@@ -1,0 +1,61 @@
+### mujoco ros node ###
+mujoco_start_log: false
+mujoco_node_log_file_name: "mujoco_log"
+single_cycle_sim_count: 5
+
+### balance control node ###
+control_freq: 200
+control_start_log: true
+control_node_log_file_name: "control_log"
+
+# ebc parmas
+ebc_dist_lpf_freq: 8.0
+ebc_min_rear_vel_mps: 0.5
+ebc_wc: 5.0
+ebc_wo: 40.0
+
+# rear LPF params
+rearLPF_low_cutoff_freq: 10000.0 # TODO有问题
+
+target_steer_pos_deg: 0.0
+target_forw_vel_kmh: 8.0
+
+
+# ilqr gnms params
+dt: 0.01      # 采样时间
+N: 200        # 预测步数
+M: 100        # 多重打靶段数
+max_iter: 1   # 最大迭代次数
+optim_tol: 1e-2       # 目标函数的终止容差
+constraint_tol: 1e-1  # 约束（多重打靶法）的终止容差
+
+## 权重: 1/Qi^2
+Q0: 10.0    # degree
+Q1: 20.0    # degree
+Q2: 0.2
+Q3: 1.0
+Q4: 10.0
+
+R0: 1.0
+R1: 5.0
+
+ilqr_gnms_print: false
+
+
+
+### mujoco ilqr node ###
+mujoco_ilqr_start_log: true
+mujoco_ilqr_log_file_name: "mujoco_ilqr"
+ilqr_single_cycle_sim_count: 5
+
+
+### drift control node ###
+drift_control_freq: 200
+drift_control_start_log: true
+drift_control_node_log_file_name: "drift_control_log"
+
+
+### drift mpc node ###
+drift_mpc_freq: 100
+first_ilqr_iter: 10
+realtime_ilqr_iter: 3

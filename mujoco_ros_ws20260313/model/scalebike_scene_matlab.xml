@@ -1,0 +1,166 @@
+<mujoco model="scalebike scene">
+  <extension>
+    <plugin plugin="mujoco.sdf.torus">
+      <instance name="torus">
+        <config key="radius1" value="0.075"/>
+        <config key="radius2" value="0.025"/>
+      </instance>
+    </plugin>
+  </extension>
+  <option timestep="0.0002" iterations="50" solver="Newton" tolerance="1e-10" integrator="Euler" cone="elliptic"
+   o_solimp="0 0.95 0.005 0.5 2" o_solref="0.02 1">
+    <!-- <flag override="enable"/> -->
+  </option>  
+  <!-- <option actuatorgroupdisable="0 2 3"/> -->
+  <compiler angle="radian" meshdir="meshes" eulerseq="XYZ"/>
+
+  <!-- <statistic center="1.0 0.7 1.0" extent="0.8"/> -->
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0.9 0.9 0.9"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="-140" elevation="-20" offwidth="960" offheight="540" />
+    <map force="0.5"/>
+  </visual>
+
+  <asset>
+    <!-- <texture type="skybox" name="sky" builtin="flat" rgb1="0 0 0" rgb2="0 0 0" width="512" height="3072"/> -->
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+
+    <mesh name="chasis_link" file="chasis_link.STL"/>
+    <mesh name="frontfork_link" file="frontfork_link.STL"/>
+    <mesh name="frontsuspension_link" file="frontsuspension_link.STL"/>
+    <mesh name="frontwheel_link" file="frontwheel_link.STL"/>
+    <mesh name="rearsuspension_link" file="rearsuspension_link.STL"/>
+    <mesh name="rearwheel_link" file="rearwheel_link.STL"/>
+    <mesh name="torus">
+      <plugin instance="torus"/>
+    </mesh>
+  </asset>
+
+  <default class="main">
+    <geom friction="0.3 0.005 0.0001"/>
+    <default class="wheel">
+      <!-- <geom type="cylinder" contype="2" conaffinity="1" size="0.1 0.0005" rgba="0.3 0.3 0.3 0.5" solimp="0.9 0.95 0.001 0.5 2" solref="0.02 1"/> -->
+      <geom type="ellipsoid" contype="2" conaffinity="1" size="0.1 0.1 0.025" rgba="0.3 0.3 0.3 0.5" 
+       solimp="0 0.95 0.005 0.5 2" solref="0.02 2" margin="0.00" priority="1" />
+      
+    </default>
+  </default>
+
+  <worldbody>
+    <light pos="1 0 2.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" group="2" type="plane" material="groundplane"/>
+    <camera name="PerspectiveCamera" mode="targetbody" pos="0 -1.5 0.7" euler="0 0 0" target="chasis"/>
+    <camera name="fixcamera" pos="2.775 2.204 1.404" xyaxes="-0.800 0.600 0.000 -0.239 -0.318 0.917"/>
+    <camera name="40fixcamera" pos="1.5 -3 9.5" xyaxes="1.000 -0.000 0.000 0.000 1.0 0.00"/>
+    <camera name="15fixcamera" pos="0.5 -1 5" xyaxes="1.000 -0.000 0.000 0.000 1.0 0.00"/>
+
+    <body name="chasis" pos="0 0 0.254" euler="1.5708 -0.01 0">
+      <joint name="floating_base_joint" type="free"/>
+      <camera name="camera" mode="track" pos="-0.3 0.7 1.2" euler="-0.5 -0.3 0"/>
+      <inertial pos="0 0 0" quat="-0.095338 0.698584 0.068831 0.7058" mass="2.6709" diaginertia="0.00732482 0.00696271 0.00233007"/>
+      <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.95 0.76 0.18 1" mesh="chasis_link"/>
+      <geom type="box" contype="2" conaffinity="1" size="0.2 0.06 0.05" pos="0 0.01 0" quat="0.991432 0 0 0.130626" rgba="0.95 0.76 0.18 0.5"/>
+      <site name="imu_local_site" pos="0 0 0" euler="-1.5708 0 -0.01"/>
+      <body name="frontfork" pos="0.13689 0.020894 0" quat="0.976296 0 0 0.216438">
+        <inertial pos="0.015593 -0.028725 0" quat="0.707099 0.707099 0.00326032 0.00326032" mass="0.60059" diaginertia="0.000652809 0.00044826 0.000315451"/>
+        <joint name="steering_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-0.8 0.8"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.84 0.45 0.39 1" mesh="frontfork_link"/>
+        <geom type="box" contype="2" conaffinity="1" size="0.025 0.15 0.055" pos="0.02 -0.06 0" rgba="0.84 0.45 0.39 0.5"/>
+        <body name="frontsuspension" pos="0.02 -0.20268 0">
+          <inertial pos="0 0.012836 0" mass="0.13737" diaginertia="6.8261e-05 6.1561e-05 1.4167e-05"/>
+          <!-- <joint name="frontsuspension_joint" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="-0.01 0.01" springdamper="0.01 1"/> -->
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.95 0.76 0.18 1" mesh="frontsuspension_link"/>
+          <geom type="box" contype="2" conaffinity="1" size="0.015 0.025 0.05" pos="0 0.02 0" rgba="0.95 0.76 0.18 0.5"/>
+          <body name="frontwheel" quat="0.976296 0 0 -0.216438">
+            <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.47237" diaginertia="0.002032 0.0010678 0.0010677"/>
+            <joint name="frontwheel_joint" pos="0 0 0" axis="0 0 1"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.3 0.3 0.3 1" mesh="frontwheel_link"/>
+            <geom class="wheel" friction="10" />
+            <!-- <geom  type="sdf" mesh="torus" contype="2" conaffinity="1" size="0.1 0.1 0.025" rgba="0.3 0.3 0.3 0.5" 
+              solimp="0 0.95 0.005 0.5 2" solref="0.02 2" margin="0.00" priority="1" friction="10">
+              <plugin instance="torus"/>
+            </geom> -->
+          </body>
+        </body>
+      </body>
+      <body name="rearsuspension" pos="-0.020438 -0.034414 0">
+        <inertial pos="-0.11047 -0.091964 0" quat="-0.257128 0.660951 0.25172 0.658534" mass="0.83342" diaginertia="0.0015951 0.00159009 0.000393403"/>
+        <joint name="rearsuspension_joint" pos="0 0 0" axis="0 0 1" limited="true" range="-0.05 0.05" springdamper="0.01 1"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.84 0.45 0.39 1" mesh="rearsuspension_link"/>
+        <geom type="box" contype="2" conaffinity="1" size="0.11 0.035 0.055" pos="-0.08 -0.07 0" quat="0.939373 0 0 0.342898" rgba="0.84 0.45 0.39 0.5"/>
+        <body name="rearwheel" pos="-0.1405 -0.11609 0">
+          <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.71956" diaginertia="0.0021738 0.0011426 0.0011424"/>
+          <joint name="rearwheel_joint" pos="0 0 0" axis="0 0 1"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.3 0.3 0.3 1" mesh="rearwheel_link"/>
+          <geom class="wheel"/>
+          <!-- <geom  type="sdf" mesh="torus" contype="2" conaffinity="1" size="0.1 0.1 0.025" rgba="0.3 0.3 0.3 0.5" 
+              solimp="0 0.95 0.005 0.5 2" solref="0.02 2" margin="0.00" priority="1" friction="0.3">
+              <plugin instance="torus"/>
+          </geom> -->
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <sensor>
+    <jointpos name="act_steering_p" joint="steering_joint"/>
+    <jointpos name="act_rearwheel_p" joint="rearwheel_joint"/>
+    <jointvel name="act_steering_v" joint="steering_joint"/>
+    <jointvel name="act_rearwheel_v" joint="rearwheel_joint"/>
+    <jointvel name="act_frontwheel_v" joint="frontwheel_joint"/>
+    <!-- <accelerometer name="acc_local" site="imu_local_site"/> -->
+    <gyro name="gyro_local" site="imu_local_site"/>
+    <!-- <framepos name="chasis_pos" objtype="body" objname="chasis"/> -->
+    <framequat name="imu_global" objtype="xbody" objname="chasis"/>
+    <frameangvel name="gyro_global" objtype="xbody" objname="chasis"/>
+    <!-- <actuatorfrc name="steer_force" actuator="cmd_steering_v"/> -->
+    <jointactuatorfrc name="steer_force" joint="steering_joint"/>
+  </sensor>
+  <actuator>
+    
+    <!-- <motor name="cmd_rearwheel_f" joint="rearwheel_joint" group="0" ctrllimited="true" ctrlrange="-12 12" forcerange="-12 12"/> -->
+    <!-- <motor name="cmd_frontwheel_f" joint="frontwheel_joint" group="2" ctrllimited="true" ctrlrange="-12 12" forcerange="-12 12"/> -->
+    <position name="cmd_steering_p" joint="steering_joint" group="1" kp="10" kv="0.1" ctrllimited="true" ctrlrange="-0.8 0.8" forcelimited="true" forcerange="-1 1"/>
+    <velocity name="cmd_rearwheel_v" joint="rearwheel_joint" group="0" kv="3" ctrllimited="true" ctrlrange="-60 60" forcelimited="true" forcerange="-3 3"/>
+    <!-- <intvelocity name="cmd_rearwheel_vint" joint="rearwheel_joint" group="0" kp="0" kv="0" actrange="-200000 200000" ctrllimited="true" ctrlrange="-60 60" forcelimited="true" forcerange="-12 12"/> -->
+    
+    <!-- <general name="cmd_rearwheel_vint" joint="rearwheel_joint" group="1" ctrllimited="true" ctrlrange="-60 60" forcelimited="true" forcerange="-12 12"
+    dyntype="integrator" dynprm="1 0 0" gaintype="fixed" gainprm="0 0 0" biastype="affine" biasprm="0 -0 0" /> -->
+    <!-- <velocity name="cmd_frontwheel_v" joint="frontwheel_joint" group="3" kv="100" ctrllimited="true" ctrlrange="-60 60" forcerange="-12 12"/> -->
+    <velocity name="cmd_steering_v" joint="steering_joint" group="2" kv="20" ctrllimited="true" ctrlrange="-3 3" forcerange="-1 1"/>
+    <intvelocity name="cmd_steering_vint" joint="steering_joint" group="2" kp="0" kv="0" actrange="-1 1" ctrllimited="true" ctrlrange="-3 3" forcelimited="true" forcerange="-1 1"/>
+  </actuator>
+
+  <keyframe>
+    <key name="drifting0" qpos="0 0 0.244 0.60070842 0.79945256 -0.00300357 0.0039973 0.1222 0 0 0" 
+      qvel="1.857 0.5809 0 0 -1.51 0 0 -18.6964 0 -22.2069" />  
+
+    <key name="drifting1" qpos="0 0 0.2435 0.60485411 0.7963137  -0.00362917  0.00477794 0.2618 0 0 0" 
+      qvel="1.7355 0.8032 0 -0.01811957 -1.45454155  0.4050686 0 -17.898 0 -23.6344" />
+    <!-- <key name="drifting1" qpos="0 0 0.2435 0.42431714 0.565644   0.56051364 0.43107574 0.2618 0 0 0" 
+      qvel="-0.8032 1.7355 0 -0.01811957 -1.45454155  0.4050686 0 -17.898 0 -23.6344" /> -->
+    <!-- <key name="drifting1" qpos="0 0 0.2435 -0.004777939519543027 0.003629168217327841 0.7963136973552041 0.6048541112007774 0.2618 0 0 0" 
+      qvel="-1.7355 -0.8032 0 -0.01811957 -1.45454155  0.4050686 0 -17.898 0 -23.6344" /> -->
+    <!-- <key name="drifting1" qpos="0 0 0.2435 0.43107495709299987 0.5605126058950578 -0.565645024808136 -0.4243179302242637 0.2618 0 0 0" 
+      qvel="0.8032 -1.7355 0 -0.01811957 -1.45454155  0.4050686 0 -17.898 0 -23.6344" /> -->
+
+    <!-- delta=10,dpsi=-0.5 -->
+    <!-- <key name="drifting+" qpos="0 0 0.244 0.5939686427163022 0.8044658177335764 -0.0035638546226559246 0.004826852828774417 0.1745 0 0 0" 
+      qvel="5.79 1 0 -0.00599986 -0.47781027  0.14717795 0 -58 0 -60" />  -->
+
+    <key name="drifting+" qpos="0 0 0.244 0.5939686427163022 0.8044658177335764 -0.0035638546226559246 0.004826852828774417 0.2618 0 0 0" 
+      qvel="5.66 1.56 0 -0.00599986 -0.47781027  0.14717795 0 -58 0 -61" /> 
+    <key name="drifting30" qpos="0 0 0.244 0.6178317314716485 0.7862874487226302 -0.003707034873355134 0.004717781305847324 0.5236 0 0 0" 
+      qvel="1.98 1.36 0 -0.01439965 -1.16586203  0.28382807 0 -22 0 -32" /> 
+    <key name="drifting40" qpos="0 0 0.244 0.6178317314716485 0.7862874487226302 -0.003707034873355134 0.004717781305847324 0.7 0 0 0" 
+      qvel="1.98 1.36 0 -0.01439965 -1.16586203  0.28382807 0 -22 0 -32" />
+    <key name="mu01" qpos="0 0 0.244 0.669087380370861 0.7431595238308237 -0.004014572457210272 0.004459010651241177 0.2618 0 0 0" 
+      qvel="1.28 0.48 0 -0.0083998  -0.69610906  0.07322307 0 -13 0 -16" />
+    <key name="mu02" qpos="0 0 0.244 0.7070927546507347 0.7070953519522198 -0.004242607439315867 0.004242623023311787 0.2618 0 0 0" 
+      qvel="0.8 0.4 0 -0.1083998  -0.29610906  0.07322307 0 -5 0 -16" />  
+  </keyframe>
+
+</mujoco>
