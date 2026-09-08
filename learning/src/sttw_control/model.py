@@ -53,7 +53,8 @@ def load_model(path=DEFAULT_XML):
     gyro=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_SENSOR,'gyro_local')
     chassis=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_BODY,'chasis')
     if min(gyro,chassis)<0: raise ValueError('missing IMU or chassis')
-    identity={'source_xml_sha256':hashlib.sha256(source).hexdigest(),
+    identity={'actuator_disable_contract':'cpu_bitmask_mjx_zero_stateless_fixed_affine_v1',
+              'source_xml_sha256':hashlib.sha256(source).hexdigest(),
               'portable_xml_sha256':hashlib.sha256(portable.encode()).hexdigest(),
               'assets':{k:hashlib.sha256(v).hexdigest() for k,v in sorted(assets.items())},
               'transform':'remove_unused_torus_assets_disable_startup_position_servo',

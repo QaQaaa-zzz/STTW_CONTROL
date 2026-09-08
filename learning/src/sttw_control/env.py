@@ -121,6 +121,18 @@ class RecoveryEnv:
         if backend=='mjx':
             from mujoco import mjx
             self.mjx_model=mjx.put_model(self.model,impl='jax')
+            # MJX 3.6 JAX does not implement opt.disableactuator. Materialize
+            # the existing CPU contract for disabled stateless fixed/affine
+            # servos; zero ctrl alone leaves their position/velocity bias active.
+            disabled=np.flatnonzero((self.model.opt.disableactuator >> self.model.actuator_group)&1)
+            for index in disabled:
+                if (self.model.actuator_dyntype[index]!=mujoco.mjtDyn.mjDYN_NONE
+                    or self.model.actuator_gaintype[index]!=mujoco.mjtGain.mjGAIN_FIXED
+                    or self.model.actuator_biastype[index] not in (mujoco.mjtBias.mjBIAS_NONE,mujoco.mjtBias.mjBIAS_AFFINE)):
+                    raise ValueError('unsupported disabled actuator semantics for MJX')
+                self.mjx_model=self.mjx_model.replace(
+                    actuator_gainprm=self.mjx_model.actuator_gainprm.at[index].set(0),
+                    actuator_biasprm=self.mjx_model.actuator_biasprm.at[index].set(0))
             self._mjx=mjx
         self._prepare_jit=jax.jit(self._prepare)
         self._advance_jit=jax.jit(self._advance)

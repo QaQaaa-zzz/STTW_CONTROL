@@ -103,3 +103,17 @@ def test_nonfinite_controller_state_is_a_terminal_failure():
     state=env.step(state,np.zeros(2))
     assert bool(state.terminated) and int(state.end_code)==3
     assert np.isfinite(state.obs).all()
+
+
+def test_mjx_disabled_position_servo_matches_cpu():
+    import jax
+    import mujoco
+    from mujoco import mjx
+    env=RecoveryEnv(backend='mjx')
+    d=mujoco.MjData(env.model)
+    d.qpos[env.bundle.steer_qpos]=.1
+    d.qvel[env.bundle.steer_dof]=.2
+    mujoco.mj_forward(env.model,d)
+    actual=jax.jit(mjx.forward)(env.mjx_model,mjx.put_data(env.model,d))
+    np.testing.assert_allclose(actual.actuator_force,d.actuator_force,atol=1e-6)
+    assert float(actual.actuator_force[0])==0.
