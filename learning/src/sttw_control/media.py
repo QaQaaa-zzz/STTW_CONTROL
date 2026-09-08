@@ -243,7 +243,7 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
     for ax in axes.flat: ax.grid(alpha=.2)
     axes[0,0].legend(fontsize=8,loc='center')
-    fig.suptitle(f"Recorded {declarations[0]['backend'].upper()} comparison | seed {declarations[0]['seed']} | {candidate_label}\nSame configuration and initial state; this is not a corrected-model retraining result",fontsize=12)
+    fig.suptitle(f"Recorded {declarations[0]['backend'].upper()} comparison | seed {declarations[0]['seed']} | {candidate_label}\nSame configuration and initial state; paired engineering evaluation",fontsize=12)
     for suffix in ('png','pdf'):fig.savefig(output/f'comparison.{suffix}',dpi=170)
     plt.close(fig)
     manifest={'baseline':str(baseline),'candidate':str(candidate),'candidate_label':candidate_label,
