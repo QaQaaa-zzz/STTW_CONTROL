@@ -10,6 +10,7 @@ dependencies = ["numpy", "mujoco>=3.3", "mujoco-mjx>=3.3", "jax>=0.6", "flax>=0.
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
+media = ["matplotlib>=3.7", "mediapy>=1.2", "Pillow>=10"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

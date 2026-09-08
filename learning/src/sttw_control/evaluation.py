@@ -7,6 +7,7 @@ import time
 import numpy as np
 import jax
 import jax.numpy as jp
+from .path import tracking_metrics
 
 
 def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
@@ -38,6 +39,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
             return {'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
+                    'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
+                    'motion_command':np.asarray(env.command(s.tick,s.pose)),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
@@ -69,6 +72,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
                  'whole_episode_root_forward_world_x_m':float(position[:,0].max()),
                  'wall_seconds':time.monotonic()-begin,'declaration_sha256':hashlib.sha256(declaration.encode()).hexdigest(),
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
+        if env.config.circle is not None:
+            summary['circle_tracking']=tracking_metrics(arrays['qpos'][:,:2],env.config.circle)
         (path/'summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
         (path/'status.json').write_text('{"status":"complete"}\n')
         return summary

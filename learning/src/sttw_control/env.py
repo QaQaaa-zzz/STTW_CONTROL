@@ -17,6 +17,7 @@ from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual
 from .observation import ObservationConfig,initial_history,advance_history,make_frame
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
+from .path import CircleConfig,circle_command
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,7 @@ class TaskConfig:
     actuator: ActuatorConfig=field(default_factory=ActuatorConfig)
     observation: ObservationConfig=field(default_factory=ObservationConfig)
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
+    circle: CircleConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
     steer_reference: float=0.
@@ -54,12 +56,14 @@ class TaskConfig:
             raise ValueError('initial engineering task requires forward speed within limits')
         if abs(self.steer_reference)+abs(self.steer_amplitude)>self.actuator.steer_limit:
             raise ValueError('steer reference exceeds position limit')
+        if self.circle is not None and self.circle.max_steer>self.actuator.steer_limit:
+            raise ValueError('circle steer bound exceeds actuator position limit')
 
 
 def load_config(path):
     raw=json.loads(Path(path).read_text())
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig)]:
-        if name in raw: raw[name]=cls(**raw[name])
+    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig)]:
+        if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
 
@@ -71,6 +75,7 @@ class EnvState:
     history: object
     recovery: object
     measurement: object
+    pose: object
     reference: object
     base: object
     obs: object
@@ -113,9 +118,16 @@ class RecoveryEnv:
         self._prepare_jit=jax.jit(self._prepare)
         self._advance_jit=jax.jit(self._advance)
 
-    def command(self,tick):
+    def command(self,tick,pose=None):
         c=self.config
+        if c.circle is not None:
+            if pose is None: raise ValueError('circle tracking requires XY/yaw localization')
+            return jp.array([circle_command(pose,c.circle,c.controller.wheelbase,c.controller.caster),c.speed_reference])
         return jp.array([c.steer_reference+c.steer_amplitude*jp.sin(2*jp.pi*c.steer_frequency*tick*c.controller.dt),c.speed_reference])
+
+    def pose(self,data):
+        matrix=jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)
+        return jp.array([data.qpos[0],data.qpos[1],jp.arctan2(matrix[1,0],matrix[0,0])])
 
     def measure(self,data):
         b=self.bundle
@@ -124,9 +136,9 @@ class RecoveryEnv:
         gyro=data.sensordata[b.imu_gyro:b.imu_gyro+3]
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
-    def _prepare(self,controller,actuator,history,measurement,tick):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose):
         c=self.config
-        command=self.command(tick)
+        command=self.command(tick,pose)
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
@@ -155,15 +167,16 @@ class RecoveryEnv:
             data=self._mjx.forward(self.mjx_model,data)
         actuator=initial_actuator(c.actuator,c.speed_reference/.1)
         measurement=self.measure(data)
-        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0))
-        return EnvState(data,controller,actuator,history,initial_recovery(),measurement,reference,base,obs,
+        pose=self.pose(data)
+        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose)
+        return EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0))
 
-    def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed):
+    def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config
         tick=state.tick+1
-        command=self.command(tick)
-        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick)
+        command=self.command(tick,pose)
+        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose)
         leaves=jax.tree_util.tree_leaves((controller,actuator,history,obs,base,measurement,action,true_speed))
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~physics_finite
         fallen=jp.abs(measurement[0])>c.roll_failure
@@ -176,7 +189,7 @@ class RecoveryEnv:
         reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
         reward=jp.where(failed,-10.,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
-        return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,
+        return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,
                              reference=reference,base=base,obs=jp.nan_to_num(obs,nan=0.,posinf=0.,neginf=0.),tick=tick,reward=reward,done=failed|timeout,
                              terminated=failed,truncated=timeout,end_code=code)
 
@@ -214,7 +227,7 @@ class RecoveryEnv:
             mujoco.mj_forward(self.model,data)
             physics_finite=jp.asarray(np.isfinite(data.qpos).all() and np.isfinite(data.qvel).all() and np.isfinite(data.act).all())
             true_speed=jp.dot(jp.asarray(data.qvel[:3]),jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)[:,0])
-            new=self._advance_jit(state.replace(data=None),self.measure(data),actuator,jp.asarray(action),physical_contact or self._contact_failure(data),physics_finite,true_speed)
+            new=self._advance_jit(state.replace(data=None),self.measure(data),actuator,jp.asarray(action),physical_contact or self._contact_failure(data),physics_finite,true_speed,self.pose(data))
         else:
             data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied).at[self.bundle.chassis,1].set(force))
             def substep(_,carry):
@@ -225,7 +238,7 @@ class RecoveryEnv:
             data=self._mjx.forward(self.mjx_model,data)
             physics_finite=jp.all(jp.isfinite(data.qpos))&jp.all(jp.isfinite(data.qvel))&jp.all(jp.isfinite(data.act))
             true_speed=jp.dot(data.qvel[:3],data.xmat[self.bundle.chassis,:,0])
-            new=self._advance(state,self.measure(data),actuator,action,physical_contact|self._contact_failure(data),physics_finite,true_speed)
+            new=self._advance(state,self.measure(data),actuator,action,physical_contact|self._contact_failure(data),physics_finite,true_speed,self.pose(data))
         return new.replace(data=data)
 
     def step(self,state,action):

@@ -2,6 +2,31 @@
 
 本目录提供 ECBC 的 JAX 实现、256→128 LeakyReLU Actor、两路速度残差、CPU MuJoCo/MJX 环境和冻结策略评估。尚未接入 PPO 更新循环；不存在已训练的补偿策略。当前验证见 [`../docs/VALIDATION.md`](../docs/VALIDATION.md)。
 
+## 保存视频与状态图
+
+已有轨迹可直接回放，不重新推进物理：
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/render.py --run runs/verification_20260908/baseline
+```
+
+依赖`learning[media]`中的Matplotlib、Pillow、mediapy，以及系统FFmpeg；CLI默认使用EGL无窗口渲染。输出到该run的新`media/`目录：`replay.mp4`、`trajectory.png/pdf`、`states.png/pdf`、`preview.png`、`terminal.png`和`manifest.json`。已存在的media目录不会覆盖。
+
+MP4默认1280×720、30fps：左侧跟随相机，右侧固定俯视，橙色为声明的参考路径，蓝色为实际轨迹。场景线条只是渲染覆盖物，不参与碰撞。HUD显示实际仿真时间、真实纵向速度与侧倾。每帧对应记录中的qpos/qvel，调用mj_forward恢复显示，不调用mj_step；最后一帧必定是轨迹终点。8s轨迹输出241帧，文件时长约8.033s，额外一帧用于保留终点。manifest记录帧索引与源文件SHA256。
+
+图中包含XY路径与误差，以及侧倾、侧倾角速度、真实速度、转向角、转向速度与后轮速度。参考/指令用橙色虚线，实际值用蓝色实线。只有声明了圆或零转向直行时才绘制XY参考路径；普通转向指令不会被误标成直线路径跟踪。残差策略回放按实际声明标注控制器。
+
+## 圆形路径跟踪
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/evaluate.py --config learning/configs/circle_tracking.json --output runs/local_circle --seed 0
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/render.py --run runs/local_circle
+```
+
+默认圆半径3m、圆心(0,3)m、逆时针、速度参考2m/s、前视距离2.5m、12s。几何外环使用当前根部XY和车体航向，生成目标转向角，由现有ECBC＋ESO完成姿态控制。它是按空间路径跟随，不强制时间参数化的目标相位；无需新增学习网络、训练或提高执行器限制。当前外环使用仿真定位，实车定位尚未接入。
+
+圆形参数位于唯一的`circle_tracking.json`，实现位于`path.py`；改变实验应修改配置或创建有明确用途的运行声明，不复制模块。当前2.5m前视距离来自三个声明工况的工程比较，结果见验证报告，不代表独立测试集上的最优参数。
+
 ## 环境与测试
 
 在仓库根目录执行。当前已验证解释器为 `/home/qy/mujoco_playground/.venv/bin/python`，MuJoCo/MJX 3.6.0、JAX 0.6.2、Flax 0.11.2。可在独立环境安装 `learning/pyproject.toml` 中声明的依赖；版本升级需要重新验证。CPU测试同时需要 `g++`，不需要 ROS。
