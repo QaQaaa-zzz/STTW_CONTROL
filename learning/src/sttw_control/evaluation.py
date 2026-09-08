@@ -61,7 +61,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         summary={'controller':identity['controller'],'backend':env.backend,'seed':seed,
                  'transitions':transitions,'captured_states':len(frames),'episode_return':total_reward,
                  'end_code':int(state.end_code),'physical_failure':bool(state.terminated),
-                 'recovery_eligible':env.config.disturbance_force!=0 and int(state.tick)>=env.event_end,
+                 'recovery_eligible':env.has_disturbance and int(state.tick)>=env.event_end,
                  'balance_recovery_success':balance_time is not None and not bool(state.terminated),
                  'task_recovery_success':task_time is not None and not bool(state.terminated),
                  'first_balance_hold_completion_from_event_seconds':balance_time,

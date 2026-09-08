@@ -107,3 +107,12 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 ```
 
 `ppo_circle_smoke.json`为修复后1024环境、单轮32768控制步的完整PPO工程配置。它只检查训练链路，不能用于宣称路径学习收敛。训练日志新增采样、优化、验证、检查点计时与完整墙钟计时。
+
+
+## 转弯扰动面板
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/disturbance.py --task learning/configs/circle_learning.json --panel learning/configs/turn_disturbance_panel.json --training-run runs/circle_corrected_1024_smoke_20260908 --checkpoint runs/circle_corrected_1024_smoke_20260908/checkpoints/update_0001 --output runs/<new-disturbance-panel>
+```
+
+只在冻结训练配置基础上显式覆盖扰动事件，不改变策略观测/动作；先运行每个控制器的无扰动对照，再运行独立正负指令脉冲与质心侧力。`disturbance.recovery_metrics`报告相对参考圆及无扰动轨迹的回轨保持；`disturbance.plot_panel`生成事件标注对比图。单个轨迹的视频仍用`cli/render.py`。

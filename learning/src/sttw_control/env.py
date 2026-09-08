@@ -36,6 +36,9 @@ class TaskConfig:
     disturbance_start: float=4.
     disturbance_duration: float=.1
     disturbance_force: float=0.
+    disturbance_steer_rate: float=0.
+    disturbance_force_frame: str="world_y"
+    disturbance_force_point: str="chassis_com"
     initial_roll_range: float=0.
     roll_failure: float=.7
     path_error_weight: float=0.
@@ -47,9 +50,11 @@ class TaskConfig:
             raise ValueError("invalid reward weights")
         if self.observation.include_path and self.circle is None:
             raise ValueError("path observations require a circle")
+        if self.disturbance_force_frame not in ("world_y","heading_lateral") or self.disturbance_force_point not in ("chassis_com","vehicle_com"):
+            raise ValueError("invalid force frame/application point")
         scalars=(self.horizon_seconds,self.speed_reference,self.steer_reference,self.steer_amplitude,
                  self.steer_frequency,self.eso_start,self.disturbance_start,self.disturbance_duration,
-                 self.disturbance_force,self.initial_roll_range,self.roll_failure)
+                 self.disturbance_force,self.disturbance_steer_rate,self.initial_roll_range,self.roll_failure)
         if not all(math.isfinite(x) for x in scalars) or self.roll_failure<=0 or self.steer_frequency<0 or self.eso_start<0:
             raise ValueError('task parameters must be finite with positive failure limit and nonnegative timing')
         if self.horizon_seconds<=0 or self.disturbance_start<0 or self.disturbance_duration<=0 or self.initial_roll_range<0:
@@ -137,6 +142,27 @@ class RecoveryEnv:
         self._prepare_jit=jax.jit(self._prepare)
         self._advance_jit=jax.jit(self._advance)
 
+    @property
+    def has_disturbance(self):
+        return self.config.disturbance_force!=0 or self.config.disturbance_steer_rate!=0
+
+    def disturbance_active(self,tick):
+        return (tick>=self.event_start)&(tick<self.event_end)
+
+    def disturbance_wrench(self,data,tick):
+        c=self.config
+        xp=np if self.backend=='cpu' else jp
+        force=xp.array([0.,c.disturbance_force,0.])
+        if c.disturbance_force_frame=='heading_lateral':
+            matrix=xp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)
+            yaw=xp.arctan2(matrix[1,0],matrix[0,0])
+            force=c.disturbance_force*xp.array([-xp.sin(yaw),xp.cos(yaw),0.])
+        torque=xp.zeros(3)
+        if c.disturbance_force_point=='vehicle_com':
+            offset=xp.asarray(data.subtree_com[self.bundle.chassis])-xp.asarray(data.xipos[self.bundle.chassis])
+            torque=xp.cross(offset,force)
+        return xp.where(self.disturbance_active(tick),xp.concatenate([force,torque]),xp.zeros(6))
+
     def command(self,tick,pose=None):
         c=self.config
         if c.circle is not None:
@@ -212,7 +238,7 @@ class RecoveryEnv:
         fallen=jp.abs(measurement[0])>c.roll_failure
         failed=invalid|fallen|physical_contact
         # Count only complete stable intervals after the force has ended.
-        event_finished=(c.disturbance_force!=0)&(state.tick>=self.event_end)
+        event_finished=self.has_disturbance&(state.tick>=self.event_end)
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
@@ -242,17 +268,17 @@ class RecoveryEnv:
 
     def _step(self,state,action):
         c=self.config
-        actuator,command=apply_residual(state.actuator,state.base,action,state.measurement[2],c.actuator)
+        offset=jp.where(self.disturbance_active(state.tick),c.disturbance_steer_rate,0.)
+        actuator,command=apply_residual(state.actuator,state.base.at[0].add(offset),action,state.measurement[2],c.actuator)
         ctrl=jp.array([0.,-command[1],command[0],command[0]])
-        force=jp.where((state.tick>=self.event_start)&(state.tick<self.event_end),c.disturbance_force,0.)
         if self.backend=='cpu':
             data=mujoco.MjData(self.model)
             mujoco.mj_copyData(data,self.model,state.data)
             data.ctrl[:]=np.asarray(ctrl)
             data.xfrc_applied[:]=0
-            data.xfrc_applied[self.bundle.chassis,1]=float(force)
             physical_contact=False
             for _ in range(self.substeps):
+                data.xfrc_applied[self.bundle.chassis,:]=np.asarray(self.disturbance_wrench(data,state.tick))
                 mujoco.mj_step(self.model,data)
                 physical_contact=physical_contact or self._contact_failure(data)
             # Sensors from mj_step can lag the final integration state.
@@ -261,9 +287,10 @@ class RecoveryEnv:
             true_speed=jp.dot(jp.asarray(data.qvel[:3]),jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)[:,0])
             new=self._advance_jit(state.replace(data=None),self.measure(data),actuator,jp.asarray(action),physical_contact or self._contact_failure(data),physics_finite,true_speed,self.pose(data))
         else:
-            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied).at[self.bundle.chassis,1].set(force))
+            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied))
             def substep(_,carry):
                 d,contact=carry
+                d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(self.disturbance_wrench(d,state.tick)))
                 d=self._mjx.step(self.mjx_model,d)
                 return d,contact|self._contact_failure(d)
             data,physical_contact=jax.lax.fori_loop(0,self.substeps,substep,(data,jp.bool_(False)))
