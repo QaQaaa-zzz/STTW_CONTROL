@@ -2,6 +2,7 @@
 
 void EsoBasedController::setParams(const EbcParams &_params, const double &_speed_ms) {
   params = _params;
+  for (double &gain : Kc) gain = 0;
   extended_states_observer_.setParams(SsParams{params.sample_time,4,1,0, true,
                                                {0,0,0,0},
                                                {{0,0,0,0},{0,0,1,0},{a2,a4,0,1},{0,0,0,0}},
@@ -180,9 +181,16 @@ void EsoBasedController::getKo(double *req_array) {
 void EsoBasedController::resetStates() {
   extended_states_observer_.resetStates();
   disturbance_filter_.resetState(0);
+  roll_vel_differ_.setParams(DiffParams{params.sample_time, 0.5});
+  filtered_disturbance = filtered_disturbance2 = roll_acc = 0;
+  estimated_equilibrium_roll = sys_input = 0;
+  for (double &value : eso_states) value = 0;
+  for (double &value : Kc) value = 0;
+  updateSystemParams(1.0);
 }
-
+// Restore explicitly supplied observer state after clearing transient history.
 void EsoBasedController::resetStates(const double *_new_states) {
+  resetStates();
   extended_states_observer_.resetStates(_new_states);
   disturbance_filter_.resetState(_new_states[3]);
 }

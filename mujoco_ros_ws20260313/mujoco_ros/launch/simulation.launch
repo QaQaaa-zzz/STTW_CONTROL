@@ -1,0 +1,13 @@
+<launch>
+  <arg name="config" default="$(find mujoco_ros)/config/controller.yaml"/>
+  <arg name="model" default="$(find mujoco_ros)/../model/scalebike_scene_matlab.xml"/>
+  <arg name="load_plugins" default="true"/>
+  <node pkg="mujoco_ros" type="mujoco_ros_node" name="mujoco_ros_node" output="screen">
+    <param name="config_path" value="$(arg config)"/>
+    <param name="model_path" value="$(arg model)"/>
+    <param name="load_plugins" value="$(arg load_plugins)"/>
+  </node>
+  <include file="$(find mujoco_ros)/launch/control.launch">
+    <arg name="config" value="$(arg config)"/>
+  </include>
+</launch>

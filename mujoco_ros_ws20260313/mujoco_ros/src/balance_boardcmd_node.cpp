@@ -3,6 +3,7 @@
 #include <cstring>
 #include <sstream>
 #include <vector>
+#include <cmath>
 #include <unistd.h>
 #include "mujoco_ros/BoardCmd.h"
 
@@ -45,6 +46,12 @@ int main(int argc, char *argv[])
         }
 
         iss.clear();
+
+        if (inputs.size()!=3 || !std::isfinite(inputs[0]) || !std::isfinite(inputs[1]) || !std::isfinite(inputs[2]) ||
+            (inputs[0]!=0 && inputs[0]!=1 && inputs[0]!=9)) {
+            ROS_WARN("Expected mode (0, 1, 9), finite steer degrees, finite forward m/s");
+            continue;
+        }
 
         boardcmd_msg.mode = inputs[0];
         boardcmd_msg.target_steer_pos = inputs[1] / 180.0 * 3.1415926;

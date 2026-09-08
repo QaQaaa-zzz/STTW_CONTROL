@@ -1,0 +1,8 @@
+<launch>
+  <arg name="config" default="$(find mujoco_ros)/config/controller.yaml"/>
+  <arg name="residual_enabled" default="false"/>
+  <node pkg="mujoco_ros" type="balance_control_node" name="balance_control_node" output="screen">
+    <param name="config_path" value="$(arg config)"/>
+    <param name="residual_enabled" value="$(arg residual_enabled)"/>
+  </node>
+</launch>

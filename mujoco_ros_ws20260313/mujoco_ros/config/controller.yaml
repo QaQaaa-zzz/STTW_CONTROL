@@ -7,6 +7,15 @@ single_cycle_sim_count: 5
 control_freq: 200
 control_start_log: true
 control_node_log_file_name: "control_log"
+state_timeout: 0.05
+residual_timeout: 0.05
+eso_start_seconds: 3.0
+steer_position_limit: 0.8
+steer_rate_limit: 3.0
+rear_rate_limit: 60.0
+steer_residual_scale: 1.0
+rear_residual_scale: 5.0
+residual_strength: 1.0
 
 # ebc parmas
 ebc_dist_lpf_freq: 8.0

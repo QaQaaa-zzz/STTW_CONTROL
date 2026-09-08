@@ -8,7 +8,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fstream>
-#include <iomanip> 
+#include <iomanip>
+#include <filesystem>
 #include <random>
 #include <chrono>
 #include <ros/ros.h>
@@ -35,7 +36,6 @@ std::string pkg_path;
 std::string ws_path;
 std::string mujoco_plugin_dir;
 std::string model_path;
-char model_file[100];
 std::string log_dir;
 std::string log_file_name;
 bool startlog = false;
@@ -90,22 +90,27 @@ int main(int argc, char** argv) {
     // 初始化漂移参数
     ros::init(argc, argv, "mujoco_ros_node");
     ros::NodeHandle nh;
+    ros::NodeHandle private_nh("~");
     ROS_INFO("mujoco_ros_node!");
 
-    YAML::Node params_node = YAML::LoadFile("/home/ubuntu/mujoco_ros_ws/src/mujoco_ros/src/mujoco_ros_params.yaml");
+    std::string config_path;
+    pkg_path=ros::package::getPath("mujoco_ros");
+    private_nh.param<std::string>("config_path",config_path,pkg_path+"/config/controller.yaml");
+    YAML::Node params_node = YAML::LoadFile(config_path);
     startlog = params_node["mujoco_start_log"].as<bool>();
     log_file_name = params_node["mujoco_node_log_file_name"].as<std::string>();
 
-    ws_path = "/home/ubuntu/mujoco_ros_ws";
-    pkg_path = "/home/ubuntu/mujoco_ros_ws/src/mujoco_ros";
-    log_dir = pkg_path + "/log/";
-    mujoco_plugin_dir = ws_path + "/src/model/mujoco_plugin";
-    model_path = ws_path + "/src/model/scalebike_scene_matlab.xml";
-    strcpy(model_file, model_path.c_str()); 
+    private_nh.param<std::string>("log_dir",log_dir,"/tmp/sttw_control");
+    std::filesystem::create_directories(log_dir);
+    log_dir+="/";
+    private_nh.param<std::string>("plugin_dir",mujoco_plugin_dir,pkg_path+"/../model/mujoco_plugin");
+    private_nh.param<std::string>("model_path",model_path,pkg_path+"/../model/scalebike_scene_matlab.xml");
 
     // 创建 MuJoCo 模型和数据结构
-    mj_loadAllPluginLibraries(mujoco_plugin_dir.c_str(),nullptr);//注册plugin模型动态库
-    create_model(&m, &d, model_file);   //创建模型
+    bool load_plugins=true;
+    private_nh.param("load_plugins",load_plugins,true);
+    if (load_plugins) mj_loadAllPluginLibraries(mujoco_plugin_dir.c_str(),nullptr);
+    create_model(&m, &d, model_path.c_str());
     init_simulation(m, d);  //设置传感器ID、控制回调函数及渲染器
 
     ros::TransportHints hints;

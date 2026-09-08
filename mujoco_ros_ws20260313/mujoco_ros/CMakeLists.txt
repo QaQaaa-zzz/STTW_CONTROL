@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  roslib
   rospy
   std_msgs
   message_generation
@@ -64,6 +65,7 @@ add_message_files(
   RobotState.msg
   ControlCmd.msg
   BoardCmd.msg
+  ResidualCmd.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -118,7 +120,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES mujoco_ros
- CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+ CATKIN_DEPENDS roscpp roslib rospy std_msgs message_runtime
  DEPENDS mujoco glfw3
 )
 
@@ -232,5 +234,4 @@ target_include_directories(balance_boardcmd_node
 target_link_libraries(balance_boardcmd_node
   ${catkin_LIBRARIES}
 )
-
 

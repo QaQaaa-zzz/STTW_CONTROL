@@ -1,0 +1,9 @@
+{
+  "horizon_seconds": 8.0,
+  "speed_reference": 2.0,
+  "steer_reference": 0.0,
+  "steer_amplitude": 0.0,
+  "disturbance_force": 0.0,
+  "eso_start": 3.0,
+  "observation": {"history_steps": 1}
+}

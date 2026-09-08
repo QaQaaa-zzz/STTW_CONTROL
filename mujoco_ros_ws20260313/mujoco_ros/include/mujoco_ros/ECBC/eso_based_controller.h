@@ -49,9 +49,9 @@ private:
   double filtered_disturbance2 = 0;
   double roll_acc = 0;
 
-  double a1;
-  double a2;
-  double a4;
+  double a1 = 0;
+  double a2 = 0;
+  double a4 = 0;
   double Kroll2steer;
   BikeModelParams bp;
 };
