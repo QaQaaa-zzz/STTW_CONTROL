@@ -15,7 +15,7 @@ import mujoco
 from .model import load_model
 from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual
-from .observation import ObservationConfig,initial_history,advance_history,make_frame
+from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
 from .path import CircleConfig,circle_command
 
@@ -38,8 +38,15 @@ class TaskConfig:
     disturbance_force: float=0.
     initial_roll_range: float=0.
     roll_failure: float=.7
+    path_error_weight: float=0.
+    heading_error_weight: float=0.
+    speed_error_weight: float=1.
 
     def __post_init__(self):
+        if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight)):
+            raise ValueError("invalid reward weights")
+        if self.observation.include_path and self.circle is None:
+            raise ValueError("path observations require a circle")
         scalars=(self.horizon_seconds,self.speed_reference,self.steer_reference,self.steer_amplitude,
                  self.steer_frequency,self.eso_start,self.disturbance_start,self.disturbance_duration,
                  self.disturbance_force,self.initial_roll_range,self.roll_failure)
@@ -110,7 +117,7 @@ class RecoveryEnv:
         self.horizon=int(math.ceil(config.horizon_seconds/config.controller.dt))
         self.event_start=int(round(config.disturbance_start/config.controller.dt))
         self.event_end=self.event_start+int(round(config.disturbance_duration/config.controller.dt))
-        self.observation_size=config.observation.history_steps*16
+        self.observation_size=config.observation.history_steps*(len(observation_fields(config.observation))+1)
         if backend=='mjx':
             from mujoco import mjx
             self.mjx_model=mjx.put_model(self.model,impl='jax')
@@ -136,6 +143,15 @@ class RecoveryEnv:
         gyro=data.sensordata[b.imu_gyro:b.imu_gyro+3]
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
+    def path_features(self,pose):
+        c=self.config.circle
+        if c is None:
+            return jp.zeros(3)
+        dx,dy=pose[0]-c.center_x,pose[1]-c.center_y
+        tangent=jp.arctan2(dy,dx)+c.direction*jp.pi/2
+        heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
+        return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
+
     def _prepare(self,controller,actuator,history,measurement,tick,pose):
         c=self.config
         command=self.command(tick,pose)
@@ -143,6 +159,8 @@ class RecoveryEnv:
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
         frame=make_frame(measurement,command,out.reference_roll,out.steer_rate,actuator.previous,out.disturbance)
+        if c.observation.include_path:
+            frame=jp.concatenate([frame,self.path_features(pose)])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),out.reference_roll
 
@@ -178,7 +196,7 @@ class RecoveryEnv:
         command=self.command(tick,pose)
         controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose)
         leaves=jax.tree_util.tree_leaves((controller,actuator,history,obs,base,measurement,action,true_speed))
-        invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~physics_finite
+        invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~jp.asarray(physics_finite)
         fallen=jp.abs(measurement[0])>c.roll_failure
         failed=invalid|fallen|physical_contact
         # Count only complete stable intervals after the force has ended.
@@ -186,7 +204,9 @@ class RecoveryEnv:
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
-        reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+        reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+        path=self.path_features(pose)
+        reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2)
         reward=jp.where(failed,-10.,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
         return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,

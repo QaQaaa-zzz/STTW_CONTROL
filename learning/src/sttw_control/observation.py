@@ -8,9 +8,15 @@ FIELDS=('roll_error','roll','roll_rate','speed_estimate','steer','steer_rate',
         'base_steer_rate','previous_steer_command','previous_rear_command','estimated_disturbance')
 
 
+PATH_FIELDS=("radial_error","heading_error","path_curvature")
+
+def observation_fields(config):
+    return FIELDS + (PATH_FIELDS if config.include_path else ())
+
 @dataclass(frozen=True)
 class ObservationConfig:
     history_steps: int=1
+    include_path: bool=False
     def __post_init__(self):
         if not isinstance(self.history_steps,int) or self.history_steps<1:
             raise ValueError('history_steps must be positive integer')
@@ -30,7 +36,7 @@ def make_frame(measurement,command,reference_roll,base_steer,previous,disturbanc
 
 
 def initial_history(config=ObservationConfig()):
-    return History(jp.zeros((config.history_steps,len(FIELDS))),jp.zeros(config.history_steps))
+    return History(jp.zeros((config.history_steps,len(observation_fields(config)))),jp.zeros(config.history_steps))
 
 
 def advance_history(state,frame,config=ObservationConfig()):

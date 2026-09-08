@@ -11,6 +11,7 @@
 默认 Actor 单帧顺序：`roll_error, roll, roll_rate, speed_estimate, steer, steer_rate, yaw_rate_body, rear_rate, front_rate, steer_reference, speed_reference, base_steer_rate, previous_steer_command, previous_rear_command, estimated_disturbance`。内部 roll 左倾为正，`roll_error=roll-reference_roll`。历史长度配置化，默认一帧以便先核对参考结构；历史缓冲记录有效掩码。动作顺序：`steer_rate_residual, rear_rate_residual`，tanh 有界输出。
 
 ## 实施计划与当前状态
+用户现已授权开始圆形跟踪的残差学习。保留几何外环、ECBC状态反馈和ESO；新增可观测路径误差输入及径向/航向奖励，使用256→128 LeakyReLU Actor和PPO。首轮上限1,048,576个训练控制步（64环境×256步×64次迭代），先进行一轮工程更新；4个固定验证seed和CPU零残差对照用于开发选模。允许训练初始侧倾±0.02rad；验证固定声明初态。达到预算后停止，禁止自动扩大预算。每8次迭代保存参数与训练状态，并报告训练和评估交互数。训练不等于实车验证。
 本轮新增（用户2026-09-08授权）：先实现保存轨迹的离线视频回放与状态图；新增可配置圆形参考路径和几何跟踪外环，沿用ECBC＋ESO产生最终控制；执行12s圆形跟踪并导出视频、轨迹与状态图。基线视频回放已有8s数据。所有媒体放对应run的media目录，复用模块，不生成版本后缀源文件。该外环使用仿真位姿，实车定位尚未接入。
 1. 治理与基线：初始化 Git、明确目录和实验边界，保存原始工程；消除绝对路径、定义配置和日志接口。
 2. 控制一致性：保持 ECBC 公式，在 Python/JAX 显式维护 ESO 和滤波状态，用真实 C++ 序列对照验证输出。
@@ -21,7 +22,7 @@
 
 首轮交付目标为步骤1—4及实际可用的网络接口。不得将后续路线列为已完成。
 
-当前进度（2026-09-08）：步骤1—4的基础实现及网络接口已落地；25项CPU测试和一次实际GPU并行reset/step检查通过。两条8s CPU基线完整运行。ROS编译/实车联调、CPU/MJX长轨迹一致性及执行器实测辨识仍待完成。步骤5—6未实施，无已训练学习补偿器。具体证据和限制见`docs/VALIDATION.md`。
+当前进度（2026-09-08）：步骤1—4的基础实现及网络接口已落地；25项CPU测试和一次实际GPU并行reset/step检查通过。两条8s CPU基线完整运行。ROS编译/实车联调、CPU/MJX长轨迹一致性及执行器实测辨识仍待完成。步骤5的PPO实现已进入实际GPU验证和首轮训练；步骤6未实施，尚无已验证优于基线的学习补偿器。具体证据和限制见`docs/VALIDATION.md`。
 
 视频/路径扩展已落地：新增`path.py`圆形几何跟踪、`media.py`状态回放和状态图、`cli/render.py`保存入口。8s直行基线与12s圆形跟踪视频已生成；半径3m、速度参考2m/s、前视2.5m时完成1.2546圈，径向RMSE0.1729m、峰值0.4005m。保持现有执行器/ESO，尚无学习补偿；该结果是调试后的单次基线演示。
 

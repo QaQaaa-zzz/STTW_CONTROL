@@ -83,3 +83,18 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 再使用 `roslaunch mujoco_ros simulation.launch model:=/absolute/path/to/build/scalebike.xml load_plugins:=false`。导出的XML引用原始mesh的绝对路径，不复制网格、不替换接触形状。目录移动后需要重新生成。
 
 `residual_cmd` 使用 `ResidualCmd.msg`：Header时间戳及两路无量纲动作，默认残差关闭；单独启动 `control.launch residual_enabled:=true` 才允许新鲜消息进入共享限幅器。超时/非有限残差回到基础控制。状态过期或mode=9输出零指令，重新获得有效状态后重置控制历史。此处只有消息接入层，未提供经过实车验证的神经网络推理节点。ROS适配层当前对应零额外延迟/斜率限制配置，训练中非默认延迟/变化率需在部署适配中对应实现并验证。
+
+## 圆形残差 PPO
+
+保留几何外环、ECBC 和 ESO，Actor 为 256→128 LeakyReLU。
+`circle_learning.json` 开启三个附加输入：径向误差、相对圆切线航向误差、参考曲率；默认历史长度1时为18字段＋1掩码。前四个核心输入与原结构不变。附加输入需要定位；目前使用仿真位姿。
+
+```bash
+PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_playground/.venv/bin/python -u learning/cli/train.py --task learning/configs/circle_learning.json --config learning/configs/ppo_circle.json --output runs/<new-training-run>
+```
+
+预算为64环境×256控制步×64次更新，约104.9万个控制步；物理步长及每控制步25个物理子步保持不变。训练初始侧倾±0.02rad，固定4个开发验证种子，更新1、每8次和最后一次保存。`metrics.jsonl`记录更新与验证指标，`status.json`给出最新和最优候选路径；“最优”仅在四个开发种子无失败、最大速度RMSE≤0.2m/s的候选中比较径向RMSE，不代表超过零残差基线。
+
+超时允许价值bootstrap，跌倒禁止；两者均截断GAE并完整reset控制、ESO、执行器及历史状态。Actor从零确定性残差开始，预tanh高斯探索初始标准差0.15；PPO概率比使用同一个预tanh样本，Jacobian相消。熵项采用潜在高斯熵近似。固定物理尺度归一化随Actor保存。
+
+每个检查点包含可供`cli/evaluate.py --policy <checkpoint>`加载的Actor，以及优化器/critic/RNG的训练快照和摘要。当前没有训练恢复CLI，快照不包含物理环境状态，不能宣称无缝继续同一轨迹。训练声明记录源码摘要、模型和全部参数。视频生成沿用`cli/render.py`，原始数据不覆盖。
