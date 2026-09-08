@@ -98,3 +98,12 @@ PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_play
 超时允许价值bootstrap，跌倒禁止；两者均截断GAE并完整reset控制、ESO、执行器及历史状态。Actor从零确定性残差开始，预tanh高斯探索初始标准差0.15；PPO概率比使用同一个预tanh样本，Jacobian相消。熵项采用潜在高斯熵近似。固定物理尺度归一化随Actor保存。
 
 每个检查点包含可供`cli/evaluate.py --policy <checkpoint>`加载的Actor，以及优化器/critic/RNG的训练快照和摘要。当前没有训练恢复CLI，快照不包含物理环境状态，不能宣称无缝继续同一轨迹。训练声明记录源码摘要、模型和全部参数。视频生成沿用`cli/render.py`，原始数据不覆盖。
+
+
+比较保存的同条件轨迹（不加载策略、不重新积分）：
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/compare.py --baseline runs/<baseline> --candidate runs/<candidate> --output runs/<comparison> --candidate-label 'Candidate policy'
+```
+
+`ppo_circle_smoke.json`为修复后1024环境、单轮32768控制步的完整PPO工程配置。它只检查训练链路，不能用于宣称路径学习收敛。训练日志新增采样、优化、验证、检查点计时与完整墙钟计时。

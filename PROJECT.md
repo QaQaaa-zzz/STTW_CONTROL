@@ -41,3 +41,5 @@ Git远端：`https://github.com/QaQaaa-zzz/STTW_CONTROL.git`，按用户授权�
 当前分析：并行训练已使用64环境；约67.6min总耗时，普通更新35.5s/轮，4环境整段验证约164s/次。先补性能分段计时、查清CPU/MJX偏差和策略后期退化，再声明后续训练。详见docs/VALIDATION.md首轮完成分析。
 
 后端差异根因调查（2026-09-08）：确认当前MJX/JAX遗漏启动位置伺服的disableactuator语义，GPU额外施加回零力矩。已补充适配和模型身份版本，原checkpoint不得静默加载为修复后策略。用户确认下一轮目标为1024环境；1024环境短步进已运行，未启动新长训练，原预算未扩张。修复后的长轨迹核对结果见当前验证报告。
+
+推进记录（2026-09-08）：核对初始提交b623a93，原始ROS在first_cmd之前禁用group2速度伺服、用group1位置伺服启动，收到指令后禁用group1、改为速度控制。新增同契约轨迹对比入口和训练rollout/optimizer/validation/checkpoint分段计时。修复后的1024环境完整PPO工程检查采用32步rollout×1更新=32768训练步、seed10001两次12s验证=4800验证步；运行目录runs/circle_corrected_1024_smoke_20260908。此配置用于实现验证，不宣称短片段训练足以改善跟圆。

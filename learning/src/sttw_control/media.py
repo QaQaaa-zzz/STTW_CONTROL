@@ -204,3 +204,49 @@ def render_run(run_path,*,fps=30):
     except Exception as exc:
         (output/'manifest.json').write_text(json.dumps({'status':'error','error':str(exc)})+'\n')
         raise
+
+
+def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual'):
+    """Compare immutable same-contract recorded runs, without loading a policy."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    baseline,candidate,output=map(Path,(baseline,candidate,output))
+    declarations=[json.loads((p/'declaration.json').read_text()) for p in (baseline,candidate)]
+    for field in ('config','model','seed','backend','reset_semantics'):
+        if declarations[0][field]!=declarations[1][field]:
+            raise ValueError('comparison mismatch: '+field)
+    traces=[dict(np.load(p/'trace.npz')) for p in (baseline,candidate)]
+    for trace in traces: validate_trace(trace)
+    for field in ('qpos','qvel'):
+        if not np.array_equal(traces[0][field][0],traces[1][field][0]):
+            raise ValueError('comparison initial state mismatch')
+    c=declarations[0]['config'];circle=CircleConfig(**c['circle'])
+    summaries=[json.loads((p/'summary.json').read_text()) for p in (baseline,candidate)]
+    output.mkdir(parents=True,exist_ok=True)
+    fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained')
+    ref=circle_reference(circle)
+    axes[0,0].plot(ref[:,0],ref[:,1],'k:',label='Reference')
+    for trace,label,color,ls,summary in zip(traces,['ECBC + ESO',candidate_label],['#24567a','#b45f24'],['-','--'],summaries):
+        t=trace['time'];s=state_series(trace,c)
+        xy=trace['qpos'][:,:2]
+        radial=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
+        rmse=summary['circle_tracking']['radial_rmse_m']
+        axes[0,0].plot(*xy.T,color=color,ls=ls,label=f'{"Baseline" if label=="ECBC + ESO" else "Residual"}: RMSE {rmse:.4f} m')
+        for ax,y in zip([axes[0,1],axes[0,2],axes[1,0],axes[1,1],axes[1,2]],
+                        [radial,np.rad2deg(trace['measurement'][:,0]),s['speed'],trace['command'][:,0],trace['command'][:,1]]):
+            ax.plot(t,y,color=color,ls=ls,label=label)
+    axes[0,0].set(xlabel='World X (m)',ylabel='World Y (m)',title='Reference and recorded trajectories',aspect='equal')
+    for ax,title,ylabel in zip(axes.flat[1:],['Signed radial error','Roll angle (left positive)','True longitudinal speed','Applied steering-rate command','Applied rear-wheel-rate command'],['m','deg','m/s','rad/s','rad/s']):
+        ax.set(title=title,xlabel='Time (s)',ylabel=ylabel)
+    axes[0,1].axhline(0,color='black',lw=.7)
+    axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
+    for ax in axes.flat: ax.grid(alpha=.2)
+    axes[0,0].legend(fontsize=8,loc='center')
+    fig.suptitle(f"Recorded {declarations[0]['backend'].upper()} comparison | seed {declarations[0]['seed']} | {candidate_label}\nSame configuration and initial state; this is not a corrected-model retraining result",fontsize=12)
+    for suffix in ('png','pdf'):fig.savefig(output/f'comparison.{suffix}',dpi=170)
+    plt.close(fig)
+    manifest={'baseline':str(baseline),'candidate':str(candidate),'candidate_label':candidate_label,
+              'trace_sha256':[hashlib.sha256((p/'trace.npz').read_bytes()).hexdigest() for p in (baseline,candidate)],'summaries':summaries}
+    (output/'comparison.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    return manifest

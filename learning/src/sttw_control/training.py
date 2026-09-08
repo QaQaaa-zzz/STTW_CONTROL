@@ -81,6 +81,7 @@ def normalization(task):
 
 
 def train(task_path,output,config=TrainingConfig()):
+    run_start=time.monotonic()
     output=Path(output)
     output.mkdir(parents=True,exist_ok=False)
     env=RecoveryEnv(load_config(task_path),backend='mjx')
@@ -196,25 +197,35 @@ def train(task_path,output,config=TrainingConfig()):
         (path/'training.json').write_text(json.dumps({'update':index,'validation':validation,'training_sha256':hashlib.sha256(snapshot).hexdigest()},indent=2)+'\n')
         return str(path)
 
-    print('Compiling four-seed deterministic baseline validation',flush=True)
+    print(f'Compiling {len(c.validation_seeds)}-seed deterministic baseline validation',flush=True)
     baseline=host_metrics(validate(params,True))
     (output/'baseline_validation.json').write_text(json.dumps(baseline,indent=2)+'\n')
     print('Baseline validation: '+json.dumps(baseline),flush=True)
     best_score=float('inf'); best=None
     start=time.monotonic()
     for index in range(1,c.updates+1):
+        rollout_start=time.monotonic()
         (state,key),rows=rollout(state,key,params)
+        jax.block_until_ready(rows[4])
+        rollout_seconds=time.monotonic()-rollout_start
+        update_start=time.monotonic()
         params,opt_state,key,metrics=update(params,opt_state,key,rows)
         host=np.asarray(metrics)
         if not np.isfinite(host).all() or not all(np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(params)):
             raise RuntimeError('Nonfinite PPO update; stopping without promotion')
         record={'update':index,'control_transitions':index*c.num_envs*c.rollout_steps,
                 'elapsed_seconds':time.monotonic()-start,'loss_metrics':host.tolist(),
+                'rollout_seconds':rollout_seconds,'optimizer_seconds':time.monotonic()-update_start,
+                'validation_seconds':0.,'checkpoint_seconds':0.,
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if index==1 or index%c.checkpoint_interval==0 or index==c.updates:
+            validation_start=time.monotonic()
             validation=host_metrics(validate(params,False))
+            record['validation_seconds']=time.monotonic()-validation_start
+            checkpoint_start=time.monotonic()
             record['validation']=validation
             path=checkpoint(index,params,opt_state,key,validation)
+            record['checkpoint_seconds']=time.monotonic()-checkpoint_start
             score=float(np.mean(validation['radial_rmse']))
             eligible=not any(validation['failed']) and max(validation['speed_rmse'])<=.2
             if eligible and score<best_score:
@@ -222,6 +233,7 @@ def train(task_path,output,config=TrainingConfig()):
             status={'last_checkpoint':path,'best_checkpoint':best,'best_radial_rmse':best_score if best else None,
                     'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates}
             (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
+        record['wall_elapsed_seconds']=time.monotonic()-run_start
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
         print(json.dumps(record,allow_nan=False),flush=True)

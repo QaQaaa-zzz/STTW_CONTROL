@@ -110,3 +110,14 @@ CPU补充复核：相同配置/seed10001/12s，零残差径向RMSE0.159840m，up
 1024环境短测在修复前的MJX语义上完成：1024×32=32768个预热后控制步，26.403s，约1241控制步/s；另有一次1024控制步用于首次编译/步进。预热后的最终状态有限、无终止；reset含编译10.79s、首次step含编译23.45s。证据`runs/backend_diagnosis_20260908/batch1024.json`。该测试证明环境批量可运行，不包含Actor/PPO/优化器和完整rollout存储，不能宣称完整训练显存或加速比例已验证，也不能直接比较此前461训练步/s。短测未扩充原训练预算。
 
 修复后12s GPU零残差复核（seed10001）：无失败，径向RMSE0.15989354m；同seed原生CPU为0.15984031m，RMSE指标相差约0.00005323m（0.053mm）。此前同seed旧MJX为0.23007569m，适配修复已消除该工况的绝大部分差异。注意0.053mm是两个RMSE指标之差，不是逐时刻位置误差。轨迹存于`runs/backend_diagnosis_20260908/mjx_corrected_seed10001`，逐状态差分存于`trajectory_comparison.json`。这仍是单种子12s零残差验证，不能代替所有接触工况的一致性证明。下一次学习应在修复后的执行器契约下重新声明训练，以1024为目标并行规模，先验证完整rollout和PPO显存/吞吐；不继续沿用受额外回零伺服影响的旧策略结论。
+
+
+## 启动伺服来源、最佳模型对比与下一步工程检查
+
+原始代码来源已核对初始提交b623a93中的`mujoco_ros_node.cpp::ros_controller`。`first_cmd=false`时disableactuator=4（禁用group2速度伺服），位置指令为-2.5×roll_ang并让后轮加速；`first_cmd=true`时disableactuator=2（禁用group1位置伺服），转向使用latest_cmd.steer_vel。数字2/4是组位掩码，不是执行器编号。学习环境对应收到指令后的连续运动阶段；不意味着关闭所有转向能力，也尚未复现自然启动阶段。
+
+旧最佳模型前后对比图：`runs/circle_learning_20260908/comparison/comparison.png/pdf`，复用既有同配置/同模型/同CPU后端/同seed10001/相同qpos、qvel初态的12s记录。六面板包括轨迹、径向误差、侧倾、真实纵向速度、两路实际指令。图中明确标记旧update24的训练动力学；未绕过新模型身份限制重跑旧策略。基线径向RMSE0.159840m、旧最佳0.175711m；侧倾峰值由0.185048rad降至0.173962rad，姿态改善不等于路径改善。生成入口`learning/cli/compare.py`校验比较契约，输出绑定两条原始轨迹SHA256。
+
+新增训练分段计时显式同步rollout并记录rollout_seconds、optimizer_seconds、validation_seconds、checkpoint_seconds和包含初始验证的wall_elapsed_seconds；首次耗时包含相应JIT编译。原elapsed_seconds字段为兼容保留，不应解释为完整运行时间。
+
+修复后1024环境PPO工程检查已启动：`ppo_circle_smoke.json`，1024×32×1=32768训练步，1个开发seed10001、更新前后各12s共4800验证步；完整网络结构、物理子步、执行器限幅均保留。当前仅报告启动与34 passed/1 skipped回归测试，实际PPO结果以run内状态文件为准。初始日志中的four-seed是旧固定打印文案，此次实际声明只有1个种子；代码已改为按配置打印。没有扩大为长训练。
