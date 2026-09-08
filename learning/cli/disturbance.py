@@ -10,25 +10,28 @@ from sttw_control.evaluation import evaluate
 from sttw_control.disturbance import recovery_metrics
 
 
-def run(task_path,panel_path,training_run,checkpoint,output):
+def run(task_path,panel_path,training_run,checkpoint,output,seed=None):
     output.mkdir(parents=True,exist_ok=False)
     panel=json.loads(panel_path.read_text());cfg=load_config(task_path)
+    if seed is not None:panel['seed']=seed
     source=json.loads((training_run/'declaration.json').read_text())
     # Only explicit event overrides and added neutral event defaults may differ.
     actual=asdict(cfg)
     for key,value in source['task'].items():
         if actual[key]!=value:raise ValueError('base task differs from frozen training task: '+key)
-    nominal=replace(cfg,disturbance_force=0.,disturbance_steer_rate=0.)
+    nominal=replace(cfg,random_events=None,disturbance_force=0.,disturbance_steer_rate=0.)
     env=RecoveryEnv(nominal)
     expected=make_policy_identity(env.bundle.identity,source['task'],cfg.observation.history_steps)
     policy=load_policy(checkpoint,expected=expected)
     identity={**expected,'checkpoint_sidecar_sha256':hashlib.sha256((checkpoint/'identity.json').read_bytes()).hexdigest(),
-              'evaluation_overrides':'event timing/amplitude/frame/application point only; policy and observation unchanged'}
+              'evaluation_overrides':'event scheduling/waveform/timing/amplitude/frame/application point only; policy and observation unchanged'}
     scenarios=[('nominal',nominal)]
-    event=replace(cfg,disturbance_start=panel['start_seconds'],disturbance_duration=panel['duration_seconds'],disturbance_force=0.,disturbance_steer_rate=0.)
-    scenarios += [(f'steer_{i}',replace(event,disturbance_steer_rate=x)) for i,x in enumerate(panel['steer_rate_pulses'])]
-    scenarios += [(f'force_{i}',replace(event,disturbance_force=x,disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')) for i,x in enumerate(panel['lateral_forces'])]
-    (output/'declaration.json').write_text(json.dumps({'panel':panel,'checkpoint':str(checkpoint),'policy':identity,'scenarios':{k:asdict(c) for k,c in scenarios},'scope':'engineering amplitude panel; not matched disturbance severity or recovery-trained policy'},indent=2)+'\n')
+    event=replace(cfg,random_events=None,disturbance_start=panel['start_seconds'],disturbance_duration=panel['duration_seconds'],disturbance_force=0.,disturbance_steer_rate=0.)
+    scenarios += [(f'steer_{i}',replace(event,disturbance_steer_rate=x)) for i,x in enumerate(panel.get('steer_rate_pulses',[]))]
+    scenarios += [(f'force_{i}',replace(event,disturbance_force=x,disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')) for i,x in enumerate(panel.get('lateral_forces',[]))]
+    for case in panel.get('cases',[]):
+        scenarios.append((case['name'],replace(event,disturbance_steer_rate=case.get('steer_rate',0.),disturbance_force=case.get('force',0.),disturbance_duration=case['duration'],disturbance_waveform=case.get('waveform','constant'),disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')))
+    (output/'declaration.json').write_text(json.dumps({'panel':panel,'checkpoint':str(checkpoint),'policy':identity,'scenarios':{k:asdict(c) for k,c in scenarios},'scope':'frozen policy engineering panel; task and checkpoint training provenance recorded explicitly'},indent=2)+'\n')
     rows=[];nom={}
     for name,c in scenarios:
         for label,p in [('baseline',None),('residual',policy)]:
@@ -45,4 +48,5 @@ def run(task_path,panel_path,training_run,checkpoint,output):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('task','panel','training-run','checkpoint','output'):p.add_argument('--'+name,type=Path,required=True)
-    a=p.parse_args();run(a.task,a.panel,a.training_run,a.checkpoint,a.output)
+    p.add_argument('--seed',type=int)
+    a=p.parse_args();run(a.task,a.panel,a.training_run,a.checkpoint,a.output,a.seed)

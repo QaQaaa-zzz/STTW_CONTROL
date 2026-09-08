@@ -1,0 +1,38 @@
+{
+  "horizon_seconds": 12.0,
+  "speed_reference": 2.0,
+  "disturbance_force": 0.0,
+  "eso_start": 3.0,
+  "circle": {
+    "radius": 3.0,
+    "center_x": 0.0,
+    "center_y": 3.0,
+    "direction": 1,
+    "lookahead": 2.5,
+    "max_steer": 0.35
+  },
+  "observation": {
+    "include_path": true
+  },
+  "initial_roll_range": 0.02,
+  "path_error_weight": 20.0,
+  "heading_error_weight": 1.0,
+  "speed_error_weight": 20.0,
+  "random_events": {
+    "start_min": 4.0,
+    "start_max": 7.0,
+    "duration_min": 0.2,
+    "duration_max": 0.6,
+    "steer_min": 0.2,
+    "steer_max": 0.8,
+    "force_min": 2.0,
+    "force_max": 5.0,
+    "nominal_probability": 0.2,
+    "sine_probability": 0.5
+  },
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "failure_penalty": 100.0,
+  "path_excess_weight": 80.0,
+  "path_soft_limit": 0.2
+}

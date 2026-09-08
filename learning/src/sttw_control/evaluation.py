@@ -8,6 +8,7 @@ import numpy as np
 import jax
 import jax.numpy as jp
 from .path import tracking_metrics
+from .events import profile
 
 
 def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
@@ -28,6 +29,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         reset=jax.jit(env.reset) if env.backend=='mjx' else env.reset
         step=jax.jit(env.step) if env.backend=='mjx' else env.step
         state=reset(jax.random.PRNGKey(seed))
+        event=np.asarray(state.event).tolist()
+        (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -37,6 +40,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         action=np.zeros(2)
         def capture(s,a):
             return {'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
+                    'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
@@ -51,7 +55,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
             transitions+=1
             frames.append(capture(state,action))
             total_reward+=float(state.reward)
-            elapsed=float(state.data.time)-env.config.disturbance_start
+            elapsed=float(state.data.time)-event[0]*env.config.controller.dt
             if bool(state.balance_recovered) and balance_time is None: balance_time=elapsed
             if bool(state.task_recovered) and task_time is None: task_time=elapsed
             if bool(state.done): break
@@ -61,7 +65,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         summary={'controller':identity['controller'],'backend':env.backend,'seed':seed,
                  'transitions':transitions,'captured_states':len(frames),'episode_return':total_reward,
                  'end_code':int(state.end_code),'physical_failure':bool(state.terminated),
-                 'recovery_eligible':env.has_disturbance and int(state.tick)>=env.event_end,
+                 'recovery_eligible':(event[2]!=0 or event[3]!=0) and int(state.tick)>=event[1],
                  'balance_recovery_success':balance_time is not None and not bool(state.terminated),
                  'task_recovery_success':task_time is not None and not bool(state.terminated),
                  'first_balance_hold_completion_from_event_seconds':balance_time,

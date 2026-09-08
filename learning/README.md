@@ -116,3 +116,11 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 ```
 
 只在冻结训练配置基础上显式覆盖扰动事件，不改变策略观测/动作；先运行每个控制器的无扰动对照，再运行独立正负指令脉冲与质心侧力。`disturbance.recovery_metrics`报告相对参考圆及无扰动轨迹的回轨保持；`disturbance.plot_panel`生成事件标注对比图。单个轨迹的视频仍用`cli/render.py`。
+
+## 动态扰动训练及自动标准评估
+
+```bash
+PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_playground/.venv/bin/python -u learning/cli/recovery_pipeline.py --task learning/configs/disturbance_learning.json --training learning/configs/ppo_disturbance.json --panel learning/configs/recovery_standard_panel.json --output runs/<new-recovery-run>
+```
+
+`pipeline_status.json`显示当前阶段；`training.log`记录主训练，训练内metrics包括实际受扰控制步计数。训练结束选冻结候选、运行独立CPU标准配对面板、保存standard_results.json及带事件窗口的图/视频；不会自动增加训练预算。采样事件完整绑定config及checkpoint，旧跟圆策略不作为这次训练起点。首次JIT计时与稳态采样吞吐应分开解读。

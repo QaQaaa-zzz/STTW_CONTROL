@@ -20,6 +20,8 @@ from .recovery import RecoveryConfig,initial_recovery,update_recovery
 from .path import CircleConfig,circle_command
 
 
+from .events import RandomEvents,sample_event,profile
+
 @dataclass(frozen=True)
 class TaskConfig:
     controller: ControllerConfig=field(default_factory=ControllerConfig)
@@ -35,21 +37,32 @@ class TaskConfig:
     eso_start: float=3.
     disturbance_start: float=4.
     disturbance_duration: float=.1
+    random_events: RandomEvents | None=None
+    disturbance_waveform: str="constant"
     disturbance_force: float=0.
     disturbance_steer_rate: float=0.
     disturbance_force_frame: str="world_y"
     disturbance_force_point: str="chassis_com"
     initial_roll_range: float=0.
     roll_failure: float=.7
+    failure_penalty: float=10.
+    path_excess_weight: float=0.
+    path_soft_limit: float=.2
     path_error_weight: float=0.
     heading_error_weight: float=0.
     speed_error_weight: float=1.
 
     def __post_init__(self):
-        if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight)):
+        if not math.isfinite(self.failure_penalty) or self.failure_penalty<=0 or not math.isfinite(self.path_soft_limit) or self.path_soft_limit<=0:
+            raise ValueError("invalid failure penalty/path soft limit")
+        if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
         if self.observation.include_path and self.circle is None:
             raise ValueError("path observations require a circle")
+        if self.disturbance_waveform not in ("constant","half_sine"):
+            raise ValueError("invalid event waveform")
+        if self.random_events and self.random_events.start_max+self.random_events.duration_max>=self.horizon_seconds:
+            raise ValueError("random event must finish inside episode")
         if self.disturbance_force_frame not in ("world_y","heading_lateral") or self.disturbance_force_point not in ("chassis_com","vehicle_com"):
             raise ValueError("invalid force frame/application point")
         scalars=(self.horizon_seconds,self.speed_reference,self.steer_reference,self.steer_amplitude,
@@ -74,7 +87,7 @@ class TaskConfig:
 
 def load_config(path):
     raw=json.loads(Path(path).read_text())
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig)]:
+    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('random_events',RandomEvents)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -97,6 +110,7 @@ class EnvState:
     terminated: object
     truncated: object
     end_code: object
+    event: object
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -144,24 +158,30 @@ class RecoveryEnv:
 
     @property
     def has_disturbance(self):
-        return self.config.disturbance_force!=0 or self.config.disturbance_steer_rate!=0
+        return self.config.random_events is not None or self.config.disturbance_force!=0 or self.config.disturbance_steer_rate!=0
 
-    def disturbance_active(self,tick):
-        return (tick>=self.event_start)&(tick<self.event_end)
+    def fixed_event(self):
+        return jp.array([self.event_start,self.event_end,self.config.disturbance_steer_rate,self.config.disturbance_force,float(self.config.disturbance_waveform=='half_sine')])
 
-    def disturbance_wrench(self,data,tick):
+    def disturbance_active(self,tick,event=None):
+        event=self.fixed_event() if event is None else event
+        return (tick>=event[0])&(tick<event[1])
+
+    def disturbance_wrench(self,data,tick,event=None):
         c=self.config
         xp=np if self.backend=='cpu' else jp
-        force=xp.array([0.,c.disturbance_force,0.])
+        event=xp.asarray(self.fixed_event() if event is None else event)
+        magnitude=event[3]*profile(tick,event,xp)
+        force=xp.array([0.,magnitude,0.])
         if c.disturbance_force_frame=='heading_lateral':
             matrix=xp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)
             yaw=xp.arctan2(matrix[1,0],matrix[0,0])
-            force=c.disturbance_force*xp.array([-xp.sin(yaw),xp.cos(yaw),0.])
+            force=magnitude*xp.array([-xp.sin(yaw),xp.cos(yaw),0.])
         torque=xp.zeros(3)
         if c.disturbance_force_point=='vehicle_com':
             offset=xp.asarray(data.subtree_com[self.bundle.chassis])-xp.asarray(data.xipos[self.bundle.chassis])
             torque=xp.cross(offset,force)
-        return xp.where(self.disturbance_active(tick),xp.concatenate([force,torque]),xp.zeros(6))
+        return xp.concatenate([force,torque])
 
     def command(self,tick,pose=None):
         c=self.config
@@ -226,7 +246,8 @@ class RecoveryEnv:
         pose=self.pose(data)
         controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose)
         return EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
-                        jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0))
+                        jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
+                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event())
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config
@@ -238,14 +259,14 @@ class RecoveryEnv:
         fallen=jp.abs(measurement[0])>c.roll_failure
         failed=invalid|fallen|physical_contact
         # Count only complete stable intervals after the force has ended.
-        event_finished=self.has_disturbance&(state.tick>=self.event_end)
+        event_finished=((state.event[2]!=0)|(state.event[3]!=0))&(state.tick>=state.event[1])
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
         reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
         path=self.path_features(pose)
-        reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2)
-        reward=jp.where(failed,-10.,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
+        reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
+        reward=jp.where(failed,-c.failure_penalty,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
         return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,
                              reference=reference,base=base,obs=jp.nan_to_num(obs,nan=0.,posinf=0.,neginf=0.),tick=tick,reward=reward,done=failed|timeout,
@@ -268,7 +289,7 @@ class RecoveryEnv:
 
     def _step(self,state,action):
         c=self.config
-        offset=jp.where(self.disturbance_active(state.tick),c.disturbance_steer_rate,0.)
+        offset=state.event[2]*profile(state.tick,state.event)
         actuator,command=apply_residual(state.actuator,state.base.at[0].add(offset),action,state.measurement[2],c.actuator)
         ctrl=jp.array([0.,-command[1],command[0],command[0]])
         if self.backend=='cpu':
@@ -278,7 +299,7 @@ class RecoveryEnv:
             data.xfrc_applied[:]=0
             physical_contact=False
             for _ in range(self.substeps):
-                data.xfrc_applied[self.bundle.chassis,:]=np.asarray(self.disturbance_wrench(data,state.tick))
+                data.xfrc_applied[self.bundle.chassis,:]=np.asarray(self.disturbance_wrench(data,state.tick,state.event))
                 mujoco.mj_step(self.model,data)
                 physical_contact=physical_contact or self._contact_failure(data)
             # Sensors from mj_step can lag the final integration state.
@@ -290,7 +311,7 @@ class RecoveryEnv:
             data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied))
             def substep(_,carry):
                 d,contact=carry
-                d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(self.disturbance_wrench(d,state.tick)))
+                d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(self.disturbance_wrench(d,state.tick,state.event)))
                 d=self._mjx.step(self.mjx_model,d)
                 return d,contact|self._contact_failure(d)
             data,physical_contact=jax.lax.fori_loop(0,self.substeps,substep,(data,jp.bool_(False)))

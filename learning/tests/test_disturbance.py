@@ -52,3 +52,20 @@ def test_path_recovery_requires_excursion_and_final_hold():
     early=recovery_metrics(short,nominal,cfg)
     assert early['failed'] and not early['event_reached']
     assert early['post_event_radial_peak_m'] is None
+    unavailable=recovery_metrics(nominal,short,cfg)
+    assert not unavailable['paired_reference_available']
+
+
+def test_random_events_are_reproducible_bounded_and_exclusive():
+    import jax
+    from sttw_control.events import RandomEvents,sample_event,profile
+    c=RandomEvents()
+    keys=jax.random.split(jax.random.PRNGKey(23),1024)
+    events=jax.vmap(lambda k:sample_event(k,c,.005))(keys)
+    np.testing.assert_array_equal(events,jax.vmap(lambda k:sample_event(k,c,.005))(keys))
+    e=np.asarray(events)
+    assert np.all((e[:,1]-e[:,0]>=40)&(e[:,1]-e[:,0]<=120))
+    assert np.all((e[:,2]==0)|(e[:,3]==0))
+    assert np.sum(e[:,2]!=0)>250 and np.sum(e[:,3]!=0)>250
+    sine=jp.array([10,30,0,3,1])
+    np.testing.assert_allclose([profile(10,sine),profile(20,sine),profile(30,sine)],[0,1,0],atol=1e-6)

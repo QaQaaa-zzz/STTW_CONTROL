@@ -67,6 +67,9 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
                          'savefig.dpi':180})
     blue,orange='#2265a0','#c07924'
     t=trace['time'];m=trace['measurement'];s=state_series(trace,config)
+    event=np.asarray(trace['event'][0]) if 'event' in trace else np.array([config['disturbance_start']/config['controller']['dt'],(config['disturbance_start']+config['disturbance_duration'])/config['controller']['dt'],config.get('disturbance_steer_rate',0.),config['disturbance_force'],float(config.get('disturbance_waveform')=='half_sine')])
+    event_start,event_end=event[:2]*config['controller']['dt']
+    has_event=bool(event[2] or event[3])
     circle=CircleConfig(**config['circle']) if config.get('circle') else None
     fig,axes=plt.subplots(1,2,figsize=(12,5),layout='constrained')
     xy=trace['qpos'][:,:2]
@@ -89,6 +92,9 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
     axes[0].set(xlabel='World X [m]',ylabel='World Y [m]',title='Reference and recorded path',aspect='equal')
     axes[0].legend(fontsize=9)
     axes[1].plot(t,error,color=blue,lw=1.4)
+    if has_event:
+        axes[1].axvspan(event_start,event_end,color='red',alpha=.15,label=f'Disturbance {event_start:.2f}-{event_end:.2f}s')
+        axes[1].legend(fontsize=8)
     axes[1].axhline(0,color='#555555',lw=.8,ls='--')
     is_path=circle is not None or (config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0)
     axes[1].set(xlabel='Simulation time [s]',ylabel=('Radial error [m], outward +' if circle else 'Lateral error [m]') if is_path else 'Steering error [deg]',title='Path tracking error' if is_path else 'Steering reference error')
@@ -105,10 +111,22 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         ax.plot(t,actual,color=blue,lw=1.35,label='Measured' if 'command' in title else 'Actual')
         if ref is not None: ax.plot(t,ref,color=orange,ls='--',lw=1.3,label='Command' if 'command' in title else 'Reference')
         ax.set(ylabel=unit,title=title)
+        if has_event:ax.axvspan(event_start,event_end,color='red',alpha=.15)
         if ref is not None: ax.legend(loc='best',fontsize=9)
     for ax in axes[-1]: ax.set_xlabel('Simulation time [s]')
     fig.suptitle('Recorded vehicle states and control targets | '+controller_label,fontsize=14)
     fig.savefig(output/'states.png');fig.savefig(output/'states.pdf');plt.close(fig)
+    if has_event:
+        phase=np.clip((t-event_start)/(event_end-event_start),0,1)
+        factor=np.where((t>=event_start)&(t<event_end),np.sin(np.pi*phase) if event[4] else 1.,0.)
+        steer=trace.get('injected_steer_rate',event[2]*factor)
+        force=np.linalg.norm(trace['applied_wrench'][:,:3],axis=1)*np.sign(event[3]) if 'applied_wrench' in trace else event[3]*factor
+        fig,axes=plt.subplots(2,1,figsize=(10,5),sharex=True,layout='constrained')
+        for ax,y,label in zip(axes,[steer,force],['Injected steer-rate pulse [rad/s]','Applied lateral force [N]']):
+            ax.plot(t,y);ax.axvspan(event_start,event_end,color='red',alpha=.15);ax.set(ylabel=label)
+        axes[-1].set_xlabel('Simulation time [s]')
+        fig.suptitle(f'Disturbance {event_start:.2f}-{event_end:.2f}s | duration {event_end-event_start:.2f}s')
+        fig.savefig(output/'disturbance.png');fig.savefig(output/'disturbance.pdf');plt.close(fig)
     return metrics
 
 
@@ -167,6 +185,8 @@ def render_run(run_path,*,fps=30):
         font_path=findfont(FontProperties(family='DejaVu Sans'))
         font=ImageFont.truetype(font_path,20)
         small=ImageFont.truetype(font_path,17)
+        event_path=run/'event.json'
+        event=json.loads(event_path.read_text()) if event_path.exists() else {'start_seconds':config['disturbance_start'],'end_seconds':config['disturbance_start']+config['disturbance_duration'],'steer_rate_peak':config.get('disturbance_steer_rate',0.),'force_peak':config['disturbance_force'],'waveform':config.get('disturbance_waveform','constant')}
         ids=frame_indices(trace['time'],fps)
         with mujoco.Renderer(model,640,640,max_geom=3000) as renderer, mediapy.VideoWriter(output/'replay.mp4',(720,1280),fps=fps,crf=20,ffmpeg_args=['-movflags','+faststart']) as writer:
             for frame_number,index in enumerate(ids):
@@ -189,9 +209,18 @@ def render_run(run_path,*,fps=30):
                 draw.text((655,8),'Overhead: orange reference / blue actual' if len(ref) else 'Overhead: blue actual (no XY reference)',font=font,fill='#243442')
                 end=' | END' if index==len(xy)-1 else ''
                 draw.text((16,688),f't = {data.time:5.2f} s   speed = {series["speed"][index]:.2f} m/s   roll = {np.rad2deg(trace["measurement"][index,0]):+.2f} deg{end}',font=small,fill='#243442')
+                if event['force_peak'] or event['steer_rate_peak']:
+                    active=event['start_seconds']<=data.time<event['end_seconds']
+                    phase=np.clip((data.time-event['start_seconds'])/(event['end_seconds']-event['start_seconds']),0.,1.)
+                    factor=(np.sin(np.pi*phase) if event['waveform']=='half_sine' else 1.) if active else 0.
+                    text=f"{'DISTURBANCE ON' if active else 'Disturbance OFF'} | {event['start_seconds']:.2f}-{event['end_seconds']:.2f}s | steer {event['steer_rate_peak']*factor:+.2f} rad/s | force {event['force_peak']*factor:+.2f} N"
+                    draw.rectangle((12,48,1268,80),fill='#a12d21' if active else '#243442')
+                    draw.text((20,53),text,font=small,fill='white')
                 frame=np.asarray(canvas)
                 writer.add_image(frame)
                 if frame_number==len(ids)//2: canvas.save(output/'preview.png')
+                if (event['force_peak'] or event['steer_rate_peak']) and abs(data.time-(event['start_seconds']+event['end_seconds'])/2)<=1/fps:
+                    canvas.save(output/'disturbance_active.png')
                 if frame_number==len(ids)-1: canvas.save(output/'terminal.png')
         manifest={'fps':fps,'frame_count':len(ids),'first_trace_index':int(ids[0]),'last_trace_index':int(ids[-1]),
                   'source_trace_sha256':hashlib.sha256(trace_path.read_bytes()).hexdigest(),

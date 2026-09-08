@@ -6,7 +6,9 @@ from .media import state_series
 def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.05,heading_tolerance=.15,hold_seconds=.5):
     """No resampling: compare equal-time samples; later failure invalidates recovery."""
     t=trace['time'];n=len(t)
-    if len(nominal['time'])<n or not np.allclose(t,nominal['time'][:n],rtol=0,atol=1e-5):
+    if len(nominal['time'])<n:
+        return {'paired_reference_available':False,'reason':'nominal trajectory ended before disturbed trajectory; no extrapolation','failed':bool(trace['terminated'][-1]),'recovered_after_excursion':False,'post_event_extra_radial_peak_m':None,'first_joint_hold_completion_after_event_end_seconds':None,'settled_joint_hold_completion_after_event_end_seconds':None}
+    if not np.allclose(t,nominal['time'][:n],rtol=0,atol=1e-5):
         raise ValueError('nominal/disturbed timestamps mismatch')
     c=config['circle'];xy=trace['qpos'][:,:2];nomxy=nominal['qpos'][:n,:2]
     center=np.array([c['center_x'],c['center_y']])
@@ -65,7 +67,9 @@ def plot_panel(root):
         for policy,color,ls in [('baseline','#24567a','-'),('residual','#b45f24','--')]:
             tr=dict(np.load(root/name/policy/'trace.npz'));nom=dict(np.load(root/'nominal'/policy/'trace.npz'))
             t=tr['time'];n=len(t)
-            extra=np.linalg.norm(tr['qpos'][:,:2]-center,axis=1)-np.linalg.norm(nom['qpos'][:n,:2]-center,axis=1)
+            paired=min(n,len(nom['time']))
+            extra=np.full(n,np.nan)
+            extra[:paired]=np.linalg.norm(tr['qpos'][:paired,:2]-center,axis=1)-np.linalg.norm(nom['qpos'][:paired,:2]-center,axis=1)
             series=state_series(tr,c)
             for ax,y in zip(row,[extra,np.rad2deg(tr['measurement'][:,0]-tr['reference_roll']),series['speed']]):
                 ax.plot(t,y,color=color,ls=ls,label=policy)
@@ -76,7 +80,7 @@ def plot_panel(root):
             ax.grid(alpha=.2)
         for sign in (-1,1):row[0].axhline(sign*decl['panel']['extra_tolerance_m'],color='black',ls=':',lw=.8)
         row[0].legend(fontsize=8)
-    fig.suptitle('Turning disturbance recovery | CPU seed '+str(decl['panel']['seed'])+' | Frozen circle-only residual\nShading: event interval; dotted lines: extra radial tolerance. See report for joint recovery criteria.',fontsize=12)
+    fig.suptitle('Turning disturbance recovery | CPU seed '+str(decl['panel']['seed'])+' | Frozen residual policy\nShading: event interval; dotted lines: extra radial tolerance. See report for joint recovery criteria.',fontsize=12)
     dest=root/'analysis';dest.mkdir(exist_ok=True)
     for suffix in ('png','pdf'):fig.savefig(dest/f'disturbance_comparison.{suffix}',dpi=160)
     plt.close(fig)

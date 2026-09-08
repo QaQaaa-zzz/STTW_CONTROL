@@ -1,0 +1,19 @@
+{
+  "num_envs": 1024,
+  "rollout_steps": 256,
+  "updates": 32,
+  "epochs": 4,
+  "minibatch_size": 2048,
+  "learning_rate": 0.0003,
+  "gamma": 0.9995,
+  "gae_lambda": 0.99,
+  "initial_std": 0.15,
+  "seed": 42,
+  "checkpoint_interval": 8,
+  "validation_seeds": [
+    40001,
+    40002,
+    40003,
+    40004
+  ]
+}

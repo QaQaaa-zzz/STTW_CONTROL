@@ -126,7 +126,7 @@ def train(task_path,output,config=TrainingConfig()):
             z=mu+jp.exp(logstd)*jax.random.normal(noise_key,mu.shape)
             nxt=step(state,jp.tanh(z))
             _,nv=outputs(p,nxt.obs)
-            row=(state.obs,z,gaussian_log_prob(z,mu,logstd),value,nxt.reward,nv,nxt.terminated,nxt.done)
+            row=(state.obs,z,gaussian_log_prob(z,mu,logstd),value,nxt.reward,nv,nxt.terminated,nxt.done,jp.stack([(state.event[:,2]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,3]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1])],axis=-1))
             def restart(s):
                 fresh=reset(jax.random.split(reset_key,c.num_envs))
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
@@ -148,7 +148,7 @@ def train(task_path,output,config=TrainingConfig()):
 
     @jax.jit
     def update(p,opt_state,key,rows):
-        obs,z,logprob,value,reward,nv,terminated,done=rows
+        obs,z,logprob,value,reward,nv,terminated,done=rows[:8]
         adv,target=generalized_advantage(reward,value,nv,terminated,done,c.gamma,c.gae_lambda)
         adv=(adv-jp.mean(adv))/(jp.std(adv)+1e-8)
         flat=jax.tree.map(lambda x:x.reshape((-1,)+x.shape[2:]),(obs,z,logprob,adv,target))
@@ -217,6 +217,8 @@ def train(task_path,output,config=TrainingConfig()):
                 'elapsed_seconds':time.monotonic()-start,'loss_metrics':host.tolist(),
                 'rollout_seconds':rollout_seconds,'optimizer_seconds':time.monotonic()-update_start,
                 'validation_seconds':0.,'checkpoint_seconds':0.,
+                'steer_disturbed_transitions':int(jp.sum(rows[8][...,0])),
+                'force_disturbed_transitions':int(jp.sum(rows[8][...,1])),
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if index==1 or index%c.checkpoint_interval==0 or index==c.updates:
             validation_start=time.monotonic()
