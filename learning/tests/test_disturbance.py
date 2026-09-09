@@ -41,6 +41,9 @@ def test_path_recovery_requires_excursion_and_final_hold():
     disturbed['qpos'][40:90,0]+=.1
     result=recovery_metrics(disturbed,nominal,cfg)
     assert result['recovered_after_excursion']
+    assert np.isclose(result['path_relative_space']['right_extent_m'],.1)
+    assert not result['path_relative_space']['recovery_censored']
+    assert result['path_relative_space']['window_start_seconds']==.2
     late={**disturbed,'qpos':disturbed['qpos'].copy()}
     late['qpos'][220:230,0]+=.1
     assert recovery_metrics(late,nominal,cfg)['settled_joint_hold_completion_after_event_end_seconds'] is None

@@ -143,3 +143,20 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=egl /home/qy/mujoco_playgrou
 输出目录必须是新的；已有单轨媒体必须完整且来源摘要一致才能复用，不覆盖失败或陈旧媒体。每工况生成同步比较视频、带事件阴影的状态图和manifest，统一INDEX.md可打开。recovery_pipeline现在自动调用此步骤覆盖全部工况。
 
 `disturbance_history_learning.json`只把当前速度优先任务的history_steps设为20，形成380维输入（95ms首末跨度）；PPO配置复用ppo_disturbance.json。对照保留所有物理、奖励和事件分布，用相同预算测试历史信息的效果。不同history身份的checkpoint不能互相静默加载。
+
+## 协同动作映射与消融
+
+任务配置可选`action_mapping`，省略时仍直接输出转向角速度/后轮转速残差。启用后Actor的两个tanh输出分别表示`lateral_acceleration_proxy_residual`和`speed_proxy_residual`；`action_mapping.py`用转向角及后轮轮速代理转换成共享执行器接口的有界残差。PPO继续在原latent变量上计算概率，环境内完成确定性映射；动作惩罚使用映射后的电机残差。
+
+| 配置 | 用途 |
+| --- | --- |
+| disturbance_learning.json | 普通双通道直接残差 |
+| disturbance_steering_only_learning.json | 后轮残差尺度为0，隔离驱动补偿作用 |
+| disturbance_coupled_learning.json | 含速度—横向响应交叉项 |
+| disturbance_decoupled_learning.json | 相同参数，交叉项置0 |
+
+上述配置可通过现有train/recovery_pipeline入口传入；配置就绪不代表已运行正式训练。映射horizon须大于指令延迟，不支持额外指令变化率限制的预测；共享执行器仍执行最终限幅、关节边界和延迟。低于minimum_speed_proxy时映射输出零。参数是局部仿真近似，实车需重新辨识。
+
+**映射策略输出不是ROS电机残差。** `load_policy`返回代理需求，部署必须先调用相同映射再进入ResidualCmd接口；当前ROS未接入此转换，禁止直接发布该策略输出。checkpoint记录action_fields并校验完整配置，旧直接策略身份不因缺省action_mapping字段改变。
+
+标准配对恢复报告增加`path_relative_space`，左正法向误差为`-direction*(distance_to_center-radius)`。左右占用从扰动开始计至观察结束；未恢复保留删失标记。该指标计根参考点，不含车体扫掠包络；旧报告不自动更新，重分析应写入新run目录。

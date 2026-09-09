@@ -1,6 +1,7 @@
 """Paired disturbance evaluation with explicitly separate path/hold metrics."""
 import numpy as np
 from .media import state_series
+from .path import CircleConfig, lateral_space_metrics
 
 
 def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.05,heading_tolerance=.15,hold_seconds=.5):
@@ -40,7 +41,11 @@ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.0
     settling_start=max(int(np.searchsorted(t,earliest-1e-8)),int(invalid_indices[-1]) if len(invalid_indices) else 0)
     settling_completion=settling_start+needed
     settled=(float(t[settling_completion]-end) if settling_completion<n and not failed and np.all(valid[settling_start+1:]) else None)
-    return {'event_reached':True,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
+    space=lateral_space_metrics(xy[post],CircleConfig(**c))
+    space.update({'window_start_seconds':float(t[post][0]),'window_end_seconds':float(t[-1]),
+                  'window':'event_start_to_observed_episode_end',
+                  'recovery_censored':settled is None,'physical_failure':failed})
+    return {'event_reached':True,'path_relative_space':space,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
             'post_event_extra_radial_peak_m':float(np.max(np.abs(extra[post]))),
             'post_event_xy_separation_peak_m':float(np.max(np.linalg.norm(xy[post]-nomxy[post],axis=1))),
             'left_extra_radial_band':bool(len(left)),

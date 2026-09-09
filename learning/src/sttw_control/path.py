@@ -50,3 +50,19 @@ def tracking_metrics(xy,config):
             'radial_max_abs_m':float(np.max(np.abs(radial))),
             'radial_final_m':float(radial[-1]),
             'completed_turns':float(config.direction*(angle[-1]-angle[0])/(2*np.pi))}
+
+
+def lateral_space_metrics(xy,config):
+    """Root-point lateral occupancy relative to circle, positive left of travel.
+
+    This excludes body width/lean and is not a swept-body collision envelope.
+    Caller selects and declares the observation window (including censored runs).
+    """
+    xy=np.asarray(xy)
+    if xy.ndim!=2 or xy.shape[1]!=2 or len(xy)==0 or not np.all(np.isfinite(xy)):
+        raise ValueError('space metrics require nonempty finite XY samples')
+    radial=np.linalg.norm(xy-np.array([config.center_x,config.center_y]),axis=1)-config.radius
+    left=-config.direction*radial
+    l=float(max(0.,np.max(left)));r=float(max(0.,-np.min(left)))
+    return {'left_extent_m':l,'right_extent_m':r,'total_corridor_width_m':l+r,
+            'scope':'chassis_root_relative_to_reference_path_excludes_body_envelope'}

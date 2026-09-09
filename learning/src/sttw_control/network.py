@@ -10,15 +10,20 @@ from flax import linen as nn, serialization
 import jax
 import jax.numpy as jp
 from .observation import FIELDS, PATH_FIELDS
+from .action_mapping import ACTION_FIELDS
 
 
 def make_policy_identity(model_identity,config,history_steps):
     """Bind mesh assets, loader transform and runtime as well as XML/config."""
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
+    config=dict(config)
+    # New optional behavior must not invalidate existing direct-action models.
+    if config.get('action_mapping') is None:config.pop('action_mapping',None)
     identity={'model_sha256':digest(model_identity),'config_sha256':digest(config),'history_steps':history_steps}
     if config.get('observation',{}).get('include_path',False):
         identity['observation_fields']=list(FIELDS+PATH_FIELDS)
+    if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
     return identity
 
 
@@ -44,7 +49,7 @@ def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_
         raise ValueError('invalid observation normalization')
     payload=serialization.to_bytes(params)
     meta={'schema':'sttw_actor_v1','identity':identity,'fields':fields,
-          'actions':['steer_rate_residual','rear_rate_residual'],'hidden_sizes':list(hidden_sizes),
+          'actions':identity.get('action_fields',['steer_rate_residual','rear_rate_residual']),'hidden_sizes':list(hidden_sizes),
           'negative_slope':negative_slope,'mean':mean.tolist(),'std':std.tolist(),
           'payload_sha256':hashlib.sha256(payload).hexdigest()}
     # Validate dimensions before publishing a checkpoint directory.
@@ -57,7 +62,7 @@ def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_
 def load_policy(path,*,expected):
     path=Path(path)
     meta=json.loads((path/'identity.json').read_text())
-    if meta.get('schema')!='sttw_actor_v1' or meta['identity']!=expected or meta['fields']!=expected.get('observation_fields',list(FIELDS)) or meta['actions']!=['steer_rate_residual','rear_rate_residual']:
+    if meta.get('schema')!='sttw_actor_v1' or meta['identity']!=expected or meta['fields']!=expected.get('observation_fields',list(FIELDS)) or meta['actions']!=expected.get('action_fields',['steer_rate_residual','rear_rate_residual']):
         raise ValueError('policy observation/action/identity mismatch')
     payload=(path/'actor.msgpack').read_bytes()
     if hashlib.sha256(payload).hexdigest()!=meta['payload_sha256']:

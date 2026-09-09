@@ -21,6 +21,7 @@ from .path import CircleConfig,circle_command
 
 
 from .events import RandomEvents,sample_event,profile
+from .action_mapping import MappingConfig,map_action
 
 @dataclass(frozen=True)
 class TaskConfig:
@@ -28,6 +29,7 @@ class TaskConfig:
     actuator: ActuatorConfig=field(default_factory=ActuatorConfig)
     observation: ObservationConfig=field(default_factory=ObservationConfig)
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
+    action_mapping: MappingConfig | None=None
     circle: CircleConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
@@ -53,6 +55,11 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.action_mapping is not None:
+            if self.action_mapping.horizon<=self.actuator.delay_steps*self.actuator.dt:
+                raise ValueError('mapping horizon must exceed command delay')
+            if self.actuator.steer_acceleration is not None or self.actuator.rear_acceleration is not None:
+                raise ValueError('mapping predictor does not model command slew limits')
         if not math.isfinite(self.failure_penalty) or self.failure_penalty<=0 or not math.isfinite(self.path_soft_limit) or self.path_soft_limit<=0:
             raise ValueError("invalid failure penalty/path soft limit")
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
@@ -87,7 +94,7 @@ class TaskConfig:
 
 def load_config(path):
     raw=json.loads(Path(path).read_text())
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('random_events',RandomEvents)]:
+    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -289,6 +296,11 @@ class RecoveryEnv:
 
     def _step(self,state,action):
         c=self.config
+        if c.action_mapping is not None:
+            mapped=map_action(action,state.measurement[5]*c.action_mapping.wheel_radius_proxy,state.measurement[2],c.action_mapping,c.actuator,c.controller)
+            # Keep malformed input visible to failure detection, while the shared
+            # actuator disables its residual exactly as in the direct branch.
+            action=jp.where(jp.all(jp.isfinite(action)),mapped,action)
         offset=state.event[2]*profile(state.tick,state.event)
         actuator,command=apply_residual(state.actuator,state.base.at[0].add(offset),action,state.measurement[2],c.actuator)
         ctrl=jp.array([0.,-command[1],command[0],command[0]])
