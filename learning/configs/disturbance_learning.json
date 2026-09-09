@@ -17,7 +17,7 @@
   "initial_roll_range": 0.02,
   "path_error_weight": 20.0,
   "heading_error_weight": 1.0,
-  "speed_error_weight": 20.0,
+  "speed_error_weight": 100.0,
   "random_events": {
     "start_min": 4.0,
     "start_max": 7.0,

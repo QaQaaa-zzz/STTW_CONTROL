@@ -17,7 +17,7 @@
     40004
   ],
   "validation_post_seconds": 10.0,
-  "selection_speed_slack": 0.01,
+  "selection_speed_slack": 0.0,
   "selection_nominal_slack": 0.01,
   "validation_events": [
     {
