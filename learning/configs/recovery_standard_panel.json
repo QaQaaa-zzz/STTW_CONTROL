@@ -64,5 +64,6 @@
   "video_cases": [
     "steer_strong_left",
     "force_strong_left"
-  ]
+  ],
+  "minimum_post_event_seconds": 10.0
 }

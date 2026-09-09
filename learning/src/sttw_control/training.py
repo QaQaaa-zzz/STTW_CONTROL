@@ -18,6 +18,8 @@ import jax.numpy as jp
 import numpy as np
 import optax
 from .env import RecoveryEnv, load_config
+from .validation import make_validator
+from .selection import rank_candidate
 from .network import ResidualActor, make_policy_identity, save_policy
 
 
@@ -58,6 +60,15 @@ class TrainingConfig:
     initial_std: float=.15
     seed: int=42
     checkpoint_interval: int=8
+    validation_post_seconds: float=10.
+    validation_hold_seconds: float=.5
+    validation_path_tolerance: float=.2
+    validation_extra_tolerance: float=.05
+    validation_heading_tolerance: float=.15
+    validation_speed_tolerance: float=.2
+    selection_speed_slack: float=.01
+    selection_nominal_slack: float=.01
+    validation_events: tuple | None=None
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
@@ -68,6 +79,18 @@ class TrainingConfig:
             raise ValueError('rollout must divide evenly into minibatches')
         if not (0<self.gamma<=1 and 0<self.gae_lambda<=1 and 0<self.clip<1 and self.learning_rate>0 and self.initial_std>0 and self.entropy_weight>=0):
             raise ValueError('invalid PPO parameters')
+        if not (math.isfinite(self.validation_post_seconds) and math.isfinite(self.validation_hold_seconds) and self.validation_post_seconds>=self.validation_hold_seconds>0):
+            raise ValueError('invalid validation observation window')
+        if any(not math.isfinite(x) or x<0 for x in (self.selection_speed_slack,self.selection_nominal_slack)):
+            raise ValueError('invalid selection regression allowance')
+        if any(not math.isfinite(x) or x<=0 for x in (self.validation_path_tolerance,self.validation_extra_tolerance,self.validation_heading_tolerance,self.validation_speed_tolerance)):
+            raise ValueError('invalid validation tolerances')
+        if self.validation_events:
+            for event in self.validation_events:
+                if not math.isfinite(event['start']+event['duration']) or event['start']<0 or event['duration']<=0:
+                    raise ValueError('invalid validation event')
+                if any(not math.isfinite(event.get(k,0.)) for k in ('steer_rate','force')) or event.get('waveform','constant') not in ('constant','half_sine'):
+                    raise ValueError('invalid validation event amplitude/waveform')
         if not self.validation_seeds or len(set(self.validation_seeds))!=len(self.validation_seeds):
             raise ValueError('validation seeds must be nonempty and unique')
 
@@ -92,6 +115,7 @@ def train(task_path,output,config=TrainingConfig()):
                  'git_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
                  'budget_control_transitions':c.num_envs*c.rollout_steps*c.updates,
                  'validation_role':'development selection, not held-out recovery evidence',
+                 'validation_peak_window':'event onset through observation end',
                  'snapshot_resume':'optimizer/parameters/RNG only; no exact physics continuation'}
     (output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
     mean,std=normalization(env.config)
@@ -167,27 +191,11 @@ def train(task_path,output,config=TrainingConfig()):
         (p,opt_state,key),metrics=jax.lax.scan(epoch,(p,opt_state,key),None,length=c.epochs)
         return p,opt_state,key,jp.mean(metrics,axis=0)
 
-    val_keys=jp.stack([jax.random.PRNGKey(s) for s in c.validation_seeds])
-    @jax.jit
-    def validate(p,zero=False):
-        state=reset(val_keys)
-        def tick(state,_):
-            mu,_=outputs(p,state.obs)
-            active=~state.done
-            nxt=step(state,jp.where(zero,jp.zeros_like(mu),jp.tanh(mu)))
-            radial=jax.vmap(env.path_features)(nxt.pose)[:,0]
-            # True body-longitudinal velocity; wheel speed is not ground truth.
-            speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
-            row=(active,radial**2,(speed-env.config.speed_reference)**2,nxt.terminated)
-            return nxt,row
-        final,(active,radial,speed,failed)=jax.lax.scan(tick,state,None,length=env.horizon)
-        count=jp.sum(active,axis=0)
-        return {'radial_rmse':jp.sqrt(jp.sum(jp.where(active,radial,0),axis=0)/count),
-                'speed_rmse':jp.sqrt(jp.sum(jp.where(active,speed,0),axis=0)/count),
-                'failed':jp.any(failed,axis=0),'steps':count}
+    validate=make_validator(env,actor,scale,c)
 
     def host_metrics(raw):
-        return {k:np.asarray(v).tolist() for k,v in raw.items()}
+        # Preserve invalid validation evidence as JSON null; ranking rejects it.
+        return {k:np.where(np.isfinite(np.asarray(v)),np.asarray(v),None).tolist() for k,v in raw.items()}
 
     def checkpoint(index,p,opt_state,key,validation):
         path=output/'checkpoints'/f'update_{index:04d}'
@@ -201,7 +209,7 @@ def train(task_path,output,config=TrainingConfig()):
     baseline=host_metrics(validate(params,True))
     (output/'baseline_validation.json').write_text(json.dumps(baseline,indent=2)+'\n')
     print('Baseline validation: '+json.dumps(baseline),flush=True)
-    best_score=float('inf'); best=None
+    best_score=None; best=None; best_radial=None
     start=time.monotonic()
     for index in range(1,c.updates+1):
         rollout_start=time.monotonic()
@@ -228,11 +236,12 @@ def train(task_path,output,config=TrainingConfig()):
             record['validation']=validation
             path=checkpoint(index,params,opt_state,key,validation)
             record['checkpoint_seconds']=time.monotonic()-checkpoint_start
-            score=float(np.mean(validation['radial_rmse']))
-            eligible=not any(validation['failed']) and max(validation['speed_rmse'])<=.2
-            if eligible and score<best_score:
+            score,reason=rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
+            record['selection']={'rank':score,'reason':reason}
+            if score is not None and (best_score is None or score<best_score):
                 best_score,best=score,path
-            status={'last_checkpoint':path,'best_checkpoint':best,'best_radial_rmse':best_score if best else None,
+                best_radial=float(np.mean(validation['radial_rmse']))
+            status={'last_checkpoint':path,'best_checkpoint':best,'best_radial_rmse':best_radial,'best_selection_rank':best_score,
                     'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates}
             (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
         record['wall_elapsed_seconds']=time.monotonic()-run_start

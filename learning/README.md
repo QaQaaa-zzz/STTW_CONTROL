@@ -1,6 +1,6 @@
 # 模型1残差恢复控制
 
-本目录提供 ECBC 的 JAX 实现、256→128 LeakyReLU Actor、两路速度残差、CPU MuJoCo/MJX 环境和冻结策略评估。尚未接入 PPO 更新循环；不存在已训练的补偿策略。当前验证见 [`../docs/VALIDATION.md`](../docs/VALIDATION.md)。
+本目录提供 ECBC 的 JAX 实现、256→128 LeakyReLU Actor、两路速度残差、CPU MuJoCo/MJX 环境和冻结策略评估。已接入 PPO 更新循环，并完成首轮随机动态扰动训练；结果与限制见当前验证报告。当前验证见 [`../docs/VALIDATION.md`](../docs/VALIDATION.md)。
 
 ## 保存视频与状态图
 
@@ -93,7 +93,7 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_playground/.venv/bin/python -u learning/cli/train.py --task learning/configs/circle_learning.json --config learning/configs/ppo_circle.json --output runs/<new-training-run>
 ```
 
-预算为64环境×256控制步×64次更新，约104.9万个控制步；物理步长及每控制步25个物理子步保持不变。训练初始侧倾±0.02rad，固定4个开发验证种子，更新1、每8次和最后一次保存。`metrics.jsonl`记录更新与验证指标，`status.json`给出最新和最优候选路径；“最优”仅在四个开发种子无失败、最大速度RMSE≤0.2m/s的候选中比较径向RMSE，不代表超过零残差基线。
+预算为64环境×256控制步×64次更新，约104.9万个控制步；物理步长及每控制步25个物理子步保持不变。训练初始侧倾±0.02rad，固定4个开发验证种子，更新1、每8次和最后一次保存。`metrics.jsonl`记录更新与验证指标，`status.json`给出最新和最优候选路径；旧实验曾仅按径向RMSE选模；当前规则见下文“恢复选模”，旧实验记录不重新解释为通过新门槛。
 
 超时允许价值bootstrap，跌倒禁止；两者均截断GAE并完整reset控制、ESO、执行器及历史状态。Actor从零确定性残差开始，预tanh高斯探索初始标准差0.15；PPO概率比使用同一个预tanh样本，Jacobian相消。熵项采用潜在高斯熵近似。固定物理尺度归一化随Actor保存。
 
@@ -124,3 +124,11 @@ PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_play
 ```
 
 `pipeline_status.json`显示当前阶段；`training.log`记录主训练，训练内metrics包括实际受扰控制步计数。训练结束选冻结候选、运行独立CPU标准配对面板、保存standard_results.json及带事件窗口的图/视频；不会自动增加训练预算。采样事件完整绑定config及checkpoint，旧跟圆策略不作为这次训练起点。首次JIT计时与稳态采样吞吐应分开解读。
+
+## 恢复选模（2026-09-09）
+
+`ppo_disturbance.json` 的训练预算仍为1024×256×32=8,388,608控制步，训练事件分布不变。开发验证改为4个seed分别交叉无扰动、正负强转向、正负强侧力5个固定工况，每条轨迹再配同策略同初态的无扰动参考，共40条。6.0–6.6s施加扰动，观察至16.6s，单次验证最多132,800控制步；更新前基线及1/8/16/24/32更新共6次，最多796,800开发验证步，独立于训练步预算。
+
+候选逐工况满足无物理失败、真实速度RMSE≤min(0.2m/s,同工况基线RMSE+0.01m/s)，且无扰动径向RMSE不比基线增加超过0.01m。之后按“最终联合保持未完成比例、平均保持完成时间、平均额外径向峰值”依次比较。未完成时间按观察窗右删失，不记为0；这里的保持完成率不等价于经过扰动离带后的恢复概率。峰值统一从扰动开始算起，保持时间从扰动结束算起。基线或候选指标非有限时不能通过门槛，JSON用null保留无效证据。
+
+标准面板 `minimum_post_event_seconds=10` 显式延长评估窗口，不改变训练任务或checkpoint身份。当前54条面板最多179,280控制步。41001–41003已经用于分析，重复运行属于回归检查；正式新的独立测试需另行冻结未使用种子，不能继续称为首次留出测试。新配置尚未启动完整训练，旧run内声明和原始12s记录保持不变。

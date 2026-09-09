@@ -19,12 +19,16 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None):
     actual=asdict(cfg)
     for key,value in source['task'].items():
         if actual[key]!=value:raise ValueError('base task differs from frozen training task: '+key)
+    extra=panel.get('minimum_post_event_seconds',0.)
+    if not np.isfinite(extra) or extra<0:raise ValueError('minimum post-event observation must be finite and nonnegative')
+    max_duration=max([panel['duration_seconds']]+[c['duration'] for c in panel.get('cases',[])])
+    cfg=replace(cfg,horizon_seconds=max(cfg.horizon_seconds,panel['start_seconds']+max_duration+extra))
     nominal=replace(cfg,random_events=None,disturbance_force=0.,disturbance_steer_rate=0.)
     env=RecoveryEnv(nominal)
     expected=make_policy_identity(env.bundle.identity,source['task'],cfg.observation.history_steps)
     policy=load_policy(checkpoint,expected=expected)
     identity={**expected,'checkpoint_sidecar_sha256':hashlib.sha256((checkpoint/'identity.json').read_bytes()).hexdigest(),
-              'evaluation_overrides':'event scheduling/waveform/timing/amplitude/frame/application point only; policy and observation unchanged'}
+              'evaluation_overrides':'event scheduling/waveform/timing/amplitude/frame/application point and observation horizon only; policy and observation unchanged'}
     scenarios=[('nominal',nominal)]
     event=replace(cfg,random_events=None,disturbance_start=panel['start_seconds'],disturbance_duration=panel['duration_seconds'],disturbance_force=0.,disturbance_steer_rate=0.)
     scenarios += [(f'steer_{i}',replace(event,disturbance_steer_rate=x)) for i,x in enumerate(panel.get('steer_rate_pulses',[]))]
