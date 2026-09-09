@@ -76,6 +76,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
                  'whole_episode_root_forward_world_x_m':float(position[:,0].max()),
                  'wall_seconds':time.monotonic()-begin,'declaration_sha256':hashlib.sha256(declaration.encode()).hexdigest(),
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
+        summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)
         if env.config.circle is not None:
             summary['circle_tracking']=tracking_metrics(arrays['qpos'][:,:2],env.config.circle)
         (path/'summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
@@ -84,3 +85,20 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
     except Exception as exc:
         (path/'status.json').write_text(json.dumps({'status':'error','error':str(exc)})+'\n')
         raise
+
+
+def command_limit_metrics(commands,config):
+    """Observed final rate-command limit occupancy; excludes initial reset frame.
+
+    This measures rate limits, not torque saturation, joint stops or clipping of
+    pre-limit requests. It must not be reported as total actuator saturation.
+    """
+    commands=np.asarray(commands)[1:]
+    if len(commands)==0:
+        return {'samples':0,'steer_rate_limit_fraction':None,'rear_rate_limit_fraction':None,'either_rate_limit_fraction':None}
+    limits=np.array([config.steer_rate_limit,config.rear_rate_limit])
+    hit=np.abs(commands)>=limits*(1-1e-6)
+    return {'samples':len(commands),'steer_rate_limit_fraction':float(hit[:,0].mean()),
+            'rear_rate_limit_fraction':float(hit[:,1].mean()),
+            'either_rate_limit_fraction':float(hit.any(axis=1).mean()),
+            'scope':'final_rate_command_limit_occupancy_not_torque_saturation'}

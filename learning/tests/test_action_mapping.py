@@ -88,3 +88,53 @@ def test_steering_only_config_removes_drive_residual():
     assert c.action_mapping is None
     _,command=apply_residual(initial_actuator(c.actuator),jp.array([0.,20.]),jp.ones(2),0.,c.actuator)
     np.testing.assert_allclose(command,[c.actuator.steer_residual_scale,20.])
+
+
+def test_box_allocation_reallocates_when_steering_is_unavailable():
+    from sttw_control.action_mapping import box_allocate
+    J=jp.array([[1.,1.],[0.,1.]])
+    request=jp.array([1.,0.]);lo=jp.array([0.,-1.]);hi=jp.array([0.,1.])
+    u=box_allocate(J,request,lo,hi,jp.ones(2),1e-6)
+    np.testing.assert_allclose(u,[0.,.5],atol=1e-5)
+    assert np.sum(np.asarray(J@u-request)**2)<1.
+
+
+def test_authority_mapping_obeys_remaining_command_margin_and_zero():
+    c=MappingConfig(authority_aware=True);a=ActuatorConfig();ctrl=ControllerConfig()
+    base=jp.array([2.9,59.9])
+    f=lambda action:map_action(action,2.,.1,c,a,ctrl,base=base)
+    np.testing.assert_array_equal(f(jp.zeros(2)),[0.,0.])
+    command=base+f(jp.ones(2))*jp.array([1.,5.])
+    assert float(command[0])<=3.000001 and float(command[1])<=60.000001
+    assert np.isfinite(jax.jacfwd(f)(jp.array([.01,.01]))).all()
+
+
+def test_authority_zero_cpu_regression_and_legacy_mapping_identity():
+    from sttw_control.env import RecoveryEnv,load_config,TaskConfig
+    from sttw_control.network import make_policy_identity
+    c=load_config('learning/configs/disturbance_authority_learning.json')
+    a=RecoveryEnv(c);b=RecoveryEnv(replace(c,action_mapping=None))
+    x,y=a.reset(4),b.reset(4)
+    for _ in range(5):
+        x,y=a.step(x,jp.zeros(2)),b.step(y,jp.zeros(2))
+        np.testing.assert_array_equal(x.data.qpos,y.data.qpos)
+    legacy=asdict(replace(c,action_mapping=MappingConfig()))
+    old={**legacy,'action_mapping':dict(legacy['action_mapping'])}
+    for key in ('authority_aware','lateral_weight','speed_weight','regularization'):old['action_mapping'].pop(key)
+    assert make_policy_identity({},old,1)==make_policy_identity({},legacy,1)
+    with pytest.raises(ValueError,match='delayed'):
+        TaskConfig(action_mapping=c.action_mapping,actuator=ActuatorConfig(delay_steps=1))
+
+
+def test_box_solver_matches_dense_search_and_infeasible_base_fallback():
+    from sttw_control.action_mapping import box_allocate
+    rng=np.random.default_rng(15)
+    for _ in range(8):
+        J=rng.normal(size=(2,2));r=rng.normal(size=2)
+        lo=np.array([-.2,-.8]);hi=np.array([.5,.3]);w=np.array([2.,1.])
+        u=np.asarray(box_allocate(jp.asarray(J),jp.asarray(r),jp.asarray(lo),jp.asarray(hi),jp.asarray(w),1e-6))
+        grid=np.stack(np.meshgrid(np.linspace(lo[0],hi[0],101),np.linspace(lo[1],hi[1],101)),axis=-1).reshape(-1,2)
+        cost=lambda v:np.sum(w*(v@J.T-r)**2,axis=-1)+1e-6*np.sum(v*v,axis=-1)
+        assert cost(u)<=cost(grid).min()+1e-5
+    c=MappingConfig(authority_aware=True)
+    np.testing.assert_array_equal(map_action(jp.ones(2),2.,.1,c,ActuatorConfig(),ControllerConfig(),base=jp.array([4.,20.])),[0.,0.])

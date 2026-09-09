@@ -20,6 +20,11 @@ def make_policy_identity(model_identity,config,history_steps):
     config=dict(config)
     # New optional behavior must not invalidate existing direct-action models.
     if config.get('action_mapping') is None:config.pop('action_mapping',None)
+    if config.get('action_mapping') is not None:
+        mapping=dict(config['action_mapping'])
+        for key,value in [('authority_aware',False),('lateral_weight',1.),('speed_weight',1.),('regularization',1e-6)]:
+            if mapping.get(key)==value:mapping.pop(key)
+        config['action_mapping']=mapping
     identity={'model_sha256':digest(model_identity),'config_sha256':digest(config),'history_steps':history_steps}
     if config.get('observation',{}).get('include_path',False):
         identity['observation_fields']=list(FIELDS+PATH_FIELDS)

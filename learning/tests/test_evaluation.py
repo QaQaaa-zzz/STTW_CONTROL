@@ -26,3 +26,13 @@ def test_history_length_does_not_change_physical_roll_summary(tmp_path):
     trace=np.load(tmp_path/'run/trace.npz')
     expected=float(np.abs(trace['measurement'][:,0]).max())
     assert result['roll_abs_max_rad']==expected
+
+
+def test_command_limit_statistics_exclude_initial_state():
+    from sttw_control.evaluation import command_limit_metrics
+    from sttw_control.actuator import ActuatorConfig
+    c=ActuatorConfig()
+    result=command_limit_metrics(np.array([[3.,60.],[3.,20.],[0.,60.],[0.,20.]]),c)
+    assert result['steer_rate_limit_fraction']==pytest.approx(1/3)
+    assert result['rear_rate_limit_fraction']==pytest.approx(1/3)
+    assert result['either_rate_limit_fraction']==pytest.approx(2/3)

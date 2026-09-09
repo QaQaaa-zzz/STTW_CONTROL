@@ -56,6 +56,8 @@ class TaskConfig:
 
     def __post_init__(self):
         if self.action_mapping is not None:
+            if self.action_mapping.authority_aware and self.actuator.delay_steps:
+                raise ValueError('authority allocation does not predict delayed command headroom')
             if self.action_mapping.horizon<=self.actuator.delay_steps*self.actuator.dt:
                 raise ValueError('mapping horizon must exceed command delay')
             if self.actuator.steer_acceleration is not None or self.actuator.rear_acceleration is not None:
@@ -297,7 +299,7 @@ class RecoveryEnv:
     def _step(self,state,action):
         c=self.config
         if c.action_mapping is not None:
-            mapped=map_action(action,state.measurement[5]*c.action_mapping.wheel_radius_proxy,state.measurement[2],c.action_mapping,c.actuator,c.controller)
+            mapped=map_action(action,state.measurement[5]*c.action_mapping.wheel_radius_proxy,state.measurement[2],c.action_mapping,c.actuator,c.controller,base=state.base)
             # Keep malformed input visible to failure detection, while the shared
             # actuator disables its residual exactly as in the direct branch.
             action=jp.where(jp.all(jp.isfinite(action)),mapped,action)

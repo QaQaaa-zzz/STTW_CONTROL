@@ -160,3 +160,7 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=egl /home/qy/mujoco_playgrou
 **映射策略输出不是ROS电机残差。** `load_policy`返回代理需求，部署必须先调用相同映射再进入ResidualCmd接口；当前ROS未接入此转换，禁止直接发布该策略输出。checkpoint记录action_fields并校验完整配置，旧直接策略身份不因缺省action_mapping字段改变。
 
 标准配对恢复报告增加`path_relative_space`，左正法向误差为`-direction*(distance_to_center-radius)`。左右占用从扰动开始计至观察结束；未恢复保留删失标记。该指标计根参考点，不含车体扫掠包络；旧报告不自动更新，重分析应写入新run目录。
+
+`disturbance_authority_learning.json`启用`authority_aware`有限指令余量分配。优化物理残差u：`sum(w * (J u - demand)^2) + regularization * ||u||²`，其中w为配置权重除以需求尺度平方，边界同时考虑残差幅值、strength、基础指令占用和当前关节位置。横向与速度权重显式配置并绑定checkpoint；当前不是自适应优先级策略。和disturbance_coupled_learning.json比较可隔离余量感知作用。
+
+此模式需给map_action传入base指令，环境已接入；基础指令越界回退零残差。不支持非零指令延迟/额外指令变化率限制。新增评估字段`command_limits`统计最终速度指令达到边界的样本比例（不含reset），不统计电机力矩饱和、关节限位或请求被裁剪次数。ROS部署仍需单独接入映射。
