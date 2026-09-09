@@ -1,0 +1,16 @@
+{
+  "speeds": [1.5, 2.0, 2.5],
+  "radii": [2.0, 3.0, 4.0],
+  "directions": [-1, 1],
+  "seeds": [43001],
+  "horizon_seconds": 16.6,
+  "event_start_seconds": 6.0,
+  "nominal_radial_rmse_max": 0.2,
+  "nominal_speed_rmse_max": 0.2,
+  "events": [
+    {"name": "steer_negative", "steer_rate": -1.2, "duration": 0.6},
+    {"name": "steer_positive", "steer_rate": 1.2, "duration": 0.6},
+    {"name": "force_negative", "force": -7.0, "duration": 0.6},
+    {"name": "force_positive", "force": 7.0, "duration": 0.6}
+  ]
+}

@@ -166,3 +166,9 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=egl /home/qy/mujoco_playgrou
 此模式需给map_action传入base指令，环境已接入；基础指令越界回退零残差。不支持非零指令延迟/额外指令变化率限制。新增评估字段`command_limits`统计最终速度指令达到边界的样本比例（不含reset），不统计电机力矩饱和、关节限位或请求被裁剪次数。ROS部署仍需单独接入映射。
 
 新评估summary的`command_headroom`使用每次动作前的基础指令及实测转向位置，统计相对于共享边界的正负余量和配置残差盒被压缩的比例，含strength。它说明是否存在潜在指令余量竞争，不说明策略实际请求被拒绝或力矩饱和。延迟配置下仍只表示即时状态诊断，不能解释为未来可用控制权。
+
+基线跨工况机制筛查（输出目录不得存在）：
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/screen.py --task learning/configs/disturbance_learning.json --protocol learning/configs/authority_screening.json --output runs/<new-screening-run>
+```
+`declaration.json`固定配置与最大控制步，`status.json`记录进度，`results.jsonl`逐条保存名义资格、原始summary和配对恢复指标。所有条件都是开发筛查数据；名义不合格不能据受扰失败宣称恢复方法不足。

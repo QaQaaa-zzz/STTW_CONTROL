@@ -328,3 +328,11 @@ CPU seed41001八受扰工况16.6s均值：基础/新模型径向RMSE0.19519/0.13
 新增headroom指标行为测试覆盖速率余量不足及关节位置边界。完整CPU套件60 passed、1 skipped（GPU专用环境测试），14.46s；git diff --check通过。
 
 authority短PPO已完整结束：runs/authority_allocation_preflight_20260909/training/status.json complete=true，32768训练控制步，1024次episode结束，转向/力受扰步数2355/2497；前后共1240验证控制步，验证无失败，loss有限，保存update_0001。累计记录127.168s，包含首次编译。约0.15s短任务不能作为真实转弯恢复效果或约束竞争证据。
+
+## 论文贡献定位与跨工况筛查启动（2026-09-09）
+
+本轮核对文献：Huo等的自行车分层残差学习（RAS2025，https://www.sciencedirect.com/science/article/pii/S092188902500082X）已有传统控制+学习补偿；Optimal dynamic Control Allocation with guaranteed constraints and online Reinforcement Learning（https://www.sciencedirect.com/science/article/pii/S0005109820304635）已有执行器约束与学习控制分配。因此不能把PPO+二次优化本身作为新贡献。当前可能形成的实质贡献是单轨转弯中速度/姿态恢复冲突的识别、与执行器响应一致的需求分配，以及等预算消融下跨工况恢复时间/空间改善；尚待实验证实。
+
+新基线筛查已启动，配置authority_screening.json，18运动条件×5事件=90条，最多298800控制步，无训练。新方向/半径保持初始位置与切向一致，模型和执行器未改。速度1.5/2/2.5、半径2/3/4、左右方向；±1.2rad/s和±7N半正弦扰动。完整筛查声明在runs/authority_screening_20260909/declaration.json，进度status.json，启动日志runs/authority_screening_20260909_launch/screening.log。当前未形成完整结果，不能声称找到了机制工况。
+
+新增场景构造测试验证18个唯一条件、左右几何初始化及控制/执行器参数不变；全套61 passed、1 skipped，13.93s。名义运动的资格按6s后速度/径向RMSE≤0.2及无失败判断，明确保留名义不合格和受扰失败结果。
