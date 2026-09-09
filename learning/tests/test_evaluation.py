@@ -36,3 +36,13 @@ def test_command_limit_statistics_exclude_initial_state():
     assert result['steer_rate_limit_fraction']==pytest.approx(1/3)
     assert result['rear_rate_limit_fraction']==pytest.approx(1/3)
     assert result['either_rate_limit_fraction']==pytest.approx(2/3)
+
+
+def test_headroom_distinguishes_joint_position_and_rate_constraints():
+    from sttw_control.evaluation import headroom_metrics
+    from sttw_control.actuator import ActuatorConfig
+    c=ActuatorConfig()
+    result=headroom_metrics(np.array([[0.,20.],[2.9,59.9],[0.,20.]]),np.array([0.,0.,.8]),c)
+    assert result['residual_box_restricted_fraction']==pytest.approx(2/3)
+    assert result['baseline_outside_command_bounds_fraction']==0.
+    assert result['minimum_positive_steer_margin_rad_s']==0.

@@ -76,6 +76,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
                  'whole_episode_root_forward_world_x_m':float(position[:,0].max()),
                  'wall_seconds':time.monotonic()-begin,'declaration_sha256':hashlib.sha256(declaration.encode()).hexdigest(),
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
+        summary['command_headroom']=headroom_metrics(arrays['base'][:-1],arrays['measurement'][:-1,2],env.config.actuator)
         summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)
         if env.config.circle is not None:
             summary['circle_tracking']=tracking_metrics(arrays['qpos'][:,:2],env.config.circle)
@@ -102,3 +103,31 @@ def command_limit_metrics(commands,config):
             'rear_rate_limit_fraction':float(hit[:,1].mean()),
             'either_rate_limit_fraction':float(hit.any(axis=1).mean()),
             'scope':'final_rate_command_limit_occupancy_not_torque_saturation'}
+
+
+def headroom_metrics(base,steer,config):
+    """Decision-state instantaneous command margins; no delayed/torque prediction.
+
+    Inputs are pre-action baseline commands and measured steering joint angles.
+    Restricted means some part of the configured residual box is unavailable,
+    not that the actual policy requested that part or suffered a performance loss.
+    """
+    base=np.asarray(base);steer=np.asarray(steer)
+    if base.ndim!=2 or base.shape[1]!=2 or steer.shape!=(len(base),) or not len(base):
+        raise ValueError('headroom requires aligned nonempty baseline and steering states')
+    if not np.isfinite(base).all() or not np.isfinite(steer).all():
+        raise ValueError('nonfinite headroom inputs')
+    limits=np.array([config.steer_rate_limit,config.rear_rate_limit])
+    lower=np.broadcast_to(-limits,base.shape).copy();upper=np.broadcast_to(limits,base.shape).copy()
+    lower[:,0]=np.clip((-config.steer_limit-steer)/config.dt,-limits[0],limits[0])
+    upper[:,0]=np.clip((config.steer_limit-steer)/config.dt,-limits[0],limits[0])
+    positive=upper-base;negative=base-lower
+    scale=config.strength*np.array([config.steer_residual_scale,config.rear_residual_scale])
+    restricted=np.any((positive<scale-1e-6)|(negative<scale-1e-6),axis=1)
+    return {'samples':len(base),'residual_box_restricted_fraction':float(restricted.mean()),
+            'baseline_outside_command_bounds_fraction':float(np.any((positive<0)|(negative<0),axis=1).mean()),
+            'minimum_positive_steer_margin_rad_s':float(positive[:,0].min()),
+            'minimum_negative_steer_margin_rad_s':float(negative[:,0].min()),
+            'minimum_positive_rear_margin_rad_s':float(positive[:,1].min()),
+            'minimum_negative_rear_margin_rad_s':float(negative[:,1].min()),
+            'scope':'instantaneous_command_headroom_not_torque_or_delayed_authority'}
