@@ -270,6 +270,9 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
         ax.set(title=title,xlabel='Time (s)',ylabel=ylabel)
     axes[0,1].axhline(0,color='black',lw=.7)
     axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
+    if c.get('disturbance_force',0.) or c.get('disturbance_steer_rate',0.):
+        for ax in axes.flat[1:]:
+            ax.axvspan(c['disturbance_start'],c['disturbance_start']+c['disturbance_duration'],color='gray',alpha=.2)
     for ax in axes.flat: ax.grid(alpha=.2)
     axes[0,0].legend(fontsize=8,loc='center')
     fig.suptitle(f"Recorded {declarations[0]['backend'].upper()} comparison | seed {declarations[0]['seed']} | {candidate_label}\nSame configuration and initial state; paired engineering evaluation",fontsize=12)

@@ -45,3 +45,22 @@ def test_path_observation_checkpoint_and_reward(tmp_path):
     penalized=env._advance(*args).reward
     original=plain._advance(*args).reward
     assert float(penalized)<float(original)
+
+
+def test_history_observations_preserve_baseline_and_reset_mask():
+    from dataclasses import replace
+    from sttw_control.env import RecoveryEnv,load_config
+    from sttw_control.observation import ObservationConfig
+    cfg=load_config('learning/configs/disturbance_learning.json')
+    plain=RecoveryEnv(cfg)
+    history=RecoveryEnv(replace(cfg,observation=ObservationConfig(history_steps=20,include_path=True)))
+    a,b=plain.reset(19),history.reset(19)
+    assert b.obs.shape==(380,)
+    assert np.count_nonzero(np.asarray(b.obs[-20:]))==1
+    for _ in range(22):
+        a,b=plain.step(a,jp.zeros(2)),history.step(b,jp.zeros(2))
+        np.testing.assert_allclose(a.data.qpos,b.data.qpos,atol=1e-10,rtol=0)
+    assert np.count_nonzero(np.asarray(b.obs[-20:]))==20
+    b=history.reset(19)
+    assert np.count_nonzero(np.asarray(b.obs[-20:]))==1
+    np.testing.assert_allclose(b.obs[:-20].reshape(20,18)[:-1],0)

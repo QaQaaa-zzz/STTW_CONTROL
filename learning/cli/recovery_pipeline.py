@@ -29,9 +29,7 @@ if __name__=='__main__':
         from sttw_control.disturbance import plot_panel
         first=a.output/'evaluation'/f"seed_{panel['evaluation_seeds'][0]}"
         plot_panel(first)
-        for case in panel.get('video_cases',[]):
-            path=first/case/'residual'
-            invoke(['learning/cli/render.py','--run',path],a.output/f'{case}_video.log',True)
+        invoke(['learning/cli/panel_media.py','--panel-run',first,'--output',a.output/'complete_media'],a.output/'complete_media.log',True)
         rows=[]
         for seed in panel['evaluation_seeds']:
             for line in (a.output/'evaluation'/f'seed_{seed}'/'results.jsonl').read_text().splitlines():

@@ -134,3 +134,12 @@ PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_play
 标准面板 `minimum_post_event_seconds=10` 显式延长评估窗口，不改变训练任务或checkpoint身份。当前54条面板最多179,280控制步。41001–41003已经用于分析，重复运行属于回归检查；正式新的独立测试需另行冻结未使用种子，不能继续称为首次留出测试。新配置尚未启动完整训练，旧run内声明和原始12s记录保持不变。
 
 2026-09-09速度优先运行：用户已授权上述预算。当前任务速度惩罚权重为100（上一轮20），ppo_disturbance.json的selection_speed_slack为0，即候选逐工况速度RMSE不得高于基线。完整配置将在runs/launches/dynamic_recovery_speed_20260909冻结，运行输出在runs/dynamic_recovery_speed_20260909；历史运行参数以各自declaration为准。
+
+
+完整标准面板媒体：
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=egl /home/qy/mujoco_playground/.venv/bin/python learning/cli/panel_media.py --panel-run runs/<run>/evaluation/seed_<seed> --output runs/<run>/complete_media
+```
+输出目录必须是新的；已有单轨媒体必须完整且来源摘要一致才能复用，不覆盖失败或陈旧媒体。每工况生成同步比较视频、带事件阴影的状态图和manifest，统一INDEX.md可打开。recovery_pipeline现在自动调用此步骤覆盖全部工况。
+
+`disturbance_history_learning.json`只把当前速度优先任务的history_steps设为20，形成380维输入（95ms首末跨度）；PPO配置复用ppo_disturbance.json。对照保留所有物理、奖励和事件分布，用相同预算测试历史信息的效果。不同history身份的checkpoint不能互相静默加载。
