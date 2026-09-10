@@ -1,0 +1,68 @@
+{
+  "speeds": [
+    2.0
+  ],
+  "radii": [
+    4.0
+  ],
+  "directions": [
+    1
+  ],
+  "seeds": [
+    45001
+  ],
+  "horizon_seconds": 70.0,
+  "event_start_seconds": 12.0,
+  "nominal_radial_rmse_max": 0.2,
+  "nominal_speed_rmse_max": 0.2,
+  "events": [
+    {
+      "name": "steer_rate_-0.4_1s",
+      "steer_rate": -0.4,
+      "duration": 1.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "steer_rate_+0.4_1s",
+      "steer_rate": 0.4,
+      "duration": 1.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "force_-3_1s",
+      "force": -3.0,
+      "duration": 1.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "force_+3_1s",
+      "force": 3.0,
+      "duration": 1.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "steer_rate_-0.4_3s",
+      "steer_rate": -0.4,
+      "duration": 3.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "steer_rate_+0.4_3s",
+      "steer_rate": 0.4,
+      "duration": 3.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "force_-3_3s",
+      "force": -3.0,
+      "duration": 3.0,
+      "waveform": "constant"
+    },
+    {
+      "name": "force_+3_3s",
+      "force": 3.0,
+      "duration": 3.0,
+      "waveform": "constant"
+    }
+  ]
+}

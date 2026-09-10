@@ -1,7 +1,7 @@
 """Paired disturbance evaluation with explicitly separate path/hold metrics."""
 import numpy as np
 from .media import state_series
-from .path import CircleConfig, lateral_space_metrics
+from .path import CircleConfig, lateral_space_metrics, FigureEightConfig, eight_trace_features
 
 
 def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.05,heading_tolerance=.15,hold_seconds=.5):
@@ -11,14 +11,20 @@ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.0
         return {'paired_reference_available':False,'reason':'nominal trajectory ended before disturbed trajectory; no extrapolation','failed':bool(trace['terminated'][-1]),'recovered_after_excursion':False,'post_event_extra_radial_peak_m':None,'first_joint_hold_completion_after_event_end_seconds':None,'settled_joint_hold_completion_after_event_end_seconds':None}
     if not np.allclose(t,nominal['time'][:n],rtol=0,atol=1e-5):
         raise ValueError('nominal/disturbed timestamps mismatch')
-    c=config['circle'];xy=trace['qpos'][:,:2];nomxy=nominal['qpos'][:n,:2]
-    center=np.array([c['center_x'],c['center_y']])
-    radial=np.linalg.norm(xy-center,axis=1)-c['radius']
-    nomradial=np.linalg.norm(nomxy-center,axis=1)-c['radius']
-    extra=radial-nomradial
+    c=config.get('circle');xy=trace['qpos'][:,:2];nomxy=nominal['qpos'][:n,:2]
     s=state_series(trace,config)
-    tangent=np.arctan2(xy[:,1]-center[1],xy[:,0]-center[0])+c['direction']*np.pi/2
-    heading=np.arctan2(np.sin(s['yaw']-tangent),np.cos(s['yaw']-tangent))
+    if config.get('figure_eight'):
+        path=FigureEightConfig(**config['figure_eight'])
+        features=eight_trace_features(trace['pose'],path)
+        nominal_features=eight_trace_features(nominal['pose'][:n],path)
+        radial=features[:,0];nomradial=nominal_features[:,0];heading=features[:,1]
+    else:
+        center=np.array([c['center_x'],c['center_y']])
+        radial=np.linalg.norm(xy-center,axis=1)-c['radius']
+        nomradial=np.linalg.norm(nomxy-center,axis=1)-c['radius']
+        tangent=np.arctan2(xy[:,1]-center[1],xy[:,0]-center[0])+c['direction']*np.pi/2
+        heading=np.arctan2(np.sin(s['yaw']-tangent),np.cos(s['yaw']-tangent))
+    extra=radial-nomradial
     start=config['disturbance_start'];end=start+config['disturbance_duration']
     post=t>=start-1e-8
     if not np.any(post):
@@ -41,11 +47,14 @@ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.0
     settling_start=max(int(np.searchsorted(t,earliest-1e-8)),int(invalid_indices[-1]) if len(invalid_indices) else 0)
     settling_completion=settling_start+needed
     settled=(float(t[settling_completion]-end) if settling_completion<n and not failed and np.all(valid[settling_start+1:]) else None)
-    space=lateral_space_metrics(xy[post],CircleConfig(**c))
+    if c is not None:space=lateral_space_metrics(xy[post],CircleConfig(**c))
+    else:
+        left_extent=float(max(0.,-radial[post].min()));right_extent=float(max(0.,radial[post].max()))
+        space={'left_extent_m':left_extent,'right_extent_m':right_extent,'total_corridor_width_m':left_extent+right_extent,'scope':'chassis_root_relative_to_reference_path_excludes_body_envelope'}
     space.update({'window_start_seconds':float(t[post][0]),'window_end_seconds':float(t[-1]),
                   'window':'event_start_to_observed_episode_end',
                   'recovery_censored':settled is None,'physical_failure':failed})
-    return {'event_reached':True,'path_relative_space':space,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
+    return {'error_coordinate':'circle_outward_radial' if c is not None else 'figure_eight_right_normal_legacy_radial_keys','event_reached':True,'path_relative_space':space,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
             'post_event_extra_radial_peak_m':float(np.max(np.abs(extra[post]))),
             'post_event_xy_separation_peak_m':float(np.max(np.linalg.norm(xy[post]-nomxy[post],axis=1))),
             'left_extra_radial_band':bool(len(left)),

@@ -180,3 +180,7 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 恢复期限诊断复用screen.py，protocol传learning/configs/recovery_duration_diagnostic.json：12条30s基础轨迹，上限72000控制步。对比原16.6s窗口以检查期限敏感性，不能替换或改写原始评估成功率。
 
 2026-09-10等预算动作表达对照：runs/response_comparison_20260910/frozen保存direct_task/mapped_task/training/panel完整冻结参数，declaration.json记录预算。status.json为两组总进度，direct和mapped子目录各自提供pipeline_status.json、training.log及训练/标准评估/媒体。流水线串行执行，失败停止，禁止向同一输出目录重启覆盖。总训练预算16777216步，开发加标准评估上限3528000步；单训练种子，仅机制初筛。
+
+8字路径配置learning/configs/figure_eight_tracking.json；figure_eight与circle互斥。曲线参数length/width为正弦半幅，初始位于交叉点、切向+x。分支选择用位置与航向，中心分支有测试；大偏离时不能保证路径进度无跳转。path_right_error为沿路径右法向偏差，独立绑定新checkpoint身份，不能静默加载旧圆策略。
+
+持续扰动测试复用screen.py，protocol使用sustained_disturbance_panel.json；对figure_eight_tracking.json和原圆任务分别执行，可得到1s/3s持续恒值扰动。图视频用原render.py；circle专用多策略面板图不用于8字。配对恢复的legacy radial字段在8字下表示右法向误差，error_coordinate会标明。

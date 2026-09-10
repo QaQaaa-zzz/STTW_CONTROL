@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import mujoco
 from .model import load_model
-from .path import CircleConfig,circle_reference,tracking_metrics
+from .path import CircleConfig,circle_reference,tracking_metrics,FigureEightConfig,eight_reference,eight_trace_features
 
 
 def frame_indices(times,fps):
@@ -78,6 +78,11 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Reference circle')
         error=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
         metrics=tracking_metrics(xy,circle)
+    elif config.get('figure_eight'):
+        figure=FigureEightConfig(**config['figure_eight']);ref=eight_reference(figure)
+        axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Figure eight reference')
+        error=eight_trace_features(trace['pose'],figure)[:,0]
+        metrics={'right_error_rmse_m':float(np.sqrt(np.mean(error**2))),'right_error_peak_m':float(abs(error).max())}
     elif config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0:
         axes[0].plot([xy[0,0],xy[-1,0]],[xy[0,1],xy[0,1]],'--',color=orange,lw=2,label='Straight reference')
         error=xy[:,1]-xy[0,1]
@@ -97,7 +102,7 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         axes[1].legend(fontsize=8)
     axes[1].axhline(0,color='#555555',lw=.8,ls='--')
     is_path=circle is not None or (config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0)
-    axes[1].set(xlabel='Simulation time [s]',ylabel=('Radial error [m], outward +' if circle else 'Lateral error [m]') if is_path else 'Steering error [deg]',title='Path tracking error' if is_path else 'Steering reference error')
+    axes[1].set(xlabel='Simulation time [s]',ylabel=('Radial error [m], outward +' if circle else 'Lateral error [m], right +') if is_path else 'Steering error [deg]',title='Path tracking error' if is_path else 'Steering reference error')
     fig.suptitle(f'{controller_label} | {t[-1]-t[0]:.1f} s',fontsize=14)
     fig.savefig(output/'trajectory.png');fig.savefig(output/'trajectory.pdf');plt.close(fig)
     fig,axes=plt.subplots(3,2,figsize=(12,10),sharex=True,layout='constrained')
@@ -166,6 +171,7 @@ def render_run(run_path,*,fps=30):
         xy=trace['qpos'][:,:2]
         straight=config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0
         ref=circle_reference(circle,181) if circle else (np.column_stack([np.linspace(xy[0,0],xy[-1,0],100),np.full(100,xy[0,1])]) if straight else np.empty((0,2)))
+        if config.get('figure_eight'):ref=eight_reference(FigureEightConfig(**config['figure_eight']),181)
         ref3=np.column_stack([ref,np.full(len(ref),.012)])
         model=bundle.model
         model.vis.global_.offwidth=640;model.vis.global_.offheight=640

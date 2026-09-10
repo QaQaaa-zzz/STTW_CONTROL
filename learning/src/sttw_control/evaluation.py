@@ -7,7 +7,7 @@ import time
 import numpy as np
 import jax
 import jax.numpy as jp
-from .path import tracking_metrics
+from .path import tracking_metrics,eight_trace_features
 from .events import profile
 from .actuator import residual_target
 
@@ -51,6 +51,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
             base,mapped=env.prepare_action(s,a)
             return residual_target(base,mapped,env.config.actuator)
         prepare=jax.jit(prepare)
+        recorded_command=jax.jit(env.command)
         def capture(s,a):
             return {'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
                     'actuator_diagnostic_valid':int(s.tick)>0,
@@ -63,7 +64,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
-                    'motion_command':np.asarray(env.command(s.tick,s.pose)),
+                    'motion_command':np.asarray(recorded_command(s.tick,s.pose)),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
@@ -99,6 +100,9 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
         summary['command_headroom']=headroom_metrics(arrays['base'][:-1],arrays['measurement'][:-1,2],env.config.actuator)
         summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)
+        if env.config.figure_eight is not None:
+            features=eight_trace_features(arrays['pose'],env.config.figure_eight)
+            summary['path_tracking']={'right_error_rmse_m':float(np.sqrt(np.mean(features[:,0]**2))),'right_error_peak_m':float(np.max(abs(features[:,0]))),'coordinate':'figure_eight_right_normal'}
         if env.config.circle is not None:
             summary['circle_tracking']=tracking_metrics(arrays['qpos'][:,:2],env.config.circle)
         (path/'summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')

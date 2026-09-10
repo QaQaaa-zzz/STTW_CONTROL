@@ -18,6 +18,7 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("figure_eight") is None:config.pop("figure_eight",None)
     # New optional behavior must not invalidate existing direct-action models.
     if config.get('action_mapping') is None:config.pop('action_mapping',None)
     if config.get('action_mapping') is not None:
@@ -28,6 +29,8 @@ def make_policy_identity(model_identity,config,history_steps):
     identity={'model_sha256':digest(model_identity),'config_sha256':digest(config),'history_steps':history_steps}
     if config.get('observation',{}).get('include_path',False):
         identity['observation_fields']=list(FIELDS+PATH_FIELDS)
+    if config.get('figure_eight') is not None and config.get('observation',{}).get('include_path',False):
+        identity['observation_fields']=list(FIELDS)+['path_right_error','heading_error','path_curvature']
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
     return identity
 

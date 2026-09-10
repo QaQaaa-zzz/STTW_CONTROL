@@ -7,11 +7,17 @@ from .env import RecoveryEnv,load_config
 from .evaluation import evaluate
 from .disturbance import recovery_metrics
 from .media import state_series
+from .path import eight_trace_features
 
 
 def scenarios(task,protocol):
     """Keep origin/tangent initialization consistent for either turn direction."""
-    if task.circle is None:raise ValueError('screening requires a circle task')
+    if task.figure_eight is not None:
+        for speed in protocol['speeds']:
+            if speed<=0:raise ValueError('positive screening speed required')
+            yield f'v{speed:g}_eight',replace(task,speed_reference=speed,random_events=None,action_mapping=None,horizon_seconds=protocol['horizon_seconds'],disturbance_start=protocol['event_start_seconds'],disturbance_force=0.,disturbance_steer_rate=0.)
+        return
+    if task.circle is None:raise ValueError('screening requires a reference path')
     for speed,radius,direction in itertools.product(protocol['speeds'],protocol['radii'],protocol['directions']):
         if speed<=0:raise ValueError('positive screening speed required')
         circle=replace(task.circle,radius=radius,center_x=0.,center_y=direction*radius,direction=direction)
@@ -48,7 +54,7 @@ def run(task_path,protocol_path,output):
                         nominal=trace
                         tail=trace['time']>=p['event_start_seconds']
                         speed=state_series(trace,asdict(cfg))['speed']
-                        radial=np.linalg.norm(trace['qpos'][:,:2]-[cfg.circle.center_x,cfg.circle.center_y],axis=1)-cfg.circle.radius
+                        radial=(eight_trace_features(trace['pose'],cfg.figure_eight)[:,0] if cfg.figure_eight is not None else np.linalg.norm(trace['qpos'][:,:2]-[cfg.circle.center_x,cfg.circle.center_y],axis=1)-cfg.circle.radius)
                         nominal_ok=bool(not summary['physical_failure'] and np.any(tail) and np.sqrt(np.mean(radial[tail]**2))<=p['nominal_radial_rmse_max'] and np.sqrt(np.mean((speed[tail]-cfg.speed_reference)**2))<=p['nominal_speed_rmse_max'])
                         recovery={}
                     else:recovery=recovery_metrics(trace,nominal,asdict(cfg))

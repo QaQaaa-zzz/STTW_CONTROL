@@ -117,3 +117,20 @@ def test_mjx_disabled_position_servo_matches_cpu():
     actual=jax.jit(mjx.forward)(env.mjx_model,mjx.put_data(env.model,d))
     np.testing.assert_allclose(actual.actuator_force,d.actuator_force,atol=1e-6)
     assert float(actual.actuator_force[0])==0.
+
+
+def test_figure_eight_observation_contract_and_continuous_event():
+    from dataclasses import replace,asdict
+    from sttw_control.path import FigureEightConfig
+    from sttw_control.observation import ObservationConfig
+    from sttw_control.network import make_policy_identity
+    cfg=TaskConfig(figure_eight=FigureEightConfig(),observation=ObservationConfig(include_path=True),disturbance_start=0.,disturbance_duration=2.,disturbance_force=2.)
+    env=RecoveryEnv(cfg);state=env.reset(1)
+    assert env.disturbance_active(0) and env.disturbance_active(399) and not env.disturbance_active(400)
+    assert state.obs.shape==(19,)
+    assert abs(float(env.path_features(state.pose)[0]))<1e-4
+    identity=make_policy_identity(env.bundle.identity,asdict(cfg),1)
+    assert 'path_right_error' in identity['observation_fields']
+    base=asdict(replace(cfg,figure_eight=None,observation=ObservationConfig()))
+    old=dict(base);old.pop('figure_eight')
+    assert make_policy_identity({},base,1)==make_policy_identity({},old,1)

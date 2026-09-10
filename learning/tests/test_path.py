@@ -35,3 +35,14 @@ def test_path_space_uses_path_normal_and_turn_direction():
     # A full nominal circle consumes no path-normal space despite world-Y motion.
     nominal=xy*3/3.2
     assert lateral_space_metrics(nominal,c)['right_extent_m']<1e-12
+
+
+def test_figure_eight_crossing_branches_and_curvature():
+    from sttw_control.path import FigureEightConfig,eight_geometry,eight_features
+    c=FigureEightConfig()
+    for phase in [0.,np.pi,.8,4.]:
+        point,tangent,k=eight_geometry(jp.asarray(phase),c)
+        f=eight_features(jp.array([point[0],point[1],tangent]),c)
+        np.testing.assert_allclose(f[:2],0.,atol=1e-4)
+        np.testing.assert_allclose(f[2],k,atol=1e-4)
+    assert float(eight_geometry(.8,c)[2])*float(eight_geometry(4.,c)[2])<0

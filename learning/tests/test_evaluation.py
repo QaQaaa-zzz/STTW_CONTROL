@@ -60,3 +60,20 @@ def test_actuator_trace_aligns_request_before_limits_and_terminal_response(tmp_p
     assert t['actuator_force'].shape==(3,env.model.nu)
     np.testing.assert_allclose(t['request_time'][1:],t['time'][:-1])
     assert np.isfinite(t['actuator_force']).all()
+
+
+def test_figure_eight_trace_metrics_media_and_pairing(tmp_path):
+    from dataclasses import asdict,replace
+    from sttw_control.env import load_config
+    from sttw_control.media import plot_states
+    from sttw_control.disturbance import recovery_metrics
+    c=replace(load_config('learning/configs/figure_eight_tracking.json'),horizon_seconds=.02,disturbance_start=0.,disturbance_duration=.005)
+    result=evaluate(RecoveryEnv(c),tmp_path/'run')
+    assert 'path_tracking' in result and 'circle_tracking' not in result
+    tr=dict(np.load(tmp_path/'run/trace.npz'))
+    r=recovery_metrics(tr,tr,asdict(c))
+    assert r['error_coordinate'].startswith('figure_eight')
+    assert r['post_event_extra_radial_peak_m']==0.
+    out=tmp_path/'plots';out.mkdir()
+    plot_states(tr,asdict(c),out,'Baseline')
+    assert (out/'trajectory.png').exists()

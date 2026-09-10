@@ -1,0 +1,26 @@
+{
+  "horizon_seconds": 70.0,
+  "speed_reference": 2.0,
+  "disturbance_force": 0.0,
+  "eso_start": 3.0,
+  "circle": null,
+  "observation": {
+    "include_path": true
+  },
+  "initial_roll_range": 0.02,
+  "path_error_weight": 20.0,
+  "heading_error_weight": 1.0,
+  "speed_error_weight": 100.0,
+  "random_events": null,
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "failure_penalty": 100.0,
+  "path_excess_weight": 80.0,
+  "path_soft_limit": 0.2,
+  "figure_eight": {
+    "length": 18.0,
+    "width": 9.0,
+    "lookahead": 2.5,
+    "max_steer": 0.35
+  }
+}

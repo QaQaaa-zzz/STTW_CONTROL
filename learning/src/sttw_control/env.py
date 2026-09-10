@@ -17,7 +17,7 @@ from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
-from .path import CircleConfig,circle_command
+from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,eight_features
 
 
 from .events import RandomEvents,sample_event,profile
@@ -31,6 +31,7 @@ class TaskConfig:
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
     circle: CircleConfig | None=None
+    figure_eight: FigureEightConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
     steer_reference: float=0.
@@ -66,8 +67,12 @@ class TaskConfig:
             raise ValueError("invalid failure penalty/path soft limit")
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
-        if self.observation.include_path and self.circle is None:
-            raise ValueError("path observations require a circle")
+        if self.circle is not None and self.figure_eight is not None:
+            raise ValueError('choose one reference path')
+        if self.figure_eight is not None and self.figure_eight.max_steer>self.actuator.steer_limit:
+            raise ValueError('figure eight steer bound exceeds actuator limit')
+        if self.observation.include_path and self.circle is None and self.figure_eight is None:
+            raise ValueError("path observations require a reference path")
         if self.disturbance_waveform not in ("constant","half_sine"):
             raise ValueError("invalid event waveform")
         if self.random_events and self.random_events.start_max+self.random_events.duration_max>=self.horizon_seconds:
@@ -96,7 +101,7 @@ class TaskConfig:
 
 def load_config(path):
     raw=json.loads(Path(path).read_text())
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -194,6 +199,9 @@ class RecoveryEnv:
 
     def command(self,tick,pose=None):
         c=self.config
+        if c.figure_eight is not None:
+            if pose is None:raise ValueError("figure eight requires localization")
+            return jp.array([eight_command(pose,c.figure_eight,c.controller.wheelbase,c.controller.caster),c.speed_reference])
         if c.circle is not None:
             if pose is None: raise ValueError('circle tracking requires XY/yaw localization')
             return jp.array([circle_command(pose,c.circle,c.controller.wheelbase,c.controller.caster),c.speed_reference])
@@ -211,6 +219,7 @@ class RecoveryEnv:
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
     def path_features(self,pose):
+        if self.config.figure_eight is not None:return eight_features(pose,self.config.figure_eight)
         c=self.config.circle
         if c is None:
             return jp.zeros(3)

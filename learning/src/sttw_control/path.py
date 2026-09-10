@@ -66,3 +66,73 @@ def lateral_space_metrics(xy,config):
     l=float(max(0.,np.max(left)));r=float(max(0.,-np.min(left)))
     return {'left_extent_m':l,'right_extent_m':r,'total_corridor_width_m':l+r,
             'scope':'chassis_root_relative_to_reference_path_excludes_body_envelope'}
+
+
+@dataclass(frozen=True)
+class FigureEightConfig:
+    length: float=12.
+    width: float=6.
+    lookahead: float=2.5
+    max_steer: float=.35
+
+    def __post_init__(self):
+        if any(not math.isfinite(x) or x<=0 for x in (self.length,self.width,self.lookahead,self.max_steer)):
+            raise ValueError('figure eight dimensions and limits must be positive finite')
+
+
+def _eight_vectors(phase,c):
+    # Gerono curve rotated so initial crossing tangent is +world X.
+    angle=-jp.arctan2(2*c.width,c.length)
+    rot=jp.array([[jp.cos(angle),-jp.sin(angle)],[jp.sin(angle),jp.cos(angle)]])
+    p=jp.array([c.length*jp.sin(phase),c.width*jp.sin(2*phase)])
+    v=jp.array([c.length*jp.cos(phase),2*c.width*jp.cos(2*phase)])
+    a=jp.array([-c.length*jp.sin(phase),-4*c.width*jp.sin(2*phase)])
+    return rot@p,rot@v,rot@a
+
+
+def eight_geometry(phase,c):
+    p,v,a=_eight_vectors(phase,c)
+    return p,jp.arctan2(v[1],v[0]),(v[0]*a[1]-v[1]*a[0])/jp.maximum(jp.linalg.norm(v)**3,1e-8)
+
+
+def eight_phase(pose,c):
+    import jax
+    grid=jp.arange(512)*(2*jp.pi/512)
+    points,headings,_=jax.vmap(lambda t:eight_geometry(t,c))(grid)
+    score=jp.sum((points-pose[:2])**2,axis=1)+.25*(1-jp.cos(headings-pose[2]))
+    phase=grid[jp.argmin(score)]
+    # Refine projection on the selected branch; fixed-size, JAX-compatible.
+    for _ in range(4):
+        p,v,a=_eight_vectors(phase,c);d=p-pose[:2]
+        denom=jp.dot(v,v)+jp.dot(d,a)
+        phase-=jp.clip(jp.dot(d,v)/jp.maximum(denom,1e-6),-.1,.1)
+    return phase
+
+
+def eight_features(pose,c):
+    p,tangent,curvature=eight_geometry(eight_phase(pose,c),c)
+    delta=pose[:2]-p
+    right=jp.sin(tangent)*delta[0]-jp.cos(tangent)*delta[1]
+    heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
+    return jp.array([right,heading,curvature])
+
+
+def eight_command(pose,c,wheelbase,caster):
+    phase=eight_phase(pose,c)
+    for _ in range(12):
+        _,v,_=_eight_vectors(phase,c)
+        phase+=(c.lookahead/12)/jp.linalg.norm(v)
+    target,_,_=eight_geometry(phase,c);d=target-pose[:2]
+    lateral=-jp.sin(pose[2])*d[0]+jp.cos(pose[2])*d[1]
+    steer=jp.arctan(wheelbase*2*lateral/jp.maximum(jp.dot(d,d),1e-8)/jp.cos(caster))
+    return jp.clip(steer,-c.max_steer,c.max_steer)
+
+
+def eight_reference(c,count=513):
+    import jax
+    return np.asarray(jax.vmap(lambda t:eight_geometry(t,c)[0])(jp.linspace(0,2*jp.pi,count)))
+
+
+def eight_trace_features(pose,c):
+    import jax
+    return np.asarray(jax.jit(jax.vmap(lambda p:eight_features(p,c)))(jp.asarray(pose)))
