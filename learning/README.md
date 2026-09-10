@@ -178,3 +178,5 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 过渡区筛查使用同一screen.py入口，将protocol替换为learning/configs/authority_transition_screening.json。正式启动前检查其216轨迹、717120控制步预算，输出目录必须新建。
 
 恢复期限诊断复用screen.py，protocol传learning/configs/recovery_duration_diagnostic.json：12条30s基础轨迹，上限72000控制步。对比原16.6s窗口以检查期限敏感性，不能替换或改写原始评估成功率。
+
+2026-09-10等预算动作表达对照：runs/response_comparison_20260910/frozen保存direct_task/mapped_task/training/panel完整冻结参数，declaration.json记录预算。status.json为两组总进度，direct和mapped子目录各自提供pipeline_status.json、training.log及训练/标准评估/媒体。流水线串行执行，失败停止，禁止向同一输出目录重启覆盖。总训练预算16777216步，开发加标准评估上限3528000步；单训练种子，仅机制初筛。
