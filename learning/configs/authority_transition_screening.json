@@ -1,0 +1,73 @@
+{
+  "speeds": [
+    2.1,
+    2.3,
+    2.4
+  ],
+  "radii": [
+    3.0,
+    4.0
+  ],
+  "directions": [
+    -1,
+    1
+  ],
+  "seeds": [
+    43011,
+    43012
+  ],
+  "horizon_seconds": 16.6,
+  "event_start_seconds": 6.0,
+  "nominal_radial_rmse_max": 0.2,
+  "nominal_speed_rmse_max": 0.2,
+  "events": [
+    {
+      "name": "steer_rate_-0.8",
+      "steer_rate": -0.8,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "steer_rate_+0.8",
+      "steer_rate": 0.8,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "steer_rate_-1.2",
+      "steer_rate": -1.2,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "steer_rate_+1.2",
+      "steer_rate": 1.2,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "force_-5",
+      "force": -5.0,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "force_+5",
+      "force": 5.0,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "force_-7",
+      "force": -7.0,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    },
+    {
+      "name": "force_+7",
+      "force": 7.0,
+      "duration": 0.6,
+      "waveform": "half_sine"
+    }
+  ]
+}

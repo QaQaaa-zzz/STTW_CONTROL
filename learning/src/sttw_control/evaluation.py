@@ -9,6 +9,7 @@ import jax
 import jax.numpy as jp
 from .path import tracking_metrics
 from .events import profile
+from .actuator import residual_target
 
 
 def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
@@ -20,6 +21,12 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
     identity={'config':config,'model':env.bundle.identity,'seed':seed,'backend':env.backend,
               'controller':'baseline' if policy is None else 'residual','policy':policy_identity,
               'reset_semantics':'synthetic_forward_velocity_model_initial_pose'}
+    import mujoco
+    identity['actuator_diagnostics']={'names':[mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_ACTUATOR,i) for i in range(env.model.nu)],
+        'force_limited':np.asarray(env.model.actuator_forcelimited).tolist(),'force_range':np.asarray(env.model.actuator_forcerange).tolist(),
+        'sampling':'backend data at captured state; CPU after existing mj_forward; no substep peak coverage',
+        'request_alignment':'row i request at time[i-1], final command and response at time[i]; reset row invalid',
+        'force_units':'raw actuator scalar force; generalized_actuator_force includes transmission'}
     declaration=json.dumps(identity,sort_keys=True,allow_nan=False)
     (path/'declaration.json').write_text(declaration+'\n')
     (path/'status.json').write_text('{"status":"running"}\n')
@@ -38,8 +45,20 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         transitions=0
         total_reward=0.
         action=np.zeros(2)
+        request=jp.zeros(2)
+        request_time=0.
+        def prepare(s,a):
+            base,mapped=env.prepare_action(s,a)
+            return residual_target(base,mapped,env.config.actuator)
+        prepare=jax.jit(prepare)
         def capture(s,a):
-            return {'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
+            return {'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
+                    'actuator_diagnostic_valid':int(s.tick)>0,
+                    'actuator_force':np.asarray(s.data.actuator_force).copy(),
+                    'generalized_actuator_force':np.asarray(s.data.qfrc_actuator).copy(),
+                    'actuator_velocity':np.asarray(s.data.actuator_velocity).copy(),
+                    'actuator_ctrl':np.asarray(s.data.ctrl).copy(),
+                    'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
                     'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
@@ -51,6 +70,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         frames.append(capture(state,action))
         for _ in range(env.horizon):
             action=np.zeros(2) if policy is None else policy(state.obs)
+            request=prepare(state.replace(data=None),jp.asarray(action))
+            request_time=float(state.data.time)
             state=step(state,jp.asarray(action))
             transitions+=1
             frames.append(capture(state,action))

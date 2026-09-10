@@ -42,12 +42,18 @@ def initial_actuator(config=ActuatorConfig(),rear_command=0.):
     return ActuatorState(jp.tile(command,(config.delay_steps+1,1)),command)
 
 
-def apply_residual(state,base,action,steer,config=ActuatorConfig()):
+def residual_target(base,action,config=ActuatorConfig()):
     c=config
     # A malformed network output disables the entire residual for this tick.
     action=jp.where(jp.all(jp.isfinite(action)),jp.clip(action,-1,1),jp.zeros(2))
     base=jp.where(jp.all(jp.isfinite(base)),base,jp.zeros(2))
     target=base+c.strength*jp.array([c.steer_residual_scale,c.rear_residual_scale])*action
+    return target
+
+
+def apply_residual(state,base,action,steer,config=ActuatorConfig()):
+    c=config
+    target=residual_target(base,action,c)
     limits=jp.array([c.steer_rate_limit,c.rear_rate_limit])
     target=jp.clip(target,-limits,limits)
     pending=jp.concatenate([state.pending[1:],target[None]],axis=0)

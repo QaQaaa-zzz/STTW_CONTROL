@@ -172,3 +172,7 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=egl /home/qy/mujoco_playgrou
 PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python learning/cli/screen.py --task learning/configs/disturbance_learning.json --protocol learning/configs/authority_screening.json --output runs/<new-screening-run>
 ```
 `declaration.json`固定配置与最大控制步，`status.json`记录进度，`results.jsonl`逐条保存名义资格、原始summary和配对恢复指标。所有条件都是开发筛查数据；名义不合格不能据受扰失败宣称恢复方法不足。
+
+执行器诊断trace新增prelimit_command/request_time，行i表示time[i-1]计算的请求；command及实际响应对应time[i]。reset行actuator_diagnostic_valid=false。包含actuator_force、actuator_velocity、actuator_ctrl和generalized_actuator_force，执行器名称及原模型力界保存在declaration.actuator_diagnostics。CPU终点值由现有mj_forward获得，未记录控制周期内的子步峰值；有延迟时请求不等于当前执行队列出口。
+
+过渡区筛查使用同一screen.py入口，将protocol替换为learning/configs/authority_transition_screening.json。正式启动前检查其216轨迹、717120控制步预算，输出目录必须新建。

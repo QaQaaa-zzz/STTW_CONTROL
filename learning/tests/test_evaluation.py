@@ -46,3 +46,17 @@ def test_headroom_distinguishes_joint_position_and_rate_constraints():
     assert result['residual_box_restricted_fraction']==pytest.approx(2/3)
     assert result['baseline_outside_command_bounds_fraction']==0.
     assert result['minimum_positive_steer_margin_rad_s']==0.
+
+
+def test_actuator_trace_aligns_request_before_limits_and_terminal_response(tmp_path):
+    env=RecoveryEnv(TaskConfig(horizon_seconds=.01,disturbance_start=0.,disturbance_duration=.005,disturbance_steer_rate=100.))
+    evaluate(env,tmp_path/'run')
+    t=np.load(tmp_path/'run/trace.npz')
+    assert not t['actuator_diagnostic_valid'][0]
+    assert t['actuator_diagnostic_valid'][1:].all()
+    assert t['prelimit_command'][1,0]>90.
+    assert t['command'][1,0]==3.
+    assert abs(t['prelimit_command'][2,0])<90.
+    assert t['actuator_force'].shape==(3,env.model.nu)
+    np.testing.assert_allclose(t['request_time'][1:],t['time'][:-1])
+    assert np.isfinite(t['actuator_force']).all()

@@ -356,3 +356,11 @@ runs/authority_screening_20260909/status.json complete，90条唯一轨迹全部
 下一步建议：优先用2m/s、半径3/4m研究不倒但恢复慢的速度—转向动态冲突；在2.1–2.4m/s、半径3/4m及分级扰动下筛查可重复的约束竞争过渡区，先多初态确认名义合格。新增执行器实际速度/力矩/限幅前请求与最终指令的对齐日志，区分响应滞后、力矩饱和、请求裁剪及失稳前后顺序。之后固定开发工况，以普通双通道、响应映射、余量分配做同预算对照，再追加至少3训练seed及独立测试。不得为突出分配优势缩小原限幅。
 
 已生成独立分析产物runs/authority_screening_analysis_20260910/summary.json、analyze.py、recovery_panel.png/pdf；图已检查，原始run未改写。本轮仅离线分析和文档更新，未增加训练/仿真交互。
+
+## 执行器日志验证及过渡区实验（2026-09-10）
+
+新增限幅前请求与最终响应对齐日志：prelimit_command、request_time、actuator_diagnostic_valid、actuator_force、generalized_actuator_force、actuator_velocity、actuator_ctrl。请求生成复用实际控制prepare_action和residual_target，包含映射、strength与当前事件，尚未经过延迟/最终限制；有延迟时不能把请求和同一行最终指令之差直接当作裁剪。raw actuator_force是执行器标量力，广义作用力含传动映射；CPU值由原有终点mj_forward计算，不是子步峰值，不代表峰值力矩饱和完整检测。
+
+TDD事件对齐测试先因缺少日志字段失败，实现后通过；明确reset行无效、首个事件请求>90rad/s但最终3rad/s、下一周期事件消失、请求时间等于上一帧时间。实现中修复诊断JIT不能接收CPU MjData的问题，传入data=None的纯控制状态。完整CPU套件62 passed、1 skipped，14.12s，git diff --check通过；本次未声称完整GPU训练复核。
+
+下一轮基础控制筛查预声明：216条、717120最大控制步、无训练，配置authority_transition_screening.json，输出runs/authority_transition_screening_20260910。2.1/2.3/2.4m/s，R=3/4m，左右，两个开发seed，八个有符号分级事件加名义参考。目标为定位名义稳定但受扰困难的过渡区，并对齐执行器响应与恢复恶化时序；尚无新性能结果。

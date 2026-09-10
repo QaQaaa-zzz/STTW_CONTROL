@@ -296,7 +296,8 @@ class RecoveryEnv:
         active=(data.contact.dist<=0)&jp.all(geom>=0,axis=1)
         return jp.any(active&floor&~jp.any(other[:,None]==wheelids[None,:],axis=1))
 
-    def _step(self,state,action):
+    def prepare_action(self,state,action):
+        """Shared pure preparation for physics and pre-limit diagnostics."""
         c=self.config
         if c.action_mapping is not None:
             mapped=map_action(action,state.measurement[5]*c.action_mapping.wheel_radius_proxy,state.measurement[2],c.action_mapping,c.actuator,c.controller,base=state.base)
@@ -304,7 +305,12 @@ class RecoveryEnv:
             # actuator disables its residual exactly as in the direct branch.
             action=jp.where(jp.all(jp.isfinite(action)),mapped,action)
         offset=state.event[2]*profile(state.tick,state.event)
-        actuator,command=apply_residual(state.actuator,state.base.at[0].add(offset),action,state.measurement[2],c.actuator)
+        return state.base.at[0].add(offset),action
+
+    def _step(self,state,action):
+        c=self.config
+        base,action=self.prepare_action(state,action)
+        actuator,command=apply_residual(state.actuator,base,action,state.measurement[2],c.actuator)
         ctrl=jp.array([0.,-command[1],command[0],command[0]])
         if self.backend=='cpu':
             data=mujoco.MjData(self.model)
