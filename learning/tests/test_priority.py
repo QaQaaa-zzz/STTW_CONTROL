@@ -138,3 +138,32 @@ def test_tracking_cost_scales_apply_before_alpha_without_changing_physics():
     np.testing.assert_allclose(r0-r,2*(r0-r2),rtol=1e-5)
     a=e.step(s,jp.zeros(2));b=scaled.step(s,jp.zeros(2))
     np.testing.assert_array_equal(a.data.qpos,b.data.qpos)
+
+
+def test_alive_reward_only_changes_nonterminal_reward_and_preserves_identity():
+    import pytest
+    from sttw_control.env import RecoveryEnv,TaskConfig,load_config
+    from sttw_control.network import make_policy_identity
+    c=load_config('learning/configs/priority_conditioned_learning.json')
+    e=RecoveryEnv(c);s=e.set_priority(e.reset(8),.5)
+    low=RecoveryEnv(replace(c,alive_reward_rate=1.))
+    args=(s,s.measurement,s.actuator,jp.zeros(2),False,True,2.1,s.pose)
+    np.testing.assert_allclose(e._advance(*args).reward-low._advance(*args).reward,4*c.controller.dt,rtol=1e-5)
+    failed=list(args);failed[4]=True
+    assert e._advance(*failed).reward == low._advance(*failed).reward == -c.failure_penalty
+    for value in [-1.,float('nan'),float('inf')]:
+        with pytest.raises(ValueError):replace(c,alive_reward_rate=value)
+    current=asdict(TaskConfig());legacy=dict(current);legacy.pop('alive_reward_rate')
+    assert make_policy_identity({},current,1)==make_policy_identity({},legacy,1)
+    changed=dict(current,alive_reward_rate=5.)
+    assert make_policy_identity({},changed,1)!=make_policy_identity({},legacy,1)
+
+
+def test_priority_reward_revision_has_symmetric_stronger_endpoints():
+    from sttw_control.env import load_config
+    c=load_config('learning/configs/priority_conditioned_learning.json')
+    assert (c.speed_error_weight,c.path_error_weight,c.heading_error_weight,c.path_excess_weight)==(10.,2.,.1,8.)
+    w=priority_weights(1.,0.,0.,0.,c.priority)
+    np.testing.assert_allclose(w[1]/w[2],199.,rtol=1e-6)
+    np.testing.assert_allclose(priority_weights(.5,0.,0.,0.,c.priority),[0.,1.,1.,1.])
+    np.testing.assert_allclose(priority_weights(0.,0.,0.,0.,c.priority)[1:3],w[1:3][::-1])

@@ -51,6 +51,7 @@ class TaskConfig:
     initial_roll_range: float=0.
     roll_failure: float=.7
     failure_penalty: float=10.
+    alive_reward_rate: float=1.  # Reward per simulated second, only before termination.
     path_excess_weight: float=0.
     path_soft_limit: float=.2
     path_error_weight: float=0.
@@ -71,6 +72,8 @@ class TaskConfig:
                 raise ValueError('mapping predictor does not model command slew limits')
         if not math.isfinite(self.failure_penalty) or self.failure_penalty<=0 or not math.isfinite(self.path_soft_limit) or self.path_soft_limit<=0:
             raise ValueError("invalid failure penalty/path soft limit")
+        if not math.isfinite(self.alive_reward_rate) or self.alive_reward_rate<0:
+            raise ValueError("invalid alive reward rate")
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
         if self.circle is not None and self.figure_eight is not None:
@@ -300,11 +303,11 @@ class RecoveryEnv:
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
         weights=priority_weights(state.priority_alpha,errors[0],measurement[0],measurement[1],c.priority) if c.priority is not None else jp.array([0.,1.,1.,1.])
-        reward=c.controller.dt*(1.-weights[3]*(10*errors[0]**2+errors[1]**2)-weights[1]/(c.priority.speed_cost_scale if c.priority else 1.)*c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+        reward=c.controller.dt*(c.alive_reward_rate-weights[3]*(10*errors[0]**2+errors[1]**2)-weights[1]/(c.priority.speed_cost_scale if c.priority else 1.)*c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
         path=self.path_features(pose)
         reward-=c.controller.dt*weights[2]/(c.priority.path_cost_scale if c.priority else 1.)*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
         if c.priority is None:
-            reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+            reward=c.controller.dt*(c.alive_reward_rate-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
             reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
         reward=jp.where(failed,-c.failure_penalty,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))

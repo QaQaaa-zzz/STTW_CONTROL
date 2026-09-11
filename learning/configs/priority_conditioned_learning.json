@@ -18,9 +18,9 @@
     "include_attitude_risk": false
   },
   "initial_roll_range": 0.02,
-  "path_error_weight": 20.0,
-  "heading_error_weight": 1.0,
-  "speed_error_weight": 100.0,
+  "path_error_weight": 2.0,
+  "heading_error_weight": 0.1,
+  "speed_error_weight": 10.0,
   "random_events": {
     "start_min": 4.0,
     "start_max": 7.0,
@@ -36,7 +36,7 @@
   "disturbance_force_frame": "heading_lateral",
   "disturbance_force_point": "vehicle_com",
   "failure_penalty": 100.0,
-  "path_excess_weight": 80.0,
+  "path_excess_weight": 8.0,
   "path_soft_limit": 0.2,
   "priority": {
     "risk_gate": false,
@@ -48,6 +48,8 @@
       0.5,
       0.75,
       1.0
-    ]
-  }
+    ],
+    "objective_floor": 0.01
+  },
+  "alive_reward_rate": 5.0
 }
