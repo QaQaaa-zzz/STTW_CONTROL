@@ -428,3 +428,41 @@ response_comparison_20260910两组pipeline均complete，各完成8388608训练�
 最终完整CPU套件68 passed、1 skipped，19.40s；跳过GPU专用环境测试，另执行了实际GPU短PPO。证据/home/qy/.codex/worktrees/sttw-priority/runs/priority_preflight_20260910：status.complete=true，256训练控制步、288开发验证控制步，3α×3事件×1seed=9配对条目，32次回合结束，验证无失败，loss有限。短回合0.04s，不是扰动恢复或优先级单调性证据。尚需正式干预实验验证：提高α是否降低速度误差并付出路径代价，以及生存表现是否可接受；随机初始化输出受α影响仅验证网络连接。
 
 当前条件策略不走旧自动recovery_pipeline；该入口在训练前拒绝priority任务，避免产生随机α的歧义标准结果。使用train.py后以disturbance.py --priority-alpha 0/0.5/1分别输出面板。未来上层网络必须用固定外部指标评价，不能通过降低误差权重逃避考核。本轮无正式大规模训练、无实车执行。
+
+## 4090D 性能工程（2026-09-11）
+
+性能诊断先分开训练采样、参数更新、开发验证和CPU标准评估。response_comparison/direct旧日志32更新累计：采样1613.72s、优化器6.44s、开发验证2616.98s（不含首次基础验证等启动开销）。因此单纯增加训练环境数不能等比例缩短整条流水线。
+
+CPU原位优化：缓存接触体ID，替代每物理子步的名称查询；扰动包络每控制步计算一次，零力跳过wrench构造，非零力仍每物理子步按当前航向与质心更新方向和力矩。200Hz控制、25子步、全部接触检查、末状态mj_forward、ESO与物理模型均保留。原版本与优化后同seed400控制步（含0.3s侧力）保存qpos/qvel/ctrl/obs/reward/done最大绝对差0；非profile计时2.92961→1.91781s，约1.528倍。这是单次短轨迹工程测量，不是完整面板或任意工况的保证。
+
+新增learning/cli/benchmark.py：每规模独立进程，输出先声明预算和源码hash，区分reset编译、首rollout编译执行与3次同步稳态计时；有限性及无终止检查不通过则拒绝吞吐样本。报告显存为JAX峰值活跃分配，不等同整张卡占用。纯仿真短窗口不包含Actor、PPO更新、完整恢复或频繁reset，不能直接称为训练加速倍数。
+
+纯物理吞吐结果（priority_conditioned_learning.json、seed61、零残差、每次0.16s模拟窗口，3重复均无终止且状态有限）：
+
+| 环境数 | 控制步/s | 相对1024 | JAX峰值活跃分配 |
+| --- | ---: | ---: | ---: |
+| 1024 | 12736 | 1.00× | 96MiB |
+| 4096 | 20641 | 1.62× | 258MiB |
+| 8192 | 39906 | 3.13× | 563MiB |
+| 16384 | 34339 | 2.70× | 1090MiB |
+| 32768 | 12438 | 0.98× | 2080MiB |
+
+32768点在停止检查时已自然完成，保留真实结果；不再追加规模。用户选定8192，与本轮最高吞吐一致。运行时nvidia-smi多次采样为100% GPU利用率，但没有全程利用率积分；不能声称平均利用率100%。吞吐非单调说明不能靠占满显存选择配置，具体kernel瓶颈尚未做设备profile。
+
+8192若维持旧8388608总步数，每环境只有5.12s调度时间，甚至不足以覆盖4–7s起扰和后续恢复，不能作为等价训练加速。新训练日志记录每环境调度时间/回合当量、JAX显存、实际rollout吞吐；首rollout与optimizer显式编译耗时单列，旧日志首轮包含编译，新旧字段不可混同比较。已启动预声明8192两更新短回合工程检查以验证PPO、reset及编译体复用；工程回合不承担恢复/能量性能证据。
+
+可复用入口（输出目录必须尚不存在；只做工程基准，不训练）：
+
+```bash
+XLA_PYTHON_CLIENT_PREALLOCATE=false PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli/benchmark.py --task learning/configs/priority_conditioned_learning.json --num-envs 8192 --output runs/performance_check
+```
+
+论文能量动机和验证边界已同步至PROJECT.md。本次未改变奖励、未测电能，不把速度更稳或机械功代理写成已证实的节能效果。
+
+8192 PPO工程检查已完成：4194304训练控制步、5400配对验证控制步，40960次回合结束；训练中转向/侧力事件分别覆盖492842/492992控制步。两更新loss均有限，3组开发验证无物理失败。rollout分别106.185/107.953s（19750/19427控制步/s），optimizer0.678/0.657s；首rollout编译54.378s、optimizer编译1.930s，第二次两项均0，确认编译可执行体复用。总墙钟357.069s，记录到的JAX峰值活跃分配1071MiB。该0.5s回合没有完整恢复观察，选模eligible也不代表恢复能力合格，不推进为论文模型。
+
+随后接入本地持久编译缓存，默认runs/.jax_compilation_cache，已有用户缓存路径与禁用设置优先；缓存目录记录到声明。两个独立GPU进程使用同一新缓存对8192 reset实测14.801→2.451s，qpos/obs/event摘要相同。只验证了reset编译缓存复用；尚未测整轮PPO的跨进程缓存提速，不能将这个比例套用到整场训练。原PPO两更新验证发生在缓存接入前，核心rollout/optimizer代码相同。
+
+结果统一位于runs/performance_20260911：CPU before/after轨迹、各规模声明与计时、ppo_8192/status.json及metrics.jsonl、cache_cold/warm.json。32768已结束、8192工程训练已结束，不存在本阶段后台续训。
+
+最终相关回归：70 passed、1 GPU专用测试在CPU套件中skipped（18.41s）；独立真实GPU基准、PPO及缓存检查见上。差异检查通过。未执行ROS/实车验证。

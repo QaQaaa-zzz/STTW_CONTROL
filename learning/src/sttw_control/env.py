@@ -148,6 +148,8 @@ class RecoveryEnv:
         self.backend=backend
         self.bundle=load_model()
         self.model=self.bundle.model
+        self._wheel_body_ids=tuple(mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_BODY,n) for n in ('frontwheel','rearwheel'))
+        self._allowed_floor_bodies=(0,*self._wheel_body_ids)
         c=config.actuator
         if c.steer_limit>self.model.jnt_range[mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_JOINT,'steering_joint'),1] or c.steer_rate_limit>self.model.actuator_ctrlrange[2,1] or c.rear_rate_limit>self.model.actuator_ctrlrange[1,1]:
             raise ValueError('configured actuator limits exceed the authoritative XML')
@@ -188,11 +190,12 @@ class RecoveryEnv:
         event=self.fixed_event() if event is None else event
         return (tick>=event[0])&(tick<event[1])
 
-    def disturbance_wrench(self,data,tick,event=None):
+    def disturbance_wrench(self,data,tick,event=None,*,magnitude=None):
         c=self.config
         xp=np if self.backend=='cpu' else jp
-        event=xp.asarray(self.fixed_event() if event is None else event)
-        magnitude=event[3]*profile(tick,event,xp)
+        if magnitude is None:
+            event=xp.asarray(self.fixed_event() if event is None else event)
+            magnitude=event[3]*profile(tick,event,xp)
         force=xp.array([0.,magnitude,0.])
         if c.disturbance_force_frame=='heading_lateral':
             matrix=xp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)
@@ -309,12 +312,12 @@ class RecoveryEnv:
         # A floor contact with a non-wheel body counts as physical failure.
         if self.backend=='cpu':
             for contact in data.contact[:data.ncon]:
-                names=[mujoco.mj_id2name(self.model,mujoco.mjtObj.mjOBJ_BODY,int(self.model.geom_bodyid[g])) for g in contact.geom]
-                if 'world' in names and any(n not in ('world','frontwheel','rearwheel') for n in names): return True
+                first,second=self.model.geom_bodyid[contact.geom]
+                if (first==0 and second not in self._allowed_floor_bodies) or (second==0 and first not in self._allowed_floor_bodies): return True
             return False
         geom=data.contact.geom
         body=jp.asarray(self.model.geom_bodyid)[jp.maximum(geom,0)]
-        wheelids=jp.array([mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_BODY,n) for n in ('frontwheel','rearwheel')])
+        wheelids=jp.array(self._wheel_body_ids)
         other=jp.where(body[:,0]==0,body[:,1],body[:,0])
         floor=jp.any(body==0,axis=1)
         active=(data.contact.dist<=0)&jp.all(geom>=0,axis=1)
@@ -350,8 +353,13 @@ class RecoveryEnv:
             data.ctrl[:]=np.asarray(ctrl)
             data.xfrc_applied[:]=0
             physical_contact=False
+            # The event envelope is held over a control tick. Heading and COM
+            # still change at each physics substep while a force is applied.
+            event=np.asarray(state.event)
+            magnitude=event[3]*profile(state.tick,event,np)
             for _ in range(self.substeps):
-                data.xfrc_applied[self.bundle.chassis,:]=np.asarray(self.disturbance_wrench(data,state.tick,state.event))
+                if magnitude!=0:
+                    data.xfrc_applied[self.bundle.chassis,:]=self.disturbance_wrench(data,state.tick,magnitude=magnitude)
                 mujoco.mj_step(self.model,data)
                 physical_contact=physical_contact or self._contact_failure(data)
             # Sensors from mj_step can lag the final integration state.

@@ -134,3 +134,21 @@ def test_figure_eight_observation_contract_and_continuous_event():
     base=asdict(replace(cfg,figure_eight=None,observation=ObservationConfig()))
     old=dict(base);old.pop('figure_eight')
     assert make_policy_identity({},base,1)==make_policy_identity({},old,1)
+
+
+def test_contact_detection_does_not_resolve_names_in_physics_loop(monkeypatch):
+    import mujoco
+    env=RecoveryEnv();state=env.reset(0)
+    # Compare against the original named-body rule, including lowered chassis.
+    for height in (state.data.qpos[2], .02):
+        state.data.qpos[2]=height
+        mujoco.mj_forward(env.model,state.data)
+        expected=False
+        for contact in state.data.contact[:state.data.ncon]:
+            names=[mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_BODY,int(env.model.geom_bodyid[g])) for g in contact.geom]
+            expected |= 'world' in names and any(n not in ('world','frontwheel','rearwheel') for n in names)
+        if height==.02:assert expected
+        with monkeypatch.context() as patch:
+            def unavailable(*args):raise AssertionError('runtime name lookup in contact loop')
+            patch.setattr(mujoco,'mj_id2name',unavailable)
+            assert env._contact_failure(state.data)==expected

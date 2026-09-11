@@ -21,6 +21,7 @@ from .env import RecoveryEnv, load_config
 from .validation import make_validator
 from .selection import rank_candidate
 from .network import ResidualActor, make_policy_identity, save_policy
+from .runtime import configure_compilation_cache
 
 
 def gaussian_log_prob(sample,mean,log_std):
@@ -106,6 +107,7 @@ def normalization(task):
 
 def train(task_path,output,config=TrainingConfig()):
     run_start=time.monotonic()
+    cache_dir=configure_compilation_cache()
     output=Path(output)
     output.mkdir(parents=True,exist_ok=False)
     env=RecoveryEnv(load_config(task_path),backend='mjx')
@@ -114,7 +116,11 @@ def train(task_path,output,config=TrainingConfig()):
     source={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('learning/src/sttw_control').glob('*.py'))}
     declaration={'task':asdict(env.config),'training':asdict(c),'policy_identity':identity,'source_sha256':source,
                  'git_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+                 'jax_compilation_cache_dir':cache_dir,
                  'budget_control_transitions':c.num_envs*c.rollout_steps*c.updates,
+                 'scheduled_seconds_per_env':c.rollout_steps*c.updates*env.config.controller.dt,
+                 'scheduled_episode_equivalents_per_env':c.rollout_steps*c.updates/env.horizon,
+                 'coverage_note':'Scheduled time is divided across resets; it does not guarantee completed recovery episodes.',
                  'validation_role':'development selection, not held-out recovery evidence',
                  'validation_peak_window':'event onset through observation end',
                  'snapshot_resume':'optimizer/parameters/RNG only; no exact physics continuation'}
@@ -213,18 +219,31 @@ def train(task_path,output,config=TrainingConfig()):
     best_score=None; best=None; best_radial=None
     start=time.monotonic()
     for index in range(1,c.updates+1):
+        rollout_compile_seconds=optimizer_compile_seconds=0.
+        if index==1:
+            compile_start=time.monotonic()
+            rollout_executable=rollout.lower(state,key,params).compile()
+            rollout_compile_seconds=time.monotonic()-compile_start
         rollout_start=time.monotonic()
-        (state,key),rows=rollout(state,key,params)
+        (state,key),rows=rollout_executable(state,key,params)
         jax.block_until_ready(rows[4])
         rollout_seconds=time.monotonic()-rollout_start
+        if index==1:
+            compile_start=time.monotonic()
+            update_executable=update.lower(params,opt_state,key,rows).compile()
+            optimizer_compile_seconds=time.monotonic()-compile_start
         update_start=time.monotonic()
-        params,opt_state,key,metrics=update(params,opt_state,key,rows)
+        params,opt_state,key,metrics=update_executable(params,opt_state,key,rows)
         host=np.asarray(metrics)
         if not np.isfinite(host).all() or not all(np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(params)):
             raise RuntimeError('Nonfinite PPO update; stopping without promotion')
         record={'update':index,'control_transitions':index*c.num_envs*c.rollout_steps,
                 'elapsed_seconds':time.monotonic()-start,'loss_metrics':host.tolist(),
                 'rollout_seconds':rollout_seconds,'optimizer_seconds':time.monotonic()-update_start,
+                'rollout_control_steps_per_second':c.num_envs*c.rollout_steps/rollout_seconds,
+                'rollout_compile_seconds':rollout_compile_seconds,
+                'optimizer_compile_seconds':optimizer_compile_seconds,
+                'device_memory_stats':jax.devices()[0].memory_stats(),
                 'validation_seconds':0.,'checkpoint_seconds':0.,
                 'steer_disturbed_transitions':int(jp.sum(rows[8][...,0])),
                 'force_disturbed_transitions':int(jp.sum(rows[8][...,1])),
