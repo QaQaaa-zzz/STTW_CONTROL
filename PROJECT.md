@@ -189,3 +189,5 @@ CPU标准面板seed47001/47002/47003，每seed名义+8种恒值扰动：6s开始
 本阶段实现与预检完成：76 passed、1 skipped；真实GPU→checkpoint→3α CPU面板→配对图视频全过程complete，12条能量摘要和3个媒体manifest核验通过。修复priority默认tuple与JSON list的严格比较兼容问题。长训练使用learning/configs/ppo_priority.json与priority_standard_panel.json；主进度文件runs/priority_recovery_20260911/pipeline_status.json，训练日志同目录training.log。该阶段按上方固定预算启动，终点为标准评估与媒体完成或明确error，不自动续训。
 
 2026-09-11训练后诊断：48更新已完成（约128min），标准评估仍运行，未改当前源码或追加训练。采样约18485步/s，但预算较历史direct增12倍，所以吞吐改善未转化为更短总墙钟；CPU标准面板/媒体仍串行，是后续优化重点。开发验证末次α=0/0.5/1分别8/8、8/8、0/8联合恢复，均无物理失败；α=1速度和路径误差均劣于α=0，未实现期望的速度偏好。update32三α均8/8恢复，后期出现退化；保持固定update48标准评估，32仅用于后续事后诊断。下一步先完成面板并分解失败条件，再做固定偏好与共享条件策略的小规模对照；暂不增加上层网络、能量奖励或无上限续训。机械功尚无完整跨α结论。详见docs/VALIDATION.md末节和本run/analysis。
+
+2026-09-11完整标准评估已结束：162条完整30s、无物理失败，24配对视频+24张图已核验存在。旧update48受扰24例基线/alpha0/alpha.5/alpha1恢复24/24、24/24、24/24、3/24；alpha0速度/路径/恢复时间均改善，alpha1在持续正向转向3s严重偏离。机械做功仅alpha0受扰均值略降，不能主张普遍节能。详见docs/VALIDATION.md最新节和run/analysis/standard_analysis.json。此次只复用轨迹分析，不追加训练/仿真。下一步建议整合已验证1393084（10帧、移除显式风险、alpha前损失尺度标定），从头验证下层偏好可控性，再研究动态alpha/能量。停止的策略参数梯度采样不续跑，用户关注的是奖励对alpha的解析偏导。此轮不是新200维方案的效果验证。
