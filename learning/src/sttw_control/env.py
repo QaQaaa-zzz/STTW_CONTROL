@@ -106,7 +106,11 @@ class TaskConfig:
 
 
 def load_config(path):
-    raw=json.loads(Path(path).read_text())
+    return config_from_dict(json.loads(Path(path).read_text()))
+
+
+def config_from_dict(raw):
+    raw=dict(raw)
     for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
@@ -249,7 +253,7 @@ class RecoveryEnv:
             frame=jp.concatenate([frame,self.path_features(pose)])
         if c.priority is not None:
             risk=priority_weights(alpha,roll-out.reference_roll,roll,rate,c.priority)[0]
-            frame=jp.concatenate([frame,jp.array([alpha,risk])])
+            frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),out.reference_roll
 
@@ -296,9 +300,9 @@ class RecoveryEnv:
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
         weights=priority_weights(state.priority_alpha,errors[0],measurement[0],measurement[1],c.priority) if c.priority is not None else jp.array([0.,1.,1.,1.])
-        reward=c.controller.dt*(1.-weights[3]*(10*errors[0]**2+errors[1]**2)-weights[1]*c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+        reward=c.controller.dt*(1.-weights[3]*(10*errors[0]**2+errors[1]**2)-weights[1]/(c.priority.speed_cost_scale if c.priority else 1.)*c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
         path=self.path_features(pose)
-        reward-=c.controller.dt*weights[2]*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
+        reward-=c.controller.dt*weights[2]/(c.priority.path_cost_scale if c.priority else 1.)*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
         if c.priority is None:
             reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
             reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
@@ -327,7 +331,7 @@ class RecoveryEnv:
         """Explicit intervention on current alpha; retain truthful past frames."""
         if self.config.priority is None:raise ValueError('policy is not priority conditioned')
         alpha=jp.clip(jp.asarray(alpha),0.,1.)
-        history=state.history.replace(frames=state.history.frames.at[-1,-2].set(alpha))
+        history=state.history.replace(frames=state.history.frames.at[-1,observation_fields(self.config.observation).index("speed_priority")].set(alpha))
         obs=jp.concatenate([history.frames.flatten(),history.mask])
         return state.replace(priority_alpha=alpha,history=history,obs=obs)
 

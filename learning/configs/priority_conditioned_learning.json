@@ -13,7 +13,9 @@
   },
   "observation": {
     "include_path": true,
-    "include_priority": true
+    "include_priority": true,
+    "history_steps": 10,
+    "include_attitude_risk": false
   },
   "initial_roll_range": 0.02,
   "path_error_weight": 20.0,
@@ -36,5 +38,9 @@
   "failure_penalty": 100.0,
   "path_excess_weight": 80.0,
   "path_soft_limit": 0.2,
-  "priority": {}
+  "priority": {
+    "risk_gate": false,
+    "speed_cost_scale": 0.3482045463855167,
+    "path_cost_scale": 3.0783592369780886
+  }
 }
