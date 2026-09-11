@@ -19,6 +19,13 @@ def make_validator(env,actor,scale,config):
         max_end=max(c['start']+c['duration'] for c in cases)
     else:
         max_end=(env.config.random_events.start_max+env.config.random_events.duration_max if env.config.random_events else env.config.disturbance_start+env.config.disturbance_duration)
+    alphas=None
+    if getattr(env.config,'priority',None) is not None:
+        choices=env.config.priority.validation_alphas
+        alphas=jp.repeat(jp.asarray(choices),n)
+        keys=jp.tile(keys,(len(choices),1))
+        if cases:events=jp.tile(events,(len(choices),1))
+        n=len(keys)
     ve=RecoveryEnv(replace(env.config,horizon_seconds=max(env.config.horizon_seconds,max_end+config.validation_post_seconds)),backend='mjx')
     reset=jax.vmap(ve.reset);step=jax.vmap(ve.step)
     needed=int(np.ceil(config.validation_hold_seconds/dt))
@@ -26,6 +33,7 @@ def make_validator(env,actor,scale,config):
     @jax.jit
     def validate(params,zero=False):
         initial=reset(keys)
+        if alphas is not None:initial=jax.vmap(ve.set_priority)(initial,alphas)
         if cases:initial=initial.replace(event=events)
         nominal=initial.replace(event=initial.event.at[:,2:4].set(0.))
         state=jax.tree.map(lambda a,b:jp.concatenate([a,b],axis=0),initial,nominal)

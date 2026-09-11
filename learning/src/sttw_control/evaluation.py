@@ -12,7 +12,8 @@ from .events import profile
 from .actuator import residual_target
 
 
-def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
+def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=None):
+    if priority_alpha is not None and (env.config.priority is None or not np.isfinite(priority_alpha) or not 0<=priority_alpha<=1):raise ValueError("invalid priority intervention")
     path=Path(path)
     if policy is not None and not policy_identity:
         raise ValueError('residual evaluation requires a frozen policy identity')
@@ -21,6 +22,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
     identity={'config':config,'model':env.bundle.identity,'seed':seed,'backend':env.backend,
               'controller':'baseline' if policy is None else 'residual','policy':policy_identity,
               'reset_semantics':'synthetic_forward_velocity_model_initial_pose'}
+    if priority_alpha is not None:identity["priority_override"]=float(priority_alpha)
     import mujoco
     identity['actuator_diagnostics']={'names':[mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_ACTUATOR,i) for i in range(env.model.nu)],
         'force_limited':np.asarray(env.model.actuator_forcelimited).tolist(),'force_range':np.asarray(env.model.actuator_forcerange).tolist(),
@@ -36,6 +38,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         reset=jax.jit(env.reset) if env.backend=='mjx' else env.reset
         step=jax.jit(env.step) if env.backend=='mjx' else env.step
         state=reset(jax.random.PRNGKey(seed))
+        if priority_alpha is not None:state=env.set_priority(state,priority_alpha)
         event=np.asarray(state.event).tolist()
         (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
@@ -53,7 +56,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None):
         prepare=jax.jit(prepare)
         recorded_command=jax.jit(env.command)
         def capture(s,a):
-            return {'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
+            return {'priority_alpha':float(s.priority_alpha),'attitude_risk':float(s.history.frames[-1,-1]) if env.config.priority is not None else 0.,'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
                     'actuator_diagnostic_valid':int(s.tick)>0,
                     'actuator_force':np.asarray(s.data.actuator_force).copy(),
                     'generalized_actuator_force':np.asarray(s.data.qfrc_actuator).copy(),

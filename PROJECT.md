@@ -138,3 +138,12 @@ GPU开发选模seed40001–40004；自动后评估使用独立CPU seed41001–41
 持续扰动首轮仅基础控制：圆R4及8字18/9，速度2m/s，seed45001，70s轨迹；每路径名义+8受扰，12s开始，1s/3s恒值转向±0.4rad/s或质心侧力±3N，原执行器共享限幅保持。每路径9条126000控制步，两路径共18条252000步，无训练。持续扰动期间每步施加，结束后才评价恢复。协议sustained_disturbance_panel.json；图视频保留每路径名义及3s正向侧力代表。旧随机事件已有可变duration_min/max，当前尚未为8字训练补偿网络。
 
 首轮已启动runs/sustained_paths_20260910，冻结参数位于frozen，status.json为总进度。CPU65项测试通过、1项GPU专用跳过；首条为8字名义70s。图视频用单轨render入口，circle专用对比图保持原范围。
+
+## 优先级条件残差：第一阶段（2026-09-11）
+用户确认暂停动力学分配主线，采用生存优先、显式速度/路径取舍。已在隔离工作区/home/qy/.codex/worktrees/sttw-priority实现第一阶段：原256→128 LeakyReLU双通道直接残差增加speed_priority α与attitude_risk两个输入；含路径时单帧21维（20字段+mask）。不使用action_mapping。α训练时按回合独立均匀采样，固定评估通过显式干预设为0/0.5/1；reset包含α及全部历史。当前没有上层自动选择α的网络，先检验下层是否可被α控制。
+
+风险来自可观测侧倾误差、绝对侧倾及侧倾角速度的归一化最大值，经smoothstep得到[0,1]风险。固定风险门控提高姿态损失、降低运动损失；α控制速度与路径损失相对系数，两者保留正下限。失败惩罚、物理失败判据、基础控制器和最终执行器契约保持。门控是平滑训练偏好，没有硬优先级保证、没有滞回记忆；这些阈值是可配置设计值，尚未硬件标定。
+
+priority_conditioned_learning.json为阶段配置，2.1m/s、R4、30s、1–3s随机持续扰动。外部set_priority修改当前帧和闭环α，保留历史帧真实过去值。评估evaluate(priority_alpha=...)记录干预来源、α与风险曲线；disturbance.py支持--priority-alpha且条件策略必须显式传入。开发验证按配置validation_alphas×seed×事件配对名义，默认三种α，验证预算相对同seed/event普通配置增至三倍。旧通用recovery_pipeline明确拒绝条件任务，防止只用随机α标准评估；条件任务用train.py后逐α面板。选模仍沿原固定标准，未自动放松速度门槛；正式训练前需审查该门槛与允许取舍的适用范围。
+
+CPU最终68 passed、1 skipped；真实GPU短PPO16环境×16步×1更新=256训练步，288配对验证步，32次回合结束，loss有限、验证无失败。工程run位于隔离工作区runs/priority_preflight_20260910；仅证明reset/更新/固定α验证/checkpoint链路，不证明已经学到优先级行为。主工作区持续扰动流程已complete，验证完成后合回主分支，未追加长训练。

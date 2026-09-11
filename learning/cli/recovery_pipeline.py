@@ -6,7 +6,10 @@ from pathlib import Path
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for name in ['task','training','panel','output']:p.add_argument('--'+name,type=Path,required=True)
-    a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+    a=p.parse_args()
+    if json.loads(a.task.read_text()).get('priority') is not None:
+        raise ValueError('conditioned policies require train.py then explicit disturbance.py --priority-alpha panels; generic pipeline does not select an alpha')
+    a.output.mkdir(parents=True,exist_ok=False)
     def status(phase,**extra):
         (a.output/'pipeline_status.json').write_text(json.dumps({'phase':phase,**extra},indent=2)+'\n')
     def invoke(args,log,cpu=False):

@@ -21,6 +21,7 @@ from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,ei
 
 
 from .events import RandomEvents,sample_event,profile
+from .priority import PriorityConfig,priority_weights
 from .action_mapping import MappingConfig,map_action
 
 @dataclass(frozen=True)
@@ -32,6 +33,7 @@ class TaskConfig:
     action_mapping: MappingConfig | None=None
     circle: CircleConfig | None=None
     figure_eight: FigureEightConfig | None=None
+    priority: PriorityConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
     steer_reference: float=0.
@@ -56,6 +58,10 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if (self.priority is not None)!=self.observation.include_priority:
+            raise ValueError('priority config and observation flag must agree')
+        if self.priority is not None and (self.action_mapping is not None or not self.observation.include_path):
+            raise ValueError('priority conditioning requires direct residual and path observations')
         if self.action_mapping is not None:
             if self.action_mapping.authority_aware and self.actuator.delay_steps:
                 raise ValueError('authority allocation does not predict delayed command headroom')
@@ -101,7 +107,7 @@ class TaskConfig:
 
 def load_config(path):
     raw=json.loads(Path(path).read_text())
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -125,6 +131,7 @@ class EnvState:
     truncated: object
     end_code: object
     event: object
+    priority_alpha: object
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -228,7 +235,7 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5):
         c=self.config
         command=self.command(tick,pose)
         roll,rate,steer,steer_rate,_,rear,_=measurement
@@ -237,6 +244,9 @@ class RecoveryEnv:
         frame=make_frame(measurement,command,out.reference_roll,out.steer_rate,actuator.previous,out.disturbance)
         if c.observation.include_path:
             frame=jp.concatenate([frame,self.path_features(pose)])
+        if c.priority is not None:
+            risk=priority_weights(alpha,roll-out.reference_roll,roll,rate,c.priority)[0]
+            frame=jp.concatenate([frame,jp.array([alpha,risk])])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),out.reference_roll
 
@@ -262,16 +272,17 @@ class RecoveryEnv:
         actuator=initial_actuator(c.actuator,c.speed_reference/.1)
         measurement=self.measure(data)
         pose=self.pose(data)
-        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose)
+        alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
+        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha)
         return EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
-                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event())
+                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha)
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config
         tick=state.tick+1
         command=self.command(tick,pose)
-        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose)
+        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose,state.priority_alpha)
         leaves=jax.tree_util.tree_leaves((controller,actuator,history,obs,base,measurement,action,true_speed))
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~jp.asarray(physics_finite)
         fallen=jp.abs(measurement[0])>c.roll_failure
@@ -281,9 +292,13 @@ class RecoveryEnv:
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
-        reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+        weights=priority_weights(state.priority_alpha,errors[0],measurement[0],measurement[1],c.priority) if c.priority is not None else jp.array([0.,1.,1.,1.])
+        reward=c.controller.dt*(1.-weights[3]*(10*errors[0]**2+errors[1]**2)-weights[1]*c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
         path=self.path_features(pose)
-        reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
+        reward-=c.controller.dt*weights[2]*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
+        if c.priority is None:
+            reward=c.controller.dt*(1.-10*errors[0]**2-errors[1]**2-c.speed_error_weight*errors[2]**2-errors[3]**2-.01*jp.sum(action**2))
+            reward-=c.controller.dt*(c.path_error_weight*path[0]**2+c.heading_error_weight*path[1]**2+c.path_excess_weight*jp.maximum(jp.abs(path[0])-c.path_soft_limit,0.)**2)
         reward=jp.where(failed,-c.failure_penalty,reward)+jp.where(recovery.task_recovered&~state.recovery.task_recovered,5.,0.)
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
         return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,
@@ -304,6 +319,14 @@ class RecoveryEnv:
         floor=jp.any(body==0,axis=1)
         active=(data.contact.dist<=0)&jp.all(geom>=0,axis=1)
         return jp.any(active&floor&~jp.any(other[:,None]==wheelids[None,:],axis=1))
+
+    def set_priority(self,state,alpha):
+        """Explicit intervention on current alpha; retain truthful past frames."""
+        if self.config.priority is None:raise ValueError('policy is not priority conditioned')
+        alpha=jp.clip(jp.asarray(alpha),0.,1.)
+        history=state.history.replace(frames=state.history.frames.at[-1,-2].set(alpha))
+        obs=jp.concatenate([history.frames.flatten(),history.mask])
+        return state.replace(priority_alpha=alpha,history=history,obs=obs)
 
     def prepare_action(self,state,action):
         """Shared pure preparation for physics and pre-limit diagnostics."""

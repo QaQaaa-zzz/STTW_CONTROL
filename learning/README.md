@@ -184,3 +184,11 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/p
 8字路径配置learning/configs/figure_eight_tracking.json；figure_eight与circle互斥。曲线参数length/width为正弦半幅，初始位于交叉点、切向+x。分支选择用位置与航向，中心分支有测试；大偏离时不能保证路径进度无跳转。path_right_error为沿路径右法向偏差，独立绑定新checkpoint身份，不能静默加载旧圆策略。
 
 持续扰动测试复用screen.py，protocol使用sustained_disturbance_panel.json；对figure_eight_tracking.json和原圆任务分别执行，可得到1s/3s持续恒值扰动。图视频用原render.py；circle专用多策略面板图不用于8字。配对恢复的legacy radial字段在8字下表示右法向误差，error_coordinate会标明。
+
+## 优先级条件残差（第一阶段）
+
+learning/configs/priority_conditioned_learning.json启用priority和observation.include_priority，不能同时启用action_mapping。α与姿态风险追加到每帧观测，单帧含路径为21维。训练reset均匀采样α，设置priority.randomize_alpha=false可固定训练α。风险门控只是奖励偏好，没有硬安全保证；自动选择α的上层网络尚未实现。
+
+训练使用原train.py；开发验证自动覆盖priority.validation_alphas（默认0/0.5/1），预算需乘三。CPU标准面板使用原disturbance.py并显式传--priority-alpha 0、0.5或1，每次使用新的输出目录；完整参数与普通面板相同。evaluate(priority_alpha=...)也支持显式干预并写入声明。set_priority仅改当前观测及α，保留过去历史。普通checkpoint不能当作条件策略加载。
+
+旧recovery_pipeline在训练前拒绝priority任务，必须先按明确预算训练，再分别评估各α；不要把随机抽到的α面板当作优先级干预验证。正式训练还需明确允许的速度/路径取舍与选模门槛，不能暗改原成功标准。
