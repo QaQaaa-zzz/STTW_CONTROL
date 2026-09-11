@@ -4,7 +4,7 @@ import argparse,json,hashlib
 from pathlib import Path
 from dataclasses import asdict,replace
 import numpy as np
-from sttw_control.env import RecoveryEnv,load_config
+from sttw_control.env import RecoveryEnv,load_config,config_from_dict
 from sttw_control.network import make_policy_identity,load_policy
 from sttw_control.evaluation import evaluate
 from sttw_control.disturbance import recovery_metrics
@@ -21,7 +21,8 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
     # JSON has arrays, not tuples: normalize defaults exactly as the frozen
     # training declaration, without relaxing any configuration comparison.
     actual=json.loads(json.dumps(asdict(cfg),allow_nan=False))
-    for key,value in source['task'].items():
+    frozen=json.loads(json.dumps(asdict(config_from_dict(source['task'])),allow_nan=False))
+    for key,value in frozen.items():
         if actual[key]!=value:raise ValueError('base task differs from frozen training task: '+key)
     extra=panel.get('minimum_post_event_seconds',0.)
     if not np.isfinite(extra) or extra<0:raise ValueError('minimum post-event observation must be finite and nonnegative')

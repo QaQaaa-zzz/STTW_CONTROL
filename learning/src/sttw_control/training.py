@@ -100,7 +100,7 @@ def normalization(task):
     scale=[.2,.2,1.,3.,.4,2.,2.,30.,30.,.4,3.,3.,3.,30.,10.]
     if task.observation.include_path:
         scale += [1.,1.,1.]
-    if task.observation.include_priority:scale += [1.,1.]
+    if task.observation.include_priority:scale += [1.] + ([1.] if task.observation.include_attitude_risk else [])
     std=np.array(scale*task.observation.history_steps+[1.]*task.observation.history_steps,np.float32)
     return np.zeros_like(std),std
 

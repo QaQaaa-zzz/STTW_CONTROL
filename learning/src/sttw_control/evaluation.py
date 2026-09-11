@@ -57,7 +57,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         prepare=jax.jit(prepare)
         recorded_command=jax.jit(env.command)
         def capture(s,a):
-            return {'priority_alpha':float(s.priority_alpha),'attitude_risk':float(s.history.frames[-1,-1]) if env.config.priority is not None else 0.,'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
+            return {'priority_alpha':float(s.priority_alpha),'attitude_risk':float(s.history.frames[-1,-1]) if env.config.priority is not None and env.config.observation.include_attitude_risk else 0.,'attitude_risk_observed':env.config.priority is not None and env.config.observation.include_attitude_risk,'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
                     'actuator_diagnostic_valid':int(s.tick)>0,
                     'actuator_force':np.asarray(s.data.actuator_force).copy(),
                     'generalized_actuator_force':np.asarray(s.data.qfrc_actuator).copy(),

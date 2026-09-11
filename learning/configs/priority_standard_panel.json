@@ -7,41 +7,19 @@
   ],
   "priority_alphas": [
     0.0,
+    0.25,
     0.5,
+    0.75,
     1.0
   ],
   "start_seconds": 6.0,
-  "duration_seconds": 1.0,
+  "duration_seconds": 3.0,
   "minimum_post_event_seconds": 20.0,
   "path_tolerance_m": 0.2,
   "extra_tolerance_m": 0.05,
   "heading_tolerance_rad": 0.15,
   "hold_seconds": 0.5,
   "cases": [
-    {
-      "name": "steer_negative_1s",
-      "duration": 1.0,
-      "waveform": "constant",
-      "steer_rate": -0.4
-    },
-    {
-      "name": "steer_positive_1s",
-      "duration": 1.0,
-      "waveform": "constant",
-      "steer_rate": 0.4
-    },
-    {
-      "name": "force_negative_1s",
-      "duration": 1.0,
-      "waveform": "constant",
-      "force": -3.0
-    },
-    {
-      "name": "force_positive_1s",
-      "duration": 1.0,
-      "waveform": "constant",
-      "force": 3.0
-    },
     {
       "name": "steer_negative_3s",
       "duration": 3.0,

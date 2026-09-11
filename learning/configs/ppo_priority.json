@@ -1,11 +1,11 @@
 {
   "num_envs": 8192,
   "rollout_steps": 256,
-  "updates": 48,
+  "updates": 32,
   "epochs": 4,
   "minibatch_size": 2048,
-  "seed": 62,
-  "checkpoint_interval": 16,
+  "seed": 63,
+  "checkpoint_interval": 8,
   "validation_post_seconds": 20.0,
   "validation_hold_seconds": 0.5,
   "validation_seeds": [
