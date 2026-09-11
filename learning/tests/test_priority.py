@@ -55,3 +55,26 @@ def test_alpha_intervention_preserves_physics_and_history(tmp_path):
     tr=np.load(tmp_path/'trace/trace.npz')
     np.testing.assert_array_equal(tr['priority_alpha'],0.)
     assert np.all((tr['attitude_risk']>=0)&(tr['attitude_risk']<=1))
+
+
+def test_conditioned_panel_roundtrips_json_checkpoint_and_fixed_alpha(tmp_path):
+    import importlib.util,json,jax
+    from pathlib import Path
+    from sttw_control.env import RecoveryEnv,load_config
+    from sttw_control.network import ResidualActor,make_policy_identity,save_policy
+    from sttw_control.training import normalization
+    c=replace(load_config('learning/configs/priority_conditioned_learning.json'),horizon_seconds=.01,random_events=None)
+    task=tmp_path/'task.json';task.write_text(json.dumps({**asdict(c),'priority':{}}))
+    train=tmp_path/'training';train.mkdir();(train/'declaration.json').write_text(json.dumps({'task':asdict(c)}))
+    e=RecoveryEnv(c);s=e.reset(1);params=ResidualActor().init(jax.random.PRNGKey(0),s.obs)
+    mean,std=normalization(c);checkpoint=tmp_path/'checkpoint'
+    save_policy(checkpoint,params,mean,std,make_policy_identity(e.bundle.identity,asdict(c),1))
+    panel=tmp_path/'panel.json';panel.write_text(json.dumps({'seed':1,'start_seconds':0.,'duration_seconds':.005,'path_tolerance_m':.2,'extra_tolerance_m':.05,'heading_tolerance_rad':.15,'hold_seconds':.005,'cases':[{'name':'force','force':1.,'duration':.005}]}))
+    spec=importlib.util.spec_from_file_location('panel_entry',Path('learning/cli/disturbance.py'))
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    out=tmp_path/'panel';module.run(task,panel,train,checkpoint,out,priority_alpha=1.)
+    assert json.loads((out/'status.json').read_text())['episodes']==4
+    for policy in ('baseline','residual'):
+        tr=np.load(out/'force'/policy/'trace.npz')
+        np.testing.assert_array_equal(tr['priority_alpha'],1.)
+        assert json.loads((out/'force'/policy/'summary.json').read_text())['sampled_mechanical_work']['available']

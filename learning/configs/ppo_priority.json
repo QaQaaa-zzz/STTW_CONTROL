@@ -1,0 +1,52 @@
+{
+  "num_envs": 8192,
+  "rollout_steps": 256,
+  "updates": 48,
+  "epochs": 4,
+  "minibatch_size": 2048,
+  "seed": 62,
+  "checkpoint_interval": 16,
+  "validation_post_seconds": 20.0,
+  "validation_hold_seconds": 0.5,
+  "validation_seeds": [
+    46001,
+    46002
+  ],
+  "validation_events": [
+    {
+      "start": 6.0,
+      "duration": 2.0,
+      "steer_rate": 0,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 2.0,
+      "steer_rate": -0.4,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 2.0,
+      "steer_rate": 0.4,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 2.0,
+      "steer_rate": 0,
+      "force": -3,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 2.0,
+      "steer_rate": 0,
+      "force": 3,
+      "waveform": "constant"
+    }
+  ]
+}

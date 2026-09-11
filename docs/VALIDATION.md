@@ -466,3 +466,12 @@ XLA_PYTHON_CLIENT_PREALLOCATE=false PYTHONPATH=learning/src /home/qy/mujoco_play
 结果统一位于runs/performance_20260911：CPU before/after轨迹、各规模声明与计时、ppo_8192/status.json及metrics.jsonl、cache_cold/warm.json。32768已结束、8192工程训练已结束，不存在本阶段后台续训。
 
 最终相关回归：70 passed、1 GPU专用测试在CPU套件中skipped（18.41s）；独立真实GPU基准、PPO及缓存检查见上。差异检查通过。未执行ROS/实车验证。
+
+## 优先级可控性流水线与能量评价（2026-09-11）
+新增energy.mechanical_work：将各执行器force×velocity逐通道拆分正/负功后进行采样梯形积分，记录完整观测窗口、平面距离及正功J/m；缺失/非有限输入标记不可用，零距离不生成J/m。该值不是电池能耗，尚未验证200Hz对物理子步功率积分的误差，不据此宣称节能。evaluation的summary同步保存统计，奖励和物理环境不变。
+
+既有recovery_pipeline改为薄入口，核心维护在pipeline.py。条件任务必须在面板中显式声明唯一有限α，固定最终checkpoint遍历所有α与标准seed；非条件任务保留原best或last规则。原训练选模门槛保持，仅作参考，条件流水线不再把“曾有eligible候选”误标为“末次模型合格”。配置冻结、源码hash在每次子进程启动前核对，变更则停止。修复了默认tuple网格与JSON list比较导致同一priority配置被拒绝的问题，比较仍严格且未放宽模型身份。
+
+真实端到端预检runs/priority_pipeline_preflight_20260911已complete：512 GPU训练步、480配对开发验证步、240 CPU标准控制步；12条标准轨迹均保存可用机械功统计，α=0/0.5/1分别生成完整配对图视频，统一complete_media/INDEX.md及三个已验证媒体manifest。该0.1s回合仅检验代码链路，不证明扰动恢复或优先级效果。最终测试76 passed、1 skipped（20.91s），真实GPU链路已独立执行。
+
+下一阶段配置ppo_priority.json与priority_standard_panel.json已冻结设计：8192×256×48=100663296训练步、最多1800000开发验证步、972000标准评估步。原30s圆形任务及1–3s两类随机持续扰动保持。正式开发输出runs/priority_recovery_20260911，固定update48进行3α×3seed×9场景×2控制器评估；每α首个预声明seed保存全部扰动的配对媒体。阶段成功与否须检查α实际造成的速度/路径变化、失败及联合恢复，不以最后模型通过旧门槛、单seed改进或机械功减少自动判定论文机制成立。普通双通道等预算消融、8字训练和多训练seed仍待后续阶段。

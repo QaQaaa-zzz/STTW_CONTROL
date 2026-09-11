@@ -18,7 +18,9 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
     if priority_alpha is not None and (cfg.priority is None or not np.isfinite(priority_alpha) or not 0<=priority_alpha<=1):raise ValueError('invalid priority alpha')
     source=json.loads((training_run/'declaration.json').read_text())
     # Only explicit event overrides and added neutral event defaults may differ.
-    actual=asdict(cfg)
+    # JSON has arrays, not tuples: normalize defaults exactly as the frozen
+    # training declaration, without relaxing any configuration comparison.
+    actual=json.loads(json.dumps(asdict(cfg),allow_nan=False))
     for key,value in source['task'].items():
         if actual[key]!=value:raise ValueError('base task differs from frozen training task: '+key)
     extra=panel.get('minimum_post_event_seconds',0.)

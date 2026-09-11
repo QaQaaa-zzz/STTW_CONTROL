@@ -10,6 +10,7 @@ import jax.numpy as jp
 from .path import tracking_metrics,eight_trace_features
 from .events import profile
 from .actuator import residual_target
+from .energy import mechanical_work
 
 
 def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=None):
@@ -102,6 +103,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                  'wall_seconds':time.monotonic()-begin,'declaration_sha256':hashlib.sha256(declaration.encode()).hexdigest(),
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
         summary['command_headroom']=headroom_metrics(arrays['base'][:-1],arrays['measurement'][:-1,2],env.config.actuator)
+        summary['sampled_mechanical_work']=mechanical_work(arrays)
         summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)
         if env.config.figure_eight is not None:
             features=eight_trace_features(arrays['pose'],env.config.figure_eight)
