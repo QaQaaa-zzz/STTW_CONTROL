@@ -271,6 +271,9 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
         for ax,y in zip([axes[0,1],axes[0,2],axes[1,0],axes[1,1],axes[1,2]],
                         [radial,np.rad2deg(trace['measurement'][:,0]),s['speed'],trace['command'][:,0],trace['command'][:,1]]):
             ax.plot(t,y,color=color,ls=ls,label=label)
+            if summary.get('physical_failure',False):
+                ax.axvline(t[-1],color=color,ls=':',lw=1)
+                ax.annotate(f'TERMINATED {t[-1]:.2f}s',xy=(t[-1],y[-1]),fontsize=7,color=color)
     axes[0,0].set(xlabel='World X (m)',ylabel='World Y (m)',title='Reference and recorded trajectories',aspect='equal')
     for ax,title,ylabel in zip(axes.flat[1:],['Signed radial error','Roll angle (left positive)','True longitudinal speed','Applied steering-rate command','Applied rear-wheel-rate command'],['m','deg','m/s','rad/s','rad/s']):
         ax.set(title=title,xlabel='Time (s)',ylabel=ylabel)

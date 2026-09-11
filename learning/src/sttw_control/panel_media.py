@@ -22,8 +22,13 @@ def verify_pair(paths):
     for trace in traces:validate_trace(trace)
     for key in ('qpos','qvel'):
         if not np.array_equal(traces[0][key][0],traces[1][key][0]):raise ValueError('paired initial state mismatch')
-    if not np.array_equal(traces[0]['time'],traces[1]['time']):
-        raise ValueError('paired time grids differ; cannot silently truncate a failed episode')
+    n=min(len(t['time']) for t in traces)
+    if not np.array_equal(traces[0]['time'][:n],traces[1]['time'][:n]):
+        raise ValueError('paired time grids differ')
+    for trace in traces:
+        if len(trace['time'])<max(len(t['time']) for t in traces):
+            if 'terminated' not in trace or not bool(trace['terminated'][-1]):
+                raise ValueError('paired time grids differ without recorded termination')
     return traces
 
 
@@ -39,6 +44,22 @@ def verify_media(path):
     num,den=map(int,probe['r_frame_rate'].split('/'))
     if int(probe['nb_read_frames'])!=m['frame_count'] or not np.isclose(num/den,m['fps']):raise ValueError('encoded video disagrees with manifest')
     return m
+
+
+def comparison_filter(manifests,traces):
+    a,b=manifests
+    count=max(a['frame_count'],b['frame_count'])
+    filters=[]
+    for i,(m,tr) in enumerate(zip((a,b),traces)):
+        missing=count-m['frame_count']
+        chain=f'[{i}:v]'
+        if missing:
+            label=f"TERMINATED at {float(tr['time'][-1]):.3f}s - frozen last recorded frame"
+            chain+=f"tpad=stop_mode=clone:stop={missing},drawtext=text='{label}':x=20:y=30:fontsize=26:fontcolor=white:box=1:boxcolor=red@0.85:enable='gte(n,{m['frame_count']-1})'"
+        else:chain+='null'
+        filters.append(chain+f'[side{i}]')
+    filters.append('[side0][side1]hstack=inputs=2[v]')
+    return ';'.join(filters),count
 
 
 def export_panel(panel_run,output,*,workers=2):
@@ -67,13 +88,15 @@ def export_panel(panel_run,output,*,workers=2):
     results={}
     for name,pair in pairs.items():
         a,b=[manifests[p] for p in pair]
-        if a['fps']!=b['fps'] or a['frame_indices']!=b['frame_indices']:raise ValueError('video frame mappings differ')
-        trace=dict(np.load(pair[0]/'trace.npz',allow_pickle=False))
-        if not np.array_equal(a['frame_indices'],frame_indices(trace['time'],a['fps'])):raise ValueError('stale frame mapping')
+        if a['fps']!=b['fps']:raise ValueError('video frame rates differ')
+        traces=verify_pair(pair)
+        for trace,m in zip(traces,(a,b)):
+            if not np.array_equal(m['frame_indices'],frame_indices(trace['time'],m['fps'])):raise ValueError('stale frame mapping')
         dest=output/name;dest.mkdir()
         compare_runs(*pair,dest,candidate_label='Frozen residual '+Path(declaration['checkpoint']).name)
-        subprocess.run(['ffmpeg','-v','error','-n','-i',str(pair[0]/'media/replay.mp4'),'-i',str(pair[1]/'media/replay.mp4'),'-filter_complex_threads','1','-filter_complex','[0:v][1:v]hstack=inputs=2[v]','-map','[v]','-an','-c:v','libx264','-threads','2','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',str(dest/'comparison.mp4')],check=True)
-        results[name]={'runs':[str(p) for p in pair],'trace_sha256':[digest(p/'trace.npz') for p in pair],'video_sha256':digest(dest/'comparison.mp4'),'fps':a['fps'],'frames':a['frame_count'],'event':json.loads((pair[1]/'event.json').read_text())}
+        graph,count=comparison_filter((a,b),traces)
+        subprocess.run(['ffmpeg','-v','error','-n','-i',str(pair[0]/'media/replay.mp4'),'-i',str(pair[1]/'media/replay.mp4'),'-filter_complex_threads','1','-filter_complex',graph,'-map','[v]','-an','-c:v','libx264','-threads','2','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',str(dest/'comparison.mp4')],check=True)
+        results[name]={'runs':[str(p) for p in pair],'trace_sha256':[digest(p/'trace.npz') for p in pair],'video_sha256':digest(dest/'comparison.mp4'),'fps':a['fps'],'frames':count,'source_frames':[a['frame_count'],b['frame_count']],'terminal_times_seconds':[float(t['time'][-1]) for t in traces],'terminal_frame_padding':[count-m['frame_count'] for m in (a,b)],'padding_semantics':'visual freeze with termination label only; no extrapolated states','event':json.loads((pair[1]/'event.json').read_text())}
         print('Complete paired media: '+name,flush=True)
     manifest={'status':'complete','panel_run':str(panel_run),'panel_declaration_sha256':digest(panel_run/'declaration.json'),'checkpoint':declaration['checkpoint'],'seed':declaration['panel']['seed'],'selection':'one predeclared seed and one frozen policy for every scenario; not best-seed selection','cases':results}
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
