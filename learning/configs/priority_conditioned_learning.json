@@ -44,9 +44,7 @@
     "path_cost_scale": 3.0783592369780886,
     "validation_alphas": [
       0.0,
-      0.25,
       0.5,
-      0.75,
       1.0
     ],
     "objective_floor": 0.01
