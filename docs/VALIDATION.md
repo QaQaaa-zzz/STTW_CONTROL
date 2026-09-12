@@ -651,3 +651,5 @@ priority_survival_20260911完整结束：32更新/67108864训练步、固定upda
 实现learning/src/sttw_control/deferred_training.py及薄CLI。排队目录runs/priority_fixed_roll_20260912_queue，训练目标runs/priority_fixed_roll_20260912。排队时冻结task/training/panel输入及源码SHA256，保留计划/状态/启动PID/日志。训练8192×256×32=67108864控制步，seed63，从零残差；固定学习侧倾6.84°、基础ECBC动态目标保留，惩罚100/20/1/80、生存5/s、alpha端点权重199:1。开发0/.5/1、两seed、五情况×配对×初始及1/8/16/24/32共2160000步上限；标准三alpha×三seed×五情况×两控制器90条、540000步上限，持续扰动6–9s，12组视频及9组奖励组成图。固定末次32，达到预算自动评估然后结束，不自动续训。角色为开发实验，不主张独立留出或硬件验证。
 
 本轮没有同时实施尚在建议阶段的KL停止/错峰采样，仍可能复现此前PPO退化；按用户当前批准配置排队，不默默改变训练算法。脚本测试3通过，覆盖门槛/篡改及两次就绪后单次启动；实际只读资源探测返回waiting_dependency并识别当前DVGC训练进程。奖励/固定目标代码此前完整CPU88通过1跳过。
+
+2026-09-12用户明确改为直接启动：原排队脚本因DVGC phase=failed退出，尚无STTW输出；GPU当前无训练进程。保留原队列error记录，改用显式manual_launch记录及独占launch_claim，核验原冻结输入/源码后直接启动同一priority_fixed_roll_20260912预算，不再要求DVGC成功。训练/评估配置及停止条件不变，不重启或修改DVGC。
