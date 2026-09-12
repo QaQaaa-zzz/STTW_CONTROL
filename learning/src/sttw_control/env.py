@@ -36,6 +36,7 @@ class TaskConfig:
     priority: PriorityConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
+    learning_roll_reference: float | None=None  # rad; does not change ECBC target.
     steer_reference: float=0.
     steer_amplitude: float=0.
     steer_frequency: float=.25
@@ -59,6 +60,8 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.learning_roll_reference is not None and (not math.isfinite(self.learning_roll_reference) or abs(self.learning_roll_reference)>=self.roll_failure):
+            raise ValueError("learning roll reference must be finite and inside roll failure bound")
         if (self.priority is not None)!=self.observation.include_priority:
             raise ValueError('priority config and observation flag must agree')
         if self.priority is not None and (self.action_mapping is not None or not self.observation.include_path):
@@ -251,14 +254,15 @@ class RecoveryEnv:
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
-        frame=make_frame(measurement,command,out.reference_roll,out.steer_rate,actuator.previous,out.disturbance)
+        learning_reference=out.reference_roll if c.learning_roll_reference is None else jp.asarray(c.learning_roll_reference)
+        frame=make_frame(measurement,command,learning_reference,out.steer_rate,actuator.previous,out.disturbance)
         if c.observation.include_path:
             frame=jp.concatenate([frame,self.path_features(pose)])
         if c.priority is not None:
-            risk=priority_weights(alpha,roll-out.reference_roll,roll,rate,c.priority)[0]
+            risk=priority_weights(alpha,roll-learning_reference,roll,rate,c.priority)[0]
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
         history,obs=advance_history(history,frame,c.observation)
-        return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),out.reference_roll
+        return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),learning_reference
 
     def reset(self,seed=0):
         key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed

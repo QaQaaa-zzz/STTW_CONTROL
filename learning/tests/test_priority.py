@@ -162,8 +162,38 @@ def test_alive_reward_only_changes_nonterminal_reward_and_preserves_identity():
 def test_priority_reward_revision_has_symmetric_stronger_endpoints():
     from sttw_control.env import load_config
     c=load_config('learning/configs/priority_conditioned_learning.json')
-    assert (c.speed_error_weight,c.path_error_weight,c.heading_error_weight,c.path_excess_weight)==(10.,2.,.1,8.)
+    assert (c.speed_error_weight,c.path_error_weight,c.heading_error_weight,c.path_excess_weight)==(100.,20.,1.,80.)
     w=priority_weights(1.,0.,0.,0.,c.priority)
     np.testing.assert_allclose(w[1]/w[2],199.,rtol=1e-6)
     np.testing.assert_allclose(priority_weights(.5,0.,0.,0.,c.priority),[0.,1.,1.,1.])
     np.testing.assert_allclose(priority_weights(0.,0.,0.,0.,c.priority)[1:3],w[1:3][::-1])
+
+
+def test_fixed_learning_roll_reference_preserves_ecbc_and_binds_identity():
+    import pytest
+    from sttw_control.env import RecoveryEnv,load_config
+    from sttw_control.network import make_policy_identity
+    c=load_config('learning/configs/priority_conditioned_learning.json')
+    fixed=RecoveryEnv(c)
+    dynamic=RecoveryEnv(replace(c,learning_roll_reference=None))
+    s=fixed.reset(8);d=dynamic.reset(8)
+    assert abs(float(s.reference)-np.deg2rad(6.84))<1e-7
+    np.testing.assert_array_equal(s.base,d.base)
+    np.testing.assert_array_equal(s.controller.eso,d.controller.eso)
+    for state in [s,s.replace(measurement=s.measurement.at[5].multiply(.8),pose=s.pose.at[0].add(.5))]:
+        args=(state.controller,state.actuator,state.history,state.measurement,state.tick,state.pose,state.priority_alpha)
+        f=fixed._prepare(*args);g=dynamic._prepare(*args)
+        np.testing.assert_array_equal(f[3],g[3])
+        assert abs(float(f[4])-np.deg2rad(6.84))<1e-7
+    np.testing.assert_allclose(s.history.frames[-1,0],s.measurement[0]-c.learning_roll_reference,atol=1e-7)
+    args=(s,s.measurement,s.actuator,jp.zeros(2),False,True,2.1,s.pose)
+    f=fixed._advance(*args);g=dynamic._advance(*args)
+    expected=-c.controller.dt*10*((s.measurement[0]-f.reference)**2-(s.measurement[0]-g.reference)**2)
+    np.testing.assert_allclose(f.reward-g.reward,expected,atol=1e-6)
+    f=fixed.step(s,jp.zeros(2));g=dynamic.step(d,jp.zeros(2))
+    np.testing.assert_array_equal(f.data.qpos,g.data.qpos)
+    current=asdict(dynamic.config);legacy=dict(current);legacy.pop('learning_roll_reference')
+    assert make_policy_identity({},current,10)==make_policy_identity({},legacy,10)
+    assert make_policy_identity({},asdict(c),10)!=make_policy_identity({},legacy,10)
+    for value in [float('nan'),float('inf'),c.roll_failure]:
+        with pytest.raises(ValueError):replace(c,learning_roll_reference=value)
