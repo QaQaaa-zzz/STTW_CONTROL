@@ -132,6 +132,11 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
             if conditioned:media_index.append(f'- alpha={alpha}: [all scenarios](alpha_{i}/INDEX.md)')
         if conditioned:(output/'complete_media'/'INDEX.md').write_text('\n'.join(media_index)+'\n')
         (output/'standard_results.json').write_text(json.dumps(rows,indent=2,allow_nan=False)+'\n')
+        if conditioned:
+            status('reward_breakdown',checkpoint=checkpoint)
+            if source_identity()!=sources:raise RuntimeError('source changed before reward diagnostics')
+            from .reward_breakdown import generate
+            generate(output)
         status('complete',checkpoint=checkpoint,episodes=len(rows),endpoint=declaration['endpoint'],
                legacy_eligible_candidate_exists=result['best_checkpoint'] is not None,
                **({'development_eligible':result['best_checkpoint'] is not None} if not conditioned else {}),

@@ -22,6 +22,9 @@ def test_pipeline_evaluates_all_alphas_at_same_final_checkpoint(tmp_path,monkeyp
     from pathlib import Path
     import sttw_control.pipeline as pipeline
     import sttw_control.disturbance as disturbance
+    import sttw_control.reward_breakdown as breakdown
+    reward_calls=[]
+    monkeypatch.setattr(breakdown,"generate",lambda root:reward_calls.append(root))
     task=tmp_path/'task.json';task.write_text(Path('learning/configs/priority_conditioned_learning.json').read_text())
     config=tmp_path/'training.json';config.write_text(json.dumps({'num_envs':1,'rollout_steps':1,'updates':1,'minibatch_size':1,'seed':1,'validation_seeds':[2]}))
     panel=tmp_path/'panel.json';panel.write_text(json.dumps({'priority_alphas':[0.,.5,1.],'evaluation_seeds':[3,4],'start_seconds':6.,'duration_seconds':1.}))
@@ -43,6 +46,7 @@ def test_pipeline_evaluates_all_alphas_at_same_final_checkpoint(tmp_path,monkeyp
     assert json.loads((out/'pipeline_status.json').read_text())['phase']=='complete'
     assert len(json.loads((out/'standard_results.json').read_text()))==6
     assert 'alpha=1.0' in (out/'complete_media/INDEX.md').read_text()
+    assert reward_calls==[out]
 
 
 def test_resume_skips_completed_training_and_evaluations(tmp_path,monkeypatch):
@@ -50,6 +54,9 @@ def test_resume_skips_completed_training_and_evaluations(tmp_path,monkeypatch):
     from pathlib import Path
     import sttw_control.pipeline as pipeline
     import sttw_control.disturbance as disturbance
+    import sttw_control.reward_breakdown as breakdown
+    reward_calls=[]
+    monkeypatch.setattr(breakdown,"generate",lambda root:reward_calls.append(root))
     task=tmp_path/'task.json';task.write_text(Path('learning/configs/priority_conditioned_learning.json').read_text())
     train=tmp_path/'train.json';train.write_text(json.dumps({'num_envs':1,'rollout_steps':1,'updates':1,'minibatch_size':1,'seed':1,'validation_seeds':[2]}))
     panel=tmp_path/'panel.json';panel.write_text(json.dumps({'priority_alphas':[0.,1.],'evaluation_seeds':[3],'start_seconds':6.,'duration_seconds':1.}))
