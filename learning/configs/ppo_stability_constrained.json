@@ -50,5 +50,6 @@
   ],
   "target_kl": 0.01,
   "warmup_pool_size": 256,
-  "warmup_steps": 6000
+  "warmup_steps": 6000,
+  "validation_final_only": true
 }

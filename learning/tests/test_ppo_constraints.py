@@ -30,3 +30,41 @@ def test_constraint_config_rejects_incomplete_warmup():
     import pytest
     for kwargs in [dict(target_kl=0),dict(target_kl=float('nan')),dict(warmup_pool_size=4),dict(warmup_steps=8)]:
         with pytest.raises(ValueError):TrainingConfig(**kwargs)
+
+
+def test_final_only_validation_schedule():
+    from sttw_control.training import should_validate
+    c=TrainingConfig(updates=8,checkpoint_interval=4,validation_final_only=True)
+    assert [i for i in range(1,9) if should_validate(c,i)]==[8]
+    c=TrainingConfig(updates=8,checkpoint_interval=4)
+    assert [i for i in range(1,9) if should_validate(c,i)]==[1,4,8]
+
+
+def test_wall_clock_warning_does_not_terminate():
+    import subprocess
+    from sttw_control.stability_screen import wait_stage
+    class Child:
+        def __init__(self):self.calls=[]
+        def wait(self,timeout=None):
+            self.calls.append(timeout)
+            if len(self.calls)==1:raise subprocess.TimeoutExpired('test',timeout)
+            return 0
+        def terminate(self):raise AssertionError('warning must not terminate')
+    child=Child();warnings=[]
+    assert wait_stage(child,None,2700,warnings.append)==0
+    assert child.calls==[2700,None] and len(warnings)==1
+
+
+def test_explicit_legacy_timeout_still_stops_child():
+    import subprocess
+    import pytest
+    from sttw_control.stability_screen import wait_stage
+    class Child:
+        stopped=False
+        def wait(self,timeout=None):
+            if not self.stopped:raise subprocess.TimeoutExpired('test',timeout)
+            return -15
+        def terminate(self):self.stopped=True
+    child=Child()
+    with pytest.raises(TimeoutError):wait_stage(child,1,2700,lambda _:None)
+    assert child.stopped

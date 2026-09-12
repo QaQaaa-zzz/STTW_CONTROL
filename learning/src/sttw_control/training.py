@@ -69,6 +69,7 @@ class TrainingConfig:
     initial_std: float=.15
     seed: int=42
     checkpoint_interval: int=8
+    validation_final_only: bool=False
     validation_post_seconds: float=10.
     validation_hold_seconds: float=.5
     validation_path_tolerance: float=.2
@@ -104,6 +105,10 @@ class TrainingConfig:
                     raise ValueError('invalid validation event amplitude/waveform')
         if not self.validation_seeds or len(set(self.validation_seeds))!=len(self.validation_seeds):
             raise ValueError('validation seeds must be nonempty and unique')
+
+
+def should_validate(config,index):
+    return index==config.updates or (not config.validation_final_only and (index==1 or index%config.checkpoint_interval==0))
 
 
 def normalization(task):
@@ -317,14 +322,18 @@ def train(task_path,output,config=TrainingConfig()):
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if c.target_kl is not None:
             record['optimizer_audit']={'attempted_minibatches':int(host[4]),'accepted_minibatches':int(host[5]),'final_exact_kl':float(host[6]),'full_update_rolled_back':bool(host[7]),'target_kl':c.target_kl}
-        if index==1 or index%c.checkpoint_interval==0 or index==c.updates:
+        checkpoint_start=time.monotonic()
+        path=checkpoint(index,params,opt_state,key,None)
+        record['checkpoint_seconds']=time.monotonic()-checkpoint_start
+        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'validating' if should_validate(c,index) else 'training','validation_complete':False},indent=2)+'\n')
+        if should_validate(c,index):
             validation_start=time.monotonic()
             validation=host_metrics(validate(params,False))
             record['validation_seconds']=time.monotonic()-validation_start
-            checkpoint_start=time.monotonic()
             record['validation']=validation
-            path=checkpoint(index,params,opt_state,key,validation)
-            record['checkpoint_seconds']=time.monotonic()-checkpoint_start
+            metadata_path=Path(path)/'training.json'
+            metadata=json.loads(metadata_path.read_text());metadata['validation']=validation
+            metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
             score,reason=rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
             record['selection']={'rank':score,'reason':reason}
             if score is not None and (best_score is None or score<best_score):
@@ -337,7 +346,7 @@ def train(task_path,output,config=TrainingConfig()):
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
         print(json.dumps(record,allow_nan=False),flush=True)
-        if 'validation' in record:
-            from .training_diagnostics import plot_training
-            plot_training(output)
+        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates else 'training','validation_complete':'validation' in record},indent=2)+'\n')
+        from .training_diagnostics import plot_training
+        plot_training(output)
     return status

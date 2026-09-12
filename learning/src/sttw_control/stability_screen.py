@@ -7,6 +7,21 @@ import sys
 from .deferred_training import verify_files
 
 
+def wait_stage(child,timeout,warning_seconds,notify):
+    """Optional legacy hard limit; otherwise warn once and respect step budget."""
+    if timeout is None:
+        try:return child.wait(timeout=warning_seconds)
+        except subprocess.TimeoutExpired:
+            notify('Wall-clock advisory exceeded; continuing the declared step budget')
+            return child.wait()
+    try:return child.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        child.terminate()
+        try:child.wait(timeout=15)
+        except subprocess.TimeoutExpired:child.kill();child.wait()
+        raise TimeoutError('bounded stage timeout; no further stages')
+
+
 def assess(training,criteria,constrained):
     status=json.loads((training/'status.json').read_text())
     rows=[json.loads(x) for x in (training/'metrics.jsonl').read_text().splitlines()]
@@ -34,12 +49,10 @@ def run(plan_path):
         if cpu:e['JAX_PLATFORMS']='cpu'
         with log.open('x') as f:
             child=subprocess.Popen([sys.executable,*map(str,args)],cwd=plan['repository'],env=e,stdout=f,stderr=subprocess.STDOUT)
-            try:code=child.wait(timeout=plan['stage_timeout_seconds'])
-            except subprocess.TimeoutExpired:
-                child.terminate()
-                try:child.wait(timeout=15)
-                except subprocess.TimeoutExpired:child.kill();child.wait()
-                raise TimeoutError('bounded stage timeout; no further stages')
+            def warning(message):
+                (root/'wall_clock_warning.json').write_text(json.dumps({'message':message,'log':str(log)},indent=2)+'\n')
+                print(message,flush=True)
+            code=wait_stage(child,plan.get('stage_timeout_seconds'),plan.get('stage_warning_seconds',2700),warning)
         if code:raise RuntimeError('stage subprocess failed: '+str(code))
     results=[]
     try:
