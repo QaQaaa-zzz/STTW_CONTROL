@@ -8,7 +8,7 @@ PANELS=[('policy','Policy surrogate loss'),('value','Value loss (includes 0.5 fa
         ('kl','Approx. KL diagnostic (symlog)'),('reward','Mean step reward (symlog; different objectives)'),
         ('entropy','Gaussian entropy before tanh'),('coverage','Disturbed samples / collected steps'),
         ('recovery','Development joint recovery fraction'),('failed','Development physical failure fraction'),
-        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]')]
+        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL')]
 
 
 def series(rows):
@@ -19,6 +19,7 @@ def series(rows):
         losses=row.get('loss_metrics',[])
         for key,i in [('policy',0),('value',1),('entropy',2),('kl',3)]:out[key].append(float(losses[i]) if len(losses)>i else float('nan'))
         out['reward'].append(row.get('mean_step_reward',float('nan')))
+        out['final_kl'].append(row.get('optimizer_audit',{}).get('final_exact_kl',float('nan')))
         disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
         v=row.get('validation',{});mask=np.asarray(v.get('event_present',[]),bool)
@@ -40,7 +41,7 @@ def draw(entries,destination,title):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    fig,axes=plt.subplots(5,2,figsize=(15,17),layout='constrained')
+    fig,axes=plt.subplots(6,2,figsize=(15,19),layout='constrained')
     colors=plt.get_cmap('tab20')
     for i,(label,s) in enumerate(entries):
         for ax,(key,name) in zip(axes.flat,PANELS):
@@ -52,6 +53,7 @@ def draw(entries,destination,title):
         if key in ['kl','value']:ax.set_yscale('symlog',linthresh=.01)
         if key in ['recovery','failed','coverage']:ax.set_ylim(-.03,1.03)
         if not any(np.isfinite(s[key]).any() for _,s in entries):ax.text(.5,.5,'Not logged',ha='center',transform=ax.transAxes)
+    for ax in list(axes.flat)[len(PANELS):]:ax.set_visible(False)
     axes[0,0].legend(fontsize=8,loc='best')
     fig.suptitle(title+'\nRaw logged values; gaps mean unavailable. Development samples are not holdout.\nReward/loss across changed tasks are not a performance ranking; no automatic convergence claim.',fontsize=11)
     for ext in ['png','pdf']:

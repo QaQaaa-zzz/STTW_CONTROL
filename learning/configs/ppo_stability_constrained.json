@@ -1,0 +1,54 @@
+{
+  "num_envs": 8192,
+  "rollout_steps": 256,
+  "updates": 8,
+  "epochs": 2,
+  "minibatch_size": 8192,
+  "seed": 63,
+  "checkpoint_interval": 4,
+  "validation_post_seconds": 20.0,
+  "validation_hold_seconds": 0.5,
+  "validation_seeds": [
+    46001
+  ],
+  "validation_events": [
+    {
+      "start": 6.0,
+      "duration": 3.0,
+      "steer_rate": 0,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 3.0,
+      "steer_rate": -0.4,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 3.0,
+      "steer_rate": 0.4,
+      "force": 0,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 3.0,
+      "steer_rate": 0,
+      "force": -3,
+      "waveform": "constant"
+    },
+    {
+      "start": 6.0,
+      "duration": 3.0,
+      "steer_rate": 0,
+      "force": 3,
+      "waveform": "constant"
+    }
+  ],
+  "target_kl": 0.01,
+  "warmup_pool_size": 256,
+  "warmup_steps": 6000
+}

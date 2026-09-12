@@ -28,6 +28,11 @@ def gaussian_log_prob(sample,mean,log_std):
     return -.5*jp.sum(((sample-mean)*jp.exp(-log_std))**2+2*log_std+math.log(2*math.pi),axis=-1)
 
 
+def gaussian_kl(old_mean,old_log_std,new_mean,new_log_std):
+    """Exact KL(old || new) per observation for diagonal latent Gaussians."""
+    return jp.sum(new_log_std-old_log_std+(jp.exp(2*old_log_std)+(old_mean-new_mean)**2)/(2*jp.exp(2*new_log_std))-.5,axis=-1)
+
+
 def generalized_advantage(reward,value,next_value,terminated,done,gamma,gae_lambda):
     delta=reward+gamma*(1-terminated.astype(value.dtype))*next_value-value
     def step(carry,row):
@@ -53,6 +58,9 @@ class TrainingConfig:
     updates: int=64
     epochs: int=4
     minibatch_size: int=2048
+    target_kl: float | None=None
+    warmup_pool_size: int=0
+    warmup_steps: int=0
     learning_rate: float=.0003
     gamma: float=.9995
     gae_lambda: float=.99
@@ -73,6 +81,8 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if self.target_kl is not None and (not math.isfinite(self.target_kl) or self.target_kl<=0):raise ValueError('invalid KL target')
+        if any(type(v) is not int or v<0 for v in (self.warmup_pool_size,self.warmup_steps)) or bool(self.warmup_pool_size)!=bool(self.warmup_steps):raise ValueError('invalid warmup pool')
         for name in ('num_envs','rollout_steps','updates','epochs','minibatch_size','checkpoint_interval'):
             if not isinstance(getattr(self,name),int) or getattr(self,name)<1:
                 raise ValueError(f'{name} must be a positive integer')
@@ -118,6 +128,7 @@ def train(task_path,output,config=TrainingConfig()):
                  'git_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
                  'jax_compilation_cache_dir':cache_dir,
                  'budget_control_transitions':c.num_envs*c.rollout_steps*c.updates,
+                 'warmup_compute_transition_budget':c.warmup_pool_size*c.warmup_steps,
                  'scheduled_seconds_per_env':c.rollout_steps*c.updates*env.config.controller.dt,
                  'scheduled_episode_equivalents_per_env':c.rollout_steps*c.updates/env.horizon,
                  'coverage_note':'Scheduled time is divided across resets; it does not guarantee completed recovery episodes.',
@@ -142,6 +153,31 @@ def train(task_path,output,config=TrainingConfig()):
     print('Compiling MJX batched reset',flush=True)
     state=jax.jit(reset)(jax.random.split(rk,c.num_envs))
     jax.block_until_ready(state.obs)
+
+    warmup_record={'computed_transition_budget':c.warmup_pool_size*c.warmup_steps,'active_transitions':0}
+    if c.warmup_steps:
+        print('Compiling physical phase-pool warmup',flush=True)
+        key,bk,ik=jax.random.split(key,3)
+        bank=jax.jit(reset)(jax.random.split(bk,c.warmup_pool_size))
+        targets=jp.arange(c.warmup_pool_size)*c.warmup_steps//c.warmup_pool_size
+        @jax.jit
+        def warmup(bank,key):
+            def tick(carry,i):
+                bank,key=carry;key,rk=jax.random.split(key)
+                nxt=step(bank,jp.zeros((c.warmup_pool_size,2)))
+                def restart(nxt):
+                    fresh=reset(jax.random.split(rk,c.warmup_pool_size))
+                    return jax.tree.map(lambda a,b:jp.where(nxt.done.reshape((c.warmup_pool_size,)+(1,)*(a.ndim-1)),b,a),nxt,fresh)
+                nxt=jax.lax.cond(jp.any(nxt.done),restart,lambda x:x,nxt)
+                bank=jax.tree.map(lambda a,b:jp.where((i<targets).reshape((c.warmup_pool_size,)+(1,)*(a.ndim-1)),b,a),bank,nxt)
+                return (bank,key),None
+            return jax.lax.scan(tick,(bank,key),jp.arange(c.warmup_steps))[0]
+        bank,key=warmup(bank,key);jax.block_until_ready(bank.obs)
+        indices=jax.random.randint(ik,(c.num_envs,),0,c.warmup_pool_size)
+        state=jax.tree.map(lambda x:x[indices],bank)
+        warmup_record.update(active_transitions=int(jp.sum(targets)),pool_size=c.warmup_pool_size,tick_quantiles=np.quantile(np.asarray(bank.tick),[0,.25,.5,.75,1]).tolist(),scope='Real zero-residual trajectories; bank states sampled with replacement, not independent initial histories')
+        print('Warmup: '+json.dumps(warmup_record),flush=True)
+    (output/'warmup.json').write_text(json.dumps(warmup_record,indent=2)+'\n')
 
     def outputs(p,obs):
         x=obs/scale
@@ -184,6 +220,37 @@ def train(task_path,output,config=TrainingConfig()):
         adv=(adv-jp.mean(adv))/(jp.std(adv)+1e-8)
         flat=jax.tree.map(lambda x:x.reshape((-1,)+x.shape[2:]),(obs,z,logprob,adv,target))
         count=c.num_envs*c.rollout_steps
+        if c.target_kl is not None:
+            old_p=p;old_opt=opt_state
+            old_std=jp.clip(old_p['log_std'],-4.,0.)
+            def kl_on(candidate,observations):
+                old_mu,_=outputs(old_p,observations);new_mu,_=outputs(candidate,observations)
+                return jp.mean(gaussian_kl(old_mu,old_std,new_mu,jp.clip(candidate['log_std'],-4.,0.)))
+            def constrained_epoch(carry,_):
+                p,opt_state,key,stopped=carry;key,pk=jax.random.split(key)
+                indices=jax.random.permutation(pk,count).reshape((-1,c.minibatch_size))
+                def minibatch(carry,idx):
+                    p,opt_state,stopped=carry
+                    def attempt(_):
+                        batch=jax.tree.map(lambda x:x[idx],flat)
+                        (_,metrics),grad=jax.value_and_grad(loss,has_aux=True)(p,batch)
+                        delta,new_opt=optimizer.update(grad,opt_state,p);candidate=optax.apply_updates(p,delta)
+                        kl=kl_on(candidate,batch[0]);finite=jp.isfinite(kl)&jp.all(jp.isfinite(metrics))
+                        accept=finite&(kl<=c.target_kl)
+                        selected=jax.lax.cond(accept,lambda _:(candidate,new_opt),lambda _:(p,opt_state),None)
+                        return (*selected,~accept),jp.concatenate([metrics,jp.array([1.,accept.astype(jp.float32),jp.nan_to_num(kl,nan=1e30,posinf=1e30)])])
+                    return jax.lax.cond(stopped,lambda _:((p,opt_state,stopped),jp.zeros(7)),attempt,None)
+                (p,opt_state,stopped),metrics=jax.lax.scan(minibatch,(p,opt_state,stopped),indices)
+                return (p,opt_state,key,stopped),jp.sum(metrics,axis=0)
+            (candidate,new_opt,key,stopped),metrics=jax.lax.scan(constrained_epoch,(p,opt_state,key,jp.bool_(False)),None,length=c.epochs)
+            # Check ALL collected observations in bounded chunks; rollback params AND optimizer.
+            def final_chunk(_,obs):return None,kl_on(candidate,obs)
+            _,kls=jax.lax.scan(final_chunk,None,flat[0].reshape((-1,c.minibatch_size,flat[0].shape[-1])))
+            final_kl=jp.mean(kls);accept=jp.isfinite(final_kl)&(final_kl<=c.target_kl)
+            p,opt_state=jax.lax.cond(accept,lambda _:(candidate,new_opt),lambda _:(old_p,old_opt),None)
+            totals=jp.sum(metrics,axis=0);means=totals[:4]/jp.maximum(totals[4],1)
+            audit=jp.array([totals[4],totals[5],jp.where(accept,final_kl,0.),~accept])
+            return p,opt_state,key,jp.concatenate([means,audit])
         def epoch(carry,_):
             p,opt_state,key=carry
             key,permkey=jax.random.split(key)
@@ -238,7 +305,7 @@ def train(task_path,output,config=TrainingConfig()):
         if not np.isfinite(host).all() or not all(np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(params)):
             raise RuntimeError('Nonfinite PPO update; stopping without promotion')
         record={'update':index,'control_transitions':index*c.num_envs*c.rollout_steps,
-                'elapsed_seconds':time.monotonic()-start,'loss_metrics':host.tolist(),
+                'elapsed_seconds':time.monotonic()-start,'loss_metrics':host[:4].tolist(),
                 'rollout_seconds':rollout_seconds,'optimizer_seconds':time.monotonic()-update_start,
                 'rollout_control_steps_per_second':c.num_envs*c.rollout_steps/rollout_seconds,
                 'rollout_compile_seconds':rollout_compile_seconds,
@@ -248,6 +315,8 @@ def train(task_path,output,config=TrainingConfig()):
                 'steer_disturbed_transitions':int(jp.sum(rows[8][...,0])),
                 'force_disturbed_transitions':int(jp.sum(rows[8][...,1])),
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
+        if c.target_kl is not None:
+            record['optimizer_audit']={'attempted_minibatches':int(host[4]),'accepted_minibatches':int(host[5]),'final_exact_kl':float(host[6]),'full_update_rolled_back':bool(host[7]),'target_kl':c.target_kl}
         if index==1 or index%c.checkpoint_interval==0 or index==c.updates:
             validation_start=time.monotonic()
             validation=host_metrics(validate(params,False))
