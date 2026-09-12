@@ -268,4 +268,7 @@ def train(task_path,output,config=TrainingConfig()):
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
         print(json.dumps(record,allow_nan=False),flush=True)
+        if 'validation' in record:
+            from .training_diagnostics import plot_training
+            plot_training(output)
     return status

@@ -25,7 +25,8 @@ def reconstruct(path):
   features=eight_trace_features(tr['pose'],FigureEightConfig(**c['figure_eight']));ey,eh=features[:,:2].T
  else:
   xy=tr['pose'][:,:2]-[c['circle']['center_x'],c['circle']['center_y']];ey=np.linalg.norm(xy,axis=1)-c['circle']['radius'];tangent=np.arctan2(xy[:,1],xy[:,0])+c['circle']['direction']*np.pi/2;eh=np.arctan2(np.sin(tr['pose'][:,2]-tangent),np.cos(tr['pose'][:,2]-tangent))
- v=p['objective_floor']+2*(1-p['objective_floor'])*a;w=p['objective_floor']+2*(1-p['objective_floor'])*(1-a)
+ from .priority import PriorityConfig,objective_weights
+ v,w=objective_weights(a,PriorityConfig(**p),xp=np)
  rates={'roll':10*er**2,'roll_rate':rr**2,'speed':v*c['speed_error_weight']*ev**2/p['speed_cost_scale'],'path':w*c['path_error_weight']*ey**2/p['path_cost_scale'],'heading':w*c['heading_error_weight']*eh**2/p['path_cost_scale'],'path_excess':w*c['path_excess_weight']*np.maximum(abs(ey)-c['path_soft_limit'],0)**2/p['path_cost_scale'],'steer':es**2,'action':.01*np.sum(tr['action']**2,axis=1)}
  reward={k:-dt*x for k,x in rates.items()};reward['alive']=np.full(n,dt*c.get('alive_reward_rate',1.));failed=tr['terminated'].astype(bool)
  for values in reward.values():values[failed]=0.;values[0]=0.

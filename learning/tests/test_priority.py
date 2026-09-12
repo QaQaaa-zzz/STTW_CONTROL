@@ -164,8 +164,8 @@ def test_priority_reward_revision_has_symmetric_stronger_endpoints():
     c=load_config('learning/configs/priority_conditioned_learning.json')
     assert (c.speed_error_weight,c.path_error_weight,c.heading_error_weight,c.path_excess_weight)==(100.,20.,1.,80.)
     w=priority_weights(1.,0.,0.,0.,c.priority)
-    np.testing.assert_allclose(w[1]/w[2],199.,rtol=1e-6)
-    np.testing.assert_allclose(priority_weights(.5,0.,0.,0.,c.priority),[0.,1.,1.,1.])
+    np.testing.assert_allclose(w[1]/w[2],100.,rtol=1e-6)
+    np.testing.assert_allclose(priority_weights(.5,0.,0.,0.,c.priority),[0.,.1,.1,1.])
     np.testing.assert_allclose(priority_weights(0.,0.,0.,0.,c.priority)[1:3],w[1:3][::-1])
 
 
@@ -197,3 +197,18 @@ def test_fixed_learning_roll_reference_preserves_ecbc_and_binds_identity():
     assert make_policy_identity({},asdict(c),10)!=make_policy_identity({},legacy,10)
     for value in [float('nan'),float('inf'),c.roll_failure]:
         with pytest.raises(ValueError):replace(c,learning_roll_reference=value)
+
+
+def test_exponential_priority_has_equal_ratio_spacing_and_legacy_default():
+    c=PriorityConfig(risk_gate=False,weight_schedule='exponential',tracking_weight_scale=.1)
+    ws=np.asarray([priority_weights(a,0.,0.,0.,c)[1:3] for a in [0,.5,1]])
+    np.testing.assert_allclose(ws,[[.01,1],[.1,.1],[1,.01]],rtol=1e-6)
+    np.testing.assert_allclose(ws[1:,0]/ws[:-1,0],[10,10],rtol=1e-6)
+    np.testing.assert_allclose(priority_weights(.5,0.,0.,0.,PriorityConfig())[1:3],[1,1])
+    from sttw_control.network import make_policy_identity
+    from sttw_control.env import load_config
+    c=load_config('learning/configs/priority_conditioned_learning.json')
+    legacy=asdict(c);legacy['priority'].update(weight_schedule='linear',tracking_weight_scale=1.,weight_base=10.)
+    old={**legacy,'priority':dict(legacy['priority'])}
+    for key in ['weight_schedule','tracking_weight_scale','weight_base']:old['priority'].pop(key)
+    assert make_policy_identity({},legacy,10)==make_policy_identity({},old,10)

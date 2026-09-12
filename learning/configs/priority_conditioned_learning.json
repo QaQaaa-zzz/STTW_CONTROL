@@ -47,7 +47,10 @@
       0.5,
       1.0
     ],
-    "objective_floor": 0.01
+    "objective_floor": 0.01,
+    "weight_schedule": "exponential",
+    "weight_base": 10.0,
+    "tracking_weight_scale": 0.1
   },
   "alive_reward_rate": 5.0,
   "learning_roll_reference": 0.11938052083641214

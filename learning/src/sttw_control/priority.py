@@ -16,12 +16,17 @@ class PriorityConfig:
     roll_critical: float=.6
     rate_warning: float=.8
     rate_critical: float=1.8
+    weight_schedule: str="linear"
+    weight_base: float=10.
+    tracking_weight_scale: float=1.
     objective_floor: float=.1
     motion_floor: float=.1
     attitude_boost: float=4.
     validation_alphas: tuple=(0.,.5,1.)
 
     def __post_init__(self):
+        if self.weight_schedule not in ("linear","exponential") or not math.isfinite(self.weight_base) or self.weight_base<=1 or not math.isfinite(self.tracking_weight_scale) or self.tracking_weight_scale<=0:
+            raise ValueError("invalid priority weight schedule")
         if not self.validation_alphas or len(set(self.validation_alphas))!=len(self.validation_alphas) or any(not math.isfinite(x) or not 0<=x<=1 for x in self.validation_alphas):raise ValueError("invalid validation alphas")
         if not isinstance(self.risk_gate,bool) or any(not math.isfinite(x) or x<=0 for x in (self.speed_cost_scale,self.path_cost_scale)):raise ValueError('invalid priority cost normalization')
         if not math.isfinite(self.fixed_alpha) or not 0<=self.fixed_alpha<=1 or not isinstance(self.randomize_alpha,bool):raise ValueError('invalid priority alpha')
@@ -38,6 +43,18 @@ def priority_weights(alpha,error,roll,rate,c):
     risk=jp.where(c.risk_gate,risk,0.)
     alpha=jp.clip(alpha,0,1)
     motion=1-(1-c.motion_floor)*risk
-    speed=motion*(c.objective_floor+2*(1-c.objective_floor)*alpha)
-    path=motion*(c.objective_floor+2*(1-c.objective_floor)*(1-alpha))
+    speed,path=objective_weights(alpha,c)
+    speed=motion*speed;path=motion*path
     return jp.array([risk,speed,path,1+c.attitude_boost*risk])
+
+
+def objective_weights(alpha,c,xp=jp):
+    """Shared reward/reconstruction weights, including fixed global scaling."""
+    a=xp.clip(alpha,0,1)
+    if c.weight_schedule=='exponential':
+        speed=xp.power(c.weight_base,2*a-1)
+        path=xp.power(c.weight_base,1-2*a)
+    else:
+        speed=c.objective_floor+2*(1-c.objective_floor)*a
+        path=c.objective_floor+2*(1-c.objective_floor)*(1-a)
+    return c.tracking_weight_scale*speed,c.tracking_weight_scale*path
