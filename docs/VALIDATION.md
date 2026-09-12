@@ -643,3 +643,11 @@ priority_survival_20260911完整结束：32更新/67108864训练步、固定upda
 固定均值取自当前左转圆轨迹的开发记录，非一般平衡角；右转/8字/不同速度半径必须重新声明目标，不能声称该常数普适。增大回原跟踪惩罚后，之前的高负回报风险仍可能存在；固定目标与ECBC动态目标之间也可能产生控制冲突，需要下一次有界训练/对照验证。本次按指定方案实现，不宣称恢复改善，未启动新训练或修改历史运行。
 
 验证：新增固定参考测试先失败后实现，检查速度/路径状态变化时ECBC基础输出不变、观测误差与姿态奖励差值正确、零残差单步物理状态相同、参数边界和checkpoint默认兼容。完整CPU88 passed、1 skipped；diff检查通过。
+
+## DVGC结束后顺序启动（2026-09-12）
+
+用户明确授权在当前DVGC训练结束后启动本项目。只读监视/home/qy/DVGC/JIT/runs/experiments/delayed_exploration_reuse_20260912/queue/execution/status.json上层队列，绑定其plan_sha256，不能只认stage_0的某个中间阶段。每30s检查，队列complete、该用户DVGC Python进程退出、GPU无其他计算任务连续两次才启动；明确豁免桌面远程控制/usr/local/awesun/bin/awesun_desktop。队列失败、输入或源码hash变化、已有输出、24h等待超时均停止；锁文件及独占launch_claim防重复，失败不重试，不写DVGC文件，不杀进程。
+
+实现learning/src/sttw_control/deferred_training.py及薄CLI。排队目录runs/priority_fixed_roll_20260912_queue，训练目标runs/priority_fixed_roll_20260912。排队时冻结task/training/panel输入及源码SHA256，保留计划/状态/启动PID/日志。训练8192×256×32=67108864控制步，seed63，从零残差；固定学习侧倾6.84°、基础ECBC动态目标保留，惩罚100/20/1/80、生存5/s、alpha端点权重199:1。开发0/.5/1、两seed、五情况×配对×初始及1/8/16/24/32共2160000步上限；标准三alpha×三seed×五情况×两控制器90条、540000步上限，持续扰动6–9s，12组视频及9组奖励组成图。固定末次32，达到预算自动评估然后结束，不自动续训。角色为开发实验，不主张独立留出或硬件验证。
+
+本轮没有同时实施尚在建议阶段的KL停止/错峰采样，仍可能复现此前PPO退化；按用户当前批准配置排队，不默默改变训练算法。脚本测试3通过，覆盖门槛/篡改及两次就绪后单次启动；实际只读资源探测返回waiting_dependency并识别当前DVGC训练进程。奖励/固定目标代码此前完整CPU88通过1跳过。
