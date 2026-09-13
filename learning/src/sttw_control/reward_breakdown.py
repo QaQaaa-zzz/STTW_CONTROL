@@ -139,4 +139,6 @@ def generate(root):
  (OUT/'summary.json').write_text(json.dumps(summaries,indent=2,allow_nan=False)+'\n')
  (OUT/'INDEX.md').write_text('# Reward and error diagnostics\n\nAll declared alpha groups and available scenario/seed panels. No new simulation. Reward reconstructed from recorded states/actions and checked against each logged transition.\n\n'+ '\n'.join(indexes)+'\n\nNPZ files contain signed per-step components; penalty plots are positive rates before terminal replacement. The failure transition replaces all regular terms with the frozen failure penalty. Common-window bars exclude the earliest terminal transition. Recovery bonus uses roll/rate/speed/steer criteria, not path recovery criteria.\n')
  print('checked',len(summaries),'trajectories; figures',len(groups),'max reward residual',max(x['max_reward_reconstruction_error'] for x in summaries))
+ from .speed_recovery import generate as generate_speed_recovery
+ generate_speed_recovery(ROOT)
  return {'trajectories':len(summaries),'figures':len(groups),'max_reward_error':max(x['max_reward_reconstruction_error'] for x in summaries)}
