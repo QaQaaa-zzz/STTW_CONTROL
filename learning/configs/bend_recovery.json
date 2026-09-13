@@ -46,9 +46,9 @@
     "objective_floor": 0.01,
     "weight_schedule": "exponential",
     "weight_base": 10.0,
-    "tracking_weight_scale": 0.1
+    "tracking_weight_scale": 0.3
   },
-  "alive_reward_rate": 5.0,
+  "alive_reward_rate": 1.0,
   "learning_roll_reference": null,
   "bend": {
     "straight": 10.0,
