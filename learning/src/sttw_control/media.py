@@ -69,7 +69,7 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
     t=trace['time'];m=trace['measurement'];s=state_series(trace,config)
     event=np.asarray(trace['event'][0]) if 'event' in trace else np.array([config['disturbance_start']/config['controller']['dt'],(config['disturbance_start']+config['disturbance_duration'])/config['controller']['dt'],config.get('disturbance_steer_rate',0.),config['disturbance_force'],float(config.get('disturbance_waveform')=='half_sine')])
     event_start,event_end=event[:2]*config['controller']['dt']
-    has_event=bool(event[2] or event[3])
+    has_event=bool(event[2] or event[3] or (len(event)>5 and event[5]))
     circle=CircleConfig(**config['circle']) if config.get('circle') else None
     fig,axes=plt.subplots(1,2,figsize=(12,5),layout='constrained')
     xy=trace['qpos'][:,:2]
@@ -78,6 +78,12 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Reference circle')
         error=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
         metrics=tracking_metrics(xy,circle)
+    elif config.get('bend'):
+        from .path import BendConfig,bend_table,bend_trace_features
+        bend=BendConfig(**config['bend']);ref=bend_table(bend)[:,1:3]
+        axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,label='Smooth bend reference')
+        error=bend_trace_features(trace['pose'],bend)[:,0]
+        metrics={'right_error_rmse_m':float(np.sqrt(np.mean(error**2))),'right_error_peak_m':float(abs(error).max())}
     elif config.get('figure_eight'):
         figure=FigureEightConfig(**config['figure_eight']);ref=eight_reference(figure)
         axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Figure eight reference')
@@ -171,6 +177,9 @@ def render_run(run_path,*,fps=30):
         xy=trace['qpos'][:,:2]
         straight=config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0
         ref=circle_reference(circle,181) if circle else (np.column_stack([np.linspace(xy[0,0],xy[-1,0],100),np.full(100,xy[0,1])]) if straight else np.empty((0,2)))
+        if config.get('bend'):
+            from .path import BendConfig,bend_table
+            ref=bend_table(BendConfig(**config['bend']))[:,1:3]
         if config.get('figure_eight'):ref=eight_reference(FigureEightConfig(**config['figure_eight']),181)
         ref3=np.column_stack([ref,np.full(len(ref),.012)])
         model=bundle.model

@@ -20,7 +20,7 @@ def series(rows):
         for key,i in [('policy',0),('value',1),('entropy',2),('kl',3)]:out[key].append(float(losses[i]) if len(losses)>i else float('nan'))
         out['reward'].append(row.get('mean_step_reward',float('nan')))
         out['final_kl'].append(row.get('optimizer_audit',{}).get('final_exact_kl',float('nan')))
-        disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))
+        disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))+row.get('rear_disturbed_transitions',0)
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
         v=row.get('validation',{});mask=np.asarray(v.get('event_present',[]),bool)
         for key,field in [('recovery','post_event_hold_complete'),('failed','failed'),('path','radial_rmse'),('speed','speed_rmse')]:

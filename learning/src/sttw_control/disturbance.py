@@ -13,7 +13,11 @@ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.0
         raise ValueError('nominal/disturbed timestamps mismatch')
     c=config.get('circle');xy=trace['qpos'][:,:2];nomxy=nominal['qpos'][:n,:2]
     s=state_series(trace,config)
-    if config.get('figure_eight'):
+    if config.get('bend'):
+        from .path import BendConfig,bend_trace_features
+        path=BendConfig(**config['bend']);features=bend_trace_features(trace['pose'],path);nominal_features=bend_trace_features(nominal['pose'][:n],path)
+        radial=features[:,0];nomradial=nominal_features[:,0];heading=features[:,1]
+    elif config.get('figure_eight'):
         path=FigureEightConfig(**config['figure_eight'])
         features=eight_trace_features(trace['pose'],path)
         nominal_features=eight_trace_features(nominal['pose'][:n],path)
@@ -54,7 +58,7 @@ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.0
     space.update({'window_start_seconds':float(t[post][0]),'window_end_seconds':float(t[-1]),
                   'window':'event_start_to_observed_episode_end',
                   'recovery_censored':settled is None,'physical_failure':failed})
-    return {'error_coordinate':'circle_outward_radial' if c is not None else 'figure_eight_right_normal_legacy_radial_keys','event_reached':True,'path_relative_space':space,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
+    return {'error_coordinate':'circle_outward_radial' if c is not None else ('bend_right_normal_legacy_radial_keys' if config.get('bend') else 'figure_eight_right_normal_legacy_radial_keys'),'event_reached':True,'path_relative_space':space,'post_event_radial_peak_m':float(np.max(np.abs(radial[post]))),
             'post_event_extra_radial_peak_m':float(np.max(np.abs(extra[post]))),
             'post_event_xy_separation_peak_m':float(np.max(np.linalg.norm(xy[post]-nomxy[post],axis=1))),
             'left_extra_radial_band':bool(len(left)),

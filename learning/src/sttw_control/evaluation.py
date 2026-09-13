@@ -41,7 +41,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         state=reset(jax.random.PRNGKey(seed))
         if priority_alpha is not None:state=env.set_priority(state,priority_alpha)
         event=np.asarray(state.event).tolist()
-        (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
+        (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_load_torque_nm':event[5],'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -64,7 +64,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'actuator_velocity':np.asarray(s.data.actuator_velocity).copy(),
                     'actuator_ctrl':np.asarray(s.data.ctrl).copy(),
                     'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
-                    'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
+                    'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'applied_generalized_force':np.asarray(s.data.qfrc_applied).copy(),'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
@@ -91,7 +91,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         summary={'controller':identity['controller'],'backend':env.backend,'seed':seed,
                  'transitions':transitions,'captured_states':len(frames),'episode_return':total_reward,
                  'end_code':int(state.end_code),'physical_failure':bool(state.terminated),
-                 'recovery_eligible':(event[2]!=0 or event[3]!=0) and int(state.tick)>=event[1],
+                 'recovery_eligible':(event[2]!=0 or event[3]!=0 or event[5]!=0) and int(state.tick)>=event[1],
                  'balance_recovery_success':balance_time is not None and not bool(state.terminated),
                  'task_recovery_success':task_time is not None and not bool(state.terminated),
                  'first_balance_hold_completion_from_event_seconds':balance_time,
@@ -105,6 +105,10 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         summary['command_headroom']=headroom_metrics(arrays['base'][:-1],arrays['measurement'][:-1,2],env.config.actuator)
         summary['sampled_mechanical_work']=mechanical_work(arrays)
         summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)
+        if env.config.bend is not None:
+            from .path import bend_trace_features
+            features=bend_trace_features(arrays['pose'],env.config.bend)
+            summary['path_tracking']={'right_error_rmse_m':float(np.sqrt(np.mean(features[:,0]**2))),'right_error_peak_m':float(np.max(abs(features[:,0]))),'coordinate':'bend_right_normal'}
         if env.config.figure_eight is not None:
             features=eight_trace_features(arrays['pose'],env.config.figure_eight)
             summary['path_tracking']={'right_error_rmse_m':float(np.sqrt(np.mean(features[:,0]**2))),'right_error_peak_m':float(np.max(abs(features[:,0]))),'coordinate':'figure_eight_right_normal'}

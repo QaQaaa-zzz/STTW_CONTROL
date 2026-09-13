@@ -15,7 +15,7 @@ def make_validator(env,actor,scale,config):
         for case in cases:
             if any(not np.isclose(case[k]/dt,round(case[k]/dt),rtol=0,atol=1e-7) for k in ('start','duration')):
                 raise ValueError('validation events must align to control ticks')
-        events=jp.asarray([[round(c['start']/dt),round((c['start']+c['duration'])/dt),c.get('steer_rate',0.),c.get('force',0.),float(c.get('waveform','constant')=='half_sine')] for _ in seeds for c in cases])
+        events=jp.asarray([[round(c['start']/dt),round((c['start']+c['duration'])/dt),c.get('steer_rate',0.),c.get('force',0.),float(c.get('waveform','constant')=='half_sine'),c.get('rear_torque',0.)] for _ in seeds for c in cases])
         max_end=max(c['start']+c['duration'] for c in cases)
     else:
         max_end=(env.config.random_events.start_max+env.config.random_events.duration_max if env.config.random_events else env.config.disturbance_start+env.config.disturbance_duration)
@@ -35,9 +35,9 @@ def make_validator(env,actor,scale,config):
         initial=reset(keys)
         if alphas is not None:initial=jax.vmap(ve.set_priority)(initial,alphas)
         if cases:initial=initial.replace(event=events)
-        nominal=initial.replace(event=initial.event.at[:,2:4].set(0.))
+        nominal=initial.replace(event=initial.event.at[:,2:4].set(0.).at[:,5].set(0.))
         state=jax.tree.map(lambda a,b:jp.concatenate([a,b],axis=0),initial,nominal)
-        event_end=initial.event[:,1];present=jp.any(initial.event[:,2:4]!=0,axis=1)
+        event_end=initial.event[:,1];present=jp.any(initial.event[:,2:4]!=0,axis=1)|(initial.event[:,5]!=0)
         def tick(carry,_):
             state,hold=carry
             action=actor.apply(params['actor'],state.obs/scale)

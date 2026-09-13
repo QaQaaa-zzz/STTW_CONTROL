@@ -17,6 +17,7 @@ from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
+from .path import BendConfig,bend_table,bend_command,bend_features
 from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,eight_features
 
 
@@ -31,6 +32,8 @@ class TaskConfig:
     observation: ObservationConfig=field(default_factory=ObservationConfig)
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
+    bend: BendConfig | None=None
+    disturbance_rear_torque: float=0.
     circle: CircleConfig | None=None
     figure_eight: FigureEightConfig | None=None
     priority: PriorityConfig | None=None
@@ -79,11 +82,13 @@ class TaskConfig:
             raise ValueError("invalid alive reward rate")
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
-        if self.circle is not None and self.figure_eight is not None:
+        if not math.isfinite(self.disturbance_rear_torque) or self.disturbance_rear_torque<0:raise ValueError('rear load must be nonnegative Nm')
+        if self.bend is not None and self.bend.max_steer>self.actuator.steer_limit:raise ValueError('bend steering exceeds actuator limit')
+        if sum(x is not None for x in (self.circle,self.figure_eight,self.bend))>1:
             raise ValueError('choose one reference path')
         if self.figure_eight is not None and self.figure_eight.max_steer>self.actuator.steer_limit:
             raise ValueError('figure eight steer bound exceeds actuator limit')
-        if self.observation.include_path and self.circle is None and self.figure_eight is None:
+        if self.observation.include_path and self.circle is None and self.figure_eight is None and self.bend is None:
             raise ValueError("path observations require a reference path")
         if self.disturbance_waveform not in ("constant","half_sine"):
             raise ValueError("invalid event waveform")
@@ -117,7 +122,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -167,6 +172,7 @@ class RecoveryEnv:
         if not math.isclose(ratio,round(ratio),abs_tol=1e-9): raise ValueError('noninteger physics substeps')
         self.substeps=int(round(ratio))
         self.horizon=int(math.ceil(config.horizon_seconds/config.controller.dt))
+        self.bend_table=jp.asarray(bend_table(config.bend)) if config.bend is not None else None
         self.event_start=int(round(config.disturbance_start/config.controller.dt))
         self.event_end=self.event_start+int(round(config.disturbance_duration/config.controller.dt))
         self.observation_size=config.observation.history_steps*(len(observation_fields(config.observation))+1)
@@ -191,10 +197,10 @@ class RecoveryEnv:
 
     @property
     def has_disturbance(self):
-        return self.config.random_events is not None or self.config.disturbance_force!=0 or self.config.disturbance_steer_rate!=0
+        return self.config.disturbance_rear_torque!=0 or self.config.random_events is not None or self.config.disturbance_force!=0 or self.config.disturbance_steer_rate!=0
 
     def fixed_event(self):
-        return jp.array([self.event_start,self.event_end,self.config.disturbance_steer_rate,self.config.disturbance_force,float(self.config.disturbance_waveform=='half_sine')])
+        return jp.array([self.event_start,self.event_end,self.config.disturbance_steer_rate,self.config.disturbance_force,float(self.config.disturbance_waveform=='half_sine'),self.config.disturbance_rear_torque])
 
     def disturbance_active(self,tick,event=None):
         event=self.fixed_event() if event is None else event
@@ -219,6 +225,7 @@ class RecoveryEnv:
 
     def command(self,tick,pose=None):
         c=self.config
+        if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),c.speed_reference])
         if c.figure_eight is not None:
             if pose is None:raise ValueError("figure eight requires localization")
             return jp.array([eight_command(pose,c.figure_eight,c.controller.wheelbase,c.controller.caster),c.speed_reference])
@@ -239,6 +246,7 @@ class RecoveryEnv:
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
     def path_features(self,pose):
+        if self.config.bend is not None:return bend_features(pose,self.bend_table)[0]
         if self.config.figure_eight is not None:return eight_features(pose,self.config.figure_eight)
         c=self.config.circle
         if c is None:
@@ -302,7 +310,7 @@ class RecoveryEnv:
         fallen=jp.abs(measurement[0])>c.roll_failure
         failed=invalid|fallen|physical_contact
         # Count only complete stable intervals after the force has ended.
-        event_finished=((state.event[2]!=0)|(state.event[3]!=0))&(state.tick>=state.event[1])
+        event_finished=((state.event[2]!=0)|(state.event[3]!=0)|(state.event[5]!=0))&(state.tick>=state.event[1])
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])
         recovery=update_recovery(state.recovery,*errors,event_finished,failed,c.recovery)
         timeout=(tick>=self.horizon)&~failed
@@ -363,6 +371,8 @@ class RecoveryEnv:
             mujoco.mj_copyData(data,self.model,state.data)
             data.ctrl[:]=np.asarray(ctrl)
             data.xfrc_applied[:]=0
+            data.qfrc_applied[:]=0
+            data.qfrc_applied[self.bundle.rear_dof]=float(state.event[5]*profile(state.tick,state.event))
             physical_contact=False
             # The event envelope is held over a control tick. Heading and COM
             # still change at each physics substep while a force is applied.
@@ -379,7 +389,7 @@ class RecoveryEnv:
             true_speed=jp.dot(jp.asarray(data.qvel[:3]),jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)[:,0])
             new=self._advance_jit(state.replace(data=None),self.measure(data),actuator,jp.asarray(action),physical_contact or self._contact_failure(data),physics_finite,true_speed,self.pose(data))
         else:
-            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied))
+            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied),qfrc_applied=jp.zeros_like(state.data.qfrc_applied).at[self.bundle.rear_dof].set(state.event[5]*profile(state.tick,state.event)))
             def substep(_,carry):
                 d,contact=carry
                 d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(self.disturbance_wrench(d,state.tick,state.event)))

@@ -28,18 +28,18 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
     if not np.isfinite(extra) or extra<0:raise ValueError('minimum post-event observation must be finite and nonnegative')
     max_duration=max([panel['duration_seconds']]+[c['duration'] for c in panel.get('cases',[])])
     cfg=replace(cfg,horizon_seconds=max(cfg.horizon_seconds,panel['start_seconds']+max_duration+extra))
-    nominal=replace(cfg,random_events=None,disturbance_force=0.,disturbance_steer_rate=0.)
+    nominal=replace(cfg,random_events=None,disturbance_rear_torque=0.,disturbance_force=0.,disturbance_steer_rate=0.)
     env=RecoveryEnv(nominal)
     expected=make_policy_identity(env.bundle.identity,source['task'],cfg.observation.history_steps)
     policy=load_policy(checkpoint,expected=expected)
     identity={**expected,'checkpoint_sidecar_sha256':hashlib.sha256((checkpoint/'identity.json').read_bytes()).hexdigest(),
               'evaluation_overrides':'event scheduling/waveform/timing/amplitude/frame/application point and observation horizon only; policy and observation unchanged'}
     scenarios=[('nominal',nominal)]
-    event=replace(cfg,random_events=None,disturbance_start=panel['start_seconds'],disturbance_duration=panel['duration_seconds'],disturbance_force=0.,disturbance_steer_rate=0.)
+    event=replace(cfg,random_events=None,disturbance_start=panel['start_seconds'],disturbance_duration=panel['duration_seconds'],disturbance_rear_torque=0.,disturbance_force=0.,disturbance_steer_rate=0.)
     scenarios += [(f'steer_{i}',replace(event,disturbance_steer_rate=x)) for i,x in enumerate(panel.get('steer_rate_pulses',[]))]
     scenarios += [(f'force_{i}',replace(event,disturbance_force=x,disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')) for i,x in enumerate(panel.get('lateral_forces',[]))]
     for case in panel.get('cases',[]):
-        scenarios.append((case['name'],replace(event,disturbance_steer_rate=case.get('steer_rate',0.),disturbance_force=case.get('force',0.),disturbance_duration=case['duration'],disturbance_waveform=case.get('waveform','constant'),disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')))
+        scenarios.append((case['name'],replace(event,disturbance_rear_torque=case.get('rear_torque',0.),disturbance_steer_rate=case.get('steer_rate',0.),disturbance_force=case.get('force',0.),disturbance_duration=case['duration'],disturbance_waveform=case.get('waveform','constant'),disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')))
     (output/'declaration.json').write_text(json.dumps({'panel':panel,'checkpoint':str(checkpoint),'policy':identity,'scenarios':{k:asdict(c) for k,c in scenarios},'priority_alpha_override':priority_alpha,'scope':'frozen policy engineering panel; task and checkpoint training provenance recorded explicitly'},indent=2)+'\n')
     rows=[];nom={}
     for name,c in scenarios:

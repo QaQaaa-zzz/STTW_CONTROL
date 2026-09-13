@@ -1,0 +1,36 @@
+{
+  "num_envs": 8192,
+  "rollout_steps": 256,
+  "updates": 8,
+  "epochs": 2,
+  "minibatch_size": 8192,
+  "seed": 63,
+  "checkpoint_interval": 4,
+  "validation_post_seconds": 18.0,
+  "validation_hold_seconds": 0.5,
+  "validation_seeds": [
+    46001
+  ],
+  "validation_events": [
+    {
+      "start": 8.0,
+      "duration": 3.0,
+      "force": 0.0,
+      "rear_torque": 0.0
+    },
+    {
+      "start": 8.0,
+      "duration": 3.0,
+      "rear_torque": 1.2
+    },
+    {
+      "start": 8.0,
+      "duration": 3.0,
+      "force": 3.0
+    }
+  ],
+  "target_kl": 0.01,
+  "warmup_pool_size": 256,
+  "warmup_steps": 6000,
+  "validation_final_only": true
+}

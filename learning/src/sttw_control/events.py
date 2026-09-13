@@ -14,11 +14,15 @@ class RandomEvents:
     steer_max: float=.8
     force_min: float=2.
     force_max: float=5.
+    rear_probability: float=0.
+    rear_min: float=.02
+    rear_max: float=.08
     nominal_probability: float=.2
     sine_probability: float=.5
 
     def __post_init__(self):
-        for low,high in [(self.start_min,self.start_max),(self.duration_min,self.duration_max),(self.steer_min,self.steer_max),(self.force_min,self.force_max)]:
+        if not 0<=self.rear_probability<=1:raise ValueError("invalid rear probability")
+        for low,high in [(self.rear_min,self.rear_max),(self.start_min,self.start_max),(self.duration_min,self.duration_max),(self.steer_min,self.steer_max),(self.force_min,self.force_max)]:
             if not math.isfinite(low+high) or low<0 or high<low:raise ValueError('invalid random event range')
         if self.duration_min<=0 or not 0<=self.nominal_probability<1 or not 0<=self.sine_probability<=1:raise ValueError('invalid event duration/probability')
 
@@ -31,10 +35,12 @@ def sample_event(key,c,dt):
     active=u[3]>=c.nominal_probability
     steer=active&(u[3]<(1+c.nominal_probability)/2)
     force=active&~steer
-    return jp.array([start,start+duration,
+    event=jp.array([start,start+duration,
                      jp.where(steer,sign*(c.steer_min+u[4]*(c.steer_max-c.steer_min)),0.),
                      jp.where(force,sign*(c.force_min+u[5]*(c.force_max-c.force_min)),0.),
-                     (u[6]<c.sine_probability).astype(jp.float32)])
+                     (u[6]<c.sine_probability).astype(jp.float32),0.])
+    rear=active&(jax.random.uniform(jax.random.fold_in(key,91))<c.rear_probability)
+    return event.at[2].set(jp.where(rear,0.,event[2])).at[3].set(jp.where(rear,0.,event[3])).at[5].set(jp.where(rear,c.rear_min+u[5]*(c.rear_max-c.rear_min),0.))
 
 
 def profile(tick,event,xp=jp):

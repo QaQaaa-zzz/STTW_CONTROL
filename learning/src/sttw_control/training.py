@@ -101,7 +101,7 @@ class TrainingConfig:
             for event in self.validation_events:
                 if not math.isfinite(event['start']+event['duration']) or event['start']<0 or event['duration']<=0:
                     raise ValueError('invalid validation event')
-                if any(not math.isfinite(event.get(k,0.)) for k in ('steer_rate','force')) or event.get('waveform','constant') not in ('constant','half_sine'):
+                if any(not math.isfinite(event.get(k,0.)) for k in ('steer_rate','force','rear_torque')) or event.get('waveform','constant') not in ('constant','half_sine'):
                     raise ValueError('invalid validation event amplitude/waveform')
         if not self.validation_seeds or len(set(self.validation_seeds))!=len(self.validation_seeds):
             raise ValueError('validation seeds must be nonempty and unique')
@@ -198,7 +198,7 @@ def train(task_path,output,config=TrainingConfig()):
             z=mu+jp.exp(logstd)*jax.random.normal(noise_key,mu.shape)
             nxt=step(state,jp.tanh(z))
             _,nv=outputs(p,nxt.obs)
-            row=(state.obs,z,gaussian_log_prob(z,mu,logstd),value,nxt.reward,nv,nxt.terminated,nxt.done,jp.stack([(state.event[:,2]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,3]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1])],axis=-1))
+            row=(state.obs,z,gaussian_log_prob(z,mu,logstd),value,nxt.reward,nv,nxt.terminated,nxt.done,jp.stack([(state.event[:,2]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,3]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,5]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1])],axis=-1))
             def restart(s):
                 fresh=reset(jax.random.split(reset_key,c.num_envs))
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
@@ -318,7 +318,7 @@ def train(task_path,output,config=TrainingConfig()):
                 'device_memory_stats':jax.devices()[0].memory_stats(),
                 'validation_seconds':0.,'checkpoint_seconds':0.,
                 'steer_disturbed_transitions':int(jp.sum(rows[8][...,0])),
-                'force_disturbed_transitions':int(jp.sum(rows[8][...,1])),
+                'force_disturbed_transitions':int(jp.sum(rows[8][...,1])),'rear_disturbed_transitions':int(jp.sum(rows[8][...,2])),
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if c.target_kl is not None:
             record['optimizer_audit']={'attempted_minibatches':int(host[4]),'accepted_minibatches':int(host[5]),'final_exact_kl':float(host[6]),'full_update_rolled_back':bool(host[7]),'target_kl':c.target_kl}

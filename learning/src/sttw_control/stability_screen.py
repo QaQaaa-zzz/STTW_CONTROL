@@ -30,7 +30,7 @@ def assess(training,criteria,constrained):
     failed=sum(bool(v['failed'][i]) for i in ids)
     recovered=sum(bool(v['post_event_hold_complete'][i]) for i in ids)
     nominal_failed=sum(v.get('nominal_failed',[]))
-    disturbed=sum(r.get('steer_disturbed_transitions',0)+r.get('force_disturbed_transitions',0) for r in rows)
+    disturbed=sum(r.get('steer_disturbed_transitions',0)+r.get('force_disturbed_transitions',0)+r.get('rear_disturbed_transitions',0) for r in rows)
     coverage=disturbed/rows[-1]['control_transitions']
     accepted=sum(r.get('optimizer_audit',{}).get('accepted_minibatches',0) for r in rows if not r.get('optimizer_audit',{}).get('full_update_rolled_back',False))
     kl_ok=all(r.get('optimizer_audit',{}).get('final_exact_kl',float('inf'))<=criteria['target_kl']+1e-6 for r in rows) if constrained else True

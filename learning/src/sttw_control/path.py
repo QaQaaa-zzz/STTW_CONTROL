@@ -136,3 +136,53 @@ def eight_reference(c,count=513):
 def eight_trace_features(pose,c):
     import jax
     return np.asarray(jax.jit(jax.vmap(lambda p:eight_features(p,c)))(jp.asarray(pose)))
+
+
+@dataclass(frozen=True)
+class BendConfig:
+    straight: float=10.
+    bend_length: float=20.
+    exit_length: float=50.
+    peak_curvature: float=.12
+    lookahead: float=2.5
+    max_steer: float=.35
+    direction: int=1
+
+    def __post_init__(self):
+        if any(not math.isfinite(x) or x<=0 for x in (self.straight,self.bend_length,self.exit_length,self.peak_curvature,self.lookahead,self.max_steer)) or self.direction not in (-1,1):
+            raise ValueError('invalid smooth bend')
+        if self.peak_curvature*self.bend_length/2>=1.5:raise ValueError('bend heading must remain below 1.5 radians')
+
+
+def bend_table(c):
+    s=np.linspace(0,c.straight+c.bend_length+c.exit_length,801)
+    u=np.clip((s-c.straight)/c.bend_length,0,1)
+    k=c.direction*c.peak_curvature*np.sin(np.pi*u)**2
+    yaw=c.direction*c.peak_curvature*c.bend_length*(u/2-np.sin(2*np.pi*u)/(4*np.pi))
+    ds=np.diff(s);x=np.r_[0,np.cumsum(ds*(np.cos(yaw[1:])+np.cos(yaw[:-1]))/2)]
+    y=np.r_[0,np.cumsum(ds*(np.sin(yaw[1:])+np.sin(yaw[:-1]))/2)]
+    return np.column_stack((s,x,y,yaw,k))
+
+
+def bend_features(pose,table):
+    xy=table[:,1:3];v=xy[1:]-xy[:-1]
+    u=jp.clip(jp.sum((pose[:2]-xy[:-1])*v,axis=1)/jp.sum(v*v,axis=1),0,1)
+    foot=xy[:-1]+u[:,None]*v;i=jp.argmin(jp.sum((foot-pose[:2])**2,axis=1))
+    yaw=table[i,3]+u[i]*(table[i+1,3]-table[i,3]);d=pose[:2]-foot[i]
+    right=jp.sin(yaw)*d[0]-jp.cos(yaw)*d[1]
+    heading=jp.arctan2(jp.sin(pose[2]-yaw),jp.cos(pose[2]-yaw))
+    curvature=table[i,4]+u[i]*(table[i+1,4]-table[i,4])
+    progress=table[i,0]+u[i]*(table[i+1,0]-table[i,0])
+    return jp.array([right,heading,curvature]),progress
+
+
+def bend_command(pose,c,table,wheelbase,caster):
+    _,s=bend_features(pose,table);ahead=s+c.lookahead
+    dx=jp.interp(ahead,table[:,0],table[:,1])-pose[0];dy=jp.interp(ahead,table[:,0],table[:,2])-pose[1]
+    lateral=-jp.sin(pose[2])*dx+jp.cos(pose[2])*dy
+    return jp.clip(jp.arctan(wheelbase*2*lateral/jp.maximum(dx*dx+dy*dy,1e-8)/jp.cos(caster)),-c.max_steer,c.max_steer)
+
+
+def bend_trace_features(pose,c):
+    import jax
+    return np.asarray(jax.jit(jax.vmap(lambda p:bend_features(p,jp.asarray(bend_table(c)))[0]))(jp.asarray(pose)))

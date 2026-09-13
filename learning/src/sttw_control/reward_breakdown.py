@@ -14,13 +14,16 @@ plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':
 
 def reconstruct(path):
  tr=dict(np.load(path/'trace.npz'));d=json.loads((path/'declaration.json').read_text());c=d['config'];dt=c['controller']['dt'];p=c['priority']
- if p is None or p.get('risk_gate',True) or c.get('action_mapping') is not None or (c.get('circle') is None and c.get('figure_eight') is None):
+ if p is None or p.get('risk_gate',True) or c.get('action_mapping') is not None or (c.get('circle') is None and c.get('figure_eight') is None and c.get('bend') is None):
   raise ValueError('reward breakdown currently requires a reference path, direct residual and disabled risk gate')
  if len(tr['time'])<2 or not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-8):raise ValueError('invalid recorded control timestamps')
  n=len(tr['time']);a=tr['priority_alpha']
  if not np.all(a==a[0]):raise ValueError('alpha comparison requires constant alpha per recorded episode')
  series=state_series(tr,c);ev=series['speed']-tr['motion_command'][:,1];er=tr['measurement'][:,0]-tr['reference_roll'];rr=tr['measurement'][:,1];es=tr['measurement'][:,2]-tr['motion_command'][:,0]
- if c.get('figure_eight') is not None:
+ if c.get('bend') is not None:
+  from .path import BendConfig,bend_trace_features
+  features=bend_trace_features(tr['pose'],BendConfig(**c['bend']));ey,eh=features[:,:2].T
+ elif c.get('figure_eight') is not None:
   from .path import FigureEightConfig,eight_trace_features
   features=eight_trace_features(tr['pose'],FigureEightConfig(**c['figure_eight']));ey,eh=features[:,:2].T
  else:
@@ -33,7 +36,7 @@ def reconstruct(path):
  reward['failure']=np.where(failed,-c['failure_penalty'],0.);reward['bonus']=np.zeros(n)
  rc=c['recovery'];count=0;latched=False
  for i in range(1,n):
-  event=tr['event'][i];finished=(event[2]!=0 or event[3]!=0) and i-1>=event[1]
+  event=tr['event'][i];finished=(event[2]!=0 or event[3]!=0 or (len(event)>5 and event[5]!=0)) and i-1>=event[1]
   valid=finished and not failed[i] and abs(er[i])<=rc['roll_tolerance'] and abs(rr[i])<=rc['roll_rate_tolerance'] and abs(ev[i])<=rc['speed_tolerance'] and abs(es[i])<=rc['steer_tolerance']
   count=count+1 if valid else 0
   if count>=math.ceil(rc['hold_seconds']/dt) and not latched:reward['bonus'][i]=5.;latched=True

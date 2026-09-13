@@ -1,0 +1,66 @@
+{
+  "horizon_seconds": 30.0,
+  "speed_reference": 2.1,
+  "disturbance_force": 0.0,
+  "eso_start": 3.0,
+  "circle": null,
+  "observation": {
+    "include_path": true,
+    "include_priority": true,
+    "history_steps": 10,
+    "include_attitude_risk": false
+  },
+  "initial_roll_range": 0.02,
+  "path_error_weight": 20.0,
+  "heading_error_weight": 1.0,
+  "speed_error_weight": 100.0,
+  "random_events": {
+    "start_min": 6.0,
+    "start_max": 10.0,
+    "duration_min": 1.0,
+    "duration_max": 3.0,
+    "steer_min": 0.1,
+    "steer_max": 0.4,
+    "force_min": 1.0,
+    "force_max": 3.0,
+    "rear_probability": 0.6,
+    "rear_min": 0.4,
+    "rear_max": 1.2,
+    "nominal_probability": 0.2,
+    "sine_probability": 0.5
+  },
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "failure_penalty": 100.0,
+  "path_excess_weight": 80.0,
+  "path_soft_limit": 0.2,
+  "priority": {
+    "risk_gate": false,
+    "speed_cost_scale": 0.3482045463855167,
+    "path_cost_scale": 3.0783592369780886,
+    "validation_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "objective_floor": 0.01,
+    "weight_schedule": "exponential",
+    "weight_base": 10.0,
+    "tracking_weight_scale": 0.1
+  },
+  "alive_reward_rate": 5.0,
+  "learning_roll_reference": null,
+  "bend": {
+    "straight": 10.0,
+    "bend_length": 16.0,
+    "exit_length": 55.0,
+    "peak_curvature": 0.18,
+    "lookahead": 2.5,
+    "max_steer": 0.35,
+    "direction": 1
+  },
+  "disturbance_rear_torque": 0.0,
+  "disturbance_steer_rate": 0.0,
+  "disturbance_start": 8.0,
+  "disturbance_duration": 3.0
+}
