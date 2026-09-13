@@ -73,5 +73,9 @@ def run(plan_path):
             invoke(['learning/cli/disturbance.py','--task',frozen/'task.json','--panel',frozen/'panel.json','--training-run',out/'training','--checkpoint',checkpoint,'--output',out/'evaluation'/f'alpha_{i}'/f'seed_{seed}','--seed',seed,'--priority-alpha',a],out/f'evaluation_alpha_{i}.log',True)
         status('reward_diagnostics',completed=results)
         invoke(['learning/cli/reward_breakdown.py','--run',out],out/'reward_diagnostics.log',True)
+        if plan.get('circle_progress_diagnostics',False):
+            status('progress_diagnostics',completed=results)
+            from .progress_diagnostics import generate
+            generate(out)
         status('complete',completed=results,second_stage_skipped=len(results)==1,recorded_panel=str(out/'analysis/reward_breakdown/INDEX.md'))
     except Exception as exc:status('error',error=str(exc),completed=results);raise
