@@ -33,6 +33,7 @@ class TaskConfig:
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
     bend: BendConfig | None=None
+    rear_disturbance_mode: str="torque"  # event[5]: Nm in torque mode, rad/s deceleration in command mode
     disturbance_rear_torque: float=0.
     circle: CircleConfig | None=None
     figure_eight: FigureEightConfig | None=None
@@ -82,7 +83,8 @@ class TaskConfig:
             raise ValueError("invalid alive reward rate")
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
-        if not math.isfinite(self.disturbance_rear_torque) or self.disturbance_rear_torque<0:raise ValueError('rear load must be nonnegative Nm')
+        if self.rear_disturbance_mode not in ('torque','command'):raise ValueError('invalid rear disturbance mode')
+        if not math.isfinite(self.disturbance_rear_torque) or self.disturbance_rear_torque<0:raise ValueError('rear disturbance amplitude must be finite and nonnegative in declared mode units')
         if self.bend is not None and self.bend.max_steer>self.actuator.steer_limit:raise ValueError('bend steering exceeds actuator limit')
         if sum(x is not None for x in (self.circle,self.figure_eight,self.bend))>1:
             raise ValueError('choose one reference path')
@@ -359,7 +361,9 @@ class RecoveryEnv:
             # actuator disables its residual exactly as in the direct branch.
             action=jp.where(jp.all(jp.isfinite(action)),mapped,action)
         offset=state.event[2]*profile(state.tick,state.event)
-        return state.base.at[0].add(offset),action
+        base=state.base.at[0].add(offset)
+        if c.rear_disturbance_mode=='command':base=base.at[1].add(-state.event[5]*profile(state.tick,state.event))
+        return base,action
 
     def _step(self,state,action):
         c=self.config
@@ -372,7 +376,7 @@ class RecoveryEnv:
             data.ctrl[:]=np.asarray(ctrl)
             data.xfrc_applied[:]=0
             data.qfrc_applied[:]=0
-            data.qfrc_applied[self.bundle.rear_dof]=float(state.event[5]*profile(state.tick,state.event))
+            data.qfrc_applied[self.bundle.rear_dof]=float(state.event[5]*profile(state.tick,state.event)) if c.rear_disturbance_mode=='torque' else 0.
             physical_contact=False
             # The event envelope is held over a control tick. Heading and COM
             # still change at each physics substep while a force is applied.
@@ -389,7 +393,7 @@ class RecoveryEnv:
             true_speed=jp.dot(jp.asarray(data.qvel[:3]),jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)[:,0])
             new=self._advance_jit(state.replace(data=None),self.measure(data),actuator,jp.asarray(action),physical_contact or self._contact_failure(data),physics_finite,true_speed,self.pose(data))
         else:
-            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied),qfrc_applied=jp.zeros_like(state.data.qfrc_applied).at[self.bundle.rear_dof].set(state.event[5]*profile(state.tick,state.event)))
+            data=state.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(state.data.xfrc_applied),qfrc_applied=jp.zeros_like(state.data.qfrc_applied).at[self.bundle.rear_dof].set(state.event[5]*profile(state.tick,state.event) if c.rear_disturbance_mode=='torque' else 0.))
             def substep(_,carry):
                 d,contact=carry
                 d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(self.disturbance_wrench(d,state.tick,state.event)))

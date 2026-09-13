@@ -41,7 +41,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         state=reset(jax.random.PRNGKey(seed))
         if priority_alpha is not None:state=env.set_priority(state,priority_alpha)
         event=np.asarray(state.event).tolist()
-        (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_load_torque_nm':event[5],'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
+        (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_disturbance_mode':env.config.rear_disturbance_mode,'rear_load_torque_nm':event[5] if env.config.rear_disturbance_mode=='torque' else 0.,'rear_command_bias_rad_s':-event[5] if env.config.rear_disturbance_mode=='command' else 0.,'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -64,7 +64,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'actuator_velocity':np.asarray(s.data.actuator_velocity).copy(),
                     'actuator_ctrl':np.asarray(s.data.ctrl).copy(),
                     'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
-                    'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'applied_generalized_force':np.asarray(s.data.qfrc_applied).copy(),'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
+                    'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'injected_rear_rate':float(-s.event[5]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 and env.config.rear_disturbance_mode=='command' else 0.,'applied_generalized_force':np.asarray(s.data.qfrc_applied).copy(),'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),

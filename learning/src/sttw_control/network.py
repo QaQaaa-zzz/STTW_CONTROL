@@ -29,6 +29,7 @@ def make_policy_identity(model_identity,config,history_steps):
         config['observation']=dict(config['observation'])
         if config['observation'].get('include_attitude_risk') is True:config['observation'].pop('include_attitude_risk')
         if config['observation'].get('include_priority') is False:config['observation'].pop('include_priority')
+    if config.get('rear_disturbance_mode','torque')=='torque':config.pop('rear_disturbance_mode',None)
     if config.get('bend') is None:config.pop('bend',None)
     if config.get('disturbance_rear_torque',0.)==0:config.pop('disturbance_rear_torque',None)
     if config.get('random_events') is not None:

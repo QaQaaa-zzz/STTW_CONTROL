@@ -14,7 +14,7 @@ plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':
 
 def reconstruct(path):
  tr=dict(np.load(path/'trace.npz'));d=json.loads((path/'declaration.json').read_text());c=d['config'];dt=c['controller']['dt'];p=c['priority']
- if p is None or p.get('risk_gate',True) or c.get('action_mapping') is not None or (c.get('circle') is None and c.get('figure_eight') is None and c.get('bend') is None):
+ if (p is not None and p.get('risk_gate',True)) or c.get('action_mapping') is not None or (c.get('circle') is None and c.get('figure_eight') is None and c.get('bend') is None):
   raise ValueError('reward breakdown currently requires a reference path, direct residual and disabled risk gate')
  if len(tr['time'])<2 or not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-8):raise ValueError('invalid recorded control timestamps')
  n=len(tr['time']);a=tr['priority_alpha']
@@ -29,7 +29,8 @@ def reconstruct(path):
  else:
   xy=tr['pose'][:,:2]-[c['circle']['center_x'],c['circle']['center_y']];ey=np.linalg.norm(xy,axis=1)-c['circle']['radius'];tangent=np.arctan2(xy[:,1],xy[:,0])+c['circle']['direction']*np.pi/2;eh=np.arctan2(np.sin(tr['pose'][:,2]-tangent),np.cos(tr['pose'][:,2]-tangent))
  from .priority import PriorityConfig,objective_weights
- v,w=objective_weights(a,PriorityConfig(**p),xp=np)
+ v,w=objective_weights(a,PriorityConfig(**p),xp=np) if p is not None else (1.,1.)
+ p=p or {'speed_cost_scale':1.,'path_cost_scale':1.}
  rates={'roll':10*er**2,'roll_rate':rr**2,'speed':v*c['speed_error_weight']*ev**2/p['speed_cost_scale'],'path':w*c['path_error_weight']*ey**2/p['path_cost_scale'],'heading':w*c['heading_error_weight']*eh**2/p['path_cost_scale'],'path_excess':w*c['path_excess_weight']*np.maximum(abs(ey)-c['path_soft_limit'],0)**2/p['path_cost_scale'],'steer':es**2,'action':.01*np.sum(tr['action']**2,axis=1)}
  reward={k:-dt*x for k,x in rates.items()};reward['alive']=np.full(n,dt*c.get('alive_reward_rate',1.));failed=tr['terminated'].astype(bool)
  for values in reward.values():values[failed]=0.;values[0]=0.
@@ -48,14 +49,19 @@ def generate(root):
  ROOT=Path(root)
  OUT=ROOT/'analysis/reward_breakdown';OUT.mkdir(parents=True,exist_ok=True)
  declaration=json.loads((ROOT/'declaration.json').read_text())
- expected=declaration['priority_alphas']
+ declared=declaration['priority_alphas']
+ unconditioned=declared==[None]
+ expected=[.5] if unconditioned else declared
  endpoint=json.loads((ROOT/'training/status.json').read_text())['last_checkpoint']
  panels=list(sorted((ROOT/'evaluation').glob('alpha_*/seed_*')))
  seeds=json.loads((ROOT/'frozen/panel.json').read_text())['evaluation_seeds']
  identities=[]
  for panel in panels:
   d=json.loads((panel/'declaration.json').read_text())
-  identities.append((d['priority_alpha_override'],d['panel']['seed']))
+  if identities and endpoint!=d['checkpoint']:raise ValueError('mixed checkpoint panels')
+  endpoint=d['checkpoint']
+  identities.append((.5 if unconditioned else d['priority_alpha_override'],d['panel']['seed']))
+  if unconditioned and d['priority_alpha_override'] is not None:raise ValueError('unexpected alpha conditioning')
   if {p.parent.name for p in panel.glob('*/residual')}!=set(d['scenarios']):raise ValueError('missing scenario traces')
  if len(identities)!=len(expected)*len(seeds) or set(identities)!={(a,s) for a in expected for s in seeds}:raise ValueError('incomplete alpha/seed panels')
  groups={};summaries=[]
@@ -79,7 +85,7 @@ def generate(root):
   end=min(x['t'][-1] for x in xs);common=end-xs[0]['dt'] if any(x['failed'] and abs(x['t'][-1]-end)<1e-5 for x in xs) else end
   totals=[]
   for x,color in zip(xs,[COLORS[i%len(COLORS)] for i in range(len(xs))]):
-   t=x['t'][1:];label=f"alpha={x['alpha']:g}";rates=x['rates']
+   t=x['t'][1:];label="unconditioned" if unconditioned else f"alpha={x['alpha']:g}";rates=x['rates']
    curves=[x['radial'][1:],x['speed'][1:],np.rad2deg(x['roll'][1:]),sum(rates[k][1:] for k in ['path','heading','path_excess']),rates['speed'][1:],rates['roll'][1:]+rates['roll_rate'][1:],np.cumsum(x['recorded'][1:])]
    for ax,y in zip(axs.flat,curves):
     ax.plot(t,y,color=color,label=label,lw=1.3)
@@ -137,7 +143,7 @@ def generate(root):
   plt.close(fig)
   indexes.append(f'- {seed} / {case}: [overview]({seed}/{case}/overview.png) | [PDF]({seed}/{case}/overview.pdf) | [speed comparison]({seed}/{case}/speed_comparison.png) | [speed PDF]({seed}/{case}/speed_comparison.pdf)')
  (OUT/'summary.json').write_text(json.dumps(summaries,indent=2,allow_nan=False)+'\n')
- (OUT/'INDEX.md').write_text('# Reward and error diagnostics\n\nAll declared alpha groups and available scenario/seed panels. No new simulation. Reward reconstructed from recorded states/actions and checked against each logged transition.\n\n'+ '\n'.join(indexes)+'\n\nNPZ files contain signed per-step components; penalty plots are positive rates before terminal replacement. The failure transition replaces all regular terms with the frozen failure penalty. Common-window bars exclude the earliest terminal transition. Recovery bonus uses roll/rate/speed/steer criteria, not path recovery criteria.\n')
+ (OUT/'INDEX.md').write_text(('Unconditioned policy: alpha=0.5 in diagnostic filenames is an unused state default, not an Actor input.\n\n' if unconditioned else '')+'# Reward and error diagnostics\n\nAll declared alpha groups and available scenario/seed panels. No new simulation. Reward reconstructed from recorded states/actions and checked against each logged transition.\n\n'+ '\n'.join(indexes)+'\n\nNPZ files contain signed per-step components; penalty plots are positive rates before terminal replacement. The failure transition replaces all regular terms with the frozen failure penalty. Common-window bars exclude the earliest terminal transition. Recovery bonus uses roll/rate/speed/steer criteria, not path recovery criteria.\n')
  print('checked',len(summaries),'trajectories; figures',len(groups),'max reward residual',max(x['max_reward_reconstruction_error'] for x in summaries))
  from .speed_recovery import generate as generate_speed_recovery
  generate_speed_recovery(ROOT)
