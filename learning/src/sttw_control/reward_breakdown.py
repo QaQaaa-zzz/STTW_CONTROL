@@ -105,14 +105,25 @@ def generate(root):
   fig,axes=plt.subplots(len(xs),2,figsize=(15,3.3*len(xs)),squeeze=False,layout='constrained',sharex=True)
   for row,x in zip(axes,xs):
    t=x['t']
-   for key,label,color,style in [('speed_target','Target','#333333','--'),('speed_true','True forward speed','#0072B2','-'),('speed_estimate','Rear wheel estimate','#D55E00',':')]:
+   bp=x['path'].parent/'baseline'
+   bt=dict(np.load(bp/'trace.npz'));bc=json.loads((bp/'declaration.json').read_text())['config']
+   bs=state_series(bt,bc);be=bt['measurement'][:,5]*.1
+   row[0].plot(bt['time'],bs['speed'],label='Baseline true forward',color='#009E73',ls='-',lw=1.3)
+   row[0].plot(bt['time'],be,label='Baseline wheel estimate',color='#CC79A7',ls=':',lw=1.3)
+   row[1].plot(bt['time'],be-bs['speed'],label='Baseline estimate - true',color='#009E73')
+   if bt['terminated'][-1]:
+    row[0].plot(bt['time'][-1],bs['speed'][-1],'x',color='#009E73')
+    row[0].plot(bt['time'][-1],be[-1],'x',color='#CC79A7')
+    row[1].plot(bt['time'][-1],(be-bs['speed'])[-1],'x',color='#009E73')
+   np.savez_compressed(dest/f"speed_pair_alpha_{x['alpha']:g}.npz",baseline_time=bt['time'],baseline_true=bs['speed'],baseline_estimate=be,baseline_target=bs['reference'][:,1],residual_time=t,residual_true=x['speed_true'],residual_estimate=x['speed_estimate'],residual_target=x['speed_target'])
+   for key,label,color,style in [('speed_target','Target','#333333','--'),('speed_true','Residual true forward','#0072B2','-'),('speed_estimate','Residual wheel estimate','#D55E00',':')]:
     row[0].plot(t,x[key],label=label,color=color,ls=style,lw=1.5)
     if x['failed']:row[0].plot(t[-1],x[key][-1],'x',color=color)
    error=x['speed_estimate']-x['speed_true']
-   row[1].plot(t,error,color='#D55E00',label='Estimate - true')
+   row[1].plot(t,error,color='#D55E00',label='Residual estimate - true')
    row[1].axhline(0,color='black',lw=.6)
    if x['failed']:row[1].plot(t[-1],error[-1],'x',color='#D55E00')
-   row[0].set_title(f"alpha={x['alpha']:g} | speeds")
+   row[0].set_title(f"alpha={x['alpha']:g} | baseline vs residual")
    row[1].set_title(f"alpha={x['alpha']:g} | estimation error")
    for ax in row:
     ax.set_ylabel('m/s');ax.set_xlabel('Time [s]');ax.grid(alpha=.2);ax.legend(fontsize=8)
