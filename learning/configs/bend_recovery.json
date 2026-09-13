@@ -24,8 +24,8 @@
     "force_min": 1.0,
     "force_max": 3.0,
     "rear_probability": 0.6,
-    "rear_min": 0.4,
-    "rear_max": 1.2,
+    "rear_min": 1.2,
+    "rear_max": 2.4,
     "nominal_probability": 0.2,
     "sine_probability": 0.5
   },
