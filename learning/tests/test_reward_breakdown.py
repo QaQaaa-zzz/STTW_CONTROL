@@ -41,3 +41,14 @@ def test_reconstruction_rejects_changed_logged_reward(tmp_path):
     z=fixture_trace(tmp_path/'bad');z['reward'][10]+=1
     np.savez(tmp_path/'bad/trace.npz',**z)
     with pytest.raises(ValueError,match='reward mismatch'):reconstruct(tmp_path/'bad')
+
+
+def test_speed_diagnostic_uses_measured_wheel_rate_not_true_speed(tmp_path):
+    from sttw_control.reward_breakdown import reconstruct
+    p=tmp_path/'speed';z=fixture_trace(p)
+    z['measurement'][:,5]=25.
+    np.savez(p/'trace.npz',**z)
+    x=reconstruct(p)
+    np.testing.assert_allclose(x['speed_true'],2.)
+    np.testing.assert_allclose(x['speed_target'],2.)
+    np.testing.assert_allclose(x['speed_estimate'],2.5)

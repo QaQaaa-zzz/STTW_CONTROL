@@ -39,7 +39,7 @@ def reconstruct(path):
   if count>=math.ceil(rc['hold_seconds']/dt) and not latched:reward['bonus'][i]=5.;latched=True
  predicted=sum(reward.values());diff=np.abs(predicted[1:]-tr['reward'][1:]);err=float(diff.max())
  if not np.allclose(predicted[1:],tr['reward'][1:],rtol=3e-5,atol=3e-5):raise ValueError(f'reward mismatch {path}: max={err}, index={int(diff.argmax())+1}')
- return dict(alpha=float(a[0]),t=tr['time'],radial=ey,speed=ev,roll=er,rates=rates,reward=reward,recorded=tr['reward'],failed=bool(failed[-1]),error=err,event=json.loads((path/'event.json').read_text()),path=path,config=c,dt=dt)
+ return dict(speed_true=series['speed'],speed_estimate=tr['measurement'][:,5]*.1,speed_target=tr['motion_command'][:,1],alpha=float(a[0]),t=tr['time'],radial=ey,speed=ev,roll=er,rates=rates,reward=reward,recorded=tr['reward'],failed=bool(failed[-1]),error=err,event=json.loads((path/'event.json').read_text()),path=path,config=c,dt=dt)
 
 def generate(root):
  ROOT=Path(root)
@@ -62,7 +62,7 @@ def generate(root):
    row={'seed':int(panel.name[5:]),'scenario':path.parent.name,'alpha':x['alpha'],'duration':float(x['t'][-1]),'failed':x['failed'],'max_reward_reconstruction_error':x['error'],'component_returns':{k:float(v.sum()) for k,v in x['reward'].items()},'recorded_return':float(x['recorded'][1:].sum()),'source_trace_sha256':hashlib.sha256((path/'trace.npz').read_bytes()).hexdigest()}
    summaries.append(row)
    dest=OUT/panel.name/path.parent.name;dest.mkdir(parents=True,exist_ok=True)
-   np.savez_compressed(dest/f"alpha_{x['alpha']:g}.npz",time=x['t'],path_error=x['radial'],speed_error=x['speed'],roll_error=x['roll'],recorded_reward=x['recorded'],**{f'reward_{k}':v for k,v in x['reward'].items()})
+   np.savez_compressed(dest/f"alpha_{x['alpha']:g}.npz",time=x['t'],speed_true=x['speed_true'],speed_estimate=x['speed_estimate'],speed_target=x['speed_target'],path_error=x['radial'],speed_error=x['speed'],roll_error=x['roll'],recorded_reward=x['recorded'],**{f'reward_{k}':v for k,v in x['reward'].items()})
  
  if not groups:raise ValueError('no recorded alpha evaluations')
  indexes=[]
@@ -102,7 +102,26 @@ def generate(root):
   fig.suptitle(f"Frozen {Path(endpoint).name} | {case} | {seed}\nGrey: disturbance; x: terminal failure ({failures}). Lines end at recorded termination.\nPenalty panels use symlog scale; cumulative reward includes +{xs[0]['config'].get('alive_reward_rate',1.):g}/s, recovery bonus and -{xs[0]['config']['failure_penalty']:g} failure replacement.",fontsize=12)
   for ext in ['png','pdf']:fig.savefig(dest/f'overview.{ext}',dpi=155)
   plt.close(fig)
-  indexes.append(f'- {seed} / {case}: [overview]({seed}/{case}/overview.png) | [PDF]({seed}/{case}/overview.pdf)')
+  fig,axes=plt.subplots(len(xs),2,figsize=(15,3.3*len(xs)),squeeze=False,layout='constrained',sharex=True)
+  for row,x in zip(axes,xs):
+   t=x['t']
+   for key,label,color,style in [('speed_target','Target','#333333','--'),('speed_true','True forward speed','#0072B2','-'),('speed_estimate','Rear wheel estimate','#D55E00',':')]:
+    row[0].plot(t,x[key],label=label,color=color,ls=style,lw=1.5)
+    if x['failed']:row[0].plot(t[-1],x[key][-1],'x',color=color)
+   error=x['speed_estimate']-x['speed_true']
+   row[1].plot(t,error,color='#D55E00',label='Estimate - true')
+   row[1].axhline(0,color='black',lw=.6)
+   if x['failed']:row[1].plot(t[-1],error[-1],'x',color='#D55E00')
+   row[0].set_title(f"alpha={x['alpha']:g} | speeds")
+   row[1].set_title(f"alpha={x['alpha']:g} | estimation error")
+   for ax in row:
+    ax.set_ylabel('m/s');ax.set_xlabel('Time [s]');ax.grid(alpha=.2);ax.legend(fontsize=8)
+    ax.set_xlim(0,x['config']['horizon_seconds'])
+    if case!='nominal':ax.axvspan(x['event']['start_seconds'],x['event']['end_seconds'],color='grey',alpha=.18)
+  fig.suptitle(f"{Path(endpoint).name} | {case} | {seed}\nTrue: body-forward velocity projection; estimate: measured rear shaft rate x 0.1 m. Grey: disturbance; x: failure.")
+  for ext in ['png','pdf']:fig.savefig(dest/f'speed_comparison.{ext}',dpi=155)
+  plt.close(fig)
+  indexes.append(f'- {seed} / {case}: [overview]({seed}/{case}/overview.png) | [PDF]({seed}/{case}/overview.pdf) | [speed comparison]({seed}/{case}/speed_comparison.png) | [speed PDF]({seed}/{case}/speed_comparison.pdf)')
  (OUT/'summary.json').write_text(json.dumps(summaries,indent=2,allow_nan=False)+'\n')
  (OUT/'INDEX.md').write_text('# Reward and error diagnostics\n\nAll declared alpha groups and available scenario/seed panels. No new simulation. Reward reconstructed from recorded states/actions and checked against each logged transition.\n\n'+ '\n'.join(indexes)+'\n\nNPZ files contain signed per-step components; penalty plots are positive rates before terminal replacement. The failure transition replaces all regular terms with the frozen failure penalty. Common-window bars exclude the earliest terminal transition. Recovery bonus uses roll/rate/speed/steer criteria, not path recovery criteria.\n')
  print('checked',len(summaries),'trajectories; figures',len(groups),'max reward residual',max(x['max_reward_reconstruction_error'] for x in summaries))
