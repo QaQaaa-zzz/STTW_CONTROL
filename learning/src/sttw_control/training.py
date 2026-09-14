@@ -115,6 +115,7 @@ def normalization(task):
     scale=[.2,.2,1.,3.,.4,2.,2.,30.,30.,.4,3.,3.,3.,30.,10.]
     if task.observation.include_path:
         scale += [1.,1.,1.]
+    if task.observation.include_motion:scale += [2.,2.]
     if task.observation.include_priority:scale += [1.] + ([1.] if task.observation.include_attitude_risk else [])
     std=np.array(scale*task.observation.history_steps+[1.]*task.observation.history_steps,np.float32)
     return np.zeros_like(std),std
@@ -334,7 +335,7 @@ def train(task_path,output,config=TrainingConfig()):
             metadata_path=Path(path)/'training.json'
             metadata=json.loads(metadata_path.read_text());metadata['validation']=validation
             metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
-            score,reason=rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
+            score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
             record['selection']={'rank':score,'reason':reason}
             if score is not None and (best_score is None or score<best_score):
                 best_score,best=score,path

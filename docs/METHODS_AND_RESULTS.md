@@ -81,3 +81,7 @@
 
 - [1024仅增加KL阈值.01](../runs/kl_matched_load_20260914_inputs/plan.json)：与旧1024完全相同训练配置，仅KL停止不同；16777216步、seed63，不提前宣称改善。末次公共面板比较并附反向负载诊断。
 - [8192冻结模型反向负载](../runs/rear_assist_20260914/declaration.json)：-2Nm于8–11s持续助推；三alpha/基线配对12回合，检验姿态、轨迹、速度耦合；不是反向负载训练结果。
+
+## 独立速度—偏航指令条件残差（2026-09-14）
+
+将任务由几何路径恢复扩展为原始速度/yaw-rate指令跟踪；10帧含动态alpha，姿态工作范围软惩罚不追踪危险侧倾参考，原ECBC和物理不变。训练时随机请求/持续时间/alpha，固定三alpha对照四类命令；目的为验证状态相关取舍必要性，自动alpha网络尚未实现。正式预算16777216步、seed64、末次update8；结果待完成。配置入口learning/configs/command_recovery.json，主运行runs/command_recovery_20260914；GPU工程预检complete、六回合奖励重建误差<8e-8，不能作为恢复收益。

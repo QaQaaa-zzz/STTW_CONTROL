@@ -7,6 +7,9 @@ from .env import RecoveryEnv
 
 
 def make_validator(env,actor,scale,config):
+    if getattr(env.config,'motion_commands',None) is not None:
+        from .command_env import make_command_validator
+        return make_command_validator(env,actor,scale,config)
     cases=config.validation_events
     seeds=config.validation_seeds
     keys=jp.stack([jax.random.PRNGKey(s) for s in seeds for _ in (cases or [None])])

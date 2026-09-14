@@ -18,6 +18,7 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("motion_commands") is None:config.pop("motion_commands",None)
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)
     if config.get("alive_reward_rate")==1.:config.pop("alive_reward_rate")
     if config.get('priority') is None:config.pop('priority',None)
@@ -27,6 +28,7 @@ def make_policy_identity(model_identity,config,history_steps):
             if config['priority'].get(key)==value:config['priority'].pop(key)
     if 'observation' in config:
         config['observation']=dict(config['observation'])
+        if not config['observation'].get('include_motion',False):config['observation'].pop('include_motion',None)
         if config['observation'].get('include_attitude_risk') is True:config['observation'].pop('include_attitude_risk')
         if config['observation'].get('include_priority') is False:config['observation'].pop('include_priority')
     if config.get('rear_disturbance_mode','torque')=='torque':config.pop('rear_disturbance_mode',None)
@@ -49,6 +51,7 @@ def make_policy_identity(model_identity,config,history_steps):
         identity['observation_fields']=list(FIELDS+PATH_FIELDS)
     if (config.get('figure_eight') is not None or config.get('bend') is not None) and config.get('observation',{}).get('include_path',False):
         identity['observation_fields']=list(FIELDS)+['path_right_error','heading_error','path_curvature']
+    if config.get('observation',{}).get('include_motion',False):identity['observation_fields']=list(FIELDS)+['yaw_rate_reference','yaw_rate_world']
     if config.get('priority') is not None:
         identity['observation_fields']=identity.get('observation_fields',list(FIELDS))+['speed_priority']+(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else [])
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS

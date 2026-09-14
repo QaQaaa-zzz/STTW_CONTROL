@@ -8,7 +8,7 @@ PANELS=[('policy','Policy surrogate loss'),('value','Value loss (includes 0.5 fa
         ('kl','Approx. KL diagnostic (symlog)'),('reward','Mean step reward (symlog; different objectives)'),
         ('entropy','Gaussian entropy before tanh'),('coverage','Disturbed samples / collected steps'),
         ('recovery','Development joint recovery fraction'),('failed','Development physical failure fraction'),
-        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL')]
+        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]')]
 
 
 def series(rows):
@@ -22,9 +22,11 @@ def series(rows):
         out['final_kl'].append(row.get('optimizer_audit',{}).get('final_exact_kl',float('nan')))
         disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))+row.get('rear_disturbed_transitions',0)
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
-        v=row.get('validation',{});mask=np.asarray(v.get('event_present',[]),bool)
+        v=row.get('validation',{});out['yaw'].append(float(np.mean(v['yaw_rmse'])) if 'yaw_rmse' in v else float('nan'));mask=np.asarray(v.get('event_present',[]),bool)
         for key,field in [('recovery','post_event_hold_complete'),('failed','failed'),('path','radial_rmse'),('speed','speed_rmse')]:
             a=np.asarray(v.get(field,[]))
+            if 'yaw_rmse' in v and key in ('failed','speed'):
+                out[key].append(float(a.mean()) if len(a) else float('nan'));continue
             out[key].append(float(a[mask].mean()) if len(a)==len(mask) and mask.any() else float('nan'))
     return out
 

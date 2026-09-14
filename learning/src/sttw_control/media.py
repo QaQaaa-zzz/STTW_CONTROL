@@ -89,6 +89,9 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Figure eight reference')
         error=eight_trace_features(trace['pose'],figure)[:,0]
         metrics={'right_error_rmse_m':float(np.sqrt(np.mean(error**2))),'right_error_peak_m':float(abs(error).max())}
+    elif config.get('motion_commands') is not None:
+        error=np.r_[0.,trace['yaw_rate_world'][1:]-trace['user_command'][:-1,1]]
+        metrics={'yaw_rate_error_rmse_rad_s':float(np.sqrt(np.mean(error[1:]**2)))}
     elif config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0:
         axes[0].plot([xy[0,0],xy[-1,0]],[xy[0,1],xy[0,1]],'--',color=orange,lw=2,label='Straight reference')
         error=xy[:,1]-xy[0,1]
@@ -109,6 +112,7 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
     axes[1].axhline(0,color='#555555',lw=.8,ls='--')
     is_path=circle is not None or (config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0)
     axes[1].set(xlabel='Simulation time [s]',ylabel=('Radial error [m], outward +' if circle else 'Lateral error [m], right +') if is_path else 'Steering error [deg]',title='Path tracking error' if is_path else 'Steering reference error')
+    if config.get('motion_commands') is not None:axes[1].set(ylabel='Yaw-rate error [rad/s]',title='Original command tracking error')
     fig.suptitle(f'{controller_label} | {t[-1]-t[0]:.1f} s',fontsize=14)
     fig.savefig(output/'trajectory.png');fig.savefig(output/'trajectory.pdf');plt.close(fig)
     fig,axes=plt.subplots(3,2,figsize=(12,10),sharex=True,layout='constrained')
@@ -177,6 +181,7 @@ def render_run(run_path,*,fps=30):
         xy=trace['qpos'][:,:2]
         straight=config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0
         ref=circle_reference(circle,181) if circle else (np.column_stack([np.linspace(xy[0,0],xy[-1,0],100),np.full(100,xy[0,1])]) if straight else np.empty((0,2)))
+        if config.get('motion_commands') is not None:ref=np.empty((0,2))
         if config.get('bend'):
             from .path import BendConfig,bend_table
             ref=bend_table(BendConfig(**config['bend']))[:,1:3]
@@ -231,6 +236,10 @@ def render_run(run_path,*,fps=30):
                     text=f"{'DISTURBANCE ON' if active else 'Disturbance OFF'} | {event['start_seconds']:.2f}-{event['end_seconds']:.2f}s | steer {event['steer_rate_peak']*factor:+.2f} rad/s | force {event['force_peak']*factor:+.2f} N"
                     draw.rectangle((12,48,1268,80),fill='#a12d21' if active else '#243442')
                     draw.text((20,53),text,font=small,fill='white')
+                if config.get('motion_commands') is not None:
+                    requested=trace['user_command'][index]
+                    draw.rectangle((12,48,1268,80),fill='#243442')
+                    draw.text((20,53),f'Original request: v={requested[0]:.2f} m/s | yaw rate={requested[1]:+.2f} rad/s | alpha={trace["priority_alpha"][index]:.2f}',font=small,fill='white')
                 frame=np.asarray(canvas)
                 writer.add_image(frame)
                 if frame_number==len(ids)//2: canvas.save(output/'preview.png')
