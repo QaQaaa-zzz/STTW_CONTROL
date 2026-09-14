@@ -68,3 +68,10 @@ def test_explicit_legacy_timeout_still_stops_child():
     child=Child()
     with pytest.raises(TimeoutError):wait_stage(child,1,2700,lambda _:None)
     assert child.stopped
+def test_explicit_validation_updates_override_periodic_schedule():
+    import pytest
+    from sttw_control.training import TrainingConfig,should_validate
+    c=TrainingConfig(updates=50,validation_updates=(25,50))
+    assert [i for i in range(1,51) if should_validate(c,i)]==[25,50]
+    with pytest.raises(ValueError):TrainingConfig(updates=50,validation_updates=(51,))
+    with pytest.raises(ValueError):TrainingConfig(updates=50,validation_updates=(25,25))

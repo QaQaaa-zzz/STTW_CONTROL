@@ -133,3 +133,12 @@ PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli
 ```
 
 保留来源SHA与JSON，导入不重新执行训练或评估。显示与运行参数参考[TensorBoard官方说明](https://www.tensorflow.org/tensorboard/get_started)。
+
+
+### Command yaw tracking bonus and sequential runs
+
+`command_yaw_reward.json` adds a positive `yaw_tracking` component: `5 * exp(-(yaw_error / 0.1)**2)` reward per second. It is independent of alpha; all existing costs remain. `MotionCommands` defaults disable it, preserving old policy identities. Failed transitions replace all terms with the existing terminal penalty. JSON, TensorBoard and per-step evaluation plots retain its positive sign.
+
+`TrainingConfig.validation_updates` optionally declares stage-local development evaluation indices (final always evaluated). For 50 updates resumed from 100, `[25, 50]` evaluates global 125/150. This does not change optimizer behavior or resume physical state.
+
+`deferred_training.py` accepts `pipeline_kind: command` with `dependency_status` and `dependency_launch` (PID and optional process_starttime). It waits only for that successful pipeline and its process exit, not unrelated GPU jobs. Frozen `input_sha256`, the exclusive lock and one-time launch claim prevent input drift and duplicate starts. `notify: true` launches the existing stage/completion/error monitor for the child; queue errors notify separately. The default recovery pipeline behavior remains available.

@@ -121,6 +121,8 @@ def generate(root):
                     if z['terminated'][-1]:ax.plot(t[-1],val[-1],'x',ms=9)
             for key in x['parts']:
                 if key!='action':axes[1,1].plot(tt,x['parts'][key],label=key)
+            if 'yaw_tracking' in x['rewards']:
+                axes[1,1].plot(tt,x['rewards']['yaw_tracking']/c['controller']['dt'],label='yaw_tracking (+reward)',ls='--')
             for key,val in x['rewards'].items():axes[2,0].plot(tt,np.cumsum(val),label=key)
             keys=list(x['parts']);means=[]
             for label in ('baseline','residual'):
@@ -132,6 +134,7 @@ def generate(root):
             axes[2,1].set_xticks([0,1],['Baseline','Residual'])
             shared=comparison['common_surviving_window']
             titles=['Speed error vs original command [m/s]','Yaw-rate error vs original command [rad/s]','Actual roll [deg]','Penalty components [reward/s]','Signed component returns',f'Mean penalties: {shared["steps"]} shared steps, neither failed']
+            if 'yaw_tracking' in x['rewards']:titles[3]='Penalty costs and positive tracking bonus [reward/s]'
             schedule=json.loads((case/'residual/commands.json').read_text())['schedule']
             plot_step_rewards(dest,b,x,schedule,f'{case.name} | alpha={tr["priority_alpha"][0]:g} | {panel.name}')
             for ax,title in zip(axes.flat,titles):

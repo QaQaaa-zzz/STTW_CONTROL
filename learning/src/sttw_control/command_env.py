@@ -6,7 +6,7 @@ import numpy as np
 from .env import RecoveryEnv
 from .controller import initial_controller
 from .observation import initial_history
-from .motion_commands import sample_schedule,reference_at,reward_terms
+from .motion_commands import sample_schedule,reference_at,reward_terms,yaw_tracking_bonus
 
 class CommandRecoveryEnv(RecoveryEnv):
     def requested(self,tick,schedule):
@@ -50,6 +50,8 @@ class CommandRecoveryEnv(RecoveryEnv):
         raw=self.requested(state.tick,state.command_schedule)
         terms=reward_terms(measurement[0],measurement[1],true_speed-raw[0],yaw-raw[1],action,state.priority_alpha,c.motion_commands)
         reward=jp.where(failed,-c.failure_penalty,c.controller.dt*(c.alive_reward_rate-sum(terms.values())))
+        if c.motion_commands.yaw_tracking_reward_rate>0:
+            reward=reward+jp.where(failed,0.,c.controller.dt*yaw_tracking_bonus(yaw-raw[1],c.motion_commands))
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
         return state.replace(controller=controller,actuator=actuator,history=history,measurement=measurement,pose=pose,reference=ref,base=base,obs=jp.nan_to_num(obs),tick=tick,reward=reward,done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,priority_alpha=alpha,yaw_rate=yaw)
 

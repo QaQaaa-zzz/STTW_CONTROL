@@ -228,3 +228,41 @@ def test_tolerance_reward_reconstructs_switch_and_failure(tmp_path):
     assert x['rewards']['speed_tolerance'][3]==0
     failed=signed_reward_components(0,0,2,2,np.zeros(2),.5,c.motion_commands,.005,1,100,True,xp=np)
     assert failed['failure']==-100 and sum(failed.values())==-100
+def test_positive_yaw_tracking_bonus_and_failure_replacement():
+    import numpy as np
+    from dataclasses import replace
+    from sttw_control.motion_commands import MotionCommands,signed_reward_components
+    c=MotionCommands(yaw_tracking_reward_rate=5.,yaw_tracking_reward_scale=.1)
+    errors=np.array([0.,.05,.1,.2,-.1])
+    def parts(config,failed=False,xp=np):
+        return signed_reward_components(0.,0.,0.,errors,np.zeros((5,2)),np.linspace(0,1,5),config,.005,1.,100.,failed,xp=xp)
+    b=parts(c);plain=parts(replace(c,yaw_tracking_reward_rate=0.))
+    assert 'yaw_tracking' not in plain
+    np.testing.assert_allclose(b['yaw_tracking'],.025*np.exp(-(errors/.1)**2))
+    for k,v in plain.items():np.testing.assert_allclose(b[k],v)
+    np.testing.assert_allclose(sum(b.values())-sum(plain.values()),b['yaw_tracking'])
+    assert b['yaw_tracking'][0]>b['yaw_tracking'][1]>b['yaw_tracking'][2]>b['yaw_tracking'][3]>=0
+    import jax.numpy as jp
+    np.testing.assert_allclose(parts(c,xp=jp)['yaw_tracking'],b['yaw_tracking'],rtol=1e-6)
+    assert np.all(parts(c,True)['yaw_tracking']==0)
+    np.testing.assert_allclose(sum(parts(c,True).values()),-100.)
+
+
+def test_yaw_bonus_cpu_reconstruction_identity_and_invalid_config(tmp_path):
+    from dataclasses import asdict
+    from sttw_control.evaluation import evaluate
+    from sttw_control.command_diagnostics import reconstruct
+    from sttw_control.network import make_policy_identity
+    c=task(yaw_tracking_reward_rate=5.,fixed=((0.,2.,0.,.5),(.01,2.7,.9,.5)))
+    evaluate(RecoveryEnv(c),tmp_path/'bonus',seed=7)
+    d=reconstruct(tmp_path/'bonus')
+    assert d['reconstruction_error']<3e-5
+    assert np.all(d['rewards']['yaw_tracking']>=0)
+    assert d['rewards']['yaw_tracking'][0]>.024
+    defaults=asdict(MotionCommands())
+    old={k:v for k,v in defaults.items() if not k.startswith('yaw_tracking_reward')}
+    ident=lambda mc:make_policy_identity({},dict(motion_commands=mc),10)
+    assert ident(defaults)==ident(old)
+    assert ident(dict(defaults,yaw_tracking_reward_rate=5.))!=ident(old)
+    for kwargs in [dict(yaw_tracking_reward_rate=-1.),dict(yaw_tracking_reward_scale=0.),dict(yaw_tracking_reward_rate=float('nan'))]:
+        with pytest.raises(ValueError):MotionCommands(**kwargs)

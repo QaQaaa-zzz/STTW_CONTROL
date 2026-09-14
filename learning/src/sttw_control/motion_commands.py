@@ -27,6 +27,8 @@ class MotionCommands:
     yaw_tolerance: float=.1  # rad/s, on the relaxed yaw-rate objective
     speed_excess_scale: float=.1  # excess giving half the maximum extra cost
     yaw_excess_scale: float=.05
+    yaw_tracking_reward_rate: float=0.  # optional positive reward/s, independent of alpha
+    yaw_tracking_reward_scale: float=.1  # rad/s; reward falls to exp(-1) here
 
     def __post_init__(self):
         if type(self.segments) is not int or self.segments<2:raise ValueError('segments >=2 required')
@@ -39,6 +41,10 @@ class MotionCommands:
             raise ValueError('invalid tolerance penalty rate')
         for value in (self.speed_tolerance,self.yaw_tolerance,self.speed_excess_scale,self.yaw_excess_scale):
             if not math.isfinite(value) or value<=0:raise ValueError('invalid tolerance threshold/scale')
+        if not math.isfinite(self.yaw_tracking_reward_rate) or self.yaw_tracking_reward_rate<0:
+            raise ValueError('invalid yaw tracking reward rate')
+        if not math.isfinite(self.yaw_tracking_reward_scale) or self.yaw_tracking_reward_scale<=0:
+            raise ValueError('invalid yaw tracking reward scale')
         if self.fixed is not None:
             if not self.fixed or self.fixed[0][0]!=0:raise ValueError('fixed commands must start at zero')
             last=-1.
@@ -88,10 +94,17 @@ def reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c,*,xp=jp):
     return costs
 
 
+def yaw_tracking_bonus(yaw_error,c,*,xp=jp):
+    """Positive accuracy bonus; original penalties remain unchanged."""
+    return c.yaw_tracking_reward_rate*xp.exp(-(yaw_error/c.yaw_tracking_reward_scale)**2)
+
+
 def signed_reward_components(roll,rate,speed_error,yaw_error,action,alpha,c,dt,alive_rate,failure_penalty,failed,*,xp=jp):
     """Signed per-transition terms, including terminal replacement, for logging."""
     costs=reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c,xp=xp)
     parts={k:xp.where(failed,0.,-dt*v) for k,v in costs.items()}
+    if c.yaw_tracking_reward_rate>0:
+        parts['yaw_tracking']=xp.where(failed,0.,dt*yaw_tracking_bonus(yaw_error,c,xp=xp))
     parts['alive']=xp.where(failed,0.,dt*alive_rate)
     parts['failure']=xp.where(failed,-failure_penalty,0.)
     return parts

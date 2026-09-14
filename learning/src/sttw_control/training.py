@@ -82,6 +82,7 @@ class TrainingConfig:
     seed: int=42
     checkpoint_interval: int=8
     validation_final_only: bool=False
+    validation_updates: tuple | None=None  # stage-local indices; final always validated
     validation_post_seconds: float=10.
     validation_hold_seconds: float=.5
     validation_path_tolerance: float=.2
@@ -95,6 +96,9 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if self.validation_updates is not None:
+            if len(set(self.validation_updates))!=len(self.validation_updates) or any(type(i) is not int or not 1<=i<=self.updates for i in self.validation_updates):
+                raise ValueError('invalid explicit validation updates')
         if self.command_selection_scope not in ('initial','full_episode'):raise ValueError('invalid command selection scope')
         if type(self.plot_interval) is not int or self.plot_interval<0:raise ValueError('invalid plot interval')
         if self.command_validation_schedules is not None:
@@ -132,6 +136,7 @@ class TrainingConfig:
 
 
 def should_validate(config,index):
+    if config.validation_updates is not None:return index==config.updates or index in config.validation_updates
     return index==config.updates or (not config.validation_final_only and (index==1 or index%config.checkpoint_interval==0))
 
 
