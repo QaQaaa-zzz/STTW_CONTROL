@@ -51,3 +51,30 @@ def test_reward_reconstruction_with_switch_and_dynamic_alpha(tmp_path):
     assert x['reconstruction_error']<3e-5
     assert x['trace']['user_command'][1,1]==0
     assert x['trace']['user_command'][2,1]>.3
+
+
+def test_current_command_config_penalizes_roll_above_nine_degrees():
+    from pathlib import Path
+    from sttw_control.env import load_config
+    c=load_config(Path(__file__).parents[1]/'configs/command_recovery.json')
+    assert np.isclose(c.motion_commands.roll_working_limit,np.deg2rad(9))
+    assert c.actuator.composition=='full_range'
+    cost=lambda deg:reward_terms(np.deg2rad(deg),0.,0.,0.,jnp.zeros(2),.5,c.motion_commands)['attitude']
+    assert cost(8.9)==0 and cost(9.1)>0
+
+
+def test_full_range_zero_preserves_physics_and_records_new_reward(tmp_path):
+    from pathlib import Path
+    from sttw_control.env import load_config
+    from sttw_control.actuator import ActuatorConfig
+    from sttw_control.evaluation import evaluate
+    from sttw_control.command_diagnostics import reconstruct
+    c=load_config(Path(__file__).parents[1]/'configs/command_recovery.json')
+    c=replace(c,horizon_seconds=.025)
+    e=RecoveryEnv(c);old=RecoveryEnv(replace(c,actuator=ActuatorConfig()))
+    s=e.reset(4);b=old.reset(4)
+    for _ in range(5):
+        s=e.step(s,jnp.zeros(2));b=old.step(b,jnp.zeros(2))
+        np.testing.assert_allclose(s.data.qpos,b.data.qpos,atol=1e-10)
+    evaluate(e,tmp_path/'trace',seed=4)
+    assert reconstruct(tmp_path/'trace')['reconstruction_error']<3e-5

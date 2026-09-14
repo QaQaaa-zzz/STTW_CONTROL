@@ -30,9 +30,12 @@
     "dynamic_alpha": true,
     "speed_scale": 0.2,
     "yaw_scale": 0.2,
-    "roll_working_limit": 0.3,
+    "roll_working_limit": 0.15707963267948966,
     "attitude_weight": 100.0,
     "rate_weight": 1.0,
     "tracking_scale": 0.3
+  },
+  "actuator": {
+    "composition": "full_range"
   }
 }

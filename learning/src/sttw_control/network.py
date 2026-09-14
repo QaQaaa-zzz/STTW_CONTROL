@@ -18,6 +18,10 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if "actuator" in config:
+        config["actuator"]=dict(config["actuator"])
+        if config["actuator"].get("composition","additive")=="additive":
+            config["actuator"].pop("composition",None)
     if config.get("motion_commands") is None:config.pop("motion_commands",None)
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)
     if config.get("alive_reward_rate")==1.:config.pop("alive_reward_rate")
@@ -55,6 +59,8 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get('priority') is not None:
         identity['observation_fields']=identity.get('observation_fields',list(FIELDS))+['speed_priority']+(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else [])
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
+    if config.get("actuator",{}).get("composition")=="full_range":
+        identity["action_fields"]=["steer_available_range_fraction","rear_available_range_fraction"]
     return identity
 
 

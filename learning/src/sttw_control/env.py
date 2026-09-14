@@ -66,6 +66,8 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.action_mapping is not None and self.actuator.composition!="additive":
+            raise ValueError("physical action mapping requires additive composition")
         if (self.motion_commands is not None)!=self.observation.include_motion:raise ValueError("motion observation contract mismatch")
         if self.motion_commands is not None:
             if any(x is not None for x in (self.bend,self.circle,self.figure_eight,self.random_events,self.action_mapping)) or self.observation.include_path or self.priority is None:raise ValueError("independent commands require direct priority policy without a path or random force events")
