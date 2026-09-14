@@ -242,3 +242,18 @@ command任务新增reward_components_mean_step：alive、attitude、roll_rate、
 
 
 2026-09-14 command_convergence已complete：32轮预算结束，best28用于全部最终评估；策略四标准场景×三alpha12/12存活，急转弯通过但速度与yaw请求被明显放宽。普通场景仍两项均劣于基线，不能声称全面提升；同训练8→28开发指标支持训练不足曾是因素但不证明收敛。详细数据见VALIDATION/METHODS_AND_RESULTS及运行analysis/INDEX。完成弹窗已发出。下一步建议冻结best28测试alpha独立/联合切换与正常工况干预，不原样加训。本次未启动实验。
+
+
+## 2026-09-14 追加32轮与急转弯轨迹核查
+
+用户授权从command_convergence末轮update_0032追加32轮，输出runs/command_continuation_20260914；轮次33–64，额外67,108,864训练步，累计134,217,728。8192环境×256步，epochs2/minibatch8192/LR3e-4/targetKL.01/gamma.9995/GAE.99保持不变，奖励、动作权限和随机命令分布冻结不改。command_patience=0以完成用户指定32轮，仍保留非有限停止、KL保护；无自动继续。预热256×2400=614400计算步另计。恢复参数、Adam、PPO RNG（预热后恢复），仿真/ESO/历史重新初始化，非逐步无缝续跑。保留旧best28作为同一开发面板重新验证的选模候选，并另记新阶段best。开发seed46001/alpha0,.5,1；验证新阶段1/每4轮/末轮；最终沿用四标准工况seed47001，固定alpha0,.5,1，配对基线，最多24条12秒。此为继续训练诊断，非独立训练种子或holdout。
+
+新增恢复快照SHA/身份/归一化/Actor一致性检查，全局轮次和累计步数；新训练打印真实随机采样的七奖励分项，并在每次验证刷新本阶段及前32轮对照loss/KL/reward/开发曲线。alpha_0/alpha_1/alpha_2是列表索引，对应0/.5/1，新评估保存alpha_values.json，旧目录不重命名。
+
+三轮旧实验标准指令面板一致，9份基线time/qpos/qvel逐元素相同。急转弯指令3秒变为v=2.7m/s、yaw rate=1.4rad/s，8秒变为2.1m/s、0rad/s；基线4.895秒失败，未执行8秒回正。新best28满12秒存活，但10–12秒平均yaw rate在alpha0/.5/1下为.19746/.31204/.32828rad/s，末帧.17047/.30112/.32053，不能称为准确回正或返回原轨迹。该任务没有独立几何参考路径。轨迹/视频及来源见runs/command_convergence_20260914/analysis/trajectory_comparison/INDEX.md。
+
+续训前工程验证：CPU训练/诊断/选模/命令行为测试；4环境×16步恢复快照并追加1轮，验证全局update2/累计128步及绘图/奖励恒等式，工程预检不作性能证据。正式启动状态以runs/command_continuation_20260914/status.json为准。
+
+续训预检已完成：20项CPU行为测试通过，GPU从update1追加到update2，新增64步、累计128步，奖励分项和lineage曲线生成成功。参数/Adam/RNG恢复有哈希与行为测试支持，未保存物理状态。
+
+正式续训已启动：runs/command_continuation_20260914/status.json为training，launcher PID1252724，监视PID1252725；源码提交bcd48a1（feat/reward-component-logging已push），奖励分项与续训代码GPU预检通过。当前处于初始化，尚无第33轮性能结论。
