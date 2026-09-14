@@ -102,3 +102,34 @@ PYTHONPATH=learning/src:/tmp/sttw_paper_tools /home/qy/mujoco_playground/.venv/b
 ```
 
 PDF含嵌入式公式/图片可直接阅读；HTML依赖同目录figures，分享时保留整目录。原始runs默认不入Git，没有本地原始记录时不能完整重算。论文中未实现的机制和待补实验必须保持标注。
+
+## TensorBoard训练过程
+
+安装本项目依赖时会安装TensorBoard。所有调用`sttw_control.training.train`的训练都会把事件写到`<训练输出>/tensorboard`，每轮JSON日志落盘后flush，异常退出也会关闭写入器。项目`runs/`内的事件目录自动链接到`runs/tensorboard/`索引；服务只扫描该索引，不遍历模型和worktree目录。
+
+在项目根目录启动查看服务：
+
+```bash
+/home/qy/mujoco_playground/.venv/bin/python -m tensorboard.main --logdir runs/tensorboard --host 127.0.0.1 --port 6006 --reload_interval 5 --samples_per_plugin scalars=100000
+```
+
+访问 http://127.0.0.1:6006 。已有服务时直接打开页面，不重复启动；当前服务PID、参数与日志在`runs/tensorboard_service/`。`scalars=100000`为每曲线最多返回10万个点；此版本设为0会返回空曲线，不代表无限制。
+
+主要分组：
+
+- `train/mean_step_reward`：随机训练采样的平均每控制步奖励；横轴step是**全局PPO轮次**，不是控制步数。`train/control_transitions`单独记录控制交互数。
+- `reward_components/`：有符号生存、速度、yaw、姿态、侧倾角速度、动作及失败奖励；没有的旧字段不补0。
+- `loss/`和`kl/`：策略损失、价值损失、潜变量高斯熵、尝试更新时的近似KL。它们是尝试优化的小批次统计，不代表最终保留策略的固定任务效果。
+- `optimizer/`：最终精确KL、整轮回退、尝试/局部接受小批次数；`retained_minibatches`在整轮回退时为0。
+- `validation/`、`paired_episode_return/`：实际执行过的开发评估回报、失败、速度/yaw误差和末段保持，以及配对基线回报和差值；缺少评估的轮次不生成点，不宣称任务成功。命令面板标签`case_00/alpha_0.5/seed_46001`按冻结声明的序列顺序解析。
+- `timing/`、`memory/`：采样、优化、验证、墙钟、吞吐和原日志显存统计。
+
+已有100轮记录已导入`runs/command_balanced_100_20260914/training/tensorboard`，包含父运行1–8轮和续训9–100轮。它们是同一训练链；导入时间不是历史训练时间，因此查看Step轴及原日志墙钟字段。开发评估仅在1、8、100轮有点；本面板case_00为gentle、case_01为tight_turn，标准测试12组另见原运行analysis索引。平滑只是显示选项，分析原值可把Smoothing设为0。
+
+历史导入示例（目标必须尚不存在，重复/倒序轮次会被拒绝）：
+
+```bash
+PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli/tensorboard_logs.py --metrics <父训练目录>/metrics.jsonl --metrics <续训目录>/metrics.jsonl --output <续训目录>/tensorboard
+```
+
+保留来源SHA与JSON，导入不重新执行训练或评估。显示与运行参数参考[TensorBoard官方说明](https://www.tensorflow.org/tensorboard/get_started)。

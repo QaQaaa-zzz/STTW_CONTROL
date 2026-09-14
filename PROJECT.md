@@ -333,3 +333,18 @@ command_balanced_100训练和评估complete，训练/最终完成均有zenity发
 验证计划：更新已有当前配置行为测试，检查中等权限的零残差基线一致、可用范围内不能完整接管、实际总限幅保持；运行残差和命令环境相关测试。不改旧freeze/checkpoint，不把旧full_range模型静默应用新动作语义；新任务需新训练身份。本次只修改和验证，不擅自启动长训练。
 
 实施完成：上述中等权限已设为当前command_recovery配置。30项残差/命令行为测试通过；逐字段确认仅动作合成与两路残差范围改变，新旧策略身份不同。当前阶段为已配置、未训练，不能声称解决了欠转弯。详见VALIDATION/METHODS_AND_RESULTS最新段。
+
+## 2026-09-14 TensorBoard接入计划
+
+用户批准接入过程可视化。复用每轮metrics.jsonl记录，在训练函数外层用上下文管理的事件写入器，每轮JSON落盘后同步导出标量并flush；成功或异常退出都关闭写入器。训练reward/分项、loss、近似与最终KL、回退/最终保留更新数、耗时/吞吐/样本数、固定开发各场景alpha种子的回报与误差分别分组；缺失项不补0，不伪造中间评估。全局PPO轮次作step。原位模块learning/src/sttw_control/tensorboard_logging.py，薄导入CLI learning/cli/tensorboard_logs.py，依赖写入learning/pyproject.toml。
+
+历史导入仅读取声明的metrics文件，要求轮次严格递增，拒绝重复覆盖已有事件目录；保留来源SHA。将原8轮与续92轮合成单一100轮事件序列。训练事件放各运行training/tensorboard；统一服务索引runs/tensorboard下使用目录链接，不复制原始实验。启动本机TensorBoard并验证HTTP和事件中的100轮原值；不运行新训练、不修改PPO/奖励/物理参数。测试事件读回、缺失值、KL回退计数、重复导入保护及异常关闭。
+
+
+## 2026-09-14 TensorBoard过程日志已接入
+
+实现tensorboard_logging模块与tensorboard_logs历史导入CLI；train外层上下文管理关闭写入器，原metrics.jsonl落盘后每轮同步flush事件。训练参数、网络、奖励、采样与物理不变。全局PPO轮次、奖励/分项、loss、近似与最终精确KL、整轮回退/最终保留更新数、开发逐样本评估/基线差和耗时均可查看；缺失项不补0。命令评估标签绑定声明case/alpha/seed顺序。依赖tensorboard>=2.18,<3（当前2.21.0），未安装TensorFlow，未改JAX/CUDA依赖。
+
+已有1–100轮日志回放到runs/command_balanced_100_20260914/training/tensorboard，来源SHA记录sources.json；原freeze/metrics/checkpoint保持不变。事件按运行目录存放并自动链接runs/tensorboard索引，当前服务http://127.0.0.1:6006，PID1808332，日志/启动记录runs/tensorboard_service。服务--samples_per_plugin scalars=100000；本版本0会返回空曲线，已改正并通过HTTP核验100点。
+
+核验：新增6项事件读回、缺失值、回退保留计数、异常关闭、重复导入保护、声明样本顺序和运行索引行为测试通过；另8项既有训练/诊断测试通过。真实100点总奖励、速度/yaw分项及价值loss逐点匹配JSON，139个标量tag，开发评估仅1/8/100轮；HTTP200且服务完整返回100个奖励点。保留原图表和完成/错误通知。本次未启动新训练；新中等残差权限仍为已配置未训练。使用说明在learning/README.md TensorBoard节。

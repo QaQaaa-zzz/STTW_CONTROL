@@ -163,12 +163,20 @@ def restore_training_snapshot(path,template,identity):
 
 
 def train(task_path,output,config=TrainingConfig()):
+    from .tensorboard_logging import TrainingEvents
+    with TrainingEvents(Path(output)/'tensorboard') as events:
+        return _train(task_path,output,config,events)
+
+
+def _train(task_path,output,config,events):
     run_start=time.monotonic();setup_timings={}
     cache_dir=configure_compilation_cache()
     output=Path(output)
     output.mkdir(parents=True,exist_ok=False)
     env=RecoveryEnv(load_config(task_path),backend='mjx')
     c=config
+    from .tensorboard_logging import validation_labels
+    event_labels=validation_labels({'task':asdict(env.config),'training':asdict(c)})
     identity=make_policy_identity(env.bundle.identity,asdict(env.config),env.config.observation.history_steps)
     source={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('learning/src/sttw_control').glob('*.py'))}
     declaration={'task':asdict(env.config),'training':asdict(c),'policy_identity':identity,'source_sha256':source,
@@ -464,6 +472,7 @@ def train(task_path,output,config=TrainingConfig()):
         record['wall_elapsed_seconds']=time.monotonic()-run_start
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
+        events.write(record,event_labels)
         print(json.dumps(record,allow_nan=False),flush=True)
         (output/'progress.json').write_text(json.dumps({'update':index+update_offset,'stage_update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates or stop else 'training','validation_complete':'validation' in record},indent=2)+'\n')
         from .training_diagnostics import plot_training

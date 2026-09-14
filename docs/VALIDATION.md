@@ -1267,3 +1267,12 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 总前轮角速度±3rad/s、角度±.8rad、后轮轴速±60rad/s、伺服/力矩/物理模型、奖励/10帧观测/动态alpha均不变。全局ActuatorConfig默认及旧运行freeze/checkpoint不改；新配置策略身份不同，旧full_range checkpoint不能作为同语义模型直接续训/评估，不绕过身份校验。
 
 验证：当前配置行为测试先在full_range下失败，修改后test_residual.py与test_motion_commands.py共30项通过（CPU，5.07s）；含零残差物理轨迹一致、代表基线下权限介于早期和full_range之间、最终指令/转向端点约束。与100轮冻结任务逐字段比较确认仅composition和两路residual_scale改变，策略身份不同。只完成配置和工程验证，尚无新权限下性能结果，本次未启动长训练。
+
+
+## 2026-09-14 TensorBoard过程日志已接入
+
+实现tensorboard_logging模块与tensorboard_logs历史导入CLI；train外层上下文管理关闭写入器，原metrics.jsonl落盘后每轮同步flush事件。训练参数、网络、奖励、采样与物理不变。全局PPO轮次、奖励/分项、loss、近似与最终精确KL、整轮回退/最终保留更新数、开发逐样本评估/基线差和耗时均可查看；缺失项不补0。命令评估标签绑定声明case/alpha/seed顺序。依赖tensorboard>=2.18,<3（当前2.21.0），未安装TensorFlow，未改JAX/CUDA依赖。
+
+已有1–100轮日志回放到runs/command_balanced_100_20260914/training/tensorboard，来源SHA记录sources.json；原freeze/metrics/checkpoint保持不变。事件按运行目录存放并自动链接runs/tensorboard索引，当前服务http://127.0.0.1:6006，PID1808332，日志/启动记录runs/tensorboard_service。服务--samples_per_plugin scalars=100000；本版本0会返回空曲线，已改正并通过HTTP核验100点。
+
+核验：新增6项事件读回、缺失值、回退保留计数、异常关闭、重复导入保护、声明样本顺序和运行索引行为测试通过；另8项既有训练/诊断测试通过。真实100点总奖励、速度/yaw分项及价值loss逐点匹配JSON，139个标量tag，开发评估仅1/8/100轮；HTTP200且服务完整返回100个奖励点。保留原图表和完成/错误通知。本次未启动新训练；新中等残差权限仍为已配置未训练。使用说明在learning/README.md TensorBoard节。
