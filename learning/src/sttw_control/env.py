@@ -24,6 +24,7 @@ from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,ei
 from .events import RandomEvents,sample_event,profile
 from .priority import PriorityConfig,priority_weights
 from .action_mapping import MappingConfig,map_action
+from .motion_commands import MotionCommands
 
 @dataclass(frozen=True)
 class TaskConfig:
@@ -32,6 +33,7 @@ class TaskConfig:
     observation: ObservationConfig=field(default_factory=ObservationConfig)
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
+    motion_commands: MotionCommands | None=None
     bend: BendConfig | None=None
     rear_disturbance_mode: str="torque"  # event[5]: signed Nm or signed rad/s bias magnitude; positive opposes forward motion
     disturbance_rear_torque: float=0.
@@ -64,11 +66,19 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.action_mapping is not None and self.actuator.composition!="additive":
+            raise ValueError("physical action mapping requires additive composition")
+        if (self.motion_commands is not None)!=self.observation.include_motion:raise ValueError("motion observation contract mismatch")
+        if self.motion_commands is not None:
+            if any(x is not None for x in (self.bend,self.circle,self.figure_eight,self.random_events,self.action_mapping)) or self.observation.include_path or self.priority is None:raise ValueError("independent commands require direct priority policy without a path or random force events")
+            if self.motion_commands.fixed is not None and (not math.isclose(self.motion_commands.fixed[0][1],self.speed_reference) or any(row[1]>.1*self.actuator.rear_rate_limit for row in self.motion_commands.fixed)):raise ValueError("fixed initial/requested speed contract")
+            if self.motion_commands.roll_working_limit>=self.roll_failure:raise ValueError("working roll limit must be below failure threshold")
+            if self.motion_commands.speed_max>.1*self.actuator.rear_rate_limit:raise ValueError("command speed exceeds actuator command bound")
         if self.learning_roll_reference is not None and (not math.isfinite(self.learning_roll_reference) or abs(self.learning_roll_reference)>=self.roll_failure):
             raise ValueError("learning roll reference must be finite and inside roll failure bound")
         if (self.priority is not None)!=self.observation.include_priority:
             raise ValueError('priority config and observation flag must agree')
-        if self.priority is not None and (self.action_mapping is not None or not self.observation.include_path):
+        if self.priority is not None and (self.action_mapping is not None or not (self.observation.include_path or self.observation.include_motion)):
             raise ValueError('priority conditioning requires direct residual and path observations')
         if self.action_mapping is not None:
             if self.action_mapping.authority_aware and self.actuator.delay_steps:
@@ -124,7 +134,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -149,6 +159,9 @@ class EnvState:
     end_code: object
     event: object
     priority_alpha: object
+    command_schedule: object=None
+    yaw_rate: object=0.
+    priority_locked: object=False
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -158,6 +171,12 @@ class EnvState:
 
 class RecoveryEnv:
     action_size=2
+
+    def __new__(cls,config=TaskConfig(),**kwargs):
+        if cls is RecoveryEnv and config.motion_commands is not None:
+            from .command_env import CommandRecoveryEnv
+            return object.__new__(CommandRecoveryEnv)
+        return object.__new__(cls)
 
     def __init__(self,config=TaskConfig(),*,backend='cpu'):
         if backend not in ('cpu','mjx'): raise ValueError('backend must be cpu or mjx')
@@ -225,7 +244,7 @@ class RecoveryEnv:
             torque=xp.cross(offset,force)
         return xp.concatenate([force,torque])
 
-    def command(self,tick,pose=None):
+    def command(self,tick,pose=None,schedule=None):
         c=self.config
         if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),c.speed_reference])
         if c.figure_eight is not None:
@@ -258,9 +277,9 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None):
         c=self.config
-        command=self.command(tick,pose)
+        command=self.command(tick,pose) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
@@ -268,6 +287,8 @@ class RecoveryEnv:
         frame=make_frame(measurement,command,learning_reference,out.steer_rate,actuator.previous,out.disturbance)
         if c.observation.include_path:
             frame=jp.concatenate([frame,self.path_features(pose)])
+        if c.observation.include_motion:
+            frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
         if c.priority is not None:
             risk=priority_weights(alpha,roll-learning_reference,roll,rate,c.priority)[0]
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
@@ -350,7 +371,7 @@ class RecoveryEnv:
         alpha=jp.clip(jp.asarray(alpha),0.,1.)
         history=state.history.replace(frames=state.history.frames.at[-1,observation_fields(self.config.observation).index("speed_priority")].set(alpha))
         obs=jp.concatenate([history.frames.flatten(),history.mask])
-        return state.replace(priority_alpha=alpha,history=history,obs=obs)
+        return state.replace(priority_alpha=alpha,history=history,obs=obs,priority_locked=jp.bool_(True))
 
     def prepare_action(self,state,action):
         """Shared pure preparation for physics and pre-limit diagnostics."""

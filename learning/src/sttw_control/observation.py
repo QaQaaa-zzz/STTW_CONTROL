@@ -11,12 +11,13 @@ FIELDS=('roll_error','roll','roll_rate','speed_estimate','steer','steer_rate',
 PATH_FIELDS=("radial_error","heading_error","path_curvature")
 
 def observation_fields(config):
-    return FIELDS + (PATH_FIELDS if config.include_path else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ())
+    return FIELDS + (PATH_FIELDS if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ())
 
 @dataclass(frozen=True)
 class ObservationConfig:
     history_steps: int=1
     include_path: bool=False
+    include_motion: bool=False
     include_priority: bool=False
     include_attitude_risk: bool=True
     def __post_init__(self):

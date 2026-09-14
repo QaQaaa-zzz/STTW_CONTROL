@@ -8,7 +8,7 @@ PANELS=[('policy','Policy surrogate loss'),('value','Value loss (includes 0.5 fa
         ('kl','Approx. KL diagnostic (symlog)'),('reward','Mean step reward (symlog; different objectives)'),
         ('entropy','Gaussian entropy before tanh'),('coverage','Disturbed samples / collected steps'),
         ('recovery','Development joint recovery fraction'),('failed','Development physical failure fraction'),
-        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL')]
+        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]'),('eval_return','Fixed development episode return'),('roll_exceed','Development roll exceed fraction'),('baseline_return','Paired baseline episode return'),('return_gain','Candidate minus baseline episode return'),('terminal_hold','Development terminal tracking hold fraction')]
 
 
 def series(rows):
@@ -22,9 +22,18 @@ def series(rows):
         out['final_kl'].append(row.get('optimizer_audit',{}).get('final_exact_kl',float('nan')))
         disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))+row.get('rear_disturbed_transitions',0)
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
-        v=row.get('validation',{});mask=np.asarray(v.get('event_present',[]),bool)
+        v=row.get('validation',{})
+        pair=row.get('paired_episode_return',{})
+        out['baseline_return'].append(float(np.mean(pair['baseline'])) if pair else float('nan'))
+        out['return_gain'].append(pair.get('mean_delta',float('nan')))
+        out['terminal_hold'].append(float(np.mean(v['terminal_tracking_hold'])) if 'terminal_tracking_hold' in v else float('nan'))
+        for key,field in [('eval_return','episode_return'),('roll_exceed','roll_exceed_fraction')]:
+            out[key].append(float(np.mean(v[field])) if field in v else float('nan'))
+        out['yaw'].append(float(np.mean(v['yaw_rmse'])) if 'yaw_rmse' in v else float('nan'));mask=np.asarray(v.get('event_present',[]),bool)
         for key,field in [('recovery','post_event_hold_complete'),('failed','failed'),('path','radial_rmse'),('speed','speed_rmse')]:
             a=np.asarray(v.get(field,[]))
+            if 'yaw_rmse' in v and key in ('failed','speed'):
+                out[key].append(float(a.mean()) if len(a) else float('nan'));continue
             out[key].append(float(a[mask].mean()) if len(a)==len(mask) and mask.any() else float('nan'))
     return out
 
@@ -41,7 +50,7 @@ def draw(entries,destination,title):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    fig,axes=plt.subplots(6,2,figsize=(15,19),layout='constrained')
+    fig,axes=plt.subplots((len(PANELS)+1)//2,2,figsize=(15,2.9*((len(PANELS)+1)//2)),layout='constrained')
     colors=plt.get_cmap('tab20')
     for i,(label,s) in enumerate(entries):
         for ax,(key,name) in zip(axes.flat,PANELS):
@@ -63,7 +72,15 @@ def draw(entries,destination,title):
 
 def plot_training(directory):
     directory=Path(directory);rows=read_metrics(directory/'metrics.jsonl');s=series(rows)
+    plot_reward_components(rows,directory/'diagnostics')
     draw([(directory.parent.name if directory.name=='training' else directory.name,s)],directory/'diagnostics','PPO training progress')
+    declaration=json.loads((directory/'declaration.json').read_text())
+    continuation=declaration.get('continuation')
+    if continuation:
+        parent=Path(continuation['checkpoint']).parents[1]
+        prior=[r for r in read_metrics(parent/'metrics.jsonl') if r['update']<=continuation['update_offset']]
+        draw([('Previous stage',series(prior)),('Continuation',s)],directory/'diagnostics/lineage','PPO continuation: same objective, reset simulation boundary')
+        (directory/'diagnostics/lineage/sources.json').write_text(json.dumps({'previous':str(parent/'metrics.jsonl'),'current':str(directory/'metrics.jsonl'),'boundary_update':continuation['update_offset']},indent=2)+'\n')
     return s
 
 
@@ -93,3 +110,26 @@ def compare_runs(root,output):
     (output/'manifest.json').write_text(json.dumps({'runs':manifest,'unavailable':errors},indent=2,allow_nan=False)+'\n')
     (output/'INDEX.md').write_text('# PPO training curves\n\nAll discovered PPO metrics, including engineering smoke runs. Different objectives/budgets are not matched experiments.\n\n'+ '\n'.join(links)+'\n\n'+ '\n'.join(f"- [{r['run']}]({r['figure']}) — {r['steps']} steps" for r in manifest)+'\n\nUnavailable: '+json.dumps(errors,ensure_ascii=False)+'\n')
     return {'runs':len(manifest),'unavailable':errors}
+
+
+def plot_reward_components(rows,destination):
+    """Logged training samples only; never substitute checkpoint evaluation data."""
+    logged=[r for r in rows if 'reward_components_mean_step' in r]
+    if not logged:return
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+    keys=sorted(logged[0]['reward_components_mean_step'])
+    x=[r['control_transitions']/1e6 for r in logged]
+    fig,axes=plt.subplots(2,1,figsize=(11,8),layout='constrained')
+    for k in keys:
+        axes[0].plot(x,[r['reward_components_mean_step'][k] for r in logged],marker='o',label=k)
+    axes[1].plot(x,[r['mean_step_reward'] for r in logged],label='logged total',marker='o')
+    axes[1].plot(x,[r['reward_components_sum_mean_step'] for r in logged],label='component sum',linestyle='--',marker='x')
+    for ax in axes:
+        ax.set_xlabel('Collected control steps [million]');ax.set_ylabel('Signed mean reward / transition');ax.set_yscale('symlog',linthresh=.005);ax.legend();ax.grid(alpha=.2)
+    fig.suptitle('Training reward components (actual stochastic rollout samples)')
+    for ext in ('png','pdf'):fig.savefig(destination/f'reward_components.{ext}',dpi=130)
+    plt.close(fig)
+    (destination/'reward_components.json').write_text(json.dumps([dict(update=r['update'],control_transitions=r['control_transitions'],total=r['mean_step_reward'],parts=r['reward_components_mean_step'],reconstruction_max_abs=r['reward_components_reconstruction_max_abs']) for r in logged],indent=2)+'\n')

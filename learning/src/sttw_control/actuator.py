@@ -10,6 +10,7 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class ActuatorConfig:
+    composition: str="additive"  # full_range: signed fraction of remaining command range
     dt: float=.005
     steer_limit: float=.8
     steer_rate_limit: float=3.
@@ -23,6 +24,8 @@ class ActuatorConfig:
 
     def __post_init__(self):
         import math
+        if self.composition not in ("additive","full_range"):
+            raise ValueError("invalid residual composition")
         positive=(self.dt,self.steer_limit,self.steer_rate_limit,self.rear_rate_limit)
         rates=(self.steer_acceleration,self.rear_acceleration)
         if any(not math.isfinite(x) or x<=0 for x in positive) or any(x is not None and (not math.isfinite(x) or x<=0) for x in rates) or self.delay_steps<0 or not isinstance(self.delay_steps,int):
@@ -47,6 +50,13 @@ def residual_target(base,action,config=ActuatorConfig()):
     # A malformed network output disables the entire residual for this tick.
     action=jp.where(jp.all(jp.isfinite(action)),jp.clip(action,-1,1),jp.zeros(2))
     base=jp.where(jp.all(jp.isfinite(base)),base,jp.zeros(2))
+    if c.composition=="full_range":
+        limits=jp.array([c.steer_rate_limit,c.rear_rate_limit])
+        baseline=jp.clip(base,-limits,limits)
+        # Zero retains baseline; +/-1 reaches either endpoint regardless of base.
+        # Position, delay, slew and mechanical force constraints still apply.
+        room=jp.where(action>=0,limits-baseline,limits+baseline)
+        return baseline+c.strength*action*room
     target=base+c.strength*jp.array([c.steer_residual_scale,c.rear_residual_scale])*action
     return target
 

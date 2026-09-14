@@ -1,0 +1,42 @@
+{
+  "horizon_seconds": 10.0,
+  "speed_reference": 2.1,
+  "eso_start": 3.0,
+  "initial_roll_range": 0.02,
+  "roll_failure": 0.7,
+  "alive_reward_rate": 1.0,
+  "failure_penalty": 100.0,
+  "observation": {
+    "history_steps": 10,
+    "include_motion": true,
+    "include_priority": true,
+    "include_attitude_risk": false
+  },
+  "priority": {
+    "risk_gate": false,
+    "validation_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ]
+  },
+  "motion_commands": {
+    "segments": 14,
+    "duration_min": 1.0,
+    "duration_max": 3.0,
+    "speed_min": 1.2,
+    "speed_max": 2.8,
+    "yaw_max": 1.4,
+    "dynamic_alpha": true,
+    "speed_scale": 0.2,
+    "yaw_scale": 0.2,
+    "roll_working_limit": 0.3,
+    "attitude_weight": 100.0,
+    "rate_weight": 1.0,
+    "tracking_scale": 0.3,
+    "tracking_priority_ratio": 10.0
+  },
+  "actuator": {
+    "composition": "full_range"
+  }
+}

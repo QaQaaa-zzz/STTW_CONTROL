@@ -1,5 +1,14 @@
 # STTW_CONTROL
 
+## 当前唯一实施入口（2026-09-14重整）
+
+- 源码已整合回主工作区learning/，新任务/训练/面板唯一默认入口为learning/configs/command_recovery.json、ppo_command_recovery.json、command_standard_panel.json；旧worktree仅保留历史溯源，新阶段使用主工作区。
+- 当前范围：保留ECBC+ESO和实际执行器，10帧条件残差；command是速度—偏航指令恢复诊断，不等同几何路径恢复，尚无任务成功证据。
+- 新配置：10秒窗口，alpha端点10:1；1024×256×8，epochs4/minibatch2048/KL.01，固定温和/急转弯开发面板，末段.5秒双误差保持，累计回报与全程误差均对照基线。新结果目录runs/command_balanced_20260914。
+- command_continuation旧配置已停止于已保存update35，不是32轮预算完成。新128步GPU全链预检已通过。
+- 历史证据和负结果见docs/METHODS_AND_RESULTS.md末尾“当前重整”，测试范围见docs/VALIDATION.md。以下日期段落是历史快照，不能把旧“运行中”或“通过”作为当前状态或任务成功。
+
+
 跨方法导航：[方法与结果总表](docs/METHODS_AND_RESULTS.md)。当前最新完整分析为2026-09-14五臂实验，见VALIDATION末节；下方旧日期结论为历史快照。
 
 ## 当前结论与入口（2026-09-12）

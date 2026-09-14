@@ -42,6 +42,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         if priority_alpha is not None:state=env.set_priority(state,priority_alpha)
         event=np.asarray(state.event).tolist()
         (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_disturbance_mode':env.config.rear_disturbance_mode,'rear_load_torque_nm':event[5] if env.config.rear_disturbance_mode=='torque' else 0.,'rear_command_bias_rad_s':-event[5] if env.config.rear_disturbance_mode=='command' else 0.,'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
+        if env.config.motion_commands is not None:
+            (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s','scheduled_alpha'],'schedule':np.asarray(state.command_schedule).tolist(),'reward_alignment':'transition i uses raw command and alpha at row i-1; yaw_rate is mean world heading rate over the control interval'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -68,7 +70,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
-                    'motion_command':np.asarray(recorded_command(s.tick,s.pose)),
+                    'motion_command':np.asarray(recorded_command(s.tick,s.pose,s.command_schedule)),
+                    'user_command':np.asarray(env.requested(s.tick,s.command_schedule)[:2]) if env.config.motion_commands is not None else np.asarray([0.,0.]),'yaw_rate_world':float(s.yaw_rate),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}

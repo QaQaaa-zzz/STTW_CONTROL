@@ -55,3 +55,27 @@ def test_identity_includes_meshes_not_only_xml():
     a=make_policy_identity({'source_xml_sha256':'same','assets':{'wheel':'one'}},{},1)
     b=make_policy_identity({'source_xml_sha256':'same','assets':{'wheel':'two'}},{},1)
     assert a!=b
+
+@pytest.mark.parametrize('base', [[4.,27.],[-4.,-27.],[0.,0.],[8.,80.]])
+def test_full_range_residual_can_reverse_baseline_and_preserves_zero(base):
+    c=ActuatorConfig(composition='full_range')
+    def output(a,cfg=c,steer=0.):
+        return apply_residual(initial_actuator(cfg),jnp.array(base),jnp.array(a),steer,cfg)[1]
+    np.testing.assert_allclose(output([0.,0.]),output([0.,0.],ActuatorConfig()))
+    np.testing.assert_allclose(output([-1.,-1.]),[-3.,-60.])
+    np.testing.assert_allclose(output([1.,1.]),[3.,60.])
+    np.testing.assert_allclose(output([float('nan'),1.]),output([0.,0.]))
+    assert output([1.,1.],steer=.8)[0]<=0
+    # Small inward requests must act immediately even with oversized base.
+    if base[0]>=4:
+        assert output([-.01,0.])[0]<3.
+
+
+def test_composition_identity_keeps_legacy_and_binds_new_actions():
+    from dataclasses import asdict
+    from sttw_control.network import make_policy_identity
+    c=asdict(ActuatorConfig());old=dict(c);old.pop('composition',None)
+    identity=lambda a:make_policy_identity({}, {'actuator':a},1)
+    assert identity(c)==identity(old)
+    c['composition']='full_range'
+    assert identity(c)!=identity(old)
