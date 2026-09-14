@@ -16,6 +16,37 @@ def reconstruct(path):
     if not np.allclose(prediction,tr['reward'][1:],rtol=3e-5,atol=3e-5):raise ValueError(f'command reward reconstruction mismatch {path}: {err}')
     return dict(trace=tr,speed=v,speed_error=ev,yaw_error=ey,parts=parts,rewards=rewards,reconstruction_error=err,config=c)
 
+def plot_step_rewards(destination, baseline, residual, schedule, title):
+    import matplotlib.pyplot as plt
+    destination=Path(destination)
+    fig,axes=plt.subplots(2,2,figsize=(15,10),layout='constrained')
+    arrays={}
+    for data,label,ax in [(baseline,'baseline',axes[1,0]),(residual,'residual',axes[1,1])]:
+        tr=data['trace'];steps=np.arange(1,len(tr['time']));reward=tr['reward'][1:]
+        arrays[label+'_steps']=steps;arrays[label+'_time']=tr['time'][1:];arrays[label+'_total']=reward
+        axes[0,0].plot(steps,reward,label=label)
+        axes[0,1].plot(steps,np.cumsum(reward),label=label)
+        for key,value in data['rewards'].items():
+            ax.plot(steps,value,label=key);arrays[label+'_'+key]=value
+        if tr['terminated'][-1]:
+            axes[0,0].plot(steps[-1],reward[-1],'x',ms=10)
+            axes[0,1].plot(steps[-1],np.sum(reward),'x',ms=10)
+            ax.axvline(steps[-1],color='red',ls=':',label='Failure endpoint')
+        ax.set_title(label+' signed components per control step')
+    axes[0,0].set_title('Actual total reward per control step (not cumulative)')
+    axes[0,1].set_title('Cumulative return; failed episodes end at failure')
+    dt=residual['config']['controller']['dt']
+    for ax in axes.flat:
+        ax.set_xlabel('Control step');ax.set_ylabel('Reward');ax.grid(alpha=.2);ax.legend(fontsize=8)
+        ax.set_yscale('symlog',linthresh=.001)
+        for i,row in enumerate(schedule[1:]):
+            end=schedule[i+2][0] if i+2<len(schedule) else residual['config']['horizon_seconds']
+            ax.axvspan(row[0]/dt,end/dt,color='gray',alpha=.06 if i%2 else .13)
+    fig.suptitle(title+'\nSigned rewards reconstructed and checked against trace; shading: command intervals. Symlog y-axis.')
+    for ext in ('png','pdf'):fig.savefig(destination/f'reward_vs_steps.{ext}',dpi=140)
+    plt.close(fig)
+    np.savez_compressed(destination/'reward_steps.npz',**arrays)
+
 def generate(root):
     import matplotlib
     matplotlib.use('Agg')
@@ -44,6 +75,7 @@ def generate(root):
             axes[2,1].set_xticks([0,1],['Baseline','Residual'])
             titles=['Speed error vs original command [m/s]','Yaw-rate error vs original command [rad/s]','Actual roll [deg]','Penalty components [reward/s]','Signed component returns','Mean penalties over common surviving window']
             schedule=json.loads((case/'residual/commands.json').read_text())['schedule']
+            plot_step_rewards(dest,b,x,schedule,f'{case.name} | alpha={tr["priority_alpha"][0]:g} | {panel.name}')
             for ax,title in zip(axes.flat,titles):
                 ax.set_title(title);ax.grid(alpha=.2);ax.legend(fontsize=8)
             for ax in list(axes.flat)[:5]:
@@ -80,7 +112,15 @@ def generate(root):
             np.savez_compressed(dest/'components.npz',time=tt,speed_error=x['speed_error'],yaw_error=x['yaw_error'],**{k:v for k,v in x['rewards'].items()})
             for data,label in [(b,'baseline'),(x,'residual')]:
                 z=data['trace'];rows.append(dict(case=case.name,alpha=float(z['priority_alpha'][0]),seed=panel.name,policy=label,failed=bool(z['terminated'][-1]),observed_seconds=float(z['time'][-1]),speed_rmse=float(np.sqrt(np.mean(data['speed_error']**2))),yaw_rmse=float(np.sqrt(np.mean(data['yaw_error']**2))),roll_peak=float(abs(z['measurement'][:,0]).max()),reward_reconstruction_error=data['reconstruction_error']))
-            links.append(f'- [{case.name} {panel.parent.name} {panel.name}]({dest.relative_to(out)}/reward_and_errors.png) · [speed/yaw/XY]({dest.relative_to(out)}/speed_yaw_trajectory.png)')
+            links.append(f'- [{case.name} {panel.parent.name} {panel.name}]({dest.relative_to(out)}/reward_and_errors.png) · [reward vs steps]({dest.relative_to(out)}/reward_vs_steps.png) · [speed/yaw/XY]({dest.relative_to(out)}/speed_yaw_trajectory.png)')
     (out/'summary.json').write_text(json.dumps(rows,indent=2)+'\n')
     (out/'INDEX.md').write_text('# Command tracking diagnostics\n\nAll errors refer to original requests. Observed-window RMSE of failed runs is not a full-task ranking. Shading denotes command intervals, not an external load.\n\n'+'\n'.join(links)+'\n')
+    with (out/'INDEX.md').open('a') as f:
+        if (out/'trajectory_comparison/INDEX.md').exists():f.write('\n- [Trajectory comparison](trajectory_comparison/INDEX.md)\n')
+        media=out/'media_selection.json'
+        if media.exists():
+            for item in json.loads(media.read_text())['selected']:
+                for label in ('baseline','residual'):
+                    path=Path(item['directory'])/label/'media/replay.mp4'
+                    if path.exists():f.write(f"- [{item['case']} alpha={item['alpha']} {label} video]({path})\n")
     return rows
