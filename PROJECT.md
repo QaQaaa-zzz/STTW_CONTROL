@@ -289,3 +289,5 @@ command任务新增reward_components_mean_step：alive、attitude、roll_rate、
 资源决策更新：已有历史逐项同步耗时足够支持1024短反馈试验，不另运行1024/8192零残差benchmark，不消耗该预备预算；实际吞吐从新8轮前两轮metrics取。只运行128步GPU PPO全链预检后启动正式8轮。
 
 新10:1奖励GPU全链预检complete：2×4×16=128训练步，6开发回合正确返回末段保持/完整误差，累计奖励差入日志；最终3alpha×配对基线共6条.25秒CPU回合，3组每步奖励PNG/PDF/NPZ和配对累计奖励JSON均完成。48项核心CPU测试通过；此为工程验证，非性能结论。
+
+新有界8轮已启动：runs/command_balanced_20260914/status.json=training，训练pipeline PID1360655、监视PID1360657，报错/完成弹窗监视monitoring、0异常。主工作区合并提交f5477b2，85项相关CPU行为测试通过，GPU预检声明的全部训练源码SHA与主工作区逐个一致。当前初始化中，无新性能结论。旧12秒best28完整12对累计回报表和每步图已补齐，见其analysis/INDEX.md及paired_rewards.json。
