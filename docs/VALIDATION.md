@@ -1066,3 +1066,6 @@ launch.json需包含流水线主进程pid；应监视流水线根状态而不是
 新增日志功能位于隔离工作树runs/worktrees/reward-logging、分支feat/reward-component-logging、提交585e684。当前正在运行的command_convergence代码不修改、不重启，已经发生但未保存的训练采样分项无法补回，不能拿评估分项冒充训练统计。后续启动需使用新日志实现。
 
 command任务新增reward_components_mean_step：alive、attitude、roll_rate、speed、yaw、action、failure，均为含alpha/控制周期的有符号每采样步贡献；失败替换其他项。每轮同时记录分项和及重建绝对/缩放误差；GPU内部先归约，不保存全量环境轨迹。diagnostics/reward_components.png/pdf/json展示分项和总奖励核对。14项CPU相关测试通过；64训练步GPU预检输出runs/reward_logging_20260914_smoke，状态以实际产物为准。旧checkpoint评估奖励图仍独立标记为评估，不修改旧原始日志。
+
+
+奖励日志GPU预检已complete：64训练步，七分项和与总奖励逐样本最大绝对差3.7253e-9，PNG/PDF/JSON生成，14项CPU相关测试通过；单点图标记另经2项绘图测试验证。实现与验证提交585e684/2eb7b30（feat/reward-component-logging）。当前正式训练保持原进程，不声称其既有日志已补齐分项。
