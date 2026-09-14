@@ -941,3 +941,9 @@ CPU行为验证37 passed（16项奖励/优先级/新增后轮接口，21项环�
 用exp3_rear_load_1024的alpha=.5、seed47001、update64原始30s配对记录导出analysis/load_demonstration：comparison.mp4左右基线/残差、trajectory.png/pdf完整与弯道放大、comparison.png/pdf状态对照。视频文字标出目标2.1m/s和8–11s后轮2Nm，并在负载期显示红色提示；轨迹圆点8s、方点11s、粗线为受载段。不是最佳策略或性能挑选，不新增物理仿真。ffprobe完整解码601帧、20fps、2560×720；源trace与视频hash保存在manifest.json。
 
 并排状态图原函数只处理圆路径，此次发现后原位补齐bend/figure-eight参考与误差分支及后轮负载阴影；真实弯道图生成检查通过，media/panel_media回归9 passed，diff检查通过。该调用修复不改变训练/物理。展示入口为runs/environment_comparison_20260914/exp3_rear_load_1024/analysis/load_demonstration/INDEX.md。
+
+## KL单因素对照与反向后轮负载（2026-09-14）
+
+用户指出8192使用KL停止、1024未使用，不能归因环境数。本轮kl_matched_load_20260914仅在既有exp3_rear_load_1024上将target_kl从null改.01；任务、奖励、seed63、1024×256×64、epochs4、minibatch2048、无预热均不变。预算16777216训练步，开发最多216000步，末次24条评估最多144000步；64更新结束或执行/非有限错误停止，不自动续训。训练仍随机正负载，标准面板保留旧名义/+2Nm/侧力并加-2Nm。与旧1024的公共面板才是KL单因素比较，与8192仍有其他超参数差异。
+
+另用已有8192 update8评估rear_assist_20260914：alpha0/.5/1、seed47001、名义与后轮-2Nm持续8–11s、两控制器，12回合最多72000步。负力矩帮助原始负轮速方向加速，目标仍2.1m/s，伺服/能力不改；此为未训练助推扰动诊断，不预设必然形成速度/路径冲突。姿态、路径、速度耦合，生存优先是任务目标，当前加权奖励并非严格优先保证。新增相对自身名义的额外升速、超速积分和绝对速度差积分，保留掉速指标及所有奖励/配对速度图。准备检查已通过，运行状态以各status.json为准。

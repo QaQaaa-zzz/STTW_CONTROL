@@ -33,7 +33,7 @@ class TaskConfig:
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
     bend: BendConfig | None=None
-    rear_disturbance_mode: str="torque"  # event[5]: Nm in torque mode, rad/s deceleration in command mode
+    rear_disturbance_mode: str="torque"  # event[5]: signed Nm or signed rad/s bias magnitude; positive opposes forward motion
     disturbance_rear_torque: float=0.
     circle: CircleConfig | None=None
     figure_eight: FigureEightConfig | None=None
@@ -84,7 +84,7 @@ class TaskConfig:
         if any(not math.isfinite(x) or x<0 for x in (self.path_error_weight,self.heading_error_weight,self.speed_error_weight,self.path_excess_weight)):
             raise ValueError("invalid reward weights")
         if self.rear_disturbance_mode not in ('torque','command'):raise ValueError('invalid rear disturbance mode')
-        if not math.isfinite(self.disturbance_rear_torque) or self.disturbance_rear_torque<0:raise ValueError('rear disturbance amplitude must be finite and nonnegative in declared mode units')
+        if not math.isfinite(self.disturbance_rear_torque):raise ValueError('rear disturbance amplitude must be finite in declared mode units')
         if self.bend is not None and self.bend.max_steer>self.actuator.steer_limit:raise ValueError('bend steering exceeds actuator limit')
         if sum(x is not None for x in (self.circle,self.figure_eight,self.bend))>1:
             raise ValueError('choose one reference path')
