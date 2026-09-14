@@ -19,6 +19,7 @@ import numpy as np
 import optax
 from .env import RecoveryEnv, load_config
 from .validation import make_validator
+from .motion_commands import signed_reward_components
 from .selection import rank_candidate, rank_command_candidate, command_improved, command_should_stop
 from .network import ResidualActor, make_policy_identity, save_policy
 from .runtime import configure_compilation_cache
@@ -209,6 +210,16 @@ def train(task_path,output,config=TrainingConfig()):
             nxt=step(state,jp.tanh(z))
             _,nv=outputs(p,nxt.obs)
             row=(state.obs,z,gaussian_log_prob(z,mu,logstd),value,nxt.reward,nv,nxt.terminated,nxt.done,jp.stack([(state.event[:,2]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,3]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]),(state.event[:,5]!=0)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1])],axis=-1))
+            if env.config.motion_commands is not None:
+                cfg=env.config
+                raw=jax.vmap(env.requested)(state.tick,state.command_schedule)
+                speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
+                parts=jax.vmap(lambda roll,rate,ev,ey,action,alpha,failed:signed_reward_components(roll,rate,ev,ey,action,alpha,cfg.motion_commands,cfg.controller.dt,cfg.alive_reward_rate,cfg.failure_penalty,failed))(nxt.measurement[:,0],nxt.measurement[:,1],speed-raw[:,0],nxt.yaw_rate-raw[:,1],jp.tanh(z),state.priority_alpha,nxt.terminated)
+                # Aggregate on-device before scan storage: no per-environment log transfer.
+                audit={k:jp.mean(v) for k,v in parts.items()}
+                audit['reconstruction_max_abs']=jp.max(jp.abs(sum(parts.values())-nxt.reward))
+                audit['reconstruction_max_scaled']=jp.max(jp.abs(sum(parts.values())-nxt.reward)/(1+jp.abs(nxt.reward)))
+                row=row+(audit,)
             def restart(s):
                 fresh=reset(jax.random.split(reset_key,c.num_envs))
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
@@ -333,6 +344,17 @@ def train(task_path,output,config=TrainingConfig()):
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if c.target_kl is not None:
             record['optimizer_audit']={'attempted_minibatches':int(host[4]),'accepted_minibatches':int(host[5]),'final_exact_kl':float(host[6]),'full_update_rolled_back':bool(host[7]),'target_kl':c.target_kl}
+        if env.config.motion_commands is not None:
+            component_means={k:float(jp.mean(v)) for k,v in rows[9].items() if not k.startswith('reconstruction_')}
+            error=float(jp.max(rows[9]['reconstruction_max_abs']))
+            scaled_error=float(jp.max(rows[9]['reconstruction_max_scaled']))
+            record['reward_components_reconstruction_max_scaled']=scaled_error
+            record['reward_components_mean_step']=component_means
+            record['reward_components_sum_mean_step']=sum(component_means.values())
+            record['reward_components_reconstruction_max_abs']=error
+            record['reward_components_units']='signed reward per sampled control transition; terminal reward replaces other terms'
+            if not all(math.isfinite(v) for v in component_means.values()) or not math.isfinite(error) or not math.isfinite(scaled_error) or scaled_error>3e-5:
+                raise RuntimeError(f'Reward component reconstruction mismatch: {error}')
         checkpoint_start=time.monotonic()
         path=checkpoint(index,params,opt_state,key,None)
         record['checkpoint_seconds']=time.monotonic()-checkpoint_start

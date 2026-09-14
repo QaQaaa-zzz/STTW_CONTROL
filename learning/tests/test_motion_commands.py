@@ -78,3 +78,16 @@ def test_full_range_zero_preserves_physics_and_records_new_reward(tmp_path):
         np.testing.assert_allclose(s.data.qpos,b.data.qpos,atol=1e-10)
     evaluate(e,tmp_path/'trace',seed=4)
     assert reconstruct(tmp_path/'trace')['reconstruction_error']<3e-5
+
+
+def test_signed_reward_components_match_reward_and_replace_failure():
+    from sttw_control.motion_commands import signed_reward_components
+    c=MotionCommands()
+    action=jnp.array([.2,-.3])
+    costs=reward_terms(.4,.3,.2,-.1,action,.7,c)
+    parts=signed_reward_components(.4,.3,.2,-.1,action,.7,c,.005,1.,100.,False)
+    np.testing.assert_allclose(sum(parts.values()),.005*(1-sum(costs.values())),atol=1e-7)
+    failed=signed_reward_components(.4,.3,.2,-.1,action,.7,c,.005,1.,100.,True)
+    assert failed['failure']==-100
+    assert all(float(v)==0 for k,v in failed.items() if k!='failure')
+    assert parts['alive']>0 and parts['speed']<0 and parts['yaw']<0

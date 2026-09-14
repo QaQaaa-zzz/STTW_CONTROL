@@ -52,3 +52,12 @@ def reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c):
                 speed=c.tracking_scale*10.**(2*alpha-1)*(speed_error/c.speed_scale)**2,
                 yaw=c.tracking_scale*10.**(1-2*alpha)*(yaw_error/c.yaw_scale)**2,
                 action=.01*jp.sum(action**2))
+
+
+def signed_reward_components(roll,rate,speed_error,yaw_error,action,alpha,c,dt,alive_rate,failure_penalty,failed):
+    """Signed per-transition terms, including terminal replacement, for logging."""
+    costs=reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c)
+    parts={k:jp.where(failed,0.,-dt*v) for k,v in costs.items()}
+    parts['alive']=jp.where(failed,0.,dt*alive_rate)
+    parts['failure']=jp.where(failed,-failure_penalty,0.)
+    return parts

@@ -68,6 +68,7 @@ def draw(entries,destination,title):
 
 def plot_training(directory):
     directory=Path(directory);rows=read_metrics(directory/'metrics.jsonl');s=series(rows)
+    plot_reward_components(rows,directory/'diagnostics')
     draw([(directory.parent.name if directory.name=='training' else directory.name,s)],directory/'diagnostics','PPO training progress')
     return s
 
@@ -98,3 +99,26 @@ def compare_runs(root,output):
     (output/'manifest.json').write_text(json.dumps({'runs':manifest,'unavailable':errors},indent=2,allow_nan=False)+'\n')
     (output/'INDEX.md').write_text('# PPO training curves\n\nAll discovered PPO metrics, including engineering smoke runs. Different objectives/budgets are not matched experiments.\n\n'+ '\n'.join(links)+'\n\n'+ '\n'.join(f"- [{r['run']}]({r['figure']}) — {r['steps']} steps" for r in manifest)+'\n\nUnavailable: '+json.dumps(errors,ensure_ascii=False)+'\n')
     return {'runs':len(manifest),'unavailable':errors}
+
+
+def plot_reward_components(rows,destination):
+    """Logged training samples only; never substitute checkpoint evaluation data."""
+    logged=[r for r in rows if 'reward_components_mean_step' in r]
+    if not logged:return
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+    keys=sorted(logged[0]['reward_components_mean_step'])
+    x=[r['control_transitions']/1e6 for r in logged]
+    fig,axes=plt.subplots(2,1,figsize=(11,8),layout='constrained')
+    for k in keys:
+        axes[0].plot(x,[r['reward_components_mean_step'][k] for r in logged],marker='o',label=k)
+    axes[1].plot(x,[r['mean_step_reward'] for r in logged],label='logged total',marker='o')
+    axes[1].plot(x,[r['reward_components_sum_mean_step'] for r in logged],label='component sum',linestyle='--')
+    for ax in axes:
+        ax.set_xlabel('Collected control steps [million]');ax.set_ylabel('Signed mean reward / transition');ax.set_yscale('symlog',linthresh=.005);ax.legend();ax.grid(alpha=.2)
+    fig.suptitle('Training reward components (actual stochastic rollout samples)')
+    for ext in ('png','pdf'):fig.savefig(destination/f'reward_components.{ext}',dpi=130)
+    plt.close(fig)
+    (destination/'reward_components.json').write_text(json.dumps([dict(update=r['update'],control_transitions=r['control_transitions'],total=r['mean_step_reward'],parts=r['reward_components_mean_step'],reconstruction_max_abs=r['reward_components_reconstruction_max_abs']) for r in logged],indent=2)+'\n')
