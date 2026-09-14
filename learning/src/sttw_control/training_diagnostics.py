@@ -115,7 +115,7 @@ def plot_reward_components(rows,destination):
     for k in keys:
         axes[0].plot(x,[r['reward_components_mean_step'][k] for r in logged],marker='o',label=k)
     axes[1].plot(x,[r['mean_step_reward'] for r in logged],label='logged total',marker='o')
-    axes[1].plot(x,[r['reward_components_sum_mean_step'] for r in logged],label='component sum',linestyle='--')
+    axes[1].plot(x,[r['reward_components_sum_mean_step'] for r in logged],label='component sum',linestyle='--',marker='x')
     for ax in axes:
         ax.set_xlabel('Collected control steps [million]');ax.set_ylabel('Signed mean reward / transition');ax.set_yscale('symlog',linthresh=.005);ax.legend();ax.grid(alpha=.2)
     fig.suptitle('Training reward components (actual stochastic rollout samples)')

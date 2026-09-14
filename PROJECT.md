@@ -230,3 +230,6 @@ GPU全流程预检已complete：实际2轮/128训练步后按工程patience停�
 用户要求训练过程记录奖励组成。新功能在独立feat/reward-component-logging工作树实现，不改变正在运行command_convergence训练源码。command任务每个采样控制步按实际随机动作、旧时刻alpha/请求和后继状态重建有符号奖励，失败步只保留failure替换；GPU上先对环境维求均值，只存每tick七分项，不复制完整轨迹。每轮metrics.jsonl/training.log新增reward_components_mean_step（alive/attitude/roll_rate/speed/yaw/action/failure）、分项和、重建绝对/缩放误差及单位说明；缩放误差超过3e-5或非有限停止，保持奖励和优化行为不变。输出diagnostics/reward_components.png/pdf/json，使用训练随机采样统计，不把固定checkpoint评估混入。
 
 当前已运行轮次没有保存逐步训练状态，不能补造训练分项。新功能供后续启动训练使用；原运行仍正常输出总奖励，标准评估仍有独立奖励分项。CPU测试通过后GPU工程预检最多4×16×1=64训练步、无预热、.25s固定序列开发评估，输出主工作区runs/reward_logging_20260914_smoke；只验证日志恒等式和PPO接口，不作性能证据。
+
+
+GPU奖励日志预检complete（64训练步）：mean_step_reward=-.002786817029，分项和=-.002786816895，逐样本最大绝对重建误差3.7253e-9；PNG/PDF/JSON实际生成并核看。14项CPU相关测试通过。该工程结果不代表正式训练性能；新日志不进入已运行的旧进程。
