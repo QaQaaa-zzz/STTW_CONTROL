@@ -190,3 +190,6 @@ command_recovery_20260914已complete，代码仍在feat/command-recovery隔离�
 ## 2026-09-14 full_range重训执行
 
 用户批准按上一轮训练。冻结配置runs/command_full_range_20260914_inputs；8192环境×256步×8更新=16777216控制步，seed64、epochs2、minibatch8192、KL.01，256×2400预热计算步。训练JSON和四标准测试面板与旧轮逐项相同，任务仅改变9度阈值/full_range。先执行command_full_range_20260914_smoke（64训练步、128预热计算步、.25s指令切换全链路），成功后正式command_full_range_20260914从头训练和自动三alpha配对评估/奖励组成/速度图/视频。只开发对照，不称holdout；非有限或执行错误停止，8更新后不自动续训，无45分钟硬上限。代码在runs/worktrees/command-recovery，声明提交f68f810；实时进度查看各运行status.json，本文不替代实时状态。
+
+
+2026-09-14 full_range训练和24条评估均complete，结果见VALIDATION/METHODS_AND_RESULTS最新段。开发seed46001三alpha均存活12s，但标准急转弯仅从4.895s延后到9.125–9.465s失败，普通场景通过减速降低姿态且速度/yaw误差均劣于基线；不声称总体提升。不原样续训，优先离线检查回正失稳及动作增益/探索对照。本次仅分析，未启动新训练。
