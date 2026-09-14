@@ -265,17 +265,23 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     for field in ('qpos','qvel'):
         if not np.array_equal(traces[0][field][0],traces[1][field][0]):
             raise ValueError('comparison initial state mismatch')
-    c=declarations[0]['config'];circle=CircleConfig(**c['circle'])
+    c=declarations[0]['config'];circle=CircleConfig(**c['circle']) if c.get('circle') else None
     summaries=[json.loads((p/'summary.json').read_text()) for p in (baseline,candidate)]
     output.mkdir(parents=True,exist_ok=True)
     fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained')
-    ref=circle_reference(circle)
+    if c.get('bend'):
+        from .path import BendConfig,bend_table,bend_trace_features
+        bend=BendConfig(**c['bend']);ref=bend_table(bend)[:,1:3]
+    elif c.get('figure_eight'):ref=eight_reference(FigureEightConfig(**c['figure_eight']))
+    else:ref=circle_reference(circle)
     axes[0,0].plot(ref[:,0],ref[:,1],'k:',label='Reference')
     for trace,label,color,ls,summary in zip(traces,['ECBC + ESO',candidate_label],['#24567a','#b45f24'],['-','--'],summaries):
         t=trace['time'];s=state_series(trace,c)
         xy=trace['qpos'][:,:2]
-        radial=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
-        rmse=summary['circle_tracking']['radial_rmse_m']
+        if c.get('bend'):radial=bend_trace_features(trace['pose'],bend)[:,0]
+        elif c.get('figure_eight'):radial=eight_trace_features(trace['pose'],FigureEightConfig(**c['figure_eight']))[:,0]
+        else:radial=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
+        rmse=float(np.sqrt(np.mean(radial**2)))
         axes[0,0].plot(*xy.T,color=color,ls=ls,label=f'{"Baseline" if label=="ECBC + ESO" else "Residual"}: RMSE {rmse:.4f} m')
         for ax,y in zip([axes[0,1],axes[0,2],axes[1,0],axes[1,1],axes[1,2]],
                         [radial,np.rad2deg(trace['measurement'][:,0]),s['speed'],trace['command'][:,0],trace['command'][:,1]]):
@@ -284,11 +290,11 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
                 ax.axvline(t[-1],color=color,ls=':',lw=1)
                 ax.annotate(f'TERMINATED {t[-1]:.2f}s',xy=(t[-1],y[-1]),fontsize=7,color=color)
     axes[0,0].set(xlabel='World X (m)',ylabel='World Y (m)',title='Reference and recorded trajectories',aspect='equal')
-    for ax,title,ylabel in zip(axes.flat[1:],['Signed radial error','Roll angle (left positive)','True longitudinal speed','Applied steering-rate command','Applied rear-wheel-rate command'],['m','deg','m/s','rad/s','rad/s']):
+    for ax,title,ylabel in zip(axes.flat[1:],['Signed path error','Roll angle (left positive)','True longitudinal speed','Applied steering-rate command','Applied rear-wheel-rate command'],['m','deg','m/s','rad/s','rad/s']):
         ax.set(title=title,xlabel='Time (s)',ylabel=ylabel)
     axes[0,1].axhline(0,color='black',lw=.7)
     axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
-    if c.get('disturbance_force',0.) or c.get('disturbance_steer_rate',0.):
+    if c.get('disturbance_force',0.) or c.get('disturbance_steer_rate',0.) or c.get('disturbance_rear_torque',0.):
         for ax in axes.flat[1:]:
             ax.axvspan(c['disturbance_start'],c['disturbance_start']+c['disturbance_duration'],color='gray',alpha=.2)
     for ax in axes.flat: ax.grid(alpha=.2)
