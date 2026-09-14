@@ -220,3 +220,6 @@ command_selection显式开启：按失败数、初始直行窗口速度或yaw较
 旧command_full_range的update1–8按旧9度冻结配置审计，用开发seed46001/三alpha，24个策略回合+3个共享基线≤64800步，不训练、不使用标准测试挑模型。输出runs/command_checkpoint_review_20260914，每checkpoint奖励/误差/速度图与总索引；属于事后开发审计。
 
 工程预检command_convergence_20260914_smoke：4环境×16步×最多3更新=192步，128预热计算步，.25s窗口；patience1/minupdates2/mindelta1e9仅用于验证早停/选模链路，正式参数不变。执行错误/非有限停止，通过后启动主训练。CPU相关17项测试通过；未把预检当性能证据。
+
+
+GPU全流程预检已complete：实际2轮/128训练步后按工程patience停止，last=update2、best=update1，后续CPU评估确实加载update1，六条配对评估与奖励/速度图及视频全部完成。早停状态complete且stop_reason=development_patience，证实选择/停止/评估链路，非性能证据。正式32轮上限训练现在启动；旧checkpoint审计独立运行，实时状态见各输出目录。
