@@ -96,3 +96,12 @@
 机制：保留ECBC/ESO，独立v/yaw-rate请求随机变化（1.2–2.8m/s、±1.4rad/s、1–3s），alpha分段随机、10帧190维条件下层；侧倾软工作范围.3rad、原失败阈值.7rad，速度/yaw均按原始请求计分，非路径跟踪任务。8192环境、KL.01、8更新16777216步、训练seed64，末次update8。代码1d58cfa在feat/command-recovery；上层自动alpha未实现。
 
 结果：四场景×三alpha×两控制器24条，初态seed47001。基线和残差各3/12失败（基线只有四个独立场景，alpha副本不独立），急转弯由4.895s失衡变为5.015/5.010/4.995s，均未救回；其余场景速度误差更大，yaw至多约1.3%改善。三个可完成场景α1同时降低速度/yaw误差，未建立两目标相反取舍。最大近似KL.000970，无限制触发或回退；开发生存略退化，不能认定收敛。8视频/24奖励复核完整，最大重建误差1.69e-5。停止原样扩训，建议先有界残差/简单指令平滑可恢复性对照，再决定上层alpha。 [分析与全部图视频](../runs/command_recovery_20260914/analysis/INDEX.md) · [复核数据](../runs/command_recovery_20260914/analysis/review_evidence.json)。
+
+
+## 2026-09-14：9度姿态阈值与完整指令范围残差
+
+用户授权的代码修改已在现有隔离分支feat/command-recovery提交17f6dee，源码目录runs/worktrees/command-recovery，当前配置为该目录learning/configs/command_recovery.json。主工作区旧训练源码未混入新动作语义。新配置超过9度(0.15707963267948966rad)开始100倍平方越界惩罚，其余奖励不改；0.7rad失败阈值及物理能力不改。
+
+新增full_range指令叠加：先把基础输出截入[-L,L]得到b，a>=0时u=b+a*(L-b)，a<0时u=b+a*(L+b)，当前strength=1。前轮L=3rad/s、后轮L=60rad/s；网络0保留基线，正负端点可覆盖甚至反转基础输出；仍受转向位置/伺服力矩等约束。full_range不使用旧固定残差尺度，并绑定新checkpoint身份；旧additive默认行为与身份保留。没有动力学分配或执行器扩容。
+
+相关测试54项通过，新增新配置CPU零残差物理回归与奖励重建后motion_commands文件7项通过，共55项不同测试；仅CPU工程验证。本次未重训，不能复用旧checkpoint宣称新机制有效。后续需要冻结新配置从头训练，并保留同场景基线/奖励组成/速度与偏航误差图。

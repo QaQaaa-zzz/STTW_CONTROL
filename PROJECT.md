@@ -176,3 +176,12 @@ Actor和Critic独立200→256→128网络，LeakyReLU(.01)，Actor两高斯均�
 ## 2026-09-14 独立指令任务完成结论
 
 command_recovery_20260914已complete，代码仍在feat/command-recovery隔离工作区（1d58cfa），本轮只分析不改运行/训练。独立速度/yaw-rate随机请求、10帧动态alpha条件下层、8192×256×8，seed64；自动alpha上层尚未训练。24标准评估基线/残差均3/12失败，均为急转弯；其余三场景均完成但网络速度误差更大。急转弯仅延迟失衡.10–.12s，不能称恢复成功。KL未触发限制、无回退，开发生存时间略退化，未建立不同状态下优先级选择的必要性。下一步建议先短预算可恢复性与简单指令平滑对照，再决定安全目标及固定/动态alpha训练；本次未启动任何新仿真。详见docs/VALIDATION.md末节与runs/command_recovery_20260914/analysis/INDEX.md。
+
+
+## 2026-09-14：9度姿态阈值与完整指令范围残差
+
+用户授权的代码修改已在现有隔离分支feat/command-recovery提交17f6dee，源码目录runs/worktrees/command-recovery，当前配置为该目录learning/configs/command_recovery.json。主工作区旧训练源码未混入新动作语义。新配置超过9度(0.15707963267948966rad)开始100倍平方越界惩罚，其余奖励不改；0.7rad失败阈值及物理能力不改。
+
+新增full_range指令叠加：先把基础输出截入[-L,L]得到b，a>=0时u=b+a*(L-b)，a<0时u=b+a*(L+b)，当前strength=1。前轮L=3rad/s、后轮L=60rad/s；网络0保留基线，正负端点可覆盖甚至反转基础输出；仍受转向位置/伺服力矩等约束。full_range不使用旧固定残差尺度，并绑定新checkpoint身份；旧additive默认行为与身份保留。没有动力学分配或执行器扩容。
+
+相关测试54项通过，新增新配置CPU零残差物理回归与奖励重建后motion_commands文件7项通过，共55项不同测试；仅CPU工程验证。本次未重训，不能复用旧checkpoint宣称新机制有效。后续需要冻结新配置从头训练，并保留同场景基线/奖励组成/速度与偏航误差图。
