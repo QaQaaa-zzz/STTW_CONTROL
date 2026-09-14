@@ -314,3 +314,6 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 用户取消第2/3/8轮对比，审计进程已停止，部分审计不作结论。当前8轮没有达到任务要求，但不能由8轮推断最终能否学会，先前“未收敛”等表述应理解为没有足够收敛证据，不是已证明训练无效。
 
 立即从command_balanced update8恢复参数、Adam和PPO RNG，续92轮至累计100，输出runs/command_balanced_100_20260914。奖励/1024环境/256步/epochs4/minibatch2048/LR3e-4/KL.01/10秒episode/动态alpha均保持原冻结配置；新增24117248交互，累计26214400。仿真闭环重新初始化与同配置预热，不是无缝物理续跑。command_selection=False、validation_final_only=True、command_patience=0、plot_interval=4，每轮保存模型和日志，每4轮刷新奖励/损失/KL及前8轮叠加图；不做中间策略性能比较，不提前停止（程序错误/非有限保护仍生效）。初始化仅固定基线验证，跳过初始策略/旧best比较，第100轮末做固定开发与标准面板评估，使用last100，不能称其为全程最优。继续训练结束与全部评估结束分别弹窗。无自动第101轮。
+
+
+累计100轮续训已实际启动：runs/command_balanced_100_20260914/status.json=training，pipeline PID1458325、watchdog PID1458327，启动源码960ba55。日志已进入MJX reset编译；这是启动证据，尚无第9轮及以后性能结果。监视器分别覆盖训练完成、整个评估完成和运行错误；不继续第2/3/8轮审计。
