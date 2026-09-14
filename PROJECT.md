@@ -229,3 +229,10 @@ launch.json需包含流水线主进程pid；应监视流水线根状态而不是
 
 
 2026-09-14用户追加正常完成弹窗：监视器在流水线根状态complete后显示“STTW 仿真完成”信息窗口，记录completion.txt和completion_notified；错误仍使用故障弹窗。新增--resume重用已停止的监视目录，核对目标状态路径并避免正常完成重复通知。已仅重启当前监视器使新行为生效，训练主进程915580未动。5项行为测试通过，包含完成弹窗及resume不重复发送；未发送伪造完成弹窗。全流水线完成（包括评估/出图）才通知，非训练子阶段结束。
+
+
+## 2026-09-14 训练奖励分项日志补齐
+
+新增日志功能位于隔离工作树runs/worktrees/reward-logging、分支feat/reward-component-logging、提交585e684。当前正在运行的command_convergence代码不修改、不重启，已经发生但未保存的训练采样分项无法补回，不能拿评估分项冒充训练统计。后续启动需使用新日志实现。
+
+command任务新增reward_components_mean_step：alive、attitude、roll_rate、speed、yaw、action、failure，均为含alpha/控制周期的有符号每采样步贡献；失败替换其他项。每轮同时记录分项和及重建绝对/缩放误差；GPU内部先归约，不保存全量环境轨迹。diagnostics/reward_components.png/pdf/json展示分项和总奖励核对。14项CPU相关测试通过；64训练步GPU预检输出runs/reward_logging_20260914_smoke，状态以实际产物为准。旧checkpoint评估奖励图仍独立标记为评估，不修改旧原始日志。
