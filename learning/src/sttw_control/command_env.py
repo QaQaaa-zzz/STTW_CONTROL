@@ -91,6 +91,16 @@ def make_command_validator(env,actor,scale,config):
         final_yaw=jp.sqrt(jp.sum(jp.where(final,yaw,0),axis=0)/jp.maximum(final_count,1))
         within=final&(speed<=config.validation_speed_tolerance**2)&(yaw<=config.validation_yaw_tolerance**2)
         terminal_hold=(final_count==hold_steps)&(jp.sum(within,axis=0)==hold_steps)&~last.terminated&(last.tick>=env.horizon)
-        return dict(episode_return=jp.sum(jp.where(active,reward,0),axis=0),initial_speed_rmse=jp.sqrt(jp.sum(jp.where(first,speed,0),axis=0)/first_count),initial_yaw_rmse=jp.sqrt(jp.sum(jp.where(first,yaw,0),axis=0)/first_count),speed_rmse=jp.sqrt(jp.sum(jp.where(active,speed,0),axis=0)/count),yaw_rmse=jp.sqrt(jp.sum(jp.where(active,yaw,0),axis=0)/count),failed=last.terminated,steps=count,roll_peak=jp.max(jp.where(active,roll,0),axis=0),roll_exceed_fraction=jp.sum(active&(roll>env.config.motion_commands.roll_working_limit),axis=0)/count,
+        result=dict(episode_return=jp.sum(jp.where(active,reward,0),axis=0),initial_speed_rmse=jp.sqrt(jp.sum(jp.where(first,speed,0),axis=0)/first_count),initial_yaw_rmse=jp.sqrt(jp.sum(jp.where(first,yaw,0),axis=0)/first_count),speed_rmse=jp.sqrt(jp.sum(jp.where(active,speed,0),axis=0)/count),yaw_rmse=jp.sqrt(jp.sum(jp.where(active,yaw,0),axis=0)/count),failed=last.terminated,steps=count,roll_peak=jp.max(jp.where(active,roll,0),axis=0),roll_exceed_fraction=jp.sum(active&(roll>env.config.motion_commands.roll_working_limit),axis=0)/count,
                     final_speed_rmse=jp.where(final_count>0,final_speed,jp.nan),final_yaw_rmse=jp.where(final_count>0,final_yaw,jp.nan),final_window_steps=final_count,terminal_tracking_hold=terminal_hold)
+
+        if env.config.motion_commands.tolerance_penalty_rate>0:
+            mc=env.config.motion_commands
+            speed_exceed=speed>mc.speed_tolerance**2
+            yaw_exceed=yaw>mc.yaw_tolerance**2
+            permitted=(~speed_exceed|(alphas==1))&(~yaw_exceed|(alphas==0))
+            result.update(speed_tolerance_exceed_fraction=jp.sum(active&speed_exceed,axis=0)/count,
+                          yaw_tolerance_exceed_fraction=jp.sum(active&yaw_exceed,axis=0)/count,
+                          relaxed_tolerance_final_hold=(final_count==hold_steps)&(jp.sum(final&permitted,axis=0)==hold_steps)&~last.terminated&(last.tick>=env.horizon))
+        return result
     return validate

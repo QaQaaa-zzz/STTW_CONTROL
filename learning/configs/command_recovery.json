@@ -34,7 +34,12 @@
     "attitude_weight": 100.0,
     "rate_weight": 1.0,
     "tracking_scale": 0.3,
-    "tracking_priority_ratio": 10.0
+    "tracking_priority_ratio": 10.0,
+    "tolerance_penalty_rate": 10.0,
+    "speed_tolerance": 0.5,
+    "yaw_tolerance": 0.1,
+    "speed_excess_scale": 0.1,
+    "yaw_excess_scale": 0.05
   },
   "actuator": {
     "composition": "additive",

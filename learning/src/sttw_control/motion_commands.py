@@ -22,6 +22,12 @@ class MotionCommands:
     tracking_scale: float=.3
     tracking_priority_ratio: float=100.  # endpoint speed:yaw ratio; legacy default
 
+    tolerance_penalty_rate: float=0.  # optional bounded extra cost [reward/s]
+    speed_tolerance: float=.5  # m/s, on the relaxed speed objective
+    yaw_tolerance: float=.1  # rad/s, on the relaxed yaw-rate objective
+    speed_excess_scale: float=.1  # excess giving half the maximum extra cost
+    yaw_excess_scale: float=.05
+
     def __post_init__(self):
         if type(self.segments) is not int or self.segments<2:raise ValueError('segments >=2 required')
         if not 0<self.duration_min<=self.duration_max or not 0<self.speed_min<=self.speed_max:raise ValueError('invalid command ranges')
@@ -29,6 +35,10 @@ class MotionCommands:
             if not math.isfinite(x) or x<=0:raise ValueError('invalid command scalar')
         if not math.isfinite(self.tracking_priority_ratio) or self.tracking_priority_ratio<1.:
             raise ValueError('tracking_priority_ratio must be finite and >= 1')
+        if not math.isfinite(self.tolerance_penalty_rate) or self.tolerance_penalty_rate<0:
+            raise ValueError('invalid tolerance penalty rate')
+        for value in (self.speed_tolerance,self.yaw_tolerance,self.speed_excess_scale,self.yaw_excess_scale):
+            if not math.isfinite(value) or value<=0:raise ValueError('invalid tolerance threshold/scale')
         if self.fixed is not None:
             if not self.fixed or self.fixed[0][0]!=0:raise ValueError('fixed commands must start at zero')
             last=-1.
@@ -62,11 +72,20 @@ def tracking_weights(alpha,c):
 
 def reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c,*,xp=jp):
     speed_weight,yaw_weight=tracking_weights(alpha,c)
-    return dict(attitude=c.attitude_weight*xp.maximum(xp.abs(roll)-c.roll_working_limit,0.)**2,
+    costs=dict(attitude=c.attitude_weight*xp.maximum(xp.abs(roll)-c.roll_working_limit,0.)**2,
                 roll_rate=c.rate_weight*rate**2,
                 speed=speed_weight*(speed_error/c.speed_scale)**2,
                 yaw=yaw_weight*(yaw_error/c.yaw_scale)**2,
                 action=.01*xp.sum(action**2,axis=-1))
+    if c.tolerance_penalty_rate>0:
+        # No new cost inside tolerance; finite upper cost for abrupt requests.
+        # 1-1/(1+z^2) avoids inf/inf for extreme finite simulation errors.
+        def excess_cost(error,tolerance,scale):
+            z=xp.maximum(xp.abs(error)-tolerance,0.)/scale
+            return c.tolerance_penalty_rate*(1.-1./(1.+z*z))
+        costs['speed_tolerance']=(1-alpha)*excess_cost(speed_error,c.speed_tolerance,c.speed_excess_scale)
+        costs['yaw_tolerance']=alpha*excess_cost(yaw_error,c.yaw_tolerance,c.yaw_excess_scale)
+    return costs
 
 
 def signed_reward_components(roll,rate,speed_error,yaw_error,action,alpha,c,dt,alive_rate,failure_penalty,failed,*,xp=jp):

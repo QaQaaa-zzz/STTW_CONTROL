@@ -325,3 +325,10 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 训练reward末20轮−.05727，仍较前20轮−.06613改善；100轮全更新、51200小批次，无KL回退。现有随机训练reward仍低于旧full_range的−.01968，与固定面板表现并不相同，不混用两种分布排名。确定性评估残差幅度最多使用前轮24.0%、后轮19.7%，无证据需要立即改限幅。建议保留中等权限，再做预算50轮的续训检查回正偏差；未启动。
 
 证据：[完整三方对照与逐阶段数据](../runs/command_medium_authority_20260914/analysis/review/INDEX.md)；[所有每步奖励/误差/速度估计与视频](../runs/command_medium_authority_20260914/analysis/INDEX.md)。详细12行表、奖励分项、限制见VALIDATION同名段。
+
+
+## 2026-09-14 容忍带强罚：实现与工程验证
+
+保留中等additive残差和原跟踪/姿态奖励，新增速度优先时yaw误差容忍0.1rad/s、yaw优先时速度误差容忍0.5m/s的有界超限成本；中间alpha连续加权。公式及正式100轮预算见PROJECT.md最新计划。新分项speed_tolerance/yaw_tolerance进入CPU/MJX共用奖励、JSON、TensorBoard及逐步奖励图；增加超限占比/时长和末段容忍带保持。后者仅检查当前被放松目标，不等于整体任务成功；原terminal_tracking_hold仍要求最后0.5s每一步速度/yaw都在各自0.2容差内。原始超限时长对两个目标均报告，需结合alpha区分其附加罚是否启用。
+
+验证：53项命令/残差/训练/TensorBoard行为测试通过。runs/command_tolerance_smoke_20260914已complete，GPU2环境×8步×1轮，CPU单切换工况×3alpha×两控制器共6条8步轨迹；逐帧奖励重建最大误差7.621e-8，TensorBoard两项超限罚及开发容忍统计存在，PNG/PDF/NPZ齐备并检查可视化。短训练样本中超限项恰为0，固定切换开发和CPU轨迹确认两项实际非零，不能据短预检判断性能。实际旧中等权限update_0100身份与当前默认关闭功能配置重建完全一致。无物理参数或终止条件变化，无新性能结论。

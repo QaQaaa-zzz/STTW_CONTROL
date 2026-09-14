@@ -25,6 +25,9 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get("motion_commands") is None:config.pop("motion_commands",None)
     else:
         config['motion_commands']=dict(config['motion_commands'])
+        if config['motion_commands'].get('tolerance_penalty_rate',0.)==0.:
+            for key in ('tolerance_penalty_rate','speed_tolerance','yaw_tolerance','speed_excess_scale','yaw_excess_scale'):
+                config['motion_commands'].pop(key,None)
         if config['motion_commands'].get('tracking_priority_ratio')==100.:
             config['motion_commands'].pop('tracking_priority_ratio')
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)

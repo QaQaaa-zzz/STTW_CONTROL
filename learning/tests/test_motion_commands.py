@@ -176,3 +176,55 @@ def test_current_command_authority_is_between_legacy_and_full_range():
     assert output(cfg,[2.,21.],[-1.,-1.])[1]>0
     np.testing.assert_allclose(output(cfg,[2.8,59.],[1.,1.]),[3.,60.])
     assert output(cfg,[0.,21.],[1.,1.],steer=.8)[0]<=0
+
+
+@pytest.mark.parametrize('alpha',[0.,.5,1.])
+def test_tolerance_penalty_endpoints_scales_and_bound(alpha):
+    c=MotionCommands(tolerance_penalty_rate=10.)
+    def costs(ev,ey,xp=np):
+        return reward_terms(0.,0.,ev,ey,np.zeros(2),alpha,c,xp=xp)
+    inside=costs(.5,.1)
+    assert inside['speed_tolerance']==0 and inside['yaw_tolerance']==0
+    for sign in (-1,1):
+        x=costs(sign*.6,sign*.15)
+        assert x['speed_tolerance']==pytest.approx(5*(1-alpha))
+        assert x['yaw_tolerance']==pytest.approx(5*alpha)
+        y=costs(sign*100.,sign*100.)
+        assert 0<=y['speed_tolerance']+y['yaw_tolerance']<=10
+        j=costs(sign*.6,sign*.15,xp=jnp)
+        for k in x:np.testing.assert_allclose(x[k],j[k],rtol=1e-5,atol=1e-6)
+    assert costs(0,.16)['yaw_tolerance']==pytest.approx(alpha*10*1.44/2.44)
+
+
+def test_tolerance_default_keeps_old_reward_and_identity():
+    from dataclasses import asdict
+    from sttw_control.network import make_policy_identity
+    c=MotionCommands();d=asdict(c)
+    fields=['tolerance_penalty_rate','speed_tolerance','yaw_tolerance','speed_excess_scale','yaw_excess_scale']
+    old={k:v for k,v in d.items() if k not in fields}
+    identity=lambda m:make_policy_identity({}, {'motion_commands':m},10)
+    assert identity(old)==identity(d)
+    new=dict(d,tolerance_penalty_rate=10.)
+    assert identity(new)!=identity(old)
+    assert identity(new)!=identity(dict(new,yaw_tolerance=.2))
+    costs=reward_terms(0.,0.,.2,.3,jnp.zeros(2),.5,c)
+    assert 'speed_tolerance' not in costs and 'yaw_tolerance' not in costs
+
+
+@pytest.mark.parametrize('kwargs',[{'tolerance_penalty_rate':-1},{'tolerance_penalty_rate':float('nan')},{'speed_tolerance':0},{'yaw_tolerance':-1},{'speed_excess_scale':0},{'yaw_excess_scale':float('inf')}])
+def test_tolerance_rejects_invalid_configuration(kwargs):
+    with pytest.raises(ValueError):MotionCommands(**kwargs)
+
+
+def test_tolerance_reward_reconstructs_switch_and_failure(tmp_path):
+    from sttw_control.evaluation import evaluate
+    from sttw_control.command_diagnostics import reconstruct
+    from sttw_control.motion_commands import signed_reward_components
+    c=task(tolerance_penalty_rate=10.,fixed=((0.,2.,0.,0.),(.01,2.7,.9,1.)))
+    evaluate(RecoveryEnv(c),tmp_path/'case',seed=7)
+    x=reconstruct(tmp_path/'case')
+    assert x['reconstruction_error']<3e-5
+    assert x['rewards']['yaw_tolerance'][3]<0
+    assert x['rewards']['speed_tolerance'][3]==0
+    failed=signed_reward_components(0,0,2,2,np.zeros(2),.5,c.motion_commands,.005,1,100,True,xp=np)
+    assert failed['failure']==-100 and sum(failed.values())==-100

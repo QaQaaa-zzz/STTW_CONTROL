@@ -119,7 +119,8 @@ def generate(root):
                 for ax,val in zip(axes.flat,[data['speed_error'],data['yaw_error'],np.rad2deg(z['measurement'][1:,0])]):
                     ax.plot(t,val,label=label)
                     if z['terminated'][-1]:ax.plot(t[-1],val[-1],'x',ms=9)
-            for key in ('speed','yaw','attitude','roll_rate'):axes[1,1].plot(tt,x['parts'][key],label=key)
+            for key in x['parts']:
+                if key!='action':axes[1,1].plot(tt,x['parts'][key],label=key)
             for key,val in x['rewards'].items():axes[2,0].plot(tt,np.cumsum(val),label=key)
             keys=list(x['parts']);means=[]
             for label in ('baseline','residual'):
@@ -142,6 +143,13 @@ def generate(root):
                     ax.axvspan(row[0],end,color='gray',alpha=.05 if j%2 else .13)
                 ax.set_xlim(0,c['horizon_seconds'])
             axes[1,1].set_yscale('symlog',linthresh=.1)
+            mc=c['motion_commands']
+            if mc.get('tolerance_penalty_rate',0)>0:
+                alpha=float(tr['priority_alpha'][0])
+                for ax,threshold,enabled in [(axes[0,0],mc['speed_tolerance'],alpha<1),(axes[0,1],mc['yaw_tolerance'],alpha>0)]:
+                    if enabled:
+                        for sign in (-1,1):ax.axhline(sign*threshold,color='red',ls=':',label='Tolerance' if sign==1 else None)
+                        ax.legend(fontsize=8)
             limit=np.rad2deg(c['motion_commands']['roll_working_limit'])
             for val in (-limit,limit):axes[1,0].axhline(val,ls=':',color='gray')
             fig.suptitle(f'{case.name} | alpha={tr["priority_alpha"][0]:g} | {panel.name}\nShading: command intervals; x: failure. Dotted roll bound is a soft working target, not a guarantee.')
@@ -169,6 +177,12 @@ def generate(root):
             np.savez_compressed(dest/'components.npz',time=tt,speed_error=x['speed_error'],yaw_error=x['yaw_error'],**{k:v for k,v in x['rewards'].items()})
             for data,label in [(b,'baseline'),(x,'residual')]:
                 z=data['trace'];rows.append(dict(case=case.name,alpha=float(z['priority_alpha'][0]),seed=panel.name,policy=label,failed=bool(z['terminated'][-1]),observed_seconds=float(z['time'][-1]),speed_rmse=float(np.sqrt(np.mean(data['speed_error']**2))),yaw_rmse=float(np.sqrt(np.mean(data['yaw_error']**2))),roll_peak=float(abs(z['measurement'][:,0]).max()),reward_reconstruction_error=data['reconstruction_error'],return_scope=comparison['scope'],**comparison[label]))
+            if c['motion_commands'].get('tolerance_penalty_rate',0)>0:
+                for data,row in [(b,rows[-2]),(x,rows[-1])]:
+                    for name in ('speed','yaw'):
+                        excess=np.abs(data[name+'_error'])>c['motion_commands'][name+'_tolerance']
+                        row[name+'_tolerance_exceed_seconds']=float(excess.sum()*c['controller']['dt'])
+                        row[name+'_tolerance_exceed_fraction']=float(excess.mean())
             links.append(f'- [{case.name} {panel.parent.name} {panel.name}]({dest.relative_to(out)}/reward_and_errors.png) · [reward vs steps]({dest.relative_to(out)}/reward_vs_steps.png) · [paired returns and components]({dest.relative_to(out)}/reward_comparison.json) · [speed/yaw/XY]({dest.relative_to(out)}/speed_yaw_trajectory.png)')
     (out/'summary.json').write_text(json.dumps(rows,indent=2)+'\n')
     (out/'paired_rewards.json').write_text(json.dumps(pairs,indent=2,allow_nan=False)+'\n')
