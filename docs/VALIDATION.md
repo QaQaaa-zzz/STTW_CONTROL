@@ -1162,3 +1162,16 @@ GPU正式启动前48项核心测试已通过；奖励子任务55项回归含旧c
 新10:1奖励GPU全链预检complete：2×4×16=128训练步，6开发回合正确返回末段保持/完整误差，累计奖励差入日志；最终3alpha×配对基线共6条.25秒CPU回合，3组每步奖励PNG/PDF/NPZ和配对累计奖励JSON均完成。48项核心CPU测试通过；此为工程验证，非性能结论。
 
 新有界8轮已启动：runs/command_balanced_20260914/status.json=training，训练pipeline PID1360655、监视PID1360657，报错/完成弹窗监视monitoring、0异常。主工作区合并提交f5477b2，85项相关CPU行为测试通过，GPU预检声明的全部训练源码SHA与主工作区逐个一致。当前初始化中，无新性能结论。旧12秒best28完整12对累计回报表和每步图已补齐，见其analysis/INDEX.md及paired_rewards.json。
+
+
+## 2026-09-14 奖励实际影响、积分参考与评估瓶颈
+
+用户澄清10:1目标是两任务对奖励的实际影响，不只是系数。当前实现仅保证系数端点10:1，不能保证实际贡献比；须按alpha/工况/阶段统计归一化误差与每步贡献。当前开发温和基线speedRMSE=.0436447m/s、yawRMSE=.0908064rad/s，两者scale均.2，yaw归一化MSE约为speed的4.33倍，alpha1实际speed/yaw代价率约2.31而非10。首轮训练平均speed=-.00517874、yaw=-.0992997、failure=-.102234/step，yaw/speed约19.17；这些是混合随机alpha统计，不能冒充单个alpha贡献。
+
+建议下阶段采用独立训练校准样本的固定Mv=E[(ev/sv)^2]、Mr=E[(er/sr)^2]，以Cv/Mv、Cr/Mr形成可比较尺度后施加alpha偏好。校准需覆盖训练分布、保持明确样本权重，冻结正数下限及尺度，不用最终测试反调奖励，不按当前每步误差强行除自身使惩罚常数化。只能在校准分布平均上定义偏好，不宣称新策略任意状态都严格10:1。当前8轮奖励未中途改变，该校准尚未实施。PPO优化长期联合回报，不是简单选择数值较大的一个奖励项。
+
+确定v/r命令可积分生成参考：psi_dot=r_ref，x_dot=v_ref*cos(psi_ref)，y_dot=v_ref*sin(psi_ref)。已由冻结10秒面板生成四工况PNG/PDF/NPZ及来源哈希，见runs/command_balanced_20260914/analysis/reference_plan/INDEX.md；直行和完整圆解析自检通过。参考在x0=y0=psi0=0坐标，叠实际运动时需按实际初态平移旋转。属于指令运动学参考，未证明动态可行，未加入观测或奖励。r=0保持当前航向，不返回初始方向。新gentle/tight/straighten/reversal累计参考航向分别51.57/240.64/154.70/51.57度。若以后加入几何路径误差，应采用连续进度约束投影的横向误差，并独立报告沿程/时序误差，避免把减速造成的时序落后重复当路径误差。
+
+第1轮新1024采样39.7515s、优化.1778s、开发验证141.2334s；初始化reset11.589s、预热174.783s、基线验证152.085s、初始化共341.386s。开发验证已经MJX/GPU六条批量scan；最终完整trace是CPU串行24回合。故直接说开启GPU即可提速不成立。CPU并行候选先在相同10秒gentle、两个初态seed47001/47002做1-worker/2-worker对照，预算4回合8000控制步，检查time/qpos/qvel/reward/terminated逐元素一致；不把基线并行验证当策略性能或CPU/GPU等价证据。
+
+CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2-worker=13.3823s，端到端加速1.833倍（含子进程启动/导入/保存，不含出图视频）；两种子的time/qpos/qvel/reward/terminated逐元素完全一致。源脚本和summary在runs/command_balanced_20260914/analysis/evaluation_benchmark。当前为外部分析预检，生产评估尚未切换；支持有限CPU进程并行方向，不支持未验证的GPU/CPU选模替换。
