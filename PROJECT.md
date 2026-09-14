@@ -193,3 +193,6 @@ command_recovery_20260914已complete，代码仍在feat/command-recovery隔离�
 
 
 2026-09-14 full_range训练和24条评估均complete，结果见VALIDATION/METHODS_AND_RESULTS最新段。开发seed46001三alpha均存活12s，但标准急转弯仅从4.895s延后到9.125–9.465s失败，普通场景通过减速降低姿态且速度/yaw误差均劣于基线；不声称总体提升。不原样续训，优先离线检查回正失稳及动作增益/探索对照。本次仅分析，未启动新训练。
+
+
+2026-09-14用户要求撤回9度阈值：feat/command-recovery提交a2d871d已将当前任务恢复.3rad，保留full_range，7项相关测试通过，旧实验不改，未重训。核对旧1024速度恢复训练为32轮/epochs4/minibatch2048/8388608步/16384个优化minibatch，best update24；新8192为8轮/epochs2/minibatch8192/16777216步/4096个优化minibatch，command任务固定末次、best为空。总采样更多不等于策略迭代充分，且任务不同不能单因子归因。当前8轮是探索预算非收敛判据；后续需command专用开发选模和有上限的平台停止机制，当前未实现，不能宣称最后checkpoint最佳。
