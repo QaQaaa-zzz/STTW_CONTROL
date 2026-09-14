@@ -1,4 +1,4 @@
-"""Independent Linux desktop fault monitor. Never modifies or restarts a run."""
+"""Independent Linux desktop completion and fault monitor. Never modifies or restarts a run."""
 import argparse
 import json
 import os
@@ -33,14 +33,14 @@ def inspect_run(status,alive):
     return 'running',None
 
 
-def popup(title,message):
+def popup(title,message,*,error=True):
     # argv only: error text is never interpreted as shell commands or markup.
     if shutil.which('zenity'):
-        p=subprocess.Popen(['zenity','--error','--no-markup','--title',title,'--text',message,'--width=600'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
+        p=subprocess.Popen(['zenity','--error' if error else '--info','--no-markup','--title',title,'--text',message,'--width=600'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
         time.sleep(.2)
         if p.poll() is None or p.returncode==0:return 'zenity'
     if shutil.which('notify-send'):
-        subprocess.run(['notify-send','--urgency=critical',title,message],check=True,timeout=10)
+        subprocess.run(['notify-send','--urgency=critical' if error else '--urgency=normal',title,message],check=True,timeout=10)
         return 'notify-send'
     raise RuntimeError('No working desktop popup backend (zenity/notify-send)')
 
@@ -53,9 +53,15 @@ def main():
     p.add_argument('--interval',type=float,default=10.)
     p.add_argument('--confirmations',type=int,default=3)
     p.add_argument('--test-popup',action='store_true')
+    p.add_argument('--resume',action='store_true',help='Reuse a stopped monitor directory; do not notify completed runs twice')
     a=p.parse_args()
     if a.interval<=0 or a.confirmations<1:p.error('positive interval and confirmations required')
-    a.output.mkdir(parents=True,exist_ok=False)
+    if a.resume:
+        previous=json.loads((a.output/'status.json').read_text())
+        if previous['status_path']!=str(a.status.resolve()):p.error('resume status path mismatch')
+        if previous.get('completion_notified'):return
+        if process_identity(previous['watchdog_pid']) is not None:p.error('previous monitor is still running')
+    a.output.mkdir(parents=True,exist_ok=a.resume)
     pid=int(json.loads(a.launch.read_text())['pid']);identity=process_identity(pid)
     def save(phase,**extra):
         value=dict(phase=phase,watchdog_pid=os.getpid(),watched_pid=pid,process_starttime=identity,status_path=str(a.status.resolve()),updated_unix=time.time(),**extra)
@@ -66,7 +72,12 @@ def main():
         while True:
             alive=identity is not None and process_identity(pid)==identity
             phase,detail=inspect_run(a.status,alive)
-            if phase=='complete':save('complete',reason='watched pipeline completed');return
+            if phase=='complete':
+                message=f'运行已正常结束：{a.status.parent}\n\n流水线状态已完成。请查看该目录的结果与分析索引。'
+                (a.output/'completion.txt').write_text(message+'\n')
+                backend=popup('STTW 仿真完成',message,error=False)
+                save('complete',reason='watched pipeline completed',completion_notified=True,backend=backend)
+                return
             count=count+1 if phase in ('error','retry') else 0
             save('monitoring',consecutive_errors=count,last_observation=phase,detail=detail)
             if count>=a.confirmations:

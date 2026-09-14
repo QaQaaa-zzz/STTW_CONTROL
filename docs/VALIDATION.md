@@ -1056,3 +1056,6 @@ learning/cli/watch_run.py（逻辑learning/src/sttw_control/run_watchdog.py）�
 PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli/watch_run.py --status runs/某次运行/status.json --launch runs/某次输入/launch.json --output runs/某次运行_watchdog
 ```
 launch.json需包含流水线主进程pid；应监视流水线根状态而不是提前完成的子训练状态。正常完成或发出一次确认故障报警后监视器退出，避免重复弹窗。
+
+
+2026-09-14用户追加正常完成弹窗：监视器在流水线根状态complete后显示“STTW 仿真完成”信息窗口，记录completion.txt和completion_notified；错误仍使用故障弹窗。新增--resume重用已停止的监视目录，核对目标状态路径并避免正常完成重复通知。已仅重启当前监视器使新行为生效，训练主进程915580未动。5项行为测试通过，包含完成弹窗及resume不重复发送；未发送伪造完成弹窗。全流水线完成（包括评估/出图）才通知，非训练子阶段结束。

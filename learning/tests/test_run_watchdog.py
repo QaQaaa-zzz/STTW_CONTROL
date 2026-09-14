@@ -25,3 +25,17 @@ def test_process_identity_is_real_and_detects_missing_pid():
     import os
     assert process_identity(os.getpid()) is not None
     assert process_identity(999999999) is None
+
+
+def test_completed_pipeline_notifies_once_on_resume(tmp_path,monkeypatch):
+    from sttw_control import run_watchdog as w
+    status=tmp_path/'run.json';status.write_text('{"phase":"complete"}')
+    launch=tmp_path/'launch.json';launch.write_text('{"pid":999999999}')
+    out=tmp_path/'monitor';calls=[]
+    monkeypatch.setattr(w,'popup',lambda title,message,**kw:calls.append((title,kw)) or 'test')
+    argv=['watch','--status',str(status),'--launch',str(launch),'--output',str(out)]
+    monkeypatch.setattr('sys.argv',argv);w.main()
+    assert len(calls)==1 and calls[0][1]['error'] is False
+    assert json.loads((out/'status.json').read_text())['completion_notified']
+    monkeypatch.setattr('sys.argv',argv+['--resume']);w.main()
+    assert len(calls)==1
