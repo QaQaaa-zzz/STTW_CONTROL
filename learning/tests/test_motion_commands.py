@@ -59,12 +59,11 @@ def test_current_command_config_restores_point_three_roll_threshold():
     from sttw_control.env import load_config
     c=load_config(Path(__file__).parents[1]/'configs/command_recovery.json')
     assert np.isclose(c.motion_commands.roll_working_limit,0.3)
-    assert c.actuator.composition=='full_range'
     cost=lambda deg:reward_terms(np.deg2rad(deg),0.,0.,0.,jnp.zeros(2),.5,c.motion_commands)['attitude']
     assert cost(9)==0 and cost(17)==0 and cost(18)>0
 
 
-def test_full_range_zero_preserves_physics_and_records_new_reward(tmp_path):
+def test_current_authority_zero_preserves_physics_and_records_reward(tmp_path):
     from pathlib import Path
     from sttw_control.env import load_config
     from sttw_control.actuator import ActuatorConfig
@@ -151,3 +150,29 @@ def test_reconstruct_supports_legacy_declaration_and_new_ratio(tmp_path,ratio):
     result=reconstruct(path)
     assert result['reconstruction_error']<3e-5
     assert result['rewards']['speed'].shape==(5,)
+
+
+def test_current_command_authority_is_between_legacy_and_full_range():
+    from pathlib import Path
+    from sttw_control.env import load_config
+    from sttw_control.actuator import ActuatorConfig, apply_residual, initial_actuator
+    cfg=load_config(Path(__file__).parents[1]/'configs/command_recovery.json').actuator
+    legacy=ActuatorConfig()
+    full=replace(legacy,composition='full_range')
+    def output(c,base,action,steer=0.):
+        return np.asarray(apply_residual(initial_actuator(c),jnp.array(base),jnp.array(action),steer,c)[1])
+    # Compare attainable command deviations at a representative forward command.
+    base=np.array([0.,21.])
+    for sign in (-1.,1.):
+        action=[sign,sign]
+        delta=np.abs(output(cfg,base,action)-base)
+        assert np.all(delta>np.abs(output(legacy,base,action)-base))
+        assert np.all(delta<np.abs(output(full,base,action)-base))
+        np.testing.assert_allclose(delta,[1.5,10.])
+    # Zero action keeps the same baseline even at final command/end-stop limits.
+    for base in ([2.,21.],[-2.,-21.],[4.,80.]):
+        np.testing.assert_allclose(output(cfg,base,[0.,0.]),output(legacy,base,[0.,0.]))
+    # A 21 rad/s baseline cannot be reversed by the reduced rear residual.
+    assert output(cfg,[2.,21.],[-1.,-1.])[1]>0
+    np.testing.assert_allclose(output(cfg,[2.8,59.],[1.,1.]),[3.,60.])
+    assert output(cfg,[0.,21.],[1.,1.],steer=.8)[0]<=0

@@ -324,3 +324,12 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 command_balanced_100训练和评估complete，训练/最终完成均有zenity发送记录。平均训练奖励明显改善并在后20轮趋缓；标准模型12/12存活、4/12末段保持，基线9/12和9/12。急转弯防摔有效但欠转严重，普通三工况9/9奖励与速度/yaw RMSE均退步，当前不是合格的通用跟踪控制器。第100轮被KL整轮回退，Actor与99相同，使用100是声明预算终点、不是best。详见docs/VALIDATION.md和docs/METHODS_AND_RESULTS.md最新段，全部图与逐阶段分析在runs/command_balanced_100_20260914/analysis/training_review/INDEX.md。
 
 本次仅分析、核验原始24条轨迹、补齐100轮训练图并更新台账；未改奖励/物理配置、未追加训练。下一步建议少量后期checkpoint开发审阅及单因素名义行为保持对照；不能继续把降低转弯幅度后的存活当成任务成功。
+
+
+## 2026-09-14 用户要求收缩残差权限
+
+实施计划：只原位修改learning/configs/command_recovery.json，将full_range改为已有additive，strength=1，前轮残差±1.5rad/s、后轮±10rad/s；早期默认±1/±5，因此保留更强补偿而不再直接覆盖全指令范围。前轮总角速度±3rad/s、角度±.8rad、后轮总轴速±60rad/s及XML力矩/伺服参数不变，奖励、观测、alpha、ECBC/ESO不变。公式u=clip(u_base+[1.5,10]*clip(a,−1,1),执行器指令边界)，再走原有位置/延迟约束；这不是能量或稳定性保证。
+
+验证计划：更新已有当前配置行为测试，检查中等权限的零残差基线一致、可用范围内不能完整接管、实际总限幅保持；运行残差和命令环境相关测试。不改旧freeze/checkpoint，不把旧full_range模型静默应用新动作语义；新任务需新训练身份。本次只修改和验证，不擅自启动长训练。
+
+实施完成：上述中等权限已设为当前command_recovery配置。30项残差/命令行为测试通过；逐字段确认仅动作合成与两路残差范围改变，新旧策略身份不同。当前阶段为已配置、未训练，不能声称解决了欠转弯。详见VALIDATION/METHODS_AND_RESULTS最新段。

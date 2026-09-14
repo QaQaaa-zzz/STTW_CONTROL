@@ -298,3 +298,12 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 92轮训练70.07分钟，其中采样61.54分钟，优化仅11.23秒；有真实学习，时间瓶颈仍在采样。alpha能改变速度行为，但alpha0连温和转弯也未获得更佳yaw，有限取舍仍未验证。评估所有roll<.3rad、姿态超限罚0，因果不能简单归咎该项。下一步建议只抽少量后期模型做开发审阅，再单因素检验名义行为保持；未启动新实验。
 
 证据：[逐工况、逐alpha、逐阶段表与100轮曲线](../runs/command_balanced_100_20260914/analysis/training_review/INDEX.md)；[全12对逐步奖励/速度估计/视频](../runs/command_balanced_100_20260914/analysis/INDEX.md)。训练种子64仅一个，不宣称多种子泛化；末段保持不是全程成功。完整数值也见VALIDATION同名段落。
+
+
+## 2026-09-14 中等残差权限已配置（未训练）
+
+用户要求降低当前full_range权限，同时大于早期±1rad/s前轮、±5rad/s后轮残差。原位更新learning/configs/command_recovery.json：composition=additive、strength=1、steer_residual_scale=1.5、rear_residual_scale=10。网络a∈[−1,1]²，残差Δu=[1.5*a0,10*a1]，与ECBC+ESO输出相加后执行原总限幅和位置/时序约束。相对早期分别1.5倍/2倍。基础后轮21rad/s时允许11–31rad/s，而full_range可达−60–60；前轮基础较小时仍可能被反向，不保证基础控制始终主导或闭环稳定。后轮±10rad/s对应轮缘速度指令±1m/s，不是实际车速改变或电机功率。
+
+总前轮角速度±3rad/s、角度±.8rad、后轮轴速±60rad/s、伺服/力矩/物理模型、奖励/10帧观测/动态alpha均不变。全局ActuatorConfig默认及旧运行freeze/checkpoint不改；新配置策略身份不同，旧full_range checkpoint不能作为同语义模型直接续训/评估，不绕过身份校验。
+
+验证：当前配置行为测试先在full_range下失败，修改后test_residual.py与test_motion_commands.py共30项通过（CPU，5.07s）；含零残差物理轨迹一致、代表基线下权限介于早期和full_range之间、最终指令/转向端点约束。与100轮冻结任务逐字段比较确认仅composition和两路residual_scale改变，策略身份不同。只完成配置和工程验证，尚无新权限下性能结果，本次未启动长训练。
