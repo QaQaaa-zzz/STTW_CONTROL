@@ -196,3 +196,10 @@ command_recovery_20260914已complete，代码仍在feat/command-recovery隔离�
 
 
 2026-09-14用户要求撤回9度阈值：feat/command-recovery提交a2d871d已将当前任务恢复.3rad，保留full_range，7项相关测试通过，旧实验不改，未重训。核对旧1024速度恢复训练为32轮/epochs4/minibatch2048/8388608步/16384个优化minibatch，best update24；新8192为8轮/epochs2/minibatch8192/16777216步/4096个优化minibatch，command任务固定末次、best为空。总采样更多不等于策略迭代充分，且任务不同不能单因子归因。当前8轮是探索预算非收敛判据；后续需command专用开发选模和有上限的平台停止机制，当前未实现，不能宣称最后checkpoint最佳。
+
+
+## 2026-09-14 执行开发选模与32轮上限训练
+
+实现位于feat/command-recovery提交1c43ca1，当前任务0.3rad/full_range。17项CPU相关测试通过；command_convergence_20260914_smoke进行GPU全链路验证。正式计划command_convergence_20260914为8192×256×最多32=67108864步，seed64/epochs2/minibatch8192/KL.01；从头训练，初始/1/每4轮开发验证seed46001和alpha0/.5/1，最少16轮且连续4次无改善停止。前两级（失败数、初始最多1秒的速度/yaw相对基线退步计数）相同，平均回合回报需提高>.1才更新best；名义容差.05m/s和.05rad/s，不代表整个名义场景无退步。best可能仍失败，不作安全保证。原标准面板只在选模之后评估24条，自动完整诊断/视频。
+
+旧9度command_full_range中间checkpoint1–8审计已启动：runs/command_checkpoint_review_20260914，旧冻结任务/开发seed46001，24个策略回合与3个共享基线≤64800步，不训练，不用标准面板选模。保留各checkpoint奖励组成/速度图和完整轨迹，属于事后开发对照。新训练实时状态以runs/command_convergence_20260914/status.json为准，工程预检不能当训练充分或恢复证据。
