@@ -348,3 +348,9 @@ command_balanced_100训练和评估complete，训练/最终完成均有zenity发
 已有1–100轮日志回放到runs/command_balanced_100_20260914/training/tensorboard，来源SHA记录sources.json；原freeze/metrics/checkpoint保持不变。事件按运行目录存放并自动链接runs/tensorboard索引，当前服务http://127.0.0.1:6006，PID1808332，日志/启动记录runs/tensorboard_service。服务--samples_per_plugin scalars=100000；本版本0会返回空曲线，已改正并通过HTTP核验100点。
 
 核验：新增6项事件读回、缺失值、回退保留计数、异常关闭、重复导入保护、声明样本顺序和运行索引行为测试通过；另8项既有训练/诊断测试通过。真实100点总奖励、速度/yaw分项及价值loss逐点匹配JSON，139个标量tag，开发评估仅1/8/100轮；HTTP200且服务完整返回100个奖励点。保留原图表和完成/错误通知。本次未启动新训练；新中等残差权限仍为已配置未训练。使用说明在learning/README.md TensorBoard节。
+
+## 2026-09-14 中等残差权限100轮训练声明
+
+用户批准开始新一轮，主要检验限制残差干预。运行command_medium_authority_20260914：前轮±1.5rad/s、后轮±10rad/s的additive残差；其余任务配置与command_balanced_100冻结任务逐字段一致（奖励、观测、动态alpha、模型与执行器物理等不变）。TrainingConfig沿用上一轮1024×256、epochs4、minibatch2048、LR3e-4、KL.01、seed64、预热池128×1800，只设从头训练100轮，无resume/incumbent，最终评估、不提前选模、每4轮出图。新增26,214,400交互步；每轮checkpoint和TensorBoard，100轮后开发6条×10s（baseline初始化另6条），最终原四工况×三alpha×seed47001×两控制器24条≤48,000步，附逐步奖励/速度估计/误差图及视频。warmup最多230,400计算步另计；无额外性能筛查。停止为100轮预算完成或错误/非有限保护，无45分钟墙钟停止、不自动101轮。
+
+数据角色为开发对照，已有标准面板已参与多次反馈，不称独立holdout。旧full_range训练为8+92分段且中途物理重置，本次从头连续100；同seed/总预算/PPO参数不保证完全相同随机经历。只声明动作权限是本轮有意改变的控制机制，不能凭一个训练种子证明因果。新旧动作身份不兼容，不导入旧Actor或优化器。配置和预算已核验并保存runs/command_medium_authority_20260914_inputs；按用户已授权方案执行，不新增网络/奖励机制。待实际启动后记录PID与状态。
