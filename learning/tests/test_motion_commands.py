@@ -53,14 +53,14 @@ def test_reward_reconstruction_with_switch_and_dynamic_alpha(tmp_path):
     assert x['trace']['user_command'][2,1]>.3
 
 
-def test_current_command_config_penalizes_roll_above_nine_degrees():
+def test_current_command_config_restores_point_three_roll_threshold():
     from pathlib import Path
     from sttw_control.env import load_config
     c=load_config(Path(__file__).parents[1]/'configs/command_recovery.json')
-    assert np.isclose(c.motion_commands.roll_working_limit,np.deg2rad(9))
+    assert np.isclose(c.motion_commands.roll_working_limit,0.3)
     assert c.actuator.composition=='full_range'
     cost=lambda deg:reward_terms(np.deg2rad(deg),0.,0.,0.,jnp.zeros(2),.5,c.motion_commands)['attitude']
-    assert cost(8.9)==0 and cost(9.1)>0
+    assert cost(9)==0 and cost(17)==0 and cost(18)>0
 
 
 def test_full_range_zero_preserves_physics_and_records_new_reward(tmp_path):
