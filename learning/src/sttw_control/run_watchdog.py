@@ -45,31 +45,47 @@ def popup(title,message,*,error=True):
     raise RuntimeError('No working desktop popup backend (zenity/notify-send)')
 
 
+def notify_completed_stages(paths,notified):
+    """Persistable stage events are separate from final pipeline completion."""
+    for path in paths:
+        path=Path(path);key=str(path.resolve())
+        if key in notified or inspect_run(path,True)[0]!='complete':continue
+        label='训练阶段' if path.parent.name=='training' else path.parent.name+'阶段'
+        message=f'{label}已结束：{path.parent}\n\n阶段完成不代表模型达标。评估、出图是否结束请查看主流水线状态。'
+        backend=popup('STTW '+label+'完成',message,error=False)
+        notified[key]={'notified_unix':time.time(),'backend':backend,'message':message}
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--status',type=Path,required=True)
     p.add_argument('--launch',type=Path,required=True,help='JSON containing the pipeline launcher pid')
     p.add_argument('--output',type=Path,required=True,help='Independent watchdog state and alert records')
+    p.add_argument('--stage-status',type=Path,action='append',help='Stage status; defaults to sibling training/status.json')
     p.add_argument('--interval',type=float,default=10.)
     p.add_argument('--confirmations',type=int,default=3)
     p.add_argument('--test-popup',action='store_true')
     p.add_argument('--resume',action='store_true',help='Reuse a stopped monitor directory; do not notify completed runs twice')
     a=p.parse_args()
     if a.interval<=0 or a.confirmations<1:p.error('positive interval and confirmations required')
+    previous={}
     if a.resume:
         previous=json.loads((a.output/'status.json').read_text())
         if previous['status_path']!=str(a.status.resolve()):p.error('resume status path mismatch')
         if previous.get('completion_notified'):return
         if process_identity(previous['watchdog_pid']) is not None:p.error('previous monitor is still running')
+    stage_notified=previous.get('stage_notified',{})
+    stages=a.stage_status if a.stage_status is not None else [a.status.parent/'training/status.json']
     a.output.mkdir(parents=True,exist_ok=a.resume)
     pid=int(json.loads(a.launch.read_text())['pid']);identity=process_identity(pid)
     def save(phase,**extra):
-        value=dict(phase=phase,watchdog_pid=os.getpid(),watched_pid=pid,process_starttime=identity,status_path=str(a.status.resolve()),updated_unix=time.time(),**extra)
+        value=dict(phase=phase,watchdog_pid=os.getpid(),watched_pid=pid,process_starttime=identity,status_path=str(a.status.resolve()),updated_unix=time.time(),stage_notified=stage_notified,**extra)
         temp=a.output/'status.tmp';temp.write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\n');temp.replace(a.output/'status.json')
     try:
         if a.test_popup:popup('STTW 报警功能测试','这是监视器测试弹窗，不代表训练报错。关闭此窗口不影响监视。')
         count=0
         while True:
+            notify_completed_stages(stages,stage_notified)
             alive=identity is not None and process_identity(pid)==identity
             phase,detail=inspect_run(a.status,alive)
             if phase=='complete':

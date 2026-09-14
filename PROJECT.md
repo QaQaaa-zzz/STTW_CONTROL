@@ -304,3 +304,13 @@ command任务新增reward_components_mean_step：alive、attitude、roll_rate、
 第1轮新1024采样39.7515s、优化.1778s、开发验证141.2334s；初始化reset11.589s、预热174.783s、基线验证152.085s、初始化共341.386s。开发验证已经MJX/GPU六条批量scan；最终完整trace是CPU串行24回合。故直接说开启GPU即可提速不成立。CPU并行候选先在相同10秒gentle、两个初态seed47001/47002做1-worker/2-worker对照，预算4回合8000控制步，检查time/qpos/qvel/reward/terminated逐元素一致；不把基线并行验证当策略性能或CPU/GPU等价证据。
 
 CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2-worker=13.3823s，端到端加速1.833倍（含子进程启动/导入/保存，不含出图视频）；两种子的time/qpos/qvel/reward/terminated逐元素完全一致。源脚本和summary在runs/command_balanced_20260914/analysis/evaluation_benchmark。当前为外部分析预检，生产评估尚未切换；支持有限CPU进程并行方向，不支持未验证的GPU/CPU选模替换。
+
+
+2026-09-14 command_balanced已完成训练与24条最终评估，best8不合格：残差10/12未摔、0/12末段跟踪保持；九条温和/回正/反转奖励和两项RMSE全退步。8轮曲线不足以判断已收敛，KL未卡更新，详见VALIDATION/METHODS_AND_RESULTS最新完整报告。本次未追加训练。
+
+
+## 2026-09-14 用户明确要求累计100轮后再评估
+
+用户取消第2/3/8轮对比，审计进程已停止，部分审计不作结论。当前8轮没有达到任务要求，但不能由8轮推断最终能否学会，先前“未收敛”等表述应理解为没有足够收敛证据，不是已证明训练无效。
+
+立即从command_balanced update8恢复参数、Adam和PPO RNG，续92轮至累计100，输出runs/command_balanced_100_20260914。奖励/1024环境/256步/epochs4/minibatch2048/LR3e-4/KL.01/10秒episode/动态alpha均保持原冻结配置；新增24117248交互，累计26214400。仿真闭环重新初始化与同配置预热，不是无缝物理续跑。command_selection=False、validation_final_only=True、command_patience=0、plot_interval=4，每轮保存模型和日志，每4轮刷新奖励/损失/KL及前8轮叠加图；不做中间策略性能比较，不提前停止（程序错误/非有限保护仍生效）。初始化仅固定基线验证，跳过初始策略/旧best比较，第100轮末做固定开发与标准面板评估，使用last100，不能称其为全程最优。继续训练结束与全部评估结束分别弹窗。无自动第101轮。

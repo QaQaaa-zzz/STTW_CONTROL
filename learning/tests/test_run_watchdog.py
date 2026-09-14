@@ -39,3 +39,26 @@ def test_completed_pipeline_notifies_once_on_resume(tmp_path,monkeypatch):
     assert json.loads((out/'status.json').read_text())['completion_notified']
     monkeypatch.setattr('sys.argv',argv+['--resume']);w.main()
     assert len(calls)==1
+
+
+def test_training_completion_notifies_before_pipeline_and_only_once(tmp_path,monkeypatch):
+    from sttw_control import run_watchdog as w
+    stage=tmp_path/'training/status.json';stage.parent.mkdir();stage.write_text('{"complete":true}')
+    calls=[];notified={}
+    monkeypatch.setattr(w,'popup',lambda title,message,**kw:calls.append((title,message,kw)) or 'test')
+    w.notify_completed_stages([stage],notified)
+    w.notify_completed_stages([stage],notified)
+    assert len(calls)==1 and calls[0][2]['error'] is False
+    assert '训练阶段' in calls[0][1] and str(stage.resolve()) in notified
+    restored=json.loads(json.dumps(notified))
+    w.notify_completed_stages([stage],restored)
+    assert len(calls)==1
+
+
+def test_incomplete_or_unreadable_stage_does_not_notify(tmp_path,monkeypatch):
+    from sttw_control import run_watchdog as w
+    p=tmp_path/'status.json';calls=[]
+    monkeypatch.setattr(w,'popup',lambda *a,**kw:calls.append(a))
+    for text in ('{','{"complete":false}','{"phase":"error"}'):
+        p.write_text(text);w.notify_completed_stages([p],{})
+    assert not calls
