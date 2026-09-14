@@ -61,6 +61,9 @@ class TrainingConfig:
     minibatch_size: int=2048
     resume_checkpoint: str | None=None
     selection_incumbent: str | None=None
+    command_selection_scope: str="initial"
+    command_validation_schedules: tuple | None=None
+    plot_interval: int=1
     command_selection: bool=False
     command_patience: int=0
     command_min_updates: int=16
@@ -85,12 +88,21 @@ class TrainingConfig:
     validation_extra_tolerance: float=.05
     validation_heading_tolerance: float=.15
     validation_speed_tolerance: float=.2
+    validation_yaw_tolerance: float=.2
     selection_speed_slack: float=.01
     selection_nominal_slack: float=.01
     validation_events: tuple | None=None
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if self.command_selection_scope not in ('initial','full_episode'):raise ValueError('invalid command selection scope')
+        if type(self.plot_interval) is not int or self.plot_interval<0:raise ValueError('invalid plot interval')
+        if self.command_validation_schedules is not None:
+            from .motion_commands import MotionCommands
+            if not self.command_validation_schedules:raise ValueError('empty command validation schedules')
+            sizes={len(s) for s in self.command_validation_schedules}
+            if len(sizes)!=1:raise ValueError('validation schedules need equal row counts')
+            for schedule in self.command_validation_schedules:MotionCommands(fixed=schedule)
         if type(self.command_patience) is not int or self.command_patience<0 or self.command_min_updates<1 or any(not math.isfinite(x) or x<0 for x in (self.command_min_delta,self.command_speed_slack,self.command_yaw_slack)):
             raise ValueError("invalid command selection settings")
         if self.command_patience and not self.command_selection:raise ValueError("command patience requires selection")
@@ -107,7 +119,7 @@ class TrainingConfig:
             raise ValueError('invalid validation observation window')
         if any(not math.isfinite(x) or x<0 for x in (self.selection_speed_slack,self.selection_nominal_slack)):
             raise ValueError('invalid selection regression allowance')
-        if any(not math.isfinite(x) or x<=0 for x in (self.validation_path_tolerance,self.validation_extra_tolerance,self.validation_heading_tolerance,self.validation_speed_tolerance)):
+        if any(not math.isfinite(x) or x<=0 for x in (self.validation_path_tolerance,self.validation_extra_tolerance,self.validation_heading_tolerance,self.validation_speed_tolerance,self.validation_yaw_tolerance)):
             raise ValueError('invalid validation tolerances')
         if self.validation_events:
             for event in self.validation_events:
@@ -121,6 +133,10 @@ class TrainingConfig:
 
 def should_validate(config,index):
     return index==config.updates or (not config.validation_final_only and (index==1 or index%config.checkpoint_interval==0))
+
+
+def should_plot(config,index):
+    return should_validate(config,index) or (config.plot_interval>0 and index%config.plot_interval==0)
 
 
 def normalization(task):
@@ -147,7 +163,7 @@ def restore_training_snapshot(path,template,identity):
 
 
 def train(task_path,output,config=TrainingConfig()):
-    run_start=time.monotonic()
+    run_start=time.monotonic();setup_timings={}
     cache_dir=configure_compilation_cache()
     output=Path(output)
     output.mkdir(parents=True,exist_ok=False)
@@ -200,9 +216,12 @@ def train(task_path,output,config=TrainingConfig()):
         (output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
     reset=jax.vmap(env.reset)
     step=jax.vmap(env.step)
+    reset_start=time.monotonic()
     print('Compiling MJX batched reset',flush=True)
     state=jax.jit(reset)(jax.random.split(rk,c.num_envs))
     jax.block_until_ready(state.obs)
+    setup_timings['reset_seconds']=time.monotonic()-reset_start
+    warmup_start=time.monotonic()
 
     warmup_record={'computed_transition_budget':c.warmup_pool_size*c.warmup_steps,'active_transitions':0}
     if c.warmup_steps:
@@ -228,6 +247,7 @@ def train(task_path,output,config=TrainingConfig()):
         warmup_record.update(active_transitions=int(jp.sum(targets)),pool_size=c.warmup_pool_size,tick_quantiles=np.quantile(np.asarray(bank.tick),[0,.25,.5,.75,1]).tolist(),scope='Real zero-residual trajectories; bank states sampled with replacement, not independent initial histories')
         print('Warmup: '+json.dumps(warmup_record),flush=True)
     if resume_key is not None:key=resume_key
+    setup_timings['warmup_seconds']=time.monotonic()-warmup_start
     (output/'warmup.json').write_text(json.dumps(warmup_record,indent=2)+'\n')
 
     def outputs(p,obs):
@@ -341,21 +361,29 @@ def train(task_path,output,config=TrainingConfig()):
         return str(path)
 
     print(f'Compiling {len(c.validation_seeds)}-seed deterministic baseline validation',flush=True)
+    baseline_start=time.monotonic()
     baseline=host_metrics(validate(params,True))
+    setup_timings['baseline_validation_seconds']=time.monotonic()-baseline_start
     (output/'baseline_validation.json').write_text(json.dumps(baseline,indent=2)+'\n')
     print('Baseline validation: '+json.dumps(baseline),flush=True)
     best_score=None; best=None; best_radial=None; stale=0
     stage_best=None;stage_best_score=None
+    initial_start=time.monotonic()
     if c.command_selection and env.config.motion_commands is not None:
-        initial=host_metrics(validate(params,False))
+        initial=host_metrics(validate(params,False)) if c.resume_checkpoint else baseline
         (output/'initial_policy_validation.json').write_text(json.dumps(initial,indent=2)+'\n')
         for source in dict.fromkeys((c.selection_incumbent,c.resume_checkpoint)):
             if source is None:continue
             prior=restore_training_snapshot(source,template,identity)
             measured=initial if source==c.resume_checkpoint else host_metrics(validate(prior['params'],False))
-            score,reason=rank_command_candidate(measured,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack)
+            score,reason=rank_command_candidate(measured,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack,scope=c.command_selection_scope)
             if command_improved(score,best_score,c.command_min_delta):best_score,best=score,str(Path(source).resolve())
             with (output/'incumbents.jsonl').open('a') as f:f.write(json.dumps({'checkpoint':str(source),'rank':score,'validation':measured})+'\n')
+    setup_timings['initial_and_incumbent_seconds']=time.monotonic()-initial_start
+    setup_timings['total_initialization_seconds']=time.monotonic()-run_start
+    setup_timings['fresh_initial_reuses_zero_residual_baseline']=not bool(c.resume_checkpoint)
+    (output/'setup_timings.json').write_text(json.dumps(setup_timings,indent=2)+'\n')
+    print('Setup timings: '+json.dumps(setup_timings),flush=True)
     start=time.monotonic()
     for index in range(1,c.updates+1):
         stop=False
@@ -410,13 +438,17 @@ def train(task_path,output,config=TrainingConfig()):
             validation=host_metrics(validate(params,False))
             record['validation_seconds']=time.monotonic()-validation_start
             record['validation']=validation
+            if env.config.motion_commands is not None:
+                delta=np.asarray(validation['episode_return'],float)-np.asarray(baseline['episode_return'],float)
+                record['paired_episode_return']={'baseline':baseline['episode_return'],'candidate':validation['episode_return'],'delta':delta.tolist(),'mean_delta':float(np.mean(delta)),'scope':'same declared horizon, commands, alpha and initial seed; terminal replacement and actual early termination retained'}
             metadata_path=Path(path)/'training.json'
             metadata=json.loads(metadata_path.read_text());metadata['validation']=validation
             metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
             score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
             command_mode=env.config.motion_commands is not None and c.command_selection
-            if command_mode:score,reason=rank_command_candidate(validation,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack)
-            record['selection']={'rank':score,'reason':reason}
+            if command_mode:score,reason=rank_command_candidate(validation,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack,scope=c.command_selection_scope)
+            record['selection']={'rank':score,'reason':reason,'task_success_verified':False}
+            if command_mode and c.command_selection_scope=='full_episode':record['selection']['development_gates_passed']=bool(score is not None and all(v==0 for v in score[:-1]))
             improved=command_improved(score,best_score,c.command_min_delta) if command_mode else score is not None and (best_score is None or score<best_score)
             if improved:
                 best_score,best=score,path
@@ -435,6 +467,8 @@ def train(task_path,output,config=TrainingConfig()):
         print(json.dumps(record,allow_nan=False),flush=True)
         (output/'progress.json').write_text(json.dumps({'update':index+update_offset,'stage_update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates or stop else 'training','validation_complete':'validation' in record},indent=2)+'\n')
         from .training_diagnostics import plot_training
-        plot_training(output)
+        if should_plot(c,index):
+            plot_start=time.monotonic();plot_training(output)
+            with (output/'plot_timings.jsonl').open('a') as f:f.write(json.dumps({'update':record['update'],'seconds':time.monotonic()-plot_start})+'\n')
         if stop:break
     return status

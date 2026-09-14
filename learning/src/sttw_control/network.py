@@ -23,6 +23,10 @@ def make_policy_identity(model_identity,config,history_steps):
         if config["actuator"].get("composition","additive")=="additive":
             config["actuator"].pop("composition",None)
     if config.get("motion_commands") is None:config.pop("motion_commands",None)
+    else:
+        config['motion_commands']=dict(config['motion_commands'])
+        if config['motion_commands'].get('tracking_priority_ratio')==100.:
+            config['motion_commands'].pop('tracking_priority_ratio')
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)
     if config.get("alive_reward_rate")==1.:config.pop("alive_reward_rate")
     if config.get('priority') is None:config.pop('priority',None)

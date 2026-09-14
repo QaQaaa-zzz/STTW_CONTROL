@@ -59,3 +59,16 @@ def test_command_early_stop_requires_minimum_and_patience():
     assert not command_should_stop(16,3,16,4)
     assert command_should_stop(16,4,16,4)
     assert not command_should_stop(32,8,16,0)
+
+
+def test_command_full_episode_rank_catches_late_regression_and_missing_return():
+    from sttw_control.selection import rank_command_candidate,command_improved
+    base=dict(failed=[False,True],episode_return=[4.,-100.],speed_rmse=[.03,2.],yaw_rmse=[.03,3.],terminal_tracking_hold=[True,False])
+    good=dict(base,failed=[False,False],episode_return=[5.,-10.],speed_rmse=[.04,.1],yaw_rmse=[.04,.1],terminal_tracking_hold=[True,True])
+    late=dict(good,episode_return=[100.,100.],yaw_rmse=[.6,.1])
+    missing=dict(good,terminal_tracking_hold=[True,False])
+    rank=lambda v:rank_command_candidate(v,base,scope='full_episode')[0]
+    assert rank(good)<rank(late) and rank(good)<rank(missing)
+    assert command_improved(rank(good),rank(late),.1)
+    assert rank(good)[-1]==-45.5
+    assert rank_command_candidate(dict(good,speed_rmse=[float('nan'),.1]),base,scope='full_episode')[0] is None

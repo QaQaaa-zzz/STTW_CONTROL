@@ -84,3 +84,13 @@ def test_snapshot_restore_preserves_optimizer_rng_and_checks_identity(tmp_path):
     with pytest.raises(ValueError,match='identity'):restore_training_snapshot(tmp_path,template,{'config':'other'})
     (tmp_path/'training.msgpack').write_bytes(raw+b'bad')
     with pytest.raises(ValueError,match='hash'):restore_training_snapshot(tmp_path,template,{'config':'same'})
+
+
+def test_short_feedback_config_and_plot_cadence():
+    import pytest
+    from sttw_control.training import TrainingConfig,should_plot
+    c=TrainingConfig(num_envs=1024,rollout_steps=128,minibatch_size=2048,epochs=4,updates=32,checkpoint_interval=8,plot_interval=0,command_selection_scope='full_episode',command_validation_schedules=[[[0,2.1,0,.5],[2,2.1,.3,.5],[6,2.1,0,.5]]])
+    assert should_plot(c,1) and should_plot(c,8) and not should_plot(c,2)
+    with pytest.raises(ValueError):TrainingConfig(plot_interval=-1)
+    with pytest.raises(ValueError):TrainingConfig(command_selection_scope='typo')
+    with pytest.raises(ValueError):TrainingConfig(command_validation_schedules=[[[1,2.1,0,.5]]])

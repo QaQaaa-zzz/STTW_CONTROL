@@ -20,12 +20,15 @@ class MotionCommands:
     attitude_weight: float=100.
     rate_weight: float=1.
     tracking_scale: float=.3
+    tracking_priority_ratio: float=100.  # endpoint speed:yaw ratio; legacy default
 
     def __post_init__(self):
         if type(self.segments) is not int or self.segments<2:raise ValueError('segments >=2 required')
         if not 0<self.duration_min<=self.duration_max or not 0<self.speed_min<=self.speed_max:raise ValueError('invalid command ranges')
         for x in (self.duration_min,self.duration_max,self.speed_min,self.speed_max,self.yaw_max,self.speed_scale,self.yaw_scale,self.roll_working_limit,self.attitude_weight,self.rate_weight,self.tracking_scale):
             if not math.isfinite(x) or x<=0:raise ValueError('invalid command scalar')
+        if not math.isfinite(self.tracking_priority_ratio) or self.tracking_priority_ratio<1.:
+            raise ValueError('tracking_priority_ratio must be finite and >= 1')
         if self.fixed is not None:
             if not self.fixed or self.fixed[0][0]!=0:raise ValueError('fixed commands must start at zero')
             last=-1.
@@ -46,18 +49,30 @@ def reference_at(seconds,schedule):
     i=jp.maximum(jp.sum(seconds>=schedule[:,0])-1,0)
     return schedule[i,1:]
 
-def reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c):
-    return dict(attitude=c.attitude_weight*jp.maximum(jp.abs(roll)-c.roll_working_limit,0.)**2,
+def tracking_weights(alpha,c):
+    """Centered ratio**(alpha-.5) weights, before normalized squared errors.
+
+    The geometric center stays at tracking_scale for either task. Equal
+    weights do not imply equal penalties when the normalized errors differ.
+    Using sqrt(ratio) keeps the legacy ratio=100 operation exactly 10**(2a-1).
+    """
+    base=math.sqrt(c.tracking_priority_ratio)
+    return c.tracking_scale*base**(2*alpha-1),c.tracking_scale*base**(1-2*alpha)
+
+
+def reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c,*,xp=jp):
+    speed_weight,yaw_weight=tracking_weights(alpha,c)
+    return dict(attitude=c.attitude_weight*xp.maximum(xp.abs(roll)-c.roll_working_limit,0.)**2,
                 roll_rate=c.rate_weight*rate**2,
-                speed=c.tracking_scale*10.**(2*alpha-1)*(speed_error/c.speed_scale)**2,
-                yaw=c.tracking_scale*10.**(1-2*alpha)*(yaw_error/c.yaw_scale)**2,
-                action=.01*jp.sum(action**2))
+                speed=speed_weight*(speed_error/c.speed_scale)**2,
+                yaw=yaw_weight*(yaw_error/c.yaw_scale)**2,
+                action=.01*xp.sum(action**2,axis=-1))
 
 
-def signed_reward_components(roll,rate,speed_error,yaw_error,action,alpha,c,dt,alive_rate,failure_penalty,failed):
+def signed_reward_components(roll,rate,speed_error,yaw_error,action,alpha,c,dt,alive_rate,failure_penalty,failed,*,xp=jp):
     """Signed per-transition terms, including terminal replacement, for logging."""
-    costs=reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c)
-    parts={k:jp.where(failed,0.,-dt*v) for k,v in costs.items()}
-    parts['alive']=jp.where(failed,0.,dt*alive_rate)
-    parts['failure']=jp.where(failed,-failure_penalty,0.)
+    costs=reward_terms(roll,rate,speed_error,yaw_error,action,alpha,c,xp=xp)
+    parts={k:xp.where(failed,0.,-dt*v) for k,v in costs.items()}
+    parts['alive']=xp.where(failed,0.,dt*alive_rate)
+    parts['failure']=xp.where(failed,-failure_penalty,0.)
     return parts

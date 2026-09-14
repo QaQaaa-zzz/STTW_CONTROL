@@ -2,6 +2,7 @@ from dataclasses import replace
 import jax
 import jax.numpy as jnp
 import numpy as np
+import pytest
 from sttw_control.motion_commands import MotionCommands, sample_schedule, reference_at, reward_terms
 from sttw_control.env import RecoveryEnv, TaskConfig
 from sttw_control.observation import ObservationConfig, observation_fields
@@ -91,3 +92,62 @@ def test_signed_reward_components_match_reward_and_replace_failure():
     assert failed['failure']==-100
     assert all(float(v)==0 for k,v in failed.items() if k!='failure')
     assert parts['alive']>0 and parts['speed']<0 and parts['yaw']<0
+
+
+@pytest.mark.parametrize('alpha,expected',[(0.,(.09486832980505137,.9486832980505138)),(.5,(.3,.3)),(1.,(.9486832980505138,.09486832980505137))])
+def test_tracking_ratio_ten_keeps_both_tasks_and_midpoint_scale(alpha,expected):
+    c=MotionCommands(tracking_priority_ratio=10.)
+    terms=reward_terms(0.,0.,.2,.2,jnp.zeros(2),alpha,c)
+    np.testing.assert_allclose([terms['speed'],terms['yaw']],expected,rtol=2e-7)
+
+
+@pytest.mark.parametrize('ratio',[0.,.5,float('nan'),float('inf')])
+def test_tracking_ratio_rejects_reversed_or_nonfinite_preference(ratio):
+    with pytest.raises(ValueError,match='tracking_priority_ratio'):
+        MotionCommands(tracking_priority_ratio=ratio)
+
+
+def test_default_ratio_preserves_legacy_reward_and_checkpoint_identity():
+    from dataclasses import asdict
+    from sttw_control.env import config_from_dict
+    from sttw_control.network import make_policy_identity
+    current=asdict(task())
+    legacy=asdict(task())
+    legacy['motion_commands'].pop('tracking_priority_ratio',None)
+    restored=config_from_dict(legacy)
+    assert restored.motion_commands.tracking_priority_ratio==100.
+    identity=lambda c:make_policy_identity({'model':'fixture'},c,10)
+    assert identity(current)==identity(legacy)
+    changed=asdict(replace(restored,motion_commands=replace(restored.motion_commands,tracking_priority_ratio=10.)))
+    assert identity(changed)!=identity(legacy)
+    for alpha,want in [(0.,(.03,3.)),(.25,(.09486832980505137,.9486832980505138)),(.5,(.3,.3)),(1.,(3.,.03))]:
+        terms=reward_terms(0.,0.,.2,.2,jnp.zeros(2),alpha,restored.motion_commands)
+        np.testing.assert_allclose([terms['speed'],terms['yaw']],want,rtol=2e-7)
+
+
+def test_shared_numpy_reward_components_keep_action_and_failure_per_transition():
+    from sttw_control.motion_commands import signed_reward_components
+    c=MotionCommands(tracking_priority_ratio=10.)
+    parts=signed_reward_components(np.zeros(2),np.zeros(2),np.array([.2,.2]),np.array([.2,.2]),np.array([[1.,0.],[0.,1.]]),np.array([.5,1.]),c,.005,1.,100.,np.array([False,True]),xp=np)
+    np.testing.assert_allclose(parts['speed'],[-.0015,0.])
+    np.testing.assert_allclose(parts['yaw'],[-.0015,0.])
+    np.testing.assert_allclose(parts['action'],[-.00005,0.])
+    np.testing.assert_allclose(sum(parts.values()),[.00195,-100.])
+
+
+@pytest.mark.parametrize('ratio',[None,10.])
+def test_reconstruct_supports_legacy_declaration_and_new_ratio(tmp_path,ratio):
+    import json
+    from sttw_control.evaluation import evaluate
+    from sttw_control.command_diagnostics import reconstruct
+    kw={} if ratio is None else {'tracking_priority_ratio':ratio}
+    c=replace(task(fixed=((0.,2.,0.,.2),(.01,2.2,.4,.8)),**kw),horizon_seconds=.025)
+    path=tmp_path/'trace'
+    evaluate(RecoveryEnv(c),path,seed=7)
+    if ratio is None:
+        declaration=json.loads((path/'declaration.json').read_text())
+        declaration['config']['motion_commands'].pop('tracking_priority_ratio',None)
+        (path/'declaration.json').write_text(json.dumps(declaration))
+    result=reconstruct(path)
+    assert result['reconstruction_error']<3e-5
+    assert result['rewards']['speed'].shape==(5,)

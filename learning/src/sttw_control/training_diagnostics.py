@@ -8,7 +8,7 @@ PANELS=[('policy','Policy surrogate loss'),('value','Value loss (includes 0.5 fa
         ('kl','Approx. KL diagnostic (symlog)'),('reward','Mean step reward (symlog; different objectives)'),
         ('entropy','Gaussian entropy before tanh'),('coverage','Disturbed samples / collected steps'),
         ('recovery','Development joint recovery fraction'),('failed','Development physical failure fraction'),
-        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]'),('eval_return','Fixed development episode return'),('roll_exceed','Development roll exceed fraction')]
+        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]'),('eval_return','Fixed development episode return'),('roll_exceed','Development roll exceed fraction'),('baseline_return','Paired baseline episode return'),('return_gain','Candidate minus baseline episode return'),('terminal_hold','Development terminal tracking hold fraction')]
 
 
 def series(rows):
@@ -23,6 +23,10 @@ def series(rows):
         disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))+row.get('rear_disturbed_transitions',0)
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
         v=row.get('validation',{})
+        pair=row.get('paired_episode_return',{})
+        out['baseline_return'].append(float(np.mean(pair['baseline'])) if pair else float('nan'))
+        out['return_gain'].append(pair.get('mean_delta',float('nan')))
+        out['terminal_hold'].append(float(np.mean(v['terminal_tracking_hold'])) if 'terminal_tracking_hold' in v else float('nan'))
         for key,field in [('eval_return','episode_return'),('roll_exceed','roll_exceed_fraction')]:
             out[key].append(float(np.mean(v[field])) if field in v else float('nan'))
         out['yaw'].append(float(np.mean(v['yaw_rmse'])) if 'yaw_rmse' in v else float('nan'));mask=np.asarray(v.get('event_present',[]),bool)
@@ -46,7 +50,7 @@ def draw(entries,destination,title):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    fig,axes=plt.subplots((len(PANELS)+1)//2,2,figsize=(15,22),layout='constrained')
+    fig,axes=plt.subplots((len(PANELS)+1)//2,2,figsize=(15,2.9*((len(PANELS)+1)//2)),layout='constrained')
     colors=plt.get_cmap('tab20')
     for i,(label,s) in enumerate(entries):
         for ax,(key,name) in zip(axes.flat,PANELS):
