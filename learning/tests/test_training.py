@@ -64,3 +64,23 @@ def test_history_observations_preserve_baseline_and_reset_mask():
     b=history.reset(19)
     assert np.count_nonzero(np.asarray(b.obs[-20:]))==1
     np.testing.assert_allclose(b.obs[:-20].reshape(20,18)[:-1],0)
+
+
+def test_snapshot_restore_preserves_optimizer_rng_and_checks_identity(tmp_path):
+    import hashlib,json
+    import numpy as np
+    from flax import serialization
+    from sttw_control.training import restore_training_snapshot
+    template={'params':{'w':jp.zeros(2)},'optimizer':{'count':jp.array(0)},'rng':jp.array([0,0],dtype=jp.uint32),'update':0}
+    original={'params':{'w':jp.array([1.,2.])},'optimizer':{'count':jp.array(16015)},'rng':jp.array([123,456],dtype=jp.uint32),'update':32}
+    raw=serialization.to_bytes(original);(tmp_path/'training.msgpack').write_bytes(raw)
+    (tmp_path/'training.json').write_text(json.dumps({'training_sha256':hashlib.sha256(raw).hexdigest()}))
+    (tmp_path/'identity.json').write_text(json.dumps({'identity':{'config':'same'}}))
+    actual=restore_training_snapshot(tmp_path,template,{'config':'same'})
+    assert actual['update']==32 and int(actual['optimizer']['count'])==16015
+    np.testing.assert_array_equal(actual['rng'],original['rng'])
+    np.testing.assert_array_equal(actual['params']['w'],original['params']['w'])
+    import pytest
+    with pytest.raises(ValueError,match='identity'):restore_training_snapshot(tmp_path,template,{'config':'other'})
+    (tmp_path/'training.msgpack').write_bytes(raw+b'bad')
+    with pytest.raises(ValueError,match='hash'):restore_training_snapshot(tmp_path,template,{'config':'same'})

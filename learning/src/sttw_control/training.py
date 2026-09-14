@@ -21,7 +21,7 @@ from .env import RecoveryEnv, load_config
 from .validation import make_validator
 from .motion_commands import signed_reward_components
 from .selection import rank_candidate, rank_command_candidate, command_improved, command_should_stop
-from .network import ResidualActor, make_policy_identity, save_policy
+from .network import ResidualActor, make_policy_identity, save_policy, load_policy
 from .runtime import configure_compilation_cache
 
 
@@ -59,6 +59,8 @@ class TrainingConfig:
     updates: int=64
     epochs: int=4
     minibatch_size: int=2048
+    resume_checkpoint: str | None=None
+    selection_incumbent: str | None=None
     command_selection: bool=False
     command_patience: int=0
     command_min_updates: int=16
@@ -131,6 +133,19 @@ def normalization(task):
     return np.zeros_like(std),std
 
 
+def restore_training_snapshot(path,template,identity):
+    path=Path(path)
+    if json.loads((path/'identity.json').read_text())['identity']!=identity:
+        raise ValueError('resume policy identity mismatch')
+    raw=(path/'training.msgpack').read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=json.loads((path/'training.json').read_text())['training_sha256']:
+        raise ValueError('resume snapshot hash mismatch')
+    restored=serialization.from_bytes(template,raw)
+    if not all(np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(restored)):
+        raise ValueError('nonfinite resume snapshot')
+    return restored
+
+
 def train(task_path,output,config=TrainingConfig()):
     run_start=time.monotonic()
     cache_dir=configure_compilation_cache()
@@ -164,6 +179,25 @@ def train(task_path,output,config=TrainingConfig()):
             'log_std':jp.full((2,),math.log(c.initial_std))}
     optimizer=optax.chain(optax.clip_by_global_norm(.5),optax.adam(c.learning_rate))
     opt_state=optimizer.init(params)
+    update_offset=0; resume_key=None
+    template={'params':params,'optimizer':opt_state,'rng':key,'update':0}
+    if c.resume_checkpoint:
+        parent=Path(c.resume_checkpoint).resolve()
+        load_policy(parent,expected=identity)
+        meta=json.loads((parent/'identity.json').read_text())
+        if not np.array_equal(np.asarray(meta['mean']),mean) or not np.array_equal(np.asarray(meta['std']),std):
+            raise ValueError('resume normalization mismatch')
+        parent_config=json.loads((parent.parents[1]/'declaration.json').read_text())['training']
+        for field in ('num_envs','rollout_steps'):
+            if parent_config[field]!=getattr(c,field):raise ValueError('resume batch geometry changed')
+        restored=restore_training_snapshot(parent,template,identity)
+        params,opt_state,resume_key=restored['params'],restored['optimizer'],restored['rng']
+        saved_actor=serialization.from_bytes(params['actor'],(parent/'actor.msgpack').read_bytes())
+        if not all(np.array_equal(np.asarray(a),np.asarray(b)) for a,b in zip(jax.tree.leaves(saved_actor),jax.tree.leaves(params['actor']))):
+            raise ValueError('snapshot actor differs from policy export')
+        update_offset=int(restored['update'])
+        declaration['continuation']={'checkpoint':str(parent),'training_sha256':json.loads((parent/'training.json').read_text())['training_sha256'],'update_offset':update_offset,'scope':'parameters, optimizer and PPO RNG restored; physics, ESO, histories reset and zero-residual warmup repeated'}
+        (output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
     reset=jax.vmap(env.reset)
     step=jax.vmap(env.step)
     print('Compiling MJX batched reset',flush=True)
@@ -193,6 +227,7 @@ def train(task_path,output,config=TrainingConfig()):
         state=jax.tree.map(lambda x:x[indices],bank)
         warmup_record.update(active_transitions=int(jp.sum(targets)),pool_size=c.warmup_pool_size,tick_quantiles=np.quantile(np.asarray(bank.tick),[0,.25,.5,.75,1]).tolist(),scope='Real zero-residual trajectories; bank states sampled with replacement, not independent initial histories')
         print('Warmup: '+json.dumps(warmup_record),flush=True)
+    if resume_key is not None:key=resume_key
     (output/'warmup.json').write_text(json.dumps(warmup_record,indent=2)+'\n')
 
     def outputs(p,obs):
@@ -310,6 +345,17 @@ def train(task_path,output,config=TrainingConfig()):
     (output/'baseline_validation.json').write_text(json.dumps(baseline,indent=2)+'\n')
     print('Baseline validation: '+json.dumps(baseline),flush=True)
     best_score=None; best=None; best_radial=None; stale=0
+    stage_best=None;stage_best_score=None
+    if c.command_selection and env.config.motion_commands is not None:
+        initial=host_metrics(validate(params,False))
+        (output/'initial_policy_validation.json').write_text(json.dumps(initial,indent=2)+'\n')
+        for source in dict.fromkeys((c.selection_incumbent,c.resume_checkpoint)):
+            if source is None:continue
+            prior=restore_training_snapshot(source,template,identity)
+            measured=initial if source==c.resume_checkpoint else host_metrics(validate(prior['params'],False))
+            score,reason=rank_command_candidate(measured,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack)
+            if command_improved(score,best_score,c.command_min_delta):best_score,best=score,str(Path(source).resolve())
+            with (output/'incumbents.jsonl').open('a') as f:f.write(json.dumps({'checkpoint':str(source),'rank':score,'validation':measured})+'\n')
     start=time.monotonic()
     for index in range(1,c.updates+1):
         stop=False
@@ -331,7 +377,7 @@ def train(task_path,output,config=TrainingConfig()):
         host=np.asarray(metrics)
         if not np.isfinite(host).all() or not all(np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(params)):
             raise RuntimeError('Nonfinite PPO update; stopping without promotion')
-        record={'update':index,'control_transitions':index*c.num_envs*c.rollout_steps,
+        record={'update':index+update_offset,'stage_update':index,'stage_control_transitions':index*c.num_envs*c.rollout_steps,'control_transitions':(index+update_offset)*c.num_envs*c.rollout_steps,
                 'elapsed_seconds':time.monotonic()-start,'loss_metrics':host[:4].tolist(),
                 'rollout_seconds':rollout_seconds,'optimizer_seconds':time.monotonic()-update_start,
                 'rollout_control_steps_per_second':c.num_envs*c.rollout_steps/rollout_seconds,
@@ -356,9 +402,9 @@ def train(task_path,output,config=TrainingConfig()):
             if not all(math.isfinite(v) for v in component_means.values()) or not math.isfinite(error) or not math.isfinite(scaled_error) or scaled_error>3e-5:
                 raise RuntimeError(f'Reward component reconstruction mismatch: {error}')
         checkpoint_start=time.monotonic()
-        path=checkpoint(index,params,opt_state,key,None)
+        path=checkpoint(index+update_offset,params,opt_state,key,None)
         record['checkpoint_seconds']=time.monotonic()-checkpoint_start
-        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'validating' if should_validate(c,index) else 'training','validation_complete':False},indent=2)+'\n')
+        (output/'progress.json').write_text(json.dumps({'update':index+update_offset,'stage_update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'validating' if should_validate(c,index) else 'training','validation_complete':False},indent=2)+'\n')
         if should_validate(c,index):
             validation_start=time.monotonic()
             validation=host_metrics(validate(params,False))
@@ -376,17 +422,18 @@ def train(task_path,output,config=TrainingConfig()):
                 best_score,best=score,path
                 best_radial=None if command_mode else float(np.mean(validation['radial_rmse']))
             if command_mode:
+                if command_improved(score,stage_best_score,c.command_min_delta):stage_best_score,stage_best=score,path
                 stale=0 if improved else stale+1
                 stop=command_should_stop(index,stale,c.command_min_updates,c.command_patience)
                 record['command_selection']={'stale_evaluations':stale,'early_stop':stop,'best_checkpoint':best}
-            status={'last_checkpoint':path,'best_checkpoint':best,'best_radial_rmse':best_radial,'best_selection_rank':best_score,
+            status={'last_checkpoint':path,'best_checkpoint':best,'stage_best_checkpoint':stage_best,'stage_best_rank':stage_best_score,'stage_control_transitions':record['stage_control_transitions'],'best_radial_rmse':best_radial,'best_selection_rank':best_score,
                     'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates or stop,'stop_reason':'development_patience' if stop else ('budget' if index==c.updates else None)}
             (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
         record['wall_elapsed_seconds']=time.monotonic()-run_start
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
         print(json.dumps(record,allow_nan=False),flush=True)
-        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates or stop else 'training','validation_complete':'validation' in record},indent=2)+'\n')
+        (output/'progress.json').write_text(json.dumps({'update':index+update_offset,'stage_update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates or stop else 'training','validation_complete':'validation' in record},indent=2)+'\n')
         from .training_diagnostics import plot_training
         plot_training(output)
         if stop:break

@@ -14,6 +14,7 @@ def evaluate_panel(root,task,panel,checkpoint):
     identity=make_policy_identity(env.bundle.identity,asdict(cfg),cfg.observation.history_steps)
     policy=load_policy(checkpoint,expected=identity)
     p=json.loads(panel.read_text())
+    (root/'alpha_values.json').write_text(json.dumps({f'alpha_{i}':a for i,a in enumerate(p['alphas'])},indent=2)+'\n')
     for i,a in enumerate(p['alphas']):
         for seed in p['seeds']:
             for case in p['cases']:

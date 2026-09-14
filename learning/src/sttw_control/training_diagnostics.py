@@ -70,6 +70,13 @@ def plot_training(directory):
     directory=Path(directory);rows=read_metrics(directory/'metrics.jsonl');s=series(rows)
     plot_reward_components(rows,directory/'diagnostics')
     draw([(directory.parent.name if directory.name=='training' else directory.name,s)],directory/'diagnostics','PPO training progress')
+    declaration=json.loads((directory/'declaration.json').read_text())
+    continuation=declaration.get('continuation')
+    if continuation:
+        parent=Path(continuation['checkpoint']).parents[1]
+        prior=[r for r in read_metrics(parent/'metrics.jsonl') if r['update']<=continuation['update_offset']]
+        draw([('Previous stage',series(prior)),('Continuation',s)],directory/'diagnostics/lineage','PPO continuation: same objective, reset simulation boundary')
+        (directory/'diagnostics/lineage/sources.json').write_text(json.dumps({'previous':str(parent/'metrics.jsonl'),'current':str(directory/'metrics.jsonl'),'boundary_update':continuation['update_offset']},indent=2)+'\n')
     return s
 
 
