@@ -19,7 +19,7 @@ import numpy as np
 import optax
 from .env import RecoveryEnv, load_config
 from .validation import make_validator
-from .selection import rank_candidate
+from .selection import rank_candidate, rank_command_candidate, command_improved, command_should_stop
 from .network import ResidualActor, make_policy_identity, save_policy
 from .runtime import configure_compilation_cache
 
@@ -58,6 +58,12 @@ class TrainingConfig:
     updates: int=64
     epochs: int=4
     minibatch_size: int=2048
+    command_selection: bool=False
+    command_patience: int=0
+    command_min_updates: int=16
+    command_min_delta: float=.1
+    command_speed_slack: float=.05
+    command_yaw_slack: float=.05
     target_kl: float | None=None
     warmup_pool_size: int=0
     warmup_steps: int=0
@@ -82,6 +88,9 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if type(self.command_patience) is not int or self.command_patience<0 or self.command_min_updates<1 or any(not math.isfinite(x) or x<0 for x in (self.command_min_delta,self.command_speed_slack,self.command_yaw_slack)):
+            raise ValueError("invalid command selection settings")
+        if self.command_patience and not self.command_selection:raise ValueError("command patience requires selection")
         if self.target_kl is not None and (not math.isfinite(self.target_kl) or self.target_kl<=0):raise ValueError('invalid KL target')
         if any(type(v) is not int or v<0 for v in (self.warmup_pool_size,self.warmup_steps)) or bool(self.warmup_pool_size)!=bool(self.warmup_steps):raise ValueError('invalid warmup pool')
         for name in ('num_envs','rollout_steps','updates','epochs','minibatch_size','checkpoint_interval'):
@@ -289,9 +298,10 @@ def train(task_path,output,config=TrainingConfig()):
     baseline=host_metrics(validate(params,True))
     (output/'baseline_validation.json').write_text(json.dumps(baseline,indent=2)+'\n')
     print('Baseline validation: '+json.dumps(baseline),flush=True)
-    best_score=None; best=None; best_radial=None
+    best_score=None; best=None; best_radial=None; stale=0
     start=time.monotonic()
     for index in range(1,c.updates+1):
+        stop=False
         rollout_compile_seconds=optimizer_compile_seconds=0.
         if index==1:
             compile_start=time.monotonic()
@@ -336,18 +346,26 @@ def train(task_path,output,config=TrainingConfig()):
             metadata=json.loads(metadata_path.read_text());metadata['validation']=validation
             metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
             score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
+            command_mode=env.config.motion_commands is not None and c.command_selection
+            if command_mode:score,reason=rank_command_candidate(validation,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack)
             record['selection']={'rank':score,'reason':reason}
-            if score is not None and (best_score is None or score<best_score):
+            improved=command_improved(score,best_score,c.command_min_delta) if command_mode else score is not None and (best_score is None or score<best_score)
+            if improved:
                 best_score,best=score,path
-                best_radial=float(np.mean(validation['radial_rmse']))
+                best_radial=None if command_mode else float(np.mean(validation['radial_rmse']))
+            if command_mode:
+                stale=0 if improved else stale+1
+                stop=command_should_stop(index,stale,c.command_min_updates,c.command_patience)
+                record['command_selection']={'stale_evaluations':stale,'early_stop':stop,'best_checkpoint':best}
             status={'last_checkpoint':path,'best_checkpoint':best,'best_radial_rmse':best_radial,'best_selection_rank':best_score,
-                    'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates}
+                    'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates or stop,'stop_reason':'development_patience' if stop else ('budget' if index==c.updates else None)}
             (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
         record['wall_elapsed_seconds']=time.monotonic()-run_start
         with (output/'metrics.jsonl').open('a') as f:
             f.write(json.dumps(record,allow_nan=False)+'\n')
         print(json.dumps(record,allow_nan=False),flush=True)
-        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates else 'training','validation_complete':'validation' in record},indent=2)+'\n')
+        (output/'progress.json').write_text(json.dumps({'update':index,'control_transitions':record['control_transitions'],'last_checkpoint':path,'phase':'complete' if index==c.updates or stop else 'training','validation_complete':'validation' in record},indent=2)+'\n')
         from .training_diagnostics import plot_training
         plot_training(output)
+        if stop:break
     return status

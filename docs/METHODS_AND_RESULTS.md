@@ -103,3 +103,14 @@ actuator新增可配置composition=full_range，旧配置默认additive保持旧
 按用户要求，当前command_recovery.json恢复roll_working_limit=.3rad，full_range残差保留；旧9度运行冻结配置与checkpoint不改，不把旧模型称为新阈值训练结果。本次未启动训练。motion_commands 7项行为测试通过，覆盖17度不罚/18度开始罚及零残差物理回归/奖励重建。
 
 核对真实历史：dynamic_recovery_speed_20260909为1024×256×32=8388608步，epochs4/minibatch2048，每采样更新512个minibatch优化、总16384次，best为update24。command_full_range_20260914为8192×256×8=16777216步，epochs2/minibatch8192，每采样更新512次、总4096次；两者任务/奖励也不同，不能单独归因于环境数。当前command任务主动跳过旧路径选模规则，best_checkpoint=null，固定末次update8；每轮checkpoint已保存，缺少command专用best选择和平台停止。预算8轮是有界探索预算，不是收敛判据。训练不足可能存在但未证明；回报平台须固定开发分布/完整回合/失败和物理指标共同核查。建议后续先建立command专用固定开发评估选模（生存和正常工况回归约束，报告速度/yaw/姿态分项）、设置有上限的分阶段预算和patience，不混用跨奖励回报，不自动无限续训；本次只恢复阈值及核查，未实现新选模。
+
+
+## 2026-09-14：用户授权32轮上限、开发选模与旧checkpoint审计
+
+当前command配置0.3rad/full_range，8192×256×最多32=67108864训练步，从头训练seed64；epochs2/minibatch8192/KL.01/预热256×2400不改。输出主工作区runs/command_convergence_20260914。固定开发seed46001，alpha0/.5/1，初始/1/每4轮及末轮验证，每次最多7200步，最多72000开发步；标准面板seed47001仅选模后24条最多57600步并输出完整奖励/速度/视频。最多32轮，至少16轮后连续4次验证无改善停止，无45分钟上限，不自动续训。
+
+command_selection显式开启：按失败数、初始直行窗口速度或yaw较基线退步的样本数、负平均完整回合回报依次排序；直行窗口为第一个命令段且最多1秒，容差分别.05m/s和.05rad/s，这不是整段名义性能保证。前两级相同需平均回报改善>.1才更新best并清零patience。失败最少的候选仍可能失败，best只表示声明开发排序最优，不保证安全/恢复。保存每轮checkpoint，标准评估改为best；对旧任务默认仍沿用原行为。曲线新增固定开发回报和侧倾越界。
+
+旧command_full_range的update1–8按旧9度冻结配置审计，用开发seed46001/三alpha，24个策略回合+3个共享基线≤64800步，不训练、不使用标准测试挑模型。输出runs/command_checkpoint_review_20260914，每checkpoint奖励/误差/速度图与总索引；属于事后开发审计。
+
+工程预检command_convergence_20260914_smoke：4环境×16步×最多3更新=192步，128预热计算步，.25s窗口；patience1/minupdates2/mindelta1e9仅用于验证早停/选模链路，正式参数不变。执行错误/非有限停止，通过后启动主训练。CPU相关17项测试通过；未把预检当性能证据。

@@ -18,3 +18,23 @@ def rank_candidate(candidate,baseline,*,speed_slack=.01,nominal_slack=.01):
     # Missing recovery is right-censored at the observation budget, never zero.
     return (float(np.mean(~complete)),float(np.mean(np.asarray(candidate['settling_seconds'])[event])),
             float(np.mean(np.asarray(candidate['post_event_peak'])[event]))),'eligible'
+
+
+def rank_command_candidate(candidate, baseline, *, speed_slack=.05, yaw_slack=.05):
+    """Development rank, not a safety certificate; failed-only banks remain labelled."""
+    keys=('initial_speed_rmse','initial_yaw_rmse','episode_return')
+    if not all(np.isfinite(np.asarray(candidate[k],float)).all() for k in keys):
+        return None,'nonfinite command validation'
+    speed=np.asarray(candidate['initial_speed_rmse'])>np.asarray(baseline['initial_speed_rmse'])+speed_slack
+    yaw=np.asarray(candidate['initial_yaw_rmse'])>np.asarray(baseline['initial_yaw_rmse'])+yaw_slack
+    return (float(np.sum(candidate['failed'])),float(np.sum(speed|yaw)), -float(np.mean(candidate['episode_return']))),'failure count, initial tracking regression count, negative mean episode return'
+
+
+def command_improved(score,best,min_delta):
+    if score is None:return False
+    if best is None:return True
+    return score[:2]<best[:2] or (score[:2]==best[:2] and score[2]<best[2]-min_delta)
+
+
+def command_should_stop(update,stale,min_updates,patience):
+    return patience>0 and update>=min_updates and stale>=patience

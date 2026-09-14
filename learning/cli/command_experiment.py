@@ -43,14 +43,17 @@ def evaluate_panel(root,task,panel,checkpoint):
 def run(a):
     root=a.output;root.mkdir(parents=True,exist_ok=False);frozen=root/'frozen';frozen.mkdir()
     for name in ('task','training','panel'):(frozen/f'{name}.json').write_bytes(getattr(a,name).read_bytes())
-    declaration=dict(role='Development command tracking, not holdout; conditioned lower policy only',endpoint='last',source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('learning/src/sttw_control').glob('*.py')})
+    declaration=dict(role='Development command tracking, not holdout; conditioned lower policy only',endpoint='best_development' if json.loads((frozen/'training.json').read_text()).get('command_selection',False) else 'last',source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('learning/src/sttw_control').glob('*.py')})
     (root/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
     def status(phase,**kw):(root/'status.json').write_text(json.dumps(dict(phase=phase,**kw),indent=2)+'\n')
     env=dict(os.environ,PYTHONUNBUFFERED='1',XLA_PYTHON_CLIENT_PREALLOCATE='false',MUJOCO_GL='egl');env.pop('JAX_PLATFORMS',None)
     try:
         status('training')
         with (root/'training.log').open('x') as f:subprocess.run([sys.executable,'learning/cli/train.py','--task',str(frozen/'task.json'),'--config',str(frozen/'training.json'),'--output',str(root/'training')],env=env,stdout=f,stderr=subprocess.STDOUT,check=True)
-        checkpoint=Path(json.loads((root/'training/status.json').read_text())['last_checkpoint'])
+        result=json.loads((root/'training/status.json').read_text())
+        use_best=json.loads((frozen/'training.json').read_text()).get('command_selection',False)
+        if use_best and not result['best_checkpoint']:raise RuntimeError('No finite development-selected checkpoint')
+        checkpoint=Path(result['best_checkpoint'] if use_best else result['last_checkpoint'])
         status('evaluation',checkpoint=str(checkpoint));env['JAX_PLATFORMS']='cpu'
         with (root/'evaluation.log').open('x') as f:subprocess.run([sys.executable,__file__,'--evaluate','--output',str(root),'--task',str(frozen/'task.json'),'--panel',str(frozen/'panel.json'),'--checkpoint',str(checkpoint)],env=env,stdout=f,stderr=subprocess.STDOUT,check=True)
         status('complete',checkpoint=str(checkpoint))

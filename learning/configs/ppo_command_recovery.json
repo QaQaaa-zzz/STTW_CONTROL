@@ -1,7 +1,7 @@
 {
   "num_envs": 8192,
   "rollout_steps": 256,
-  "updates": 8,
+  "updates": 32,
   "epochs": 2,
   "minibatch_size": 8192,
   "target_kl": 0.01,
@@ -12,5 +12,11 @@
   "validation_seeds": [
     46001
   ],
-  "validation_final_only": false
+  "validation_final_only": false,
+  "command_selection": true,
+  "command_patience": 4,
+  "command_min_updates": 16,
+  "command_min_delta": 0.1,
+  "command_speed_slack": 0.05,
+  "command_yaw_slack": 0.05
 }

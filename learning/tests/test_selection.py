@@ -38,3 +38,24 @@ def test_invalid_reference_cannot_disable_regression_guards():
     assert rank_candidate(candidate,base)[0] is None
     candidate=row();candidate['settling_seconds']=[None,3.]
     assert rank_candidate(candidate,row())[1]=='nonfinite validation'
+
+
+def test_command_selection_prioritizes_survival_then_nominal_then_return():
+    from sttw_control.selection import rank_command_candidate, command_improved
+    base=dict(failed=[False],initial_speed_rmse=[.02],initial_yaw_rmse=[.02],episode_return=[0.])
+    good=dict(base,episode_return=[-10.])
+    failed=dict(base,failed=[True],episode_return=[100.])
+    regression=dict(base,initial_speed_rmse=[.3],episode_return=[100.])
+    score=lambda x:rank_command_candidate(x,base)[0]
+    assert score(good)<score(failed) and score(good)<score(regression)
+    assert not command_improved((0.,0.,9.95),(0.,0.,10.),.1)
+    assert command_improved((0.,0.,9.),(0.,0.,10.),.1)
+    assert rank_command_candidate(dict(good,episode_return=[float('nan')]),base)[0] is None
+
+
+def test_command_early_stop_requires_minimum_and_patience():
+    from sttw_control.selection import command_should_stop
+    assert not command_should_stop(12,4,16,4)
+    assert not command_should_stop(16,3,16,4)
+    assert command_should_stop(16,4,16,4)
+    assert not command_should_stop(32,8,16,0)

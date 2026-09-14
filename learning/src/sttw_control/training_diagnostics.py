@@ -8,7 +8,7 @@ PANELS=[('policy','Policy surrogate loss'),('value','Value loss (includes 0.5 fa
         ('kl','Approx. KL diagnostic (symlog)'),('reward','Mean step reward (symlog; different objectives)'),
         ('entropy','Gaussian entropy before tanh'),('coverage','Disturbed samples / collected steps'),
         ('recovery','Development joint recovery fraction'),('failed','Development physical failure fraction'),
-        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]')]
+        ('path','Development radial RMSE [m; observed windows]'),('speed','Development speed RMSE [m/s; observed windows]'),('final_kl','Accepted policy exact Gaussian KL'),('yaw','Development yaw-rate RMSE [rad/s]'),('eval_return','Fixed development episode return'),('roll_exceed','Development roll exceed fraction')]
 
 
 def series(rows):
@@ -22,7 +22,10 @@ def series(rows):
         out['final_kl'].append(row.get('optimizer_audit',{}).get('final_exact_kl',float('nan')))
         disturbed=row.get('steer_disturbed_transitions',float('nan'))+row.get('force_disturbed_transitions',float('nan'))+row.get('rear_disturbed_transitions',0)
         out['coverage'].append(disturbed/(step-previous) if step>previous else float('nan'));previous=step
-        v=row.get('validation',{});out['yaw'].append(float(np.mean(v['yaw_rmse'])) if 'yaw_rmse' in v else float('nan'));mask=np.asarray(v.get('event_present',[]),bool)
+        v=row.get('validation',{})
+        for key,field in [('eval_return','episode_return'),('roll_exceed','roll_exceed_fraction')]:
+            out[key].append(float(np.mean(v[field])) if field in v else float('nan'))
+        out['yaw'].append(float(np.mean(v['yaw_rmse'])) if 'yaw_rmse' in v else float('nan'));mask=np.asarray(v.get('event_present',[]),bool)
         for key,field in [('recovery','post_event_hold_complete'),('failed','failed'),('path','radial_rmse'),('speed','speed_rmse')]:
             a=np.asarray(v.get(field,[]))
             if 'yaw_rmse' in v and key in ('failed','speed'):
@@ -43,7 +46,7 @@ def draw(entries,destination,title):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    fig,axes=plt.subplots(6,2,figsize=(15,19),layout='constrained')
+    fig,axes=plt.subplots((len(PANELS)+1)//2,2,figsize=(15,22),layout='constrained')
     colors=plt.get_cmap('tab20')
     for i,(label,s) in enumerate(entries):
         for ax,(key,name) in zip(axes.flat,PANELS):

@@ -63,8 +63,10 @@ def make_command_validator(env,actor,scale,config):
             n=jax.vmap(env.step)(s,jp.where(zero,jp.zeros_like(a),a))
             raw=jax.vmap(env.requested)(s.tick,s.command_schedule)
             speed=jp.sum(n.data.qvel[:,:3]*n.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
-            return n,(active,(speed-raw[:,0])**2,(n.yaw_rate-raw[:,1])**2,jp.abs(n.measurement[:,0]))
-        last,(active,speed,yaw,roll)=jax.lax.scan(tick,state,None,length=env.horizon)
+            return n,(active,(speed-raw[:,0])**2,(n.yaw_rate-raw[:,1])**2,jp.abs(n.measurement[:,0]),n.reward,s.tick*env.config.controller.dt<jp.minimum(1.,s.command_schedule[:,1,0]) if s.command_schedule.shape[1]>1 else s.tick*env.config.controller.dt<1.)
+        last,(active,speed,yaw,roll,reward,initial)=jax.lax.scan(tick,state,None,length=env.horizon)
         count=jp.maximum(jp.sum(active,axis=0),1)
-        return dict(speed_rmse=jp.sqrt(jp.sum(jp.where(active,speed,0),axis=0)/count),yaw_rmse=jp.sqrt(jp.sum(jp.where(active,yaw,0),axis=0)/count),failed=last.terminated,steps=count,roll_peak=jp.max(jp.where(active,roll,0),axis=0),roll_exceed_fraction=jp.sum(active&(roll>env.config.motion_commands.roll_working_limit),axis=0)/count)
+        first=active&initial
+        first_count=jp.maximum(jp.sum(first,axis=0),1)
+        return dict(episode_return=jp.sum(jp.where(active,reward,0),axis=0),initial_speed_rmse=jp.sqrt(jp.sum(jp.where(first,speed,0),axis=0)/first_count),initial_yaw_rmse=jp.sqrt(jp.sum(jp.where(first,yaw,0),axis=0)/first_count),speed_rmse=jp.sqrt(jp.sum(jp.where(active,speed,0),axis=0)/count),yaw_rmse=jp.sqrt(jp.sum(jp.where(active,yaw,0),axis=0)/count),failed=last.terminated,steps=count,roll_peak=jp.max(jp.where(active,roll,0),axis=0),roll_exceed_fraction=jp.sum(active&(roll>env.config.motion_commands.roll_working_limit),axis=0)/count)
     return validate
