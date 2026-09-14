@@ -206,3 +206,23 @@ command_recovery_20260914已complete，代码仍在feat/command-recovery隔离�
 
 
 2026-09-14 GPU早停/选模预检complete：第2轮提前停止，last update2、best update1，六条CPU配对评估实际使用best并完成图与视频。正式command_convergence_20260914已启动（源码声明a39419f），阶段以status.json为准；旧checkpoint审计继续独立运行。未声称新策略性能或收敛。
+
+
+## 2026-09-14 旧checkpoint开发审计完成
+
+证据runs/command_checkpoint_review_20260914/status.json、summary.json、INDEX.md。旧9度/full_range冻结任务，单开发seed46001、alpha0/.5/1，8个checkpoint×3策略回合和3共享基线；非新0.3rad训练结果，非独立测试。各轮存活数（分母3）为0/0/0/0/2/3/2/3；平均完整回报-276.200/-231.999/-195.623/-225.144/-227.629/-102.412/-129.163/-102.287；初始直行速度RMSE均值.061/.123/.183/.240/.326/.368/.364/.398m/s。按失败数、初始退步数、平均回报预定排序选update8，但它较update6平均回报只高.125，不是显著优势；三个alpha中8相对6仅alpha0回报改善，.5/1退步。
+
+结论：没有发现明显全面更优的早期模型，不能把旧结果解释成仅末次选错；存活随训练改善伴随正常直行降速，6–8轮有局部平台/反复，但不足以证明收敛，不能证明继续训练必好或必坏。保留新0.3rad/32轮上限训练，不改运行参数。
+
+
+## 程序故障桌面报警
+
+learning/cli/watch_run.py（逻辑learning/src/sttw_control/run_watchdog.py）独立监视--status和--launch中的进程，--output保存监视状态与alert.txt。默认10秒检查、连续3次异常确认；捕获phase错误、未完成时进程消失/僵尸/PID复用，以及持续不可读状态文件。complete为正常结束；物理failed数组/小车摔倒不当程序错误。没有默认无日志超时，不检测仍存活但卡死的进程；不自动重启/停止训练。使用zenity错误弹窗，失败时尝试notify-send；依赖当前登录桌面会话，桌面服务不可用会记录监视器error。弹窗发送不代表用户已阅读。
+
+已运行：runs/command_convergence_20260914_watchdog/status.json，监视当前训练主进程915580，保存进程starttime防PID复用；首次测试弹窗明确标注测试，关闭不影响后续监视。4项行为测试通过，实际桌面后端已发出测试，监视状态monitoring/0异常。源码放主工作区，未改运行训练工作树的源码。后续新运行需启动对应监视器，不会自动监视其他项目或所有进程。
+
+启动示例（从项目根目录，输出目录应尚不存在）：
+```bash
+PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli/watch_run.py --status runs/某次运行/status.json --launch runs/某次输入/launch.json --output runs/某次运行_watchdog
+```
+launch.json需包含流水线主进程pid；应监视流水线根状态而不是提前完成的子训练状态。正常完成或发出一次确认故障报警后监视器退出，避免重复弹窗。
