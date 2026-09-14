@@ -185,3 +185,8 @@ command_recovery_20260914已complete，代码仍在feat/command-recovery隔离�
 新增full_range指令叠加：先把基础输出截入[-L,L]得到b，a>=0时u=b+a*(L-b)，a<0时u=b+a*(L+b)，当前strength=1。前轮L=3rad/s、后轮L=60rad/s；网络0保留基线，正负端点可覆盖甚至反转基础输出；仍受转向位置/伺服力矩等约束。full_range不使用旧固定残差尺度，并绑定新checkpoint身份；旧additive默认行为与身份保留。没有动力学分配或执行器扩容。
 
 相关测试54项通过，新增新配置CPU零残差物理回归与奖励重建后motion_commands文件7项通过，共55项不同测试；仅CPU工程验证。本次未重训，不能复用旧checkpoint宣称新机制有效。后续需要冻结新配置从头训练，并保留同场景基线/奖励组成/速度与偏航误差图。
+
+
+## 2026-09-14 full_range重训执行
+
+用户批准按上一轮训练。冻结配置runs/command_full_range_20260914_inputs；8192环境×256步×8更新=16777216控制步，seed64、epochs2、minibatch8192、KL.01，256×2400预热计算步。训练JSON和四标准测试面板与旧轮逐项相同，任务仅改变9度阈值/full_range。先执行command_full_range_20260914_smoke（64训练步、128预热计算步、.25s指令切换全链路），成功后正式command_full_range_20260914从头训练和自动三alpha配对评估/奖励组成/速度图/视频。只开发对照，不称holdout；非有限或执行错误停止，8更新后不自动续训，无45分钟硬上限。代码在runs/worktrees/command-recovery，声明提交f68f810；实时进度查看各运行status.json，本文不替代实时状态。
