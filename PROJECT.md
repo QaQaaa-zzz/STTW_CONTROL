@@ -239,3 +239,6 @@ command任务新增reward_components_mean_step：alive、attitude、roll_rate、
 
 
 奖励日志GPU预检已complete：64训练步，七分项和与总奖励逐样本最大绝对差3.7253e-9，PNG/PDF/JSON生成，14项CPU相关测试通过；单点图标记另经2项绘图测试验证。实现与验证提交585e684/2eb7b30（feat/reward-component-logging）。当前正式训练保持原进程，不声称其既有日志已补齐分项。
+
+
+2026-09-14 command_convergence已complete：32轮预算结束，best28用于全部最终评估；策略四标准场景×三alpha12/12存活，急转弯通过但速度与yaw请求被明显放宽。普通场景仍两项均劣于基线，不能声称全面提升；同训练8→28开发指标支持训练不足曾是因素但不证明收敛。详细数据见VALIDATION/METHODS_AND_RESULTS及运行analysis/INDEX。完成弹窗已发出。下一步建议冻结best28测试alpha独立/联合切换与正常工况干预，不原样加训。本次未启动实验。
