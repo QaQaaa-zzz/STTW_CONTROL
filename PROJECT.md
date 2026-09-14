@@ -317,3 +317,10 @@ CPU并行工程核验完成：相同两种子10秒gentle，1-worker=24.5248s、2
 
 
 累计100轮续训已实际启动：runs/command_balanced_100_20260914/status.json=training，pipeline PID1458325、watchdog PID1458327，启动源码960ba55。日志已进入MJX reset编译；这是启动证据，尚无第9轮及以后性能结果。监视器分别覆盖训练完成、整个评估完成和运行错误；不继续第2/3/8轮审计。
+
+
+## 2026-09-14 累计100轮完成，当前判断
+
+command_balanced_100训练和评估complete，训练/最终完成均有zenity发送记录。平均训练奖励明显改善并在后20轮趋缓；标准模型12/12存活、4/12末段保持，基线9/12和9/12。急转弯防摔有效但欠转严重，普通三工况9/9奖励与速度/yaw RMSE均退步，当前不是合格的通用跟踪控制器。第100轮被KL整轮回退，Actor与99相同，使用100是声明预算终点、不是best。详见docs/VALIDATION.md和docs/METHODS_AND_RESULTS.md最新段，全部图与逐阶段分析在runs/command_balanced_100_20260914/analysis/training_review/INDEX.md。
+
+本次仅分析、核验原始24条轨迹、补齐100轮训练图并更新台账；未改奖励/物理配置、未追加训练。下一步建议少量后期checkpoint开发审阅及单因素名义行为保持对照；不能继续把降低转弯幅度后的存活当成任务成功。
