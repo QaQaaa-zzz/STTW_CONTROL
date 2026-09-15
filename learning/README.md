@@ -200,3 +200,11 @@ r=.005*(1+4*wv*Gv+4*wp*Gp-Ctail-Cbudget-Croll-Caction-Creturn)
 ### 本轮没有承诺的结果
 
 没有将PPO替换成RSL-RL，没有宣称16个大mini-batch一定优于512个小mini-batch；主要采样瓶颈仍需在目标GPU实测。没有改物理步长/接触参数换取速度。当前弯道/速度配置不是所有左右转与极端指令的覆盖；固定的原路径跟踪与恢复机制先通过工程测试，再另行做课程、消融、多训练seed和硬件状态估计验证。
+
+### RSL-RL PPO（几何alpha任务）
+
+安装可选依赖：`pip install -e 'learning[rsl,media]'`。锁定`rsl-rl-lib==3.2.0`，其余历史JAX配置继续使用`trainer: jax`；`ppo_path_priority.json`现在为`trainer: rsl`。实际调用上游PPO，不是将自写PPO重命名。当前RSL适配器限定`tracking`几何任务；旧command实验不要直接切trainer。
+
+当前参数：4096环境、24步rollout、5 epochs、24576小批次、200轮；98304采样/轮、20小批更新/轮。网络280→256→128→2，Actor/Critic均ELU；alpha仍显式输入各历史帧，权限不随alpha变化。学习率初始.001、上游KL自适应，目标.01；该KL控制是调学习率，不是旧JAX更新拒绝或回退。原模型推理按各自元数据激活加载。每条环境跨rollout连续，只有done才reset。
+
+训练仍用`learning/cli/train.py --task learning/configs/path_priority_recovery.json --config learning/configs/ppo_path_priority.json --output runs/<run>/training`；完整训练/评估/媒体使用`learning/cli/recovery_pipeline.py`。RSL存储潜高斯样本，环境输入tanh动作。超时bootstrap使用reset前实际下一观测，真实失败不bootstrap。checkpoint附`rsl_snapshot.pt`用于RSL恢复，`actor.msgpack`与identity.json供现有评估/实车推理链路使用；不能把旧JAX optimizer snapshot用于RSL续训。日志保留原始reward分项、loss、全rollout更新后高斯KL及实际学习率。后者与上游逐小批内部KL不同。

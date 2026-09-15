@@ -26,7 +26,7 @@ def scalar_values(record,labels=(),profile="full"):
     result={}
     def add(tag,value):
         if isinstance(value,numbers.Real) and math.isfinite(value):result[tag]=float(value)
-    for key in ('mean_step_reward','control_transitions','stage_control_transitions','episode_ends'):
+    for key in ('mean_step_reward','learning_rate','control_transitions','stage_control_transitions','episode_ends'):
         add('train/'+key,record.get(key))
     for key,value in record.get('reward_components_mean_step',{}).items():add('reward_components/'+key,value)
     for key,value in zip(('policy','value','latent_entropy','approx_kl'),record.get('loss_metrics',[])):
@@ -48,7 +48,7 @@ def scalar_values(record,labels=(),profile="full"):
     for key,value in record.get('selection',{}).items():
         if key!='rank':add('selection/'+key,value)
     if profile == 'core':
-        keep = {'train/mean_step_reward', 'loss/policy', 'loss/value', 'kl/approx_kl',
+        keep = {'train/learning_rate', 'train/mean_step_reward', 'loss/policy', 'loss/value', 'kl/approx_kl',
                 'optimizer/retained_minibatches'}
         result = {k:v for k,v in result.items() if k in keep}
         for group in ('validation',):

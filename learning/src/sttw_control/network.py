@@ -85,17 +85,21 @@ def make_policy_identity(model_identity,config,history_steps):
 class ResidualActor(nn.Module):
     hidden_sizes: tuple=(256,128)
     negative_slope: float=.01
+    activation: str="leaky_relu"
 
     @nn.compact
     def __call__(self,observation,return_logits=False):
         x=observation
         for width in self.hidden_sizes:
-            x=nn.leaky_relu(nn.Dense(width)(x),negative_slope=self.negative_slope)
+            x=nn.Dense(width)(x)
+            if self.activation=="elu":x=nn.elu(x)
+            elif self.activation=="leaky_relu":x=nn.leaky_relu(x,negative_slope=self.negative_slope)
+            else:raise ValueError("unsupported actor activation")
         logits=nn.Dense(2)(x)
         return logits if return_logits else jp.tanh(logits)
 
 
-def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_slope=.01):
+def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_slope=.01,activation="leaky_relu"):
     path=Path(path)
     mean,std=np.asarray(mean),np.asarray(std)
     fields=identity.get('observation_fields',list(FIELDS))
@@ -105,10 +109,10 @@ def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_
     payload=serialization.to_bytes(params)
     meta={'schema':'sttw_actor_v1','identity':identity,'fields':fields,
           'actions':identity.get('action_fields',['steer_rate_residual','rear_rate_residual']),'hidden_sizes':list(hidden_sizes),
-          'negative_slope':negative_slope,'mean':mean.tolist(),'std':std.tolist(),
+          'negative_slope':negative_slope,'activation':activation,'mean':mean.tolist(),'std':std.tolist(),
           'payload_sha256':hashlib.sha256(payload).hexdigest()}
     # Validate dimensions before publishing a checkpoint directory.
-    ResidualActor(tuple(hidden_sizes),negative_slope).apply(params,jp.zeros(size))
+    ResidualActor(tuple(hidden_sizes),negative_slope,activation).apply(params,jp.zeros(size))
     path.mkdir(parents=True,exist_ok=False)
     (path/'actor.msgpack').write_bytes(payload)
     (path/'identity.json').write_text(json.dumps(meta,indent=2,allow_nan=False)+'\n')
@@ -126,7 +130,7 @@ def load_policy(path,*,expected):
     size=int(expected['history_steps'])*(len(expected.get('observation_fields',FIELDS))+1)
     if mean.shape!=(size,) or std.shape!=mean.shape or not np.isfinite(mean).all() or not np.isfinite(std).all() or np.any(std<=0):
         raise ValueError('invalid normalization')
-    actor=ResidualActor(tuple(meta['hidden_sizes']),meta['negative_slope'])
+    actor=ResidualActor(tuple(meta['hidden_sizes']),meta['negative_slope'],meta.get('activation','leaky_relu'))
     template=actor.init(jax.random.PRNGKey(0),jp.zeros(size))
     params=serialization.from_bytes(template,payload)
     return jax.jit(lambda obs: actor.apply(params,(obs-jp.asarray(mean))/jp.asarray(std)))

@@ -1,10 +1,10 @@
 {
-  "num_envs": 1024,
-  "rollout_steps": 128,
-  "updates": 32,
-  "epochs": 4,
-  "minibatch_size": 32768,
-  "learning_rate": 0.0003,
+  "num_envs": 4096,
+  "rollout_steps": 24,
+  "updates": 200,
+  "epochs": 5,
+  "minibatch_size": 24576,
+  "learning_rate": 0.001,
   "gamma": 0.9995,
   "gae_lambda": 0.99,
   "clip": 0.2,
@@ -14,14 +14,18 @@
   "warmup_pool_size": 64,
   "warmup_steps": 1400,
   "seed": 65,
-  "checkpoint_interval": 8,
+  "checkpoint_interval": 25,
   "plot_interval": 0,
   "validation_updates": [
     1,
-    8,
-    16,
-    24,
-    32
+    25,
+    50,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200
   ],
   "validation_seeds": [
     48001
@@ -46,5 +50,7 @@
       "duration": 1.0,
       "rear_torque": 0.4
     }
-  ]
+  ],
+  "trainer": "rsl",
+  "activation": "elu"
 }

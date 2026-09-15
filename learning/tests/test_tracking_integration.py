@@ -123,8 +123,9 @@ def test_trace_reconstructs_all_signed_terms_and_final_hold(tmp_path):
 
 def test_training_config_has_short_rollout_large_minibatches_and_no_gate():
     cfg=TrainingConfig(**json.loads(open('learning/configs/ppo_path_priority.json').read()))
-    assert cfg.num_envs*cfg.rollout_steps*cfg.updates==4194304
-    assert cfg.num_envs*cfg.rollout_steps//cfg.minibatch_size*cfg.epochs==16
+    assert cfg.num_envs*cfg.rollout_steps*cfg.updates==19660800
+    assert cfg.num_envs*cfg.rollout_steps//cfg.minibatch_size*cfg.epochs==20
+    assert cfg.trainer=="rsl" and cfg.activation=="elu" and cfg.learning_rate==.001
     assert cfg.initial_std==.15 and cfg.gamma==.9995
     c=config();assert c.priority.randomize_alpha and not c.priority.risk_gate
 

@@ -83,8 +83,12 @@ def refresh_best_reward_model(training_dir):
     chosen=max(candidates,key=lambda x:(x['mean_episode_return'],-x['update']))
     validation=json.loads((Path(chosen['checkpoint'])/'training.json').read_text())['validation']
     baseline=json.loads((root/'baseline_validation.json').read_text())
-    rank,reason=rank_command_candidate(validation,baseline,scope='full_episode',speed_slack=config.get('command_speed_slack',.05),yaw_slack=config.get('command_yaw_slack',.05))
-    result=dict(**chosen,criterion='maximum mean fixed-development episode return',scope='evaluated stage checkpoints plus compatible resume checkpoint; earlier update wins exact ties; no extra physics',development_gates_passed=bool(rank is not None and all(x==0 for x in rank[:-1])),acceptance_rank=rank,acceptance_reason=reason,task_success_verified=False,candidates=candidates)
+    geometric=declared.get('task',{}).get('tracking') is not None
+    if geometric:
+        rank,reason=rank_tracking_candidate(validation,baseline,speed_slack=config.get('selection_speed_slack',.05),nominal_slack=config.get('selection_nominal_slack',.03))
+    else:
+        rank,reason=rank_command_candidate(validation,baseline,scope='full_episode',speed_slack=config.get('command_speed_slack',.05),yaw_slack=config.get('command_yaw_slack',.05))
+    result=dict(**chosen,criterion='maximum mean fixed-development episode return',scope='evaluated stage checkpoints plus compatible resume checkpoint; earlier update wins exact ties; no extra physics',development_gates_passed=bool(rank is not None and (geometric or all(x==0 for x in rank[:-1]))),acceptance_rank=rank,acceptance_reason=reason,task_success_verified=False,candidates=candidates)
     dest=root/'best_model'
     if dest.exists() and not dest.is_symlink():raise ValueError('best_model exists and is not a managed symlink')
     temporary=root/'.best_model.tmp'

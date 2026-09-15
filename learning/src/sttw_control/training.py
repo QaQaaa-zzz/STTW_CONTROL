@@ -54,6 +54,8 @@ class Critic(nn.Module):
 
 @dataclass(frozen=True)
 class TrainingConfig:
+    trainer: str="jax"
+    activation: str="leaky_relu"
     num_envs: int=64
     rollout_steps: int=256
     updates: int=64
@@ -96,6 +98,8 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if self.activation not in ("leaky_relu","elu") or (self.trainer=="jax" and self.activation!="leaky_relu"):raise ValueError("activation unsupported by selected trainer")
+        if self.trainer not in ("jax","rsl"):raise ValueError("unknown PPO trainer")
         if self.validation_updates is not None:
             if len(set(self.validation_updates))!=len(self.validation_updates) or any(type(i) is not int or not 1<=i<=self.updates for i in self.validation_updates):
                 raise ValueError('invalid explicit validation updates')
@@ -169,6 +173,9 @@ def restore_training_snapshot(path,template,identity):
 
 
 def train(task_path,output,config=TrainingConfig()):
+    if config.trainer=='rsl':
+        from .rsl_training import train as rsl_train
+        return rsl_train(task_path,output,config)
     from .tensorboard_logging import TrainingEvents
     with TrainingEvents(Path(output)/'tensorboard', profile='core') as events:
         return _train(task_path,output,config,events)
