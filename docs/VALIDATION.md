@@ -1578,3 +1578,5 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=osmesa STTW_TEST_MJX_CPU=1 p
 已同步用户确认的2032491远端几何实现。RSL-RL锁定3.2.0，直接调用上游PPO；保留MJX/ECBC/ESO、显式alpha、奖励与有界动作。RSL存潜高斯样本，执行tanh；timeout使用真实下一状态critic而非上游time_outs的当前值快捷路径。新ELU元数据随Actor导出，旧LeakyReLU缺省兼容。几何best索引修复为几何验收，不再错误调用yaw-rate验收。
 最终CPU套件245 passed、2 skipped；跳过显式GPU/MJX-CPU opt-in项。另实际cuda:0 MJX+Torch RSL端到端短测2轮32转移完成，奖励重建最大3.7253e-9，loss/KL/各奖励分项、best、ELU推理导出和训练图均生成。证据runs/rsl_integration_smoke/complete_check；早期两次日志接口失败保留，一个中断短测亦保留，不冒充全部尝试成功。首轮rollout含编译82.25s，第二轮4步.414s；小batch结果不外推4096吞吐或学习质量。上游自适应LR不是KL硬界，短测第二轮更新后KL=.0798，这个小样本试验不作为策略效果判据。
 用户批准下一轮4096×24×200=19,660,800训练转移，5epochs、4小批/epoch=20优化/轮；lr=.001 adaptive、ELU、std=.15、gamma=.9995、GAE=.99。正式训练尚需实际启动状态确认，不使用工程通过声明恢复有效。
+
+正式启动核验：runs/path_rsl_4096_20260915/pipeline_status.json=training，training/status.json=initializing；进程已分配GPU，尚无正式训练迭代/效果结论。冻结task/training/panel与declaration可审计；启动、阶段和完成监视器均已接入。

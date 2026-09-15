@@ -492,3 +492,5 @@ T200补评现已complete；analysis/comparison报告48条不重复轨迹，重�
 ## 2026-09-15 RSL-RL替换与用户指定200轮预算
 已快进同步远端2032491的显式alpha几何恢复实现；中断前本地原型仅保存于Git stash，不合并回已完成实现。新几何配置使用RSL-RL 3.2.0官方PPO，MJX物理/ECBC/ESO/280维alpha历史观测/奖励不变。DLPack设备交换，RSL存储pre-tanh高斯动作，物理收到tanh；超时加gamma*V(真实下一状态)，不使用RSL默认当前状态timeout捷径。ELU激活随导出元数据保存，旧LeakyReLU模型仍按原激活加载。
 用户已授权4096×24、minibatch24576、epochs5、lr=.001 adaptive、200轮：每轮98304转移、20小批更新，总19,660,800转移及4000小批更新。gamma=.9995、GAE=.99、clip=.2、std=.15、KL目标=.01，RSL原生自适应LR不是原JAX拒绝/回退。rollout边界不reset，只有真实done清理全部状态。阶段真实warmup64×1400额外89600计算转移。开发1/25/50/75/100/125/150/175/200，标准阶段末只用经典三扰动+名义、alpha0/.5/1、seed49001；最多24条10秒回合。工程短测先核验ELU导出、timeout、真实GPU两轮链路，再启动200轮；不自动延长预算，不声称替换库必然提高性能。
+
+正式流水线已启动：runs/path_rsl_4096_20260915，launcher PID1670321；冻结声明预算19,660,800，当前训练初始化。监视器PID1670322，状态在runs/path_rsl_4096_20260915_inputs/monitor，分别监控training/status.json与pipeline_status.json。TensorBoard既有6006服务新增RSL_4096_ELU系列；代码提交eacbaa8已推送。训练是否有效以完成后的逐工况配对结果为准。
