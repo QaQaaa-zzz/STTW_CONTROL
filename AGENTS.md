@@ -97,3 +97,6 @@
 ## 几何任务固定首屏交付（2026-09-15）
 - 每次分析先展示轨迹图与每步总奖励对steps图，再解释指标。几何任务也必须执行，不限旧command任务。
 - tracking_diagnostics.generate_panel自动调用write_panel_overview；全部声明场景/alpha/seed均含配对ECBC+ESO和残差、原始几何参考、持续扰动区间与真实失败终点。输出PNG/PDF、证据哈希索引，奖励分项/误差/速度图保留。不得用总回报数字替代图。
+
+- 用户明确要求累计奖励随steps：每次同时提供累计总奖励、每步总奖励、每步奖励分项及累计分项，均与基线配对；累计量从第1个实际转移求和，保留终止罚并在真实终点截止。
+- 场景名称必须明确：旧command四场景为gentle/tight_turn/straighten/reversal；新path几何面板为nominal/force_right/steer_left/rear_load，不得混称同一四场景或直接跨任务比较回报。
