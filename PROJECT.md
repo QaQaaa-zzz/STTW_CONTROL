@@ -521,3 +521,5 @@ path_reference_rsl_4096_20260915完成200轮及96条标准评估。R200累计回
 当前250 passed、2 skipped，包含交叉处不得跳支路、正常回退、区间边界测试。奖励公式文件未修改；历史任务/模型仍保留全局投影行为。
 
 实际GPU RSL短测2轮32转移complete，采样/优化、跨参考开发验证、best索引、ELU导出及训练图通过；奖励重建最大误差3.725290298461914e-09。证据runs/projection_validation_20260915/training。准备启动相同200轮预算，短测不作为效果证据。
+
+正式训练已启动：runs/path_projection_rsl_4096_20260915，PID2627237；监视器2627238已确认running、consecutive_errors=0，训练阶段initializing。TensorBoard6006新增RSL_continuous_projection，训练结束和全流水线结束分别通知。实现已本地提交cf6606f；两次push均遇gnutls_handshake TLS连接中断，保留本地提交，不声称远端已更新。
