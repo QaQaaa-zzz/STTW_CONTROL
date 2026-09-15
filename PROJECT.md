@@ -462,3 +462,7 @@ G100补跑相同四工况、三α、seed47001的24条配对标准轨迹，全部
 报告runs/command_alpha_gate_20260915/analysis/review/INDEX.md，best标准图在best_evaluation/analysis/INDEX.md，指针training/best_model→checkpoints/update_0100。72条轨迹奖励重建最大6.3263e-6，跨运行基线time/qpos/qvel逐元素一致。G200基础转向11/12组合从未超±3，失败急转中点仅1步超界，普通退化不能主要归因限幅死区。G200训练后段平台、开发性能下降；优化器63,951个保留小批次、无整轮KL回退，不能因此认定性能稳定。
 
 下一步：等已授权T250结束，比较各阶段best/last及配对基线，再决定下层候选。暂不启动上层α训练或新奖励实验；若继续研究门控，应分开偏好与权限，做固定权限/仅投影/门控的同预算消融，并检查1–3s动态α训练与10s固定α评估的分布差异。此次只修复best保存/索引，不改变正在运行的策略训练或预算。
+
+## 2026-09-15 跨方法展示与精简监控
+已将固定command场景的XY参考/实际轨迹和逐步总奖励叠加实现为command_comparison共享模块，command_diagnostics每次自动生成；显式manifest可比较多个冻结模型，不重新仿真。当前T150/G100/G200+ECBC四场景、三alpha、seed47001共四组轨迹图和四组奖励图位于runs/command_alpha_gate_20260915/analysis/trajectory_comparison。参考只是原始指令的理想积分，偏离参考与存活分开判断；急转弯失败端点保留。
+TensorBoard 6006切换到runs/tensorboard_core/events，显示T连续训练、G门控、Y额外yaw奖励三条方法系列。精简投影持续追踪metrics.jsonl，原始事件和完整JSON不删。新训练直接记录core标签；当前已运行trainer不热改，由投影过滤。开发总回报均值与训练每步平均reward名称明确区分，不能当作同一统计量。

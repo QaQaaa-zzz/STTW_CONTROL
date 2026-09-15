@@ -169,7 +169,7 @@ def restore_training_snapshot(path,template,identity):
 
 def train(task_path,output,config=TrainingConfig()):
     from .tensorboard_logging import TrainingEvents
-    with TrainingEvents(Path(output)/'tensorboard') as events:
+    with TrainingEvents(Path(output)/'tensorboard', profile='core') as events:
         return _train(task_path,output,config,events)
 
 

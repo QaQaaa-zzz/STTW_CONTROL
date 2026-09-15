@@ -71,3 +71,15 @@ def test_event_index_links_to_run_and_does_not_link_itself(tmp_path):
     assert len(links)==1 and links[0].resolve()==log
     register_run(index)
     assert len(list(index.iterdir()))==1
+
+
+def test_core_profile_keeps_rewards_and_kl_without_sample_explosion():
+    from sttw_control.tensorboard_logging import scalar_values
+    r={'mean_step_reward':.1,'loss_metrics':[1,2,3,4],
+       'validation':{'episode_return':[2,None,4]},'device_memory_stats':{'used':200},
+       'optimizer_audit':{'accepted_minibatches':3,'unwanted':9}}
+    values=scalar_values(r,profile='core')
+    assert values['validation/mean_episode_return']==3
+    assert values['train/mean_step_reward']==.1
+    assert values['kl/approx_kl']==4
+    assert not any('sample_' in k or k.startswith('memory/') or k.endswith('unwanted') for k in values)

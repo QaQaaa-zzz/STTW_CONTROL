@@ -82,3 +82,8 @@
 
 ## 训练阶段与流水线完成提示
 - 训练阶段结束立即单独弹窗，不等待评估/出图；流水线全部完成后再弹窗。错误仍单独通知。监视器保存stage_notified和completion_notified，重启后不重复发送。默认监视同运行training/status.json，可用--stage-status指定其他阶段。只重启监视器，不重启正在评估的程序。
+
+## 固定场景跨方法图（2026-09-15）
+- 每次command结果分析必须先提供各声明场景的配对XY轨迹图和各模型每步总奖励对steps图；各alpha/seed完整覆盖，包含ECBC+ESO。累计回报作为附图，不替代每步奖励。
+- 固定速度/世界偏航角速度指令积分生成同初始位姿的理想参考轨迹，明确不是可行性保证或新增几何路径目标；实际轨迹在真实失败处停止。跨方法验证场景、初态、基线和时序一致。
+- 统一使用learning/cli/command_comparison.py及共享command_comparison模块，PNG/PDF/NPZ/源文件哈希与索引同时保留。TensorBoard默认精简奖励、loss、KL、有效更新及开发失败率；完整JSON日志保留。

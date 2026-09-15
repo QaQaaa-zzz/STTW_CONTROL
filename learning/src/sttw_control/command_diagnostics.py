@@ -196,6 +196,11 @@ def generate(root):
         ends=[f'{item["end_seconds"]:g}'+(' / failed' if item['terminal_failure_included'] else '') for item in (b,x)]
         table.append(f'| {pair["case"]} | {pair["alpha"]:g} | {pair["seed"]} | {ends[0]} | {ends[1]} | {b["observed_return"]:.8g} | {x["observed_return"]:.8g} | {pair["delta_residual_minus_baseline"]:.8g} | {shared["end_seconds"]:g} | {shared["delta_residual_minus_baseline"]:.8g} |')
     (out/'INDEX.md').write_text('# Command tracking diagnostics\n\nAll errors refer to original requests. Observed-window RMSE and return of failed runs are not full-task rankings. Shading denotes command intervals, not an external load.\n\nReturns sum actual per-step rewards and include the terminal failure penalty. Observed endpoints may differ; common-window deltas use identical control steps through the earlier endpoint, including any failure at that endpoint. All deltas are signed residual minus baseline, never return ratios. Mean penalty bars instead exclude a step if either policy failed. Per-step reward figures remain the primary reward diagnostic.\n\n[All paired return scopes and component totals](paired_rewards.json)\n\n'+'\n'.join(table)+'\n\n'+'\n'.join(links)+'\n')
+    from .command_comparison import generate_comparison
+    comparison_out = out/'trajectory_comparison'
+    manifest = comparison_out/'manifest.json'
+    comparison_runs = json.loads(manifest.read_text())['runs'] if manifest.exists() else {'Residual': str(root.resolve())}
+    generate_comparison(comparison_runs, comparison_out)
     with (out/'INDEX.md').open('a') as f:
         if (out/'trajectory_comparison/INDEX.md').exists():f.write('\n- [Trajectory comparison](trajectory_comparison/INDEX.md)\n')
         media=out/'media_selection.json'

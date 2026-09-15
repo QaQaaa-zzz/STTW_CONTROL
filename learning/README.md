@@ -142,3 +142,11 @@ PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli
 `TrainingConfig.validation_updates` optionally declares stage-local development evaluation indices (final always evaluated). For 50 updates resumed from 100, `[25, 50]` evaluates global 125/150. This does not change optimizer behavior or resume physical state.
 
 `deferred_training.py` accepts `pipeline_kind: command` with `dependency_status` and `dependency_launch` (PID and optional process_starttime). It waits only for that successful pipeline and its process exit, not unrelated GPU jobs. Frozen `input_sha256`, the exclusive lock and one-time launch claim prevent input drift and duplicate starts. `notify: true` launches the existing stage/completion/error monitor for the child; queue errors notify separately. The default recovery pipeline behavior remains available.
+
+### 固定command场景的跨方法图
+
+`PYTHONPATH=learning/src python learning/cli/command_comparison.py --manifest comparison.json --output runs/<run>/analysis/trajectory_comparison`
+
+manifest格式为`{"runs":{"方法名称":"/absolute/run/root"}}`，每个root具有evaluation/alpha_*/seed_*/*/{baseline,residual}。每场景/种子输出一张全部alpha的XY图和一张每步总奖励/累计回报图，附PDF、NPZ及来源哈希。参考使用速度与世界yaw-rate精确分段积分；失败记录不延伸。自动command诊断会生成单模型+基线版本，已有manifest则保留其跨方法比较清单。
+
+精简TensorBoard投影：`PYTHONPATH=learning/src python learning/cli/tensorboard_core.py --manifest runs/tensorboard_core/manifest.json --output runs/tensorboard_core/events --watch --resume`。manifest的runs值为有序metrics.jsonl文件列表；首次运行去掉--resume。保留训练每步平均reward、开发episode总回报均值/基线/差值、关键奖励分项、policy/value loss、KL、保留minibatch数和开发失败比例。详细审计仍在原始JSON中。默认服务：http://127.0.0.1:6006。

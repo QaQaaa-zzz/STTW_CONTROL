@@ -17,7 +17,7 @@ def validation_labels(declaration):
             for s in cfg.get('validation_seeds',[])]
 
 
-def scalar_values(record,labels=()):
+def scalar_values(record,labels=(),profile="full"):
     result={}
     def add(tag,value):
         if isinstance(value,numbers.Real) and math.isfinite(value):result[tag]=float(value)
@@ -42,6 +42,26 @@ def scalar_values(record,labels=()):
             else:add(f'{group}/{key}',value)
     for key,value in record.get('selection',{}).items():
         if key!='rank':add('selection/'+key,value)
+    if profile == 'core':
+        keep = {'train/mean_step_reward', 'loss/policy', 'loss/value', 'kl/approx_kl',
+                'optimizer/retained_minibatches'}
+        result = {k:v for k,v in result.items() if k in keep}
+        for group in ('validation',):
+            values = record.get(group, {}).get('episode_return', [])
+            if isinstance(values, list):
+                values = [v for v in values if isinstance(v, numbers.Real) and math.isfinite(v)]
+                if values: result[group+'/mean_episode_return'] = sum(values)/len(values)
+        for key in ('baseline','candidate','delta'):
+            values = record.get('paired_episode_return', {}).get(key, [])
+            values = [v for v in values if isinstance(v,numbers.Real) and math.isfinite(v)]
+            if values:result['validation/mean_'+key+'_return'] = sum(values)/len(values)
+        failures=record.get('validation',{}).get('failed',[])
+        if failures:result['validation/failure_fraction']=sum(failures)/len(failures)
+        for key in ('speed','yaw','alive','speed_tolerance','yaw_tolerance','yaw_tracking','failure'):
+
+            add('reward_components/'+key, record.get('reward_components_mean_step',{}).get(key))
+    elif profile != 'full':
+        raise ValueError('Unknown TensorBoard profile')
     return result
 
 
@@ -63,8 +83,9 @@ def register_run(logdir):
 
 class TrainingEvents:
     """Lazy writer: leave output creation to the trainer; flush each iteration."""
-    def __init__(self,path):
+    def __init__(self,path,profile="full",register=True):
         self.path=Path(path);self.writer=None;self.last_step=None
+        self.profile=profile;self.register=register
     def __enter__(self):return self
     def __exit__(self,*exc):self.close()
     def close(self):
@@ -76,10 +97,10 @@ class TrainingEvents:
         from tensorboard.summary.writer.event_file_writer import EventFileWriter
         step=int(record['update'])
         if self.last_step is not None and step<=self.last_step:raise ValueError('updates must be strictly increasing')
-        values=scalar_values(record,labels)
+        values=scalar_values(record,labels,self.profile)
         if self.writer is None:
             self.writer=EventFileWriter(str(self.path))
-            register_run(self.path)
+            if self.register:register_run(self.path)
         self.writer.add_event(Event(wall_time=time.time(),step=step,summary=Summary(value=[
             Summary.Value(tag=k,simple_value=v) for k,v in values.items()])))
         self.writer.flush();self.last_step=step
