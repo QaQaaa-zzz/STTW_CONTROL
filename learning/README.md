@@ -150,3 +150,53 @@ PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli
 manifest格式为`{"runs":{"方法名称":"/absolute/run/root"}}`，每个root具有evaluation/alpha_*/seed_*/*/{baseline,residual}。每场景/种子输出一张全部alpha的XY图和一张每步总奖励/累计回报图，附PDF、NPZ及来源哈希。参考使用速度与世界yaw-rate精确分段积分；失败记录不延伸。自动command诊断会生成单模型+基线版本，已有manifest则保留其跨方法比较清单。
 
 精简TensorBoard投影：`PYTHONPATH=learning/src python learning/cli/tensorboard_core.py --manifest runs/tensorboard_core/manifest.json --output runs/tensorboard_core/events --watch --resume`。manifest的runs值为有序metrics.jsonl文件列表；首次运行去掉--resume。保留训练每步平均reward、开发episode总回报均值/基线/差值、关键奖励分项、policy/value loss、KL、保留minibatch数和开发失败比例。详细审计仍在原始JSON中。默认服务：http://127.0.0.1:6006。
+
+
+## α输入Actor的几何路径恢复（新增，2026-09-15）
+
+### 入口与运行边界
+
+此任务复用ECBC+ESO与原执行器；α=0路径优先，α=1速度优先。α进入每帧观测，不控制动作权限；三种优先级共同约束roll和最终回归。配置是待训练第一阶段，不是已经成功的策略。
+
+```bash
+export PYTHONPATH=learning/src
+# 只执行训练；目录必须不存在。该命令不是本次已经执行的记录。
+python learning/cli/train.py --task learning/configs/path_priority_recovery.json --config learning/configs/ppo_path_priority.json --output runs/DECLARED_PATH_RUN/training
+# 完整独立流水线（不要与上面共用已经存在的输出目录）
+python learning/cli/recovery_pipeline.py --task learning/configs/path_priority_recovery.json --training learning/configs/ppo_path_priority.json --panel learning/configs/path_priority_standard_panel.json --output runs/DECLARED_NEW_PATH_PIPELINE
+```
+
+前者预算4,194,304训练转移；额外预热89,600计算转移。后者还包含开发面板及标准5α×2初态seed×6场景×2控制器的评估、图表/视频；它们不是独立训练种子。训练seed65、开发48001、标准49001/49002相互分离，但本轮没有运行这些长实验。
+
+### 精确奖励
+
+设ev为真实前向速度减**本转移发生前的请求速度**，ey为原始路径横向投影误差，ep为包角航向误差，a为两维有界残差，alpha使用转移前值。所有误差使用物理单位，不是网络归一化观测。
+
+```
+wv=(1+9*alpha)/11; wp=(10-9*alpha)/11
+Gv=.5*exp(-(ev/.5)^2)+.5*exp(-(ev/.15)^2)
+Gp=.5*exp(-(ey/.4)^2-(ep/.35)^2)+.5*exp(-(ey/.1)^2-(ep/.1)^2)
+H(z)=z^2                    (|z|<=1)
+    =2*|z|-1                (|z|>1)
+bv=.5-.3*alpha; by=.1+.3*alpha
+Ctail=.1*(wv*H(ev/.2)+wp*(H(ey/.2)+.3*H(ep/.15)))
+Cbudget=2*H(max(|ev|-bv,0)/.2)+2*H(max(|ey|-by,0)/.2)
+Croll=100*max(|roll|-.3,0)^2+roll_rate^2
+Caction=.01*sum(a^2)+.02*sum((a-a_previous)^2)
+Creturn=.5*pending*(1+min(elapsed/3,1))   # 仅初始化1s以后
+r=.005*(1+4*wv*Gv+4*wp*Gp-Ctail-Cbudget-Croll-Caction-Creturn)
+```
+
+共同回归带为|ey|≤.1m、|ep|≤.15rad、|ev|≤.2m/s、|roll|≤.3rad、|roll_rate|≤.3rad/s；连续保持.5s才完成。时钟从真实离带起计时、包括扰动期，3s未回归记为deadline_missed，不能靠晚到清除。曾离带后完成可每回合加2分一次；失败转移所有分项清零，仅−100。常规奖励不截成非负。完整可改参数均在配置tracking段，不引入机械臂、脚/轮腾空、抓取或无依据能量奖励。
+
+### 接口、兼容与诊断
+
+新Actor输入280维：27字段×10帧+10mask。观测中的α、原始路径、速度参考、上一残差和回归状态均有显式顺序及归一化；checkpoint绑定新身份，不能用旧190/200维模型冒充。`tracking=None`、`include_tracking=False`和无speed_schedule保留旧身份。软件力矩/物理模型未改，前轮仍是rad/s转向角速度而非转角。
+
+单条evaluate会自动重建14项有符号奖励并存`analysis/tracking/summary.json`与components.npz；面板提供配对XY、每步总奖励/分项、横向/航向/roll、目标/真实/轮速代理速度、估计误差、回归计时的PNG/PDF及索引。失败曲线在实际失败时终止。新恢复判断和旧command yaw诊断分开。
+
+新开发选模必须无失败、末段共同保持、无超时，且名义速度RMSE不比配对基线高.05m/s、名义横向/航向RMSE不高.03（各自单位），成熟阶段速度/路径过程容忍超限比例均≤10%。这些只是声明的开发门槛，不是安全证明；不合格时best为空，流水线last仅作为标记清楚的诊断候选。
+
+### 本轮没有承诺的结果
+
+没有将PPO替换成RSL-RL，没有宣称16个大mini-batch一定优于512个小mini-batch；主要采样瓶颈仍需在目标GPU实测。没有改物理步长/接触参数换取速度。当前弯道/速度配置不是所有左右转与极端指令的覆盖；固定的原路径跟踪与恢复机制先通过工程测试，再另行做课程、消融、多训练seed和硬件状态估计验证。

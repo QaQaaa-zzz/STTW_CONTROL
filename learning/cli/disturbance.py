@@ -27,6 +27,8 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
     extra=panel.get('minimum_post_event_seconds',0.)
     if not np.isfinite(extra) or extra<0:raise ValueError('minimum post-event observation must be finite and nonnegative')
     max_duration=max([panel['duration_seconds']]+[c['duration'] for c in panel.get('cases',[])])
+    if cfg.tracking is not None and panel['start_seconds']+max_duration+max(extra,cfg.tracking.return_seconds)>cfg.horizon_seconds+1e-7:
+        raise ValueError('tracking panel recovery window exceeds fixed episode')
     cfg=replace(cfg,horizon_seconds=max(cfg.horizon_seconds,panel['start_seconds']+max_duration+extra))
     nominal=replace(cfg,random_events=None,disturbance_rear_torque=0.,disturbance_force=0.,disturbance_steer_rate=0.)
     env=RecoveryEnv(nominal)

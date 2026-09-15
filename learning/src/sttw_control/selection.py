@@ -92,3 +92,27 @@ def refresh_best_reward_model(training_dir):
     temporary.symlink_to(os.path.relpath(chosen['checkpoint'],root),target_is_directory=True);temporary.replace(dest)
     tmp=root/'best_model.tmp.json';tmp.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');tmp.replace(root/'best_model.json')
     return result
+
+
+def rank_tracking_candidate(candidate, baseline, *, speed_slack=.05, nominal_slack=.03):
+    """Hard development acceptance before ranking; not a stability certificate."""
+    keys=('radial_rmse','speed_rmse','heading_rmse','nominal_radial_rmse',
+          'nominal_speed_rmse','nominal_heading_rmse','episode_return',
+          'speed_tolerance_exceed_fraction','path_tolerance_exceed_fraction')
+    if not all(np.isfinite(np.asarray(data[k],float)).all() for data in (candidate,baseline) for k in keys):
+        return None,'nonfinite geometric validation'
+    if any(candidate['failed']) or any(candidate['nominal_failed']):return None,'physical failure'
+    if not all(candidate['terminal_tracking_hold']) or not all(candidate['nominal_terminal_tracking_hold']):
+        return None,'final common tracking hold incomplete'
+    if any(candidate['return_deadline_missed']) or any(candidate['nominal_return_deadline_missed']):
+        return None,'declared return deadline missed'
+    # Nominal paired baseline must itself survive; failure cannot become a cheap reference.
+    if any(baseline['nominal_failed']):return None,'nominal baseline panel is not valid for non-regression'
+    for key,slack in (('nominal_speed_rmse',speed_slack),('nominal_radial_rmse',nominal_slack),
+                      ('nominal_heading_rmse',nominal_slack)):
+        if np.any(np.asarray(candidate[key])>np.asarray(baseline[key])+slack):
+            return None,'undisturbed regression: '+key
+    if any(np.any(np.asarray(candidate[k])>.1) for k in ('speed_tolerance_exceed_fraction','path_tolerance_exceed_fraction')):
+        return None,'relaxed tolerance exceeded for more than 10% of evaluated mature steps'
+    delta=np.asarray(candidate['episode_return'])-np.asarray(baseline['episode_return'])
+    return (-float(np.mean(delta)),float(np.mean(candidate['radial_rmse']))),'development gates passed; independent evaluation still required'

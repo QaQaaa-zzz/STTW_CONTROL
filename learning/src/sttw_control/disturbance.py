@@ -6,6 +6,15 @@ from .path import CircleConfig, lateral_space_metrics, FigureEightConfig, eight_
 
 def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.05,heading_tolerance=.15,hold_seconds=.5):
     """No resampling: compare equal-time samples; later failure invalidates recovery."""
+    if config.get('tracking') is not None:
+        from .tracking_diagnostics import trace_summary
+        result=trace_summary(trace,config)
+        paired=min(len(trace['time']),len(nominal['time']))
+        if not np.allclose(trace['time'][:paired],nominal['time'][:paired],rtol=0,atol=1e-5):
+            raise ValueError('paired timestamps mismatch')
+        result['paired_reference_available']=paired==len(trace['time'])
+        result['paired_extra_lateral_peak_m']=float(np.max(np.abs(trace['path_features'][:paired,0]-nominal['path_features'][:paired,0])))
+        return result
     t=trace['time'];n=len(t)
     if len(nominal['time'])<n:
         return {'paired_reference_available':False,'reason':'nominal trajectory ended before disturbed trajectory; no extrapolation','failed':bool(trace['terminated'][-1]),'recovered_after_excursion':False,'post_event_extra_radial_peak_m':None,'first_joint_hold_completion_after_event_end_seconds':None,'settled_joint_hold_completion_after_event_end_seconds':None}
@@ -78,6 +87,11 @@ def plot_panel(root):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     root=Path(root);decl=json.loads((root/'declaration.json').read_text())
+    if any(c.get('tracking') is not None for c in decl['scenarios'].values()):
+        from .tracking_diagnostics import write_diagnostics
+        for name in decl['scenarios']:
+            write_diagnostics(root/name/'residual',baseline=root/name/'baseline')
+        return
     cases=[(k,c) for k,c in decl['scenarios'].items() if k!='nominal']
     fig,axes=plt.subplots(len(cases),3,figsize=(14,3*len(cases)),squeeze=False,layout='constrained')
     for row,(name,c) in zip(axes,cases):

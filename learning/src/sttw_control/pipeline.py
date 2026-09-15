@@ -48,6 +48,8 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
     cases=panel.get('cases',[])
     count=1+len(cases)+len(panel.get('steer_rate_pulses',[]))+len(panel.get('lateral_forces',[]))
     horizon=max(cfg.horizon_seconds,panel['start_seconds']+max([panel['duration_seconds']]+[c['duration'] for c in cases])+panel.get('minimum_post_event_seconds',0.))
+    if cfg.tracking is not None and horizon>cfg.horizon_seconds+1e-7:
+        raise ValueError('tracking panel cannot extend the fixed episode')
     output=Path(output).resolve()
     if not resume:
         output.mkdir(parents=True,exist_ok=False)
@@ -56,7 +58,7 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
             (frozen/f'{name}.json').write_bytes(p.read_bytes())
     sources=source_identity()
     declaration={'source_sha256':sources,'priority_alphas':alphas,
-                 'endpoint':'fixed final update; priority controllability development' if conditioned else 'legacy best eligible or last fallback',
+                 'endpoint':('best geometric development-gated candidate or explicitly unqualified last fallback' if cfg.tracking is not None else ('fixed final update; priority controllability development' if conditioned else 'legacy best eligible or last fallback')),
                  'training_budget':training.num_envs*training.rollout_steps*training.updates,
                  'standard_budget':len(alphas)*len(seeds)*count*2*math.ceil(horizon/cfg.controller.dt),
                  'media_selection':'first predeclared seed, all events, every declared alpha',
@@ -91,7 +93,11 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
         result=json.loads((train/'status.json').read_text())
         if not result['complete']:raise RuntimeError('training did not finish its declared budget')
         if resume and result.get('control_transitions')!=declaration['training_budget']:raise ValueError('completed training budget mismatch')
-        checkpoint=select_endpoint(result,conditioned=conditioned)
+        checkpoint=(result['best_checkpoint'] or result['last_checkpoint']) if cfg.tracking is not None else select_endpoint(result,conditioned=conditioned)
+        if cfg.tracking is not None:
+            (output/'endpoint.json').write_text(json.dumps({'checkpoint':checkpoint,
+                'development_eligible':result['best_checkpoint'] is not None,
+                'scope':'best development-gated checkpoint; unqualified last fallback remains diagnostic only'},indent=2)+'\n')
         rows=[];media_index=['# Complete standard recovery media','',declaration['media_selection'],'']
         for i,alpha in enumerate(alphas):
             prefix=f'alpha_{i}/' if conditioned else ''
@@ -140,6 +146,6 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
         status('complete',checkpoint=checkpoint,episodes=len(rows),endpoint=declaration['endpoint'],
                legacy_eligible_candidate_exists=result['best_checkpoint'] is not None,
                **({'development_eligible':result['best_checkpoint'] is not None} if not conditioned else {}),
-               eligibility_scope='legacy speed/nominal gate, not priority controllability evidence')
+               eligibility_scope=('geometric development gates; not held-out safety evidence' if cfg.tracking is not None else 'legacy speed/nominal gate, not priority controllability evidence'))
     except Exception as exc:
         status('error',error=str(exc));raise

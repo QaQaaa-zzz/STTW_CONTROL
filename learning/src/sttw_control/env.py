@@ -25,6 +25,8 @@ from .events import RandomEvents,sample_event,profile
 from .priority import PriorityConfig,priority_weights
 from .action_mapping import MappingConfig,map_action
 from .motion_commands import MotionCommands
+from .tracking_reward import TrackingConfig, initial_return, return_observation
+from .tracking_reward import transition as tracking_transition
 
 @dataclass(frozen=True)
 class TaskConfig:
@@ -34,6 +36,7 @@ class TaskConfig:
     recovery: RecoveryConfig=field(default_factory=RecoveryConfig)
     action_mapping: MappingConfig | None=None
     motion_commands: MotionCommands | None=None
+    tracking: TrackingConfig | None=None
     bend: BendConfig | None=None
     rear_disturbance_mode: str="torque"  # event[5]: signed Nm or signed rad/s bias magnitude; positive opposes forward motion
     disturbance_rear_torque: float=0.
@@ -42,6 +45,7 @@ class TaskConfig:
     priority: PriorityConfig | None=None
     horizon_seconds: float=8.
     speed_reference: float=2.
+    speed_schedule: tuple | None=None  # geometric tracking: (seconds, speed m/s) rows
     learning_roll_reference: float | None=None  # rad; does not change ECBC target.
     steer_reference: float=0.
     steer_amplitude: float=0.
@@ -66,6 +70,34 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.speed_schedule is not None:
+            if self.tracking is None or not self.speed_schedule:
+                raise ValueError("speed schedule requires geometric tracking")
+            last=-1.
+            for row in self.speed_schedule:
+                if (len(row)!=2 or not all(math.isfinite(x) for x in row) or row[0]<=last
+                        or row[0]<0 or not 0<row[1]<=.1*self.actuator.rear_rate_limit):
+                    raise ValueError("invalid geometric speed schedule")
+                if not math.isclose(row[0]/self.controller.dt,round(row[0]/self.controller.dt),abs_tol=1e-7):
+                    raise ValueError("speed changes must align with control ticks")
+                last=row[0]
+            if self.speed_schedule[0][0]!=0 or not math.isclose(self.speed_schedule[0][1],self.speed_reference):
+                raise ValueError("first speed request must match physical reset speed")
+        if (self.tracking is not None) != self.observation.include_tracking:
+            raise ValueError("tracking config and observation flag must agree")
+        if self.tracking is not None:
+            if (self.motion_commands is not None or not self.observation.include_path
+                    or self.priority is None or not self.observation.include_priority
+                    or self.action_mapping is not None or self.priority.risk_gate
+                    or self.observation.include_attitude_risk
+                    or self.actuator.composition != "additive"):
+                raise ValueError("geometric tracking requires visible alpha, path and fixed additive authority")
+            if self.learning_roll_reference is not None:
+                raise ValueError("geometric tracking must preserve dynamic roll reference")
+            if self.horizon_seconds > 10.:
+                raise ValueError("new tracking episodes must not exceed 10 seconds")
+            if self.tracking.roll_working_limit >= self.roll_failure:
+                raise ValueError("working roll limit must lie below failure threshold")
         if self.action_mapping is not None and self.actuator.composition!="additive":
             raise ValueError("physical action mapping requires additive composition")
         if (self.motion_commands is not None)!=self.observation.include_motion:raise ValueError("motion observation contract mismatch")
@@ -134,7 +166,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('tracking',TrackingConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -162,6 +194,8 @@ class EnvState:
     command_schedule: object=None
     yaw_rate: object=0.
     priority_locked: object=False
+    tracking_state: object=None
+    tracking_components: object=None
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -244,16 +278,23 @@ class RecoveryEnv:
             torque=xp.cross(offset,force)
         return xp.concatenate([force,torque])
 
+    def speed_command(self,tick):
+        if self.config.speed_schedule is None:return jp.asarray(self.config.speed_reference)
+        rows=jp.asarray(self.config.speed_schedule)
+        index=jp.maximum(jp.sum(tick*self.config.controller.dt>=rows[:,0])-1,0)
+        return rows[index,1]
+
     def command(self,tick,pose=None,schedule=None):
         c=self.config
-        if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),c.speed_reference])
+        speed=self.speed_command(tick)
+        if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),speed])
         if c.figure_eight is not None:
             if pose is None:raise ValueError("figure eight requires localization")
-            return jp.array([eight_command(pose,c.figure_eight,c.controller.wheelbase,c.controller.caster),c.speed_reference])
+            return jp.array([eight_command(pose,c.figure_eight,c.controller.wheelbase,c.controller.caster),speed])
         if c.circle is not None:
             if pose is None: raise ValueError('circle tracking requires XY/yaw localization')
-            return jp.array([circle_command(pose,c.circle,c.controller.wheelbase,c.controller.caster),c.speed_reference])
-        return jp.array([c.steer_reference+c.steer_amplitude*jp.sin(2*jp.pi*c.steer_frequency*tick*c.controller.dt),c.speed_reference])
+            return jp.array([circle_command(pose,c.circle,c.controller.wheelbase,c.controller.caster),speed])
+        return jp.array([c.steer_reference+c.steer_amplitude*jp.sin(2*jp.pi*c.steer_frequency*tick*c.controller.dt),speed])
 
     def pose(self,data):
         matrix=jp.asarray(data.xmat[self.bundle.chassis]).reshape(3,3)
@@ -277,7 +318,7 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None):
         c=self.config
         command=self.command(tick,pose) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
@@ -293,6 +334,8 @@ class RecoveryEnv:
         if c.priority is not None:
             risk=priority_weights(alpha,roll-learning_reference,roll,rate,c.priority)[0]
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
+        if c.tracking is not None:
+            frame=jp.concatenate([frame,return_observation(initial_return() if tracking_state is None else tracking_state,c.tracking)])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),learning_reference
 
@@ -320,12 +363,24 @@ class RecoveryEnv:
         pose=self.pose(data)
         alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
         controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha)
-        return EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
+        state=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
                         sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha)
+        if c.tracking is not None:
+            tracking_state=initial_return()
+            _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
+                lateral_error=0.,heading_error=0.,action=jp.zeros(2),alpha=alpha,dt=c.controller.dt,
+                alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,failed=False,
+                enabled=False,config=c.tracking)
+            state=state.replace(tracking_state=tracking_state,
+                                tracking_components=jax.tree.map(jp.zeros_like,components))
+        return state
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config
+        if c.tracking is not None:
+            return self._advance_tracking(state,measurement,actuator,action,physical_contact,
+                                          physics_finite,true_speed,pose)
         tick=state.tick+1
         command=self.command(tick,pose)
         controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose,state.priority_alpha)
@@ -350,6 +405,36 @@ class RecoveryEnv:
         return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,
                              reference=reference,base=base,obs=jp.nan_to_num(obs,nan=0.,posinf=0.,neginf=0.),tick=tick,reward=reward,done=failed|timeout,
                              terminated=failed,truncated=timeout,end_code=code)
+
+    def _advance_tracking(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
+        c=self.config;tick=state.tick+1
+        # The reward uses the request and alpha that generated this transition.
+        command=self.command(state.tick,state.pose)
+        path=self.path_features(pose)
+        leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,path))
+        invalid=(~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in leaves]))
+                 | ~jp.asarray(physics_finite))
+        fallen=jp.abs(measurement[0])>c.roll_failure
+        failed=invalid|fallen|physical_contact
+        tracking_state,parts=tracking_transition(state.tracking_state,
+            roll=measurement[0],roll_rate=measurement[1],speed_error=true_speed-command[1],
+            lateral_error=path[0],heading_error=path[1],action=action,alpha=state.priority_alpha,
+            dt=c.controller.dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,
+            failed=failed,enabled=state.tick*c.controller.dt>=c.tracking.start_seconds,
+            config=c.tracking)
+        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,
+            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state)
+        controller_invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((controller,obs,base))]))
+        invalid=invalid|controller_invalid;failed=failed|controller_invalid
+        parts={k:jp.where(controller_invalid,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
+        timeout=(tick>=self.horizon)&~failed
+        code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
+        recovery=state.recovery.replace(balance_recovered=tracking_state.hold>=c.tracking.hold_seconds,
+                                         task_recovered=tracking_state.credited & ~tracking_state.pending & ~tracking_state.deadline_missed & ~failed)
+        return state.replace(controller=controller,actuator=actuator,history=history,measurement=measurement,
+            pose=pose,reference=reference,base=base,obs=jp.nan_to_num(obs),tick=tick,reward=sum(parts.values()),
+            done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
+            tracking_state=tracking_state,tracking_components=parts)
 
     def _contact_failure(self,data):
         # A floor contact with a non-wheel body counts as physical failure.

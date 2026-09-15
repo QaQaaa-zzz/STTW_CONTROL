@@ -20,7 +20,7 @@ import optax
 from .env import RecoveryEnv, load_config
 from .validation import make_validator
 from .motion_commands import signed_reward_components,gated_action
-from .selection import refresh_best_reward_model, rank_candidate, rank_command_candidate, command_improved, command_should_stop
+from .selection import refresh_best_reward_model, rank_candidate, rank_tracking_candidate, rank_command_candidate, command_improved, command_should_stop
 from .network import ResidualActor, make_policy_identity, save_policy, load_policy
 from .runtime import configure_compilation_cache
 
@@ -150,6 +150,7 @@ def normalization(task):
         scale += [1.,1.,1.]
     if task.observation.include_motion:scale += [2.,2.]
     if task.observation.include_priority:scale += [1.] + ([1.] if task.observation.include_attitude_risk else [])
+    if task.observation.include_tracking:scale += [1.,1.,1.,task.tracking.return_seconds,task.tracking.hold_seconds,1.,1.,1.]
     std=np.array(scale*task.observation.history_steps+[1.]*task.observation.history_steps,np.float32)
     return np.zeros_like(std),std
 
@@ -287,6 +288,12 @@ def _train(task_path,output,config,events):
                 audit={k:jp.mean(v) for k,v in parts.items()}
                 audit['reconstruction_max_abs']=jp.max(jp.abs(sum(parts.values())-nxt.reward))
                 audit['reconstruction_max_scaled']=jp.max(jp.abs(sum(parts.values())-nxt.reward)/(1+jp.abs(nxt.reward)))
+                row=row+(audit,)
+            if env.config.tracking is not None:
+                audit={k:jp.mean(v) for k,v in nxt.tracking_components.items()}
+                error=jp.abs(sum(nxt.tracking_components.values())-nxt.reward)
+                audit['reconstruction_max_abs']=jp.max(error)
+                audit['reconstruction_max_scaled']=jp.max(error/(1+jp.abs(nxt.reward)))
                 row=row+(audit,)
             def restart(s):
                 fresh=reset(jax.random.split(reset_key,c.num_envs))
@@ -431,7 +438,7 @@ def _train(task_path,output,config,events):
                 'mean_step_reward':float(jp.mean(rows[4])),'episode_ends':int(jp.sum(rows[7]))}
         if c.target_kl is not None:
             record['optimizer_audit']={'attempted_minibatches':int(host[4]),'accepted_minibatches':int(host[5]),'final_exact_kl':float(host[6]),'full_update_rolled_back':bool(host[7]),'target_kl':c.target_kl}
-        if env.config.motion_commands is not None:
+        if env.config.motion_commands is not None or env.config.tracking is not None:
             component_means={k:float(jp.mean(v)) for k,v in rows[9].items() if not k.startswith('reconstruction_')}
             error=float(jp.max(rows[9]['reconstruction_max_abs']))
             scaled_error=float(jp.max(rows[9]['reconstruction_max_scaled']))
@@ -451,7 +458,7 @@ def _train(task_path,output,config,events):
             validation=host_metrics(validate(params,False))
             record['validation_seconds']=time.monotonic()-validation_start
             record['validation']=validation
-            if env.config.motion_commands is not None:
+            if env.config.motion_commands is not None or env.config.tracking is not None:
                 delta=np.asarray(validation['episode_return'],float)-np.asarray(baseline['episode_return'],float)
                 record['paired_episode_return']={'baseline':baseline['episode_return'],'candidate':validation['episode_return'],'delta':delta.tolist(),'mean_delta':float(np.mean(delta)),'scope':'same declared horizon, commands, alpha and initial seed; terminal replacement and actual early termination retained'}
             metadata_path=Path(path)/'training.json'
@@ -459,10 +466,14 @@ def _train(task_path,output,config,events):
             metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
             if env.config.motion_commands is not None:
                 record['best_reward_model']=refresh_best_reward_model(output)
-            score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
+            score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else ((None,"geometric tracking: separate acceptance") if env.config.tracking is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack))
+            if env.config.tracking is not None:
+                score,reason=rank_tracking_candidate(validation,baseline,
+                    speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
             command_mode=env.config.motion_commands is not None and c.command_selection
             if command_mode:score,reason=rank_command_candidate(validation,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack,scope=c.command_selection_scope)
             record['selection']={'rank':score,'reason':reason,'task_success_verified':False}
+            if env.config.tracking is not None:record['selection']['development_gates_passed']=score is not None
             if command_mode and c.command_selection_scope=='full_episode':record['selection']['development_gates_passed']=bool(score is not None and all(v==0 for v in score[:-1]))
             improved=command_improved(score,best_score,c.command_min_delta) if command_mode else score is not None and (best_score is None or score<best_score)
             if improved:

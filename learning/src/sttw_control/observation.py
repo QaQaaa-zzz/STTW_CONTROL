@@ -9,9 +9,12 @@ FIELDS=('roll_error','roll','roll_rate','speed_estimate','steer','steer_rate',
 
 
 PATH_FIELDS=("radial_error","heading_error","path_curvature")
+TRACKING_FIELDS=("previous_steer_residual", "previous_rear_residual",
+                 "return_pending", "return_elapsed", "return_hold",
+                 "return_credited", "return_ever_left", "return_deadline_missed")
 
 def observation_fields(config):
-    return FIELDS + (PATH_FIELDS if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ())
+    return FIELDS + ((("path_lateral_error", "heading_error", "path_curvature") if config.include_tracking else PATH_FIELDS) if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ()) + (TRACKING_FIELDS if config.include_tracking else ())
 
 @dataclass(frozen=True)
 class ObservationConfig:
@@ -20,6 +23,7 @@ class ObservationConfig:
     include_motion: bool=False
     include_priority: bool=False
     include_attitude_risk: bool=True
+    include_tracking: bool=False
     def __post_init__(self):
         if not isinstance(self.history_steps,int) or self.history_steps<1:
             raise ValueError('history_steps must be positive integer')

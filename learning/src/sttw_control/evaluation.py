@@ -61,7 +61,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         prepare=jax.jit(prepare)
         recorded_command=jax.jit(env.command)
         def capture(s,a):
-            return {'priority_alpha':float(s.priority_alpha),'attitude_risk':float(s.history.frames[-1,-1]) if env.config.priority is not None and env.config.observation.include_attitude_risk else 0.,'attitude_risk_observed':env.config.priority is not None and env.config.observation.include_attitude_risk,'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
+            row={'priority_alpha':float(s.priority_alpha),'attitude_risk':float(s.history.frames[-1,-1]) if env.config.priority is not None and env.config.observation.include_attitude_risk else 0.,'attitude_risk_observed':env.config.priority is not None and env.config.observation.include_attitude_risk,'prelimit_command':np.asarray(request).copy(),'request_time':request_time,
                     'actuator_diagnostic_valid':int(s.tick)>0,
                     'actuator_force':np.asarray(s.data.actuator_force).copy(),
                     'generalized_actuator_force':np.asarray(s.data.qfrc_actuator).copy(),
@@ -78,6 +78,13 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'effective_action':np.asarray(effective_action).copy(),'composition_base':np.asarray(composed_base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
+            if env.config.tracking is not None:
+                from .tracking_reward import return_observation
+                row['path_features']=np.asarray(env.path_features(s.pose))
+                row['true_forward_speed']=float(jp.dot(s.data.qvel[:3],jp.asarray(s.data.xmat[env.bundle.chassis]).reshape(3,3)[:,0]))
+                row['return_state']=np.asarray(return_observation(s.tracking_state,env.config.tracking))
+                row.update({'reward_'+name:float(value) for name,value in s.tracking_components.items()})
+            return row
         frames.append(capture(state,action))
         for _ in range(env.horizon):
             action=np.zeros(2) if policy is None else policy(state.obs)
@@ -120,6 +127,11 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
             summary['path_tracking']={'right_error_rmse_m':float(np.sqrt(np.mean(features[:,0]**2))),'right_error_peak_m':float(np.max(abs(features[:,0]))),'coordinate':'figure_eight_right_normal'}
         if env.config.circle is not None:
             summary['circle_tracking']=tracking_metrics(arrays['qpos'][:,:2],env.config.circle)
+        if env.config.tracking is not None:
+            from .tracking_diagnostics import audit_trace, write_diagnostics
+            audited=audit_trace(path)
+            summary.update(audited['summary'])
+            write_diagnostics(path, audited=audited, plots=False)
         (path/'summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
         (path/'status.json').write_text('{"status":"complete"}\n')
         return summary

@@ -9,7 +9,7 @@ import numpy as np
 from flax import linen as nn, serialization
 import jax
 import jax.numpy as jp
-from .observation import FIELDS, PATH_FIELDS
+from .observation import FIELDS, PATH_FIELDS, TRACKING_FIELDS
 from .action_mapping import ACTION_FIELDS
 
 
@@ -18,6 +18,8 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("speed_schedule") is None:config.pop("speed_schedule",None)
+    if config.get("tracking") is None:config.pop("tracking",None)
     if "actuator" in config:
         config["actuator"]=dict(config["actuator"])
         if not config["actuator"].get("project_base",False):config["actuator"].pop("project_base",None)
@@ -44,6 +46,7 @@ def make_policy_identity(model_identity,config,history_steps):
             if config['priority'].get(key)==value:config['priority'].pop(key)
     if 'observation' in config:
         config['observation']=dict(config['observation'])
+        if not config['observation'].get('include_tracking',False):config['observation'].pop('include_tracking',None)
         if not config['observation'].get('include_motion',False):config['observation'].pop('include_motion',None)
         if config['observation'].get('include_attitude_risk') is True:config['observation'].pop('include_attitude_risk')
         if config['observation'].get('include_priority') is False:config['observation'].pop('include_priority')
@@ -70,6 +73,9 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get('observation',{}).get('include_motion',False):identity['observation_fields']=list(FIELDS)+['yaw_rate_reference','yaw_rate_world']
     if config.get('priority') is not None:
         identity['observation_fields']=identity.get('observation_fields',list(FIELDS))+['speed_priority']+(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else [])
+    if config.get('observation',{}).get('include_tracking',False):
+        identity['observation_fields'][15]='path_lateral_error'
+        identity['observation_fields'] += list(TRACKING_FIELDS)
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
     if config.get("actuator",{}).get("composition")=="full_range":
         identity["action_fields"]=["steer_available_range_fraction","rear_available_range_fraction"]

@@ -10,6 +10,11 @@ import time
 def validation_labels(declaration):
     """Match make_command_validator's case -> alpha -> seed flattening order."""
     task=declaration.get('task',{});cfg=declaration.get('training',{})
+    if task.get('tracking') is not None:
+        cases=cfg.get('validation_events') or [None]
+        return [f'alpha_{a:g}/seed_{seed}/case_{i:02d}'
+                for a in task['priority']['validation_alphas']
+                for seed in cfg.get('validation_seeds',[]) for i in range(len(cases))]
     cases=cfg.get('command_validation_schedules')
     if task.get('motion_commands') is None or not cases:return []
     return [f'case_{i:02d}/alpha_{a:g}/seed_{s}' for i in range(len(cases))
@@ -32,7 +37,7 @@ def scalar_values(record,labels=(),profile="full"):
         add('optimizer/retained_minibatches',0 if audit.get('full_update_rolled_back') else audit['accepted_minibatches'])
     for key,value in record.items():
         if key.endswith('_seconds') or key.endswith('_per_second'):add('timing/'+key,value)
-    for key,value in record.get('device_memory_stats',{}).items():add('memory/'+key,value)
+    for key,value in (record.get('device_memory_stats') or {}).items():add('memory/'+key,value)
     for group in ('validation','paired_episode_return'):
         for key,value in record.get(group,{}).items():
             if isinstance(value,list):
@@ -57,9 +62,12 @@ def scalar_values(record,labels=(),profile="full"):
             if values:result['validation/mean_'+key+'_return'] = sum(values)/len(values)
         failures=record.get('validation',{}).get('failed',[])
         if failures:result['validation/failure_fraction']=sum(failures)/len(failures)
-        for key in ('speed','yaw','alive','speed_tolerance','yaw_tolerance','yaw_tracking','failure'):
+        for key in ('speed','yaw','alive','speed_tolerance','yaw_tolerance','yaw_tracking','failure','speed_tracking','path_tracking','speed_tail','path_tail','speed_budget','path_budget','return_time','recovery','attitude','roll_rate','action_delta'):
 
             add('reward_components/'+key, record.get('reward_components_mean_step',{}).get(key))
+        for key in ('terminal_tracking_hold','return_deadline_missed','recovered_after_excursion'):
+            values=record.get('validation',{}).get(key,[])
+            if values:add('validation/'+key+'_fraction',sum(values)/len(values))
     elif profile != 'full':
         raise ValueError('Unknown TensorBoard profile')
     return result

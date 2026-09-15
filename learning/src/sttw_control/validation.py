@@ -7,6 +7,9 @@ from .env import RecoveryEnv
 
 
 def make_validator(env,actor,scale,config):
+    if getattr(env.config,'tracking',None) is not None:
+        from .tracking_validation import make_tracking_validator
+        return make_tracking_validator(env,actor,scale,config)
     if getattr(env.config,'motion_commands',None) is not None:
         from .command_env import make_command_validator
         return make_command_validator(env,actor,scale,config)

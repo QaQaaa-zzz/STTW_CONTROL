@@ -14,6 +14,7 @@ plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':
 
 def reconstruct(path):
  tr=dict(np.load(path/'trace.npz'));d=json.loads((path/'declaration.json').read_text());c=d['config'];dt=c['controller']['dt'];p=c['priority']
+ if c.get('tracking') is not None:raise ValueError('Use tracking_diagnostics.audit_trace for geometric tracking rewards')
  if (p is not None and p.get('risk_gate',True)) or c.get('action_mapping') is not None or (c.get('circle') is None and c.get('figure_eight') is None and c.get('bend') is None):
   raise ValueError('reward breakdown currently requires a reference path, direct residual and disabled risk gate')
  if len(tr['time'])<2 or not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-8):raise ValueError('invalid recorded control timestamps')
@@ -47,6 +48,10 @@ def reconstruct(path):
 
 def generate(root):
  ROOT=Path(root)
+ task=json.loads((ROOT/'frozen/task.json').read_text()) if (ROOT/'frozen/task.json').exists() else {}
+ if task.get('tracking') is not None:
+  from .tracking_diagnostics import generate_panel
+  return generate_panel(ROOT)
  OUT=ROOT/'analysis/reward_breakdown';OUT.mkdir(parents=True,exist_ok=True)
  declaration=json.loads((ROOT/'declaration.json').read_text())
  declared=declaration['priority_alphas']
