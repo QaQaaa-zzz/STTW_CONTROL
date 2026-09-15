@@ -1,0 +1,56 @@
+{
+  "horizon_seconds": 10.0,
+  "speed_reference": 2.1,
+  "eso_start": 3.0,
+  "initial_roll_range": 0.02,
+  "roll_failure": 0.7,
+  "alive_reward_rate": 1.0,
+  "failure_penalty": 100.0,
+  "learning_roll_reference": null,
+  "bend": {
+    "straight": 4.0,
+    "bend_length": 7.0,
+    "exit_length": 24.0,
+    "peak_curvature": 0.3,
+    "lookahead": 1.2,
+    "max_steer": 0.7,
+    "direction": 1
+  },
+  "observation": {
+    "history_steps": 10,
+    "include_path": true,
+    "include_tracking": true,
+    "include_priority": true,
+    "include_attitude_risk": false
+  },
+  "priority": {
+    "risk_gate": false,
+    "randomize_alpha": true,
+    "validation_alphas": [0.0, 0.5, 1.0]
+  },
+  "tracking_reward": {},
+  "actuator": {
+    "composition": "additive",
+    "project_base": false,
+    "steer_residual_scale": 1.5,
+    "rear_residual_scale": 10.0,
+    "strength": 1.0
+  },
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "random_events": {
+    "start_min": 2.5,
+    "start_max": 4.0,
+    "duration_min": 0.5,
+    "duration_max": 1.5,
+    "steer_min": 0.1,
+    "steer_max": 0.4,
+    "force_min": 1.0,
+    "force_max": 3.0,
+    "rear_probability": 0.2,
+    "rear_min": 0.02,
+    "rear_max": 0.08,
+    "nominal_probability": 0.35,
+    "sine_probability": 0.5
+  }
+}

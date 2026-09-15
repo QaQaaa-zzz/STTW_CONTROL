@@ -25,6 +25,7 @@ from .events import RandomEvents,sample_event,profile
 from .priority import PriorityConfig,priority_weights
 from .action_mapping import MappingConfig,map_action
 from .motion_commands import MotionCommands
+from .tracking_reward import TrackingRewardConfig
 
 @dataclass(frozen=True)
 class TaskConfig:
@@ -64,8 +65,28 @@ class TaskConfig:
     path_error_weight: float=0.
     heading_error_weight: float=0.
     speed_error_weight: float=1.
+    tracking_reward: TrackingRewardConfig | None=None
 
     def __post_init__(self):
+        if (self.tracking_reward is not None) != self.observation.include_tracking:
+            raise ValueError('tracking reward/context observation contract mismatch')
+        if self.tracking_reward is not None:
+            if not self.observation.include_path or not self.observation.include_priority or self.priority is None:
+                raise ValueError('geometric tracking requires path observations and alpha Actor input')
+            if self.motion_commands is not None or self.action_mapping is not None:
+                raise ValueError('geometric tracking is a direct residual path task, not command yaw tracking')
+            if self.priority.risk_gate or self.actuator.composition != 'additive':
+                raise ValueError('alpha must not alter residual authority or roll weighting')
+            if self.learning_roll_reference is not None:
+                raise ValueError('fixed left-turn learning roll targets are not valid for general paths')
+            if self.tracking_reward.roll_working_limit >= self.roll_failure:
+                raise ValueError('working roll limit must be below the physical failure threshold')
+            if self.horizon_seconds > 10.:
+                raise ValueError('new geometric tracking experiments must fit in a 10 second window')
+            event_end = (self.random_events.start_max+self.random_events.duration_max if self.random_events
+                         else self.disturbance_start+self.disturbance_duration)
+            if event_end+self.tracking_reward.return_deadline_seconds > self.horizon_seconds+1e-9:
+                raise ValueError('episode must leave the declared post-event return observation window')
         if self.action_mapping is not None and self.actuator.composition!="additive":
             raise ValueError("physical action mapping requires additive composition")
         if (self.motion_commands is not None)!=self.observation.include_motion:raise ValueError("motion observation contract mismatch")
@@ -134,7 +155,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('tracking_reward',TrackingRewardConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -162,6 +183,8 @@ class EnvState:
     command_schedule: object=None
     yaw_rate: object=0.
     priority_locked: object=False
+    tracking: object=None
+    reward_parts: object=None
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -275,7 +298,9 @@ class RecoveryEnv:
         dx,dy=pose[0]-c.center_x,pose[1]-c.center_y
         tangent=jp.arctan2(dy,dx)+c.direction*jp.pi/2
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
-        return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
+        lateral=jp.sqrt(dx*dx+dy*dy)-c.radius
+        if self.config.tracking_reward is not None:lateral=c.direction*lateral
+        return jp.array([lateral,heading,c.direction/c.radius])
 
     def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None):
         c=self.config
@@ -290,6 +315,9 @@ class RecoveryEnv:
             frame=jp.concatenate([frame,self.path_features(pose)])
         if c.observation.include_motion:
             frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
+        if c.observation.include_tracking:
+            # Filled with the new observable state once the transition is complete.
+            frame=jp.concatenate([frame,jp.zeros(5)])
         if c.priority is not None:
             risk=priority_weights(alpha,roll-learning_reference,roll,rate,c.priority)[0]
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
@@ -320,9 +348,13 @@ class RecoveryEnv:
         pose=self.pose(data)
         alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
         controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha)
-        return EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
+        result=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
                         sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha)
+        if c.tracking_reward is not None:
+            from .tracking_env import reset_tracking_state
+            result=reset_tracking_state(self,result)
+        return result
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config
@@ -333,6 +365,10 @@ class RecoveryEnv:
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~jp.asarray(physics_finite)
         fallen=jp.abs(measurement[0])>c.roll_failure
         failed=invalid|fallen|physical_contact
+        if c.tracking_reward is not None:
+            from .tracking_env import finish_tracking_step
+            return finish_tracking_step(self,state,measurement,actuator,action,true_speed,pose,tick,
+                (controller,history,obs,base,reference),invalid,physical_contact,fallen)
         # Count only complete stable intervals after the force has ended.
         event_finished=((state.event[2]!=0)|(state.event[3]!=0)|(state.event[5]!=0))&(state.tick>=state.event[1])
         errors=jp.array([measurement[0]-reference,measurement[1],true_speed-command[1],measurement[2]-command[0]])

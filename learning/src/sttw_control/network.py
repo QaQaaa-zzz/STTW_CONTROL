@@ -9,7 +9,7 @@ import numpy as np
 from flax import linen as nn, serialization
 import jax
 import jax.numpy as jp
-from .observation import FIELDS, PATH_FIELDS
+from .observation import FIELDS, PATH_FIELDS, TRACKING_FIELDS
 from .action_mapping import ACTION_FIELDS
 
 
@@ -18,6 +18,7 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("tracking_reward") is None:config.pop("tracking_reward",None)
     if "actuator" in config:
         config["actuator"]=dict(config["actuator"])
         if not config["actuator"].get("project_base",False):config["actuator"].pop("project_base",None)
@@ -44,6 +45,7 @@ def make_policy_identity(model_identity,config,history_steps):
             if config['priority'].get(key)==value:config['priority'].pop(key)
     if 'observation' in config:
         config['observation']=dict(config['observation'])
+        if not config['observation'].get('include_tracking',False):config['observation'].pop('include_tracking',None)
         if not config['observation'].get('include_motion',False):config['observation'].pop('include_motion',None)
         if config['observation'].get('include_attitude_risk') is True:config['observation'].pop('include_attitude_risk')
         if config['observation'].get('include_priority') is False:config['observation'].pop('include_priority')
@@ -73,6 +75,10 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
     if config.get("actuator",{}).get("composition")=="full_range":
         identity["action_fields"]=["steer_available_range_fraction","rear_available_range_fraction"]
+    if config.get('tracking_reward') is not None:
+        identity['observation_fields']=(list(FIELDS)+['path_right_error','heading_error','path_curvature']
+            +list(TRACKING_FIELDS)+['speed_priority']
+            +(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else []))
     return identity
 
 
@@ -102,7 +108,7 @@ def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_
           'negative_slope':negative_slope,'mean':mean.tolist(),'std':std.tolist(),
           'payload_sha256':hashlib.sha256(payload).hexdigest()}
     # Validate dimensions before publishing a checkpoint directory.
-    ResidualActor(tuple(hidden_sizes),negative_slope).apply(params,jp.zeros(size))
+    ResidualActor(tuple(hidden_sizes),meta['negative_slope']).apply(params,jp.zeros(size))
     path.mkdir(parents=True,exist_ok=False)
     (path/'actor.msgpack').write_bytes(payload)
     (path/'identity.json').write_text(json.dumps(meta,indent=2,allow_nan=False)+'\n')
