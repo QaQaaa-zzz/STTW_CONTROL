@@ -27,9 +27,10 @@ jobs:
         if: github.ref == 'refs/heads/agent/alpha-path-tracking'
         run: |
           if test -f .github/pending-tracking.patch; then
-            git apply --check .github/pending-tracking.patch
-            git apply .github/pending-tracking.patch
-            git rm .github/pending-tracking.patch
+            cat .github/tracking-patch-parts/*.patch .github/pending-tracking.patch > /tmp/tracking-changes.patch
+            git apply --check /tmp/tracking-changes.patch
+            git apply /tmp/tracking-changes.patch
+            git rm .github/pending-tracking.patch .github/tracking-patch-parts/*.patch
             git add learning PROJECT.md docs AGENTS.md .github/workflows/learning-tests.yml
             git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'feat: alpha-conditioned geometric path recovery'
           fi
