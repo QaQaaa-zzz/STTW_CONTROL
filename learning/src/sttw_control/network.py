@@ -19,6 +19,11 @@ def make_policy_identity(model_identity,config,history_steps):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
     if config.get("reference_paths") is None:config.pop("reference_paths",None)
+    else:
+        config['reference_paths']=dict(config['reference_paths'])
+        if not config['reference_paths'].get('continuous_projection',False):
+            config['reference_paths'].pop('continuous_projection',None)
+            config['reference_paths'].pop('projection_margin',None)
     if config.get("speed_schedule") is None:config.pop("speed_schedule",None)
     if config.get("tracking") is None:config.pop("tracking",None)
     if "actuator" in config:

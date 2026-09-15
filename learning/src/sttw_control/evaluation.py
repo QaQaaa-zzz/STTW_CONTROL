@@ -71,8 +71,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'injected_rear_rate':float(-s.event[5]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 and env.config.rear_disturbance_mode=='command' else 0.,'applied_generalized_force':np.asarray(s.data.qfrc_applied).copy(),'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
                     'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
-                    'path_id':int(s.path_id),'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
-                    'motion_command':np.asarray(recorded_command(s.tick,s.pose,s.command_schedule,path_id=s.path_id) if env.config.reference_paths is not None else recorded_command(s.tick,s.pose,s.command_schedule)),
+                    'path_progress':float(s.path_progress),'path_id':int(s.path_id),'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
+                    'motion_command':np.asarray(recorded_command(s.tick,s.pose,s.command_schedule,path_id=s.path_id,path_progress=s.path_progress) if env.config.reference_paths is not None else recorded_command(s.tick,s.pose,s.command_schedule)),
                     'user_command':np.asarray(env.requested(s.tick,s.command_schedule)[:2]) if env.config.motion_commands is not None else np.asarray([0.,0.]),'yaw_rate_world':float(s.yaw_rate),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
                     'effective_action':np.asarray(effective_action).copy(),'composition_base':np.asarray(composed_base).copy(),
@@ -80,7 +80,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
             if env.config.tracking is not None:
                 from .tracking_reward import return_observation
-                row['path_features']=np.asarray(env.path_features(s.pose,s.path_id))
+                row['path_features']=np.asarray(env.path_features(s.pose,s.path_id,s.path_progress))
                 row['true_forward_speed']=float(jp.dot(s.data.qvel[:3],jp.asarray(s.data.xmat[env.bundle.chassis]).reshape(3,3)[:,0]))
                 row['return_state']=np.asarray(return_observation(s.tracking_state,env.config.tracking))
                 row.update({'reward_'+name:float(value) for name,value in s.tracking_components.items()})

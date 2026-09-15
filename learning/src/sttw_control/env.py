@@ -17,7 +17,7 @@ from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual,composition_base
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
-from .path import BendConfig,bend_table,bend_command,bend_features,ReferencePaths,integrated_reference
+from .path import BendConfig,bend_table,bend_command,bend_features,ReferencePaths,integrated_reference,features_at_progress
 from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,eight_features
 
 
@@ -205,6 +205,7 @@ class EnvState:
     tracking_state: object=None
     tracking_components: object=None
     path_id: object=0
+    path_progress: object=0.
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -302,10 +303,10 @@ class RecoveryEnv:
         index=jp.maximum(jp.sum(tick*self.config.controller.dt>=rows[:,0])-1,0)
         return rows[index,1]
 
-    def command(self,tick,pose=None,schedule=None,path_id=0):
+    def command(self,tick,pose=None,schedule=None,path_id=0,path_progress=None):
         c=self.config
         speed=self.speed_command(tick,path_id)
-        if self.reference_tables is not None:return jp.array([bend_command(pose,c.bend,self.reference_tables[path_id],c.controller.wheelbase,c.controller.caster),speed])
+        if self.reference_tables is not None:return jp.array([bend_command(pose,c.bend,self.reference_tables[path_id],c.controller.wheelbase,c.controller.caster,progress=path_progress if c.reference_paths.continuous_projection else None),speed])
         if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),speed])
         if c.figure_eight is not None:
             if pose is None:raise ValueError("figure eight requires localization")
@@ -326,7 +327,8 @@ class RecoveryEnv:
         gyro=data.sensordata[b.imu_gyro:b.imu_gyro+3]
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
-    def path_features(self,pose,path_id=0):
+    def path_features(self,pose,path_id=0,path_progress=None):
+        if self.reference_tables is not None and self.config.reference_paths.continuous_projection and path_progress is not None:return features_at_progress(pose,self.reference_tables[path_id],path_progress)
         if self.reference_tables is not None:return bend_features(pose,self.reference_tables[path_id])[0]
         if self.config.bend is not None:return bend_features(pose,self.bend_table)[0]
         if self.config.figure_eight is not None:return eight_features(pose,self.config.figure_eight)
@@ -338,9 +340,9 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None):
         c=self.config
-        command=(self.command(tick,pose,path_id=path_id) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
+        command=(self.command(tick,pose,path_id=path_id,path_progress=path_progress) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
@@ -348,7 +350,7 @@ class RecoveryEnv:
         visible_base=composition_base(jp.array([out.steer_rate,command[1]/.1]),c.actuator)
         frame=make_frame(measurement,command,learning_reference,visible_base[0],actuator.previous,out.disturbance)
         if c.observation.include_path:
-            frame=jp.concatenate([frame,self.path_features(pose,path_id)])
+            frame=jp.concatenate([frame,self.path_features(pose,path_id,path_progress)])
         if c.observation.include_motion:
             frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
         if c.priority is not None:
@@ -386,10 +388,10 @@ class RecoveryEnv:
         measurement=self.measure(data)
         pose=self.pose(data)
         alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
-        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha,path_id=path_id)
+        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha,path_id=path_id,path_progress=jp.asarray(0.))
         state=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
-                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha,path_id=path_id)
+                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha,path_id=path_id,path_progress=jp.asarray(0.))
         if c.tracking is not None:
             tracking_state=initial_return()
             _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
@@ -433,8 +435,12 @@ class RecoveryEnv:
     def _advance_tracking(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;tick=state.tick+1
         # The reward uses the request and alpha that generated this transition.
-        command=self.command(state.tick,state.pose,path_id=state.path_id)
-        path=self.path_features(pose,state.path_id)
+        command=self.command(state.tick,state.pose,path_id=state.path_id,path_progress=state.path_progress)
+        progress=state.path_progress
+        if c.reference_paths is not None and c.reference_paths.continuous_projection:
+            window=c.reference_paths.projection_margin+2*jp.linalg.norm(pose[:2]-state.pose[:2])
+            _,progress=bend_features(pose,self.reference_tables[state.path_id],progress,window)
+        path=self.path_features(pose,state.path_id,progress)
         leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,path))
         invalid=(~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in leaves]))
                  | ~jp.asarray(physics_finite))
@@ -447,7 +453,7 @@ class RecoveryEnv:
             failed=failed,enabled=state.tick*c.controller.dt>=c.tracking.start_seconds,
             config=c.tracking)
         controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,
-            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state,path_id=state.path_id)
+            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state,path_id=state.path_id,path_progress=progress)
         controller_invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((controller,obs,base))]))
         invalid=invalid|controller_invalid;failed=failed|controller_invalid
         parts={k:jp.where(controller_invalid,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
@@ -458,7 +464,7 @@ class RecoveryEnv:
         return state.replace(controller=controller,actuator=actuator,history=history,measurement=measurement,
             pose=pose,reference=reference,base=base,obs=jp.nan_to_num(obs),tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
-            tracking_state=tracking_state,tracking_components=parts)
+            tracking_state=tracking_state,tracking_components=parts,path_progress=progress)
 
     def _contact_failure(self,data):
         # A floor contact with a non-wheel body counts as physical failure.

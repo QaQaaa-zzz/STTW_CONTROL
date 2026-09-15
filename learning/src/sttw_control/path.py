@@ -164,10 +164,16 @@ def bend_table(c):
     return np.column_stack((s,x,y,yaw,k))
 
 
-def bend_features(pose,table):
+def bend_features(pose,table,progress=None,window=None):
     xy=table[:,1:3];v=xy[1:]-xy[:-1]
     u=jp.clip(jp.sum((pose[:2]-xy[:-1])*v,axis=1)/jp.sum(v*v,axis=1),0,1)
-    foot=xy[:-1]+u[:,None]*v;i=jp.argmin(jp.sum((foot-pose[:2])**2,axis=1))
+    valid=jp.ones_like(u,dtype=bool)
+    if progress is not None:
+        lo=jp.maximum(table[0,0],progress-window);hi=jp.minimum(table[-1,0],progress+window)
+        ds=table[1:,0]-table[:-1,0]
+        valid=(table[1:,0]>=lo)&(table[:-1,0]<=hi)
+        u=jp.clip(u,jp.clip((lo-table[:-1,0])/ds,0,1),jp.clip((hi-table[:-1,0])/ds,0,1))
+    foot=xy[:-1]+u[:,None]*v;i=jp.argmin(jp.where(valid,jp.sum((foot-pose[:2])**2,axis=1),jp.inf))
     yaw=table[i,3]+u[i]*(table[i+1,3]-table[i,3]);d=pose[:2]-foot[i]
     right=jp.sin(yaw)*d[0]-jp.cos(yaw)*d[1]
     heading=jp.arctan2(jp.sin(pose[2]-yaw),jp.cos(pose[2]-yaw))
@@ -176,8 +182,9 @@ def bend_features(pose,table):
     return jp.array([right,heading,curvature]),progress
 
 
-def bend_command(pose,c,table,wheelbase,caster):
-    _,s=bend_features(pose,table);ahead=s+c.lookahead
+def bend_command(pose,c,table,wheelbase,caster,progress=None):
+    s=bend_features(pose,table)[1] if progress is None else progress
+    ahead=s+c.lookahead
     dx=jp.interp(ahead,table[:,0],table[:,1])-pose[0];dy=jp.interp(ahead,table[:,0],table[:,2])-pose[1]
     lateral=-jp.sin(pose[2])*dx+jp.cos(pose[2])*dy
     return jp.clip(jp.arctan(wheelbase*2*lateral/jp.maximum(dx*dx+dy*dy,1e-8)/jp.cos(caster)),-c.max_steer,c.max_steer)
@@ -193,8 +200,11 @@ class ReferencePaths:
     """Fixed global paths obtained by integrating declared (time, speed, yaw-rate)."""
     cases: tuple
     selected: int | None = None  # evaluation only; training samples uniformly on reset
+    continuous_projection: bool = False  # false preserves frozen historical tasks
+    projection_margin: float = .05  # m, added to twice the actual XY displacement
 
     def __post_init__(self):
+        if not math.isfinite(self.projection_margin) or self.projection_margin<=0:raise ValueError('projection margin must be positive')
         if not self.cases or len({c['name'] for c in self.cases})!=len(self.cases):
             raise ValueError('reference cases must be nonempty and uniquely named')
         if self.selected is not None and (type(self.selected) is not int or not 0<=self.selected<len(self.cases)):
@@ -232,3 +242,12 @@ def reference_table(config):
         if i is None:raise ValueError('select a reference before rendering a mixed bank')
         return integrated_reference(bank['cases'][i]['commands'],config['horizon_seconds'],config.get('controller',{}).get('dt',.005))
     return bend_table(BendConfig(**config['bend']))
+
+
+def features_at_progress(pose,table,progress):
+    """Measure errors against the one stored projection used by the controller."""
+    x=jp.interp(progress,table[:,0],table[:,1]);y=jp.interp(progress,table[:,0],table[:,2])
+    yaw=jp.interp(progress,table[:,0],table[:,3]);k=jp.interp(progress,table[:,0],table[:,4])
+    right=jp.sin(yaw)*(pose[0]-x)-jp.cos(yaw)*(pose[1]-y)
+    heading=jp.arctan2(jp.sin(pose[2]-yaw),jp.cos(pose[2]-yaw))
+    return jp.array([right,heading,k])

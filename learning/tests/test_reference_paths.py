@@ -45,3 +45,18 @@ def test_reference_selection_is_not_revealed_as_an_actor_feature():
     from sttw_control.observation import observation_fields
     assert 'path_id' not in observation_fields(cfg.observation)
     with pytest.raises(ValueError):ReferencePaths(cases=cfg.reference_paths.cases,selected=4)
+
+
+def test_crossing_projection_stays_on_current_branch_and_allows_reverse():
+    from sttw_control.path import bend_features,features_at_progress
+    table=jp.asarray([[0,-1,0,0,0],[2,1,0,0,0],[4,0,-1,1.57,0],[6,0,1,1.57,0]],float)
+    pose=jp.array([.01,.02,0.])
+    _,global_s=bend_features(pose,table)
+    assert float(global_s)>4
+    features,s=bend_features(pose,table,jp.asarray(1.),jp.asarray(.1))
+    assert float(s)==pytest.approx(1.01,abs=1e-5)
+    np.testing.assert_allclose(features,features_at_progress(pose,table,s),atol=1e-5)
+    _,back=bend_features(jp.array([-.04,0.,0.]),table,s,jp.asarray(.1))
+    assert float(back)<float(s)
+    _,edge=bend_features(jp.array([100.,0.,0.]),table,s,jp.asarray(.1))
+    assert float(edge)<=float(s)+.10001

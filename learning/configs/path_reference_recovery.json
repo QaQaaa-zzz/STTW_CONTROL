@@ -177,6 +177,8 @@
           ]
         ]
       }
-    ]
+    ],
+    "continuous_projection": true,
+    "projection_margin": 0.05
   }
 }

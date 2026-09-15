@@ -50,7 +50,7 @@ def make_tracking_validator(env, actor, scale, config):
             active=~state.done
             action=actor.apply(params['actor'],state.obs/scale)
             nxt=step(state,jp.where(zero,jp.zeros_like(action),action))
-            features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id)
+            features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id,nxt.path_progress)
             speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
             ev=speed-(jax.vmap(env.speed_command)(state.tick) if bank is None else jax.vmap(env.speed_command)(state.tick,state.path_id))
             bv,by=tolerances(state.priority_alpha,tc)
