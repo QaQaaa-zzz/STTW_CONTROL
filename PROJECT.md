@@ -508,3 +508,5 @@ T200补评现已complete；analysis/comparison报告48条不重复轨迹，重�
 用户澄清并确认：保留path_rsl本轮全部奖励、280维10帧观测、显式alpha、ECBC/ESO、执行器残差权限及RSL超参数。只把参考任务更换为原gentle/tight_turn/straighten/reversal指令积分得到的固定全局轨迹，用同一策略混合训练；不恢复旧T150 yaw-rate奖励。错误方向的未提交适配和配置已撤回，正式训练没有使用过它们。
 新增可配置reference_paths，reset均匀抽取四类；轨迹编号是环境状态、不作为Actor新增特征，回合内不重选，自动reset同时重置历史。按原指令速度与偏航积分生成参考，几何跟踪控制器仍使用原lookahead/转向界；不宣称参考在工作姿态范围内必然可行。保留原随机扰动分布及无扰动比例。新任务配置仅reference_paths和speed_schedule与上一轮不同，奖励/观测/权限配置逐项相等。
 200轮×4096×24=19,660,800训练转移，20优化/轮，ELU，LR .001 adaptive；训练seed65，开发48001，标准49001，全部episode≤10s。沿用九个开发时点，四类参考×三扰动×三alpha并配对无扰动，共72个开发回合/次。结束标准4参考×4扰动面板（含nominal）×3alpha×2方法=96条回合、最多192000控制步。各参考分别展示，不能当作旧直接yaw-rate控制的同定义结果。工程短测后直接启动，不自动追加预算。
+
+正式启动确认：runs/path_reference_rsl_4096_20260915，pipeline PID2116022，watchdog PID2116023。pipeline_status=training，training/status=initializing，监视器running且连续错误0。TensorBoard6006新增RSL_four_references。GPU短测、16条CPU面板及反向轨迹奖励图/视频均完成，重建误差2.06e-9；实现提交b95e3be已push。未宣称正式200轮已经完成或学会任务。
