@@ -18,6 +18,7 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("reference_paths") is None:config.pop("reference_paths",None)
     if config.get("speed_schedule") is None:config.pop("speed_schedule",None)
     if config.get("tracking") is None:config.pop("tracking",None)
     if "actuator" in config:

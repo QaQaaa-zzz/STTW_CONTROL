@@ -1,4 +1,5 @@
 """Render recorded states, never integrate physics to manufacture a video."""
+from .path import reference_table
 import hashlib
 import json
 import math
@@ -80,9 +81,9 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
         metrics=tracking_metrics(xy,circle)
     elif config.get('bend'):
         from .path import BendConfig,bend_table,bend_trace_features
-        bend=BendConfig(**config['bend']);ref=bend_table(bend)[:,1:3]
-        axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,label='Smooth bend reference')
-        error=bend_trace_features(trace['pose'],bend)[:,0]
+        bend=BendConfig(**config['bend']);ref=reference_table(config)[:,1:3]
+        axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,label='Fixed global reference')
+        error=trace['path_features'][:,0] if config.get('reference_paths') else bend_trace_features(trace['pose'],bend)[:,0]
         metrics={'right_error_rmse_m':float(np.sqrt(np.mean(error**2))),'right_error_peak_m':float(abs(error).max())}
     elif config.get('figure_eight'):
         figure=FigureEightConfig(**config['figure_eight']);ref=eight_reference(figure)
@@ -184,7 +185,7 @@ def render_run(run_path,*,fps=30):
         if config.get('motion_commands') is not None:ref=np.empty((0,2))
         if config.get('bend'):
             from .path import BendConfig,bend_table
-            ref=bend_table(BendConfig(**config['bend']))[:,1:3]
+            ref=reference_table(config)[:,1:3]
         if config.get('figure_eight'):ref=eight_reference(FigureEightConfig(**config['figure_eight']),181)
         ref3=np.column_stack([ref,np.full(len(ref),.012)])
         model=bundle.model
@@ -280,14 +281,14 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained')
     if c.get('bend'):
         from .path import BendConfig,bend_table,bend_trace_features
-        bend=BendConfig(**c['bend']);ref=bend_table(bend)[:,1:3]
+        bend=BendConfig(**c['bend']);ref=reference_table(c)[:,1:3]
     elif c.get('figure_eight'):ref=eight_reference(FigureEightConfig(**c['figure_eight']))
     else:ref=circle_reference(circle)
     axes[0,0].plot(ref[:,0],ref[:,1],'k:',label='Reference')
     for trace,label,color,ls,summary in zip(traces,['ECBC + ESO',candidate_label],['#24567a','#b45f24'],['-','--'],summaries):
         t=trace['time'];s=state_series(trace,c)
         xy=trace['qpos'][:,:2]
-        if c.get('bend'):radial=bend_trace_features(trace['pose'],bend)[:,0]
+        if c.get('bend'):radial=trace['path_features'][:,0] if c.get('reference_paths') else bend_trace_features(trace['pose'],bend)[:,0]
         elif c.get('figure_eight'):radial=eight_trace_features(trace['pose'],FigureEightConfig(**c['figure_eight']))[:,0]
         else:radial=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
         rmse=float(np.sqrt(np.mean(radial**2)))

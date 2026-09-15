@@ -10,6 +10,7 @@ from .tracking_reward import tolerances
 
 def make_tracking_validator(env, actor, scale, config):
     c=env.config; tc=c.tracking; dt=c.controller.dt
+    bank=getattr(c,"reference_paths",None)
     cases=config.validation_events or ({'start':0.,'duration':dt},)
     for case in cases:
         if any(not np.isclose(case[k]/dt,round(case[k]/dt),rtol=0,atol=1e-7)
@@ -26,6 +27,12 @@ def make_tracking_validator(env, actor, scale, config):
                        case.get('steer_rate',0.),case.get('force',0.),
                        float(case.get('waveform','constant')=='half_sine'),case.get('rear_torque',0.)]
                       for alpha in choices for seed in config.validation_seeds for case in cases],dtype=np.float32)
+    path_ids=jp.zeros(len(keys),dtype=jp.int32)
+    if bank is not None:
+        count=len(bank.cases)
+        path_ids=jp.repeat(jp.arange(count,dtype=jp.int32),len(keys))
+        keys=jp.tile(keys,(count,1));alphas=jp.tile(alphas,count)
+        event_rows=np.tile(event_rows,(count,1))
     # Assemble the paired panel explicitly before tracing; no scatter updates
     # to closed-over event constants and no concatenation of aliased states.
     nominal_rows=event_rows.copy();nominal_rows[:,[2,3,5]]=0.
@@ -37,14 +44,15 @@ def make_tracking_validator(env, actor, scale, config):
 
     @jax.jit
     def validate(params, zero=False):
-        state=jax.vmap(env.set_priority)(reset(all_keys),all_alphas).replace(event=all_events)
+        initial=reset(all_keys) if bank is None else jax.vmap(lambda key,i:env.reset(key,reference_id=i))(all_keys,jp.concatenate((path_ids,path_ids)))
+        state=jax.vmap(env.set_priority)(initial,all_alphas).replace(event=all_events)
         def tick(state,_):
             active=~state.done
             action=actor.apply(params['actor'],state.obs/scale)
             nxt=step(state,jp.where(zero,jp.zeros_like(action),action))
-            features=jax.vmap(env.path_features)(nxt.pose)
+            features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id)
             speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
-            ev=speed-jax.vmap(env.speed_command)(state.tick)
+            ev=speed-(jax.vmap(env.speed_command)(state.tick) if bank is None else jax.vmap(env.speed_command)(state.tick,state.path_id))
             bv,by=tolerances(state.priority_alpha,tc)
             mature=active & (state.tick*dt>=tc.start_seconds)
             row=(active,features[:,0]**2,ev**2,features[:,1]**2,nxt.reward,

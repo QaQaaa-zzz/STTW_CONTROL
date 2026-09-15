@@ -186,3 +186,49 @@ def bend_command(pose,c,table,wheelbase,caster):
 def bend_trace_features(pose,c):
     import jax
     return np.asarray(jax.jit(jax.vmap(lambda p:bend_features(p,jp.asarray(bend_table(c)))[0]))(jp.asarray(pose)))
+
+
+@dataclass(frozen=True)
+class ReferencePaths:
+    """Fixed global paths obtained by integrating declared (time, speed, yaw-rate)."""
+    cases: tuple
+    selected: int | None = None  # evaluation only; training samples uniformly on reset
+
+    def __post_init__(self):
+        if not self.cases or len({c['name'] for c in self.cases})!=len(self.cases):
+            raise ValueError('reference cases must be nonempty and uniquely named')
+        if self.selected is not None and (type(self.selected) is not int or not 0<=self.selected<len(self.cases)):
+            raise ValueError('invalid selected reference')
+        for case in self.cases:
+            if not case['name'] or any(x in case['name'] for x in ('/','\\')) or case['name'] in ('.','..'):raise ValueError('invalid reference name')
+            last=-1.
+            for row in case['commands']:
+                if len(row)!=3 or not all(math.isfinite(x) for x in row) or row[0]<=last or row[1]<=0:
+                    raise ValueError('reference rows require increasing time, positive speed, finite yaw rate')
+                last=row[0]
+            if not case['commands'] or case['commands'][0][0]!=0:raise ValueError('reference must start at zero')
+
+
+def integrated_reference(commands,horizon,dt=.005,count=801):
+    """Exact constant-twist integration, resampled by arc length; no feasibility claim."""
+    rows=np.asarray(commands,float)
+    times=np.unique(np.r_[np.arange(0,horizon+5+dt/2,dt),rows[:,0]])
+    xy=[np.zeros(2)];yaw=[0.];arc=[0.]
+    for t,end in zip(times[:-1],times[1:]):
+        _,v,w=rows[max(0,np.searchsorted(rows[:,0],t+1e-9,side='right')-1)]
+        h=end-t;theta=yaw[-1];n=theta+w*h
+        d=v*h*np.array([np.cos(theta),np.sin(theta)]) if abs(w)<1e-12 else v/w*np.array([np.sin(n)-np.sin(theta),np.cos(theta)-np.cos(n)])
+        xy.append(xy[-1]+d);yaw.append(n);arc.append(arc[-1]+v*h)
+    s=np.linspace(0,arc[-1],count);xy=np.asarray(xy);t=np.interp(s,arc,times)
+    idx=np.maximum(np.searchsorted(rows[:,0],t,side='right')-1,0)
+    return np.column_stack((s,np.interp(s,arc,xy[:,0]),np.interp(s,arc,xy[:,1]),np.interp(s,arc,yaw),rows[idx,2]/rows[idx,1]))
+
+
+def reference_table(config):
+    """Plot/evaluation reference from a frozen task dictionary."""
+    bank=config.get('reference_paths')
+    if bank is not None:
+        i=bank.get('selected')
+        if i is None:raise ValueError('select a reference before rendering a mixed bank')
+        return integrated_reference(bank['cases'][i]['commands'],config['horizon_seconds'],config.get('controller',{}).get('dt',.005))
+    return bend_table(BendConfig(**config['bend']))

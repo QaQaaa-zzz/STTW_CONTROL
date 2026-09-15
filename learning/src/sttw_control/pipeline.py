@@ -47,6 +47,7 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
     if set(seeds)&set(training.validation_seeds) or training.seed in set(seeds)|set(training.validation_seeds):raise ValueError('training, development and standard seeds must be separate')
     cases=panel.get('cases',[])
     count=1+len(cases)+len(panel.get('steer_rate_pulses',[]))+len(panel.get('lateral_forces',[]))
+    if cfg.reference_paths is not None:count*=len(cfg.reference_paths.cases)
     horizon=max(cfg.horizon_seconds,panel['start_seconds']+max([panel['duration_seconds']]+[c['duration'] for c in cases])+panel.get('minimum_post_event_seconds',0.))
     if cfg.tracking is not None and horizon>cfg.horizon_seconds+1e-7:
         raise ValueError('tracking panel cannot extend the fixed episode')

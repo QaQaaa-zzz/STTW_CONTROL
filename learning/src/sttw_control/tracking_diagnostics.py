@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 import numpy as np
+from .path import reference_table
 from .tracking_reward import TrackingConfig, initial_return, return_observation, transition, tolerances
 
 
@@ -131,7 +132,7 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
     chart('return_elapsed','Return elapsed [s]',[(l,d,d['trace']['return_state'][1:,3]) for l,d in sources])
     fig,ax=plt.subplots(figsize=(8,6),layout='constrained')
     from .path import BendConfig,bend_table,CircleConfig,circle_reference,FigureEightConfig,eight_reference
-    if config.get('bend'):reference=bend_table(BendConfig(**config['bend']))[:,1:3]
+    if config.get('bend'):reference=reference_table(config)[:,1:3]
     elif config.get('circle'):reference=circle_reference(CircleConfig(**config['circle']))
     else:reference=eight_reference(FigureEightConfig(**config['figure_eight']))
     ax.plot(reference[:,0],reference[:,1],ls='--',label='Original reference path')
@@ -205,7 +206,7 @@ def write_panel_overview(root, rows):
             config=json.loads((directory/'declaration.json').read_text())['config']
             sources.append((policy,trace))
         stem=f'{case}_alpha_{alpha:g}_seed_{seed}'
-        if config.get('bend'):reference=bend_table(BendConfig(**config['bend']))[:,1:3]
+        if config.get('bend'):reference=reference_table(config)[:,1:3]
         elif config.get('circle'):reference=circle_reference(CircleConfig(**config['circle']))
         else:reference=eight_reference(FigureEightConfig(**config['figure_eight']))
         manifest.append({k:row[k] for k in ('alpha','seed','scenario','trace_sha256','baseline_trace_sha256','declaration_sha256')})

@@ -42,6 +42,15 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
     scenarios += [(f'force_{i}',replace(event,disturbance_force=x,disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')) for i,x in enumerate(panel.get('lateral_forces',[]))]
     for case in panel.get('cases',[]):
         scenarios.append((case['name'],replace(event,disturbance_rear_torque=case.get('rear_torque',0.),disturbance_steer_rate=case.get('steer_rate',0.),disturbance_force=case.get('force',0.),disturbance_duration=case['duration'],disturbance_waveform=case.get('waveform','constant'),disturbance_force_frame='heading_lateral',disturbance_force_point='vehicle_com')))
+    nominal_names={'nominal':'nominal'}
+    if cfg.reference_paths is not None:
+        original=scenarios;scenarios=[];nominal_names={}
+        for i,reference in enumerate(cfg.reference_paths.cases):
+            for name,c in original:
+                label=reference['name']+'__'+name
+                scenarios.append((label,replace(c,reference_paths=replace(c.reference_paths,selected=i))))
+                nominal_names[label]=reference['name']+'__nominal'
+        identity['evaluation_overrides']+='; explicitly selected member of frozen reference bank'
     (output/'declaration.json').write_text(json.dumps({'panel':panel,'checkpoint':str(checkpoint),'policy':identity,'scenarios':{k:asdict(c) for k,c in scenarios},'priority_alpha_override':priority_alpha,'scope':'frozen policy engineering panel; task and checkpoint training provenance recorded explicitly'},indent=2)+'\n')
     rows=[];nom={}
     for name,c in scenarios:
@@ -49,8 +58,9 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
             path=output/name/label
             summary=evaluate(RecoveryEnv(c),path,seed=panel['seed'],policy=p,policy_identity=identity if p else None,priority_alpha=priority_alpha)
             trace=dict(np.load(path/'trace.npz'))
-            if name=='nominal':nom[label]=trace
-            metrics={} if name=='nominal' else recovery_metrics(trace,nom[label],asdict(c),path_tolerance=panel['path_tolerance_m'],extra_tolerance=panel['extra_tolerance_m'],heading_tolerance=panel['heading_tolerance_rad'],hold_seconds=panel['hold_seconds'])
+            nominal_name=nominal_names.get(name,'nominal')
+            if name==nominal_name:nom[(nominal_name,label)]=trace
+            metrics={} if name==nominal_name else recovery_metrics(trace,nom[(nominal_name,label)],asdict(c),path_tolerance=panel['path_tolerance_m'],extra_tolerance=panel['extra_tolerance_m'],heading_tolerance=panel['heading_tolerance_rad'],hold_seconds=panel['hold_seconds'])
             row={'scenario':name,'policy':label,'summary':summary,'path_recovery':metrics};rows.append(row)
             with (output/'results.jsonl').open('a') as f:f.write(json.dumps(row)+'\n')
             print(json.dumps(row),flush=True)

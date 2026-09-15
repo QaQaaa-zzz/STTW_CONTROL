@@ -433,3 +433,7 @@ G100标准补评：回报12/12高于G200，但急转中点5.180s更早摔倒，�
 ## 2026-09-15 累计奖励与场景身份纠正
 用户要求累计总奖励对steps已纳入tracking_diagnostics：逐步求和保留终止罚；每步奖励分项和累计分项同时包含配对基线。全12组合累计终值与记录episode_return核对一致，8项相关测试通过、1项opt-in跳过。新增总览analysis/review/cumulative_rewards.png，各组合在analysis/comparison和analysis/reward_breakdown。
 本轮path_rsl使用新几何平滑弯道+nominal/force_right/steer_left/rear_load面板，与历史gentle/tight_turn/straighten/reversal命令四场景不同；前次“四场景”表述未强调任务切换，现明确纠正。旧四场景冻结文件保留，未声称本轮模型已完成旧面板评估；不能跨任务比较累计奖励或将改善单独归因RSL。未启动额外训练。
+
+## 2026-09-15 四类参考混合训练工程验证
+新增reference_paths只提供任务参考及reset选择，不改tracking_reward、Actor维数/激活/参数、alpha偏好、基础控制器或执行器。新配置相对path_priority_recovery仅reference_paths与speed_schedule不同；PPO配置文件完全复用。回合内参考固定，CPU标准评估显式选择冻结轨迹成员，policy身份仍绑定完整训练任务库。原始全局参考用于视频/轨迹，不能误画旧弯道。
+249 passed、2 skipped；最终参考相关7 passed。实际GPU短测2轮32转移complete，奖励重建max3.7253e-9，12个开发组合覆盖4轨迹×3alpha。CPU短面板16回合complete（4轨迹×nominal/force×两方法），检查实际path_id、观测、逐步奖励；短测仅验证接口不证明抗扰。正式配置及预算见PROJECT.md，准备启动200轮。

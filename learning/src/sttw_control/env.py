@@ -17,7 +17,7 @@ from .controller import ControllerConfig,initial_controller,controller_step
 from .actuator import ActuatorConfig,initial_actuator,apply_residual,composition_base
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
-from .path import BendConfig,bend_table,bend_command,bend_features
+from .path import BendConfig,bend_table,bend_command,bend_features,ReferencePaths,integrated_reference
 from .path import CircleConfig,circle_command,FigureEightConfig,eight_command,eight_features
 
 
@@ -37,6 +37,7 @@ class TaskConfig:
     action_mapping: MappingConfig | None=None
     motion_commands: MotionCommands | None=None
     tracking: TrackingConfig | None=None
+    reference_paths: ReferencePaths | None=None
     bend: BendConfig | None=None
     rear_disturbance_mode: str="torque"  # event[5]: signed Nm or signed rad/s bias magnitude; positive opposes forward motion
     disturbance_rear_torque: float=0.
@@ -70,6 +71,13 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if self.reference_paths is not None:
+            if self.tracking is None or self.bend is None or self.speed_schedule is not None:
+                raise ValueError('reference bank needs geometry tracking and lookahead settings, without a second speed schedule')
+            for case in self.reference_paths.cases:
+                if not math.isclose(case['commands'][0][1],self.speed_reference):raise ValueError('reference initial speed mismatch')
+                for t,v,w in case['commands']:
+                    if t>=self.horizon_seconds or v>.1*self.actuator.rear_rate_limit or not math.isclose(t/self.controller.dt,round(t/self.controller.dt),abs_tol=1e-7):raise ValueError('reference exceeds time/speed contract')
         if self.speed_schedule is not None:
             if self.tracking is None or not self.speed_schedule:
                 raise ValueError("speed schedule requires geometric tracking")
@@ -166,7 +174,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('tracking',TrackingConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('reference_paths',ReferencePaths),('tracking',TrackingConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -196,6 +204,7 @@ class EnvState:
     priority_locked: object=False
     tracking_state: object=None
     tracking_components: object=None
+    path_id: object=0
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -228,6 +237,11 @@ class RecoveryEnv:
         self.substeps=int(round(ratio))
         self.horizon=int(math.ceil(config.horizon_seconds/config.controller.dt))
         self.bend_table=jp.asarray(bend_table(config.bend)) if config.bend is not None else None
+        self.reference_tables=None
+        if config.reference_paths is not None:
+            self.reference_tables=jp.asarray(np.stack([integrated_reference(x['commands'],config.horizon_seconds,config.controller.dt) for x in config.reference_paths.cases]))
+            length=max(len(x['commands']) for x in config.reference_paths.cases)
+            self.reference_schedules=jp.asarray([list(x['commands'])+[[1e9,*x['commands'][-1][1:]]]*(length-len(x['commands'])) for x in config.reference_paths.cases])
         self.event_start=int(round(config.disturbance_start/config.controller.dt))
         self.event_end=self.event_start+int(round(config.disturbance_duration/config.controller.dt))
         self.observation_size=config.observation.history_steps*(len(observation_fields(config.observation))+1)
@@ -278,15 +292,20 @@ class RecoveryEnv:
             torque=xp.cross(offset,force)
         return xp.concatenate([force,torque])
 
-    def speed_command(self,tick):
+    def speed_command(self,tick,path_id=0):
+        if self.reference_tables is not None:
+            rows=self.reference_schedules[path_id]
+            index=jp.maximum(jp.sum(tick*self.config.controller.dt>=rows[:,0])-1,0)
+            return rows[index,1]
         if self.config.speed_schedule is None:return jp.asarray(self.config.speed_reference)
         rows=jp.asarray(self.config.speed_schedule)
         index=jp.maximum(jp.sum(tick*self.config.controller.dt>=rows[:,0])-1,0)
         return rows[index,1]
 
-    def command(self,tick,pose=None,schedule=None):
+    def command(self,tick,pose=None,schedule=None,path_id=0):
         c=self.config
-        speed=self.speed_command(tick)
+        speed=self.speed_command(tick,path_id)
+        if self.reference_tables is not None:return jp.array([bend_command(pose,c.bend,self.reference_tables[path_id],c.controller.wheelbase,c.controller.caster),speed])
         if c.bend is not None:return jp.array([bend_command(pose,c.bend,self.bend_table,c.controller.wheelbase,c.controller.caster),speed])
         if c.figure_eight is not None:
             if pose is None:raise ValueError("figure eight requires localization")
@@ -307,7 +326,8 @@ class RecoveryEnv:
         gyro=data.sensordata[b.imu_gyro:b.imu_gyro+3]
         return jp.array([-raw,-gyro[0],data.qpos[b.steer_qpos],data.qvel[b.steer_dof],gyro[2],-data.qvel[b.rear_dof],-data.qvel[b.front_dof]])
 
-    def path_features(self,pose):
+    def path_features(self,pose,path_id=0):
+        if self.reference_tables is not None:return bend_features(pose,self.reference_tables[path_id])[0]
         if self.config.bend is not None:return bend_features(pose,self.bend_table)[0]
         if self.config.figure_eight is not None:return eight_features(pose,self.config.figure_eight)
         c=self.config.circle
@@ -318,9 +338,9 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0):
         c=self.config
-        command=self.command(tick,pose) if command_override is None else command_override
+        command=(self.command(tick,pose,path_id=path_id) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
@@ -328,7 +348,7 @@ class RecoveryEnv:
         visible_base=composition_base(jp.array([out.steer_rate,command[1]/.1]),c.actuator)
         frame=make_frame(measurement,command,learning_reference,visible_base[0],actuator.previous,out.disturbance)
         if c.observation.include_path:
-            frame=jp.concatenate([frame,self.path_features(pose)])
+            frame=jp.concatenate([frame,self.path_features(pose,path_id)])
         if c.observation.include_motion:
             frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
         if c.priority is not None:
@@ -339,9 +359,13 @@ class RecoveryEnv:
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),learning_reference
 
-    def reset(self,seed=0):
+    def reset(self,seed=0,*,reference_id=None):
         key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
         c=self.config
+        path_id=jp.int32(0)
+        if c.reference_paths is not None:
+            chosen=c.reference_paths.selected if reference_id is None else reference_id
+            path_id=jax.random.randint(jax.random.fold_in(key,79),(),0,len(c.reference_paths.cases)) if chosen is None else jp.asarray(chosen,jp.int32)
         qpos=jp.asarray(self.model.qpos0)
         angle=jax.random.uniform(key,(),minval=-c.initial_roll_range,maxval=c.initial_roll_range)
         # Left-positive physical roll = negative world-x rotation.
@@ -362,10 +386,10 @@ class RecoveryEnv:
         measurement=self.measure(data)
         pose=self.pose(data)
         alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
-        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha)
+        controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha,path_id=path_id)
         state=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
-                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha)
+                        sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha,path_id=path_id)
         if c.tracking is not None:
             tracking_state=initial_return()
             _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
@@ -409,8 +433,8 @@ class RecoveryEnv:
     def _advance_tracking(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;tick=state.tick+1
         # The reward uses the request and alpha that generated this transition.
-        command=self.command(state.tick,state.pose)
-        path=self.path_features(pose)
+        command=self.command(state.tick,state.pose,path_id=state.path_id)
+        path=self.path_features(pose,state.path_id)
         leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,path))
         invalid=(~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in leaves]))
                  | ~jp.asarray(physics_finite))
@@ -423,7 +447,7 @@ class RecoveryEnv:
             failed=failed,enabled=state.tick*c.controller.dt>=c.tracking.start_seconds,
             config=c.tracking)
         controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,
-            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state)
+            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state,path_id=state.path_id)
         controller_invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((controller,obs,base))]))
         invalid=invalid|controller_invalid;failed=failed|controller_invalid
         parts={k:jp.where(controller_invalid,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
