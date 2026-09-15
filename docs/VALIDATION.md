@@ -1595,3 +1595,7 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=osmesa STTW_TEST_MJX_CPU=1 p
 249 passed、2 skipped；最终参考相关7 passed。实际GPU短测2轮32转移complete，奖励重建max3.7253e-9，12个开发组合覆盖4轨迹×3alpha。CPU短面板16回合complete（4轨迹×nominal/force×两方法），检查实际path_id、观测、逐步奖励；短测仅验证接口不证明抗扰。正式配置及预算见PROJECT.md，准备启动200轮。
 
 正式启动确认：runs/path_reference_rsl_4096_20260915，pipeline PID2116022，watchdog PID2116023。pipeline_status=training，training/status=initializing，监视器running且连续错误0。TensorBoard6006新增RSL_four_references。GPU短测、16条CPU面板及反向轨迹奖励图/视频均完成，重建误差2.06e-9；实现提交b95e3be已push。未宣称正式200轮已经完成或学会任务。
+
+## 2026-09-15 四类参考R200结果与投影缺陷
+path_reference_rsl_4096_20260915完成200轮及96条标准评估。R200累计回报0/48优于基线，末段共同保持及严格任务0/48；存活31/48对基线21/48，不能称成功。开发best_reward_model=R50（−62.20，受扰20/36失败、末段0/36）；已标准评估的是R200（开发−153.99），不是R50。全工况/alpha/seed与逐阶段结果、累计图、轨迹见analysis/review/INDEX.md。训练64.5min，pipeline约100min。
+首要缺陷：全局最近点投影不适用于新交叉参考；alpha.5急转无扰动1.425s模型参考进度从2.74跳到17.44m，基线1.460s从3.00跳17.69m再返回，实际车体位移为厘米量级。发生在转弯/外扰前，原0.06s短测未覆盖。奖励重建max5.40e−6只证明公式一致，不证明正确路段选择。下一步先修连续进度/局部可达投影、补全程零残差测试，奖励/网络/权限/PPO保持，验证后再考虑重训；不能把本轮负结果仅归因RSL或reward。完整96条projection_audit.json保留。当前只分析，未续训。
