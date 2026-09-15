@@ -164,5 +164,68 @@ def generate_panel(root):
             index.append(f'- alpha={pair[0]}, seed={pair[1]}, {case}: [plots and data]({relative})')
     if seen!=expected or len(checkpoints)!=1:raise ValueError('incomplete alpha/seed or mixed checkpoint coverage')
     (out/'summary.json').write_text(json.dumps(rows,indent=2,allow_nan=False)+'\n')
+    index.insert(2,'- [Required paired trajectory and per-step reward overview](../comparison/INDEX.md)')
     (out/'INDEX.md').write_text('\n'.join(index)+'\n')
+    write_panel_overview(root, rows)
     return rows
+
+
+def write_panel_overview(root, rows):
+    """Always expose paired XY and per-step reward figures for every panel cell.
+
+    Uses already audited traces; never advances physics or pads failed episodes.
+    Alpha values come from declarations, not folder indices.
+    """
+    import os
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from .path import BendConfig, bend_table, CircleConfig, circle_reference, FigureEightConfig, eight_reference
+    root=Path(root);out=root/'analysis/comparison';out.mkdir(parents=True,exist_ok=True)
+    index=['# Paired geometric trajectories and per-step rewards','',
+           'Every declared scenario, alpha and seed is included. Crosses mark physical failure.',
+           'Reward uses a symmetric-log axis to retain terminal penalties and small normal rewards.','']
+    manifest=[]
+    for row in rows:
+        alpha,seed,case=row['alpha'],row['seed'],row['scenario']
+        # Resolve the declaration rather than interpreting alpha_2 as alpha=2.
+        candidates=[]
+        for panel in (root/'evaluation').glob('alpha_*/seed_*'):
+            declaration=json.loads((panel/'declaration.json').read_text())
+            if declaration['priority_alpha_override']==alpha and declaration['panel']['seed']==seed:
+                candidates.append(panel)
+        if len(candidates)!=1:raise ValueError('ambiguous overview panel')
+        panel=candidates[0];sources=[]
+        for policy in ('baseline','residual'):
+            directory=panel/case/policy
+            with np.load(directory/'trace.npz',allow_pickle=False) as saved:
+                trace={k:saved[k] for k in saved.files}
+            config=json.loads((directory/'declaration.json').read_text())['config']
+            sources.append((policy,trace))
+        stem=f'{case}_alpha_{alpha:g}_seed_{seed}'
+        if config.get('bend'):reference=bend_table(BendConfig(**config['bend']))[:,1:3]
+        elif config.get('circle'):reference=circle_reference(CircleConfig(**config['circle']))
+        else:reference=eight_reference(FigureEightConfig(**config['figure_eight']))
+        manifest.append({k:row[k] for k in ('alpha','seed','scenario','trace_sha256','baseline_trace_sha256','declaration_sha256')})
+        fig,axes=plt.subplots(1,2,figsize=(13,5),layout='constrained')
+        axes[0].plot(reference[:,0],reference[:,1],'--',color='.5',label='Original reference')
+        for label,tr in sources:
+            line,=axes[0].plot(tr['pose'][:,0],tr['pose'][:,1],label=label)
+            axes[0].plot(*tr['pose'][-1,:2],marker='x' if tr['terminated'][-1] else 'o',color=line.get_color())
+            steps=np.arange(1,len(tr['time']))
+            line,=axes[1].plot(steps,tr['reward'][1:],label=label)
+            if tr['terminated'][-1]:axes[1].plot(steps[-1],tr['reward'][-1],'x',color=line.get_color())
+        event=sources[1][1]['event'][0]
+        if np.any(event[[2,3,5]]!=0):axes[1].axvspan(event[0],event[1],alpha=.15,color='grey')
+        axes[0].set(xlabel='X [m]',ylabel='Y [m]',title='Trajectory');axes[0].set_aspect('equal')
+        axes[1].set(xlabel='Control step',ylabel='Signed reward (symlog)',yscale='symlog',title='Per-step total reward')
+        axes[1].set_yscale('symlog',linthresh=.05)
+        for ax in axes:ax.legend();ax.grid(alpha=.2)
+        fig.suptitle(f'{case} | alpha={alpha:g} | seed={seed}')
+        for ext in ('png','pdf'):fig.savefig(out/f'{stem}.{ext}',dpi=140)
+        plt.close(fig)
+        detail=os.path.relpath(panel/case/'residual/analysis/tracking/INDEX.md',out)
+        index.append(f'- {case}, alpha={alpha:g}, seed={seed}: [trajectory + step reward]({stem}.png), [PDF]({stem}.pdf), [components and errors]({detail})')
+    (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    (out/'INDEX.md').write_text('\n'.join(index)+'\n')
+    return out

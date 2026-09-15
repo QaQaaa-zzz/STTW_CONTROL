@@ -424,3 +424,8 @@ G100标准补评：回报12/12高于G200，但急转中点5.180s更早摔倒，�
 
 ## 2026-09-15 RSL-RL PPO与ELU（工程接入，效果未验证）
 用户在已完成几何alpha任务上要求替换优化库，并指定4096环境×24步rollout、24576小批、5epochs、ELU、.001自适应LR、200轮。使用RSL-RL3.2.0原生PPO，MJX以DLPack连接Torch，保留显式alpha和任务/物理；动作仍以潜高斯采样后tanh执行。与旧实验同时改变库、激活、批次、学习率，不能将后续差异单独归因RSL。真实GPU2轮短测完成，仅说明训练/验证/导出链路可运行；未证明4096更快或策略已学会。完整记录见VALIDATION最新节及runs/rsl_integration_smoke/complete_check。
+
+## 2026-09-15 RSL200完成复核与强制图交付
+训练200轮19,660,800交互完成；九次GPU开发评估均未全门槛达标，best_reward_model为R200（开发受扰平均45.568），best_checkpoint=null不是未保存best。CPU标准seed49001四工况×alpha0/.5/1，模型12/12存活并末段共同容差保持，严格完整任务11/12（含3无扰动；受扰8/9），配对基线存活3/12、严格0/12。α0侧向力恢复超时仍判失败，不能放宽标准。基线无扰动7.21s摔倒；新任务同时改动几何参考/奖励/网络/训练器，不能单独归因RSL。α1常同时改善速度/路径，尚无上层α或可解释取舍证据；后轮.4Nm实际注入但与nominal很接近，不能称强负载恢复。
+报告runs/path_rsl_4096_20260915/analysis/review/INDEX.md含全工况全alpha逐阶段表、四场景轨迹、逐步reward和训练图；完整奖励分项/速度叠图保留于analysis/reward_breakdown。训练记录墙钟74.7min，rollout39.0min、开发27.8min，优化计时受异步影响不作为精确GPU性能结论。训练与完成弹窗均已确认zenity送达。下一步优先无扰动基线审计、同初态CPU/MJX核对和α0侧向力期限诊断，不自动续训。
+用户再次要求每次先给图：tracking_diagnostics.generate_panel现自动生成analysis/comparison全声明场景/alpha/seed配对轨迹+每步总奖励PNG/PDF与证据哈希索引，AGENTS.md已明确几何任务同样强制。实际重建本轮12组24文件通过；相关行为测试14 passed、1 skipped（opt-in GPU）。原冻结实验记录未改，新增图属于事后审计。
