@@ -266,3 +266,65 @@ def test_yaw_bonus_cpu_reconstruction_identity_and_invalid_config(tmp_path):
     assert ident(dict(defaults,yaw_tracking_reward_rate=5.))!=ident(old)
     for kwargs in [dict(yaw_tracking_reward_rate=-1.),dict(yaw_tracking_reward_scale=0.),dict(yaw_tracking_reward_rate=float('nan'))]:
         with pytest.raises(ValueError):MotionCommands(**kwargs)
+
+
+def test_authority_gate_dynamic_reward_and_trace(tmp_path):
+    from sttw_control.actuator import ActuatorConfig
+    from sttw_control.evaluation import evaluate
+    from sttw_control.command_diagnostics import reconstruct
+    from sttw_control.motion_commands import gated_action
+    cfg=task(residual_gate_min=.2,fixed=((0.,2.,0.,.5),(.01,2.,.2,1.)))
+    cfg=replace(cfg,actuator=ActuatorConfig(project_base=True))
+    np.testing.assert_allclose(gated_action(np.ones((5,2)),np.array([0,.25,.5,.75,1]),cfg.motion_commands,xp=np)[:,0],[1,.6,.2,.6,1])
+    e=RecoveryEnv(cfg)
+    evaluate(e,tmp_path/'gated',seed=7,policy=lambda obs:np.array([.2,-.3]),policy_identity={'test':'constant'})
+    result=reconstruct(tmp_path/'gated')
+    assert result['reconstruction_error']<3e-5
+    tr=result['trace']
+    np.testing.assert_allclose(tr['effective_action'][1:3],[[.04,-.06]]*2,atol=1e-7)
+    np.testing.assert_allclose(tr['effective_action'][3],[.2,-.3],atol=1e-7)
+    np.testing.assert_allclose(result['parts']['action'][:2],.01*(.04**2+.06**2))
+
+
+def test_projected_base_preserves_zero_and_removes_reverse_dead_zone():
+    from sttw_control.actuator import ActuatorConfig,initial_actuator,apply_residual
+    old=ActuatorConfig(steer_residual_scale=1.)
+    new=replace(old,project_base=True)
+    b=jnp.array([4.,21.]);s=initial_actuator(old)
+    np.testing.assert_array_equal(apply_residual(s,b,jnp.zeros(2),0.,old)[1],apply_residual(s,b,jnp.zeros(2),0.,new)[1])
+    assert float(apply_residual(s,b,jnp.array([-.5,0]),0.,old)[1][0])==3.
+    assert float(apply_residual(s,b,jnp.array([-.5,0]),0.,new)[1][0])==2.5
+
+
+def test_gate_defaults_keep_checkpoint_identity():
+    from dataclasses import asdict
+    from sttw_control.network import make_policy_identity
+    c=asdict(task());c['motion_commands'].pop('residual_gate_min');c['actuator'].pop('project_base');before=make_policy_identity({},c,10)
+    c['motion_commands']['residual_gate_min']=None
+    c['actuator']['project_base']=False
+    assert make_policy_identity({},c,10)==before
+    c['motion_commands']['residual_gate_min']=.2
+    assert make_policy_identity({},c,10)!=before
+
+
+@pytest.mark.parametrize('minimum',[-.1,1.1,float('nan'),float('inf')])
+def test_gate_rejects_invalid_minimum(minimum):
+    with pytest.raises(ValueError):MotionCommands(residual_gate_min=minimum)
+
+
+def test_gate_zero_action_baseline_and_projected_observation():
+    from sttw_control.actuator import ActuatorConfig
+    cfg=task(fixed=((0.,2.,0.,.5),))
+    original=RecoveryEnv(cfg)
+    changed=RecoveryEnv(replace(cfg,motion_commands=replace(cfg.motion_commands,residual_gate_min=.2),actuator=ActuatorConfig(project_base=True)))
+    a=original.reset(7);b=changed.reset(7)
+    for _ in range(4):
+        a=original.step(a,jnp.zeros(2));b=changed.step(b,jnp.zeros(2))
+        np.testing.assert_array_equal(a.data.qpos,b.data.qpos)
+        np.testing.assert_array_equal(a.actuator.previous,b.actuator.previous)
+    from sttw_control.observation import initial_history
+    m=b.measurement.at[0].set(.6)
+    _,history,_,base,_=changed.prepare_command(b.controller,b.actuator,initial_history(cfg.observation),m,b.tick,b.pose,b.priority_alpha,b.command_schedule,b.yaw_rate)
+    assert abs(float(base[0]))>3.
+    # Field 11 is the base steering-rate input, before observation normalization.
+    assert abs(float(history.frames[-1,observation_fields(cfg.observation).index('base_steer_rate')]))==3.

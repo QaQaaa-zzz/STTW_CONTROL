@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 from sttw_control.command_env import make_command_validator
-from sttw_control.motion_commands import reference_at
+from sttw_control.motion_commands import reference_at, MotionCommands
 
 
 @struct.dataclass
@@ -37,7 +37,7 @@ class TrajectoryEnv:
         self.config = SimpleNamespace(
             controller=SimpleNamespace(dt=1.), speed_reference=2.,
             priority=SimpleNamespace(validation_alphas=(0., .5, 1.)),
-            motion_commands=SimpleNamespace(roll_working_limit=.3))
+            motion_commands=MotionCommands(roll_working_limit=.3))
         self.horizon = 4
         self.bundle = SimpleNamespace(chassis=0)
         self.speed_errors = jp.asarray(speed_errors)

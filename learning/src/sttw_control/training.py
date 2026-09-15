@@ -19,7 +19,7 @@ import numpy as np
 import optax
 from .env import RecoveryEnv, load_config
 from .validation import make_validator
-from .motion_commands import signed_reward_components
+from .motion_commands import signed_reward_components,gated_action
 from .selection import rank_candidate, rank_command_candidate, command_improved, command_should_stop
 from .network import ResidualActor, make_policy_identity, save_policy, load_policy
 from .runtime import configure_compilation_cache
@@ -282,7 +282,7 @@ def _train(task_path,output,config,events):
                 cfg=env.config
                 raw=jax.vmap(env.requested)(state.tick,state.command_schedule)
                 speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
-                parts=jax.vmap(lambda roll,rate,ev,ey,action,alpha,failed:signed_reward_components(roll,rate,ev,ey,action,alpha,cfg.motion_commands,cfg.controller.dt,cfg.alive_reward_rate,cfg.failure_penalty,failed))(nxt.measurement[:,0],nxt.measurement[:,1],speed-raw[:,0],nxt.yaw_rate-raw[:,1],jp.tanh(z),state.priority_alpha,nxt.terminated)
+                parts=jax.vmap(lambda roll,rate,ev,ey,action,alpha,failed:signed_reward_components(roll,rate,ev,ey,action,alpha,cfg.motion_commands,cfg.controller.dt,cfg.alive_reward_rate,cfg.failure_penalty,failed))(nxt.measurement[:,0],nxt.measurement[:,1],speed-raw[:,0],nxt.yaw_rate-raw[:,1],gated_action(jp.tanh(z),state.priority_alpha,cfg.motion_commands),state.priority_alpha,nxt.terminated)
                 # Aggregate on-device before scan storage: no per-environment log transfer.
                 audit={k:jp.mean(v) for k,v in parts.items()}
                 audit['reconstruction_max_abs']=jp.max(jp.abs(sum(parts.values())-nxt.reward))

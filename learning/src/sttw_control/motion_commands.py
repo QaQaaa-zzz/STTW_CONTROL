@@ -6,6 +6,7 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class MotionCommands:
+    residual_gate_min: float | None=None  # None preserves legacy constant authority
     segments: int=12
     duration_min: float=1.
     duration_max: float=3.
@@ -31,6 +32,8 @@ class MotionCommands:
     yaw_tracking_reward_scale: float=.1  # rad/s; reward falls to exp(-1) here
 
     def __post_init__(self):
+        if self.residual_gate_min is not None and (not math.isfinite(self.residual_gate_min) or not 0<=self.residual_gate_min<=1):
+            raise ValueError('residual_gate_min must be in [0,1] or None')
         if type(self.segments) is not int or self.segments<2:raise ValueError('segments >=2 required')
         if not 0<self.duration_min<=self.duration_max or not 0<self.speed_min<=self.speed_max:raise ValueError('invalid command ranges')
         for x in (self.duration_min,self.duration_max,self.speed_min,self.speed_max,self.yaw_max,self.speed_scale,self.yaw_scale,self.roll_working_limit,self.attitude_weight,self.rate_weight,self.tracking_scale):
@@ -51,6 +54,13 @@ class MotionCommands:
             for row in self.fixed:
                 if len(row)!=4 or not all(math.isfinite(x) for x in row) or row[0]<=last or row[1]<=0 or not 0<=row[3]<=1:raise ValueError('invalid command row')
                 last=row[0]
+
+def gated_action(action,alpha,c,*,xp=jp):
+    """Scale raw normalized action once, using the alpha BEFORE the transition."""
+    if c.residual_gate_min is None:return action
+    gain=c.residual_gate_min+(1-c.residual_gate_min)*xp.abs(2*xp.asarray(alpha)-1)
+    return xp.asarray(action)*gain[...,None]
+
 
 def sample_schedule(key,c,initial_speed):
     if c.fixed is not None:return jp.asarray(c.fixed)

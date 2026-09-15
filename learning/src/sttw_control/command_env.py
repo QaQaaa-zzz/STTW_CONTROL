@@ -6,9 +6,13 @@ import numpy as np
 from .env import RecoveryEnv
 from .controller import initial_controller
 from .observation import initial_history
-from .motion_commands import sample_schedule,reference_at,reward_terms,yaw_tracking_bonus
+from .motion_commands import sample_schedule,reference_at,reward_terms,yaw_tracking_bonus,gated_action
 
 class CommandRecoveryEnv(RecoveryEnv):
+    def prepare_action(self,state,action):
+        base,action=super().prepare_action(state,action)
+        return base,gated_action(action,state.priority_alpha,self.config.motion_commands)
+
     def requested(self,tick,schedule):
         return reference_at(tick*self.config.controller.dt,schedule)
 

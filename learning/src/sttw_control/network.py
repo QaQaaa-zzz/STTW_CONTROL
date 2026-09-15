@@ -20,11 +20,13 @@ def make_policy_identity(model_identity,config,history_steps):
     config=dict(config)
     if "actuator" in config:
         config["actuator"]=dict(config["actuator"])
+        if not config["actuator"].get("project_base",False):config["actuator"].pop("project_base",None)
         if config["actuator"].get("composition","additive")=="additive":
             config["actuator"].pop("composition",None)
     if config.get("motion_commands") is None:config.pop("motion_commands",None)
     else:
         config['motion_commands']=dict(config['motion_commands'])
+        if config['motion_commands'].get('residual_gate_min') is None:config['motion_commands'].pop('residual_gate_min',None)
         if config['motion_commands'].get('yaw_tracking_reward_rate',0.)==0.:
             for key in ('yaw_tracking_reward_rate','yaw_tracking_reward_scale'):
                 config['motion_commands'].pop(key,None)

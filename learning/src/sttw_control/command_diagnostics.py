@@ -3,13 +3,13 @@ import json
 from pathlib import Path
 import numpy as np
 from .media import state_series
-from .motion_commands import MotionCommands, reward_terms, signed_reward_components
+from .motion_commands import MotionCommands, reward_terms, signed_reward_components, gated_action
 
 def reconstruct(path):
     path=Path(path);tr=dict(np.load(path/'trace.npz'));c=json.loads((path/'declaration.json').read_text())['config'];m=MotionCommands(**c['motion_commands'])
     v=state_series(tr,c)['speed'];a=tr['priority_alpha'][:-1];t=tr['time'][1:]
     ev=v[1:]-tr['user_command'][:-1,0];ey=tr['yaw_rate_world'][1:]-tr['user_command'][:-1,1]
-    args=(tr['measurement'][1:,0],tr['measurement'][1:,1],ev,ey,tr['action'][1:],a,m)
+    args=(tr['measurement'][1:,0],tr['measurement'][1:,1],ev,ey,gated_action(tr['action'][1:],a,m,xp=np),a,m)
     parts=reward_terms(*args,xp=np)
     rewards=signed_reward_components(*args,c['controller']['dt'],c['alive_reward_rate'],c['failure_penalty'],tr['terminated'][1:],xp=np)
     prediction=sum(rewards.values());err=float(np.max(abs(prediction-tr['reward'][1:])))

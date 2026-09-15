@@ -11,6 +11,7 @@ import jax.numpy as jp
 @dataclass(frozen=True)
 class ActuatorConfig:
     composition: str="additive"  # full_range: signed fraction of remaining command range
+    project_base: bool=False  # project baseline before additive residual; legacy off
     dt: float=.005
     steer_limit: float=.8
     steer_rate_limit: float=3.
@@ -26,6 +27,7 @@ class ActuatorConfig:
         import math
         if self.composition not in ("additive","full_range"):
             raise ValueError("invalid residual composition")
+        if type(self.project_base) is not bool:raise ValueError('project_base must be boolean')
         positive=(self.dt,self.steer_limit,self.steer_rate_limit,self.rear_rate_limit)
         rates=(self.steer_acceleration,self.rear_acceleration)
         if any(not math.isfinite(x) or x<=0 for x in positive) or any(x is not None and (not math.isfinite(x) or x<=0) for x in rates) or self.delay_steps<0 or not isinstance(self.delay_steps,int):
@@ -45,6 +47,14 @@ def initial_actuator(config=ActuatorConfig(),rear_command=0.):
     return ActuatorState(jp.tile(command,(config.delay_steps+1,1)),command)
 
 
+def composition_base(base,config=ActuatorConfig()):
+    """Baseline used for composition and actor observation; raw output stays logged."""
+    if config.project_base:
+        limits=jp.array([config.steer_rate_limit,config.rear_rate_limit])
+        return jp.clip(base,-limits,limits)
+    return base
+
+
 def residual_target(base,action,config=ActuatorConfig()):
     c=config
     # A malformed network output disables the entire residual for this tick.
@@ -57,7 +67,7 @@ def residual_target(base,action,config=ActuatorConfig()):
         # Position, delay, slew and mechanical force constraints still apply.
         room=jp.where(action>=0,limits-baseline,limits+baseline)
         return baseline+c.strength*action*room
-    target=base+c.strength*jp.array([c.steer_residual_scale,c.rear_residual_scale])*action
+    target=composition_base(base,c)+c.strength*jp.array([c.steer_residual_scale,c.rear_residual_scale])*action
     return target
 
 

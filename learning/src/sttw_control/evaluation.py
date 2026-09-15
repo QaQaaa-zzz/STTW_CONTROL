@@ -9,7 +9,7 @@ import jax
 import jax.numpy as jp
 from .path import tracking_metrics,eight_trace_features
 from .events import profile
-from .actuator import residual_target
+from .actuator import residual_target,composition_base
 from .energy import mechanical_work
 
 
@@ -51,11 +51,13 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         transitions=0
         total_reward=0.
         action=np.zeros(2)
+        effective_action=jp.zeros(2)
+        composed_base=jp.zeros(2)
         request=jp.zeros(2)
         request_time=0.
         def prepare(s,a):
             base,mapped=env.prepare_action(s,a)
-            return residual_target(base,mapped,env.config.actuator)
+            return residual_target(base,mapped,env.config.actuator),mapped,composition_base(base,env.config.actuator)
         prepare=jax.jit(prepare)
         recorded_command=jax.jit(env.command)
         def capture(s,a):
@@ -73,12 +75,13 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'motion_command':np.asarray(recorded_command(s.tick,s.pose,s.command_schedule)),
                     'user_command':np.asarray(env.requested(s.tick,s.command_schedule)[:2]) if env.config.motion_commands is not None else np.asarray([0.,0.]),'yaw_rate_world':float(s.yaw_rate),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
+                    'effective_action':np.asarray(effective_action).copy(),'composition_base':np.asarray(composed_base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
         frames.append(capture(state,action))
         for _ in range(env.horizon):
             action=np.zeros(2) if policy is None else policy(state.obs)
-            request=prepare(state.replace(data=None),jp.asarray(action))
+            request,effective_action,composed_base=prepare(state.replace(data=None),jp.asarray(action))
             request_time=float(state.data.time)
             state=step(state,jp.asarray(action))
             transitions+=1

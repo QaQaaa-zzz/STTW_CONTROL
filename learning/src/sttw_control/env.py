@@ -14,7 +14,7 @@ import numpy as np
 import mujoco
 from .model import load_model
 from .controller import ControllerConfig,initial_controller,controller_step
-from .actuator import ActuatorConfig,initial_actuator,apply_residual
+from .actuator import ActuatorConfig,initial_actuator,apply_residual,composition_base
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
 from .path import BendConfig,bend_table,bend_command,bend_features
@@ -284,7 +284,8 @@ class RecoveryEnv:
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
         controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
         learning_reference=out.reference_roll if c.learning_roll_reference is None else jp.asarray(c.learning_roll_reference)
-        frame=make_frame(measurement,command,learning_reference,out.steer_rate,actuator.previous,out.disturbance)
+        visible_base=composition_base(jp.array([out.steer_rate,command[1]/.1]),c.actuator)
+        frame=make_frame(measurement,command,learning_reference,visible_base[0],actuator.previous,out.disturbance)
         if c.observation.include_path:
             frame=jp.concatenate([frame,self.path_features(pose)])
         if c.observation.include_motion:
