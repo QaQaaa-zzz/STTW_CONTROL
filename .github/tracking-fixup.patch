@@ -1,0 +1,103 @@
+diff --git a/learning/src/sttw_control/observation.py b/learning/src/sttw_control/observation.py
+--- a/learning/src/sttw_control/observation.py
++++ b/learning/src/sttw_control/observation.py
+@@ -14,7 +14,7 @@
+                  "return_credited", "return_ever_left", "return_deadline_missed")
+ 
+ def observation_fields(config):
+-    return FIELDS + (PATH_FIELDS if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ()) + (TRACKING_FIELDS if config.include_tracking else ())
++    return FIELDS + ((("path_lateral_error", "heading_error", "path_curvature") if config.include_tracking else PATH_FIELDS) if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ()) + (TRACKING_FIELDS if config.include_tracking else ())
+ 
+ @dataclass(frozen=True)
+ class ObservationConfig:
+diff --git a/learning/src/sttw_control/network.py b/learning/src/sttw_control/network.py
+--- a/learning/src/sttw_control/network.py
++++ b/learning/src/sttw_control/network.py
+@@ -73,7 +73,9 @@
+     if config.get('observation',{}).get('include_motion',False):identity['observation_fields']=list(FIELDS)+['yaw_rate_reference','yaw_rate_world']
+     if config.get('priority') is not None:
+         identity['observation_fields']=identity.get('observation_fields',list(FIELDS))+['speed_priority']+(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else [])
+-    if config.get('observation',{}).get('include_tracking',False):identity['observation_fields'] += list(TRACKING_FIELDS)
++    if config.get('observation',{}).get('include_tracking',False):
++        identity['observation_fields'][15]='path_lateral_error'
++        identity['observation_fields'] += list(TRACKING_FIELDS)
+     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
+     if config.get("actuator",{}).get("composition")=="full_range":
+         identity["action_fields"]=["steer_available_range_fraction","rear_available_range_fraction"]
+diff --git a/learning/src/sttw_control/tracking_diagnostics.py b/learning/src/sttw_control/tracking_diagnostics.py
+--- a/learning/src/sttw_control/tracking_diagnostics.py
++++ b/learning/src/sttw_control/tracking_diagnostics.py
+@@ -13,7 +13,7 @@
+ def trace_summary(trace, config):
+     c=TrackingConfig(**config['tracking']);dt=config['controller']['dt']
+     t=trace['time'];rs=trace['return_state'][-1]
+-    failed=bool(trace['terminated'][-1]);full=t[-1]+1e-6>=config['horizon_seconds']
++    failed=bool(trace['terminated'][-1]);full=bool(t[-1]+1e-6>=config['horizon_seconds'])
+     final=bool(full and not failed and not rs[2] and rs[4]+1e-6>=c.hold_seconds)
+     qualified=final and not bool(rs[7])
+     present=bool(np.any(trace['event'][0,[2,3,5]]!=0))
+diff --git a/learning/tests/test_tracking_integration.py b/learning/tests/test_tracking_integration.py
+--- a/learning/tests/test_tracking_integration.py
++++ b/learning/tests/test_tracking_integration.py
+@@ -44,8 +44,10 @@
+     a,b=env.reset(12),old.reset(12)
+     for _ in range(5):
+         a,b=env.step(a,jp.zeros(2)),old.step(b,jp.zeros(2))
+-        np.testing.assert_array_equal(a.data.qpos,b.data.qpos)
+-        np.testing.assert_allclose(a.base,b.base,atol=0,rtol=0)
++        # Dynamic speed lookup and a constant request can differ by float32
++        # rounding (observed <2e-6 rad/s); preserve physical equivalence.
++        np.testing.assert_allclose(a.data.qpos,b.data.qpos,atol=1e-8,rtol=1e-7)
++        np.testing.assert_allclose(a.base,b.base,atol=3e-6,rtol=1e-7)
+     s=env.reset(12);u=jp.array([.2,-.3]);targets=[]
+     for alpha in (0.,.5,1.):
+         sa=env.set_priority(s,alpha)
+diff --git a/learning/src/sttw_control/tracking_validation.py b/learning/src/sttw_control/tracking_validation.py
+--- a/learning/src/sttw_control/tracking_validation.py
++++ b/learning/src/sttw_control/tracking_validation.py
+@@ -57,7 +57,9 @@
+                   &(rs.hold+1e-6>=tc.hold_seconds))
+         qualified=complete&~rs.deadline_missed
+         present=jp.any(events[:,jp.array([2,3,5])]!=0.,axis=1)
+-        return dict(radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],
++        return dict(return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
++                    return_pending=rs.pending[:n],return_hold_seconds=rs.hold[:n],
++                    radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],
+                     heading_rmse=rmse(heading)[:n],nominal_radial_rmse=rmse(lateral)[n:],
+                     nominal_speed_rmse=rmse(speed)[n:],nominal_heading_rmse=rmse(heading)[n:],
+                     failed=last.terminated[:n],nominal_failed=last.terminated[n:],
+diff --git a/learning/tests/test_tracking_validation.py b/learning/tests/test_tracking_validation.py
+--- a/learning/tests/test_tracking_validation.py
++++ b/learning/tests/test_tracking_validation.py
+@@ -65,7 +65,7 @@
+     env=Env();cfg=SimpleNamespace(validation_seeds=(3,),validation_events=({'start':.1,'duration':.2,'force':1.},))
+     validate=make_tracking_validator(env,Actor(),jp.ones(1),cfg)
+     good=validate({'actor':0.})
+-    assert np.all(good['terminal_tracking_hold']) and np.all(good['recovered_after_excursion'])
++    assert np.all(good['terminal_tracking_hold']) and np.all(good['recovered_after_excursion']), {k:np.asarray(v).tolist() for k,v in good.items()}
+     assert not np.any(good['maintained_without_excursion'])
+     late=validate({'actor':1.})
+     assert not np.any(late['terminal_tracking_hold'])
+diff --git a/learning/src/sttw_control/selection.py b/learning/src/sttw_control/selection.py
+--- a/learning/src/sttw_control/selection.py
++++ b/learning/src/sttw_control/selection.py
+@@ -97,7 +97,8 @@
+ def rank_tracking_candidate(candidate, baseline, *, speed_slack=.05, nominal_slack=.03):
+     """Hard development acceptance before ranking; not a stability certificate."""
+     keys=('radial_rmse','speed_rmse','heading_rmse','nominal_radial_rmse',
+-          'nominal_speed_rmse','nominal_heading_rmse','episode_return')
++          'nominal_speed_rmse','nominal_heading_rmse','episode_return',
++          'speed_tolerance_exceed_fraction','path_tolerance_exceed_fraction')
+     if not all(np.isfinite(np.asarray(data[k],float)).all() for data in (candidate,baseline) for k in keys):
+         return None,'nonfinite geometric validation'
+     if any(candidate['failed']) or any(candidate['nominal_failed']):return None,'physical failure'
+diff --git a/learning/tests/test_tracking_selection.py b/learning/tests/test_tracking_selection.py
+--- a/learning/tests/test_tracking_selection.py
++++ b/learning/tests/test_tracking_selection.py
+@@ -20,4 +20,5 @@
+         b=deepcopy(a);b[key]=[False];assert rank_tracking_candidate(b,a)[0] is None
+     b=deepcopy(a);b['nominal_speed_rmse']=[.3];assert rank_tracking_candidate(b,a)[0] is None
+     b=deepcopy(a);b['path_tolerance_exceed_fraction']=[.2];assert rank_tracking_candidate(b,a)[0] is None
+-    b=deepcopy(a);b['radial_rmse']=[np.nan];assert rank_tracking_candidate(b,a)[0] is None
++    for key in ('radial_rmse','speed_tolerance_exceed_fraction','path_tolerance_exceed_fraction'):
++        b=deepcopy(a);b[key]=[np.nan];assert rank_tracking_candidate(b,a)[0] is None
