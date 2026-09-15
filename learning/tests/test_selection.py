@@ -72,3 +72,50 @@ def test_command_full_episode_rank_catches_late_regression_and_missing_return():
     assert command_improved(rank(good),rank(late),.1)
     assert rank(good)[-1]==-45.5
     assert rank_command_candidate(dict(good,speed_rmse=[float('nan'),.1]),base,scope='full_episode')[0] is None
+
+
+def test_best_reward_model_is_independent_of_last_and_acceptance(tmp_path):
+    import json
+    from sttw_control.selection import refresh_best_reward_model
+    base=dict(failed=[False,True],episode_return=[4.,-100.],speed_rmse=[.03,2.],yaw_rmse=[.03,3.],terminal_tracking_hold=[True,False])
+    (tmp_path/'baseline_validation.json').write_text(json.dumps(base))
+    (tmp_path/'declaration.json').write_text(json.dumps({'training':{'command_speed_slack':.05,'command_yaw_slack':.05}}))
+    for update,score in [(50,-80),(100,-40),(200,-70)]:
+        folder=tmp_path/'checkpoints'/f'update_{update:04d}';folder.mkdir(parents=True)
+        v=dict(base,episode_return=[score,score])
+        (folder/'training.json').write_text(json.dumps({'update':update,'validation':v}))
+    result=refresh_best_reward_model(tmp_path)
+    assert result['update']==100
+    assert result['development_gates_passed'] is False
+    assert (tmp_path/'best_model').resolve().name=='update_0100'
+    assert result['criterion']=='maximum mean fixed-development episode return'
+    assert len(result['candidates'])==3
+
+
+def test_best_reward_model_rejects_missing_or_nonfinite_scores(tmp_path):
+    import json
+    from sttw_control.selection import refresh_best_reward_model
+    (tmp_path/'baseline_validation.json').write_text('{}')
+    for update,v in [(1,None),(2,{'episode_return':[float('nan')]})]:
+        p=tmp_path/'checkpoints'/f'update_{update:04d}';p.mkdir(parents=True)
+        (p/'training.json').write_text(json.dumps({'update':update,'validation':v}))
+    assert refresh_best_reward_model(tmp_path) is None
+    assert not (tmp_path/'best_model').exists()
+
+
+def test_best_reward_resume_competes_only_with_same_validation_contract(tmp_path):
+    import json
+    from sttw_control.selection import refresh_best_reward_model
+    base=dict(failed=[False],episode_return=[0.],speed_rmse=[.03],yaw_rmse=[.03],terminal_tracking_hold=[True])
+    prev=tmp_path/'previous';cp=prev/'checkpoints/update_0150';cp.mkdir(parents=True)
+    config={'validation_seeds':[1],'command_validation_schedules':[[[0,2,0,.5]]]}
+    (prev/'declaration.json').write_text(json.dumps({'training':config,'policy_identity':{'config':'same'}}))
+    (cp/'training.json').write_text(json.dumps({'update':150,'validation':base}))
+    current=tmp_path/'current';current.mkdir()
+    declaration={'training':dict(config,resume_checkpoint=str(cp)),'policy_identity':{'config':'same'}}
+    (current/'declaration.json').write_text(json.dumps(declaration))
+    (current/'baseline_validation.json').write_text(json.dumps(base))
+    assert refresh_best_reward_model(current)['update']==150
+    declaration['training']['validation_seeds']=[2]
+    (current/'declaration.json').write_text(json.dumps(declaration))
+    assert refresh_best_reward_model(current) is None

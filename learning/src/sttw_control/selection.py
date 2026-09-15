@@ -48,3 +48,47 @@ def command_improved(score,best,min_delta):
 
 def command_should_stop(update,stale,min_updates,patience):
     return patience>0 and update>=min_updates and stale>=patience
+
+
+def refresh_best_reward_model(training_dir):
+    """Maintain a best-return alias without changing stopping or acceptance rules.
+
+    Saved fixed-development validations and a compatible resume checkpoint compete.
+    Unevaluated checkpoints never inherit their rollout's training reward.
+    """
+    import hashlib,json,os
+    from pathlib import Path
+    root=Path(training_dir).resolve()
+    declaration=root/'declaration.json'
+    declared=json.loads(declaration.read_text()) if declaration.exists() else {}
+    config=declared.get('training',{})
+    metadata_paths=sorted((root/'checkpoints').glob('update_*/training.json'))
+    resume=config.get('resume_checkpoint')
+    if resume:
+        checkpoint=Path(resume)
+        parent=json.loads((checkpoint.parents[1]/'declaration.json').read_text())
+        fields=('validation_seeds','command_validation_schedules')
+        same_panel=all(parent['training'].get(k)==config.get(k) for k in fields)
+        same_policy=parent.get('policy_identity') is not None and parent['policy_identity']==declared.get('policy_identity')
+        if same_panel and same_policy:metadata_paths.append(checkpoint/'training.json')
+    candidates=[]
+    for metadata in metadata_paths:
+        raw=metadata.read_bytes();entry=json.loads(raw);v=entry.get('validation')
+        if not v:continue
+        returns=np.asarray(v.get('episode_return',[]),float)
+        if not returns.size or not np.isfinite(returns).all():continue
+        candidates.append(dict(checkpoint=str(metadata.parent),update=entry['update'],mean_episode_return=float(returns.mean()),case_count=int(returns.size),failures=sum(v.get('failed',[])),metadata_sha256=hashlib.sha256(raw).hexdigest()))
+    if not candidates:return None
+    if len({c['case_count'] for c in candidates})!=1:raise ValueError('development panel sizes differ')
+    chosen=max(candidates,key=lambda x:(x['mean_episode_return'],-x['update']))
+    validation=json.loads((Path(chosen['checkpoint'])/'training.json').read_text())['validation']
+    baseline=json.loads((root/'baseline_validation.json').read_text())
+    rank,reason=rank_command_candidate(validation,baseline,scope='full_episode',speed_slack=config.get('command_speed_slack',.05),yaw_slack=config.get('command_yaw_slack',.05))
+    result=dict(**chosen,criterion='maximum mean fixed-development episode return',scope='evaluated stage checkpoints plus compatible resume checkpoint; earlier update wins exact ties; no extra physics',development_gates_passed=bool(rank is not None and all(x==0 for x in rank[:-1])),acceptance_rank=rank,acceptance_reason=reason,task_success_verified=False,candidates=candidates)
+    dest=root/'best_model'
+    if dest.exists() and not dest.is_symlink():raise ValueError('best_model exists and is not a managed symlink')
+    temporary=root/'.best_model.tmp'
+    if temporary.is_symlink():temporary.unlink()
+    temporary.symlink_to(os.path.relpath(chosen['checkpoint'],root),target_is_directory=True);temporary.replace(dest)
+    tmp=root/'best_model.tmp.json';tmp.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');tmp.replace(root/'best_model.json')
+    return result

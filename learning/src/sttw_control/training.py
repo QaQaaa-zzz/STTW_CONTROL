@@ -20,7 +20,7 @@ import optax
 from .env import RecoveryEnv, load_config
 from .validation import make_validator
 from .motion_commands import signed_reward_components,gated_action
-from .selection import rank_candidate, rank_command_candidate, command_improved, command_should_stop
+from .selection import refresh_best_reward_model, rank_candidate, rank_command_candidate, command_improved, command_should_stop
 from .network import ResidualActor, make_policy_identity, save_policy, load_policy
 from .runtime import configure_compilation_cache
 
@@ -457,6 +457,8 @@ def _train(task_path,output,config,events):
             metadata_path=Path(path)/'training.json'
             metadata=json.loads(metadata_path.read_text());metadata['validation']=validation
             metadata_path.write_text(json.dumps(metadata,indent=2)+'\n')
+            if env.config.motion_commands is not None:
+                record['best_reward_model']=refresh_best_reward_model(output)
             score,reason=(None,"command task: predeclared final endpoint; no path recovery ranking") if env.config.motion_commands is not None else rank_candidate(validation,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
             command_mode=env.config.motion_commands is not None and c.command_selection
             if command_mode:score,reason=rank_command_candidate(validation,baseline,speed_slack=c.command_speed_slack,yaw_slack=c.command_yaw_slack,scope=c.command_selection_scope)
@@ -473,6 +475,8 @@ def _train(task_path,output,config,events):
                 record['command_selection']={'stale_evaluations':stale,'early_stop':stop,'best_checkpoint':best}
             status={'last_checkpoint':path,'best_checkpoint':best,'stage_best_checkpoint':stage_best,'stage_best_rank':stage_best_score,'stage_control_transitions':record['stage_control_transitions'],'best_radial_rmse':best_radial,'best_selection_rank':best_score,
                     'baseline':baseline,'control_transitions':record['control_transitions'],'complete':index==c.updates or stop,'stop_reason':'development_patience' if stop else ('budget' if index==c.updates else None)}
+            if record.get('best_reward_model'):
+                status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
             (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
         record['wall_elapsed_seconds']=time.monotonic()-run_start
         with (output/'metrics.jsonl').open('a') as f:
