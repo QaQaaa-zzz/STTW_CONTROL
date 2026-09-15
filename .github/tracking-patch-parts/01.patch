@@ -1,0 +1,462 @@
+diff --git a/.github/workflows/learning-tests.yml b/.github/workflows/learning-tests.yml
+index 04a98c7..2a875ba 100644
+--- a/.github/workflows/learning-tests.yml
++++ b/.github/workflows/learning-tests.yml
+@@ -4,7 +4,7 @@ on:
+     branches: ["agent/alpha-path-tracking", "feat/residual-recovery"]
+     paths: ["learning/**", ".github/**"]
+ permissions:
+-  contents: write
++  contents: read
+ concurrency:
+   group: learning-tests-${{ github.ref }}
+   cancel-in-progress: true
+@@ -14,6 +14,7 @@ jobs:
+     timeout-minutes: 20
+     env:
+       JAX_PLATFORMS: cpu
++      STTW_TEST_MJX_CPU: '1'
+       MUJOCO_GL: osmesa
+       PYTHONPATH: learning/src
+       OMP_NUM_THREADS: '2'
+@@ -23,17 +24,6 @@ jobs:
+       - uses: actions/setup-python@v5
+         with:
+           python-version: '3.11'
+-      - name: Apply reviewed patch on staging branch only
+-        if: github.ref == 'refs/heads/agent/alpha-path-tracking'
+-        run: |
+-          if test -f .github/pending-tracking.patch; then
+-            cat .github/tracking-patch-parts/*.patch .github/pending-tracking.patch > /tmp/tracking-changes.patch
+-            git apply --check /tmp/tracking-changes.patch
+-            git apply /tmp/tracking-changes.patch
+-            git rm .github/pending-tracking.patch .github/tracking-patch-parts/*.patch
+-            git add learning PROJECT.md docs AGENTS.md .github/workflows/learning-tests.yml
+-            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'feat: alpha-conditioned geometric path recovery'
+-          fi
+       - name: Archive exact tested sources
+         run: |
+           mkdir -p test-output
+@@ -56,9 +46,6 @@ jobs:
+           python -m pip freeze > test-output/dependencies.txt
+       - name: Run learning tests without GPU or long training
+         run: python -m pytest learning/tests -q --junitxml=test-output/pytest.xml
+-      - name: Push tested staging commit only
+-        if: success() && github.ref == 'refs/heads/agent/alpha-path-tracking'
+-        run: git push origin HEAD:refs/heads/agent/alpha-path-tracking
+       - name: Upload test results
+         if: always()
+         uses: actions/upload-artifact@v4
+diff --git a/AGENTS.md b/AGENTS.md
+index 71a189f..032664b 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -87,3 +87,9 @@
+ - 每次command结果分析必须先提供各声明场景的配对XY轨迹图和各模型每步总奖励对steps图；各alpha/seed完整覆盖，包含ECBC+ESO。累计回报作为附图，不替代每步奖励。
+ - 固定速度/世界偏航角速度指令积分生成同初始位姿的理想参考轨迹，明确不是可行性保证或新增几何路径目标；实际轨迹在真实失败处停止。跨方法验证场景、初态、基线和时序一致。
+ - 统一使用learning/cli/command_comparison.py及共享command_comparison模块，PNG/PDF/NPZ/源文件哈希与索引同时保留。TensorBoard默认精简奖励、loss、KL、有效更新及开发失败率；完整JSON日志保留。
++
++## α条件几何恢复实现约定（2026-09-15，用户本轮确认）
++- α明确进入残差Actor，不采用“α不入网”的先前建议。新几何任务中α仅改变有限偏好/过程容忍，不改变残差权限。
++- `tracking`为可选新行为，缺省None时保持历史配置/旧checkpoint身份。原始全局路径不重定位；新回归时钟从离带开始计时，不依赖不可观测真实扰动结束标签。
++- 新奖励、CPU/MJX、回归判断和逐步重建共用`tracking_reward.py`。最终保持、曾离带、曾恢复、超时分别记录；不能把回报排名或存活作为合格证明。
++- 未运行GPU性能评估或正式训练前，不宣称PPO批次修改已经使训练更快或学会了任务。
+diff --git a/PROJECT.md b/PROJECT.md
+index f41411c..f44a260 100644
+--- a/PROJECT.md
++++ b/PROJECT.md
+@@ -1,5 +1,22 @@
+ # STTW_CONTROL
+ 
++## 当前新增实施入口：α输入网络的几何路径恢复（2026-09-15）
++
++用户明确确认：**α必须输入残差Actor**。本轮未采用外部偏好参考管理器；α只改变速度/原始路径的有限偏好和过程容忍，不改变两路残差权限或roll/最终回归条件。
++
++新实验入口：`learning/configs/path_priority_recovery.json`、`ppo_path_priority.json`、`path_priority_standard_panel.json`。旧command、T150/T250、门控和固定侧倾实验及其冻结配置不修改；下文旧“当前”段落均按日期追溯，不覆盖本节的新实现说明。
++
++- 保留ECBC＋ESO、200Hz、原XML物理子步与执行器；残差前轮角速度±1.5rad/s、后轮轴速±10rad/s。无α权限门控；零残差回归同配置基础控制输出。没有把前轮改成转角动作。
++- 原始全局平滑弯道＋可见分段速度参考＋随机转向/侧向力/后轮负载。未重定位、平移或重定义原路径来制造回归；不把yaw-rate跟踪冒充路径跟踪。当前配置是左弯第一阶段，左右转/不同曲率/多训练种子泛化未验证。
++- Actor仍256→128 LeakyReLU、两输出tanh。新任务为27字段×10帧＋10mask＝280维，包含原15字段、3路径字段、α、上一步两路残差和6个回归状态字段。无真实外力幅值/结束时刻输入；定位和前向速度估计接入实车仍须验证，轮速代理不是真速度。
++- 奖励见`tracking_reward.py`：宽窄两档正向速度/几何路径跟踪、Huber尾部、有限容忍、独立roll与roll-rate、残差幅度/变化、回归时间与每回合一次完成奖励；普通项乘0.005s，不做总奖励非负截断；失败整步替换为−100。
++- 回归时钟从初始化1s以后**可观测离开共同跟踪带**起算，扰动持续期间也计时，不使用仿真扰动结束标签。3s总偏离预算；最终横向0.1m、航向0.15rad、真实速度误差0.2m/s、roll≤0.3rad和roll-rate≤0.3rad/s连续0.5s。曾恢复与末段保持分开，超时标志保持；无离带是维持跟踪，不是恢复成功。
++- 训练仍是本项目JAX/Flax/Optax PPO，不是RSL-RL。新配置1024×128×32＝4,194,304训练转移，4epochs、minibatch32768（每轮最多16个优化小批次），保留LR3e−4、gamma.9995、lambda.99、std.15、KL.01。额外预热预算64×1400＝89,600计算转移，单独记录；未用改变物理步长来提速。
++- 新开发选模先检查失败、共同末段保持、回归超时、名义性能退化、过程容忍超限比例；仅合格候选参与best。流水线无合格候选时仍可对last作诊断，但不宣称合格。每个α/seed/场景保留真实终点和奖励重建。
++
++本轮为实现与有界工程验证，**没有启动正式训练、没有得到新训练模型、没有证明恢复成功率/训练提速/实车安全**。测试命令和CI结果见`docs/VALIDATION.md`；启动命令、奖励公式及限制见`learning/README.md`新增节。运行长训练需另行记录预算和实验身份。
++
++
+ ## 当前唯一实施入口（2026-09-14重整）
+ 
+ - 源码已整合回主工作区learning/，新任务/训练/面板唯一默认入口为learning/configs/command_recovery.json、ppo_command_recovery.json、command_standard_panel.json；旧worktree仅保留历史溯源，新阶段使用主工作区。
+diff --git a/docs/METHODS_AND_RESULTS.md b/docs/METHODS_AND_RESULTS.md
+index b751fd7..17ce1aa 100644
+--- a/docs/METHODS_AND_RESULTS.md
++++ b/docs/METHODS_AND_RESULTS.md
+@@ -405,3 +405,19 @@ G100标准补评：回报12/12高于G200，但急转中点5.180s更早摔倒，
+ ## 2026-09-15 T150延长至T200/T250：训练reward上升不等于固定场景改善
+ 目的：检验T150尚在上涨的训练reward能否通过再100轮转化为更好跟踪。方法/奖励/物理/网络不变，从150续至250；中间200补同四场景三alpha面板。开发平均累计回报150/200/250=-24.218/-27.158/-27.161，best仍T150。两后期模型各仅3/12标准累计回报超过T150，普通9组合均未超过基线；各12/12存活与末段保持不能代替持续阶段跟踪。T250全部12速度RMSE改善但仅2 yaw RMSE改善，温和alpha0近似直行是明确负结果。100轮没有整轮KL回退，随机reward改善不支持“未更新”的解释；分布差异、普通场景补偿反向作用仍待诊断而非已证实原因。
+ 证据：`runs/command_tolerance_extension_20260915/analysis/comparison/INDEX.md`，包含四场景轨迹/每步总奖励、训练曲线、每alpha/seed/阶段指标与重建奖励分项。下一步建议冻结T150做固定/分段alpha配对诊断，再选择单因素训练对照；尚未执行该建议。
++
++## 已实现、效果待训练验证：：α输入网络的几何路径恢复（2026-09-15）
++
++用户明确确认：**α必须输入残差Actor**。本轮未采用外部偏好参考管理器；α只改变速度/原始路径的有限偏好和过程容忍，不改变两路残差权限或roll/最终回归条件。
++
++新实验入口：`learning/configs/path_priority_recovery.json`、`ppo_path_priority.json`、`path_priority_standard_panel.json`。旧command、T150/T250、门控和固定侧倾实验及其冻结配置不修改；下文旧“当前”段落均按日期追溯，不覆盖本节的新实现说明。
++
++- 保留ECBC＋ESO、200Hz、原XML物理子步与执行器；残差前轮角速度±1.5rad/s、后轮轴速±10rad/s。无α权限门控；零残差回归同配置基础控制输出。没有把前轮改成转角动作。
++- 原始全局平滑弯道＋可见分段速度参考＋随机转向/侧向力/后轮负载。未重定位、平移或重定义原路径来制造回归；不把yaw-rate跟踪冒充路径跟踪。当前配置是左弯第一阶段，左右转/不同曲率/多训练种子泛化未验证。
++- Actor仍256→128 LeakyReLU、两输出tanh。新任务为27字段×10帧＋10mask＝280维，包含原15字段、3路径字段、α、上一步两路残差和6个回归状态字段。无真实外力幅值/结束时刻输入；定位和前向速度估计接入实车仍须验证，轮速代理不是真速度。
++- 奖励见`tracking_reward.py`：宽窄两档正向速度/几何路径跟踪、Huber尾部、有限容忍、独立roll与roll-rate、残差幅度/变化、回归时间与每回合一次完成奖励；普通项乘0.005s，不做总奖励非负截断；失败整步替换为−100。
++- 回归时钟从初始化1s以后**可观测离开共同跟踪带**起算，扰动持续期间也计时，不使用仿真扰动结束标签。3s总偏离预算；最终横向0.1m、航向0.15rad、真实速度误差0.2m/s、roll≤0.3rad和roll-rate≤0.3rad/s连续0.5s。曾恢复与末段保持分开，超时标志保持；无离带是维持跟踪，不是恢复成功。
++- 训练仍是本项目JAX/Flax/Optax PPO，不是RSL-RL。新配置1024×128×32＝4,194,304训练转移，4epochs、minibatch32768（每轮最多16个优化小批次），保留LR3e−4、gamma.9995、lambda.99、std.15、KL.01。额外预热预算64×1400＝89,600计算转移，单独记录；未用改变物理步长来提速。
++- 新开发选模先检查失败、共同末段保持、回归超时、名义性能退化、过程容忍超限比例；仅合格候选参与best。流水线无合格候选时仍可对last作诊断，但不宣称合格。每个α/seed/场景保留真实终点和奖励重建。
++
++本轮为实现与有界工程验证，**没有启动正式训练、没有得到新训练模型、没有证明恢复成功率/训练提速/实车安全**。测试命令和CI结果见`docs/VALIDATION.md`；启动命令、奖励公式及限制见`learning/README.md`新增节。运行长训练需另行记录预算和实验身份。
+diff --git a/docs/VALIDATION.md b/docs/VALIDATION.md
+index 3969e40..d3ecab5 100644
+--- a/docs/VALIDATION.md
++++ b/docs/VALIDATION.md
+@@ -1559,3 +1559,17 @@ G200温和转弯α0/.5/1持续段实际yaw均值−.1047/.1806/−.1121（目标
+ 训练及原面板complete，原监视器已送达阶段/最终提示。task逐字段完全一致，续训100轮26,214,400转移；采样4508.17s、优化15.96s、开发228.39s，记录训练总墙钟86.61min。开发best依旧T150（-24.217882），T200=-27.157631、T250=-27.160751。随机训练每步reward的25轮均值从151–175的-.05110升到226–250的-.03806，固定开发没有随之改善。
+ T200补评24条同10秒上限回合已complete，无训练、无新奖励/物理变更，monitor监视完成。analysis/comparison包含4场景×3alpha×同seed47001的T150/T200/T250及基线，48条不重复审计数据；奖励重建最大误差6.3263e-6，各运行配对基线逐数组一致。4组XY/4组逐步+累计奖励均输出PNG/PDF/NPZ，另训练曲线和完整逐阶段表；目视核验温和轨迹/奖励和训练图。
+ T150/T200/T250全存活、末段保持均12/12，不能作为全程任务成功。T200/T250各3/12回报超过T150，普通9组合均未超过基线。T250速度RMSE12/12优于T150、yaw RMSE仅2/12改善。温和α0持续yaw均值.154→.019，对照目标.3；温和α.5的yaw超容忍罚-6.182→-12.160抵消速度收益。证据支持保留T150开发候选，不支持单纯延长训练或上层α有效性。
++
++## 2026-09-15 α条件几何恢复：工程验证范围
++
++源码基于远端1230ae7，保留全部旧实验。新增测试覆盖：α输入/归一化与导出身份、固定残差权限、零残差物理轨迹、分段速度指令的转移前后对齐、几何误差奖励、符号分项与终止替换、回归离带/连续保持/一次加分/超时、最终保持与选模拒绝、逐帧重建及配对图。NumPy/JAX纯函数测试在编辑环境运行；完整CPU与可选单步MJX通过GitHub Actions运行，最终状态以对应提交的`Learning regression tests`及pytest.xml为准，不把未完成的CI写成通过。
++
++编辑阶段已实测26项纯奖励/选模测试通过（无MuJoCo依赖）；原有测试在补齐OSMesa系统库后通过CI。新实现最终完整测试总数以提交的CI报告为准。CI固定MuJoCo/MJX3.6.0、JAX0.6.2、Flax0.10.7、Optax0.2.5；保存精确源码、依赖和JUnit报告。
++
++```bash
++PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=osmesa python -m pytest learning/tests -q
++# 可选：只增加单次真实MJX-CPU reset/step编译检查，不训练网络
++PYTHONPATH=learning/src JAX_PLATFORMS=cpu MUJOCO_GL=osmesa STTW_TEST_MJX_CPU=1 python -m pytest learning/tests/test_tracking_integration.py -q
++```
++
++控制器、XML、质量、力矩约束、物理步长不改。没有正式策略训练、GPU吞吐测量、跨种子恢复证据或实车实验。回归时间3s为从离带开始的总预算（包括扰动期），不同于先前设计草案提出的“扰动撤销后3s”；这样不向Actor提供不可观测的扰动结束标签。实车仍需要经过验证的定位/速度状态估计与等价的回归状态计算，不能直接部署仿真策略。
+diff --git a/learning/README.md b/learning/README.md
+index 24444d0..92bbac0 100644
+--- a/learning/README.md
++++ b/learning/README.md
+@@ -150,3 +150,53 @@ PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python learning/cli
+ manifest格式为`{"runs":{"方法名称":"/absolute/run/root"}}`，每个root具有evaluation/alpha_*/seed_*/*/{baseline,residual}。每场景/种子输出一张全部alpha的XY图和一张每步总奖励/累计回报图，附PDF、NPZ及来源哈希。参考使用速度与世界yaw-rate精确分段积分；失败记录不延伸。自动command诊断会生成单模型+基线版本，已有manifest则保留其跨方法比较清单。
+ 
+ 精简TensorBoard投影：`PYTHONPATH=learning/src python learning/cli/tensorboard_core.py --manifest runs/tensorboard_core/manifest.json --output runs/tensorboard_core/events --watch --resume`。manifest的runs值为有序metrics.jsonl文件列表；首次运行去掉--resume。保留训练每步平均reward、开发episode总回报均值/基线/差值、关键奖励分项、policy/value loss、KL、保留minibatch数和开发失败比例。详细审计仍在原始JSON中。默认服务：http://127.0.0.1:6006。
++
++
++## α输入Actor的几何路径恢复（新增，2026-09-15）
++
++### 入口与运行边界
++
++此任务复用ECBC+ESO与原执行器；α=0路径优先，α=1速度优先。α进入每帧观测，不控制动作权限；三种优先级共同约束roll和最终回归。配置是待训练第一阶段，不是已经成功的策略。
++
++```bash
++export PYTHONPATH=learning/src
++# 只执行训练；目录必须不存在。该命令不是本次已经执行的记录。
++python learning/cli/train.py --task learning/configs/path_priority_recovery.json --config learning/configs/ppo_path_priority.json --output runs/DECLARED_PATH_RUN/training
++# 完整独立流水线（不要与上面共用已经存在的输出目录）
++python learning/cli/recovery_pipeline.py --task learning/configs/path_priority_recovery.json --training learning/configs/ppo_path_priority.json --panel learning/configs/path_priority_standard_panel.json --output runs/DECLARED_NEW_PATH_PIPELINE
++```
++
++前者预算4,194,304训练转移；额外预热89,600计算转移。后者还包含开发面板及标准5α×2初态seed×6场景×2控制器的评估、图表/视频；它们不是独立训练种子。训练seed65、开发48001、标准49001/49002相互分离，但本轮没有运行这些长实验。
++
++### 精确奖励
++
++设ev为真实前向速度减**本转移发生前的请求速度**，ey为原始路径横向投影误差，ep为包角航向误差，a为两维有界残差，alpha使用转移前值。所有误差使用物理单位，不是网络归一化观测。
++
++```
++wv=(1+9*alpha)/11; wp=(10-9*alpha)/11
++Gv=.5*exp(-(ev/.5)^2)+.5*exp(-(ev/.15)^2)
++Gp=.5*exp(-(ey/.4)^2-(ep/.35)^2)+.5*exp(-(ey/.1)^2-(ep/.1)^2)
++H(z)=z^2                    (|z|<=1)
++    =2*|z|-1                (|z|>1)
++bv=.5-.3*alpha; by=.1+.3*alpha
++Ctail=.1*(wv*H(ev/.2)+wp*(H(ey/.2)+.3*H(ep/.15)))
++Cbudget=2*H(max(|ev|-bv,0)/.2)+2*H(max(|ey|-by,0)/.2)
++Croll=100*max(|roll|-.3,0)^2+roll_rate^2
++Caction=.01*sum(a^2)+.02*sum((a-a_previous)^2)
++Creturn=.5*pending*(1+min(elapsed/3,1))   # 仅初始化1s以后
++r=.005*(1+4*wv*Gv+4*wp*Gp-Ctail-Cbudget-Croll-Caction-Creturn)
++```
++
++共同回归带为|ey|≤.1m、|ep|≤.15rad、|ev|≤.2m/s、|roll|≤.3rad、|roll_rate|≤.3rad/s；连续保持.5s才完成。时钟从真实离带起计时、包括扰动期，3s未回归记为deadline_missed，不能靠晚到清除。曾离带后完成可每回合加2分一次；失败转移所有分项清零，仅−100。常规奖励不截成非负。完整可改参数均在配置tracking段，不引入机械臂、脚/轮腾空、抓取或无依据能量奖励。
++
++### 接口、兼容与诊断
++
++新Actor输入280维：27字段×10帧+10mask。观测中的α、原始路径、速度参考、上一残差和回归状态均有显式顺序及归一化；checkpoint绑定新身份，不能用旧190/200维模型冒充。`tracking=None`、`include_tracking=False`和无speed_schedule保留旧身份。软件力矩/物理模型未改，前轮仍是rad/s转向角速度而非转角。
++
++单条evaluate会自动重建14项有符号奖励并存`analysis/tracking/summary.json`与components.npz；面板提供配对XY、每步总奖励/分项、横向/航向/roll、目标/真实/轮速代理速度、估计误差、回归计时的PNG/PDF及索引。失败曲线在实际失败时终止。新恢复判断和旧command yaw诊断分开。
++
++新开发选模必须无失败、末段共同保持、无超时，且名义速度RMSE不比配对基线高.05m/s、名义横向/航向RMSE不高.03（各自单位），成熟阶段速度/路径过程容忍超限比例均≤10%。这些只是声明的开发门槛，不是安全证明；不合格时best为空，流水线last仅作为标记清楚的诊断候选。
++
++### 本轮没有承诺的结果
++
++没有将PPO替换成RSL-RL，没有宣称16个大mini-batch一定优于512个小mini-batch；主要采样瓶颈仍需在目标GPU实测。没有改物理步长/接触参数换取速度。当前弯道/速度配置不是所有左右转与极端指令的覆盖；固定的原路径跟踪与恢复机制先通过工程测试，再另行做课程、消融、多训练seed和硬件状态估计验证。
+diff --git a/learning/cli/disturbance.py b/learning/cli/disturbance.py
+index f8a6194..29e7a27 100644
+--- a/learning/cli/disturbance.py
++++ b/learning/cli/disturbance.py
+@@ -27,6 +27,8 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
+     extra=panel.get('minimum_post_event_seconds',0.)
+     if not np.isfinite(extra) or extra<0:raise ValueError('minimum post-event observation must be finite and nonnegative')
+     max_duration=max([panel['duration_seconds']]+[c['duration'] for c in panel.get('cases',[])])
++    if cfg.tracking is not None and panel['start_seconds']+max_duration+max(extra,cfg.tracking.return_seconds)>cfg.horizon_seconds+1e-7:
++        raise ValueError('tracking panel recovery window exceeds fixed episode')
+     cfg=replace(cfg,horizon_seconds=max(cfg.horizon_seconds,panel['start_seconds']+max_duration+extra))
+     nominal=replace(cfg,random_events=None,disturbance_rear_torque=0.,disturbance_force=0.,disturbance_steer_rate=0.)
+     env=RecoveryEnv(nominal)
+diff --git a/learning/configs/path_priority_recovery.json b/learning/configs/path_priority_recovery.json
+new file mode 100644
+index 0000000..c577bba
+--- /dev/null
++++ b/learning/configs/path_priority_recovery.json
+@@ -0,0 +1,107 @@
++{
++  "horizon_seconds": 10.0,
++  "speed_reference": 2.1,
++  "speed_schedule": [
++    [
++      0.0,
++      2.1
++    ],
++    [
++      3.0,
++      2.5
++    ],
++    [
++      6.0,
++      2.1
++    ]
++  ],
++  "eso_start": 3.0,
++  "initial_roll_range": 0.02,
++  "roll_failure": 0.7,
++  "failure_penalty": 100.0,
++  "alive_reward_rate": 1.0,
++  "learning_roll_reference": null,
++  "bend": {
++    "straight": 3.0,
++    "bend_length": 8.0,
++    "exit_length": 20.0,
++    "peak_curvature": 0.22,
++    "lookahead": 1.2,
++    "max_steer": 0.35,
++    "direction": 1
++  },
++  "observation": {
++    "history_steps": 10,
++    "include_path": true,
++    "include_priority": true,
++    "include_tracking": true,
++    "include_attitude_risk": false
++  },
++  "priority": {
++    "risk_gate": false,
++    "randomize_alpha": true,
++    "validation_alphas": [
++      0.0,
++      0.5,
++      1.0
++    ]
++  },
++  "actuator": {
++    "composition": "additive",
++    "project_base": false,
++    "steer_residual_scale": 1.5,
++    "rear_residual_scale": 10.0,
++    "strength": 1.0
++  },
++  "tracking": {
++    "priority_ratio": 10.0,
++    "tracking_rate": 4.0,
++    "speed_wide": 0.5,
++    "speed_fine": 0.15,
++    "lateral_wide": 0.4,
++    "lateral_fine": 0.1,
++    "heading_wide": 0.35,
++    "heading_fine": 0.1,
++    "tail_rate": 0.1,
++    "speed_scale": 0.2,
++    "lateral_scale": 0.2,
++    "heading_scale": 0.15,
++    "heading_tail_weight": 0.3,
++    "budget_rate": 2.0,
++    "speed_tight": 0.2,
++    "speed_relaxed": 0.5,
++    "lateral_tight": 0.1,
++    "lateral_relaxed": 0.4,
++    "roll_working_limit": 0.3,
++    "roll_weight": 100.0,
++    "roll_rate_weight": 1.0,
++    "action_weight": 0.01,
++    "action_delta_weight": 0.02,
++    "return_rate": 0.5,
++    "return_bonus": 2.0,
++    "return_seconds": 3.0,
++    "hold_seconds": 0.5,
++    "final_speed_tolerance": 0.2,
++    "final_lateral_tolerance": 0.1,
++    "final_heading_tolerance": 0.15,
++    "final_roll_rate_tolerance": 0.3,
++    "start_seconds": 1.0
++  },
++  "disturbance_force_frame": "heading_lateral",
++  "disturbance_force_point": "vehicle_com",
++  "random_events": {
++    "start_min": 3.0,
++    "start_max": 4.5,
++    "duration_min": 0.5,
++    "duration_max": 1.5,
++    "steer_min": 0.1,
++    "steer_max": 0.4,
++    "force_min": 1.0,
++    "force_max": 3.0,
++    "rear_probability": 0.3,
++    "rear_min": 0.1,
++    "rear_max": 0.6,
++    "nominal_probability": 0.4,
++    "sine_probability": 0.5
++  }
++}
+diff --git a/learning/configs/path_priority_standard_panel.json b/learning/configs/path_priority_standard_panel.json
+new file mode 100644
+index 0000000..9826fbd
+--- /dev/null
++++ b/learning/configs/path_priority_standard_panel.json
+@@ -0,0 +1,48 @@
++{
++  "seed": 49001,
++  "evaluation_seeds": [
++    49001,
++    49002
++  ],
++  "priority_alphas": [
++    0.0,
++    0.25,
++    0.5,
++    0.75,
++    1.0
++  ],
++  "start_seconds": 4.0,
++  "duration_seconds": 1.0,
++  "minimum_post_event_seconds": 3.0,
++  "path_tolerance_m": 0.1,
++  "extra_tolerance_m": 0.05,
++  "heading_tolerance_rad": 0.15,
++  "hold_seconds": 0.5,
++  "cases": [
++    {
++      "name": "force_left",
++      "duration": 1.0,
++      "force": 2.0
++    },
++    {
++      "name": "force_right",
++      "duration": 1.0,
++      "force": -2.0
++    },
++    {
++      "name": "steer_left",
++      "duration": 1.0,
++      "steer_rate": 0.3
++    },
++    {
++      "name": "steer_right",
++      "duration": 1.0,
++      "steer_rate": -0.3
++    },
++    {
++      "name": "rear_load",
++      "duration": 1.0,
++      "rear_torque": 0.4
++    }
++  ]
++}
+diff --git a/learning/configs/ppo_path_priority.json b/learning/configs/ppo_path_priority.json
+new file mode 100644
+index 0000000..f9d0a0f
+--- /dev/null
++++ b/learning/configs/ppo_path_priority.json
+@@ -0,0 +1,50 @@
++{
++  "num_envs": 1024,
++  "rollout_steps": 128,
++  "updates": 32,
++  "epochs": 4,
++  "minibatch_size": 32768,
++  "learning_rate": 0.0003,
++  "gamma": 0.9995,
++  "gae_lambda": 0.99,
++  "clip": 0.2,
++  "entropy_weight": 0.001,
++  "initial_std": 0.15,
++  "target_kl": 0.01,
++  "warmup_pool_size": 64,
++  "warmup_steps": 1400,
++  "seed": 65,
++  "checkpoint_interval": 8,
++  "plot_interval": 0,
++  "validation_updates": [
++    1,
++    8,
++    16,
++    24,
++    32
++  ],
++  "validation_seeds": [
++    48001
++  ],
++  "validation_hold_seconds": 0.5,
++  "validation_post_seconds": 3.0,
++  "selection_speed_slack": 0.05,
++  "selection_nominal_slack": 0.03,
++  "validation_events": [
++    {
++      "start": 4.0,
++      "duration": 1.0,
++      "force": -2.0
++    },
++    {
++      "start": 4.0,
++      "duration": 1.0,
++      "steer_rate": 0.3
++    },
++    {
++      "start": 4.0,
++      "duration": 1.0,
++      "rear_torque": 0.4
++    }
++  ]
++}
+diff --git a/learning/src/sttw_control/disturbance.py b/learning/src/sttw_control/disturbance.py
+index eaee49a..706d3c1 100644
+--- a/learning/src/sttw_control/disturbance.py
++++ b/learning/src/sttw_control/disturbance.py
+@@ -6,6 +6,15 @@ from .path import CircleConfig, lateral_space_metrics, FigureEightConfig, eight_
+ 
+ def recovery_metrics(trace,nominal,config,*,path_tolerance=.2,extra_tolerance=.05,heading_tolerance=.15,hold_seconds=.5):
+     """No resampling: compare equal-time samples; later failure invalidates recovery."""
++    if config.get('tracking') is not None:
++        from .tracking_diagnostics import trace_summary
++        result=trace_summary(trace,config)
++        paired=min(len(trace['time']),len(nominal['time']))
++        if not np.allclose(trace['time'][:paired],nominal['time'][:paired],rtol=0,atol=1e-5):
++            raise ValueError('paired timestamps mismatch')
++        result['paired_reference_available']=paired==len(trace['time'])
++        result['paired_extra_lateral_peak_m']=float(np.max(np.abs(trace['path_features'][:paired,0]-nominal['path_features'][:paired,0])))
++        return result
+     t=trace['time'];n=len(t)
+     if len(nominal['time'])<n:
+         return {'paired_reference_available':False,'reason':'nominal trajectory ended before disturbed trajectory; no extrapolation','failed':bool(trace['terminated'][-1]),'recovered_after_excursion':False,'post_event_extra_radial_peak_m':None,'first_joint_hold_completion_after_event_end_seconds':None,'settled_joint_hold_completion_after_event_end_seconds':None}
+@@ -78,6 +87,11 @@ def plot_panel(root):
+     matplotlib.use('Agg')
+     import matplotlib.pyplot as plt
+     root=Path(root);decl=json.loads((root/'declaration.json').read_text())
++    if any(c.get('tracking') is not None for c in decl['scenarios'].values()):
++        from .tracking_diagnostics import write_diagnostics
++        for name in decl['scenarios']:
++            write_diagnostics(root/name/'residual',baseline=root/name/'baseline')
++        return
+     cases=[(k,c) for k,c in decl['scenarios'].items() if k!='nominal']
+     fig,axes=plt.subplots(len(cases),3,figsize=(14,3*len(cases)),squeeze=False,layout='constrained')
+     for row,(name,c) in zip(axes,cases):
