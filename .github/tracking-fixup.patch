@@ -140,3 +140,16 @@ diff --git a/learning/src/sttw_control/tracking_validation.py b/learning/src/stt
          return dict(return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
                      return_pending=rs.pending[:n],return_hold_seconds=rs.hold[:n],
                      radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],
+diff --git a/learning/tests/test_tracking_validation.py b/learning/tests/test_tracking_validation.py
+--- a/learning/tests/test_tracking_validation.py
++++ b/learning/tests/test_tracking_validation.py
+@@ -44,7 +44,8 @@
+     def speed_command(self,tick):return jp.asarray(2.1)
+     def path_features(self,pose):return pose
+     def step(self,s,a):
+-        tick=s.tick+1;active=jp.any(s.event[jp.array([2,3,5])]!=0.)
++        tick=s.tick+1
++        active=(s.event[2]!=0.) | (s.event[3]!=0.) | (s.event[5]!=0.)
+         lateral=jp.where(active & (tick>=2)&(tick<=3),.2,0.)
+         # Large policy output causes a late second excursion despite earlier recovery.
+         lateral=jp.where((a[0]>.5)&(tick>=9),.4,lateral)
