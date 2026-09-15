@@ -101,3 +101,42 @@ diff --git a/learning/tests/test_tracking_selection.py b/learning/tests/test_tra
 -    b=deepcopy(a);b['radial_rmse']=[np.nan];assert rank_tracking_candidate(b,a)[0] is None
 +    for key in ('radial_rmse','speed_tolerance_exceed_fraction','path_tolerance_exceed_fraction'):
 +        b=deepcopy(a);b[key]=[np.nan];assert rank_tracking_candidate(b,a)[0] is None
+diff --git a/learning/src/sttw_control/tracking_validation.py b/learning/src/sttw_control/tracking_validation.py
+--- a/learning/src/sttw_control/tracking_validation.py
++++ b/learning/src/sttw_control/tracking_validation.py
+@@ -22,17 +22,22 @@
+     keys=jp.stack([jax.random.PRNGKey(seed) for alpha in choices
+                    for seed in config.validation_seeds for case in cases])
+     alphas=jp.asarray([alpha for alpha in choices for seed in config.validation_seeds for case in cases])
+-    events=jp.asarray([[round(case['start']/dt),round((case['start']+case['duration'])/dt),
++    event_rows=np.asarray([[round(case['start']/dt),round((case['start']+case['duration'])/dt),
+                        case.get('steer_rate',0.),case.get('force',0.),
+                        float(case.get('waveform','constant')=='half_sine'),case.get('rear_torque',0.)]
+-                      for alpha in choices for seed in config.validation_seeds for case in cases])
++                      for alpha in choices for seed in config.validation_seeds for case in cases],dtype=np.float32)
++    # Assemble the paired panel explicitly before tracing; no scatter updates
++    # to closed-over event constants and no concatenation of aliased states.
++    nominal_rows=event_rows.copy();nominal_rows[:,[2,3,5]]=0.
++    all_events=jp.asarray(np.concatenate((event_rows,nominal_rows),axis=0))
++    all_keys=jp.concatenate((keys,keys),axis=0)
++    all_alphas=jp.concatenate((alphas,alphas),axis=0)
++    present=jp.asarray(np.any(event_rows[:,[2,3,5]]!=0.,axis=1))
+     n=len(keys); reset=jax.vmap(env.reset); step=jax.vmap(env.step)
+ 
+     @jax.jit
+     def validate(params, zero=False):
+-        initial=jax.vmap(env.set_priority)(reset(keys),alphas).replace(event=events)
+-        nominal=initial.replace(event=events.at[:,2:4].set(0.).at[:,5].set(0.))
+-        state=jax.tree.map(lambda a,b:jp.concatenate((a,b),axis=0),initial,nominal)
++        state=jax.vmap(env.set_priority)(reset(all_keys),all_alphas).replace(event=all_events)
+         def tick(state,_):
+             active=~state.done
+             action=actor.apply(params['actor'],state.obs/scale)
+@@ -56,7 +61,6 @@
+         complete=((last.tick>=env.horizon)&~last.terminated&~rs.pending
+                   &(rs.hold+1e-6>=tc.hold_seconds))
+         qualified=complete&~rs.deadline_missed
+-        present=jp.any(events[:,jp.array([2,3,5])]!=0.,axis=1)
+         return dict(return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
+                     return_pending=rs.pending[:n],return_hold_seconds=rs.hold[:n],
+                     radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],
