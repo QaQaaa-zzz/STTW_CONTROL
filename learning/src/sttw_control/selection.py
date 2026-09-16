@@ -138,3 +138,37 @@ def rank_tracking_candidate(candidate, baseline, *, speed_slack=.05, nominal_sla
         return None,'relaxed tolerance exceeded for more than 10% of evaluated mature steps'
     delta=np.asarray(candidate['episode_return'])-np.asarray(baseline['episode_return'])
     return (-float(np.mean(delta)),float(np.mean(candidate['radial_rmse']))),'development gates passed; independent evaluation still required'
+
+
+def record_training_reward_best(training_dir, checkpoint, policy_update, sampled_during_update, score):
+    """Rank actual sampling policies by noisy training-batch mean step reward.
+
+    A batch is generated BEFORE optimization. Never attach its reward to the
+    post-update policy. This is not fixed-development or episode-return ranking.
+    """
+    import json, os
+    from pathlib import Path
+    root=Path(training_dir).resolve()
+    checkpoint=Path(checkpoint).resolve()
+    if not np.isfinite(score):raise ValueError('training reward must be finite')
+    if not checkpoint.is_dir():raise ValueError('sampling checkpoint is missing')
+    path=root/'best_model.json'
+    prior=json.loads(path.read_text()) if path.exists() else None
+    criterion='maximum sampled training mean step reward'
+    if prior is not None and prior.get('criterion')!=criterion:
+        raise ValueError('cannot mix development and training reward rankings')
+    if prior is not None and score<=prior['mean_step_reward']:return prior
+    result=dict(checkpoint=str(checkpoint),update=int(policy_update),
+        sampled_during_update=int(sampled_during_update),mean_step_reward=float(score),
+        criterion=criterion,scope='sampling policies in this continuation only; first observed wins ties; final post-update policy unscored',
+        limitations='random short training batches, stochastic actions and inherited closed-loop state; not a fixed evaluation or complete-episode ranking',
+        development_gates_passed=None,task_success_verified=False)
+    dest=root/'best_model'
+    if dest.exists() and not dest.is_symlink():raise ValueError('best_model is not a managed symlink')
+    temporary=root/'.best_model.tmp'
+    temporary.unlink(missing_ok=True)
+    temporary.symlink_to(os.path.relpath(checkpoint,root),target_is_directory=True)
+    temporary.replace(dest)
+    tmp=root/'best_model.tmp.json'
+    tmp.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');tmp.replace(path)
+    return result

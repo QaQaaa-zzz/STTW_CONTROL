@@ -57,6 +57,7 @@ class TrainingConfig:
     trainer: str="jax"
     activation: str="leaky_relu"
     hidden_sizes: tuple=(256,128)
+    training_reward_selection: bool=False  # RSL sampling reward; disables all development rollouts.
     evaluation_reward_best: bool=False
     num_envs: int=64
     rollout_steps: int=256
@@ -104,6 +105,8 @@ class TrainingConfig:
         if not isinstance(self.hidden_sizes,(tuple,list)) or not self.hidden_sizes or any(type(w) is not int or w<=0 for w in self.hidden_sizes):raise ValueError("hidden sizes must be positive integers")
         object.__setattr__(self,"hidden_sizes",tuple(self.hidden_sizes))
         if self.trainer=="jax" and self.hidden_sizes!=(256,128):raise ValueError("configurable hidden sizes require RSL trainer")
+        if type(self.training_reward_selection) is not bool:raise ValueError("training_reward_selection must be boolean")
+        if self.training_reward_selection and self.trainer!="rsl":raise ValueError("training reward selection requires RSL trainer")
         if type(self.evaluation_reward_best) is not bool:raise ValueError("evaluation_reward_best must be boolean")
         if self.activation not in ("leaky_relu","elu") or (self.trainer=="jax" and self.activation!="leaky_relu"):raise ValueError("activation unsupported by selected trainer")
         if self.trainer not in ("jax","rsl"):raise ValueError("unknown PPO trainer")
@@ -147,6 +150,7 @@ class TrainingConfig:
 
 
 def should_validate(config,index):
+    if config.training_reward_selection:return False
     if config.best_model_every_update:return True
     if config.validation_updates is not None:return index==config.updates or index in config.validation_updates
     return index==config.updates or (not config.validation_final_only and (index==1 or index%config.checkpoint_interval==0))

@@ -112,3 +112,13 @@ def test_reward_best_endpoint_never_silently_uses_last():
     assert select_endpoint(result,conditioned=True,reward_best=True)=='reward_best'
     with pytest.raises(ValueError,match='reward.best'):
         select_endpoint({**result,'best_reward_checkpoint':None},conditioned=True,reward_best=True)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA restore regression')
+def test_resume_rng_loaded_onto_cuda_is_restored_on_cpu():
+    from sttw_control.rsl_training import restore_cuda_rng
+    torch.cuda.manual_seed_all(123)
+    states = [state.to('cuda') for state in torch.cuda.get_rng_state_all()]
+    expected = torch.rand(8, device='cuda')
+    restore_cuda_rng(states)
+    torch.testing.assert_close(torch.rand(8, device='cuda'), expected)

@@ -575,3 +575,12 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 - [ ] 先短工程筛查，错误停止；正式预算不自动增加。新配置、源码、耗时/样本预算冻结，监视阶段/流水线完成及错误，Git逻辑提交后push。
 
 正式启动核实：runs/timed_random_rsl_4096_20260916，pipeline567379，monitor567380，training/status=initializing。冻结输入/预算在_inputs/experiment.json，pipeline declaration包含开发/基线/warmup成本。最终全套311 passed2 skipped；新增开发gate后的GPU training_verified两轮32步complete，固定随机开发每轮验证、best索引、沿程/yaw gate接线通过。当前只证明启动，不宣称训练完成或任务提升。
+
+## 2026-09-16 用户授权取消训练内评估并续训
+- [x] 精确暂停当前 timed_random 流水线、训练器和监视器，保留原始记录。
+- [x] TrainingConfig 增加 RSL 专用 training_reward_selection；开启后不构造验证器、不跑基线/中间/最终开发评估，保留旧模式用于旧配置。
+- [x] 用本轮实际采样平均每步奖励选择产生该采样的更新前 checkpoint；最后更新没有后续采样时不冒称已计分。best_model.json 明确随机训练批次排名、无任务合格结论，原开发 best 保留在旧目录。
+- [x] 单测验证禁用评估和奖励/checkpoint 对应；GPU 短续训验证 snapshot 恢复、无开发评估及 best 链接。
+- [x] 从最新完整 snapshot 新目录续训至总计200轮，额外仅声明重建物理初态 warmup；不自动运行后续标准评估。保留原场景/网络/奖励/优化参数；更新文档、commit/push，启动监视器并核实真实进度。
+
+最终验证315 passed2 skipped；GPU两轮32步续训无任何评估、reward/policy映射正确。正式续训目录runs/timed_random_rsl_4096_20260916_reward_only/training，trainer818060、monitor818061；TensorBoard6006并列显示旧开发阶段与新训练奖励阶段。旧update42完整snapshot保留，剩余158轮预算15,532,032训练步，warmup89,600计算步，所有自动评估预算0。

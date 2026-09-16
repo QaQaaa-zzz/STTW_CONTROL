@@ -1648,3 +1648,10 @@ TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配�
 正式训练采用随机速度1.7–2.5m/s、yawrate±.6rad/s，slew .5m/s²/.6rad/s²。标准tight_turn及部分其他大yaw指令超出该阶段随机幅值范围，属于外推压力条件；不因失败改变物理或资格标准。尚无新策略恢复提升结论。
 
 最终复核：CPU全套311 passed、2 skipped；training_verified（新增开发gate后的代码）真实GPU两轮32训练步complete，新增along/yaw过程指标保存在每轮validation。正式pipeline567379已启动，monitor567380；初始化中，仍无正式效果结论。
+
+## 2026-09-16 训练奖励选择与GPU恢复
+- 新单测验证training_reward_selection覆盖每轮及最终验证开关，限制RSL模式；奖励正确指向采样前模型，分数更高才替换best，平局保留最早候选，非有限值拒绝。
+- CUDA恢复回归：加载到GPU的随机状态先转CPU字节张量再恢复，随后随机序列精确一致。相关16项通过。
+- 第一次GPU续训失败保留 `runs/timed_reward_only_validation_20260916/training`；修复后的两轮32步短测为 `training_verified`。正式阶段从原update42恢复，不使用工程短测权重。
+- 最终全套：315 passed, 2 skipped（50.18s）。GPU短续训两轮32步完成，update43/44分别计分policy42/43；无baseline文件、无validation字段，奖励重建最大缩放误差6.9985e-9；验证记录为 `runs/timed_reward_only_validation_20260916/verification.json`。
+- 正式续训已启动：`runs/timed_random_rsl_4096_20260916_reward_only/training`，trainer818060、monitor818061。从原update42恢复至总计200，不使用短测权重。启动不是训练完成或跟踪达标证据。

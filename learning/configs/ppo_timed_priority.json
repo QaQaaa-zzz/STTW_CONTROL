@@ -16,17 +16,7 @@
   "seed": 65,
   "checkpoint_interval": 25,
   "plot_interval": 25,
-  "validation_updates": [
-    1,
-    25,
-    50,
-    75,
-    100,
-    125,
-    150,
-    175,
-    200
-  ],
+  "validation_updates": null,
   "validation_seeds": [
     48001,
     48002,
@@ -56,11 +46,12 @@
   ],
   "trainer": "rsl",
   "activation": "elu",
-  "best_model_every_update": true,
+  "best_model_every_update": false,
   "hidden_sizes": [
     128,
     128,
     128
   ],
-  "evaluation_reward_best": true
+  "evaluation_reward_best": true,
+  "training_reward_selection": true
 }

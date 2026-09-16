@@ -56,12 +56,17 @@ def export_actor(policy):
                                     'bias':jp.asarray(m.bias.detach().cpu().numpy())} for i,m in enumerate(layers)}}
 
 
+def restore_cuda_rng(states):
+    """torch.load(map_location=cuda) also moves RNG bytes; CUDA expects CPU bytes."""
+    torch.cuda.set_rng_state_all([state.cpu() for state in states])
+
+
 def train(task_path,output,c):
     from .env import RecoveryEnv,load_config
     from .network import ResidualActor,make_policy_identity,save_policy
     from .training import normalization,should_validate,should_plot
     from .validation import make_validator
-    from .selection import rank_tracking_candidate,refresh_best_reward_model
+    from .selection import rank_tracking_candidate,refresh_best_reward_model,record_training_reward_best
     from .tensorboard_logging import TrainingEvents
     from .training_diagnostics import plot_training
     from .runtime import configure_compilation_cache
@@ -120,7 +125,7 @@ def train(task_path,output,c):
             if snapshot['identity']!=identity or snapshot['rsl_version']!=RSL_VERSION or snapshot.get('activation','leaky_relu')!=c.activation or tuple(snapshot.get('hidden_sizes',(256,128)))!=c.hidden_sizes:raise ValueError('RSL resume identity mismatch')
             algo.policy.load_state_dict(snapshot['policy']);algo.optimizer.load_state_dict(snapshot['optimizer'])
             torch.set_rng_state(snapshot['torch_rng'].cpu())
-            if device.startswith('cuda'):torch.cuda.set_rng_state_all(snapshot['cuda_rng'])
+            if device.startswith('cuda'):restore_cuda_rng(snapshot['cuda_rng'])
             key=jp.asarray(snapshot['jax_rng']);offset=snapshot['update'];transition_offset=snapshot['control_transitions'];algo.learning_rate=snapshot['learning_rate']
         @jax.jit
         def advance(state,action,key):
@@ -133,9 +138,16 @@ def train(task_path,output,c):
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error
-        actor=ResidualActor(hidden_sizes=c.hidden_sizes,activation=c.activation);validate=make_validator(env,actor,jp.asarray(std),c)
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
-        baseline=host(validate({'actor':export_actor(algo.policy)},True));write('baseline_validation.json',baseline)
+        baseline=None;validate=None
+        if not c.training_reward_selection:
+            actor=ResidualActor(hidden_sizes=c.hidden_sizes,activation=c.activation)
+            validate=make_validator(env,actor,jp.asarray(std),c)
+            baseline=host(validate({'actor':export_actor(algo.policy)},True));write('baseline_validation.json',baseline)
+        sampling_checkpoint=Path(c.resume_checkpoint).resolve() if c.resume_checkpoint else root/'checkpoints'/f'update_{offset:04d}'
+        if c.training_reward_selection and not c.resume_checkpoint:
+            save_policy(sampling_checkpoint,export_actor(algo.policy),mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
+            (sampling_checkpoint/'training.json').write_text(json.dumps({'update':offset,'role':'initial sampling policy'})+'\n')
         write('setup_timings.json',{'initialization_and_baseline_seconds':time.monotonic()-start})
         best=None;best_rank=None;rows=[]
         with TrainingEvents(root/'tensorboard',profile='core') as writer:
@@ -174,12 +186,17 @@ def train(task_path,output,c):
                     'learning_rate':algo.learning_rate,'rollout_seconds':rollout_seconds,'optimizer_seconds':optim_seconds,
                     'optimizer_audit':{'accepted_minibatches':c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size),'full_update_rolled_back':False},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
+                if c.training_reward_selection:
+                    record['sampling_checkpoint']=str(sampling_checkpoint)
+                    record['sampling_policy_update']=iteration-1
+                    record['best_reward_model']=record_training_reward_best(root,sampling_checkpoint,iteration-1,iteration,record['mean_step_reward'])
                 record['reward_components_sum_mean_step']=sum(record['reward_components_mean_step'].values())
                 record['reward_components_units']='signed reward per sampled control transition; terminal replacement included'
                 params=export_actor(algo.policy);checkpoint=root/'checkpoints'/f'update_{iteration:04d}'
                 save_policy(checkpoint,params,mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
                 torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,
                     'update':iteration,'control_transitions':record['control_transitions'],'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key)},checkpoint/'rsl_snapshot.pt')
+                sampling_checkpoint=checkpoint
                 metadata={'update':iteration,'trainer':'rsl_rl.algorithms.PPO','rsl_version':RSL_VERSION}
                 if should_validate(c,local):
                     vs=time.monotonic();v=host(validate({'actor':params},False));record['validation']=v;metadata['validation']=v;record['validation_seconds']=time.monotonic()-vs
@@ -193,7 +210,7 @@ def train(task_path,output,c):
                 record['wall_elapsed_seconds']=time.monotonic()-start
                 with (root/'metrics.jsonl').open('a') as f:f.write(json.dumps(record,allow_nan=False)+'\n')
                 writer.write(record);print(json.dumps(record,allow_nan=False),flush=True);rows.append(record)
-                status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'control_transitions':record['control_transitions']}
+                status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'selection_mode':'training_mean_step_reward' if c.training_reward_selection else 'fixed_development','control_transitions':record['control_transitions']}
                 if record.get('best_reward_model'):status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
                 if should_plot(c,local):plot_training(root)
                 write('status.json',status);write('progress.json',{'update':iteration,'phase':status['phase'],'validation_complete':'validation' in record})
