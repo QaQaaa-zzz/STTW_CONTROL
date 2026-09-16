@@ -1,0 +1,20 @@
+--- a/learning/tests/test_geometric_env.py
++++ b/learning/tests/test_geometric_env.py
+@@ -164,4 +164,16 @@
+         assert 'training_evidence/fixed_selection.json' in z.namelist()
+         assert 'engineering_short/alpha_0/trace_compact.npz' in z.namelist()
+         manifest=json.loads(z.read('compact_manifest.json'))
+-        assert all(t['samples']==5 for t in manifest['traces'])
++        # A five-transition trace includes its initial reset state as row zero.
++        # Compare every transferred field with the original, not only row counts.
++        assert len(manifest['traces'])==3  # one baseline and two alpha rollouts
++        for t in manifest['traces']:
++            with np.load(output/t['path']/'trace.npz',allow_pickle=False) as original:
++                with z.open(t['path']+'/trace_compact.npz') as handle:
++                    import io
++                    with np.load(io.BytesIO(handle.read()),allow_pickle=False) as compact:
++                        assert t['samples']==len(original['time'])==env.horizon+1
++                        assert not bool(compact['actuator_diagnostic_valid'][0])
++                        assert np.count_nonzero(compact['actuator_diagnostic_valid'])==env.horizon
++                        for field in compact.files:
++                            np.testing.assert_array_equal(compact[field],original[field])
