@@ -56,6 +56,8 @@ class Critic(nn.Module):
 class TrainingConfig:
     trainer: str="jax"
     activation: str="leaky_relu"
+    hidden_sizes: tuple=(256,128)
+    evaluation_reward_best: bool=False
     num_envs: int=64
     rollout_steps: int=256
     updates: int=64
@@ -99,6 +101,10 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if not isinstance(self.hidden_sizes,(tuple,list)) or not self.hidden_sizes or any(type(w) is not int or w<=0 for w in self.hidden_sizes):raise ValueError("hidden sizes must be positive integers")
+        object.__setattr__(self,"hidden_sizes",tuple(self.hidden_sizes))
+        if self.trainer=="jax" and self.hidden_sizes!=(256,128):raise ValueError("configurable hidden sizes require RSL trainer")
+        if type(self.evaluation_reward_best) is not bool:raise ValueError("evaluation_reward_best must be boolean")
         if self.activation not in ("leaky_relu","elu") or (self.trainer=="jax" and self.activation!="leaky_relu"):raise ValueError("activation unsupported by selected trainer")
         if self.trainer not in ("jax","rsl"):raise ValueError("unknown PPO trainer")
         if self.validation_updates is not None:

@@ -53,5 +53,11 @@
   ],
   "trainer": "rsl",
   "activation": "elu",
-  "best_model_every_update": true
+  "best_model_every_update": true,
+  "hidden_sizes": [
+    128,
+    128,
+    128
+  ],
+  "evaluation_reward_best": true
 }

@@ -1626,3 +1626,10 @@ R75回报胜基线35/48（gentle11、tight0、straighten12、reversal12）；失
 
 新增共享tracking_diagnostics.write_alpha_error_overview，由generate_panel自动调用。每工况/seed同图叠加全部alpha的真实速度误差与几何有符号横向位置误差、配对基线、持续扰动区间和实际失败终点；PNG/PDF/NPZ及哈希。R75/R150各16工况已从原轨迹生成，不重复仿真，入口checkpoint_comparison/INDEX.md。
 RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已证明的全程最佳。新增显式best_model_every_update模式；ppo_path_priority.json启用，未来每轮更新后在同一固定开发面板比较并维护单一best_model；不拿更新前rollout reward作为更新后模型分数。selection_coverage记录未评估轮次，续训跨阶段覆盖仍需单独核查。不自动重跑历史200轮审计、不改变冻结记录，本次未训练。全部开发评估将从9次增加到200次，增加显著成本；绘图仍按独立节奏，不能宣称效率不变。历史R75保持候选身份。
+
+## 2026-09-16 三层128网络与奖励三倍实验启动前验证
+
+TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配置Actor/Critic为128/128/128，ELU。RSL构建、开发验证、导出元数据与恢复身份检查使用声明尺寸。新增非零输出Torch/Flax导出加载一致性、尺寸合法性和reward-best无静默last回退测试，先观察新增6项失败，再实现通过。CPU全套258 passed、2 skipped（opt-in），后续process队列支持另经12项队列/流水线测试通过。
+真实GPU两轮短测runs/path_mlp128x3_validation_20260916/training已complete：32训练转移，含每轮开发验证、best索引、三层导出及曲线；只证明工程链路。第二组冻结配置对5个alpha×失败/非失败状态逐项核对，六项奖励恰为第一组3倍，其余分项和回归状态不变（atol1e-12）。两组正式训练尚待启动，不宣称效果改善。
+
+启动后状态：第一组runs/path_mlp128x3_20260916已进入training/initializing（PID233196）；监视器233197。第二组队列233198已启动，等待第一组全流水线成功；每组训练及流水线完成各自弹窗，失败停止。最终相关测试24 passed，GPU短测奖励重建最大3.72529e-9。尚无正式训练性能结果。

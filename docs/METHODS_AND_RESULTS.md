@@ -464,3 +464,10 @@ R75回报胜基线35/48（gentle11、tight0、straighten12、reversal12）；失
 
 新增共享tracking_diagnostics.write_alpha_error_overview，由generate_panel自动调用。每工况/seed同图叠加全部alpha的真实速度误差与几何有符号横向位置误差、配对基线、持续扰动区间和实际失败终点；PNG/PDF/NPZ及哈希。R75/R150各16工况已从原轨迹生成，不重复仿真，入口checkpoint_comparison/INDEX.md。
 RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已证明的全程最佳。新增显式best_model_every_update模式；ppo_path_priority.json启用，未来每轮更新后在同一固定开发面板比较并维护单一best_model；不拿更新前rollout reward作为更新后模型分数。selection_coverage记录未评估轮次，续训跨阶段覆盖仍需单独核查。不自动重跑历史200轮审计、不改变冻结记录，本次未训练。全部开发评估将从9次增加到200次，增加显著成本；绘图仍按独立节奏，不能宣称效率不变。历史R75保持候选身份。
+
+## 2026-09-16 三层128及alpha相关奖励三倍（A初始化、B排队）
+
+目的：检查网络结构变化及更强alpha相关跟踪奖励是否改善条件策略。A：昨日连续投影四参考任务，Actor/Critic从256/128改128/128/128；B：与A相同，六项alpha相关奖励统一乘3（tracking_rate12、tail_rate.3、budget_rate6），用户明确确认；并非单独改变端点权重比。两组均200×4096×24=19,660,800训练步、seed65，从零开始、无自动续训；奖励best每轮固定开发参评（最多28,800,000开发步/组，另基线144,000），最终96条配对标准回合最多192,000步，每回合≤10秒。A完成全流水线后启动B。旧实验只9次开发，本轮200次，计算成本需分开报告。
+工程证据：runs/path_mlp128x3_validation_20260916/training，真实GPU两轮32转移complete；CPU258 passed2 skipped，队列/流水线12 passed；奖励3倍逐项验证runs/path_mlp128x3_reward3_20260916_inputs/reward_scale_validation.json。正式结果入口预声明runs/path_mlp128x3_20260916与runs/path_mlp128x3_reward3_20260916，尚无性能结论。
+
+实时启动快照：A pipeline233196，监视233197；B队列233198，依赖A完整成功后执行。此处为启动快照，不能视作完成结果；任务成功与alpha取舍尚待完整评估。

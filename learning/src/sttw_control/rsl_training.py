@@ -33,11 +33,11 @@ def bootstrap_timeout(rewards,next_values,truncated,terminated,gamma):
     return rewards+gamma*next_values.reshape_as(rewards)*(truncated & ~terminated).to(rewards.dtype)
 
 
-def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=.9995,lam=.99,clip=.2,entropy=.001,std=.15,kl=.01,activation="leaky_relu"):
+def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=.9995,lam=.99,clip=.2,entropy=.001,std=.15,kl=.01,activation="leaky_relu",hidden_sizes=(256,128)):
     if importlib.metadata.version('rsl-rl-lib')!=RSL_VERSION:
         raise RuntimeError(f'This adapter requires rsl-rl-lib=={RSL_VERSION}')
     policy=ActorCritic(obs,{'policy':['policy'],'critic':['policy']},2,
-        actor_hidden_dims=[256,128],critic_hidden_dims=[256,128],activation='elu' if activation=='elu' else 'lrelu',
+        actor_hidden_dims=list(hidden_sizes),critic_hidden_dims=list(hidden_sizes),activation='elu' if activation=='elu' else 'lrelu',
         init_noise_std=std,noise_std_type='log',actor_obs_normalization=False,critic_obs_normalization=False).to(device)
     linear=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)][-1]
     torch.nn.init.zeros_(linear.weight);torch.nn.init.zeros_(linear.bias)
@@ -51,7 +51,7 @@ def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=
 def export_actor(policy):
     """Transpose Torch weights into the existing inference-only Flax schema."""
     layers=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)]
-    if len(layers)!=3:raise ValueError('Actor architecture differs from export contract')
+    if len(layers)<2 or layers[-1].out_features!=2:raise ValueError('Actor architecture differs from export contract')
     return {'params':{f'Dense_{i}':{'kernel':jp.asarray(m.weight.detach().cpu().numpy().T),
                                     'bias':jp.asarray(m.bias.detach().cpu().numpy())} for i,m in enumerate(layers)}}
 
@@ -113,11 +113,11 @@ def train(task_path,output,c):
         def observations(value):return TensorDict({'policy':torch_from_jax(value)/scale},batch_size=[c.num_envs])
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
-                            c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation)
+                            c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes)
         offset=0;transition_offset=0
         if c.resume_checkpoint:
             snapshot=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)
-            if snapshot['identity']!=identity or snapshot['rsl_version']!=RSL_VERSION or snapshot.get('activation','leaky_relu')!=c.activation:raise ValueError('RSL resume identity mismatch')
+            if snapshot['identity']!=identity or snapshot['rsl_version']!=RSL_VERSION or snapshot.get('activation','leaky_relu')!=c.activation or tuple(snapshot.get('hidden_sizes',(256,128)))!=c.hidden_sizes:raise ValueError('RSL resume identity mismatch')
             algo.policy.load_state_dict(snapshot['policy']);algo.optimizer.load_state_dict(snapshot['optimizer'])
             torch.set_rng_state(snapshot['torch_rng'].cpu())
             if device.startswith('cuda'):torch.cuda.set_rng_state_all(snapshot['cuda_rng'])
@@ -133,7 +133,7 @@ def train(task_path,output,c):
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error
-        actor=ResidualActor(activation=c.activation);validate=make_validator(env,actor,jp.asarray(std),c)
+        actor=ResidualActor(hidden_sizes=c.hidden_sizes,activation=c.activation);validate=make_validator(env,actor,jp.asarray(std),c)
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
         baseline=host(validate({'actor':export_actor(algo.policy)},True));write('baseline_validation.json',baseline)
         write('setup_timings.json',{'initialization_and_baseline_seconds':time.monotonic()-start})
@@ -177,8 +177,8 @@ def train(task_path,output,c):
                 record['reward_components_sum_mean_step']=sum(record['reward_components_mean_step'].values())
                 record['reward_components_units']='signed reward per sampled control transition; terminal replacement included'
                 params=export_actor(algo.policy);checkpoint=root/'checkpoints'/f'update_{iteration:04d}'
-                save_policy(checkpoint,params,mean,std,identity,activation=c.activation)
-                torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,
+                save_policy(checkpoint,params,mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
+                torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,
                     'update':iteration,'control_transitions':record['control_transitions'],'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key)},checkpoint/'rsl_snapshot.pt')
                 metadata={'update':iteration,'trainer':'rsl_rl.algorithms.PPO','rsl_version':RSL_VERSION}
                 if should_validate(c,local):

@@ -40,22 +40,23 @@ def test_watcher_launches_once_after_two_ready_checks(tmp_path,monkeypatch):
     assert json.loads((tmp_path/'status.json').read_text())['phase']=='complete'
     with pytest.raises(ValueError,match='already claimed'):module.watch(plan)
     assert len(launches)==1
-def test_command_queue_requires_success_and_does_not_wait_for_other_gpu_jobs(tmp_path,monkeypatch):
+@pytest.mark.parametrize('kind,entry,status_name',[('command','command_experiment.py','status.json'),('recovery','recovery_pipeline.py','pipeline_status.json')])
+def test_process_queue_requires_success_and_does_not_wait_for_other_gpu_jobs(tmp_path,monkeypatch,kind,entry,status_name):
     import json,time
     import sttw_control.deferred_training as m
     dep=tmp_path/'dependency.json';dep.write_text('{"phase":"complete"}')
     launch=tmp_path/'dependency_launch.json';launch.write_text('{"pid":999999999}')
     out=tmp_path/'result';plan=tmp_path/'plan.json'
-    plan.write_text(json.dumps(dict(pipeline_kind='command',created_unix=time.time(),max_wait_seconds=60,poll_seconds=0,input_sha256={},output=str(out),dependency_status=str(dep),dependency_launch=str(launch),repository=str(tmp_path),task='task',training='train',panel='panel')))
+    plan.write_text(json.dumps(dict(pipeline_kind=kind,dependency_mode='process',created_unix=time.time(),max_wait_seconds=60,poll_seconds=0,input_sha256={},output=str(out),dependency_status=str(dep),dependency_launch=str(launch),repository=str(tmp_path),task='task',training='train',panel='panel')))
     monkeypatch.setattr(m,'gpu_processes',lambda _:pytest.fail('must not query unrelated GPU jobs'))
     commands=[]
     class Child:
         pid=123
         def wait(self):
-            out.mkdir();(out/'status.json').write_text('{"phase":"complete"}');return 0
+            out.mkdir();(out/status_name).write_text('{"phase":"complete"}');return 0
     monkeypatch.setattr(m.subprocess,'Popen',lambda command,**kw:commands.append(command) or Child())
     m.watch(plan)
-    assert len(commands)==1 and commands[0][1]=='learning/cli/command_experiment.py'
+    assert len(commands)==1 and commands[0][1]=='learning/cli/'+entry
     assert json.loads((tmp_path/'launch.json').read_text())['pid']==123
     with pytest.raises(ValueError,match='already claimed'):m.watch(plan)
 

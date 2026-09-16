@@ -74,3 +74,41 @@ def test_elu_export_and_load(tmp_path):
     loaded=load_policy(tmp_path/'policy',expected=identity)
     with torch.no_grad():expected=torch.tanh(algo.policy.act_inference(obs)).numpy()
     np.testing.assert_allclose(loaded(obs['policy'].numpy()),expected,atol=1e-6)
+
+
+def test_three_hidden_layers_export_nonzero_policy(tmp_path):
+    from sttw_control.network import save_policy,load_policy,ResidualActor
+    from sttw_control.training import TrainingConfig
+    c=TrainingConfig(trainer='rsl',activation='elu',hidden_sizes=[128,128,128])
+    obs=TensorDict({'policy':torch.randn(4,16)},batch_size=[4])
+    algo=make_algorithm(obs,steps=2,epochs=1,minibatches=1,device='cpu',
+                        activation=c.activation,hidden_sizes=c.hidden_sizes)
+    assert [m.out_features for m in algo.policy.critic.modules() if isinstance(m,torch.nn.Linear)]==[128,128,128,1]
+    with torch.no_grad():
+        layers=[m for m in algo.policy.actor.modules() if isinstance(m,torch.nn.Linear)]
+        torch.nn.init.normal_(layers[-1].weight,std=.05)
+        layers[-1].bias.fill_(.1)
+        expected=torch.tanh(algo.policy.act_inference(obs)).numpy()
+    assert np.ptp(expected[:,0])>1e-5
+    params=export_actor(algo.policy)
+    np.testing.assert_allclose(ResidualActor(tuple(c.hidden_sizes),activation='elu').apply(params,obs['policy'].numpy()),expected,atol=1e-6)
+    identity={'history_steps':1}
+    save_policy(tmp_path/'policy',params,np.zeros(16),np.ones(16),identity,
+                hidden_sizes=c.hidden_sizes,activation=c.activation)
+    loaded=load_policy(tmp_path/'policy',expected=identity)
+    np.testing.assert_allclose(loaded(obs['policy'].numpy()),expected,atol=1e-6)
+
+
+@pytest.mark.parametrize('sizes',[[],[0,128],[128,False],[128,1.5]])
+def test_invalid_hidden_sizes_rejected(sizes):
+    from sttw_control.training import TrainingConfig
+    with pytest.raises(ValueError,match='hidden'):
+        TrainingConfig(trainer='rsl',hidden_sizes=sizes)
+
+
+def test_reward_best_endpoint_never_silently_uses_last():
+    from sttw_control.pipeline import select_endpoint
+    result={'last_checkpoint':'last','best_checkpoint':'eligible','best_reward_checkpoint':'reward_best'}
+    assert select_endpoint(result,conditioned=True,reward_best=True)=='reward_best'
+    with pytest.raises(ValueError,match='reward.best'):
+        select_endpoint({**result,'best_reward_checkpoint':None},conditioned=True,reward_best=True)

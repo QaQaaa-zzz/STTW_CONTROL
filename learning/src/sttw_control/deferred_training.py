@@ -60,6 +60,8 @@ def watch(plan_path):
     try:
         kind=plan.get('pipeline_kind','recovery')
         if kind not in ('recovery','command'):raise ValueError('unknown pipeline kind')
+        dependency_mode=plan.get('dependency_mode','process' if kind=='command' else 'repository')
+        if dependency_mode not in ('process','repository'):raise ValueError('unknown dependency mode')
         while True:
             if plan_path.read_bytes()!=raw:raise ValueError('watch plan changed')
             verify_files(plan['input_sha256'])
@@ -68,15 +70,15 @@ def watch(plan_path):
             try:
                 dependency=json.loads(Path(plan['dependency_status']).read_text())
             except (OSError,json.JSONDecodeError) as exc:
-                if kind=='command':
+                if dependency_mode=='process':
                     from .run_watchdog import process_identity
                     launch=json.loads(Path(plan['dependency_launch']).read_text())
                     if process_identity(launch['pid']) is None:raise RuntimeError('dependency exited without readable status') from exc
                 ready=0;status('waiting_status',reason=str(exc));time.sleep(plan['poll_seconds']);continue
             # Failure/identity checks apply even if GPU probing fails.
-            expected=plan.get('dependency_plan_sha256') if kind=='command' else plan['dependency_plan_sha256']
+            expected=plan.get('dependency_plan_sha256') if dependency_mode=='process' else plan['dependency_plan_sha256']
             gate(dependency,expected,[],[])
-            if kind=='command':
+            if dependency_mode=='process':
                 # Wait only for this declared pipeline, never unrelated GPU jobs.
                 from .run_watchdog import process_identity
                 launch=json.loads(Path(plan['dependency_launch']).read_text())

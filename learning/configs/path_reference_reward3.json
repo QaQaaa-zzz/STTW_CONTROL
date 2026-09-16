@@ -1,0 +1,184 @@
+{
+  "horizon_seconds": 10.0,
+  "speed_reference": 2.1,
+  "eso_start": 3.0,
+  "initial_roll_range": 0.02,
+  "roll_failure": 0.7,
+  "failure_penalty": 100.0,
+  "alive_reward_rate": 1.0,
+  "learning_roll_reference": null,
+  "bend": {
+    "straight": 3.0,
+    "bend_length": 8.0,
+    "exit_length": 20.0,
+    "peak_curvature": 0.22,
+    "lookahead": 1.2,
+    "max_steer": 0.35,
+    "direction": 1
+  },
+  "observation": {
+    "history_steps": 10,
+    "include_path": true,
+    "include_priority": true,
+    "include_tracking": true,
+    "include_attitude_risk": false
+  },
+  "priority": {
+    "risk_gate": false,
+    "randomize_alpha": true,
+    "validation_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ]
+  },
+  "actuator": {
+    "composition": "additive",
+    "project_base": false,
+    "steer_residual_scale": 1.5,
+    "rear_residual_scale": 10.0,
+    "strength": 1.0
+  },
+  "tracking": {
+    "priority_ratio": 10.0,
+    "tracking_rate": 12.0,
+    "speed_wide": 0.5,
+    "speed_fine": 0.15,
+    "lateral_wide": 0.4,
+    "lateral_fine": 0.1,
+    "heading_wide": 0.35,
+    "heading_fine": 0.1,
+    "tail_rate": 0.30000000000000004,
+    "speed_scale": 0.2,
+    "lateral_scale": 0.2,
+    "heading_scale": 0.15,
+    "heading_tail_weight": 0.3,
+    "budget_rate": 6.0,
+    "speed_tight": 0.2,
+    "speed_relaxed": 0.5,
+    "lateral_tight": 0.1,
+    "lateral_relaxed": 0.4,
+    "roll_working_limit": 0.3,
+    "roll_weight": 100.0,
+    "roll_rate_weight": 1.0,
+    "action_weight": 0.01,
+    "action_delta_weight": 0.02,
+    "return_rate": 0.5,
+    "return_bonus": 2.0,
+    "return_seconds": 3.0,
+    "hold_seconds": 0.5,
+    "final_speed_tolerance": 0.2,
+    "final_lateral_tolerance": 0.1,
+    "final_heading_tolerance": 0.15,
+    "final_roll_rate_tolerance": 0.3,
+    "start_seconds": 1.0
+  },
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "random_events": {
+    "start_min": 3.0,
+    "start_max": 4.5,
+    "duration_min": 0.5,
+    "duration_max": 1.5,
+    "steer_min": 0.1,
+    "steer_max": 0.4,
+    "force_min": 1.0,
+    "force_max": 3.0,
+    "rear_probability": 0.3,
+    "rear_min": 0.1,
+    "rear_max": 0.6,
+    "nominal_probability": 0.4,
+    "sine_probability": 0.5
+  },
+  "reference_paths": {
+    "cases": [
+      {
+        "name": "gentle",
+        "commands": [
+          [
+            0,
+            2.1,
+            0
+          ],
+          [
+            3,
+            2.1,
+            0.3
+          ],
+          [
+            6,
+            2.1,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "tight_turn",
+        "commands": [
+          [
+            0,
+            2.1,
+            0
+          ],
+          [
+            3,
+            2.7,
+            1.4
+          ],
+          [
+            6,
+            2.1,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "straighten",
+        "commands": [
+          [
+            0,
+            2.1,
+            0
+          ],
+          [
+            2,
+            2.1,
+            0.9
+          ],
+          [
+            5,
+            2.1,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "reversal",
+        "commands": [
+          [
+            0,
+            2.1,
+            0
+          ],
+          [
+            2,
+            2.1,
+            0.9
+          ],
+          [
+            5,
+            2.1,
+            -0.9
+          ],
+          [
+            7,
+            2.1,
+            0
+          ]
+        ]
+      }
+    ],
+    "continuous_projection": true,
+    "projection_margin": 0.05
+  }
+}

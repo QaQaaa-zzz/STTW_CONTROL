@@ -545,3 +545,18 @@ R75回报胜基线35/48（gentle11、tight0、straighten12、reversal12）；失
 
 新增共享tracking_diagnostics.write_alpha_error_overview，由generate_panel自动调用。每工况/seed同图叠加全部alpha的真实速度误差与几何有符号横向位置误差、配对基线、持续扰动区间和实际失败终点；PNG/PDF/NPZ及哈希。R75/R150各16工况已从原轨迹生成，不重复仿真，入口checkpoint_comparison/INDEX.md。
 RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已证明的全程最佳。新增显式best_model_every_update模式；ppo_path_priority.json启用，未来每轮更新后在同一固定开发面板比较并维护单一best_model；不拿更新前rollout reward作为更新后模型分数。selection_coverage记录未评估轮次，续训跨阶段覆盖仍需单独核查。不自动重跑历史200轮审计、不改变冻结记录，本次未训练。全部开发评估将从9次增加到200次，增加显著成本；绘图仍按独立节奏，不能宣称效率不变。历史R75保持候选身份。
+
+## 2026-09-16 三层128网络同预算重训
+
+用户要求128→128→128三层结构并按昨日连续投影任务再训练一次。Actor和Critic同改；ELU、280维显式alpha历史、固定残差权限、奖励、连续投影、任务/扰动分布、训练seed65均保持。旧配置默认256→128，旧模型元数据加载保持兼容；隐藏尺寸改为TrainingConfig配置，贯穿RSL构建、Flax开发验证、导出与恢复检查。
+
+- [x] 先补三层网络非零输出的Torch/Flax导出加载一致性测试，以及旧默认与配置合法性检查；再实现尺寸传递。
+- [x] 标准流水线新增显式evaluation_reward_best，开启时严格使用已保存固定开发奖励best，资格另记录；测试不得回退last。
+- [x] CPU相关回归与GPU两轮短测（32训练转移），通过后冻结原任务/标准面板及新训练配置。
+- [ ] 从零200轮×4096×24=19,660,800训练转移；warmup64×1400=89,600计算转移；20小批更新/轮。每轮固定开发72回合×最多2000步，共最多28,800,000开发转移，另初始基线最多144,000；开发seed48001。每轮best验证沿用用户最新要求，相比昨日9次增加成本。
+- [ ] 标准best评估4参考×4设置×3alpha×配对方法=96回合、最多192,000转移，seed49001，每回合≤10s；配对轨迹/每步与累计奖励/分项/alpha误差和视频自动交付。全部为开发诊断，不称独立测试。
+- [ ] 预算终点停止，不自动续训；异常停止并通知。启动并确认独立监视器，训练完成与全流水线完成分别弹窗；检查Git diff后commit/push。
+
+第二组用户确认：三层128网络基础上，所有alpha相关六项奖励统一乘3，tracking_rate=12、tail_rate=.3、budget_rate=6；其余奖励、容忍带、物理和残差权限不变。配置learning/configs/path_reference_reward3.json。它放大alpha评分差异，也放大跟踪相对共同奖励的强度，不能解释成纯偏好差异消融。第二组同200轮、同种子、同验证/标准预算，从零训练，第一组全部成功后才启动；失败停止队列。输出分别runs/path_mlp128x3_20260916与runs/path_mlp128x3_reward3_20260916。队列使用共享deferred_training的process依赖模式，仅等待声明的第一组进程与完成状态，不等待或停止其他GPU任务。
+
+启动核实：第一组pipeline PID233196、监视器233197，pipeline_status=training、training/status=initializing；第二组队列PID233198等待第一组全流水线完成。两组输入/源码哈希和PID起始身份已记录。CPU全套258 passed2 skipped，最终相关24 passed，GPU两轮奖励重建最大3.72529e-9。独立只读代码复核无阻断项。两组正式训练均未完成，后续以各实时status与评估索引为准。

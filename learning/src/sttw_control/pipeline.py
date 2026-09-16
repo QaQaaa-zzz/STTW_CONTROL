@@ -21,7 +21,10 @@ def evaluation_alphas(task,panel):
     return list(map(float,values))
 
 
-def select_endpoint(result,*,conditioned):
+def select_endpoint(result,*,conditioned,reward_best=False):
+    if reward_best:
+        if not result.get("best_reward_checkpoint"):raise ValueError("reward-best checkpoint missing; refusing last fallback")
+        return result["best_reward_checkpoint"]
     return result['last_checkpoint'] if conditioned else result['best_checkpoint'] or result['last_checkpoint']
 
 
@@ -59,7 +62,7 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
             (frozen/f'{name}.json').write_bytes(p.read_bytes())
     sources=source_identity()
     declaration={'source_sha256':sources,'priority_alphas':alphas,
-                 'endpoint':('best geometric development-gated candidate or explicitly unqualified last fallback' if cfg.tracking is not None else ('fixed final update; priority controllability development' if conditioned else 'legacy best eligible or last fallback')),
+                 'endpoint':('fixed-development reward-best; task qualification reported separately' if training.evaluation_reward_best else 'best geometric development-gated candidate or explicitly unqualified last fallback' if cfg.tracking is not None else ('fixed final update; priority controllability development' if conditioned else 'legacy best eligible or last fallback')),
                  'training_budget':training.num_envs*training.rollout_steps*training.updates,
                  'standard_budget':len(alphas)*len(seeds)*count*2*math.ceil(horizon/cfg.controller.dt),
                  'media_selection':'first predeclared seed, all events, every declared alpha',
@@ -94,11 +97,12 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
         result=json.loads((train/'status.json').read_text())
         if not result['complete']:raise RuntimeError('training did not finish its declared budget')
         if resume and result.get('control_transitions')!=declaration['training_budget']:raise ValueError('completed training budget mismatch')
-        checkpoint=(result['best_checkpoint'] or result['last_checkpoint']) if cfg.tracking is not None else select_endpoint(result,conditioned=conditioned)
+        checkpoint=select_endpoint(result,conditioned=conditioned,reward_best=True) if training.evaluation_reward_best else ((result['best_checkpoint'] or result['last_checkpoint']) if cfg.tracking is not None else select_endpoint(result,conditioned=conditioned))
+        endpoint_eligible=(json.loads((train/'best_model.json').read_text())['development_gates_passed'] if training.evaluation_reward_best else result['best_checkpoint'] is not None)
         if cfg.tracking is not None:
             (output/'endpoint.json').write_text(json.dumps({'checkpoint':checkpoint,
-                'development_eligible':result['best_checkpoint'] is not None,
-                'scope':'best development-gated checkpoint; unqualified last fallback remains diagnostic only'},indent=2)+'\n')
+                'development_eligible':endpoint_eligible,
+                'scope':declaration['endpoint']},indent=2)+'\n')
         rows=[];media_index=['# Complete standard recovery media','',declaration['media_selection'],'']
         for i,alpha in enumerate(alphas):
             prefix=f'alpha_{i}/' if conditioned else ''
