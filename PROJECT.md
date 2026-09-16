@@ -584,3 +584,6 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 - [x] 从最新完整 snapshot 新目录续训至总计200轮，额外仅声明重建物理初态 warmup；不自动运行后续标准评估。保留原场景/网络/奖励/优化参数；更新文档、commit/push，启动监视器并核实真实进度。
 
 最终验证315 passed2 skipped；GPU两轮32步续训无任何评估、reward/policy映射正确。正式续训目录runs/timed_random_rsl_4096_20260916_reward_only/training，trainer818060、monitor818061；TensorBoard6006并列显示旧开发阶段与新训练奖励阶段。旧update42完整snapshot保留，剩余158轮预算15,532,032训练步，warmup89,600计算步，所有自动评估预算0。
+
+## 2026-09-16 reward-only训练完成与结果分析
+已核实完整200轮、19,660,800训练转移；续训158轮32.63分钟（含初始化），稳定采样中位10.41s。训练采样best=policy192，在update193获得0.0496043；policy200已保存但未采样计分。最后20轮平均0.048711，主要是位置/yaw正奖励与超带惩罚改善，不能推出alpha有效或任务达标。没有执行额外评估/续训；建议以后单独标准面板诊断best。完整图/数据/局限见runs/timed_random_rsl_4096_20260916_reward_only/analysis/REPORT.md。

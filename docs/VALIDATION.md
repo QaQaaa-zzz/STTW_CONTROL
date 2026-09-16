@@ -1655,3 +1655,6 @@ TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配�
 - 第一次GPU续训失败保留 `runs/timed_reward_only_validation_20260916/training`；修复后的两轮32步短测为 `training_verified`。正式阶段从原update42恢复，不使用工程短测权重。
 - 最终全套：315 passed, 2 skipped（50.18s）。GPU短续训两轮32步完成，update43/44分别计分policy42/43；无baseline文件、无validation字段，奖励重建最大缩放误差6.9985e-9；验证记录为 `runs/timed_reward_only_validation_20260916/verification.json`。
 - 正式续训已启动：`runs/timed_random_rsl_4096_20260916_reward_only/training`，trainer818060、monitor818061。从原update42恢复至总计200，不使用短测权重。启动不是训练完成或跟踪达标证据。
+
+## 2026-09-16 正式训练完成记录审计
+核对续训metrics更新43–200连续、status.complete=true、总转移19,660,800，best别名与最大采样分数一致且归属policy192；未发现validation字段，末模型200不冒用199的分数。奖励重建最大scaled误差1.572e-7。完成监视器stage_notified与completion_notified已记录。生成并检查训练摘要PNG/PDF及source_hashes；本次仅日志与文档分析，无新增代码测试、仿真或标准评估。证据：runs/timed_random_rsl_4096_20260916_reward_only/analysis/。
