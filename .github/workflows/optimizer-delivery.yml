@@ -71,10 +71,11 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq libosmesa6 libegl1 libgl1 libeigen3-dev ffmpeg
-          python -m pip install 'torch==2.9.1' --index-url https://download.pytorch.org/whl/cpu
-          python -m pip install 'mujoco==3.6.0' 'mujoco-mjx==3.6.0' 'jax[cpu]==0.6.2' 'flax==0.10.7' 'optax==0.2.5'
-          python -m pip install -e './learning[test,media,rsl]'
-          python -c "import torch,rsl_rl;from importlib.metadata import version;assert version('rsl-rl-lib')=='3.2.0';print(torch.__version__)"
+          python -m pip install --no-cache-dir 'torch==2.9.1' 'torchvision==0.24.1' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --no-cache-dir 'mujoco==3.6.0' 'mujoco-mjx==3.6.0' 'jax[cpu]==0.6.2' 'flax==0.10.7' 'optax==0.2.5'
+          printf 'torch==2.9.1+cpu\ntorchvision==0.24.1+cpu\njax==0.6.2\njaxlib==0.6.2\nflax==0.10.7\noptax==0.2.5\n' > "$RUNNER_TEMP/cpu-constraints.txt"
+          python -m pip install --no-cache-dir -c "$RUNNER_TEMP/cpu-constraints.txt" -e './learning[test,media,rsl]'
+          python -c "import torch,torchvision,rsl_rl;from importlib.metadata import version;assert version('rsl-rl-lib')=='3.2.0';assert torch.__version__=='2.9.1+cpu';print(torch.__version__,torchvision.__version__)"
           python -m pip freeze > test-output/dependencies.txt
       - name: Full regression including real PPO and short physical selection
         run: python -m pytest learning/tests -q --junitxml=test-output/pytest.xml
