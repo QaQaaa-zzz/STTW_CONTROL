@@ -560,3 +560,18 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 第二组用户确认：三层128网络基础上，所有alpha相关六项奖励统一乘3，tracking_rate=12、tail_rate=.3、budget_rate=6；其余奖励、容忍带、物理和残差权限不变。配置learning/configs/path_reference_reward3.json。它放大alpha评分差异，也放大跟踪相对共同奖励的强度，不能解释成纯偏好差异消融。第二组同200轮、同种子、同验证/标准预算，从零训练，第一组全部成功后才启动；失败停止队列。输出分别runs/path_mlp128x3_20260916与runs/path_mlp128x3_reward3_20260916。队列使用共享deferred_training的process依赖模式，仅等待声明的第一组进程与完成状态，不等待或停止其他GPU任务。
 
 启动核实：第一组pipeline PID233196、监视器233197，pipeline_status=training、training/status=initializing；第二组队列PID233198等待第一组全流水线完成。两组输入/源码哈希和PID起始身份已记录。CPU全套258 passed2 skipped，最终相关24 passed，GPU两轮奖励重建最大3.72529e-9。独立只读代码复核无阻断项。两组正式训练均未完成，后续以各实时status与评估索引为准。
+
+## 2026-09-16 随机指令与时间轨迹任务切换（用户批准）
+
+旧A在已记录35轮/3,440,640训练步后取消，完整checkpoint与best（停止前update0020）及原始metrics均保留；中断轮可能存在未完成验证的checkpoint，不计完成预算。旧B未启动并取消队列。停止身份、原状态快照见runs/path_mlp128x3_20260916_inputs/stop_record.json。停止原因是任务定义变更，不是宣称模型已收敛或当前结果不佳。
+
+新任务设计与实施计划：
+- [x] 独立时间参考：reset随机连续采样速度1.7–2.5m/s、yawrate±.6rad/s，初始2.1m/s/0；三次切换时间分别U[1.5,2.5]、U[3,4]、U[5,6]s，速度/yaw变化率限制.5m/s²/.6rad/s²；最后目标保持至10s。参考只在reset与实际位姿对齐，之后精确积分前一步平滑请求，禁止随实际位姿重定位。
+- [x] 同时观测和奖励速度/yawrate、时间参考沿程/右法向位置及航向误差；沿程actual-reference负为落后。保持ECBC/ESO与原物理，基础转向由参考yaw前馈及航向/横向反馈生成；Actor新增可定位观测的沿程误差及yaw请求/实测，尺寸绑定checkpoint。alpha1命令优先、alpha0位置优先，权限固定；共同最终沿程与yaw门槛.15m/.15rad/s，加旧速度.2/横向.1/航向.15/姿态门槛与.5s保持，离带起3s恢复期限。
+- [x] 采用已批准三层128与3倍相关跟踪项（tracking_rate12、tail_rate.3、budget_rate6）；新增yaw项与速度平分命令奖励，位置正奖励联合沿/横/航向，旧几何配置缺省行为和身份保持。
+- [x] CPU/JAX积分、奖励与参考重建、旧checkpoint兼容、CPU/MJX闭环及三层GPU短测通过后才正式启动。
+- [ ] 新策略从零200轮×4096×24=19,660,800训练步；warmup64×1400=89,600计算步。固定开发随机种子48001–48004，三扰动×三alpha配对nominal，每轮72回合最多28,800,000开发步，另初始基线最多144,000。开发参考来自随机分布，绝不使用标准四参考选best。
+- [ ] 标准四参考仅在结束后评估，使用旧指令表但同样经过新声明的slew限制独立积分；4参考×4扰动设置×3alpha×seed49001×配对方法=96回合、最多192,000步。旧标准已用于历史开发，不称全新独立holdout；新结果不能直接与旧奖励/参考回报比较。每条件轨迹、每步与累计分项、沿/横/yaw/速度和alpha叠图完整覆盖。
+- [ ] 先短工程筛查，错误停止；正式预算不自动增加。新配置、源码、耗时/样本预算冻结，监视阶段/流水线完成及错误，Git逻辑提交后push。
+
+正式启动核实：runs/timed_random_rsl_4096_20260916，pipeline567379，monitor567380，training/status=initializing。冻结输入/预算在_inputs/experiment.json，pipeline declaration包含开发/基线/warmup成本。最终全套311 passed2 skipped；新增开发gate后的GPU training_verified两轮32步complete，固定随机开发每轮验证、best索引、沿程/yaw gate接线通过。当前只证明启动，不宣称训练完成或任务提升。

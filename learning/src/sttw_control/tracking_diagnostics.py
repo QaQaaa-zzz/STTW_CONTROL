@@ -11,6 +11,44 @@ from .path import reference_table
 from .tracking_reward import TrackingConfig, initial_return, return_observation, transition, tolerances
 
 
+def speed_error(trace, config):
+    target=trace['reference_command'][:-1,0] if config.get('timed_reference') is not None else trace['motion_command'][:-1,1]
+    return trace['true_forward_speed'][1:]-target
+
+
+def reference_xy(trace, config):
+    if config.get('timed_reference') is not None:return trace['reference_pose'][:,:2]
+    from .path import CircleConfig,circle_reference,FigureEightConfig,eight_reference
+    if config.get('bend'):return reference_table(config)[:,1:3]
+    if config.get('circle'):return circle_reference(CircleConfig(**config['circle']))
+    return eight_reference(FigureEightConfig(**config['figure_eight']))
+
+
+def audit_timed_reference(trace, dt):
+    """Independent exact SE(2) integration from captured pre-step commands."""
+    ref=np.asarray(trace['reference_pose']);command=np.asarray(trace['reference_command'])
+    if ref.shape!=(len(trace['time']),3) or command.shape!=(len(ref),2):raise ValueError('timed reference shape mismatch')
+    if not np.isfinite(ref).all() or not np.isfinite(command).all():raise ValueError('nonfinite timed reference')
+    if not np.allclose(ref[0],trace['pose'][0],atol=2e-5,rtol=0):raise ValueError('reference initial pose mismatch')
+    expected=np.empty_like(ref);expected[0]=ref[0]
+    for i,(speed,yaw) in enumerate(command[:-1],1):
+        x,y,heading=expected[i-1];angle=yaw*dt
+        distance=speed*dt*np.sinc(angle/(2*np.pi))
+        expected[i]=[x+distance*np.cos(heading+angle/2),y+distance*np.sin(heading+angle/2),heading+angle]
+    difference=ref-expected;difference[:,2]=np.arctan2(np.sin(difference[:,2]),np.cos(difference[:,2]))
+    if not np.allclose(difference,0,atol=2e-4,rtol=0):raise ValueError('independent timed reference integration mismatch')
+    delta=trace['pose'][:,:2]-ref[:,:2];heading=ref[:,2]
+    longitudinal=delta[:,0]*np.cos(heading)+delta[:,1]*np.sin(heading)
+    right=delta[:,0]*np.sin(heading)-delta[:,1]*np.cos(heading)
+    heading_error=trace['pose'][:,2]-heading;heading_error=np.arctan2(np.sin(heading_error),np.cos(heading_error))
+    for name,actual,want in [('longitudinal error',trace['longitudinal_error'],longitudinal),
+                              ('lateral error',trace['path_features'][:,0],right),
+                              ('heading error',trace['path_features'][:,1],heading_error),
+                              ('yaw rate error',trace['yaw_rate_error'][1:],trace['yaw_rate_world'][1:]-command[:-1,1])]:
+        if not np.allclose(actual,want,rtol=3e-5,atol=2e-4):raise ValueError('timed '+name+' mismatch')
+    return float(np.max(np.abs(difference)))
+
+
 def trace_summary(trace, config):
     c=TrackingConfig(**config['tracking']);dt=config['controller']['dt']
     t=trace['time'];rs=trace['return_state'][-1]
@@ -18,12 +56,12 @@ def trace_summary(trace, config):
     final=bool(full and not failed and not rs[2] and rs[4]+1e-6>=c.hold_seconds)
     qualified=final and not bool(rs[7])
     present=bool(np.any(trace['event'][0,[2,3,5]]!=0))
-    ev=trace['true_forward_speed'][1:]-trace['motion_command'][:-1,1]
+    ev=speed_error(trace,config)
     path=trace['path_features'][1:]
     bv,by=tolerances(trace['priority_alpha'][:-1],c,xp=np)
     mature=t[:-1]+1e-7>=c.start_seconds
     def fraction(mask):return float(np.mean(mask[mature])) if np.any(mature) else None
-    return dict(
+    result=dict(
         task_recovery_success=bool(qualified and rs[6] and rs[5]),
         recovered_after_excursion=bool(qualified and rs[6] and rs[5]),
         maintained_without_excursion=bool(qualified and not rs[6]),
@@ -41,6 +79,13 @@ def trace_summary(trace, config):
                            'heading_rad':c.final_heading_tolerance,'roll_rad':c.roll_working_limit,
                            'roll_rate_rad_s':c.final_roll_rate_tolerance,'hold_s':c.hold_seconds,
                            'return_budget_s':c.return_seconds,'return_clock':'from observable tracking-band departure, including forcing','initial_settling_s':c.start_seconds})
+    if config.get('timed_reference') is not None:
+        result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
+                      xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
+                      yaw_rate_error_rmse_rad_s=float(np.sqrt(np.mean(trace['yaw_rate_error'][1:]**2))))
+        result['recovery_criteria'].update(longitudinal_m=c.final_longitudinal_tolerance,yaw_rate_rad_s=c.final_yaw_rate_tolerance)
+        result['scope']='independent timed trajectory and command tracking; common final hold and no missed return deadline; no safety/generalization claim'
+    return result
 
 
 def audit_trace(path):
@@ -49,15 +94,19 @@ def audit_trace(path):
     with np.load(path/'trace.npz',allow_pickle=False) as saved:tr={k:saved[k] for k in saved.files}
     if len(tr['time'])<2:raise ValueError('tracking audit needs at least one transition')
     if not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-6):raise ValueError('nonuniform trace timing')
+    timed=config.get('timed_reference') is not None
+    reference_error=audit_timed_reference(tr,dt) if timed else None
     state=initial_return(xp=np);parts={};max_state=0.
+    ev=speed_error(tr,config)
     for i in range(1,len(tr['time'])):
         event=tr['event'][i-1];tick=round(float(tr['time'][i-1])/dt)
         state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
-            speed_error=tr['true_forward_speed'][i]-tr['motion_command'][i-1,1],
+            speed_error=ev[i-1],
             lateral_error=tr['path_features'][i,0],heading_error=tr['path_features'][i,1],
             action=tr['effective_action'][i],alpha=tr['priority_alpha'][i-1],dt=dt,
             alive_rate=config['alive_reward_rate'],failure_penalty=config['failure_penalty'],
-            failed=tr['terminated'][i],enabled=tick*dt>=c.start_seconds,config=c,xp=np)
+            failed=tr['terminated'][i],enabled=tick*dt>=c.start_seconds,config=c,xp=np,
+            **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if timed else {}))
         for name,value in terms.items():parts.setdefault(name,[0.]).append(float(value))
         if int(tr['end_code'][i])!=3:  # Invalid physics can also invalidate hidden controller state.
             max_state=max(max_state,float(np.max(np.abs(return_observation(state,c,xp=np)-tr['return_state'][i]))))
@@ -70,7 +119,7 @@ def audit_trace(path):
             raise ValueError('tracking component mismatch: '+name)
     if max_state>2e-3:raise ValueError(f'return-state reconstruction mismatch {max_state}')
     return {'trace':tr,'config':config,'parts':parts,'summary':trace_summary(tr,config),
-            'max_reward_error':error,'max_return_state_error':max_state,
+            'max_reward_error':error,'max_return_state_error':max_state,'max_reference_error':reference_error,
             'trace_sha256':hashlib.sha256((path/'trace.npz').read_bytes()).hexdigest(),
             'declaration_sha256':hashlib.sha256((path/'declaration.json').read_bytes()).hexdigest()}
 
@@ -94,14 +143,25 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
         result['baseline_trace_sha256']=base['trace_sha256']
     (out/'summary.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     np.savez_compressed(out/'components.npz',time=tr['time'],**parts)
+    sources=[('residual' if baseline else 'recorded',data)]+([('baseline',base)] if base else [])
+    arrays={}
+    for label,source in sources:
+        trace=source['trace']
+        fields=dict(time=trace['time'][1:],speed_error=speed_error(trace,config),lateral_error=trace['path_features'][1:,0],heading_error=trace['path_features'][1:,1])
+        if config.get('timed_reference') is not None:
+            fields.update(reference_pose=trace['reference_pose'][1:],reference_command=trace['reference_command'][:-1],
+                          longitudinal_error=trace['longitudinal_error'][1:],yaw_rate_error=trace['yaw_rate_error'][1:],
+                          xy_error=np.linalg.norm(trace['pose'][1:,:2]-trace['reference_pose'][1:,:2],axis=1))
+        arrays.update({label+'_'+key:value for key,value in fields.items()})
+    np.savez_compressed(out/'tracking_errors.npz',**arrays)
     if not plots:return result
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     index=['# Frozen geometric tracking diagnostics','',
            'Every curve ends at the true recorded endpoint. Short failed returns use different exposure.',
-           'The target is the original global geometric path, not a rebased trajectory.','']
-    sources=[('residual' if baseline else 'recorded',data)]+([('baseline',base)] if base else [])
+           'The target is the original global reference; timed trajectories retain their independent clock.',
+           '- [Paired tracking error data](tracking_errors.npz)', '- [Reward component data](components.npz)','']
     def chart(name,ylabel,curves,*,steps=False):
         fig,ax=plt.subplots(figsize=(10,4.5),layout='constrained')
         for label,source,values in curves:
@@ -112,7 +172,7 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
         if np.any(event[[2,3,5]]!=0):
             ax.axvspan(event[0]*(1 if steps else dt),event[1]*(1 if steps else dt),alpha=.15)
         ax.set(xlabel='Control step' if steps else 'Time [s]',ylabel=ylabel,title=name)
-        ax.legend(fontsize=8);ax.grid(alpha=.2)
+        ax.legend(fontsize=8,ncol=2 if len(curves)>8 else 1);ax.grid(alpha=.2)
         for ext in ('png','pdf'):fig.savefig(out/(name+'.'+ext),dpi=130)
         plt.close(fig);index.append(f'- [{name}]({name}.png)')
     chart('step_reward','Signed reward / transition',[(l,d,d['trace']['reward'][1:]) for l,d in sources],steps=True)
@@ -121,20 +181,22 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
     chart('cumulative_components','Cumulative signed reward component',[(l+' '+k,d,np.cumsum(v[1:])) for l,d in sources for k,v in d['parts'].items()],steps=True)
     chart('lateral_error','Path error [m]',[(l,d,d['trace']['path_features'][1:,0]) for l,d in sources])
     chart('heading_error','Heading error [rad]',[(l,d,d['trace']['path_features'][1:,1]) for l,d in sources])
+    if config.get('timed_reference') is not None:
+        chart('longitudinal_error','Along-track error [m]',[(l,d,d['trace']['longitudinal_error'][1:]) for l,d in sources])
+        chart('xy_error','Timed XY distance [m]',[(l,d,np.linalg.norm(d['trace']['pose'][1:,:2]-d['trace']['reference_pose'][1:,:2],axis=1)) for l,d in sources])
+        chart('yaw_rate_error','Yaw-rate error [rad/s]',[(l,d,d['trace']['yaw_rate_error'][1:]) for l,d in sources])
+        chart('yaw_rate','World yaw rate [rad/s]',[(l+' '+kind,d,d['trace']['yaw_rate_world'][1:] if kind=='actual' else d['trace']['reference_command'][:-1,1]) for l,d in sources for kind in ('actual','request')])
     chart('roll','Roll [rad]',[(l,d,d['trace']['measurement'][1:,0]) for l,d in sources])
     curves=[];estimates=[]
     for label,d in sources:
         trace=d['trace'];true=trace['true_forward_speed'][1:];est=trace['measurement'][1:,5]*.1
         curves.extend([(label+' true',d,true),(label+' wheel estimate',d,est),
-                       (label+' request',d,trace['motion_command'][:-1,1])])
+                       (label+' request',d,trace['reference_command'][:-1,0] if config.get('timed_reference') is not None else trace['motion_command'][:-1,1])])
         estimates.append((label,d,est-true))
     chart('speed','Speed [m/s]',curves);chart('speed_estimation_error','Estimate minus true [m/s]',estimates)
     chart('return_elapsed','Return elapsed [s]',[(l,d,d['trace']['return_state'][1:,3]) for l,d in sources])
     fig,ax=plt.subplots(figsize=(8,6),layout='constrained')
-    from .path import BendConfig,bend_table,CircleConfig,circle_reference,FigureEightConfig,eight_reference
-    if config.get('bend'):reference=reference_table(config)[:,1:3]
-    elif config.get('circle'):reference=circle_reference(CircleConfig(**config['circle']))
-    else:reference=eight_reference(FigureEightConfig(**config['figure_eight']))
+    reference=reference_xy(tr,config)
     ax.plot(reference[:,0],reference[:,1],ls='--',label='Original reference path')
     for label,d in sources:
         xy=d['trace']['pose'][:,:2];ax.plot(xy[:,0],xy[:,1],label=label)
@@ -207,9 +269,7 @@ def write_panel_overview(root, rows):
             config=json.loads((directory/'declaration.json').read_text())['config']
             sources.append((policy,trace))
         stem=f'{case}_alpha_{alpha:g}_seed_{seed}'
-        if config.get('bend'):reference=reference_table(config)[:,1:3]
-        elif config.get('circle'):reference=circle_reference(CircleConfig(**config['circle']))
-        else:reference=eight_reference(FigureEightConfig(**config['figure_eight']))
+        reference=reference_xy(max(sources,key=lambda item:len(item[1]['time']))[1],config)
         manifest.append({k:row[k] for k in ('alpha','seed','scenario','trace_sha256','baseline_trace_sha256','declaration_sha256')})
         fig,axes=plt.subplots(1,3,figsize=(18,5),layout='constrained')
         axes[0].plot(reference[:,0],reference[:,1],'--',color='.5',label='Original reference')
@@ -251,9 +311,13 @@ def write_alpha_error_overview(root):
         d=json.loads((panel/'declaration.json').read_text())
         for case in d['scenarios']:
             groups.setdefault((case,int(d['panel']['seed'])),[]).append((float(d['priority_alpha_override']),panel/case))
-    index=['# Same-task alpha tracking errors','', 'Speed error = true forward speed minus pre-step target [m/s]. Position error = signed right-normal geometric cross-track error [m], not timed XY distance. Crosses mark real failures; shaded interval is sustained external disturbance.','']
+    index=['# Same-task alpha tracking errors','', 'Speed error = true forward speed minus pre-step target [m/s]. Position error uses the frozen reference: geometric cross-track for legacy paths; right and along-track components at the current reference time for timed trajectories. Crosses mark real failures; shaded interval is sustained external disturbance.','']
     for (case,seed),entries in sorted(groups.items()):
-        fig,axes=plt.subplots(2,1,figsize=(10,7),sharex=True,layout='constrained');arrays={};checkpoint=set()
+        first_config=json.loads((entries[0][1]/'residual/declaration.json').read_text())['config']
+        timed=first_config.get('timed_reference') is not None
+        keys=['speed_error','lateral_error']+(['longitudinal_error','yaw_rate_error'] if timed else [])
+        labels=['True speed error [m/s]','Signed right error [m]']+(['Along-track error [m]','Yaw-rate error [rad/s]'] if timed else [])
+        fig,axes=plt.subplots(len(keys),1,figsize=(10,3.5*len(keys)),sharex=True,layout='constrained');arrays={};checkpoint=set()
         reference_config=None
         for i,(alpha,path) in enumerate(sorted(entries)):
             for policy in ['baseline','residual']:
@@ -263,19 +327,20 @@ def write_alpha_error_overview(root):
                 with np.load(p/'trace.npz') as data:t={k:data[k] for k in data.files}
                 sources[str(p.relative_to(root))]=hashlib.sha256((p/'trace.npz').read_bytes()).hexdigest()
                 if policy=='residual':checkpoint.add(json.loads((path.parent/'declaration.json').read_text())['checkpoint'])
-                x=t['time'][1:];values=[t['true_forward_speed'][1:]-t['motion_command'][:-1,1],t['path_features'][1:,0]]
+                x=t['time'][1:];values=[speed_error(t,cfg),t['path_features'][1:,0]]
+                if timed:values.extend([t['longitudinal_error'][1:],t['yaw_rate_error'][1:]])
                 label=f'{policy} alpha={alpha}';color='black' if policy=='baseline' else f'C{i}'
-                for ax,y,key in zip(axes,values,['speed_error','lateral_error']):
+                for ax,y,key in zip(axes,values,keys):
                     ax.plot(x,y,label=label,color=color,linestyle='--' if policy=='baseline' else '-',alpha=.65 if policy=='baseline' else 1)
                     if t['terminated'][-1]:ax.plot(x[-1],y[-1],'x',color=color)
                     arrays[f'{policy}_alpha_{alpha}_{key}']=y
                 arrays[f'{policy}_alpha_{alpha}_time']=x
                 if i==0 and policy=='residual' and np.any(t['event'][0,[2,3,5]]!=0):
-                    for ax in axes:ax.axvspan(cfg['disturbance_start'],cfg['disturbance_start']+cfg['disturbance_duration'],color='.5',alpha=.15)
+                    for ax in axes:ax.axvspan(t['event'][0,0]*cfg['controller']['dt'],t['event'][0,1]*cfg['controller']['dt'],color='.5',alpha=.15)
         if len(checkpoint)!=1:raise ValueError('mixed checkpoints in alpha overlay')
         title=f'{case} | seed={seed} | {Path(next(iter(checkpoint))).name}'
         fig.suptitle(title)
-        for ax,label in zip(axes,['True speed error [m/s]','Signed cross-track error [m]']):
+        for ax,label in zip(axes,labels):
             ax.axhline(0,color='.6',lw=.7);ax.set_ylabel(label);ax.grid(alpha=.2);ax.legend(fontsize=8)
         axes[-1].set_xlabel('Time [s]');name=f'{case}_seed_{seed}'
         for ext in ['png','pdf']:fig.savefig(out/f'{name}.{ext}',dpi=140)

@@ -35,7 +35,7 @@ def source_identity():
 
 def run(task_path,training_path,panel_path,output,*,resume=False):
     from .env import load_config
-    from .training import TrainingConfig
+    from .training import TrainingConfig,should_validate
     from .disturbance import plot_panel
     task_path,training_path,panel_path=map(Path,(task_path,training_path,panel_path))
     if resume:
@@ -51,6 +51,7 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
     cases=panel.get('cases',[])
     count=1+len(cases)+len(panel.get('steer_rate_pulses',[]))+len(panel.get('lateral_forces',[]))
     if cfg.reference_paths is not None:count*=len(cfg.reference_paths.cases)
+    if cfg.timed_reference is not None and panel.get("reference_cases"):count*=len(panel["reference_cases"])
     horizon=max(cfg.horizon_seconds,panel['start_seconds']+max([panel['duration_seconds']]+[c['duration'] for c in cases])+panel.get('minimum_post_event_seconds',0.))
     if cfg.tracking is not None and horizon>cfg.horizon_seconds+1e-7:
         raise ValueError('tracking panel cannot extend the fixed episode')
@@ -67,6 +68,13 @@ def run(task_path,training_path,panel_path,output,*,resume=False):
                  'standard_budget':len(alphas)*len(seeds)*count*2*math.ceil(horizon/cfg.controller.dt),
                  'media_selection':'first predeclared seed, all events, every declared alpha',
                  'role':'development; no holdout, energy saving or hardware claim'}
+    if cfg.tracking is not None:
+        development_cases=len(training.validation_events or ({},))*len(training.validation_seeds)*len(cfg.priority.validation_alphas)
+        if cfg.reference_paths is not None:development_cases*=len(cfg.reference_paths.cases)
+        per_validation=2*development_cases*math.ceil(cfg.horizon_seconds/cfg.controller.dt)
+        declaration.update(development_budget_upper_bound=per_validation*sum(should_validate(training,i) for i in range(1,training.updates+1)),
+                           initial_baseline_budget_upper_bound=per_validation,
+                           warmup_computed_budget=training.warmup_pool_size*training.warmup_steps)
     attempt=0
     if resume:
         original=json.loads((output/'declaration.json').read_text())

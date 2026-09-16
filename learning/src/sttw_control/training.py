@@ -164,6 +164,7 @@ def normalization(task):
     if task.observation.include_motion:scale += [2.,2.]
     if task.observation.include_priority:scale += [1.] + ([1.] if task.observation.include_attitude_risk else [])
     if task.observation.include_tracking:scale += [1.,1.,1.,task.tracking.return_seconds,task.tracking.hold_seconds,1.,1.,1.]
+    if task.observation.include_timed:scale += [1.,2.,2.]
     std=np.array(scale*task.observation.history_steps+[1.]*task.observation.history_steps,np.float32)
     return np.zeros_like(std),std
 

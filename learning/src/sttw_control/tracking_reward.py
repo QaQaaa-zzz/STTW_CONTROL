@@ -44,20 +44,42 @@ class TrackingConfig:
     final_heading_tolerance: float = .15
     final_roll_rate_tolerance: float = .3
     start_seconds: float = 1.
+    timed: bool = False
+    longitudinal_wide: float = .5
+    longitudinal_fine: float = .15
+    longitudinal_scale: float = .2
+    longitudinal_tight: float = .15
+    longitudinal_relaxed: float = .5
+    yaw_rate_wide: float = .4
+    yaw_rate_fine: float = .1
+    yaw_rate_scale: float = .2
+    yaw_rate_tight: float = .15
+    yaw_rate_relaxed: float = .4
+    final_longitudinal_tolerance: float = .15
+    final_yaw_rate_tolerance: float = .15
 
     def __post_init__(self):
         nonnegative = {'start_seconds', 'tail_rate', 'budget_rate', 'return_rate',
                        'return_bonus', 'action_weight', 'action_delta_weight'}
         for field in fields(self):
             value = getattr(self, field.name)
+            if field.name == 'timed':
+                if not isinstance(value, bool):
+                    raise ValueError('timed must be boolean')
+                continue
             if not math.isfinite(value) or (value < 0 if field.name in nonnegative else value <= 0):
                 raise ValueError(f'invalid tracking parameter {field.name}')
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
-        if self.speed_tight > self.speed_relaxed or self.lateral_tight > self.lateral_relaxed:
+        if any(tight > relaxed for tight, relaxed in (
+                (self.speed_tight, self.speed_relaxed), (self.lateral_tight, self.lateral_relaxed),
+                (self.longitudinal_tight, self.longitudinal_relaxed),
+                (self.yaw_rate_tight, self.yaw_rate_relaxed))):
             raise ValueError('tight tolerance must not exceed relaxed tolerance')
         if any(wide < fine for wide, fine in ((self.speed_wide, self.speed_fine),
-               (self.lateral_wide, self.lateral_fine), (self.heading_wide, self.heading_fine))):
+               (self.lateral_wide, self.lateral_fine), (self.heading_wide, self.heading_fine),
+               (self.longitudinal_wide, self.longitudinal_fine),
+               (self.yaw_rate_wide, self.yaw_rate_fine))):
             raise ValueError('wide tracking scale must not be narrower than fine scale')
 
 
@@ -102,17 +124,31 @@ def huber_tail(value, *, xp=jp):
     return xp.minimum(absolute, 1.) ** 2 + 2. * xp.maximum(absolute - 1., 0.)
 
 
-def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, config, *, xp=jp):
-    return ((xp.abs(roll) <= config.roll_working_limit)
+def timed_tolerances(alpha, config, *, xp=jp):
+    """Along-track position loosens and yaw-rate tightens toward command priority."""
+    alpha = xp.clip(xp.asarray(alpha), 0., 1.)
+    return (config.longitudinal_tight + alpha * (config.longitudinal_relaxed - config.longitudinal_tight),
+            config.yaw_rate_relaxed + alpha * (config.yaw_rate_tight - config.yaw_rate_relaxed))
+
+
+def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, config, *,
+                 longitudinal_error=None, yaw_rate_error=None, xp=jp):
+    final = ((xp.abs(roll) <= config.roll_working_limit)
             & (xp.abs(roll_rate) <= config.final_roll_rate_tolerance)
             & (xp.abs(speed_error) <= config.final_speed_tolerance)
             & (xp.abs(lateral_error) <= config.final_lateral_tolerance)
             & (xp.abs(heading_error) <= config.final_heading_tolerance))
+    if config.timed:
+        if longitudinal_error is None or yaw_rate_error is None:
+            raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
+        final = (final & (xp.abs(longitudinal_error) <= config.final_longitudinal_tolerance)
+                 & (xp.abs(yaw_rate_error) <= config.final_yaw_rate_tolerance))
+    return final
 
 
 def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_error,
                action, alpha, dt, alive_rate, failure_penalty, failed,
-               enabled, config, xp=jp):
+               enabled, config, longitudinal_error=None, yaw_rate_error=None, xp=jp):
     """One transition, using pre-action alpha and the resulting physical errors.
 
     The clock starts at observed departure, not an oracle disturbance-end label.
@@ -122,6 +158,8 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     for these tracking-state updates; wheel odometry alone is not ground truth.
     """
     c = config
+    if c.timed and (longitudinal_error is None or yaw_rate_error is None):
+        raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
     failed = xp.asarray(failed)
     action = xp.asarray(action)
     # Simulator invalid-state termination must still return a finite -penalty.
@@ -131,7 +169,12 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     alpha = xp.clip(xp.nan_to_num(xp.asarray(alpha), nan=.5), 0., 1.)
     wv, wp = preference_weights(alpha, c, xp=xp)
     bv, by = tolerances(alpha, c, xp=xp)
-    final = within_final(phi, rate, ev, ey, ep, c, xp=xp) & ~failed
+    ex, ew = (None, None)
+    if c.timed:
+        ex, ew = [xp.nan_to_num(xp.asarray(x), nan=0., posinf=0., neginf=0.)
+                  for x in (longitudinal_error, yaw_rate_error)]
+    final = within_final(phi, rate, ev, ey, ep, c, longitudinal_error=ex,
+                         yaw_rate_error=ew, xp=xp) & ~failed
     left = xp.asarray(enabled) & ~final & ~failed
     armed = (state.pending | left) & ~failed
     clock_on = xp.asarray(enabled) & ~failed
@@ -151,6 +194,11 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     speed_bonus = .5 * (xp.exp(-(ev / c.speed_wide) ** 2) + xp.exp(-(ev / c.speed_fine) ** 2))
     path_bonus = .5 * (xp.exp(-(ey / c.lateral_wide) ** 2 - (ep / c.heading_wide) ** 2)
                        + xp.exp(-(ey / c.lateral_fine) ** 2 - (ep / c.heading_fine) ** 2))
+    if c.timed:
+        path_bonus = .5 * (xp.exp(-(ex / c.longitudinal_wide) ** 2
+                                 - (ey / c.lateral_wide) ** 2 - (ep / c.heading_wide) ** 2)
+                           + xp.exp(-(ex / c.longitudinal_fine) ** 2
+                                    - (ey / c.lateral_fine) ** 2 - (ep / c.heading_fine) ** 2))
     rates = dict(
         alive=xp.asarray(alive_rate),
         speed_tracking=c.tracking_rate * wv * speed_bonus,
@@ -166,6 +214,23 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
         action_delta=-c.action_delta_weight * xp.sum((a - state.previous_action) ** 2, axis=-1),
         return_time=-c.return_rate * pending * clock_on * (1. + xp.minimum(elapsed / c.return_seconds, 1.)),
     )
+    if c.timed:
+        bx, bw = timed_tolerances(alpha, c, xp=xp)
+        rates['speed_tracking'] *= .5
+        rates['speed_tail'] *= .5
+        rates['speed_budget'] *= .5
+        rates['path_budget'] *= .5
+        rates['path_tail'] -= c.tail_rate * wp * huber_tail(ex / c.longitudinal_scale, xp=xp)
+        yaw_bonus = .5 * (xp.exp(-(ew / c.yaw_rate_wide) ** 2)
+                          + xp.exp(-(ew / c.yaw_rate_fine) ** 2))
+        rates.update(
+            yaw_rate_tracking=.5 * c.tracking_rate * wv * yaw_bonus,
+            yaw_rate_tail=-.5 * c.tail_rate * wv * huber_tail(ew / c.yaw_rate_scale, xp=xp),
+            yaw_rate_budget=-.5 * c.budget_rate * huber_tail(
+                xp.maximum(xp.abs(ew) - bw, 0.) / c.yaw_rate_scale, xp=xp),
+            longitudinal_budget=-.5 * c.budget_rate * huber_tail(
+                xp.maximum(xp.abs(ex) - bx, 0.) / c.longitudinal_scale, xp=xp),
+        )
     parts = {name: xp.where(failed, 0., dt * value) for name, value in rates.items()}
     parts['recovery'] = xp.where(failed, 0., c.return_bonus * earned)
     parts['failure'] = xp.where(failed, -failure_penalty, 0.)

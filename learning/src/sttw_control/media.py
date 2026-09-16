@@ -74,7 +74,12 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
     circle=CircleConfig(**config['circle']) if config.get('circle') else None
     fig,axes=plt.subplots(1,2,figsize=(12,5),layout='constrained')
     xy=trace['qpos'][:,:2]
-    if circle:
+    if config.get('timed_reference') is not None:
+        ref=trace['reference_pose'][:,:2]
+        axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,label='Independent timed reference')
+        error=trace['path_features'][:,0]
+        metrics={'right_error_rmse_m':float(np.sqrt(np.mean(error**2))),'right_error_peak_m':float(abs(error).max())}
+    elif circle:
         ref=circle_reference(circle)
         axes[0].plot(ref[:,0],ref[:,1],'--',color=orange,lw=2,label='Reference circle')
         error=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
@@ -113,7 +118,7 @@ def plot_states(trace,config,output,controller_label='ECBC + ESO baseline'):
     axes[1].axhline(0,color='#555555',lw=.8,ls='--')
     is_path=circle is not None or (config.get('steer_reference',0)==0 and config.get('steer_amplitude',0)==0)
     axes[1].set(xlabel='Simulation time [s]',ylabel=('Radial error [m], outward +' if circle else 'Lateral error [m], right +') if is_path else 'Steering error [deg]',title='Path tracking error' if is_path else 'Steering reference error')
-    if config.get('motion_commands') is not None:axes[1].set(ylabel='Yaw-rate error [rad/s]',title='Original command tracking error')
+    if config.get('motion_commands') is not None and config.get('timed_reference') is None:axes[1].set(ylabel='Yaw-rate error [rad/s]',title='Original command tracking error')
     fig.suptitle(f'{controller_label} | {t[-1]-t[0]:.1f} s',fontsize=14)
     fig.savefig(output/'trajectory.png');fig.savefig(output/'trajectory.pdf');plt.close(fig)
     fig,axes=plt.subplots(3,2,figsize=(12,10),sharex=True,layout='constrained')
@@ -187,6 +192,7 @@ def render_run(run_path,*,fps=30):
             from .path import BendConfig,bend_table
             ref=reference_table(config)[:,1:3]
         if config.get('figure_eight'):ref=eight_reference(FigureEightConfig(**config['figure_eight']),181)
+        if config.get('timed_reference') is not None:ref=trace['reference_pose'][:,:2]
         ref3=np.column_stack([ref,np.full(len(ref),.012)])
         model=bundle.model
         model.vis.global_.offwidth=640;model.vis.global_.offheight=640
@@ -279,7 +285,9 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     summaries=[json.loads((p/'summary.json').read_text()) for p in (baseline,candidate)]
     output.mkdir(parents=True,exist_ok=True)
     fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained')
-    if c.get('bend'):
+    if c.get('timed_reference') is not None:
+        ref=max(traces,key=lambda trace:len(trace['time']))['reference_pose'][:,:2]
+    elif c.get('bend'):
         from .path import BendConfig,bend_table,bend_trace_features
         bend=BendConfig(**c['bend']);ref=reference_table(c)[:,1:3]
     elif c.get('figure_eight'):ref=eight_reference(FigureEightConfig(**c['figure_eight']))
@@ -288,7 +296,8 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     for trace,label,color,ls,summary in zip(traces,['ECBC + ESO',candidate_label],['#24567a','#b45f24'],['-','--'],summaries):
         t=trace['time'];s=state_series(trace,c)
         xy=trace['qpos'][:,:2]
-        if c.get('bend'):radial=trace['path_features'][:,0] if c.get('reference_paths') else bend_trace_features(trace['pose'],bend)[:,0]
+        if c.get('timed_reference') is not None:radial=trace['path_features'][:,0]
+        elif c.get('bend'):radial=trace['path_features'][:,0] if c.get('reference_paths') else bend_trace_features(trace['pose'],bend)[:,0]
         elif c.get('figure_eight'):radial=eight_trace_features(trace['pose'],FigureEightConfig(**c['figure_eight']))[:,0]
         else:radial=np.linalg.norm(xy-np.array([circle.center_x,circle.center_y]),axis=1)-circle.radius
         rmse=float(np.sqrt(np.mean(radial**2)))
@@ -303,7 +312,10 @@ def compare_runs(baseline,candidate,output,*,candidate_label='Learned residual')
     for ax,title,ylabel in zip(axes.flat[1:],['Signed path error','Roll angle (left positive)','True longitudinal speed','Applied steering-rate command','Applied rear-wheel-rate command'],['m','deg','m/s','rad/s','rad/s']):
         ax.set(title=title,xlabel='Time (s)',ylabel=ylabel)
     axes[0,1].axhline(0,color='black',lw=.7)
-    axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
+    if c.get('timed_reference') is not None:
+        target=max(traces,key=lambda trace:len(trace['time']))
+        axes[1,0].plot(target['time'],target['reference_command'][:,0],color='black',ls=':',label='Reference')
+    else:axes[1,0].axhline(c['speed_reference'],color='black',ls=':',label='Reference')
     if c.get('disturbance_force',0.) or c.get('disturbance_steer_rate',0.) or c.get('disturbance_rear_torque',0.):
         for ax in axes.flat[1:]:
             ax.axvspan(c['disturbance_start'],c['disturbance_start']+c['disturbance_duration'],color='gray',alpha=.2)

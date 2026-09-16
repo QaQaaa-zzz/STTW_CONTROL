@@ -28,6 +28,9 @@ class State:
     priority_alpha: object
     tracking_state: object
     reward: object
+    reference_pose: object = None
+    reference_command: object = None
+    yaw_rate: object = None
 
 
 class Env:
@@ -35,6 +38,7 @@ class Env:
     bundle=SimpleNamespace(chassis=0)
     def __init__(self):
         self.config=SimpleNamespace(controller=SimpleNamespace(dt=.1),horizon_seconds=1.,
+            timed_reference=None,
             tracking=TrackingConfig(start_seconds=0.,hold_seconds=.2,return_seconds=.5),
             priority=SimpleNamespace(validation_alphas=(0.,.5,1.)))
     def reset(self,key):
@@ -86,3 +90,35 @@ def test_validator_refuses_to_extend_episode_to_hide_missing_return_window():
     cfg=SimpleNamespace(validation_seeds=(3,),validation_events=({'start':.7,'duration':.2,'force':1.},))
     with pytest.raises(ValueError,match='return window'):
         make_tracking_validator(Env(),Actor(),jp.ones(1),cfg)
+
+
+class TimedEnv(Env):
+    def __init__(self):
+        super().__init__()
+        self.config.timed_reference = object()
+        self.config.tracking = replace(self.config.tracking, timed=True)
+
+    def reset(self, key):
+        return super().reset(key).replace(reference_pose=jp.zeros(3),
+            reference_command=jp.array([2.1, 0.]), yaw_rate=jp.asarray(0.))
+
+    def step(self, s, action):
+        active = (s.event[2] != 0.) | (s.event[3] != 0.) | (s.event[5] != 0.)
+        error = jp.where(active, .3, .05)
+        tick = s.tick + 1
+        return s.replace(tick=tick, done=tick>=self.horizon,
+            pose=jp.array([error, 0., 0.]), yaw_rate=error)
+
+
+def test_timed_validator_reports_alpha_bounds_and_separate_nominal_statistics():
+    config = SimpleNamespace(validation_seeds=(3,),
+        validation_events=({'start': .1, 'duration': .2, 'force': 1.},))
+    result = make_tracking_validator(TimedEnv(), Actor(), jp.ones(1), config)({'actor': 0.})
+    np.testing.assert_allclose(result['longitudinal_rmse'], .3)
+    np.testing.assert_allclose(result['yaw_rate_rmse'], .3)
+    np.testing.assert_allclose(result['nominal_longitudinal_rmse'], .05)
+    np.testing.assert_allclose(result['nominal_yaw_rate_rmse'], .05)
+    np.testing.assert_allclose(result['longitudinal_tolerance_exceed_fraction'], [1., 0., 0.])
+    np.testing.assert_allclose(result['yaw_rate_tolerance_exceed_fraction'], [0., 1., 1.])
+    np.testing.assert_array_equal(result['nominal_longitudinal_tolerance_exceed_fraction'], 0.)
+    np.testing.assert_array_equal(result['nominal_yaw_rate_tolerance_exceed_fraction'], 0.)

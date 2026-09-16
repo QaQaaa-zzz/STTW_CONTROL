@@ -5,7 +5,7 @@ No horizon extension, post-failure zero padding, or yaw-rate-as-path criterion.
 import jax
 import jax.numpy as jp
 import numpy as np
-from .tracking_reward import tolerances
+from .tracking_reward import tolerances, timed_tolerances
 
 
 def make_tracking_validator(env, actor, scale, config):
@@ -50,18 +50,28 @@ def make_tracking_validator(env, actor, scale, config):
             active=~state.done
             action=actor.apply(params['actor'],state.obs/scale)
             nxt=step(state,jp.where(zero,jp.zeros_like(action),action))
-            features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id,nxt.path_progress)
+            if getattr(c,'timed_reference',None) is not None:
+                from .timed_reference import errors
+                timed_features=jax.vmap(errors)(nxt.pose,nxt.reference_pose,state.reference_command)
+                features=timed_features[:,:3]
+            else:features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id,nxt.path_progress)
             speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
-            ev=speed-(jax.vmap(env.speed_command)(state.tick) if bank is None else jax.vmap(env.speed_command)(state.tick,state.path_id))
+            ev=speed-(state.reference_command[:,0] if getattr(c,'timed_reference',None) is not None else (jax.vmap(env.speed_command)(state.tick) if bank is None else jax.vmap(env.speed_command)(state.tick,state.path_id)))
             bv,by=tolerances(state.priority_alpha,tc)
             mature=active & (state.tick*dt>=tc.start_seconds)
             row=(active,features[:,0]**2,ev**2,features[:,1]**2,nxt.reward,
                  jp.where(active,jp.abs(nxt.measurement[:,0]),0.),
                  mature,mature & (jp.abs(ev)>bv),mature & (jp.abs(features[:,0])>by),
                  jp.where(active[:n],jp.abs(features[:n,0]-features[n:,0]),0.))
+            if getattr(c,'timed_reference',None) is not None:
+                bx,bw=timed_tolerances(state.priority_alpha,tc)
+                yaw_error=nxt.yaw_rate-state.reference_command[:,1]
+                row=row+(timed_features[:,3]**2,yaw_error**2,
+                         mature & (jp.abs(timed_features[:,3])>bx),
+                         mature & (jp.abs(yaw_error)>bw))
             return nxt,row
         last,rows=jax.lax.scan(tick,state,None,length=env.horizon)
-        active,lateral,speed,heading,reward,roll,mature,speed_out,path_out,extra=rows
+        active,lateral,speed,heading,reward,roll,mature,speed_out,path_out,extra=rows[:10]
         count=jp.maximum(jp.sum(active,axis=0),1)
         mature_count=jp.maximum(jp.sum(mature,axis=0),1)
         def rmse(error):return jp.sqrt(jp.sum(jp.where(active,error,0.),axis=0)/count)
@@ -69,7 +79,13 @@ def make_tracking_validator(env, actor, scale, config):
         complete=((last.tick>=env.horizon)&~last.terminated&~rs.pending
                   &(rs.hold+1e-6>=tc.hold_seconds))
         qualified=complete&~rs.deadline_missed
-        return dict(return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
+        timed_metrics=({"longitudinal_rmse":rmse(rows[10])[:n],"nominal_longitudinal_rmse":rmse(rows[10])[n:],
+                       "yaw_rate_rmse":rmse(rows[11])[:n],"nominal_yaw_rate_rmse":rmse(rows[11])[n:],
+                       "longitudinal_tolerance_exceed_fraction":(jp.sum(rows[12],axis=0)/mature_count)[:n],
+                       "nominal_longitudinal_tolerance_exceed_fraction":(jp.sum(rows[12],axis=0)/mature_count)[n:],
+                       "yaw_rate_tolerance_exceed_fraction":(jp.sum(rows[13],axis=0)/mature_count)[:n],
+                       "nominal_yaw_rate_tolerance_exceed_fraction":(jp.sum(rows[13],axis=0)/mature_count)[n:]} if getattr(c,'timed_reference',None) is not None else {})
+        return dict(**timed_metrics,return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
                     return_pending=rs.pending[:n],return_hold_seconds=rs.hold[:n],
                     radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],
                     heading_rmse=rmse(heading)[:n],nominal_radial_rmse=rmse(lateral)[n:],

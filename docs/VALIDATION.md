@@ -1633,3 +1633,18 @@ TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配�
 真实GPU两轮短测runs/path_mlp128x3_validation_20260916/training已complete：32训练转移，含每轮开发验证、best索引、三层导出及曲线；只证明工程链路。第二组冻结配置对5个alpha×失败/非失败状态逐项核对，六项奖励恰为第一组3倍，其余分项和回归状态不变（atol1e-12）。两组正式训练尚待启动，不宣称效果改善。
 
 启动后状态：第一组runs/path_mlp128x3_20260916已进入training/initializing（PID233196）；监视器233197。第二组队列233198已启动，等待第一组全流水线成功；每组训练及流水线完成各自弹窗，失败停止。最终相关测试24 passed，GPU短测奖励重建最大3.72529e-9。尚无正式训练性能结果。
+
+## 2026-09-16 随机指令时间轨迹工程验证（正式训练前）
+
+旧几何A停止前已记录update35、3,440,640训练转移，保留36个checkpoint目录（第36轮可能验证未完成）；旧B队列未启动已取消。原状态保存在stop_record.json，没有裁剪旧实验或删除模型。
+
+新任务加入独立时间参考、沿程误差及yawrate跟踪；CPU/MJX共享参考更新与奖励。先以纯函数与环境测试验证随机采样、SE2积分、slew、reset、观测310维、旧checkpoint身份、奖励分项/最终保持，再执行真实链路。新增开发gate覆盖沿程/yawRMSE的nominal非回归及过程超带比例≤10%。
+证据根runs/timed_reference_validation_20260916：
+- cpu_nominal：10秒/2000转移完整，未物理失败，但末段联合保持和严格恢复未通过，不能称学会任务；奖励重建max1.13398e-7、参考独立积分max4.76837e-7。
+- training：GPU两轮32训练转移complete，三层128/310维，两个固定随机开发验证点；奖励重建max7.45058e-9。此后新增gate做最终短训复核，结果以training_verified为准。
+- standard_smoke：四个声明名称的短指令（工程缩短替身，不是完整标准成绩）×基线/残差共8条、每条.06秒，真实评估CLI、奖励重建与导出加载complete。
+- cpu_mjx_parity.json：相同seed、相同动作10步；参考max差5.82e-11，qpos4.20e-6，qvel3.68e-4，reward7.45e-7，仅短工程一致性。
+
+正式训练采用随机速度1.7–2.5m/s、yawrate±.6rad/s，slew .5m/s²/.6rad/s²。标准tight_turn及部分其他大yaw指令超出该阶段随机幅值范围，属于外推压力条件；不因失败改变物理或资格标准。尚无新策略恢复提升结论。
+
+最终复核：CPU全套311 passed、2 skipped；training_verified（新增开发gate后的代码）真实GPU两轮32训练步complete，新增along/yaw过程指标保存在每轮validation。正式pipeline567379已启动，monitor567380；初始化中，仍无正式效果结论。

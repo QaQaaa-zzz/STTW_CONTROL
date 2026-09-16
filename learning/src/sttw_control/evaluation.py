@@ -44,6 +44,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_disturbance_mode':env.config.rear_disturbance_mode,'rear_load_torque_nm':event[5] if env.config.rear_disturbance_mode=='torque' else 0.,'rear_command_bias_rad_s':-event[5] if env.config.rear_disturbance_mode=='command' else 0.,'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
         if env.config.motion_commands is not None:
             (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s','scheduled_alpha'],'schedule':np.asarray(state.command_schedule).tolist(),'reward_alignment':'transition i uses raw command and alpha at row i-1; yaw_rate is mean world heading rate over the control interval'},indent=2)+'\n')
+        if env.config.timed_reference is not None:
+            (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s'],'schedule':np.asarray(state.command_schedule).tolist(),'reference':'independent timed SE2 integration; pre-step command drives transition; no rebasing'},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -84,6 +86,14 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                 row['true_forward_speed']=float(jp.dot(s.data.qvel[:3],jp.asarray(s.data.xmat[env.bundle.chassis]).reshape(3,3)[:,0]))
                 row['return_state']=np.asarray(return_observation(s.tracking_state,env.config.tracking))
                 row.update({'reward_'+name:float(value) for name,value in s.tracking_components.items()})
+            if env.config.timed_reference is not None:
+                from .timed_reference import errors
+                feature=np.asarray(errors(s.pose,s.reference_pose,s.reference_command))
+                previous=frames[-1]['reference_command'] if frames else np.asarray(s.reference_command)
+                row.update(reference_pose=np.asarray(s.reference_pose).copy(),reference_command=np.asarray(s.reference_command).copy(),
+                    path_features=feature[:3],longitudinal_error=float(feature[3]),
+                    yaw_rate_error=float(s.yaw_rate-previous[1]),user_command=np.asarray(s.reference_command).copy(),
+                    motion_command=np.asarray(env.control_reference(s.pose,s.reference_pose,s.reference_command)))
             return row
         frames.append(capture(state,action))
         for _ in range(env.horizon):

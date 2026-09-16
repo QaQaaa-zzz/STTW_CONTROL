@@ -471,3 +471,15 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 工程证据：runs/path_mlp128x3_validation_20260916/training，真实GPU两轮32转移complete；CPU258 passed2 skipped，队列/流水线12 passed；奖励3倍逐项验证runs/path_mlp128x3_reward3_20260916_inputs/reward_scale_validation.json。正式结果入口预声明runs/path_mlp128x3_20260916与runs/path_mlp128x3_reward3_20260916，尚无性能结论。
 
 实时启动快照：A pipeline233196，监视233197；B队列233198，依赖A完整成功后执行。此处为启动快照，不能视作完成结果；任务成功与alpha取舍尚待完整评估。
+
+## 2026-09-16 从几何路径切换随机指令时间轨迹
+
+用户确认几何路径不能要求追回沿程进度，停止尚未完成的网络/奖励尺度几何对照。A已记录35轮3,440,640训练步，best停止快照update20；第36checkpoint目录保留但不当已完成评估。B未启动取消；因此不报告这两组的最终对照结论。停止原状态/信号身份见runs/path_mlp128x3_20260916_inputs/stop_record.json。
+
+新方法：独立积分平滑随机v/yawrate指令的时间位姿；命令(v/yaw)与位置(沿程/横向/航向)有限alpha取舍，同时保留ECBC/ESO、原物理和残差尺度。Actor/Critic128×128×128，310维历史观测；tracking_rate12/tail_rate.3/budget_rate6沿用3倍相关项，新增yaw与速度平分命令项，位置项联合沿/横/航向。初始位姿只reset锚定，不重定位；超时/最终共同门槛包含along/yaw。
+
+工程尝试已完成：10s CPU基线无摔倒但严格任务未通过；GPU两轮短链路、8条CPU标准短替身、10步CPU/MJX一致性。见runs/timed_reference_validation_20260916及docs/VALIDATION.md；这些不作为策略有效性证据。
+
+正式预声明：从零200×4096×24=19,660,800训练步，warmup89,600；每轮固定随机开发48001–48004、72回合，最多28,800,000开发步加初始基线144,000；标准seed49001、4参考×4设置×3alpha×配对方法=96回合192,000步。训练幅值v1.7–2.5、yaw±.6，三次随机切换后保持至10s；标准同slew积分，部分大yaw为分布外压力测试。标准不参与这次best选择，但已用于历史项目开发，不能称全新独立holdout。输出预声明runs/timed_random_rsl_4096_20260916；预算完成停止，无自动续训。
+
+启动快照：新时间轨迹pipeline567379、监视567380，已进入initializing；旧两组不会自动继续。最终工程全套311 passed2 skipped、gate接线后二轮GPU短测complete。每轮best为开发随机集奖励排序，不代表满足全部任务门槛。

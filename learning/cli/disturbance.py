@@ -51,6 +51,14 @@ def run(task_path,panel_path,training_run,checkpoint,output,seed=None,priority_a
                 scenarios.append((label,replace(c,reference_paths=replace(c.reference_paths,selected=i))))
                 nominal_names[label]=reference['name']+'__nominal'
         identity['evaluation_overrides']+='; explicitly selected member of frozen reference bank'
+    if cfg.timed_reference is not None and panel.get('reference_cases'):
+        original=scenarios;scenarios=[];nominal_names={}
+        for reference in panel['reference_cases']:
+            for name,c in original:
+                label=reference['name']+'__'+name
+                scenarios.append((label,replace(c,timed_reference=replace(c.timed_reference,fixed=reference['commands']))))
+                nominal_names[label]=reference['name']+'__nominal'
+        identity['evaluation_overrides']+='; declared standard timed command schedules, same slew and independent integration'
     (output/'declaration.json').write_text(json.dumps({'panel':panel,'checkpoint':str(checkpoint),'policy':identity,'scenarios':{k:asdict(c) for k,c in scenarios},'priority_alpha_override':priority_alpha,'scope':'frozen policy engineering panel; task and checkpoint training provenance recorded explicitly'},indent=2)+'\n')
     rows=[];nom={}
     for name,c in scenarios:

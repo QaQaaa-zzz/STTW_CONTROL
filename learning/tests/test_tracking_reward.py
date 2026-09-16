@@ -163,3 +163,98 @@ def test_float32_deadline_matches_numpy_at_exact_control_tick():
     for i in range(602):
         state,_=tick(state,lateral_error=.3)
         assert bool(state.deadline_missed)==bool(missed[i])
+
+
+def timed_tick(**kwargs):
+    values = dict(config=TrackingConfig(timed=True), longitudinal_error=0., yaw_rate_error=0.)
+    values.update(kwargs)
+    return tick(**values)
+
+
+@pytest.mark.parametrize('alpha', [0., .5, 1.])
+def test_timed_longitudinal_lag_is_penalized_and_blocks_final(alpha):
+    _, ideal = timed_tick(alpha=alpha)
+    state, lag = timed_tick(alpha=alpha, longitudinal_error=-.6)
+    assert state.pending and state.ever_left and state.hold == 0
+    assert lag['path_tracking'] < ideal['path_tracking']
+    assert lag['path_tail'] < 0 and lag['longitudinal_budget'] < 0
+    assert not within_final(0., 0., 0., 0., 0., TrackingConfig(timed=True),
+                            longitudinal_error=-.6, yaw_rate_error=0., xp=np)
+    assert sum(ideal.values()) == pytest.approx(.025)
+
+
+def test_timed_yaw_rate_error_penalized_with_finite_alpha_tradeoff():
+    from sttw_control.tracking_reward import timed_tolerances
+    _, ideal = timed_tick()
+    _, low = timed_tick(alpha=0., yaw_rate_error=.6, longitudinal_error=.6)
+    _, high = timed_tick(alpha=1., yaw_rate_error=.6, longitudinal_error=.6)
+    assert 0 < low['yaw_rate_tracking'] < ideal['yaw_rate_tracking']
+    assert high['yaw_rate_tail'] < low['yaw_rate_tail'] < 0
+    assert low['path_tail'] < high['path_tail'] < 0
+    assert high['yaw_rate_budget'] < low['yaw_rate_budget'] < 0
+    assert low['longitudinal_budget'] < high['longitudinal_budget'] < 0
+    np.testing.assert_allclose(timed_tolerances(0., TrackingConfig(timed=True), xp=np), [.15, .4])
+    np.testing.assert_allclose(timed_tolerances(1., TrackingConfig(timed=True), xp=np), [.5, .15])
+
+
+def test_timed_errors_required_but_legacy_ignores_optional_errors():
+    config = TrackingConfig(timed=True)
+    with pytest.raises(ValueError, match='longitudinal_error.*yaw_rate_error'):
+        tick(config=config)
+    with pytest.raises(ValueError):
+        within_final(0., 0., 0., 0., 0., config, xp=np)
+    _, legacy = tick()
+    _, extras = tick(longitudinal_error=10., yaw_rate_error=10.)
+    assert legacy.keys() == extras.keys()
+    for key in legacy:
+        np.testing.assert_array_equal(legacy[key], extras[key])
+
+
+@pytest.mark.parametrize('failed', [False, True])
+def test_timed_numpy_jax_parity_and_failure_replacement(failed):
+    values = dict(longitudinal_error=-.3, yaw_rate_error=.4, speed_error=.2,
+                  lateral_error=.1, heading_error=.05, failed=failed)
+    state, parts = timed_tick(**values)
+    jstate, jparts = jax.jit(lambda: timed_tick(xp=jp, **values))()
+    for lhs, rhs in zip(jax.tree.leaves(state), jax.tree.leaves(jstate)):
+        np.testing.assert_allclose(lhs, rhs, rtol=1e-5, atol=1e-7)
+    for key in parts:
+        np.testing.assert_allclose(parts[key], jparts[key], rtol=1e-5, atol=1e-7)
+    if failed:
+        assert sum(parts.values()) == -100.
+        assert all(value == 0 for key, value in parts.items() if key != 'failure')
+
+
+@pytest.mark.parametrize('change', [{'longitudinal_wide': .01}, {'yaw_rate_wide': .01},
+    {'longitudinal_relaxed': .01}, {'yaw_rate_relaxed': .01}, {'timed': 1}])
+def test_timed_invalid_parameters_rejected(change):
+    with pytest.raises(ValueError):
+        replace(TrackingConfig(), **change)
+
+
+@pytest.mark.parametrize('alpha', [0., .5, 1.])
+def test_timed_yaw_departure_requires_continuous_common_final_hold(alpha):
+    state, _ = timed_tick(alpha=alpha, yaw_rate_error=.2)
+    assert state.pending and state.ever_left and state.hold == 0
+    for _ in range(99):
+        state, parts = timed_tick(state=state, alpha=alpha)
+    assert parts['recovery'] == 0
+    state, _ = timed_tick(state=state, alpha=alpha, longitudinal_error=.2)
+    assert state.hold == 0
+    for _ in range(100):
+        state, parts = timed_tick(state=state, alpha=alpha)
+    assert parts['recovery'] == 2. and state.credited and not state.pending
+
+
+def test_timed_batched_jax_handles_failed_nonfinite_errors():
+    def run(alpha, failed, longitudinal, yaw_rate):
+        return timed_tick(xp=jp, alpha=alpha, failed=failed,
+                          longitudinal_error=longitudinal, yaw_rate_error=yaw_rate)
+    states, parts = jax.jit(jax.vmap(run))(
+        jp.array([0., .5, 1.]), jp.array([False, False, True]),
+        jp.array([-.3, .3, jp.nan]), jp.array([.4, -.4, jp.inf]))
+    assert parts['yaw_rate_tracking'].shape == (3,)
+    assert all(np.isfinite(np.asarray(value)).all() for value in parts.values())
+    assert sum(value[2] for value in parts.values()) == -100.
+    assert not states.pending[2]
+    assert np.isfinite(jax.grad(lambda alpha: sum(run(alpha, False, .3, .2)[1].values()))(.5))

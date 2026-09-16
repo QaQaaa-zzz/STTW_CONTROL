@@ -25,6 +25,7 @@ from .events import RandomEvents,sample_event,profile
 from .priority import PriorityConfig,priority_weights
 from .action_mapping import MappingConfig,map_action
 from .motion_commands import MotionCommands
+from .timed_reference import TimedReferenceConfig
 from .tracking_reward import TrackingConfig, initial_return, return_observation
 from .tracking_reward import transition as tracking_transition
 
@@ -38,6 +39,7 @@ class TaskConfig:
     motion_commands: MotionCommands | None=None
     tracking: TrackingConfig | None=None
     reference_paths: ReferencePaths | None=None
+    timed_reference: TimedReferenceConfig | None=None
     bend: BendConfig | None=None
     rear_disturbance_mode: str="torque"  # event[5]: signed Nm or signed rad/s bias magnitude; positive opposes forward motion
     disturbance_rear_torque: float=0.
@@ -71,6 +73,15 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
+        if (self.timed_reference is not None)!=self.observation.include_timed:raise ValueError("timed reference and observation must agree")
+        if self.timed_reference is not None:
+            if self.tracking is None or not self.tracking.timed or any(x is not None for x in (self.reference_paths,self.bend,self.circle,self.figure_eight,self.speed_schedule,self.motion_commands)):raise ValueError("timed tracking needs its own independent reference")
+            tr=self.timed_reference
+            if tr.speed_max>.1*self.actuator.rear_rate_limit or tr.max_steer>self.actuator.steer_limit:raise ValueError("timed reference exceeds actuator contract")
+            if tr.fixed is not None:
+                if not math.isclose(tr.fixed[0][1],self.speed_reference) or tr.fixed[0][2]!=0 or any(row[0]>=self.horizon_seconds or row[1]>.1*self.actuator.rear_rate_limit for row in tr.fixed):raise ValueError("invalid timed fixed initial/time/speed contract")
+            elif tr.switch_windows and tr.switch_windows[-1][1]>=self.horizon_seconds:raise ValueError("timed switches must fit horizon")
+        elif self.tracking is not None and self.tracking.timed:raise ValueError("timed reward requires timed reference")
         if self.reference_paths is not None:
             if self.tracking is None or self.bend is None or self.speed_schedule is not None:
                 raise ValueError('reference bank needs geometry tracking and lookahead settings, without a second speed schedule')
@@ -140,7 +151,7 @@ class TaskConfig:
             raise ValueError('choose one reference path')
         if self.figure_eight is not None and self.figure_eight.max_steer>self.actuator.steer_limit:
             raise ValueError('figure eight steer bound exceeds actuator limit')
-        if self.observation.include_path and self.circle is None and self.figure_eight is None and self.bend is None:
+        if self.observation.include_path and self.circle is None and self.figure_eight is None and self.bend is None and self.timed_reference is None:
             raise ValueError("path observations require a reference path")
         if self.disturbance_waveform not in ("constant","half_sine"):
             raise ValueError("invalid event waveform")
@@ -174,7 +185,7 @@ def load_config(path):
 
 def config_from_dict(raw):
     raw=dict(raw)
-    for name,cls in [('reference_paths',ReferencePaths),('tracking',TrackingConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
+    for name,cls in [('timed_reference',TimedReferenceConfig),('reference_paths',ReferencePaths),('tracking',TrackingConfig),('motion_commands',MotionCommands),('bend',BendConfig),('controller',ControllerConfig),('actuator',ActuatorConfig),('observation',ObservationConfig),('recovery',RecoveryConfig),('circle',CircleConfig),('figure_eight',FigureEightConfig),('priority',PriorityConfig),('random_events',RandomEvents),('action_mapping',MappingConfig)]:
         if name in raw and raw[name] is not None: raw[name]=cls(**raw[name])
     return TaskConfig(**raw)
 
@@ -206,6 +217,8 @@ class EnvState:
     tracking_components: object=None
     path_id: object=0
     path_progress: object=0.
+    reference_pose: object=None
+    reference_command: object=None
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -217,6 +230,9 @@ class RecoveryEnv:
     action_size=2
 
     def __new__(cls,config=TaskConfig(),**kwargs):
+        if cls is RecoveryEnv and config.timed_reference is not None:
+            from .timed_env import TimedRecoveryEnv
+            return object.__new__(TimedRecoveryEnv)
         if cls is RecoveryEnv and config.motion_commands is not None:
             from .command_env import CommandRecoveryEnv
             return object.__new__(CommandRecoveryEnv)
@@ -340,7 +356,7 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None,path_features_override=None,timed_frame=None):
         c=self.config
         command=(self.command(tick,pose,path_id=path_id,path_progress=path_progress) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
@@ -350,7 +366,7 @@ class RecoveryEnv:
         visible_base=composition_base(jp.array([out.steer_rate,command[1]/.1]),c.actuator)
         frame=make_frame(measurement,command,learning_reference,visible_base[0],actuator.previous,out.disturbance)
         if c.observation.include_path:
-            frame=jp.concatenate([frame,self.path_features(pose,path_id,path_progress)])
+            frame=jp.concatenate([frame,self.path_features(pose,path_id,path_progress) if path_features_override is None else path_features_override])
         if c.observation.include_motion:
             frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
         if c.priority is not None:
@@ -358,6 +374,7 @@ class RecoveryEnv:
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
         if c.tracking is not None:
             frame=jp.concatenate([frame,return_observation(initial_return() if tracking_state is None else tracking_state,c.tracking)])
+        if c.observation.include_timed:frame=jp.concatenate([frame,jp.zeros(3) if timed_frame is None else timed_frame])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),learning_reference
 
@@ -397,7 +414,7 @@ class RecoveryEnv:
             _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
                 lateral_error=0.,heading_error=0.,action=jp.zeros(2),alpha=alpha,dt=c.controller.dt,
                 alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,failed=False,
-                enabled=False,config=c.tracking)
+                enabled=False,config=c.tracking,**({"longitudinal_error":0.,"yaw_rate_error":0.} if c.tracking.timed else {}))
             state=state.replace(tracking_state=tracking_state,
                                 tracking_components=jax.tree.map(jp.zeros_like,components))
         return state

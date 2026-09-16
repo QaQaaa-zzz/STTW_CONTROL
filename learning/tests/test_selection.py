@@ -142,3 +142,41 @@ def test_every_update_best_selection_overrides_sparse_schedule():
     assert all(should_validate(c,i) for i in range(1,11))
     assert not should_plot(c,2)
     assert should_plot(c,10)
+
+
+def timed_tracking_row():
+    return dict(radial_rmse=[.01], speed_rmse=[.01], heading_rmse=[.01],
+        nominal_radial_rmse=[.01], nominal_speed_rmse=[.01], nominal_heading_rmse=[.01],
+        episode_return=[10.], speed_tolerance_exceed_fraction=[0.], path_tolerance_exceed_fraction=[0.],
+        failed=[False], nominal_failed=[False], terminal_tracking_hold=[True],
+        nominal_terminal_tracking_hold=[True], return_deadline_missed=[False],
+        nominal_return_deadline_missed=[False], longitudinal_rmse=[.01], yaw_rate_rmse=[.01],
+        nominal_longitudinal_rmse=[.01], nominal_yaw_rate_rmse=[.01],
+        longitudinal_tolerance_exceed_fraction=[0.], yaw_rate_tolerance_exceed_fraction=[0.],
+        nominal_longitudinal_tolerance_exceed_fraction=[0.], nominal_yaw_rate_tolerance_exceed_fraction=[0.])
+
+
+def test_timed_acceptance_rejects_new_axis_nonfinite_regression_and_excess_duration():
+    from sttw_control.selection import rank_tracking_candidate
+    base = timed_tracking_row()
+    assert rank_tracking_candidate(base, base)[0] is not None
+    for key in ('longitudinal_rmse', 'yaw_rate_rmse', 'nominal_longitudinal_rmse',
+                'nominal_yaw_rate_rmse', 'longitudinal_tolerance_exceed_fraction',
+                'yaw_rate_tolerance_exceed_fraction', 'nominal_longitudinal_tolerance_exceed_fraction',
+                'nominal_yaw_rate_tolerance_exceed_fraction'):
+        candidate = dict(base, **{key: [float('nan')]})
+        assert rank_tracking_candidate(candidate, base)[0] is None, key
+    for key in ('nominal_longitudinal_rmse', 'nominal_yaw_rate_rmse'):
+        assert rank_tracking_candidate(dict(base, **{key: [.2]}), base)[0] is None, key
+    for key in ('longitudinal_tolerance_exceed_fraction', 'yaw_rate_tolerance_exceed_fraction',
+                'nominal_longitudinal_tolerance_exceed_fraction', 'nominal_yaw_rate_tolerance_exceed_fraction'):
+        assert rank_tracking_candidate(dict(base, **{key: [.11]}), base)[0] is None, key
+        assert rank_tracking_candidate(dict(base, **{key: [.1]}), base)[0] is not None, key
+
+
+def test_timed_acceptance_rejects_partial_timed_metrics():
+    from sttw_control.selection import rank_tracking_candidate
+    base = timed_tracking_row()
+    candidate = dict(base)
+    del candidate['yaw_rate_tolerance_exceed_fraction']
+    assert rank_tracking_candidate(candidate, base)[0] is None
