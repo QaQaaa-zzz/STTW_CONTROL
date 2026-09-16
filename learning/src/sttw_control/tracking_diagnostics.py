@@ -497,7 +497,7 @@ def rescore_trace(data, alpha):
             'scoring_alpha':float(alpha),'scoring_scope':'frozen physical trace counterfactual reward replay'}
 
 
-def review_checkpoint(training_run, panel_path, output, *, checkpoint=None):
+def review_checkpoint(training_run, panel_path, output, *, checkpoint=None, selection=None, compact=False):
     """Explicit post-training review; no retraining, no automatic extra scenarios.
 
     One baseline physical run per scenario is reused with counterfactual reward
@@ -514,7 +514,20 @@ def review_checkpoint(training_run, panel_path, output, *, checkpoint=None):
     source=json.loads((training_run/'declaration.json').read_text())
     status=json.loads((training_run/'status.json').read_text())
     if not status.get('complete'):raise ValueError('finish the declared training stage before review')
-    selected=checkpoint or status.get('best_reward_checkpoint')
+    selection_meta=None
+    if selection is not None:
+        if checkpoint is not None:raise ValueError('use selection OR explicit checkpoint, not both')
+        selection_meta=json.loads(Path(selection).read_text())
+        if (selection_meta.get('schema')!='sttw_fixed_checkpoint_comparison_v1'
+                or not selection_meta.get('complete')
+                or selection_meta.get('training_declaration_sha256')!=hashlib.sha256((training_run/'declaration.json').read_bytes()).hexdigest()):
+            raise ValueError('incomplete or mismatched fixed checkpoint selection')
+        selected=selection_meta.get('selected_checkpoint')
+        entry=next((e for e in selection_meta.get('candidates',[]) if e.get('checkpoint')==selected),None)
+        if not entry or hashlib.sha256((Path(selected)/'actor.msgpack').read_bytes()).hexdigest()!=entry.get('actor_sha256'):
+            raise ValueError('selected Actor changed after comparison')
+    else:
+        selected=checkpoint or status.get('best_reward_checkpoint')
     if not selected:raise ValueError('no scored best checkpoint; specify --checkpoint explicitly')
     checkpoint=Path(selected).resolve()
     cfg=config_from_dict(source['task']);panel=json.loads(Path(panel_path).read_text())
@@ -538,13 +551,14 @@ def review_checkpoint(training_run, panel_path, output, *, checkpoint=None):
     output.mkdir(parents=True,exist_ok=False)
     declaration={'training_run':str(training_run),'checkpoint':str(checkpoint),'panel':panel,
         'source_task':source['task'],'residual_episodes':len(cases)*len(alphas),'baseline_physical_episodes':len(cases),
-        'selection':'explicit checkpoint or training-sampled reward best; not certified successful',
+        'selection':('fixed completed-episode candidate subset' if selection_meta else 'explicit checkpoint or training-sampled reward best; not certified successful'),
+        'fixed_selection_development_gates_passed':selection_meta.get('development_gates_passed') if selection_meta else None,
         'baseline_reuse':'same physical trace; reward is replayed at each scoring alpha',
         'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}}
     (output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
     def progress(phase,**kwargs):(output/'status.json').write_text(json.dumps({'phase':phase,**kwargs},indent=2)+'\n')
     rows=[];cross=[];index=['# Geometric speed/path reward review','',
-        'Training reward selects the checkpoint; physical failure, deadline and final hold determine task qualification.',
+        'Selection provenance is in declaration.json; physical failure, deadline and final hold determine task qualification.',
         'Cross-score maxima need not lie on the diagonal. Shared good trajectories are valid at every alpha.','']
     try:
         for case,c in zip(cases,configs):
@@ -599,17 +613,63 @@ def review_checkpoint(training_run, panel_path, output, *, checkpoint=None):
         for name in ('declaration.json','status.json','best_model.json','metrics.jsonl','setup_timings.json'):
             p=training_run/name
             if p.exists():shutil.copy2(p,evidence/name)
+        if selection_meta is not None:(evidence/'fixed_selection.json').write_text(json.dumps(selection_meta,indent=2)+'\n')
         for name in ('actor.msgpack','identity.json','training.json'):
             p=checkpoint/name
             if p.exists():shutil.copy2(p,evidence/('selected_'+name))
         index.extend(['','- [All metrics](summary.json)','- [Counterfactual cross scores](cross_scores.csv)'])
         (output/'INDEX.md').write_text('\n'.join(index)+'\n')
         progress('complete',complete=True,residual_episodes=len(cases)*len(alphas),baseline_physical_episodes=len(cases))
-        archive=output.with_suffix('.zip')
-        with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
-            for p in sorted(output.rglob('*')):
-                if p.is_file():z.write(p,p.relative_to(output.parent))
-        print(json.dumps({'review':str(output),'archive':str(archive),'complete':True}),flush=True)
+        if compact:
+            archive=compact_review_archive(output,training_run=training_run)
+        else:
+            archive=output.with_suffix('.zip')
+            with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
+                for p in sorted(output.rglob('*')):
+                    if p.is_file():z.write(p,p.relative_to(output.parent))
+        print(json.dumps({'review':str(output),'archive':str(archive),'archive_bytes':archive.stat().st_size,'complete':True}),flush=True)
         return rows
     except Exception as exc:
         progress('error',complete=False,error=repr(exc));raise
+
+
+def compact_review_archive(output,*,training_run=None):
+    """Small transfer bundle, full local evidence untouched; no temporal thinning.
+
+    Numeric traces retain each actual control step and the fields required for
+    reward/reference analysis. High-dimensional Actor observations, full qpos/
+    qvel and detailed actuator/force tensors are intentionally excluded. Named
+    trace_compact.npz, never masquerading as the original trace.npz.
+    """
+    import io,zipfile
+    output=Path(output).resolve();archive=output.with_name(output.name+'_compact.zip')
+    excluded={'observation','qpos','qvel','actuator_force','generalized_actuator_force',
+              'actuator_velocity','actuator_ctrl','applied_generalized_force','applied_wrench'}
+    manifest={'scope':'partial transfer package; full local raw traces unchanged; all actual timesteps retained',
+              'excluded_trace_fields':sorted(excluded),'traces':[],'not_included':'per-alpha PDF/PNG duplicates, optimizer snapshots, full Actor input histories'}
+    with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
+        for name in ('summary.json','cross_scores.csv','declaration.json','status.json'):
+            p=output/name
+            if p.exists():z.write(p,name)
+        for p in sorted((output/'training_evidence').glob('*')):
+            if p.is_file():z.write(p,'training_evidence/'+p.name)
+        for p in sorted(output.glob('*/alpha_trajectories.png')):z.write(p,str(p.relative_to(output)))
+        for p in sorted(output.glob('*/*/trace.npz')):
+            relative=p.parent.relative_to(output)
+            with np.load(p,allow_pickle=False) as original:
+                data={k:original[k] for k in original.files if k not in excluded}
+            buffer=io.BytesIO();np.savez_compressed(buffer,**data)
+            z.writestr(str(relative/'trace_compact.npz'),buffer.getvalue())
+            manifest['traces'].append({'path':str(relative),'full_trace_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+                                       'samples':len(data['time']),'included_fields':sorted(data)})
+            for name in ('declaration.json','commands.json','event.json','summary.json'):
+                q=p.parent/name
+                if q.exists():z.write(q,str(relative/name))
+        if training_run is not None:
+            for p in sorted((Path(training_run)/'tensorboard').glob('events.out.tfevents.*')):
+                z.write(p,'training_evidence/tensorboard/'+p.name)
+        z.writestr('compact_manifest.json',json.dumps(manifest,indent=2)+'\n')
+        z.writestr('README.txt','Compact transfer: summary/cross-score tables, selected Actor, training evidence and all-step numeric traces.\n'
+            'trace_compact.npz intentionally excludes observation/qpos/qvel/force tensors; full traces remain on the training computer.\n'
+            'No reward, failure endpoint, timestep, or score is changed to make this archive smaller.\n')
+    return archive

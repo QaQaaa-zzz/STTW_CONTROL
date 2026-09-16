@@ -10,5 +10,7 @@ if __name__ == '__main__':
     p.add_argument('--panel',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--checkpoint',type=Path)
+    p.add_argument('--selection',type=Path,help='selection.json from explicit fixed checkpoint comparison')
+    p.add_argument('--compact',action='store_true',help='Transfer summary, events and all-step reduced traces; retain full evidence locally')
     a=p.parse_args()
-    review_checkpoint(a.training_run,a.panel,a.output,checkpoint=a.checkpoint)
+    review_checkpoint(a.training_run,a.panel,a.output,checkpoint=a.checkpoint,selection=a.selection,compact=a.compact)

@@ -9,6 +9,8 @@ import importlib.metadata
 import json
 import time
 import hashlib
+import copy
+import math
 import numpy as np
 import jax
 import jax.numpy as jp
@@ -33,7 +35,7 @@ def bootstrap_timeout(rewards,next_values,truncated,terminated,gamma):
     return rewards+gamma*next_values.reshape_as(rewards)*(truncated & ~terminated).to(rewards.dtype)
 
 
-def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=.9995,lam=.99,clip=.2,entropy=.001,std=.15,kl=.01,activation="leaky_relu",hidden_sizes=(256,128)):
+def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=.9995,lam=.99,clip=.2,entropy=.001,std=.15,kl=.01,activation="leaky_relu",hidden_sizes=(256,128),schedule="auto"):
     if importlib.metadata.version('rsl-rl-lib')!=RSL_VERSION:
         raise RuntimeError(f'This adapter requires rsl-rl-lib=={RSL_VERSION}')
     policy=ActorCritic(obs,{'policy':['policy'],'critic':['policy']},2,
@@ -42,10 +44,12 @@ def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=
     linear=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)][-1]
     torch.nn.init.zeros_(linear.weight);torch.nn.init.zeros_(linear.bias)
     storage=RolloutStorage('rl',obs.batch_size[0],steps,obs,[2],device=device)
+    if schedule not in ('auto','fixed','adaptive'):raise ValueError('invalid RSL schedule')
+    chosen_schedule=('adaptive' if kl else 'fixed') if schedule=='auto' else schedule
     return PPO(policy,storage,num_learning_epochs=epochs,num_mini_batches=minibatches,
         clip_param=clip,gamma=gamma,lam=lam,value_loss_coef=.5,entropy_coef=entropy,
         learning_rate=learning_rate,max_grad_norm=.5,use_clipped_value_loss=False,
-        schedule='adaptive' if kl else 'fixed',desired_kl=kl,device=device)
+        schedule=chosen_schedule,desired_kl=kl,device=device)
 
 
 def export_actor(policy):
@@ -59,6 +63,50 @@ def export_actor(policy):
 def restore_cuda_rng(states):
     """torch.load(map_location=cuda) also moves RNG bytes; CUDA expects CPU bytes."""
     torch.cuda.set_rng_state_all([state.cpu() for state in states])
+
+
+
+def guarded_update(algo, limit=None):
+    """Audit exact Gaussian KL on ALL sampled observations; optionally rollback.
+
+    The snapshot includes optimizer moments, not just weights. Candidate losses
+    are diagnostic when rejected. This bounds a sampled mean policy change, NOT
+    physical risk or a guarantee for unobserved states. RSL still computes PPO/GAE.
+    """
+    if limit is not None and (not math.isfinite(limit) or limit<=0):
+        raise ValueError('invalid update KL limit')
+    snapshot=(copy.deepcopy(algo.policy.state_dict()),copy.deepcopy(algo.optimizer.state_dict()),
+              algo.learning_rate) if limit is not None else None
+    metrics=algo.update()
+    with torch.no_grad():
+        algo.policy.log_std.clamp_(-4.,0.)
+        stored=algo.storage.observations.flatten(0,1)
+        old_mu=algo.storage.mu.flatten(0,1);old_sigma=algo.storage.sigma.flatten(0,1)
+        # Deterministic distribution evaluation: diagnostics do not consume noise RNG.
+        new_mu=algo.policy.act_inference(stored)
+        new_sigma=algo.policy.log_std.exp().expand_as(new_mu)
+        kl_rows=torch.sum(torch.log(new_sigma/old_sigma)+(old_sigma**2+(old_mu-new_mu)**2)/(2*new_sigma**2)-.5,dim=-1)
+        kl=float(kl_rows.mean());tail=float(torch.quantile(kl_rows,.95))
+        finite=math.isfinite(kl) and all(math.isfinite(float(v)) for v in metrics.values())
+        finite=finite and all(bool(torch.isfinite(p).all()) for p in algo.policy.parameters())
+    reject=not finite or (limit is not None and kl>limit)
+    if reject and snapshot is None:
+        raise RuntimeError('nonfinite RSL update; no finite checkpoint published')
+    if reject:
+        algo.policy.load_state_dict(snapshot[0]);algo.optimizer.load_state_dict(snapshot[1]);algo.learning_rate=snapshot[2]
+    def safe(x):return float(x) if math.isfinite(float(x)) else None
+    audit={'candidate_exact_kl':safe(kl),'candidate_kl_p95':safe(tail),
+           'final_exact_kl':0. if reject else float(kl),
+           'full_update_rolled_back':bool(reject),'kl_limit':limit,
+           'learning_rate_schedule':algo.schedule,'candidate_nonfinite':not finite}
+    with torch.no_grad():
+        mu=algo.policy.act_inference(stored)
+        mean_action=torch.tanh(mu)
+        audit.update(mean_action_abs=float(mean_action.abs().mean()),
+                     mean_action_saturation_fraction=float((mean_action.abs()>.95).float().mean()),
+                     steer_latent_std=float(algo.policy.log_std[0].exp()),
+                     rear_latent_std=float(algo.policy.log_std[1].exp()))
+    return {k:safe(v) for k,v in metrics.items()},audit
 
 
 def train(task_path,output,c):
@@ -89,7 +137,8 @@ def train(task_path,output,c):
             'rsl_version':RSL_VERSION,'torch_version':torch.__version__,'device':device,
             'action_contract':'RSL stores pre-tanh Gaussian samples; physics receives tanh(sample); entropy is latent',
             'timeout_contract':'gamma*V(final_next_obs) added only on truncation; RSL time_outs shortcut disabled',
-            'kl_contract':'Upstream adaptive learning rate, NOT JAX candidate rejection/rollback',
+            'kl_contract':{'schedule':c.rsl_schedule,'whole_update_exact_kl_limit':c.rsl_kl_limit,
+                           'scope':'RSL PPO with optional full-batch mean Gaussian KL rollback; not safety certification'},
             'resume_contract':'optimizer/policy/RNG restored; fresh physics and truthful phase warmup',
             'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}}
         write('declaration.json',declaration);write('status.json',{'phase':'initializing','complete':False})
@@ -118,7 +167,7 @@ def train(task_path,output,c):
         def observations(value):return TensorDict({'policy':torch_from_jax(value)/scale},batch_size=[c.num_envs])
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
-                            c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes)
+                            c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes,schedule=c.rsl_schedule)
         offset=0;transition_offset=0
         if c.resume_checkpoint:
             snapshot=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)
@@ -127,6 +176,9 @@ def train(task_path,output,c):
             torch.set_rng_state(snapshot['torch_rng'].cpu())
             if device.startswith('cuda'):restore_cuda_rng(snapshot['cuda_rng'])
             key=jp.asarray(snapshot['jax_rng']);offset=snapshot['update'];transition_offset=snapshot['control_transitions'];algo.learning_rate=snapshot['learning_rate']
+            if c.rsl_schedule=='fixed':
+                algo.learning_rate=c.learning_rate
+                for group in algo.optimizer.param_groups:group['lr']=c.learning_rate
         @jax.jit
         def advance(state,action,key):
             nxt=step(state,action);key,rk=jax.random.split(key)
@@ -149,8 +201,14 @@ def train(task_path,output,c):
                     sampled_errors.update(yaw_rate_rad_s=nxt.yaw_rate-state.reference_command[:,1],
                                           longitudinal_m=features[:,3])
                 alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp)
+            phase=state.tick*cfg.controller.dt
+            phase_id=jp.sum(phase[:,None]>=jp.array([1.,3.,6.]),axis=1)
+            phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
+            phase_stats['elapsed_sum']=jp.sum(phase)
+            phase_stats['physical_failures']=jp.sum(nxt.terminated)
+            phase_stats['disturbed_samples']=jp.sum(jp.any(state.event[:,[2,3,5]]!=0,axis=1)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]))
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
-            return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats
+            return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats,phase_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
         baseline=None;validate=None
         if not c.training_reward_selection:
@@ -165,31 +223,26 @@ def train(task_path,output,c):
         best=None;best_rank=None;rows=[]
         with TrainingEvents(root/'tensorboard',profile='core') as writer:
             for local in range(1,c.updates+1):
-                iteration=offset+local;begin=time.monotonic();reward_sum=torch.zeros((),device=device);component_sum={};alpha_sum={};ends=torch.zeros((),device=device);max_error=0.
+                iteration=offset+local;begin=time.monotonic();reward_sum=torch.zeros((),device=device);component_sum={};alpha_sum={};phase_sum={};ends=torch.zeros((),device=device);max_error=0.
                 with torch.no_grad():
                     for _ in range(c.rollout_steps):
                         latent=algo.act(obs)
-                        state,key,final_obs,reward,done,truncated,terminated,parts,error,alpha_stats=advance(state,jax_from_torch(torch.tanh(latent)),key)
+                        state,key,final_obs,reward,done,truncated,terminated,parts,error,alpha_stats,phase_stats=advance(state,jax_from_torch(torch.tanh(latent)),key)
                         final=observations(final_obs);r=torch_from_jax(reward);d=torch_from_jax(done)
                         corrected=bootstrap_timeout(r,algo.policy.evaluate(final).squeeze(-1),torch_from_jax(truncated),torch_from_jax(terminated),c.gamma)
                         obs=observations(state.obs)
                         algo.process_env_step(obs,corrected,d,{})
                         reward_sum+=r.mean();ends+=d.sum()
                         for k,v in alpha_stats.items():alpha_sum[k]=alpha_sum.get(k,0)+torch_from_jax(v)
+                        for k,v in phase_stats.items():phase_sum[k]=phase_sum.get(k,0)+torch_from_jax(v)
                         for k,v in parts.items():component_sum[k]=component_sum.get(k,0)+torch_from_jax(v)
                         max_error=torch.maximum(torch.as_tensor(max_error,device=device),torch_from_jax(error))
                     algo.compute_returns(obs)
                 if device.startswith('cuda'):torch.cuda.synchronize()
                 rollout_seconds=time.monotonic()-begin;optim_start=time.monotonic()
                 # RSL update clears the storage cursor but retains arrays for audit.
-                metrics=algo.update()
-                with torch.no_grad():
-                    algo.policy.log_std.clamp_(-4.,0.)
-                    stored=algo.storage.observations.flatten(0,1)
-                    old_mu=algo.storage.mu.flatten(0,1);old_sigma=algo.storage.sigma.flatten(0,1)
-                    algo.policy.act(stored)
-                    new_mu=algo.policy.action_mean;new_sigma=algo.policy.action_std
-                    kl=torch.sum(torch.log(new_sigma/old_sigma)+(old_sigma**2+(old_mu-new_mu)**2)/(2*new_sigma**2)-.5,dim=-1).mean().item()
+                metrics,update_audit=guarded_update(algo,c.rsl_kl_limit)
+                kl=update_audit['candidate_exact_kl']
                 if device.startswith('cuda'):torch.cuda.synchronize()
                 optim_seconds=time.monotonic()-optim_start
                 error=float(max_error[0])
@@ -198,8 +251,16 @@ def train(task_path,output,c):
                     'control_transitions':transition_offset+local*c.num_envs*c.rollout_steps,'stage_control_transitions':local*c.num_envs*c.rollout_steps,
                     'episode_ends':int(ends.item()),'loss_metrics':[metrics['surrogate'],metrics['value'],metrics['entropy'],kl],
                     'learning_rate':algo.learning_rate,'rollout_seconds':rollout_seconds,'optimizer_seconds':optim_seconds,
-                    'optimizer_audit':{'accepted_minibatches':c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size),'full_update_rolled_back':False},
+                    'optimizer_audit':{**update_audit,'attempted_minibatches':c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size),
+                        'accepted_minibatches':0 if update_audit['full_update_rolled_back'] else c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size)},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
+                batch_count=c.num_envs*c.rollout_steps
+                record['sample_phase']={f'fraction_{i}':float(phase_sum[f'bin_{i}_samples'])/batch_count for i in range(4)}
+                record['sample_phase'].update(mean_elapsed_seconds=float(phase_sum['elapsed_sum'])/batch_count,
+                    physical_failures=int(phase_sum['physical_failures']),
+                    disturbed_fraction=float(phase_sum['disturbed_samples'])/batch_count)
+                record['sample_phase_scope']='actual pre-step elapsed seconds: [0,1), [1,3), [3,6), [6,horizon]; not policy-matched validation'
+                record['rollout_control_steps_per_second']=batch_count/rollout_seconds
                 if alpha_sum:
                     record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()})
                     record['alpha_training_scope']='random training samples in three alpha intervals; not paired fixed-alpha evaluation; errors use pre-step commands and post-step physics'

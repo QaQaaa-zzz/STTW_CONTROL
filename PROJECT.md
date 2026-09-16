@@ -1,3 +1,7 @@
+# 当前实施更新：固定学习率、可比选模与精简日志交付（2026-09-16）
+
+用户上传bc390691的64轮运行：更新实际执行，但训练片段best为update_0001，12标准回合均未完成最终跟踪。当前新增入口为`ppo_geometric_stable.json`；几何reward/task不改，alpha继续入网，RSL3.2保留。固定LR3e-4、更新KL回退、1024×128×48，相同6,291,456训练预算。训练中不增加验证；阶段末用`select_best.py --fixed-evaluate`比较声明候选（含zero/first/last），不强制后期胜出、不覆盖原训练best。`reward_review.py --selection ... --compact`输出精简包。工程检查与运行命令见learning/README与VALIDATION新增节；尚无新正式训练或实车证据。下方旧当前段落为历史快照。
+
 # 当前实施入口：几何路径／速度奖励修复（2026-09-16）
 
 本节覆盖下方历史时间位置任务的当前入口；用户明确授权实现并推送，正式训练由用户执行。

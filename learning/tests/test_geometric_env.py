@@ -122,3 +122,58 @@ def test_short_review_publishes_zip_and_reuses_baseline(tmp_path, monkeypatch):
         assert 'review/cross_scores.csv' in z.namelist()
         assert 'review/engineering_short/alpha_trajectories.png' in z.namelist()
     assert len((review/'cross_scores.csv').read_text().splitlines())==5
+
+
+@pytest.mark.skipif(os.environ.get('STTW_TEST_MJX_CPU')!='1',reason='explicit short fixed comparison CPU integration')
+def test_posttraining_fixed_comparison_includes_last_and_compact_review(tmp_path):
+    import jax
+    import jax.numpy as jp
+    import zipfile
+    from sttw_control.network import ResidualActor,save_policy
+    from sttw_control.training import TrainingConfig,normalization
+    from sttw_control.selection import compare_fixed_checkpoints
+    from sttw_control.tracking_diagnostics import review_checkpoint
+    c=config(short=True)
+    c=replace(c,tracking=replace(c.tracking,start_seconds=0.,hold_seconds=.005,return_seconds=.005))
+    env=RecoveryEnv(c)
+    tc=TrainingConfig(trainer='rsl',num_envs=4,rollout_steps=4,updates=2,epochs=1,minibatch_size=16,
+                      training_reward_selection=True)
+    actor=ResidualActor();params=jax.tree.map(jp.zeros_like,actor.init(jax.random.PRNGKey(0),jp.zeros(env.observation_size)))
+    training=tmp_path/'training';training.mkdir()
+    mean,std=normalization(c);identity=make_policy_identity(env.bundle.identity,asdict(c),10)
+    for u in (0,1,2):
+        p=training/'checkpoints'/f'update_{u:04d}'
+        save_policy(p,params,mean,std,identity)
+        (p/'training.json').write_text(json.dumps({'update':u}))
+    (training/'declaration.json').write_text(json.dumps({'task':asdict(c),'training':asdict(tc),'policy_identity':identity}))
+    (training/'status.json').write_text(json.dumps({'complete':True,'best_reward_checkpoint':str(training/'checkpoints/update_0001')}))
+    (training/'best_model.json').write_text(json.dumps({'update':1}))
+    before=(training/'best_model.json').read_bytes()
+    result=compare_fixed_checkpoints(training,tmp_path/'selection',seeds=(12,),event={'start':0.,'duration':.005})
+    assert result['complete'] and result['candidate_updates']==[0,1,2]
+    assert len(result['candidates'])==3 and all(len(e['validation']['episode_return'])==3 for e in result['candidates'])
+    assert (training/'best_model.json').read_bytes()==before
+    # Identical candidates may legitimately choose zero, not a forced later winner.
+    assert result['selected_update']==0
+    panel=tmp_path/'panel.json'
+    panel.write_text(json.dumps({'seed':12,'alphas':[0.,1.],'scenarios':[{
+        'name':'engineering_short','commands':[[0.,2.1,0.]],'event':{'start':0.,'duration':.005}}]}))
+    output=tmp_path/'review'
+    review_checkpoint(training,panel,output,selection=tmp_path/'selection/selection.json',compact=True)
+    with zipfile.ZipFile(tmp_path/'review_compact.zip') as z:
+        assert 'training_evidence/fixed_selection.json' in z.namelist()
+        assert 'engineering_short/alpha_0/trace_compact.npz' in z.namelist()
+        manifest=json.loads(z.read('compact_manifest.json'))
+        # A five-transition trace includes its initial reset state as row zero.
+        # Compare every transferred field with the original, not only row counts.
+        assert len(manifest['traces'])==3  # one baseline and two alpha rollouts
+        for t in manifest['traces']:
+            with np.load(output/t['path']/'trace.npz',allow_pickle=False) as original:
+                with z.open(t['path']+'/trace_compact.npz') as handle:
+                    import io
+                    with np.load(io.BytesIO(handle.read()),allow_pickle=False) as compact:
+                        assert t['samples']==len(original['time'])==env.horizon+1
+                        assert not bool(compact['actuator_diagnostic_valid'][0])
+                        assert np.count_nonzero(compact['actuator_diagnostic_valid'])==env.horizon
+                        for field in compact.files:
+                            np.testing.assert_array_equal(compact[field],original[field])

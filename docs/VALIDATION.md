@@ -1690,3 +1690,54 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 
 ## 2026-09-16 奖励设计表格导出验证
 导出6个配对轨迹指标、完整有符号分项、12行交叉评分和7类CSV。每条原轨迹分项总和与日志回报差<1e-4；压缩包6张逐步表各2000行，逐步reward求和与最后累计reward差<1e-5，ZIP完整性校验通过。来源NPZ、CSV、声明及分析JSON的SHA-256已保存；没有新仿真或训练变化。入口docs/data/reward_design_20260916/README.md。
+
+
+## Uploaded geometric run: optimizer and checkpoint-selection audit (2026-09-16)
+
+Source: user-provided partial `result.zip` and a TensorBoard event file; frozen
+run commit bc390691, RSL-RL 3.2.0, 4096 x 24 x 64. This audit did not rerun later
+policies and does not infer their deterministic performance from training loss.
+The partial archive includes summary metrics for all 12 standard episodes, but
+detailed physical traces for only part of the panel. These coverage levels differ.
+
+- Training completed 64 updates / 6,291,456 transitions; all 64 recorded 20 retained
+  optimizer minibatches, hence 1280 retained optimizer steps, not "no later training".
+- The sampled best is update_0001, scored during update 2 at -0.0364251013/step.
+  This is a policy after ONE update, not the zero-initialized policy. Ownership of
+  pre-update sampling is correct. Policy 64 is saved but unscored by this criterion.
+- The score compares 0.12-second batches at different evolving episode phases,
+  with stochastic actions and inherited physics/controller/history. It is not a
+  controlled full-episode comparison. Initial phase bank: 64 real trajectories
+  replicated into 4096 environments. This is a plausible early-score advantage,
+  not a controlled causal proof that all later policies are worse.
+- Adaptive LR was already 0.0050625 after update 1; it reached 0.01 on 48/64 updates.
+  Full-batch exact KL exceeded 0.01 in 11 updates (maximum 0.0396993); the upstream
+  desired KL is an LR target, not a rejection constraint. Value loss started
+  0.8440, peaked 116.9705, and ended 18.3457. These are warning signs rather than a
+  proof that learning rate alone caused the degradation.
+- Rewards were -0.03740 (log1), -0.18181 (log32), -0.07818 (log64). Training recorded
+  1265 physical-failure transitions and 3255 episode ends across changing samples;
+  these are not held-out episode failure rates.
+- Reviewed sampled-best results: 0/12 physical failures, 0/12 final common holds,
+  12/12 deadline misses. Survival does not establish geometric recovery.
+- All 65 TensorBoard TFRecord CRCs validated: 64 scalar steps, 64 tags / 4096 scalar
+  values. Reward matched JSON within 4.97e-9, LR within 2.24e-10. The file is valid;
+  it is binary event data served by TensorBoard, not a document to double-click.
+
+New implementation (not new training evidence): freeze the geometric reward,
+reference, ECBC+ESO, physical model, timing, alpha input, network and residual
+limits. Use an explicitly fixed 3e-4 LR, full-batch exact-KL rollback at 0.02 with
+BOTH weights and Adam state restored, longer 128-step samples, 1024 environments,
+48 updates / the SAME 6,291,456 training transitions, four epochs / 16 minibatches.
+The phase bank grows to 256 genuine trajectories (warmup 358400 compute transitions,
+previously 89600; not silently counted as training). This is a joint practical
+stabilization experiment, not a single-factor causal ablation or proven speed-up.
+
+Keep in-training evaluation disabled. A separate explicit fixed-case comparison
+includes checkpoint zero, first, last and declared intermediate checkpoints plus
+the noisy sampled best. Candidate policy rollouts start from matching full reset
+states and requests. All candidates share one paired zero-residual baseline batch.
+A later model is NEVER forced to win. Qualified candidates rank first; a selected
+fallback is explicitly marked unqualified. Training best files remain immutable.
+Compact result export removes redundant pictures and high-dimensional state/input
+arrays, not timesteps, errors, rewards or failures. Original full local traces remain.

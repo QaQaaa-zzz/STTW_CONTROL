@@ -70,6 +70,19 @@ def scalar_values(record,labels=(),profile="full"):
             if values:add('validation/'+key+'_fraction',sum(values)/len(values))
     elif profile != 'full':
         raise ValueError('Unknown TensorBoard profile')
+    # These are kept even in the compact profile; missing values are not zeros.
+    for key in ('deadline','return_overdue','action'):
+        add('reward_components/'+key,record.get('reward_components_mean_step',{}).get(key))
+    for key in ('candidate_exact_kl','candidate_kl_p95','final_exact_kl','kl_limit',
+                'full_update_rolled_back','mean_action_abs','mean_action_saturation_fraction',
+                'steer_latent_std','rear_latent_std','attempted_minibatches'):
+        add('optimizer/'+key,record.get('optimizer_audit',{}).get(key))
+    for key,value in record.get('sample_phase',{}).items():add('sample_phase/'+key,value)
+    for key in ('control_transitions','episode_ends'):add('train/'+key,record.get(key))
+    add('timing/rollout_control_steps_per_second',record.get('rollout_control_steps_per_second'))
+    for key in ('sampling_policy_update',):add('train/'+key,record.get(key))
+    add('selection/training_sample_best_update',record.get('best_reward_model',{}).get('update'))
+    add('selection/development_gates_passed',record.get('selection',{}).get('development_gates_passed'))
     for i,group in enumerate(record.get('alpha_training_samples',[])):
         for key,value in group.items():
             if key not in ('alpha_lower','alpha_upper','upper_inclusive'):add(f'alpha_training/bin_{i}/{key}',value)
