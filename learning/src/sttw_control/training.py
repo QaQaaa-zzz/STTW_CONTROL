@@ -83,6 +83,7 @@ class TrainingConfig:
     initial_std: float=.15
     seed: int=42
     checkpoint_interval: int=8
+    best_model_every_update: bool=False  # Explicit full-development selection; adds evaluation cost.
     validation_final_only: bool=False
     validation_updates: tuple | None=None  # stage-local indices; final always validated
     validation_post_seconds: float=10.
@@ -140,11 +141,13 @@ class TrainingConfig:
 
 
 def should_validate(config,index):
+    if config.best_model_every_update:return True
     if config.validation_updates is not None:return index==config.updates or index in config.validation_updates
     return index==config.updates or (not config.validation_final_only and (index==1 or index%config.checkpoint_interval==0))
 
 
 def should_plot(config,index):
+    if config.best_model_every_update:return index==config.updates or (config.plot_interval>0 and index%config.plot_interval==0)
     return should_validate(config,index) or (config.plot_interval>0 and index%config.plot_interval==0)
 
 

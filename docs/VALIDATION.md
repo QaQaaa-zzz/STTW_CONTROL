@@ -1621,3 +1621,8 @@ path_reference_rsl_4096_20260915完成200轮及96条标准评估。R200累计回
 同一冻结参考/奖励/物理/初态49001，四参考×四设置×三alpha；新增96个残差CPU回合，基线逐字节复用原面板并核验96/96副本一致。6进程评估，仿真276.7秒，含全分项及跨模型PNG/PDF绘图总399.6秒。无新训练，完成zenity弹窗已记录。
 R75回报胜基线35/48（gentle11、tight0、straighten12、reversal12）；失败12/48全部急转，末段联合保持0/48、严格任务0/48。R150胜33/48（7、4、10、12）；失败0/48，末段保持7/48、严格任务0/48。不能由不摔判任务完成。R75是固定开发奖励best，不是R200，补评证明不能用R200代替best主图。
 输出 `runs/path_projection_rsl_4096_20260915/checkpoint_comparison/INDEX.md`：13张跨模型PNG及PDF、全部48条件轨迹/每步及累计回报；各模型分别48条分项、误差和速度诊断。首页小图明确无外扰、alpha=.5、四参考；完整图覆盖alpha0/.5/1及持续外扰4–5s，失败打叉，不补齐伪造后段。R75奖励重建max1.16543e-7，R150 max9.56505e-8；哈希保存在source_hashes.json。一个训练种子，开发诊断而非泛化证明。
+
+## 2026-09-16 alpha误差叠图与best覆盖纠正
+
+新增共享tracking_diagnostics.write_alpha_error_overview，由generate_panel自动调用。每工况/seed同图叠加全部alpha的真实速度误差与几何有符号横向位置误差、配对基线、持续扰动区间和实际失败终点；PNG/PDF/NPZ及哈希。R75/R150各16工况已从原轨迹生成，不重复仿真，入口checkpoint_comparison/INDEX.md。
+RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已证明的全程最佳。新增显式best_model_every_update模式；ppo_path_priority.json启用，未来每轮更新后在同一固定开发面板比较并维护单一best_model；不拿更新前rollout reward作为更新后模型分数。selection_coverage记录未评估轮次，续训跨阶段覆盖仍需单独核查。不自动重跑历史200轮审计、不改变冻结记录，本次未训练。全部开发评估将从9次增加到200次，增加显著成本；绘图仍按独立节奏，不能宣称效率不变。历史R75保持候选身份。

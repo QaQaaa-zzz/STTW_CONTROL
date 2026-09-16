@@ -52,5 +52,6 @@
     }
   ],
   "trainer": "rsl",
-  "activation": "elu"
+  "activation": "elu",
+  "best_model_every_update": true
 }

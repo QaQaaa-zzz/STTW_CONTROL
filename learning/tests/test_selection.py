@@ -119,3 +119,26 @@ def test_best_reward_resume_competes_only_with_same_validation_contract(tmp_path
     declaration['training']['validation_seeds']=[2]
     (current/'declaration.json').write_text(json.dumps(declaration))
     assert refresh_best_reward_model(current) is None
+
+
+def test_best_reward_reports_unevaluated_update(tmp_path):
+    import json
+    from sttw_control.selection import refresh_best_reward_model
+    base=dict(failed=[False],episode_return=[1.],speed_rmse=[.03],yaw_rmse=[.03],terminal_tracking_hold=[True])
+    (tmp_path/'baseline_validation.json').write_text(json.dumps(base))
+    for update in [1,2]:
+        folder=tmp_path/'checkpoints'/f'update_{update:04d}';folder.mkdir(parents=True)
+        entry={'update':update}
+        if update==1:entry['validation']=base
+        (folder/'training.json').write_text(json.dumps(entry))
+    result=refresh_best_reward_model(tmp_path)
+    assert result['selection_coverage']['unevaluated_updates']==[2]
+    assert not result['selection_coverage']['all_saved_updates_evaluated']
+
+
+def test_every_update_best_selection_overrides_sparse_schedule():
+    from sttw_control.training import TrainingConfig,should_validate,should_plot
+    c=TrainingConfig(updates=10,validation_updates=(1,10),best_model_every_update=True,plot_interval=0)
+    assert all(should_validate(c,i) for i in range(1,11))
+    assert not should_plot(c,2)
+    assert should_plot(c,10)

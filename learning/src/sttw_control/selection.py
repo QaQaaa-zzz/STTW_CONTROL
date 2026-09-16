@@ -89,6 +89,9 @@ def refresh_best_reward_model(training_dir):
     else:
         rank,reason=rank_command_candidate(validation,baseline,scope='full_episode',speed_slack=config.get('command_speed_slack',.05),yaw_slack=config.get('command_yaw_slack',.05))
     result=dict(**chosen,criterion='maximum mean fixed-development episode return',scope='evaluated stage checkpoints plus compatible resume checkpoint; earlier update wins exact ties; no extra physics',development_gates_passed=bool(rank is not None and (geometric or all(x==0 for x in rank[:-1]))),acceptance_rank=rank,acceptance_reason=reason,task_success_verified=False,candidates=candidates)
+    saved_updates={json.loads(p.read_text())['update'] for p in metadata_paths}
+    evaluated_updates={c['update'] for c in candidates}
+    result['selection_coverage']={'saved_updates':len(saved_updates),'evaluated_updates':len(evaluated_updates),'unevaluated_updates':sorted(saved_updates-evaluated_updates),'all_saved_updates_evaluated':saved_updates<=evaluated_updates,'scope':'this stage plus compatible resume checkpoint; not unrecorded historical stages or parameter-space optimum'}
     dest=root/'best_model'
     if dest.exists() and not dest.is_symlink():raise ValueError('best_model exists and is not a managed symlink')
     temporary=root/'.best_model.tmp'

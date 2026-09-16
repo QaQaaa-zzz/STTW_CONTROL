@@ -170,6 +170,7 @@ def generate_panel(root):
     index.insert(2,'- [Required paired trajectory and per-step reward overview](../comparison/INDEX.md)')
     (out/'INDEX.md').write_text('\n'.join(index)+'\n')
     write_panel_overview(root, rows)
+    write_alpha_error_overview(root)
     return rows
 
 
@@ -236,4 +237,49 @@ def write_panel_overview(root, rows):
         index.append(f'- {case}, alpha={alpha:g}, seed={seed}: [trajectory + step reward + cumulative reward]({stem}.png), [PDF]({stem}.pdf), [components and errors]({detail})')
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     (out/'INDEX.md').write_text('\n'.join(index)+'\n')
+    return out
+
+
+def write_alpha_error_overview(root):
+    """Overlay all declared preferences for each frozen task/seed, without simulation."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    root=Path(root);out=root/'analysis/alpha_errors';out.mkdir(parents=True,exist_ok=True)
+    groups={};sources={}
+    for panel in sorted((root/'evaluation').glob('alpha_*/seed_*')):
+        d=json.loads((panel/'declaration.json').read_text())
+        for case in d['scenarios']:
+            groups.setdefault((case,int(d['panel']['seed'])),[]).append((float(d['priority_alpha_override']),panel/case))
+    index=['# Same-task alpha tracking errors','', 'Speed error = true forward speed minus pre-step target [m/s]. Position error = signed right-normal geometric cross-track error [m], not timed XY distance. Crosses mark real failures; shaded interval is sustained external disturbance.','']
+    for (case,seed),entries in sorted(groups.items()):
+        fig,axes=plt.subplots(2,1,figsize=(10,7),sharex=True,layout='constrained');arrays={};checkpoint=set()
+        reference_config=None
+        for i,(alpha,path) in enumerate(sorted(entries)):
+            for policy in ['baseline','residual']:
+                p=path/policy;d=json.loads((p/'declaration.json').read_text());cfg=d['config']
+                if reference_config is None:reference_config=cfg
+                if cfg!=reference_config:raise ValueError('alpha overlay task configurations differ')
+                with np.load(p/'trace.npz') as data:t={k:data[k] for k in data.files}
+                sources[str(p.relative_to(root))]=hashlib.sha256((p/'trace.npz').read_bytes()).hexdigest()
+                if policy=='residual':checkpoint.add(json.loads((path.parent/'declaration.json').read_text())['checkpoint'])
+                x=t['time'][1:];values=[t['true_forward_speed'][1:]-t['motion_command'][:-1,1],t['path_features'][1:,0]]
+                label=f'{policy} alpha={alpha}';color='black' if policy=='baseline' else f'C{i}'
+                for ax,y,key in zip(axes,values,['speed_error','lateral_error']):
+                    ax.plot(x,y,label=label,color=color,linestyle='--' if policy=='baseline' else '-',alpha=.65 if policy=='baseline' else 1)
+                    if t['terminated'][-1]:ax.plot(x[-1],y[-1],'x',color=color)
+                    arrays[f'{policy}_alpha_{alpha}_{key}']=y
+                arrays[f'{policy}_alpha_{alpha}_time']=x
+                if i==0 and policy=='residual' and np.any(t['event'][0,[2,3,5]]!=0):
+                    for ax in axes:ax.axvspan(cfg['disturbance_start'],cfg['disturbance_start']+cfg['disturbance_duration'],color='.5',alpha=.15)
+        if len(checkpoint)!=1:raise ValueError('mixed checkpoints in alpha overlay')
+        title=f'{case} | seed={seed} | {Path(next(iter(checkpoint))).name}'
+        fig.suptitle(title)
+        for ax,label in zip(axes,['True speed error [m/s]','Signed cross-track error [m]']):
+            ax.axhline(0,color='.6',lw=.7);ax.set_ylabel(label);ax.grid(alpha=.2);ax.legend(fontsize=8)
+        axes[-1].set_xlabel('Time [s]');name=f'{case}_seed_{seed}'
+        for ext in ['png','pdf']:fig.savefig(out/f'{name}.{ext}',dpi=140)
+        plt.close(fig);np.savez_compressed(out/f'{name}.npz',**arrays)
+        index.append(f'- {title}: [PNG]({name}.png) / [PDF]({name}.pdf) / [data]({name}.npz)')
+    (out/'source_hashes.json').write_text(json.dumps(sources,indent=2));(out/'INDEX.md').write_text('\n'.join(index)+'\n')
     return out
