@@ -1,0 +1,22 @@
+{
+  "base_commit": "f8506ea99da938ea2b517e9dd52b393cb797675d",
+  "patch_sha256": "b130647646c15c5c35415fc5d8b0e0a4f5b1d5245311906fc20133d52e546d1c",
+  "files": {
+    "learning/README.md": "019a4e6f936c14048c1fe027422298fa59f047cc9101d77d31b9bf6f4f549da9",
+    "learning/cli/reward_review.py": "448778a33ed8997ef45c32e7914e70da6a9428cda63c92b35c7958527e9604ca",
+    "learning/configs/geometric_reward_panel.json": "e39fee7234c39850c1c1f508bdb38deb769314e7093aeb125b1cfbf5772903a8",
+    "learning/configs/geometric_reward_recovery.json": "73b17a38997435258e16ada60cd62bebae9777645f6c3bb502bc67d04600d3df",
+    "learning/configs/ppo_geometric_reward.json": "987536ea8bdb7c4b1f01ae1556812f5878cdccddc53e5d1040310e819e6a758a",
+    "learning/src/sttw_control/env.py": "d1b2d045d3b98f9c7b3bff0b582d13ec380db5e4935db3e78f951c891524fae8",
+    "learning/src/sttw_control/evaluation.py": "62c80cb61ff415e4d3ac077fe2ac2d6f31e2c99177c19519857580dce71f1e47",
+    "learning/src/sttw_control/network.py": "5c78115fbc6e88f771ad2e472677d461fc0a0a174fbfadbc7f99f96448e79914",
+    "learning/src/sttw_control/rsl_training.py": "304d0db49c42e9e90865d1d24947e7287a94fb0e233a4c8ba87ac0462cd69939",
+    "learning/src/sttw_control/timed_env.py": "7a1e99357c6177b4ffb66bfaad96e520170a9871b3038e41f98d34a995e956ed",
+    "learning/src/sttw_control/timed_reference.py": "769d99152925f56d819a69c44a57e55ed0f11a94e17a279252a2cdd32bc7bd23",
+    "learning/src/sttw_control/tracking_diagnostics.py": "ac892839400af948e081852a70fcee9f4ea8070229362f6b562e7f30a8adf73d",
+    "learning/src/sttw_control/tracking_reward.py": "d2fe56d9ab001a8e555f947d7278cda8871fdfa4e4d0387944795f9097df5b8c",
+    "learning/src/sttw_control/tracking_validation.py": "e909619540cc9f8bd7a4d590676fcc418265482cad4476f10609d56decc6aa53",
+    "learning/tests/test_geometric_contract.py": "134431a35fd24235e4f38f2a011331d038d0982663241011b97a45d0cea39af6",
+    "learning/tests/test_geometric_env.py": "d7de1cecb0155e3983e0a7e3d580ccc0cce4a1065b29195154cce73845c9bf5e"
+  }
+}
