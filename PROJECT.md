@@ -523,3 +523,11 @@ path_reference_rsl_4096_20260915完成200轮及96条标准评估。R200累计回
 实际GPU RSL短测2轮32转移complete，采样/优化、跨参考开发验证、best索引、ELU导出及训练图通过；奖励重建最大误差3.725290298461914e-09。证据runs/projection_validation_20260915/training。准备启动相同200轮预算，短测不作为效果证据。
 
 正式训练已启动：runs/path_projection_rsl_4096_20260915，PID2627237；监视器2627238已确认running、consecutive_errors=0，训练阶段initializing。TensorBoard6006新增RSL_continuous_projection，训练结束和全流水线结束分别通知。实现已本地提交cf6606f；两次push均遇gnutls_handshake TLS连接中断，保留本地提交，不声称远端已更新。
+
+## 2026-09-16 连续投影RSL训练完成复核
+
+`runs/path_projection_rsl_4096_20260915`完成200轮、19,660,800转移和96条标准回合。标准R200：累计回报20/48优于配对ECBC+ESO，存活36/48对21/48，但完整任务及末段联合保持均0/48。gentle全部回报退化；tight_turn全部失败；straighten 9/12回报改善且路径误差下降、速度误差上升；reversal 11/12回报改善但后段偏轨，不能算成功。各自失败观察窗不同，不用全程RMSE作等时长因果比较。
+
+奖励最佳已保存R75（开发均值−16.29、9/36失败）；R200开发−58.33、9/36失败。R150开发0/36失败、6/36末段保持，但回报−44.05。标准面板只评了R200，尚无R75/R150同面板结果。没有合格候选时流水线回退last不等于reward-best；后续先补评R75和R150再决定优化，不盲目续训。
+
+96条实际progress窗口检查0违规，最大单步.033902m；48条模型逐步奖励重建最大1.14858e−7。全场景/α/seed逐阶段表、轨迹、每步/累计总奖励和分项见 `runs/path_projection_rsl_4096_20260915/analysis/review/INDEX.md`（另comparison、reward_breakdown索引）。训练约64min，采样38.4min、开发18.5min、记录优化12.2s；这次未改代码、未追加训练。单训练种子开发证据，尚不支持泛化或论文性能结论。
