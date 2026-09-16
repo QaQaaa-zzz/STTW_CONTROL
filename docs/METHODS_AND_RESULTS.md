@@ -493,3 +493,10 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 
 ### reward-only正式完成分析
 完整200轮19,660,800步已结束；续训158轮1957.74s，采样中位10.41s。best policy192由update193采样分数0.0496043选出，policy200未后续计分。43–62/181–200平均每步奖励0.006544/0.048711；位置正奖励0.010442→0.019563，yaw0.008002→0.012282，速度0.014294→0.014525。主要改善来自位置/yaw相关项，但随机短窗口和物理状态分布不同，非因果配对比较。末20轮没有failure惩罚，仍有恢复时间代价；KL曾达到0.1364，不能声称硬KL约束或已经收敛。无逐alpha新轨迹，alpha行为效果与配对基线任务性能仍未验证。已有日志分析和PNG/PDF/JSON/哈希位于 `runs/timed_random_rsl_4096_20260916_reward_only/analysis/REPORT.md`；本次未执行任何新评估或续训。
+
+## 2026-09-16 alpha日志细分与best192标准诊断
+用户确认日志按alpha分组，并要求XY/每步奖励/累计奖励三类图片。新增时间轨迹RSL训练样本统计，按三个连续alpha区间累加真实样本和平方误差后再计算RMSE；报告单位及有效/无效误差分母，写入JSON和TensorBoard。此分组不能替代同指令/同扰动固定alpha实验；旧训练没有记录的数据不回填。
+
+共享tracking_diagnostics导出steps.csv及baseline_steps.csv（排除reset、保留终止罚、真实终点截止）；参考请求取前一步，位置/物理取后一步。现有NPZ及PNG/PDF保留，三联图标题增加checkpoint。标准诊断声明位于runs/timed_random_rsl_4096_20260916_reward_only/standard_best192/declaration.json：固定训练奖励best192、seed49001、4已知标准指令×4扰动×3alpha×配对方法=96回合，最大192,000转移，单回合≤10s，不自动续训。部分标准指令超出训练分布，属于外推压力诊断。
+
+标准best192面板已完成：96回合/48配对条件，全部三联PNG/PDF、16张跨alpha误差叠图、分项诊断与逐步CSV齐全。入口 `runs/timed_random_rsl_4096_20260916_reward_only/standard_best192/INDEX.md`。48残差回合与48基线回合均12次物理失败，全部位于tight_turn；末端共同跟踪保持残差7/48、基线0/48，恢复期限违反33/48与36/48，不能称任务整体达标。alpha=.5无扰动gentle，速度RMSE基线.045→残差.013m/s，沿程.337→.043m，横向.188→.081m，yaw.124→.069rad/s。straighten/reversal有改善但未通过末端共同保持。gentle无扰动alpha0/.5/1残差横向RMSE.0698/.0813/.0862m，速度RMSE.0156/.0131/.0219m/s；alpha存在可测影响但速度偏好不呈稳定单调趋势。急弯早失败比较必须考虑不同观察时长。单训练seed、单标准初态seed，不构成泛化结论。

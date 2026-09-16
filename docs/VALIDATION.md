@@ -1658,3 +1658,8 @@ TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配�
 
 ## 2026-09-16 正式训练完成记录审计
 核对续训metrics更新43–200连续、status.complete=true、总转移19,660,800，best别名与最大采样分数一致且归属policy192；未发现validation字段，末模型200不冒用199的分数。奖励重建最大scaled误差1.572e-7。完成监视器stage_notified与completion_notified已记录。生成并检查训练摘要PNG/PDF及source_hashes；本次仅日志与文档分析，无新增代码测试、仿真或标准评估。证据：runs/timed_random_rsl_4096_20260916_reward_only/analysis/。
+
+## 2026-09-16 alpha分组日志与逐步CSV
+单测覆盖alpha分箱边界、按样本加权的均值/RMSE、空组null、非有限终止误差有效/无效计数、TensorBoard指标/分母、CSV排除reset、前步请求、累计分项及失败终点终止罚。全套320 passed, 2 skipped（55.47s）；独立审查指出的非有限误差传播问题已回归修复。GPU两轮短测及完整96回合标准诊断另外记录，不把单测解释为策略性能。
+GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified` 完成两轮32步：每轮16步的分组样本数守恒、加权奖励与总值相差<1e-7、实际记录48个alpha分组TensorBoard标签、无validation字段。此短测模型不用于标准面板；标准面板仍固定正式训练best192。CSV图标题改动后timed diagnostics相关6项再次通过。
+标准面板实际完成96回合/48配对，耗时626.62s；48组奖励独立逐步重建最大误差2.7733e-7，时间参考独立积分最大误差2.3842e-7。48组三联PNG/PDF、16组alpha误差PNG/PDF及完整逐步CSV均已生成；结果和索引为standard_best192/INDEX.md。保留全部失败，未续训。新增日志/CSV工程测试与此正式策略诊断分别记录。

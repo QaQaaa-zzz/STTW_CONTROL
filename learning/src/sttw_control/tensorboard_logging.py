@@ -70,6 +70,9 @@ def scalar_values(record,labels=(),profile="full"):
             if values:add('validation/'+key+'_fraction',sum(values)/len(values))
     elif profile != 'full':
         raise ValueError('Unknown TensorBoard profile')
+    for i,group in enumerate(record.get('alpha_training_samples',[])):
+        for key,value in group.items():
+            if key not in ('alpha_lower','alpha_upper','upper_inclusive'):add(f'alpha_training/bin_{i}/{key}',value)
     return result
 
 

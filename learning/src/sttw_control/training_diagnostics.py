@@ -133,3 +133,35 @@ def plot_reward_components(rows,destination):
     for ext in ('png','pdf'):fig.savefig(destination/f'reward_components.{ext}',dpi=130)
     plt.close(fig)
     (destination/'reward_components.json').write_text(json.dumps([dict(update=r['update'],control_transitions=r['control_transitions'],total=r['mean_step_reward'],parts=r['reward_components_mean_step'],reconstruction_max_abs=r['reward_components_reconstruction_max_abs']) for r in logged],indent=2)+'\n')
+
+
+def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np):
+    """Additive statistics from pre-step alpha and post-step physical errors."""
+    groups=xp.minimum((alpha*3).astype(int),2)
+    mask=groups[None,:]==xp.arange(3)[:,None]
+    values={'samples':xp.ones_like(reward),'reward_sum':reward,'physical_failures':failed}
+    for name,error in errors.items():
+        valid=xp.isfinite(error)
+        values[name+'_valid_samples']=valid
+        values[name+'_error_sum']=xp.where(valid,error,0)
+        values[name+'_squared_error_sum']=xp.where(valid,error,0)**2
+    return {key:xp.sum(xp.where(mask,value[None,:],0),axis=1) for key,value in values.items()}
+
+
+def alpha_sample_summary(sums):
+    """Reduce pooled sums once; do not average per-step RMSEs or bin means."""
+    result=[]
+    for i in range(3):
+        n=int(sums['samples'][i]);row={'alpha_lower':i/3,'alpha_upper':(i+1)/3,
+            'upper_inclusive':i==2,'samples':n,'physical_failures':int(sums['physical_failures'][i]),
+            'mean_step_reward':float(sums['reward_sum'][i]/n) if n else None}
+        for key,value in sums.items():
+            if key.endswith('_squared_error_sum'):
+                name=key[:-len('_squared_error_sum')]
+                valid=int(sums[name+'_valid_samples'][i])
+                row[name+'_valid_samples']=valid
+                row[name+'_invalid_samples']=n-valid
+                row[name+'_rmse']=float(np.sqrt(value[i]/valid)) if valid else None
+                row[name+'_mean_error']=float(sums[name+'_error_sum'][i]/valid) if valid else None
+        result.append(row)
+    return result

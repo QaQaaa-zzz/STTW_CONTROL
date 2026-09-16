@@ -154,6 +154,8 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
                           xy_error=np.linalg.norm(trace['pose'][1:,:2]-trace['reference_pose'][1:,:2],axis=1))
         arrays.update({label+'_'+key:value for key,value in fields.items()})
     np.savez_compressed(out/'tracking_errors.npz',**arrays)
+    write_step_csv(data,out/'steps.csv')
+    if base:write_step_csv(base,out/'baseline_steps.csv')
     if not plots:return result
     import matplotlib
     matplotlib.use('Agg')
@@ -290,7 +292,7 @@ def write_panel_overview(root, rows):
         axes[1].set_yscale('symlog',linthresh=.05)
         axes[2].set(xlabel='Control step',ylabel='Cumulative signed reward',title='Cumulative total reward')
         for ax in axes:ax.legend();ax.grid(alpha=.2)
-        fig.suptitle(f'{case} | alpha={alpha:g} | seed={seed}')
+        fig.suptitle(f'{case} | alpha={alpha:g} | seed={seed} | checkpoint={Path(declaration["checkpoint"]).name}')
         for ext in ('png','pdf'):fig.savefig(out/f'{stem}.{ext}',dpi=140)
         plt.close(fig)
         detail=os.path.relpath(panel/case/'residual/analysis/tracking/INDEX.md',out)
@@ -348,3 +350,26 @@ def write_alpha_error_overview(root):
         index.append(f'- {title}: [PNG]({name}.png) / [PDF]({name}.pdf) / [data]({name}.npz)')
     (out/'source_hashes.json').write_text(json.dumps(sources,indent=2));(out/'INDEX.md').write_text('\n'.join(index)+'\n')
     return out
+
+
+def write_step_csv(data, destination):
+    """Human-readable actual transitions; reset row excluded, failure retained."""
+    import csv
+    trace=data['trace'];config=data['config'];parts=data['parts']
+    n=len(trace['time'])-1
+    fields=dict(step=np.arange(1,n+1),time_s=trace['time'][1:],alpha=trace['priority_alpha'][:-1],
+        x_m=trace['pose'][1:,0],y_m=trace['pose'][1:,1],
+        true_speed_m_s=trace['true_forward_speed'][1:],speed_error_m_s=speed_error(trace,config),
+        lateral_error_m=trace['path_features'][1:,0],heading_error_rad=trace['path_features'][1:,1],
+        reward=trace['reward'][1:],cumulative_reward=np.cumsum(trace['reward'][1:]),
+        terminated=trace['terminated'][1:],end_code=trace['end_code'][1:])
+    if config.get('timed_reference') is not None:
+        fields.update(reference_x_m=trace['reference_pose'][1:,0],reference_y_m=trace['reference_pose'][1:,1],
+            reference_speed_m_s=trace['reference_command'][:-1,0],reference_yaw_rate_rad_s=trace['reference_command'][:-1,1],
+            longitudinal_error_m=trace['longitudinal_error'][1:],yaw_rate_error_rad_s=trace['yaw_rate_error'][1:])
+    for key,value in parts.items():
+        fields['reward_'+key]=value[1:]
+        fields['cumulative_'+key]=np.cumsum(value[1:])
+    with Path(destination).open('w',newline='') as f:
+        writer=csv.writer(f);writer.writerow(fields)
+        writer.writerows(zip(*fields.values()))

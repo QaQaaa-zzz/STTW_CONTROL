@@ -87,3 +87,31 @@ def test_media_uses_timed_reference_without_static_path(tmp_path):
     result=plot_states(trace,config,out)
     assert result['right_error_rmse_m']==0.
     assert (out/'trajectory.png').exists()
+
+
+def test_step_csv_uses_actual_transitions_and_preserves_cumulative_reward(tmp_path):
+    import csv
+    path=tmp_path/'trace'
+    trace,config=save_timed_fixture(path)
+    diagnostics.write_diagnostics(path,plots=False)
+    with (path/'analysis/tracking/steps.csv').open() as f:rows=list(csv.DictReader(f))
+    assert len(rows)==2
+    assert [int(r['step']) for r in rows]==[1,2]
+    assert float(rows[0]['reference_speed_m_s'])==trace['reference_command'][0,0]
+    assert float(rows[-1]['cumulative_reward'])==pytest.approx(trace['reward'][1:].sum())
+    assert float(rows[-1]['reference_x_m'])==trace['reference_pose'][-1,0]
+    assert 'reward_path_tracking' in rows[0]
+    assert float(rows[-1]['cumulative_path_tracking'])==pytest.approx(trace['reward_path_tracking'][1:].sum())
+
+
+def test_step_csv_retains_failed_endpoint_and_terminal_penalty(tmp_path):
+    import csv
+    trace,config=save_timed_fixture(tmp_path/'source')
+    trace['terminated'][-1]=True;trace['end_code'][-1]=1;trace['reward'][-1]=-100.
+    path=tmp_path/'failed.csv'
+    diagnostics.write_step_csv({'trace':trace,'config':config,'parts':{'failure':np.array([0.,0.,-100.])}},path)
+    with path.open() as f:rows=list(csv.DictReader(f))
+    assert len(rows)==2 and rows[-1]['terminated']=='True'
+    assert float(rows[-1]['reward'])==-100.
+    assert float(rows[-1]['cumulative_failure'])==-100.
+    assert float(rows[-1]['cumulative_reward'])==pytest.approx(trace['reward'][1:].sum())

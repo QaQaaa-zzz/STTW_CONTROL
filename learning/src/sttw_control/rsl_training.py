@@ -68,7 +68,7 @@ def train(task_path,output,c):
     from .validation import make_validator
     from .selection import rank_tracking_candidate,refresh_best_reward_model,record_training_reward_best
     from .tensorboard_logging import TrainingEvents
-    from .training_diagnostics import plot_training
+    from .training_diagnostics import plot_training,alpha_sample_sums,alpha_sample_summary
     from .runtime import configure_compilation_cache
     configure_compilation_cache()
     cfg=load_config(task_path)
@@ -136,8 +136,17 @@ def train(task_path,output,c):
             def restart(s):
                 fresh=reset(jax.random.split(rk,c.num_envs))
                 return jax.tree.map(lambda a,b:jp.where(s.done.reshape((c.num_envs,)+(1,)*(a.ndim-1)),b,a),s,fresh)
+            alpha_stats={}
+            if cfg.timed_reference is not None:
+                from .timed_reference import errors as reference_errors
+                features=jax.vmap(reference_errors)(nxt.pose,nxt.reference_pose,state.reference_command)
+                speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=1)
+                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,{
+                    'speed_m_s':speed-state.reference_command[:,0],
+                    'yaw_rate_rad_s':nxt.yaw_rate-state.reference_command[:,1],
+                    'longitudinal_m':features[:,3],'lateral_m':features[:,0]},xp=jp)
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
-            return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error
+            return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
         baseline=None;validate=None
         if not c.training_reward_selection:
@@ -152,16 +161,17 @@ def train(task_path,output,c):
         best=None;best_rank=None;rows=[]
         with TrainingEvents(root/'tensorboard',profile='core') as writer:
             for local in range(1,c.updates+1):
-                iteration=offset+local;begin=time.monotonic();reward_sum=torch.zeros((),device=device);component_sum={};ends=torch.zeros((),device=device);max_error=0.
+                iteration=offset+local;begin=time.monotonic();reward_sum=torch.zeros((),device=device);component_sum={};alpha_sum={};ends=torch.zeros((),device=device);max_error=0.
                 with torch.no_grad():
                     for _ in range(c.rollout_steps):
                         latent=algo.act(obs)
-                        state,key,final_obs,reward,done,truncated,terminated,parts,error=advance(state,jax_from_torch(torch.tanh(latent)),key)
+                        state,key,final_obs,reward,done,truncated,terminated,parts,error,alpha_stats=advance(state,jax_from_torch(torch.tanh(latent)),key)
                         final=observations(final_obs);r=torch_from_jax(reward);d=torch_from_jax(done)
                         corrected=bootstrap_timeout(r,algo.policy.evaluate(final).squeeze(-1),torch_from_jax(truncated),torch_from_jax(terminated),c.gamma)
                         obs=observations(state.obs)
                         algo.process_env_step(obs,corrected,d,{})
                         reward_sum+=r.mean();ends+=d.sum()
+                        for k,v in alpha_stats.items():alpha_sum[k]=alpha_sum.get(k,0)+torch_from_jax(v)
                         for k,v in parts.items():component_sum[k]=component_sum.get(k,0)+torch_from_jax(v)
                         max_error=torch.maximum(torch.as_tensor(max_error,device=device),torch_from_jax(error))
                     algo.compute_returns(obs)
@@ -186,6 +196,9 @@ def train(task_path,output,c):
                     'learning_rate':algo.learning_rate,'rollout_seconds':rollout_seconds,'optimizer_seconds':optim_seconds,
                     'optimizer_audit':{'accepted_minibatches':c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size),'full_update_rolled_back':False},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
+                if alpha_sum:
+                    record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()})
+                    record['alpha_training_scope']='random training samples in three alpha intervals; not paired fixed-alpha evaluation; errors use pre-step commands and post-step physics'
                 if c.training_reward_selection:
                     record['sampling_checkpoint']=str(sampling_checkpoint)
                     record['sampling_policy_update']=iteration-1
