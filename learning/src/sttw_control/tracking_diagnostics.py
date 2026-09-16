@@ -320,13 +320,21 @@ def write_alpha_error_overview(root):
         keys=['speed_error','lateral_error']+(['longitudinal_error','yaw_rate_error'] if timed else [])
         labels=['True speed error [m/s]','Signed right error [m]']+(['Along-track error [m]','Yaw-rate error [rad/s]'] if timed else [])
         fig,axes=plt.subplots(len(keys),1,figsize=(10,3.5*len(keys)),sharex=True,layout='constrained');arrays={};checkpoint=set()
-        reference_config=None
+        reference_config=None;trajectory_sources=[];initial_state=None;event=None
         for i,(alpha,path) in enumerate(sorted(entries)):
             for policy in ['baseline','residual']:
                 p=path/policy;d=json.loads((p/'declaration.json').read_text());cfg=d['config']
                 if reference_config is None:reference_config=cfg
                 if cfg!=reference_config:raise ValueError('alpha overlay task configurations differ')
                 with np.load(p/'trace.npz') as data:t={k:data[k] for k in data.files}
+                current_initial=(t['qpos'][0],t['qvel'][0])
+                if initial_state is None:initial_state=current_initial;event=t['event'][0]
+                if not all(np.allclose(a,b,rtol=0,atol=1e-7) for a,b in zip(initial_state,current_initial)) or not np.array_equal(event,t['event'][0]):
+                    raise ValueError('alpha overlay initial state or event differs')
+                trajectory_sources.append((alpha,policy,t))
+                arrays[f'{policy}_alpha_{alpha}_xy']=t['pose'][:,:2]
+                arrays[f'{policy}_alpha_{alpha}_trajectory_time']=t['time']
+                arrays[f'{policy}_alpha_{alpha}_terminated']=t['terminated']
                 sources[str(p.relative_to(root))]=hashlib.sha256((p/'trace.npz').read_bytes()).hexdigest()
                 if policy=='residual':checkpoint.add(json.loads((path.parent/'declaration.json').read_text())['checkpoint'])
                 x=t['time'][1:];values=[speed_error(t,cfg),t['path_features'][1:,0]]
@@ -346,7 +354,41 @@ def write_alpha_error_overview(root):
             ax.axhline(0,color='.6',lw=.7);ax.set_ylabel(label);ax.grid(alpha=.2);ax.legend(fontsize=8)
         axes[-1].set_xlabel('Time [s]');name=f'{case}_seed_{seed}'
         for ext in ['png','pdf']:fig.savefig(out/f'{name}.{ext}',dpi=140)
+        plt.close(fig)
+        fig,xyaxes=plt.subplots(1,2,figsize=(13,6),layout='constrained')
+        reference_trace=max(trajectory_sources,key=lambda item:len(item[2]['time']))[2]
+        ref=reference_xy(reference_trace,reference_config);arrays['reference_xy']=ref
+        residuals=[t for a,p,t in trajectory_sources if p=='residual']
+        n=min(len(t['time']) for t in residuals)
+        if any(not np.allclose(t['time'][:n],residuals[0]['time'][:n]) for t in residuals):raise ValueError('alpha trajectory time grids differ')
+        stack=np.stack([t['pose'][:n,:2] for t in residuals])
+        spread=np.max(np.linalg.norm(stack[:,None]-stack[None,:],axis=-1),axis=(0,1))
+        peak=int(np.argmax(spread));center=stack[:,peak].mean(axis=0)
+        radius=max(.15,float(spread[peak])*1.5)
+        arrays['same_time_max_alpha_separation_m']=spread
+        arrays['same_time_comparison_time']=residuals[0]['time'][:n]
+        arrays['zoom_time_s']=np.asarray(residuals[0]['time'][peak])
+        for ax in xyaxes:ax.plot(ref[:,0],ref[:,1],color='.5',ls=':',label='Timed reference' if timed else 'Reference')
+        baseline_seen=[]
+        for alpha,policy,t in trajectory_sources:
+            if policy=='baseline' and any(t['pose'].shape==v.shape and np.allclose(t['pose'],v,rtol=0,atol=1e-7) for v in baseline_seen):continue
+            if policy=='baseline':baseline_seen.append(t['pose'])
+            color='black' if policy=='baseline' else f'C{[a for a,p,tr in trajectory_sources if p=="residual"].index(alpha)}'
+            label='ECBC+ESO' if policy=='baseline' else f'Residual alpha={alpha:g}'
+            for ax in xyaxes:
+                ax.plot(t['pose'][:,0],t['pose'][:,1],label=label,color=color,ls='--' if policy=='baseline' else '-',lw=1.5)
+                ax.plot(*t['pose'][-1,:2],marker='x' if t['terminated'][-1] else 'o',color=color,ms=6)
+                if np.any(t['event'][0,[2,3,5]]!=0):
+                    active=(t['time']>=event[0]*cfg['controller']['dt'])&(t['time']<=event[1]*cfg['controller']['dt'])
+                    ax.plot(t['pose'][active,0],t['pose'][active,1],color=color,lw=4,alpha=.45)
+        xyaxes[0].set_title('Same-scene XY trajectories')
+        xyaxes[1].set(xlim=(center[0]-radius,center[0]+radius),ylim=(center[1]-radius,center[1]+radius),
+                      title=f'Zoom at max same-time alpha separation: t={residuals[0]["time"][peak]:.2f}s')
+        for ax in xyaxes:ax.set_aspect('equal');ax.set_xlabel('X [m]');ax.set_ylabel('Y [m]');ax.legend(fontsize=8);ax.grid(alpha=.2)
+        fig.suptitle(title+'\nThick segments: disturbance; x: failure; o: recorded endpoint. Zoom selected by maximum alpha separation.')
+        for ext in ['png','pdf']:fig.savefig(out/f'{name}_xy.{ext}',dpi=150)
         plt.close(fig);np.savez_compressed(out/f'{name}.npz',**arrays)
+        index.append(f'- {title}: **[same-scene alpha XY trajectories]({name}_xy.png)** / [XY PDF]({name}_xy.pdf)')
         index.append(f'- {title}: [PNG]({name}.png) / [PDF]({name}.pdf) / [data]({name}.npz)')
     (out/'source_hashes.json').write_text(json.dumps(sources,indent=2));(out/'INDEX.md').write_text('\n'.join(index)+'\n')
     return out

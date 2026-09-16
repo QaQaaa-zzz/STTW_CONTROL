@@ -115,3 +115,18 @@ def test_step_csv_retains_failed_endpoint_and_terminal_penalty(tmp_path):
     assert float(rows[-1]['reward'])==-100.
     assert float(rows[-1]['cumulative_failure'])==-100.
     assert float(rows[-1]['cumulative_reward'])==pytest.approx(trace['reward'][1:].sum())
+
+
+def test_alpha_overview_includes_same_scene_xy_and_source_arrays(tmp_path):
+    import json
+    for i,alpha in enumerate([0.,.5,1.]):
+        panel=tmp_path/f'evaluation/alpha_{i}/seed_7';panel.mkdir(parents=True)
+        (panel/'declaration.json').write_text(json.dumps(dict(priority_alpha_override=alpha,panel={'seed':7},scenarios=['random'],checkpoint='fixed-best')))
+        for policy in ['baseline','residual']:save_timed_fixture(panel/'random'/policy)
+    out=diagnostics.write_alpha_error_overview(tmp_path)
+    assert (out/'random_seed_7_xy.png').exists()
+    assert (out/'random_seed_7_xy.pdf').exists()
+    with np.load(out/'random_seed_7.npz') as a:
+        for alpha in [0.,.5,1.]:
+            np.testing.assert_allclose(a[f'residual_alpha_{alpha}_xy'],reference_fixture()['pose'][:,:2])
+        assert 'reference_xy' in a

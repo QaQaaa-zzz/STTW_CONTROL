@@ -500,3 +500,6 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 共享tracking_diagnostics导出steps.csv及baseline_steps.csv（排除reset、保留终止罚、真实终点截止）；参考请求取前一步，位置/物理取后一步。现有NPZ及PNG/PDF保留，三联图标题增加checkpoint。标准诊断声明位于runs/timed_random_rsl_4096_20260916_reward_only/standard_best192/declaration.json：固定训练奖励best192、seed49001、4已知标准指令×4扰动×3alpha×配对方法=96回合，最大192,000转移，单回合≤10s，不自动续训。部分标准指令超出训练分布，属于外推压力诊断。
 
 标准best192面板已完成：96回合/48配对条件，全部三联PNG/PDF、16张跨alpha误差叠图、分项诊断与逐步CSV齐全。入口 `runs/timed_random_rsl_4096_20260916_reward_only/standard_best192/INDEX.md`。48残差回合与48基线回合均12次物理失败，全部位于tight_turn；末端共同跟踪保持残差7/48、基线0/48，恢复期限违反33/48与36/48，不能称任务整体达标。alpha=.5无扰动gentle，速度RMSE基线.045→残差.013m/s，沿程.337→.043m，横向.188→.081m，yaw.124→.069rad/s。straighten/reversal有改善但未通过末端共同保持。gentle无扰动alpha0/.5/1残差横向RMSE.0698/.0813/.0862m，速度RMSE.0156/.0131/.0219m/s；alpha存在可测影响但速度偏好不呈稳定单调趋势。急弯早失败比较必须考虑不同观察时长。单训练seed、单标准初态seed，不构成泛化结论。
+
+### 同场景alpha轨迹对照补充
+已补全16场景设置×三alpha同图XY对照，复用既有trace，不重跑；共享alpha误差图模块增加同图轨迹和自动局部放大。相同模型、任务、初态、扰动与请求时间轨迹下，16/16残差存在XY差异，ECBC+ESO跨alpha坐标差0。straighten无扰动最大同时间分离.1475m；alpha0/.5/1横向RMSE.1904/.2074/.2249m，yaw RMSE.0976/.0929/.0920rad/s，是位置/yaw取舍的样本证据；速度RMSE.0273/.0237/.0257m/s并非单调。gentle的alpha1速度误差.0219高于alpha0的.0156，保留此反例。事后联合指标按冻结最终容差归一化：13/16端点、10/16三个alpha均符合预期方向；这是描述性证据而非预注册统计检验或新增成功规则，不将局部放大图当全局性能优势。全表和每个反例在standard_best192/analysis/alpha_errors/EVIDENCE.md，包含同长度比较窗口与来源哈希。单训练/评估seed和急弯失败限制仍适用。

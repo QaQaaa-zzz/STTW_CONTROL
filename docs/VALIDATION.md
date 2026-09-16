@@ -1663,3 +1663,6 @@ TrainingConfig新增hidden_sizes，默认256/128保持旧模型兼容；新配�
 单测覆盖alpha分箱边界、按样本加权的均值/RMSE、空组null、非有限终止误差有效/无效计数、TensorBoard指标/分母、CSV排除reset、前步请求、累计分项及失败终点终止罚。全套320 passed, 2 skipped（55.47s）；独立审查指出的非有限误差传播问题已回归修复。GPU两轮短测及完整96回合标准诊断另外记录，不把单测解释为策略性能。
 GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified` 完成两轮32步：每轮16步的分组样本数守恒、加权奖励与总值相差<1e-7、实际记录48个alpha分组TensorBoard标签、无validation字段。此短测模型不用于标准面板；标准面板仍固定正式训练best192。CSV图标题改动后timed diagnostics相关6项再次通过。
 标准面板实际完成96回合/48配对，耗时626.62s；48组奖励独立逐步重建最大误差2.7733e-7，时间参考独立积分最大误差2.3842e-7。48组三联PNG/PDF、16组alpha误差PNG/PDF及完整逐步CSV均已生成；结果和索引为standard_best192/INDEX.md。保留全部失败，未续训。新增日志/CSV工程测试与此正式策略诊断分别记录。
+
+## 2026-09-16 同场景alpha XY图补齐
+相关timed diagnostics 7 passed；测试新增PNG/PDF输出与NPZ逐alpha实际坐标一致性。真实数据16组图全部生成；逐条件核对配置、qpos/qvel初态、扰动、参考请求/位置、共同时间网格，基线跨alpha最大坐标差0。XY差异统计仅取共同真实观测窗口，不延长失败轨迹；证据源96条trace哈希保存在alpha_errors/evidence_source_hashes.json。只做已有数据绘图与分析，没有新仿真或训练。
