@@ -40,6 +40,7 @@ jobs:
           raw=''.join((root/f'{i:02d}.b64').read_text() for i in range(4))
           patch=lzma.decompress(base64.b64decode(raw,validate=True))
           assert hashlib.sha256(patch).hexdigest()==manifest['patch_sha256']
+          assert hashlib.sha256((root/'fix.patch').read_bytes()).hexdigest()==manifest['additional_patch_sha256']
           (root/'change.patch').write_bytes(patch)
           PY
           git fetch origin feat/residual-recovery
@@ -47,6 +48,8 @@ jobs:
           git switch --detach "$BASE_SHA"
           git apply --index --check "$RUNNER_TEMP/optimizer-delivery/change.patch"
           git apply --index "$RUNNER_TEMP/optimizer-delivery/change.patch"
+          git apply --index --check "$RUNNER_TEMP/optimizer-delivery/fix.patch"
+          git apply --index "$RUNNER_TEMP/optimizer-delivery/fix.patch"
           git diff --cached --check
           python - <<'PY'
           import os,pathlib,json,hashlib,subprocess
