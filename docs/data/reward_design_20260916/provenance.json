@@ -1,0 +1,42 @@
+{
+  "run": "timed_random_rsl_4096_20260916_reward_only/inrange_best192",
+  "scenario": "gentle__force_right",
+  "checkpoint": "update_0192",
+  "seed": 49001,
+  "alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "episode_seconds": 10,
+  "dt_seconds": 0.005,
+  "force_N": -2.0,
+  "disturbance_seconds": [
+    4,
+    5
+  ],
+  "scope": "selected scenario descriptive evidence; no claim reward design alone causes all observed limitations",
+  "sources_sha256": {
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/analysis/reward_authority/analysis.json": "6c2941a732f78ef3b74a8b3894108010187d761bf45a20de1cfe654a520e8c39",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/analysis/reward_authority/network_sensitivity.json": "83c831eeb15b45a26b99efa222f480540f15b5b0a6e3b08247e5bbf1626de1fb",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/residual/trace.npz": "a944e41e9a4d8517afcf69d639c4ea5e584132740cc1a243549c1cbcfb51f62f",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/residual/declaration.json": "6059aabd6dc6028ab43a617f30203ba0ae9a941219f5b535e96629c7acc32865",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/residual/analysis/tracking/steps.csv": "4a679fb623ada23d743f57d29dfab8374a49a04189fd1b4cde1ce3465c3aa3e9",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/baseline/trace.npz": "28b34c14884eacfc61ee6fa982cc9d83f1a914985490b56110d6e82b6ed364bf",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/baseline/declaration.json": "b3ae14b08e396c9f5e0060f3fb9aaffe85ca06f2690b7491dd2d07c1162f9715",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_0/seed_49001/gentle__force_right/residual/analysis/tracking/baseline_steps.csv": "caa0f018377b114d442e6c89ca072567c73f21d10bc185b820467b51b67d42ba",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/residual/trace.npz": "ab26bfb48b85bc00c1e61728f3bb26927e65e098d77263fd51fcfd15a73bb696",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/residual/declaration.json": "436c28ac3f31845705c636d7ed043754ce949d616f124441cd6ac77e8737e8f1",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/residual/analysis/tracking/steps.csv": "015a60f1272e91c2e4bb89997b18bebf9a95904b9ef32ecd1c72a956b623afeb",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/baseline/trace.npz": "e8792b9e1c9469fa47a0aeb1a6a4ebbf8f752404d825b3c1633f7f9364108a85",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/baseline/declaration.json": "87ad9662f03c0e6f7d6cbb84b59c7874ea873817534f8a8d5c2631c0016d0358",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_1/seed_49001/gentle__force_right/residual/analysis/tracking/baseline_steps.csv": "baf00650b7dad92357f6c1829a3bcfabf62b524388957872deea5b9a592cc535",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/residual/trace.npz": "eab44a2673f54ad42da81b09c31ba268b2ce63bbc938e5b7771ae58f3a96b93a",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/residual/declaration.json": "3a2ee2c9b59262539893a74f62d9b7d1765218902311ac4f23d99ff90e8e0d2a",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/residual/analysis/tracking/steps.csv": "0624164ee1ed37918c1abe03833062c26d5a28cc8aa40841b93fc0027422289e",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/baseline/trace.npz": "e357f677c6c90ec0123e58a444573104881ee74ce43a22fd9f73102fd3d41863",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/baseline/declaration.json": "77c9a42ddc10f22a7e76c6a52f6cad362205d65a476e01ffc953021d1134d726",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/evaluation/alpha_2/seed_49001/gentle__force_right/residual/analysis/tracking/baseline_steps.csv": "11a7dd12a5e15aa083f42f8c21cef4656d1b5b00d786936e865e851329a5d1a8",
+    "runs/timed_random_rsl_4096_20260916_reward_only/inrange_best192/analysis/alpha_errors/gentle__force_right_seed_49001_xy.png": "9d85c270b7b685dc420287ad1c85d9d20a9b397b2fcb55c02f83debcfe8427a7"
+  }
+}
