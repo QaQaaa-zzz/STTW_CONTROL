@@ -1675,3 +1675,4 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 
 ## 2026-09-16 奖励/权限分析核对
 使用共享tracking_reward.transition对三条2000步轨迹重新评分；原配置/原alpha对角线与日志累计奖励差<1e-4。保存3×3交叉矩阵与三个离线参数变体，按前/持续/撤销后时间窗报告误差；动作和执行器限制直接取冻结配置与prelimit/command记录。无源代码变更、无新增训练/评估，宽范围训练继续运行。该分析不等价于奖励或动作缩放后的新闭环性能。
+固定观测alpha反事实推理：三条完整保存观测上的原动作复现最大误差约1.05e-7，替换alpha后输出非零变化；只前向推理，没有新物理回合。证据reward_authority/network_sensitivity.json。80%基线仅按冻结后轮接口和残差scale代数核对，未宣称闭环收益或实际车速恰好降低20%。
