@@ -17,6 +17,10 @@ def speed_error(trace, config):
 
 
 def reference_xy(trace, config):
+    if 'reference_geometry' in trace:
+        stride=config['timed_reference'].get('geometry_stride',10)
+        count=round(config['horizon_seconds']/config['controller']['dt']/stride)+1
+        return trace['reference_geometry'][:count,1:3]
     if config.get('timed_reference') is not None:return trace['reference_pose'][:,:2]
     from .path import CircleConfig,circle_reference,FigureEightConfig,eight_reference
     if config.get('bend'):return reference_table(config)[:,1:3]
@@ -79,12 +83,15 @@ def trace_summary(trace, config):
                            'heading_rad':c.final_heading_tolerance,'roll_rad':c.roll_working_limit,
                            'roll_rate_rad_s':c.final_roll_rate_tolerance,'hold_s':c.hold_seconds,
                            'return_budget_s':c.return_seconds,'return_clock':'from observable tracking-band departure, including forcing','initial_settling_s':c.start_seconds})
-    if config.get('timed_reference') is not None:
+    if c.timed:
         result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
                       xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
                       yaw_rate_error_rmse_rad_s=float(np.sqrt(np.mean(trace['yaw_rate_error'][1:]**2))))
         result['recovery_criteria'].update(longitudinal_m=c.final_longitudinal_tolerance,yaw_rate_rad_s=c.final_yaw_rate_tolerance)
         result['scope']='independent timed trajectory and command tracking; common final hold and no missed return deadline; no safety/generalization claim'
+    if config.get('timed_reference') and config['timed_reference'].get('mode')=='geometry':
+        result['reference_mode']='fixed geometric curve; no timed along-track or yaw-rate target'
+        result['path_progress_m']=float(trace['path_progress'][-1])
     return result
 
 
@@ -95,7 +102,8 @@ def audit_trace(path):
     if len(tr['time'])<2:raise ValueError('tracking audit needs at least one transition')
     if not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-6):raise ValueError('nonuniform trace timing')
     timed=config.get('timed_reference') is not None
-    reference_error=audit_timed_reference(tr,dt) if timed else None
+    geometric=config.get('timed_reference',{}).get('mode')=='geometry' if timed else False
+    reference_error=(audit_geometric_reference(tr,config,decl['seed']) if geometric else audit_timed_reference(tr,dt)) if timed else None
     state=initial_return(xp=np);parts={};max_state=0.
     ev=speed_error(tr,config)
     for i in range(1,len(tr['time'])):
@@ -133,6 +141,10 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
     result['episode_return']=float(tr['reward'][1:].sum())
     base=audit_trace(baseline) if baseline is not None else None
     if base:
+        scoring_alpha=float(tr['priority_alpha'][0])
+        if not np.allclose(base['trace']['priority_alpha'],scoring_alpha):
+            base=rescore_trace(base,scoring_alpha)
+            result['baseline_scoring_scope']='one baseline physical trace, reward replayed at candidate alpha'
         bt=base['trace']
         if config!=base['config'] or not np.array_equal(tr['event'][0],bt['event'][0]):
             raise ValueError('paired tasks/events differ')
@@ -184,9 +196,9 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
     chart('lateral_error','Path error [m]',[(l,d,d['trace']['path_features'][1:,0]) for l,d in sources])
     chart('heading_error','Heading error [rad]',[(l,d,d['trace']['path_features'][1:,1]) for l,d in sources])
     if config.get('timed_reference') is not None:
-        chart('longitudinal_error','Along-track error [m]',[(l,d,d['trace']['longitudinal_error'][1:]) for l,d in sources])
-        chart('xy_error','Timed XY distance [m]',[(l,d,np.linalg.norm(d['trace']['pose'][1:,:2]-d['trace']['reference_pose'][1:,:2],axis=1)) for l,d in sources])
-        chart('yaw_rate_error','Yaw-rate error [rad/s]',[(l,d,d['trace']['yaw_rate_error'][1:]) for l,d in sources])
+        chart('longitudinal_error',('Projection tangential residual [m], not time lag' if config['timed_reference'].get('mode')=='geometry' else 'Along-track error [m]'),[(l,d,d['trace']['longitudinal_error'][1:]) for l,d in sources])
+        chart('xy_error',('Geometric projection distance [m]' if config['timed_reference'].get('mode')=='geometry' else 'Timed XY distance [m]'),[(l,d,np.linalg.norm(d['trace']['pose'][1:,:2]-d['trace']['reference_pose'][1:,:2],axis=1)) for l,d in sources])
+        chart('yaw_rate_error',('Yaw minus path feedforward [rad/s], diagnostic only' if config['timed_reference'].get('mode')=='geometry' else 'Yaw-rate error [rad/s]'),[(l,d,d['trace']['yaw_rate_error'][1:]) for l,d in sources])
         chart('yaw_rate','World yaw rate [rad/s]',[(l+' '+kind,d,d['trace']['yaw_rate_world'][1:] if kind=='actual' else d['trace']['reference_command'][:-1,1]) for l,d in sources for kind in ('actual','request')])
     chart('roll','Roll [rad]',[(l,d,d['trace']['measurement'][1:,0]) for l,d in sources])
     curves=[];estimates=[]
@@ -415,3 +427,189 @@ def write_step_csv(data, destination):
     with Path(destination).open('w',newline='') as f:
         writer=csv.writer(f);writer.writerow(fields)
         writer.writerows(zip(*fields.values()))
+
+
+def audit_geometric_reference(trace, config, seed):
+    """Independent NumPy integration plus sequential projection replay.
+
+    The original curve is verified from the declared seed/schedule, not from a
+    moving trace of projection points. No dynamics are rerun or rebased.
+    """
+    import math
+    import jax
+    from dataclasses import replace
+    from .timed_reference import TimedReferenceConfig, schedule, reference_trace, project_geometry
+    c=TimedReferenceConfig(**config['timed_reference']);dt=config['controller']['dt']
+    rows=np.asarray(schedule(jax.random.fold_in(jax.random.PRNGKey(seed),51),c,config['speed_reference']))
+    if not np.allclose(rows,trace['geometric_schedule'],rtol=0,atol=1e-6):
+        raise ValueError('geometric schedule does not match declared reset seed/config')
+    ticks=math.ceil(math.ceil((config['horizon_seconds']+c.extension_seconds)/dt)/c.geometry_stride)*c.geometry_stride
+    rebuilt=reference_trace(replace(c,fixed=tuple(map(tuple,rows))),dt,ticks*dt,
+                            config['speed_reference'],trace['pose'][0])
+    cmd=rebuilt['reference_command'];arc=np.r_[0.,np.cumsum(cmd[:-1,0]*dt)]
+    original=np.column_stack((arc,rebuilt['reference_pose'],cmd[:,1]/cmd[:,0]))[::c.geometry_stride]
+    saved=trace['reference_geometry']
+    if saved.shape!=original.shape or not np.allclose(saved,original,rtol=3e-5,atol=2e-3):
+        raise ValueError('fixed geometric curve differs from independently integrated schedule')
+    progress=0.;max_error=float(np.max(np.abs(saved-original)))
+    for i in range(1,len(trace['time'])):
+        window=2*np.linalg.norm(trace['pose'][i,:2]-trace['pose'][i-1,:2])+c.projection_margin
+        progress,foot,k=project_geometry(trace['pose'][i],saved,progress,window,xp=np)
+        delta=foot-trace['reference_pose'][i];delta[2]=np.arctan2(np.sin(delta[2]),np.cos(delta[2]))
+        if not np.allclose(delta,0,atol=3e-4,rtol=0) or not np.isclose(progress,trace['path_progress'][i],atol=3e-4):
+            raise ValueError('geometric projection replay mismatch')
+        d=trace['pose'][i]-foot
+        ey=np.sin(foot[2])*d[0]-np.cos(foot[2])*d[1]
+        ep=np.arctan2(np.sin(d[2]),np.cos(d[2]))
+        if not np.allclose(trace['path_features'][i],[ey,ep,k],atol=3e-4,rtol=3e-5):
+            raise ValueError('geometric tracking features mismatch')
+    # Speed still follows the exogenous clock, independently of progress/alpha.
+    if not np.allclose(trace['reference_command'][:,0],cmd[:len(trace['time']),0],atol=2e-4,rtol=3e-5):
+        raise ValueError('geometric task speed request changed with vehicle progress')
+    return max_error
+
+
+def rescore_trace(data, alpha):
+    """Counterfactual reward replay of audited physics, not a new policy rollout.
+
+    Used both for cross-alpha scoring and reuse of a single baseline trajectory.
+    Source trace and captured observations are not overwritten on disk.
+    """
+    if not np.isfinite(alpha) or not 0<=alpha<=1:raise ValueError('invalid scoring alpha')
+    tr={k:v.copy() for k,v in data['trace'].items()};config=data['config']
+    c=TrackingConfig(**config['tracking']);dt=config['controller']['dt']
+    state=initial_return(xp=np);parts={};returns=[np.asarray(return_observation(state,c,xp=np))]
+    ev=speed_error(tr,config)
+    for i in range(1,len(tr['time'])):
+        state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
+            speed_error=ev[i-1],lateral_error=tr['path_features'][i,0],heading_error=tr['path_features'][i,1],
+            action=tr['effective_action'][i],alpha=alpha,dt=dt,alive_rate=config['alive_reward_rate'],
+            failure_penalty=config['failure_penalty'],failed=tr['terminated'][i],
+            enabled=round(tr['time'][i-1]/dt)*dt>=c.start_seconds,config=c,xp=np,
+            **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if c.timed else {}))
+        for k,v in terms.items():parts.setdefault(k,[0.]).append(float(v))
+        returns.append(np.asarray(return_observation(state,c,xp=np)))
+    parts={k:np.asarray(v) for k,v in parts.items()}
+    tr['reward']=sum(parts.values());tr['priority_alpha']=np.full_like(tr['priority_alpha'],alpha)
+    tr['return_state']=np.asarray(returns)
+    for k,v in parts.items():tr['reward_'+k]=v
+    return {**data,'trace':tr,'parts':parts,'summary':trace_summary(tr,config),
+            'scoring_alpha':float(alpha),'scoring_scope':'frozen physical trace counterfactual reward replay'}
+
+
+def review_checkpoint(training_run, panel_path, output, *, checkpoint=None):
+    """Explicit post-training review; no retraining, no automatic extra scenarios.
+
+    One baseline physical run per scenario is reused with counterfactual reward
+    replay at each alpha. A training-reward best is not called a qualified model.
+    """
+    import csv
+    import shutil
+    import zipfile
+    from dataclasses import asdict,replace
+    from .env import RecoveryEnv,config_from_dict
+    from .network import make_policy_identity,load_policy
+    from .evaluation import evaluate
+    training_run=Path(training_run).resolve();output=Path(output).resolve()
+    source=json.loads((training_run/'declaration.json').read_text())
+    status=json.loads((training_run/'status.json').read_text())
+    if not status.get('complete'):raise ValueError('finish the declared training stage before review')
+    selected=checkpoint or status.get('best_reward_checkpoint')
+    if not selected:raise ValueError('no scored best checkpoint; specify --checkpoint explicitly')
+    checkpoint=Path(selected).resolve()
+    cfg=config_from_dict(source['task']);panel=json.loads(Path(panel_path).read_text())
+    if cfg.timed_reference is None or cfg.timed_reference.mode!='geometry':
+        raise ValueError('this runner requires the explicit geometric reference task')
+    alphas=panel['alphas'];seed=panel['seed'];cases=panel['scenarios']
+    if type(seed) is not int or not alphas or len(set(alphas))!=len(alphas) or any(not np.isfinite(a) or not 0<=a<=1 for a in alphas):
+        raise ValueError('invalid review seed/alphas')
+    if not cases or len({c['name'] for c in cases})!=len(cases):raise ValueError('duplicate/empty scenarios')
+    configs=[]
+    for case in cases:
+        name=case['name'];ev=case.get('event',{})
+        if not name or '/' in name or '\\' in name or name in ('.','..'):raise ValueError('invalid scenario name')
+        start=ev.get('start',4.);duration=ev.get('duration',1.)
+        if start+duration+cfg.tracking.return_seconds>cfg.horizon_seconds+1e-7:
+            raise ValueError('scenario does not leave the declared return observation window')
+        configs.append(replace(cfg,random_events=None,timed_reference=replace(cfg.timed_reference,fixed=case['commands']),
+            disturbance_start=start,disturbance_duration=duration,disturbance_force=ev.get('force',0.),
+            disturbance_steer_rate=ev.get('steer_rate',0.),disturbance_rear_torque=ev.get('rear_torque',0.),
+            disturbance_waveform=ev.get('waveform','constant')))
+    output.mkdir(parents=True,exist_ok=False)
+    declaration={'training_run':str(training_run),'checkpoint':str(checkpoint),'panel':panel,
+        'source_task':source['task'],'residual_episodes':len(cases)*len(alphas),'baseline_physical_episodes':len(cases),
+        'selection':'explicit checkpoint or training-sampled reward best; not certified successful',
+        'baseline_reuse':'same physical trace; reward is replayed at each scoring alpha',
+        'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}}
+    (output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
+    def progress(phase,**kwargs):(output/'status.json').write_text(json.dumps({'phase':phase,**kwargs},indent=2)+'\n')
+    rows=[];cross=[];index=['# Geometric speed/path reward review','',
+        'Training reward selects the checkpoint; physical failure, deadline and final hold determine task qualification.',
+        'Cross-score maxima need not lie on the diagonal. Shared good trajectories are valid at every alpha.','']
+    try:
+        for case,c in zip(cases,configs):
+            name=case['name'];root=output/name;root.mkdir()
+            env=RecoveryEnv(c,backend='cpu')
+            expected=make_policy_identity(env.bundle.identity,asdict(cfg),cfg.observation.history_steps)
+            policy=load_policy(checkpoint,expected=expected)
+            identity={**expected,'checkpoint':str(checkpoint),
+                      'checkpoint_sidecar_sha256':hashlib.sha256((checkpoint/'identity.json').read_bytes()).hexdigest(),
+                      'evaluation_overrides':'explicit fixed reference schedule and event only'}
+            progress('baseline',scenario=name,complete=False)
+            basepath=root/'baseline'
+            evaluate(env,basepath,seed=seed,priority_alpha=0.)
+            base=audit_trace(basepath);candidates=[]
+            for a in alphas:
+                progress('residual',scenario=name,alpha=a,complete=False)
+                path=root/f'alpha_{a:g}'
+                evaluate(env,path,seed=seed,priority_alpha=a,policy=policy,policy_identity=identity)
+                data=audit_trace(path);candidates.append((a,data))
+                result=write_diagnostics(path,baseline=basepath,audited=data)
+                rows.append({'scenario':name,'alpha':a,'seed':seed,'physical_failure':bool(data['trace']['terminated'][-1]),**result})
+                index.append(f'- {name}, alpha={a}: [{path.name}/analysis/tracking/INDEX.md]({name}/{path.name}/analysis/tracking/INDEX.md)')
+            for score_alpha in alphas:
+                for actor_alpha,data in candidates:
+                    score=rescore_trace(data,score_alpha)
+                    cross.append({'scenario':name,'scoring_alpha':score_alpha,'actor_alpha':actor_alpha,
+                                  'return':float(score['trace']['reward'][1:].sum()),
+                                  'scope':'same recorded physics, counterfactual preference score'})
+            import matplotlib
+            matplotlib.use('Agg')
+            import matplotlib.pyplot as plt
+            fig,ax=plt.subplots(figsize=(8,6),layout='constrained')
+            ref=reference_xy(base['trace'],base['config'])
+            ax.plot(ref[:,0],ref[:,1],ls='--',label='original fixed path')
+            for label,data in [('ECBC+ESO',base)]+[(f'alpha={a:g}',d) for a,d in candidates]:
+                t=data['trace'];xy=t['pose'][:,:2]
+                line,=ax.plot(xy[:,0],xy[:,1],label=label)
+                ev=t['event'][0];dt=c.controller.dt
+                during=(t['time']>=ev[0]*dt)&(t['time']<=ev[1]*dt)
+                if np.any(ev[[2,3,5]]!=0) and np.any(during):
+                    ax.plot(xy[during,0],xy[during,1],linewidth=3,alpha=.6,color=line.get_color())
+                ax.plot(xy[-1,0],xy[-1,1],marker='x' if t['terminated'][-1] else 'o')
+            ax.set(xlabel='X [m]',ylabel='Y [m]',title=name+' | '+checkpoint.name)
+            ax.set_aspect('equal');ax.legend()
+            for ext in ('png','pdf'):fig.savefig(root/('alpha_trajectories.'+ext),dpi=140)
+            plt.close(fig)
+            index.append(f'- {name}: [all-alpha trajectory overlay]({name}/alpha_trajectories.png)')
+        (output/'summary.json').write_text(json.dumps(rows,indent=2,allow_nan=False)+'\n')
+        with (output/'cross_scores.csv').open('w',newline='') as f:
+            w=csv.DictWriter(f,fieldnames=list(cross[0]));w.writeheader();w.writerows(cross)
+        evidence=output/'training_evidence';evidence.mkdir()
+        for name in ('declaration.json','status.json','best_model.json','metrics.jsonl','setup_timings.json'):
+            p=training_run/name
+            if p.exists():shutil.copy2(p,evidence/name)
+        for name in ('actor.msgpack','identity.json','training.json'):
+            p=checkpoint/name
+            if p.exists():shutil.copy2(p,evidence/('selected_'+name))
+        index.extend(['','- [All metrics](summary.json)','- [Counterfactual cross scores](cross_scores.csv)'])
+        (output/'INDEX.md').write_text('\n'.join(index)+'\n')
+        progress('complete',complete=True,residual_episodes=len(cases)*len(alphas),baseline_physical_episodes=len(cases))
+        archive=output.with_suffix('.zip')
+        with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
+            for p in sorted(output.rglob('*')):
+                if p.is_file():z.write(p,p.relative_to(output.parent))
+        print(json.dumps({'review':str(output),'archive':str(archive),'complete':True}),flush=True)
+        return rows
+    except Exception as exc:
+        progress('error',complete=False,error=repr(exc));raise

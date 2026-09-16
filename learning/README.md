@@ -1,3 +1,104 @@
+## Geometric speed/path reward contract (2026-09-16)
+
+The new run uses `geometric_reward_recovery.json` and `ppo_geometric_reward.json`.
+It is **not** the old time-position objective. Alpha is still a direct Actor input;
+ECBC+ESO, vehicle assets, 200 Hz control, 25 physics substeps, tanh and fixed residual
+limits (+/-1.5 steering-rate, +/-10 rear-axle-rate rad/s) are unchanged.
+
+At reset, the existing random slew-limited speed/yaw schedule is integrated once
+into a fixed global curve. A continuity-windowed segment projection gives geometric
+cross-track and heading errors. Deliberately going slower on the same curve is not
+a time-position error. The speed request retains its external clock. Scheduled yaw
+constructs the curve; yaw-rate tracking is **not** part of the speed reward. Local
+curvature/heading/lateral feedback supplies the base controller reference. Therefore
+compare residual against the baseline under this SAME new reference contract.
+
+Normal transitions use `dt * (alive - tracking_cost - roll_cost - action_cost
+- budget_cost - return_time_cost - overdue_cost)`, with no positive clipping.
+`H(z)=z^2` for `abs(z)<=1`, otherwise `2*abs(z)-1`:
+
+- `wv=(1+9*alpha)/11`, `wp=(10-9*alpha)/11`.
+- `tracking_cost=4*(wv*H(ev/0.1)+wp*(H(ey/0.1)+0.3*H(epsi/0.15)))`.
+- Speed tolerance: `0.5-0.3*alpha` m/s; geometric lateral tolerance:
+  `0.1+0.3*alpha` m. Within-band errors still have tracking cost.
+- `return_bonus=0`: creating an excursion cannot earn a recovery prize.
+- First deadline violation costs 5 once (not dt-scaled); while still pending after
+  the deadline, an additional 2/s cost applies. `deadline_missed` is sticky.
+- Failure replaces the entire transition with -100. Roll costs, final tolerances
+  and actuator authority never depend on alpha. These are not safety guarantees.
+- Final hold: speed 0.2 m/s, lateral 0.1 m, heading 0.15 rad, roll 0.3 rad,
+  roll-rate 0.3 rad/s, continuous 0.5 s. After the 1 s initialization window the
+  3 s deadline starts at observed joint-band departure INCLUDING forcing and hold;
+  it does not receive an oracle disturbance-end signal. Late final hold is reported
+  separately from on-time task qualification. No time-lag catch-up is required.
+
+Old configs retain `objective=legacy`, `mode=time` and unchanged reward semantics /
+checkpoint identity. New mode has **280 Actor inputs**, not the old timed 310, and
+requires a fresh policy. The same number of inputs as another task does NOT make
+its checkpoint interchangeable. Configured Gaussian and longitudinal/yaw scales
+inherited from old dataclasses are inactive in this explicit Huber/geometric mode.
+The static curve includes 5 s of geometric extension for projection; physical
+rollouts and return budgets are still 10 s, never extended to hide failures.
+True forward speed is used in rewards/return state; deployment needs a validated
+velocity/localization estimate, not an assumption that wheel odometry is truth.
+
+### Run the bounded first experiment
+
+Run from the repository root, with a clean/saved working tree. Do not restart an
+already running old experiment to use partially updated code. Existing runs are
+immutable. Output directories must not exist; use a new run name for each attempt.
+Use the SAME configured environment used by the existing RSL training:
+
+```bash
+export PYTHONPATH="$PWD/learning/src"
+PY=/home/qy/mujoco_playground/.venv/bin/python
+
+$PY -m pytest learning/tests/test_geometric_contract.py learning/tests/test_geometric_env.py -q
+
+$PY learning/cli/train.py \
+  --task learning/configs/geometric_reward_recovery.json \
+  --config learning/configs/ppo_geometric_reward.json \
+  --output runs/geometric_reward_first/training
+
+# Explicit POST-training test: 4 scenarios x 3 alpha = 12 residual episodes,
+# plus only 4 baseline physical episodes, reused/re-scored across alpha.
+$PY learning/cli/reward_review.py \
+  --training-run runs/geometric_reward_first/training \
+  --panel learning/configs/geometric_reward_panel.json \
+  --output runs/geometric_reward_first/review
+```
+
+RSL-RL 3.2.0 remains the trainer (three 128 ELU layers): 4096 environments x 24
+steps x 64 updates = **6,291,456 training transitions**; 5 epochs, 24,576 minibatch,
+lr .001/adaptive KL .01, gamma .9995, lambda .99, initial std .15. Extra phase-pool
+warmup budget is 64 x 1400 = 89,600 computed transitions. No in-training evaluation:
+`training_reward_selection=true`, retaining the existing pre-update sampling-policy
+ownership rule. Training-reward best is not a certified successful model; the last
+updated policy without another rollout remains unscored. No automatic continuation.
+No measured speed-up or improved recovery is claimed before the user runs this.
+
+`review_checkpoint` refuses incomplete training and chooses the scored training best;
+`--checkpoint` can explicitly select another compatible Actor. It verifies frozen
+config, actual per-step reward reconstruction, independently integrated curve and
+local projections. It emits paired PNG/PDF/CSV/NPZ, true/estimated/requested speeds,
+real failure endpoints, all-alpha XY overlays, component sums, final/deadline metrics,
+and `cross_scores.csv`. A common excellent trace MAY win every scoring alpha; this
+is not automatically a reward error. The standard cases are declared historical
+scenarios, not untouched holdouts. Fixed seed is not an independent training seed.
+
+Return **`runs/geometric_reward_first/review.zip`** for analysis. It includes the
+review, original physical traces, selected Actor/identity and training evidence
+(metrics, config/status, best-selection record), not all optimizer checkpoints.
+Training and evaluation are separate commands; evaluation does not restart training.
+
+Local implementation checks: 83 pure reward/reference tests passed; physical tests
+are skipped locally when Flax/MuJoCo are absent. The repository CPU CI additionally
+runs real CPU/MJX reset/step, alpha baseline invariance, legacy identity, exact reward
+replay, and a short end-to-end review/ZIP test. These are engineering checks, not
+formal training results, GPU throughput measurements or real-robot validation.
+
+---
+
 # 模型1条件残差恢复控制
 
 本目录实现ECBC＋ESO基础上的有界两路残差、CPU MuJoCo/MJX、PPO训练、标准恢复评估和完整媒体。当前研究状态见[PROJECT](../PROJECT.md)，逐轮证据见[VALIDATION](../docs/VALIDATION.md)，完整公式与框图见[论文草稿](../docs/paper/MANUSCRIPT.md)。所有命令在仓库根目录执行；以下启动命令是操作说明，不代表已执行或自动追加预算。

@@ -1,3 +1,14 @@
+# 当前工程验证：几何奖励契约修复（2026-09-16）
+
+本次是实现与测试，不是新策略训练结果。源码基于f8506ea；历史记录不重写。
+本地执行`test_geometric_contract.py`、`test_tracking_reward.py`、`test_timed_reference.py`与`test_geometric_env.py`：83 passed，1 skipped；跳过原因为本地缺Flax/MuJoCo导致物理集成模块未收集，不冒称物理测试通过。
+已验证共同优秀轨迹可在全部alpha获胜、真正取舍端点翻转、支配关系、自造离带不获利、首次超时单次扣分、晚恢复不清除期限、旧奖励默认兼容及NumPy/JAX/JIT一致性。
+CI对待发布的精确源码执行完整learning/tests（显式STTW_TEST_MJX_CPU=1），包含实际CPU/MJX reset/控制步、alpha基线物理一致性、独立几何投影重建及短review/ZIP全链。
+发布仅允许从核对过的父提交快进；若测试失败或远端已前进则停止，不覆盖并行修改。测试报告、源码归档及commit.txt绑定实际测试提交。
+用户正式实验入口与预算见learning/README.md。此次未进行64轮训练、12回合正式标准评估、目标GPU吞吐或实车验证；不能由单步工程测试推断恢复性能。
+
+---
+
 # 当前实现与验证记录
 
 ## 当前总览与最新完整结果（2026-09-12）

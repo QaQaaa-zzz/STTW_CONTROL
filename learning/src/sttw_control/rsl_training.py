@@ -141,10 +141,14 @@ def train(task_path,output,c):
                 from .timed_reference import errors as reference_errors
                 features=jax.vmap(reference_errors)(nxt.pose,nxt.reference_pose,state.reference_command)
                 speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=1)
-                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,{
-                    'speed_m_s':speed-state.reference_command[:,0],
-                    'yaw_rate_rad_s':nxt.yaw_rate-state.reference_command[:,1],
-                    'longitudinal_m':features[:,3],'lateral_m':features[:,0]},xp=jp)
+                sampled_errors={'speed_m_s':speed-state.reference_command[:,0],
+                                'lateral_m':features[:,0]}
+                if cfg.timed_reference.mode=='geometry':
+                    sampled_errors['heading_rad']=features[:,1]
+                else:
+                    sampled_errors.update(yaw_rate_rad_s=nxt.yaw_rate-state.reference_command[:,1],
+                                          longitudinal_m=features[:,3])
+                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp)
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)

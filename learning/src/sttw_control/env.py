@@ -73,10 +73,13 @@ class TaskConfig:
     speed_error_weight: float=1.
 
     def __post_init__(self):
-        if (self.timed_reference is not None)!=self.observation.include_timed:raise ValueError("timed reference and observation must agree")
+        is_time = self.timed_reference is not None and self.timed_reference.mode == 'time'
+        if is_time != self.observation.include_timed:raise ValueError("timed reference and observation must agree")
         if self.timed_reference is not None:
-            if self.tracking is None or not self.tracking.timed or any(x is not None for x in (self.reference_paths,self.bend,self.circle,self.figure_eight,self.speed_schedule,self.motion_commands)):raise ValueError("timed tracking needs its own independent reference")
+            if self.tracking is None or self.tracking.timed != is_time or any(x is not None for x in (self.reference_paths,self.bend,self.circle,self.figure_eight,self.speed_schedule,self.motion_commands)):raise ValueError("timed tracking needs its own independent reference")
             tr=self.timed_reference
+            if tr.mode == 'geometry' and self.tracking.objective != 'geometric_huber':
+                raise ValueError('geometry mode requires the explicit geometric_huber objective')
             if tr.speed_max>.1*self.actuator.rear_rate_limit or tr.max_steer>self.actuator.steer_limit:raise ValueError("timed reference exceeds actuator contract")
             if tr.fixed is not None:
                 if not math.isclose(tr.fixed[0][1],self.speed_reference) or tr.fixed[0][2]!=0 or any(row[0]>=self.horizon_seconds or row[1]>.1*self.actuator.rear_rate_limit for row in tr.fixed):raise ValueError("invalid timed fixed initial/time/speed contract")
@@ -219,6 +222,7 @@ class EnvState:
     path_progress: object=0.
     reference_pose: object=None
     reference_command: object=None
+    reference_geometry: object=None
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered

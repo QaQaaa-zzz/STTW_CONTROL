@@ -4,7 +4,7 @@ import jax.numpy as jp
 from .env import RecoveryEnv
 from .controller import initial_controller
 from .observation import initial_history
-from .timed_reference import schedule,command_at,advance_reference,errors
+from .timed_reference import schedule,command_at,advance_reference,errors,geometry_table,project_geometry
 from .tracking_reward import transition,initial_return
 
 
@@ -29,17 +29,30 @@ class TimedRecoveryEnv(RecoveryEnv):
         key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
         commands=schedule(jax.random.fold_in(key,51),self.config.timed_reference,self.config.speed_reference)
         ref=jp.array([self.config.speed_reference,0.]);pose=s.pose
+        geometry=None
+        if self.config.timed_reference.mode == 'geometry':
+            geometry=geometry_table(commands,self.config.timed_reference,self.config.speed_reference,
+                                    pose,self.config.horizon_seconds,self.config.controller.dt)
         ctrl,h,obs,base,roll=self.prepare_timed(initial_controller(self.config.controller),s.actuator,
             initial_history(self.config.observation),s.measurement,s.tick,s.pose,s.priority_alpha,
             pose,ref,jp.asarray(0.),initial_return())
         return s.replace(controller=ctrl,history=h,obs=obs,base=base,reference=roll,
-            command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.))
+            command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
+            reference_geometry=geometry,path_progress=jp.asarray(0.))
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;dt=c.controller.dt;tick=state.tick+1
         ref_pose=advance_reference(state.reference_pose,state.reference_command,dt)
         ref_command=command_at(tick,state.reference_command,state.command_schedule,dt,c.timed_reference)
-        feature=errors(pose,ref_pose,state.reference_command)
+        progress=state.path_progress
+        used_command=state.reference_command
+        if c.timed_reference.mode == 'geometry':
+            window=2.*jp.linalg.norm(pose[:2]-state.pose[:2])+c.timed_reference.projection_margin
+            progress,ref_pose,curvature=project_geometry(pose,state.reference_geometry,progress,window)
+            # Raw scheduled yaw builds the fixed curve; it is NOT a competing reward target.
+            used_command=jp.array([state.reference_command[0],curvature*state.reference_command[0]])
+            ref_command=jp.array([ref_command[0],curvature*ref_command[0]])
+        feature=errors(pose,ref_pose,used_command)
         dpsi=pose[2]-state.pose[2];yaw=jp.arctan2(jp.sin(dpsi),jp.cos(dpsi))/dt
         leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,yaw,ref_pose,ref_command))
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in leaves]))|~jp.asarray(physics_finite)
@@ -62,4 +75,4 @@ class TimedRecoveryEnv(RecoveryEnv):
             actuator=actuator,measurement=measurement,pose=pose,tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
             tracking_state=tracking,tracking_components=parts,reference_pose=ref_pose,
-            reference_command=ref_command,yaw_rate=yaw)
+            reference_command=ref_command,yaw_rate=yaw,path_progress=progress)

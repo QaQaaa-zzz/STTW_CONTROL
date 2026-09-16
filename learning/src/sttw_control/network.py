@@ -18,6 +18,15 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get('timed_reference') is not None:
+        config['timed_reference']=dict(config['timed_reference'])
+        if config['timed_reference'].get('mode','time')=='time':
+            for k in ('mode','geometry_stride','projection_margin','extension_seconds'):
+                config['timed_reference'].pop(k,None)
+    if config.get('tracking') is not None:
+        config['tracking']=dict(config['tracking'])
+        for k,v in (('objective','legacy'),('deadline_penalty',0.),('overdue_rate',0.)):
+            if config['tracking'].get(k,v)==v:config['tracking'].pop(k,None)
     if config.get("timed_reference") is None:config.pop("timed_reference",None)
     if config.get("tracking") is not None and not config["tracking"].get("timed",False):
         config["tracking"]=dict(config["tracking"])
