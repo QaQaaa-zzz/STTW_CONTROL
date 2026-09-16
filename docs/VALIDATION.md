@@ -1666,3 +1666,9 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 
 ## 2026-09-16 同场景alpha XY图补齐
 相关timed diagnostics 7 passed；测试新增PNG/PDF输出与NPZ逐alpha实际坐标一致性。真实数据16组图全部生成；逐条件核对配置、qpos/qvel初态、扰动、参考请求/位置、共同时间网格，基线跨alpha最大坐标差0。XY差异统计仅取共同真实观测窗口，不延长失败轨迹；证据源96条trace哈希保存在alpha_errors/evidence_source_hashes.json。只做已有数据绘图与分析，没有新仿真或训练。
+
+## 2026-09-16 直接扩大时间随机指令范围
+配置检查仅speed_max与yaw_rate_max两处任务变化；1000个随机schedule的目标速度实测[1.7000016,2.6997862]，yaw[-1.3999089,1.3999606]，覆盖正负较大转弯。相关32项测试通过；GPU新任务从零两轮32步完成，无开发评估，alpha分组采样数守恒，证据runs/timed_standard_range_validation_20260916/verification.json。正式200轮需在新测试面板检查后启动，此段为工程检查而非性能证明。
+
+用户随即要求训练边界超出标准场景：正式启动前将最终范围改为速度[1.7,3.0]m/s、yaw±1.8rad/s，替代上文待启动2.7/1.4；测试面板不变。初次两轮32步工程记录保留，修订配置另跑training_margin两轮32步（累计工程64步），正式仍200轮不增预算。物理/执行器、slew和成功门槛均不变。
+最终margin配置GPU两轮32步完成，alpha样本分母守恒、无开发评估。新面板96回合及48配对三联图/16跨alpha XY图完成，原gentle无扰动三alpha和两控制器的轨迹/奖励与旧记录逐元素相同。正式宽范围训练已启动：trainer1314906、monitor1314907，初始状态initializing，TensorBoard6006访问正常；此时尚非训练完成。后续12回合/匹配基线复用约定已更新AGENTS。

@@ -1,0 +1,122 @@
+{
+  "seed": 49001,
+  "evaluation_seeds": [
+    49001
+  ],
+  "priority_alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "start_seconds": 4.0,
+  "duration_seconds": 1.0,
+  "minimum_post_event_seconds": 3.0,
+  "path_tolerance_m": 0.1,
+  "extra_tolerance_m": 0.05,
+  "heading_tolerance_rad": 0.15,
+  "hold_seconds": 0.5,
+  "cases": [
+    {
+      "name": "force_right",
+      "duration": 1.0,
+      "force": -2.0
+    },
+    {
+      "name": "steer_left",
+      "duration": 1.0,
+      "steer_rate": 0.3
+    },
+    {
+      "name": "rear_load",
+      "duration": 1.0,
+      "rear_torque": 0.4
+    }
+  ],
+  "reference_cases": [
+    {
+      "name": "gentle",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          3,
+          2.1,
+          0.3
+        ],
+        [
+          6,
+          2.1,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "tight_turn",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          3,
+          2.5,
+          0.6
+        ],
+        [
+          6,
+          2.1,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "straighten",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          2,
+          2.1,
+          0.6
+        ],
+        [
+          5,
+          2.1,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "reversal",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          2,
+          2.1,
+          0.6
+        ],
+        [
+          5,
+          2.1,
+          -0.6
+        ],
+        [
+          7,
+          2.1,
+          0
+        ]
+      ]
+    }
+  ]
+}
