@@ -1,0 +1,97 @@
+name: Test and publish stable optimization and fixed selection
+on:
+  push:
+    branches: ["delivery/optimizer-stability"]
+permissions:
+  contents: write
+concurrency:
+  group: optimizer-stability-delivery
+  cancel-in-progress: false
+jobs:
+  test-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      JAX_PLATFORMS: cpu
+      STTW_TEST_MJX_CPU: '1'
+      MUJOCO_GL: osmesa
+      PYTHONPATH: learning/src
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+      BASE_SHA: bc39069167d4e31a51f77774cb6cdf1928408e5d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prepare exact proposed source without modifying target branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/optimizer-delivery"
+          cp .github/optimizer-delivery/* "$RUNNER_TEMP/optimizer-delivery/"
+          python - <<'PY'
+          import os,pathlib,base64,lzma,json,hashlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'optimizer-delivery'
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest['base_commit']==os.environ['BASE_SHA']
+          raw=''.join((root/f'{i:02d}.b64').read_text() for i in range(4))
+          patch=lzma.decompress(base64.b64decode(raw,validate=True))
+          assert hashlib.sha256(patch).hexdigest()==manifest['patch_sha256']
+          (root/'change.patch').write_bytes(patch)
+          PY
+          git fetch origin feat/residual-recovery
+          test "$(git rev-parse FETCH_HEAD)" = "$BASE_SHA"
+          git switch --detach "$BASE_SHA"
+          git apply --index --check "$RUNNER_TEMP/optimizer-delivery/change.patch"
+          git apply --index "$RUNNER_TEMP/optimizer-delivery/change.patch"
+          git diff --cached --check
+          python - <<'PY'
+          import os,pathlib,json,hashlib,subprocess
+          m=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'optimizer-delivery/manifest.json').read_text())
+          for path,expected in m['files'].items():
+              assert hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()==expected,path
+          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert set(paths)==set(m['files'])
+          assert paths and all(p.startswith(('learning/','docs/')) or p=='PROJECT.md' for p in paths)
+          PY
+          git config user.name 'STTW code assistant'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          TREE=$(git write-tree)
+          COMMIT=$(printf '%s\n' 'fix: stabilize residual PPO updates, compare complete checkpoint episodes and compact telemetry' | git commit-tree "$TREE" -p "$BASE_SHA")
+          git switch --detach "$COMMIT"
+          mkdir -p test-output
+          git archive --format=tar.gz --output=test-output/source.tar.gz HEAD
+          git rev-parse HEAD > test-output/commit.txt
+          cp "$RUNNER_TEMP/optimizer-delivery/manifest.json" test-output/
+          git diff "$BASE_SHA" HEAD --stat > test-output/diff-stat.txt
+      - name: Install CPU physics and REAL upstream RSL dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libosmesa6 libegl1 libgl1 libeigen3-dev ffmpeg
+          python -m pip install 'torch==2.9.1' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'mujoco==3.6.0' 'mujoco-mjx==3.6.0' 'jax[cpu]==0.6.2' 'flax==0.10.7' 'optax==0.2.5'
+          python -m pip install -e './learning[test,media,rsl]'
+          python -c "import torch,rsl_rl;from importlib.metadata import version;assert version('rsl-rl-lib')=='3.2.0';print(torch.__version__)"
+          python -m pip freeze > test-output/dependencies.txt
+      - name: Full regression including real PPO and short physical selection
+        run: python -m pytest learning/tests -q --junitxml=test-output/pytest.xml
+      - name: Publish only after all tests pass and only by fast-forward
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin feat/residual-recovery
+          test "$(git rev-parse FETCH_HEAD)" = "$BASE_SHA"
+          test "$(git rev-parse HEAD^)" = "$BASE_SHA"
+          test -z "$(git diff "$BASE_SHA" HEAD -- .github)"
+          git push origin HEAD:refs/heads/feat/residual-recovery
+          printf '{"published_commit":"%s","branch":"feat/residual-recovery","tests_passed":true}\n' "$(git rev-parse HEAD)" > test-output/publication.json
+      - name: Save exact sources and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimizer-stability-tested-delivery
+          path: test-output
+          retention-days: 7
