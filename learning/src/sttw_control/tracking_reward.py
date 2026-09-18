@@ -45,6 +45,8 @@ class TrackingConfig:
     return_seconds: float = 3.
     hold_seconds: float = .5
     final_speed_tolerance: float = .2
+    final_overspeed_tolerance: float = .2
+    overspeed_band: float = .2
     final_lateral_tolerance: float = .1
     final_heading_tolerance: float = .15
     final_roll_rate_tolerance: float = .3
@@ -76,7 +78,7 @@ class TrackingConfig:
                     raise ValueError('reward_mode must be gaussian or huber')
                 continue
             if field.name == 'objective':
-                if value not in ('legacy', 'geometric_huber'):
+                if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber'):
                     raise ValueError('unsupported tracking objective')
                 continue
             if field.name in ('timed', 'geometric', 'shrink_tolerances'):
@@ -94,6 +96,8 @@ class TrackingConfig:
             raise ValueError('timed huber tracking requires geometric mode')
         if self.objective == 'geometric_huber' and (self.timed or self.return_bonus != 0 or self.tail_rate != 0):
             raise ValueError('geometric_huber excludes timed objectives, recovery bonus and duplicate tails')
+        if self.objective == 'asymmetric_geometric_huber' and ((self.timed and not self.geometric) or self.return_bonus != 0 or self.tail_rate != 0):
+            raise ValueError('asymmetric geometric huber requires geometric tracking and excludes bonus/tails')
 
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
@@ -150,6 +154,49 @@ def huber_tail(value, *, xp=jp):
     return xp.minimum(absolute, 1.) ** 2 + 2. * xp.maximum(absolute - 1., 0.)
 
 
+def directional_speed_path_rates(speed_error, lateral_error, heading_error, alpha,
+                                 return_elapsed, config, *, xp=jp):
+    """One authoritative asymmetric speed/path cost implementation.
+
+    Error is actual forward speed minus the already-active external reference.
+    The overspeed weight and band are independent of alpha. ``return_elapsed``
+    is the existing non-resetting recovery debt clock.
+    """
+    c = config
+    ev, ey, ep = (xp.nan_to_num(xp.asarray(value), nan=0., posinf=0., neginf=0.)
+                  for value in (speed_error, lateral_error, heading_error))
+    alpha = xp.clip(xp.nan_to_num(xp.asarray(alpha), nan=.5), 0., 1.)
+    under, over = xp.maximum(-ev, 0.), xp.maximum(ev, 0.)
+    wv, wp = preference_weights(alpha, c, xp=xp)
+    wover = c.priority_ratio / (c.priority_ratio + 1.)
+    under_band, over_band, path_band = directional_tolerances(
+        alpha, return_elapsed, c, xp=xp)
+    return {
+        'underspeed_tracking': -c.tracking_rate * wv * huber_tail(under / c.speed_scale, xp=xp),
+        'overspeed_tracking': -c.tracking_rate * wover * huber_tail(over / c.speed_scale, xp=xp),
+        'path_tracking': -c.tracking_rate * wp * (
+            huber_tail(ey / c.lateral_scale, xp=xp)
+            + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp)),
+        'underspeed_budget': -c.budget_rate * huber_tail(
+            xp.maximum(under - under_band, 0.) / c.speed_scale, xp=xp),
+        'overspeed_budget': -c.budget_rate * huber_tail(
+            xp.maximum(over - over_band, 0.) / c.speed_scale, xp=xp),
+        'path_budget': -c.budget_rate * huber_tail(
+            xp.maximum(xp.abs(ey) - path_band, 0.) / c.lateral_scale, xp=xp),
+    }
+
+
+def directional_tolerances(alpha, return_elapsed, config, *, xp=jp):
+    alpha = xp.clip(xp.asarray(alpha), 0., 1.)
+    initial_under = config.speed_relaxed + alpha * (config.speed_tight - config.speed_relaxed)
+    initial_path = config.lateral_tight + alpha * (config.lateral_relaxed - config.lateral_tight)
+    fraction = (xp.clip(return_elapsed / (config.return_seconds - config.hold_seconds), 0., 1.)
+                if config.shrink_tolerances else xp.asarray(0.))
+    return (initial_under + fraction * (config.final_speed_tolerance - initial_under),
+            xp.asarray(config.overspeed_band),
+            initial_path + fraction * (config.final_lateral_tolerance - initial_path))
+
+
 def timed_tolerances(alpha, config, *, xp=jp):
     """Along-track position loosens and yaw-rate tightens toward command priority."""
     alpha = xp.clip(xp.asarray(alpha), 0., 1.)
@@ -159,9 +206,13 @@ def timed_tolerances(alpha, config, *, xp=jp):
 
 def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, config, *,
                  longitudinal_error=None, yaw_rate_error=None, xp=jp):
+    speed_ok = ((speed_error >= -config.final_speed_tolerance)
+                & (speed_error <= config.final_overspeed_tolerance)
+                if config.objective == 'asymmetric_geometric_huber'
+                else xp.abs(speed_error) <= config.final_speed_tolerance)
     final = ((xp.abs(roll) <= config.roll_working_limit)
             & (xp.abs(roll_rate) <= config.final_roll_rate_tolerance)
-            & (xp.abs(speed_error) <= config.final_speed_tolerance)
+            & speed_ok
             & (xp.abs(lateral_error) <= config.final_lateral_tolerance)
             & (xp.abs(heading_error) <= config.final_heading_tolerance))
     if config.timed and not config.geometric:
@@ -174,7 +225,8 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
 
 def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_error,
                action, alpha, dt, alive_rate, failure_penalty, failed,
-               enabled, config, longitudinal_error=None, yaw_rate_error=None, xp=jp):
+               enabled, config, longitudinal_error=None, yaw_rate_error=None,
+               recovery_trigger=False, clock_from_departure=True, xp=jp):
     """One transition, using pre-action alpha and the resulting physical errors.
 
     The clock starts at observed departure, not an oracle disturbance-end label.
@@ -202,7 +254,8 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     final = within_final(phi, rate, ev, ey, ep, c, longitudinal_error=ex,
                          yaw_rate_error=ew, xp=xp) & ~failed
     left = xp.asarray(enabled) & ~final & ~failed
-    armed = (state.pending | left) & ~failed
+    armed = (state.pending | xp.asarray(recovery_trigger)
+             | (left & xp.asarray(clock_from_departure))) & ~failed
     clock_on = xp.asarray(enabled) & ~failed
     # Recover integer tick counts before incrementing: repeated float32 second
     # addition otherwise trips a 3 s deadline one tick early on MJX.
@@ -214,7 +267,7 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     earned = completed & ~state.credited
     pending = armed & ~completed
     missed = state.deadline_missed | (armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9)))
-    if c.objective == 'geometric_huber':
+    if c.objective in ('geometric_huber', 'asymmetric_geometric_huber'):
         # Completion remains diagnostic; late return must not erase a violation.
         earned = earned & ~missed
     nxt = ReturnState(pending, xp.where(pending, elapsed, 0.),
@@ -247,7 +300,14 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
         action_delta=-c.action_delta_weight * xp.sum((a - state.previous_action) ** 2, axis=-1),
         return_time=-c.return_rate * pending * clock_on * (1. + xp.minimum(elapsed / c.return_seconds, 1.)),
     )
-    if c.reward_mode == 'huber':
+    if c.objective == 'asymmetric_geometric_huber':
+        directional = directional_speed_path_rates(ev, ey, ep, alpha, elapsed, c, xp=xp)
+        rates.update(directional)
+        rates['speed_tracking'] = xp.zeros_like(ev)
+        rates['speed_tail'] = xp.zeros_like(ev)
+        rates['path_tail'] = xp.zeros_like(ey)
+        rates['speed_budget'] = xp.zeros_like(ev)
+    if c.reward_mode == 'huber' and c.objective != 'asymmetric_geometric_huber':
         rates['speed_tracking'] = -c.tracking_rate * wv * huber_tail(ev / c.speed_scale, xp=xp)
         rates['path_tracking'] = -c.tracking_rate * wp * (
             huber_tail(ey / c.lateral_scale, xp=xp)
@@ -285,7 +345,7 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
             + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp))
         rates['return_overdue'] = -c.overdue_rate * pending * clock_on * missed
     parts = {name: xp.where(failed, 0., dt * value) for name, value in rates.items()}
-    if c.deadline_penalty or c.objective == 'geometric_huber':
+    if c.deadline_penalty or c.objective in ('geometric_huber', 'asymmetric_geometric_huber'):
         parts['deadline'] = xp.where(failed, 0., -c.deadline_penalty * (missed & ~state.deadline_missed))
     parts['recovery'] = xp.where(failed, 0., c.return_bonus * earned)
     parts['failure'] = xp.where(failed, -failure_penalty, 0.)

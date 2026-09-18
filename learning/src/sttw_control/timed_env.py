@@ -4,7 +4,10 @@ import jax.numpy as jp
 from .env import RecoveryEnv
 from .controller import initial_controller
 from .observation import initial_history
-from .timed_reference import schedule,command_at,advance_reference,errors,geometry_table,project_geometry,project_committed_geometry
+from .recovery import initial_recovery
+from .timed_reference import (schedule, command_at, raw_request_at, recovery_entry_at,
+                              advance_reference, errors, geometry_table,
+                              project_geometry, project_committed_geometry)
 from .tracking_reward import transition,initial_return
 
 
@@ -18,36 +21,97 @@ class TimedRecoveryEnv(RecoveryEnv):
         steer=jp.arctan(c.controller.wheelbase*requested_yaw/(jp.maximum(v,.1)*jp.cos(c.controller.caster)))
         return jp.array([jp.clip(steer,-r.max_steer,r.max_steer),v])
 
-    def prepare_timed(self,controller,actuator,history,measurement,tick,pose,alpha,ref_pose,ref_command,yaw,tracking_state,path_features=None):
+    def prepare_timed(self,controller,actuator,history,measurement,tick,pose,alpha,ref_pose,ref_command,yaw,tracking_state,path_features=None,eso_enabled=False,base_output_scale=None):
         feature=errors(pose,ref_pose,ref_command)
         return self._prepare(controller,actuator,history,measurement,tick,pose,alpha,
             command_override=self.control_reference(pose,ref_pose,ref_command,path_features),tracking_state=tracking_state,
-            path_features_override=feature[:3] if path_features is None else path_features,timed_frame=jp.array([feature[3],ref_command[1],yaw]))
+            path_features_override=feature[:3] if path_features is None else path_features,timed_frame=jp.array([feature[3],ref_command[1],yaw]),
+            eso_enabled=eso_enabled,base_output_scale=base_output_scale)
 
-    def reset(self,seed=0,*,reference_id=None):
-        if reference_id is not None:raise ValueError('timed training samples commands, not reference IDs')
+    def _event_for(self, commands, fallback):
+        if not self.config.timed_reference.training_mix:
+            return fallback
+        scenario=commands[0,6].astype(jp.int32)
+        sign=jp.where(commands[1,2] < 0.,-1.,1.)
+        start=jp.rint(3./self.config.controller.dt)
+        duration=jp.rint(.5/self.config.controller.dt)
+        return jp.where(scenario==2,jp.array([start,start+duration,0.,2.*sign,0.,0.]),jp.zeros(6))
+
+    def _begin_task(self, state, commands, event, *, reset_memory, preparation_failed=False):
+        c=self.config
+        ref=jp.array([c.speed_reference,0.]);pose=state.pose
+        raw=raw_request_at(0,commands,c.controller.dt)
+        table=jp.zeros((self.horizon+1,6)).at[0].set(jp.concatenate((jp.zeros(1),pose,ref))) if c.tracking.geometric else None
+        geometric=errors(pose,pose,ref)[:3] if table is not None else None
+        geometry=None
+        if c.timed_reference.mode == 'geometry':
+            geometry=geometry_table(commands,c.timed_reference,c.speed_reference,
+                                    pose,c.horizon_seconds,c.controller.dt)
+        controller=initial_controller(c.controller) if reset_memory else state.controller
+        history=initial_history(c.observation) if reset_memory else state.history
+        tracking=initial_return()
+        ctrl,h,obs,base,roll=self.prepare_timed(controller,state.actuator,history,
+            state.measurement,jp.int32(0),pose,state.priority_alpha,pose,ref,jp.asarray(0.),
+            tracking,geometric,eso_enabled=state.eso_enabled,
+            base_output_scale=c.actuator.base_output_scale)
+        components=jax.tree.map(jp.zeros_like,state.tracking_components)
+        failed=jp.asarray(preparation_failed)
+        return state.replace(controller=ctrl,history=h,obs=obs,base=base,reference=roll,event=event,
+            command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
+            raw_reference_request=raw,geometric_table=table,geometric_features=geometric,
+            path_segment=jp.int32(0),reference_geometry=geometry,path_progress=jp.asarray(0.),
+            tracking_state=tracking,tracking_components=components,recovery=initial_recovery(),
+            tick=jp.int32(0),reward=jp.asarray(0.),done=failed,terminated=failed,
+            truncated=jp.bool_(False),end_code=jp.where(failed,5,0),preparation_failed=failed,
+            active_base_output_scale=jp.asarray(c.actuator.base_output_scale))
+
+    def _sample_task(self,state,key):
+        commands=schedule(jax.random.fold_in(key,51),self.config.timed_reference,self.config.speed_reference)
+        alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if self.config.priority.randomize_alpha
+               else jp.asarray(self.config.priority.fixed_alpha))
+        state=state.replace(priority_alpha=alpha)
+        event=self._event_for(commands,state.event)
+        return self._begin_task(state,commands,event,reset_memory=not bool(self.config.preparation_seconds),
+                                preparation_failed=state.preparation_failed)
+
+    def prepare_state(self,seed=0):
+        """Compute the physical/controller/history state before task time zero."""
         s=super().reset(seed)
         key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
         commands=schedule(jax.random.fold_in(key,51),self.config.timed_reference,self.config.speed_reference)
-        ref=jp.array([self.config.speed_reference,0.]);pose=s.pose
-        table=jp.zeros((self.horizon+1,6)).at[0].set(jp.concatenate((jp.zeros(1),pose,ref))) if self.config.tracking.geometric else None
-        geometric=errors(pose,pose,ref)[:3] if table is not None else None
-        geometry=None
-        if self.config.timed_reference.mode == 'geometry':
-            geometry=geometry_table(commands,self.config.timed_reference,self.config.speed_reference,
-                                    pose,self.config.horizon_seconds,self.config.controller.dt)
-        ctrl,h,obs,base,roll=self.prepare_timed(initial_controller(self.config.controller),s.actuator,
-            initial_history(self.config.observation),s.measurement,s.tick,s.pose,s.priority_alpha,
-            pose,ref,jp.asarray(0.),initial_return(),geometric)
-        return s.replace(controller=ctrl,history=h,obs=obs,base=base,reference=roll,
-            command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
-            geometric_table=table,geometric_features=geometric,path_segment=jp.int32(0),
-            reference_geometry=geometry,path_progress=jp.asarray(0.))
+        steps=int(round(self.config.preparation_seconds/self.config.controller.dt))
+        if not steps:
+            return s
+        state=self._begin_task(s,commands,jp.zeros(6),reset_memory=True)
+        straight=commands.at[:,1].set(self.config.speed_reference).at[:,2].set(0.)
+        if straight.shape[1]>=6:straight=straight.at[:,5].set(0.).at[:,6].set(0.)
+        prep=state.replace(command_schedule=straight,event=jp.zeros(6),
+                           active_base_output_scale=jp.asarray(self.config.preparation_base_output_scale))
+        if self.backend=='cpu':
+            for _ in range(steps):
+                prep=self.step(prep,jp.zeros(2))
+        else:
+            prep,_=jax.lax.scan(lambda carry,_:(self.step(carry,jp.zeros(2)),None),prep,None,length=steps)
+        failed=prep.done|~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((prep.controller,prep.actuator,prep.history,prep.measurement,prep.pose))]))
+        prep=prep.replace(eso_enabled=prep.eso_enabled|(steps*self.config.controller.dt>self.config.eso_start))
+        return prep.replace(preparation_failed=failed)
+
+    def reset_from_prepared(self,prepared,seed):
+        """Start a new randomized task without recomputing the closed-loop preparation."""
+        key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
+        return self._sample_task(prepared,key)
+
+    def reset(self,seed=0,*,reference_id=None):
+        if reference_id is not None:raise ValueError('timed training samples commands, not reference IDs')
+        key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
+        prepared=self.prepare_state(key)
+        return self.reset_from_prepared(prepared,key)
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;dt=c.controller.dt;tick=state.tick+1
         ref_pose=advance_reference(state.reference_pose,state.reference_command,dt)
         ref_command=command_at(tick,state.reference_command,state.command_schedule,dt,c.timed_reference)
+        raw_request=raw_request_at(tick,state.command_schedule,dt)
         used_command=state.reference_command
         feature=errors(pose,ref_pose,used_command)
         progress=state.path_progress;segment=state.path_segment;geometric=state.geometric_features
@@ -70,13 +134,20 @@ class TimedRecoveryEnv(RecoveryEnv):
         leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,yaw,ref_pose,ref_command))
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in leaves]))|~jp.asarray(physics_finite)
         failed=invalid|(jp.abs(measurement[0])>c.roll_failure)|physical_contact
+        scenario=(state.command_schedule[0,6].astype(jp.int32)
+                  if c.timed_reference.training_mix else jp.int32(-1))
+        recovery_trigger=(recovery_entry_at(state.tick,state.command_schedule,dt)
+                          if c.timed_reference.training_mix else False)
         tracking,parts=transition(state.tracking_state,roll=measurement[0],roll_rate=measurement[1],
             speed_error=true_speed-state.reference_command[0],yaw_rate_error=yaw-state.reference_command[1],
             lateral_error=reward_feature[0],heading_error=reward_feature[1],longitudinal_error=feature[3],action=action,
             alpha=state.priority_alpha,dt=dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,
-            failed=failed,enabled=state.tick*dt>=c.tracking.start_seconds,config=c.tracking)
+            failed=failed,enabled=state.tick*dt>=c.tracking.start_seconds,config=c.tracking,
+            recovery_trigger=recovery_trigger,clock_from_departure=scenario!=1)
+        eso_enabled=state.eso_enabled|(tick*c.controller.dt>c.eso_start)
         ctrl,h,obs,base,roll=self.prepare_timed(state.controller,actuator,state.history,measurement,tick,pose,
-            state.priority_alpha,ref_pose,ref_command,yaw,tracking,geometric)
+            state.priority_alpha,ref_pose,ref_command,yaw,tracking,geometric,eso_enabled=eso_enabled,
+            base_output_scale=state.active_base_output_scale)
         bad=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((ctrl,obs,base))]))
         invalid=invalid|bad;failed=failed|bad
         parts={k:jp.where(bad,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
@@ -88,4 +159,6 @@ class TimedRecoveryEnv(RecoveryEnv):
             actuator=actuator,measurement=measurement,pose=pose,tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
             tracking_state=tracking,tracking_components=parts,reference_pose=ref_pose,
-            reference_command=ref_command,yaw_rate=yaw,path_progress=progress,path_segment=segment,geometric_features=geometric,geometric_table=table)
+            reference_command=ref_command,raw_reference_request=raw_request,yaw_rate=yaw,
+            path_progress=progress,path_segment=segment,geometric_features=geometric,geometric_table=table,
+            eso_enabled=eso_enabled)

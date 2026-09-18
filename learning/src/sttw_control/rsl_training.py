@@ -139,13 +139,30 @@ def train(task_path,output,c):
             'timeout_contract':'gamma*V(final_next_obs) added only on truncation; RSL time_outs shortcut disabled',
             'kl_contract':{'schedule':c.rsl_schedule,'whole_update_exact_kl_limit':c.rsl_kl_limit,
                            'scope':'RSL PPO with optional full-batch mean Gaussian KL rollback; not safety certification'},
+            'baseline_contract':{'original_ecbc_eso_base_output_scale':1.0,
+                'learning_zero_residual_ablation_scale':cfg.actuator.base_output_scale,
+                'prepared_state_scale':cfg.preparation_base_output_scale,
+                'selection_baseline':'original ECBC+ESO at scale 1.0; zero-residual learning environment is reported separately'},
             'resume_contract':'optimizer/policy/RNG restored; fresh physics and truthful phase warmup',
             'source_revision':os.environ.get('STTW_SOURCE_REVISION'),
             'source_provenance':'launch Git revision; retain model/config/checkpoint identity, omit bulk source hashing'}
         write('declaration.json',declaration);write('status.json',{'phase':'initializing','complete':False})
-        reset=jax.vmap(env.reset);step=jax.vmap(env.step)
+        step=jax.vmap(env.step)
         key=jax.random.PRNGKey(c.seed);key,rk=jax.random.split(key)
-        state=jax.jit(reset)(jax.random.split(rk,c.num_envs));jax.block_until_ready(state.obs)
+        preparation_count=0
+        if cfg.preparation_seconds:
+            if c.warmup_steps:raise ValueError('task preparation and legacy phase warmup cannot be combined')
+            prepare=jax.jit(jax.vmap(env.prepare_state))
+            prepared=prepare(jax.random.split(rk,c.num_envs));jax.block_until_ready(prepared.obs)
+            if bool(jp.any(prepared.preparation_failed)):raise RuntimeError('closed-loop preparation failed')
+            preparation_count=c.num_envs*int(round(cfg.preparation_seconds/cfg.controller.dt))
+            reset_from_prepared=jax.jit(jax.vmap(env.reset_from_prepared))
+            def reset(keys):return reset_from_prepared(prepared,keys)
+            key,rk=jax.random.split(key);state=reset(jax.random.split(rk,c.num_envs))
+        else:
+            reset=jax.jit(jax.vmap(env.reset))
+            state=reset(jax.random.split(rk,c.num_envs))
+        jax.block_until_ready(state.obs)
         warmup_count=0
         if c.warmup_steps:
             key,bk,ik=jax.random.split(key,3);bank=jax.jit(reset)(jax.random.split(bk,c.warmup_pool_size))
@@ -163,7 +180,11 @@ def train(task_path,output,c):
                 return jax.lax.scan(tick,(bank,key),jp.arange(c.warmup_steps))[0]
             bank,key=warmup(bank,key);idx=jax.random.randint(ik,(c.num_envs,),0,c.warmup_pool_size)
             state=jax.tree.map(lambda x:x[idx],bank);jax.block_until_ready(state.obs);warmup_count=int(jp.sum(targets))
-        write('warmup.json',{'computed_transition_budget':c.warmup_pool_size*c.warmup_steps,'active_transitions':warmup_count})
+        write('warmup.json',{'legacy_phase_computed_transition_budget':c.warmup_pool_size*c.warmup_steps,
+            'legacy_phase_active_transitions':warmup_count,
+            'closed_loop_preparation_computed_transitions':preparation_count,
+            'closed_loop_preparation_reused_for_episode_resets':bool(cfg.preparation_seconds),
+            'training_control_transitions_exclude_preparation':True})
         scale=torch.tensor(std,device=device)
         def observations(value):return TensorDict({'policy':torch_from_jax(value)/scale},batch_size=[c.num_envs])
         obs=observations(state.obs)
@@ -211,11 +232,15 @@ def train(task_path,output,c):
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats,phase_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
-        baseline=None;validate=None
+        baseline=None;ablation=None;validate=None
         if not c.training_reward_selection:
             actor=ResidualActor(hidden_sizes=c.hidden_sizes,activation=c.activation)
             validate=make_validator(env,actor,jp.asarray(std),c)
-            baseline=host(validate({'actor':export_actor(algo.policy)},True));write('baseline_validation.json',baseline)
+            initial_params={'actor':export_actor(algo.policy)}
+            ablation=host(validate(initial_params,True,jp.nan))
+            baseline=host(validate(initial_params,True,1.))
+            write('zero_residual_0p8_validation.json',ablation)
+            write('baseline_validation.json',baseline)
         sampling_checkpoint=Path(c.resume_checkpoint).resolve() if c.resume_checkpoint else root/'checkpoints'/f'update_{offset:04d}'
         if c.training_reward_selection and not c.resume_checkpoint:
             save_policy(sampling_checkpoint,export_actor(algo.policy),mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
@@ -289,7 +314,7 @@ def train(task_path,output,c):
                 record['wall_elapsed_seconds']=time.monotonic()-start
                 with (root/'metrics.jsonl').open('a') as f:f.write(json.dumps(record,allow_nan=False)+'\n')
                 writer.write(record);print(json.dumps(record,allow_nan=False),flush=True);rows.append(record)
-                status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'selection_mode':'training_mean_step_reward' if c.training_reward_selection else 'fixed_development','control_transitions':record['control_transitions']}
+                status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'zero_residual_0p8_ablation':ablation,'selection_mode':'training_mean_step_reward' if c.training_reward_selection else 'fixed_development','control_transitions':record['control_transitions']}
                 if record.get('best_reward_model'):status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
                 if should_plot(c,local):plot_training(root)
                 write('status.json',status);write('progress.json',{'update':iteration,'phase':status['phase'],'validation_complete':'validation' in record})

@@ -19,6 +19,7 @@ class ActuatorConfig:
     steer_residual_scale: float=1.
     rear_residual_scale: float=5.
     strength: float=1.
+    base_output_scale: float=1.  # scales both ECBC outputs before residual/disturbance composition
     steer_acceleration: float | None=None
     rear_acceleration: float | None=None
     delay_steps: int=0
@@ -32,7 +33,7 @@ class ActuatorConfig:
         rates=(self.steer_acceleration,self.rear_acceleration)
         if any(not math.isfinite(x) or x<=0 for x in positive) or any(x is not None and (not math.isfinite(x) or x<=0) for x in rates) or self.delay_steps<0 or not isinstance(self.delay_steps,int):
             raise ValueError('invalid actuator timing or limits')
-        if not 0<=self.strength<=1 or any(not math.isfinite(x) or x<0 for x in (self.steer_residual_scale,self.rear_residual_scale)):
+        if not 0<=self.strength<=1 or not math.isfinite(self.base_output_scale) or self.base_output_scale<=0 or any(not math.isfinite(x) or x<0 for x in (self.steer_residual_scale,self.rear_residual_scale)):
             raise ValueError('invalid residual scale')
 
 
@@ -53,6 +54,12 @@ def composition_base(base,config=ActuatorConfig()):
         limits=jp.array([config.steer_rate_limit,config.rear_rate_limit])
         return jp.clip(base,-limits,limits)
     return base
+
+
+def effective_base(base, config=ActuatorConfig(), scale=None):
+    """Scale the two baseline commands before residuals or external offsets."""
+    factor=config.base_output_scale if scale is None else scale
+    return composition_base(jp.asarray(base) * factor, config)
 
 
 def residual_target(base,action,config=ActuatorConfig()):

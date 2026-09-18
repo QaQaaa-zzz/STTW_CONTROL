@@ -22,7 +22,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
     config=asdict(env.config)
     identity={'config':config,'model':env.bundle.identity,'seed':seed,'backend':env.backend,
               'controller':'baseline' if policy is None else 'residual','policy':policy_identity,
-              'reset_semantics':'synthetic_forward_velocity_model_initial_pose'}
+              'reset_semantics':('closed_loop_straight_preparation_preserving_controller_actuator_history_then_task_clock_zero'
+                                 if env.config.preparation_seconds else 'synthetic_forward_velocity_model_initial_pose')}
     if priority_alpha is not None:identity["priority_override"]=float(priority_alpha)
     import mujoco
     identity['actuator_diagnostics']={'names':[mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_ACTUATOR,i) for i in range(env.model.nu)],
@@ -45,7 +46,9 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         if env.config.motion_commands is not None:
             (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s','scheduled_alpha'],'schedule':np.asarray(state.command_schedule).tolist(),'reward_alignment':'transition i uses raw command and alpha at row i-1; yaw_rate is mean world heading rate over the control interval'},indent=2)+'\n')
         if env.config.timed_reference is not None:
-            (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s'],'schedule':np.asarray(state.command_schedule).tolist(),'reference':('fixed reset-integrated geometric curve; projection follows position, speed retains external clock' if env.config.timed_reference.mode=='geometry' else 'causal committed geometric prefix; pre-step command drives independent integration; no future projection or rebasing' if env.config.tracking.geometric else 'independent timed SE2 integration; pre-step command drives transition; no rebasing')},indent=2)+'\n')
+            columns=(['start_seconds','speed_m_s','yaw_rate_rad_s','speed_slew_m_s2','yaw_slew_rad_s2','recovery_entry','scenario']
+                     if env.config.timed_reference.training_mix else ['start_seconds','speed_m_s','yaw_rate_rad_s'])
+            (path/'commands.json').write_text(json.dumps({'columns':columns,'schedule':np.asarray(state.command_schedule).tolist(),'reference':('fixed reset-integrated geometric curve; projection follows position, speed retains external clock' if env.config.timed_reference.mode=='geometry' else 'causal committed geometric prefix; pre-step command drives independent integration; no future projection or rebasing' if env.config.tracking.geometric else 'independent timed SE2 integration; pre-step command drives transition; no rebasing')},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -71,12 +74,13 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'actuator_ctrl':np.asarray(s.data.ctrl).copy(),
                     'qpos':np.asarray(s.data.qpos).copy(),'qvel':np.asarray(s.data.qvel).copy(),
                     'event':np.asarray(s.event).copy(),'injected_steer_rate':float(s.event[2]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 else 0.,'injected_rear_rate':float(-s.event[5]*profile(jp.maximum(s.tick-1,0),s.event)) if int(s.tick)>0 and env.config.rear_disturbance_mode=='command' else 0.,'applied_generalized_force':np.asarray(s.data.qfrc_applied).copy(),'applied_wrench':np.asarray(s.data.xfrc_applied[env.bundle.chassis]).copy(),
-                    'time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
+                    'time':float(s.tick*env.config.controller.dt),'simulation_time':float(s.data.time),'observation':np.asarray(s.obs).copy(),
                     'measurement':np.asarray(s.measurement).copy(),
                     'path_progress':float(s.path_progress),'path_id':int(s.path_id),'pose':np.asarray(s.pose).copy(),'reference_roll':float(s.reference),
                     'motion_command':np.asarray(recorded_command(s.tick,s.pose,s.command_schedule,path_id=s.path_id,path_progress=s.path_progress) if env.config.reference_paths is not None else recorded_command(s.tick,s.pose,s.command_schedule)),
                     'user_command':np.asarray(env.requested(s.tick,s.command_schedule)[:2]) if env.config.motion_commands is not None else np.asarray([0.,0.]),'yaw_rate_world':float(s.yaw_rate),
                     'command':np.asarray(s.actuator.previous).copy(),'base':np.asarray(s.base).copy(),
+                    'active_base_output_scale':float(s.active_base_output_scale),
                     'effective_action':np.asarray(effective_action).copy(),'composition_base':np.asarray(composed_base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
@@ -91,6 +95,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                 feature=np.asarray(errors(s.pose,s.reference_pose,s.reference_command))
                 previous=frames[-1]['reference_command'] if frames else np.asarray(s.reference_command)
                 row.update(reference_pose=np.asarray(s.reference_pose).copy(),reference_command=np.asarray(s.reference_command).copy(),
+                    raw_reference_request=np.asarray(s.raw_reference_request).copy(),
                     path_features=np.asarray(s.geometric_features) if env.config.tracking.geometric else feature[:3],longitudinal_error=float(feature[3]),
                     yaw_rate_error=float(s.yaw_rate-previous[1]),user_command=np.asarray(s.reference_command).copy(),
                     motion_command=np.asarray(env.control_reference(s.pose,s.reference_pose,s.reference_command,s.geometric_features)))
@@ -101,7 +106,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         for _ in range(env.horizon):
             action=np.zeros(2) if policy is None else policy(state.obs)
             request,effective_action,composed_base=prepare(state.replace(data=None),jp.asarray(action))
-            request_time=float(state.data.time)
+            request_time=float(state.tick*env.config.controller.dt)
             state=step(state,jp.asarray(action))
             transitions+=1
             frames.append(capture(state,action))
@@ -111,6 +116,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
             if bool(state.task_recovered) and task_time is None: task_time=elapsed
             if bool(state.done): break
         arrays={key:np.asarray([frame[key] for frame in frames]) for key in frames[0]}
+        if env.config.timed_reference is not None:
+            arrays['command_schedule']=np.asarray(state.command_schedule)
         if state.reference_geometry is not None:
             arrays['reference_geometry']=np.asarray(state.reference_geometry)
             arrays['geometric_schedule']=np.asarray(state.command_schedule)
@@ -130,6 +137,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                  'whole_episode_root_forward_world_x_m':float(position[:,0].max()),
                  'wall_seconds':time.monotonic()-begin,'declaration_sha256':hashlib.sha256(declaration.encode()).hexdigest(),
                  'scope':'engineering_baseline_not_recovery_domain_or_swept_body_envelope'}
+        summary['preparation']={'seconds':env.config.preparation_seconds,
+            'failed':bool(state.preparation_failed),'simulation_time_at_task_end':float(state.data.time)}
         summary['command_headroom']=headroom_metrics(arrays['base'][:-1],arrays['measurement'][:-1,2],env.config.actuator)
         summary['sampled_mechanical_work']=mechanical_work(arrays)
         summary['command_limits']=command_limit_metrics(arrays['command'],env.config.actuator)

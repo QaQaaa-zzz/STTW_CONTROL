@@ -427,3 +427,18 @@ The training X-axis is update index. `train/sampling_policy_update` identifies
 which PRE-update policy generated that score; `train/control_transitions` gives
 sample count. Alpha log bins contain random intervals, not exact paired alpha
 0/.5/1. TensorBoard event values are a projection of authoritative JSON logs.
+# 2026-09-18 不对称速度/几何路径训练
+
+主候选与rho=10对照按同一固定预算顺序运行：
+
+```bash
+JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=false MUJOCO_GL=egl \
+PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python \
+  learning/cli/asymmetric_priority_comparison.py \
+  --main-task learning/configs/asymmetric_priority_rho34.json \
+  --control-task learning/configs/asymmetric_priority_rho10.json \
+  --training learning/configs/ppo_asymmetric_priority.json \
+  --output runs/asymmetric_priority_comparison_20260918
+```
+
+每组1024×128×48=6,291,456正式控制转移，准备计算另列。`baseline_validation.json`是base scale 1.0原始ECBC+ESO；`zero_residual_0p8_validation.json`是学习环境零残差消融，二者不得混称。TensorBoard读取各arm的`training/tensorboard`；奖励分项包含`underspeed_tracking`、`overspeed_tracking`、`underspeed_budget`与`overspeed_budget`。

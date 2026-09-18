@@ -62,7 +62,7 @@ def scalar_values(record,labels=(),profile="full"):
             if values:result['validation/mean_'+key+'_return'] = sum(values)/len(values)
         failures=record.get('validation',{}).get('failed',[])
         if failures:result['validation/failure_fraction']=sum(failures)/len(failures)
-        for key in ('speed','yaw','alive','speed_tolerance','yaw_tolerance','yaw_tracking','failure','speed_tracking','path_tracking','speed_tail','path_tail','speed_budget','path_budget','return_time','recovery','attitude','roll_rate','action_delta'):
+        for key in ('speed','yaw','alive','speed_tolerance','yaw_tolerance','yaw_tracking','failure','speed_tracking','underspeed_tracking','overspeed_tracking','path_tracking','speed_tail','path_tail','speed_budget','underspeed_budget','overspeed_budget','path_budget','return_time','recovery','attitude','roll_rate','action_delta'):
 
             add('reward_components/'+key, record.get('reward_components_mean_step',{}).get(key))
         for key in ('terminal_tracking_hold','return_deadline_missed','recovered_after_excursion'):

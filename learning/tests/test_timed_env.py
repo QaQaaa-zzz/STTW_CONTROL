@@ -25,6 +25,33 @@ def test_timed_reset_resamples_schedule_and_exposes_clock_errors():
     assert len(a.tracking_components)>14
 
 
+def test_closed_loop_preparation_preserves_eso_actuator_and_history_at_task_zero():
+    c=task()
+    c=replace(c,speed_reference=2.3,eso_start=.005,preparation_seconds=.02,
+              timed_reference=replace(c.timed_reference,training_mix=True,fixed_scenario='core_left'))
+    env=RecoveryEnv(c);state=env.reset(71)
+    assert state.tick==0
+    assert state.eso_enabled and not state.preparation_failed
+    assert float(state.data.time)==pytest.approx(.02)
+    assert np.count_nonzero(np.asarray(state.history.mask))>1
+    assert np.linalg.norm(np.asarray(state.controller.eso))>0
+    np.testing.assert_allclose(state.raw_reference_request,[2.3,0.])
+    np.testing.assert_allclose(state.reference_pose,state.pose)
+
+
+def test_prepared_state_is_reused_without_recomputing_or_mutating_physics():
+    c=task()
+    c=replace(c,speed_reference=2.3,eso_start=.005,preparation_seconds=.02,
+              timed_reference=replace(c.timed_reference,training_mix=True))
+    env=RecoveryEnv(c);prepared=env.prepare_state(71)
+    a=env.reset_from_prepared(prepared,81);b=env.reset_from_prepared(prepared,82)
+    np.testing.assert_array_equal(a.data.qpos,b.data.qpos)
+    np.testing.assert_array_equal(a.data.qvel,b.data.qvel)
+    np.testing.assert_array_equal(a.controller.eso,b.controller.eso)
+    assert a.tick==b.tick==0 and a.data.time==b.data.time==pytest.approx(.02)
+    assert not np.array_equal(a.command_schedule,b.command_schedule)
+
+
 def test_time_reference_advances_independently_of_actions_and_resets():
     env=RecoveryEnv(task());a=env.reset(71);b=env.reset(71)
     for _ in range(5):

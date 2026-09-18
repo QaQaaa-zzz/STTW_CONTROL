@@ -1780,3 +1780,10 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-18 五场景15条件同图补齐
 用户固定未来gentle/tight_turn/straighten/reversal/synthetic_turn各alpha0/.5/1，共15残差回合；基线各场景首次一条，之后条件匹配复用。规则写入AGENTS.md，覆盖旧12回合约定，不恢复训练内每轮评估。共享tracking_diagnostics.write_cross_alpha_comparison接入generate_panel；本次直接读取best252原四场景和同初态单弯轨迹，没有新增仿真/训练。交付5张总览＋20张单图，各PNG/PDF，以及5份CSV/NPZ；每张总览含XY、每步总奖励、累计奖励、速度误差。每步奖励symlog保留大惩罚与小变化；奖励基线按各alpha重评分，其余图基线共享一条。
 核实5场景/15残差条件/同一checkpoint与seed，CSV和NPZ奖励、累计量及速度误差与30组已评分轨迹逐值一致，基线物理跨alpha相同。12项相关测试通过，检查代表性原场景/新增单弯总览并修正奖励轴可读性；所有索引链接有效。统一入口runs/geometric_random_recovery_20260918_continue200/analysis/five_scene_comparison/INDEX.md，原报告和标准图索引已添加入口。
+# 2026-09-18 不对称奖励与闭环准备工程验证
+
+- 契约测试覆盖欠速/超速方向、固定超速权重、不对称最终带、收紧过程、三个合成候选、非重置恢复债务、base scale边界、40/40/20采样和核心参考积分。
+- 聚焦检查：106 passed；完整`learning/tests`最终为392 passed、4 skipped。4项跳过均为显式GPU/环境开关；独立MJX GPU全链已实际执行。
+- MJX GPU：8环境×700步准备均无失败，任务reset/8步推进观测奖励有限；64环境×128步推进无失败，首次编译后测得约240控制转移/s（小批量工程值，不能外推1024环境正式吞吐）。
+- RSL全链短跑：8×8×1=64正式转移，fixed LR=3e-4，候选全批KL约0.000260，未回退；奖励分项重建最大绝对误差约9.3e-10。固定开发面板完整运行，所有预训练策略均未完成最终保持，作为负结果保留。
+- 物理准备：3.5s、scale1.0、无扰动、零学习残差；任务时钟归零后ESO保持启用，学习scale切至0.8。CPU检查准备末实际前向速度约2.254m/s、roll约1e-5rad，未把参考2.3m/s冒充实际精确值。

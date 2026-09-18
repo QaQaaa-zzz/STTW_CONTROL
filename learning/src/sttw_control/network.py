@@ -23,10 +23,18 @@ def make_policy_identity(model_identity,config,history_steps):
         if config['timed_reference'].get('mode','time')=='time':
             for k in ('mode','geometry_stride','projection_margin','extension_seconds'):
                 config['timed_reference'].pop(k,None)
+        for key,default in (('training_mix',False),('fixed_scenario',None),
+                            ('fast_speed_slew',1.),('fast_yaw_slew',2.4),
+                            ('gentle_yaw_rate',.35)):
+            if config['timed_reference'].get(key,default)==default:
+                config['timed_reference'].pop(key,None)
     if config.get('tracking') is not None:
         config['tracking']=dict(config['tracking'])
         for k,v in (('objective','legacy'),('deadline_penalty',0.),('overdue_rate',0.)):
             if config['tracking'].get(k,v)==v:config['tracking'].pop(k,None)
+        for key,default in (('final_overspeed_tolerance',.2),('overspeed_band',.2)):
+            if config['tracking'].get(key,default)==default:
+                config['tracking'].pop(key,None)
     if config.get("timed_reference") is None:config.pop("timed_reference",None)
     else:
         config['timed_reference']=dict(config['timed_reference'])
@@ -52,6 +60,8 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get("tracking") is None:config.pop("tracking",None)
     if "actuator" in config:
         config["actuator"]=dict(config["actuator"])
+        if config["actuator"].get("base_output_scale",1.)==1.:
+            config["actuator"].pop("base_output_scale",None)
         if not config["actuator"].get("project_base",False):config["actuator"].pop("project_base",None)
         if config["actuator"].get("composition","additive")=="additive":
             config["actuator"].pop("composition",None)
@@ -69,6 +79,8 @@ def make_policy_identity(model_identity,config,history_steps):
             config['motion_commands'].pop('tracking_priority_ratio')
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)
     if config.get("alive_reward_rate")==1.:config.pop("alive_reward_rate")
+    if config.get("preparation_seconds",0.)==0.:
+        config.pop("preparation_seconds",None);config.pop("preparation_base_output_scale",None)
     if config.get('priority') is None:config.pop('priority',None)
     else:
         config['priority']=dict(config['priority'])
@@ -124,7 +136,10 @@ class ResidualActor(nn.Module):
         x=observation
         for width in self.hidden_sizes:
             x=nn.Dense(width)(x)
-            if self.activation=="elu":x=nn.elu(x)
+            # Match torch.nn.ELU used by the RSL actor export. Flax's ELU uses
+            # a numerically different expm1 path that drifts by ~1e-5 per deep
+            # network and breaks the bound checkpoint inference contract.
+            if self.activation=="elu":x=jp.where(x>0,x,jp.exp(x)-1.)
             elif self.activation=="leaky_relu":x=nn.leaky_relu(x,negative_slope=self.negative_slope)
             else:raise ValueError("unsupported actor activation")
         logits=nn.Dense(2)(x)

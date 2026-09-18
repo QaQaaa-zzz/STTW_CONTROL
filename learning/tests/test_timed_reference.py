@@ -8,7 +8,7 @@ import pytest
 
 from sttw_control.timed_reference import (
     TimedReferenceConfig, advance_reference, command_at, errors,
-    reference_trace, schedule,
+    raw_request_at, reference_trace, schedule,
 )
 
 
@@ -58,6 +58,39 @@ def test_commands_switch_by_time_and_obey_both_slew_limits():
     assert np.max(np.abs(differences[:, 0])) <= config.speed_slew*.1+1e-12
     assert np.max(np.abs(differences[:, 1])) <= config.yaw_slew*.1+1e-12
     np.testing.assert_allclose(result['reference_command'][-1], [2.5, .6])
+
+
+def test_core_conflict_uses_fast_reference_slew_and_declared_recovery_segment():
+    config = TimedReferenceConfig(training_mix=True, fixed_scenario='core_left')
+    rows = np.asarray(schedule(jax.random.PRNGKey(0), config, 2.3))
+    assert rows.shape[1] == 7
+    np.testing.assert_allclose(rows[:3, :3], [
+        [0.0, 2.3, 0.0], [1.0, 2.5, 1.8], [1.95, 2.5, 0.0]])
+    np.testing.assert_allclose(rows[1:3, 3:5], [[1.0, 2.4], [1.0, 2.4]])
+    assert rows[2, 5] == 1.0
+    command = np.array([2.3, 0.0])
+    yaw_area = 0.0
+    zero_tick = None
+    for tick in range(1, 2001):
+        yaw_area += command[1] * 0.005
+        command = command_at(tick, command, rows, 0.005, config, xp=np)
+        if tick >= 390 and zero_tick is None and abs(command[1]) < 1e-9:
+            zero_tick = tick
+    assert zero_tick * 0.005 == pytest.approx(2.70, abs=0.0051)
+    assert yaw_area == pytest.approx(1.71, abs=0.01)
+    np.testing.assert_allclose(raw_request_at(390, rows, 0.005, xp=np), [2.5, 0.0])
+
+
+def test_training_mix_has_declared_40_40_20_scenario_frequencies_and_mirrors():
+    config = TimedReferenceConfig(training_mix=True)
+    rows = np.stack([np.asarray(schedule(jax.random.PRNGKey(i), config, 2.3)) for i in range(4000)])
+    scenario = rows[:, 0, 6].astype(int)
+    fractions = np.bincount(scenario, minlength=3) / len(scenario)
+    np.testing.assert_allclose(fractions, [0.4, 0.4, 0.2], atol=0.03)
+    for code in (0, 1, 2):
+        yaw = rows[scenario == code, 1, 2]
+        yaw = yaw[yaw != 0]
+        assert abs(np.mean(np.sign(yaw))) < 0.1
 
 
 def test_fixed_trace_rebuilds_with_pre_step_command_and_ignores_actual_disturbance():

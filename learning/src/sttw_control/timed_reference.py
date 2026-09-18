@@ -27,6 +27,11 @@ class TimedReferenceConfig:
     recovery_probability: float = 0.
     recovery_start: float = 4.
     conflict_start_window: tuple = (.5, 1.)
+    training_mix: bool = False
+    fixed_scenario: str | None = None
+    fast_speed_slew: float = 1.
+    fast_yaw_slew: float = 2.4
+    gentle_yaw_rate: float = .35
 
     mode: str = 'time'  # 'geometry': fixed original curve, not time-position tracking
     geometry_stride: int = 10  # downsample exact control-tick integration at reset
@@ -34,6 +39,12 @@ class TimedReferenceConfig:
     extension_seconds: float = 5.
 
     def __post_init__(self):
+        if type(self.training_mix) is not bool:
+            raise ValueError('training_mix must be boolean')
+        if self.fixed_scenario not in (None, 'nominal', 'ordinary_accel', 'core_left', 'core_right', 'disturbance_left', 'disturbance_right'):
+            raise ValueError('invalid fixed training scenario')
+        if self.fixed_scenario is not None and not self.training_mix:
+            raise ValueError('fixed_scenario requires training_mix')
         if not math.isfinite(self.recovery_probability) or not 0 <= self.recovery_probability <= 1:
             raise ValueError('recovery_probability must be in [0,1]')
         window = tuple(self.conflict_start_window)
@@ -51,7 +62,8 @@ class TimedReferenceConfig:
         if any(not math.isfinite(x) or x <= 0 for x in (self.projection_margin, self.extension_seconds)):
             raise ValueError('projection margin and extension must be positive finite')
         positive = (self.speed_min, self.speed_max, self.speed_slew,
-                    self.yaw_slew, self.max_steer)
+                    self.yaw_slew, self.fast_speed_slew, self.fast_yaw_slew,
+                    self.gentle_yaw_rate, self.max_steer)
         nonnegative = (self.yaw_rate_max, self.yaw_feedback, self.lateral_feedback)
         if any(not math.isfinite(x) or x <= 0 for x in positive):
             raise ValueError('speeds, slew rates and steering bound must be positive finite')
@@ -89,6 +101,42 @@ def schedule(key, config, initial_speed):
     """
     if config.fixed is not None:
         return jp.asarray(config.fixed, dtype=float)
+    if config.training_mix:
+        # Columns: time, raw speed/yaw request, speed/yaw slew, recovery-entry,
+        # scenario (0 nominal, 1 finite conflict, 2 lateral disturbance).
+        draw = jax.random.uniform(key, (6,))
+        sign = jp.where(draw[1] < .5, -1., 1.)
+        nominal_kind = jp.floor(draw[2] * 3.).astype(jp.int32)
+        nominal_yaw = jp.where(nominal_kind == 0, 0., sign * config.gentle_yaw_rate)
+        nominal_speed = config.speed_min + draw[3] * (config.speed_max - config.speed_min)
+        def row(time, speed, yaw, speed_slew, yaw_slew, recovery, scenario):
+            return jp.asarray([time, speed, yaw, speed_slew, yaw_slew, recovery, scenario])
+        nominal = jp.stack((
+            row(0., initial_speed, 0., config.speed_slew, config.yaw_slew, 0., 0.),
+            row(1., nominal_speed, nominal_yaw, config.speed_slew, config.yaw_slew, 0., 0.),
+            row(4., nominal_speed, 0., config.speed_slew, config.yaw_slew, 0., 0.),
+            row(9., nominal_speed, 0., config.speed_slew, config.yaw_slew, 0., 0.)))
+        conflict = jp.stack((
+            row(0., initial_speed, 0., config.fast_speed_slew, config.fast_yaw_slew, 0., 1.),
+            row(1., 2.5, sign * 1.8, config.fast_speed_slew, config.fast_yaw_slew, 0., 1.),
+            row(1.95, 2.5, 0., config.fast_speed_slew, config.fast_yaw_slew, 1., 1.),
+            row(9., 2.5, 0., config.fast_speed_slew, config.fast_yaw_slew, 0., 1.)))
+        disturbance = jp.stack((
+            row(0., initial_speed, 0., config.speed_slew, config.yaw_slew, 0., 2.),
+            row(1., initial_speed, sign * config.gentle_yaw_rate, config.speed_slew, config.yaw_slew, 0., 2.),
+            row(6., initial_speed, 0., config.speed_slew, config.yaw_slew, 0., 2.),
+            row(9., initial_speed, 0., config.speed_slew, config.yaw_slew, 0., 2.)))
+        if config.fixed_scenario is not None:
+            if config.fixed_scenario == 'ordinary_accel':
+                return nominal.at[1,1:3].set(jp.array([2.5,0.])).at[2:,1:3].set(jp.array([2.5,0.]))
+            code = 0 if config.fixed_scenario == 'nominal' else (1 if config.fixed_scenario.startswith('core') else 2)
+            forced_sign = -1. if config.fixed_scenario.endswith('right') else 1.
+            chosen = (nominal, conflict, disturbance)[code]
+            if code:
+                chosen = chosen.at[1, 2].set(abs(chosen[1, 2]) * forced_sign)
+            return chosen
+        scenario = jp.where(draw[0] < .4, 0, jp.where(draw[0] < .8, 1, 2))
+        return jp.where(scenario == 0, nominal, jp.where(scenario == 1, conflict, disturbance))
     n = len(config.switch_windows)
     draws = jax.random.uniform(key, (n, 3))
     windows = jp.asarray(config.switch_windows, dtype=float).reshape(n, 2)
@@ -121,8 +169,31 @@ def command_at(tick, previous_command, schedule, dt, config, *, xp=jp):
     tolerance = xp.minimum(dt * .001, 4 * np.finfo(np.float32).eps * xp.maximum(1., xp.abs(time)))
     index = xp.maximum(xp.sum(rows[:, 0] <= time + tolerance) - 1, 0)
     target = rows[index, 1:3]
-    limit = xp.asarray([config.speed_slew, config.yaw_slew]) * dt
+    limit = (rows[index, 3:5] if config.training_mix
+             else xp.asarray([config.speed_slew, config.yaw_slew])) * dt
     return previous_command + xp.clip(target - previous_command, -limit, limit)
+
+
+def raw_request_at(tick, schedule, dt, *, xp=jp):
+    """Return the externally published unslewed speed/yaw request."""
+    rows = xp.asarray(schedule)
+    time = tick * dt
+    tolerance = xp.minimum(dt * .001, 4 * np.finfo(np.float32).eps * xp.maximum(1., xp.abs(time)))
+    index = xp.maximum(xp.sum(rows[:, 0] <= time + tolerance) - 1, 0)
+    return rows[index, 1:3]
+
+
+def recovery_entry_at(tick, schedule, dt, *, xp=jp):
+    """True once when a published row enters the declared recovery segment."""
+    rows = xp.asarray(schedule)
+    if rows.shape[1] < 6:
+        return xp.asarray(False)
+    time = tick * dt
+    tolerance = xp.minimum(dt * .001, 4 * np.finfo(np.float32).eps * xp.maximum(1., xp.abs(time)))
+    index = xp.maximum(xp.sum(rows[:, 0] <= time + tolerance) - 1, 0)
+    previous_time = xp.maximum(tick - 1, 0) * dt
+    previous_index = xp.maximum(xp.sum(rows[:, 0] <= previous_time + tolerance) - 1, 0)
+    return (rows[index, 5] > .5) & (index != previous_index)
 
 
 def advance_reference(pose, command, dt, *, xp=jp):

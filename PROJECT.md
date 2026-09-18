@@ -1,3 +1,11 @@
+# 当前实施更新：不对称速度代价与固定几何路径训练（2026-09-18）
+
+新入口为 `asymmetric_priority_rho34.json`（主候选）和 `asymmetric_priority_rho10.json`（单变量对照），共同使用 `ppo_asymmetric_priority.json`。α=0允许有限欠速以贴原始几何路径，α=1优先速度；超速权重和0.05m/s过程带对所有α固定，最终速度带为[-0.20,+0.05]m/s。奖励方向逻辑集中在`tracking_reward.py`的显式新objective，旧objective与冻结重评分身份保持兼容。
+
+每回合正式任务10s；任务前3.5s以base scale 1.0真实闭环准备稳定直行，任务时钟归零时保留车辆、ECBC/ESO、执行器和10帧历史，学习任务切换到base scale 0.8。训练reset复用预计算的完整准备状态，716,800次准备计算转移单列，不计入每组6,291,456正式训练转移。40/40/20任务分别为可行名义、有限加速转弯后回归、缓弯中单次±2N/0.5s侧向扰动；核心左右场景的生效yaw参考约2.695s归零、积分转角约1.71rad。
+
+RSL保持三层128 ELU、固定3e-4学习率；全采样高斯平均KL超过0.02时回退Actor、Critic、log-std和Adam状态。固定开发比较覆盖普通加速、核心左右冲突、缓弯侧扰动，在初始化、更新1/24/48比较原始scale1.0 ECBC+ESO、scale0.8零残差消融和α=0/.5/1策略，并记录欠/超速峰值、积分和越带时间。工程短跑已通过，正式运行状态以新运行目录为准；训练和存活不代表任务合格或安全保证。
+
 # 当前实施更新：固定学习率、可比选模与精简日志交付（2026-09-16）
 
 用户上传bc390691的64轮运行：更新实际执行，但训练片段best为update_0001，12标准回合均未完成最终跟踪。当前新增入口为`ppo_geometric_stable.json`；几何reward/task不改，alpha继续入网，RSL3.2保留。固定LR3e-4、更新KL回退、1024×128×48，相同6,291,456训练预算。训练中不增加验证；阶段末用`select_best.py --fixed-evaluate`比较声明候选（含zero/first/last），不强制后期胜出、不覆盖原训练best。`reward_review.py --selection ... --compact`输出精简包。工程检查与运行命令见learning/README与VALIDATION新增节；尚无新正式训练或实车证据。下方旧当前段落为历史快照。

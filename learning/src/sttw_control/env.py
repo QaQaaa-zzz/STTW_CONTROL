@@ -14,7 +14,7 @@ import numpy as np
 import mujoco
 from .model import load_model
 from .controller import ControllerConfig,initial_controller,controller_step
-from .actuator import ActuatorConfig,initial_actuator,apply_residual,composition_base
+from .actuator import ActuatorConfig,initial_actuator,apply_residual,effective_base
 from .observation import ObservationConfig,initial_history,advance_history,make_frame,observation_fields
 from .recovery import RecoveryConfig,initial_recovery,update_recovery
 from .path import BendConfig,bend_table,bend_command,bend_features,ReferencePaths,integrated_reference,features_at_progress
@@ -71,6 +71,8 @@ class TaskConfig:
     path_error_weight: float=0.
     heading_error_weight: float=0.
     speed_error_weight: float=1.
+    preparation_seconds: float=0.  # closed-loop zero-residual straight preparation before task time zero
+    preparation_base_output_scale: float=1.
 
     def __post_init__(self):
         is_time = self.timed_reference is not None and self.timed_reference.mode == 'time'
@@ -80,13 +82,15 @@ class TaskConfig:
             tr=self.timed_reference
             if tr.mode == 'geometry' and self.tracking.geometric:
                 raise ValueError('full-curve geometry and committed geometry are distinct modes')
-            if tr.mode == 'geometry' and self.tracking.objective != 'geometric_huber':
-                raise ValueError('geometry mode requires the explicit geometric_huber objective')
+            if tr.mode == 'geometry' and self.tracking.objective not in ('geometric_huber', 'asymmetric_geometric_huber'):
+                raise ValueError('geometry mode requires an explicit geometric huber objective')
+            if tr.training_mix and not math.isclose(self.speed_reference, 2.3):
+                raise ValueError('declared mixed task preparation starts at 2.3 m/s')
             if tr.speed_max>.1*self.actuator.rear_rate_limit or tr.max_steer>self.actuator.steer_limit:raise ValueError("timed reference exceeds actuator contract")
             if tr.fixed is not None:
                 if not math.isclose(tr.fixed[0][1],self.speed_reference) or tr.fixed[0][2]!=0 or any(row[0]>=self.horizon_seconds or row[1]>.1*self.actuator.rear_rate_limit for row in tr.fixed):raise ValueError("invalid timed fixed initial/time/speed contract")
-            elif tr.switch_windows and tr.switch_windows[-1][1]>=self.horizon_seconds:raise ValueError("timed switches must fit horizon")
-            if tr.fixed is None and tr.recovery_probability and max(tr.recovery_start,tr.switch_windows[-1][1])+.001>=self.horizon_seconds:
+            elif not tr.training_mix and tr.switch_windows and tr.switch_windows[-1][1]>=self.horizon_seconds:raise ValueError("timed switches must fit horizon")
+            if tr.fixed is None and not tr.training_mix and tr.recovery_probability and max(tr.recovery_start,tr.switch_windows[-1][1])+.001>=self.horizon_seconds:
                 raise ValueError("recovery mixture switches must fit horizon")
         elif self.tracking is not None and self.tracking.timed:raise ValueError("timed reward requires timed reference")
         if self.reference_paths is not None:
@@ -173,6 +177,12 @@ class TaskConfig:
             raise ValueError('task parameters must be finite with positive failure limit and nonnegative timing')
         if self.horizon_seconds<=0 or self.disturbance_start<0 or self.disturbance_duration<=0 or self.initial_roll_range<0:
             raise ValueError('invalid episode or perturbation interval')
+        if not math.isfinite(self.preparation_seconds) or self.preparation_seconds<0 or not math.isfinite(self.preparation_base_output_scale) or self.preparation_base_output_scale<=0:
+            raise ValueError('invalid preparation duration')
+        if self.preparation_seconds and self.timed_reference is None:
+            raise ValueError('closed-loop task preparation is currently defined for timed references')
+        if not math.isclose(self.preparation_seconds/self.controller.dt,round(self.preparation_seconds/self.controller.dt),abs_tol=1e-8):
+            raise ValueError('preparation duration must align to control ticks')
         if self.controller.dt!=self.actuator.dt or self.controller.dt!=self.recovery.dt:
             raise ValueError('controller/actuator/recovery dt mismatch')
         if any(not math.isclose(value/self.controller.dt,round(value/self.controller.dt),abs_tol=1e-8)
@@ -187,7 +197,19 @@ class TaskConfig:
 
 
 def load_config(path):
-    return config_from_dict(json.loads(Path(path).read_text()))
+    path=Path(path)
+    raw=json.loads(path.read_text())
+    if 'extends' in raw:
+        parent=path.parent/raw.pop('extends')
+        base=json.loads(parent.read_text())
+        if 'extends' in base:
+            raise ValueError('nested config inheritance is not supported')
+        for key,value in raw.items():
+            if isinstance(value,dict) and isinstance(base.get(key),dict):
+                base[key]={**base[key],**value}
+            else:base[key]=value
+        raw=base
+    return config_from_dict(raw)
 
 
 def config_from_dict(raw):
@@ -226,10 +248,14 @@ class EnvState:
     path_progress: object=0.
     reference_pose: object=None
     reference_command: object=None
+    raw_reference_request: object=None
     geometric_table: object=None
     geometric_features: object=None
     path_segment: object=0
     reference_geometry: object=None
+    eso_enabled: object=False
+    preparation_failed: object=False
+    active_base_output_scale: object=1.
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered
@@ -367,14 +393,15 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None,path_features_override=None,timed_frame=None):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None,path_features_override=None,timed_frame=None,eso_enabled=False,base_output_scale=None):
         c=self.config
         command=(self.command(tick,pose,path_id=path_id,path_progress=path_progress) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
         row=jp.array([rear*.1,steer,steer_rate,roll,rate,command[0]])
-        controller,out=controller_step(controller,row,tick*c.controller.dt>c.eso_start,c.controller)
+        controller,out=controller_step(controller,row,(tick*c.controller.dt>c.eso_start)|jp.asarray(eso_enabled),c.controller)
         learning_reference=out.reference_roll if c.learning_roll_reference is None else jp.asarray(c.learning_roll_reference)
-        visible_base=composition_base(jp.array([out.steer_rate,command[1]/.1]),c.actuator)
+        raw_base=jp.array([out.steer_rate,command[1]/.1])
+        visible_base=effective_base(raw_base,c.actuator,base_output_scale)
         frame=make_frame(measurement,command,learning_reference,visible_base[0],actuator.previous,out.disturbance)
         if c.observation.include_path:
             frame=jp.concatenate([frame,self.path_features(pose,path_id,path_progress) if path_features_override is None else path_features_override])
@@ -387,7 +414,7 @@ class RecoveryEnv:
             frame=jp.concatenate([frame,return_observation(initial_return() if tracking_state is None else tracking_state,c.tracking)])
         if c.observation.include_timed:frame=jp.concatenate([frame,jp.zeros(3) if timed_frame is None else timed_frame])
         history,obs=advance_history(history,frame,c.observation)
-        return controller,history,obs,jp.array([out.steer_rate,command[1]/.1]),learning_reference
+        return controller,history,obs,raw_base,learning_reference
 
     def reset(self,seed=0,*,reference_id=None):
         key=jax.random.PRNGKey(seed) if isinstance(seed,int) else seed
@@ -420,6 +447,7 @@ class RecoveryEnv:
         state=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
                         sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha,path_id=path_id,path_progress=jp.asarray(0.))
+        state=state.replace(active_base_output_scale=jp.asarray(c.actuator.base_output_scale))
         if c.tracking is not None:
             tracking_state=initial_return()
             _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
@@ -437,7 +465,8 @@ class RecoveryEnv:
                                           physics_finite,true_speed,pose)
         tick=state.tick+1
         command=self.command(tick,pose)
-        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose,state.priority_alpha)
+        eso_enabled=state.eso_enabled|(tick*c.controller.dt>c.eso_start)
+        controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,measurement,tick,pose,state.priority_alpha,eso_enabled=eso_enabled,base_output_scale=state.active_base_output_scale)
         leaves=jax.tree_util.tree_leaves((controller,actuator,history,obs,base,measurement,action,true_speed))
         invalid=~jp.all(jp.stack([jp.all(jp.isfinite(leaf)) for leaf in leaves])) | ~jp.asarray(physics_finite)
         fallen=jp.abs(measurement[0])>c.roll_failure
@@ -458,7 +487,7 @@ class RecoveryEnv:
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(fallen,1,jp.where(timeout,2,0))))
         return state.replace(controller=controller,actuator=actuator,history=history,recovery=recovery,measurement=measurement,pose=pose,
                              reference=reference,base=base,obs=jp.nan_to_num(obs,nan=0.,posinf=0.,neginf=0.),tick=tick,reward=reward,done=failed|timeout,
-                             terminated=failed,truncated=timeout,end_code=code)
+                             terminated=failed,truncated=timeout,end_code=code,eso_enabled=eso_enabled)
 
     def _advance_tracking(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;tick=state.tick+1
@@ -480,8 +509,9 @@ class RecoveryEnv:
             dt=c.controller.dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,
             failed=failed,enabled=state.tick*c.controller.dt>=c.tracking.start_seconds,
             config=c.tracking)
+        eso_enabled=state.eso_enabled|(tick*c.controller.dt>c.eso_start)
         controller,history,obs,base,reference=self._prepare(state.controller,actuator,state.history,
-            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state,path_id=state.path_id,path_progress=progress)
+            measurement,tick,pose,state.priority_alpha,tracking_state=tracking_state,path_id=state.path_id,path_progress=progress,eso_enabled=eso_enabled,base_output_scale=state.active_base_output_scale)
         controller_invalid=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((controller,obs,base))]))
         invalid=invalid|controller_invalid;failed=failed|controller_invalid
         parts={k:jp.where(controller_invalid,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
@@ -492,7 +522,7 @@ class RecoveryEnv:
         return state.replace(controller=controller,actuator=actuator,history=history,measurement=measurement,
             pose=pose,reference=reference,base=base,obs=jp.nan_to_num(obs),tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
-            tracking_state=tracking_state,tracking_components=parts,path_progress=progress)
+            tracking_state=tracking_state,tracking_components=parts,path_progress=progress,eso_enabled=eso_enabled)
 
     def _contact_failure(self,data):
         # A floor contact with a non-wheel body counts as physical failure.
@@ -526,7 +556,7 @@ class RecoveryEnv:
             # actuator disables its residual exactly as in the direct branch.
             action=jp.where(jp.all(jp.isfinite(action)),mapped,action)
         offset=state.event[2]*profile(state.tick,state.event)
-        base=state.base.at[0].add(offset)
+        base=effective_base(state.base,c.actuator,state.active_base_output_scale).at[0].add(offset)
         if c.rear_disturbance_mode=='command':base=base.at[1].add(-state.event[5]*profile(state.tick,state.event))
         return base,action
 

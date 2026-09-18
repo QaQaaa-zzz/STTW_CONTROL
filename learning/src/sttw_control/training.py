@@ -102,6 +102,7 @@ class TrainingConfig:
     selection_nominal_slack: float=.01
     validation_events: tuple | None=None
     validation_seeds: tuple=(10001,10002,10003,10004)
+    development_scenarios: tuple | None=None
 
     def __post_init__(self):
         if self.rsl_schedule not in ('auto','fixed','adaptive'):
@@ -157,6 +158,12 @@ class TrainingConfig:
                     raise ValueError('invalid validation event amplitude/waveform')
         if not self.validation_seeds or len(set(self.validation_seeds))!=len(self.validation_seeds):
             raise ValueError('validation seeds must be nonempty and unique')
+        allowed={'ordinary_accel','core_left','core_right','disturbance_left','disturbance_right'}
+        if self.development_scenarios is not None:
+            object.__setattr__(self,'development_scenarios',tuple(self.development_scenarios))
+            if (not self.development_scenarios or len(set(self.development_scenarios))!=len(self.development_scenarios)
+                    or any(name not in allowed for name in self.development_scenarios)):
+                raise ValueError('invalid fixed development scenarios')
 
 
 def should_validate(config,index):

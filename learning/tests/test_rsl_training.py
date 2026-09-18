@@ -79,6 +79,7 @@ def test_elu_export_and_load(tmp_path):
 def test_three_hidden_layers_export_nonzero_policy(tmp_path):
     from sttw_control.network import save_policy,load_policy,ResidualActor
     from sttw_control.training import TrainingConfig
+    torch.manual_seed(1234)
     c=TrainingConfig(trainer='rsl',activation='elu',hidden_sizes=[128,128,128])
     obs=TensorDict({'policy':torch.randn(4,16)},batch_size=[4])
     algo=make_algorithm(obs,steps=2,epochs=1,minibatches=1,device='cpu',
@@ -91,12 +92,14 @@ def test_three_hidden_layers_export_nonzero_policy(tmp_path):
         expected=torch.tanh(algo.policy.act_inference(obs)).numpy()
     assert np.ptp(expected[:,0])>1e-5
     params=export_actor(algo.policy)
-    np.testing.assert_allclose(ResidualActor(tuple(c.hidden_sizes),activation='elu').apply(params,obs['policy'].numpy()),expected,atol=1e-6)
+    # Torch and XLA use different float32 matrix-reduction orders; require a
+    # tight action-space bound without asserting bitwise cross-framework math.
+    np.testing.assert_allclose(ResidualActor(tuple(c.hidden_sizes),activation='elu').apply(params,obs['policy'].numpy()),expected,atol=1e-4)
     identity={'history_steps':1}
     save_policy(tmp_path/'policy',params,np.zeros(16),np.ones(16),identity,
                 hidden_sizes=c.hidden_sizes,activation=c.activation)
     loaded=load_policy(tmp_path/'policy',expected=identity)
-    np.testing.assert_allclose(loaded(obs['policy'].numpy()),expected,atol=1e-6)
+    np.testing.assert_allclose(loaded(obs['policy'].numpy()),expected,atol=1e-4)
 
 
 @pytest.mark.parametrize('sizes',[[],[0,128],[128,False],[128,1.5]])

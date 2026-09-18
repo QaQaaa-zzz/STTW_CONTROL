@@ -131,6 +131,9 @@ def trace_summary(trace, config):
                            'heading_rad':c.final_heading_tolerance,'roll_rad':c.roll_working_limit,
                            'roll_rate_rad_s':c.final_roll_rate_tolerance,'hold_s':c.hold_seconds,
                            'return_budget_s':c.return_seconds,'return_clock':'from observable tracking-band departure, including forcing','initial_settling_s':c.start_seconds})
+    if c.objective=='asymmetric_geometric_huber':
+        result['recovery_criteria'].update(speed_error_lower_m_s=-c.final_speed_tolerance,
+                                           speed_error_upper_m_s=c.final_overspeed_tolerance)
     if c.timed:
         result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
                       xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
@@ -157,6 +160,10 @@ def audit_trace(path):
     reference_error=(audit_geometric_reference(tr,config,decl['seed']) if geometric else audit_timed_reference(tr,dt,c.geometric)) if timed else None
     state=initial_return(xp=np);parts={};max_state=0.
     ev=speed_error(tr,config)
+    mixed=bool((config.get('timed_reference') or {}).get('training_mix',False))
+    if mixed:
+        from .timed_reference import recovery_entry_at
+        scenario=int(tr['command_schedule'][0,6])
     for i in range(1,len(tr['time'])):
         event=tr['event'][i-1];tick=round(float(tr['time'][i-1])/dt)
         state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
@@ -165,6 +172,8 @@ def audit_trace(path):
             action=tr['effective_action'][i],alpha=tr['priority_alpha'][i-1],dt=dt,
             alive_rate=config['alive_reward_rate'],failure_penalty=config['failure_penalty'],
             failed=tr['terminated'][i],enabled=tick*dt>=c.start_seconds,config=c,xp=np,
+            recovery_trigger=recovery_entry_at(tick,tr['command_schedule'],dt,xp=np) if mixed else False,
+            clock_from_departure=scenario!=1 if mixed else True,
             **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if timed else {}))
         for name,value in terms.items():parts.setdefault(name,[0.]).append(float(value))
         if int(tr['end_code'][i])!=3:  # Invalid physics can also invalidate hidden controller state.
@@ -532,12 +541,19 @@ def rescore_trace(data, alpha):
     c=TrackingConfig(**config['tracking']);dt=config['controller']['dt']
     state=initial_return(xp=np);parts={};returns=[np.asarray(return_observation(state,c,xp=np))]
     ev=speed_error(tr,config)
+    mixed=bool((config.get('timed_reference') or {}).get('training_mix',False))
+    if mixed:
+        from .timed_reference import recovery_entry_at
+        scenario=int(tr['command_schedule'][0,6])
     for i in range(1,len(tr['time'])):
+        tick=i-1
         state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
             speed_error=ev[i-1],lateral_error=tr['path_features'][i,0],heading_error=tr['path_features'][i,1],
             action=tr['effective_action'][i],alpha=alpha,dt=dt,alive_rate=config['alive_reward_rate'],
             failure_penalty=config['failure_penalty'],failed=tr['terminated'][i],
             enabled=round(tr['time'][i-1]/dt)*dt>=c.start_seconds,config=c,xp=np,
+            recovery_trigger=recovery_entry_at(tick,tr['command_schedule'],dt,xp=np) if mixed else False,
+            clock_from_departure=scenario!=1 if mixed else True,
             **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if c.timed else {}))
         for k,v in terms.items():parts.setdefault(k,[0.]).append(float(v))
         returns.append(np.asarray(return_observation(state,c,xp=np)))
