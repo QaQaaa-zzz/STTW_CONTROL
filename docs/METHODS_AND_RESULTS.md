@@ -597,3 +597,6 @@ A later model is NEVER forced to win. Qualified candidates rank first; a selecte
 fallback is explicitly marked unqualified. Training best files remain immutable.
 Compact result export removes redundant pictures and high-dimensional state/input
 arrays, not timesteps, errors, rewards or failures. Original full local traces remain.
+
+## 2026-09-18 随机几何任务追加200轮
+用户明确授权从已完成update200继续到400，属于同设置延长优化预算，不是新奖励/结构消融。原阶段19,660,800转移；追加相同预算，物理重新预热89,600计算步。仅resume_checkpoint改变，任务字节一致，源码learning与XML相对37d219f无差异。保留原阶段；续训入口runs/geometric_random_recovery_20260918_continue200_inputs/experiment.json，按本阶段训练采样奖励选best，未自动评估任务能力。
