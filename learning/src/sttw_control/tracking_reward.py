@@ -50,6 +50,8 @@ class TrackingConfig:
     final_roll_rate_tolerance: float = .3
     start_seconds: float = 1.
     timed: bool = False
+    objective: str = 'legacy'  # 'geometric_huber': pure speed vs geometric path
+    overdue_rate: float = 0.  # per second while still pending after deadline
     longitudinal_wide: float = .5
     longitudinal_fine: float = .15
     longitudinal_scale: float = .2
@@ -66,12 +68,16 @@ class TrackingConfig:
     def __post_init__(self):
         nonnegative = {'start_seconds', 'tail_rate', 'budget_rate', 'return_rate',
                        'return_bonus', 'action_weight', 'action_delta_weight',
-                       'deadline_penalty', 'over_deadline_rate'}
+                       'deadline_penalty', 'over_deadline_rate', 'overdue_rate'}
         for field in fields(self):
             value = getattr(self, field.name)
             if field.name == 'reward_mode':
                 if value not in ('gaussian', 'huber'):
                     raise ValueError('reward_mode must be gaussian or huber')
+                continue
+            if field.name == 'objective':
+                if value not in ('legacy', 'geometric_huber'):
+                    raise ValueError('unsupported tracking objective')
                 continue
             if field.name in ('timed', 'geometric', 'shrink_tolerances'):
                 if not isinstance(value, bool):
@@ -86,6 +92,9 @@ class TrackingConfig:
             raise ValueError('shrinking bands require T > hold and initial bands >= final bands')
         if self.reward_mode == 'huber' and self.timed and not self.geometric:
             raise ValueError('timed huber tracking requires geometric mode')
+        if self.objective == 'geometric_huber' and (self.timed or self.return_bonus != 0 or self.tail_rate != 0):
+            raise ValueError('geometric_huber excludes timed objectives, recovery bonus and duplicate tails')
+
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
         if any(tight > relaxed for tight, relaxed in (
@@ -205,6 +214,9 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     earned = completed & ~state.credited
     pending = armed & ~completed
     missed = state.deadline_missed | (armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9)))
+    if c.objective == 'geometric_huber':
+        # Completion remains diagnostic; late return must not erase a violation.
+        earned = earned & ~missed
     nxt = ReturnState(pending, xp.where(pending, elapsed, 0.),
                       xp.minimum(hold, c.hold_seconds), state.credited | earned,
                       state.ever_left | left, missed, a)
@@ -266,8 +278,14 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     overdue = armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9))
     if c.over_deadline_rate:
         rates['over_deadline'] = -c.over_deadline_rate * pending * overdue
+    if c.objective == 'geometric_huber':
+        rates['speed_tracking'] = -c.tracking_rate * wv * huber_tail(ev / c.speed_scale, xp=xp)
+        rates['path_tracking'] = -c.tracking_rate * wp * (
+            huber_tail(ey / c.lateral_scale, xp=xp)
+            + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp))
+        rates['return_overdue'] = -c.overdue_rate * pending * clock_on * missed
     parts = {name: xp.where(failed, 0., dt * value) for name, value in rates.items()}
-    if c.deadline_penalty:
+    if c.deadline_penalty or c.objective == 'geometric_huber':
         parts['deadline'] = xp.where(failed, 0., -c.deadline_penalty * (missed & ~state.deadline_missed))
     parts['recovery'] = xp.where(failed, 0., c.return_bonus * earned)
     parts['failure'] = xp.where(failed, -failure_penalty, 0.)

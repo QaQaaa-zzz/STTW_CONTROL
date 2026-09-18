@@ -28,6 +28,11 @@ class TimedReferenceConfig:
     recovery_start: float = 4.
     conflict_start_window: tuple = (.5, 1.)
 
+    mode: str = 'time'  # 'geometry': fixed original curve, not time-position tracking
+    geometry_stride: int = 10  # downsample exact control-tick integration at reset
+    projection_margin: float = .05
+    extension_seconds: float = 5.
+
     def __post_init__(self):
         if not math.isfinite(self.recovery_probability) or not 0 <= self.recovery_probability <= 1:
             raise ValueError('recovery_probability must be in [0,1]')
@@ -39,6 +44,12 @@ class TimedReferenceConfig:
         object.__setattr__(self, 'conflict_start_window', window)
         if self.recovery_probability and not self.switch_windows:
             raise ValueError('recovery mixture requires random target windows')
+        if self.mode not in ('time', 'geometry'):
+            raise ValueError('reference mode must be time or geometry')
+        if type(self.geometry_stride) is not int or self.geometry_stride < 1:
+            raise ValueError('geometry_stride must be a positive integer')
+        if any(not math.isfinite(x) or x <= 0 for x in (self.projection_margin, self.extension_seconds)):
+            raise ValueError('projection margin and extension must be positive finite')
         positive = (self.speed_min, self.speed_max, self.speed_slew,
                     self.yaw_slew, self.max_steer)
         nonnegative = (self.yaw_rate_max, self.yaw_feedback, self.lateral_feedback)
@@ -178,7 +189,7 @@ def reference_trace(config_dict, dt, horizon, initial_speed,
     return {'reference_pose': poses, 'reference_command': commands}
 
 
-def geometry_table(initial_pose, initial_command, rows, dt, config, steps):
+def committed_geometry_table(initial_pose, initial_command, rows, dt, config, steps):
     """Frozen original reference, columns arc,x,y,heading,speed,yaw-rate.
 
     Future rows exist for efficient reset-time construction but projection only
@@ -195,7 +206,7 @@ def geometry_table(initial_pose, initial_command, rows, dt, config, steps):
     return jp.concatenate((initial[None], tail))
 
 
-def project_geometry(pose, table, previous_segment, previous_progress, displacement, frontier, *, xp=jp):
+def project_committed_geometry(pose, table, previous_segment, previous_progress, displacement, frontier, *, xp=jp):
     """Causal continuous local projection; return path features, arc, segment.
 
     A 129-segment search is intersected with the already committed prefix and
@@ -228,3 +239,53 @@ def project_geometry(pose, table, previous_segment, previous_progress, displacem
     features=xp.stack((xp.sin(tangent)*delta[0]-xp.cos(tangent)*delta[1],
                        xp.arctan2(xp.sin(heading),xp.cos(heading)),row[5]/row[4]))
     return features,row[0]+f*span[chosen],indices[chosen]
+
+
+def geometry_table(rows, config, initial_speed, initial_pose, horizon, dt):
+    """Fixed curve integrated at the original control tick, then downsampled.
+
+    Table columns: arc length, world X/Y, unwrapped heading, curvature. The
+    extra suffix prevents an artificial end-of-path during the episode. It is
+    part of the declared geometry, not a recovery-time extension.
+    """
+    steps = math.ceil((horizon + config.extension_seconds) / dt)
+    stride = config.geometry_stride
+    steps = math.ceil(steps / stride) * stride
+    pose = jp.asarray(initial_pose)
+    command = jp.asarray([initial_speed, 0.])
+    def integrate(carry, tick):
+        pose, command, arc = carry
+        nxt_pose = advance_reference(pose, command, dt)
+        arc = arc + command[0] * dt
+        nxt_cmd = command_at(tick + 1, command, rows, dt, config)
+        row = jp.concatenate((jp.reshape(arc, (1,)), nxt_pose,
+                              jp.reshape(nxt_cmd[1] / nxt_cmd[0], (1,))))
+        return (nxt_pose, nxt_cmd, arc), row
+    _, table = jax.lax.scan(integrate, (pose, command, jp.asarray(0.)), jp.arange(steps))
+    first = jp.concatenate((jp.zeros(1), pose, jp.zeros(1)))
+    return jp.concatenate((first[None], table[stride-1::stride]), axis=0)
+
+
+def project_geometry(pose, table, previous_progress, window, *, xp=jp):
+    """Continuity-windowed segment projection, shared with offline audit.
+
+    Never reanchors or translates the original path. The search window depends
+    on actual displacement, not speed-command time or alpha. At crossings a
+    spatially close but arc-distant branch is excluded.
+    """
+    pose, table = xp.asarray(pose), xp.asarray(table)
+    start, end = table[:-1, 1:3], table[1:, 1:3]
+    delta = end - start
+    ds = table[1:, 0] - table[:-1, 0]
+    lo = xp.maximum(table[0, 0], previous_progress - window)
+    hi = xp.minimum(table[-1, 0], previous_progress + window)
+    valid = (table[1:, 0] >= lo) & (table[:-1, 0] <= hi)
+    u = xp.sum((pose[:2] - start) * delta, axis=1) / xp.maximum(xp.sum(delta**2, axis=1), 1e-12)
+    u = xp.clip(u, xp.clip((lo-table[:-1, 0])/ds, 0., 1.),
+                xp.clip((hi-table[:-1, 0])/ds, 0., 1.))
+    foot = start + u[:, None] * delta
+    index = xp.argmin(xp.where(valid, xp.sum((foot-pose[:2])**2, axis=1), xp.inf))
+    progress = table[index, 0] + u[index] * ds[index]
+    yaw = table[index, 3] + u[index] * (table[index+1, 3]-table[index, 3])
+    curvature = table[index, 4] + u[index] * (table[index+1, 4]-table[index, 4])
+    return progress, xp.concatenate((foot[index], xp.reshape(yaw, (1,)))), curvature

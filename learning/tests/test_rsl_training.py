@@ -122,3 +122,44 @@ def test_resume_rng_loaded_onto_cuda_is_restored_on_cpu():
     expected = torch.rand(8, device='cuda')
     restore_cuda_rng(states)
     torch.testing.assert_close(torch.rand(8, device='cuda'), expected)
+
+
+def _fill_guard_rollout(algo,obs):
+    with torch.no_grad():
+        for _ in range(algo.storage.num_transitions_per_env):
+            z=algo.act(obs)
+            algo.process_env_step(obs,-(z[:,0]-.5)**2,torch.zeros(len(obs),dtype=torch.bool),{})
+        algo.compute_returns(obs)
+
+
+def test_real_rsl_fixed_learning_rate_and_guard_audit():
+    from sttw_control.rsl_training import guarded_update
+    obs=TensorDict({'policy':torch.randn(4,20)},batch_size=[4])
+    algo=make_algorithm(obs,steps=4,epochs=2,minibatches=2,device='cpu',
+                        learning_rate=.0003,kl=.01,schedule='fixed')
+    _fill_guard_rollout(algo,obs)
+    metrics,audit=guarded_update(algo,.02)
+    assert algo.schedule=='fixed' and algo.learning_rate==.0003
+    assert algo.optimizer.param_groups[0]['lr']==.0003
+    assert all(np.isfinite(v) for v in metrics.values())
+    assert audit['final_exact_kl']<=.02 and np.isfinite(audit['candidate_exact_kl'])
+    assert 0<=audit['mean_action_saturation_fraction']<=1
+
+
+def test_real_rsl_guard_rejects_and_restores_full_adam_state():
+    import copy
+    from sttw_control.rsl_training import guarded_update
+    obs=TensorDict({'policy':torch.randn(8,20)},batch_size=[8])
+    algo=make_algorithm(obs,steps=4,epochs=2,minibatches=2,device='cpu',
+                        learning_rate=.003,kl=.01,schedule='fixed')
+    _fill_guard_rollout(algo,obs);guarded_update(algo)  # create non-empty Adam moments
+    _fill_guard_rollout(algo,obs)
+    before=copy.deepcopy(algo.policy.state_dict());optim=copy.deepcopy(algo.optimizer.state_dict())
+    _,audit=guarded_update(algo,1e-12)
+    assert audit['full_update_rolled_back'] and audit['candidate_exact_kl']>1e-12
+    assert audit['final_exact_kl']==0.
+    for k,v in before.items():torch.testing.assert_close(algo.policy.state_dict()[k],v,rtol=0,atol=0)
+    after=algo.optimizer.state_dict();assert after['param_groups']==optim['param_groups']
+    for idx,state in optim['state'].items():
+        for key,v in state.items():torch.testing.assert_close(after['state'][idx][key],v,rtol=0,atol=0)
+    assert algo.learning_rate==.003

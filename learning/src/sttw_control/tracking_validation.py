@@ -67,7 +67,7 @@ def make_tracking_validator(env, actor, scale, config):
                  jp.where(active,jp.abs(nxt.measurement[:,0]),0.),
                  mature,mature & (jp.abs(ev)>bv),mature & (jp.abs(features[:,0])>by),
                  jp.where(active[:n],jp.abs(features[:n,0]-features[n:,0]),0.))
-            if getattr(c,'timed_reference',None) is not None:
+            if tc.timed:
                 bx,bw=timed_tolerances(state.priority_alpha,tc)
                 yaw_error=nxt.yaw_rate-state.reference_command[:,1]
                 row=row+(timed_features[:,3]**2,yaw_error**2,
@@ -88,7 +88,7 @@ def make_tracking_validator(env, actor, scale, config):
                        "longitudinal_tolerance_exceed_fraction":(jp.sum(rows[12],axis=0)/mature_count)[:n],
                        "nominal_longitudinal_tolerance_exceed_fraction":(jp.sum(rows[12],axis=0)/mature_count)[n:],
                        "yaw_rate_tolerance_exceed_fraction":(jp.sum(rows[13],axis=0)/mature_count)[:n],
-                       "nominal_yaw_rate_tolerance_exceed_fraction":(jp.sum(rows[13],axis=0)/mature_count)[n:]} if getattr(c,'timed_reference',None) is not None else {})
+                       "nominal_yaw_rate_tolerance_exceed_fraction":(jp.sum(rows[13],axis=0)/mature_count)[n:]} if tc.timed else {})
         return dict(**timed_metrics,return_ever_left=rs.ever_left[:n],return_credited=rs.credited[:n],
                     return_pending=rs.pending[:n],return_hold_seconds=rs.hold[:n],
                     radial_rmse=rmse(lateral)[:n],speed_rmse=rmse(speed)[:n],

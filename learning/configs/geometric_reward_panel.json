@@ -1,0 +1,115 @@
+{
+  "seed": 49001,
+  "alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "scenarios": [
+    {
+      "name": "gentle_force_right",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          3,
+          2.1,
+          0.3
+        ],
+        [
+          6,
+          2.1,
+          0
+        ]
+      ],
+      "event": {
+        "start": 4.0,
+        "duration": 1.0,
+        "force": -2.0
+      }
+    },
+    {
+      "name": "tight_nominal",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          3,
+          2.5,
+          0.6
+        ],
+        [
+          6,
+          2.1,
+          0
+        ]
+      ],
+      "event": {
+        "start": 4.0,
+        "duration": 1.0
+      }
+    },
+    {
+      "name": "straighten_steer_left",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          2,
+          2.1,
+          0.6
+        ],
+        [
+          5,
+          2.1,
+          0
+        ]
+      ],
+      "event": {
+        "start": 4.0,
+        "duration": 1.0,
+        "steer_rate": 0.3
+      }
+    },
+    {
+      "name": "reversal_rear_load",
+      "commands": [
+        [
+          0,
+          2.1,
+          0
+        ],
+        [
+          2,
+          2.1,
+          0.6
+        ],
+        [
+          5,
+          2.1,
+          -0.6
+        ],
+        [
+          7,
+          2.1,
+          0
+        ]
+      ],
+      "event": {
+        "start": 4.0,
+        "duration": 1.0,
+        "rear_torque": 0.4
+      }
+    }
+  ],
+  "role": "12 residual episodes and 4 alpha-independent baselines; historical standard cases, not held-out proof"
+}

@@ -1,3 +1,12 @@
+## 当前实现（未正式训练）：几何速度／路径奖励契约
+
+根据f8506ea的交叉评分审计，新增显式geometry模式而非事后提高高斯峰值：固定原始全局曲线的连续投影，速度维持外部时钟；不惩罚沿路径降速的时间落后，不把原始yaw-rate混入速度目标。
+α仍直接输入Actor且不改变执行器权限。主要项改为规范化Huber速度/横向/航向代价；取消恢复奖金，加入首次期限违反和待回归超期成本，保留共同最终保持条件。
+旧timed配置/模型/数据不变。RSL-RL、三层128 ELU和物理参数不更改；64轮短预算与阶段末12残差+4复用基线已经声明，但本次没有执行正式训练或验证收益。
+工程测试及限制见VALIDATION.md顶部；用户运行命令和结果包入口见learning/README.md顶部。奖励对角线获胜不是硬目标：真正共同优秀的候选允许在所有偏好下最优。
+
+---
+
 # 方法与结果总表
 
 更新：2026-09-14。本文是本项目唯一的方法台账；每次完成实验后原位补充，不另建版本副本。范围仅STTW_CONTROL，不包含DVGC/JIT。
@@ -537,3 +546,54 @@ policy192同seed三alpha保存轨迹的转向/后轮归一化动作最大仅.268
 预算：从零200×4096×24=19,660,800训练转移，warmup64×1400=89,600计算转移。三层128 ELU、alpha回合随机且固定、reward-only采样best，无训练内/末端自动评估，200轮结束停止。尚不宣称学会目标或泛化。成立需要可达残差动作、足够退出/纠偏时间、真实可得定位和速度及优化有效；这些只能通过闭环验证，不由奖励单独保证。
 
 追加后轮反馈审计：ECBC的增益/平衡参考已经随实测后轮转速×.1变化；固定其他状态，输入速度1.7/2.1/3.0时转向输出为−.52696/−.84120/−1.21606rad/s。后轮外层目标v_ref/.1确为直接轮速请求，但XML velocity kv3实现tau=clip(3*(omega_cmd−omega),−3,3)，实际MuJoCo四点计算确认。故“没有独立真实车速外环”属实，“整个后轮没有反馈”不属实。现有闭环不改为重复轮速PI；真实车速估计/滑移调节及负载稳态误差仍有研究空间，未验证其必然改善。本轮仍按新几何取舍训练，不附会为反馈修复成功。官方接口：https://mujoco.readthedocs.io/en/latest/XMLreference.html#actuator-velocity 。
+
+
+## Uploaded geometric run: optimizer and checkpoint-selection audit (2026-09-16)
+
+Source: user-provided partial `result.zip` and a TensorBoard event file; frozen
+run commit bc390691, RSL-RL 3.2.0, 4096 x 24 x 64. This audit did not rerun later
+policies and does not infer their deterministic performance from training loss.
+The partial archive includes summary metrics for all 12 standard episodes, but
+detailed physical traces for only part of the panel. These coverage levels differ.
+
+- Training completed 64 updates / 6,291,456 transitions; all 64 recorded 20 retained
+  optimizer minibatches, hence 1280 retained optimizer steps, not "no later training".
+- The sampled best is update_0001, scored during update 2 at -0.0364251013/step.
+  This is a policy after ONE update, not the zero-initialized policy. Ownership of
+  pre-update sampling is correct. Policy 64 is saved but unscored by this criterion.
+- The score compares 0.12-second batches at different evolving episode phases,
+  with stochastic actions and inherited physics/controller/history. It is not a
+  controlled full-episode comparison. Initial phase bank: 64 real trajectories
+  replicated into 4096 environments. This is a plausible early-score advantage,
+  not a controlled causal proof that all later policies are worse.
+- Adaptive LR was already 0.0050625 after update 1; it reached 0.01 on 48/64 updates.
+  Full-batch exact KL exceeded 0.01 in 11 updates (maximum 0.0396993); the upstream
+  desired KL is an LR target, not a rejection constraint. Value loss started
+  0.8440, peaked 116.9705, and ended 18.3457. These are warning signs rather than a
+  proof that learning rate alone caused the degradation.
+- Rewards were -0.03740 (log1), -0.18181 (log32), -0.07818 (log64). Training recorded
+  1265 physical-failure transitions and 3255 episode ends across changing samples;
+  these are not held-out episode failure rates.
+- Reviewed sampled-best results: 0/12 physical failures, 0/12 final common holds,
+  12/12 deadline misses. Survival does not establish geometric recovery.
+- All 65 TensorBoard TFRecord CRCs validated: 64 scalar steps, 64 tags / 4096 scalar
+  values. Reward matched JSON within 4.97e-9, LR within 2.24e-10. The file is valid;
+  it is binary event data served by TensorBoard, not a document to double-click.
+
+New implementation (not new training evidence): freeze the geometric reward,
+reference, ECBC+ESO, physical model, timing, alpha input, network and residual
+limits. Use an explicitly fixed 3e-4 LR, full-batch exact-KL rollback at 0.02 with
+BOTH weights and Adam state restored, longer 128-step samples, 1024 environments,
+48 updates / the SAME 6,291,456 training transitions, four epochs / 16 minibatches.
+The phase bank grows to 256 genuine trajectories (warmup 358400 compute transitions,
+previously 89600; not silently counted as training). This is a joint practical
+stabilization experiment, not a single-factor causal ablation or proven speed-up.
+
+Keep in-training evaluation disabled. A separate explicit fixed-case comparison
+includes checkpoint zero, first, last and declared intermediate checkpoints plus
+the noisy sampled best. Candidate policy rollouts start from matching full reset
+states and requests. All candidates share one paired zero-residual baseline batch.
+A later model is NEVER forced to win. Qualified candidates rank first; a selected
+fallback is explicitly marked unqualified. Training best files remain immutable.
+Compact result export removes redundant pictures and high-dimensional state/input
+arrays, not timesteps, errors, rewards or failures. Original full local traces remain.

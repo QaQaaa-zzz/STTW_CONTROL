@@ -9,7 +9,17 @@ if __name__=='__main__':
     p.add_argument('--training',type=Path,required=True)
     p.add_argument('--watch',action='store_true')
     p.add_argument('--interval',type=float,default=15.)
+    p.add_argument('--fixed-evaluate',action='store_true',help='Post-training complete-episode candidate comparison')
+    p.add_argument('--output',type=Path)
+    p.add_argument('--updates',type=int,nargs='+')
+    p.add_argument('--seeds',type=int,nargs='+',default=[51001])
     a=p.parse_args()
+    if a.fixed_evaluate:
+        if a.watch or a.output is None:p.error('--fixed-evaluate requires --output and cannot use --watch')
+        from sttw_control.selection import compare_fixed_checkpoints
+        print(json.dumps(compare_fixed_checkpoints(a.training,a.output,updates=a.updates,seeds=a.seeds),indent=2))
+        raise SystemExit(0)
+    if a.output is not None or a.updates is not None:p.error('--output/--updates require --fixed-evaluate')
     if not a.interval>0:p.error('interval must be positive')
     previous=None
     while True:

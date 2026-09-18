@@ -1,0 +1,57 @@
+{
+  "num_envs": 4096,
+  "rollout_steps": 24,
+  "updates": 64,
+  "epochs": 5,
+  "minibatch_size": 24576,
+  "learning_rate": 0.001,
+  "gamma": 0.9995,
+  "gae_lambda": 0.99,
+  "clip": 0.2,
+  "entropy_weight": 0.001,
+  "initial_std": 0.15,
+  "target_kl": 0.01,
+  "warmup_pool_size": 64,
+  "warmup_steps": 1400,
+  "seed": 65,
+  "checkpoint_interval": 16,
+  "plot_interval": 16,
+  "validation_updates": null,
+  "validation_seeds": [
+    48001,
+    48002,
+    48003,
+    48004
+  ],
+  "validation_hold_seconds": 0.5,
+  "validation_post_seconds": 3.0,
+  "selection_speed_slack": 0.05,
+  "selection_nominal_slack": 0.03,
+  "validation_events": [
+    {
+      "start": 4.0,
+      "duration": 1.0,
+      "force": -2.0
+    },
+    {
+      "start": 4.0,
+      "duration": 1.0,
+      "steer_rate": 0.3
+    },
+    {
+      "start": 4.0,
+      "duration": 1.0,
+      "rear_torque": 0.4
+    }
+  ],
+  "trainer": "rsl",
+  "activation": "elu",
+  "best_model_every_update": false,
+  "hidden_sizes": [
+    128,
+    128,
+    128
+  ],
+  "evaluation_reward_best": true,
+  "training_reward_selection": true
+}

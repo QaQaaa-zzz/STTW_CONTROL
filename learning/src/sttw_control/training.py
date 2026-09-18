@@ -55,6 +55,8 @@ class Critic(nn.Module):
 @dataclass(frozen=True)
 class TrainingConfig:
     trainer: str="jax"
+    rsl_schedule: str="auto"  # auto preserves historical adaptive/fixed choice
+    rsl_kl_limit: float | None=None  # optional whole-update exact-KL rejection
     activation: str="leaky_relu"
     hidden_sizes: tuple=(256,128)
     training_reward_selection: bool=False  # RSL sampling reward; disables all development rollouts.
@@ -102,6 +104,14 @@ class TrainingConfig:
     validation_seeds: tuple=(10001,10002,10003,10004)
 
     def __post_init__(self):
+        if self.rsl_schedule not in ('auto','fixed','adaptive'):
+            raise ValueError('invalid RSL learning rate schedule')
+        if self.rsl_kl_limit is not None and (not math.isfinite(self.rsl_kl_limit) or self.rsl_kl_limit<=0):
+            raise ValueError('RSL KL limit must be positive finite')
+        if self.trainer!='rsl' and (self.rsl_schedule!='auto' or self.rsl_kl_limit is not None):
+            raise ValueError('RSL optimizer controls require the RSL trainer')
+        if self.rsl_schedule=='adaptive' and self.target_kl is None:
+            raise ValueError('adaptive RSL schedule requires target_kl')
         if not isinstance(self.hidden_sizes,(tuple,list)) or not self.hidden_sizes or any(type(w) is not int or w<=0 for w in self.hidden_sizes):raise ValueError("hidden sizes must be positive integers")
         object.__setattr__(self,"hidden_sizes",tuple(self.hidden_sizes))
         if self.trainer=="jax" and self.hidden_sizes!=(256,128):raise ValueError("configurable hidden sizes require RSL trainer")

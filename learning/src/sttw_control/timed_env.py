@@ -4,7 +4,7 @@ import jax.numpy as jp
 from .env import RecoveryEnv
 from .controller import initial_controller
 from .observation import initial_history
-from .timed_reference import schedule,command_at,advance_reference,errors,project_geometry
+from .timed_reference import schedule,command_at,advance_reference,errors,geometry_table,project_geometry,project_committed_geometry
 from .tracking_reward import transition,initial_return
 
 
@@ -32,18 +32,24 @@ class TimedRecoveryEnv(RecoveryEnv):
         ref=jp.array([self.config.speed_reference,0.]);pose=s.pose
         table=jp.zeros((self.horizon+1,6)).at[0].set(jp.concatenate((jp.zeros(1),pose,ref))) if self.config.tracking.geometric else None
         geometric=errors(pose,pose,ref)[:3] if table is not None else None
+        geometry=None
+        if self.config.timed_reference.mode == 'geometry':
+            geometry=geometry_table(commands,self.config.timed_reference,self.config.speed_reference,
+                                    pose,self.config.horizon_seconds,self.config.controller.dt)
         ctrl,h,obs,base,roll=self.prepare_timed(initial_controller(self.config.controller),s.actuator,
             initial_history(self.config.observation),s.measurement,s.tick,s.pose,s.priority_alpha,
             pose,ref,jp.asarray(0.),initial_return(),geometric)
         return s.replace(controller=ctrl,history=h,obs=obs,base=base,reference=roll,
             command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
-            geometric_table=table,geometric_features=geometric,path_segment=jp.int32(0),path_progress=jp.asarray(0.))
+            geometric_table=table,geometric_features=geometric,path_segment=jp.int32(0),
+            reference_geometry=geometry,path_progress=jp.asarray(0.))
 
     def _advance(self,state,measurement,actuator,action,physical_contact,physics_finite,true_speed,pose):
         c=self.config;dt=c.controller.dt;tick=state.tick+1
         ref_pose=advance_reference(state.reference_pose,state.reference_command,dt)
         ref_command=command_at(tick,state.reference_command,state.command_schedule,dt,c.timed_reference)
-        feature=errors(pose,ref_pose,state.reference_command)
+        used_command=state.reference_command
+        feature=errors(pose,ref_pose,used_command)
         progress=state.path_progress;segment=state.path_segment;geometric=state.geometric_features
         table=state.geometric_table
         if c.tracking.geometric:
@@ -51,7 +57,14 @@ class TimedRecoveryEnv(RecoveryEnv):
             # integration and no path rebasing to the actual vehicle.
             arc=table[state.tick,0]+state.reference_command[0]*dt
             table=table.at[tick].set(jp.concatenate((jp.atleast_1d(arc),ref_pose,ref_command)))
-            geometric,progress,segment=project_geometry(pose,table,segment,progress,jp.linalg.norm(pose[:2]-state.pose[:2]),tick)
+            geometric,progress,segment=project_committed_geometry(pose,table,segment,progress,jp.linalg.norm(pose[:2]-state.pose[:2]),tick)
+        elif c.timed_reference.mode == 'geometry':
+            window=2.*jp.linalg.norm(pose[:2]-state.pose[:2])+c.timed_reference.projection_margin
+            progress,ref_pose,curvature=project_geometry(pose,state.reference_geometry,progress,window)
+            # Full-curve mode uses the original reset-integrated path tangent.
+            used_command=jp.array([state.reference_command[0],curvature*state.reference_command[0]])
+            ref_command=jp.array([ref_command[0],curvature*ref_command[0]])
+            feature=errors(pose,ref_pose,used_command)
         reward_feature=geometric if c.tracking.geometric else feature
         dpsi=pose[2]-state.pose[2];yaw=jp.arctan2(jp.sin(dpsi),jp.cos(dpsi))/dt
         leaves=jax.tree.leaves((measurement,actuator,action,true_speed,pose,yaw,ref_pose,ref_command))

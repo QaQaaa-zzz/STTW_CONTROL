@@ -1,3 +1,104 @@
+## Geometric speed/path reward contract (2026-09-16)
+
+The new run uses `geometric_reward_recovery.json` and `ppo_geometric_reward.json`.
+It is **not** the old time-position objective. Alpha is still a direct Actor input;
+ECBC+ESO, vehicle assets, 200 Hz control, 25 physics substeps, tanh and fixed residual
+limits (+/-1.5 steering-rate, +/-10 rear-axle-rate rad/s) are unchanged.
+
+At reset, the existing random slew-limited speed/yaw schedule is integrated once
+into a fixed global curve. A continuity-windowed segment projection gives geometric
+cross-track and heading errors. Deliberately going slower on the same curve is not
+a time-position error. The speed request retains its external clock. Scheduled yaw
+constructs the curve; yaw-rate tracking is **not** part of the speed reward. Local
+curvature/heading/lateral feedback supplies the base controller reference. Therefore
+compare residual against the baseline under this SAME new reference contract.
+
+Normal transitions use `dt * (alive - tracking_cost - roll_cost - action_cost
+- budget_cost - return_time_cost - overdue_cost)`, with no positive clipping.
+`H(z)=z^2` for `abs(z)<=1`, otherwise `2*abs(z)-1`:
+
+- `wv=(1+9*alpha)/11`, `wp=(10-9*alpha)/11`.
+- `tracking_cost=4*(wv*H(ev/0.1)+wp*(H(ey/0.1)+0.3*H(epsi/0.15)))`.
+- Speed tolerance: `0.5-0.3*alpha` m/s; geometric lateral tolerance:
+  `0.1+0.3*alpha` m. Within-band errors still have tracking cost.
+- `return_bonus=0`: creating an excursion cannot earn a recovery prize.
+- First deadline violation costs 5 once (not dt-scaled); while still pending after
+  the deadline, an additional 2/s cost applies. `deadline_missed` is sticky.
+- Failure replaces the entire transition with -100. Roll costs, final tolerances
+  and actuator authority never depend on alpha. These are not safety guarantees.
+- Final hold: speed 0.2 m/s, lateral 0.1 m, heading 0.15 rad, roll 0.3 rad,
+  roll-rate 0.3 rad/s, continuous 0.5 s. After the 1 s initialization window the
+  3 s deadline starts at observed joint-band departure INCLUDING forcing and hold;
+  it does not receive an oracle disturbance-end signal. Late final hold is reported
+  separately from on-time task qualification. No time-lag catch-up is required.
+
+Old configs retain `objective=legacy`, `mode=time` and unchanged reward semantics /
+checkpoint identity. New mode has **280 Actor inputs**, not the old timed 310, and
+requires a fresh policy. The same number of inputs as another task does NOT make
+its checkpoint interchangeable. Configured Gaussian and longitudinal/yaw scales
+inherited from old dataclasses are inactive in this explicit Huber/geometric mode.
+The static curve includes 5 s of geometric extension for projection; physical
+rollouts and return budgets are still 10 s, never extended to hide failures.
+True forward speed is used in rewards/return state; deployment needs a validated
+velocity/localization estimate, not an assumption that wheel odometry is truth.
+
+### Run the bounded first experiment
+
+Run from the repository root, with a clean/saved working tree. Do not restart an
+already running old experiment to use partially updated code. Existing runs are
+immutable. Output directories must not exist; use a new run name for each attempt.
+Use the SAME configured environment used by the existing RSL training:
+
+```bash
+export PYTHONPATH="$PWD/learning/src"
+PY=/home/qy/mujoco_playground/.venv/bin/python
+
+$PY -m pytest learning/tests/test_geometric_contract.py learning/tests/test_geometric_env.py -q
+
+$PY learning/cli/train.py \
+  --task learning/configs/geometric_reward_recovery.json \
+  --config learning/configs/ppo_geometric_reward.json \
+  --output runs/geometric_reward_first/training
+
+# Explicit POST-training test: 4 scenarios x 3 alpha = 12 residual episodes,
+# plus only 4 baseline physical episodes, reused/re-scored across alpha.
+$PY learning/cli/reward_review.py \
+  --training-run runs/geometric_reward_first/training \
+  --panel learning/configs/geometric_reward_panel.json \
+  --output runs/geometric_reward_first/review
+```
+
+RSL-RL 3.2.0 remains the trainer (three 128 ELU layers): 4096 environments x 24
+steps x 64 updates = **6,291,456 training transitions**; 5 epochs, 24,576 minibatch,
+lr .001/adaptive KL .01, gamma .9995, lambda .99, initial std .15. Extra phase-pool
+warmup budget is 64 x 1400 = 89,600 computed transitions. No in-training evaluation:
+`training_reward_selection=true`, retaining the existing pre-update sampling-policy
+ownership rule. Training-reward best is not a certified successful model; the last
+updated policy without another rollout remains unscored. No automatic continuation.
+No measured speed-up or improved recovery is claimed before the user runs this.
+
+`review_checkpoint` refuses incomplete training and chooses the scored training best;
+`--checkpoint` can explicitly select another compatible Actor. It verifies frozen
+config, actual per-step reward reconstruction, independently integrated curve and
+local projections. It emits paired PNG/PDF/CSV/NPZ, true/estimated/requested speeds,
+real failure endpoints, all-alpha XY overlays, component sums, final/deadline metrics,
+and `cross_scores.csv`. A common excellent trace MAY win every scoring alpha; this
+is not automatically a reward error. The standard cases are declared historical
+scenarios, not untouched holdouts. Fixed seed is not an independent training seed.
+
+Return **`runs/geometric_reward_first/review.zip`** for analysis. It includes the
+review, original physical traces, selected Actor/identity and training evidence
+(metrics, config/status, best-selection record), not all optimizer checkpoints.
+Training and evaluation are separate commands; evaluation does not restart training.
+
+Local implementation checks: 83 pure reward/reference tests passed; physical tests
+are skipped locally when Flax/MuJoCo are absent. The repository CPU CI additionally
+runs real CPU/MJX reset/step, alpha baseline invariance, legacy identity, exact reward
+replay, and a short end-to-end review/ZIP test. These are engineering checks, not
+formal training results, GPU throughput measurements or real-robot validation.
+
+---
+
 # 模型1条件残差恢复控制
 
 本目录实现ECBC＋ESO基础上的有界两路残差、CPU MuJoCo/MJX、PPO训练、标准恢复评估和完整媒体。当前研究状态见[PROJECT](../PROJECT.md)，逐轮证据见[VALIDATION](../docs/VALIDATION.md)，完整公式与框图见[论文草稿](../docs/paper/MANUSCRIPT.md)。所有命令在仓库根目录执行；以下启动命令是操作说明，不代表已执行或自动追加预算。
@@ -208,3 +309,121 @@ r=.005*(1+4*wv*Gv+4*wp*Gp-Ctail-Cbudget-Croll-Caction-Creturn)
 当前参数：4096环境、24步rollout、5 epochs、24576小批次、200轮；98304采样/轮、20小批更新/轮。网络280→256→128→2，Actor/Critic均ELU；alpha仍显式输入各历史帧，权限不随alpha变化。学习率初始.001、上游KL自适应，目标.01；该KL控制是调学习率，不是旧JAX更新拒绝或回退。原模型推理按各自元数据激活加载。每条环境跨rollout连续，只有done才reset。
 
 训练仍用`learning/cli/train.py --task learning/configs/path_priority_recovery.json --config learning/configs/ppo_path_priority.json --output runs/<run>/training`；完整训练/评估/媒体使用`learning/cli/recovery_pipeline.py`。RSL存储潜高斯样本，环境输入tanh动作。超时bootstrap使用reset前实际下一观测，真实失败不bootstrap。checkpoint附`rsl_snapshot.pt`用于RSL恢复，`actor.msgpack`与identity.json供现有评估/实车推理链路使用；不能把旧JAX optimizer snapshot用于RSL续训。日志保留原始reward分项、loss、全rollout更新后高斯KL及实际学习率。后者与上游逐小批内部KL不同。
+
+
+## Stable optimization, explicit post-training selection and TensorBoard
+
+Use this after the uploaded geometric first-run audit. **Reward/task/physics do
+not change.** Old runs/configs remain available. Default existing configurations
+still use the old `rsl_schedule=auto`, `rsl_kl_limit=None` behavior. The new optimizer
+controls are explicit RSL-only options, not a modified PPO objective.
+
+First train a fresh model (do not copy a prior best or optimizer snapshot):
+
+```bash
+export PYTHONPATH="$PWD/learning/src"
+PY=/home/qy/mujoco_playground/.venv/bin/python
+
+# Existing RSL environment; do not silently upgrade working CUDA dependencies.
+JAX_PLATFORMS=cpu "$PY" -m pytest learning/tests/test_optimizer_contracts.py learning/tests/test_rsl_training.py -q
+
+"$PY" learning/cli/train.py \
+  --task learning/configs/geometric_reward_recovery.json \
+  --config learning/configs/ppo_geometric_stable.json \
+  --output runs/geometric_stable/training
+```
+
+Training: 1024 environments x 128 steps x 48 updates = 6,291,456 transitions, equal
+to the prior 4096 x 24 x 64. Rollout spans 0.64 rather than 0.12 seconds/environment;
+4 epochs, minibatch 32768, at most 16 retained minibatches/update. LR fixed 0.0003;
+full-update mean Gaussian KL limit 0.02 on ALL rollout observations. An over-limit
+or nonfinite candidate restores policy weights AND optimizer moments; final
+retained KL is zero for rejected updates. Candidate losses remain labelled
+candidate diagnostics. Mean-KL control is not a physical safety guarantee.
+Phase bank 256 x 1400 = 358,400 computed warmup transitions; actual active warmup
+count is recorded separately. Network, gamma/lambda, tanh/std and physical action
+limits unchanged. No automatic continuation or in-training dev evaluation.
+A fixed LR resume explicitly overrides the saved adaptive LR but restores moments;
+this experiment is declared FRESH, not a claim of exact resumed physics.
+
+### Inspect candidates on comparable full episodes, AFTER training
+
+```bash
+"$PY" learning/cli/select_best.py \
+  --training runs/geometric_stable/training \
+  --fixed-evaluate --output runs/geometric_stable/selection
+
+"$PY" learning/cli/reward_review.py \
+  --training-run runs/geometric_stable/training \
+  --panel learning/configs/geometric_reward_panel.json \
+  --selection runs/geometric_stable/selection/selection.json \
+  --output runs/geometric_stable/review --compact
+```
+
+Candidate subset is declared before evaluation: checkpoints 0, 1, 16, 32, 48,
+plus the sampled training best when it is distinct (5--6 candidates). Default
+seed 51001, alphas 0/.5/1, one fixed force event plus paired nominal: six 10-second
+rollouts per candidate, one six-rollout zero-residual baseline batch. Thus 36--42
+comparison episodes / at most 72,000--84,000 control transitions. This is explicitly
+an additional post-training development comparison, NOT the 12-episode standard
+panel and NOT a search of all checkpoints or policies. For another run use
+`--updates 0 1 16 32 64` to choose an explicit existing subset; last is included by
+default, even though it has no following training rollout.
+
+The standard review remains four historical cases x three alpha = 12 residual
+rollouts plus four baseline physical rollouts. It is not a untouched holdout.
+Candidate ranking first enforces the existing qualification gates. If none pass,
+a finite diagnostic candidate may be selected with `development_gates_passed=false`;
+the pipeline NEVER relabels it as successful or forces a late winner. Original
+`training/best_model.json` and `status.json` remain unchanged. The selected Actor,
+identity and training declaration hashes are verified before review.
+
+Send `runs/geometric_stable/review_compact.zip`, not the full review directory.
+All timesteps and numeric reward/error/failure information are retained. Actor
+observations, full qpos/qvel/force tensors and repeated PDF/per-alpha pictures are
+omitted from transfer, never deleted locally. `compact_manifest.json` names dropped
+fields and hashes original traces. Training TensorBoard event files and fixed
+comparison evidence are included. Missing physical fields cannot support a full
+state replay; this limitation is deliberate and explicit.
+
+### Watch TensorBoard in a SECOND terminal
+
+```bash
+cd /path/to/the/SAME/STTW_CONTROL/worktree
+PY=/home/qy/mujoco_playground/.venv/bin/python
+"$PY" -m tensorboard.main \
+  --logdir "$PWD/runs/geometric_stable" \
+  --host 127.0.0.1 --port 6006
+```
+
+Open `http://127.0.0.1:6006` in a browser on that computer. Leave TensorBoard running
+while the other terminal trains; refreshing does not restart training. The logdir
+is a DIRECTORY containing `events.out.tfevents.*`, not a .zip/checkpoint file.
+For the prior run change logdir to `runs/geometric_reward_first/training/tensorboard`.
+Uploaded renamed `.0` event files can be copied to a new directory using a filename
+beginning `events.out.tfevents.`; do not replace the original file. TensorBoard
+is a dependency of this project; if missing, first confirm the correct Python
+interpreter. Install only TensorBoard into that environment when necessary.
+
+When training on a remote computer, keep the server bound to loopback and run
+`ssh -N -L 6006:127.0.0.1:6006 qy@TRAINING_HOST` on your desktop, then open the same
+local browser address. Replace TRAINING_HOST with your actual authorized host.
+No public binding/authentication bypass is needed.
+
+Start with smoothing = 0 and X-axis Step. Watch:
+- `train/learning_rate`: exactly 0.0003 for this fixed schedule.
+- `optimizer/candidate_exact_kl`, `optimizer/final_exact_kl`,
+  `optimizer/full_update_rolled_back`, `optimizer/retained_minibatches`:
+  distinguish proposed from retained updates. Repeated rollbacks are diagnostic,
+  not permission to keep blindly extending the budget or to turn off the guard.
+- `loss/value`, `train/mean_step_reward`, `sample_phase/*`, `alpha_training/*`:
+  evolving sampled phases make batch scores non-comparable as fixed validation.
+- `reward_components/deadline`, `return_overdue`, `speed_tail`, `path_tail`, `failure`:
+  do not hide common-return costs behind total reward.
+- Under the separate selection run: paired full-episode return, physical failure,
+  final hold, deadlines, and `selection/development_gates_passed`.
+
+The training X-axis is update index. `train/sampling_policy_update` identifies
+which PRE-update policy generated that score; `train/control_transitions` gives
+sample count. Alpha log bins contain random intervals, not exact paired alpha
+0/.5/1. TensorBoard event values are a projection of authoritative JSON logs.

@@ -1,3 +1,14 @@
+# 当前工程验证：几何奖励契约修复（2026-09-16）
+
+本次是实现与测试，不是新策略训练结果。源码基于f8506ea；历史记录不重写。
+本地执行`test_geometric_contract.py`、`test_tracking_reward.py`、`test_timed_reference.py`与`test_geometric_env.py`：83 passed，1 skipped；跳过原因为本地缺Flax/MuJoCo导致物理集成模块未收集，不冒称物理测试通过。
+已验证共同优秀轨迹可在全部alpha获胜、真正取舍端点翻转、支配关系、自造离带不获利、首次超时单次扣分、晚恢复不清除期限、旧奖励默认兼容及NumPy/JAX/JIT一致性。
+CI对待发布的精确源码执行完整learning/tests（显式STTW_TEST_MJX_CPU=1），包含实际CPU/MJX reset/控制步、alpha基线物理一致性、独立几何投影重建及短review/ZIP全链。
+发布仅允许从核对过的父提交快进；若测试失败或远端已前进则停止，不覆盖并行修改。测试报告、源码归档及commit.txt绑定实际测试提交。
+用户正式实验入口与预算见learning/README.md。此次未进行64轮训练、12回合正式标准评估、目标GPU吞吐或实车验证；不能由单步工程测试推断恢复性能。
+
+---
+
 # 当前实现与验证记录
 
 ## 当前总览与最新完整结果（2026-09-12）
@@ -1698,3 +1709,56 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 按用户效率指令，RSL启动声明改记launch传入的Git revision，不再计算全部Python源文件哈希；模型、配置及checkpoint必要身份校验保留。此处仅记录实现来源，不宣称优化训练吞吐的主要瓶颈来自哈希。
 
 最终增量参考GPU短测complete：2更新/128训练步，奖励分项重建最大2.98023e−8，每轮alpha三组样本数合计64，采样归属policy0/1，最后policy2未计分；无基线或开发rollout。三组工程共384训练转移、33600预热计算转移，正式预算独立。独立代码复核包含增量参考修正，未发现阻断项。最终相关32项、随后新增投影/奖励/配置26项测试通过。
+
+
+## Uploaded geometric run: optimizer and checkpoint-selection audit (2026-09-16)
+
+Source: user-provided partial `result.zip` and a TensorBoard event file; frozen
+run commit bc390691, RSL-RL 3.2.0, 4096 x 24 x 64. This audit did not rerun later
+policies and does not infer their deterministic performance from training loss.
+The partial archive includes summary metrics for all 12 standard episodes, but
+detailed physical traces for only part of the panel. These coverage levels differ.
+
+- Training completed 64 updates / 6,291,456 transitions; all 64 recorded 20 retained
+  optimizer minibatches, hence 1280 retained optimizer steps, not "no later training".
+- The sampled best is update_0001, scored during update 2 at -0.0364251013/step.
+  This is a policy after ONE update, not the zero-initialized policy. Ownership of
+  pre-update sampling is correct. Policy 64 is saved but unscored by this criterion.
+- The score compares 0.12-second batches at different evolving episode phases,
+  with stochastic actions and inherited physics/controller/history. It is not a
+  controlled full-episode comparison. Initial phase bank: 64 real trajectories
+  replicated into 4096 environments. This is a plausible early-score advantage,
+  not a controlled causal proof that all later policies are worse.
+- Adaptive LR was already 0.0050625 after update 1; it reached 0.01 on 48/64 updates.
+  Full-batch exact KL exceeded 0.01 in 11 updates (maximum 0.0396993); the upstream
+  desired KL is an LR target, not a rejection constraint. Value loss started
+  0.8440, peaked 116.9705, and ended 18.3457. These are warning signs rather than a
+  proof that learning rate alone caused the degradation.
+- Rewards were -0.03740 (log1), -0.18181 (log32), -0.07818 (log64). Training recorded
+  1265 physical-failure transitions and 3255 episode ends across changing samples;
+  these are not held-out episode failure rates.
+- Reviewed sampled-best results: 0/12 physical failures, 0/12 final common holds,
+  12/12 deadline misses. Survival does not establish geometric recovery.
+- All 65 TensorBoard TFRecord CRCs validated: 64 scalar steps, 64 tags / 4096 scalar
+  values. Reward matched JSON within 4.97e-9, LR within 2.24e-10. The file is valid;
+  it is binary event data served by TensorBoard, not a document to double-click.
+
+New implementation (not new training evidence): freeze the geometric reward,
+reference, ECBC+ESO, physical model, timing, alpha input, network and residual
+limits. Use an explicitly fixed 3e-4 LR, full-batch exact-KL rollback at 0.02 with
+BOTH weights and Adam state restored, longer 128-step samples, 1024 environments,
+48 updates / the SAME 6,291,456 training transitions, four epochs / 16 minibatches.
+The phase bank grows to 256 genuine trajectories (warmup 358400 compute transitions,
+previously 89600; not silently counted as training). This is a joint practical
+stabilization experiment, not a single-factor causal ablation or proven speed-up.
+
+Keep in-training evaluation disabled. A separate explicit fixed-case comparison
+includes checkpoint zero, first, last and declared intermediate checkpoints plus
+the noisy sampled best. Candidate policy rollouts start from matching full reset
+states and requests. All candidates share one paired zero-residual baseline batch.
+A later model is NEVER forced to win. Qualified candidates rank first; a selected
+fallback is explicitly marked unqualified. Training best files remain immutable.
+Compact result export removes redundant pictures and high-dimensional state/input
+arrays, not timesteps, errors, rewards or failures. Original full local traces remain.
+
+远端整合：origin已新增bc39069/4afaf81，隔离worktree合并保留两种配置语义（完整预生成几何曲线与本轮因果已下发前缀）及远端优化器/回合选模工具。377 passed、4 skipped；两父版本奖励各500步精确等价，几何相关14 passed/3 skipped。正式进程303368仍运行已通过GPU的37d219f；未将CPU合并回归冒充合并优化器GPU训练验证。

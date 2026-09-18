@@ -45,7 +45,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         if env.config.motion_commands is not None:
             (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s','scheduled_alpha'],'schedule':np.asarray(state.command_schedule).tolist(),'reward_alignment':'transition i uses raw command and alpha at row i-1; yaw_rate is mean world heading rate over the control interval'},indent=2)+'\n')
         if env.config.timed_reference is not None:
-            (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s'],'schedule':np.asarray(state.command_schedule).tolist(),'reference':'independent timed SE2 integration; pre-step command drives transition; no rebasing'},indent=2)+'\n')
+            (path/'commands.json').write_text(json.dumps({'columns':['start_seconds','speed_m_s','yaw_rate_rad_s'],'schedule':np.asarray(state.command_schedule).tolist(),'reference':('fixed reset-integrated geometric curve; projection follows position, speed retains external clock' if env.config.timed_reference.mode=='geometry' else 'causal committed geometric prefix; pre-step command drives independent integration; no future projection or rebasing' if env.config.tracking.geometric else 'independent timed SE2 integration; pre-step command drives transition; no rebasing')},indent=2)+'\n')
         first_position=np.asarray(state.data.qpos[:3]).copy()
         # Fixed world frame anchored at the initial position; orientation and
         # swept-body envelopes are not yet planning-ready space descriptors.
@@ -111,6 +111,9 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
             if bool(state.task_recovered) and task_time is None: task_time=elapsed
             if bool(state.done): break
         arrays={key:np.asarray([frame[key] for frame in frames]) for key in frames[0]}
+        if state.reference_geometry is not None:
+            arrays['reference_geometry']=np.asarray(state.reference_geometry)
+            arrays['geometric_schedule']=np.asarray(state.command_schedule)
         np.savez_compressed(path/'trace.npz',**arrays)
         position=arrays['qpos'][:,:3]-first_position
         summary={'controller':identity['controller'],'backend':env.backend,'seed':seed,

@@ -73,11 +73,11 @@ def test_geometry_state_and_control_use_projected_path_not_clock_yaw():
 
 def test_geometric_environment_only_constructs_committed_reference_prefix():
     import jax.numpy as jp
-    from sttw_control.timed_reference import geometry_table
+    from sttw_control.timed_reference import committed_geometry_table
     c=task();c=replace(c,tracking=replace(c.tracking,geometric=True))
     env=RecoveryEnv(c);s=env.reset(19)
     assert np.count_nonzero(np.asarray(s.geometric_table[1:]))==0
-    expected=geometry_table(s.pose,s.reference_command,s.command_schedule,c.controller.dt,c.timed_reference,5)
+    expected=committed_geometry_table(s.pose,s.reference_command,s.command_schedule,c.controller.dt,c.timed_reference,5)
     for _ in range(5):s=env.step(s,np.zeros(2))
     np.testing.assert_allclose(s.geometric_table[:6],expected,atol=2e-7)
     assert np.count_nonzero(np.asarray(s.geometric_table[6:]))==0
