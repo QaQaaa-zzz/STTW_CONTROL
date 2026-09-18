@@ -1701,3 +1701,8 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 
 
 2026-09-18 正式启动核实：runs/geometric_random_recovery_20260918/training 已完成前3/200更新、294912训练转移；第3轮采样9.575s，优化.056s，状态training，无自动开发评估。训练源码37d219f，trainer303368/monitor303369；监视器running且0错误。远端更新在隔离worktree合并，6a9813b已普通推送；主工作区源代码保留当前运行版本，避免中途切换，合并代码CPU377 passed/4 skipped，不冒称其GPU训练已执行。
+
+## 2026-09-18 追加200轮启动检查
+原status为complete、update0200快照可加载，update=200、control_transitions=19,660,800且optimizer状态非空；当前XML与原冻结source_xml.xml逐字节一致。新training.json与旧配置仅resume_checkpoint不同，updates=200在现有恢复循环中表示追加200轮。无算法修改，无额外测试训练；正式启动trainer455172、monitor455173，TensorBoard456132监听127.0.0.1:6006，HTTP200，等待预热后核实真实更新与新标量。
+
+续训实际核实：已完成update201，累计19,759,104转移，本阶段98,304转移；首轮采样归属原policy200，优化器完成20个minibatch，loss有限。TensorBoard6006已加载initial200及continued200标量；trainer455172、monitor455173、TensorBoard456132，监视器running且0错误。实际初始化约248秒，首轮采样33.62秒；GPU存在并发工作，暂不估算独占吞吐或任务能力。
