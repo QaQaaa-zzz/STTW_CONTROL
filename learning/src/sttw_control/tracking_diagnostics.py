@@ -68,6 +68,28 @@ def audit_committed_reference(trace, dt):
         feature,progress,segment=project_committed_geometry(trace['pose'][tick],table,segment,progress,
             np.linalg.norm(trace['pose'][tick,:2]-trace['pose'][tick-1,:2]),tick,xp=np)
         features.append(feature);all_progress.append(progress)
+    if (not np.allclose(features,trace['path_features'],rtol=3e-4,atol=3e-4)
+            or not np.allclose(all_progress,trace['path_progress'],rtol=3e-4,atol=3e-4)):
+        # Distant points can tie on adjacent segments in float32. Reconstruct
+        # with the runtime arithmetic before rejecting; do not widen tolerance
+        # or seed this replay from logged projection state/features.
+        import jax
+        import jax.numpy as jp
+        with jax.default_device(jax.devices('cpu')[0]):
+            reference=jp.asarray(ref);command=jp.asarray(cmd);pose=jp.asarray(trace['pose'])
+            zero=jp.asarray(0.,dtype=command.dtype)
+            arc=jax.lax.scan(lambda a,v:(a+v*dt,a+v*dt),zero,command[:-1,0])[1]
+            committed=jp.column_stack((jp.concatenate((zero[None],arc)),reference,command))
+            @jax.jit
+            def replay():
+                def tick(carry,i):
+                    feature,progress,segment=project_committed_geometry(pose[i],committed,carry[1],carry[0],
+                        jp.linalg.norm(pose[i,:2]-pose[i-1,:2]),i)
+                    return (progress,segment),(feature,progress)
+                return jax.lax.scan(tick,(zero,jp.int32(0)),jp.arange(1,len(ref)))[1]
+            replay_features,replay_progress=replay()
+            features=np.vstack((np.zeros(3),np.asarray(replay_features)))
+            all_progress=np.r_[0.,np.asarray(replay_progress)]
     if not np.allclose(features,trace['path_features'],rtol=3e-4,atol=3e-4):
         raise ValueError('geometric path projection mismatch')
     if not np.allclose(all_progress,trace['path_progress'],rtol=3e-4,atol=3e-4):

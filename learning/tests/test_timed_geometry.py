@@ -52,3 +52,17 @@ def test_geometric_audit_rejects_tampered_path_feature():
     assert audit_committed_reference(trace,.005)<1e-9
     trace['path_features'][5,0]=.1
     with pytest.raises(ValueError,match='projection mismatch'):audit_committed_reference(trace,.005)
+
+
+def test_geometric_audit_replays_float32_nearest_segment_tie():
+    # Frozen baseline prefix: a large lateral offset creates a float32 distance
+    # tie between adjacent segments. NumPy picks the neighbor at step 1522.
+    from pathlib import Path
+    import pytest
+    from sttw_control.tracking_diagnostics import audit_committed_reference
+    with np.load(Path(__file__).parent / "fixtures/geometric_projection_float32_tie.npz") as saved:
+        trace = {k: saved[k] for k in saved.files}
+    assert audit_committed_reference(trace, .005) < 1e-6
+    trace['path_features'][1522, 0] += .01
+    with pytest.raises(ValueError, match='projection mismatch'):
+        audit_committed_reference(trace, .005)
