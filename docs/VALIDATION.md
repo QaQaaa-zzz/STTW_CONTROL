@@ -1706,3 +1706,10 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 原status为complete、update0200快照可加载，update=200、control_transitions=19,660,800且optimizer状态非空；当前XML与原冻结source_xml.xml逐字节一致。新training.json与旧配置仅resume_checkpoint不同，updates=200在现有恢复循环中表示追加200轮。无算法修改，无额外测试训练；正式启动trainer455172、monitor455173，TensorBoard456132监听127.0.0.1:6006，HTTP200，等待预热后核实真实更新与新标量。
 
 续训实际核实：已完成update201，累计19,759,104转移，本阶段98,304转移；首轮采样归属原policy200，优化器完成20个minibatch，loss有限。TensorBoard6006已加载initial200及continued200标量；trainer455172、monitor455173、TensorBoard456132，监视器running且0错误。实际初始化约248秒，首轮采样33.62秒；GPU存在并发工作，暂不估算独占吞吐或任务能力。
+
+## 2026-09-18 400轮结果与源文档单弯对照
+400轮39,321,600训练转移完成；续训best252为update253采样−.0493251/step，policy400未计分。追加阶段46.07分钟，采样中位8.52s；54项相关CPU行为测试通过，日志400×20=8000次优化minibatch、无物理失败记录，不等于任务成功。最后50轮速度RMSE .5633对上一阶段末50轮.4886，横向.1571对.1772；描述性批次比较，不认定因果退化。
+对best252单独标准12残差+4基线、每条10秒：全部无物理失败，残差仅gentle alpha1末段保持1/12，基线0/4。12/12横向RMSE优于基线但12/12速度RMSE更差；9/12同alpha回报提高不能替代共同任务门槛。完整阶段/分项数据、跨alpha轨迹和每步/累计奖励：runs/geometric_random_recovery_20260918_continue200/analysis/REPORT.md。
+用户追加附件及ZIP主例：原始sin²空间曲率30度/1m峰值，候选侧倾设计帽.28，评分.30，3个原候选独立重算特征误差≤2.78e−17；未重跑12/24全库。源对齐同初态物理测试synthetic_matched_best252为3秒统一零残差预热+6秒、3alpha+1基线7200步；指令时qpos/qvel等逐值一致，实际初速1.9596，非精确2m/s。当前参考离散与源曲线最大差1.412mm，终航向30.000002度。真实alpha0/.5/1最低速度1.791/1.782/1.775，横偏峰值.534/.523/.512m，3秒和6秒共同保持均未通过，均无物理失败。原候选有全路径预瞄/加减速限制，本策略不等价；参考yaw2.699和slew22.074明显超训练范围，不能据此直接否定当前奖励或认定只需34.2。未再训练或修改物理。
+主报告：runs/geometric_random_recovery_20260918_continue200/synthetic_matched_best252/analysis/source_comparison/REPORT.md。两组近似/不同预热试测独立保留，各4回合7200步，不混入主对照；本次全部新增物理预算标准32,000+单弯21,600=53,600步。
+诊断修正：浮点近等距的相邻片段可能使NumPy复核选邻段；新增从原路径、零进度独立JAX算术回放作为严格复核，不放宽阈值、不改训练/环境。冻结1601帧60KB工程夹具修复前失败，修复后通过并拒绝0.01m篡改。原始完整物理轨迹保留，未因诊断报错重跑。
