@@ -621,3 +621,10 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 
 ## 2026-09-18：48轮后继续至累计250轮（用户授权）
 主组48轮固定开发奖励best为update1，最终保持门槛未通过；用户要求暂不评估，先延长优化预算。保持任务、reward、base scale0.8、残差权限与PPO配置，从主组last48恢复Actor/Critic/优化器/RNG并追加202轮；训练准备状态重新计算。rho10尚无保存checkpoint，原初始化停止后排队从头250轮。主组新增26,476,544控制转移，每组累计32,768,000，准备成本另列。训练中/末不做开发评估，新目录采样best不等于旧固定评估best；250轮性能尚未验证。后续状态：runs/asymmetric_priority_comparison_20260918_continue250/status.json。
+
+## 2026-09-18：修复同步阶段采样（新主组，非奖励改版）
+- 动机：1024环境同起同止，10s回合/0.64s采样形成15.625updates周期。路径代价在困难段持续偏高；同步解释周期，但不能解释全部性能不足。
+- 用户要求暂停对照，rho10保存至36；唯一新主组fresh250updates，32,768,000控制转移，rho34.2/base0.8/128×3及其余原PPO不变。独立预备716,800计算步；相位分散2,046,976计算步，其中1,022,496活跃步，不计入正式训练预算。
+- 方法：真实闭环预推进分散阶段；训练完整回合统计和分阶段误差；禁用短片段reward选best，阶段结束再决定固定评测。完整回合跨策略，因此不冒充固定checkpoint表现。
+- 工程验证：401测试通过、4跳过。运行入口learning/configs/ppo_asymmetric_phase_spread.json；状态runs/asymmetric_phase_spread_20260918/training/status.json。正式训练结果待观察，不预称恢复/速度/路径改善。旧rho34.2/10结果及best保持独立。
+- GPU短验证完成：两个update均覆盖约10%/20%/30%/40%的四阶段，消除了此前单batch集中同一阶段的直接机制；4096转移零物理失败，奖励重建误差5.96e-8。性能改进仍待正式运行及固定场景检验。

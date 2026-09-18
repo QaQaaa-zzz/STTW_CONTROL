@@ -78,6 +78,8 @@ def scalar_values(record,labels=(),profile="full"):
                 'steer_latent_std','rear_latent_std','attempted_minibatches'):
         add('optimizer/'+key,record.get('optimizer_audit',{}).get(key))
     for key,value in record.get('sample_phase',{}).items():add('sample_phase/'+key,value)
+    for group in ('complete_training_episodes','phase_tracking'):
+        for key,value in record.get(group,{}).items():add(group+'/'+key,value)
     for key in ('control_transitions','episode_ends'):add('train/'+key,record.get(key))
     add('timing/rollout_control_steps_per_second',record.get('rollout_control_steps_per_second'))
     for key in ('sampling_policy_update',):add('train/'+key,record.get(key))

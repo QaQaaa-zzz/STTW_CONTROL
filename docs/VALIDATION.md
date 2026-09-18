@@ -1792,3 +1792,11 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 - `asymmetric_priority_comparison.py`支持冻结任务/参数、最新RSL snapshot续训，累计target减去已保存update计算新增预算；达到target时拒绝隐式追加。
 - `--no-evaluation`沿用已验证的training_reward_selection分支，关闭初始化/中间/最终开发rollout，保持旧固定开发best不变。
 - 本轮25项测试通过：campaign_continuation、asymmetric_configs、training_reward_selection、rsl_training；git diff --check通过。此为编排/契约检查，不代表250轮训练完成或控制性能提高。
+
+## 2026-09-18：真实闭环相位分散与完整回合日志
+根因：此前1024环境每2000步同步结束，128步rollout因此约15.625updates重复相位；主组202更新零物理失败，重置计数每次恰好1024。新增可选phase_spread_initialization，在共同准备状态之后按分层均匀目标执行真实策略控制步骤，完整保留物理/控制器/ESO/执行器/观测历史，提前终止正常reset，记录实际相位及reset数。未修改物理/目标/奖励/终止/正式采样预算。
+
+新配置关闭短采样best，不生成误导性best_model别名；所有更新checkpoint保留待固定完整场景选模。完整训练episode记录从正式采样中的完整reset开始，排除预推进后不完整首回合，记录原始奖励含失败罚、不含Critic超时bootstrap；允许跨更新策略，只作训练统计。TensorBoard保留分相位误差及完整回合指标。
+
+全套learning/tests：401 passed、4 skipped，70.57秒；覆盖真实步进历史、早失败重置、跨batch累加、残缺首回合排除、旧配置默认值和新核心TensorBoard字段。GPU短验证结果及正式运行状态另见runs/asymmetric_phase_spread_smoke_20260918和runs/asymmetric_phase_spread_20260918；本节测试不代表任务性能提高。
+GPU短验证实际完成：16环境×128步×2updates＝4,096正式转移；预推进15,000活跃/31,984计算转移，0重置，实际四阶段环境数2/3/5/6。两次正式采样阶段比例均约10.06%/19.97%/30.03%/39.94%，0物理失败；奖励重建最大绝对误差5.96e-8，KL分别0.004923/0.000222；没有baseline_validation或best_model别名。因短跑尚无完整正式回合，完整回合计数为0（非零填充回报），其跨update统计逻辑由行为测试验证。此证据证明采样链修复，不证明学习效果。

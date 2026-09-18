@@ -201,6 +201,26 @@ def train(task_path,output,c):
             if c.rsl_schedule=='fixed':
                 algo.learning_rate=c.learning_rate
                 for group in algo.optimizer.param_groups:group['lr']=c.learning_rate
+        from .rsl_sampling import phase_spread,EpisodeStatistics
+        if c.phase_spread_initialization:
+            write('status.json',{'phase':'phase_spreading','complete':False})
+            phase_begin=time.monotonic()
+            actor=ResidualActor(hidden_sizes=c.hidden_sizes,activation=c.activation)
+            params=export_actor(algo.policy)
+            horizon_steps=int(round(cfg.horizon_seconds/cfg.controller.dt))
+            spread=jax.jit(lambda s,k:phase_spread(s,k,c.num_envs,horizon_steps,step,reset,
+                lambda x:actor.apply(params,x.obs/jp.asarray(std))))
+            state,key,phase_stats=spread(state,key);jax.block_until_ready(state.obs)
+            ticks=np.asarray(state.tick)
+            write('phase_spread.json',{'active_transitions':int(phase_stats['active_transitions']),
+                'computed_transitions':int(phase_stats['computed_transitions']),
+                'reset_count':int(phase_stats['reset_count']),
+                'elapsed_seconds':time.monotonic()-phase_begin,
+                'actual_tick_min':int(ticks.min()),'actual_tick_max':int(ticks.max()),
+                'actual_phase_counts':np.histogram(ticks*cfg.controller.dt,bins=[0,1,3,6,cfg.horizon_seconds])[0].tolist(),
+                'excluded_from_training_budget':True,'policy':'deterministic current actor; complete closed-loop state retained'})
+            obs=observations(state.obs)
+        episode_stats=EpisodeStatistics(torch_from_jax(state.tick==0))
         @jax.jit
         def advance(state,action,key):
             nxt=step(state,action);key,rk=jax.random.split(key)
@@ -229,6 +249,12 @@ def train(task_path,output,c):
             phase_stats['elapsed_sum']=jp.sum(phase)
             phase_stats['physical_failures']=jp.sum(nxt.terminated)
             phase_stats['disturbed_samples']=jp.sum(jp.any(state.event[:,[2,3,5]]!=0,axis=1)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]))
+            for i in range(4):
+                mask=phase_id==i
+                phase_stats[f'bin_{i}_reward_sum']=jp.sum(jp.where(mask,nxt.reward,0.))
+                if alpha_stats:
+                    phase_stats[f'bin_{i}_speed_squared_sum']=jp.sum(jp.where(mask,sampled_errors['speed_m_s']**2,0.))
+                    phase_stats[f'bin_{i}_lateral_squared_sum']=jp.sum(jp.where(mask,sampled_errors['lateral_m']**2,0.))
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats,phase_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)
@@ -255,6 +281,7 @@ def train(task_path,output,c):
                         latent=algo.act(obs)
                         state,key,final_obs,reward,done,truncated,terminated,parts,error,alpha_stats,phase_stats=advance(state,jax_from_torch(torch.tanh(latent)),key)
                         final=observations(final_obs);r=torch_from_jax(reward);d=torch_from_jax(done)
+                        episode_stats.add(r,d,torch_from_jax(terminated))
                         corrected=bootstrap_timeout(r,algo.policy.evaluate(final).squeeze(-1),torch_from_jax(truncated),torch_from_jax(terminated),c.gamma)
                         obs=observations(state.obs)
                         algo.process_env_step(obs,corrected,d,{})
@@ -281,6 +308,15 @@ def train(task_path,output,c):
                         'accepted_minibatches':0 if update_audit['full_update_rolled_back'] else c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size)},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
                 batch_count=c.num_envs*c.rollout_steps
+                record['complete_training_episodes']=episode_stats.flush()
+                record['phase_tracking']={}
+                for i in range(4):
+                    count=float(phase_sum[f'bin_{i}_samples'])
+                    if count:
+                        record['phase_tracking'][f'phase_{i}_mean_reward']=float(phase_sum[f'bin_{i}_reward_sum'])/count
+                        for field in ('speed','lateral'):
+                            k=f'bin_{i}_{field}_squared_sum'
+                            if k in phase_sum:record['phase_tracking'][f'phase_{i}_{field}_rmse']=float((phase_sum[k]/count).sqrt())
                 record['sample_phase']={f'fraction_{i}':float(phase_sum[f'bin_{i}_samples'])/batch_count for i in range(4)}
                 record['sample_phase'].update(mean_elapsed_seconds=float(phase_sum['elapsed_sum'])/batch_count,
                     physical_failures=int(phase_sum['physical_failures']),
@@ -293,7 +329,8 @@ def train(task_path,output,c):
                 if c.training_reward_selection:
                     record['sampling_checkpoint']=str(sampling_checkpoint)
                     record['sampling_policy_update']=iteration-1
-                    record['best_reward_model']=record_training_reward_best(root,sampling_checkpoint,iteration-1,iteration,record['mean_step_reward'])
+                    if c.training_reward_best_enabled:
+                        record['best_reward_model']=record_training_reward_best(root,sampling_checkpoint,iteration-1,iteration,record['mean_step_reward'])
                 record['reward_components_sum_mean_step']=sum(record['reward_components_mean_step'].values())
                 record['reward_components_units']='signed reward per sampled control transition; terminal replacement included'
                 params=export_actor(algo.policy);checkpoint=root/'checkpoints'/f'update_{iteration:04d}'
@@ -315,6 +352,8 @@ def train(task_path,output,c):
                 with (root/'metrics.jsonl').open('a') as f:f.write(json.dumps(record,allow_nan=False)+'\n')
                 writer.write(record);print(json.dumps(record,allow_nan=False),flush=True);rows.append(record)
                 status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'zero_residual_0p8_ablation':ablation,'selection_mode':'training_mean_step_reward' if c.training_reward_selection else 'fixed_development','control_transitions':record['control_transitions']}
+                if c.training_reward_selection and not c.training_reward_best_enabled:
+                    status['selection_mode']='deferred_fixed_complete_episode_evaluation'
                 if record.get('best_reward_model'):status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
                 if should_plot(c,local):plot_training(root)
                 write('status.json',status);write('progress.json',{'update':iteration,'phase':status['phase'],'validation_complete':'validation' in record})

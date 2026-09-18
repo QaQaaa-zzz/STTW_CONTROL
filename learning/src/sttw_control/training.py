@@ -60,6 +60,8 @@ class TrainingConfig:
     activation: str="leaky_relu"
     hidden_sizes: tuple=(256,128)
     training_reward_selection: bool=False  # RSL sampling reward; disables all development rollouts.
+    training_reward_best_enabled: bool=True  # Can disable biased short-rollout aliases while retaining no-eval mode.
+    phase_spread_initialization: bool=False  # Real policy-driven full-state advancement, not artificial clocks.
     evaluation_reward_best: bool=False
     num_envs: int=64
     rollout_steps: int=256
@@ -118,6 +120,10 @@ class TrainingConfig:
         if self.trainer=="jax" and self.hidden_sizes!=(256,128):raise ValueError("configurable hidden sizes require RSL trainer")
         if type(self.training_reward_selection) is not bool:raise ValueError("training_reward_selection must be boolean")
         if self.training_reward_selection and self.trainer!="rsl":raise ValueError("training reward selection requires RSL trainer")
+        if type(self.phase_spread_initialization) is not bool or type(self.training_reward_best_enabled) is not bool:
+            raise ValueError('sampling controls must be boolean')
+        if self.phase_spread_initialization and (self.trainer!='rsl' or self.warmup_steps):
+            raise ValueError('phase spread requires RSL and no legacy warmup')
         if type(self.evaluation_reward_best) is not bool:raise ValueError("evaluation_reward_best must be boolean")
         if self.activation not in ("leaky_relu","elu") or (self.trainer=="jax" and self.activation!="leaky_relu"):raise ValueError("activation unsupported by selected trainer")
         if self.trainer not in ("jax","rsl"):raise ValueError("unknown PPO trainer")

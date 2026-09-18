@@ -464,3 +464,32 @@ are preserved. `--no-evaluation` disables initialization, intermediate and final
 rollouts; the new best alias describes sampled training rewards only. No automatic assessment
 is performed at update 250. `continuation.json` records each arm's incremental and cumulative
 budget before it starts. Use a new output directory for each continuation.
+
+### Main-only phase-spread training
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=false MUJOCO_GL=egl \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/train.py \
+  --task learning/configs/asymmetric_priority_rho34.json \
+  --config learning/configs/ppo_asymmetric_phase_spread.json \
+  --output runs/asymmetric_phase_spread_20260918/training
+```
+
+This is a fresh 250-update, 32,768,000-transition main run, not a comparison queue.
+`phase_spread_initialization` advances the current deterministic policy for stratified
+numbers of real control steps before collection. It retains vehicle/controller/ESO/
+actuator/history state and uses normal reset after early termination. It never assigns
+an artificial episode clock. Preparation and phase spread are separately reported in
+`warmup.json` and `phase_spread.json`; actual phase occupancy is logged every update.
+Early failures can reduce phase diversity, so check actual occupancy rather than only
+requested offsets. New options default off (phase spread) / on (legacy sampled-best),
+preserving previous configurations.
+
+`training_reward_selection=true` plus `training_reward_best_enabled=false` disables
+all development rollouts and all sampled-reward best aliases. Every update is saved;
+selection is deferred to complete fixed-scenario evaluation. Complete training-episode
+returns/lengths/failure fractions exclude the initial partial episodes from phase spread,
+include terminal penalties, and can span several behavior policies. They are training
+statistics, not a score attributed to a particular checkpoint. TensorBoard additionally
+shows phase-specific reward and speed/lateral RMSE. A smoother curve alone does not
+prove task improvement.
