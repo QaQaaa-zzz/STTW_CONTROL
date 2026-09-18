@@ -1776,3 +1776,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 用户追加附件及ZIP主例：原始sin²空间曲率30度/1m峰值，候选侧倾设计帽.28，评分.30，3个原候选独立重算特征误差≤2.78e−17；未重跑12/24全库。源对齐同初态物理测试synthetic_matched_best252为3秒统一零残差预热+6秒、3alpha+1基线7200步；指令时qpos/qvel等逐值一致，实际初速1.9596，非精确2m/s。当前参考离散与源曲线最大差1.412mm，终航向30.000002度。真实alpha0/.5/1最低速度1.791/1.782/1.775，横偏峰值.534/.523/.512m，3秒和6秒共同保持均未通过，均无物理失败。原候选有全路径预瞄/加减速限制，本策略不等价；参考yaw2.699和slew22.074明显超训练范围，不能据此直接否定当前奖励或认定只需34.2。未再训练或修改物理。
 主报告：runs/geometric_random_recovery_20260918_continue200/synthetic_matched_best252/analysis/source_comparison/REPORT.md。两组近似/不同预热试测独立保留，各4回合7200步，不混入主对照；本次全部新增物理预算标准32,000+单弯21,600=53,600步。
 诊断修正：浮点近等距的相邻片段可能使NumPy复核选邻段；新增从原路径、零进度独立JAX算术回放作为严格复核，不放宽阈值、不改训练/环境。冻结1601帧60KB工程夹具修复前失败，修复后通过并拒绝0.01m篡改。原始完整物理轨迹保留，未因诊断报错重跑。
+
+## 2026-09-18 五场景15条件同图补齐
+用户固定未来gentle/tight_turn/straighten/reversal/synthetic_turn各alpha0/.5/1，共15残差回合；基线各场景首次一条，之后条件匹配复用。规则写入AGENTS.md，覆盖旧12回合约定，不恢复训练内每轮评估。共享tracking_diagnostics.write_cross_alpha_comparison接入generate_panel；本次直接读取best252原四场景和同初态单弯轨迹，没有新增仿真/训练。交付5张总览＋20张单图，各PNG/PDF，以及5份CSV/NPZ；每张总览含XY、每步总奖励、累计奖励、速度误差。每步奖励symlog保留大惩罚与小变化；奖励基线按各alpha重评分，其余图基线共享一条。
+核实5场景/15残差条件/同一checkpoint与seed，CSV和NPZ奖励、累计量及速度误差与30组已评分轨迹逐值一致，基线物理跨alpha相同。12项相关测试通过，检查代表性原场景/新增单弯总览并修正奖励轴可读性；所有索引链接有效。统一入口runs/geometric_random_recovery_20260918_continue200/analysis/five_scene_comparison/INDEX.md，原报告和标准图索引已添加入口。

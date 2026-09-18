@@ -298,6 +298,7 @@ def generate_panel(root):
     (out/'INDEX.md').write_text('\n'.join(index)+'\n')
     write_panel_overview(root, rows)
     write_alpha_error_overview(root)
+    write_cross_alpha_comparison(root)
     return rows
 
 
@@ -724,3 +725,111 @@ def compact_review_archive(output,*,training_run=None):
             'trace_compact.npz intentionally excludes observation/qpos/qvel/force tensors; full traces remain on the training computer.\n'
             'No reward, failure endpoint, timestep, or score is changed to make this archive smaller.\n')
     return archive
+
+
+def write_cross_alpha_comparison(root):
+    """One scene per figure: all declared alphas and matched baseline traces.
+
+    Reads recorded transitions only. Baseline physics is drawn once; its three
+    preference-dependent scores remain paired with the corresponding policies.
+    """
+    import csv
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    root=Path(root);out=root/'analysis/cross_alpha';out.mkdir(parents=True,exist_ok=True)
+    declared=json.loads((root/'declaration.json').read_text())
+    expected=set(map(float,declared['priority_alphas']));groups={}
+    for panel in sorted((root/'evaluation').glob('alpha_*/seed_*')):
+        d=json.loads((panel/'declaration.json').read_text())
+        for case in d['scenarios']:
+            groups.setdefault((case,int(d['panel']['seed'])),[]).append((float(d['priority_alpha_override']),panel/case,d['checkpoint']))
+    manifest=[];index=['# Same-scene alpha and ECBC+ESO comparison','',
+        'Trajectory and speed error: one shared baseline. Reward: solid policy and same-alpha dashed baseline; different alpha rewards are not a common physical-performance scale.',
+        'Only recorded transitions are plotted. Cumulative reward includes terminal penalties and stops at the actual endpoint.','']
+    scenario_file=root/'frozen/scenario.json'
+    warmup=json.loads(scenario_file.read_text()).get('precondition_seconds') if scenario_file.exists() else None
+    for (case,seed),entries in sorted(groups.items()):
+        if len(entries)!=len(expected) or {a for a,_,_ in entries}!=expected:raise ValueError('incomplete or duplicate alpha comparison')
+        checkpoints={str(c) for _,_,c in entries}
+        if len(checkpoints)!=1:raise ValueError('mixed checkpoints in cross-alpha comparison')
+        data=[];arrays={};csv_rows=[];common_cfg=None;baseline=None
+        for a,path,_ in sorted(entries):
+            pair={}
+            for label in ('baseline','residual'):
+                cfg=json.loads((path/label/'declaration.json').read_text())['config']
+                if common_cfg is None:common_cfg=cfg
+                if cfg!=common_cfg:raise ValueError('cross-alpha task mismatch')
+                with np.load(path/label/'trace.npz',allow_pickle=False) as f:t={k:f[k] for k in f.files}
+                if not np.isfinite(t['reward']).all():raise ValueError('nonfinite rewards in comparison')
+                step=np.arange(1,len(t['time']));reward=t['reward'][1:];ev=speed_error(t,cfg)
+                prefix=f'{label}_alpha_{a:g}'
+                values=dict(step=step,time_s=t['time'][1:],reward=reward,cumulative_reward=np.cumsum(reward),speed_error_m_s=ev,
+                    x_m=t['pose'][1:,0],y_m=t['pose'][1:,1],terminated=t['terminated'][1:])
+                arrays.update({prefix+'__'+k:v for k,v in values.items()})
+                for j in range(len(step)):csv_rows.append(dict(alpha=a,policy=label,**{k:v[j].item() for k,v in values.items()}))
+                pair[label]=t
+                if label=='baseline':
+                    if baseline is None:baseline=t
+                    elif any(not np.array_equal(t[k],baseline[k]) for k in ('time','pose','true_forward_speed','terminated')+ (('reference_command',) if cfg.get('timed_reference') is not None else ())):
+                        raise ValueError('baseline physics differs across alpha; cannot show a shared baseline')
+            if any(not np.array_equal(pair['baseline'][k][0],pair['residual'][k][0]) for k in ('qpos','qvel','event')):
+                raise ValueError('unmatched baseline initial condition or event')
+            data.append((a,pair))
+        cfg=common_cfg;dt=cfg['controller']['dt'];reference=reference_xy(max((p['residual'] for _,p in data),key=lambda t:len(t['time'])),cfg)
+        arrays['reference_xy']=reference
+        fixed=(cfg.get('timed_reference') or {}).get('fixed') or []
+        switches=[row[0] for row in fixed[1:]]
+        if len(switches)>8:switches=[switches[0],switches[-1]]
+        title=f'{case} | {Path(next(iter(checkpoints))).name} | seed={seed}'
+        subtitle='Solid: policy; dashed: baseline scored at matching alpha. Dotted vertical lines: command changes.'
+        if warmup is not None:subtitle+=f' Shared zero-residual warmup: 0-{warmup:g}s.'
+        def draw(ax,kind):
+            if kind=='xy':
+                ax.plot(reference[:,0],reference[:,1],':',color='.5',label='Original reference')
+                traces=[('ECBC+ESO',baseline,'black','--')]+[(f'alpha={a:g}',p['residual'],f'C{i}','-') for i,(a,p) in enumerate(data)]
+                for label,t,color,ls in traces:
+                    ax.plot(t['pose'][:,0],t['pose'][:,1],color=color,ls=ls,label=label)
+                    ax.plot(*t['pose'][-1,:2],marker='x' if t['terminated'][-1] else 'o',color=color,ms=4)
+                    if np.any(t['event'][0,[2,3,5]]!=0):
+                        active=(t['time']>=t['event'][0,0]*dt)&(t['time']<=t['event'][0,1]*dt)
+                        ax.plot(t['pose'][active,0],t['pose'][active,1],color=color,lw=4,alpha=.4)
+                ax.set(xlabel='X [m]',ylabel='Y [m]',title='XY trajectory');ax.set_aspect('equal',adjustable='datalim')
+            else:
+                if kind=='speed_error':traces=[('ECBC+ESO',baseline,'black','--')]+[(f'alpha={a:g}',p['residual'],f'C{i}','-') for i,(a,p) in enumerate(data)]
+                else:traces=[(f'{label} alpha={a:g}',p[label],f'C{i}','--' if label=='baseline' else '-') for i,(a,p) in enumerate(data) for label in ('residual','baseline')]
+                for label,t,color,ls in traces:
+                    y=speed_error(t,cfg) if kind=='speed_error' else t['reward'][1:]
+                    if kind=='cumulative_reward':y=np.cumsum(y)
+                    steps=np.arange(1,len(t['time']));ax.plot(steps,y,color=color,ls=ls,label=label,lw=1.3)
+                    if t['terminated'][-1]:ax.plot(steps[-1],y[-1],'x',color=color)
+                for sec in switches:ax.axvline(sec/dt,color='.6',ls=':',lw=.8)
+                if np.any(baseline['event'][0,[2,3,5]]!=0):ax.axvspan(*baseline['event'][0,:2],color='.5',alpha=.15)
+                if kind=='speed_error':ax.axhline(0,color='.5',lw=.7)
+                if kind=='reward':ax.set_yscale('symlog',linthresh=.01)
+                labels={'speed_error':('Speed error','True forward speed minus target [m/s]'),
+                    'reward':('Per-step total reward (symlog)','Reward per control step'),
+                    'cumulative_reward':('Cumulative total reward','Cumulative reward')}
+                ax.set(title=labels[kind][0],ylabel=labels[kind][1],xlabel=f'Control step (dt={dt:g} s)')
+            ax.grid(alpha=.2);ax.legend(fontsize=8,ncol=2 if kind in ('reward','cumulative_reward') else 1)
+        stem=f'{case}_seed_{seed}';kinds=('xy','reward','cumulative_reward','speed_error')
+        fig,axes=plt.subplots(2,2,figsize=(15,10),layout='constrained')
+        for ax,kind in zip(axes.flat,kinds):draw(ax,kind)
+        fig.suptitle(title+'\n'+subtitle,fontsize=11)
+        for ext in ('png','pdf'):fig.savefig(out/f'{stem}_overview.{ext}',dpi=150)
+        plt.close(fig)
+        for kind in kinds:
+            fig,ax=plt.subplots(figsize=(10,6),layout='constrained');draw(ax,kind);fig.suptitle(title+'\n'+subtitle,fontsize=10)
+            for ext in ('png','pdf'):fig.savefig(out/f'{stem}_{kind}.{ext}',dpi=150)
+            plt.close(fig)
+        np.savez_compressed(out/f'{stem}.npz',**arrays)
+        with (out/f'{stem}.csv').open('w',newline='') as f:
+            writer=csv.DictWriter(f,fieldnames=list(csv_rows[0]));writer.writeheader();writer.writerows(csv_rows)
+        record=dict(scenario=case,seed=seed,checkpoint=next(iter(checkpoints)),alphas=sorted(expected),stem=stem,
+            sources=[str(path) for _,path,_ in sorted(entries)],transitions=len(csv_rows),baseline_physics_shared=True)
+        manifest.append(record)
+        index+=['',f'## {case}',f'![overview]({stem}_overview.png)',
+            ' / '.join(f'[{kind}]({stem}_{kind}.png)' for kind in kinds),f'[PDF]({stem}_overview.pdf) / [CSV]({stem}.csv) / [NPZ]({stem}.npz)']
+    (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    (out/'INDEX.md').write_text('\n'.join(index)+'\n')
+    return out
