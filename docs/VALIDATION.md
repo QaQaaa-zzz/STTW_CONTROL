@@ -1762,3 +1762,5 @@ Compact result export removes redundant pictures and high-dimensional state/inpu
 arrays, not timesteps, errors, rewards or failures. Original full local traces remain.
 
 远端整合：origin已新增bc39069/4afaf81，隔离worktree合并保留两种配置语义（完整预生成几何曲线与本轮因果已下发前缀）及远端优化器/回合选模工具。377 passed、4 skipped；两父版本奖励各500步精确等价，几何相关14 passed/3 skipped。正式进程303368仍运行已通过GPU的37d219f；未将CPU合并回归冒充合并优化器GPU训练验证。
+
+2026-09-18 正式启动核实：runs/geometric_random_recovery_20260918/training 已完成前3/200更新、294912训练转移；第3轮采样9.575s，优化.056s，状态training，无自动开发评估。训练源码37d219f，trainer303368/monitor303369；监视器running且0错误。远端更新在隔离worktree合并，6a9813b已普通推送；主工作区源代码保留当前运行版本，避免中途切换，合并代码CPU377 passed/4 skipped，不冒称其GPU训练已执行。
