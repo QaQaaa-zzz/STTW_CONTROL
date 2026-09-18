@@ -1698,3 +1698,6 @@ GPU日志工程短测 `runs/alpha_logging_validation_20260916/training_verified`
 按用户效率指令，RSL启动声明改记launch传入的Git revision，不再计算全部Python源文件哈希；模型、配置及checkpoint必要身份校验保留。此处仅记录实现来源，不宣称优化训练吞吐的主要瓶颈来自哈希。
 
 最终增量参考GPU短测complete：2更新/128训练步，奖励分项重建最大2.98023e−8，每轮alpha三组样本数合计64，采样归属policy0/1，最后policy2未计分；无基线或开发rollout。三组工程共384训练转移、33600预热计算转移，正式预算独立。独立代码复核包含增量参考修正，未发现阻断项。最终相关32项、随后新增投影/奖励/配置26项测试通过。
+
+
+2026-09-18 正式启动核实：runs/geometric_random_recovery_20260918/training 已完成前3/200更新、294912训练转移；第3轮采样9.575s，优化.056s，状态training，无自动开发评估。训练源码37d219f，trainer303368/monitor303369；监视器running且0错误。远端更新在隔离worktree合并，6a9813b已普通推送；主工作区源代码保留当前运行版本，避免中途切换，合并代码CPU377 passed/4 skipped，不冒称其GPU训练已执行。
