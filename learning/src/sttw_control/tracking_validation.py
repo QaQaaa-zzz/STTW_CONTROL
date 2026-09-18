@@ -53,11 +53,15 @@ def make_tracking_validator(env, actor, scale, config):
             if getattr(c,'timed_reference',None) is not None:
                 from .timed_reference import errors
                 timed_features=jax.vmap(errors)(nxt.pose,nxt.reference_pose,state.reference_command)
-                features=timed_features[:,:3]
+                features=nxt.geometric_features if tc.geometric else timed_features[:,:3]
             else:features=jax.vmap(env.path_features)(nxt.pose) if bank is None else jax.vmap(env.path_features)(nxt.pose,nxt.path_id,nxt.path_progress)
             speed=jp.sum(nxt.data.qvel[:,:3]*nxt.data.xmat[:,env.bundle.chassis,:,0],axis=-1)
             ev=speed-(state.reference_command[:,0] if getattr(c,'timed_reference',None) is not None else (jax.vmap(env.speed_command)(state.tick) if bank is None else jax.vmap(env.speed_command)(state.tick,state.path_id)))
             bv,by=tolerances(state.priority_alpha,tc)
+            if tc.shrink_tolerances:
+                fraction=jp.clip(nxt.tracking_state.elapsed/(tc.return_seconds-tc.hold_seconds),0,1)
+                bv=bv+fraction*(tc.final_speed_tolerance-bv)
+                by=by+fraction*(tc.final_lateral_tolerance-by)
             mature=active & (state.tick*dt>=tc.start_seconds)
             row=(active,features[:,0]**2,ev**2,features[:,1]**2,nxt.reward,
                  jp.where(active,jp.abs(nxt.measurement[:,0]),0.),

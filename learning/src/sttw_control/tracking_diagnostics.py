@@ -24,7 +24,7 @@ def reference_xy(trace, config):
     return eight_reference(FigureEightConfig(**config['figure_eight']))
 
 
-def audit_timed_reference(trace, dt):
+def audit_timed_reference(trace, dt, geometric=False):
     """Independent exact SE(2) integration from captured pre-step commands."""
     ref=np.asarray(trace['reference_pose']);command=np.asarray(trace['reference_command'])
     if ref.shape!=(len(trace['time']),3) or command.shape!=(len(ref),2):raise ValueError('timed reference shape mismatch')
@@ -41,12 +41,34 @@ def audit_timed_reference(trace, dt):
     longitudinal=delta[:,0]*np.cos(heading)+delta[:,1]*np.sin(heading)
     right=delta[:,0]*np.sin(heading)-delta[:,1]*np.cos(heading)
     heading_error=trace['pose'][:,2]-heading;heading_error=np.arctan2(np.sin(heading_error),np.cos(heading_error))
+    if geometric:
+        audit_geometric_reference(trace, dt)
+        right=trace['path_features'][:,0];heading_error=trace['path_features'][:,1]
     for name,actual,want in [('longitudinal error',trace['longitudinal_error'],longitudinal),
                               ('lateral error',trace['path_features'][:,0],right),
                               ('heading error',trace['path_features'][:,1],heading_error),
                               ('yaw rate error',trace['yaw_rate_error'][1:],trace['yaw_rate_world'][1:]-command[:-1,1])]:
         if not np.allclose(actual,want,rtol=3e-5,atol=2e-4):raise ValueError('timed '+name+' mismatch')
     return float(np.max(np.abs(difference)))
+
+
+
+def audit_geometric_reference(trace, dt):
+    """Rebuild projection from captured committed original path, not logged errors."""
+    from .timed_reference import project_geometry
+    ref=np.asarray(trace['reference_pose']);cmd=np.asarray(trace['reference_command'])
+    arc=np.r_[0.,np.cumsum(cmd[:-1,0]*dt)]
+    table=np.column_stack((arc,ref,cmd))
+    progress=0.;segment=0;features=[np.zeros(3)];all_progress=[0.]
+    for tick in range(1,len(ref)):
+        feature,progress,segment=project_geometry(trace['pose'][tick],table,segment,progress,
+            np.linalg.norm(trace['pose'][tick,:2]-trace['pose'][tick-1,:2]),tick,xp=np)
+        features.append(feature);all_progress.append(progress)
+    if not np.allclose(features,trace['path_features'],rtol=3e-4,atol=3e-4):
+        raise ValueError('geometric path projection mismatch')
+    if not np.allclose(all_progress,trace['path_progress'],rtol=3e-4,atol=3e-4):
+        raise ValueError('geometric path progress mismatch')
+    return float(np.max(np.abs(np.asarray(features)-trace['path_features'])))
 
 
 def trace_summary(trace, config):
@@ -59,6 +81,10 @@ def trace_summary(trace, config):
     ev=speed_error(trace,config)
     path=trace['path_features'][1:]
     bv,by=tolerances(trace['priority_alpha'][:-1],c,xp=np)
+    if c.shrink_tolerances:
+        fraction=np.clip(trace['return_state'][1:,3]/(c.return_seconds-c.hold_seconds),0,1)
+        bv=bv+fraction*(c.final_speed_tolerance-bv)
+        by=by+fraction*(c.final_lateral_tolerance-by)
     mature=t[:-1]+1e-7>=c.start_seconds
     def fraction(mask):return float(np.mean(mask[mature])) if np.any(mature) else None
     result=dict(
@@ -83,8 +109,11 @@ def trace_summary(trace, config):
         result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
                       xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
                       yaw_rate_error_rmse_rad_s=float(np.sqrt(np.mean(trace['yaw_rate_error'][1:]**2))))
-        result['recovery_criteria'].update(longitudinal_m=c.final_longitudinal_tolerance,yaw_rate_rad_s=c.final_yaw_rate_tolerance)
-        result['scope']='independent timed trajectory and command tracking; common final hold and no missed return deadline; no safety/generalization claim'
+        if not c.geometric:
+            result['recovery_criteria'].update(longitudinal_m=c.final_longitudinal_tolerance,yaw_rate_rad_s=c.final_yaw_rate_tolerance)
+            result['scope']='independent timed trajectory and command tracking; common final hold and no missed return deadline; no safety/generalization claim'
+        else:
+            result['scope']='original geometric path and requested speed; temporal XY/along/yaw errors are diagnostics only; no safety/generalization claim'
     return result
 
 
@@ -95,7 +124,7 @@ def audit_trace(path):
     if len(tr['time'])<2:raise ValueError('tracking audit needs at least one transition')
     if not np.allclose(np.diff(tr['time']),dt,rtol=1e-5,atol=1e-6):raise ValueError('nonuniform trace timing')
     timed=config.get('timed_reference') is not None
-    reference_error=audit_timed_reference(tr,dt) if timed else None
+    reference_error=audit_timed_reference(tr,dt,c.geometric) if timed else None
     state=initial_return(xp=np);parts={};max_state=0.
     ev=speed_error(tr,config)
     for i in range(1,len(tr['time'])):
@@ -313,7 +342,7 @@ def write_alpha_error_overview(root):
         d=json.loads((panel/'declaration.json').read_text())
         for case in d['scenarios']:
             groups.setdefault((case,int(d['panel']['seed'])),[]).append((float(d['priority_alpha_override']),panel/case))
-    index=['# Same-task alpha tracking errors','', 'Speed error = true forward speed minus pre-step target [m/s]. Position error uses the frozen reference: geometric cross-track for legacy paths; right and along-track components at the current reference time for timed trajectories. Crosses mark real failures; shaded interval is sustained external disturbance.','']
+    index=['# Same-task alpha tracking errors','', 'Speed error = true forward speed minus pre-step target [m/s]. Position error uses the frozen reference: geometric cross-track for legacy paths; right and along-track components at the current reference time for legacy timed trajectories. Geometric mode uses continuous original-path projection; timed along/yaw are diagnostic only. Crosses mark real failures; shaded interval is sustained external disturbance.','']
     for (case,seed),entries in sorted(groups.items()):
         first_config=json.loads((entries[0][1]/'residual/declaration.json').read_text())['config']
         timed=first_config.get('timed_reference') is not None

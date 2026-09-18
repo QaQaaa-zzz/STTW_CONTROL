@@ -7,8 +7,8 @@ from pathlib import Path
 from dataclasses import asdict
 import importlib.metadata
 import json
+import os
 import time
-import hashlib
 import numpy as np
 import jax
 import jax.numpy as jp
@@ -91,7 +91,8 @@ def train(task_path,output,c):
             'timeout_contract':'gamma*V(final_next_obs) added only on truncation; RSL time_outs shortcut disabled',
             'kl_contract':'Upstream adaptive learning rate, NOT JAX candidate rejection/rollback',
             'resume_contract':'optimizer/policy/RNG restored; fresh physics and truthful phase warmup',
-            'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}}
+            'source_revision':os.environ.get('STTW_SOURCE_REVISION'),
+            'source_provenance':'launch Git revision; retain model/config/checkpoint identity, omit bulk source hashing'}
         write('declaration.json',declaration);write('status.json',{'phase':'initializing','complete':False})
         reset=jax.vmap(env.reset);step=jax.vmap(env.step)
         key=jax.random.PRNGKey(c.seed);key,rk=jax.random.split(key)
@@ -144,7 +145,7 @@ def train(task_path,output,c):
                 alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,{
                     'speed_m_s':speed-state.reference_command[:,0],
                     'yaw_rate_rad_s':nxt.yaw_rate-state.reference_command[:,1],
-                    'longitudinal_m':features[:,3],'lateral_m':features[:,0]},xp=jp)
+                    'longitudinal_m':features[:,3],'lateral_m':nxt.geometric_features[:,0] if cfg.tracking.geometric else features[:,0]},xp=jp)
             live=jax.lax.cond(jp.any(nxt.done),restart,lambda s:s,nxt)
             return live,key,nxt.obs,nxt.reward,nxt.done,nxt.truncated,nxt.terminated,parts,error,alpha_stats
         host=lambda x:jax.tree.map(lambda v:np.asarray(v).tolist(),x)

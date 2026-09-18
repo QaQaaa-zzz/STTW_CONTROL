@@ -24,8 +24,21 @@ class TimedReferenceConfig:
     yaw_feedback: float = 1.
     lateral_feedback: float = .4
     max_steer: float = .35
+    recovery_probability: float = 0.
+    recovery_start: float = 4.
+    conflict_start_window: tuple = (.5, 1.)
 
     def __post_init__(self):
+        if not math.isfinite(self.recovery_probability) or not 0 <= self.recovery_probability <= 1:
+            raise ValueError('recovery_probability must be in [0,1]')
+        window = tuple(self.conflict_start_window)
+        if len(window) != 2 or not all(math.isfinite(x) for x in window) or not 0 < window[0] <= window[1]:
+            raise ValueError('invalid conflict_start_window')
+        if not math.isfinite(self.recovery_start) or self.recovery_start <= window[1]:
+            raise ValueError('recovery_start must follow conflict start window')
+        object.__setattr__(self, 'conflict_start_window', window)
+        if self.recovery_probability and not self.switch_windows:
+            raise ValueError('recovery mixture requires random target windows')
         positive = (self.speed_min, self.speed_max, self.speed_slew,
                     self.yaw_slew, self.max_steer)
         nonnegative = (self.yaw_rate_max, self.yaw_feedback, self.lateral_feedback)
@@ -72,7 +85,19 @@ def schedule(key, config, initial_speed):
     speeds = config.speed_min + draws[:, 1] * (config.speed_max - config.speed_min)
     yaws = (2 * draws[:, 2] - 1) * config.yaw_rate_max
     initial = jp.asarray([0., initial_speed, 0.])[None, :]
-    return jp.concatenate((initial, jp.stack((times, speeds, yaws), axis=1)), axis=0)
+    ordinary = jp.concatenate((initial, jp.stack((times, speeds, yaws), axis=1)), axis=0)
+    if config.recovery_probability == 0:
+        return ordinary
+    # Separate random stream leaves the original stress schedules byte-identical.
+    recover = jax.random.uniform(jax.random.fold_in(key, 73)) < config.recovery_probability
+    start = config.conflict_start_window[0] + draws[0, 0] * (config.conflict_start_window[1] - config.conflict_start_window[0])
+    # Repeated identical targets preserve a static shape without further switches.
+    conflict_times = start + jp.arange(n) * (config.recovery_start - start) / n
+    conflict = jp.stack((conflict_times, jp.full((n,), speeds[0]), jp.full((n,), yaws[0])), axis=1)
+    recovery_rows = jp.concatenate((initial, conflict, jp.array([[config.recovery_start, speeds[0], 0.]])), axis=0)
+    end_time = max(config.recovery_start, config.switch_windows[-1][1]) + .001
+    stress_rows = jp.concatenate((ordinary, jp.array([[end_time, speeds[-1], yaws[-1]]])), axis=0)
+    return jp.where(recover, recovery_rows, stress_rows)
 
 
 def command_at(tick, previous_command, schedule, dt, config, *, xp=jp):
@@ -151,3 +176,55 @@ def reference_trace(config_dict, dt, horizon, initial_speed,
         poses[tick + 1] = advance_reference(poses[tick], commands[tick], dt, xp=np)
         commands[tick + 1] = command_at(tick + 1, commands[tick], rows, dt, config, xp=np)
     return {'reference_pose': poses, 'reference_command': commands}
+
+
+def geometry_table(initial_pose, initial_command, rows, dt, config, steps):
+    """Frozen original reference, columns arc,x,y,heading,speed,yaw-rate.
+
+    Future rows exist for efficient reset-time construction but projection only
+    reads committed segments. The table is never translated to the vehicle.
+    """
+    def step(carry, tick):
+        pose, command, arc = carry
+        pose = advance_reference(pose, command, dt)
+        arc = arc + command[0] * dt
+        command = command_at(tick, command, rows, dt, config)
+        return (pose, command, arc), jp.concatenate((jp.atleast_1d(arc), pose, command))
+    initial = jp.concatenate((jp.zeros(1), initial_pose, initial_command))
+    _, tail = jax.lax.scan(step, (initial_pose, initial_command, jp.asarray(0.)), jp.arange(1, steps + 1))
+    return jp.concatenate((initial[None], tail))
+
+
+def project_geometry(pose, table, previous_segment, previous_progress, displacement, frontier, *, xp=jp):
+    """Causal continuous local projection; return path features, arc, segment.
+
+    A 129-segment search is intersected with the already committed prefix and
+    a (twice displacement + 5 cm) arc window. This prevents jumping to another loop at
+    self intersections. Ahead of the committed frontier, projection clamps to
+    its endpoint; the endpoint tangent is held, with no future command preview.
+    Piecewise linear XY geometry approximates each exact integrated interval.
+    """
+    pose, table = xp.asarray(pose), xp.asarray(table)
+    frontier = xp.clip(frontier, 0, len(table)-1)
+    indices = xp.clip(previous_segment + xp.arange(-64,65), 0, xp.maximum(frontier-1,0)).astype(int)
+    end_indices = xp.minimum(indices+1, frontier).astype(int)
+    a,b = table[indices],table[end_indices]
+    vector=b[:,1:3]-a[:,1:3]
+    length2=xp.sum(vector*vector,axis=1)
+    fraction=xp.sum((pose[:2]-a[:,1:3])*vector,axis=1)/xp.maximum(length2,1e-12)
+    span=b[:,0]-a[:,0]
+    allowance=2*xp.maximum(displacement,0.)+.05
+    lo=xp.maximum(a[:,0],previous_progress-allowance)
+    hi=xp.minimum(b[:,0],previous_progress+allowance)
+    fraction=xp.clip(fraction,xp.clip((lo-a[:,0])/xp.maximum(span,1e-12),0,1),xp.clip((hi-a[:,0])/xp.maximum(span,1e-12),0,1))
+    point=a[:,1:3]+fraction[:,None]*vector
+    distance=xp.sum((pose[:2]-point)**2,axis=1)
+    distance=xp.where(lo<=hi+1e-7,distance,xp.inf)
+    chosen=xp.argmin(distance)
+    row=a[chosen];f=fraction[chosen];endpoint=b[chosen]
+    tangent=row[3]+f*(endpoint[3]-row[3])
+    delta=pose[:2]-point[chosen]
+    heading=pose[2]-tangent
+    features=xp.stack((xp.sin(tangent)*delta[0]-xp.cos(tangent)*delta[1],
+                       xp.arctan2(xp.sin(heading),xp.cos(heading)),row[5]/row[4]))
+    return features,row[0]+f*span[chosen],indices[chosen]

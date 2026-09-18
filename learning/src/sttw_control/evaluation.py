@@ -91,9 +91,11 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                 feature=np.asarray(errors(s.pose,s.reference_pose,s.reference_command))
                 previous=frames[-1]['reference_command'] if frames else np.asarray(s.reference_command)
                 row.update(reference_pose=np.asarray(s.reference_pose).copy(),reference_command=np.asarray(s.reference_command).copy(),
-                    path_features=feature[:3],longitudinal_error=float(feature[3]),
+                    path_features=np.asarray(s.geometric_features) if env.config.tracking.geometric else feature[:3],longitudinal_error=float(feature[3]),
                     yaw_rate_error=float(s.yaw_rate-previous[1]),user_command=np.asarray(s.reference_command).copy(),
-                    motion_command=np.asarray(env.control_reference(s.pose,s.reference_pose,s.reference_command)))
+                    motion_command=np.asarray(env.control_reference(s.pose,s.reference_pose,s.reference_command,s.geometric_features)))
+                if env.config.tracking.geometric:
+                    row.update(path_segment=int(s.path_segment),timed_path_features=feature[:3],geometric_frontier_clamped=bool(float(s.path_progress)>=float(s.geometric_table[int(s.tick),0])-1e-6))
             return row
         frames.append(capture(state,action))
         for _ in range(env.horizon):

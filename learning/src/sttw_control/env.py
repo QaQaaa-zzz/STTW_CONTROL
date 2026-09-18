@@ -81,6 +81,8 @@ class TaskConfig:
             if tr.fixed is not None:
                 if not math.isclose(tr.fixed[0][1],self.speed_reference) or tr.fixed[0][2]!=0 or any(row[0]>=self.horizon_seconds or row[1]>.1*self.actuator.rear_rate_limit for row in tr.fixed):raise ValueError("invalid timed fixed initial/time/speed contract")
             elif tr.switch_windows and tr.switch_windows[-1][1]>=self.horizon_seconds:raise ValueError("timed switches must fit horizon")
+            if tr.fixed is None and tr.recovery_probability and max(tr.recovery_start,tr.switch_windows[-1][1])+.001>=self.horizon_seconds:
+                raise ValueError("recovery mixture switches must fit horizon")
         elif self.tracking is not None and self.tracking.timed:raise ValueError("timed reward requires timed reference")
         if self.reference_paths is not None:
             if self.tracking is None or self.bend is None or self.speed_schedule is not None:
@@ -219,6 +221,9 @@ class EnvState:
     path_progress: object=0.
     reference_pose: object=None
     reference_command: object=None
+    geometric_table: object=None
+    geometric_features: object=None
+    path_segment: object=0
 
     @property
     def balance_recovered(self): return self.recovery.balance_recovered

@@ -47,4 +47,37 @@ def test_legacy_checkpoint_identity_stays_compatible():
     if not path.exists():pytest.skip('local historical checkpoint not available')
     decl=json.loads((path/'declaration.json').read_text());cfg=config_from_dict(decl['task'])
     env=RecoveryEnv(cfg)
-    assert make_policy_identity(env.bundle.identity,asdict(cfg),cfg.observation.history_steps)==decl['policy_identity']
+    rebuilt=make_policy_identity(env.bundle.identity,asdict(cfg),cfg.observation.history_steps)
+    assert rebuilt['config_sha256']==decl['policy_identity']['config_sha256']
+    assert rebuilt==make_policy_identity(env.bundle.identity,decl['task'],cfg.observation.history_steps)
+    # Model identity remains binding; current user-edited physics is not the frozen old XML.
+
+
+def test_geometry_state_and_control_use_projected_path_not_clock_yaw():
+    from sttw_control.timed_reference import errors
+    c=task()
+    assert 'geometric' in c.tracking.__dataclass_fields__, 'explicit geometric mode required'
+    c=replace(c,tracking=replace(c.tracking,geometric=True))
+    env=RecoveryEnv(c);s=env.reset(7)
+    assert s.geometric_table.shape==(env.horizon+1,6)
+    # Curvature zero: a nonzero clock yaw must not influence geometric feedforward.
+    command=env.control_reference(s.pose,s.reference_pose,np.array([2.1,.5]),np.zeros(3))
+    np.testing.assert_allclose(command,[0,2.1],atol=1e-6)
+    nxt=env.step(s,np.zeros(2))
+    assert float(nxt.path_progress)>=0
+    assert float(nxt.path_progress)<=float(nxt.geometric_table[1,0])+1e-6
+    np.testing.assert_allclose(nxt.geometric_table[:1],s.geometric_table[:1])
+    np.testing.assert_allclose(nxt.geometric_table[1,1:4],nxt.reference_pose)
+    assert nxt.obs.shape==(310,)
+
+
+def test_geometric_environment_only_constructs_committed_reference_prefix():
+    import jax.numpy as jp
+    from sttw_control.timed_reference import geometry_table
+    c=task();c=replace(c,tracking=replace(c.tracking,geometric=True))
+    env=RecoveryEnv(c);s=env.reset(19)
+    assert np.count_nonzero(np.asarray(s.geometric_table[1:]))==0
+    expected=geometry_table(s.pose,s.reference_command,s.command_schedule,c.controller.dt,c.timed_reference,5)
+    for _ in range(5):s=env.step(s,np.zeros(2))
+    np.testing.assert_allclose(s.geometric_table[:6],expected,atol=2e-7)
+    assert np.count_nonzero(np.asarray(s.geometric_table[6:]))==0

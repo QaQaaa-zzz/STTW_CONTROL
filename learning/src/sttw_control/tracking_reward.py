@@ -12,6 +12,11 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class TrackingConfig:
+    geometric: bool = False
+    reward_mode: str = 'gaussian'
+    shrink_tolerances: bool = False
+    deadline_penalty: float = 0.
+    over_deadline_rate: float = 0.
     priority_ratio: float = 10.
     tracking_rate: float = 4.
     speed_wide: float = .5
@@ -60,15 +65,27 @@ class TrackingConfig:
 
     def __post_init__(self):
         nonnegative = {'start_seconds', 'tail_rate', 'budget_rate', 'return_rate',
-                       'return_bonus', 'action_weight', 'action_delta_weight'}
+                       'return_bonus', 'action_weight', 'action_delta_weight',
+                       'deadline_penalty', 'over_deadline_rate'}
         for field in fields(self):
             value = getattr(self, field.name)
-            if field.name == 'timed':
+            if field.name == 'reward_mode':
+                if value not in ('gaussian', 'huber'):
+                    raise ValueError('reward_mode must be gaussian or huber')
+                continue
+            if field.name in ('timed', 'geometric', 'shrink_tolerances'):
                 if not isinstance(value, bool):
-                    raise ValueError('timed must be boolean')
+                    raise ValueError(f'{field.name} must be boolean')
                 continue
             if not math.isfinite(value) or (value < 0 if field.name in nonnegative else value <= 0):
                 raise ValueError(f'invalid tracking parameter {field.name}')
+        if self.shrink_tolerances and (
+                self.return_seconds <= self.hold_seconds
+                or self.speed_tight < self.final_speed_tolerance
+                or self.lateral_tight < self.final_lateral_tolerance):
+            raise ValueError('shrinking bands require T > hold and initial bands >= final bands')
+        if self.reward_mode == 'huber' and self.timed and not self.geometric:
+            raise ValueError('timed huber tracking requires geometric mode')
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
         if any(tight > relaxed for tight, relaxed in (
@@ -138,7 +155,7 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
             & (xp.abs(speed_error) <= config.final_speed_tolerance)
             & (xp.abs(lateral_error) <= config.final_lateral_tolerance)
             & (xp.abs(heading_error) <= config.final_heading_tolerance))
-    if config.timed:
+    if config.timed and not config.geometric:
         if longitudinal_error is None or yaw_rate_error is None:
             raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
         final = (final & (xp.abs(longitudinal_error) <= config.final_longitudinal_tolerance)
@@ -191,10 +208,14 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     nxt = ReturnState(pending, xp.where(pending, elapsed, 0.),
                       xp.minimum(hold, c.hold_seconds), state.credited | earned,
                       state.ever_left | left, missed, a)
+    if c.shrink_tolerances:
+        fraction = xp.clip(elapsed / (c.return_seconds - c.hold_seconds), 0., 1.)
+        bv = bv + fraction * (c.final_speed_tolerance - bv)
+        by = by + fraction * (c.final_lateral_tolerance - by)
     speed_bonus = .5 * (xp.exp(-(ev / c.speed_wide) ** 2) + xp.exp(-(ev / c.speed_fine) ** 2))
     path_bonus = .5 * (xp.exp(-(ey / c.lateral_wide) ** 2 - (ep / c.heading_wide) ** 2)
                        + xp.exp(-(ey / c.lateral_fine) ** 2 - (ep / c.heading_fine) ** 2))
-    if c.timed:
+    if c.timed and not c.geometric:
         path_bonus = .5 * (xp.exp(-(ex / c.longitudinal_wide) ** 2
                                  - (ey / c.lateral_wide) ** 2 - (ep / c.heading_wide) ** 2)
                            + xp.exp(-(ex / c.longitudinal_fine) ** 2
@@ -214,7 +235,18 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
         action_delta=-c.action_delta_weight * xp.sum((a - state.previous_action) ** 2, axis=-1),
         return_time=-c.return_rate * pending * clock_on * (1. + xp.minimum(elapsed / c.return_seconds, 1.)),
     )
-    if c.timed:
+    if c.reward_mode == 'huber':
+        rates['speed_tracking'] = -c.tracking_rate * wv * huber_tail(ev / c.speed_scale, xp=xp)
+        rates['path_tracking'] = -c.tracking_rate * wp * (
+            huber_tail(ey / c.lateral_scale, xp=xp)
+            + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp))
+        rates['speed_tail'] = xp.zeros_like(ev)
+        rates['path_tail'] = xp.zeros_like(ey)
+    if c.timed and c.geometric:
+        # Retain timed diagnostic names without rewarding time phase or yaw-rate.
+        rates.update({name: xp.zeros_like(ev) for name in (
+            'yaw_rate_tracking', 'yaw_rate_tail', 'yaw_rate_budget', 'longitudinal_budget')})
+    if c.timed and not c.geometric:
         bx, bw = timed_tolerances(alpha, c, xp=xp)
         rates['speed_tracking'] *= .5
         rates['speed_tail'] *= .5
@@ -231,7 +263,12 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
             longitudinal_budget=-.5 * c.budget_rate * huber_tail(
                 xp.maximum(xp.abs(ex) - bx, 0.) / c.longitudinal_scale, xp=xp),
         )
+    overdue = armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9))
+    if c.over_deadline_rate:
+        rates['over_deadline'] = -c.over_deadline_rate * pending * overdue
     parts = {name: xp.where(failed, 0., dt * value) for name, value in rates.items()}
+    if c.deadline_penalty:
+        parts['deadline'] = xp.where(failed, 0., -c.deadline_penalty * (missed & ~state.deadline_missed))
     parts['recovery'] = xp.where(failed, 0., c.return_bonus * earned)
     parts['failure'] = xp.where(failed, -failure_penalty, 0.)
     return nxt, parts

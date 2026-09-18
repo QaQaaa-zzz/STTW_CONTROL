@@ -40,7 +40,7 @@
   </asset>
 
   <default class="main">
-    <geom friction="0.3 0.005 0.0001"/>
+    <geom friction="0.8 0.005 0.0001"/>
     <default class="wheel">
       <!-- <geom type="cylinder" contype="2" conaffinity="1" size="0.1 0.0005" rgba="0.3 0.3 0.3 0.5" solimp="0.9 0.95 0.001 0.5 2" solref="0.02 1"/> -->
       <geom type="ellipsoid" contype="2" conaffinity="1" size="0.1 0.1 0.025" rgba="0.3 0.3 0.3 0.5" 

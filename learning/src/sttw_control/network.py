@@ -19,6 +19,16 @@ def make_policy_identity(model_identity,config,history_steps):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
     if config.get("timed_reference") is None:config.pop("timed_reference",None)
+    else:
+        config['timed_reference']=dict(config['timed_reference'])
+        if config['timed_reference'].get('recovery_probability',0.)==0.:
+            for key in ('recovery_probability','recovery_start','conflict_start_window'):
+                config['timed_reference'].pop(key,None)
+    if config.get('tracking') is not None:
+        config['tracking']=dict(config['tracking'])
+        for key,default in [('geometric',False),('reward_mode','gaussian'),('shrink_tolerances',False),('deadline_penalty',0.),('over_deadline_rate',0.)]:
+            if config['tracking'].get(key,default)==default:config['tracking'].pop(key,None)
+
     if config.get("tracking") is not None and not config["tracking"].get("timed",False):
         config["tracking"]=dict(config["tracking"])
         for k in list(config["tracking"]):
