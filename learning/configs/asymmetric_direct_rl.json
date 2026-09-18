@@ -1,0 +1,115 @@
+{
+  "horizon_seconds": 10.0,
+  "preparation_seconds": 3.5,
+  "preparation_base_output_scale": 1.0,
+  "speed_reference": 2.3,
+  "eso_start": 3.0,
+  "initial_roll_range": 0.0,
+  "roll_failure": 0.7,
+  "failure_penalty": 100.0,
+  "alive_reward_rate": 1.0,
+  "learning_roll_reference": null,
+  "observation": {
+    "history_steps": 10,
+    "include_path": true,
+    "include_priority": true,
+    "include_tracking": true,
+    "include_attitude_risk": false,
+    "include_timed": true
+  },
+  "priority": {
+    "risk_gate": false,
+    "randomize_alpha": true,
+    "validation_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ]
+  },
+  "actuator": {
+    "composition": "additive",
+    "project_base": false,
+    "base_output_scale": 0.0,
+    "steer_residual_scale": 3.0,
+    "rear_residual_scale": 60.0,
+    "strength": 1.0
+  },
+  "tracking": {
+    "objective": "asymmetric_geometric_huber",
+    "geometric": true,
+    "timed": true,
+    "reward_mode": "huber",
+    "priority_ratio": 34.2,
+    "tracking_rate": 4.0,
+    "tail_rate": 0.0,
+    "speed_scale": 0.1,
+    "lateral_scale": 0.1,
+    "heading_scale": 0.15,
+    "heading_tail_weight": 0.3,
+    "budget_rate": 2.0,
+    "speed_relaxed": 0.5,
+    "speed_tight": 0.2,
+    "overspeed_band": 0.05,
+    "lateral_tight": 0.1,
+    "lateral_relaxed": 0.4,
+    "roll_working_limit": 0.3,
+    "roll_weight": 100.0,
+    "roll_rate_weight": 1.0,
+    "action_weight": 0.01,
+    "action_delta_weight": 0.02,
+    "return_rate": 0.0,
+    "return_bonus": 0.0,
+    "return_seconds": 3.0,
+    "hold_seconds": 0.5,
+    "final_speed_tolerance": 0.2,
+    "final_overspeed_tolerance": 0.05,
+    "final_lateral_tolerance": 0.1,
+    "final_heading_tolerance": 0.15,
+    "final_roll_rate_tolerance": 0.3,
+    "start_seconds": 1.0,
+    "shrink_tolerances": true,
+    "deadline_penalty": 0.0,
+    "over_deadline_rate": 0.0,
+    "overdue_rate": 0.0
+  },
+  "disturbance_force_frame": "heading_lateral",
+  "disturbance_force_point": "vehicle_com",
+  "random_events": null,
+  "timed_reference": {
+    "mode": "time",
+    "speed_min": 1.7,
+    "speed_max": 3.0,
+    "yaw_rate_max": 1.8,
+    "speed_slew": 0.5,
+    "yaw_slew": 0.6,
+    "fast_speed_slew": 1.0,
+    "fast_yaw_slew": 2.4,
+    "gentle_yaw_rate": 0.35,
+    "training_mix": true,
+    "fixed_scenario": null,
+    "switch_windows": [
+      [
+        1.5,
+        2.5
+      ],
+      [
+        3.0,
+        4.0
+      ],
+      [
+        5.0,
+        6.0
+      ]
+    ],
+    "fixed": null,
+    "yaw_feedback": 1.0,
+    "lateral_feedback": 0.4,
+    "max_steer": 0.35,
+    "recovery_probability": 0.0,
+    "recovery_start": 4.0,
+    "conflict_start_window": [
+      0.5,
+      1.0
+    ]
+  }
+}

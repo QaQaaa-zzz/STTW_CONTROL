@@ -33,7 +33,7 @@ class ActuatorConfig:
         rates=(self.steer_acceleration,self.rear_acceleration)
         if any(not math.isfinite(x) or x<=0 for x in positive) or any(x is not None and (not math.isfinite(x) or x<=0) for x in rates) or self.delay_steps<0 or not isinstance(self.delay_steps,int):
             raise ValueError('invalid actuator timing or limits')
-        if not 0<=self.strength<=1 or not math.isfinite(self.base_output_scale) or self.base_output_scale<=0 or any(not math.isfinite(x) or x<0 for x in (self.steer_residual_scale,self.rear_residual_scale)):
+        if not 0<=self.strength<=1 or not math.isfinite(self.base_output_scale) or self.base_output_scale<0 or any(not math.isfinite(x) or x<0 for x in (self.steer_residual_scale,self.rear_residual_scale)):
             raise ValueError('invalid residual scale')
 
 

@@ -1800,3 +1800,6 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 
 全套learning/tests：401 passed、4 skipped，70.57秒；覆盖真实步进历史、早失败重置、跨batch累加、残缺首回合排除、旧配置默认值和新核心TensorBoard字段。GPU短验证结果及正式运行状态另见runs/asymmetric_phase_spread_smoke_20260918和runs/asymmetric_phase_spread_20260918；本节测试不代表任务性能提高。
 GPU短验证实际完成：16环境×128步×2updates＝4,096正式转移；预推进15,000活跃/31,984计算转移，0重置，实际四阶段环境数2/3/5/6。两次正式采样阶段比例均约10.06%/19.97%/30.03%/39.94%，0物理失败；奖励重建最大绝对误差5.96e-8，KL分别0.004923/0.000222；没有baseline_validation或best_model别名。因短跑尚无完整正式回合，完整回合计数为0（非零填充回报），其跨update统计逻辑由行为测试验证。此证据证明采样链修复，不证明学习效果。
+
+## 2026-09-18：正式任务基础输出为零的直接RL组
+ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼容。asymmetric_direct_rl.json相对于rho34原任务仅更改base scale0、动作尺度3/60，其余字段一致。18项相关测试通过（zero_base_control/asymmetric_speed_contract/rsl_sampling），包括两路基础输出归零、零动作零命令、完整动作范围、准备scale1覆盖、CPU完整3.5s准备后两组qpos/qvel一致（atol1e-9）、正式状态active_base_output_scale=0及无隐藏前馈命令。git diff --check通过。没有宣称直接RL学会控制；学习效果待正式运行和固定场景比较。

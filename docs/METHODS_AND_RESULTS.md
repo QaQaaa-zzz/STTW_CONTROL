@@ -628,3 +628,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 - 方法：真实闭环预推进分散阶段；训练完整回合统计和分阶段误差；禁用短片段reward选best，阶段结束再决定固定评测。完整回合跨策略，因此不冒充固定checkpoint表现。
 - 工程验证：401测试通过、4跳过。运行入口learning/configs/ppo_asymmetric_phase_spread.json；状态runs/asymmetric_phase_spread_20260918/training/status.json。正式训练结果待观察，不预称恢复/速度/路径改善。旧rho34.2/10结果及best保持独立。
 - GPU短验证完成：两个update均覆盖约10%/20%/30%/40%的四阶段，消除了此前单batch集中同一阶段的直接机制；4096转移零物理失败，奖励重建误差5.96e-8。性能改进仍待正式运行及固定场景检验。
+
+## 2026-09-18：零基础输出＋完整动作范围直接RL（用户批准）
+动机：比较强化学习直接承担全部命令与已有ECBC+ESO有界残差控制。新配置asymmetric_direct_rl.json，正式任务base0、前轮±3rad/s/后轮±60rad/s；同3.5s稳定准备、同rho34.2奖励、128×3网络和250updates/32,768,000转移。原主组保持，rho10仍暂停。采用现有真实阶段分散与完整回合日志，不按短片段奖励选best。
+工程验证18项通过，CPU验证准备物理状态一致且正式基础输出为零；正式状态runs/asymmetric_direct_rl_20260918/training/status.json。结果待完成，不预称优于残差方案。保留ESO/参考侧倾等观测信息；与残差组同时改变了命令映射权限及动作成本对应的物理尺度，结论限于两种完整控制方案，不是纯单变量baseline消融。

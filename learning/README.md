@@ -493,3 +493,28 @@ include terminal penalties, and can span several behavior policies. They are tra
 statistics, not a score attributed to a particular checkpoint. TensorBoard additionally
 shows phase-specific reward and speed/lateral RMSE. A smoother curve alone does not
 prove task improvement.
+
+### Direct RL commands with zero task-time baseline
+
+Use the same training configuration and a separate output directory:
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=false MUJOCO_GL=egl \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/train.py \
+  --task learning/configs/asymmetric_direct_rl.json \
+  --config learning/configs/ppo_asymmetric_phase_spread.json \
+  --output runs/asymmetric_direct_rl_20260918/training
+```
+
+The user-authorized direct-control arm sets both baseline commands to zero during
+formal tasks and maps tanh actions to existing command limits ±3 rad/s steering and
+±60 rad/s rear wheel. Preparation remains 3.5 seconds using scale1 ECBC+ESO, matching
+the residual arm. Controller/ESO-derived observation/reference features remain; this
+is zero baseline actuation, not removal of all controller-derived information. Reward,
+network, PPO, seed, task and 250-update budget match the phase-spread arm. Fresh policy
+identity includes the different command mapping; do not resume a residual checkpoint.
+The physical action magnitude represented by the normalized action penalty differs,
+so the experiment compares whole direct/residual schemes, not an isolated baseline
+removal. Early failures during phase spread may reduce actual phase coverage; inspect
+phase_spread.json and sample_phase metrics. No automatic fixed evaluation or sampled
+best selection is enabled.
