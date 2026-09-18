@@ -1787,3 +1787,8 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 - MJX GPU：8环境×700步准备均无失败，任务reset/8步推进观测奖励有限；64环境×128步推进无失败，首次编译后测得约240控制转移/s（小批量工程值，不能外推1024环境正式吞吐）。
 - RSL全链短跑：8×8×1=64正式转移，fixed LR=3e-4，候选全批KL约0.000260，未回退；奖励分项重建最大绝对误差约9.3e-10。固定开发面板完整运行，所有预训练策略均未完成最终保持，作为负结果保留。
 - 物理准备：3.5s、scale1.0、无扰动、零学习残差；任务时钟归零后ESO保持启用，学习scale切至0.8。CPU检查准备末实际前向速度约2.254m/s、roll约1e-5rad，未把参考2.3m/s冒充实际精确值。
+
+## 2026-09-18：累计250轮续训入口
+- `asymmetric_priority_comparison.py`支持冻结任务/参数、最新RSL snapshot续训，累计target减去已保存update计算新增预算；达到target时拒绝隐式追加。
+- `--no-evaluation`沿用已验证的training_reward_selection分支，关闭初始化/中间/最终开发rollout，保持旧固定开发best不变。
+- 本轮25项测试通过：campaign_continuation、asymmetric_configs、training_reward_selection、rsl_training；git diff --check通过。此为编排/契约检查，不代表250轮训练完成或控制性能提高。

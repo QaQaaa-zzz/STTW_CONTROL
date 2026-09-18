@@ -442,3 +442,25 @@ PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python \
 ```
 
 每组1024×128×48=6,291,456正式控制转移，准备计算另列。`baseline_validation.json`是base scale 1.0原始ECBC+ESO；`zero_residual_0p8_validation.json`是学习环境零残差消融，二者不得混称。TensorBoard读取各arm的`training/tensorboard`；奖励分项包含`underspeed_tracking`、`overspeed_tracking`、`underspeed_budget`与`overspeed_budget`。
+
+### Extend a two-arm campaign to a cumulative update target without evaluation
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=false MUJOCO_GL=egl \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/asymmetric_priority_comparison.py \
+  --main-task learning/configs/asymmetric_priority_rho34.json \
+  --control-task learning/configs/asymmetric_priority_rho10.json \
+  --training learning/configs/ppo_asymmetric_priority.json \
+  --resume-run runs/asymmetric_priority_comparison_20260918 \
+  --target-updates 250 --no-evaluation \
+  --output runs/asymmetric_priority_comparison_20260918_continue250
+```
+
+Stop the source campaign before continuation. The runner loads each arm's frozen task/training
+configuration and latest RSL snapshot (policy, critic, optimizer, RNG), then trains only
+`target - saved_update` additional updates. Physics starts from a fresh closed-loop prepared
+state. An arm without a snapshot starts fresh. Existing records and fixed-development best
+are preserved. `--no-evaluation` disables initialization, intermediate and final development
+rollouts; the new best alias describes sampled training rewards only. No automatic assessment
+is performed at update 250. `continuation.json` records each arm's incremental and cumulative
+budget before it starts. Use a new output directory for each continuation.

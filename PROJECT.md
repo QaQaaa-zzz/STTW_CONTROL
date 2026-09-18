@@ -701,3 +701,6 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 ## 2026-09-18 五场景15条件同图补齐
 用户固定未来gentle/tight_turn/straighten/reversal/synthetic_turn各alpha0/.5/1，共15残差回合；基线各场景首次一条，之后条件匹配复用。规则写入AGENTS.md，覆盖旧12回合约定，不恢复训练内每轮评估。共享tracking_diagnostics.write_cross_alpha_comparison接入generate_panel；本次直接读取best252原四场景和同初态单弯轨迹，没有新增仿真/训练。交付5张总览＋20张单图，各PNG/PDF，以及5份CSV/NPZ；每张总览含XY、每步总奖励、累计奖励、速度误差。每步奖励symlog保留大惩罚与小变化；奖励基线按各alpha重评分，其余图基线共享一条。
 核实5场景/15残差条件/同一checkpoint与seed，CSV和NPZ奖励、累计量及速度误差与30组已评分轨迹逐值一致，基线物理跨alpha相同。12项相关测试通过，检查代表性原场景/新增单弯总览并修正奖励轴可读性；所有索引链接有效。统一入口runs/geometric_random_recovery_20260918_continue200/analysis/five_scene_comparison/INDEX.md，原报告和标准图索引已添加入口。
+
+## 当前续训安排（2026-09-18，覆盖上一评估安排）
+用户要求暂停评估，训练到累计250轮后再考虑。主组rho34.2从update48的完整RSL snapshot继续202轮；原update1固定开发best保留。rho10原运行尚无snapshot，暂停旧流水线后排在主组之后从头训练250轮。每组累计32,768,000控制转移，主组新增26,476,544；准备计算另记。奖励/物理/模型/网络/PPO不变，恢复Actor/Critic/优化器/RNG但重新准备仿真初态。续训启用training_reward_selection以禁用全部初始化/中间/末轮开发评估；采样best仅是训练日志指标，不与旧固定开发best混比。运行入口支持--resume-run、--target-updates、--no-evaluation，使用新目录保留原始结果。原计划的best评估脚本延期，250轮结束不自动评估。
