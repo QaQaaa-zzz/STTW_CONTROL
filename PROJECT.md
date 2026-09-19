@@ -710,3 +710,6 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 
 ## 2026-09-18 用户确认新增直接RL控制训练
 新任务配置asymmetric_direct_rl.json：正式任务base_output_scale=0，两路Actor分别直接映射±3rad/s前轮/±60rad/s后轮，执行器机械约束不变；共同3.5s、scale1稳定准备保持。ECBC/ESO及参考侧倾仍可计算并作为现有观测/奖励信息，正式任务基础命令贡献为零，不宣称移除了所有传统控制知识。沿用ppo_asymmetric_phase_spread.json从头250updates（32,768,000正式转移），rho34.2、奖励、网络、优化器、种子等相同，不加载旧checkpoint。保留在训0.8主组；rho10不重启。基于真实闭环分散相位，直接策略若提前失败须如实记录实际覆盖，不通过伪造时钟维持均匀。阶段末固定场景选模/比较另行执行，不用短片段reward选best。此为完整动作范围直接控制与有界残差方案比较，不是仅移除baseline的单变量消融。
+
+## 2026-09-19 当前结果
+phase_spread残差与direct_rl两组250轮均完成。训练日志诊断显示残差保持10秒生存但路径回归不佳；直接RL后期平均0.357秒失败、100%物理失败且KL回退180/250，不能因短回合误差小/回报较高判优。详见METHODS_AND_RESULTS最新节及runs/asymmetric_direct_rl_20260918/analysis/training_diagnosis/REPORT.md。本轮只作现有日志分析，未新增训练或固定场景仿真，最终checkpoint/alpha任务表现尚需配对验证。

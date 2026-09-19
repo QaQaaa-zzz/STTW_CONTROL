@@ -632,3 +632,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-18：零基础输出＋完整动作范围直接RL（用户批准）
 动机：比较强化学习直接承担全部命令与已有ECBC+ESO有界残差控制。新配置asymmetric_direct_rl.json，正式任务base0、前轮±3rad/s/后轮±60rad/s；同3.5s稳定准备、同rho34.2奖励、128×3网络和250updates/32,768,000转移。原主组保持，rho10仍暂停。采用现有真实阶段分散与完整回合日志，不按短片段奖励选best。
 工程验证18项通过，CPU验证准备物理状态一致且正式基础输出为零；正式状态runs/asymmetric_direct_rl_20260918/training/status.json。结果待完成，不预称优于残差方案。保留ESO/参考侧倾等观测信息；与残差组同时改变了命令映射权限及动作成本对应的物理尺度，结论限于两种完整控制方案，不是纯单变量baseline消融。
+
+## 2026-09-19：阶段分散残差与直接RL完成后的负结果诊断
+两组各250updates/32,768,000转移完成。末25updates：残差1639完整训练回合，均10s、0物理失败、平均回报-383.091；直接RL45814回合，均0.357s、100%物理失败、平均回报-103.548。直接组较高回合回报伴随更短长度，不代表优胜；后期全采样在第1秒前，未学到转弯恢复。全程KL回退分别4/250和180/250，无nonfinite update记录。残差同步问题已修复但3–6s路径RMSE仍约0.786m（逐update RMSE均值），生存不等于恢复。
+原因证据：直接组继承零输出Actor初始化/未按物理尺度调整探索、早失败截断负成本的激励风险、KL全回退有效更新少；残差仍有路径回归差和零deadline成本。以上训练证据不是冻结checkpoint任务评测，不判定精确失败终止类型。报告与复现脚本：runs/asymmetric_direct_rl_20260918/analysis/training_diagnosis/REPORT.md及analyze.py；CSV/JSON同目录。建议先校验终止价值和固定完整场景、直接控制示教初始化/探索定标、单变量base1与回归代价验证。未启动额外训练或静默改奖励。
