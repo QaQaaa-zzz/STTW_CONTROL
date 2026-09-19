@@ -33,3 +33,21 @@ def test_no_evaluation_disables_first_middle_and_final():
     original={'trainer':'rsl','num_envs':1024,'rollout_steps':128,'minibatch_size':32768}
     config=TrainingConfig(**campaign.continuation_config(original,250,48,'checkpoint',True))
     assert not any(should_validate(config,i) for i in (1,24,48,202))
+
+
+def test_named_three_arm_pipeline_runs_in_order(tmp_path,monkeypatch):
+    import json,sys
+    training=tmp_path/'training.json';training.write_text(json.dumps({'updates':200}))
+    tasks=[]
+    for name in ['ecbc1','ecbc08','direct']:
+        path=tmp_path/(name+'.json');path.write_text('{}');tasks.append((name,path))
+    seen=[]
+    def fake_train(task,output,config):
+        seen.append((output.parent.name,config.updates,config.resume_checkpoint))
+        return {'complete':True,'control_transitions':1,'last_checkpoint':'fixture'}
+    monkeypatch.setattr(campaign,'train',fake_train)
+    args=['campaign','--training',str(training),'--output',str(tmp_path/'out')]
+    for name,path in tasks:args+=['--arm',f'{name}={path}']
+    monkeypatch.setattr(sys,'argv',args);campaign.main()
+    assert seen==[(name,200,None) for name,_ in tasks]
+    assert json.loads((tmp_path/'out/status.json').read_text())['complete']

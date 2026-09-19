@@ -636,3 +636,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-19：阶段分散残差与直接RL完成后的负结果诊断
 两组各250updates/32,768,000转移完成。末25updates：残差1639完整训练回合，均10s、0物理失败、平均回报-383.091；直接RL45814回合，均0.357s、100%物理失败、平均回报-103.548。直接组较高回合回报伴随更短长度，不代表优胜；后期全采样在第1秒前，未学到转弯恢复。全程KL回退分别4/250和180/250，无nonfinite update记录。残差同步问题已修复但3–6s路径RMSE仍约0.786m（逐update RMSE均值），生存不等于恢复。
 原因证据：直接组继承零输出Actor初始化/未按物理尺度调整探索、早失败截断负成本的激励风险、KL全回退有效更新少；残差仍有路径回归差和零deadline成本。以上训练证据不是冻结checkpoint任务评测，不判定精确失败终止类型。报告与复现脚本：runs/asymmetric_direct_rl_20260918/analysis/training_diagnosis/REPORT.md及analyze.py；CSV/JSON同目录。建议先校验终止价值和固定完整场景、直接控制示教初始化/探索定标、单变量base1与回归代价验证。未启动额外训练或静默改奖励。
+
+## 2026-09-19：离散alpha三种控制器重训（新实验）
+用户要求alpha只取0/0.1/1，每回合等概率重新抽取、回合内固定。三组fresh200updates依次为ECBC1+残差、ECBC0.8+残差、正式任务base0全动作RL；残差1.5/10、直接控制3/60rad/s，物理最终限制不变。共同scale1准备、阶段分散、rho34.2奖励、128×3 ELU及原PPO。每组26,214,400正式转移，合计78,643,200；原来的终止激励风险和KL机制不改，本轮不是奖励修复。
+实现共享alpha采样，普通reset和timed任务开始均使用；None保持旧连续样本和身份。日志按精确alpha分别累加奖励/误差/失败/样本数，TensorBoard命名alpha_0、alpha_0.1、alpha_1；各alpha在每回合等概率不保证转移比例相等。新编排复用asymmetric_priority_comparison.py --arm，顺序执行，程序错误时停止。CPU场景采样/回合内固定/旧身份与GPU6000样本检查通过；GPU计数1980/2028/1992。运行入口runs/discrete_alpha_three_control_20260919，结果待完成，不预称离散偏好能解决直接RL早失败。

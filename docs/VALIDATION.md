@@ -1803,3 +1803,7 @@ GPU短验证实际完成：16环境×128步×2updates＝4,096正式转移；预�
 
 ## 2026-09-18：正式任务基础输出为零的直接RL组
 ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼容。asymmetric_direct_rl.json相对于rho34原任务仅更改base scale0、动作尺度3/60，其余字段一致。18项相关测试通过（zero_base_control/asymmetric_speed_contract/rsl_sampling），包括两路基础输出归零、零动作零命令、完整动作范围、准备scale1覆盖、CPU完整3.5s准备后两组qpos/qvel一致（atol1e-9）、正式状态active_base_output_scale=0及无隐藏前馈命令。git diff --check通过。没有宣称直接RL学会控制；学习效果待正式运行和固定场景比较。
+
+## 2026-09-19：离散alpha训练和三组编排
+新增PriorityConfig.training_alphas可选集合，普通reset和timed任务reset统一sample_alpha，旧默认None保留连续U[0,1]同PRNG采样与旧身份。非空/唯一/有限/[0,1]校验；新身份绑定离散集合。精确alpha日志不再把0和0.1混入同一连续区间。重复--arm支持任意命名队列，保留原main/control CLI兼容并测试三组顺序完成。
+全套419 passed、4 skipped（79.57s）。包括真实CPU reset/一步内alpha不变、旧采样逐值一致、身份默认兼容、精确分组、三组预算及字段差异、编排序列。GPU6000次采样仅0/0.1/1，计数1980/2028/1992。首次全套测试曾发现timed任务开始覆盖alpha，已修复共享入口并重新全套通过。git diff --check通过。本次只证明实现契约，不证明训练效果改善。

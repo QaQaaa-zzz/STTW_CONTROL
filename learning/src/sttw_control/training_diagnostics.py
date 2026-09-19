@@ -135,10 +135,11 @@ def plot_reward_components(rows,destination):
     (destination/'reward_components.json').write_text(json.dumps([dict(update=r['update'],control_transitions=r['control_transitions'],total=r['mean_step_reward'],parts=r['reward_components_mean_step'],reconstruction_max_abs=r['reward_components_reconstruction_max_abs']) for r in logged],indent=2)+'\n')
 
 
-def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np):
+def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np, choices=None):
     """Additive statistics from pre-step alpha and post-step physical errors."""
     groups=xp.minimum((alpha*3).astype(int),2)
-    mask=groups[None,:]==xp.arange(3)[:,None]
+    mask=(groups[None,:]==xp.arange(3)[:,None] if choices is None
+          else alpha[None,:]==xp.asarray(choices,dtype=alpha.dtype)[:,None])
     values={'samples':xp.ones_like(reward),'reward_sum':reward,'physical_failures':failed}
     for name,error in errors.items():
         valid=xp.isfinite(error)
@@ -148,13 +149,16 @@ def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np):
     return {key:xp.sum(xp.where(mask,value[None,:],0),axis=1) for key,value in values.items()}
 
 
-def alpha_sample_summary(sums):
+def alpha_sample_summary(sums, *, choices=None):
     """Reduce pooled sums once; do not average per-step RMSEs or bin means."""
     result=[]
-    for i in range(3):
+    for i in range(3 if choices is None else len(choices)):
         n=int(sums['samples'][i]);row={'alpha_lower':i/3,'alpha_upper':(i+1)/3,
             'upper_inclusive':i==2,'samples':n,'physical_failures':int(sums['physical_failures'][i]),
             'mean_step_reward':float(sums['reward_sum'][i]/n) if n else None}
+        if choices is not None:
+            row={k:v for k,v in row.items() if k not in ('alpha_lower','alpha_upper','upper_inclusive')}
+            row['alpha']=float(choices[i])
         for key,value in sums.items():
             if key.endswith('_squared_error_sum'):
                 name=key[:-len('_squared_error_sum')]

@@ -442,7 +442,8 @@ class RecoveryEnv:
         actuator=initial_actuator(c.actuator,c.speed_reference/.1)
         measurement=self.measure(data)
         pose=self.pose(data)
-        alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if c.priority.randomize_alpha else jp.asarray(c.priority.fixed_alpha)) if c.priority is not None else jp.asarray(.5)
+        from .priority import sample_alpha
+        alpha=sample_alpha(key,c.priority) if c.priority is not None else jp.asarray(.5)
         controller,history,obs,base,reference=self._prepare(initial_controller(c.controller),actuator,initial_history(c.observation),measurement,jp.int32(0),pose,alpha,path_id=path_id,path_progress=jp.asarray(0.))
         state=EnvState(data,controller,actuator,history,initial_recovery(),measurement,pose,reference,base,obs,
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),

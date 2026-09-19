@@ -84,6 +84,7 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get('priority') is None:config.pop('priority',None)
     else:
         config['priority']=dict(config['priority'])
+        if config['priority'].get('training_alphas') is None:config['priority'].pop('training_alphas',None)
         for key,value in [('weight_schedule','linear'),('weight_base',10.),('tracking_weight_scale',1.),('risk_gate',True),('speed_cost_scale',1.),('path_cost_scale',1.)]:
             if config['priority'].get(key)==value:config['priority'].pop(key)
     if 'observation' in config:

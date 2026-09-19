@@ -242,7 +242,7 @@ def train(task_path,output,c):
                 else:
                     sampled_errors.update(yaw_rate_rad_s=nxt.yaw_rate-state.reference_command[:,1],
                                           longitudinal_m=features[:,3])
-                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp)
+                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp,choices=getattr(cfg.priority,'training_alphas',None))
             phase=state.tick*cfg.controller.dt
             phase_id=jp.sum(phase[:,None]>=jp.array([1.,3.,6.]),axis=1)
             phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
@@ -324,8 +324,10 @@ def train(task_path,output,c):
                 record['sample_phase_scope']='actual pre-step elapsed seconds: [0,1), [1,3), [3,6), [6,horizon]; not policy-matched validation'
                 record['rollout_control_steps_per_second']=batch_count/rollout_seconds
                 if alpha_sum:
-                    record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()})
+                    record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()},choices=getattr(cfg.priority,'training_alphas',None))
                     record['alpha_training_scope']='random training samples in three alpha intervals; not paired fixed-alpha evaluation; errors use pre-step commands and post-step physics'
+                if getattr(cfg.priority,'training_alphas',None) is not None:
+                    record['alpha_training_scope']='exact discrete alpha training groups; not paired fixed-scenario evaluation'
                 if c.training_reward_selection:
                     record['sampling_checkpoint']=str(sampling_checkpoint)
                     record['sampling_policy_update']=iteration-1

@@ -713,3 +713,7 @@ RSL保存全部200轮模型，但此前仅9轮固定开发评估，R75不是已�
 
 ## 2026-09-19 当前结果
 phase_spread残差与direct_rl两组250轮均完成。训练日志诊断显示残差保持10秒生存但路径回归不佳；直接RL后期平均0.357秒失败、100%物理失败且KL回退180/250，不能因短回合误差小/回报较高判优。详见METHODS_AND_RESULTS最新节及runs/asymmetric_direct_rl_20260918/analysis/training_diagnosis/REPORT.md。本轮只作现有日志分析，未新增训练或固定场景仿真，最终checkpoint/alpha任务表现尚需配对验证。
+
+## 2026-09-19 离散alpha三组重训（用户授权）
+alpha每回合等概率抽取{0,0.1,1}并回合内保持；按三个精确值记录训练统计，不把0与0.1混入同一连续区间。主reward继续rho34.2，不修改失败罚/回归罚或KL机制。新鲜初始化三组：ecbc1（base1、残差1.5/10），ecbc08（base0.8、残差1.5/10），direct（正式base0、动作3/60）；共同3.5s scale1准备、相位分散、128×3 ELU和原PPO。
+每组1024×128×200＝26,214,400正式转移，三组合计78,643,200；准备与相位分散另计。已有记录不覆盖、不加载旧checkpoint，不恢复采样best或训练内开发评测。按ecbc1/ecbc08/direct顺序自动执行；发生程序错误停止，不无上限续训。阶段结束弹窗；全部完成弹窗。入口支持重复--arm NAME=TASK.json；配置discrete_alpha_{ecbc1,ecbc08,direct}.json与ppo_discrete_alpha.json。现有直接RL失败风险未被本次采样变更自动修复，结果待核验。

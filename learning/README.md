@@ -518,3 +518,24 @@ so the experiment compares whole direct/residual schemes, not an isolated baseli
 removal. Early failures during phase spread may reduce actual phase coverage; inspect
 phase_spread.json and sample_phase metrics. No automatic fixed evaluation or sampled
 best selection is enabled.
+
+### Three control schemes with discrete episode alpha
+
+```bash
+PYTHONPATH=learning/src JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=false MUJOCO_GL=egl \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/asymmetric_priority_comparison.py \
+  --arm ecbc1=learning/configs/discrete_alpha_ecbc1.json \
+  --arm ecbc08=learning/configs/discrete_alpha_ecbc08.json \
+  --arm direct=learning/configs/discrete_alpha_direct.json \
+  --training learning/configs/ppo_discrete_alpha.json \
+  --output runs/discrete_alpha_three_control_20260919
+```
+
+Each arm trains from scratch for 200 updates (26,214,400 control transitions),
+sequentially. Optional `priority.training_alphas` is uniformly sampled at reset;
+None preserves the exact prior continuous sampler and checkpoint identity.
+The new configs use [0, 0.1, 1], constant within each episode. Logs/TensorBoard group
+these exact values separately; these are mixed training cases, not paired evaluation.
+Preparation uses scale1 in all arms; task scales are 1, .8, 0. Residual ranges are
+1.5/10; direct ranges 3/60 rad/s. No reward/PPO repair is included in this experiment.
+No training-time evaluation or sampled-best aliases; all checkpoints remain available.

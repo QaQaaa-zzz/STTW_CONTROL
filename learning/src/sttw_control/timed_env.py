@@ -67,8 +67,8 @@ class TimedRecoveryEnv(RecoveryEnv):
 
     def _sample_task(self,state,key):
         commands=schedule(jax.random.fold_in(key,51),self.config.timed_reference,self.config.speed_reference)
-        alpha=(jax.random.uniform(jax.random.fold_in(key,31)) if self.config.priority.randomize_alpha
-               else jp.asarray(self.config.priority.fixed_alpha))
+        from .priority import sample_alpha
+        alpha=sample_alpha(key,self.config.priority)
         state=state.replace(priority_alpha=alpha)
         event=self._event_for(commands,state.event)
         return self._begin_task(state,commands,event,reset_memory=not bool(self.config.preparation_seconds),

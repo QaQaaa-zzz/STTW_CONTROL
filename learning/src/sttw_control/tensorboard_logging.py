@@ -86,8 +86,9 @@ def scalar_values(record,labels=(),profile="full"):
     add('selection/training_sample_best_update',record.get('best_reward_model',{}).get('update'))
     add('selection/development_gates_passed',record.get('selection',{}).get('development_gates_passed'))
     for i,group in enumerate(record.get('alpha_training_samples',[])):
+        label=f"alpha_{group['alpha']:g}" if 'alpha' in group else f'bin_{i}'
         for key,value in group.items():
-            if key not in ('alpha_lower','alpha_upper','upper_inclusive'):add(f'alpha_training/bin_{i}/{key}',value)
+            if key not in ('alpha','alpha_lower','alpha_upper','upper_inclusive'):add(f'alpha_training/{label}/{key}',value)
     return result
 
 

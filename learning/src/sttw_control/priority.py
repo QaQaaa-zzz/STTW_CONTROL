@@ -10,6 +10,7 @@ class PriorityConfig:
     path_cost_scale: float=1.
     fixed_alpha: float=.5
     randomize_alpha: bool=True
+    training_alphas: tuple | None=None
     error_warning: float=.15
     error_critical: float=.35
     roll_warning: float=.35
@@ -25,6 +26,11 @@ class PriorityConfig:
     validation_alphas: tuple=(0.,.5,1.)
 
     def __post_init__(self):
+        if self.training_alphas is not None:
+            values=tuple(self.training_alphas)
+            if not values or len(set(values))!=len(values) or any(not math.isfinite(x) or not 0<=x<=1 for x in values):
+                raise ValueError('invalid training alphas')
+            object.__setattr__(self,'training_alphas',values)
         if self.weight_schedule not in ("linear","exponential") or not math.isfinite(self.weight_base) or self.weight_base<=1 or not math.isfinite(self.tracking_weight_scale) or self.tracking_weight_scale<=0:
             raise ValueError("invalid priority weight schedule")
         if not self.validation_alphas or len(set(self.validation_alphas))!=len(self.validation_alphas) or any(not math.isfinite(x) or not 0<=x<=1 for x in self.validation_alphas):raise ValueError("invalid validation alphas")
@@ -33,6 +39,14 @@ class PriorityConfig:
         for a,b in [(self.error_warning,self.error_critical),(self.roll_warning,self.roll_critical),(self.rate_warning,self.rate_critical)]:
             if not math.isfinite(a+b) or not 0<=a<b:raise ValueError('invalid risk thresholds')
         if not 0<self.objective_floor<=1 or not 0<self.motion_floor<=1 or not math.isfinite(self.attitude_boost) or self.attitude_boost<0:raise ValueError('invalid priority weights')
+
+
+def sample_alpha(key,c):
+    import jax
+    if not c.randomize_alpha:return jp.asarray(c.fixed_alpha)
+    key=jax.random.fold_in(key,31)
+    if c.training_alphas is None:return jax.random.uniform(key)
+    return jp.asarray(c.training_alphas)[jax.random.randint(key,(),0,len(c.training_alphas))]
 
 
 def priority_weights(alpha,error,roll,rate,c):

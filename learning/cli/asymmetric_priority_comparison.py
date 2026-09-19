@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen rho=34.2 and rho=10 RSL training arms sequentially."""
+"""Run declared RSL training arms sequentially; the legacy rho pair is supported."""
 import argparse
 import json
 from pathlib import Path
@@ -20,21 +20,33 @@ def continuation_config(original, target, offset, checkpoint, no_evaluation):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--main-task',type=Path,required=True)
-    parser.add_argument('--control-task',type=Path,required=True)
+    parser.add_argument('--main-task',type=Path)
+    parser.add_argument('--control-task',type=Path)
+    parser.add_argument('--arm',action='append',help='Repeat NAME=TASK.json for a named multi-arm campaign')
     parser.add_argument('--training',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--resume-run',type=Path,help='Prior campaign; restore each arm from its latest complete RSL snapshot')
     parser.add_argument('--target-updates',type=int,help='Cumulative target, including restored updates')
     parser.add_argument('--no-evaluation',action='store_true',help='Disable all development rollouts, including initialization and final evaluation')
     args=parser.parse_args()
+    if args.arm:
+        if args.main_task or args.control_task:parser.error('use --arm or legacy main/control tasks')
+        arms=[]
+        for value in args.arm:
+            name,sep,path=value.partition('=')
+            if not sep or not name or not all(ch.isalnum() or ch in '_-' for ch in name) or not Path(path).is_file():
+                parser.error('invalid arm; expected NAME=existing-task.json')
+            arms.append((name,Path(path)))
+        if len({name for name,_ in arms})!=len(arms):parser.error('duplicate arm names')
+    else:
+        if not args.main_task or not args.control_task:parser.error('provide --arm or both --main-task/--control-task')
+        arms=(('rho34p2',args.main_task),('rho10',args.control_task))
     if args.resume_run and args.target_updates is None:
         parser.error('--resume-run requires --target-updates')
     if args.target_updates is not None and args.target_updates<=0:
         parser.error('--target-updates must be positive')
     root=args.output;root.mkdir(parents=True,exist_ok=False)
     original=json.loads(args.training.read_text())
-    arms=(('rho34p2',args.main_task),('rho10',args.control_task))
     completed=[]
     plans=[]
     def status(phase,**extra):
