@@ -657,3 +657,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 采用声明的成本cap100和普通scale0.1、失败-200与一次超时-5作为首轮有界候选；数值失败激励检查通过，但核心左转基线17.15%成本触顶，不能忽略梯度区分度损失。完整物理与GPU短测试只证明工程链路可用，不证明新奖励学会任务；新旧回报尺度不直接比较。
 
 用户确认只训练完整ECBC＋残差，alpha0/.5/1等概率按回合采样，200更新=26,214,400转移，新初始化；按TensorBoard平均每步训练奖励最大值保留实际采样模型best，不恢复开发评测。配置`precision_speed_ecbc1.json`和`ppo_precision_speed.json`；工程证据`runs/precision_speed_ecbc1_20260920/engineering/`。正式结果待训练完成，阶段末完整配对比较须另查恢复和α1相对基线速度精度。
+
+## 2026-09-20 precision best0196单弯限定评估
+
+用户要求只用训练best、仅synthetic_turn：脚本读取best_model.json并冻结update0196，alpha0/.5/1、seed49001，3策略＋1基线。9秒窗口前三秒共享零残差；只用3～9秒统计误差。基线速度RMSE0.09176、路径0.40392；三个alpha分别速度0.07412/0.07466/0.07528、路径0.10204/0.10196/0.10217。全部策略最终保持通过、无回归超时与物理失败，但alpha差异几乎消失且速度排序不符合alpha1更准的预期。alpha1/基线0.820，未达≤0.8；短暂超速约0.155，超0.05持续0.175秒，不能宣称全程不超速。单弯峰值yaw2.699rad/s是外推开发检查。完整叠图/分项/逐步及指标CSV见`runs/precision_speed_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md`。

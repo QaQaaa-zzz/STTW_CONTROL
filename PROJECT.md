@@ -737,3 +737,7 @@ alpha每回合等概率抽取{0,0.1,1}并回合内保持；按三个精确值记
 用户最新确认：只训练完整ECBC＋残差，α=0/0.5/1，按TensorBoard `train/mean_step_reward`最大值保存`best_model`及`best_model.json`。使用`ppo_precision_speed.json`启用`training_reward_best_enabled`，奖励归属采样模型（更新前），末次未再次采样的update200不借用update199奖励；不增加开发rollout。新运行目录`runs/precision_speed_ecbc1_20260920`。
 
 正式PID4155187；首4轮更新已接受，TensorBoard6006已加载真实训练标量，best记录已生成并核对为训练采样奖励最大值。工程与启动核验见`runs/precision_speed_ecbc1_20260920/startup_verification.json`，实时进度以该运行training/status.json为准。训练仍进行中，尚无本轮最终能力结论。
+
+## 2026-09-20 单弯best复查完成
+
+precision_speed_ecbc1已完成200更新，按训练奖励选择update0196（第197轮采样）。用户限定仅单弯，完成alpha0/.5/1＋共享基线；入口`runs/precision_speed_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md`。3～9秒速度RMSE基线0.09176、策略0.07412/0.07466/0.07528；路径RMSE基线0.40392、策略约0.102。三个alpha均最终保持、无超时/物理失败，但轨迹几乎重合，alpha1速度RMSE/基线0.820，未达0.8目标；超速峰值约0.155m/s且超0.05持续0.175s。不是全任务合格或泛化结论。

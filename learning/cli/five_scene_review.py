@@ -15,10 +15,13 @@ from sttw_control.evaluation import evaluate
 from sttw_control.tracking_diagnostics import audit_trace,rescore_trace,generate_panel
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--training',type=Path,required=True);p.add_argument('--checkpoint',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=49001);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--training',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=49001);p.add_argument('--scenes',nargs='+',help='Explicit subset; defaults to all five scenes');a=p.parse_args()
     root=a.output.resolve();root.mkdir(parents=True,exist_ok=True);(root/'frozen').mkdir(exist_ok=True)
     if not json.loads((a.training/'status.json').read_text()).get('complete'):raise ValueError('training must be complete before this review')
-    source=json.loads((a.training/'declaration.json').read_text());cfg=config_from_dict(source['task']);ck=a.checkpoint.resolve();alphas=list(cfg.priority.validation_alphas)
+    source=json.loads((a.training/'declaration.json').read_text());cfg=config_from_dict(source['task']);best=None
+    if a.checkpoint is None:
+        best=json.loads((a.training/'best_model.json').read_text())
+    ck=(a.checkpoint or Path(best['checkpoint'])).resolve();alphas=list(cfg.priority.validation_alphas)
     if cfg.actuator.base_output_scale!=1.:raise ValueError('this panel requires full ECBC scale 1; scaled and direct arms need separately labeled baseline configurations')
     if not cfg.tracking or not cfg.tracking.geometric:raise ValueError('geometric tracking configuration required')
     identity=make_policy_identity(RecoveryEnv(cfg).bundle.identity,asdict(cfg),cfg.observation.history_steps);policy=load_policy(ck,expected=identity)
@@ -36,7 +39,11 @@ def main():
     commands=[[0.,spec['initial_speed_m_s'],0.]]+[[float(t0+t),v,float(v*c)] for t,c in zip(times,k)]
     configs['synthetic_turn']=replace(base,speed_reference=spec['initial_speed_m_s'],horizon_seconds=t0+spec['observation_seconds_after_command'],timed_reference=replace(cfg.timed_reference,training_mix=False,fixed_scenario=None,fixed=commands,speed_slew=abs(v-spec['initial_speed_m_s'])/dt*1.01,yaw_slew=float(np.max(np.abs(np.diff(v*k))))/dt*1.01))
     warmups['synthetic_turn']=t0
-    manifest=dict(checkpoint=str(ck),selection='user-selected final checkpoint; NOT best',priority_alphas=alphas,seed=a.seed,residual_episodes=len(configs)*len(alphas),baseline_episodes=len(configs),role='historical development panel; not held-out evidence',scenario_notes='Four standard schedules use current slew and committed geometric projection; initial speed matches first request. Synthetic turn uses original spatial sin-squared path with explicit evaluation-only slew override; all methods zero residual for first 3 task seconds. All scenes also retain training closed-loop preparation before task time zero.',warmup_seconds=warmups)
+    if a.scenes:
+        if len(set(a.scenes))!=len(a.scenes) or not set(a.scenes)<=set(configs):raise ValueError('invalid or duplicate scenario subset')
+        configs={name:configs[name] for name in a.scenes}
+        warmups={name:value for name,value in warmups.items() if name in configs}
+    manifest=dict(checkpoint=str(ck),selection=best if best is not None else 'user-selected explicit checkpoint; not selected by this script',priority_alphas=alphas,seed=a.seed,residual_episodes=len(configs)*len(alphas),baseline_episodes=len(configs),role='historical development panel; not held-out evidence',scenario_notes='Four standard schedules use current slew and committed geometric projection; initial speed matches first request. Synthetic turn uses original spatial sin-squared path with explicit evaluation-only slew override; all methods zero residual for first 3 task seconds. All scenes also retain training closed-loop preparation before task time zero.',warmup_seconds=warmups)
     def write(path,data):path.write_text(json.dumps(data,indent=2,allow_nan=False)+'\n')
     if (root/'declaration.json').exists() and json.loads((root/'declaration.json').read_text())!=manifest:raise ValueError('existing output declaration differs')
     write(root/'declaration.json',manifest);write(root/'frozen/panel.json',panel);write(root/'frozen/task.json',asdict(cfg));write(root/'frozen/scenarios.json',{n:asdict(c) for n,c in configs.items()})

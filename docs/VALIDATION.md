@@ -1829,3 +1829,7 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 - 成本截断是实际限制：核心左转零残差轨迹17.15%步触顶，极大误差区间损失区分度；正式日志增加`precision_cost_cap_fraction`和TensorBoard `reward/cost_cap_fraction`。不宣称该精度目标可在真实车上达到。正式训练无开发评估，阶段末配对诊断加入指令变化起完整窗口α1速度RMSE≤0.8基线的额外门槛，提前失败不能通过。
 - 最终相关测试集合84 passed（4.89s），独立代码审查未发现阻止启动的问题；新配对验收/奖励专项6项复查通过。
 - 正式启动已验证：PID4155187，仅一组200轮，冻结声明alpha0/.5/1与reward-best均正确；前4轮PPO更新接受，无KL回退。TensorBoard6006 HTTP可访问且新运行标量已加载，best指针与日志最大mean_step_reward、更新前采样模型对应一致。前4轮成本触顶比例8.43%～10.71%，为随机训练批次统计，非固定评估。实时训练进度见`runs/precision_speed_ecbc1_20260920/training/status.json`；84项相关测试通过。代码提交a1149a8。
+
+## 2026-09-20 单弯限定best评估交付
+
+`five_scene_review.py`新增可选`--scenes`，省略`--checkpoint`时读取best_model.json并冻结选择元数据；显式模型仍可用。实际运行仅synthetic_turn、best0196、alpha0/.5/1，4物理回合完成。3组逐步重建最大误差7.72e-9，前三秒共享准备qpos与零动作逐值核对；12个PNG/PDF总览及单图存在、人工检查总览可读。相关reward-best与精度验收测试4 passed。指标与局限见METHODS_AND_RESULTS对应记录；无新增训练或其他场景评估。
