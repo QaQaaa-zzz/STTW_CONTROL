@@ -1845,3 +1845,5 @@ CPU核心左转10秒零残差：新奖励重建误差6.69e-8、原始成本误�
 终止收益界仍是dt.005/gamma.9995/10秒下普通项[-.0495,.0005]、一次-5、真实失败-200的有限记录界。RSL保留原time-limit bootstrap，即仅truncated且非terminated时加gamma*V(finalobs)，不能将有限记录界宣称为Critic或无限时域保证。
 
 GPU短测64×128×2完成16,384转移，原始成本及平滑映射斜率已记录，奖励分项重建scaled误差低于1e-7；训练奖励best正确关联更新前采样checkpoint。工程记录位于runs/soft_budget_ecbc1_20260920/engineering，不能作为任务能力证明。
+
+正式250轮已启动，首轮更新接受（KL0.002142<0.02，16/16 minibatches，无非有限值）。TensorBoard HTTP与实际train/mean_step_reward标量、best最大值及更新前模型归属均核对通过，证据runs/soft_budget_ecbc1_20260920/startup_verification.json。完成/错误通知监视器正常运行。
