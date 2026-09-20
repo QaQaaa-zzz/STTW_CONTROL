@@ -640,3 +640,6 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-19：离散alpha三种控制器重训（新实验）
 用户要求alpha只取0/0.1/1，每回合等概率重新抽取、回合内固定。三组fresh200updates依次为ECBC1+残差、ECBC0.8+残差、正式任务base0全动作RL；残差1.5/10、直接控制3/60rad/s，物理最终限制不变。共同scale1准备、阶段分散、rho34.2奖励、128×3 ELU及原PPO。每组26,214,400正式转移，合计78,643,200；原来的终止激励风险和KL机制不改，本轮不是奖励修复。
 实现共享alpha采样，普通reset和timed任务开始均使用；None保持旧连续样本和身份。日志按精确alpha分别累加奖励/误差/失败/样本数，TensorBoard命名alpha_0、alpha_0.1、alpha_1；各alpha在每回合等概率不保证转移比例相等。新编排复用asymmetric_priority_comparison.py --arm，顺序执行，程序错误时停止。CPU场景采样/回合内固定/旧身份与GPU6000样本检查通过；GPU计数1980/2028/1992。运行入口runs/discrete_alpha_three_control_20260919，结果待完成，不预称离散偏好能解决直接RL早失败。
+
+## 2026-09-20：离散alpha三组200轮完成
+三组各26,214,400转移完成，无固定场景best选模。末25训练完整回合：ECBC1 1639个/10s/0失败/回报-315.95；ECBC0.8 1639个/10s/0失败/-582.75；直接RL20961个/0.769s/100%物理失败/-104.64。全程保留更新分别199、25、98；0.8组21–176连续156次KL回退。ECBC1三alpha速度RMSE0.160–0.173m/s、横向0.525–0.567m，0.8为0.290–0.318m/s、0.906–0.982m；为有效样本池化训练指标，不是配对评测。完整ECBC最值得后续固定场景检查，但回归路径误差仍大。直接组93.23%采样在第1秒内，短期小路径误差不能判优。alpha0/0.1相似，alpha1有弱取舍方向，因任务未配对不能证明alpha因果效果。建议优先base1+残差，修KL超限缩步/有限重试，再验证固定场景/终止价值，不原样追加三组长训。报告/数据/复现脚本：runs/discrete_alpha_three_control_20260919/analysis/REPORT.md；本轮只分析现有日志。

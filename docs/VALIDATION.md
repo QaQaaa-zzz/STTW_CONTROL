@@ -1807,3 +1807,6 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 ## 2026-09-19：离散alpha训练和三组编排
 新增PriorityConfig.training_alphas可选集合，普通reset和timed任务reset统一sample_alpha，旧默认None保留连续U[0,1]同PRNG采样与旧身份。非空/唯一/有限/[0,1]校验；新身份绑定离散集合。精确alpha日志不再把0和0.1混入同一连续区间。重复--arm支持任意命名队列，保留原main/control CLI兼容并测试三组顺序完成。
 全套419 passed、4 skipped（79.57s）。包括真实CPU reset/一步内alpha不变、旧采样逐值一致、身份默认兼容、精确分组、三组预算及字段差异、编排序列。GPU6000次采样仅0/0.1/1，计数1980/2028/1992。首次全套测试曾发现timed任务开始覆盖alpha，已修复共享入口并重新全套通过。git diff --check通过。本次只证明实现契约，不证明训练效果改善。
+
+## 2026-09-20：离散alpha日志分析核验
+复现脚本analysis/analyze.py校验每组200条更新、末端26,214,400转移；完整回合按count加权，alpha误差按各字段valid_samples池化平方后开根，未简单平均RMSE。原始状态三组均complete。未运行新物理评测，不把训练统计当固定checkpoint/同场景基线证据。git diff --check通过；报告见runs/discrete_alpha_three_control_20260919/analysis/REPORT.md。
