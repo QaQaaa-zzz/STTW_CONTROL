@@ -30,6 +30,9 @@ def make_policy_identity(model_identity,config,history_steps):
                 config['timed_reference'].pop(key,None)
     if config.get('tracking') is not None:
         config['tracking']=dict(config['tracking'])
+        if config['tracking'].get('objective')!='soft_budget_v1':
+            for key in list(config['tracking']):
+                if key.startswith('soft_'):config['tracking'].pop(key)
         if not config['tracking'].get('precision_reward',False):
             for key in list(config['tracking']):
                 if key.startswith('precision_'):config['tracking'].pop(key)

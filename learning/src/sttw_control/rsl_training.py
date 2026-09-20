@@ -248,6 +248,10 @@ def train(task_path,output,c):
             phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
             phase_stats['elapsed_sum']=jp.sum(phase)
             phase_stats['physical_failures']=jp.sum(nxt.terminated)
+            if nxt.tracking_raw_costs is not None:
+                for name,value in nxt.tracking_raw_costs.items():phase_stats['raw_cost_'+name]=jp.sum(value)
+                total=sum(nxt.tracking_raw_costs.values())
+                phase_stats['soft_bound_slope_sum']=jp.sum((cfg.tracking.soft_cost_bound/(cfg.tracking.soft_cost_bound+total))**2)
             if cfg.tracking.precision_reward:
                 ordinary=sum(v for k,v in nxt.tracking_components.items()
                              if k not in ('deadline','failure','recovery'))
@@ -313,6 +317,9 @@ def train(task_path,output,c):
                         'accepted_minibatches':0 if update_audit['full_update_rolled_back'] else c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size)},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
                 batch_count=c.num_envs*c.rollout_steps
+                if cfg.tracking.objective=='soft_budget_v1':
+                    record['raw_costs_mean_rate']={k[len('raw_cost_'):]:float(v)/batch_count for k,v in phase_sum.items() if k.startswith('raw_cost_')}
+                    record['soft_bound_slope_mean']=float(phase_sum['soft_bound_slope_sum'])/batch_count
                 if cfg.tracking.precision_reward:
                     record['precision_cost_cap_fraction']=float(phase_sum['cost_capped_samples'])/batch_count
                 record['complete_training_episodes']=episode_stats.flush()

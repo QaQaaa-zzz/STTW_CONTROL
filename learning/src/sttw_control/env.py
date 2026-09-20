@@ -244,6 +244,7 @@ class EnvState:
     priority_locked: object=False
     tracking_state: object=None
     tracking_components: object=None
+    tracking_raw_costs: object=None
     path_id: object=0
     path_progress: object=0.
     reference_pose: object=None

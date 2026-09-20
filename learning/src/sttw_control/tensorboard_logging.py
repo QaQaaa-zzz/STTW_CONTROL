@@ -79,6 +79,10 @@ def scalar_values(record,labels=(),profile="full"):
         add('optimizer/'+key,record.get('optimizer_audit',{}).get(key))
     for key,value in record.get('sample_phase',{}).items():add('sample_phase/'+key,value)
     add('reward/cost_cap_fraction',record.get('precision_cost_cap_fraction'))
+    add('reward/soft_bound_slope_mean',record.get('soft_bound_slope_mean'))
+    for key,value in record.get('raw_costs_mean_rate',{}).items():add('raw_cost_rates/'+key,value)
+    for key in ('underspeed_primary','overspeed_primary','path_primary','heading_budget','roll_excess'):
+        add('reward_components/'+key,record.get('reward_components_mean_step',{}).get(key))
     for group in ('complete_training_episodes','phase_tracking'):
         for key,value in record.get(group,{}).items():add(group+'/'+key,value)
     for key in ('control_transitions','episode_ends'):add('train/'+key,record.get(key))

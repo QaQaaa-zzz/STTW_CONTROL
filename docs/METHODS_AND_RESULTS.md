@@ -661,3 +661,9 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-20 precision best0196单弯限定评估
 
 用户要求只用训练best、仅synthetic_turn：脚本读取best_model.json并冻结update0196，alpha0/.5/1、seed49001，3策略＋1基线。9秒窗口前三秒共享零残差；只用3～9秒统计误差。基线速度RMSE0.09176、路径0.40392；三个alpha分别速度0.07412/0.07466/0.07528、路径0.10204/0.10196/0.10217。全部策略最终保持通过、无回归超时与物理失败，但alpha差异几乎消失且速度排序不符合alpha1更准的预期。alpha1/基线0.820，未达≤0.8；短暂超速约0.155，超0.05持续0.175秒，不能宣称全程不超速。单弯峰值yaw2.699rad/s是外推开发检查。完整叠图/分项/逐步及指标CSV见`runs/precision_speed_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md`。
+
+## 2026-09-20 三模式软预算V1（工程通过，正式结果待训练）
+
+按用户上传sttw_reward_v1实现独立objective。α0/0.5/1：欠速主系数8α、路径主系数8(1−α)，超速固定8，速度归一化.05；共同四种越带惩罚保留，新增heading预算。回归tau前1s维持过程带，随后1.5s收紧，最后.5s保持，3s期限不延长。平滑100C/(100+C)代替precision硬截断；仍有大成本压缩，不保证累计成本排名保持。普通reward×.1、失败整步-200、首次超时-5、pending且超期成本率2。无恢复奖金、不奖励主动制造差异。
+
+仅完整ECBC＋ESO＋残差，alpha等概率、新初始化250轮=32,768,000转移，控制/网络/物理/PPO不变。用户要求250轮覆盖附件不加轮数建议。保留按训练平均每步奖励保存实际采样模型best，无训练内开发评估。配置soft_budget_ecbc1.json/ppo_soft_budget.json，证据runs/soft_budget_ecbc1_20260920。原始成本与平滑后有效分项分别记录，旧奖励/旧身份兼容；尚无新训练能力结论。

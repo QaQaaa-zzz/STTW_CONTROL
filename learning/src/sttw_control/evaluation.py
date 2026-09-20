@@ -90,6 +90,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                 row['true_forward_speed']=float(jp.dot(s.data.qvel[:3],jp.asarray(s.data.xmat[env.bundle.chassis]).reshape(3,3)[:,0]))
                 row['return_state']=np.asarray(return_observation(s.tracking_state,env.config.tracking))
                 row.update({'reward_'+name:float(value) for name,value in s.tracking_components.items()})
+                if s.tracking_raw_costs is not None:
+                    row.update({'raw_cost_'+name:float(value) for name,value in s.tracking_raw_costs.items()})
             if env.config.timed_reference is not None:
                 from .timed_reference import errors
                 feature=np.asarray(errors(s.pose,s.reference_pose,s.reference_command))

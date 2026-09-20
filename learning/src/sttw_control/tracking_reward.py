@@ -12,6 +12,10 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class TrackingConfig:
+    soft_grace_seconds: float = 1.
+    soft_heading_relaxed: float = .35
+    soft_reward_scale: float = .1
+    soft_cost_bound: float = 100.
     precision_reward: bool = False
     precision_under_rate_low: float = .12
     precision_under_rate_high: float = 8.
@@ -89,7 +93,7 @@ class TrackingConfig:
                     raise ValueError('reward_mode must be gaussian or huber')
                 continue
             if field.name == 'objective':
-                if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber'):
+                if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber', 'soft_budget_v1'):
                     raise ValueError('unsupported tracking objective')
                 continue
             if field.name in ('timed', 'geometric', 'shrink_tolerances', 'precision_reward'):
@@ -110,6 +114,11 @@ class TrackingConfig:
         if self.objective == 'asymmetric_geometric_huber' and ((self.timed and not self.geometric) or self.return_bonus != 0 or self.tail_rate != 0):
             raise ValueError('asymmetric geometric huber requires geometric tracking and excludes bonus/tails')
 
+        if self.objective == 'soft_budget_v1':
+            if not self.geometric or self.precision_reward or self.return_bonus or self.tail_rate or self.return_rate or self.over_deadline_rate:
+                raise ValueError('soft budget requires geometric-only costs without precision or duplicate terms')
+            if not 0 <= self.soft_grace_seconds < self.return_seconds-self.hold_seconds:
+                raise ValueError('soft budget grace leaves no tightening window')
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
         if self.precision_reward and self.objective != 'asymmetric_geometric_huber':
@@ -228,7 +237,7 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
                  longitudinal_error=None, yaw_rate_error=None, xp=jp):
     speed_ok = ((speed_error >= -config.final_speed_tolerance)
                 & (speed_error <= config.final_overspeed_tolerance)
-                if config.objective == 'asymmetric_geometric_huber'
+                if config.objective in ('asymmetric_geometric_huber','soft_budget_v1')
                 else xp.abs(speed_error) <= config.final_speed_tolerance)
     final = ((xp.abs(roll) <= config.roll_working_limit)
             & (xp.abs(roll_rate) <= config.final_roll_rate_tolerance)
@@ -246,7 +255,7 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
 def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_error,
                action, alpha, dt, alive_rate, failure_penalty, failed,
                enabled, config, longitudinal_error=None, yaw_rate_error=None,
-               recovery_trigger=False, clock_from_departure=True, xp=jp):
+               recovery_trigger=False, clock_from_departure=True, return_raw=False, xp=jp):
     """One transition, using pre-action alpha and the resulting physical errors.
 
     The clock starts at observed departure, not an oracle disturbance-end label.
@@ -258,6 +267,10 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     c = config
     if c.timed and (longitudinal_error is None or yaw_rate_error is None):
         raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
+    if c.objective == 'soft_budget_v1':
+        values=[xp.asarray(v) for v in (roll,roll_rate,speed_error,lateral_error,heading_error,alpha,action)]
+        valid=xp.all(xp.stack([xp.all(xp.isfinite(v)) for v in values]))
+        failed=xp.asarray(failed)|~valid|~xp.asarray((alpha==0.)|(alpha==.5)|(alpha==1.))
     failed = xp.asarray(failed)
     action = xp.asarray(action)
     # Simulator invalid-state termination must still return a finite -penalty.
@@ -287,12 +300,22 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     earned = completed & ~state.credited
     pending = armed & ~completed
     missed = state.deadline_missed | (armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9)))
-    if c.objective in ('geometric_huber', 'asymmetric_geometric_huber'):
+    if c.objective in ('geometric_huber', 'asymmetric_geometric_huber', 'soft_budget_v1'):
         # Completion remains diagnostic; late return must not erase a violation.
         earned = earned & ~missed
     nxt = ReturnState(pending, xp.where(pending, elapsed, 0.),
                       xp.minimum(hold, c.hold_seconds), state.credited | earned,
                       state.ever_left | left, missed, a)
+    if c.objective == 'soft_budget_v1':
+        raw,_=soft_budget_costs(ev,ey,ep,phi,rate,a,state.previous_action,alpha,elapsed,pending,c,xp=xp)
+        cost=sum(raw.values());failed=failed|~xp.isfinite(cost)
+        factor=c.soft_cost_bound/(c.soft_cost_bound+cost)
+        parts={name:xp.where(failed,0.,-dt*c.soft_reward_scale*value*factor) for name,value in raw.items()}
+        parts.update(alive=xp.where(failed,0.,dt*c.soft_reward_scale*alive_rate),
+                     deadline=xp.where(failed,0.,-c.deadline_penalty*(missed & ~state.deadline_missed)),
+                     failure=xp.where(failed,-failure_penalty,0.))
+        nxt=nxt._replace(pending=nxt.pending & ~failed,credited=nxt.credited & ~failed)
+        return (nxt,parts,raw) if return_raw else (nxt,parts)
     if c.shrink_tolerances:
         fraction = xp.clip(elapsed / (c.return_seconds - c.hold_seconds), 0., 1.)
         bv = bv + fraction * (c.final_speed_tolerance - bv)
@@ -377,3 +400,26 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     parts['recovery'] = xp.where(failed, 0., c.return_bonus * earned)
     parts['failure'] = xp.where(failed, -failure_penalty, 0.)
     return nxt, parts
+
+
+def soft_budget_costs(ev,ey,ep,roll,roll_rate,action,previous_action,alpha,elapsed,pending,c,*,xp=jp):
+    """Unscaled rates for the independent three-mode objective; no legacy costs."""
+    fraction=xp.clip((elapsed-c.soft_grace_seconds)/(c.return_seconds-c.hold_seconds-c.soft_grace_seconds),0.,1.)
+    under_band=c.final_speed_tolerance+(c.speed_relaxed-c.final_speed_tolerance)*(1-alpha)*(1-fraction)
+    path_band=c.final_lateral_tolerance+(c.lateral_relaxed-c.final_lateral_tolerance)*alpha*(1-fraction)
+    heading_band=c.final_heading_tolerance+(c.soft_heading_relaxed-c.final_heading_tolerance)*alpha*(1-fraction)
+    under,over=xp.maximum(-ev,0.),xp.maximum(ev,0.)
+    h=lambda x:huber_tail(x,xp=xp)
+    raw=dict(underspeed_primary=c.tracking_rate*alpha*h(under/c.speed_scale),
+        overspeed_primary=c.tracking_rate*h(over/c.speed_scale),
+        path_primary=c.tracking_rate*(1-alpha)*(h(ey/c.lateral_scale)+c.heading_tail_weight*h(ep/c.heading_scale)),
+        underspeed_budget=c.budget_rate*h(xp.maximum(under-under_band,0.)/c.speed_scale),
+        overspeed_budget=c.budget_rate*h(xp.maximum(over-c.overspeed_band,0.)/c.speed_scale),
+        path_budget=c.budget_rate*h(xp.maximum(xp.abs(ey)-path_band,0.)/c.lateral_scale),
+        heading_budget=c.budget_rate*c.heading_tail_weight*h(xp.maximum(xp.abs(ep)-heading_band,0.)/c.heading_scale),
+        roll_excess=c.roll_weight*xp.maximum(xp.abs(roll)-c.roll_working_limit,0.)**2,
+        roll_rate=c.roll_rate_weight*roll_rate**2,
+        action=c.action_weight*xp.sum(action**2,axis=-1),
+        action_delta=c.action_delta_weight*xp.sum((action-previous_action)**2,axis=-1),
+        return_overdue=c.overdue_rate*pending*(elapsed>c.return_seconds+1e-9))
+    return raw,dict(under_band=under_band,over_band=xp.asarray(c.overspeed_band),path_band=path_band,heading_band=heading_band,shrink_fraction=fraction)

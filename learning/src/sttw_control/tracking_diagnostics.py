@@ -108,7 +108,8 @@ def trace_summary(trace, config):
     path=trace['path_features'][1:]
     bv,by=tolerances(trace['priority_alpha'][:-1],c,xp=np)
     if c.shrink_tolerances:
-        fraction=np.clip(trace['return_state'][1:,3]/(c.return_seconds-c.hold_seconds),0,1)
+        elapsed=trace['return_state'][1:,3]
+        fraction=(np.clip((elapsed-c.soft_grace_seconds)/(c.return_seconds-c.hold_seconds-c.soft_grace_seconds),0,1) if c.objective=='soft_budget_v1' else np.clip(elapsed/(c.return_seconds-c.hold_seconds),0,1))
         bv=bv+fraction*(c.final_speed_tolerance-bv)
         by=by+fraction*(c.final_lateral_tolerance-by)
     mature=t[:-1]+1e-7>=c.start_seconds
@@ -123,7 +124,7 @@ def trace_summary(trace, config):
         path_error_rmse_m=float(np.sqrt(np.mean(path[:,0]**2))),
         heading_error_rmse_rad=float(np.sqrt(np.mean(path[:,1]**2))),
         speed_error_rmse_m_s=float(np.sqrt(np.mean(ev**2))),
-        speed_tolerance_exceed_fraction=fraction(np.abs(ev)>bv),
+        speed_tolerance_exceed_fraction=fraction(((ev < -bv) | (ev > c.overspeed_band)) if c.objective=='soft_budget_v1' else np.abs(ev)>bv),
         path_tolerance_exceed_fraction=fraction(np.abs(path[:,0])>by),
         full_declared_horizon=full,
         scope='fixed-horizon geometric tracking; common final hold and no missed return deadline; no safety/generalization claim',
@@ -131,7 +132,7 @@ def trace_summary(trace, config):
                            'heading_rad':c.final_heading_tolerance,'roll_rad':c.roll_working_limit,
                            'roll_rate_rad_s':c.final_roll_rate_tolerance,'hold_s':c.hold_seconds,
                            'return_budget_s':c.return_seconds,'return_clock':'from observable tracking-band departure, including forcing','initial_settling_s':c.start_seconds})
-    if c.objective=='asymmetric_geometric_huber':
+    if c.objective in ('asymmetric_geometric_huber','soft_budget_v1'):
         result['recovery_criteria'].update(speed_error_lower_m_s=-c.final_speed_tolerance,
                                            speed_error_upper_m_s=c.final_overspeed_tolerance)
     if c.timed:
@@ -158,7 +159,7 @@ def audit_trace(path):
     timed=config.get('timed_reference') is not None
     geometric=config.get('timed_reference',{}).get('mode')=='geometry' if timed else False
     reference_error=(audit_geometric_reference(tr,config,decl['seed']) if geometric else audit_timed_reference(tr,dt,c.geometric)) if timed else None
-    state=initial_return(xp=np);parts={};max_state=0.
+    state=initial_return(xp=np);parts={};max_state=0.;max_raw=0.
     ev=speed_error(tr,config)
     mixed=bool((config.get('timed_reference') or {}).get('training_mix',False))
     if mixed:
@@ -166,15 +167,21 @@ def audit_trace(path):
         scenario=int(tr['command_schedule'][0,6])
     for i in range(1,len(tr['time'])):
         event=tr['event'][i-1];tick=round(float(tr['time'][i-1])/dt)
-        state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
+        result=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
             speed_error=ev[i-1],
             lateral_error=tr['path_features'][i,0],heading_error=tr['path_features'][i,1],
             action=tr['effective_action'][i],alpha=tr['priority_alpha'][i-1],dt=dt,
             alive_rate=config['alive_reward_rate'],failure_penalty=config['failure_penalty'],
             failed=tr['terminated'][i],enabled=tick*dt>=c.start_seconds,config=c,xp=np,
             recovery_trigger=recovery_entry_at(tick,tr['command_schedule'],dt,xp=np) if mixed else False,
-            clock_from_departure=scenario!=1 if mixed else True,
+            clock_from_departure=scenario!=1 if mixed else True,return_raw=c.objective=='soft_budget_v1',
             **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if timed else {}))
+        state,terms=result[:2]
+        if len(result)==3:
+            for name,value in result[2].items():
+                recorded=tr['raw_cost_'+name][i]
+                max_raw=max(max_raw,float(abs(value-recorded)))
+                if not np.allclose(value,recorded,rtol=3e-5,atol=3e-5):raise ValueError('raw cost mismatch: '+name)
         for name,value in terms.items():parts.setdefault(name,[0.]).append(float(value))
         if int(tr['end_code'][i])!=3:  # Invalid physics can also invalidate hidden controller state.
             max_state=max(max_state,float(np.max(np.abs(return_observation(state,c,xp=np)-tr['return_state'][i]))))
@@ -187,7 +194,7 @@ def audit_trace(path):
             raise ValueError('tracking component mismatch: '+name)
     if max_state>2e-3:raise ValueError(f'return-state reconstruction mismatch {max_state}')
     return {'trace':tr,'config':config,'parts':parts,'summary':trace_summary(tr,config),
-            'max_reward_error':error,'max_return_state_error':max_state,'max_reference_error':reference_error,
+            'max_raw_cost_error':max_raw,'max_reward_error':error,'max_return_state_error':max_state,'max_reference_error':reference_error,
             'trace_sha256':hashlib.sha256((path/'trace.npz').read_bytes()).hexdigest(),
             'declaration_sha256':hashlib.sha256((path/'declaration.json').read_bytes()).hexdigest()}
 
@@ -242,11 +249,17 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
         result['baseline_return']=float(bt['reward'][1:].sum())
         result['paired_return_delta']=result['episode_return']-result['baseline_return']
         result['baseline_trace_sha256']=base['trace_sha256']
-        if config['tracking'].get('precision_reward',False):
+        if config['tracking'].get('precision_reward',False) or config['tracking'].get('objective')=='soft_budget_v1':
             result['precision_speed_acceptance']=precision_speed_acceptance(tr,bt,config)
             result['precision_speed_acceptance']['required_for_this_alpha']=bool(scoring_alpha==1.)
     (out/'summary.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     np.savez_compressed(out/'components.npz',time=tr['time'],**parts)
+    raw={k:v for k,v in tr.items() if k.startswith('raw_cost_')}
+    if raw:
+        np.savez_compressed(out/'raw_costs.npz',time=tr['time'],**raw)
+        import csv
+        with (out/'raw_costs.csv').open('w',newline='') as f:
+            writer=csv.writer(f);writer.writerow(['time_s',*raw]);writer.writerows(zip(tr['time'][1:],*[v[1:] for v in raw.values()]))
     sources=[('residual' if baseline else 'recorded',data)]+([('baseline',base)] if base else [])
     arrays={}
     for label,source in sources:
@@ -516,6 +529,8 @@ def write_step_csv(data, destination):
         fields.update(reference_x_m=trace['reference_pose'][1:,0],reference_y_m=trace['reference_pose'][1:,1],
             reference_speed_m_s=trace['reference_command'][:-1,0],reference_yaw_rate_rad_s=trace['reference_command'][:-1,1],
             longitudinal_error_m=trace['longitudinal_error'][1:],yaw_rate_error_rad_s=trace['yaw_rate_error'][1:])
+    for key,value in trace.items():
+        if key.startswith('raw_cost_'):fields[key]=value[1:]
     for key,value in parts.items():
         fields['reward_'+key]=value[1:]
         fields['cumulative_'+key]=np.cumsum(value[1:])
@@ -581,14 +596,17 @@ def rescore_trace(data, alpha):
         scenario=int(tr['command_schedule'][0,6])
     for i in range(1,len(tr['time'])):
         tick=i-1
-        state,terms=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
+        result=transition(state,roll=tr['measurement'][i,0],roll_rate=tr['measurement'][i,1],
             speed_error=ev[i-1],lateral_error=tr['path_features'][i,0],heading_error=tr['path_features'][i,1],
             action=tr['effective_action'][i],alpha=alpha,dt=dt,alive_rate=config['alive_reward_rate'],
             failure_penalty=config['failure_penalty'],failed=tr['terminated'][i],
             enabled=round(tr['time'][i-1]/dt)*dt>=c.start_seconds,config=c,xp=np,
             recovery_trigger=recovery_entry_at(tick,tr['command_schedule'],dt,xp=np) if mixed else False,
-            clock_from_departure=scenario!=1 if mixed else True,
+            clock_from_departure=scenario!=1 if mixed else True,return_raw=c.objective=='soft_budget_v1',
             **({'longitudinal_error':tr['longitudinal_error'][i],'yaw_rate_error':tr['yaw_rate_error'][i]} if c.timed else {}))
+        state,terms=result[:2]
+        if len(result)==3:
+            for k,v in result[2].items():tr['raw_cost_'+k][i]=v
         for k,v in terms.items():parts.setdefault(k,[0.]).append(float(v))
         returns.append(np.asarray(return_observation(state,c,xp=np)))
     parts={k:np.asarray(v) for k,v in parts.items()}

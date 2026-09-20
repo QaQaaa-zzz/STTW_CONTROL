@@ -1833,3 +1833,15 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 ## 2026-09-20 单弯限定best评估交付
 
 `five_scene_review.py`新增可选`--scenes`，省略`--checkpoint`时读取best_model.json并冻结选择元数据；显式模型仍可用。实际运行仅synthetic_turn、best0196、alpha0/.5/1，4物理回合完成。3组逐步重建最大误差7.72e-9，前三秒共享准备qpos与零动作逐值核对；12个PNG/PDF总览及单图存在、人工检查总览可读。相关reward-best与精度验收测试4 passed。指标与局限见METHODS_AND_RESULTS对应记录；无新增训练或其他场景评估。
+
+## 2026-09-20 三模式软预算V1工程检查
+
+新增独立`soft_budget_v1` objective，在共享tracking_reward里复现上传参考，而非覆盖仓库模块。1000步随机连续状态的奖励/分项/恢复tick、候选P/M/S、缓冲收紧、一次超时、无效输入终止、NumPy/JAX与旧身份测试通过；附件原46项测试通过，仓库相关84项通过。测试参考快照位于learning/tests/fixtures，生产不导入附件。
+
+CPU核心左转10秒零残差：新奖励重建误差6.69e-8、原始成本误差7.63e-6、回归状态6.11e-7、参考1.50e-8；旧precision策略身份精确相同，旧轨迹重建误差7.72e-9。正常时限终点是truncated而非physical failure，基线输出未缩放。原始成本保存在独立state字典/trace raw_cost_*、训练raw_costs_mean_rate；有效分项才参与reward求和，两者不得重复计罚。配对诊断输出raw_costs.csv/npz。
+
+独立审查未发现正式启动阻断项，指出超速带统计不能沿用对称欠速带；已为新objective改用ev<-under_band或ev>固定over_band。不修改旧冻结分析。
+
+终止收益界仍是dt.005/gamma.9995/10秒下普通项[-.0495,.0005]、一次-5、真实失败-200的有限记录界。RSL保留原time-limit bootstrap，即仅truncated且非terminated时加gamma*V(finalobs)，不能将有限记录界宣称为Critic或无限时域保证。
+
+GPU短测64×128×2完成16,384转移，原始成本及平滑映射斜率已记录，奖励分项重建scaled误差低于1e-7；训练奖励best正确关联更新前采样checkpoint。工程记录位于runs/soft_budget_ecbc1_20260920/engineering，不能作为任务能力证明。

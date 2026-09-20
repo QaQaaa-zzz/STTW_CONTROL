@@ -60,7 +60,8 @@ class TimedRecoveryEnv(RecoveryEnv):
             command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
             raw_reference_request=raw,geometric_table=table,geometric_features=geometric,
             path_segment=jp.int32(0),reference_geometry=geometry,path_progress=jp.asarray(0.),
-            tracking_state=tracking,tracking_components=components,recovery=initial_recovery(),
+            tracking_state=tracking,tracking_components=components,
+            tracking_raw_costs=({k:jp.zeros_like(v) for k,v in components.items() if k not in ('alive','deadline','failure')} if c.tracking.objective=='soft_budget_v1' else None),recovery=initial_recovery(),
             tick=jp.int32(0),reward=jp.asarray(0.),done=failed,terminated=failed,
             truncated=jp.bool_(False),end_code=jp.where(failed,5,0),preparation_failed=failed,
             active_base_output_scale=jp.asarray(c.actuator.base_output_scale))
@@ -138,12 +139,15 @@ class TimedRecoveryEnv(RecoveryEnv):
                   if c.timed_reference.training_mix else jp.int32(-1))
         recovery_trigger=(recovery_entry_at(state.tick,state.command_schedule,dt)
                           if c.timed_reference.training_mix else False)
-        tracking,parts=transition(state.tracking_state,roll=measurement[0],roll_rate=measurement[1],
+        reward_result=transition(state.tracking_state,roll=measurement[0],roll_rate=measurement[1],
             speed_error=true_speed-state.reference_command[0],yaw_rate_error=yaw-state.reference_command[1],
             lateral_error=reward_feature[0],heading_error=reward_feature[1],longitudinal_error=feature[3],action=action,
             alpha=state.priority_alpha,dt=dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,
             failed=failed,enabled=state.tick*dt>=c.tracking.start_seconds,config=c.tracking,
-            recovery_trigger=recovery_trigger,clock_from_departure=scenario!=1)
+            recovery_trigger=recovery_trigger,clock_from_departure=scenario!=1,return_raw=c.tracking.objective=='soft_budget_v1')
+        tracking,parts=reward_result[:2]
+        raw_costs=reward_result[2] if len(reward_result)==3 else None
+        if raw_costs is not None:failed=failed|(parts['failure']<0)
         eso_enabled=state.eso_enabled|(tick*c.controller.dt>c.eso_start)
         ctrl,h,obs,base,roll=self.prepare_timed(state.controller,actuator,state.history,measurement,tick,pose,
             state.priority_alpha,ref_pose,ref_command,yaw,tracking,geometric,eso_enabled=eso_enabled,
@@ -158,7 +162,7 @@ class TimedRecoveryEnv(RecoveryEnv):
         return state.replace(controller=ctrl,history=h,obs=jp.nan_to_num(obs),base=base,reference=roll,
             actuator=actuator,measurement=measurement,pose=pose,tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
-            tracking_state=tracking,tracking_components=parts,reference_pose=ref_pose,
+            tracking_state=tracking,tracking_components=parts,tracking_raw_costs=raw_costs,reference_pose=ref_pose,
             reference_command=ref_command,raw_reference_request=raw_request,yaw_rate=yaw,
             path_progress=progress,path_segment=segment,geometric_features=geometric,geometric_table=table,
             eso_enabled=eso_enabled)
