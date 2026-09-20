@@ -1828,3 +1828,4 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 - 普通项采用0.1×dt×(alive-min(cost,100))，保留按比例分配后的有符号分项；整步失败-200、一次deadline-5不作普通缩放。gamma=.9995、10秒下完整非失败回合回报下界约-67.59，高于任意物理失败回合上界约-72.96，仅证明该有限奖励契约的数值排序。
 - 成本截断是实际限制：核心左转零残差轨迹17.15%步触顶，极大误差区间损失区分度；正式日志增加`precision_cost_cap_fraction`和TensorBoard `reward/cost_cap_fraction`。不宣称该精度目标可在真实车上达到。正式训练无开发评估，阶段末配对诊断加入指令变化起完整窗口α1速度RMSE≤0.8基线的额外门槛，提前失败不能通过。
 - 最终相关测试集合84 passed（4.89s），独立代码审查未发现阻止启动的问题；新配对验收/奖励专项6项复查通过。
+- 正式启动已验证：PID4155187，仅一组200轮，冻结声明alpha0/.5/1与reward-best均正确；前4轮PPO更新接受，无KL回退。TensorBoard6006 HTTP可访问且新运行标量已加载，best指针与日志最大mean_step_reward、更新前采样模型对应一致。前4轮成本触顶比例8.43%～10.71%，为随机训练批次统计，非固定评估。实时训练进度见`runs/precision_speed_ecbc1_20260920/training/status.json`；84项相关测试通过。代码提交a1149a8。
