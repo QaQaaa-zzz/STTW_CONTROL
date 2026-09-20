@@ -752,3 +752,7 @@ precision_speed_ecbc1已完成200更新，按训练奖励选择update0196（第1
 - [x] CPU闭环与有界GPU短测，通过后冻结250轮配置、启动单组训练/TensorBoard/通知，并核对首轮best归属。
 
 正式训练PID1291444，源码fae5aaf已推送。首轮131,072转移完成，更新接受，KL0.002142，无非有限值；TensorBoard6006已加载实际奖励，best与采样模型归属核验通过。运行入口runs/soft_budget_ecbc1_20260920/INDEX.md；实时进度以training/status.json为准，尚无训练后能力结论。
+
+## 2026-09-21 软预算V1 best单弯复查
+
+250更新完成，训练奖励best为update0244（第245轮采样，mean_step_reward=-0.0037052934）。按用户要求仅复查synthetic_turn，alpha0/.5/1、seed49001，三策略＋共享ECBC基线。入口runs/soft_budget_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md。指令后3～9秒速度RMSE为0.07336/0.07369/0.07409m/s（基线0.09176），路径RMSE0.09964/0.09904/0.09852m（基线0.40392）。最终保持3/3、无超时/物理失败；三个alpha仍近乎重合，alpha1速度RMSE比基线0.807，未达≤0.8。超速峰值0.203/0.209/0.215m/s，比上轮约0.155更差；不能仅凭总体RMSE称全面改进。单场景外推开发诊断，不是泛化或硬约束保证。

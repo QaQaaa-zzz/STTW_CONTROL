@@ -669,3 +669,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 仅完整ECBC＋ESO＋残差，alpha等概率、新初始化250轮=32,768,000转移，控制/网络/物理/PPO不变。用户要求250轮覆盖附件不加轮数建议。保留按训练平均每步奖励保存实际采样模型best，无训练内开发评估。配置soft_budget_ecbc1.json/ppo_soft_budget.json，证据runs/soft_budget_ecbc1_20260920。原始成本与平滑后有效分项分别记录，旧奖励/旧身份兼容；尚无新训练能力结论。
 
 软预算V1正式单组250更新已启动（runs/soft_budget_ecbc1_20260920），首轮接受且日志/best/TensorBoard验证通过；当前仅工程与启动证据，最终控制效果及alpha取舍尚未评测。
+
+## 2026-09-21 软预算V1 best单弯复查
+
+250更新完成，训练奖励best为update0244（第245轮采样，mean_step_reward=-0.0037052934）。按用户要求仅复查synthetic_turn，alpha0/.5/1、seed49001，三策略＋共享ECBC基线。入口runs/soft_budget_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md。指令后3～9秒速度RMSE为0.07336/0.07369/0.07409m/s（基线0.09176），路径RMSE0.09964/0.09904/0.09852m（基线0.40392）。最终保持3/3、无超时/物理失败；三个alpha仍近乎重合，alpha1速度RMSE比基线0.807，未达≤0.8。超速峰值0.203/0.209/0.215m/s，比上轮约0.155更差；不能仅凭总体RMSE称全面改进。单场景外推开发诊断，不是泛化或硬约束保证。
