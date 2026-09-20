@@ -13,7 +13,7 @@ from .actuator import residual_target,composition_base
 from .energy import mechanical_work
 
 
-def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=None):
+def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=None,initial_state=None):
     if priority_alpha is not None and (env.config.priority is None or not np.isfinite(priority_alpha) or not 0<=priority_alpha<=1):raise ValueError("invalid priority intervention")
     path=Path(path)
     if policy is not None and not policy_identity:
@@ -24,6 +24,8 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
               'controller':'baseline' if policy is None else 'residual','policy':policy_identity,
               'reset_semantics':('closed_loop_straight_preparation_preserving_controller_actuator_history_then_task_clock_zero'
                                  if env.config.preparation_seconds else 'synthetic_forward_velocity_model_initial_pose')}
+    if initial_state is not None:
+        identity['reset_reuse']='complete live tick-zero EnvState: physics, controller, actuator, history and reference; not qpos/qvel-only'
     if priority_alpha is not None:identity["priority_override"]=float(priority_alpha)
     import mujoco
     identity['actuator_diagnostics']={'names':[mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_ACTUATOR,i) for i in range(env.model.nu)],
@@ -39,7 +41,9 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
     try:
         reset=jax.jit(env.reset) if env.backend=='mjx' else env.reset
         step=jax.jit(env.step) if env.backend=='mjx' else env.step
-        state=reset(jax.random.PRNGKey(seed))
+        state=reset(jax.random.PRNGKey(seed)) if initial_state is None else initial_state
+        if initial_state is not None and (int(state.tick)!=0 or bool(state.done) or state.data is None):
+            raise ValueError('shared reset must be a complete live EnvState at task tick zero')
         if priority_alpha is not None:state=env.set_priority(state,priority_alpha)
         event=np.asarray(state.event).tolist()
         (path/'event.json').write_text(json.dumps({'start_seconds':event[0]*env.config.controller.dt,'end_seconds':event[1]*env.config.controller.dt,'steer_rate_peak':event[2],'rear_disturbance_mode':env.config.rear_disturbance_mode,'rear_load_torque_nm':event[5] if env.config.rear_disturbance_mode=='torque' else 0.,'rear_command_bias_rad_s':-event[5] if env.config.rear_disturbance_mode=='command' else 0.,'force_peak':event[3],'waveform':'half_sine' if event[4] else 'constant'},indent=2)+'\n')
@@ -209,124 +213,3 @@ def headroom_metrics(base,steer,config):
             'minimum_positive_rear_margin_rad_s':float(positive[:,1].min()),
             'minimum_negative_rear_margin_rad_s':float(negative[:,1].min()),
             'scope':'instantaneous_command_headroom_not_torque_or_delayed_authority'}
-
-
-def candidate_offset(action, offset, step, count):
-    """Finite, symmetric bias window; never expands normalized action limits."""
-    if count < 1:raise ValueError('candidate window must contain at least one step')
-    a=np.asarray(action,float);b=np.asarray(offset,float)
-    if a.shape!=(2,) or b.shape!=(2,) or not np.isfinite(a).all() or not np.isfinite(b).all():
-        raise ValueError('invalid candidate action/offset')
-    envelope=np.sin(np.pi*(step+.5)/count)**2 if 0<=step<count else 0.
-    raw=a+envelope*b
-    return np.clip(raw,-1.,1.),bool(np.any(np.abs(raw)>1.))
-
-
-def candidate_search_report(rows):
-    """Finite-set Pareto and reward ordering, never a global feasibility claim."""
-    def front(group):
-        return [r['candidate'] for r in group if not any(
-            q['speed_rmse']<=r['speed_rmse'] and q['path_rmse']<=r['path_rmse']
-            and (q['speed_rmse']<r['speed_rmse'] or q['path_rmse']<r['path_rmse']) for q in group)]
-    finite=[r for r in rows if r['finite']]
-    task=[r for r in finite if r['task_qualified']]
-    work=[r for r in task if r['work_envelope_qualified']]
-    selected={str(a):(max(work,key=lambda r:r['scores'][str(a)])['candidate'] if work else None) for a in (0.,.5,1.)}
-    return {'scope':'declared local residual-bias candidates, not global reachability or deployable expert proof',
-        'count':len(rows),'actual_search_transitions':sum(r['steps'] for r in rows),
-        'task_qualified_count':len(task),'work_envelope_qualified_count':len(work),
-        'task_pareto_candidates':front(task),'work_pareto_candidates':front(work),
-        'work_reward_winners':selected,'rows':rows,
-        'decision':('No candidate satisfied the declared work gates; this finite search does not prove global infeasibility.'
-                    if not work else 'Inspect non-dominated candidates and raw work metrics; do not force different winners.')}
-
-
-def search_candidates(env,path,*,seed,policy,policy_identity,alpha,start_seconds=3.,duration=.5,
-                      offsets=(-.5,-.25,0.,.25,.5)):
-    """Real CPU rollouts from one complete immutable closed-loop prefix state.
-
-    This is offline controllability exploration. Biases are causal timed pulses;
-    choosing them after seeing whole rollouts is NOT a deployable policy. All
-    candidates, including failures, are retained. No optimizer or model edits.
-    """
-    import math,itertools
-    from .tracking_reward import transition
-    from .timed_reference import recovery_entry_at
-    c=env.config;dt=c.controller.dt;path=Path(path)
-    if env.backend!='cpu' or c.tracking.objective!='soft_budget_v1' or not c.tracking.geometric or c.timed_reference is None:
-        raise ValueError('candidate search requires CPU V1 committed geometric task')
-    if alpha not in (0.,.5,1.) or not policy_identity:raise ValueError('declare exact alpha and policy identity')
-    if (not math.isfinite(start_seconds+duration) or start_seconds<0 or duration<=0
-            or start_seconds+duration>c.horizon_seconds):raise ValueError('invalid search interval')
-    if any(not math.isclose(x/dt,round(x/dt),abs_tol=1e-7) for x in (start_seconds,duration)):
-        raise ValueError('search interval must align to control steps')
-    if not offsets or len(set(offsets))!=len(offsets) or any(not math.isfinite(x) or abs(x)>1 for x in offsets):
-        raise ValueError('invalid declared normalized offsets')
-    path.mkdir(parents=True,exist_ok=False)
-    prepared=env.set_priority(env.reset(seed),alpha)
-    start_tick=round(start_seconds/dt);window=round(duration/dt)
-    for _ in range(start_tick):
-        if bool(prepared.done):raise RuntimeError('shared zero-residual prefix failed before search')
-        prepared=env.step(prepared,np.zeros(2))
-    # Entire EnvState, not only qpos/qvel: includes ESO, actuator, history,
-    # committed path, projection progress, task clock and return-debt state.
-    original_qpos=np.asarray(prepared.data.qpos).copy()
-    metadata={'config':asdict(c),'seed':seed,'alpha':alpha,'policy':policy_identity,
-        'start_seconds':start_seconds,'duration_seconds':duration,'offsets':list(offsets),
-        'max_search_transitions':len(offsets)**2*(env.horizon-start_tick),
-        'prefix_transitions':start_tick,'preparation_transitions':round(c.preparation_seconds/dt),
-        'prefix':'shared full-state zero-residual prefix, immutable; physical preparation counted separately',
-        'work_gates':'roll <= configured working .3 and overspeed <= configured .05 throughout search, plus final task requirements; diagnostic gates, no changed physical termination'}
-    (path/'declaration.json').write_text(json.dumps(metadata,indent=2)+'\n')
-    summaries=[]
-    for idx,bias in enumerate(itertools.product(offsets,repeat=2)):
-        state=prepared;replays=[jax.tree.map(lambda x:np.asarray(x).copy(),prepared.tracking_state) for _ in range(3)]
-        scores=np.zeros(3);rows=[];clip_count=0;max_error=0.
-        for k in range(env.horizon-start_tick):
-            if bool(state.done):break
-            action,clipped=candidate_offset(np.asarray(policy(state.obs)),bias,k,window);clip_count+=int(clipped)
-            nxt=env.step(state,action)
-            speed=float(jp.dot(nxt.data.qvel[:3],nxt.data.xmat[env.bundle.chassis].reshape(3,3)[:,0]))
-            errors=np.asarray(nxt.geometric_features);ev=speed-float(state.reference_command[0])
-            scenario=int(state.command_schedule[0,6]) if c.timed_reference.training_mix else -1
-            trigger=bool(recovery_entry_at(state.tick,state.command_schedule,dt)) if c.timed_reference.training_mix else False
-            # The same physical trace may be rescored; it is NOT off-policy PPO data.
-            for h,a in enumerate((0.,.5,1.)):
-                replays[h],parts=transition(replays[h],roll=float(nxt.measurement[0]),roll_rate=float(nxt.measurement[1]),
-                    speed_error=ev,lateral_error=errors[0],heading_error=errors[1],action=action,alpha=a,
-                    dt=dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,failed=bool(nxt.terminated),
-                    enabled=int(state.tick)*dt>=c.tracking.start_seconds,config=c.tracking,
-                    longitudinal_error=0.,yaw_rate_error=0.,recovery_trigger=trigger,clock_from_departure=scenario!=1,xp=np)
-                scores[h]+=float(sum(parts.values()))
-                if a==alpha:max_error=max(max_error,abs(float(sum(parts.values()))-float(nxt.reward)))
-            rows.append({'time':float(nxt.tick)*dt,'speed_error':ev,'speed':speed,'lateral_error':float(errors[0]),
-                         'heading_error':float(errors[1]),'roll':float(nxt.measurement[0]),'roll_rate':float(nxt.measurement[1]),
-                         'action':action.copy(),'base':np.asarray(state.base),'command':np.asarray(nxt.actuator.previous),
-                         'pose':np.asarray(nxt.pose),'reward':float(nxt.reward),'failed':bool(nxt.terminated)})
-            state=nxt
-        if not rows:raise RuntimeError('empty candidate trajectory')
-        if max_error>3e-5:raise RuntimeError('candidate reward reconstruction mismatch')
-        trace={key:np.asarray([row[key] for row in rows]) for key in rows[0]}
-        name=f'alpha_{alpha:g}_candidate_{idx:02d}'
-        np.savez_compressed(path/(name+'.npz'),**trace,offset=np.asarray(bias),scores=scores)
-        finite=all(np.isfinite(trace[k]).all() for k in ('speed','lateral_error','roll','heading_error'))
-        task=bool(finite and not state.terminated and int(state.tick)>=env.horizon and not state.tracking_state.pending
-                  and not state.tracking_state.deadline_missed and float(state.tracking_state.hold)+1e-6>=c.tracking.hold_seconds)
-        roll_peak=float(np.max(np.abs(trace['roll']))) if finite else None
-        over_peak=float(np.maximum(trace['speed_error'],0).max()) if finite else None
-        summary={'candidate':name,'alpha':alpha,'offset':list(bias),'steps':len(rows),'finite':finite,
-            'physical_failure':bool(state.terminated),'task_qualified':task,
-            'work_envelope_qualified':bool(task and roll_peak<=c.tracking.roll_working_limit and over_peak<=c.tracking.overspeed_band),
-            'roll_peak':roll_peak,'overspeed_peak':over_peak,
-            'speed_rmse':float(np.sqrt(np.mean(trace['speed_error']**2))) if finite else None,
-            'path_rmse':float(np.sqrt(np.mean(trace['lateral_error']**2))) if finite else None,
-            'minimum_speed':float(trace['speed'].min()) if finite else None,
-            'underspeed_integral':float(np.maximum(-trace['speed_error'],0).sum()*dt) if finite else None,
-            'path_absolute_integral':float(np.abs(trace['lateral_error']).sum()*dt) if finite else None,
-            'scores':{str(a):float(v) for a,v in zip((0.,.5,1.),scores)},
-            'action_clipped_fraction':clip_count/len(rows),'reward_reconstruction_max_abs':max_error}
-        summaries.append(summary)
-        (path/'results.json').write_text(json.dumps(candidate_search_report(summaries),indent=2,allow_nan=False)+'\n')
-        print(json.dumps(summary),flush=True)
-        np.testing.assert_array_equal(prepared.data.qpos,original_qpos)
-    return summaries

@@ -60,21 +60,21 @@ def export_actor(policy):
                                     'bias':jp.asarray(m.bias.detach().cpu().numpy())} for i,m in enumerate(layers)}}
 
 
-def initialize_actor_weights(policy, params):
-    """Copy a checked Flax export into this policy's existing Torch Actor only."""
-    layers=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)]
-    source=params['params']
-    if set(source)!={f'Dense_{i}' for i in range(len(layers))}:
-        raise ValueError('initializer layer layout mismatch')
-    # Validate every tensor before mutating any parameter.
-    pairs=[]
-    for i,layer in enumerate(layers):
+def initialize_dense_actor(policy, params):
+    """Copy all Actor layers atomically after validation; NEVER touch Critic/std."""
+    dense=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)]
+    source=params.get('params',{})
+    if set(source)!={f'Dense_{i}' for i in range(len(dense))}:
+        raise ValueError('source Dense layers differ from target Actor')
+    arrays=[]
+    for i,layer in enumerate(dense):
         item=source[f'Dense_{i}'];w=np.asarray(item['kernel']).T;b=np.asarray(item['bias'])
-        if w.shape!=tuple(layer.weight.shape) or b.shape!=tuple(layer.bias.shape) or not np.isfinite(w).all() or not np.isfinite(b).all():
-            raise ValueError('initializer tensor shape/nonfinite value')
-        pairs.append((layer,w.copy(),b.copy()))
+        if w.shape!=tuple(layer.weight.shape) or b.shape!=tuple(layer.bias.shape):
+            raise ValueError('Actor layer shape mismatch')
+        if not np.isfinite(w).all() or not np.isfinite(b).all():raise ValueError('nonfinite Actor weight')
+        arrays.append((w.copy(),b.copy()))
     with torch.no_grad():
-        for layer,w,b in pairs:
+        for layer,(w,b) in zip(dense,arrays):
             layer.weight.copy_(torch.as_tensor(w,device=layer.weight.device,dtype=layer.weight.dtype))
             layer.bias.copy_(torch.as_tensor(b,device=layer.bias.device,dtype=layer.bias.dtype))
 
@@ -209,14 +209,15 @@ def train(task_path,output,c):
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
                             c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes,schedule=c.rsl_schedule)
-        if c.initialize_actor:
-            from .network import actor_transfer_data
-            transferred,transfer=actor_transfer_data(c.initialize_actor,cfg,env.bundle.identity,mean,std,
-                                                    c.hidden_sizes,c.activation)
-            initialize_actor_weights(algo.policy,transferred)
-            declaration['actor_initialization']=transfer
-            declaration['actor_initialization']['optimizer_and_critic']='fresh; no old moments, value weights or RNG restored'
-            write('declaration.json',declaration)
+        if c.actor_init_checkpoint:
+            from .network import verified_actor_initialization
+            init_params,init_record=verified_actor_initialization(c.actor_init_checkpoint,c.actor_init_training,
+                asdict(cfg),env.bundle.identity,mean,std,c.hidden_sizes,c.activation)
+            initialize_dense_actor(algo.policy,init_params)
+            # Adam has no moments yet; Critic and log_std remain freshly initialized.
+            if algo.optimizer.state:raise RuntimeError('Actor initialization must precede all optimizer updates')
+            declaration['actor_initialization']=init_record
+            write('declaration.json',declaration);write('actor_initialization.json',init_record)
         offset=0;transition_offset=0
         if c.resume_checkpoint:
             snapshot=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)
@@ -275,6 +276,12 @@ def train(task_path,output,c):
             phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
             phase_stats['elapsed_sum']=jp.sum(phase)
             phase_stats['physical_failures']=jp.sum(nxt.terminated)
+            ev=sampled_errors.get('speed_m_s',jp.zeros_like(nxt.tick)) if alpha_stats else jp.zeros_like(nxt.tick)
+            roll=jp.abs(nxt.measurement[:,0])
+            phase_stats['roll_working_violations']=jp.sum(roll>cfg.tracking.roll_working_limit)
+            phase_stats['overspeed_violations']=jp.sum(ev>cfg.tracking.overspeed_band)
+            phase_stats['roll_working_squared_sum']=jp.sum(jp.maximum(roll-cfg.tracking.roll_working_limit,0.)**2)
+            phase_stats['overspeed_excess_squared_sum']=jp.sum(jp.maximum(ev-cfg.tracking.overspeed_band,0.)**2)
             if nxt.tracking_raw_costs is not None:
                 for name,value in nxt.tracking_raw_costs.items():phase_stats['raw_cost_'+name]=jp.sum(value)
                 total=sum(nxt.tracking_raw_costs.values())
@@ -362,6 +369,12 @@ def train(task_path,output,c):
                 record['sample_phase'].update(mean_elapsed_seconds=float(phase_sum['elapsed_sum'])/batch_count,
                     physical_failures=int(phase_sum['physical_failures']),
                     disturbed_fraction=float(phase_sum['disturbed_samples'])/batch_count)
+                record['process_constraints']={
+                    'roll_working_violation_fraction':float(phase_sum['roll_working_violations'])/batch_count,
+                    'overspeed_violation_fraction':float(phase_sum['overspeed_violations'])/batch_count,
+                    'roll_working_squared_excess_mean':float(phase_sum['roll_working_squared_sum'])/batch_count,
+                    'overspeed_squared_excess_mean':float(phase_sum['overspeed_excess_squared_sum'])/batch_count,
+                    'scope':'sampled process metrics; soft bands, not failure thresholds or held-out guarantees'}
                 record['sample_phase_scope']='actual pre-step elapsed seconds: [0,1), [1,3), [3,6), [6,horizon]; not policy-matched validation'
                 record['rollout_control_steps_per_second']=batch_count/rollout_seconds
                 if alpha_sum:

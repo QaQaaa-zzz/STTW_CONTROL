@@ -90,6 +90,7 @@ def scalar_values(record,labels=(),profile="full"):
     for key in ('sampling_policy_update',):add('train/'+key,record.get(key))
     add('selection/training_sample_best_update',record.get('best_reward_model',{}).get('update'))
     add('selection/development_gates_passed',record.get('selection',{}).get('development_gates_passed'))
+    for key,value in record.get('process_constraints',{}).items():add('constraints/'+key,value)
     for i,group in enumerate(record.get('alpha_training_samples',[])):
         label=f"alpha_{group['alpha']:g}" if 'alpha' in group else f'bin_{i}'
         for key,value in group.items():

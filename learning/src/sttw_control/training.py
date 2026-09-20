@@ -69,7 +69,8 @@ class TrainingConfig:
     epochs: int=4
     minibatch_size: int=2048
     resume_checkpoint: str | None=None
-    initialize_actor: str | None=None  # Actor-only transfer; never restore Critic/Adam/RNG.
+    actor_init_checkpoint: str | None=None
+    actor_init_training: str | None=None
     selection_incumbent: str | None=None
     command_selection_scope: str="initial"
     command_validation_schedules: tuple | None=None
@@ -108,8 +109,10 @@ class TrainingConfig:
     development_scenarios: tuple | None=None
 
     def __post_init__(self):
-        if self.initialize_actor is not None and (self.trainer!='rsl' or self.resume_checkpoint):
-            raise ValueError('Actor-only initialization requires RSL and excludes resume')
+        if bool(self.actor_init_checkpoint)!=bool(self.actor_init_training):
+            raise ValueError('Actor initialization requires checkpoint AND source training declaration')
+        if self.actor_init_checkpoint and (self.resume_checkpoint or self.trainer!='rsl'):
+            raise ValueError('Actor-only transfer is RSL-only and mutually exclusive with resume')
         if self.rsl_schedule not in ('auto','fixed','adaptive'):
             raise ValueError('invalid RSL learning rate schedule')
         if self.rsl_kl_limit is not None and (not math.isfinite(self.rsl_kl_limit) or self.rsl_kl_limit<=0):
@@ -548,96 +551,3 @@ def _train(task_path,output,config,events):
             with (output/'plot_timings.jsonl').open('a') as f:f.write(json.dumps({'update':record['update'],'seconds':time.monotonic()-plot_start})+'\n')
         if stop:break
     return status
-
-
-def plan_experts(task,config):
-    """Pure plan: same physics/reward; only alpha sampling differs per process."""
-    from dataclasses import replace
-    if config.trainer!='rsl' or config.resume_checkpoint or not config.initialize_actor:
-        raise ValueError('independent experts require RSL, explicit Actor initializer, and fresh optimization')
-    if task.tracking is None or task.tracking.objective!='soft_budget_v1' or task.priority is None:
-        raise ValueError('first expert isolation experiment keeps the verified V1 task')
-    if task.actuator.base_output_scale!=1. or task.preparation_base_output_scale!=1.:
-        raise ValueError('expert experiment preserves full ECBC+ESO baseline')
-    if not config.training_reward_selection:
-        raise ValueError('this bounded isolation stage has no hidden in-training evaluation')
-    plans=[]
-    for alpha in (0.,.5,1.):
-        cfg=replace(task,priority=replace(task.priority,fixed_alpha=alpha,randomize_alpha=False,
-                    training_alphas=(alpha,),validation_alphas=(0.,.5,1.)))
-        plans.append((alpha,cfg,config))
-    return plans
-
-
-def train_experts(task_path,output,config,*,skip_completed=False):
-    """Run three fully independent existing trainers, not three updates to one trunk.
-
-    A child failure stops the sequence. Completed stages can be verified/skipped;
-    partial stages are never deleted, overwritten or restarted without a new run.
-    No physics/reward/actuator changes; output remains standard Actor checkpoints.
-    """
-    from dataclasses import replace
-    from .network import resolve_actor_checkpoint
-    output=Path(output).resolve();task=load_config(task_path)
-    plan_experts(task,config)  # validate before any directory or child process is created
-    initializer=resolve_actor_checkpoint(config.initialize_actor)
-    config=replace(config,initialize_actor=str(initializer))
-    plans=plan_experts(task,config)
-    declaration={'schema':'sttw_independent_experts_v1','task':asdict(task),'training':asdict(config),
-        'alphas':[0.,.5,1.],'initializer':str(initializer),
-        'initializer_sha256':hashlib.sha256((initializer/'actor.msgpack').read_bytes()).hexdigest(),
-        'training_transition_budget':3*config.num_envs*config.rollout_steps*config.updates,
-        'stage_transition_budget':config.num_envs*config.rollout_steps*config.updates,
-        'scope':'independent Actor/Critic/Adam per alpha; same seed and scenario rules, asynchronous resets not paired timesteps',
-        'selection':'per-mode sampled best plus final saved; not certified scenario optimum'}
-    # Compare JSON-canonical values: saved tuples become lists after serialization.
-    declaration=json.loads(json.dumps(declaration,allow_nan=False))
-    if output.exists():
-        if not skip_completed or not (output/'declaration.json').is_file() or json.loads((output/'declaration.json').read_text())!=declaration:
-            raise ValueError('output exists without matching explicit resume-experts declaration')
-    else:
-        output.mkdir(parents=True);(output/'declaration.json').write_text(json.dumps(declaration,indent=2)+'\n')
-    def status(phase,**more):
-        p=output/'status.json';tmp=p.with_suffix('.tmp')
-        tmp.write_text(json.dumps({'phase':phase,'complete':phase=='complete',**more},indent=2)+'\n');tmp.replace(p)
-    import sys
-    cli=Path(__file__).resolve().parents[2]/'cli/train.py'
-    members=[]
-    try:
-        for alpha,cfg,tc in plans:
-            stage=output/f'alpha_{alpha:g}';run=stage/'training'
-            wanted={'task':asdict(cfg),'training':asdict(tc)}
-            if run.exists():
-                if not skip_completed or not (run/'status.json').is_file() or not json.loads((run/'status.json').read_text()).get('complete'):
-                    raise ValueError(f'incomplete/existing stage {run}; preserve evidence and use a new output')
-                old=json.loads((run/'declaration.json').read_text())
-                if old['task']!=json.loads(json.dumps(wanted['task'])) or old['training']!=json.loads(json.dumps(wanted['training'])):
-                    raise ValueError('completed stage no longer matches planned configuration')
-            else:
-                stage.mkdir(exist_ok=True)
-                task_file=stage/'task.json';train_file=stage/'training_config.json'
-                task_file.write_text(json.dumps(asdict(cfg),indent=2)+'\n')
-                train_file.write_text(json.dumps(asdict(tc),indent=2)+'\n')
-                status('training',active_alpha=alpha,finished_alphas=[m['alpha'] for m in members])
-                command=[sys.executable,str(cli),'--task',str(task_file),'--config',str(train_file),'--output',str(run)]
-                # Inherit console output. Child process frees all CUDA allocations on exit.
-                subprocess.run(command,check=True)
-            result=json.loads((run/'status.json').read_text())
-            if not result.get('complete'):raise RuntimeError('child returned without complete training')
-            best=json.loads((run/'best_model.json').read_text()) if (run/'best_model.json').exists() else None
-            if not best:raise RuntimeError('no scored best; never silently substitute last')
-            paths=[Path(best['checkpoint']),Path(result['last_checkpoint'])]
-            if any(not (p/'actor.msgpack').is_file() or not (p/'identity.json').is_file() for p in paths):
-                raise RuntimeError('child completed without declared Actor files')
-            members.append({'alpha':alpha,'training':str(run),'sampled_best':best['checkpoint'],
-                            'last_checkpoint':result['last_checkpoint'],
-                            'best_actor_sha256':hashlib.sha256((paths[0]/'actor.msgpack').read_bytes()).hexdigest(),
-                            'last_actor_sha256':hashlib.sha256((paths[1]/'actor.msgpack').read_bytes()).hexdigest()})
-        bundle={'schema':'sttw_expert_bundle_v1','complete':True,'members':members,
-                'task':asdict(task),'initializer':str(initializer),
-                'training_transition_budget':declaration['training_transition_budget'],
-                'scope':'three independent full networks; no cross-mode action averaging or success claim'}
-        (output/'experts.json').write_text(json.dumps(bundle,indent=2)+'\n')
-        status('complete',members=members);return bundle
-    except Exception as exc:
-        status('error',error=repr(exc),finished_alphas=[m['alpha'] for m in members]);raise

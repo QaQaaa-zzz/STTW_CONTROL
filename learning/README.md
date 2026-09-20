@@ -674,3 +674,49 @@ No training-time evaluation or sampled-best aliases; all checkpoints remain avai
 `learning/cli/five_scene_review.py` 接受 `--training`、`--checkpoint`、`--output`、可选 `--seed`，从仓库根目录以 `PYTHONPATH=learning/src` 运行。它只评估指定模型，不进行选模；输出不得称为 best。当前适用于 `base_output_scale=1` 的几何 ECBC＋残差任务。
 
 三个 alpha 从训练声明读取。四个历史指令工况加 `synthetic_turn_reproduction.json` 附件单弯，五条原始 ECBC＋ESO 物理基线跨 alpha 共享并重评分。准备状态、参考处理和场景覆盖写入冻结声明；新建输出目录，重复相同命令可核对并复用完成的轨迹。每场景总览包含 XY、每步奖励、累计奖励、速度误差和有符号路径误差，并保存单图、PNG/PDF、CSV/NPZ；详细奖励诊断保留。
+
+
+## 独立alpha隔离试验：使用已写好的代码，不需要Codex补实现
+
+本次不改V1奖励。先验证同一原始任务内是否存在可行取舍，再将三个模式的学习参数完全隔离。三个完整策略不是三个共享主干私有头；这一步比三头隔离更彻底，目的是区分“共享优化”与“奖励/动力学可行性”。改善需要实际运行验证。
+
+从本轮新工作目录运行，保持既有venv，不升级CUDA/PyTorch/JAX/MuJoCo：
+
+```bash
+export PYTHONPATH="$PWD/learning/src"
+PY=/home/qy/mujoco_playground/.venv/bin/python
+SRC=/home/qy/STTW_CONTROL/runs/soft_budget_ecbc1_20260920/training
+CK="$SRC/checkpoints/update_0244"
+
+# 一次有限工程训练：三路合计576正式转移，CPU运行，不代表性能验证。
+JAX_PLATFORMS=cpu "$PY" learning/cli/experiment_campaign.py --mode-recovery \
+  --source-training "$SRC" --source-checkpoint "$CK" \
+  --output runs/mode_isolation_engineering --stage specialize --engineering
+
+# 真正闭环候选：75条，每条同配置9s；最多135,000任务步+一次700步准备。
+JAX_PLATFORMS=cpu "$PY" learning/cli/experiment_campaign.py --mode-recovery \
+  --source-training "$SRC" --source-checkpoint "$CK" \
+  --output runs/mode_isolation --stage probe
+
+# 三路独立训练，顺序运行；每路80更新，禁止自动追加。
+"$PY" learning/cli/experiment_campaign.py --mode-recovery \
+  --source-training "$SRC" --source-checkpoint "$CK" \
+  --output runs/mode_isolation --stage specialize --updates-per-mode 80
+
+# 明确复核source和三路最终策略：各9条残差+3条基线，共24条实际回合。
+JAX_PLATFORMS=cpu "$PY" learning/cli/experiment_campaign.py --mode-recovery \
+  --source-training "$SRC" --source-checkpoint "$CK" \
+  --output runs/mode_isolation --stage review
+```
+
+`--stage all`会按上述三正式阶段启动独立CPU/GPU进程；工程测试单独先跑。不应把CPU probe与CUDA trainer在同一个已初始化的JAX进程里混用。重跑使用新目录，已经完成的评测可由原five_scene_review审计复用，但不得混入不同输入。运行失败停止保留日志，不自动改代码/重训/跳过约束。
+
+额外计算预算需如实报告：形式训练为31,457,280转移。三个模式的闭环准备合计2,150,400控制步；若保留当前phase_spread=true，其计算步上界3×1024×1999=6,140,928，实际活动/重复reset以各训练phase_spread.json为准。这些不算在正式训练预算内，但确实消耗时间；不能声称总算力比单次250轮更低。local probe是CPU实验，不能保证短墙钟时间。
+
+结果：`probe/results.json`给出各候选/失败及两套前沿，`probe_summary.zip`精简传输；`specialization/modes.json`记录每路完整checkpoint、来源Actor和全部身份hash；各自TensorBoard在specialization/alpha_*/training/tensorboard。评测输出source_review_compact.zip与modes_review_compact.zip，仍包含全时间步误差/动作/成本，省略重复图片与高维qpos/obs，完整原始文件留在本地。
+
+```bash
+"$PY" -m tensorboard.main --logdir "$PWD/runs/mode_isolation" --host 127.0.0.1 --port 6006
+```
+
+看`constraints/*`、每路速度/路径指标和最终/过程门槛，不能跨alpha直接比较训练加权回报大小。0.30rad与0.05m/s暂作共同工作门槛，物理终止仍0.70rad；不把这组门槛冒称理论安全域。若strict frontier为空或三路仍趋于共同策略，应提交真实结果判断后续任务/约束修正，不靠强制动作方向或无限加轮数制造差异。

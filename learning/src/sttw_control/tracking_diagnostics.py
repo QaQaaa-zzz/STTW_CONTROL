@@ -135,14 +135,6 @@ def trace_summary(trace, config):
     if c.objective in ('asymmetric_geometric_huber','soft_budget_v1'):
         result['recovery_criteria'].update(speed_error_lower_m_s=-c.final_speed_tolerance,
                                            speed_error_upper_m_s=c.final_overspeed_tolerance)
-    roll=np.asarray(trace['measurement'][1:,0]);over=np.maximum(ev,0.)
-    result.update(roll_peak_rad=float(np.max(np.abs(roll))),
-        roll_working_exceed_seconds=float(np.sum(np.abs(roll)>c.roll_working_limit)*dt),
-        roll_excess_integral=float(np.sum(np.maximum(np.abs(roll)-c.roll_working_limit,0.)**2)*dt),
-        overspeed_peak_m_s=float(over.max()),overspeed_exceed_seconds=float(np.sum(over>c.overspeed_band)*dt),
-        overspeed_excess_integral=float(np.sum(np.maximum(over-c.overspeed_band,0.)**2)*dt),
-        work_envelope_qualified=bool(qualified and np.max(np.abs(roll))<=c.roll_working_limit and over.max()<=c.overspeed_band),
-        work_envelope_scope='separate whole-task diagnostic; stricter than final hold, no changed failure threshold')
     if c.timed:
         result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
                       xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
@@ -155,6 +147,7 @@ def trace_summary(trace, config):
     if config.get('timed_reference') and config['timed_reference'].get('mode')=='geometry':
         result['reference_mode']='fixed geometric curve; no timed along-track or yaw-rate target'
         result['path_progress_m']=float(trace['path_progress'][-1])
+    result.update(process_guard_metrics(trace,config))
     return result
 
 
@@ -776,13 +769,15 @@ def compact_review_archive(output,*,training_run=None):
     manifest={'scope':'partial transfer package; full local raw traces unchanged; all actual timesteps retained',
               'excluded_trace_fields':sorted(excluded),'traces':[],'not_included':'per-alpha PDF/PNG duplicates, optimizer snapshots, full Actor input histories'}
     with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
-        for name in ('summary.json','cross_scores.csv','declaration.json','status.json'):
+        for name in ('summary.json','cross_scores.csv','declaration.json','status.json','analysis/reward_breakdown/summary.json','analysis/metrics.csv'):
             p=output/name
             if p.exists():z.write(p,name)
         for p in sorted((output/'training_evidence').glob('*')):
             if p.is_file():z.write(p,'training_evidence/'+p.name)
         for p in sorted(output.glob('*/alpha_trajectories.png')):z.write(p,str(p.relative_to(output)))
-        for p in sorted(output.glob('*/*/trace.npz')):
+        trace_paths=set(output.glob('*/*/trace.npz'))|set(output.glob('evaluation/alpha_*/seed_*/*/*/trace.npz'))
+        if not trace_paths:raise ValueError('no raw traces found for compact export')
+        for p in sorted(trace_paths):
             relative=p.parent.relative_to(output)
             with np.load(p,allow_pickle=False) as original:
                 data={k:original[k] for k in original.files if k not in excluded}
@@ -793,6 +788,19 @@ def compact_review_archive(output,*,training_run=None):
             for name in ('declaration.json','commands.json','event.json','summary.json'):
                 q=p.parent/name
                 if q.exists():z.write(q,str(relative/name))
+        for p in sorted(output.glob('analysis/cross_alpha/*_overview.png')):
+            z.write(p,str(p.relative_to(output)))
+        declaration_path=output/'declaration.json'
+        if declaration_path.exists():
+            declaration=json.loads(declaration_path.read_text())
+            for key,item in declaration.get('per_mode_sources',{}).items():
+                folder=Path(item['training']);checkpoint=Path(item['checkpoint'])
+                for name in ('declaration.json','status.json','metrics.jsonl','actor_initialization.json'):
+                    q=folder/name
+                    if q.exists():z.write(q,f'training_evidence/mode_{key}/'+name)
+                for name in ('actor.msgpack','identity.json','training.json'):
+                    q=checkpoint/name
+                    if q.exists():z.write(q,f'training_evidence/mode_{key}/selected_'+name)
         if training_run is not None:
             for p in sorted((Path(training_run)/'tensorboard').glob('events.out.tfevents.*')):
                 z.write(p,'training_evidence/tensorboard/'+p.name)
@@ -916,31 +924,95 @@ def write_cross_alpha_comparison(root):
     return out
 
 
-def pack_mode_review(root,*,training=None):
-    """Small post-review transfer. Never delete or downsample local numeric evidence.
+def inspect_alpha_diagnosis(directory):
+    """Recompute the supplied detailed diagnosis from numbers, not report prose.
 
-    Includes CSV/JSON diagnostics, candidate NPZ when present, only overview PNGs,
-    and source training logs. Omits full physical state tensors and optimizer files.
+    Required input: three all-step CSVs and three same-state NPZs. This verifies
+    cost accounting and recorded network-output differences; it does NOT rerun
+    the source Actor or reconstruct missing full physical/controller state.
     """
-    import zipfile
-    root=Path(root).resolve();archive=root.with_name(root.name+'_compact.zip')
-    if not json.loads((root/'status.json').read_text()).get('complete'):
-        raise ValueError('do not package an incomplete review as completed')
-    included=[]
-    with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
-        for p in sorted(root.rglob('*')):
-            if not p.is_file():continue
-            rel=p.relative_to(root)
-            keep=(p.suffix in ('.csv','.json','.md') or (p.suffix=='.png' and p.stem.endswith('_overview'))
-                  or (p.suffix=='.npz' and 'candidates' in rel.parts))
-            if keep:z.write(p,str(rel));included.append(str(rel))
-        if training is not None:
-            tr=Path(training).resolve()
-            for prefix in [tr]+sorted(tr.glob('alpha_*/training')):
-                relative=prefix.relative_to(tr)
-                for name in ('declaration.json','experts.json','status.json','best_model.json','metrics.jsonl','warmup.json'):
-                    p=prefix/name
-                    if p.is_file():z.write(p,str(Path('training_evidence')/relative/name))
-        z.writestr('transfer_manifest.json',json.dumps({'scope':'analysis tables, exact per-step CSV, candidate NPZ and overview images; full physics/observation/optimizer stay local',
-            'review':str(root),'included':included,'time_downsampling':False},indent=2)+'\n')
-    return str(archive)
+    import csv
+    directory=Path(directory)
+    rows=[];provenance={}
+    for alpha in (0.,.5,1.):
+        stem=f'{alpha:g}';path=directory/f'steps_alpha_{stem}.csv'
+        with path.open(newline='') as f:
+            raw=list(csv.DictReader(f))
+        if not raw:raise ValueError('empty step data')
+        a={k:np.asarray([float(row[k]) for row in raw]) for k in raw[0]}
+        if any(not np.isfinite(v).all() for v in a.values()):raise ValueError('nonfinite diagnosis')
+        dt=.005
+        if not np.allclose(a['time_post']-a['time_pre'],dt,rtol=0,atol=2e-6):raise ValueError('time alignment mismatch')
+        if not np.allclose(np.diff(a['time_pre']),dt,rtol=0,atol=2e-6):raise ValueError('missing/duplicate control steps')
+        if not np.all(a['alpha']==alpha):raise ValueError('CSV alpha mismatch')
+        costs={k[9:]:v for k,v in a.items() if k.startswith('raw_cost_')}
+        total=sum(costs.values())
+        if not np.allclose(total,a['raw_total_cost'],rtol=2e-5,atol=2e-6):raise ValueError('raw component sum mismatch')
+        factor=100/(100+total)
+        if not np.allclose(factor**2,a['mapping_slope'],rtol=2e-5,atol=2e-7):raise ValueError('mapping slope mismatch')
+        for name,value in costs.items():
+            if not np.allclose(-.0005*value*factor,a['reward_'+name],rtol=2e-5,atol=2e-7):raise ValueError('reward accounting '+name)
+        reward=sum(v for k,v in a.items() if k.startswith('reward_'))
+        if not np.allclose(reward,a['reward'],rtol=2e-5,atol=2e-7):raise ValueError('reward sum mismatch')
+        for axis,scale in (('steer',1.5),('rear',10.)):
+            expected=a['composition_base_'+axis]+scale*a['action_'+axis]
+            if not np.allclose(expected,a['prelimit_command_'+axis],rtol=3e-5,atol=3e-6):raise ValueError('prelimit command mismatch')
+        npz=directory/f'same_state_alpha_{stem}.npz'
+        with np.load(npz,allow_pickle=False) as z:data={k:z[k] for k in z.files}
+        if data['action'].shape!=(1200,3,2) or not np.array_equal(data['alpha'],[0.,.5,1.]):raise ValueError('same-state layout mismatch')
+        if not np.allclose(np.tanh(data['mu']),data['action'],atol=3e-7,rtol=3e-6):raise ValueError('tanh output mismatch')
+        mask=np.rint(a['time_pre']/dt).astype(int)>=600
+        if not np.allclose(data['time'],a['time_pre'][mask],atol=2e-6,rtol=0):raise ValueError('source decision alignment mismatch')
+        index=(0.,.5,1.).index(alpha)
+        original=np.stack([a['action_steer'][mask],a['action_rear'][mask]],axis=-1)
+        err=float(np.max(np.abs(original-data['action'][:,index])))
+        if err>3e-6:raise ValueError('recorded policy replay mismatch')
+        delta=data['action'][:,2]-data['action'][:,0]
+        command_delta=data['final_command'][:,2]-data['final_command'][:,0]
+        rms=np.sqrt(np.mean(delta**2,axis=0));crms=np.sqrt(np.mean(command_delta**2,axis=0))
+        phi=np.abs(a['roll'][mask]);ev=a['speed_error'][mask];ey=a['lateral_error'][mask]
+        turn=(np.rint(a['time_pre']/dt).astype(int)>=600)&(np.rint(a['time_pre']/dt).astype(int)<678)
+        clipped=(np.abs(a['command_steer']-a['prelimit_command_steer'])>1e-5)|(np.abs(a['command_rear']-a['prelimit_command_rear'])>1e-5)
+        rows.append({'alpha':alpha,'postcommand_steps':int(mask.sum()),'reference_turn_steps':int(turn.sum()),
+            'speed_rmse':float(np.sqrt(np.mean(ev**2))),'path_rmse':float(np.sqrt(np.mean(ey**2))),
+            'roll_peak':float(phi.max()),'roll_above_03_seconds':float(dt*np.sum(phi>.3)),
+            'overspeed_peak':float(np.maximum(ev,0).max()),'overspeed_above_05_seconds':float(dt*np.sum(ev>.05)),
+            'command_clipped_fraction':float(np.mean(clipped[mask])),
+            'turn_underspeed_integral':float(dt*np.maximum(-a['speed_error'][turn],0).sum()),
+            'turn_path_integral':float(dt*np.abs(a['lateral_error'][turn]).sum()),
+            'turn_minimum_speed':float(a['actual_speed'][turn].min()),
+            'same_state_action_delta_rms':rms.tolist(),'same_state_command_delta_rms':crms.tolist(),
+            'rms_command_difference_retention':(crms/(rms*np.asarray([1.5,10.]))).tolist(),
+            'recorded_policy_replay_max_error':err,
+            'reward_reconstruction_max_abs':float(np.max(np.abs(reward-a['reward']))),
+            'roll_excess_effective_return':float(a['reward_roll_excess'][mask].sum()),
+            'overspeed_effective_return':float((a['reward_overspeed_primary'][mask]+a['reward_overspeed_budget'][mask]).sum()),
+            'mapping_slope_min':float(a['mapping_slope'][mask].min()),'mapping_slope_mean':float(a['mapping_slope'][mask].mean())})
+        provenance[path.name]=hashlib.sha256(path.read_bytes()).hexdigest();provenance[npz.name]=hashlib.sha256(npz.read_bytes()).hexdigest()
+    return {'scope':'recomputed uploaded numeric evidence; no new simulation, no re-execution of the frozen Actor',
+        'source_files_sha256':provenance,'alphas':rows,'total_recorded_transitions':sum(r['postcommand_steps'] for r in rows),
+        'same_state_mode_queries':sum(r['postcommand_steps'] for r in rows)*3,
+        'conclusion':'Weak nonzero alpha sensitivity is preserved by command limits; soft roll/overspeed bands are violated. Causality of shared-gradient interference and existence of safe tradeoff remain unproven.'}
+
+
+def process_guard_metrics(trace,config):
+    """Whole-task physical working-band checks, separate from final-hold success.
+
+    Initial reset row and pre-task preparation are excluded. This is NOT a new
+    termination/reward definition, nor a claim that 0.30rad is a proven safe set.
+    """
+    dt=config['controller']['dt'];c=config['tracking']
+    speed=np.asarray(trace['true_forward_speed'])[1:]
+    ref=(np.asarray(trace['reference_command'])[:-1,0] if 'reference_command' in trace
+         else np.full_like(speed,config['speed_reference']))
+    ev=speed-ref;roll=np.abs(np.asarray(trace['measurement'])[1:,0])
+    finite=bool(len(ev) and np.isfinite(ev).all() and np.isfinite(roll).all())
+    full=bool(trace['time'][-1]+1e-6>=config['horizon_seconds'])
+    peak_roll=float(roll.max()) if finite else None
+    peak_over=float(np.maximum(ev,0).max()) if finite else None
+    return {'process_roll_peak_rad':peak_roll,'process_overspeed_peak_m_s':peak_over,
+        'process_roll_excess_seconds':float(dt*np.sum(roll>c['roll_working_limit'])) if finite else None,
+        'process_overspeed_excess_seconds':float(dt*np.sum(ev>c['overspeed_band'])) if finite else None,
+        'process_working_guard_passed':bool(finite and full and not trace['terminated'][-1]
+            and peak_roll<=c['roll_working_limit'] and peak_over<=c['overspeed_band']),
+        'process_guard_scope':'all actual task control transitions excluding reset row; not pre-task preparation or a safety certificate'}

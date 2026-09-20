@@ -190,91 +190,88 @@ def load_policy(path,*,expected):
     return jax.jit(lambda obs: actor.apply(params,(obs-jp.asarray(mean))/jp.asarray(std)))
 
 
-def alpha_sampling_compatible(source, target):
-    """Only fixed/random alpha sampling may change during Actor-only transfer.
+_MODE_PRIORITY_KEYS = ('randomize_alpha', 'fixed_alpha', 'training_alphas', 'validation_alphas')
 
-    Full rewards, path generation, history layout, baseline, actuator and physics
-    must match. In particular this is NOT permission to change a failed task.
+def check_mode_transfer_contract(source_task, target_task):
+    """Only sampling/selection of alpha may change for the isolated V1 experiment.
+
+    Does NOT permit reward, observation, vehicle, actuator, reference, preparation,
+    controller or timing changes. Fixed alpha still enters the original Actor.
     """
-    import copy
-    a,b=copy.deepcopy(source),copy.deepcopy(target)
-    for x in (a,b):
-        if not isinstance(x.get('priority'),dict):return False
-        for key in ('fixed_alpha','randomize_alpha','training_alphas','validation_alphas'):
-            x['priority'].pop(key,None)
-    return a==b
+    source=json.loads(json.dumps(source_task));target=json.loads(json.dumps(target_task))
+    if source.get('tracking',{}).get('objective')!='soft_budget_v1':
+        raise ValueError('independent-mode transfer currently requires the frozen V1 reward')
+    priority=target.get('priority') or {}
+    alpha=priority.get('fixed_alpha')
+    if priority.get('randomize_alpha') is not False or alpha not in (0.,.5,1.):
+        raise ValueError('target must declare a fixed discrete alpha 0/.5/1')
+    if list(priority.get('training_alphas') or []) != [alpha]:
+        raise ValueError('target training_alphas must contain ONLY its fixed alpha')
+    for task in (source,target):
+        task['priority']=dict(task.get('priority') or {})
+        for key in _MODE_PRIORITY_KEYS:task['priority'].pop(key,None)
+    if source!=target:
+        changed=sorted(key for key in set(source)|set(target) if source.get(key)!=target.get(key))
+        raise ValueError('Actor transfer would silently change task fields: '+','.join(changed))
+    return float(alpha)
 
 
-def resolve_actor_checkpoint(value):
-    """Accept a checkpoint or completed training run. Never silently choose last."""
-    if value is None:raise ValueError('Actor initialization path is required')
-    path=Path(value).resolve()
-    if (path/'identity.json').is_file() and (path/'actor.msgpack').is_file():return path
-    if (path/'best_model.json').is_file():
-        best=json.loads((path/'best_model.json').read_text())
-        candidate=Path(best['checkpoint'])
-        if candidate.is_dir():return candidate.resolve()
-        # A moved training directory may retain absolute old checkpoint paths.
-        moved=path/'checkpoints'/candidate.name
-        if moved.is_dir():return moved.resolve()
-    raise ValueError('explicit Actor checkpoint or training best is missing; never substitute last')
+def verified_actor_initialization(checkpoint, source_training, target_task, model_identity,
+                                  mean, std, hidden_sizes, activation):
+    """Read a safe msgpack Actor, validate original identity then allow alpha-only transfer.
+
+    No torch.load/pickle, Critic, optimizer, RNG or simulated state is imported.
+    """
+    cp=Path(checkpoint).resolve();source=Path(source_training).resolve()
+    declaration=json.loads((source/'declaration.json').read_text())
+    if not json.loads((source/'status.json').read_text()).get('complete'):
+        raise ValueError('source training is not complete')
+    if not cp.is_relative_to(source/'checkpoints'):
+        raise ValueError('initial Actor must be a checkpoint from the declared source training')
+    alpha=check_mode_transfer_contract(declaration['task'],target_task)
+    expected=make_policy_identity(model_identity,declaration['task'],target_task['observation']['history_steps'])
+    side=json.loads((cp/'identity.json').read_text())
+    if declaration['policy_identity']!=expected or side['identity']!=expected:
+        raise ValueError('source model/runtime/task identity does not match; do not bypass this guard')
+    if tuple(side['hidden_sizes'])!=tuple(hidden_sizes) or side.get('activation','leaky_relu')!=activation:
+        raise ValueError('source and target Actor architectures differ')
+    if not np.array_equal(np.asarray(side['mean']),np.asarray(mean)) or not np.array_equal(np.asarray(side['std']),np.asarray(std)):
+        raise ValueError('observation normalization differs')
+    load_policy(cp,expected=expected)  # validates finite normalization and payload hash
+    payload=(cp/'actor.msgpack').read_bytes()
+    params=serialization.msgpack_restore(payload)
+    record={'checkpoint':str(cp),'source_training':str(source),'fixed_alpha':alpha,
+            'actor_payload_sha256':hashlib.sha256(payload).hexdigest(),
+            'source_declaration_sha256':hashlib.sha256((source/'declaration.json').read_bytes()).hexdigest(),
+            'scope':'Actor weights only; fresh Critic, Adam, exploration std, RNG and physical preparation'}
+    return params,record
 
 
-def actor_transfer_data(value,target_config,model_identity,mean,std,hidden_sizes,activation):
-    from dataclasses import asdict
-    from .env import config_from_dict
-    path=resolve_actor_checkpoint(value)
-    declaration=path.parent.parent/'declaration.json'
-    if not declaration.is_file():raise ValueError('initializer needs its source training declaration')
-    raw=json.loads(declaration.read_text());source=asdict(config_from_dict(raw['task']))
-    target=asdict(target_config)
-    if not alpha_sampling_compatible(source,target):
-        raise ValueError('initializer changed reward/model/control/reference, not merely alpha sampling')
-    expected=make_policy_identity(model_identity,source,target_config.observation.history_steps)
-    load_policy(path,expected=expected)  # checks source payload, shape and immutable identity
-    meta=json.loads((path/'identity.json').read_text())
-    if tuple(meta['hidden_sizes'])!=tuple(hidden_sizes) or meta.get('activation','leaky_relu')!=activation:
-        raise ValueError('initializer architecture mismatch')
-    if not np.array_equal(np.asarray(meta['mean']),mean) or not np.array_equal(np.asarray(meta['std']),std):
-        raise ValueError('initializer normalization mismatch')
-    params=serialization.msgpack_restore((path/'actor.msgpack').read_bytes())
-    return params,{'checkpoint':str(path),'actor_sha256':hashlib.sha256((path/'actor.msgpack').read_bytes()).hexdigest(),
-                   'source_identity':expected,'transfer':'Actor weights only; unchanged task except explicit alpha sampling'}
 
-
-def load_expert_bundle(root,model_identity,*,endpoint='best'):
-    """Load one independently trained Actor per alpha; never average actions."""
-    from dataclasses import asdict
-    from .env import config_from_dict
-    root=Path(root).resolve()
-    bundle=json.loads((root/'experts.json').read_text())
-    if bundle.get('schema')!='sttw_expert_bundle_v1' or not bundle.get('complete'):
-        raise ValueError('incomplete or unknown expert bundle')
-    if endpoint not in ('best','last','initial'):raise ValueError('invalid expert endpoint')
-    task=asdict(config_from_dict(bundle['task']));members=bundle['members']
-    if not json.loads((root/'status.json').read_text()).get('complete'):raise ValueError('expert orchestration incomplete')
-    if sorted(m['alpha'] for m in members)!=[0.,.5,1.]:raise ValueError('bundle must contain each exact alpha once')
-    policies={};identities={}
-    for member in members:
-        alpha=member['alpha'];run=Path(member['training'])
-        # Relocation preserves the explicit mode directory and never guesses checkpoints.
-        if not run.exists():run=root/f'alpha_{alpha:g}'/'training'
-        stage=json.loads((run/'declaration.json').read_text())
-        cfg=config_from_dict(stage['task'])
-        if cfg.priority.randomize_alpha or cfg.priority.fixed_alpha!=alpha or not alpha_sampling_compatible(task,asdict(cfg)):
-            raise ValueError('expert task or fixed-alpha contract differs')
-        if not json.loads((run/'status.json').read_text()).get('complete'):
-            raise ValueError('unfinished expert')
-        chosen=(Path(member['sampled_best']) if endpoint=='best' else Path(member['last_checkpoint']) if endpoint=='last'
-                else run/'checkpoints/update_0000')
-        if not chosen.exists():chosen=run/'checkpoints'/chosen.name
-        if endpoint in ('best','last') and member.get(endpoint+'_actor_sha256') is not None:
-            if hashlib.sha256((chosen/'actor.msgpack').read_bytes()).hexdigest()!=member[endpoint+'_actor_sha256']:
-                raise ValueError('expert Actor changed after bundle publication')
-        expected=make_policy_identity(model_identity,asdict(cfg),cfg.observation.history_steps)
-        policies[alpha]=load_policy(chosen,expected=expected)
-        identities[alpha]={**expected,'checkpoint':str(chosen.resolve()),
-            'actor_sha256':hashlib.sha256((chosen/'actor.msgpack').read_bytes()).hexdigest(),
-            'selection':endpoint,'fixed_training_alpha':alpha,
-            'scope':'independent expert; evaluation overrides alpha sampling only'}
-    return task,policies,identities
+def load_independent_mode_bundle(path, source_task, model_identity):
+    """Read three declared full Actors; do not blend actions or swap private heads."""
+    path=Path(path).resolve();bundle=json.loads(path.read_text())
+    if bundle.get('schema')!='sttw_independent_modes_v1' or not bundle.get('complete'):
+        raise ValueError('incomplete independent-mode bundle')
+    if set(bundle.get('modes',{}))!={'0.0','0.5','1.0'}:raise ValueError('bundle must have exactly 0/.5/1')
+    policies={};metadata={}
+    for key,item in bundle['modes'].items():
+        cp=Path(item['checkpoint']);training=Path(item['training'])
+        if not cp.is_absolute():cp=(path.parent/cp).resolve()
+        if not training.is_absolute():training=(path.parent/training).resolve()
+        if not cp.is_relative_to(training/'checkpoints'):raise ValueError('bundle checkpoint outside declared training')
+        if not json.loads((training/'status.json').read_text()).get('complete'):raise ValueError('mode training incomplete')
+        d=json.loads((training/'declaration.json').read_text())
+        alpha=check_mode_transfer_contract(source_task,d['task'])
+        if alpha!=float(key):raise ValueError('mode label and fixed alpha disagree')
+        payload=(cp/'actor.msgpack').read_bytes()
+        if hashlib.sha256(payload).hexdigest()!=item['actor_payload_sha256']:raise ValueError('mode Actor changed')
+        if hashlib.sha256((training/'declaration.json').read_bytes()).hexdigest()!=item['declaration_sha256']:raise ValueError('mode declaration changed')
+        init=json.loads((training/'actor_initialization.json').read_text())
+        if init.get('actor_payload_sha256')!=bundle.get('source_actor_sha256'):
+            raise ValueError('bundle modes did not share the declared source Actor')
+        expected=make_policy_identity(model_identity,d['task'],d['task']['observation']['history_steps'])
+        if expected!=d['policy_identity']:raise ValueError('mode runtime/task identity differs')
+        policies[alpha]=load_policy(cp,expected=expected)
+        metadata[key]={**item,'checkpoint':str(cp),'training':str(training),'scope':'independent full Actor selected by alpha; no action averaging'}
+    return policies,metadata
