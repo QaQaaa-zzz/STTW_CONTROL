@@ -192,6 +192,35 @@ def audit_trace(path):
             'declaration_sha256':hashlib.sha256((path/'declaration.json').read_bytes()).hexdigest()}
 
 
+def precision_speed_acceptance(trace, baseline, config, *, ratio_target=.8):
+    """Post-request full-window speed gate; never reward-shape with baseline.
+
+    Shared pre-command preparation is excluded. An early failure or missing
+    full window cannot pass, irrespective of its short-window error.
+    """
+    rows=np.asarray(trace.get('command_schedule',
+                    (config.get('timed_reference') or {}).get('fixed') or []))
+    if rows.ndim!=2 or len(rows)<2:
+        return dict(passed=False,available=False,reason='no published command change')
+    changed=np.flatnonzero(np.any(rows[1:,1:3]!=rows[:-1,1:3],axis=1))+1
+    if not len(changed):
+        return dict(passed=False,available=False,reason='no published command change')
+    start=float(rows[changed[0],0]);dt=config['controller']['dt']
+    mask=trace['time'][:-1]>=start-dt*1e-4
+    base_mask=baseline['time'][:-1]>=start-dt*1e-4
+    if not mask.any() or not base_mask.any():
+        return dict(passed=False,available=False,reason='no post-command samples')
+    score=float(np.sqrt(np.mean(speed_error(trace,config)[mask]**2)))
+    reference=float(np.sqrt(np.mean(speed_error(baseline,config)[base_mask]**2)))
+    complete=(np.array_equal(trace['time'],baseline['time'])
+              and trace['time'][-1]+1e-6>=config['horizon_seconds']
+              and not trace['terminated'][-1] and not baseline['terminated'][-1])
+    return dict(available=True,passed=bool(complete and score<=ratio_target*reference),
+                full_matched_window=bool(complete),start_seconds=start,samples=int(mask.sum()),
+                policy_rmse_m_s=score,baseline_rmse_m_s=reference,ratio_target=ratio_target,
+                scope='first issued request change through full endpoint; excludes precommand preparation; other recovery and overspeed gates still required')
+
+
 def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
     path=Path(path);data=audit_trace(path) if audited is None else audited
     out=path/'analysis/tracking';out.mkdir(parents=True,exist_ok=True)
@@ -213,6 +242,9 @@ def write_diagnostics(path, *, baseline=None, audited=None, plots=True):
         result['baseline_return']=float(bt['reward'][1:].sum())
         result['paired_return_delta']=result['episode_return']-result['baseline_return']
         result['baseline_trace_sha256']=base['trace_sha256']
+        if config['tracking'].get('precision_reward',False):
+            result['precision_speed_acceptance']=precision_speed_acceptance(tr,bt,config)
+            result['precision_speed_acceptance']['required_for_this_alpha']=bool(scoring_alpha==1.)
     (out/'summary.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     np.savez_compressed(out/'components.npz',time=tr['time'],**parts)
     sources=[('residual' if baseline else 'recorded',data)]+([('baseline',base)] if base else [])

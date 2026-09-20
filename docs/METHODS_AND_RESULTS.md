@@ -649,3 +649,11 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 用户指定 `discrete_alpha_three_control_20260919/ecbc1/training/checkpoints/update_0200`，不再选模；已停止候选0/1/100/200比较，不宣称 best。新 `learning/cli/five_scene_review.py` 复用现有物理评估、逐步奖励重建与绘图逻辑。α从训练声明读取为0/0.1/1，seed49001；gentle/tight_turn/straighten/reversal/synthetic_turn，15个残差回合＋5个原始ECBC＋ESO物理基线。保留闭环准备及原训练物理；附件单弯yaw峰值2.699rad/s与参考slew为声明外推覆盖，非独立holdout。
 
 结果：15/15残差跑满、0物理失败，最终共同保持0/15、回归超时15/15。路径RMSE在后四个工况优于基线，gentle略差；五个工况速度RMSE均差于基线。α1相对α0速度误差略低、路径误差略高，α0.1近似α0。尚未学会“暂时欠速、随后恢复速度贴线”。不能用存活或部分场景奖励改善替代任务合格。所有原始/逐步/分阶段数据与图见 `runs/discrete_alpha_three_control_20260919/ecbc1/final_review/panel/analysis/INDEX.md`；每场景新增同图路径误差，并保留XY、每步/累计奖励、速度误差及详细分项。
+
+## 2026-09-20 新候选：绝对速度精度奖励（待正式训练结果）
+
+目的：纠正离散alpha最终策略持续欠速，非继续增加已归一化饱和的priority_ratio。新开关`precision_reward`下欠速系数0.12→8、尺度0.10→0.05，超速8/0.05固定，路径系数4→0.1；priority_ratio保留给旧奖励分支，本候选使用绝对系数。冲突欠速带0.5→0.05，共同最终±0.05；几何路径过程带0.1→0.4收紧至0.1。保留原始路径、已发布参考触发的冲突回归、可观测离带外扰回归、回归上下文、全部原控制/物理/残差权限。
+
+采用声明的成本cap100和普通scale0.1、失败-200与一次超时-5作为首轮有界候选；数值失败激励检查通过，但核心左转基线17.15%成本触顶，不能忽略梯度区分度损失。完整物理与GPU短测试只证明工程链路可用，不证明新奖励学会任务；新旧回报尺度不直接比较。
+
+用户确认只训练完整ECBC＋残差，alpha0/.5/1等概率按回合采样，200更新=26,214,400转移，新初始化；按TensorBoard平均每步训练奖励最大值保留实际采样模型best，不恢复开发评测。配置`precision_speed_ecbc1.json`和`ppo_precision_speed.json`；工程证据`runs/precision_speed_ecbc1_20260920/engineering/`。正式结果待训练完成，阶段末完整配对比较须另查恢复和α1相对基线速度精度。

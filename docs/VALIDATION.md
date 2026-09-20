@@ -1817,3 +1817,14 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 - `PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python -m pytest learning/tests/test_tracking_reward.py learning/tests/test_tracking_selection.py -q`：43 passed；新CLI帮助与编译检查通过。评估使用原有真实MuJoCo CPU后端，不宣称额外CPU/MJX等价性测试。
 - 指标：物理失败0/15，最终共同保持0/15，回归超时15/15；非成功模型。全部场景图、CSV/NPZ、分项及分阶段表保存在 `runs/discrete_alpha_three_control_20260919/ecbc1/final_review/panel/analysis/INDEX.md`。
 - 最终派生图检查：5场景×(总览＋5种单图)×PNG/PDF=60文件齐全，导出横向误差与原trace逐值一致，累计奖励与实际转移求和一致；共享基线qpos/qvel/pose/time/reference/终止标志逐值一致，策略与基线初态一致；附件单弯前600控制步动作全零且物理qpos完全一致。人工查看急转弯与附件单弯总览，标签、单位和图例可读。
+
+## 2026-09-20 速度精度奖励工程验证
+
+`precision_reward`是默认关闭的兼容开关，仅在asymmetric objective下启用。新参数进入checkpoint身份；关闭开关时新字段从旧身份计算中剔除。新配置为`precision_speed_ecbc1.json`，alpha0/.5/1；训练配置`ppo_precision_speed.json`仅启用训练采样奖励best，相对原200轮RSL配置不改优化超参。
+
+- 附件候选成本、overspeed不降权、严格共同速度保持、渐进收紧、一次deadline、旧身份、新旧CPU重建、NumPy/JAX分项一致性与无重置债务检查通过；相关测试与GPU工程记录位于`runs/precision_speed_ecbc1_20260920/engineering/`。
+- 真实CPU核心左转10秒零残差：无物理失败；新逐步奖励最大重建误差1.15e-8，回归状态误差6.11e-7；旧synthetic_turn轨迹误差2.69e-8，旧训练checkpoint身份精确不变。CPU端基线命令组合与原始输出相符。
+- GPU64环境×128步×2更新=16,384正式工程转移，两个更新均接受，KL分别0.001312/0.000542，无非有限值，奖励重建最大scaled误差7.94e-8。工程配置减少环境数/epoch用于完整链路检查，不是正式性能证据；该短跑没有选best，正式配置按用户最新要求启用best。
+- 普通项采用0.1×dt×(alive-min(cost,100))，保留按比例分配后的有符号分项；整步失败-200、一次deadline-5不作普通缩放。gamma=.9995、10秒下完整非失败回合回报下界约-67.59，高于任意物理失败回合上界约-72.96，仅证明该有限奖励契约的数值排序。
+- 成本截断是实际限制：核心左转零残差轨迹17.15%步触顶，极大误差区间损失区分度；正式日志增加`precision_cost_cap_fraction`和TensorBoard `reward/cost_cap_fraction`。不宣称该精度目标可在真实车上达到。正式训练无开发评估，阶段末配对诊断加入指令变化起完整窗口α1速度RMSE≤0.8基线的额外门槛，提前失败不能通过。
+- 最终相关测试集合84 passed（4.89s），独立代码审查未发现阻止启动的问题；新配对验收/奖励专项6项复查通过。

@@ -12,6 +12,17 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class TrackingConfig:
+    precision_reward: bool = False
+    precision_under_rate_low: float = .12
+    precision_under_rate_high: float = 8.
+    precision_under_scale_low: float = .1
+    precision_under_scale_high: float = .05
+    precision_over_rate: float = 8.
+    precision_over_scale: float = .05
+    precision_path_rate_low: float = 4.
+    precision_path_rate_high: float = .1
+    precision_reward_scale: float = .1
+    precision_cost_cap: float = 100.
     geometric: bool = False
     reward_mode: str = 'gaussian'
     shrink_tolerances: bool = False
@@ -81,7 +92,7 @@ class TrackingConfig:
                 if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber'):
                     raise ValueError('unsupported tracking objective')
                 continue
-            if field.name in ('timed', 'geometric', 'shrink_tolerances'):
+            if field.name in ('timed', 'geometric', 'shrink_tolerances', 'precision_reward'):
                 if not isinstance(value, bool):
                     raise ValueError(f'{field.name} must be boolean')
                 continue
@@ -101,6 +112,8 @@ class TrackingConfig:
 
         if self.priority_ratio < 1 or self.return_seconds < self.hold_seconds:
             raise ValueError('invalid priority ratio or recovery window')
+        if self.precision_reward and self.objective != 'asymmetric_geometric_huber':
+            raise ValueError('precision_reward requires asymmetric_geometric_huber')
         if any(tight > relaxed for tight, relaxed in (
                 (self.speed_tight, self.speed_relaxed), (self.lateral_tight, self.lateral_relaxed),
                 (self.longitudinal_tight, self.longitudinal_relaxed),
@@ -171,16 +184,23 @@ def directional_speed_path_rates(speed_error, lateral_error, heading_error, alph
     wover = c.priority_ratio / (c.priority_ratio + 1.)
     under_band, over_band, path_band = directional_tolerances(
         alpha, return_elapsed, c, xp=xp)
+    under_rate, over_rate, path_rate = c.tracking_rate * wv, c.tracking_rate * wover, c.tracking_rate * wp
+    under_scale = over_scale = c.speed_scale
+    if c.precision_reward:
+        under_rate = c.precision_under_rate_low + alpha * (c.precision_under_rate_high-c.precision_under_rate_low)
+        path_rate = c.precision_path_rate_low + alpha * (c.precision_path_rate_high-c.precision_path_rate_low)
+        under_scale = c.precision_under_scale_low + alpha * (c.precision_under_scale_high-c.precision_under_scale_low)
+        over_rate, over_scale = c.precision_over_rate, c.precision_over_scale
     return {
-        'underspeed_tracking': -c.tracking_rate * wv * huber_tail(under / c.speed_scale, xp=xp),
-        'overspeed_tracking': -c.tracking_rate * wover * huber_tail(over / c.speed_scale, xp=xp),
-        'path_tracking': -c.tracking_rate * wp * (
+        'underspeed_tracking': -under_rate * huber_tail(under / under_scale, xp=xp),
+        'overspeed_tracking': -over_rate * huber_tail(over / over_scale, xp=xp),
+        'path_tracking': -path_rate * (
             huber_tail(ey / c.lateral_scale, xp=xp)
             + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp)),
         'underspeed_budget': -c.budget_rate * huber_tail(
-            xp.maximum(under - under_band, 0.) / c.speed_scale, xp=xp),
+            xp.maximum(under - under_band, 0.) / under_scale, xp=xp),
         'overspeed_budget': -c.budget_rate * huber_tail(
-            xp.maximum(over - over_band, 0.) / c.speed_scale, xp=xp),
+            xp.maximum(over - over_band, 0.) / over_scale, xp=xp),
         'path_budget': -c.budget_rate * huber_tail(
             xp.maximum(xp.abs(ey) - path_band, 0.) / c.lateral_scale, xp=xp),
     }
@@ -344,6 +364,13 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
             huber_tail(ey / c.lateral_scale, xp=xp)
             + c.heading_tail_weight * huber_tail(ep / c.heading_scale, xp=xp))
         rates['return_overdue'] = -c.overdue_rate * pending * clock_on * missed
+    if c.precision_reward:
+        # All non-alive rates are nonpositive in the asymmetric objective.
+        # Preserve signed component accounting while bounding their sum once.
+        cost = -sum(value for name,value in rates.items() if name != 'alive')
+        factor = xp.minimum(1., c.precision_cost_cap / xp.maximum(cost, 1e-12))
+        rates = {name: c.precision_reward_scale * value * (1. if name == 'alive' else factor)
+                 for name,value in rates.items()}
     parts = {name: xp.where(failed, 0., dt * value) for name, value in rates.items()}
     if c.deadline_penalty or c.objective in ('geometric_huber', 'asymmetric_geometric_huber'):
         parts['deadline'] = xp.where(failed, 0., -c.deadline_penalty * (missed & ~state.deadline_missed))

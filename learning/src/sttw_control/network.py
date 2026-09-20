@@ -30,6 +30,9 @@ def make_policy_identity(model_identity,config,history_steps):
                 config['timed_reference'].pop(key,None)
     if config.get('tracking') is not None:
         config['tracking']=dict(config['tracking'])
+        if not config['tracking'].get('precision_reward',False):
+            for key in list(config['tracking']):
+                if key.startswith('precision_'):config['tracking'].pop(key)
         for k,v in (('objective','legacy'),('deadline_penalty',0.),('overdue_rate',0.)):
             if config['tracking'].get(k,v)==v:config['tracking'].pop(k,None)
         for key,default in (('final_overspeed_tolerance',.2),('overspeed_band',.2)):

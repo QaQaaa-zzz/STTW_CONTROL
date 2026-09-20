@@ -248,6 +248,11 @@ def train(task_path,output,c):
             phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
             phase_stats['elapsed_sum']=jp.sum(phase)
             phase_stats['physical_failures']=jp.sum(nxt.terminated)
+            if cfg.tracking.precision_reward:
+                ordinary=sum(v for k,v in nxt.tracking_components.items()
+                             if k not in ('deadline','failure','recovery'))
+                floor=cfg.controller.dt*cfg.tracking.precision_reward_scale*(cfg.alive_reward_rate-cfg.tracking.precision_cost_cap)
+                phase_stats['cost_capped_samples']=jp.sum((~nxt.terminated)&(ordinary<=floor+1e-7))
             phase_stats['disturbed_samples']=jp.sum(jp.any(state.event[:,[2,3,5]]!=0,axis=1)&(state.tick>=state.event[:,0])&(state.tick<state.event[:,1]))
             for i in range(4):
                 mask=phase_id==i
@@ -308,6 +313,8 @@ def train(task_path,output,c):
                         'accepted_minibatches':0 if update_audit['full_update_rolled_back'] else c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size)},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
                 batch_count=c.num_envs*c.rollout_steps
+                if cfg.tracking.precision_reward:
+                    record['precision_cost_cap_fraction']=float(phase_sum['cost_capped_samples'])/batch_count
                 record['complete_training_episodes']=episode_stats.flush()
                 record['phase_tracking']={}
                 for i in range(4):
