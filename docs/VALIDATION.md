@@ -1848,6 +1848,6 @@ GPU短测64×128×2完成16,384转移，原始成本及平滑映射斜率已记�
 
 正式250轮已启动，首轮更新接受（KL0.002142<0.02，16/16 minibatches，无非有限值）。TensorBoard HTTP与实际train/mean_step_reward标量、best最大值及更新前模型归属均核对通过，证据runs/soft_budget_ecbc1_20260920/startup_verification.json。完成/错误通知监视器正常运行。
 
-## 2026-09-21 软预算best单弯评测验证
+## 2026-09-20 软预算best单弯评测验证
 
 复用five_scene_review.py自动读取best0244，三条件全部完成；逐步奖励重建通过，前三秒策略与基线qpos逐值一致且零残差。同图三alpha＋基线的总览和五种单图PNG/PDF共12文件完整，人工检查总览可读。CSV/NPZ、有效奖励分项和原始成本独立保留。指标及超速持续时间见single_turn_review/panel/analysis/metrics.json和verification.json。本次未修改源代码、未训练或评测其他checkpoint。
