@@ -1,0 +1,113 @@
+name: Verify mode isolation twice then publish
+on:
+  push:
+    branches: ['verify/mode-isolation-delivery']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      JAX_PLATFORMS: cpu
+      MUJOCO_GL: egl
+      MPLBACKEND: Agg
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      STTW_TEST_MJX_CPU: '1'
+      XLA_PYTHON_CLIENT_PREALLOCATE: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reconstruct exact application commit without delivery files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/evidence"
+          cp .delivery/mode-isolation/manifest.json "$RUNNER_TEMP/evidence/manifest.json"
+          python - <<'PY'
+          import base64,lzma,json,hashlib,os
+          from pathlib import Path
+          root=Path('.delivery/mode-isolation');m=json.loads((root/'manifest.json').read_text())
+          patch=lzma.decompress(base64.b64decode(''.join(p.read_text() for p in sorted(root.glob('*.b64')))))
+          assert hashlib.sha256(patch).hexdigest()==m['patch_sha256']
+          (Path(os.environ['RUNNER_TEMP'])/'application.patch').write_bytes(patch)
+          PY
+          git worktree add "$RUNNER_TEMP/application" 4cafb531522f94f4bc79696225f635134947a388
+          cd "$RUNNER_TEMP/application"
+          git apply --index "$RUNNER_TEMP/application.patch"
+          python - <<'PY'
+          from pathlib import Path
+          import os,json,hashlib,subprocess
+          m=json.loads((Path(os.environ['RUNNER_TEMP'])/'evidence/manifest.json').read_text())
+          for p,h in m['files'].items(): assert hashlib.sha256(Path(p).read_bytes()).hexdigest()==h,p
+          for p in m['unchanged']: assert not subprocess.check_output(['git','diff','--cached','--',p]),p
+          PY
+          git diff --cached --check
+          git config user.name 'STTW maintenance'
+          git config user.email 'noreply@openai.com'
+          git commit -m 'feat: isolate fixed-alpha experts and audit actual controllability'
+          git rev-parse HEAD > "$RUNNER_TEMP/evidence/commit.txt"
+          git diff --stat HEAD^ HEAD > "$RUNNER_TEMP/evidence/diff-stat.txt"
+          git archive HEAD | gzip > "$RUNNER_TEMP/evidence/source.tar.gz"
+          echo "PYTHONPATH=$RUNNER_TEMP/application/learning/src" >> "$GITHUB_ENV"
+          echo "STTW_SOURCE_REVISION=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Install pinned CPU physics and RSL dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir torch==2.9.1+cpu torchvision==0.24.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          cat > "$RUNNER_TEMP/constraints.txt" <<'EOF'
+          torch==2.9.1+cpu
+          torchvision==0.24.1+cpu
+          numpy==2.2.6
+          jax==0.6.2
+          jaxlib==0.6.2
+          flax==0.10.7
+          optax==0.2.5
+          chex==0.1.90
+          orbax-checkpoint==0.11.24
+          mujoco==3.6.0
+          mujoco-mjx==3.6.0
+          tensorboard==2.20.0
+          tensordict==0.10.0
+          rsl-rl-lib==3.2.0
+          EOF
+          python -m pip install --no-cache-dir -c "$RUNNER_TEMP/constraints.txt" -e "$RUNNER_TEMP/application/learning[rsl,test,media]"
+          python -m pip freeze > "$RUNNER_TEMP/evidence/dependencies.txt"
+      - name: Verification 1 new contracts real RSL CPU and tiny training loop
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/application"
+          python -m compileall -q learning
+          python -m pytest learning/tests/test_expert_contracts.py learning/tests/test_expert_integration.py learning/tests/test_rsl_training.py -q --junitxml="$RUNNER_TEMP/evidence/verification1.xml" 2>&1 | tee "$RUNNER_TEMP/evidence/verification1.log"
+      - name: Verification 2 entire suite in a new process
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/application"
+          python -m pytest learning/tests -q --junitxml="$RUNNER_TEMP/evidence/verification2.xml" 2>&1 | tee "$RUNNER_TEMP/evidence/verification2.log"
+      - name: Publish only if both tests pass and target parent has not moved
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/application"
+          old=$(git ls-remote origin refs/heads/feat/residual-recovery | cut -f1)
+          test "$old" = 4cafb531522f94f4bc79696225f635134947a388
+          git push origin HEAD:refs/heads/feat/residual-recovery
+          published=$(git ls-remote origin refs/heads/feat/residual-recovery | cut -f1)
+          test "$published" = "$(git rev-parse HEAD)"
+          printf '{"parent":"%s","published_commit":"%s","verification_rounds":2,"force":false}\n' "$old" "$published" > "$RUNNER_TEMP/evidence/publication.json"
+      - name: Upload exact tested source and both validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mode-isolation-tested
+          path: ${{ runner.temp }}/evidence
+          retention-days: 14
