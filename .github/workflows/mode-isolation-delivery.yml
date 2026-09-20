@@ -60,6 +60,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1 libosmesa6 ffmpeg
           python -m pip install --upgrade pip
           python -m pip install --no-cache-dir torch==2.9.1+cpu torchvision==0.24.1+cpu --index-url https://download.pytorch.org/whl/cpu
           cat > "$RUNNER_TEMP/constraints.txt" <<'EOF'
