@@ -1,0 +1,11 @@
+--- a/learning/src/sttw_control/training.py
++++ b/learning/src/sttw_control/training.py
+@@ -590,6 +590,8 @@
+         'stage_transition_budget':config.num_envs*config.rollout_steps*config.updates,
+         'scope':'independent Actor/Critic/Adam per alpha; same seed and scenario rules, asynchronous resets not paired timesteps',
+         'selection':'per-mode sampled best plus final saved; not certified scenario optimum'}
++    # Compare JSON-canonical values: saved tuples become lists after serialization.
++    declaration=json.loads(json.dumps(declaration,allow_nan=False))
+     if output.exists():
+         if not skip_completed or not (output/'declaration.json').is_file() or json.loads((output/'declaration.json').read_text())!=declaration:
+             raise ValueError('output exists without matching explicit resume-experts declaration')

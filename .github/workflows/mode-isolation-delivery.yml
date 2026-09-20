@@ -36,10 +36,14 @@ jobs:
           patch=lzma.decompress(base64.b64decode(''.join(p.read_text() for p in sorted(root.glob('*.b64')))))
           assert hashlib.sha256(patch).hexdigest()==m['patch_sha256']
           (Path(os.environ['RUNNER_TEMP'])/'application.patch').write_bytes(patch)
+          followup=(root/'followup.patch').read_bytes()
+          assert hashlib.sha256(followup).hexdigest()==m['followup_patch_sha256']
+          (Path(os.environ['RUNNER_TEMP'])/'followup.patch').write_bytes(followup)
           PY
           git worktree add "$RUNNER_TEMP/application" 4cafb531522f94f4bc79696225f635134947a388
           cd "$RUNNER_TEMP/application"
           git apply --index "$RUNNER_TEMP/application.patch"
+          git apply --index "$RUNNER_TEMP/followup.patch"
           python - <<'PY'
           from pathlib import Path
           import os,json,hashlib,subprocess
