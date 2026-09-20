@@ -1810,3 +1810,10 @@ ActuatorConfig允许base_output_scale=0，仍拒绝负数/NaN/Inf，默认1.0兼
 
 ## 2026-09-20：离散alpha日志分析核验
 复现脚本analysis/analyze.py校验每组200条更新、末端26,214,400转移；完整回合按count加权，alpha误差按各字段valid_samples池化平方后开根，未简单平均RMSE。原始状态三组均complete。未运行新物理评测，不把训练统计当固定checkpoint/同场景基线证据。git diff --check通过；报告见runs/discrete_alpha_three_control_20260919/analysis/REPORT.md。
+
+## 2026-09-20：最终模型五场景图包
+
+- 指定 update_0200，禁止默认为best；五场景×α0/0.1/1=15策略，五条scale1 ECBC＋ESO基线跨α物理共享并重评分。全部20物理回合完成，15/15逐步奖励/回归状态/参考重建通过；最大误差分别4.37e-8、6.49e-7、2.21e-6。
+- `PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python -m pytest learning/tests/test_tracking_reward.py learning/tests/test_tracking_selection.py -q`：43 passed；新CLI帮助与编译检查通过。评估使用原有真实MuJoCo CPU后端，不宣称额外CPU/MJX等价性测试。
+- 指标：物理失败0/15，最终共同保持0/15，回归超时15/15；非成功模型。全部场景图、CSV/NPZ、分项及分阶段表保存在 `runs/discrete_alpha_three_control_20260919/ecbc1/final_review/panel/analysis/INDEX.md`。
+- 最终派生图检查：5场景×(总览＋5种单图)×PNG/PDF=60文件齐全，导出横向误差与原trace逐值一致，累计奖励与实际转移求和一致；共享基线qpos/qvel/pose/time/reference/终止标志逐值一致，策略与基线初态一致；附件单弯前600控制步动作全零且物理qpos完全一致。人工查看急转弯与附件单弯总览，标签、单位和图例可读。

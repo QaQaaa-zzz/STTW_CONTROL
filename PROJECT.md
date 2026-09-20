@@ -720,3 +720,7 @@ alpha每回合等概率抽取{0,0.1,1}并回合内保持；按三个精确值记
 
 ## 2026-09-20 当前训练结果
 离散alpha三组200轮已全部完成。训练证据优先支持进一步评测ECBC1+残差，尚不满足路径回归结论；0.8组175/200轮KL回退，直接RL末25完整回合100%物理失败（平均0.769s）。详细分alpha池化误差/窗口统计/复现脚本位于runs/discrete_alpha_three_control_20260919/analysis。未新增训练或固定场景仿真，未选择best；下一步建议先修KL缩步机制并做完整场景检查。
+
+## 2026-09-20 当前交付：完整 ECBC＋残差最终轮可视化
+
+用户确认只看离散α实验ecbc1的最终update_0200；候选比较已停止，没有新增训练，也不称best。完成五历史场景、α0/0.1/1、seed49001的15条策略＋5条配对原始基线；图包入口：`runs/discrete_alpha_three_control_20260919/ecbc1/final_review/panel/analysis/INDEX.md`。15条均存活到窗口末，但共同最终保持0/15；路径在4/5场景改善、速度在5/5场景差于基线。新增可复用入口`learning/cli/five_scene_review.py`，同图总览含路径误差；细节见当前VALIDATION及METHODS_AND_RESULTS末节。

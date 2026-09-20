@@ -441,7 +441,9 @@ def write_alpha_error_overview(root):
         arrays['same_time_max_alpha_separation_m']=spread
         arrays['same_time_comparison_time']=residuals[0]['time'][:n]
         arrays['zoom_time_s']=np.asarray(residuals[0]['time'][peak])
-        for ax in xyaxes:ax.plot(ref[:,0],ref[:,1],color='.5',ls=':',label='Timed reference' if timed else 'Reference')
+        reference_label=('Original geometric reference' if reference_config['tracking'].get('geometric')
+                         else 'Timed reference' if timed else 'Reference')
+        for ax in xyaxes:ax.plot(ref[:,0],ref[:,1],color='.5',ls=':',label=reference_label)
         baseline_seen=[]
         for alpha,policy,t in trajectory_sources:
             if policy=='baseline' and any(t['pose'].shape==v.shape and np.allclose(t['pose'],v,rtol=0,atol=1e-7) for v in baseline_seen):continue
@@ -781,6 +783,7 @@ def write_cross_alpha_comparison(root):
                 step=np.arange(1,len(t['time']));reward=t['reward'][1:];ev=speed_error(t,cfg)
                 prefix=f'{label}_alpha_{a:g}'
                 values=dict(step=step,time_s=t['time'][1:],reward=reward,cumulative_reward=np.cumsum(reward),speed_error_m_s=ev,
+                    lateral_error_m=t['path_features'][1:,0],
                     x_m=t['pose'][1:,0],y_m=t['pose'][1:,1],terminated=t['terminated'][1:])
                 arrays.update({prefix+'__'+k:v for k,v in values.items()})
                 for j in range(len(step)):csv_rows.append(dict(alpha=a,policy=label,**{k:v[j].item() for k,v in values.items()}))
@@ -799,7 +802,8 @@ def write_cross_alpha_comparison(root):
         if len(switches)>8:switches=[switches[0],switches[-1]]
         title=f'{case} | {Path(next(iter(checkpoints))).name} | seed={seed}'
         subtitle='Solid: policy; dashed: baseline scored at matching alpha. Dotted vertical lines: command changes.'
-        if warmup is not None:subtitle+=f' Shared zero-residual warmup: 0-{warmup:g}s.'
+        case_warmup=declared.get('warmup_seconds',{}).get(case,warmup)
+        if case_warmup is not None:subtitle+=f' Shared zero-residual warmup: 0-{case_warmup:g}s.'
         def draw(ax,kind):
             if kind=='xy':
                 ax.plot(reference[:,0],reference[:,1],':',color='.5',label='Original reference')
@@ -812,25 +816,28 @@ def write_cross_alpha_comparison(root):
                         ax.plot(t['pose'][active,0],t['pose'][active,1],color=color,lw=4,alpha=.4)
                 ax.set(xlabel='X [m]',ylabel='Y [m]',title='XY trajectory');ax.set_aspect('equal',adjustable='datalim')
             else:
-                if kind=='speed_error':traces=[('ECBC+ESO',baseline,'black','--')]+[(f'alpha={a:g}',p['residual'],f'C{i}','-') for i,(a,p) in enumerate(data)]
+                if kind in ('speed_error','lateral_error'):traces=[('ECBC+ESO',baseline,'black','--')]+[(f'alpha={a:g}',p['residual'],f'C{i}','-') for i,(a,p) in enumerate(data)]
                 else:traces=[(f'{label} alpha={a:g}',p[label],f'C{i}','--' if label=='baseline' else '-') for i,(a,p) in enumerate(data) for label in ('residual','baseline')]
                 for label,t,color,ls in traces:
                     y=speed_error(t,cfg) if kind=='speed_error' else t['reward'][1:]
+                    if kind=='lateral_error':y=t['path_features'][1:,0]
                     if kind=='cumulative_reward':y=np.cumsum(y)
                     steps=np.arange(1,len(t['time']));ax.plot(steps,y,color=color,ls=ls,label=label,lw=1.3)
                     if t['terminated'][-1]:ax.plot(steps[-1],y[-1],'x',color=color)
                 for sec in switches:ax.axvline(sec/dt,color='.6',ls=':',lw=.8)
                 if np.any(baseline['event'][0,[2,3,5]]!=0):ax.axvspan(*baseline['event'][0,:2],color='.5',alpha=.15)
-                if kind=='speed_error':ax.axhline(0,color='.5',lw=.7)
+                if kind in ('speed_error','lateral_error'):ax.axhline(0,color='.5',lw=.7)
                 if kind=='reward':ax.set_yscale('symlog',linthresh=.01)
                 labels={'speed_error':('Speed error','True forward speed minus target [m/s]'),
+                    'lateral_error':('Geometric path error','Signed lateral error [m]'),
                     'reward':('Per-step total reward (symlog)','Reward per control step'),
                     'cumulative_reward':('Cumulative total reward','Cumulative reward')}
                 ax.set(title=labels[kind][0],ylabel=labels[kind][1],xlabel=f'Control step (dt={dt:g} s)')
             ax.grid(alpha=.2);ax.legend(fontsize=8,ncol=2 if kind in ('reward','cumulative_reward') else 1)
-        stem=f'{case}_seed_{seed}';kinds=('xy','reward','cumulative_reward','speed_error')
-        fig,axes=plt.subplots(2,2,figsize=(15,10),layout='constrained')
+        stem=f'{case}_seed_{seed}';kinds=('xy','reward','cumulative_reward','speed_error','lateral_error')
+        fig,axes=plt.subplots(3,2,figsize=(15,14),layout='constrained')
         for ax,kind in zip(axes.flat,kinds):draw(ax,kind)
+        axes.flat[-1].set_visible(False)
         fig.suptitle(title+'\n'+subtitle,fontsize=11)
         for ext in ('png','pdf'):fig.savefig(out/f'{stem}_overview.{ext}',dpi=150)
         plt.close(fig)

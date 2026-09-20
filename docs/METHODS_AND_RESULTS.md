@@ -643,3 +643,9 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 
 ## 2026-09-20：离散alpha三组200轮完成
 三组各26,214,400转移完成，无固定场景best选模。末25训练完整回合：ECBC1 1639个/10s/0失败/回报-315.95；ECBC0.8 1639个/10s/0失败/-582.75；直接RL20961个/0.769s/100%物理失败/-104.64。全程保留更新分别199、25、98；0.8组21–176连续156次KL回退。ECBC1三alpha速度RMSE0.160–0.173m/s、横向0.525–0.567m，0.8为0.290–0.318m/s、0.906–0.982m；为有效样本池化训练指标，不是配对评测。完整ECBC最值得后续固定场景检查，但回归路径误差仍大。直接组93.23%采样在第1秒内，短期小路径误差不能判优。alpha0/0.1相似，alpha1有弱取舍方向，因任务未配对不能证明alpha因果效果。建议优先base1+残差，修KL超限缩步/有限重试，再验证固定场景/终止价值，不原样追加三组长训。报告/数据/复现脚本：runs/discrete_alpha_three_control_20260919/analysis/REPORT.md；本轮只分析现有日志。
+
+## 2026-09-20：离散 α、完整 ECBC＋残差最终模型五场景
+
+用户指定 `discrete_alpha_three_control_20260919/ecbc1/training/checkpoints/update_0200`，不再选模；已停止候选0/1/100/200比较，不宣称 best。新 `learning/cli/five_scene_review.py` 复用现有物理评估、逐步奖励重建与绘图逻辑。α从训练声明读取为0/0.1/1，seed49001；gentle/tight_turn/straighten/reversal/synthetic_turn，15个残差回合＋5个原始ECBC＋ESO物理基线。保留闭环准备及原训练物理；附件单弯yaw峰值2.699rad/s与参考slew为声明外推覆盖，非独立holdout。
+
+结果：15/15残差跑满、0物理失败，最终共同保持0/15、回归超时15/15。路径RMSE在后四个工况优于基线，gentle略差；五个工况速度RMSE均差于基线。α1相对α0速度误差略低、路径误差略高，α0.1近似α0。尚未学会“暂时欠速、随后恢复速度贴线”。不能用存活或部分场景奖励改善替代任务合格。所有原始/逐步/分阶段数据与图见 `runs/discrete_alpha_three_control_20260919/ecbc1/final_review/panel/analysis/INDEX.md`；每场景新增同图路径误差，并保留XY、每步/累计奖励、速度误差及详细分项。

@@ -539,3 +539,9 @@ these exact values separately; these are mixed training cases, not paired evalua
 Preparation uses scale1 in all arms; task scales are 1, .8, 0. Residual ranges are
 1.5/10; direct ranges 3/60 rad/s. No reward/PPO repair is included in this experiment.
 No training-time evaluation or sampled-best aliases; all checkpoints remain available.
+
+### 显式最终模型的五工况复查
+
+`learning/cli/five_scene_review.py` 接受 `--training`、`--checkpoint`、`--output`、可选 `--seed`，从仓库根目录以 `PYTHONPATH=learning/src` 运行。它只评估指定模型，不进行选模；输出不得称为 best。当前适用于 `base_output_scale=1` 的几何 ECBC＋残差任务。
+
+三个 alpha 从训练声明读取。四个历史指令工况加 `synthetic_turn_reproduction.json` 附件单弯，五条原始 ECBC＋ESO 物理基线跨 alpha 共享并重评分。准备状态、参考处理和场景覆盖写入冻结声明；新建输出目录，重复相同命令可核对并复用完成的轨迹。每场景总览包含 XY、每步奖励、累计奖励、速度误差和有符号路径误差，并保存单图、PNG/PDF、CSV/NPZ；详细奖励诊断保留。
