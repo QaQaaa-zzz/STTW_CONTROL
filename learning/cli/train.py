@@ -3,7 +3,7 @@
 import argparse
 import json
 from pathlib import Path
-from sttw_control.training import train,TrainingConfig,train_experts
+from sttw_control.training import train,TrainingConfig
 from dataclasses import replace
 
 if __name__=='__main__':
@@ -18,6 +18,8 @@ if __name__=='__main__':
     c=TrainingConfig(**json.loads(args.config.read_text()))
     if args.initialize_actor:c=replace(c,initialize_actor=str(args.initialize_actor.resolve()))
     if args.resume_experts and not args.expert_modes:p.error('--resume-experts requires --expert-modes')
+    if args.expert_modes:
+        from sttw_control.training import train_experts
     result=(train_experts(args.task,args.output,c,skip_completed=args.resume_experts) if args.expert_modes
             else train(args.task,args.output,c))
     print(json.dumps(result,indent=2))
