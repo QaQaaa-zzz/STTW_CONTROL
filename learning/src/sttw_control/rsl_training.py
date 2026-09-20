@@ -60,6 +60,25 @@ def export_actor(policy):
                                     'bias':jp.asarray(m.bias.detach().cpu().numpy())} for i,m in enumerate(layers)}}
 
 
+def initialize_actor_weights(policy, params):
+    """Copy a checked Flax export into this policy's existing Torch Actor only."""
+    layers=[m for m in policy.actor.modules() if isinstance(m,torch.nn.Linear)]
+    source=params['params']
+    if set(source)!={f'Dense_{i}' for i in range(len(layers))}:
+        raise ValueError('initializer layer layout mismatch')
+    # Validate every tensor before mutating any parameter.
+    pairs=[]
+    for i,layer in enumerate(layers):
+        item=source[f'Dense_{i}'];w=np.asarray(item['kernel']).T;b=np.asarray(item['bias'])
+        if w.shape!=tuple(layer.weight.shape) or b.shape!=tuple(layer.bias.shape) or not np.isfinite(w).all() or not np.isfinite(b).all():
+            raise ValueError('initializer tensor shape/nonfinite value')
+        pairs.append((layer,w.copy(),b.copy()))
+    with torch.no_grad():
+        for layer,w,b in pairs:
+            layer.weight.copy_(torch.as_tensor(w,device=layer.weight.device,dtype=layer.weight.dtype))
+            layer.bias.copy_(torch.as_tensor(b,device=layer.bias.device,dtype=layer.bias.dtype))
+
+
 def restore_cuda_rng(states):
     """torch.load(map_location=cuda) also moves RNG bytes; CUDA expects CPU bytes."""
     torch.cuda.set_rng_state_all([state.cpu() for state in states])
@@ -190,6 +209,14 @@ def train(task_path,output,c):
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
                             c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes,schedule=c.rsl_schedule)
+        if c.initialize_actor:
+            from .network import actor_transfer_data
+            transferred,transfer=actor_transfer_data(c.initialize_actor,cfg,env.bundle.identity,mean,std,
+                                                    c.hidden_sizes,c.activation)
+            initialize_actor_weights(algo.policy,transferred)
+            declaration['actor_initialization']=transfer
+            declaration['actor_initialization']['optimizer_and_critic']='fresh; no old moments, value weights or RNG restored'
+            write('declaration.json',declaration)
         offset=0;transition_offset=0
         if c.resume_checkpoint:
             snapshot=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)

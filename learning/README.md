@@ -1,3 +1,132 @@
+# Current change: diagnose weak alpha conditioning with independent experts
+
+This implementation is based on the uploaded update0244 detailed report, not a
+new claim of recovery performance. Recomputed post-command roll peaks are
+0.47291/0.47427/0.47507rad (all exceed .30 for .325s); overspeed peaks are
+.20343/.20890/.21469m/s. Same-state 0->1 action RMS is .0101--.0103 steering and
+.00619--.00636 rear. Final-command differences are approximately .9989 and 1.0000
+of action difference times the unchanged physical residual scale. Thus learned
+conditioning is weak, not absent and not principally erased by command clipping.
+This does not exclude torque limits/dynamics or prove shared-gradient interference.
+The reference-turn window has a tiny correctly directed under-speed/path-integral
+tradeoff, whereas full-window RMSE includes overshoot and has the opposite order.
+Actual minimum speed in that window exceeds the pre-command actual speed; no
+active below-initial braking is demonstrated. Terminal hold is not an all-time
+work-envelope guarantee. Uploaded files are evidence, not edited results.
+
+Design decisions checked before implementation:
+1. Keep V1, timing, world reference, vehicle, ECBC+ESO, tanh and authority unchanged.
+   Do not infer feasible endpoint trajectories from scalar reward tests or loosen
+   safety/overspeed criteria to manufacture separation.
+2. Isolate learning: alpha stays a neural input, but each alpha gets an independent
+   full Actor/Critic/Adam process. Same source Actor, same seed/rules; fresh value,
+   noise .15 and optimizer. No hidden trunk sharing, action averaging, or forced
+   diversity reward. Same source conditional Actor is evaluated at each fixed alpha,
+   not falsely described as identical initial actions for different alpha.
+3. Make the claim testable: a bounded real-physics candidate search and whole-path
+   work metrics are implemented. No candidate found is only a local negative result.
+   No automatic long training, ablation expansion, real-robot use, or success claim.
+
+## Existing entry points, no Codex code-generation step
+
+Run in the repository root, after saving local edits and fast-forwarding the branch.
+Use the existing environment; do not upgrade the working GPU software stack.
+
+```bash
+export PYTHONPATH="$PWD/learning/src"
+PY=/home/qy/mujoco_playground/.venv/bin/python
+SOURCE=runs/soft_budget_ecbc1_20260920/training
+ACTOR="$SOURCE/checkpoints/update_0244"
+test -f "$ACTOR/actor.msgpack" && test -f "$SOURCE/declaration.json"
+
+JAX_PLATFORMS=cpu "$PY" -m pytest \
+  learning/tests/test_expert_contracts.py learning/tests/test_expert_integration.py -q
+
+# Phase 1: independent controllability diagnostic, no training.
+"$PY" learning/cli/five_scene_review.py --training "$SOURCE" --checkpoint "$ACTOR" \
+  --scenes synthetic_turn --candidate-search --compact \
+  --output runs/v1_mode_isolation/candidate_search
+
+# Phase 2: three sequential independent trainers; stop on any error.
+"$PY" learning/cli/train.py --task learning/configs/soft_budget_ecbc1.json \
+  --config learning/configs/ppo_independent_modes.json \
+  --initialize-actor "$ACTOR" --expert-modes \
+  --output runs/v1_mode_isolation/experts
+
+# Phase 3: the existing five scenes, per-mode scored best, common baseline.
+"$PY" learning/cli/five_scene_review.py --training runs/v1_mode_isolation/experts \
+  --expert-endpoint best --compact --output runs/v1_mode_isolation/final_review
+```
+
+Phase 1 is 25 symmetric smooth bias pairs per alpha, first .5s after task time3s,
+then frozen closed-loop control until9s: 75 candidates, <=90,000 search transitions.
+The complete zero-residual prefix (physics, ESO, actuator, history, committed path,
+projection and return state) is computed once per alpha, not per candidate; prefix
+and 3.5s physical preparation costs are separately declared. The normalized summed
+action stays [-1,1], actuator limits unchanged. This is offline local search, NOT
+an online controller or reward-labeled on-policy data. All failure endpoints and
+raw metrics retained. Final-hold gates and whole-search work gates (.3rad/.05m/s)
+are separate. A best-by-reward candidate violating work gates is not "safe".
+Candidate per-alpha results and cross-score summary are written incrementally.
+
+Phase 2 is 80 updates per expert, each1024x128, 4epochs, minibatch32768, fixed3e-4
+LR, exact-KL guard. Total NEW training budget31,457,280 transitions (240 cumulative
+updates); prior250 run cost is not erased. Preparation and phase spread are extra,
+reported separately. No changes to V1 reward, initial state rules or optimizer
+algorithm. This is Actor-warm-start specialization, not from-scratch/single-factor
+proof against the prior250 run. Every reset holds alpha fixed. Different experts'
+matched nth episode seeds have the same scenario rules, but early failures can
+cause asynchronous phase occupancy; do not call later samples same-state pairs.
+The driver verifies all task/physics/reward/normalization/model fields except the
+four alpha-sampling fields. It never restores the source Critic, Adam or RNG.
+No repeated source fallback to last. Completed stages may be skipped only with
+--resume-experts and identical declarations; a partial failed stage requires a new
+output and is not silently deleted/resumed. Standard last/initial snapshots can
+be explicitly assessed with --expert-endpoint last/initial in a separate output.
+
+Phase 3 is15 residual+5 physically shared baseline episodes. Each mode's selected
+checkpoint/provenance is recorded explicitly (not falsely labelled one update).
+Per-mode training-best is a stochastic training-sample ranking, not a fixed-scenario
+optimum. No attempt to make a late model or a different trajectory win artificially.
+Optional explicitly named in-range diagnostics reuse the same runner:
+`--scenes ordinary_accel core_left core_right` adds9 residual+3baseline episodes;
+use a separate output, and declare them in analysis, not hidden default expansion.
+
+No first-run results are overwritten. Commands require new output directories.
+If the source Actor or full source task declaration is missing, STOP, do not create
+replacement weights. If no candidate meets the work gates, retain the negative
+result; independent training only tests optimization, it does not prove feasibility.
+
+## TensorBoard and compact return files
+
+In a second terminal, reuse the project's running service or start:
+`$PY -m tensorboard.main --logdir "$PWD/runs/v1_mode_isolation/experts" --host 127.0.0.1 --port 6006`.
+Open http://127.0.0.1:6006. Each alpha has its own log directory. Shared trunk gradient
+cosines are irrelevant for this isolation version; inspect retained KL updates,
+reward parts, raw costs, actual state-phase occupancy and work metrics per expert.
+Do not compare differently weighted reward magnitudes as physical performance.
+
+Return `candidate_search_compact.zip` and `final_review_compact.zip` alongside
+`experts/experts.json`. The archive retains complete per-step numeric CSV and
+candidate NPZ, overview PNG and JSON provenance; duplicate PDFs and full state/input
+NPZ remain local. Nothing is temporally downsampled or falsely replaced by zeros.
+A failed review cannot be packaged as completed. Standard raw trace directories
+remain available for additional dynamics questions.
+
+## Verification scope
+
+New tests exercise alpha-only identity relaxation, shape/normalization/payload
+checks, exact Actor copy, unchanged source/other experts under one expert update,
+independent orchestration (explicit mock process contract), true RSL update,
+short actual CPU MuJoCo prefix/search/reward replay, and an opt-in tiny MJX/RSL CLI
+training run (32 transitions, not task learning). Full learning tests run in a
+second process before publication. Optional GPU and real-robot tests are not
+claimed. The old default CI lacked torch during test collection; the optional
+RSL sampling test now skips cleanly without torch, while delivery validation
+installs pinned CPU RSL/PyTorch and runs it, not hides it.
+
+---
+
 ## Geometric speed/path reward contract (2026-09-16)
 
 The new run uses `geometric_reward_recovery.json` and `ppo_geometric_reward.json`.

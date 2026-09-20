@@ -135,6 +135,14 @@ def trace_summary(trace, config):
     if c.objective in ('asymmetric_geometric_huber','soft_budget_v1'):
         result['recovery_criteria'].update(speed_error_lower_m_s=-c.final_speed_tolerance,
                                            speed_error_upper_m_s=c.final_overspeed_tolerance)
+    roll=np.asarray(trace['measurement'][1:,0]);over=np.maximum(ev,0.)
+    result.update(roll_peak_rad=float(np.max(np.abs(roll))),
+        roll_working_exceed_seconds=float(np.sum(np.abs(roll)>c.roll_working_limit)*dt),
+        roll_excess_integral=float(np.sum(np.maximum(np.abs(roll)-c.roll_working_limit,0.)**2)*dt),
+        overspeed_peak_m_s=float(over.max()),overspeed_exceed_seconds=float(np.sum(over>c.overspeed_band)*dt),
+        overspeed_excess_integral=float(np.sum(np.maximum(over-c.overspeed_band,0.)**2)*dt),
+        work_envelope_qualified=bool(qualified and np.max(np.abs(roll))<=c.roll_working_limit and over.max()<=c.overspeed_band),
+        work_envelope_scope='separate whole-task diagnostic; stricter than final hold, no changed failure threshold')
     if c.timed:
         result.update(longitudinal_error_rmse_m=float(np.sqrt(np.mean(trace['longitudinal_error'][1:]**2))),
                       xy_error_rmse_m=float(np.sqrt(np.mean(np.sum((trace['pose'][1:,:2]-trace['reference_pose'][1:,:2])**2,axis=1)))),
@@ -906,3 +914,33 @@ def write_cross_alpha_comparison(root):
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     (out/'INDEX.md').write_text('\n'.join(index)+'\n')
     return out
+
+
+def pack_mode_review(root,*,training=None):
+    """Small post-review transfer. Never delete or downsample local numeric evidence.
+
+    Includes CSV/JSON diagnostics, candidate NPZ when present, only overview PNGs,
+    and source training logs. Omits full physical state tensors and optimizer files.
+    """
+    import zipfile
+    root=Path(root).resolve();archive=root.with_name(root.name+'_compact.zip')
+    if not json.loads((root/'status.json').read_text()).get('complete'):
+        raise ValueError('do not package an incomplete review as completed')
+    included=[]
+    with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
+        for p in sorted(root.rglob('*')):
+            if not p.is_file():continue
+            rel=p.relative_to(root)
+            keep=(p.suffix in ('.csv','.json','.md') or (p.suffix=='.png' and p.stem.endswith('_overview'))
+                  or (p.suffix=='.npz' and 'candidates' in rel.parts))
+            if keep:z.write(p,str(rel));included.append(str(rel))
+        if training is not None:
+            tr=Path(training).resolve()
+            for prefix in [tr]+sorted(tr.glob('alpha_*/training')):
+                relative=prefix.relative_to(tr)
+                for name in ('declaration.json','experts.json','status.json','best_model.json','metrics.jsonl','warmup.json'):
+                    p=prefix/name
+                    if p.is_file():z.write(p,str(Path('training_evidence')/relative/name))
+        z.writestr('transfer_manifest.json',json.dumps({'scope':'analysis tables, exact per-step CSV, candidate NPZ and overview images; full physics/observation/optimizer stay local',
+            'review':str(root),'included':included,'time_downsampling':False},indent=2)+'\n')
+    return str(archive)

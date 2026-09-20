@@ -2,7 +2,8 @@ from typing import NamedTuple
 import numpy as np
 import jax
 import jax.numpy as jp
-import torch
+import pytest
+torch=pytest.importorskip("torch", reason="RSL optional dependency; full RSL CI installs it")
 from sttw_control.rsl_sampling import phase_spread, EpisodeStatistics
 
 class State(NamedTuple):
