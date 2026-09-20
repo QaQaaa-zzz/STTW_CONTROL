@@ -87,7 +87,7 @@ def test_plan_budget_and_independent_objects_and_original_reward():
     assert arms[1]['task']['tracking']['roll_weight']==100 and s['tracking']['roll_weight']==100
 
 
-@pytest.mark.parametrize('updates',[0,-1,81,1000,1.2,True])
+@pytest.mark.parametrize('updates',[0,-1,251,1000,1.2,True])
 def test_budget_overrun_rejected(updates):
     with pytest.raises(ValueError):plan_function()(source_contract(),{},'/tmp/source','/tmp/source/checkpoints/x',updates=updates)
 
@@ -211,3 +211,13 @@ def test_process_guard_is_distinct_from_final_hold_and_uses_previous_reference()
     result=f(tr,c);assert result['process_overspeed_peak_m_s']==0 and result['process_working_guard_passed']
     tr['measurement'][2,0]=.47
     result=f(tr,c);assert result['process_roll_excess_seconds']==.005 and not result['process_working_guard_passed']
+
+
+def test_explicit_250_updates_authorized_budget():
+    s=source_contract();p=json.loads((ROOT/'learning/configs/ppo_soft_budget.json').read_text())
+    arms,budget=plan_function()(s,p,'/tmp/source','/tmp/source/checkpoints/update_0244',updates=250)
+    assert budget==98304000
+    assert all(a['training']['updates']==250 for a in arms)
+    assert all(a['task']['tracking']==s['tracking'] for a in arms)
+    _,engineering=plan_function()(s,p,'/tmp/source','/tmp/source/checkpoints/update_0244',updates=250,engineering=True)
+    assert engineering==576

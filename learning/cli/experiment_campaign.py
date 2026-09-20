@@ -58,8 +58,8 @@ def mode_training_documents(source_task, source_training_config, source_run, che
                             *, updates=80, engineering=False):
     """Three isolated optimizers; same reward/dynamics and equal per-mode sample budget."""
     import copy
-    if type(updates) is not int or not 1<=updates<=80:
-        raise ValueError('independent-mode stage is bounded to 1..80 updates/mode')
+    if type(updates) is not int or not 1<=updates<=250:
+        raise ValueError('independent-mode stage is bounded to 1..250 updates/mode')
     if source_task.get('tracking',{}).get('objective')!='soft_budget_v1':
         raise ValueError('mode separation must start from the frozen V1 task')
     source_run=str(Path(source_run).resolve());checkpoint=str(Path(checkpoint).resolve())
@@ -80,7 +80,7 @@ def mode_training_documents(source_task, source_training_config, source_run, che
             raise ValueError('formal bounded mode experiment requires the inspected 1024x128 geometry')
         arms.append({'alpha':alpha,'name':f'alpha_{alpha:g}','task':task,'training':training})
     budget=sum(a['training']['num_envs']*a['training']['rollout_steps']*a['training']['updates'] for a in arms)
-    if budget>32768000:raise ValueError('mode experiment exceeds prior single-run training budget')
+    if budget>98304000:raise ValueError('mode experiment exceeds authorized three-mode 250-update budget')
     return arms,budget
 
 
