@@ -673,3 +673,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 ## 2026-09-20 软预算V1 best单弯复查
 
 250更新完成，训练奖励best为update0244（第245轮采样，mean_step_reward=-0.0037052934）。按用户要求仅复查synthetic_turn，alpha0/.5/1、seed49001，三策略＋共享ECBC基线。入口runs/soft_budget_ecbc1_20260920/single_turn_review/panel/analysis/INDEX.md。指令后3～9秒速度RMSE为0.07336/0.07369/0.07409m/s（基线0.09176），路径RMSE0.09964/0.09904/0.09852m（基线0.40392）。最终保持3/3、无超时/物理失败；三个alpha仍近乎重合，alpha1速度RMSE比基线0.807，未达≤0.8。超速峰值0.203/0.209/0.215m/s，比上轮约0.155更差；不能仅凭总体RMSE称全面改进。单场景外推开发诊断，不是泛化或硬约束保证。
+
+## 2026-09-20 V1附件诊断报告与同状态alpha核查
+
+报告runs/soft_budget_ecbc1_20260920/single_turn_review/diagnosis/REPORT.md，附逐步CSV、原始/有效成本、同状态mu/action/base/final_command NPZ和evidence.zip。复用既有best0244三轨迹，无新物理rollout或训练。真实roll峰值0.473～0.475rad、超0.30持续0.325s；同状态全十帧alpha替换的动作0→1 RMS差约前轮0.0101～0.0103、后轮0.00619～0.00636，最终命令差基本保留，不能把主要原因归结为限幅消差。3～3.39s参考窗口欠速积分略降/路径积分略升，为极弱预期方向，与全窗口RMSE反向须分开。转弯最低后步速度1.97976高于指令前1.95962，未展示主动减速。候选搜索、训练内core左右诊断、独立端点/三头仅为条件建议，未执行，不宣称全局无可行取舍。
