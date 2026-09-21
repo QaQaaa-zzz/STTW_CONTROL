@@ -61,6 +61,7 @@ class TrainingConfig:
     hidden_sizes: tuple=(256,128)
     training_reward_selection: bool=False  # RSL sampling reward; disables all development rollouts.
     training_reward_best_enabled: bool=True  # Can disable biased short-rollout aliases while retaining no-eval mode.
+    priority_v2_development_interval: int=0  # Explicit frozen complete-episode evaluation, independent of rollout reward.
     phase_spread_initialization: bool=False  # Real policy-driven full-state advancement, not artificial clocks.
     evaluation_reward_best: bool=False
     num_envs: int=64
@@ -109,6 +110,8 @@ class TrainingConfig:
     development_scenarios: tuple | None=None
 
     def __post_init__(self):
+        if type(self.priority_v2_development_interval) is not int or self.priority_v2_development_interval<0:
+            raise ValueError('invalid priority V2 development interval')
         if bool(self.actor_init_checkpoint)!=bool(self.actor_init_training):
             raise ValueError('Actor initialization requires checkpoint AND source training declaration')
         if self.actor_init_checkpoint and (self.resume_checkpoint or self.trainer!='rsl'):
@@ -198,6 +201,7 @@ def normalization(task):
     if task.observation.include_priority:scale += [1.] + ([1.] if task.observation.include_attitude_risk else [])
     if task.observation.include_tracking:scale += [1.,1.,1.,task.tracking.return_seconds,task.tracking.hold_seconds,1.,1.,1.]
     if task.observation.include_timed:scale += [1.,2.,2.]
+    if getattr(task.observation,'include_priority_v2',False):scale += [3.,1.,3.,1.,3.,task.horizon_seconds]
     std=np.array(scale*task.observation.history_steps+[1.]*task.observation.history_steps,np.float32)
     return np.zeros_like(std),std
 

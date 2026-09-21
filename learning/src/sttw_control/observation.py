@@ -8,6 +8,9 @@ FIELDS=('roll_error','roll','roll_rate','speed_estimate','steer','steer_rate',
         'base_steer_rate','previous_steer_command','previous_rear_command','estimated_disturbance')
 
 
+PRIORITY_V2_FIELDS=("forward_speed_for_tracking", "priority_v2_q", "priority_v2_deadline_remaining",
+                    "priority_v2_exit_valid", "priority_v2_signed_distance", "priority_v2_time_to_end")
+
 PATH_FIELDS=("radial_error","heading_error","path_curvature")
 TIMED_FIELDS=("longitudinal_error","yaw_rate_reference","yaw_rate_world")
 TRACKING_FIELDS=("previous_steer_residual", "previous_rear_residual",
@@ -15,7 +18,7 @@ TRACKING_FIELDS=("previous_steer_residual", "previous_rear_residual",
                  "return_credited", "return_ever_left", "return_deadline_missed")
 
 def observation_fields(config):
-    return FIELDS + ((("path_lateral_error", "heading_error", "path_curvature") if config.include_tracking else PATH_FIELDS) if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ()) + (TRACKING_FIELDS if config.include_tracking else ()) + (TIMED_FIELDS if config.include_timed else ())
+    return FIELDS + ((("path_lateral_error", "heading_error", "path_curvature") if config.include_tracking else PATH_FIELDS) if config.include_path else ()) + (("yaw_rate_reference","yaw_rate_world") if config.include_motion else ()) + (("speed_priority",) + (("attitude_risk",) if config.include_attitude_risk else ()) if config.include_priority else ()) + (TRACKING_FIELDS if config.include_tracking else ()) + (TIMED_FIELDS if config.include_timed else ()) + (PRIORITY_V2_FIELDS if config.include_priority_v2 else ())
 
 @dataclass(frozen=True)
 class ObservationConfig:
@@ -26,6 +29,7 @@ class ObservationConfig:
     include_attitude_risk: bool=True
     include_tracking: bool=False
     include_timed: bool=False
+    include_priority_v2: bool=False
     def __post_init__(self):
         if not isinstance(self.history_steps,int) or self.history_steps<1:
             raise ValueError('history_steps must be positive integer')

@@ -9,7 +9,7 @@ import numpy as np
 from flax import linen as nn, serialization
 import jax
 import jax.numpy as jp
-from .observation import FIELDS, PATH_FIELDS, TRACKING_FIELDS, TIMED_FIELDS
+from .observation import FIELDS, PATH_FIELDS, TRACKING_FIELDS, TIMED_FIELDS, PRIORITY_V2_FIELDS
 from .action_mapping import ACTION_FIELDS
 
 
@@ -18,12 +18,13 @@ def make_policy_identity(model_identity,config,history_steps):
     def digest(value):
         return hashlib.sha256(json.dumps(value,sort_keys=True,allow_nan=False).encode()).hexdigest()
     config=dict(config)
+    if config.get("forward_speed_source","wheel")=="wheel":config.pop("forward_speed_source",None)
     if config.get('timed_reference') is not None:
         config['timed_reference']=dict(config['timed_reference'])
         if config['timed_reference'].get('mode','time')=='time':
             for k in ('mode','geometry_stride','projection_margin','extension_seconds'):
                 config['timed_reference'].pop(k,None)
-        for key,default in (('training_mix',False),('fixed_scenario',None),
+        for key,default in (('training_mix',False),('priority_v2_screen',False),('fixed_scenario',None),
                             ('fast_speed_slew',1.),('fast_yaw_slew',2.4),
                             ('gentle_yaw_rate',.35)):
             if config['timed_reference'].get(key,default)==default:
@@ -95,6 +96,7 @@ def make_policy_identity(model_identity,config,history_steps):
             if config['priority'].get(key)==value:config['priority'].pop(key)
     if 'observation' in config:
         config['observation']=dict(config['observation'])
+        if not config['observation'].get('include_priority_v2',False):config['observation'].pop('include_priority_v2',None)
         if not config['observation'].get('include_timed',False):config['observation'].pop('include_timed',None)
         if not config['observation'].get('include_tracking',False):config['observation'].pop('include_tracking',None)
         if not config['observation'].get('include_motion',False):config['observation'].pop('include_motion',None)
@@ -127,6 +129,7 @@ def make_policy_identity(model_identity,config,history_steps):
         identity['observation_fields'][15]='path_lateral_error'
         identity['observation_fields'] += list(TRACKING_FIELDS)
     if config.get('observation',{}).get('include_timed',False):identity['observation_fields'] += list(TIMED_FIELDS)
+    if config.get('observation',{}).get('include_priority_v2',False):identity['observation_fields'] += list(PRIORITY_V2_FIELDS)
     if config.get('action_mapping') is not None:identity['action_fields']=ACTION_FIELDS
     if config.get("actuator",{}).get("composition")=="full_range":
         identity["action_fields"]=["steer_available_range_fraction","rear_available_range_fraction"]
@@ -172,7 +175,7 @@ def save_policy(path,params,mean,std,identity,*,hidden_sizes=(256,128),negative_
     (path/'identity.json').write_text(json.dumps(meta,indent=2,allow_nan=False)+'\n')
 
 
-def load_policy(path,*,expected):
+def load_policy(path,*,expected,return_logits=False):
     path=Path(path)
     meta=json.loads((path/'identity.json').read_text())
     if meta.get('schema')!='sttw_actor_v1' or meta['identity']!=expected or meta['fields']!=expected.get('observation_fields',list(FIELDS)) or meta['actions']!=expected.get('action_fields',['steer_rate_residual','rear_rate_residual']):
@@ -187,7 +190,7 @@ def load_policy(path,*,expected):
     actor=ResidualActor(tuple(meta['hidden_sizes']),meta['negative_slope'],meta.get('activation','leaky_relu'))
     template=actor.init(jax.random.PRNGKey(0),jp.zeros(size))
     params=serialization.from_bytes(template,payload)
-    return jax.jit(lambda obs: actor.apply(params,(obs-jp.asarray(mean))/jp.asarray(std)))
+    return jax.jit(lambda obs: actor.apply(params,(obs-jp.asarray(mean))/jp.asarray(std),return_logits=return_logits))
 
 
 _MODE_PRIORITY_KEYS = ('randomize_alpha', 'fixed_alpha', 'training_alphas', 'validation_alphas')

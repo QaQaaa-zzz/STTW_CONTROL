@@ -28,6 +28,7 @@ class TimedReferenceConfig:
     recovery_start: float = 4.
     conflict_start_window: tuple = (.5, 1.)
     training_mix: bool = False
+    priority_v2_screen: bool = False
     fixed_scenario: str | None = None
     fast_speed_slew: float = 1.
     fast_yaw_slew: float = 2.4
@@ -39,6 +40,8 @@ class TimedReferenceConfig:
     extension_seconds: float = 5.
 
     def __post_init__(self):
+        if type(self.priority_v2_screen) is not bool or (self.priority_v2_screen and not self.training_mix):
+            raise ValueError("priority_v2_screen requires training_mix")
         if type(self.training_mix) is not bool:
             raise ValueError('training_mix must be boolean')
         if self.fixed_scenario not in (None, 'nominal', 'ordinary_accel', 'core_left', 'core_right', 'disturbance_left', 'disturbance_right'):
@@ -135,6 +138,10 @@ def schedule(key, config, initial_speed):
             if code:
                 chosen = chosen.at[1, 2].set(abs(chosen[1, 2]) * forced_sign)
             return chosen
+        if config.priority_v2_screen:
+            ordinary=nominal.at[1:,1:3].set(jp.array([2.5,0.]))
+            conflict=conflict.at[1,2].set(jp.where(draw[0]<.65,1.8,-1.8))
+            return jp.where(draw[0]<.30,ordinary,conflict)
         scenario = jp.where(draw[0] < .4, 0, jp.where(draw[0] < .8, 1, 2))
         return jp.where(scenario == 0, nominal, jp.where(scenario == 1, conflict, disturbance))
     n = len(config.switch_windows)

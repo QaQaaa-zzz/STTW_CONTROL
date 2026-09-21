@@ -160,6 +160,25 @@ def audit_trace(path):
     timed=config.get('timed_reference') is not None
     geometric=config.get('timed_reference',{}).get('mode')=='geometry' if timed else False
     reference_error=(audit_geometric_reference(tr,config,decl['seed']) if geometric else audit_timed_reference(tr,dt,c.geometric)) if timed else None
+    if c.objective == 'priority_return_v2':
+        from .priority_v2_analysis import replay, metrics
+        _,states,rewards,raw=replay(tr,config,return_raw=True)
+        parts={k:np.r_[0.,[row[k] for row in rewards]] for k in rewards[0]}
+        max_state=max(float(np.max(np.abs(np.asarray([row[k] for row in states])-tr['priority_v2_'+k][1:]))) for k in states[0])
+        if max_state>2e-3:raise ValueError(f'V2 state reconstruction mismatch {max_state}')
+        max_raw=0.
+        for k in raw[0]:
+            predicted=np.asarray([row[k] for row in raw]);actual=tr['raw_cost_'+k][1:]
+            max_raw=max(max_raw,float(np.max(abs(predicted-actual))))
+            if not np.allclose(predicted,actual,rtol=3e-5,atol=3e-5):raise ValueError('V2 raw cost mismatch: '+k)
+        for k,values in parts.items():
+            if not np.allclose(values,tr['reward_'+k],rtol=3e-5,atol=3e-5):raise ValueError('V2 reward component mismatch: '+k)
+        error=float(np.max(abs(sum(parts.values())-tr['reward'])))
+        if not np.allclose(sum(parts.values()),tr['reward'],rtol=3e-5,atol=3e-5):raise ValueError('V2 total reward reconstruction mismatch')
+        summary,_,_=metrics(tr,config)
+        summary.update(terminal_tracking_hold=summary['v2_final_complete'],return_deadline_missed=summary['v2_deadline_missed'],task_recovery_success=summary['v2_engineering_accepted'])
+        return dict(trace=tr,config=config,parts=parts,summary=summary,max_raw_cost_error=max_raw,max_reward_error=error,max_return_state_error=max_state,max_reference_error=reference_error,
+                    trace_sha256=hashlib.sha256((path/'trace.npz').read_bytes()).hexdigest(),declaration_sha256=hashlib.sha256((path/'declaration.json').read_bytes()).hexdigest())
     state=initial_return(xp=np);parts={};max_state=0.;max_raw=0.
     ev=speed_error(tr,config)
     mixed=bool((config.get('timed_reference') or {}).get('training_mix',False))

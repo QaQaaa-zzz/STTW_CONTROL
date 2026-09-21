@@ -93,7 +93,7 @@ class TrackingConfig:
                     raise ValueError('reward_mode must be gaussian or huber')
                 continue
             if field.name == 'objective':
-                if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber', 'soft_budget_v1'):
+                if value not in ('legacy', 'geometric_huber', 'asymmetric_geometric_huber', 'soft_budget_v1', 'priority_return_v2'):
                     raise ValueError('unsupported tracking objective')
                 continue
             if field.name in ('timed', 'geometric', 'shrink_tolerances', 'precision_reward'):
@@ -114,7 +114,7 @@ class TrackingConfig:
         if self.objective == 'asymmetric_geometric_huber' and ((self.timed and not self.geometric) or self.return_bonus != 0 or self.tail_rate != 0):
             raise ValueError('asymmetric geometric huber requires geometric tracking and excludes bonus/tails')
 
-        if self.objective == 'soft_budget_v1':
+        if self.objective in ('soft_budget_v1','priority_return_v2'):
             if not self.geometric or self.precision_reward or self.return_bonus or self.tail_rate or self.return_rate or self.over_deadline_rate:
                 raise ValueError('soft budget requires geometric-only costs without precision or duplicate terms')
             if not 0 <= self.soft_grace_seconds < self.return_seconds-self.hold_seconds:
@@ -255,7 +255,8 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
 def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_error,
                action, alpha, dt, alive_rate, failure_penalty, failed,
                enabled, config, longitudinal_error=None, yaw_rate_error=None,
-               recovery_trigger=False, clock_from_departure=True, return_raw=False, xp=jp):
+               recovery_trigger=False, clock_from_departure=True, return_raw=False,
+               priority_v2_state=None, priority_v2_events=None, task_penalty_already_paid=False, xp=jp):
     """One transition, using pre-action alpha and the resulting physical errors.
 
     The clock starts at observed departure, not an oracle disturbance-end label.
@@ -265,6 +266,18 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
     for these tracking-state updates; wheel odometry alone is not ground truth.
     """
     c = config
+    if c.objective == "priority_return_v2":
+        from .priority_return_v2 import reward_terms
+        if priority_v2_state is None or priority_v2_events is None:
+            raise ValueError("priority_return_v2 needs independently advanced causal state/events")
+        result=reward_terms(alpha=alpha,speed_error=speed_error,lateral_error=lateral_error,
+            heading_error=heading_error,roll=roll,roll_rate=roll_rate,action=action,
+            previous_action=state.previous_action,relaxation=priority_v2_state.q,dt=dt,failed=failed,
+            missed_deadline_now=priority_v2_events["missed_deadline_now"],
+            terminal_incomplete_now=priority_v2_events["terminal_incomplete_now"],
+            task_penalty_already_paid=task_penalty_already_paid,xp=xp)
+        output=(state._replace(previous_action=xp.asarray(action)),result["reward_parts"])
+        return output+(result["raw_costs"],) if return_raw else output
     if c.timed and (longitudinal_error is None or yaw_rate_error is None):
         raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
     if c.objective == 'soft_budget_v1':

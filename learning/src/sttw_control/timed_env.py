@@ -1,4 +1,5 @@
 """Random command tracking against an independent time-indexed reference pose."""
+from dataclasses import replace
 import jax
 import jax.numpy as jp
 from .env import RecoveryEnv
@@ -9,6 +10,7 @@ from .timed_reference import (schedule, command_at, raw_request_at, recovery_ent
                               advance_reference, errors, geometry_table,
                               project_geometry, project_committed_geometry)
 from .tracking_reward import transition,initial_return
+from . import priority_return_v2 as v2
 
 
 class TimedRecoveryEnv(RecoveryEnv):
@@ -21,12 +23,12 @@ class TimedRecoveryEnv(RecoveryEnv):
         steer=jp.arctan(c.controller.wheelbase*requested_yaw/(jp.maximum(v,.1)*jp.cos(c.controller.caster)))
         return jp.array([jp.clip(steer,-r.max_steer,r.max_steer),v])
 
-    def prepare_timed(self,controller,actuator,history,measurement,tick,pose,alpha,ref_pose,ref_command,yaw,tracking_state,path_features=None,eso_enabled=False,base_output_scale=None):
+    def prepare_timed(self,controller,actuator,history,measurement,tick,pose,alpha,ref_pose,ref_command,yaw,tracking_state,path_features=None,eso_enabled=False,base_output_scale=None,priority_v2_frame=None):
         feature=errors(pose,ref_pose,ref_command)
         return self._prepare(controller,actuator,history,measurement,tick,pose,alpha,
             command_override=self.control_reference(pose,ref_pose,ref_command,path_features),tracking_state=tracking_state,
             path_features_override=feature[:3] if path_features is None else path_features,timed_frame=jp.array([feature[3],ref_command[1],yaw]),
-            eso_enabled=eso_enabled,base_output_scale=base_output_scale)
+            eso_enabled=eso_enabled,base_output_scale=base_output_scale,priority_v2_frame=priority_v2_frame)
 
     def _event_for(self, commands, fallback):
         if not self.config.timed_reference.training_mix:
@@ -50,18 +52,29 @@ class TimedRecoveryEnv(RecoveryEnv):
         controller=initial_controller(c.controller) if reset_memory else state.controller
         history=initial_history(c.observation) if reset_memory else state.history
         tracking=initial_return()
+        v2_state=v2.initial_state() if c.observation.include_priority_v2 else None
+        v2_frame=None
+        if v2_state is not None:
+            speed=jp.dot(jp.asarray(state.data.qvel[:3]),jp.asarray(state.data.xmat[self.bundle.chassis]).reshape(3,3)[:,0]) if c.forward_speed_source=="true" else state.measurement[5]*.1
+            v2_frame=jp.concatenate([jp.atleast_1d(speed),v2.observation_context(v2_state,t=0.,episode_end=c.horizon_seconds,actual_progress=0.)])
         ctrl,h,obs,base,roll=self.prepare_timed(controller,state.actuator,history,
             state.measurement,jp.int32(0),pose,state.priority_alpha,pose,ref,jp.asarray(0.),
             tracking,geometric,eso_enabled=state.eso_enabled,
-            base_output_scale=c.actuator.base_output_scale)
+            base_output_scale=c.actuator.base_output_scale,priority_v2_frame=v2_frame)
         components=jax.tree.map(jp.zeros_like,state.tracking_components)
+        raw_costs=({k:jp.zeros_like(v) for k,v in components.items() if k not in ("alive","deadline","failure")} if c.tracking.objective=="soft_budget_v1" else None)
+        if c.tracking.objective=="priority_return_v2":
+            result=v2.reward_terms(alpha=state.priority_alpha,speed_error=0.,lateral_error=0.,heading_error=0.)
+            components=jax.tree.map(jp.zeros_like,result["reward_parts"])
+            raw_costs=jax.tree.map(jp.zeros_like,result["raw_costs"])
         failed=jp.asarray(preparation_failed)
         return state.replace(controller=ctrl,history=h,obs=obs,base=base,reference=roll,event=event,
             command_schedule=commands,reference_pose=pose,reference_command=ref,yaw_rate=jp.asarray(0.),
             raw_reference_request=raw,geometric_table=table,geometric_features=geometric,
             path_segment=jp.int32(0),reference_geometry=geometry,path_progress=jp.asarray(0.),
+            priority_v2_state=v2_state,physical_failed=failed,
             tracking_state=tracking,tracking_components=components,
-            tracking_raw_costs=({k:jp.zeros_like(v) for k,v in components.items() if k not in ('alive','deadline','failure')} if c.tracking.objective=='soft_budget_v1' else None),recovery=initial_recovery(),
+            tracking_raw_costs=raw_costs,recovery=initial_recovery(),
             tick=jp.int32(0),reward=jp.asarray(0.),done=failed,terminated=failed,
             truncated=jp.bool_(False),end_code=jp.where(failed,5,0),preparation_failed=failed,
             active_base_output_scale=jp.asarray(c.actuator.base_output_scale))
@@ -139,21 +152,39 @@ class TimedRecoveryEnv(RecoveryEnv):
                   if c.timed_reference.training_mix else jp.int32(-1))
         recovery_trigger=(recovery_entry_at(state.tick,state.command_schedule,dt)
                           if c.timed_reference.training_mix else False)
+        diagnostic_config=replace(c.tracking,objective="soft_budget_v1") if c.tracking.objective=="priority_return_v2" else c.tracking
         reward_result=transition(state.tracking_state,roll=measurement[0],roll_rate=measurement[1],
             speed_error=true_speed-state.reference_command[0],yaw_rate_error=yaw-state.reference_command[1],
             lateral_error=reward_feature[0],heading_error=reward_feature[1],longitudinal_error=feature[3],action=action,
             alpha=state.priority_alpha,dt=dt,alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,
-            failed=failed,enabled=state.tick*dt>=c.tracking.start_seconds,config=c.tracking,
-            recovery_trigger=recovery_trigger,clock_from_departure=scenario!=1,return_raw=c.tracking.objective=='soft_budget_v1')
+            failed=failed,enabled=state.tick*dt>=c.tracking.start_seconds,config=diagnostic_config,
+            recovery_trigger=recovery_trigger,clock_from_departure=scenario!=1,return_raw=diagnostic_config.objective=='soft_budget_v1')
         tracking,parts=reward_result[:2]
         raw_costs=reward_result[2] if len(reward_result)==3 else None
         if raw_costs is not None:failed=failed|(parts['failure']<0)
+        v2_state=state.priority_v2_state
+        v2_frame=None
+        if c.observation.include_priority_v2:
+            v2_state,events=v2.advance(v2_state,t=tick*dt,dt=dt,episode_end=c.horizon_seconds,
+                reference_speed=ref_command[0],reference_yaw=ref_command[1],published_yaw_request=raw_request[1],previous_reference_speed=state.reference_command[0],
+                reference_progress=table[tick,0],actual_progress=progress,
+                speed_error=true_speed-used_command[0],lateral_error=reward_feature[0],heading_error=reward_feature[1],
+                roll=measurement[0],roll_rate=measurement[1],failed=failed)
+            if c.tracking.objective=="priority_return_v2":
+                _,parts,raw_costs=transition(state.tracking_state,roll=measurement[0],roll_rate=measurement[1],
+                    speed_error=true_speed-used_command[0],lateral_error=reward_feature[0],heading_error=reward_feature[1],
+                    action=action,alpha=state.priority_alpha,dt=dt,alive_rate=0.,failure_penalty=200.,failed=failed,
+                    enabled=True,config=c.tracking,priority_v2_state=v2_state,priority_v2_events=events,
+                    task_penalty_already_paid=state.priority_v2_state.penalty_paid,return_raw=True)
+            speed=true_speed if c.forward_speed_source=="true" else measurement[5]*.1
+            v2_frame=jp.concatenate([jp.atleast_1d(speed),v2.observation_context(v2_state,t=tick*dt,episode_end=c.horizon_seconds,actual_progress=progress)])
         eso_enabled=state.eso_enabled|(tick*c.controller.dt>c.eso_start)
         ctrl,h,obs,base,roll=self.prepare_timed(state.controller,actuator,state.history,measurement,tick,pose,
             state.priority_alpha,ref_pose,ref_command,yaw,tracking,geometric,eso_enabled=eso_enabled,
-            base_output_scale=state.active_base_output_scale)
+            base_output_scale=state.active_base_output_scale,priority_v2_frame=v2_frame)
         bad=~jp.all(jp.stack([jp.all(jp.isfinite(x)) for x in jax.tree.leaves((ctrl,obs,base))]))
         invalid=invalid|bad;failed=failed|bad
+        if v2_state is not None:v2_state=v2_state.replace(physical_failed=failed,task_complete=v2_state.task_complete & ~failed)
         parts={k:jp.where(bad,-c.failure_penalty if k=='failure' else 0.,v) for k,v in parts.items()}
         timeout=(tick>=self.horizon)&~failed
         code=jp.where(invalid,3,jp.where(physical_contact,4,jp.where(failed,1,jp.where(timeout,2,0))))
@@ -162,6 +193,7 @@ class TimedRecoveryEnv(RecoveryEnv):
         return state.replace(controller=ctrl,history=h,obs=jp.nan_to_num(obs),base=base,reference=roll,
             actuator=actuator,measurement=measurement,pose=pose,tick=tick,reward=sum(parts.values()),
             done=failed|timeout,terminated=failed,truncated=timeout,end_code=code,recovery=recovery,
+            physical_failed=failed,priority_v2_state=v2_state,
             tracking_state=tracking,tracking_components=parts,tracking_raw_costs=raw_costs,reference_pose=ref_pose,
             reference_command=ref_command,raw_reference_request=raw_request,yaw_rate=yaw,
             path_progress=progress,path_segment=segment,geometric_features=geometric,geometric_table=table,

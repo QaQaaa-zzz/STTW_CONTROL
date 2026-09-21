@@ -71,10 +71,18 @@ class TaskConfig:
     path_error_weight: float=0.
     heading_error_weight: float=0.
     speed_error_weight: float=1.
+    forward_speed_source: str="wheel"
     preparation_seconds: float=0.  # closed-loop zero-residual straight preparation before task time zero
     preparation_base_output_scale: float=1.
 
     def __post_init__(self):
+        if self.forward_speed_source not in ("wheel", "true"):
+            raise ValueError("forward_speed_source must be wheel or true")
+        if self.observation.include_priority_v2:
+            if self.timed_reference is None or self.tracking is None or not self.tracking.geometric or self.observation.history_steps != 10:
+                raise ValueError("priority V2 context requires committed geometry and 10 frames")
+        elif self.forward_speed_source != "wheel" or (self.tracking is not None and self.tracking.objective == "priority_return_v2"):
+            raise ValueError("priority V2 objective/speed source requires its observation contract")
         is_time = self.timed_reference is not None and self.timed_reference.mode == 'time'
         if is_time != self.observation.include_timed:raise ValueError("timed reference and observation must agree")
         if self.timed_reference is not None:
@@ -242,6 +250,8 @@ class EnvState:
     command_schedule: object=None
     yaw_rate: object=0.
     priority_locked: object=False
+    physical_failed: object=False
+    priority_v2_state: object=None
     tracking_state: object=None
     tracking_components: object=None
     tracking_raw_costs: object=None
@@ -394,7 +404,7 @@ class RecoveryEnv:
         heading=jp.arctan2(jp.sin(pose[2]-tangent),jp.cos(pose[2]-tangent))
         return jp.array([jp.sqrt(dx*dx+dy*dy)-c.radius,heading,c.direction/c.radius])
 
-    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None,path_features_override=None,timed_frame=None,eso_enabled=False,base_output_scale=None):
+    def _prepare(self,controller,actuator,history,measurement,tick,pose,alpha=.5,command_override=None,extra_frame=None,tracking_state=None,path_id=0,path_progress=None,path_features_override=None,timed_frame=None,priority_v2_frame=None,eso_enabled=False,base_output_scale=None):
         c=self.config
         command=(self.command(tick,pose,path_id=path_id,path_progress=path_progress) if c.reference_paths is not None else self.command(tick,pose)) if command_override is None else command_override
         roll,rate,steer,steer_rate,_,rear,_=measurement
@@ -414,6 +424,8 @@ class RecoveryEnv:
         if c.tracking is not None:
             frame=jp.concatenate([frame,return_observation(initial_return() if tracking_state is None else tracking_state,c.tracking)])
         if c.observation.include_timed:frame=jp.concatenate([frame,jp.zeros(3) if timed_frame is None else timed_frame])
+        if c.observation.include_priority_v2:
+            frame=jp.concatenate([frame,jp.zeros(6) if priority_v2_frame is None else priority_v2_frame])
         history,obs=advance_history(history,frame,c.observation)
         return controller,history,obs,raw_base,learning_reference
 
@@ -450,12 +462,17 @@ class RecoveryEnv:
                         jp.int32(0),jp.asarray(0.),jp.bool_(False),jp.bool_(False),jp.bool_(False),jp.int32(0),
                         sample_event(jax.random.fold_in(key,17),c.random_events,c.controller.dt) if c.random_events else self.fixed_event(),alpha,path_id=path_id,path_progress=jp.asarray(0.))
         state=state.replace(active_base_output_scale=jp.asarray(c.actuator.base_output_scale))
+        if c.observation.include_priority_v2:
+            from .priority_return_v2 import initial_state
+            state=state.replace(priority_v2_state=initial_state())
         if c.tracking is not None:
+            from dataclasses import replace
+            diagnostic_config=replace(c.tracking,objective="soft_budget_v1") if c.tracking.objective=="priority_return_v2" else c.tracking
             tracking_state=initial_return()
             _,components=tracking_transition(tracking_state,roll=0.,roll_rate=0.,speed_error=0.,
                 lateral_error=0.,heading_error=0.,action=jp.zeros(2),alpha=alpha,dt=c.controller.dt,
                 alive_rate=c.alive_reward_rate,failure_penalty=c.failure_penalty,failed=False,
-                enabled=False,config=c.tracking,**({"longitudinal_error":0.,"yaw_rate_error":0.} if c.tracking.timed else {}))
+                enabled=False,config=diagnostic_config,**({"longitudinal_error":0.,"yaw_rate_error":0.} if c.tracking.timed else {}))
             state=state.replace(tracking_state=tracking_state,
                                 tracking_components=jax.tree.map(jp.zeros_like,components))
         return state

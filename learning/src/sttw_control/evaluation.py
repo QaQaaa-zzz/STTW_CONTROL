@@ -88,6 +88,9 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
                     'effective_action':np.asarray(effective_action).copy(),'composition_base':np.asarray(composed_base).copy(),
                     'action':np.asarray(a).copy(),'reward':float(s.reward),
                     'terminated':bool(s.terminated),'truncated':bool(s.truncated),'end_code':int(s.end_code)}
+            row['physical_failed']=bool(s.physical_failed) if env.config.observation.include_priority_v2 else bool(s.terminated)
+            if s.priority_v2_state is not None:
+                row.update({'priority_v2_'+name:float(value) for name,value in vars(s.priority_v2_state).items()})
             if env.config.tracking is not None:
                 from .tracking_reward import return_observation
                 row['path_features']=np.asarray(env.path_features(s.pose,s.path_id,s.path_progress))
@@ -131,7 +134,7 @@ def evaluate(env,path,*,seed=0,policy=None,policy_identity=None,priority_alpha=N
         position=arrays['qpos'][:,:3]-first_position
         summary={'controller':identity['controller'],'backend':env.backend,'seed':seed,
                  'transitions':transitions,'captured_states':len(frames),'episode_return':total_reward,
-                 'end_code':int(state.end_code),'physical_failure':bool(state.terminated),
+                 'end_code':int(state.end_code),'physical_failure':bool(state.physical_failed) if env.config.observation.include_priority_v2 else bool(state.terminated),
                  'recovery_eligible':(event[2]!=0 or event[3]!=0 or event[5]!=0) and int(state.tick)>=event[1],
                  'balance_recovery_success':balance_time is not None and not bool(state.terminated),
                  'task_recovery_success':task_time is not None and not bool(state.terminated),

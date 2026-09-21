@@ -31,8 +31,10 @@ def jax_from_torch(value):
     return jax.dlpack.from_dlpack(value.detach().contiguous())
 
 
-def bootstrap_timeout(rewards,next_values,truncated,terminated,gamma):
-    return rewards+gamma*next_values.reshape_as(rewards)*(truncated & ~terminated).to(rewards.dtype)
+def bootstrap_timeout(rewards,next_values,truncated,terminated,gamma,task_terminal=None):
+    eligible=truncated & ~terminated
+    if task_terminal is not None:eligible=eligible & ~task_terminal
+    return rewards+gamma*next_values.reshape_as(rewards)*eligible.to(rewards.dtype)
 
 
 def make_algorithm(obs,steps,epochs,minibatches,device,learning_rate=3e-4,gamma=.9995,lam=.99,clip=.2,entropy=.001,std=.15,kl=.01,activation="leaky_relu",hidden_sizes=(256,128),schedule="auto"):
@@ -139,6 +141,9 @@ def train(task_path,output,c):
     from .runtime import configure_compilation_cache
     configure_compilation_cache()
     cfg=load_config(task_path)
+    finite_task=getattr(cfg.observation,'include_priority_v2',False)
+    if c.priority_v2_development_interval and not finite_task:raise ValueError('V2 development requires V2 observation and terminal semantics')
+    if finite_task and (c.actor_init_checkpoint or c.actor_init_training or c.resume_checkpoint):raise ValueError('first V2 screen requires full cold start')
     if cfg.tracking is None:raise ValueError('RSL adapter currently targets the explicit-alpha geometric tracking task')
     if c.command_selection or c.selection_incumbent:raise ValueError('RSL geometry uses geometric acceptance, not command selection')
     root=Path(output);root.mkdir(parents=True,exist_ok=False)
@@ -155,7 +160,7 @@ def train(task_path,output,c):
         declaration={'task':asdict(cfg),'training':asdict(c),'policy_identity':identity,'trainer':'rsl_rl.algorithms.PPO',
             'rsl_version':RSL_VERSION,'torch_version':torch.__version__,'device':device,
             'action_contract':'RSL stores pre-tanh Gaussian samples; physics receives tanh(sample); entropy is latent',
-            'timeout_contract':'gamma*V(final_next_obs) added only on truncation; RSL time_outs shortcut disabled',
+            'timeout_contract':('finite task horizon: no bootstrap; physical failure separately recorded' if finite_task else 'gamma*V(final_next_obs) added only on truncation; RSL time_outs shortcut disabled'),
             'kl_contract':{'schedule':c.rsl_schedule,'whole_update_exact_kl_limit':c.rsl_kl_limit,
                            'scope':'RSL PPO with optional full-batch mean Gaussian KL rollback; not safety certification'},
             'baseline_contract':{'original_ecbc_eso_base_output_scale':1.0,
@@ -209,6 +214,10 @@ def train(task_path,output,c):
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
                             c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes,schedule=c.rsl_schedule)
+        if finite_task:
+            last=[m for m in algo.policy.actor.modules() if isinstance(m,torch.nn.Linear)][-1]
+            assert not torch.count_nonzero(last.weight) and not torch.count_nonzero(last.bias) and not algo.optimizer.state
+            write('cold_start.json',{'actor_imported':False,'critic_optimizer_std_rng':'new','output_mean_zero':True,'source_checkpoint':None})
         if c.actor_init_checkpoint:
             from .network import verified_actor_initialization
             init_params,init_record=verified_actor_initialization(c.actor_init_checkpoint,c.actor_init_training,
@@ -285,7 +294,7 @@ def train(task_path,output,c):
             if nxt.tracking_raw_costs is not None:
                 for name,value in nxt.tracking_raw_costs.items():phase_stats['raw_cost_'+name]=jp.sum(value)
                 total=sum(nxt.tracking_raw_costs.values())
-                phase_stats['soft_bound_slope_sum']=jp.sum((cfg.tracking.soft_cost_bound/(cfg.tracking.soft_cost_bound+total))**2)
+                if cfg.tracking.objective=='soft_budget_v1':phase_stats['soft_bound_slope_sum']=jp.sum((cfg.tracking.soft_cost_bound/(cfg.tracking.soft_cost_bound+total))**2)
             if cfg.tracking.precision_reward:
                 ordinary=sum(v for k,v in nxt.tracking_components.items()
                              if k not in ('deadline','failure','recovery'))
@@ -311,12 +320,31 @@ def train(task_path,output,c):
             write('zero_residual_0p8_validation.json',ablation)
             write('baseline_validation.json',baseline)
         sampling_checkpoint=Path(c.resume_checkpoint).resolve() if c.resume_checkpoint else root/'checkpoints'/f'update_{offset:04d}'
+        consecutive_rollbacks=0
         if c.training_reward_selection and not c.resume_checkpoint:
             save_policy(sampling_checkpoint,export_actor(algo.policy),mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
             (sampling_checkpoint/'training.json').write_text(json.dumps({'update':offset,'role':'initial sampling policy'})+'\n')
+        def snapshot(path,update,transitions):
+            torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,
+                'update':update,'control_transitions':transitions,'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key)},path/'rsl_snapshot.pt')
+        development=[]
+        def fixed_development(checkpoint,update):
+            import subprocess,sys
+            from .priority_v2_analysis import select, development_stop_reason
+            dest=root/'development'/f'update_{update:04d}';dest.mkdir(parents=True,exist_ok=True)
+            command=[sys.executable,str(Path(__file__).resolve().parents[2]/'cli/priority_v2_campaign.py'),'--stage','evaluate','--execute','--task',str(Path(task_path).resolve()),'--checkpoint',str(checkpoint.resolve()),'--output',str(dest.resolve())]
+            environment=dict(os.environ,JAX_PLATFORMS='cpu',CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1')
+            with (dest/'evaluation.log').open('w') as log:subprocess.run(command,env=environment,stdout=log,stderr=subprocess.STDOUT,check=True)
+            result=json.loads((dest/'summary.json').read_text());result['update']=update;development.append(result)
+            chosen=select(development);write('model_selection.json',chosen);write('development_history.json',development)
+            write('best_diagnostic.json',chosen['best_diagnostic']);write('best_accepted.json',chosen['best_accepted'])
+            return result,development_stop_reason(development)
+        if finite_task:snapshot(sampling_checkpoint,offset,transition_offset)
+        if c.priority_v2_development_interval:fixed_development(sampling_checkpoint,offset)
         write('setup_timings.json',{'initialization_and_baseline_seconds':time.monotonic()-start})
         best=None;best_rank=None;rows=[]
         with TrainingEvents(root/'tensorboard',profile='core') as writer:
+            if development:writer.write({'update':offset,'priority_v2_development':development[-1]})
             for local in range(1,c.updates+1):
                 iteration=offset+local;begin=time.monotonic();reward_sum=torch.zeros((),device=device);component_sum={};alpha_sum={};phase_sum={};ends=torch.zeros((),device=device);max_error=0.
                 with torch.no_grad():
@@ -325,7 +353,7 @@ def train(task_path,output,c):
                         state,key,final_obs,reward,done,truncated,terminated,parts,error,alpha_stats,phase_stats=advance(state,jax_from_torch(torch.tanh(latent)),key)
                         final=observations(final_obs);r=torch_from_jax(reward);d=torch_from_jax(done)
                         episode_stats.add(r,d,torch_from_jax(terminated))
-                        corrected=bootstrap_timeout(r,algo.policy.evaluate(final).squeeze(-1),torch_from_jax(truncated),torch_from_jax(terminated),c.gamma)
+                        corrected=bootstrap_timeout(r,algo.policy.evaluate(final).squeeze(-1),torch_from_jax(truncated),torch_from_jax(terminated),c.gamma,task_terminal=torch_from_jax(truncated) if finite_task else None)
                         obs=observations(state.obs)
                         algo.process_env_step(obs,corrected,d,{})
                         reward_sum+=r.mean();ends+=d.sum()
@@ -351,9 +379,9 @@ def train(task_path,output,c):
                         'accepted_minibatches':0 if update_audit['full_update_rolled_back'] else c.epochs*(c.num_envs*c.rollout_steps//c.minibatch_size)},
                     'reward_components_mean_step':{k:v.item()/c.rollout_steps for k,v in component_sum.items()},'reward_components_reconstruction_max_scaled':error,'reward_components_reconstruction_max_abs':float(max_error[1])}
                 batch_count=c.num_envs*c.rollout_steps
-                if cfg.tracking.objective=='soft_budget_v1':
+                if cfg.tracking.objective in ('soft_budget_v1','priority_return_v2'):
                     record['raw_costs_mean_rate']={k[len('raw_cost_'):]:float(v)/batch_count for k,v in phase_sum.items() if k.startswith('raw_cost_')}
-                    record['soft_bound_slope_mean']=float(phase_sum['soft_bound_slope_sum'])/batch_count
+                    if cfg.tracking.objective=='soft_budget_v1':record['soft_bound_slope_mean']=float(phase_sum['soft_bound_slope_sum'])/batch_count
                 if cfg.tracking.precision_reward:
                     record['precision_cost_cap_fraction']=float(phase_sum['cost_capped_samples'])/batch_count
                 record['complete_training_episodes']=episode_stats.flush()
@@ -402,6 +430,9 @@ def train(task_path,output,c):
                     rank,reason=rank_tracking_candidate(v,baseline,speed_slack=c.selection_speed_slack,nominal_slack=c.selection_nominal_slack)
                     record['selection']={'rank':rank,'reason':reason,'task_success_verified':False}
                     if rank is not None and (best_rank is None or rank<best_rank):best_rank,best=rank,str(checkpoint)
+                development_stop=None
+                if c.priority_v2_development_interval and (local%c.priority_v2_development_interval==0 or local==c.updates):
+                    record['priority_v2_development'],development_stop=fixed_development(checkpoint,iteration)
                 (checkpoint/'training.json').write_text(json.dumps(metadata,indent=2)+'\n')
                 if 'validation' in metadata:record['best_reward_model']=refresh_best_reward_model(root)
                 record['wall_elapsed_seconds']=time.monotonic()-start
@@ -410,9 +441,15 @@ def train(task_path,output,c):
                 status={'phase':'complete' if local==c.updates else 'training','complete':local==c.updates,'last_checkpoint':str(checkpoint),'best_checkpoint':best,'best_selection_rank':best_rank,'baseline':baseline,'zero_residual_0p8_ablation':ablation,'selection_mode':'training_mean_step_reward' if c.training_reward_selection else 'fixed_development','control_transitions':record['control_transitions']}
                 if c.training_reward_selection and not c.training_reward_best_enabled:
                     status['selection_mode']='deferred_fixed_complete_episode_evaluation'
+                if c.priority_v2_development_interval:status['selection_mode']='fixed_complete_episode_primary_secondary_metrics'
                 if record.get('best_reward_model'):status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
                 if should_plot(c,local):plot_training(root)
+                if finite_task:
+                    consecutive_rollbacks=consecutive_rollbacks+1 if record['optimizer_audit']['full_update_rolled_back'] else 0
+                    if consecutive_rollbacks>=3:status.update(phase='stopped',complete=False,stop_reason='three consecutive full KL rollbacks')
+                if development_stop:status.update(phase='stopped',complete=False,stop_reason=development_stop)
                 write('status.json',status);write('progress.json',{'update':iteration,'phase':status['phase'],'validation_complete':'validation' in record})
+                if development_stop or (finite_task and consecutive_rollbacks>=3):break
         return status
     except Exception as exc:
         write('status.json',{'phase':'error','complete':False,'error':repr(exc)})
