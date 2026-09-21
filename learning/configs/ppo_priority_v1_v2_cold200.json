@@ -1,0 +1,52 @@
+{
+  "num_envs": 1024,
+  "rollout_steps": 128,
+  "updates": 200,
+  "epochs": 2,
+  "minibatch_size": 32768,
+  "learning_rate": 0.0001,
+  "gamma": 0.9995,
+  "gae_lambda": 0.99,
+  "clip": 0.1,
+  "entropy_weight": 0.001,
+  "initial_std": 0.1,
+  "target_kl": null,
+  "warmup_pool_size": 0,
+  "warmup_steps": 0,
+  "seed": 66,
+  "checkpoint_interval": 8,
+  "plot_interval": 0,
+  "validation_updates": null,
+  "development_scenarios": [
+    "ordinary_accel",
+    "core_left",
+    "core_right",
+    "disturbance_left"
+  ],
+  "validation_seeds": [
+    52001
+  ],
+  "validation_hold_seconds": 0.5,
+  "validation_post_seconds": 3.0,
+  "selection_speed_slack": 0.05,
+  "selection_nominal_slack": 0.03,
+  "validation_events": null,
+  "trainer": "rsl",
+  "activation": "elu",
+  "hidden_sizes": [
+    128,
+    128,
+    128
+  ],
+  "best_model_every_update": false,
+  "evaluation_reward_best": false,
+  "training_reward_selection": true,
+  "rsl_schedule": "fixed",
+  "rsl_kl_limit": 0.02,
+  "training_reward_best_enabled": false,
+  "phase_spread_initialization": true,
+  "actor_init_checkpoint": null,
+  "actor_init_training": null,
+  "resume_checkpoint": null,
+  "priority_v2_development_interval": 100
+}

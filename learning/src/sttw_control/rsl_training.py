@@ -336,7 +336,7 @@ def train(task_path,output,c):
             environment=dict(os.environ,JAX_PLATFORMS='cpu',CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1')
             with (dest/'evaluation.log').open('w') as log:subprocess.run(command,env=environment,stdout=log,stderr=subprocess.STDOUT,check=True)
             result=json.loads((dest/'summary.json').read_text());result['update']=update;development.append(result)
-            chosen=select(development);write('model_selection.json',chosen);write('development_history.json',development)
+            chosen=select(development,alpha=.5 if len(cfg.priority.validation_alphas)>1 else cfg.priority.validation_alphas[0]);write('model_selection.json',chosen);write('development_history.json',development)
             write('best_diagnostic.json',chosen['best_diagnostic']);write('best_accepted.json',chosen['best_accepted'])
             return result,development_stop_reason(development)
         if finite_task:snapshot(sampling_checkpoint,offset,transition_offset)

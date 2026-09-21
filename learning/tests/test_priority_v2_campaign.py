@@ -49,3 +49,18 @@ def test_absorbing_failure_once_and_blocked_screen(tmp_path):
  assert r['undiscounted']==-201 and r['absorbing_transitions']==1998
  with pytest.raises(RuntimeError,match='screen blocked'):campaign.screen(tmp_path,campaign.configurations())
  assert not (tmp_path/'A/training').exists()
+
+
+def test_cold200_mixed_configs_and_budget():
+ import json
+ from sttw_control.priority import sample_alpha
+ from dataclasses import asdict
+ configs=[config_from_dict(json.loads(Path(f'learning/configs/priority_cold200_{arm}.json').read_text())) for arm in ('v1','v2')]
+ ppo=TrainingConfig(**json.loads(Path('learning/configs/ppo_priority_v1_v2_cold200.json').read_text()))
+ assert ppo.updates==200 and ppo.num_envs*ppo.rollout_steps*ppo.updates==26214400
+ assert ppo.priority_v2_development_interval==100
+ a,b=map(asdict,configs);a['tracking']['objective']='priority_return_v2';assert a==b
+ for c in configs:
+  values=np.asarray(jax.vmap(lambda key:sample_alpha(key,c.priority))(jax.random.split(jax.random.PRNGKey(66),300)))
+  assert set(values)=={0.,.5,1.}
+  assert tuple(c.priority.validation_alphas)==(0.,.5,1.)

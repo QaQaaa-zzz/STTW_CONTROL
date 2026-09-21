@@ -813,3 +813,10 @@ Goal：原提交3db2ab2上实现新合同、完成安全与逃罚门槛后仅alp
 入口：runs/priority_v2/analysis/REPORT.md、probe/escape_gate.json、tests_receipt.json、execution_receipt.json。TensorBoard6006同时显示旧模式与新工程日志。此次运行使用开发中的未提交源码，最终交付commit不能追溯冒充运行启动commit；原始身份/声明与逐步重建保留。
 
 审查订正：锁存deadline到期审定，避免按期完成后的短暂离带误记旧债务超时；MANEUVER由当前已发布raw请求触发，出口仍按slew后参考稳定确认。修正后复算同48条物理轨迹，工程合格20/24左、10/24右，严格0/48；前述未修正的3/24和0/24初步统计已撤回。两项回归测试通过并经独立只读复核。GPU工程修正前后各8转移，CPU完整复核各2000步，准备另记。
+
+
+## 2026-09-21 用户改为V1/V2三alpha冷启动各200轮
+
+最新明确授权覆盖16轮A/B/C及逃罚覆盖补齐后才能启动的历史安排：只跑V1和V2，两组alpha每回合均匀抽取0/.5/1，完整冷启动，不加载任何旧Actor/Critic/Adam。旧逃罚gate保持false，不宣称已经通过。基础ECBC+ESO=1、同扩展wheel观测、同30/35/35任务、物理/动作/PPO不变；C oracle不跑。
+每组1024×128×200=26,214,400正式转移，总52,428,800，准备/相位铺开/评估另记。先V1再V2顺序执行；保留三KL回退及开发三点恶化停止、错误停止队列，不自动重试或加预算。开发评估0/100/200，覆盖6场景×三alpha，基线同场景只算一次；确定性和单固定随机动作序列分开，随机序列不是失败概率估计。共享策略全局诊断选模按跨场景/alpha等权Jp/Jv均衡，合格模型可null，不按不同奖励总分比较。
+运行：runs/priority_v1_v2_cold200_20260921；冻结配置、declaration、run.py、status及每组stdout/training状态可复核。TensorBoard6006追加新日志，不影响JIT或旧结果。

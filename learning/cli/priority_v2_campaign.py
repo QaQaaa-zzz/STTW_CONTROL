@@ -66,17 +66,18 @@ def evaluate_checkpoint(task,checkpoint,out):
  cs,ws=scenarios(cfg);rows=[]
  for name,c in cs.items():
   env=RecoveryEnv(c);prepared=env.reset(49001);dest=Path(out)/name
-  for method in ['baseline','policy','policy_stochastic']:
-   p=dest/method
-   if not (p/'trace.npz').exists():
-    count=[0];rng=np.random.default_rng(49001)
-    def actor(obs):
-     count[0]+=1
-     if count[0]<=round(ws.get(name,0)/c.controller.dt):return np.zeros(2)
-     return np.tanh(np.asarray(logits(obs))+latent_std*rng.normal(size=2)) if method=='policy_stochastic' else policy(obs)
-    evaluate(env,p,seed=49001,priority_alpha=0.,policy=actor if method!='baseline' else None,policy_identity=identity if method!='baseline' else None,initial_state=prepared)
-   verify_cached_trace(p,c,identity if method!='baseline' else None)
-   tr=dict(np.load(p/'trace.npz'));mt,states,parts=metrics(tr,asdict(c));mt.update(scenario=name,method=method);write(p/'v2_metrics.json',mt);write(p/'v2_replay.json',{'states':states,'reward_parts':[{k:float(v) for k,v in d.items()} for d in parts]});rows.append(mt)
+  for alpha in cfg.priority.validation_alphas:
+   for method in ['baseline','policy','policy_stochastic']:
+    p=dest/method if method=='baseline' else dest/f'alpha_{alpha:g}'/method
+    if not (p/'trace.npz').exists():
+     count=[0];rng=np.random.default_rng(49001)
+     def actor(obs):
+      count[0]+=1
+      if count[0]<=round(ws.get(name,0)/c.controller.dt):return np.zeros(2)
+      return np.tanh(np.asarray(logits(obs))+latent_std*rng.normal(size=2)) if method=='policy_stochastic' else policy(obs)
+     evaluate(env,p,seed=49001,priority_alpha=float(alpha) if method!='baseline' else 0.,policy=actor if method!='baseline' else None,policy_identity=identity if method!='baseline' else None,initial_state=prepared)
+    verify_cached_trace(p,c,identity if method!='baseline' else None)
+    tr=dict(np.load(p/'trace.npz'));tr['priority_alpha']=np.full_like(tr['priority_alpha'],alpha);mt,states,parts=metrics(tr,asdict(c));mt.update(scenario=name,method=method,alpha=float(alpha));scoring=p/f'score_alpha_{alpha:g}';write(scoring/'v2_metrics.json',mt);write(scoring/'v2_replay.json',{'states':states,'reward_parts':[{k:float(v) for k,v in d.items()} for d in parts]});rows.append(mt)
  rows_policy=[x for x in rows if x['method']=='policy'];summary={'checkpoint':str(checkpoint),'Jp':float(np.mean([x['Jp'] for x in rows_policy])),'Jv':float(np.mean([x['Jv'] for x in rows_policy])),'engineering_accepted':all(x['v2_engineering_accepted'] for x in rows_policy),'strict_accepted':all(x['v2_strict_accepted'] for x in rows_policy),'physical_failures':sum(x['physical_failed'] for x in rows_policy),'stochastic_physical_failures':sum(x['physical_failed'] for x in rows if x['method']=='policy_stochastic'),'stochastic_scope':'one fixed Gaussian draw sequence per scene; diagnostic only, not a failure probability estimate','rows':rows};write(Path(out)/'summary.json',summary);return summary
 
 def audit(out):
