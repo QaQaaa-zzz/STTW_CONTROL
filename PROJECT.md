@@ -26,7 +26,9 @@ Python：`/home/qy/mujoco_playground/.venv/bin/python`。运行CLI时从当前�
 
 **运行：[`priority_v2_cold200_repaired_20260926`](runs/priority_v2_cold200_repaired_20260926/INDEX.md)。**
 
-这是修复评估程序后的同条件V2重跑，完全冷启动，未加载原0244、独立模式或旧V2第100轮。不是新奖励方案，也不是新增独立训练种子。用户已授权200更新，不自动延长。
+本轮最初为修复评估程序后的同条件V2完全冷启动，未加载原0244、独立模式或旧V2第100轮。2026-09-26检查发现进程已退出：本轮第100轮快照已保存，第100轮开发评估未完成，逐轮日志写到99。退出原因尚未确定，不能归因于旧离线精度错误。用户授权恢复本轮完整第100轮快照，再做100更新，总计200；奖励、物理和停止门槛不变。
+
+当前恢复入口：[attempt_0001](runs/priority_v2_cold200_repaired_20260926/recovery/attempt_0001/INDEX.md)。恢复Actor、Critic、Adam、std和RNG；车辆重新闭环准备、错相初始化，不称逐位不中断续跑。原始快照和中断记录保留。
 
 | 项目 | 冻结设置 |
 |---|---|
@@ -42,13 +44,14 @@ Python：`/home/qy/mujoco_playground/.venv/bin/python`。运行CLI时从当前�
 | 停止条件 | 错误；连续三次整轮KL回退；三个开发检查点的物理失败或路径指标持续恶化；预算结束 |
 
 - [冻结任务](runs/priority_v2_cold200_repaired_20260926/frozen/task.json) / [冻结PPO](runs/priority_v2_cold200_repaired_20260926/frozen/ppo.json) / [声明](runs/priority_v2_cold200_repaired_20260926/declaration.json)
-- [实时状态](runs/priority_v2_cold200_repaired_20260926/training/status.json) / [逐轮日志](runs/priority_v2_cold200_repaired_20260926/training/metrics.jsonl) / [启动来源](runs/priority_v2_cold200_repaired_20260926/launch.json)
+- [恢复实时状态](runs/priority_v2_cold200_repaired_20260926/recovery/attempt_0001/training/status.json) / [恢复记录](runs/priority_v2_cold200_repaired_20260926/recovery/attempt_0001/training/resume.json) / [恢复启动来源](runs/priority_v2_cold200_repaired_20260926/recovery/attempt_0001/launch.json)
+- [原中断状态](runs/priority_v2_cold200_repaired_20260926/training/status.json) / [原逐轮日志](runs/priority_v2_cold200_repaired_20260926/training/metrics.jsonl)；这是保留的历史现场，不再作为实时状态。
 - [开发选模](runs/priority_v2_cold200_repaired_20260926/training/model_selection.json) / [监视器](runs/priority_v2_cold200_repaired_20260926/monitor/status.json)
-- [TensorBoard](http://127.0.0.1:6006)：选择`repaired200/training/tensorboard`；服务记录在[tensorboard_service.json](runs/priority_v2_cold200_repaired_20260926/tensorboard_service.json)。
+- [TensorBoard](http://127.0.0.1:6006)：选择`resume100/training/tensorboard`查看恢复阶段，`repaired200/training/tensorboard`查看原阶段；服务记录在[tensorboard_service.json](runs/priority_v2_cold200_repaired_20260926/tensorboard_service.json)。
 
 启动源码是`2c1e34a`；后续文档提交不冒充训练启动版本。第0轮有35条旧初始评估轨迹经完整参数、任务身份和奖励重建核验后复用，其余7条正常生成；见[复用记录](runs/priority_v2_cold200_repaired_20260926/initial_evaluation_reuse.json)。这只节省评估计算，没有继承训练权重。
 
-本文不持续写入易过期的轮数；以status、metrics和checkpoint交叉核对。当前文档整理不会重启、暂停或再开一份训练。
+本文不持续写入易过期的轮数；以status、metrics和checkpoint交叉核对。恢复日志单独保存，并继承原第0轮开发结果、补完第100轮检查，仍在总第200轮做终评。训练奖励缺失的第100轮不补造。
 
 ## 4. 当前训练环境的实际范围
 
@@ -114,7 +117,7 @@ JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python \
 | V1冷启动200轮 | 200更新已执行；第100轮Jp6.945/Jv.746、3/18通过，第200轮10.161/1.557、2/18通过；后期退化 | [V1报告](runs/priority_v1_v2_cold200_20260921/v1/analysis/REPORT.md) |
 | 旧V2冷启动 | 第100轮模型已保存，评估报错退出；原日志99条，不是完成200轮 | [原状态](runs/priority_v1_v2_cold200_20260921/v2/training/status.json) |
 | 旧V2第100轮补评 | Jp7.082/Jv.932，工程和严格均3/18，仅普通加速通过；暂未优于同100轮V1 | [补评报告](runs/priority_v2_review_20260926/analysis/REPORT.md) |
-| 新V2同条件200轮 | 已启动并确认实际更新；最终能力尚未确定 | [运行入口](runs/priority_v2_cold200_repaired_20260926/INDEX.md) |
+| 新V2同条件200轮 | 冷启动已保存100轮后进程中断，按用户指令恢复剩余100轮；最终能力尚未确定 | [运行入口](runs/priority_v2_cold200_repaired_20260926/INDEX.md) |
 
 独立模式的9个条件与新对照的18个条件不同，不直接比较成功百分比。原0244训练环境、观测及选择方式也与后来的V1冷启动组不同，不能将跨代差异都归因于奖励。
 

@@ -86,6 +86,51 @@ def restore_cuda_rng(states):
     torch.cuda.set_rng_state_all([state.cpu() for state in states])
 
 
+def restore_training_snapshot(algo,snapshot,identity,c,device):
+    """Same-task full resume; validate identity before changing any model state."""
+    if snapshot['identity']!=identity or snapshot['rsl_version']!=RSL_VERSION or snapshot.get('activation','leaky_relu')!=c.activation or tuple(snapshot.get('hidden_sizes',(256,128)))!=c.hidden_sizes:
+        raise ValueError('RSL resume identity mismatch')
+    algo.policy.load_state_dict(snapshot['policy']);algo.optimizer.load_state_dict(snapshot['optimizer'])
+    torch.set_rng_state(snapshot['torch_rng'].cpu())
+    if device.startswith('cuda'):restore_cuda_rng(snapshot['cuda_rng'])
+    algo.learning_rate=snapshot['learning_rate']
+    if c.rsl_schedule=='fixed':
+        algo.learning_rate=c.learning_rate
+        for group in algo.optimizer.param_groups:group['lr']=c.learning_rate
+    return jp.asarray(snapshot['jax_rng']),snapshot['update'],snapshot['control_transitions']
+
+
+def resume_development_history(checkpoint,offset,identity):
+    """Retain earlier fixed evaluations; re-evaluate the resumed model itself."""
+    source=Path(checkpoint).resolve().parents[1]
+    declaration=json.loads((source/'declaration.json').read_text())
+    if declaration['policy_identity']!=json.loads(json.dumps(identity)):
+        raise ValueError('development resume identity mismatch')
+    history=json.loads((source/'development_history.json').read_text())
+    return [row for row in history if row['update']<offset]
+
+
+def resume_rollback_count(snapshot,checkpoint):
+    """Old snapshots need evidence of acceptance, not an assumed cleared gate."""
+    if 'consecutive_rollbacks' in snapshot:return snapshot['consecutive_rollbacks']
+    if snapshot['update']==0:return 0
+    source=Path(checkpoint).resolve().parents[1]
+    metrics=source/'metrics.jsonl'
+    rows=[json.loads(line) for line in metrics.read_text().splitlines()] if metrics.exists() else []
+    rows=[row for row in rows if row['update']<=snapshot['update']]
+    if rows and rows[-1]['update']==snapshot['update']:
+        count=0
+        for row in reversed(rows):
+            if not row['optimizer_audit']['full_update_rolled_back']:return count
+            count+=1
+        return count
+    previous=Path(checkpoint).parent/f"update_{snapshot['update']-1:04d}"/'rsl_snapshot.pt'
+    if previous.exists():
+        policy=torch.load(previous,map_location='cpu',weights_only=False)['policy']
+        if any(not torch.equal(value.cpu(),policy[k]) for k,value in snapshot['policy'].items()):return 0
+    raise ValueError('cannot establish legacy resume rollback history')
+
+
 
 def guarded_update(algo, limit=None):
     """Audit exact Gaussian KL on ALL sampled observations; optionally rollback.
@@ -143,7 +188,7 @@ def train(task_path,output,c):
     cfg=load_config(task_path)
     finite_task=getattr(cfg.observation,'include_priority_v2',False)
     if c.priority_v2_development_interval and not finite_task:raise ValueError('V2 development requires V2 observation and terminal semantics')
-    if finite_task and (c.actor_init_checkpoint or c.actor_init_training or c.resume_checkpoint):raise ValueError('first V2 screen requires full cold start')
+    if finite_task and (c.actor_init_checkpoint or c.actor_init_training):raise ValueError('first V2 screen requires full cold start; Actor-only imports are not a full resume')
     if cfg.tracking is None:raise ValueError('RSL adapter currently targets the explicit-alpha geometric tracking task')
     if c.command_selection or c.selection_incumbent:raise ValueError('RSL geometry uses geometric acceptance, not command selection')
     root=Path(output);root.mkdir(parents=True,exist_ok=False)
@@ -214,7 +259,7 @@ def train(task_path,output,c):
         obs=observations(state.obs)
         algo=make_algorithm(obs,c.rollout_steps,c.epochs,c.num_envs*c.rollout_steps//c.minibatch_size,device,
                             c.learning_rate,c.gamma,c.gae_lambda,c.clip,c.entropy_weight,c.initial_std,c.target_kl,c.activation,c.hidden_sizes,schedule=c.rsl_schedule)
-        if finite_task:
+        if finite_task and not c.resume_checkpoint:
             last=[m for m in algo.policy.actor.modules() if isinstance(m,torch.nn.Linear)][-1]
             assert not torch.count_nonzero(last.weight) and not torch.count_nonzero(last.bias) and not algo.optimizer.state
             write('cold_start.json',{'actor_imported':False,'critic_optimizer_std_rng':'new','output_mean_zero':True,'source_checkpoint':None})
@@ -227,17 +272,17 @@ def train(task_path,output,c):
             if algo.optimizer.state:raise RuntimeError('Actor initialization must precede all optimizer updates')
             declaration['actor_initialization']=init_record
             write('declaration.json',declaration);write('actor_initialization.json',init_record)
-        offset=0;transition_offset=0
+        offset=0;transition_offset=0;consecutive_rollbacks=0
         if c.resume_checkpoint:
-            snapshot=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)
-            if snapshot['identity']!=identity or snapshot['rsl_version']!=RSL_VERSION or snapshot.get('activation','leaky_relu')!=c.activation or tuple(snapshot.get('hidden_sizes',(256,128)))!=c.hidden_sizes:raise ValueError('RSL resume identity mismatch')
-            algo.policy.load_state_dict(snapshot['policy']);algo.optimizer.load_state_dict(snapshot['optimizer'])
-            torch.set_rng_state(snapshot['torch_rng'].cpu())
-            if device.startswith('cuda'):restore_cuda_rng(snapshot['cuda_rng'])
-            key=jp.asarray(snapshot['jax_rng']);offset=snapshot['update'];transition_offset=snapshot['control_transitions'];algo.learning_rate=snapshot['learning_rate']
-            if c.rsl_schedule=='fixed':
-                algo.learning_rate=c.learning_rate
-                for group in algo.optimizer.param_groups:group['lr']=c.learning_rate
+            saved=torch.load(Path(c.resume_checkpoint)/'rsl_snapshot.pt',map_location=device,weights_only=False)
+            key,offset,transition_offset=restore_training_snapshot(algo,saved,identity,c,device)
+            consecutive_rollbacks=resume_rollback_count(saved,c.resume_checkpoint) if finite_task else 0
+            if finite_task and consecutive_rollbacks>=3:raise ValueError('resume checkpoint already reached three consecutive full KL rollbacks')
+            write('resume.json',{'source_checkpoint':str(Path(c.resume_checkpoint).resolve()),'source_update':offset,
+                'inherited_control_transitions':transition_offset,'remaining_updates':c.updates,'target_update':offset+c.updates,
+                'restored':['actor','critic','Adam','log_std','torch_rng','cuda_rng','jax_rng'],
+                'physics':'fresh closed-loop preparation and phase spreading; not bitwise uninterrupted simulation',
+                'consecutive_rollbacks':consecutive_rollbacks,'rollback_count_in_snapshot':'consecutive_rollbacks' in saved})
         from .rsl_sampling import phase_spread,EpisodeStatistics
         if c.phase_spread_initialization:
             write('status.json',{'phase':'phase_spreading','complete':False})
@@ -319,15 +364,14 @@ def train(task_path,output,c):
             baseline=host(validate(initial_params,True,1.))
             write('zero_residual_0p8_validation.json',ablation)
             write('baseline_validation.json',baseline)
-        sampling_checkpoint=Path(c.resume_checkpoint).resolve() if c.resume_checkpoint else root/'checkpoints'/f'update_{offset:04d}'
-        consecutive_rollbacks=0
-        if c.training_reward_selection and not c.resume_checkpoint:
+        sampling_checkpoint=Path(c.resume_checkpoint).resolve() if c.resume_checkpoint and not finite_task else root/'checkpoints'/f'update_{offset:04d}'
+        if finite_task or (c.training_reward_selection and not c.resume_checkpoint):
             save_policy(sampling_checkpoint,export_actor(algo.policy),mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
             (sampling_checkpoint/'training.json').write_text(json.dumps({'update':offset,'role':'initial sampling policy'})+'\n')
         def snapshot(path,update,transitions):
             torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,
-                'update':update,'control_transitions':transitions,'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key)},path/'rsl_snapshot.pt')
-        development=[]
+                'update':update,'control_transitions':transitions,'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key),'consecutive_rollbacks':consecutive_rollbacks},path/'rsl_snapshot.pt')
+        development=resume_development_history(c.resume_checkpoint,offset,identity) if c.resume_checkpoint and c.priority_v2_development_interval else []
         def fixed_development(checkpoint,update):
             import subprocess,sys
             from .priority_v2_analysis import select, development_stop_reason
@@ -340,7 +384,11 @@ def train(task_path,output,c):
             write('best_diagnostic.json',chosen['best_diagnostic']);write('best_accepted.json',chosen['best_accepted'])
             return result,development_stop_reason(development)
         if finite_task:snapshot(sampling_checkpoint,offset,transition_offset)
-        if c.priority_v2_development_interval:fixed_development(sampling_checkpoint,offset)
+        if c.priority_v2_development_interval:
+            _,stop_reason=fixed_development(sampling_checkpoint,offset)
+            if stop_reason:
+                status={'phase':'stopped','complete':False,'last_checkpoint':str(sampling_checkpoint),'control_transitions':transition_offset,'stop_reason':stop_reason}
+                write('status.json',status);return status
         write('setup_timings.json',{'initialization_and_baseline_seconds':time.monotonic()-start})
         best=None;best_rank=None;rows=[]
         with TrainingEvents(root/'tensorboard',profile='core') as writer:
@@ -418,9 +466,9 @@ def train(task_path,output,c):
                 record['reward_components_sum_mean_step']=sum(record['reward_components_mean_step'].values())
                 record['reward_components_units']='signed reward per sampled control transition; terminal replacement included'
                 params=export_actor(algo.policy);checkpoint=root/'checkpoints'/f'update_{iteration:04d}'
+                if finite_task:consecutive_rollbacks=consecutive_rollbacks+1 if record['optimizer_audit']['full_update_rolled_back'] else 0
                 save_policy(checkpoint,params,mean,std,identity,hidden_sizes=c.hidden_sizes,activation=c.activation)
-                torch.save({'policy':algo.policy.state_dict(),'optimizer':algo.optimizer.state_dict(),'identity':identity,'rsl_version':RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,
-                    'update':iteration,'control_transitions':record['control_transitions'],'learning_rate':algo.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if device.startswith('cuda') else [],'jax_rng':np.asarray(key)},checkpoint/'rsl_snapshot.pt')
+                snapshot(checkpoint,iteration,record['control_transitions'])
                 sampling_checkpoint=checkpoint
                 metadata={'update':iteration,'trainer':'rsl_rl.algorithms.PPO','rsl_version':RSL_VERSION}
                 if should_validate(c,local):
@@ -431,7 +479,7 @@ def train(task_path,output,c):
                     record['selection']={'rank':rank,'reason':reason,'task_success_verified':False}
                     if rank is not None and (best_rank is None or rank<best_rank):best_rank,best=rank,str(checkpoint)
                 development_stop=None
-                if c.priority_v2_development_interval and (local%c.priority_v2_development_interval==0 or local==c.updates):
+                if c.priority_v2_development_interval and (iteration%c.priority_v2_development_interval==0 or local==c.updates):
                     record['priority_v2_development'],development_stop=fixed_development(checkpoint,iteration)
                 (checkpoint/'training.json').write_text(json.dumps(metadata,indent=2)+'\n')
                 if 'validation' in metadata:record['best_reward_model']=refresh_best_reward_model(root)
@@ -445,7 +493,6 @@ def train(task_path,output,c):
                 if record.get('best_reward_model'):status['best_reward_checkpoint']=record['best_reward_model']['checkpoint']
                 if should_plot(c,local):plot_training(root)
                 if finite_task:
-                    consecutive_rollbacks=consecutive_rollbacks+1 if record['optimizer_audit']['full_update_rolled_back'] else 0
                     if consecutive_rollbacks>=3:status.update(phase='stopped',complete=False,stop_reason='three consecutive full KL rollbacks')
                 if development_stop:status.update(phase='stopped',complete=False,stop_reason=development_stop)
                 write('status.json',status);write('progress.json',{'update':iteration,'phase':status['phase'],'validation_complete':'validation' in record})

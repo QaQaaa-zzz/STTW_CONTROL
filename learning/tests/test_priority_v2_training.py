@@ -1,6 +1,74 @@
 import torch
 from sttw_control.rsl_training import bootstrap_timeout
 
+
+def test_finite_resume_reaches_environment_but_actor_only_import_is_rejected(tmp_path,monkeypatch):
+ import pytest
+ from dataclasses import replace
+ from sttw_control import env,rsl_training
+ from sttw_control.training import TrainingConfig
+ class EnvironmentReached(Exception):pass
+ def boundary(*args,**kwargs):raise EnvironmentReached()
+ monkeypatch.setattr(env,'RecoveryEnv',boundary)
+ c=TrainingConfig(trainer='rsl',resume_checkpoint=str(tmp_path/'source'))
+ with pytest.raises(EnvironmentReached):
+  rsl_training.train('learning/configs/priority_v2_a.json',tmp_path/'resume',c)
+ with pytest.raises(ValueError,match='cold start|Actor-only'):
+  rsl_training.train('learning/configs/priority_v2_a.json',tmp_path/'actor',replace(c,resume_checkpoint=None,actor_init_checkpoint='actor',actor_init_training='source'))
+
+
+def test_full_resume_restores_policy_adam_rng_and_rejects_wrong_identity():
+ import copy,numpy as np,pytest
+ from tensordict import TensorDict
+ from sttw_control import rsl_training as r
+ from sttw_control.training import TrainingConfig
+ obs=TensorDict({'policy':torch.randn(4,12)},batch_size=[4])
+ c=TrainingConfig(trainer='rsl',hidden_sizes=(8,8),activation='elu',rsl_schedule='fixed')
+ def fresh():return r.make_algorithm(obs,2,1,1,'cpu',hidden_sizes=c.hidden_sizes,activation=c.activation,schedule='fixed')
+ a=fresh()
+ with torch.no_grad():
+  for _ in range(2):
+   z=a.act(obs);a.process_env_step(obs,-(z[:,0]-.3)**2,torch.zeros(4,dtype=torch.bool),{})
+  a.compute_returns(obs)
+ a.update()
+ saved=copy.deepcopy({'policy':a.policy.state_dict(),'optimizer':a.optimizer.state_dict(),'identity':{'task':'same'},'rsl_version':r.RSL_VERSION,'activation':c.activation,'hidden_sizes':c.hidden_sizes,'learning_rate':a.learning_rate,'torch_rng':torch.get_rng_state(),'cuda_rng':[],'jax_rng':np.array([123,456],np.uint32),'update':100,'control_transitions':13107200})
+ noise=torch.rand(5);b=fresh()
+ key,offset,transitions=r.restore_training_snapshot(b,saved,{'task':'same'},c,'cpu')
+ assert (offset,transitions)==(100,13107200)
+ np.testing.assert_array_equal(key,[123,456]);torch.testing.assert_close(torch.rand(5),noise,rtol=0,atol=0)
+ for k,v in saved['policy'].items():torch.testing.assert_close(b.policy.state_dict()[k],v,rtol=0,atol=0)
+ for i,s in saved['optimizer']['state'].items():
+  for k,v in s.items():torch.testing.assert_close(b.optimizer.state_dict()['state'][i][k],v,rtol=0,atol=0)
+ with pytest.raises(ValueError,match='identity mismatch'):r.restore_training_snapshot(b,saved,{'task':'changed'},c,'cpu')
+
+
+def test_resume_keeps_earlier_development_for_three_point_gate(tmp_path):
+ import json,pytest
+ from sttw_control import rsl_training as r
+ from sttw_control.priority_v2_analysis import development_stop_reason
+ source=tmp_path/'source';cp=source/'checkpoints/update_0100';cp.mkdir(parents=True)
+ identity={'task':'unchanged'}
+ (source/'declaration.json').write_text(json.dumps({'policy_identity':identity}))
+ a=dict(update=0,Jp=1.,Jv=5.,physical_failures=0)
+ b=dict(a,update=100,Jp=1.1);later=dict(a,update=200,Jp=1.3)
+ (source/'development_history.json').write_text(json.dumps([a,b,later]))
+ history=r.resume_development_history(cp,100,identity)
+ assert history==[a]  # Offset is re-evaluated; later checkpoints cannot leak in.
+ assert development_stop_reason(history+[b,later]) is not None
+ with pytest.raises(ValueError,match='identity mismatch'):r.resume_development_history(cp,100,{'task':'different'})
+
+
+def test_legacy_resume_does_not_silently_clear_unknown_rollback_streak(tmp_path):
+ import pytest
+ from sttw_control.rsl_training import resume_rollback_count
+ cp=tmp_path/'checkpoints/update_0100';cp.mkdir(parents=True)
+ previous=cp.parent/'update_0099';previous.mkdir()
+ torch.save({'policy':{'weight':torch.tensor([1.])}},previous/'rsl_snapshot.pt')
+ assert resume_rollback_count({'consecutive_rollbacks':2},cp)==2
+ assert resume_rollback_count({'update':100,'policy':{'weight':torch.tensor([2.])}},cp)==0
+ with pytest.raises(ValueError,match='rollback history'):
+  resume_rollback_count({'update':100,'policy':{'weight':torch.tensor([1.])}},cp)
+
 def test_finite_task_end_does_not_bootstrap():
  r=torch.tensor([-20.,-200.,-1.]);v=torch.tensor([9.,9.,9.]);tr=torch.tensor([True,False,True]);term=torch.tensor([False,True,False]);task=torch.tensor([True,False,False])
  out=bootstrap_timeout(r,v,tr,term,.9,task_terminal=task)

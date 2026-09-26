@@ -1,5 +1,16 @@
 # 当前实施：V1偏好弱响应诊断与独立专家隔离（2026-09-20）
 
+## 2026-09-26：本轮第100更新完整恢复
+
+用户要求检查训练并在退出时恢复。原PID已消失，checkpoint 0100包含完整Actor/Critic/Adam/std/RNG，正式转移13,107,200；metrics只到99，开发评估完成22条轨迹后中断。没有确定退出原因，保留原记录。
+
+修正有限任务入口：允许身份匹配的完整恢复，继续禁止Actor-only导入。恢复初始模型写入新目录，不覆盖来源；继承较早开发结果，按全局更新编号评估；保留KL连续回退计数及开发停止条件。旧快照缺少回退计数时须有已接受更新的证据，不能静默清零。
+
+验证命令：`PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python -m pytest learning/tests/test_priority_v2_training.py learning/tests/test_rsl_training.py learning/tests/test_priority_v2_environment.py learning/tests/test_priority_v2_campaign.py learning/tests/test_priority_return_v2.py -q`：**50 passed**，无跳过。新增测试先失败再修复，覆盖完整恢复、身份拒绝、Actor-only禁用、三点趋势历史及未知回退历史拒绝。
+
+本次恢复只剩100更新，新增预算13,107,200，总预算26,214,400不变。车辆重新准备，不能称为完整物理状态连续恢复。实测恢复状态与服务记录见`runs/priority_v2_cold200_repaired_20260926/recovery/attempt_0001/`。
+
+
 详细数据已核实：实际roll峰值0.473～0.475，超0.30约0.325秒；超速0.203～0.215；同状态动作RMS差约前轮1%、后轮0.6%，最终命令近乎完整传递，不支持主要被命令限幅抹掉。
 保留V1、完整ECBC+ESO、原物理/参考/观测/残差权限。新增Actor-only初始化和三模式独立Actor/Critic/Adam进程，全部从同一update0244初始化，每个固定alpha0/.5/1；不是共享三头，也不强制动作分离。80轮/模式，总新增31,457,280转移，准备和phase-spread另计；正式训练由用户执行，不在此声称已有改善。
 现有five_scene_review.py加入75候选局部真实物理搜索、独立专家bundle评估和精简归档。全程roll/超速工作门槛与末段保持分别报告，未找到可行候选不等于全局不可达。
