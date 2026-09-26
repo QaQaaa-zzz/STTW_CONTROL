@@ -6,11 +6,14 @@ from .priority_return_v2 import initial_state,advance,reward_terms
 
 def replay(trace,config,alpha=None,*,return_raw=False):
     dt=config['controller']['dt'];end=config['horizon_seconds'];s=initial_state(xp=np);rows=[];previous=np.zeros(2)
-    arc=0.;vprev=float(trace['reference_command'][0,0]);totals={};allparts=[];allraw=[]
+    # Match the online float32 sequential arc accumulator at discrete crossings.
+    # Higher precision can move an exact crossing by a control tick.
+    arcs=np.cumsum(np.asarray(trace['reference_command'][:-1,0],dtype=np.float32)*np.float32(dt),dtype=np.float32)
+    allparts=[];allraw=[]
     for i in range(1,len(trace['time'])):
-        v,w=trace['reference_command'][i-1];vnext,wnext=trace['reference_command'][i];arc+=float(v)*dt
+        v,w=trace['reference_command'][i-1];vnext,wnext=trace['reference_command'][i];arc=float(arcs[i-1])
         ev=float(trace['true_forward_speed'][i]-v);ey,ep=map(float,trace['path_features'][i,:2]);roll,rate=map(float,trace['measurement'][i,:2]);failed=bool(trace.get('physical_failed',trace['terminated'])[i]);old=s
-        s,events=advance(s,t=i*dt,dt=dt,episode_end=end,reference_speed=float(vnext),reference_yaw=float(wnext),published_yaw_request=float(trace["raw_reference_request"][i,1]) if "raw_reference_request" in trace else float(wnext),previous_reference_speed=float(v),reference_progress=arc,actual_progress=float(trace['path_progress'][i]),speed_error=ev,lateral_error=ey,heading_error=ep,roll=roll,roll_rate=rate,failed=failed,xp=np)
+        s,events=advance(s,t=float(trace['time'][i]),dt=dt,episode_end=end,reference_speed=float(vnext),reference_yaw=float(wnext),published_yaw_request=float(trace["raw_reference_request"][i,1]) if "raw_reference_request" in trace else float(wnext),previous_reference_speed=float(v),reference_progress=arc,actual_progress=float(trace['path_progress'][i]),speed_error=ev,lateral_error=ey,heading_error=ep,roll=roll,roll_rate=rate,failed=failed,xp=np)
         a=float(trace['priority_alpha'][i-1]) if alpha is None else alpha
         r=reward_terms(alpha=a,speed_error=ev,lateral_error=ey,heading_error=ep,roll=roll,roll_rate=rate,action=trace.get('effective_action',trace['action'])[i],previous_action=previous,relaxation=float(s.q),dt=dt,failed=failed,task_penalty_already_paid=bool(old.penalty_paid),**{k:bool(events[k]) for k in ('missed_deadline_now','terminal_incomplete_now')},xp=np)
         previous=trace.get('effective_action',trace['action'])[i];allparts.append(r['reward_parts']);allraw.append(r['raw_costs']);rows.append({k:float(np.asarray(v)) for k,v in vars(s).items()})
