@@ -117,7 +117,7 @@ class TaskConfig:
             raise ValueError("tracking config and observation flag must agree")
         if self.tracking is not None:
             if (self.motion_commands is not None or not self.observation.include_path
-                    or self.priority is None or not self.observation.include_priority
+                    or self.priority is None or (not self.observation.include_priority and self.priority.randomize_alpha)
                     or self.action_mapping is not None or self.priority.risk_gate
                     or self.observation.include_attitude_risk
                     or self.actuator.composition != "additive"):
@@ -138,7 +138,11 @@ class TaskConfig:
             if self.motion_commands.speed_max>.1*self.actuator.rear_rate_limit:raise ValueError("command speed exceeds actuator command bound")
         if self.learning_roll_reference is not None and (not math.isfinite(self.learning_roll_reference) or abs(self.learning_roll_reference)>=self.roll_failure):
             raise ValueError("learning roll reference must be finite and inside roll failure bound")
-        if (self.priority is not None)!=self.observation.include_priority:
+        if self.controller.fixed_roll_reference is not None:
+            if self.tracking is None or self.tracking.fixed_roll_reference!=self.controller.fixed_roll_reference:raise ValueError("controller and tracking roll target must match")
+        if self.tracking is not None and self.tracking.fixed_roll_reference!=self.controller.fixed_roll_reference:raise ValueError("controller and tracking roll target must match")
+        hidden_fixed=self.priority is not None and not self.priority.randomize_alpha and not self.observation.include_priority
+        if (self.priority is not None)!=self.observation.include_priority and not hidden_fixed:
             raise ValueError('priority config and observation flag must agree')
         if self.priority is not None and (self.action_mapping is not None or not (self.observation.include_path or self.observation.include_motion)):
             raise ValueError('priority conditioning requires direct residual and path observations')
@@ -408,7 +412,7 @@ class RecoveryEnv:
             frame=jp.concatenate([frame,self.path_features(pose,path_id,path_progress) if path_features_override is None else path_features_override])
         if c.observation.include_motion:
             frame=jp.concatenate([frame,jp.zeros(2) if extra_frame is None else extra_frame])
-        if c.priority is not None:
+        if c.observation.include_priority:
             risk=priority_weights(alpha,roll-learning_reference,roll,rate,c.priority)[0]
             frame=jp.concatenate([frame,jp.array([alpha,risk]) if c.observation.include_attitude_risk else jp.array([alpha])])
         if c.tracking is not None:
@@ -544,6 +548,9 @@ class RecoveryEnv:
     def set_priority(self,state,alpha):
         """Explicit intervention on current alpha; retain truthful past frames."""
         if self.config.priority is None:raise ValueError('policy is not priority conditioned')
+        if not self.config.observation.include_priority:
+            if not math.isfinite(float(alpha)) or float(alpha)!=self.config.priority.fixed_alpha:raise ValueError('cannot change hidden fixed alpha')
+            return state.replace(priority_locked=jp.bool_(True))
         alpha=jp.clip(jp.asarray(alpha),0.,1.)
         history=state.history.replace(frames=state.history.frames.at[-1,observation_fields(self.config.observation).index("speed_priority")].set(alpha))
         obs=jp.concatenate([history.frames.flatten(),history.mask])

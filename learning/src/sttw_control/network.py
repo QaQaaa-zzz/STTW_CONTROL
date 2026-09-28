@@ -20,6 +20,7 @@ def make_policy_identity(model_identity,config,history_steps):
     config=dict(config)
     if config.get('timed_reference') is not None:
         config['timed_reference']=dict(config['timed_reference'])
+        if config['timed_reference'].get('yaw_rate_min') is None:config['timed_reference'].pop('yaw_rate_min',None)
         if config['timed_reference'].get('mode','time')=='time':
             for k in ('mode','geometry_stride','projection_margin','extension_seconds'):
                 config['timed_reference'].pop(k,None)
@@ -44,6 +45,7 @@ def make_policy_identity(model_identity,config,history_steps):
     if config.get("timed_reference") is None:config.pop("timed_reference",None)
     else:
         config['timed_reference']=dict(config['timed_reference'])
+        if config['timed_reference'].get('yaw_rate_min') is None:config['timed_reference'].pop('yaw_rate_min',None)
         if config['timed_reference'].get('recovery_probability',0.)==0.:
             for key in ('recovery_probability','recovery_start','conflict_start_window'):
                 config['timed_reference'].pop(key,None)
@@ -83,6 +85,10 @@ def make_policy_identity(model_identity,config,history_steps):
                 config['motion_commands'].pop(key,None)
         if config['motion_commands'].get('tracking_priority_ratio')==100.:
             config['motion_commands'].pop('tracking_priority_ratio')
+    if config.get('controller',{}).get('fixed_roll_reference') is None:
+        config['controller']=dict(config.get('controller',{}));config['controller'].pop('fixed_roll_reference',None)
+    if config.get('tracking') is not None and config['tracking'].get('fixed_roll_reference') is None:
+        for k in ('fixed_roll_reference','roll_target_weight','roll_target_scale','roll_target_tolerance'):config['tracking'].pop(k,None)
     if config.get("learning_roll_reference") is None:config.pop("learning_roll_reference",None)
     if config.get("alive_reward_rate")==1.:config.pop("alive_reward_rate")
     if config.get("preparation_seconds",0.)==0.:
@@ -121,7 +127,7 @@ def make_policy_identity(model_identity,config,history_steps):
     if (config.get('figure_eight') is not None or config.get('bend') is not None) and config.get('observation',{}).get('include_path',False):
         identity['observation_fields']=list(FIELDS)+['path_right_error','heading_error','path_curvature']
     if config.get('observation',{}).get('include_motion',False):identity['observation_fields']=list(FIELDS)+['yaw_rate_reference','yaw_rate_world']
-    if config.get('priority') is not None:
+    if config.get('observation',{}).get('include_priority',False):
         identity['observation_fields']=identity.get('observation_fields',list(FIELDS))+['speed_priority']+(['attitude_risk'] if config.get('observation',{}).get('include_attitude_risk',True) else [])
     if config.get('observation',{}).get('include_tracking',False):
         identity['observation_fields'][15]='path_lateral_error'

@@ -132,6 +132,9 @@ def trace_summary(trace, config):
                            'heading_rad':c.final_heading_tolerance,'roll_rad':c.roll_working_limit,
                            'roll_rate_rad_s':c.final_roll_rate_tolerance,'hold_s':c.hold_seconds,
                            'return_budget_s':c.return_seconds,'return_clock':'from observable tracking-band departure, including forcing','initial_settling_s':c.start_seconds})
+    if c.fixed_roll_reference is not None:
+        result['recovery_criteria'].update(fixed_roll_reference_rad=c.fixed_roll_reference,
+                                          roll_target_tolerance_rad=c.roll_target_tolerance)
     if c.objective in ('asymmetric_geometric_huber','soft_budget_v1'):
         result['recovery_criteria'].update(speed_error_lower_m_s=-c.final_speed_tolerance,
                                            speed_error_upper_m_s=c.final_overspeed_tolerance)

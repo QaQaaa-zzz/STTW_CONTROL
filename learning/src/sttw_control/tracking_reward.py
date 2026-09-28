@@ -12,6 +12,10 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class TrackingConfig:
+    fixed_roll_reference: float | None = None
+    roll_target_weight: float = 8.
+    roll_target_scale: float = .1
+    roll_target_tolerance: float = .06
     soft_grace_seconds: float = 1.
     soft_heading_relaxed: float = .35
     soft_reward_scale: float = .1
@@ -88,6 +92,9 @@ class TrackingConfig:
                        'deadline_penalty', 'over_deadline_rate', 'overdue_rate'}
         for field in fields(self):
             value = getattr(self, field.name)
+            if field.name == 'fixed_roll_reference':
+                if value is not None and (not math.isfinite(value) or abs(value)>=self.roll_working_limit):raise ValueError('fixed roll target must be inside working bound')
+                continue
             if field.name == 'reward_mode':
                 if value not in ('gaussian', 'huber'):
                     raise ValueError('reward_mode must be gaussian or huber')
@@ -244,6 +251,8 @@ def within_final(roll, roll_rate, speed_error, lateral_error, heading_error, con
             & speed_ok
             & (xp.abs(lateral_error) <= config.final_lateral_tolerance)
             & (xp.abs(heading_error) <= config.final_heading_tolerance))
+    if config.fixed_roll_reference is not None:
+        final=final & (xp.abs(roll-config.fixed_roll_reference)<=config.roll_target_tolerance)
     if config.timed and not config.geometric:
         if longitudinal_error is None or yaw_rate_error is None:
             raise ValueError('timed tracking requires longitudinal_error and yaw_rate_error')
@@ -378,6 +387,8 @@ def transition(state, *, roll, roll_rate, speed_error, lateral_error, heading_er
             longitudinal_budget=-.5 * c.budget_rate * huber_tail(
                 xp.maximum(xp.abs(ex) - bx, 0.) / c.longitudinal_scale, xp=xp),
         )
+    if c.fixed_roll_reference is not None:
+        rates['roll_target']=-c.roll_target_weight*huber_tail((phi-c.fixed_roll_reference)/c.roll_target_scale,xp=xp)
     overdue = armed & clock_on & (elapsed_ticks > math.floor(c.return_seconds / dt + 1e-9))
     if c.over_deadline_rate:
         rates['over_deadline'] = -c.over_deadline_rate * pending * overdue
@@ -422,4 +433,5 @@ def soft_budget_costs(ev,ey,ep,roll,roll_rate,action,previous_action,alpha,elaps
         action=c.action_weight*xp.sum(action**2,axis=-1),
         action_delta=c.action_delta_weight*xp.sum((action-previous_action)**2,axis=-1),
         return_overdue=c.overdue_rate*pending*(elapsed>c.return_seconds+1e-9))
+    if c.fixed_roll_reference is not None:raw['roll_target']=c.roll_target_weight*h((roll-c.fixed_roll_reference)/c.roll_target_scale)
     return raw,dict(under_band=under_band,over_band=xp.asarray(c.overspeed_band),path_band=path_band,heading_band=heading_band,shrink_fraction=fraction)

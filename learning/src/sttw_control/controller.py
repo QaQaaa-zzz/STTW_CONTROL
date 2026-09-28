@@ -10,6 +10,7 @@ import jax.numpy as jp
 
 @dataclass(frozen=True)
 class ControllerConfig:
+    fixed_roll_reference: float | None = None
     dt: float = .005
     wo: float = 40.
     wc: float = 5.
@@ -26,6 +27,7 @@ class ControllerConfig:
 
     def __post_init__(self):
         import math
+        if self.fixed_roll_reference is not None and not math.isfinite(self.fixed_roll_reference):raise ValueError("fixed roll reference must be finite")
         values=(self.dt,self.wo,self.wc,self.disturbance_filter,self.minimum_speed,self.max_steer_rate,
                 self.mass,self.cg_forward,self.cg_height,self.wheelbase,self.trail,self.gravity)
         if any(not math.isfinite(x) or x<=0 for x in values) or not math.isfinite(self.caster):
@@ -76,7 +78,9 @@ def controller_step(state, measurement, enable_eso, config=ControllerConfig()):
     speed,steer,steer_rate,roll,roll_rate,reference=measurement
     a1,a2,a4,ratio,gains=_system(speed,state.gains,c)
     shift=jp.where(enable_eso,-state.disturbance/a4,0.)
-    reference_roll=reference/ratio
+    if c.fixed_roll_reference is not None:
+        reference=ratio*c.fixed_roll_reference
+    reference_roll=reference/ratio if c.fixed_roll_reference is None else jp.asarray(c.fixed_roll_reference)
     u=jp.clip(gains@jp.array([reference-steer,reference_roll-roll+shift,-roll_rate]),-c.max_steer_rate,c.max_steer_rate)
     e0,e1=steer-state.eso[0],roll-state.eso[1]
     derivative=jp.array([steer_rate+30*e0,

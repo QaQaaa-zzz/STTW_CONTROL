@@ -16,6 +16,7 @@ import numpy as np
 class TimedReferenceConfig:
     speed_min: float = 1.7
     speed_max: float = 2.5
+    yaw_rate_min: float | None = None
     yaw_rate_max: float = .6
     speed_slew: float = .5
     yaw_slew: float = .6
@@ -39,6 +40,8 @@ class TimedReferenceConfig:
     extension_seconds: float = 5.
 
     def __post_init__(self):
+        if self.yaw_rate_min is not None and (not math.isfinite(self.yaw_rate_min) or not -self.yaw_rate_max<=self.yaw_rate_min<=self.yaw_rate_max):raise ValueError('yaw minimum must lie within symmetric maximum')
+        if self.yaw_rate_min is not None and (self.training_mix or self.recovery_probability):raise ValueError('bounded yaw applies to ordinary random schedules only')
         if type(self.training_mix) is not bool:
             raise ValueError('training_mix must be boolean')
         if self.fixed_scenario not in (None, 'nominal', 'ordinary_accel', 'core_left', 'core_right', 'disturbance_left', 'disturbance_right'):
@@ -142,7 +145,10 @@ def schedule(key, config, initial_speed):
     windows = jp.asarray(config.switch_windows, dtype=float).reshape(n, 2)
     times = windows[:, 0] + draws[:, 0] * (windows[:, 1] - windows[:, 0])
     speeds = config.speed_min + draws[:, 1] * (config.speed_max - config.speed_min)
-    yaws = (2 * draws[:, 2] - 1) * config.yaw_rate_max
+    if config.yaw_rate_min is None:
+        yaws = (2*draws[:,2]-1)*config.yaw_rate_max
+    else:
+        yaws = config.yaw_rate_min + draws[:,2]*(config.yaw_rate_max-config.yaw_rate_min)
     initial = jp.asarray([0., initial_speed, 0.])[None, :]
     ordinary = jp.concatenate((initial, jp.stack((times, speeds, yaws), axis=1)), axis=0)
     if config.recovery_probability == 0:
