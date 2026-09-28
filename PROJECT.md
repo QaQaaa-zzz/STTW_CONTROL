@@ -933,3 +933,12 @@ validating all method fields against V3; (2) tests for500 acceptance, immutable 
 rejection and sample-count consistency; (3) launch new bounded campaign and isolated
 TensorBoard, verify a current pilot reward scalar and checkpoint; (4) record source,
 run identity, live progress and stop conditions. Existing isolated branch reused.
+
+
+Launch verified: run `runs/direct_command_v3_fresh500_20260928`, source`cc03aa6`.
+At verification2/500 formal updates,131072 transitions, fresh initialization;
+checkpoint update0002 exists and TensorBoard http://localhost:6018 loaded both
+formal pilot reward scalars. Run remains active; status.json is authoritative.
+Required interface checks and8x16x2 smoke passed. Existing20-update run and logs
+remain unchanged. No remote push, no other process stopped. Source regression
+checks for config isolation, sample budgets, PPO and evidence modules passed.

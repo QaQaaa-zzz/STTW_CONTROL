@@ -1954,3 +1954,20 @@ Evidence and limitations: `runs/direct_command_v3_20260928/INDEX.md` (PNG/PDF/CS
 checkpoint, config/model identities, budget/status and separate TensorBoard6016).
 This is a bounded negative/partial pilot, not convergence, generalization or safety
 proof;20 updates without the desired result do not establish method invalidity.
+
+
+## 2026-09-28 Explicit user-authorized fresh500 launch
+
+User requested500 updates after the20-update pilot. Config-only budget expansion
+uses `direct_command_500.json`:512x128x500,15000s training,16200s total. Method,
+physics, reward, initialization and limited review remain frozen. Old JSON retains
+20-update default; CLI rejects500 with old config and501 with new config, as well
+as learning-rate changes and inconsistent sample budgets. Targeted config/PPO/core
+checks18passed, config/scenario/report/audit checks24passed (overlapping subsets).
+The two new config tests first failed before support was implemented.
+
+New separate run `runs/direct_command_v3_fresh500_20260928` launched from`cc03aa6`.
+8x16x2 smoke passed; formal fresh network reached2/500 and savedupdate0002 when
+verified. HTTP6018 has loaded two pilot reward scalars. This is launch verification,
+not500-update completion or new physical improvement evidence. Read status.json
+and TensorBoard for current progress. Old20-update evidence was not overwritten.
