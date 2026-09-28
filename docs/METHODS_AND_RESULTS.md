@@ -732,3 +732,41 @@ Prior failed precision remains negative evidence. Four240-step execution/scan co
 and independently rebuilt costs/constraint flags pass; full tests467/5 skipped. No claim
 of controller performance or real-time readiness: warm144 prediction69.25s. Original
 80M budget continues into gate-ordered offline panels, completion/error popup enabled.
+
+
+## 2026-09-28 Direct reference correction V3 — partial review, no preference success
+
+User-fixed method: shared alpha0/1 short-history MLP, Actor345/Critic346, two raw
+Gaussian PPO latents mapped to speed/steer offsets relative to each current raw
+command. Original teleop physics, ECBC measured speed, one ESO commit per200Hz tick,
+50Hz Actor, residual±1.5/±10 and final±3/±60 retained. No analytic preference/heading
+allocator, q projection, parameter network, candidate search or old policy loading.
+Parent92afde6; training snapshot8211d89; isolated experiment/direct-command-policy-v3.
+
+8x16x2 smoke and separately fresh512x128x20 completed:1,310,720 policy transitions.
+Last update0020 used. Main three-method review externally stopped at60s wall limit
+(actual60.26s); each saved5s prefix, random case unrun. Same-window[2.5,4.5)s speed
+RMSE B0/alpha0/alpha1=.178115/.117384/.114678m/s; steer=.037576/.049995/.050479rad;
+heading=.823306/.883051/.894164rad. Peakroll=.384821/.351292/.351265rad: all violate
+working0.30rad even with declared0.002 evaluation tolerance. Both policies improve
+speed/roll partly but worsen steering/heading; alpha differences fall far below
+predeclared separation. Raw steer not settled at cutoff, so recovery unverified.
+No physical failure in these partial prefixes, not a complete-review failure rate.
+Training0/1536 ended episodes failed; work violations persist (~4.24%/4.34% ticks).
+
+Independent NumPy reconstruction of three saved prefixes passes, maxcost error4.98e-5,
+reward~1.6e-8; coverage remains3partial/3missing. Same-state alpha response is nonzero,
+Torch/Flax mean parity5.96e-8, but neither proves useful closed-loop preference.
+Related suite48passed. Reporting fixture alias failures and a real float32 clip-flag
+bug were diagnosed without weakening control constraints. Actual saved review
+requests show0% residual permission clips; original flags32.9%/26.0% preserved as
+roundoff artifacts. Full training saturation cannot be reconstructed, so logged
+motor/final flag fractions are not accepted physical metrics. No retraining followed.
+
+Compilation185.39s, engineering78.78s, PPO526.67s, review60.26s; tests/reporting and
+process overhead charged as well, total about15min of30min. Owned worker stopped;
+no automatic continuation, panel enlargement, other-job termination or push.
+Evidence and limitations: `runs/direct_command_v3_20260928/INDEX.md` (PNG/PDF/CSV/NPZ,
+checkpoint, config/model identities, budget/status and separate TensorBoard6016).
+This is a bounded negative/partial pilot, not convergence, generalization or safety
+proof;20 updates without the desired result do not establish method invalidity.

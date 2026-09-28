@@ -1,16 +1,35 @@
-# STTW直接指令网络 V3 执行包
+# Direct command policy V3
 
-交付内容：
-- STTW_Codex_Direct_Command_V3.md：完整实施规格（首读）。
-- STTW_Direct_Command_V3.json：参数、输入字段、工况与预算。
-- STTW_Direct_Command_V3_reference.py：纯数学/映射/奖励/预算校验，不是环境或完整控制器。
-- numerical_check_results.json：本次实际执行的纯数学校验结果。
+The sole V3 method is one shared alpha-conditioned Actor (345 inputs, 69186 mean parameters, two Gaussian latents). It changes speed/steer references relative to the currently issued raw command. The original ECBC, ESO and bounded actuator residual interface remain. There is no parameter governor, q-based action projection, analytic heading controller or candidate rollout search in the V3 execution path.
 
-默认只实施一个输入alpha、输出速度/转向参考修正的共享网络；不实现参数网络、解析alpha分配器、候选搜索、世界模型或扩散。20更新pilot后停止，不自动扩大训练。
+Numerical authority: [STTW_Direct_Command_V3.json](../../learning/configs/STTW_Direct_Command_V3.json). Protocol: [attached specification](STTW_Codex_Direct_Command_V3.md). Implementation parent: local teleop `92afde6`; implementation snapshot: `8211d89`. Changes to shared teleop helpers preserve old defaults and add only an explicit prefiltered reference passthrough and zero-residual actuator-preview diagnostics.
 
-校验命令：
+Run in this worktree using the already installed environment:
+
 ```bash
-python STTW_Direct_Command_V3_reference.py
+PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=1 \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/train_direct_command.py \
+  --config learning/configs/STTW_Direct_Command_V3.json \
+  --output runs/NEW_UNIQUE_RUN --updates 20 --compute-wall-budget 1800
 ```
 
-已完成的是文档/配置与纯函数数值检查。尚未导入用户仓库、运行车辆仿真、训练或验证效果。参数均为首轮设计值，没有保证必然收敛、不摔或泛化。
+`--dry-run` checks the exact frozen configuration and creates status/budget without physics. Unknown or altered schema values and updates outside 1..20 are rejected. Existing run identities are immutable; this command cannot resume or overwrite a completed or interrupted run. No remote push occurs.
+
+The command launches one owned worker with an external supervisor. Persistent stage ceilings are compile 300 s, prepared states plus interface checks plus engineering smoke 120 s, pilot 1200 s, review 180 s; total new compute 1800 s. Tests and interrupted attempts are charged to the same ledger. The two interface checks are capped at 4 simulation seconds, engineering smoke is 8x16x2, and pilot starts a fresh 512x128 shared policy. Normal finite task ends have no bootstrap; live rollout cuts preserve complete closed-loop state. The pipeline saves each completed checkpoint to preserve the endpoint at any budget stop, with 5/10/15/20 included.
+
+Review uses the prescribed prepared state (2.3 m/s initial setpoint, zero initial roll), last completed pilot checkpoint, and fixed main/random88001 command streams. Three methods run as independent batched physical trajectories. Each 1 s simulated chunk saves all 5 ms samples, so an interrupted review leaves a real prefix. The per-episode 60 s and total-review 180 s ceilings are unchanged by batching. Failure stops that environment at its true endpoint.
+
+Authoritative artifacts in the run:
+
+- `manifest.json`, `frozen_config.json`, `observation_action_schema.json`: source/config/model/interface identities.
+- `status.json`, `budget.json`, `launch.json`, `execution.log`: current stage, durable accounting and stop reason.
+- `prepared_bank.pkl`, `prepared_metrics.json`, `interface_traces.npz`, `interface_checks.json`: full state and short interface evidence.
+- `smoke/`, `pilot/`: separate fresh policies, metrics, finite checkpoints with optimizer and RNG, deterministic environment case manifests, two logged diagnostic environments per update.
+- `tensorboard/`: separate phase scalars; TensorBoard HTTP service is recorded and verified by the execution operator.
+- `review/`: frozen schedules, B0/alpha0/alpha1 physical traces, actual-observation alpha sensitivity, same-window metrics and PNG/PDF plots, plus explicit missing/partial evidence.
+
+The review overview plots realized final-command change, computed from `actual_normalized_residual × [1.5, 10]` rad/s. `applied_residual` is the bounded additive request before the final actuator clip and is reported separately in `metrics.json` and each step CSV. For each of the two declared cases, `*_rewards.png/pdf` compares the three available methods' actual 5 ms scored reward and cumulative reward. Per-method `*_components.png/pdf` shows raw and effective cost rates and their cumulative component integrals. Curves stop at their observed physical failure or partial endpoint; failure reward replacement appears in scored reward, not in normal interval component costs.
+
+Reward plots pair α0 policy with B0 scored under α0 and α1 policy with the same B0 physical trajectory rescored under α1. The derived `B0_rescored_alpha1.npz` and CSV preserve the physical trace, reweight speed/steer components from the frozen JSON, recalculate the cap and retain the whole 20 ms failure replacement. Rescoring first audits B0's stored α0 components and scored reward. If that audit fails or required fields are absent, the report labels the α1 baseline unavailable and does not draw a false comparison.
+
+Training reward, gradient changes, latent differences and survival are not substitutes for the prescribed actual-speed/steer, work-range and unwrapped-heading results. One seed and six planned review episodes are a pilot, not convergence, generalization or safety proof. No real vehicle execution is authorized by this run.

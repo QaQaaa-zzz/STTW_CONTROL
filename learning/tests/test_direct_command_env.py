@@ -12,3 +12,29 @@ def test_budget_persists(tmp_path):
     try:ComputeBudget(tmp_path,spec).reserve(1,'must reject')
     except BudgetStop:pass
     else:raise AssertionError('budget reset')
+
+def test_nonfinite_optimizer_stops_before_review(monkeypatch,tmp_path):
+    import pytest
+    from contextlib import nullcontext
+    from sttw_control import direct_command_training as training
+    from sttw_control import direct_command_reporting as reporting
+    called=[]
+    class Budget:
+        total_limit=1800
+        def measure(self,*args):return nullcontext()
+    class Campaign:
+        def __init__(self,*args):
+            self.status={};self.budget=Budget();self.out=tmp_path;self.spec={}
+        def initialize(self):pass
+        def preflight(self):pass
+        def train(self,phase,updates):
+            if phase=='pilot':self.status['training_stop_reason']='nonfinite_optimizer_epoch_rolled_back'
+            return object(),1
+        def review(self,*args):called.append('review')
+        def _status(self,**kwargs):self.status.update(kwargs)
+    monkeypatch.setattr(training,'Campaign',Campaign)
+    monkeypatch.setattr(training,'notify',lambda *args:None)
+    monkeypatch.setattr(reporting,'generate_report',lambda *args:called.append('saved_report'))
+    with pytest.raises(RuntimeError,match='no review'):
+        training.run('unused',tmp_path)
+    assert called==['saved_report']

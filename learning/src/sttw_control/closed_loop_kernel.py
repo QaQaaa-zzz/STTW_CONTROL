@@ -21,5 +21,6 @@ def controls(controller,actuator,measurement,raw,governed,enable_eso,bypass,cc,a
         requested_residual=requested,applied_residual=applied,
         normalized_residual=action,actual_normalized_residual=(final-zero_final)/scales,
         zero_residual_final_command=zero_final,u_prelimit=u_nom+applied,final_command=final,
-        residual_clipped=jp.any(requested!=applied),
+        # Divide/multiply roundoff is not a permission-limit event.
+        residual_clipped=jp.any(jp.abs(requested)>scales),
         final_command_clipped=jp.any(final!=u_nom+applied))

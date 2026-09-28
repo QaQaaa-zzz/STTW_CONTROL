@@ -364,6 +364,8 @@ def run(config,output,updates=20,compute_wall_budget=1800,dry_run=False):
     try:
         c.initialize();c.preflight();c.train('smoke',2)
         algo,completed=c.train('pilot',updates)
+        if c.status.get('training_stop_reason')=='nonfinite_optimizer_epoch_rolled_back':
+            raise RuntimeError('nonfinite optimizer epoch rolled back; saved finite checkpoint, no review')
         if completed>0:c.review(algo,completed)
         else:c._status(state='budget_stopped',reason='no completed pilot checkpoint')
     except Exception as exc:

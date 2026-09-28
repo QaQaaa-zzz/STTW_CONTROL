@@ -885,3 +885,34 @@ failures remain failed. Warm144 prediction ~69.25s: not real-time20Hz. Proceed o
 within original80M ledger; gate order unchanged; detector will popup at completion or
 failure stop. At launch preparation700 ticks, predictor301440 ticks, contracts21,
 main episodes0. Numerical evidence: numerical_diagnosis/REPORT.md under original run.
+
+
+## 2026-09-28 Direct command V3 — saved and stopped
+
+Independent branch `experiment/direct-command-policy-v3`, teleop parent `92afde6`,
+training execution snapshot `8211d89`. One shared alpha0/1 Actor345 / Critic346 /
+two Gaussian latents changes raw-relative speed and steering references, retaining
+original physics, ECBC/ESO, 200Hz/50Hz timing and actuator authority. No analytic
+allocation, parameter coordinator, search or old checkpoint enters the V3 path.
+
+Fresh 8x16x2 engineering and separate fresh512x128x20 PPO completed. Last checkpoint
+update0020. Main review reached the60s per-episode wall cutoff; three1000-tick/5s
+prefixes saved, random88001 unrun. No restart or continuation. Main[2.5,4.5)s speed
+RMSE B0/alpha0/alpha1=.178115/.117384/.114678 m/s, steer=.037576/.049995/.050479 rad;
+peakroll=.384821/.351292/.351265 rad. Both policies sacrifice steering/heading to
+retain speed; alpha separation is too small and work range fails. Direction recovery
+is unverified because the raw steer has not yet settled by the saved endpoint.
+
+Evidence `runs/direct_command_v3_20260928/INDEX.md`; live historical metrics at
+http://localhost:6016 (20 reward scalars loaded, physics worker stopped). Compile185.39s,
+preparation/interfaces/smoke78.78s, pilot526.67s, review60.26s including~.26s exit latency;
+all checks/plots/overhead retained in the same1800s ledger, total about15min. No push.
+Implementation/schema/run instructions: `docs/direct_command/README.md`.
+
+Post-run corrections: raw!=bounded float32 diagnostics falsely reported residual
+clips; source flag fixed and saved review clips reconstructed without editing NPZ.
+Full training motor/final clip aggregate cannot be corrected from two diagnostic
+environments, so it is not saturation evidence. Added optimizer-nonfinite stop gate
+before review (not triggered in this finite run), independent saved-trace audit,
+matched-alpha baseline re-scoring, physical and reward plots. Control mathematics
+and this run's trained checkpoint were not changed. Final related suite48passed.

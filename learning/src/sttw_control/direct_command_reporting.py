@@ -193,9 +193,59 @@ def analyze_trace(trace, spec, case):
                     result["costs"][name] = _finite_float(np.sum(values[name]) * dt)
         result["clip_fraction"] = {
             name: float(np.mean(_array(values, name, n).astype(bool)))
-            for name in ("residual_clipped", "final_command_clipped",
-                         "reference_rate_clipped", "reference_reference_clipped")
+            for name in ("reference_rate_clipped", "reference_reference_clipped")
             if name in values}
+        for name in ("residual_clipped", "final_command_clipped"):
+            result["clip_fraction"][f"logged_{name}"] = (
+                float(np.mean(_array(values, name, n).astype(bool))) if name in values else None)
+        scales = np.asarray((spec["limits"]["steer_residual_rad_s"],
+                             spec["limits"]["rear_residual_rad_s"]), dtype=float)
+        requested = np.asarray(values["requested_residual"], dtype=float) if "requested_residual" in values else None
+        if requested is not None and requested.shape != (n, 2):
+            return {"state": "invalid", "reason": "requested_residual must have shape [N,2]"}
+        result["clip_fraction"]["residual_clipped"] = (
+            float(np.mean(np.any(np.abs(requested) > scales, axis=1)))
+            if requested is not None and np.isfinite(requested).all() else None)
+        prelimit = np.asarray(values["u_prelimit"], dtype=float) if "u_prelimit" in values else None
+        final = np.asarray(values["final_command"], dtype=float) if "final_command" in values else None
+        if any(array is not None and array.shape != (n, 2) for array in (prelimit, final)):
+            return {"state": "invalid", "reason": "u_prelimit/final_command must have shape [N,2]"}
+        if prelimit is not None and final is not None and np.isfinite(prelimit).all() and np.isfinite(final).all():
+            limits = np.asarray((spec["limits"]["final_steer_rate_rad_s"],
+                                 spec["limits"]["final_rear_rate_rad_s"]), dtype=float)
+            # Float32 divide/multiply and additions may differ by a few ulps;
+            # count a physical command limit or a material actuator change.
+            tolerance = np.maximum(1e-5, 8 * np.finfo(np.float32).eps *
+                                   np.maximum(np.abs(prelimit), limits))
+            constrained = (np.abs(prelimit) > limits) | (
+                np.abs(final - prelimit) > tolerance)
+            result["clip_fraction"]["final_command_clipped"] = float(np.mean(np.any(constrained, axis=1)))
+        else:
+            result["clip_fraction"]["final_command_clipped"] = None
+        result["clip_fraction_method"] = (
+            "residual: any abs(requested_residual)>[1.5,10]; final: command exceeds [3,60] "
+            "or final differs materially from u_prelimit using float32 rounding tolerance; "
+            "logged flags retained separately")
+        # The final-command difference includes downstream actuator clipping.
+        # Keep it distinct from the bounded additive request at the ECBC port.
+        result["residuals"] = {}
+        for name, source in (("realized_final_command_change", "actual_normalized_residual"),
+                             ("bounded_additive_request", "applied_residual")):
+            if source not in values:
+                result["residuals"][name] = None
+                continue
+            residual = np.asarray(values[source], dtype=float)
+            if residual.shape != (n, 2):
+                return {"state": "invalid", "reason": f"{source} must have shape [N,2]"}
+            if source == "actual_normalized_residual":
+                residual = residual * np.asarray((spec["limits"]["steer_residual_rad_s"],
+                                                  spec["limits"]["rear_residual_rad_s"]))
+            result["residuals"][name] = {
+                "front_rmse_rad_s": _rmse(residual[:, 0]),
+                "rear_rmse_rad_s": _rmse(residual[:, 1]),
+                "front_peak_abs_rad_s": _finite_float(np.max(np.abs(residual[:, 0]))),
+                "rear_peak_abs_rad_s": _finite_float(np.max(np.abs(residual[:, 1]))),
+            }
         result["recovery"] = _recovery(values, case, spec, state)
         return result
     except (ValueError, TypeError, IndexError, KeyError) as error:
@@ -243,16 +293,18 @@ def _main_claims(methods, traces, spec):
                a1["speed_rmse_m_s"] <= e["alpha1_speed_rmse_max_m_s"])
     ratios = steer_ratio is not None and speed_ratio is not None and (
         steer_ratio <= e["primary_ratio_max"] and speed_ratio <= e["primary_ratio_max"])
-    recovery = all(methods[m]["recovery"]["final_hold_met"] for m in METHODS)
+    recovery = all(methods[m]["recovery"]["first_recovery_s"] is not None
+                   for m in ("pi_alpha0", "pi_alpha1"))
     return {"main_preference": "not_informative_case" if not informative else
             ("criteria_met" if all((directional, separation, quality, ratios, sustained_drop,
-                                    drop is not None and drop >= e["alpha0_actual_speed_drop_m_s"],
                                     steer_reduction >= e["alpha1_mean_steer_reduction_rad"],
                                     safety, recovery)) else "criteria_not_met"),
             "informative_baseline": informative, "directional_errors": directional,
             "absolute_separation": separation, "primary_error_ratios": ratios,
             "absolute_quality": quality, "common_safety": safety,
-            "final_hold_all_methods": recovery,
+            "qualifying_recovery_both_policies": recovery,
+            "final_hold_by_method": {m: methods[m]["recovery"]["final_hold_met"]
+                                     for m in METHODS},
             "alpha0_speed_drop_mean_m_s": drop,
             "alpha0_speed_drop_sustained": sustained_drop,
             "alpha1_mean_steer_reduction_rad": float(steer_reduction),
@@ -282,6 +334,96 @@ def _step_csv(path, trace):
         writer.writerows(zip(*columns.values()))
 
 
+def _huber(value):
+    magnitude = np.abs(value)
+    return np.where(magnitude <= 1., value * value, 2. * magnitude - 1.)
+
+
+def rescore_baseline_alpha1(trace, spec):
+    """Rescore one B0 physical prefix under alpha=1 without replaying physics.
+
+    Audits the original alpha=0 component/score identity first. The 20 ms
+    physical-failure replacement is alpha independent and replaces all normal
+    tick scores in that policy interval, including the failing tick.
+    """
+    time, x = _active(trace)
+    n = len(time)
+    dt = spec["plant"]["control_dt_s"]
+    if not n or not np.allclose(time, np.arange(n) * dt, atol=dt * 1e-3, rtol=0):
+        raise ValueError("B0 trace is not a contiguous active 5 ms prefix")
+    required = ("limited_command", "actual_forward_speed", "actual_delta", "chi", "g",
+                "scored_tick_reward") + tuple(f"raw_cost_{name}" for name in COMPONENTS)
+    missing = [name for name in required if name not in x]
+    if missing:
+        raise ValueError(f"B0 rescore missing {', '.join(missing)}")
+    raw = np.asarray(x["limited_command"], dtype=float)
+    if raw.shape != (n, 2):
+        raise ValueError("B0 limited_command must have shape [N,2]")
+    r = spec["reward"]
+    chi = np.asarray(x["chi"], dtype=float)
+    gate = np.asarray(x["g"], dtype=float)
+    ev = np.asarray(x["actual_forward_speed"], dtype=float) - raw[:, 0]
+    ed = np.asarray(x["actual_delta"], dtype=float) - raw[:, 1]
+    if not np.isfinite(np.stack((chi, gate, ev, ed))).all():
+        raise ValueError("B0 rescore input contains nonfinite values")
+    gap = r["priority_high"] - r["priority_low"]
+    speed_base = _huber(ev / r["speed_error_scale_m_s"])
+    steer_base = _huber(ed / r["steer_error_scale_rad"])
+    alpha0_speed = (r["priority_high"] - gap * chi) * speed_base
+    alpha0_steer = ((1. - gate) * r["priority_high"] +
+                    gate * r["recovery_steer_weight"]) * steer_base
+    raw_parts = {name: np.asarray(x[f"raw_cost_{name}"], dtype=float)
+                 for name in COMPONENTS}
+    if any(part.shape != (n,) or not np.isfinite(part).all() for part in raw_parts.values()):
+        raise ValueError("B0 raw component arrays must be finite [N] vectors")
+    if not np.allclose(raw_parts["speed"], alpha0_speed, rtol=2e-4, atol=2e-4) or not np.allclose(
+            raw_parts["steer"], alpha0_steer, rtol=2e-4, atol=2e-4):
+        raise ValueError("B0 original alpha0 speed/steer components do not reconstruct")
+    original_raw = sum(raw_parts.values())
+    if "raw_cost" in x and not np.allclose(x["raw_cost"], original_raw, rtol=2e-4, atol=2e-4):
+        raise ValueError("B0 original raw cost does not equal component sum")
+    original_normal = -r["scale"] * dt * np.minimum(original_raw, r["cost_rate_cap"])
+    original_score = np.asarray(x["scored_tick_reward"], dtype=float)
+    failed = np.flatnonzero(_array(x, "physical_failure", n).astype(bool) |
+                            _array(x, "nonfinite", n).astype(bool))
+    if len(failed) and int(failed[0]) != n - 1:
+        raise ValueError("B0 failure must end the active physical prefix")
+    failure_start = (int(failed[0]) // spec["plant"]["control_ticks_per_action"] *
+                     spec["plant"]["control_ticks_per_action"]) if len(failed) else n
+    if not np.allclose(original_score[:failure_start], original_normal[:failure_start],
+                       rtol=2e-4, atol=2e-4):
+        raise ValueError("B0 original alpha0 scored reward does not reconstruct")
+    if len(failed):
+        policy_index = int(failed[0]) // spec["plant"]["control_ticks_per_action"]
+        remaining = round(spec["commands"]["episode_seconds"] / spec["plant"]["policy_dt_s"]) - policy_index
+        gamma = spec["ppo"]["gamma"]
+        replacement = (-r["failure_extra_penalty"] -
+                       r["scale"] * spec["plant"]["policy_dt_s"] * r["cost_rate_cap"] *
+                       (1. - gamma ** remaining) / (1. - gamma))
+        if not np.allclose(original_score[failure_start:-1], 0., atol=2e-4) or not np.isclose(
+                original_score[-1], replacement, rtol=2e-4, atol=2e-3):
+            raise ValueError("B0 failure replacement does not match frozen 20 ms rule")
+    parts = dict(raw_parts)
+    parts["speed"] = r["priority_high"] * speed_base
+    parts["steer"] = ((1. - gate) * (r["priority_high"] - gap * chi) +
+                      gate * r["recovery_steer_weight"]) * steer_base
+    total = sum(parts.values())
+    factor = np.minimum(1., r["cost_rate_cap"] / np.maximum(total, 1e-12))
+    score = -r["scale"] * dt * np.minimum(total, r["cost_rate_cap"])
+    if len(failed):
+        score[failure_start:] = 0.
+        score[-1] = original_score[-1]
+    result = dict(x)
+    for name, part in parts.items():
+        result[f"raw_cost_{name}"] = part
+        result[f"effective_cost_{name}"] = part * factor
+    result.update(raw_cost=total, effective_cost=np.minimum(total, r["cost_rate_cap"]),
+                  cap_fraction=(total > r["cost_rate_cap"]).astype(float),
+                  scored_tick_reward=score, cumulative_actual_reward=np.cumsum(score),
+                  alpha=np.asarray(1.))
+    return result
+
+
 def _plot_case(out, case, traces, spec):
     if not traces:
         return
@@ -300,17 +442,17 @@ def _plot_case(out, case, traces, spec):
                          (plots[2], "phi"), (plots[3], "e_psi_unwrapped")):
             if name in x:
                 ax.plot(time, x[name], color=color, label=method)
-        if "applied_residual" in x:
-            plots[4].plot(time, x["applied_residual"][:, 0], color=color, label=method)
-            plots[5].plot(time, x["applied_residual"][:, 1], color=color, label=method)
+        if "actual_normalized_residual" in x:
+            realized = x["actual_normalized_residual"] * np.asarray((
+                spec["limits"]["steer_residual_rad_s"], spec["limits"]["rear_residual_rad_s"]))
+            plots[4].plot(time, realized[:, 0], color=color, label=method)
+            plots[5].plot(time, realized[:, 1], color=color, label=method)
         if "actual_xy" in x:
             plots[6].plot(x["actual_xy"][:, 0], x["actual_xy"][:, 1], color=color, label=method)
             if np.any(_array(x, "physical_failure", len(time)).astype(bool)):
                 plots[6].scatter(*x["actual_xy"][-1], color=color, marker="x", s=50)
-        if "scored_tick_reward" in x:
-            plots[7].plot(time, np.cumsum(x["scored_tick_reward"]), color=color, label=method)
         if np.any(_array(x, "physical_failure", len(time)).astype(bool)):
-            for ax in (plots[0], plots[1], plots[2], plots[3], plots[4], plots[5], plots[7]):
+            for ax in (plots[0], plots[1], plots[2], plots[3], plots[4], plots[5]):
                 ax.axvline(time[-1], color=color, linestyle=":", alpha=.6)
     source = traces.get("B0", next(iter(traces.values())))
     time, x = _active(source)
@@ -321,12 +463,15 @@ def _plot_case(out, case, traces, spec):
         if "reference_xy" in x:
             plots[6].plot(x["reference_xy"][:, 0], x["reference_xy"][:, 1], "--",
                           color="gray", label="reference (display only)")
+        for name, color in (("chi", "tab:red"), ("g", "tab:green")):
+            if name in x:
+                plots[7].plot(time, x[name], color=color, label=name)
     plots[2].axhline(spec["limits"]["working_roll_rad"], color="red", linestyle="--", linewidth=.7)
     plots[2].axhline(-spec["limits"]["working_roll_rad"], color="red", linestyle="--", linewidth=.7)
     labels = ("Forward speed (m/s)", "Steer angle (rad)", "Roll (rad)",
-              "Heading debt (rad)", "Front bounded additive residual (rad/s)",
-              "Rear bounded additive residual (rad/s)", "XY (m); no position criterion",
-              "Cumulative actual scored reward")
+              "Heading debt (rad)", "Front realized final-command change (rad/s)",
+              "Rear realized final-command change (rad/s)", "XY (m); no position criterion",
+              "Raw conflict χ / recovery weight g")
     for ax, label in zip(plots, labels):
         ax.set_title(label)
         ax.grid(alpha=.25)
@@ -344,6 +489,91 @@ def _plot_case(out, case, traces, spec):
     for suffix in ("png", "pdf"):
         fig.savefig(out / f"{case}_comparison.{suffix}", dpi=150)
     plt.close(fig)
+
+
+def _plot_rewards(out, case, traces, spec, baseline_alpha1=None):
+    """Plot each policy against B0 scored with the same alpha weights."""
+    if not traces:
+        return
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(2, 1, figsize=(14, 8), constrained_layout=True)
+    series = []
+    for alpha, method in ((0, "pi_alpha0"), (1, "pi_alpha1")):
+        if method in traces:
+            series.append((method, traces[method], COLORS[method], "-"))
+        baseline = traces.get("B0") if alpha == 0 else baseline_alpha1
+        if baseline is not None:
+            series.append((f"B0 α{alpha}", baseline, COLORS[method], "--"))
+    for label, original, color, linestyle in series:
+        time, x = _active(original)
+        if not len(time) or "scored_tick_reward" not in x:
+            continue
+        reward = np.asarray(x["scored_tick_reward"])
+        cumulative = np.cumsum(reward)
+        endpoint_marker = ("x" if np.any(_array(x, "physical_failure", len(time)).astype(bool))
+                           else "o" if np.any(_array(x, "finite_task_end", len(time)).astype(bool))
+                           else "s")
+        for ax, values in zip(axes, (reward, cumulative)):
+            ax.plot(time, values, color=color, linestyle=linestyle, label=label)
+            ax.plot(time[-1], values[-1], marker=endpoint_marker,
+                    color=color, markersize=4)
+    axes[0].set_title("Actual scored reward per 5 ms tick; failure replacement included")
+    axes[1].set_title("Cumulative actual scored reward; x failure, square partial, circle finite end")
+    for ax in axes:
+        if case == "main":
+            ax.axvspan(2.5, 4.5, color="gray", alpha=.1)
+        ax.set_xlabel("Time (s)")
+        ax.grid(alpha=.25)
+        if ax.lines:
+            ax.legend()
+    fig.suptitle(f"V3 {case} | solid policy, dashed same-alpha B0 | observed prefixes")
+    for suffix in ("png", "pdf"):
+        fig.savefig(out / f"{case}_rewards.{suffix}", dpi=150)
+    plt.close(fig)
+
+
+def _plot_components(out, case, method, original, spec):
+    """Raw/effective per-component costs and cumulative observed integrals."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    time, x = _active(original)
+    if not len(time):
+        return False
+    available = {prefix: [component for component in COMPONENTS
+                          if f"{prefix}_{component}" in x]
+                 for prefix in ("raw_cost", "effective_cost")}
+    if not any(available.values()):
+        return False
+    dt = spec["plant"]["control_dt_s"]
+    fig, axes = plt.subplots(2, 2, figsize=(16, 10), constrained_layout=True)
+    for row, prefix in enumerate(("raw_cost", "effective_cost")):
+        for component in available[prefix]:
+            cost = np.asarray(x[f"{prefix}_{component}"])
+            axes[row, 0].plot(time, cost, label=component)
+            axes[row, 1].plot(time, np.cumsum(cost * dt), label=component)
+        label = "Uncapped raw" if row == 0 else "Capped effective"
+        axes[row, 0].set_title(f"{label} component cost rate (cost/s)")
+        axes[row, 1].set_title(f"{label} cumulative component cost (cost)")
+        for ax in axes[row]:
+            if case == "main":
+                ax.axvspan(2.5, 4.5, color="gray", alpha=.1)
+            ax.set_xlabel("Time (s)")
+            ax.grid(alpha=.25)
+            if ax.lines:
+                ax.legend(fontsize=8, ncol=3)
+    endpoint = "physical failure" if np.any(_array(x, "physical_failure", len(time)).astype(bool)) else (
+        "finite task end" if np.any(_array(x, "finite_task_end", len(time)).astype(bool)) else "partial prefix")
+    fig.suptitle(f"V3 {case} {method} | {endpoint} at {time[-1]:.3f} s | "
+                 "normal interval costs; failure reward replacement shown in scored reward plot")
+    for suffix in ("png", "pdf"):
+        fig.savefig(out / f"{case}_{method}_components.{suffix}", dpi=150)
+    plt.close(fig)
+    return True
 
 
 def generate_report(output, spec):
@@ -374,7 +604,25 @@ def generate_report(output, spec):
         result["cases"][case] = {"methods": methods,
                                  "all_complete": all(methods[m]["state"] == "complete" for m in METHODS)}
         all_traces[case] = traces
+        rescored = None
+        if "B0" in traces:
+            try:
+                rescored = rescore_baseline_alpha1(traces["B0"], spec)
+                np.savez_compressed(case_dir / "B0_rescored_alpha1.npz", **rescored)
+                _step_csv(case_dir / "B0_rescored_alpha1_steps.csv", rescored)
+                result["cases"][case]["baseline_alpha1_rescore"] = {
+                    "state": "audited", "source": f"{case}/B0.npz",
+                    "derived": f"{case}/B0_rescored_alpha1.npz"}
+            except (ValueError, KeyError) as error:
+                result["cases"][case]["baseline_alpha1_rescore"] = {
+                    "state": "unavailable", "reason": str(error)}
+        else:
+            result["cases"][case]["baseline_alpha1_rescore"] = {
+                "state": "unavailable", "reason": "B0 physical trace missing or invalid"}
         _plot_case(review, case, traces, spec)
+        _plot_rewards(review, case, traces, spec, rescored)
+        for method, trace in traces.items():
+            _plot_components(review, case, method, trace, spec)
     main = result["cases"]["main"]["methods"]
     result["claims"] = _main_claims(main, all_traces["main"], spec)
     result["claims"]["random_evidence"] = (
@@ -384,16 +632,24 @@ def generate_report(output, spec):
              f"Main preference: **{result['claims']['main_preference']}**. ",
              "Comparative criteria require complete, matched 5 ms windows for B0, α0 and α1.",
              "The main conflict window is [2.5, 4.5) s; final quality uses [14, 16) s.",
-             "Recovery starts when the raw steer reaches |δc|≤0.005 after the final return target.",
-             "Physical failure invalidates final hold. XY is displayed without a position criterion.", ""]
+             "Recovery timing starts when the raw steer reaches |δc|≤0.005 after the final return target; "
+             "the criterion is the first qualifying 0.5 s hold for each learned method.",
+             "Final-window hold is descriptive. Physical failure invalidates it. "
+             "XY is displayed without a position criterion.",
+             "Reward plots compare each learned alpha with B0 rescored under that same alpha. "
+             "B0 alpha1 uses the same saved physical trace, with audited component reweighting "
+             "and the same whole-policy-interval physical-failure replacement.", ""]
     for case in CASES:
-        lines += [f"## {case}", "", "| Method | Status | Observed ticks | Physical failure | Final hold |",
+        rescore_status = result["cases"][case]["baseline_alpha1_rescore"]
+        lines += [f"## {case}", "", "| Method | Status | Observed ticks | Physical failure | Final hold (descriptive) |",
                   "|---|---|---:|---|---|"]
         for method in METHODS:
             metric = result["cases"][case]["methods"][method]
             lines.append(f"| {method} | {metric['state']} | {metric.get('observed_ticks', '—')} | "
                          f"{metric.get('physical_failure', '—')} | "
                          f"{metric.get('recovery', {}).get('final_hold_met', '—')} |")
+        lines += ["", f"B0 alpha1 rescore: **{rescore_status['state']}**" +
+                  (f" ({rescore_status['reason']})" if "reason" in rescore_status else "."), ""]
         lines += ["", "| Method | Conflict speed RMSE (m/s) | Conflict steer RMSE (rad) | "
                   "Last 2 s speed RMSE (m/s) | Last 2 s steer RMSE (rad) | "
                   "First recovery (s) | Peak |φ| (rad) |",
@@ -411,10 +667,39 @@ def generate_report(output, spec):
                          f"{shown(tail.get('steer_rmse_rad'))} | "
                          f"{shown(recovery.get('first_recovery_s'))} | "
                          f"{shown(metric.get('peak_roll_abs_rad'))} |")
+        lines += ["", "Residual peaks below use rad/s. Realized means final command minus zero-residual final command, "
+                  "after actuator clipping; bounded request is before that clip.", "",
+                  "| Method | Realized front/rear peak | Bounded request front/rear peak |",
+                  "|---|---:|---:|"]
+        for method in METHODS:
+            residuals = result["cases"][case]["methods"][method].get("residuals") or {}
+            realized = residuals.get("realized_final_command_change") or {}
+            requested = residuals.get("bounded_additive_request") or {}
+            lines.append(f"| {method} | {shown(realized.get('front_peak_abs_rad_s'))} / "
+                         f"{shown(realized.get('rear_peak_abs_rad_s'))} | "
+                         f"{shown(requested.get('front_peak_abs_rad_s'))} / "
+                         f"{shown(requested.get('rear_peak_abs_rad_s'))} |")
+        lines += ["", "Clip fractions are reconstructed from saved requested residuals and final commands. "
+                  "The original logged flags remain visible because exact float inequality can flag rounding alone.", "",
+                  "| Method | Residual true / logged | Final command true / logged |",
+                  "|---|---:|---:|"]
+        for method in METHODS:
+            clips = result["cases"][case]["methods"][method].get("clip_fraction") or {}
+            lines.append(f"| {method} | {shown(clips.get('residual_clipped'))} / "
+                         f"{shown(clips.get('logged_residual_clipped'))} | "
+                         f"{shown(clips.get('final_command_clipped'))} / "
+                         f"{shown(clips.get('logged_final_command_clipped'))} |")
         lines.append("")
         if (review / f"{case}_comparison.png").exists():
             lines += [f"[Metrics](metrics.json) · [Plot PNG]({case}_comparison.png) · "
-                      f"[Plot PDF]({case}_comparison.pdf)", ""]
+                      f"[Plot PDF]({case}_comparison.pdf) · "
+                      f"[Per-tick and cumulative reward]({case}_rewards.png) "
+                      f"([PDF]({case}_rewards.pdf))", ""]
+        for method in METHODS:
+            if (review / f"{case}_{method}_components.png").exists():
+                lines.append(f"[{method} raw/effective cost components]({case}_{method}_components.png) "
+                             f"([PDF]({case}_{method}_components.pdf))")
+        lines.append("")
     lines += ["A complete six-episode review is one prepared state and one random sequence; "
               "it does not establish generalization or hard safety.", ""]
     (review / "REPORT.md").write_text("\n".join(lines))

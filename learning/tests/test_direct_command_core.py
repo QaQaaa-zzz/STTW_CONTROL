@@ -16,6 +16,19 @@ SPEC = json.loads((Path(__file__).parents[1]/'configs'/'STTW_Direct_Command_V3.j
 CC = ControllerConfig(fixed_roll_reference=None)
 
 
+def test_residual_clip_flag_reports_permission_limit_not_float_roundtrip(monkeypatch):
+    from types import SimpleNamespace
+    from sttw_control import closed_loop_kernel as kernel
+    from sttw_control.actuator import ActuatorConfig,initial_actuator
+    monkeypatch.setattr(kernel,'controller_step',lambda state,row,*args:(
+        state,SimpleNamespace(steer_rate=row[-1])))
+    ac=ActuatorConfig(steer_residual_scale=1.5,rear_residual_scale=10.)
+    for requested,expected in [(.1,False),(.07,False),(1.6,True)]:
+        _,_,log=kernel.controls(None,initial_actuator(ac),jp.zeros(7),
+            jp.array([2.3,0.]),jp.array([2.3,requested]),True,False,CC,ac)
+        assert bool(log['residual_clipped']) is expected
+
+
 def test_zero_latent_preserves_raw_reference_and_asymmetric_map():
     for speed, steer in [(2., -.3), (2.3, 0.), (2.6, .3)]:
         raw = jp.array([speed, steer])
