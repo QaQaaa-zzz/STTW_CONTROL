@@ -110,3 +110,17 @@ def test_base_output_scale_is_legacy_compatible_and_scales_both_channels():
         effective_base(raw, ActuatorConfig(base_output_scale=0.8)),
         np.array([1.2, 18.4]),
     )
+
+
+def test_new_endpoint_configs_match_attachment_candidate_costs():
+    from pathlib import Path
+    from sttw_control.env import load_config
+    root=Path(__file__).resolve().parents[1]/'configs'
+    expected={0:[3.4545454545,37.6,12.9090909091],1:[31.5454545455,37.4690909091,1.0909090909]}
+    for alpha in [0,1]:
+        cfg=load_config(root/f'fixed_endpoint_directional_alpha{alpha}.json')
+        c=cfg.tracking
+        costs=[-sum(directional_speed_path_rates(ev,ey,0.,alpha,0.,c,xp=np).values()) for ev,ey in [(-.4,.05),(.4,.02),(0.,.2)]]
+        np.testing.assert_allclose(costs,expected[alpha],rtol=1e-8)
+        assert c.shrink_tolerances and c.final_speed_tolerance==.2
+        assert cfg.priority.fixed_alpha==alpha and not cfg.observation.include_priority

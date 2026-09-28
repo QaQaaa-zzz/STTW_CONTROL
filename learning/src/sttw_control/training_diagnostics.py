@@ -135,7 +135,7 @@ def plot_reward_components(rows,destination):
     (destination/'reward_components.json').write_text(json.dumps([dict(update=r['update'],control_transitions=r['control_transitions'],total=r['mean_step_reward'],parts=r['reward_components_mean_step'],reconstruction_max_abs=r['reward_components_reconstruction_max_abs']) for r in logged],indent=2)+'\n')
 
 
-def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np, choices=None):
+def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np, choices=None, overspeed_band=.05):
     """Additive statistics from pre-step alpha and post-step physical errors."""
     groups=xp.minimum((alpha*3).astype(int),2)
     mask=(groups[None,:]==xp.arange(3)[:,None] if choices is None
@@ -146,10 +146,27 @@ def alpha_sample_sums(alpha, reward, failed, errors, *, xp=np, choices=None):
         values[name+'_valid_samples']=valid
         values[name+'_error_sum']=xp.where(valid,error,0)
         values[name+'_squared_error_sum']=xp.where(valid,error,0)**2
-    return {key:xp.sum(xp.where(mask,value[None,:],0),axis=1) for key,value in values.items()}
+    result={key:xp.sum(xp.where(mask,value[None,:],0),axis=1) for key,value in values.items()}
+    if 'speed_m_s' in errors:
+        ev=errors['speed_m_s'];valid=xp.isfinite(ev)
+        for name,value in [('underspeed',-ev),('overspeed',ev)]:
+            amount=xp.where(valid,xp.maximum(value,0.),0.)
+            result[name+'_positive_samples']=xp.sum(mask & (amount[None,:]>0),axis=1)
+            result[name+'_magnitude_sum']=xp.sum(xp.where(mask,amount[None,:],0.),axis=1)
+            result[name+'_peak']=xp.max(xp.where(mask,amount[None,:],0.),axis=1)
+        result['overspeed_above_band_samples']=xp.sum(mask & valid[None,:] & (ev[None,:]>overspeed_band),axis=1)
+    return result
 
 
-def alpha_sample_summary(sums, *, choices=None):
+def merge_sample_statistics(previous, incoming, *, maximum=np.maximum):
+    """Pool sums across rollout steps, but retain the maximum of observed peaks."""
+    result=dict(previous)
+    for key,value in incoming.items():
+        result[key]=(maximum(result[key],value) if key.endswith('_peak') else result[key]+value) if key in result else value
+    return result
+
+
+def alpha_sample_summary(sums, *, choices=None, dt=None):
     """Reduce pooled sums once; do not average per-step RMSEs or bin means."""
     result=[]
     for i in range(3 if choices is None else len(choices)):
@@ -167,5 +184,30 @@ def alpha_sample_summary(sums, *, choices=None):
                 row[name+'_invalid_samples']=n-valid
                 row[name+'_rmse']=float(np.sqrt(value[i]/valid)) if valid else None
                 row[name+'_mean_error']=float(sums[name+'_error_sum'][i]/valid) if valid else None
+        if 'overspeed_peak' in sums:
+            valid=int(sums['speed_m_s_valid_samples'][i])
+            for name in ('underspeed','overspeed'):
+                row[name+'_peak_m_s']=float(sums[name+'_peak'][i]) if valid else None
+                row[name+'_sample_fraction']=float(sums[name+'_positive_samples'][i]/valid) if valid else None
+                if dt is not None:
+                    row[name+'_environment_seconds']=float(sums[name+'_positive_samples'][i]*dt)
+                    row[name+'_integral_m']=float(sums[name+'_magnitude_sum'][i]*dt)
+            if dt is not None:
+                row['overspeed_above_band_environment_seconds']=float(sums['overspeed_above_band_samples'][i]*dt)
+            row['directional_scope']='pooled valid environment transitions; duration is summed environment-seconds, not one episode or wall time'
         result.append(row)
+    return result
+
+
+def directional_speed_trace(errors, dt, overspeed_band):
+    """Observed single-episode speed errors; invalid samples break contiguous spans."""
+    errors=np.asarray(errors);valid=np.isfinite(errors)
+    result={'invalid_samples':int((~valid).sum()),'valid_samples':int(valid.sum()),'overspeed_band_m_s':float(overspeed_band)}
+    for name,value in [('underspeed',-errors),('overspeed',errors),('overspeed_above_band',errors-overspeed_band)]:
+        amount=np.where(valid,np.maximum(value,0.),0.);active=amount>0
+        edges=np.diff(np.r_[False,active,False].astype(int));lengths=np.flatnonzero(edges==-1)-np.flatnonzero(edges==1)
+        result[name+'_peak_m_s']=float(amount.max()) if valid.any() else None
+        result[name+'_seconds']=float(active.sum()*dt)
+        result[name+'_longest_seconds']=float(lengths.max()*dt) if len(lengths) else 0.
+        result[name+'_integral_m']=float(amount.sum()*dt)
     return result

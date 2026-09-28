@@ -116,7 +116,7 @@ def train(task_path,output,c):
     from .validation import make_validator
     from .selection import rank_tracking_candidate,refresh_best_reward_model,record_training_reward_best
     from .tensorboard_logging import TrainingEvents
-    from .training_diagnostics import plot_training,alpha_sample_sums,alpha_sample_summary
+    from .training_diagnostics import plot_training,alpha_sample_sums,alpha_sample_summary,merge_sample_statistics
     from .runtime import configure_compilation_cache
     configure_compilation_cache()
     cfg=load_config(task_path)
@@ -242,7 +242,7 @@ def train(task_path,output,c):
                 else:
                     sampled_errors.update(yaw_rate_rad_s=nxt.yaw_rate-state.reference_command[:,1],
                                           longitudinal_m=features[:,3])
-                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp,choices=getattr(cfg.priority,'training_alphas',None))
+                alpha_stats=alpha_sample_sums(state.priority_alpha,nxt.reward,nxt.terminated,sampled_errors,xp=jp,choices=getattr(cfg.priority,'training_alphas',None),overspeed_band=cfg.tracking.overspeed_band)
             phase=state.tick*cfg.controller.dt
             phase_id=jp.sum(phase[:,None]>=jp.array([1.,3.,6.]),axis=1)
             phase_stats={f'bin_{i}_samples':jp.sum(phase_id==i) for i in range(4)}
@@ -295,7 +295,7 @@ def train(task_path,output,c):
                         obs=observations(state.obs)
                         algo.process_env_step(obs,corrected,d,{})
                         reward_sum+=r.mean();ends+=d.sum()
-                        for k,v in alpha_stats.items():alpha_sum[k]=alpha_sum.get(k,0)+torch_from_jax(v)
+                        alpha_sum=merge_sample_statistics(alpha_sum,{k:torch_from_jax(v) for k,v in alpha_stats.items()},maximum=torch.maximum)
                         for k,v in phase_stats.items():phase_sum[k]=phase_sum.get(k,0)+torch_from_jax(v)
                         for k,v in parts.items():component_sum[k]=component_sum.get(k,0)+torch_from_jax(v)
                         max_error=torch.maximum(torch.as_tensor(max_error,device=device),torch_from_jax(error))
@@ -338,7 +338,7 @@ def train(task_path,output,c):
                 record['sample_phase_scope']='actual pre-step elapsed seconds: [0,1), [1,3), [3,6), [6,horizon]; not policy-matched validation'
                 record['rollout_control_steps_per_second']=batch_count/rollout_seconds
                 if alpha_sum:
-                    record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()},choices=getattr(cfg.priority,'training_alphas',None))
+                    record['alpha_training_samples']=alpha_sample_summary({k:v.cpu().numpy() for k,v in alpha_sum.items()},choices=getattr(cfg.priority,'training_alphas',None),dt=cfg.controller.dt)
                     record['alpha_training_scope']='random training samples in three alpha intervals; not paired fixed-alpha evaluation; errors use pre-step commands and post-step physics'
                 if getattr(cfg.priority,'training_alphas',None) is not None:
                     record['alpha_training_scope']='exact discrete alpha training groups; not paired fixed-scenario evaluation'

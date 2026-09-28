@@ -20,3 +20,29 @@ def test_logged_reward_components_have_inspectable_plot_data(tmp_path):
     assert (tmp_path/'reward_components.png').is_file()
     assert (tmp_path/'reward_components.pdf').is_file()
     assert json.loads((tmp_path/'reward_components.json').read_text())[0]['parts']['speed']==-.105
+
+def test_directional_speed_statistics_pool_peaks_by_max_not_sum():
+    import numpy as np
+    from sttw_control.training_diagnostics import alpha_sample_sums,alpha_sample_summary,merge_sample_statistics
+    def sample(errors):
+        return alpha_sample_sums(np.array([0.,0.,1.]),np.zeros(3),np.zeros(3),{'speed_m_s':np.array(errors)},xp=np)
+    a=sample([-.4,.1,float('nan')]);b=sample([-.2,.2,-.1])
+    pooled=merge_sample_statistics(a,b,maximum=np.maximum)
+    rows=alpha_sample_summary(pooled,dt=.005)
+    assert rows[0]['underspeed_peak_m_s']==pytest.approx(.4)
+    assert rows[0]['overspeed_peak_m_s']==pytest.approx(.2)
+    assert rows[0]['underspeed_environment_seconds']==pytest.approx(.01)
+    assert rows[0]['overspeed_integral_m']==pytest.approx(.0015)
+    assert rows[0]['overspeed_above_band_environment_seconds']==pytest.approx(.01)
+    assert rows[2]['speed_m_s_invalid_samples']==1
+    assert rows[1]['overspeed_peak_m_s'] is None
+
+def test_trace_directional_durations_break_at_invalid_samples():
+    import numpy as np
+    from sttw_control.training_diagnostics import directional_speed_trace
+    d=directional_speed_trace(np.array([.1,.2,np.nan,.1,-.4,-.2,0.]),.005,.05)
+    assert d['overspeed_peak_m_s']==pytest.approx(.2)
+    assert d['overspeed_seconds']==pytest.approx(.015)
+    assert d['overspeed_longest_seconds']==pytest.approx(.01)
+    assert d['underspeed_integral_m']==pytest.approx(.003)
+    assert d['invalid_samples']==1

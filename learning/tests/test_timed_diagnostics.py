@@ -130,3 +130,15 @@ def test_alpha_overview_includes_same_scene_xy_and_source_arrays(tmp_path):
         for alpha in [0.,.5,1.]:
             np.testing.assert_allclose(a[f'residual_alpha_{alpha}_xy'],reference_fixture()['pose'][:,:2])
         assert 'reference_xy' in a
+
+def test_asymmetric_summary_counts_overspeed_above_fixed_upper_band(tmp_path):
+    import json
+    from dataclasses import asdict
+    from sttw_control.tracking_reward import TrackingConfig
+    path=tmp_path/'trace';save_timed_fixture(path)
+    with np.load(path/'trace.npz') as f:trace={k:f[k] for k in f.files}
+    config=json.loads((path/'declaration.json').read_text())['config']
+    config['tracking']=asdict(TrackingConfig(objective='asymmetric_geometric_huber',geometric=True,timed=True,start_seconds=0.,speed_relaxed=.5,overspeed_band=.05,return_bonus=0.,tail_rate=0.))
+    trace['priority_alpha'][:]=0.
+    trace['true_forward_speed'][1:]=trace['reference_command'][:-1,0]+.1
+    assert diagnostics.trace_summary(trace,config)['speed_tolerance_exceed_fraction']==1.
