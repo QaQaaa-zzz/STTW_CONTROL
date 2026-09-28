@@ -15,9 +15,11 @@ def controls(controller,actuator,measurement,raw,governed,enable_eso,bypass,cc,a
     scales=jp.array([ac.steer_residual_scale,ac.rear_residual_scale])
     action=jp.clip(requested/scales,-1,1)
     applied=scales*action
+    _,zero_final=apply_residual(actuator,u_nom,jp.zeros(2),m[2],ac)
     actuator,final=apply_residual(actuator,u_nom,action,m[2],ac)
     return next_controller,actuator,dict(u_nom=u_nom,u_goal=u_goal,
         requested_residual=requested,applied_residual=applied,
-        normalized_residual=action,u_prelimit=u_nom+applied,final_command=final,
+        normalized_residual=action,actual_normalized_residual=(final-zero_final)/scales,
+        zero_residual_final_command=zero_final,u_prelimit=u_nom+applied,final_command=final,
         residual_clipped=jp.any(requested!=applied),
         final_command_clipped=jp.any(final!=u_nom+applied))

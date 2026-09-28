@@ -1,3 +1,18 @@
+# 2026-09-28 Direct command V3 approved execution plan
+
+Numeric authority: learning/configs/STTW_Direct_Command_V3.json. Approved design: docs/direct_command/STTW_Codex_Direct_Command_V3.md. This isolated task replaces V2; no Phi/kpsi learner or analytic action allocator is imported. Parent 92afde6; reuse teleop physics, exact reference integration, same-state ECBC previews, actuator and RSL internals. Local commit only, no push.
+
+- [ ] Pure action/observation/reward and causal schedule modules, tests against supplied numerical reference and fixed clock semantics. 345/346 observations, alpha in context, 2 raw Gaussian latents, original-command-relative corrections only.
+- [ ] Independent shared RSL adapter, 69186 Actor parameters, per-group LR/gradients, full and per-alpha KL, epoch rollback at >.03/nonfinite, complete checkpoint identity and RNG.
+- [ ] Integrate 4x5ms wrapper with existing physics-only kernel. Eight declared prepared full states, fixed per-episode slew and family PRNG folded with env_id/episode_index. Preserve finite terminal and final pre-reset observation.
+- [ ] Meter all new compute: compile300s, preparation/interfaces/smoke120s, pilot1200s, review180s, total1800s. Additional supervision, incremental per-second review writes. No implicit expansion or prior model load.
+- [ ] Interface zero-policy checks, 8x16x2 smoke, fresh512x128x<=20 pilot, last-completed main and seed88001 each B0/alpha0/alpha1. One-second compiled chunks for review avoid per-20ms host tree copies, retaining 5ms evidence and true endpoints.
+- [ ] Same-state alpha sensitivity without physics, independent reward reconstruction, physical PNG/PDF/CSV/report, limits/failure/cap/grad/KL/timing. Update current validation and methods ledger, local logical commit.
+
+Source-reading/code-writing time is separate from compute. V2 is preserved and already stopped at its own single-episode review limit after 20 updates; no V2 continuation is part of this task. V3 has a fresh bounded budget and fresh learner. Skills: using-git-worktrees, writing-plans, test-driven-development and subagent-driven-development for independent modules, verification-before-completion.
+
+---
+
 # 当前实施更新：不对称速度代价与固定几何路径训练（2026-09-18）
 
 新入口为 `asymmetric_priority_rho34.json`（主候选）和 `asymmetric_priority_rho10.json`（单变量对照），共同使用 `ppo_asymmetric_priority.json`。α=0允许有限欠速以贴原始几何路径，α=1优先速度；超速权重和0.05m/s过程带对所有α固定，最终速度带为[-0.20,+0.05]m/s。奖励方向逻辑集中在`tracking_reward.py`的显式新objective，旧objective与冻结重评分身份保持兼容。

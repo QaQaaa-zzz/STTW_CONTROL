@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "scope": "pure numerical/specification checks only; no repository import, simulator rollout, or training",
+  "actor_input_dim": 345,
+  "critic_input_dim": 346,
+  "actor_mean_parameters": 69186,
+  "policy_transitions": 1310720,
+  "control_transitions_upper": 5242880,
+  "gamma_time_constant_s": 6.65666165915238,
+  "synthetic_command_costs_AB": {
+    "0.0": [
+      5.919999999999999,
+      17.727999999999998
+    ],
+    "1.0": [
+      56.032,
+      3.039999999999999
+    ]
+  },
+  "failure_reward_at_start": -65.64057976549874,
+  "failure_reward_at_last_interval": -5.2,
+  "normal_zero_action_identity_samples": 10000,
+  "reward_reconstruction_random_samples": 1000
+}
