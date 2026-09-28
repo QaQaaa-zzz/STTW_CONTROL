@@ -798,6 +798,26 @@ def compact_review_archive(output,*,training_run=None):
     return archive
 
 
+def comparison_task_identity(config, *, independent=False):
+    """Compare physical/reward contracts; independent fixed policies may differ only in alpha labels."""
+    result=json.loads(json.dumps(config))
+    if independent:
+        if result.get('observation',{}).get('include_priority',False) or result.get('priority',{}).get('randomize_alpha',True):
+            raise ValueError('independent comparison requires hidden fixed alpha')
+        for field in ('fixed_alpha','validation_alphas'):
+            result['priority'].pop(field,None)
+    return result
+
+
+def validate_baseline_reuse(data, declaration, target_config, model_identity, seed):
+    if comparison_task_identity(data['config'],independent=True)!=comparison_task_identity(target_config,independent=True):
+        raise ValueError('baseline reuse task mismatch')
+    if declaration['seed']!=seed or declaration['model']!=model_identity:
+        raise ValueError('baseline reuse seed/model mismatch')
+    if declaration['controller']!='baseline' or declaration.get('policy') is not None or np.any(data['trace']['effective_action']!=0):
+        raise ValueError('reuse source must be a zero-residual baseline')
+
+
 def write_cross_alpha_comparison(root):
     """One scene per figure: all declared alphas and matched baseline traces.
 
@@ -810,6 +830,7 @@ def write_cross_alpha_comparison(root):
     import matplotlib.pyplot as plt
     root=Path(root);out=root/'analysis/cross_alpha';out.mkdir(parents=True,exist_ok=True)
     declared=json.loads((root/'declaration.json').read_text())
+    independent=declared.get('independent_fixed_policies',False)
     expected=set(map(float,declared['priority_alphas']));groups={}
     for panel in sorted((root/'evaluation').glob('alpha_*/seed_*')):
         d=json.loads((panel/'declaration.json').read_text())
@@ -823,16 +844,18 @@ def write_cross_alpha_comparison(root):
     for (case,seed),entries in sorted(groups.items()):
         if len(entries)!=len(expected) or {a for a,_,_ in entries}!=expected:raise ValueError('incomplete or duplicate alpha comparison')
         checkpoints={str(c) for _,_,c in entries}
-        if len(checkpoints)!=1:raise ValueError('mixed checkpoints in cross-alpha comparison')
+        if len(checkpoints)!=1 and not independent:raise ValueError('mixed checkpoints in cross-alpha comparison')
         data=[];arrays={};csv_rows=[];common_cfg=None;baseline=None
         for a,path,_ in sorted(entries):
             pair={}
             for label in ('baseline','residual'):
-                cfg=json.loads((path/label/'declaration.json').read_text())['config']
+                trace_decl=json.loads((path/label/'declaration.json').read_text());cfg=trace_decl['config']
                 if common_cfg is None:common_cfg=cfg
-                if cfg!=common_cfg:raise ValueError('cross-alpha task mismatch')
+                if comparison_task_identity(cfg,independent=independent)!=comparison_task_identity(common_cfg,independent=independent):raise ValueError('cross-alpha task mismatch')
                 with np.load(path/label/'trace.npz',allow_pickle=False) as f:t={k:f[k] for k in f.files}
                 if not np.isfinite(t['reward']).all():raise ValueError('nonfinite rewards in comparison')
+                if independent and (cfg['priority']['fixed_alpha']!=a or trace_decl.get('priority_override')!=a or not np.all(t['priority_alpha']==a)):
+                    raise ValueError('independent policy alpha label mismatch')
                 step=np.arange(1,len(t['time']));reward=t['reward'][1:];ev=speed_error(t,cfg)
                 prefix=f'{label}_alpha_{a:g}'
                 values=dict(step=step,time_s=t['time'][1:],reward=reward,cumulative_reward=np.cumsum(reward),speed_error_m_s=ev,
@@ -853,8 +876,10 @@ def write_cross_alpha_comparison(root):
         fixed=(cfg.get('timed_reference') or {}).get('fixed') or []
         switches=[row[0] for row in fixed[1:]]
         if len(switches)>8:switches=[switches[0],switches[-1]]
-        title=f'{case} | {Path(next(iter(checkpoints))).name} | seed={seed}'
+        checkpoint_label='; '.join(f'alpha={a:g}: {Path(c).name}' for a,_,c in sorted(entries))
+        title=f'{case} | {checkpoint_label} | seed={seed}'
         subtitle='Solid: policy; dashed: baseline scored at matching alpha. Dotted vertical lines: command changes.'
+        if independent:subtitle+=' Independent networks; fixed-roll ECBC+ESO baseline.'
         case_warmup=declared.get('warmup_seconds',{}).get(case,warmup)
         if case_warmup is not None:subtitle+=f' Shared zero-residual warmup: 0-{case_warmup:g}s.'
         def draw(ax,kind):
@@ -901,8 +926,9 @@ def write_cross_alpha_comparison(root):
         np.savez_compressed(out/f'{stem}.npz',**arrays)
         with (out/f'{stem}.csv').open('w',newline='') as f:
             writer=csv.DictWriter(f,fieldnames=list(csv_rows[0]));writer.writeheader();writer.writerows(csv_rows)
-        record=dict(scenario=case,seed=seed,checkpoint=next(iter(checkpoints)),alphas=sorted(expected),stem=stem,
+        record=dict(scenario=case,seed=seed,checkpoint_by_alpha={str(a):str(c) for a,_,c in entries},independent_fixed_policies=independent,alphas=sorted(expected),stem=stem,
             sources=[str(path) for _,path,_ in sorted(entries)],transitions=len(csv_rows),baseline_physics_shared=True)
+        if len(checkpoints)==1:record['checkpoint']=next(iter(checkpoints))
         manifest.append(record)
         index+=['',f'## {case}',f'![overview]({stem}_overview.png)',
             ' / '.join(f'[{kind}]({stem}_{kind}.png)' for kind in kinds),f'[PDF]({stem}_overview.pdf) / [CSV]({stem}.csv) / [NPZ]({stem}.npz)']

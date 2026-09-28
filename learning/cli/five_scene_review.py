@@ -12,10 +12,10 @@ import numpy as np
 from sttw_control.env import RecoveryEnv,config_from_dict
 from sttw_control.network import make_policy_identity,load_policy
 from sttw_control.evaluation import evaluate
-from sttw_control.tracking_diagnostics import audit_trace,rescore_trace,generate_panel
+from sttw_control.tracking_diagnostics import audit_trace,rescore_trace,generate_panel,comparison_task_identity,validate_baseline_reuse
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--training',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=49001);p.add_argument('--scenes',nargs='+',help='Explicit subset; defaults to all five scenes');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--training',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--seed',type=int,default=49001);p.add_argument('--baseline-review',type=Path,help='Reuse matching fixed-preference baseline physics from an audited review');p.add_argument('--scenes',nargs='+',help='Explicit subset; defaults to all five scenes');a=p.parse_args()
     root=a.output.resolve();root.mkdir(parents=True,exist_ok=True);(root/'frozen').mkdir(exist_ok=True)
     if not json.loads((a.training/'status.json').read_text()).get('complete'):raise ValueError('training must be complete before this review')
     source=json.loads((a.training/'declaration.json').read_text());cfg=config_from_dict(source['task']);best=None
@@ -62,7 +62,17 @@ def main():
                 dest=root/f'evaluation/alpha_{i}/seed_{a.seed}';dest.mkdir(parents=True,exist_ok=True)
                 write(dest/'declaration.json',dict(panel=panel,checkpoint=str(ck),policy=identity,scenarios={n:asdict(c2) for n,c2 in configs.items()},priority_alpha_override=alpha))
                 pair=dest/case;status('evaluation',scenario=case,alpha=alpha);print(case,alpha,flush=True)
-                if i==0:run(env,pair/'baseline',alpha)
+                if i==0 and a.baseline_review is not None and not (pair/'baseline/trace.npz').exists():
+                    src=a.baseline_review/f'evaluation/alpha_0/seed_{a.seed}/{case}/baseline'
+                    original=audit_trace(src);target_config=json.loads(json.dumps(asdict(c)))
+                    if comparison_task_identity(original['config'],independent=True)!=comparison_task_identity(target_config,independent=True):raise ValueError('baseline reuse task mismatch')
+                    d=json.loads((src/'declaration.json').read_text())
+                    validate_baseline_reuse(original,d,target_config,env.bundle.identity,a.seed)
+                    data=rescore_trace(original,alpha);target=pair/'baseline';target.mkdir(parents=True)
+                    d.update(config=target_config,priority_override=alpha,baseline_reuse=str(src.resolve()),reuse_scope='identical fixed-roll baseline physics; preference rescored; captured observations retain source tracking tolerances')
+                    write(target/'declaration.json',d);np.savez_compressed(target/'trace.npz',**data['trace']);write(target/'status.json',dict(status='complete',baseline_reused=True))
+                    audit_trace(target)
+                elif i==0:run(env,pair/'baseline',alpha)
                 elif not (pair/'baseline/trace.npz').exists():
                     src=root/f'evaluation/alpha_0/seed_{a.seed}/{case}/baseline';data=rescore_trace(audit_trace(src),alpha);target=pair/'baseline';target.mkdir(parents=True)
                     d=json.loads((src/'declaration.json').read_text());d.update(priority_override=alpha,baseline_reuse=str(src),reuse_scope='identical physical trace; shared reward replay; recorded observations retain source alpha')
