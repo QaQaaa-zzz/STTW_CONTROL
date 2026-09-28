@@ -102,7 +102,7 @@ class PreferenceGovernor:
         mode,ticks=mode_update(raw_ok,reserve,int(gs.reserve_ticks),int(gs.mode),error,
             int(gs.recovery_hold_ticks)>=100,self.disable_recovery)
         gain=min(1.,float(gs.recovery_gain)+.05/.30) if mode==RECOVER else 0.
-        gov=gs.replace(reserve_ticks=jp.int32(ticks),recovery_gain=jp.float32(gain),mode=jp.int32(mode))
+        gov=gs.replace(reserve_ticks=jp.int32(ticks),recovery_gain=jp.asarray(gain,dtype=gs.recovery_gain.dtype),mode=jp.int32(mode))
         allc=rc;r=rr;index=0;used=240;blocked=False;coarse_count=0;fine_count=0
         if mode!=TRACK:
             _,_,speed=self.predictor.env.observe(s.data)
@@ -118,7 +118,7 @@ class PreferenceGovernor:
             allc=Candidate(np.concatenate([coarse.goal,fine.goal]),np.concatenate([coarse.bypass,fine.bypass]),np.concatenate([coarse.valid,fine.valid]))
             index=select(r,alpha,mode)
             if index is None:raise FloatingPointError('numerical_failure: every candidate nonfinite')
-            if not np.any(r['feasible']):mode=EMERGENCY;gain=0.;gov=gov.replace(mode=jp.int32(mode),recovery_gain=jp.float32(0))
+            if not np.any(r['feasible']):mode=EMERGENCY;gain=0.;gov=gov.replace(mode=jp.int32(mode),recovery_gain=jp.asarray(0.,dtype=gs.recovery_gain.dtype))
             if mode==RECOVER:
                 improves=r['feasible']&(r['heading_cost']<=rr['heading_cost'][0]-1e-4)
                 if not np.any(improves):index=0;blocked=True

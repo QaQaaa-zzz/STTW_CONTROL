@@ -12,10 +12,11 @@ def provenance(root,config,env):
         xml_sha256=env.bundle.identity['source_xml_sha256'],model_identity=env.bundle.identity,
         dependencies=dict(jax=jax.__version__,mujoco=mujoco.__version__,numpy=numpy.__version__),
         devices=[str(d) for d in jax.devices()],hardware=platform.platform(),
-        backend='mjx jax',observation_mode=env.observation_mode)
+        backend='mjx jax',observation_mode=env.observation_mode,
+        jax_enable_x64=jax.config.x64_enabled,model_dtype=str(env.helpers.mjx_model.body_mass.dtype))
     if path.exists():
         old=json.loads(path.read_text())
-        for k in ['config_sha256','xml_sha256','dependencies']:
+        for k in ['config_sha256','xml_sha256','dependencies','jax_enable_x64','model_dtype','devices','commit']:
             if old[k]!=identity[k]:raise ValueError('run identity mismatch: '+k)
         return old
     path.write_text(json.dumps(identity,indent=2)+'\n');return identity

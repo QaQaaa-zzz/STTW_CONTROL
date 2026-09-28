@@ -17,8 +17,10 @@ def run(a,c):
     try:
         if (root/'status.json').exists():
             old=json.loads((root/'status.json').read_text())
-            if old['status'].startswith(('stopped','budget_exhausted','numerical_failure','implementation_error')):
+            if old['status'].startswith(('stopped','budget_exhausted','numerical_failure','implementation_error')) and not (a.resume_contracts and old['status'].startswith('stopped_contracts')):
                 raise ValueError('run stopped; no automatic continuation or replacement of failed evidence')
+        import jax
+        if a.float64:jax.config.update('jax_enable_x64',True)
         env=TeleopEnv(c);provenance(root,a.config,env)
         frozen=root/'frozen_config.json'
         if frozen.exists() and json.loads(frozen.read_text())!=c:raise ValueError('frozen configuration mismatch')
@@ -30,12 +32,25 @@ def run(a,c):
         else:
             prep=json.loads((contracts/'preparation.json').read_text())
             with (contracts/'prepared_snapshot.pkl').open('rb') as f:prepared=pickle.load(f)
+        pointer=root/'contracts/current_contracts.json'
+        current=json.loads(pointer.read_text()) if pointer.exists() else None
+        if current:
+            if current['float64']!=a.float64:raise ValueError('validated precision differs from requested execution')
+            with (root/current['snapshot']).open('rb') as f:prepared=pickle.load(f)
+        elif a.float64:
+            from sttw_control.teleop_precision import promote_snapshot
+            prepared=promote_snapshot(prepared)
         review=Review(env,prepared,budget,root,c)
-        if (root/'status.json').exists():review.restore()
+        if (root/'metrics.json').exists():review.restore()
+        if a.resume_contracts and (root/'status.json').exists():
+            history=root/'status_history';history.mkdir(exist_ok=True)
+            import time,shutil
+            shutil.copy2(root/'status.json',history/(str(time.time_ns())+'.json'))
         if not prep['passed']:
             review.status.update(status='stopped_preparation',classification='baseline_not_ready')
             review.status['gates']['interfaces']='preparation_failed';review.status['gates']['prediction_replay']='not_run';review.save();return
-        if not (contracts/'physical_contracts.json').exists():checks=physical_contracts(env,prepared,budget,contracts)
+        if current:checks=json.loads((root/current['result']).read_text())
+        elif not (contracts/'physical_contracts.json').exists():checks=physical_contracts(env,prepared,budget,contracts)
         else:checks=json.loads((contracts/'physical_contracts.json').read_text())
         if not checks['passed']:
             review.status.update(status='stopped_contracts',classification='timing_or_state_mismatch')
@@ -126,7 +141,7 @@ def run(a,c):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--config',required=True);p.add_argument('--output',required=True)
     p.add_argument('--phase',choices=['contracts','baseline','core','random','ablation','all'],default='all')
-    p.add_argument('--predictor-budget',type=int,default=80000000);p.add_argument('--cases',nargs='*');p.add_argument('--methods',nargs='*');p.add_argument('--dry-run',action='store_true')
+    p.add_argument('--float64',action='store_true');p.add_argument('--resume-contracts',action='store_true');p.add_argument('--predictor-budget',type=int,default=80000000);p.add_argument('--cases',nargs='*');p.add_argument('--methods',nargs='*');p.add_argument('--dry-run',action='store_true')
     a=p.parse_args();c=load_teleop_config(a.config)
     if a.predictor_budget<0:raise ValueError('negative budget')
     if a.methods and set(a.methods)-{'B0','G0','G1'}:raise ValueError('unknown method')

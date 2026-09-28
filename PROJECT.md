@@ -840,3 +840,23 @@ Read-only detector: `python3 learning/cli/teleop_governor_status.py --watch --no
 Uses run-local checks_watch.json, persists notification receipt to avoid duplicate popup;
 no automatic continuation. Popup title explicitly requested by user: 偏好控制器仿真结束;
 body distinguishes short-check completion, failed check, and unrun later panels.
+
+### 2026-09-28 resumed contract diagnosis (user: continue)
+Existing ledger retained. CPU float32 144-copy diagnostic confirms original snapshot
+unchanged and duplicates exactly equal, yet batch vs scalar replay terminal qvel
+max error3.7145146052353084e-5 exceeds unchanged1e-5 tolerance. Original check conflated
+state mutation with duplicate arithmetic equality. Next bounded diagnostic: same full
+MJX/JAX equations/model/solver and complete initial snapshot, both plant and predictor
+float64, to test batched rounding sensitivity. No XML/threshold/window/grid/controller
+parameter change. This arithmetic precision change is explicit; old float32 evidence
+remains unaccepted. Reserve34560 batch +240 scalar ticks per raw/governed diagnostic;
+ledger includes all work. No main episode until actual batch/step consistency passes.
+Float64 same-snapshot diagnostic completed: raw terminal qvel difference7.0980e-11,
+governed1.3804e-14; qpos6.4574e-12/2.0539e-15. Real snapshot preserved, duplicate
+results equal. Initial migration compile error (contact geom int32 vs JAX64 int64)
+is retained; the fix casts only those indices without changing values. Added verified
+complete-state promotion, stable governor scalar dtype, precision/device provenance,
+and production shape1/144/80 vs independently rebuilt executed summaries contract.
+Current 25 targeted tests passed. Next production contract attempt remains in the same
+run and budget; no main panel until it passes. Notification keys separate this resumed
+stage from the already-delivered completion popup.

@@ -29,3 +29,7 @@ def test_notification_text_distinguishes_completion_from_pass():
     title,body=m.notification_text({'status':'finished_with_failed_check','all_finished':True,'checks':[]})
     assert title=='偏好控制器仿真结束'
     assert '未通过' in body and '尚未运行' in body
+
+def test_popup_uses_current_failure_names_instead_of_old_gate():
+    title,body=module().notification_text({'status':'finished_with_failed_check','all_finished':True,'checks':[{'name':'Gate A baseline','passed':False}]})
+    assert 'Gate A baseline' in body and '144 个重复候选' not in body

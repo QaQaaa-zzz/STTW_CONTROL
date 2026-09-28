@@ -106,3 +106,46 @@ def test_dry_run_does_not_create_output_or_simulate(tmp_path):
     result=subprocess.run([sys.executable,str(ROOT/'learning/cli/teleop_governor_review.py'),'--config',str(ROOT/'learning/configs/teleop_pref_governor_v1.json'),'--output',str(out),'--dry-run'],capture_output=True,text=True)
     assert result.returncode==0,result.stderr
     assert not out.exists()
+
+def test_copy_isolation_is_separate_from_batched_numeric_variation():
+    from sttw_control.teleop_contract_checks import copy_diagnostics
+    before=[np.array([1.,2.])];after=[np.array([1.,2.])]
+    report=copy_diagnostics(before,after,{'terminal_qvel':np.array([[1.],[1.00009]]),'feasible':np.array([True,True])})
+    assert report['state_preserved']
+    assert report['per_field_duplicate_max_abs']['terminal_qvel']>1e-5
+    after[0][1]=3.
+    assert not copy_diagnostics(before,after,{})['state_preserved']
+
+def test_initial_state_respects_selected_jax_precision():
+    # Higher arithmetic precision must not leave float32 state inside a float64 scan.
+    import jax
+    from sttw_control.teleop_env import TeleopEnv
+    with jax.experimental.enable_x64():
+        e=TeleopEnv(backend='cpu');s=e.initial()
+        assert np.asarray(s.raw).dtype==np.float64
+        np.testing.assert_array_equal(s.data.qpos,e.model.qpos0)
+
+def test_precision_migration_preserves_complete_snapshot_values():
+    import jax
+    from sttw_control.teleop_env import TeleopEnv
+    from sttw_control.teleop_precision import promote_snapshot
+    e=TeleopEnv(backend='mjx');s=e.initial()
+    with jax.experimental.enable_x64():
+        migrated=promote_snapshot(s)
+        for x,y in zip(jax.tree.leaves(s),jax.tree.leaves(migrated)):
+            np.testing.assert_array_equal(x,y)
+        assert migrated.data.qpos.dtype==np.float64
+        assert migrated.data._impl.contact.geom.dtype==np.int64
+        assert migrated.governor.recovery_gain.dtype==np.float64
+
+def test_independent_summary_rebuilds_actual_costs():
+    from sttw_control.teleop_contract_checks import independent_summary
+    from types import SimpleNamespace
+    from sttw_control.controller import ControllerConfig
+    n=240
+    initial=SimpleNamespace(raw=np.array([2.3,0.]),actuator=SimpleNamespace(previous=np.array([0.,23.])))
+    end=SimpleNamespace(failed=False,data=SimpleNamespace(qpos=np.zeros(11),qvel=np.zeros(10)))
+    logs={k:np.zeros(n) for k in ['phi','phi_dot','actual_delta','peak_roll','peak_roll_rate','e_psi_unwrapped','nonfinite']}
+    logs.update(wheel_speed_proxy=np.full(n,2.3),actual_forward_speed=np.full(n,2.4),final_command=np.tile([0.,23.],(n,1)),applied_residual=np.zeros((n,2)))
+    r=independent_summary(initial,end,logs,SimpleNamespace(cc=ControllerConfig()))
+    assert abs(r['speed_rmse']-.1)<1e-14 and r['steer_rmse']==0 and r['smoothness']==0 and r['feasible']

@@ -54,7 +54,8 @@ def inspect(run):
 def notification_text(result):
     title='偏好控制器仿真结束' if result['all_finished'] else '偏好控制器检查异常'
     if result['status']=='finished_with_failed_check':
-        body='本次已启动的短检查均已结束，其中一项检查未通过。\n144 个重复候选结果存在差异，需要诊断。\n温和指令、冲突与航向恢复、随机面板尚未运行。\n已按你的要求暂停，不会自动继续。'
+        failed=', '.join(c['name'] for c in result['checks'] if c.get('passed') is False)
+        body='本次已登记的检查均已结束，存在未通过项：'+(failed or '请查看报告')+'。\n未通过 gate 后的后续实验尚未运行；脚本不会自动继续。'
     elif result['all_finished']:
         body='本次已登记的检查均已结束。\n检查结束不代表所有实验 gate 通过；请查看检测报告。\n后续面板尚未运行，等待你通知继续。'
     else:
@@ -63,8 +64,12 @@ def notification_text(result):
 
 
 def notify(run,result):
-    import fcntl,os,shutil,subprocess
-    run=Path(run);record=run/'completion_notification.json'
+    import fcntl,os,re,shutil,subprocess
+    run=Path(run)
+    manifest=json.loads((run/'checks_watch.json').read_text())
+    key=manifest.get('notification_key','completion')
+    if not re.fullmatch(r'[a-zA-Z0-9_-]+',key):raise ValueError('invalid notification key')
+    record=run/(key+'_notification.json')
     with (run/'.completion_notification.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         if record.exists():return json.loads(record.read_text())

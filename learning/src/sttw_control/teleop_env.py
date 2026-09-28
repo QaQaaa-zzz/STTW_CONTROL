@@ -36,7 +36,7 @@ class TeleopEnv:
     def initial(self):
         # Fresh physics only; never RecoveryEnv.reset/_prepare (which updates ESO).
         m=self.model;b=self.bundle;raw=jp.array([2.3,0.])
-        qpos=jp.asarray(m.qpos0,dtype=jp.float32)
+        qpos=jp.asarray(m.qpos0,dtype=raw.dtype)
         qvel=jp.zeros(m.nv).at[0].set(2.3).at[b.rear_dof].set(-23.).at[b.front_dof].set(-23.)
         ctrl=jp.zeros(m.nu).at[1].set(-23.)
         if self.backend=='cpu':
@@ -46,7 +46,7 @@ class TeleopEnv:
             data=self.helpers._mjx.make_data(m,impl='jax').replace(qpos=qpos,qvel=qvel,ctrl=ctrl)
             data=jax.jit(lambda d:self.helpers._mjx.forward(self.helpers.mjx_model,d))(data)
         p=self.helpers.pose(data)
-        governor=GovernorState(raw,raw,jp.int32(0),jp.float32(0),jp.int32(0),jp.int32(0))
+        governor=GovernorState(raw,raw,jp.int32(0),jp.asarray(0.,dtype=raw.dtype),jp.int32(0),jp.int32(0))
         return Snapshot(data,initial_controller(self.cc),initial_actuator(self.ac,23.),
             jp.int32(0),raw,p,p[2],p[2],governor,jp.bool_(False))
 
@@ -81,7 +81,7 @@ class TeleopEnv:
                 finite=finite&jp.all(jp.isfinite(d.qpos))&jp.all(jp.isfinite(d.qvel))&jp.all(jp.isfinite(d.act))
                 return d,contact|h._contact_failure(d),jp.maximum(pr,jp.abs(mm[0])),jp.maximum(pd,jp.abs(mm[1])),finite
             d,contact,peak_roll,peak_rate,finite=jax.lax.fori_loop(0,self.substeps,substep,
-                (d,jp.bool_(False),jp.float32(0),jp.float32(0),jp.bool_(True)))
+                (d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True)))
             d=h._mjx.forward(h.mjx_model,d)
         m,p,speed=self.observe(d)
         peak_roll=jp.maximum(peak_roll,jp.abs(m[0]));peak_rate=jp.maximum(peak_rate,jp.abs(m[1]))
