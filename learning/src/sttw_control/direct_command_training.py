@@ -35,8 +35,35 @@ def load_spec(path):
         return result
     spec=json.loads(Path(path).read_text(),object_pairs_hook=unique)
     canonical=json.loads((Path(__file__).resolve().parents[2]/'configs/STTW_Direct_Command_V3.json').read_text())
-    if spec!=canonical:raise ValueError('unknown or altered frozen V3 field; new protocol identity required')
+    # A separately frozen, user-authorized run may change its training budget.
+    # Method, reward, evaluation, initialization and physical fields stay frozen.
+    mutable={'ppo':('default_updates','future_total_updates_only_after_user_approval'),
+        'budget':('default_policy_transitions','default_control_transitions_upper',
+                  'additional_compute_wall_seconds','training_wall_seconds')}
+    expected=json.loads(json.dumps(canonical))
+    for section,fields in mutable.items():
+        for field in fields:
+            value=spec.get(section,{}).get(field)
+            if type(value) is not int or value<=0:raise ValueError('invalid run budget '+field)
+            expected[section][field]=value
+    if spec!=expected:raise ValueError('unknown or altered frozen V3 method field')
+    updates=spec['ppo']['default_updates'];b=spec['budget']
+    samples=updates*spec['ppo']['num_envs']*spec['ppo']['rollout_policy_steps']
+    if (updates>spec['ppo']['future_total_updates_only_after_user_approval'] or
+        b['default_policy_transitions']!=samples or
+        b['default_control_transitions_upper']!=samples*spec['plant']['control_ticks_per_action'] or
+        b['training_wall_seconds']>b['additional_compute_wall_seconds']):
+        raise ValueError('inconsistent declared training budget')
     return spec
+
+def validate_run_limits(spec,updates=None,compute_wall_budget=None):
+    maximum=spec['ppo']['default_updates'];wall=spec['budget']['additional_compute_wall_seconds']
+    updates=maximum if updates is None else updates
+    compute_wall_budget=wall if compute_wall_budget is None else compute_wall_budget
+    if type(updates) is not int or not 1<=updates<=maximum:
+        raise ValueError(f'updates must be1..{maximum} for this frozen run config')
+    if not 0<compute_wall_budget<=wall:raise ValueError(f'compute budget must be0..{wall}')
+    return updates,compute_wall_budget
 
 def flatten_logs(logs):
     flat={}
@@ -52,7 +79,7 @@ class Campaign:
         self.config=Path(config);self.spec=load_spec(config);self.out=Path(output)
         if (self.out/'manifest.json').exists():raise FileExistsError('immutable run output already exists')
         self.budget=ComputeBudget(output,self.spec);self.budget.recover_interrupted()
-        self.status=dict(run_id=self.out.name,state='initializing',stage='interface',completed_updates=0,declared_updates=20,
+        self.status=dict(run_id=self.out.name,state='initializing',stage='interface',completed_updates=0,declared_updates=self.spec['ppo']['default_updates'],
             policy_transitions=0,control_ticks=0,initialization='fresh',training_seed=self.spec['ppo']['seed'])
         self.seen_cases=set();self._status()
     def _status(self,**kwargs):
@@ -357,9 +384,11 @@ class Campaign:
         self._status(stage='complete',state='complete',completed_updates=completed)
         notify('STTW V3 pipeline ended',f'checkpoint {completed}; comparison evidence saved')
 
-def run(config,output,updates=20,compute_wall_budget=1800,dry_run=False):
-    if not 1<=updates<=20:raise ValueError('updates must be1..20; no automatic extension')
-    c=Campaign(config,output);c.budget.total_limit=min(c.budget.total_limit,compute_wall_budget)
+def run(config,output,updates=None,compute_wall_budget=None,dry_run=False):
+    c=Campaign(config,output)
+    updates,compute_wall_budget=validate_run_limits(c.spec,updates,compute_wall_budget)
+    c.budget.total_limit=min(c.budget.total_limit,compute_wall_budget)
+    c._status(declared_updates=updates)
     if dry_run:c._status(stage='dry_run',state='dry_run');return
     try:
         c.initialize();c.preflight();c.train('smoke',2)

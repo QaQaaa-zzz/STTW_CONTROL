@@ -33,3 +33,15 @@ The review overview plots realized final-command change, computed from `actual_n
 Reward plots pair α0 policy with B0 scored under α0 and α1 policy with the same B0 physical trajectory rescored under α1. The derived `B0_rescored_alpha1.npz` and CSV preserve the physical trace, reweight speed/steer components from the frozen JSON, recalculate the cap and retain the whole 20 ms failure replacement. Rescoring first audits B0's stored α0 components and scored reward. If that audit fails or required fields are absent, the report labels the α1 baseline unavailable and does not draw a false comparison.
 
 Training reward, gradient changes, latent differences and survival are not substitutes for the prescribed actual-speed/steer, work-range and unwrapped-heading results. One seed and six planned review episodes are a pilot, not convergence, generalization or safety proof. No real vehicle execution is authorized by this run.
+
+
+## Explicitly authorized 500-update trial
+
+After the original20-update pilot, the user requested500 updates. The separate
+`learning/configs/direct_command_500.json` declares fresh512x128x500 sampling,
+32,768,000 policy transitions,131,072,000 control ticks maximum,15000s training and
+16200s total compute. It changes only run-length/sample budgets; the frozen V3 method,
+reward, physics, initialization and restricted final-review contract are unchanged.
+The CLI derives omitted update/wall arguments from the selected frozen config and
+rejects values beyond that config. The original JSON still defaults to20/1800.
+No checkpoint import or automatic further continuation is introduced.

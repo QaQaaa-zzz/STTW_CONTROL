@@ -916,3 +916,20 @@ environments, so it is not saturation evidence. Added optimizer-nonfinite stop g
 before review (not triggered in this finite run), independent saved-trace audit,
 matched-alpha baseline re-scoring, physical and reward plots. Control mathematics
 and this run's trained checkpoint were not changed. Final related suite48passed.
+
+
+## 2026-09-28 User-authorized V3 500-update trial — implementation plan
+
+User explicitly replaced the20-update cap with500 updates. Keep the V3 method and
+its fresh-initialization requirement: separate fresh shared Actor/Critic/optimizer,
+seed73,512x128x500=32,768,000 policy transitions,131,072,000 control ticks maximum.
+Config `learning/configs/direct_command_500.json` changes only update/sample and
+training/total compute budgets. Training15000s, total16200s; compile300s,
+engineering120s and existing restricted two-case review budget remain unchanged.
+No old experiment overwrite, no policy import, no automatic beyond500 continuation.
+
+Plan: (1) make existing CLI/status/budget honor explicitly frozen run counts while
+validating all method fields against V3; (2) tests for500 acceptance, immutable method
+rejection and sample-count consistency; (3) launch new bounded campaign and isolated
+TensorBoard, verify a current pilot reward scalar and checkpoint; (4) record source,
+run identity, live progress and stop conditions. Existing isolated branch reused.
