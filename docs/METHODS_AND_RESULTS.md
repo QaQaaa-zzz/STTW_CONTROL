@@ -704,7 +704,7 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 
 新增按alpha统计超速/欠速峰值、发生比例、累计环境秒和积分；峰值跨采样步取max，时长积分累加，无效值独立计数。评估单轨迹另记录最长连续段；修复旧汇总speed_tolerance_exceed_fraction对非对称任务漏报超速。均为日志诊断，不改变旧冻结轨迹/奖励/模型身份。
 
-附件A/B/C成本率复现：alpha0为3.4545/37.6000/12.9091，alpha1为31.5455/37.4691/1.0909。CPU基线2000步无物理失败、奖励重建误差2.92e-7；两组GPU各2轮×8环境×8步完成。全套441 passed/5 skipped，补充修复后相关19 passed，最终全套复核进行中。
+附件A/B/C成本率复现：alpha0为3.4545/37.6000/12.9091，alpha1为31.5455/37.4691/1.0909。CPU基线2000步无物理失败、奖励重建误差2.92e-7；两组GPU各2轮×8环境×8步完成。最终全套442 passed、5 skipped，相关方向诊断/奖励测试19 passed。
 
 新目录runs/fixed_endpoints_directional100_20260928，两组冷启动各100更新，1024×128采样/轮、32768 minibatch、4epochs、固定学习率3e-4；总26,214,400正式转移，初始化每组≤2,048,000计算步另计。顺序运行、异常停队列、不自动延长；实时启动状态以status.json为准。
 
