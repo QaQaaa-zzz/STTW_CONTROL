@@ -69,6 +69,8 @@ def report(root,status,metrics,case_manifest):
     with (root/'metrics.csv').open('w') as f:
         w=csv.writer(f);w.writerow(['metric','value']);w.writerows(flat)
     budget=json.loads((root/'budget.json').read_text())
+    pointer=root/'contracts/current_contracts.json'
+    contract_link=json.loads(pointer.read_text())['result'] if pointer.exists() else 'contracts/physical_contracts.json'
     lines=['# Teleop preference governor V1 audit','',f"Status: **{status['status']}**.",'',
         'No training, no neural policy, no parameter tuning. Full-state oracle simulation only.',
         'Reference is original slew-limited v/delta intent. Heading recovery is distinct from XY recovery.','',
@@ -79,7 +81,7 @@ def report(root,status,metrics,case_manifest):
         f"Main episodes: {budget['main_episodes']}; ablations: {budget['ablation_episodes']}; contract rollouts: {budget['contract_rollouts']}.",
         'Reserved work is conservative after interruptions; detailed events and physics substeps are in budget.json.',
         '', '## Evidence', '', '[Exact metrics](metrics.json), [flattened metrics CSV](metrics.csv), [budget](budget.json), [case manifest](case_manifest.json).',
-        '[Preparation](contracts/preparation.json), [physical contracts](contracts/physical_contracts.json).','',
+        f'[Preparation](contracts/preparation.json), [physical contracts]({contract_link}), [numerical diagnosis](numerical_diagnosis/REPORT.md).','',
         '## Limits','', 'Unrun gates are NOT passed. Emergency, incomplete horizon and budget exhaustion disqualify task success.',
         'Compilation is reported separately; synchronized solve latency includes candidate generation, prediction and selection.','']
     for case in case_manifest:

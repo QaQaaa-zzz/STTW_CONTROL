@@ -860,3 +860,13 @@ and production shape1/144/80 vs independently rebuilt executed summaries contrac
 Current 25 targeted tests passed. Next production contract attempt remains in the same
 run and budget; no main panel until it passes. Notification keys separate this resumed
 stage from the already-delivered completion popup.
+Production contract resume_validation passed: four explicit/scan240-tick replays,
+plus real predict() shapes1/144/80 versus independently reconstructed physical/cost/
+constraint summaries. Maximum error7.09802e-11; Boolean constraints agree; complete
+snapshot unchanged. 467 passed/5 skipped in full compatibility suite. XML, control
+parameters, candidate grids, thresholds and permissions unchanged; execution now
+explicitly uses MJX/JAX CPU float64 with exact-value snapshot migration. Old float32
+failures remain failed. Warm144 prediction ~69.25s: not real-time20Hz. Proceed offline
+within original80M ledger; gate order unchanged; detector will popup at completion or
+failure stop. At launch preparation700 ticks, predictor301440 ticks, contracts21,
+main episodes0. Numerical evidence: numerical_diagnosis/REPORT.md under original run.

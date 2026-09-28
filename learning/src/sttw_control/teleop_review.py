@@ -106,6 +106,8 @@ class Review:
             for k,row in enumerate(stream):
                 s=s.replace(raw=jp.asarray(row[2:]))
                 if k%10==0:
+                    if k%100==0:
+                        (self.root/'execution_progress.json').write_text(json.dumps(dict(case=case,method=method,task_time_s=k*.005,phase='ablation' if ablation else 'main',updated_unix=time.time()))+'\n')
                     if method!='B0':
                         decision=gov.decide(s,int(method[1]));s=s.replace(governor=decision.governor)
                         self.latencies.append((decision.latency_ms,decision.cold_compile));raw_conflict|=not decision.raw_feasible

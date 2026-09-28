@@ -1903,3 +1903,16 @@ acceptance or realtime solve evidence. Later CLI/plotting/metrics code has not b
 validated end-to-end. User requested pause and a desktop completion detector; this is
 an intermediate implementation handoff, not successful simulation delivery.
 Evidence: runs/teleop_pref_governor_v1/20260928T055716Z/HANDOFF.md.
+
+## 2026-09-28 Teleop resumed numerical contract repair
+CPU float32 isolates the original failure: snapshot unchanged and duplicates equal,
+but batch/scalar terminal qvel differs3.71e-5 raw and1.63e-5 governed, above fixed1e-5.
+Explicit float64 complete-state promotion preserves every original value; contact geom
+index width is adapted to JAX64 without changing indices. Same XML/solver/controller,
+limits, candidate grid and thresholds. Production predict() shapes1/144/80 against
+independent240-step execution and NumPy-rebuilt costs/flags pass (max7.10e-11), alongside
+four exact scan/explicit replays. Full suite467 passed/5 skipped. These checks cover
+tested boundaries only; baseline/pref/recovery gates remain to be run. Warm144 CPU
+prediction ~69.25s is not real-time20Hz; permitted offline validation continues bounded.
+Evidence: runs/teleop_pref_governor_v1/20260928T055716Z/contracts/resume_validation and
+numerical_diagnosis/REPORT.md. Original attempts and budget retained; no training/push.

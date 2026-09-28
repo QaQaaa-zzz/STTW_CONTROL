@@ -723,3 +723,12 @@ Predictor reserved ticks 71,760; preparation plant ticks700; training/main episo
 Original failure and retry evidence preserved under
 runs/teleop_pref_governor_v1/20260928T055716Z; read-only detector and one-time completion
 popup implemented at user's request. No automatic continuation or push.
+
+Teleop V1 numerical follow-up (user resumed): separate state-isolation evidence shows
+no mutation. Float32 batch/scalar replay exceeds1e-5; common float64 arithmetic reduces
+maximum production check error to7.10e-11 across shapes1/144/80. Complete state values
+are preserved without ESO reset; no physical/controller parameter or acceptance change.
+Prior failed precision remains negative evidence. Four240-step execution/scan comparisons
+and independently rebuilt costs/constraint flags pass; full tests467/5 skipped. No claim
+of controller performance or real-time readiness: warm144 prediction69.25s. Original
+80M budget continues into gate-ordered offline panels, completion/error popup enabled.

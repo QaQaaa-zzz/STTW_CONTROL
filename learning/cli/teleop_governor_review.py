@@ -59,6 +59,7 @@ def run(a,c):
         methods=a.methods or ['B0','G0','G1']
         phases=['baseline','core','random','ablation'] if a.phase=='all' else [a.phase]
         for phase in phases:
+            review.status.update(status='in_progress',phase=phase);review.save()
             if phase=='baseline':
                 cases=a.cases or [f'N{i}' for i in range(6)]
                 if any(not case.startswith('N') for case in cases):raise ValueError('baseline cases must be N0--N5')
