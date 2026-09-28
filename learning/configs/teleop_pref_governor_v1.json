@@ -1,0 +1,483 @@
+{
+  "schema_version": "sttw_teleop_pref_governor_v1.0",
+  "method": "finite_candidate_lexicographic_closed_loop_reference_governor",
+  "base": {
+    "repository": "QaQaaa-zzz/STTW_CONTROL",
+    "commit": "b446abae131f7a3698c884f1872f8049e9ba3c6e",
+    "branch": "experiment/teleop-pref-governor-v1"
+  },
+  "scope": {
+    "train_neural_network": false,
+    "train_rl": false,
+    "load_policy_checkpoint": false,
+    "push_remote": false,
+    "lateral_position_objective": false,
+    "longitudinal_catchup_objective": false,
+    "preserve_legacy_task_semantics": true
+  },
+  "model": {
+    "plant_backend": "mjx",
+    "predictor_backend": "mjx",
+    "mjx_impl": "jax",
+    "load_existing_model": true,
+    "modify_xml": false,
+    "modify_physics_timestep": false,
+    "modify_contact_or_solver": false,
+    "state_provider": "oracle_full_state",
+    "future_command_model": "hold_current_limited_command",
+    "external_disturbances_enabled": false,
+    "copy_complete_integration_state": true,
+    "preserve_disabled_actuator_compatibility": true,
+    "controller_speed_measurement": "existing_rear_rate_times_0p1",
+    "supervisor_speed_measurement": "world_planar_velocity_projected_on_heading"
+  },
+  "controller": {
+    "dt_s": 0.005,
+    "fixed_roll_reference": null,
+    "learning_roll_reference": null,
+    "retain_gains_and_eso_equations": true,
+    "eso_start_s": 3.0,
+    "controller_updates_per_physical_tick": 1
+  },
+  "actuator_contract": {
+    "composition": "additive",
+    "project_base": false,
+    "strength": 1.0,
+    "base_output_scale": 1.0,
+    "steer_residual_scale_rad_s": 1.5,
+    "rear_residual_scale_rad_s": 10.0,
+    "final_steer_rate_limit_rad_s": 3.0,
+    "final_rear_rate_limit_rad_s": 60.0,
+    "steer_joint_limit_rad": 0.8,
+    "wheel_radius_proxy_m": 0.1,
+    "retain_existing_delay_and_slew": true,
+    "apply_tanh_to_analytic_residual": false
+  },
+  "reference": {
+    "kind": "kinematic_bicycle_command_intent",
+    "wheelbase_source": "ControllerConfig.wheelbase",
+    "caster_source": "ControllerConfig.caster",
+    "expected_wheelbase_m": 0.408,
+    "expected_caster_deg": 25.0,
+    "integration": "constant_twist_exact_midpoint_sinc",
+    "sinc_definition": "sin(z)/z",
+    "heading_storage": "unwrapped",
+    "reanchor_during_episode": false
+  },
+  "commands": {
+    "initial_v_m_s": 2.3,
+    "initial_delta_rad": 0.0,
+    "v_min_m_s": 2.0,
+    "v_max_m_s": 2.6,
+    "delta_abs_max_rad": 0.3,
+    "v_slew_m_s2": 0.5,
+    "delta_slew_rad_s": 0.3,
+    "sample_independent_yaw_rate": false
+  },
+  "governor": {
+    "alphas": [
+      0.0,
+      1.0
+    ],
+    "alpha_constant_per_episode": true,
+    "period_s": 0.05,
+    "control_ticks_per_decision": 10,
+    "performance_horizon_s": 0.8,
+    "performance_ticks": 160,
+    "continuation_horizon_s": 0.4,
+    "continuation_ticks": 80,
+    "terminal_set_is_certified_invariant": false,
+    "v_goal_min_m_s": 1.5,
+    "conflict_max_v_reduction_m_s": 1.0,
+    "v_goal_upper": "current_limited_user_speed",
+    "delta_goal_abs_max_rad": 0.35,
+    "v_reference_slew_m_s2": 1.0,
+    "delta_reference_slew_rad_s": 0.6,
+    "bypass_mode": "exact_zero_residual_reset_virtual_governed_reference_only"
+  },
+  "candidates": {
+    "speed_grid_points": 9,
+    "steer_grid_points": 15,
+    "special_candidate_slots": 9,
+    "coarse_batch_size": 144,
+    "refinement_centers": [
+      "best_steer",
+      "best_speed",
+      "best_heading_or_smoothness"
+    ],
+    "centers_independent_of_alpha": true,
+    "refinement_offsets_in_coarse_spacing": [
+      -0.5,
+      -0.25,
+      0.0,
+      0.25,
+      0.5
+    ],
+    "refinement_max_evaluated": 75,
+    "refinement_batch_size": 80,
+    "refinement_rounds": 1,
+    "stable_tiebreak": "lowest_candidate_index"
+  },
+  "constraints": {
+    "roll_working_rad": 0.3,
+    "roll_rate_working_rad_s": 1.5,
+    "terminal_roll_rate_rad_s": 0.3,
+    "terminal_equilibrium_error_rad": 0.08,
+    "terminal_equilibrium_reference": "actual_steer_divided_by_ecbc_ratio_at_wheel_speed",
+    "roll_physical_failure_rad": 0.7,
+    "retain_contact_and_nonfinite_failure": true,
+    "hard_instantaneous_speed_tracking_band": null,
+    "all_alphas_identical_constraints": true
+  },
+  "selection": {
+    "performance_errors_use": "predicted_actual_physical_state",
+    "conflict_alpha0_order": [
+      "steer_rmse",
+      "speed_rmse",
+      "smoothness"
+    ],
+    "conflict_alpha1_order": [
+      "speed_rmse",
+      "steer_rmse",
+      "smoothness"
+    ],
+    "steer_primary_slack_rad": 0.005,
+    "speed_primary_slack_m_s": 0.02,
+    "final_command_delta_weight": 0.02,
+    "nominal_deviation_weight": 0.001,
+    "final_command_normalizers": [
+      3.0,
+      60.0
+    ],
+    "residual_normalizers": [
+      1.5,
+      10.0
+    ],
+    "recover_order": [
+      "speed_rmse_with_slack",
+      "heading_cost",
+      "smoothness"
+    ],
+    "heading_scale_rad": 0.1,
+    "heading_terminal_weight": 2.0,
+    "heading_cost_tie_slack": 0.001,
+    "recovery_improvement_min": 0.0001
+  },
+  "recovery": {
+    "enabled": true,
+    "reserve_roll_rad": 0.24,
+    "reserve_roll_rate_rad_s": 0.8,
+    "reserve_hold_s": 0.2,
+    "activation_heading_error_rad": 0.08,
+    "exit_heading_error_rad": 0.03,
+    "exit_speed_error_m_s": 0.1,
+    "exit_steer_error_rad": 0.03,
+    "exit_hold_s": 0.5,
+    "gain_ramp_s": 0.3,
+    "heading_gain_per_s": 0.8,
+    "heading_control_clip_rad": 1.5707963267948966,
+    "yaw_rate_extra_abs_max_rad_s": 0.4,
+    "delta_extra_abs_max_rad": 0.1,
+    "max_speed_reduction_m_s": 0.1,
+    "inverse_speed_floor_m_s": 1.5,
+    "same_logic_for_both_alphas": true,
+    "large_debt_diagnostic_rad": 3.141592653589793,
+    "use_departure_deadline_in_control": false
+  },
+  "initialization": {
+    "preparation_s": 3.5,
+    "v_m_s": 2.3,
+    "delta_rad": 0.0,
+    "residual": [
+      0.0,
+      0.0
+    ],
+    "reset_eso_at_task_start": false,
+    "end_roll_abs_max_rad": 0.05,
+    "end_roll_rate_abs_max_rad_s": 0.1,
+    "end_speed_abs_error_max_m_s": 0.1,
+    "end_steer_abs_max_rad": 0.03,
+    "pair_same_complete_snapshot": true
+  },
+  "evaluation": {
+    "task_duration_s": 16.0,
+    "methods": [
+      "B0",
+      "G0",
+      "G1"
+    ],
+    "phase_order": [
+      "contracts",
+      "baseline",
+      "core",
+      "random",
+      "ablation"
+    ],
+    "stop_on_gate_failure": true,
+    "conflict_window_s": [
+      3.0,
+      5.0
+    ],
+    "nominal_speed_rmse_max_m_s": 0.12,
+    "nominal_steer_rmse_max_rad": 0.04,
+    "working_roll_numeric_tolerance_rad": 0.002,
+    "primary_relative_ratio_max": 0.8,
+    "steer_separation_min_rad": 0.01,
+    "speed_separation_min_m_s": 0.05,
+    "alpha0_primary_steer_rmse_max_rad": 0.05,
+    "alpha1_primary_speed_rmse_max_m_s": 0.15,
+    "active_brake_pre_window_s": [
+      1.5,
+      2.0
+    ],
+    "active_brake_speed_drop_min_m_s": 0.15,
+    "active_brake_hold_s": 0.2,
+    "alpha1_mean_steer_reduction_min_rad": 0.03,
+    "recovery_reference_start_after_s": 5.0,
+    "recovery_reference_steer_abs_max_rad": 0.005,
+    "recovery_deadline_s": 8.0,
+    "recovery_heading_abs_max_rad": 0.05,
+    "recovery_speed_abs_error_max_m_s": 0.1,
+    "recovery_steer_abs_error_max_rad": 0.03,
+    "recovery_hold_s": 0.5,
+    "fallback_disqualifies_pass": true,
+    "require_lateral_recovery": false
+  },
+  "random_panel": {
+    "generator": "numpy.random.Generator(numpy.random.PCG64(seed))",
+    "seeds": [
+      65001,
+      65002,
+      65003,
+      65004
+    ],
+    "start_s": 2.0,
+    "end_s": 10.0,
+    "hold_min_s": 0.8,
+    "hold_max_s": 1.6,
+    "recovery_target_v_m_s": 2.3,
+    "recovery_target_delta_rad": 0.0,
+    "draw_order_each_segment": [
+      "speed_uniform",
+      "steer_uniform",
+      "duration_uniform"
+    ]
+  },
+  "budgets": {
+    "training_updates": 0,
+    "training_transitions": 0,
+    "main_episodes_max": 42,
+    "ablation_episodes_max": 4,
+    "contract_rollouts_max": 128,
+    "contract_rollout_duration_max_s": 1.2,
+    "predictor_control_tick_equivalents_max": 80000000,
+    "count_padding_and_benchmark_work": true,
+    "persistent_ledger": true,
+    "allow_automatic_extension": false
+  },
+  "runtime": {
+    "jit_compile_separately_reported": true,
+    "synchronize_before_timing_end": true,
+    "p99_target_ms": 40.0,
+    "period_deadline_ms": 50.0,
+    "allow_offline_evaluation_when_not_realtime": true,
+    "automatically_change_period_or_horizon": false
+  },
+  "fixed_cases": {
+    "N0": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "N1": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          2,
+          2.6,
+          0
+        ],
+        [
+          6,
+          2.0,
+          0
+        ],
+        [
+          10,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "N2": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          2,
+          2.3,
+          0.08
+        ],
+        [
+          6,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "N3": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          2,
+          2.3,
+          -0.08
+        ],
+        [
+          6,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "N4": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          2,
+          2.3,
+          0.08
+        ],
+        [
+          5,
+          2.3,
+          -0.08
+        ],
+        [
+          8,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "N5": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.6,
+          0
+        ],
+        [
+          2,
+          2.6,
+          0.08
+        ],
+        [
+          6,
+          2.0,
+          0.08
+        ],
+        [
+          10,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "C25L": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.6,
+          0
+        ],
+        [
+          2,
+          2.6,
+          0.25
+        ],
+        [
+          5,
+          2.6,
+          0
+        ]
+      ]
+    },
+    "C25R": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.6,
+          0
+        ],
+        [
+          2,
+          2.6,
+          -0.25
+        ],
+        [
+          5,
+          2.6,
+          0
+        ]
+      ]
+    },
+    "C30L": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.6,
+          0
+        ],
+        [
+          2,
+          2.6,
+          0.3
+        ],
+        [
+          5,
+          2.6,
+          0
+        ]
+      ]
+    },
+    "C30R": {
+      "target_rows_time_speed_steer": [
+        [
+          0,
+          2.6,
+          0
+        ],
+        [
+          2,
+          2.6,
+          -0.3
+        ],
+        [
+          5,
+          2.6,
+          0
+        ]
+      ]
+    }
+  }
+}

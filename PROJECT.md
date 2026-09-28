@@ -792,3 +792,51 @@ precision_speed_ecbc1已完成200更新，按训练奖励选择update0196（第1
 正式训练队列732007已启动，监视器732008正常，alpha0处于相位初始化、alpha1排队；源码91bdb8d已推送。最终全套442 passed、5 skipped。TensorBoard6006当前服务PID721652，previous/directional两组标签共用入口；新标量等待正式首批采样。
 
 正式首轮131,072转移已完成，16批优化接受、无非有限值；TensorBoard已加载directional_alpha0及超速峰值等新标量。alpha1仍按队列待alpha0完成后运行。
+
+## 2026-09-28 Teleop preference governor V1 (isolated execution)
+User-approved specification: docs/teleop/SPECIFICATION.md; original JSON copied unchanged.
+Base b446abae131f7a3698c884f1872f8049e9ba3c6e, branch experiment/teleop-pref-governor-v1.
+No training, no policy loading, no push. Existing workspace and runs untouched.
+Plan/progress kept here per repository rules (writing-plans / planning-with-files).
+- [x] Audit base, instructions, dependencies and frozen actuator/controller/XML limits.
+- [ ] Add strict independent schema, causal v/delta command stream, exact reference integration.
+- [ ] Test and implement complete-state kernel: shared old ESO state, one commit, unchanged actuator.
+- [ ] Contract tests, one-step/240-step replay, CPU/MJX audit and original compatibility suite.
+- [ ] Shared 700-tick preparation; B0 N0--N5 gate before governor functional panels.
+- [ ] Predictor summary via vmap/scan, 144+80 candidates, lexicographic selection and recovery.
+- [ ] Gate A G0/G1; Gate B C25 pair then C30 pair; Gate C four frozen PCG64 streams.
+- [ ] Recovery ablation only after gates and if budget remains; reports, local commit.
+Budget: 80M predictor ticks including padding/benchmarks; <=128 contract rollouts;
+<=42 main and <=4 ablation episodes (16s each); shared preparation 3.5s.
+Any failed gate stops later large panels. No automatic tuning or budget extension.
+Source audit: dt=.005, physics dt=.0002 (25 substeps), final 3/60, residual 1.5/10,
+mechanical steer .8, ESO start 3.0. Only fixed roll references removed in new task.
+
+Implementation progress: independent schema/reference/kernel, full-state MJX predictor,
+144+80 fixed shape candidate search, lexicographic endpoints, recovery state machine,
+persistent budget, staged CLI and static evidence writer now implemented. 14 new pure/
+CPU tests passed; original suite including first five additions: 447 passed, 5 skipped.
+Shared 700-tick MJX preparation passed (v=2.25384784, roll=-4.89e-6 rad).
+First engineering replay attempt hit a readonly NumPy-view masking bug after 35,520
+reserved predictor ticks; logs preserved. Fixed with non-mutating masks and regression
+check. Second attempt is running in contracts/attempt_0002; left bypass replay differences
+are exactly zero through 240 ticks including qacc_warmstart and ESO. GPU is shared with
+unrelated jobs; 170.4s first scan compile+execution is not a realtime result. No functional
+gate passed yet. Code review identified and repaired phase continuation, early-budget
+reporting, Gate A bypass checks, failed-state freeze, and non-bypass replay coverage.
+
+### User pause and desktop detector (2026-09-28)
+User asked to stop waiting, provide a detector, and show a completion popup. No new
+functional experiments will start until the user resumes. Both previously dispatched
+short checks have finished. Left/right bypass replay max errors are zero; the 144-copy
+candidate consistency check FAILED (max duplicate difference 9.714823681861162e-05).
+Its cause is not yet diagnosed; no gate acceptance is inferred. CPU-device MJX governed
+short scan completed: compile 26.9698s, execute .39085s, no physical failure; no matching
+step replay yet. Later implementation/CLI code remains unvalidated end-to-end.
+Evidence: runs/teleop_pref_governor_v1/20260928T055716Z/HANDOFF.md.
+Budget: predictor 71,760/80,000,000 ticks, plant preparation 700 ticks, 9 contract
+rollouts, 0 main episodes, 0 training. Original attempts and budget charges retained.
+Read-only detector: `python3 learning/cli/teleop_governor_status.py --watch --notify`.
+Uses run-local checks_watch.json, persists notification receipt to avoid duplicate popup;
+no automatic continuation. Popup title explicitly requested by user: 偏好控制器仿真结束;
+body distinguishes short-check completion, failed check, and unrun later panels.

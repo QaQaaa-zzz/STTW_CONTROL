@@ -709,3 +709,17 @@ arrays, not timesteps, errors, rewards or failures. Original full local traces r
 新目录runs/fixed_endpoints_directional100_20260928，两组冷启动各100更新，1024×128采样/轮、32768 minibatch、4epochs、固定学习率3e-4；总26,214,400正式转移，初始化每组≤2,048,000计算步另计。顺序运行、异常停队列、不自动延长；实时启动状态以status.json为准。
 
 边界：失败罚仍-200，不支配无界成本；假设持续超速B十秒、仅方向成本加存活即约-366，说明严重错误下仍可能存在提前终止激励，不能称已消除此风险。此问题与几何绕圈/固定侧倾任务冲突不在本次奖励最小改动中解决；记录实际物理失败，无新能力结论。
+
+## 2026-09-28 Teleop preference governor V1 — engineering checks, paused
+User specified full closed-loop MJX prediction, finite 144+80 candidate search,
+lexicographic endpoint preferences and explicit unwrapped heading recovery. No network,
+training, old policy, weighted reward replacement, or physical/authority modification.
+Implementation is isolated from b446aba. Shared 3.5s preparation and zero-residual
+left/right scan/step replay passed; 144-copy candidate consistency check did not pass
+(max duplicate difference 9.714823681861162e-05). Root cause remains unclassified pending
+user resumption. CPU-device short MJX scan took .39085s after 26.9698s compile; this is
+not full solve realtime evidence. No baseline/core/random/ablation panel executed.
+Predictor reserved ticks 71,760; preparation plant ticks700; training/main episodes0.
+Original failure and retry evidence preserved under
+runs/teleop_pref_governor_v1/20260928T055716Z; read-only detector and one-time completion
+popup implemented at user's request. No automatic continuation or push.

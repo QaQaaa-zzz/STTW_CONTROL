@@ -1889,3 +1889,17 @@ GPU短测64×128×2完成16,384转移，原始成本及平滑映射斜率已记�
 新目录runs/fixed_endpoints_directional100_20260928，两组冷启动各100更新，1024×128采样/轮、32768 minibatch、4epochs、固定学习率3e-4；总26,214,400正式转移，初始化每组≤2,048,000计算步另计。顺序运行、异常停队列、不自动延长；实时启动状态以status.json为准。
 
 边界：失败罚仍-200，不支配无界成本；假设持续超速B十秒、仅方向成本加存活即约-366，说明严重错误下仍可能存在提前终止激励，不能称已消除此风险。此问题与几何绕圈/固定侧倾任务冲突不在本次奖励最小改动中解决；记录实际物理失败，无新能力结论。
+
+## 2026-09-28 Teleop V1 isolated implementation — paused, contracts not accepted
+Base b446aba; no changes to existing controller/actuator/model/reward modules.
+Original suite plus first five additions: 447 passed, 5 skipped. Current teleop-specific
+suite: 20 tests (input/reference, authority/ESO, lex ordering, budget, metrics, detector).
+Shared MJX preparation passed. Left/right 240-tick bypass scan vs independent execution
+had zero recorded max errors, including warmstart and ESO. First attempt stopped at
+readonly NumPy-mask bug; fixed and original evidence retained. Second attempt's 144-copy
+consistency check failed, max duplicate difference 9.714823681861162e-05; diagnosis pending.
+No Gate A/B/C or recovery ablation executed. Governed CPU-device scan alone is not replay
+acceptance or realtime solve evidence. Later CLI/plotting/metrics code has not been
+validated end-to-end. User requested pause and a desktop completion detector; this is
+an intermediate implementation handoff, not successful simulation delivery.
+Evidence: runs/teleop_pref_governor_v1/20260928T055716Z/HANDOFF.md.
