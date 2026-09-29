@@ -942,3 +942,23 @@ formal pilot reward scalars. Run remains active; status.json is authoritative.
 Required interface checks and8x16x2 smoke passed. Existing20-update run and logs
 remain unchanged. No remote push, no other process stopped. Source regression
 checks for config isolation, sample budgets, PPO and evidence modules passed.
+
+
+## 2026-09-29 Frozen residual lower controller / fresh upper500
+User requested key evidence upload and a new500 trial using path_rsl_4096 evaluation
+alpha_2/seed_49001/force_right/residual. Source update0200 is pinned by sidecar/payload
+hash; lower alpha=1,280 inputs,200Hz history, frozen ELU256/128 tanh actor. Existing
+V3 upper Actor345/Critic346,50Hz,PPO512x128,alpha0/1 and reward remain unchanged.
+Plan: verify pinned lower input/output and geometric history adapter; combine raw-to-
+governed ECBC change plus frozen residual under one shared±1.5/10 authority; run
+interfaces8x16x2 then fresh upper500, separate output, checked TensorBoard. No old
+upper/optimizer import. Keep original V3 physics (old lower source XML differs).
+Lower world-fixed path is integrated causally from governed commands, historical
+nearest-segment curvature, with endpoint tangent extrapolation; not old bend-task
+reproduction. Original raw-command reference/reward remain independent. Lower
+history/return/path state reset per episode; ESO committed once. Preparation uses
+original ECBC bank, lower activates at task reset. This transfer is experimentally
+unverified until new checks/evaluation. Budget:compile600s,engineering300s,training
+15000s,review600s,per-case240s,total18000s. Stage/time/numerical stops remain.
+Existing456 result is not coordinated tracking success; concise shareable evidence
+in docs/evidence/direct_command_fresh500_20260929. No new panel expansion.

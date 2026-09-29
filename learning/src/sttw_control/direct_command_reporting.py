@@ -629,6 +629,10 @@ def generate_report(output, spec):
         "complete_three_method_case" if result["cases"]["random"]["all_complete"] else "incomplete")
     (review / "metrics.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     lines = ["# Direct command V3 review", "",
+             ("B0 = ECBC+ESO plus the pinned frozen residual Actor (lower alpha=1); "
+              "upper alpha0/1 share that same lower controller. The lower causal governed path "
+              "is a transfer adapter, not a reproduction of the source bend task."
+              if spec.get('lower_controller') else "B0 = original ECBC+ESO."), "",
              f"Main preference: **{result['claims']['main_preference']}**. ",
              "Comparative criteria require complete, matched 5 ms windows for B0, α0 and α1.",
              "The main conflict window is [2.5, 4.5) s; final quality uses [14, 16) s.",

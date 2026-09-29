@@ -55,14 +55,16 @@ class TeleopEnv:
         speed=jp.dot(jp.asarray(data.qvel[:2]),jp.array([jp.cos(p[2]),jp.sin(p[2])]))
         return m,p,speed
 
-    def _step(self,s,goal,bypass,exact_governed=False):
+    def _step(self,s,goal,bypass,exact_governed=False,control_override=None):
         h=self.helpers;dt=self.cc.dt
         m,_,_=self.observe(s.data)
         current=s.governor.current_reference
         governed=jp.where(bypass,s.raw,current+jp.clip(goal-current,-jp.array([1.,.6])*dt,jp.array([1.,.6])*dt))
         governed=jp.where(exact_governed,goal,governed)
-        cs,act,log=self._controls(s.controller,s.actuator,m,s.raw,governed,
-            s.physical_tick*dt>3.,bypass)
+        if control_override is None:
+            cs,act,log=self._controls(s.controller,s.actuator,m,s.raw,governed,
+                s.physical_tick*dt>3.,bypass)
+        else:cs,act,log=control_override
         final=act.previous;ctrl=jp.array([0.,-final[1],final[0],final[0]])
         if self.backend=='cpu':
             d=mujoco.MjData(self.model);mujoco.mj_copyData(d,self.model,s.data)

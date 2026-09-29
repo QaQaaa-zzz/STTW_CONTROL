@@ -88,3 +88,25 @@ def test_reward_components_reconstruct_capped_cost_and_failure_tail():
     assert np.isclose(float(d['reward']), -.1*.005*float(d['effective_cost']))
     assert -65.7 < float(failure_reward(800, SPEC)) < -65.5
     assert np.isclose(float(failure_reward(1, SPEC)), -5.2, atol=1e-6)
+
+
+def test_frozen_lower_composition_shares_preview_and_total_authority(monkeypatch):
+    from types import SimpleNamespace
+    from sttw_control import closed_loop_kernel as kernel
+    from sttw_control.actuator import ActuatorConfig,initial_actuator
+    calls=[]
+    def controller(state,row,*args):
+        calls.append(row)
+        return state+1,SimpleNamespace(steer_rate=row[-1])
+    monkeypatch.setattr(kernel,'controller_step',controller)
+    ac=ActuatorConfig(steer_residual_scale=1.5,rear_residual_scale=10.)
+    raw=jp.array([2.3,0.]);goal=jp.array([2.55,.2]);m=jp.zeros(7)
+    preview=kernel.preview_controls(0,m,raw,goal,True,CC)
+    cs,_,log=kernel.controls(0,initial_actuator(ac),m,raw,goal,True,False,CC,ac,
+        lower_action=jp.array([1.,1.]),previewed=preview)
+    assert cs==1 and len(calls)==2
+    np.testing.assert_allclose(log['applied_residual'],[1.5,10.])
+    assert bool(log['residual_clipped'])
+    _,_,zero=kernel.controls(0,initial_actuator(ac),m,raw,raw,True,True,CC,ac,
+        lower_action=jp.array([.2,.4]))
+    np.testing.assert_allclose(zero['requested_residual'],[.3,4.],atol=1e-7)

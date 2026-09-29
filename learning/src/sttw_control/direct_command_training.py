@@ -39,8 +39,15 @@ def load_spec(path):
     # Method, reward, evaluation, initialization and physical fields stay frozen.
     mutable={'ppo':('default_updates','future_total_updates_only_after_user_approval'),
         'budget':('default_policy_transitions','default_control_transitions_upper',
-                  'additional_compute_wall_seconds','training_wall_seconds')}
+                  'additional_compute_wall_seconds','training_wall_seconds','compile_wall_seconds',
+                  'engineering_wall_seconds','evaluation_wall_seconds','full_episode_wall_seconds')}
     expected=json.loads(json.dumps(canonical))
+    if 'lower_controller' in spec:
+        lower=spec['lower_controller']
+        required={'source_checkpoint','source_declaration','sidecar_sha256','payload_sha256','alpha','path_capacity'}
+        if set(lower)!=required or lower['alpha']!=1. or lower['path_capacity']!=3201:
+            raise ValueError('invalid frozen lower transfer contract')
+        expected['lower_controller']=lower
     for section,fields in mutable.items():
         for field in fields:
             value=spec.get(section,{}).get(field)
@@ -111,7 +118,10 @@ class Campaign:
             config_sha256=hashlib.sha256(self.config.read_bytes()).hexdigest(),model=e.physics.bundle.identity,
             controller=asdict(e.cc),actuator=asdict(e.ac),physics_timestep=e.physics.model.opt.timestep,substeps=e.physics.substeps,
             identity=dict(actor=345,critic=346,latent=2,action_semantics='raw-relative speed/steer reference corrections',alpha_index=336),
-            observation_mode='simulation_state_assisted',old_checkpoint_loaded=False))
+            observation_mode='simulation_state_assisted',old_checkpoint_loaded=False,
+            frozen_lower=None if e.lower is None else e.lower.provenance,
+            initialization='fresh_upper_actor_critic_optimizer',
+            preparation='original ECBC prepared bank; lower history/reset starts with each task'))
         write(self.out/'frozen_config.json',self.spec);write(self.out/'observation_action_schema.json',dict(network=self.spec['network'],action=self.spec['action']))
         conditions=jp.asarray(self.spec['initialization']['initial_conditions_speed_roll'])
         def initial(condition):
@@ -167,7 +177,12 @@ class Campaign:
                 if bool(jp.any(states.physical.failed)):raise RuntimeError('zero-policy interface physical failure')
             residual=np.concatenate([x['normalized_residual'] for x in chunks],axis=0)
             governed=np.concatenate([x['governed'] for x in chunks],axis=0);raw=np.concatenate([x['limited_command'] for x in chunks],axis=0)
-            if np.max(np.abs(residual))>1e-6 or np.max(np.abs(governed-raw))>1e-6:raise RuntimeError('zero policy changed baseline interface')
+            if e.lower is None:
+                if np.max(np.abs(residual))>1e-6:raise RuntimeError('zero policy changed baseline interface')
+            else:
+                if any(np.asarray(x['lower_fault']).any() for x in chunks):raise RuntimeError('frozen lower nonfinite interface')
+                if np.max(np.abs(residual))>1.+1e-6:raise RuntimeError('combined residual exceeds original authority')
+            if np.max(np.abs(governed-raw))>1e-6:raise RuntimeError('zero upper policy changed reference')
             flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x,axis=0),*chunks))
             np.savez_compressed(self.out/'interface_traces.npz',**flat)
             write(self.out/'interface_checks.json',dict(passed=True,episodes=2,seconds_each=4,max_residual=float(np.max(np.abs(residual))),
@@ -369,7 +384,7 @@ class Campaign:
                 np.savez_compressed(root/'actual_observations.npz',observations=np.concatenate(observations,axis=0))
             try:
                 # All three run concurrently: elapsed applies to every full episode.
-                with self.budget.measure('review',case+' three-method physical review',cap=60.):
+                with self.budget.measure('review',case+' three-method physical review',cap=self.spec['budget']['full_episode_wall_seconds']):
                     states=reset(jp.asarray(rows,jp.float32))
                     for second in range(16):
                         states,(logs,obs)=execute(states);jax.block_until_ready(states)

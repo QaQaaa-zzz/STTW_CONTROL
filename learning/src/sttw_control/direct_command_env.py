@@ -25,11 +25,16 @@ class DirectState:
     alpha: object
     tick: object
     fault: object
+    lower: object=None
 
 class DirectCommandEnv:
     def __init__(self,spec):
         self.spec=spec;self.physics=TeleopEnv(config=spec,backend='mjx')
         self.cc=self.physics.cc;self.ac=self.physics.ac;self.zero_log=None
+        self.lower=None
+        if spec.get('lower_controller') is not None:
+            from .frozen_lower_controller import FrozenLowerController
+            self.lower=FrozenLowerController(spec['lower_controller'])
     def reset(self,snapshot,env_id,episode_index,alpha,rows=None,slew=None):
         raw=jp.stack((snapshot.raw[0],jp.asarray(0.)))
         sampled,family,drawn_slew=schedule(env_id,episode_index,raw[0],self.spec)
@@ -41,6 +46,7 @@ class DirectCommandEnv:
         state=DirectState(p.replace(raw=issued),initial_history(self.spec),jp.zeros(2),jp.asarray(0.),rates,
             jp.asarray(0.),jp.zeros(2),jp.asarray(env_id,jp.int32),jp.asarray(episode_index,jp.int32),rows,family,slew,
             jp.asarray(alpha),jp.int32(0),~((alpha==0)|(alpha==1)))
+        if self.lower is not None:state=state.replace(lower=self.lower.initial(pose))
         return self.record_frame(state)
     def observation(self,s):
         chi,g,eligible,_=raw_context(s.physical.raw,s.command_rates,s.settle_clock,self.cc,self.spec)
@@ -62,7 +68,22 @@ class DirectCommandEnv:
         offsets,governed,flags=correction_tick(s.offsets,z,raw,self.spec)
         offsets=jp.where(bypass,jp.zeros(2),offsets);governed=jp.where(bypass,raw,governed)
         previous=p.actuator.previous
-        p,log=self.physics._step(p,governed,bypass,exact_governed=True)
+        override=None;lower=s.lower;lower_fault=jp.bool_(False)
+        if self.lower is not None:
+            from .closed_loop_kernel import preview_controls,controls
+            measurement,pose,_=self.physics.observe(p.data)
+            preview=preview_controls(p.controller,measurement,raw,governed,p.physical_tick*self.cc.dt>3.,self.cc)
+            lower,lower_action,lower_obs,lower_flags=self.lower.prepare(lower,measurement,pose,governed,preview[2],previous)
+            lower_fault=~lower_flags['finite']
+            safe_action=jp.where(lower_fault,jp.zeros(2),lower_action)
+            override=controls(p.controller,p.actuator,measurement,raw,governed,p.physical_tick*self.cc.dt>3.,bypass,
+                              self.cc,self.ac,lower_action=safe_action,previewed=preview)
+        p,log=self.physics._step(p,governed,bypass,exact_governed=True,control_override=override)
+        if self.lower is not None:
+            measurement,pose,speed=self.physics.observe(p.data)
+            lower=self.lower.after_step(lower,governed,pose,measurement,speed,safe_action,p.failed,s.tick)
+            log.update(lower_action=lower_action,lower_path_features=lower_flags['path_features'],
+                       lower_endpoint_extension=lower_flags['path_endpoint_extension'],lower_fault=lower_fault)
         yaw_rate=(p.yaw_unwrapped-s.physical.yaw_unwrapped)/self.cc.dt
         costs=interval_cost(alpha=s.alpha,chi=chi,g=g,raw=raw,
             actual_speed=log['actual_forward_speed'],actual_steer=log['actual_delta'],
@@ -80,7 +101,8 @@ class DirectCommandEnv:
             raw_components=costs['raw_components'],effective_components=costs['effective_components'])
         for name,value in flags.items():log['reference_'+name]=value
         return s.replace(physical=p.replace(raw=next_raw),offsets=offsets,settle_clock=next_clock,
-            command_rates=next_rates,yaw_rate=yaw_rate,previous_bounded=log['applied_residual'],tick=s.tick+1),log
+            command_rates=next_rates,yaw_rate=yaw_rate,previous_bounded=log['applied_residual'],tick=s.tick+1,
+            lower=lower,fault=s.fault|lower_fault),log
     def set_log_template(self,s):
         shape=jax.eval_shape(lambda s:self._tick(s,jp.zeros(2),False),s)[1]
         self.zero_log=jax.tree.map(lambda x:jp.zeros(x.shape,x.dtype),shape)
