@@ -962,3 +962,10 @@ unverified until new checks/evaluation. Budget:compile600s,engineering300s,train
 15000s,review600s,per-case240s,total18000s. Stage/time/numerical stops remain.
 Existing456 result is not coordinated tracking success; concise shareable evidence
 in docs/evidence/direct_command_fresh500_20260929. No new panel expansion.
+
+
+Launch verification: frozen-lower500 run passed both4s interface replays and
+8x16x2 engineering updates. Formal fresh upper reached2/500,131072 transitions,
+checkpointupdate0002 saved, ~27.4s/update. TensorBoard http://localhost:6021 loaded
+both formal reward scalars; watchdog monitoring with zero errors. Run remains
+active; live status.json is authoritative. No claim of new control improvement.

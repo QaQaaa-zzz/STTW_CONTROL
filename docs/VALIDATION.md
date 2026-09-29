@@ -1971,3 +1971,27 @@ New separate run `runs/direct_command_v3_fresh500_20260928` launched from`cc03aa
 verified. HTTP6018 has loaded two pilot reward scalars. This is launch verification,
 not500-update completion or new physical improvement evidence. Read status.json
 and TensorBoard for current progress. Old20-update evidence was not overwritten.
+
+
+## 2026-09-29 直接效果与冻结残差底层试验
+
+旧fresh500实际采样456轮，最后一次硬KL回滚；未达到协调目标。主场景
+[2.5,4.5)s速度RMSE从基线0.178降至alpha0/1的0.034/0.029m/s，转角RMSE
+从0.038增至0.155/0.157rad。两alpha仍主要保速度，牺牲转向。方向恢复
+与随机序列没有完整证据。关键图/指标/5ms轨迹已上传现有origin分支，
+入口docs/evidence/direct_command_fresh500_20260929/README.md。
+
+用户授权改用指定残差模型做底层再500轮。新run：
+runs/direct_command_frozen_lower500_20260929，源码eb86825；冻结旧update0200
+低层alpha1/280维/200Hz，重新初始化上层345/346维/50Hz/共享alpha0/1。
+用因果governed历史路径适配原几何观测，总残差权限仍统一±1.5/±10；
+当前V3物理保持不变，明确不同于旧Actor源XML。54个相关行为测试通过，
+尚不能宣称新底层改善。训练目标500、总计算18000秒，阶段与停止条件
+见冻结配置direct_command_frozen_lower_500.json。TensorBoard6021。
+
+
+Launch verification: frozen-lower500 run passed both4s interface replays and
+8x16x2 engineering updates. Formal fresh upper reached2/500,131072 transitions,
+checkpointupdate0002 saved, ~27.4s/update. TensorBoard http://localhost:6021 loaded
+both formal reward scalars; watchdog monitoring with zero errors. Run remains
+active; live status.json is authoritative. No claim of new control improvement.
