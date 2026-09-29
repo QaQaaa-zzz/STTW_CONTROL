@@ -1,0 +1,19 @@
+{
+  "run_id": "direct_command_v3_fresh500_20260928",
+  "state": "budget_stopped",
+  "stage": "review",
+  "completed_updates": 456,
+  "declared_updates": 500,
+  "policy_transitions": 29884416,
+  "control_ticks": 119537664,
+  "initialization": "fresh",
+  "training_seed": 73,
+  "last_update_epoch": 1790619658.7176096,
+  "detail": "one-second three-method deterministic review chunk",
+  "stage_completed_updates": 456,
+  "stage_declared_updates": 500,
+  "last_reward": -0.008004854433238506,
+  "training_stop_reason": "hard_kl_epoch_rolled_back",
+  "review_case": "main",
+  "reason": "external review stage cutoff"
+}
