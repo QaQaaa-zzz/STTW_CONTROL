@@ -57,7 +57,7 @@ def training_diagnostics(runs,out,selections):
     return summary
 
 
-def review_pair(root,alias):
+def review_pair(root,alias,allow_partial_training=False):
     import jax,jax.numpy as jp
     from .direct_command_env import DirectCommandEnv
     from .direct_command_policy import DirectCommandActor
@@ -73,18 +73,26 @@ def review_pair(root,alias):
     updates=specs[0]['ppo']['default_updates']
     assert specs[1]['ppo']['default_updates']==updates
     for p in runs:
-        status=json.loads((p/'status.json').read_text());assert status['completed_updates']==updates and status['state']=='complete'
+        status=json.loads((p/'status.json').read_text())
+        if allow_partial_training:
+            assert status['state'] in ('complete','cancelled') and status['completed_updates']>0
+        else:
+            assert status['completed_updates']==updates and status['state']=='complete'
     selections=[select_checkpoint(p) for p in runs]
     training_diagnostics(runs,out/'review',selections)
     banks=[]
     for p in runs:
         with (p/'prepared_bank.pkl').open('rb') as f:banks.append(pickle.load(f))
-    for a,b in zip(jax.tree.leaves(banks[0]),jax.tree.leaves(banks[1])):np.testing.assert_allclose(a,b,rtol=0,atol=1e-6)
+    manifests=[json.loads((p/'manifest.json').read_text()) for p in runs]
+    for key in ['model','controller','actuator','physics_timestep','substeps']:
+        assert manifests[0][key]==manifests[1][key], 'different physical contract: '+key
+    bank_parity=all(np.allclose(a,b,rtol=0,atol=1e-6) for a,b in zip(jax.tree.leaves(banks[0]),jax.tree.leaves(banks[1])))
+    # Every method resets from exactly the same alpha0 bank sample, not its own training bank.
     sample=jax.tree.map(lambda x:jp.asarray(x[3]),banks[0]);params=[]
     for selected in selections:
         with Path(selected['actor']).open('rb') as f:params.append(pickle.load(f))
     stacked=jax.tree.map(lambda a,b:jp.stack([a,a,b]),*params);spec=specs[0];env=DirectCommandEnv(spec);actor=DirectCommandActor();alphas=jp.array([0.,0.,1.]);bypass=jp.array([True,False,False])
-    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[x['checkpoint'] for x in selections],checkpoint_selection=selections,bank_parity=True,new_episodes=18,control_ticks_upper=36000,budget_s=1200,protocol=protocol))
+    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[x['checkpoint'] for x in selections],checkpoint_selection=selections,partial_training_authorized=allow_partial_training,training_bank_parity=bank_parity,common_evaluation_bank=str(runs[0]/'prepared_bank.pkl'),common_bank_index=3,new_episodes=18,control_ticks_upper=36000,budget_s=1200,protocol=protocol))
     cases=schedules(protocol);main=cases[0][1];sl=np.asarray(protocol['slew']);write(out/'review/frozen_schedules.json',protocol)
     reset=jax.jit(lambda rows:jax.vmap(lambda a:env.reset(sample,jp.int32(77001),jp.int32(0),a,rows,jp.asarray(sl,jp.float32)))(alphas))
     states=reset(jp.asarray(main,jp.float32));jax.block_until_ready(states);env.set_log_template(jax.tree.map(lambda x:x[0],states))
@@ -93,25 +101,31 @@ def review_pair(root,alias):
             obs,_,fault,_=jax.vmap(env.observation)(s);mu=jax.vmap(lambda p,x:actor.apply(p,x))(stacked,obs);z=jp.where((bypass|s.physical.failed)[:,None],jp.zeros_like(mu),mu)
             end,_,_,logs,_=jax.vmap(env.policy_step)(s,z,bypass);return end,logs
         return jax.lax.scan(step,s,None,length=50)
-    write(out/'status.json',dict(state='running',stage='compile'));execute=jax.jit(chunk).lower(states).compile();audits={}
-    for case,rows in cases:
-        states=reset(jp.asarray(rows,jp.float32));chunks=[];case_start=time.monotonic()
-        case_dir=out/'review'/case;case_dir.mkdir(parents=True,exist_ok=True)
-        def persist():
-            flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
+    # Batch all declared cases, preserving three independent states per case.
+    case_count=len(cases)
+    all_rows=jp.asarray(np.repeat(np.stack([r for _,r in cases]),3,axis=0),jp.float32)
+    alphas=jp.tile(alphas,case_count);bypass=jp.tile(bypass,case_count)
+    stacked=jax.tree.map(lambda x:jp.concatenate([x]*case_count,axis=0),stacked)
+    batch_reset=jax.jit(jax.vmap(lambda rows,a:env.reset(sample,jp.int32(77001),jp.int32(0),a,rows,jp.asarray(sl,jp.float32))))
+    states=batch_reset(all_rows,alphas);jax.block_until_ready(states)
+    write(out/'status.json',dict(state='running',stage='compile',cases=[c for c,_ in cases]));execute=jax.jit(chunk).lower(states).compile();audits={};chunks=[]
+    for sec in range(protocol['duration_s']):
+        if time.monotonic()-start>1100:raise TimeoutError('declared comparison budget')
+        states,logs=execute(states);jax.block_until_ready(states);chunks.append(jax.device_get(logs))
+        flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
+        for j,(case,_) in enumerate(cases):
+            case_dir=out/'review'/case;case_dir.mkdir(parents=True,exist_ok=True)
             for i,name in enumerate(['B0','pi_alpha0','pi_alpha1']):
-                d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};mask=d['active_tick'];d={k:v[mask] for k,v in d.items()};d['checkpoint_update']=np.asarray(-1 if i==0 else selections[i-1]['update']);np.savez_compressed(case_dir/f'{name}.npz',**d)
-        for sec in range(protocol['duration_s']):
-            if time.monotonic()-start>1100 or time.monotonic()-case_start>480:raise TimeoutError('declared comparison budget')
-            states,logs=execute(states);jax.block_until_ready(states);chunks.append(jax.device_get(logs));persist()
-            write(out/'status.json',dict(state='running',case=case,seconds=sec+1,elapsed_s=time.monotonic()-start))
-            if np.any(np.asarray(states.fault)):raise RuntimeError('evaluation policy fault')
+                d={k:v[:,j*3+i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};mask=d['active_tick'];d={k:v[mask] for k,v in d.items()};d['checkpoint_update']=np.asarray(-1 if i==0 else selections[i-1]['update']);np.savez_compressed(case_dir/f'{name}.npz',**d)
+        write(out/'status.json',dict(state='running',stage='physics',cases=[c for c,_ in cases],seconds=sec+1,elapsed_s=time.monotonic()-start))
+        if np.any(np.asarray(states.fault)):raise RuntimeError('evaluation policy fault')
+    for case,_ in cases:
+        case_dir=out/'review'/case;audits[case]={}
         controller=json.loads((runs[0]/'manifest.json').read_text())['controller'];audits[case]={}
         for name in ['B0','pi_alpha0','pi_alpha1']:
             d=dict(np.load(case_dir/f'{name}.npz'));audits[case][name]=reconstruct_trace(d,spec,np.asarray(sample.actuator.previous),controller)
         baseline=dict(np.load(case_dir/'B0.npz'));b1=rescore_baseline(baseline,1,spec,np.asarray(sample.actuator.previous));np.savez_compressed(case_dir/'B0_alpha1.npz',**b1);audits[case]['B0_alpha1']=reconstruct_trace(b1,spec,np.asarray(sample.actuator.previous),controller)
         assert all(v['passed'] for v in audits[case].values())
-        report(out,spec,protocol)
         # Additional correctly paired reward curves; B0 in inherited overview is alpha0-scored.
         import matplotlib
         matplotlib.use('Agg')
@@ -125,6 +139,7 @@ def review_pair(root,alias):
         fig.suptitle(alias+' '+case+' paired reward; raw command evaluation');fig.tight_layout()
         for ext in ['png','pdf']:fig.savefig(out/'review'/f'{case}_paired_rewards.{ext}',dpi=130)
         plt.close(fig)
+    report(out,spec,protocol)
     write(out/'review/audit.json',audits);write(out/'status.json',dict(state='complete',episodes=18,elapsed_s=time.monotonic()-start))
     (out/'review/INDEX.md').write_text(
         '# Frozen lower / independent upper endpoint comparison\n\n'

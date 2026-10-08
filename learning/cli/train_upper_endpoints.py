@@ -4,13 +4,13 @@ import os,sys,argparse,json,time,subprocess,signal
 from pathlib import Path
 os.environ.setdefault('XLA_PYTHON_CLIENT_PREALLOCATE','false');os.environ.setdefault('OMP_NUM_THREADS','2')
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--worker-config');p.add_argument('--review-alias');p.add_argument('--aliases',nargs='+',choices=['STTW_R196_ALPHA1','STTW_R244_ALPHA1'],default=['STTW_R196_ALPHA1','STTW_R244_ALPHA1']);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--worker-config');p.add_argument('--review-alias');p.add_argument('--allow-partial-training',action='store_true');p.add_argument('--aliases',nargs='+',choices=['STTW_R196_ALPHA1','STTW_R244_ALPHA1'],default=['STTW_R196_ALPHA1','STTW_R244_ALPHA1']);a=p.parse_args()
 if a.worker_config:
  from sttw_control.upper_endpoint_training import run_endpoint
  run_endpoint(a.worker_config,a.output)
 elif a.review_alias:
  from sttw_control.upper_endpoint_review import review_pair
- review_pair(a.output,a.review_alias)
+ review_pair(a.output,a.review_alias,allow_partial_training=a.allow_partial_training)
 else:
  from sttw_control.direct_command_training import write,notify
  root=Path(a.output);root.mkdir(parents=True,exist_ok=True)

@@ -802,3 +802,7 @@ RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小�
 六条保存轨迹独立重建及导出一致性核对通过。仅后处理，无追加训练/物理评估。
 关键证据：docs/evidence/direct_command_frozen_lower500_20261008/README.md；
 本地完整索引runs/direct_command_frozen_lower500_20260929/INDEX.md。
+
+
+## R196独立上层固定六场景实测（2026-10-08）
+upper0 last250/upper1 last143，lower_alpha1；18条10秒轨迹完成、无失败。底层/upper0/upper1末速度+转角+航向共同保持均2/6，但场景不同。alpha0改善反向缓转恢复，两上层改善转向反转保持；直行退化、急转方向均未恢复。急转alpha1速度RMSE.0827→.0174但转角.0582→.1003、末航向.3158→.4372rad，侧倾峰值.4131→.2119。预算不等长、单初态开发面板，不称单alpha因果或泛化证明。原始/网络请求/保护后指令图及完整实测：runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_comparison/review/RESULTS_ZH.md。未更改模型/物理/奖励/窗口，未停止R244训练。

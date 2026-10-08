@@ -13,7 +13,7 @@
 
 正负采用控制接口符号，不凭直觉改成左右。所有原始目标通过既有slew：速度0.5m/s²、转角0.3rad/s。上层不能改变原始参考、窗口或目标积分。
 
-固定seed77001、prepared_bank[3]（3.5s原ECBC准备，2.3m/s初速），无外扰，10s观察。两模型准备bank逐叶对照一致；身份不同不复用旧基线。物理200Hz、上层50Hz、原权限/ESO不变，lower_alpha固定1。10s只是观察截断；原16s网络任务剩余时间和失败吸收奖励保留，不把10s冒充原任务自然结束。
+固定seed77001、prepared_bank[3]（3.5s原ECBC准备，2.3m/s初速），无外扰，10s观察。核对两组物理/控制器/执行器身份一致后，三方法统一使用同一份alpha0准备bank[3]，不分别使用各自训练bank。独立训练bank是否逐叶一致如实记录；身份不同不复用旧基线。物理200Hz、上层50Hz、原权限/ESO不变，lower_alpha固定1。10s只是观察截断；原16s网络任务剩余时间和失败吸收奖励保留，不把10s冒充原任务自然结束。
 
 每个底层固定三方法：B0=仅该冻结底层（零上层修正）、独立upper_alpha0、独立upper_alpha1。6×3=18物理回合，不新增种子/扰动笛卡尔积。best_model.json优先，无best才last_completed；图/manifest记录各自checkpoint。旧ECBC+ESO与旧底层面板是历史参考，除非全闭环身份和初态核验一致，不冒充本轮配对基线。
 
@@ -22,3 +22,5 @@
 逐场景交付速度、转角、侧倾、航向、实际两通道残差与XY叠图、每步/累计奖励、奖励分项和CSV/NPZ。奖励基线按upper alpha分别从同物理轨迹重评分；不同alpha总reward不用于物理性能排名。单种子开发测试不称泛化成功率。
 
 历史证据：/home/qy/STTW_CONTROL/runs/tracking_candidate_review_20261008/commands/INDEX.md（底层候选），/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/INDEX.md（旧底层）。这些不是R196新上层250/143的已完成评价。
+
+用户追加的固定交付：每场景增加原始速度/转角指令、网络保护前请求、保护后实际送到底层参考的同轴时序图，标明切换/末保持/失败终点；保存PNG/PDF/CSV。不得把实际车速/轮角当作网络输出。
