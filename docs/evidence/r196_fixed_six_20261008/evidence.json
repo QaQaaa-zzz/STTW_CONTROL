@@ -1,0 +1,1298 @@
+{
+  "schema": "minimal_control_evidence_v1",
+  "implementation_commit": "6cdb3ce",
+  "protocol": {
+    "protocol_id": "fixed_command_six_v1",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+    "cases": {
+      "straight_hold": [
+        [
+          0,
+          2.3,
+          0
+        ]
+      ],
+      "speed_changes": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.6,
+          0
+        ],
+        [
+          3.5,
+          2.0,
+          0
+        ],
+        [
+          6,
+          2.3,
+          0
+        ]
+      ],
+      "gentle_positive": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          0.08
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ],
+      "gentle_negative": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          -0.08
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ],
+      "steer_reversal": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          0.15
+        ],
+        [
+          3,
+          2.3,
+          -0.15
+        ],
+        [
+          5,
+          2.3,
+          0
+        ]
+      ],
+      "fast_turn": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.6,
+          0.25
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "seed": 77001,
+    "prepared_bank_index": 3,
+    "duration_s": 10,
+    "slew": [
+      0.5,
+      0.3
+    ],
+    "command_window_s": [
+      1,
+      6
+    ],
+    "final_window_s": [
+      9.5,
+      10
+    ],
+    "final_tolerances": {
+      "speed_m_s": 0.1,
+      "steer_rad": 0.04,
+      "heading_rad": 0.05
+    },
+    "diagnostic_roll_rad": 0.3,
+    "methods": [
+      "B0",
+      "pi_alpha0",
+      "pi_alpha1"
+    ],
+    "lower_alpha": 1,
+    "checkpoint_selection": "best_model.json else last_completed",
+    "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+    "external_disturbance": false
+  },
+  "metrics": {
+    "straight_hold": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.016594885644229458,
+          "steer_rmse_rad": 0.00267864211505926,
+          "heading_rmse_rad": 0.017858559780529776,
+          "actual_speed_mean_m_s": 2.288503885269165,
+          "actual_abs_steer_mean_rad": 0.0022406817879527807,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.02598421427857448,
+          "steer_rmse_rad": 0.005566464212251267,
+          "heading_rmse_rad": 0.014559545517297993,
+          "actual_speed_mean_m_s": 2.2740159034729004,
+          "actual_abs_steer_mean_rad": 0.005561328027397394,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.008910775184631348,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.029336621521905873,
+          "steer_rmse_rad": 0.004643235525537673,
+          "heading_rmse_rad": 0.04122657088775851,
+          "actual_speed_mean_m_s": 2.3269917964935303,
+          "actual_abs_steer_mean_rad": 0.0038326329085975885,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.012280718270023921,
+          "steer_rmse_rad": 6.069588548670219e-05,
+          "heading_rmse_rad": 0.06963705731828597,
+          "actual_speed_mean_m_s": 2.3122806549072266,
+          "actual_abs_steer_mean_rad": 5.3139588999329135e-05,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.008195281028747559,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.035476240739894964,
+          "steer_rmse_rad": 0.002812528807205303,
+          "heading_rmse_rad": 0.02455083226284992,
+          "actual_speed_mean_m_s": 2.3333730697631836,
+          "actual_abs_steer_mean_rad": 0.0027116977144032717,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.020069822968303973,
+          "steer_rmse_rad": 0.002423694683796426,
+          "heading_rmse_rad": 0.05115801160171164,
+          "actual_speed_mean_m_s": 2.3200693130493164,
+          "actual_abs_steer_mean_rad": 0.0024182675406336784,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.011482477188110352,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    },
+    "speed_changes": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.014659230996039451,
+          "steer_rmse_rad": 0.004130084225866881,
+          "heading_rmse_rad": 0.0194393613950804,
+          "actual_speed_mean_m_s": 2.3418593406677246,
+          "actual_abs_steer_mean_rad": 0.0033454280346632004,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.026262421769442264,
+          "steer_rmse_rad": 0.004831878280157929,
+          "heading_rmse_rad": 0.028595050812962507,
+          "actual_speed_mean_m_s": 2.273737907409668,
+          "actual_abs_steer_mean_rad": 0.0048139141872525215,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.009387969970703125,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.028231200137469853,
+          "steer_rmse_rad": 0.006641901532352229,
+          "heading_rmse_rad": 0.01733037780793558,
+          "actual_speed_mean_m_s": 2.381101608276367,
+          "actual_abs_steer_mean_rad": 0.005767533089965582,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.012341171374512155,
+          "steer_rmse_rad": 0.0017336616557659295,
+          "heading_rmse_rad": 0.048554213573686854,
+          "actual_speed_mean_m_s": 2.3123409748077393,
+          "actual_abs_steer_mean_rad": 0.001725615467876196,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.01161956787109375,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.033952280857405606,
+          "steer_rmse_rad": 0.00449312239351125,
+          "heading_rmse_rad": 0.029033034618866093,
+          "actual_speed_mean_m_s": 2.386169910430908,
+          "actual_abs_steer_mean_rad": 0.003414228092879057,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.01947012285357594,
+          "steer_rmse_rad": 0.00041377609454889175,
+          "heading_rmse_rad": 0.03078350416791503,
+          "actual_speed_mean_m_s": 2.319469690322876,
+          "actual_abs_steer_mean_rad": 0.0004104357212781906,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.011482477188110352,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    },
+    "gentle_positive": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.032583655993513934,
+          "steer_rmse_rad": 0.029492956105013873,
+          "heading_rmse_rad": 0.07365635553390489,
+          "actual_speed_mean_m_s": 2.269387722015381,
+          "actual_abs_steer_mean_rad": 0.061200082302093506,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.026317365277217817,
+          "steer_rmse_rad": 0.005348310527448149,
+          "heading_rmse_rad": 0.0472333226552047,
+          "actual_speed_mean_m_s": 2.273683547973633,
+          "actual_abs_steer_mean_rad": 0.005320636555552483,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.11680996417999268,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.021091508866470862,
+          "steer_rmse_rad": 0.0275041665391091,
+          "heading_rmse_rad": 0.24521776303161677,
+          "actual_speed_mean_m_s": 2.3172128200531006,
+          "actual_abs_steer_mean_rad": 0.04179341346025467,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.011777703120117635,
+          "steer_rmse_rad": 0.0017469487686202828,
+          "heading_rmse_rad": 0.08321132069917667,
+          "actual_speed_mean_m_s": 2.311774492263794,
+          "actual_abs_steer_mean_rad": 0.0017433896427974105,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.08160209655761719,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.03047400720822152,
+          "steer_rmse_rad": 0.0349476150940889,
+          "heading_rmse_rad": 0.34039072415376437,
+          "actual_speed_mean_m_s": 2.327951669692993,
+          "actual_abs_steer_mean_rad": 0.0389072522521019,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.01722875384341274,
+          "steer_rmse_rad": 0.0014818778946702716,
+          "heading_rmse_rad": 0.06020659559446903,
+          "actual_speed_mean_m_s": 2.317228317260742,
+          "actual_abs_steer_mean_rad": 0.0014710839604958892,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.07541263103485107,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    },
+    "gentle_negative": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.03711834253109208,
+          "steer_rmse_rad": 0.030847433428663733,
+          "heading_rmse_rad": 0.07165146970239185,
+          "actual_speed_mean_m_s": 2.263922929763794,
+          "actual_abs_steer_mean_rad": 0.06331228464841843,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.032660613547576836,
+          "steer_rmse_rad": 0.013398027997892819,
+          "heading_rmse_rad": 0.08301934321803518,
+          "actual_speed_mean_m_s": 2.2673399448394775,
+          "actual_abs_steer_mean_rad": 0.013393508270382881,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.12569749355316162,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.03146081056344096,
+          "steer_rmse_rad": 0.029242911102542787,
+          "heading_rmse_rad": 0.2878426447641899,
+          "actual_speed_mean_m_s": 2.3299946784973145,
+          "actual_abs_steer_mean_rad": 0.04064678028225899,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.012409546888239753,
+          "steer_rmse_rad": 0.00470623728345162,
+          "heading_rmse_rad": 0.02678520710730884,
+          "actual_speed_mean_m_s": 2.3121485710144043,
+          "actual_abs_steer_mean_rad": 0.0046819401904940605,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.0798342227935791,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.03361094498198559,
+          "steer_rmse_rad": 0.03971527612623834,
+          "heading_rmse_rad": 0.4054950365547161,
+          "actual_speed_mean_m_s": 2.3311679363250732,
+          "actual_abs_steer_mean_rad": 0.03990669175982475,
+          "raw_abs_steer_mean_rad": 0.047999996691942215
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.021530640443735524,
+          "steer_rmse_rad": 0.002542158570744861,
+          "heading_rmse_rad": 0.060631363687846114,
+          "actual_speed_mean_m_s": 2.321331739425659,
+          "actual_abs_steer_mean_rad": 0.0025031957775354385,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.07616746425628662,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    },
+    "steer_reversal": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.04219798578221478,
+          "steer_rmse_rad": 0.05032708069477103,
+          "heading_rmse_rad": 0.15686022064829536,
+          "actual_speed_mean_m_s": 2.262723207473755,
+          "actual_abs_steer_mean_rad": 0.12215195596218109,
+          "raw_abs_steer_mean_rad": 0.10500000417232513
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.0321874063067962,
+          "steer_rmse_rad": 0.0053615173802872085,
+          "heading_rmse_rad": 0.05104715538806825,
+          "actual_speed_mean_m_s": 2.267812490463257,
+          "actual_abs_steer_mean_rad": 0.0053259022533893585,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.211309552192688,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.018929453535186075,
+          "steer_rmse_rad": 0.05736090047871932,
+          "heading_rmse_rad": 0.27810653420753123,
+          "actual_speed_mean_m_s": 2.2982966899871826,
+          "actual_abs_steer_mean_rad": 0.07252077758312225,
+          "raw_abs_steer_mean_rad": 0.10500000417232513
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.0026401745716160127,
+          "steer_rmse_rad": 0.0039976360928016125,
+          "heading_rmse_rad": 0.022171842897013464,
+          "actual_speed_mean_m_s": 2.3021492958068848,
+          "actual_abs_steer_mean_rad": 0.0039718132466077805,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.13792049884796143,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.024565155486680472,
+          "steer_rmse_rad": 0.07701875901954042,
+          "heading_rmse_rad": 0.4095706871625352,
+          "actual_speed_mean_m_s": 2.3215389251708984,
+          "actual_abs_steer_mean_rad": 0.05065222829580307,
+          "raw_abs_steer_mean_rad": 0.10500000417232513
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.009332618421915505,
+          "steer_rmse_rad": 0.006487045315800932,
+          "heading_rmse_rad": 0.0282260246936915,
+          "actual_speed_mean_m_s": 2.309325933456421,
+          "actual_abs_steer_mean_rad": 0.006476538255810738,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          true
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.11168563365936279,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    },
+    "fast_turn": {
+      "B0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.08265468935457242,
+          "steer_rmse_rad": 0.05823194943089838,
+          "heading_rmse_rad": 0.1877791697679695,
+          "actual_speed_mean_m_s": 2.408064842224121,
+          "actual_abs_steer_mean_rad": 0.1611705869436264,
+          "raw_abs_steer_mean_rad": 0.15000003576278687
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.02179504898471196,
+          "steer_rmse_rad": 0.020003249472290905,
+          "heading_rmse_rad": 0.3157678313602838,
+          "actual_speed_mean_m_s": 2.2782084941864014,
+          "actual_abs_steer_mean_rad": 0.019736388698220253,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.4131392240524292,
+        "diagnostic_roll_over_0_3_s": 2.57,
+        "working_roll_violation_s": 2.57
+      },
+      "pi_alpha0": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.11799809055802714,
+          "steer_rmse_rad": 0.0738417810643257,
+          "heading_rmse_rad": 1.0900129418757851,
+          "actual_speed_mean_m_s": 2.405226707458496,
+          "actual_abs_steer_mean_rad": 0.11674857884645462,
+          "raw_abs_steer_mean_rad": 0.15000003576278687
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.02047087168107433,
+          "steer_rmse_rad": 0.020232875271704167,
+          "heading_rmse_rad": 0.2897441040230989,
+          "actual_speed_mean_m_s": 2.320469617843628,
+          "actual_abs_steer_mean_rad": 0.020194992423057556,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          true,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.2532386779785156,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      },
+      "pi_alpha1": {
+        "command_window": {
+          "start_s": 1.0,
+          "end_s": 6.0,
+          "count": 1000,
+          "speed_rmse_m_s": 0.017361195149825516,
+          "steer_rmse_rad": 0.10028571539493171,
+          "heading_rmse_rad": 1.5224358707910772,
+          "actual_speed_mean_m_s": 2.4884042739868164,
+          "actual_abs_steer_mean_rad": 0.09251244366168976,
+          "raw_abs_steer_mean_rad": 0.15000003576278687
+        },
+        "final_window": {
+          "start_s": 9.5,
+          "end_s": 10.0,
+          "count": 100,
+          "speed_rmse_m_s": 0.023741661785807215,
+          "steer_rmse_rad": 0.04127215306825622,
+          "heading_rmse_rad": 0.43715129067680547,
+          "actual_speed_mean_m_s": 2.3237385749816895,
+          "actual_abs_steer_mean_rad": 0.04120254144072533,
+          "raw_abs_steer_mean_rad": 0.0
+        },
+        "final_hold": [
+          true,
+          false,
+          false
+        ],
+        "complete": true,
+        "physical_failure": false,
+        "observed_ticks": 2000,
+        "peak_roll": 0.21193993091583252,
+        "diagnostic_roll_over_0_3_s": 0.0,
+        "working_roll_violation_s": 0.0
+      }
+    }
+  },
+  "training_summary": {
+    "alpha0": {
+      "cost_cap": 0.007078369140625,
+      "roll_violations": 0.007731246948242188,
+      "motor_clip": 0.0,
+      "final_clip": 0.003706878662109375,
+      "reference_clip": 0.0,
+      "reference_rate_clip": 0.9772563323974609,
+      "failed_episodes": 0,
+      "episode_ends": 20480,
+      "failure_rate": 0.0,
+      "updates": 250,
+      "sample_seconds": 6419.758188520016,
+      "optimize_seconds": 20.279325032972338,
+      "hard_kl_stops": 0,
+      "nonfinite_stops": 0,
+      "actor_grad_norm": {
+        "min": 0.2901846170425415,
+        "max": 2.7372831801573434,
+        "mean": 0.7195275560008982
+      },
+      "critic_grad_norm": {
+        "min": 0.44298755656927824,
+        "max": 51.687758058309555,
+        "mean": 6.956942652265231
+      },
+      "mean_kl": {
+        "min": 0.00028757737163687125,
+        "max": 0.018814442213624716,
+        "mean": 0.00278204145753989
+      }
+    },
+    "alpha1": {
+      "cost_cap": 0.013069552975101071,
+      "roll_violations": 0.013328738979526333,
+      "motor_clip": 0.0,
+      "final_clip": 0.003166598873538571,
+      "reference_clip": 0.0,
+      "reference_rate_clip": 0.9765121086494072,
+      "failed_episodes": 0,
+      "episode_ends": 11264,
+      "failure_rate": 0.0,
+      "updates": 143,
+      "sample_seconds": 3786.582687323018,
+      "optimize_seconds": 11.966305841993744,
+      "hard_kl_stops": 0,
+      "nonfinite_stops": 0,
+      "actor_grad_norm": {
+        "min": 0.29354976397007704,
+        "max": 4.472081750631332,
+        "mean": 0.8639381012221524
+      },
+      "critic_grad_norm": {
+        "min": 1.5940434858202934,
+        "max": 41.798614114522934,
+        "mean": 9.709218328368214
+      },
+      "mean_kl": {
+        "min": 0.0003163230139762163,
+        "max": 0.025514112319797277,
+        "mean": 0.00353766408781692
+      }
+    }
+  },
+  "models": [
+    {
+      "upper_alpha": 0,
+      "checkpoint_update": 250,
+      "selection": "last_completed_no_best_record",
+      "checkpoint_sha256": "cb39e8a26e17abdc09ee92614415ca4b25e7dbb9a90c6baa27644bac51fcee7e",
+      "actor_sha256": "73d993541cf6d6d1128e26e3aaadd75b16471a5b5addf614a87109a33ceb9dbd"
+    },
+    {
+      "upper_alpha": 1,
+      "checkpoint_update": 143,
+      "selection": "last_completed_no_best_record",
+      "checkpoint_sha256": "65d29c509d80fb05a01cbb59957138c2c1ae769623ecef602f336277565f3eff",
+      "actor_sha256": "4e0633dba4343570579ac643919cc448cc1eddd82817555b18175e57ea69373a"
+    }
+  ],
+  "frozen_lower": {
+    "alias": "STTW_R196_ALPHA1",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/precision_speed_ecbc1_20260920/training/checkpoints/update_0196",
+    "identity": {
+      "model_sha256": "afdce2cbb75d236b6bad15a2f1ed7a376e35279ff71d07d511c89f936160afa0",
+      "config_sha256": "008881624b9bc1f795732f136e98ca2faad055ac6a4bc7cc6a9d49e763cca9e5",
+      "history_steps": 10,
+      "observation_fields": [
+        "roll_error",
+        "roll",
+        "roll_rate",
+        "speed_estimate",
+        "steer",
+        "steer_rate",
+        "yaw_rate_body",
+        "rear_rate",
+        "front_rate",
+        "steer_reference",
+        "speed_reference",
+        "base_steer_rate",
+        "previous_steer_command",
+        "previous_rear_command",
+        "estimated_disturbance",
+        "path_lateral_error",
+        "heading_error",
+        "path_curvature",
+        "speed_priority",
+        "previous_steer_residual",
+        "previous_rear_residual",
+        "return_pending",
+        "return_elapsed",
+        "return_hold",
+        "return_credited",
+        "return_ever_left",
+        "return_deadline_missed",
+        "longitudinal_error",
+        "yaw_rate_reference",
+        "yaw_rate_world"
+      ]
+    },
+    "payload_sha256": "a2e5bf112e0cb986b4ec207fa9f20dcf90f48af6d7855b0abda32bfa13206672",
+    "sidecar_sha256": "efced7cd83cfd8f691821e29cca28ccd4b40e5b5f32b42b9b708ea945bea8a0e",
+    "fields": [
+      "roll_error",
+      "roll",
+      "roll_rate",
+      "speed_estimate",
+      "steer",
+      "steer_rate",
+      "yaw_rate_body",
+      "rear_rate",
+      "front_rate",
+      "steer_reference",
+      "speed_reference",
+      "base_steer_rate",
+      "previous_steer_command",
+      "previous_rear_command",
+      "estimated_disturbance",
+      "path_lateral_error",
+      "heading_error",
+      "path_curvature",
+      "speed_priority",
+      "previous_steer_residual",
+      "previous_rear_residual",
+      "return_pending",
+      "return_elapsed",
+      "return_hold",
+      "return_credited",
+      "return_ever_left",
+      "return_deadline_missed",
+      "longitudinal_error",
+      "yaw_rate_reference",
+      "yaw_rate_world"
+    ],
+    "lower_alpha": 1.0,
+    "path_capacity": 3201,
+    "transfer": "validated causal historical path / endpoint ray + source return rules; body and world yaw kept distinct"
+  },
+  "selected_configuration": {
+    "action": {
+      "latent_order": [
+        "speed",
+        "steer"
+      ],
+      "mapping": "tanh_then_asymmetric_speed_correction",
+      "speed_negative_scale_m_s": 1.0,
+      "speed_positive_scale_m_s": 0.25,
+      "steer_scale_rad": 0.2,
+      "speed_reference_min_m_s": 1.5,
+      "speed_reference_max_m_s": 3.0,
+      "steer_reference_abs_max_rad": 0.35,
+      "correction_speed_decrease_rate_m_s2": 1.0,
+      "correction_speed_increase_rate_m_s2": 0.5,
+      "correction_steer_rate_rad_s": 0.8,
+      "filter_corrections_not_raw_commands": true,
+      "clip_back_calculation": true,
+      "apply_extra_tanh_to_motor_residual": false,
+      "retain_old_low_level_residual_permissions": true
+    },
+    "reward": {
+      "huber": "z2_inside1_else_2absz_minus1",
+      "scale": 0.1,
+      "cost_rate_cap": 100.0,
+      "alive_bonus_rate": 0.0,
+      "speed_error_scale_m_s": 0.1,
+      "steer_error_scale_rad": 0.05,
+      "heading_error_scale_rad": 0.15,
+      "heading_deadband_rad": 0.03,
+      "priority_high": 8.0,
+      "priority_low": 0.8,
+      "recovery_steer_weight": 1.0,
+      "heading_weight": 4.0,
+      "conflict_phi_start_rad": 0.18,
+      "conflict_phi_full_rad": 0.3,
+      "recovery_raw_steer_abs_max_rad": 0.05,
+      "recovery_raw_phi_abs_max_rad": 0.18,
+      "recovery_raw_speed_rate_abs_max_m_s2": 0.1,
+      "recovery_raw_steer_rate_abs_max_rad_s": 0.02,
+      "recovery_settle_s": 0.4,
+      "recovery_ramp_s": 0.4,
+      "roll_soft_start_rad": 0.26,
+      "roll_error_scale_rad": 0.04,
+      "roll_weight": 40.0,
+      "roll_rate_soft_start_rad_s": 0.8,
+      "roll_rate_error_scale_rad_s": 0.8,
+      "roll_rate_weight": 1.0,
+      "overspeed_free_band_m_s": 0.05,
+      "overspeed_scale_m_s": 0.1,
+      "overspeed_weight": 2.0,
+      "low_speed_start_m_s": 1.5,
+      "low_speed_scale_m_s": 0.2,
+      "low_speed_weight": 4.0,
+      "reference_correction_weight": 0.02,
+      "correction_normalizers": [
+        1.0,
+        0.2
+      ],
+      "final_command_change_weight": 0.1,
+      "final_command_normalizers": [
+        3.0,
+        60.0
+      ],
+      "failure_extra_penalty": 5.0,
+      "failure_accounting": "replace_policy_interval_with_discounted_remaining_absorbing_cost",
+      "terminal_success_bonus": 0.0,
+      "heading_gate_cannot_use_actual_errors_or_learned_actions": true
+    },
+    "limits": {
+      "base_output_scale": 1.0,
+      "strength": 1.0,
+      "composition": "additive",
+      "project_base": false,
+      "steer_residual_rad_s": 1.5,
+      "rear_residual_rad_s": 10.0,
+      "final_steer_rate_rad_s": 3.0,
+      "final_rear_rate_rad_s": 60.0,
+      "steer_joint_rad": 0.8,
+      "wheel_radius_proxy_m": 0.1,
+      "working_roll_rad": 0.3,
+      "physical_roll_failure_rad": 0.7,
+      "retain_existing_contact_and_nonfinite_failure": true
+    },
+    "plant": {
+      "backend": "mjx",
+      "mjx_impl": "jax",
+      "reuse_xml_and_solver": true,
+      "modify_physics": false,
+      "simulation_state_assisted_velocity_and_yaw": true,
+      "control_dt_s": 0.005,
+      "policy_dt_s": 0.02,
+      "control_ticks_per_action": 4,
+      "fixed_roll_reference": null,
+      "learning_roll_reference": null,
+      "eso_equations_unchanged": true,
+      "external_disturbances": false
+    }
+  },
+  "audit": {
+    "straight_hold": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.33247500624055937
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.6611663755091676
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.8935506579636163
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.33247500624055937
+      }
+    },
+    "speed_changes": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.3637536085135257
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.5803668985363194
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.7924649423060461
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.4901161193847656e-06,
+        "reward_sum": -0.3637536085135257
+      }
+    },
+    "gentle_positive": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.033029136873978e-06,
+        "reward_sum": -1.9716106717826225
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.08210245874929e-05,
+        "reward_sum": -2.581207905348535
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.913706461564857e-05,
+        "reward_sum": -3.9994480096439675
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.033029136873978e-06,
+        "reward_sum": -1.9716106717826225
+      }
+    },
+    "gentle_negative": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.031405732796145e-06,
+        "reward_sum": -2.672068888594869
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 1.6277631138095217e-05,
+        "reward_sum": -2.942245038842967
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 2.5548934960539782e-05,
+        "reward_sum": -4.43897950899227
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.031405732796145e-06,
+        "reward_sum": -2.672068888594869
+      }
+    },
+    "steer_reversal": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.189830445255893e-06,
+        "reward_sum": -4.538867855929162
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.513204203693277e-06,
+        "reward_sum": -5.138304805039195
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 9.282430013968224e-06,
+        "reward_sum": -8.354039196911078
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.189830445255893e-06,
+        "reward_sum": -4.538867855929162
+      }
+    },
+    "fast_turn": {
+      "B0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.4182781977042396e-05,
+        "reward_sum": -32.59998526210866
+      },
+      "pi_alpha0": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 8.366902669365572e-05,
+        "reward_sum": -21.340415214588283
+      },
+      "pi_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 0.0001383463541628771,
+        "reward_sum": -27.13786742881275
+      },
+      "B0_alpha1": {
+        "passed": true,
+        "count": 2000,
+        "physical_failure": false,
+        "max_abs_error": 4.431569266216684e-05,
+        "reward_sum": -32.3995650858274
+      }
+    }
+  },
+  "data_schema": {
+    "key_format": "case__method__field",
+    "shared_fields": [
+      "time",
+      "target",
+      "limited_command",
+      "reference_xy",
+      "reference_yaw_unwrapped"
+    ],
+    "method_fields": [
+      "governed",
+      "latent_z",
+      "actual_forward_speed",
+      "wheel_speed_proxy",
+      "actual_delta",
+      "phi",
+      "e_psi_unwrapped",
+      "actual_xy",
+      "actual_normalized_residual",
+      "final_command",
+      "scored_tick_reward",
+      "failure_cost",
+      "physical_failure",
+      "cap_fraction"
+    ],
+    "scored_cost_component_columns": [
+      "scored_cost_command_change",
+      "scored_cost_correction",
+      "scored_cost_heading",
+      "scored_cost_low_speed",
+      "scored_cost_overspeed",
+      "scored_cost_roll",
+      "scored_cost_roll_rate",
+      "scored_cost_speed",
+      "scored_cost_steer"
+    ],
+    "actual_normalized_residual_scales": [
+      1.5,
+      10
+    ],
+    "B0_alpha1": "same B0 physical trace, only reward and cost reweighting stored"
+  },
+  "scope": "18 full10s trajectories; original16s failure rule; one seed; unequal upper training lengths; no generalization claim",
+  "execution": {
+    "total_control_ticks": 38400,
+    "retained_engineering_prefix_ticks": 2400,
+    "serial_cases": [
+      "straight_hold",
+      "speed_changes"
+    ],
+    "parallel_cases": [
+      "gentle_positive",
+      "gentle_negative",
+      "steer_reversal",
+      "fast_turn"
+    ],
+    "within_declared_1200s": true
+  },
+  "files_sha256": {
+    "gentle_negative_command_references.png": "432227adbb2c82c50db938f3c1b83ef661fbcc19bbc6b742451f14e7bc93ef34",
+    "gentle_positive_comparison.png": "c5d12fac9bbfbf60b1b1df0caf5d0554482ecd1fa5b1da6698c3c921ddc4f4af",
+    "steer_reversal_command_references.png": "6fbc35cec7000875848411d705e0d568abc02241fd5bab2f5519424ef9dbf088",
+    "fast_turn_comparison.png": "11d9942bb1ab6d2b21853783622962fd30ae7f8bc88f3bc39f83d650907c051b",
+    "speed_changes_command_references.png": "78658f6af6ba73dc4d633eaf3053622405a640a3e5942bebb9dc0a97730eba1d",
+    "fast_turn_command_references.png": "2aab8bafbd092304bdb975ce9139681f6e2e099c18deba54dbe41b545c9d46ac",
+    "timeseries.npz": "49c485180f393fff8a6441529154edd4b590ebddc4531cf97c9fcf36f7595eda",
+    "gentle_positive_command_references.png": "b8d8a3f74fb5cb6c413265e195f5f0a10cc4efe83ae41721182ae821a3857247",
+    "straight_hold_comparison.png": "a889ad7ef4b9353a661a683fb5da0e0c819a526efda817de10ddd37c670c2b50",
+    "straight_hold_command_references.png": "29e395a35da8b6175cdfc7800f44743dcbcd656ec842ad15a9f012177985ef4c",
+    "gentle_negative_comparison.png": "f261ede096037b164310e6d0fa7cc03ec101c5e54b7690cfafb8132178c17d50",
+    "speed_changes_comparison.png": "734c480d0f38d402f409b4a2d672b691422a62872029490851e7f6add45ddee6",
+    "steer_reversal_comparison.png": "1437df7dea396362b44793ff5874dd121d2b564e9977e434f6953f5c6261b34a"
+  }
+}
