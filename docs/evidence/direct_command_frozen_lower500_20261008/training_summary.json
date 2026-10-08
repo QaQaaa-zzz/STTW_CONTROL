@@ -1,0 +1,157 @@
+{
+  "updates": 500,
+  "alpha": {
+    "all": {
+      "0": {
+        "failed_episodes": 0,
+        "episode_ends": 20480,
+        "roll_violations": 0.04625874328613281,
+        "cost_cap": 0.3766709747314453,
+        "motor_clip": 0.007619949340820312,
+        "reference_rate_clip": 0.9095406494140625,
+        "speed_rmse": 0.11763042204800803,
+        "steer_rmse": 0.1272595475986863,
+        "heading_rmse": 3.051002411334191
+      },
+      "1": {
+        "failed_episodes": 0,
+        "episode_ends": 20480,
+        "roll_violations": 0.045472579956054686,
+        "cost_cap": 0.3761129302978516,
+        "motor_clip": 0.007560623168945312,
+        "reference_rate_clip": 0.9100005340576172,
+        "speed_rmse": 0.117139515944111,
+        "steer_rmse": 0.12733343725237248,
+        "heading_rmse": 3.0497067210591644
+      }
+    },
+    "first20": {
+      "0": {
+        "failed_episodes": 0,
+        "episode_ends": 768,
+        "roll_violations": 0.026644134521484376,
+        "cost_cap": 0.5047962188720703,
+        "motor_clip": 0.0,
+        "reference_rate_clip": 0.9882007598876953,
+        "speed_rmse": 0.15437388953701953,
+        "steer_rmse": 0.13310955850731498,
+        "heading_rmse": 4.448735030757089
+      },
+      "1": {
+        "failed_episodes": 0,
+        "episode_ends": 768,
+        "roll_violations": 0.027918624877929687,
+        "cost_cap": 0.5040351867675781,
+        "motor_clip": 0.0,
+        "reference_rate_clip": 0.9880115509033203,
+        "speed_rmse": 0.1500613548784465,
+        "steer_rmse": 0.13241471322716272,
+        "heading_rmse": 4.428855084050403
+      }
+    },
+    "last20": {
+      "0": {
+        "failed_episodes": 0,
+        "episode_ends": 1024,
+        "roll_violations": 0.03232917785644531,
+        "cost_cap": 0.4748222351074219,
+        "motor_clip": 0.016172027587890624,
+        "reference_rate_clip": 0.8252101898193359,
+        "speed_rmse": 0.12109846375570371,
+        "steer_rmse": 0.12449161112961597,
+        "heading_rmse": 2.702936107318548
+      },
+      "1": {
+        "failed_episodes": 0,
+        "episode_ends": 1024,
+        "roll_violations": 0.031159591674804688,
+        "cost_cap": 0.4776176452636719,
+        "motor_clip": 0.015838241577148436,
+        "reference_rate_clip": 0.8364955902099609,
+        "speed_rmse": 0.11877969147362781,
+        "steer_rmse": 0.12483779000897835,
+        "heading_rmse": 2.761299921277295
+      }
+    }
+  },
+  "optimizer": {
+    "mean_kl": {
+      "min": 0.00031418674370797817,
+      "max": 0.01965298457071185,
+      "last": 0.0017440829105908051
+    },
+    "kl_alpha0": {
+      "min": 0.00031374776153825223,
+      "max": 0.01952847745269537,
+      "last": 0.0017287126975134015
+    },
+    "kl_alpha1": {
+      "min": 0.00028806492991861887,
+      "max": 0.019777491688728333,
+      "last": 0.0017594531236682087
+    },
+    "actor_grad_norm_preclip": {
+      "min": 0.2639078954234719,
+      "max": 7.824932441115379,
+      "last": 1.8954171035438776
+    },
+    "critic_grad_norm_preclip": {
+      "min": 2.008685741573572,
+      "max": 197.18523788452148,
+      "last": 59.47312772274017
+    },
+    "hard_kl_stops": 0,
+    "nonfinite_stops": 0,
+    "accepted_epochs": 1921,
+    "updates_with_less_than_four_epochs": 31
+  },
+  "audit_coverage": {
+    "expected": 6,
+    "checked": 6,
+    "complete": 6,
+    "physical_failure": 0,
+    "partial": 0,
+    "missing": 0,
+    "invalid": 0
+  },
+  "audit_passed": true,
+  "audit_max_error": 0.0004740397135378771,
+  "reward": {
+    "all": -0.11292877862229943,
+    "first20": -0.12243519788607955,
+    "last20": -0.1270802913233638
+  },
+  "paired_behavior": {
+    "main": {
+      "actual_forward_speed": 0.004007025621831417,
+      "actual_delta": 0.0009021268342621624,
+      "e_psi_unwrapped": 0.0060141258873045444
+    },
+    "random": {
+      "actual_forward_speed": 0.0027783240657299757,
+      "actual_delta": 0.0005198889994062483,
+      "e_psi_unwrapped": 0.002172066830098629
+    }
+  },
+  "sensitivity": {
+    "available": true,
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/pilot/checkpoints/update_0500.pt",
+    "checkpoint_update": 500,
+    "observation_pairs": 3200,
+    "torch_flax_mu_max_abs": 4.76837158203125e-07,
+    "torch_flax_mu_parity_passed": true,
+    "latent_mean_delta_mean": [
+      -0.021688800305128098,
+      0.0015779710374772549
+    ],
+    "latent_mean_delta_abs_mean": [
+      0.021691041067242622,
+      0.003570590866729617
+    ],
+    "latent_mean_delta_abs_max": [
+      0.033030033111572266,
+      0.017398014664649963
+    ],
+    "note": "Counterfactual alpha replacement holds each saved physical observation fixed; it does not establish closed-loop preference or task success."
+  }
+}

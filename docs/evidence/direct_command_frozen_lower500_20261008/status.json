@@ -1,0 +1,18 @@
+{
+  "run_id": "direct_command_frozen_lower500_20260929",
+  "state": "complete",
+  "stage": "complete",
+  "completed_updates": 500,
+  "declared_updates": 500,
+  "policy_transitions": 32768000,
+  "control_ticks": 131072000,
+  "initialization": "fresh",
+  "training_seed": 73,
+  "last_update_epoch": 1790660105.032923,
+  "detail": "one-second three-method deterministic review chunk",
+  "stage_completed_updates": 500,
+  "stage_declared_updates": 500,
+  "last_reward": -0.19172799587249756,
+  "training_stop_reason": null,
+  "review_case": "random"
+}

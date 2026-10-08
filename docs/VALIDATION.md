@@ -1995,3 +1995,18 @@ Launch verification: frozen-lower500 run passed both4s interface replays and
 checkpointupdate0002 saved, ~27.4s/update. TensorBoard http://localhost:6021 loaded
 both formal reward scalars; watchdog monitoring with zero errors. Run remains
 active; live status.json is authoritative. No claim of new control improvement.
+
+
+## 2026-10-08 冻结残差底层500轮结果核查
+
+run direct_command_frozen_lower500_20260929已完成500/500（32,768,000转移），
+update0500完成主场景/随机各三方法全部16秒，共6回合。未达到协调或恢复要求。
+主场景[2.5,4.5)s B0/alpha0/alpha1速度RMSE=.00937/.13613/.13750m/s，转角
+RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小转角
+误差但牺牲速度，两alpha几乎无区别；工作界及回正保持不合格。随机同样未恢复。
+训练无硬KL/非有限停止、0/40960结束回合物理失败，但成本触顶全程约37.6%、
+末20轮约48%，工作界违反约4.6%。这些是跟踪问题，不以存活/奖励替代成功。
+冻结残差底层在因果governed路径迁移中也未可靠回正，不能据此单因果归咎ECBC。
+六条保存轨迹独立重建及导出一致性核对通过。仅后处理，无追加训练/物理评估。
+关键证据：docs/evidence/direct_command_frozen_lower500_20261008/README.md；
+本地完整索引runs/direct_command_frozen_lower500_20260929/INDEX.md。

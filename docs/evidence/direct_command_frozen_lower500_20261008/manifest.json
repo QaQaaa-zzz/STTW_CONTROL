@@ -1,0 +1,92 @@
+{
+  "parent_revision": "92afde6",
+  "source_revision": "eb86825d6cdc683b3312655cd9d893c3fe199442",
+  "reused": {
+    "physics": "teleop_env.py",
+    "control": "closed_loop_kernel.py",
+    "reference": "teleop_reference.py",
+    "PPO": "RSL3.2 task adapter"
+  },
+  "shared_diff": "optional exact-governed passthrough and zero-actuator preview logging; old defaults unchanged",
+  "config_sha256": "2a8a73b5736e27d1b5b2d115ff71c7d56319c4806f8fb99a0cf68f593685320d",
+  "model": {
+    "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+    "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+    "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+    "assets": {
+      "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+      "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+      "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+      "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+      "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+      "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+    },
+    "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+    "mujoco_version": "3.6.0"
+  },
+  "controller": {
+    "fixed_roll_reference": null,
+    "dt": 0.005,
+    "wo": 40.0,
+    "wc": 5.0,
+    "disturbance_filter": 8.0,
+    "minimum_speed": 0.5,
+    "max_steer_rate": 4.0,
+    "mass": 5.4,
+    "cg_forward": 0.164,
+    "cg_height": 0.2,
+    "wheelbase": 0.408,
+    "trail": 0.024,
+    "caster": 0.4363323129985824,
+    "gravity": 9.8
+  },
+  "actuator": {
+    "composition": "additive",
+    "project_base": false,
+    "dt": 0.005,
+    "steer_limit": 0.8,
+    "steer_rate_limit": 3.0,
+    "rear_rate_limit": 60.0,
+    "steer_residual_scale": 1.5,
+    "rear_residual_scale": 10.0,
+    "strength": 1.0,
+    "base_output_scale": 1.0,
+    "steer_acceleration": null,
+    "rear_acceleration": null,
+    "delay_steps": 0
+  },
+  "physics_timestep": 0.0002,
+  "substeps": 25,
+  "identity": {
+    "actor": 345,
+    "critic": 346,
+    "latent": 2,
+    "action_semantics": "raw-relative speed/steer reference corrections",
+    "alpha_index": 336
+  },
+  "observation_mode": "simulation_state_assisted",
+  "old_checkpoint_loaded": false,
+  "frozen_lower": {
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/path_rsl_4096_20260915/training/checkpoints/update_0200",
+    "sidecar_sha256": "15c64eca1aba7720c4d0f3855f3b204e0ce6b35b1c013cda99d6cc50d2d15040",
+    "payload_sha256": "950efa65fa5828c0a11119ff41ce0ab3b756be74a31b63ca7973cd487f9083b4",
+    "source_model": {
+      "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+      "assets": {
+        "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+        "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+        "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+        "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+        "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+        "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+      },
+      "mujoco_version": "3.6.0",
+      "portable_xml_sha256": "0708c6d3c85bbe4a8f915fb33d2ee39855ea16474e99505b9cf6ae99924111fd",
+      "source_xml_sha256": "a3dcc59eb877b40043240ce67bbbe30b6554550c298ab3f7f1492259ba16ee59",
+      "transform": "remove_unused_torus_assets_disable_startup_position_servo"
+    },
+    "transfer": "causal_governed_history_with_endpoint_tangent_ray"
+  },
+  "initialization": "fresh_upper_actor_critic_optimizer",
+  "preparation": "original ECBC prepared bank; lower history/reset starts with each task"
+}

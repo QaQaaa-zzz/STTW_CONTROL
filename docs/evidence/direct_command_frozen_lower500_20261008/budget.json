@@ -1,0 +1,6273 @@
+{
+  "schema": "direct_command_v3_budget",
+  "seconds": {
+    "compile": 184.67490646296937,
+    "smoke": 82.95144939498277,
+    "pilot": 13568.329311680092,
+    "review": 355.8567679609696,
+    "checks": 13.360018024996464,
+    "process_overhead": 9.075311190623324
+  },
+  "control_ticks_reserved": 131099424,
+  "events": [
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "load original MJX model and initial forward",
+      "seconds": 11.583809582996764,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "eight declared initial conditions",
+      "seconds": 9.569049270998221,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "make eight complete states",
+      "seconds": 0.00921349399141036,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "eight prepared-state physics",
+      "seconds": 19.1502399519959,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 5600,
+      "reason": "eight x 700 prepare ticks"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "3.5s bank physical preparation",
+      "seconds": 31.637042326008668,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "trace direct command observation and log schema",
+      "seconds": 4.247764533996815,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "two zero-policy interface resets",
+      "seconds": 0.4841237410000758,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "interface resets",
+      "seconds": 0.0030138129950501025,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "one-second zero-policy interface chunk",
+      "seconds": 33.6030865329958,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 1600,
+      "reason": "two 4s maximum zero-policy interface traces"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "zero straight and mild-turn physical interfaces",
+      "seconds": 42.15412504998676,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "8 independent initial task cases",
+      "seconds": 3.016259206997347,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "reset task cases",
+      "seconds": 0.0031711860065115616,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "8 direct actions four physical ticks and terminal reset",
+      "seconds": 35.13482979600667,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "8 observations",
+      "seconds": 0.19113627799379174,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "fresh shared Actor/Critic initialization",
+      "seconds": 0.0670045260048937,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 512,
+      "reason": "smoke full rollout 1"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "update 1",
+      "seconds": 4.631267591990763,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 512,
+      "reason": "smoke full rollout 2"
+    },
+    {
+      "kind": "compute",
+      "stage": "smoke",
+      "reason": "update 2",
+      "seconds": 4.4466114079987165,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 independent initial task cases",
+      "seconds": 2.8117363469937118,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "reset task cases",
+      "seconds": 0.0037563869991572574,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 direct actions four physical ticks and terminal reset",
+      "seconds": 30.99681547700311,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 observations",
+      "seconds": 0.17706655799702276,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "fresh shared Actor/Critic initialization",
+      "seconds": 0.01700464500754606,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 1"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 1",
+      "seconds": 27.44418046399369,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 2"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 2",
+      "seconds": 27.34750576200895,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 3"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 3",
+      "seconds": 33.01670340599958,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 4"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 4",
+      "seconds": 29.644836118997773,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 5"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 5",
+      "seconds": 26.358093351998832,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 6"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 6",
+      "seconds": 26.193065020997892,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 7"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 7",
+      "seconds": 26.238432186000864,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 8"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 8",
+      "seconds": 26.438186106010107,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 9"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 9",
+      "seconds": 31.500255524995737,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 10"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 10",
+      "seconds": 31.181046195008093,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 11"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 11",
+      "seconds": 26.73464797300403,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 12"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 12",
+      "seconds": 27.240273274001083,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 13"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 13",
+      "seconds": 27.913248349999776,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 14"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 14",
+      "seconds": 26.625285349000478,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 15"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 15",
+      "seconds": 29.691534851997858,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 16"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 16",
+      "seconds": 33.491569693011115,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 17"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 17",
+      "seconds": 26.723702681003488,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 18"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 18",
+      "seconds": 27.404039355998975,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 19"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 19",
+      "seconds": 28.64329268099391,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 20"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 20",
+      "seconds": 26.63284325999848,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 21"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 21",
+      "seconds": 28.629144685997744,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 22"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 22",
+      "seconds": 34.20594351198815,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 23"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 23",
+      "seconds": 28.23179540799174,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 24"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 24",
+      "seconds": 26.72933325599297,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 25"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 25",
+      "seconds": 26.063123270010692,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 26"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 26",
+      "seconds": 26.02924233498925,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 27"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 27",
+      "seconds": 26.03137762300321,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 28"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 28",
+      "seconds": 31.508847834993503,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 29"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 29",
+      "seconds": 29.797255240002414,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 30"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 30",
+      "seconds": 25.755707996999263,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 31"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 31",
+      "seconds": 26.553024692999315,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 32"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 32",
+      "seconds": 26.309501516007003,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 33"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 33",
+      "seconds": 26.767769636004232,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 34"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 34",
+      "seconds": 29.47183638899878,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 35"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 35",
+      "seconds": 30.122513911002898,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 36"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 36",
+      "seconds": 25.89039441999921,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 37"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 37",
+      "seconds": 26.79406393499812,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 38"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 38",
+      "seconds": 26.163735946000088,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 39"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 39",
+      "seconds": 26.208367131999694,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 40"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 40",
+      "seconds": 28.66754772599961,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 41"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 41",
+      "seconds": 30.650444389000768,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 42"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 42",
+      "seconds": 25.87761379100266,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 43"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 43",
+      "seconds": 26.302999218998593,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 44"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 44",
+      "seconds": 26.424311818002025,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 45"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 45",
+      "seconds": 26.049218785992707,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 46"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 46",
+      "seconds": 27.553611562005244,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 47"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 47",
+      "seconds": 30.699795831998927,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 48"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 48",
+      "seconds": 26.8154440579965,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 49"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 49",
+      "seconds": 25.811237423011335,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 50"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 50",
+      "seconds": 26.687437717002467,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 51"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 51",
+      "seconds": 26.118925725997542,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 52"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 52",
+      "seconds": 25.898764875004417,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 53"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 53",
+      "seconds": 29.3076650879957,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 54"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 54",
+      "seconds": 28.34780042800412,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 55"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 55",
+      "seconds": 26.153709079997498,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 56"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 56",
+      "seconds": 26.642726123012835,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 57"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 57",
+      "seconds": 26.231734987013624,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 58"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 58",
+      "seconds": 26.028444990995922,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 59"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 59",
+      "seconds": 27.744058854004834,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 60"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 60",
+      "seconds": 28.623572359996615,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 61"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 61",
+      "seconds": 25.998115413996857,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 62"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 62",
+      "seconds": 27.243335546008893,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 63"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 63",
+      "seconds": 26.562688662001165,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 64"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 64",
+      "seconds": 26.47715445200447,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 65"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 65",
+      "seconds": 28.37626903700584,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 66"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 66",
+      "seconds": 30.715993596997578,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 67"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 67",
+      "seconds": 25.51903201499954,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 68"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 68",
+      "seconds": 26.327460251006414,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 69"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 69",
+      "seconds": 25.816055802992196,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 70"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 70",
+      "seconds": 25.513339840996196,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 71"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 71",
+      "seconds": 25.334162159007974,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 72"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 72",
+      "seconds": 28.382425310992403,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 73"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 73",
+      "seconds": 27.044410376998712,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 74"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 74",
+      "seconds": 26.448481462008203,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 75"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 75",
+      "seconds": 25.50552893600252,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 76"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 76",
+      "seconds": 25.032855615005246,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 77"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 77",
+      "seconds": 25.21140745798766,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 78"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 78",
+      "seconds": 27.273285232004127,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 79"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 79",
+      "seconds": 28.302546983002685,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 80"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 80",
+      "seconds": 25.875212537008338,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 81"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 81",
+      "seconds": 25.614842270006193,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 82"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 82",
+      "seconds": 25.137047504991642,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 83"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 83",
+      "seconds": 25.134191988006933,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 84"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 84",
+      "seconds": 26.137197126008687,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 85"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 85",
+      "seconds": 28.697383367994917,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 86"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 86",
+      "seconds": 25.949117073992966,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 87"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 87",
+      "seconds": 25.786320175990113,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 88"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 88",
+      "seconds": 25.782741898001404,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 89"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 89",
+      "seconds": 25.077075755994883,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 90"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 90",
+      "seconds": 26.291985052012024,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 91"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 91",
+      "seconds": 29.887612869992154,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 92"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 92",
+      "seconds": 26.25372987499577,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 93"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 93",
+      "seconds": 25.84961885899247,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 94"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 94",
+      "seconds": 25.94084428899805,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 95"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 95",
+      "seconds": 25.104394615002093,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 96"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 96",
+      "seconds": 25.46426579299441,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 97"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 97",
+      "seconds": 28.933620141004212,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 98"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 98",
+      "seconds": 26.610298026003875,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 99"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 99",
+      "seconds": 26.013161820010282,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 100"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 100",
+      "seconds": 26.57219619800162,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 101"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 101",
+      "seconds": 25.01327167499403,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 102"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 102",
+      "seconds": 25.03251748200273,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 103"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 103",
+      "seconds": 27.196484750995296,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 104"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 104",
+      "seconds": 27.548732445007772,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 105"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 105",
+      "seconds": 26.368694946999312,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 106"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 106",
+      "seconds": 26.09844721099944,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 107"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 107",
+      "seconds": 25.596569443994667,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 108"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 108",
+      "seconds": 25.4273237259913,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 109"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 109",
+      "seconds": 26.17813188600121,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 110"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 110",
+      "seconds": 29.979216528998222,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 111"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 111",
+      "seconds": 27.20963744299661,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 112"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 112",
+      "seconds": 27.155562239000574,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 113"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 113",
+      "seconds": 26.334880021997378,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 114"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 114",
+      "seconds": 25.494877528995858,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 115"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 115",
+      "seconds": 26.4453265810007,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 116"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 116",
+      "seconds": 28.850554671997088,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 117"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 117",
+      "seconds": 26.52066793999984,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 118"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 118",
+      "seconds": 25.931376281994744,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 119"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 119",
+      "seconds": 26.191211527009727,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 120"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 120",
+      "seconds": 25.420556459997897,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 121"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 121",
+      "seconds": 25.442935961007606,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 122"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 122",
+      "seconds": 29.357976059007342,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 123"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 123",
+      "seconds": 27.353839714996866,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 124"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 124",
+      "seconds": 26.07271925099485,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 125"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 125",
+      "seconds": 27.27419947400631,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 126"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 126",
+      "seconds": 25.170542717998615,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 127"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 127",
+      "seconds": 25.1926004489942,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 128"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 128",
+      "seconds": 26.894177591995685,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 129"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 129",
+      "seconds": 27.470207450998714,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 130"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 130",
+      "seconds": 26.309051139003714,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 131"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 131",
+      "seconds": 26.46542866100208,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 132"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 132",
+      "seconds": 26.41075231799914,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 133"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 133",
+      "seconds": 25.07276749200537,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 134"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 134",
+      "seconds": 25.75804370098922,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 135"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 135",
+      "seconds": 28.781019888003357,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 136"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 136",
+      "seconds": 26.276624592006556,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 137"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 137",
+      "seconds": 28.644332169002155,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 138"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 138",
+      "seconds": 27.71475556799851,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 139"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 139",
+      "seconds": 25.028168895005365,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 140"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 140",
+      "seconds": 25.762934860991663,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 141"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 141",
+      "seconds": 28.596486125999945,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 142"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 142",
+      "seconds": 26.27743978399667,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 143"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 143",
+      "seconds": 27.26099799000076,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 144"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 144",
+      "seconds": 27.413777865993325,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 145"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 145",
+      "seconds": 24.95389175400487,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 146"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 146",
+      "seconds": 24.96666025799641,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 147"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 147",
+      "seconds": 29.388806375995046,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 148"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 148",
+      "seconds": 27.002205512995715,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 149"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 149",
+      "seconds": 27.37417896000261,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 150"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 150",
+      "seconds": 29.456118543006596,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 151"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 151",
+      "seconds": 25.06910509899899,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 152"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 152",
+      "seconds": 25.135549083992373,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 153"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 153",
+      "seconds": 27.11054072600382,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 154"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 154",
+      "seconds": 29.36971854699368,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 155"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 155",
+      "seconds": 27.370804534992203,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 156"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 156",
+      "seconds": 28.62239874000079,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 157"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 157",
+      "seconds": 26.456557814002736,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 158"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 158",
+      "seconds": 25.347034941005404,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 159"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 159",
+      "seconds": 26.515424537996296,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 160"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 160",
+      "seconds": 29.35351123000146,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 161"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 161",
+      "seconds": 26.805078102013795,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 162"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 162",
+      "seconds": 28.633020249006222,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 163"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 163",
+      "seconds": 27.79468336899299,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 164"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 164",
+      "seconds": 25.622980389991426,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 165"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 165",
+      "seconds": 26.913439556010417,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 166"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 166",
+      "seconds": 30.48448501600069,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 167"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 167",
+      "seconds": 26.595153479996952,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 168"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 168",
+      "seconds": 27.942820008000126,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 169"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 169",
+      "seconds": 28.18126192499767,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 170"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 170",
+      "seconds": 25.578282525995746,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 171"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 171",
+      "seconds": 25.525723316997755,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 172"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 172",
+      "seconds": 31.387095081998268,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 173"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 173",
+      "seconds": 28.16928219900001,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 174"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 174",
+      "seconds": 29.704760297987377,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 175"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 175",
+      "seconds": 29.216997362003895,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 176"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 176",
+      "seconds": 25.40951306700299,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 177"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 177",
+      "seconds": 25.488018500996986,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 178"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 178",
+      "seconds": 28.085169925994705,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 179"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 179",
+      "seconds": 29.3167234499997,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 180"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 180",
+      "seconds": 28.698806794011034,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 181"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 181",
+      "seconds": 31.42859197600046,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 182"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 182",
+      "seconds": 26.68172597400553,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 183"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 183",
+      "seconds": 25.74984140599554,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 184"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 184",
+      "seconds": 25.958592805996886,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 185"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 185",
+      "seconds": 29.328939844999695,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 186"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 186",
+      "seconds": 26.981659495009808,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 187"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 187",
+      "seconds": 31.97538235099637,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 188"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 188",
+      "seconds": 28.118953395009157,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 189"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 189",
+      "seconds": 25.658944292998058,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 190"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 190",
+      "seconds": 25.5242921320023,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 191"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 191",
+      "seconds": 31.01474720299302,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 192"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 192",
+      "seconds": 26.669976530989516,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 193"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 193",
+      "seconds": 28.78693608600588,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 194"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 194",
+      "seconds": 29.83562660901225,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 195"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 195",
+      "seconds": 25.77538439500495,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 196"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 196",
+      "seconds": 25.940971545001958,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 197"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 197",
+      "seconds": 30.245096722996095,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 198"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 198",
+      "seconds": 27.434508577993256,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 199"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 199",
+      "seconds": 29.44664104000549,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 200"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 200",
+      "seconds": 29.984076407999964,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 201"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 201",
+      "seconds": 25.260541821000515,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 202"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 202",
+      "seconds": 24.989089415001217,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 203"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 203",
+      "seconds": 28.449484858007054,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 204"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 204",
+      "seconds": 28.855065255003865,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 205"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 205",
+      "seconds": 26.764302163996035,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 206"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 206",
+      "seconds": 28.885737999997218,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 207"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 207",
+      "seconds": 27.20313582700328,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 208"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 208",
+      "seconds": 25.436532040999737,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 209"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 209",
+      "seconds": 26.100329445995158,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 210"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 210",
+      "seconds": 29.886968634993536,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 211"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 211",
+      "seconds": 27.36234697799955,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 212"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 212",
+      "seconds": 27.335813112993492,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 213"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 213",
+      "seconds": 28.23565826099366,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 214"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 214",
+      "seconds": 25.31114089800394,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 215"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 215",
+      "seconds": 25.41011858099955,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 216"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 216",
+      "seconds": 29.609856004011817,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 217"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 217",
+      "seconds": 26.319810839006095,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 218"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 218",
+      "seconds": 26.46921155999007,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 219"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 219",
+      "seconds": 27.56609008400119,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 220"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 220",
+      "seconds": 25.251421648994437,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 221"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 221",
+      "seconds": 25.075392375001684,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 222"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 222",
+      "seconds": 29.632853428993258,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 223"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 223",
+      "seconds": 26.793190923999646,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 224"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 224",
+      "seconds": 25.905515525999363,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 225"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 225",
+      "seconds": 27.89643391300342,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 226"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 226",
+      "seconds": 24.945452020008815,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 227"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 227",
+      "seconds": 25.01821161499538,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 228"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 228",
+      "seconds": 28.523521046998212,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 229"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 229",
+      "seconds": 28.948296261994983,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 230"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 230",
+      "seconds": 26.0301253630023,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 231"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 231",
+      "seconds": 27.424852582000312,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 232"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 232",
+      "seconds": 25.379724404003355,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 233"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 233",
+      "seconds": 25.019964325998444,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 234"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 234",
+      "seconds": 25.82105765400047,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 235"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 235",
+      "seconds": 28.486256502001197,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 236"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 236",
+      "seconds": 26.067139486011,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 237"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 237",
+      "seconds": 26.508799834002275,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 238"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 238",
+      "seconds": 26.041551709990017,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 239"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 239",
+      "seconds": 24.818669935004436,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 240"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 240",
+      "seconds": 25.051803264999762,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 241"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 241",
+      "seconds": 29.406019466012367,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 242"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 242",
+      "seconds": 25.97891215600248,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 243"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 243",
+      "seconds": 26.79135750500427,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 244"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 244",
+      "seconds": 25.888057682997896,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 245"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 245",
+      "seconds": 24.828980075006257,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 246"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 246",
+      "seconds": 24.96652051700221,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 247"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 247",
+      "seconds": 29.76454122699215,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 248"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 248",
+      "seconds": 26.687153200997273,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 249"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 249",
+      "seconds": 25.83211081799527,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 250"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 250",
+      "seconds": 26.84582593399682,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 251"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 251",
+      "seconds": 24.864645405003102,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 252"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 252",
+      "seconds": 24.776635294998414,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 253"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 253",
+      "seconds": 27.83185721699556,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 254"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 254",
+      "seconds": 28.646304865993443,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 255"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 255",
+      "seconds": 25.783208606997505,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 256"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 256",
+      "seconds": 26.562934061003034,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 257"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 257",
+      "seconds": 25.26435030499124,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 258"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 258",
+      "seconds": 24.800281709991395,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 259"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 259",
+      "seconds": 27.659375891002128,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 260"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 260",
+      "seconds": 30.43601472300361,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 261"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 261",
+      "seconds": 25.839119019001373,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 262"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 262",
+      "seconds": 26.337905966007384,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 263"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 263",
+      "seconds": 26.20531830500113,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 264"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 264",
+      "seconds": 24.82596529100556,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 265"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 265",
+      "seconds": 25.26894527100376,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 266"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 266",
+      "seconds": 31.414587382008904,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 267"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 267",
+      "seconds": 26.245640080000157,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 268"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 268",
+      "seconds": 25.73370831599459,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 269"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 269",
+      "seconds": 26.04175682499772,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 270"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 270",
+      "seconds": 24.718320587999187,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 271"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 271",
+      "seconds": 24.875050465008826,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 272"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 272",
+      "seconds": 30.384832463998464,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 273"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 273",
+      "seconds": 26.813327915995615,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 274"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 274",
+      "seconds": 25.50756941200234,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 275"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 275",
+      "seconds": 28.016901502996916,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 276"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 276",
+      "seconds": 24.8251882869954,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 277"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 277",
+      "seconds": 24.84132722800132,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 278"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 278",
+      "seconds": 27.83760925300885,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 279"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 279",
+      "seconds": 28.211037979999674,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 280"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 280",
+      "seconds": 26.450834781993763,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 281"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 281",
+      "seconds": 26.90526877400407,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 282"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 282",
+      "seconds": 25.617538906997652,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 283"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 283",
+      "seconds": 24.775874047001707,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 284"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 284",
+      "seconds": 26.498322632993222,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 285"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 285",
+      "seconds": 29.746281886007637,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 286"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 286",
+      "seconds": 26.394741103998967,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 287"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 287",
+      "seconds": 26.661064861007617,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 288"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 288",
+      "seconds": 25.63260550898849,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 289"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 289",
+      "seconds": 24.798720444989158,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 290"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 290",
+      "seconds": 25.189181531008217,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 291"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 291",
+      "seconds": 29.587577919999603,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 292"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 292",
+      "seconds": 25.97424650398898,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 293"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 293",
+      "seconds": 25.721910777996527,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 294"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 294",
+      "seconds": 26.697943519000546,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 295"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 295",
+      "seconds": 24.75195903200074,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 296"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 296",
+      "seconds": 24.91077065000718,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 297"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 297",
+      "seconds": 29.584765189007157,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 298"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 298",
+      "seconds": 26.544602792011574,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 299"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 299",
+      "seconds": 25.628460021005594,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 300"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 300",
+      "seconds": 27.025568336990546,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 301"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 301",
+      "seconds": 24.814580652004224,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 302"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 302",
+      "seconds": 24.83036228400306,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 303"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 303",
+      "seconds": 29.681249332003063,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 304"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 304",
+      "seconds": 27.750061601997004,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 305"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 305",
+      "seconds": 25.665142334008124,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 306"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 306",
+      "seconds": 26.939777531995787,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 307"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 307",
+      "seconds": 25.562961201998405,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 308"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 308",
+      "seconds": 24.771240225003567,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 309"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 309",
+      "seconds": 26.589097805990605,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 310"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 310",
+      "seconds": 29.780545443005394,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 311"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 311",
+      "seconds": 25.802291098007117,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 312"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 312",
+      "seconds": 25.95740326399391,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 313"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 313",
+      "seconds": 27.086433842006954,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 314"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 314",
+      "seconds": 24.735467603997677,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 315"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 315",
+      "seconds": 25.205876317006187,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 316"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 316",
+      "seconds": 29.84247684699949,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 317"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 317",
+      "seconds": 26.01252245499927,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 318"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 318",
+      "seconds": 26.023729645006824,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 319"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 319",
+      "seconds": 26.967282413010253,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 320"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 320",
+      "seconds": 24.736117446998833,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 321"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 321",
+      "seconds": 24.905767213000217,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 322"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 322",
+      "seconds": 29.83931378100533,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 323"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 323",
+      "seconds": 27.141388150994317,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 324"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 324",
+      "seconds": 25.596760332002304,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 325"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 325",
+      "seconds": 27.888284407003084,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 326"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 326",
+      "seconds": 24.721934397995938,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 327"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 327",
+      "seconds": 24.808510741990176,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 328"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 328",
+      "seconds": 29.407250635995297,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 329"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 329",
+      "seconds": 28.072547750998638,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 330"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 330",
+      "seconds": 25.572417219998897,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 331"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 331",
+      "seconds": 27.609527448992594,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 332"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 332",
+      "seconds": 26.18773405000684,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 333"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 333",
+      "seconds": 24.774588920990936,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 334"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 334",
+      "seconds": 26.686718368000584,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 335"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 335",
+      "seconds": 30.698307597995154,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 336"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 336",
+      "seconds": 26.068011276001926,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 337"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 337",
+      "seconds": 26.343618394996156,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 338"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 338",
+      "seconds": 26.664773929005605,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 339"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 339",
+      "seconds": 24.63986962598574,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 340"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 340",
+      "seconds": 25.80879728999571,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 341"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 341",
+      "seconds": 30.363935651999782,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 342"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 342",
+      "seconds": 26.178264229005435,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 343"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 343",
+      "seconds": 25.539171290991362,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 344"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 344",
+      "seconds": 27.69431638599781,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 345"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 345",
+      "seconds": 24.623367897002026,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 346"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 346",
+      "seconds": 24.94722064099915,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 347"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 347",
+      "seconds": 31.084281367991935,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 348"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 348",
+      "seconds": 26.598542289008037,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 349"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 349",
+      "seconds": 25.448794622003334,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 350"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 350",
+      "seconds": 28.407048698005383,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 351"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 351",
+      "seconds": 24.711663513997337,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 352"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 352",
+      "seconds": 24.69691491399135,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 353"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 353",
+      "seconds": 30.14265774701198,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 354"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 354",
+      "seconds": 28.788358206002158,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 355"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 355",
+      "seconds": 25.624639863002812,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 356"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 356",
+      "seconds": 27.791151104000164,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 357"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 357",
+      "seconds": 26.442762399005005,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 358"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 358",
+      "seconds": 24.67655537799874,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 359"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 359",
+      "seconds": 26.954533209995134,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 360"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 360",
+      "seconds": 30.65283572601038,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 361"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 361",
+      "seconds": 25.915654393989826,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 362"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 362",
+      "seconds": 26.318221117006033,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 363"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 363",
+      "seconds": 28.245689848990878,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 364"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 364",
+      "seconds": 24.55633412201132,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 365"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 365",
+      "seconds": 25.30112775399175,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 366"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 366",
+      "seconds": 30.884419068999705,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 367"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 367",
+      "seconds": 25.96546020900132,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 368"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 368",
+      "seconds": 25.59653103200253,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 369"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 369",
+      "seconds": 28.898787388010533,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 370"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 370",
+      "seconds": 24.589451944004395,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 371"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 371",
+      "seconds": 24.83740402299736,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 372"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 372",
+      "seconds": 31.494268034992274,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 373"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 373",
+      "seconds": 26.782773241997347,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 374"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 374",
+      "seconds": 25.70795450899459,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 375"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 375",
+      "seconds": 31.081679556009476,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 376"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 376",
+      "seconds": 24.71141825900122,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 377"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 377",
+      "seconds": 24.64838718099054,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 378"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 378",
+      "seconds": 29.121363340993412,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 379"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 379",
+      "seconds": 28.063618483996834,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 380"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 380",
+      "seconds": 25.76443257300707,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 381"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 381",
+      "seconds": 27.81031690799864,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 382"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 382",
+      "seconds": 26.75902029199642,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 383"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 383",
+      "seconds": 24.59162426900002,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 384"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 384",
+      "seconds": 27.746151404004195,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 385"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 385",
+      "seconds": 30.559172577006393,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 386"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 386",
+      "seconds": 26.135973953991197,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 387"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 387",
+      "seconds": 27.20093774300767,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 388"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 388",
+      "seconds": 28.113650756989955,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 389"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 389",
+      "seconds": 24.560417828004574,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 390"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 390",
+      "seconds": 25.351286413992057,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 391"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 391",
+      "seconds": 31.60035823499493,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 392"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 392",
+      "seconds": 26.23575234200689,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 393"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 393",
+      "seconds": 25.451153595000505,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 394"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 394",
+      "seconds": 29.604938618009328,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 395"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 395",
+      "seconds": 24.53458930400666,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 396"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 396",
+      "seconds": 25.21969432599144,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 397"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 397",
+      "seconds": 28.98708581799292,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 398"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 398",
+      "seconds": 26.56601763900835,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 399"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 399",
+      "seconds": 25.430096119001973,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 400"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 400",
+      "seconds": 29.876151710006525,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 401"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 401",
+      "seconds": 24.69445948798966,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 402"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 402",
+      "seconds": 24.70733288199699,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 403"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 403",
+      "seconds": 27.83182309899712,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 404"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 404",
+      "seconds": 29.827764172005118,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 405"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 405",
+      "seconds": 26.122355093000806,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 406"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 406",
+      "seconds": 27.90422008499445,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 407"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 407",
+      "seconds": 26.800345007999567,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 408"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 408",
+      "seconds": 24.601505696002278,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 409"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 409",
+      "seconds": 27.445745799006545,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 410"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 410",
+      "seconds": 29.839665431005415,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 411"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 411",
+      "seconds": 26.740012962007313,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 412"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 412",
+      "seconds": 26.857861191005213,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 413"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 413",
+      "seconds": 28.431991575998836,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 414"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 414",
+      "seconds": 24.516179284997634,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 415"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 415",
+      "seconds": 26.27933933598979,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 416"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 416",
+      "seconds": 32.3277346649993,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 417"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 417",
+      "seconds": 26.679879725998035,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 418"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 418",
+      "seconds": 26.068139309005346,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 419"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 419",
+      "seconds": 30.318180937989382,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 420"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 420",
+      "seconds": 24.55415412300499,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 421"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 421",
+      "seconds": 24.89512434399512,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 422"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 422",
+      "seconds": 30.410764505009865,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 423"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 423",
+      "seconds": 26.954396561006433,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 424"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 424",
+      "seconds": 26.21786529199744,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 425"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 425",
+      "seconds": 31.38528350100387,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 426"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 426",
+      "seconds": 24.63841904999572,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 427"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 427",
+      "seconds": 24.596673955995357,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 428"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 428",
+      "seconds": 28.757574175004265,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 429"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 429",
+      "seconds": 29.661104575003264,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 430"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 430",
+      "seconds": 25.94404305999342,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 431"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 431",
+      "seconds": 28.658981250002398,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 432"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 432",
+      "seconds": 26.775539095004206,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 433"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 433",
+      "seconds": 24.577153111997177,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 434"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 434",
+      "seconds": 27.435138972999994,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 435"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 435",
+      "seconds": 30.679682536996552,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 436"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 436",
+      "seconds": 26.882689649006352,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 437"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 437",
+      "seconds": 27.75091028600582,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 438"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 438",
+      "seconds": 28.767522470996482,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 439"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 439",
+      "seconds": 24.55626813399431,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 440"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 440",
+      "seconds": 26.29017637600191,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 441"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 441",
+      "seconds": 31.74001903300814,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 442"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 442",
+      "seconds": 28.07330566200835,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 443"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 443",
+      "seconds": 26.981015655997908,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 444"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 444",
+      "seconds": 30.414106412004912,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 445"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 445",
+      "seconds": 24.515103625002666,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 446"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 446",
+      "seconds": 24.857034030996147,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 447"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 447",
+      "seconds": 31.05043332799687,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 448"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 448",
+      "seconds": 28.570192444996792,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 449"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 449",
+      "seconds": 25.952602577992366,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 450"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 450",
+      "seconds": 31.675817752999137,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 451"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 451",
+      "seconds": 24.56753670598846,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 452"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 452",
+      "seconds": 24.611061957999482,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 453"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 453",
+      "seconds": 29.249072131991852,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 454"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 454",
+      "seconds": 30.703057083999738,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 455"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 455",
+      "seconds": 25.751536898009363,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 456"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 456",
+      "seconds": 29.350161416004994,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 457"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 457",
+      "seconds": 26.71650222700555,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 458"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 458",
+      "seconds": 24.54369270100142,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 459"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 459",
+      "seconds": 27.686067971997545,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 460"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 460",
+      "seconds": 31.341867301001912,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 461"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 461",
+      "seconds": 27.18588076600281,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 462"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 462",
+      "seconds": 27.514779289995204,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 463"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 463",
+      "seconds": 28.76473990798695,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 464"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 464",
+      "seconds": 24.49076356200385,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 465"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 465",
+      "seconds": 26.17750900000101,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 466"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 466",
+      "seconds": 32.515865822992055,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 467"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 467",
+      "seconds": 28.53041551800561,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 468"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 468",
+      "seconds": 26.92319343901181,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 469"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 469",
+      "seconds": 30.59467374299129,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 470"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 470",
+      "seconds": 24.53501680199406,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 471"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 471",
+      "seconds": 25.06293710099999,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 472"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 472",
+      "seconds": 32.492522428001394,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 473"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 473",
+      "seconds": 29.796128385001794,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 474"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 474",
+      "seconds": 25.811337740989984,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 475"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 475",
+      "seconds": 31.577369267994072,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 476"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 476",
+      "seconds": 24.65622313201311,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 477"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 477",
+      "seconds": 24.654421794999507,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 478"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 478",
+      "seconds": 31.1705162319995,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 479"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 479",
+      "seconds": 32.01115583401406,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 480"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 480",
+      "seconds": 26.615043872996466,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 481"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 481",
+      "seconds": 30.328478056995664,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 482"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 482",
+      "seconds": 26.742654967005365,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 483"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 483",
+      "seconds": 24.55364220699994,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 484"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 484",
+      "seconds": 27.873653163012932,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 485"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 485",
+      "seconds": 32.87093616000493,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 486"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 486",
+      "seconds": 28.051109882013407,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 487"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 487",
+      "seconds": 28.164641669005505,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 488"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 488",
+      "seconds": 28.89060668500315,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 489"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 489",
+      "seconds": 24.555469646991696,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 490"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 490",
+      "seconds": 25.47243983000226,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 491"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 491",
+      "seconds": 32.63668274100928,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 492"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 492",
+      "seconds": 28.78676638699835,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 493"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 493",
+      "seconds": 26.435542130013346,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 494"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 494",
+      "seconds": 30.951382193990867,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 495"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 495",
+      "seconds": 24.547637330993894,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 496"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 496",
+      "seconds": 25.04153262299951,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 497"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 497",
+      "seconds": 30.81679962700582,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 498"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 498",
+      "seconds": 29.540831399994204,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 499"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 499",
+      "seconds": 26.401530176997767,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "pilot full rollout 500"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "update 500",
+      "seconds": 31.562804325993056,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "three matched review states",
+      "seconds": 0.4766948809992755,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "paired review state creation",
+      "seconds": 0.005580037002800964,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "one-second three-method deterministic review chunk",
+      "seconds": 33.232294304994866,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 9600,
+      "reason": "main: three paired16s episodes upper bound"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "main three-method physical review",
+      "seconds": 171.79723689598904,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "main physical comparison plots",
+      "seconds": 3.9106733599910513,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 9600,
+      "reason": "random: three paired16s episodes upper bound"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "random three-method physical review",
+      "seconds": 173.39712074499403,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "random physical comparison plots",
+      "seconds": 6.746156922992668,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "checks",
+      "reason": "final evidence report",
+      "seconds": 7.912978531996487,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "checks",
+      "reason": "saved result audit and training summary",
+      "seconds": 4.683201043999986,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "checks",
+      "reason": "training figure from saved metrics",
+      "seconds": 0.7638384489999908,
+      "outcome": "complete"
+    }
+  ],
+  "active": null,
+  "total_compute_seconds": 14214.247764714633,
+  "physics_steps_reserved": 3277485600,
+  "external_returncode": 0,
+  "external_stop_reason": null
+}

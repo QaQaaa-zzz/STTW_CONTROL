@@ -1,0 +1,21 @@
+{
+  "available": true,
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/pilot/checkpoints/update_0500.pt",
+  "checkpoint_update": 500,
+  "observation_pairs": 3200,
+  "torch_flax_mu_max_abs": 4.76837158203125e-07,
+  "torch_flax_mu_parity_passed": true,
+  "latent_mean_delta_mean": [
+    -0.021688800305128098,
+    0.0015779710374772549
+  ],
+  "latent_mean_delta_abs_mean": [
+    0.021691041067242622,
+    0.003570590866729617
+  ],
+  "latent_mean_delta_abs_max": [
+    0.033030033111572266,
+    0.017398014664649963
+  ],
+  "note": "Counterfactual alpha replacement holds each saved physical observation fixed; it does not establish closed-loop preference or task success."
+}
