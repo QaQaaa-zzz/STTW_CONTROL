@@ -59,7 +59,9 @@ def _repeating_rows(key, prepared_speed, spec, family):
                                          tail_speed, jnp.asarray(branch["tail_steer_rad"]))))
 
 
-def _conflict_rows(key, prepared_speed, spec):
+def _conflict_rows(key, prepared_speed, spec, slew=None):
+    if spec.get("smooth_v4"):
+        return _smooth_conflict(key,prepared_speed,spec,slew)
     c = spec["commands"]["conflict"]
     speed_key, start_key, mag_key, sign_key, form_key, single_key, first_key, second_key, tail_key = jax.random.split(key, 9)
     high = jax.random.uniform(speed_key, (), minval=c["speed_range_m_s"][0],
@@ -117,7 +119,7 @@ def schedule(env_id, episode_index, prepared_speed, spec, key=None):
     ))
     rows = jax.lax.switch(family, (
         lambda: _repeating_rows(nominal_key, prepared_speed, spec, 0),
-        lambda: _conflict_rows(conflict_key, prepared_speed, spec),
+        lambda: _conflict_rows(conflict_key, prepared_speed, spec, slew),
         lambda: _repeating_rows(random_key, prepared_speed, spec, 2),
     ))
     return rows, family, slew
@@ -175,3 +177,19 @@ def review_rows(spec):
                           branch["tail_steer_rad"])
     return main, random_rows, np.asarray(
         (e["main_speed_slew_m_s2"], e["main_steer_slew_rad_s"]), dtype=np.float64)
+
+
+def _smooth_conflict(key, prepared_speed, spec, slew):
+    c=spec['smooth_v4']['training_commands']; keys=jax.random.split(key,9)
+    draw=lambda k,r:jax.random.uniform(k,(),minval=r[0],maxval=r[1])
+    high=draw(keys[0],c['conflict_speed_range_m_s']); start=draw(keys[1],c['conflict_start_s'])
+    delta=draw(keys[2],c['conflict_steer_magnitude_rad'])*jnp.where(jax.random.uniform(keys[3],())<c['conflict_sign_probability_positive'],1.,-1.)
+    single=jax.random.uniform(keys[4],())<c['conflict_single_fraction']
+    hold1=draw(keys[5],c['conflict_hold_after_limited_target_reached_s']); hold2=draw(keys[6],c['conflict_hold_after_limited_target_reached_s'])
+    tail=jnp.where(jax.random.uniform(keys[7],())<c['conflict_tail_same_high_speed_probability'],high,draw(keys[8],c['conflict_other_tail_speed_range_m_s']))
+    # Retain inherited high-speed target from t=0. Account for its remaining slew at turn onset.
+    speed_at_turn=prepared_speed+jnp.clip(high-prepared_speed,-slew[0]*start,slew[0]*start)
+    end1=start+jnp.maximum(jnp.abs(delta)/slew[1],jnp.abs(high-speed_at_turn)/slew[0])+hold1
+    end2=end1+2*jnp.abs(delta)/slew[1]+hold2
+    rows=_empty_rows(prepared_speed).at[0].set(jnp.array([0.,high,0.])).at[1].set(jnp.array([start,high,delta]))
+    return jax.lax.cond(single,lambda r:r.at[2].set(jnp.array([end1,tail,0.])),lambda r:r.at[2].set(jnp.array([end1,high,-delta])).at[3].set(jnp.array([end2,tail,0.])),rows)

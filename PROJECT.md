@@ -1,3 +1,25 @@
+# User amendment — fresh upper training 150 each, 2026-10-08
+
+Supersedes the warm-start60 plan below. Both endpoint Actors/Critics/Adam/std initialize fresh (seed81); no policy weights transferred. Frozen R196 lower remains fixed alpha1. Authorised budgets: train4500s/endpoint, compile600s, evaluation1200s, total10800s. Two initial value-only rollouts remain separate, then at most150 PPO batches. Checks at60/150; user cancelled stage20, original six10s cases at60/150 with separate16s fast_turn tail. No automatic extension. New run: runs/smooth_v4_fresh150_20261008_run03; live research state in /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.
+
+Warm-start run cancelled by user after4 alpha0 policy batches, no alpha1 batches; last saved policy checkpoint0 (warmup Critic updated). No warm-start model is used in the fresh run. Related12 focused checks passed, independent saved-rollout reward reconstruction error<1e-8. Control improvement remains unverified pending actual fixed cases.
+
+---
+
+# R196 SmoothV4 implementation plan — 2026-10-08
+
+Source implementation: 6cdb3ce. Numerical authority: docs/smooth_v4/attachment/*alpha[01].json. Independent endpoint actors warm-start at 250/143; frozen R196 lower_alpha=1; reset critic/Adam/std. Preserve all physical/control/action interfaces.
+
+- [x] Locate true implementation and run saved NPZ audit, zero new physics.
+- [ ] Implement component-protected reward, causal 20ms offset differences, same-episode Actor regularization and specified command distribution.
+- [ ] Check against independent NumPy reference, pair/reset semantics and initialization; no full repository or lower necessity rerun.
+- [ ] Value-only 2 rollouts then at most 60 policy batches/endpoint; report accepted epochs separately. Evaluate at 20 and 60; six original 10s cases plus fast_turn16s without replacing 10s conclusions.
+- [ ] Deliver actual physical/command comparisons, timing, failures and limits; update shared research state and local commit.
+
+Compute ceilings: compilation600s, training1800s per endpoint, evaluation1200s, overall5400s. Existing prepared bank reused. No new seeds or automatic extension. TensorBoard must expose actual formal reward.
+
+---
+
 # 2026-09-28 Direct command V3 approved execution plan
 
 Numeric authority: learning/configs/STTW_Direct_Command_V3.json. Approved design: docs/direct_command/STTW_Codex_Direct_Command_V3.md. This isolated task replaces V2; no Phi/kpsi learner or analytic action allocator is imported. Parent 92afde6; reuse teleop physics, exact reference integration, same-state ECBC previews, actuator and RSL internals. Local commit only, no push.

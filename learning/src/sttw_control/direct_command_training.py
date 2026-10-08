@@ -220,6 +220,9 @@ class Campaign:
             windows=jp.stack([jp.ones_like(active),(logs['chi']==0)&(logs['g']==0),logs['chi']>0,logs['g']>0],axis=-1)
             summary=jp.einsum('ntf,ntw->nwf',base,windows)
             diag=jax.tree.map(lambda x:x[jp.array([0,n//2])],logs)
+            if self.spec.get('smooth_v4'):
+                diag['all_component_cap_counts']={k:jp.sum(v & logs['active_tick']) for k,v in logs['component_capped'].items()}
+                diag['all_active_ticks']=jp.sum(logs['active_tick'])
             return nxt,a,c,f,reward,done,summary,end.physical.failed,end.fault,jp.max(logs['peak_roll'],axis=1),diag,final_obs
         advance=self.compile(f'{n} direct actions four physical ticks and terminal reset',advance,states,jp.zeros((n,2)))
         observe=self.compile(f'{n} observations',jax.vmap(e.observation),states)

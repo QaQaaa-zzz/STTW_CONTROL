@@ -806,3 +806,14 @@ RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小�
 
 ## R196独立上层固定六场景实测（2026-10-08）
 upper0 last250/upper1 last143，lower_alpha1；18条10秒轨迹完成、无失败。底层/upper0/upper1末速度+转角+航向共同保持均2/6，但场景不同。alpha0改善反向缓转恢复，两上层改善转向反转保持；直行退化、急转方向均未恢复。急转alpha1速度RMSE.0827→.0174但转角.0582→.1003、末航向.3158→.4372rad，侧倾峰值.4131→.2119。预算不等长、单初态开发面板，不称单alpha因果或泛化证明。原始/网络请求/保护后指令图及完整实测：runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_comparison/review/RESULTS_ZH.md。未更改模型/物理/奖励/窗口，未停止R244训练。
+
+
+## R196 SmoothV4, user-amended fresh150 (2026-10-08)
+
+Purpose: reduce useless upper correction jitter while preserving steering/speed preference and final heading recovery. Actual implementation branch experiment/r196-smooth-v4 is based on6cdb3ce, not the d269f71 evidence tree. Independent345/346 upper models; frozen R196 lower_alpha1. Reward changes: asymmetric conflict speed price for alpha0, alpha1 excess-understeering penalty, small-heading recovery/yaw damping, neutral offset cost, causal20ms offset rate/acceleration replacing motor-delta reward, component caps with800 failure bound. Actor temporal term uses true within-episode adjacent observations, both current-policy outputs, denominator all real pairs.
+
+User superseded Actor250/143 warm-start with fresh upper Actor/Critic/Adam/std and150 PPO batches/endpoint. Initial std override found in reused initializer and corrected to configured0.1. Prior attempts stopped, data retained, no policy weights reused. Prior fresh-attempt compute charged to same4500s/endpoint,600compile,1200evaluation,10800total budget. User cancelled20-panel; complete fixed-six evaluations at60/150, independent per-alpha physical bestmodel selection and same-checkpoint future evaluation. No reward ranking or assumption that best is qualified.
+
+Saved-data audit (no new physics) found straight_hold alpha0 executed-steer-offset139 reversals, rate RMS0.6097rad/s, acceleration RMS35.034rad/s²; actual steering rate RMS0.1327rad/s versus B0 0.0092 and alpha1 0.0081. These are fixed quiet-window waveform metrics, not task success. Actual new control benefit is pending.
+
+Run: runs/smooth_v4_fresh150_20261008_run03/INDEX.md. TensorBoard6010. Thirteen related tests pass; independent NumPy reward reconstruction on saved first-rollout diagnostic differed by<1e-8/policy step. No whole repository tests or renewed lower-necessity experiment. Authoritative ongoing state: /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.

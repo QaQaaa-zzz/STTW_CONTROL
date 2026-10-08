@@ -160,3 +160,5 @@ Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/rese
 - 用户批准两个独立网络各100 PPO更新；本实验alpha0/1固定在奖励配置且不入Actor，覆盖此前本任务必须alpha入网的规则。禁止隐藏随机alpha。
 - 保留有限非零几何位置惩罚；允许沿时间落后，不奖励减速本身或停车。固定侧倾6.84°是目标而非物理锁定，ECBC平衡转角随速度一致变化，外部几何转角请求由残差处理。基线明确标为固定侧倾ECBC+ESO。
 - 当前分支基于4cafb53复用几何实现，不声称85cacdc精确回滚；历史主分支/证据不覆盖。预算、冷启动和无逐轮评估契约见PROJECT.md及冻结experiment.json。
+
+Research coordination rules: /home/qy/STTW_CONTROL/research-hub/AGENTS.md; authoritative live state: /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.

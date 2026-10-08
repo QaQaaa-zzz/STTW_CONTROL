@@ -25,6 +25,8 @@ class DirectState:
     alpha: object
     tick: object
     fault: object
+    previous_offset_rate: object=None
+    offset_acceleration_valid: object=False
     lower: object=None
 
 class DirectCommandEnv:
@@ -50,6 +52,7 @@ class DirectCommandEnv:
         state=DirectState(p.replace(raw=issued),initial_history(self.spec),jp.zeros(2),jp.asarray(0.),rates,
             jp.asarray(0.),jp.zeros(2),jp.asarray(env_id,jp.int32),jp.asarray(episode_index,jp.int32),rows,family,slew,
             jp.asarray(alpha),jp.int32(0),~((alpha==0)|(alpha==1)))
+        state=state.replace(previous_offset_rate=jp.zeros(2),offset_acceleration_valid=jp.bool_(False))
         if self.lower is not None:state=state.replace(lower=self.lower.initial(pose))
         return self.record_frame(state)
     def observation(self,s):
@@ -93,7 +96,7 @@ class DirectCommandEnv:
         costs=interval_cost(alpha=s.alpha,chi=chi,g=g,raw=raw,
             actual_speed=log['actual_forward_speed'],actual_steer=log['actual_delta'],
             heading_error=log['e_psi_unwrapped'],roll=log['phi'],roll_rate=log['phi_dot'],
-            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec)
+            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate)
         _,_,target=publish_command(raw,s.rows,s.tick,s.slew,self.cc.dt)
         next_raw,next_rates,_=publish_command(raw,s.rows,s.tick+1,s.slew,self.cc.dt)
         next_raw=jp.where(p.failed,raw,next_raw)
@@ -119,6 +122,22 @@ class DirectCommandEnv:
                 lambda c:(c,self.zero_log),lambda c:self._tick(c,z,bypass),c)
         end,logs=jax.lax.scan(tick,s,None,length=4)
         end=self.record_frame(end)
+        if self.spec.get('smooth_v4'):
+            from .direct_command_reward import upper_motion_cost
+            rate,acc,mraw,meff=upper_motion_cost(end.offsets,s.offsets,s.previous_offset_rate,s.offset_acceleration_valid,self.spec)
+            end=end.replace(previous_offset_rate=rate,offset_acceleration_valid=jp.bool_(True))
+            # Endpoint cost is computed once; distribute its rate over four ticks
+            # solely for additive reward/component logging. No 5ms differentiation.
+            for name,value in mraw.items():
+                logs['raw_components'][name]=jp.full((4,),value)
+                logs['effective_components'][name]=jp.full((4,),meff[name])
+            logs['raw_cost']=logs['raw_cost']+sum(mraw.values())
+            logs['effective_cost']=logs['effective_cost']+sum(meff.values())
+            logs['tick_reward']=logs['tick_reward']-self.spec['reward']['scale']*self.cc.dt*sum(meff.values())
+            logs['upper_offset_rate']=jp.tile(rate,(4,1));logs['upper_offset_acceleration']=jp.tile(acc,(4,1))
+            logs['upper_acceleration_valid']=jp.full((4,),s.offset_acceleration_valid)
+            logs['legacy_command_change_diagnostic']=.1*jp.sum(((logs['final_command']-jp.concatenate([s.physical.actuator.previous[None],logs['final_command'][:-1]],axis=0))/jp.array([3.,60.]))**2,axis=-1)
+            logs['component_capped']={k:v>self.spec['reward']['independent_component_caps'][k] for k,v in logs['raw_components'].items()}
         normal=jp.sum(logs['tick_reward']);failed=end.physical.failed
         reward=jp.where(failed,failure_reward(800-j,self.spec),normal)
         active=jp.sum(logs['active_tick'].astype(jp.int32));last=jp.maximum(active-1,0)

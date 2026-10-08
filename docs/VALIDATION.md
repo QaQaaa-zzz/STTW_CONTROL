@@ -1,3 +1,13 @@
+# SmoothV4 fresh150 — 2026-10-08
+
+User amended the attachment to fresh Actor/Critic/optimizer initialization,150 PPO batches per independent upper endpoint; frozen R196 lower unchanged. Actual std must equal0.1. A prior attempt was stopped after discovering initialize_policy overwrote constructor std; make_algorithm now restores configured std after weight initialization. The12 relevant reward/causal-pair/value-only/PPO checks passed before corrected launch; saved two-env reward reconstruction matched NumPy within1e-8. No whole repository or lower necessity re-evaluation.
+
+A focused bestmodel test verifies a safe completed-hold candidate wins over a later lower-RMSE candidate missing hold. Selection uses complete fixed-six evaluation candidates, then failure/work range/joint hold/primary/secondary/roughness. Stage20 evaluation has been cancelled by the user; best candidates are complete60/150 fixed-six panels. bestmodel.pt points to the selected immutable checkpoint; best_model.json records candidate range and qualification; corresponding saved fixed-case traces are the evaluation evidence.
+
+Current fresh corrected run: runs/smooth_v4_fresh150_20261008_run03. User cancelled stage20; only60/150 fixed-six panels run. Earlier attempts remain separately recorded and never supply upper weights. Prior invalid fresh-attempt compute is charged to the same amended budget. Running status is not control success. See research-hub/PROJECT_STATE.md for authoritative live state.
+
+---
+
 # 当前工程验证：几何奖励契约修复（2026-09-16）
 
 本次是实现与测试，不是新策略训练结果。源码基于f8506ea；历史记录不重写。

@@ -53,6 +53,8 @@ class DirectCommandPPO(PPO):
         self.hard_kl_stop = False
         self.nonfinite_stop = False
         self.last_update = None
+        self.temporal_spec = None
+        self.accepted_policy_updates = 0
 
     def _snapshot(self):
         return {
@@ -105,12 +107,55 @@ class DirectCommandPPO(PPO):
         mean = sum(totals.values()) / count if count else float("nan")
         return (mean, by_alpha) if self.kl_group_index is not None else (mean, {"all": mean})
 
+    def prepare_temporal_pairs(self):
+        o=self.storage.observations['policy']
+        self.temporal_left=o[:-1].reshape(-1,345)
+        self.temporal_right=o[1:].reshape(-1,345)
+        self.temporal_valid=~self.storage.dones[:-1].reshape(-1).bool()
+        self.temporal_denominator=int(self.temporal_valid.sum())
+        cfg=self.temporal_spec['actor_temporal_regularizer']
+        scales=torch.tensor([x['scale'] for x in self.temporal_spec['network']['frame_fields']],device=o.device)
+        def eligible(x):
+            f=x[:,300:320]*scales
+            return ((f[:,10].abs()<=cfg['eligible_raw_speed_rate_m_s2']) & (f[:,11].abs()<=cfg['eligible_raw_steer_rate_rad_s']) & (f[:,0].abs()<cfg['eligible_roll_rad']) & (f[:,1].abs()<cfg['eligible_roll_rate_rad_s']))
+        self.temporal_mask=self.temporal_valid & eligible(self.temporal_left) & eligible(self.temporal_right)
+        self.temporal_coefficient=cfg['coefficient']*min(self.accepted_policy_updates/cfg['ramp_policy_updates'],1.)
+
+    def temporal_loss(self, indices):
+        indices=indices[self.temporal_mask[indices]]
+        if not len(indices) or not self.temporal_denominator:
+            return next(self.policy.actor.parameters()).sum()*0.
+        c=self.temporal_spec['action']
+        def offset(obs):
+            z=self.policy.actor(obs).tanh()
+            return torch.stack((z[:,0]*torch.where(z[:,0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),z[:,1]*c['steer_scale_rad']),dim=-1)
+        d=offset(self.temporal_right[indices])-offset(self.temporal_left[indices])
+        norm=torch.tensor(self.temporal_spec['actor_temporal_regularizer']['physical_correction_normalizers'],device=d.device)
+        return self.temporal_coefficient*(d/norm).square().sum()*self.num_mini_batches/self.temporal_denominator
+
+    def value_only_update(self, epochs):
+        original={k:v.detach().clone() for k,v in self.policy.state_dict().items() if not k.startswith('critic.')}
+        total=norms=count=0
+        for batch in self.storage.mini_batch_generator(self.num_mini_batches,epochs):
+            obs,_,_,_,returns,*_=batch
+            loss=self.value_loss_coef*(returns-self.policy.evaluate(obs)).square().mean()
+            self.optimizer.zero_grad(set_to_none=True);loss.backward()
+            norm=torch.nn.utils.clip_grad_norm_(self.critic_parameters,self.critic_grad_limit)
+            if not _finite_tensors(loss,norm):raise RuntimeError('nonfinite value-only update')
+            if any(p.grad is not None for p in self.actor_parameters):raise RuntimeError('Actor gradient during value-only warmup')
+            self.optimizer.step();total+=float(loss.detach());norms+=float(norm);count+=1
+        assert all(torch.equal(v,self.policy.state_dict()[k]) for k,v in original.items())
+        assert all(p not in self.optimizer.state for p in self.actor_parameters)
+        self.storage.clear()
+        return dict(value=total/count,critic_grad_norm=norms/count,actor_grad_norm=0.,actor_bitwise_unchanged=True)
+
     def update(self):
         if self.hard_kl_stop or self.nonfinite_stop:
             raise RuntimeError("direct command PPO is stopped; do not start another update")
         if self.storage.step != self.storage.num_transitions_per_env:
             raise ValueError("full rollout required before PPO update")
-        sums = {"value": 0., "surrogate": 0., "entropy": 0.,
+        if self.temporal_spec is not None:self.prepare_temporal_pairs()
+        sums = {"temporal":0., "value": 0., "surrogate": 0., "entropy": 0.,
                 "actor_grad_norm": 0., "critic_grad_norm": 0.}
         attempted_grad_sums = {"actor": 0., "critic": 0.}
         attempted_grad_count = 0
@@ -126,6 +171,8 @@ class DirectCommandPPO(PPO):
                 epoch_sums = {key: 0. for key in sums}
                 epoch_minibatches = 0
                 bad = False
+                if self.temporal_spec is not None:
+                    temporal_chunks=torch.randperm(len(self.temporal_left),device=self.temporal_left.device).tensor_split(self.num_mini_batches)
                 for (obs, actions, _old_values, advantages, returns, old_logprob,
                      _old_mu, _old_std, _hidden, _masks) in self.storage.mini_batch_generator(
                          self.num_mini_batches, 1):
@@ -147,7 +194,8 @@ class DirectCommandPPO(PPO):
                                 * ratio.clamp(1 - self.clip_param, 1 + self.clip_param))
                     surrogate_loss = torch.maximum(surrogate, clipped).mean()
                     value_loss = (returns - value).square().mean()
-                    loss = (surrogate_loss + self.value_loss_coef * value_loss
+                    temporal=self.temporal_loss(temporal_chunks[epoch_minibatches]) if self.temporal_spec is not None else surrogate_loss*0.
+                    loss = (temporal + surrogate_loss + self.value_loss_coef * value_loss
                             - self.entropy_coef * entropy)
                     if not _finite_tensors(loss):
                         bad = True
@@ -175,6 +223,7 @@ class DirectCommandPPO(PPO):
                     if not _finite_tensors(*self.policy.parameters(), *optimizer_tensors):
                         bad = True
                         break
+                    epoch_sums["temporal"] += float(temporal.detach())
                     epoch_sums["value"] += float(value_loss.detach())
                     epoch_sums["surrogate"] += float(surrogate_loss.detach())
                     epoch_sums["entropy"] += float(entropy.detach())
@@ -236,6 +285,9 @@ class DirectCommandPPO(PPO):
                       stop_reason=stop_reason,
                       actor_lr=self.optimizer.param_groups[0]["lr"],
                       critic_lr=self.optimizer.param_groups[1]["lr"])
+        if self.temporal_spec is not None:
+            result.update(temporal_coefficient=self.temporal_coefficient,temporal_real_pairs=self.temporal_denominator,temporal_eligible_pairs=int(self.temporal_mask.sum()))
+            if accepted_epochs:self.accepted_policy_updates+=1
         self.last_update = result
         return result
 
@@ -272,6 +324,8 @@ def make_algorithm(obs, steps, spec, device):
                          actor_obs_normalization=False,
                          critic_obs_normalization=False).to(device)
     initialize_policy(policy)
+    with torch.no_grad():
+        policy.log_std.copy_(torch.tensor(ppo['initial_latent_std'],device=device).log())
     storage = RolloutStorage("rl", obs.batch_size[0], steps, obs, [2], device=device)
     return DirectCommandPPO(
         policy, storage, num_learning_epochs=ppo["epochs"],

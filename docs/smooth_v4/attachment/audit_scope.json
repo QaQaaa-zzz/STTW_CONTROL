@@ -1,0 +1,43 @@
+{
+  "evidence_commit": "d269f71424b5eb393e7c5158333f2231eb687664",
+  "read": [
+    "README",
+    "evidence.json",
+    "published older V3 command generator"
+  ],
+  "source_ref_6cdb3ce_available": false,
+  "binary_timeseries_loaded_here": false,
+  "new_vehicle_rollouts": 0,
+  "reward_formula_self_checks": "passed",
+  "metrics_helper_synthetic_check": "passed",
+  "known_facts": {
+    "alpha0_training_updates": 250,
+    "alpha1_training_updates": 143,
+    "trajectories": 18,
+    "duration_s": 10,
+    "old_reward_global_cap_fractions": [
+      0.007078369140625,
+      0.013069552975101071
+    ],
+    "fast_turn_speed_rmse": [
+      0.08265468935,
+      0.11799809056,
+      0.01736119515
+    ],
+    "fast_turn_steer_rmse": [
+      0.05823194943,
+      0.07384178106,
+      0.10028571539
+    ],
+    "fast_turn_roll_peak": [
+      0.41313922405,
+      0.25323867798,
+      0.21193993092
+    ],
+    "fast_turn_final_heading_rmse": [
+      0.31576783136,
+      0.28974410402,
+      0.43715129068
+    ]
+  }
+}
