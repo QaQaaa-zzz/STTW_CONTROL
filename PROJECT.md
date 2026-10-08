@@ -1,3 +1,11 @@
+# User amendment — total250 and no wall-clock cutoff (2026-10-08)
+
+The user extended each upper endpoint to250 total updates and then explicitly cancelled additional compute/wall-clock budget limits. Preserve the250-update endpoint, metered elapsed time, original safety/nonfinite checks and no automatic retries/extensions. Stage150 evaluation is disabled through the already-supported runtime_control; reuse stage60 and evaluate at250. Automatic successor: runs/smooth_v4_extend250_20261008, launched by learning/cli/continue_smooth_command.py after the current worker exits. Restore full upper learner (Actor/Critic/Adam/std/RNG/counter) from the current fresh run's last checkpoint, never physical-best for training. Prepared physical/ESO/history states reset because old checkpoints do not serialize them; first unused episode keys avoid recycling training schedules. No further value-only warmup.
+
+15 relevant tests passed including exact learned-state/Adam restoration and disabled wall cutoff with continued time metering. Shared research-hub/AGENTS.md records the STTW future default. This supersedes earlier150/wall-cap requirements below; historical attempts and reports remain immutable.
+
+---
+
 # User amendment — fresh upper training 150 each, 2026-10-08
 
 Supersedes the warm-start60 plan below. Both endpoint Actors/Critics/Adam/std initialize fresh (seed81); no policy weights transferred. Frozen R196 lower remains fixed alpha1. Authorised budgets: train4500s/endpoint, compile600s, evaluation1200s, total10800s. Two initial value-only rollouts remain separate, then at most150 PPO batches. Checks at60/150; user cancelled stage20, original six10s cases at60/150 with separate16s fast_turn tail. No automatic extension. New run: runs/smooth_v4_fresh150_20261008_run03; live research state in /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.

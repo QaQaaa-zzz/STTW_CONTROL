@@ -86,3 +86,32 @@ def test_best_prefers_physical_hold_not_last(tmp_path):
         result=json.loads((tmp_path/f'alpha{a}/best_model.json').read_text())
         assert result['update']==60 and result['qualified']
         assert (tmp_path/f'alpha{a}/bestmodel.pt').resolve().name=='update_0060.pt'
+
+def test_resume_keeps_critic_adam_std_and_counter():
+    import torch,copy
+    from tensordict import TensorDict
+    from sttw_control.direct_command_ppo import make_algorithm
+    from sttw_control.smooth_command_training import restore_learner
+    s=resolve(0);s['ppo']['minibatches']=1
+    obs=TensorDict({'policy':torch.zeros(2,345),'critic':torch.zeros(2,346)},batch_size=[2])
+    a=make_algorithm(obs,2,s,'cpu')
+    for _ in range(2):
+        with torch.no_grad():a.act(obs);a.process_env_step(obs,torch.ones(2),torch.zeros(2,dtype=torch.bool),{})
+    with torch.no_grad():a.compute_returns(obs)
+    a.update();a.optimizer.param_groups[0]['lr']=2.5e-5
+    saved=dict(policy=copy.deepcopy(a.policy.state_dict()),optimizer=copy.deepcopy(a.optimizer.state_dict()),accepted_policy_updates=147)
+    b=make_algorithm(obs,2,s,'cpu');restore_learner(b,saved)
+    assert b.accepted_policy_updates==147 and b.optimizer.param_groups[0]['lr']==2.5e-5
+    for key,value in a.policy.state_dict().items():torch.testing.assert_close(value,b.policy.state_dict()[key],rtol=0,atol=0)
+    for key,state in saved['optimizer']['state'].items():
+        for k,v in state.items():
+            if isinstance(v,torch.Tensor):torch.testing.assert_close(v,b.optimizer.state_dict()['state'][key][k],rtol=0,atol=0)
+
+def test_no_wall_cap_keeps_metering(tmp_path):
+    from sttw_control.direct_command_budget import ComputeBudget
+    s=resolve(0);s['budget']['wall_limits_enabled']=False
+    b=ComputeBudget(tmp_path,s);b.limits['pilot']=0;b.total_limit=0
+    assert b.remaining('pilot')==float('inf')
+    with b.measure('pilot','no wall cutoff'):pass
+    import json
+    d=json.loads((tmp_path/'budget.json').read_text());assert d['seconds']['pilot']>=0 and d['active'] is None

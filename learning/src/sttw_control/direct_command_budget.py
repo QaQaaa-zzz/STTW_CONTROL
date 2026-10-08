@@ -6,6 +6,7 @@ import json
 import os
 import signal
 import time
+import math
 
 class BudgetStop(RuntimeError):
     pass
@@ -18,7 +19,7 @@ class ComputeBudget:
         self.limits={'compile':e['compile_wall_seconds'],'smoke':e['engineering_wall_seconds'],
                      'pilot':e['training_wall_seconds'],'review':e['evaluation_wall_seconds'],'checks':e['additional_compute_wall_seconds']}
         self.total_limit=e['additional_compute_wall_seconds']; self.tick_limit=e['default_control_transitions_upper']+5600+1024+1600+19200
-        self._update(lambda d: None)
+        self._update(lambda d: d.update(wall_limits_enabled=spec['budget'].get('wall_limits_enabled',True)))
     def _update(self, fn):
         with (self.root/'.compute.lock').open('a') as f:
             fcntl.flock(f,fcntl.LOCK_EX)
@@ -28,6 +29,7 @@ class ComputeBudget:
             tmp=self.path.with_suffix('.tmp');tmp.write_text(json.dumps(d,indent=2)+'\n');os.replace(tmp,self.path)
             return d
     def remaining(self, stage):
+        if not self.spec['budget'].get('wall_limits_enabled',True):return float('inf')
         d=json.loads(self.path.read_text())
         return max(0.,min(self.total_limit-sum(d['seconds'].values()),self.limits[stage]-d['seconds'].get(stage,0.)))
     def reserve(self, ticks, reason):
@@ -40,12 +42,13 @@ class ComputeBudget:
     @contextmanager
     def measure(self,stage,reason,estimate=0.,cap=None):
         left=self.remaining(stage)
-        if cap is not None:left=min(left,cap)
+        if cap is not None and self.spec['budget'].get('wall_limits_enabled',True):left=min(left,cap)
         if left<=max(0.01,estimate):raise BudgetStop(f'{stage}: insufficient wall budget ({left:.3f}s)')
         start=time.monotonic(); old=signal.getsignal(signal.SIGALRM)
         def alarm(*_):raise BudgetStop(f'{stage}: wall budget reached during {reason}')
-        self._update(lambda d:d.update(active=dict(stage=stage,reason=reason,started_epoch=time.time(),reserved_s=left)))
-        signal.signal(signal.SIGALRM,alarm);signal.setitimer(signal.ITIMER_REAL,left)
+        self._update(lambda d:d.update(active=dict(stage=stage,reason=reason,started_epoch=time.time(),reserved_s=left if math.isfinite(left) else None)))
+        signal.signal(signal.SIGALRM,alarm)
+        if math.isfinite(left):signal.setitimer(signal.ITIMER_REAL,left)
         outcome='complete'
         try:yield
         except BaseException:

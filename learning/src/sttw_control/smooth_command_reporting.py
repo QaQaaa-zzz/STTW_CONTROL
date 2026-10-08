@@ -132,7 +132,7 @@ def report(root,stage):
 def select_physical_checkpoint(root):
     """Full six-case candidates only; no selection by training reward."""
     candidates={}
-    for stage in [60,150]:
+    for stage in [60,150,250]:
         path=root/f'evaluation{stage}/metrics.json'
         if path.exists():
             data=json.loads(path.read_text())

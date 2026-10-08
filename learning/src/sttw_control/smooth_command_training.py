@@ -9,9 +9,24 @@ from .smooth_command_config import resolve
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False):
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
-        self.resolve=lambda alpha:resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall)
+        self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
+        def configured(alpha):
+            spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall)
+            if self.resume_parent:
+                if target_updates!=250:raise ValueError('this authorized continuation ends at250')
+                spec['initialization_mode']='learner_state_resume_environment_reset'
+                spec['ppo'].update(default_updates=250,future_total_updates_only_after_user_approval=250,policy_updates_per_endpoint=250,validation_updates=[250])
+                spec['smooth_v4']['ppo'].update(policy_updates_per_endpoint=250,validation_updates=[250])
+                spec['smooth_v4']['evaluation']['stage250_cases']=list(spec['smooth_v4']['evaluation']['stage60_cases'])
+                spec['budget']['default_control_transitions_upper']=2*250*512*128*4
+            if unlimited_wall:
+                spec['budget']['wall_limits_enabled']=False
+                spec['smooth_v4']['budget']['wall_limits_enabled']=False
+                spec['smooth_v4']['budget']['user_amendment']='Stop at declared250 updates, no wall-clock budget termination'
+            return spec
+        self.resolve=configured
         self.out=Path(output);self.spec=self.resolve(0);self.config=Path('learning/configs/r196_smooth_alpha0.json')
         if (self.out/'manifest.json').exists():raise FileExistsError('no automatic restart of immutable run')
         self.budget=ComputeBudget(self.out,self.spec);self.budget.limits.update(train0=train_wall,train1=train_wall);self.budget.recover_interrupted()
@@ -24,6 +39,7 @@ class SmoothCampaign(Campaign):
                 d['events'].append(dict(kind='prior_attempt_compute_charge',source=prior['source'],seconds=prior['seconds']))
             self.budget._update(apply)
         self.status=dict(state='initializing',completed_updates={'0':0,'1':0},declared_policy_batches_per_endpoint=self.spec['ppo']['default_updates'],initialization='scratch_actor_critic_optimizer_std' if fresh else 'actor_weights_only_fresh_critic_optimizer_std',pid=os.getpid())
+        if self.resume_parent:self.status.update(initialization='learner_state_resume_environment_reset',parent_run=str(self.resume_parent))
         self.seen_cases=set();self.endpoints={};self._status()
     def initialize(self):
         import jax,jax.numpy as jp,torch
@@ -44,13 +60,14 @@ class SmoothCampaign(Campaign):
         assert self.env.physics.bundle.identity==old['model']
         write(self.out/'manifest.json',dict(implementation_parent='6cdb3ce',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
           prepared_bank=str(source),prepared_bank_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),lower=self.env.lower.provenance,
-          initialization='Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
+          initialization='Full upper learner from parent150; physical episode reset' if self.resume_parent else 'Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
           budget=self.spec['smooth_v4']['budget'],new_preparation_ticks=0,lower_interfaces_reused=True,command_center='preserved governed-centered ECBC plus frozen lower residual',
-          policy_budget_semantics=f"maximum{self.spec['ppo']['default_updates']} new PPO batches each; accepted epochs and updates separate; two value-only rollouts excluded"))
+          policy_budget_semantics=("global endpoint target250; resume parent completed batch, no new value-only warmup" if self.resume_parent else f"maximum{self.spec['ppo']['default_updates']} new PPO batches each; accepted epochs and updates separate; two value-only rollouts excluded")))
         for a in [0,1]:write(self.out/f'alpha{a}/frozen_config.json',self.resolve(a))
         self.states,self.advance,self.observe=self.setup_batch(512)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
     def create_endpoint(self,alpha):
+        if self.resume_parent:return self.resume_endpoint(alpha)
         import torch,jax,jax.numpy as jp
         from torch.utils.tensorboard import SummaryWriter
         from .direct_command_ppo import make_algorithm
@@ -81,6 +98,41 @@ class SmoothCampaign(Campaign):
             self.endpoints[alpha]=ep
             write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='scratch' if self.fresh else 'actor_only',source_checkpoint=None if src is None else str(src),source_actor_sha256=digest,actor_exact=None if self.fresh else True,previous_policy_loaded=not self.fresh,critic_fresh=True,optimizer_empty=True,std=algo.policy.log_std.exp().detach().cpu().tolist(),seed=81))
             self.save(alpha,0)
+    def resume_endpoint(self,alpha):
+        import torch,jax,jax.numpy as jp
+        from torch.utils.tensorboard import SummaryWriter
+        from .direct_command_ppo import make_algorithm
+        last=json.loads((self.resume_parent/f'alpha{alpha}/last_completed.json').read_text())
+        source=Path(last['checkpoint'])
+        saved=torch.load(source,map_location='cuda',weights_only=False)
+        if not 60<=saved['update']<=150 or saved['warmup']!=2:raise ValueError('requires parent checkpoint60..150 and original warmup')
+        start_update=int(saved['update'])
+        spec=self.resolve(alpha)
+        for key in ['reward','action','network','commands','plant','limits','reference','lower_controller','lower_reference_centered','actor_temporal_regularizer']:
+            if spec.get(key)!=saved['config'].get(key):raise ValueError('resume method mismatch '+key)
+        # Parent checkpoints do not serialize physical/ESO/history state. Start
+        # new complete episodes with unused episode keys, never pretend exact resume.
+        manifest=self.resume_parent/f'alpha{alpha}/case_manifest.jsonl'
+        episode=max(json.loads(line)['episode_index'] for line in manifest.read_text().splitlines())+1
+        ids=jp.arange(512,dtype=jp.int32)
+        def reset_one(env_id):
+            key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(spec['commands']['random_seed']),env_id),episode)
+            index=jax.random.randint(jax.random.fold_in(key,812),(),0,8)
+            snap=jax.tree.map(lambda x:x[index],self.bank)
+            return self.env.reset(snap,env_id,jp.int32(episode),jp.asarray(float(alpha)))
+        reset=self.compile(f'alpha{alpha} continuation episode reset',jax.vmap(reset_one),ids)
+        with self.budget.measure(f'train{alpha}','restore full upper learner and reset physical episodes'):
+            state=reset(ids);jax.block_until_ready(state)
+            a,c,_,_=self.observe(state);obs=self.td(a,c)
+            algo=make_algorithm(obs,128,spec,'cuda');algo.temporal_spec=spec
+            restore_learner(algo,saved)
+            restore_rng(saved)
+            ep=dict(algo=algo,state=state,obs=obs,update=start_update,warmup=2,hard_rejects=0,duration=0.,stopped=None,rng=capture_rng(),writer=SummaryWriter(str(self.out/'tensorboard'/f'alpha{alpha}')))
+            self.endpoints[alpha]=ep
+            write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='learner_state_resume_environment_reset',source_checkpoint=str(source),source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),actor_critic_optimizer_std_restored=True,rng_restored=True,accepted_policy_updates=algo.accepted_policy_updates,physical_state_restored=False,new_episode_index=episode,first_new_update=start_update+1,additional_value_only_rollouts=0))
+            self.save(alpha,start_update)
+        self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()})
+
     @staticmethod
     def td(a,c):
         import torch
@@ -91,13 +143,15 @@ class SmoothCampaign(Campaign):
         from .direct_command_policy import export_actor
         ep=self.endpoints[alpha];algo=ep['algo'];root=self.out/f'alpha{alpha}/checkpoints';root.mkdir(exist_ok=True,parents=True)
         path=root/f'update_{update:04d}.pt'
-        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),initialization='scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume'),path.with_suffix('.tmp'))
+        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),initialization='learner_state_resume_environment_reset' if self.resume_parent else 'scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume'),path.with_suffix('.tmp'))
         os.replace(path.with_suffix('.tmp'),path)
         with path.with_name(f'actor_{update:04d}.pkl').open('wb') as f:pickle.dump(jax.device_get(export_actor(algo.policy)),f)
         write(self.out/f'alpha{alpha}/last_completed.json',dict(update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,checkpoint=str(path.resolve()),stop=ep['stopped']))
     def batch(self,alpha,warmup=False):
         import torch,jax,jax.numpy as jp
-        ep=self.endpoints[alpha];algo=ep['algo'];stage=f'train{alpha}';index=ep['warmup']+1 if warmup else ep['update']+1
+        ep=self.endpoints[alpha]
+        if 'rng' in ep:restore_rng(ep['rng'])
+        algo=ep['algo'];stage=f'train{alpha}';index=ep['warmup']+1 if warmup else ep['update']+1
         estimate=ep['duration']*1.1
         if self.budget.remaining(stage)<=max(1.,estimate):ep['stopped']='predicted_training_budget';return False
         self._status(stage=stage,phase='value_only' if warmup else 'PPO',current_alpha=alpha,current_batch=index)
@@ -154,6 +208,7 @@ class SmoothCampaign(Campaign):
                 print(json.dumps(dict(alpha=alpha,phase=rec['phase'],batch=index,reward=rec['mean_step_reward'],kl=metrics.get('mean_kl'),seconds=rec['total_seconds'],stop=ep['stopped'])),flush=True)
         except BudgetStop:
             algo._restore(snapshot);algo.storage.clear();ep['stopped']='budget_interrupted_batch';self.save(alpha,ep['update']);return False
+        if self.resume_parent:ep['rng']=capture_rng()
         ep['duration']=time.monotonic()-start
         self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()},current_stop=ep['stopped'])
         return not ep['stopped']
@@ -225,3 +280,25 @@ def run(output,**kwargs):
         notify('STTW SmoothV4停止',str(exc));raise
     finally:
         for e in c.endpoints.values():e['writer'].close()
+
+
+def capture_rng():
+    import torch
+    return dict(torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate())
+
+
+def restore_rng(saved):
+    import torch
+    torch.set_rng_state(saved['torch_rng'].cpu())
+    if torch.cuda.is_available():torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])
+    np.random.set_state(saved['numpy_rng']);random.setstate(saved['python_rng'])
+
+
+def restore_learner(algo,saved):
+    """Resume all learned state; never substitute physical-best for training-last."""
+    import torch
+    algo.policy.load_state_dict(saved['policy']);algo.optimizer.load_state_dict(saved['optimizer'])
+    algo.accepted_policy_updates=int(saved['accepted_policy_updates'])
+    for k,v in saved['policy'].items():
+        if not torch.equal(v,algo.policy.state_dict()[k]):raise ValueError('learner restore mismatch '+k)
+    if not algo.optimizer.state:raise ValueError('missing parent optimizer state')

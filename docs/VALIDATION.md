@@ -1,3 +1,9 @@
+# SmoothV4 extension250 — 2026-10-08
+
+User-authorized full-upper-learner continuation from the current fresh run,250 total updates/endpoint, no wall-clock budget termination. Existing150 evaluation disabled,60 evidence reused, final250 fixed-six panel and same physical best ranking. Unit tests verify Actor/Critic/log_std/Adam tensors and actor LR restoration, accepted-update counter, and no SIGALRM deadline with elapsed-time recording. Fifteen related tests pass. No new physics test or broad suite. Environment state is explicitly reconstructed, not an exact simulator resume; unused episode keys are chosen from the parent case manifest. Until the pending queue starts, do not report resumed training as running or a new reward as loaded.
+
+---
+
 # SmoothV4 fresh150 — 2026-10-08
 
 User amended the attachment to fresh Actor/Critic/optimizer initialization,150 PPO batches per independent upper endpoint; frozen R196 lower unchanged. Actual std must equal0.1. A prior attempt was stopped after discovering initialize_policy overwrote constructor std; make_algorithm now restores configured std after weight initialization. The12 relevant reward/causal-pair/value-only/PPO checks passed before corrected launch; saved two-env reward reconstruction matched NumPy within1e-8. No whole repository or lower necessity re-evaluation.
