@@ -1,5 +1,5 @@
 <!-- CURRENT RESEARCH ENTRY -->
-Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md before work. Latest user authorization: fresh lower residual random-command training1024envs/200updates; older dated task-specific alpha/path contracts are historical, not this experiment. Preserve original physics/ECBC/ESO/permissions.
+Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md before work. Latest user authorization: frozen R196/R244 lowers (lower_alpha=1), each with independent upper alpha0/1 policies,250updates each (4 groups); older dated task-specific alpha/path contracts are historical, not this experiment. Preserve original physics/ECBC/ESO/permissions.
 
 # STTW_CONTROL agent 工作规则
 

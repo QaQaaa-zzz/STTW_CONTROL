@@ -997,3 +997,14 @@ Plan:
 - [x] Run CPU tests and8x16x2 GPU engineering smoke; verify finite gradients and weights actually change.
 - [x] Register run under shared lock; start fresh1024x200, verify reward scalar HTTP TensorBoard and checkpoint/progress.
 - [x] Commit isolated implementation after launch; no automatic push. No claims of control improvement until paired trajectories evaluated.
+
+## 2026-10-08 Frozen registered lowers / independent upper endpoints
+User authorizes R196 and R244 ALPHA1 lower controllers, upper alpha0/1 retrials250 updates. Interpret as2x2 independent upper policies (4 groups), rather than confounding lower identity with upper preference. No old upper or optimizer loaded. Same seed73,512envs x128policy steps x250=16,384,000 policy transitions/group;65,536,000 physical ticks/group. Upper50Hz, lower200Hz; original16s upper task/reward/command/action mapping preserved. Frozen lower history capacity extends2001->3201 solely to support16s; contract fields/scales/normalization/return rules preserved. Composition follows frozen lower: base ECBC at governed reference + original±1.5/10 residual, final original limits. This differs from former raw-centered shared correction budget; do not label single-variable comparison with old500 results.
+
+Budget/group: compile900s, engineering600s, training14400s, restricted final review1200s (per-case480s), total18000s. Four groups max72000s wall; serial workers, stop queue on group numerical/interface/budget error, no retries or extra updates. Final comparisons: each lower's zero-upper baseline and own alpha0/1 finals on original main+random16s schedules; no broad panel. Save partial/failure evidence. TensorBoard all group directories separated; live verification receipts and progress are recorded in the run directory and shared research ledger.
+
+Plan (brainstorming / writing-plans / TDD; user delegates implementation and authorizes launch):
+- [x] Registry adapter preserves310-field Actor, mask/history, fixed lower_alpha1 and independent state; parity with validated Transfer.
+- [x] Parameterize upper training single-alpha grouping without changing historical defaults; keep separate model/checkpoint/optimizer identities.
+- [x] Short8x16x2 fresh engineering checks; validate lower reference-centered control, ESO once, raw reward/reference, registry hashes.
+- [x] Register/launch bounded4-group queue and completion review, verify current reward in TensorBoard, commit after launch.

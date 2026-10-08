@@ -33,8 +33,12 @@ class DirectCommandEnv:
         self.cc=self.physics.cc;self.ac=self.physics.ac;self.zero_log=None
         self.lower=None
         if spec.get('lower_controller') is not None:
-            from .frozen_lower_controller import FrozenLowerController
-            self.lower=FrozenLowerController(spec['lower_controller'])
+            if 'alias' in spec['lower_controller']:
+                from .registered_lower_controller import RegisteredLowerController
+                self.lower=RegisteredLowerController(spec['lower_controller']['alias'],path_capacity=spec['lower_controller']['path_capacity'])
+            else:
+                from .frozen_lower_controller import FrozenLowerController
+                self.lower=FrozenLowerController(spec['lower_controller'])
     def reset(self,snapshot,env_id,episode_index,alpha,rows=None,slew=None):
         raw=jp.stack((snapshot.raw[0],jp.asarray(0.)))
         sampled,family,drawn_slew=schedule(env_id,episode_index,raw[0],self.spec)
@@ -72,11 +76,12 @@ class DirectCommandEnv:
         if self.lower is not None:
             from .closed_loop_kernel import preview_controls,controls
             measurement,pose,_=self.physics.observe(p.data)
-            preview=preview_controls(p.controller,measurement,raw,governed,p.physical_tick*self.cc.dt>3.,self.cc)
+            control_raw=governed if self.spec.get('lower_reference_centered',False) else raw
+            preview=preview_controls(p.controller,measurement,control_raw,governed,p.physical_tick*self.cc.dt>3.,self.cc)
             lower,lower_action,lower_obs,lower_flags=self.lower.prepare(lower,measurement,pose,governed,preview[2],previous)
             lower_fault=~lower_flags['finite']
             safe_action=jp.where(lower_fault,jp.zeros(2),lower_action)
-            override=controls(p.controller,p.actuator,measurement,raw,governed,p.physical_tick*self.cc.dt>3.,bypass,
+            override=controls(p.controller,p.actuator,measurement,control_raw,governed,p.physical_tick*self.cc.dt>3.,bypass,
                               self.cc,self.ac,lower_action=safe_action,previewed=preview)
         p,log=self.physics._step(p,governed,bypass,exact_governed=True,control_override=override)
         if self.lower is not None:

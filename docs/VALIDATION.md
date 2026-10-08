@@ -2015,3 +2015,12 @@ RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小�
 ## 2026-10-08 Lower random-command startup validation
 
 New task unit tests5 passed; inherited guarded PPO tests7 passed. Random schedule publisher shape16, bounds/seed reproducibility/tail, reward ordering without flat global cap, observation210/211, normalized actuator range and global KL/real gradients checked. Runtime zero-residual parity compares full physical data, ESO/controller and actuator states against original ECBC. GPU8x16x2 separate smoke passed; formal initialization restored seed and empty optimizer, not smoke weights. Formal1024 rollout began and actual TensorBoard training reward loaded viaHTTP6006. Full run identity: runs/lower_random_commands_1024_200_20261008/INDEX.md. No final tracking improvement claim; training still active.
+
+
+## Frozen lower endpoint interface validation (2026-10-08)
+
+Scope: registry adapters for STTW_R196_ALPHA1 / STTW_R244_ALPHA1, independently trained upper alpha0/1, fixed lower_alpha1. Both frozen actors and identities pass pinned SHA checks. Registered adapter observations/actions/closed-loop internal state match original command_replay.Transfer over sequential steps for both aliases.24 relevant registered-lower, direct-command PPO/core/environment tests pass. Prior default composition remains unchanged; new endpoint profile explicitly centers original ECBC on governed reference before bounded lower residual.
+
+First group runtime interface: two4s zero-upper traces passed; nonzero-upper probe confirms governed reference reaches lower ECBC, ESO once, original raw reference/reward retained, lower residual scales1.5/10. Engineering8env×16policy steps×2updates passed with nonzero Actor/Critic weight changes. Formal initial checkpoint independently checked: empty optimizer, identical seeded initial parameters to pre-smoke initialization, different from trained smoke weights,512 environments with upper_alpha0/lower_alpha1. Formal launch is engineering evidence, not a control improvement result. Remaining groups execute the same gates separately.
+
+Exact artifacts: runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/{interface_checks,lower_contract_check,fresh_initialization_audit}.json and smoke/passed.json. Training/current research status is maintained only in shared research-hub/PROJECT_STATE.md; frozen run status is authoritative for progress.

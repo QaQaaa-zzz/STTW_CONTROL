@@ -287,4 +287,5 @@ def make_algorithm(obs, steps, spec, device):
         weight_decay=ppo["weight_decay"], std_min=ppo["latent_std_min"],
         std_max=ppo["latent_std_max"], hard_kl=ppo["hard_stop_mean_kl"],
         actor_grad_limit=ppo["max_grad_norm_actor"],
-        critic_grad_limit=ppo["max_grad_norm_critic"])
+        critic_grad_limit=ppo["max_grad_norm_critic"],
+        kl_group_index=ppo.get('kl_group_index',ALPHA_INDEX))

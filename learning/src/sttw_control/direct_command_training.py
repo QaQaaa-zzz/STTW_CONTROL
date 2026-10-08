@@ -191,7 +191,9 @@ class Campaign:
     def setup_batch(self,n):
         import jax
         import jax.numpy as jp
-        e=self.env;ids=jp.arange(n,dtype=jp.int32);alpha=jp.concatenate([jp.zeros(n//2),jp.ones(n-n//2)])
+        e=self.env;ids=jp.arange(n,dtype=jp.int32)
+        fixed_alpha=self.spec.get('upper_alpha')
+        alpha=(jp.full((n,),float(fixed_alpha)) if fixed_alpha is not None else jp.concatenate([jp.zeros(n//2),jp.ones(n-n//2)]))
         def reset_one(env_id,episode,alpha):
             key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.spec['commands']['random_seed']),env_id),episode)
             index=jax.random.randint(jax.random.fold_in(key,812),(),0,8)
@@ -230,7 +232,7 @@ class Campaign:
         path=self.out/phase/'case_manifest.jsonl';path.parent.mkdir(parents=True,exist_ok=True)
         with path.open('a') as f:
             for i in new:
-                rec=dict(env_id=int(ids[i]),episode_index=int(episodes[i]),alpha=float(alpha[i]),family=int(family[i]),slew=slew[i].tolist(),rows=rows[i].tolist())
+                rec=dict(env_id=int(ids[i]),episode_index=int(episodes[i]),alpha=float(alpha[i]),upper_alpha=float(alpha[i]),lower_alpha=1. if self.env.lower is not None else None,family=int(family[i]),slew=slew[i].tolist(),rows=rows[i].tolist())
                 f.write(json.dumps(rec)+'\n');self.seen_cases.add((phase,int(ids[i]),int(episodes[i])))
     def checkpoint(self,algo,update,phase,states):
         import torch,jax
@@ -251,7 +253,7 @@ class Campaign:
         from tensordict import TensorDict
         from torch.utils.tensorboard import SummaryWriter
         from .direct_command_ppo import make_algorithm
-        n,steps=(8,16) if phase=='smoke' else (512,128)
+        n,steps=(8,16) if phase=='smoke' else (self.spec['ppo']['num_envs'],self.spec['ppo']['rollout_policy_steps'])
         states,advance,observe=self.setup_batch(n)
         def td(a,c):return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(c)},batch_size=[n])
         with self.budget.measure(phase,'fresh shared Actor/Critic initialization'):
@@ -300,7 +302,8 @@ class Campaign:
                     names=['count','speed_mse_sum','steer_mse_sum','roll_violations','cost_cap','raw_cost','effective_cost','motor_clip','final_clip','reference_clip','reference_rate_clip','heading_mse_sum','speed_offset','steer_offset']
                     costnames=sorted(diagnostics[0]['raw_components'])
                     names += ['raw_'+x for x in costnames]+['effective_'+x for x in costnames]
-                    for alpha,sl in [(0,slice(0,n//2)),(1,slice(n//2,n))]:
+                    alpha_groups=([(int(self.spec['upper_alpha']),slice(None))] if 'upper_alpha' in self.spec else [(0,slice(0,n//2)),(1,slice(n//2,n))])
+                    for alpha,sl in alpha_groups:
                         for fam in [-1,0,1,2]:
                             mask=np.ones(families[:,sl].shape,bool) if fam==-1 else families[:,sl]==fam
                             for wi,window in enumerate(['all','ordinary','conflict','recovery']):
