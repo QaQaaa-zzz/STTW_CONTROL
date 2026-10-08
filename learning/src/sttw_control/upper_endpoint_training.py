@@ -24,6 +24,23 @@ def make_spec(alias,alpha,updates=250):
     s['budget'].update(default_policy_transitions=512*128*updates,default_control_transitions_upper=512*128*updates*4,additional_compute_wall_seconds=2400+14400*updates//250,compile_wall_seconds=900,engineering_wall_seconds=600,training_wall_seconds=14400*updates//250,evaluation_wall_seconds=1200,full_episode_wall_seconds=480)
     return s
 
+def record_training_best(output):
+    """Reward belongs to rollout-producing model update, never the next update."""
+    import math
+    root=Path(output);records=[]
+    for line in (root/'pilot/metrics.jsonl').read_text().splitlines():
+        row=json.loads(line)
+        if math.isfinite(row['mean_step_reward']):records.append(row)
+    if not records:return None
+    row=max(records,key=lambda r:r['mean_step_reward']);update=int(row['sampling_model_update'])
+    checkpoint=root/f'pilot/checkpoints/update_{update:04d}.pt'
+    actor=root/f'pilot/checkpoints/actor_{update:04d}.pkl'
+    if not checkpoint.exists() or not actor.exists():raise FileNotFoundError(checkpoint)
+    info=dict(update=update,checkpoint=str(checkpoint),actor=str(actor),criterion='training_mean_step_reward',score=row['mean_step_reward'],scoring_rollout_update=row['update'],candidate_count=len(records),scope='sampled_training_candidates_only',final_update_scored=False)
+    write(root/'pilot/best_model.json',info)
+    return info
+
+
 class EndpointCampaign(Campaign):
     def __init__(self,config,output):
         self.config=Path(config);self.spec=load_endpoint_spec(config);self.out=Path(output)
@@ -60,6 +77,7 @@ def run_endpoint(config,output):
         target=c.spec['ppo']['default_updates']
         _,completed=c.train('pilot',target)
         if completed!=target or c.status.get('training_stop_reason'):raise RuntimeError('endpoint incomplete or optimizer stopped; retain last checkpoint, stop queue')
+        record_training_best(c.out)
         c._status(state='complete',stage='training_complete',completed_updates=completed)
         notify('STTW upper endpoint complete',f"{c.status['lower_alias']} upper_alpha={c.status['upper_alpha']} {completed}/{target}")
     except BaseException as e:

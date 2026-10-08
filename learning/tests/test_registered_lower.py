@@ -83,6 +83,24 @@ def test_reduced_endpoint_budget_stops_at_declared_update(tmp_path,monkeypatch):
  campaign.train.side_effect=[(None,2),(None,125)]
  monkeypatch.setattr(training,'EndpointCampaign',lambda *args:campaign)
  monkeypatch.setattr(training,'notify',lambda *args:None)
+ monkeypatch.setattr(training,'record_training_best',lambda *args:None)
  training.run_endpoint(p,tmp_path)
  assert campaign.train.call_args_list[-1].args==('pilot',125)
  campaign._status.assert_called_once_with(state='complete',stage='training_complete',completed_updates=125)
+
+
+def test_best_uses_sampling_model_and_falls_back_only_when_absent(tmp_path):
+ import json
+ from sttw_control.upper_endpoint_training import record_training_best
+ from sttw_control.upper_endpoint_review import select_checkpoint
+ p=tmp_path/'pilot';c=p/'checkpoints';c.mkdir(parents=True)
+ for u in [0,1,2]:
+  (c/f'update_{u:04d}.pt').touch();(c/f'actor_{u:04d}.pkl').touch()
+ (p/'last_completed.json').write_text(json.dumps({'update':2}))
+ assert select_checkpoint(tmp_path)['update']==2
+ rows=[{'update':1,'sampling_model_update':0,'mean_step_reward':-3.}, {'update':2,'sampling_model_update':1,'mean_step_reward':-1.}]
+ (p/'metrics.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows))
+ info=record_training_best(tmp_path)
+ assert info['update']==1 and info['scoring_rollout_update']==2
+ assert select_checkpoint(tmp_path)['selection']=='training_reward_best'
+ assert select_checkpoint(tmp_path)['update']==1
