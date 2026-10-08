@@ -1,3 +1,5 @@
+后续指令协调器默认固定测试见 docs/FIXED_COMMAND_TESTS.md 和 learning/configs/fixed_command_six.json；六场景原始时序/窗口不得按结果调整。
+
 <!-- CURRENT RESEARCH ENTRY -->
 Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md before work. Latest user authorization: frozen R196/R244 lowers (lower_alpha=1), each with independent upper alpha0/1 policies,250updates each (4 groups); older dated task-specific alpha/path contracts are historical, not this experiment. Preserve original physics/ECBC/ESO/permissions.
 

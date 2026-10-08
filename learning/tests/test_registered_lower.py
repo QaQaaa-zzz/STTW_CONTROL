@@ -104,3 +104,12 @@ def test_best_uses_sampling_model_and_falls_back_only_when_absent(tmp_path):
  assert info['update']==1 and info['scoring_rollout_update']==2
  assert select_checkpoint(tmp_path)['selection']=='training_reward_best'
  assert select_checkpoint(tmp_path)['update']==1
+
+
+def test_fixed_command_panel_preserves_historical_cases():
+ from sttw_control.fixed_command_panel import load_protocol,schedules
+ p=load_protocol();rows=dict(schedules(p))
+ assert len(rows)==6 and p['duration_s']==10 and p['slew']==[.5,.3]
+ assert p['command_window_s']==[1,6] and p['final_window_s']==[9.5,10]
+ assert rows['steer_reversal'][:4].tolist()==[[0,2.3,0],[1,2.3,.15],[3,2.3,-.15],[5,2.3,0]]
+ assert rows['fast_turn'][:3].tolist()==[[0,2.3,0],[1,2.6,.25],[4,2.3,0]]

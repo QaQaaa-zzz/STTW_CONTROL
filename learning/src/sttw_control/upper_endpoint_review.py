@@ -62,7 +62,8 @@ def review_pair(root,alias):
     from .direct_command_env import DirectCommandEnv
     from .direct_command_policy import DirectCommandActor
     from .direct_command_scenarios import review_rows
-    from .direct_command_reporting import generate_report
+    from .fixed_command_panel import load_protocol,schedules,report
+    protocol=load_protocol()
     from .direct_command_audit import reconstruct_trace
     root=Path(root);short=alias.split('_')[1];runs=[root/f'{short}_upper{a}' for a in [0,1]];out=root/f'{short}_comparison';start=time.monotonic()
     if (out/'manifest.json').exists():raise FileExistsError(out)
@@ -83,8 +84,8 @@ def review_pair(root,alias):
     for selected in selections:
         with Path(selected['actor']).open('rb') as f:params.append(pickle.load(f))
     stacked=jax.tree.map(lambda a,b:jp.stack([a,a,b]),*params);spec=specs[0];env=DirectCommandEnv(spec);actor=DirectCommandActor();alphas=jp.array([0.,0.,1.]);bypass=jp.array([True,False,False])
-    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[x['checkpoint'] for x in selections],checkpoint_selection=selections,bank_parity=True,new_episodes=6,control_ticks_upper=19200,budget_s=1200,protocol='original main/random16s,3 methods, raw command evaluation'))
-    main,random,sl=review_rows(spec);write(out/'review/frozen_schedules.json',dict(main=main.tolist(),random=random.tolist(),slew=sl.tolist()))
+    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[x['checkpoint'] for x in selections],checkpoint_selection=selections,bank_parity=True,new_episodes=18,control_ticks_upper=36000,budget_s=1200,protocol=protocol))
+    cases=schedules(protocol);main=cases[0][1];sl=np.asarray(protocol['slew']);write(out/'review/frozen_schedules.json',protocol)
     reset=jax.jit(lambda rows:jax.vmap(lambda a:env.reset(sample,jp.int32(77001),jp.int32(0),a,rows,jp.asarray(sl,jp.float32)))(alphas))
     states=reset(jp.asarray(main,jp.float32));jax.block_until_ready(states);env.set_log_template(jax.tree.map(lambda x:x[0],states))
     def chunk(s):
@@ -93,14 +94,14 @@ def review_pair(root,alias):
             end,_,_,logs,_=jax.vmap(env.policy_step)(s,z,bypass);return end,logs
         return jax.lax.scan(step,s,None,length=50)
     write(out/'status.json',dict(state='running',stage='compile'));execute=jax.jit(chunk).lower(states).compile();audits={}
-    for case,rows in [('main',main),('random',random)]:
+    for case,rows in cases:
         states=reset(jp.asarray(rows,jp.float32));chunks=[];case_start=time.monotonic()
         case_dir=out/'review'/case;case_dir.mkdir(parents=True,exist_ok=True)
         def persist():
             flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
             for i,name in enumerate(['B0','pi_alpha0','pi_alpha1']):
                 d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};mask=d['active_tick'];d={k:v[mask] for k,v in d.items()};d['checkpoint_update']=np.asarray(-1 if i==0 else selections[i-1]['update']);np.savez_compressed(case_dir/f'{name}.npz',**d)
-        for sec in range(16):
+        for sec in range(protocol['duration_s']):
             if time.monotonic()-start>1100 or time.monotonic()-case_start>480:raise TimeoutError('declared comparison budget')
             states,logs=execute(states);jax.block_until_ready(states);chunks.append(jax.device_get(logs));persist()
             write(out/'status.json',dict(state='running',case=case,seconds=sec+1,elapsed_s=time.monotonic()-start))
@@ -110,7 +111,7 @@ def review_pair(root,alias):
             d=dict(np.load(case_dir/f'{name}.npz'));audits[case][name]=reconstruct_trace(d,spec,np.asarray(sample.actuator.previous),controller)
         baseline=dict(np.load(case_dir/'B0.npz'));b1=rescore_baseline(baseline,1,spec,np.asarray(sample.actuator.previous));np.savez_compressed(case_dir/'B0_alpha1.npz',**b1);audits[case]['B0_alpha1']=reconstruct_trace(b1,spec,np.asarray(sample.actuator.previous),controller)
         assert all(v['passed'] for v in audits[case].values())
-        generate_report(out,spec)
+        report(out,spec,protocol)
         # Additional correctly paired reward curves; B0 in inherited overview is alpha0-scored.
         import matplotlib
         matplotlib.use('Agg')
@@ -124,12 +125,12 @@ def review_pair(root,alias):
         fig.suptitle(alias+' '+case+' paired reward; raw command evaluation');fig.tight_layout()
         for ext in ['png','pdf']:fig.savefig(out/'review'/f'{case}_paired_rewards.{ext}',dpi=130)
         plt.close(fig)
-    write(out/'review/audit.json',audits);write(out/'status.json',dict(state='complete',episodes=6,elapsed_s=time.monotonic()-start))
+    write(out/'review/audit.json',audits);write(out/'status.json',dict(state='complete',episodes=18,elapsed_s=time.monotonic()-start))
     (out/'review/INDEX.md').write_text(
         '# Frozen lower / independent upper endpoint comparison\n\n'
         f"Lower: {alias}, fixed lower_alpha=1. Independent upper selected updates: {[x['update'] for x in selections]}.\n\n"
         '[Training diagnostics](training_diagnostics.png) · [Training metrics](training_summary.json)\n\n'
         '[Physical metrics and plots](REPORT.md) · [Metrics](metrics.json) · [Reward audit](audit.json)\n\n'
-        '[Main paired rewards](main_paired_rewards.png) · [Random paired rewards](random_paired_rewards.png)\n\n'
+        'Six historical fixed command cases; case plots linked in REPORT.md.\n\n'
         'B0 is this frozen residual lower with zero upper correction. Its physical trajectory is shared; '
         'rewards are rescored separately for each upper alpha. These are two independent upper policies.\n')

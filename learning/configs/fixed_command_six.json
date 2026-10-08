@@ -1,0 +1,138 @@
+{
+  "protocol_id": "fixed_command_six_v1",
+  "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+  "cases": {
+    "straight_hold": [
+      [
+        0,
+        2.3,
+        0
+      ]
+    ],
+    "speed_changes": [
+      [
+        0,
+        2.3,
+        0
+      ],
+      [
+        1,
+        2.6,
+        0
+      ],
+      [
+        3.5,
+        2.0,
+        0
+      ],
+      [
+        6,
+        2.3,
+        0
+      ]
+    ],
+    "gentle_positive": [
+      [
+        0,
+        2.3,
+        0
+      ],
+      [
+        1,
+        2.3,
+        0.08
+      ],
+      [
+        4,
+        2.3,
+        0
+      ]
+    ],
+    "gentle_negative": [
+      [
+        0,
+        2.3,
+        0
+      ],
+      [
+        1,
+        2.3,
+        -0.08
+      ],
+      [
+        4,
+        2.3,
+        0
+      ]
+    ],
+    "steer_reversal": [
+      [
+        0,
+        2.3,
+        0
+      ],
+      [
+        1,
+        2.3,
+        0.15
+      ],
+      [
+        3,
+        2.3,
+        -0.15
+      ],
+      [
+        5,
+        2.3,
+        0
+      ]
+    ],
+    "fast_turn": [
+      [
+        0,
+        2.3,
+        0
+      ],
+      [
+        1,
+        2.6,
+        0.25
+      ],
+      [
+        4,
+        2.3,
+        0
+      ]
+    ]
+  },
+  "seed": 77001,
+  "prepared_bank_index": 3,
+  "duration_s": 10,
+  "slew": [
+    0.5,
+    0.3
+  ],
+  "command_window_s": [
+    1,
+    6
+  ],
+  "final_window_s": [
+    9.5,
+    10
+  ],
+  "final_tolerances": {
+    "speed_m_s": 0.1,
+    "steer_rad": 0.04,
+    "heading_rad": 0.05
+  },
+  "diagnostic_roll_rad": 0.3,
+  "methods": [
+    "B0",
+    "pi_alpha0",
+    "pi_alpha1"
+  ],
+  "lower_alpha": 1,
+  "checkpoint_selection": "best_model.json else last_completed",
+  "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+  "external_disturbance": false
+}
