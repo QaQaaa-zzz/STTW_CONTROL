@@ -397,8 +397,8 @@
     "actor_has_time": false,
     "rollout_boundary_bootstrap": true,
     "use_final_observation_before_reset": true,
-    "default_updates": 250,
-    "future_total_updates_only_after_user_approval": 250,
+    "default_updates": 125,
+    "future_total_updates_only_after_user_approval": 125,
     "save_every_updates": 5,
     "default_evaluation_checkpoint": "last_completed_update",
     "kl_group_index": null
@@ -503,12 +503,12 @@
     }
   },
   "budget": {
-    "default_policy_transitions": 16384000,
-    "default_control_transitions_upper": 65536000,
-    "additional_compute_wall_seconds": 16800,
+    "default_policy_transitions": 8192000,
+    "default_control_transitions_upper": 32768000,
+    "additional_compute_wall_seconds": 9600,
     "compile_wall_seconds": 900,
     "engineering_wall_seconds": 600,
-    "training_wall_seconds": 14400,
+    "training_wall_seconds": 7200,
     "evaluation_wall_seconds": 1200,
     "full_episode_wall_seconds": 480,
     "engineering_num_envs": 8,

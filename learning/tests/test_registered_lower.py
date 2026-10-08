@@ -68,3 +68,21 @@ def test_baseline_rescore_preserves_alpha0_and_changes_alpha1():
  for a in [0,1]:
   new=rescore_baseline(t,a,s,previous);assert reconstruct_trace(new,s,previous,controller)['passed']
   if a==0:np.testing.assert_allclose(new['scored_tick_reward'],t['scored_tick_reward'],atol=2e-6)
+
+
+def test_reduced_endpoint_budget_stops_at_declared_update(tmp_path,monkeypatch):
+ import json
+ import sttw_control.upper_endpoint_training as training
+ from unittest.mock import MagicMock
+ s=training.make_spec('STTW_R244_ALPHA1',0,125)
+ p=tmp_path/'config.json';p.write_text(json.dumps(s))
+ assert training.load_endpoint_spec(p)==s
+ assert s['budget']['default_policy_transitions']==8192000
+ assert s['budget']['default_control_transitions_upper']==32768000
+ campaign=MagicMock();campaign.spec=s;campaign.status={'lower_alias':'STTW_R244_ALPHA1','upper_alpha':0}
+ campaign.train.side_effect=[(None,2),(None,125)]
+ monkeypatch.setattr(training,'EndpointCampaign',lambda *args:campaign)
+ monkeypatch.setattr(training,'notify',lambda *args:None)
+ training.run_endpoint(p,tmp_path)
+ assert campaign.train.call_args_list[-1].args==('pilot',125)
+ campaign._status.assert_called_once_with(state='complete',stage='training_complete',completed_updates=125)

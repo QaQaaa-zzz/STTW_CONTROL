@@ -30,17 +30,19 @@ def review_pair(root,alias):
     specs=[json.loads((p/'frozen_config.json').read_text()) for p in runs]
     assert [s['upper_alpha'] for s in specs]==[0,1]
     assert all(s['lower_controller']['alias']==alias and s['lower_controller']['alpha']==1. for s in specs)
+    updates=specs[0]['ppo']['default_updates']
+    assert specs[1]['ppo']['default_updates']==updates
     for p in runs:
-        status=json.loads((p/'status.json').read_text());assert status['completed_updates']==250 and status['state']=='complete'
+        status=json.loads((p/'status.json').read_text());assert status['completed_updates']==updates and status['state']=='complete'
     banks=[]
     for p in runs:
         with (p/'prepared_bank.pkl').open('rb') as f:banks.append(pickle.load(f))
     for a,b in zip(jax.tree.leaves(banks[0]),jax.tree.leaves(banks[1])):np.testing.assert_allclose(a,b,rtol=0,atol=1e-6)
     sample=jax.tree.map(lambda x:jp.asarray(x[3]),banks[0]);params=[]
     for p in runs:
-        with (p/'pilot/checkpoints/actor_0250.pkl').open('rb') as f:params.append(pickle.load(f))
+        with (p/f'pilot/checkpoints/actor_{updates:04d}.pkl').open('rb') as f:params.append(pickle.load(f))
     stacked=jax.tree.map(lambda a,b:jp.stack([a,a,b]),*params);spec=specs[0];env=DirectCommandEnv(spec);actor=DirectCommandActor();alphas=jp.array([0.,0.,1.]);bypass=jp.array([True,False,False])
-    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[str(p/'pilot/checkpoints/update_0250.pt') for p in runs],bank_parity=True,new_episodes=6,control_ticks_upper=19200,budget_s=1200,protocol='original main/random16s,3 methods, raw command evaluation'))
+    write(out/'manifest.json',dict(lower_alias=alias,lower_alpha=1.,upper_alphas=[0,1],independent_checkpoints=[str(p/f'pilot/checkpoints/update_{updates:04d}.pt') for p in runs],bank_parity=True,new_episodes=6,control_ticks_upper=19200,budget_s=1200,protocol='original main/random16s,3 methods, raw command evaluation'))
     main,random,sl=review_rows(spec);write(out/'review/frozen_schedules.json',dict(main=main.tolist(),random=random.tolist(),slew=sl.tolist()))
     reset=jax.jit(lambda rows:jax.vmap(lambda a:env.reset(sample,jp.int32(77001),jp.int32(0),a,rows,jp.asarray(sl,jp.float32)))(alphas))
     states=reset(jp.asarray(main,jp.float32));jax.block_until_ready(states);env.set_log_template(jax.tree.map(lambda x:x[0],states))
@@ -56,7 +58,7 @@ def review_pair(root,alias):
         def persist():
             flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
             for i,name in enumerate(['B0','pi_alpha0','pi_alpha1']):
-                d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};mask=d['active_tick'];d={k:v[mask] for k,v in d.items()};d['checkpoint_update']=np.asarray(250);np.savez_compressed(case_dir/f'{name}.npz',**d)
+                d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};mask=d['active_tick'];d={k:v[mask] for k,v in d.items()};d['checkpoint_update']=np.asarray(updates);np.savez_compressed(case_dir/f'{name}.npz',**d)
         for sec in range(16):
             if time.monotonic()-start>1100 or time.monotonic()-case_start>480:raise TimeoutError('declared comparison budget')
             states,logs=execute(states);jax.block_until_ready(states);chunks.append(jax.device_get(logs));persist()
@@ -84,7 +86,7 @@ def review_pair(root,alias):
     write(out/'review/audit.json',audits);write(out/'status.json',dict(state='complete',episodes=6,elapsed_s=time.monotonic()-start))
     (out/'review/INDEX.md').write_text(
         '# Frozen lower / independent upper endpoint comparison\n\n'
-        f'Lower: {alias}, fixed lower_alpha=1. Independent upper Actors at update250.\n\n'
+        f'Lower: {alias}, fixed lower_alpha=1. Independent upper Actors at update{updates}.\n\n'
         '[Physical metrics and plots](REPORT.md) · [Metrics](metrics.json) · [Reward audit](audit.json)\n\n'
         '[Main paired rewards](main_paired_rewards.png) · [Random paired rewards](random_paired_rewards.png)\n\n'
         'B0 is this frozen residual lower with zero upper correction. Its physical trajectory is shared; '
