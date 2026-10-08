@@ -10326,5 +10326,25 @@
     }
   },
   "evaluation_status": "complete",
-  "adoption_status": "not_adopted_all_case_qualified_controller"
+  "adoption_status": "not_adopted_all_case_qualified_controller",
+  "xy_delivery": {
+    "figure": "xy_trajectories.png",
+    "fields": [
+      "actual_xy",
+      "reference_xy",
+      "reference_yaw_unwrapped",
+      "yaw_unwrapped"
+    ],
+    "source": "saved raw NPZ, no new simulation; original integrated reference, not governed-command integration",
+    "checks": {
+      "straight_hold": "reference matches across methods through10s; actual finite; true termination respected",
+      "speed_changes": "reference matches across methods through10s; actual finite; true termination respected",
+      "gentle_positive": "reference matches across methods through10s; actual finite; true termination respected",
+      "gentle_negative": "reference matches across methods through10s; actual finite; true termination respected",
+      "steer_reversal": "reference matches across methods through10s; actual finite; true termination respected",
+      "fast_turn": "reference matches across methods through10s; actual finite; true termination respected"
+    },
+    "units": "world meters; equal scale",
+    "extension": "fast_turn 10-16s dotted; no B0 extension comparison"
+  }
 }
