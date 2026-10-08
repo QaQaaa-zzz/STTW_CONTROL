@@ -36,8 +36,9 @@ class DirectCommandPPO(PPO):
 
     def __init__(self, *args, actor_lr, critic_lr, adam_betas, adam_epsilon,
                  weight_decay, std_min, std_max, hard_kl, actor_grad_limit,
-                 critic_grad_limit, **kwargs):
+                 critic_grad_limit, kl_group_index=ALPHA_INDEX, **kwargs):
         super().__init__(*args, **kwargs)
+        self.kl_group_index = kl_group_index
         self.actor_parameters = list(self.policy.actor.parameters()) + [self.policy.log_std]
         self.critic_parameters = list(self.policy.critic.parameters())
         self.optimizer = torch.optim.Adam([
@@ -78,7 +79,8 @@ class DirectCommandPPO(PPO):
         observations = self.storage.observations.flatten(0, 1)
         old_mu = self.storage.mu.flatten(0, 1)
         old_std = self.storage.sigma.flatten(0, 1)
-        alpha = observations["policy"][:, ALPHA_INDEX]
+        alpha = (observations["policy"][:, self.kl_group_index] if self.kl_group_index is not None
+                 else torch.zeros(old_mu.shape[0], device=old_mu.device))
         std = self.policy.log_std.exp()
         if not _finite_tensors(old_mu, old_std, std, alpha) or bool((old_std <= 0).any()):
             return float("nan"), {"0": float("nan"), "1": float("nan")}
@@ -101,7 +103,7 @@ class DirectCommandPPO(PPO):
                     for key in ("0", "1")}
         count = sum(counts.values())
         mean = sum(totals.values()) / count if count else float("nan")
-        return mean, by_alpha
+        return (mean, by_alpha) if self.kl_group_index is not None else (mean, {"all": mean})
 
     def update(self):
         if self.hard_kl_stop or self.nonfinite_stop:
@@ -215,8 +217,8 @@ class DirectCommandPPO(PPO):
         result = {key: value / accepted_minibatches if accepted_minibatches else 0.
                   for key, value in sums.items()}
         result.update(mean_kl=mean_kl, exact_kl=mean_kl,
-                      kl_by_alpha=kl_by_alpha, kl_alpha0=kl_by_alpha["0"],
-                      kl_alpha1=kl_by_alpha["1"],
+                      kl_by_alpha=kl_by_alpha, kl_alpha0=kl_by_alpha.get("0"),
+                      kl_alpha1=kl_by_alpha.get("1"),
                       actor_grad_norm_preclip=result["actor_grad_norm"],
                       critic_grad_norm_preclip=result["critic_grad_norm"],
                       attempted_actor_grad_norm=(attempted_grad_sums["actor"] /

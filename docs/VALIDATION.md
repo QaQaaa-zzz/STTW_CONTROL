@@ -2010,3 +2010,8 @@ RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小�
 六条保存轨迹独立重建及导出一致性核对通过。仅后处理，无追加训练/物理评估。
 关键证据：docs/evidence/direct_command_frozen_lower500_20261008/README.md；
 本地完整索引runs/direct_command_frozen_lower500_20260929/INDEX.md。
+
+
+## 2026-10-08 Lower random-command startup validation
+
+New task unit tests5 passed; inherited guarded PPO tests7 passed. Random schedule publisher shape16, bounds/seed reproducibility/tail, reward ordering without flat global cap, observation210/211, normalized actuator range and global KL/real gradients checked. Runtime zero-residual parity compares full physical data, ESO/controller and actuator states against original ECBC. GPU8x16x2 separate smoke passed; formal initialization restored seed and empty optimizer, not smoke weights. Formal1024 rollout began and actual TensorBoard training reward loaded viaHTTP6006. Full run identity: runs/lower_random_commands_1024_200_20261008/INDEX.md. No final tracking improvement claim; training still active.

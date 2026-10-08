@@ -984,3 +984,16 @@ RMSE=.12914/.09146/.09149rad；峰值侧倾=.3753/.4373/.4377rad。上层减小�
 六条保存轨迹独立重建及导出一致性核对通过。仅后处理，无追加训练/物理评估。
 关键证据：docs/evidence/direct_command_frozen_lower500_20261008/README.md；
 本地完整索引runs/direct_command_frozen_lower500_20260929/INDEX.md。
+
+## Lower random-command residual implementation plan (2026-10-08)
+User delegates reward/hyperparameters and authorizes fresh1024envs x128steps x200updates.
+Design: reuse TeleopEnv physics, closed_loop_kernel.controls, command slew, RSL rollout/GAE and guarded optimizer. New lower task has no path or alpha inputs; Actor210 (10x20frames+10mask), Critic211 including remaining duration, ELU256/128, Gaussian2 -> tanh -> bounded front/rear residuals. All200Hz. Original observation fields/scales reused, actual body forward velocity is explicitly simulation-assisted.
+Reward rate:2exp(-(ev/.15)^2)+2exp(-(ed/.05)^2)-.2Huber(ev/.2)-.2Huber(ed/.1)-4Huber(max(abs(roll)-.26,0)/.05)-.02sum(action^2)-.05sum((action-prev)^2). Multiply dt=.005; physical failure -10 additional. No total cost cap; no heading/path objective. Finite10s task terminal, rollout boundary bootstraps, terminal never bootstraps. Tracking limitations of large speed/steer commands remain visible.
+Commands:1.5..3m/s,70% narrow±.12rad,20%±.30rad,10%straight per target; targets hold.8..1.8s,final2s straight at sampled speed; speed slew.3.. .8,steer.15.. .45. Stateless seed/env/episode sampling; no future rows in observation.
+PPO:1024x128,4epochs,8minibatches,Actor lr1e-4/Critic3e-4,gamma.9975,lambda.95,clip.2,entropy.001,grad1,std.15 bounded.05.. .5,soft KL.01/hard.05 rollback-stop. One seed830081. Max9000s wall including compilation/smoke/formal. Engineering8x16x2 separate initialization; formal200 maximum, no auto continuation/development panels. Save every10 and last, training-reward best belongs to pre-update model only.
+Plan:
+- [x] Tests for reward ordering, random schedules/causality, reset history, zero residual ECBC parity and PPO global KL.
+- [x] Implement lower task and small training entrypoint; reuse existing physical and optimizer modules.
+- [x] Run CPU tests and8x16x2 GPU engineering smoke; verify finite gradients and weights actually change.
+- [x] Register run under shared lock; start fresh1024x200, verify reward scalar HTTP TensorBoard and checkpoint/progress.
+- [x] Commit isolated implementation after launch; no automatic push. No claims of control improvement until paired trajectories evaluated.

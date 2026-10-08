@@ -1,0 +1,76 @@
+{
+  "schema": "sttw_lower_command_v1",
+  "seed": 830081,
+  "num_envs": 1024,
+  "updates": 200,
+  "rollout_steps": 128,
+  "epochs": 4,
+  "minibatches": 8,
+  "actor_lr": 0.0001,
+  "critic_lr": 0.0003,
+  "gamma": 0.9975,
+  "gae_lambda": 0.95,
+  "clip_ratio": 0.2,
+  "entropy": 0.001,
+  "soft_kl": 0.01,
+  "hard_kl": 0.05,
+  "std": 0.15,
+  "std_min": 0.05,
+  "std_max": 0.5,
+  "hidden_sizes": [
+    256,
+    128
+  ],
+  "dt": 0.005,
+  "episode_seconds": 10,
+  "history_frames": 10,
+  "actor_dim": 210,
+  "critic_dim": 211,
+  "command_seed": 830082,
+  "command_speed": [
+    1.5,
+    3.0
+  ],
+  "command_steer_narrow": 0.12,
+  "command_steer_wide": 0.3,
+  "command_probabilities": [
+    0.7,
+    0.2,
+    0.1
+  ],
+  "hold_s": [
+    0.8,
+    1.8
+  ],
+  "tail_start_s": 8.0,
+  "speed_slew": [
+    0.3,
+    0.8
+  ],
+  "steer_slew": [
+    0.15,
+    0.45
+  ],
+  "reward": {
+    "speed_sigma": 0.15,
+    "steer_sigma": 0.05,
+    "speed_weight": 2.0,
+    "steer_weight": 2.0,
+    "speed_huber_scale": 0.2,
+    "steer_huber_scale": 0.1,
+    "error_weight": 0.2,
+    "roll_start": 0.26,
+    "roll_scale": 0.05,
+    "roll_weight": 4.0,
+    "action_weight": 0.02,
+    "action_change_weight": 0.05,
+    "failure_penalty": 10.0
+  },
+  "wall_budget_s": 9000,
+  "save_every": 10,
+  "prepared_bank": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/prepared_bank.pkl",
+  "prepared_manifest": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/manifest.json",
+  "initialization": "fresh_actor_critic_optimizer",
+  "formal_transitions": 26214400,
+  "auto_evaluation": false
+}

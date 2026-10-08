@@ -1,3 +1,6 @@
+<!-- CURRENT RESEARCH ENTRY -->
+Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md before work. Latest user authorization: fresh lower residual random-command training1024envs/200updates; older dated task-specific alpha/path contracts are historical, not this experiment. Preserve original physics/ECBC/ESO/permissions.
+
 # STTW_CONTROL agent 工作规则
 
 ## 任务与权限

@@ -1,0 +1,148 @@
+"""Fresh bounded lower-controller training; reuses RSL and teleop physics."""
+from pathlib import Path
+import json,os,time,pickle,random,hashlib,subprocess,math
+import numpy as np
+from .direct_command_training import write,clean_numbers,notify
+
+def make_algorithm(obs,steps,cfg,device='cuda'):
+    import torch
+    from rsl_rl.modules import ActorCritic
+    from rsl_rl.storage import RolloutStorage
+    from .direct_command_ppo import DirectCommandPPO
+    assert obs['policy'].shape[-1]==cfg['actor_dim'] and obs['critic'].shape[-1]==cfg['critic_dim']
+    policy=ActorCritic(obs,{'policy':['policy'],'critic':['critic']},2,actor_hidden_dims=cfg['hidden_sizes'],critic_hidden_dims=cfg['hidden_sizes'],activation='elu',init_noise_std=cfg['std'],noise_std_type='log',state_dependent_std=False,actor_obs_normalization=False,critic_obs_normalization=False).to(device)
+    with torch.no_grad():
+        for net in [policy.actor,policy.critic]:
+            layers=[x for x in net.modules() if isinstance(x,torch.nn.Linear)]
+            for layer in layers:
+                torch.nn.init.orthogonal_(layer.weight,math.sqrt(2));torch.nn.init.zeros_(layer.bias)
+            if net is policy.actor:torch.nn.init.zeros_(layers[-1].weight)
+            else:torch.nn.init.orthogonal_(layers[-1].weight,1.)
+    storage=RolloutStorage('rl',obs.batch_size[0],steps,obs,[2],device=device)
+    return DirectCommandPPO(policy,storage,num_learning_epochs=cfg['epochs'],num_mini_batches=cfg['minibatches'],clip_param=cfg['clip_ratio'],gamma=cfg['gamma'],lam=cfg['gae_lambda'],value_loss_coef=1.,entropy_coef=cfg['entropy'],use_clipped_value_loss=False,schedule='fixed',desired_kl=cfg['soft_kl'],normalize_advantage_per_mini_batch=False,device=device,actor_lr=cfg['actor_lr'],critic_lr=cfg['critic_lr'],adam_betas=(.9,.999),adam_epsilon=1e-5,weight_decay=0.,std_min=cfg['std_min'],std_max=cfg['std_max'],hard_kl=cfg['hard_kl'],actor_grad_limit=1.,critic_grad_limit=1.,kl_group_index=None)
+
+class Training:
+    def __init__(self,config,output):
+        self.cfg=json.loads(Path(config).read_text());self.out=Path(output);self.started=time.monotonic()
+        if (self.out/'manifest.json').exists():raise FileExistsError('run already exists; no overwrite/resume')
+        self.status=dict(state='initializing',run_id=self.out.name,declared_updates=self.cfg['updates'],completed_updates=0,training_transitions=0,initialization='fresh_actor_critic_optimizer',training_seed=self.cfg['seed'])
+        self.update_status();write(self.out/'config.json',self.cfg)
+    def update_status(self,**kw):
+        self.status.update(kw);self.status.update(updated_epoch=time.time(),elapsed_s=time.monotonic()-self.started);write(self.out/'status.json',self.status)
+    def check_budget(self):
+        if time.monotonic()-self.started>self.cfg['wall_budget_s']:raise TimeoutError('declared wall budget exhausted')
+    def compile(self,label,fn,*args):
+        import jax
+        self.check_budget();self.update_status(stage='compile',detail=label,state='running');start=time.monotonic()
+        result=jax.jit(fn).lower(*args).compile();self.check_budget()
+        with (self.out/'compile.jsonl').open('a') as f:f.write(json.dumps(dict(label=label,seconds=time.monotonic()-start))+'\n')
+        return result
+    def initialize(self):
+        import jax,jax.numpy as jp,torch
+        from dataclasses import asdict
+        from .lower_command import LowerCommandEnv
+        from .runtime import configure_compilation_cache
+        torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
+        self.env=LowerCommandEnv(self.cfg)
+        with Path(self.cfg['prepared_bank']).open('rb') as f:self.bank=jax.tree.map(jp.asarray,pickle.load(f))
+        source=json.loads(Path(self.cfg['prepared_manifest']).read_text())
+        assert self.env.physics.bundle.identity==source['model'],'prepared bank physics identity mismatch'
+        assert asdict(self.env.cc)==source['controller'] and asdict(self.env.ac)==source['actuator']
+        write(self.out/'manifest.json',dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=None,optimizer_source=None,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
+        # Complete physical/controller/actuator parity, not merely matching motor commands.
+        sample=jax.tree.map(lambda x:x[3],self.bank);s=self.env.reset(sample,jp.int32(0),jp.int32(0))
+        def parity(s):
+            a,_,_,log=self.env.step(s,jp.zeros(2));b,base=self.env.physics._step(s.physical,s.physical.raw,True,exact_governed=True)
+            return a.physical,b,log,base
+        fn=self.compile('zero-residual ECBC ESO physics parity',parity,s);a,b,log,base=fn(s);jax.block_until_ready(a)
+        for name in ['controller','actuator','data']:
+            leaves1=jax.tree.leaves(getattr(a,name));leaves2=jax.tree.leaves(getattr(b,name))
+            for x,y in zip(leaves1,leaves2):np.testing.assert_allclose(np.asarray(x),np.asarray(y),rtol=1e-5,atol=1e-6)
+        write(self.out/'interface_checks.json',dict(zero_residual_physics_parity=True,eso_once=True,history_valid_frames=int(np.asarray(s.mask).sum()),command_schedule='16rows',dt=.005))
+    def batch(self,n):
+        import jax,jax.numpy as jp
+        e=self.env
+        def reset_one(eid,episode):
+            key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.cfg['seed']),eid),episode)
+            idx=jax.random.randint(key,(),0,8);snap=jax.tree.map(lambda x:x[idx],self.bank)
+            return e.reset(snap,eid,episode)
+        reset=self.compile(f'{n} resets',jax.vmap(reset_one),jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32))
+        states=reset(jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32));jax.block_until_ready(states)
+        def advance(states,z):
+            end,reward,done,logs=jax.vmap(e.step)(states,z)
+            nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda x:reset_one(x.env_id,x.episode+1),lambda x:x,s))(end,done)
+            a,c=jax.vmap(e.observation)(nxt)
+            ev=logs['actual_forward_speed']-logs['limited_command'][:,0];ed=logs['actual_delta']-logs['limited_command'][:,1]
+            # Nonfinite errors are logged separately; training stops instead of treating them as zero.
+            stats=jp.stack([jp.mean(ev**2),jp.mean(ed**2),jp.mean(jp.abs(ev)),jp.mean(jp.abs(ed)),jp.mean(jp.abs(logs['phi'])>.3),jp.mean(end.physical.failed),jp.mean(done),jp.mean(jp.abs(logs['normalized_residual'])>=.99),jp.max(logs['peak_roll']),jp.mean(logs['actual_forward_speed']),jp.mean(logs['limited_command'][:,0]),jp.mean(logs['limited_command'][:,1]),jp.mean(logs['final_command_clipped'])])
+            parts={k:jp.mean(v) for k,v in logs['reward_parts'].items()};diag=jax.tree.map(lambda x:x[:2],logs)
+            return nxt,a,c,reward,done,stats,parts,diag
+        advance=self.compile(f'{n} residual control physics and reset',advance,states,jp.zeros((n,2)))
+        observe=self.compile(f'{n} observations',jax.vmap(e.observation),states)
+        return states,advance,observe
+    def checkpoint(self,algo,update,phase,states,name=None):
+        import torch
+        root=self.out/phase/'checkpoints';root.mkdir(parents=True,exist_ok=True);path=root/(name or f'update_{update:04d}.pt');tmp=path.with_suffix('.tmp')
+        torch.save(dict(schema=self.cfg['schema'],update=update,config=self.cfg,policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),episode_indices=np.asarray(states.episode),task_ticks=np.asarray(states.tick),observation_scales='lower_command.SCALES',environment_continuation='not saved; no automatic resume'),tmp);os.replace(tmp,path)
+        return str(path.resolve())
+    def train(self,phase):
+        import jax,jax.numpy as jp,torch
+        from tensordict import TensorDict
+        from torch.utils.tensorboard import SummaryWriter
+        n,steps,updates=(8,16,2) if phase=='smoke' else (self.cfg['num_envs'],self.cfg['rollout_steps'],self.cfg['updates'])
+        states,advance,observe=self.batch(n)
+        torch.manual_seed(self.cfg['seed']);torch.cuda.manual_seed_all(self.cfg['seed']);np.random.seed(self.cfg['seed']);random.seed(self.cfg['seed'])
+        def td(a,c):return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(c)},batch_size=[n])
+        a,c=observe(states);obs=td(a,c);algo=make_algorithm(obs,steps,self.cfg)
+        self.checkpoint(algo,0,phase,states);writer=SummaryWriter(str(self.out/'tensorboard'/phase));writer.add_scalar('progress/updates',0,0);writer.flush()
+        self.update_status(stage=phase,state='running',stage_updates=0)
+        best=-float('inf');completed=0
+        try:
+            for update in range(1,updates+1):
+                self.check_budget();start=time.monotonic();stat=[];rews=[];parts=[];diags=[]
+                original={k:v.detach().clone() for k,v in algo.policy.state_dict().items() if k.startswith('actor.')}
+                with torch.no_grad():
+                    for t in range(steps):
+                        self.check_budget();z=algo.act(obs)
+                        if not bool(torch.isfinite(z).all()):raise RuntimeError('nonfinite latent')
+                        states,a,c,r,d,st,pt,dg=advance(states,jax.dlpack.from_dlpack(z.detach().contiguous()))
+                        obs=td(a,c)
+                        if not bool(torch.isfinite(obs['policy']).all()) or not bool(jp.all(jp.isfinite(r))) or not bool(jp.all(jp.isfinite(st))):raise RuntimeError('nonfinite observation/reward/physical diagnostics')
+                        algo.process_env_step(obs,torch.utils.dlpack.from_dlpack(r),torch.utils.dlpack.from_dlpack(d),{})
+                        stat.append(np.asarray(st));rews.append(float(jp.mean(r)));parts.append(jax.device_get(pt));diags.append(jax.device_get(dg))
+                    algo.compute_returns(obs)
+                sample_seconds=time.monotonic()-start;mean_reward=float(np.mean(rews))
+                if mean_reward>best:
+                    best=mean_reward;path=self.checkpoint(algo,update-1,phase,states,'training_reward_best.pt');write(self.out/phase/'best_model.json',dict(checkpoint=path,update=update-1,scored_by_rollout=update,mean_step_reward=best,selection='random training rollout, pre-update actor, not fixed-scene qualification'))
+                opt=time.monotonic();metrics=algo.update();opt_seconds=time.monotonic()-opt;completed=update
+                arr=np.asarray(stat);avg=arr.mean(0);actor_delta=float(torch.sqrt(sum(((v-original[k])**2).sum() for k,v in algo.policy.state_dict().items() if k in original)))
+                record=dict(update=update,transitions=update*n*steps,mean_step_reward=mean_reward,speed_rmse=float(np.sqrt(avg[0])),steer_rmse=float(np.sqrt(avg[1])),speed_mae=float(avg[2]),steer_mae=float(avg[3]),working_roll_fraction=float(avg[4]),failed_episodes=int(round(arr[:,5].sum()*n)),ended_episodes=int(round(arr[:,6].sum()*n)),residual_saturation_fraction=float(avg[7]),peak_roll=float(arr[:,8].max()),actual_speed_mean=float(avg[9]),command_speed_mean=float(avg[10]),command_steer_mean=float(avg[11]),logged_final_clip_fraction=float(avg[12]),sample_seconds=sample_seconds,optimize_seconds=opt_seconds,seconds=time.monotonic()-start,actor_weight_delta_l2=actor_delta,ppo=metrics,reward_parts={k:float(np.mean([x[k] for x in parts])) for k in parts[0]})
+                record['failure_rate']=record['failed_episodes']/record['ended_episodes'] if record['ended_episodes'] else None
+                with (self.out/phase/'metrics.jsonl').open('a') as f:f.write(json.dumps(clean_numbers(record),allow_nan=False)+'\n')
+                for k,v in record.items():
+                    if isinstance(v,(int,float)) and np.isfinite(v):writer.add_scalar('train/'+k,v,update)
+                for k,v in metrics.items():
+                    if isinstance(v,(int,float)) and np.isfinite(v):writer.add_scalar('ppo/'+k,v,update)
+                for k,v in record['reward_parts'].items():writer.add_scalar('reward_parts/'+k,v,update)
+                writer.flush()
+                if update==1 or update%self.cfg['save_every']==0 or update==updates or metrics['hard_kl_stop'] or metrics['nonfinite_stop']:
+                    path=self.checkpoint(algo,update,phase,states);write(self.out/phase/'last_completed.json',dict(update=update,checkpoint=path))
+                    from .direct_command_training import flatten_logs
+                    full=flatten_logs(jax.tree.map(lambda *x:np.stack(x),*diags));np.savez_compressed(self.out/phase/f'diagnostic_{update:04d}.npz',**full)
+                self.update_status(stage=phase,state='running',stage_updates=update,completed_updates=update if phase=='training' else 0,training_transitions=update*n*steps if phase=='training' else 0,last_reward=mean_reward,last_speed_rmse=record['speed_rmse'],last_steer_rmse=record['steer_rmse'],last_actor_grad=metrics['actor_grad_norm'],last_update_seconds=record['seconds'])
+                print(json.dumps(dict(phase=phase,update=update,reward=mean_reward,speed_rmse=record['speed_rmse'],steer_rmse=record['steer_rmse'],grad=metrics['actor_grad_norm'],kl=metrics['mean_kl'],seconds=record['seconds'])),flush=True)
+                if metrics['hard_kl_stop'] or metrics['nonfinite_stop']:raise RuntimeError('PPO numerical/KL stop, saved last finite checkpoint')
+            if phase=='smoke':
+                assert actor_delta>0 and metrics['actor_grad_norm']>0 and metrics['critic_grad_norm']>0
+                write(self.out/'smoke/passed.json',dict(updates=completed,finite_gradients=True,actor_delta=actor_delta))
+        finally:writer.close()
+        notify('STTW lower training stage ended',f'{phase} {completed}/{updates}')
+
+def run(config,output,smoke_only=False):
+    t=Training(config,output)
+    try:
+        t.initialize();t.train('smoke')
+        if not smoke_only:t.train('training')
+        t.update_status(state='completed',stage='complete');notify('STTW lower pipeline complete',str(t.out))
+    except Exception as exc:
+        t.update_status(state='budget_stopped' if isinstance(exc,TimeoutError) else 'error',reason=str(exc));notify('STTW lower training stopped',str(exc));raise
