@@ -1,0 +1,32 @@
+{
+  "parent_run": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5/runs/preference_v5_20261009",
+  "parent_terminal_stage": "stage1_gate_failed_stopped",
+  "stage1_gate_passed": false,
+  "user_override_required": true,
+  "endpoints": {
+    "0": {
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5/runs/preference_v5_20261009/alpha0/checkpoints/update_0040.pt",
+      "sha256": "5e60f85235a82110bbd5e264af4040d7d7e54da4b41c844efaeb7596b0d36e1e",
+      "update": 40,
+      "warmup": 0,
+      "accepted_policy_updates": 40,
+      "optimizer_state_present": true,
+      "rng_state_present": true
+    },
+    "1": {
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5/runs/preference_v5_20261009/alpha1/checkpoints/update_0040.pt",
+      "sha256": "f7ef272304ab19a40b828c615d32ee26b6302b2cdb06a40bb833e1c3cbe0e84e",
+      "update": 40,
+      "warmup": 0,
+      "accepted_policy_updates": 40,
+      "optimizer_state_present": true,
+      "rng_state_present": true
+    }
+  },
+  "from_stage": 1,
+  "to_stage": 2,
+  "actor_critic_adam_std_rng_preserved": true,
+  "physics_eso_filter_action_history_reset": true,
+  "reward_formula_unchanged": true,
+  "user_override_reason": "User explicitly requested Stage2 after the declared Stage1 paired gate failed"
+}

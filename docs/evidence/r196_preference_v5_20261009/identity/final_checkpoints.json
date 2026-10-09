@@ -1,0 +1,12 @@
+{
+  "alpha0": {
+    "path": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5/runs/preference_v5_stage2_override_20261009/alpha0/checkpoints/update_0120.pt",
+    "sha256": "54420b7b89269d8f196c403eb5fd7961097d695a0c494aabc94ecaf529614cc8",
+    "update": 120
+  },
+  "alpha1": {
+    "path": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5/runs/preference_v5_stage2_override_20261009/alpha1/checkpoints/update_0120.pt",
+    "sha256": "c21d8443233b4a88e26eabae52a0212358df434628f46f5050127935da32560c",
+    "update": 120
+  }
+}

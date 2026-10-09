@@ -1,0 +1,2158 @@
+{
+  "schema": "direct_command_v3_budget",
+  "seconds": {
+    "compile": 87.5677119109896,
+    "pilot": 0.008044554997468367,
+    "train0": 2151.3036154939327,
+    "train1": 2153.9369683781115,
+    "review": 1498.2311110020091
+  },
+  "control_ticks_reserved": 42022240,
+  "events": [
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "load unchanged lower, physics and existing prepared bank",
+      "seconds": 9.03249852299632,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 independent initial task cases",
+      "seconds": 2.9954921530006686,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "pilot",
+      "reason": "reset task cases",
+      "seconds": 0.008044554997468367,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 direct actions four physical ticks and terminal reset",
+      "seconds": 32.05088893399807,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "512 observations",
+      "seconds": 0.16521020799700636,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "restore full Stage1 upper learner and reset Stage2 physical episodes",
+      "seconds": 0.08443023500149138,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "restore full Stage1 upper learner and reset Stage2 physical episodes",
+      "seconds": 0.011979238013736904,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch41 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 41",
+      "seconds": 31.88997816000483,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch42 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 42",
+      "seconds": 27.20112525600416,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch43 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 43",
+      "seconds": 27.020406858995557,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch44 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 44",
+      "seconds": 27.87615449698933,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch45 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 45",
+      "seconds": 28.053185399010545,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch46 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 46",
+      "seconds": 27.102949595995597,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch47 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 47",
+      "seconds": 27.39175599599548,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch48 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 48",
+      "seconds": 26.373665950988652,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch49 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 49",
+      "seconds": 26.023480131989345,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch50 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 50",
+      "seconds": 25.93034098899807,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch51 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 51",
+      "seconds": 25.796530854000594,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch52 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 52",
+      "seconds": 25.93414143199334,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch53 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 53",
+      "seconds": 25.899599399999715,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch54 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 54",
+      "seconds": 26.529289483994944,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch55 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 55",
+      "seconds": 26.304429545009043,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch56 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 56",
+      "seconds": 26.833698730988544,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch57 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 57",
+      "seconds": 26.91123427300772,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch58 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 58",
+      "seconds": 26.48546743100451,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch59 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 59",
+      "seconds": 26.380454072001157,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch60 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 60",
+      "seconds": 26.263321674996405,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch61 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 61",
+      "seconds": 26.593179010989843,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch62 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 62",
+      "seconds": 27.173572446001344,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch63 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 63",
+      "seconds": 27.643598946000566,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch64 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 64",
+      "seconds": 25.95407016799436,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch65 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 65",
+      "seconds": 27.212233991987887,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch66 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 66",
+      "seconds": 26.2443601309933,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch67 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 67",
+      "seconds": 27.463491916991188,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch68 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 68",
+      "seconds": 26.29000826299307,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch69 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 69",
+      "seconds": 27.40929542799131,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch70 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 70",
+      "seconds": 26.002475764995324,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch71 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 71",
+      "seconds": 28.724303152004723,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch72 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 72",
+      "seconds": 26.300129269991885,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch73 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 73",
+      "seconds": 27.449699541000882,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch74 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 74",
+      "seconds": 26.288560665998375,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch75 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 75",
+      "seconds": 28.17763945099432,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch76 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 76",
+      "seconds": 26.186656292004045,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch77 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 77",
+      "seconds": 26.573363713003346,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch78 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 78",
+      "seconds": 26.91344775199832,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch79 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 79",
+      "seconds": 26.519201985996915,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch80 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 80",
+      "seconds": 27.076675791991875,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch41 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 41",
+      "seconds": 26.241003226998146,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch42 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 42",
+      "seconds": 27.32542883401038,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch43 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 43",
+      "seconds": 26.364130375004606,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch44 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 44",
+      "seconds": 27.08393019999494,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch45 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 45",
+      "seconds": 26.079461150002317,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch46 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 46",
+      "seconds": 26.53604030200222,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch47 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 47",
+      "seconds": 26.269869061987265,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch48 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 48",
+      "seconds": 27.422100711002713,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch49 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 49",
+      "seconds": 27.154089799005305,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch50 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 50",
+      "seconds": 26.18949122799677,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch51 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 51",
+      "seconds": 27.059640339997713,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch52 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 52",
+      "seconds": 26.06274857999233,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch53 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 53",
+      "seconds": 26.729748351994203,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch54 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 54",
+      "seconds": 26.772675476007862,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch55 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 55",
+      "seconds": 27.359250095003517,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch56 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 56",
+      "seconds": 26.275035291007953,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch57 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 57",
+      "seconds": 27.488516387005802,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch58 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 58",
+      "seconds": 26.113655702007236,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch59 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 59",
+      "seconds": 26.59321393800201,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch60 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 60",
+      "seconds": 29.67186463600956,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch61 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 61",
+      "seconds": 26.351925839990145,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch62 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 62",
+      "seconds": 30.776523984997766,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch63 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 63",
+      "seconds": 27.098945310004638,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch64 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 64",
+      "seconds": 29.06503082800191,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch65 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 65",
+      "seconds": 26.032450127997436,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch66 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 66",
+      "seconds": 29.18033662700327,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch67 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 67",
+      "seconds": 26.627992694004206,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch68 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 68",
+      "seconds": 27.53714953699091,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch69 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 69",
+      "seconds": 26.32508081200649,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch70 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 70",
+      "seconds": 26.5675776739954,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch71 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 71",
+      "seconds": 26.256710856992868,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch72 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 72",
+      "seconds": 26.59197436401155,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch73 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 73",
+      "seconds": 27.462269094001385,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch74 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 74",
+      "seconds": 26.220697526005097,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch75 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 75",
+      "seconds": 30.71832465600164,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch76 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 76",
+      "seconds": 25.997314157008077,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch77 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 77",
+      "seconds": 27.5544074359932,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch78 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 78",
+      "seconds": 25.962657754993415,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch79 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 79",
+      "seconds": 26.524577374002547,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch80 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 80",
+      "seconds": 30.336622495000483,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "V5 stage2 paired reset",
+      "seconds": 0.4339826939976774,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "V5 stage2 paired 1s physical evaluation",
+      "seconds": 35.27348708600039,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation80/straight_hold matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/straight_hold",
+      "seconds": 109.02730568200059,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation80/speed_changes matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/speed_changes",
+      "seconds": 114.37666139900102,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation80/gentle_positive matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/gentle_positive",
+      "seconds": 117.8809003829956,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation80/gentle_negative matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/gentle_negative",
+      "seconds": 116.9656680800108,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation80/steer_reversal matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/steer_reversal",
+      "seconds": 122.15728208499786,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 9600,
+      "reason": "evaluation80/fast_turn matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update80/fast_turn",
+      "seconds": 182.2451575659943,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch81 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 81",
+      "seconds": 27.454304037994007,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch82 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 82",
+      "seconds": 26.353024569994886,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch83 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 83",
+      "seconds": 26.27272546599852,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch84 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 84",
+      "seconds": 26.406171067006653,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch85 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 85",
+      "seconds": 26.684547345998,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch86 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 86",
+      "seconds": 26.693634100010968,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch87 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 87",
+      "seconds": 27.12096942300559,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch88 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 88",
+      "seconds": 27.252835314997355,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch89 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 89",
+      "seconds": 26.328457042996888,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch90 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 90",
+      "seconds": 26.359145979004097,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch91 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 91",
+      "seconds": 26.589939270998002,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch92 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 92",
+      "seconds": 26.81567125899892,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch93 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 93",
+      "seconds": 26.67650832000072,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch94 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 94",
+      "seconds": 26.88969080300012,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch95 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 95",
+      "seconds": 26.205392043004395,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch96 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 96",
+      "seconds": 25.953119262994733,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch97 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 97",
+      "seconds": 26.358983380006975,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch98 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 98",
+      "seconds": 26.548399293998955,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch99 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 99",
+      "seconds": 27.314537974991254,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch100 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 100",
+      "seconds": 26.21108378599456,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch101 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 101",
+      "seconds": 26.979273817007197,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch102 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 102",
+      "seconds": 26.096780895997654,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch103 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 103",
+      "seconds": 29.500472970001283,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch104 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 104",
+      "seconds": 26.568689035993884,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch105 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 105",
+      "seconds": 27.230013511012658,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch106 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 106",
+      "seconds": 26.301413136010524,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch107 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 107",
+      "seconds": 29.879734945003293,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch108 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 108",
+      "seconds": 26.00702848500805,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch109 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 109",
+      "seconds": 26.926836269005435,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch110 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 110",
+      "seconds": 26.34201217300142,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch111 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 111",
+      "seconds": 27.155787491996307,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch112 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 112",
+      "seconds": 26.3505828470079,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch113 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 113",
+      "seconds": 26.80946507200133,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch114 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 114",
+      "seconds": 26.2046118129947,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch115 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 115",
+      "seconds": 28.210016326003824,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch116 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 116",
+      "seconds": 26.907073857000796,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch117 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 117",
+      "seconds": 26.419352565993904,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch118 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 118",
+      "seconds": 26.726108775998,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch119 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 119",
+      "seconds": 27.209476459000143,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha0 batch120 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train0",
+      "reason": "policy batch 120",
+      "seconds": 28.508141658006934,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch81 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 81",
+      "seconds": 26.660253872003523,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch82 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 82",
+      "seconds": 28.455855356005486,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch83 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 83",
+      "seconds": 26.109892248990946,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch84 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 84",
+      "seconds": 26.62212255698978,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch85 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 85",
+      "seconds": 26.554725242007407,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch86 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 86",
+      "seconds": 26.725122654999723,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch87 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 87",
+      "seconds": 26.449339560000226,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch88 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 88",
+      "seconds": 28.658989119998296,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch89 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 89",
+      "seconds": 28.721160309010884,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch90 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 90",
+      "seconds": 26.06782732400461,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch91 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 91",
+      "seconds": 27.074662839993834,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch92 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 92",
+      "seconds": 26.53883210499771,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch93 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 93",
+      "seconds": 26.967310154999723,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch94 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 94",
+      "seconds": 26.495223367004655,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch95 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 95",
+      "seconds": 26.687079640993034,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch96 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 96",
+      "seconds": 26.108997071001795,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch97 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 97",
+      "seconds": 26.677412587989238,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch98 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 98",
+      "seconds": 27.013411977008218,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch99 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 99",
+      "seconds": 26.75515276999795,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch100 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 100",
+      "seconds": 26.888699643008295,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch101 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 101",
+      "seconds": 26.019326466994244,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch102 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 102",
+      "seconds": 26.40743225000915,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch103 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 103",
+      "seconds": 25.968007829011185,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch104 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 104",
+      "seconds": 26.869696656998713,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch105 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 105",
+      "seconds": 26.211983893008437,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch106 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 106",
+      "seconds": 27.88836105899827,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch107 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 107",
+      "seconds": 26.11694833599904,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch108 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 108",
+      "seconds": 26.48559834698972,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch109 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 109",
+      "seconds": 26.21570250300283,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch110 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 110",
+      "seconds": 27.037858531009988,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch111 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 111",
+      "seconds": 26.4906727780035,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch112 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 112",
+      "seconds": 26.397865229999297,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch113 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 113",
+      "seconds": 26.57696752900665,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch114 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 114",
+      "seconds": 26.1484630729974,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch115 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 115",
+      "seconds": 26.624235113005852,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch116 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 116",
+      "seconds": 26.1066544510104,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch117 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 117",
+      "seconds": 27.05176408799889,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch118 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 118",
+      "seconds": 26.261860768005135,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch119 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 119",
+      "seconds": 26.931918286005384,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 262144,
+      "reason": "alpha1 batch120 warmup=False"
+    },
+    {
+      "kind": "compute",
+      "stage": "train1",
+      "reason": "policy batch 120",
+      "seconds": 25.90113871700305,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "V5 stage2 paired reset",
+      "seconds": 1.0600140610040398,
+      "outcome": "complete"
+    },
+    {
+      "kind": "compute",
+      "stage": "compile",
+      "reason": "V5 stage2 paired 1s physical evaluation",
+      "seconds": 6.556138251995435,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation120/straight_hold matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/straight_hold",
+      "seconds": 107.65507186000468,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation120/speed_changes matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/speed_changes",
+      "seconds": 112.45123119201162,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation120/gentle_positive matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/gentle_positive",
+      "seconds": 109.05649516500125,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation120/gentle_negative matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/gentle_negative",
+      "seconds": 109.23465040599694,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 6000,
+      "reason": "evaluation120/steer_reversal matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/steer_reversal",
+      "seconds": 109.11276287099463,
+      "outcome": "complete"
+    },
+    {
+      "kind": "tick_reservation",
+      "ticks": 9600,
+      "reason": "evaluation120/fast_turn matched 3 methods"
+    },
+    {
+      "kind": "compute",
+      "stage": "review",
+      "reason": "update120/fast_turn",
+      "seconds": 188.06792431299982,
+      "outcome": "complete"
+    }
+  ],
+  "active": null,
+  "wall_limits_enabled": false,
+  "total_compute_seconds": 5891.04745134004,
+  "physics_steps_reserved": 1050556000
+}

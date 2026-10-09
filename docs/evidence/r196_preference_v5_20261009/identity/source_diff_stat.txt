@@ -1,0 +1,25 @@
+ AGENTS.override.md                                 |   1 +
+ PROJECT.md                                         |   6 +
+ docs/METHODS_AND_RESULTS.md                        |  59 +++
+ docs/preference_v5/README.md                       |  23 +
+ .../attachment/STTW_R196_PreferenceV5_Codex.md     | 218 ++++++++++
+ .../attachment/STTW_R196_PreferenceV5_alpha0.json  | 467 +++++++++++++++++++++
+ .../attachment/STTW_R196_PreferenceV5_alpha1.json  | 467 +++++++++++++++++++++
+ .../attachment/audit_saved_commands.py             |  78 ++++
+ .../preference_v5/attachment/reference_checks.json |  44 ++
+ docs/preference_v5/attachment/reference_math.py    | 132 ++++++
+ .../attachment/verified_evidence_summary.json      |  69 +++
+ learning/cli/train_smooth_command.py               |   9 +-
+ learning/src/sttw_control/direct_command_env.py    |  26 +-
+ learning/src/sttw_control/direct_command_ppo.py    |  74 +++-
+ learning/src/sttw_control/direct_command_reward.py |  29 +-
+ .../src/sttw_control/direct_command_scenarios.py   |   7 +
+ .../src/sttw_control/direct_command_training.py    |  14 +
+ .../sttw_control/preference_command_reporting.py   | 224 ++++++++++
+ learning/src/sttw_control/smooth_command_config.py |  94 ++++-
+ .../src/sttw_control/smooth_command_training.py    | 285 ++++++++++++-
+ .../tests/test_preference_command_reporting.py     |  58 +++
+ learning/tests/test_preference_v5_ppo.py           |  92 ++++
+ learning/tests/test_preference_v5_reward.py        |  89 ++++
+ learning/tests/test_preference_v5_task.py          |  63 +++
+ 24 files changed, 2571 insertions(+), 57 deletions(-)

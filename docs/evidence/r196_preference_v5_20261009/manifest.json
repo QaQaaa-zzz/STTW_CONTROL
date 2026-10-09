@@ -1,0 +1,286 @@
+{
+  "schema": "r196_preference_v5_compact_evidence_v1",
+  "source_revision": "68996dac9e8fef0bdb440093f44033eb2e8229a0",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 6658,
+      "sha256": "3fef7be5ef1c4d6cca2966949d484cdd2c55ae98793d07e4fa1d139b52af4670"
+    },
+    {
+      "path": "build_bundle.py",
+      "bytes": 14015,
+      "sha256": "ef885e3e4df5bf7136236df4dceb81947006e9a209b19034c5207bd1bfd192b8"
+    },
+    {
+      "path": "config/alpha0_stage1.json",
+      "bytes": 32711,
+      "sha256": "6eeff54d2657ecc8e30ef7223cd5fc2b912143e80683e472ba850468b7ed1664"
+    },
+    {
+      "path": "config/alpha0_stage2.json",
+      "bytes": 32760,
+      "sha256": "9ab9784fdbd066ab7f191c470657b9049af5a0777a177cf85a5efb26f462a228"
+    },
+    {
+      "path": "config/alpha1_stage1.json",
+      "bytes": 32711,
+      "sha256": "f71f436faae37a0adde853b5495c8b65a18269020a566768696346946fe3f092"
+    },
+    {
+      "path": "config/alpha1_stage2.json",
+      "bytes": 32760,
+      "sha256": "d6149b3187de5e246c97348014a9ab21ca6aadb30671f769ffb3b480aba14641"
+    },
+    {
+      "path": "data/fast_turn_chain_summary.csv",
+      "bytes": 1439,
+      "sha256": "2beafa3c1bdd3564f46e671a823640fbacbcca94894ae275fb1c8ec529b195f1"
+    },
+    {
+      "path": "data/stage1_gate_update20.json",
+      "bytes": 253455,
+      "sha256": "dc7e3c91ea8ff74f2f7f6a87aa4618b31144eb0ce96c195f1df5def521dac93a"
+    },
+    {
+      "path": "data/stage1_gate_update40.json",
+      "bytes": 253064,
+      "sha256": "aa22926755c5b979e66091f3cd049b1f8b95f1effb012106b14cd3c445b20f59"
+    },
+    {
+      "path": "data/stage1_pair_summary.csv",
+      "bytes": 1834,
+      "sha256": "c1b5773aabba7ea779c2fb438e0e53041253dc26a7d070c8f1da72dc86066a3e"
+    },
+    {
+      "path": "data/stage1_update20_timeseries.npz",
+      "bytes": 710283,
+      "sha256": "4357676214db24c9780eae8795b350fbc1fe98fedca77c99ca51cedc2b67586c"
+    },
+    {
+      "path": "data/stage1_update40_timeseries.npz",
+      "bytes": 714211,
+      "sha256": "7632a0ea4c84adf87202ff50359709636d78f88958f234958615e1f17d0db30c"
+    },
+    {
+      "path": "data/stage2_metrics_update120.json",
+      "bytes": 698277,
+      "sha256": "db9f15135aac3f015284241604c83d3d0b68d13fc7385467e82d6deff27f58a7"
+    },
+    {
+      "path": "data/stage2_metrics_update80.json",
+      "bytes": 698155,
+      "sha256": "c08d20945d32b72bd33ce3648a8b6656c35b7a21a912ce7d576206bec6383740"
+    },
+    {
+      "path": "data/stage2_six_case_summary.csv",
+      "bytes": 12284,
+      "sha256": "8217686effff08c9c994e2f5f1c9ee637421a504bb316625694677a24df01f7a"
+    },
+    {
+      "path": "data/stage2_update120_timeseries.npz",
+      "bytes": 4424662,
+      "sha256": "d57e703e13b8b32279cc59924556eb09d7d75191ffaca5ae2414de8b782f513d"
+    },
+    {
+      "path": "data/stage2_update80_timeseries.npz",
+      "bytes": 4388802,
+      "sha256": "ce73a78a13aa2d5a89c2eae08ffad5ca2c9e85cd8b9bc0052191d523f4f26d19"
+    },
+    {
+      "path": "data/tensorboard_scalars.csv",
+      "bytes": 501632,
+      "sha256": "f0ccf038b1ce0fd0abf211b9c3a821f67e8db5a95176e441ae6be5f26e602e75"
+    },
+    {
+      "path": "figures/stage1_u20_negative_control.png",
+      "bytes": 346600,
+      "sha256": "44f367d27b0f601fed7181573b5af3d42e9346a21a9bef0fd2348917cc1a7191"
+    },
+    {
+      "path": "figures/stage1_u20_negative_xy.png",
+      "bytes": 100108,
+      "sha256": "ee7a19da76ee232651d7d5ac7133019d1a17e70c48d3ecceb2e9255d9d8ee48c"
+    },
+    {
+      "path": "figures/stage1_u20_positive_control.png",
+      "bytes": 331491,
+      "sha256": "0e0b5a1c7f9f9ef2a1e1c2233a6766afc274a46a5999bd7e97bc6f505d254412"
+    },
+    {
+      "path": "figures/stage1_u20_positive_xy.png",
+      "bytes": 100320,
+      "sha256": "be5a1040cc17a0a7ceaf1bf77b31d0d6f203b437c8fb451b4472d55135958459"
+    },
+    {
+      "path": "figures/stage1_u40_negative_control.png",
+      "bytes": 344371,
+      "sha256": "16035689fb46322d21e56982d387478ff9adba4522707adab8bfea44b854c0f0"
+    },
+    {
+      "path": "figures/stage1_u40_negative_xy.png",
+      "bytes": 99804,
+      "sha256": "8db40348b1c8ee09fe65d42a0e64c77601952c8a8e84f843066af9b33d0689a3"
+    },
+    {
+      "path": "figures/stage1_u40_positive_control.png",
+      "bytes": 330181,
+      "sha256": "6f6ab1bb4a0c099be1c526aca5180e97369f5752d04e526718cf005f998ea399"
+    },
+    {
+      "path": "figures/stage1_u40_positive_xy.png",
+      "bytes": 99420,
+      "sha256": "1c38557669bcc0529ef8f74b013107646b46994385be7cf2fdb478d91a35b1be"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_16s_control.png",
+      "bytes": 389767,
+      "sha256": "46159c292ef28a1ce2e33368da36193a0d1f7bc4c4b79bd068311253af42dc8e"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_16s_xy.png",
+      "bytes": 85079,
+      "sha256": "2131e22bbf225f8a1c0f5835fd53e9fda979e38ae3e024a10fd8b2481fb215ce"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_control.png",
+      "bytes": 407802,
+      "sha256": "c2263ae984d67f471aca2ee6e5187a8e0c5a0cb7d84b5fb384eb019d92b2a603"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_motor_chain.png",
+      "bytes": 254392,
+      "sha256": "d4328c7f1710bd7051b08187ecfc3ffdfc2a9fd4de209e9c2639dc4f4dcbb572"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_reward.png",
+      "bytes": 171001,
+      "sha256": "dd13cac1d73a80e541d6f027d8dae30f52851603d7cd99ab5348b52b996a9f7d"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_reward_components.png",
+      "bytes": 519631,
+      "sha256": "7dafd0fea01f9cb85ccd57b4622b42d8d282aede33bdbbf714342baaad0a25ea"
+    },
+    {
+      "path": "figures/stage2_u120_fast_turn_xy.png",
+      "bytes": 94010,
+      "sha256": "7885e50708bdc80ddad22c697e6e38dabcde86fb4ec6ef498002a91bdb95c357"
+    },
+    {
+      "path": "figures/stage2_u120_gentle_negative_control.png",
+      "bytes": 438510,
+      "sha256": "1f4e5f7dffbacb63c837eeeebbfd53173eadecf4a47c18dc979569b7fe16b480"
+    },
+    {
+      "path": "figures/stage2_u120_gentle_negative_xy.png",
+      "bytes": 84211,
+      "sha256": "84f5d94dc86a6d5267daa499011eab187b305d90b81f48499e189ef6dacf6046"
+    },
+    {
+      "path": "figures/stage2_u120_gentle_positive_control.png",
+      "bytes": 404168,
+      "sha256": "568445e90b2035ad5626b779207e8ab5f85a242363936e8be5ad2a23cc97cc17"
+    },
+    {
+      "path": "figures/stage2_u120_gentle_positive_xy.png",
+      "bytes": 87752,
+      "sha256": "4a94c8c991375b8f58f6f13af080e01a19a0f96d45233c46df43bfb34b98d77a"
+    },
+    {
+      "path": "figures/stage2_u120_speed_changes_control.png",
+      "bytes": 456809,
+      "sha256": "1034967aac303fc982bd2340e3114ae07fa44052d775009241aac834e59c0dd4"
+    },
+    {
+      "path": "figures/stage2_u120_speed_changes_xy.png",
+      "bytes": 50159,
+      "sha256": "8ffcf67e3b27ad560720e686d9ea4c0e38768172a08a2d48fef4e97a1194bd9b"
+    },
+    {
+      "path": "figures/stage2_u120_steer_reversal_control.png",
+      "bytes": 465908,
+      "sha256": "aa04c491b11179a969f0642a91281f5b5591158afe3eaba858d587b44b7b8823"
+    },
+    {
+      "path": "figures/stage2_u120_steer_reversal_xy.png",
+      "bytes": 77807,
+      "sha256": "adba0ba36b39b3a6d197080641cb57ee86aed5a09cfca457e75bd45b4a54a5e0"
+    },
+    {
+      "path": "figures/stage2_u120_straight_hold_control.png",
+      "bytes": 373444,
+      "sha256": "38555e0a077815ae49efedd5df7923f7d7537c680a13bd5238b7b424fe45f4de"
+    },
+    {
+      "path": "figures/stage2_u120_straight_hold_xy.png",
+      "bytes": 48252,
+      "sha256": "561030145ec9b15f6efad94d3a6c207ea7ea04b1ba9a1b086ad09abf1fffd3af"
+    },
+    {
+      "path": "figures/stage2_u80_fast_turn_16s_control.png",
+      "bytes": 387180,
+      "sha256": "6c01a9ae5e1e29cb81b3b9946102c35f3a0031dc5f269d134116e0222810d132"
+    },
+    {
+      "path": "figures/stage2_u80_fast_turn_16s_xy.png",
+      "bytes": 83327,
+      "sha256": "9a24b5a4ea73f1db495a4a5de246a0c8cf633f74c4c6ea17ebae9e45cd7566e2"
+    },
+    {
+      "path": "figures/tensorboard_training_curves.png",
+      "bytes": 635926,
+      "sha256": "b80c6c874f71480c862daf38c1ab49c5e2e7d99a50ecc4e4e7c930c1e062c7f7"
+    },
+    {
+      "path": "identity/decision.json",
+      "bytes": 677,
+      "sha256": "9cad473ca99b4fb52b7c9e8d51cb14b4feb4d77856e37c2fd46a34f5b117b8c1"
+    },
+    {
+      "path": "identity/final_checkpoints.json",
+      "bytes": 539,
+      "sha256": "c9ffde20c33f79e89538ee16ebba8e21a5f7fa1f026eee2a21e2ec62712d1fc0"
+    },
+    {
+      "path": "identity/source_commits.txt",
+      "bytes": 285,
+      "sha256": "30f3afeb672c435d3b07e3e2a270a3442cb1c5d7888ee24955803147d1adaebe"
+    },
+    {
+      "path": "identity/source_diff_stat.txt",
+      "bytes": 1598,
+      "sha256": "44695d207926cf09c0fb09ed6ec561fe847df46a604be7c5ca9a0193b9040c86"
+    },
+    {
+      "path": "identity/stage1_manifest.json",
+      "bytes": 3839,
+      "sha256": "50b43f996ad1b784ad216c9205861ea38f1fa0cc568587564f9665c52aacb030"
+    },
+    {
+      "path": "identity/stage1_status.json",
+      "bytes": 719,
+      "sha256": "356cd42c70968e50e72613fb14324acf54cac97f1387650f05965efff311eb8e"
+    },
+    {
+      "path": "identity/stage2_budget.json",
+      "bytes": 50776,
+      "sha256": "ac977e8ec422a384b49f3688f7d3c7760372b5abfa59d51b67921af766587c6b"
+    },
+    {
+      "path": "identity/stage2_manifest.json",
+      "bytes": 4029,
+      "sha256": "7ab3c3052ef6fcc6d9dda3d4693ab775fdbd55965a998500a949ebf9274eb400"
+    },
+    {
+      "path": "identity/stage2_stage_transition.json",
+      "bytes": 1306,
+      "sha256": "72661d72e234b035fc6a5e81b8dd074ef838bc39ec9a46e46e285ce94fe8ddf1"
+    },
+    {
+      "path": "identity/stage2_status.json",
+      "bytes": 853,
+      "sha256": "392bc1cc47829fe5e27dc12caf9f97c2bccfe81436e4034941c83bec792f6474"
+    }
+  ]
+}

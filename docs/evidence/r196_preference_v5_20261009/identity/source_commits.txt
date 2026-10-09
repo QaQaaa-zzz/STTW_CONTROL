@@ -1,0 +1,5 @@
+0a884ea Implement bounded R196 Preference V5 endpoint coordination pilot
+1b7727f Verify substep roll gate and paired reward plots
+fbf0a69 Record Preference V5 Stage1 gate failure
+4e39bcf Resume Preference V5 Stage2 from failed pilot
+68996da Record Preference V5 Stage2 negative result

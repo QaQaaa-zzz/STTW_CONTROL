@@ -2,6 +2,8 @@
 
 User explicitly overrode the failed Stage1 gate to try Stage2. The separate run `runs/preference_v5_stage2_override_20261009` restored both complete update40 learners and finished update120 plus matched update80/120 six-case evaluation. Alpha0 brakes and limits fast-turn roll while retaining more steering; alpha1 retains more speed but weakens steering and still exceeds the common roll bound. Final joint speed/steer/heading hold is alpha0 0/6 and alpha1 1/6 at10s; no method passes fast_turn heading hold at16s. The result is complete, unqualified and not adopted; no250/500 extension. Full actual-control-first and XY evidence: `runs/preference_v5_stage2_override_20261009/analysis/REPORT.md`.
 
+Remote-review evidence including Stage1 update20/40, Stage2 update80/120, compact 5ms trajectories, numerical CSV/JSON, control/XY/reward figures and TensorBoard scalar export is under `docs/evidence/r196_preference_v5_20261009/README.md`.
+
 ---
 
 # User amendment — total250 and no wall-clock cutoff (2026-10-08)

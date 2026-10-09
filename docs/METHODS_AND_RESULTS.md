@@ -876,3 +876,8 @@ success. All saved reward reconstructions pass (max component error1.145e-5, pol
 error4.233e-8) with zero component-cap incidence. Decision: complete evaluation,
 unqualified, not adopted, no250/500 extension. Full report:
 `runs/preference_v5_stage2_override_20261009/analysis/REPORT.md`.
+
+The remote-review bundle is `docs/evidence/r196_preference_v5_20261009/README.md`. It includes
+Stage1 update20/40 as well as Stage2 update80/120, machine-readable summary tables,
+compressed5ms traces, source/config identities, key control/XY/reward figures, and a
+static TensorBoard plot plus the complete exported scalar CSV.

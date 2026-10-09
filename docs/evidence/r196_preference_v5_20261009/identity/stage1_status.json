@@ -1,0 +1,31 @@
+{
+  "state": "complete",
+  "completed_updates": {
+    "0": 40,
+    "1": 40
+  },
+  "declared_policy_batches_per_endpoint": 40,
+  "initialization": "scratch_actor_critic_optimizer_std",
+  "pid": 788181,
+  "last_update_epoch": 1791514429.7948072,
+  "stage": "stage1_gate_failed_stopped",
+  "detail": "V5 stage1 paired 1s physical evaluation",
+  "phase": "PPO",
+  "current_alpha": 1,
+  "current_batch": 40,
+  "current_stop": null,
+  "stage_notified": [
+    "training_0_20",
+    "training_1_20",
+    "training_0_40",
+    "training_1_40"
+  ],
+  "case": "negative",
+  "training_stage": 1,
+  "stage1_gate_passed": false,
+  "stage2_started": false,
+  "qualified": false,
+  "completion_notified": [
+    "pipeline_complete"
+  ]
+}

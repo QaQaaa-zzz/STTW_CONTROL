@@ -1,0 +1,22 @@
+{
+  "execution": "complete",
+  "evaluation": "complete",
+  "qualified": false,
+  "adoption": "not_adopted",
+  "stage1_gate_passed": false,
+  "stage2_user_override": true,
+  "checkpoint_update": 120,
+  "main10_joint_hold_cases": {
+    "alpha0": 0,
+    "alpha1": 1,
+    "total_cases": 6
+  },
+  "fast_turn_extension16_joint_hold": {
+    "alpha0": false,
+    "alpha1": false
+  },
+  "common_roll_requirement_passed": false,
+  "ordinary_no_unhelpful_intervention_passed": false,
+  "automatic_extension": false,
+  "reason": "Most scenarios fail final heading hold; alpha1 exceeds the common roll bound in fast_turn; ordinary straight operation retains positive speed intervention."
+}
