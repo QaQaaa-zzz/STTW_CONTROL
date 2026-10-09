@@ -351,7 +351,9 @@ class SmoothCampaign(Campaign):
         write(self.out/'stage_transition.json',dict(from_stage=1,to_stage=2,actor_critic_adam_rng_preserved=True,accepted_updates={str(a):ep['algo'].accepted_policy_updates for a,ep in self.endpoints.items()},physics_histories_reset=True))
         self._status(training_stage=2,declared_policy_batches_per_endpoint=120)
 
-    def evaluate_preference(self,update,case_filter=None,batched=False):
+    def evaluate_preference(self,update,case_filter=None,batched=None):
+        # V5.1 uses the measured case-by-method batch; False retains the reference path.
+        if batched is None:batched=self.preference_v51
         import jax,jax.numpy as jp
         from .direct_command_policy import DirectCommandActor,export_actor
         from .fixed_command_panel import load_protocol,schedules
