@@ -22,14 +22,16 @@ RTX4090D, driver580.159.03, Torch CUDA12.8. Fresh upper endpoints, prepared bank
 | 512x128 summary plus batch reset guard | 27.455516,27.382838,27.380626 | 27.382838 | about1% vs summary median; not robustly established |
 | 512x128 rollout device summary | 27.643317,32.112284,27.648829 | 27.648829 | overlapping ranges; gain not established |
 
-Baseline synchronized diagnostic: environment31.303574s, policy0.103284s, handoff0.016885s, storage0.033019s, episode-statistics0.027593s, GAE0.005234s. These are a separate instrumented run, not additive decomposition of the uninstrumented samples. Full evaluation, PPO A/B, end-to-end and environment-size sweep: pending/unmeasured.
+Baseline synchronized diagnostic: environment31.303574s, policy0.103284s, handoff0.016885s, storage0.033019s, episode-statistics0.027593s, GAE0.005234s. These are a separate instrumented run, not additive decomposition of the uninstrumented samples. PPO-only fixed-rollout baseline samples0.098963/0.103479/0.100336s versus candidate0.071958/0.068820/0.069801s (medians0.100336/0.069801,30.4% reduction). PPO is a small fraction of total time. Full evaluation, end-to-end and environment-size sweep: pending/unmeasured.
 
 ## Equivalence and adoption gates
 
 Original regression96 tests passed. Dimension-focused17 passed. Device statistics preserve pre-reset attribution, persistent incomplete episodes, every reset event and40 consecutive5ms ticks. Boundary tests preserve NumPy's original float64 comparisons of float32 -.15/-.30 values.
 
-The first physical full-state comparison **failed** rtol2e-4/atol2e-5 (observed violation4.334e-5). Same-kernel A/A diagnosis pending; batch reset guard synthetic all/partial/single/no-done tests4 passed; no tolerance relaxation and no adoption. `training_summary` remains opt-in; default `evaluation_full` retains original logging. Do not interpret pure statistic tests as physical equivalence.
+The first physical full-state comparison **failed** rtol2e-4/atol2e-5 (observed violation4.334e-5). User subsequently clarified that the old implementation is a comparator, not ground truth, and the tiny difference alone must not block optimization. Contract/decision checks and A/A diagnosis continue; batch reset guard synthetic all/partial/single/no-done tests4 passed; no tolerance relaxation and no adoption. `training_summary` remains opt-in; default `evaluation_full` retains original logging. Do not interpret pure statistic tests as physical equivalence.
 
 Optimized HLO retains f32[8,3200] global projection operations from frozen_lower_controller.py. Its isolated wall cost is not yet established, so no geometry-cache or local-window change is enabled. Handoff timing currently does not justify the conditional second-stage JAX rollout rewrite.
 
 No model, cache, large trace or repeated run artifact is committed. Local commit history and shared research ledger record implementation progress; no push has been performed for this task.
+
+PPO validation:30 tests passed. On the identical serialized512x128 rollout, normal updates, nonzero temporal weight (accepted count30), injected NaN and forced hard-KL rejection all produced bitwise-equal gradients, policy, full Adam and all RNG states. Metric differences were0 in this fixture. Snapshot/restore and KL/finite decision frequencies are unchanged. Nonzero temporal dynamic indexing is retained; no unmeasured dense-mask gain is claimed.
