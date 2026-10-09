@@ -1064,3 +1064,15 @@ remain passing. A separate8env x16step x2update engineering run completed with f
 Actor/Critic/Adam/std and finite optimizer metrics. Formal endpoints are to be newly
 initialized, seed87,512x128, max100 updates, checks at25 and100, with no automatic
 extension. Control benefit remains unverified until the declared physical evaluations.
+
+Formal result: both independent endpoints completed100/100 updates. The first update100
+evaluation stopped after `straight_hold` because evaluation ticks were incorrectly charged
+against the exact training-transition ceiling. Evaluation was separated from that ceiling
+and the five missing cases were run from the saved policies; no PPO batch or checkpoint
+write occurred. On `fast_turn` [2,4)s, alpha0 steer RMSE=.01862rad passes .05 and alpha1
+speed RMSE=.04997m/s passes .08. Both fail the common roll requirement: peak
+.31540/.36761rad and2.160/2.445s above.302rad. Final joint speed/steer/heading hold
+passes alpha0 3/6 and alpha1 1/6. Fast-turn heading fails at10s and16s, with16s RMSE
+.07749/.24961rad. Straight hold retains unhelpful speed offsets .0753/.0442m/s and
+worsens B0 speed error. Reward reconstruction passes, but the result is unqualified and
+not adopted; no250/500 continuation.

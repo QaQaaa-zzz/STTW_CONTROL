@@ -18,7 +18,12 @@ class ComputeBudget:
         e=spec['budget']
         self.limits={'compile':e['compile_wall_seconds'],'smoke':e['engineering_wall_seconds'],
                      'pilot':e['training_wall_seconds'],'review':e['evaluation_wall_seconds'],'checks':e['additional_compute_wall_seconds']}
-        self.total_limit=e['additional_compute_wall_seconds']; self.tick_limit=e['default_control_transitions_upper']+5600+1024+1600+19200
+        self.total_limit=e['additional_compute_wall_seconds']
+        # V5.1's declared transition ceiling describes PPO sampling only.
+        # Evaluation is a separate evidence pass and must never terminate after
+        # a fully completed learner because training consumed its exact budget.
+        self.tick_limit=(e['default_control_transitions_upper'] if spec.get('priority_recovery_v51')
+                         else e['default_control_transitions_upper']+5600+1024+1600+19200)
         self._update(lambda d: d.update(wall_limits_enabled=spec['budget'].get('wall_limits_enabled',True)))
     def _update(self, fn):
         with (self.root/'.compute.lock').open('a') as f:

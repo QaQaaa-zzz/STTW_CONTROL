@@ -320,7 +320,7 @@ class SmoothCampaign(Campaign):
         write(self.out/'stage_transition.json',dict(from_stage=1,to_stage=2,actor_critic_adam_rng_preserved=True,accepted_updates={str(a):ep['algo'].accepted_policy_updates for a,ep in self.endpoints.items()},physics_histories_reset=True))
         self._status(training_stage=2,declared_policy_batches_per_endpoint=120)
 
-    def evaluate_preference(self,update):
+    def evaluate_preference(self,update,case_filter=None):
         import jax,jax.numpy as jp
         from .direct_command_policy import DirectCommandActor,export_actor
         from .fixed_command_panel import load_protocol,schedules
@@ -341,6 +341,11 @@ class SmoothCampaign(Campaign):
             cases=[(name,rows,16 if name=='fast_turn' else 10) for name,rows in schedules(load_protocol())]
             if self.preference_v51 and update==25:
                 cases=[row for row in cases if row[0] in ('straight_hold','fast_turn')]
+        if case_filter is not None:
+            wanted=set(case_filter);cases=[row for row in cases if row[0] in wanted]
+            found={row[0] for row in cases}
+            if found!=wanted:raise ValueError(f'unknown preference evaluation cases: {sorted(wanted-found)}')
+        if not cases:raise ValueError('preference evaluation requires at least one case')
         reset=self.compile(f'V5 stage{self.training_stage} paired reset',reset,jp.asarray(cases[0][1],jp.float32))
         states=reset(jp.asarray(cases[0][1],jp.float32))
         def chunk(states,params):
@@ -354,7 +359,6 @@ class SmoothCampaign(Campaign):
         chunk=self.compile(f'V5 stage{self.training_stage} paired 1s physical evaluation',chunk,states,params)
         for case,rows,seconds in cases:
             self._status(stage=f'evaluate{update}',case=case)
-            self.budget.reserve(len(methods)*seconds*200,f'evaluation{update}/{case} matched {len(methods)} methods')
             with self.budget.measure('review',f'update{update}/{case}'):
                 states=reset(jp.asarray(rows,jp.float32));chunks=[]
                 for _ in range(seconds):
@@ -589,5 +593,58 @@ def run_preference_v51(output,smoke=False):
         c.notify_once('pipeline_complete','STTW V5.1流水线结束','声明100更新及评价完成；不自动追加')
     except BaseException as exc:
         c._status(state='error',reason=str(exc),training_stage=51);notify('STTW V5.1错误停止',str(exc));raise
+    finally:
+        for ep in c.endpoints.values():ep['writer'].close()
+
+
+def recover_preference_v51_evaluation(parent):
+    """Finish missing update100 evidence from immutable completed V5.1 learners."""
+    import torch
+    parent=Path(parent).resolve()
+    original_status=json.loads((parent/'status.json').read_text())
+    if original_status.get('completed_updates')!={'0':100,'1':100}:
+        raise ValueError('V5.1 evaluation recovery requires two completed update100 learners')
+    if original_status.get('training_stage')!=51:
+        raise ValueError('parent is not a V5.1 run')
+    receipt=parent/'evaluation100_error_receipt.json'
+    if not receipt.exists():write(receipt,original_status)
+    runtime=parent/f'evaluation_recovery_runtime_{int(time.time())}'
+    c=SmoothCampaign(runtime,fresh=True,preference_v51=True,unlimited_wall=True)
+    try:
+        c.initialize()
+        for alpha in (0,1):
+            source=parent/f'alpha{alpha}/checkpoints/update_0100.pt'
+            saved=torch.load(source,map_location='cuda',weights_only=False)
+            if int(saved.get('update', -1))!=100 or int(saved.get('accepted_policy_updates', -1))!=100:
+                raise ValueError(f'alpha{alpha} source is not the completed update100 learner')
+            spec=c.resolve(alpha)
+            for key in ['reward','action','network','plant','limits','reference','lower_controller','lower_reference_centered','actor_temporal_regularizer']:
+                if spec.get(key)!=saved.get('config',{}).get(key):raise ValueError('V5.1 recovery method mismatch '+key)
+            c.create_endpoint(alpha)
+            c.endpoints[alpha]['algo'].policy.load_state_dict(saved['policy'])
+            c.endpoints[alpha]['update']=100
+        c.out=parent;c.status=original_status
+        from .fixed_command_panel import load_protocol,schedules
+        expected=[name for name,_ in schedules(load_protocol())]
+        missing=[name for name in expected if any(not (parent/'evaluation100'/name/f'{method}.npz').exists() for method in ('alpha0','alpha1','B0'))]
+        if missing:
+            result=c.evaluate_preference(100,case_filter=missing)
+        else:
+            from .preference_command_reporting import report_stage2
+            result=report_stage2(parent,100)
+        audits=[payload[f'alpha{endpoint}']['reward_audit'] for payload in result.values() for endpoint in (0,1)]
+        failed=[audit for audit in audits if audit.get('passed') is not True]
+        if failed:raise RuntimeError(f'V5.1 independent reward reconstruction failed at update100: {failed}')
+        recovery=dict(parent_run=str(parent),runtime=str(runtime),missing_cases_completed=missing,training_restarted=False,
+                      checkpoints_written=False,original_error_receipt=str(receipt),completed_epoch=time.time())
+        write(parent/'evaluation100_recovery.json',recovery)
+        c._status(state='complete',stage='saved_and_stopped',training_stage=51,qualified=None,
+                  reason=None,case=None,evaluation_recovered_after_tick_budget_fix=True,
+                  recovery_receipt=str(parent/'evaluation100_recovery.json'))
+        return result
+    except BaseException as exc:
+        c.out=parent;c.status=original_status
+        c._status(state='error',reason=str(exc),training_stage=51,evaluation_recovery_failed=True)
+        raise
     finally:
         for ep in c.endpoints.values():ep['writer'].close()

@@ -6,6 +6,7 @@ import jax.numpy as jp
 from sttw_control.controller import ControllerConfig
 from sttw_control.direct_command_reward import failure_reward, interval_cost
 from sttw_control.direct_command_scenarios import heading_recovery_initial_error, schedule
+from sttw_control.direct_command_budget import ComputeBudget
 from sttw_control.smooth_command_config import resolve
 
 
@@ -83,3 +84,12 @@ def test_existing_v5_component_identity_is_unchanged():
     assert 'yaw_damping' in old['reward']['independent_component_caps']
     assert 'primary_excess' not in old['reward']['independent_component_caps']
     assert old['reward']['failure_absorbing_cost_rate'] == 1680.
+
+
+def test_v51_tick_limit_covers_training_only(tmp_path):
+    spec = resolve(0, preference_v51=True)
+    training = 2*512*128*100*4
+    assert training == 52_428_800
+    assert spec['budget']['default_control_transitions_upper'] == training
+    assert 'evaluation_control_ticks_upper' not in spec['budget']
+    assert ComputeBudget(tmp_path, spec).tick_limit == training

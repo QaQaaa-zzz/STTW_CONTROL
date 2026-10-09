@@ -900,3 +900,14 @@ lower from actual pose, changed only upper reference yaw, and evaluation reset r
 e0=0. The separate8x16x2 run completed two accepted updates without physical/policy
 failure or nonfinite optimizer state. These checks establish implementation behavior,
 not task success, recovery, or safety.
+
+Formal100-update evaluation is complete. An evaluation-accounting fault initially stopped
+the pass after `straight_hold`: evaluation shared the exact52,428,800 training-tick ceiling.
+Evaluation no longer participates in that counter; five missing cases were completed from
+the saved update100 policies without further training or checkpoint writes. Fast-turn
+alpha0 steer RMSE=.01862rad and alpha1 speed RMSE=.04997m/s meet their individual
+thresholds, but peak roll=.31540/.36761rad violates the common.302rad requirement.
+Fast-turn heading hold fails at10s and16s. Across six10s cases, joint final hold passes
+3/6 and1/6. Straight speed intervention remains harmful relative to B0. Primary-excess
+is uncapped and nonzero only in fast_turn (integral2.422/.165); it does not dominate.
+All endpoint reward reconstructions pass. The full contract remains unqualified.
