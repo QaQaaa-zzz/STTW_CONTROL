@@ -4,12 +4,12 @@ import json,pickle,time,hashlib,random,os,subprocess
 import numpy as np
 from .direct_command_training import Campaign,write,clean_numbers,flatten_logs,notify
 from .direct_command_budget import ComputeBudget,BudgetStop
-from .smooth_command_config import resolve
+from .smooth_command_config import resolve,resolve_dimensions
 
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None):
         if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
             raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
         if (preference_v5 or preference_v51) and not preference_stage2_parent and (not fresh or resume_parent):
@@ -17,15 +17,13 @@ class SmoothCampaign(Campaign):
         self.preference_v51=preference_v51
         self.preference_v5=preference_v5 or preference_v51;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
         self.training_stage=51 if preference_v51 else 2 if self.preference_stage2_parent else 1;self.smoke=smoke
-        self.n=8 if smoke else 512;self.steps=16 if smoke else 128
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
         self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
         def configured(alpha):
             spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall,preference_v5=preference_v5,preference_v51=preference_v51,stage=self.training_stage)
             if preference_v5 or preference_v51:
                 spec['prepared_high_speed_indices']=getattr(self,'high_speed_indices',[5,6,7])
-                if smoke:spec['ppo'].update(num_envs=8,rollout_policy_steps=16,minibatch_size=32)
-                return spec
+                return resolve_dimensions(spec,smoke=smoke,num_envs=num_envs,rollout_steps=rollout_steps)
             if self.resume_parent:
                 if target_updates!=250:raise ValueError('this authorized continuation ends at250')
                 spec['initialization_mode']='learner_state_resume_environment_reset'
@@ -37,9 +35,12 @@ class SmoothCampaign(Campaign):
                 spec['budget']['wall_limits_enabled']=False
                 spec['smooth_v4']['budget']['wall_limits_enabled']=False
                 spec['smooth_v4']['budget']['user_amendment']='Stop at declared250 updates, no wall-clock budget termination'
-            return spec
+            if num_envs is not None or rollout_steps is not None:
+                raise ValueError('dimension overrides require preference mode')
+            return resolve_dimensions(spec,smoke=smoke)
         self.resolve=configured
         self.out=Path(output);self.spec=self.resolve(0);self.config=Path('learning/configs/r196_smooth_alpha0.json')
+        self.n=self.spec['ppo']['num_envs'];self.steps=self.spec['ppo']['rollout_policy_steps']
         if (self.out/'manifest.json').exists():raise FileExistsError('no automatic restart of immutable run')
         self.budget=ComputeBudget(self.out,self.spec);self.budget.limits.update(train0=train_wall,train1=train_wall);self.budget.recover_interrupted()
         carry=self.out/'prior_attempt_budget.json'
@@ -81,7 +82,7 @@ class SmoothCampaign(Campaign):
         assert asdict(self.env.ac)==old['actuator']
         assert self.env.physics.bundle.identity==old['model']
         write(self.out/'manifest.json',dict(implementation_parent='6cdb3ce',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-          prepared_bank=str(source),prepared_bank_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),lower=self.env.lower.provenance,
+          execution_dimensions=self.spec['execution_dimensions'],prepared_bank=str(source),prepared_bank_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),lower=self.env.lower.provenance,
           initialization='Full upper learner from parent150; physical episode reset' if self.resume_parent else 'Full Stage1 upper learner from update40; physical episode reset' if self.preference_stage2_parent else 'Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
           budget=self.spec['budget'] if self.preference_v5 else self.spec['smooth_v4']['budget'],new_preparation_ticks=0,lower_interfaces_reused=True,command_center='preserved governed-centered ECBC plus frozen lower residual',
           policy_budget_semantics=("global endpoint target250; resume parent completed batch, no new value-only warmup" if self.resume_parent else f"maximum{self.spec['ppo']['default_updates']} new PPO batches each; accepted epochs and updates separate; two value-only rollouts excluded")))
