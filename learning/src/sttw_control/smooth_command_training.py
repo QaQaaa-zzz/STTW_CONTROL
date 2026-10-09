@@ -9,11 +9,13 @@ from .smooth_command_config import resolve,resolve_dimensions
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None,log_mode="evaluation_full"):
         if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
             raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
         if (preference_v5 or preference_v51) and not preference_stage2_parent and (not fresh or resume_parent):
             raise ValueError('V5 Stage1 requires fresh independent uppers')
+        self.log_mode=log_mode
+        if log_mode=="training_summary" and not preference_v51:raise ValueError("summary currently validated for V5.1 only")
         self.preference_v51=preference_v51
         self.preference_v5=preference_v5 or preference_v51;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
         self.training_stage=51 if preference_v51 else 2 if self.preference_stage2_parent else 1;self.smoke=smoke
@@ -97,7 +99,7 @@ class SmoothCampaign(Campaign):
             manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics=semantics,prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero,
                             parent_run=None if not self.preference_stage2_parent else str(self.preference_stage2_parent),stage1_gate_passed=None if not self.preference_stage2_parent else False,user_override_stage2=bool(self.preference_stage2_parent),priority_recovery_v51=self.preference_v51)
             write(self.out/'manifest.json',manifest)
-        self.states,self.advance,self.observe=self.setup_batch(self.n)
+        self.states,self.advance,self.observe=self.setup_batch(self.n,log_mode=self.log_mode)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
         if self.preference_stage2_parent:
             self.stage2_parent_receipt=validate_preference_stage2_parent(self.preference_stage2_parent)
@@ -215,13 +217,21 @@ class SmoothCampaign(Campaign):
         self._status(stage=stage,phase='value_only' if warmup else 'PPO',current_alpha=alpha,current_batch=index)
         sums=np.zeros((4,14+2*len(self.component_names)));family_sums=np.zeros((4,14+2*len(self.component_names)));rewards=[];fails=ends=0;start=time.monotonic();capcounts={k:0 for k in self.component_names};capden=0;diagnostics=[]
         snapshot=algo._snapshot()
+        summary_mode=self.log_mode=='training_summary'
+        if summary_mode:
+            from .smooth_device_statistics import initialize,begin_rollout,accumulate
+            if not hasattr(self,'accumulate_statistics'):self.accumulate_statistics=jax.jit(accumulate)
+            carry=begin_rollout(ep.get('device_statistics',initialize(self.n,14+2*len(self.component_names),len(self.component_names))))
+            events=[];reset_events=[]
+            # The first entry is the actual starting state, before any advance.
+            self.case_manifest(ep['state'],f'alpha{alpha}')
         try:
             with self.budget.measure(stage,f"{'critic_only' if warmup else 'policy'} batch {index}",estimate=estimate):
                 self.budget.reserve(self.n*self.steps*4,f'alpha{alpha} batch{index} warmup={warmup}')
                 with torch.no_grad():
                     for t in range(self.steps):
                         obs=ep['obs']
-                        current_families=np.asarray(ep['state'].family)
+                        current_families=ep['state'].family if summary_mode else np.asarray(ep['state'].family)
                         if not torch.isfinite(obs['policy']).all() or not torch.isfinite(obs['critic']).all():raise RuntimeError('nonfinite observation')
                         z=algo.act(obs)
                         if not torch.isfinite(z).all():raise RuntimeError('nonfinite latent')
@@ -230,15 +240,34 @@ class SmoothCampaign(Campaign):
                         if bool(jp.any(f|fault)):raise RuntimeError('policy/lower fault')
                         ep['state']=state;ep['obs']=self.td(a,c)
                         algo.process_env_step(ep['obs'],torch.utils.dlpack.from_dlpack(r),torch.utils.dlpack.from_dlpack(d),{})
-                        if self.preference_v5:self.record_episode_statistics(alpha,np.asarray(r),np.asarray(d),np.asarray(failed),np.asarray(stat),jax.device_get(diag))
-                        stat_np=np.asarray(stat);sums+=stat_np.sum(axis=0)
-                        for family_id in range(4):family_sums[family_id]+=stat_np[current_families==family_id,0].sum(axis=0)
-                        rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
-                        if t==0 or bool(jp.any(d)):self.case_manifest(state,f'alpha{alpha}')
-                        if warmup and index==1:diagnostics.append(jax.device_get({k:v for k,v in diag.items() if not k.startswith('all_')}))
-                        for k,v in diag['all_component_cap_counts'].items():capcounts[k]+=int(v)
-                        capden+=int(diag['all_active_ticks'])
+                        if summary_mode:
+                            carry,event=self.accumulate_statistics(carry,r,d,failed,stat,current_families,
+                                jp.stack([diag['all_component_cap_counts'][k] for k in self.component_names]),diag['all_active_ticks'],
+                                diag['all_proposal_dv'],diag['all_governed_dv'],diag['all_valid_ticks'])
+                            events.append(event);reset_events.append(diag['reset_event'])
+                        else:
+                            if self.preference_v5:self.record_episode_statistics(alpha,np.asarray(r),np.asarray(d),np.asarray(failed),np.asarray(stat),jax.device_get(diag))
+                            stat_np=np.asarray(stat);sums+=stat_np.sum(axis=0)
+                            for family_id in range(4):family_sums[family_id]+=stat_np[current_families==family_id,0].sum(axis=0)
+                            rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
+                            if t==0 or bool(jp.any(d)):self.case_manifest(state,f'alpha{alpha}')
+                            if warmup and index==1:diagnostics.append(jax.device_get({k:v for k,v in diag.items() if not k.startswith('all_')}))
+                            for k,v in diag['all_component_cap_counts'].items():capcounts[k]+=int(v)
+                            capden+=int(diag['all_active_ticks'])
                     algo.compute_returns(ep['obs'])
+                if summary_mode:
+                    if len(events)!=self.steps:raise RuntimeError('incomplete statistics event buffer')
+                    ep['device_statistics']=carry
+                    host,episode_events,resets=jax.device_get((carry,jax.tree.map(lambda *x:jp.stack(x),*events),jax.tree.map(lambda *x:jp.stack(x),*reset_events)))
+                    sums=host['sums'];family_sums=host['family_sums'];rewards=[host['reward_sum']/(self.n*self.steps)]
+                    fails=int(host['fails']);ends=int(host['ends']);capden=int(host['capden']);capcounts=dict(zip(self.component_names,host['capcounts'].tolist()))
+                    ep['negative_covered']=host['negative_covered'];ep['coverage_completed']=int(host['coverage_completed'])
+                    for t,i in zip(*np.nonzero(episode_events['done'])):
+                        row=episode_events['stats'][t,i];count=max(row[0],1)
+                        ep.setdefault('completed_episode_batch',[]).append(dict(return_sum=float(episode_events['return_sum'][t,i]),
+                            policy_steps=int(episode_events['steps'][t,i]),physical_failure=bool(episode_events['failed'][t,i]),
+                            speed_rmse=float(np.sqrt(row[1]/count)),steer_rmse=float(np.sqrt(row[2]/count)),heading_rmse=float(np.sqrt(row[11]/count)),training_stage=self.training_stage))
+                    self.write_reset_events(resets,f'alpha{alpha}')
                 if diagnostics:
                     flat=flatten_logs(jax.tree.map(lambda *x:np.stack(x),*diagnostics));np.savez_compressed(self.out/f'alpha{alpha}/first_rollout_diagnostic.npz',**flat)
                 sample=time.monotonic()-start

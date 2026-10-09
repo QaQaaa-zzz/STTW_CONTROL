@@ -50,13 +50,15 @@ def run(args):
     root = Path(args.output).resolve()
     if root.exists(): raise FileExistsError('benchmark output must be new')
     root.mkdir(parents=True)
+    if args.mode=='ppo' and args.rollout_source:
+        return run_frozen_ppo(args,root)
     write(root/'hardware_before.json', hardware())
     telemetry = (root/'gpu.csv').open('w')
     monitor = subprocess.Popen(['nvidia-smi','--query-gpu=timestamp,name,pstate,utilization.gpu,memory.used,temperature.gpu,power.draw,clocks.sm,clocks.mem','--format=csv','-lms','200'], stdout=telemetry, stderr=subprocess.DEVNULL)
     campaign = None
     try:
         start = time.perf_counter()
-        kwargs = dict(fresh=True, preference_v51=True, smoke=args.smoke)
+        kwargs = dict(fresh=True, preference_v51=True, smoke=args.smoke,log_mode=args.log_mode)
         if args.num_envs is not None: kwargs.update(num_envs=args.num_envs, rollout_steps=args.rollout_steps)
         campaign = SmoothCampaign(root/'run', **kwargs)
         campaign.initialize()
@@ -66,6 +68,7 @@ def run(args):
             torch.cuda.synchronize()
         sync()
         preparation = time.perf_counter()-start
+        (root/'advance_optimized_hlo.txt').write_text(campaign.advance.as_text())
         original_out = campaign.out
         initial = {}
         for alpha, ep in campaign.endpoints.items():
@@ -112,13 +115,25 @@ def run(args):
         operation={'env':env_only,'rollout':rollout,'end-to-end':end_to_end,
                    'evaluation':lambda:campaign.evaluate_preference(args.evaluation_update)}.get(args.mode)
         if args.mode=='ppo':
-            restore(); rollout(); sync()
-            algo=campaign.endpoints[0]['algo']; frozen=copy.deepcopy(algo.storage); rng=capture_rng()
+            algo=campaign.endpoints[0]['algo']
+            if args.rollout_source:
+                payload=torch.load(args.rollout_source,map_location='cuda',weights_only=False)
+                if payload['config']!=campaign.resolve(0):raise ValueError('frozen rollout configuration mismatch')
+                initial[0]['learner']=payload['learner'];initial[0]['accepted']=payload['accepted']
+                frozen=payload['storage'];rng={k:payload['learner'][k] for k in ('torch_rng','cuda_rng','numpy_rng','python_rng')}
+            else:
+                restore(); rollout(); sync()
+                frozen=copy.deepcopy(algo.storage);rng=capture_rng()
+            torch.save(dict(storage=frozen,learner=algo._snapshot(),config=campaign.resolve(0),accepted=algo.accepted_policy_updates),root/'frozen_rollout.pt')
             restore_initial=restore
             def restore():
                 restore_initial();algo.storage=copy.deepcopy(frozen);restore_rng(rng)
             operation=algo.update
-        result=measure_repeated(operation,restore,sync,args.warmups,args.repeats)
+        completed=[0]
+        def progress():
+            completed[0]+=1
+            write(root/'benchmark_status.json',dict(state='measuring',mode=args.mode,completed_iterations=completed[0],total_iterations=args.warmups+args.repeats,last_update_epoch=time.time()))
+        result=measure_repeated(operation,restore,sync,args.warmups,args.repeats,observe=progress)
         result.update(mode=args.mode, preparation_compile_seconds=preparation,
                       num_envs=campaign.n,rollout_steps=campaign.steps,seed=87,
                       scheduled_ticks_per_rollout=campaign.n*campaign.steps*4,active_ticks=active,
@@ -151,10 +166,82 @@ def run(args):
             else:operation();sync()
         finally:
             for obj,name,fn in reversed(originals):setattr(obj,name,fn)
+        if args.mode=='rollout':
+            algo=campaign.endpoints[0]['algo']
+            torch.save(dict(storage=algo.storage,learner=algo._snapshot(),config=campaign.resolve(0),accepted=algo.accepted_policy_updates),root/'frozen_rollout.pt')
         write(root/'diagnostic_phases.json',dict(seconds=phases,overhead='synchronized diagnostic repetition, not additive throughput timings',unmeasured=['reward_audit','plotting','general_file_output']))
+        if args.verify_log_modes:
+            verify_log_modes(campaign, root)
         campaign.out=original_out;campaign._status(state='complete',stage='benchmark',benchmark_only=True)
+        write(root/'benchmark_status.json',dict(state='complete',mode=args.mode,completed_iterations=args.warmups+args.repeats,total_iterations=args.warmups+args.repeats,last_update_epoch=time.time()))
     finally:
         if campaign:
             for ep in campaign.endpoints.values(): ep['writer'].close()
         monitor.terminate();monitor.wait();telemetry.close()
         write(root/'hardware_after.json',hardware())
+
+
+def verify_log_modes(campaign, root):
+    """Full pytree fixed-action regression, including forced horizon resets."""
+    import jax
+    import jax.numpy as jp
+    import numpy as np
+    from .direct_command_training import write
+    from .direct_command_env import task_horizon_steps
+    _, full, _ = campaign.setup_batch(campaign.n,log_mode='evaluation_full')
+    _, summary, _ = campaign.setup_batch(campaign.n,log_mode='training_summary')
+    results=[]
+    # Every leaf of state (MJX, ESO, history, lower), observation, reward/done,
+    # summary and final observation is compared. Logging leaves intentionally differ.
+    for count in (0,1,campaign.n//2,campaign.n):
+        base=campaign.states.replace(tick=jp.where(jp.arange(campaign.n)<count,task_horizon_steps(campaign.spec)*4-4,0))
+        a=b=base;maximum=0.
+        for step in range(min(campaign.steps,16)):
+            z=jp.asarray(np.random.default_rng(87+step).normal(size=(campaign.n,2)),jp.float32)
+            x=full(a,z);y=summary(b,z)
+            for index in list(range(10))+[11]:
+                for left,right in zip(jax.tree.leaves(x[index]),jax.tree.leaves(y[index])):
+                    left,right=np.asarray(left),np.asarray(right)
+                    if left.dtype.kind in 'biu':np.testing.assert_array_equal(left,right)
+                    else:
+                        np.testing.assert_allclose(left,right,rtol=2e-4,atol=2e-5,equal_nan=False)
+                        if left.size:maximum=max(maximum,float(np.max(np.abs(left-right))))
+            a,b=x[0],y[0]
+        results.append(dict(forced_done_count=count,steps=min(campaign.steps,16),max_absolute_difference=maximum))
+    write(root/'full_state_equivalence.json',dict(passed=True,rtol=2e-4,atol=2e-5,cases=results))
+
+
+def run_frozen_ppo(args,root):
+    """No simulator setup needed to benchmark exactly the same serialized rollout."""
+    import torch
+    import importlib.util
+    from .direct_command_ppo import make_algorithm
+    from .direct_command_training import write
+    payload=torch.load(args.rollout_source,map_location='cuda',weights_only=False)
+    if args.reference_revision:
+        source=subprocess.check_output(['git','show',args.reference_revision+':learning/src/sttw_control/direct_command_ppo.py'],text=True)
+        path=root/'reference_ppo.py';path.write_text(source)
+        spec=importlib.util.spec_from_file_location('sttw_control._reference_ppo',path)
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        make_algorithm=module.make_algorithm
+    torch.set_num_threads(2)
+    frozen=payload['storage'];config=payload['config']
+    algo=make_algorithm(frozen.observations[0],frozen.num_transitions_per_env,config,'cuda');algo.temporal_spec=config
+    def restore():
+        algo._restore(payload['learner']);algo.storage=copy.deepcopy(frozen)
+        algo.accepted_policy_updates=payload['accepted'];algo.hard_kl_stop=False;algo.nonfinite_stop=False
+    outcomes=[]
+    def operation():outcomes.append(algo.update())
+    write(root/'hardware_before.json',hardware())
+    result=measure_repeated(operation,restore,torch.cuda.synchronize,args.warmups,args.repeats)
+    result.update(mode='ppo',frozen_rollout=str(Path(args.rollout_source).resolve()),
+        frozen_rollout_sha256=hashlib.sha256(Path(args.rollout_source).read_bytes()).hexdigest(),
+        reference_revision=args.reference_revision,metrics=outcomes,torch_peak_allocated_bytes=torch.cuda.max_memory_allocated())
+    write(root/'timing.json',result)
+    torch.save(dict(snapshot=algo._snapshot(),metrics=outcomes[-1]),root/'result.pt')
+    if args.trace:
+        restore()
+        with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA]) as prof:
+            operation();torch.cuda.synchronize()
+        prof.export_chrome_trace(str(root/'torch_trace.json'))
+    write(root/'hardware_after.json',hardware())
