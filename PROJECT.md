@@ -1,3 +1,17 @@
+# V5.2 training paused by user — 2026-10-09
+
+LOWER_TRACKING_LIMITED: saved fast_turn B0 and alpha0 show persistent steering tracking errors after governed quiet intervals. User explicitly chose “按附件暂停训练”. New physics0, new PPO0; engineering check not launched. V5.2 code prepared and7 focused CPU checks passed; GPU integration is unverified. Parent best/last distinction, physical qualification, zero-shift decomposition and all intervals: docs/V52_VALIDATION.md. No formal launch or automatic extension while paused.
+
+---
+
+# V5.2 implementation — 2026-10-09
+
+Approved design: attachment STTW_V52_Codex.md and endpoint JSONs. Base26c3fed merged with performance7ab2cd8 before algorithm edits (405cda1). No physical/observation/action/lower changes. Read-only parent18-trace NPZ audit first; then three reward changes and5080 independent cap/failure bound; Actor+std only hot-start, Critic/Adam reset; four value-only batches; safety-first fixed-protocol best and bounded convergence extension. Numeric validation100/150/200 then every50, plots only final reloaded best. Parent counts and new counts separate.
+
+Implementation plan: (1) finish saved-data audit and severe tracking intervals; (2) reward/config with independent reference tests; (3) selection metrics, atomic identity and convergence; (4) integrate existing optimized campaign, complete-episode summaries and CLI; (5) one8x16x2 engineering check then authorized200/max400 training with checked TensorBoard. No repeated lower interface or scale tests. Shared research ledger is authoritative current state.
+
+---
+
 # RTX 4090D performance implementation (2026-10-09)
 
 Authorized specification: user request, baseline 071fc6f; implementation base 77f715f retains evaluation-budget repair. Isolated branch performance/r196-v51-4090d. No formal training, no changes to physics/reward/control/PPO contract, no DVGC/JIT writes or process termination.

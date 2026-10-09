@@ -250,7 +250,10 @@ class Campaign:
                 diag['all_proposal_dv']=map_latent(z,self.spec)[:,0]
                 diag['all_governed_dv']=logs['offsets'][:,:,0]
                 diag['all_valid_ticks']=logs['active_tick']
-            if log_mode=='training_summary':
+            if self.spec.get('preference_v52'):
+                # Bounded per-tick evidence needed for complete episode physical diagnostics.
+                diag['episode_ticks']={k:logs[k] for k in ('active_tick','time','limited_command','governed','actual_forward_speed','actual_delta','e_psi_unwrapped','peak_roll','phi_dot','g','recovery_phase','chi','effective_cost','final_command_clipped')}
+            if log_mode=='training_summary' or self.spec.get('preference_v52'):
                 diag['reset_event']=dict(done=done,env_id=nxt.env_id,episode_index=nxt.episode_index,alpha=nxt.alpha,
                     family=nxt.family,initial_heading_error=nxt.initial_heading_error,reference_pose=nxt.physical.reference_pose,
                     actual_yaw=nxt.physical.yaw_unwrapped,slew=nxt.slew,rows=nxt.rows)

@@ -9,21 +9,28 @@ from .smooth_command_config import resolve,resolve_dimensions
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None,log_mode="evaluation_full",reset_guard=False):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None,log_mode="evaluation_full",reset_guard=False,preference_v52=False,repair_parent=None,additional_updates=200,max_additional_updates=400):
         if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
             raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
         if (preference_v5 or preference_v51) and not preference_stage2_parent and (not fresh or resume_parent):
             raise ValueError('V5 Stage1 requires fresh independent uppers')
+        self.preference_v52=preference_v52
+        self.repair_parent=Path(repair_parent).resolve() if repair_parent else None
+        if preference_v52 and not self.repair_parent:raise ValueError("V5.2 requires repair_parent")
+        preference_v51=preference_v51 or preference_v52
         self.reset_guard=reset_guard
         self.log_mode=log_mode
         if log_mode=="training_summary" and not preference_v51:raise ValueError("summary currently validated for V5.1 only")
         self.preference_v51=preference_v51
         self.preference_v5=preference_v5 or preference_v51;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
-        self.training_stage=51 if preference_v51 else 2 if self.preference_stage2_parent else 1;self.smoke=smoke
+        self.training_stage=52 if preference_v52 else 51 if preference_v51 else 2 if self.preference_stage2_parent else 1;self.smoke=smoke
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
         self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
         def configured(alpha):
             spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall,preference_v5=preference_v5,preference_v51=preference_v51,stage=self.training_stage)
+            if preference_v52:
+                from .smooth_command_config import resolve_preference_v52
+                spec=resolve_preference_v52(alpha,additional_updates,max_additional_updates)
             if preference_v5 or preference_v51:
                 spec['prepared_high_speed_indices']=getattr(self,'high_speed_indices',[5,6,7])
                 return resolve_dimensions(spec,smoke=smoke,num_envs=num_envs,rollout_steps=rollout_steps)
@@ -138,6 +145,9 @@ class SmoothCampaign(Campaign):
             ep['rng']=capture_rng()
             self.endpoints[alpha]=ep
             write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='scratch' if self.fresh else 'actor_only',source_checkpoint=None if src is None else str(src),source_actor_sha256=digest,actor_exact=None if self.fresh else True,previous_policy_loaded=not self.fresh,critic_fresh=True,optimizer_empty=True,std=algo.policy.log_std.exp().detach().cpu().tolist(),seed=seed))
+            if self.preference_v52:
+                from .preference_training import warm_start_endpoint
+                warm_start_endpoint(self,alpha)
             self.save(alpha,0)
     def resume_preference_stage2_endpoint(self,alpha):
         import torch,jax.numpy as jp
@@ -204,9 +214,15 @@ class SmoothCampaign(Campaign):
         from .direct_command_policy import export_actor
         ep=self.endpoints[alpha];algo=ep['algo'];root=self.out/f'alpha{alpha}/checkpoints';root.mkdir(exist_ok=True,parents=True)
         path=root/f'update_{update:04d}.pt'
-        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),initialization='learner_state_resume_environment_reset' if self.resume_parent or self.preference_stage2_parent else 'scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume'),path.with_suffix('.tmp'))
+        rng=ep.get('rng',capture_rng()) if self.preference_v52 else capture_rng()
+        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=rng['torch_rng'],cuda_rng=rng['cuda_rng'],numpy_rng=rng['numpy_rng'],python_rng=rng['python_rng'],initialization='learner_state_resume_environment_reset' if self.resume_parent or self.preference_stage2_parent else 'scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume',alpha=alpha,
+            lineage=dict(parent_updates=100,additional_updates=update,lineage_updates=100+update,reward_version='V5.2') if self.preference_v52 else None,
+            config_sha256=hashlib.sha256(json.dumps(self.resolve(alpha),sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+            lower_identity=self.env.lower.provenance,hard_rejects=ep['hard_rejects']),path.with_suffix('.tmp'))
         os.replace(path.with_suffix('.tmp'),path)
         with path.with_name(f'actor_{update:04d}.pkl').open('wb') as f:pickle.dump(jax.device_get(export_actor(algo.policy)),f)
+        if self.preference_v52:
+            link=root.parent/'last_model.pt';tmp=link.with_suffix('.tmp');tmp.unlink(missing_ok=True);tmp.symlink_to(path.relative_to(root.parent));os.replace(tmp,link)
         write(self.out/f'alpha{alpha}/last_completed.json',dict(update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,checkpoint=str(path.resolve()),stop=ep['stopped']))
     def batch(self,alpha,warmup=False):
         import torch,jax,jax.numpy as jp
@@ -218,6 +234,7 @@ class SmoothCampaign(Campaign):
         self._status(stage=stage,phase='value_only' if warmup else 'PPO',current_alpha=alpha,current_batch=index)
         sums=np.zeros((4,14+2*len(self.component_names)));family_sums=np.zeros((4,14+2*len(self.component_names)));rewards=[];fails=ends=0;start=time.monotonic();capcounts={k:0 for k in self.component_names};capden=0;diagnostics=[]
         snapshot=algo._snapshot()
+        if self.preference_v52:self.case_manifest(ep['state'],f'alpha{alpha}')
         summary_mode=self.log_mode=='training_summary'
         if summary_mode:
             from .smooth_device_statistics import initialize,begin_rollout,accumulate
@@ -239,6 +256,9 @@ class SmoothCampaign(Campaign):
                         result=self.advance(ep['state'],jax.dlpack.from_dlpack(z.detach().contiguous()))
                         state,a,c,f,r,d,stat,failed,fault,peak,diag,final_obs=result
                         if bool(jp.any(f|fault)):raise RuntimeError('policy/lower fault')
+                        if self.preference_v52:
+                            from .preference_training import accumulate_episodes
+                            accumulate_episodes(self,alpha,r,d,failed,diag,warmup,index)
                         ep['state']=state;ep['obs']=self.td(a,c)
                         algo.process_env_step(ep['obs'],torch.utils.dlpack.from_dlpack(r),torch.utils.dlpack.from_dlpack(d),{})
                         if summary_mode:
@@ -251,7 +271,7 @@ class SmoothCampaign(Campaign):
                             stat_np=np.asarray(stat);sums+=stat_np.sum(axis=0)
                             for family_id in range(4):family_sums[family_id]+=stat_np[current_families==family_id,0].sum(axis=0)
                             rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
-                            if t==0 or bool(jp.any(d)):self.case_manifest(state,f'alpha{alpha}')
+                            if not self.preference_v52 and (t==0 or bool(jp.any(d))):self.case_manifest(state,f'alpha{alpha}')
                             if warmup and index==1:diagnostics.append(jax.device_get({k:v for k,v in diag.items() if not k.startswith('all_')}))
                             for k,v in diag['all_component_cap_counts'].items():capcounts[k]+=int(v)
                             capden+=int(diag['all_active_ticks'])
@@ -294,11 +314,12 @@ class SmoothCampaign(Campaign):
                     rec.update(training_stage=self.training_stage,complete_episode_statistics=ep.pop('completed_episode_batch',[]),negative_request_coverage=self.coverage_summary(ep))
                 rec=clean_numbers(rec)
                 with (self.out/f'alpha{alpha}/metrics.jsonl').open('a') as f:f.write(json.dumps(rec,allow_nan=False)+'\n')
-                step=index if not warmup else index-3;writer=ep['writer'];writer.add_scalar('train/mean_step_reward',rec['mean_step_reward'],step)
+                step=index;writer=ep['writer'];writer.add_scalar('warmup/mean_step_reward' if warmup and self.preference_v52 else 'train/mean_step_reward',rec['mean_step_reward'],step)
                 for k,v in metrics.items():
                     if isinstance(v,(int,float)) and np.isfinite(v):writer.add_scalar('ppo/'+k,v,step)
                 for k in ['speed_rmse','steer_rmse','heading_rmse','working_roll_fraction']:writer.add_scalar('physical/'+k,groups['all'][k],step)
                 writer.add_scalar('physical/failure_fraction',rec['failure_fraction'],step);writer.flush()
+                if self.preference_v52:ep['rng']=capture_rng()
                 if warmup or index%10==0 or ep['stopped']:self.save(alpha,ep['update'])
                 print(json.dumps(dict(alpha=alpha,phase=rec['phase'],batch=index,reward=rec['mean_step_reward'],kl=metrics.get('mean_kl'),seconds=rec['total_seconds'],stop=ep['stopped'])),flush=True)
         except BudgetStop:
@@ -306,6 +327,9 @@ class SmoothCampaign(Campaign):
         if self.resume_parent or self.preference_v5:ep['rng']=capture_rng()
         ep['duration']=time.monotonic()-start
         self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()},current_stop=ep['stopped'])
+        if self.preference_v52 and not warmup and index%25==0:
+            from .preference_training import episode_window
+            episode_window(self,alpha,index)
         return not ep['stopped']
     def notify_once(self,event,title,body):
         key='stage_notified' if event.startswith('training_') else 'completion_notified'
@@ -351,7 +375,7 @@ class SmoothCampaign(Campaign):
         write(self.out/'stage_transition.json',dict(from_stage=1,to_stage=2,actor_critic_adam_rng_preserved=True,accepted_updates={str(a):ep['algo'].accepted_policy_updates for a,ep in self.endpoints.items()},physics_histories_reset=True))
         self._status(training_stage=2,declared_policy_batches_per_endpoint=120)
 
-    def evaluate_preference(self,update,case_filter=None,batched=None):
+    def evaluate_preference(self,update,case_filter=None,batched=None,methods_filter=None,render=True):
         # V5.1 uses the measured case-by-method batch; False retains the reference path.
         if batched is None:batched=self.preference_v51
         import jax,jax.numpy as jp
@@ -361,7 +385,8 @@ class SmoothCampaign(Campaign):
         env=self.env;cfg=self.spec['preference_v5']['evaluation'];actor=DirectCommandActor()
         reuse_baseline=self.training_stage==1 and update==40
         methods=['alpha0','alpha1'] if reuse_baseline else ['alpha0','alpha1','B0']
-        indices=[0,1] if reuse_baseline else [0,1,0]
+        if methods_filter is not None:methods=[m for m in methods if m in methods_filter]
+        indices=[1 if m=='alpha1' else 0 for m in methods]
         params=jax.tree.map(lambda *x:jp.stack(x),*[export_actor(self.endpoints[a]['algo'].policy) for a in indices])
         alphas=jp.asarray(indices,dtype=jp.float32);bypass=jp.array([m=='B0' for m in methods])
         sample=jax.tree.map(lambda x:x[self.high_speed_zero],self.bank) if self.training_stage==1 else self.sample
@@ -381,7 +406,7 @@ class SmoothCampaign(Campaign):
         if not cases:raise ValueError('preference evaluation requires at least one case')
         if batched:
             if not self.preference_v51:raise ValueError('batched evaluation currently validated for V5.1')
-            return self.evaluate_preference_batch(cases,methods,indices,params,sample,update,actor)
+            return self.evaluate_preference_batch(cases,methods,indices,params,sample,update,actor,render=render)
         evaluation_started=time.perf_counter();physics_seconds=output_seconds=0.
         compile_started=time.perf_counter()
         reset=self.compile(f'V5 stage{self.training_stage} paired reset',reset,jp.asarray(cases[0][1],jp.float32))
@@ -419,12 +444,12 @@ class SmoothCampaign(Campaign):
                 (dest/'B0.npz').symlink_to(source.resolve())
             print(f'V5 evaluation{update} {case} saved',flush=True)
         from .smooth_evaluation import timed_report
-        result=timed_report(self.out,update,self.training_stage)
+        result=timed_report(self.out,update,self.training_stage) if render else None
         write(self.out/f'evaluation{update}/evaluation_timings.json',dict(compile=compilation_seconds,physics=physics_seconds,file_output=output_seconds,total=time.perf_counter()-evaluation_started,batched=False))
         notify('STTW V5评价阶段完成',f'update{update} 图与门槛结果已保存')
         return result
 
-    def evaluate_preference_batch(self,cases,methods,indices,params,sample,update,actor):
+    def evaluate_preference_batch(self,cases,methods,indices,params,sample,update,actor,render=True):
         import jax,jax.numpy as jp
         from .smooth_evaluation import expand_cases,masked_step,timed_report,policy_log_template
         started=time.perf_counter();env=self.env
@@ -471,9 +496,12 @@ class SmoothCampaign(Campaign):
                     data={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()}
                     valid=data['active_tick'];data={k:v[valid] for k,v in data.items()}
                     data.update(checkpoint_update=np.asarray(update),partial=np.asarray(False))
+                    if self.preference_v52 and update=='best' and name.startswith('alpha'):
+                        best=self.endpoints[int(name[-1])]['best']
+                        data.update(checkpoint_update=np.asarray(best['source_update']),checkpoint_sha256=np.asarray(best['checkpoint_sha256']),additional_updates=np.asarray(best['additional_updates']))
                     np.savez_compressed(dest/f'{name}.npz',**data)
             output=time.perf_counter()-output_started
-        result=timed_report(self.out,update,self.training_stage)
+        result=timed_report(self.out,update,self.training_stage) if render else None
         write(self.out/f'evaluation{update}/evaluation_timings.json',dict(compile=compilation,physics=physics,file_output=output,total=time.perf_counter()-started,batched=True,trajectory_count=len(cases)*len(methods)))
         return result
 
