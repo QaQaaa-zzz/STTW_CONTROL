@@ -1076,3 +1076,8 @@ passes alpha0 3/6 and alpha1 1/6. Fast-turn heading fails at10s and16s, with16s 
 .07749/.24961rad. Straight hold retains unhelpful speed offsets .0753/.0442m/s and
 worsens B0 speed error. Reward reconstruction passes, but the result is unqualified and
 not adopted; no250/500 continuation.
+
+Remote-review evidence bundle: `docs/evidence/r196_preference_v51_20261009/README.md`.
+It includes XY-first plots for every fixed case, paired update25/update100 metrics and
+5ms trajectories, frozen configurations, failure/recovery receipts, and TensorBoard
+image plus numeric scalars. The local full run remains under `runs/`.

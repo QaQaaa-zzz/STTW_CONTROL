@@ -1,0 +1,15 @@
+{
+  "parent_run": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009",
+  "runtime": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation_recovery_runtime_1791534385",
+  "missing_cases_completed": [
+    "speed_changes",
+    "gentle_positive",
+    "gentle_negative",
+    "steer_reversal",
+    "fast_turn"
+  ],
+  "training_restarted": false,
+  "original_error_receipt": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation100_error_receipt.json",
+  "completed_epoch": 1791535138.8600526,
+  "checkpoints_written": false
+}

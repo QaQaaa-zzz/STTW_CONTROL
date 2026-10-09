@@ -911,3 +911,6 @@ Fast-turn heading hold fails at10s and16s. Across six10s cases, joint final hold
 3/6 and1/6. Straight speed intervention remains harmful relative to B0. Primary-excess
 is uncapped and nonzero only in fast_turn (integral2.422/.165); it does not dominate.
 All endpoint reward reconstructions pass. The full contract remains unqualified.
+The remotely reviewable compact evidence is indexed at
+`docs/evidence/r196_preference_v51_20261009/README.md`, including update25 and
+update100 XY/control/reward plots, raw 5ms data and exported TensorBoard scalars.
