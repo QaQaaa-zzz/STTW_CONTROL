@@ -33,7 +33,9 @@ def accumulate(carry,reward,done,failed,stat,family,capcounts,active,proposal,go
     event=dict(done=done,return_sum=returns,steps=steps,failed=failed,stats=stats)
     # Both family and episode attribution are from before reset.
     c['sums']=c['sums']+stat.sum(axis=0)
-    c['family_sums']=c['family_sums']+jax.nn.one_hot(family,4).T@stat[:,0]
+    # DEFAULT GPU dot precision can round inputs below float32 accuracy.
+    # Statistics must conserve the same values as the ordinary sum reduction.
+    c['family_sums']=c['family_sums']+jp.matmul(jax.nn.one_hot(family,4).T,stat[:,0],precision=jax.lax.Precision.HIGHEST)
     c['reward_sum']=c['reward_sum']+reward.sum();c['fails']=c['fails']+failed.sum();c['ends']=c['ends']+done.sum()
     c['capcounts']=c['capcounts']+capcounts;c['capden']=c['capden']+active
     c['negative_covered']=c['negative_covered']+(seen & done[:,None,None]).sum(axis=0)

@@ -58,3 +58,15 @@ def test_float32_threshold_boundary_matches_original_float64_comparison():
             carry,_=fn(carry,jp.ones(1),jp.zeros(1,bool),jp.zeros(1,bool),jp.ones((1,4,16)),jp.zeros(1,jp.int32),jp.zeros(1,jp.int32),jp.int32(4),jp.full(1,threshold),jp.full((1,4),threshold),jp.ones((1,4),bool))
         expected=np.float32(threshold)<np.array([-.15,-.30])
         np.testing.assert_array_equal(np.asarray(carry['negative_seen'])[0],np.broadcast_to(expected,(2,2)))
+
+
+def test_gpu_family_reduction_conserves_float32_statistics():
+    import pytest
+    if jax.default_backend()!='gpu':pytest.skip('requires actual GPU dot precision')
+    rng=np.random.default_rng(87);n=512;fields=46
+    stat=rng.uniform(.01,400,(n,4,fields)).astype(np.float32);stat[:,:,0]=4
+    family=rng.integers(0,4,n,dtype=np.int32)
+    carry,_=jax.jit(accumulate)(initialize(n,fields,16),jp.zeros(n),jp.zeros(n,bool),jp.zeros(n,bool),
+        jp.asarray(stat),jp.asarray(family),jp.zeros(16,jp.int32),jp.int32(n*4),jp.zeros(n),jp.zeros((n,4)),jp.ones((n,4),bool))
+    expected=np.stack([stat[family==i,0].astype(np.float64).sum(0) for i in range(4)])
+    np.testing.assert_allclose(np.asarray(carry['family_sums']),expected,rtol=2e-6,atol=1e-5)
