@@ -22,14 +22,14 @@ def test_published_sequences_screen_every_slew_tick():
         def step(raw,t):
             nxt,rates,target=publish_local_command(raw,rows,t,slew,s)
             return nxt,jp.array([nxt[0],nxt[1],local_roll_reference(nxt[0],nxt[1])])
-        return jax.lax.scan(step,jp.array([2.3,0.]),jp.arange(2400))[1]
+        return jax.lax.scan(step,jp.array([2.3,0.]),jp.arange(round(s['episode_seconds']/s['dt'])))[1]
     data=np.asarray(jax.jit(jax.vmap(one))(jp.arange(12)))
     assert np.max(np.abs(data[:,:,2]))<=.26001
     assert data[:,:,0].min()>=1.69999 and data[:,:,0].max()<=2.80001
     assert np.max(np.abs(data[:,:,1]))<=.28001
 
 def test_physical_best_requires_complete_protocol_and_does_not_use_reward():
-    s=json.loads(CFG.read_text());n=2400;t=np.arange(n)*.005
+    s=json.loads(CFG.read_text());n=round(s['validation']['seconds']/s['dt']);t=np.arange(n)*.005
     good=dict(time=t,limited_command=np.tile([2.3,0.],(n,1)),actual_forward_speed=np.full(n,2.3),actual_delta=np.zeros(n),phi=np.zeros(n),peak_roll=np.zeros(n),physical_failure=np.zeros(n,bool),raw_rates=np.zeros((n,2)),final_command_clipped=np.zeros(n,bool),actual_delta_rate=np.zeros(n))
     traces={k:good.copy() for k in s['validation']['case_ids']}
     result=summarize_local(traces,s);assert result['qualified']
@@ -49,8 +49,8 @@ def test_local_hard_kl_halves_lr_then_stops_after_three():
 
 def test_validation_rejects_fault_and_duplicate_clock():
     import pytest
-    s=json.loads(CFG.read_text());n=2400
+    s=json.loads(CFG.read_text());n=round(s['validation']['seconds']/s['dt'])
     good=dict(time=np.arange(n)*.005,limited_command=np.tile([2.3,0.],(n,1)),actual_forward_speed=np.full(n,2.3),actual_delta=np.zeros(n),phi=np.zeros(n),peak_roll=np.zeros(n),physical_failure=np.zeros(n,bool),raw_rates=np.zeros((n,2)),final_command_clipped=np.zeros(n,bool),actual_delta_rate=np.zeros(n))
-    for change in [{'lower_fault':np.ones(n,bool)},{'nonfinite':np.ones(n,bool)},{'time':np.full(n,11.995)},{'actual_delta_rate':np.full(n,np.nan)}]:
+    for change in [{'lower_fault':np.ones(n,bool)},{'nonfinite':np.ones(n,bool)},{'time':np.full(n,s['validation']['seconds']-.005)},{'actual_delta_rate':np.full(n,np.nan)}]:
         traces={k:{**good,**change} for k in s['validation']['case_ids']}
         with pytest.raises(ValueError):summarize_local(traces,s)

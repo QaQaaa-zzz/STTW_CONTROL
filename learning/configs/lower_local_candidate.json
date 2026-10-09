@@ -22,7 +22,7 @@
     128
   ],
   "dt": 0.005,
-  "episode_seconds": 12,
+  "episode_seconds": 10,
   "history_frames": 10,
   "actor_dim": 210,
   "critic_dim": 211,
@@ -117,7 +117,7 @@
       "post_return_small_positive",
       "post_return_small_negative"
     ],
-    "seconds": 12.0,
+    "seconds": 10.0,
     "speed_tolerance": 0.1,
     "steer_tolerance": 0.04,
     "working_roll_limit": 0.302,
