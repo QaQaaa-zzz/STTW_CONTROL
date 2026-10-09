@@ -37,3 +37,22 @@ def test_stage1_requires_both_turn_signs(tmp_path,monkeypatch):
     path=tmp_path/'evaluation40/negative/alpha0.npz';d=reporting._load(path);d['peak_roll'][600]=.303;np.savez(path,**d)
     report=reporting.report_stage1(tmp_path,40)
     assert not report['passed'] and report['signs']['positive']['passed']
+
+def test_substep_peak_required_finite_and_nonzero_chi_is_conflict():
+    d=trace();d['peak_roll'][700]=np.nan
+    assert not _stage1_metrics(d)['complete5s']
+    assert _stage1_metrics(d)['peak_roll'] is None
+    del d['peak_roll']
+    assert not _stage1_metrics(d)['complete5s']
+    d=trace();d['chi'][200:]=.01;d['scored_cost_speed']=np.ones(1000)
+    assert mode_costs(d)['conflict_nonrecovery']['seconds']==4
+
+def test_reward_plots_include_totals_and_components(tmp_path):
+    import matplotlib
+    matplotlib.use('Agg')
+    from sttw_control.preference_command_reporting import _reward_plots
+    d=trace();d['scored_tick_reward']=np.full(1000,-.002)
+    d['scored_cost_speed']=np.full(1000,4.);d['failure_cost']=np.zeros(1000)
+    _reward_plots({'alpha0':d},tmp_path,'positive',40,5)
+    assert (tmp_path/'positive_5s_reward.png').stat().st_size>1000
+    assert (tmp_path/'positive_5s_reward_components.png').stat().st_size>1000
