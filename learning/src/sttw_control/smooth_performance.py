@@ -11,7 +11,7 @@ import subprocess
 import time
 
 
-def measure_repeated(operation, restore, synchronize, warmups=2, repeats=3, observe=None):
+def measure_repeated(operation, restore, synchronize, warmups=2, repeats=3, observe=None, on_sample=None):
     if warmups < 2 or repeats < 3:
         raise ValueError('at least two warmups and three measurements required')
     result = {'warmup_seconds': [], 'samples_seconds': [], 'intervals': []}
@@ -25,6 +25,7 @@ def measure_repeated(operation, restore, synchronize, warmups=2, repeats=3, obse
         result['warmup_seconds' if index < warmups else 'samples_seconds'].append(time.perf_counter()-start)
         result['intervals'].append(dict(kind='warmup' if index<warmups else 'measurement',start_epoch=epoch,end_epoch=time.time()))
         if observe is not None: result.setdefault('outcomes', []).append(observe())
+        if on_sample is not None:on_sample(result)
     result['median_seconds'] = statistics.median(result['samples_seconds'])
     return result
 
@@ -185,7 +186,7 @@ def run(args):
                 active.append(sum(int(np.load(p)['active_tick'].sum()) for p in campaign.out.glob(f'evaluation{args.evaluation_update}/*/*.npz')))
             completed[0]+=1
             write(root/'benchmark_status.json',dict(state='measuring',mode=args.mode,completed_iterations=completed[0],total_iterations=args.warmups+args.repeats,last_update_epoch=time.time()))
-        result=measure_repeated(operation,restore,sync,args.warmups,args.repeats,observe=progress)
+        result=measure_repeated(operation,restore,sync,args.warmups,args.repeats,observe=progress,on_sample=lambda row:write(root/'timing_partial.json',row))
         scheduled=(3*(66 if args.evaluation_update==100 else 26)*200 if args.mode=='evaluation'
                    else campaign.n*campaign.steps*4*(2 if args.mode=='end-to-end' else 1))
         result.update(mode=args.mode, reference_ppo_revision=args.reference_revision, preparation_compile_seconds=preparation,
@@ -193,6 +194,7 @@ def run(args):
                       evaluation_physical_concurrency=(18 if args.evaluation_update==100 else 6) if args.evaluation_batched else 3,
                       num_envs=campaign.n,rollout_steps=campaign.steps,seed=87,
                       scheduled_ticks_per_rollout=campaign.n*campaign.steps*4,active_ticks=active,
+                      jax_device_memory_stats=jax.devices()[0].memory_stats(),
                       torch_peak_allocated_bytes=torch.cuda.max_memory_allocated(),
                       torch_cuda=torch.version.cuda, caveats=['GPU peak in gpu.csv is sampled; Torch peak excludes JAX',
                       'Frozen evaluation checkpoints loaded' if args.evaluation_parent else 'Fresh endpoint policies; not control qualification',
@@ -307,7 +309,7 @@ def run_frozen_ppo(args,root):
     telemetry=(root/'gpu.csv').open('w')
     monitor=subprocess.Popen(['nvidia-smi','--query-gpu=timestamp,name,pstate,utilization.gpu,memory.used,temperature.gpu,power.draw,clocks.sm,clocks.mem','--format=csv','-lms','200'],stdout=telemetry,stderr=subprocess.DEVNULL)
     try:
-        result=measure_repeated(operation,restore,torch.cuda.synchronize,args.warmups,args.repeats)
+        result=measure_repeated(operation,restore,torch.cuda.synchronize,args.warmups,args.repeats,on_sample=lambda row:write(root/'timing_partial.json',row))
         result.update(mode='ppo',frozen_rollout=str(Path(args.rollout_source).resolve()),
             frozen_rollout_sha256=hashlib.sha256(Path(args.rollout_source).read_bytes()).hexdigest(),
             reference_revision=args.reference_revision,metrics=outcomes,torch_peak_allocated_bytes=torch.cuda.max_memory_allocated())
