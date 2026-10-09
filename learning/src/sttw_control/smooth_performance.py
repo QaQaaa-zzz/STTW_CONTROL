@@ -217,7 +217,9 @@ def run(args):
         for ep in campaign.endpoints.values():
             for name,label in [('act','policy_inference'),('process_env_step','storage'),('compute_returns','GAE'),('update','PPO')]:wrap(ep['algo'],name,label)
         try:
-            operation();sync()
+            # Evaluation already records every phase inside each operation.
+            # A sixth full panel would add no diagnostic scope.
+            if args.mode!='evaluation':operation();sync()
             if args.mode=='rollout':
                 algo=campaign.endpoints[0]['algo']
                 torch.save(dict(storage=algo.storage,learner=algo._snapshot(),config=campaign.resolve(0),accepted=algo.accepted_policy_updates),root/'frozen_rollout.pt')
@@ -232,7 +234,7 @@ def run(args):
                 write(root/'trace_scope.json',dict(mode='fixed-action environment',policy_steps=min(4,campaign.steps),num_envs=campaign.n,excluded_from_throughput=True))
         finally:
             for obj,name,fn in reversed(originals):setattr(obj,name,fn)
-        write(root/'diagnostic_phases.json',dict(seconds=phases,overhead='synchronized diagnostic repetition, not additive throughput timings',
+        write(root/'diagnostic_phases.json',dict(seconds=phases,evaluation_uses_per_operation_timings=args.mode=='evaluation',overhead='synchronized diagnostic repetition, not additive throughput timings',
             evaluation_timing_files=[str(p.relative_to(root)) for p in root.glob('trial_*/evaluation*/**/*timings.json')],
             unmeasured=['general_file_output'] if args.mode=='evaluation' else ['reward_audit','plotting','general_file_output']))
         if args.verify_log_modes:
