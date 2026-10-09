@@ -198,6 +198,8 @@ def run(args):
                       evaluation_physical_concurrency=(18 if args.evaluation_update==100 else 6) if args.evaluation_batched else 3,
                       num_envs=campaign.n,rollout_steps=campaign.steps,seed=87,
                       scheduled_ticks_per_rollout=campaign.n*campaign.steps*4,active_ticks=active,env_outcomes=env_outcomes,
+                      jax_compilation_cache_dir=jax.config.jax_compilation_cache_dir,
+                      jax_compilation_cache_enabled=jax.config.jax_enable_compilation_cache,
                       jax_device_memory_stats=jax.devices()[0].memory_stats(),
                       torch_peak_allocated_bytes=torch.cuda.max_memory_allocated(),
                       torch_cuda=torch.version.cuda, caveats=['GPU peak in gpu.csv is sampled; Torch peak excludes JAX',

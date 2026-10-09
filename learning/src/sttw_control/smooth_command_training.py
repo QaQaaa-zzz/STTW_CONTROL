@@ -65,7 +65,7 @@ class SmoothCampaign(Campaign):
         from dataclasses import asdict
         from .direct_command_env import DirectCommandEnv
         from .runtime import configure_compilation_cache
-        torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
+        torch.set_num_threads(2);configure_compilation_cache()
         with self.budget.measure('compile','load unchanged lower, physics and existing prepared bank'):
             self.env=DirectCommandEnv(self.spec)
             source=OLD/'R196_upper0/prepared_bank.pkl'

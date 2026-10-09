@@ -113,7 +113,7 @@ class Campaign:
         from .runtime import configure_compilation_cache
         from .actuator import initial_actuator
         if jax.config.x64_enabled:raise ValueError('V3 preserves float32, no global x64 change')
-        torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
+        torch.set_num_threads(2);configure_compilation_cache()
         with self.budget.measure('compile','load original MJX model and initial forward'):
             self.env=DirectCommandEnv(self.spec);base=self.env.physics.initial();jax.block_until_ready(base)
         e=self.env;cc=e.cc
