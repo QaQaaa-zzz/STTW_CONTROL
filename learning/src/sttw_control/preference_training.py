@@ -191,7 +191,7 @@ def run_preference_v52(output,repair_parent,additional_updates=200,max_additiona
                 if not c.batch(a):raise RuntimeError('engineering PPO stopped')
                 c.save(a,c.endpoints[a]['update'])
             write(c.out/'smoke_result.json',dict(passed=True,num_envs=8,policy_steps=16,total_updates=2,updates_per_endpoint=1,new_policy_transitions=256,scope='engineering only; no scene evaluation'))
-            c._status(state='complete',stage='engineering_complete');return
+            c._status(state='complete',stage='engineering_complete',declared_policy_batches_per_endpoint=1);return
         parent_candidates(c)
         for a in (0,1):
             for _ in range(4):

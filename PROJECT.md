@@ -1,3 +1,9 @@
+# V5.2 launch resumed — 2026-10-09
+
+User explicitly requested 开启训练, revoking the earlier pause. Lower-tracking limitation remains a known result. One engineering8×16 check completed two total PPO batches (one per endpoint), finite and no stop. Formal run planned at runs/preference_v52_tracking_best_start_20261009: parent100 Actor/log_std, fresh Critic/Adam, four value-only rollouts each, initial200 additional PPO each, original evidence-gated100 extensions capped400. No20/25 scene validation or fixed wall cutoff. TensorBoard6016 separates engineering/formal. Historical paused run and audit are preserved. Current live facts are in the shared ledger.
+
+---
+
 # V5.2 training paused by user — 2026-10-09
 
 LOWER_TRACKING_LIMITED: saved fast_turn B0 and alpha0 show persistent steering tracking errors after governed quiet intervals. User explicitly chose “按附件暂停训练”. New physics0, new PPO0; engineering check not launched. V5.2 code prepared and7 focused CPU checks passed; GPU integration is unverified. Parent best/last distinction, physical qualification, zero-shift decomposition and all intervals: docs/V52_VALIDATION.md. No formal launch or automatic extension while paused.

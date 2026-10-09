@@ -64,6 +64,7 @@ class SmoothCampaign(Campaign):
         completed={'0':40,'1':40} if self.preference_stage2_parent else {'0':0,'1':0}
         initialization='learner_state_resume_environment_reset' if self.preference_stage2_parent else 'scratch_actor_critic_optimizer_std' if fresh else 'actor_weights_only_fresh_critic_optimizer_std'
         self.status=dict(state='initializing',completed_updates=completed,declared_policy_batches_per_endpoint=self.spec['ppo']['default_updates'],initialization=initialization,pid=os.getpid())
+        if self.preference_v52:self.status.update(initialization='parent_actor_and_log_std_new_critic_adam',parent_run=str(self.repair_parent),training_stage=52)
         if self.resume_parent:self.status.update(initialization='learner_state_resume_environment_reset',parent_run=str(self.resume_parent))
         if self.preference_stage2_parent:self.status.update(parent_run=str(self.preference_stage2_parent),training_stage=2,stage1_gate_passed=False,user_override_stage2=True)
         self.seen_cases=set();self.endpoints={};self._status()
@@ -327,6 +328,8 @@ class SmoothCampaign(Campaign):
         if self.resume_parent or self.preference_v5:ep['rng']=capture_rng()
         ep['duration']=time.monotonic()-start
         self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()},current_stop=ep['stopped'])
+        if self.preference_v52:
+            self._status(additional_updates={str(a):e['update'] for a,e in self.endpoints.items()},lineage_updates={str(a):100+e['update'] for a,e in self.endpoints.items()},completed_value_only_rollouts={str(a):e['warmup'] for a,e in self.endpoints.items()})
         if self.preference_v52 and not warmup and index%25==0:
             from .preference_training import episode_window
             episode_window(self,alpha,index)
