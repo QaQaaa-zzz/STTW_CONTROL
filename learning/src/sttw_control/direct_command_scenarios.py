@@ -116,8 +116,14 @@ def schedule(env_id, episode_index, prepared_speed, spec, key=None):
     family_key, speed_slew_key, steer_slew_key, nominal_key, conflict_key, random_key = jax.random.split(key, 6)
     c = spec["commands"]
     u = jax.random.uniform(family_key, ())
+    heading_fraction = c.get("heading_recovery_start_fraction", 0.)
     family = jnp.where(u < c["nominal_fraction"], 0,
-                       jnp.where(u < c["nominal_fraction"] + c["conflict_fraction"], 1, 2)).astype(jnp.int32)
+                       jnp.where(u < c["nominal_fraction"] + c["conflict_fraction"], 1,
+                                 jnp.where(u < c["nominal_fraction"] + c["conflict_fraction"] + c["random_fraction"], 2, 3))).astype(jnp.int32)
+    if not spec.get('priority_recovery_v51'):
+        family = jnp.minimum(family, 2)
+    elif not np.isclose(c["nominal_fraction"] + c["conflict_fraction"] + c["random_fraction"] + heading_fraction, 1.):
+        raise ValueError('V5.1 training-family probabilities must sum to one')
     slew = jnp.stack((
         jax.random.uniform(speed_slew_key, (), minval=c["episode_speed_slew_range_m_s2"][0],
                            maxval=c["episode_speed_slew_range_m_s2"][1]),
@@ -128,8 +134,25 @@ def schedule(env_id, episode_index, prepared_speed, spec, key=None):
         lambda: _repeating_rows(nominal_key, prepared_speed, spec, 0),
         lambda: _conflict_rows(conflict_key, prepared_speed, spec, slew),
         lambda: _repeating_rows(random_key, prepared_speed, spec, 2),
+        lambda: _empty_rows(prepared_speed),
     ))
     return rows, family, slew
+
+
+def heading_recovery_initial_error(env_id, episode_index, spec, family):
+    """Deterministic virtual-reference yaw offset for V5.1 family 3 only."""
+    if not spec.get('priority_recovery_v51'):
+        return jnp.asarray(0., dtype=jnp.float32)
+    cfg = spec['commands']['heading_recovery_start']
+    key = jax.random.fold_in(jax.random.PRNGKey(spec['commands']['random_seed']), env_id)
+    key = jax.random.fold_in(jax.random.fold_in(key, episode_index), 51001)
+    sign_key, band_key, magnitude_key = jax.random.split(key, 3)
+    small = jax.random.uniform(band_key, ()) < cfg['small_magnitude_probability']
+    lo = jnp.where(small, cfg['small_magnitude_rad'][0], cfg['large_magnitude_rad'][0])
+    hi = jnp.where(small, cfg['small_magnitude_rad'][1], cfg['large_magnitude_rad'][1])
+    magnitude = jax.random.uniform(magnitude_key, (), minval=lo, maxval=hi)
+    sign = jnp.where(jax.random.uniform(sign_key, ()) < cfg['sign_positive_probability'], 1., -1.)
+    return jnp.where(jnp.asarray(family) == 3, sign*magnitude, 0.)
 
 
 def publish_command(raw, rows, tick, slew, dt):

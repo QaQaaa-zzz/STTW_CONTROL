@@ -246,10 +246,14 @@ class Campaign:
         new=[i for i,key in enumerate(zip(ids,episodes)) if (phase,int(key[0]),int(key[1])) not in self.seen_cases]
         if not new:return
         rows=np.asarray(states.rows);family=np.asarray(states.family);slew=np.asarray(states.slew);alpha=np.asarray(states.alpha)
+        initial_heading_error=np.asarray(states.initial_heading_error)
+        reference_pose=np.asarray(states.physical.reference_pose);actual_yaw=np.asarray(states.physical.yaw_unwrapped)
         path=self.out/phase/'case_manifest.jsonl';path.parent.mkdir(parents=True,exist_ok=True)
         with path.open('a') as f:
             for i in new:
-                rec=dict(env_id=int(ids[i]),episode_index=int(episodes[i]),alpha=float(alpha[i]),upper_alpha=float(alpha[i]),lower_alpha=1. if self.env.lower is not None else None,family=int(family[i]),slew=slew[i].tolist(),rows=rows[i].tolist())
+                rec=dict(env_id=int(ids[i]),episode_index=int(episodes[i]),alpha=float(alpha[i]),upper_alpha=float(alpha[i]),lower_alpha=1. if self.env.lower is not None else None,
+                         family=int(family[i]),initial_heading_error_rad=float(initial_heading_error[i]),initial_reference_pose=reference_pose[i].tolist(),
+                         initial_actual_yaw_rad=float(actual_yaw[i]),slew=slew[i].tolist(),rows=rows[i].tolist())
                 f.write(json.dumps(rec)+'\n');self.seen_cases.add((phase,int(ids[i]),int(episodes[i])))
     def checkpoint(self,algo,update,phase,states):
         import torch,jax

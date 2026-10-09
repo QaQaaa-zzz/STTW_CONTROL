@@ -81,12 +81,20 @@ def smooth_state_cost(alpha, chi, g, raw, speed, steer, debt, roll, roll_rate, o
     rawc=dict(speed=(1-g)*((1-chi)*vn+chi*jp.where(alpha==0,v0,v1))+g*rec['speed_weight']*huber(pos(jp.abs(ev)-rec.get('speed_deadband_m_s',0.))/rec['speed_scale_m_s']),
       steer=(1-g)*((1-chi)*dn+chi*jp.where(alpha==0,d0,d1))+g*rec['steer_weight']*huber(ed/rec['steer_scale_rad']),
       heading=rec['heading_weight']*g*huber(pos(jp.abs(debt)-rec['heading_deadband_rad'])/rec['heading_scale_rad']),
-      yaw_damping=rec['yaw_damping_weight']*g*jp.exp(-(debt/rec['yaw_damping_heading_scale_rad'])**2)*huber((yaw_rate-rc)/rec['yaw_scale_rad_s']),
       roll=safe['roll_weight']*huber(pos(jp.abs(roll)-safe['roll_start_rad'])/safe['roll_scale_rad']),
       roll_rate=safe['roll_rate_weight']*huber(pos(jp.abs(roll_rate)-safe['roll_rate_start_rad_s'])/safe['roll_rate_scale_rad_s']),
       overspeed=safe['overspeed_weight']*huber(pos(ev-safe['overspeed_band_m_s'])/safe['overspeed_scale_m_s']),
       low_speed=safe['low_speed_weight']*huber(pos(safe['low_speed_start_m_s']-speed)/safe['low_speed_scale_m_s']),
       magnitude=wm*jp.sum((offsets/jp.asarray(mag['normalizers']))**2))
+    if spec.get('priority_recovery_v51'):
+        primary=r['primary_excess']
+        steer_excess=huber(pos(jp.abs(ed)-primary['alpha0_steer_tolerance_rad'])/primary['alpha0_steer_scale_rad'])
+        speed_excess=huber(pos(jp.abs(ev)-primary['alpha1_speed_tolerance_m_s'])/primary['alpha1_speed_scale_m_s'])
+        rawc['primary_excess']=primary['weight']*chi*(1-g)*((1-alpha)*steer_excess+alpha*speed_excess)
+        yaw_debt=jp.clip(rec['yaw_debt_gain_per_s']*debt,-rec['yaw_debt_rate_limit_rad_s'],rec['yaw_debt_rate_limit_rad_s'])
+        rawc['yaw_recovery']=rec['yaw_recovery_weight']*g*huber(((yaw_rate-rc)-yaw_debt)/rec['yaw_scale_rad_s'])
+    else:
+        rawc['yaw_damping']=rec['yaw_damping_weight']*g*jp.exp(-(debt/rec['yaw_damping_heading_scale_rad'])**2)*huber((yaw_rate-rc)/rec['yaw_scale_rad_s'])
     if spec.get('preference_v5'):
         from .direct_command_policy import q_ratio
         if cc is None:

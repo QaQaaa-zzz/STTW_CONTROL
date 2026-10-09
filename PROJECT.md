@@ -1046,3 +1046,21 @@ Plan (brainstorming / writing-plans / TDD; user delegates implementation and aut
 - [x] Parameterize upper training single-alpha grouping without changing historical defaults; keep separate model/checkpoint/optimizer identities.
 - [x] Short8x16x2 fresh engineering checks; validate lower reference-centered control, ESO once, raw reward/reference, registry hashes.
 - [x] Register/launch bounded4-group queue and completion review, verify current reward in TensorBoard, commit after launch.
+
+## R196 Preference V5.1 strong-primary experiment (2026-10-09)
+
+User-authorized successor to V5, based on published implementation `6a264f7`. The
+frozen R196 lower_alpha1 controller, ECBC/ESO, governed-centered lower interface,
+physics, authority, upper345/critic346 network and action mapping remain fixed. V5.1
+adds the endpoint-selected actual primary-excess cost (weight40, cap400), replaces
+`yaw_damping` with reward-only signed `yaw_recovery` (cap20), and trains from the
+first batch on one16s distribution containing20% virtual initial-heading-error resets.
+Physical reset state is unchanged and the lower initializes from actual pose; evaluation
+uses zero initial heading offset. Failure bound is the2080 sum of component caps and
+there is no total-cost clip.
+
+The attachment math and focused production checks pass; old V5 reward/task/PPO checks
+remain passing. A separate8env x16step x2update engineering run completed with fresh
+Actor/Critic/Adam/std and finite optimizer metrics. Formal endpoints are to be newly
+initialized, seed87,512x128, max100 updates, checks at25 and100, with no automatic
+extension. Control benefit remains unverified until the declared physical evaluations.

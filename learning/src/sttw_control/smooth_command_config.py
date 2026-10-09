@@ -2,7 +2,9 @@
 from pathlib import Path
 import json
 
-def resolve(alpha, *, fresh=False, train_wall=1800, total_wall=5400, preference_v5=False, stage=1):
+def resolve(alpha, *, fresh=False, train_wall=1800, total_wall=5400, preference_v5=False, preference_v51=False, stage=1):
+    if preference_v51:
+        return resolve_preference_v51(alpha)
     if preference_v5:
         return resolve_preference(alpha, stage=stage)
     root=Path(__file__).resolve().parents[3]
@@ -117,4 +119,70 @@ def resolve_preference(alpha, stage=1):
     s['budget'].update(default_policy_transitions=v['training']['total_policy_transitions_two_endpoints'],
                        default_control_transitions_upper=v['training']['total_control_ticks_two_endpoints'],
                        max_updates_per_endpoint=120, no_extra_wall_cutoff=True)
+    return s
+
+
+def resolve_preference_v51(alpha):
+    """Apply the supplied V5.1 endpoint overlay without changing V5."""
+    from copy import deepcopy
+    if alpha not in (0, 1):
+        raise ValueError("V5.1 requires endpoint alpha 0/1")
+    alpha = int(alpha)
+    s = resolve_preference(alpha, stage=2)
+    root = Path(__file__).resolve().parents[3]
+    overlay = json.loads((root / f'docs/preference_v51/attachment/STTW_V5_1_alpha{alpha}.json').read_text())
+    assert overlay['run']['upper_alpha'] == alpha
+    assert overlay['source_commit'] == '6a264f77468cc4090f8e79919027b333740e5dfa'
+    s['priority_recovery_v51'] = True
+    s['preference_v51'] = overlay
+    s['preference_v5_stage'] = None
+    s['training_stage'] = 51
+    s['initialization_mode'] = 'scratch'
+    s['episode_duration_s'] = float(overlay['run']['episode_seconds'])
+
+    change = overlay['reward_changes']
+    r = s['reward'] = deepcopy(s['reward'])
+    primary = change['primary_excess']
+    r['primary_excess'] = dict(
+        weight=primary['weight'],
+        alpha0_steer_tolerance_rad=primary['alpha0_actual_steer_tolerance_rad'],
+        alpha0_steer_scale_rad=primary['alpha0_error_scale_rad'],
+        alpha1_speed_tolerance_m_s=primary['alpha1_actual_speed_tolerance_m_s'],
+        alpha1_speed_scale_m_s=primary['alpha1_error_scale_m_s'])
+    yaw = change['replace_yaw_damping']
+    r['recovery'] = deepcopy(r['recovery'])
+    for key in ('yaw_damping_weight', 'yaw_damping_heading_scale_rad'):
+        r['recovery'].pop(key, None)
+    r['recovery'].update(yaw_recovery_weight=yaw['weight'], yaw_debt_gain_per_s=yaw['debt_gain_per_s'],
+                         yaw_debt_rate_limit_rad_s=yaw['debt_rate_limit_rad_s'], yaw_scale_rad_s=yaw['error_scale_rad_s'])
+    caps = r['independent_component_caps'] = deepcopy(r['independent_component_caps'])
+    assert caps.pop('yaw_damping') == yaw['cap']
+    caps['yaw_recovery'] = yaw['cap']
+    caps['primary_excess'] = primary['cap']
+    r['failure_absorbing_cost_rate'] = change['failure_cost_rate_bound']
+    assert sum(caps.values()) == r['failure_absorbing_cost_rate'] == 2080.
+
+    p = s['ppo']; vp = overlay['ppo']
+    p.update(seed=vp['seed'], num_envs=vp['num_envs'], rollout_policy_steps=vp['rollout_policy_steps'],
+             epochs=vp['epochs'], minibatches=vp['minibatches'], minibatch_size=vp['minibatch_size'],
+             actor_learning_rate=vp['actor_lr'], critic_learning_rate=vp['critic_lr'], gamma=vp['gamma'],
+             gae_lambda=vp['gae_lambda'], clip_ratio=vp['clip_ratio'], value_loss_coefficient=vp['value_coef'],
+             entropy_coefficient=vp['entropy_coef'], adam_betas=vp['adam_betas'], adam_epsilon=vp['adam_eps'],
+             max_grad_norm_actor=vp['max_grad_actor'], max_grad_norm_critic=vp['max_grad_critic'],
+             initial_latent_std=vp['initial_latent_std'], latent_std_min=vp['latent_std_min'],
+             latent_std_max=vp['latent_std_max'], target_mean_kl_after_epoch=vp['soft_kl'],
+             hard_stop_mean_kl=vp['hard_kl'], actor_lr_floor=vp['actor_lr_floor'],
+             hard_reject_consecutive_stop=vp['consecutive_hard_reject_stop'], fresh_value_only_rollouts=0,
+             default_updates=overlay['run']['policy_updates'], policy_updates_per_endpoint=overlay['run']['policy_updates'],
+             stage_additional_updates=overlay['run']['policy_updates'], validation_updates=overlay['run']['validation_updates'],
+             future_total_updates_only_after_user_approval=overlay['run']['policy_updates'])
+    family = overlay['training_families']; c = s['commands']
+    c.update(episode_seconds=16., random_seed=vp['seed'], nominal_fraction=family['nominal_probability'],
+             conflict_fraction=family['conflict_probability'], random_fraction=family['random_probability'],
+             heading_recovery_start_fraction=family['heading_recovery_start_probability'])
+    c['heading_recovery_start'] = deepcopy(family['recovery_start'])
+    s['budget'].update(wall_limits_enabled=False,
+                       default_policy_transitions=overlay['budget']['policy_transitions_both_endpoints'],
+                       default_control_transitions_upper=overlay['budget']['control_ticks_both_upper_bound'],
+                       max_updates_per_endpoint=overlay['run']['policy_updates'], no_extra_wall_cutoff=True)
     return s

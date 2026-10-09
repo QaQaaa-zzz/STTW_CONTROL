@@ -1,0 +1,177 @@
+{
+  "schema": "sttw_v5_1_strong_primary_overlay",
+  "source_commit": "6a264f77468cc4090f8e79919027b333740e5dfa",
+  "base_config": "docs/evidence/r196_preference_v5_20261009/config/alpha0_stage2.json",
+  "instructions_file": "STTW_V5_1_Codex.md",
+  "run": {
+    "upper_alpha": 0,
+    "independent_endpoint": true,
+    "initialization": "fresh_upper_actor_critic_optimizer_std",
+    "lower_alias": "STTW_R196_ALPHA1",
+    "lower_alpha": 1,
+    "freeze_lower": true,
+    "retain_lower_reference_centered": true,
+    "stage1_resume": false,
+    "episode_seconds": 16,
+    "policy_updates": 100,
+    "validation_updates": [
+      25,
+      100
+    ],
+    "no_auto_extension": true,
+    "additional_wall_cutoff": null
+  },
+  "network": {
+    "actor_input_dim": 345,
+    "critic_input_dim": 346,
+    "hidden_sizes": [
+      128,
+      128,
+      64
+    ],
+    "output_dim": 2,
+    "history_frames": 16,
+    "activation": "elu",
+    "retain_action_mapping_and_slew": true,
+    "new_analytic_action_controller": false
+  },
+  "reward_changes": {
+    "primary_excess": {
+      "weight": 40.0,
+      "gate": "chi*(1-g)",
+      "alpha0_actual_steer_tolerance_rad": 0.03,
+      "alpha0_error_scale_rad": 0.05,
+      "alpha1_actual_speed_tolerance_m_s": 0.05,
+      "alpha1_error_scale_m_s": 0.1,
+      "huber": "z*z when abs(z)<=1 else 2*abs(z)-1",
+      "cap": 400.0,
+      "append_to_existing_actual_costs": true
+    },
+    "replace_yaw_damping": {
+      "new_key": "yaw_recovery",
+      "weight": 2.0,
+      "gate": "g",
+      "debt_gain_per_s": 0.8,
+      "debt_rate_limit_rad_s": 0.4,
+      "error_scale_rad_s": 0.2,
+      "heading_debt_sign": "reference_minus_actual",
+      "measured_yaw_rate": "world_unwrapped_difference",
+      "target": "raw_yaw_rate+clip(0.8*e_heading,-0.4,0.4)",
+      "in_reward_only": true,
+      "cap": 20.0
+    },
+    "retain_heading_magnitude_weight": 6.0,
+    "retain_v5_other_costs": true,
+    "global_cost_cap": null,
+    "failure_cost_rate_bound": 2080.0,
+    "failure_extra": 5.0,
+    "reward_scale": 0.1
+  },
+  "training_families": {
+    "nominal_probability": 0.3,
+    "conflict_probability": 0.4,
+    "random_probability": 0.1,
+    "heading_recovery_start_probability": 0.2,
+    "retain_v5_stage2_command_distributions": true,
+    "recovery_start": {
+      "initial_actual_state": "unchanged_complete_prepared_snapshot",
+      "virtual_reference_xy": "actual_xy",
+      "virtual_reference_yaw": "actual_yaw+e0",
+      "raw_speed": "prepared_snapshot_speed",
+      "raw_steer_rad": 0.0,
+      "sign_positive_probability": 0.5,
+      "small_magnitude_probability": 0.5,
+      "small_magnitude_rad": [
+        0.03,
+        0.15
+      ],
+      "large_magnitude_rad": [
+        0.15,
+        1.0
+      ],
+      "settle_clock_initial_s": 0.0,
+      "lower_reference_initialized_at_actual_pose": true,
+      "eval_e0_rad": 0.0,
+      "reanchor_during_episode": false
+    }
+  },
+  "ppo": {
+    "seed": 87,
+    "num_envs": 512,
+    "rollout_policy_steps": 128,
+    "epochs": 4,
+    "minibatches": 4,
+    "minibatch_size": 16384,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "clip_ratio": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.001,
+    "adam_betas": [
+      0.9,
+      0.999
+    ],
+    "adam_eps": 1e-05,
+    "max_grad_actor": 1.0,
+    "max_grad_critic": 1.0,
+    "initial_latent_std": [
+      0.3,
+      0.1
+    ],
+    "latent_std_min": [
+      0.08,
+      0.03
+    ],
+    "latent_std_max": [
+      0.4,
+      0.2
+    ],
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "actor_lr_floor": 1e-05,
+    "consecutive_hard_reject_stop": 3,
+    "retain_v5_temporal_regularizer": true
+  },
+  "budget": {
+    "policy_transitions_per_endpoint": 6553600,
+    "policy_transitions_both_endpoints": 13107200,
+    "control_ticks_both_upper_bound": 52428800,
+    "full_grid_search": false
+  },
+  "evaluation": {
+    "reuse_fixed_six_protocol": true,
+    "stage25_cases": [
+      "straight_hold",
+      "fast_turn"
+    ],
+    "stage100_cases": [
+      "straight_hold",
+      "speed_changes",
+      "gentle_positive",
+      "gentle_negative",
+      "steer_reversal",
+      "fast_turn"
+    ],
+    "fast_turn_seconds": [
+      10,
+      16
+    ],
+    "fixed_raw_input_and_initial_snapshot": true,
+    "stable_conflict_window_s": [
+      2,
+      4
+    ],
+    "alpha0_steer_rmse_max_rad": 0.05,
+    "alpha1_speed_rmse_max_m_s": 0.08,
+    "roll_peak_limit_with_numeric_tolerance_rad": 0.302,
+    "final_hold_s": 0.5,
+    "final_tolerances": {
+      "speed_m_s": 0.1,
+      "steer_rad": 0.04,
+      "heading_rad": 0.05
+    },
+    "position_goal_added": false
+  }
+}

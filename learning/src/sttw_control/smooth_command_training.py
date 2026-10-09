@@ -9,19 +9,20 @@ from .smooth_command_config import resolve
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,smoke=False,preference_stage2_parent=None):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None):
         if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
             raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
-        if preference_v5 and not preference_stage2_parent and (not fresh or resume_parent):
+        if (preference_v5 or preference_v51) and not preference_stage2_parent and (not fresh or resume_parent):
             raise ValueError('V5 Stage1 requires fresh independent uppers')
-        self.preference_v5=preference_v5;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
-        self.training_stage=2 if self.preference_stage2_parent else 1;self.smoke=smoke
+        self.preference_v51=preference_v51
+        self.preference_v5=preference_v5 or preference_v51;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
+        self.training_stage=51 if preference_v51 else 2 if self.preference_stage2_parent else 1;self.smoke=smoke
         self.n=8 if smoke else 512;self.steps=16 if smoke else 128
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
         self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
         def configured(alpha):
-            spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall,preference_v5=preference_v5,stage=self.training_stage)
-            if preference_v5:
+            spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall,preference_v5=preference_v5,preference_v51=preference_v51,stage=self.training_stage)
+            if preference_v5 or preference_v51:
                 spec['prepared_high_speed_indices']=getattr(self,'high_speed_indices',[5,6,7])
                 if smoke:spec['ppo'].update(num_envs=8,rollout_policy_steps=16,minibatch_size=32)
                 return spec
@@ -89,9 +90,11 @@ class SmoothCampaign(Campaign):
             if self.preference_v5:write(self.out/f'alpha{a}/frozen_config_stage{self.training_stage}.json',self.resolve(a))
         if self.preference_v5:
             manifest=json.loads((self.out/'manifest.json').read_text())
-            semantics='Stage2 user override after failed Stage1 gate; resume cumulative40 and stop at120; no value warmup' if self.preference_stage2_parent else 'Stage1 max40 each; only paired gate pass permits Stage2 cumulative120; no value warmup'
+            semantics=('V5.1 scratch 16-second mixed task from first batch; stop at100; no value warmup' if self.preference_v51 else
+                       'Stage2 user override after failed Stage1 gate; resume cumulative40 and stop at120; no value warmup' if self.preference_stage2_parent else
+                       'Stage1 max40 each; only paired gate pass permits Stage2 cumulative120; no value warmup')
             manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics=semantics,prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero,
-                            parent_run=None if not self.preference_stage2_parent else str(self.preference_stage2_parent),stage1_gate_passed=None if not self.preference_stage2_parent else False,user_override_stage2=bool(self.preference_stage2_parent))
+                            parent_run=None if not self.preference_stage2_parent else str(self.preference_stage2_parent),stage1_gate_passed=None if not self.preference_stage2_parent else False,user_override_stage2=bool(self.preference_stage2_parent),priority_recovery_v51=self.preference_v51)
             write(self.out/'manifest.json',manifest)
         self.states,self.advance,self.observe=self.setup_batch(self.n)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
@@ -209,7 +212,7 @@ class SmoothCampaign(Campaign):
         estimate=ep['duration']*1.1
         if self.budget.remaining(stage)<=max(1.,estimate):ep['stopped']='predicted_training_budget';return False
         self._status(stage=stage,phase='value_only' if warmup else 'PPO',current_alpha=alpha,current_batch=index)
-        sums=np.zeros((4,14+2*len(self.component_names)));rewards=[];fails=ends=0;start=time.monotonic();capcounts={k:0 for k in self.component_names};capden=0;diagnostics=[]
+        sums=np.zeros((4,14+2*len(self.component_names)));family_sums=np.zeros((4,14+2*len(self.component_names)));rewards=[];fails=ends=0;start=time.monotonic();capcounts={k:0 for k in self.component_names};capden=0;diagnostics=[]
         snapshot=algo._snapshot()
         try:
             with self.budget.measure(stage,f"{'critic_only' if warmup else 'policy'} batch {index}",estimate=estimate):
@@ -217,6 +220,7 @@ class SmoothCampaign(Campaign):
                 with torch.no_grad():
                     for t in range(self.steps):
                         obs=ep['obs']
+                        current_families=np.asarray(ep['state'].family)
                         if not torch.isfinite(obs['policy']).all() or not torch.isfinite(obs['critic']).all():raise RuntimeError('nonfinite observation')
                         z=algo.act(obs)
                         if not torch.isfinite(z).all():raise RuntimeError('nonfinite latent')
@@ -226,7 +230,9 @@ class SmoothCampaign(Campaign):
                         ep['state']=state;ep['obs']=self.td(a,c)
                         algo.process_env_step(ep['obs'],torch.utils.dlpack.from_dlpack(r),torch.utils.dlpack.from_dlpack(d),{})
                         if self.preference_v5:self.record_episode_statistics(alpha,np.asarray(r),np.asarray(d),np.asarray(failed),np.asarray(stat),jax.device_get(diag))
-                        sums+=np.asarray(stat).sum(axis=0);rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
+                        stat_np=np.asarray(stat);sums+=stat_np.sum(axis=0)
+                        for family_id in range(4):family_sums[family_id]+=stat_np[current_families==family_id,0].sum(axis=0)
+                        rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
                         if t==0 or bool(jp.any(d)):self.case_manifest(state,f'alpha{alpha}')
                         if warmup and index==1:diagnostics.append(jax.device_get({k:v for k,v in diag.items() if not k.startswith('all_')}))
                         for k,v in diag['all_component_cap_counts'].items():capcounts[k]+=int(v)
@@ -247,11 +253,12 @@ class SmoothCampaign(Campaign):
                         algo.hard_kl_stop=False
                     if metrics['nonfinite_stop']:ep['stopped']='nonfinite_optimizer'
                     if ep['hard_rejects']>=3:ep['stopped']='three_consecutive_hard_rejected_batches'
-                groups={}
-                for label,row in zip(['all','ordinary','conflict','recovery'],sums):
+                def summarize(row):
                     count=max(1.,row[0]);n=len(self.component_names)
-                    groups[label]=dict(count=int(row[0]),speed_rmse=float(np.sqrt(row[1]/count)),steer_rmse=float(np.sqrt(row[2]/count)),heading_rmse=float(np.sqrt(row[11]/count)),working_roll_fraction=row[3]/count,any_state_cap_fraction=row[4]/count,motor_clip=row[7]/count,final_clip=row[8]/count,reference_clip=row[9]/count,reference_slew_fraction_diagnostic_only=row[10]/count,mean_offsets=(row[12:14]/count).tolist(),raw_costs=dict(zip(self.component_names,(row[14:14+n]/count).tolist())),effective_costs=dict(zip(self.component_names,(row[14+n:]/count).tolist())))
-                rec=dict(alpha=alpha,phase='value_only' if warmup else 'policy',batch=index,completed_policy_batches=ep['update'],accepted_policy_updates=algo.accepted_policy_updates,mean_step_reward=float(np.mean(rewards)),failed_episodes=fails,ended_episodes=ends,failure_fraction=fails/max(1,ends),optimizer=metrics,explained_variance=explained,groups=groups,component_cap_fraction_all_envs={k:v/max(1,capden) for k,v in capcounts.items()},sample_seconds=sample,total_seconds=time.monotonic()-start)
+                    return dict(count=int(row[0]),speed_rmse=float(np.sqrt(row[1]/count)),steer_rmse=float(np.sqrt(row[2]/count)),heading_rmse=float(np.sqrt(row[11]/count)),working_roll_fraction=row[3]/count,any_state_cap_fraction=row[4]/count,motor_clip=row[7]/count,final_clip=row[8]/count,reference_clip=row[9]/count,reference_slew_fraction_diagnostic_only=row[10]/count,mean_offsets=(row[12:14]/count).tolist(),raw_costs=dict(zip(self.component_names,(row[14:14+n]/count).tolist())),effective_costs=dict(zip(self.component_names,(row[14+n:]/count).tolist())))
+                groups={label:summarize(row) for label,row in zip(['all','ordinary','conflict','recovery'],sums)}
+                families={label:summarize(row) for label,row in zip(['nominal','conflict','random','heading_recovery_start'],family_sums)}
+                rec=dict(alpha=alpha,phase='value_only' if warmup else 'policy',batch=index,completed_policy_batches=ep['update'],accepted_policy_updates=algo.accepted_policy_updates,mean_step_reward=float(np.mean(rewards)),failed_episodes=fails,ended_episodes=ends,failure_fraction=fails/max(1,ends),optimizer=metrics,explained_variance=explained,groups=groups,families=families,component_cap_fraction_all_envs={k:v/max(1,capden) for k,v in capcounts.items()},sample_seconds=sample,total_seconds=time.monotonic()-start)
                 if self.preference_v5:
                     rec.update(training_stage=self.training_stage,complete_episode_statistics=ep.pop('completed_episode_batch',[]),negative_request_coverage=self.coverage_summary(ep))
                 rec=clean_numbers(rec)
@@ -330,7 +337,10 @@ class SmoothCampaign(Campaign):
             cases=[]
             for name,r in cfg['stage1_pair_cases'].items():
                 rows=np.zeros((16,3));rows[:,0]=99.;rows[:len(r)]=r;cases.append((name,rows,5))
-        else:cases=[(name,rows,16 if name=='fast_turn' else 10) for name,rows in schedules(load_protocol())]
+        else:
+            cases=[(name,rows,16 if name=='fast_turn' else 10) for name,rows in schedules(load_protocol())]
+            if self.preference_v51 and update==25:
+                cases=[row for row in cases if row[0] in ('straight_hold','fast_turn')]
         reset=self.compile(f'V5 stage{self.training_stage} paired reset',reset,jp.asarray(cases[0][1],jp.float32))
         states=reset(jp.asarray(cases[0][1],jp.float32))
         def chunk(states,params):
@@ -547,5 +557,37 @@ def run_preference_stage2(output,parent):
         c.notify_once('pipeline_complete','STTW V5流水线结束','Stage2声明120更新及任务评价完成；不自动追加')
     except BaseException as exc:
         c._status(state='error',reason=str(exc),stage1_gate_passed=False,user_override_stage2=True);notify('STTW V5错误停止',str(exc));raise
+    finally:
+        for ep in c.endpoints.values():ep['writer'].close()
+
+
+def run_preference_v51(output,smoke=False):
+    """Execute the supplied fresh V5.1 16-second, 100-update endpoint campaign."""
+    c=SmoothCampaign(output,fresh=True,preference_v51=True,smoke=smoke,unlimited_wall=True)
+    try:
+        c.initialize()
+        for a in ([0] if smoke else [0,1]):c.create_endpoint(a)
+        if smoke:
+            for _ in range(2):
+                if not c.batch(0):raise RuntimeError('V5.1 finite engineering run stopped')
+            c.save(0,c.endpoints[0]['update'])
+            write(c.out/'smoke_result.json',dict(passed=True,environments=8,policy_steps=16,updates=2,
+                  policy_transitions=256,control_ticks=1024,scope='engineering only; official learners are initialized separately'))
+            c._status(state='complete',stage='engineering_check_complete');return
+        c._status(state='running',stage='v51_training',training_stage=51)
+        for update in [25,100]:
+            for a in [0,1]:
+                ep=c.endpoints[a]
+                while ep['update']<update:
+                    if not c.batch(a):raise RuntimeError(f'alpha{a} stopped: '+str(ep['stopped']))
+                c.save(a,ep['update']);c.notify_once(f'training_{a}_{update}','STTW V5.1训练阶段结束',f'alpha{a} {update}/100，等待固定协议评价')
+            result=c.evaluate_preference(update)
+            audits=[payload[f'alpha{endpoint}']['reward_audit'] for payload in result.values() for endpoint in (0,1)]
+            failed=[audit for audit in audits if audit.get('passed') is not True]
+            if failed:raise RuntimeError(f'V5.1 independent reward reconstruction failed at update{update}: {failed}')
+        c._status(state='complete',stage='saved_and_stopped',training_stage=51,qualified=None)
+        c.notify_once('pipeline_complete','STTW V5.1流水线结束','声明100更新及评价完成；不自动追加')
+    except BaseException as exc:
+        c._status(state='error',reason=str(exc),training_stage=51);notify('STTW V5.1错误停止',str(exc));raise
     finally:
         for ep in c.endpoints.values():ep['writer'].close()

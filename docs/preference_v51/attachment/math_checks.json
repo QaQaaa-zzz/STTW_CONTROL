@@ -1,0 +1,73 @@
+{
+  "checks_passed": true,
+  "vehicle_simulation_run": false,
+  "speed_examples": [
+    {
+      "abs_speed_error": 0.03,
+      "old_primary_cost": 0.72,
+      "added_cost": 0.0
+    },
+    {
+      "abs_speed_error": 0.05,
+      "old_primary_cost": 2.0,
+      "added_cost": 0.0
+    },
+    {
+      "abs_speed_error": 0.1,
+      "old_primary_cost": 8.0,
+      "added_cost": 10.0
+    },
+    {
+      "abs_speed_error": 0.15,
+      "old_primary_cost": 15.999999999999996,
+      "added_cost": 39.99999999999999
+    },
+    {
+      "abs_speed_error": 0.2,
+      "old_primary_cost": 24.0,
+      "added_cost": 80.00000000000001
+    },
+    {
+      "abs_speed_error": 0.3,
+      "old_primary_cost": 39.99999999999999,
+      "added_cost": 160.0
+    }
+  ],
+  "steer_examples": [
+    {
+      "abs_steer_error": 0.02,
+      "old_primary_cost": 1.2799999999999998,
+      "added_cost": 0.0
+    },
+    {
+      "abs_steer_error": 0.03,
+      "old_primary_cost": 2.88,
+      "added_cost": 0.0
+    },
+    {
+      "abs_steer_error": 0.05,
+      "old_primary_cost": 8.0,
+      "added_cost": 6.400000000000002
+    },
+    {
+      "abs_steer_error": 0.08,
+      "old_primary_cost": 17.599999999999998,
+      "added_cost": 40.0
+    },
+    {
+      "abs_steer_error": 0.1,
+      "old_primary_cost": 24.0,
+      "added_cost": 72.00000000000001
+    },
+    {
+      "abs_steer_error": 0.15,
+      "old_primary_cost": 39.99999999999999,
+      "added_cost": 152.0
+    }
+  ],
+  "recovery_cost_stationary": 6.0,
+  "recovery_cost_wrong_direction": 14.0,
+  "cost_rate_bound": 2080.0,
+  "total_policy_transitions_two_endpoints": 13107200,
+  "total_control_ticks_upper_bound": 52428800
+}

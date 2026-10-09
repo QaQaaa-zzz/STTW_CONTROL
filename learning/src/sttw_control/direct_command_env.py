@@ -6,7 +6,7 @@ from .teleop_env import TeleopEnv
 from .controller import _system
 from .direct_command_policy import (correction_tick,raw_context,initial_history,make_frame,push_history,assemble_observation)
 from .direct_command_reward import interval_cost,failure_reward
-from .direct_command_scenarios import schedule,publish_command
+from .direct_command_scenarios import schedule,publish_command,heading_recovery_initial_error
 
 def task_horizon_steps(spec):
     return round(spec.get('episode_duration_s',16.)/spec['plant']['policy_dt_s'])
@@ -37,6 +37,7 @@ class DirectState:
     offset_acceleration_valid: object=False
     lower: object=None
     has_turn: object=False
+    initial_heading_error: object=0.
 
 class DirectCommandEnv:
     def __init__(self,spec):
@@ -53,14 +54,18 @@ class DirectCommandEnv:
     def reset(self,snapshot,env_id,episode_index,alpha,rows=None,slew=None):
         raw=jp.stack((snapshot.raw[0],jp.asarray(0.)))
         sampled,family,drawn_slew=schedule(env_id,episode_index,raw[0],self.spec)
+        external_schedule=rows is not None
         rows=sampled if rows is None else rows;slew=drawn_slew if slew is None else slew
+        family=jp.asarray(-1,jp.int32) if external_schedule else family
         pose=self.physics.helpers.pose(snapshot.data)
-        p=snapshot.replace(reference_pose=pose,yaw_unwrapped=pose[2],yaw_wrapped=pose[2],raw=raw,
+        e0=jp.asarray(0.) if external_schedule else heading_recovery_initial_error(env_id,episode_index,self.spec,family)
+        reference_pose=pose.at[2].add(e0)
+        p=snapshot.replace(reference_pose=reference_pose,yaw_unwrapped=pose[2],yaw_wrapped=pose[2],raw=raw,
             governor=snapshot.governor.replace(current_reference=raw,last_goal=raw))
         issued,rates,_=publish_command(raw,rows,jp.int32(0),slew,self.cc.dt)
         state=DirectState(p.replace(raw=issued),initial_history(self.spec),jp.zeros(2),jp.asarray(0.),rates,
             jp.asarray(0.),jp.zeros(2),jp.asarray(env_id,jp.int32),jp.asarray(episode_index,jp.int32),rows,family,slew,
-            jp.asarray(alpha),jp.int32(0),~((alpha==0)|(alpha==1)))
+            jp.asarray(alpha),jp.int32(0),~((alpha==0)|(alpha==1)),initial_heading_error=e0)
         state=state.replace(previous_offset_rate=jp.zeros(2),offset_acceleration_valid=jp.bool_(False))
         if self.lower is not None:state=state.replace(lower=self.lower.initial(pose))
         return self.record_frame(state)
@@ -112,6 +117,7 @@ class DirectCommandEnv:
         next_rates=jp.where(p.failed,s.command_rates,next_rates)
         log.update(target=target,raw_rates=s.command_rates,offsets=offsets,chi=chi,g=g,settle_clock=s.settle_clock,
             eligible=eligible,recovery_phase=s.has_turn & (g>0),alpha=s.alpha,family=s.family,episode_index=s.episode_index,env_id=s.env_id,
+            initial_heading_error=s.initial_heading_error,
             active_tick=jp.bool_(True),time=s.tick*self.cc.dt,yaw_rate=yaw_rate,
             latent_z=z,raw_cost=costs['raw_cost'],effective_cost=costs['effective_cost'],
             cap_fraction=costs['cap_fraction'],tick_reward=costs['reward'],policy_fault=s.fault,

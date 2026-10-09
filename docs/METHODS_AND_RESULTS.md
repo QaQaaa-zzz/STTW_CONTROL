@@ -881,3 +881,22 @@ The remote-review bundle is `docs/evidence/r196_preference_v5_20261009/README.md
 Stage1 update20/40 as well as Stage2 update80/120, machine-readable summary tables,
 compressed5ms traces, source/config identities, key control/XY/reward figures, and a
 static TensorBoard plot plus the complete exported scalar CSV.
+
+## Preference V5.1: targeted primary preservation and signed heading recovery (2026-10-09)
+
+Status: implementation and bounded engineering validation complete; formal physical
+result pending. Source parent is `6a264f7`; V5 results remain the comparison and are
+not overwritten. The only reward changes are a fixed-alpha actual primary-excess term
+and replacement of near-zero `yaw_damping` by signed `yaw_recovery`. A new20% training
+family offsets only the upper virtual reference yaw at reset. Official upper learners
+start from scratch on the complete16s task; lower R196, ECBC/ESO, physics, action mapping,
+network and evaluation inputs are unchanged.
+
+Attachment reference values match production within float32 tolerance, including
+primary-excess40 at alpha0 steer error.08rad and alpha1 speed error.15m/s, yaw-recovery
+costs0/6/14 for correct/stationary/wrong yaw rates at heading debt.8rad, and failure
+bound2080. A forced heading-family reset preserved physical qpos/qvel, initialized the
+lower from actual pose, changed only upper reference yaw, and evaluation reset restored
+e0=0. The separate8x16x2 run completed two accepted updates without physical/policy
+failure or nonfinite optimizer state. These checks establish implementation behavior,
+not task success, recovery, or safety.

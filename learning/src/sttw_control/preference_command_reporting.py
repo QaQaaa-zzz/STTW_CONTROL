@@ -5,6 +5,7 @@ import json
 import numpy as np
 
 ATTACHMENT = Path(__file__).resolve().parents[3] / 'docs/preference_v5/attachment'
+ATTACHMENT51 = Path(__file__).resolve().parents[3] / 'docs/preference_v51/attachment'
 DT = .005
 
 def _write(path, value):
@@ -155,6 +156,10 @@ def reward_audit(d,alpha,root,horizon,include_reconstruction=False):
     if not p.exists():return {'passed':False,'missing_config':str(p)}
     cfg=json.loads(p.read_text());caps=cfg['reward'].get('independent_component_caps',cfg['reward'].get('caps'))
     if caps is None:return {'passed':False,'missing_caps':True}
+    ref51=None
+    if cfg.get('priority_recovery_v51'):
+        module51=importlib.util.spec_from_file_location('v51_reference',ATTACHMENT51/'reward_delta_reference.py')
+        ref51=importlib.util.module_from_spec(module51);sys.modules[module51.name]=ref51;module51.loader.exec_module(ref51)
     reconstructed={k:np.zeros(len(d['time'])) for k in caps};reconstructed['failure']=np.zeros(len(d['time']))
     errors={};efferrors={};maxreward=0.;previous=np.zeros(2);prior_rate=np.zeros(2);valid=False
     for start in range(0,len(d['time']),4):
@@ -162,7 +167,17 @@ def reward_audit(d,alpha,root,horizon,include_reconstruction=False):
         offset=d['governed'][last]-d['limited_command'][last];rate=(offset-previous)/.02;acc=(rate-prior_rate)/.02 if valid else np.zeros(2)
         total=0.
         for i in range(start,stop):
-            costs=ref.costs(alpha,d['limited_command'][i],d['governed'][i],d['actual_forward_speed'][i],d['actual_delta'][i],d['phi'][i],d['phi_dot'][i],d['e_psi_unwrapped'][i],d['yaw_rate'][i],d['limited_command'][i,0]*np.cos(np.deg2rad(cfg['reference']['caster_deg_expected']))*np.tan(d['limited_command'][i,1])/cfg['reference']['wheelbase_m_expected'],d['chi'][i],d['g'][i])
+            raw_yaw_rate=d['limited_command'][i,0]*np.cos(np.deg2rad(cfg['reference']['caster_deg_expected']))*np.tan(d['limited_command'][i,1])/cfg['reference']['wheelbase_m_expected']
+            costs=ref.costs(alpha,d['limited_command'][i],d['governed'][i],d['actual_forward_speed'][i],d['actual_delta'][i],d['phi'][i],d['phi_dot'][i],d['e_psi_unwrapped'][i],d['yaw_rate'][i],raw_yaw_rate,d['chi'][i],d['g'][i])
+            if cfg.get('priority_recovery_v51'):
+                delta=ref51.reward_changes(alpha=alpha,
+                    ev=float(d['actual_forward_speed'][i]-d['limited_command'][i,0]),
+                    ed=float(d['actual_delta'][i]-d['limited_command'][i,1]),
+                    e_heading=float(d['e_psi_unwrapped'][i]),yaw_rate=float(d['yaw_rate'][i]),
+                    raw_yaw_rate=float(raw_yaw_rate),chi=float(d['chi'][i]),g=float(d['g'][i]))
+                costs.pop('yaw_damping')
+                costs['primary_excess']=delta.primary_excess_raw
+                costs['yaw_recovery']=delta.yaw_recovery_raw
             rho=.2+.8*(1-d['chi'][last])*np.exp(-(d['e_psi_unwrapped'][last]/.1)**2)
             costs['upper_rate']=.03*rho*np.sum((rate/np.array([1.,.4]))**2)
             costs['upper_acceleration']=.01*rho*np.sum((acc/10)**2)
@@ -174,7 +189,12 @@ def reward_audit(d,alpha,root,horizon,include_reconstruction=False):
                 reconstructed[k][i]=-.1*DT*effective
                 total-=.1*DT*effective
         if np.any(d['physical_failure'][start:stop]):
-            total=ref.failure_reward(round(horizon/.02)-round(float(d['time'][start])/.02))
+            remaining=round(horizon/.02)-round(float(d['time'][start])/.02)
+            if cfg.get('priority_recovery_v51'):
+                gamma=cfg['ppo']['gamma'];bound=cfg['reward']['failure_absorbing_cost_rate']
+                total=-cfg['reward']['failure_extra_penalty']-cfg['reward']['scale']*cfg['plant']['policy_dt_s']*bound*(1-gamma**remaining)/(1-gamma)
+            else:
+                total=ref.failure_reward(remaining)
             for values in reconstructed.values():values[start:stop]=0
             reconstructed['failure'][stop-1]=total
         maxreward=max(maxreward,abs(total-float(np.sum(d['scored_tick_reward'][start:stop]))))
@@ -216,9 +236,32 @@ def report_stage2(root,update):
     for case in sorted(out.iterdir()):
         if not case.is_dir() or not (case/'alpha0.npz').exists():continue
         traces={k:_load(case/(k+'.npz')) for k in ['alpha0','alpha1','B0'] if (case/(k+'.npz')).exists()}
-        _plots(traces,out,case.name,update,10,(root,16));result[case.name]={k:{'main10':physical(d,10),'chain':chain_audit(d)} for k,d in traces.items()}
+        _plots(traces,out,case.name,update,10,(root,16));result[case.name]={k:{'main10':physical(d,10),'chain':chain_audit(d),'v51_contract':_v51_contract_metrics(d,10)} for k,d in traces.items()}
         for a in [0,1]:result[case.name][f'alpha{a}']['reward_audit']=reward_audit(traces[f'alpha{a}'],a,root,16)
         if case.name=='fast_turn' and all(len(d['time'])>=3200 for d in traces.values()):
             _plots(traces,out,case.name,update,16,(root,16))
-            for k,d in traces.items():result[case.name][k]['extension16']=physical(d,16)
+            for k,d in traces.items():
+                result[case.name][k]['extension16']=physical(d,16)
+                result[case.name][k]['v51_contract_extension16']=_v51_contract_metrics(d,16)
     _write(out/'stage2_metrics.json',result);return result
+
+
+def _v51_contract_metrics(d,end):
+    """Physical V5.1 acceptance inputs; no reward or survival substitution."""
+    valid=_window(d,0,end);steady=valid&_window(d,2,4);pre=valid&_window(d,.5,1.)
+    ev=d['actual_forward_speed']-d['limited_command'][:,0]
+    ed=d['actual_delta']-d['limited_command'][:,1]
+    pre_speed=float(np.mean(d['actual_forward_speed'][pre])) if pre.any() else None
+    drop=np.zeros(len(valid)) if pre_speed is None else pre_speed-d['actual_forward_speed']
+    rms=lambda x:float(np.sqrt(np.mean(x*x))) if len(x) else None
+    return dict(
+        horizon_s=end, steady_window_s=[2.,4.],
+        steady_speed_rmse_m_s=rms(ev[steady]), steady_steer_rmse_rad=rms(ed[steady]),
+        steady_actual_speed_mean_m_s=float(np.mean(d['actual_forward_speed'][steady])) if steady.any() else None,
+        steady_actual_steer_mean_rad=float(np.mean(d['actual_delta'][steady])) if steady.any() else None,
+        peak_abs_roll_rad=float(np.max(np.abs(d['peak_roll'][valid]))) if valid.any() else None,
+        roll_over_0p302_s=float(np.sum(np.abs(d['peak_roll'][valid])>.302)*DT),
+        preturn_actual_speed_mean_m_s=pre_speed,
+        actual_drop_ge_0p1_longest_s=_longest(valid&(drop>=.1)),
+        actual_drop_ge_0p2_longest_s=_longest(valid&(drop>=.2)),
+        component_integrals_and_caps=mode_costs(d,end))
