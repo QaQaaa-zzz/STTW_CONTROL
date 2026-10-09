@@ -56,3 +56,23 @@ def test_reward_plots_include_totals_and_components(tmp_path):
     _reward_plots({'alpha0':d},tmp_path,'positive',40,5)
     assert (tmp_path/'positive_5s_reward.png').stat().st_size>1000
     assert (tmp_path/'positive_5s_reward_components.png').stat().st_size>1000
+
+
+def test_fast_turn_reports_both_windows_even_after_early_failure(tmp_path,monkeypatch):
+    import sttw_control.preference_command_reporting as reporting
+    import sttw_control.smooth_command_reporting as physical_reporting
+    windows=[]
+    monkeypatch.setattr(reporting,'_plots',lambda traces,out,case,update,end,*args:windows.append(end))
+    monkeypatch.setattr(reporting,'reward_audit',lambda *args:{'passed':True})
+    monkeypatch.setattr(reporting,'chain_audit',lambda d:{})
+    monkeypatch.setattr(reporting,'_v51_contract_metrics',lambda d,end:{'observed_ticks':len(d['time'])})
+    monkeypatch.setattr(physical_reporting,'physical',lambda d,end:{'horizon':end,'observed_ticks':len(d['time']),'failed':bool(d['physical_failure'][-1])})
+    folder=tmp_path/'evaluation100/fast_turn';folder.mkdir(parents=True)
+    for method in ('alpha0','alpha1','B0'):
+        d=trace(60);d['physical_failure'][-1]=True
+        np.savez(folder/f'{method}.npz',**d)
+    result=reporting.report_stage2(tmp_path,100)
+    assert windows==[10,16]
+    for row in result['fast_turn'].values():
+        assert row['main10']['observed_ticks']==row['extension16']['observed_ticks']==60
+        assert row['extension16']['failed']
