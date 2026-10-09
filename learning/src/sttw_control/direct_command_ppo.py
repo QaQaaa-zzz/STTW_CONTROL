@@ -45,8 +45,14 @@ class DirectCommandPPO(PPO):
             {"params": self.actor_parameters, "lr": actor_lr},
             {"params": self.critic_parameters, "lr": critic_lr},
         ], betas=tuple(adam_betas), eps=adam_epsilon, weight_decay=weight_decay)
-        self.std_min = float(std_min)
-        self.std_max = float(std_max)
+        self.std_min = torch.as_tensor(std_min, device=self.policy.log_std.device,
+                                       dtype=self.policy.log_std.dtype).expand_as(self.policy.log_std).clone()
+        self.std_max = torch.as_tensor(std_max, device=self.policy.log_std.device,
+                                       dtype=self.policy.log_std.dtype).expand_as(self.policy.log_std).clone()
+        if (not _finite_tensors(self.std_min, self.std_max)
+                or bool((self.std_min <= 0).any())
+                or bool((self.std_max < self.std_min).any())):
+            raise ValueError("latent std bounds must be finite, positive, and ordered")
         self.hard_kl = float(hard_kl)
         self.actor_grad_limit = float(actor_grad_limit)
         self.critic_grad_limit = float(critic_grad_limit)
@@ -108,18 +114,48 @@ class DirectCommandPPO(PPO):
         return (mean, by_alpha) if self.kl_group_index is not None else (mean, {"all": mean})
 
     def prepare_temporal_pairs(self):
-        o=self.storage.observations['policy']
-        self.temporal_left=o[:-1].reshape(-1,345)
-        self.temporal_right=o[1:].reshape(-1,345)
-        self.temporal_valid=~self.storage.dones[:-1].reshape(-1).bool()
-        self.temporal_denominator=int(self.temporal_valid.sum())
-        cfg=self.temporal_spec['actor_temporal_regularizer']
-        scales=torch.tensor([x['scale'] for x in self.temporal_spec['network']['frame_fields']],device=o.device)
-        def eligible(x):
-            f=x[:,300:320]*scales
-            return ((f[:,10].abs()<=cfg['eligible_raw_speed_rate_m_s2']) & (f[:,11].abs()<=cfg['eligible_raw_steer_rate_rad_s']) & (f[:,0].abs()<cfg['eligible_roll_rad']) & (f[:,1].abs()<cfg['eligible_roll_rate_rad_s']))
-        self.temporal_mask=self.temporal_valid & eligible(self.temporal_left) & eligible(self.temporal_right)
-        self.temporal_coefficient=cfg['coefficient']*min(self.accepted_policy_updates/cfg['ramp_policy_updates'],1.)
+        observations = self.storage.observations['policy']
+        self.temporal_left = observations[:-1].reshape(-1, 345)
+        self.temporal_right = observations[1:].reshape(-1, 345)
+        self.temporal_valid = ~self.storage.dones[:-1].reshape(-1).bool()
+        self.temporal_denominator = int(self.temporal_valid.sum())
+        v5 = self.temporal_spec.get('preference_v5')
+        cfg = (v5['temporal_regularizer'] if v5 else
+               self.temporal_spec['actor_temporal_regularizer'])
+        self.temporal_normalizers = cfg['physical_correction_normalizers']
+        scales = observations.new_tensor([
+            field['scale'] for field in self.temporal_spec['network']['frame_fields']])
+        if v5:
+            context_scales = observations.new_tensor([
+                field['scale'] for field in self.temporal_spec['network']['context_fields']])
+            limits = cfg['mask_both_endpoints']
+
+        def eligible(obs):
+            frame = obs[:, 300:320] * scales
+            if not v5:
+                return ((frame[:, 10].abs() <= cfg['eligible_raw_speed_rate_m_s2'])
+                        & (frame[:, 11].abs() <= cfg['eligible_raw_steer_rate_rad_s'])
+                        & (frame[:, 0].abs() < cfg['eligible_roll_rad'])
+                        & (frame[:, 1].abs() < cfg['eligible_roll_rate_rad_s']))
+            context = obs[:, 336:345] * context_scales
+            return ((context[:, 4] < limits['chi_max'])
+                    & (context[:, 1].abs() < limits['abs_heading_max_rad'])
+                    & ((frame[:, 4] - frame[:, 8]).abs() < limits['abs_speed_error_max_m_s'])
+                    & ((frame[:, 2] - frame[:, 9]).abs() < limits['abs_steer_error_max_rad'])
+                    & (frame[:, 0].abs() < limits['abs_roll_max_rad'])
+                    & (frame[:, 1].abs() < limits['abs_roll_rate_max_rad_s'])
+                    & (frame[:, 10].abs() <= limits['raw_speed_rate_max_m_s2'])
+                    & (frame[:, 11].abs() <= limits['raw_steer_rate_max_rad_s']))
+
+        self.temporal_mask = (self.temporal_valid & eligible(self.temporal_left)
+                              & eligible(self.temporal_right))
+        if v5:
+            start, end = cfg['zero_until_update'], cfg['linear_ramp_end_update']
+            fraction = max(0., min((self.accepted_policy_updates - start) / (end - start), 1.))
+            self.temporal_coefficient = cfg['max_weight'] * fraction
+        else:
+            self.temporal_coefficient = cfg['coefficient'] * min(
+                self.accepted_policy_updates / cfg['ramp_policy_updates'], 1.)
 
     def temporal_loss(self, indices):
         indices=indices[self.temporal_mask[indices]]
@@ -130,7 +166,7 @@ class DirectCommandPPO(PPO):
             z=self.policy.actor(obs).tanh()
             return torch.stack((z[:,0]*torch.where(z[:,0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),z[:,1]*c['steer_scale_rad']),dim=-1)
         d=offset(self.temporal_right[indices])-offset(self.temporal_left[indices])
-        norm=torch.tensor(self.temporal_spec['actor_temporal_regularizer']['physical_correction_normalizers'],device=d.device)
+        norm=d.new_tensor(self.temporal_normalizers)
         return self.temporal_coefficient*(d/norm).square().sum()*self.num_mini_batches/self.temporal_denominator
 
     def value_only_update(self, epochs):
@@ -216,8 +252,7 @@ class DirectCommandPPO(PPO):
                         break
                     self.optimizer.step()
                     with torch.no_grad():
-                        self.policy.log_std.clamp_(math.log(self.std_min),
-                                                   math.log(self.std_max))
+                        self.policy.log_std.clamp_(self.std_min.log(), self.std_max.log())
                     optimizer_tensors = [item for state in self.optimizer.state.values()
                                          for item in state.values() if isinstance(item, torch.Tensor)]
                     if not _finite_tensors(*self.policy.parameters(), *optimizer_tensors):
@@ -314,8 +349,9 @@ def make_algorithm(obs, steps, spec, device):
     minibatches = int(ppo["minibatches"])
     if minibatches <= 0 or steps * obs.batch_size[0] % minibatches:
         raise ValueError("rollout size must divide evenly into minibatches")
-    if len(ppo["initial_latent_std"]) != 2 or ppo["initial_latent_std"][0] != ppo["initial_latent_std"][1]:
-        raise ValueError("RSL fixed Gaussian requires equal initial latent std")
+    if (len(ppo["initial_latent_std"]) != 2
+            or any(not math.isfinite(x) or x <= 0 for x in ppo["initial_latent_std"])):
+        raise ValueError("initial latent std requires two finite positive channels")
     policy = ActorCritic(obs, {"policy": ["policy"], "critic": ["critic"]}, 2,
                          actor_hidden_dims=network["hidden_sizes"],
                          critic_hidden_dims=network["hidden_sizes"],

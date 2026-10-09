@@ -1,0 +1,467 @@
+{
+  "schema": "sttw_r196_preference_v5_proposal",
+  "status": "design_only_not_vehicle_validated",
+  "source": {
+    "repo": "QaQaaa-zzz/STTW_CONTROL",
+    "evidence_commit": "bb714255f1b70ccd8104841912ab04670dfa9a69",
+    "evidence_directory": "docs/evidence/r196_smooth_v4_250_20261008",
+    "local_implementation_commit": "e1a6cc1f5a57b90b780207a69ce5bfa543cc1642",
+    "implementation_was_not_accessible_remotely": true,
+    "base_is_local_implementation_not_reports_branch": true
+  },
+  "lower": {
+    "alias": "STTW_R196_ALPHA1",
+    "frozen": true,
+    "lower_alpha": 1.0,
+    "actor_sha256": "a2e5bf112e0cb986b4ec207fa9f20dcf90f48af6d7855b0abda32bfa13206672",
+    "sidecar_sha256": "efced7cd83cfd8f691821e29cca28ccd4b40e5b5f32b42b9b708ea945bea8a0e",
+    "preserve_existing_reference_centered_semantics": true,
+    "do_not_interrupt_other_runs": true
+  },
+  "architecture": {
+    "actor_input_dim": 345,
+    "critic_input_dim": 346,
+    "actor_hidden": [
+      128,
+      128,
+      64
+    ],
+    "activation": "elu",
+    "output_dim": 2,
+    "history_frames": 16,
+    "history_dt_s": 0.02,
+    "endpoints_independent": true,
+    "alpha_values": [
+      0.0,
+      1.0
+    ],
+    "alpha_constant_within_run": true,
+    "fresh_actor_critic_optimizer": true,
+    "actor_last_layer": "zeros",
+    "critic_remaining_time_feature": "remaining_seconds/16",
+    "no_shared_policy_or_distillation_this_run": true,
+    "run_alpha": 1.0
+  },
+  "timing": {
+    "control_dt_s": 0.005,
+    "policy_dt_s": 0.02,
+    "action_repeat": 4
+  },
+  "action": {
+    "mapping": "existing_tanh_asymmetric_raw_relative_reference_correction",
+    "speed_negative_scale_m_s": 1.0,
+    "speed_positive_scale_m_s": 0.25,
+    "steer_scale_rad": 0.2,
+    "speed_reference_min_m_s": 1.5,
+    "speed_reference_max_m_s": 3.0,
+    "steer_reference_abs_max_rad": 0.35,
+    "correction_speed_decrease_rate_m_s2": 1.0,
+    "correction_speed_increase_rate_m_s2": 0.5,
+    "correction_steer_rate_rad_s": 0.8,
+    "change_limits_or_composition": false,
+    "no_parameter_network_or_analytic_allocator": true
+  },
+  "reward": {
+    "inherit_task_formulas_from_v4": true,
+    "scale": 0.1,
+    "global_cost_cap": null,
+    "normal": {
+      "speed_weight": 8.0,
+      "speed_scale_m_s": 0.1,
+      "speed_deadband_m_s": 0.03,
+      "steer_weight": 8.0,
+      "steer_scale_rad": 0.05,
+      "steer_deadband_rad": 0.003
+    },
+    "alpha0_conflict": {
+      "steer_weight": 8.0,
+      "steer_scale_rad": 0.05,
+      "underspeed_weight": 0.4,
+      "underspeed_scale_m_s": 0.3,
+      "overspeed_tracking_weight": 0.4,
+      "overspeed_tracking_scale_m_s": 0.1,
+      "excess_underspeed_weight": 2.0,
+      "underspeed_soft_band_m_s": 0.6,
+      "excess_scale_m_s": 0.2
+    },
+    "alpha1_conflict": {
+      "speed_weight": 8.0,
+      "speed_scale_m_s": 0.1,
+      "steer_weight": 0.8,
+      "steer_scale_rad": 0.05,
+      "excess_steer_weight": 2.0,
+      "steer_soft_band_rad": 0.15,
+      "excess_scale_rad": 0.05
+    },
+    "context": {
+      "chi_start_phi_rad": 0.18,
+      "chi_full_phi_rad": 0.3,
+      "g": "retain_original_raw_command_eligibility_0.4s_settle_0.4s_ramp",
+      "do_not_use_actor_output_for_chi_or_g": true
+    },
+    "recovery": {
+      "speed_weight": 8.0,
+      "speed_scale_m_s": 0.1,
+      "speed_deadband_m_s": 0.03,
+      "steer_weight": 1.0,
+      "steer_scale_rad": 0.1,
+      "heading_weight": 6.0,
+      "heading_deadband_rad": 0.01,
+      "heading_scale_rad": 0.1,
+      "yaw_damping_weight": 0.5,
+      "yaw_scale_rad_s": 0.2,
+      "yaw_damping_heading_scale_rad": 0.15
+    },
+    "reference_priority": {
+      "weight": 4.0,
+      "gate": "chi*(1-g)",
+      "alpha0_steer_correction_deadband_rad": 0.01,
+      "alpha0_steer_correction_scale_rad": 0.05,
+      "alpha1_speed_correction_deadband_m_s": 0.05,
+      "alpha1_speed_correction_scale_m_s": 0.2,
+      "uses": "governed-original_limited_reference",
+      "not_a_hard_channel_lock": true
+    },
+    "command_compatibility": {
+      "weight": 2.0,
+      "roll_reference_limit_rad": 0.26,
+      "scale_rad": 0.05,
+      "uses": "abs(governed_delta/q(governed_speed))",
+      "q": "existing_ECBC_ratio_positive_design_domain",
+      "applied_to_all_alphas_and_modes": true,
+      "only_training_cost_not_action_projection": true,
+      "not_a_safety_certificate": true
+    },
+    "safety": {
+      "roll_weight": 40.0,
+      "roll_start_rad": 0.26,
+      "roll_scale_rad": 0.04,
+      "roll_rate_weight": 1.0,
+      "roll_rate_start_rad_s": 0.8,
+      "roll_rate_scale_rad_s": 0.8,
+      "overspeed_weight": 2.0,
+      "overspeed_band_m_s": 0.05,
+      "overspeed_scale_m_s": 0.1,
+      "low_speed_weight": 4.0,
+      "low_speed_start_m_s": 1.5,
+      "low_speed_scale_m_s": 0.2
+    },
+    "magnitude": {
+      "inherit_v4": true,
+      "weight_floor": 0.05,
+      "neutral_extra_weight": 0.45,
+      "heading_scale_rad": 0.1,
+      "roll_start_rad": 0.2,
+      "roll_scale_rad": 0.1,
+      "roll_rate_scale_rad_s": 0.6,
+      "normalizers": [
+        0.5,
+        0.1
+      ]
+    },
+    "smoothness": {
+      "rate_weight": 0.03,
+      "rate_normalizers": [
+        1.0,
+        0.4
+      ],
+      "acceleration_weight": 0.01,
+      "acceleration_normalizers": [
+        10.0,
+        10.0
+      ],
+      "gate": "rho=0.2+0.8*(1-chi)*exp(-(heading_error/0.10)^2)",
+      "sample_dt_s": 0.02,
+      "penalize_offset_not_raw_or_lower_action": true,
+      "reset_difference_mask": true
+    },
+    "caps": {
+      "speed": 100.0,
+      "steer": 100.0,
+      "heading": 300.0,
+      "roll": 900.0,
+      "roll_rate": 40.0,
+      "overspeed": 50.0,
+      "low_speed": 50.0,
+      "magnitude": 10.0,
+      "upper_rate": 10.0,
+      "upper_acceleration": 20.0,
+      "yaw_damping": 20.0,
+      "reference_priority": 40.0,
+      "command_compatibility": 40.0
+    },
+    "failure_cost_rate_bound": 1680.0,
+    "failure_extra": 5.0,
+    "failure_handling": "replace_entire_current_policy_reward_with_discounted_absorbing_remainder_including_current",
+    "terminal_extra_bonus": 0.0,
+    "no_position_objective": true
+  },
+  "temporal_regularizer": {
+    "max_weight": 0.002,
+    "zero_until_update": 20,
+    "linear_ramp_end_update": 40,
+    "normalize_by_all_same_episode_pairs": true,
+    "physical_correction_normalizers": [
+      0.1,
+      0.02
+    ],
+    "mask_both_endpoints": {
+      "chi_max": 0.2,
+      "abs_heading_max_rad": 0.05,
+      "abs_speed_error_max_m_s": 0.05,
+      "abs_steer_error_max_rad": 0.02,
+      "abs_roll_max_rad": 0.22,
+      "abs_roll_rate_max_rad_s": 0.4,
+      "raw_speed_rate_max_m_s2": 0.1,
+      "raw_steer_rate_max_rad_s": 0.02
+    },
+    "no_spatial_regularization": true,
+    "no_AR_or_added_correlated_noise_this_run": true
+  },
+  "ppo": {
+    "library": "retain_pinned_RSL_3.2.0_task_adapter",
+    "num_envs": 512,
+    "rollout_policy_steps": 128,
+    "epochs": 4,
+    "num_minibatches": 4,
+    "minibatch_size": 16384,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "clip_ratio": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.001,
+    "adam_betas": [
+      0.9,
+      0.999
+    ],
+    "adam_eps": 1e-05,
+    "weight_decay": 0.0,
+    "initial_latent_std": [
+      0.3,
+      0.1
+    ],
+    "std_min": [
+      0.08,
+      0.03
+    ],
+    "std_max": [
+      0.4,
+      0.2
+    ],
+    "max_grad_actor": 1.0,
+    "max_grad_critic": 1.0,
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "hard_reject": "rollback_epoch_stop_batch_halve_actor_lr_then_fresh_rollout",
+    "lr_floor": 1e-05,
+    "consecutive_hard_reject_stop": 3,
+    "nonfinite_stop": true,
+    "absent_other_alpha_is_not_nan": true,
+    "fresh_value_only_rollouts": 0,
+    "seed": 83,
+    "checkpoint_every_updates": 10
+  },
+  "training": {
+    "stage1": {
+      "name": "learn_endpoint_coordination",
+      "updates": 40,
+      "episode_s": 5.0,
+      "nominal_probability": 0.2,
+      "conflict_probability": 0.8,
+      "random_probability": 0.0,
+      "conflict_initial_prepared_speeds_m_s": [
+        2.6
+      ],
+      "conflict_speed_target_range_m_s": [
+        2.5,
+        2.6
+      ],
+      "turn_start_range_s": [
+        1.0,
+        1.5
+      ],
+      "steer_magnitude_range_rad": [
+        0.24,
+        0.28
+      ],
+      "turn_sign_probability_positive": 0.5,
+      "speed_slew_range_m_s2": [
+        0.4,
+        0.6
+      ],
+      "steer_slew_range_rad_s": [
+        0.25,
+        0.35
+      ],
+      "conflict_no_return_before_true_terminal": true,
+      "critic_horizon_normalizer_s": 16.0,
+      "nominal_speed_range_m_s": [
+        2.0,
+        2.6
+      ],
+      "nominal_steer_abs_max_rad": 0.08,
+      "nominal_target_hold_range_s": [
+        1.0,
+        1.5
+      ],
+      "nominal_straight_fraction": 0.6,
+      "diagnostic_updates": [
+        20,
+        40
+      ]
+    },
+    "stage2": {
+      "name": "combine_coordination_and_recovery",
+      "updates": 80,
+      "only_after_stage1_gate": true,
+      "episode_s": 16.0,
+      "nominal_probability": 0.3,
+      "conflict_probability": 0.5,
+      "random_probability": 0.2,
+      "speed_range_m_s": [
+        2.0,
+        2.6
+      ],
+      "steer_abs_max_rad": 0.3,
+      "speed_slew_range_m_s2": [
+        0.3,
+        0.8
+      ],
+      "steer_slew_range_rad_s": [
+        0.15,
+        0.45
+      ],
+      "turn_speed_range_m_s": [
+        2.4,
+        2.6
+      ],
+      "turn_magnitude_range_rad": [
+        0.22,
+        0.3
+      ],
+      "turn_start_range_s": [
+        1.0,
+        2.0
+      ],
+      "turn_single_probability": 0.8,
+      "hold_after_slew_range_s": [
+        0.8,
+        1.5
+      ],
+      "tail_keep_high_probability": 0.5,
+      "tail_random_speed_range_m_s": [
+        2.0,
+        2.6
+      ],
+      "random_target_hold_range_s": [
+        0.8,
+        1.6
+      ],
+      "random_tail_start_s": 8.0,
+      "no_physics_or_disturbance_randomization": true,
+      "reuse_stage1_actor_critic_optimizer": true,
+      "reset_physics_histories_not_learning_state": true,
+      "diagnostic_cumulative_updates": [
+        80,
+        120
+      ]
+    },
+    "max_updates_per_endpoint": 120,
+    "max_policy_transitions_per_endpoint": 7864320,
+    "max_control_ticks_per_endpoint": 31457280,
+    "total_policy_transitions_two_endpoints": 15728640,
+    "total_control_ticks_two_endpoints": 62914560,
+    "no_auto_250_or_500": true,
+    "respect_user_no_extra_wall_cutoff": true
+  },
+  "evaluation": {
+    "retain_old_six_case_protocol": true,
+    "old_case_window_s": [
+      1.0,
+      6.0
+    ],
+    "report_fast_stable_window_s": [
+      2.0,
+      4.0
+    ],
+    "report_10s_and_16s_separately": true,
+    "do_not_call_5s_stage1_completion_full_task_success": true,
+    "stage1_pair_cases": {
+      "positive": [
+        [
+          0.0,
+          2.6,
+          0.0
+        ],
+        [
+          1.0,
+          2.6,
+          0.25
+        ]
+      ],
+      "negative": [
+        [
+          0.0,
+          2.6,
+          0.0
+        ],
+        [
+          1.0,
+          2.6,
+          -0.25
+        ]
+      ]
+    },
+    "stage1_pair_duration_s": 5.0,
+    "stage1_slew": [
+      0.5,
+      0.3
+    ],
+    "stage1_common_window_s": [
+      2.0,
+      4.5
+    ],
+    "stage1_pre_turn_window_s": [
+      0.5,
+      1.0
+    ],
+    "stage1_gate": {
+      "physical_failure": false,
+      "peak_roll_max_rad": 0.302,
+      "alpha0_steer_rmse_max_rad": 0.05,
+      "alpha1_speed_rmse_max_m_s": 0.08,
+      "speed_rmse_difference_min_m_s": 0.1,
+      "steer_rmse_difference_min_rad": 0.01,
+      "alpha0_actual_speed_drop_min_m_s": 0.2,
+      "drop_hold_s": 0.3
+    },
+    "final_hold": {
+      "speed_error_max_m_s": 0.1,
+      "steer_error_max_rad": 0.04,
+      "heading_error_max_rad": 0.05,
+      "hold_s": 0.5
+    },
+    "max_new_random_test_seeds": 1,
+    "new_random_seed": 99083,
+    "same_original_commands_and_snapshot_across_methods": true
+  },
+  "audit": {
+    "only_three_required_checks": [
+      "local_alpha_and_reward_alpha_consistency_lower_always_1",
+      "reference_cost_formula_and_smoothness_masks",
+      "one_8env_16step_2update_finite_smoke"
+    ],
+    "offline_saved_npz_checks": [
+      "signed_upper_offsets_plateau_statistics",
+      "proposed_to_governed_to_actual_chain",
+      "stage_separated_primary_secondary_safety_recovery_costs",
+      "negative_offset_event_dwell_duration"
+    ],
+    "do_not_repeat_large_regression_suite": true,
+    "no_candidate_search": true,
+    "must_export_exact_executed_source_diff": true
+  },
+  "upper_alpha": 1
+}

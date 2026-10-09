@@ -1,0 +1,44 @@
+{
+  "alpha0": {
+    "A_reference_penalty": 0.0,
+    "B_reference_penalty": 7.1999999999999975,
+    "A_compatibility": 0.0005795377874134594,
+    "B_compatibility": 0.0,
+    "A_synthetic_total": 0.7275328711207473,
+    "B_synthetic_total": 24.831999999999994
+  },
+  "alpha1": {
+    "A_reference_penalty": 10.400000000000006,
+    "B_reference_penalty": 0.0,
+    "A_compatibility": 0.0005795377874134594,
+    "B_compatibility": 0.0,
+    "A_synthetic_total": 68.03419953778744,
+    "B_synthetic_total": 1.7919999999999996
+  },
+  "roll_0.3": {
+    "V4_after_cap": 39.99999999999996,
+    "V5_after_cap": 39.99999999999996
+  },
+  "roll_0.33": {
+    "V4_after_cap": 100,
+    "V5_after_cap": 100.00000000000001
+  },
+  "roll_0.345": {
+    "V4_after_cap": 100,
+    "V5_after_cap": 129.99999999999994
+  },
+  "roll_0.4": {
+    "V4_after_cap": 100,
+    "V5_after_cap": 240.00000000000003
+  },
+  "roll_0.69": {
+    "V4_after_cap": 100,
+    "V5_after_cap": 819.9999999999999
+  },
+  "initial_zero_mean_probability_speed_request_below_minus_0_4": {
+    "0.1": 1.1352086647655318e-05,
+    "0.3": 0.07895097127855784
+  },
+  "scope": "Algebra only. Synthetic A/B are NOT simulated reachable trajectories.",
+  "physical_simulations_run": 0
+}

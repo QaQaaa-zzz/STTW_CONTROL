@@ -8,6 +8,14 @@ from .direct_command_policy import (correction_tick,raw_context,initial_history,
 from .direct_command_reward import interval_cost,failure_reward
 from .direct_command_scenarios import schedule,publish_command
 
+def task_horizon_steps(spec):
+    return round(spec.get('episode_duration_s',16.)/spec['plant']['policy_dt_s'])
+
+
+def remaining_time_feature(tick,spec):
+    return (spec.get('episode_duration_s',16.)-tick*spec['plant']['control_dt_s'])/spec.get('critic_horizon_normalizer_s',16.)
+
+
 @struct.dataclass
 class DirectState:
     physical: object
@@ -28,6 +36,7 @@ class DirectState:
     previous_offset_rate: object=None
     offset_acceleration_valid: object=False
     lower: object=None
+    has_turn: object=False
 
 class DirectCommandEnv:
     def __init__(self,spec):
@@ -59,7 +68,7 @@ class DirectCommandEnv:
         chi,g,eligible,_=raw_context(s.physical.raw,s.command_rates,s.settle_clock,self.cc,self.spec)
         debt=s.physical.reference_pose[2]-s.physical.yaw_unwrapped
         actor,clipped,fault=assemble_observation(s.history,s.alpha,debt,chi,g,s.settle_clock,s.offsets,self.spec)
-        critic=jp.concatenate([actor,jp.asarray([(800-s.tick//4)/800.])])
+        critic=jp.concatenate([actor,jp.asarray([remaining_time_feature(s.tick,self.spec)])])
         return actor,critic,fault|s.fault,clipped
     def record_frame(self,s):
         m,_,v=self.physics.observe(s.physical.data)
@@ -96,13 +105,13 @@ class DirectCommandEnv:
         costs=interval_cost(alpha=s.alpha,chi=chi,g=g,raw=raw,
             actual_speed=log['actual_forward_speed'],actual_steer=log['actual_delta'],
             heading_error=log['e_psi_unwrapped'],roll=log['phi'],roll_rate=log['phi_dot'],
-            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate)
+            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate,cc=self.cc)
         _,_,target=publish_command(raw,s.rows,s.tick,s.slew,self.cc.dt)
         next_raw,next_rates,_=publish_command(raw,s.rows,s.tick+1,s.slew,self.cc.dt)
         next_raw=jp.where(p.failed,raw,next_raw)
         next_rates=jp.where(p.failed,s.command_rates,next_rates)
         log.update(target=target,raw_rates=s.command_rates,offsets=offsets,chi=chi,g=g,settle_clock=s.settle_clock,
-            eligible=eligible,alpha=s.alpha,family=s.family,episode_index=s.episode_index,env_id=s.env_id,
+            eligible=eligible,recovery_phase=s.has_turn & (g>0),alpha=s.alpha,family=s.family,episode_index=s.episode_index,env_id=s.env_id,
             active_tick=jp.bool_(True),time=s.tick*self.cc.dt,yaw_rate=yaw_rate,
             latent_z=z,raw_cost=costs['raw_cost'],effective_cost=costs['effective_cost'],
             cap_fraction=costs['cap_fraction'],tick_reward=costs['reward'],policy_fault=s.fault,
@@ -110,7 +119,7 @@ class DirectCommandEnv:
         for name,value in flags.items():log['reference_'+name]=value
         return s.replace(physical=p.replace(raw=next_raw),offsets=offsets,settle_clock=next_clock,
             command_rates=next_rates,yaw_rate=yaw_rate,previous_bounded=log['applied_residual'],tick=s.tick+1,
-            lower=lower,fault=s.fault|lower_fault),log
+            lower=lower,has_turn=s.has_turn|(jp.abs(raw[1])>.01),fault=s.fault|lower_fault),log
     def set_log_template(self,s):
         shape=jax.eval_shape(lambda s:self._tick(s,jp.zeros(2),False),s)[1]
         self.zero_log=jax.tree.map(lambda x:jp.zeros(x.shape,x.dtype),shape)
@@ -124,7 +133,8 @@ class DirectCommandEnv:
         end=self.record_frame(end)
         if self.spec.get('smooth_v4'):
             from .direct_command_reward import upper_motion_cost
-            rate,acc,mraw,meff=upper_motion_cost(end.offsets,s.offsets,s.previous_offset_rate,s.offset_acceleration_valid,self.spec)
+            last_active=jp.maximum(jp.sum(logs['active_tick'].astype(jp.int32))-1,0)
+            rate,acc,mraw,meff=upper_motion_cost(end.offsets,s.offsets,s.previous_offset_rate,s.offset_acceleration_valid,self.spec,chi=logs['chi'][last_active],heading_error=logs['e_psi_unwrapped'][last_active])
             end=end.replace(previous_offset_rate=rate,offset_acceleration_valid=jp.bool_(True))
             # Endpoint cost is computed once; distribute its rate over four ticks
             # solely for additive reward/component logging. No 5ms differentiation.
@@ -139,14 +149,14 @@ class DirectCommandEnv:
             logs['legacy_command_change_diagnostic']=.1*jp.sum(((logs['final_command']-jp.concatenate([s.physical.actuator.previous[None],logs['final_command'][:-1]],axis=0))/jp.array([3.,60.]))**2,axis=-1)
             logs['component_capped']={k:v>self.spec['reward']['independent_component_caps'][k] for k,v in logs['raw_components'].items()}
         normal=jp.sum(logs['tick_reward']);failed=end.physical.failed
-        reward=jp.where(failed,failure_reward(800-j,self.spec),normal)
+        reward=jp.where(failed,failure_reward(task_horizon_steps(self.spec)-j,self.spec),normal)
         active=jp.sum(logs['active_tick'].astype(jp.int32));last=jp.maximum(active-1,0)
         # Full failure replacement once, including when failure occurs inside repeat.
         failure_rewards=jp.zeros(4).at[last].set(reward)
         logs['scored_tick_reward']=jp.where(failed,failure_rewards,logs['tick_reward'])
         logs['failure_cost']=jp.where(failed,-failure_rewards,jp.zeros(4))
         logs['scored_effective_components']=jax.tree.map(lambda x:jp.where(failed,jp.zeros_like(x),x),logs['effective_components'])
-        logs['finite_task_end']=jp.full((4,),(end.tick>=3200)&~failed&~end.fault)
-        done=failed|end.fault|(end.tick>=3200)
+        logs['finite_task_end']=jp.full((4,),(end.tick>=task_horizon_steps(self.spec)*4)&~failed&~end.fault)
+        done=failed|end.fault|(end.tick>=task_horizon_steps(self.spec)*4)
         final_obs=self.observation(end)
         return end,reward,done,logs,final_obs

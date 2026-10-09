@@ -9,11 +9,18 @@ from .smooth_command_config import resolve
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,smoke=False):
+        if preference_v5 and (not fresh or resume_parent):raise ValueError('V5 requires fresh independent uppers; stage2 continuation is internal only')
+        self.preference_v5=preference_v5;self.training_stage=1;self.smoke=smoke
+        self.n=8 if smoke else 512;self.steps=16 if smoke else 128
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
         self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
         def configured(alpha):
-            spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall)
+            spec=resolve(alpha,fresh=fresh,train_wall=train_wall,total_wall=total_wall,preference_v5=preference_v5,stage=self.training_stage)
+            if preference_v5:
+                spec['prepared_high_speed_indices']=getattr(self,'high_speed_indices',[5,6,7])
+                if smoke:spec['ppo'].update(num_envs=8,rollout_policy_steps=16,minibatch_size=32)
+                return spec
             if self.resume_parent:
                 if target_updates!=250:raise ValueError('this authorized continuation ends at250')
                 spec['initialization_mode']='learner_state_resume_environment_reset'
@@ -51,6 +58,13 @@ class SmoothCampaign(Campaign):
             self.env=DirectCommandEnv(self.spec)
             source=OLD/'R196_upper0/prepared_bank.pkl'
             with source.open('rb') as f:self.bank=jax.tree.map(jp.asarray,pickle.load(f))
+            if self.preference_v5:
+                meta=json.loads((OLD/'R196_upper0/prepared_metrics.json').read_text())
+                conditions=np.asarray(meta['conditions'])
+                self.high_speed_indices=np.flatnonzero(np.isclose(conditions[:,0],2.6,atol=1e-6)).tolist()
+                if len(self.high_speed_indices)!=3:raise ValueError('prepared bank high-speed metadata mismatch')
+                self.spec['prepared_high_speed_indices']=self.high_speed_indices
+                self.high_speed_zero=int(np.flatnonzero(np.isclose(conditions[:,0],2.6,atol=1e-6)&(conditions[:,1]==0))[0])
             self.sample=jax.tree.map(lambda x:x[3],self.bank)
             self.sample_state=self.env.reset(self.sample,jp.int32(0),jp.int32(0),jp.asarray(0.));self.env.set_log_template(self.sample_state)
             jax.block_until_ready(self.sample_state)
@@ -61,10 +75,16 @@ class SmoothCampaign(Campaign):
         write(self.out/'manifest.json',dict(implementation_parent='6cdb3ce',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
           prepared_bank=str(source),prepared_bank_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),lower=self.env.lower.provenance,
           initialization='Full upper learner from parent150; physical episode reset' if self.resume_parent else 'Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
-          budget=self.spec['smooth_v4']['budget'],new_preparation_ticks=0,lower_interfaces_reused=True,command_center='preserved governed-centered ECBC plus frozen lower residual',
+          budget=self.spec['budget'] if self.preference_v5 else self.spec['smooth_v4']['budget'],new_preparation_ticks=0,lower_interfaces_reused=True,command_center='preserved governed-centered ECBC plus frozen lower residual',
           policy_budget_semantics=("global endpoint target250; resume parent completed batch, no new value-only warmup" if self.resume_parent else f"maximum{self.spec['ppo']['default_updates']} new PPO batches each; accepted epochs and updates separate; two value-only rollouts excluded")))
-        for a in [0,1]:write(self.out/f'alpha{a}/frozen_config.json',self.resolve(a))
-        self.states,self.advance,self.observe=self.setup_batch(512)
+        for a in [0,1]:
+            write(self.out/f'alpha{a}/frozen_config.json',self.resolve(a))
+            if self.preference_v5:write(self.out/f'alpha{a}/frozen_config_stage1.json',self.resolve(a))
+        if self.preference_v5:
+            manifest=json.loads((self.out/'manifest.json').read_text())
+            manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics='Stage1 max40 each; only paired gate pass permits Stage2 cumulative120; no value warmup',prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero)
+            write(self.out/'manifest.json',manifest)
+        self.states,self.advance,self.observe=self.setup_batch(self.n)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
     def create_endpoint(self,alpha):
         if self.resume_parent:return self.resume_endpoint(alpha)
@@ -74,10 +94,10 @@ class SmoothCampaign(Campaign):
         from .direct_command_policy import export_actor
         spec=self.resolve(alpha);stage=f'train{alpha}'
         with self.budget.measure(stage,'fresh Actor Critic Adam std' if self.fresh else 'Actor-only warm start, new Critic Adam std'):
-            torch.manual_seed(81);torch.cuda.manual_seed_all(81);np.random.seed(81);random.seed(81)
-            state=self.states.replace(alpha=jp.full((512,),float(alpha)))
+            seed=spec['ppo']['seed'];torch.manual_seed(seed);torch.cuda.manual_seed_all(seed);np.random.seed(seed);random.seed(seed)
+            state=self.states.replace(alpha=jp.full((self.n,),float(alpha)))
             a,c,_,_=self.observe(state);obs=self.td(a,c)
-            algo=make_algorithm(obs,128,spec,'cuda');algo.temporal_spec=spec
+            algo=make_algorithm(obs,self.steps,spec,'cuda');algo.temporal_spec=spec
             np.testing.assert_allclose(algo.policy.log_std.exp().detach().cpu().numpy(),spec['ppo']['initial_latent_std'],rtol=1e-6)
             if self.fresh:
                 src=None;digest=None
@@ -95,8 +115,9 @@ class SmoothCampaign(Campaign):
                 with actor.open('rb') as f:expected=pickle.load(f)
                 for x,y in zip(jax.tree.leaves(export_actor(algo.policy)),jax.tree.leaves(expected)):np.testing.assert_array_equal(np.asarray(x),np.asarray(y))
             ep=dict(algo=algo,state=state,obs=obs,update=0,warmup=0,hard_rejects=0,duration=0.,stopped=None,writer=SummaryWriter(str(self.out/'tensorboard'/f'alpha{alpha}')))
+            ep['rng']=capture_rng()
             self.endpoints[alpha]=ep
-            write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='scratch' if self.fresh else 'actor_only',source_checkpoint=None if src is None else str(src),source_actor_sha256=digest,actor_exact=None if self.fresh else True,previous_policy_loaded=not self.fresh,critic_fresh=True,optimizer_empty=True,std=algo.policy.log_std.exp().detach().cpu().tolist(),seed=81))
+            write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='scratch' if self.fresh else 'actor_only',source_checkpoint=None if src is None else str(src),source_actor_sha256=digest,actor_exact=None if self.fresh else True,previous_policy_loaded=not self.fresh,critic_fresh=True,optimizer_empty=True,std=algo.policy.log_std.exp().detach().cpu().tolist(),seed=seed))
             self.save(alpha,0)
     def resume_endpoint(self,alpha):
         import torch,jax,jax.numpy as jp
@@ -124,7 +145,7 @@ class SmoothCampaign(Campaign):
         with self.budget.measure(f'train{alpha}','restore full upper learner and reset physical episodes'):
             state=reset(ids);jax.block_until_ready(state)
             a,c,_,_=self.observe(state);obs=self.td(a,c)
-            algo=make_algorithm(obs,128,spec,'cuda');algo.temporal_spec=spec
+            algo=make_algorithm(obs,self.steps,spec,'cuda');algo.temporal_spec=spec
             restore_learner(algo,saved)
             restore_rng(saved)
             ep=dict(algo=algo,state=state,obs=obs,update=start_update,warmup=2,hard_rejects=0,duration=0.,stopped=None,rng=capture_rng(),writer=SummaryWriter(str(self.out/'tensorboard'/f'alpha{alpha}')))
@@ -133,11 +154,10 @@ class SmoothCampaign(Campaign):
             self.save(alpha,start_update)
         self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()})
 
-    @staticmethod
-    def td(a,c):
+    def td(self,a,c):
         import torch
         from tensordict import TensorDict
-        return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(c)},batch_size=[512])
+        return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(c)},batch_size=[self.n])
     def save(self,alpha,update):
         import torch,jax
         from .direct_command_policy import export_actor
@@ -159,9 +179,9 @@ class SmoothCampaign(Campaign):
         snapshot=algo._snapshot()
         try:
             with self.budget.measure(stage,f"{'critic_only' if warmup else 'policy'} batch {index}",estimate=estimate):
-                self.budget.reserve(512*128*4,f'alpha{alpha} batch{index} warmup={warmup}')
+                self.budget.reserve(self.n*self.steps*4,f'alpha{alpha} batch{index} warmup={warmup}')
                 with torch.no_grad():
-                    for t in range(128):
+                    for t in range(self.steps):
                         obs=ep['obs']
                         if not torch.isfinite(obs['policy']).all() or not torch.isfinite(obs['critic']).all():raise RuntimeError('nonfinite observation')
                         z=algo.act(obs)
@@ -171,6 +191,7 @@ class SmoothCampaign(Campaign):
                         if bool(jp.any(f|fault)):raise RuntimeError('policy/lower fault')
                         ep['state']=state;ep['obs']=self.td(a,c)
                         algo.process_env_step(ep['obs'],torch.utils.dlpack.from_dlpack(r),torch.utils.dlpack.from_dlpack(d),{})
+                        if self.preference_v5:self.record_episode_statistics(alpha,np.asarray(r),np.asarray(d),np.asarray(failed),np.asarray(stat),jax.device_get(diag))
                         sums+=np.asarray(stat).sum(axis=0);rewards.append(np.asarray(r));fails+=int(jp.sum(failed));ends+=int(jp.sum(d))
                         if t==0 or bool(jp.any(d)):self.case_manifest(state,f'alpha{alpha}')
                         if warmup and index==1:diagnostics.append(jax.device_get({k:v for k,v in diag.items() if not k.startswith('all_')}))
@@ -197,6 +218,8 @@ class SmoothCampaign(Campaign):
                     count=max(1.,row[0]);n=len(self.component_names)
                     groups[label]=dict(count=int(row[0]),speed_rmse=float(np.sqrt(row[1]/count)),steer_rmse=float(np.sqrt(row[2]/count)),heading_rmse=float(np.sqrt(row[11]/count)),working_roll_fraction=row[3]/count,any_state_cap_fraction=row[4]/count,motor_clip=row[7]/count,final_clip=row[8]/count,reference_clip=row[9]/count,reference_slew_fraction_diagnostic_only=row[10]/count,mean_offsets=(row[12:14]/count).tolist(),raw_costs=dict(zip(self.component_names,(row[14:14+n]/count).tolist())),effective_costs=dict(zip(self.component_names,(row[14+n:]/count).tolist())))
                 rec=dict(alpha=alpha,phase='value_only' if warmup else 'policy',batch=index,completed_policy_batches=ep['update'],accepted_policy_updates=algo.accepted_policy_updates,mean_step_reward=float(np.mean(rewards)),failed_episodes=fails,ended_episodes=ends,failure_fraction=fails/max(1,ends),optimizer=metrics,explained_variance=explained,groups=groups,component_cap_fraction_all_envs={k:v/max(1,capden) for k,v in capcounts.items()},sample_seconds=sample,total_seconds=time.monotonic()-start)
+                if self.preference_v5:
+                    rec.update(training_stage=self.training_stage,complete_episode_statistics=ep.pop('completed_episode_batch',[]),negative_request_coverage=self.coverage_summary(ep))
                 rec=clean_numbers(rec)
                 with (self.out/f'alpha{alpha}/metrics.jsonl').open('a') as f:f.write(json.dumps(rec,allow_nan=False)+'\n')
                 step=index if not warmup else index-3;writer=ep['writer'];writer.add_scalar('train/mean_step_reward',rec['mean_step_reward'],step)
@@ -208,10 +231,106 @@ class SmoothCampaign(Campaign):
                 print(json.dumps(dict(alpha=alpha,phase=rec['phase'],batch=index,reward=rec['mean_step_reward'],kl=metrics.get('mean_kl'),seconds=rec['total_seconds'],stop=ep['stopped'])),flush=True)
         except BudgetStop:
             algo._restore(snapshot);algo.storage.clear();ep['stopped']='budget_interrupted_batch';self.save(alpha,ep['update']);return False
-        if self.resume_parent:ep['rng']=capture_rng()
+        if self.resume_parent or self.preference_v5:ep['rng']=capture_rng()
         ep['duration']=time.monotonic()-start
         self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()},current_stop=ep['stopped'])
         return not ep['stopped']
+    def notify_once(self,event,title,body):
+        key='stage_notified' if event.startswith('training_') else 'completion_notified'
+        seen=self.status.get(key,[])
+        if event in seen:return
+        notify(title,body);self._status(**{key:seen+[event]})
+
+    def record_episode_statistics(self,alpha,reward,done,failed,stat,diag):
+        ep=self.endpoints[alpha]
+        if 'episode_return' not in ep:
+            ep.update(episode_return=np.zeros(self.n),episode_steps=np.zeros(self.n,int),episode_stats=np.zeros((self.n,stat.shape[-1])),negative_dwell=np.zeros((self.n,2,2),int),negative_seen=np.zeros((self.n,2,2),bool),negative_covered=np.zeros((2,2),int),coverage_completed=0)
+        ep['episode_return']+=reward;ep['episode_steps']+=1;ep['episode_stats']+=stat[:,0]
+        for tick in range(4):
+            values=np.stack([diag['all_proposal_dv'],diag['all_governed_dv'][:,tick]],axis=1)
+            mask=(values[:,:,None]<np.array([-.15,-.30]))&diag['all_valid_ticks'][:,tick,None,None]
+            ep['negative_dwell']=np.where(mask,ep['negative_dwell']+1,0)
+            ep['negative_seen']|=ep['negative_dwell']>=40
+        for i in np.flatnonzero(done):
+            row=ep['episode_stats'][i];count=max(row[0],1)
+            rec=dict(return_sum=float(ep['episode_return'][i]),policy_steps=int(ep['episode_steps'][i]),physical_failure=bool(failed[i]),speed_rmse=float(np.sqrt(row[1]/count)),steer_rmse=float(np.sqrt(row[2]/count)),heading_rmse=float(np.sqrt(row[11]/count)),training_stage=self.training_stage)
+            ep.setdefault('completed_episode_batch',[]).append(rec)
+            ep['negative_covered']+=ep['negative_seen'][i];ep['coverage_completed']+=1
+            ep['episode_return'][i]=0;ep['episode_steps'][i]=0;ep['episode_stats'][i]=0;ep['negative_dwell'][i]=0;ep['negative_seen'][i]=False
+
+    @staticmethod
+    def coverage_summary(ep):
+        n=ep.get('coverage_completed',0)
+        return dict(complete_episodes=n,request_and_governed_thresholds=[-.15,-.30],minimum_continuous_s=.2,covered_counts=ep.get('negative_covered',np.zeros((2,2),int)).tolist(),fraction=None if not n else (ep['negative_covered']/n).tolist())
+
+    def switch_preference_stage2(self):
+        import jax,jax.numpy as jp
+        from .direct_command_env import DirectCommandEnv
+        self.training_stage=2;self.spec=self.resolve(0);self.env=DirectCommandEnv(self.spec)
+        self.sample_state=self.env.reset(self.sample,jp.int32(0),jp.int32(0),jp.asarray(0.));self.env.set_log_template(self.sample_state)
+        self.states,self.advance,self.observe=self.setup_batch(self.n)
+        for a,ep in self.endpoints.items():
+            write(self.out/f'alpha{a}/stage1_partial_episodes_at_transition.json',dict(discarded_partial_episode_steps=ep.get('episode_steps',np.zeros(self.n,int)).tolist(),not_counted_as_complete=True))
+            for k in ['episode_return','episode_steps','episode_stats','negative_dwell','negative_seen','negative_covered','coverage_completed']:ep.pop(k,None)
+            ep['state']=self.states.replace(alpha=jp.full((self.n,),float(a)))
+            x,y,_,_=self.observe(ep['state']);ep['obs']=self.td(x,y)
+            ep['algo'].storage.clear();ep['algo'].temporal_spec=self.resolve(a)
+            write(self.out/f'alpha{a}/frozen_config_stage2.json',self.resolve(a))
+        write(self.out/'stage_transition.json',dict(from_stage=1,to_stage=2,actor_critic_adam_rng_preserved=True,accepted_updates={str(a):ep['algo'].accepted_policy_updates for a,ep in self.endpoints.items()},physics_histories_reset=True))
+        self._status(training_stage=2,declared_policy_batches_per_endpoint=120)
+
+    def evaluate_preference(self,update):
+        import jax,jax.numpy as jp
+        from .direct_command_policy import DirectCommandActor,export_actor
+        from .fixed_command_panel import load_protocol,schedules
+        from .preference_command_reporting import report_stage1,report_stage2
+        env=self.env;cfg=self.spec['preference_v5']['evaluation'];actor=DirectCommandActor()
+        reuse_baseline=self.training_stage==1 and update==40
+        methods=['alpha0','alpha1'] if reuse_baseline else ['alpha0','alpha1','B0']
+        indices=[0,1] if reuse_baseline else [0,1,0]
+        params=jax.tree.map(lambda *x:jp.stack(x),*[export_actor(self.endpoints[a]['algo'].policy) for a in indices])
+        alphas=jp.asarray(indices,dtype=jp.float32);bypass=jp.array([m=='B0' for m in methods])
+        sample=jax.tree.map(lambda x:x[self.high_speed_zero],self.bank) if self.training_stage==1 else self.sample
+        def reset(rows):return jax.vmap(lambda a:env.reset(sample,jp.int32(77001),jp.int32(0),a,rows,jp.array([.5,.3])))(alphas)
+        if self.training_stage==1:
+            cases=[]
+            for name,r in cfg['stage1_pair_cases'].items():
+                rows=np.zeros((16,3));rows[:,0]=99.;rows[:len(r)]=r;cases.append((name,rows,5))
+        else:cases=[(name,rows,16 if name=='fast_turn' else 10) for name,rows in schedules(load_protocol())]
+        reset=self.compile(f'V5 stage{self.training_stage} paired reset',reset,jp.asarray(cases[0][1],jp.float32))
+        states=reset(jp.asarray(cases[0][1],jp.float32))
+        def chunk(states,params):
+            def step(states,_):
+                obs,_,fault,_=jax.vmap(env.observation)(states)
+                mu=jax.vmap(lambda p,o:actor.apply(p,o))(params,obs);mu=jp.where(bypass[:,None],jp.zeros_like(mu),mu)
+                states=states.replace(fault=states.fault|(fault&~states.physical.failed))
+                end,r,done,logs,_=jax.vmap(lambda st,z:env.policy_step(st,z,False))(states,mu)
+                return end,logs
+            return jax.lax.scan(step,states,None,length=50)
+        chunk=self.compile(f'V5 stage{self.training_stage} paired 1s physical evaluation',chunk,states,params)
+        for case,rows,seconds in cases:
+            self._status(stage=f'evaluate{update}',case=case)
+            self.budget.reserve(len(methods)*seconds*200,f'evaluation{update}/{case} matched {len(methods)} methods')
+            with self.budget.measure('review',f'update{update}/{case}'):
+                states=reset(jp.asarray(rows,jp.float32));chunks=[]
+                for _ in range(seconds):
+                    states,logs=chunk(states,params);jax.block_until_ready(states);chunks.append(jax.device_get(logs))
+                    if bool(jp.any(states.fault)):raise RuntimeError('evaluation nonfinite policy or lower')
+                flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
+                dest=self.out/f'evaluation{update}'/case;dest.mkdir(parents=True,exist_ok=True)
+                for i,name in enumerate(methods):
+                    d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};valid=d['active_tick'];d={k:v[valid] for k,v in d.items()}
+                    d.update(checkpoint_update=np.asarray(update),partial=np.asarray(False))
+                    np.savez_compressed(dest/f'{name}.npz',**d)
+            if reuse_baseline:
+                source=self.out/'evaluation20'/case/'B0.npz'
+                if not source.exists():raise FileNotFoundError(source)
+                (dest/'B0.npz').symlink_to(source.resolve())
+            print(f'V5 evaluation{update} {case} saved',flush=True)
+        result=report_stage1(self.out,update) if self.training_stage==1 else report_stage2(self.out,update)
+        notify('STTW V5评价阶段完成',f'update{update} 图与门槛结果已保存')
+        return result
+
     def evaluate(self,stage):
         control=self.out/'runtime_control.json'
         if control.exists() and stage in json.loads(control.read_text()).get('disabled_evaluation_stages',[]):
@@ -302,3 +421,43 @@ def restore_learner(algo,saved):
     for k,v in saved['policy'].items():
         if not torch.equal(v,algo.policy.state_dict()[k]):raise ValueError('learner restore mismatch '+k)
     if not algo.optimizer.state:raise ValueError('missing parent optimizer state')
+
+
+def run_preference(output,smoke=False):
+    """Execute the user-declared gated V5 budget, never extend a failed pilot."""
+    c=SmoothCampaign(output,fresh=True,preference_v5=True,smoke=smoke,unlimited_wall=True)
+    try:
+        c.initialize()
+        for a in ([0] if smoke else [0,1]):c.create_endpoint(a)
+        if smoke:
+            for _ in range(2):
+                if not c.batch(0):raise RuntimeError('V5 finite smoke stopped')
+            c.save(0,c.endpoints[0]['update'])
+            write(c.out/'smoke_result.json',dict(passed=True,environments=8,policy_steps=16,updates=2,policy_transitions=256,control_ticks=1024,scope='engineering only, not coordination evidence'))
+            c._status(state='complete',stage='smoke_complete');return
+        gate=None
+        for update in [20,40]:
+            for a in [0,1]:
+                ep=c.endpoints[a]
+                while ep['update']<update:
+                    if not c.batch(a):raise RuntimeError(f'alpha{a} stopped: '+str(ep['stopped']))
+                c.save(a,ep['update']);c.notify_once(f'training_{a}_{update}','STTW V5训练阶段结束',f'alpha{a} Stage1 {update}/40，尚待左右配对评价')
+            gate=c.evaluate_preference(update)
+        if not gate['passed']:
+            c._status(state='complete',stage='stage1_gate_failed_stopped',training_stage=1,stage1_gate_passed=False,stage2_started=False,qualified=False)
+            c.notify_once('pipeline_complete','STTW V5流水线结束','Stage1未通过左右门槛；停止扩训，不进入Stage2')
+            return
+        c.switch_preference_stage2()
+        for update in [80,120]:
+            for a in [0,1]:
+                ep=c.endpoints[a]
+                while ep['update']<update:
+                    if not c.batch(a):raise RuntimeError(f'alpha{a} stopped: '+str(ep['stopped']))
+                c.save(a,ep['update']);c.notify_once(f'training_{a}_{update}','STTW V5训练阶段结束',f'alpha{a} 累计{update}/120，尚待完整任务评价')
+            c.evaluate_preference(update)
+        c._status(state='complete',stage='saved_and_stopped',training_stage=2,stage1_gate_passed=True)
+        c.notify_once('pipeline_complete','STTW V5流水线结束','声明120更新及任务评价完成；不自动追加')
+    except BaseException as exc:
+        c._status(state='error',reason=str(exc));notify('STTW V5错误停止',str(exc));raise
+    finally:
+        for ep in c.endpoints.values():ep['writer'].close()

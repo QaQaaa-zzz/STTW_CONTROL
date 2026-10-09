@@ -197,6 +197,12 @@ class Campaign:
         def reset_one(env_id,episode,alpha):
             key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.spec['commands']['random_seed']),env_id),episode)
             index=jax.random.randint(jax.random.fold_in(key,812),(),0,8)
+            if self.spec.get('preference_v5') and self.spec.get('training_stage')==1:
+                from .direct_command_scenarios import schedule
+                _,family,_=schedule(env_id,episode,2.6,self.spec)
+                high=jp.asarray(self.spec['prepared_high_speed_indices'])
+                choice=jax.random.randint(jax.random.fold_in(key,813),(),0,len(self.spec['prepared_high_speed_indices']))
+                index=jp.where(family==1,high[choice],index)
             snap=jax.tree.map(lambda x:x[index],self.bank)
             return e.reset(snap,env_id,episode,alpha)
         reset=self.compile(f'{n} independent initial task cases',jax.vmap(reset_one),ids,jp.zeros(n,jp.int32),alpha)
@@ -218,11 +224,19 @@ class Campaign:
             effective=jp.stack(list(logs['effective_components'].values()),axis=-1)*active[:,:,None]
             base=jp.concatenate([base,raw_cost,effective],axis=-1)
             windows=jp.stack([jp.ones_like(active),(logs['chi']==0)&(logs['g']==0),logs['chi']>0,logs['g']>0],axis=-1)
+            if self.spec.get('preference_v5'):
+                recovery=logs['recovery_phase'];conflict=(logs['chi']>0)&(logs['g']==0)
+                windows=jp.stack([jp.ones_like(active),~(recovery|conflict),conflict,recovery],axis=-1)
             summary=jp.einsum('ntf,ntw->nwf',base,windows)
             diag=jax.tree.map(lambda x:x[jp.array([0,n//2])],logs)
             if self.spec.get('smooth_v4'):
                 diag['all_component_cap_counts']={k:jp.sum(v & logs['active_tick']) for k,v in logs['component_capped'].items()}
                 diag['all_active_ticks']=jp.sum(logs['active_tick'])
+            if self.spec.get('preference_v5'):
+                from .direct_command_policy import map_latent
+                diag['all_proposal_dv']=map_latent(z,self.spec)[:,0]
+                diag['all_governed_dv']=logs['offsets'][:,:,0]
+                diag['all_valid_ticks']=logs['active_tick']
             return nxt,a,c,f,reward,done,summary,end.physical.failed,end.fault,jp.max(logs['peak_roll'],axis=1),diag,final_obs
         advance=self.compile(f'{n} direct actions four physical ticks and terminal reset',advance,states,jp.zeros((n,2)))
         observe=self.compile(f'{n} observations',jax.vmap(e.observation),states)

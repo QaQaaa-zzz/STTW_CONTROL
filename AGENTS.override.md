@@ -1,0 +1,1 @@
+Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md before research work. This work follows user-approved PreferenceV5 attachment; no automatic push. Preserve inherited physical and execution contracts.

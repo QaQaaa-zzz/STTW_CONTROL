@@ -1,0 +1,69 @@
+{
+  "evidence_commit": "bb714255f1b70ccd8104841912ab04670dfa9a69",
+  "source": "connector-fetched README and evidence.json; not re-simulated",
+  "raw_npz_was_not_downloaded_in_this_runtime": true,
+  "old_r196_fast_1to6": {
+    "alpha0_speed_rmse": 0.11799809,
+    "alpha0_steer_rmse": 0.07384178,
+    "alpha1_speed_rmse": 0.0173612,
+    "alpha1_steer_rmse": 0.10028572,
+    "alpha0_roll_peak": 0.25323868,
+    "alpha1_roll_peak": 0.21193993
+  },
+  "new_v4_fast_1to6": {
+    "alpha0_speed_rmse": 0.03085336,
+    "alpha0_steer_rmse": 0.07820263,
+    "alpha1_speed_rmse": 0.03406921,
+    "alpha1_steer_rmse": 0.06201062,
+    "alpha0_roll_peak": 0.30921328,
+    "alpha1_roll_peak": 0.34530783
+  },
+  "new_v4_fast_2to4": {
+    "alpha0_speed_rmse": 0.04319568,
+    "alpha0_steer_rmse": 0.07019996,
+    "alpha1_speed_rmse": 0.04909303,
+    "alpha1_steer_rmse": 0.04870864
+  },
+  "new_v4_fast_mean_abs_reference_offsets_full10s": {
+    "alpha0": [
+      0.0274029002,
+      0.0396802463
+    ],
+    "alpha1": [
+      0.0331398696,
+      0.0314689055
+    ]
+  },
+  "quiet_straight_steer_rate_rms_old0_new0": [
+    0.60975,
+    0.00864427
+  ],
+  "quiet_straight_steer_acceleration_rms_old0_new0": [
+    35.0357,
+    0.3531195
+  ],
+  "first_reversal_delay_s_old0_new0": [
+    0.25,
+    0.705
+  ],
+  "v4_fast10s_heading_rmse": [
+    0.14232431,
+    0.16234486
+  ],
+  "v4_fast16s_heading_rmse": [
+    0.03333833,
+    0.00763369
+  ],
+  "final_hold_count_six_cases": {
+    "baseline": 2,
+    "old0": 2,
+    "old1": 2,
+    "v4_alpha0": 3,
+    "v4_alpha1": 5
+  },
+  "inference_not_proved_causality": [
+    "small fresh exploration combined with smoothing impedes sustained deceleration",
+    "auxiliary smooth losses may dominate early policy learning",
+    "lower execution clipping may consume part of upper requested change; requires local trace fields"
+  ]
+}

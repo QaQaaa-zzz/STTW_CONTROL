@@ -60,6 +60,13 @@ def _repeating_rows(key, prepared_speed, spec, family):
 
 
 def _conflict_rows(key, prepared_speed, spec, slew=None):
+    if spec.get('preference_v5') and spec.get('training_stage')==1:
+        c=spec['preference_v5']['training']['stage1'];keys=jax.random.split(key,4)
+        draw=lambda k,r:jax.random.uniform(k,(),minval=r[0],maxval=r[1])
+        high=draw(keys[0],c['conflict_speed_target_range_m_s'])
+        start=draw(keys[1],c['turn_start_range_s'])
+        delta=draw(keys[2],c['steer_magnitude_range_rad'])*jnp.where(jax.random.uniform(keys[3],())<c['turn_sign_probability_positive'],1.,-1.)
+        return _empty_rows(prepared_speed).at[0].set(jnp.array([0.,high,0.])).at[1].set(jnp.array([start,high,delta]))
     if spec.get("smooth_v4"):
         return _smooth_conflict(key,prepared_speed,spec,slew)
     c = spec["commands"]["conflict"]
