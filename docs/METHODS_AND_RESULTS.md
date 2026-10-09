@@ -817,3 +817,35 @@ User superseded Actor250/143 warm-start with fresh upper Actor/Critic/Adam/std a
 Saved-data audit (no new physics) found straight_hold alpha0 executed-steer-offset139 reversals, rate RMS0.6097rad/s, acceleration RMS35.034rad/s²; actual steering rate RMS0.1327rad/s versus B0 0.0092 and alpha1 0.0081. These are fixed quiet-window waveform metrics, not task success. Actual new control benefit is pending.
 
 Run: runs/smooth_v4_fresh150_20261008_run03/INDEX.md. TensorBoard6010. Thirteen related tests pass; independent NumPy reward reconstruction on saved first-rollout diagnostic differed by<1e-8/policy step. No whole repository tests or renewed lower-necessity experiment. Authoritative ongoing state: /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.
+
+## R196 Preference V5 Stage1 bounded result (2026-10-09)
+
+Local source `1b7727f`, branch `experiment/r196-preference-v5`; frozen R196
+lower_alpha1 and governed-centered ECBC/ESO unchanged. Alpha0/alpha1 used independent
+fresh Actor/Critic/Adam with initial latent std `[.30,.10]`, seed83. Each completed
+40 PPO updates (2,621,440 policy transitions), 10,240 complete training episodes,
+zero physical failures, hard-KL rejects, or nonfinite stops. Existing V4 signed-chain
+audit showed small positive requests rather than canceled braking, so no interface or
+authority change was made.
+
+At the matched five-second positive/negative turn gate, alpha0 learned sustained actual
+braking and steering priority: speed RMSE .6252/.6219m/s, steering RMSE .01405/.01243rad,
+peak roll .2425/.2411rad, and >=.20m/s speed-drop dwell2.5s. Alpha1 was directionally
+different but not a keep-speed endpoint: speed RMSE .2630/.3093m/s, steering RMSE
+.03979/.02515rad, and peak roll .2980/.3092rad. Thus the endpoint-separation margins,
+alpha0 steering, and alpha0 braking gates pass, while alpha1 speed<=.08 and negative
+roll<=.302 fail. All four evaluation episodes finish without physical failure; that does
+not override the failed task gates.
+
+The signed chain is consistent: alpha0 requested/governed Δv about -.577/-.542m/s and
+actual speed fell to1.975/1.978m/s; alpha1 still requested about -.196m/s and actual
+speed was2.337/2.291m/s. Final rear commands fell accordingly. The failure is learned
+request behavior, not interface cancellation. Ordinary pre-turn speed corrections remain
+unhelpful (+.0622/+.0310m/s for alpha0/1). Update20→40 improves roll and alpha0 steering
+but increases alpha0 braking; alpha1 remains outside speed tolerance. Reward rose while
+conflict speed error worsened, so reward is not treated as success.
+
+Decision: Stage1 gate failed, `qualified=false`; the pipeline stopped automatically and
+never started Stage2. No 10s/16s direction-recovery claim, best/adoption, extra250/500,
+or push. Full XY-first evidence, command/motor chain, per-step/cumulative reward and
+component plots: `runs/preference_v5_20261009/analysis/REPORT.md`.
