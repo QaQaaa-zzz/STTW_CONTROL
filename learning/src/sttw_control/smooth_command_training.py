@@ -9,9 +9,13 @@ from .smooth_command_config import resolve
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,smoke=False):
-        if preference_v5 and (not fresh or resume_parent):raise ValueError('V5 requires fresh independent uppers; stage2 continuation is internal only')
-        self.preference_v5=preference_v5;self.training_stage=1;self.smoke=smoke
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,smoke=False,preference_stage2_parent=None):
+        if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
+            raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
+        if preference_v5 and not preference_stage2_parent and (not fresh or resume_parent):
+            raise ValueError('V5 Stage1 requires fresh independent uppers')
+        self.preference_v5=preference_v5;self.preference_stage2_parent=Path(preference_stage2_parent).resolve() if preference_stage2_parent else None
+        self.training_stage=2 if self.preference_stage2_parent else 1;self.smoke=smoke
         self.n=8 if smoke else 512;self.steps=16 if smoke else 128
         self.fresh=fresh;self.train_wall=train_wall;self.total_wall=total_wall
         self.resume_parent=Path(resume_parent).resolve() if resume_parent else None
@@ -45,8 +49,11 @@ class SmoothCampaign(Campaign):
                 d['seconds']={k:d['seconds'].get(k,0.)+v for k,v in prior['seconds'].items()};d['prior_attempt_charged']=True
                 d['events'].append(dict(kind='prior_attempt_compute_charge',source=prior['source'],seconds=prior['seconds']))
             self.budget._update(apply)
-        self.status=dict(state='initializing',completed_updates={'0':0,'1':0},declared_policy_batches_per_endpoint=self.spec['ppo']['default_updates'],initialization='scratch_actor_critic_optimizer_std' if fresh else 'actor_weights_only_fresh_critic_optimizer_std',pid=os.getpid())
+        completed={'0':40,'1':40} if self.preference_stage2_parent else {'0':0,'1':0}
+        initialization='learner_state_resume_environment_reset' if self.preference_stage2_parent else 'scratch_actor_critic_optimizer_std' if fresh else 'actor_weights_only_fresh_critic_optimizer_std'
+        self.status=dict(state='initializing',completed_updates=completed,declared_policy_batches_per_endpoint=self.spec['ppo']['default_updates'],initialization=initialization,pid=os.getpid())
         if self.resume_parent:self.status.update(initialization='learner_state_resume_environment_reset',parent_run=str(self.resume_parent))
+        if self.preference_stage2_parent:self.status.update(parent_run=str(self.preference_stage2_parent),training_stage=2,stage1_gate_passed=False,user_override_stage2=True)
         self.seen_cases=set();self.endpoints={};self._status()
     def initialize(self):
         import jax,jax.numpy as jp,torch
@@ -74,19 +81,25 @@ class SmoothCampaign(Campaign):
         assert self.env.physics.bundle.identity==old['model']
         write(self.out/'manifest.json',dict(implementation_parent='6cdb3ce',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
           prepared_bank=str(source),prepared_bank_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),lower=self.env.lower.provenance,
-          initialization='Full upper learner from parent150; physical episode reset' if self.resume_parent else 'Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
+          initialization='Full upper learner from parent150; physical episode reset' if self.resume_parent else 'Full Stage1 upper learner from update40; physical episode reset' if self.preference_stage2_parent else 'Fresh Actor Critic Adam std; no prior policy loaded' if self.fresh else 'Actor only from alpha0@250 and alpha1@143; Critic Adam std reset',
           budget=self.spec['budget'] if self.preference_v5 else self.spec['smooth_v4']['budget'],new_preparation_ticks=0,lower_interfaces_reused=True,command_center='preserved governed-centered ECBC plus frozen lower residual',
           policy_budget_semantics=("global endpoint target250; resume parent completed batch, no new value-only warmup" if self.resume_parent else f"maximum{self.spec['ppo']['default_updates']} new PPO batches each; accepted epochs and updates separate; two value-only rollouts excluded")))
         for a in [0,1]:
             write(self.out/f'alpha{a}/frozen_config.json',self.resolve(a))
-            if self.preference_v5:write(self.out/f'alpha{a}/frozen_config_stage1.json',self.resolve(a))
+            if self.preference_v5:write(self.out/f'alpha{a}/frozen_config_stage{self.training_stage}.json',self.resolve(a))
         if self.preference_v5:
             manifest=json.loads((self.out/'manifest.json').read_text())
-            manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics='Stage1 max40 each; only paired gate pass permits Stage2 cumulative120; no value warmup',prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero)
+            semantics='Stage2 user override after failed Stage1 gate; resume cumulative40 and stop at120; no value warmup' if self.preference_stage2_parent else 'Stage1 max40 each; only paired gate pass permits Stage2 cumulative120; no value warmup'
+            manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics=semantics,prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero,
+                            parent_run=None if not self.preference_stage2_parent else str(self.preference_stage2_parent),stage1_gate_passed=None if not self.preference_stage2_parent else False,user_override_stage2=bool(self.preference_stage2_parent))
             write(self.out/'manifest.json',manifest)
         self.states,self.advance,self.observe=self.setup_batch(self.n)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
+        if self.preference_stage2_parent:
+            self.stage2_parent_receipt=validate_preference_stage2_parent(self.preference_stage2_parent)
+            write(self.out/'stage_transition.json',dict(**self.stage2_parent_receipt,from_stage=1,to_stage=2,actor_critic_adam_std_rng_preserved=True,physics_eso_filter_action_history_reset=True,reward_formula_unchanged=True,user_override_reason='User explicitly requested Stage2 after the declared Stage1 paired gate failed'))
     def create_endpoint(self,alpha):
+        if self.preference_stage2_parent:return self.resume_preference_stage2_endpoint(alpha)
         if self.resume_parent:return self.resume_endpoint(alpha)
         import torch,jax,jax.numpy as jp
         from torch.utils.tensorboard import SummaryWriter
@@ -119,6 +132,27 @@ class SmoothCampaign(Campaign):
             self.endpoints[alpha]=ep
             write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='scratch' if self.fresh else 'actor_only',source_checkpoint=None if src is None else str(src),source_actor_sha256=digest,actor_exact=None if self.fresh else True,previous_policy_loaded=not self.fresh,critic_fresh=True,optimizer_empty=True,std=algo.policy.log_std.exp().detach().cpu().tolist(),seed=seed))
             self.save(alpha,0)
+    def resume_preference_stage2_endpoint(self,alpha):
+        import torch,jax.numpy as jp
+        from torch.utils.tensorboard import SummaryWriter
+        from .direct_command_ppo import make_algorithm
+        receipt=self.stage2_parent_receipt
+        source=Path(receipt['endpoints'][str(alpha)]['checkpoint'])
+        saved=torch.load(source,map_location='cuda',weights_only=False)
+        spec=self.resolve(alpha)
+        for key in ['reward','action','network','plant','limits','reference','lower_controller','lower_reference_centered','actor_temporal_regularizer']:
+            if spec.get(key)!=saved['config'].get(key):raise ValueError('V5 Stage2 resume method mismatch '+key)
+        with self.budget.measure(f'train{alpha}','restore full Stage1 upper learner and reset Stage2 physical episodes'):
+            state=self.states.replace(alpha=jp.full((self.n,),float(alpha)))
+            a,c,_,_=self.observe(state);obs=self.td(a,c)
+            algo=make_algorithm(obs,self.steps,spec,'cuda');algo.temporal_spec=spec
+            restore_learner(algo,saved)
+            ep=dict(algo=algo,state=state,obs=obs,update=40,warmup=0,hard_rejects=0,duration=0.,stopped=None,rng={k:saved[k] for k in ('torch_rng','cuda_rng','numpy_rng','python_rng')},writer=SummaryWriter(str(self.out/'tensorboard'/f'alpha{alpha}')))
+            self.endpoints[alpha]=ep
+            write(self.out/f'alpha{alpha}/initialization.json',dict(initialization='learner_state_resume_environment_reset',source_checkpoint=str(source),source_sha256=receipt['endpoints'][str(alpha)]['sha256'],actor_critic_optimizer_std_restored=True,rng_restored_on_first_batch=True,accepted_policy_updates=algo.accepted_policy_updates,physical_state_restored=False,first_new_update=41,additional_value_only_rollouts=0,stage1_gate_passed=False,user_override_stage2=True))
+            restore_rng(ep['rng'])
+            self.save(alpha,40)
+        self._status(completed_updates={str(a):e['update'] for a,e in self.endpoints.items()})
     def resume_endpoint(self,alpha):
         import torch,jax,jax.numpy as jp
         from torch.utils.tensorboard import SummaryWriter
@@ -163,7 +197,7 @@ class SmoothCampaign(Campaign):
         from .direct_command_policy import export_actor
         ep=self.endpoints[alpha];algo=ep['algo'];root=self.out/f'alpha{alpha}/checkpoints';root.mkdir(exist_ok=True,parents=True)
         path=root/f'update_{update:04d}.pt'
-        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),initialization='learner_state_resume_environment_reset' if self.resume_parent else 'scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume'),path.with_suffix('.tmp'))
+        torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,config=self.resolve(alpha),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),initialization='learner_state_resume_environment_reset' if self.resume_parent or self.preference_stage2_parent else 'scratch' if self.fresh else 'actor_only_warm_start',environment_continuation='not an exact physics resume'),path.with_suffix('.tmp'))
         os.replace(path.with_suffix('.tmp'),path)
         with path.with_name(f'actor_{update:04d}.pkl').open('wb') as f:pickle.dump(jax.device_get(export_actor(algo.policy)),f)
         write(self.out/f'alpha{alpha}/last_completed.json',dict(update=update,warmup=ep['warmup'],accepted_policy_updates=algo.accepted_policy_updates,checkpoint=str(path.resolve()),stop=ep['stopped']))
@@ -423,6 +457,38 @@ def restore_learner(algo,saved):
     if not algo.optimizer.state:raise ValueError('missing parent optimizer state')
 
 
+def validate_preference_stage2_parent(parent):
+    """Validate the immutable Stage1 endpoint checkpoints before an explicit override."""
+    import torch
+    parent=Path(parent).resolve()
+    status=json.loads((parent/'status.json').read_text())
+    if status.get('state')!='complete' or status.get('training_stage')!=1:
+        raise ValueError('V5 Stage2 parent must be a completed Stage1 run')
+    if status.get('completed_updates')!={'0':40,'1':40}:
+        raise ValueError('V5 Stage2 parent endpoints must both be exactly 40 updates')
+    if status.get('stage')!='stage1_gate_failed_stopped' or status.get('stage1_gate_passed') is not False or status.get('stage2_started') is not False:
+        raise ValueError('V5 Stage2 override requires the preserved failed-gate terminal status')
+    endpoints={}
+    for alpha in (0,1):
+        last=json.loads((parent/f'alpha{alpha}/last_completed.json').read_text())
+        source=Path(last['checkpoint']).resolve()
+        if source.parent.parent!=parent/f'alpha{alpha}' or not source.exists():
+            raise ValueError(f'alpha{alpha} checkpoint does not belong to parent run')
+        saved=torch.load(source,map_location='cpu',weights_only=False)
+        if any(int(saved.get(k,-1))!=40 for k in ('update','accepted_policy_updates')) or int(saved.get('warmup',-1))!=0:
+            raise ValueError(f'alpha{alpha} parent learner must be exactly update40 with no warmup')
+        if last.get('stop') is not None or int(last.get('update',-1))!=40 or int(last.get('accepted_policy_updates',-1))!=40:
+            raise ValueError(f'alpha{alpha} last-completed receipt mismatch')
+        if saved.get('config',{}).get('preference_v5_stage')!=1:
+            raise ValueError(f'alpha{alpha} is not a V5 Stage1 checkpoint')
+        if not saved.get('policy') or not saved.get('optimizer',{}).get('state'):
+            raise ValueError(f'alpha{alpha} missing full learner state')
+        if any(k not in saved for k in ('torch_rng','cuda_rng','numpy_rng','python_rng')):
+            raise ValueError(f'alpha{alpha} missing RNG state')
+        endpoints[str(alpha)]=dict(checkpoint=str(source),sha256=hashlib.sha256(source.read_bytes()).hexdigest(),update=40,warmup=0,accepted_policy_updates=40,optimizer_state_present=True,rng_state_present=True)
+    return dict(parent_run=str(parent),parent_terminal_stage=status['stage'],stage1_gate_passed=False,user_override_required=True,endpoints=endpoints)
+
+
 def run_preference(output,smoke=False):
     """Execute the user-declared gated V5 budget, never extend a failed pilot."""
     c=SmoothCampaign(output,fresh=True,preference_v5=True,smoke=smoke,unlimited_wall=True)
@@ -459,5 +525,27 @@ def run_preference(output,smoke=False):
         c.notify_once('pipeline_complete','STTW V5流水线结束','声明120更新及任务评价完成；不自动追加')
     except BaseException as exc:
         c._status(state='error',reason=str(exc));notify('STTW V5错误停止',str(exc));raise
+    finally:
+        for ep in c.endpoints.values():ep['writer'].close()
+
+
+def run_preference_stage2(output,parent):
+    """Continue failed-gate Stage1 learners only after the user's explicit override."""
+    c=SmoothCampaign(output,preference_v5=True,preference_stage2_parent=parent,unlimited_wall=True)
+    try:
+        c.initialize()
+        for a in [0,1]:c.create_endpoint(a)
+        c._status(state='running',stage='stage2_training',training_stage=2,stage1_gate_passed=False,stage2_started=True,user_override_stage2=True)
+        for update in [80,120]:
+            for a in [0,1]:
+                ep=c.endpoints[a]
+                while ep['update']<update:
+                    if not c.batch(a):raise RuntimeError(f'alpha{a} stopped: '+str(ep['stopped']))
+                c.save(a,ep['update']);c.notify_once(f'training_{a}_{update}','STTW V5训练阶段结束',f'alpha{a} Stage2累计{update}/120，尚待完整任务评价')
+            c.evaluate_preference(update)
+        c._status(state='complete',stage='saved_and_stopped',training_stage=2,stage1_gate_passed=False,stage2_started=True,user_override_stage2=True,qualified=None)
+        c.notify_once('pipeline_complete','STTW V5流水线结束','Stage2声明120更新及任务评价完成；不自动追加')
+    except BaseException as exc:
+        c._status(state='error',reason=str(exc),stage1_gate_passed=False,user_override_stage2=True);notify('STTW V5错误停止',str(exc));raise
     finally:
         for ep in c.endpoints.values():ep['writer'].close()
