@@ -137,15 +137,19 @@ def run(args):
                 write(campaign.out/f'alpha{alpha}/frozen_config.json', campaign.resolve(alpha))
             campaign.seen_cases=seen.copy()
             restore_rng(initial[0]['fields']['rng'])
-        active = []
+        active = [];env_outcomes=[]
         fixed_z = jp.asarray(__import__('numpy').random.default_rng(87).normal(size=(campaign.steps,campaign.n,2)).astype('float32'))
         jax.block_until_ready(fixed_z)
         def env_only():
-            state=campaign.endpoints[0]['state']; ticks=jp.int32(0)
+            state=campaign.endpoints[0]['state'];ticks=jp.int32(0);failures=ends=jp.int32(0);fault=jp.bool_(False)
             for z in fixed_z:
                 result=campaign.advance(state,z);state=result[0]
                 ticks=ticks+result[10]['all_active_ticks']
-            jax.block_until_ready((state,ticks));active.append(int(ticks))
+                failures=failures+result[7].sum();ends=ends+result[5].sum()
+                fault=fault|jp.any(result[3]|result[8])
+            jax.block_until_ready((state,ticks,failures,ends,fault))
+            if bool(fault):raise RuntimeError('env-only benchmark encountered policy/lower fault')
+            active.append(int(ticks));env_outcomes.append(dict(active_ticks=int(ticks),physical_failures=int(failures),episode_ends=int(ends),policy_lower_fault=False))
         def rollout():
             algo=campaign.endpoints[0]['algo']; update=algo.update
             try:
@@ -193,7 +197,7 @@ def run(args):
                       scheduled_control_ticks_per_sample=scheduled,physics_substeps_upper_bound_per_sample=scheduled*25,
                       evaluation_physical_concurrency=(18 if args.evaluation_update==100 else 6) if args.evaluation_batched else 3,
                       num_envs=campaign.n,rollout_steps=campaign.steps,seed=87,
-                      scheduled_ticks_per_rollout=campaign.n*campaign.steps*4,active_ticks=active,
+                      scheduled_ticks_per_rollout=campaign.n*campaign.steps*4,active_ticks=active,env_outcomes=env_outcomes,
                       jax_device_memory_stats=jax.devices()[0].memory_stats(),
                       torch_peak_allocated_bytes=torch.cuda.max_memory_allocated(),
                       torch_cuda=torch.version.cuda, caveats=['GPU peak in gpu.csv is sampled; Torch peak excludes JAX',
@@ -208,13 +212,16 @@ def run(args):
             def timed(*a,**kw):
                 sync();t=time.perf_counter()
                 out=fn(*a,**kw)
-                if label=='environment':jax.block_until_ready(out)
+                if label in ('environment','device_statistics'):jax.block_until_ready(out)
                 sync();phases[label]=phases.get(label,0.)+time.perf_counter()-t
                 return out
             originals.append((obj,name,fn));setattr(obj,name,timed)
         restore()
         for name,label in [('advance','environment'),('td','framework_handoff'),('record_episode_statistics','episode_statistics'),('case_manifest','reset_event_output'),('save','checkpoint')]:wrap(campaign,name,label)
+        if hasattr(campaign,'accumulate_statistics'):wrap(campaign,'accumulate_statistics','device_statistics')
+        if hasattr(campaign,'write_reset_events'):wrap(campaign,'write_reset_events','reset_event_output')
         for ep in campaign.endpoints.values():
+            wrap(ep['writer'],'flush','tensorboard_output')
             for name,label in [('act','policy_inference'),('process_env_step','storage'),('compute_returns','GAE'),('update','PPO')]:wrap(ep['algo'],name,label)
         try:
             # Evaluation already records every phase inside each operation.
