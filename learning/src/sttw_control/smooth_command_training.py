@@ -351,7 +351,7 @@ class SmoothCampaign(Campaign):
         write(self.out/'stage_transition.json',dict(from_stage=1,to_stage=2,actor_critic_adam_rng_preserved=True,accepted_updates={str(a):ep['algo'].accepted_policy_updates for a,ep in self.endpoints.items()},physics_histories_reset=True))
         self._status(training_stage=2,declared_policy_batches_per_endpoint=120)
 
-    def evaluate_preference(self,update,case_filter=None):
+    def evaluate_preference(self,update,case_filter=None,batched=False):
         import jax,jax.numpy as jp
         from .direct_command_policy import DirectCommandActor,export_actor
         from .fixed_command_panel import load_protocol,schedules
@@ -377,6 +377,11 @@ class SmoothCampaign(Campaign):
             found={row[0] for row in cases}
             if found!=wanted:raise ValueError(f'unknown preference evaluation cases: {sorted(wanted-found)}')
         if not cases:raise ValueError('preference evaluation requires at least one case')
+        if batched:
+            if not self.preference_v51:raise ValueError('batched evaluation currently validated for V5.1')
+            return self.evaluate_preference_batch(cases,methods,indices,params,sample,update,actor)
+        evaluation_started=time.perf_counter();physics_seconds=output_seconds=0.
+        compile_started=time.perf_counter()
         reset=self.compile(f'V5 stage{self.training_stage} paired reset',reset,jp.asarray(cases[0][1],jp.float32))
         states=reset(jp.asarray(cases[0][1],jp.float32))
         def chunk(states,params):
@@ -388,26 +393,86 @@ class SmoothCampaign(Campaign):
                 return end,logs
             return jax.lax.scan(step,states,None,length=50)
         chunk=self.compile(f'V5 stage{self.training_stage} paired 1s physical evaluation',chunk,states,params)
+        compilation_seconds=time.perf_counter()-compile_started
         for case,rows,seconds in cases:
             self._status(stage=f'evaluate{update}',case=case)
             with self.budget.measure('review',f'update{update}/{case}'):
+                physics_started=time.perf_counter()
                 states=reset(jp.asarray(rows,jp.float32));chunks=[]
                 for _ in range(seconds):
                     states,logs=chunk(states,params);jax.block_until_ready(states);chunks.append(jax.device_get(logs))
                     if bool(jp.any(states.fault)):raise RuntimeError('evaluation nonfinite policy or lower')
+                physics_seconds+=time.perf_counter()-physics_started
+                output_started=time.perf_counter()
                 flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
                 dest=self.out/f'evaluation{update}'/case;dest.mkdir(parents=True,exist_ok=True)
                 for i,name in enumerate(methods):
                     d={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()};valid=d['active_tick'];d={k:v[valid] for k,v in d.items()}
                     d.update(checkpoint_update=np.asarray(update),partial=np.asarray(False))
                     np.savez_compressed(dest/f'{name}.npz',**d)
+                output_seconds+=time.perf_counter()-output_started
             if reuse_baseline:
                 source=self.out/'evaluation20'/case/'B0.npz'
                 if not source.exists():raise FileNotFoundError(source)
                 (dest/'B0.npz').symlink_to(source.resolve())
             print(f'V5 evaluation{update} {case} saved',flush=True)
-        result=report_stage1(self.out,update) if self.training_stage==1 else report_stage2(self.out,update)
+        from .smooth_evaluation import timed_report
+        result=timed_report(self.out,update,self.training_stage)
+        write(self.out/f'evaluation{update}/evaluation_timings.json',dict(compile=compilation_seconds,physics=physics_seconds,file_output=output_seconds,total=time.perf_counter()-evaluation_started,batched=False))
         notify('STTW V5评价阶段完成',f'update{update} 图与门槛结果已保存')
+        return result
+
+    def evaluate_preference_batch(self,cases,methods,indices,params,sample,update,actor):
+        import jax,jax.numpy as jp
+        from .smooth_evaluation import expand_cases,masked_step,timed_report,policy_log_template
+        started=time.perf_counter();env=self.env
+        rows,alphas,bypass,horizons=map(jp.asarray,expand_cases(cases,methods,indices))
+        params=jax.tree.map(lambda x:jp.concatenate([x]*len(cases),axis=0),params)
+        key=(len(cases),tuple(methods))
+        cache=getattr(self,'preference_evaluation_cache',{})
+        compile_started=time.perf_counter()
+        if key not in cache:
+            def reset(rows,alphas):
+                return jax.vmap(lambda r,a:env.reset(sample,jp.int32(77001),jp.int32(0),a,r,jp.array([.5,.3])))(rows,alphas)
+            reset=self.compile('V5.1 case-method batch reset',reset,rows,alphas)
+            states=reset(rows,alphas)
+            zero=policy_log_template(env,self.sample_state)
+            def chunk(states,params,bypass,horizons):
+                def step(states,_):
+                    active=(states.tick<horizons)&~states.physical.failed&~states.fault
+                    obs,_,fault,_=jax.vmap(env.observation)(states)
+                    mu=jax.vmap(lambda p,o:actor.apply(p,o))(params,obs)
+                    mu=jp.where(bypass[:,None],jp.zeros_like(mu),mu)
+                    states=states.replace(fault=states.fault|(fault&active))
+                    def physical(state,z):
+                        end,_,_,logs,_=env.policy_step(state,z,False)
+                        return end,logs
+                    return jax.vmap(lambda state,z,alive:masked_step(physical,state,z,alive,zero))(states,mu,active)
+                return jax.lax.scan(step,states,None,length=50)
+            chunk=self.compile('V5.1 batched one-second physical evaluation',chunk,states,params,bypass,horizons)
+            cache[key]=(reset,chunk);self.preference_evaluation_cache=cache
+        compilation=time.perf_counter()-compile_started
+        with self.budget.measure('review',f'update{update}/case-method batch'):
+            reset,chunk=cache[key];physics_started=time.perf_counter()
+            states=reset(rows,alphas);chunks=[]
+            for second in range(max(case[2] for case in cases)):
+                states,logs=chunk(states,params,bypass,horizons);jax.block_until_ready(states)
+                chunks.append(jax.device_get(logs))
+                if bool(jp.any(states.fault)):raise RuntimeError('batched evaluation policy/lower fault')
+                self._status(stage=f'evaluate{update}',case='case-method batch',evaluation_seconds_completed=second+1)
+            physics=time.perf_counter()-physics_started;output_started=time.perf_counter()
+            flat=flatten_logs(jax.tree.map(lambda *x:np.concatenate(x),*chunks))
+            for case_index,(case,_,seconds) in enumerate(cases):
+                dest=self.out/f'evaluation{update}'/case;dest.mkdir(parents=True,exist_ok=True)
+                for method_index,name in enumerate(methods):
+                    i=case_index*len(methods)+method_index
+                    data={k:v[:,i].reshape((-1,)+v.shape[3:]) for k,v in flat.items()}
+                    valid=data['active_tick'];data={k:v[valid] for k,v in data.items()}
+                    data.update(checkpoint_update=np.asarray(update),partial=np.asarray(False))
+                    np.savez_compressed(dest/f'{name}.npz',**data)
+            output=time.perf_counter()-output_started
+        result=timed_report(self.out,update,self.training_stage)
+        write(self.out/f'evaluation{update}/evaluation_timings.json',dict(compile=compilation,physics=physics,file_output=output,total=time.perf_counter()-started,batched=True,trajectory_count=len(cases)*len(methods)))
         return result
 
     def evaluate(self,stage):
