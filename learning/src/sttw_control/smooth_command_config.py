@@ -186,3 +186,34 @@ def resolve_preference_v51(alpha):
                        default_control_transitions_upper=overlay['budget']['control_ticks_both_upper_bound'],
                        max_updates_per_endpoint=overlay['run']['policy_updates'], no_extra_wall_cutoff=True)
     return s
+
+
+def resolve_dimensions(spec, *, smoke=False, num_envs=None, rollout_steps=None):
+    """Resolve execution dimensions and their derived budget in one place.
+
+    Explicit overrides are engineering inputs, never new formal defaults.
+    """
+    from copy import deepcopy
+    spec = deepcopy(spec)
+    p = spec['ppo']
+    if smoke and (num_envs is not None or rollout_steps is not None):
+        raise ValueError('smoke and explicit dimensions are mutually exclusive')
+    n = 8 if smoke else p['num_envs'] if num_envs is None else num_envs
+    t = 16 if smoke else p['rollout_policy_steps'] if rollout_steps is None else rollout_steps
+    if any(isinstance(x, bool) or not isinstance(x, int) or x <= 0 for x in (n,t,p['minibatches'])):
+        raise ValueError('dimensions must be positive integers')
+    if n*t % p['minibatches']:
+        raise ValueError('N*T must divide evenly into minibatches')
+    if smoke or num_envs is not None or rollout_steps is not None:
+        p.update(num_envs=n, rollout_policy_steps=t, minibatch_size=n*t//p['minibatches'])
+    if n*t != p['minibatches']*p['minibatch_size']:
+        raise ValueError('N*T must equal minibatches*minibatch_size')
+    # Preserve the original number of policy batches including legacy warmup.
+    if spec.get('preference_v5'):
+        transitions = 2*p['default_updates']*n*t
+        spec['budget'].update(default_policy_transitions=transitions,
+                              default_control_transitions_upper=4*transitions)
+    spec['execution_dimensions'] = dict(num_envs=n, rollout_policy_steps=t,
+                                        transitions_per_rollout=n*t,
+                                        minibatches=p['minibatches'], minibatch_size=p['minibatch_size'])
+    return spec

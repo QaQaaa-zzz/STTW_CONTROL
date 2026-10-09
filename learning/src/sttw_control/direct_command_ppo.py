@@ -28,7 +28,11 @@ ALPHA_INDEX = 336  # 16 frames * 20 fields + 16 valid masks
 
 
 def _finite_tensors(*tensors):
-    return all(bool(torch.isfinite(tensor).all()) for tensor in tensors)
+    flags = {}
+    for tensor in tensors:
+        flags.setdefault(tensor.device, []).append(torch.isfinite(tensor).all())
+    # Adam step counters may be CPU tensors; never stack across devices.
+    return all(bool(torch.stack(group).all()) for group in flags.values())
 
 
 class DirectCommandPPO(PPO):
@@ -92,8 +96,8 @@ class DirectCommandPPO(PPO):
         std = self.policy.log_std.exp()
         if not _finite_tensors(old_mu, old_std, std, alpha) or bool((old_std <= 0).any()):
             return float("nan"), {"0": float("nan"), "1": float("nan")}
-        totals = {"0": 0., "1": 0.}
-        counts = {"0": 0, "1": 0}
+        totals = torch.zeros(2, device=old_mu.device, dtype=torch.float64)
+        counts = torch.zeros(2, device=old_mu.device, dtype=torch.int64)
         for start in range(0, old_mu.shape[0], 16384):
             end = min(start + 16384, old_mu.shape[0])
             new_mu = self.policy.act_inference(observations[start:end])
@@ -103,14 +107,14 @@ class DirectCommandPPO(PPO):
                       - .5).sum(dim=-1)
             if not _finite_tensors(row_kl):
                 return float("nan"), {"0": float("nan"), "1": float("nan")}
-            for key, value in (("0", 0.), ("1", 1.)):
+            for index, value in enumerate((0., 1.)):
                 mask = alpha[start:end] == value
-                totals[key] += float(row_kl[mask].sum())
-                counts[key] += int(mask.sum())
-        by_alpha = {key: totals[key] / counts[key] if counts[key] else float("nan")
-                    for key in ("0", "1")}
-        count = sum(counts.values())
-        mean = sum(totals.values()) / count if count else float("nan")
+                totals[index] += torch.where(mask, row_kl, 0.).sum()
+                counts[index] += mask.sum()
+        totals, counts = torch.stack((totals, counts.to(totals.dtype))).cpu().tolist()
+        by_alpha = {str(i): totals[i] / counts[i] if counts[i] else float("nan") for i in (0,1)}
+        count = sum(counts)
+        mean = sum(totals) / count if count else float("nan")
         return (mean, by_alpha) if self.kl_group_index is not None else (mean, {"all": mean})
 
     def prepare_temporal_pairs(self):
@@ -158,6 +162,9 @@ class DirectCommandPPO(PPO):
                 self.accepted_policy_updates / cfg['ramp_policy_updates'], 1.)
 
     def temporal_loss(self, indices):
+        # Pair preparation and randperm still run in their original order.
+        if self.temporal_coefficient == 0:
+            return next(self.policy.actor.parameters()).sum()*0.
         indices=indices[self.temporal_mask[indices]]
         if not len(indices) or not self.temporal_denominator:
             return next(self.policy.actor.parameters()).sum()*0.
@@ -193,7 +200,8 @@ class DirectCommandPPO(PPO):
         if self.temporal_spec is not None:self.prepare_temporal_pairs()
         sums = {"temporal":0., "value": 0., "surrogate": 0., "entropy": 0.,
                 "actor_grad_norm": 0., "critic_grad_norm": 0.}
-        attempted_grad_sums = {"actor": 0., "critic": 0.}
+        sums = {key: torch.zeros((),device=self.policy.log_std.device,dtype=torch.float64) for key in sums}
+        attempted_grad_sums = {key: torch.zeros_like(sums["value"]) for key in ("actor","critic")}
         attempted_grad_count = 0
         attempted_epochs = accepted_epochs = 0
         attempted_minibatches = accepted_minibatches = 0
@@ -204,7 +212,7 @@ class DirectCommandPPO(PPO):
             for _ in range(self.num_learning_epochs):
                 snapshot = self._snapshot()  # rejected epoch only; retain earlier epochs
                 attempted_epochs += 1
-                epoch_sums = {key: 0. for key in sums}
+                epoch_sums = {key: torch.zeros_like(value) for key,value in sums.items()}
                 epoch_minibatches = 0
                 bad = False
                 if self.temporal_spec is not None:
@@ -258,14 +266,14 @@ class DirectCommandPPO(PPO):
                     if not _finite_tensors(*self.policy.parameters(), *optimizer_tensors):
                         bad = True
                         break
-                    epoch_sums["temporal"] += float(temporal.detach())
-                    epoch_sums["value"] += float(value_loss.detach())
-                    epoch_sums["surrogate"] += float(surrogate_loss.detach())
-                    epoch_sums["entropy"] += float(entropy.detach())
-                    epoch_sums["actor_grad_norm"] += float(actor_norm)
-                    epoch_sums["critic_grad_norm"] += float(critic_norm)
-                    attempted_grad_sums["actor"] += float(actor_norm)
-                    attempted_grad_sums["critic"] += float(critic_norm)
+                    epoch_sums["temporal"] += temporal.detach()
+                    epoch_sums["value"] += value_loss.detach()
+                    epoch_sums["surrogate"] += surrogate_loss.detach()
+                    epoch_sums["entropy"] += entropy.detach()
+                    epoch_sums["actor_grad_norm"] += actor_norm
+                    epoch_sums["critic_grad_norm"] += critic_norm
+                    attempted_grad_sums["actor"] += actor_norm
+                    attempted_grad_sums["critic"] += critic_norm
                     attempted_grad_count += 1
                     epoch_minibatches += 1
                 if bad:
@@ -298,6 +306,9 @@ class DirectCommandPPO(PPO):
             self.nonfinite_stop = True
             raise
         self.storage.clear()
+        summary = torch.stack([*sums.values(),*attempted_grad_sums.values()]).cpu().tolist()
+        sums = dict(zip(sums,summary[:len(sums)]))
+        attempted_grad_sums = dict(zip(attempted_grad_sums,summary[-2:]))
         result = {key: value / accepted_minibatches if accepted_minibatches else 0.
                   for key, value in sums.items()}
         result.update(mean_kl=mean_kl, exact_kl=mean_kl,

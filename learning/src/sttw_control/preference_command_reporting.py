@@ -238,7 +238,7 @@ def report_stage2(root,update):
         traces={k:_load(case/(k+'.npz')) for k in ['alpha0','alpha1','B0'] if (case/(k+'.npz')).exists()}
         _plots(traces,out,case.name,update,10,(root,16));result[case.name]={k:{'main10':physical(d,10),'chain':chain_audit(d),'v51_contract':_v51_contract_metrics(d,10)} for k,d in traces.items()}
         for a in [0,1]:result[case.name][f'alpha{a}']['reward_audit']=reward_audit(traces[f'alpha{a}'],a,root,16)
-        if case.name=='fast_turn' and all(len(d['time'])>=3200 for d in traces.values()):
+        if case.name=='fast_turn':
             _plots(traces,out,case.name,update,16,(root,16))
             for k,d in traces.items():
                 result[case.name][k]['extension16']=physical(d,16)

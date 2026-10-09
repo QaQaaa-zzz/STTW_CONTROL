@@ -81,6 +81,15 @@ def flatten_logs(logs):
         else:flat[name]=value
     return flat
 
+def conditional_batch_reset(end,done,reset_one):
+    """Skip all reset computation only when the entire batch has no done."""
+    import jax
+    import jax.numpy as jp
+    return jax.lax.cond(jp.any(done),
+        lambda args:jax.vmap(lambda state,finished:jax.lax.cond(finished,reset_one,lambda x:x,state))(*args),
+        lambda args:args[0],(end,done))
+
+
 class Campaign:
     def __init__(self,config,output):
         self.config=Path(config);self.spec=load_spec(config);self.out=Path(output)
@@ -104,7 +113,7 @@ class Campaign:
         from .runtime import configure_compilation_cache
         from .actuator import initial_actuator
         if jax.config.x64_enabled:raise ValueError('V3 preserves float32, no global x64 change')
-        torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
+        torch.set_num_threads(2);configure_compilation_cache()
         with self.budget.measure('compile','load original MJX model and initial forward'):
             self.env=DirectCommandEnv(self.spec);base=self.env.physics.initial();jax.block_until_ready(base)
         e=self.env;cc=e.cc
@@ -188,7 +197,8 @@ class Campaign:
             write(self.out/'interface_checks.json',dict(passed=True,episodes=2,seconds_each=4,max_residual=float(np.max(np.abs(residual))),
                 max_reference_difference=float(np.max(np.abs(governed-raw))),final_steer=np.asarray(log['actual_delta'][-1,:,-1]).tolist(),
                 final_yaw=np.asarray(log['yaw_unwrapped'][-1,:,-1]).tolist()))
-    def setup_batch(self,n):
+    def setup_batch(self,n,log_mode="evaluation_full",reset_guard=False):
+        if log_mode not in ("training_summary","evaluation_full"):raise ValueError(log_mode)
         import jax
         import jax.numpy as jp
         e=self.env;ids=jp.arange(n,dtype=jp.int32)
@@ -211,7 +221,10 @@ class Campaign:
             states=reset(ids,jp.zeros(n,jp.int32),alpha);jax.block_until_ready(states)
         def advance(states,z):
             end,reward,done,logs,final_obs=jax.vmap(e.policy_step)(states,z)
-            nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha),lambda s:s,s))(end,done)
+            if reset_guard:
+                nxt=conditional_batch_reset(end,done,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha))
+            else:
+                nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha),lambda s:s,s))(end,done)
             a,c,f,clip=jax.vmap(e.observation)(nxt)
             active=logs['active_tick'].astype(jp.float32)
             ev=logs['actual_forward_speed']-logs['limited_command'][:,:,0];ed=logs['actual_delta']-logs['limited_command'][:,:,1]
@@ -228,7 +241,7 @@ class Campaign:
                 recovery=logs['recovery_phase'];conflict=(logs['chi']>0)&(logs['g']==0)
                 windows=jp.stack([jp.ones_like(active),~(recovery|conflict),conflict,recovery],axis=-1)
             summary=jp.einsum('ntf,ntw->nwf',base,windows)
-            diag=jax.tree.map(lambda x:x[jp.array([0,n//2])],logs)
+            diag=(jax.tree.map(lambda x:x[jp.array([0,n//2])],logs) if log_mode=='evaluation_full' else {})
             if self.spec.get('smooth_v4'):
                 diag['all_component_cap_counts']={k:jp.sum(v & logs['active_tick']) for k,v in logs['component_capped'].items()}
                 diag['all_active_ticks']=jp.sum(logs['active_tick'])
@@ -237,6 +250,10 @@ class Campaign:
                 diag['all_proposal_dv']=map_latent(z,self.spec)[:,0]
                 diag['all_governed_dv']=logs['offsets'][:,:,0]
                 diag['all_valid_ticks']=logs['active_tick']
+            if log_mode=='training_summary':
+                diag['reset_event']=dict(done=done,env_id=nxt.env_id,episode_index=nxt.episode_index,alpha=nxt.alpha,
+                    family=nxt.family,initial_heading_error=nxt.initial_heading_error,reference_pose=nxt.physical.reference_pose,
+                    actual_yaw=nxt.physical.yaw_unwrapped,slew=nxt.slew,rows=nxt.rows)
             return nxt,a,c,f,reward,done,summary,end.physical.failed,end.fault,jp.max(logs['peak_roll'],axis=1),diag,final_obs
         advance=self.compile(f'{n} direct actions four physical ticks and terminal reset',advance,states,jp.zeros((n,2)))
         observe=self.compile(f'{n} observations',jax.vmap(e.observation),states)
@@ -255,6 +272,20 @@ class Campaign:
                          family=int(family[i]),initial_heading_error_rad=float(initial_heading_error[i]),initial_reference_pose=reference_pose[i].tolist(),
                          initial_actual_yaw_rad=float(actual_yaw[i]),slew=slew[i].tolist(),rows=rows[i].tolist())
                 f.write(json.dumps(rec)+'\n');self.seen_cases.add((phase,int(ids[i]),int(episodes[i])))
+    def write_reset_events(self,events,phase):
+        """Events captured at reset, never reconstructed from rollout-end state."""
+        path=self.out/phase/'case_manifest.jsonl';path.parent.mkdir(parents=True,exist_ok=True)
+        with path.open('a') as f:
+            for t,i in zip(*np.nonzero(events['done'])):
+                def get(key):return events[key][t,i]
+                key=(phase,int(get('env_id')),int(get('episode_index')))
+                if key in self.seen_cases:continue
+                rec=dict(env_id=key[1],episode_index=key[2],alpha=float(get('alpha')),upper_alpha=float(get('alpha')),
+                    lower_alpha=1. if self.env.lower is not None else None,family=int(get('family')),
+                    initial_heading_error_rad=float(get('initial_heading_error')),initial_reference_pose=get('reference_pose').tolist(),
+                    initial_actual_yaw_rad=float(get('actual_yaw')),slew=get('slew').tolist(),rows=get('rows').tolist())
+                f.write(json.dumps(rec)+'\n');self.seen_cases.add(key)
+
     def checkpoint(self,algo,update,phase,states):
         import torch,jax
         from .direct_command_policy import export_actor

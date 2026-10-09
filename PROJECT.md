@@ -1,3 +1,13 @@
+# RTX 4090D performance implementation (2026-10-09)
+
+Authorized specification: user request, baseline 071fc6f; implementation base 77f715f retains evaluation-budget repair. Isolated branch performance/r196-v51-4090d. No formal training, no changes to physics/reward/control/PPO contract, no DVGC/JIT writes or process termination.
+
+Plan (sequential A/B commits): (1) reusable five-mode benchmark and current baseline; (2) resolved dimensions; (3) device statistics and exact reset events; (4) batch reset guard; (5) PPO synchronization; (6) batched evaluation plus numerical audit; (7) profile-gated geometry/cache/scale decisions. JAX rollout only if remaining framework handoff cost warrants it. Each benchmark uses two warmups and three restored-state measurements; compile/preparation separate. Existing tests and complete-state comparisons gate adoption. Raw artifacts stay under ignored runs/. Current research status remains in the shared ledger.
+
+Progress: completed evaluation A/B: median752.835059s to239.373127s (3.15x), all18 reward audits pass. V5.1 batch evaluation is now the default with explicit sequential fallback. Small trajectory differences remain (maximum compared XY0.0211668m); strict numerical equivalence is not claimed. Dimensions, PPO and shared cache enabled; summary/reset remain opt-in. User requested fewer tests: optional remaining scale queue cancelled, raw evidence preserved, no formal training. Report and all six XY links: docs/PERFORMANCE.md. Existing100/100 experiment and DVGC/JIT untouched. No push per worktree override.
+
+---
+
 # Preference V5 Stage2 completed, not qualified (2026-10-09)
 
 User explicitly overrode the failed Stage1 gate to try Stage2. The separate run `runs/preference_v5_stage2_override_20261009` restored both complete update40 learners and finished update120 plus matched update80/120 six-case evaluation. Alpha0 brakes and limits fast-turn roll while retaining more steering; alpha1 retains more speed but weakens steering and still exceeds the common roll bound. Final joint speed/steer/heading hold is alpha0 0/6 and alpha1 1/6 at10s; no method passes fast_turn heading hold at16s. The result is complete, unqualified and not adopted; no250/500 extension. Full actual-control-first and XY evidence: `runs/preference_v5_stage2_override_20261009/analysis/REPORT.md`.
