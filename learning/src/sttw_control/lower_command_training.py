@@ -22,15 +22,19 @@ def make_algorithm(obs,steps,cfg,device='cuda'):
     return DirectCommandPPO(policy,storage,num_learning_epochs=cfg['epochs'],num_mini_batches=cfg['minibatches'],clip_param=cfg['clip_ratio'],gamma=cfg['gamma'],lam=cfg['gae_lambda'],value_loss_coef=1.,entropy_coef=cfg['entropy'],use_clipped_value_loss=False,schedule='fixed',desired_kl=cfg['soft_kl'],normalize_advantage_per_mini_batch=False,device=device,actor_lr=cfg['actor_lr'],critic_lr=cfg['critic_lr'],adam_betas=(.9,.999),adam_epsilon=1e-5,weight_decay=0.,std_min=cfg['std_min'],std_max=cfg['std_max'],hard_kl=cfg['hard_kl'],actor_grad_limit=1.,critic_grad_limit=1.,kl_group_index=None)
 
 class Training:
-    def __init__(self,config,output):
-        self.cfg=json.loads(Path(config).read_text());self.out=Path(output);self.started=time.monotonic()
+    def __init__(self,config,output,authorize_local_training=False):
+        self.cfg=json.loads(Path(config).read_text())
+        if self.cfg.get('candidate_local_interface'):
+            self.cfg['formal_training_authorized']=bool(authorize_local_training)
+            if not authorize_local_training:raise PermissionError('local candidate training resources not authorized')
+        self.out=Path(output);self.started=time.monotonic()
         if (self.out/'manifest.json').exists():raise FileExistsError('run already exists; no overwrite/resume')
         self.status=dict(state='initializing',run_id=self.out.name,declared_updates=self.cfg['updates'],completed_updates=0,training_transitions=0,initialization='fresh_actor_critic_optimizer',training_seed=self.cfg['seed'])
         self.update_status();write(self.out/'config.json',self.cfg)
     def update_status(self,**kw):
         self.status.update(kw);self.status.update(updated_epoch=time.time(),elapsed_s=time.monotonic()-self.started);write(self.out/'status.json',self.status)
     def check_budget(self):
-        if time.monotonic()-self.started>self.cfg['wall_budget_s']:raise TimeoutError('declared wall budget exhausted')
+        if self.cfg.get('wall_budget_s') is not None and time.monotonic()-self.started>self.cfg['wall_budget_s']:raise TimeoutError('declared wall budget exhausted')
     def compile(self,label,fn,*args):
         import jax
         self.check_budget();self.update_status(stage='compile',detail=label,state='running');start=time.monotonic()
@@ -44,11 +48,20 @@ class Training:
         from .runtime import configure_compilation_cache
         torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
         self.env=LowerCommandEnv(self.cfg)
+        if self.cfg.get('candidate_local_interface'):
+            from .lower_command import SCALES
+            np.testing.assert_allclose(np.asarray(SCALES),self.cfg['observation_scales'],rtol=1e-7,atol=0)
+            assert self.cfg['actor_dim']==210 and self.cfg['critic_dim']==211 and self.cfg['history_frames']==10
+            assert self.cfg['num_envs']*self.cfg['rollout_steps']%self.cfg['minibatches']==0
         with Path(self.cfg['prepared_bank']).open('rb') as f:self.bank=jax.tree.map(jp.asarray,pickle.load(f))
         source=json.loads(Path(self.cfg['prepared_manifest']).read_text())
         assert self.env.physics.bundle.identity==source['model'],'prepared bank physics identity mismatch'
         assert asdict(self.env.cc)==source['controller'] and asdict(self.env.ac)==source['actuator']
         write(self.out/'manifest.json',dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=None,optimizer_source=None,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
+        if self.cfg.get('candidate_local_interface'):
+            # Existing lower/ECBC interface validation is retained; do not repeat it.
+            write(self.out/'interface_checks.json',dict(status='reused_existing_interface_no_new_parity_physics',candidate_checks='learning/tests/test_local_lower_candidate.py'))
+            return
         # Complete physical/controller/actuator parity, not merely matching motor commands.
         sample=jax.tree.map(lambda x:x[3],self.bank);s=self.env.reset(sample,jp.int32(0),jp.int32(0))
         def parity(s):
@@ -83,7 +96,7 @@ class Training:
     def checkpoint(self,algo,update,phase,states,name=None):
         import torch
         root=self.out/phase/'checkpoints';root.mkdir(parents=True,exist_ok=True);path=root/(name or f'update_{update:04d}.pt');tmp=path.with_suffix('.tmp')
-        torch.save(dict(schema=self.cfg['schema'],update=update,config=self.cfg,policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),episode_indices=np.asarray(states.episode),task_ticks=np.asarray(states.tick),observation_scales='lower_command.SCALES',environment_continuation='not saved; no automatic resume'),tmp);os.replace(tmp,path)
+        torch.save(dict(schema=self.cfg['schema'],update=update,config=self.cfg,policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),accepted_policy_updates=algo.accepted_policy_updates,torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all(),numpy_rng=np.random.get_state(),python_rng=random.getstate(),episode_indices=np.asarray(states.episode),task_ticks=np.asarray(states.tick),observation_scales='lower_command.SCALES',environment_continuation='not saved; no automatic resume'),tmp);os.replace(tmp,path)
         return str(path.resolve())
     def train(self,phase):
         import jax,jax.numpy as jp,torch
@@ -96,7 +109,7 @@ class Training:
         a,c=observe(states);obs=td(a,c);algo=make_algorithm(obs,steps,self.cfg)
         self.checkpoint(algo,0,phase,states);writer=SummaryWriter(str(self.out/'tensorboard'/phase));writer.add_scalar('progress/updates',0,0);writer.flush()
         self.update_status(stage=phase,state='running',stage_updates=0)
-        best=-float('inf');completed=0
+        best=-float('inf');completed=0;hard_rejects=0
         try:
             for update in range(1,updates+1):
                 self.check_budget();start=time.monotonic();stat=[];rews=[];parts=[];diags=[]
@@ -113,7 +126,7 @@ class Training:
                     algo.compute_returns(obs)
                 sample_seconds=time.monotonic()-start;mean_reward=float(np.mean(rews))
                 if mean_reward>best:
-                    best=mean_reward;path=self.checkpoint(algo,update-1,phase,states,'training_reward_best.pt');write(self.out/phase/'best_model.json',dict(checkpoint=path,update=update-1,scored_by_rollout=update,mean_step_reward=best,selection='random training rollout, pre-update actor, not fixed-scene qualification'))
+                    best=mean_reward;path=self.checkpoint(algo,update-1,phase,states,'training_reward_best.pt');write(self.out/phase/('train_best_candidate.json' if self.cfg.get('candidate_local_interface') else 'best_model.json'),dict(checkpoint=path,update=update-1,scored_by_rollout=update,mean_step_reward=best,selection='random training rollout, pre-update actor, not fixed-scene qualification'))
                 opt=time.monotonic();metrics=algo.update();opt_seconds=time.monotonic()-opt;completed=update
                 arr=np.asarray(stat);avg=arr.mean(0);actor_delta=float(torch.sqrt(sum(((v-original[k])**2).sum() for k,v in algo.policy.state_dict().items() if k in original)))
                 record=dict(update=update,transitions=update*n*steps,mean_step_reward=mean_reward,speed_rmse=float(np.sqrt(avg[0])),steer_rmse=float(np.sqrt(avg[1])),speed_mae=float(avg[2]),steer_mae=float(avg[3]),working_roll_fraction=float(avg[4]),failed_episodes=int(round(arr[:,5].sum()*n)),ended_episodes=int(round(arr[:,6].sum()*n)),residual_saturation_fraction=float(avg[7]),peak_roll=float(arr[:,8].max()),actual_speed_mean=float(avg[9]),command_speed_mean=float(avg[10]),command_steer_mean=float(avg[11]),logged_final_clip_fraction=float(avg[12]),sample_seconds=sample_seconds,optimize_seconds=opt_seconds,seconds=time.monotonic()-start,actor_weight_delta_l2=actor_delta,ppo=metrics,reward_parts={k:float(np.mean([x[k] for x in parts])) for k in parts[0]})
@@ -131,15 +144,46 @@ class Training:
                     full=flatten_logs(jax.tree.map(lambda *x:np.stack(x),*diags));np.savez_compressed(self.out/phase/f'diagnostic_{update:04d}.npz',**full)
                 self.update_status(stage=phase,state='running',stage_updates=update,completed_updates=update if phase=='training' else 0,training_transitions=update*n*steps if phase=='training' else 0,last_reward=mean_reward,last_speed_rmse=record['speed_rmse'],last_steer_rmse=record['steer_rmse'],last_actor_grad=metrics['actor_grad_norm'],last_update_seconds=record['seconds'])
                 print(json.dumps(dict(phase=phase,update=update,reward=mean_reward,speed_rmse=record['speed_rmse'],steer_rmse=record['steer_rmse'],grad=metrics['actor_grad_norm'],kl=metrics['mean_kl'],seconds=record['seconds'])),flush=True)
-                if metrics['hard_kl_stop'] or metrics['nonfinite_stop']:raise RuntimeError('PPO numerical/KL stop, saved last finite checkpoint')
+                if self.cfg.get('candidate_local_interface'):
+                    hard_rejects,stop=handle_candidate_ppo_result(algo,metrics,hard_rejects,self.cfg)
+                    if stop:raise RuntimeError(stop)
+                    if phase=='training' and update in self.cfg['validation_updates']:
+                        from .lower_command_validation import evaluate_fixed
+                        path=self.checkpoint(algo,update,phase,states)
+                        self.update_status(stage='fixed_validation',stage_updates=update)
+                        evaluate_fixed(self,algo,update,path)
+                elif metrics['hard_kl_stop'] or metrics['nonfinite_stop']:
+                    raise RuntimeError('PPO numerical/KL stop, saved last finite checkpoint')
+            if phase=='training' and self.cfg.get('candidate_local_interface'):
+                notify('STTW lower training stage ended',f'{phase} {completed}/{updates}')
+                from .lower_command_validation import load_best,evaluate_fixed
+                # Last is already checkpointed. Final verification reloads immutable best.
+                best_record=load_best(self.out/'training',algo.policy)
+                evaluate_fixed(self,algo,best_record['source_update'],best_record['checkpoint'],select=False)
+                self.update_status(best_source_update=best_record['source_update'],best_qualified=best_record['qualified'],adoption_status='not_adopted')
             if phase=='smoke':
                 assert actor_delta>0 and metrics['actor_grad_norm']>0 and metrics['critic_grad_norm']>0
                 write(self.out/'smoke/passed.json',dict(updates=completed,finite_gradients=True,actor_delta=actor_delta))
         finally:writer.close()
-        notify('STTW lower training stage ended',f'{phase} {completed}/{updates}')
+        if not (phase=='training' and self.cfg.get('candidate_local_interface')):
+            notify('STTW lower training stage ended',f'{phase} {completed}/{updates}')
 
-def run(config,output,smoke_only=False):
-    t=Training(config,output)
+def handle_candidate_ppo_result(algo,metrics,consecutive,cfg):
+    # DirectCommandPPO already restored rejected epoch Actor/Critic/Adam/RNG.
+    # Match V5.2: one hard rejection reduces Actor LR; fresh rollout follows.
+    if metrics['nonfinite_stop']:return consecutive,'nonfinite_optimizer'
+    consecutive=consecutive+1 if metrics['hard_kl_stop'] else 0
+    if metrics['hard_kl_stop']:
+        algo.optimizer.param_groups[0]['lr']=max(cfg['actor_lr_floor'],algo.optimizer.param_groups[0]['lr']/2)
+        algo.hard_kl_stop=False
+    return consecutive,'three_consecutive_hard_rejected_batches' if consecutive>=cfg['hard_reject_consecutive_stop'] else None
+
+
+def run(config,output,smoke_only=False,authorize_local_training=False):
+    cfg=json.loads(Path(config).read_text())
+    if cfg.get('candidate_local_interface') and not authorize_local_training:
+        raise PermissionError('local candidate is preparation only; explicitly confirm training resources and pass --authorize-local-training')
+    t=Training(config,output,authorize_local_training)
     try:
         t.initialize();t.train('smoke')
         if not smoke_only:t.train('training')
