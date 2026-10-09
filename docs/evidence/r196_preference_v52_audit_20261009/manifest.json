@@ -1,0 +1,17 @@
+{
+  "source_commit": "26c3fedac76b099ae98ff153f3f50f09f2730da9",
+  "implementation_commit": "4ed253d",
+  "source_npz": "docs/evidence/r196_preference_v51_20261009/data/update100_timeseries.npz",
+  "source_npz_sha256": "6f2b4a24e6e96641bcd4f2f1c02c0353d3b0b3625f3844e4be1fe122c2f8aea1",
+  "new_physics_steps": 0,
+  "new_training_updates": 0,
+  "state": "paused",
+  "evidence": {
+    "status.json": "fd9493cc06466a95b9466ce0d2fb6de500666ab79066439934b185cb3bf9309c",
+    "parent_alpha0_physical_selection.json": "cb22c7bf16e5a472ad4e18da15dcd269e8b9209bc1fc8df4bb76199afad38383",
+    "lower_tracking_report.json": "9fa4493ae5d2230e488f457a1376e754a4c0ffbbba11cd8a5005fbef6e9cdc11",
+    "lower_tracking_gate.json": "81b3b20429a9ec902e1a8782c2590d3eb7aeecb91afe953f3248c4f9da42302c",
+    "lower_tracking_summary.csv": "c80b8e6887ad0f5ba2718ad17634afa3cbc121190e4d8765b5d557bc15396339",
+    "parent_alpha1_physical_selection.json": "928656df3dd956995e5a180b06b54ea3b288c741371e4cb3ad2fd4faa937317c"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "state": "LOWER_TRACKING_LIMITED",
+  "decision": "paused_by_user",
+  "new_simulation_ticks": 0,
+  "new_training_updates": 0,
+  "scope": "persistent recovery-stage tracking errors; not proof the whole lower controller is infeasible",
+  "segments": [
+    {
+      "case": "fast_turn",
+      "method": "B0",
+      "start_s": 5.444999694824219,
+      "end_exclusive_s": 6.204999809265137,
+      "duration_s": 0.76,
+      "start_index": 1089,
+      "end_index_exclusive": 1241,
+      "channel": "steer",
+      "governed_min": [
+        2.299999952316284,
+        0.0
+      ],
+      "governed_max": [
+        2.299999952316284,
+        0.0
+      ],
+      "lower_error_min": 0.04218073561787605,
+      "lower_error_max": 0.1444188952445984,
+      "final_command_clip_fraction": 0.0,
+      "peak_roll": 0.11865520477294922,
+      "source_full_npz": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation100/fast_turn/B0.npz",
+      "residual_clip_fraction": 0.0,
+      "roll_range": [
+        0.0037331581115722656,
+        0.11865365505218506
+      ],
+      "roll_rate_range": [
+        -0.5724444389343262,
+        0.40055349469184875
+      ],
+      "heading_error_range": [
+        -0.511042594909668,
+        -0.09787607192993164
+      ],
+      "history_state_saved": false
+    },
+    {
+      "case": "fast_turn",
+      "method": "B0",
+      "start_s": 6.315000057220459,
+      "end_exclusive_s": 8.744999771118165,
+      "duration_s": 2.43,
+      "start_index": 1263,
+      "end_index_exclusive": 1749,
+      "channel": "steer",
+      "governed_min": [
+        2.299999952316284,
+        0.0
+      ],
+      "governed_max": [
+        2.299999952316284,
+        0.0
+      ],
+      "lower_error_min": -0.09159881621599197,
+      "lower_error_max": -0.04007895290851593,
+      "final_command_clip_fraction": 0.0,
+      "peak_roll": 0.08081626892089844,
+      "source_full_npz": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation100/fast_turn/B0.npz",
+      "residual_clip_fraction": 0.0,
+      "roll_range": [
+        -0.08081555366516113,
+        -0.04613137245178223
+      ],
+      "roll_rate_range": [
+        -0.3516305685043335,
+        0.07724057883024216
+      ],
+      "heading_error_range": [
+        -0.509183406829834,
+        0.16238641738891602
+      ],
+      "history_state_saved": false
+    },
+    {
+      "case": "fast_turn",
+      "method": "alpha0",
+      "start_s": 9.019999504089355,
+      "end_exclusive_s": 10.239999656677247,
+      "duration_s": 1.22,
+      "start_index": 1804,
+      "end_index_exclusive": 2048,
+      "channel": "steer",
+      "governed_min": [
+        2.37394118309021,
+        0.025947317481040955
+      ],
+      "governed_max": [
+        2.374056339263916,
+        0.028378654271364212
+      ],
+      "lower_error_min": -0.0713146161288023,
+      "lower_error_max": -0.04307533800601959,
+      "final_command_clip_fraction": 0.0,
+      "peak_roll": 0.05330240726470947,
+      "source_full_npz": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation100/fast_turn/alpha0.npz",
+      "residual_clip_fraction": 0.0,
+      "roll_range": [
+        -0.05319094657897949,
+        -0.019796252250671387
+      ],
+      "roll_rate_range": [
+        0.024594701826572418,
+        0.031160350888967514
+      ],
+      "heading_error_range": [
+        0.3896501064300537,
+        0.5855240821838379
+      ],
+      "history_state_saved": false
+    }
+  ],
+  "full_controller_eso_history_available": false,
+  "short_reproduction_executed": false
+}

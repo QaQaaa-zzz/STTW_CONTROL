@@ -61,10 +61,10 @@ B0这些时段下发参考为[2.3m/s,0rad]；alpha0约[2.374m/s,0.026–0.028rad
 
 所有18条轨迹逐步恒等式 `e_task=e_upper+e_lower` 通过，零时间平移。完整报告逐场景/方法/通道包含bias、RMSE、P95、最大值及发生时刻、越限比例、全部连续越限区间；同时保留全程、[1,6)、[2,4)、governed静稳≥0.3s、governed过渡、转弯后恢复窗口。速度一般诊断阈值.10m/s，转角.04rad。
 
-- [完整分窗口、全部越限区间 JSON](../runs/v52_parent_audit/lower_tracking_report.json)
-- [可比较统计 CSV](../runs/v52_parent_audit/lower_tracking_summary.csv)
-- [全时间轴误差与raw/proposal/governed/actual NPZ](../runs/v52_parent_audit/lower_tracking_errors.npz)
-- [持续错误门槛与姿态、裁剪来源](../runs/v52_parent_audit/lower_tracking_gate.json)
+- [完整分窗口、全部越限区间 JSON](evidence/r196_preference_v52_audit_20261009/lower_tracking_report.json)
+- [可比较统计 CSV](evidence/r196_preference_v52_audit_20261009/lower_tracking_summary.csv)
+- [原始全时间轴5ms NPZ](evidence/r196_preference_v51_20261009/data/update100_timeseries.npz)；[离线误差重建脚本](../learning/src/sttw_control/lower_tracking_audit.py)可重建全量误差，不重复上传原始波形
+- [持续错误门槛与姿态、裁剪来源](evidence/r196_preference_v52_audit_20261009/lower_tracking_gate.json)
 
 `wheel_speed_proxy=轮轴速度×0.1m` 与实际车体速度分别保留；proxy−actual是速度差，`slip_proxy`不是经接触运动学验证的真实滑移率。
 
@@ -81,4 +81,9 @@ B0这些时段下发参考为[2.3m/s,0rad]；alpha0约[2.374m/s,0.026–0.028rad
 
 7项必要CPU检查通过：新奖励/峰值/cap/失败、配置继承、误差区间、best安全排序/partial拒绝/身份加载、旧B0在新奖励下离线重评分。只读审查发现并修复B0新分项缺失会使奖励图漏基线的问题。工程8×16×2检查与正式训练**均未执行**；训练集成和自动扩展尚无运行验证，不能称V5.2已验证或可部署。
 
-分支experiment/r196-v52-best-tracking。未push；模型、缓存、大轨迹不提交。
+本轮用户已明确授权上传结果，交付分支为 `experiment/r196-v52-best-tracking`。训练仍暂停；模型、缓存和重复大轨迹不提交。
+
+- [交付身份与文件哈希](evidence/r196_preference_v52_audit_20261009/manifest.json)
+- [alpha0完整物理选择指标](evidence/r196_preference_v52_audit_20261009/parent_alpha0_physical_selection.json)
+- [alpha1完整物理选择指标](evidence/r196_preference_v52_audit_20261009/parent_alpha1_physical_selection.json)
+- [暂停状态](evidence/r196_preference_v52_audit_20261009/status.json)

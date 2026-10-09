@@ -1,0 +1,20 @@
+{
+  "state": "paused",
+  "stage": "parent_lower_tracking_gate",
+  "reason": "Explicit user reply: 按附件暂停训练",
+  "completed_additional_updates": {
+    "0": 0,
+    "1": 0
+  },
+  "completed_value_only_rollouts": {
+    "0": 0,
+    "1": 0
+  },
+  "initial_target_per_endpoint": 200,
+  "max_additional_updates": 400,
+  "engineering_check_started": false,
+  "formal_training_started": false,
+  "parent_run": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009",
+  "best_model": null,
+  "last_model": null
+}
