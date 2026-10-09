@@ -34,7 +34,7 @@ update100 alpha0转角满足≤.05rad，alpha1速度满足≤.08m/s。然而两�
 
 每个声明场景均有同场景叠加的[XY、控制、每步/累计reward及有符号分项图](figures/)；fast_turn另有[电机命令链图](figures/update100_fast_turn_10s_motor_chain.png)。图按真实轨迹终点绘制，原始参考不会随上层改令重定位。
 
-- [update100六场景5ms轨迹NPZ](data/update100_timeseries.npz) · [update25两场景5ms轨迹NPZ](data/update25_timeseries.npz)。键格式为 <case>__<method>__<field>；包括原始命令、governed、实际速度/转角、侧倾、航向、实际/参考XY、上下层与电机命令、reward和分项/触顶标志。
+- [update100六场景5ms轨迹NPZ](data/update100_timeseries.npz) · [update25两场景5ms轨迹NPZ](data/update25_timeseries.npz)。键格式为 `case__method__field`；包括原始命令、governed、实际速度/转角、侧倾、航向、实际/参考XY、上下层与电机命令、reward和分项/触顶标志。
 - [逐场景汇总CSV](data/fixed_case_summary.csv) · [update25结构化指标](data/update25_metrics.json) · [update100结构化指标](data/update100_metrics.json)。
 - [TensorBoard训练曲线图](figures/tensorboard_training_curves.png) · [全部导出标量CSV](data/tensorboard_scalars.csv)，共6200行、31个tag，保留alpha、step、wall time和值。训练曲线只说明优化过程。
 - [alpha0冻结配置](config/alpha0.json) · [alpha1冻结配置](config/alpha1.json) · [运行状态](identity/status.json) · [运行manifest](identity/manifest.json) · [评价故障原始收据](identity/evaluation100_error_receipt.json) · [补评收据](identity/evaluation100_recovery.json)。
