@@ -1,3 +1,9 @@
+# Preference V5 Stage2 completed, not qualified (2026-10-09)
+
+User explicitly overrode the failed Stage1 gate to try Stage2. The separate run `runs/preference_v5_stage2_override_20261009` restored both complete update40 learners and finished update120 plus matched update80/120 six-case evaluation. Alpha0 brakes and limits fast-turn roll while retaining more steering; alpha1 retains more speed but weakens steering and still exceeds the common roll bound. Final joint speed/steer/heading hold is alpha0 0/6 and alpha1 1/6 at10s; no method passes fast_turn heading hold at16s. The result is complete, unqualified and not adopted; no250/500 extension. Full actual-control-first and XY evidence: `runs/preference_v5_stage2_override_20261009/analysis/REPORT.md`.
+
+---
+
 # User amendment — total250 and no wall-clock cutoff (2026-10-08)
 
 The user extended each upper endpoint to250 total updates and then explicitly cancelled additional compute/wall-clock budget limits. Preserve the250-update endpoint, metered elapsed time, original safety/nonfinite checks and no automatic retries/extensions. Stage150 evaluation is disabled through the already-supported runtime_control; reuse stage60 and evaluate at250. Automatic successor: runs/smooth_v4_extend250_20261008, launched by learning/cli/continue_smooth_command.py after the current worker exits. Restore full upper learner (Actor/Critic/Adam/std/RNG/counter) from the current fresh run's last checkpoint, never physical-best for training. Prepared physical/ESO/history states reset because old checkpoints do not serialize them; first unused episode keys avoid recycling training schedules. No further value-only warmup.

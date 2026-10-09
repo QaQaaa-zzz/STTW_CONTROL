@@ -849,3 +849,30 @@ Decision: Stage1 gate failed, `qualified=false`; the pipeline stopped automatica
 never started Stage2. No 10s/16s direction-recovery claim, best/adoption, extra250/500,
 or push. Full XY-first evidence, command/motor chain, per-step/cumulative reward and
 component plots: `runs/preference_v5_20261009/analysis/REPORT.md`.
+
+## R196 Preference V5 Stage2 user override result (2026-10-09)
+
+The user explicitly overrode the failed Stage1 gate to try the declared Stage2; the
+Stage1 failure remains unchanged. Both complete update40 learners restored Actor,
+Critic, Adam, log_std, RNG and accepted-update count, reset physical/ESO/history state,
+and finished cumulative update120. Each endpoint added80 PPO batches,5,242,880 policy
+transitions and6,144 complete16s training episodes with zero physical failures,
+hard-KL stops or nonfinite stops. Reward and method fields stayed fixed; only the declared
+Stage2 task horizon and dynamic-command distribution changed.
+
+At update120 fast_turn[2,4), alpha0 changes speed/steer by -.356m/s/-.0149rad,
+giving actual2.177m/s/.233rad and peak roll.2895rad. Its negative speed request and
+governed modification persist more than2.4s, and final rear command falls accordingly;
+the interface does not cancel braking. Alpha1 changes -.057m/s/-.0452rad, giving
+2.469m/s/.197rad and peak roll.3150rad. It preserves more speed but removes more steer
+and violates the common.302rad roll bound. Straight holding retains useless positive
+speed intervention +.0715/+.0542m/s for alpha0/1 and worsens speed RMSE versus B0.
+
+All update120 fixed episodes survive, but final joint speed/steer/heading hold is
+alpha0 0/6 and alpha1 1/6; fast_turn16s also fails both endpoints. Fast-turn10s XY error
+is9.269/9.356m and16s error18.794/15.169m. Continued80→120 training improves parts of
+speed/roll but worsens key steer/heading measures, so reward and survival do not establish
+success. All saved reward reconstructions pass (max component error1.145e-5, policy-step
+error4.233e-8) with zero component-cap incidence. Decision: complete evaluation,
+unqualified, not adopted, no250/500 extension. Full report:
+`runs/preference_v5_stage2_override_20261009/analysis/REPORT.md`.
