@@ -110,7 +110,7 @@ class DirectCommandEnv:
         costs=interval_cost(alpha=s.alpha,chi=chi,g=g,raw=raw,
             actual_speed=log['actual_forward_speed'],actual_steer=log['actual_delta'],
             heading_error=log['e_psi_unwrapped'],roll=log['phi'],roll_rate=log['phi_dot'],
-            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate,cc=self.cc)
+            executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate,cc=self.cc,peak_roll=log['peak_roll'])
         _,_,target=publish_command(raw,s.rows,s.tick,s.slew,self.cc.dt)
         next_raw,next_rates,_=publish_command(raw,s.rows,s.tick+1,s.slew,self.cc.dt)
         next_raw=jp.where(p.failed,raw,next_raw)

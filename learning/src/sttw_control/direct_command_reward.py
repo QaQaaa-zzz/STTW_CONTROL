@@ -15,14 +15,14 @@ def huber(z):
 
 def interval_cost(*, alpha, chi, g, raw, actual_speed, actual_steer,
                   heading_error, roll, roll_rate, executed_offsets,
-                  final_command, previous_final_command, spec, yaw_rate=0., cc=None):
+                  final_command, previous_final_command, spec, yaw_rate=0., cc=None, peak_roll=None):
     """Score post-physics state against this interval's original raw command.
 
     Returns raw/effective component dictionaries and a scalar 5 ms reward.
     Invalid values remain invalid; caller records physical/policy failure.
     """
     if spec.get('smooth_v4'):
-        return smooth_state_cost(alpha,chi,g,raw,actual_speed,actual_steer,heading_error,roll,roll_rate,executed_offsets,yaw_rate,spec,cc=cc)
+        return smooth_state_cost(alpha,chi,g,raw,actual_speed,actual_steer,heading_error,roll,roll_rate,executed_offsets,yaw_rate,spec,cc=cc,peak_roll=peak_roll)
     r = spec['reward']; dt = spec['plant']['control_dt_s']
     raw = jp.asarray(raw)
     ev = actual_speed - raw[..., 0]
@@ -66,9 +66,11 @@ def failure_reward(remaining_including_current, spec):
         r['scale']*spec['plant']['policy_dt_s']*r.get('failure_absorbing_cost_rate',r.get('cost_rate_cap'))*geometric)
 
 
-def smooth_state_cost(alpha, chi, g, raw, speed, steer, debt, roll, roll_rate, offsets, yaw_rate, spec, cc=None):
+def smooth_state_cost(alpha, chi, g, raw, speed, steer, debt, roll, roll_rate, offsets, yaw_rate, spec, cc=None, peak_roll=None):
     """SmoothV4: independent protections, no total-cost clipping."""
     r=spec['reward']; n=r['normal']; a0=r['conflict_alpha0']; a1=r['conflict_alpha1']; rec=r['recovery']; safe=r['safety']; mag=r['offset_magnitude']
+    if spec.get('preference_v52') and peak_roll is None:raise ValueError('V5.2 requires interval substep peak_roll')
+    risk=jp.maximum(jp.abs(roll),peak_roll) if spec.get('preference_v52') else jp.abs(roll)
     pos=lambda x:jp.maximum(x,0.)
     ev=speed-raw[0]; ed=steer-raw[1]; under=pos(-ev)
     vn=n['speed_weight']*huber(pos(jp.abs(ev)-n.get('speed_deadband_m_s',0.))/n['speed_scale_m_s']); dn=n['steer_weight']*huber(pos(jp.abs(ed)-n.get('steer_deadband_rad',0.))/n['steer_scale_rad'])
@@ -81,11 +83,14 @@ def smooth_state_cost(alpha, chi, g, raw, speed, steer, debt, roll, roll_rate, o
     rawc=dict(speed=(1-g)*((1-chi)*vn+chi*jp.where(alpha==0,v0,v1))+g*rec['speed_weight']*huber(pos(jp.abs(ev)-rec.get('speed_deadband_m_s',0.))/rec['speed_scale_m_s']),
       steer=(1-g)*((1-chi)*dn+chi*jp.where(alpha==0,d0,d1))+g*rec['steer_weight']*huber(ed/rec['steer_scale_rad']),
       heading=rec['heading_weight']*g*huber(pos(jp.abs(debt)-rec['heading_deadband_rad'])/rec['heading_scale_rad']),
-      roll=safe['roll_weight']*huber(pos(jp.abs(roll)-safe['roll_start_rad'])/safe['roll_scale_rad']),
+      roll=safe['roll_weight']*huber(pos(risk-safe['roll_start_rad'])/safe['roll_scale_rad']),
       roll_rate=safe['roll_rate_weight']*huber(pos(jp.abs(roll_rate)-safe['roll_rate_start_rad_s'])/safe['roll_rate_scale_rad_s']),
       overspeed=safe['overspeed_weight']*huber(pos(ev-safe['overspeed_band_m_s'])/safe['overspeed_scale_m_s']),
       low_speed=safe['low_speed_weight']*huber(pos(safe['low_speed_start_m_s']-speed)/safe['low_speed_scale_m_s']),
       magnitude=wm*jp.sum((offsets/jp.asarray(mag['normalizers']))**2))
+    if spec.get('preference_v52'):
+        work=r['working_roll_excess']
+        rawc['working_roll_excess']=work['weight']*huber(pos(risk-work['start_rad'])/work['scale_rad'])
     if spec.get('priority_recovery_v51'):
         primary=r['primary_excess']
         steer_excess=huber(pos(jp.abs(ed)-primary['alpha0_steer_tolerance_rad'])/primary['alpha0_steer_scale_rad'])
@@ -104,7 +109,7 @@ def smooth_state_cost(alpha, chi, g, raw, speed, steer, debt, roll, roll_rate, o
         governed = jp.asarray(raw) + offsets
         rawc['reference_priority'] = priority['weight']*chi*(1-g)*(
             (1-alpha)*huber(pos(jp.abs(offsets[1])-priority['alpha0_steer_correction_deadband_rad'])/priority['alpha0_steer_correction_scale_rad'])
-            + alpha*huber(pos(jp.abs(offsets[0])-priority['alpha1_speed_correction_deadband_m_s'])/priority['alpha1_speed_correction_scale_m_s']))
+            + alpha*huber(pos((-offsets[0] if priority.get('alpha1_downward_only',False) else jp.abs(offsets[0]))-priority['alpha1_speed_correction_deadband_m_s'])/priority['alpha1_speed_correction_scale_m_s']))
         phi_requested = governed[1]/q_ratio(governed[0],cc)
         rawc['command_compatibility'] = compat['weight']*huber(pos(jp.abs(phi_requested)-compat['roll_reference_limit_rad'])/compat['scale_rad'])
     caps=r['independent_component_caps']; eff={k:jp.minimum(v,caps[k]) for k,v in rawc.items()}

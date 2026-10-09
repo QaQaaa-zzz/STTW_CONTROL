@@ -213,7 +213,39 @@ def resolve_dimensions(spec, *, smoke=False, num_envs=None, rollout_steps=None):
         transitions = 2*p['default_updates']*n*t
         spec['budget'].update(default_policy_transitions=transitions,
                               default_control_transitions_upper=4*transitions)
+    if spec.get('preference_v52'):
+        spec['budget']['default_control_transitions_upper']=2*(spec['budget']['max_updates_per_endpoint']+4)*n*t*4
+        spec['budget']['value_only_control_ticks']=2*4*n*t*4
     spec['execution_dimensions'] = dict(num_envs=n, rollout_policy_steps=t,
                                         transitions_per_rollout=n*t,
                                         minibatches=p['minibatches'], minibatch_size=p['minibatch_size'])
     return spec
+
+
+def resolve_preference_v52(alpha, additional_updates=200, max_additional_updates=400):
+    """The supplied endpoint delta is the only reward change to frozen V5.1."""
+    from copy import deepcopy
+    if additional_updates not in (200,300,400) or not additional_updates<=max_additional_updates<=400:
+        raise ValueError('V5.2 requires initial200/300/400 and bounded maximum<=400')
+    s=resolve_preference_v51(alpha)
+    root=Path(__file__).resolve().parents[3]
+    v=json.loads((root/f'docs/preference_v52/attachment/STTW_V52_alpha{alpha}.json').read_text())
+    assert v['fixed_upper_alpha']==alpha and v['source_commit']=='26c3fedac76b099ae98ff153f3f50f09f2730da9'
+    s.update(preference_v52=v,training_stage=52,initialization_mode='parent_actor_and_log_std_new_critic_adam')
+    d=v['reward_deltas'];r=s['reward']
+    r['working_roll_excess']=deepcopy(d['working_roll_excess'])
+    r['roll_use_substep_peak']=d['roll_use_substep_peak']
+    r['reference_priority']['alpha1_downward_only']=True
+    r['normal']['speed_deadband_m_s']=d['normal_speed_deadband_m_s']
+    r['recovery']['speed_deadband_m_s']=d['recovery_speed_deadband_m_s']
+    r['independent_component_caps']=deepcopy(d['independent_component_caps'])
+    r['failure_absorbing_cost_rate']=sum(r['independent_component_caps'].values())
+    assert r['failure_absorbing_cost_rate']==d['failure_absorbing_cost_rate']==5080
+    p=s['ppo'];p.update(fresh_value_only_rollouts=4,default_updates=additional_updates,policy_updates_per_endpoint=additional_updates,
+        stage_additional_updates=additional_updates,validation_updates=list(range(100,additional_updates+1,50)),save_every_updates=10,
+        future_total_updates_only_after_user_approval=max_additional_updates)
+    n=p['num_envs']*p['rollout_policy_steps']
+    s['budget'].update(default_policy_transitions=2*additional_updates*n,default_control_transitions_upper=2*(max_additional_updates+4)*n*4,
+        max_updates_per_endpoint=max_additional_updates,initial_updates_per_endpoint=additional_updates,value_only_control_ticks=2*4*n*4)
+    s['lineage']=dict(parent_updates=100,additional_updates=0,reward_version='V5.2')
+    return s

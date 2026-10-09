@@ -1,0 +1,151 @@
+{
+  "schema": "sttw_v52_delta_spec_not_vehicle_validated",
+  "fixed_upper_alpha": 1,
+  "source_commit": "26c3fedac76b099ae98ff153f3f50f09f2730da9",
+  "inherit_config": "docs/evidence/r196_preference_v51_20261009/config/alpha1.json",
+  "lower": {
+    "alias": "STTW_R196_ALPHA1",
+    "fixed_alpha": 1,
+    "frozen": true,
+    "lower_reference_centered": true
+  },
+  "reward_deltas": {
+    "working_roll_excess": {
+      "weight": 120.0,
+      "start_rad": 0.3,
+      "scale_rad": 0.02,
+      "use_substep_peak": true,
+      "cap": 3000.0
+    },
+    "roll_use_substep_peak": true,
+    "reference_priority_alpha1": "H(max(-delta_v-0.05,0)/0.20)",
+    "normal_speed_deadband_m_s": 0.01,
+    "recovery_speed_deadband_m_s": 0.01,
+    "independent_component_caps": {
+      "speed": 100.0,
+      "steer": 100.0,
+      "heading": 300.0,
+      "roll": 900.0,
+      "roll_rate": 40.0,
+      "overspeed": 50.0,
+      "low_speed": 50.0,
+      "magnitude": 10.0,
+      "upper_rate": 10.0,
+      "upper_acceleration": 20.0,
+      "yaw_recovery": 20.0,
+      "reference_priority": 40.0,
+      "command_compatibility": 40.0,
+      "primary_excess": 400.0,
+      "working_roll_excess": 3000.0
+    },
+    "failure_absorbing_cost_rate": 5080.0,
+    "retained_primary_weight": 40.0,
+    "retained_heading_weight": 6.0,
+    "retained_yaw_recovery_weight": 2.0,
+    "global_cap": null,
+    "lower_tracking_error_cost_enabled": false
+  },
+  "initialization": {
+    "parent_update": 100,
+    "load_parent_actor": true,
+    "load_parent_log_std": true,
+    "load_parent_critic": false,
+    "load_parent_optimizer": false,
+    "value_only_rollouts": 4,
+    "value_only_epochs": 8,
+    "reset_physical_episodes": true,
+    "reset_frozen_lower_weights": false
+  },
+  "ppo": {
+    "num_envs": 512,
+    "rollout_steps": 128,
+    "epochs": 4,
+    "minibatches": 4,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "clip_ratio": 0.2,
+    "entropy_coef": 0.001,
+    "grad_clip_actor": 1.0,
+    "grad_clip_critic": 1.0,
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "lr_floor": 1e-05,
+    "consecutive_hard_reject_stop": 3
+  },
+  "budget": {
+    "additional_updates_initial": 200,
+    "additional_updates_max": 400,
+    "extension_block": 100,
+    "no_fixed_short_wall_cutoff": true,
+    "initial_total_new_policy_steps_both_endpoints": 26214400,
+    "initial_total_new_control_ticks_both_endpoints": 104857600,
+    "max_total_new_control_ticks_both_endpoints": 209715200,
+    "extra_value_only_control_ticks_both_endpoints": 2097152
+  },
+  "validation": {
+    "first_additional_update": 100,
+    "every_additional_updates": 50,
+    "no_update20_or25_evaluation": true,
+    "checkpoint_every": 10,
+    "protocol": "fixed_command_six_v1",
+    "seed": 77001,
+    "bank_index": 3,
+    "ordinary_duration_s": 10,
+    "fast_turn_duration_s": 16,
+    "main_terminal_window_s": [
+      9.5,
+      10.0
+    ],
+    "final_speed_tol": 0.1,
+    "final_steer_tol": 0.04,
+    "final_heading_tol": 0.05,
+    "working_roll_tol": 0.302,
+    "final_model": "best_model.pt",
+    "selection_tuple": [
+      "physical_failure_cases",
+      "working_limit_failure_cases",
+      "primary_failure_cases",
+      "joint_final_hold_failure_cases",
+      "physical_quality_score"
+    ],
+    "relative_quality_improvement_for_replacement": 0.005,
+    "plots_only_for_final_best": true,
+    "reuse_B0_if_identical_protocol": true
+  },
+  "convergence": {
+    "min_new_updates_for_decision": 200,
+    "episode_window_updates": 25,
+    "validation_quality_improvement_to_extend": 0.02,
+    "training_physical_cost_improvement_to_extend": 0.03,
+    "plateau_validations": 3,
+    "plateau_best_quality_change_max": 0.01,
+    "plateau_training_cost_change_max": 0.02,
+    "max_discordant_extension_blocks": 1
+  },
+  "lower_audit": {
+    "speed_tolerance_m_s": 0.1,
+    "steer_tolerance_rad": 0.04,
+    "quiet_speed_slope_m_s2": 0.1,
+    "quiet_steer_slope_rad_s": 0.02,
+    "quiet_duration_s": 0.3,
+    "severe_persistent_speed_error_m_s": 0.15,
+    "severe_persistent_steer_error_rad": 0.04,
+    "severe_duration_s": 0.5,
+    "zero_time_shift_scoring": true,
+    "new_simulations_default": 0
+  },
+  "do_not_change": [
+    "physics",
+    "ECBC",
+    "ESO",
+    "R196 weights",
+    "actor architecture",
+    "observation/action schema",
+    "command slew",
+    "final actuator limits",
+    "reference anchoring",
+    "two independent endpoints"
+  ]
+}

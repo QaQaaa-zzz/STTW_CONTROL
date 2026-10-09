@@ -178,14 +178,26 @@ def reward_audit(d,alpha,root,horizon,include_reconstruction=False):
                 costs.pop('yaw_damping')
                 costs['primary_excess']=delta.primary_excess_raw
                 costs['yaw_recovery']=delta.yaw_recovery_raw
+            if cfg.get('preference_v52'):
+                # Independent NumPy reconstruction of exactly the supplied deltas.
+                H=lambda x:np.where(abs(x)<=1,x*x,2*abs(x)-1)
+                ev=float(d['actual_forward_speed'][i]-d['limited_command'][i,0])
+                chi=float(d['chi'][i]);g=float(d['g'][i]);offset_i=d['governed'][i]-d['limited_command'][i]
+                costs['speed']+=((1-g)*(1-chi)+g)*8*(H(max(abs(ev)-.01,0)/.1)-H(max(abs(ev)-.03,0)/.1))
+                risk=max(abs(float(d['phi'][i])),float(d['peak_roll'][i]))
+                costs['roll']=40*H(max(risk-.26,0)/.04)
+                costs['working_roll_excess']=120*H(max(risk-.30,0)/.02)
+                costs['reference_priority']=4*chi*(1-g)*((1-alpha)*H(max(abs(float(offset_i[1]))-.01,0)/.05)+alpha*H(max(-float(offset_i[0])-.05,0)/.20))
             rho=.2+.8*(1-d['chi'][last])*np.exp(-(d['e_psi_unwrapped'][last]/.1)**2)
             costs['upper_rate']=.03*rho*np.sum((rate/np.array([1.,.4]))**2)
             costs['upper_acceleration']=.01*rho*np.sum((acc/10)**2)
             for k,value in costs.items():
                 rawkey='raw_cost_'+k;effkey='effective_cost_'+k
-                if rawkey not in d:return {'passed':False,'missing_component':rawkey}
-                errors[k]=max(errors.get(k,0.),abs(float(value)-float(d[rawkey][i])))
-                effective=min(float(value),caps[k]);efferrors[k]=max(efferrors.get(k,0.),abs(effective-float(d[effkey][i])))
+                effective=min(float(value),caps[k])
+                if not include_reconstruction:
+                    if rawkey not in d:return {'passed':False,'missing_component':rawkey}
+                    errors[k]=max(errors.get(k,0.),abs(float(value)-float(d[rawkey][i])))
+                    efferrors[k]=max(efferrors.get(k,0.),abs(effective-float(d[effkey][i])))
                 reconstructed[k][i]=-.1*DT*effective
                 total-=.1*DT*effective
         if np.any(d['physical_failure'][start:stop]):
