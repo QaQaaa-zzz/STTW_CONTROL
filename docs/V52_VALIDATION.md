@@ -1,6 +1,13 @@
 # V5.2：父模型离线审计与训练暂停
 
-2026-10-09。当前状态：**LOWER_TRACKING_LIMITED / 用户明确暂停训练**。新物理步0，新PPO更新0，工程小批尚未执行。
+2026-10-09离线审计时状态：**LOWER_TRACKING_LIMITED / 用户明确暂停训练**。下方审计对应当时新物理步0、新PPO更新0；此历史证据保留。
+
+**后续用户已明确“开启训练”**：一次8×16工程检查已通过，正式运行 `preference_v52_tracking_best_start_20261009` 已从对应V5.1@100 Actor/log_std启动，Critic/Adam重置。每端4个value-only后新增200 PPO，按附件改善条件100扩展、最多400。底层限制尚未解决，不因启动而撤回。
+
+- [实时TensorBoard](http://localhost:6016)（已核验正式warmup奖励HTTP加载）
+- [本地运行索引](../runs/preference_v52_tracking_best_start_20261009/INDEX.md)
+- [实时状态](../runs/preference_v52_tracking_best_start_20261009/status.json)
+- [启动身份](../runs/preference_v52_tracking_best_start_20261009/launch.json)
 
 ## 原始 XY 证据
 
