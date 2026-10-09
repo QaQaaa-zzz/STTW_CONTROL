@@ -81,6 +81,15 @@ def flatten_logs(logs):
         else:flat[name]=value
     return flat
 
+def conditional_batch_reset(end,done,reset_one):
+    """Skip all reset computation only when the entire batch has no done."""
+    import jax
+    import jax.numpy as jp
+    return jax.lax.cond(jp.any(done),
+        lambda args:jax.vmap(lambda state,finished:jax.lax.cond(finished,reset_one,lambda x:x,state))(*args),
+        lambda args:args[0],(end,done))
+
+
 class Campaign:
     def __init__(self,config,output):
         self.config=Path(config);self.spec=load_spec(config);self.out=Path(output)
@@ -188,7 +197,7 @@ class Campaign:
             write(self.out/'interface_checks.json',dict(passed=True,episodes=2,seconds_each=4,max_residual=float(np.max(np.abs(residual))),
                 max_reference_difference=float(np.max(np.abs(governed-raw))),final_steer=np.asarray(log['actual_delta'][-1,:,-1]).tolist(),
                 final_yaw=np.asarray(log['yaw_unwrapped'][-1,:,-1]).tolist()))
-    def setup_batch(self,n,log_mode="evaluation_full"):
+    def setup_batch(self,n,log_mode="evaluation_full",reset_guard=False):
         if log_mode not in ("training_summary","evaluation_full"):raise ValueError(log_mode)
         import jax
         import jax.numpy as jp
@@ -212,7 +221,10 @@ class Campaign:
             states=reset(ids,jp.zeros(n,jp.int32),alpha);jax.block_until_ready(states)
         def advance(states,z):
             end,reward,done,logs,final_obs=jax.vmap(e.policy_step)(states,z)
-            nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha),lambda s:s,s))(end,done)
+            if reset_guard:
+                nxt=conditional_batch_reset(end,done,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha))
+            else:
+                nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda s:reset_one(s.env_id,s.episode_index+1,s.alpha),lambda s:s,s))(end,done)
             a,c,f,clip=jax.vmap(e.observation)(nxt)
             active=logs['active_tick'].astype(jp.float32)
             ev=logs['actual_forward_speed']-logs['limited_command'][:,:,0];ed=logs['actual_delta']-logs['limited_command'][:,:,1]

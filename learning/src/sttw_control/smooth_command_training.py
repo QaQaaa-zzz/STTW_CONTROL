@@ -9,11 +9,12 @@ from .smooth_command_config import resolve,resolve_dimensions
 OLD=Path('/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008')
 
 class SmoothCampaign(Campaign):
-    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None,log_mode="evaluation_full"):
+    def __init__(self,output,*,fresh=False,train_wall=1800,total_wall=5400,resume_parent=None,target_updates=None,unlimited_wall=False,preference_v5=False,preference_v51=False,smoke=False,preference_stage2_parent=None,num_envs=None,rollout_steps=None,log_mode="evaluation_full",reset_guard=False):
         if preference_stage2_parent and (not preference_v5 or fresh or resume_parent or smoke):
             raise ValueError('V5 Stage2 continuation requires only --preference-v5 and a Stage1 parent')
         if (preference_v5 or preference_v51) and not preference_stage2_parent and (not fresh or resume_parent):
             raise ValueError('V5 Stage1 requires fresh independent uppers')
+        self.reset_guard=reset_guard
         self.log_mode=log_mode
         if log_mode=="training_summary" and not preference_v51:raise ValueError("summary currently validated for V5.1 only")
         self.preference_v51=preference_v51
@@ -99,7 +100,7 @@ class SmoothCampaign(Campaign):
             manifest.update(implementation_parent='e1a6cc1f5a57b90b780207a69ce5bfa543cc1642',policy_budget_semantics=semantics,prepared_high_speed_indices=self.high_speed_indices,prepared_high_speed_zero_index=self.high_speed_zero,
                             parent_run=None if not self.preference_stage2_parent else str(self.preference_stage2_parent),stage1_gate_passed=None if not self.preference_stage2_parent else False,user_override_stage2=bool(self.preference_stage2_parent),priority_recovery_v51=self.preference_v51)
             write(self.out/'manifest.json',manifest)
-        self.states,self.advance,self.observe=self.setup_batch(self.n,log_mode=self.log_mode)
+        self.states,self.advance,self.observe=self.setup_batch(self.n,log_mode=self.log_mode,reset_guard=self.reset_guard)
         self.component_names=sorted(list(self.env.zero_log['raw_components'])+['upper_rate','upper_acceleration'])
         if self.preference_stage2_parent:
             self.stage2_parent_receipt=validate_preference_stage2_parent(self.preference_stage2_parent)

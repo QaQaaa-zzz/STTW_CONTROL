@@ -50,6 +50,12 @@ def run(args):
     root = Path(args.output).resolve()
     if root.exists(): raise FileExistsError('benchmark output must be new')
     root.mkdir(parents=True)
+    write(root/'arguments.json',vars(args))
+    (root/'source.patch').write_text(subprocess.check_output(['git','diff','HEAD','--','learning'],text=True))
+    snapshot=root/'source';snapshot.mkdir()
+    for name in ('smooth_performance','smooth_command_training','smooth_command_config','smooth_device_statistics','direct_command_training','direct_command_ppo','direct_command_env'):
+        source=Path(__file__).with_name(name+'.py')
+        if source.exists():(snapshot/source.name).write_text(source.read_text())
     if args.mode=='ppo' and args.rollout_source:
         return run_frozen_ppo(args,root)
     write(root/'hardware_before.json', hardware())
@@ -58,7 +64,7 @@ def run(args):
     campaign = None
     try:
         start = time.perf_counter()
-        kwargs = dict(fresh=True, preference_v51=True, smoke=args.smoke,log_mode=args.log_mode)
+        kwargs = dict(fresh=True, preference_v51=True, smoke=args.smoke,log_mode=args.log_mode,reset_guard=args.reset_guard)
         if args.num_envs is not None: kwargs.update(num_envs=args.num_envs, rollout_steps=args.rollout_steps)
         campaign = SmoothCampaign(root/'run', **kwargs)
         campaign.initialize()
@@ -174,6 +180,11 @@ def run(args):
             verify_log_modes(campaign, root)
         campaign.out=original_out;campaign._status(state='complete',stage='benchmark',benchmark_only=True)
         write(root/'benchmark_status.json',dict(state='complete',mode=args.mode,completed_iterations=args.warmups+args.repeats,total_iterations=args.warmups+args.repeats,last_update_epoch=time.time()))
+    except BaseException as exc:
+        write(root/'benchmark_status.json',dict(state='error',reason=repr(exc),last_update_epoch=time.time()))
+        if campaign:
+            campaign.out=root/'run';campaign._status(state='error',stage='benchmark',reason=repr(exc))
+        raise
     finally:
         if campaign:
             for ep in campaign.endpoints.values(): ep['writer'].close()
@@ -189,26 +200,32 @@ def verify_log_modes(campaign, root):
     from .direct_command_training import write
     from .direct_command_env import task_horizon_steps
     _, full, _ = campaign.setup_batch(campaign.n,log_mode='evaluation_full')
-    _, summary, _ = campaign.setup_batch(campaign.n,log_mode='training_summary')
-    results=[]
-    # Every leaf of state (MJX, ESO, history, lower), observation, reward/done,
-    # summary and final observation is compared. Logging leaves intentionally differ.
+    _, summary, _ = campaign.setup_batch(campaign.n,log_mode='training_summary',reset_guard=campaign.reset_guard)
+    results=[];violations=[]
+    # Keep the original tolerance. A/A diagnoses nondeterminism; it does not
+    # automatically excuse an A/B failure or widen acceptance thresholds.
     for count in (0,1,campaign.n//2,campaign.n):
         base=campaign.states.replace(tick=jp.where(jp.arange(campaign.n)<count,task_horizon_steps(campaign.spec)*4-4,0))
-        a=b=base;maximum=0.
+        a=b=aa=base;maximum={'AA':0.,'AB':0.}
         for step in range(min(campaign.steps,16)):
             z=jp.asarray(np.random.default_rng(87+step).normal(size=(campaign.n,2)),jp.float32)
-            x=full(a,z);y=summary(b,z)
-            for index in list(range(10))+[11]:
-                for left,right in zip(jax.tree.leaves(x[index]),jax.tree.leaves(y[index])):
-                    left,right=np.asarray(left),np.asarray(right)
-                    if left.dtype.kind in 'biu':np.testing.assert_array_equal(left,right)
-                    else:
-                        np.testing.assert_allclose(left,right,rtol=2e-4,atol=2e-5,equal_nan=False)
-                        if left.size:maximum=max(maximum,float(np.max(np.abs(left-right))))
-            a,b=x[0],y[0]
+            x=full(a,z);repeat=full(aa,z);y=summary(b,z)
+            for kind,other in [('AA',repeat),('AB',y)]:
+                for index in list(range(10))+[11]:
+                    lefts,_=jax.tree_util.tree_flatten_with_path(x[index]);rights=jax.tree.leaves(other[index])
+                    for (path,left),right in zip(lefts,rights):
+                        left,right=np.asarray(left),np.asarray(right)
+                        if left.dtype.kind in 'biu':ok=np.array_equal(left,right);difference=0. if ok else 1.
+                        else:
+                            ok=np.allclose(left,right,rtol=2e-4,atol=2e-5,equal_nan=False)
+                            difference=float(np.max(np.abs(left-right))) if left.size else 0.
+                        maximum[kind]=max(maximum[kind],difference)
+                        if not ok:violations.append(dict(kind=kind,forced_done_count=count,step=step,output=index,path=str(path),max_absolute_difference=difference))
+            a,b,aa=x[0],y[0],repeat[0]
         results.append(dict(forced_done_count=count,steps=min(campaign.steps,16),max_absolute_difference=maximum))
-    write(root/'full_state_equivalence.json',dict(passed=True,rtol=2e-4,atol=2e-5,cases=results))
+    receipt=dict(passed=not violations,rtol=2e-4,atol=2e-5,cases=results,violations=violations)
+    write(root/'full_state_equivalence.json',receipt)
+    if violations:raise AssertionError('full-state equivalence failed; see full_state_equivalence.json including A/A control')
 
 
 def run_frozen_ppo(args,root):

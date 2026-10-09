@@ -13,6 +13,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output',required=True)
     p.add_argument('--mode',choices=['env','rollout','ppo','evaluation','end-to-end'],required=True)
+    p.add_argument('--reset-guard',action='store_true')
     p.add_argument('--log-mode',choices=['evaluation_full','training_summary'],default='evaluation_full')
     p.add_argument('--smoke',action='store_true')
     p.add_argument('--num-envs',type=int)
