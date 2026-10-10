@@ -96,6 +96,8 @@ class DirectCommandEnv:
             control_raw=governed if self.spec.get('lower_reference_centered',False) else raw
             preview=preview_controls(p.controller,measurement,control_raw,governed,p.physical_tick*self.cc.dt>3.,self.cc)
             lower,lower_action,lower_obs,lower_flags=self.lower.prepare(lower,measurement,pose,governed,preview[2],previous)
+            if self.spec.get('lower_internal_diagnostics',False):
+                diagnostic_pre=(lower,measurement,pose)
             lower_fault=~lower_flags['finite']
             safe_action=jp.where(lower_fault,jp.zeros(2),lower_action)
             override=controls(p.controller,p.actuator,measurement,control_raw,governed,p.physical_tick*self.cc.dt>3.,bypass,
@@ -104,6 +106,10 @@ class DirectCommandEnv:
         if self.lower is not None:
             measurement,pose,speed=self.physics.observe(p.data)
             lower=self.lower.after_step(lower,governed,pose,measurement,speed,safe_action,p.failed,s.tick)
+            if self.spec.get('lower_internal_diagnostics',False):
+                from .lower_interface_diagnostics import capture
+                prepared,pre_measurement,pre_pose=diagnostic_pre
+                log['lower_diagnostic']=capture(self,s,prepared,lower,pre_measurement,pre_pose,governed,preview,lower_obs,lower_flags)
             log.update(lower_action=lower_action,lower_path_features=lower_flags['path_features'],
                        lower_endpoint_extension=lower_flags['path_endpoint_extension'],lower_fault=lower_fault)
         yaw_rate=(p.yaw_unwrapped-s.physical.yaw_unwrapped)/self.cc.dt

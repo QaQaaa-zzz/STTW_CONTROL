@@ -83,9 +83,22 @@ class TeleopEnv:
                 d=h._mjx.step(h.mjx_model,d);mm=h.measure(d)
                 finite=finite&jp.all(jp.isfinite(d.qpos))&jp.all(jp.isfinite(d.qvel))&jp.all(jp.isfinite(d.act))
                 return d,contact|h._contact_failure(d),jp.maximum(pr,jp.abs(mm[0])),jp.maximum(pd,jp.abs(mm[1])),finite
-            d,contact,peak_roll,peak_rate,finite=jax.lax.fori_loop(0,self.substeps,substep,
-                (d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True)))
+            initial=(d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True))
+            if self.spec.get('lower_internal_diagnostics',False):
+                limits=jp.asarray(self.model.actuator_forcerange);limited=jp.asarray(self.model.actuator_forcelimited)
+                def diagnostic_substep(i,carry):
+                    physical,lo,hi,hits=carry;physical=substep(i,physical);force=physical[0].actuator_force
+                    at_limit=limited&((force<=limits[:,0]+1e-5)|(force>=limits[:,1]-1e-5))
+                    return physical,jp.minimum(lo,force),jp.maximum(hi,force),hits+at_limit.astype(jp.int32)
+                result,force_min,force_max,force_hits=jax.lax.fori_loop(0,self.substeps,diagnostic_substep,
+                    (initial,jp.full(self.model.nu,jp.inf),jp.full(self.model.nu,-jp.inf),jp.zeros(self.model.nu,jp.int32)))
+                d,contact,peak_roll,peak_rate,finite=result
+                log.update(actuator_force_min=force_min,actuator_force_max=force_max,actuator_force_limit_substeps=force_hits)
+            else:
+                d,contact,peak_roll,peak_rate,finite=jax.lax.fori_loop(0,self.substeps,substep,initial)
             d=h._mjx.forward(h.mjx_model,d)
+        if self.spec.get('lower_internal_diagnostics',False):
+            log.update(actuator_force_end=d.actuator_force,actuator_ctrl=ctrl)
         m,p,speed=self.observe(d)
         peak_roll=jp.maximum(peak_roll,jp.abs(m[0]));peak_rate=jp.maximum(peak_rate,jp.abs(m[1]))
         finite=finite&jp.all(jp.isfinite(m))&jp.all(jp.isfinite(cs.eso))&jp.isfinite(cs.disturbance)&jp.all(jp.isfinite(cs.gains))

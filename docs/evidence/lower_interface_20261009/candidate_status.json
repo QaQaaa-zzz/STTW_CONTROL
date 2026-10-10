@@ -1,0 +1,27 @@
+{
+  "candidate_alias_reserved": "STTW_LOCAL_CMD_V1",
+  "alias_registered": false,
+  "adoption": "not_adopted",
+  "training": "not_run",
+  "formal_training_transitions": 0,
+  "formal_policy_updates": 0,
+  "local_physical_validation": "not_run",
+  "old_parent_mismatch_same_state_validation": "not_run",
+  "implementation_commits": [
+    "63c9d68",
+    "6e47341"
+  ],
+  "tests": {
+    "new_focused_cpu": 6,
+    "related_legacy_cpu": 5,
+    "all_passed": true,
+    "horizon_followup_cpu": 5
+  },
+  "engineering_limit": "No candidate GPU physical/training batch executed; existing lower interface validation not repeated",
+  "episode_seconds": 10,
+  "validation_seconds": 10,
+  "diagnostic_original_B0_seconds": 12,
+  "authorization": "Code/config preparation only; formal training resources need separate user confirmation",
+  "prepared_bank_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+  "prepared_bank_scope": "existing lower_command bank; local R196 comparator uses same complete bank; this does not replace old mismatch-state gate"
+}

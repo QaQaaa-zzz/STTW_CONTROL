@@ -1,3 +1,9 @@
+# R196 lower interface repair — 2026-10-09
+
+Authorized bounded diagnosis and local candidate preparation. Live V5.2 remains untouched. Plan: immutable declaration/interface audit; one full-state B0 fast_turn12s diagnostic replay (optional alpha0 once); control-chain evidence; opt-in210D local candidate with screened commands, component-bounded finite reward, late physical best and V5.2 KL handling; necessary CPU checks; report and shared ledger. No formal lower training or deployment. Current facts are in research-hub/PROJECT_STATE.md. Candidate implementation committed63c9d68; six new CPU checks plus five directly related legacy checks pass. Formal local training remains not_run. Offline original-trace ECBC/ESO/return reconstruction and three control-chain plots completed; the sole B0 diagnostic replay completed12s with no failure:36/60000 steer-force substeps touched limits (22 in first mismatch,0 in second). Native path jumps and tiny original/replay differences recorded; no alpha0 replay. Candidate horizon corrected to10s in6e47341.
+
+---
+
 # V5.2 launch resumed — 2026-10-09
 
 User explicitly requested 开启训练, revoking the earlier pause. Lower-tracking limitation remains a known result. One engineering8×16 check completed two total PPO batches (one per endpoint), finite and no stop. Formal run planned at runs/preference_v52_tracking_best_start_20261009: parent100 Actor/log_std, fresh Critic/Adam, four value-only rollouts each, initial200 additional PPO each, original evidence-gated100 extensions capped400. No20/25 scene validation or fixed wall cutoff. TensorBoard6016 separates engineering/formal. Historical paused run and audit are preserved. Current live facts are in the shared ledger.

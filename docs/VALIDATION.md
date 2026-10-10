@@ -1,3 +1,9 @@
+# R196 lower interface diagnosis and local candidate — 2026-10-09
+
+[Current report and XY/control-chain figures](LOWER_INTERFACE_REPAIR.md). Original V5.1 saved traces reused; no18-trace rerun. ECBC/ESO offline reconstruction matches logged output within2e-6rad/s. Fresh210D local candidate code is preparation only:11 targeted CPU checks passed; no candidate training, deployment or claimed repair. Sole authorized B0 diagnostic completed2400ticks/60000substeps without failure. Small non-bitwise replay differences recorded; native path jumps reproduced. Steering force reached±1Nm for36/60000substeps (first mismatch22/3800, second0/12150); no blanket no-saturation claim. Alpha0 force not measured. Live V5.2 remains unchanged. Shared research ledger is authoritative.
+
+---
+
 # SmoothV4 extension250 — 2026-10-08
 
 User-authorized full-upper-learner continuation from the current fresh run,250 total updates/endpoint, no wall-clock budget termination. Existing150 evaluation disabled,60 evidence reused, final250 fixed-six panel and same physical best ranking. Unit tests verify Actor/Critic/log_std/Adam tensors and actor LR restoration, accepted-update counter, and no SIGALRM deadline with elapsed-time recording. Fifteen related tests pass. No new physics test or broad suite. Environment state is explicitly reconstructed, not an exact simulator resume; unused episode keys are chosen from the parent case manifest. Until the pending queue starts, do not report resumed training as running or a new reward as loaded.

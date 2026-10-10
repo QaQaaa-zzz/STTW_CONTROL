@@ -1,0 +1,345 @@
+{
+  "status": {
+    "state": "completed",
+    "method": "B0",
+    "pid": 2806973,
+    "ticks": 2400,
+    "budget_ticks": 2400,
+    "compile_s": 24.47280925299856,
+    "execute_s": 2379.5896364830114,
+    "failed": false,
+    "fault": false,
+    "logged_ticks": 2400,
+    "executed_replays": 1
+  },
+  "identity": {
+    "method": "B0",
+    "dtype": "float32",
+    "prepared_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+    "lower": {
+      "alias": "STTW_R196_ALPHA1",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/precision_speed_ecbc1_20260920/training/checkpoints/update_0196",
+      "identity": {
+        "model_sha256": "afdce2cbb75d236b6bad15a2f1ed7a376e35279ff71d07d511c89f936160afa0",
+        "config_sha256": "008881624b9bc1f795732f136e98ca2faad055ac6a4bc7cc6a9d49e763cca9e5",
+        "history_steps": 10,
+        "observation_fields": [
+          "roll_error",
+          "roll",
+          "roll_rate",
+          "speed_estimate",
+          "steer",
+          "steer_rate",
+          "yaw_rate_body",
+          "rear_rate",
+          "front_rate",
+          "steer_reference",
+          "speed_reference",
+          "base_steer_rate",
+          "previous_steer_command",
+          "previous_rear_command",
+          "estimated_disturbance",
+          "path_lateral_error",
+          "heading_error",
+          "path_curvature",
+          "speed_priority",
+          "previous_steer_residual",
+          "previous_rear_residual",
+          "return_pending",
+          "return_elapsed",
+          "return_hold",
+          "return_credited",
+          "return_ever_left",
+          "return_deadline_missed",
+          "longitudinal_error",
+          "yaw_rate_reference",
+          "yaw_rate_world"
+        ]
+      },
+      "payload_sha256": "a2e5bf112e0cb986b4ec207fa9f20dcf90f48af6d7855b0abda32bfa13206672",
+      "sidecar_sha256": "efced7cd83cfd8f691821e29cca28ccd4b40e5b5f32b42b9b708ea945bea8a0e",
+      "fields": [
+        "roll_error",
+        "roll",
+        "roll_rate",
+        "speed_estimate",
+        "steer",
+        "steer_rate",
+        "yaw_rate_body",
+        "rear_rate",
+        "front_rate",
+        "steer_reference",
+        "speed_reference",
+        "base_steer_rate",
+        "previous_steer_command",
+        "previous_rear_command",
+        "estimated_disturbance",
+        "path_lateral_error",
+        "heading_error",
+        "path_curvature",
+        "speed_priority",
+        "previous_steer_residual",
+        "previous_rear_residual",
+        "return_pending",
+        "return_elapsed",
+        "return_hold",
+        "return_credited",
+        "return_ever_left",
+        "return_deadline_missed",
+        "longitudinal_error",
+        "yaw_rate_reference",
+        "yaw_rate_world"
+      ],
+      "lower_alpha": 1.0,
+      "path_capacity": 3201,
+      "transfer": "validated causal historical path / endpoint ray + source return rules; body and world yaw kept distinct"
+    }
+  },
+  "checks": {
+    "pre_post_clock_max_error": 8.391216397285461e-07,
+    "u_nom_goal_max_error": 0.0,
+    "ecbc_logged_output_max_error": 0.0,
+    "composition_unclipped_max_error": 0.0,
+    "normalization_max_error": 2.384185791015625e-07,
+    "history_first_ten_valid_counts": [
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0
+    ],
+    "fixed_lower_alpha_all_frames": true,
+    "eso_commit_continuity_max_error": 0.0,
+    "return_commit_continuity_all_fields": true,
+    "return_one_tick_elapsed_max_error": 8.391216397285461e-07,
+    "path_frame_features_max_error": 0.0,
+    "finite_required_arrays": true,
+    "physical_failure": false,
+    "lower_fault": false
+  },
+  "original_overlap": {
+    "ticks": 2400,
+    "metrics": {
+      "time": {
+        "max_abs": 0.0,
+        "rms": 0.0
+      },
+      "actual_delta": {
+        "max_abs": 2.4102628231048584e-05,
+        "rms": 6.480013780674199e-06
+      },
+      "actual_forward_speed": {
+        "max_abs": 3.552436828613281e-05,
+        "rms": 9.43343184189871e-06
+      },
+      "phi": {
+        "max_abs": 1.5974044799804688e-05,
+        "rms": 5.782025709777372e-06
+      },
+      "actual_xy": {
+        "max_abs": 0.0002827644348144531,
+        "rms": 0.00010131687304237857
+      },
+      "final_command": {
+        "max_abs": 0.000774383544921875,
+        "rms": 0.00013432498963084072
+      },
+      "governed": {
+        "max_abs": 0.0,
+        "rms": 0.0
+      }
+    },
+    "bitwise_all": false
+  },
+  "force": {
+    "full": [
+      {
+        "index": 0,
+        "name": "cmd_steering_p",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 60000
+      },
+      {
+        "index": 1,
+        "name": "cmd_rearwheel_v",
+        "limited": 1,
+        "forcerange": [
+          -3.0,
+          3.0
+        ],
+        "minimum": -1.2705535888671875,
+        "maximum": 0.37078094482421875,
+        "at_limit_substeps": 0,
+        "observed_substeps": 60000
+      },
+      {
+        "index": 2,
+        "name": "cmd_steering_v",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "at_limit_substeps": 36,
+        "observed_substeps": 60000
+      },
+      {
+        "index": 3,
+        "name": "cmd_steering_vint",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 60000
+      }
+    ],
+    "B0_first": [
+      {
+        "index": 0,
+        "name": "cmd_steering_p",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 3800
+      },
+      {
+        "index": 1,
+        "name": "cmd_rearwheel_v",
+        "limited": 1,
+        "forcerange": [
+          -3.0,
+          3.0
+        ],
+        "minimum": -1.2705535888671875,
+        "maximum": 0.18445587158203125,
+        "at_limit_substeps": 0,
+        "observed_substeps": 3800
+      },
+      {
+        "index": 2,
+        "name": "cmd_steering_v",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "at_limit_substeps": 22,
+        "observed_substeps": 3800
+      },
+      {
+        "index": 3,
+        "name": "cmd_steering_vint",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 3800
+      }
+    ],
+    "B0_second": [
+      {
+        "index": 0,
+        "name": "cmd_steering_p",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 12150
+      },
+      {
+        "index": 1,
+        "name": "cmd_rearwheel_v",
+        "limited": 1,
+        "forcerange": [
+          -3.0,
+          3.0
+        ],
+        "minimum": -0.06781005859375,
+        "maximum": 0.03279876708984375,
+        "at_limit_substeps": 0,
+        "observed_substeps": 12150
+      },
+      {
+        "index": 2,
+        "name": "cmd_steering_v",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": -0.20742225646972656,
+        "maximum": 0.36795711517333984,
+        "at_limit_substeps": 0,
+        "observed_substeps": 12150
+      },
+      {
+        "index": 3,
+        "name": "cmd_steering_vint",
+        "limited": 1,
+        "forcerange": [
+          -1.0,
+          1.0
+        ],
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "at_limit_substeps": 0,
+        "observed_substeps": 12150
+      }
+    ]
+  },
+  "native_projection_discontinuities": [
+    {
+      "time": 5.125,
+      "index_before": 1023,
+      "index_after": 144,
+      "progress_before": 12.669144630432129,
+      "progress_after": 1.6651287078857422,
+      "heading_before": 0.17207938432693481,
+      "heading_after": -1.744969129562378
+    },
+    {
+      "time": 5.929999828338623,
+      "index_before": 123,
+      "index_after": 1177,
+      "progress_before": 1.4254359006881714,
+      "progress_after": 14.44245433807373,
+      "heading_before": -1.5649760961532593,
+      "heading_after": 0.3531821072101593
+    }
+  ],
+  "scope": "One B0 replay only; force evidence pertains to this replay. Alpha0 force was not measured; no second physics replay.",
+  "interpretation": "Observed path/return and network activations do not isolate causal neural field contributions."
+}

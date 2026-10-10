@@ -1,0 +1,38 @@
+[
+  {
+    "method": "B0",
+    "interval": [
+      5.445,
+      6.205
+    ],
+    "governed_steer_mean": 0.0,
+    "old_relationship_mean": 0.1584537979236996,
+    "old_relationship_min": -0.20182935318993928,
+    "old_relationship_max": 0.35,
+    "interpretation": "Original relation evaluated on current adapter geometry, not old continuous projection, not executed, not causal intervention"
+  },
+  {
+    "method": "B0",
+    "interval": [
+      6.315,
+      8.745
+    ],
+    "governed_steer_mean": 0.0,
+    "old_relationship_mean": -0.18869321468124017,
+    "old_relationship_min": -0.21204076591735505,
+    "old_relationship_max": -0.13522065837004296,
+    "interpretation": "Original relation evaluated on current adapter geometry, not old continuous projection, not executed, not causal intervention"
+  },
+  {
+    "method": "alpha0",
+    "interval": [
+      9.02,
+      10.24
+    ],
+    "governed_steer_mean": 0.027676349505782127,
+    "old_relationship_mean": -0.18831567234641497,
+    "old_relationship_min": -0.24449445834990435,
+    "old_relationship_max": -0.12670249674306683,
+    "interpretation": "Original relation evaluated on current adapter geometry, not old continuous projection, not executed, not causal intervention"
+  }
+]

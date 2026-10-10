@@ -1,0 +1,76 @@
+{
+  "B0": {
+    "max_ecbc_reconstruction_abs": 1.914799213409424e-06,
+    "new_physics_steps": 0,
+    "alignment": "controller pre-state from previous stored post-state; scoring unchanged",
+    "return_post_source": "next stored row pre path; source extends beyond the12s audit",
+    "full_lower_input_available": false,
+    "actuator_force_available": false,
+    "max_path_feature_reconstruction_abs": [
+      1.9371509552001953e-06,
+      0.0003662034869194031,
+      0.0004153251647949219
+    ],
+    "projection_discontinuities": [
+      {
+        "time": 5.125,
+        "progress_before": 12.66925048828125,
+        "progress_after": 1.6651601791381836,
+        "index_before": 1023,
+        "index_after": 144,
+        "endpoint_before": false,
+        "endpoint_after": false,
+        "heading_before": 0.17209845781326294,
+        "heading_after": -1.7449496984481812
+      },
+      {
+        "time": 5.929999828338623,
+        "progress_before": 1.4254902601242065,
+        "progress_after": 14.442549705505371,
+        "index_before": 123,
+        "index_after": 1177,
+        "endpoint_before": false,
+        "endpoint_after": false,
+        "heading_before": -1.5649652481079102,
+        "heading_after": 0.35319361090660095
+      }
+    ]
+  },
+  "alpha0": {
+    "max_ecbc_reconstruction_abs": 1.6391277313232422e-06,
+    "new_physics_steps": 0,
+    "alignment": "controller pre-state from previous stored post-state; scoring unchanged",
+    "return_post_source": "next stored row pre path; source extends beyond the12s audit",
+    "full_lower_input_available": false,
+    "actuator_force_available": false,
+    "max_path_feature_reconstruction_abs": [
+      1.430511474609375e-06,
+      0.00017357617616653442,
+      0.000513911247253418
+    ],
+    "projection_discontinuities": [
+      {
+        "time": 5.679999828338623,
+        "progress_before": 13.462055206298828,
+        "progress_after": 0.5366541147232056,
+        "index_before": 1135,
+        "index_after": 45,
+        "endpoint_before": true,
+        "endpoint_after": false,
+        "heading_before": 0.0923507958650589,
+        "heading_after": -2.274550437927246
+      },
+      {
+        "time": 6.864999771118164,
+        "progress_before": 0.0,
+        "progress_after": 15.906917572021484,
+        "index_before": 0,
+        "index_after": 1342,
+        "endpoint_before": false,
+        "endpoint_after": false,
+        "heading_before": -1.8780685663223267,
+        "heading_after": 0.5916464924812317
+      }
+    ]
+  }
+}
