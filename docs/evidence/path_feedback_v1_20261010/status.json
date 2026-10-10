@@ -1,0 +1,23 @@
+{
+  "state": "completed",
+  "pid": 2333520,
+  "control_ticks": 6000,
+  "maximum_control_ticks": 6000,
+  "training_steps": 0,
+  "completed": [
+    {
+      "case": "straight",
+      "control_ticks": 2000,
+      "reason": "horizon"
+    },
+    {
+      "case": "left90_R2",
+      "control_ticks": 4000,
+      "reason": "horizon"
+    }
+  ],
+  "elapsed_s": 530.08611573698,
+  "protected_unchanged": true,
+  "phase_C": "not_run",
+  "adoption": "not_adopted"
+}

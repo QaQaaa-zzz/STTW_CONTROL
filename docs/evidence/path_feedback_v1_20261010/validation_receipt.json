@@ -1,0 +1,11 @@
+{
+  "test_command": "PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python -m pytest learning/tests/test_path_feedback.py learning/tests/test_path_frequency.py -q",
+  "focused_tests_passed": 9,
+  "full_repository_tests_run": false,
+  "attachment_math_passed": true,
+  "links_checked": true,
+  "protected_current_sha_verified": true,
+  "budget_verified": true,
+  "baseline_acceptance": "0/2; not prerequisite for perfection before mainline",
+  "physics_rerun_after_guard": false
+}

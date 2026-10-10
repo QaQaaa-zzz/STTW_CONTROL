@@ -1125,3 +1125,6 @@ User-authorized attachment specifies fresh210/211 ELU256→128 local two-residua
 Seven focused new CPU checks pass; prior11 checks and B0 replay reused. Sole engineering8×16×2 completed. Formal fresh512×256×200 started; corrected accepted-count metadata after six updates via full-boundary exact resume (no sample repetition). Status and PID in runs/noalpha_v2_formal_20261010. Fixed numeric validation100/150/200; evidence-based100-block extension≤400. Local pass then one old mismatch full-state comparison; both gates then frozen upper straight/fast_turn combination. Final physical evidence must precede adoption; no push.
 
 Source paths: learning/configs/lower_local_tracking_no_alpha_v2.json; lower_command.py; lower_command_training.py; lower_command_validation.py. Resume: --formal-only --resume-checkpoint <run>/training/checkpoints/resume_boundary.pt --target-updates <total≤400>. Old boundaries/future-artifact overwrite rejected before writing.
+
+## 2026-10-10 Path Feedback V1 工程交付
+隔离自ab195e7，新增几何模式与351/352接口，A复用旧四条，B两条共6000步已完成，C未训练。当前事实及用户“快速验证主线、不追求基线完美”决定见共享台账STTW-PATH-FEEDBACK-V1；工程证据[INDEX](docs/evidence/path_feedback_v1_20261010/INDEX.md)。不替换旧teleop、best或物理，不自动push。

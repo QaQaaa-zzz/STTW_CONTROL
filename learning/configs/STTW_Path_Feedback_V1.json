@@ -1,0 +1,368 @@
+{
+  "schema": "sttw_path_feedback_v1_design",
+  "status": "design_not_robot_validated",
+  "source_commit": "ab195e768a6750f78a2e74813fe268a7ab4dccda",
+  "default_execution": "implement_A_and_B_only_then_report; C_is_specified_but_requires_path_baseline_acceptance",
+  "scope": {
+    "new_planning_network": false,
+    "action_candidate_search": false,
+    "retrain_lower": false,
+    "lower_checkpoint": 300,
+    "preserve_old_teleop_mode": true,
+    "preserve_old_upper_best": true,
+    "final_goal_this_phase": "pass_goal_cross_section_and_track_outgoing_path_not_stop"
+  },
+  "timing": {
+    "physics_dt_s_expected": 0.0002,
+    "physics_substeps_per_control_expected": 25,
+    "lower_dt_s": 0.005,
+    "upper_dt_s": 0.02,
+    "path_follower_dt_s": 0.02,
+    "do_not_silently_change_simulation_timing": true
+  },
+  "path": {
+    "coordinate_frame": "existing_world_XY_and_positive_yaw; verify_steer_sign_against_existing_reference_model",
+    "spacing_m": 0.02,
+    "straight_prefix_m": 3.0,
+    "straight_tail_m": 70.0,
+    "turn_angle_rad": 1.5707963267948966,
+    "turn_radius_m": 2.0,
+    "curvature_transition_length_m": 0.5,
+    "curvature_ramp": "3*u^2-2*u^3",
+    "path_is_fixed_before_rollout": true,
+    "reanchor_during_rollout": false,
+    "allow_online_teleop_future": false,
+    "projection_backward_m": 0.05,
+    "projection_forward_floor_m": 0.3,
+    "projection_forward_motion_multiplier": 2.0,
+    "projection_forward_padding_m": 0.1,
+    "projection_progress": "nondecreasing_forward_tracking; keep_unclamped_projection_for_diagnostics",
+    "goal_section_offset_after_turn_m": 4.0
+  },
+  "follower": {
+    "method": "pure_pursuit_with_actual_chord_denominator",
+    "lookahead_time_s": 0.7,
+    "lookahead_min_m": 0.8,
+    "lookahead_max_m": 1.8,
+    "lookahead_min_speed_m_s": 1.5,
+    "speed_reference": "external_v_user; no_curvature_speed_regulation_in_follower",
+    "steer_reference_max_rad": 0.3,
+    "nominal_speed_slew_m_s2": 0.5,
+    "nominal_steer_slew_rad_s": 0.3,
+    "wheelbase_m_expected": 0.408,
+    "caster_deg_expected": 25.0,
+    "preview_body_x_min_m": 0.05,
+    "out_of_domain": "log_and_stop_diagnostic_if_preview_behind_or_heading_error_ge_pi_over_2; no_spin_in_place"
+  },
+  "residual_interface": {
+    "latent_order": [
+      "speed",
+      "steer"
+    ],
+    "mapping": "tanh_then_existing_asymmetric_scales",
+    "speed_negative_scale_m_s": 1.0,
+    "speed_positive_scale_m_s": 0.25,
+    "steer_scale_rad": 0.2,
+    "speed_reference_bounds_m_s": [
+      1.5,
+      3.0
+    ],
+    "steer_reference_bound_rad": 0.35,
+    "correction_speed_down_m_s2": 1.0,
+    "correction_speed_up_m_s2": 0.5,
+    "correction_steer_rate_rad_s": 0.8,
+    "filter_tau_s": [
+      0.1,
+      0.08
+    ],
+    "filter_update_dt_s": 0.005,
+    "filter_position": "physical_offset_target_before_existing_offset_slew",
+    "reference_clip_antiwindup": "back_calculate_filter_and_offset_to_actual_governed_minus_nominal_only_if_reference_amplitude_clip_occurs; do_not_reset_filter_on_normal_slew",
+    "lower_reference_centered": true,
+    "execution_residual_limits_rad_s": [
+      1.5,
+      10.0
+    ],
+    "final_actuator_rate_limits_rad_s": [
+      3.0,
+      60.0
+    ]
+  },
+  "network": {
+    "history_frames": 16,
+    "frame_fields": 20,
+    "history_dt_s": 0.02,
+    "mask_fields": 16,
+    "context_fields": [
+      {
+        "name": "alpha",
+        "scale": 1.0
+      },
+      {
+        "name": "signed_cross_track_error_m",
+        "scale": 0.2
+      },
+      {
+        "name": "sin_path_heading_error",
+        "scale": 1.0
+      },
+      {
+        "name": "cos_path_heading_error",
+        "scale": 1.0
+      },
+      {
+        "name": "curvature_here_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "curvature_plus_0p5m_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "curvature_plus_1m_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "preview_body_x_m",
+        "scale": 1.8
+      },
+      {
+        "name": "preview_body_y_m",
+        "scale": 1.8
+      },
+      {
+        "name": "external_speed_m_s",
+        "scale": 3.0
+      },
+      {
+        "name": "previous_applied_speed_offset_m_s",
+        "scale": 1.0
+      },
+      {
+        "name": "previous_applied_steer_offset_rad",
+        "scale": 0.2
+      },
+      {
+        "name": "speed_filter_state_m_s",
+        "scale": 1.0
+      },
+      {
+        "name": "steer_filter_state_rad",
+        "scale": 0.2
+      },
+      {
+        "name": "lookahead_distance_m",
+        "scale": 1.8
+      }
+    ],
+    "actor_dim": 351,
+    "critic_dim": 352,
+    "critic_extra": "finite_task_remaining_fraction",
+    "hidden": [
+      128,
+      128,
+      64
+    ],
+    "activation": "elu",
+    "actions": 2,
+    "policy_type": "separate_fixed_alpha_endpoints_for_this_phase",
+    "alphas": [
+      0,
+      1
+    ],
+    "alpha_is_constant_per_episode": true,
+    "initialization": "fresh_upper_actor_critic_optimizer; zero_actor_output_layer; freeze_lower300",
+    "old_345_actor_weight_loading": false,
+    "norm": "fixed_physical_scales; clip_finite_normalized_values_at_5; never_sanitize_NaN"
+  },
+  "path_reward": {
+    "scale": 0.1,
+    "huber": "x^2 if abs(x)<=1 else 2abs(x)-1",
+    "task": "geometric_path_not_issued_steer_tracking",
+    "chi": "clip((abs(delta_ff(path_curvature)/q(v_user))-.18)/.12,0,1)",
+    "speed_weight": "10-9*chi*(1-alpha)",
+    "path_weight": "10-9*chi*alpha",
+    "speed_scale_m_s": 0.1,
+    "cross_track_scale_m": 0.1,
+    "path_heading_scale_rad": 0.1,
+    "path_heading_factor": 0.5,
+    "primary_weight": 20.0,
+    "primary_speed_band_m_s": 0.05,
+    "primary_path_band_m": 0.1,
+    "primary_speed_scale_m_s": 0.1,
+    "primary_path_scale_m": 0.1,
+    "primary_gate": "chi; do not gate on network output",
+    "roll_weight": 40.0,
+    "roll_start_rad": 0.26,
+    "roll_scale_rad": 0.04,
+    "working_roll_weight": 120.0,
+    "working_roll_start_rad": 0.3,
+    "working_roll_scale_rad": 0.02,
+    "roll_rate_weight": 1.0,
+    "roll_rate_start_rad_s": 0.8,
+    "roll_rate_scale_rad_s": 0.8,
+    "overspeed_weight": 2.0,
+    "overspeed_band_m_s": 0.05,
+    "overspeed_scale_m_s": 0.1,
+    "low_speed_weight": 4.0,
+    "low_speed_start_m_s": 1.5,
+    "low_speed_scale_m_s": 0.2,
+    "offset_magnitude_weight": 0.02,
+    "offset_magnitude_scales": [
+      1.0,
+      0.2
+    ],
+    "offset_rate_weight": 0.03,
+    "offset_rate_scales": [
+      1.0,
+      0.4
+    ],
+    "offset_rate_dt_s": 0.02,
+    "old_time_heading_debt_cost": false,
+    "old_raw_steer_primary_cost": false,
+    "old_delta_ref_preservation_cost": false,
+    "old_time_recovery_gate": false,
+    "old_analytic_heading_recovery": false,
+    "longitudinal_time_position_cost": false,
+    "global_cost_clip": false,
+    "component_caps": {
+      "speed": 200.0,
+      "path": 200.0,
+      "primary": 400.0,
+      "roll": 900.0,
+      "working_roll": 3000.0,
+      "roll_rate": 40.0,
+      "overspeed": 160.0,
+      "low_speed": 160.0,
+      "offset_magnitude": 0.2,
+      "offset_rate": 20.0
+    },
+    "failure_extra": 5.0,
+    "failure_cost_rate_bound": 5080.2
+  },
+  "training_future_phase_C": {
+    "num_envs": 512,
+    "rollout_steps": 128,
+    "episode_s": 20.0,
+    "updates_initial": 200,
+    "updates_max": 400,
+    "extension_block": 100,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "epochs": 4,
+    "minibatches": 4,
+    "clip": 0.2,
+    "std_initial": [
+      0.25,
+      0.1
+    ],
+    "std_min": 0.05,
+    "std_max": 0.5,
+    "entropy": 0.001,
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "grad_clip_actor": 1.0,
+    "grad_clip_critic": 1.0,
+    "family_fraction": {
+      "straight_or_gentle": 0.3,
+      "rounded_left_or_right_60_to_100_degrees": 0.5,
+      "smooth_S_path": 0.2
+    },
+    "speed_range_m_s": [
+      1.8,
+      2.6
+    ],
+    "radius_range_m": [
+      1.8,
+      4.0
+    ],
+    "initial_route_pose_offset_fraction": 0.2,
+    "initial_lateral_offset_range_m": [
+      -0.1,
+      0.1
+    ],
+    "initial_heading_offset_range_rad": [
+      -0.05,
+      0.05
+    ],
+    "freeze_physical_prepared_snapshot": true,
+    "randomize_path_relative_to_actual_pose_once_at_reset": true,
+    "save_every": 10,
+    "validation_updates": [
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400
+    ],
+    "no_20_or_25_update_evaluation": true,
+    "best_on": "physical_safety_then_endpoint_primary_then_final_geometric_hold_then_worst_case_normalized_error",
+    "convergence": "late_fixed_validation_and_complete_episode_physical_metrics; not_rollout_reward_only"
+  },
+  "stage_B_baseline": {
+    "cases": [
+      {
+        "name": "straight",
+        "horizon_s": 10.0,
+        "v_user": 2.3,
+        "lateral_initial_error_m": 0.05
+      },
+      {
+        "name": "left90_R2",
+        "horizon_s": 20.0,
+        "v_user": 2.0,
+        "lateral_initial_error_m": 0.0
+      }
+    ],
+    "upper_residual": "zero; no_old_actor_in_new_path_mode",
+    "nominal_y_error_rmse_m": 0.1,
+    "final_y_error_m": 0.1,
+    "final_path_heading_error_rad": 0.05,
+    "final_speed_error_m_s": 0.1,
+    "hold_s": 1.0,
+    "working_roll_rad": 0.302,
+    "require_goal_section_for_turn": true,
+    "report_all_transition_errors": true,
+    "max_baseline_runs": 2
+  },
+  "anti_oscillation_diagnostic": {
+    "new_robot_rollouts_default": 0,
+    "existing_data_only": true,
+    "sampling_Hz": 50,
+    "analyse_sign_reversal_with_amplitude_deadband": true,
+    "rate_sign_deadband_rad_s": 0.05,
+    "min_adjacent_steer_excursion_rad": 0.002,
+    "PSD_method": "Welch_Hann_mean_removed",
+    "PSD_band_Hz": [
+      10.0,
+      25.0
+    ],
+    "window_selection": "fixed_original_nominal_command_steady; do_not_condition_on_smooth_governed",
+    "report_reversal_events_not_periodic_frequency": true
+  },
+  "stage_C_evaluation": {
+    "route_ids": [
+      "straight",
+      "left90_R2",
+      "right90_R2"
+    ],
+    "low_speed_m_s": 2.0,
+    "conflict_speed_m_s": 2.6,
+    "compare_nominal_follower_and_two_endpoints": true,
+    "compare_same_path_not_same_generated_steer_stream": true,
+    "endpoint_progress_requirement": "pass_target_cross_section; keep_tracking_outgoing_path; no_stop_task",
+    "candidate_does_not_mean_qualified": true
+  },
+  "protection": {
+    "never_modify_existing_best_pointers": true,
+    "never_hot_swap_lower_on_existing_run": true,
+    "never_install_new_alias_without_acceptance": true,
+    "no_automatic_push": true,
+    "no_automatic_phase_C_training": true,
+    "no_changes_to_DVGC_JIT": true
+  }
+}

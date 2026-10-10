@@ -1,0 +1,36 @@
+{
+  "straight": {
+    "initial_error": 0.05,
+    "last1_max_heading": 0.06380986422300339,
+    "last1_max_lateral": 0.018606938421726227,
+    "last1_max_speed": 0.029458284378051758,
+    "all_lower_finite": true,
+    "max_abs_nominal_speed_rate": 0.0,
+    "max_abs_nominal_steer_rate": 0.30000025033950806,
+    "max_projection_increment": 0.011518500745296478,
+    "min_preview_body_x": 1.5780247449874878,
+    "governed_last4s_psd_peak_hz": 0.78125,
+    "governed_last4s_peak_to_peak": 0.07482113316655159,
+    "actual_last4s_psd_peak_hz": 0.78125,
+    "actual_last4s_peak_to_peak": 0.1422145962715149,
+    "heading_error_last4s_psd_peak_hz": 0.78125,
+    "heading_error_last4s_peak_to_peak": 0.12668287754058838
+  },
+  "left90_R2": {
+    "initial_error": 0.0,
+    "last1_max_heading": 0.07343602180480957,
+    "last1_max_lateral": 0.01944446563720703,
+    "last1_max_speed": 0.029495835304260254,
+    "all_lower_finite": true,
+    "max_abs_nominal_speed_rate": 0.5000114440917969,
+    "max_abs_nominal_steer_rate": 0.3000006079673767,
+    "max_projection_increment": 0.011247149668633938,
+    "min_preview_body_x": 1.2396986484527588,
+    "governed_last4s_psd_peak_hz": 0.78125,
+    "governed_last4s_peak_to_peak": 0.10053500905632973,
+    "actual_last4s_psd_peak_hz": 0.78125,
+    "actual_last4s_peak_to_peak": 0.17868337035179138,
+    "heading_error_last4s_psd_peak_hz": 0.78125,
+    "heading_error_last4s_peak_to_peak": 0.1461937353014946
+  }
+}

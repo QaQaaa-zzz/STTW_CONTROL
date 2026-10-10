@@ -1,0 +1,285 @@
+{
+  "straight": {
+    "completed": true,
+    "control_ticks": 2000,
+    "observed_s": 10.0,
+    "stop_reason": "horizon",
+    "physical_failure": false,
+    "policy_fault": false,
+    "domain_exit": false,
+    "peak_roll_rad": 0.051982760429382324,
+    "path_rmse_m": 0.0143948282381702,
+    "heading_rmse_rad": 0.035240391698752045,
+    "speed_rmse_m_s": 0.019394470085813555,
+    "final_hold": false,
+    "goal_crossed": null,
+    "goal_cross_time_s": null,
+    "final_path_error_m": 0.018606938421726227,
+    "final_heading_error_rad": -0.0338471457362175,
+    "final_speed_error_m_s": -0.010451316833496094,
+    "final_progress_m": 22.81404685974121,
+    "goal_progress_m": 4.0,
+    "lower_speed_rmse_m_s": 0.019394470085813555,
+    "lower_steer_rmse_rad": 0.0410715419408252,
+    "final_hold_violations": {
+      "samples": 200,
+      "lateral": 0,
+      "heading": 92,
+      "speed": 0
+    },
+    "accepted": false,
+    "windows": {
+      "initial_0_1s": {
+        "samples": 200,
+        "path_rmse_m": 0.03686499684222706,
+        "speed_rmse_m_s": 0.020977740733668405,
+        "heading_rmse_rad": 0.027638566470436794
+      },
+      "full": {
+        "samples": 2000,
+        "path_rmse_m": 0.0143948282381702,
+        "speed_rmse_m_s": 0.019394470085813555,
+        "heading_rmse_rad": 0.035240391698752045
+      },
+      "last1s": {
+        "samples": 200,
+        "path_rmse_m": 0.009954534677680642,
+        "speed_rmse_m_s": 0.019015348617280853,
+        "heading_rmse_rad": 0.04643145740739507
+      },
+      "curvature_transition": {
+        "samples": 0
+      }
+    },
+    "clip_counts": {
+      "final": [
+        0,
+        0
+      ],
+      "residual": [
+        0,
+        0
+      ],
+      "reference": [
+        0,
+        0
+      ]
+    },
+    "signal_50Hz": {
+      "nominal_steer": {
+        "signal_sign_reversal_events": 18,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 500,
+        "duration_s": 10.0,
+        "mean": -0.0018404138711630366,
+        "peak_to_peak": 0.07482113316655159,
+        "rms": 0.020763476130438347,
+        "ac_rms": 0.020681750839861547,
+        "rate_rms": 0.11928574680108502,
+        "raw_reversal_events": 19,
+        "raw_reversal_events_per_s": 1.9,
+        "amplitude_reversal_events": 19,
+        "amplitude_reversal_events_per_s": 1.9,
+        "peak_frequency_hz": 0.78125,
+        "high_band_fraction": 2.788721691680446e-09
+      },
+      "governed_steer": {
+        "signal_sign_reversal_events": 18,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 500,
+        "duration_s": 10.0,
+        "mean": -0.0018404138711630366,
+        "peak_to_peak": 0.07482113316655159,
+        "rms": 0.020763476130438347,
+        "ac_rms": 0.020681750839861547,
+        "rate_rms": 0.11928574680108502,
+        "raw_reversal_events": 19,
+        "raw_reversal_events_per_s": 1.9,
+        "amplitude_reversal_events": 19,
+        "amplitude_reversal_events_per_s": 1.9,
+        "peak_frequency_hz": 0.78125,
+        "high_band_fraction": 2.788721691680446e-09
+      },
+      "actual_steer": {
+        "signal_sign_reversal_events": 19,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 500,
+        "duration_s": 10.0,
+        "mean": 0.0006507198578910902,
+        "peak_to_peak": 0.1422145962715149,
+        "rms": 0.03946773247042947,
+        "ac_rms": 0.03946236777011662,
+        "rate_rms": 0.2341089488918284,
+        "raw_reversal_events": 19,
+        "raw_reversal_events_per_s": 1.9,
+        "amplitude_reversal_events": 19,
+        "amplitude_reversal_events_per_s": 1.9,
+        "peak_frequency_hz": 0.78125,
+        "high_band_fraction": 1.9673958351665128e-08
+      }
+    },
+    "endpoint_diagnosis": {
+      "initial_error": 0.05,
+      "last1_max_heading": 0.06380986422300339,
+      "last1_max_lateral": 0.018606938421726227,
+      "last1_max_speed": 0.029458284378051758,
+      "all_lower_finite": true,
+      "max_abs_nominal_speed_rate": 0.0,
+      "max_abs_nominal_steer_rate": 0.30000025033950806,
+      "max_projection_increment": 0.011518500745296478,
+      "min_preview_body_x": 1.5780247449874878,
+      "governed_last4s_psd_peak_hz": 0.78125,
+      "governed_last4s_peak_to_peak": 0.07482113316655159,
+      "actual_last4s_psd_peak_hz": 0.78125,
+      "actual_last4s_peak_to_peak": 0.1422145962715149,
+      "heading_error_last4s_psd_peak_hz": 0.78125,
+      "heading_error_last4s_peak_to_peak": 0.12668287754058838
+    },
+    "cross_track_reconstruction_max_abs": 0.0,
+    "reward_reconstruction_max_abs": 2.4459612308659617e-10,
+    "scored_reward_verified": true
+  },
+  "left90_R2": {
+    "completed": true,
+    "control_ticks": 4000,
+    "observed_s": 20.0,
+    "stop_reason": "horizon",
+    "physical_failure": false,
+    "policy_fault": false,
+    "domain_exit": false,
+    "peak_roll_rad": 0.1901240348815918,
+    "path_rmse_m": 0.032808859680197366,
+    "heading_rmse_rad": 0.05109514620102484,
+    "speed_rmse_m_s": 0.031688068907418536,
+    "final_hold": false,
+    "goal_crossed": true,
+    "goal_cross_time_s": 5.269999866485596,
+    "final_path_error_m": 0.01822948455810547,
+    "final_heading_error_rad": 0.007281423546373844,
+    "final_speed_error_m_s": -0.005287051200866699,
+    "final_progress_m": 39.87753677368164,
+    "goal_progress_m": 10.641592979431152,
+    "lower_speed_rmse_m_s": 0.0216212374728172,
+    "lower_steer_rmse_rad": 0.06146980969808843,
+    "final_hold_violations": {
+      "samples": 200,
+      "lateral": 0,
+      "heading": 112,
+      "speed": 0
+    },
+    "accepted": false,
+    "windows": {
+      "initial_0_1s": {
+        "samples": 200,
+        "path_rmse_m": 0.0012781663595591106,
+        "speed_rmse_m_s": 0.1088777819812281,
+        "heading_rmse_rad": 0.0018866840740588535
+      },
+      "full": {
+        "samples": 4000,
+        "path_rmse_m": 0.032808859680197366,
+        "speed_rmse_m_s": 0.031688068907418536,
+        "heading_rmse_rad": 0.05109514620102484
+      },
+      "last1s": {
+        "samples": 200,
+        "path_rmse_m": 0.011438626331136266,
+        "speed_rmse_m_s": 0.017400588289871226,
+        "heading_rmse_rad": 0.05340010992094981
+      },
+      "curvature_transition": {
+        "samples": 103,
+        "path_rmse_m": 0.060997901208988216,
+        "speed_rmse_m_s": 0.03651233289244198,
+        "heading_rmse_rad": 0.07786117181309232
+      }
+    },
+    "clip_counts": {
+      "final": [
+        2,
+        0
+      ],
+      "residual": [
+        0,
+        0
+      ],
+      "reference": [
+        0,
+        0
+      ]
+    },
+    "signal_50Hz": {
+      "nominal_steer": {
+        "signal_sign_reversal_events": 31,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 1000,
+        "duration_s": 20.0,
+        "mean": 0.015394732907973484,
+        "peak_to_peak": 0.25853992253541946,
+        "rms": 0.061628216177511685,
+        "ac_rms": 0.05967444367494573,
+        "rate_rms": 0.18873231341235472,
+        "raw_reversal_events": 34,
+        "raw_reversal_events_per_s": 1.7,
+        "amplitude_reversal_events": 30,
+        "amplitude_reversal_events_per_s": 1.5,
+        "peak_frequency_hz": 0.390625,
+        "high_band_fraction": 1.326657621464791e-07
+      },
+      "governed_steer": {
+        "signal_sign_reversal_events": 31,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 1000,
+        "duration_s": 20.0,
+        "mean": 0.015394732907973484,
+        "peak_to_peak": 0.25853992253541946,
+        "rms": 0.061628216177511685,
+        "ac_rms": 0.05967444367494573,
+        "rate_rms": 0.18873231341235472,
+        "raw_reversal_events": 34,
+        "raw_reversal_events_per_s": 1.7,
+        "amplitude_reversal_events": 30,
+        "amplitude_reversal_events_per_s": 1.5,
+        "peak_frequency_hz": 0.390625,
+        "high_band_fraction": 1.326657621464791e-07
+      },
+      "actual_steer": {
+        "signal_sign_reversal_events": 32,
+        "derivative_reversal_definition": "sign changes of first difference of this signal; for measured actual_steer_rate use signal_sign_reversal_events to count measured rate reversals",
+        "samples": 1000,
+        "duration_s": 20.0,
+        "mean": 0.01705128317008348,
+        "peak_to_peak": 0.3104705512523651,
+        "rms": 0.08020025792278511,
+        "ac_rms": 0.0783666709330879,
+        "rate_rms": 0.32179486361052945,
+        "raw_reversal_events": 35,
+        "raw_reversal_events_per_s": 1.75,
+        "amplitude_reversal_events": 32,
+        "amplitude_reversal_events_per_s": 1.6,
+        "peak_frequency_hz": 0.78125,
+        "high_band_fraction": 3.97895524146916e-08
+      }
+    },
+    "endpoint_diagnosis": {
+      "initial_error": 0.0,
+      "last1_max_heading": 0.07343602180480957,
+      "last1_max_lateral": 0.01944446563720703,
+      "last1_max_speed": 0.029495835304260254,
+      "all_lower_finite": true,
+      "max_abs_nominal_speed_rate": 0.5000114440917969,
+      "max_abs_nominal_steer_rate": 0.3000006079673767,
+      "max_projection_increment": 0.011247149668633938,
+      "min_preview_body_x": 1.2396986484527588,
+      "governed_last4s_psd_peak_hz": 0.78125,
+      "governed_last4s_peak_to_peak": 0.10053500905632973,
+      "actual_last4s_psd_peak_hz": 0.78125,
+      "actual_last4s_peak_to_peak": 0.17868337035179138,
+      "heading_error_last4s_psd_peak_hz": 0.78125,
+      "heading_error_last4s_peak_to_peak": 0.1461937353014946
+    },
+    "cross_track_reconstruction_max_abs": 1.4901161193847656e-08,
+    "reward_reconstruction_max_abs": 3.168288440630329e-09,
+    "scored_reward_verified": true
+  }
+}

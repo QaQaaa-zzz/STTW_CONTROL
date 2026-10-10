@@ -1,0 +1,28 @@
+{
+  "scope": "math_and_config_only_no_robot_simulation_no_training",
+  "actor_dim": 351,
+  "critic_dim": 352,
+  "pure_pursuit_circle_curvature": 0.49999999999999994,
+  "turn_total_length_m": 3.641592653589793,
+  "goal_cross_section_s_m": 10.641592653589793,
+  "component_bound": 5080.2,
+  "filter_tick_coefficients": [
+    0.951229424500714,
+    0.9394130628134758
+  ],
+  "continuous_filter_steer_magnitude_at_10Hz": 0.19511986277060736,
+  "steer_rate_rms_new_old_ratio_alpha0": 10.073664456595667,
+  "steer_rate_rms_new_old_ratio_alpha1": 9.499053638725654,
+  "ranking_synthetic_not_vehicle_rollout": {
+    "alpha0": {
+      "A_path_favouring_errors": 8.1,
+      "B_speed_favouring_errors": 51.29
+    },
+    "alpha1": {
+      "A_path_favouring_errors": 190.11,
+      "B_speed_favouring_errors": 3.525
+    }
+  },
+  "training_transitions_per_endpoint_at_200_updates": 13107200,
+  "all_checks_passed": true
+}

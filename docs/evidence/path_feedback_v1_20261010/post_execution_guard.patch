@@ -1,0 +1,11 @@
+--- executed/path_command_env.py
++++ current/path_command_env.py
+@@ -17,0 +18,5 @@
++
++def guard_lower_action(action,finite):
++    """Preserve lower_fault while preventing invalid inference entering physics."""
++    return j.where(finite,action,j.zeros_like(action))
++
+@@ -81 +86 @@
+-        override=controls(p.controller,p.actuator,m,governed,governed,p.physical_tick*self.cc.dt>3.,False,self.cc,self.ac,lower_action=action,previewed=preview)
++        override=controls(p.controller,p.actuator,m,governed,governed,p.physical_tick*self.cc.dt>3.,False,self.cc,self.ac,lower_action=guard_lower_action(action,lf['finite']),previewed=preview)
