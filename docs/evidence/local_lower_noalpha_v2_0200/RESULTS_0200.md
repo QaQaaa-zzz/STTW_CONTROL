@@ -50,3 +50,7 @@ Live TensorBoard: http://localhost:6006 (`formal/.`); exact launch PID/command i
 ## Training coverage caveat
 
 Fixed steady reference values are{'steady_positive': 0.12092247605323792, 'steady_negative': -0.12092247605323792}; the ordinary training family has abs steer≤.10rad. Dynamic turn families hold larger turns at low1.7–2.1m/s, so prolonged2.6m/s/approximately±.122rad steady tracking is not directly covered by the ordinary target support. These references remain within declared global core ranges and acceptance remains unchanged; this is a joint-distribution coverage gap, not proof of the observed error mechanism or an exemption. The authorized extension retains the frozen distribution.
+
+## Actual sampling consumption
+
+Actual transition-family fractions ordinary/turn-return/post-small/reversal=24.805/35.016/24.394/15.785%; edge15.309%, dynamic19.881%. Target speed1.50066–2.99987m/s, |target steer|≤.35rad; published speed1.50084–2.99987m/s, |issued steer|≤.35rad; published rate maxima1.79973m/s² and1.24974rad/s. Positive turn/small signs approximately50.14/50.13%. Main steer cost cap fraction0.0843%, other cap fractions0. These are training distribution measurements, not domain feasibility/safety guarantees. [Exact statistics](sampling_0200.json).

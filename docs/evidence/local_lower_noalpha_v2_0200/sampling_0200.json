@@ -1,0 +1,40 @@
+{
+  "scope": "training updates1-200; labels diagnostic only; targets/issued/rates ordered v,delta,issued_v,issued_delta,dv/dt,ddelta/dt",
+  "target_issued_rates_min": [
+    1.5006604194641113,
+    -0.3499999940395355,
+    1.500837802886963,
+    -0.3499999940395355,
+    -1.7997264862060547,
+    -1.2497395277023315
+  ],
+  "target_issued_rates_max": [
+    2.999871253967285,
+    0.3499999940395355,
+    2.999871253967285,
+    0.3499999940395355,
+    1.7997264862060547,
+    1.2497395277023315
+  ],
+  "family_sample_fraction": {
+    "ordinary": 0.248046875,
+    "turn_return": 0.35015869140625,
+    "post_return_small": 0.2439422607421875,
+    "reversal": 0.1578521728515625
+  },
+  "edge_dynamic_positive_turn_positive_small_fraction": [
+    0.1530914306640625,
+    0.1988067626953125,
+    0.50140380859375,
+    0.501251220703125
+  ],
+  "component_cap_fraction": {
+    "action": 0.0,
+    "action_change": 0.0,
+    "roll": 0.0,
+    "roll_rate": 0.0,
+    "speed": 0.0,
+    "steer": 0.0008431243896484375,
+    "working_roll": 0.0
+  }
+}
