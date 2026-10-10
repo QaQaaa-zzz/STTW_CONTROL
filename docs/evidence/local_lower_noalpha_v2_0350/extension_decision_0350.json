@@ -1,0 +1,36 @@
+{
+  "initial_update": 350,
+  "target_update": 400,
+  "additional_updates": 50,
+  "additional_transitions": 6553600,
+  "total_transitions": 52428800,
+  "maximum_total_updates": 400,
+  "scope": "remaining half of declared final100clarification block",
+  "best_update": 300,
+  "last_qualified": false,
+  "consecutive_late_qualified": false,
+  "training_cost_last25_relative_change": 0.018832489070880865,
+  "complete_episode_blocks": {
+    "276-300": {
+      "episodes": 1536,
+      "mean_cost_per_tick": 0.0018636095921198527,
+      "speed_rmse": 0.024270289930336697,
+      "steer_rmse": 0.030790225925437283
+    },
+    "301-325": {
+      "episodes": 1536,
+      "mean_cost_per_tick": 0.0017133126258850097,
+      "speed_rmse": 0.02371781947917298,
+      "steer_rmse": 0.029049870724851577
+    },
+    "326-350": {
+      "episodes": 1536,
+      "mean_cost_per_tick": 0.0017455785671869912,
+      "speed_rmse": 0.023922544191725292,
+      "steer_rmse": 0.02909806406620354
+    }
+  },
+  "reason": "mixed signals, regression in fixed positive turn; complete bounded final clarification block, no claims of convergence",
+  "upper_combo": "gate_closed",
+  "adoption": "not_adopted"
+}

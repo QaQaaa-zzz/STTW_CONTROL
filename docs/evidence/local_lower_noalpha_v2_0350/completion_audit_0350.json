@@ -1,0 +1,84 @@
+{
+  "updates": 350,
+  "accepted_updates": 350,
+  "transitions": 45875200,
+  "best_source_update": 300,
+  "best_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+  "full_boundary_state": true,
+  "optimizer_nonempty": true,
+  "history_shape": [
+    512,
+    10,
+    20
+  ],
+  "same_issued_reference": true,
+  "R196_cache_hashes_unchanged": true,
+  "upper_best_hashes_unchanged": true,
+  "reload_max_differences": {
+    "straight_speed_change": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    },
+    "steady_positive": {
+      "actual_xy": 3.528594970703125e-05,
+      "actual_delta": 1.329183578491211e-05,
+      "actual_forward_speed": 1.6927719116210938e-05,
+      "phi": 1.1920928955078125e-05,
+      "action": 1.1468306183815002e-05
+    },
+    "steady_negative": {
+      "actual_xy": 0.00012683868408203125,
+      "actual_delta": 6.549060344696045e-06,
+      "actual_forward_speed": 2.0742416381835938e-05,
+      "phi": 8.344650268554688e-06,
+      "action": 1.2237578630447388e-05
+    },
+    "return_positive": {
+      "actual_xy": 0.0,
+      "actual_delta": 6.277114152908325e-07,
+      "actual_forward_speed": 3.814697265625e-06,
+      "phi": 0.0,
+      "action": 2.635642886161804e-06
+    },
+    "return_negative": {
+      "actual_xy": 4.76837158203125e-07,
+      "actual_delta": 4.5335618779063225e-06,
+      "actual_forward_speed": 2.6226043701171875e-06,
+      "phi": 5.125999450683594e-06,
+      "action": 6.056623533368111e-06
+    },
+    "post_return_small_positive": {
+      "actual_xy": 0.00011873245239257812,
+      "actual_delta": 6.9588422775268555e-06,
+      "actual_forward_speed": 1.9073486328125e-05,
+      "phi": 8.344650268554688e-06,
+      "action": 9.327195584774017e-06
+    },
+    "post_return_small_negative": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    }
+  },
+  "selection_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7390904178867257
+  ],
+  "reloaded_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7391187095742962
+  ],
+  "parent_mismatch": "best300 passed .445s; unchanged best",
+  "adoption": "not_adopted"
+}
