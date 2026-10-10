@@ -1,4 +1,6 @@
-# Geometric path Phase C — wired, physical training not_run
+# Geometric path Phase C — implementation and preparation record
+
+Subsequent explicit user authorization launched the200-update endpoint campaign. See the [dated work report and launch snapshot](evidence/path_feedback_v1_20261010/INDEX.md) for actual progress; the preparation results below retain their original no-training scope.
 
 Authoritative design: [spec](path_feedback_v1_spec.md), [supplied JSON](../learning/configs/STTW_Path_Feedback_V1.json). Executable preparation: [run configuration](../learning/configs/path_feedback_phase_C_run.json). Current research decisions remain in `/home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md`.
 

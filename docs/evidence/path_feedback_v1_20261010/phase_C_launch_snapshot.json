@@ -1,0 +1,43 @@
+{
+  "captured_at": "2026-10-10T17:16:06.823086+08:00",
+  "launch": {
+    "pid": 2478647,
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/train_path_command.py",
+      "--config",
+      "learning/configs/path_feedback_phase_C_run.json",
+      "--output",
+      "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010",
+      "--execute"
+    ],
+    "cwd": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1",
+    "log": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010.launch.log",
+    "started_at": "2026-10-10T17:07:55.029583+08:00",
+    "code_revision": "8e16cd105c7cdca88ec151b73695cc327a2096ba",
+    "authorization": "user explicitly approved alpha0/1 200 updates",
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010"
+  },
+  "status_snapshot": {
+    "state": "initializing",
+    "declared_updates_per_endpoint": 200,
+    "policy_transitions_total": 0,
+    "training_control_ticks_total": 0,
+    "validation_control_ticks_total": 6000,
+    "endpoint_elapsed_s": 485.7507997149951,
+    "stage": "validation",
+    "case": "straight_2.6",
+    "completed_intervals": 500,
+    "last_update_epoch": 1791623765.7585275
+  },
+  "tensorboard": {
+    "pid": 2478988,
+    "url": "http://localhost:6007",
+    "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010/tensorboard",
+    "scalar_verified": false,
+    "http_status": 200,
+    "scalar_tags": {}
+  },
+  "process": "    PID     ELAPSED COMMAND\n2478647       08:12 /home/qy/mujoco_playground/.venv/bin/python learning/cli/train_path_command.py --config learning/configs/path_feedback_phase_C_run.json --output /home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010 --execute\n",
+  "report_scope": "A/B completed evidence plus C wiring and launch snapshot; not completed C evaluation"
+}
