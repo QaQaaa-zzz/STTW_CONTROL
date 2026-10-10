@@ -1,0 +1,13 @@
+{
+  "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-interface-repair/runs/lower_interface_20261009/B0",
+  "best_run": "runs/noalpha_v2_formal_20261010",
+  "prefix_ticks": 1263,
+  "paired_ticks": 400,
+  "budget_control_transitions": 2063,
+  "history": "last ten causal real pre-step states, commands and executed actions from old controller",
+  "command": [
+    2.3,
+    0.0
+  ],
+  "no_training": true
+}

@@ -1,0 +1,10 @@
+{
+  "all_physical_state_leaves_identical": true,
+  "old_tick": 1263,
+  "new_history": [
+    10,
+    20
+  ],
+  "mask_all_valid": true,
+  "history_source": "old-controller causal prefix"
+}

@@ -1,0 +1,83 @@
+{
+  "best_update": 300,
+  "best_checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+  "prefix_overlap": {
+    "actual_xy": 0.0,
+    "actual_delta": 0.0,
+    "actual_forward_speed": 0.0,
+    "phi": 0.0,
+    "governed": 0.0
+  },
+  "methods": {
+    "R196": {
+      "qualified": false,
+      "complete": true,
+      "finite": true,
+      "physical_failure": false,
+      "new_working_limit_failure": false,
+      "initial_roll": -0.04735696315765381,
+      "entry_s": null,
+      "peak_roll": 0.08080744743347168,
+      "speed_rmse": 0.02433215267956257,
+      "steer_rmse": 0.058006271719932556,
+      "joint_exceed_intervals": [
+        {
+          "start_s": 0.0,
+          "end_exclusive_s": 2.0,
+          "duration_s": 2.0,
+          "start_index": 0,
+          "end_index_exclusive": 400
+        }
+      ],
+      "force_peak_abs": [
+        0.0,
+        0.06781005859375,
+        0.36795711517333984,
+        0.0
+      ],
+      "force_limit_substeps": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "best300": {
+      "qualified": true,
+      "complete": true,
+      "finite": true,
+      "physical_failure": false,
+      "new_working_limit_failure": false,
+      "initial_roll": -0.04735696315765381,
+      "entry_s": 0.445,
+      "peak_roll": 0.07250118255615234,
+      "speed_rmse": 0.02398177981376648,
+      "steer_rmse": 0.03673404082655907,
+      "joint_exceed_intervals": [
+        {
+          "start_s": 0.0,
+          "end_exclusive_s": 0.44,
+          "duration_s": 0.44,
+          "start_index": 0,
+          "end_index_exclusive": 88
+        }
+      ],
+      "force_peak_abs": [
+        0.0,
+        0.345306396484375,
+        1.0,
+        0.0
+      ],
+      "force_limit_substeps": [
+        0,
+        0,
+        4,
+        0
+      ]
+    }
+  },
+  "adoption": "not_adopted",
+  "two_consecutive_late_validation": "only300passed",
+  "upper_comparison": "not_run",
+  "timestamp_convention": "time labels command/pre-step; physical actual is at time+.005; entry_s is post-step elapsed time"
+}

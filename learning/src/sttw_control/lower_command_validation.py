@@ -9,6 +9,29 @@ import numpy as np
 from .preference_best import COUNT_NAMES,selection_key,qualified,is_better,persist_best,load_best,config_hash
 from .lower_tracking_audit import held,intervals
 
+def summarize_parent_recovery(d,*,initial_roll,dt=.005):
+    """Declared two-second gate, measured from the inherited full state."""
+    t=np.asarray(d['time']);n=len(t)
+    complete=n==round(2./dt) and np.allclose(t,np.arange(n)*dt,atol=2e-6,rtol=0)
+    ev=np.asarray(d['actual_forward_speed'])-np.asarray(d['limited_command'])[:,0]
+    ed=np.asarray(d['actual_delta'])-np.asarray(d['limited_command'])[:,1]
+    finite=all(np.isfinite(x).all() for x in (t,ev,ed,d['peak_roll']))
+    joint=(abs(ev)<=.10)&(abs(ed)<=.04)
+    # Entry must occur by one second, hold at least .5s and never leave again.
+    entry=next((i for i in range(n) if joint[i:].all() and n-i>=round(.5/dt)),None)
+    # Logs label the pre-step time, while actual is measured after this step.
+    entry_s=None if entry is None else float(t[entry]+dt)
+    timely=entry_s is not None and entry_s<=1.+1e-6
+    physical=bool(np.any(d['physical_failure']))
+    working=bool(abs(initial_roll)<=.302 and np.any(np.asarray(d['peak_roll'])>.302))
+    return dict(qualified=bool(complete and finite and timely and not physical and not working),
+                complete=bool(complete),finite=bool(finite),physical_failure=physical,
+                new_working_limit_failure=working,initial_roll=float(initial_roll),
+                entry_s=entry_s,
+                peak_roll=float(np.max(d['peak_roll'])) if n else None,
+                speed_rmse=float(np.sqrt(np.mean(ev**2))),steer_rmse=float(np.sqrt(np.mean(ed**2))),
+                joint_exceed_intervals=intervals(~joint,t,dt))
+
 def validate_trace(d,dt,horizon):
     required={'time':(), 'limited_command':(2,), 'actual_forward_speed':(), 'actual_delta':(),
               'phi':(), 'peak_roll':(), 'physical_failure':(), 'raw_rates':(2,),
