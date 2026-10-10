@@ -1,0 +1,42 @@
+{
+  "schema": "sttw_path_training_plan_v1",
+  "design_config": "STTW_Path_Feedback_V1.json",
+  "integration_manifest": "../../docs/evidence/select300_integration_20261010/manifest.json",
+  "alphas": [
+    0,
+    1
+  ],
+  "seed": 910101,
+  "updates": 200,
+  "wall_budget_s_per_endpoint": null,
+  "automatic_extension": false,
+  "automatic_training_authorized": false,
+  "actor_lr_floor": 1e-07,
+  "hard_reject_consecutive_stop": 3,
+  "sampler_resolution": {
+    "ordinary_fraction": 0.3,
+    "ordinary_straight_fraction": 0.5,
+    "gentle_angle_deg": 30,
+    "gentle_radius_m": 4,
+    "single_turn_fraction": 0.5,
+    "S_fraction": 0.2,
+    "S_inter_bend_straight_m": 3,
+    "fixed_grid_length_m": 100,
+    "fixed_grid_points": 5001,
+    "interpretation": "resolved engineering details within supplied family contract; S uses two opposite bends of the same sampled angle/radius"
+  },
+  "best_resolution": {
+    "primary_metric": "worst-case normalized RMSE over chi>0, else entire ordinary case; alpha0 ey/.1, alpha1 ev/.05",
+    "primary_pass_threshold": null,
+    "order": [
+      "physical_failure_count",
+      "working_limit_failure_count",
+      "primary_metric",
+      "goal_and_final_hold_failure_count",
+      "worst_case_normalized_error"
+    ],
+    "qualification": "physical/work/goal/final hold only; no claim of alpha preference qualification",
+    "finite_horizon_is_terminal": true,
+    "domain_exit": "engineering out-of-domain; abort batch, preserve state, do not optimize or rank as physical failure"
+  }
+}

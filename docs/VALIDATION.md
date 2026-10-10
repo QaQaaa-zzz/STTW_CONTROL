@@ -1,3 +1,9 @@
+# Phase C engineering validation — 2026-10-10
+
+[Implementation, proposed budget and validation limits](path_feedback_phase_C.md). New351/352 geometric sampler/PPO lifecycle/checkpoint/best/report wiring is prepared. No new vehicle physics or alpha training; Stage B failures remain unchanged. Shared research hub is authoritative.
+
+---
+
 # R196 lower interface diagnosis and local candidate — 2026-10-09
 
 [Current report and XY/control-chain figures](LOWER_INTERFACE_REPAIR.md). Original V5.1 saved traces reused; no18-trace rerun. ECBC/ESO offline reconstruction matches logged output within2e-6rad/s. Fresh210D local candidate code is preparation only:11 targeted CPU checks passed; no candidate training, deployment or claimed repair. Sole authorized B0 diagnostic completed2400ticks/60000substeps without failure. Small non-bitwise replay differences recorded; native path jumps reproduced. Steering force reached±1Nm for36/60000substeps (first mismatch22/3800, second0/12150); no blanket no-saturation claim. Alpha0 force not measured. Live V5.2 remains unchanged. Shared research ledger is authoritative.

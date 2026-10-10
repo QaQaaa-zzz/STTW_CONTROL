@@ -1,3 +1,9 @@
+# STTW path Phase C preparation — 2026-10-10
+
+[Implementation, proposed budget and validation limits](path_feedback_phase_C.md). New351/352 geometric sampler/PPO lifecycle/checkpoint/best/report wiring is prepared. No new vehicle physics or alpha training; Stage B failures remain unchanged. Shared research hub is authoritative.
+
+---
+
 # 2026-10-09 R196 interface diagnosis / local command candidate
 
 Attempt STTW-LOWER-INTERFACE-20261009: reuse original fast_turn error intervals; offline control-chain decomposition identifies opposing wheel-angle and roll ECBC contributions, while R196 assists angle correction in the later B0/alpha0 intervals. Path-heading discontinuities and persistent return state are evidenced but not a unique neural cause. Single B0 replay completed12s/60000substeps, no failure; native projection jumps match original event times. Short steering force saturation exists (36substeps total,22 in first mismatch,0 in second); alpha0 force unmeasured. New fresh210D local-command residual reuses existing lower_command/trainer, component-bounded reward, screened published commands and late physical best; training/physical qualification/adoption not_run/not_adopted. Frozen R196 and active V5.2 unchanged. [XY, interval figures, evidence and limits](LOWER_INTERFACE_REPAIR.md).
