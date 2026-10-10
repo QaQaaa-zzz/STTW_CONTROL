@@ -80,3 +80,11 @@ Evidence remains local and ignored under `runs/performance/`: `baseline_evaluati
 - [fast_turn,16s extension](../runs/performance/batched_evaluation_100/trial_003/evaluation100/fast_turn_16s_xy.png)
 
 Final engineering check: `adopted_end_to_end_smoke` completed5/5 restored trials (2 warmups +3 samples), each both independent endpoints8x16 with PPO and checkpoint. Raw hot seconds: [9.786585035006283, 10.422119882001425, 10.246228732008603]; median10.246229s. This excludes full evaluation, which is measured above; no matched old end-to-end run was made, so end-to-end speedup is **未测**. Current endpoint reward scalars were verified through TensorBoard HTTP6015; receipt retained. No formal training continuation.
+
+## Geometric path 执行接线（2026-10-10）
+
+用户要求立即将剩余主线迁接已采用的优化。`path_command_evaluation.py`按路径数组形状分组vmap，用50个上层步的scan分块；保留每个有效5ms日志、域失败独立冻结与工程故障停止，不填充或改变路径。训练接入共享JAX编译缓存，跨端点复用评测编译函数，已完成端点跳过训练advance编译。既有PPO同步优化和实际512×128维度继续使用；未正式采用的device summary/conditional reset guard未启用。
+
+有界实际检查：alpha0 task best100，两速度直线各1秒，任务horizon20秒保持；串行与批量共800 lower ticks。执行+传输26.93895→10.65899秒，短窗口2.527倍；编译20.60→36.07秒，不能外推为完整训练或完整六场景倍数。步数/终止完全一致，XY最大差异9.54e-7m，每步reward最大差异1.99e-7。逐字段rtol2e-4/atol2e-5及布尔严格比较**未全部通过**，保留执行器浮点差异与final_command_clipped标志差异，不宣称逐位或全程数值等价；原始逐字段结果见`runs/path_eval_optimization_check_20261010/summary.json`及配对NPZ。采用执行组织不改变奖励或物理公式，不重跑旧物理面板。
+
+恢复保留原run、checkpoint及四条已完成final轨迹，记录`optimization_boundary_interrupt.json`。缓存检查验证六B0、四final、三次继承DEV，错误actor身份拒绝。继承数值证据放`inherited_history`，避免下次resume当成本地有checkpoint的候选。5项既有终止/排序/缓存检查通过；本次只扩必要检查。根AGENTS要求后续默认复用已采用且适用的优化。

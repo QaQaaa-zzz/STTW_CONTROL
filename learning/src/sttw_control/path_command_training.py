@@ -288,12 +288,15 @@ def train(path,output,*,execute=False,resume=None):
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
     if root.exists():raise FileExistsError('new run directory required, including resumed stage')
     root.mkdir(parents=True);torch.set_num_threads(2)
+    from .runtime import configure_compilation_cache
+    compilation_cache=configure_compilation_cache()
     env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));n=c['num_envs'];steps=c['rollout_steps'];updates=plan['updates']
     candidate=source['candidate'];protected_paths=[Path(candidate[k]) for k in ['actor','checkpoint','config']]
     protected_paths.extend([Path(candidate['original_protocol_best']['checkpoint']),Path(candidate['config']).parent/'training/best_model.json'])
     for upper in candidate['upper'].values():protected_paths.extend([Path(upper['actor']),Path(upper['checkpoint']),Path(upper['actor']).parents[2]/'best_model.json'])
     protected={str(p):digest(p) for p in protected_paths if p.exists()}
     manifest=dict(schema=SCHEMA,plan=plan,config=cfg,source=source,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),protected=protected,physical_continuation='reset to original complete prepared bank, not resumed simulator state',terminal_contract=plan.get('terminal_contract','terminal_contract_v1'),data_role='random TRAIN; fixed six-route DEV; no independent holdout',resume_parent=None if resume is None else str(Path(resume).resolve()))
+    manifest['execution_optimizations']=dict(evaluator='vmap_scan50',compilation_cache=str(compilation_cache),ppo='existing_direct_command_ppo',actual_batch_dimensions=[n,steps],experimental_summary_reset_guard=False)
     atomic_json(root/'manifest.json',manifest)
     try:tb=_start_tensorboard(root)
     except (OSError,RuntimeError) as e:
@@ -304,6 +307,7 @@ def train(path,output,*,execute=False,resume=None):
         if 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
     def account_validation(ticks):status['validation_control_ticks_total']+=ticks
+    shared_eval_cache={}
     baseline_done=False;best_panels={};writer=None;algo=None;out=None;episodes=None;learner_ready=False
     if resume:
         parent_status=json.loads((Path(resume)/'status.json').read_text())
@@ -320,7 +324,7 @@ def train(path,output,*,execute=False,resume=None):
             batch=PathBatch(env,snapshot,cfg,plan['seed'],alpha)
             sample=batch.reset(j.int32(0),j.int32(0));env.set_log_template(sample.state,sample.route.path,sample.route.speed)
             reset=jax.jit(jax.vmap(batch.reset));episodes=reset(j.arange(n,dtype=j.int32),j.zeros(n,j.int32));jax.block_until_ready(episodes)
-            observe=jax.jit(jax.vmap(batch.observation));advance=jax.jit(jax.vmap(batch.advance_one)).lower(episodes,j.zeros((n,2))).compile()
+            observe=jax.jit(jax.vmap(batch.observation))
             a,cr,fault=observe(episodes)
             if bool(j.any(fault)):raise RuntimeError('reset observation fault')
             status['compile_and_setup_seconds']=time.monotonic()-started
@@ -344,12 +348,16 @@ def train(path,output,*,execute=False,resume=None):
                 a,cr,fault=observe(episodes)
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
+            advance=None if start_update>=updates else jax.jit(jax.vmap(batch.advance_one)).lower(episodes,j.zeros((n,2))).compile()
+            status['compile_and_setup_seconds']=time.monotonic()-started
             initial_checkpoint=save_checkpoint(out/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode)
             atomic_json(out/'last_completed.json',dict(update=start_update,checkpoint=str(initial_checkpoint.resolve()),checkpoint_sha256=digest(initial_checkpoint),schema=SCHEMA))
             update_status(completed_updates=start_update)
             learner_ready=True
             if resume:rescore_saved_candidates(resume,out,alpha,cfg,identity)
-            evaluator=PanelEvaluator(env,snapshot,cfg,check_budget,update_status,account_validation)
+            from .path_command_evaluation import BatchedPanelEvaluator
+            evaluator=BatchedPanelEvaluator(env,snapshot,cfg,check_budget,update_status,account_validation)
+            evaluator.compiled=shared_eval_cache
             if not baseline_done:
                 cached=set()
                 if resume:
@@ -423,7 +431,13 @@ def train(path,output,*,execute=False,resume=None):
             best=json.loads((out/'best_task_model.json').read_text())
             if digest(best['actor'])!=best['actor_sha256'] or digest(best['checkpoint'])!=best['checkpoint_sha256']:raise ValueError('best task weights identity changed')
             with Path(best['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
-            best_panels[alpha]=evaluator.evaluate(params,alpha,out/'final_best');atomic_json(out/'final_best'/'metrics.json',summarize_task(best_panels[alpha],alpha,cfg));atomic_json(out/'final_best'/'source.json',best)
+            cached_final=set()
+            if resume:
+                from .path_command_cache import reuse_final_panel, inherit_numerical_history
+                cached_final=reuse_final_panel(resume,out,alpha,cfg,source,best,paths)
+                inherit_numerical_history(resume,out,alpha)
+            update_status(reused_final_cases=len(cached_final))
+            best_panels[alpha]=evaluator.evaluate(params,alpha,out/'final_best',cached_names=cached_final if cached_final else None);atomic_json(out/'final_best'/'metrics.json',summarize_task(best_panels[alpha],alpha,cfg));atomic_json(out/'final_best'/'source.json',best)
         for p,sha in protected.items():
             if digest(p)!=sha:raise RuntimeError('protected source changed')
         from .path_command_reporting import report_final_panel
@@ -434,7 +448,11 @@ def train(path,output,*,execute=False,resume=None):
         for a in plan['alphas']:
             endpoint=root/f'alpha{a}'
             history=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'validation').glob('update_*/task_metrics.json'))]
-            previous=endpoint/'statistics'/'update_0175.json';last=endpoint/'statistics'/'update_0200.json';trend={}
+            inherited=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'inherited_history'/'validation').glob('update_*/task_metrics.json'))]
+            history=sorted({row['update']:row for row in inherited+history}.values(),key=lambda row:row['update'])
+            stats_root=endpoint/'statistics'
+            if not (stats_root/'update_0200.json').exists():stats_root=endpoint/'inherited_history'/'statistics'
+            previous=stats_root/'update_0175.json';last=stats_root/'update_0200.json';trend={}
             if previous.exists() and last.exists():
                 key='lateral_rmse_m' if a==0 else 'speed_rmse_m_s'
                 before=json.loads(previous.read_text())['windows']['strong_demand'][key];after=json.loads(last.read_text())['windows']['strong_demand'][key]

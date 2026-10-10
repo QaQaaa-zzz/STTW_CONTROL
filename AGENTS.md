@@ -162,3 +162,8 @@ Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/rese
 - 当前分支基于4cafb53复用几何实现，不声称85cacdc精确回滚；历史主分支/证据不覆盖。预算、冷启动和无逐轮评估契约见PROJECT.md及冻结experiment.json。
 
 Research coordination rules: /home/qy/STTW_CONTROL/research-hub/AGENTS.md; authoritative live state: /home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md.
+
+## 已采用性能优化必须复用（2026-10-10，用户明确要求）
+- 后续训练、续训与评测必须先核对并默认启用适用于当前任务的已采用优化；不得另写慢速入口而漏接既有实现。当前路径主线使用同形状场景 vmap 批量评测、scan(50) 分块与编译函数复用、共享 JAX 编译缓存、既有 DirectCommandPPO 同步优化及实际 batch 维度。
+- 同身份已完成基线、评测轨迹与数值验证优先从磁盘复用；核验配置、模型、路径、时序与完整性，恢复不重复完整基线。每次记录实际启用项、版本及初始化/采样/优化/验证耗时，不能把历史加速倍数冒充当前实测。
+- 仅把已采用且适用的优化设为默认；未正式采用的设备摘要或条件 reset guard 不能冒充已验证优化。无法复用时说明具体兼容性原因。不得以提速为由更改物理、频率、奖励、网络、终止语义、样本预算或丢弃失败样本。新入口仅做必要的短配对数值检查，不重跑大面板作为工程检查。
