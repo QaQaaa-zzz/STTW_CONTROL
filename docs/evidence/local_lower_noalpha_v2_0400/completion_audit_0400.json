@@ -1,0 +1,84 @@
+{
+  "updates": 400,
+  "accepted_updates": 400,
+  "transitions": 52428800,
+  "best_source_update": 400,
+  "best_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5",
+  "full_boundary_state": true,
+  "optimizer_nonempty": true,
+  "history_shape": [
+    512,
+    10,
+    20
+  ],
+  "same_issued_reference": true,
+  "R196_cache_hashes_unchanged": true,
+  "upper_best_hashes_unchanged": true,
+  "reload_max_differences": {
+    "straight_speed_change": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    },
+    "steady_positive": {
+      "actual_xy": 6.389617919921875e-05,
+      "actual_delta": 1.280754804611206e-05,
+      "actual_forward_speed": 1.5974044799804688e-05,
+      "phi": 1.1444091796875e-05,
+      "action": 3.113783895969391e-05
+    },
+    "steady_negative": {
+      "actual_xy": 0.00028777122497558594,
+      "actual_delta": 8.113682270050049e-06,
+      "actual_forward_speed": 2.2172927856445312e-05,
+      "phi": 8.106231689453125e-06,
+      "action": 1.93864107131958e-05
+    },
+    "return_positive": {
+      "actual_xy": 4.124641418457031e-05,
+      "actual_delta": 3.999099135398865e-06,
+      "actual_forward_speed": 1.704692840576172e-05,
+      "phi": 2.86102294921875e-06,
+      "action": 7.975846529006958e-06
+    },
+    "return_negative": {
+      "actual_xy": 3.337860107421875e-05,
+      "actual_delta": 7.29784369468689e-06,
+      "actual_forward_speed": 5.245208740234375e-06,
+      "phi": 5.364418029785156e-06,
+      "action": 1.1132564395666122e-05
+    },
+    "post_return_small_positive": {
+      "actual_xy": 3.8623809814453125e-05,
+      "actual_delta": 4.40254807472229e-05,
+      "actual_forward_speed": 1.9073486328125e-05,
+      "phi": 2.753734588623047e-05,
+      "action": 0.0001056082546710968
+    },
+    "post_return_small_negative": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    }
+  },
+  "selection_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7288998542692953
+  ],
+  "reloaded_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7289082009037562
+  ],
+  "parent_mismatch": "best400 not_run; earlier best300 passed .445s",
+  "adoption": "not_adopted"
+}

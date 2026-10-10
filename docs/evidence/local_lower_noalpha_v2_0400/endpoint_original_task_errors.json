@@ -1,0 +1,121 @@
+{
+  "straight_speed_change": {
+    "best400": {
+      "endpoint_xy_distance_m": 1.5051928758621216,
+      "endpoint_world_y_error_m": 1.4641038179397583,
+      "endpoint_heading_error_rad": -0.1281754970550537
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 0.2312401384115219,
+      "endpoint_world_y_error_m": -0.07737504690885544,
+      "endpoint_heading_error_rad": -0.006719798780977726
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.15643073618412018,
+      "endpoint_world_y_error_m": -0.08225568383932114,
+      "endpoint_heading_error_rad": 0.02217346429824829
+    }
+  },
+  "steady_positive": {
+    "best400": {
+      "endpoint_xy_distance_m": 0.1780768483877182,
+      "endpoint_world_y_error_m": 0.14042523503303528,
+      "endpoint_heading_error_rad": 0.16646814346313477
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 0.15801149606704712,
+      "endpoint_world_y_error_m": 0.07027831673622131,
+      "endpoint_heading_error_rad": 0.1531381607055664
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.221231609582901,
+      "endpoint_world_y_error_m": -0.015982545912265778,
+      "endpoint_heading_error_rad": 0.08874368667602539
+    }
+  },
+  "steady_negative": {
+    "best400": {
+      "endpoint_xy_distance_m": 2.891714572906494,
+      "endpoint_world_y_error_m": -1.5450507402420044,
+      "endpoint_heading_error_rad": -0.8233375549316406
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 2.1141133308410645,
+      "endpoint_world_y_error_m": -0.9195442795753479,
+      "endpoint_heading_error_rad": -0.6243443489074707
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.21936599910259247,
+      "endpoint_world_y_error_m": 0.15718717873096466,
+      "endpoint_heading_error_rad": -0.027306079864501953
+    }
+  },
+  "return_positive": {
+    "best400": {
+      "endpoint_xy_distance_m": 2.6738107204437256,
+      "endpoint_world_y_error_m": -2.6707990169525146,
+      "endpoint_heading_error_rad": -0.24668169021606445
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 1.9976717233657837,
+      "endpoint_world_y_error_m": -1.9953293800354004,
+      "endpoint_heading_error_rad": -0.1593613624572754
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.6944563388824463,
+      "endpoint_world_y_error_m": -0.5625920295715332,
+      "endpoint_heading_error_rad": 0.20623135566711426
+    }
+  },
+  "return_negative": {
+    "best400": {
+      "endpoint_xy_distance_m": 2.2966814041137695,
+      "endpoint_world_y_error_m": -1.9847984313964844,
+      "endpoint_heading_error_rad": -0.22779059410095215
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 0.5164206027984619,
+      "endpoint_world_y_error_m": -0.28511667251586914,
+      "endpoint_heading_error_rad": -0.059308767318725586
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.4812144339084625,
+      "endpoint_world_y_error_m": 0.055162906646728516,
+      "endpoint_heading_error_rad": -0.281477689743042
+    }
+  },
+  "post_return_small_positive": {
+    "best400": {
+      "endpoint_xy_distance_m": 2.1044421195983887,
+      "endpoint_world_y_error_m": -1.6209659576416016,
+      "endpoint_heading_error_rad": -0.16000938415527344
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 0.44896644353866577,
+      "endpoint_world_y_error_m": -0.08170175552368164,
+      "endpoint_heading_error_rad": -0.008129119873046875
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 0.8705601692199707,
+      "endpoint_world_y_error_m": 0.40730810165405273,
+      "endpoint_heading_error_rad": -0.23656558990478516
+    }
+  },
+  "post_return_small_negative": {
+    "best400": {
+      "endpoint_xy_distance_m": 2.911694049835205,
+      "endpoint_world_y_error_m": -2.892711877822876,
+      "endpoint_heading_error_rad": -0.32891106605529785
+    },
+    "best300": {
+      "endpoint_xy_distance_m": 2.1767826080322266,
+      "endpoint_world_y_error_m": -2.1638903617858887,
+      "endpoint_heading_error_rad": -0.22615623474121094
+    },
+    "R196": {
+      "endpoint_xy_distance_m": 1.0619312524795532,
+      "endpoint_world_y_error_m": -0.8760952949523926,
+      "endpoint_heading_error_rad": 0.16082525253295898
+    }
+  }
+}
