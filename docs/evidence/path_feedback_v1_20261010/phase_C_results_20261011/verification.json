@@ -1,0 +1,104 @@
+{
+  "weights": "checked_final_sources verified actor and checkpoint SHA for both selected task bests",
+  "numeric_checks": {
+    "alpha0/straight_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 2.8505889454466526e-09,
+      "speed_rmse": 0.026498135179281235
+    },
+    "alpha0/straight_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 3.3476562910639274e-09,
+      "speed_rmse": 0.030232656747102737
+    },
+    "alpha0/left90_R2_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 2.8505604196538137e-09,
+      "speed_rmse": 0.02852691151201725
+    },
+    "alpha0/left90_R2_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 5.5980111712816694e-08,
+      "speed_rmse": 0.034692879766225815
+    },
+    "alpha0/right90_R2_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 2.8348981391534966e-09,
+      "speed_rmse": 0.027202991768717766
+    },
+    "alpha0/right90_R2_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 2.923051306558122e-08,
+      "speed_rmse": 0.03165879473090172
+    },
+    "alpha1/straight_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 4.51797681905175e-09,
+      "speed_rmse": 0.03295009583234787
+    },
+    "alpha1/straight_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 3.4140116185465974e-09,
+      "speed_rmse": 0.036341506987810135
+    },
+    "alpha1/left90_R2_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 4.91827830545466e-09,
+      "speed_rmse": 0.032687049359083176
+    },
+    "alpha1/left90_R2_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 2.1447776971106336e-08,
+      "speed_rmse": 0.03640560805797577
+    },
+    "alpha1/right90_R2_2.0": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 4.91827830545466e-09,
+      "speed_rmse": 0.033479224890470505
+    },
+    "alpha1/right90_R2_2.6": {
+      "steps": 4000,
+      "reward_reconstruction_max_abs": 5.1715006499364335e-08,
+      "speed_rmse": 0.03695438802242279
+    }
+  },
+  "raw_npz_sha256": {
+    "data/B0/left90_R2_2.0.npz": "46c89f111e0de65b514b98f21168a1713ef7637a2e42ad1f38677d579569e1f3",
+    "data/B0/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/B0/left90_R2_2.6.npz": "b7aa3a3ba62047034ada5e26f2673267dcb89f252788abca11f1661334ee36a1",
+    "data/B0/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/B0/right90_R2_2.0.npz": "3cb2f47464cc893eaa7c00e1811dd4b7ff4818b3a44f6b4853c8f533b1508f85",
+    "data/B0/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/B0/right90_R2_2.6.npz": "2d157d35f01d08addfe02517631eb2e3db68bb2af5049d35183bb16ee2c1eb5d",
+    "data/B0/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/B0/straight_2.0.npz": "a27df33da6faf6f5557c304d751af6a19262ce412ffd19e1d0ee9296e587a7c8",
+    "data/B0/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "data/B0/straight_2.6.npz": "ce65c1be380c7bf4024fcc9bf7fa8ac0d019234c7a1e79c1604610b417f5e86b",
+    "data/B0/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "data/alpha0/left90_R2_2.0.npz": "87f15e261258ab71bf1ed3e8de6830c30d453306dc0cdb23fbb2c08853507c77",
+    "data/alpha0/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/alpha0/left90_R2_2.6.npz": "5703b826627bfc63efd88eaab5c061eb3a2fef34d1bc278bf9d2bd6ee0e70762",
+    "data/alpha0/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/alpha0/right90_R2_2.0.npz": "b22cb6914b89678524445985417f43398048f88e55a94c394b6e11c9aef7e684",
+    "data/alpha0/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/alpha0/right90_R2_2.6.npz": "181987e596e29a4034dd3d68b11fc47563f9620c0fb5eb02c743e071f01acaee",
+    "data/alpha0/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/alpha0/straight_2.0.npz": "18932044c06dcf3e36c2666b8a936355967f9cf4f5d0c3028cdf350946988c47",
+    "data/alpha0/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "data/alpha0/straight_2.6.npz": "c7606d5a341a94655536457d475588346badbab618ec4f49c3ae70ce468e9592",
+    "data/alpha0/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "data/alpha1/left90_R2_2.0.npz": "b85df154cb032401db53e328c4d8e03d948a90b83c44cdba676fae86a7a5741b",
+    "data/alpha1/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/alpha1/left90_R2_2.6.npz": "1e54d66f073208bd76151c4f1870bd6ec88dfe4c1de0deee515cfb299d26a513",
+    "data/alpha1/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "data/alpha1/right90_R2_2.0.npz": "bf6ae8e4a0848e8ea6f701e44242f70e64fb86caa5f09fe684dc64b120289ff0",
+    "data/alpha1/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/alpha1/right90_R2_2.6.npz": "03e6d48a251881ac23f3d250101ffe681c71ec7caf629191376ad4f3dc6009cd",
+    "data/alpha1/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "data/alpha1/straight_2.0.npz": "6463a2e73e625c8332098c6a5ae67b0c5de0bdf07110a7b35b6c9000169d81cd",
+    "data/alpha1/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "data/alpha1/straight_2.6.npz": "b2e2abaa1cbe966eb8c2691312bff113cf2ca0f28335e5b7a06fec10f3b2809d",
+    "data/alpha1/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f"
+  },
+  "new_physics_this_analysis": 0
+}

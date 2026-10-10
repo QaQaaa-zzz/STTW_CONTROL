@@ -1,0 +1,22 @@
+{
+  "endpoint_decisions": {
+    "alpha0": {
+      "action": "inspect_coverage_caps_and_task_trends",
+      "reason": "no evidence sufficient to authorize extension; reward alone is insufficient",
+      "late_quality_relative_improvement": -1.438833851381431,
+      "matched_training_trend": -0.17190720116802513,
+      "automatic_extension": false
+    },
+    "alpha1": {
+      "action": "inspect_coverage_caps_and_task_trends",
+      "reason": "no evidence sufficient to authorize extension; reward alone is insufficient",
+      "late_quality_relative_improvement": -0.9190128084835032,
+      "matched_training_trend": 0.030430818309187764,
+      "automatic_extension": false
+    }
+  },
+  "paired_task_qualified": false,
+  "automatic_extension": false,
+  "paired_metrics": "paired_metrics.json",
+  "note": "Both jointly qualified endpoints need not be forced to diverge; inspect paired metrics for preference claim."
+}

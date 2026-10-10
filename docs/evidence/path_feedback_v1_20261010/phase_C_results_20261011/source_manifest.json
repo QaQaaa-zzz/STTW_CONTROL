@@ -1,0 +1,737 @@
+{
+  "schema": "sttw_geometric_path_actor351_v1",
+  "plan": {
+    "schema": "sttw_path_training_plan_v1",
+    "design_config": "STTW_Path_Feedback_V1.json",
+    "integration_manifest": "../../docs/evidence/select300_integration_20261010/manifest.json",
+    "alphas": [
+      0,
+      1
+    ],
+    "seed": 910101,
+    "updates": 200,
+    "wall_budget_s_per_endpoint": null,
+    "automatic_extension": false,
+    "automatic_training_authorized": false,
+    "actor_lr_floor": 1e-07,
+    "hard_reject_consecutive_stop": 3,
+    "sampler_resolution": {
+      "ordinary_fraction": 0.3,
+      "ordinary_straight_fraction": 0.5,
+      "gentle_angle_deg": 30,
+      "gentle_radius_m": 4,
+      "single_turn_fraction": 0.5,
+      "S_fraction": 0.2,
+      "S_inter_bend_straight_m": 3,
+      "fixed_grid_length_m": 100,
+      "fixed_grid_points": 5001,
+      "interpretation": "resolved engineering details within supplied family contract; S uses two opposite bends of the same sampled angle/radius"
+    },
+    "best_resolution": {
+      "primary_metric": "worst-case normalized RMSE over chi>0, else entire ordinary case; alpha0 ey/.1, alpha1 ev/.05",
+      "primary_pass_threshold": null,
+      "order": [
+        "physical_failure_count",
+        "working_limit_failure_count",
+        "primary_metric",
+        "goal_and_final_hold_failure_count",
+        "worst_case_normalized_error"
+      ],
+      "qualification": "physical/work/goal/final hold only; no claim of alpha preference qualification",
+      "finite_horizon_is_terminal": true,
+      "domain_exit": "engineering out-of-domain; abort batch, preserve state, do not optimize or rank as physical failure"
+    },
+    "terminal_contract": "terminal_contract_v2",
+    "task_selection_schema": "path_task_best_v2",
+    "http_failure_policy": "warn"
+  },
+  "config": {
+    "schema": "sttw_path_feedback_v1_design",
+    "status": "design_not_robot_validated",
+    "source_commit": "ab195e768a6750f78a2e74813fe268a7ab4dccda",
+    "default_execution": "implement_A_and_B_only_then_report; C_is_specified_but_requires_path_baseline_acceptance",
+    "scope": {
+      "new_planning_network": false,
+      "action_candidate_search": false,
+      "retrain_lower": false,
+      "lower_checkpoint": 300,
+      "preserve_old_teleop_mode": true,
+      "preserve_old_upper_best": true,
+      "final_goal_this_phase": "pass_goal_cross_section_and_track_outgoing_path_not_stop"
+    },
+    "timing": {
+      "physics_dt_s_expected": 0.0002,
+      "physics_substeps_per_control_expected": 25,
+      "lower_dt_s": 0.005,
+      "upper_dt_s": 0.02,
+      "path_follower_dt_s": 0.02,
+      "do_not_silently_change_simulation_timing": true
+    },
+    "path": {
+      "coordinate_frame": "existing_world_XY_and_positive_yaw; verify_steer_sign_against_existing_reference_model",
+      "spacing_m": 0.02,
+      "straight_prefix_m": 3.0,
+      "straight_tail_m": 70.0,
+      "turn_angle_rad": 1.5707963267948966,
+      "turn_radius_m": 2.0,
+      "curvature_transition_length_m": 0.5,
+      "curvature_ramp": "3*u^2-2*u^3",
+      "path_is_fixed_before_rollout": true,
+      "reanchor_during_rollout": false,
+      "allow_online_teleop_future": false,
+      "projection_backward_m": 0.05,
+      "projection_forward_floor_m": 0.3,
+      "projection_forward_motion_multiplier": 2.0,
+      "projection_forward_padding_m": 0.1,
+      "projection_progress": "nondecreasing_forward_tracking; keep_unclamped_projection_for_diagnostics",
+      "goal_section_offset_after_turn_m": 4.0
+    },
+    "follower": {
+      "method": "pure_pursuit_with_actual_chord_denominator",
+      "lookahead_time_s": 0.7,
+      "lookahead_min_m": 0.8,
+      "lookahead_max_m": 1.8,
+      "lookahead_min_speed_m_s": 1.5,
+      "speed_reference": "external_v_user; no_curvature_speed_regulation_in_follower",
+      "steer_reference_max_rad": 0.3,
+      "nominal_speed_slew_m_s2": 0.5,
+      "nominal_steer_slew_rad_s": 0.3,
+      "wheelbase_m_expected": 0.408,
+      "caster_deg_expected": 25.0,
+      "preview_body_x_min_m": 0.05,
+      "out_of_domain": "log_and_stop_diagnostic_if_preview_behind_or_heading_error_ge_pi_over_2; no_spin_in_place"
+    },
+    "residual_interface": {
+      "latent_order": [
+        "speed",
+        "steer"
+      ],
+      "mapping": "tanh_then_existing_asymmetric_scales",
+      "speed_negative_scale_m_s": 1.0,
+      "speed_positive_scale_m_s": 0.25,
+      "steer_scale_rad": 0.2,
+      "speed_reference_bounds_m_s": [
+        1.5,
+        3.0
+      ],
+      "steer_reference_bound_rad": 0.35,
+      "correction_speed_down_m_s2": 1.0,
+      "correction_speed_up_m_s2": 0.5,
+      "correction_steer_rate_rad_s": 0.8,
+      "filter_tau_s": [
+        0.1,
+        0.08
+      ],
+      "filter_update_dt_s": 0.005,
+      "filter_position": "physical_offset_target_before_existing_offset_slew",
+      "reference_clip_antiwindup": "back_calculate_filter_and_offset_to_actual_governed_minus_nominal_only_if_reference_amplitude_clip_occurs; do_not_reset_filter_on_normal_slew",
+      "lower_reference_centered": true,
+      "execution_residual_limits_rad_s": [
+        1.5,
+        10.0
+      ],
+      "final_actuator_rate_limits_rad_s": [
+        3.0,
+        60.0
+      ]
+    },
+    "network": {
+      "history_frames": 16,
+      "frame_fields": 20,
+      "history_dt_s": 0.02,
+      "mask_fields": 16,
+      "context_fields": [
+        {
+          "name": "alpha",
+          "scale": 1.0
+        },
+        {
+          "name": "signed_cross_track_error_m",
+          "scale": 0.2
+        },
+        {
+          "name": "sin_path_heading_error",
+          "scale": 1.0
+        },
+        {
+          "name": "cos_path_heading_error",
+          "scale": 1.0
+        },
+        {
+          "name": "curvature_here_1_m",
+          "scale": 0.6
+        },
+        {
+          "name": "curvature_plus_0p5m_1_m",
+          "scale": 0.6
+        },
+        {
+          "name": "curvature_plus_1m_1_m",
+          "scale": 0.6
+        },
+        {
+          "name": "preview_body_x_m",
+          "scale": 1.8
+        },
+        {
+          "name": "preview_body_y_m",
+          "scale": 1.8
+        },
+        {
+          "name": "external_speed_m_s",
+          "scale": 3.0
+        },
+        {
+          "name": "previous_applied_speed_offset_m_s",
+          "scale": 1.0
+        },
+        {
+          "name": "previous_applied_steer_offset_rad",
+          "scale": 0.2
+        },
+        {
+          "name": "speed_filter_state_m_s",
+          "scale": 1.0
+        },
+        {
+          "name": "steer_filter_state_rad",
+          "scale": 0.2
+        },
+        {
+          "name": "lookahead_distance_m",
+          "scale": 1.8
+        }
+      ],
+      "actor_dim": 351,
+      "critic_dim": 352,
+      "critic_extra": "finite_task_remaining_fraction",
+      "hidden": [
+        128,
+        128,
+        64
+      ],
+      "activation": "elu",
+      "actions": 2,
+      "policy_type": "separate_fixed_alpha_endpoints_for_this_phase",
+      "alphas": [
+        0,
+        1
+      ],
+      "alpha_is_constant_per_episode": true,
+      "initialization": "fresh_upper_actor_critic_optimizer; zero_actor_output_layer; freeze_lower300",
+      "old_345_actor_weight_loading": false,
+      "norm": "fixed_physical_scales; clip_finite_normalized_values_at_5; never_sanitize_NaN"
+    },
+    "path_reward": {
+      "scale": 0.1,
+      "huber": "x^2 if abs(x)<=1 else 2abs(x)-1",
+      "task": "geometric_path_not_issued_steer_tracking",
+      "chi": "clip((abs(delta_ff(path_curvature)/q(v_user))-.18)/.12,0,1)",
+      "speed_weight": "10-9*chi*(1-alpha)",
+      "path_weight": "10-9*chi*alpha",
+      "speed_scale_m_s": 0.1,
+      "cross_track_scale_m": 0.1,
+      "path_heading_scale_rad": 0.1,
+      "path_heading_factor": 0.5,
+      "primary_weight": 20.0,
+      "primary_speed_band_m_s": 0.05,
+      "primary_path_band_m": 0.1,
+      "primary_speed_scale_m_s": 0.1,
+      "primary_path_scale_m": 0.1,
+      "primary_gate": "chi; do not gate on network output",
+      "roll_weight": 40.0,
+      "roll_start_rad": 0.26,
+      "roll_scale_rad": 0.04,
+      "working_roll_weight": 120.0,
+      "working_roll_start_rad": 0.3,
+      "working_roll_scale_rad": 0.02,
+      "roll_rate_weight": 1.0,
+      "roll_rate_start_rad_s": 0.8,
+      "roll_rate_scale_rad_s": 0.8,
+      "overspeed_weight": 2.0,
+      "overspeed_band_m_s": 0.05,
+      "overspeed_scale_m_s": 0.1,
+      "low_speed_weight": 4.0,
+      "low_speed_start_m_s": 1.5,
+      "low_speed_scale_m_s": 0.2,
+      "offset_magnitude_weight": 0.02,
+      "offset_magnitude_scales": [
+        1.0,
+        0.2
+      ],
+      "offset_rate_weight": 0.03,
+      "offset_rate_scales": [
+        1.0,
+        0.4
+      ],
+      "offset_rate_dt_s": 0.02,
+      "old_time_heading_debt_cost": false,
+      "old_raw_steer_primary_cost": false,
+      "old_delta_ref_preservation_cost": false,
+      "old_time_recovery_gate": false,
+      "old_analytic_heading_recovery": false,
+      "longitudinal_time_position_cost": false,
+      "global_cost_clip": false,
+      "component_caps": {
+        "speed": 200.0,
+        "path": 200.0,
+        "primary": 400.0,
+        "roll": 900.0,
+        "working_roll": 3000.0,
+        "roll_rate": 40.0,
+        "overspeed": 160.0,
+        "low_speed": 160.0,
+        "offset_magnitude": 0.2,
+        "offset_rate": 20.0
+      },
+      "failure_extra": 5.0,
+      "failure_cost_rate_bound": 5080.2
+    },
+    "training_future_phase_C": {
+      "num_envs": 512,
+      "rollout_steps": 128,
+      "episode_s": 20.0,
+      "updates_initial": 200,
+      "updates_max": 400,
+      "extension_block": 100,
+      "actor_lr": 0.0001,
+      "critic_lr": 0.0003,
+      "gamma": 0.997,
+      "gae_lambda": 0.99,
+      "epochs": 4,
+      "minibatches": 4,
+      "clip": 0.2,
+      "std_initial": [
+        0.25,
+        0.1
+      ],
+      "std_min": 0.05,
+      "std_max": 0.5,
+      "entropy": 0.001,
+      "soft_kl": 0.01,
+      "hard_kl": 0.03,
+      "grad_clip_actor": 1.0,
+      "grad_clip_critic": 1.0,
+      "family_fraction": {
+        "straight_or_gentle": 0.3,
+        "rounded_left_or_right_60_to_100_degrees": 0.5,
+        "smooth_S_path": 0.2
+      },
+      "speed_range_m_s": [
+        1.8,
+        2.6
+      ],
+      "radius_range_m": [
+        1.8,
+        4.0
+      ],
+      "initial_route_pose_offset_fraction": 0.2,
+      "initial_lateral_offset_range_m": [
+        -0.1,
+        0.1
+      ],
+      "initial_heading_offset_range_rad": [
+        -0.05,
+        0.05
+      ],
+      "freeze_physical_prepared_snapshot": true,
+      "randomize_path_relative_to_actual_pose_once_at_reset": true,
+      "save_every": 10,
+      "validation_updates": [
+        100,
+        150,
+        200,
+        250,
+        300,
+        350,
+        400
+      ],
+      "no_20_or_25_update_evaluation": true,
+      "best_on": "physical_safety_then_endpoint_primary_then_final_geometric_hold_then_worst_case_normalized_error",
+      "convergence": "late_fixed_validation_and_complete_episode_physical_metrics; not_rollout_reward_only"
+    },
+    "stage_B_baseline": {
+      "cases": [
+        {
+          "name": "straight",
+          "horizon_s": 10.0,
+          "v_user": 2.3,
+          "lateral_initial_error_m": 0.05
+        },
+        {
+          "name": "left90_R2",
+          "horizon_s": 20.0,
+          "v_user": 2.0,
+          "lateral_initial_error_m": 0.0
+        }
+      ],
+      "upper_residual": "zero; no_old_actor_in_new_path_mode",
+      "nominal_y_error_rmse_m": 0.1,
+      "final_y_error_m": 0.1,
+      "final_path_heading_error_rad": 0.05,
+      "final_speed_error_m_s": 0.1,
+      "hold_s": 1.0,
+      "working_roll_rad": 0.302,
+      "require_goal_section_for_turn": true,
+      "report_all_transition_errors": true,
+      "max_baseline_runs": 2
+    },
+    "anti_oscillation_diagnostic": {
+      "new_robot_rollouts_default": 0,
+      "existing_data_only": true,
+      "sampling_Hz": 50,
+      "analyse_sign_reversal_with_amplitude_deadband": true,
+      "rate_sign_deadband_rad_s": 0.05,
+      "min_adjacent_steer_excursion_rad": 0.002,
+      "PSD_method": "Welch_Hann_mean_removed",
+      "PSD_band_Hz": [
+        10.0,
+        25.0
+      ],
+      "window_selection": "fixed_original_nominal_command_steady; do_not_condition_on_smooth_governed",
+      "report_reversal_events_not_periodic_frequency": true
+    },
+    "stage_C_evaluation": {
+      "route_ids": [
+        "straight",
+        "left90_R2",
+        "right90_R2"
+      ],
+      "low_speed_m_s": 2.0,
+      "conflict_speed_m_s": 2.6,
+      "compare_nominal_follower_and_two_endpoints": true,
+      "compare_same_path_not_same_generated_steer_stream": true,
+      "endpoint_progress_requirement": "pass_target_cross_section; keep_tracking_outgoing_path; no_stop_task",
+      "candidate_does_not_mean_qualified": true
+    },
+    "protection": {
+      "never_modify_existing_best_pointers": true,
+      "never_hot_swap_lower_on_existing_run": true,
+      "never_install_new_alias_without_acceptance": true,
+      "no_automatic_push": true,
+      "no_automatic_phase_C_training": true,
+      "no_changes_to_DVGC_JIT": true
+    }
+  },
+  "source": {
+    "role": "diagnostic_only",
+    "candidate": {
+      "role": "integration_candidate",
+      "status": "diagnostic_only",
+      "adoption": "not_adopted",
+      "source_update": 300,
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+      "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+      "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+      "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+      "normalizer": {
+        "type": "fixed_SCALES",
+        "scales": [
+          0.3,
+          1.5,
+          0.35,
+          3.0,
+          3.0,
+          2.0,
+          3.0,
+          3.0,
+          3.0,
+          0.35,
+          0.8,
+          0.45,
+          3.0,
+          0.35,
+          3.0,
+          60.0,
+          1.5,
+          10.0,
+          0.3,
+          0.3
+        ],
+        "clip": 5.0,
+        "actor_dim": 210,
+        "history": 10,
+        "fields": [
+          "roll",
+          "roll_rate",
+          "steer",
+          "steer_rate",
+          "measured_forward_speed",
+          "measured_world_yaw_rate",
+          "rear_speed_proxy",
+          "front_speed_proxy",
+          "local_command_speed",
+          "local_command_steer",
+          "local_command_speed_rate",
+          "local_command_steer_rate",
+          "previous_local_speed_reference",
+          "previous_local_steer_reference",
+          "previous_final_front_rate",
+          "previous_final_rear_rate",
+          "previous_applied_front_residual",
+          "previous_applied_rear_residual",
+          "ESO_equilibrium_shift",
+          "local_command_equilibrium_reference"
+        ]
+      },
+      "original_protocol_best": {
+        "source_update": 400,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+        "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+      },
+      "upper": {
+        "0": {
+          "source_update": 200,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+          "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+          "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+        },
+        "1": {
+          "source_update": 250,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+          "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+          "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+        }
+      },
+      "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+      "two_different_late_checkpoints_passed": false,
+      "training_transitions": 0,
+      "maximum_new_control_ticks": 10400
+    },
+    "upper_run": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009",
+    "prepared_bank": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+    "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+    "bank_index": 3,
+    "seed": 77001,
+    "protocol": {
+      "protocol_id": "fixed_command_six_v1",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+      "cases": {
+        "straight_hold": [
+          [
+            0,
+            2.3,
+            0
+          ]
+        ],
+        "speed_changes": [
+          [
+            0,
+            2.3,
+            0
+          ],
+          [
+            1,
+            2.6,
+            0
+          ],
+          [
+            3.5,
+            2.0,
+            0
+          ],
+          [
+            6,
+            2.3,
+            0
+          ]
+        ],
+        "gentle_positive": [
+          [
+            0,
+            2.3,
+            0
+          ],
+          [
+            1,
+            2.3,
+            0.08
+          ],
+          [
+            4,
+            2.3,
+            0
+          ]
+        ],
+        "gentle_negative": [
+          [
+            0,
+            2.3,
+            0
+          ],
+          [
+            1,
+            2.3,
+            -0.08
+          ],
+          [
+            4,
+            2.3,
+            0
+          ]
+        ],
+        "steer_reversal": [
+          [
+            0,
+            2.3,
+            0
+          ],
+          [
+            1,
+            2.3,
+            0.15
+          ],
+          [
+            3,
+            2.3,
+            -0.15
+          ],
+          [
+            5,
+            2.3,
+            0
+          ]
+        ],
+        "fast_turn": [
+          [
+            0,
+            2.3,
+            0
+          ],
+          [
+            1,
+            2.6,
+            0.25
+          ],
+          [
+            4,
+            2.3,
+            0
+          ]
+        ]
+      },
+      "seed": 77001,
+      "prepared_bank_index": 3,
+      "duration_s": 10,
+      "slew": [
+        0.5,
+        0.3
+      ],
+      "command_window_s": [
+        1,
+        6
+      ],
+      "final_window_s": [
+        9.5,
+        10
+      ],
+      "final_tolerances": {
+        "speed_m_s": 0.1,
+        "steer_rad": 0.04,
+        "heading_rad": 0.05
+      },
+      "diagnostic_roll_rad": 0.3,
+      "methods": [
+        "B0",
+        "pi_alpha0",
+        "pi_alpha1"
+      ],
+      "lower_alpha": 1,
+      "checkpoint_selection": "best_model.json else last_completed",
+      "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+      "external_disturbance": false
+    },
+    "lower_training_bank_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+    "upper_config_file_sha256": {
+      "0": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c",
+      "1": "91d286aacd35b05ab7531b7d0ad881ab46b1315c6a1889738da71834e0ce310a"
+    },
+    "model": {
+      "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+      "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+      "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+      "assets": {
+        "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+        "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+        "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+        "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+        "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+        "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+      },
+      "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+      "mujoco_version": "3.6.0"
+    },
+    "controller": {
+      "fixed_roll_reference": null,
+      "dt": 0.005,
+      "wo": 40.0,
+      "wc": 5.0,
+      "disturbance_filter": 8.0,
+      "minimum_speed": 0.5,
+      "max_steer_rate": 4.0,
+      "mass": 5.4,
+      "cg_forward": 0.164,
+      "cg_height": 0.2,
+      "wheelbase": 0.408,
+      "trail": 0.024,
+      "caster": 0.4363323129985824,
+      "gravity": 9.8
+    },
+    "actuator": {
+      "composition": "additive",
+      "project_base": false,
+      "dt": 0.005,
+      "steer_limit": 0.8,
+      "steer_rate_limit": 3.0,
+      "rear_rate_limit": 60.0,
+      "steer_residual_scale": 1.5,
+      "rear_residual_scale": 10.0,
+      "strength": 1.0,
+      "base_output_scale": 1.0,
+      "steer_acceleration": null,
+      "rear_acceleration": null,
+      "delay_steps": 0
+    },
+    "physics_dt": 0.0002,
+    "substeps": 25,
+    "control_dt": 0.005,
+    "policy_dt": 0.02,
+    "maximum_new_control_ticks": 10400,
+    "training_ticks": 0,
+    "initialization": "matched complete prepared physical bank; causal masks zero at start, one real pre-frame per5ms",
+    "stop_rule": "physical/policy fault or quiet-settled lower speed>.20/steer>.08 continuously1s; save and stop new combinations",
+    "baseline_reuse": "V5.2 evaluationbest with identical bank/protocol and upper SHA; check exact raw/reference stream after simulation"
+  },
+  "code_revision": "50fcf33686ba77b62f67448fa215249d18da7d7f",
+  "protected": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_model.json": "7a133d0e34c7a5da7329bbef984ec352040a6f8390ec7edf655be8a80adc9104",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_model.json": "17a5782e73e8329e21dd8e98afbac00ce7d737b61c96491efdd823cdb90a5f88",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_model.json": "d17fadf5139ee015782fdab560b5e5abc9a47266cfb7149ee8ca175aa1b92cfa"
+  },
+  "physical_continuation": "reset to original complete prepared bank, not resumed simulator state",
+  "terminal_contract": "terminal_contract_v2",
+  "data_role": "random TRAIN; fixed six-route DEV; no independent holdout",
+  "resume_parent": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_terminal_v2_20261010",
+  "execution_optimizations": {
+    "evaluator": "vmap_scan50",
+    "compilation_cache": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/.jax_compilation_cache",
+    "ppo": "existing_direct_command_ppo",
+    "actual_batch_dimensions": [
+      512,
+      128
+    ],
+    "experimental_summary_reset_guard": false
+  }
+}

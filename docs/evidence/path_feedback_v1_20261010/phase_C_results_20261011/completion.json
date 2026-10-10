@@ -1,0 +1,38 @@
+{
+  "training": {
+    "state": "completed",
+    "declared_updates_per_endpoint": 200,
+    "policy_transitions_total": 13107200,
+    "training_control_ticks_total": 52428800,
+    "validation_control_ticks_total": 104000,
+    "parent_consumed_policy_transitions": 13267968,
+    "parent_reported_updates": 200,
+    "stage": "reported",
+    "last_update_epoch": 1791651401.0928323,
+    "alpha": 1,
+    "completed_updates": 200,
+    "endpoint_updates": {
+      "alpha0": 200,
+      "alpha1": 200
+    },
+    "compile_and_setup_seconds": 31.226027308002813,
+    "reused_baseline_cases": 6,
+    "reused_final_cases": 0,
+    "endpoint_elapsed_s": 9630.104543043999,
+    "case": "left90_R2_2.0,left90_R2_2.6,right90_R2_2.0,right90_R2_2.6",
+    "completed_intervals": 950,
+    "declared_updates": 200,
+    "accepted_batches": 200,
+    "last_reward": -0.015567278489470482,
+    "dev_seconds": 1503.6357319070084,
+    "protected_unchanged": true
+  },
+  "supplement": {
+    "state": "completed",
+    "stage": "reported",
+    "new_lower_ticks": 72000,
+    "maximum_new_lower_ticks": 96000,
+    "training_updates": 0,
+    "original_best_pointers_unchanged": true
+  }
+}

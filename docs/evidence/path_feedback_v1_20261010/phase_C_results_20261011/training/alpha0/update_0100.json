@@ -1,0 +1,273 @@
+{
+  "schema": "path_training_statistics_v1",
+  "active_lower_samples": 6553600,
+  "weighting": "active lower samples; overlapping spatial/chi windows; route fractions are sample weighted",
+  "windows": {
+    "ordinary": {
+      "samples": 6395851,
+      "sample_fraction": 0.9759294128417969,
+      "speed_rmse_m_s": 0.0663442890875915,
+      "lateral_rmse_m": 0.08232609501576293,
+      "heading_rmse_rad": 0.06149264523748519
+    },
+    "bend": {
+      "samples": 157749,
+      "sample_fraction": 0.024070587158203125,
+      "speed_rmse_m_s": 0.10672863765083529,
+      "lateral_rmse_m": 0.09697488842820673,
+      "heading_rmse_rad": 0.07908030838944302
+    },
+    "strong_demand": {
+      "samples": 48007,
+      "sample_fraction": 0.007325286865234375,
+      "speed_rmse_m_s": 0.12099609092033214,
+      "lateral_rmse_m": 0.1086675332207881,
+      "heading_rmse_rad": 0.0899002142684662
+    },
+    "exit_straight": {
+      "samples": 4381636,
+      "sample_fraction": 0.6685845947265625,
+      "speed_rmse_m_s": 0.06019937337292072,
+      "lateral_rmse_m": 0.09309093668584638,
+      "heading_rmse_rad": 0.07083074676116904
+    }
+  },
+  "route_distribution": {
+    "family_names": [
+      "ordinary_gentle",
+      "single_bend",
+      "s_bend"
+    ],
+    "family_fraction": [
+      0.3158099365234375,
+      0.483758544921875,
+      0.2004315185546875
+    ],
+    "sign_names": [
+      "right",
+      "straight",
+      "left"
+    ],
+    "initial_bend_sign_fraction": [
+      0.4335321044921875,
+      0.15610107421875,
+      0.4103668212890625
+    ],
+    "speed": {
+      "units": "m/s",
+      "mean": 2.2018704223632812,
+      "std": 0.23373214975432108,
+      "histogram_edges": [
+        1.8,
+        1.96,
+        2.12,
+        2.2800000000000002,
+        2.44,
+        2.6
+      ],
+      "histogram_fraction": [
+        0.2089459228515625,
+        0.179609375,
+        0.202637939453125,
+        0.2078961181640625,
+        0.20091064453125
+      ]
+    },
+    "radius": {
+      "units": "m",
+      "mean": 3.252371826171875,
+      "std": 0.7262742132549161,
+      "histogram_edges": [
+        1.8,
+        2.24,
+        2.68,
+        3.12,
+        3.5600000000000005,
+        4.0
+      ],
+      "histogram_fraction": [
+        0.1262335205078125,
+        0.14759765625,
+        0.138497314453125,
+        0.133765869140625,
+        0.4539056396484375
+      ]
+    }
+  },
+  "commands": {
+    "target_offset": {
+      "channels": [
+        "delta_v_m_s",
+        "delta_delta_rad"
+      ],
+      "signed_mean": [
+        -0.02772468090057373,
+        0.011687096357345581
+      ],
+      "rms": [
+        0.13948566901178386,
+        0.023765112466947305
+      ],
+      "positive_fraction": [
+        0.627647705078125,
+        0.7136785888671875
+      ],
+      "negative_fraction": [
+        0.372352294921875,
+        0.2863214111328125
+      ]
+    },
+    "filtered_offset": {
+      "channels": [
+        "delta_v_m_s",
+        "delta_delta_rad"
+      ],
+      "signed_mean": [
+        -0.02762255907058716,
+        0.011651633977890015
+      ],
+      "rms": [
+        0.052875572778652076,
+        0.01455825255423795
+      ],
+      "positive_fraction": [
+        0.29541168212890623,
+        0.9092279052734376
+      ],
+      "negative_fraction": [
+        0.7045883178710938,
+        0.0907720947265625
+      ]
+    },
+    "offsets": {
+      "channels": [
+        "delta_v_m_s",
+        "delta_delta_rad"
+      ],
+      "signed_mean": [
+        -0.031267907619476315,
+        0.011651774644851684
+      ],
+      "rms": [
+        0.053024376211854206,
+        0.014558339556088762
+      ],
+      "positive_fraction": [
+        0.2464056396484375,
+        0.90923095703125
+      ],
+      "negative_fraction": [
+        0.7535763549804687,
+        0.09076889038085938
+      ]
+    },
+    "governed_minus_nominal": {
+      "channels": [
+        "delta_v_m_s",
+        "delta_delta_rad"
+      ],
+      "signed_mean": [
+        -0.031267907619476315,
+        0.011651774644851684
+      ],
+      "rms": [
+        0.053024376211854206,
+        0.014558339556088762
+      ],
+      "positive_fraction": [
+        0.2464056396484375,
+        0.90923095703125
+      ],
+      "negative_fraction": [
+        0.7535763549804687,
+        0.09076889038085938
+      ]
+    }
+  },
+  "reference_limits": {
+    "correction_slew_any_fraction": [
+      0.7823593139648437
+    ],
+    "nominal_slew_channel_fraction": [
+      0.02095306396484375,
+      0.10471343994140625
+    ],
+    "amplitude_clip_channel_fraction": [
+      0.0,
+      0.0
+    ],
+    "missing_flag_semantics": "null means flag not recorded; never treated as zero clipping"
+  },
+  "costs": {
+    "speed": {
+      "raw_mean": 4.060031127929688,
+      "effective_mean": 4.060031127929688,
+      "cap_fraction": 0.0
+    },
+    "path": {
+      "raw_mean": 3.8117218017578125,
+      "effective_mean": 3.6831515502929686,
+      "cap_fraction": 0.002365264892578125
+    },
+    "primary": {
+      "raw_mean": 0.02268437385559082,
+      "effective_mean": 0.02268437385559082,
+      "cap_fraction": 0.0
+    },
+    "roll": {
+      "raw_mean": 0.17579238891601562,
+      "effective_mean": 0.17579238891601562,
+      "cap_fraction": 0.0
+    },
+    "working_roll": {
+      "raw_mean": 0.35821189880371096,
+      "effective_mean": 0.35821189880371096,
+      "cap_fraction": 0.0
+    },
+    "roll_rate": {
+      "raw_mean": 0.0,
+      "effective_mean": 0.0,
+      "cap_fraction": 0.0
+    },
+    "overspeed": {
+      "raw_mean": 0.03667144060134888,
+      "effective_mean": 0.03667144060134888,
+      "cap_fraction": 0.0
+    },
+    "low_speed": {
+      "raw_mean": 0.0,
+      "effective_mean": 0.0,
+      "cap_fraction": 0.0
+    },
+    "offset_magnitude": {
+      "raw_mean": 0.00016220413148403166,
+      "effective_mean": 0.00016220413148403166,
+      "cap_fraction": 0.0
+    },
+    "offset_rate": {
+      "raw_mean": 0.02091218709945679,
+      "effective_mean": 0.02091218709945679,
+      "cap_fraction": 0.0
+    }
+  },
+  "update": 100,
+  "complete_episode_count": 1611,
+  "complete_episode_return_mean": -103.4538345336914,
+  "complete_episode_cost_integral_means": {
+    "speed": 88.34077246895049,
+    "path": 79.59417071067199,
+    "primary": 0.5059863310476195,
+    "roll": 3.4394519474220933,
+    "working_roll": 7.124139046821394,
+    "roll_rate": 0.0,
+    "overspeed": 0.7193079437131074,
+    "low_speed": 0.0,
+    "offset_magnitude": 0.003645143426710787,
+    "offset_rate": 0.4126640376024998
+  },
+  "physical_failure_count": 0,
+  "tracking_domain_failure_count": 55,
+  "engineering_fault_count": 0,
+  "physical_failure_rate": 0.0,
+  "tracking_domain_failure_rate": 0.03414028553693358
+}
