@@ -103,3 +103,11 @@ PPO复用原更新器，补齐20s有限任务终止、活跃rollout边界bootstr
 ## 后续执行优化切换（2026-10-10）
 
 alpha0已完成200/200，alpha1尚未开始时，按用户要求在保存边界切换后续执行实现。原terminal_v2运行及中断收据保留。新输出目录`runs/path_phase_C_200_optimized_20261010`恢复alpha0的200边界，复用6条B0与4条已完成final，只补缺失评测，然后执行alpha1原定200上限。优化与短对照的数值局限见[性能记录](../../PERFORMANCE.md)。训练/评价完成与否以新目录status.json为准，不把优化采用当作任务合格。
+
+## 训练奖励峰值附近候选补评（2026-10-11，用户追加授权）
+
+原100/150/200固定DEV最佳只代表这三个候选。用户要求再从TensorBoard最高训练奖励附近选保存模型评估。新增独立入口`learning/cli/evaluate_path_reward_peaks.py`，待原200更新及最终报告完成后运行，当前训练不重启、不热改、不增加训练预算。使用完整原始`train/mean_step_reward`对应JSONL，每条记录的sampling_model_update=update−1；选原始全局峰值两侧最近保存点，峰值模型正好保存则只取一个。每alpha至多2候选，每候选固定6场景，新增物理上限96000 lower ticks，复用已有DEV及6条B0。
+
+2026-10-11初查TB6008 alpha0峰值125（模型124），候选120/130；TB6009 alpha1当前峰值156（模型155），候选150/160。alpha1最后候选以200轮完整日志为准。四个当前候选的Actor数组与对应checkpoint逐层一致，身份核验通过。奖励只提出候选，最终仍按task_best_v2共同安全/超容差/目标保持/误差排序；独立补评目录保存扩展best，不覆盖原best。全体候选含未胜出者保留XY/逐步与累计奖励图、NPZ和指标，最终胜者复用已评轨迹生成同路径配对完整报告。结果仍是同一DEV上的扩展候选选择，不是独立holdout。
+
+补评输出：`runs/path_reward_peak_review_20261011/status.json`、`selection.json`、`report/INDEX.md`。启动时状态应为waiting，不能据入口已准备宣称补评完成。选择归属/精确保存点/无效数据3项针对性检查通过，无额外测试物理回放。
