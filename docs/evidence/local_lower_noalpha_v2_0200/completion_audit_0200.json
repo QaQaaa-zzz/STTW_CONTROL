@@ -1,0 +1,77 @@
+{
+  "updates": 200,
+  "accepted_updates": 200,
+  "control_transitions": 26214400,
+  "best_source_update": 200,
+  "best_sha256": "5d2cf35739f81429b7f6cbff39066dc1ad6d72f939dd8524e955e0609ef37df4",
+  "local_qualified": false,
+  "full_state_resume_checked": true,
+  "exact_same_issued_reference": true,
+  "reloaded_best_numerical_difference": {
+    "straight_speed_change": {
+      "actual_xy": 0.0,
+      "actual_forward_speed": 0.0,
+      "actual_delta": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    },
+    "steady_positive": {
+      "actual_xy": 6.628036499023438e-05,
+      "actual_forward_speed": 2.7179718017578125e-05,
+      "actual_delta": 1.6026198863983154e-05,
+      "phi": 2.205371856689453e-05,
+      "action": 1.7117708921432495e-05
+    },
+    "steady_negative": {
+      "actual_xy": 5.14984130859375e-05,
+      "actual_forward_speed": 2.7418136596679688e-05,
+      "actual_delta": 2.90796160697937e-05,
+      "phi": 2.3603439331054688e-05,
+      "action": 3.408268094062805e-05
+    },
+    "return_positive": {
+      "actual_xy": 3.337860107421875e-06,
+      "actual_forward_speed": 1.049041748046875e-05,
+      "actual_delta": 2.2778986021876335e-06,
+      "phi": 1.7881393432617188e-06,
+      "action": 9.176786988973618e-06
+    },
+    "return_negative": {
+      "actual_xy": 0.000110626220703125,
+      "actual_forward_speed": 7.867813110351562e-06,
+      "actual_delta": 7.938913768157363e-06,
+      "phi": 6.198883056640625e-06,
+      "action": 1.958003849722445e-05
+    },
+    "post_return_small_positive": {
+      "actual_xy": 0.00012111663818359375,
+      "actual_forward_speed": 1.2755393981933594e-05,
+      "actual_delta": 7.1749091148376465e-06,
+      "phi": 5.4836273193359375e-06,
+      "action": 1.1826865375041962e-05
+    },
+    "post_return_small_negative": {
+      "actual_xy": 0.0,
+      "actual_forward_speed": 0.0,
+      "actual_delta": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    }
+  },
+  "same_physical_fail_counts": true,
+  "selection_metrics": [
+    0,
+    0,
+    5,
+    2,
+    2.8460162728627396
+  ],
+  "reloaded_metrics": [
+    0,
+    0,
+    5,
+    2,
+    2.8460170458524643
+  ],
+  "final_best_artifacts": "training/final_best_validation_0200; original selection training/validation_0200"
+}

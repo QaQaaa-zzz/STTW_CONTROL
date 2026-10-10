@@ -1,0 +1,106 @@
+{
+  "stage_completed": 200,
+  "target_total_updates": 300,
+  "additional_updates": 100,
+  "additional_transitions": 13107200,
+  "total_target_transitions": 39321600,
+  "maximum_total_updates": 400,
+  "initialization": "exact_resume_full_rollout_boundary",
+  "source_checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/checkpoints/update_0200.pt",
+  "quality_improvement_150_to_200": 0.36163385757531674,
+  "failure_categories_reduced": true,
+  "family_complete_episode_comparisons": {
+    "ordinary": [
+      {
+        "window": [
+          151,
+          175
+        ],
+        "episodes": 391,
+        "mean_cost_per_tick": 0.0012636396012952566,
+        "speed_rmse": 0.025230949552855167,
+        "steer_rmse": 0.02151601508913532
+      },
+      {
+        "window": [
+          176,
+          200
+        ],
+        "episodes": 379,
+        "mean_cost_per_tick": 0.0011391954245856695,
+        "speed_rmse": 0.023732582137853304,
+        "steer_rmse": 0.02045769481958173
+      }
+    ],
+    "turn_return": [
+      {
+        "window": [
+          151,
+          175
+        ],
+        "episodes": 534,
+        "mean_cost_per_tick": 0.0031262993401802433,
+        "speed_rmse": 0.02844049849501257,
+        "steer_rmse": 0.041583205443722175
+      },
+      {
+        "window": [
+          176,
+          200
+        ],
+        "episodes": 563,
+        "mean_cost_per_tick": 0.002869405580456261,
+        "speed_rmse": 0.02809432733537331,
+        "steer_rmse": 0.03896966575737233
+      }
+    ],
+    "post_return_small": [
+      {
+        "window": [
+          151,
+          175
+        ],
+        "episodes": 374,
+        "mean_cost_per_tick": 0.0033661352963371073,
+        "speed_rmse": 0.029041087657707743,
+        "steer_rmse": 0.04265973961444047
+      },
+      {
+        "window": [
+          176,
+          200
+        ],
+        "episodes": 356,
+        "mean_cost_per_tick": 0.0029689792247300736,
+        "speed_rmse": 0.028184244596863563,
+        "steer_rmse": 0.03898134024413806
+      }
+    ],
+    "reversal": [
+      {
+        "window": [
+          151,
+          175
+        ],
+        "episodes": 237,
+        "mean_cost_per_tick": 0.005688977849131395,
+        "speed_rmse": 0.03125394508146989,
+        "steer_rmse": 0.05989086016989302
+      },
+      {
+        "window": [
+          176,
+          200
+        ],
+        "episodes": 238,
+        "mean_cost_per_tick": 0.004918888124097295,
+        "speed_rmse": 0.030783400833394987,
+        "steer_rmse": 0.054787824190734045
+      }
+    ]
+  },
+  "local_qualified": false,
+  "parent_mismatch_test": "not_run_gate_closed",
+  "upper_combo": "not_run_gate_closed",
+  "reason": "declared fixed failures decrease and Q improves36.16%; all four families improve cost/speed/steer. Not a platform. One authorized100-update extension then reassess; no automatic400 or upper training."
+}

@@ -920,3 +920,7 @@ All endpoint reward reconstructions pass. The full contract remains unqualified.
 The remotely reviewable compact evidence is indexed at
 `docs/evidence/r196_preference_v51_20261009/README.md`, including update25 and
 update100 XY/control/reward plots, raw 5ms data and exported TensorBoard scalars.
+
+## 2026-10-10 No-alpha local lower v2, first200 updates
+
+Fresh210/211 local tracking residual, source9a2c66e;200 accepted updates/26,214,400 control transitions. Fixed100/150/200: tuples[0, 0, 6, 3, 6.242980957851922], [0, 0, 6, 3, 4.458281985402324], [0, 0, 5, 2, 2.8460162728627396];best200 unqualified2/7, R1963/7. Small-angle windows improve, negative steady bias remains7.835s>.02rad. Old full-state mismatch repair and upper migration not executed because local gate fails. Authorized one100-update exact-continuation to300 because Q improves36.2% and all four training families improve. Full evidence: [stage200 analysis](../runs/noalpha_v2_formal_20261010/analysis/RESULTS_0200.md), seven matched XY and reward panels. No physical or reward change/adoption/upper training/push.
