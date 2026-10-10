@@ -1,0 +1,44 @@
+{
+  "captured_at": "2026-10-10T18:27:01.145389+08:00",
+  "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_terminal_v2_20261010",
+  "code_revision": "48e9297ed3484569ee28fdc7cd4395ba2e91ef08",
+  "pid": 2744526,
+  "status": {
+    "state": "running",
+    "declared_updates_per_endpoint": 200,
+    "policy_transitions_total": 262144,
+    "training_control_ticks_total": 1048576,
+    "validation_control_ticks_total": 0,
+    "parent_consumed_policy_transitions": 160768,
+    "parent_reported_updates": 2,
+    "stage": "sampling",
+    "last_update_epoch": 1791627999.1790295,
+    "alpha": 0,
+    "completed_updates": 4,
+    "endpoint_updates": {
+      "alpha0": 4
+    },
+    "compile_and_setup_seconds": 34.88457162701525,
+    "reused_baseline_cases": 6,
+    "endpoint_elapsed_s": 191.72532411201973,
+    "case": null,
+    "completed_intervals": null,
+    "declared_updates": 200,
+    "accepted_batches": 4,
+    "last_reward": -0.270919531583786
+  },
+  "verified_reward_latest": [
+    1791627999.1783285,
+    4,
+    -0.270919531583786
+  ],
+  "tensorboard_url": "http://localhost:6008",
+  "alpha0_completed_updates": 4,
+  "alpha1_completed_updates": 0,
+  "observed_domain_failures": 8,
+  "physical_failures": 0,
+  "engineering_faults": 0,
+  "reused_baseline_cases": 6,
+  "new_baseline_physics": 0,
+  "claim": "finite domain failures counted/reset and subsequent PPO update completed; no alpha/task qualification claim"
+}

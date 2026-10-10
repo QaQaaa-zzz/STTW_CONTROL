@@ -12,6 +12,12 @@
 
 按用户新附件实现terminal_contract_v2、独立best_task_model、同路径取舍指标、基线缓存和HTTP非致命告警；正常reward、网络、滤波、频率、物理及local300均不变。[修复与恢复合同](../../path_feedback_phase_C.md#2026-10-10-mainline-review-terminal_contract_v2) · [必要验证](mainline_repair_validation.json)。本轮不自动push，不重复六条完整基线；恢复进度以新run实际状态为准。暂无两个端点固定DEV，不宣称已实现alpha分工、共同保持合格或底层阻断。
 
+### 修复后实际恢复快照：2026-10-10T18:27:01.145389+08:00
+
+新run `path_phase_C_200_terminal_v2_20261010`，代码48e9297，PID2744526。alpha0已完成**4/200**，alpha1尚未开始；固定6基线全部复用，新增基线物理0。当前累计有限域失败8、物理失败0、工程故障0；有限域失败后对应回合计罚/reset，PPO继续完成更新。当前没有100/150/200 DEV候选，best_task和alpha配对结论均PENDING，不能据此判断底层阻断。
+
+[恢复后的实际进度与奖励HTTP核验](mainline_resume_snapshot.json)，本机TensorBoard `http://localhost:6008` 已加载当前alpha0真实reward。继续原200上限，不自动追加100，也未新增路径验证；只在共同任务结果支持后再决定下一步。报告快照不自动刷新，实时进度查看新run/status.json；旧run/error原样保留。本轮提交仅本地，未push。
+
 ## 本次交付与训练启动快照
 
 记录时间：**2026-10-10T17:16:06.823086+08:00**。下述训练进度是有时间戳的快照，远端报告不会自动刷新。上图是已完成的阶段 B 两条基线，不能当作阶段 C 策略结果。
