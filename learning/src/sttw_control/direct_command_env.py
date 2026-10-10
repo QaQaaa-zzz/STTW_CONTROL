@@ -6,7 +6,7 @@ from .teleop_env import TeleopEnv
 from .controller import _system
 from .direct_command_policy import (correction_tick,raw_context,initial_history,make_frame,push_history,assemble_observation)
 from .direct_command_reward import interval_cost,failure_reward
-from .direct_command_scenarios import schedule,publish_command,heading_recovery_initial_error
+from .direct_command_scenarios import schedule,publish_command,publish_issued_reference,heading_recovery_initial_error
 
 def task_horizon_steps(spec):
     return round(spec.get('episode_duration_s',16.)/spec['plant']['policy_dt_s'])
@@ -51,6 +51,8 @@ class DirectCommandEnv:
             else:
                 from .frozen_lower_controller import FrozenLowerController
                 self.lower=FrozenLowerController(spec['lower_controller'])
+    def publish_reference(self,raw,rows,tick,slew,dt):
+        return publish_issued_reference(raw,rows,tick,slew,dt,self.spec.get('prepublished_local_reference',False))
     def reset(self,snapshot,env_id,episode_index,alpha,rows=None,slew=None):
         raw=jp.stack((snapshot.raw[0],jp.asarray(0.)))
         sampled,family,drawn_slew=schedule(env_id,episode_index,raw[0],self.spec)
@@ -62,7 +64,7 @@ class DirectCommandEnv:
         reference_pose=pose.at[2].add(e0)
         p=snapshot.replace(reference_pose=reference_pose,yaw_unwrapped=pose[2],yaw_wrapped=pose[2],raw=raw,
             governor=snapshot.governor.replace(current_reference=raw,last_goal=raw))
-        issued,rates,_=publish_command(raw,rows,jp.int32(0),slew,self.cc.dt)
+        issued,rates,_=self.publish_reference(raw,rows,jp.int32(0),slew,self.cc.dt)
         state=DirectState(p.replace(raw=issued),initial_history(self.spec),jp.zeros(2),jp.asarray(0.),rates,
             jp.asarray(0.),jp.zeros(2),jp.asarray(env_id,jp.int32),jp.asarray(episode_index,jp.int32),rows,family,slew,
             jp.asarray(alpha),jp.int32(0),~((alpha==0)|(alpha==1)),initial_heading_error=e0)
@@ -117,8 +119,8 @@ class DirectCommandEnv:
             actual_speed=log['actual_forward_speed'],actual_steer=log['actual_delta'],
             heading_error=log['e_psi_unwrapped'],roll=log['phi'],roll_rate=log['phi_dot'],
             executed_offsets=offsets,final_command=log['final_command'],previous_final_command=previous,spec=self.spec,yaw_rate=yaw_rate,cc=self.cc,peak_roll=log['peak_roll'])
-        _,_,target=publish_command(raw,s.rows,s.tick,s.slew,self.cc.dt)
-        next_raw,next_rates,_=publish_command(raw,s.rows,s.tick+1,s.slew,self.cc.dt)
+        _,_,target=self.publish_reference(raw,s.rows,s.tick,s.slew,self.cc.dt)
+        next_raw,next_rates,_=self.publish_reference(raw,s.rows,s.tick+1,s.slew,self.cc.dt)
         next_raw=jp.where(p.failed,raw,next_raw)
         next_rates=jp.where(p.failed,s.command_rates,next_rates)
         log.update(target=target,raw_rates=s.command_rates,offsets=offsets,chi=chi,g=g,settle_clock=s.settle_clock,

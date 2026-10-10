@@ -1117,3 +1117,11 @@ Remote-review evidence bundle: `docs/evidence/r196_preference_v51_20261009/READM
 It includes XY-first plots for every fixed case, paired update25/update100 metrics and
 5ms trajectories, frozen configurations, failure/recovery receipts, and TensorBoard
 image plus numeric scalars. The local full run remains under `runs/`.
+
+## 2026-10-10 Lower first no-alpha v2 — implementation plan
+
+User-authorized attachment specifies fresh210/211 ELU256→128 local two-residual lower, unchanged ECBC/ESO/plant/limits. Isolated from4e956f0; upper2eeef42 best0 added200/best1 added250 frozen. Five fixes in lower_command/training/validation: consume configured four-family/range/slew sampler, independent small direction at7.5 (≤7.6)s, fine.01rad small acceptance, common immutable issued stream, complete rollout-boundary resume. No deployment screening or old310 weight surgery.
+
+Seven focused new CPU checks pass; prior11 checks and B0 replay reused. Sole engineering8×16×2 completed. Formal fresh512×256×200 started; corrected accepted-count metadata after six updates via full-boundary exact resume (no sample repetition). Status and PID in runs/noalpha_v2_formal_20261010. Fixed numeric validation100/150/200; evidence-based100-block extension≤400. Local pass then one old mismatch full-state comparison; both gates then frozen upper straight/fast_turn combination. Final physical evidence must precede adoption; no push.
+
+Source paths: learning/configs/lower_local_tracking_no_alpha_v2.json; lower_command.py; lower_command_training.py; lower_command_validation.py. Resume: --formal-only --resume-checkpoint <run>/training/checkpoints/resume_boundary.pt --target-updates <total≤400>. Old boundaries/future-artifact overwrite rejected before writing.

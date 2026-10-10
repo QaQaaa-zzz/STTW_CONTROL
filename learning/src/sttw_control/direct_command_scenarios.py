@@ -223,3 +223,10 @@ def _smooth_conflict(key, prepared_speed, spec, slew):
     end2=end1+2*jnp.abs(delta)/slew[1]+hold2
     rows=_empty_rows(prepared_speed).at[0].set(jnp.array([0.,high,0.])).at[1].set(jnp.array([start,high,delta]))
     return jax.lax.cond(single,lambda r:r.at[2].set(jnp.array([end1,tail,0.])),lambda r:r.at[2].set(jnp.array([end1,high,-delta])).at[3].set(jnp.array([end2,tail,0.])),rows)
+
+
+def publish_issued_reference(raw,rows,tick,slew,dt,prepublished=False):
+    """Exact replay of a dataset reference; no further screening or slew."""
+    if not prepublished:return publish_command(raw,rows,tick,slew,dt)
+    row=rows[jnp.minimum(tick,rows.shape[0]-1)]
+    return row[1:3],row[3:5],row[1:3]

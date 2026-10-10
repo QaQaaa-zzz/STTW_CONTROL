@@ -2060,3 +2060,7 @@ Final engineering check: `adopted_end_to_end_smoke` completed5/5 restored trials
 ## V5.2 paused preparation — 2026-10-09
 
 26c3fed plus completed4090D framework405cda1. Seven focused new CPU checks pass (reward/peak/failure, frozen config inheritance, error intervals, physical best ordering/partial refusal/SHA, oldB0 offline V5.2 rescoring). Parent18 NPZ traces audited with zero new physical steps. B0 and alpha0 fast_turn recovery show persistent steering tracking errors; user explicitly paused training. No engineering batch or formal training launched; GPU integration and convergence-extension execution remain unverified. Full evidence and qualification limits: [V52_VALIDATION.md](V52_VALIDATION.md).
+
+## 2026-10-10 Local lower no-alpha v2 implementation checks
+
+Seven focused new checks passed (sampling rates/sign/time/live CC, fine small-angle acceptance, published-stream derivative replay, full-state boundary roundtrip, accepted-update accounting, stale-resume rejection). They address the declared gaps; no full-repository or old11-check rerun. One8×16×2 GPU engineering batch completed with finite actor/critic gradients and nonzero actor change. Formal scratch checkpoint0: accepted0, empty Adam, actor output zero, std.15, complete512×10×20 frames/masks, physical/ESO/actuator/task state saved. This is engineering evidence; fixed tracking qualification and mismatch repair pending. Original physical/ECBC/ESO/action constraints retained.
