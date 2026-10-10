@@ -924,3 +924,7 @@ update100 XY/control/reward plots, raw 5ms data and exported TensorBoard scalars
 ## 2026-10-10 No-alpha local lower v2, first200 updates
 
 Fresh210/211 local tracking residual, source9a2c66e;200 accepted updates/26,214,400 control transitions. Fixed100/150/200: tuples[0, 0, 6, 3, 6.242980957851922], [0, 0, 6, 3, 4.458281985402324], [0, 0, 5, 2, 2.8460162728627396];best200 unqualified2/7, R1963/7. Small-angle windows improve, negative steady bias remains7.835s>.02rad. Old full-state mismatch repair and upper migration not executed because local gate fails. Authorized one100-update exact-continuation to300 because Q improves36.2% and all four training families improve. Full evidence: [stage200 analysis](../runs/noalpha_v2_formal_20261010/analysis/RESULTS_0200.md), seven matched XY and reward panels. No physical or reward change/adoption/upper training/push.
+
+## 2026-10-10 无alpha局部底层300更新分析
+
+完整200→300续训结束，累计39,321,600控制转移/300接受更新。物理best/last来源300；固定250未合格，300及磁盘重载best七场景7/7，R196相同流3/7。Q2.846016→1.739090；负向稳态原7.835秒持续转角偏差消除，仅入弯.475秒超差。小角±窗口转角RMSE.003186/.004913rad，均过.01rad。保留切换瞬态、路径偏差、一次后期合格限制；旧6.315秒完整状态恢复、upper组合尚未做，未采用。upper/R196哈希未变，原200数据未覆盖。[完整图与结果](evidence/local_lower_noalpha_v2_0300/RESULTS_0300.md)。本次仅读取/重建绘图及状态审计，无新增训练/仿真/全仓测试/push。

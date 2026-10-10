@@ -1,0 +1,84 @@
+{
+  "updates": 300,
+  "accepted_updates": 300,
+  "transitions": 39321600,
+  "best_source_update": 300,
+  "best_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+  "full_boundary_state": true,
+  "optimizer_nonempty": true,
+  "history_shape": [
+    512,
+    10,
+    20
+  ],
+  "same_issued_reference": true,
+  "R196_cache_hashes_unchanged": true,
+  "upper_best_hashes_unchanged": true,
+  "reload_max_differences": {
+    "straight_speed_change": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    },
+    "steady_positive": {
+      "actual_xy": 5.626678466796875e-05,
+      "actual_delta": 1.665949821472168e-05,
+      "actual_forward_speed": 1.6450881958007812e-05,
+      "phi": 1.4424324035644531e-05,
+      "action": 1.2464821338653564e-05
+    },
+    "steady_negative": {
+      "actual_xy": 0.00013065338134765625,
+      "actual_delta": 8.545815944671631e-06,
+      "actual_forward_speed": 1.8596649169921875e-05,
+      "phi": 1.1563301086425781e-05,
+      "action": 1.0926276445388794e-05
+    },
+    "return_positive": {
+      "actual_xy": 0.0,
+      "actual_delta": 6.277114152908325e-07,
+      "actual_forward_speed": 3.814697265625e-06,
+      "phi": 0.0,
+      "action": 2.635642886161804e-06
+    },
+    "return_negative": {
+      "actual_xy": 4.2438507080078125e-05,
+      "actual_delta": 4.783272743225098e-06,
+      "actual_forward_speed": 1.5735626220703125e-05,
+      "phi": 6.198883056640625e-06,
+      "action": 9.581446647644043e-06
+    },
+    "post_return_small_positive": {
+      "actual_xy": 3.4809112548828125e-05,
+      "actual_delta": 8.821487426757812e-06,
+      "actual_forward_speed": 2.1457672119140625e-05,
+      "phi": 7.748603820800781e-06,
+      "action": 1.4081597328186035e-05
+    },
+    "post_return_small_negative": {
+      "actual_xy": 0.0,
+      "actual_delta": 0.0,
+      "actual_forward_speed": 0.0,
+      "phi": 0.0,
+      "action": 0.0
+    }
+  },
+  "selection_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7390904178867257
+  ],
+  "reloaded_score": [
+    0,
+    0,
+    0,
+    0,
+    1.7391009061675855
+  ],
+  "parent_mismatch": "not_run",
+  "adoption": "not_adopted"
+}

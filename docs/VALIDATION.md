@@ -2068,3 +2068,7 @@ Seven focused new checks passed (sampling rates/sign/time/live CC, fine small-an
 ## 2026-10-10 No-alpha local lower stage200 physical evaluation
 
 [Matched XY/tracking, reward, speed/proxy and training plots](evidence/local_lower_noalpha_v2_0200/INDEX.md) and [numeric analysis](evidence/local_lower_noalpha_v2_0200/RESULTS_0200.md).200 accepted updates/26,214,400 transitions complete. Best evaluated candidate200 is not qualified:2/7 complete local acceptance vs R1963/7. Two small-angle windows improve below.01rad, but negative steady steering bias persists7.835s>.02rad. Fixed Q150→200 improves36.16% and all four training-family late metrics improve, so execute exactly one authorized100-update continuation to300. Full state/Actor/Adam/RNG checked before launch. No old-mismatch recovery, lower installation or upper combination because gate remains closed. Best reload repeats have max.0001212m XY/.00002908rad steering differences; acceptance counts unchanged. No second engineering run or full-test rerun.
+
+## 2026-10-10 无alpha局部底层300更新分析
+
+完整200→300续训结束，累计39,321,600控制转移/300接受更新。物理best/last来源300；固定250未合格，300及磁盘重载best七场景7/7，R196相同流3/7。Q2.846016→1.739090；负向稳态原7.835秒持续转角偏差消除，仅入弯.475秒超差。小角±窗口转角RMSE.003186/.004913rad，均过.01rad。保留切换瞬态、路径偏差、一次后期合格限制；旧6.315秒完整状态恢复、upper组合尚未做，未采用。upper/R196哈希未变，原200数据未覆盖。[完整图与结果](evidence/local_lower_noalpha_v2_0300/RESULTS_0300.md)。本次仅读取/重建绘图及状态审计，无新增训练/仿真/全仓测试/push。
