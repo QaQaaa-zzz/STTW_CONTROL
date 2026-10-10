@@ -22,3 +22,8 @@ def test_recovery_rejects_new_working_limit_and_incomplete_trace():
     assert not summarize_parent_recovery(d,initial_roll=.2)['qualified']
     d={k:v[:-1] for k,v in trace().items()}
     assert not summarize_parent_recovery(d,initial_roll=.2)['qualified']
+
+
+def test_one_second_deadline_uses_post_step_measurement_time():
+    assert summarize_parent_recovery(trace(.995),initial_roll=.2)['qualified']
+    assert not summarize_parent_recovery(trace(1.),initial_roll=.2)['qualified']
