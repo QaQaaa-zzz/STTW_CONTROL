@@ -27,7 +27,7 @@ def test_terminal_fault_and_rollout_edge_are_distinct():
  assert not bool(live['done']) and bool(live['bootstrap'])
  end=training.termination_flags(j.int32(4000),False,False,False,20.,cfg)
  assert bool(end['finite_task_end']) and not bool(end['bootstrap'])
- bad=training.termination_flags(j.int32(20),False,False,True,20.,cfg)
+ bad=training.termination_flags(j.int32(20),False,False,True,20.,cfg,'terminal_contract_v1')
  assert bool(bad['engineering_fault']) and not bool(bad['physical_failure'])
  fail=training.termination_flags(j.int32(20),True,False,False,20.,cfg)
  assert bool(fail['physical_failure']) and bool(fail['done'])

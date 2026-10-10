@@ -1,0 +1,14 @@
+{
+  "terminal_contract": "terminal_contract_v2",
+  "selection_schema": "path_task_best_v2",
+  "tests": "12 relevant checks passed; only terminal/reset, task-best counterexample, cache identity, same-alpha rescoring and directly reused checkpoint tests",
+  "abstract_step": "single and two-env shape tracing passed; no vehicle physics",
+  "cache": "six existing complete baselines verified against loaded bank pose/generated fixed paths/config/source/timing/zero corrections and copied; per-file SHA receipt retained in preflight run",
+  "normal_reward_network_filter_physics_lower": "unchanged",
+  "review": "legacy ordering, restored-boundary counter, parent task-best inheritance corrections reviewed",
+  "new_physics_for_checks": 0,
+  "failed_run": "path_phase_C_200_20261010",
+  "restoration": "last persisted update0 learner; two optimized updates lost; no claim of exact update2 resume",
+  "automatic_extension": false,
+  "push": false
+}

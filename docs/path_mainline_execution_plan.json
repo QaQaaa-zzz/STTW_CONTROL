@@ -1,0 +1,128 @@
+{
+  "schema": "sttw_path_mainline_review_execution_plan_v1",
+  "artifact_type": "implementation_plan_not_drop_in_training_config",
+  "source_commit": "61f612aa82f695bf5b57fb354cb5831a5061f9ac",
+  "reported_launch_commit": "8e16cd105c7cdca88ec151b73695cc327a2096ba",
+  "reported_snapshot_time": "2026-10-10T17:16:06.823086+08:00",
+  "reported_snapshot_training_transitions": 0,
+  "live_status_known": false,
+  "decision": "continue_authorized_path_upper_training_freeze_lower_and_interior_reward",
+  "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010",
+  "preserve": {
+    "lower": "local300",
+    "old_upper_checkpoints": true,
+    "alpha_endpoints": [
+      0,
+      1
+    ],
+    "actor_dim": 351,
+    "critic_dim": 352,
+    "actor_hidden": [
+      128,
+      128,
+      64
+    ],
+    "output_dim": 2,
+    "physics_dt": 0.0002,
+    "physics_substeps": 25,
+    "lower_dt": 0.005,
+    "upper_dt": 0.02,
+    "filter_tau": [
+      0.1,
+      0.08
+    ],
+    "reward_scale": 0.1,
+    "failure_cost_bound": 5080.2
+  },
+  "training": {
+    "num_envs": 512,
+    "rollout_steps": 128,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "epochs": 4,
+    "minibatches": 4,
+    "clip": 0.2,
+    "std_initial": [
+      0.25,
+      0.1
+    ],
+    "std_limits": [
+      0.05,
+      0.5
+    ],
+    "entropy": 0.001,
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "authorized_updates_per_endpoint": 200,
+    "save_every": 10,
+    "validation_updates": [
+      100,
+      150,
+      200
+    ],
+    "no_20_25_evaluation": true
+  },
+  "repair": {
+    "finite_domain_exit_is_per_env_terminal": true,
+    "numeric_fault_still_aborts": true,
+    "domain_failure_penalty": "same_remaining_horizon_failure_cost_once",
+    "new_terminal_contract": "terminal_contract_v2",
+    "do_not_hot_patch_running_process": true,
+    "do_not_reset_actor_for_this_fix": true,
+    "http_tensorboard_failure_is_warning": true,
+    "reuse_complete_matching_zero_upper": true
+  },
+  "selection": {
+    "legacy_pointer": "best_model.json",
+    "new_pointer": "best_task_model.json",
+    "new_schema": "path_task_best_v2",
+    "primary_bands": {
+      "conflict_alpha0_ey_m": 0.1,
+      "conflict_alpha1_ev_m_s": 0.05,
+      "ordinary_ev_m_s": 0.1,
+      "ordinary_ey_m": 0.1
+    },
+    "score": [
+      "task_failure_count",
+      "working_failure_count",
+      "primary_band_failure_count",
+      "goal_hold_failure_count",
+      "worst_primary_ratio",
+      "worst_normalized_error"
+    ],
+    "working_roll_limit": 0.302,
+    "final_hold_seconds": 1.0,
+    "final_hold_bounds": {
+      "ey": 0.1,
+      "eh": 0.05,
+      "ev": 0.1
+    },
+    "paired_preference_not_inferred_from_single_model_qualified": true
+  },
+  "extension": {
+    "automatic_authorized": false,
+    "proposed_targets": [
+      300,
+      400
+    ],
+    "block": 100,
+    "require_late_validation_and_training_evidence": true,
+    "improvement_threshold": 0.02,
+    "plateau_validation_threshold": 0.01,
+    "plateau_training_threshold": 0.02
+  },
+  "diagnostics": {
+    "reuse_existing_physics": true,
+    "no_new_baseline_perfection_gate": true,
+    "same_path_not_identical_nominal_command": true,
+    "proposed_visible_pair_gaps": {
+      "speed_rmse_gap_m_s": 0.03,
+      "path_rmse_gap_m": 0.02
+    },
+    "new_unseen_routes_max_after_success": 3,
+    "followup_lower_training_default": false
+  },
+  "execute_note": "Read matching MD. Do not pass this JSON to existing trainer without implementing explicit fields; preserve current live run."
+}

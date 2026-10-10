@@ -1,0 +1,48 @@
+{
+  "parent_status": {
+    "state": "error",
+    "declared_updates_per_endpoint": 200,
+    "policy_transitions_total": 160768,
+    "training_control_ticks_total": 643072,
+    "validation_control_ticks_total": 24000,
+    "endpoint_elapsed_s": 1975.5883016339794,
+    "stage": "sampling",
+    "case": "right90_R2_2.6",
+    "completed_intervals": 950,
+    "last_update_epoch": 1791625255.9508321,
+    "alpha": 0,
+    "completed_updates": 2,
+    "declared_updates": 200,
+    "accepted_batches": 2,
+    "last_reward": -0.025087222456932068,
+    "error_type": "RuntimeError",
+    "message": "domain/observation/lower fault; discard rollout, no optimizer update"
+  },
+  "endpoints": {
+    "0": {
+      "logged_batches": 2,
+      "accepted_batches": 2,
+      "last_completed": {
+        "update": 0,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_phase_C_200_20261010/alpha0/checkpoints/update_0000.pt",
+        "checkpoint_sha256": "44ea12982add42b47b262fc367e5fb0ffd3076510f7c4e64ee600fdd17a05f37",
+        "schema": "sttw_geometric_path_actor351_v1"
+      }
+    },
+    "1": {
+      "logged_batches": 0,
+      "accepted_batches": 0,
+      "last_completed": null
+    }
+  },
+  "reused_baselines": [
+    "left90_R2_2.0",
+    "left90_R2_2.6",
+    "right90_R2_2.0",
+    "right90_R2_2.6",
+    "straight_2.0",
+    "straight_2.6"
+  ],
+  "terminal_contract": "terminal_contract_v2",
+  "new_physics": 0
+}

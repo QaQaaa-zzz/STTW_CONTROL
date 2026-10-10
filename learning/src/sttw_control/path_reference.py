@@ -11,6 +11,7 @@ class Pursuit:
     lookahead: object
     kappa: object
     invalid: object
+    numerical_fault: object
 
 
 def pursuit(path,progress,pose,speed,v_user,config):
@@ -22,8 +23,9 @@ def pursuit(path,progress,pose,speed,v_user,config):
     denominator=j.sum(body**2);k=2*body[1]/j.maximum(denominator,1e-12)
     steer=j.arctan(c['wheelbase_m_expected']*k/j.cos(j.deg2rad(c['caster_deg_expected'])))
     cmd=j.stack([v_user,j.clip(steer,-c['steer_reference_max_rad'],c['steer_reference_max_rad'])])
-    invalid=(body[0]<=c['preview_body_x_min_m'])|(j.abs(wrap(heading-pose[2]))>=j.pi/2)|~j.all(j.isfinite(cmd))|~j.all(j.isfinite(body))
-    return Pursuit(cmd,body,point,look,k,invalid)
+    numerical_fault=~j.all(j.isfinite(j.concatenate([cmd,body,j.atleast_1d(heading),j.atleast_1d(progress),j.atleast_1d(speed)])))
+    invalid=(body[0]<=c['preview_body_x_min_m'])|(j.abs(wrap(heading-pose[2]))>=j.pi/2)|numerical_fault
+    return Pursuit(cmd,body,point,look,k,invalid,numerical_fault)
 
 
 def publish(previous,target,config):

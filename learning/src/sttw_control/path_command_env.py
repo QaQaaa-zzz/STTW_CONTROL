@@ -41,7 +41,8 @@ class PathState:
 class PathCommandEnv:
     task_mode='geometric_path'
     schema='sttw_geometric_path_actor351_v1'
-    def __init__(self,config,plant_spec,lower):
+    def __init__(self,config,plant_spec,lower,terminal_contract="terminal_contract_v1"):
+        self.terminal_contract=terminal_contract
         self.config=config;self.plant_spec=plant_spec;self.lower=lower
         self.physics=TeleopEnv(config={**plant_spec,'lower_internal_diagnostics':True},backend='mjx')
         self.cc=self.physics.cc;self.ac=self.physics.ac
@@ -61,7 +62,7 @@ class PathCommandEnv:
         follower=pursuit(path,projection.progress,pose,v,j.asarray(v_user),self.config)
         nominal,rates=publish(snapshot.raw,follower.command,self.config)
         p=snapshot.replace(raw=nominal,reference_pose=pose,yaw_wrapped=pose[2],yaw_unwrapped=pose[2])
-        s=PathState(p,self.lower.initial(pose),initial_history(self.plant_spec),projection,follower,j.zeros(2),j.zeros(2),rates,j.zeros(2),j.array(0.),j.int32(0),j.asarray(alpha),j.bool_(False),follower.invalid)
+        s=PathState(p,self.lower.initial(pose),initial_history(self.plant_spec),projection,follower,j.zeros(2),j.zeros(2),rates,j.zeros(2),j.array(0.),j.int32(0),j.asarray(alpha),follower.invalid|~j.all(j.isfinite(path.xy))|~j.all(j.isfinite(path.heading))|~j.all(j.isfinite(path.curvature))|~j.all(j.diff(path.s)>0),follower.invalid&~follower.numerical_fault)
         return self.record_frame(s)
 
     def record_frame(self,s):
@@ -100,10 +101,10 @@ class PathCommandEnv:
         nominal,rates=publish(p.raw,follower.command,self.config)
         log.update(time=s.tick*self.cc.dt,active_tick=j.bool_(True),v_user=v_user,path_cross_track=projection.cross_track,path_heading_error=eh,path_progress=projection.progress,path_projection_unclamped=projection.unclamped,path_curvature=k,
             reference_xy=projection.point,reference_yaw_unwrapped=projection.heading,e_psi_unwrapped=eh,along=j.array(0.),lateral=projection.cross_track,large_heading_debt=j.abs(eh)>j.pi,
-            nominal=p.raw,nominal_rates=s.nominal_rates,pp_target=s.follower.command,preview_body=s.follower.preview_body,preview_world=s.follower.preview_world,lookahead=s.follower.lookahead,pp_curvature=s.follower.kappa,
-            target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid,goal_section_signed_distance=goal_distance,
-            reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],chi=chi)
-        end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault'],domain_exit=s.domain_exit|follower.invalid)
+            nominal=p.raw,nominal_rates=s.nominal_rates,nominal_slew_channels=j.abs(s.follower.command-p.raw)>1e-7,pp_target=s.follower.command,preview_body=s.follower.preview_body,preview_world=s.follower.preview_world,lookahead=s.follower.lookahead,pp_curvature=s.follower.kappa,
+            target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid&~follower.numerical_fault,tracking_domain_failure=follower.invalid&~follower.numerical_fault,goal_section_signed_distance=goal_distance,
+            correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],chi=chi)
+        end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|~j.all(j.isfinite(p2.data.qpos))|~j.all(j.isfinite(p2.data.qvel)),domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
         return end,log
 
     def set_log_template(self,s,path,v_user):
@@ -122,6 +123,7 @@ class PathCommandEnv:
         logs['raw_components']['offset_rate']=j.full(4,rate_cost);logs['effective_components']['offset_rate']=j.full(4,effective);logs['component_capped']['offset_rate']=j.full(4,rate_cost>effective)
         logs['tick_reward']-=c['scale']*self.cc.dt*effective
         n=j.sum(logs['active_tick']);last=j.maximum(n-1,0);normal=j.sum(j.where(logs['active_tick'],logs['tick_reward'],0))
-        reward=j.where(end.physical.failed,failure_reward(j.ceil(horizon/.02)-s.tick//4,self.config),normal)
-        logs['scored_tick_reward']=j.where(end.physical.failed,j.zeros(4).at[last].set(reward),j.where(logs['active_tick'],logs['tick_reward'],0))
+        failed=end.physical.failed|((self.terminal_contract=='terminal_contract_v2')&end.domain_exit&~end.fault)
+        reward=j.where(failed,failure_reward(j.ceil(horizon/.02)-s.tick//4,self.config),normal)
+        logs['scored_tick_reward']=j.where(failed,j.zeros(4).at[last].set(reward),j.where(logs['active_tick'],logs['tick_reward'],0))
         return end,logs

@@ -6,6 +6,12 @@
 
 底层冻结local300＋ECBC/ESO，上层修正恒零；不是纯ECBC基线。seed77001，原完整准备bank index3；straight10s、left90_R2 20s，共6000/6000底层步，训练0。基准ab195e7；无重跑旧四条、旧七场景或ESO/mask大检查，无换400、重训、best变更、自动push或DVGC/JIT操作。
 
+## 后续本机事实：原运行故障及主线修复
+
+**此前17:16启动快照不是实时状态。** 原进程后续完成六条基线和alpha0两次更新，第三批因一个有限PP域退出停止。最新磁盘learner仅update0，不能声称精确接续update2。旧状态/日志/故障样本保持不变。[原故障](mainline_fault_diagnosis.json) · [恢复审计](mainline_recovery_audit.json)。
+
+按用户新附件实现terminal_contract_v2、独立best_task_model、同路径取舍指标、基线缓存和HTTP非致命告警；正常reward、网络、滤波、频率、物理及local300均不变。[修复与恢复合同](../../path_feedback_phase_C.md#2026-10-10-mainline-review-terminal_contract_v2) · [必要验证](mainline_repair_validation.json)。本轮不自动push，不重复六条完整基线；恢复进度以新run实际状态为准。暂无两个端点固定DEV，不宣称已实现alpha分工、共同保持合格或底层阻断。
+
 ## 本次交付与训练启动快照
 
 记录时间：**2026-10-10T17:16:06.823086+08:00**。下述训练进度是有时间戳的快照，远端报告不会自动刷新。上图是已完成的阶段 B 两条基线，不能当作阶段 C 策略结果。

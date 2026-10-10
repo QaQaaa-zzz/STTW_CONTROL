@@ -38,5 +38,8 @@
     "qualification": "physical/work/goal/final hold only; no claim of alpha preference qualification",
     "finite_horizon_is_terminal": true,
     "domain_exit": "engineering out-of-domain; abort batch, preserve state, do not optimize or rank as physical failure"
-  }
+  },
+  "terminal_contract": "terminal_contract_v2",
+  "task_selection_schema": "path_task_best_v2",
+  "http_failure_policy": "warn"
 }

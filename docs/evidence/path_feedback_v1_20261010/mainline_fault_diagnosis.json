@@ -1,0 +1,41 @@
+{
+  "cause": "finite Pure Pursuit domain exit triggers global engineering abort",
+  "environment": 168,
+  "tick": 1256,
+  "time_s": 6.28,
+  "episode": 0,
+  "family": "rounded right turn",
+  "v_user": 1.902999,
+  "radius_m": 2.1550941,
+  "angle_rad": -1.4331415,
+  "preview_body_x_m": 0.018933653831481934,
+  "preview_body_y_m": -1.4838125705718994,
+  "minimum_preview_x_m": 0.05,
+  "cross_track_m": 0.787244439125061,
+  "state_fault_count": 0,
+  "domain_exit_count": 1,
+  "physical_failure_count": 0,
+  "nonfinite_saved_state_leaves": 0,
+  "completed_updates": 2,
+  "accepted_batches": 2,
+  "last_persisted_update": 0,
+  "training_transitions_consumed": 160768,
+  "training_lower_ticks": 643072,
+  "completed_zero_upper_cases": 6,
+  "validation_lower_ticks": 24000,
+  "restarted": false,
+  "exact_update2_resume_possible": false,
+  "required_contract_decision": "Distinguish finite task-domain termination from numerical/engineering fault; retain domain-failure labels and terminal penalty, never relax .05m threshold. Current contract explicitly aborts, so do not silently relabel or restart.",
+  "verified_reward_scalars": [
+    [
+      1791625197.6087065,
+      1,
+      -0.02934630960226059
+    ],
+    [
+      1791625238.0260324,
+      2,
+      -0.025087222456932068
+    ]
+  ]
+}
