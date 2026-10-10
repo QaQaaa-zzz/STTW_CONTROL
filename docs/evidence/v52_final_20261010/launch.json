@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "learning/cli/train_smooth_command.py",
+    "--preference-v52",
+    "--repair-parent",
+    "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009",
+    "--additional-updates",
+    "200",
+    "--max-additional-updates",
+    "400",
+    "--output",
+    "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009"
+  ],
+  "cwd": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking",
+  "source_revision": "413f58c91819a930e7806f2f662e2829a4575c7c",
+  "initial_additional_updates_per_endpoint": 200,
+  "max_additional_updates_per_endpoint": 400,
+  "value_only_rollouts_per_endpoint": 4,
+  "user_authorization": "开启训练; supersedes prior pause; known lower tracking limit retained",
+  "engineering_receipt": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/v52_engineering_20261009/smoke_result.json",
+  "started_epoch": 1791544237.2402544,
+  "pid": 2556760
+}

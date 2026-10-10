@@ -1,0 +1,74 @@
+[
+  {
+    "additional_updates": 0,
+    "checkpoint_sha256": "41448515dff7b0d8d44129a2ec7aaa39118db0044667246f7395901b38c1b946",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      5,
+      11.1753890087305
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 100,
+    "checkpoint_sha256": "ba9f00f2e61989ac3b52b7ad17545c3f3e192a01099638bc44130ff1ab809b76",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      5,
+      7.593899547258709
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 150,
+    "checkpoint_sha256": "a0d16f352e3f1ef1f368893f8b67ba8e176643e1f59601ee3296315ac920060d",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      1,
+      6.432686461875146
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 200,
+    "checkpoint_sha256": "1e8a71fb415fd2ba5012fbbf42555d2321f227bcee982f68a3b8a2cbbdd71a08",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      1,
+      6.536868034030607
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 250,
+    "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      1,
+      6.121081391544961
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 300,
+    "checkpoint_sha256": "229aeed82191ba7b2b67b786126acee4d38a22d7cf5244f2e5587e905e935ae4",
+    "score_tuple": [
+      0,
+      1,
+      1,
+      0,
+      3.8109058668348794
+    ],
+    "qualified": false
+  }
+]

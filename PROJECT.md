@@ -1,3 +1,9 @@
+# V5.2 final result delivery — 2026-10-10
+
+Both endpoints completed300 additional PPO updates; final reloaded best alpha0@200/alpha1@250, both unqualified. No extension to400. Final report and compact original evidence: [V52_VALIDATION](docs/V52_VALIDATION.md). Earlier sections below are historical snapshots; current research facts remain in the shared ledger.
+
+---
+
 # V5.2 launch resumed — 2026-10-09
 
 User explicitly requested 开启训练, revoking the earlier pause. Lower-tracking limitation remains a known result. One engineering8×16 check completed two total PPO batches (one per endpoint), finite and no stop. Formal run planned at runs/preference_v52_tracking_best_start_20261009: parent100 Actor/log_std, fresh Critic/Adam, four value-only rollouts each, initial200 additional PPO each, original evidence-gated100 extensions capped400. No20/25 scene validation or fixed wall cutoff. TensorBoard6016 separates engineering/formal. Historical paused run and audit are preserved. Current live facts are in the shared ledger.

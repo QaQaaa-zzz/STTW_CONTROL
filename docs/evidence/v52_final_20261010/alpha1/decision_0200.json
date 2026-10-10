@@ -1,0 +1,8 @@
+{
+  "additional_updates": 200,
+  "extend_by": 100,
+  "reason": "one_discordant_confirmation_block",
+  "converged": false,
+  "discordant_extension_used": true,
+  "training_gain": 0.0833900939269426
+}

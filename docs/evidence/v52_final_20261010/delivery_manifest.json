@@ -1,0 +1,27 @@
+{
+  "source_run": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009",
+  "delivery": "final reloaded best, six cases x three methods, seed77001",
+  "models_included": false,
+  "original_npz_count": 18,
+  "npz_sha256": {
+    "evaluationbest/gentle_positive/B0.npz": "f14070816a9fd0c2e543d63b19f130c715c90efb0655cd9c33304358590d9d35",
+    "evaluationbest/gentle_positive/alpha1.npz": "fe8b460cde2f8cd29752dc53bf0146d53627a4f12c15909aaecd39a361e0b74e",
+    "evaluationbest/gentle_positive/alpha0.npz": "4fe84611365a25fed08d53c7127d9d6ccd42a37d181aa57765d0871f2bb14938",
+    "evaluationbest/gentle_negative/B0.npz": "4be58220f6780bb7c4a7569dba92b62e05753db83ec6be6e37caf5e122c2aa0a",
+    "evaluationbest/gentle_negative/alpha1.npz": "6e39b85e4b9edf693b94adfa0922daf0c8a12ab927f71dcfe724f04d14599cd7",
+    "evaluationbest/gentle_negative/alpha0.npz": "1942a0ea9738ace39c5631b92ce060b4a297a80fdf477cd814c0a6ebe730adda",
+    "evaluationbest/speed_changes/B0.npz": "32a9ce49a2566bf463a9f6f24e28077be1bacda0d4f5101c319cb3b104da60aa",
+    "evaluationbest/speed_changes/alpha1.npz": "4d965d43b8b1cd7e869a7cf6d0760f1aa0f7481af43ea7672f58e6a9230f8e62",
+    "evaluationbest/speed_changes/alpha0.npz": "a2f05f5f4ab773187de0c941356658dbdd263e32cccd097e9292d2b83be26d7f",
+    "evaluationbest/fast_turn/B0.npz": "a82b55b089d314484a28247121764cca98ff0f9cc0f09a8813fc0577c88acdaa",
+    "evaluationbest/fast_turn/alpha1.npz": "f4e2aa72061f612d13a3ab0161466c8f4ffa03a6522d9e91e89ad5d45b5422c0",
+    "evaluationbest/fast_turn/alpha0.npz": "b1c7bf2361aed928cbd4dd82c29f56f931a797afad6fb13f88bb355db372f7dd",
+    "evaluationbest/straight_hold/B0.npz": "9e635d04008d74489cad55262c9a87e5ccb18f3a21216f51c505483889f73775",
+    "evaluationbest/straight_hold/alpha1.npz": "3aa94928103b6bab9a00061c148510d2b45c3ebf22195e4e40d4d18ea88b438f",
+    "evaluationbest/straight_hold/alpha0.npz": "a28554bd7a627fddcec50abf1061862108a7f9d4ecebd9b226dc4f68847afa71",
+    "evaluationbest/steer_reversal/B0.npz": "bd5efa95655fa9442a1309e266a147982235fcd9c93c7e88977a40a120e76294",
+    "evaluationbest/steer_reversal/alpha1.npz": "6fa505a932f6ba0e6a9c7b86216ddf9d4af82c82b1aaf77730cda7d8c753d2cf",
+    "evaluationbest/steer_reversal/alpha0.npz": "2d66f93e8ee6b263d0079617cbc52f5e42c7f2ee44af539a4232e98f9e44ced3"
+  },
+  "excluded": "model weights, caches, large internal traces, repeated intermediate evaluations; original local records retained"
+}

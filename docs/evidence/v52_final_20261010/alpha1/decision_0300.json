@@ -1,0 +1,9 @@
+{
+  "additional_updates": 300,
+  "extend_by": 0,
+  "reason": "no_supported_extension",
+  "converged": false,
+  "discordant_extension_used": true,
+  "training_gain": -0.09591270276110203,
+  "validation_gain": 0.3774129727961342
+}

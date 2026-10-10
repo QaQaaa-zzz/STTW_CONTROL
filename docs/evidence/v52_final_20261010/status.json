@@ -1,0 +1,73 @@
+{
+  "state": "complete",
+  "completed_updates": {
+    "0": 300,
+    "1": 300
+  },
+  "declared_policy_batches_per_endpoint": 200,
+  "initialization": "parent_actor_and_log_std_new_critic_adam",
+  "pid": 2556760,
+  "parent_run": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009",
+  "training_stage": 52,
+  "last_update_epoch": 1791563919.7338686,
+  "stage": "best_evaluated",
+  "detail": "V5.1 batched one-second physical evaluation",
+  "parent_updates": 100,
+  "additional_updates": {
+    "0": 300,
+    "1": 300
+  },
+  "lineage_updates": {
+    "0": 400,
+    "1": 400
+  },
+  "reward_version": "V5.2",
+  "max_additional_updates": 400,
+  "phase": "PPO",
+  "current_alpha": 1,
+  "current_batch": 300,
+  "current_stop": null,
+  "completed_value_only_rollouts": {
+    "0": 4,
+    "1": 4
+  },
+  "targets": {
+    "0": 300,
+    "1": 300
+  },
+  "case": "case-method batch",
+  "evaluation_seconds_completed": 16,
+  "stage_notified": [
+    "training_0_200",
+    "training_1_200",
+    "training_0_300",
+    "training_1_300"
+  ],
+  "qualified": {
+    "0": false,
+    "1": false
+  },
+  "decisions": {
+    "0": {
+      "additional_updates": 300,
+      "extend_by": 0,
+      "reason": "no_supported_extension",
+      "converged": false,
+      "discordant_extension_used": false,
+      "training_gain": -0.015448879073489019,
+      "validation_gain": 0.19897753726682996
+    },
+    "1": {
+      "additional_updates": 300,
+      "extend_by": 0,
+      "reason": "no_supported_extension",
+      "converged": false,
+      "discordant_extension_used": true,
+      "training_gain": -0.09591270276110203,
+      "validation_gain": 0.3774129727961342
+    }
+  },
+  "completion_notified": [
+    "pipeline_complete"
+  ]
+}

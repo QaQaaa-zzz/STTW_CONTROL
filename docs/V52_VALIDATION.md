@@ -1,3 +1,40 @@
+# V5.2 最终训练结果（2026-10-10核验）
+
+[六场景同图 XY、每步奖励及控制链图](evidence/v52_final_20261010/evaluationbest/INDEX.md)
+
+![fast_turn 10s：原始参考、冻结R196基线和两端best](evidence/v52_final_20261010/evaluationbest/fast_turn_10s_xy.png)
+
+每端新增300次PPO更新，另4次value-only rollout；父V5.1更新100单独记录，lineage400。状态complete/best_evaluated，原进程已退出。初始200更新后按证据扩展一次到300；没有续到400。奖励版本V5.2，R196、ECBC/ESO、物理和动作权限未更改。
+
+|指标（六场景）|alpha0 best|alpha1 best|
+|---|---:|---:|
+|best新增更新|200|250|
+|last新增更新|300|300|
+|物理失败|0|0|
+|工作侧倾门槛失败|0|1|
+|主目标失败|1|0|
+|10秒联合保持失败|6|1|
+|qualified|false|false|
+
+best是固定协议已评估候选中的最佳，不是所有更新全程最优。实际best checkpoint SHA已复核，final_best_loaded身份吻合；最终评价重新加载best，未拿内存last代替。alpha0 last的失败计数为0/1/1/1，alpha1 last为0/1/1/0（依次物理、工作界、主目标、联合保持），因此不能单看一个保持指标否定既定安全优先排序。
+
+fast_turn：alpha0主目标失败，峰值侧倾0.3003255rad，工作界通过包含既定0.002rad数值容差；alpha1主目标通过，但峰值0.3415436rad，工作界失败。两端10秒联合保持失败、16秒延伸通过；延伸不替代10秒结论。alpha0其余五场景主目标通过，但联合保持仍不通过；alpha1其余五场景主目标和共同保持通过。
+
+两端decision_0300均no_supported_extension、converged=false。记录的training_gain为-0.01545/-0.09591，validation_gain为+0.19898/+0.37741；部分后期验证改善不构成一致改善或收敛证明。本轮保留不合格结果，没有自动继续训练。
+
+## 数据与身份
+
+- [最终全量物理指标与逐窗口误差/越限区间](evidence/v52_final_20261010/evaluationbest/validation_metrics.json)
+- [最终加载best身份](evidence/v52_final_20261010/final_best_loaded.json)
+- [alpha0 best](evidence/v52_final_20261010/alpha0/best_model.json)、[alpha1 best](evidence/v52_final_20261010/alpha1/best_model.json)
+- [运行状态](evidence/v52_final_20261010/status.json)、[交付清单及18条原始NPZ身份](evidence/v52_final_20261010/delivery_manifest.json)
+
+精简包保留35张PNG、18条原始5ms NPZ、最终和后期选择指标、完整回合窗口摘要及训练顶层标量摘要。模型/缓存/大型内部trace不提交；完整原始训练日志和模型留在本地源run。JSON内绝对路径是原始机器溯源路径，并非远端可下载模型承诺。原始上层让步(governed−raw)与底层误差(actual−governed)分别保留，未平移曲线评分；slip_proxy不代表已验证真实滑移率。
+
+下方保留启动前的历史审计，旧“暂停/未训练”文字仅属于当时快照，不代表本次最终状态。
+
+---
+
 # V5.2：父模型离线审计与训练暂停
 
 2026-10-09离线审计时状态：**LOWER_TRACKING_LIMITED / 用户明确暂停训练**。下方审计对应当时新物理步0、新PPO更新0；此历史证据保留。

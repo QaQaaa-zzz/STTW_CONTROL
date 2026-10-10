@@ -1,0 +1,7 @@
+{
+  "update": 300,
+  "warmup": 4,
+  "accepted_policy_updates": 300,
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/checkpoints/update_0300.pt",
+  "stop": null
+}

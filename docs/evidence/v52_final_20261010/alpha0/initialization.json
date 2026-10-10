@@ -1,0 +1,21 @@
+{
+  "initialization": "parent_actor_and_log_std_only",
+  "parent": {
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/alpha0/checkpoints/update_0100.pt",
+    "sha256": "c5679db90f2b6a90ea6e97ba6c4df7ca3986c01a9c4d3b0cea4da967469b7161",
+    "actor": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/alpha0/checkpoints/actor_0100.pkl",
+    "update": 100,
+    "alpha": 0
+  },
+  "actor_exact": true,
+  "log_std_exact": true,
+  "critic_fresh": true,
+  "optimizer_empty": true,
+  "physical_state_restored": false,
+  "physical_eso_history": "new complete episodes from original prepared bank",
+  "value_only_rollouts": 4,
+  "parent_updates": 100,
+  "additional_updates": 0,
+  "lineage_updates": 100,
+  "reward_version": "V5.2"
+}

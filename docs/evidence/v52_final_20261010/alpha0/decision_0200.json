@@ -1,0 +1,9 @@
+{
+  "additional_updates": 200,
+  "extend_by": 100,
+  "reason": "physical_training_and_validation_improving",
+  "converged": false,
+  "discordant_extension_used": false,
+  "training_gain": 0.12241495149564821,
+  "validation_gain": 0.5963683451848327
+}

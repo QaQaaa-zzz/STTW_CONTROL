@@ -1,0 +1,74 @@
+[
+  {
+    "additional_updates": 0,
+    "checkpoint_sha256": "c5679db90f2b6a90ea6e97ba6c4df7ca3986c01a9c4d3b0cea4da967469b7161",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      3,
+      9.031970574785431
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 100,
+    "checkpoint_sha256": "8c708d0bc93a92425c4b9b417efaf52b6818f2b634b0dced8460ef811d476d1c",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      6,
+      9.755212455056217
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 150,
+    "checkpoint_sha256": "32f9c5d2018508d37da6beeb0133f7067f176e6e40bbf5808c96c43ef3ef7ee0",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      6,
+      7.590241218325327
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 200,
+    "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+    "score_tuple": [
+      0,
+      0,
+      1,
+      6,
+      3.063661623398943
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 250,
+    "checkpoint_sha256": "e38df0e0ad5bc78395b685c76da37c3677a7bd1f6c90141557557b091ee773fb",
+    "score_tuple": [
+      0,
+      1,
+      0,
+      1,
+      5.937709802485505
+    ],
+    "qualified": false
+  },
+  {
+    "additional_updates": 300,
+    "checkpoint_sha256": "fe104912f625f808507e6e4694a1c24ab08a8b3d84ff2e46e7a96951bd65e857",
+    "score_tuple": [
+      0,
+      1,
+      1,
+      1,
+      4.756238928981824
+    ],
+    "qualified": false
+  }
+]
