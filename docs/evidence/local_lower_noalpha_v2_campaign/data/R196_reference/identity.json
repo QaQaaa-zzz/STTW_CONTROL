@@ -1,0 +1,255 @@
+{
+  "identity": {
+    "reference_stream_sha256": "032ad817ad43493f2ff87ffd1e037babf404634f827821e7f8a1122929add4d7",
+    "protocol": {
+      "protocol": "local_tracking_no_alpha_v2",
+      "seconds": 10.0,
+      "case_ids": [
+        "straight_speed_change",
+        "steady_positive",
+        "steady_negative",
+        "return_positive",
+        "return_negative",
+        "post_return_small_positive",
+        "post_return_small_negative"
+      ],
+      "speed_tolerance": 0.05,
+      "steer_tolerance": 0.02,
+      "small_steer_tolerance": 0.01,
+      "historical_loose_thresholds_to_report": [
+        0.1,
+        0.04
+      ],
+      "working_roll_limit": 0.302,
+      "settle_s": 0.5,
+      "minimum_stable_s": 1.0,
+      "final_hold_s": 0.5,
+      "stable_rate_thresholds": [
+        0.05,
+        0.01
+      ],
+      "small_window": "from_actual_issued_small_plateau_plus_0p5s_to_end",
+      "post_small_target": 0.04,
+      "post_small_target_start_s": 7.5,
+      "post_small_prior_turn_opposite_sign": true,
+      "checkpoint_selection": "safety_then_local_tracking_then_final_hold_then_normalized_quality",
+      "quality_relative_improvement": 0.005,
+      "qualifies_only_declared_domain": true,
+      "r196_baseline_same_exact_issued_command_stream": true,
+      "no_time_shift_scoring": true,
+      "batch_cases": true,
+      "adoption_requires_same_state_parent_mismatch_comparison": true
+    },
+    "command_design": {
+      "version": "four_local_families_v2",
+      "command_speed_core": [
+        1.7,
+        2.8
+      ],
+      "command_speed_edge": [
+        1.5,
+        3.0
+      ],
+      "edge_fraction": 0.15,
+      "abs_steer_max_core": 0.28,
+      "abs_steer_max_edge": 0.35,
+      "ordinary_roll_reference": 0.24,
+      "rare_roll_reference": 0.26,
+      "rare_fraction": 0.1,
+      "sample_target_roll_reference_abs_range": [
+        0.08,
+        0.24
+      ],
+      "screen_published_slew": true,
+      "online_inference_screen": false,
+      "use_live_controller_config": true,
+      "family_probabilities": {
+        "ordinary": 0.25,
+        "turn_return": 0.35,
+        "post_return_small": 0.25,
+        "reversal": 0.15
+      },
+      "ordinary_straight_target_probability": 0.5,
+      "ordinary_abs_steer_max": 0.1,
+      "speed_slew_normal": [
+        0.3,
+        0.8
+      ],
+      "steer_slew_normal": [
+        0.15,
+        0.45
+      ],
+      "dynamic_rate_fraction": 0.2,
+      "speed_slew_dynamic": [
+        0.8,
+        1.8
+      ],
+      "steer_slew_dynamic": [
+        0.45,
+        1.25
+      ],
+      "post_return_small_magnitude": [
+        0.02,
+        0.06
+      ],
+      "post_return_small_sign_independent_of_prior_turn": true,
+      "base_event_times": {
+        "slow_request": 0.5,
+        "turn_request": 2.0,
+        "return_request": 4.5,
+        "high_speed_request": 6.0,
+        "small_turn_request": 7.5
+      },
+      "time_jitter_abs_s": 0.15,
+      "post_return_small_latest_request_s": 7.6,
+      "minimum_post_small_observation_s": 2.4,
+      "ordinary_target_hold_s": [
+        1.0,
+        1.8
+      ],
+      "log_target_issued_actual_separately": true,
+      "reject_early_freeze_before_required_small_event": true,
+      "selection_on_agent_issued_not_unscreened_target": true,
+      "domain_caveat": "Screen is only command-dataset design; it does not prove dynamic feasibility or cover all upper outputs."
+    },
+    "command_seed": 830182,
+    "prepared_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+    "prepared_index": 3,
+    "lower": {
+      "alias": "STTW_R196_ALPHA1",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/precision_speed_ecbc1_20260920/training/checkpoints/update_0196",
+      "identity": {
+        "model_sha256": "afdce2cbb75d236b6bad15a2f1ed7a376e35279ff71d07d511c89f936160afa0",
+        "config_sha256": "008881624b9bc1f795732f136e98ca2faad055ac6a4bc7cc6a9d49e763cca9e5",
+        "history_steps": 10,
+        "observation_fields": [
+          "roll_error",
+          "roll",
+          "roll_rate",
+          "speed_estimate",
+          "steer",
+          "steer_rate",
+          "yaw_rate_body",
+          "rear_rate",
+          "front_rate",
+          "steer_reference",
+          "speed_reference",
+          "base_steer_rate",
+          "previous_steer_command",
+          "previous_rear_command",
+          "estimated_disturbance",
+          "path_lateral_error",
+          "heading_error",
+          "path_curvature",
+          "speed_priority",
+          "previous_steer_residual",
+          "previous_rear_residual",
+          "return_pending",
+          "return_elapsed",
+          "return_hold",
+          "return_credited",
+          "return_ever_left",
+          "return_deadline_missed",
+          "longitudinal_error",
+          "yaw_rate_reference",
+          "yaw_rate_world"
+        ]
+      },
+      "payload_sha256": "a2e5bf112e0cb986b4ec207fa9f20dcf90f48af6d7855b0abda32bfa13206672",
+      "sidecar_sha256": "efced7cd83cfd8f691821e29cca28ccd4b40e5b5f32b42b9b708ea945bea8a0e",
+      "fields": [
+        "roll_error",
+        "roll",
+        "roll_rate",
+        "speed_estimate",
+        "steer",
+        "steer_rate",
+        "yaw_rate_body",
+        "rear_rate",
+        "front_rate",
+        "steer_reference",
+        "speed_reference",
+        "base_steer_rate",
+        "previous_steer_command",
+        "previous_rear_command",
+        "estimated_disturbance",
+        "path_lateral_error",
+        "heading_error",
+        "path_curvature",
+        "speed_priority",
+        "previous_steer_residual",
+        "previous_rear_residual",
+        "return_pending",
+        "return_elapsed",
+        "return_hold",
+        "return_credited",
+        "return_ever_left",
+        "return_deadline_missed",
+        "longitudinal_error",
+        "yaw_rate_reference",
+        "yaw_rate_world"
+      ],
+      "lower_alpha": 1.0,
+      "path_capacity": 3201,
+      "transfer": "validated causal historical path / endpoint ray + source return rules; body and world yaw kept distinct"
+    },
+    "model": {
+      "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+      "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+      "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+      "assets": {
+        "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+        "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+        "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+        "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+        "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+        "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+      },
+      "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+      "mujoco_version": "3.6.0"
+    },
+    "controller": {
+      "fixed_roll_reference": null,
+      "dt": 0.005,
+      "wo": 40.0,
+      "wc": 5.0,
+      "disturbance_filter": 8.0,
+      "minimum_speed": 0.5,
+      "max_steer_rate": 4.0,
+      "mass": 5.4,
+      "cg_forward": 0.164,
+      "cg_height": 0.2,
+      "wheelbase": 0.408,
+      "trail": 0.024,
+      "caster": 0.4363323129985824,
+      "gravity": 9.8
+    },
+    "actuator": {
+      "composition": "additive",
+      "project_base": false,
+      "dt": 0.005,
+      "steer_limit": 0.8,
+      "steer_rate_limit": 3.0,
+      "rear_rate_limit": 60.0,
+      "steer_residual_scale": 1.5,
+      "rear_residual_scale": 10.0,
+      "strength": 1.0,
+      "base_output_scale": 1.0,
+      "steer_acceleration": null,
+      "rear_acceleration": null,
+      "delay_steps": 0
+    },
+    "physics_dt": 0.0002,
+    "control_dt": 0.005
+  },
+  "identity_sha256": "3e6ff5c7febe0bd44f86ffab7d42944e2861f2bcaec24cb81ee6f88699887e09",
+  "trace_sha256": {
+    "straight_speed_change": "a79787cd52e649aaa86f065583ec82a31911997ad48364562a39b1810e864fc1",
+    "steady_positive": "1281c6c98d2d49d379c0e7c61010add3998ed66d3d180b05658a8e76c715be88",
+    "steady_negative": "bd5ba4bf5f17e48b094120098e689e6541b363c23b8eacd5b2a785ed03fc5b04",
+    "return_positive": "bfd484ce99603579eacb58f393f527daf59d105a3a3aeb970eadbe516194739d",
+    "return_negative": "1371f917b54a4b96c00e099b3cf1ca7358e4af1ec40bc0dc8de832f39a259078",
+    "post_return_small_positive": "4e2f6c4f41410508e67c2ff11fca2fcb256a73190541120cef8c5d719c757f85",
+    "post_return_small_negative": "b628c6704bb78cb17537663d805348d823f431268aac64327d1074122b42351b"
+  }
+}

@@ -1,0 +1,314 @@
+[
+  {
+    "file": "data/final_best_validation_0200/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/post_return_small_negative.npz",
+    "sha256": "76991f6a6a06d02ada8702076cde840444ab4e1521e8a3998c284bf5fdba75f1",
+    "bytes": 344901
+  },
+  {
+    "file": "data/final_best_validation_0200/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/post_return_small_positive.npz",
+    "sha256": "b43d9f3c0eff869c55f2225818d1c3eb0a0852d731f51bfd2d0f35d511d646bb",
+    "bytes": 344775
+  },
+  {
+    "file": "data/final_best_validation_0200/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/return_negative.npz",
+    "sha256": "102da37c44a84dc776cfdc65cb6d09378c39fc1444b1534d75c426458e156795",
+    "bytes": 334978
+  },
+  {
+    "file": "data/final_best_validation_0200/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/return_positive.npz",
+    "sha256": "683caf921f87a564df11df1c27cda908f2fabd913fb9d9a871e89501b811ade5",
+    "bytes": 335474
+  },
+  {
+    "file": "data/final_best_validation_0200/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/steady_negative.npz",
+    "sha256": "f587d876dde0b92a96f22dfa1cffd6261ed750c632520af0f21dd523172e8c10",
+    "bytes": 287413
+  },
+  {
+    "file": "data/final_best_validation_0200/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/steady_positive.npz",
+    "sha256": "5628465e3eeafb21c3f85502976dd40fc24ccca6e975ca1c6d47e43ce9826eb7",
+    "bytes": 289412
+  },
+  {
+    "file": "data/final_best_validation_0200/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0200/straight_speed_change.npz",
+    "sha256": "db230cef9492bc54522b24982d537b86f1225d0b2298c1559b967716c734920e",
+    "bytes": 304434
+  },
+  {
+    "file": "data/validation_0300/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/post_return_small_negative.npz",
+    "sha256": "fcdcd2ba1c1cc1558fd860e6ed1855e13af882e5ea4192fa86a47484fc7409f0",
+    "bytes": 344942
+  },
+  {
+    "file": "data/validation_0300/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/post_return_small_positive.npz",
+    "sha256": "97027bd59bc40c7dcad97442b3792da0c8eb4e14c3eaeab1dc72d4ad0d5d0264",
+    "bytes": 344282
+  },
+  {
+    "file": "data/validation_0300/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/return_negative.npz",
+    "sha256": "6e2bbe123c689781baca66b90e826ab2a989ed5126cd3c64f73c35b428cab6a4",
+    "bytes": 333619
+  },
+  {
+    "file": "data/validation_0300/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/return_positive.npz",
+    "sha256": "687871c1a2b5ba8817fd2a251d2db9b386caf6241a74f7a791d955f022e6df34",
+    "bytes": 333754
+  },
+  {
+    "file": "data/validation_0300/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/steady_negative.npz",
+    "sha256": "2203c549856dbcb85e31ebd844d3124284e74ab0adae2a08d98db575dd4125f9",
+    "bytes": 287993
+  },
+  {
+    "file": "data/validation_0300/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/steady_positive.npz",
+    "sha256": "af35e6a49a6af7f8c1e8d91e5ed09035543aa4b9b58cd55af33436a49d4f39da",
+    "bytes": 287408
+  },
+  {
+    "file": "data/validation_0300/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0300/straight_speed_change.npz",
+    "sha256": "7e5100adf61c76528d28d944288efb55a926312805cf6e6f4bb09468f11f8c58",
+    "bytes": 298679
+  },
+  {
+    "file": "data/final_best_validation_0300/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/post_return_small_negative.npz",
+    "sha256": "fcdcd2ba1c1cc1558fd860e6ed1855e13af882e5ea4192fa86a47484fc7409f0",
+    "bytes": 344942
+  },
+  {
+    "file": "data/final_best_validation_0300/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/post_return_small_positive.npz",
+    "sha256": "66ce67a55ffbe1b1e990131d083a788345f886ef917acb3f3d27cea514e153dc",
+    "bytes": 344419
+  },
+  {
+    "file": "data/final_best_validation_0300/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/return_negative.npz",
+    "sha256": "84c2cba8e32932aecc35bc0f30eb530b056633cbe1d39d48fd38a399d11524a8",
+    "bytes": 333585
+  },
+  {
+    "file": "data/final_best_validation_0300/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/return_positive.npz",
+    "sha256": "706b69bed342c9f0e11036be96e39c9c346fd1c606683e20103a55ee4826d893",
+    "bytes": 333782
+  },
+  {
+    "file": "data/final_best_validation_0300/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/steady_negative.npz",
+    "sha256": "d2ca4b59a1cbf8ec90e46b69e1552dd5d648ea7c336f7c45695439e7e857da76",
+    "bytes": 288159
+  },
+  {
+    "file": "data/final_best_validation_0300/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/steady_positive.npz",
+    "sha256": "b281ff3baaa961b3565b93339981cf26fcbcee801bf5e0c3f256b65e506a8243",
+    "bytes": 287232
+  },
+  {
+    "file": "data/final_best_validation_0300/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300/straight_speed_change.npz",
+    "sha256": "7e5100adf61c76528d28d944288efb55a926312805cf6e6f4bb09468f11f8c58",
+    "bytes": 298679
+  },
+  {
+    "file": "data/validation_0350/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/post_return_small_negative.npz",
+    "sha256": "3314c7297bb115464ae9c5f8bf979f79e980e9ab07cfc3d26218855d11d2f39d",
+    "bytes": 343298
+  },
+  {
+    "file": "data/validation_0350/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/post_return_small_positive.npz",
+    "sha256": "64afe3d7eac3b12b6965c3c39618a40008a3cdf1bb211a197f50d97b3850bc50",
+    "bytes": 343536
+  },
+  {
+    "file": "data/validation_0350/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/return_negative.npz",
+    "sha256": "5dacc00786fb4672e34a1a7610bfbc4b9d4eff6b0f86458473955c84cd567933",
+    "bytes": 336161
+  },
+  {
+    "file": "data/validation_0350/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/return_positive.npz",
+    "sha256": "b1f9a5b59340600bc2654dece0c7d31891b48575b99db124c404c68d46012a12",
+    "bytes": 335302
+  },
+  {
+    "file": "data/validation_0350/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/steady_negative.npz",
+    "sha256": "48933648df005bf5e2d695128461694cb805f6ceabf31ef05f65726b0d4ee1c7",
+    "bytes": 286547
+  },
+  {
+    "file": "data/validation_0350/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/steady_positive.npz",
+    "sha256": "6d29cd56074176ae018b75267d68ec6c3ff4cad340fa7d186c379cb7b62cef1c",
+    "bytes": 285522
+  },
+  {
+    "file": "data/validation_0350/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0350/straight_speed_change.npz",
+    "sha256": "07db90a081e6558ab12b5d6acf9a5332dd69aa4827260ada3e84da8b31730440",
+    "bytes": 305059
+  },
+  {
+    "file": "data/validation_0400/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/post_return_small_negative.npz",
+    "sha256": "8225a1b8139c9eacccd50f801c3b0fecc1c38626e5e2e9ddae0082569e02b7f3",
+    "bytes": 341365
+  },
+  {
+    "file": "data/validation_0400/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/post_return_small_positive.npz",
+    "sha256": "4869fb8f3bcf07799deda697b87980a601ae561ed87ad34e74f0f254a34316b0",
+    "bytes": 342593
+  },
+  {
+    "file": "data/validation_0400/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/return_negative.npz",
+    "sha256": "2445a633e1f7b691be99fdb863001445e30ef1dcf053cb95ecbe3b4c2ab49cdd",
+    "bytes": 334930
+  },
+  {
+    "file": "data/validation_0400/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/return_positive.npz",
+    "sha256": "70d64d7376f56fdd8990cc6a91bfb86bf3adda92125e4ae69f71d5d95b37ff9d",
+    "bytes": 334695
+  },
+  {
+    "file": "data/validation_0400/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/steady_negative.npz",
+    "sha256": "b17ac35c5e9eceea875e1d67c404a8ea1952983af5c763b0f530f7bc2a837479",
+    "bytes": 284660
+  },
+  {
+    "file": "data/validation_0400/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/steady_positive.npz",
+    "sha256": "d92219b542a6af2ac212f61b2d263c24a9f3a03da3cf4841fc1364dcc16f7da5",
+    "bytes": 288015
+  },
+  {
+    "file": "data/validation_0400/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/validation_0400/straight_speed_change.npz",
+    "sha256": "f276d9e7a478e8556e39fc959e65f5453da771e4a2776f1c02b3e98e167b8ede",
+    "bytes": 305841
+  },
+  {
+    "file": "data/final_best_validation/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/post_return_small_negative.npz",
+    "sha256": "8225a1b8139c9eacccd50f801c3b0fecc1c38626e5e2e9ddae0082569e02b7f3",
+    "bytes": 341365
+  },
+  {
+    "file": "data/final_best_validation/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/post_return_small_positive.npz",
+    "sha256": "a5e9e6f8a4139708cf97d76bac24b849da0af71ecfac2d3a4243d6ac2dbd0bb1",
+    "bytes": 342491
+  },
+  {
+    "file": "data/final_best_validation/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/return_negative.npz",
+    "sha256": "75680112ba0f87441acb495a8cff2dac94d639a1c712ff531bb5988955bee0ce",
+    "bytes": 334988
+  },
+  {
+    "file": "data/final_best_validation/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/return_positive.npz",
+    "sha256": "c41d8674bf9f9b508deb0e2dbc5dc7eb1e4e84a04da5708857ac2a4bac94fe9e",
+    "bytes": 334567
+  },
+  {
+    "file": "data/final_best_validation/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/steady_negative.npz",
+    "sha256": "01342241e320dd7de25a381aef73a5d9a07bb073cce500466b8e8f71b65e84e8",
+    "bytes": 284960
+  },
+  {
+    "file": "data/final_best_validation/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/steady_positive.npz",
+    "sha256": "c10c1b67bddb45119d1ea7b6f9cdabeb5b8b999139d48bb23a5e8a4cbae9af68",
+    "bytes": 287708
+  },
+  {
+    "file": "data/final_best_validation/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation/straight_speed_change.npz",
+    "sha256": "f276d9e7a478e8556e39fc959e65f5453da771e4a2776f1c02b3e98e167b8ede",
+    "bytes": 305841
+  },
+  {
+    "file": "data/R196_reference/post_return_small_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/post_return_small_negative.npz",
+    "sha256": "b628c6704bb78cb17537663d805348d823f431268aac64327d1074122b42351b",
+    "bytes": 425448
+  },
+  {
+    "file": "data/R196_reference/post_return_small_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/post_return_small_positive.npz",
+    "sha256": "4e2f6c4f41410508e67c2ff11fca2fcb256a73190541120cef8c5d719c757f85",
+    "bytes": 422765
+  },
+  {
+    "file": "data/R196_reference/return_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/return_negative.npz",
+    "sha256": "1371f917b54a4b96c00e099b3cf1ca7358e4af1ec40bc0dc8de832f39a259078",
+    "bytes": 418813
+  },
+  {
+    "file": "data/R196_reference/return_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/return_positive.npz",
+    "sha256": "bfd484ce99603579eacb58f393f527daf59d105a3a3aeb970eadbe516194739d",
+    "bytes": 416375
+  },
+  {
+    "file": "data/R196_reference/steady_negative.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/steady_negative.npz",
+    "sha256": "bd5ba4bf5f17e48b094120098e689e6541b363c23b8eacd5b2a785ed03fc5b04",
+    "bytes": 388984
+  },
+  {
+    "file": "data/R196_reference/steady_positive.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/steady_positive.npz",
+    "sha256": "1281c6c98d2d49d379c0e7c61010add3998ed66d3d180b05658a8e76c715be88",
+    "bytes": 390062
+  },
+  {
+    "file": "data/R196_reference/straight_speed_change.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/R196_reference/straight_speed_change.npz",
+    "sha256": "a79787cd52e649aaa86f065583ec82a31911997ad48364562a39b1810e864fc1",
+    "bytes": 397594
+  },
+  {
+    "file": "data/parent_recovery_best300/best300.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/parent_recovery_best300_20261010/best300.npz",
+    "sha256": "e8cc78134f45837b8559e1ce7d1f0da76a27203e0b85fa0e21d7be6a9ca50187",
+    "bytes": 84085
+  },
+  {
+    "file": "data/parent_recovery_best300/R196.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/parent_recovery_best300_20261010/R196.npz",
+    "sha256": "961799dcf835e6f154d2a90c79ea3ed0b8773fff6386ce7ffd5041efc8cf8698",
+    "bytes": 101206
+  },
+  {
+    "file": "data/parent_recovery_best300/prefix_overlap.npz",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/parent_recovery_best300_20261010/prefix_overlap.npz",
+    "sha256": "dbd2100cea9271710e1580c35de9c6058f82d1872a35cf00de0c56134522a337",
+    "bytes": 34149
+  }
+]
