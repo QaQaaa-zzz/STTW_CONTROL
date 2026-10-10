@@ -1,0 +1,122 @@
+{
+  "records": [
+    {
+      "file": "data/straight_hold/old_alpha0.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/straight_hold/alpha0.npz",
+      "sha256": "a28554bd7a627fddcec50abf1061862108a7f9d4ecebd9b226dc4f68847afa71"
+    },
+    {
+      "file": "data/straight_hold/old_alpha1.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/straight_hold/alpha1.npz",
+      "sha256": "3aa94928103b6bab9a00061c148510d2b45c3ebf22195e4e40d4d18ea88b438f"
+    },
+    {
+      "file": "data/straight_hold/B0.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/straight_hold/B0.npz",
+      "sha256": "9e635d04008d74489cad55262c9a87e5ccb18f3a21216f51c505483889f73775"
+    },
+    {
+      "file": "data/fast_turn/old_alpha0.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/fast_turn/alpha0.npz",
+      "sha256": "b1c7bf2361aed928cbd4dd82c29f56f931a797afad6fb13f88bb355db372f7dd"
+    },
+    {
+      "file": "data/fast_turn/old_alpha1.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/fast_turn/alpha1.npz",
+      "sha256": "f4e2aa72061f612d13a3ab0161466c8f4ffa03a6522d9e91e89ad5d45b5422c0"
+    },
+    {
+      "file": "data/fast_turn/B0.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/evaluationbest/fast_turn/B0.npz",
+      "sha256": "a82b55b089d314484a28247121764cca98ff0f9cc0f09a8813fc0577c88acdaa"
+    }
+  ],
+  "parent_reuse_receipt": {
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/r196-preference-v5-1-strong-primary/runs/preference_v51_strong_primary_100_20261009/evaluation100",
+    "protocol_id": "fixed_command_six_v1",
+    "seed": 77001,
+    "bank_index": 3,
+    "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+    "lower": {
+      "alias": "STTW_R196_ALPHA1",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/precision_speed_ecbc1_20260920/training/checkpoints/update_0196",
+      "identity": {
+        "model_sha256": "afdce2cbb75d236b6bad15a2f1ed7a376e35279ff71d07d511c89f936160afa0",
+        "config_sha256": "008881624b9bc1f795732f136e98ca2faad055ac6a4bc7cc6a9d49e763cca9e5",
+        "history_steps": 10,
+        "observation_fields": [
+          "roll_error",
+          "roll",
+          "roll_rate",
+          "speed_estimate",
+          "steer",
+          "steer_rate",
+          "yaw_rate_body",
+          "rear_rate",
+          "front_rate",
+          "steer_reference",
+          "speed_reference",
+          "base_steer_rate",
+          "previous_steer_command",
+          "previous_rear_command",
+          "estimated_disturbance",
+          "path_lateral_error",
+          "heading_error",
+          "path_curvature",
+          "speed_priority",
+          "previous_steer_residual",
+          "previous_rear_residual",
+          "return_pending",
+          "return_elapsed",
+          "return_hold",
+          "return_credited",
+          "return_ever_left",
+          "return_deadline_missed",
+          "longitudinal_error",
+          "yaw_rate_reference",
+          "yaw_rate_world"
+        ]
+      },
+      "payload_sha256": "a2e5bf112e0cb986b4ec207fa9f20dcf90f48af6d7855b0abda32bfa13206672",
+      "sidecar_sha256": "efced7cd83cfd8f691821e29cca28ccd4b40e5b5f32b42b9b708ea945bea8a0e",
+      "fields": [
+        "roll_error",
+        "roll",
+        "roll_rate",
+        "speed_estimate",
+        "steer",
+        "steer_rate",
+        "yaw_rate_body",
+        "rear_rate",
+        "front_rate",
+        "steer_reference",
+        "speed_reference",
+        "base_steer_rate",
+        "previous_steer_command",
+        "previous_rear_command",
+        "estimated_disturbance",
+        "path_lateral_error",
+        "heading_error",
+        "path_curvature",
+        "speed_priority",
+        "previous_steer_residual",
+        "previous_rear_residual",
+        "return_pending",
+        "return_elapsed",
+        "return_hold",
+        "return_credited",
+        "return_ever_left",
+        "return_deadline_missed",
+        "longitudinal_error",
+        "yaw_rate_reference",
+        "yaw_rate_world"
+      ],
+      "lower_alpha": 1.0,
+      "path_capacity": 3201,
+      "transfer": "validated causal historical path / endpoint ray + source return rules; body and world yaw kept distinct"
+    },
+    "selection": "physical metrics only; old reward not compared to V5.2",
+    "new_physics_ticks": 0
+  },
+  "comparison": "exact raw/time/reference stream asserted by runner; common full bank SHA/index3, unchanged physics, old sameupper best payload SHA verified"
+}

@@ -1,0 +1,16 @@
+{
+  "pid": 2163982,
+  "completed": [
+    "straight_hold/alpha0",
+    "straight_hold/alpha1",
+    "fast_turn/alpha0",
+    "fast_turn/alpha1"
+  ],
+  "control_ticks": 10400,
+  "training_ticks": 0,
+  "elapsed_s": 368.9166011909838,
+  "state": "completed",
+  "stage": "saved",
+  "protected_identities_unchanged": true,
+  "adoption": "not_adopted"
+}

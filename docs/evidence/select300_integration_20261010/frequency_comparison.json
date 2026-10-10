@@ -1,0 +1,115 @@
+{
+  "straight_hold/alpha0/new": {
+    "speed": {
+      "reversals": 327,
+      "per_s": 32.7,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.12629708647727966
+    },
+    "steer": {
+      "reversals": 337,
+      "per_s": 33.7,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.6122360825538635
+    }
+  },
+  "straight_hold/alpha0/old": {
+    "speed": {
+      "reversals": 53,
+      "per_s": 5.3,
+      "median_interval_s": 0.09,
+      "rate_rms": 0.06792517006397247
+    },
+    "steer": {
+      "reversals": 65,
+      "per_s": 6.5,
+      "median_interval_s": 0.04,
+      "rate_rms": 0.06077590584754944
+    }
+  },
+  "straight_hold/alpha1/new": {
+    "speed": {
+      "reversals": 335,
+      "per_s": 33.5,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.16478300094604492
+    },
+    "steer": {
+      "reversals": 338,
+      "per_s": 33.8,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.6189566254615784
+    }
+  },
+  "straight_hold/alpha1/old": {
+    "speed": {
+      "reversals": 75,
+      "per_s": 7.5,
+      "median_interval_s": 0.06,
+      "rate_rms": 0.04408484324812889
+    },
+    "steer": {
+      "reversals": 81,
+      "per_s": 8.1,
+      "median_interval_s": 0.06,
+      "rate_rms": 0.06515982002019882
+    }
+  },
+  "fast_turn/alpha0/new": {
+    "speed": {
+      "reversals": 457,
+      "per_s": 28.5625,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.26978811621665955
+    },
+    "steer": {
+      "reversals": 524,
+      "per_s": 32.75,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.5482145547866821
+    }
+  },
+  "fast_turn/alpha0/old": {
+    "speed": {
+      "reversals": 50,
+      "per_s": 3.125,
+      "median_interval_s": 0.12,
+      "rate_rms": 0.1777646243572235
+    },
+    "steer": {
+      "reversals": 60,
+      "per_s": 3.75,
+      "median_interval_s": 0.04,
+      "rate_rms": 0.12098021805286407
+    }
+  },
+  "fast_turn/alpha1/new": {
+    "speed": {
+      "reversals": 431,
+      "per_s": 26.9375,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.1866113841533661
+    },
+    "steer": {
+      "reversals": 460,
+      "per_s": 28.75,
+      "median_interval_s": 0.02,
+      "rate_rms": 0.5375394225120544
+    }
+  },
+  "fast_turn/alpha1/old": {
+    "speed": {
+      "reversals": 36,
+      "per_s": 2.25,
+      "median_interval_s": 0.06,
+      "rate_rms": 0.1287493109703064
+    },
+    "steer": {
+      "reversals": 46,
+      "per_s": 2.875,
+      "median_interval_s": 0.06,
+      "rate_rms": 0.10111598670482635
+    }
+  },
+  "definition": "same50Hz policy endpoint governed derivative, no interpolation or score shift; sign reversals of adjacent nonzero signed rates"
+}

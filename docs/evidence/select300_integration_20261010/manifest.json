@@ -1,0 +1,293 @@
+{
+  "role": "diagnostic_only",
+  "candidate": {
+    "role": "integration_candidate",
+    "status": "diagnostic_only",
+    "adoption": "not_adopted",
+    "source_update": 300,
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+    "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+    "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+    "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+    "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+    "normalizer": {
+      "type": "fixed_SCALES",
+      "scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "clip": 5.0,
+      "actor_dim": 210,
+      "history": 10,
+      "fields": [
+        "roll",
+        "roll_rate",
+        "steer",
+        "steer_rate",
+        "measured_forward_speed",
+        "measured_world_yaw_rate",
+        "rear_speed_proxy",
+        "front_speed_proxy",
+        "local_command_speed",
+        "local_command_steer",
+        "local_command_speed_rate",
+        "local_command_steer_rate",
+        "previous_local_speed_reference",
+        "previous_local_steer_reference",
+        "previous_final_front_rate",
+        "previous_final_rear_rate",
+        "previous_applied_front_residual",
+        "previous_applied_rear_residual",
+        "ESO_equilibrium_shift",
+        "local_command_equilibrium_reference"
+      ]
+    },
+    "original_protocol_best": {
+      "source_update": 400,
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+      "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+    },
+    "upper": {
+      "0": {
+        "source_update": 200,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+        "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+        "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+      },
+      "1": {
+        "source_update": 250,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+        "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+        "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+      }
+    },
+    "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+    "two_different_late_checkpoints_passed": false,
+    "training_transitions": 0,
+    "maximum_new_control_ticks": 10400
+  },
+  "upper_run": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009",
+  "prepared_bank": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+  "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+  "bank_index": 3,
+  "seed": 77001,
+  "protocol": {
+    "protocol_id": "fixed_command_six_v1",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+    "cases": {
+      "straight_hold": [
+        [
+          0,
+          2.3,
+          0
+        ]
+      ],
+      "speed_changes": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.6,
+          0
+        ],
+        [
+          3.5,
+          2.0,
+          0
+        ],
+        [
+          6,
+          2.3,
+          0
+        ]
+      ],
+      "gentle_positive": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          0.08
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ],
+      "gentle_negative": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          -0.08
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ],
+      "steer_reversal": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.3,
+          0.15
+        ],
+        [
+          3,
+          2.3,
+          -0.15
+        ],
+        [
+          5,
+          2.3,
+          0
+        ]
+      ],
+      "fast_turn": [
+        [
+          0,
+          2.3,
+          0
+        ],
+        [
+          1,
+          2.6,
+          0.25
+        ],
+        [
+          4,
+          2.3,
+          0
+        ]
+      ]
+    },
+    "seed": 77001,
+    "prepared_bank_index": 3,
+    "duration_s": 10,
+    "slew": [
+      0.5,
+      0.3
+    ],
+    "command_window_s": [
+      1,
+      6
+    ],
+    "final_window_s": [
+      9.5,
+      10
+    ],
+    "final_tolerances": {
+      "speed_m_s": 0.1,
+      "steer_rad": 0.04,
+      "heading_rad": 0.05
+    },
+    "diagnostic_roll_rad": 0.3,
+    "methods": [
+      "B0",
+      "pi_alpha0",
+      "pi_alpha1"
+    ],
+    "lower_alpha": 1,
+    "checkpoint_selection": "best_model.json else last_completed",
+    "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+    "external_disturbance": false
+  },
+  "lower_training_bank_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+  "upper_config_file_sha256": {
+    "0": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c",
+    "1": "91d286aacd35b05ab7531b7d0ad881ab46b1315c6a1889738da71834e0ce310a"
+  },
+  "model": {
+    "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+    "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+    "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+    "assets": {
+      "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+      "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+      "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+      "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+      "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+      "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+    },
+    "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+    "mujoco_version": "3.6.0"
+  },
+  "controller": {
+    "fixed_roll_reference": null,
+    "dt": 0.005,
+    "wo": 40.0,
+    "wc": 5.0,
+    "disturbance_filter": 8.0,
+    "minimum_speed": 0.5,
+    "max_steer_rate": 4.0,
+    "mass": 5.4,
+    "cg_forward": 0.164,
+    "cg_height": 0.2,
+    "wheelbase": 0.408,
+    "trail": 0.024,
+    "caster": 0.4363323129985824,
+    "gravity": 9.8
+  },
+  "actuator": {
+    "composition": "additive",
+    "project_base": false,
+    "dt": 0.005,
+    "steer_limit": 0.8,
+    "steer_rate_limit": 3.0,
+    "rear_rate_limit": 60.0,
+    "steer_residual_scale": 1.5,
+    "rear_residual_scale": 10.0,
+    "strength": 1.0,
+    "base_output_scale": 1.0,
+    "steer_acceleration": null,
+    "rear_acceleration": null,
+    "delay_steps": 0
+  },
+  "physics_dt": 0.0002,
+  "substeps": 25,
+  "control_dt": 0.005,
+  "policy_dt": 0.02,
+  "maximum_new_control_ticks": 10400,
+  "training_ticks": 0,
+  "initialization": "matched complete prepared physical bank; causal masks zero at start, one real pre-frame per5ms",
+  "stop_rule": "physical/policy fault or quiet-settled lower speed>.20/steer>.08 continuously1s; save and stop new combinations",
+  "baseline_reuse": "V5.2 evaluationbest with identical bank/protocol and upper SHA; check exact raw/reference stream after simulation"
+}

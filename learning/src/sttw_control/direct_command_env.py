@@ -40,11 +40,11 @@ class DirectState:
     initial_heading_error: object=0.
 
 class DirectCommandEnv:
-    def __init__(self,spec):
+    def __init__(self,spec,*,lower_adapter=None):
         self.spec=spec;self.physics=TeleopEnv(config=spec,backend='mjx')
         self.cc=self.physics.cc;self.ac=self.physics.ac;self.zero_log=None
-        self.lower=None
-        if spec.get('lower_controller') is not None:
+        self.lower=lower_adapter
+        if lower_adapter is None and spec.get('lower_controller') is not None:
             if 'alias' in spec['lower_controller']:
                 from .registered_lower_controller import RegisteredLowerController
                 self.lower=RegisteredLowerController(spec['lower_controller']['alias'],path_capacity=spec['lower_controller']['path_capacity'])
@@ -94,11 +94,14 @@ class DirectCommandEnv:
         override=None;lower=s.lower;lower_fault=jp.bool_(False)
         if self.lower is not None:
             from .closed_loop_kernel import preview_controls,controls
-            measurement,pose,_=self.physics.observe(p.data)
+            measurement,pose,true_speed=self.physics.observe(p.data)
             control_raw=governed if self.spec.get('lower_reference_centered',False) else raw
             preview=preview_controls(p.controller,measurement,control_raw,governed,p.physical_tick*self.cc.dt>3.,self.cc)
-            lower,lower_action,lower_obs,lower_flags=self.lower.prepare(lower,measurement,pose,governed,preview[2],previous)
-            if self.spec.get('lower_internal_diagnostics',False):
+            if getattr(self.lower,'local_interface',False):
+                lower,lower_action,lower_obs,lower_flags=self.lower.prepare_local(lower,measurement,pose,true_speed,governed,p,self.cc)
+            else:
+                lower,lower_action,lower_obs,lower_flags=self.lower.prepare(lower,measurement,pose,governed,preview[2],previous)
+            if self.spec.get('lower_internal_diagnostics',False) and not getattr(self.lower,'local_interface',False):
                 diagnostic_pre=(lower,measurement,pose)
             lower_fault=~lower_flags['finite']
             safe_action=jp.where(lower_fault,jp.zeros(2),lower_action)
@@ -107,8 +110,12 @@ class DirectCommandEnv:
         p,log=self.physics._step(p,governed,bypass,exact_governed=True,control_override=override)
         if self.lower is not None:
             measurement,pose,speed=self.physics.observe(p.data)
-            lower=self.lower.after_step(lower,governed,pose,measurement,speed,safe_action,p.failed,s.tick)
-            if self.spec.get('lower_internal_diagnostics',False):
+            if getattr(self.lower,'local_interface',False):
+                lower=self.lower.finish_local(lower,log['applied_residual'],(p.yaw_unwrapped-s.physical.yaw_unwrapped)/self.cc.dt)
+                log.update(lower_observation=lower_obs,lower_governed_rates=lower.frames[-1,10:12])
+            else:
+                lower=self.lower.after_step(lower,governed,pose,measurement,speed,safe_action,p.failed,s.tick)
+            if self.spec.get('lower_internal_diagnostics',False) and not getattr(self.lower,'local_interface',False):
                 from .lower_interface_diagnostics import capture
                 prepared,pre_measurement,pre_pose=diagnostic_pre
                 log['lower_diagnostic']=capture(self,s,prepared,lower,pre_measurement,pre_pose,governed,preview,lower_obs,lower_flags)

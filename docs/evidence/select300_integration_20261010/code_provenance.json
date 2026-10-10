@@ -1,0 +1,13 @@
+{
+  "base_commit": "2d887e1b460421dd00f6a597e0d9391af1f0e897",
+  "source_file_sha256": {
+    "learning/src/sttw_control/frozen_local_lower.py": "d38d3618973726b42fe335aae7af9f87cf6273ebacb468bcd42b56c8836c7e04",
+    "learning/src/sttw_control/direct_command_env.py": "ff73fc35e43af4cd761050163e58ee74b1d6eca77589c42d1d82ff1c1d164471",
+    "learning/src/sttw_control/local_integration_diagnostics.py": "7ae9dfe211b44a4ca8a8eba8f138765587bdadad4822ca1b86ac424c53f34fae",
+    "learning/cli/diagnose_local_integration.py": "a5a812f3815a66ef96951564170c90d62f564c81d9d791888a4fae71185ee422",
+    "learning/cli/analyze_local_integration.py": "f918749e55764b399bd606276a8f026157c0a1eb793cb64c0fbc253ad2565f22",
+    "learning/cli/report_local_integration.py": "1adb9762d7b803702caf4899fd37d7adb302d54e7d569722f6133e8b2d26106d",
+    "learning/cli/plot_local_integration_supplement.py": "a911ff7710cf42dea0949c77e706e7a2c96fd376d69e0f6914120b3c09efd3d1"
+  },
+  "protected_scope": "upper Actor/reward/mapping, physics, ECBC/ESO and original best400 unchanged; explicit diagnostic adapter injection only"
+}

@@ -1,0 +1,87 @@
+{
+  "role": "integration_candidate",
+  "status": "diagnostic_only",
+  "adoption": "not_adopted",
+  "source_update": 300,
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+  "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+  "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+  "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+  "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+  "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+  "normalizer": {
+    "type": "fixed_SCALES",
+    "scales": [
+      0.3,
+      1.5,
+      0.35,
+      3.0,
+      3.0,
+      2.0,
+      3.0,
+      3.0,
+      3.0,
+      0.35,
+      0.8,
+      0.45,
+      3.0,
+      0.35,
+      3.0,
+      60.0,
+      1.5,
+      10.0,
+      0.3,
+      0.3
+    ],
+    "clip": 5.0,
+    "actor_dim": 210,
+    "history": 10,
+    "fields": [
+      "roll",
+      "roll_rate",
+      "steer",
+      "steer_rate",
+      "measured_forward_speed",
+      "measured_world_yaw_rate",
+      "rear_speed_proxy",
+      "front_speed_proxy",
+      "local_command_speed",
+      "local_command_steer",
+      "local_command_speed_rate",
+      "local_command_steer_rate",
+      "previous_local_speed_reference",
+      "previous_local_steer_reference",
+      "previous_final_front_rate",
+      "previous_final_rear_rate",
+      "previous_applied_front_residual",
+      "previous_applied_rear_residual",
+      "ESO_equilibrium_shift",
+      "local_command_equilibrium_reference"
+    ]
+  },
+  "original_protocol_best": {
+    "source_update": 400,
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+    "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+  },
+  "upper": {
+    "0": {
+      "source_update": 200,
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+      "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+      "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+    },
+    "1": {
+      "source_update": 250,
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+      "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+      "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+    }
+  },
+  "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+  "two_different_late_checkpoints_passed": false,
+  "training_transitions": 0,
+  "maximum_new_control_ticks": 10400
+}

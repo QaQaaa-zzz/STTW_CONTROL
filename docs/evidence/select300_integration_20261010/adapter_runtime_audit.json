@@ -1,0 +1,34 @@
+{
+  "straight_hold/alpha0": {
+    "ticks": 2000,
+    "lower_dim": 210,
+    "mask": "1..10 then full, no mid-episode reset",
+    "upper_latent_repeat4": true,
+    "physical_tick_delta": 2000,
+    "exact_current_governed_input": true
+  },
+  "straight_hold/alpha1": {
+    "ticks": 2000,
+    "lower_dim": 210,
+    "mask": "1..10 then full, no mid-episode reset",
+    "upper_latent_repeat4": true,
+    "physical_tick_delta": 2000,
+    "exact_current_governed_input": true
+  },
+  "fast_turn/alpha0": {
+    "ticks": 3200,
+    "lower_dim": 210,
+    "mask": "1..10 then full, no mid-episode reset",
+    "upper_latent_repeat4": true,
+    "physical_tick_delta": 3200,
+    "exact_current_governed_input": true
+  },
+  "fast_turn/alpha1": {
+    "ticks": 3200,
+    "lower_dim": 210,
+    "mask": "1..10 then full, no mid-episode reset",
+    "upper_latent_repeat4": true,
+    "physical_tick_delta": 3200,
+    "exact_current_governed_input": true
+  }
+}
