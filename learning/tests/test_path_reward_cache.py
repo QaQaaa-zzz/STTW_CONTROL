@@ -63,6 +63,15 @@ def test_initial_reward_candidate_and_final_panel_reuse_end_to_end(tmp_path):
     resumed=tmp_path/'resumed/alpha0'
     assert inherit_reward_validation(tmp_path,resumed,0,cfg,identity)==1
     assert len(reuse_selected_validation(resumed,best,cfg))==6
+    # Inherited candidate weights live at their original immutable receipt.
+    # A second resume must not assume checkpoint0 exists in the first resume.
+    from sttw_control.path_command_training import rescore_saved_candidates
+    second=tmp_path/'second/alpha0'
+    assert not (resumed/'checkpoints/update_0000.pt').exists()
+    rescore_saved_candidates(tmp_path/'resumed',second,0,cfg,identity)
+    assert inherit_reward_validation(tmp_path/'resumed',second,0,cfg,identity)==1
+    second_best=json.loads((second/'best_safety_task_model.json').read_text())
+    assert len(reuse_selected_validation(second,second_best,cfg))==6
     final=dict(np.load(tmp_path/'alpha0/final_best/left90_R2_2.6.npz'))
     np.testing.assert_array_equal(final['scored_tick_reward'],reward_series(final,0,cfg)[0])
     expected['left90_R2']=expected['left90_R2'].replace(xy=expected['left90_R2'].xy+1)

@@ -298,9 +298,19 @@ def rescore_saved_candidates(parent,out,alpha,cfg,identity):
         persist_task_best(out,incumbent['checkpoint'],incumbent['actor'],incumbent['metrics'],dict(identity,source_update=incumbent['source_update']))
     for directory in sorted((Path(parent)/f'alpha{alpha}'/'validation').glob('update_*')):
         if not (directory/'metrics.json').exists():continue
-        update=int(directory.name.split('_')[-1]);checkpoint=directory.parents[1]/'checkpoints'/f'update_{update:04d}.pt';actor=checkpoint.with_name(f'actor_{update:04d}.pkl')
+        update=int(directory.name.split('_')[-1])
+        source_file=directory/'source.json'
+        if source_file.exists():
+            record=json.loads(source_file.read_text())
+            if record.get('source_update')!=update or any(record.get(k)!=v for k,v in identity.items()):raise ValueError('saved candidate receipt identity mismatch')
+            checkpoint=Path(record['checkpoint']);actor=Path(record['actor'])
+            for key,file in (('checkpoint',checkpoint),('actor',actor)):
+                if digest(file)!=record[key+'_sha256']:raise ValueError('saved candidate receipt SHA mismatch')
+        else:
+            if cfg.get('task_selection_schema')=='path_safety_task_v1':raise ValueError('safety candidate requires immutable source receipt')
+            checkpoint=directory.parents[1]/'checkpoints'/f'update_{update:04d}.pt';actor=checkpoint.with_name(f'actor_{update:04d}.pkl')
         saved=torch.load(checkpoint,map_location='cpu',weights_only=False)
-        if saved.get('identity')!=identity or saved['update']!=update:raise ValueError('saved candidate identity mismatch')
+        if saved.get('schema')!=SCHEMA or saved.get('identity')!=identity or saved['update']!=update:raise ValueError('saved candidate identity mismatch')
         traces={name:dict(np.load(directory/f'{name}.npz')) for name,_,_ in cases(cfg)}
         summary=summarize_task(traces,alpha,cfg)
         atomic_json(Path(out)/'rescored_parent'/f'update_{update:04d}.json',summary)
