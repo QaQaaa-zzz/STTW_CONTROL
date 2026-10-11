@@ -274,6 +274,32 @@ def recovery_oracle(tail,config,*,start_tick,initial_phi,route,alpha,prefix):
         initial_segment_path_cost=float(np.sum(ey[initial_segment]**2)*dt))
 
 
+def validate_recovery_arm(*,name,alpha,manifest,run_status,training_status,selected,final_source,source,lower_sha256):
+    """Pure preflight: final completed arm role/source/selection before any tail."""
+    if name not in ('control0','candidate0','control1','candidate1') or alpha!=int(name[-1]):
+        raise ValueError('recovery arm independent endpoint mismatch')
+    plan=manifest.get('plan',{});cfg=manifest.get('config',{})
+    role=name[:-1]
+    if plan.get('experiment_arm')!=role:raise ValueError('recovery arm role mismatch')
+    reward=cfg.get('path_reward',{})
+    if (role=='candidate' and reward.get('reward_version')!='path_safety_preference_v1') or (role=='control' and 'reward_version' in reward):
+        raise ValueError('recovery arm reward version/role mismatch')
+    if manifest.get('terminal_contract')!='terminal_contract_v2' or plan.get('terminal_contract')!='terminal_contract_v2':
+        raise ValueError('recovery arm terminal contract mismatch')
+    if not source or config_hash(manifest.get('source'))!=config_hash(source):
+        raise ValueError('recovery arm complete source mismatch')
+    target=plan.get('updates')
+    if (run_status.get('state')!='completed' or training_status.get('state')!='completed'
+        or type(target) is not int or target<=0 or training_status.get('declared_updates')!=target
+        or training_status.get('completed_updates')!=target):
+        raise ValueError('recovery arm training not completed at declared endpoint')
+    if config_hash(selected)!=config_hash(final_source):raise ValueError('recovery selected/final receipt mismatch')
+    if (selected.get('selection_schema')!='path_safety_task_v1' or selected.get('alpha')!=alpha
+        or selected.get('lower_actor_sha256')!=lower_sha256 or selected.get('config_sha256')!=config_hash(cfg)):
+        raise ValueError('recovery selected endpoint/config/lower identity mismatch')
+    return selected
+
+
 def evaluate_pairs(evaluator,snapshots,template,identity,arms,output):
     """Explicit B0/control/candidate endpoint tails, with actor+alpha reuse."""
     names={'B0','control0','candidate0','control1','candidate1'}

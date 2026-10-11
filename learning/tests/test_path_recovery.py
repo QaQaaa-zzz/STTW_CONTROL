@@ -256,3 +256,38 @@ def test_cpu_recovery_report_original_xy_all_arms_and_png_index(tmp_path):
     assert (tmp_path/'left90_R2_path.npz').exists() and (tmp_path/'left90_R2_reward_components.png').exists()
     text=(tmp_path/'INDEX.md').read_text();assert text.index('xy.png')<text.index('diagnostics.png')
     assert all(name in text for name in names) and 'snapshot' in text
+
+
+def test_recovery_arm_role_source_terminal_and_final_receipt_fail_closed():
+    import copy
+    from sttw_control.path_command_recovery import validate_recovery_arm
+    from sttw_control.preference_best import config_hash
+    source=dict(candidate={'actor_sha256':'frozen300'},prepared_bank_sha256='bank',bank_index=7,model={'xml':'original'})
+    def fixture(role):
+        cfg={'path_reward':{'reward_version':'path_safety_preference_v1'} if role=='candidate' else {}}
+        manifest=dict(config=cfg,source=copy.deepcopy(source),terminal_contract='terminal_contract_v2',
+            plan=dict(experiment_arm=role,terminal_contract='terminal_contract_v2',updates=50))
+        selected=dict(selection_schema='path_safety_task_v1',alpha=0,lower_actor_sha256='frozen300',config_sha256=config_hash(cfg),actor_sha256='selected')
+        return dict(name=role+'0',alpha=0,manifest=manifest,run_status={'state':'completed'},
+            training_status=dict(state='completed',completed_updates=50,declared_updates=50),
+            selected=selected,final_source=copy.deepcopy(selected),source=source,lower_sha256='frozen300')
+    for role in ('control','candidate'):
+        good=fixture(role);validate_recovery_arm(**good)
+        bad=copy.deepcopy(good);bad['manifest']['plan']['experiment_arm']='candidate' if role=='control' else 'control'
+        with pytest.raises(ValueError,match='role'):validate_recovery_arm(**bad)
+    mutations=[
+        ('source',lambda x:x['manifest']['source'].update(bank_index=8)),
+        ('terminal',lambda x:x['manifest'].update(terminal_contract='terminal_contract_v1')),
+        ('terminal',lambda x:x['manifest']['plan'].update(terminal_contract='terminal_contract_v1')),
+        ('final',lambda x:x['final_source'].update(actor_sha256='different')),
+        ('completed',lambda x:x['training_status'].update(state='running')),
+        ('completed',lambda x:x['training_status'].update(completed_updates=49)),
+        ('completed',lambda x:x['run_status'].update(state='running')),
+        ('endpoint',lambda x:x.update(alpha=1)),
+        ('reward',lambda x:x['manifest']['config']['path_reward'].pop('reward_version')),
+    ]
+    for message,mutate in mutations:
+        bad=fixture('candidate');mutate(bad)
+        with pytest.raises(ValueError,match=message):validate_recovery_arm(**bad)
+    bad=fixture('control');bad['manifest']['config']['path_reward']['reward_version']=None
+    with pytest.raises(ValueError,match='reward'):validate_recovery_arm(**bad)

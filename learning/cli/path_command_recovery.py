@@ -34,7 +34,7 @@ def main():
     from sttw_control.path_command_evaluation import BatchedPanelEvaluator
     from sttw_control.path_command_policy import PathCommandActor
     from sttw_control.frozen_local_lower import FrozenLocalLower
-    from sttw_control.path_command_recovery import make_identity,capture_natural_snapshots,evaluate_pairs
+    from sttw_control.path_command_recovery import make_identity,capture_natural_snapshots,evaluate_pairs,validate_recovery_arm
     from sttw_control.preference_best import digest,atomic_json,config_hash
     from sttw_control.path_command_fork import physical_config_identity
     from sttw_control.runtime import configure_compilation_cache
@@ -71,12 +71,16 @@ def main():
         arms={'B0':dict(params=zero,actor_sha256=config_hash(jax.tree.map(lambda x:x.tolist(),zero)),alpha=0)}
         for name,specification in request['arms'].items():
             root=Path(specification['run']);alpha=specification['alpha']
-            if alpha!=int(name[-1]) or json.loads((root/'status.json').read_text())['state']!='completed':raise ValueError('arm not completed independent endpoint')
+            run_status=json.loads((root/'status.json').read_text())
+            training_status=json.loads((root/f'alpha{alpha}'/'training_status.json').read_text())
+            manifest=json.loads((root/'manifest.json').read_text())
+            final_source=json.loads((root/f'alpha{alpha}'/'final_best/source.json').read_text())
             selected=json.loads((root/f'alpha{alpha}'/'best_safety_task_model.json').read_text())
-            if selected.get('selection_schema')!='path_safety_task_v1' or selected.get('alpha')!=alpha or selected.get('lower_actor_sha256')!=identity['lower']:raise ValueError('final safety selected actor required')
+            validate_recovery_arm(name=name,alpha=alpha,manifest=manifest,run_status=run_status,training_status=training_status,
+                selected=selected,final_source=final_source,source=source,lower_sha256=identity['lower'])
             for key in ('actor','checkpoint'):
                 if digest(selected[key])!=selected[key+'_sha256']:raise ValueError('selected arm SHA mismatch')
-            manifest=json.loads((root/'manifest.json').read_text());armcfg=manifest['config']
+            armcfg=manifest['config']
             if physical_config_identity(armcfg)!=identity['physical_config']:raise ValueError('selected arm physical identity mismatch')
             if selected.get('config_sha256')!=config_hash(armcfg):raise ValueError('selected arm config identity mismatch')
             arm_env=PathCommandEnv(armcfg,env.plant_spec,FrozenLocalLower(lower_params),terminal_contract='terminal_contract_v2')
