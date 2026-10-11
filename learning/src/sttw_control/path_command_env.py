@@ -14,7 +14,7 @@ from .direct_command_policy import initial_history,make_frame,push_history,q_rat
 from .geometric_path import project,at,wrap
 from .path_reference import pursuit,publish
 from .path_command_policy import correction_tick,assemble_observation
-from .path_command_reward import costs,failure_reward
+from .path_command_reward import costs,failure_reward,reward_version
 
 def guard_lower_action(action,finite):
     """Preserve lower_fault while preventing invalid inference entering physics."""
@@ -42,6 +42,7 @@ class PathCommandEnv:
     task_mode='geometric_path'
     schema='sttw_geometric_path_actor351_v1'
     def __init__(self,config,plant_spec,lower,terminal_contract="terminal_contract_v1"):
+        reward_version(config)
         self.terminal_contract=terminal_contract
         self.config=config;self.plant_spec=plant_spec;self.lower=lower
         self.physics=TeleopEnv(config={**plant_spec,'lower_internal_diagnostics':True},backend='mjx')
@@ -90,7 +91,7 @@ class PathCommandEnv:
         projection=project(path,post[:2],s.projection.progress,j.linalg.norm(post[:2]-pose[:2]),self.config)
         eh=wrap(projection.heading-post[2]);_,_,k=at(path,projection.progress)
         ff=j.arctan(self.cc.wheelbase*k/j.cos(self.cc.caster));chi=j.clip((j.abs(ff/q_ratio(v_user,self.cc))-.18)/.12,0,1)
-        c=costs(alpha=s.alpha,chi=chi,ev=log['actual_forward_speed']-v_user,ey=projection.cross_track,eh=eh,peak_roll=log['peak_roll'],roll_rate=log['phi_dot'],speed=log['actual_forward_speed'],offsets=offsets,offset_rate=j.zeros(2),config=self.config)
+        c=costs(alpha=s.alpha,chi=chi,ev=log['actual_forward_speed']-v_user,ey=projection.cross_track,eh=eh,peak_roll=log['peak_roll'],roll_rate=log['phi_dot'],roll_angle=log['phi'],speed=log['actual_forward_speed'],offsets=offsets,offset_rate=j.zeros(2),config=self.config)
         lower=self.lower.finish_local(lower,log['applied_residual'],yaw_rate)
         goal_point,goal_heading,_=at(path,path.goal)
         goal_distance=j.dot(post[:2]-goal_point,j.array([j.cos(goal_heading),j.sin(goal_heading)]))
@@ -103,7 +104,7 @@ class PathCommandEnv:
             reference_xy=projection.point,reference_yaw_unwrapped=projection.heading,e_psi_unwrapped=eh,along=j.array(0.),lateral=projection.cross_track,large_heading_debt=j.abs(eh)>j.pi,
             nominal=p.raw,nominal_rates=s.nominal_rates,nominal_slew_channels=j.abs(s.follower.command-p.raw)>1e-7,pp_target=s.follower.command,preview_body=s.follower.preview_body,preview_world=s.follower.preview_world,lookahead=s.follower.lookahead,pp_curvature=s.follower.kappa,
             target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid&~follower.numerical_fault,tracking_domain_failure=follower.invalid&~follower.numerical_fault,goal_section_signed_distance=goal_distance,
-            correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],chi=chi)
+            correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],diagnostic_subcosts=c['diagnostic_subcosts'],chi=chi)
         end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|~j.all(j.isfinite(p2.data.qpos))|~j.all(j.isfinite(p2.data.qvel)),domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
         return end,log
 
@@ -124,6 +125,12 @@ class PathCommandEnv:
         logs['tick_reward']-=c['scale']*self.cc.dt*effective
         n=j.sum(logs['active_tick']);last=j.maximum(n-1,0);normal=j.sum(j.where(logs['active_tick'],logs['tick_reward'],0))
         failed=end.physical.failed|((self.terminal_contract=='terminal_contract_v2')&end.domain_exit&~end.fault)
+        # Repeat raw interval boundaries so sliced diagnostics never guess a rate.
+        logs.update(offset_rate=j.broadcast_to(rate,(4,2)),
+            interval_offset_before=j.broadcast_to(s.offsets,(4,2)),
+            interval_offset_end=j.broadcast_to(end.offsets,(4,2)),
+            interval_start_tick=j.full(4,s.tick),interval_active_ticks=j.full(4,n),
+            interval_failed=j.full(4,failed))
         reward=j.where(failed,failure_reward(j.ceil(horizon/.02)-s.tick//4,self.config),normal)
         logs['scored_tick_reward']=j.where(failed,j.zeros(4).at[last].set(reward),j.where(logs['active_tick'],logs['tick_reward'],0))
         return end,logs

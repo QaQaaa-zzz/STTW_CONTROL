@@ -3,23 +3,119 @@ from pathlib import Path
 import json
 import numpy as np
 
+def _interval_context(d, config):
+    """Rebuild rates using four-tick endpoints, never copied logged costs/rates.
+
+    New traces repeat raw interval boundaries on every row, including partial
+    terminal intervals. Legacy traces must be a contiguous prefix from reset;
+    reset offsets are zero by the environment contract. A sliced live block
+    without its endpoints is insufficient evidence.
+    """
+    dt=config['timing']['lower_dt_s'];upper_dt=config['timing']['upper_dt_s']
+    times=np.asarray(d['time'],float);n=len(times)
+    if not n or not np.isfinite(times).all():raise ValueError('empty or nonfinite trace time')
+    ticks=np.rint(times/dt).astype(np.int64)
+    if (ticks<0).any() or not np.allclose(times/dt,ticks,rtol=0,atol=.002) or not np.all(np.diff(ticks)==1):
+        raise ValueError('trace must contain contiguous actual lower ticks')
+    if not np.isclose(upper_dt,4*dt,rtol=0,atol=1e-12):raise ValueError('four-tick interval timing mismatch')
+    offsets=np.asarray(d['offsets'],float)
+    if offsets.shape!=(n,2) or not np.isfinite(offsets).all():raise ValueError('invalid raw offset measurements')
+    failure=np.broadcast_to(np.asarray(d.get('physical_failure',False),bool),(n,)) | np.broadcast_to(np.asarray(d.get('tracking_domain_failure',d.get('domain_exit',False)),bool),(n,))
+    starts=ticks//4*4;rate=np.empty((n,2));failed=np.zeros(n,bool);ends=np.empty(n,np.int64)
+    fields=('interval_offset_before','interval_offset_end','interval_start_tick','interval_active_ticks','interval_failed')
+    supplied=[k in d for k in fields]
+    if any(supplied) and not all(supplied):raise ValueError('incomplete interval boundary context')
+    if all(supplied):
+        before=np.asarray(d[fields[0]],float);after=np.asarray(d[fields[1]],float)
+        logged_starts=np.asarray(d[fields[2]]);counts=np.asarray(d[fields[3]]);terminal=np.asarray(d[fields[4]],bool)
+        if before.shape!=(n,2) or after.shape!=(n,2) or any(x.shape!=(n,) for x in (logged_starts,counts,terminal)):
+            raise ValueError('invalid interval boundary context shape')
+        if not np.isfinite(before).all() or not np.isfinite(after).all() or not np.array_equal(logged_starts,starts):
+            raise ValueError('invalid interval boundary context')
+        if not np.isfinite(counts).all() or not np.all((counts>=1)&(counts<=4)&(counts==np.rint(counts))):
+            raise ValueError('invalid interval active tick count')
+        for start in np.unique(starts):
+            ix=np.flatnonzero(starts==start);first=ix[0]
+            for value in (before,after,counts,terminal):
+                if not np.all(value[ix]==value[first]):raise ValueError('inconsistent interval boundary context')
+            last_tick=int(start+counts[first]-1)
+            if (ticks[ix]>last_tick).any():raise ValueError('trace extends past interval endpoint')
+            endpoint=np.flatnonzero(ticks==last_tick)
+            if endpoint.size and not np.allclose(offsets[endpoint[0]],after[first],rtol=1e-5,atol=1e-7):
+                raise ValueError('raw offset endpoint disagrees with interval context')
+            predecessor=np.flatnonzero(ticks==start-1)
+            if predecessor.size and not np.allclose(offsets[predecessor[0]],before[first],rtol=1e-5,atol=1e-7):
+                raise ValueError('raw offset before interval disagrees with context')
+            # Explicit scoring context also preserves v1 domain engineering faults:
+            # only v2 treats a finite domain exit as a replaced failure interval.
+            if np.any(np.broadcast_to(np.asarray(d.get('physical_failure',False),bool),(n,))[ix]) and not terminal[first]:
+                raise ValueError('physical failure disagrees with interval context')
+            rate[ix]=(after[first]-before[first])/upper_dt
+            failed[ix]=terminal[first];ends[ix]=last_tick
+    else:
+        if ticks[0]!=0:raise ValueError('slice is missing interval boundary context before its first tick')
+        for start in np.unique(starts):
+            ix=np.flatnonzero(starts==start)
+            if len(ix)<4 and not failure[ix[-1]]:
+                raise ValueError('partial live interval is missing endpoint context')
+            before=np.zeros(2) if start==0 else offsets[ix[0]-1]
+            rate[ix]=(offsets[ix[-1]]-before)/upper_dt
+            failed[ix]=np.any(failure[ix]);ends[ix]=ticks[ix[-1]]
+    return dict(offset_rate=rate,interval_start_tick=starts,interval_failed=failed,
+                interval_end_tick=ends,ticks=ticks)
+
+
+def reconstruct_costs(d,alpha,config):
+    """Independent NumPy reconstruction of all ten costs from raw measurements."""
+    c=config['path_reward'];version=c.get('reward_version')
+    if 'reward_version' in c and version!='path_safety_preference_v1':
+        raise ValueError(f'unknown path reward version: {version!r}')
+    if version=='path_safety_preference_v1' and 'phi' not in d:
+        raise ValueError('signed roll phi is required for path_safety_preference_v1')
+    interval=_interval_context(d,config);n=len(interval['ticks'])
+    def measurement(key):
+        value=np.asarray(d[key],float)
+        if value.shape!=(n,) or not np.isfinite(value).all():raise ValueError(f'invalid raw measurement {key}')
+        return value
+    chi=measurement('chi');speed=measurement('actual_forward_speed')
+    ev=speed-measurement('v_user');ey=measurement('path_cross_track');eh=measurement('path_heading_error')
+    peak=measurement('peak_roll');roll_rate=measurement('phi_dot');offsets=np.asarray(d['offsets'],float)
+    h=lambda x:np.where(np.abs(x)<=1,x*x,2*np.abs(x)-1)
+    pos=lambda x:np.maximum(x,0)
+    raw=dict(speed=(10-9*chi*(1-alpha))*h(ev/c['speed_scale_m_s']),
+        path=(10-9*chi*alpha)*(h(ey/c['cross_track_scale_m'])+c['path_heading_factor']*h(eh/c['path_heading_scale_rad'])),
+        primary=c['primary_weight']*chi*((1-alpha)*h(pos(np.abs(ey)-c['primary_path_band_m'])/c['primary_path_scale_m'])+alpha*h(pos(np.abs(ev)-c['primary_speed_band_m_s'])/c['primary_speed_scale_m_s'])),
+        roll=c['roll_weight']*h(pos(peak-c['roll_start_rad'])/c['roll_scale_rad']),
+        working_roll=c['working_roll_weight']*h(pos(peak-c['working_roll_start_rad'])/c['working_roll_scale_rad']),
+        roll_rate=c['roll_rate_weight']*h(pos(np.abs(roll_rate)-c['roll_rate_start_rad_s'])/c['roll_rate_scale_rad_s']),
+        overspeed=c['overspeed_weight']*h(pos(ev-c['overspeed_band_m_s'])/c['overspeed_scale_m_s']),
+        low_speed=c['low_speed_weight']*h(pos(c['low_speed_start_m_s']-speed)/c['low_speed_scale_m_s']),
+        offset_magnitude=c['offset_magnitude_weight']*np.sum((offsets/np.asarray(c['offset_magnitude_scales']))**2,axis=1),
+        offset_rate=c['offset_rate_weight']*np.sum((interval['offset_rate']/np.asarray(c['offset_rate_scales']))**2,axis=1))
+    diagnostic={k:np.zeros(n) for k in ('predictive_roll','working_exposure','corridor')}
+    if version=='path_safety_preference_v1':
+        phi=measurement('phi');rho=np.maximum(np.abs(phi),np.abs(phi+c['risk_prediction_s']*roll_rate))
+        diagnostic=dict(predictive_roll=c['predictive_roll_weight']*h(pos(rho-c['predictive_roll_start_rad'])/c['predictive_roll_scale_rad']),
+            working_exposure=c['working_exposure_weight']*np.clip((peak-.30)/c['working_exposure_width_rad'],0,1),
+            corridor=c['corridor_weight']*h(pos(np.abs(ey)-c['corridor_band_m'])/c['corridor_scale_m']))
+        raw['roll']+=diagnostic['predictive_roll'];raw['working_roll']+=diagnostic['working_exposure'];raw['path']+=diagnostic['corridor']
+    effective={k:np.minimum(v,c['component_caps'][k]) for k,v in raw.items()}
+    return dict(raw=raw,effective=effective,capped={k:v>c['component_caps'][k] for k,v in raw.items()},
+                diagnostic_subcosts=diagnostic,**interval)
+
+
 def reward_series(d,alpha,config,horizon=None):
-    """Same-alpha reweighting of fixed physical traces; terminal tail retained."""
-    c=config['path_reward'];dt=config['timing']['lower_dt_s'];chi=np.asarray(d['chi'],float)
-    ev=np.asarray(d['actual_forward_speed'],float)-d['v_user'];ey=np.asarray(d['path_cross_track'],float);eh=np.asarray(d['path_heading_error'],float)
-    huber=lambda x:np.where(abs(x)<=1,x*x,2*abs(x)-1)
-    effective={k:np.asarray(d['effective_cost_'+k],float).copy() for k in c['component_caps']}
-    raw=dict(speed=(10-9*chi*(1-alpha))*huber(ev/c['speed_scale_m_s']),
-             path=(10-9*chi*alpha)*(huber(ey/c['cross_track_scale_m'])+c['path_heading_factor']*huber(eh/c['path_heading_scale_rad'])),
-             primary=c['primary_weight']*chi*((1-alpha)*huber(np.maximum(abs(ey)-c['primary_path_band_m'],0)/c['primary_path_scale_m'])+alpha*huber(np.maximum(abs(ev)-c['primary_speed_band_m_s'],0)/c['primary_speed_scale_m_s'])))
-    effective.update({k:np.minimum(v,c['component_caps'][k]) for k,v in raw.items()})
-    components={k:-c['scale']*dt*v for k,v in effective.items()};components['failure_tail']=np.zeros(len(ev))
-    if np.any(d['physical_failure']) or np.any(d.get('tracking_domain_failure',d.get('domain_exit',False))):
-        last=len(ev)-1;interval_start=(last//4)*4
-        for v in components.values():v[interval_start:]=0
-        h=config['training_future_phase_C']['episode_s'] if horizon is None else horizon
-        remaining=round(h/config['timing']['upper_dt_s'])-last//4;gamma=config['training_future_phase_C']['gamma']
-        components['failure_tail'][-1]=-c['failure_extra']-c['scale']*config['timing']['upper_dt_s']*c['failure_cost_rate_bound']*(1-gamma**remaining)/(1-gamma)
+    """Same-alpha reweighting from raw physics; one original failure tail."""
+    rebuilt=reconstruct_costs(d,alpha,config);c=config['path_reward'];dt=config['timing']['lower_dt_s']
+    components={k:-c['scale']*dt*v for k,v in rebuilt['effective'].items()}
+    components['failure_tail']=np.zeros(len(rebuilt['ticks']))
+    failed=rebuilt['interval_failed']
+    for value in components.values():value[failed]=0
+    terminal=failed & (rebuilt['ticks']==rebuilt['interval_end_tick'])
+    h=config['training_future_phase_C']['episode_s'] if horizon is None else horizon
+    gamma=config['training_future_phase_C']['gamma']
+    remaining=np.ceil(h/config['timing']['upper_dt_s'])-rebuilt['interval_start_tick'][terminal]//4
+    components['failure_tail'][terminal]=-c['failure_extra']-c['scale']*config['timing']['upper_dt_s']*c['failure_cost_rate_bound']*(1-gamma**remaining)/(1-gamma)
     return sum(components.values()),components
 
 def _rms(x):
