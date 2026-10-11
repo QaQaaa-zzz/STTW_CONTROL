@@ -1,3 +1,9 @@
+# Path Coverage V2 — 2026-10-11
+
+Reset-distribution-only fork from alpha0 best100 / alpha1 best150. [Execution contract and verification](docs/path_coverage_v2.md). Default +100 each; conditional +50 blocks capped +200. Old results preserved; no auto push. Live facts remain in the shared research hub.
+
+---
+
 # Phase C training wiring — 2026-10-10
 
 [Implementation, proposed budget and validation limits](docs/path_feedback_phase_C.md). New351/352 geometric sampler/PPO lifecycle/checkpoint/best/report wiring is prepared. No new vehicle physics or alpha training; Stage B failures remain unchanged. Shared research hub is authoritative.

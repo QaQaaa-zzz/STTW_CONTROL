@@ -1,3 +1,9 @@
+# Path Coverage V2 focused verification — 2026-10-11
+
+30 focused CPU checks passed: sampler and legacy routing, active statistics, original full parent restoration and bounded extension, finite-domain single-environment reset, and identity-checked cached DEV. One 8×16 engineering batch executed 512 lower ticks and one disposable PPO update; no engineering fault, all four optimizer epochs accepted. Setup/compile 43.81s, total49.20s. Frozen physics assertion .0002×25=.005s, upper/PP .02s. This short prefix check establishes wiring only, not bend performance or coverage; actual coverage comes from ten-update training windows. Raw evidence: `runs/path_coverage_v2_preparation_20261011/engineering_result.json`. No old physical panels or broad repository tests.
+
+---
+
 # Phase C engineering validation — 2026-10-10
 
 [Implementation, proposed budget and validation limits](path_feedback_phase_C.md). New351/352 geometric sampler/PPO lifecycle/checkpoint/best/report wiring is prepared. No new vehicle physics or alpha training; Stage B failures remain unchanged. Shared research hub is authoritative.

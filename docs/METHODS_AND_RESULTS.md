@@ -1,3 +1,9 @@
+# 2026-10-11 Path Coverage V2
+
+Single intervention: 102 legacy / 204 stronger single-bend / 206 stronger S-bend reset environments; full best100/150 learner forks. Reward, PP, filter/slew, network, local300 and physics unchanged. Old `bend=chi>0` was demand coverage, not all geometry. [Native configuration, budget and checks](path_coverage_v2.md). Effectiveness pending formal training and same-six-DEV comparison; engineering checks do not establish alpha preference.
+
+---
+
 # STTW path Phase C preparation — 2026-10-10
 
 [Implementation, proposed budget and validation limits](path_feedback_phase_C.md). New351/352 geometric sampler/PPO lifecycle/checkpoint/best/report wiring is prepared. No new vehicle physics or alpha training; Stage B failures remain unchanged. Shared research hub is authoritative.

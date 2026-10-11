@@ -102,9 +102,9 @@ class PathBatch:
         self.env=env;self.snapshot=snapshot;self.config=config;self.seed=seed;self.alpha=alpha
         self.horizon=config['training_future_phase_C']['episode_s']
     def reset(self,eid,episode):
-        from .path_command_scenarios import sample_route,episode_key
+        from .path_command_scenarios import sample_training_route
         pose=self.env.physics.helpers.pose(self.snapshot.data)
-        route=sample_route(episode_key(self.seed,eid,episode),pose,self.config)
+        route=sample_training_route(self.seed,eid,episode,pose,self.config)
         state=self.env.reset(self.snapshot,route.path,route.speed,j.asarray(self.alpha))
         return Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
@@ -115,11 +115,12 @@ class PathBatch:
         active=logs['active_tick'];ev=logs['actual_forward_speed']-ep.route.speed
         sums=j.array([j.sum(active),j.sum(j.where(active,ev**2,0)),j.sum(j.where(active,logs['path_cross_track']**2,0)),j.sum(j.where(active,logs['path_heading_error']**2,0)),j.sum(logs['scored_tick_reward']),j.max(logs['peak_roll'])])
         totals=ep.totals+sums;totals=totals.at[5].set(j.maximum(ep.totals[5],sums[5]))
-        from .path_command_statistics import step_statistics
+        from .path_command_statistics import step_statistics,merge_statistics,reset_statistics
         diagnostics=step_statistics(logs,ep.route,self.config)
         cost_totals=ep.component_totals+diagnostics['cost_effective_sum']*self.config['timing']['lower_dt_s']
         ended=ep.replace(state=end,totals=totals,component_totals=cost_totals)
         nxt=reset_finished_episode(ended,flags,self.reset)
+        diagnostics=merge_statistics(diagnostics,reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
         obs=self.observation(nxt)
         return nxt,obs,j.sum(logs['scored_tick_reward']),flags,final,dict(diagnostics=diagnostics,completed_component_costs=j.where(flags['done'],cost_totals,0.),rollout=sums,completed_totals=j.where(flags['done'],totals,0.),family=ep.route.family,episode=ep.episode,active_ticks=j.sum(active),component_caps={k:j.sum(v&active) for k,v in logs['component_capped'].items()})
 
@@ -136,6 +137,17 @@ def load_plan(path):
     if cfg['path']['spacing_m']!=.02 or c['family_fraction']!={'straight_or_gentle':.3,'rounded_left_or_right_60_to_100_degrees':.5,'smooth_S_path':.2}:raise ValueError('sampler contract changed')
     if plan.get('terminal_contract','terminal_contract_v1') not in ['terminal_contract_v1','terminal_contract_v2']:raise ValueError('unknown terminal contract')
     if plan['wall_budget_s_per_endpoint'] is not None:raise ValueError('no default wall limit; explicit user contract required')
+    from .path_command_scenarios import validate_training_sampler
+    validate_training_sampler(cfg)
+    version=plan.get('sampler_version','legacy')
+    if version=='demand_exposure_v2':
+        if plan['sampler_resolution'].get('training_sampler')!=cfg.get('training_sampler'):raise ValueError('sampler config not connected to declared resolution')
+        if plan.get('conditional_extension')!={'enabled':True,'block':50,'hard_max_updates':200,'default_updates':100}:raise ValueError('coverage extension contract changed')
+        if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('coverage exposure contract changed')
+        for key in ['parent_run','identities']:plan['fork'][key]=str((path.parent/plan['fork'][key]).resolve())
+        from .path_command_fork import validate_fork_contract
+        validate_fork_contract(plan,cfg,source)
+    elif version!='legacy' or cfg.get('training_sampler') is not None:raise ValueError('unknown or disconnected sampler version')
     return plan,cfg,source
 
 
@@ -152,6 +164,8 @@ def prepare(path,output,check_interface=False):
     validation_updates=[x for x in c['validation_updates'] if x<=updates]
     policy_per_endpoint=c['num_envs']*c['rollout_steps']*updates
     report=dict(schema=SCHEMA,state='prepared_not_run',plan=plan,config=cfg,source_manifest=source,training_policy_transitions_per_endpoint=policy_per_endpoint,training_policy_transitions_total=2*policy_per_endpoint,training_lower_ticks_total=8*policy_per_endpoint,validation_updates=validation_updates,maximum_validation_lower_ticks=(len(validation_updates)*2+1+2)*6*round(c['episode_s']/.005),additional_training_executed=0,additional_physics_executed=0,mainline_gate='baseline perfection not required',requires_explicit_execute=True,physical_training_smoke='not_run')
+    if plan.get('sampler_version')=='demand_exposure_v2':
+        report.update(maximum_validation_lower_ticks=len(validation_updates)*2*6*round(c['episode_s']/.005),conditional_hard_max_updates_per_endpoint=200,baseline_physics=0,final_best_physics=0)
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],0)
         ep=batch.reset(j.int32(0),j.int32(0));env.set_log_template(ep.state,ep.route.path,ep.route.speed)
@@ -275,6 +289,10 @@ def rescore_saved_candidates(parent,out,alpha,cfg,identity):
         atomic_json(Path(out)/'rescored_parent'/f'update_{update:04d}.json',summary)
         persist_task_best(out,checkpoint,actor,summary,dict(identity,source_update=update))
 
+class CoveragePause(RuntimeError):
+    pass
+
+
 def train(path,output,*,execute=False,resume=None):
     """Explicit-only bounded runner. Merely importing or preparing never trains."""
     if not execute:raise PermissionError('use preparation by default; training needs explicit execution')
@@ -286,10 +304,16 @@ def train(path,output,*,execute=False,resume=None):
     from .path_command_selection import summarize,persist_best,summarize_task,persist_task_best
     from .path_command_policy import PathCommandActor
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
+    coverage_mode=plan.get('sampler_version')=='demand_exposure_v2'
+    fork_receipt=None
+    if coverage_mode:
+        from .path_command_fork import validate_fork_contract,restore_fork,extension_decision
+        fork_receipt=validate_fork_contract(plan,cfg,source)
     if root.exists():raise FileExistsError('new run directory required, including resumed stage')
     root.mkdir(parents=True);torch.set_num_threads(2)
     from .runtime import configure_compilation_cache
     compilation_cache=configure_compilation_cache()
+    atomic_json(root/'status.json',dict(state='initializing',stage='loading_frozen_physics_and_bank',pid=os.getpid(),endpoint_updates={'alpha0':0,'alpha1':0},declared_updates_per_endpoint=plan['updates'],last_update_epoch=time.time()))
     env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));n=c['num_envs'];steps=c['rollout_steps'];updates=plan['updates']
     candidate=source['candidate'];protected_paths=[Path(candidate[k]) for k in ['actor','checkpoint','config']]
     protected_paths.extend([Path(candidate['original_protocol_best']['checkpoint']),Path(candidate['config']).parent/'training/best_model.json'])
@@ -297,11 +321,12 @@ def train(path,output,*,execute=False,resume=None):
     protected={str(p):digest(p) for p in protected_paths if p.exists()}
     manifest=dict(schema=SCHEMA,plan=plan,config=cfg,source=source,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),protected=protected,physical_continuation='reset to original complete prepared bank, not resumed simulator state',terminal_contract=plan.get('terminal_contract','terminal_contract_v1'),data_role='random TRAIN; fixed six-route DEV; no independent holdout',resume_parent=None if resume is None else str(Path(resume).resolve()))
     manifest['execution_optimizations']=dict(evaluator='vmap_scan50',compilation_cache=str(compilation_cache),ppo='existing_direct_command_ppo',actual_batch_dimensions=[n,steps],experimental_summary_reset_guard=False)
+    if coverage_mode:manifest['fork']=fork_receipt
     atomic_json(root/'manifest.json',manifest)
     try:tb=_start_tensorboard(root)
     except (OSError,RuntimeError) as e:
         tb=dict(url=None,scalar_verified=False,warning=str(e));atomic_json(root/'tensorboard_server_warning.json',tb)
-    status={'state':'initializing','declared_updates_per_endpoint':updates,'policy_transitions_total':0,'training_control_ticks_total':0,'validation_control_ticks_total':0}
+    status={'state':'initializing','pid':os.getpid(),'endpoint_updates':{'alpha0':0,'alpha1':0},'declared_updates_per_endpoint':updates,'policy_transitions_total':0,'training_control_ticks_total':0,'validation_control_ticks_total':0}
     def update_status(**kw):
         status.update(kw)
         if 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
@@ -316,6 +341,14 @@ def train(path,output,*,execute=False,resume=None):
     update_status(stage='loading')
     try:
         for alpha in plan['alphas']:
+            endpoint_target=updates
+            endpoint_resume=bool(resume and (Path(resume)/f'alpha{alpha}'/'last_completed.json').exists())
+            if coverage_mode and endpoint_resume:
+                for decision_file in sorted((Path(resume)/f'alpha{alpha}'/'decisions').glob('update_*.json')):
+                    decision=json.loads(decision_file.read_text())
+                    if decision['allow'] and decision['previous_target']==endpoint_target and decision['next_target']==endpoint_target+50:
+                        endpoint_target=decision['next_target']
+                if endpoint_target>200:raise ValueError('resume target exceeds authorized coverage maximum')
             algo=None;learner_ready=False;started=time.monotonic();update_status(stage='compiling',alpha=alpha,completed_updates=0);out=root/f'alpha{alpha}';out.mkdir();writer=SummaryWriter(str(root/'tensorboard'/f'alpha{alpha}'))
             def check_budget():
                 status['endpoint_elapsed_s']=time.monotonic()-started
@@ -330,13 +363,19 @@ def train(path,output,*,execute=False,resume=None):
             status['compile_and_setup_seconds']=time.monotonic()-started
             obs=to_torch(a,cr);algo=make_algorithm(obs,steps,cfg,'cuda')
             identity=dict(schema=SCHEMA,alpha=alpha,lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),sampler_sha256=config_hash(plan['sampler_resolution']),best_sha256=config_hash(plan['best_resolution']),seed=plan['seed'])
+            if coverage_mode:
+                identity.update(parent_source_update=fork_receipt['identities'][f'alpha{alpha}']['source_update'],parent_checkpoint_sha256=fork_receipt['identities'][f'alpha{alpha}']['checkpoint_sha256'])
             start_update=0;rejections=0
-            if resume and (Path(resume)/f'alpha{alpha}'/'last_completed.json').exists():
+            if coverage_mode and not endpoint_resume:
+                saved_parent=restore_fork(algo,fork_receipt,alpha)
+                rejections=saved_parent['consecutive_rejections']
+                atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],restored=['actor','critic','log_std','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng'],new_update=0,route_seed=cfg['training_sampler']['route_seed'],route_counters='new sampler version starts at episode0',physical_state='original prepared bank reset; not frame continuation'))
+            if endpoint_resume:
                 receipt,parent_best=resume_source(resume,alpha,identity)
                 saved=restore_checkpoint(receipt['checkpoint'],algo,identity);
                 if parent_best:persist_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update']})
                 start_update=saved['update'];rejections=saved['consecutive_rejections']
-                if start_update>updates:raise ValueError('resume boundary exceeds declared target')
+                if start_update>endpoint_target:raise ValueError('resume boundary exceeds declared target')
                 if saved.get('route_counters') is None or np.shape(saved['route_counters'])!=(n,):raise ValueError('resume requires per-environment route counters')
                 route_counters=np.asarray(saved['route_counters'])
                 fault_file=Path(resume)/f'alpha{alpha}'/'engineering_fault_states.pkl'
@@ -348,30 +387,57 @@ def train(path,output,*,execute=False,resume=None):
                 a,cr,fault=observe(episodes)
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
-            advance=None if start_update>=updates else jax.jit(jax.vmap(batch.advance_one)).lower(episodes,j.zeros((n,2))).compile()
+            from .path_command_statistics import reduce_statistics,merge_statistics,reset_statistics
+            def advance_batch(episodes,z):
+                nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one)(episodes,z)
+                stats['diagnostics']=reduce_statistics(stats['diagnostics'],axis=0)
+                return nxt,obs_batch,reward,flags,final,stats
+            merge_diagnostics=jax.jit(merge_statistics)
+            advance=None if start_update>=endpoint_target else jax.jit(advance_batch).lower(episodes,j.zeros((n,2))).compile()
             status['compile_and_setup_seconds']=time.monotonic()-started
             initial_checkpoint=save_checkpoint(out/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode)
             atomic_json(out/'last_completed.json',dict(update=start_update,checkpoint=str(initial_checkpoint.resolve()),checkpoint_sha256=digest(initial_checkpoint),schema=SCHEMA))
             update_status(completed_updates=start_update)
             learner_ready=True
-            if resume:rescore_saved_candidates(resume,out,alpha,cfg,identity)
+            if endpoint_resume:
+                rescore_saved_candidates(resume,out,alpha,cfg,identity)
+                if coverage_mode:
+                    import shutil
+                    for folder in ('validation','statistics','coverage','decisions'):
+                        prior=Path(resume)/f'alpha{alpha}'/folder
+                        if prior.exists():shutil.copytree(prior,out/folder)
+            parent_traces=None
+            if coverage_mode:
+                from .path_command_cache import reuse_fork_parent
+                parent_traces=reuse_fork_parent(fork_receipt,out,alpha,cfg,identity,initial_checkpoint,register=not endpoint_resume)
             from .path_command_evaluation import BatchedPanelEvaluator
             evaluator=BatchedPanelEvaluator(env,snapshot,cfg,check_budget,update_status,account_validation)
             evaluator.compiled=shared_eval_cache
             if not baseline_done:
                 cached=set()
-                if resume:
+                if resume or coverage_mode:
                     from .path_command_cache import reuse_zero_upper
                     from .geometric_path import build_path
                     pose=np.asarray(env.physics.helpers.pose(snapshot.data))
                     paths={route:build_path(route,pose,cfg) for route in cfg['stage_C_evaluation']['route_ids']}
-                    cached=reuse_zero_upper(resume,root,cfg,source,paths)
-                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if resume else None);baseline_done=True
+                    cache_parent=resume if resume else fork_receipt['parent_run']
+                    cache_cfg=cfg if resume else fork_receipt['parent_manifest']['config']
+                    cached=reuse_zero_upper(cache_parent,root,cache_cfg,source,paths)
+                    if coverage_mode and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
+                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode) else None);baseline_done=True
                 status['reused_baseline_cases']=len(cached)
             accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
             from .path_command_statistics import summarize_statistics,COST_KEYS
-            for update in range(start_update+1,updates+1):
-                check_budget();tick_start=time.monotonic();update_status(state='running',stage='sampling',case=None,completed_intervals=None,alpha=alpha,completed_updates=update-1,declared_updates=updates)
+            coverage_stats=None;coverage_low=0;coverage_fraction=None;window_start=start_update+1;coverage_start=start_update+1
+            if coverage_mode and endpoint_resume:
+                previous_coverage=out/'coverage'/f'update_{start_update:04d}.json'
+                if previous_coverage.exists():
+                    prior=json.loads(previous_coverage.read_text());coverage_low=prior['consecutive_low_windows'];coverage_fraction=prior['windows']['strong_demand']['sample_fraction']
+            initial_resets=reduce_statistics(jax.vmap(reset_statistics)(episodes.route),axis=0)
+            atomic_json(out/'initial_reset_counts.json',{k:np.asarray(v).tolist() for k,v in initial_resets.items()})
+            while update<endpoint_target:
+                update+=1
+                check_budget();tick_start=time.monotonic();update_status(state='running',stage='sampling',case=None,completed_intervals=None,alpha=alpha,completed_updates=update-1,declared_updates=endpoint_target)
                 rewards=[];rollout_stats=[];completed_episodes=[];caps={};episode_ends=0;physical_failures=0;domain_failures=0;cost_totals_update=np.zeros(10)
                 with torch.no_grad():
                     for _ in range(steps):
@@ -388,8 +454,9 @@ def train(path,output,*,execute=False,resume=None):
                         rewards.append(np.asarray(reward));rollout_stats.append(np.asarray(stats['rollout']));completed_episodes.append(np.asarray(stats['completed_totals']))
                         episode_ends+=int(j.sum(flags['done']));physical_failures+=int(j.sum(flags['physical_failure']));domain_failures+=int(j.sum(flags['tracking_domain_failure']))
                         cost_totals_update+=np.asarray(j.sum(stats['completed_component_costs'],axis=0))
-                        diagnostic=jax.tree.map(lambda x:np.asarray(j.sum(x,axis=0)),stats['diagnostics'])
-                        window_stats=diagnostic if window_stats is None else jax.tree.map(lambda x,y:x+y,window_stats,diagnostic)
+                        diagnostic=stats['diagnostics']
+                        window_stats=diagnostic if window_stats is None else merge_diagnostics(window_stats,diagnostic)
+                        if coverage_mode:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
                         for key,count in stats['component_caps'].items():caps[key]=caps.get(key,0)+int(j.sum(count))
                     algo.compute_returns(obs)
                 sample_seconds=time.monotonic()-tick_start;opt_start=time.monotonic();update_status(stage='optimizing');metrics=algo.update();opt_seconds=time.monotonic()-opt_start;check_budget()
@@ -397,12 +464,26 @@ def train(path,output,*,execute=False,resume=None):
                 rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,plan);accepted+=int(metrics['accepted_epochs']>0)
                 totals=np.sum(np.stack(rollout_stats),axis=(0,1));done_totals=np.sum(np.stack(completed_episodes),axis=(0,1));count=max(totals[0],1)
                 record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
+                if coverage_mode:record.update(new_update=update,lineage_update=identity['parent_source_update']+update,parent_source_update=identity['parent_source_update'])
                 window_episodes+=episode_ends;window_return+=done_totals[4];window_costs+=cost_totals_update;window_physical+=physical_failures;window_domain+=domain_failures
-                if update%25==0 or update==updates:
+                if update%25==0 or update==endpoint_target:
                     diagnostic=summarize_statistics(window_stats,cfg)
                     diagnostic.update(update=update,complete_episode_count=window_episodes,complete_episode_return_mean=None if not window_episodes else float(window_return/window_episodes),complete_episode_cost_integral_means=None if not window_episodes else dict(zip(COST_KEYS,(window_costs/window_episodes).tolist())),physical_failure_count=window_physical,tracking_domain_failure_count=window_domain,engineering_fault_count=0,physical_failure_rate=None if not window_episodes else window_physical/window_episodes,tracking_domain_failure_rate=None if not window_episodes else window_domain/window_episodes)
+                    diagnostic.update(window_updates=update-window_start+1,engineering_failure_rate=0.,domain_failure_rate=window_domain/max(diagnostic['active_lower_samples'],1))
                     atomic_json(out/'statistics'/f'update_{update:04d}.json',diagnostic)
+                    window_start=update+1
                     window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
+                coverage_pause=False
+                if coverage_mode and update%10==0:
+                    coverage_summary=summarize_statistics(coverage_stats,cfg);coverage_stats=None
+                    coverage_fraction=coverage_summary['windows']['strong_demand']['sample_fraction']
+                    complete_window=update-coverage_start+1==10
+                    if complete_window:coverage_low=coverage_low+1 if coverage_fraction<plan['coverage_monitor']['target'] else 0
+                    coverage_summary.update(new_update=update,consecutive_low_windows=coverage_low,window_updates=update-coverage_start+1)
+                    coverage_start=update+1
+                    atomic_json(out/'coverage'/f'update_{update:04d}.json',coverage_summary)
+                    writer.add_scalar('coverage/strong_active_fraction',coverage_fraction,update)
+                    coverage_pause=complete_window and coverage_low>=plan['coverage_monitor']['consecutive_low_windows']
                 with (out/'metrics.jsonl').open('a') as f:f.write(json.dumps(record,allow_nan=False)+'\n')
                 writer.add_scalar('train/mean_step_reward',record['mean_step_reward'],update)
                 for key in ['rollout_speed_rmse','rollout_path_rmse','rollout_heading_rmse','complete_episode_count','physical_failures','tracking_domain_failures']:writer.add_scalar('train/'+key,record[key],update)
@@ -410,11 +491,14 @@ def train(path,output,*,execute=False,resume=None):
                 for channel,value in enumerate(algo.policy.log_std.detach().cpu().tolist()):writer.add_scalar(f'ppo/std_{channel}',float(np.exp(value)),update)
                 for group,g in enumerate(algo.optimizer.param_groups):writer.add_scalar(f'ppo/lr_{group}',g['lr'],update)
                 writer.flush()
-                if update%c['save_every']==0 or update==updates or stop:
+                if update%c['save_every']==0 or update==endpoint_target or stop:
                     checkpoint=save_checkpoint(out/'checkpoints',algo,update,identity,rejections=rejections,route_counters=episodes.episode)
                     atomic_json(out/'last_completed.json',dict(update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),schema=SCHEMA))
                 if not http_verified and (update==start_update+1 or update%25==0):http_verified=_verify_reward_http(root,tb,f'alpha{alpha}')
                 update_status(stage='optimized',completed_updates=update,accepted_batches=accepted,last_reward=record['mean_step_reward'])
+                if coverage_pause:
+                    atomic_json(out/'coverage_diagnosis.json',dict(reason='two consecutive complete ten-update windows below exposure target',sampler=cfg['training_sampler'],actual=coverage_summary,domain_failures_last_rollout=domain_failures,policy='save and pause; no silent sampler/reward/lower change'))
+                    raise CoveragePause('strong demand exposure below target in two windows; saved boundary and diagnosis')
                 if update in c['validation_updates'] and not stop:
                     dev_started=time.monotonic();params=export_actor(algo.policy);traces=evaluator.evaluate(params,alpha,out/'validation'/f'update_{update:04d}');summary=summarize(traces,alpha,cfg)
                     atomic_json(out/'validation'/f'update_{update:04d}'/'metrics.json',summary)
@@ -422,17 +506,29 @@ def train(path,output,*,execute=False,resume=None):
                     status['dev_seconds']=status.get('dev_seconds',0)+time.monotonic()-dev_started
                     task_summary=summarize_task(traces,alpha,cfg)
                     atomic_json(out/'validation'/f'update_{update:04d}'/'task_metrics.json',task_summary)
+                    atomic_json(out/'validation'/f'update_{update:04d}'/'source.json',dict(identity,source_update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),actor=str((out/'checkpoints'/f'actor_{update:04d}.pkl').resolve()),actor_sha256=digest(out/'checkpoints'/f'actor_{update:04d}.pkl')))
                     persist_task_best(out,checkpoint,out/'checkpoints'/f'actor_{update:04d}.pkl',task_summary,dict(identity,source_update=update))
-                print(f'alpha{alpha} update{update}/{updates} reward={record["mean_step_reward"]:.6g} accepted={accepted}',flush=True)
+                if coverage_mode and update==endpoint_target and update<plan['conditional_extension']['hard_max_updates'] and not stop:
+                    previous=json.loads((out/'statistics'/f'update_{update-25:04d}.json').read_text());latest=json.loads((out/'statistics'/f'update_{update:04d}.json').read_text())
+                    decision=extension_decision(fork_receipt['identities'][f'alpha{alpha}']['metrics'],task_summary,parent_traces,traces,previous,latest,coverage_fraction,alpha,cfg)
+                    decision.update(new_update=update,previous_target=endpoint_target)
+                    if decision['allow']:endpoint_target+=plan['conditional_extension']['block']
+                    decision['next_target']=endpoint_target;atomic_json(out/'decisions'/f'update_{update:04d}.json',decision)
+                    update_status(declared_updates=endpoint_target)
+                print(f'alpha{alpha} update{update}/{endpoint_target} reward={record["mean_step_reward"]:.6g} accepted={accepted}',flush=True)
                 if stop:break
-            writer.close();notify('STTW path training stage ended',f'alpha{alpha}: {update}/{updates}; {stop or "budget reached"}')
+            atomic_json(out/'training_status.json',dict(state='completed' if not stop else 'error',completed_updates=update,declared_updates=endpoint_target,stop_reason=stop))
+            writer.close();notify('STTW path training stage ended',f'alpha{alpha}: {update}/{endpoint_target}; {stop or "budget reached"}')
             if stop:raise RuntimeError(stop)
             if not (out/'best_task_model.json').exists():raise RuntimeError('no fixed validation candidate; no last-as-best fallback')
             best=json.loads((out/'best_task_model.json').read_text())
             if digest(best['actor'])!=best['actor_sha256'] or digest(best['checkpoint'])!=best['checkpoint_sha256']:raise ValueError('best task weights identity changed')
             with Path(best['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
             cached_final=set()
-            if resume:
+            if coverage_mode:
+                from .path_command_cache import reuse_selected_validation
+                cached_final=reuse_selected_validation(out,best,cfg)
+            elif resume:
                 from .path_command_cache import reuse_final_panel, inherit_numerical_history
                 cached_final=reuse_final_panel(resume,out,alpha,cfg,source,best,paths)
                 inherit_numerical_history(resume,out,alpha)
@@ -459,6 +555,9 @@ def train(path,output,*,execute=False,resume=None):
                 if before is not None and after is not None:trend=dict(matched_condition_relative_improvement=(before-after)/max(abs(before),1e-12),window='strong_demand',metric=key,updates=[175,200])
             decisions[f'alpha{a}']=convergence_decision(history,trend,paired_qualified=qualified)
         atomic_json(root/'report'/'next_step.json',dict(endpoint_decisions=decisions,paired_task_qualified=qualified,automatic_extension=False,paired_metrics='paired_metrics.json',note='Both jointly qualified endpoints need not be forced to diverge; inspect paired metrics for preference claim.'))
+        if coverage_mode:
+            from .path_command_reporting import report_coverage_parent_comparison
+            report_coverage_parent_comparison(root,cfg,fork_receipt)
         update_status(state='completed',stage='reported',protected_unchanged=True);notify('STTW path pipeline completed',str(root))
     except BaseException as e:
         if learner_ready and algo is not None and status.get('stage')!='optimizing':
@@ -466,4 +565,4 @@ def train(path,output,*,execute=False,resume=None):
             if not checkpoint.exists():checkpoint=save_checkpoint(out/'checkpoints',algo,completed,identity,rejections=rejections,route_counters=episodes.episode)
             atomic_json(out/'last_completed.json',dict(update=completed,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),schema=SCHEMA))
         if writer is not None:writer.close()
-        update_status(state='error',error_type=type(e).__name__,message=str(e));notify('STTW path error',str(e));raise
+        update_status(state='paused' if isinstance(e,CoveragePause) else 'error',error_type=type(e).__name__,message=str(e));notify('STTW path error',str(e));raise

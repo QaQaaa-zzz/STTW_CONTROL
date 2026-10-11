@@ -1,0 +1,49 @@
+{
+  "source_commit": "e6af0cae12790320b4d42cef2e582bcc7bade701",
+  "source_status": "both_endpoints_200_updates_and_extra_candidate_evaluation_completed",
+  "best_updates": {
+    "alpha0": 100,
+    "alpha1": 150
+  },
+  "best_endpoint_result": {
+    "goal_and_final_hold_pass_cases": 6,
+    "cases_per_endpoint": 6,
+    "working_roll_failure_cases": 2
+  },
+  "lower_tracking_rmse_range": {
+    "speed_m_s": [
+      0.0212,
+      0.0292
+    ],
+    "steer_rad": [
+      0.00182,
+      0.02134
+    ]
+  },
+  "late_exposure": {
+    "demand_positive_fraction_approx": 0.022,
+    "strong_demand_fraction_approx": 0.006,
+    "exit_straight_fraction_approx": 0.67
+  },
+  "statistics_correction": "bend means chi>0, not every geometrically nonzero-curvature sample",
+  "decision": "retain architecture and lower; fork each verified best; change only training reset distribution; evaluate same fixed DEV",
+  "evidence_files": [
+    "docs/evidence/path_feedback_v1_20261010/phase_C_results_20261011/INDEX.md",
+    "docs/evidence/path_feedback_v1_20261010/phase_C_results_20261011/training_summary.json",
+    "docs/evidence/path_feedback_v1_20261010/phase_C_results_20261011/paired/identities.json",
+    "learning/src/sttw_control/path_command_statistics.py",
+    "learning/src/sttw_control/path_command_scenarios.py",
+    "learning/src/sttw_control/path_command_reward.py"
+  ],
+  "work_performed_here": [
+    "GitHub source and structured-result review",
+    "arithmetic and nominal geometric exposure check",
+    "execution specification generation"
+  ],
+  "not_performed_here": [
+    "new physics rollout",
+    "new training",
+    "local-process status query",
+    "new checkpoint evaluation"
+  ]
+}

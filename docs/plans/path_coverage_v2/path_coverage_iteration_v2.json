@@ -1,0 +1,172 @@
+{
+  "schema": "sttw_path_mainline_coverage_iteration_v2",
+  "kind": "execution_spec_not_native_trainer_config",
+  "base_commit": "e6af0cae12790320b4d42cef2e582bcc7bade701",
+  "branch": "experiment/path-feedback-v1",
+  "decision": "freeze_system_change_training_reset_distribution_only_fork_from_each_task_best",
+  "parent": {
+    "alpha0": {
+      "source_update": 100,
+      "checkpoint_sha256": "c1246d7bcae1568d923e2b819cf87a4c10c7a128c0fdfd9e14b73126ff75c20a",
+      "actor_sha256": "99ed5c769bcf80ac0ca5b5be912c629ea2df5e6631673934a8ff08ca0aa82422"
+    },
+    "alpha1": {
+      "source_update": 150,
+      "checkpoint_sha256": "2df605339a892e180399be9647ece2aba181b601e62d7c7966e97f5a59732261",
+      "actor_sha256": "77af68f4b45427cc309b2ef51b30ab1d60363c7af616293331fec71de9a90809"
+    },
+    "restore": [
+      "actor",
+      "critic",
+      "log_std",
+      "matching_optimizer"
+    ],
+    "physical_continuation": "new episodes from unchanged complete prepared state",
+    "do_not_use_last200": true
+  },
+  "frozen": {
+    "lower": "local300",
+    "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "actor_dim": 351,
+    "critic_dim": 352,
+    "hidden": [
+      128,
+      128,
+      64
+    ],
+    "normal_reward": "unchanged_path_command_reward.py",
+    "terminal_contract": "terminal_contract_v2",
+    "episode_seconds": 20.0,
+    "physics_dt_s": 0.0002,
+    "physics_substeps": 25,
+    "lower_dt_s": 0.005,
+    "upper_dt_s": 0.02,
+    "follower_dt_s": 0.02,
+    "filter_tau_s": [
+      0.1,
+      0.08
+    ],
+    "no_lower_training": true,
+    "no_new_planning_network": true,
+    "no_action_search": true
+  },
+  "sampler": {
+    "version": "demand_exposure_v2",
+    "route_seed": 910201,
+    "groups": [
+      {
+        "ids_inclusive": [
+          0,
+          101
+        ],
+        "count": 102,
+        "mode": "legacy_sample_route"
+      },
+      {
+        "ids_inclusive": [
+          102,
+          305
+        ],
+        "count": 204,
+        "mode": "strong_single"
+      },
+      {
+        "ids_inclusive": [
+          306,
+          511
+        ],
+        "count": 206,
+        "mode": "strong_s"
+      }
+    ],
+    "strong": {
+      "speed_m_s": [
+        2.4,
+        2.6
+      ],
+      "radius_m": [
+        2.0,
+        2.2
+      ],
+      "angle_deg": [
+        90.0,
+        100.0
+      ],
+      "left_right_pairing": true,
+      "prefix_m": 3.0,
+      "curvature_ramp_m": 0.5,
+      "s_inter_bend_m": 3.0,
+      "goal_offset_m": 4.0,
+      "points": 5001,
+      "grid_ds_m": 0.02,
+      "initial_offset_fraction": 0.2,
+      "lateral_offset_m": [
+        -0.1,
+        0.1
+      ],
+      "heading_offset_rad": [
+        -0.05,
+        0.05
+      ]
+    },
+    "keep_development_routes_unchanged": true,
+    "on_policy_sample": true,
+    "no_old_trajectory_replay_as_new_ppo_samples": true,
+    "strong_active_fraction_target_min": 0.05,
+    "coverage_check_updates": 10,
+    "max_consecutive_coverage_low_windows_before_diagnosis": 2
+  },
+  "training": {
+    "num_envs": 512,
+    "rollout_steps": 128,
+    "new_updates_default_per_endpoint": 100,
+    "new_updates_hard_max_per_endpoint": 200,
+    "conditional_extension_block": 50,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "gamma": 0.997,
+    "gae_lambda": 0.99,
+    "epochs": 4,
+    "minibatches": 4,
+    "clip_ratio": 0.2,
+    "entropy": 0.001,
+    "std": "inherit_parent",
+    "std_min": 0.05,
+    "std_max": 0.5,
+    "soft_kl": 0.01,
+    "hard_kl": 0.03,
+    "save_every": 10,
+    "fixed_dev_new_updates": [
+      50,
+      100,
+      150,
+      200
+    ],
+    "forbid_early_dev": [
+      20,
+      25
+    ],
+    "default_total_upper_transitions": 13107200,
+    "default_total_lower_steps": 52428800,
+    "wall_budget_s": null
+  },
+  "selection": {
+    "reuse_parent_baseline_and_dev": true,
+    "schema": "path_task_best_v2",
+    "reload_best_for_export": true,
+    "no_reward_peak_extra_evaluation": true,
+    "do_not_overwrite_parent_best": true,
+    "old_success_counts": "6/6 goal and final hold for both parents",
+    "safety_working_rad": 0.302
+  },
+  "artifacts": [
+    "resolved_config",
+    "actual_source_diff",
+    "coverage_statistics",
+    "complete_episode_metrics",
+    "six_case_dev",
+    "best_identity",
+    "parent_comparison",
+    "decision"
+  ]
+}

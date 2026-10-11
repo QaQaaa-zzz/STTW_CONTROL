@@ -1,0 +1,140 @@
+{
+  "schema": "sttw_path_training_plan_v1",
+  "design_config": "STTW_Path_Coverage_V2.json",
+  "integration_manifest": "../../docs/evidence/select300_integration_20261010/manifest.json",
+  "alphas": [
+    0,
+    1
+  ],
+  "seed": 910101,
+  "updates": 100,
+  "wall_budget_s_per_endpoint": null,
+  "automatic_extension": false,
+  "automatic_training_authorized": false,
+  "actor_lr_floor": 1e-07,
+  "hard_reject_consecutive_stop": 3,
+  "sampler_resolution": {
+    "ordinary_fraction": 0.3,
+    "ordinary_straight_fraction": 0.5,
+    "gentle_angle_deg": 30,
+    "gentle_radius_m": 4,
+    "single_turn_fraction": 0.5,
+    "S_fraction": 0.2,
+    "S_inter_bend_straight_m": 3,
+    "fixed_grid_length_m": 100,
+    "fixed_grid_points": 5001,
+    "interpretation": "resolved engineering details within supplied family contract; S uses two opposite bends of the same sampled angle/radius",
+    "training_sampler": {
+      "version": "demand_exposure_v2",
+      "route_seed": 910201,
+      "groups": [
+        {
+          "ids_inclusive": [
+            0,
+            101
+          ],
+          "count": 102,
+          "mode": "legacy_sample_route"
+        },
+        {
+          "ids_inclusive": [
+            102,
+            305
+          ],
+          "count": 204,
+          "mode": "strong_single"
+        },
+        {
+          "ids_inclusive": [
+            306,
+            511
+          ],
+          "count": 206,
+          "mode": "strong_s"
+        }
+      ],
+      "strong": {
+        "speed_m_s": [
+          2.4,
+          2.6
+        ],
+        "radius_m": [
+          2.0,
+          2.2
+        ],
+        "angle_deg": [
+          90.0,
+          100.0
+        ],
+        "left_right_pairing": true,
+        "prefix_m": 3.0,
+        "curvature_ramp_m": 0.5,
+        "s_inter_bend_m": 3.0,
+        "goal_offset_m": 4.0,
+        "points": 5001,
+        "grid_ds_m": 0.02,
+        "initial_offset_fraction": 0.2,
+        "lateral_offset_m": [
+          -0.1,
+          0.1
+        ],
+        "heading_offset_rad": [
+          -0.05,
+          0.05
+        ]
+      },
+      "keep_development_routes_unchanged": true,
+      "on_policy_sample": true,
+      "no_old_trajectory_replay_as_new_ppo_samples": true,
+      "strong_active_fraction_target_min": 0.05,
+      "coverage_check_updates": 10,
+      "max_consecutive_coverage_low_windows_before_diagnosis": 2
+    }
+  },
+  "best_resolution": {
+    "primary_metric": "worst-case normalized RMSE over chi>0, else entire ordinary case; alpha0 ey/.1, alpha1 ev/.05",
+    "primary_pass_threshold": null,
+    "order": [
+      "physical_failure_count",
+      "working_limit_failure_count",
+      "primary_metric",
+      "goal_and_final_hold_failure_count",
+      "worst_case_normalized_error"
+    ],
+    "qualification": "physical/work/goal/final hold only; no claim of alpha preference qualification",
+    "finite_horizon_is_terminal": true,
+    "domain_exit": "engineering out-of-domain; abort batch, preserve state, do not optimize or rank as physical failure"
+  },
+  "terminal_contract": "terminal_contract_v2",
+  "task_selection_schema": "path_task_best_v2",
+  "http_failure_policy": "warn",
+  "sampler_version": "demand_exposure_v2",
+  "fork": {
+    "parent_run": "../../runs/path_reward_peak_review_20261011",
+    "identities": "../../docs/evidence/path_feedback_v1_20261010/phase_C_results_20261011/paired/identities.json",
+    "expected_parents": {
+      "alpha0": {
+        "source_update": 100,
+        "checkpoint_sha256": "c1246d7bcae1568d923e2b819cf87a4c10c7a128c0fdfd9e14b73126ff75c20a",
+        "actor_sha256": "99ed5c769bcf80ac0ca5b5be912c629ea2df5e6631673934a8ff08ca0aa82422"
+      },
+      "alpha1": {
+        "source_update": 150,
+        "checkpoint_sha256": "2df605339a892e180399be9647ece2aba181b601e62d7c7966e97f5a59732261",
+        "actor_sha256": "77af68f4b45427cc309b2ef51b30ab1d60363c7af616293331fec71de9a90809"
+      }
+    },
+    "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc"
+  },
+  "conditional_extension": {
+    "enabled": true,
+    "block": 50,
+    "hard_max_updates": 200,
+    "default_updates": 100
+  },
+  "coverage_monitor": {
+    "target": 0.05,
+    "check_every": 10,
+    "consecutive_low_windows": 2
+  }
+}

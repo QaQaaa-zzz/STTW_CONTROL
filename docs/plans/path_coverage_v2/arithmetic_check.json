@@ -1,0 +1,24 @@
+{
+  "kind": "nominal_geometry_only_no_physics_no_learning",
+  "audited_commit": "e6af0cae12790320b4d42cef2e582bcc7bade701",
+  "new_group_sizes": {
+    "retention_old_sampler": 102,
+    "demand_single": 204,
+    "demand_S": 206
+  },
+  "nominal_prediction_excluding_retention_group_contribution": {
+    "chi_positive_fraction": 0.08188599316406281,
+    "chi_ge_half_fraction": 0.07809956445312517,
+    "nonzero_curvature_fraction": 0.09558407031249984
+  },
+  "nominal_plateau_chi_min_in_demand_box": 0.6224989333338061,
+  "updates100_both_endpoints": {
+    "upper_transitions": 13107200,
+    "lower_steps": 52428800
+  },
+  "notes": [
+    "Assumes progress=vt; actual exposure must come from active training logs.",
+    "chi is a nominal-demand surrogate, not a proven safety boundary.",
+    "Same reward/20s horizon/physics/control structure; only sampler distribution changed."
+  ]
+}

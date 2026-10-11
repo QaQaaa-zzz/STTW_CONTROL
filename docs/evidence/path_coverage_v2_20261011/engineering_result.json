@@ -1,0 +1,1214 @@
+{
+  "state": "passed",
+  "batch": [
+    8,
+    16
+  ],
+  "policy_transitions": 128,
+  "active_lower_ticks": 512,
+  "discarded_engineering_ppo_updates": 1,
+  "formal_training_updates": 0,
+  "parent_source_update": 100,
+  "sampler_env_ids": [
+    0,
+    1,
+    102,
+    103,
+    304,
+    305,
+    306,
+    307
+  ],
+  "sample_group_counts": [
+    2,
+    4,
+    2
+  ],
+  "statistics": {
+    "schema": "path_training_statistics_v1",
+    "active_lower_samples": 512,
+    "weighting": "active lower samples; overlapping spatial/chi windows; route fractions are sample weighted; exceedance durations sum active environment time",
+    "windows": {
+      "ordinary": {
+        "samples": 512,
+        "sample_fraction": 1.0,
+        "speed_rmse_m_s": 0.1606987105260714,
+        "lateral_rmse_m": 0.0007350981080607177,
+        "heading_rmse_rad": 0.002770053720612073,
+        "speed_signed_mean_m_s": -0.1205681711435318,
+        "lateral_signed_mean_m": 0.00041653012158349156,
+        "heading_signed_mean_rad": 0.0014612323138862848,
+        "error_mae": [
+          0.13137497007846832,
+          0.0004654174845200032,
+          0.0020169862546026707
+        ],
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": 0.01747000217437744,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": 0.0,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": [
+              -0.05605373904109001,
+              0.005867514293640852
+            ]
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": [
+              -0.044741690158843994,
+              0.004601435270160437
+            ]
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": [
+              -0.041203368455171585,
+              0.004601435735821724
+            ]
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": [
+              -0.041203368455171585,
+              0.004601435735821724
+            ]
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": [
+            -0.007212899159640074,
+            -0.0043604508973658085
+          ],
+          "rms": [
+            0.02929544942089495,
+            0.01475255245275151
+          ]
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": 17.71701431274414,
+            "effective_mean": 17.71701431274414,
+            "cap_fraction": 0.0
+          },
+          "path": {
+            "raw_mean": 0.004376968368887901,
+            "effective_mean": 0.004376968368887901,
+            "cap_fraction": 0.0
+          },
+          "primary": {
+            "raw_mean": 0.0,
+            "effective_mean": 0.0,
+            "cap_fraction": 0.0
+          },
+          "roll": {
+            "raw_mean": 0.0,
+            "effective_mean": 0.0,
+            "cap_fraction": 0.0
+          },
+          "working_roll": {
+            "raw_mean": 0.0,
+            "effective_mean": 0.0,
+            "cap_fraction": 0.0
+          },
+          "roll_rate": {
+            "raw_mean": 0.0,
+            "effective_mean": 0.0,
+            "cap_fraction": 0.0
+          },
+          "overspeed": {
+            "raw_mean": 0.014015009626746178,
+            "effective_mean": 0.014015009626746178,
+            "cap_fraction": 0.0
+          },
+          "low_speed": {
+            "raw_mean": 0.0,
+            "effective_mean": 0.0,
+            "cap_fraction": 0.0
+          },
+          "offset_magnitude": {
+            "raw_mean": 9.659062197897583e-05,
+            "effective_mean": 9.659062197897583e-05,
+            "cap_fraction": 0.0
+          },
+          "offset_rate": {
+            "raw_mean": 0.021895263344049454,
+            "effective_mean": 0.021895263344049454,
+            "cap_fraction": 0.0
+          }
+        }
+      },
+      "bend": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "strong_demand": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "exit_straight": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "geometric_turn": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "demand_positive": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "local_left": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      },
+      "local_right": {
+        "samples": 0,
+        "sample_fraction": 0.0,
+        "speed_rmse_m_s": null,
+        "lateral_rmse_m": null,
+        "heading_rmse_rad": null,
+        "speed_signed_mean_m_s": null,
+        "lateral_signed_mean_m": null,
+        "heading_signed_mean_rad": null,
+        "error_mae": null,
+        "error_channels": [
+          "speed_m_s",
+          "lateral_m",
+          "heading_rad"
+        ],
+        "peak_roll_rad": null,
+        "working_roll_bound_rad": 0.302,
+        "working_roll_exceedance_duration_s": 0.0,
+        "working_roll_exceedance_fraction": null,
+        "commands": {
+          "target_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "filtered_offset": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "offsets": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          },
+          "governed_minus_nominal": {
+            "channels": [
+              "delta_v_m_s",
+              "delta_delta_rad"
+            ],
+            "signed_mean": null
+          }
+        },
+        "lower_actual_minus_governed": {
+          "channels": [
+            "speed_m_s",
+            "steer_rad"
+          ],
+          "signed_mean": null,
+          "rms": null
+        },
+        "costs": {
+          "speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "path": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "primary": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "working_roll": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "roll_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "overspeed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "low_speed": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_magnitude": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          },
+          "offset_rate": {
+            "raw_mean": null,
+            "effective_mean": null,
+            "cap_fraction": null
+          }
+        }
+      }
+    },
+    "route_distribution": {
+      "family_names": [
+        "ordinary_gentle",
+        "single_bend",
+        "s_bend"
+      ],
+      "family_fraction": [
+        0.0,
+        0.75,
+        0.25
+      ],
+      "sign_names": [
+        "right",
+        "straight",
+        "left"
+      ],
+      "initial_bend_sign_fraction": [
+        0.625,
+        0.0,
+        0.375
+      ],
+      "sample_group_names": [
+        "legacy",
+        "strong_single",
+        "strong_s"
+      ],
+      "sample_group_fraction": [
+        0.25,
+        0.5,
+        0.25
+      ],
+      "reset_count": 0,
+      "reset_family_fraction": null,
+      "reset_sample_group_fraction": null,
+      "speed": {
+        "units": "m/s",
+        "mean": 2.4263226985931396,
+        "std": 0.1225857009955868,
+        "histogram_edges": [
+          1.8,
+          1.96,
+          2.12,
+          2.2800000000000002,
+          2.44,
+          2.6
+        ],
+        "histogram_fraction": [
+          0.0,
+          0.0,
+          0.125,
+          0.375,
+          0.5
+        ]
+      },
+      "radius": {
+        "units": "m",
+        "mean": 2.2109341621398926,
+        "std": 0.38476869415864456,
+        "histogram_edges": [
+          1.8,
+          2.24,
+          2.68,
+          3.12,
+          3.5600000000000005,
+          4.0
+        ],
+        "histogram_fraction": [
+          0.875,
+          0.0,
+          0.0,
+          0.125,
+          0.0
+        ]
+      }
+    },
+    "commands": {
+      "target_offset": {
+        "channels": [
+          "delta_v_m_s",
+          "delta_delta_rad"
+        ],
+        "signed_mean": [
+          -0.05605373531579971,
+          0.005867513827979565
+        ],
+        "rms": [
+          0.15315775545264163,
+          0.01995115991088837
+        ],
+        "positive_fraction": [
+          0.4921875,
+          0.625
+        ],
+        "negative_fraction": [
+          0.5078125,
+          0.375
+        ]
+      },
+      "filtered_offset": {
+        "channels": [
+          "delta_v_m_s",
+          "delta_delta_rad"
+        ],
+        "signed_mean": [
+          -0.044741690158843994,
+          0.004601435270160437
+        ],
+        "rms": [
+          0.06289185676790071,
+          0.007843791240725253
+        ],
+        "positive_fraction": [
+          0.16015625,
+          0.76171875
+        ],
+        "negative_fraction": [
+          0.83984375,
+          0.23828125
+        ]
+      },
+      "offsets": {
+        "channels": [
+          "delta_v_m_s",
+          "delta_delta_rad"
+        ],
+        "signed_mean": [
+          -0.041203368455171585,
+          0.004601435270160437
+        ],
+        "rms": [
+          0.05737076409850959,
+          0.007843791240725253
+        ],
+        "positive_fraction": [
+          0.1640625,
+          0.76171875
+        ],
+        "negative_fraction": [
+          0.8359375,
+          0.23828125
+        ]
+      },
+      "governed_minus_nominal": {
+        "channels": [
+          "delta_v_m_s",
+          "delta_delta_rad"
+        ],
+        "signed_mean": [
+          -0.041203368455171585,
+          0.004601435270160437
+        ],
+        "rms": [
+          0.05737076409850959,
+          0.007843791240725253
+        ],
+        "positive_fraction": [
+          0.1640625,
+          0.76171875
+        ],
+        "negative_fraction": [
+          0.8359375,
+          0.23828125
+        ]
+      }
+    },
+    "reference_limits": {
+      "correction_slew_any_fraction": [
+        0.763671875
+      ],
+      "nominal_slew_channel_fraction": [
+        0.81640625,
+        0.00390625
+      ],
+      "amplitude_clip_channel_fraction": [
+        0.0,
+        0.0
+      ],
+      "missing_flag_semantics": "null means flag not recorded; never treated as zero clipping"
+    },
+    "costs": {
+      "speed": {
+        "raw_mean": 17.717016220092773,
+        "effective_mean": 17.717016220092773,
+        "cap_fraction": 0.0
+      },
+      "path": {
+        "raw_mean": 0.004376968368887901,
+        "effective_mean": 0.004376968368887901,
+        "cap_fraction": 0.0
+      },
+      "primary": {
+        "raw_mean": 0.0,
+        "effective_mean": 0.0,
+        "cap_fraction": 0.0
+      },
+      "roll": {
+        "raw_mean": 0.0,
+        "effective_mean": 0.0,
+        "cap_fraction": 0.0
+      },
+      "working_roll": {
+        "raw_mean": 0.0,
+        "effective_mean": 0.0,
+        "cap_fraction": 0.0
+      },
+      "roll_rate": {
+        "raw_mean": 0.0,
+        "effective_mean": 0.0,
+        "cap_fraction": 0.0
+      },
+      "overspeed": {
+        "raw_mean": 0.014015009626746178,
+        "effective_mean": 0.014015009626746178,
+        "cap_fraction": 0.0
+      },
+      "low_speed": {
+        "raw_mean": 0.0,
+        "effective_mean": 0.0,
+        "cap_fraction": 0.0
+      },
+      "offset_magnitude": {
+        "raw_mean": 9.659062197897583e-05,
+        "effective_mean": 9.659062197897583e-05,
+        "cap_fraction": 0.0
+      },
+      "offset_rate": {
+        "raw_mean": 0.021895263344049454,
+        "effective_mean": 0.021895263344049454,
+        "cap_fraction": 0.0
+      }
+    }
+  },
+  "reward_mean": -0.035514800763394305,
+  "optimizer": {
+    "temporal": 0.0,
+    "value": 368.705283164978,
+    "surrogate": -0.01058827992528677,
+    "entropy": -0.8502266481518745,
+    "actor_grad_norm": 7.902765780687332,
+    "critic_grad_norm": 3218.5383529663086,
+    "mean_kl": 0.016969408839941025,
+    "exact_kl": 0.016969408839941025,
+    "kl_by_alpha": {
+      "all": 0.016969408839941025
+    },
+    "kl_alpha0": null,
+    "kl_alpha1": null,
+    "actor_grad_norm_preclip": 7.902765780687332,
+    "critic_grad_norm_preclip": 3218.5383529663086,
+    "attempted_actor_grad_norm": 7.902765780687332,
+    "attempted_critic_grad_norm": 3218.5383529663086,
+    "projected_std": [
+      0.24950234591960907,
+      0.10025234520435333
+    ],
+    "attempted_epochs": 4,
+    "accepted_epochs": 4,
+    "attempted_minibatches": 16,
+    "accepted_minibatches": 16,
+    "completed_epochs": 4,
+    "completed_minibatches": 16,
+    "hard_kl_stop": false,
+    "nonfinite_stop": false,
+    "stop_reason": "target_kl",
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003
+  },
+  "compile_setup_seconds": 43.81069883800001,
+  "total_seconds": 49.203780383999856,
+  "compilation_cache": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/.jax_compilation_cache",
+  "parent_files_unchanged": true,
+  "timing": {
+    "physics_dt_s_expected": 0.0002,
+    "physics_substeps_per_control_expected": 25,
+    "lower_dt_s": 0.005,
+    "upper_dt_s": 0.02,
+    "path_follower_dt_s": 0.02,
+    "do_not_silently_change_simulation_timing": true
+  }
+}

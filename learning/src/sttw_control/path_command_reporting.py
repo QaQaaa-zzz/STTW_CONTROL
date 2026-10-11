@@ -111,6 +111,172 @@ def checked_final_sources(root):
         identities[f'alpha{alpha}']={'best_task':record,'legacy_best':json.loads((out/'best_model.json').read_text()) if (out/'best_model.json').exists() else None,'last':json.loads((out/'last_completed.json').read_text())}
     return identities
 
+
+def report_coverage_parent_comparison(root,cfg,fork_receipt):
+    """Render cached parent/new best evidence; never runs or selects a policy."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from .path_command_selection import cases
+    from .preference_best import digest
+    root=Path(root);parent=Path(fork_receipt['parent_run'])
+    identities=checked_final_sources(root)
+    out=root/'report'/'coverage_parent_comparison';out.mkdir(parents=True,exist_ok=True)
+    result=dict(schema='path_coverage_parent_comparison_v1',parent_run=str(parent),
+        current_run=str(root.resolve()),sources={},training={},scenarios={},
+        evidence_scope='Original six fixed DEV cases, not independent generalization; cached physics only. No reward ranking.',
+        window_semantics='old bend = chi>0 (demand_positive), not all geometric turns; ordinary = chi<=0 may curve; strong_demand = chi>=.5; geometric_turn = abs(path_curvature)>1e-4; overlapping active-tick windows')
+    lines=['# Coverage adaptation: parent best versus new best_task','',result['evidence_scope'],
+           result['window_semantics'],'','The first panel axis is fixed-world XY. Times are not shifted; traces stop at their actual terminal frame.',
+           'A selected new update 0 is the inherited parent candidate, not a newly trained improvement.','']
+    for alpha in (0,1):
+        key=f'alpha{alpha}';old=fork_receipt['identities'][key];new=identities[key]['best_task']
+        source=json.loads((parent/key/'final_best'/'source.json').read_text())
+        for field in ('actor','checkpoint'):
+            if source[field+'_sha256']!=old[field+'_sha256'] or digest(old[field])!=old[field+'_sha256']:
+                raise ValueError('parent comparison source SHA mismatch: '+key+' '+field)
+        if source['source_update']!=old['source_update']:raise ValueError('parent comparison update mismatch')
+        result['sources'][key]=dict(parent=old,current=new,new_update=new['source_update'],
+            lineage_update=old['source_update']+new['source_update'],inherited_parent_selected=new['source_update']==0)
+        lines.extend([f"- {key}: parent update {old['source_update']} → selected new update {new['source_update']} "
+                      f"(lineage {old['source_update']+new['source_update']}); inherited parent selected: {new['source_update']==0}.",
+                      f"  Parent Actor `{old['actor_sha256']}`; current Actor `{new['actor_sha256']}`."])
+        def receipts(folder):
+            return [dict(path=str(p.resolve()),receipt=json.loads(p.read_text()))
+                    for p in sorted((root/key/folder).glob('update_*.json'))]
+        coverage=receipts('coverage');statistics=receipts('statistics');decisions=receipts('decisions')
+        complete=[x for x in coverage if x['receipt'].get('window_updates')==10]
+        counts=[(x['receipt']['windows']['strong_demand']['samples'],x['receipt']['active_lower_samples']) for x in complete]
+        exposure=sum(x[0] for x in counts)/sum(x[1] for x in counts) if counts and sum(x[1] for x in counts) else None
+        rows=[]
+        for entry in statistics:
+            s=entry['receipt'];w=s['windows']['strong_demand']
+            rows.append(dict(update=s.get('update'),window_updates=s.get('window_updates'),
+                strong_fraction=w['sample_fraction'],speed_rmse_m_s=w['speed_rmse_m_s'],
+                path_rmse_m=w['lateral_rmse_m'],heading_rmse_rad=w['heading_rmse_rad'],
+                peak_roll_rad=w.get('peak_roll_rad'),working_exceedance_fraction=w.get('working_roll_exceedance_fraction'),
+                effective_cost_means={k:v['effective_mean'] for k,v in w.get('costs',{}).items()}))
+        full=[r for r in rows if r['window_updates']==25];trend={'status':'UNKNOWN: fewer than two complete 25-update windows'}
+        if len(full)>=2:
+            before,after=full[-2:];primary='path_rmse_m' if alpha==0 else 'speed_rmse_m_s'
+            metric_keys=('speed_rmse_m_s','path_rmse_m','heading_rmse_rad','working_exceedance_fraction')
+            delta={k:after[k]-before[k] if before[k] is not None and after[k] is not None else None for k in metric_keys}
+            trend=dict(status='descriptive random-rollout comparison; no causal or generalization claim',
+                previous_update=before['update'],latest_update=after['update'],primary_metric=primary,
+                latest_minus_previous=delta,primary_improves=None if delta[primary] is None else delta[primary]<0,
+                effective_cost_latest_minus_previous={k:after['effective_cost_means'][k]-v
+                    for k,v in before['effective_cost_means'].items() if k in after['effective_cost_means']})
+        passed=sum(x['receipt']['windows']['strong_demand']['sample_fraction'] is not None and
+                   x['receipt']['windows']['strong_demand']['sample_fraction']>=.05 for x in complete)
+        result['training'][key]=dict(coverage_receipts=coverage,statistics_receipts=statistics,
+            decision_receipts=decisions,complete_ten_update_windows=len(complete),windows_at_least_five_percent=passed,
+            pooled_strong_active_fraction=exposure,twenty_five_window_rows=rows,latest_twenty_five_trend=trend,
+            coverage_diagnosis=json.loads((root/key/'coverage_diagnosis.json').read_text()) if (root/key/'coverage_diagnosis.json').exists() else None,
+            final_decision=decisions[-1]['receipt'] if decisions else {'status':'UNKNOWN: no decision receipt'},
+            last_completed=identities[key]['last'])
+        lines.extend([f"- {key} effective strong exposure: {'UNKNOWN' if exposure is None else f'{exposure:.2%}'}; "
+                      f"complete 10-update windows ≥5%: {passed}/{len(complete)}. Reset fractions remain separate in JSON.",
+                      f"- {key} last recorded decision: `{json.dumps(result['training'][key]['final_decision'],ensure_ascii=False)}`",
+                      f"- {key} last two complete 25-update windows: `{json.dumps(trend,ensure_ascii=False)}`"])
+    summaries={key:dict(goal_and_hold=0,working_roll_failures=0,physical_or_domain_failures=0)
+               for key in ('zero_upper','parent_alpha0','parent_alpha1','alpha0','alpha1')}
+    for name,_,speed in cases(cfg):
+        locations={'zero_upper':root/'zero_upper',**{f'parent_alpha{a}':parent/f'alpha{a}'/'final_best' for a in (0,1)},
+                   **{f'alpha{a}':root/f'alpha{a}'/'final_best' for a in (0,1)}}
+        data={k:dict(np.load(p/f'{name}.npz',allow_pickle=False)) for k,p in locations.items()}
+        path=dict(np.load(root/'zero_upper'/f'{name}_path.npz',allow_pickle=False))
+        for folder in locations.values():
+            other=dict(np.load(folder/f'{name}_path.npz',allow_pickle=False))
+            if set(other)!=set(path) or any(not np.array_equal(path[k],other[k]) for k in path):
+                raise ValueError('parent/new fixed path differs: '+name)
+        metrics=paired_path_metrics(data,path,cfg)
+        old_pair=paired_path_metrics({'alpha0':data['parent_alpha0'],'alpha1':data['parent_alpha1']},path,cfg)
+        metrics['parent_pairing']=old_pair['pairing'];metrics['current_pairing']=metrics.pop('pairing')
+        metrics['current_minus_parent']={}
+        for alpha in (0,1):
+            old=metrics['methods'][f'parent_alpha{alpha}'];new=metrics['methods'][f'alpha{alpha}']
+            metrics['current_minus_parent'][f'alpha{alpha}']=dict(
+                peak_roll_rad=new['peak_roll_rad']-old['peak_roll_rad'],
+                working_exceedance_s=new['working_exceedance_s']-old['working_exceedance_s'],
+                windows={w:{k:(new['windows'][w].get(k)-old['windows'][w].get(k))
+                    if new['windows'][w].get(k) is not None and old['windows'][w].get(k) is not None else None
+                    for k in ('speed_rmse_m_s','path_rmse_m','heading_rmse_rad')}
+                    for w in ('whole','spatial_turn','strong_demand','exit')})
+        result['scenarios'][name]=metrics
+        fig,axes=plt.subplots(3,2,figsize=(15,13));xy=axes[0,0]
+        extent=max(float(np.max(d['path_progress'])) for d in data.values())+2
+        xy.plot(*path['xy'][path['s']<=extent].T,'k--',label='original fixed path')
+        for key,d in data.items():
+            m=metrics['methods'][key];summaries[key]['goal_and_hold']+=int(m['goal_crossed'] and m['final_hold'])
+            summaries[key]['working_roll_failures']+=int(m['working_exceedance_s']>0)
+            summaries[key]['physical_or_domain_failures']+=int(m['physical_failure'] or m['tracking_domain_failure'])
+            isparent=key.startswith('parent');style='--' if isparent else '-'
+            color='black' if key=='zero_upper' else ('tab:blue' if key.endswith('0') else 'tab:orange')
+            label=key
+            if key!='zero_upper':
+                a=key[-1];identity=result['sources'][f'alpha{a}'];update=identity['parent' if isparent else 'current']['source_update']
+                label=f"{'parent' if isparent else 'new'} a{a} update{update}"
+            t=np.asarray(d['time'])+cfg['timing']['lower_dt_s']
+            xy.plot(*d['actual_xy'].T,style,color=color,label=label)
+            xy.plot(*d['actual_xy'][-1],marker='x' if m['physical_failure'] or m['tracking_domain_failure'] else 'o',color=color)
+            for ax,y in ((axes[0,1],d['actual_forward_speed']),(axes[1,0],d['path_cross_track']),
+                         (axes[1,1],d['peak_roll']),(axes[2,0],d['path_heading_error'])):
+                ax.plot(t,y,style,color=color,label=label)
+                ax.plot(t[-1],y[-1],marker='x' if m['physical_failure'] or m['tracking_domain_failure'] else 'o',color=color)
+        xy.set_aspect('equal',adjustable='datalim');xy.set_xlabel('World X (m)');xy.set_ylabel('World Y (m)')
+        axes[0,1].axhline(speed,color='gray',ls=':',label='user speed');axes[0,1].set_ylabel('Actual forward speed (m/s)')
+        axes[1,0].set_ylabel('Signed cross-track error (m)');axes[1,1].set_ylabel('Peak absolute roll per tick (rad)')
+        axes[1,1].axhline(cfg['stage_B_baseline']['working_roll_rad'],color='red',ls=':',label='working bound')
+        axes[2,0].set_ylabel('Signed path heading error (rad)')
+        for ax in (axes[1,0],axes[2,0]):
+            bound=cfg['stage_B_baseline']['final_y_error_m' if ax is axes[1,0] else 'final_path_heading_error_rad']
+            for sign in (-1,1):ax.axhline(sign*bound,color='gray',ls=':',lw=.7)
+        axes[2,1].axis('off')
+        table=[[k,str(m['goal_crossed']),str(m['final_hold']),f"{m['working_exceedance_s']:.3f}",f"{m['observed_seconds']:.2f}"] for k,m in metrics['methods'].items()]
+        axes[2,1].table(cellText=table,colLabels=['Method','Goal','Final hold','Roll > bound (s)','Observed (s)'],loc='center').auto_set_font_size(False)
+        for ax in axes.flat:
+            if ax is axes[2,1]:continue
+            ax.legend(fontsize=7);ax.grid(alpha=.2)
+            if ax is not xy:
+                ax.set_xlabel('Actual time (s)');ax.axvspan(cfg['training_future_phase_C']['episode_s']-cfg['stage_B_baseline']['hold_s'],cfg['training_future_phase_C']['episode_s'],color='gray',alpha=.08)
+        seeds='/'.join(str(result['sources'][f'alpha{a}']['current'].get('seed','UNKNOWN')) for a in (0,1))
+        fig.suptitle(name+f' | cached fixed DEV | local300 | run seeds a0/a1={seeds} | no external disturbance\nParent versus disk-selected new best_task; x=failure, o=actual final frame; shaded=final hold window')
+        fig.tight_layout(rect=(0,0,1,.95));fig.savefig(out/f'{name}.png',dpi=130);plt.close(fig)
+        lines.extend(['',f'## {name}',f'![Fixed XY first, speed/path/roll and final hold]({name}.png)','',
+                      '| Method | Whole speed RMSE m/s | Whole path RMSE m | Turn speed RMSE m/s | Turn path RMSE m | Peak roll rad | Roll exceed s | Goal / hold | Failure physical / domain |',
+                      '|---|---:|---:|---:|---:|---:|---:|---|---|'])
+        fmt=lambda x:'N/A' if x is None else f'{x:.5f}'
+        for key,m in metrics['methods'].items():
+            w=m['windows']['whole'];turn=m['windows']['spatial_turn']
+            lines.append(f"| {key} | {fmt(w['speed_rmse_m_s'])} | {fmt(w['path_rmse_m'])} | {fmt(turn.get('speed_rmse_m_s'))} | {fmt(turn.get('path_rmse_m'))} | {fmt(m['peak_roll_rad'])} | {fmt(m['working_exceedance_s'])} | {m['goal_crossed']} / {m['final_hold']} | {m['physical_failure']} / {m['tracking_domain_failure']} |")
+    result['six_case_summary']=summaries
+    next_step=dict(schema='path_coverage_decision_summary_v1',initial_new_updates_per_endpoint=100,
+        hard_max_new_updates_per_endpoint=200,automatic_further_training=False,
+        report='coverage_parent_comparison/INDEX.md',
+        qualification_semantics='qualified_task is same-six-DEV task qualification, separate from proof of alpha preference; no automatic extension beyond saved decisions',
+        endpoints={key:dict(last_completed=result['training'][key]['last_completed'],
+            selected_new_update=result['sources'][key]['new_update'],
+            selected_lineage_update=result['sources'][key]['lineage_update'],
+            qualified_task=identities[key]['best_task'].get('qualified_task'),
+            recorded_decision=result['training'][key]['final_decision']) for key in ('alpha0','alpha1')})
+    for key,endpoint in next_step['endpoints'].items():
+        completed=endpoint['last_completed']['update'];decision=endpoint['recorded_decision']
+        endpoint['action']='freeze_at_hard_cap' if completed>=200 else (
+            'freeze_after_failed_extension_gate' if decision.get('allow') is False else
+            'report_saved_boundary_no_automatic_additional_training')
+        lines.insert(7,f"{key}: completed {completed} new updates; {endpoint['action']}; selected qualified_task={endpoint['qualified_task']} (separate from preference proof).")
+    (root/'report'/'next_step.json').write_text(json.dumps(next_step,indent=2,allow_nan=False)+'\n')
+    result['next_step']=next_step
+    lines[7:7]=['','Physical outcomes (denominator six DEV cases):','',*[f"- {k}: goal + final hold {v['goal_and_hold']}/6; working-roll failures {v['working_roll_failures']}/6; physical/domain failures {v['physical_or_domain_failures']}/6." for k,v in summaries.items()],'']
+    lines.extend(['','[Exact identities, physical metrics, common spatial-bin comparisons, exposure receipts and decisions](comparison.json)',
+        'Same path is compared at each method’s actual arrival times. Occupied-time RMSE and common spatial-bin differences are descriptive. Neither survival, return, nor best selection proves preference or safety.'])
+    (out/'comparison.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
+    (out/'INDEX.md').write_text('\n'.join(lines)+'\n')
+    index=root/'report'/'INDEX.md';link='[Parent best100/150 versus coverage best_task](coverage_parent_comparison/INDEX.md)'
+    if index.exists() and link not in index.read_text():
+        with index.open('a') as stream:stream.write('\n'+link+'\n')
+    return result
+
 def report_final_panel(root,config):
     import matplotlib
     matplotlib.use('Agg')
