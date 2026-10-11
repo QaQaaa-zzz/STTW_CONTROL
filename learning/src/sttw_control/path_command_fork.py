@@ -229,6 +229,39 @@ def load_weights_only(algo,saved):
     return dict(restored=sorted(keys),critic='fresh',optimizer='fresh',rng='fresh',update=0,consecutive_rejections=0)
 
 
+def reward_validation_schedule(plan,cfg):
+    """Keep the frozen50 pilot identity; require an explicit bounded continuation."""
+    schedule=cfg['training_future_phase_C']['validation_updates']
+    if schedule!=[50]:raise ValueError('reward pilot design schedule changed')
+    budget=plan.get('authorized_budget')
+    if plan['updates']==50 and budget is None:return [50]
+    expected={'total_updates':200,'checkpoint_updates':[50,100,150,200],'resume_boundary':50}
+    if plan['updates']!=200 or budget!=expected:raise ValueError('explicit paired200 budget and checkpoint contract required')
+    return expected['checkpoint_updates']
+
+
+def validate_reward_resume(plan,cfg,source,resume):
+    """Authorize only matching completed50 learner states for the200 stage."""
+    if plan.get('authorized_budget') is None:return
+    reward_validation_schedule(plan,cfg)
+    if resume is None or Path(resume).resolve()!=Path(plan.get('resume_stage','')).resolve():
+        raise ValueError('paired200 requires the declared50 resume stage')
+    parent=Path(resume);manifest=json.loads((parent/'manifest.json').read_text())
+    _equal(manifest['config'],cfg,'resume frozen design')
+    _equal(manifest['source'],source,'resume frozen lower/bank')
+    old=manifest['plan']
+    if old['updates']!=50 or old.get('authorized_budget'):raise ValueError('paired200 requires original50 pilot')
+    for key in ('seed','alphas','sampler_resolution','best_resolution','initialization','experiment_arm','task_selection_schema','terminal_contract'):
+        _equal(old[key],plan[key],'paired200 resume '+key)
+    status=json.loads((parent/'status.json').read_text())
+    if status['state']!='completed' or status.get('endpoint_updates')!={'alpha0':50,'alpha1':50}:
+        raise ValueError('paired200 resume stage not completed50')
+    for alpha in (0,1):
+        end=json.loads((parent/f'alpha{alpha}'/'training_status.json').read_text())
+        if end['state']!='completed' or end['completed_updates']!=50 or end['declared_updates']!=50:
+            raise ValueError('paired200 endpoint not completed50')
+
+
 def validate_reward_fork(plan,cfg,source):
     """Completed-parent, immutable-receipt audit for paired reward-only pilots."""
     fork=plan['initialization']
@@ -241,7 +274,7 @@ def validate_reward_fork(plan,cfg,source):
     _equal(source,manifest['source'],'reward fork frozen source')
     if physical_config_identity(cfg)!=physical_config_identity(manifest['config']):raise ValueError('reward fork physical config identity mismatch')
     _equal(plan['sampler_resolution'],manifest['plan']['sampler_resolution'],'reward fork sampler')
-    if plan['updates']!=50 or cfg['training_future_phase_C']['validation_updates']!=[50]:raise ValueError('reward pilot must use 50 updates and DEV 0/50 only')
+    reward_validation_schedule(plan,cfg)
     if plan['seed']!=911101 or plan.get('automatic_extension') or plan.get('conditional_extension'):raise ValueError('reward pilot seed or extension changed')
     expected=fork.get('expected_parents')
     if not expected:raise ValueError('freeze completed parent identities before reward fork')

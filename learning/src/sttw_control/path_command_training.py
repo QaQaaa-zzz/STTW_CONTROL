@@ -142,7 +142,9 @@ def load_plan(path):
     version=plan.get('sampler_version','legacy')
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
     if reward_fork:
-        if version!='demand_exposure_v2' or plan['updates']!=50 or plan['seed']!=911101 or c['validation_updates']!=[50]:raise ValueError('reward fork pilot contract changed')
+        from .path_command_fork import reward_validation_schedule
+        reward_validation_schedule(plan,cfg)
+        if version!='demand_exposure_v2' or plan['seed']!=911101:raise ValueError('reward fork pilot contract changed')
         if plan['sampler_resolution'].get('training_sampler')!=cfg.get('training_sampler'):raise ValueError('reward fork sampler disconnected')
         if plan.get('conditional_extension'):raise ValueError('reward pilot cannot extend')
         if plan.get('terminal_contract')!='terminal_contract_v2' or plan.get('http_failure_policy')!='error':raise ValueError('reward pilot terminal/TensorBoard contract changed')
@@ -175,13 +177,15 @@ def prepare(path,output,check_interface=False):
     for key in ['actor','checkpoint']:
         if digest(candidate[key])!=candidate[key+'_sha256']:raise ValueError('frozen lower identity mismatch')
     if digest(source['prepared_bank'])!=source['prepared_bank_sha256']:raise ValueError('prepared bank identity mismatch')
-    validation_updates=[x for x in c['validation_updates'] if x<=updates]
+    from .path_command_fork import reward_validation_schedule
+    schedule=reward_validation_schedule(plan,cfg) if plan.get('initialization',{}).get('mode')=='weights_only_reward_fork' else c['validation_updates']
+    validation_updates=[x for x in schedule if x<=updates]
     policy_per_endpoint=c['num_envs']*c['rollout_steps']*updates
     report=dict(schema=SCHEMA,state='prepared_not_run',plan=plan,config=cfg,source_manifest=source,training_policy_transitions_per_endpoint=policy_per_endpoint,training_policy_transitions_total=2*policy_per_endpoint,training_lower_ticks_total=8*policy_per_endpoint,validation_updates=validation_updates,maximum_validation_lower_ticks=(len(validation_updates)*2+1+2)*6*round(c['episode_s']/.005),additional_training_executed=0,additional_physics_executed=0,mainline_gate='baseline perfection not required',requires_explicit_execute=True,physical_training_smoke='not_run')
     if plan.get('sampler_version')=='demand_exposure_v2':
         report.update(maximum_validation_lower_ticks=len(validation_updates)*2*6*round(c['episode_s']/.005),conditional_hard_max_updates_per_endpoint=200,baseline_physics=0,final_best_physics=0)
     if plan.get('initialization',{}).get('mode')=='weights_only_reward_fork':
-        report.update(conditional_hard_max_updates_per_endpoint=50,parent_identities_frozen=bool(plan['initialization'].get('expected_parents')),formal_stage='not_run',maximum_validation_lower_ticks=48000,baseline_physics=0,final_best_physics=0)
+        report.update(conditional_hard_max_updates_per_endpoint=plan['updates'],parent_identities_frozen=bool(plan['initialization'].get('expected_parents')),formal_stage='not_run',maximum_validation_lower_ticks=len(validation_updates)*48000,baseline_physics=0,final_best_physics=0)
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],0)
         ep=batch.reset(j.int32(0),j.int32(0));env.set_log_template(ep.state,ep.route.path,ep.route.speed)
@@ -338,8 +342,10 @@ def train(path,output,*,execute=False,resume=None):
         from .path_command_fork import validate_fork_contract,restore_fork,extension_decision
         fork_receipt=validate_fork_contract(plan,cfg,source)
     if reward_fork:
-        from .path_command_fork import validate_reward_fork,restore_reward_fork
+        from .path_command_fork import validate_reward_fork,restore_reward_fork,reward_validation_schedule,validate_reward_resume
         fork_receipt=validate_reward_fork(plan,cfg,source)
+        validate_reward_resume(plan,cfg,source,resume)
+    validation_schedule=reward_validation_schedule(plan,cfg) if reward_fork else c['validation_updates']
     if root.exists():raise FileExistsError('new run directory required, including resumed stage')
     root.mkdir(parents=True);torch.set_num_threads(2)
     from .runtime import configure_compilation_cache
@@ -547,7 +553,7 @@ def train(path,output,*,execute=False,resume=None):
                 if coverage_pause:
                     atomic_json(out/'coverage_diagnosis.json',dict(reason='two consecutive complete ten-update windows below exposure target',sampler=cfg['training_sampler'],actual=coverage_summary,domain_failures_last_rollout=domain_failures,policy='save and pause; no silent sampler/reward/lower change'))
                     raise CoveragePause('strong demand exposure below target in two windows; saved boundary and diagnosis')
-                if update in c['validation_updates'] and not stop:
+                if update in validation_schedule and not stop:
                     dev_started=time.monotonic();params=export_actor(algo.policy);traces=evaluator.evaluate(params,alpha,out/'validation'/f'update_{update:04d}');summary=summarize(traces,alpha,cfg)
                     atomic_json(out/'validation'/f'update_{update:04d}'/'metrics.json',summary)
                     persist_best(out,checkpoint,out/'checkpoints'/f'actor_{update:04d}.pkl',summary,dict(identity,source_update=update))

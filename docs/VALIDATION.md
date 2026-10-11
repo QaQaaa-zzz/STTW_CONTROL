@@ -2109,3 +2109,10 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 
 ## 2026-10-10 Path Feedback V1 有界验证
 9项新增必要测试通过（符号/弦长/不可重锚/局部投影/filter/antiwindup/schema/新Actor零输出/非有限保护/频谱），附件数学检查通过；非全仓验证。实际加载.0002×25=.005，upper/path.02；两条2000+4000真实步完成，训练0。两条无物理失败，但末1s航向超限92/200、112/200，整体保持0/2；保留原门槛，不以生存/通过目标截面代替保持。[完整证据](evidence/path_feedback_v1_20261010/INDEX.md)。运行后非有限防护修复有单元证据，未重跑物理；执行源码SHA及差异已保存。
+
+
+### 2026-10-11 paired safety reward budget200 continuation
+
+In isolated path-safety-budget-200 worktree, added explicit200 budget with50/100/150/200 checkpoints. Frozen50 design, reward, physical sampler and checkpoint identity preserved. Both200 plans require completed matching50-stage receipts before execution; partial50 and swapped reward arm rejected. Existing full learner restore used, including Adam momentum/learning rates, Critic, torch/NumPy/Python RNG, route counters and rejection count. Physical state is reset to original prepared bank, not frame-continuous.
+
+Verification: 38 tests passed6.09s across path_reward_budget, path_reward_fork, path_training, path_fork, path_cache, path_recovery. Both completed Coverage parent audits passed; live unfinished50-stage correctly rejected until completion. No extra GPU smoke or large physical panel. New200 plans preserve resolved config, source, seed, sampler, parent identity and selection identity; explicit authorized_budget overrides only the future validation schedule. Training effect remains unverified until actual evaluation.

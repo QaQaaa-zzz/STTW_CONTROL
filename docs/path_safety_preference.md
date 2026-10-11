@@ -160,3 +160,12 @@ CPU历史轨迹测试复用归档`runs/path_reward_peak_review_20261011`；本�
 以ignored符号链接指向原worktree该归档，不复制大产物。新checkout运行相关
 测试前须接入同身份归档；缺少它是fixture不可访问，不能解释为物理失败。
 最终完整16个path模块110项CPU检查通过；独立源码审阅所有已记录问题已修正。
+
+
+### Authorized paired total budget200 (2026-10-11)
+
+User selected all four groups total200, with50 as checkpoint. Preserve the active50-stage code/config/artifacts. In isolated budget worktree: test explicit bounded plan and completed50 resume guards, allow only budget200 with DEV50/100/150/200, keep frozen design and best identity unchanged, and use existing full learner restore (including Adam learning rates and RNG), never weights-only reinitialization at50. All four arms reset physical/controller state to prepared bank at the same stage boundary, consistent with existing learner resume semantics; no claim of frame-continuous training.
+
+Implementation steps: (1) add failing budget/resume tests; (2) centralize budget schedule validation in path_command_fork and connect plan loader/evaluator; (3) add independent200 plans referencing existing50 runs and same frozen parent identity; (4) run targeted CPU tests and source-diff checks; (5) preregister incremental budget exactly four150x512x128=39,321,600 transitions (total52,428,800), queue continuation after all four50 arms complete, monitor and verify TB when continuation produces reward. No policy, reward, physics, sampler, optimizer algorithm or safety gate changes.
+
+Verification completed:38 related CPU tests passed, including full learner state and Adam learning-rate restore. Both200 plan completed-parent audits passed. Continuation checkpoint identity retains the original50 best_resolution to load exact states; the explicit authorized_budget checkpoint_updates field records the expanded50/100/150/200 candidate comparison scope. Total four-group budget52,428,800 policy transitions; incremental remaining39,321,600; total max209,715,200 training lower ticks and max384,000 DEV lower ticks (24 cases per four checkpoints, update0 reused), recovery remains separately bounded48,000 ticks.
