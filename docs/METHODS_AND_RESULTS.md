@@ -1,6 +1,6 @@
 # 2026-10-11 Path safety preference v1 — code implementation
 
-Candidate adds signed roll trend warning, near-boundary exposure cost and common0.40m corridor cost into existing capped ten-cost reward. Separate safety best ranks violation severity/duration before targets. Same-parent Actor/log_std-only fork resets Critic/Adam/RNG for both old-reward control and candidate. Complete natural-state recovery uses existing vmap/scan50 executor and original20s clock. [Verification and boundaries](evidence/path_safety_preference_v1/INDEX.md):109CPU checks and one discarded8×16GPU engineering run pass. Formal fourarm training/recovery/qualification NOT_RUN; no causal improvement/adoption claim. Current research facts remain in shared ledger.
+Candidate adds signed roll trend warning, near-boundary exposure cost and common0.40m corridor cost into existing capped ten-cost reward. Separate safety best ranks violation severity/duration before targets. Same-parent Actor/log_std-only fork resets Critic/Adam/RNG for both old-reward control and candidate. Complete natural-state recovery uses existing vmap/scan50 executor and original20s clock. [Verification and boundaries](evidence/path_safety_preference_v1/INDEX.md):110CPU checks and one discarded8×16GPU engineering run pass. Formal fourarm training/recovery/qualification NOT_RUN; no causal improvement/adoption claim. Current research facts remain in shared ledger.
 
 ---
 

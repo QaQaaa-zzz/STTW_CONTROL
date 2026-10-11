@@ -7,7 +7,7 @@ New-stage fixed-six DEV and natural-overlimit recovery panels: **NOT_RUN**.
 This delivery qualifies implementation wiring only; no policy/adoption claim.
 
 - [Contract and runnable handoff](../../path_safety_preference.md)
-- [CPU verification](verification.json): 109 passed, 13.94s.
+- [CPU verification](verification.json): 110 passed, 13.92s.
 - [One discarded GPU check](receipt.json): 8x16, 128 policy transitions,
   512 lower ticks, 1 optimizer update, 4 accepted epochs, learner discarded.
 - [Completed engineering status](status.json): 53.043s total;
@@ -34,3 +34,5 @@ Future control/candidate share frozen parent Actor/log_std and the same new
 Critic/Adam/RNG seed; both use safety selection and unchanged CoverageV2
 sampling. Two paired-endpoint plans = four50-update arms. Formal budgets,
 qualification, plots and natural recovery remain an independent stage.
+
+[Final independent source review and fix receipt](review.md): clean; repeated-resume0 candidate and recovery arm provenance gates corrected.

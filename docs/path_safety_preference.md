@@ -155,3 +155,8 @@ export JAX_COMPILATION_CACHE_DIR=/home/qy/STTW_CONTROL/runs/.jax_compilation_cac
 恢复判据独立于正常六场景主任务/偏好验收；主目标RMSE保留描述性数据，
 不能额外添加用户未声明的恢复门槛。输出PNG/NPZ/统一索引，保留初始超限段。
 当前工程和CPU证据见[实现验证索引](evidence/path_safety_preference_v1/INDEX.md)。
+
+CPU历史轨迹测试复用归档`runs/path_reward_peak_review_20261011`；本隔离工作树
+以ignored符号链接指向原worktree该归档，不复制大产物。新checkout运行相关
+测试前须接入同身份归档；缺少它是fixture不可访问，不能解释为物理失败。
+最终完整16个path模块110项CPU检查通过；独立源码审阅所有已记录问题已修正。

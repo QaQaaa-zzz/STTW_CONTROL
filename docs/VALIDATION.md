@@ -1,6 +1,6 @@
 # Path safety preference v1 verification — 2026-10-11
 
-[Receipts and limits](evidence/path_safety_preference_v1/INDEX.md). 109 necessary CPU path checks pass. One8×16 GPU engineering run completes128policy transitions/512lower ticks/one discarded PPO update in53.043s; current reward step16 verified overHTTP6007. Full-state roundtrip and paired deterministic continuation pass inside that budget. This establishes wiring only. Actual natural-overlimit recovery, six-case newstage DEV, learned preference and qualification remain NOT_RUN. Historical reward/best identities preserved; local300/network/physics/PPO unchanged.
+[Receipts and limits](evidence/path_safety_preference_v1/INDEX.md). 110 necessary CPU path checks pass. One8×16 GPU engineering run completes128policy transitions/512lower ticks/one discarded PPO update in53.043s; current reward step16 verified overHTTP6007. Full-state roundtrip and paired deterministic continuation pass inside that budget. This establishes wiring only. Actual natural-overlimit recovery, six-case newstage DEV, learned preference and qualification remain NOT_RUN. Historical reward/best identities preserved; local300/network/physics/PPO unchanged.
 
 ---
 

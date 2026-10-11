@@ -69,6 +69,7 @@ def main():
         ticks=prefix_charged
         if set(request['arms'])!={'control0','candidate0','control1','candidate1'}:raise ValueError('four final selected arms required')
         arms={'B0':dict(params=zero,actor_sha256=config_hash(jax.tree.map(lambda x:x.tolist(),zero)),alpha=0)}
+        arm_runners={config_hash(cfg):evaluator}
         for name,specification in request['arms'].items():
             root=Path(specification['run']);alpha=specification['alpha']
             run_status=json.loads((root/'status.json').read_text())
@@ -83,11 +84,16 @@ def main():
             armcfg=manifest['config']
             if physical_config_identity(armcfg)!=identity['physical_config']:raise ValueError('selected arm physical identity mismatch')
             if selected.get('config_sha256')!=config_hash(armcfg):raise ValueError('selected arm config identity mismatch')
-            arm_env=PathCommandEnv(armcfg,env.plant_spec,FrozenLocalLower(lower_params),terminal_contract='terminal_contract_v2')
-            if make_identity(arm_env,source)!=identity:raise ValueError('arm lower/model/controller/actuator identity mismatch')
+            cfg_identity=config_hash(armcfg)
+            if cfg_identity not in arm_runners:
+                arm_env=PathCommandEnv(armcfg,env.plant_spec,FrozenLocalLower(lower_params),terminal_contract='terminal_contract_v2')
+                if make_identity(arm_env,source)!=identity:raise ValueError('arm lower/model/controller/actuator identity mismatch')
+                runner=BatchedPanelEvaluator(arm_env,snapshot,armcfg,account=account)
+                runner.compiled=evaluator.compiled
+                arm_runners[cfg_identity]=runner
             with Path(selected['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
             arms[name]=dict(params=params,alpha=alpha,actor_sha256=selected['actor_sha256'],state='completed',selected=True,
-                evaluator=BatchedPanelEvaluator(arm_env,snapshot,armcfg,account=account))
+                evaluator=arm_runners[cfg_identity])
     if args.output.exists():raise FileExistsError('immutable execution output exists')
     try:
         if args.mode=='capture':result=capture_natural_snapshots(evaluator,zero,args.output,identity)
