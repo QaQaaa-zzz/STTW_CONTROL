@@ -140,7 +140,21 @@ def load_plan(path):
     from .path_command_scenarios import validate_training_sampler
     validate_training_sampler(cfg)
     version=plan.get('sampler_version','legacy')
-    if version=='demand_exposure_v2':
+    reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
+    if reward_fork:
+        if version!='demand_exposure_v2' or plan['updates']!=50 or plan['seed']!=911101 or c['validation_updates']!=[50]:raise ValueError('reward fork pilot contract changed')
+        if plan['sampler_resolution'].get('training_sampler')!=cfg.get('training_sampler'):raise ValueError('reward fork sampler disconnected')
+        if plan.get('conditional_extension'):raise ValueError('reward pilot cannot extend')
+        if plan.get('terminal_contract')!='terminal_contract_v2' or plan.get('http_failure_policy')!='error':raise ValueError('reward pilot terminal/TensorBoard contract changed')
+        if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('reward pilot coverage monitor changed')
+        if cfg.get('task_selection_schema')!='path_safety_task_v1' or plan.get('task_selection_schema')!='path_safety_task_v1':raise ValueError('reward fork safety selection required')
+        init=plan['initialization'];init['parent_run']=str((path.parent/init['parent_run']).resolve())
+        receipt_path=(path.parent/init['identities_file']).resolve();init['identities_file']=str(receipt_path)
+        if receipt_path.exists():
+            frozen=json.loads(receipt_path.read_text())
+            if frozen['parent_run']!=init['parent_run']:raise ValueError('frozen parent run mismatch')
+            init['expected_parents']=frozen['expected_parents']
+    elif version=='demand_exposure_v2':
         if plan['sampler_resolution'].get('training_sampler')!=cfg.get('training_sampler'):raise ValueError('sampler config not connected to declared resolution')
         if plan.get('conditional_extension')!={'enabled':True,'block':50,'hard_max_updates':200,'default_updates':100}:raise ValueError('coverage extension contract changed')
         if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('coverage exposure contract changed')
@@ -166,6 +180,8 @@ def prepare(path,output,check_interface=False):
     report=dict(schema=SCHEMA,state='prepared_not_run',plan=plan,config=cfg,source_manifest=source,training_policy_transitions_per_endpoint=policy_per_endpoint,training_policy_transitions_total=2*policy_per_endpoint,training_lower_ticks_total=8*policy_per_endpoint,validation_updates=validation_updates,maximum_validation_lower_ticks=(len(validation_updates)*2+1+2)*6*round(c['episode_s']/.005),additional_training_executed=0,additional_physics_executed=0,mainline_gate='baseline perfection not required',requires_explicit_execute=True,physical_training_smoke='not_run')
     if plan.get('sampler_version')=='demand_exposure_v2':
         report.update(maximum_validation_lower_ticks=len(validation_updates)*2*6*round(c['episode_s']/.005),conditional_hard_max_updates_per_endpoint=200,baseline_physics=0,final_best_physics=0)
+    if plan.get('initialization',{}).get('mode')=='weights_only_reward_fork':
+        report.update(conditional_hard_max_updates_per_endpoint=50,parent_identities_frozen=bool(plan['initialization'].get('expected_parents')),formal_stage='not_run',maximum_validation_lower_ticks=48000,baseline_physics=0,final_best_physics=0)
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],0)
         ep=batch.reset(j.int32(0),j.int32(0));env.set_log_template(ep.state,ep.route.path,ep.route.speed)
@@ -214,14 +230,15 @@ class PanelEvaluator:
                 traces[name]=dict(np.load(out/f'{name}.npz'));continue
             self.check_budget();path=build_path(route,np.asarray(pose),self.config);v=j.asarray(speed,j.float32)
             s=self.env.reset(self.snapshot,path,v,j.asarray(alpha,j.float32));self.env.set_log_template(s,path,v)
-            if route not in self.compiled:
+            cache_key=(config_hash(self.config),self.env.terminal_contract,route)
+            if cache_key not in self.compiled:
                 def step(state,path,v,params):
                     obs,_,fault=self.env.observation(state,path,v,h)
                     state=state.replace(fault=state.fault|fault)
                     z=PathCommandActor().apply(params,obs)
                     return self.env.policy_step(state,z,path,v,h)
-                self.compiled[route]=jax.jit(step).lower(s,path,v,params).compile()
-            execute=self.compiled[route];chunks=[]
+                self.compiled[cache_key]=jax.jit(step).lower(s,path,v,params).compile()
+            execute=self.compiled[cache_key];chunks=[]
             for index in range(round(h/.02)):
                 if index%50==0:self.check_budget();self.status(state='running',stage='validation',case=name,completed_intervals=index)
                 s,log=execute(s,path,v,params);jax.block_until_ready(s);chunks.append(jax.device_get(log));self.account(int(j.sum(log['active_tick'])))
@@ -271,8 +288,8 @@ def _verify_reward_http(root,info,run):
 def rescore_saved_candidates(parent,out,alpha,cfg,identity):
     """Only saved same-protocol DEV; no extra physical panel for selection v2."""
     import torch
-    from .path_command_selection import cases,summarize_task,persist_task_best
-    task_pointer=Path(parent)/f'alpha{alpha}'/'best_task_model.json'
+    from .path_command_selection import cases,summarize_task,persist_task_best,task_pointer_name
+    task_pointer=Path(parent)/f'alpha{alpha}'/task_pointer_name(cfg)
     if task_pointer.exists():
         incumbent=json.loads(task_pointer.read_text())
         if any(incumbent.get(k)!=v for k,v in identity.items()):raise ValueError('parent task best identity mismatch')
@@ -301,14 +318,18 @@ def train(path,output,*,execute=False,resume=None):
     from torch.utils.tensorboard import SummaryWriter
     from .lower_command_training import handle_candidate_ppo_result
     from .direct_command_training import clean_numbers,notify
-    from .path_command_selection import summarize,persist_best,summarize_task,persist_task_best
+    from .path_command_selection import summarize,persist_best,summarize_task,persist_task_best,task_pointer_name
     from .path_command_policy import PathCommandActor
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
-    coverage_mode=plan.get('sampler_version')=='demand_exposure_v2'
+    reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
+    coverage_mode=plan.get('sampler_version')=='demand_exposure_v2' and not reward_fork
     fork_receipt=None
     if coverage_mode:
         from .path_command_fork import validate_fork_contract,restore_fork,extension_decision
         fork_receipt=validate_fork_contract(plan,cfg,source)
+    if reward_fork:
+        from .path_command_fork import validate_reward_fork,restore_reward_fork
+        fork_receipt=validate_reward_fork(plan,cfg,source)
     if root.exists():raise FileExistsError('new run directory required, including resumed stage')
     root.mkdir(parents=True);torch.set_num_threads(2)
     from .runtime import configure_compilation_cache
@@ -321,11 +342,12 @@ def train(path,output,*,execute=False,resume=None):
     protected={str(p):digest(p) for p in protected_paths if p.exists()}
     manifest=dict(schema=SCHEMA,plan=plan,config=cfg,source=source,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),protected=protected,physical_continuation='reset to original complete prepared bank, not resumed simulator state',terminal_contract=plan.get('terminal_contract','terminal_contract_v1'),data_role='random TRAIN; fixed six-route DEV; no independent holdout',resume_parent=None if resume is None else str(Path(resume).resolve()))
     manifest['execution_optimizations']=dict(evaluator='vmap_scan50',compilation_cache=str(compilation_cache),ppo='existing_direct_command_ppo',actual_batch_dimensions=[n,steps],experimental_summary_reset_guard=False)
-    if coverage_mode:manifest['fork']=fork_receipt
+    if coverage_mode or reward_fork:manifest['fork']=fork_receipt
     atomic_json(root/'manifest.json',manifest)
     try:tb=_start_tensorboard(root)
     except (OSError,RuntimeError) as e:
         tb=dict(url=None,scalar_verified=False,warning=str(e));atomic_json(root/'tensorboard_server_warning.json',tb)
+        if plan.get('http_failure_policy')=='error':raise
     status={'state':'initializing','pid':os.getpid(),'endpoint_updates':{'alpha0':0,'alpha1':0},'declared_updates_per_endpoint':updates,'policy_transitions_total':0,'training_control_ticks_total':0,'validation_control_ticks_total':0}
     def update_status(**kw):
         status.update(kw)
@@ -363,13 +385,16 @@ def train(path,output,*,execute=False,resume=None):
             status['compile_and_setup_seconds']=time.monotonic()-started
             obs=to_torch(a,cr);algo=make_algorithm(obs,steps,cfg,'cuda')
             identity=dict(schema=SCHEMA,alpha=alpha,lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),sampler_sha256=config_hash(plan['sampler_resolution']),best_sha256=config_hash(plan['best_resolution']),seed=plan['seed'])
-            if coverage_mode:
+            if coverage_mode or reward_fork:
                 identity.update(parent_source_update=fork_receipt['identities'][f'alpha{alpha}']['source_update'],parent_checkpoint_sha256=fork_receipt['identities'][f'alpha{alpha}']['checkpoint_sha256'])
             start_update=0;rejections=0
             if coverage_mode and not endpoint_resume:
                 saved_parent=restore_fork(algo,fork_receipt,alpha)
                 rejections=saved_parent['consecutive_rejections']
                 atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],restored=['actor','critic','log_std','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng'],new_update=0,route_seed=cfg['training_sampler']['route_seed'],route_counters='new sampler version starts at episode0',physical_state='original prepared bank reset; not frame continuation'))
+            if reward_fork and not endpoint_resume:
+                initialization=restore_reward_fork(algo,fork_receipt,alpha)
+                atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if endpoint_resume:
                 receipt,parent_best=resume_source(resume,alpha,identity)
                 saved=restore_checkpoint(receipt['checkpoint'],algo,identity);
@@ -401,30 +426,42 @@ def train(path,output,*,execute=False,resume=None):
             learner_ready=True
             if endpoint_resume:
                 rescore_saved_candidates(resume,out,alpha,cfg,identity)
-                if coverage_mode:
+                if reward_fork:
+                    from .path_command_cache import inherit_reward_validation
+                    inherit_reward_validation(resume,out,alpha,cfg,identity)
+                if coverage_mode or reward_fork:
                     import shutil
                     for folder in ('validation','statistics','coverage','decisions'):
                         prior=Path(resume)/f'alpha{alpha}'/folder
-                        if prior.exists():shutil.copytree(prior,out/folder)
+                        if prior.exists() and not (reward_fork and folder=='validation'):shutil.copytree(prior,out/folder)
             parent_traces=None
             if coverage_mode:
                 from .path_command_cache import reuse_fork_parent
                 parent_traces=reuse_fork_parent(fork_receipt,out,alpha,cfg,identity,initial_checkpoint,register=not endpoint_resume)
+            if reward_fork and not endpoint_resume:
+                from .path_command_cache import reuse_reward_parent
+                from .geometric_path import build_path
+                pose=np.asarray(env.physics.helpers.pose(snapshot.data))
+                expected_paths={r:build_path(r,pose,cfg) for r in cfg['stage_C_evaluation']['route_ids']}
+                parent_traces=reuse_reward_parent(fork_receipt,out,alpha,cfg,identity,initial_checkpoint,expected_paths)
             from .path_command_evaluation import BatchedPanelEvaluator
             evaluator=BatchedPanelEvaluator(env,snapshot,cfg,check_budget,update_status,account_validation)
             evaluator.compiled=shared_eval_cache
             if not baseline_done:
                 cached=set()
-                if resume or coverage_mode:
+                if resume or coverage_mode or reward_fork:
                     from .path_command_cache import reuse_zero_upper
                     from .geometric_path import build_path
                     pose=np.asarray(env.physics.helpers.pose(snapshot.data))
                     paths={route:build_path(route,pose,cfg) for route in cfg['stage_C_evaluation']['route_ids']}
                     cache_parent=resume if resume else fork_receipt['parent_run']
                     cache_cfg=cfg if resume else fork_receipt['parent_manifest']['config']
-                    cached=reuse_zero_upper(cache_parent,root,cache_cfg,source,paths)
-                    if coverage_mode and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
-                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode) else None);baseline_done=True
+                    if reward_fork:
+                        from .path_command_cache import reuse_reward_baseline
+                        cached=reuse_reward_baseline(cache_parent,root,cfg,source,paths)
+                    else:cached=reuse_zero_upper(cache_parent,root,cache_cfg,source,paths)
+                    if (coverage_mode or reward_fork) and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
+                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode or reward_fork) else None);baseline_done=True
                 status['reused_baseline_cases']=len(cached)
             accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
             from .path_command_statistics import summarize_statistics,COST_KEYS
@@ -456,7 +493,7 @@ def train(path,output,*,execute=False,resume=None):
                         cost_totals_update+=np.asarray(j.sum(stats['completed_component_costs'],axis=0))
                         diagnostic=stats['diagnostics']
                         window_stats=diagnostic if window_stats is None else merge_diagnostics(window_stats,diagnostic)
-                        if coverage_mode:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
+                        if coverage_mode or reward_fork:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
                         for key,count in stats['component_caps'].items():caps[key]=caps.get(key,0)+int(j.sum(count))
                     algo.compute_returns(obs)
                 sample_seconds=time.monotonic()-tick_start;opt_start=time.monotonic();update_status(stage='optimizing');metrics=algo.update();opt_seconds=time.monotonic()-opt_start;check_budget()
@@ -474,7 +511,7 @@ def train(path,output,*,execute=False,resume=None):
                     window_start=update+1
                     window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
                 coverage_pause=False
-                if coverage_mode and update%10==0:
+                if (coverage_mode or reward_fork) and update%10==0:
                     coverage_summary=summarize_statistics(coverage_stats,cfg);coverage_stats=None
                     coverage_fraction=coverage_summary['windows']['strong_demand']['sample_fraction']
                     complete_window=update-coverage_start+1==10
@@ -495,6 +532,7 @@ def train(path,output,*,execute=False,resume=None):
                     checkpoint=save_checkpoint(out/'checkpoints',algo,update,identity,rejections=rejections,route_counters=episodes.episode)
                     atomic_json(out/'last_completed.json',dict(update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),schema=SCHEMA))
                 if not http_verified and (update==start_update+1 or update%25==0):http_verified=_verify_reward_http(root,tb,f'alpha{alpha}')
+                if plan.get('http_failure_policy')=='error' and not http_verified:raise RuntimeError('current TensorBoard reward scalar not verified')
                 update_status(stage='optimized',completed_updates=update,accepted_batches=accepted,last_reward=record['mean_step_reward'])
                 if coverage_pause:
                     atomic_json(out/'coverage_diagnosis.json',dict(reason='two consecutive complete ten-update windows below exposure target',sampler=cfg['training_sampler'],actual=coverage_summary,domain_failures_last_rollout=domain_failures,policy='save and pause; no silent sampler/reward/lower change'))
@@ -520,12 +558,12 @@ def train(path,output,*,execute=False,resume=None):
             atomic_json(out/'training_status.json',dict(state='completed' if not stop else 'error',completed_updates=update,declared_updates=endpoint_target,stop_reason=stop))
             writer.close();notify('STTW path training stage ended',f'alpha{alpha}: {update}/{endpoint_target}; {stop or "budget reached"}')
             if stop:raise RuntimeError(stop)
-            if not (out/'best_task_model.json').exists():raise RuntimeError('no fixed validation candidate; no last-as-best fallback')
-            best=json.loads((out/'best_task_model.json').read_text())
+            if not (out/task_pointer_name(cfg)).exists():raise RuntimeError('no fixed validation candidate; no last-as-best fallback')
+            best=json.loads((out/task_pointer_name(cfg)).read_text())
             if digest(best['actor'])!=best['actor_sha256'] or digest(best['checkpoint'])!=best['checkpoint_sha256']:raise ValueError('best task weights identity changed')
             with Path(best['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
             cached_final=set()
-            if coverage_mode:
+            if coverage_mode or reward_fork:
                 from .path_command_cache import reuse_selected_validation
                 cached_final=reuse_selected_validation(out,best,cfg)
             elif resume:
@@ -540,7 +578,7 @@ def train(path,output,*,execute=False,resume=None):
         report_final_panel(root,cfg)
         from .path_command_reporting import convergence_decision
         paired=json.loads((root/'report'/'paired_metrics.json').read_text());decisions={}
-        qualified=all(json.loads((root/f'alpha{a}'/'best_task_model.json').read_text())['qualified_task'] for a in plan['alphas'])
+        qualified=all(json.loads((root/f'alpha{a}'/task_pointer_name(cfg)).read_text())['qualified_task'] for a in plan['alphas'])
         for a in plan['alphas']:
             endpoint=root/f'alpha{a}'
             history=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'validation').glob('update_*/task_metrics.json'))]

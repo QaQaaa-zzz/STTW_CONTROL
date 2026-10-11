@@ -204,3 +204,101 @@ def extension_decision(parent_summary,current_summary,parent_traces,current_trac
     except (KeyError,ValueError,TypeError,IndexError) as exc:
         return dict(allow=False,reasons=['missing_or_invalid_evidence: '+str(exc)],checks=checks,evidence=evidence)
     return dict(allow=all(checks.values()),reasons=[key for key,value in checks.items() if not value],checks=checks,evidence=evidence)
+
+
+def physical_config_identity(config):
+    """Reward/sorting do not affect motion; everything else is fail-closed."""
+    frozen=deepcopy(config)
+    frozen.pop('path_reward',None);frozen.pop('task_selection_schema',None)
+    frozen.get('training_future_phase_C',{}).pop('validation_updates',None)
+    return config_hash(frozen)
+
+
+def load_weights_only(algo,saved):
+    """Load Actor/log_std only into a freshly constructed learner, never RNG."""
+    import torch
+    if algo.optimizer.state_dict()['state']:raise ValueError('weights-only fork requires fresh Adam')
+    state=algo.policy.state_dict();parent=saved['policy']
+    keys={k for k in state if k.startswith('actor.') or k=='log_std'}
+    if {k for k in parent if k.startswith('actor.') or k=='log_std'}!=keys:
+        raise ValueError('weights-only parent actor/log_std keys mismatch')
+    for key in keys:
+        if parent[key].shape!=state[key].shape or not torch.isfinite(parent[key]).all():raise ValueError('invalid parent weights '+key)
+        state[key]=parent[key].to(device=state[key].device,dtype=state[key].dtype)
+    algo.policy.load_state_dict(state,strict=True)
+    return dict(restored=sorted(keys),critic='fresh',optimizer='fresh',rng='fresh',update=0,consecutive_rejections=0)
+
+
+def validate_reward_fork(plan,cfg,source):
+    """Completed-parent, immutable-receipt audit for paired reward-only pilots."""
+    fork=plan['initialization']
+    if fork.get('mode')!='weights_only_reward_fork':raise ValueError('explicit weights_only_reward_fork required')
+    parent=Path(fork['parent_run'])
+    if not parent.is_absolute():raise ValueError('reward fork parent path must be resolved')
+    status=json.loads((parent/'status.json').read_text())
+    if status['state']!='completed':raise ValueError('reward fork parent stage is not completed')
+    mp=parent/'manifest.json';manifest=json.loads(mp.read_text())
+    _equal(source,manifest['source'],'reward fork frozen source')
+    if physical_config_identity(cfg)!=physical_config_identity(manifest['config']):raise ValueError('reward fork physical config identity mismatch')
+    _equal(plan['sampler_resolution'],manifest['plan']['sampler_resolution'],'reward fork sampler')
+    if plan['updates']!=50 or cfg['training_future_phase_C']['validation_updates']!=[50]:raise ValueError('reward pilot must use 50 updates and DEV 0/50 only')
+    if plan['seed']!=911101 or plan.get('automatic_extension') or plan.get('conditional_extension'):raise ValueError('reward pilot seed or extension changed')
+    expected=fork.get('expected_parents')
+    if not expected:raise ValueError('freeze completed parent identities before reward fork')
+    records={};original={}
+    for alpha in (0,1):
+        name=f'alpha{alpha}';end=parent/name
+        if json.loads((end/'training_status.json').read_text())['state']!='completed':raise ValueError('parent endpoint not completed')
+        record=json.loads((end/'best_task_model.json').read_text())
+        for key in ('source_update','checkpoint_sha256','actor_sha256'):_equal(record[key],expected[name][key],name+' frozen reward parent '+key)
+        _equal(json.loads((end/'final_best'/'source.json').read_text()),record,name+' completed final panel receipt')
+        identity={k:record[k] for k in IDENTITY_KEYS}
+        for key,value in [('schema',SCHEMA),('alpha',alpha),('lower_actor_sha256',source['candidate']['actor_sha256']),('config_sha256',config_hash(manifest['config'])),('sampler_sha256',config_hash(manifest['plan']['sampler_resolution'])),('best_sha256',config_hash(manifest['plan']['best_resolution'])),('seed',manifest['plan']['seed'])]:
+            _equal(identity[key],value,name+' original identity '+key)
+        # Parent may itself be a fork, so attest its complete serialized identity.
+        import torch
+        saved=torch.load(record['checkpoint'],map_location='cpu',weights_only=False)
+        _audit_saved_parent(record,saved['identity'])
+        for key in IDENTITY_KEYS:_equal(saved['identity'][key],identity[key],name+' serialized identity '+key)
+        panel_files=_audit_reward_parent_panel(parent,alpha,manifest['config'])
+        _equal(panel_files,expected[name].get('panel_sha256'),name+' frozen selected physics')
+        records[name]=record;original[name]=saved['identity']
+    return dict(parent_run=str(parent),parent_manifest=manifest,parent_manifest_sha256=digest(mp),identities=records,original_identities=original,mode='weights_only_reward_fork')
+
+
+def restore_reward_fork(algo,receipt,alpha):
+    name=f'alpha{alpha}'
+    saved=_audit_saved_parent(receipt['identities'][name],receipt['original_identities'][name])
+    return load_weights_only(algo,saved)
+
+
+def freeze_reward_parents(parent):
+    """Return identities only after both final selections and panels are complete."""
+    parent=Path(parent).resolve()
+    if json.loads((parent/'status.json').read_text())['state']!='completed':raise ValueError('parent stage is not completed')
+    result={}
+    for alpha in (0,1):
+        end=parent/f'alpha{alpha}'
+        if json.loads((end/'training_status.json').read_text())['state']!='completed':raise ValueError('endpoint not completed')
+        r=json.loads((end/'best_task_model.json').read_text())
+        _equal(r,json.loads((end/'final_best'/'source.json').read_text()),'final selected parent')
+        for key in ('actor','checkpoint'):
+            if digest(r[key])!=r[key+'_sha256']:raise ValueError('parent file SHA mismatch')
+        result[f'alpha{alpha}']={k:r[k] for k in ('source_update','checkpoint_sha256','actor_sha256')}
+        config=json.loads((parent/'manifest.json').read_text())['config']
+        result[f'alpha{alpha}']['panel_sha256']=_audit_reward_parent_panel(parent,alpha,config)
+    return result
+
+
+def _audit_reward_parent_panel(parent,alpha,config):
+    """Freeze complete selected physics receipts, including matching B0 path."""
+    from .path_command_cache import _read_complete_panel
+    from .path_command_selection import cases
+    parent=Path(parent);folder=parent/f'alpha{alpha}'/'final_best'
+    _,files,_,_=_read_complete_panel(folder,alpha,config)
+    for name,_,_ in cases(config):
+        baseline=parent/'zero_upper'/f'{name}_path.npz'
+        with np.load(folder/f'{name}_path.npz') as actual,np.load(baseline) as reference:
+            for key in ('s','xy','heading','curvature','goal','turn_end'):
+                np.testing.assert_array_equal(actual[key],reference[key],err_msg='parent path differs from B0 '+name)
+    return files

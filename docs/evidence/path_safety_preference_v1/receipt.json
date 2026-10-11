@@ -1,0 +1,79 @@
+{
+  "config_sha256": "00e2b9a2deb9110302c1085a4d0902cab47aeb21fd0436025b429d96369a2c29",
+  "parent_checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_reward_peak_review_20261011/alpha0/task_best_generations/c1246d7bcae1568d923e2b819cf87a4c10c7a128c0fdfd9e14b73126ff75c20a/best_model.pt",
+  "parent_sha256": "c1246d7bcae1568d923e2b819cf87a4c10c7a128c0fdfd9e14b73126ff75c20a",
+  "parent_role": "archived engineering weights, not frozen formal Coverage parents",
+  "initialization": {
+    "restored": [
+      "actor.0.bias",
+      "actor.0.weight",
+      "actor.2.bias",
+      "actor.2.weight",
+      "actor.4.bias",
+      "actor.4.weight",
+      "actor.6.bias",
+      "actor.6.weight",
+      "log_std"
+    ],
+    "critic": "fresh",
+    "optimizer": "fresh",
+    "rng": "fresh",
+    "update": 0,
+    "consecutive_rejections": 0
+  },
+  "actual_batch_dimensions": [
+    8,
+    16
+  ],
+  "compilation_cache": "/home/qy/STTW_CONTROL/runs/.jax_compilation_cache",
+  "physics": "unchanged existing PathBatch.advance_one",
+  "optimizer": "existing DirectCommandPPO",
+  "deterministic_complete_state_pair": true,
+  "complete_state_serialization_equal": true,
+  "metrics": {
+    "temporal": 0.0,
+    "value": 0.06031823786906898,
+    "surrogate": -0.022223191102966666,
+    "entropy": -0.8496122807264328,
+    "actor_grad_norm": 6.642463713884354,
+    "critic_grad_norm": 1.7427627556025982,
+    "mean_kl": 0.012655798345804214,
+    "exact_kl": 0.012655798345804214,
+    "kl_by_alpha": {
+      "all": 0.012655798345804214
+    },
+    "kl_alpha0": null,
+    "kl_alpha1": null,
+    "actor_grad_norm_preclip": 6.642463713884354,
+    "critic_grad_norm_preclip": 1.7427627556025982,
+    "attempted_actor_grad_norm": 6.642463713884354,
+    "attempted_critic_grad_norm": 1.7427627556025982,
+    "projected_std": [
+      0.24975715577602386,
+      0.1002807766199112
+    ],
+    "attempted_epochs": 4,
+    "accepted_epochs": 4,
+    "attempted_minibatches": 16,
+    "accepted_minibatches": 16,
+    "completed_epochs": 4,
+    "completed_minibatches": 16,
+    "hard_kl_stop": false,
+    "nonfinite_stop": false,
+    "stop_reason": "target_kl",
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003
+  },
+  "sampling_seconds": 10.388016536999203,
+  "optimize_seconds": 0.2585599360008928,
+  "compile_seconds": 42.375769832000515,
+  "tensorboard": {
+    "pid": 739652,
+    "url": "http://localhost:6007",
+    "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/runs/path_safety_engineering_20261011/tensorboard",
+    "scalar_verified": false
+  },
+  "scalar_verified": true,
+  "formal_training": "not_run",
+  "learner_retained": false
+}

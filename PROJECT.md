@@ -1,3 +1,9 @@
+# Path safety preference v1 — implementation, 2026-10-11
+
+[Contract and handoff](docs/path_safety_preference.md) · [Verified implementation evidence](docs/evidence/path_safety_preference_v1/INDEX.md). Isolated from active Coverage. New reward/safety ranking, weights-only paired fork, physical-trace rescoring and complete-state recovery are implemented. Formal four50-update arms and actual overlimit recovery remain NOT_RUN. Live facts remain in `/home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md`; no auto push.
+
+---
+
 # Path Coverage V2 — 2026-10-11
 
 Reset-distribution-only fork from alpha0 best100 / alpha1 best150. [Execution contract and verification](docs/path_coverage_v2.md). Default +100 each; conditional +50 blocks capped +200. Old results preserved; no auto push. Live facts remain in the shared research hub.

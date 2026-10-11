@@ -1,3 +1,9 @@
+# Path safety preference v1 verification — 2026-10-11
+
+[Receipts and limits](evidence/path_safety_preference_v1/INDEX.md). 109 necessary CPU path checks pass. One8×16 GPU engineering run completes128policy transitions/512lower ticks/one discarded PPO update in53.043s; current reward step16 verified overHTTP6007. Full-state roundtrip and paired deterministic continuation pass inside that budget. This establishes wiring only. Actual natural-overlimit recovery, six-case newstage DEV, learned preference and qualification remain NOT_RUN. Historical reward/best identities preserved; local300/network/physics/PPO unchanged.
+
+---
+
 # Path Coverage V2 focused verification — 2026-10-11
 
 30 focused CPU checks passed: sampler and legacy routing, active statistics, original full parent restoration and bounded extension, finite-domain single-environment reset, and identity-checked cached DEV. One 8×16 engineering batch executed 512 lower ticks and one disposable PPO update; no engineering fault, all four optimizer epochs accepted. Setup/compile 43.81s, total49.20s. Frozen physics assertion .0002×25=.005s, upper/PP .02s. This short prefix check establishes wiring only, not bend performance or coverage; actual coverage comes from ten-update training windows. Raw evidence: `runs/path_coverage_v2_preparation_20261011/engineering_result.json`. No old physical panels or broad repository tests.

@@ -1,3 +1,9 @@
+# 2026-10-11 Path safety preference v1 — code implementation
+
+Candidate adds signed roll trend warning, near-boundary exposure cost and common0.40m corridor cost into existing capped ten-cost reward. Separate safety best ranks violation severity/duration before targets. Same-parent Actor/log_std-only fork resets Critic/Adam/RNG for both old-reward control and candidate. Complete natural-state recovery uses existing vmap/scan50 executor and original20s clock. [Verification and boundaries](evidence/path_safety_preference_v1/INDEX.md):109CPU checks and one discarded8×16GPU engineering run pass. Formal fourarm training/recovery/qualification NOT_RUN; no causal improvement/adoption claim. Current research facts remain in shared ledger.
+
+---
+
 # 2026-10-11 Path Coverage V2
 
 Single intervention: 102 legacy / 204 stronger single-bend / 206 stronger S-bend reset environments; full best100/150 learner forks. Reward, PP, filter/slew, network, local300 and physics unchanged. Old `bend=chi>0` was demand coverage, not all geometry. [Native configuration, budget and checks](path_coverage_v2.md). Effectiveness pending formal training and same-six-DEV comparison; engineering checks do not establish alpha preference.

@@ -1,0 +1,17 @@
+{
+  "state": "completed",
+  "pid": 739423,
+  "declared_policy_steps": 16,
+  "declared_envs": 8,
+  "declared_policy_transitions": 128,
+  "declared_lower_ticks": 512,
+  "completed_policy_steps": 16,
+  "policy_transitions": 128,
+  "lower_ticks": 512,
+  "optimizer_updates": 1,
+  "discarded": true,
+  "stage": "discarded",
+  "last_update_epoch": 1791723707.2717974,
+  "compile_seconds": 42.375769832000515,
+  "total_seconds": 53.04308332100118
+}

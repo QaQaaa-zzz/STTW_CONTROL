@@ -1,0 +1,13 @@
+{
+  "pid": 739652,
+  "url": "http://localhost:6007",
+  "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/runs/path_safety_engineering_20261011/tensorboard",
+  "scalar_verified": true,
+  "run": "engineering",
+  "tag": "train/mean_step_reward",
+  "latest": [
+    1791723706.9841187,
+    16,
+    -0.005680058151483536
+  ]
+}

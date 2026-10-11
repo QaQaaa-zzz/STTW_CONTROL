@@ -9,7 +9,7 @@ import time
 import numpy as np
 import jax
 import jax.numpy as j
-from .preference_best import atomic_json
+from .preference_best import atomic_json,config_hash
 
 
 def _signature(tree):
@@ -23,10 +23,10 @@ class BatchedPanelEvaluator:
         self.check_budget=check_budget;self.status=status;self.account=account
         self.compiled={}
 
-    def _compiled_group(self,paths,speeds,alpha,params,horizon):
+    def _compiled_group(self,paths,speeds,alpha,params,horizon,*,capture_states=False):
         from .path_command_policy import PathCommandActor
         env=self.env
-        key=(_signature(paths),_signature(speeds),_signature(params),float(horizon))
+        key=(config_hash(self.config),env.terminal_contract,_signature(paths),_signature(speeds),_signature(params),float(horizon),bool(capture_states))
         if key not in self.compiled:
             def reset(paths,speeds,alpha):
                 return jax.vmap(lambda p,v:env.reset(self.snapshot,p,v,alpha))(paths,speeds)
@@ -48,7 +48,9 @@ class BatchedPanelEvaluator:
                         z=actor.apply(params,obs)
                         return env.policy_step(state,z,path,v,horizon)
                     return jax.lax.cond(active,advance,lambda state:(state,zero_logs),state)
-                def step(states,_):return jax.vmap(one)(states,paths,speeds)
+                def step(states,_):
+                    nxt,logs=jax.vmap(one)(states,paths,speeds)
+                    return nxt,(logs,nxt) if capture_states else logs
                 return jax.lax.scan(step,states,None,length=50)
             chunk_fn=jax.jit(chunk).lower(states,paths,speeds,params).compile()
             self.compiled[key]=(reset_fn,chunk_fn)

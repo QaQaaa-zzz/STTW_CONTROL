@@ -1,0 +1,9 @@
+{
+  "cpu_command": "JAX_PLATFORMS=cpu PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python -m pytest -q learning/tests/test_path*.py",
+  "result": "109 passed in 13.94s",
+  "scope": "16 path test modules; reward/caps/terminal/rates/selection/fork/cache/fullstate/recovery/reporting and historical regressions",
+  "formal_training": "not_run",
+  "natural_overlimit_recovery": "not_run",
+  "new_policy_qualification": "not_verified",
+  "gpu_check": "exactly one 8x16; 128 transitions /512 lower ticks /1 discarded optimizer update"
+}

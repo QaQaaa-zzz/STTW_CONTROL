@@ -195,11 +195,13 @@ def convergence_decision(validation_history,training_trend=None,paired_qualified
     return dict(action='inspect_coverage_caps_and_task_trends',reason='no evidence sufficient to authorize extension; reward alone is insufficient',late_quality_relative_improvement=improvement,matched_training_trend=train,automatic_extension=False)
 
 
-def checked_final_sources(root):
+def checked_final_sources(root,config=None):
+    from .path_command_selection import task_pointer_name
+    config={} if config is None else config
     from .preference_best import digest
     root=Path(root);identities={}
     for alpha in (0,1):
-        out=root/f'alpha{alpha}';record=json.loads((out/'best_task_model.json').read_text())
+        out=root/f'alpha{alpha}';record=json.loads((out/task_pointer_name(config)).read_text())
         for key in ['actor','checkpoint']:
             if digest(record[key])!=record[key+'_sha256']:raise ValueError('best_task file SHA mismatch')
         receipt=json.loads((out/'final_best'/'source.json').read_text())
@@ -374,11 +376,12 @@ def report_coverage_parent_comparison(root,cfg,fork_receipt):
     return result
 
 def report_final_panel(root,config):
+    from .path_command_selection import qualify_preference,SAFETY_SELECTION_SCHEMA
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from .path_command_selection import cases
-    root=Path(root);identities=checked_final_sources(root);out=root/'report';out.mkdir(exist_ok=True);lines=['# Geometric upper fixed-path comparison','', 'Same immutable path and prepared state; nominal PP reference may differ by actual pose. No post-hoc smoothing. Best is fixed-DEV ranking, not independent validation or proof of alpha preference.','']
+    root=Path(root);identities=checked_final_sources(root,config);out=root/'report';out.mkdir(exist_ok=True);lines=['# Geometric upper fixed-path comparison','', 'Same immutable path and prepared state; nominal PP reference may differ by actual pose. No post-hoc smoothing. Best is fixed-DEV ranking, not independent validation or proof of alpha preference.','']
     all_metrics={}
     for name,route,speed in cases(config):
         data={'zero_upper':dict(np.load(root/'zero_upper'/f'{name}.npz'))}
@@ -436,6 +439,13 @@ def report_final_panel(root,config):
             if window=='common_arclength_bins':continue
             lines.append(f"| {window} | {fmt(pair.get('D_v_m_s'))} | {fmt(pair.get('D_y_m'))} | {pair.get('direction_correct','N/A')} | {pair.get('discernible_reference','N/A')} |")
         lines.append('')
+    if config.get('task_selection_schema')==SAFETY_SELECTION_SCHEMA:
+        traces0={name:dict(np.load(root/'alpha0'/'final_best'/f'{name}.npz')) for name,_,_ in cases(config)}
+        traces1={name:dict(np.load(root/'alpha1'/'final_best'/f'{name}.npz')) for name,_,_ in cases(config)}
+        paths={name:dict(np.load(root/'alpha0'/'final_best'/f'{name}_path.npz')) for name,_,_ in cases(config)}
+        (out/'preference_qualification.json').write_text(json.dumps(qualify_preference(traces0,traces1,paths,config),indent=2,allow_nan=False))
+        lines.extend(['[Predeclared safety and preference qualification](preference_qualification.json)',
+            'New-stage acceptance first requires both complete common tasks (roll <=.302rad; cross-track <=.40m; original goal/last1s hold and primary gates). Preference then uses every fixed .5m bin of each complete high-speed left/right turn, sqrt(mean(bin MSE)); Dv >=.03m/s and Dy >=.02m. Missing bins fail; no common-fragment shortcut.'])
     (out/'paired_metrics.json').write_text(json.dumps(all_metrics,indent=2,allow_nan=False))
     lines.extend(['[Same-path paired windows, spatial bins, commands and lower evidence](paired_metrics.json)','Differences: Dv=Ev(alpha0)-Ev(alpha1), Dy=Ey(alpha1)-Ey(alpha0). Positive values support the intended direction; .03m/s and .02m are descriptive discernibility references, not reward terms. Lower causal blocking remains unproved from RMSE alone.'])
     (out/'identities.json').write_text(json.dumps(identities,indent=2));lines.append('[Exact checkpoint identities and fixed-validation metrics](identities.json)');(out/'INDEX.md').write_text('\n'.join(lines)+'\n')

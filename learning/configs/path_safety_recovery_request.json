@@ -1,0 +1,11 @@
+{
+  "config": "learning/configs/STTW_Path_Safety_candidate.json",
+  "source": "docs/evidence/select300_integration_20261010/manifest.json",
+  "snapshots": "runs/path_safety_recovery_capture",
+  "arms": {
+    "control0": {"run": "runs/path_safety_control_50", "alpha": 0},
+    "candidate0": {"run": "runs/path_safety_candidate_50", "alpha": 0},
+    "control1": {"run": "runs/path_safety_control_50", "alpha": 1},
+    "candidate1": {"run": "runs/path_safety_candidate_50", "alpha": 1}
+  }
+}

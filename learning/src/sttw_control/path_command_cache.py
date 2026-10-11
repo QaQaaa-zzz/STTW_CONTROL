@@ -206,3 +206,82 @@ def reuse_selected_validation(out,best,cfg):
                 source_sha256=digest(source_file),source_update=update,cases=files,
                 semantics='selected complete saved DEV; no physical rollout'))
     return set(traces)
+
+
+def _rescore_trace(data,alpha,cfg):
+    """Derived reward identity changes; raw physics and original reference remain."""
+    from .path_command_reporting import reconstruct_costs,reward_series
+    result={k:np.array(v,copy=True) for k,v in data.items()}
+    rebuilt=reconstruct_costs(result,alpha,cfg);reward,components=reward_series(result,alpha,cfg)
+    for group in ('raw','effective','capped'):
+        for key,value in rebuilt[group].items():result[f'{dict(raw="raw_cost",effective="effective_cost",capped="component_capped")[group]}_{key}']=value
+    for key,value in rebuilt['diagnostic_subcosts'].items():result[f'diagnostic_subcosts_{key}']=value
+    result['offset_rate']=rebuilt['offset_rate'];result['scored_tick_reward']=reward
+    result['rho']=np.maximum(np.abs(result['phi']),np.abs(result['phi']+cfg['path_reward'].get('risk_prediction_s',.10)*result['phi_dot']))
+    result['tick_reward']=-cfg['path_reward']['scale']*cfg['timing']['lower_dt_s']*sum(rebuilt['effective'].values())
+    return result
+
+
+def reuse_reward_parent(receipt,out,alpha,cfg,identity,initial_checkpoint,expected_paths):
+    from .path_command_fork import physical_config_identity
+    from .path_command_selection import summarize,summarize_task,persist_best,persist_task_best
+    import torch
+    out=Path(out);parent=Path(receipt['parent_run']);record=receipt['identities'][f'alpha{alpha}'];folder=parent/f'alpha{alpha}'/'final_best'
+    if digest(parent/'manifest.json')!=receipt['parent_manifest_sha256']:raise ValueError('reward parent manifest changed')
+    if physical_config_identity(cfg)!=physical_config_identity(receipt['parent_manifest']['config']):raise ValueError('reward cache physical identity mismatch')
+    if config_hash(json.loads((folder/'source.json').read_text()))!=config_hash(record):raise ValueError('reward cache selected parent differs')
+    saved=torch.load(initial_checkpoint,map_location='cpu',weights_only=False)
+    original=torch.load(record['checkpoint'],map_location='cpu',weights_only=False)
+    for key,value in saved['policy'].items():
+        if key.startswith('actor.') or key=='log_std':
+            if not torch.equal(value,original['policy'][key]):raise ValueError('reward cache initial weights differ from parent')
+    if saved['optimizer']['state'] or saved['update']!=0 or saved['consecutive_rejections']!=0:raise ValueError('reward fork initial learner is not fresh')
+    traces,files,_,_=_read_complete_panel(folder,alpha,receipt['parent_manifest']['config'])
+    for name,route,_ in cases(cfg):
+        with np.load(folder/f'{name}_path.npz') as archive:
+            for key in ('s','xy','heading','curvature','goal','turn_end'):
+                np.testing.assert_allclose(archive[key],np.asarray(getattr(expected_paths[route],key)),rtol=0,atol=2e-6,err_msg='reward parent original path mismatch '+name)
+    target=out/'validation'/'update_0000';target.mkdir(parents=True)
+    for name,d in traces.items():
+        traces[name]=_rescore_trace(d,alpha,cfg)
+        np.savez_compressed(target/f'{name}.npz',**traces[name])
+        shutil.copyfile(folder/f'{name}_path.npz',target/f'{name}_path.npz')
+    actor=Path(initial_checkpoint).with_name('actor_0000.pkl')
+    source=dict(identity,source_update=0,checkpoint=str(Path(initial_checkpoint).resolve()),checkpoint_sha256=digest(initial_checkpoint),actor=str(actor.resolve()),actor_sha256=digest(actor))
+    atomic_json(target/'source.json',source)
+    summary=summarize(traces,alpha,cfg);task=summarize_task(traces,alpha,cfg)
+    atomic_json(target/'metrics.json',summary);atomic_json(target/'task_metrics.json',task)
+    atomic_json(out/'reward_parent_reuse.json',dict(physical_config_identity=physical_config_identity(cfg),reward_config_sha256=config_hash(cfg['path_reward']),original_parent=record,source_files=files,physics_executed=0,scoring='independent reconstruction from raw physical quantities'))
+    persist_best(out,initial_checkpoint,actor,summary,dict(identity,source_update=0))
+    persist_task_best(out,initial_checkpoint,actor,task,dict(identity,source_update=0))
+    return traces
+
+
+def reuse_reward_baseline(parent,root,cfg,source,expected_paths):
+    from .path_command_fork import physical_config_identity
+    parent=Path(parent);manifest=json.loads((parent/'manifest.json').read_text())
+    if physical_config_identity(cfg)!=physical_config_identity(manifest['config']):raise ValueError('baseline physical identity mismatch')
+    names=reuse_zero_upper(parent,root,manifest['config'],source,expected_paths)
+    # A copied baseline is alpha-neutral physics. Derived scoring is performed
+    # independently for each alpha by report_final_panel; no common score implied.
+    atomic_json(Path(root)/'baseline_reward_identity.json',dict(physical_identity=physical_config_identity(cfg),reward_identity=config_hash(cfg['path_reward']),scoring='per-alpha independent reconstruction',physics_executed=0))
+    return names
+
+
+def inherit_reward_validation(parent,out,alpha,cfg,identity):
+    """Audit and preserve saved DEV0/50 for exact reward-pilot resumes."""
+    from .path_command_fork import IDENTITY_KEYS
+    parent=Path(parent);out=Path(out);count=0
+    for folder in sorted((parent/f'alpha{alpha}'/'validation').glob('update_*')):
+        record=json.loads((folder/'source.json').read_text())
+        if any(record.get(k)!=v for k,v in identity.items()):raise ValueError('resumed validation identity mismatch')
+        for key in ('actor','checkpoint'):
+            if digest(record[key])!=record[key+'_sha256']:raise ValueError('resumed validation weights changed')
+        traces,files,summary,task=_read_complete_panel(folder,alpha,cfg)
+        target=out/'validation'/folder.name
+        _copy_panel(folder,target,files)
+        atomic_json(target/'source.json',record);atomic_json(target/'metrics.json',summary);atomic_json(target/'task_metrics.json',task)
+        count+=1
+    if not count:raise ValueError('reward resume requires saved complete DEV candidates')
+    atomic_json(out/'inherited_validation_receipt.json',dict(parent=str(parent.resolve()),complete_candidates=count,physics_executed=0))
+    return count
