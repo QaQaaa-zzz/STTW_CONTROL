@@ -76,33 +76,26 @@ def prepare_request(request):
         files[str(path)]=sha
     frozen_path=Path(request['frozen_identities']);frozen=json.loads(frozen_path.read_text())
     files[str(frozen_path)]=digest(frozen_path)
-    if frozen['source']!=source:raise ValueError('frozen prepared/lower source changed')
+    validate_execution_manifest(manifest,frozen)
     for label,role in request['frozen_roles'].items():
         anchor=frozen['records'][role];record=request['models'][label]
         for key in ('actor','checkpoint','actor_sha256','checkpoint_sha256'):
             if record[key]!=anchor[key]:raise ValueError('frozen model anchor changed '+label)
+    execution_manifests={}
     for label,path in request['model_manifests'].items():
         files[str(path)]=digest(path)
         other=json.loads(Path(path).read_text())
-        if other['source']!=source or other['terminal_contract']!='terminal_contract_v2':raise ValueError('diagnostic prepared-state identity mismatch')
+        validate_execution_manifest(other,frozen)
+        execution_manifests[label]=other
     for record in request['models'].values():
         for key in ['checkpoint','actor']:audit(record[key],record[key+'_sha256'])
     for key in ['actor','checkpoint']:audit(source['candidate'][key],source['candidate'][key+'_sha256'])
     audit(source['candidate']['config'],source['candidate']['config_file_sha256']);audit(source['prepared_bank'],source['prepared_bank_sha256'])
     if source['candidate']['source_update']!=300:raise ValueError('local300 changed')
-    for label,folder in request['cached_panels'].items():
-        folder=Path(folder)
-        for name,_,speed in cases(cfg):
-            for suffix in ['', '_path']:
-                path=folder/(name+suffix+'.npz');files[str(path)]=digest(path)
-                with np.load(path,allow_pickle=False) as z:
-                    if suffix=='':
-                        if not len(z['time']) or len(z['time'])>4000:raise ValueError('invalid cached endpoint')
-                        np.testing.assert_allclose(z['v_user'],speed,rtol=0,atol=1e-6)
-                    elif not {'s','xy','heading','curvature','goal','turn_end'}<=set(z.files):raise ValueError('incomplete original path')
+    validate_cached_panels(request,frozen,files)
     return dict(schema=request['schema'],state='prepared_not_run',physical_ticks=0,training_updates=0,
         budget_lower_ticks=32000,prepared_state=dict(path=source['prepared_bank'],sha256=source['prepared_bank_sha256'],bank_index=source['bank_index'],restoration='complete load_environment snapshot'),
-        files=files,request=request,manifest=manifest,manifest_sha256=digest(manifest_path))
+        files=files,request=request,manifest=manifest,execution_manifests=execution_manifests,manifest_sha256=digest(manifest_path))
 
 
 def diagnostic_groups(request):
@@ -112,3 +105,94 @@ def diagnostic_groups(request):
     for row in request['cases']:
         groups.setdefault((row['model'],config_hash(row['transform'])),[]).append(row)
     return list(groups.values())
+
+
+def validate_execution_manifest(manifest,frozen):
+    from .path_command_fork import physical_config_identity
+    cfg=manifest['config']
+    if manifest['source']!=frozen['source'] or manifest['terminal_contract']!='terminal_contract_v2':
+        raise ValueError('diagnostic prepared-state identity mismatch')
+    if physical_config_identity(cfg)!=frozen['physical_config_identity']:
+        raise ValueError('diagnostic physical configuration changed')
+    if cfg['training_future_phase_C']['episode_s']!=20.:raise ValueError('diagnostic horizon changed')
+    required={'physics_dt_s_expected':.0002,'physics_substeps_per_control_expected':25,
+        'lower_dt_s':.005,'upper_dt_s':.02,'path_follower_dt_s':.02}
+    if any(cfg['timing'].get(k)!=v for k,v in required.items()):raise ValueError('diagnostic timing changed')
+
+
+def validate_panel_source(record,anchor,config,lower_sha,*,alpha,parent=False):
+    from .preference_best import config_hash
+    for key,value in [('alpha',alpha),('actor_sha256',anchor['actor_sha256']),
+        ('config_sha256',config_hash(config)),('lower_actor_sha256',lower_sha)]:
+        if record.get(key)!=value:raise ValueError('cached panel source mismatch '+key)
+    if parent:
+        if record.get('source_update')!=0 or record.get('parent_checkpoint_sha256')!=anchor['checkpoint_sha256']:
+            raise ValueError('cached update-zero parent association mismatch')
+    elif record.get('checkpoint_sha256')!=anchor['checkpoint_sha256']:
+        raise ValueError('cached panel checkpoint mismatch')
+
+
+def validate_cached_panels(request,frozen,files):
+    """Frozen attestations plus original provenance, geometry and true endpoints."""
+    import json
+    from pathlib import Path
+    from .preference_best import digest,config_hash
+    from .path_command_cache import _read_complete_panel
+    from .path_command_fork import physical_config_identity
+    from .path_command_selection import cases
+    attestations=frozen['cached_panels']
+    if set(attestations)!=set(request['cached_panels']):raise ValueError('frozen cached panel coverage mismatch')
+    b0_folder=Path(request['cached_panels']['B0'])
+    baseline_manifest=json.loads((b0_folder.parent/'manifest.json').read_text())
+    validate_execution_manifest(baseline_manifest,frozen)
+    baseline_cfg=baseline_manifest['config']
+    reuse=json.loads((b0_folder.parent/'zero_upper_reuse.json').read_text())
+    reward=json.loads((b0_folder.parent/'baseline_reward_identity.json').read_text())
+    if reuse['config_sha256']!=config_hash(baseline_cfg) or reuse['source_sha256']!=config_hash(frozen['source']):
+        raise ValueError('B0 original source/config association mismatch')
+    if reward['physical_identity']!=frozen['physical_config_identity'] or reward['reward_identity']!=config_hash(baseline_cfg['path_reward']):
+        raise ValueError('B0 baseline reward/physical identity mismatch')
+    lower_sha=frozen['source']['candidate']['actor_sha256']
+    for label,folder in request['cached_panels'].items():
+        folder=Path(folder);attested=attestations[label]
+        if str(folder)!=attested['folder']:raise ValueError('cached panel folder changed')
+        manifest_path=Path(attested['manifest'])
+        if label in request['model_manifests'] and str(manifest_path)!=request['model_manifests'][label]:raise ValueError('execution manifest differs from cached panel provenance')
+        if digest(manifest_path)!=attested['manifest_sha256']:raise ValueError('cached panel manifest changed')
+        files[str(manifest_path)]=attested['manifest_sha256']
+        manifest=json.loads(manifest_path.read_text());validate_execution_manifest(manifest,frozen)
+        cfg=manifest['config']
+        for name,sha in attested['files'].items():
+            path=folder/name
+            if digest(path)!=sha:raise ValueError('frozen cached panel file changed '+str(path))
+            files[str(path)]=sha
+        for path,sha in attested.get('provenance_files',{}).items():
+            if digest(path)!=sha:raise ValueError('cached provenance changed '+path)
+            files[path]=sha
+        alpha=0 if label in ('B0','alpha0') else 1
+        traces,actual_files,_,_=_read_complete_panel(folder,alpha,cfg)
+        if label!='B0':
+            source_path=folder/'source.json'
+            if 'source.json' not in attested['files'] and str(source_path) not in attested.get('provenance_files',{}):raise ValueError('cached source receipt unattested')
+            source=json.loads(source_path.read_text());anchor=frozen['records'][request['frozen_roles'][label]]
+            validate_panel_source(source,anchor,cfg,lower_sha,alpha=alpha,parent=label=='parent1')
+            for key in ('actor','checkpoint'):
+                if digest(source[key])!=source[key+'_sha256']:raise ValueError('cached source model artifact changed '+key)
+                files[source[key]]=source[key+'_sha256']
+        else:
+            for required in ('zero_upper_reuse.json','baseline_reward_identity.json'):
+                if str(folder.parent/required) not in attested.get('provenance_files',{}):raise ValueError('B0 provenance unattested')
+        for name,_,_ in cases(cfg):
+            expected=reuse['cases'][name]
+            validate_original_path(folder/(name+'_path.npz'),expected['path_sha256'])
+            for filename,sha in actual_files[name].items():
+                if attested['files'].get(filename)!=sha:raise ValueError('cached six-case data unattested')
+            if label=='B0':
+                if actual_files[name][name+'.npz']!=expected['trace_sha256']:raise ValueError('B0 original trace changed')
+                for field in ('offsets','target_offset','filtered_offset'):
+                    np.testing.assert_array_equal(traces[name][field],np.zeros_like(traces[name][field]))
+
+
+def validate_original_path(path,expected_sha):
+    from .preference_best import digest
+    if digest(path)!=expected_sha:raise ValueError('cached original path changed '+str(path))
