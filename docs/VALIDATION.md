@@ -1,3 +1,15 @@
+# Path safety repair diagnostic verification — 2026-10-12
+
+Runtime commits6daed97/387abc5;61 targeted CPU tests pass (reward/cache/recovery/diagnostic), including rejection of changed physical configs, swapped Actor provenance, truncated live caches and shifted original paths. Independent task/whole-stage static reviews pass after identity repairs. No lower/network/reward/PPO changes. New evaluator uses vmap paired cases, scan50, shared JAX cache; frozen model/bank/provenance and true endpoint checks precede execution.
+
+Eight complete20s traces/32000active lower ticks, zero training updates; independent reward reconstruction maxdifference9.9312e-8. All traces physical/domain failures0 and goals crossed; all eight full case gates fail. Three settings cannot simultaneously preserve roll<=.302 and reduce peak path error in both high turns. Both latefade final holds fail through heading error .066252/.085453rad. These are fixedActor interventions, not learned candidates or qualification.
+
+GPU numerical prefix validation **FAIL** on straight2.6: actualdelta maxdifference2.3832e-5rad exceeds original2e-6 tolerance. Full applied latent equals original Actor latent before10s on both straights; low2.0 matches all cached columns exactly. High2.6 first measured-steer/rate difference at tick135 precedes upper/lower command differences at136. Frozen source and batchshape match; compilation/rounding is a hypothesis, not confirmed cause. Original ACCOUNTING=error and exit1 preserved; no tolerance increase or physical retry. All eight traces and failed-prefix all-channel audit retained. FormalB/C, discarded engineering update and natural-overlimit recovery NOT_RUN under declared gates.
+
+[XY, full per-step/cumulative components/errors/command chain, provenance and numeric audit](evidence/path_safety_repair/diagnostic/INDEX.md). PNG plus original NPZ links, no copied weights. This section supersedes no historical result; previous dated snapshots follow.
+
+---
+
 # Path safety preference v1 verification — 2026-10-11
 
 [Receipts and limits](evidence/path_safety_preference_v1/INDEX.md). 110 necessary CPU path checks pass. One8×16 GPU engineering run completes128policy transitions/512lower ticks/one discarded PPO update in53.043s; current reward step16 verified overHTTP6007. Full-state roundtrip and paired deterministic continuation pass inside that budget. This establishes wiring only. Actual natural-overlimit recovery, six-case newstage DEV, learned preference and qualification remain NOT_RUN. Historical reward/best identities preserved; local300/network/physics/PPO unchanged.

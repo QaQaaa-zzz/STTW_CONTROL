@@ -1,3 +1,10 @@
+# Path safety repair — authorized Task1 execution, 2026-10-12
+
+[Implementation and conditional plan](docs/path_safety_preference.md#next-repair-plan) · [Eight fixed-Actor diagnostic results](docs/evidence/path_safety_repair/diagnostic/INDEX.md).
+Diagnostic evaluator/CLI/identity/cache guards implemented in6daed97/387abc5;61 targeted CPU checks and independent code reviews pass. All eight20s physical traces executed,32000lower ticks, no PPO update. Three fixed steer/backoff settings fail the paired roll/path support gate; steering removal improves ordinary path error but fails final heading hold. High-speed straight also fails the declared numerical prefix tolerance; original execution error retained. B/C and recovery were not triggered. Shared research-hub/PROJECT_STATE.md remains the only live fact ledger. Historical snapshots follow.
+
+---
+
 # Path safety preference v1 — implementation, 2026-10-11
 
 [Contract and handoff](docs/path_safety_preference.md) · [Verified implementation evidence](docs/evidence/path_safety_preference_v1/INDEX.md). Isolated from active Coverage. New reward/safety ranking, weights-only paired fork, physical-trace rescoring and complete-state recovery are implemented. Formal four50-update arms and actual overlimit recovery remain NOT_RUN. Live facts remain in `/home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md`; no auto push.

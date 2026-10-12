@@ -1,0 +1,1240 @@
+{
+  "straight_2.0": {
+    "declared_tolerance": 2e-06,
+    "no_op_latent_exact_before10": true,
+    "channels": {
+      "active_tick": {
+        "equal": true
+      },
+      "actual_delta": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actual_delta_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actual_forward_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actual_normalized_residual": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actual_xy": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actuator_ctrl": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actuator_force_end": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actuator_force_limit_substeps": {
+        "equal": true
+      },
+      "actuator_force_max": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "actuator_force_min": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "along": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "applied_residual": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "chi": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "component_capped_low_speed": {
+        "equal": true
+      },
+      "component_capped_offset_magnitude": {
+        "equal": true
+      },
+      "component_capped_offset_rate": {
+        "equal": true
+      },
+      "component_capped_overspeed": {
+        "equal": true
+      },
+      "component_capped_path": {
+        "equal": true
+      },
+      "component_capped_primary": {
+        "equal": true
+      },
+      "component_capped_roll": {
+        "equal": true
+      },
+      "component_capped_roll_rate": {
+        "equal": true
+      },
+      "component_capped_speed": {
+        "equal": true
+      },
+      "component_capped_working_roll": {
+        "equal": true
+      },
+      "contact_failure": {
+        "equal": true
+      },
+      "correction_rate_clipped": {
+        "equal": true
+      },
+      "diagnostic_subcosts_corridor": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "diagnostic_subcosts_predictive_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "diagnostic_subcosts_working_exposure": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "domain_exit": {
+        "equal": true
+      },
+      "e_psi_unwrapped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_low_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_offset_magnitude": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_offset_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_overspeed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_path": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_primary": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_roll_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_working_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "filtered_offset": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "final_command": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "final_command_clipped": {
+        "equal": true
+      },
+      "final_ctrl": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "goal": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "goal_section_signed_distance": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "governed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "interval_active_ticks": {
+        "equal": true
+      },
+      "interval_failed": {
+        "equal": true
+      },
+      "interval_offset_before": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "interval_offset_end": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "interval_start_tick": {
+        "equal": true
+      },
+      "large_heading_debt": {
+        "equal": true
+      },
+      "latent_z": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lateral": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "limited_command": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lookahead": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lower_action": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lower_error": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lower_fault": {
+        "equal": true
+      },
+      "lower_observation": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "nominal": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "nominal_rates": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "nominal_slew_channels": {
+        "equal": true
+      },
+      "nonfinite": {
+        "equal": true
+      },
+      "normalized_residual": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "offset_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "offsets": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "omega_c": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_cross_track": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_curvature": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_heading_error": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_progress": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_projection_unclamped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "peak_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "peak_roll_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "phi": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "phi_dot": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "physical_failure": {
+        "equal": true
+      },
+      "policy_fault": {
+        "equal": true
+      },
+      "pp_curvature": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "pp_target": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "preview_body": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "preview_world": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_low_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_offset_magnitude": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_offset_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_overspeed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_path": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_primary": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_roll_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_working_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "reference_clip_channels": {
+        "equal": true
+      },
+      "reference_xy": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "reference_yaw_unwrapped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "requested_residual": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "residual_clipped": {
+        "equal": true
+      },
+      "rho": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "scored_tick_reward": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "slip_proxy": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "target_offset": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "tick_reward": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "time": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "tracking_domain_failure": {
+        "equal": true
+      },
+      "u_goal": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "u_nom": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "u_prelimit": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "v_user": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "wheel_speed_proxy": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "yaw_unwrapped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "yaw_wrapped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "zero_residual_final_command": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "goal_progress": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      }
+    },
+    "prefix_pass": true
+  },
+  "straight_2.6": {
+    "declared_tolerance": 2e-06,
+    "no_op_latent_exact_before10": true,
+    "channels": {
+      "active_tick": {
+        "equal": true
+      },
+      "actual_delta": {
+        "max_abs_diff": 2.3832031729398295e-05,
+        "first_nonzero_tick": 135,
+        "first_exceed_tick": 201,
+        "exceed_rows": 627
+      },
+      "actual_delta_rate": {
+        "max_abs_diff": 0.0005490544135682285,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1753
+      },
+      "actual_forward_speed": {
+        "max_abs_diff": 1.239776611328125e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 168,
+        "exceed_rows": 521
+      },
+      "actual_normalized_residual": {
+        "max_abs_diff": 0.00015851203352212906,
+        "first_nonzero_tick": 137,
+        "first_exceed_tick": 156,
+        "exceed_rows": 1765
+      },
+      "actual_xy": {
+        "max_abs_diff": 1.3649463653564453e-05,
+        "first_nonzero_tick": 150,
+        "first_exceed_tick": 786,
+        "exceed_rows": 1072
+      },
+      "actuator_ctrl": {
+        "max_abs_diff": 0.0005499115213751793,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1837
+      },
+      "actuator_force_end": {
+        "max_abs_diff": 0.002083988394588232,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 142,
+        "exceed_rows": 1838
+      },
+      "actuator_force_limit_substeps": {
+        "equal": true
+      },
+      "actuator_force_max": {
+        "max_abs_diff": 0.0023964247666299343,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 138,
+        "exceed_rows": 1856
+      },
+      "actuator_force_min": {
+        "max_abs_diff": 0.0027927719056606293,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 145,
+        "exceed_rows": 1850
+      },
+      "along": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "applied_residual": {
+        "max_abs_diff": 0.00029158592224121094,
+        "first_nonzero_tick": 137,
+        "first_exceed_tick": 154,
+        "exceed_rows": 1841
+      },
+      "chi": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "component_capped_low_speed": {
+        "equal": true
+      },
+      "component_capped_offset_magnitude": {
+        "equal": true
+      },
+      "component_capped_offset_rate": {
+        "equal": true
+      },
+      "component_capped_overspeed": {
+        "equal": true
+      },
+      "component_capped_path": {
+        "equal": true
+      },
+      "component_capped_primary": {
+        "equal": true
+      },
+      "component_capped_roll": {
+        "equal": true
+      },
+      "component_capped_roll_rate": {
+        "equal": true
+      },
+      "component_capped_speed": {
+        "equal": true
+      },
+      "component_capped_working_roll": {
+        "equal": true
+      },
+      "contact_failure": {
+        "equal": true
+      },
+      "correction_rate_clipped": {
+        "equal": true
+      },
+      "diagnostic_subcosts_corridor": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "diagnostic_subcosts_predictive_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "diagnostic_subcosts_working_exposure": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "domain_exit": {
+        "equal": true
+      },
+      "e_psi_unwrapped": {
+        "max_abs_diff": 3.0074530513957143e-05,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 798,
+        "exceed_rows": 937
+      },
+      "effective_cost_low_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_offset_magnitude": {
+        "max_abs_diff": 8.584465831518173e-07,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_offset_rate": {
+        "max_abs_diff": 1.0791700333356857e-06,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_overspeed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_path": {
+        "max_abs_diff": 0.002727508544921875,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 152,
+        "exceed_rows": 1839
+      },
+      "effective_cost_primary": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_roll_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "effective_cost_speed": {
+        "max_abs_diff": 0.0002805441617965698,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 160,
+        "exceed_rows": 1735
+      },
+      "effective_cost_working_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "filtered_offset": {
+        "max_abs_diff": 1.1242926120758057e-05,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 1407,
+        "exceed_rows": 495
+      },
+      "final_command": {
+        "max_abs_diff": 0.0005499115213751793,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1837
+      },
+      "final_command_clipped": {
+        "equal": false
+      },
+      "final_ctrl": {
+        "max_abs_diff": 0.0005499115213751793,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1837
+      },
+      "goal": {
+        "max_abs_diff": 7.82310962677002e-06,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 1071,
+        "exceed_rows": 439
+      },
+      "goal_section_signed_distance": {
+        "max_abs_diff": 9.5367431640625e-07,
+        "first_nonzero_tick": 240,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "governed": {
+        "max_abs_diff": 7.82310962677002e-06,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 1071,
+        "exceed_rows": 439
+      },
+      "interval_active_ticks": {
+        "equal": true
+      },
+      "interval_failed": {
+        "equal": true
+      },
+      "interval_offset_before": {
+        "max_abs_diff": 1.1242926120758057e-05,
+        "first_nonzero_tick": 160,
+        "first_exceed_tick": 1408,
+        "exceed_rows": 500
+      },
+      "interval_offset_end": {
+        "max_abs_diff": 1.1242926120758057e-05,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 1404,
+        "exceed_rows": 500
+      },
+      "interval_start_tick": {
+        "equal": true
+      },
+      "large_heading_debt": {
+        "equal": true
+      },
+      "latent_z": {
+        "max_abs_diff": 7.107853889465332e-05,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 168,
+        "exceed_rows": 1616
+      },
+      "lateral": {
+        "max_abs_diff": 1.3649463653564453e-05,
+        "first_nonzero_tick": 150,
+        "first_exceed_tick": 786,
+        "exceed_rows": 1072
+      },
+      "limited_command": {
+        "max_abs_diff": 1.6942620277404785e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 816,
+        "exceed_rows": 768
+      },
+      "lookahead": {
+        "max_abs_diff": 5.960464477539062e-07,
+        "first_nonzero_tick": 212,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "lower_action": {
+        "max_abs_diff": 0.00015851203352212906,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 156,
+        "exceed_rows": 1764
+      },
+      "lower_error": {
+        "max_abs_diff": 2.5404035113751888e-05,
+        "first_nonzero_tick": 135,
+        "first_exceed_tick": 168,
+        "exceed_rows": 1063
+      },
+      "lower_fault": {
+        "equal": true
+      },
+      "lower_observation": {
+        "max_abs_diff": 0.0005861123790964484,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1847
+      },
+      "nominal": {
+        "max_abs_diff": 1.6942620277404785e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 816,
+        "exceed_rows": 768
+      },
+      "nominal_rates": {
+        "max_abs_diff": 0.00023692846298217773,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 156,
+        "exceed_rows": 429
+      },
+      "nominal_slew_channels": {
+        "equal": true
+      },
+      "nonfinite": {
+        "equal": true
+      },
+      "normalized_residual": {
+        "max_abs_diff": 0.00015851203352212906,
+        "first_nonzero_tick": 137,
+        "first_exceed_tick": 156,
+        "exceed_rows": 1764
+      },
+      "offset_rate": {
+        "max_abs_diff": 0.00010952353477478027,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 156,
+        "exceed_rows": 1656
+      },
+      "offsets": {
+        "max_abs_diff": 1.1242926120758057e-05,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": 1407,
+        "exceed_rows": 495
+      },
+      "omega_c": {
+        "max_abs_diff": 9.843707084655762e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 182,
+        "exceed_rows": 1580
+      },
+      "path_cross_track": {
+        "max_abs_diff": 1.3649463653564453e-05,
+        "first_nonzero_tick": 150,
+        "first_exceed_tick": 786,
+        "exceed_rows": 1072
+      },
+      "path_curvature": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_heading_error": {
+        "max_abs_diff": 3.0074530513957143e-05,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 798,
+        "exceed_rows": 937
+      },
+      "path_progress": {
+        "max_abs_diff": 9.5367431640625e-07,
+        "first_nonzero_tick": 240,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "path_projection_unclamped": {
+        "max_abs_diff": 9.5367431640625e-07,
+        "first_nonzero_tick": 240,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "peak_roll": {
+        "max_abs_diff": 2.968311309814453e-05,
+        "first_nonzero_tick": 153,
+        "first_exceed_tick": 822,
+        "exceed_rows": 670
+      },
+      "peak_roll_rate": {
+        "max_abs_diff": 9.665352990850806e-05,
+        "first_nonzero_tick": 135,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1617
+      },
+      "phi": {
+        "max_abs_diff": 2.956390380859375e-05,
+        "first_nonzero_tick": 153,
+        "first_exceed_tick": 821,
+        "exceed_rows": 669
+      },
+      "phi_dot": {
+        "max_abs_diff": 0.00010050696437247097,
+        "first_nonzero_tick": 135,
+        "first_exceed_tick": 152,
+        "exceed_rows": 1619
+      },
+      "physical_failure": {
+        "equal": true
+      },
+      "policy_fault": {
+        "equal": true
+      },
+      "pp_curvature": {
+        "max_abs_diff": 3.787875175476074e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 356,
+        "exceed_rows": 1144
+      },
+      "pp_target": {
+        "max_abs_diff": 1.6942620277404785e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 816,
+        "exceed_rows": 768
+      },
+      "preview_body": {
+        "max_abs_diff": 6.341934204101562e-05,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 228,
+        "exceed_rows": 1376
+      },
+      "preview_world": {
+        "max_abs_diff": 1.9073486328125e-06,
+        "first_nonzero_tick": 212,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_low_speed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_offset_magnitude": {
+        "max_abs_diff": 8.584465831518173e-07,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_offset_rate": {
+        "max_abs_diff": 1.0791700333356857e-06,
+        "first_nonzero_tick": 156,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_overspeed": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_path": {
+        "max_abs_diff": 0.002727508544921875,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 152,
+        "exceed_rows": 1839
+      },
+      "raw_cost_primary": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_roll_rate": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "raw_cost_speed": {
+        "max_abs_diff": 0.0002805441617965698,
+        "first_nonzero_tick": 152,
+        "first_exceed_tick": 160,
+        "exceed_rows": 1735
+      },
+      "raw_cost_working_roll": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "reference_clip_channels": {
+        "equal": true
+      },
+      "reference_xy": {
+        "max_abs_diff": 9.5367431640625e-07,
+        "first_nonzero_tick": 240,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "reference_yaw_unwrapped": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "requested_residual": {
+        "max_abs_diff": 0.00029155611991882324,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 154,
+        "exceed_rows": 1841
+      },
+      "residual_clipped": {
+        "equal": true
+      },
+      "rho": {
+        "max_abs_diff": 2.956390380859375e-05,
+        "first_nonzero_tick": 135,
+        "first_exceed_tick": 152,
+        "exceed_rows": 619
+      },
+      "scored_tick_reward": {
+        "max_abs_diff": 1.3783574104309082e-06,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "slip_proxy": {
+        "max_abs_diff": 1.7404556274414062e-05,
+        "first_nonzero_tick": 139,
+        "first_exceed_tick": 157,
+        "exceed_rows": 847
+      },
+      "target_offset": {
+        "max_abs_diff": 1.2151896953582764e-05,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 208,
+        "exceed_rows": 604
+      },
+      "tick_reward": {
+        "max_abs_diff": 1.3783574104309082e-06,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "time": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "tracking_domain_failure": {
+        "equal": true
+      },
+      "u_goal": {
+        "max_abs_diff": 0.0006841719150543213,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1786
+      },
+      "u_nom": {
+        "max_abs_diff": 0.0006841719150543213,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1786
+      },
+      "u_prelimit": {
+        "max_abs_diff": 0.0005499115213751793,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1837
+      },
+      "v_user": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      },
+      "wheel_speed_proxy": {
+        "max_abs_diff": 1.5497207641601562e-05,
+        "first_nonzero_tick": 139,
+        "first_exceed_tick": 157,
+        "exceed_rows": 927
+      },
+      "yaw_unwrapped": {
+        "max_abs_diff": 3.006707993336022e-05,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 798,
+        "exceed_rows": 936
+      },
+      "yaw_wrapped": {
+        "max_abs_diff": 3.0074530513957143e-05,
+        "first_nonzero_tick": 145,
+        "first_exceed_tick": 798,
+        "exceed_rows": 937
+      },
+      "zero_residual_final_command": {
+        "max_abs_diff": 0.000684171449393034,
+        "first_nonzero_tick": 136,
+        "first_exceed_tick": 153,
+        "exceed_rows": 1786
+      },
+      "goal_progress": {
+        "max_abs_diff": 0.0,
+        "first_nonzero_tick": null,
+        "first_exceed_tick": null,
+        "exceed_rows": 0
+      }
+    },
+    "prefix_pass": false
+  }
+}
