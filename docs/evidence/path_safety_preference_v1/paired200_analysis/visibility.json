@@ -1,0 +1,95 @@
+{
+  "checked_at": "2026-10-12T09:41:00.520376+08:00",
+  "runs": {
+    "control": {
+      "status": {
+        "state": "completed",
+        "pid": 1553714,
+        "endpoint_updates": {
+          "alpha0": 200,
+          "alpha1": 200
+        },
+        "declared_updates_per_endpoint": 200,
+        "policy_transitions_total": 19660800,
+        "training_control_ticks_total": 78643200,
+        "validation_control_ticks_total": 144000,
+        "parent_consumed_policy_transitions": 6553600,
+        "parent_reported_updates": 50,
+        "stage": "reported",
+        "last_update_epoch": 1791754779.8072882,
+        "alpha": 1,
+        "completed_updates": 200,
+        "compile_and_setup_seconds": 8.47482246299478,
+        "reused_baseline_cases": 6,
+        "endpoint_elapsed_s": 6926.956573350995,
+        "case": "left90_R2_2.0,left90_R2_2.6,right90_R2_2.0,right90_R2_2.6",
+        "completed_intervals": 950,
+        "declared_updates": 200,
+        "accepted_batches": 150,
+        "last_reward": -0.12291698902845383,
+        "dev_seconds": 2750.1774330080007,
+        "reused_final_cases": 6,
+        "protected_unchanged": true
+      },
+      "url": "http://localhost:6010",
+      "scalars": {
+        "0": [
+          1791747377.623576,
+          200,
+          -0.035180144011974335
+        ],
+        "1": [
+          1791754315.1227694,
+          200,
+          -0.12291698902845383
+        ]
+      },
+      "http_status": 200
+    },
+    "candidate": {
+      "status": {
+        "state": "completed",
+        "pid": 2157447,
+        "endpoint_updates": {
+          "alpha0": 200,
+          "alpha1": 200
+        },
+        "declared_updates_per_endpoint": 200,
+        "policy_transitions_total": 19660800,
+        "training_control_ticks_total": 78643200,
+        "validation_control_ticks_total": 144000,
+        "parent_consumed_policy_transitions": 6553600,
+        "parent_reported_updates": 50,
+        "stage": "reported",
+        "last_update_epoch": 1791768677.4936407,
+        "alpha": 1,
+        "completed_updates": 200,
+        "compile_and_setup_seconds": 8.421510141000908,
+        "reused_baseline_cases": 6,
+        "endpoint_elapsed_s": 6956.069934255,
+        "case": "left90_R2_2.0,left90_R2_2.6,right90_R2_2.0,right90_R2_2.6",
+        "completed_intervals": 950,
+        "declared_updates": 200,
+        "accepted_batches": 150,
+        "last_reward": -0.15330445766448975,
+        "dev_seconds": 2771.960439945011,
+        "reused_final_cases": 6,
+        "protected_unchanged": true
+      },
+      "url": "http://localhost:6011",
+      "scalars": {
+        "0": [
+          1791761245.2954376,
+          200,
+          -0.05058175325393677
+        ],
+        "1": [
+          1791768209.8294778,
+          200,
+          -0.15330445766448975
+        ]
+      },
+      "http_status": 200
+    }
+  }
+}
