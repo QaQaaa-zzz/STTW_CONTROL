@@ -23,10 +23,13 @@ class BatchedPanelEvaluator:
         self.check_budget=check_budget;self.status=status;self.account=account
         self.compiled={}
 
-    def _compiled_group(self,paths,speeds,alpha,params,horizon,*,capture_states=False):
+    def _compiled_group(self,paths,speeds,alpha,params,horizon,*,capture_states=False,diagnostic_transform=None,diagnostic_identity=None):
         from .path_command_policy import PathCommandActor
         env=self.env
-        key=(config_hash(self.config),env.terminal_contract,_signature(paths),_signature(speeds),_signature(params),float(horizon),bool(capture_states))
+        if (diagnostic_transform is None)!=(diagnostic_identity is None):
+            raise ValueError('diagnostic transform requires explicit serializable identity')
+        diagnostic_key=None if diagnostic_identity is None else config_hash(diagnostic_identity)
+        key=(config_hash(self.config),env.terminal_contract,_signature(paths),_signature(speeds),_signature(params),float(horizon),bool(capture_states),diagnostic_key)
         if key not in self.compiled:
             def reset(paths,speeds,alpha):
                 return jax.vmap(lambda p,v:env.reset(self.snapshot,p,v,alpha))(paths,speeds)
@@ -37,6 +40,10 @@ class BatchedPanelEvaluator:
             env.set_log_template(example,path,speeds[0])
             template=jax.eval_shape(lambda state:env.policy_step(state,j.zeros(2),path,speeds[0],horizon),example)[1]
             zero_logs=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
+            if diagnostic_transform is not None:
+                _,metadata=diagnostic_transform(j.zeros(2),example,path,speeds[0],env)
+                lower_ticks=round(self.config['timing']['upper_dt_s']/self.config['timing']['lower_dt_s'])
+                zero_logs=dict(zero_logs,**{'diagnostic_'+k:j.zeros((lower_ticks,)+v.shape,v.dtype) for k,v in metadata.items()})
             horizon_ticks=round(horizon/self.config['timing']['lower_dt_s'])
             actor=PathCommandActor()
             def chunk(states,paths,speeds,params):
@@ -46,7 +53,13 @@ class BatchedPanelEvaluator:
                         obs,_,fault=env.observation(state,path,v,horizon)
                         state=state.replace(fault=state.fault|fault)
                         z=actor.apply(params,obs)
-                        return env.policy_step(state,z,path,v,horizon)
+                        if diagnostic_transform is None:return env.policy_step(state,z,path,v,horizon)
+                        applied,metadata=diagnostic_transform(z,state,path,v,env)
+                        # A transform cannot sanitize an original Actor fault.
+                        state=state.replace(fault=state.fault|~j.all(j.isfinite(z)))
+                        nxt,logs=env.policy_step(state,applied,path,v,horizon)
+                        logs=dict(logs,**{'diagnostic_'+k:j.broadcast_to(value,(logs['active_tick'].shape[0],)+value.shape) for k,value in metadata.items()})
+                        return nxt,logs
                     return jax.lax.cond(active,advance,lambda state:(state,zero_logs),state)
                 def step(states,_):
                     nxt,logs=jax.vmap(one)(states,paths,speeds)
@@ -56,7 +69,7 @@ class BatchedPanelEvaluator:
             self.compiled[key]=(reset_fn,chunk_fn)
         return self.compiled[key]
 
-    def evaluate(self,params,alpha,output,cached_names=None):
+    def evaluate(self,params,alpha,output,cached_names=None,*,case_names=None,diagnostic_transform=None,diagnostic_identity=None):
         from .path_command_selection import cases
         from .geometric_path import build_path
         from .direct_command_training import flatten_logs
@@ -64,6 +77,13 @@ class BatchedPanelEvaluator:
         if out.exists() and cached_names is None:raise FileExistsError('validation output immutable')
         out.mkdir(parents=True,exist_ok=cached_names is not None)
         declared=cases(self.config);names={name for name,_,_ in declared}
+        if case_names is not None:
+            requested=list(case_names)
+            if not requested or len(set(requested))!=len(requested) or not set(requested)<=names:raise ValueError('invalid diagnostic case subset')
+            declared=[row for row in declared if row[0] in requested];names=set(requested)
+        if diagnostic_transform is not None:
+            if cached_names is not None:raise ValueError('diagnostics cannot use unchanged panel cache')
+            if diagnostic_identity is None:raise ValueError('diagnostic identity required')
         cached=set(cached_names or ())
         if not cached<=names:raise ValueError('unknown cached validation case')
         horizon=self.config['training_future_phase_C']['episode_s']
@@ -73,7 +93,7 @@ class BatchedPanelEvaluator:
         traces={};groups={};pose=np.asarray(self.env.physics.helpers.pose(self.snapshot.data))
         timing=dict(schema='path_batched_evaluation_v1',compile_seconds=0.,physics_seconds=0.,
             transfer_seconds=0.,file_seconds=0.,reset_seconds=0.,cached_cases=sorted(cached),
-            chunk_policy_steps=50,lower_dt_s=self.config['timing']['lower_dt_s'],groups=[],completed=False)
+            chunk_policy_steps=50,lower_dt_s=self.config['timing']['lower_dt_s'],groups=[],completed=False,diagnostic_identity=diagnostic_identity)
         def write_timing():
             timing['total_seconds']=time.perf_counter()-started
             atomic_json(out/'evaluation_timings.json',timing)
@@ -106,7 +126,7 @@ class BatchedPanelEvaluator:
                 paths=jax.tree.map(lambda *xs:j.stack(xs),*[path for _,path in entries])
                 speeds=j.asarray([row[2] for row in rows],j.float32);a=j.asarray(alpha,j.float32)
                 before=time.perf_counter()
-                reset,chunk=self._compiled_group(paths,speeds,a,params,horizon)
+                reset,chunk=self._compiled_group(paths,speeds,a,params,horizon,diagnostic_transform=diagnostic_transform,diagnostic_identity=diagnostic_identity)
                 timing['compile_seconds']+=time.perf_counter()-before
                 before=time.perf_counter();states=reset(paths,speeds,a);jax.block_until_ready(states)
                 timing['reset_seconds']+=time.perf_counter()-before

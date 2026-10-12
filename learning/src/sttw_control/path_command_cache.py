@@ -285,3 +285,10 @@ def inherit_reward_validation(parent,out,alpha,cfg,identity):
     if not count:raise ValueError('reward resume requires saved complete DEV candidates')
     atomic_json(out/'inherited_validation_receipt.json',dict(parent=str(parent.resolve()),complete_candidates=count,physics_executed=0))
     return count
+
+
+def diagnostic_cache_identity(context,transform):
+    """Dedicated diagnostic identity; never represents the unchanged panel cache."""
+    if not context.get('actor_sha256') or not context.get('case_ids'):
+        raise ValueError('diagnostic cache requires Actor SHA and explicit case IDs')
+    return config_hash(dict(schema='path_fixed_actor_diagnostic_v1',context=context,transform=transform))
