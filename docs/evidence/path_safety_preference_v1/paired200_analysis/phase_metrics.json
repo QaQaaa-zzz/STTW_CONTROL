@@ -1,0 +1,1901 @@
+{
+  "schema": "paired200_phase_audit_v1",
+  "physics_interactions": 0,
+  "sources": {
+    "B0 local300": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper",
+    "Coverage alpha0": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/validation/update_0000",
+    "Coverage alpha1": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0000",
+    "Control alpha0 u200": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/validation/update_0200",
+    "Safety alpha1 u200": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200"
+  },
+  "time_convention": "time + .005 = post-lower-tick; peak_roll includes physics substeps",
+  "cases": {
+    "straight_2.0": {
+      "B0 local300": {
+        "max_roll_rad": 0.03639340400695801,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.011756202206015587,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.027461647987365723,
+        "final_max_path_error": 0.011756202206015587,
+        "final_max_heading_error": 0.05229778215289116,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 3909,
+          "time_s": 19.549999237060547,
+          "progress_m": 38.78965377807617,
+          "signed_path_m": 0.01169841829687357,
+          "peak_roll_rad": 0.03639340400695801,
+          "heading_error_rad": -0.020471790805459023
+        },
+        "path_peak": {
+          "index": 3913,
+          "time_s": 19.569997787475586,
+          "progress_m": 38.82932662963867,
+          "signed_path_m": 0.011756202206015587,
+          "peak_roll_rad": 0.0362238883972168,
+          "heading_error_rad": -0.015149570070207119
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.003608826780691743
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.0,
+            -0.003608826780691743
+          ],
+          "final_command": [
+            -0.026494693011045456,
+            20.243389129638672
+          ],
+          "actual_delta": -0.006721539422869682,
+          "actual_forward_speed": 1.9828335046768188,
+          "chi": 0.0,
+          "effective_cost_path": 0.7214320302009583,
+          "effective_cost_speed": 0.3148742616176605
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.97825,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.0035817623138427734,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.02055439166724682,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.02929091453552246,
+        "final_max_path_error": 0.02052445337176323,
+        "final_max_heading_error": 0.00026288771186955273,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 101,
+          "time_s": 0.5099999904632568,
+          "progress_m": 1.097628116607666,
+          "signed_path_m": 0.00018201991042587906,
+          "peak_roll_rad": 0.0035817623138427734,
+          "heading_error_rad": -0.0002932565985247493
+        },
+        "path_peak": {
+          "index": 1644,
+          "time_s": 8.225000381469727,
+          "progress_m": 16.75731086730957,
+          "signed_path_m": -0.02055439166724682,
+          "peak_roll_rad": 2.8252601623535156e-05,
+          "heading_error_rad": 3.762471169466153e-05
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.00922410935163498
+          ],
+          "offsets": [
+            0.05109763145446777,
+            -0.008544208481907845
+          ],
+          "governed": [
+            2.051102638244629,
+            0.0006799038383178413
+          ],
+          "final_command": [
+            1.2138471902289893e-05,
+            20.70849609375
+          ],
+          "actual_delta": 3.363086943863891e-05,
+          "actual_forward_speed": 2.029278516769409,
+          "chi": 0.0,
+          "effective_cost_path": 0.4166611883315766,
+          "effective_cost_speed": 0.8572389640642086
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.9825,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.0084686279296875,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.02500251866877079,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.026032209396362305,
+        "final_max_path_error": 0.0007234734948724508,
+        "final_max_heading_error": 0.0003688602882903069,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 263,
+          "time_s": 1.3199999332427979,
+          "progress_m": 2.7357072830200195,
+          "signed_path_m": -0.024000229313969612,
+          "peak_roll_rad": 0.0084686279296875,
+          "heading_error_rad": 0.009273076429963112
+        },
+        "path_peak": {
+          "index": 295,
+          "time_s": 1.4800000190734863,
+          "progress_m": 3.0599567890167236,
+          "signed_path_m": -0.02500251866877079,
+          "peak_roll_rad": 0.006997466087341309,
+          "heading_error_rad": 0.0012326183496043086
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -9.290155139751732e-05
+          ],
+          "offsets": [
+            0.047804780304431915,
+            0.0006130742840468884
+          ],
+          "governed": [
+            2.0478007793426514,
+            0.0005201724707148969
+          ],
+          "final_command": [
+            3.5902125091524795e-05,
+            20.67507553100586
+          ],
+          "actual_delta": -6.161674536997452e-05,
+          "actual_forward_speed": 2.0260109901428223,
+          "chi": 0.0,
+          "effective_cost_path": 0.00033657100736391083,
+          "effective_cost_speed": 0.6765686636663304
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.981,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.006669282913208008,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.030209587886929512,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.011427640914916992,
+        "final_max_path_error": 0.028791941702365875,
+        "final_max_heading_error": 0.00027659739134833217,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 183,
+          "time_s": 0.9199999570846558,
+          "progress_m": 1.895006537437439,
+          "signed_path_m": 0.0020261257886886597,
+          "peak_roll_rad": 0.006669282913208008,
+          "heading_error_rad": 0.002993914531543851
+        },
+        "path_peak": {
+          "index": 553,
+          "time_s": 2.7699999809265137,
+          "progress_m": 5.617578506469727,
+          "signed_path_m": -0.030209587886929512,
+          "peak_roll_rad": 0.0006736516952514648,
+          "heading_error_rad": -0.0001052386942319572
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.013071405701339245
+          ],
+          "offsets": [
+            0.03318973630666733,
+            -0.012561623007059097
+          ],
+          "governed": [
+            2.033184766769409,
+            0.0005097700050100684
+          ],
+          "final_command": [
+            -5.973968200123636e-06,
+            20.52605628967285
+          ],
+          "actual_delta": -6.379925616784021e-05,
+          "actual_forward_speed": 2.011406898498535,
+          "chi": 0.0,
+          "effective_cost_path": 0.8188770413398743,
+          "effective_cost_speed": 0.13011890649795532
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.98525,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.007111072540283203,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.11257320642471313,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.00802624225616455,
+        "final_max_path_error": 0.11075136810541153,
+        "final_max_heading_error": 0.00039454083889722824,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 103,
+          "time_s": 0.5199999809265137,
+          "progress_m": 1.103491187095642,
+          "signed_path_m": 0.0022037264425307512,
+          "peak_roll_rad": 0.007111072540283203,
+          "heading_error_rad": -0.00276488671079278
+        },
+        "path_peak": {
+          "index": 821,
+          "time_s": 4.110000133514404,
+          "progress_m": 8.244941711425781,
+          "signed_path_m": 0.11257320642471313,
+          "peak_roll_rad": 0.0003656148910522461,
+          "heading_error_rad": -2.9276743589434773e-05
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.05101729556918144
+          ],
+          "offsets": [
+            0.013770141638815403,
+            0.05150413140654564
+          ],
+          "governed": [
+            2.013768434524536,
+            0.00048682314809411764
+          ],
+          "final_command": [
+            -3.604495941544883e-05,
+            20.328052520751953
+          ],
+          "actual_delta": -2.864974521799013e-05,
+          "actual_forward_speed": 1.9919968843460083,
+          "chi": 0.0,
+          "effective_cost_path": 12.098332405090332,
+          "effective_cost_speed": 0.06405097991228104
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.1195,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    },
+    "straight_2.6": {
+      "B0 local300": {
+        "max_roll_rad": 0.07187378406524658,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.027512265369296074,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.0321049690246582,
+        "final_max_path_error": 0.027512265369296074,
+        "final_max_heading_error": 0.0777413547039032,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 3939,
+          "time_s": 19.69999885559082,
+          "progress_m": 50.73125076293945,
+          "signed_path_m": -0.007454808801412582,
+          "peak_roll_rad": 0.07187378406524658,
+          "heading_error_rad": 0.024571560323238373
+        },
+        "path_peak": {
+          "index": 3836,
+          "time_s": 19.184999465942383,
+          "progress_m": 49.403358459472656,
+          "signed_path_m": 0.027512265369296074,
+          "peak_roll_rad": 0.07071197032928467,
+          "heading_error_rad": -0.01785954274237156
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            -0.00037569389678537846
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.600003719329834,
+            -0.00037569389678537846
+          ],
+          "final_command": [
+            0.027793796733021736,
+            26.394960403442383
+          ],
+          "actual_delta": 0.0007386350771412253,
+          "actual_forward_speed": 2.58243465423584,
+          "chi": 0.0,
+          "effective_cost_path": 1.6640310287475586,
+          "effective_cost_speed": 0.3713487684726715
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.8535,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.007372617721557617,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.01219814084470272,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.017069101333618164,
+        "final_max_path_error": 0.01098589412868023,
+        "final_max_heading_error": 0.00013446886441670358,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 100,
+          "time_s": 0.5049999952316284,
+          "progress_m": 1.255058765411377,
+          "signed_path_m": 0.0017850683070719242,
+          "peak_roll_rad": 0.007372617721557617,
+          "heading_error_rad": -0.0035824840888381004
+        },
+        "path_peak": {
+          "index": 395,
+          "time_s": 1.9799998998641968,
+          "progress_m": 5.119229316711426,
+          "signed_path_m": -0.01219814084470272,
+          "peak_roll_rad": 0.0008018016815185547,
+          "heading_error_rad": -0.0001121010136557743
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.0030759803485125303
+          ],
+          "offsets": [
+            0.03850628063082695,
+            -0.004520064685493708
+          ],
+          "governed": [
+            2.6385109424591064,
+            -0.0014440832892432809
+          ],
+          "final_command": [
+            3.494645852697431e-06,
+            26.706687927246094
+          ],
+          "actual_delta": 2.461999247316271e-05,
+          "actual_forward_speed": 2.617055654525757,
+          "chi": 0.0,
+          "effective_cost_path": 0.12005790047472104,
+          "effective_cost_speed": 0.2908995533002212
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.988,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.010306477546691895,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.016337905079126358,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.022897958755493164,
+        "final_max_path_error": 0.013128630816936493,
+        "final_max_heading_error": 0.00010689526243368164,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 160,
+          "time_s": 0.8049999475479126,
+          "progress_m": 2.032658815383911,
+          "signed_path_m": -9.271531598642468e-05,
+          "peak_roll_rad": 0.010306477546691895,
+          "heading_error_rad": -0.0044403281062841415
+        },
+        "path_peak": {
+          "index": 1092,
+          "time_s": 5.465000152587891,
+          "progress_m": 14.255282402038574,
+          "signed_path_m": -0.016337905079126358,
+          "peak_roll_rad": 0.0002549886703491211,
+          "heading_error_rad": 3.5422344808466733e-06
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.003637496614828706
+          ],
+          "offsets": [
+            0.04429662600159645,
+            -0.005247627384960651
+          ],
+          "governed": [
+            2.644293785095215,
+            -0.0016101299552246928
+          ],
+          "final_command": [
+            -2.5785061552596744e-06,
+            26.766149520874023
+          ],
+          "actual_delta": -2.441855576762464e-05,
+          "actual_forward_speed": 2.6228833198547363,
+          "chi": 0.0,
+          "effective_cost_path": 0.16985717706702558,
+          "effective_cost_speed": 0.5236591367889787
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.98525,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.005606174468994141,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.03486945107579231,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.0037915706634521484,
+        "final_max_path_error": 0.03157755360007286,
+        "final_max_heading_error": 9.368290920974687e-05,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 139,
+          "time_s": 0.699999988079071,
+          "progress_m": 1.7681392431259155,
+          "signed_path_m": 0.002727669896557927,
+          "peak_roll_rad": 0.005606174468994141,
+          "heading_error_rad": -0.001345285912975669
+        },
+        "path_peak": {
+          "index": 627,
+          "time_s": 3.140000104904175,
+          "progress_m": 8.12125301361084,
+          "signed_path_m": -0.03486945107579231,
+          "peak_roll_rad": 0.0008463859558105469,
+          "heading_error_rad": -2.1516993001569062e-05
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.008756384253501892
+          ],
+          "offsets": [
+            0.025219645351171494,
+            -0.010322831571102142
+          ],
+          "governed": [
+            2.625216007232666,
+            -0.0015664439415559173
+          ],
+          "final_command": [
+            -3.458433866398991e-06,
+            26.57120132446289
+          ],
+          "actual_delta": -2.5674893549876288e-05,
+          "actual_forward_speed": 2.6037817001342773,
+          "chi": 0.0,
+          "effective_cost_path": 0.9919242262840271,
+          "effective_cost_speed": 0.014301471412181854
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.9885,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.03176701068878174,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.2910479009151459,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.011377334594726562,
+        "final_max_path_error": 0.28737950325012207,
+        "final_max_heading_error": 0.00030567575595341623,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 165,
+          "time_s": 0.8299999833106995,
+          "progress_m": 2.0772738456726074,
+          "signed_path_m": 0.021366596221923828,
+          "peak_roll_rad": 0.03176701068878174,
+          "heading_error_rad": -0.0264445673674345
+        },
+        "path_peak": {
+          "index": 916,
+          "time_s": 4.585000038146973,
+          "progress_m": 11.777392387390137,
+          "signed_path_m": 0.2910479009151459,
+          "peak_roll_rad": 0.0006560087203979492,
+          "heading_error_rad": 6.840479181846604e-05
+        },
+        "first_turn_end": null,
+        "turn_end_m": 0.0,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            -0.07776814699172974
+          ],
+          "offsets": [
+            0.010142325423657894,
+            0.07628995925188065
+          ],
+          "governed": [
+            2.610139846801758,
+            -0.0014782485086470842
+          ],
+          "final_command": [
+            -4.1995037463493645e-05,
+            26.41704559326172
+          ],
+          "actual_delta": 7.622749762958847e-06,
+          "actual_forward_speed": 2.588672161102295,
+          "chi": 0.0,
+          "effective_cost_path": 47.413963317871094,
+          "effective_cost_speed": 0.12831489741802216
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.02925,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    },
+    "left90_R2_2.0": {
+      "B0 local300": {
+        "max_roll_rad": 0.1901240348815918,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.13142678141593933,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.029495835304260254,
+        "final_max_path_error": 0.01944446563720703,
+        "final_max_heading_error": 0.07343602180480957,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 403,
+          "time_s": 2.0199999809265137,
+          "progress_m": 4.090137958526611,
+          "signed_path_m": 0.10310351848602295,
+          "peak_roll_rad": 0.1901240348815918,
+          "heading_error_rad": 0.017963113263249397
+        },
+        "path_peak": {
+          "index": 502,
+          "time_s": 2.515000104904175,
+          "progress_m": 5.119770526885986,
+          "signed_path_m": 0.13142678141593933,
+          "peak_roll_rad": 0.18110430240631104,
+          "heading_error_rad": 0.0648188516497612
+        },
+        "first_turn_end": {
+          "index": 649,
+          "time_s": 3.25,
+          "progress_m": 6.643492698669434,
+          "signed_path_m": 0.05019378662109375,
+          "peak_roll_rad": 0.0724639892578125,
+          "heading_error_rad": 0.06667375564575195
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.0037251063622534275
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.0,
+            -0.0037251063622534275
+          ],
+          "final_command": [
+            -0.03663993999361992,
+            20.272985458374023
+          ],
+          "actual_delta": 0.01215677335858345,
+          "actual_forward_speed": 1.9841454029083252,
+          "chi": 0.0,
+          "effective_cost_path": 1.5566281080245972,
+          "effective_cost_speed": 0.3027804493904114
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.441,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.16571545600891113,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.06606453657150269,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.029332876205444336,
+        "final_max_path_error": 0.018903732299804688,
+        "final_max_heading_error": 0.0008890629396773875,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 527,
+          "time_s": 2.640000104904175,
+          "progress_m": 5.211022853851318,
+          "signed_path_m": 0.06605343520641327,
+          "peak_roll_rad": 0.16571545600891113,
+          "heading_error_rad": 0.06868743896484375
+        },
+        "path_peak": {
+          "index": 526,
+          "time_s": 2.634999990463257,
+          "progress_m": 5.201898097991943,
+          "signed_path_m": 0.06606453657150269,
+          "peak_roll_rad": 0.16570699214935303,
+          "heading_error_rad": 0.06871092319488525
+        },
+        "first_turn_end": {
+          "index": 670,
+          "time_s": 3.3550000190734863,
+          "progress_m": 6.642287731170654,
+          "signed_path_m": -0.02458667755126953,
+          "peak_roll_rad": 0.09441518783569336,
+          "heading_error_rad": 0.09229803085327148
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.008939608000218868
+          ],
+          "offsets": [
+            0.051069293171167374,
+            -0.00844761822372675
+          ],
+          "governed": [
+            2.0510709285736084,
+            0.000491986982524395
+          ],
+          "final_command": [
+            0.00023803423391655087,
+            20.708398818969727
+          ],
+          "actual_delta": 3.6117771742283367e-06,
+          "actual_forward_speed": 2.0292775630950928,
+          "chi": 0.0,
+          "effective_cost_path": 0.3552608092552547,
+          "effective_cost_speed": 0.8571832171628557
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.85875,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.16537344455718994,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.5184450149536133,
+        "path_exceed_seconds": 0.905,
+        "final_max_speed_error": 0.026133298873901367,
+        "final_max_path_error": 0.00031375885009765625,
+        "final_max_heading_error": 0.00038862231303937733,
+        "first_corridor_exceed": {
+          "index": 633,
+          "time_s": 3.1700000762939453,
+          "progress_m": 6.198511123657227,
+          "signed_path_m": -0.4019545614719391,
+          "peak_roll_rad": 0.15452146530151367,
+          "heading_error_rad": 0.26621508598327637
+        },
+        "roll_peak": {
+          "index": 469,
+          "time_s": 2.3500001430511475,
+          "progress_m": 4.760471820831299,
+          "signed_path_m": -0.09778669476509094,
+          "peak_roll_rad": 0.16537344455718994,
+          "heading_error_rad": 0.2050725221633911
+        },
+        "path_peak": {
+          "index": 719,
+          "time_s": 3.6000001430511475,
+          "progress_m": 7.010788440704346,
+          "signed_path_m": -0.5184450149536133,
+          "peak_roll_rad": 0.1335986852645874,
+          "heading_error_rad": 0.02880561351776123
+        },
+        "first_turn_end": {
+          "index": 683,
+          "time_s": 3.4200000762939453,
+          "progress_m": 6.646705150604248,
+          "signed_path_m": -0.4959831237792969,
+          "peak_roll_rad": 0.15264225006103516,
+          "heading_error_rad": 0.17317165434360504
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.0002941175480373204
+          ],
+          "offsets": [
+            0.04783320054411888,
+            0.0007112768362276256
+          ],
+          "governed": [
+            2.0478360652923584,
+            0.0004171594337094575
+          ],
+          "final_command": [
+            -3.91708490496967e-05,
+            20.675464630126953
+          ],
+          "actual_delta": -3.7366979086073115e-05,
+          "actual_forward_speed": 2.0260422229766846,
+          "chi": 0.0,
+          "effective_cost_path": 0.00010898719389704589,
+          "effective_cost_speed": 0.6781918123928676
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.76475,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.1506483554840088,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.09250354766845703,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.011687517166137695,
+        "final_max_path_error": 0.027800559997558594,
+        "final_max_heading_error": 0.0011661052703857422,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 531,
+          "time_s": 2.6600000858306885,
+          "progress_m": 5.089352130889893,
+          "signed_path_m": 0.01885399781167507,
+          "peak_roll_rad": 0.1506483554840088,
+          "heading_error_rad": 0.07053934782743454
+        },
+        "path_peak": {
+          "index": 744,
+          "time_s": 3.7250001430511475,
+          "progress_m": 7.134243965148926,
+          "signed_path_m": -0.09250354766845703,
+          "peak_roll_rad": 0.05494654178619385,
+          "heading_error_rad": 0.003291368717327714
+        },
+        "first_turn_end": {
+          "index": 696,
+          "time_s": 3.4850001335144043,
+          "progress_m": 6.649901390075684,
+          "signed_path_m": -0.07276725769042969,
+          "peak_roll_rad": 0.09036767482757568,
+          "heading_error_rad": 0.10445606708526611
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.013209960423409939
+          ],
+          "offsets": [
+            0.033193398267030716,
+            -0.012588240206241608
+          ],
+          "governed": [
+            2.033193588256836,
+            0.0006217314512468874
+          ],
+          "final_command": [
+            -1.9410739696468227e-05,
+            20.526073455810547
+          ],
+          "actual_delta": 5.926510493736714e-05,
+          "actual_forward_speed": 2.0113980770111084,
+          "chi": 0.0,
+          "effective_cost_path": 0.7668232917785645,
+          "effective_cost_speed": 0.1299184262752533
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.8315,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.16838538646697998,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.6040477752685547,
+        "path_exceed_seconds": 1.185,
+        "final_max_speed_error": 0.00805652141571045,
+        "final_max_path_error": 0.11220073699951172,
+        "final_max_heading_error": 0.000977635383605957,
+        "first_corridor_exceed": {
+          "index": 614,
+          "time_s": 3.075000047683716,
+          "progress_m": 6.031213283538818,
+          "signed_path_m": -0.40197426080703735,
+          "peak_roll_rad": 0.16163885593414307,
+          "heading_error_rad": 0.3065527677536011
+        },
+        "roll_peak": {
+          "index": 527,
+          "time_s": 2.640000104904175,
+          "progress_m": 5.291228294372559,
+          "signed_path_m": -0.18596428632736206,
+          "peak_roll_rad": 0.16838538646697998,
+          "heading_error_rad": 0.29587146639823914
+        },
+        "path_peak": {
+          "index": 729,
+          "time_s": 3.6500000953674316,
+          "progress_m": 7.087741851806641,
+          "signed_path_m": -0.6040477752685547,
+          "peak_roll_rad": 0.14410412311553955,
+          "heading_error_rad": 0.03497278690338135
+        },
+        "first_turn_end": {
+          "index": 685,
+          "time_s": 3.430000066757202,
+          "progress_m": 6.642662525177002,
+          "signed_path_m": -0.5690212249755859,
+          "peak_roll_rad": 0.15591859817504883,
+          "heading_error_rad": 0.20880983769893646
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.05101090297102928
+          ],
+          "offsets": [
+            0.013793774880468845,
+            0.051585134118795395
+          ],
+          "governed": [
+            2.013793706893921,
+            0.0005742382491007447
+          ],
+          "final_command": [
+            -5.4578290473727975e-06,
+            20.328157424926758
+          ],
+          "actual_delta": -2.3875496481196024e-05,
+          "actual_forward_speed": 1.992000699043274,
+          "chi": 0.0,
+          "effective_cost_path": 12.427759170532227,
+          "effective_cost_speed": 0.06399121880531311
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.034,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    },
+    "left90_R2_2.6": {
+      "B0 local300": {
+        "max_roll_rad": 0.32751405239105225,
+        "roll_exceed_seconds": 0.51,
+        "max_path_m": 0.18269938230514526,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.03322625160217285,
+        "final_max_path_error": 0.03148365020751953,
+        "final_max_heading_error": 0.08668923377990723,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 351,
+          "time_s": 1.7599999904632568,
+          "progress_m": 4.491977691650391,
+          "signed_path_m": 0.16179116070270538,
+          "peak_roll_rad": 0.32751405239105225,
+          "heading_error_rad": 0.023167848587036133
+        },
+        "path_peak": {
+          "index": 412,
+          "time_s": 2.065000057220459,
+          "progress_m": 5.334038734436035,
+          "signed_path_m": 0.18269938230514526,
+          "peak_roll_rad": 0.30051887035369873,
+          "heading_error_rad": 0.04242420196533203
+        },
+        "first_turn_end": {
+          "index": 508,
+          "time_s": 2.5450000762939453,
+          "progress_m": 6.6474432945251465,
+          "signed_path_m": 0.07145023345947266,
+          "peak_roll_rad": 0.10798346996307373,
+          "heading_error_rad": 0.11103188246488571
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            -0.005794727709144354
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.600003719329834,
+            -0.005794727709144354
+          ],
+          "final_command": [
+            -0.03394461050629616,
+            26.424135208129883
+          ],
+          "actual_delta": 0.0019538330379873514,
+          "actual_forward_speed": 2.5842416286468506,
+          "chi": 0.0,
+          "effective_cost_path": 2.1037795543670654,
+          "effective_cost_speed": 0.32017654180526733
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.41225,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.25979888439178467,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.09140396118164062,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.017098188400268555,
+        "final_max_path_error": 0.009077072143554688,
+        "final_max_heading_error": 0.0008218288421630859,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 414,
+          "time_s": 2.075000047683716,
+          "progress_m": 5.1177215576171875,
+          "signed_path_m": 0.07051332294940948,
+          "peak_roll_rad": 0.25979888439178467,
+          "heading_error_rad": 0.07798707485198975
+        },
+        "path_peak": {
+          "index": 594,
+          "time_s": 2.9750001430511475,
+          "progress_m": 7.3903326988220215,
+          "signed_path_m": -0.09140396118164062,
+          "peak_roll_rad": 0.06681704521179199,
+          "heading_error_rad": -0.011941194534301758
+        },
+        "first_turn_end": {
+          "index": 537,
+          "time_s": 2.690000057220459,
+          "progress_m": 6.645981788635254,
+          "signed_path_m": -0.054404258728027344,
+          "peak_roll_rad": 0.14879870414733887,
+          "heading_error_rad": 0.11467361450195312
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.0028471252880990505
+          ],
+          "offsets": [
+            0.03846554830670357,
+            -0.00441844342276454
+          ],
+          "governed": [
+            2.6384668350219727,
+            -0.0015713166212663054
+          ],
+          "final_command": [
+            -9.05163396964781e-05,
+            26.706483840942383
+          ],
+          "actual_delta": -2.516227323212661e-05,
+          "actual_forward_speed": 2.6170341968536377,
+          "chi": 0.0,
+          "effective_cost_path": 0.08114274061305124,
+          "effective_cost_speed": 0.29017286011054466
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.88425,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.24379146099090576,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 1.0891590118408203,
+        "path_exceed_seconds": 2.475,
+        "final_max_speed_error": 0.022907257080078125,
+        "final_max_path_error": 0.014560699462890625,
+        "final_max_heading_error": 0.00014603137969970703,
+        "first_corridor_exceed": {
+          "index": 434,
+          "time_s": 2.174999952316284,
+          "progress_m": 5.418698787689209,
+          "signed_path_m": -0.4021134376525879,
+          "peak_roll_rad": 0.24064207077026367,
+          "heading_error_rad": 0.38164836168289185
+        },
+        "roll_peak": {
+          "index": 402,
+          "time_s": 2.015000104904175,
+          "progress_m": 5.085788249969482,
+          "signed_path_m": -0.2684862017631531,
+          "peak_roll_rad": 0.24379146099090576,
+          "heading_error_rad": 0.36839592456817627
+        },
+        "path_peak": {
+          "index": 633,
+          "time_s": 3.1700000762939453,
+          "progress_m": 7.582043647766113,
+          "signed_path_m": -1.0891590118408203,
+          "peak_roll_rad": 0.17195069789886475,
+          "heading_error_rad": 0.007307887077331543
+        },
+        "first_turn_end": {
+          "index": 561,
+          "time_s": 2.809999942779541,
+          "progress_m": 6.652634143829346,
+          "signed_path_m": -0.9647159576416016,
+          "peak_roll_rad": 0.2238560914993286,
+          "heading_error_rad": 0.31530144810676575
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.003971852362155914
+          ],
+          "offsets": [
+            0.04431505128741264,
+            -0.005513783544301987
+          ],
+          "governed": [
+            2.644315242767334,
+            -0.0015419311821460724
+          ],
+          "final_command": [
+            9.169679833576083e-05,
+            26.766197204589844
+          ],
+          "actual_delta": -1.939650610438548e-05,
+          "actual_forward_speed": 2.6228928565979004,
+          "chi": 0.0,
+          "effective_cost_path": 0.20957982704931766,
+          "effective_cost_speed": 0.5240841851278333
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.72475,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.2493133544921875,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.17341899871826172,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.0038461685180664062,
+        "final_max_path_error": 0.03130531311035156,
+        "final_max_heading_error": 0.0007001161575317383,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 383,
+          "time_s": 1.9199999570846558,
+          "progress_m": 4.6634907722473145,
+          "signed_path_m": -0.01594342291355133,
+          "peak_roll_rad": 0.2493133544921875,
+          "heading_error_rad": 0.1214253231883049
+        },
+        "path_peak": {
+          "index": 615,
+          "time_s": 3.080000162124634,
+          "progress_m": 7.335655689239502,
+          "signed_path_m": -0.17341899871826172,
+          "peak_roll_rad": 0.07556307315826416,
+          "heading_error_rad": -0.003906726837158203
+        },
+        "first_turn_end": {
+          "index": 562,
+          "time_s": 2.815000057220459,
+          "progress_m": 6.653553485870361,
+          "signed_path_m": -0.14122581481933594,
+          "peak_roll_rad": 0.13270103931427002,
+          "heading_error_rad": 0.11113321781158447
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.008967415429651737
+          ],
+          "offsets": [
+            0.025219984352588654,
+            -0.010438301600515842
+          ],
+          "governed": [
+            2.6252212524414062,
+            -0.0014708872186020017
+          ],
+          "final_command": [
+            2.4896482500480488e-05,
+            26.570959091186523
+          ],
+          "actual_delta": 5.669386609952198e-06,
+          "actual_forward_speed": 2.6037654876708984,
+          "chi": 0.0,
+          "effective_cost_path": 0.9749937653541565,
+          "effective_cost_speed": 0.014182801358401775
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.82975,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.2434978485107422,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 1.010263442993164,
+        "path_exceed_seconds": 2.275,
+        "final_max_speed_error": 0.011316776275634766,
+        "final_max_path_error": 0.2890462875366211,
+        "final_max_heading_error": 0.0005643367767333984,
+        "first_corridor_exceed": {
+          "index": 455,
+          "time_s": 2.2799999713897705,
+          "progress_m": 5.706254482269287,
+          "signed_path_m": -0.4028104245662689,
+          "peak_roll_rad": 0.24243521690368652,
+          "heading_error_rad": 0.4244745373725891
+        },
+        "roll_peak": {
+          "index": 425,
+          "time_s": 2.130000114440918,
+          "progress_m": 5.398047924041748,
+          "signed_path_m": -0.2610885500907898,
+          "peak_roll_rad": 0.2434978485107422,
+          "heading_error_rad": 0.411180704832077
+        },
+        "path_peak": {
+          "index": 629,
+          "time_s": 3.1500000953674316,
+          "progress_m": 7.678155899047852,
+          "signed_path_m": -1.010263442993164,
+          "peak_roll_rad": 0.16697299480438232,
+          "heading_error_rad": 0.003197908401489258
+        },
+        "first_turn_end": {
+          "index": 549,
+          "time_s": 2.75,
+          "progress_m": 6.641671657562256,
+          "signed_path_m": -0.8580694198608398,
+          "peak_roll_rad": 0.23158562183380127,
+          "heading_error_rad": 0.34697413444519043
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            -0.07784862071275711
+          ],
+          "offsets": [
+            0.010173123329877853,
+            0.07639697194099426
+          ],
+          "governed": [
+            2.6101694107055664,
+            -0.0014516444643959403
+          ],
+          "final_command": [
+            5.733519628847716e-06,
+            26.417282104492188
+          ],
+          "actual_delta": 7.149898465286242e-06,
+          "actual_forward_speed": 2.5886964797973633,
+          "chi": 0.0,
+          "effective_cost_path": 47.792823791503906,
+          "effective_cost_speed": 0.12776535749435425
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.02275,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    },
+    "right90_R2_2.0": {
+      "B0 local300": {
+        "max_roll_rad": 0.19403064250946045,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.12074892222881317,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.029463768005371094,
+        "final_max_path_error": 0.01934337615966797,
+        "final_max_heading_error": 0.07318472117185593,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 410,
+          "time_s": 2.055000066757202,
+          "progress_m": 4.169296741485596,
+          "signed_path_m": -0.10064563155174255,
+          "peak_roll_rad": 0.19403064250946045,
+          "heading_error_rad": -0.030189691111445427
+        },
+        "path_peak": {
+          "index": 499,
+          "time_s": 2.5,
+          "progress_m": 5.093770980834961,
+          "signed_path_m": -0.12074892222881317,
+          "peak_roll_rad": 0.1813105344772339,
+          "heading_error_rad": -0.0623818077147007
+        },
+        "first_turn_end": {
+          "index": 649,
+          "time_s": 3.25,
+          "progress_m": 6.646483421325684,
+          "signed_path_m": -0.02826976776123047,
+          "peak_roll_rad": 0.06794369220733643,
+          "heading_error_rad": -0.07848452776670456
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.006142305675894022
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.0,
+            0.006142305675894022
+          ],
+          "final_command": [
+            0.07401936501264572,
+            20.28105926513672
+          ],
+          "actual_delta": -0.0009145092917606235,
+          "actual_forward_speed": 1.9847949743270874,
+          "chi": 0.0,
+          "effective_cost_path": 1.2963873147964478,
+          "effective_cost_speed": 0.2876976430416107
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.48225,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.1846771240234375,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.09150924533605576,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.029407024383544922,
+        "final_max_path_error": 0.018863677978515625,
+        "final_max_heading_error": 0.0012137888697907329,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 528,
+          "time_s": 2.6449999809265137,
+          "progress_m": 5.392022132873535,
+          "signed_path_m": -0.0776747465133667,
+          "peak_roll_rad": 0.1846771240234375,
+          "heading_error_rad": -0.10078918933868408
+        },
+        "path_peak": {
+          "index": 449,
+          "time_s": 2.25,
+          "progress_m": 4.603165626525879,
+          "signed_path_m": -0.09150924533605576,
+          "peak_roll_rad": 0.1780637502670288,
+          "heading_error_rad": -0.06429178267717361
+        },
+        "first_turn_end": {
+          "index": 654,
+          "time_s": 3.2750000953674316,
+          "progress_m": 6.642318248748779,
+          "signed_path_m": 0.0013132095336914062,
+          "peak_roll_rad": 0.07346463203430176,
+          "heading_error_rad": -0.08435749262571335
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.008996998891234398
+          ],
+          "offsets": [
+            0.051084209233522415,
+            -0.008457120507955551
+          ],
+          "governed": [
+            2.051084041595459,
+            0.0005398800713010132
+          ],
+          "final_command": [
+            0.00012327457079663873,
+            20.708585739135742
+          ],
+          "actual_delta": 1.9571762095438316e-05,
+          "actual_forward_speed": 2.029280424118042,
+          "chi": 0.0,
+          "effective_cost_path": 0.3537646290734076,
+          "effective_cost_speed": 0.8573401028186822
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.8625,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.19768130779266357,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.3639030456542969,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.026120424270629883,
+        "final_max_path_error": 0.0011730194091796875,
+        "final_max_heading_error": 0.0007529259892180562,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 498,
+          "time_s": 2.495000123977661,
+          "progress_m": 5.07034158706665,
+          "signed_path_m": 0.14423272013664246,
+          "peak_roll_rad": 0.19768130779266357,
+          "heading_error_rad": -0.22515714168548584
+        },
+        "path_peak": {
+          "index": 678,
+          "time_s": 3.3949999809265137,
+          "progress_m": 6.703866481781006,
+          "signed_path_m": 0.3639030456542969,
+          "peak_roll_rad": 0.1442626714706421,
+          "heading_error_rad": -0.027478577569127083
+        },
+        "first_turn_end": {
+          "index": 672,
+          "time_s": 3.365000009536743,
+          "progress_m": 6.642862319946289,
+          "signed_path_m": 0.3632030487060547,
+          "peak_roll_rad": 0.150498628616333,
+          "heading_error_rad": -0.052108284085989
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.00012572389096021652
+          ],
+          "offsets": [
+            0.04781234264373779,
+            0.0006475938716903329
+          ],
+          "governed": [
+            2.047811985015869,
+            0.00052187021356076
+          ],
+          "final_command": [
+            1.3778614629700314e-05,
+            20.675151824951172
+          ],
+          "actual_delta": -1.4758538782189135e-05,
+          "actual_forward_speed": 2.0260088443756104,
+          "chi": 0.0,
+          "effective_cost_path": 0.0014049984269253108,
+          "effective_cost_speed": 0.6764622902022666
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.7545,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.17882978916168213,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.06497859954833984,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.011507749557495117,
+        "final_max_path_error": 0.028120040893554688,
+        "final_max_heading_error": 0.0007808209047652781,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 442,
+          "time_s": 2.2150001525878906,
+          "progress_m": 4.446962833404541,
+          "signed_path_m": -0.03952737897634506,
+          "peak_roll_rad": 0.17882978916168213,
+          "heading_error_rad": -0.11184665560722351
+        },
+        "path_peak": {
+          "index": 720,
+          "time_s": 3.6050000190734863,
+          "progress_m": 7.092644691467285,
+          "signed_path_m": 0.06497859954833984,
+          "peak_roll_rad": 0.0517505407333374,
+          "heading_error_rad": -0.0026855466421693563
+        },
+        "first_turn_end": {
+          "index": 676,
+          "time_s": 3.384999990463257,
+          "progress_m": 6.649440765380859,
+          "signed_path_m": 0.04960823059082031,
+          "peak_roll_rad": 0.08415043354034424,
+          "heading_error_rad": -0.08756435662508011
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            0.013138867914676666
+          ],
+          "offsets": [
+            0.03319837152957916,
+            -0.01257957611232996
+          ],
+          "governed": [
+            2.0331971645355225,
+            0.0005593002424575388
+          ],
+          "final_command": [
+            5.401751332101412e-05,
+            20.526063919067383
+          ],
+          "actual_delta": -5.116351076139836e-06,
+          "actual_forward_speed": 2.0114123821258545,
+          "chi": 0.0,
+          "effective_cost_path": 0.7873418927192688,
+          "effective_cost_speed": 0.1302427351474762
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.8355,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.1838223934173584,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.19077110290527344,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.008082985877990723,
+        "final_max_path_error": 0.11054515838623047,
+        "final_max_heading_error": 0.00031530859996564686,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 523,
+          "time_s": 2.620000123977661,
+          "progress_m": 5.104334831237793,
+          "signed_path_m": 0.06892150640487671,
+          "peak_roll_rad": 0.1838223934173584,
+          "heading_error_rad": -0.09354197978973389
+        },
+        "path_peak": {
+          "index": 753,
+          "time_s": 3.7699999809265137,
+          "progress_m": 7.316704750061035,
+          "signed_path_m": 0.19077110290527344,
+          "peak_roll_rad": 0.023738622665405273,
+          "heading_error_rad": 0.005503535270690918
+        },
+        "first_turn_end": {
+          "index": 686,
+          "time_s": 3.434999942779541,
+          "progress_m": 6.648227214813232,
+          "signed_path_m": 0.16868877410888672,
+          "peak_roll_rad": 0.07591545581817627,
+          "heading_error_rad": -0.08774685859680176
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.0,
+            -0.050674933940172195
+          ],
+          "offsets": [
+            0.013790164142847061,
+            0.05133507773280144
+          ],
+          "governed": [
+            2.0137906074523926,
+            0.0006601668428629637
+          ],
+          "final_command": [
+            -0.00012616513413377106,
+            20.328107833862305
+          ],
+          "actual_delta": -7.285751053132117e-05,
+          "actual_forward_speed": 1.991999864578247,
+          "chi": 0.0,
+          "effective_cost_path": 12.096435546875,
+          "effective_cost_speed": 0.06400476396083832
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.034,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    },
+    "right90_R2_2.6": {
+      "B0 local300": {
+        "max_roll_rad": 0.32493042945861816,
+        "roll_exceed_seconds": 0.47000000000000003,
+        "max_path_m": 0.15506140887737274,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.03321123123168945,
+        "final_max_path_error": 0.031310081481933594,
+        "final_max_heading_error": 0.08649872988462448,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 350,
+          "time_s": 1.7549999952316284,
+          "progress_m": 4.48929500579834,
+          "signed_path_m": -0.1439642310142517,
+          "peak_roll_rad": 0.32493042945861816,
+          "heading_error_rad": -0.035933732986450195
+        },
+        "path_peak": {
+          "index": 399,
+          "time_s": 2.0,
+          "progress_m": 5.157163143157959,
+          "signed_path_m": -0.15506140887737274,
+          "peak_roll_rad": 0.3065534830093384,
+          "heading_error_rad": -0.047723229974508286
+        },
+        "first_turn_end": {
+          "index": 510,
+          "time_s": 2.555000066757202,
+          "progress_m": 6.652007579803467,
+          "signed_path_m": -0.02043914794921875,
+          "peak_roll_rad": 0.11033785343170166,
+          "heading_error_rad": -0.1306038796901703
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            1.1000074664480053e-05
+          ],
+          "offsets": [
+            0.0,
+            0.0
+          ],
+          "governed": [
+            2.600003719329834,
+            1.1000074664480053e-05
+          ],
+          "final_command": [
+            0.03436029702425003,
+            26.40770721435547
+          ],
+          "actual_delta": 0.0023363970685750246,
+          "actual_forward_speed": 2.582944631576538,
+          "chi": 0.0,
+          "effective_cost_path": 2.082373857498169,
+          "effective_cost_speed": 0.3682189881801605
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.4425,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha0": {
+        "max_roll_rad": 0.28351855278015137,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.17938709259033203,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.01714038848876953,
+        "final_max_path_error": 0.009662628173828125,
+        "final_max_heading_error": 0.0009003878221847117,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 348,
+          "time_s": 1.7450000047683716,
+          "progress_m": 4.458108425140381,
+          "signed_path_m": -0.09384390711784363,
+          "peak_roll_rad": 0.28351855278015137,
+          "heading_error_rad": -0.08839071542024612
+        },
+        "path_peak": {
+          "index": 617,
+          "time_s": 3.0900001525878906,
+          "progress_m": 7.8101487159729,
+          "signed_path_m": 0.17938709259033203,
+          "peak_roll_rad": 0.06434547901153564,
+          "heading_error_rad": 0.0011935234069824219
+        },
+        "first_turn_end": {
+          "index": 527,
+          "time_s": 2.640000104904175,
+          "progress_m": 6.646350383758545,
+          "signed_path_m": 0.0949544906616211,
+          "peak_roll_rad": 0.13898539543151855,
+          "heading_error_rad": -0.17272543907165527
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.003023897297680378
+          ],
+          "offsets": [
+            0.03848155587911606,
+            -0.004481724929064512
+          ],
+          "governed": [
+            2.638481855392456,
+            -0.0014578273985534906
+          ],
+          "final_command": [
+            -0.00012584950309246778,
+            26.706464767456055
+          ],
+          "actual_delta": 2.5261733753723092e-05,
+          "actual_forward_speed": 2.617039680480957,
+          "chi": 0.0,
+          "effective_cost_path": 0.09037220404425897,
+          "effective_cost_speed": 0.29036590174371213
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.8195,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Coverage alpha1": {
+        "max_roll_rad": 0.2985631227493286,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.6106491088867188,
+        "path_exceed_seconds": 1.31,
+        "final_max_speed_error": 0.02294635772705078,
+        "final_max_path_error": 0.012358665466308594,
+        "final_max_heading_error": 0.000731348991394043,
+        "first_corridor_exceed": {
+          "index": 468,
+          "time_s": 2.3450000286102295,
+          "progress_m": 5.830044746398926,
+          "signed_path_m": 0.40048858523368835,
+          "peak_roll_rad": 0.2912752628326416,
+          "heading_error_rad": -0.25389528274536133
+        },
+        "roll_peak": {
+          "index": 408,
+          "time_s": 2.0450000762939453,
+          "progress_m": 5.178756237030029,
+          "signed_path_m": 0.23868809640407562,
+          "peak_roll_rad": 0.2985631227493286,
+          "heading_error_rad": -0.27241021394729614
+        },
+        "path_peak": {
+          "index": 578,
+          "time_s": 2.8949999809265137,
+          "progress_m": 7.111574172973633,
+          "signed_path_m": 0.6106491088867188,
+          "peak_roll_rad": 0.15508568286895752,
+          "heading_error_rad": 0.003916501998901367
+        },
+        "first_turn_end": {
+          "index": 543,
+          "time_s": 2.7200000286102295,
+          "progress_m": 6.654476642608643,
+          "signed_path_m": 0.5843563079833984,
+          "peak_roll_rad": 0.2161933183670044,
+          "heading_error_rad": -0.13479220867156982
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.0037272898480296135
+          ],
+          "offsets": [
+            0.04428818076848984,
+            -0.005282305646687746
+          ],
+          "governed": [
+            2.644289255142212,
+            -0.0015550124226137996
+          ],
+          "final_command": [
+            -7.437977910740301e-05,
+            26.765958786010742
+          ],
+          "actual_delta": -2.026401307375636e-05,
+          "actual_forward_speed": 2.6228604316711426,
+          "chi": 0.0,
+          "effective_cost_path": 0.150866003487183,
+          "effective_cost_speed": 0.522611178840009
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.7635,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Control alpha0 u200": {
+        "max_roll_rad": 0.26545822620391846,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.16701221466064453,
+        "path_exceed_seconds": 0.0,
+        "final_max_speed_error": 0.0038373470306396484,
+        "final_max_path_error": 0.031737327575683594,
+        "final_max_heading_error": 0.00044596195220947266,
+        "first_corridor_exceed": null,
+        "roll_peak": {
+          "index": 379,
+          "time_s": 1.899999976158142,
+          "progress_m": 4.737458229064941,
+          "signed_path_m": 0.014104681089520454,
+          "peak_roll_rad": 0.26545822620391846,
+          "heading_error_rad": -0.15005989372730255
+        },
+        "path_peak": {
+          "index": 616,
+          "time_s": 3.0850000381469727,
+          "progress_m": 7.436933994293213,
+          "signed_path_m": 0.16701221466064453,
+          "peak_roll_rad": 0.06202399730682373,
+          "heading_error_rad": 0.00271761417388916
+        },
+        "first_turn_end": {
+          "index": 554,
+          "time_s": 2.7750000953674316,
+          "progress_m": 6.649690628051758,
+          "signed_path_m": 0.1309804916381836,
+          "peak_roll_rad": 0.11553537845611572,
+          "heading_error_rad": -0.11014759540557861
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            0.00895247608423233
+          ],
+          "offsets": [
+            0.025221552699804306,
+            -0.01042780838906765
+          ],
+          "governed": [
+            2.625221014022827,
+            -0.0014753224095329642
+          ],
+          "final_command": [
+            7.064238889142871e-05,
+            26.571056365966797
+          ],
+          "actual_delta": 5.959160489510396e-07,
+          "actual_forward_speed": 2.603764533996582,
+          "chi": 0.0,
+          "effective_cost_path": 1.0019958019256592,
+          "effective_cost_speed": 0.014174248091876507
+        },
+        "final_hold": true,
+        "post_lower_dev_mask_proxy_fraction": 0.81425,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      },
+      "Safety alpha1 u200": {
+        "max_roll_rad": 0.281693696975708,
+        "roll_exceed_seconds": 0.0,
+        "max_path_m": 0.5755386352539062,
+        "path_exceed_seconds": 1.78,
+        "final_max_speed_error": 0.01136159896850586,
+        "final_max_path_error": 0.28778648376464844,
+        "final_max_heading_error": 0.00041913989116437733,
+        "first_corridor_exceed": {
+          "index": 478,
+          "time_s": 2.3949999809265137,
+          "progress_m": 5.678636074066162,
+          "signed_path_m": 0.4014935791492462,
+          "peak_roll_rad": 0.278533935546875,
+          "heading_error_rad": -0.18420685827732086
+        },
+        "roll_peak": {
+          "index": 397,
+          "time_s": 1.9900000095367432,
+          "progress_m": 4.833581924438477,
+          "signed_path_m": 0.25681036710739136,
+          "peak_roll_rad": 0.281693696975708,
+          "heading_error_rad": -0.2213166356086731
+        },
+        "path_peak": {
+          "index": 605,
+          "time_s": 3.0299999713897705,
+          "progress_m": 7.136075496673584,
+          "signed_path_m": 0.5755386352539062,
+          "peak_roll_rad": 0.10202145576477051,
+          "heading_error_rad": 0.012766004540026188
+        },
+        "first_turn_end": {
+          "index": 567,
+          "time_s": 2.8400001525878906,
+          "progress_m": 6.643052577972412,
+          "signed_path_m": 0.5537824630737305,
+          "peak_roll_rad": 0.16832780838012695,
+          "heading_error_rad": -0.09852838516235352
+        },
+        "turn_end_m": 6.641592502593994,
+        "final_chain": {
+          "nominal": [
+            2.600003719329834,
+            -0.0776553601026535
+          ],
+          "offsets": [
+            0.010163980536162853,
+            0.07625734806060791
+          ],
+          "governed": [
+            2.6101644039154053,
+            -0.0013980359071865678
+          ],
+          "final_command": [
+            7.951592124300078e-05,
+            26.41701889038086
+          ],
+          "actual_delta": 1.041473115037661e-05,
+          "actual_forward_speed": 2.5886828899383545,
+          "chi": 0.0,
+          "effective_cost_path": 47.540706634521484,
+          "effective_cost_speed": 0.1280711442232132
+        },
+        "final_hold": false,
+        "post_lower_dev_mask_proxy_fraction": 0.02275,
+        "mask_caveat": "post-lower DEV proxy; NOT training pre-action mask coverage"
+      }
+    }
+  },
+  "preference": {
+    "left90_R2_2.6": {
+      "bins": {
+        "Coverage alpha0": {
+          "speed_rmse": 0.2680474519729614,
+          "path_rmse": 0.05836580693721771,
+          "counts": [
+            40,
+            42,
+            44,
+            43,
+            42,
+            41,
+            39,
+            11
+          ]
+        },
+        "Coverage alpha1": {
+          "speed_rmse": 0.026349185034632683,
+          "path_rmse": 0.4987888038158417,
+          "counts": [
+            38,
+            38,
+            40,
+            44,
+            48,
+            53,
+            53,
+            12
+          ]
+        }
+      },
+      "Dv": 0.24169826693832874,
+      "Dy": 0.44042299687862396,
+      "qualification": "descriptive; parent alpha1 violates .40m corridor"
+    },
+    "right90_R2_2.6": {
+      "bins": {
+        "Coverage alpha0": {
+          "speed_rmse": 0.20358291268348694,
+          "path_rmse": 0.07774141430854797,
+          "counts": [
+            38,
+            39,
+            41,
+            42,
+            41,
+            40,
+            41,
+            11
+          ]
+        },
+        "Coverage alpha1": {
+          "speed_rmse": 0.021533261984586716,
+          "path_rmse": 0.32033345103263855,
+          "counts": [
+            38,
+            38,
+            40,
+            43,
+            45,
+            47,
+            46,
+            12
+          ]
+        }
+      },
+      "Dv": 0.18204965069890022,
+      "Dy": 0.24259203672409058,
+      "qualification": "descriptive; parent alpha1 violates .40m corridor"
+    }
+  },
+  "limits": "one training seed per endpoint; historical DEV; no overlimit recovery"
+}

@@ -4,6 +4,38 @@
 
 [Same-budget200 XY](ALL_XY_last200.png). Fixed original paths, frozenlocal300 B0, all four upper groups; seed911101+alpha,20s original protocol, no external disturbance. Best only denotes evaluated lexicographic selection; unqualified candidates remain unqualified.
 
+**2026-10-12 重新分析：保留已学会的协调，定向限制弯中让步并防止回归能力遗忘。**
+[本次弯段XY/滚转/路径相位图](TURN_PHASE_REASSESSMENT.png) ·
+[Coverage父代全部六场景XY](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/docs/evidence/path_safety_preference_v1/coverage_final_analysis/ALL_XY.png) ·
+[给实施agent的下一步指令](../../../path_safety_preference.md#next-repair-plan)。
+后面的四组200轮负结果仍成立；它不否定此前Coverage阶段已经学出的有用行为。
+
+### 哪些效果应该保留
+
+| 高速弯 | B0滚转峰值 rad | Coverage α0滚转峰值 rad | Coverage α1滚转峰值 rad | α0/α1速度RMSE m/s | α0/α1路径RMSE m |
+|---|---:|---:|---:|---|---|
+| 左 | .327514 | .259799 | .243791 | .268047 / .026349 | .058366 / .498789 |
+| 右 | .324930 | .283519 | .298563 | .203583 / .021533 | .077741 / .320333 |
+
+滚转峰值来自完整20秒；两类RMSE使用完整原弯段0.5m弧长分箱、各箱MSE等权后开方。B0为冻结local300＋ECBC/ESO，不能称纯ECBC。父代α0减速保路径、α1扩大轨迹保速度，两端把B0高速左右弯的超限消除了。Coverage α1六场景原有滚转/目标/最终保持/速度主任务均通过；最终1秒最大路径误差≤.014561m，确实有良好回正能力。然而它有三个场景不满足新.40m边界，不能称共同任务或有限偏好已经合格。独立端点的训练历程不同，仅一个训练seed；这是行为证据，不是α唯一因果或泛化证明。
+
+旧奖励α0继续200轮后共同任务6/6，最坏归一化主目标分数由.808226降到.447690；适合冻结为当前比较基准。α1修补应回到Coverage父代，避免继承新200轮失去保持的Actor。
+
+### 剩余问题的发生顺序
+
+父代α1首次超.40m，左/右分别在原路径s=5.418699/5.830045m；弯段终点是6.641593m。新α1 u200首次超带也在弯内（s=5.706254/5.678636m）。两者滚转峰值发生得更早，当时横向偏差仅约.24–.27m；随后继续累积偏差，出弯后达到峰值。因此不能只在出口才启用路径恢复，也不能把约1m的峰值全解释为峰值当时滚转安全所必需。
+
+新α1高速左/右最大路径偏差1.010263/.575539m，相比父代1.089159/.610649m仅改善7.24%/5.75%；低速左弯反而从.518445升至约.604m。左弯从当前1.010263降到.40仍需约60.4%的缩减。新α1 u100右弯.439569m看似接近边界，但其需求区速度RMSE=.163031m/s，且同模型左弯偏差1.358363m，不能挑这一项称“即将通过”。
+
+奖励诊断发现两个不同的问题：
+
+1. 大偏差时path分项cap200已饱和。新α1 u200高速左弯raw path最高640.274、饱和1.685秒，现有候选所有DEV最高988.447。cap使进一步恶化失去即时成本区分，是应验证的设计缺口，尚未证明它是训练失败的唯一原因。
+2. 普通区漂移并非缺少路径罚。新α1 u200 straight2.6末段χ=0、路径成本47.414、速度成本.1283，路径成本从未cap；名义转角−.077768rad被上层+.076290rad抵消，修正参考约−.001478rad、实测转角接近零，车辆维持约+.287m平行偏置。普通样本占末25轮lower ticks的88.31%。父代末段合格，而新训练逐渐偏移，支持能力保持问题；尚无逐状态优势/梯度证据证明其唯一优化根因。
+
+当前γ=.997/λ=.99在20ms策略周期下没有发现单位错误；128步rollout尾部有Critic bootstrap。改γ还会改变失败尾罚，暂不作为首个修复。下一步先做不更新Actor的有界闭环干预，随后有条件比较cap/失败上界修正与父Actor普通合格区保持。**本次只新增离线分析与指令，诊断仿真、训练、超限恢复均未执行。**
+
+[本次30条完整轨迹的相位/末段/命令链数据](phase_metrics.json) · [独立离线复算脚本](phase_analysis.py)。新增相位图只用于解释高速弯；全部六场景、两端、旧/新奖励的完整20秒、每步/累计奖励及误差证据仍见以下面板与原始报告。
+
 All four groups completed200 updates,52,428,800 policytransitions,209,715,200 training lower ticks,384,000 DEV ticks. No new simulator interaction, recovery or learner update in this audit.
 
 ## Same-budget200 gates
