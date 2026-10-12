@@ -126,6 +126,7 @@ def main():
         zoom.plot(*path['xy'][pmask].T, 'k--', label='original fixed path')
         detail, da = plt.subplots(3, 3, figsize=(18, 13))
         chain, ca = plt.subplots(2, 3, figsize=(17, 9))
+        speed_fig, speed_axes = plt.subplots(2, 1, figsize=(12, 8))
         component_fig, component_axes = plt.subplots(4, 3, figsize=(17, 14))
         cumulative_fig, cumulative_axes = plt.subplots(4, 3, figsize=(17, 14))
         for (label, (d, cfg, alpha)), color in zip(datasets.items(), colors):
@@ -161,6 +162,10 @@ def main():
                     cumax.plot(bs, bparts[key].cumsum(), color=color, ls=':', lw=.7)
             ca[0, 0].plot(t, d['governed'][:, 0], color=color, ls='--', label=label+' corrected')
             ca[0, 0].plot(t, d['actual_forward_speed'], color=color, label=label+' measured')
+            speed_axes[0].plot(t,d['actual_forward_speed'],color=color,label=label+' true body')
+            speed_axes[0].plot(t,d['wheel_speed_proxy'],color=color,ls=':',label=label+' axle x radius proxy')
+            speed_axes[0].plot(t,d['governed'][:,0],color=color,ls='--',lw=.8,label=label+' corrected')
+            speed_axes[1].plot(t,d['wheel_speed_proxy']-d['actual_forward_speed'],color=color,label=label)
             ca[0, 1].plot(t, d['nominal'][:, 1], color=color, ls=':', label=label+' nominal')
             ca[0, 1].plot(t, d['governed'][:, 1], color=color, ls='--', label=label+' corrected')
             ca[0, 1].plot(t, d['actual_delta'], color=color, label=label+' measured')
@@ -203,6 +208,13 @@ def main():
         subtitle=name+' | full20s, fixed Actor, no external disturbance'+warning+'\nOwn alpha/reward version; intervention is not trained capability; originals and all10 costs in linked NPZ'
         detail.suptitle(subtitle);detail.tight_layout();detail.savefig(OUT/(name+'_diagnostic.png'),dpi=120);plt.close(detail)
         chain.suptitle(subtitle);chain.tight_layout();chain.savefig(OUT/(name+'_command_chain.png'),dpi=120);plt.close(chain)
+        speed_axes[0].axhline(float(d['v_user'][0]),color='k',ls='-.',label='original speed request')
+        speed_axes[0].set(title='Original request / corrected reference / true speed / wheel proxy',xlabel='Time (s)',ylabel='m/s')
+        speed_axes[1].set(title='Measured wheel proxy minus true body speed',xlabel='Time (s)',ylabel='m/s')
+        for ax in speed_axes:
+            ax.grid(alpha=.2);ax.legend(fontsize=5)
+            if name.startswith('straight'):ax.axvspan(10,10.5,color='grey',alpha=.15)
+        speed_fig.suptitle(subtitle);speed_fig.tight_layout();speed_fig.savefig(OUT/(name+'_speed_estimate.png'),dpi=120);plt.close(speed_fig)
         for figure, axs, suffix in ((component_fig, component_axes, 'reward_components'),
                                     (cumulative_fig, cumulative_axes, 'cumulative_components')):
             for ax in axs.flat:
@@ -211,7 +223,8 @@ def main():
             figure.suptitle(subtitle+'\nDotted lines = same alpha/reward B0 rescoring; actual terminations retained')
             figure.tight_layout();figure.savefig(OUT/(name+'_'+suffix+'.png'),dpi=105);plt.close(figure)
         rows_md.append(f'[{name}: reward/error/detail]({name}_diagnostic.png) · [command chain]({name}_command_chain.png) · '
-                       f'[all signed components]({name}_reward_components.png) · [cumulative components]({name}_cumulative_components.png)')
+                       f'[all signed components]({name}_reward_components.png) · [cumulative components]({name}_cumulative_components.png) · '
+                       f'[true speed / wheel proxy and estimate error]({name}_speed_estimate.png)')
     fig.suptitle('Fixed-Actor causal diagnostic | all four declared cases, all eight interventions\nOriginal20s, no disturbance, frozenlocal300 B0 and fixed alpha0; markers=real ends')
     fig.tight_layout();fig.savefig(OUT/'ALL_XY.png',dpi=140);plt.close(fig)
     zoom_fig.suptitle('Fixed-Actor diagnostic: turn / 10s intervention detail, original world coordinates\nEqual axes; complete20s traces in ALL_XY; straight2.6 prefix check failed')

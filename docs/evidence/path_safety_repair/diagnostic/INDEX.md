@@ -24,10 +24,10 @@ Active lower ticks: 32000/32000. Training transitions: 0.
 Turn-repair support gate: **False**. Ordinary latefade support gate: **False**.
 Conditional training decision: **Stop automatic training under declared diagnostic gate**.
 
-[left90_R2_2.6: reward/error/detail](left90_R2_2.6_diagnostic.png) · [command chain](left90_R2_2.6_command_chain.png) · [all signed components](left90_R2_2.6_reward_components.png) · [cumulative components](left90_R2_2.6_cumulative_components.png)
-[right90_R2_2.6: reward/error/detail](right90_R2_2.6_diagnostic.png) · [command chain](right90_R2_2.6_command_chain.png) · [all signed components](right90_R2_2.6_reward_components.png) · [cumulative components](right90_R2_2.6_cumulative_components.png)
-[straight_2.0: reward/error/detail](straight_2.0_diagnostic.png) · [command chain](straight_2.0_command_chain.png) · [all signed components](straight_2.0_reward_components.png) · [cumulative components](straight_2.0_cumulative_components.png)
-[straight_2.6: reward/error/detail](straight_2.6_diagnostic.png) · [command chain](straight_2.6_command_chain.png) · [all signed components](straight_2.6_reward_components.png) · [cumulative components](straight_2.6_cumulative_components.png)
+[left90_R2_2.6: reward/error/detail](left90_R2_2.6_diagnostic.png) · [command chain](left90_R2_2.6_command_chain.png) · [all signed components](left90_R2_2.6_reward_components.png) · [cumulative components](left90_R2_2.6_cumulative_components.png) · [true speed / wheel proxy and estimate error](left90_R2_2.6_speed_estimate.png)
+[right90_R2_2.6: reward/error/detail](right90_R2_2.6_diagnostic.png) · [command chain](right90_R2_2.6_command_chain.png) · [all signed components](right90_R2_2.6_reward_components.png) · [cumulative components](right90_R2_2.6_cumulative_components.png) · [true speed / wheel proxy and estimate error](right90_R2_2.6_speed_estimate.png)
+[straight_2.0: reward/error/detail](straight_2.0_diagnostic.png) · [command chain](straight_2.0_command_chain.png) · [all signed components](straight_2.0_reward_components.png) · [cumulative components](straight_2.0_cumulative_components.png) · [true speed / wheel proxy and estimate error](straight_2.0_speed_estimate.png)
+[straight_2.6: reward/error/detail](straight_2.6_diagnostic.png) · [command chain](straight_2.6_command_chain.png) · [all signed components](straight_2.6_reward_components.png) · [cumulative components](straight_2.6_cumulative_components.png) · [true speed / wheel proxy and estimate error](straight_2.6_speed_estimate.png)
 
 [Calculated per-case gates and pair decision](metrics.json) · [Offline source](analyze.py)
 
