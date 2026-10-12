@@ -1,3 +1,5 @@
+[远端精简代码与重要结果入口](docs/evidence/path_safety_repair/README.md)（2026-10-12发布快照）。
+
 # Path safety repair — authorized Task1 execution, 2026-10-12
 
 [Implementation and conditional plan](docs/path_safety_preference.md#next-repair-plan) · [Eight fixed-Actor diagnostic results](docs/evidence/path_safety_repair/diagnostic/INDEX.md).

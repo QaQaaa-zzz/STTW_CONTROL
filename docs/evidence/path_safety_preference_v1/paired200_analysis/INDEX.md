@@ -6,7 +6,7 @@
 
 **2026-10-12 重新分析：保留已学会的协调，定向限制弯中让步并防止回归能力遗忘。**
 [本次弯段XY/滚转/路径相位图](TURN_PHASE_REASSESSMENT.png) ·
-[Coverage父代全部六场景XY](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/docs/evidence/path_safety_preference_v1/coverage_final_analysis/ALL_XY.png) ·
+[Coverage父代全部六场景XY](../coverage_final_analysis/ALL_XY.png) ·
 [给实施agent的下一步指令](../../../path_safety_preference.md#next-repair-plan)。
 后面的四组200轮负结果仍成立；它不否定此前Coverage阶段已经学出的有用行为。
 
@@ -170,8 +170,8 @@ Natural overlimit paired recovery remains NOT_RUN; no complete takeover qualific
 
 [Raw calculated metrics, gates, training counters and identities](metrics.json) · [Offline source](analyze.py). Reproduce with PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python docs/evidence/path_safety_preference_v1/paired200_analysis/analyze.py; originals referenced, no NPZ or weights copied.
 
-[control original full reward/command-chain report](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/report/INDEX.md)
-[candidate original full reward/command-chain report](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/report/INDEX.md)
+control original full reward/command-chain report (server-local, not included): `/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/report/INDEX.md`
+candidate original full reward/command-chain report (server-local, not included): `/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/report/INDEX.md`
 
 
 Signed chain note: final_command contains actuator front steer-angle rate and rear wheel-axis rate (rad/s), NOT corrected speed/steer references. Those references are governed[v,delta]. Newalpha1 straight exit has persistent positive delta correction ~.0515rad at2.0m/s/~.0763rad at2.6m/s, canceling nominal PP path correction; governed steer approaches0 while actual speed tracks. This supports an upper correction equilibrium bias concern, not a proved lower-controller failure.

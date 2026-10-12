@@ -1,7 +1,7 @@
 # Path safety preference v1 — implementation evidence
 
 Historical XY entry (prior Phase C, **not new safety-stage results**):
-[Six-case actual/reference XY](/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/docs/evidence/path_feedback_v1_20261010/phase_C_results_20261011/ALL_XY.png).
+[Six-case actual/reference XY](../path_feedback_v1_20261010/phase_C_results_20261011/ALL_XY.png).
 
 New-stage fixed-six DEV and natural-overlimit recovery panels: **NOT_RUN**.
 This delivery qualifies implementation wiring only; no policy/adoption claim.

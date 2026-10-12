@@ -1,0 +1,338 @@
+{
+  "schema": "path_safety_compact_publication_v1",
+  "recorded_on": "2026-10-12",
+  "code_head_before_publication": "21fb7602ccaf5449044518766c43f5009e2ae904",
+  "runtime_commits": [
+    "6daed97",
+    "387abc5"
+  ],
+  "branch": "experiment/path-safety-repair",
+  "remote": "https://github.com/QaQaaa-zzz/STTW_CONTROL",
+  "prepared_state": {
+    "path": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+    "sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+    "bank_index": 3,
+    "restoration": "complete load_environment snapshot"
+  },
+  "original_file_identities": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/manifest.json": "676612678165f33129900866c54671fabef85bdb8d9f05e4224c389a4a80688e",
+    "runs/path_safety_repair_20261012/frozen_identities.json": "9b72059c61634719c1fef6180ef5cd740e7a84bd34005dc1ef33b162e79afda1",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/manifest.json": "64ce27580946670c1bd5f023d4852a97bfe81b38e9b4770384a24014b36ba5e4",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/safety_task_best_generations/d674afdac56d97b520882592853ff8e2e5c87b011ee6c6e588ad2178caea595a/best_model.pt": "d674afdac56d97b520882592853ff8e2e5c87b011ee6c6e588ad2178caea595a",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/safety_task_best_generations/d674afdac56d97b520882592853ff8e2e5c87b011ee6c6e588ad2178caea595a/best_actor.pkl": "b66df1d960dd29d60031c306b46d78007f389f435fea271264d5bdcf496818e6",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/update_0200.pt": "eb990a5bd2772ee24a3b0f11e6523eaf273ec713a5df0dd6d9dd0ac5a195e420",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/actor_0200.pkl": "ae778ed3085b01d9dd63aadedb3384e925f59da2fdae4ca8808bc9d6c36679fc",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+    "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+    "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/straight_2.0.npz": "a27df33da6faf6f5557c304d751af6a19262ce412ffd19e1d0ee9296e587a7c8",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/straight_2.6.npz": "ce65c1be380c7bf4024fcc9bf7fa8ac0d019234c7a1e79c1604610b417f5e86b",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/left90_R2_2.0.npz": "46c89f111e0de65b514b98f21168a1713ef7637a2e42ad1f38677d579569e1f3",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/left90_R2_2.6.npz": "b7aa3a3ba62047034ada5e26f2673267dcb89f252788abca11f1661334ee36a1",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/right90_R2_2.0.npz": "3cb2f47464cc893eaa7c00e1811dd4b7ff4818b3a44f6b4853c8f533b1508f85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/right90_R2_2.6.npz": "2d157d35f01d08addfe02517631eb2e3db68bb2af5049d35183bb16ee2c1eb5d",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/zero_upper_reuse.json": "bda8e65c18ce1d7c0e37d851244e5673528f80d85c7c3dfe282be34a5273058d",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/baseline_reward_identity.json": "a01c19367709ef7a7c20d629a2c4c4b0800371c897f75f2a3b6539bd09651a27",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/straight_2.0.npz": "7d849447006aff38138c50d8a04f2a0c6160d77ed8e61aefcc4ea1c86d1e92b0",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/straight_2.6.npz": "cebfcc5ad0dac051469f60ee76f08dc0b2d4782a191128371846fda169e477b8",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/left90_R2_2.0.npz": "a4f43e2eb463b115e87a1856ee92c66719fe695f263dc1a1d451358862597805",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/left90_R2_2.6.npz": "76f9349cc8d0e348865b8a32cdb8544e0cfe23304e38d050bc7da4c7061b94eb",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/right90_R2_2.0.npz": "d230e89c874797e651e4ab897b7bd2eb8b10173428e1bb2e342356e754a24093",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/right90_R2_2.6.npz": "83fd9ced5cfacf6a7443f613935b76b8f7fcdeeccdeaf22b382ae4d7a2917254",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha1/validation/update_0000/source.json": "1f32df6afef104c9e1be58d354626ba7437708bf8fc15d45b9f5e1d0ce2bef33",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/runs/path_safety_control_50_20261011/alpha1/checkpoints/actor_0000.pkl": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-preference/runs/path_safety_control_50_20261011/alpha1/checkpoints/update_0000.pt": "ab06020e48fdef363c836e23ff1f39e60603bfbc7016e5dfa59d8557627728a7",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/straight_2.0.npz": "b968b0bbc8cda647d801174e7c9890d85857c9390b3b13189a5eeb9638baafd3",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/straight_2.6.npz": "21ecb6019442e7414c02e947e58d5afbe8c1ec11f10b28c0d0f1751a9bfb12bd",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/left90_R2_2.0.npz": "d34f68264fb923e7c5766a65bb2706189b4e1d0dac851fc1370d5ffd510020f1",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/left90_R2_2.6.npz": "b39a477237f2bca46f20f18319ae87cef35cf0cdd1eba698129b8b2b4a450425",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/right90_R2_2.0.npz": "c43139adce2fdbcb88fdbfb1b4584e1d77695901735905987e20fcdd1c16ede4",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/right90_R2_2.6.npz": "b4cc5eccb2bf82b49794abfd83cb6da7075ec892a7da074020c4504de4ba824c",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_control_200_20261011/alpha0/final_best/source.json": "1b8c3b82e6d558195cc9313a015fe6242ac129ca2d36f62b7aa7211d08bd7ac2",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/straight_2.0.npz": "0072d3a44b2b0d2fdcc934f070df32ecb2ef92229aa0999f36c918081cc0b5b8",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/straight_2.0_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/straight_2.6.npz": "895f1bbb66ea988b970c929bd494c0461d505348a5d71e783c2530521682d633",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/straight_2.6_path.npz": "63f9c14c2c9752d7073c04d0cf16ec9f7ae43b21c24409f28894c79a8345514f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/left90_R2_2.0.npz": "0f08241b172108682494e62344c65b98a323b05c494d9a7523faabc678f2c5fb",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/left90_R2_2.0_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/left90_R2_2.6.npz": "0983da03b585036a2e953137223f5e9570ff67ee6fe47d9ace57c84a477b572d",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/left90_R2_2.6_path.npz": "7ea5f1922933d03a17772e0d41b0bd93a39eba55eed81a97921ddc27ca4f5e85",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/right90_R2_2.0.npz": "6e9f96203a2e597f6c932a38219663e93ef2f8e2eac9941818cdfe4402013d9b",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/right90_R2_2.0_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/right90_R2_2.6.npz": "1b90b6d73c0e26e4ed06d49bd92738412fdc0504bde9c33ae24341edacd9fe0c",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/right90_R2_2.6_path.npz": "17f2e7db26b25d2bd8d2d11d96567a51bcca8f018066f12c479818df07a7f754",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/validation/update_0200/source.json": "ae6b722d43c6123c4a0c4c1027ab801aa99b19ad856c7f98dc3a3764cead731e"
+  },
+  "manifest_sha256": "676612678165f33129900866c54671fabef85bdb8d9f05e4224c389a4a80688e",
+  "accounting": {
+    "active_lower_ticks": 32000,
+    "declared_budget": 32000,
+    "training_updates": 0,
+    "state": "error"
+  },
+  "case_sources": {
+    "left90_R2_2.6_beta0.5_backoff0": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.5,
+          "speed_backoff": 0
+        },
+        "cache_key": "347b8ab09d5f66d6c46891e2fbc2b267d9ca9abc8b8086a326f00c89cc2b0b1c"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_01/evaluation_timings.json"
+    },
+    "left90_R2_2.6_beta0.5_backoff0.05": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.5,
+          "speed_backoff": 0.05
+        },
+        "cache_key": "db43b3d2a355eceea8fd94de7fcbf5e1de5011afe5744f5953404f8adfe02beb"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_02/evaluation_timings.json"
+    },
+    "left90_R2_2.6_beta0.75_backoff0": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.75,
+          "speed_backoff": 0
+        },
+        "cache_key": "a168601aadb2ac11c231b4ae6ee79607fa48811f42c79e9f1d7f1080aa53832f"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_00/evaluation_timings.json"
+    },
+    "right90_R2_2.6_beta0.5_backoff0": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.5,
+          "speed_backoff": 0
+        },
+        "cache_key": "347b8ab09d5f66d6c46891e2fbc2b267d9ca9abc8b8086a326f00c89cc2b0b1c"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_01/evaluation_timings.json"
+    },
+    "right90_R2_2.6_beta0.5_backoff0.05": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.5,
+          "speed_backoff": 0.05
+        },
+        "cache_key": "db43b3d2a355eceea8fd94de7fcbf5e1de5011afe5744f5953404f8adfe02beb"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_02/evaluation_timings.json"
+    },
+    "right90_R2_2.6_beta0.75_backoff0": {
+      "model": {
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+        "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+        "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+          "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "case_ids": [
+            "left90_R2_2.6",
+            "right90_R2_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "dbb9db24c8e889a3cbcb42a4e16a34c883544a7b497e56a62f5cfc91219faf54"
+        },
+        "transform": {
+          "beta": 0.75,
+          "speed_backoff": 0
+        },
+        "cache_key": "a168601aadb2ac11c231b4ae6ee79607fa48811f42c79e9f1d7f1080aa53832f"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_00/evaluation_timings.json"
+    },
+    "straight_2.0_late_fade": {
+      "model": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 1,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "00e2b9a2deb9110302c1085a4d0902cab47aeb21fd0436025b429d96369a2c29",
+        "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+        "best_sha256": "0275db6e53b96a0f75aa12e995b45584025020723190241bc592b33939eb524c",
+        "seed": 911101,
+        "parent_source_update": 200,
+        "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "source_update": 200,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/update_0200.pt",
+        "checkpoint_sha256": "eb990a5bd2772ee24a3b0f11e6523eaf273ec713a5df0dd6d9dd0ac5a195e420",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/actor_0200.pkl",
+        "actor_sha256": "ae778ed3085b01d9dd63aadedb3384e925f59da2fdae4ca8808bc9d6c36679fc"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "ae778ed3085b01d9dd63aadedb3384e925f59da2fdae4ca8808bc9d6c36679fc",
+          "checkpoint_sha256": "eb990a5bd2772ee24a3b0f11e6523eaf273ec713a5df0dd6d9dd0ac5a195e420",
+          "case_ids": [
+            "straight_2.0",
+            "straight_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "00e2b9a2deb9110302c1085a4d0902cab47aeb21fd0436025b429d96369a2c29"
+        },
+        "transform": {
+          "kind": "late_fade",
+          "start_s": 10.0,
+          "duration_s": 0.5
+        },
+        "cache_key": "4064623964e35b50b789fdcf0376ccc690838c97f72df450e8899c3dd1a267f5"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_03/evaluation_timings.json"
+    },
+    "straight_2.6_late_fade": {
+      "model": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 1,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "00e2b9a2deb9110302c1085a4d0902cab47aeb21fd0436025b429d96369a2c29",
+        "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+        "best_sha256": "0275db6e53b96a0f75aa12e995b45584025020723190241bc592b33939eb524c",
+        "seed": 911101,
+        "parent_source_update": 200,
+        "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "source_update": 200,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/update_0200.pt",
+        "checkpoint_sha256": "eb990a5bd2772ee24a3b0f11e6523eaf273ec713a5df0dd6d9dd0ac5a195e420",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/runs/path_safety_candidate_200_20261011/alpha1/checkpoints/actor_0200.pkl",
+        "actor_sha256": "ae778ed3085b01d9dd63aadedb3384e925f59da2fdae4ca8808bc9d6c36679fc"
+      },
+      "diagnostic_identity": {
+        "context": {
+          "actor_sha256": "ae778ed3085b01d9dd63aadedb3384e925f59da2fdae4ca8808bc9d6c36679fc",
+          "checkpoint_sha256": "eb990a5bd2772ee24a3b0f11e6523eaf273ec713a5df0dd6d9dd0ac5a195e420",
+          "case_ids": [
+            "straight_2.0",
+            "straight_2.6"
+          ],
+          "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+          "config_sha256": "00e2b9a2deb9110302c1085a4d0902cab47aeb21fd0436025b429d96369a2c29"
+        },
+        "transform": {
+          "kind": "late_fade",
+          "start_s": 10.0,
+          "duration_s": 0.5
+        },
+        "cache_key": "4064623964e35b50b789fdcf0376ccc690838c97f72df450e8899c3dd1a267f5"
+      },
+      "batch_timings": "/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic/group_03/evaluation_timings.json"
+    }
+  },
+  "validation": {
+    "targeted_cpu_tests": 61,
+    "fresh_result": "61 passed in 6.98s",
+    "command": "PYTHONPATH=learning/src JAX_PLATFORMS=cpu /home/qy/mujoco_playground/.venv/bin/python -m pytest learning/tests/test_path_diagnostic.py learning/tests/test_path_safety_reward.py learning/tests/test_path_reward_cache.py learning/tests/test_path_recovery.py -q",
+    "gpu_prefix": "FAIL: straight2.6; original tolerance/error preserved"
+  },
+  "limitations": [
+    "Development cases, one training seed per endpoint; no holdout claim",
+    "Fixed Actor interventions; no new PPO updates",
+    "Natural overlimit recovery NOT_RUN",
+    "Full trajectories, checkpoints, learner state and prepared bank are server-local, not included"
+  ]
+}

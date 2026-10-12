@@ -33,8 +33,8 @@ Conditional training decision: **Stop automatic training under declared diagnost
 
 [All-channel strict prefix audit](prefix_audit.json). Both new traces apply exactly the original Actor latent before10s; low-speed trace matches all original columns exactly. High-speed trace differs in measured motion before intervention despite identical batch shape and frozen source. Numerical compilation/rounding is a hypothesis, not an established root cause. Tolerance was not relaxed and no physical retry was performed.
 
-[Original NPZ, exact Actor/config/bank identities and execution accounting](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic)
+[Published Actor/config/bank identities and execution accounting](../publication_provenance.json). Full original NPZ remain server-local, not included: `/home/qy/STTW_CONTROL/runs/worktrees/path-safety-repair/runs/path_safety_repair_20261012/diagnostic`.
 
-Original six-case parent and paired200 evidence remain available in [prior report](/home/qy/STTW_CONTROL/runs/worktrees/path-safety-budget-200/docs/evidence/path_safety_preference_v1/paired200_analysis/INDEX.md).
+Original six-case parent and paired200 evidence remain available in [prior report](../../path_safety_preference_v1/paired200_analysis/INDEX.md).
 
 All cases use original speed/path requests. .05chi speed backoff may fail original speed-primary gate; it does not change the gate. No incomplete bins, shifted references or zero-padded failed tails are accepted. One historical DEV seed, no holdout claim.
