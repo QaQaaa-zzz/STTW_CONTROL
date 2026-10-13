@@ -64,6 +64,8 @@ class PathCommandEnv:
         nominal,rates=publish(snapshot.raw,follower.command,self.config)
         p=snapshot.replace(raw=nominal,reference_pose=pose,yaw_wrapped=pose[2],yaw_unwrapped=pose[2])
         s=PathState(p,self.lower.initial(pose),initial_history(self.plant_spec),projection,follower,j.zeros(2),j.zeros(2),rates,j.zeros(2),j.array(0.),j.int32(0),j.asarray(alpha),follower.invalid|~j.all(j.isfinite(path.xy))|~j.all(j.isfinite(path.heading))|~j.all(j.isfinite(path.curvature))|~j.all(j.diff(path.s)>0),follower.invalid&~follower.numerical_fault)
+        if self.config.get('alpha_conditioning'):
+            s=s.replace(fault=s.fault|~j.isfinite(s.alpha)|(s.alpha<0)|(s.alpha>1))
         return self.record_frame(s)
 
     def record_frame(self,s):
@@ -106,6 +108,7 @@ class PathCommandEnv:
             target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid&~follower.numerical_fault,tracking_domain_failure=follower.invalid&~follower.numerical_fault,goal_section_signed_distance=goal_distance,
             correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],diagnostic_subcosts=c['diagnostic_subcosts'],rho=j.maximum(j.abs(log['phi']),j.abs(log['phi']+self.config['path_reward'].get('risk_prediction_s',.10)*log['phi_dot'])),chi=chi)
         end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|~j.all(j.isfinite(p2.data.qpos))|~j.all(j.isfinite(p2.data.qvel)),domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
+        if self.config.get('alpha_conditioning'):log['upper_alpha']=s.alpha
         return end,log
 
     def set_log_template(self,s,path,v_user):

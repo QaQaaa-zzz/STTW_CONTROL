@@ -158,3 +158,146 @@ def qualify_preference(traces0,traces1,paths,config):
         dv=float(errors[0][0]-errors[1][0]);dy=float(errors[1][1]-errors[0][1])
         result[name]=dict(qualified=dv>=.03 and dy>=.02,status='evaluated',D_v_m_s=dv,D_y_m=dy,bin_counts=counts,edges_m=edges.tolist(),equal_bin_rmse=[x.tolist() for x in errors])
     return dict(qualified=len(result)==2 and all(x['qualified'] for x in result.values()),status='evaluated',cases=result)
+
+
+CONDITIONAL_SELECTION_SCHEMA='path_conditional_task_v1'
+CONDITIONAL_ALPHAS=(0.,.25,.5,.75,1.)
+
+
+def alpha_key(value):
+    """Canonical, lossless folder key; never infer alpha from a final character."""
+    from decimal import Decimal
+    number=float(value)
+    if not np.isfinite(number) or not 0<=number<=1:raise ValueError('alpha must be finite in [0,1]')
+    text=format(Decimal(str(number)).normalize(),'f')
+    if number==0:text='0'
+    return 'alpha_'+text.replace('.','p')
+
+
+def alpha_value(key):
+    if not isinstance(key,str) or not key.startswith('alpha_'):raise ValueError('invalid alpha key')
+    try:value=float(key[6:].replace('p','.'))
+    except ValueError as exc:raise ValueError('invalid alpha key') from exc
+    if alpha_key(value)!=key:raise ValueError('noncanonical alpha key')
+    return value
+
+
+def conditional_grid(config):
+    values=config.get('alpha_conditioning',{}).get('evaluation_alphas',CONDITIONAL_ALPHAS)
+    values=tuple(float(a) for a in values)
+    if values!=CONDITIONAL_ALPHAS:raise ValueError('conditional alpha grid must be 0/.25/.5/.75/1')
+    return values
+
+
+def summarize_conditional(panels,config):
+    """Rank one shared model on all 30 cases; legacy thresholds are diagnostics.
+
+    Interior preferences have no invented endpoint-primary acceptance threshold.
+    They retain the same physical, corridor, goal and final-hold diagnostics.
+    """
+    if config.get('task_selection_schema')!=CONDITIONAL_SELECTION_SCHEMA:
+        raise ValueError('conditional task selection schema required')
+    alphas=conditional_grid(config);expected={alpha_key(a) for a in alphas}
+    if set(panels)!=expected:raise ValueError('complete conditional alpha panel required')
+    safety_config=dict(config,task_selection_schema=SAFETY_SELECTION_SCHEMA)
+    per_alpha={};weighted=[];endpoint_primary=0
+    for alpha in alphas:
+        key=alpha_key(alpha);traces=panels[key]
+        for d in traces.values():
+            logged=np.asarray(d.get('upper_alpha',[]),float)
+            if logged.shape!=np.asarray(d['time']).shape or not np.allclose(logged,alpha,rtol=0,atol=1e-7):
+                raise ValueError('conditional trace alpha identity mismatch')
+        s=summarize_task(traces,0 if alpha==0 else 1,safety_config)
+        applicable=alpha in (0.,1.)
+        for name,d in traces.items():
+            m=s['cases'][name];mask=np.asarray(d['chi'])>0
+            if not mask.any():mask=np.ones(len(d['time']),bool)
+            ev=np.asarray(d['actual_forward_speed'],float)-np.asarray(d['v_user'],float)
+            ey=np.asarray(d['path_cross_track'],float)
+            rms=lambda x:float(np.sqrt(np.mean(np.square(x[mask]))))
+            score=(1-alpha)*rms(ey)/.1+alpha*rms(ev)/.05
+            m.update(alpha=alpha,primary_applicable=applicable,weighted_normalized_error=score,
+                     demand_speed_rmse=rms(ev),demand_path_rmse=rms(ey))
+            weighted.append(score)
+            if not applicable:
+                m['primary_band_failure']=None;m['primary_normalized_rmse']=None
+        if applicable:endpoint_primary+=s['primary_band_failures']
+        else:
+            s['primary_band_failures']=None;s['primary_score']=None
+            s['qualified_task']=not any(s[k] for k in ('physical_failures','tracking_domain_failures','working_failures','corridor_failures','goal_hold_failures'))
+            s['qualified']=s['qualified_task']
+        s.update(alpha=alpha,primary_applicable=applicable)
+        s.pop('score_tuple',None)
+        per_alpha[key]=s
+    summaries=list(per_alpha.values())
+    result=dict(schema=SCHEMA,selection_schema=CONDITIONAL_SELECTION_SCHEMA,
+        mode='shared_conditional_v1',all_declared_traces_complete=True,
+        alphas={alpha_key(a):a for a in alphas},declared_episodes=sum(len(s['cases']) for s in summaries),
+        per_alpha=per_alpha,endpoint_primary_failures=endpoint_primary,primary_band_failures=endpoint_primary,
+        mean_weighted_normalized_error=float(np.mean(weighted)),primary_score=float(np.mean(weighted)),
+        max_roll_excess_rad=max(s['max_roll_excess_rad'] for s in summaries),
+        max_corridor_excess_m=max(s['max_corridor_excess_m'] for s in summaries),
+        worst_error=max(s['worst_error'] for s in summaries),qualified_preference=None,
+        qualification_role='legacy diagnostic only; never a training budget stop rule')
+    for k in ('physical_failures','tracking_domain_failures','task_failures','working_failures',
+              'roll_exceedance_seconds','corridor_failures','goal_hold_failures'):
+        result[k]=sum(s[k] for s in summaries)
+    result['qualified_task']=not any(result[k] for k in ('physical_failures','tracking_domain_failures',
+        'working_failures','corridor_failures','goal_hold_failures','endpoint_primary_failures'))
+    result['qualified']=result['qualified_task']
+    result['score_tuple']=conditional_score_key(result)
+    return result
+
+
+def conditional_score_key(summary):
+    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema')!=CONDITIONAL_SELECTION_SCHEMA
+            or not summary.get('all_declared_traces_complete')):
+        raise ValueError('invalid conditional selection identity')
+    fields=('physical_failures','tracking_domain_failures','working_failures','max_roll_excess_rad',
+            'roll_exceedance_seconds','corridor_failures','max_corridor_excess_m','goal_hold_failures',
+            'endpoint_primary_failures','mean_weighted_normalized_error','worst_error')
+    key=tuple(summary[k] for k in fields)
+    if not all(np.isfinite(v) for v in key):raise ValueError('nonfinite conditional selection')
+    return key
+
+
+def persist_conditional_best(root,checkpoint,actor,summary,identity):
+    """One atomic pointer for the same shared checkpoint across the entire grid."""
+    root=Path(root);key=conditional_score_key(summary)
+    update=identity.get('source_update',identity.get('update'))
+    if update is None:raise ValueError('conditional best requires source update identity')
+    validation=Path(identity.get('validation_dir',root/'validation'/f'update_{int(update):04d}')).resolve()
+    source=json.loads((validation/'source.json').read_text())
+    hashes={'checkpoint_sha256':digest(checkpoint),'actor_sha256':digest(actor)}
+    if any(source.get(k)!=v for k,v in hashes.items()) or source.get('source_update',source.get('update'))!=update:
+        raise ValueError('conditional validation source identity mismatch')
+    logical_identity={k:v for k,v in identity.items() if k not in ('update','source_update','validation_update','validation_dir')}
+    if any(source.get(k)!=v for k,v in logical_identity.items()):
+        raise ValueError('conditional validation source learner identity mismatch')
+    meta=json.loads((validation/'panel_identity.json').read_text())
+    if not meta.get('completed') or meta.get('alphas')!=summary['alphas']:
+        raise ValueError('incomplete conditional validation identity')
+    pointer=root/'best_conditional_model.json';incumbent=json.loads(pointer.read_text()) if pointer.exists() else None
+    if incumbent:
+        if incumbent.get('selection_schema')!=CONDITIONAL_SELECTION_SCHEMA:raise ValueError('conditional best identity mismatch')
+        if any(incumbent['panel_identity'].get(k)!=meta.get(k) for k in ('schema','mode','alphas','config_sha256')):
+            raise ValueError('conditional best protocol identity mismatch')
+        for k,v in identity.items():
+            if k not in ('update','source_update','validation_update','validation_dir') and incumbent.get(k)!=v:
+                raise ValueError('conditional learner identity mismatch')
+        for kind in ('actor','checkpoint'):
+            if digest(incumbent[kind])!=incumbent[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
+        if key>=tuple(incumbent['score_tuple']):return incumbent
+    generation=root/'conditional_best_generations'/hashes['checkpoint_sha256'];generation.mkdir(parents=True,exist_ok=True)
+    for original,name in ((checkpoint,'best_model.pt'),(actor,'best_actor.pkl')):
+        dest=generation/name
+        if dest.exists() and digest(original)!=digest(dest):raise ValueError('immutable conditional generation differs')
+        if not dest.exists():shutil.copyfile(original,dest)
+        if digest(original)!=digest(dest):raise ValueError('conditional generation copy SHA mismatch')
+    record=dict(identity,schema=SCHEMA,selection_schema=CONDITIONAL_SELECTION_SCHEMA,source_update=int(update),
+        checkpoint=str((generation/'best_model.pt').resolve()),actor=str((generation/'best_actor.pkl').resolve()),
+        **hashes,validation_dir=str(validation),panel_identity=meta,logical_identity=logical_identity,alphas=summary['alphas'],
+        score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary['qualified_task'],
+        qualified_preference=None,metrics=summary)
+    atomic_json(generation/'selection.json',record);atomic_json(pointer,record)
+    return record

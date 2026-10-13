@@ -1,3 +1,11 @@
+# Unified conditional upper-policy verification — 2026-10-13
+
+119 targeted CPU tests pass in32.12s across17 files, covering new alpha initialization/sampling/statistics/shared selection/cache/report/resume behavior and existing reward/endpoint/terminal/fork regressions. Six real baseline traces pass source/config/path/timing/completeness checks with zero new physics. The report integration uses the real shared directory and selection/reuse chain with a simulated physics provider; this is not learned-control evidence. Independent review findings (shared report directory, interrupted boundary DEV, full source identity) are fixed and regression tested.
+
+[Method and bounded run](path_unified_alpha.md). GPU engineering and formal training receipts are recorded separately in runs/path_unified_alpha_200_20261013; current execution facts remain in the shared ledger. This CPU record alone does not establish runtime success or preference behavior.
+
+---
+
 # Path safety repair diagnostic verification — 2026-10-12
 
 Runtime commits6daed97/387abc5;61 targeted CPU tests pass (reward/cache/recovery/diagnostic), including rejection of changed physical configs, swapped Actor provenance, truncated live caches and shifted original paths. Independent task/whole-stage static reviews pass after identity repairs. No lower/network/reward/PPO changes. New evaluator uses vmap paired cases, scan50, shared JAX cache; frozen model/bank/provenance and true endpoint checks precede execution.

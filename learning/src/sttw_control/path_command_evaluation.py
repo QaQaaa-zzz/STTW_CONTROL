@@ -153,3 +153,69 @@ class BatchedPanelEvaluator:
             timing['completed']=True
             return traces
         finally:write_timing()
+
+
+def _conditional_parameter_digest(params):
+    import hashlib
+    hasher=hashlib.sha256()
+    hasher.update(str(jax.tree.structure(params)).encode())
+    for value in jax.tree.leaves(params):
+        array=np.asarray(value)
+        hasher.update(str((array.shape,array.dtype.str)).encode());hasher.update(array.tobytes())
+    return hasher.hexdigest()
+
+
+def evaluate_conditional(evaluator,params,alphas,output):
+    """Reuse existing vmap/scan50 evaluation with one parameter tree for all alpha."""
+    from .path_command_selection import alpha_key,conditional_grid,summarize_conditional
+    values=tuple(float(a) for a in alphas)
+    if values!=conditional_grid(evaluator.config):raise ValueError('conditional alpha grid mismatch')
+    out=Path(output)
+    if out.exists():raise FileExistsError('conditional validation output immutable')
+    out.mkdir(parents=True)
+    meta=dict(schema='path_conditional_panel_v1',mode='shared_conditional_v1',
+        alphas={alpha_key(a):a for a in values},config_sha256=config_hash(evaluator.config),
+        actor_parameters_sha256=_conditional_parameter_digest(params),completed=False)
+    atomic_json(out/'panel_identity.json',meta)
+    result={alpha_key(a):evaluator.evaluate(params,a,out/alpha_key(a)) for a in values}
+    summary=summarize_conditional(result,evaluator.config)
+    atomic_json(out/'task_metrics.json',summary)
+    meta['completed']=True;atomic_json(out/'panel_identity.json',meta)
+    return result
+
+
+def reuse_conditional_best(root,best,config):
+    """Verify and copy one saved whole-grid panel; never runs simulator physics."""
+    import json,shutil
+    from .preference_best import digest
+    from .path_command_selection import cases,alpha_key,conditional_grid,summarize_conditional,conditional_score_key
+    root=Path(root);source_dir=Path(best['validation_dir']);source=json.loads((source_dir/'source.json').read_text())
+    for kind in ('checkpoint','actor'):
+        if digest(best[kind])!=best[kind+'_sha256'] or source.get(kind+'_sha256')!=best[kind+'_sha256']:
+            raise ValueError('conditional validation source SHA mismatch')
+    if source.get('source_update',source.get('update'))!=best['source_update']:
+        raise ValueError('conditional validation source update identity mismatch')
+    if any(source.get(k)!=v for k,v in best['logical_identity'].items()):
+        raise ValueError('conditional validation source learner identity mismatch')
+    meta=json.loads((source_dir/'panel_identity.json').read_text())
+    expected={alpha_key(a):a for a in conditional_grid(config)}
+    if not meta.get('completed') or meta.get('alphas')!=expected or meta.get('config_sha256')!=config_hash(config) or meta!=best['panel_identity']:
+        raise ValueError('conditional panel identity mismatch')
+    panels={key:{name:dict(np.load(source_dir/key/f'{name}.npz')) for name,_,_ in cases(config)} for key in expected}
+    summary=summarize_conditional(panels,config)
+    if conditional_score_key(summary)!=tuple(best['score_tuple']):raise ValueError('conditional panel metrics differ from selected model')
+    final=root/'final_best'
+    if final.exists():
+        existing=json.loads((final/'source.json').read_text())
+        if existing!=best:raise ValueError('immutable conditional final source differs')
+    else:final.mkdir()
+    for key in expected:
+        target=final/key;target.mkdir(exist_ok=True)
+        for name,_,_ in cases(config):
+            for suffix in ('.npz','_path.npz'):
+                src=source_dir/key/(name+suffix);dest=target/(name+suffix)
+                if dest.exists() and digest(src)!=digest(dest):raise ValueError('immutable conditional final trace differs')
+                if not dest.exists():shutil.copyfile(src,dest)
+    atomic_json(final/'panel_identity.json',meta);atomic_json(final/'task_metrics.json',summary)
+    atomic_json(final/'source.json',best)
+    return panels

@@ -1,0 +1,206 @@
+"""Conditional panels must preserve alpha identity and select one shared model."""
+from copy import deepcopy
+from pathlib import Path
+import json
+import numpy as np
+import pytest
+from test_path_task_selection import CFG, panel
+from sttw_control import path_command_selection as selection
+from sttw_control import path_command_evaluation as evaluation
+
+ALPHAS=(0.,.25,.5,.75,1.)
+KEYS=('alpha_0','alpha_0p25','alpha_0p5','alpha_0p75','alpha_1')
+
+def config():
+    c=deepcopy(CFG);c['task_selection_schema']='path_conditional_task_v1'
+    c['alpha_conditioning']={'mode':'shared_conditional_v1','evaluation_alphas':list(ALPHAS)}
+    return c
+
+def panels():
+    result={}
+    for key,a in zip(KEYS,ALPHAS):
+        traces=panel()
+        for d in traces.values():d['upper_alpha']=np.full(len(d['time']),a)
+        result[key]=traces
+    return result
+
+def test_conditional_middle_does_not_inherit_endpoint_speed_gate():
+    p=panels()
+    for key in KEYS[1:-1]:
+        for d in p[key].values():d['actual_forward_speed'][:]=2.08
+    summary=selection.summarize_conditional(p,config())
+    assert summary['declared_episodes']==30
+    assert summary['endpoint_primary_failures']==0
+    assert summary['qualified_task']
+    assert summary['per_alpha']['alpha_0p5']['cases']['left90_R2_2.6']['primary_band_failure'] is None
+    assert summary['per_alpha']['alpha_0p5']['cases']['left90_R2_2.6']['weighted_normalized_error']==pytest.approx(.85)
+    p['alpha_0p25']['left90_R2_2.6']['peak_roll'][0]=.32
+    assert not selection.summarize_conditional(p,config())['qualified_task']
+    assert selection.summarize_conditional(p,config())['working_failures']==1
+    p['alpha_1']['right90_R2_2.6']['actual_forward_speed'][:]=2.08
+    assert selection.summarize_conditional(p,config())['endpoint_primary_failures']==1
+
+def test_conditional_rejects_missing_or_mislabeled_alpha_and_preserves_old_summary():
+    p=panels();p.pop('alpha_0p25')
+    with pytest.raises(ValueError,match='alpha'):selection.summarize_conditional(p,config())
+    p=panels();p['alpha_0p25']['left90_R2_2.6']['upper_alpha'][:]=.75
+    with pytest.raises(ValueError,match='alpha'):selection.summarize_conditional(p,config())
+    for a,k in zip(ALPHAS,KEYS):
+        assert selection.alpha_key(a)==k
+        assert selection.alpha_value(k)==a
+    for key in ('alpha_0.25','alpha_00','alpha_0p250','alpha_nan'):
+        with pytest.raises(ValueError):selection.alpha_value(key)
+    old=selection.summarize_task(panel(),0,CFG)
+    assert old['selection_schema']=='path_task_best_v2'
+    assert old['qualified_task']
+
+def test_conditional_severity_uses_all_alpha_cases():
+    first=panels();second=panels()
+    first['alpha_0p25']['left90_R2_2.6']['peak_roll'][0]=.32
+    second['alpha_0p75']['left90_R2_2.6']['peak_roll'][:20]=.31
+    a=selection.summarize_conditional(first,config());b=selection.summarize_conditional(second,config())
+    assert b['score_tuple']<a['score_tuple']
+    assert b['roll_exceedance_seconds']==pytest.approx(.1)
+
+class SavedEvaluator:
+    """Avoid external simulator; preserve the real evaluator's disk side effects."""
+    config=config()
+    def evaluate(self,params,alpha,output):
+        out=Path(output);out.mkdir()
+        data=panel()
+        for name,d in data.items():
+            d['upper_alpha']=np.full(len(d['time']),alpha)
+            np.savez_compressed(out/f'{name}.npz',**d)
+            np.savez_compressed(out/f'{name}_path.npz',s=[0,20],xy=[[0,0],[20,0]],curvature=[0,0],turn_end=0.)
+        return data
+
+def test_evaluate_conditional_writes_unambiguous_grid_and_rejects_duplicate(tmp_path):
+    result=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,tmp_path/'panel')
+    assert tuple(result)==KEYS
+    meta=json.loads((tmp_path/'panel/panel_identity.json').read_text())
+    assert meta['alphas']==dict(zip(KEYS,ALPHAS))
+    assert meta['completed'] and len(meta['actor_parameters_sha256'])==64
+    assert (tmp_path/'panel/alpha_0p25/left90_R2_2.6.npz').exists()
+    with pytest.raises(ValueError,match='alpha'):
+        evaluation.evaluate_conditional(SavedEvaluator(),{},[0,.5,.5,1],tmp_path/'bad')
+    assert not (tmp_path/'bad').exists()
+
+def test_one_conditional_best_and_final_reuse_preserve_all_alphas(tmp_path):
+    ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
+    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    out=tmp_path/'validation/update_0050'
+    p=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,out)
+    summary=selection.summarize_conditional(p,config())
+    source=dict(mode='shared_conditional_v1',seed=42,source_update=50,checkpoint=str(ck),actor=str(actor),checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+    (out/'source.json').write_text(json.dumps(source))
+    identity=dict(mode='shared_conditional_v1',source_update=50,seed=42,validation_dir=str(out))
+    (tmp_path/'best_task_model.json').write_text('historical')
+    best=selection.persist_conditional_best(tmp_path,ck,actor,summary,identity)
+    assert best['selection_schema']=='path_conditional_task_v1'
+    assert (tmp_path/'best_task_model.json').read_text()=='historical'
+    assert (tmp_path/'best_conditional_model.json').exists()
+    reused=evaluation.reuse_conditional_best(tmp_path,best,config())
+    assert tuple(reused)==KEYS
+    assert json.loads((tmp_path/'final_best/source.json').read_text())['actor_sha256']==best['actor_sha256']
+    for key in KEYS:
+        np.testing.assert_array_equal(reused[key]['left90_R2_2.6']['upper_alpha'],float(selection.alpha_value(key)))
+    source['actor_sha256']='incorrect';(out/'source.json').write_text(json.dumps(source))
+    with pytest.raises(ValueError,match='source|SHA|identity'):
+        evaluation.reuse_conditional_best(tmp_path,best,config())
+
+
+def report_run(tmp_path):
+    """Exercise the training layout and evaluate -> select -> reuse handoff."""
+    from sttw_control.path_command_reporting import reward_series
+    cfg=config();learner=tmp_path/'shared';learner.mkdir()
+    class ReportingEvaluator(SavedEvaluator):
+        config=cfg
+        def evaluate(self,params,alpha,output):
+            data=super().evaluate(params,alpha,output);dest=Path(output)
+            for name,d in data.items():
+                n=len(d['time']);z=np.zeros((n,2));progress=np.linspace(0,20,n)
+                d.update(phi=np.zeros(n),phi_dot=np.zeros(n),offsets=z.copy(),actual_delta=np.zeros(n),
+                         actual_xy=np.column_stack([progress,np.full(n,.01)]),path_progress=progress,
+                         nominal=np.column_stack([np.full(n,2.),np.zeros(n)]),governed=np.column_stack([np.full(n,2.01),np.zeros(n)]),
+                         target_offset=z.copy(),filtered_offset=z.copy(),final_command=z.copy(),wheel_speed_proxy=np.full(n,2.))
+                d['scored_tick_reward']=reward_series(d,alpha,cfg)[0]
+                np.savez_compressed(dest/f'{name}.npz',**d)
+                path=dict(s=np.array([0.,3.,4.,20.]),xy=np.array([[0.,0.],[3.,0.],[4.,0.],[20.,0.]]),
+                          curvature=np.array([0.,1.,1.,0.]),turn_end=4.,goal=10.)
+                np.savez_compressed(dest/f'{name}_path.npz',**path)
+                if alpha==0:
+                    zero=tmp_path/'zero_upper';zero.mkdir(exist_ok=True)
+                    np.savez_compressed(zero/f'{name}.npz',**d)
+                    np.savez_compressed(zero/f'{name}_path.npz',**path)
+            return data
+    checkpoint=learner/'model.pt';checkpoint.write_bytes(b'learner')
+    actor=learner/'actor.pkl';actor.write_bytes(b'actor')
+    destination=learner/'validation/update_0050'
+    p=evaluation.evaluate_conditional(ReportingEvaluator(),{'weights':np.zeros(2)},ALPHAS,destination)
+    identity=dict(policy_mode='shared_conditional_v1',seed=42)
+    provenance=dict(identity,source_update=50,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=selection.digest(checkpoint),
+                    actor=str(actor.resolve()),actor_sha256=selection.digest(actor),validation_dir=str(destination.resolve()))
+    (destination/'source.json').write_text(json.dumps(provenance))
+    best=selection.persist_conditional_best(learner,checkpoint,actor,selection.summarize_conditional(p,cfg),
+        dict(identity,source_update=50,validation_dir=str(destination.resolve())))
+    evaluation.reuse_conditional_best(learner,best,cfg)
+    return cfg
+
+
+def test_conditional_report_covers_all_alphas_and_rebuilds_rewards(tmp_path):
+    from sttw_control import path_command_reporting as reporting
+    cfg=report_run(tmp_path)
+    result=reporting.report_conditional_panel(tmp_path,cfg)
+    assert result['summary']['declared_episodes']==30
+    assert set(result['cases'])==set(panel())
+    assert set(result['cases']['left90_R2_2.6']['alphas'])==set(KEYS)
+    assert result['reward_audit']['checked_policy_traces']==30
+    assert result['reward_audit']['max_abs_tick_error']<1e-12
+    assert (tmp_path/'report/ALL_XY.png').read_bytes()[:8]==b'\x89PNG\r\n\x1a\n'
+    for name in panel():
+        for suffix in ('_XY.png','_physical.png','_reward.png','_components.png','_command_chain.png'):
+            assert (tmp_path/'report'/f'{name}{suffix}').exists()
+    trace=tmp_path/'shared/final_best/alpha_0p25/left90_R2_2.6.npz'
+    d=dict(np.load(trace));d['scored_tick_reward'][0]+=.1;np.savez_compressed(trace,**d)
+    with pytest.raises(ValueError,match='reward'):
+        reporting.report_conditional_panel(tmp_path,cfg)
+
+
+def test_conditional_best_rejects_protocol_change_even_without_caller_hash(tmp_path):
+    ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
+    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    def candidate(update,cfg):
+        evaluator=SavedEvaluator();evaluator.config=cfg
+        out=tmp_path/f'validation/update_{update:04d}'
+        p=evaluation.evaluate_conditional(evaluator,{'weights':np.zeros(2)},ALPHAS,out)
+        source=dict(mode='shared_conditional_v1',source_update=update,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+        (out/'source.json').write_text(json.dumps(source))
+        return selection.summarize_conditional(p,cfg),dict(mode='shared_conditional_v1',source_update=update,validation_dir=str(out))
+    summary,identity=candidate(0,config());selection.persist_conditional_best(tmp_path,ck,actor,summary,identity)
+    different=config();different['path_reward']['scale']*=2
+    summary,identity=candidate(50,different)
+    with pytest.raises(ValueError,match='protocol|identity'):
+        selection.persist_conditional_best(tmp_path,ck,actor,summary,identity)
+
+
+def test_conditional_source_cannot_relabel_learner_even_with_same_weight_hashes(tmp_path):
+    ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
+    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    out=tmp_path/'validation/update_0050'
+    p=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,out)
+    source=dict(mode='other_policy',seed=7,source_update=50,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+    (out/'source.json').write_text(json.dumps(source))
+    with pytest.raises(ValueError,match='source.*identity'):
+        selection.persist_conditional_best(tmp_path,ck,actor,selection.summarize_conditional(p,config()),
+            dict(mode='shared_conditional_v1',seed=42,source_update=50,validation_dir=str(out)))
+
+
+def test_report_rejects_modified_final_physics_even_when_reward_is_rescored(tmp_path):
+    from sttw_control import path_command_reporting as reporting
+    cfg=report_run(tmp_path)
+    trace=tmp_path/'shared/final_best/alpha_0p25/left90_R2_2.6.npz'
+    d=dict(np.load(trace));d['peak_roll'][0]=.32
+    d['scored_tick_reward']=reporting.reward_series(d,.25,cfg)[0]
+    np.savez_compressed(trace,**d)
+    with pytest.raises(ValueError,match='selected.*metrics|metrics.*selected'):
+        reporting.report_conditional_panel(tmp_path,cfg)

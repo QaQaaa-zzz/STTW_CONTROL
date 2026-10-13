@@ -449,3 +449,190 @@ def report_final_panel(root,config):
     (out/'paired_metrics.json').write_text(json.dumps(all_metrics,indent=2,allow_nan=False))
     lines.extend(['[Same-path paired windows, spatial bins, commands and lower evidence](paired_metrics.json)','Differences: Dv=Ev(alpha0)-Ev(alpha1), Dy=Ey(alpha1)-Ey(alpha0). Positive values support the intended direction; .03m/s and .02m are descriptive discernibility references, not reward terms. Lower causal blocking remains unproved from RMSE alone.'])
     (out/'identities.json').write_text(json.dumps(identities,indent=2));lines.append('[Exact checkpoint identities and fixed-validation metrics](identities.json)');(out/'INDEX.md').write_text('\n'.join(lines)+'\n')
+
+
+def _conditional_turn_bins(trace,path,config):
+    """Full original-turn equal-bin MSE; missing coverage is never discarded."""
+    start=float(config['path']['straight_prefix_m']);end=float(path['turn_end'])
+    if end<=start:return dict(status='not_a_turn',speed_rmse=None,path_rmse=None,counts=[])
+    edges=np.append(np.arange(start,end,.5),end);progress=np.asarray(trace['path_progress'])
+    ev=np.asarray(trace['actual_forward_speed'])-trace['v_user'];ey=np.asarray(trace['path_cross_track'])
+    counts=[];values=[]
+    for index,(lo,hi) in enumerate(zip(edges[:-1],edges[1:])):
+        selected=(progress>=lo)&((progress<=hi) if index==len(edges)-2 else (progress<hi))
+        counts.append(int(selected.sum()))
+        if selected.any():values.append([float(np.mean(ev[selected]**2)),float(np.mean(ey[selected]**2))])
+    complete=bool(counts) and all(counts)
+    errors=np.sqrt(np.mean(values,axis=0)) if complete else (None,None)
+    return dict(status='complete' if complete else 'incomplete_turn',edges_m=edges.tolist(),counts=counts,
+                speed_rmse=None if errors[0] is None else float(errors[0]),
+                path_rmse=None if errors[1] is None else float(errors[1]))
+
+
+def report_conditional_panel(root,config):
+    """All-alpha evidence for one disk-selected shared model; zero simulator calls."""
+    from .path_command_selection import (cases,conditional_grid,alpha_key,summarize_conditional,
+                                        CONDITIONAL_SELECTION_SCHEMA)
+    from .preference_best import digest,config_hash,atomic_json
+    root=Path(root);learner=root/'shared';final=learner/'final_best'
+    best=json.loads((learner/'best_conditional_model.json').read_text())
+    if best.get('selection_schema')!=CONDITIONAL_SELECTION_SCHEMA:raise ValueError('conditional best selection identity mismatch')
+    if json.loads((final/'source.json').read_text())!=best:raise ValueError('conditional final source differs from selected model')
+    for kind in ('checkpoint','actor'):
+        if digest(best[kind])!=best[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
+    values=conditional_grid(config);alphas={alpha_key(a):a for a in values}
+    meta=json.loads((final/'panel_identity.json').read_text())
+    if not meta.get('completed') or meta.get('alphas')!=alphas or meta.get('config_sha256')!=config_hash(config):
+        raise ValueError('conditional final panel identity mismatch')
+    declared=cases(config)
+    panels={key:{name:dict(np.load(final/key/f'{name}.npz')) for name,_,_ in declared} for key in alphas}
+    summary=summarize_conditional(panels,config)
+    if tuple(summary['score_tuple'])!=tuple(best['score_tuple']):
+        raise ValueError('conditional final metrics differ from selected model')
+    baseline={name:dict(np.load(root/'zero_upper'/f'{name}.npz')) for name,_,_ in declared}
+    paths={name:dict(np.load(root/'zero_upper'/f'{name}_path.npz')) for name,_,_ in declared}
+    # Validate every physical path and reconstructed score before drawing anything.
+    scores={};maximum_error=0.;report_cases={};preference_cases={}
+    for name,route,speed in declared:
+        path=paths[name];scores[name]={};report_cases[name]={'alphas':{},'baseline_trace':str((root/'zero_upper'/f'{name}.npz').resolve())}
+        for key,alpha in alphas.items():
+            other=dict(np.load(final/key/f'{name}_path.npz'))
+            if set(path)!=set(other) or any(not np.array_equal(path[k],other[k]) for k in path):
+                raise ValueError('conditional original path differs across alpha or baseline')
+            trace=panels[key][name];reward,parts=reward_series(trace,alpha,config)
+            logged=np.asarray(trace['scored_tick_reward'])
+            if logged.shape!=reward.shape or not np.allclose(reward,logged,rtol=2e-4,atol=2e-6):
+                raise ValueError(f'conditional reward reconstruction mismatch: {key}/{name}')
+            maximum_error=max(maximum_error,float(np.max(np.abs(reward-logged))))
+            baseline_reward,baseline_parts=reward_series(baseline[name],alpha,config)
+            scores[name][key]=(reward,parts,baseline_reward,baseline_parts)
+            m=dict(summary['per_alpha'][key]['cases'][name])
+            m.update(trace=str((final/key/f'{name}.npz').resolve()),
+                     full_turn_equal_bins=_conditional_turn_bins(trace,path,config) if route!='straight' else None,
+                     total_reward=float(reward.sum()),baseline_same_alpha_reward=float(baseline_reward.sum()),
+                     component_returns={k:float(v.sum()) for k,v in parts.items()})
+            report_cases[name]['alphas'][key]=m
+        if route!='straight' and speed==config['stage_C_evaluation']['conflict_speed_m_s']:
+            bins={key:report_cases[name]['alphas'][key]['full_turn_equal_bins'] for key in alphas}
+            complete=all(v['status']=='complete' for v in bins.values())
+            dv=bins['alpha_0']['speed_rmse']-bins['alpha_1']['speed_rmse'] if complete else None
+            dy=bins['alpha_1']['path_rmse']-bins['alpha_0']['path_rmse'] if complete else None
+            preference_cases[name]=dict(all_alpha_complete_turn=complete,bins=bins,D_v_m_s=dv,D_y_m=dy,
+                endpoint_direction_observed=bool(complete and dv>0 and dy>0),
+                legacy_endpoint_difference_gate=bool(complete and dv>=.03 and dy>=.02),
+                adjacent_speed_error_changes=None if not complete else np.diff([bins[k]['speed_rmse'] for k in alphas]).tolist(),
+                adjacent_path_error_changes=None if not complete else np.diff([bins[k]['path_rmse'] for k in alphas]).tolist())
+    preference=dict(cases=preference_cases,qualified=bool(summary['qualified_task'] and len(preference_cases)==2
+        and all(v['legacy_endpoint_difference_gate'] for v in preference_cases.values())),
+        role='legacy common-task and endpoint preference diagnostics; interior curves are descriptive, not a monotonicity certificate')
+    result=dict(schema='path_conditional_report_v1',model=best,alphas=alphas,summary=summary,
+                cases=report_cases,preference=preference,
+                reward_audit=dict(checked_policy_traces=len(declared)*len(alphas),max_abs_tick_error=maximum_error),
+                simulation_ticks=0,scope='fixed historical DEV; one shared Actor at every alpha; no generalization claim')
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    out=root/'report';out.mkdir(exist_ok=True)
+    colors={key:plt.get_cmap('viridis')(i/(len(alphas)-1)) for i,key in enumerate(alphas)}
+    dt=config['timing']['lower_dt_s'];h=config['training_future_phase_C']['episode_s']
+    title=f"shared checkpoint u{best['source_update']} SHA={best['checkpoint_sha256'][:12]} | seed={best.get('seed','UNKNOWN')}"
+    lines=['# Shared conditional upper: all-alpha fixed-path report','',
+           '![All six original/actual XY panels](ALL_XY.png)','',title,'',
+           'One Actor, Critic and checkpoint for every alpha. B0 = frozen local300 + ECBC/ESO. '
+           'Original paths and requests are unchanged; no external disturbance. x marks real failure and o the real final sample. '
+           'Reward uses each alpha objective, with the matching rescored B0; cross-alpha returns are not physical rankings. '
+           'The historical .302 rad/.40 m and task gates below are diagnostics, not reasons to shorten the authorized training budget.','']
+    allfig,allaxes=plt.subplots(2,3,figsize=(16,10))
+    def finish(fig,filename):
+        fig.tight_layout(rect=(0,0,1,.955));fig.savefig(out/filename,dpi=110);plt.close(fig)
+    def decorate(axes):
+        for ax in np.asarray(axes).flat:
+            ax.grid(alpha=.2);ax.legend(fontsize=5,ncol=2)
+    for (name,route,speed),allxy in zip(declared,allaxes.flat):
+        data={'B0':baseline[name],**{k:panels[k][name] for k in alphas}};path=paths[name]
+        max_progress=max(float(d['path_progress'].max()) for d in data.values())
+        path_mask=path['s']<=max_progress+2
+        physical,pa=plt.subplots(2,3,figsize=(16,9))
+        xyfig,xy=plt.subplots(figsize=(9,7))
+        for ax in (allxy,xy,pa[0,0]):
+            ax.plot(*path['xy'][path_mask].T,'k--',label='original fixed path')
+            ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=name)
+            ax.set_aspect('equal',adjustable='datalim')
+        chain,ch=plt.subplots(4,2,figsize=(16,15))
+        for method,d in data.items():
+            color='0.55' if method=='B0' else colors[method];label='B0 local300' if method=='B0' else f'alpha={alphas[method]:g}'
+            t=np.asarray(d['time'])+dt
+            failed=bool(np.any(d['physical_failure']) or np.any(d.get('tracking_domain_failure',d.get('domain_exit',False))))
+            marker='x' if failed else 'o'
+            for ax in (allxy,xy,pa[0,0]):
+                ax.plot(*d['actual_xy'].T,color=color,label=label,lw=1)
+                ax.plot(*d['actual_xy'][-1],marker=marker,color=color,ms=4)
+            curves=((pa[0,1],d['peak_roll']),(pa[0,2],d['actual_forward_speed']-d['v_user']),
+                    (pa[1,0],d['path_cross_track']),(pa[1,1],d['path_heading_error']),
+                    (pa[1,2],d['actual_forward_speed']))
+            for ax,y in curves:
+                ax.plot(t,y,color=color,label=label,lw=.9);ax.plot(t[-1],y[-1],marker=marker,color=color,ms=3)
+            for channel in (0,1):
+                for key,style in (('nominal','--'),('governed',':')):
+                    ch[0,channel].plot(t,d[key][:,channel],style,color=color,lw=.7,label=f'{label} {key}')
+                actual=d['actual_forward_speed'] if channel==0 else d['actual_delta']
+                ch[0,channel].plot(t,actual,color=color,lw=.8,label=f'{label} actual')
+                for key,style in (('target_offset','--'),('filtered_offset',':'),('offsets','-')):
+                    ch[1,channel].plot(t,d[key][:,channel],style,color=color,lw=.7,label=f'{label} {key}')
+                ch[2,channel].plot(t,d['final_command'][:,channel],color=color,label=label,lw=.8)
+            ch[3,0].plot(t,d['actual_forward_speed'],color=color,label=f'{label} body',lw=.8)
+            ch[3,0].plot(t,d['wheel_speed_proxy'],'--',color=color,label=f'{label} wheel proxy',lw=.7)
+            ch[3,1].plot(t,d['wheel_speed_proxy']-d['actual_forward_speed'],color=color,label=label,lw=.8)
+        pa[0,1].axhline(config['stage_B_baseline']['working_roll_rad'],color='k',ls='--',lw=.7)
+        for sign in (-1,1):pa[1,0].axhline(sign*.4,color='k',ls='--',lw=.7)
+        for ax,label in ((pa[0,1],'Substep roll peak (rad)'),(pa[0,2],'Original speed error (m/s)'),
+                         (pa[1,0],'Original signed path error (m)'),(pa[1,1],'Original heading error (rad)'),
+                         (pa[1,2],'Measured body speed (m/s)')):
+            ax.set(xlabel='Time (s)',ylabel=label);ax.axvspan(h-config['stage_B_baseline']['hold_s'],h,color='0.5',alpha=.07)
+        pa[1,2].axhline(speed,color='k',ls=':',label='original speed request')
+        ch[0,0].axhline(speed,color='k',ls=':',label='original speed request')
+        ch[3,0].axhline(speed,color='k',ls=':',label='original speed request')
+        chain_labels=(('Request / corrected / measured speed (m/s)','Nominal / corrected / measured steer (rad)'),
+            ('Target / filtered / applied speed correction (m/s)','Target / filtered / applied steer correction (rad)'),
+            ('Final front steer-rate command (rad/s)','Final rear axle-rate command (rad/s)'),
+            ('Requested / body / wheel proxy speed (m/s)','Wheel proxy minus body speed (m/s)'))
+        for row in range(4):
+            for col in range(2):ch[row,col].set(xlabel='Time (s)',ylabel=chain_labels[row][col])
+        for fig in (physical,xyfig,chain):fig.suptitle(f'{name} | {title}\nOriginal {h:g}s window, real failure endpoints, no external disturbance')
+        decorate(pa);decorate(ch);decorate([xy]);allxy.legend(fontsize=5)
+        finish(physical,f'{name}_physical.png');finish(xyfig,f'{name}_XY.png');finish(chain,f'{name}_command_chain.png')
+        rewardfig,ra=plt.subplots(2,1,figsize=(13,8))
+        component_names=list(scores[name]['alpha_0'][1]);compfig,ca=plt.subplots(len(component_names),2,figsize=(16,2.1*len(component_names)))
+        for key,alpha in alphas.items():
+            reward,parts,b_reward,b_parts=scores[name][key];color=colors[key]
+            for y,pieces,style,label in ((reward,parts,'-',f'alpha={alpha:g} shared'),(b_reward,b_parts,'--',f'alpha={alpha:g} B0 scored')):
+                steps=np.arange(1,len(y)+1)
+                ra[0].plot(steps,y,style,color=color,label=label,lw=.8)
+                ra[1].plot(steps,np.cumsum(y),style,color=color,label=label,lw=.8)
+                for index,component in enumerate(component_names):
+                    v=pieces[component];ca[index,0].plot(steps,v,style,color=color,label=label,lw=.7)
+                    ca[index,1].plot(steps,np.cumsum(v),style,color=color,label=label,lw=.7)
+        ra[0].set(ylabel='Signed reward per actual lower tick');ra[1].set(ylabel='Cumulative signed reward',xlabel='Actual lower steps')
+        for index,component in enumerate(component_names):
+            ca[index,0].set(ylabel=component+' per tick',xlabel='Actual lower steps')
+            ca[index,1].set(ylabel=component+' cumulative',xlabel='Actual lower steps')
+        for fig in (rewardfig,compfig):fig.suptitle(f'{name} | {title}\nSame-alpha B0 rescored independently; cumulative rewards include the true terminal tail')
+        decorate(ra);decorate(ca);finish(rewardfig,f'{name}_reward.png');finish(compfig,f'{name}_components.png')
+        lines.extend([f'## {name}','',f'![Original and actual XY]({name}_XY.png)','',
+            f'[Roll and original errors]({name}_physical.png) · [Step and cumulative reward]({name}_reward.png) · '
+            f'[Signed components]({name}_components.png) · [Complete command chain and wheel-speed proxy]({name}_command_chain.png)','',
+            '| Alpha | Speed RMSE (m/s) | Path RMSE (m) | Peak roll (rad) | Corridor fail | Goal / hold | Endpoint primary fail |',
+            '|---|---:|---:|---:|---|---|---|'])
+        for key,alpha in alphas.items():
+            m=report_cases[name]['alphas'][key]
+            lines.append(f"| {alpha:g} | {m['speed_rmse']:.5f} | {m['path_rmse']:.5f} | {m['peak_roll']:.5f} | {m['corridor_failure']} | {m['goal']} / {m['final_hold']} | {m['primary_band_failure'] if m['primary_applicable'] else 'N/A (interior alpha)'} |")
+        lines.append('')
+    allfig.suptitle(title+' | five alpha values, same checkpoint + B0 | original world paths, metres')
+    finish(allfig,'ALL_XY.png')
+    atomic_json(out/'conditional_metrics.json',result);atomic_json(out/'identities.json',best)
+    lines.extend(['[Full per-alpha metrics, complete-turn bins, source NPZ paths and reward audit](conditional_metrics.json)',
+                  '[One shared checkpoint identity](identities.json)',
+                  'The complete original turn is used for equal-bin MSE metrics. Missing bins remain missing; no common-fragment shortcut. '
+                  'Middle-alpha primary thresholds are not invented. Intermediate-alpha trends and endpoint preference are reported separately from common physical diagnostics.'])
+    (out/'INDEX.md').write_text('\n'.join(lines)+'\n')
+    return result

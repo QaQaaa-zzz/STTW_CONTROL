@@ -292,3 +292,34 @@ def diagnostic_cache_identity(context,transform):
     if not context.get('actor_sha256') or not context.get('case_ids'):
         raise ValueError('diagnostic cache requires Actor SHA and explicit case IDs')
     return config_hash(dict(schema='path_fixed_actor_diagnostic_v1',context=context,transform=transform))
+
+
+def reuse_conditional_baseline(parent,root,cfg,source,expected_paths):
+    """Reuse alpha-neutral B0 physics with an explicit training-only allowlist."""
+    from copy import deepcopy
+    from .path_command_fork import physical_config_identity
+    from .path_command_conditioning import MODE
+    parent=Path(parent);root=Path(root)
+    manifest=json.loads((parent/'manifest.json').read_text())
+    if cfg.get('alpha_conditioning',{}).get('mode')!=MODE:
+        raise ValueError('conditional baseline requires shared conditional mode')
+    def physical(config):
+        config=deepcopy(config)
+        config.pop('alpha_conditioning',None)
+        for key in ('policy_type','alphas','initialization'):config.get('network',{}).pop(key,None)
+        for key in ('validation_updates','updates_max','best_on'):config.get('training_future_phase_C',{}).pop(key,None)
+        return physical_config_identity(config)
+    if physical(cfg)!=physical(manifest['config']):raise ValueError('conditional baseline physical config identity mismatch')
+    if config_hash(source)!=config_hash(manifest['source']):raise ValueError('conditional baseline lower/model/bank source mismatch')
+    names=reuse_zero_upper(parent,root,manifest['config'],source,expected_paths)
+    expected={name for name,_,_ in cases(cfg)}
+    if names!=expected:raise ValueError('conditional baseline requires all six complete cached cases')
+    atomic_json(root/'baseline_reward_identity.json',dict(schema='conditional_baseline_reuse_v1',
+        physical_identity=physical(cfg),reward_identity=config_hash(cfg['path_reward']),
+        parent_manifest_sha256=digest(parent/'manifest.json'),current_config_sha256=config_hash(cfg),
+        excluded_training_metadata=['alpha_conditioning','network.policy_type','network.alphas',
+            'network.initialization','training_future_phase_C.validation_updates',
+            'training_future_phase_C.updates_max','training_future_phase_C.best_on'],
+        scoring='per-alpha independent reconstruction; cached logged score is not a universal baseline score',
+        physics_executed=0))
+    return names

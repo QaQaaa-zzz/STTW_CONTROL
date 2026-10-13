@@ -7,6 +7,7 @@ import jax.numpy as j
 from flax import struct
 from .path_command_policy import SCHEMA
 from .preference_best import atomic_json,config_hash,digest
+from .path_command_conditioning import is_conditional,execution_dimensions
 
 
 def termination_flags(tick,physical_failure,fault,domain_exit,horizon,config,terminal_contract='terminal_contract_v2'):
@@ -72,11 +73,12 @@ def restore_checkpoint(path,algo,identity):
 
 def resume_source(parent,alpha,identity):
     """Resolve an immutable saved boundary, never a guessed checkpoint filename."""
-    out=Path(parent)/f'alpha{alpha}'
+    out=Path(parent)/('shared' if alpha is None else f'alpha{alpha}')
     receipt=json.loads((out/'last_completed.json').read_text())
     if receipt['schema']!=SCHEMA or digest(receipt['checkpoint'])!=receipt['checkpoint_sha256']:
         raise ValueError('resume boundary identity mismatch')
-    best=json.loads((out/'best_model.json').read_text()) if (out/'best_model.json').exists() else None
+    pointer=out/('best_conditional_model.json' if alpha is None else 'best_model.json')
+    best=json.loads(pointer.read_text()) if pointer.exists() else None
     if best:
         if any(best.get(k)!=v for k,v in identity.items()):raise ValueError('parent best task identity mismatch')
         for key in ['checkpoint','actor']:
@@ -105,7 +107,11 @@ class PathBatch:
         from .path_command_scenarios import sample_training_route
         pose=self.env.physics.helpers.pose(self.snapshot.data)
         route=sample_training_route(self.seed,eid,episode,pose,self.config)
-        state=self.env.reset(self.snapshot,route.path,route.speed,j.asarray(self.alpha))
+        if self.alpha is None:
+            from .path_command_conditioning import sample_episode_alpha
+            alpha=sample_episode_alpha(self.config['alpha_conditioning']['seed'],eid,episode)
+        else:alpha=j.asarray(self.alpha)
+        state=self.env.reset(self.snapshot,route.path,route.speed,alpha)
         return Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
     def advance_one(self,ep,z):
@@ -128,8 +134,12 @@ class PathBatch:
 def load_plan(path):
     path=Path(path).resolve();plan=json.loads(path.read_text());cfgpath=(path.parent/plan['design_config']).resolve();sourcepath=(path.parent/plan['integration_manifest']).resolve()
     cfg=json.loads(cfgpath.read_text());source=json.loads(sourcepath.read_text());c=cfg['training_future_phase_C']
-    if plan['schema']!='sttw_path_training_plan_v1' or cfg['network']['actor_dim']!=351:raise ValueError('wrong task schema')
-    if plan['alphas']!=[0,1] or not 1<=plan['updates']<=c['updates_initial'] or plan['automatic_extension']:raise ValueError('unapproved endpoint/budget extension')
+    conditional=is_conditional(plan)
+    if conditional:
+        from .path_command_conditioning import validate_conditional_plan
+        validate_conditional_plan(plan,cfg)
+    elif plan['schema']!='sttw_path_training_plan_v1' or cfg['network']['actor_dim']!=351:raise ValueError('wrong task schema')
+    if not conditional and (plan['alphas']!=[0,1] or not 1<=plan['updates']<=c['updates_initial'] or plan['automatic_extension']):raise ValueError('unapproved endpoint/budget extension')
     if source['candidate']['source_update']!=300:raise ValueError('frozen300 required')
     # These are explicit resolved details; reject silent changes to code constants.
     expected={'ordinary_fraction':.3,'ordinary_straight_fraction':.5,'gentle_angle_deg':30,'gentle_radius_m':4,'single_turn_fraction':.5,'S_fraction':.2,'S_inter_bend_straight_m':3,'fixed_grid_length_m':100,'fixed_grid_points':5001}
@@ -141,7 +151,10 @@ def load_plan(path):
     validate_training_sampler(cfg)
     version=plan.get('sampler_version','legacy')
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
-    if reward_fork:
+    if conditional:
+        plan['initialization']['checkpoint']=str((path.parent/plan['initialization']['checkpoint']).resolve())
+        plan['baseline_parent']=str((path.parent/plan['baseline_parent']).resolve())
+    elif reward_fork:
         from .path_command_fork import reward_validation_schedule
         reward_validation_schedule(plan,cfg)
         if version!='demand_exposure_v2' or plan['seed']!=911101:raise ValueError('reward fork pilot contract changed')
@@ -186,8 +199,16 @@ def prepare(path,output,check_interface=False):
         report.update(maximum_validation_lower_ticks=len(validation_updates)*2*6*round(c['episode_s']/.005),conditional_hard_max_updates_per_endpoint=200,baseline_physics=0,final_best_physics=0)
     if plan.get('initialization',{}).get('mode')=='weights_only_reward_fork':
         report.update(conditional_hard_max_updates_per_endpoint=plan['updates'],parent_identities_frozen=bool(plan['initialization'].get('expected_parents')),formal_stage='not_run',maximum_validation_lower_ticks=len(validation_updates)*48000,baseline_physics=0,final_best_physics=0)
+    if is_conditional(plan):
+        n,steps=execution_dimensions(plan,cfg);engineering=plan.get('engineering_check',False)
+        if digest(plan['initialization']['checkpoint'])!=plan['initialization']['checkpoint_sha256']:raise ValueError('parent checkpoint SHA mismatch')
+        report.update(policy_mode=plan['policy_mode'],training_policy_transitions_total=n*steps*updates,
+            training_policy_transitions_per_endpoint=None,training_lower_ticks_total=4*n*steps*updates,
+            validation_updates=[] if engineering else validation_updates,maximum_validation_lower_ticks=0 if engineering else len(validation_updates)*len(plan['alphas'])*6*4000,
+            engineering_check=engineering,discard_engineering_update=engineering,actual_batch_dimensions=[n,steps],learner_count=1,
+            baseline_physics=0,final_best_physics=0,conditional_hard_max_updates_per_endpoint=None)
     if check_interface:
-        env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],0)
+        env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],None if is_conditional(plan) else 0)
         ep=batch.reset(j.int32(0),j.int32(0));env.set_log_template(ep.state,ep.route.path,ep.route.speed)
         shapes=jax.eval_shape(batch.advance_one,ep,j.zeros(2))
         report['abstract_single_step_shapes']={'actor':list(shapes[1][0].shape),'critic':list(shapes[1][1].shape),'reward':list(shapes[2].shape),'done':list(shapes[3]['done'].shape)}
@@ -335,8 +356,10 @@ def train(path,output,*,execute=False,resume=None):
     from .path_command_selection import summarize,persist_best,summarize_task,persist_task_best,task_pointer_name
     from .path_command_policy import PathCommandActor
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
+    conditional=is_conditional(plan);engineering=conditional and plan.get('engineering_check',False)
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
-    coverage_mode=plan.get('sampler_version')=='demand_exposure_v2' and not reward_fork
+    coverage_mode=plan.get('sampler_version')=='demand_exposure_v2' and not reward_fork and not conditional
+    if conditional and resume and not (Path(resume)/'shared/last_completed.json').exists():raise ValueError('shared resume boundary missing')
     fork_receipt=None
     if coverage_mode:
         from .path_command_fork import validate_fork_contract,restore_fork,extension_decision
@@ -345,16 +368,19 @@ def train(path,output,*,execute=False,resume=None):
         from .path_command_fork import validate_reward_fork,restore_reward_fork,reward_validation_schedule,validate_reward_resume
         fork_receipt=validate_reward_fork(plan,cfg,source)
         validate_reward_resume(plan,cfg,source,resume)
-    validation_schedule=reward_validation_schedule(plan,cfg) if reward_fork else c['validation_updates']
+    validation_schedule=[] if engineering else (reward_validation_schedule(plan,cfg) if reward_fork else c['validation_updates'])
     if root.exists():raise FileExistsError('new run directory required, including resumed stage')
     root.mkdir(parents=True);torch.set_num_threads(2)
     from .runtime import configure_compilation_cache
     compilation_cache=configure_compilation_cache()
-    atomic_json(root/'status.json',dict(state='initializing',stage='loading_frozen_physics_and_bank',pid=os.getpid(),endpoint_updates={'alpha0':0,'alpha1':0},declared_updates_per_endpoint=plan['updates'],last_update_epoch=time.time()))
-    env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));n=c['num_envs'];steps=c['rollout_steps'];updates=plan['updates']
+    initial_status=dict(state='initializing',stage='loading_frozen_physics_and_bank',pid=os.getpid(),endpoint_updates={'alpha0':0,'alpha1':0},declared_updates_per_endpoint=plan['updates'],last_update_epoch=time.time())
+    if conditional:initial_status.update(policy_mode=plan['policy_mode'],endpoint_updates={},shared_updates=0,declared_updates=plan['updates'],engineering_check=engineering)
+    atomic_json(root/'status.json',initial_status)
+    env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));n,steps=execution_dimensions(plan,cfg);updates=plan['updates']
     candidate=source['candidate'];protected_paths=[Path(candidate[k]) for k in ['actor','checkpoint','config']]
     protected_paths.extend([Path(candidate['original_protocol_best']['checkpoint']),Path(candidate['config']).parent/'training/best_model.json'])
     for upper in candidate['upper'].values():protected_paths.extend([Path(upper['actor']),Path(upper['checkpoint']),Path(upper['actor']).parents[2]/'best_model.json'])
+    if conditional:protected_paths.append(Path(plan['initialization']['checkpoint']))
     protected={str(p):digest(p) for p in protected_paths if p.exists()}
     manifest=dict(schema=SCHEMA,plan=plan,config=cfg,source=source,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),protected=protected,physical_continuation='reset to original complete prepared bank, not resumed simulator state',terminal_contract=plan.get('terminal_contract','terminal_contract_v1'),data_role='random TRAIN; fixed six-route DEV; no independent holdout',resume_parent=None if resume is None else str(Path(resume).resolve()))
     manifest['execution_optimizations']=dict(evaluator='vmap_scan50',compilation_cache=str(compilation_cache),ppo='existing_direct_command_ppo',actual_batch_dimensions=[n,steps],experimental_summary_reset_guard=False)
@@ -365,9 +391,11 @@ def train(path,output,*,execute=False,resume=None):
         tb=dict(url=None,scalar_verified=False,warning=str(e));atomic_json(root/'tensorboard_server_warning.json',tb)
         if plan.get('http_failure_policy')=='error':raise
     status={'state':'initializing','pid':os.getpid(),'endpoint_updates':{'alpha0':0,'alpha1':0},'declared_updates_per_endpoint':updates,'policy_transitions_total':0,'training_control_ticks_total':0,'validation_control_ticks_total':0}
+    if conditional:status.update(policy_mode=plan['policy_mode'],endpoint_updates={},declared_updates=updates,engineering_check=engineering,discard_engineering_update=engineering)
     def update_status(**kw):
         status.update(kw)
-        if 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
+        if conditional and 'completed_updates' in status:status['shared_updates']=status['completed_updates']
+        elif 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
     def account_validation(ticks):status['validation_control_ticks_total']+=ticks
     shared_eval_cache={}
@@ -375,23 +403,25 @@ def train(path,output,*,execute=False,resume=None):
     if resume:
         parent_status=json.loads((Path(resume)/'status.json').read_text())
         status['parent_consumed_policy_transitions']=parent_status.get('policy_transitions_total',0)+parent_status.get('parent_consumed_policy_transitions',0)
+        if conditional:status['parent_consumed_validation_control_ticks']=parent_status.get('validation_control_ticks_total',0)+parent_status.get('parent_consumed_validation_control_ticks',0)
         status['parent_reported_updates']=parent_status.get('completed_updates',0)
     update_status(stage='loading')
     try:
-        for alpha in plan['alphas']:
+        for alpha in ([None] if conditional else plan['alphas']):
+            learner_name='shared' if conditional else f'alpha{alpha}'
             endpoint_target=updates
-            endpoint_resume=bool(resume and (Path(resume)/f'alpha{alpha}'/'last_completed.json').exists())
+            endpoint_resume=bool(resume and (Path(resume)/learner_name/'last_completed.json').exists())
             if coverage_mode and endpoint_resume:
                 for decision_file in sorted((Path(resume)/f'alpha{alpha}'/'decisions').glob('update_*.json')):
                     decision=json.loads(decision_file.read_text())
                     if decision['allow'] and decision['previous_target']==endpoint_target and decision['next_target']==endpoint_target+50:
                         endpoint_target=decision['next_target']
                 if endpoint_target>200:raise ValueError('resume target exceeds authorized coverage maximum')
-            algo=None;learner_ready=False;started=time.monotonic();update_status(stage='compiling',alpha=alpha,completed_updates=0);out=root/f'alpha{alpha}';out.mkdir();writer=SummaryWriter(str(root/'tensorboard'/f'alpha{alpha}'))
+            algo=None;learner_ready=False;started=time.monotonic();update_status(stage='compiling',alpha=alpha,completed_updates=0);out=root/learner_name;out.mkdir();writer=SummaryWriter(str(root/'tensorboard'/learner_name))
             def check_budget():
                 status['endpoint_elapsed_s']=time.monotonic()-started
             def to_torch(a,cr):return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(cr)},batch_size=[n])
-            seed=plan['seed']+alpha;torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
+            seed=plan['seed']+(0 if conditional else alpha);torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
             batch=PathBatch(env,snapshot,cfg,plan['seed'],alpha)
             sample=batch.reset(j.int32(0),j.int32(0));env.set_log_template(sample.state,sample.route.path,sample.route.speed)
             reset=jax.jit(jax.vmap(batch.reset));episodes=reset(j.arange(n,dtype=j.int32),j.zeros(n,j.int32));jax.block_until_ready(episodes)
@@ -401,6 +431,9 @@ def train(path,output,*,execute=False,resume=None):
             status['compile_and_setup_seconds']=time.monotonic()-started
             obs=to_torch(a,cr);algo=make_algorithm(obs,steps,cfg,'cuda')
             identity=dict(schema=SCHEMA,alpha=alpha,lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),sampler_sha256=config_hash(plan['sampler_resolution']),best_sha256=config_hash(plan['best_resolution']),seed=plan['seed'])
+            if conditional:
+                from .path_command_conditioning import conditional_identity
+                identity=conditional_identity(plan,cfg,source)
             if coverage_mode or reward_fork:
                 identity.update(parent_source_update=fork_receipt['identities'][f'alpha{alpha}']['source_update'],parent_checkpoint_sha256=fork_receipt['identities'][f'alpha{alpha}']['checkpoint_sha256'])
             start_update=0;rejections=0
@@ -411,15 +444,24 @@ def train(path,output,*,execute=False,resume=None):
             if reward_fork and not endpoint_resume:
                 initialization=restore_reward_fork(algo,fork_receipt,alpha)
                 atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
+            if conditional and not endpoint_resume:
+                from .path_command_conditioning import initialize_conditional_actor
+                init=plan['initialization'];initialization=initialize_conditional_actor(algo,init['checkpoint'],init['checkpoint_sha256'],expected_lower_sha=source['candidate']['actor_sha256'])
+                atomic_json(out/'fork_receipt.json',dict(initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if endpoint_resume:
                 receipt,parent_best=resume_source(resume,alpha,identity)
                 saved=restore_checkpoint(receipt['checkpoint'],algo,identity);
-                if parent_best:persist_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update']})
+                if conditional and saved['update']!=receipt['update']:raise ValueError('shared resume update receipt mismatch')
+                if parent_best:
+                    if conditional:
+                        from .path_command_selection import persist_conditional_best
+                        persist_conditional_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update'],'validation_dir':parent_best['validation_dir']})
+                    else:persist_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update']})
                 start_update=saved['update'];rejections=saved['consecutive_rejections']
                 if start_update>endpoint_target:raise ValueError('resume boundary exceeds declared target')
                 if saved.get('route_counters') is None or np.shape(saved['route_counters'])!=(n,):raise ValueError('resume requires per-environment route counters')
                 route_counters=np.asarray(saved['route_counters'])
-                fault_file=Path(resume)/f'alpha{alpha}'/'engineering_fault_states.pkl'
+                fault_file=Path(resume)/learner_name/'engineering_fault_states.pkl'
                 if fault_file.exists():
                     with fault_file.open('rb') as f:failed_episodes=pickle.load(f)
                     route_counters=np.maximum(route_counters,np.asarray(failed_episodes.episode))
@@ -440,7 +482,7 @@ def train(path,output,*,execute=False,resume=None):
             atomic_json(out/'last_completed.json',dict(update=start_update,checkpoint=str(initial_checkpoint.resolve()),checkpoint_sha256=digest(initial_checkpoint),schema=SCHEMA))
             update_status(completed_updates=start_update)
             learner_ready=True
-            if endpoint_resume:
+            if endpoint_resume and not conditional:
                 rescore_saved_candidates(resume,out,alpha,cfg,identity)
                 if reward_fork:
                     from .path_command_cache import inherit_reward_validation
@@ -463,9 +505,16 @@ def train(path,output,*,execute=False,resume=None):
             from .path_command_evaluation import BatchedPanelEvaluator
             evaluator=BatchedPanelEvaluator(env,snapshot,cfg,check_budget,update_status,account_validation)
             evaluator.compiled=shared_eval_cache
-            if not baseline_done:
+            if not baseline_done and not engineering:
                 cached=set()
-                if resume or coverage_mode or reward_fork:
+                if conditional:
+                    from .path_command_cache import reuse_conditional_baseline
+                    from .geometric_path import build_path
+                    pose=np.asarray(env.physics.helpers.pose(snapshot.data))
+                    paths={route:build_path(route,pose,cfg) for route in cfg['stage_C_evaluation']['route_ids']}
+                    cached=reuse_conditional_baseline(plan['baseline_parent'],root,cfg,source,paths)
+                    if len(cached)!=6:raise ValueError('conditional baseline requires six reusable cases')
+                if (resume or coverage_mode or reward_fork) and not conditional:
                     from .path_command_cache import reuse_zero_upper
                     from .geometric_path import build_path
                     pose=np.asarray(env.physics.helpers.pose(snapshot.data))
@@ -477,8 +526,25 @@ def train(path,output,*,execute=False,resume=None):
                         cached=reuse_reward_baseline(cache_parent,root,cfg,source,paths)
                     else:cached=reuse_zero_upper(cache_parent,root,cache_cfg,source,paths)
                     if (coverage_mode or reward_fork) and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
-                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode or reward_fork) else None);baseline_done=True
+                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode or reward_fork or conditional) else None);baseline_done=True
                 status['reused_baseline_cases']=len(cached)
+            def evaluate_shared(update,checkpoint):
+                from .path_command_evaluation import evaluate_conditional
+                from .path_command_selection import summarize_conditional,persist_conditional_best
+                destination=out/'validation'/f'update_{update:04d}';panels=evaluate_conditional(evaluator,export_actor(algo.policy),plan['alphas'],destination)
+                summary=summarize_conditional(panels,cfg)
+                actor=out/'checkpoints'/f'actor_{update:04d}.pkl'
+                provenance=dict(identity,source_update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),actor=str(actor.resolve()),actor_sha256=digest(actor),validation_dir=str(destination.resolve()))
+                atomic_json(destination/'source.json',provenance);atomic_json(destination/'task_metrics.json',summary)
+                persist_conditional_best(out,checkpoint,actor,summary,{**identity,'source_update':update,'validation_dir':str(destination.resolve())})
+                return summary
+            if conditional and not engineering and start_update in validation_schedule:
+                dev_started=time.monotonic()
+                if endpoint_resume:
+                    from .path_command_conditioning import complete_resume_validation
+                    status['resume_validation']=complete_resume_validation(resume,out,start_update,initial_checkpoint,identity,cfg,export_actor(algo.policy),evaluate_shared,lambda:status['validation_control_ticks_total'])
+                else:evaluate_shared(start_update,initial_checkpoint)
+                status['dev_seconds']=time.monotonic()-dev_started
             accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
             from .path_command_statistics import summarize_statistics,COST_KEYS
             coverage_stats=None;coverage_low=0;coverage_fraction=None;window_start=start_update+1;coverage_start=start_update+1
@@ -509,7 +575,7 @@ def train(path,output,*,execute=False,resume=None):
                         cost_totals_update+=np.asarray(j.sum(stats['completed_component_costs'],axis=0))
                         diagnostic=stats['diagnostics']
                         window_stats=diagnostic if window_stats is None else merge_diagnostics(window_stats,diagnostic)
-                        if coverage_mode or reward_fork:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
+                        if coverage_mode or reward_fork or conditional:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
                         for key,count in stats['component_caps'].items():caps[key]=caps.get(key,0)+int(j.sum(count))
                     algo.compute_returns(obs)
                 sample_seconds=time.monotonic()-tick_start;opt_start=time.monotonic();update_status(stage='optimizing');metrics=algo.update();opt_seconds=time.monotonic()-opt_start;check_budget()
@@ -524,10 +590,13 @@ def train(path,output,*,execute=False,resume=None):
                     diagnostic.update(update=update,complete_episode_count=window_episodes,complete_episode_return_mean=None if not window_episodes else float(window_return/window_episodes),complete_episode_cost_integral_means=None if not window_episodes else dict(zip(COST_KEYS,(window_costs/window_episodes).tolist())),physical_failure_count=window_physical,tracking_domain_failure_count=window_domain,engineering_fault_count=0,physical_failure_rate=None if not window_episodes else window_physical/window_episodes,tracking_domain_failure_rate=None if not window_episodes else window_domain/window_episodes)
                     diagnostic.update(window_updates=update-window_start+1,engineering_failure_rate=0.,domain_failure_rate=window_domain/max(diagnostic['active_lower_samples'],1))
                     atomic_json(out/'statistics'/f'update_{update:04d}.json',diagnostic)
+                    for group_name,group in diagnostic.get('alpha_groups',{}).items():
+                        for metric in ('samples','reward_mean','speed_rmse_m_s','lateral_rmse_m','heading_rmse_rad','strong_demand_fraction'):
+                            if group.get(metric) is not None:writer.add_scalar(f'alpha/{group_name}/{metric}',group[metric],update)
                     window_start=update+1
                     window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
                 coverage_pause=False
-                if (coverage_mode or reward_fork) and update%10==0:
+                if (coverage_mode or reward_fork or conditional) and update%10==0:
                     coverage_summary=summarize_statistics(coverage_stats,cfg);coverage_stats=None
                     coverage_fraction=coverage_summary['windows']['strong_demand']['sample_fraction']
                     complete_window=update-coverage_start+1==10
@@ -547,13 +616,15 @@ def train(path,output,*,execute=False,resume=None):
                 if update%c['save_every']==0 or update==endpoint_target or stop:
                     checkpoint=save_checkpoint(out/'checkpoints',algo,update,identity,rejections=rejections,route_counters=episodes.episode)
                     atomic_json(out/'last_completed.json',dict(update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),schema=SCHEMA))
-                if not http_verified and (update==start_update+1 or update%25==0):http_verified=_verify_reward_http(root,tb,f'alpha{alpha}')
+                if not http_verified and (update==start_update+1 or update%25==0):http_verified=_verify_reward_http(root,tb,learner_name)
                 if plan.get('http_failure_policy')=='error' and not http_verified:raise RuntimeError('current TensorBoard reward scalar not verified')
                 update_status(stage='optimized',completed_updates=update,accepted_batches=accepted,last_reward=record['mean_step_reward'])
                 if coverage_pause:
                     atomic_json(out/'coverage_diagnosis.json',dict(reason='two consecutive complete ten-update windows below exposure target',sampler=cfg['training_sampler'],actual=coverage_summary,domain_failures_last_rollout=domain_failures,policy='save and pause; no silent sampler/reward/lower change'))
                     raise CoveragePause('strong demand exposure below target in two windows; saved boundary and diagnosis')
-                if update in validation_schedule and not stop:
+                if conditional and update in validation_schedule and not stop:
+                    dev_started=time.monotonic();evaluate_shared(update,checkpoint);status['dev_seconds']=status.get('dev_seconds',0)+time.monotonic()-dev_started
+                if not conditional and update in validation_schedule and not stop:
                     dev_started=time.monotonic();params=export_actor(algo.policy);traces=evaluator.evaluate(params,alpha,out/'validation'/f'update_{update:04d}');summary=summarize(traces,alpha,cfg)
                     atomic_json(out/'validation'/f'update_{update:04d}'/'metrics.json',summary)
                     persist_best(out,checkpoint,out/'checkpoints'/f'actor_{update:04d}.pkl',summary,dict(identity,source_update=update))
@@ -569,11 +640,18 @@ def train(path,output,*,execute=False,resume=None):
                     if decision['allow']:endpoint_target+=plan['conditional_extension']['block']
                     decision['next_target']=endpoint_target;atomic_json(out/'decisions'/f'update_{update:04d}.json',decision)
                     update_status(declared_updates=endpoint_target)
-                print(f'alpha{alpha} update{update}/{endpoint_target} reward={record["mean_step_reward"]:.6g} accepted={accepted}',flush=True)
+                print(f'{learner_name} update{update}/{endpoint_target} reward={record["mean_step_reward"]:.6g} accepted={accepted}',flush=True)
                 if stop:break
             atomic_json(out/'training_status.json',dict(state='completed' if not stop else 'error',completed_updates=update,declared_updates=endpoint_target,stop_reason=stop))
-            writer.close();notify('STTW path training stage ended',f'alpha{alpha}: {update}/{endpoint_target}; {stop or "budget reached"}')
+            writer.close();notify('STTW path training stage ended',f'{learner_name}: {update}/{endpoint_target}; {stop or "budget reached"}')
             if stop:raise RuntimeError(stop)
+            if engineering:
+                atomic_json(out/'engineering_receipt.json',dict(state='completed',discarded_update=True,training_policy_transitions=status['policy_transitions_total'],training_lower_ticks=status['training_control_ticks_total'],validation_lower_ticks=0,eligible_as_parent=False))
+                continue
+            if conditional:
+                from .path_command_evaluation import reuse_conditional_best
+                best=json.loads((out/'best_conditional_model.json').read_text());best_panels['shared']=reuse_conditional_best(out,best,cfg)
+                continue
             if not (out/task_pointer_name(cfg)).exists():raise RuntimeError('no fixed validation candidate; no last-as-best fallback')
             best=json.loads((out/task_pointer_name(cfg)).read_text())
             if digest(best['actor'])!=best['actor_sha256'] or digest(best['checkpoint'])!=best['checkpoint_sha256']:raise ValueError('best task weights identity changed')
@@ -590,28 +668,33 @@ def train(path,output,*,execute=False,resume=None):
             best_panels[alpha]=evaluator.evaluate(params,alpha,out/'final_best',cached_names=cached_final if cached_final else None);atomic_json(out/'final_best'/'metrics.json',summarize_task(best_panels[alpha],alpha,cfg));atomic_json(out/'final_best'/'source.json',best)
         for p,sha in protected.items():
             if digest(p)!=sha:raise RuntimeError('protected source changed')
-        from .path_command_reporting import report_final_panel
-        report_final_panel(root,cfg)
-        from .path_command_reporting import convergence_decision
-        paired=json.loads((root/'report'/'paired_metrics.json').read_text());decisions={}
-        qualified=all(json.loads((root/f'alpha{a}'/task_pointer_name(cfg)).read_text())['qualified_task'] for a in plan['alphas'])
-        for a in plan['alphas']:
-            endpoint=root/f'alpha{a}'
-            history=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'validation').glob('update_*/task_metrics.json'))]
-            inherited=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'inherited_history'/'validation').glob('update_*/task_metrics.json'))]
-            history=sorted({row['update']:row for row in inherited+history}.values(),key=lambda row:row['update'])
-            stats_root=endpoint/'statistics'
-            if not (stats_root/'update_0200.json').exists():stats_root=endpoint/'inherited_history'/'statistics'
-            previous=stats_root/'update_0175.json';last=stats_root/'update_0200.json';trend={}
-            if previous.exists() and last.exists():
-                key='lateral_rmse_m' if a==0 else 'speed_rmse_m_s'
-                before=json.loads(previous.read_text())['windows']['strong_demand'][key];after=json.loads(last.read_text())['windows']['strong_demand'][key]
-                if before is not None and after is not None:trend=dict(matched_condition_relative_improvement=(before-after)/max(abs(before),1e-12),window='strong_demand',metric=key,updates=[175,200])
-            decisions[f'alpha{a}']=convergence_decision(history,trend,paired_qualified=qualified)
-        atomic_json(root/'report'/'next_step.json',dict(endpoint_decisions=decisions,paired_task_qualified=qualified,automatic_extension=False,paired_metrics='paired_metrics.json',note='Both jointly qualified endpoints need not be forced to diverge; inspect paired metrics for preference claim.'))
-        if coverage_mode:
-            from .path_command_reporting import report_coverage_parent_comparison
-            report_coverage_parent_comparison(root,cfg,fork_receipt)
+        if conditional:
+            if not engineering:
+                from .path_command_reporting import report_conditional_panel
+                report_conditional_panel(root,cfg)
+        else:
+            from .path_command_reporting import report_final_panel
+            report_final_panel(root,cfg)
+            from .path_command_reporting import convergence_decision
+            paired=json.loads((root/'report'/'paired_metrics.json').read_text());decisions={}
+            qualified=all(json.loads((root/f'alpha{a}'/task_pointer_name(cfg)).read_text())['qualified_task'] for a in plan['alphas'])
+            for a in plan['alphas']:
+                endpoint=root/f'alpha{a}'
+                history=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'validation').glob('update_*/task_metrics.json'))]
+                inherited=[dict(update=int(p.parent.name.split('_')[-1]),summary=json.loads(p.read_text())) for p in sorted((endpoint/'inherited_history'/'validation').glob('update_*/task_metrics.json'))]
+                history=sorted({row['update']:row for row in inherited+history}.values(),key=lambda row:row['update'])
+                stats_root=endpoint/'statistics'
+                if not (stats_root/'update_0200.json').exists():stats_root=endpoint/'inherited_history'/'statistics'
+                previous=stats_root/'update_0175.json';last=stats_root/'update_0200.json';trend={}
+                if previous.exists() and last.exists():
+                    key='lateral_rmse_m' if a==0 else 'speed_rmse_m_s'
+                    before=json.loads(previous.read_text())['windows']['strong_demand'][key];after=json.loads(last.read_text())['windows']['strong_demand'][key]
+                    if before is not None and after is not None:trend=dict(matched_condition_relative_improvement=(before-after)/max(abs(before),1e-12),window='strong_demand',metric=key,updates=[175,200])
+                decisions[f'alpha{a}']=convergence_decision(history,trend,paired_qualified=qualified)
+            atomic_json(root/'report'/'next_step.json',dict(endpoint_decisions=decisions,paired_task_qualified=qualified,automatic_extension=False,paired_metrics='paired_metrics.json',note='Both jointly qualified endpoints need not be forced to diverge; inspect paired metrics for preference claim.'))
+            if coverage_mode:
+                from .path_command_reporting import report_coverage_parent_comparison
+                report_coverage_parent_comparison(root,cfg,fork_receipt)
         update_status(state='completed',stage='reported',protected_unchanged=True);notify('STTW path pipeline completed',str(root))
     except BaseException as e:
         if learner_ready and algo is not None and status.get('stage')!='optimizing':

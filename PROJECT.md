@@ -1,3 +1,9 @@
+# Unified continuous-alpha upper policy — 2026-10-13
+
+User-approved direct conditional PPO with alpha0 Actor-only warm start; no distillation. [Implementation and bounded experiment](docs/path_unified_alpha.md). One shared learner, fixed alpha per episode first, 200 total updates with 50-update checks. Dynamic alpha is a separate later stage. Existing task thresholds remain reported diagnostics; physical termination is unchanged. Current run state and adoption decisions are maintained only in the shared research ledger.
+
+---
+
 [远端精简代码与重要结果入口](docs/evidence/path_safety_repair/README.md)（2026-10-12发布快照）。
 
 # Path safety repair — authorized Task1 execution, 2026-10-12
