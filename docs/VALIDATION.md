@@ -2,7 +2,9 @@
 
 119 targeted CPU tests pass in32.12s across17 files, covering new alpha initialization/sampling/statistics/shared selection/cache/report/resume behavior and existing reward/endpoint/terminal/fork regressions. Six real baseline traces pass source/config/path/timing/completeness checks with zero new physics. The report integration uses the real shared directory and selection/reuse chain with a simulated physics provider; this is not learned-control evidence. Independent review findings (shared report directory, interrupted boundary DEV, full source identity) are fixed and regression tested.
 
-[Method and bounded run](path_unified_alpha.md). GPU engineering and formal training receipts are recorded separately in runs/path_unified_alpha_200_20261013; current execution facts remain in the shared ledger. This CPU record alone does not establish runtime success or preference behavior.
+GPU engineering check on commit5ba2cd7 completes128policy transitions/512lower ticks/one discarded PPO batch; no engineering or physical failure. Two optimizer epochs accepted before normal target-KL early stopping (KL .021551); no hard/nonfinite stop. Setup42.321s, learner47.947s; engineering reward HTTP6012 independently verified. Formal initialization tensors match the original engineering initialization, with fresh Adam and no imported engineering update. First two saved DEV0 straight traces each contain4000lower samples; independent reward reconstruction differences below3e-9 and recordedalpha=0.
+
+[Method and bounded run](path_unified_alpha.md). Evidence: runs/path_unified_alpha_200_20261013/engineering_verification.json, formal_initialization_verification.json, initial_dev_partial_reward_audit.json. Formal200 launched with its own logs/TensorBoard; launch is not training completion, preference qualification or dynamic-alpha validation. Current execution facts remain in the shared ledger.
 
 ---
 
