@@ -474,6 +474,60 @@ def _conditional_turn_bins(trace,path,config):
                 path_rmse=None if errors[1] is None else float(errors[1]))
 
 
+def _conditional_last_receipt(learner,config,best):
+    """Verify last learner and reconstruct only its existing complete DEV panel."""
+    from .preference_best import digest,config_hash
+    from .path_command_selection import cases,conditional_grid,alpha_key,summarize_conditional,summarize_preference
+    from .path_command_evaluation import _conditional_parameter_digest
+    from .path_command_policy import architecture_identity,validate_actor_parameters
+    from .path_command_reward import reward_version
+    import pickle
+    boundary=Path(learner)/'last_completed.json'
+    result=dict(state='UNKNOWN',source_update=None,summary=None,reason='last completed learner receipt missing')
+    if not boundary.exists():return result
+    last=json.loads(boundary.read_text());update=last['update']
+    if digest(last['checkpoint'])!=last['checkpoint_sha256']:raise ValueError('last learner checkpoint SHA mismatch')
+    result.update(source_update=update,checkpoint=last['checkpoint'],checkpoint_sha256=last['checkpoint_sha256'],
+                  reason='last learner has no complete saved validation panel')
+    panel=Path(learner)/'validation'/f'update_{update:04d}'
+    if not (panel/'panel_identity.json').exists() or not (panel/'source.json').exists():return result
+    meta=json.loads((panel/'panel_identity.json').read_text())
+    if not meta.get('completed'):return result
+    source=json.loads((panel/'source.json').read_text())
+    if source.get('source_update')!=update or source.get('checkpoint_sha256')!=last['checkpoint_sha256']:
+        raise ValueError('last validation source identity mismatch')
+    if any(source.get(k)!=v for k,v in best['logical_identity'].items()):
+        raise ValueError('last validation learner identity mismatch')
+    for kind in ('checkpoint','actor'):
+        if digest(source[kind])!=source[kind+'_sha256']:raise ValueError('last validation '+kind+' SHA mismatch')
+    expected={alpha_key(a):a for a in conditional_grid(config)}
+    if meta.get('config_sha256')!=config_hash(config) or meta.get('alphas')!=expected:
+        raise ValueError('last validation panel identity mismatch')
+    architecture=architecture_identity(config)
+    if meta.get('architecture',architecture)!=architecture or meta.get('reward_version',reward_version(config))!=reward_version(config):
+        raise ValueError('last validation architecture/reward identity mismatch')
+    with Path(source['actor']).open('rb') as stream:params=pickle.load(stream)
+    validate_actor_parameters(params,config)
+    if meta.get('actor_parameters_sha256')!=_conditional_parameter_digest(params):
+        raise ValueError('last validation Actor identity mismatch')
+    if config.get('preference_selection_schema')=='path_preference_research_v1':
+        from .path_command_selection import resolve_preference_acceptance
+        sha=config_hash(resolve_preference_acceptance(config))
+        if meta.get('acceptance_sha256')!=sha or source.get('acceptance_sha256')!=sha:
+            raise ValueError('last validation acceptance identity mismatch')
+    panels={key:{name:dict(np.load(panel/key/f'{name}.npz')) for name,_,_ in cases(config)} for key in expected}
+    preference_mode=bool(config.get('preference_selection_schema'))
+    summary=summarize_preference(panels,config) if preference_mode else summarize_conditional(panels,config)
+    if preference_mode:
+        from .path_command_selection import preference_score_key
+        summary['score_tuple']=preference_score_key(summary,update)
+    metrics=panel/('preference_metrics.json' if preference_mode else 'task_metrics.json')
+    if metrics.exists() and tuple(json.loads(metrics.read_text())['score_tuple'])!=tuple(summary['score_tuple']):
+        raise ValueError('last validation saved metrics differ from reconstructed traces')
+    result.update(state='verified_saved_panel',summary=summary,actor=source['actor'],actor_sha256=source['actor_sha256'],reason=None)
+    return result
+
+
 def report_conditional_panel(root,config):
     """All-alpha evidence for one disk-selected shared model; zero simulator calls."""
     from .path_command_selection import (cases,conditional_grid,alpha_key,summarize_conditional,
@@ -481,9 +535,9 @@ def report_conditional_panel(root,config):
     from .preference_best import digest,config_hash,atomic_json
     root=Path(root);learner=root/'shared';final=learner/'final_best'
     strong=config.get('preference_selection_schema') is not None
-    from .path_command_selection import PREFERENCE_SELECTION_SCHEMA,summarize_preference,preference_score_key
+    from .path_command_selection import summarize_preference,preference_score_key
     best=json.loads((learner/('best_preference_model.json' if strong else 'best_conditional_model.json')).read_text())
-    if best.get('selection_schema')!=(PREFERENCE_SELECTION_SCHEMA if strong else CONDITIONAL_SELECTION_SCHEMA):raise ValueError('conditional best selection identity mismatch')
+    if best.get('selection_schema')!=(config['preference_selection_schema'] if strong else CONDITIONAL_SELECTION_SCHEMA):raise ValueError('conditional best selection identity mismatch')
     if json.loads((final/'source.json').read_text())!=best:raise ValueError('conditional final source differs from selected model')
     for kind in ('checkpoint','actor'):
         if digest(best[kind])!=best[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
@@ -491,6 +545,11 @@ def report_conditional_panel(root,config):
     meta=json.loads((final/'panel_identity.json').read_text())
     if not meta.get('completed') or meta.get('alphas')!=alphas or meta.get('config_sha256')!=config_hash(config):
         raise ValueError('conditional final panel identity mismatch')
+    if config.get('preference_selection_schema')=='path_preference_research_v1':
+        from .path_command_selection import resolve_preference_acceptance
+        acceptance_sha=config_hash(resolve_preference_acceptance(config))
+        if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
+            raise ValueError('conditional final preference acceptance identity mismatch')
     declared=cases(config)
     panels={key:{name:dict(np.load(final/key/f'{name}.npz')) for name,_,_ in declared} for key in alphas}
     summary=summarize_preference(panels,config) if strong else summarize_conditional(panels,config)
@@ -534,9 +593,13 @@ def report_conditional_panel(root,config):
         and all(v['legacy_endpoint_difference_gate'] for v in preference_cases.values())),
         role='legacy common-task and endpoint preference diagnostics; interior curves are descriptive, not a monotonicity certificate')
     if strong:
-        preference.update(qualified=summary['qualified_preference'],acceptance=summary['preference_cases'],
+        from .path_command_selection import resolve_preference_acceptance
+        acceptance=resolve_preference_acceptance(config)
+        preference.update(qualified=summary['qualified_preference'],cases=summary['preference_cases'],acceptance=acceptance,
+            acceptance_sha256=config_hash(acceptance),
             role='strong fixed-alpha preference; physical/domain and goal/hold required; roll/corridor diagnostics separate')
-    result=dict(schema='path_conditional_report_v1',model=best,alphas=alphas,summary=summary,
+    last=_conditional_last_receipt(learner,config,best)
+    result=dict(schema='path_conditional_report_v1',model=best,alphas=alphas,summary=summary,last_completed=last,
                 cases=report_cases,preference=preference,
                 reward_audit=dict(checked_policy_traces=len(declared)*len(alphas),max_abs_tick_error=maximum_error),
                 simulation_ticks=0,scope='fixed historical DEV; one shared Actor at every alpha; no generalization claim')
@@ -554,9 +617,24 @@ def report_conditional_panel(root,config):
            'Reward uses each alpha objective, with the matching rescored B0; cross-alpha returns are not physical rankings. '
            'The historical .302 rad/.40 m and task gates below are diagnostics, not reasons to shorten the authorized training budget.','']
     if strong:
-        lines += [f"Strong preference qualified: {summary['qualified_preference']}; legacy common task diagnostic: {summary['qualified_task']}.",
+        research=best['selection_schema']=='path_preference_research_v1'
+        label='Fixed-alpha research behavior' if research else 'Strong fixed-alpha preference'
+        lines += [f"{label} qualified: {summary['qualified_preference']}; legacy common task diagnostic: {summary['qualified_task']}.",
                   f"Architecture: {best['architecture']}; reward: {best['reward_version']}; selection: {best['selection_schema']}.",
-                  'High-speed endpoint targets and complete-turn differences/adjacent-alpha continuity determine preference acceptance. Roll/corridor are reported diagnostics.','']
+                  f"High-speed endpoint targets: path <= {acceptance['endpoint_path_rmse_m']:g} m, speed <= {acceptance['endpoint_speed_rmse_m_s']:g} m/s; complete-turn Dv >= {acceptance['min_speed_gap_m_s']:g} m/s and Dy >= {acceptance['min_path_gap_m']:g} m.",
+                  f"Final {acceptance['final_hold_s']:g} s hold: speed/path/heading <= {acceptance['final_speed_error_m_s']:g} m/s / {acceptance['final_path_error_m']:g} m / {acceptance['final_heading_error_rad']:g} rad.",
+                  f"Adjacent-alpha monotonicity role: {acceptance['adjacent_monotonicity_role']}; roll/corridor are reported diagnostics."]
+        if research:
+            preference.update(qualified_research_preference=summary['qualified_research_preference'],
+                legacy_strict_preference_qualified=summary['legacy_strict_preference_qualified'],
+                role='fixed-alpha research behavior; adjacent monotonicity and historical strict gates are diagnostics')
+            lines += [f"Legacy strict preference diagnostic: {summary['legacy_strict_preference_qualified']}. Adjacent reverse changes do not veto research acceptance; Dy >= 0.001 m establishes identifiable direction, not strong preference."]
+        lines.append('')
+    lines += [f"Selected update: {best['source_update']}; last completed update: {last['source_update'] if last['source_update'] is not None else 'UNKNOWN'}; last evidence: {last['state']}."]
+    if last['summary'] is not None:
+        lm=last['summary']
+        lines += [f"Last model common task: {lm['qualified_task']}; research preference: {lm.get('qualified_research_preference','UNKNOWN')}; legacy strict preference: {lm.get('legacy_strict_preference_qualified',lm.get('qualified_preference','UNKNOWN'))}."]
+    lines.append('')
     allfig,allaxes=plt.subplots(2,3,figsize=(16,10))
     def finish(fig,filename):
         fig.tight_layout(rect=(0,0,1,.955));fig.savefig(out/filename,dpi=110);plt.close(fig)

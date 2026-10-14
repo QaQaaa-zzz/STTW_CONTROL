@@ -2146,3 +2146,14 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 In isolated path-safety-budget-200 worktree, added explicit200 budget with50/100/150/200 checkpoints. Frozen50 design, reward, physical sampler and checkpoint identity preserved. Both200 plans require completed matching50-stage receipts before execution; partial50 and swapped reward arm rejected. Existing full learner restore used, including Adam momentum/learning rates, Critic, torch/NumPy/Python RNG, route counters and rejection count. Physical state is reset to original prepared bank, not frame-continuous.
 
 Verification: 38 tests passed6.09s across path_reward_budget, path_reward_fork, path_training, path_fork, path_cache, path_recovery. Both completed Coverage parent audits passed; live unfinished50-stage correctly rejected until completion. No extra GPU smoke or large physical panel. New200 plans preserve resolved config, source, seed, sampler, parent identity and selection identity; explicit authorized_budget overrides only the future validation schedule. Training effect remains unverified until actual evaluation.
+
+
+## 2026-10-14 统一偏好scratch实现验证
+
+任务书：[path_unified_scratch_taskbook](path_unified_scratch_taskbook.md)。隔离分支experiment/path-unified-scratch，源码基线b0ae710；首次初始化fresh upper Actor351/Critic352/FiLM/Adam/std/RNG，无上层父checkpoint。Actor隐藏层随机正交且alpha336列保留，输出层零；底层local300冻结。固定40/40/20 episode alpha与独立RNG，原reward_v2和所有物理/控制/终止合同保持。研究验收path_preference_research_v1显式冻结，末0.5s原20s终点100ticks保持；旧strong/.302/.40/1s/相邻单调指标并行保留，不进入研究排序。acceptance SHA贯穿checkpoint/panel/source/best/dynamic/resume；B0仅排除纯验收元数据，所有物理与source身份仍校验。selected与last保存轨迹CPU复算并列交付。
+
+预算：唯一工程8×16=128policy transitions/512lower ticks丢弃，不DEV/动态；正式fresh重新初始化200×512×128=13,107,200policy transitions/52,428,800lower ticks；DEV0/50/100/150/200五alpha×六场景最多600,000ticks，恢复前完整panel预留且计入父代消耗；条件动态24,000ticks全lineage。总上限53,053,312ticks，不追加。科学未合格和低暴露覆盖只诊断，不提前终止scratch；工程/nonfinite/identity/budget保护保留。
+
+无物理声明通过，six B0配置/source/路径完整检查通过并复用，0新基线ticks。CPU完整检查与GPU工程/正式启动收据随后追加；本节不宣称训练已启动或研究合格。最新研究事实和运行状态见共享PROJECT_STATE，原始运行拟runs/path_unified_scratch_200_20261014。
+
+CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初始化身份补充后受影响18项再次通过4.92s。独立最终审查无剩余P1/P2，git diff --check通过。旧Strong输出/课程/初始化/奖励保持回归；新Torch/Flax调制、scratch零输出/随机隐藏与alpha列、自身checkpoint恢复、固定分布、研究保持/排序、缓存/动态/报告覆盖。GPU工程与正式尚未启动。

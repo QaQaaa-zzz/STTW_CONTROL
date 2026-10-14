@@ -8,6 +8,7 @@ MODE='shared_conditional_v1'
 PLAN_SCHEMA='sttw_path_conditional_training_plan_v1'
 ALPHA_INDEX=336
 ALPHA_GRID=[0.,.25,.5,.75,1.]
+SCRATCH_SCHEMA='sttw_path_scratch_preference_training_plan_v1'
 STRONG_SCHEMA='sttw_path_strong_preference_training_plan_v1'
 CURRICULUM=[dict(updates_inclusive=[1,100],endpoint_probability_each=.5,uniform_probability=0.),dict(updates_inclusive=[101,200],endpoint_probability_each=.4,uniform_probability=.2)]
 
@@ -16,7 +17,7 @@ def is_strong(config):
 
 def curriculum_probabilities(config,absolute_update):
     a=config['alpha_conditioning']
-    if not is_strong(config):return j.asarray([a['endpoint_probability_each']]*2+[a['uniform_probability']],j.float32)
+    if a.get('sampling_mode')=='fixed_mixture' or not is_strong(config):return j.asarray([a['endpoint_probability_each']]*2+[a['uniform_probability']],j.float32)
     stages=a['curriculum']
     return j.where(j.asarray(absolute_update)<=stages[0]['updates_inclusive'][1],
         j.asarray([stages[0]['endpoint_probability_each']]*2+[stages[0]['uniform_probability']],j.float32),
@@ -46,9 +47,13 @@ def validate_conditional_plan(plan,config):
     from .path_command_policy import architecture_identity
     architecture_identity(config)
     strong=is_strong(config)
-    if plan.get('schema')!=(STRONG_SCHEMA if strong else PLAN_SCHEMA) or not is_conditional(plan):raise ValueError('conditional plan schema/mode mismatch')
+    scratch=plan.get('schema')==SCRATCH_SCHEMA
+    if plan.get('schema')!=(SCRATCH_SCHEMA if scratch else STRONG_SCHEMA if strong else PLAN_SCHEMA) or not is_conditional(plan):raise ValueError('conditional plan schema/mode mismatch')
     expected=dict(mode=MODE,alpha_index=336,endpoint_probability_each=.25,uniform_probability=.5,constant_per_episode=True,evaluation_alphas=ALPHA_GRID)
-    if strong:
+    if scratch:
+        expected.update(sampling_mode='fixed_mixture',endpoint_probability_each=.4,uniform_probability=.2)
+        if not strong:raise ValueError('scratch requires alpha_modulated_v1 architecture')
+    elif strong:
         expected.pop('endpoint_probability_each');expected.pop('uniform_probability');expected['curriculum']=CURRICULUM
     if {k:v for k,v in a.items() if k!='seed'}!=expected or config['network'].get('policy_type')!=MODE:raise ValueError('conditional alpha contract mismatch')
     seeds=[plan.get('seed'),a.get('seed')]
@@ -65,9 +70,18 @@ def validate_conditional_plan(plan,config):
         if plan['updates']!=1 or plan.get('engineering_dimensions')!=[8,16] or not plan.get('discard_engineering_update'):raise ValueError('engineering check must discard exactly 8x16 update')
     elif plan['updates']!=200:raise ValueError('conditional formal budget is 200 updates')
     init=plan.get('initialization',{})
-    if init.get('mode')!=('actor_only_fold_alpha1' if strong else 'actor_only_zero_alpha_column') or init.get('parent_alpha')!=(1 if strong else 0):raise ValueError('conditional actor-only initialization mismatch')
-    if strong and (config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_strong_preference_v1' or config.get('preference_selection_schema')!='path_strong_preference_v1'):raise ValueError('strong preference reward/selection contract mismatch')
-    if not init.get('checkpoint') or len(init.get('checkpoint_sha256',''))!=64:raise ValueError('conditional parent identity missing')
+    if scratch:
+        if init!={'mode':'scratch','parent_alpha':None,'checkpoint':None,'checkpoint_sha256':None}:raise ValueError('scratch initialization must have null upper parent identity')
+        if config['network'].get('initialization')!='fresh_scratch':raise ValueError('scratch network initialization mismatch')
+        if config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_preference_research_v1' or config.get('preference_selection_schema')!='path_preference_research_v1':raise ValueError('scratch reward/selection mismatch')
+        from .path_command_selection import resolve_preference_acceptance
+        resolve_preference_acceptance(config)
+        from .path_command_dynamic import dynamic_contract
+        dynamic=dynamic_contract(config)
+        if dynamic.get('enabled') is not True or dynamic.get('trigger')!='qualified_research_preference':raise ValueError('scratch explicit dynamic contract mismatch')
+    elif init.get('mode')!=('actor_only_fold_alpha1' if strong else 'actor_only_zero_alpha_column') or init.get('parent_alpha')!=(1 if strong else 0):raise ValueError('conditional actor-only initialization mismatch')
+    if strong and not scratch and (config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_strong_preference_v1' or config.get('preference_selection_schema')!='path_strong_preference_v1'):raise ValueError('strong preference reward/selection contract mismatch')
+    if not scratch and (not init.get('checkpoint') or len(init.get('checkpoint_sha256',''))!=64):raise ValueError('conditional parent identity missing')
     if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('conditional exposure coverage monitor mismatch')
 
 
@@ -98,6 +112,17 @@ def initialize_conditional_actor(algo,parent_checkpoint,expected_sha,*,expected_
         restored=sorted(parent_keys),folded_parent_alpha=1 if strong else None,zeroed_alpha_input_column=ALPHA_INDEX,critic='fresh',log_std='configured_fresh',optimizer='fresh',rng='fresh',update=0)
 
 
+def initialize_upper_policy(algo,plan,config,source):
+    """First-start dispatch only; self-checkpoint resumes use restore_checkpoint."""
+    init=plan['initialization']
+    if init['mode']=='scratch':
+        if algo.optimizer.state_dict()['state']:raise ValueError('scratch initialization requires fresh Adam')
+        return dict(mode='scratch',parent_checkpoint=None,parent_checkpoint_sha256=None,restored=[],
+            critic='fresh',optimizer='fresh',log_std='configured_fresh',rng='fresh',update=0)
+    return initialize_conditional_actor(algo,init['checkpoint'],init['checkpoint_sha256'],
+        expected_lower_sha=source['candidate']['actor_sha256'],config=config)
+
+
 def conditional_identity(plan,config,source):
     from .path_command_policy import SCHEMA
     identity=dict(schema=SCHEMA,policy_mode=MODE,alpha_conditioning_sha256=config_hash(config['alpha_conditioning']),
@@ -106,7 +131,13 @@ def conditional_identity(plan,config,source):
         parent_checkpoint_sha256=plan['initialization']['checkpoint_sha256'],engineering_check=bool(plan.get('engineering_check',False)))
     if is_strong(config):
         from .path_command_policy import architecture_identity
-        identity.update(architecture=architecture_identity(config),reward_version=config['path_reward']['reward_version'],curriculum_sha256=config_hash(config['alpha_conditioning']['curriculum']),preference_selection_schema=config['preference_selection_schema'])
+        identity.update(architecture=architecture_identity(config),reward_version=config['path_reward']['reward_version'],preference_selection_schema=config['preference_selection_schema'])
+    if 'curriculum' in config['alpha_conditioning']:identity['curriculum_sha256']=config_hash(config['alpha_conditioning']['curriculum'])
+    if plan['initialization']['mode']=='scratch':
+        from .path_command_selection import resolve_preference_acceptance
+        n,steps=execution_dimensions(plan,config)
+        identity.update(initialization_mode='scratch',acceptance_sha256=config_hash(resolve_preference_acceptance(config)),
+            declared_updates=plan['updates'],actual_batch_dimensions=[n,steps],declared_policy_transitions=n*steps*plan['updates'])
     return identity
 
 
@@ -135,6 +166,9 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
     meta=json.loads(meta_file.read_text()) if meta_file.exists() else None
     expected=dict(schema='path_conditional_panel_v1',mode=MODE,alphas=grid,
         config_sha256=config_hash(config),actor_parameters_sha256=_conditional_parameter_digest(params))
+    if config.get('preference_selection_schema')=='path_preference_research_v1':
+        from .path_command_selection import resolve_preference_acceptance
+        expected['acceptance_sha256']=config_hash(resolve_preference_acceptance(config))
     if meta is not None and any(meta.get(k)!=v for k,v in expected.items()):raise ValueError('resume conditional panel identity mismatch')
     source=json.loads(source_file.read_text()) if source_file.exists() else None
     if source is not None:
@@ -155,7 +189,7 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
             panels={key:{name:dict(np.load(boundary/key/(name+'.npz'))) for name,_,_ in cases(config)} for key in grid}
             summary=summarize_conditional(panels,config)
             persist_conditional_best(out,source['checkpoint'],source['actor'],summary,{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
-            if is_strong(config):
+            if config.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1'):
                 from .path_command_selection import summarize_preference,persist_preference_best
                 persist_preference_best(out,source['checkpoint'],source['actor'],summarize_preference(panels,config),{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
         else:evaluate(update,checkpoint)

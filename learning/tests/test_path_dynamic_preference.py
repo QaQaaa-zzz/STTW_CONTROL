@@ -182,3 +182,64 @@ def test_completed_dynamic_parent_is_verified_and_reused_with_zero_physics(tmp_p
     parent_target.write_bytes(parent_target.read_bytes()+b'tamper')
     with pytest.raises(ValueError,match='parent source SHA'):
         run_dynamic_preference_checks(tmp_path/'new2',cfg,best,evaluator=Evaluator(),resume_parent=tmp_path/'parent')
+
+
+def _research_config():
+    from pathlib import Path
+    import json
+    c=json.loads((Path(__file__).parents[1]/'configs/STTW_Path_Strong_Preference.json').read_text())
+    c['preference_selection_schema']='path_preference_research_v1'
+    c['preference_acceptance']=dict(spatial_bin_width_m=.5,endpoint_path_rmse_m=.15,
+        endpoint_speed_rmse_m_s=.10,min_speed_gap_m_s=.02,min_path_gap_m=.001,
+        final_hold_s=.5,final_speed_error_m_s=.15,final_path_error_m=.20,
+        final_heading_error_rad=.10,adjacent_monotonicity_role='diagnostic',
+        adjacent_speed_reverse_m_s=.01,adjacent_path_reverse_m=.01,
+        roll_limit_role='diagnostic',corridor_limit_role='diagnostic')
+    c['dynamic_preference_checks'].update(enabled=True,trigger='qualified_research_preference')
+    return c
+
+
+def test_research_dynamic_hold_uses_current_profile_and_preserves_strict_diagnostic():
+    from sttw_control.path_command_dynamic import _metrics
+    cfg=_research_config();n=4000;t=np.arange(n)*.005
+    request=np.where(t<.5,0.,1.);applied=np.empty(n);a=0.
+    for start in range(0,n,4):
+        a+=np.clip(request[start]-a,-.01,.01);applied[start:start+4]=a
+    trace=dict(time=t,actual_forward_speed=np.full(n,2.12),v_user=np.full(n,2.),
+        path_cross_track=np.full(n,.15),path_heading_error=np.full(n,.08),
+        physical_failure=np.zeros(n,bool),domain_exit=np.zeros(n,bool),
+        upper_alpha=applied,alpha_applied=applied,alpha_request=request,
+        goal_section_signed_distance=np.ones(n),path_progress=np.full(n,20.),
+        goal_progress=np.full(n,10.),peak_roll=np.zeros(n))
+    m=_metrics(trace,cfg,0)
+    assert m['qualified'] and m['final_hold'] and m['hold_lower_ticks']==100
+    assert m['hold_window_s']==.5 and not m['legacy_strict_final_hold']
+
+
+def test_explicit_disabled_dynamic_does_not_load_selected_model(tmp_path):
+    from sttw_control.path_command_dynamic import run_dynamic_preference_checks
+    cfg=_research_config();cfg['dynamic_preference_checks']['enabled']=False
+    receipt=run_dynamic_preference_checks(tmp_path,cfg,{'qualified_research_preference':True})
+    assert receipt['state']=='not_run' and receipt['reason']=='dynamic checks disabled'
+
+
+def test_research_trigger_does_not_fall_back_to_legacy_qualification(tmp_path):
+    from sttw_control.path_command_dynamic import run_dynamic_preference_checks
+    cfg=_research_config()
+    receipt=run_dynamic_preference_checks(tmp_path,cfg,{'qualified_preference':True,'qualified_research_preference':False})
+    assert receipt['state']=='not_run' and receipt['active_lower_ticks']==0
+
+
+def test_research_dynamic_rejects_mismatched_acceptance_before_physics(tmp_path):
+    import pytest
+    from sttw_control.path_command_dynamic import run_dynamic_preference_checks
+    from sttw_control.path_command_selection import resolve_preference_acceptance
+    from sttw_control.preference_best import config_hash
+    _,best=_qualified_fixture(tmp_path);cfg=_research_config()
+    best.update(qualified_research_preference=True,selection_schema='path_preference_research_v1',acceptance_sha256='stale')
+    best['panel_identity'].update(config_sha256=config_hash(cfg),acceptance_sha256=config_hash(resolve_preference_acceptance(cfg)))
+    class Evaluator:
+        config=cfg
+        def evaluate(self,*args,**kw):raise AssertionError('acceptance mismatch may not run physics')
+    with pytest.raises(ValueError,match='acceptance identity'):
+        run_dynamic_preference_checks(tmp_path/'new',cfg,best,evaluator=Evaluator())

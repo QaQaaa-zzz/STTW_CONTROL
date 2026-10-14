@@ -196,6 +196,9 @@ def evaluate_conditional(evaluator,params,alphas,output):
         alphas={alpha_key(a):a for a in values},config_sha256=config_hash(evaluator.config),
         actor_parameters_sha256=_conditional_parameter_digest(params),
         architecture=architecture_identity(evaluator.config),reward_version=reward_version(evaluator.config),completed=False)
+    if evaluator.config.get('preference_selection_schema')=='path_preference_research_v1':
+        from .path_command_selection import resolve_preference_acceptance
+        meta['acceptance_sha256']=config_hash(resolve_preference_acceptance(evaluator.config))
     atomic_json(out/'panel_identity.json',meta)
     result={alpha_key(a):evaluator.evaluate(params,a,out/alpha_key(a)) for a in values}
     summary=summarize_conditional(result,evaluator.config)
@@ -235,6 +238,13 @@ def reuse_conditional_best(root,best,config):
         raise ValueError('conditional architecture identity mismatch')
     if meta.get('reward_version',reward_version(config))!=reward_version(config):
         raise ValueError('conditional reward identity mismatch')
+    if config.get('preference_selection_schema')=='path_preference_research_v1':
+        from .path_command_selection import resolve_preference_acceptance
+        acceptance_sha=config_hash(resolve_preference_acceptance(config))
+        if meta.get('acceptance_sha256')!=acceptance_sha:
+            raise ValueError('conditional preference acceptance identity mismatch')
+        if best.get('selection_schema')=='path_preference_research_v1' and best.get('acceptance_sha256')!=acceptance_sha:
+            raise ValueError('selected preference acceptance identity mismatch')
     panels={key:{name:dict(np.load(source_dir/key/f'{name}.npz')) for name,_,_ in cases(config)} for key in expected}
     if best.get('selection_schema')==config.get('preference_selection_schema') and best.get('selection_schema') is not None:
         from .path_command_selection import summarize_preference,preference_score_key

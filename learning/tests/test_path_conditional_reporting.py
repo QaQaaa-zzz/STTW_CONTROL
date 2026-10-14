@@ -214,3 +214,55 @@ def test_report_rejects_modified_final_physics_even_when_reward_is_rescored(tmp_
     np.savez_compressed(trace,**d)
     with pytest.raises(ValueError,match='selected.*metrics|metrics.*selected'):
         reporting.report_conditional_panel(tmp_path,cfg)
+
+
+def test_research_panel_pins_acceptance_identity(tmp_path):
+    from test_path_dynamic_preference import _research_config
+    cfg=_research_config()
+    evaluator=SavedEvaluator();evaluator.config=cfg
+    params=make_path_actor(cfg).init(jax.random.PRNGKey(9),j.zeros(351))
+    evaluation.evaluate_conditional(evaluator,params,ALPHAS,tmp_path/'panel')
+    meta=json.loads((tmp_path/'panel/panel_identity.json').read_text())
+    from sttw_control.preference_best import config_hash
+    assert meta['acceptance_sha256']==config_hash(selection.resolve_preference_acceptance(cfg))
+
+
+def test_research_report_uses_research_pointer_and_documents_diagnostic_monotonicity(tmp_path,monkeypatch):
+    import test_path_strong_selection as strong
+    from test_path_dynamic_preference import _research_config
+    from sttw_control.preference_best import config_hash
+    from sttw_control.path_command_reporting import report_conditional_panel
+    cfg=_research_config();sha=config_hash(selection.resolve_preference_acceptance(cfg))
+    monkeypatch.setattr(strong,'config',lambda:cfg)
+    persist=selection.persist_preference_best
+    def research_candidate(root,checkpoint,actor,summary,identity):
+        identity=dict(identity,acceptance_sha256=sha)
+        source=Path(identity['validation_dir'])/'source.json'
+        metadata=json.loads(source.read_text());metadata['acceptance_sha256']=sha
+        source.write_text(json.dumps(metadata))
+        return persist(root,checkpoint,actor,summary,identity)
+    monkeypatch.setattr(selection,'persist_preference_best',research_candidate)
+    cfg,best,_=strong.strong_saved_run(tmp_path)
+    result=report_conditional_panel(tmp_path,cfg)
+    assert result['model']['selection_schema']=='path_preference_research_v1'
+    assert result['preference']['qualified_research_preference']
+    assert result['preference']['acceptance_sha256']==sha
+    text=(tmp_path/'report/INDEX.md').read_text()
+    assert 'Adjacent-alpha monotonicity role: diagnostic' in text
+    assert 'Legacy strict preference diagnostic:' in text
+    assert 'Final 0.5 s hold:' in text
+
+
+def test_last_receipt_is_unknown_when_missing_and_rebuilt_when_saved(tmp_path):
+    from sttw_control.path_command_reporting import _conditional_last_receipt
+    cfg=report_run(tmp_path);learner=tmp_path/'shared'
+    best=json.loads((learner/'best_conditional_model.json').read_text())
+    missing=_conditional_last_receipt(learner,cfg,best)
+    assert missing['state']=='UNKNOWN' and missing['source_update'] is None
+    (learner/'last_completed.json').write_text(json.dumps(dict(update=50,checkpoint=best['checkpoint'],checkpoint_sha256=best['checkpoint_sha256'])))
+    last=_conditional_last_receipt(learner,cfg,best)
+    assert last['state']=='verified_saved_panel' and last['source_update']==50
+    assert last['summary']['qualified_task']
+    data=json.loads((learner/'last_completed.json').read_text());data['checkpoint_sha256']='tampered'
+    (learner/'last_completed.json').write_text(json.dumps(data))
+    with pytest.raises(ValueError,match='last.*SHA'):_conditional_last_receipt(learner,cfg,best)

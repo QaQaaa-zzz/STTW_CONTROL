@@ -1029,3 +1029,14 @@ GPU工程补记：5ba2cd7单次8×16完成128策略转移/512底层tick，0工�
 统一α确有弱响应且随训练增强：完整原弯段.5m等权MSE下，u50高左/右Dv=.003210/.002071m/s，Dy=.001527/−.000083m；u200 Dv=.012117/.011600、Dy=.011159/.000234。u200左取舍方向逐α清楚，右路径仍几乎不变；未达到旧.03/.02偏好差值。α首层列从0增长到.12261，不能称alpha没接入，但同状态敏感性未验证。χ>0采样9.2%–11.4%/强需求8.4%–10.5%，共同段占大多数，“差异梯度弱+热启动共同减速偏置”为假设。保留u50共同对照和u200后续研究候选，先做固定α响应/左右分组诊断及有界强化，再单独声明动态阶段；本次不新增训练或重评物理。
 
 只读复算150条轨迹、600k真实lower样本及各checkpoint/Actor/source身份，NumPy十项重建最大差3.1226e-8；正式TensorBoard6013真实reward200点HTTP实查。总墙钟5.817h，DEV3.531h/约61%，后续可单独核验跨α批量评测效率。单种子固定DEV，不宣称泛化、动态α或超限恢复。新增u50/u200 XY局部、u200全六场景XY/每步/累计reward及五候选曲线，原NPZ未重复复制。[结果分析与复算](evidence/path_unified_alpha_20261014/INDEX.md)。
+
+
+## 2026-10-14 统一偏好scratch研究尝试
+
+任务书：[path_unified_scratch_taskbook](path_unified_scratch_taskbook.md)。隔离分支experiment/path-unified-scratch，源码基线b0ae710；首次初始化fresh upper Actor351/Critic352/FiLM/Adam/std/RNG，无上层父checkpoint。Actor隐藏层随机正交且alpha336列保留，输出层零；底层local300冻结。固定40/40/20 episode alpha与独立RNG，原reward_v2和所有物理/控制/终止合同保持。研究验收path_preference_research_v1显式冻结，末0.5s原20s终点100ticks保持；旧strong/.302/.40/1s/相邻单调指标并行保留，不进入研究排序。acceptance SHA贯穿checkpoint/panel/source/best/dynamic/resume；B0仅排除纯验收元数据，所有物理与source身份仍校验。selected与last保存轨迹CPU复算并列交付。
+
+预算：唯一工程8×16=128policy transitions/512lower ticks丢弃，不DEV/动态；正式fresh重新初始化200×512×128=13,107,200policy transitions/52,428,800lower ticks；DEV0/50/100/150/200五alpha×六场景最多600,000ticks，恢复前完整panel预留且计入父代消耗；条件动态24,000ticks全lineage。总上限53,053,312ticks，不追加。科学未合格和低暴露覆盖只诊断，不提前终止scratch；工程/nonfinite/identity/budget保护保留。
+
+无物理声明通过，six B0配置/source/路径完整检查通过并复用，0新基线ticks。CPU完整检查与GPU工程/正式启动收据随后追加；本节不宣称训练已启动或研究合格。最新研究事实和运行状态见共享PROJECT_STATE，原始运行拟runs/path_unified_scratch_200_20261014。
+
+CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初始化身份补充后受影响18项再次通过4.92s。独立最终审查无剩余P1/P2，git diff --check通过。旧Strong输出/课程/初始化/奖励保持回归；新Torch/Flax调制、scratch零输出/随机隐藏与alpha列、自身checkpoint恢复、固定分布、研究保持/排序、缓存/动态/报告覆盖。GPU工程与正式尚未启动。

@@ -9,7 +9,12 @@ from .preference_best import atomic_json,config_hash,digest
 
 
 def dynamic_contract(config):
-    c=config['dynamic_preference_checks']
+    c=dict(config['dynamic_preference_checks'])
+    c.setdefault('enabled',True);c.setdefault('trigger','qualified_preference')
+    if not isinstance(c['enabled'],bool) or c['trigger'] not in ('qualified_preference','qualified_research_preference'):
+        raise ValueError('invalid dynamic enabled/trigger contract')
+    if c['trigger']=='qualified_research_preference' and config.get('preference_selection_schema')!='path_preference_research_v1':
+        raise ValueError('research dynamic trigger requires research selection schema')
     expected={'rate_per_s':.5,'first_change_s':.5,'return_s':6.,'max_lower_ticks':24000}
     if any(c.get(k)!=v for k,v in expected.items()):raise ValueError('dynamic alpha contract mismatch')
     if config['timing']['upper_dt_s']!=.02 or config['timing']['lower_dt_s']!=.005:
@@ -31,7 +36,7 @@ def apply_dynamic_alpha(state,mode,config):
 
 def _metrics(trace,config,mode=None):
     dt=config['timing']['lower_dt_s'];h=config['training_future_phase_C']['episode_s']
-    time=np.asarray(trace['time'])+dt;tail=time>h-1.+1e-5
+    time=np.asarray(trace['time'])+dt
     ev=np.asarray(trace['actual_forward_speed'])-trace['v_user']
     ey=np.asarray(trace['path_cross_track']);eh=np.asarray(trace['path_heading_error'])
     physical=bool(np.any(trace['physical_failure']));domain=bool(np.any(trace['domain_exit']))
@@ -59,15 +64,15 @@ def _metrics(trace,config,mode=None):
     terminal=np.asarray(trace['physical_failure'])|np.asarray(trace['domain_exit'])
     if np.any(terminal[:-1]):raise ValueError('dynamic trace beyond failure endpoint')
     goal=bool(np.any((trace['goal_section_signed_distance']>=0)&(trace['path_progress']>=trace['goal_progress'])))
-    hold=bool(tail.sum()==round(1./dt) and not(physical or domain) and
-        np.all(abs(ev[tail])<=.10) and np.all(abs(ey[tail])<=.10) and np.all(abs(eh[tail])<=.05))
+    from .path_command_selection import resolve_preference_acceptance,preference_hold_metrics
+    acceptance=resolve_preference_acceptance(config)
+    hold=preference_hold_metrics(trace,config,acceptance)
+    legacy=resolve_preference_acceptance(dict(config,preference_selection_schema='path_strong_preference_v1'))
+    strict=preference_hold_metrics(trace,config,legacy)
     return dict(observed_lower_ticks=n,physical_failure=physical,tracking_domain_failure=domain,
-        goal=goal,final_hold=hold,hold_lower_ticks=int(tail.sum()),hold_window_s=1.,
-        final_hold_max_speed_error_m_s=float(np.max(abs(ev[tail]))) if tail.any() else None,
-        final_hold_max_path_error_m=float(np.max(abs(ey[tail]))) if tail.any() else None,
-        final_hold_max_heading_error_rad=float(np.max(abs(eh[tail]))) if tail.any() else None,
+        goal=goal,**hold,legacy_strict_final_hold=strict['final_hold'],legacy_strict_hold_metrics=strict,
         final_time_s=float(time[-1]),peak_roll_rad=float(np.max(trace['peak_roll'])),
-        qualified=goal and hold,alpha_final=float(trace['alpha_applied'][-1]))
+        qualified=goal and hold['final_hold'],alpha_final=float(trace['alpha_applied'][-1]))
 
 
 def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=None):
@@ -81,9 +86,20 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
     out.mkdir(parents=True)
     receipt=dict(schema='path_dynamic_preference_checks_v1',state='not_run',active_lower_ticks=0,
         max_lower_ticks=24000,reason='fixed-alpha preference not qualified')
-    if best.get('qualified_preference') is not True:
+    controls=cfg.get('dynamic_preference_checks',{})
+    trigger=controls.get('trigger','qualified_preference')
+    if controls.get('enabled',True) is False:
+        receipt['reason']='dynamic checks disabled'
+        atomic_json(out/'receipt.json',receipt);report_dynamic_preference(root,cfg,receipt);return receipt
+    if controls and (not isinstance(controls.get('enabled',True),bool) or trigger not in ('qualified_preference','qualified_research_preference')):
+        raise ValueError('invalid dynamic enabled/trigger contract')
+    if best.get(trigger) is not True:
         atomic_json(out/'receipt.json',receipt);report_dynamic_preference(root,cfg,receipt);return receipt
     dynamic_contract(cfg)
+    from .path_command_selection import resolve_preference_acceptance
+    acceptance=resolve_preference_acceptance(cfg)
+    acceptance_sha=config_hash(acceptance)
+    receipt.update(trigger=trigger,selection_schema=cfg.get('preference_selection_schema'),acceptance=acceptance,acceptance_sha256=acceptance_sha)
     if cfg['training_future_phase_C']['episode_s']!=20.:raise ValueError('dynamic checks require frozen 20-second horizon')
     if evaluator is None or config_hash(evaluator.config)!=config_hash(cfg):
         raise ValueError('matching existing batched evaluator required')
@@ -91,6 +107,11 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
     if (meta.get('config_sha256')!=config_hash(cfg) or meta.get('architecture')!=architecture_identity(cfg)
             or meta.get('reward_version')!=reward_version(cfg) or not meta.get('completed')):
         raise ValueError('selected dynamic model identity mismatch')
+    if cfg.get('preference_selection_schema')=='path_preference_research_v1':
+        if best.get('selection_schema')!='path_preference_research_v1':
+            raise ValueError('selected dynamic preference selection identity mismatch')
+        if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
+            raise ValueError('selected dynamic preference acceptance identity mismatch')
     for key in ('actor','checkpoint'):
         if digest(best[key])!=best[key+'_sha256']:raise ValueError('selected dynamic '+key+' SHA mismatch')
     with Path(best['actor']).open('rb') as stream:params=pickle.load(stream)

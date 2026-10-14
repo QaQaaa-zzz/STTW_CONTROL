@@ -301,11 +301,72 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
         **hashes,validation_dir=str(validation),panel_identity=meta,logical_identity=logical_identity,alphas=summary['alphas'],
         score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary.get('qualified',summary['qualified_task']),
         qualified_preference=summary.get('qualified_preference'),metrics=summary)
+    if _selection_schema==RESEARCH_PREFERENCE_SELECTION_SCHEMA:
+        record.update(acceptance=summary['acceptance'],acceptance_sha256=summary['acceptance_sha256'],
+            qualified_research_preference=summary['qualified_research_preference'],
+            legacy_strict_preference_qualified=summary['legacy_strict_preference_qualified'])
     atomic_json(generation/'selection.json',record);atomic_json(pointer,record)
     return record
 
 
 PREFERENCE_SELECTION_SCHEMA='path_strong_preference_v1'
+RESEARCH_PREFERENCE_SELECTION_SCHEMA='path_preference_research_v1'
+
+
+def resolve_preference_acceptance(config):
+    """Resolve only acceptance metadata; never mutate rewards or baseline gates."""
+    schema=config.get('preference_selection_schema')
+    legacy=dict(spatial_bin_width_m=.5,endpoint_path_rmse_m=.10,
+        endpoint_speed_rmse_m_s=.05,min_speed_gap_m_s=.03,min_path_gap_m=.02,
+        final_hold_s=1.,final_speed_error_m_s=.10,final_path_error_m=.10,
+        final_heading_error_rad=.05,adjacent_monotonicity_role='hard',
+        adjacent_speed_reverse_m_s=.01,adjacent_path_reverse_m=.01,
+        roll_limit_role='diagnostic',corridor_limit_role='diagnostic')
+    if schema==PREFERENCE_SELECTION_SCHEMA:return legacy
+    if schema!=RESEARCH_PREFERENCE_SELECTION_SCHEMA:raise ValueError('unknown preference selection schema')
+    supplied=config.get('preference_acceptance')
+    if not isinstance(supplied,dict) or set(supplied)!=set(legacy):
+        raise ValueError('unknown or missing preference acceptance fields')
+    acceptance=dict(supplied)
+    for key,value in acceptance.items():
+        if key.endswith('_role'):
+            if value!='diagnostic':raise ValueError('research acceptance roles must be diagnostic')
+        else:
+            if isinstance(value,bool) or not isinstance(value,(int,float)) or not np.isfinite(value) or value<=0:
+                raise ValueError('preference acceptance numbers must be finite and positive')
+    if acceptance['spatial_bin_width_m']!=.5:raise ValueError('full original turn requires 0.5m bins')
+    dt=float(config['timing']['lower_dt_s']);horizon=float(config['training_future_phase_C']['episode_s'])
+    if not np.isfinite(dt) or dt<=0 or not np.isfinite(horizon) or horizon<=0:
+        raise ValueError('invalid preference hold timing')
+    ticks=acceptance['final_hold_s']/dt
+    if not np.isclose(ticks,round(ticks),rtol=0,atol=1e-8) or acceptance['final_hold_s']>horizon:
+        raise ValueError('preference hold must contain integer lower ticks within horizon')
+    return acceptance
+
+
+def preference_hold_metrics(trace,config,acceptance):
+    """Check actual post-step lower ticks at the original episode endpoint."""
+    dt=float(config['timing']['lower_dt_s']);horizon=float(config['training_future_phase_C']['episode_s'])
+    end_tick=round(horizon/dt);hold_ticks=round(acceptance['final_hold_s']/dt)
+    times=np.asarray(trace['time'],float)
+    finite_time=np.isfinite(times).all()
+    tick_end=np.rint(np.where(np.isfinite(times),times,0.)/dt).astype(np.int64)+1
+    mask=(tick_end>end_tick-hold_ticks)&(tick_end<=end_tick)
+    complete=finite_time and np.allclose(times,(tick_end-1)*dt,rtol=0,atol=dt*.05) and np.array_equal(
+        tick_end[mask],np.arange(end_tick-hold_ticks+1,end_tick+1))
+    failed=any(np.any(trace[k]) for k in ('physical_failure','domain_exit'))
+    fields=(('final_hold_max_speed_error_m_s',np.asarray(trace['actual_forward_speed'],float)-np.asarray(trace['v_user'],float),'final_speed_error_m_s'),
+            ('final_hold_max_path_error_m',np.asarray(trace['path_cross_track'],float),'final_path_error_m'),
+            ('final_hold_max_heading_error_rad',np.asarray(trace['path_heading_error'],float),'final_heading_error_rad'))
+    result=dict(final_hold=False,hold_lower_ticks=int(mask.sum()),hold_window_s=float(acceptance['final_hold_s']))
+    within=True
+    for name,values,limit in fields:
+        valid=np.isfinite(values).all()
+        maximum=float(np.max(np.abs(values[mask]))) if mask.any() and valid else None
+        result[name]=maximum
+        within=within and maximum is not None and maximum<=acceptance[limit]
+    result['final_hold']=bool(complete and not failed and within)
+    return result
 
 
 def _full_turn_metrics(trace,config):
@@ -328,7 +389,7 @@ def _full_turn_metrics(trace,config):
         path_rmse_m=None if errors[1] is None else float(errors[1]))
 
 
-def summarize_preference(panels,config):
+def _summarize_strong_preference(panels,config):
     """Strong preference selection; roll/corridor remain separate diagnostics."""
     if config.get('preference_selection_schema')!=PREFERENCE_SELECTION_SCHEMA:
         raise ValueError('strong preference selection schema mismatch')
@@ -383,9 +444,70 @@ def summarize_preference(panels,config):
     return result
 
 
+def summarize_preference(panels,config):
+    acceptance=resolve_preference_acceptance(config)
+    if config['preference_selection_schema']==PREFERENCE_SELECTION_SCHEMA:
+        return _summarize_strong_preference(panels,config)
+    from .preference_best import config_hash
+    legacy=_summarize_strong_preference(panels,dict(config,preference_selection_schema=PREFERENCE_SELECTION_SCHEMA))
+    result=summarize_conditional(panels,config)
+    result.update(selection_schema=RESEARCH_PREFERENCE_SELECTION_SCHEMA,
+        qualification_role='fixed_alpha_research_behavior',acceptance=acceptance,
+        acceptance_sha256=config_hash(acceptance),preference_cases={},research_goal_hold_failures=0,
+        highspeed_endpoint_failures=0,preference_direction_failures=0,incomplete_turn_conditions=0,
+        legacy_strict_preference_qualified=legacy['qualified_preference'],
+        legacy_strict_preference_metrics=legacy)
+    # All 30 ordinary and conflict episodes retain goal and true failure requirements.
+    for key,summary in result['per_alpha'].items():
+        for name,m in summary['cases'].items():
+            research=preference_hold_metrics(panels[key][name],config,acceptance)
+            m.update(research_hold=research,legacy_final_hold=m['final_hold'],acceptance=acceptance)
+            result['research_goal_hold_failures']+=int(not(m['goal'] and research['final_hold']))
+    worst=0.;deficit=0.;missing=False;endpoint_missing=False
+    for name,old_case in legacy['preference_cases'].items():
+        metrics=old_case['per_alpha']
+        incomplete=sum(not m['complete'] for m in metrics.values())
+        result['incomplete_turn_conditions']+=incomplete
+        missing=missing or bool(incomplete)
+        zero=metrics['alpha_0'];one=metrics['alpha_1']
+        endpoints=(zero['path_rmse_m'],one['speed_rmse_m_s'])
+        limits=(acceptance['endpoint_path_rmse_m'],acceptance['endpoint_speed_rmse_m_s'])
+        endpoint_fail=[v is None or v>limit for v,limit in zip(endpoints,limits)]
+        result['highspeed_endpoint_failures']+=sum(endpoint_fail)
+        for value,limit in zip(endpoints,limits):
+            if value is None:endpoint_missing=True
+            else:worst=max(worst,value/limit)
+        dv=old_case['D_v_m_s'];dy=old_case['D_y_m']
+        gaps=(acceptance['min_speed_gap_m_s'],acceptance['min_path_gap_m'])
+        gap_fail=[v is None or v<limit for v,limit in zip((dv,dy),gaps)]
+        result['preference_direction_failures']+=sum(gap_fail)
+        deficit+=sum(1. if v is None else max(0.,(limit-v)/limit) for v,limit in zip((dv,dy),gaps))
+        result['preference_cases'][name]=dict(old_case,endpoint_main_failures=endpoint_fail,
+            gap_failures=gap_fail,acceptance=acceptance,
+            research_hold={key:result['per_alpha'][key]['cases'][name]['research_hold'] for key in metrics},
+            legacy_final_hold={key:result['per_alpha'][key]['cases'][name]['final_hold'] for key in metrics},
+            legacy_strong_gap_qualified=dv is not None and dy is not None and dv>=.03 and dy>=.02)
+    result.update(worst_endpoint_normalized_error=float(np.finfo(np.float32).max) if endpoint_missing else worst,
+        normalized_preference_deficit=deficit,missing_turn_bins=missing,
+        missing_error_semantics=legacy['missing_error_semantics'])
+    result['qualified_research_preference']=not any(result[k] for k in (
+        'physical_failures','tracking_domain_failures','incomplete_turn_conditions',
+        'research_goal_hold_failures','highspeed_endpoint_failures','preference_direction_failures'))
+    result['qualified_preference']=result['qualified_research_preference']
+    result['qualified']=result['qualified_research_preference']
+    result['score_tuple']=preference_score_key(result)
+    return result
+
+
 def preference_score_key(summary,update=0):
-    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema')!=PREFERENCE_SELECTION_SCHEMA
+    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema') not in (PREFERENCE_SELECTION_SCHEMA,RESEARCH_PREFERENCE_SELECTION_SCHEMA)
             or not summary.get('all_declared_traces_complete')):raise ValueError('invalid strong preference identity')
+    if summary['selection_schema']==RESEARCH_PREFERENCE_SELECTION_SCHEMA:
+        key=(summary['physical_failures']+summary['tracking_domain_failures'],summary['incomplete_turn_conditions'],
+            summary['research_goal_hold_failures'],summary['highspeed_endpoint_failures'],summary['preference_direction_failures'],
+            summary['worst_endpoint_normalized_error'],summary['normalized_preference_deficit'],int(update))
+        if not all(np.isfinite(v) for v in key):raise ValueError('nonfinite research preference selection')
+        return key
     key=(summary['physical_failures']+summary['tracking_domain_failures'],summary['goal_hold_failures'],
         summary['highspeed_endpoint_failures'],summary['preference_continuity_failures'],
         summary['worst_endpoint_normalized_error'],summary['normalized_preference_deficit'],int(update))
@@ -406,11 +528,20 @@ def persist_preference_best(root,checkpoint,actor,summary,identity):
     meta=json.loads((folder/'panel_identity.json').read_text())
     for key in ('architecture','reward_version','config_sha256'):
         if meta.get(key)!=identity.get(key):raise ValueError('strong preference panel identity mismatch '+key)
+    research=summary.get('selection_schema')==RESEARCH_PREFERENCE_SELECTION_SCHEMA
+    if research:
+        acceptance=summary.get('acceptance')
+        sha=config_hash(acceptance)
+        if summary.get('acceptance_sha256')!=sha or identity.get('acceptance_sha256')!=sha or meta.get('acceptance_sha256')!=sha:
+            raise ValueError('research preference acceptance identity mismatch')
+        # Source identity pins the SHA; the full acceptance is retained in the pointer.
+        source=json.loads((folder/'source.json').read_text())
+        if source.get('acceptance_sha256')!=sha:raise ValueError('research preference source acceptance identity mismatch')
     with Path(actor).open('rb') as stream:params=pickle.load(stream)
     validate_actor_parameters(params,{'network':{'architecture':identity['architecture']}})
     if _conditional_parameter_digest(params)!=meta.get('actor_parameters_sha256'):
         raise ValueError('strong preference full Actor parameters identity mismatch')
     summary=dict(summary,score_tuple=preference_score_key(summary,update))
     return persist_conditional_best(root,checkpoint,actor,summary,identity,
-        _selection_schema=PREFERENCE_SELECTION_SCHEMA,_pointer='best_preference_model.json',
+        _selection_schema=summary['selection_schema'],_pointer='best_preference_model.json',
         _score=lambda m:preference_score_key(m,update),_generation='preference_best_generations')

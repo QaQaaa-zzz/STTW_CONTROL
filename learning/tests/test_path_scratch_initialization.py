@@ -1,0 +1,76 @@
+"""Scratch initialization, fixed alpha stream and self-checkpoint restoration."""
+import copy
+from pathlib import Path
+import numpy as np
+import pytest
+import torch
+import jax
+import jax.numpy as j
+from tensordict import TensorDict
+from sttw_control import path_command_training as t, path_command_conditioning as c
+ROOT=Path(__file__).parents[2]
+def scratch():return t.load_plan(ROOT/'learning/configs/path_unified_scratch_run.json')
+def test_scratch_preparation_without_upper_parent(tmp_path):
+ p,cfg,source=scratch()
+ assert all(p['initialization'][k] is None for k in ('parent_alpha','checkpoint','checkpoint_sha256'))
+ for key,value in [('parent_alpha',1),('checkpoint','missing.pt'),('checkpoint_sha256','a'*64)]:
+  bad=copy.deepcopy(p);bad['initialization'][key]=value
+  with pytest.raises(ValueError):c.validate_conditional_plan(bad,cfg)
+ report=t.prepare(ROOT/'learning/configs/path_unified_scratch_run.json',tmp_path/'declaration')
+ assert report['training_policy_transitions_total']==13_107_200 and report['maximum_validation_lower_ticks']==600_000
+ ident=c.conditional_identity(p,cfg,source)
+ assert ident['initialization_mode']=='scratch' and ident['parent_checkpoint_sha256'] is None
+ assert 'curriculum_sha256' not in ident and ident['acceptance_sha256']
+ bad=copy.deepcopy(cfg);bad['alpha_conditioning']['sampling_mode']='unknown'
+ with pytest.raises(ValueError):c.validate_conditional_plan(p,bad)
+
+def test_fresh_seed_zero_output_random_hidden_and_self_resume(tmp_path,monkeypatch):
+ p,cfg,source=scratch();obs=TensorDict({'policy':torch.randn(8,351),'critic':torch.randn(8,352)},batch_size=[8])
+ def make():
+  torch.manual_seed(p['seed']);return t.make_algorithm(obs,2,cfg,'cpu')
+ a=make();b=make();before=copy.deepcopy(a.policy.state_dict())
+ monkeypatch.setattr(c,'initialize_conditional_actor',lambda *a,**kw:pytest.fail('scratch must never import parent'))
+ receipt=c.initialize_upper_policy(a,p,cfg,source)
+ assert receipt['mode']=='scratch' and receipt['restored']==[] and receipt['parent_checkpoint'] is None
+ assert not a.optimizer.state_dict()['state']
+ for k,v in before.items():torch.testing.assert_close(v,b.policy.state_dict()[k],rtol=0,atol=0)
+ first=next(m for m in a.policy.actor.modules() if isinstance(m,torch.nn.Linear))
+ assert torch.count_nonzero(first.weight[:,336]) and torch.count_nonzero(first.weight)
+ assert torch.count_nonzero(a.policy.act_inference(obs))==0
+ np.testing.assert_allclose(a.policy.log_std.detach().exp().numpy(),[.25,.10])
+ with torch.no_grad():
+  for _ in range(2):
+   a.act(obs);a.process_env_step(obs,-torch.arange(8,dtype=torch.float32)/10,torch.zeros(8,dtype=torch.bool),{})
+  a.compute_returns(obs)
+ a.update()
+ # Nonzero FiLM must survive self resume, regardless of a first zero-output gradient.
+ with torch.no_grad():a.policy.actor.gain_2.add_(.02)
+ identity=c.conditional_identity(p,cfg,source)
+ file=t.save_checkpoint(tmp_path,a,1,identity,route_counters=np.arange(8),rejections=2)
+ saved=t.restore_checkpoint(file,b,identity)
+ assert saved['update']==1 and saved['consecutive_rejections']==2 and a.optimizer.state_dict()['state']
+ for k,v in a.policy.state_dict().items():torch.testing.assert_close(v,b.policy.state_dict()[k],rtol=0,atol=0)
+ assert saved['route_counters'].tolist()==list(range(8))
+
+def test_fixed_mixture_update_invariance_and_independent_routes():
+ from types import SimpleNamespace
+ p,cfg,_=scratch();ids=j.arange(10000,dtype=j.int32);eps=j.zeros_like(ids)
+ sample=jax.jit(jax.vmap(lambda eid,ep,u:c.sample_episode_alpha(911402,eid,ep,cfg,u),in_axes=(0,0,None)))
+ arrays=[np.asarray(sample(ids,eps,j.int32(u))) for u in (1,100,101,200)]
+ for a in arrays[1:]:np.testing.assert_array_equal(a,arrays[0])
+ a=arrays[0];assert .38<np.mean(a==0)<.42 and .38<np.mean(a==1)<.42 and .18<np.mean((a>0)&(a<1))<.22
+ env=SimpleNamespace(physics=SimpleNamespace(helpers=SimpleNamespace(pose=lambda _:j.zeros(3))),reset=lambda s,p,v,a:a)
+ mixed=t.PathBatch(env,SimpleNamespace(data=None),cfg,p['seed'],None);fixed=t.PathBatch(env,SimpleNamespace(data=None),cfg,p['seed'],0.)
+ for eid in (0,102,306):
+  x=mixed.reset(j.int32(eid),j.int32(7));y=fixed.reset(j.int32(eid),j.int32(7))
+  for a,b in zip(jax.tree.leaves(x.route),jax.tree.leaves(y.route)):np.testing.assert_array_equal(a,b)
+  flags=dict(done=j.bool_(False),engineering_fault=j.bool_(False))
+  kept=t.reset_finished_episode(x,flags,lambda eid,ep:mixed.reset(eid,ep,200))
+  assert float(kept.state)==float(x.state)
+
+
+def test_dev_reserve_counts_parent_partial_consumption_before_physics():
+ p,cfg,_=scratch()
+ assert t.check_conditional_dev_budget(dict(validation_control_ticks_total=120000,parent_consumed_validation_control_ticks=360000),cfg,p['alphas'])==120000
+ with pytest.raises(RuntimeError,match='lineage budget'):
+  t.check_conditional_dev_budget(dict(validation_control_ticks_total=120000,parent_consumed_validation_control_ticks=360001),cfg,p['alphas'])

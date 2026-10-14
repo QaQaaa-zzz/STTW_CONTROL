@@ -155,7 +155,7 @@ def load_plan(path):
     version=plan.get('sampler_version','legacy')
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
     if conditional:
-        plan['initialization']['checkpoint']=str((path.parent/plan['initialization']['checkpoint']).resolve())
+        if plan['initialization']['mode']!='scratch':plan['initialization']['checkpoint']=str((path.parent/plan['initialization']['checkpoint']).resolve())
         plan['baseline_parent']=str((path.parent/plan['baseline_parent']).resolve())
     elif reward_fork:
         from .path_command_fork import reward_validation_schedule
@@ -204,12 +204,18 @@ def prepare(path,output,check_interface=False):
         report.update(conditional_hard_max_updates_per_endpoint=plan['updates'],parent_identities_frozen=bool(plan['initialization'].get('expected_parents')),formal_stage='not_run',maximum_validation_lower_ticks=len(validation_updates)*48000,baseline_physics=0,final_best_physics=0)
     if is_conditional(plan):
         n,steps=execution_dimensions(plan,cfg);engineering=plan.get('engineering_check',False)
-        if digest(plan['initialization']['checkpoint'])!=plan['initialization']['checkpoint_sha256']:raise ValueError('parent checkpoint SHA mismatch')
+        if plan['initialization']['mode']!='scratch' and digest(plan['initialization']['checkpoint'])!=plan['initialization']['checkpoint_sha256']:raise ValueError('parent checkpoint SHA mismatch')
         report.update(policy_mode=plan['policy_mode'],training_policy_transitions_total=n*steps*updates,
             training_policy_transitions_per_endpoint=None,training_lower_ticks_total=4*n*steps*updates,
             validation_updates=[] if engineering else validation_updates,maximum_validation_lower_ticks=0 if engineering else len(validation_updates)*len(plan['alphas'])*6*4000,
             engineering_check=engineering,discard_engineering_update=engineering,actual_batch_dimensions=[n,steps],learner_count=1,
             baseline_physics=0,final_best_physics=0,conditional_hard_max_updates_per_endpoint=None)
+    if is_conditional(plan) and plan['initialization']['mode']=='scratch':
+        from .path_command_conditioning import conditional_identity
+        report.update(initialization_mode='scratch',upper_parent_checkpoint=None,
+            maximum_dynamic_lower_ticks=0 if engineering else 24000,
+            complete_experiment_lower_tick_budget=53053312,
+            upper_identity=conditional_identity(plan,cfg,source))
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],None if is_conditional(plan) else 0)
         ep=batch.reset(j.int32(0),j.int32(0));env.set_log_template(ep.state,ep.route.path,ep.route.speed)
@@ -344,6 +350,15 @@ def rescore_saved_candidates(parent,out,alpha,cfg,identity):
         atomic_json(Path(out)/'rescored_parent'/f'update_{update:04d}.json',summary)
         persist_task_best(out,checkpoint,actor,summary,dict(identity,source_update=update))
 
+def check_conditional_dev_budget(status,config,alphas):
+    """Reserve a full fixed panel before replaying any resumed DEV physics."""
+    reserve=len(alphas)*6*round(config['training_future_phase_C']['episode_s']/config['timing']['lower_dt_s'])
+    consumed=status['validation_control_ticks_total']+status.get('parent_consumed_validation_control_ticks',0)
+    if consumed+reserve>600000:
+        raise RuntimeError('insufficient remaining conditional DEV lineage budget; partial replay cannot expand declaration')
+    return reserve
+
+
 class CoveragePause(RuntimeError):
     pass
 
@@ -383,7 +398,7 @@ def train(path,output,*,execute=False,resume=None):
     candidate=source['candidate'];protected_paths=[Path(candidate[k]) for k in ['actor','checkpoint','config']]
     protected_paths.extend([Path(candidate['original_protocol_best']['checkpoint']),Path(candidate['config']).parent/'training/best_model.json'])
     for upper in candidate['upper'].values():protected_paths.extend([Path(upper['actor']),Path(upper['checkpoint']),Path(upper['actor']).parents[2]/'best_model.json'])
-    if conditional:protected_paths.append(Path(plan['initialization']['checkpoint']))
+    if conditional and plan['initialization']['checkpoint'] is not None:protected_paths.append(Path(plan['initialization']['checkpoint']))
     protected={str(p):digest(p) for p in protected_paths if p.exists()}
     manifest=dict(schema=SCHEMA,plan=plan,config=cfg,source=source,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),protected=protected,physical_continuation='reset to original complete prepared bank, not resumed simulator state',terminal_contract=plan.get('terminal_contract','terminal_contract_v1'),data_role='random TRAIN; fixed six-route DEV; no independent holdout',resume_parent=None if resume is None else str(Path(resume).resolve()))
     manifest['execution_optimizations']=dict(evaluator='vmap_scan50',compilation_cache=str(compilation_cache),ppo='existing_direct_command_ppo',actual_batch_dimensions=[n,steps],experimental_summary_reset_guard=False)
@@ -400,7 +415,10 @@ def train(path,output,*,execute=False,resume=None):
         if conditional and 'completed_updates' in status:status['shared_updates']=status['completed_updates']
         elif 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
-    def account_validation(ticks):status['validation_control_ticks_total']+=ticks
+    def account_validation(ticks):
+        proposed=status['validation_control_ticks_total']+int(ticks)
+        if conditional and proposed+status.get('parent_consumed_validation_control_ticks',0)>600000:raise RuntimeError('conditional DEV lineage budget exceeded')
+        status['validation_control_ticks_total']=proposed
     shared_eval_cache={}
     baseline_done=False;best_panels={};writer=None;algo=None;out=None;episodes=None;learner_ready=False
     if resume:
@@ -428,6 +446,7 @@ def train(path,output,*,execute=False,resume=None):
             batch=PathBatch(env,snapshot,cfg,plan['seed'],alpha)
             sample=batch.reset(j.int32(0),j.int32(0));env.set_log_template(sample.state,sample.route.path,sample.route.speed)
             strong=is_strong(cfg)
+            preference_selection=cfg.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1')
             reset=jax.jit(jax.vmap(batch.reset,in_axes=(0,0,None))) if strong else jax.jit(jax.vmap(batch.reset))
             def reset_batch(counters,absolute_update):
                 args=(j.arange(n,dtype=j.int32),counters)
@@ -453,8 +472,8 @@ def train(path,output,*,execute=False,resume=None):
                 initialization=restore_reward_fork(algo,fork_receipt,alpha)
                 atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if conditional and not endpoint_resume:
-                from .path_command_conditioning import initialize_conditional_actor
-                init=plan['initialization'];initialization=initialize_conditional_actor(algo,init['checkpoint'],init['checkpoint_sha256'],expected_lower_sha=source['candidate']['actor_sha256'],config=cfg)
+                from .path_command_conditioning import initialize_upper_policy
+                initialization=initialize_upper_policy(algo,plan,cfg,source)
                 atomic_json(out/'fork_receipt.json',dict(initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if endpoint_resume:
                 receipt,parent_best=resume_source(resume,alpha,identity)
@@ -465,7 +484,7 @@ def train(path,output,*,execute=False,resume=None):
                         from .path_command_selection import persist_conditional_best
                         persist_conditional_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update'],'validation_dir':parent_best['validation_dir']})
                     else:persist_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update']})
-                if strong:
+                if preference_selection:
                     from .path_command_selection import persist_preference_best
                     preference_file=Path(resume)/'shared/best_preference_model.json'
                     if preference_file.exists():
@@ -483,7 +502,7 @@ def train(path,output,*,execute=False,resume=None):
                     with fault_file.open('rb') as f:failed_episodes=pickle.load(f)
                     route_counters=np.maximum(route_counters,np.asarray(failed_episodes.episode))
                 episodes=reset_batch(j.asarray(route_counters)+1,start_update+1)
-                atomic_json(out/'resume_receipt.json',dict(parent_checkpoint=receipt,parent_terminal_contract=saved.get('terminal_contract','terminal_contract_v1'),terminal_contract=plan.get('terminal_contract'),restored_update=start_update,parent_reported_updates=status.get('parent_reported_updates'),physical_state='reset to prepared bank',routes='next unused after saved and fault snapshot counters'))
+                atomic_json(out/'resume_receipt.json',dict(parent_checkpoint=receipt,parent_terminal_contract=saved.get('terminal_contract','terminal_contract_v1'),terminal_contract=plan.get('terminal_contract'),restored_update=start_update,parent_reported_updates=status.get('parent_reported_updates'),physical_state='reset to prepared bank',routes='next unused after saved and fault snapshot counters',restored=['actor','critic','film','log_std','optimizer','learning_rates','torch_rng','cuda_rng','numpy_rng','python_rng','consecutive_rejections','route_counters'],initialization_mode='exact_resume',original_initialization_mode=plan.get('initialization',{}).get('mode')))
                 a,cr,fault=observe(episodes)
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
@@ -550,13 +569,14 @@ def train(path,output,*,execute=False,resume=None):
             def evaluate_shared(update,checkpoint):
                 from .path_command_evaluation import evaluate_conditional
                 from .path_command_selection import summarize_conditional,persist_conditional_best
+                check_conditional_dev_budget(status,cfg,plan['alphas'])
                 destination=out/'validation'/f'update_{update:04d}';panels=evaluate_conditional(evaluator,export_actor(algo.policy),plan['alphas'],destination)
                 summary=summarize_conditional(panels,cfg)
                 actor=out/'checkpoints'/f'actor_{update:04d}.pkl'
                 provenance=dict(identity,source_update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),actor=str(actor.resolve()),actor_sha256=digest(actor),validation_dir=str(destination.resolve()))
                 atomic_json(destination/'source.json',provenance);atomic_json(destination/'task_metrics.json',summary)
                 persist_conditional_best(out,checkpoint,actor,summary,{**identity,'source_update':update,'validation_dir':str(destination.resolve())})
-                if strong:
+                if preference_selection:
                     from .path_command_selection import summarize_preference,persist_preference_best,preference_score_key
                     preference=summarize_preference(panels,cfg)
                     preference['score_tuple']=preference_score_key(preference,update)
@@ -618,10 +638,10 @@ def train(path,output,*,execute=False,resume=None):
                 record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
                 if strong:
                     from .path_command_conditioning import curriculum_probabilities
-                    record.update(curriculum_stage=1 if update<=cfg['alpha_conditioning']['curriculum'][0]['updates_inclusive'][1] else 2,absolute_update=update,endpoint_strong_demand_lower_samples={'alpha0':float(alpha_demand_counts[0]),'alpha1':float(alpha_demand_counts[-1])},reset_alpha_probabilities=np.asarray(curriculum_probabilities(cfg,update)).tolist(),actual_alpha_policy_samples=dict(zip(('alpha0','alpha1','interior'),alpha_counts.tolist())),actual_alpha_policy_proportions=(alpha_counts/max(alpha_counts.sum(),1)).tolist())
+                    record.update(alpha_sampling_mode=cfg['alpha_conditioning'].get('sampling_mode','curriculum'),curriculum_stage=None if cfg['alpha_conditioning'].get('sampling_mode')=='fixed_mixture' else 1 if update<=cfg['alpha_conditioning']['curriculum'][0]['updates_inclusive'][1] else 2,absolute_update=update,endpoint_strong_demand_lower_samples={'alpha0':float(alpha_demand_counts[0]),'alpha1':float(alpha_demand_counts[-1])},reset_alpha_probabilities=np.asarray(curriculum_probabilities(cfg,update)).tolist(),actual_alpha_policy_samples=dict(zip(('alpha0','alpha1','interior'),alpha_counts.tolist())),actual_alpha_policy_proportions=(alpha_counts/max(alpha_counts.sum(),1)).tolist())
                     for label in ('alpha0','alpha1'):writer.add_scalar('curriculum/'+label+'_strong_demand_lower_samples',record['endpoint_strong_demand_lower_samples'][label],update)
                     for label,count in zip(('alpha0','alpha1','interior'),alpha_counts):writer.add_scalar('curriculum/'+label+'_samples',int(count),update)
-                    writer.add_scalar('curriculum/stage',record['curriculum_stage'],update)
+                    if record['curriculum_stage'] is not None:writer.add_scalar('curriculum/stage',record['curriculum_stage'],update)
                 if coverage_mode:record.update(new_update=update,lineage_update=identity['parent_source_update']+update,parent_source_update=identity['parent_source_update'])
                 window_episodes+=episode_ends;window_return+=done_totals[4];window_costs+=cost_totals_update;window_physical+=physical_failures;window_domain+=domain_failures
                 if update%25==0 or update==endpoint_target:
@@ -642,9 +662,10 @@ def train(path,output,*,execute=False,resume=None):
                     if complete_window:coverage_low=coverage_low+1 if coverage_fraction<plan['coverage_monitor']['target'] else 0
                     coverage_summary.update(new_update=update,consecutive_low_windows=coverage_low,window_updates=update-coverage_start+1)
                     coverage_start=update+1
-                    atomic_json(out/'coverage'/f'update_{update:04d}.json',coverage_summary)
                     writer.add_scalar('coverage/strong_active_fraction',coverage_fraction,update)
-                    coverage_pause=complete_window and coverage_low>=plan['coverage_monitor']['consecutive_low_windows']
+                    coverage_pause=complete_window and coverage_low>=plan['coverage_monitor']['consecutive_low_windows'] and plan.get('initialization',{}).get('mode')!='scratch'
+                    coverage_summary['qualification_role']='diagnostic_continue_declared_budget' if plan.get('initialization',{}).get('mode')=='scratch' else 'legacy_exposure_pause'
+                    atomic_json(out/'coverage'/f'update_{update:04d}.json',coverage_summary)
                 with (out/'metrics.jsonl').open('a') as f:f.write(json.dumps(record,allow_nan=False)+'\n')
                 writer.add_scalar('train/mean_step_reward',record['mean_step_reward'],update)
                 for key in ['rollout_speed_rmse','rollout_path_rmse','rollout_heading_rmse','complete_episode_count','physical_failures','tracking_domain_failures']:writer.add_scalar('train/'+key,record[key],update)
@@ -689,8 +710,8 @@ def train(path,output,*,execute=False,resume=None):
                 continue
             if conditional:
                 from .path_command_evaluation import reuse_conditional_best
-                best=json.loads((out/('best_preference_model.json' if strong else 'best_conditional_model.json')).read_text());best_panels['shared']=reuse_conditional_best(out,best,cfg)
-                if strong:
+                best=json.loads((out/('best_preference_model.json' if preference_selection else 'best_conditional_model.json')).read_text());best_panels['shared']=reuse_conditional_best(out,best,cfg)
+                if cfg.get('dynamic_preference_checks',{}).get('enabled',strong):
                     from .path_command_dynamic import run_dynamic_preference_checks
                     run_dynamic_preference_checks(root,cfg,best,evaluator=evaluator,resume_parent=resume)
                 continue

@@ -13,7 +13,7 @@ from sttw_control.preference_best import atomic_json,digest
 
 ROOT=Path(__file__).parents[2]
 
-@pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference'])
+@pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference','path_unified_scratch'])
 def test_preparation_counts_one_learner_and_engineering_has_no_dev(tmp_path,prefix):
     formal=training.prepare(ROOT/'learning/configs'/f'{prefix}_run.json',tmp_path/'formal')
     smoke=training.prepare(ROOT/'learning/configs'/f'{prefix}_engineering.json',tmp_path/'smoke')
@@ -55,7 +55,7 @@ def test_shared_checkpoint_resume_keeps_identity_rng_and_mixed_alpha_ppo(tmp_pat
     for key,value in algo.policy.state_dict().items():torch.testing.assert_close(value,other.policy.state_dict()[key],rtol=0,atol=0)
 
 
-@pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json'])
+@pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json','path_unified_scratch_engineering.json'])
 def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch,plan_file):
     """Exercise the real orchestration/PPO on a deterministic non-physical batch."""
     from flax import struct
@@ -103,6 +103,9 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
     monkeypatch.setattr(statistics,'summarize_statistics',lambda s,c:{'active_lower_samples':float(s['count'])})
     monkeypatch.setattr(evaluation.BatchedPanelEvaluator,'evaluate',lambda *args,**kw:pytest.fail('engineering must not evaluate'))
     out=tmp_path/'engineering'
+    if plan_file=='path_unified_scratch_engineering.json':
+        from sttw_control import path_command_conditioning as c
+        monkeypatch.setattr(c,'initialize_conditional_actor',lambda *a,**kw:pytest.fail('scratch importing parent'))
     training.train(ROOT/'learning/configs'/plan_file,out,execute=True)
     status=json.loads((out/'status.json').read_text());receipt=json.loads((out/'shared/engineering_receipt.json').read_text())
     assert calls==[(8,16)] and status['state']=='completed' and status['shared_updates']==1
