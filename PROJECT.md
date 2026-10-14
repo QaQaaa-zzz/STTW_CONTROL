@@ -1,3 +1,9 @@
+# Scratch 独立结果图 — 2026-10-15
+
+[仅scratch：末轮200与选中100分别查看](docs/evidence/path_scratch_only_20261015/INDEX.md)。每张图只含同一scratch checkpoint的五α、原参考和匹配B0；新增高速弯局部图，不混合其他模型。复用已保存轨迹，0新增训练/仿真；选模指针和结论不变。
+
+---
+
 # Scratch stage results — 2026-10-15
 
 [Verified compact results, XY first](https://github.com/QaQaaa-zzz/STTW_CONTROL/blob/a8a2a65cc8c3665d089775aa69702f7cf578c00e/docs/evidence/alpha_unified_results_20261015/INDEX.md). Charged sampling cursor200 is complete, with194 recoverable learner updates after reboot. Official research selection is slot100; lastslot200 improves tracking but still fails bilateral preference direction/magnitude. Dynamic checks remain not_run. Original artifacts and best pointers are preserved; no new training/simulation. The shared research ledger remains the only live fact authority. Historical snapshots follow.

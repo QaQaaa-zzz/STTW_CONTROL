@@ -1,0 +1,6 @@
+arm,update,selected,physical_failures,domain_failures,strict_goal_hold_failures,own_goal_hold_failures,own_highspeed_endpoint_failures,own_direction_continuity_failures,own_qualified,score,recorded_goal_hold_failures
+scratch,0,False,0,0,30,0,0,4,False,"[0, 0, 0, 0, 4, 0.9376120582365216, 3.999214890293758, 0]",30
+scratch,50,False,0,0,10,0,0,3,False,"[0, 0, 0, 0, 3, 0.9035607434841592, 5.510572263212795, 50]",10
+scratch,100,True,0,0,0,0,0,2,False,"[0, 0, 0, 0, 2, 0.8227989650818157, 14.376995146715075, 100]",0
+scratch,150,False,0,0,0,0,0,3,False,"[0, 0, 0, 0, 3, 0.8473556802139122, 5.137785160809783, 150]",0
+scratch,200,False,0,0,0,0,0,3,False,"[0, 0, 0, 0, 3, 0.5997432142963334, 5.933976940522877, 200]",0

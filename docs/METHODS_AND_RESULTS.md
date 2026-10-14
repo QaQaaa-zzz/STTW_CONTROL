@@ -1,3 +1,9 @@
+# Scratch独立绘图交付 — 2026-10-15
+
+[单模型图与坐标证据](evidence/path_scratch_only_20261015/INDEX.md)。遵照用户最新呈现要求，selected100与last200各自独立作图，每图只含同一checkpoint五α、匹配local300＋ECBC/ESO和原路径。60条轨迹独立重建奖励核验，六场景全覆盖；不追加仿真或PPO，不改变best或研究资格。末轮200为194次可恢复学习更新；原结论与负证据保留。
+
+---
+
 # scratch200阶段完成核验与双运行精简报告 — 2026-10-15
 
 [远端固定提交报告与XY/完整指标](https://github.com/QaQaaa-zzz/STTW_CONTROL/blob/a8a2a65cc8c3665d089775aa69702f7cf578c00e/docs/evidence/alpha_unified_results_20261015/INDEX.md)。scratch恢复阶段194个实际可恢复学习更新、计费cursor200（5个已完成但丢失更新＋第6槽未知储备保留），不能称完整200模型更新。research best slot100，末slot200 tracking更好但Dv左/右 .014916/.039075m/s、Dy .000492/−.004172m，不满足自身.02/.001门槛。初始与slot50旧严格1s保持失败30/10；slot100/150/200均30/30严格保持，所有阶段宽research保持均过。roll/corridor只诊断，不是当前方向差失败原因。source/reward与warm相同，但课程/初始化/验收/损耗不同，不能称初始化消融。两组全部300DEV无物理/域终止，训练仍有域终止；全部原始reward/路径/分箱已独立复算。动态not_run、未采用、0新增物理/PPO。精简证据只存于强偏好分支固定提交，避免重复模型/大日志；本分支方法索引指向同一发布包，当前事实以共享台账为准。

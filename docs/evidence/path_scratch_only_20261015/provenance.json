@@ -1,0 +1,78 @@
+{
+  "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01",
+  "seed": 911401,
+  "B0": "frozen local300 + ECBC/ESO",
+  "new_physics_ticks": 0,
+  "new_PPO_updates": 0,
+  "figures_single_checkpoint": true,
+  "stages": {
+    "selected100": {
+      "sampling_slot": 100,
+      "recoverable_learner_updates": 94,
+      "source": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "policy_mode": "shared_conditional_v1",
+        "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+        "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+        "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+        "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+        "seed": 911401,
+        "parent_checkpoint_sha256": null,
+        "engineering_check": false,
+        "architecture": "alpha_modulated_v1",
+        "reward_version": "path_safety_preference_v2",
+        "preference_selection_schema": "path_preference_research_v1",
+        "initialization_mode": "scratch",
+        "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+        "declared_updates": 200,
+        "actual_batch_dimensions": [
+          512,
+          128
+        ],
+        "declared_policy_transitions": 13107200,
+        "source_update": 100,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0100.pt",
+        "checkpoint_sha256": "9f1f91fcc2dbc479e171b9cc0c11f947d7450793ebfa3e313d60a6ce85147bd9",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0100.pkl",
+        "actor_sha256": "9d6e545251a4aa917b26d207c2c74c68705b753a96beec9a89f854a47e0fc3ed",
+        "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0100"
+      }
+    },
+    "last200": {
+      "sampling_slot": 200,
+      "recoverable_learner_updates": 194,
+      "source": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "policy_mode": "shared_conditional_v1",
+        "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+        "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+        "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+        "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+        "seed": 911401,
+        "parent_checkpoint_sha256": null,
+        "engineering_check": false,
+        "architecture": "alpha_modulated_v1",
+        "reward_version": "path_safety_preference_v2",
+        "preference_selection_schema": "path_preference_research_v1",
+        "initialization_mode": "scratch",
+        "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+        "declared_updates": 200,
+        "actual_batch_dimensions": [
+          512,
+          128
+        ],
+        "declared_policy_transitions": 13107200,
+        "source_update": 200,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0200.pt",
+        "checkpoint_sha256": "ae28c8b480dd014496d5c86c192483f371047b961483fe5a268a252fc04f107b",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0200.pkl",
+        "actor_sha256": "ce1087c1cd8dc0185d5f93ef0a698de83bbd61f50695bca3016c1105875c1d44",
+        "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0200"
+      }
+    }
+  }
+}
