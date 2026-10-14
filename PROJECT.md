@@ -1,3 +1,9 @@
+# Unified-alpha completed results — 2026-10-15
+
+[Compact paired delivery, XY first](docs/evidence/alpha_unified_results_20261015/INDEX.md). Both declared pipelines finished. Warm retained200 learner updates and selectedu0; scratch charged200 sampling slots with194 recoverable learner updates and selectedslot100. Tracking progress is stronger in scratch; consistent speed/path preference and real-time alpha remain unverified. All300 DEV source trajectories were audited without new simulation or training. Original models and logs stay server-side; the shared research ledger remains the live fact authority. Earlier snapshots follow.
+
+---
+
 # Single strong-preference upper policy — 2026-10-14
 
 [Authorized implementation contract](docs/path_strong_preference.md). One alpha1 Actor-only warm start, two hidden-layer alpha modulations, fresh Critic/Adam, speed-primary reward multiplier2, endpoint-first reset curriculum, and one200-update shared learner. Old task best remains diagnostic; a separate preference pointer evaluates full-turn endpoint differences and continuity. GPU engineering and formal launch receipts will remain under runs/path_strong_preference_200_20261014. Shared research-hub/PROJECT_STATE.md is the live fact authority. Historical snapshots follow.

@@ -1,0 +1,17 @@
+{
+  "policy_traces_checked": 300,
+  "expected_policy_traces": 300,
+  "complete_lower_ticks": 1200000,
+  "new_physics": 0,
+  "new_PPO_updates": 0,
+  "matched_B0_cases": 6,
+  "fullturn_bin_recomputations": 200,
+  "reward_max_abs_error": 9.887746925396623e-08,
+  "selected": {
+    "warm": 0,
+    "scratch": 100
+  },
+  "dynamic": "not_run for both; fixed preference failed",
+  "curve_npz_bytes": 19043265,
+  "curve_npz_sha256": "8f60057987ef7a0df648048c4e13e35b9423d23adcf62d713a76c062a7edcd41"
+}

@@ -1,3 +1,9 @@
+# 统一α两组完成结果与远端精简证据 — 2026-10-15
+
+[完整结果、同场景跨α XY、selected/last、数值与身份](evidence/alpha_unified_results_20261015/INDEX.md)。warm正式模型200更新完成（重启补偿最多9轮另记），strict偏好最佳仍u0；后续端点任务未改善且u150/u200分别15/1个严格保持反例。scratch计费200槽位、可恢复194更新，research最佳slot100；slot200跟踪改善但左Dv/Dy .014916/.000492，右.039075/−.004172，不满足其.02/.001方向门槛。两组各5候选×5α×6场景300轨迹无物理/域终止，独立奖励重建与完整弯段分箱核验；训练阶段仍有域终止，不外推安全。scratch初始/slot50严格1秒保持失败30/10，slot100以后均30/30保持；宽研究保持不得冒充旧严格要求。动态两组均not_run，候选均未采用，无新增物理/PPO。相同v2reward/source，但初始化/α课程/验收/损耗不同，非受控初始化消融或多种子结论。完整原始模型/日志/NPZ留服务器；本报告仅精简PNG、CSV/JSON、曲线NPZ与复算脚本。当前事实与下一步以共享台账为准。
+
+---
+
 # Single strong-preference alpha modulation — 2026-10-14 implementation
 
 Purpose: strengthen the weak/asymmetric alpha response observed in the prior unified200 run, while retaining one shared policy and the same frozen local300/path/physical contract. Changes: Coverage alpha1 Actor fold initialization, hidden2/3 gain/shift conditioning, primary speed branch×2, endpoint-first reset sampling, and a separate preference best. No teacher, distillation, extra comparison arm, lower retraining or dynamic PPO. One authorized200-update experiment follows a single discarded8×16 engineering check. Dynamic six-case evaluation is conditional on fixed preference qualification and capped across resumed stages. Prior unified200 negative evidence remains intact. [Contract](path_strong_preference.md). Implementation CPU evidence is recorded in VALIDATION.md; training outcomes are PENDING in the shared research ledger.

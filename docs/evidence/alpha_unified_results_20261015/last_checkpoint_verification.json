@@ -1,0 +1,25 @@
+{
+  "warm": {
+    "serialized_update": 200,
+    "route_counters": 512,
+    "optimizer_states": 25,
+    "restored_boundary_accounting": null,
+    "retained_learning_updates_inferred_from_boundary_and_counter": 200
+  },
+  "scratch": {
+    "serialized_update": 200,
+    "route_counters": 512,
+    "optimizer_states": 25,
+    "restored_boundary_accounting": {
+      "restored_checkpoint_update": 0,
+      "sampling_budget_cursor": 6,
+      "known_policy_transitions": 327680,
+      "charged_policy_transitions": 393216,
+      "uncertain_policy_transition_reserve": 65536,
+      "unrecoverable_sampling_slots": 6,
+      "remaining_sampling_updates": 194,
+      "update_semantics": "absolute sampling budget slot; lost slots do not imply recovered PPO updates"
+    },
+    "retained_learning_updates_inferred_from_boundary_and_counter": 194
+  }
+}

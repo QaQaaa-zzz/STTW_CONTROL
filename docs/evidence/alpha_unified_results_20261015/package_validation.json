@@ -1,0 +1,17 @@
+{
+  "state": "passed",
+  "condition_rows": 300,
+  "unique_conditions": 300,
+  "preference_rows": 20,
+  "candidate_rows": 10,
+  "unmodified_full_resolution_policy_curves": 120,
+  "png_decodes": 34,
+  "local_markdown_links": 45,
+  "csv_line_endings": "LF",
+  "source_reward_max_abs_error": 9.887746925396623e-08,
+  "new_physics": 0,
+  "new_training_updates": 0,
+  "files": 49,
+  "bytes": 34631186,
+  "no_models_or_full_logs": true
+}

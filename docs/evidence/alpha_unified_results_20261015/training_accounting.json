@@ -1,0 +1,44 @@
+{
+  "warm": {
+    "retained_learning_updates": 200,
+    "resume_known_batches": 170,
+    "resume_physical_failures": 0,
+    "resume_domain_failures": 153,
+    "mean_last25_sample_reward": -0.07925212882459164,
+    "resume_sample_seconds": 14803.675761237017,
+    "resume_optimize_seconds": 36.40347029897788,
+    "resume_dev_seconds": 18561.193390713994,
+    "resume_elapsed_seconds": 33393.446428541996,
+    "tensorboard_url": "http://localhost:6007",
+    "http_latest_reward": [
+      1791984509.9166794,
+      200,
+      -0.0395597405731678
+    ],
+    "known_lineage_policy_transitions": 13631488,
+    "charged_lineage_policy_transitions_upper": 13697024,
+    "unrecoverable_completed_updates": 8,
+    "lineage_dev_ticks": 600000
+  },
+  "scratch": {
+    "retained_learning_updates": 194,
+    "resume_known_batches": 194,
+    "resume_physical_failures": 0,
+    "resume_domain_failures": 198,
+    "mean_last25_sample_reward": -0.009803756289184094,
+    "resume_sample_seconds": 16876.215733492976,
+    "resume_optimize_seconds": 37.63341876101714,
+    "resume_dev_seconds": 17741.12125514299,
+    "resume_elapsed_seconds": 34659.748051334995,
+    "tensorboard_url": "http://localhost:6006",
+    "http_latest_reward": [
+      1791986836.8188787,
+      200,
+      -0.008451850153505802
+    ],
+    "known_lineage_policy_transitions": 13041664,
+    "charged_lineage_policy_transitions_upper": 13107200,
+    "unrecoverable_completed_updates": 5,
+    "lineage_dev_ticks": 600000
+  }
+}

@@ -1,0 +1,2125 @@
+{
+  "warm": {
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training",
+    "manifest_sha256": "84cf6b07fb501030bf371055174f9436386893a43a3d22cd220e1bb1228f6158",
+    "status": {
+      "state": "completed",
+      "pid": 23712,
+      "endpoint_updates": {},
+      "declared_updates_per_endpoint": 200,
+      "policy_transitions_total": 11141120,
+      "training_control_ticks_total": 44564480,
+      "validation_control_ticks_total": 480000,
+      "policy_mode": "shared_conditional_v1",
+      "declared_updates": 200,
+      "engineering_check": false,
+      "discard_engineering_update": false,
+      "parent_consumed_policy_transitions": 2490368,
+      "parent_consumed_validation_control_ticks": 120000,
+      "parent_reported_updates": 38,
+      "stage": "reported",
+      "last_update_epoch": 1791989094.4430563,
+      "alpha": null,
+      "completed_updates": 200,
+      "shared_updates": 200,
+      "compile_and_setup_seconds": 13.570800439000038,
+      "reused_baseline_cases": 6,
+      "endpoint_elapsed_s": 33393.446428541996,
+      "case": "left90_R2_2.0,left90_R2_2.6,right90_R2_2.0,right90_R2_2.6",
+      "completed_intervals": 950,
+      "accepted_batches": 170,
+      "last_reward": -0.0395597405731678,
+      "dev_seconds": 18561.193390713994,
+      "protected_unchanged": true
+    },
+    "selected_update": 0,
+    "selected_checkpoint_sha256": "b3e9b54ae5e420811038c48267d5a5915b73882421261ec51795720a3e180eed",
+    "config": {
+      "schema": "sttw_path_feedback_v1_design",
+      "status": "design_not_robot_validated",
+      "source_commit": "ab195e768a6750f78a2e74813fe268a7ab4dccda",
+      "default_execution": "implement_A_and_B_only_then_report; C_is_specified_but_requires_path_baseline_acceptance",
+      "scope": {
+        "new_planning_network": false,
+        "action_candidate_search": false,
+        "retrain_lower": false,
+        "lower_checkpoint": 300,
+        "preserve_old_teleop_mode": true,
+        "preserve_old_upper_best": true,
+        "final_goal_this_phase": "pass_goal_cross_section_and_track_outgoing_path_not_stop"
+      },
+      "timing": {
+        "physics_dt_s_expected": 0.0002,
+        "physics_substeps_per_control_expected": 25,
+        "lower_dt_s": 0.005,
+        "upper_dt_s": 0.02,
+        "path_follower_dt_s": 0.02,
+        "do_not_silently_change_simulation_timing": true
+      },
+      "path": {
+        "coordinate_frame": "existing_world_XY_and_positive_yaw; verify_steer_sign_against_existing_reference_model",
+        "spacing_m": 0.02,
+        "straight_prefix_m": 3.0,
+        "straight_tail_m": 70.0,
+        "turn_angle_rad": 1.5707963267948966,
+        "turn_radius_m": 2.0,
+        "curvature_transition_length_m": 0.5,
+        "curvature_ramp": "3*u^2-2*u^3",
+        "path_is_fixed_before_rollout": true,
+        "reanchor_during_rollout": false,
+        "allow_online_teleop_future": false,
+        "projection_backward_m": 0.05,
+        "projection_forward_floor_m": 0.3,
+        "projection_forward_motion_multiplier": 2.0,
+        "projection_forward_padding_m": 0.1,
+        "projection_progress": "nondecreasing_forward_tracking; keep_unclamped_projection_for_diagnostics",
+        "goal_section_offset_after_turn_m": 4.0
+      },
+      "follower": {
+        "method": "pure_pursuit_with_actual_chord_denominator",
+        "lookahead_time_s": 0.7,
+        "lookahead_min_m": 0.8,
+        "lookahead_max_m": 1.8,
+        "lookahead_min_speed_m_s": 1.5,
+        "speed_reference": "external_v_user; no_curvature_speed_regulation_in_follower",
+        "steer_reference_max_rad": 0.3,
+        "nominal_speed_slew_m_s2": 0.5,
+        "nominal_steer_slew_rad_s": 0.3,
+        "wheelbase_m_expected": 0.408,
+        "caster_deg_expected": 25.0,
+        "preview_body_x_min_m": 0.05,
+        "out_of_domain": "log_and_stop_diagnostic_if_preview_behind_or_heading_error_ge_pi_over_2; no_spin_in_place"
+      },
+      "residual_interface": {
+        "latent_order": [
+          "speed",
+          "steer"
+        ],
+        "mapping": "tanh_then_existing_asymmetric_scales",
+        "speed_negative_scale_m_s": 1.0,
+        "speed_positive_scale_m_s": 0.25,
+        "steer_scale_rad": 0.2,
+        "speed_reference_bounds_m_s": [
+          1.5,
+          3.0
+        ],
+        "steer_reference_bound_rad": 0.35,
+        "correction_speed_down_m_s2": 1.0,
+        "correction_speed_up_m_s2": 0.5,
+        "correction_steer_rate_rad_s": 0.8,
+        "filter_tau_s": [
+          0.1,
+          0.08
+        ],
+        "filter_update_dt_s": 0.005,
+        "filter_position": "physical_offset_target_before_existing_offset_slew",
+        "reference_clip_antiwindup": "back_calculate_filter_and_offset_to_actual_governed_minus_nominal_only_if_reference_amplitude_clip_occurs; do_not_reset_filter_on_normal_slew",
+        "lower_reference_centered": true,
+        "execution_residual_limits_rad_s": [
+          1.5,
+          10.0
+        ],
+        "final_actuator_rate_limits_rad_s": [
+          3.0,
+          60.0
+        ]
+      },
+      "network": {
+        "history_frames": 16,
+        "frame_fields": 20,
+        "history_dt_s": 0.02,
+        "mask_fields": 16,
+        "context_fields": [
+          {
+            "name": "alpha",
+            "scale": 1.0
+          },
+          {
+            "name": "signed_cross_track_error_m",
+            "scale": 0.2
+          },
+          {
+            "name": "sin_path_heading_error",
+            "scale": 1.0
+          },
+          {
+            "name": "cos_path_heading_error",
+            "scale": 1.0
+          },
+          {
+            "name": "curvature_here_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "curvature_plus_0p5m_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "curvature_plus_1m_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "preview_body_x_m",
+            "scale": 1.8
+          },
+          {
+            "name": "preview_body_y_m",
+            "scale": 1.8
+          },
+          {
+            "name": "external_speed_m_s",
+            "scale": 3.0
+          },
+          {
+            "name": "previous_applied_speed_offset_m_s",
+            "scale": 1.0
+          },
+          {
+            "name": "previous_applied_steer_offset_rad",
+            "scale": 0.2
+          },
+          {
+            "name": "speed_filter_state_m_s",
+            "scale": 1.0
+          },
+          {
+            "name": "steer_filter_state_rad",
+            "scale": 0.2
+          },
+          {
+            "name": "lookahead_distance_m",
+            "scale": 1.8
+          }
+        ],
+        "actor_dim": 351,
+        "critic_dim": 352,
+        "critic_extra": "finite_task_remaining_fraction",
+        "hidden": [
+          128,
+          128,
+          64
+        ],
+        "activation": "elu",
+        "actions": 2,
+        "policy_type": "shared_conditional_v1",
+        "alphas": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ],
+        "alpha_is_constant_per_episode": true,
+        "initialization": "actor_only_fold_alpha1; fresh critic optimizer log_std RNG",
+        "old_345_actor_weight_loading": false,
+        "norm": "fixed_physical_scales; clip_finite_normalized_values_at_5; never_sanitize_NaN",
+        "architecture": "alpha_modulated_v1"
+      },
+      "path_reward": {
+        "scale": 0.1,
+        "huber": "x^2 if abs(x)<=1 else 2abs(x)-1",
+        "task": "geometric_path_not_issued_steer_tracking",
+        "chi": "clip((abs(delta_ff(path_curvature)/q(v_user))-.18)/.12,0,1)",
+        "speed_weight": "10-9*chi*(1-alpha)",
+        "path_weight": "10-9*chi*alpha",
+        "speed_scale_m_s": 0.1,
+        "cross_track_scale_m": 0.1,
+        "path_heading_scale_rad": 0.1,
+        "path_heading_factor": 0.5,
+        "primary_weight": 20.0,
+        "primary_speed_band_m_s": 0.05,
+        "primary_path_band_m": 0.1,
+        "primary_speed_scale_m_s": 0.1,
+        "primary_path_scale_m": 0.1,
+        "primary_gate": "chi; do not gate on network output",
+        "roll_weight": 40.0,
+        "roll_start_rad": 0.26,
+        "roll_scale_rad": 0.04,
+        "working_roll_weight": 120.0,
+        "working_roll_start_rad": 0.3,
+        "working_roll_scale_rad": 0.02,
+        "roll_rate_weight": 1.0,
+        "roll_rate_start_rad_s": 0.8,
+        "roll_rate_scale_rad_s": 0.8,
+        "overspeed_weight": 2.0,
+        "overspeed_band_m_s": 0.05,
+        "overspeed_scale_m_s": 0.1,
+        "low_speed_weight": 4.0,
+        "low_speed_start_m_s": 1.5,
+        "low_speed_scale_m_s": 0.2,
+        "offset_magnitude_weight": 0.02,
+        "offset_magnitude_scales": [
+          1.0,
+          0.2
+        ],
+        "offset_rate_weight": 0.03,
+        "offset_rate_scales": [
+          1.0,
+          0.4
+        ],
+        "offset_rate_dt_s": 0.02,
+        "old_time_heading_debt_cost": false,
+        "old_raw_steer_primary_cost": false,
+        "old_delta_ref_preservation_cost": false,
+        "old_time_recovery_gate": false,
+        "old_analytic_heading_recovery": false,
+        "longitudinal_time_position_cost": false,
+        "global_cost_clip": false,
+        "component_caps": {
+          "speed": 200.0,
+          "path": 200.0,
+          "primary": 400.0,
+          "roll": 900.0,
+          "working_roll": 3000.0,
+          "roll_rate": 40.0,
+          "overspeed": 160.0,
+          "low_speed": 160.0,
+          "offset_magnitude": 0.2,
+          "offset_rate": 20.0
+        },
+        "failure_extra": 5.0,
+        "failure_cost_rate_bound": 5080.2,
+        "reward_version": "path_safety_preference_v2",
+        "risk_prediction_s": 0.1,
+        "predictive_roll_weight": 20,
+        "predictive_roll_start_rad": 0.28,
+        "predictive_roll_scale_rad": 0.02,
+        "working_exposure_weight": 30,
+        "working_exposure_width_rad": 0.002,
+        "corridor_weight": 40,
+        "corridor_band_m": 0.4,
+        "corridor_scale_m": 0.1,
+        "primary_speed_multiplier": 2
+      },
+      "training_future_phase_C": {
+        "num_envs": 512,
+        "rollout_steps": 128,
+        "episode_s": 20.0,
+        "updates_initial": 200,
+        "updates_max": 200,
+        "extension_block": 100,
+        "actor_lr": 0.0001,
+        "critic_lr": 0.0003,
+        "gamma": 0.997,
+        "gae_lambda": 0.99,
+        "epochs": 4,
+        "minibatches": 4,
+        "clip": 0.2,
+        "std_initial": [
+          0.25,
+          0.1
+        ],
+        "std_min": 0.05,
+        "std_max": 0.5,
+        "entropy": 0.001,
+        "soft_kl": 0.01,
+        "hard_kl": 0.03,
+        "grad_clip_actor": 1.0,
+        "grad_clip_critic": 1.0,
+        "family_fraction": {
+          "straight_or_gentle": 0.3,
+          "rounded_left_or_right_60_to_100_degrees": 0.5,
+          "smooth_S_path": 0.2
+        },
+        "speed_range_m_s": [
+          1.8,
+          2.6
+        ],
+        "radius_range_m": [
+          1.8,
+          4.0
+        ],
+        "initial_route_pose_offset_fraction": 0.2,
+        "initial_lateral_offset_range_m": [
+          -0.1,
+          0.1
+        ],
+        "initial_heading_offset_range_rad": [
+          -0.05,
+          0.05
+        ],
+        "freeze_physical_prepared_snapshot": true,
+        "randomize_path_relative_to_actual_pose_once_at_reset": true,
+        "save_every": 10,
+        "validation_updates": [
+          0,
+          50,
+          100,
+          150,
+          200
+        ],
+        "no_20_or_25_update_evaluation": true,
+        "best_on": "single_shared_checkpoint_joint_alpha_development_diagnostics",
+        "convergence": "late_fixed_validation_and_complete_episode_physical_metrics; not_rollout_reward_only"
+      },
+      "stage_B_baseline": {
+        "cases": [
+          {
+            "name": "straight",
+            "horizon_s": 10.0,
+            "v_user": 2.3,
+            "lateral_initial_error_m": 0.05
+          },
+          {
+            "name": "left90_R2",
+            "horizon_s": 20.0,
+            "v_user": 2.0,
+            "lateral_initial_error_m": 0.0
+          }
+        ],
+        "upper_residual": "zero; no_old_actor_in_new_path_mode",
+        "nominal_y_error_rmse_m": 0.1,
+        "final_y_error_m": 0.1,
+        "final_path_heading_error_rad": 0.05,
+        "final_speed_error_m_s": 0.1,
+        "hold_s": 1.0,
+        "working_roll_rad": 0.302,
+        "require_goal_section_for_turn": true,
+        "report_all_transition_errors": true,
+        "max_baseline_runs": 2
+      },
+      "anti_oscillation_diagnostic": {
+        "new_robot_rollouts_default": 0,
+        "existing_data_only": true,
+        "sampling_Hz": 50,
+        "analyse_sign_reversal_with_amplitude_deadband": true,
+        "rate_sign_deadband_rad_s": 0.05,
+        "min_adjacent_steer_excursion_rad": 0.002,
+        "PSD_method": "Welch_Hann_mean_removed",
+        "PSD_band_Hz": [
+          10.0,
+          25.0
+        ],
+        "window_selection": "fixed_original_nominal_command_steady; do_not_condition_on_smooth_governed",
+        "report_reversal_events_not_periodic_frequency": true
+      },
+      "stage_C_evaluation": {
+        "route_ids": [
+          "straight",
+          "left90_R2",
+          "right90_R2"
+        ],
+        "low_speed_m_s": 2.0,
+        "conflict_speed_m_s": 2.6,
+        "compare_nominal_follower_and_two_endpoints": true,
+        "compare_same_path_not_same_generated_steer_stream": true,
+        "endpoint_progress_requirement": "pass_target_cross_section; keep_tracking_outgoing_path; no_stop_task",
+        "candidate_does_not_mean_qualified": true
+      },
+      "protection": {
+        "never_modify_existing_best_pointers": true,
+        "never_hot_swap_lower_on_existing_run": true,
+        "never_install_new_alias_without_acceptance": true,
+        "no_automatic_push": true,
+        "no_automatic_phase_C_training": true,
+        "no_changes_to_DVGC_JIT": true
+      },
+      "training_sampler": {
+        "version": "demand_exposure_v2",
+        "route_seed": 910201,
+        "groups": [
+          {
+            "ids_inclusive": [
+              0,
+              101
+            ],
+            "count": 102,
+            "mode": "legacy_sample_route"
+          },
+          {
+            "ids_inclusive": [
+              102,
+              305
+            ],
+            "count": 204,
+            "mode": "strong_single"
+          },
+          {
+            "ids_inclusive": [
+              306,
+              511
+            ],
+            "count": 206,
+            "mode": "strong_s"
+          }
+        ],
+        "strong": {
+          "speed_m_s": [
+            2.4,
+            2.6
+          ],
+          "radius_m": [
+            2.0,
+            2.2
+          ],
+          "angle_deg": [
+            90.0,
+            100.0
+          ],
+          "left_right_pairing": true,
+          "prefix_m": 3.0,
+          "curvature_ramp_m": 0.5,
+          "s_inter_bend_m": 3.0,
+          "goal_offset_m": 4.0,
+          "points": 5001,
+          "grid_ds_m": 0.02,
+          "initial_offset_fraction": 0.2,
+          "lateral_offset_m": [
+            -0.1,
+            0.1
+          ],
+          "heading_offset_rad": [
+            -0.05,
+            0.05
+          ]
+        },
+        "keep_development_routes_unchanged": true,
+        "on_policy_sample": true,
+        "no_old_trajectory_replay_as_new_ppo_samples": true,
+        "strong_active_fraction_target_min": 0.05,
+        "coverage_check_updates": 10,
+        "max_consecutive_coverage_low_windows_before_diagnosis": 2
+      },
+      "task_selection_schema": "path_conditional_task_v1",
+      "alpha_conditioning": {
+        "mode": "shared_conditional_v1",
+        "seed": 911402,
+        "alpha_index": 336,
+        "constant_per_episode": true,
+        "evaluation_alphas": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ],
+        "curriculum": [
+          {
+            "updates_inclusive": [
+              1,
+              100
+            ],
+            "endpoint_probability_each": 0.5,
+            "uniform_probability": 0.0
+          },
+          {
+            "updates_inclusive": [
+              101,
+              200
+            ],
+            "endpoint_probability_each": 0.4,
+            "uniform_probability": 0.2
+          }
+        ]
+      },
+      "preference_selection_schema": "path_strong_preference_v1",
+      "dynamic_preference_checks": {
+        "rate_per_s": 0.5,
+        "first_change_s": 0.5,
+        "return_s": 6,
+        "max_lower_ticks": 24000
+      }
+    },
+    "source": {
+      "role": "diagnostic_only",
+      "candidate": {
+        "role": "integration_candidate",
+        "status": "diagnostic_only",
+        "adoption": "not_adopted",
+        "source_update": 300,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+        "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+        "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+        "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+        "normalizer": {
+          "type": "fixed_SCALES",
+          "scales": [
+            0.3,
+            1.5,
+            0.35,
+            3.0,
+            3.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            0.35,
+            0.8,
+            0.45,
+            3.0,
+            0.35,
+            3.0,
+            60.0,
+            1.5,
+            10.0,
+            0.3,
+            0.3
+          ],
+          "clip": 5.0,
+          "actor_dim": 210,
+          "history": 10,
+          "fields": [
+            "roll",
+            "roll_rate",
+            "steer",
+            "steer_rate",
+            "measured_forward_speed",
+            "measured_world_yaw_rate",
+            "rear_speed_proxy",
+            "front_speed_proxy",
+            "local_command_speed",
+            "local_command_steer",
+            "local_command_speed_rate",
+            "local_command_steer_rate",
+            "previous_local_speed_reference",
+            "previous_local_steer_reference",
+            "previous_final_front_rate",
+            "previous_final_rear_rate",
+            "previous_applied_front_residual",
+            "previous_applied_rear_residual",
+            "ESO_equilibrium_shift",
+            "local_command_equilibrium_reference"
+          ]
+        },
+        "original_protocol_best": {
+          "source_update": 400,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+          "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+        },
+        "upper": {
+          "0": {
+            "source_update": 200,
+            "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+            "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+            "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+            "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+          },
+          "1": {
+            "source_update": 250,
+            "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+            "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+            "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+            "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+          }
+        },
+        "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+        "two_different_late_checkpoints_passed": false,
+        "training_transitions": 0,
+        "maximum_new_control_ticks": 10400
+      },
+      "upper_run": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009",
+      "prepared_bank": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+      "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+      "bank_index": 3,
+      "seed": 77001,
+      "protocol": {
+        "protocol_id": "fixed_command_six_v1",
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+        "cases": {
+          "straight_hold": [
+            [
+              0,
+              2.3,
+              0
+            ]
+          ],
+          "speed_changes": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.6,
+              0
+            ],
+            [
+              3.5,
+              2.0,
+              0
+            ],
+            [
+              6,
+              2.3,
+              0
+            ]
+          ],
+          "gentle_positive": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              0.08
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ],
+          "gentle_negative": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              -0.08
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ],
+          "steer_reversal": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              0.15
+            ],
+            [
+              3,
+              2.3,
+              -0.15
+            ],
+            [
+              5,
+              2.3,
+              0
+            ]
+          ],
+          "fast_turn": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.6,
+              0.25
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ]
+        },
+        "seed": 77001,
+        "prepared_bank_index": 3,
+        "duration_s": 10,
+        "slew": [
+          0.5,
+          0.3
+        ],
+        "command_window_s": [
+          1,
+          6
+        ],
+        "final_window_s": [
+          9.5,
+          10
+        ],
+        "final_tolerances": {
+          "speed_m_s": 0.1,
+          "steer_rad": 0.04,
+          "heading_rad": 0.05
+        },
+        "diagnostic_roll_rad": 0.3,
+        "methods": [
+          "B0",
+          "pi_alpha0",
+          "pi_alpha1"
+        ],
+        "lower_alpha": 1,
+        "checkpoint_selection": "best_model.json else last_completed",
+        "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+        "external_disturbance": false
+      },
+      "lower_training_bank_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+      "upper_config_file_sha256": {
+        "0": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c",
+        "1": "91d286aacd35b05ab7531b7d0ad881ab46b1315c6a1889738da71834e0ce310a"
+      },
+      "model": {
+        "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+        "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+        "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+        "assets": {
+          "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+          "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+          "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+          "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+          "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+          "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+        },
+        "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+        "mujoco_version": "3.6.0"
+      },
+      "controller": {
+        "fixed_roll_reference": null,
+        "dt": 0.005,
+        "wo": 40.0,
+        "wc": 5.0,
+        "disturbance_filter": 8.0,
+        "minimum_speed": 0.5,
+        "max_steer_rate": 4.0,
+        "mass": 5.4,
+        "cg_forward": 0.164,
+        "cg_height": 0.2,
+        "wheelbase": 0.408,
+        "trail": 0.024,
+        "caster": 0.4363323129985824,
+        "gravity": 9.8
+      },
+      "actuator": {
+        "composition": "additive",
+        "project_base": false,
+        "dt": 0.005,
+        "steer_limit": 0.8,
+        "steer_rate_limit": 3.0,
+        "rear_rate_limit": 60.0,
+        "steer_residual_scale": 1.5,
+        "rear_residual_scale": 10.0,
+        "strength": 1.0,
+        "base_output_scale": 1.0,
+        "steer_acceleration": null,
+        "rear_acceleration": null,
+        "delay_steps": 0
+      },
+      "physics_dt": 0.0002,
+      "substeps": 25,
+      "control_dt": 0.005,
+      "policy_dt": 0.02,
+      "maximum_new_control_ticks": 10400,
+      "training_ticks": 0,
+      "initialization": "matched complete prepared physical bank; causal masks zero at start, one real pre-frame per5ms",
+      "stop_rule": "physical/policy fault or quiet-settled lower speed>.20/steer>.08 continuously1s; save and stop new combinations",
+      "baseline_reuse": "V5.2 evaluationbest with identical bank/protocol and upper SHA; check exact raw/reference stream after simulation"
+    },
+    "dynamic": {
+      "schema": "path_dynamic_preference_checks_v1",
+      "state": "not_run",
+      "active_lower_ticks": 0,
+      "max_lower_ticks": 24000,
+      "reason": "fixed-alpha preference not qualified"
+    },
+    "stages": [
+      {
+        "update": 0,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "16a80a1a8a8f296c1bf2b5e3f800e7efea006d24bc7224fa2874f10dbacead22",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "ad297401556c55f60553ec04c4b39af1e0ae80a79d181aff563b7bb3c183e9a6",
+          "seed": 911401,
+          "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "curriculum_sha256": "f28b7b594e38adad8e343eb37cb94eef965c3c5f2980122d138614b181d39b6c",
+          "preference_selection_schema": "path_strong_preference_v1",
+          "source_update": 0,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_20261014/training/shared/checkpoints/update_0000.pt",
+          "checkpoint_sha256": "b3e9b54ae5e420811038c48267d5a5915b73882421261ec51795720a3e180eed",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_20261014/training/shared/checkpoints/actor_0000.pkl",
+          "actor_sha256": "4932b55d66184182a6ceb23b649d030d1f670e0a8990271172f88a21ff58df50",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_20261014/training/shared/validation/update_0000"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "actor_parameters_sha256": "34d0c1cf6d7023433576b7be573aa0e2241090fe3bf54308e7c9b2e7478f511c",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true
+        }
+      },
+      {
+        "update": 50,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "16a80a1a8a8f296c1bf2b5e3f800e7efea006d24bc7224fa2874f10dbacead22",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "ad297401556c55f60553ec04c4b39af1e0ae80a79d181aff563b7bb3c183e9a6",
+          "seed": 911401,
+          "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "curriculum_sha256": "f28b7b594e38adad8e343eb37cb94eef965c3c5f2980122d138614b181d39b6c",
+          "preference_selection_schema": "path_strong_preference_v1",
+          "source_update": 50,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/update_0050.pt",
+          "checkpoint_sha256": "27a5dc7200bd3841c13dccb99c57b1146558def22a3095281ee516763a8ee43a",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/actor_0050.pkl",
+          "actor_sha256": "fcf265cd51f05a96c2717484766a0f74e94d2a1507bdb1ca79da58f546d9b743",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/validation/update_0050"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "actor_parameters_sha256": "5aec78cc7ec545dd1ef3cd541f6ac84c8681f3a674ea78d5fac3f4d6e7436de6",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true
+        }
+      },
+      {
+        "update": 100,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "16a80a1a8a8f296c1bf2b5e3f800e7efea006d24bc7224fa2874f10dbacead22",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "ad297401556c55f60553ec04c4b39af1e0ae80a79d181aff563b7bb3c183e9a6",
+          "seed": 911401,
+          "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "curriculum_sha256": "f28b7b594e38adad8e343eb37cb94eef965c3c5f2980122d138614b181d39b6c",
+          "preference_selection_schema": "path_strong_preference_v1",
+          "source_update": 100,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/update_0100.pt",
+          "checkpoint_sha256": "440ce248bd2639f8d4e89c1ae7efbde5e145933d3926c994616b92040c18e9c8",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/actor_0100.pkl",
+          "actor_sha256": "7d6707d8d44b039c2b3de94323ea7b81def1db5305b5ca5b80ad78009b62db99",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/validation/update_0100"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "actor_parameters_sha256": "ab7e694919c58a0b25bc379651d78230019c49ea69a8e97e2a9f62cc593cdc37",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true
+        }
+      },
+      {
+        "update": 150,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "16a80a1a8a8f296c1bf2b5e3f800e7efea006d24bc7224fa2874f10dbacead22",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "ad297401556c55f60553ec04c4b39af1e0ae80a79d181aff563b7bb3c183e9a6",
+          "seed": 911401,
+          "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "curriculum_sha256": "f28b7b594e38adad8e343eb37cb94eef965c3c5f2980122d138614b181d39b6c",
+          "preference_selection_schema": "path_strong_preference_v1",
+          "source_update": 150,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/update_0150.pt",
+          "checkpoint_sha256": "ddf9d2471cdc896e22d6483a862fe62a439ffe041feba2222763c995032a6aa4",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/actor_0150.pkl",
+          "actor_sha256": "3f69d12451eda5915b64b2d97ee8d7be2a6ebbf6b36c95b7d3a8859026b3e0ee",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/validation/update_0150"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "actor_parameters_sha256": "4a73a0327505bdd02981cca90ca9b994a62f10b2f936deb32423dc442d7ce5f7",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true
+        }
+      },
+      {
+        "update": 200,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "16a80a1a8a8f296c1bf2b5e3f800e7efea006d24bc7224fa2874f10dbacead22",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "ad297401556c55f60553ec04c4b39af1e0ae80a79d181aff563b7bb3c183e9a6",
+          "seed": 911401,
+          "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "curriculum_sha256": "f28b7b594e38adad8e343eb37cb94eef965c3c5f2980122d138614b181d39b6c",
+          "preference_selection_schema": "path_strong_preference_v1",
+          "source_update": 200,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/update_0200.pt",
+          "checkpoint_sha256": "411b8c11e11146ec4717510c0d4fc71dfe0cde8347adff27a6edae111d53a66d",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/checkpoints/actor_0200.pkl",
+          "actor_sha256": "75f81ad3193922e9c25519525b97f0a0b60d330df653e76e20cfd0c3fa209f22",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-strong-preference/runs/path_strong_preference_200_reboot_resume_20261014/training/shared/validation/update_0200"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "ca58f88f3f4fdc1b5fa720ec06d6822ae0095015632feb21efd7c94594c7878b",
+          "actor_parameters_sha256": "6d1b5fa9fd35fdb539341e8de445695e009fd60cc96044352992d9ba9716f230",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true
+        }
+      }
+    ]
+  },
+  "scratch": {
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01",
+    "manifest_sha256": "b703e241cb6190726c173b778d7489d60b38f155e2ca239ab7a58e361edfc2f5",
+    "status": {
+      "state": "completed",
+      "pid": 22247,
+      "endpoint_updates": {},
+      "declared_updates_per_endpoint": 200,
+      "policy_transitions_total": 12713984,
+      "training_control_ticks_total": 50855936,
+      "validation_control_ticks_total": 480000,
+      "policy_mode": "shared_conditional_v1",
+      "declared_updates": 200,
+      "engineering_check": false,
+      "discard_engineering_update": false,
+      "parent_consumed_policy_transitions": 393216,
+      "parent_consumed_validation_control_ticks": 120000,
+      "parent_reported_updates": 5,
+      "stage": "reported",
+      "last_update_epoch": 1791990331.0388987,
+      "alpha": null,
+      "completed_updates": 200,
+      "shared_updates": 200,
+      "compile_and_setup_seconds": 13.651620828000034,
+      "resume_accounting": {
+        "restored_checkpoint_update": 0,
+        "sampling_budget_cursor": 6,
+        "known_policy_transitions": 327680,
+        "charged_policy_transitions": 393216,
+        "uncertain_policy_transition_reserve": 65536,
+        "unrecoverable_sampling_slots": 6,
+        "remaining_sampling_updates": 194,
+        "update_semantics": "absolute sampling budget slot; lost slots do not imply recovered PPO updates"
+      },
+      "recoverable_learner_updates": 194,
+      "completed_updates_semantics": "absolute_sampling_budget_cursor",
+      "reused_baseline_cases": 6,
+      "endpoint_elapsed_s": 34659.748051334995,
+      "case": "left90_R2_2.0,left90_R2_2.6,right90_R2_2.0,right90_R2_2.6",
+      "completed_intervals": 950,
+      "accepted_batches": 194,
+      "last_reward": -0.008451850153505802,
+      "dev_seconds": 17741.12125514299,
+      "protected_unchanged": true
+    },
+    "selected_update": 100,
+    "selected_checkpoint_sha256": "9f1f91fcc2dbc479e171b9cc0c11f947d7450793ebfa3e313d60a6ce85147bd9",
+    "config": {
+      "schema": "sttw_path_feedback_v1_design",
+      "status": "design_not_robot_validated",
+      "source_commit": "ab195e768a6750f78a2e74813fe268a7ab4dccda",
+      "default_execution": "implement_A_and_B_only_then_report; C_is_specified_but_requires_path_baseline_acceptance",
+      "scope": {
+        "new_planning_network": false,
+        "action_candidate_search": false,
+        "retrain_lower": false,
+        "lower_checkpoint": 300,
+        "preserve_old_teleop_mode": true,
+        "preserve_old_upper_best": true,
+        "final_goal_this_phase": "pass_goal_cross_section_and_track_outgoing_path_not_stop"
+      },
+      "timing": {
+        "physics_dt_s_expected": 0.0002,
+        "physics_substeps_per_control_expected": 25,
+        "lower_dt_s": 0.005,
+        "upper_dt_s": 0.02,
+        "path_follower_dt_s": 0.02,
+        "do_not_silently_change_simulation_timing": true
+      },
+      "path": {
+        "coordinate_frame": "existing_world_XY_and_positive_yaw; verify_steer_sign_against_existing_reference_model",
+        "spacing_m": 0.02,
+        "straight_prefix_m": 3.0,
+        "straight_tail_m": 70.0,
+        "turn_angle_rad": 1.5707963267948966,
+        "turn_radius_m": 2.0,
+        "curvature_transition_length_m": 0.5,
+        "curvature_ramp": "3*u^2-2*u^3",
+        "path_is_fixed_before_rollout": true,
+        "reanchor_during_rollout": false,
+        "allow_online_teleop_future": false,
+        "projection_backward_m": 0.05,
+        "projection_forward_floor_m": 0.3,
+        "projection_forward_motion_multiplier": 2.0,
+        "projection_forward_padding_m": 0.1,
+        "projection_progress": "nondecreasing_forward_tracking; keep_unclamped_projection_for_diagnostics",
+        "goal_section_offset_after_turn_m": 4.0
+      },
+      "follower": {
+        "method": "pure_pursuit_with_actual_chord_denominator",
+        "lookahead_time_s": 0.7,
+        "lookahead_min_m": 0.8,
+        "lookahead_max_m": 1.8,
+        "lookahead_min_speed_m_s": 1.5,
+        "speed_reference": "external_v_user; no_curvature_speed_regulation_in_follower",
+        "steer_reference_max_rad": 0.3,
+        "nominal_speed_slew_m_s2": 0.5,
+        "nominal_steer_slew_rad_s": 0.3,
+        "wheelbase_m_expected": 0.408,
+        "caster_deg_expected": 25.0,
+        "preview_body_x_min_m": 0.05,
+        "out_of_domain": "log_and_stop_diagnostic_if_preview_behind_or_heading_error_ge_pi_over_2; no_spin_in_place"
+      },
+      "residual_interface": {
+        "latent_order": [
+          "speed",
+          "steer"
+        ],
+        "mapping": "tanh_then_existing_asymmetric_scales",
+        "speed_negative_scale_m_s": 1.0,
+        "speed_positive_scale_m_s": 0.25,
+        "steer_scale_rad": 0.2,
+        "speed_reference_bounds_m_s": [
+          1.5,
+          3.0
+        ],
+        "steer_reference_bound_rad": 0.35,
+        "correction_speed_down_m_s2": 1.0,
+        "correction_speed_up_m_s2": 0.5,
+        "correction_steer_rate_rad_s": 0.8,
+        "filter_tau_s": [
+          0.1,
+          0.08
+        ],
+        "filter_update_dt_s": 0.005,
+        "filter_position": "physical_offset_target_before_existing_offset_slew",
+        "reference_clip_antiwindup": "back_calculate_filter_and_offset_to_actual_governed_minus_nominal_only_if_reference_amplitude_clip_occurs; do_not_reset_filter_on_normal_slew",
+        "lower_reference_centered": true,
+        "execution_residual_limits_rad_s": [
+          1.5,
+          10.0
+        ],
+        "final_actuator_rate_limits_rad_s": [
+          3.0,
+          60.0
+        ]
+      },
+      "network": {
+        "history_frames": 16,
+        "frame_fields": 20,
+        "history_dt_s": 0.02,
+        "mask_fields": 16,
+        "context_fields": [
+          {
+            "name": "alpha",
+            "scale": 1.0
+          },
+          {
+            "name": "signed_cross_track_error_m",
+            "scale": 0.2
+          },
+          {
+            "name": "sin_path_heading_error",
+            "scale": 1.0
+          },
+          {
+            "name": "cos_path_heading_error",
+            "scale": 1.0
+          },
+          {
+            "name": "curvature_here_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "curvature_plus_0p5m_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "curvature_plus_1m_1_m",
+            "scale": 0.6
+          },
+          {
+            "name": "preview_body_x_m",
+            "scale": 1.8
+          },
+          {
+            "name": "preview_body_y_m",
+            "scale": 1.8
+          },
+          {
+            "name": "external_speed_m_s",
+            "scale": 3.0
+          },
+          {
+            "name": "previous_applied_speed_offset_m_s",
+            "scale": 1.0
+          },
+          {
+            "name": "previous_applied_steer_offset_rad",
+            "scale": 0.2
+          },
+          {
+            "name": "speed_filter_state_m_s",
+            "scale": 1.0
+          },
+          {
+            "name": "steer_filter_state_rad",
+            "scale": 0.2
+          },
+          {
+            "name": "lookahead_distance_m",
+            "scale": 1.8
+          }
+        ],
+        "actor_dim": 351,
+        "critic_dim": 352,
+        "critic_extra": "finite_task_remaining_fraction",
+        "hidden": [
+          128,
+          128,
+          64
+        ],
+        "activation": "elu",
+        "actions": 2,
+        "policy_type": "shared_conditional_v1",
+        "alphas": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ],
+        "alpha_is_constant_per_episode": true,
+        "initialization": "fresh_scratch",
+        "old_345_actor_weight_loading": false,
+        "norm": "fixed_physical_scales; clip_finite_normalized_values_at_5; never_sanitize_NaN",
+        "architecture": "alpha_modulated_v1"
+      },
+      "path_reward": {
+        "scale": 0.1,
+        "huber": "x^2 if abs(x)<=1 else 2abs(x)-1",
+        "task": "geometric_path_not_issued_steer_tracking",
+        "chi": "clip((abs(delta_ff(path_curvature)/q(v_user))-.18)/.12,0,1)",
+        "speed_weight": "10-9*chi*(1-alpha)",
+        "path_weight": "10-9*chi*alpha",
+        "speed_scale_m_s": 0.1,
+        "cross_track_scale_m": 0.1,
+        "path_heading_scale_rad": 0.1,
+        "path_heading_factor": 0.5,
+        "primary_weight": 20.0,
+        "primary_speed_band_m_s": 0.05,
+        "primary_path_band_m": 0.1,
+        "primary_speed_scale_m_s": 0.1,
+        "primary_path_scale_m": 0.1,
+        "primary_gate": "chi; do not gate on network output",
+        "roll_weight": 40.0,
+        "roll_start_rad": 0.26,
+        "roll_scale_rad": 0.04,
+        "working_roll_weight": 120.0,
+        "working_roll_start_rad": 0.3,
+        "working_roll_scale_rad": 0.02,
+        "roll_rate_weight": 1.0,
+        "roll_rate_start_rad_s": 0.8,
+        "roll_rate_scale_rad_s": 0.8,
+        "overspeed_weight": 2.0,
+        "overspeed_band_m_s": 0.05,
+        "overspeed_scale_m_s": 0.1,
+        "low_speed_weight": 4.0,
+        "low_speed_start_m_s": 1.5,
+        "low_speed_scale_m_s": 0.2,
+        "offset_magnitude_weight": 0.02,
+        "offset_magnitude_scales": [
+          1.0,
+          0.2
+        ],
+        "offset_rate_weight": 0.03,
+        "offset_rate_scales": [
+          1.0,
+          0.4
+        ],
+        "offset_rate_dt_s": 0.02,
+        "old_time_heading_debt_cost": false,
+        "old_raw_steer_primary_cost": false,
+        "old_delta_ref_preservation_cost": false,
+        "old_time_recovery_gate": false,
+        "old_analytic_heading_recovery": false,
+        "longitudinal_time_position_cost": false,
+        "global_cost_clip": false,
+        "component_caps": {
+          "speed": 200.0,
+          "path": 200.0,
+          "primary": 400.0,
+          "roll": 900.0,
+          "working_roll": 3000.0,
+          "roll_rate": 40.0,
+          "overspeed": 160.0,
+          "low_speed": 160.0,
+          "offset_magnitude": 0.2,
+          "offset_rate": 20.0
+        },
+        "failure_extra": 5.0,
+        "failure_cost_rate_bound": 5080.2,
+        "reward_version": "path_safety_preference_v2",
+        "risk_prediction_s": 0.1,
+        "predictive_roll_weight": 20,
+        "predictive_roll_start_rad": 0.28,
+        "predictive_roll_scale_rad": 0.02,
+        "working_exposure_weight": 30,
+        "working_exposure_width_rad": 0.002,
+        "corridor_weight": 40,
+        "corridor_band_m": 0.4,
+        "corridor_scale_m": 0.1,
+        "primary_speed_multiplier": 2
+      },
+      "training_future_phase_C": {
+        "num_envs": 512,
+        "rollout_steps": 128,
+        "episode_s": 20.0,
+        "updates_initial": 200,
+        "updates_max": 200,
+        "extension_block": 100,
+        "actor_lr": 0.0001,
+        "critic_lr": 0.0003,
+        "gamma": 0.997,
+        "gae_lambda": 0.99,
+        "epochs": 4,
+        "minibatches": 4,
+        "clip": 0.2,
+        "std_initial": [
+          0.25,
+          0.1
+        ],
+        "std_min": 0.05,
+        "std_max": 0.5,
+        "entropy": 0.001,
+        "soft_kl": 0.01,
+        "hard_kl": 0.03,
+        "grad_clip_actor": 1.0,
+        "grad_clip_critic": 1.0,
+        "family_fraction": {
+          "straight_or_gentle": 0.3,
+          "rounded_left_or_right_60_to_100_degrees": 0.5,
+          "smooth_S_path": 0.2
+        },
+        "speed_range_m_s": [
+          1.8,
+          2.6
+        ],
+        "radius_range_m": [
+          1.8,
+          4.0
+        ],
+        "initial_route_pose_offset_fraction": 0.2,
+        "initial_lateral_offset_range_m": [
+          -0.1,
+          0.1
+        ],
+        "initial_heading_offset_range_rad": [
+          -0.05,
+          0.05
+        ],
+        "freeze_physical_prepared_snapshot": true,
+        "randomize_path_relative_to_actual_pose_once_at_reset": true,
+        "save_every": 10,
+        "validation_updates": [
+          0,
+          50,
+          100,
+          150,
+          200
+        ],
+        "no_20_or_25_update_evaluation": true,
+        "best_on": "single_shared_checkpoint_joint_alpha_development_diagnostics",
+        "convergence": "late_fixed_validation_and_complete_episode_physical_metrics; not_rollout_reward_only"
+      },
+      "stage_B_baseline": {
+        "cases": [
+          {
+            "name": "straight",
+            "horizon_s": 10.0,
+            "v_user": 2.3,
+            "lateral_initial_error_m": 0.05
+          },
+          {
+            "name": "left90_R2",
+            "horizon_s": 20.0,
+            "v_user": 2.0,
+            "lateral_initial_error_m": 0.0
+          }
+        ],
+        "upper_residual": "zero; no_old_actor_in_new_path_mode",
+        "nominal_y_error_rmse_m": 0.1,
+        "final_y_error_m": 0.1,
+        "final_path_heading_error_rad": 0.05,
+        "final_speed_error_m_s": 0.1,
+        "hold_s": 1.0,
+        "working_roll_rad": 0.302,
+        "require_goal_section_for_turn": true,
+        "report_all_transition_errors": true,
+        "max_baseline_runs": 2
+      },
+      "anti_oscillation_diagnostic": {
+        "new_robot_rollouts_default": 0,
+        "existing_data_only": true,
+        "sampling_Hz": 50,
+        "analyse_sign_reversal_with_amplitude_deadband": true,
+        "rate_sign_deadband_rad_s": 0.05,
+        "min_adjacent_steer_excursion_rad": 0.002,
+        "PSD_method": "Welch_Hann_mean_removed",
+        "PSD_band_Hz": [
+          10.0,
+          25.0
+        ],
+        "window_selection": "fixed_original_nominal_command_steady; do_not_condition_on_smooth_governed",
+        "report_reversal_events_not_periodic_frequency": true
+      },
+      "stage_C_evaluation": {
+        "route_ids": [
+          "straight",
+          "left90_R2",
+          "right90_R2"
+        ],
+        "low_speed_m_s": 2.0,
+        "conflict_speed_m_s": 2.6,
+        "compare_nominal_follower_and_two_endpoints": true,
+        "compare_same_path_not_same_generated_steer_stream": true,
+        "endpoint_progress_requirement": "pass_target_cross_section; keep_tracking_outgoing_path; no_stop_task",
+        "candidate_does_not_mean_qualified": true
+      },
+      "protection": {
+        "never_modify_existing_best_pointers": true,
+        "never_hot_swap_lower_on_existing_run": true,
+        "never_install_new_alias_without_acceptance": true,
+        "no_automatic_push": true,
+        "no_automatic_phase_C_training": true,
+        "no_changes_to_DVGC_JIT": true
+      },
+      "training_sampler": {
+        "version": "demand_exposure_v2",
+        "route_seed": 910201,
+        "groups": [
+          {
+            "ids_inclusive": [
+              0,
+              101
+            ],
+            "count": 102,
+            "mode": "legacy_sample_route"
+          },
+          {
+            "ids_inclusive": [
+              102,
+              305
+            ],
+            "count": 204,
+            "mode": "strong_single"
+          },
+          {
+            "ids_inclusive": [
+              306,
+              511
+            ],
+            "count": 206,
+            "mode": "strong_s"
+          }
+        ],
+        "strong": {
+          "speed_m_s": [
+            2.4,
+            2.6
+          ],
+          "radius_m": [
+            2.0,
+            2.2
+          ],
+          "angle_deg": [
+            90.0,
+            100.0
+          ],
+          "left_right_pairing": true,
+          "prefix_m": 3.0,
+          "curvature_ramp_m": 0.5,
+          "s_inter_bend_m": 3.0,
+          "goal_offset_m": 4.0,
+          "points": 5001,
+          "grid_ds_m": 0.02,
+          "initial_offset_fraction": 0.2,
+          "lateral_offset_m": [
+            -0.1,
+            0.1
+          ],
+          "heading_offset_rad": [
+            -0.05,
+            0.05
+          ]
+        },
+        "keep_development_routes_unchanged": true,
+        "on_policy_sample": true,
+        "no_old_trajectory_replay_as_new_ppo_samples": true,
+        "strong_active_fraction_target_min": 0.05,
+        "coverage_check_updates": 10,
+        "max_consecutive_coverage_low_windows_before_diagnosis": 2
+      },
+      "task_selection_schema": "path_conditional_task_v1",
+      "alpha_conditioning": {
+        "mode": "shared_conditional_v1",
+        "sampling_mode": "fixed_mixture",
+        "seed": 911402,
+        "alpha_index": 336,
+        "constant_per_episode": true,
+        "evaluation_alphas": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ],
+        "endpoint_probability_each": 0.4,
+        "uniform_probability": 0.2
+      },
+      "preference_selection_schema": "path_preference_research_v1",
+      "dynamic_preference_checks": {
+        "rate_per_s": 0.5,
+        "first_change_s": 0.5,
+        "return_s": 6,
+        "max_lower_ticks": 24000,
+        "enabled": true,
+        "trigger": "qualified_research_preference"
+      },
+      "preference_acceptance": {
+        "spatial_bin_width_m": 0.5,
+        "endpoint_path_rmse_m": 0.15,
+        "endpoint_speed_rmse_m_s": 0.1,
+        "min_speed_gap_m_s": 0.02,
+        "min_path_gap_m": 0.001,
+        "final_hold_s": 0.5,
+        "final_speed_error_m_s": 0.15,
+        "final_path_error_m": 0.2,
+        "final_heading_error_rad": 0.1,
+        "adjacent_monotonicity_role": "diagnostic",
+        "adjacent_speed_reverse_m_s": 0.01,
+        "adjacent_path_reverse_m": 0.01,
+        "roll_limit_role": "diagnostic",
+        "corridor_limit_role": "diagnostic"
+      }
+    },
+    "source": {
+      "role": "diagnostic_only",
+      "candidate": {
+        "role": "integration_candidate",
+        "status": "diagnostic_only",
+        "adoption": "not_adopted",
+        "source_update": 300,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+        "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+        "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+        "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+        "normalizer": {
+          "type": "fixed_SCALES",
+          "scales": [
+            0.3,
+            1.5,
+            0.35,
+            3.0,
+            3.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            0.35,
+            0.8,
+            0.45,
+            3.0,
+            0.35,
+            3.0,
+            60.0,
+            1.5,
+            10.0,
+            0.3,
+            0.3
+          ],
+          "clip": 5.0,
+          "actor_dim": 210,
+          "history": 10,
+          "fields": [
+            "roll",
+            "roll_rate",
+            "steer",
+            "steer_rate",
+            "measured_forward_speed",
+            "measured_world_yaw_rate",
+            "rear_speed_proxy",
+            "front_speed_proxy",
+            "local_command_speed",
+            "local_command_steer",
+            "local_command_speed_rate",
+            "local_command_steer_rate",
+            "previous_local_speed_reference",
+            "previous_local_steer_reference",
+            "previous_final_front_rate",
+            "previous_final_rear_rate",
+            "previous_applied_front_residual",
+            "previous_applied_rear_residual",
+            "ESO_equilibrium_shift",
+            "local_command_equilibrium_reference"
+          ]
+        },
+        "original_protocol_best": {
+          "source_update": 400,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+          "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+        },
+        "upper": {
+          "0": {
+            "source_update": 200,
+            "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+            "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+            "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+            "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+          },
+          "1": {
+            "source_update": 250,
+            "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+            "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+            "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+            "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+          }
+        },
+        "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+        "two_different_late_checkpoints_passed": false,
+        "training_transitions": 0,
+        "maximum_new_control_ticks": 10400
+      },
+      "upper_run": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009",
+      "prepared_bank": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+      "prepared_bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+      "bank_index": 3,
+      "seed": 77001,
+      "protocol": {
+        "protocol_id": "fixed_command_six_v1",
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/lower_tracking_probe_20261008/evaluate.py",
+        "cases": {
+          "straight_hold": [
+            [
+              0,
+              2.3,
+              0
+            ]
+          ],
+          "speed_changes": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.6,
+              0
+            ],
+            [
+              3.5,
+              2.0,
+              0
+            ],
+            [
+              6,
+              2.3,
+              0
+            ]
+          ],
+          "gentle_positive": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              0.08
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ],
+          "gentle_negative": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              -0.08
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ],
+          "steer_reversal": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.3,
+              0.15
+            ],
+            [
+              3,
+              2.3,
+              -0.15
+            ],
+            [
+              5,
+              2.3,
+              0
+            ]
+          ],
+          "fast_turn": [
+            [
+              0,
+              2.3,
+              0
+            ],
+            [
+              1,
+              2.6,
+              0.25
+            ],
+            [
+              4,
+              2.3,
+              0
+            ]
+          ]
+        },
+        "seed": 77001,
+        "prepared_bank_index": 3,
+        "duration_s": 10,
+        "slew": [
+          0.5,
+          0.3
+        ],
+        "command_window_s": [
+          1,
+          6
+        ],
+        "final_window_s": [
+          9.5,
+          10
+        ],
+        "final_tolerances": {
+          "speed_m_s": 0.1,
+          "steer_rad": 0.04,
+          "heading_rad": 0.05
+        },
+        "diagnostic_roll_rad": 0.3,
+        "methods": [
+          "B0",
+          "pi_alpha0",
+          "pi_alpha1"
+        ],
+        "lower_alpha": 1,
+        "checkpoint_selection": "best_model.json else last_completed",
+        "episode_note": "10s observation truncation; original16s task reward/failure accounting unchanged",
+        "external_disturbance": false
+      },
+      "lower_training_bank_sha256": "2eb3b3069043085e72bff29a94f058b22e9c3f712a4b54aadab281c95271cd06",
+      "upper_config_file_sha256": {
+        "0": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c",
+        "1": "91d286aacd35b05ab7531b7d0ad881ab46b1315c6a1889738da71834e0ce310a"
+      },
+      "model": {
+        "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+        "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+        "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+        "assets": {
+          "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+          "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+          "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+          "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+          "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+          "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+        },
+        "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+        "mujoco_version": "3.6.0"
+      },
+      "controller": {
+        "fixed_roll_reference": null,
+        "dt": 0.005,
+        "wo": 40.0,
+        "wc": 5.0,
+        "disturbance_filter": 8.0,
+        "minimum_speed": 0.5,
+        "max_steer_rate": 4.0,
+        "mass": 5.4,
+        "cg_forward": 0.164,
+        "cg_height": 0.2,
+        "wheelbase": 0.408,
+        "trail": 0.024,
+        "caster": 0.4363323129985824,
+        "gravity": 9.8
+      },
+      "actuator": {
+        "composition": "additive",
+        "project_base": false,
+        "dt": 0.005,
+        "steer_limit": 0.8,
+        "steer_rate_limit": 3.0,
+        "rear_rate_limit": 60.0,
+        "steer_residual_scale": 1.5,
+        "rear_residual_scale": 10.0,
+        "strength": 1.0,
+        "base_output_scale": 1.0,
+        "steer_acceleration": null,
+        "rear_acceleration": null,
+        "delay_steps": 0
+      },
+      "physics_dt": 0.0002,
+      "substeps": 25,
+      "control_dt": 0.005,
+      "policy_dt": 0.02,
+      "maximum_new_control_ticks": 10400,
+      "training_ticks": 0,
+      "initialization": "matched complete prepared physical bank; causal masks zero at start, one real pre-frame per5ms",
+      "stop_rule": "physical/policy fault or quiet-settled lower speed>.20/steer>.08 continuously1s; save and stop new combinations",
+      "baseline_reuse": "V5.2 evaluationbest with identical bank/protocol and upper SHA; check exact raw/reference stream after simulation"
+    },
+    "dynamic": {
+      "schema": "path_dynamic_preference_checks_v1",
+      "state": "not_run",
+      "active_lower_ticks": 0,
+      "max_lower_ticks": 24000,
+      "reason": "fixed-alpha preference not qualified"
+    },
+    "stages": [
+      {
+        "update": 0,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+          "seed": 911401,
+          "parent_checkpoint_sha256": null,
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "preference_selection_schema": "path_preference_research_v1",
+          "initialization_mode": "scratch",
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+          "declared_updates": 200,
+          "actual_batch_dimensions": [
+            512,
+            128
+          ],
+          "declared_policy_transitions": 13107200,
+          "source_update": 0,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/training/shared/checkpoints/update_0000.pt",
+          "checkpoint_sha256": "9f492986277a239c94a5aa823692cf04721f229ba23c1336b021052735c222eb",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/training/shared/checkpoints/actor_0000.pkl",
+          "actor_sha256": "104abf8447c83f3776ba1da301fb8ae7bdb4fb8ba7b592034cd06bd5c78ce9ec",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/training/shared/validation/update_0000"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "actor_parameters_sha256": "f3c2208366bfe3ae1a34e120d68a34e7d476667af99e407c96d65fbd9c9e0681",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true,
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5"
+        }
+      },
+      {
+        "update": 50,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+          "seed": 911401,
+          "parent_checkpoint_sha256": null,
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "preference_selection_schema": "path_preference_research_v1",
+          "initialization_mode": "scratch",
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+          "declared_updates": 200,
+          "actual_batch_dimensions": [
+            512,
+            128
+          ],
+          "declared_policy_transitions": 13107200,
+          "source_update": 50,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0050.pt",
+          "checkpoint_sha256": "3a27d6ad3321e765d30ffb46c68a5f010170236a4a296f521cb50b5f29467985",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0050.pkl",
+          "actor_sha256": "593488eed6fc3fd92b781c3bb657f18a9afe51f960ac2fa1c53959b0ce5b2d2c",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0050"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "actor_parameters_sha256": "f349f92c2242e19c311c9ba5556ef48f32ffb417c12deed4e766d5c1cf832d35",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true,
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5"
+        }
+      },
+      {
+        "update": 100,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+          "seed": 911401,
+          "parent_checkpoint_sha256": null,
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "preference_selection_schema": "path_preference_research_v1",
+          "initialization_mode": "scratch",
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+          "declared_updates": 200,
+          "actual_batch_dimensions": [
+            512,
+            128
+          ],
+          "declared_policy_transitions": 13107200,
+          "source_update": 100,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0100.pt",
+          "checkpoint_sha256": "9f1f91fcc2dbc479e171b9cc0c11f947d7450793ebfa3e313d60a6ce85147bd9",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0100.pkl",
+          "actor_sha256": "9d6e545251a4aa917b26d207c2c74c68705b753a96beec9a89f854a47e0fc3ed",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0100"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "actor_parameters_sha256": "b6473cda79f5261ebea4cce31855e146b07042630182304fadce8ee717e60c9b",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true,
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5"
+        }
+      },
+      {
+        "update": 150,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+          "seed": 911401,
+          "parent_checkpoint_sha256": null,
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "preference_selection_schema": "path_preference_research_v1",
+          "initialization_mode": "scratch",
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+          "declared_updates": 200,
+          "actual_batch_dimensions": [
+            512,
+            128
+          ],
+          "declared_policy_transitions": 13107200,
+          "source_update": 150,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0150.pt",
+          "checkpoint_sha256": "65b9e7245e2130be711716c3f14ee401c2fdf7b99d5f2e88119ef615d040ae53",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0150.pkl",
+          "actor_sha256": "aca439e58a4f4dc803f0e462a4ac8222d066f7ac6ed9c766f7a732e242cbd91b",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0150"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "actor_parameters_sha256": "fffb1a629c3c46665b38518975d2f03a69aec1b6ce30af4f3cbb8f3047ead116",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true,
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5"
+        }
+      },
+      {
+        "update": 200,
+        "source": {
+          "schema": "sttw_geometric_path_actor351_v1",
+          "policy_mode": "shared_conditional_v1",
+          "alpha_conditioning_sha256": "54d8ef001b97fb391fecdc70a50a21c5127d51fd21f83030388a8918220faca4",
+          "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+          "source_sha256": "0763606bda208b64b0faccf11cfd840c523c311e426f8db62cf8c5a59c377435",
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "sampler_sha256": "95021cbc513c301a4d83875d0fb669150f3c9b4e65aabcf60a60e7ac636226d2",
+          "best_sha256": "cd8c183eea23af22e75b6b38caaf340d51f364eceb2c876c9e9d0525783eed60",
+          "seed": 911401,
+          "parent_checkpoint_sha256": null,
+          "engineering_check": false,
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "preference_selection_schema": "path_preference_research_v1",
+          "initialization_mode": "scratch",
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5",
+          "declared_updates": 200,
+          "actual_batch_dimensions": [
+            512,
+            128
+          ],
+          "declared_policy_transitions": 13107200,
+          "source_update": 200,
+          "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/update_0200.pt",
+          "checkpoint_sha256": "ae28c8b480dd014496d5c86c192483f371047b961483fe5a268a252fc04f107b",
+          "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/checkpoints/actor_0200.pkl",
+          "actor_sha256": "ce1087c1cd8dc0185d5f93ef0a698de83bbd61f50695bca3016c1105875c1d44",
+          "validation_dir": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-scratch/runs/path_unified_scratch_200_20261014/resume_20261014_01/shared/validation/update_0200"
+        },
+        "panel_identity": {
+          "schema": "path_conditional_panel_v1",
+          "mode": "shared_conditional_v1",
+          "alphas": {
+            "alpha_0": 0.0,
+            "alpha_0p25": 0.25,
+            "alpha_0p5": 0.5,
+            "alpha_0p75": 0.75,
+            "alpha_1": 1.0
+          },
+          "config_sha256": "bb0318188c1b989c852ce9901a458a8427912af342d61c35a8ab6b310dfb5884",
+          "actor_parameters_sha256": "44a0d292cd64ad3a44cfb89e5d8aa380ab178273feef51e671feda36d2dbd161",
+          "architecture": "alpha_modulated_v1",
+          "reward_version": "path_safety_preference_v2",
+          "completed": true,
+          "acceptance_sha256": "9c99f3f2c10db204c303de89e90b9f63d89da8913253090bc3fe56983b4c08e5"
+        }
+      }
+    ]
+  }
+}
