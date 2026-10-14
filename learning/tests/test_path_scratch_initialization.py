@@ -74,3 +74,22 @@ def test_dev_reserve_counts_parent_partial_consumption_before_physics():
  assert t.check_conditional_dev_budget(dict(validation_control_ticks_total=120000,parent_consumed_validation_control_ticks=360000),cfg,p['alphas'])==120000
  with pytest.raises(RuntimeError,match='lineage budget'):
   t.check_conditional_dev_budget(dict(validation_control_ticks_total=120000,parent_consumed_validation_control_ticks=360001),cfg,p['alphas'])
+
+
+def test_reboot_charges_lost_updates_and_uncertain_inflight_batch():
+ parent=dict(completed_updates=5,stage='sampling',policy_transitions_total=5*65536)
+ budget=t.scratch_resume_budget(parent,dict(update=0),512,128,200)
+ assert budget['restored_checkpoint_update']==0 and budget['sampling_budget_cursor']==6
+ assert budget['known_policy_transitions']==327680 and budget['uncertain_policy_transition_reserve']==65536
+ assert budget['charged_policy_transitions']==393216 and budget['remaining_sampling_updates']==194
+ assert budget['unrecoverable_sampling_slots']==6
+ # Clean saved boundary recovers real learner progress without charging a phantom batch.
+ parent=dict(completed_updates=25,stage='optimized',policy_transitions_total=25*65536)
+ clean=t.scratch_resume_budget(parent,dict(update=25),512,128,200)
+ assert clean['sampling_budget_cursor']==25 and clean['uncertain_policy_transition_reserve']==0
+ assert clean['remaining_sampling_updates']==175 and clean['unrecoverable_sampling_slots']==0
+ # Repeated reboot preserves prior charge and loss, without double accounting.
+ parent=dict(completed_updates=7,stage='optimized',parent_consumed_policy_transitions=6*65536,policy_transitions_total=65536)
+ again=t.scratch_resume_budget(parent,dict(update=7,resume_accounting=budget),512,128,200)
+ assert again['sampling_budget_cursor']==7 and again['charged_policy_transitions']==7*65536
+ assert again['unrecoverable_sampling_slots']==6

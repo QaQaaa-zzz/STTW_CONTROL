@@ -59,7 +59,7 @@ def save_checkpoint(root,algo,update,identity,*,rejections=0,route_counters=None
     import torch
     root=Path(root);root.mkdir(parents=True,exist_ok=True);path=root/f'update_{update:04d}.pt'
     if path.exists():raise FileExistsError(path)
-    saved=dict(schema=SCHEMA,identity=identity,update=update,route_counters=None if route_counters is None else np.asarray(route_counters),policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all() if torch.cuda.is_initialized() else None,numpy_rng=np.random.get_state(),python_rng=random.getstate(),consecutive_rejections=rejections,terminal_contract='terminal_contract_v2',environment_continuation='learner exact; physical/controller/history/filter restart from original prepared bank, not frame-continuous')
+    saved=dict(schema=SCHEMA,identity=identity,update=update,route_counters=None if route_counters is None else np.asarray(route_counters),policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all() if torch.cuda.is_initialized() else None,numpy_rng=np.random.get_state(),python_rng=random.getstate(),consecutive_rejections=rejections,terminal_contract='terminal_contract_v2',environment_continuation='learner exact; physical/controller/history/filter restart from original prepared bank, not frame-continuous',resume_accounting=getattr(algo,'path_resume_accounting',None))
     temp=path.with_suffix('.tmp');torch.save(saved,temp);os.replace(temp,path)
     with (root/f'actor_{update:04d}.pkl').open('wb') as f:pickle.dump(jax.device_get(export_actor(algo.policy)),f)
     return path
@@ -350,6 +350,24 @@ def rescore_saved_candidates(parent,out,alpha,cfg,identity):
         atomic_json(Path(out)/'rescored_parent'/f'update_{update:04d}.json',summary)
         persist_task_best(out,checkpoint,actor,summary,dict(identity,source_update=update))
 
+def scratch_resume_budget(parent_status,saved,num_envs,rollout_steps,updates):
+    """Recover state and sampling slots separately after an uncheckpointed reboot."""
+    size=num_envs*rollout_steps
+    known=int(parent_status.get('policy_transitions_total',0))+int(parent_status.get('parent_consumed_policy_transitions',0))
+    if known<0 or saved['update']<0:raise ValueError('invalid scratch resume counters')
+    cursor=max(int(saved['update']),(known+size-1)//size)
+    if parent_status.get('stage')=='sampling':
+        cursor=max(cursor,int(parent_status.get('completed_updates',saved['update']))+1)
+    if cursor>updates:raise ValueError('scratch resume exceeds declared sampling budget')
+    charged=cursor*size
+    lost=int((saved.get('resume_accounting') or {}).get('unrecoverable_sampling_slots',0))+cursor-int(saved['update'])
+    return dict(restored_checkpoint_update=int(saved['update']),sampling_budget_cursor=cursor,
+        known_policy_transitions=known,charged_policy_transitions=charged,
+        uncertain_policy_transition_reserve=charged-known,unrecoverable_sampling_slots=lost,
+        remaining_sampling_updates=updates-cursor,
+        update_semantics='absolute sampling budget slot; lost slots do not imply recovered PPO updates')
+
+
 def check_conditional_dev_budget(status,config,alphas):
     """Reserve a full fixed panel before replaying any resumed DEV physics."""
     reserve=len(alphas)*6*round(config['training_future_phase_C']['episode_s']/config['timing']['lower_dt_s'])
@@ -414,6 +432,10 @@ def train(path,output,*,execute=False,resume=None):
         status.update(kw)
         if conditional and 'completed_updates' in status:status['shared_updates']=status['completed_updates']
         elif 'alpha' in status and 'completed_updates' in status:status.setdefault('endpoint_updates',{})[f"alpha{status['alpha']}"]=status['completed_updates']
+        if conditional and algo is not None and getattr(algo,'path_resume_accounting',None):
+            accounting=algo.path_resume_accounting
+            status['recoverable_learner_updates']=status.get('completed_updates',0)-accounting['unrecoverable_sampling_slots']
+            status['completed_updates_semantics']='absolute_sampling_budget_cursor'
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
     def account_validation(ticks):
         proposed=status['validation_control_ticks_total']+int(ticks)
@@ -494,6 +516,11 @@ def train(path,output,*,execute=False,resume=None):
                             if digest(incumbent[key])!=incumbent[key+'_sha256']:raise ValueError('resume preference best SHA mismatch')
                         persist_preference_best(out,incumbent['checkpoint'],incumbent['actor'],incumbent['metrics'],{**identity,'source_update':incumbent['source_update'],'validation_dir':incumbent['validation_dir']})
                 start_update=saved['update'];rejections=saved['consecutive_rejections']
+                if conditional and plan['initialization']['mode']=='scratch':
+                    accounting=scratch_resume_budget(parent_status,saved,n,steps,updates)
+                    algo.path_resume_accounting=accounting
+                    status.update(resume_accounting=accounting,parent_consumed_policy_transitions=accounting['charged_policy_transitions'])
+                    start_update=accounting['sampling_budget_cursor']
                 if start_update>endpoint_target:raise ValueError('resume boundary exceeds declared target')
                 if saved.get('route_counters') is None or np.shape(saved['route_counters'])!=(n,):raise ValueError('resume requires per-environment route counters')
                 route_counters=np.asarray(saved['route_counters'])
@@ -502,7 +529,7 @@ def train(path,output,*,execute=False,resume=None):
                     with fault_file.open('rb') as f:failed_episodes=pickle.load(f)
                     route_counters=np.maximum(route_counters,np.asarray(failed_episodes.episode))
                 episodes=reset_batch(j.asarray(route_counters)+1,start_update+1)
-                atomic_json(out/'resume_receipt.json',dict(parent_checkpoint=receipt,parent_terminal_contract=saved.get('terminal_contract','terminal_contract_v1'),terminal_contract=plan.get('terminal_contract'),restored_update=start_update,parent_reported_updates=status.get('parent_reported_updates'),physical_state='reset to prepared bank',routes='next unused after saved and fault snapshot counters',restored=['actor','critic','film','log_std','optimizer','learning_rates','torch_rng','cuda_rng','numpy_rng','python_rng','consecutive_rejections','route_counters'],initialization_mode='exact_resume',original_initialization_mode=plan.get('initialization',{}).get('mode')))
+                atomic_json(out/'resume_receipt.json',dict(parent_checkpoint=receipt,parent_terminal_contract=saved.get('terminal_contract','terminal_contract_v1'),terminal_contract=plan.get('terminal_contract'),restored_update=saved['update'],sampling_budget_cursor=start_update,resume_accounting=getattr(algo,'path_resume_accounting',None),parent_reported_updates=status.get('parent_reported_updates'),physical_state='reset to prepared bank',routes='next unused after saved and fault snapshot counters',restored=['actor','critic','film','log_std','optimizer','learning_rates','torch_rng','cuda_rng','numpy_rng','python_rng','consecutive_rejections','route_counters'],initialization_mode='exact_resume',original_initialization_mode=plan.get('initialization',{}).get('mode')))
                 a,cr,fault=observe(episodes)
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
@@ -673,7 +700,7 @@ def train(path,output,*,execute=False,resume=None):
                 for channel,value in enumerate(algo.policy.log_std.detach().cpu().tolist()):writer.add_scalar(f'ppo/std_{channel}',float(np.exp(value)),update)
                 for group,g in enumerate(algo.optimizer.param_groups):writer.add_scalar(f'ppo/lr_{group}',g['lr'],update)
                 writer.flush()
-                if update%c['save_every']==0 or update==endpoint_target or stop:
+                if (conditional and plan['initialization']['mode']=='scratch') or update%c['save_every']==0 or update==endpoint_target or stop:
                     checkpoint=save_checkpoint(out/'checkpoints',algo,update,identity,rejections=rejections,route_counters=episodes.episode)
                     atomic_json(out/'last_completed.json',dict(update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),schema=SCHEMA))
                 if not http_verified and (update==start_update+1 or update%25==0):http_verified=_verify_reward_http(root,tb,learner_name)
