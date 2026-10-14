@@ -8,18 +8,32 @@ MODE='shared_conditional_v1'
 PLAN_SCHEMA='sttw_path_conditional_training_plan_v1'
 ALPHA_INDEX=336
 ALPHA_GRID=[0.,.25,.5,.75,1.]
+STRONG_SCHEMA='sttw_path_strong_preference_training_plan_v1'
+CURRICULUM=[dict(updates_inclusive=[1,100],endpoint_probability_each=.5,uniform_probability=0.),dict(updates_inclusive=[101,200],endpoint_probability_each=.4,uniform_probability=.2)]
+
+def is_strong(config):
+    return config.get('network',{}).get('architecture')=='alpha_modulated_v1'
+
+def curriculum_probabilities(config,absolute_update):
+    a=config['alpha_conditioning']
+    if not is_strong(config):return j.asarray([a['endpoint_probability_each']]*2+[a['uniform_probability']],j.float32)
+    stages=a['curriculum']
+    return j.where(j.asarray(absolute_update)<=stages[0]['updates_inclusive'][1],
+        j.asarray([stages[0]['endpoint_probability_each']]*2+[stages[0]['uniform_probability']],j.float32),
+        j.asarray([stages[1]['endpoint_probability_each']]*2+[stages[1]['uniform_probability']],j.float32))
 
 
 def is_conditional(plan):
     return plan.get('policy_mode')==MODE
 
 
-def sample_episode_alpha(seed,env_id,episode):
+def sample_episode_alpha(seed,env_id,episode,config=None,absolute_update=1):
     """Separate purpose/seed stream; the sampled value is held in PathState."""
     key=jax.random.fold_in(jax.random.PRNGKey(seed),j.uint32(0xA17A))
     key=jax.random.fold_in(jax.random.fold_in(key,env_id),episode)
     draw=jax.random.uniform(key,(),dtype=j.float32)
-    return j.where(draw<.25,j.float32(0),j.where(draw<.5,j.float32(1),(draw-.5)*2))
+    p=j.asarray([.25,.25,.5]) if config is None else curriculum_probabilities(config,absolute_update)
+    return j.where(draw<p[0],j.float32(0),j.where(draw<p[0]+p[1],j.float32(1),(draw-p[0]-p[1])/j.maximum(p[2],1e-8)))
 
 
 def execution_dimensions(plan,config):
@@ -29,8 +43,13 @@ def execution_dimensions(plan,config):
 
 def validate_conditional_plan(plan,config):
     c=config['training_future_phase_C'];a=config.get('alpha_conditioning',{})
-    if plan.get('schema')!=PLAN_SCHEMA or not is_conditional(plan):raise ValueError('conditional plan schema/mode mismatch')
+    from .path_command_policy import architecture_identity
+    architecture_identity(config)
+    strong=is_strong(config)
+    if plan.get('schema')!=(STRONG_SCHEMA if strong else PLAN_SCHEMA) or not is_conditional(plan):raise ValueError('conditional plan schema/mode mismatch')
     expected=dict(mode=MODE,alpha_index=336,endpoint_probability_each=.25,uniform_probability=.5,constant_per_episode=True,evaluation_alphas=ALPHA_GRID)
+    if strong:
+        expected.pop('endpoint_probability_each');expected.pop('uniform_probability');expected['curriculum']=CURRICULUM
     if {k:v for k,v in a.items() if k!='seed'}!=expected or config['network'].get('policy_type')!=MODE:raise ValueError('conditional alpha contract mismatch')
     seeds=[plan.get('seed'),a.get('seed')]
     if any(type(seed) is not int or not 0<=seed<2**32 for seed in seeds) or a['seed'] in (plan['seed'],config['training_sampler']['route_seed']):raise ValueError('independent integer alpha seed required')
@@ -40,44 +59,55 @@ def validate_conditional_plan(plan,config):
     if plan.get('automatic_extension') or plan.get('conditional_extension'):raise ValueError('conditional budget cannot extend')
     if plan.get('sampler_version')!='demand_exposure_v2' or plan['sampler_resolution'].get('training_sampler')!=config.get('training_sampler'):raise ValueError('conditional sampler disconnected')
     if plan.get('terminal_contract')!='terminal_contract_v2' or plan.get('http_failure_policy')!='error':raise ValueError('conditional terminal/visibility contract mismatch')
-    if config['path_reward'].get('reward_version')!='path_safety_preference_v1':raise ValueError('conditional reward version mismatch')
+    if config['path_reward'].get('reward_version')!=('path_safety_preference_v2' if strong else 'path_safety_preference_v1'):raise ValueError('conditional reward version mismatch')
     if c['num_envs']!=512 or c['rollout_steps']!=128 or c['episode_s']!=20 or c['validation_updates']!=[0,50,100,150,200]:raise ValueError('conditional training dimensions/schedule mismatch')
     if plan.get('engineering_check',False):
         if plan['updates']!=1 or plan.get('engineering_dimensions')!=[8,16] or not plan.get('discard_engineering_update'):raise ValueError('engineering check must discard exactly 8x16 update')
     elif plan['updates']!=200:raise ValueError('conditional formal budget is 200 updates')
     init=plan.get('initialization',{})
-    if init.get('mode')!='actor_only_zero_alpha_column' or init.get('parent_alpha')!=0:raise ValueError('conditional actor-only alpha0 initialization required')
+    if init.get('mode')!=('actor_only_fold_alpha1' if strong else 'actor_only_zero_alpha_column') or init.get('parent_alpha')!=(1 if strong else 0):raise ValueError('conditional actor-only initialization mismatch')
+    if strong and (config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_strong_preference_v1' or config.get('preference_selection_schema')!='path_strong_preference_v1'):raise ValueError('strong preference reward/selection contract mismatch')
     if not init.get('checkpoint') or len(init.get('checkpoint_sha256',''))!=64:raise ValueError('conditional parent identity missing')
     if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('conditional exposure coverage monitor mismatch')
 
 
-def initialize_conditional_actor(algo,parent_checkpoint,expected_sha,*,expected_lower_sha=None):
+def initialize_conditional_actor(algo,parent_checkpoint,expected_sha,*,expected_lower_sha=None,config=None):
     import torch
     if digest(parent_checkpoint)!=expected_sha:raise ValueError('parent checkpoint SHA mismatch')
     if algo.optimizer.state_dict()['state']:raise ValueError('conditional initialization requires fresh Adam')
     saved=torch.load(parent_checkpoint,map_location=algo.device,weights_only=False)
     from .path_command_policy import SCHEMA
-    if saved.get('schema')!=SCHEMA or saved.get('identity',{}).get('alpha')!=0:raise ValueError('conditional parent must be geometric alpha0')
+    strong=is_strong(config or {})
+    if saved.get('schema')!=SCHEMA or saved.get('identity',{}).get('alpha')!=(1 if strong else 0):raise ValueError('conditional parent alpha identity mismatch')
     if expected_lower_sha is None or saved['identity'].get('lower_actor_sha256')!=expected_lower_sha:raise ValueError('conditional parent lower identity mismatch')
     current=algo.policy.state_dict();parent=saved['policy'];keys={k for k in current if k.startswith('actor.')}
-    if keys!={k for k in parent if k.startswith('actor.')}:raise ValueError('conditional parent actor keys mismatch')
-    for key in keys:
+    parent_keys={k for k in parent if k.startswith('actor.')}
+    dense_keys={k for k in keys if k.endswith(('.weight','.bias'))}
+    if parent_keys!=(dense_keys if strong else keys):raise ValueError('conditional parent actor keys mismatch')
+    for key in parent_keys:
         if parent[key].shape!=current[key].shape or not torch.isfinite(parent[key]).all():raise ValueError('invalid conditional parent actor tensor '+key)
     first_name,first=next((name,module) for name,module in algo.policy.actor.named_modules() if isinstance(module,torch.nn.Linear))
     if first.in_features!=351:raise ValueError('conditional actor schema351 required')
-    for key in keys:current[key]=parent[key].to(device=algo.device,dtype=current[key].dtype).clone()
+    for key in parent_keys:current[key]=parent[key].to(device=algo.device,dtype=current[key].dtype).clone()
+    if strong:
+        current[f'actor.{first_name}.bias']+=current[f'actor.{first_name}.weight'][:,ALPHA_INDEX].clone()
+        for key in keys-parent_keys:current[key].zero_()
     current[f'actor.{first_name}.weight'][:,ALPHA_INDEX]=0
     algo.policy.load_state_dict(current,strict=True)
-    return dict(mode='actor_only_zero_alpha_column',parent_checkpoint=str(Path(parent_checkpoint).resolve()),parent_checkpoint_sha256=expected_sha,
-        restored=sorted(keys),zeroed_alpha_input_column=ALPHA_INDEX,critic='fresh',log_std='configured_fresh',optimizer='fresh',rng='fresh',update=0)
+    return dict(mode='actor_only_fold_alpha1' if strong else 'actor_only_zero_alpha_column',parent_checkpoint=str(Path(parent_checkpoint).resolve()),parent_checkpoint_sha256=expected_sha,
+        restored=sorted(parent_keys),folded_parent_alpha=1 if strong else None,zeroed_alpha_input_column=ALPHA_INDEX,critic='fresh',log_std='configured_fresh',optimizer='fresh',rng='fresh',update=0)
 
 
 def conditional_identity(plan,config,source):
     from .path_command_policy import SCHEMA
-    return dict(schema=SCHEMA,policy_mode=MODE,alpha_conditioning_sha256=config_hash(config['alpha_conditioning']),
+    identity=dict(schema=SCHEMA,policy_mode=MODE,alpha_conditioning_sha256=config_hash(config['alpha_conditioning']),
         lower_actor_sha256=source['candidate']['actor_sha256'],source_sha256=config_hash(source),config_sha256=config_hash(config),
         sampler_sha256=config_hash(plan['sampler_resolution']),best_sha256=config_hash(plan['best_resolution']),seed=plan['seed'],
         parent_checkpoint_sha256=plan['initialization']['checkpoint_sha256'],engineering_check=bool(plan.get('engineering_check',False)))
+    if is_strong(config):
+        from .path_command_policy import architecture_identity
+        identity.update(architecture=architecture_identity(config),reward_version=config['path_reward']['reward_version'],curriculum_sha256=config_hash(config['alpha_conditioning']['curriculum']),preference_selection_schema=config['preference_selection_schema'])
+    return identity
 
 
 def complete_resume_validation(parent,out,update,checkpoint,identity,config,params,evaluate,tick_count):
@@ -125,6 +155,9 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
             panels={key:{name:dict(np.load(boundary/key/(name+'.npz'))) for name,_,_ in cases(config)} for key in grid}
             summary=summarize_conditional(panels,config)
             persist_conditional_best(out,source['checkpoint'],source['actor'],summary,{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
+            if is_strong(config):
+                from .path_command_selection import summarize_preference,persist_preference_best
+                persist_preference_best(out,source['checkpoint'],source['actor'],summarize_preference(panels,config),{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
         else:evaluate(update,checkpoint)
         receipt['completed']=True
     finally:

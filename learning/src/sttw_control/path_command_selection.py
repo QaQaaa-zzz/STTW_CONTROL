@@ -261,9 +261,11 @@ def conditional_score_key(summary):
     return key
 
 
-def persist_conditional_best(root,checkpoint,actor,summary,identity):
+def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
+        _selection_schema=CONDITIONAL_SELECTION_SCHEMA,_pointer='best_conditional_model.json',
+        _score=conditional_score_key,_generation='conditional_best_generations'):
     """One atomic pointer for the same shared checkpoint across the entire grid."""
-    root=Path(root);key=conditional_score_key(summary)
+    root=Path(root);key=_score(summary)
     update=identity.get('source_update',identity.get('update'))
     if update is None:raise ValueError('conditional best requires source update identity')
     validation=Path(identity.get('validation_dir',root/'validation'/f'update_{int(update):04d}')).resolve()
@@ -277,9 +279,9 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity):
     meta=json.loads((validation/'panel_identity.json').read_text())
     if not meta.get('completed') or meta.get('alphas')!=summary['alphas']:
         raise ValueError('incomplete conditional validation identity')
-    pointer=root/'best_conditional_model.json';incumbent=json.loads(pointer.read_text()) if pointer.exists() else None
+    pointer=root/_pointer;incumbent=json.loads(pointer.read_text()) if pointer.exists() else None
     if incumbent:
-        if incumbent.get('selection_schema')!=CONDITIONAL_SELECTION_SCHEMA:raise ValueError('conditional best identity mismatch')
+        if incumbent.get('selection_schema')!=_selection_schema:raise ValueError('conditional best identity mismatch')
         if any(incumbent['panel_identity'].get(k)!=meta.get(k) for k in ('schema','mode','alphas','config_sha256')):
             raise ValueError('conditional best protocol identity mismatch')
         for k,v in identity.items():
@@ -288,16 +290,127 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity):
         for kind in ('actor','checkpoint'):
             if digest(incumbent[kind])!=incumbent[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
         if key>=tuple(incumbent['score_tuple']):return incumbent
-    generation=root/'conditional_best_generations'/hashes['checkpoint_sha256'];generation.mkdir(parents=True,exist_ok=True)
+    generation=root/_generation/hashes['checkpoint_sha256'];generation.mkdir(parents=True,exist_ok=True)
     for original,name in ((checkpoint,'best_model.pt'),(actor,'best_actor.pkl')):
         dest=generation/name
         if dest.exists() and digest(original)!=digest(dest):raise ValueError('immutable conditional generation differs')
         if not dest.exists():shutil.copyfile(original,dest)
         if digest(original)!=digest(dest):raise ValueError('conditional generation copy SHA mismatch')
-    record=dict(identity,schema=SCHEMA,selection_schema=CONDITIONAL_SELECTION_SCHEMA,source_update=int(update),
+    record=dict(identity,schema=SCHEMA,selection_schema=_selection_schema,source_update=int(update),
         checkpoint=str((generation/'best_model.pt').resolve()),actor=str((generation/'best_actor.pkl').resolve()),
         **hashes,validation_dir=str(validation),panel_identity=meta,logical_identity=logical_identity,alphas=summary['alphas'],
-        score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary['qualified_task'],
-        qualified_preference=None,metrics=summary)
+        score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary.get('qualified',summary['qualified_task']),
+        qualified_preference=summary.get('qualified_preference'),metrics=summary)
     atomic_json(generation/'selection.json',record);atomic_json(pointer,record)
     return record
+
+
+PREFERENCE_SELECTION_SCHEMA='path_strong_preference_v1'
+
+
+def _full_turn_metrics(trace,config):
+    """Equal-MSE spatial bins of the immutable route, never common fragments."""
+    c=config['path'];start=float(c['straight_prefix_m'])
+    end=start+float(c['curvature_transition_length_m'])+abs(float(c['turn_angle_rad']))*float(c['turn_radius_m'])
+    edges=np.append(np.arange(start,end,.5),end)
+    progress=np.asarray(trace['path_progress'],float)
+    ev=np.asarray(trace['actual_forward_speed'],float)-np.asarray(trace['v_user'],float)
+    ey=np.asarray(trace['path_cross_track'],float)
+    counts=[];squares=[]
+    for i,(lo,hi) in enumerate(zip(edges[:-1],edges[1:])):
+        mask=(progress>=lo)&((progress<=hi) if i==len(edges)-2 else (progress<hi))
+        counts.append(int(mask.sum()))
+        if mask.any():squares.append([float(np.mean(ev[mask]**2)),float(np.mean(ey[mask]**2))])
+    complete=bool(counts) and all(counts)
+    errors=np.sqrt(np.mean(squares,axis=0)) if complete else (None,None)
+    return dict(complete=complete,bin_counts=counts,edges_m=edges.tolist(),
+        speed_rmse_m_s=None if errors[0] is None else float(errors[0]),
+        path_rmse_m=None if errors[1] is None else float(errors[1]))
+
+
+def summarize_preference(panels,config):
+    """Strong preference selection; roll/corridor remain separate diagnostics."""
+    if config.get('preference_selection_schema')!=PREFERENCE_SELECTION_SCHEMA:
+        raise ValueError('strong preference selection schema mismatch')
+    result=summarize_conditional(panels,config)
+    result.update(selection_schema=PREFERENCE_SELECTION_SCHEMA,preference_cases={},
+                  highspeed_endpoint_failures=0,preference_continuity_failures=0)
+    worst=0.;deficit=0.;missing=False
+    high=config['stage_C_evaluation']['conflict_speed_m_s']
+    names=[name for name,route,v in cases(config) if route!='straight' and v==high]
+    if len(names)!=2:raise ValueError('strong preference requires high left/right turns')
+    for name in names:
+        metrics={key:_full_turn_metrics(panels[key][name],config) for key in result['alphas']}
+        complete=all(m['complete'] for m in metrics.values())
+        zero=metrics['alpha_0'];one=metrics['alpha_1']
+        path=zero['path_rmse_m'];speed=one['speed_rmse_m_s']
+        endpoints=[path,speed];limits=[.10,.05]
+        endpoint_fail=[value is None or value>limit for value,limit in zip(endpoints,limits)]
+        result['highspeed_endpoint_failures']+=sum(endpoint_fail)
+        for value,limit in zip(endpoints,limits):
+            if value is None:missing=True
+            else:worst=max(worst,value/limit)
+        dv=zero['speed_rmse_m_s']-one['speed_rmse_m_s'] if zero['complete'] and one['complete'] else None
+        dy=one['path_rmse_m']-zero['path_rmse_m'] if zero['complete'] and one['complete'] else None
+        gap_fail=[dv is None or dv<.03,dy is None or dy<.02]
+        result['preference_continuity_failures']+=sum(gap_fail)
+        deficit+=sum(1. if v is None else max(0.,(limit-v)/limit) for v,limit in [(dv,.03),(dy,.02)])
+        reverse_speed=[];reverse_path=[]
+        keys=list(metrics)
+        for left,right in zip(keys[:-1],keys[1:]):
+            a=metrics[left];b=metrics[right]
+            if not (a['complete'] and b['complete']):
+                reverse_speed.append(None);reverse_path.append(None)
+                result['preference_continuity_failures']+=2;deficit+=2.;missing=True
+                continue
+            rv=b['speed_rmse_m_s']-a['speed_rmse_m_s']
+            ry=a['path_rmse_m']-b['path_rmse_m']
+            reverse_speed.append(rv);reverse_path.append(ry)
+            result['preference_continuity_failures']+=int(rv>.01)+int(ry>.01)
+            deficit+=max(0.,(rv-.01)/.01)+max(0.,(ry-.01)/.01)
+        result['preference_cases'][name]=dict(per_alpha=metrics,all_alpha_complete_turn=complete,
+            endpoint_main_failures=endpoint_fail,D_v_m_s=dv,D_y_m=dy,
+            gap_failures=gap_fail,adjacent_speed_reverse_changes_m_s=reverse_speed,
+            adjacent_path_reverse_changes_m=reverse_path)
+    result.update(worst_endpoint_normalized_error=float(np.finfo(np.float32).max) if missing else worst,
+        normalized_preference_deficit=deficit,missing_turn_bins=missing,
+        missing_error_semantics='errors remain null; missing coverage fails criteria and receives finite maximum rank sentinel',
+        qualification_role='physical/domain, goal/hold, highspeed endpoint targets and preference continuity; roll/corridor diagnostic only')
+    result['qualified_preference']=not any(result[k] for k in ('physical_failures','tracking_domain_failures',
+        'goal_hold_failures','highspeed_endpoint_failures','preference_continuity_failures')) and not missing
+    result['qualified']=result['qualified_preference']
+    result['score_tuple']=preference_score_key(result)
+    return result
+
+
+def preference_score_key(summary,update=0):
+    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema')!=PREFERENCE_SELECTION_SCHEMA
+            or not summary.get('all_declared_traces_complete')):raise ValueError('invalid strong preference identity')
+    key=(summary['physical_failures']+summary['tracking_domain_failures'],summary['goal_hold_failures'],
+        summary['highspeed_endpoint_failures'],summary['preference_continuity_failures'],
+        summary['worst_endpoint_normalized_error'],summary['normalized_preference_deficit'],int(update))
+    if not all(np.isfinite(v) for v in key):raise ValueError('nonfinite strong preference selection')
+    return key
+
+
+def persist_preference_best(root,checkpoint,actor,summary,identity):
+    update=identity.get('source_update',identity.get('update'))
+    if update is None:raise ValueError('strong preference requires source update')
+    from .path_command_policy import MODULATED_ARCHITECTURE,validate_actor_parameters
+    from .preference_best import config_hash
+    from .path_command_evaluation import _conditional_parameter_digest
+    import pickle
+    if identity.get('architecture')!=MODULATED_ARCHITECTURE or identity.get('reward_version')!='path_safety_preference_v2':
+        raise ValueError('strong preference architecture/reward identity mismatch')
+    folder=Path(identity.get('validation_dir',Path(root)/'validation'/f'update_{int(update):04d}'))
+    meta=json.loads((folder/'panel_identity.json').read_text())
+    for key in ('architecture','reward_version','config_sha256'):
+        if meta.get(key)!=identity.get(key):raise ValueError('strong preference panel identity mismatch '+key)
+    with Path(actor).open('rb') as stream:params=pickle.load(stream)
+    validate_actor_parameters(params,{'network':{'architecture':identity['architecture']}})
+    if _conditional_parameter_digest(params)!=meta.get('actor_parameters_sha256'):
+        raise ValueError('strong preference full Actor parameters identity mismatch')
+    summary=dict(summary,score_tuple=preference_score_key(summary,update))
+    return persist_conditional_best(root,checkpoint,actor,summary,identity,
+        _selection_schema=PREFERENCE_SELECTION_SCHEMA,_pointer='best_preference_model.json',
+        _score=lambda m:preference_score_key(m,update),_generation='preference_best_generations')

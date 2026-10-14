@@ -13,9 +13,10 @@ from sttw_control.preference_best import atomic_json,digest
 
 ROOT=Path(__file__).parents[2]
 
-def test_preparation_counts_one_learner_and_engineering_has_no_dev(tmp_path):
-    formal=training.prepare(ROOT/'learning/configs/path_unified_alpha_run.json',tmp_path/'formal')
-    smoke=training.prepare(ROOT/'learning/configs/path_unified_alpha_engineering.json',tmp_path/'smoke')
+@pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference'])
+def test_preparation_counts_one_learner_and_engineering_has_no_dev(tmp_path,prefix):
+    formal=training.prepare(ROOT/'learning/configs'/f'{prefix}_run.json',tmp_path/'formal')
+    smoke=training.prepare(ROOT/'learning/configs'/f'{prefix}_engineering.json',tmp_path/'smoke')
     assert formal['training_policy_transitions_total']==13_107_200
     assert formal['training_lower_ticks_total']==52_428_800 and formal['maximum_validation_lower_ticks']==600_000
     assert formal['learner_count']==1 and formal['validation_updates']==[0,50,100,150,200]
@@ -54,7 +55,8 @@ def test_shared_checkpoint_resume_keeps_identity_rng_and_mixed_alpha_ppo(tmp_pat
     for key,value in algo.policy.state_dict().items():torch.testing.assert_close(value,other.policy.state_dict()[key],rtol=0,atol=0)
 
 
-def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch):
+@pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json'])
+def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch,plan_file):
     """Exercise the real orchestration/PPO on a deterministic non-physical batch."""
     from flax import struct
     from sttw_control import path_command_statistics as statistics
@@ -72,15 +74,17 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
         family:object
         sample_group:object
     class Batch:
-        def __init__(self,env,snapshot,config,seed,alpha):assert alpha is None
-        def reset(self,eid,episode):
-            state=State(j.int32(0),sample_episode_alpha(911402,eid,episode),j.bool_(False))
+        def __init__(self,env,snapshot,config,seed,alpha):
+            assert alpha is None
+            self.config=config
+        def reset(self,eid,episode,absolute_update=1):
+            state=State(j.int32(0),sample_episode_alpha(self.config['alpha_conditioning']['seed'],eid,episode,self.config,absolute_update),j.bool_(False))
             route=Route(j.float32(0),j.float32(2),j.int32(0),j.int32(0))
             return training.Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
         def observation(self,ep):
             obs=j.zeros(351).at[336].set(ep.state.alpha)
             return obs,j.concatenate([obs,j.ones(1)]),ep.state.fault
-        def advance_one(self,ep,z):
+        def advance_one(self,ep,z,absolute_update=1):
             nxt=ep.replace(state=ep.state.replace(tick=ep.state.tick+4));obs=self.observation(nxt)
             flags={k:j.bool_(False) for k in ('engineering_fault','done','physical_failure','tracking_domain_failure')}
             stats=dict(active_ticks=j.int32(4),rollout=j.array([4.,0.,0.,0.,-.01,0.]),completed_totals=j.zeros(6),
@@ -99,7 +103,7 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
     monkeypatch.setattr(statistics,'summarize_statistics',lambda s,c:{'active_lower_samples':float(s['count'])})
     monkeypatch.setattr(evaluation.BatchedPanelEvaluator,'evaluate',lambda *args,**kw:pytest.fail('engineering must not evaluate'))
     out=tmp_path/'engineering'
-    training.train(ROOT/'learning/configs/path_unified_alpha_engineering.json',out,execute=True)
+    training.train(ROOT/'learning/configs'/plan_file,out,execute=True)
     status=json.loads((out/'status.json').read_text());receipt=json.loads((out/'shared/engineering_receipt.json').read_text())
     assert calls==[(8,16)] and status['state']=='completed' and status['shared_updates']==1
     assert status['policy_transitions_total']==128 and status['training_control_ticks_total']==512

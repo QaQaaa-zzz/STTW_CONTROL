@@ -40,3 +40,15 @@ def test_conditional_baseline_rejects_physics_or_incomplete_cache(tmp_path,monke
     monkeypatch.setattr(cache,'reuse_zero_upper',lambda *a:set())
     target=tmp_path/'new';target.mkdir()
     with pytest.raises(ValueError):cache.reuse_conditional_baseline(parent,target,new,source,{})
+
+
+def test_strong_baseline_changes_reward_network_and_curriculum_without_physics(tmp_path,monkeypatch):
+    root=Path(__file__).parents[2]
+    plan,new,_=load_plan(root/'learning/configs/path_strong_preference_run.json')
+    old=json.loads((Path(plan['baseline_parent'])/'manifest.json').read_text())
+    parent=tmp_path/'parent';parent.mkdir();atomic_json(parent/'manifest.json',old)
+    monkeypatch.setattr(cache,'reuse_zero_upper',lambda *args:{name for name,_,_ in cache.cases(new)})
+    target=tmp_path/'new';target.mkdir()
+    assert len(cache.reuse_conditional_baseline(parent,target,new,old['source'],{}))==6
+    new['residual_interface']['speed_negative_scale_m_s']+=.1
+    with pytest.raises(ValueError,match='physical'):cache.reuse_conditional_baseline(parent,target,new,old['source'],{})

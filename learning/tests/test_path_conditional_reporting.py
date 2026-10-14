@@ -2,6 +2,10 @@
 from copy import deepcopy
 from pathlib import Path
 import json
+import pickle
+import jax
+import jax.numpy as j
+from sttw_control.path_command_policy import make_path_actor
 import numpy as np
 import pytest
 from test_path_task_selection import CFG, panel
@@ -15,6 +19,12 @@ def config():
     c=deepcopy(CFG);c['task_selection_schema']='path_conditional_task_v1'
     c['alpha_conditioning']={'mode':'shared_conditional_v1','evaluation_alphas':list(ALPHAS)}
     return c
+
+def actor_parameters():
+    return make_path_actor(config()).init(jax.random.PRNGKey(9),j.zeros(351))
+
+def save_actor(path):
+    path.write_bytes(pickle.dumps(actor_parameters()))
 
 def panels():
     result={}
@@ -75,7 +85,7 @@ class SavedEvaluator:
         return data
 
 def test_evaluate_conditional_writes_unambiguous_grid_and_rejects_duplicate(tmp_path):
-    result=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,tmp_path/'panel')
+    result=evaluation.evaluate_conditional(SavedEvaluator(),actor_parameters(),ALPHAS,tmp_path/'panel')
     assert tuple(result)==KEYS
     meta=json.loads((tmp_path/'panel/panel_identity.json').read_text())
     assert meta['alphas']==dict(zip(KEYS,ALPHAS))
@@ -87,9 +97,9 @@ def test_evaluate_conditional_writes_unambiguous_grid_and_rejects_duplicate(tmp_
 
 def test_one_conditional_best_and_final_reuse_preserve_all_alphas(tmp_path):
     ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
-    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    actor=tmp_path/'actor.pkl';save_actor(actor)
     out=tmp_path/'validation/update_0050'
-    p=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,out)
+    p=evaluation.evaluate_conditional(SavedEvaluator(),actor_parameters(),ALPHAS,out)
     summary=selection.summarize_conditional(p,config())
     source=dict(mode='shared_conditional_v1',seed=42,source_update=50,checkpoint=str(ck),actor=str(actor),checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
     (out/'source.json').write_text(json.dumps(source))
@@ -134,9 +144,9 @@ def report_run(tmp_path):
                     np.savez_compressed(zero/f'{name}_path.npz',**path)
             return data
     checkpoint=learner/'model.pt';checkpoint.write_bytes(b'learner')
-    actor=learner/'actor.pkl';actor.write_bytes(b'actor')
+    actor=learner/'actor.pkl';save_actor(actor)
     destination=learner/'validation/update_0050'
-    p=evaluation.evaluate_conditional(ReportingEvaluator(),{'weights':np.zeros(2)},ALPHAS,destination)
+    p=evaluation.evaluate_conditional(ReportingEvaluator(),actor_parameters(),ALPHAS,destination)
     identity=dict(policy_mode='shared_conditional_v1',seed=42)
     provenance=dict(identity,source_update=50,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=selection.digest(checkpoint),
                     actor=str(actor.resolve()),actor_sha256=selection.digest(actor),validation_dir=str(destination.resolve()))
@@ -168,11 +178,11 @@ def test_conditional_report_covers_all_alphas_and_rebuilds_rewards(tmp_path):
 
 def test_conditional_best_rejects_protocol_change_even_without_caller_hash(tmp_path):
     ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
-    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    actor=tmp_path/'actor.pkl';save_actor(actor)
     def candidate(update,cfg):
         evaluator=SavedEvaluator();evaluator.config=cfg
         out=tmp_path/f'validation/update_{update:04d}'
-        p=evaluation.evaluate_conditional(evaluator,{'weights':np.zeros(2)},ALPHAS,out)
+        p=evaluation.evaluate_conditional(evaluator,actor_parameters(),ALPHAS,out)
         source=dict(mode='shared_conditional_v1',source_update=update,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
         (out/'source.json').write_text(json.dumps(source))
         return selection.summarize_conditional(p,cfg),dict(mode='shared_conditional_v1',source_update=update,validation_dir=str(out))
@@ -185,9 +195,9 @@ def test_conditional_best_rejects_protocol_change_even_without_caller_hash(tmp_p
 
 def test_conditional_source_cannot_relabel_learner_even_with_same_weight_hashes(tmp_path):
     ck=tmp_path/'checkpoint.pt';ck.write_bytes(b'learner')
-    actor=tmp_path/'actor.pkl';actor.write_bytes(b'shared actor')
+    actor=tmp_path/'actor.pkl';save_actor(actor)
     out=tmp_path/'validation/update_0050'
-    p=evaluation.evaluate_conditional(SavedEvaluator(),{'weights':np.zeros(2)},ALPHAS,out)
+    p=evaluation.evaluate_conditional(SavedEvaluator(),actor_parameters(),ALPHAS,out)
     source=dict(mode='other_policy',seed=7,source_update=50,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
     (out/'source.json').write_text(json.dumps(source))
     with pytest.raises(ValueError,match='source.*identity'):

@@ -306,7 +306,8 @@ def reuse_conditional_baseline(parent,root,cfg,source,expected_paths):
     def physical(config):
         config=deepcopy(config)
         config.pop('alpha_conditioning',None)
-        for key in ('policy_type','alphas','initialization'):config.get('network',{}).pop(key,None)
+        config.pop('preference_selection_schema',None);config.pop('dynamic_preference_checks',None)
+        for key in ('policy_type','alphas','initialization','architecture'):config.get('network',{}).pop(key,None)
         for key in ('validation_updates','updates_max','best_on'):config.get('training_future_phase_C',{}).pop(key,None)
         return physical_config_identity(config)
     if physical(cfg)!=physical(manifest['config']):raise ValueError('conditional baseline physical config identity mismatch')
@@ -318,7 +319,7 @@ def reuse_conditional_baseline(parent,root,cfg,source,expected_paths):
         physical_identity=physical(cfg),reward_identity=config_hash(cfg['path_reward']),
         parent_manifest_sha256=digest(parent/'manifest.json'),current_config_sha256=config_hash(cfg),
         excluded_training_metadata=['alpha_conditioning','network.policy_type','network.alphas',
-            'network.initialization','training_future_phase_C.validation_updates',
+            'network.initialization','network.architecture','preference_selection_schema','dynamic_preference_checks','training_future_phase_C.validation_updates',
             'training_future_phase_C.updates_max','training_future_phase_C.best_on'],
         scoring='per-alpha independent reconstruction; cached logged score is not a universal baseline score',
         physics_executed=0))

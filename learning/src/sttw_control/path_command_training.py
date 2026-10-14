@@ -7,7 +7,7 @@ import jax.numpy as j
 from flax import struct
 from .path_command_policy import SCHEMA
 from .preference_best import atomic_json,config_hash,digest
-from .path_command_conditioning import is_conditional,execution_dimensions
+from .path_command_conditioning import is_conditional,is_strong,execution_dimensions
 
 
 def termination_flags(tick,physical_failure,fault,domain_exit,horizon,config,terminal_contract='terminal_contract_v2'):
@@ -33,6 +33,11 @@ def make_algorithm(obs,steps,config,device='cuda'):
     if n['actor_dim']!=351 or n['critic_dim']!=352 or n['hidden']!=[128,128,64] or n['activation']!='elu':raise ValueError('path network mismatch')
     if steps*obs.batch_size[0]%c['minibatches']:raise ValueError('rollout must divide minibatches')
     policy=ActorCritic(obs,{'policy':['policy'],'critic':['critic']},2,actor_hidden_dims=n['hidden'],critic_hidden_dims=n['hidden'],activation='elu',init_noise_std=c['std_initial'][0],noise_std_type='log',state_dependent_std=False,actor_obs_normalization=False,critic_obs_normalization=False).to(device)
+    if is_strong(config):
+        from .path_command_policy import make_torch_path_network
+        policy.actor=make_torch_path_network(351,2,config).to(device)
+        policy.critic=make_torch_path_network(352,1,config).to(device)
+    policy.path_network_config=config
     with torch.no_grad():
         for net in (policy.actor,policy.critic):
             layers=[x for x in net.modules() if isinstance(x,torch.nn.Linear)]
@@ -46,10 +51,8 @@ def make_algorithm(obs,steps,config,device='cuda'):
 
 
 def export_actor(policy):
-    import torch
-    layers=[x for x in policy.actor.modules() if isinstance(x,torch.nn.Linear)]
-    if [(x.in_features,x.out_features) for x in layers]!=[(351,128),(128,128),(128,64),(64,2)]:raise ValueError('path Actor architecture mismatch')
-    return {'params':{f'Dense_{i}':{'kernel':j.asarray(x.weight.detach().cpu().numpy().T),'bias':j.asarray(x.bias.detach().cpu().numpy())} for i,x in enumerate(layers)}}
+    from .path_command_policy import export_torch_actor
+    return export_torch_actor(policy.actor,getattr(policy,'path_network_config',None))
 
 
 def save_checkpoint(root,algo,update,identity,*,rejections=0,route_counters=None):
@@ -103,18 +106,18 @@ class PathBatch:
     def __init__(self,env,snapshot,config,seed,alpha):
         self.env=env;self.snapshot=snapshot;self.config=config;self.seed=seed;self.alpha=alpha
         self.horizon=config['training_future_phase_C']['episode_s']
-    def reset(self,eid,episode):
+    def reset(self,eid,episode,absolute_update=1):
         from .path_command_scenarios import sample_training_route
         pose=self.env.physics.helpers.pose(self.snapshot.data)
         route=sample_training_route(self.seed,eid,episode,pose,self.config)
         if self.alpha is None:
             from .path_command_conditioning import sample_episode_alpha
-            alpha=sample_episode_alpha(self.config['alpha_conditioning']['seed'],eid,episode)
+            alpha=sample_episode_alpha(self.config['alpha_conditioning']['seed'],eid,episode,self.config,absolute_update)
         else:alpha=j.asarray(self.alpha)
         state=self.env.reset(self.snapshot,route.path,route.speed,alpha)
         return Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
-    def advance_one(self,ep,z):
+    def advance_one(self,ep,z,absolute_update=1):
         end,logs=self.env.policy_step(ep.state,z,ep.route.path,ep.route.speed,self.horizon)
         final=self.env.observation(end,ep.route.path,ep.route.speed,self.horizon)
         flags=termination_flags(end.tick,end.physical.failed,end.fault|final[2],end.domain_exit,self.horizon,self.config,self.env.terminal_contract)
@@ -125,7 +128,7 @@ class PathBatch:
         diagnostics=step_statistics(logs,ep.route,self.config)
         cost_totals=ep.component_totals+diagnostics['cost_effective_sum']*self.config['timing']['lower_dt_s']
         ended=ep.replace(state=end,totals=totals,component_totals=cost_totals)
-        nxt=reset_finished_episode(ended,flags,self.reset)
+        nxt=reset_finished_episode(ended,flags,lambda eid,episode:self.reset(eid,episode,absolute_update))
         diagnostics=merge_statistics(diagnostics,reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
         obs=self.observation(nxt)
         return nxt,obs,j.sum(logs['scored_tick_reward']),flags,final,dict(diagnostics=diagnostics,completed_component_costs=j.where(flags['done'],cost_totals,0.),rollout=sums,completed_totals=j.where(flags['done'],totals,0.),family=ep.route.family,episode=ep.episode,active_ticks=j.sum(active),component_caps={k:j.sum(v&active) for k,v in logs['component_capped'].items()})
@@ -244,7 +247,7 @@ class PanelEvaluator:
         self.env=env;self.snapshot=snapshot;self.config=config;self.check_budget=check_budget;self.status=status;self.compiled={};self.account=account
     def evaluate(self,params,alpha,output,cached_names=None):
         from .path_command_selection import cases
-        from .path_command_policy import PathCommandActor
+        from .path_command_policy import make_path_actor
         from .geometric_path import build_path
         from .direct_command_training import flatten_logs
         out=Path(output)
@@ -260,7 +263,7 @@ class PanelEvaluator:
                 def step(state,path,v,params):
                     obs,_,fault=self.env.observation(state,path,v,h)
                     state=state.replace(fault=state.fault|fault)
-                    z=PathCommandActor().apply(params,obs)
+                    z=make_path_actor(self.config).apply(params,obs)
                     return self.env.policy_step(state,z,path,v,h)
                 self.compiled[cache_key]=jax.jit(step).lower(s,path,v,params).compile()
             execute=self.compiled[cache_key];chunks=[]
@@ -354,7 +357,7 @@ def train(path,output,*,execute=False,resume=None):
     from .lower_command_training import handle_candidate_ppo_result
     from .direct_command_training import clean_numbers,notify
     from .path_command_selection import summarize,persist_best,summarize_task,persist_task_best,task_pointer_name
-    from .path_command_policy import PathCommandActor
+    from .path_command_policy import make_path_actor
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
     conditional=is_conditional(plan);engineering=conditional and plan.get('engineering_check',False)
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
@@ -424,7 +427,12 @@ def train(path,output,*,execute=False,resume=None):
             seed=plan['seed']+(0 if conditional else alpha);torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
             batch=PathBatch(env,snapshot,cfg,plan['seed'],alpha)
             sample=batch.reset(j.int32(0),j.int32(0));env.set_log_template(sample.state,sample.route.path,sample.route.speed)
-            reset=jax.jit(jax.vmap(batch.reset));episodes=reset(j.arange(n,dtype=j.int32),j.zeros(n,j.int32));jax.block_until_ready(episodes)
+            strong=is_strong(cfg)
+            reset=jax.jit(jax.vmap(batch.reset,in_axes=(0,0,None))) if strong else jax.jit(jax.vmap(batch.reset))
+            def reset_batch(counters,absolute_update):
+                args=(j.arange(n,dtype=j.int32),counters)
+                return reset(*args,j.int32(absolute_update)) if strong else reset(*args)
+            episodes=reset_batch(j.zeros(n,j.int32),1);jax.block_until_ready(episodes)
             observe=jax.jit(jax.vmap(batch.observation))
             a,cr,fault=observe(episodes)
             if bool(j.any(fault)):raise RuntimeError('reset observation fault')
@@ -446,7 +454,7 @@ def train(path,output,*,execute=False,resume=None):
                 atomic_json(out/'fork_receipt.json',dict(parent=fork_receipt['identities'][f'alpha{alpha}'],initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if conditional and not endpoint_resume:
                 from .path_command_conditioning import initialize_conditional_actor
-                init=plan['initialization'];initialization=initialize_conditional_actor(algo,init['checkpoint'],init['checkpoint_sha256'],expected_lower_sha=source['candidate']['actor_sha256'])
+                init=plan['initialization'];initialization=initialize_conditional_actor(algo,init['checkpoint'],init['checkpoint_sha256'],expected_lower_sha=source['candidate']['actor_sha256'],config=cfg)
                 atomic_json(out/'fork_receipt.json',dict(initialization=initialization,physical_state='complete prepared bank reset',route_counters='new episode0'))
             if endpoint_resume:
                 receipt,parent_best=resume_source(resume,alpha,identity)
@@ -457,6 +465,15 @@ def train(path,output,*,execute=False,resume=None):
                         from .path_command_selection import persist_conditional_best
                         persist_conditional_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update'],'validation_dir':parent_best['validation_dir']})
                     else:persist_best(out,parent_best['checkpoint'],parent_best['actor'],parent_best['metrics'],{**identity,'source_update':parent_best['source_update']})
+                if strong:
+                    from .path_command_selection import persist_preference_best
+                    preference_file=Path(resume)/'shared/best_preference_model.json'
+                    if preference_file.exists():
+                        incumbent=json.loads(preference_file.read_text())
+                        if any(incumbent.get(k)!=v for k,v in identity.items()) or incumbent['source_update']>saved['update']:raise ValueError('resume preference best identity mismatch')
+                        for key in ('checkpoint','actor'):
+                            if digest(incumbent[key])!=incumbent[key+'_sha256']:raise ValueError('resume preference best SHA mismatch')
+                        persist_preference_best(out,incumbent['checkpoint'],incumbent['actor'],incumbent['metrics'],{**identity,'source_update':incumbent['source_update'],'validation_dir':incumbent['validation_dir']})
                 start_update=saved['update'];rejections=saved['consecutive_rejections']
                 if start_update>endpoint_target:raise ValueError('resume boundary exceeds declared target')
                 if saved.get('route_counters') is None or np.shape(saved['route_counters'])!=(n,):raise ValueError('resume requires per-environment route counters')
@@ -465,18 +482,20 @@ def train(path,output,*,execute=False,resume=None):
                 if fault_file.exists():
                     with fault_file.open('rb') as f:failed_episodes=pickle.load(f)
                     route_counters=np.maximum(route_counters,np.asarray(failed_episodes.episode))
-                episodes=reset(j.arange(n,dtype=j.int32),j.asarray(route_counters)+1)
+                episodes=reset_batch(j.asarray(route_counters)+1,start_update+1)
                 atomic_json(out/'resume_receipt.json',dict(parent_checkpoint=receipt,parent_terminal_contract=saved.get('terminal_contract','terminal_contract_v1'),terminal_contract=plan.get('terminal_contract'),restored_update=start_update,parent_reported_updates=status.get('parent_reported_updates'),physical_state='reset to prepared bank',routes='next unused after saved and fault snapshot counters'))
                 a,cr,fault=observe(episodes)
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
             from .path_command_statistics import reduce_statistics,merge_statistics,reset_statistics
-            def advance_batch(episodes,z):
-                nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one)(episodes,z)
+            def advance_batch(episodes,z,absolute_update=1):
+                if strong:nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one,in_axes=(0,0,None))(episodes,z,absolute_update)
+                else:nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one)(episodes,z)
                 stats['diagnostics']=reduce_statistics(stats['diagnostics'],axis=0)
                 return nxt,obs_batch,reward,flags,final,stats
             merge_diagnostics=jax.jit(merge_statistics)
-            advance=None if start_update>=endpoint_target else jax.jit(advance_batch).lower(episodes,j.zeros((n,2))).compile()
+            advance_args=(episodes,j.zeros((n,2)),j.int32(start_update+1)) if strong else (episodes,j.zeros((n,2)))
+            advance=None if start_update>=endpoint_target else jax.jit(advance_batch).lower(*advance_args).compile()
             status['compile_and_setup_seconds']=time.monotonic()-started
             initial_checkpoint=save_checkpoint(out/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode)
             atomic_json(out/'last_completed.json',dict(update=start_update,checkpoint=str(initial_checkpoint.resolve()),checkpoint_sha256=digest(initial_checkpoint),schema=SCHEMA))
@@ -526,7 +545,7 @@ def train(path,output,*,execute=False,resume=None):
                         cached=reuse_reward_baseline(cache_parent,root,cfg,source,paths)
                     else:cached=reuse_zero_upper(cache_parent,root,cache_cfg,source,paths)
                     if (coverage_mode or reward_fork) and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
-                zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode or reward_fork or conditional) else None);baseline_done=True
+                zero=make_path_actor(cfg).init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode or reward_fork or conditional) else None);baseline_done=True
                 status['reused_baseline_cases']=len(cached)
             def evaluate_shared(update,checkpoint):
                 from .path_command_evaluation import evaluate_conditional
@@ -537,6 +556,12 @@ def train(path,output,*,execute=False,resume=None):
                 provenance=dict(identity,source_update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),actor=str(actor.resolve()),actor_sha256=digest(actor),validation_dir=str(destination.resolve()))
                 atomic_json(destination/'source.json',provenance);atomic_json(destination/'task_metrics.json',summary)
                 persist_conditional_best(out,checkpoint,actor,summary,{**identity,'source_update':update,'validation_dir':str(destination.resolve())})
+                if strong:
+                    from .path_command_selection import summarize_preference,persist_preference_best,preference_score_key
+                    preference=summarize_preference(panels,cfg)
+                    preference['score_tuple']=preference_score_key(preference,update)
+                    atomic_json(destination/'preference_metrics.json',preference)
+                    persist_preference_best(out,checkpoint,actor,preference,{**identity,'source_update':update,'validation_dir':str(destination.resolve())})
                 return summary
             if conditional and not engineering and start_update in validation_schedule:
                 dev_started=time.monotonic()
@@ -548,8 +573,8 @@ def train(path,output,*,execute=False,resume=None):
             accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
             from .path_command_statistics import summarize_statistics,COST_KEYS
             coverage_stats=None;coverage_low=0;coverage_fraction=None;window_start=start_update+1;coverage_start=start_update+1
-            if coverage_mode and endpoint_resume:
-                previous_coverage=out/'coverage'/f'update_{start_update:04d}.json'
+            if (coverage_mode or conditional) and endpoint_resume:
+                previous_coverage=(Path(resume)/learner_name if conditional else out)/'coverage'/f'update_{start_update:04d}.json'
                 if previous_coverage.exists():
                     prior=json.loads(previous_coverage.read_text());coverage_low=prior['consecutive_low_windows'];coverage_fraction=prior['windows']['strong_demand']['sample_fraction']
             initial_resets=reduce_statistics(jax.vmap(reset_statistics)(episodes.route),axis=0)
@@ -557,12 +582,19 @@ def train(path,output,*,execute=False,resume=None):
             while update<endpoint_target:
                 update+=1
                 check_budget();tick_start=time.monotonic();update_status(state='running',stage='sampling',case=None,completed_intervals=None,alpha=alpha,completed_updates=update-1,declared_updates=endpoint_target)
+                alpha_counts=np.zeros(3,dtype=np.int64);alpha_demand_counts=np.zeros(6)
                 rewards=[];rollout_stats=[];completed_episodes=[];caps={};episode_ends=0;physical_failures=0;domain_failures=0;cost_totals_update=np.zeros(10)
                 with torch.no_grad():
                     for _ in range(steps):
-                        check_budget();z=algo.act(obs)
+                        check_budget()
+                        if strong:
+                            sampled=obs['policy'][:,336].detach().cpu().numpy()
+                            alpha_counts+= [np.sum(sampled==0),np.sum(sampled==1),np.sum((sampled>0)&(sampled<1))]
+                        z=algo.act(obs)
                         if not bool(torch.isfinite(z).all()):raise RuntimeError('nonfinite upper latent')
-                        episodes,next_obs,reward,flags,final,stats=advance(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()))
+                        advance_args=(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()))
+                        if strong:advance_args+= (j.int32(update),)
+                        episodes,next_obs,reward,flags,final,stats=advance(*advance_args)
                         jax.block_until_ready(episodes)
                         status['training_control_ticks_total']+=int(j.sum(stats['active_ticks']));status['policy_transitions_total']+=n
                         if bool(j.any(flags['engineering_fault'])) or bool(j.any(next_obs[2])):
@@ -574,6 +606,7 @@ def train(path,output,*,execute=False,resume=None):
                         episode_ends+=int(j.sum(flags['done']));physical_failures+=int(j.sum(flags['physical_failure']));domain_failures+=int(j.sum(flags['tracking_domain_failure']))
                         cost_totals_update+=np.asarray(j.sum(stats['completed_component_costs'],axis=0))
                         diagnostic=stats['diagnostics']
+                        if strong and 'alpha_strong_count' in diagnostic:alpha_demand_counts+=np.asarray(diagnostic['alpha_strong_count'])
                         window_stats=diagnostic if window_stats is None else merge_diagnostics(window_stats,diagnostic)
                         if coverage_mode or reward_fork or conditional:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
                         for key,count in stats['component_caps'].items():caps[key]=caps.get(key,0)+int(j.sum(count))
@@ -583,6 +616,12 @@ def train(path,output,*,execute=False,resume=None):
                 rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,plan);accepted+=int(metrics['accepted_epochs']>0)
                 totals=np.sum(np.stack(rollout_stats),axis=(0,1));done_totals=np.sum(np.stack(completed_episodes),axis=(0,1));count=max(totals[0],1)
                 record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
+                if strong:
+                    from .path_command_conditioning import curriculum_probabilities
+                    record.update(curriculum_stage=1 if update<=cfg['alpha_conditioning']['curriculum'][0]['updates_inclusive'][1] else 2,absolute_update=update,endpoint_strong_demand_lower_samples={'alpha0':float(alpha_demand_counts[0]),'alpha1':float(alpha_demand_counts[-1])},reset_alpha_probabilities=np.asarray(curriculum_probabilities(cfg,update)).tolist(),actual_alpha_policy_samples=dict(zip(('alpha0','alpha1','interior'),alpha_counts.tolist())),actual_alpha_policy_proportions=(alpha_counts/max(alpha_counts.sum(),1)).tolist())
+                    for label in ('alpha0','alpha1'):writer.add_scalar('curriculum/'+label+'_strong_demand_lower_samples',record['endpoint_strong_demand_lower_samples'][label],update)
+                    for label,count in zip(('alpha0','alpha1','interior'),alpha_counts):writer.add_scalar('curriculum/'+label+'_samples',int(count),update)
+                    writer.add_scalar('curriculum/stage',record['curriculum_stage'],update)
                 if coverage_mode:record.update(new_update=update,lineage_update=identity['parent_source_update']+update,parent_source_update=identity['parent_source_update'])
                 window_episodes+=episode_ends;window_return+=done_totals[4];window_costs+=cost_totals_update;window_physical+=physical_failures;window_domain+=domain_failures
                 if update%25==0 or update==endpoint_target:
@@ -591,7 +630,7 @@ def train(path,output,*,execute=False,resume=None):
                     diagnostic.update(window_updates=update-window_start+1,engineering_failure_rate=0.,domain_failure_rate=window_domain/max(diagnostic['active_lower_samples'],1))
                     atomic_json(out/'statistics'/f'update_{update:04d}.json',diagnostic)
                     for group_name,group in diagnostic.get('alpha_groups',{}).items():
-                        for metric in ('samples','reward_mean','speed_rmse_m_s','lateral_rmse_m','heading_rmse_rad','strong_demand_fraction'):
+                        for metric in ('strong_demand_samples','samples','reward_mean','speed_rmse_m_s','lateral_rmse_m','heading_rmse_rad','strong_demand_fraction'):
                             if group.get(metric) is not None:writer.add_scalar(f'alpha/{group_name}/{metric}',group[metric],update)
                     window_start=update+1
                     window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
@@ -650,7 +689,10 @@ def train(path,output,*,execute=False,resume=None):
                 continue
             if conditional:
                 from .path_command_evaluation import reuse_conditional_best
-                best=json.loads((out/'best_conditional_model.json').read_text());best_panels['shared']=reuse_conditional_best(out,best,cfg)
+                best=json.loads((out/('best_preference_model.json' if strong else 'best_conditional_model.json')).read_text());best_panels['shared']=reuse_conditional_best(out,best,cfg)
+                if strong:
+                    from .path_command_dynamic import run_dynamic_preference_checks
+                    run_dynamic_preference_checks(root,cfg,best,evaluator=evaluator,resume_parent=resume)
                 continue
             if not (out/task_pointer_name(cfg)).exists():raise RuntimeError('no fixed validation candidate; no last-as-best fallback')
             best=json.loads((out/task_pointer_name(cfg)).read_text())

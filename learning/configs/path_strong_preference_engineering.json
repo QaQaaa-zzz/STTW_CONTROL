@@ -1,0 +1,135 @@
+{
+  "schema": "sttw_path_strong_preference_training_plan_v1",
+  "design_config": "STTW_Path_Strong_Preference.json",
+  "integration_manifest": "../../docs/evidence/select300_integration_20261010/manifest.json",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "seed": 911401,
+  "updates": 1,
+  "wall_budget_s_per_endpoint": null,
+  "automatic_extension": false,
+  "automatic_training_authorized": false,
+  "actor_lr_floor": 1e-07,
+  "hard_reject_consecutive_stop": 3,
+  "sampler_resolution": {
+    "ordinary_fraction": 0.3,
+    "ordinary_straight_fraction": 0.5,
+    "gentle_angle_deg": 30,
+    "gentle_radius_m": 4,
+    "single_turn_fraction": 0.5,
+    "S_fraction": 0.2,
+    "S_inter_bend_straight_m": 3,
+    "fixed_grid_length_m": 100,
+    "fixed_grid_points": 5001,
+    "interpretation": "resolved engineering details within supplied family contract; S uses two opposite bends of the same sampled angle/radius",
+    "training_sampler": {
+      "version": "demand_exposure_v2",
+      "route_seed": 910201,
+      "groups": [
+        {
+          "ids_inclusive": [
+            0,
+            101
+          ],
+          "count": 102,
+          "mode": "legacy_sample_route"
+        },
+        {
+          "ids_inclusive": [
+            102,
+            305
+          ],
+          "count": 204,
+          "mode": "strong_single"
+        },
+        {
+          "ids_inclusive": [
+            306,
+            511
+          ],
+          "count": 206,
+          "mode": "strong_s"
+        }
+      ],
+      "strong": {
+        "speed_m_s": [
+          2.4,
+          2.6
+        ],
+        "radius_m": [
+          2.0,
+          2.2
+        ],
+        "angle_deg": [
+          90.0,
+          100.0
+        ],
+        "left_right_pairing": true,
+        "prefix_m": 3.0,
+        "curvature_ramp_m": 0.5,
+        "s_inter_bend_m": 3.0,
+        "goal_offset_m": 4.0,
+        "points": 5001,
+        "grid_ds_m": 0.02,
+        "initial_offset_fraction": 0.2,
+        "lateral_offset_m": [
+          -0.1,
+          0.1
+        ],
+        "heading_offset_rad": [
+          -0.05,
+          0.05
+        ]
+      },
+      "keep_development_routes_unchanged": true,
+      "on_policy_sample": true,
+      "no_old_trajectory_replay_as_new_ppo_samples": true,
+      "strong_active_fraction_target_min": 0.05,
+      "coverage_check_updates": 10,
+      "max_consecutive_coverage_low_windows_before_diagnosis": 2
+    }
+  },
+  "best_resolution": {
+    "selection_schema": "path_conditional_task_v1",
+    "development_updates": [
+      0,
+      50,
+      100,
+      150,
+      200
+    ],
+    "independent_holdout": false,
+    "qualification_is_diagnostic_only": true,
+    "preference_selection_schema": "path_strong_preference_v1"
+  },
+  "terminal_contract": "terminal_contract_v2",
+  "task_selection_schema": "path_conditional_task_v1",
+  "http_failure_policy": "error",
+  "sampler_version": "demand_exposure_v2",
+  "coverage_monitor": {
+    "target": 0.05,
+    "check_every": 10,
+    "consecutive_low_windows": 2
+  },
+  "initialization": {
+    "mode": "actor_only_fold_alpha1",
+    "parent_alpha": 1,
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+    "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3"
+  },
+  "experiment_arm": "strong_preference_direct_ppo",
+  "policy_mode": "shared_conditional_v1",
+  "engineering_check": true,
+  "baseline_parent": "/home/qy/STTW_CONTROL/runs/worktrees/path-unified-alpha/runs/path_unified_alpha_200_20261013/training",
+  "preference_selection_schema": "path_strong_preference_v1",
+  "engineering_dimensions": [
+    8,
+    16
+  ],
+  "discard_engineering_update": true
+}

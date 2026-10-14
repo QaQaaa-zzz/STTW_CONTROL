@@ -68,10 +68,15 @@ def _interval_context(d, config):
 def reconstruct_costs(d,alpha,config):
     """Independent NumPy reconstruction of all ten costs from raw measurements."""
     c=config['path_reward'];version=c.get('reward_version')
-    if 'reward_version' in c and version!='path_safety_preference_v1':
+    if 'reward_version' in c and version not in ('path_safety_preference_v1','path_safety_preference_v2'):
         raise ValueError(f'unknown path reward version: {version!r}')
-    if version=='path_safety_preference_v1' and 'phi' not in d:
+    if version in ('path_safety_preference_v1','path_safety_preference_v2') and 'phi' not in d:
         raise ValueError('signed roll phi is required for path_safety_preference_v1')
+    multiplier=1.
+    if version=='path_safety_preference_v2':
+        try:multiplier=float(c['primary_speed_multiplier'])
+        except (KeyError,TypeError,ValueError) as e:raise ValueError('v2 requires finite positive primary speed multiplier') from e
+        if not np.isfinite(multiplier) or multiplier<=0:raise ValueError('v2 requires finite positive primary speed multiplier')
     interval=_interval_context(d,config);n=len(interval['ticks'])
     def measurement(key):
         value=np.asarray(d[key],float)
@@ -84,7 +89,7 @@ def reconstruct_costs(d,alpha,config):
     pos=lambda x:np.maximum(x,0)
     raw=dict(speed=(10-9*chi*(1-alpha))*h(ev/c['speed_scale_m_s']),
         path=(10-9*chi*alpha)*(h(ey/c['cross_track_scale_m'])+c['path_heading_factor']*h(eh/c['path_heading_scale_rad'])),
-        primary=c['primary_weight']*chi*((1-alpha)*h(pos(np.abs(ey)-c['primary_path_band_m'])/c['primary_path_scale_m'])+alpha*h(pos(np.abs(ev)-c['primary_speed_band_m_s'])/c['primary_speed_scale_m_s'])),
+        primary=c['primary_weight']*chi*((1-alpha)*h(pos(np.abs(ey)-c['primary_path_band_m'])/c['primary_path_scale_m'])+multiplier*alpha*h(pos(np.abs(ev)-c['primary_speed_band_m_s'])/c['primary_speed_scale_m_s'])),
         roll=c['roll_weight']*h(pos(peak-c['roll_start_rad'])/c['roll_scale_rad']),
         working_roll=c['working_roll_weight']*h(pos(peak-c['working_roll_start_rad'])/c['working_roll_scale_rad']),
         roll_rate=c['roll_rate_weight']*h(pos(np.abs(roll_rate)-c['roll_rate_start_rad_s'])/c['roll_rate_scale_rad_s']),
@@ -93,7 +98,7 @@ def reconstruct_costs(d,alpha,config):
         offset_magnitude=c['offset_magnitude_weight']*np.sum((offsets/np.asarray(c['offset_magnitude_scales']))**2,axis=1),
         offset_rate=c['offset_rate_weight']*np.sum((interval['offset_rate']/np.asarray(c['offset_rate_scales']))**2,axis=1))
     diagnostic={k:np.zeros(n) for k in ('predictive_roll','working_exposure','corridor')}
-    if version=='path_safety_preference_v1':
+    if version in ('path_safety_preference_v1','path_safety_preference_v2'):
         phi=measurement('phi');rho=np.maximum(np.abs(phi),np.abs(phi+c['risk_prediction_s']*roll_rate))
         diagnostic=dict(predictive_roll=c['predictive_roll_weight']*h(pos(rho-c['predictive_roll_start_rad'])/c['predictive_roll_scale_rad']),
             working_exposure=c['working_exposure_weight']*np.clip((peak-.30)/c['working_exposure_width_rad'],0,1),
@@ -475,8 +480,10 @@ def report_conditional_panel(root,config):
                                         CONDITIONAL_SELECTION_SCHEMA)
     from .preference_best import digest,config_hash,atomic_json
     root=Path(root);learner=root/'shared';final=learner/'final_best'
-    best=json.loads((learner/'best_conditional_model.json').read_text())
-    if best.get('selection_schema')!=CONDITIONAL_SELECTION_SCHEMA:raise ValueError('conditional best selection identity mismatch')
+    strong=config.get('preference_selection_schema') is not None
+    from .path_command_selection import PREFERENCE_SELECTION_SCHEMA,summarize_preference,preference_score_key
+    best=json.loads((learner/('best_preference_model.json' if strong else 'best_conditional_model.json')).read_text())
+    if best.get('selection_schema')!=(PREFERENCE_SELECTION_SCHEMA if strong else CONDITIONAL_SELECTION_SCHEMA):raise ValueError('conditional best selection identity mismatch')
     if json.loads((final/'source.json').read_text())!=best:raise ValueError('conditional final source differs from selected model')
     for kind in ('checkpoint','actor'):
         if digest(best[kind])!=best[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
@@ -486,7 +493,8 @@ def report_conditional_panel(root,config):
         raise ValueError('conditional final panel identity mismatch')
     declared=cases(config)
     panels={key:{name:dict(np.load(final/key/f'{name}.npz')) for name,_,_ in declared} for key in alphas}
-    summary=summarize_conditional(panels,config)
+    summary=summarize_preference(panels,config) if strong else summarize_conditional(panels,config)
+    if strong:summary['score_tuple']=preference_score_key(summary,best['source_update'])
     if tuple(summary['score_tuple'])!=tuple(best['score_tuple']):
         raise ValueError('conditional final metrics differ from selected model')
     baseline={name:dict(np.load(root/'zero_upper'/f'{name}.npz')) for name,_,_ in declared}
@@ -525,6 +533,9 @@ def report_conditional_panel(root,config):
     preference=dict(cases=preference_cases,qualified=bool(summary['qualified_task'] and len(preference_cases)==2
         and all(v['legacy_endpoint_difference_gate'] for v in preference_cases.values())),
         role='legacy common-task and endpoint preference diagnostics; interior curves are descriptive, not a monotonicity certificate')
+    if strong:
+        preference.update(qualified=summary['qualified_preference'],acceptance=summary['preference_cases'],
+            role='strong fixed-alpha preference; physical/domain and goal/hold required; roll/corridor diagnostics separate')
     result=dict(schema='path_conditional_report_v1',model=best,alphas=alphas,summary=summary,
                 cases=report_cases,preference=preference,
                 reward_audit=dict(checked_policy_traces=len(declared)*len(alphas),max_abs_tick_error=maximum_error),
@@ -542,6 +553,10 @@ def report_conditional_panel(root,config):
            'Original paths and requests are unchanged; no external disturbance. x marks real failure and o the real final sample. '
            'Reward uses each alpha objective, with the matching rescored B0; cross-alpha returns are not physical rankings. '
            'The historical .302 rad/.40 m and task gates below are diagnostics, not reasons to shorten the authorized training budget.','']
+    if strong:
+        lines += [f"Strong preference qualified: {summary['qualified_preference']}; legacy common task diagnostic: {summary['qualified_task']}.",
+                  f"Architecture: {best['architecture']}; reward: {best['reward_version']}; selection: {best['selection_schema']}.",
+                  'High-speed endpoint targets and complete-turn differences/adjacent-alpha continuity determine preference acceptance. Roll/corridor are reported diagnostics.','']
     allfig,allaxes=plt.subplots(2,3,figsize=(16,10))
     def finish(fig,filename):
         fig.tight_layout(rect=(0,0,1,.955));fig.savefig(out/filename,dpi=110);plt.close(fig)
@@ -634,5 +649,13 @@ def report_conditional_panel(root,config):
                   '[One shared checkpoint identity](identities.json)',
                   'The complete original turn is used for equal-bin MSE metrics. Missing bins remain missing; no common-fragment shortcut. '
                   'Middle-alpha primary thresholds are not invented. Intermediate-alpha trends and endpoint preference are reported separately from common physical diagnostics.'])
+    dynamic=root/'dynamic_preference_checks'/'receipt.json'
+    if strong:
+        if dynamic.exists():
+            dynamic_receipt=json.loads(dynamic.read_text())
+            lines.extend(['', '[Dynamic alpha source-backed report](../dynamic_preference_checks/INDEX.md)',
+                'Dynamic state: '+dynamic_receipt['state']+'; '+str(dynamic_receipt.get('reason') or 'see identity and goal/hold receipt')])
+        else:
+            lines.extend(['', 'Dynamic state: not_run; no dynamic receipt exists.'])
     (out/'INDEX.md').write_text('\n'.join(lines)+'\n')
     return result

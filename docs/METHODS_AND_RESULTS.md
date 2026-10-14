@@ -1,3 +1,9 @@
+# Single strong-preference alpha modulation — 2026-10-14 implementation
+
+Purpose: strengthen the weak/asymmetric alpha response observed in the prior unified200 run, while retaining one shared policy and the same frozen local300/path/physical contract. Changes: Coverage alpha1 Actor fold initialization, hidden2/3 gain/shift conditioning, primary speed branch×2, endpoint-first reset sampling, and a separate preference best. No teacher, distillation, extra comparison arm, lower retraining or dynamic PPO. One authorized200-update experiment follows a single discarded8×16 engineering check. Dynamic six-case evaluation is conditional on fixed preference qualification and capped across resumed stages. Prior unified200 negative evidence remains intact. [Contract](path_strong_preference.md). Implementation CPU evidence is recorded in VALIDATION.md; training outcomes are PENDING in the shared research ledger.
+
+---
+
 # 2026-10-11 Path safety preference v1 — code implementation
 
 Candidate adds signed roll trend warning, near-boundary exposure cost and common0.40m corridor cost into existing capped ten-cost reward. Separate safety best ranks violation severity/duration before targets. Same-parent Actor/log_std-only fork resets Critic/Adam/RNG for both old-reward control and candidate. Complete natural-state recovery uses existing vmap/scan50 executor and original20s clock. [Verification and boundaries](evidence/path_safety_preference_v1/INDEX.md):110CPU checks and one discarded8×16GPU engineering run pass. Formal fourarm training/recovery/qualification NOT_RUN; no causal improvement/adoption claim. Current research facts remain in shared ledger.

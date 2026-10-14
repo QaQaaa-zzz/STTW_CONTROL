@@ -1,3 +1,11 @@
+# Strong-preference CPU verification — 2026-10-14
+
+150 focused CPU checks passed in60.45s across22 files after the final dynamic-resume/report repair. Checks cover Torch/Flax modulation parity and gradients,384 added parameters per network, exact alpha1 Dense folding, fresh learner state, absolute-update reset curriculum, v2 reward regression and independent reconstruction, full-turn preference selection, shared pointer/report/cache/resume, and legacy terminal/fork/reward behavior. Real six-case B0 caches were identity checked with zero new physics; old alpha0/1 high-turn costs were independently rescored under v2. These are implementation checks, not learned preference or dynamic qualification. Dynamic repair covers causal applied-alpha schedules, contiguous true prefixes, float32 timing, complete-source SHA reuse, consumed partial-stage refusal, rendered XY and reward outputs, and source tamper rejection. Independent scoped final re-review confirms both dynamic P2 findings addressed with no new P1/P2. GPU evidence remains PENDING.
+
+Evidence: runs/path_strong_preference_200_20261014/cpu_final_tests.log, baseline_final_preflight.json and reward_parent_rescore.json.
+
+---
+
 # Unified conditional upper-policy verification — 2026-10-13
 
 119 targeted CPU tests pass in32.12s across17 files, covering new alpha initialization/sampling/statistics/shared selection/cache/report/resume behavior and existing reward/endpoint/terminal/fork regressions. Six real baseline traces pass source/config/path/timing/completeness checks with zero new physics. The report integration uses the real shared directory and selection/reuse chain with a simulated physics provider; this is not learned-control evidence. Independent review findings (shared report directory, interrupted boundary DEV, full source identity) are fixed and regression tested.

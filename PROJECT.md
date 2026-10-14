@@ -1,3 +1,9 @@
+# Single strong-preference upper policy — 2026-10-14
+
+[Authorized implementation contract](docs/path_strong_preference.md). One alpha1 Actor-only warm start, two hidden-layer alpha modulations, fresh Critic/Adam, speed-primary reward multiplier2, endpoint-first reset curriculum, and one200-update shared learner. Old task best remains diagnostic; a separate preference pointer evaluates full-turn endpoint differences and continuity. GPU engineering and formal launch receipts will remain under runs/path_strong_preference_200_20261014. Shared research-hub/PROJECT_STATE.md is the live fact authority. Historical snapshots follow.
+
+---
+
 # Unified alpha fixed-stage results — 2026-10-14
 
 [200-update analysis and XY/reward evidence](docs/evidence/path_unified_alpha_20261014/INDEX.md). The declared stage is complete; selectedu50 and lastu200 both retain common tracking in all30 DEV conditions. Alpha response grows byu200, but remains weak and asymmetric; endpoint primary diagnostics still fail. No dynamic-alpha or new training stage was started. The shared research ledger remains the live fact authority. Earlier dated snapshots follow.
