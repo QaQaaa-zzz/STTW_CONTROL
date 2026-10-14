@@ -1,3 +1,9 @@
+# Unified alpha fixed-stage results — 2026-10-14
+
+[200-update analysis and XY/reward evidence](docs/evidence/path_unified_alpha_20261014/INDEX.md). The declared stage is complete; selectedu50 and lastu200 both retain common tracking in all30 DEV conditions. Alpha response grows byu200, but remains weak and asymmetric; endpoint primary diagnostics still fail. No dynamic-alpha or new training stage was started. The shared research ledger remains the live fact authority. Earlier dated snapshots follow.
+
+---
+
 # Unified continuous-alpha upper policy — 2026-10-13
 
 User-approved direct conditional PPO with alpha0 Actor-only warm start; no distillation. [Implementation and bounded experiment](docs/path_unified_alpha.md). One shared learner, fixed alpha per episode first, 200 total updates with 50-update checks. Dynamic alpha is a separate later stage. Existing task thresholds remain reported diagnostics; physical termination is unchanged. Current run state and adoption decisions are maintained only in the shared research ledger.
