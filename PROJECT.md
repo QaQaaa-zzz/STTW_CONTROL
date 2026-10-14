@@ -1193,3 +1193,12 @@ CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初
 正式PID3918354/monitor3918356，原CLI+path_unified_scratch_run.json，单组200轮13,107,200策略转移上限。25个Actor/Critic/FiLM/std张量与工程update0逐值相同，Torch RNG相同，Adam空、父null；未导入工程update1。实际优化配置vmap_scan50/DirectCommandPPO/shared JAXcache/512×128；setup39.094s，复用six B0、0新基线物理。状态核验running/DEV0，完成0/200、训练0转移，DEV已1600ticks；当前尚未产生正式训练reward，不能称训练标量已核验。正式TB http://localhost:6017 已HTTP200及/data/environment精确归属本run独立logdir验证；首批后训练程序通过现有_verify_reward_http检查，失败按error停止。工程scalar不替代正式scalar。研究资格/旧严格资格PENDING，初始化评测不是偏好成功。
 
 本地入口runs/path_unified_scratch_200_20261014/INDEX.md；engineering_verification.json、formal_initialization_verification.json、formal_visibility_verification.json、training_launch.json、training/status.json、原始日志/TB/checkpoint保留。不改旧热启动或DVGC；监视器分别发送训练阶段/流水线完成与错误通知。任务本轮完成实现与启动，正式预算执行/DEV结果和训练reward核验仍在后台进行。
+
+
+## 2026-10-14 重启后scratch有界恢复
+
+用户明确继续本会话scratch训练。原进程/TB重启消失，已完成5PPO批次但checkpoint仅u0，5批权重不可恢复；已知327680策略转移/1310720ticks、完整DEV0 120000ticks保留。断电第6采样批按65536策略转移/262144ticks上限预留。原200slots上限内charged6slots，恢复启动时只剩194；原配置、物理、奖励、α采样不改。
+
+源码5888a9e修正恢复sampling cursor与checkpoint模型来源分离，检查点带resume_accounting；scratch每完成一轮持久化Actor/Critic/FiLM/std/Adam/RNG/计数。34恢复/selection/training CPU+8cache/terminal检查通过，diff-check通过。恢复目录runs/path_unified_scratch_200_20261014/resume_20261014_01，PID22247/monitor22249；恢复u0模型25张量/Adam/Torch RNG逐值匹配，预算cursor6的checkpoint明确不是6轮模型更新。物理闭环prepared-bank重启，不是逐帧接续。B0和DEV0原始完整轨迹复用，新增DEV0 ticks=0。
+
+已实际完成恢复后首个PPO批次：absolute budget slot7，新65536策略转移/262144ticks，1recoverable learner update，4epochs接受；TB http://localhost:6006 HTTP真实shared/train/mean_step_reward step7=-.0759840906已核验，本resume独立logdir。不重启其他项目或旧warmstart。工程/科学合格仍PENDING，不将预算cursor7说成恢复了原7轮模型更新。恢复preflight/restoration/reward/checkpoint/launch收据原位保留，完整状态以共享台账和实时status为准。
