@@ -1,3 +1,9 @@
+# Scratch stage results — 2026-10-15
+
+[Verified compact results, XY first](https://github.com/QaQaaa-zzz/STTW_CONTROL/blob/a8a2a65cc8c3665d089775aa69702f7cf578c00e/docs/evidence/alpha_unified_results_20261015/INDEX.md). Charged sampling cursor200 is complete, with194 recoverable learner updates after reboot. Official research selection is slot100; lastslot200 improves tracking but still fails bilateral preference direction/magnitude. Dynamic checks remain not_run. Original artifacts and best pointers are preserved; no new training/simulation. The shared research ledger remains the only live fact authority. Historical snapshots follow.
+
+---
+
 # Single strong-preference upper policy — 2026-10-14
 
 [Authorized implementation contract](docs/path_strong_preference.md). One alpha1 Actor-only warm start, two hidden-layer alpha modulations, fresh Critic/Adam, speed-primary reward multiplier2, endpoint-first reset curriculum, and one200-update shared learner. Old task best remains diagnostic; a separate preference pointer evaluates full-turn endpoint differences and continuity. GPU engineering and formal launch receipts will remain under runs/path_strong_preference_200_20261014. Shared research-hub/PROJECT_STATE.md is the live fact authority. Historical snapshots follow.

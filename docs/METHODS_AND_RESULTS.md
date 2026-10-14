@@ -1,3 +1,9 @@
+# scratch200阶段完成核验与双运行精简报告 — 2026-10-15
+
+[远端固定提交报告与XY/完整指标](https://github.com/QaQaaa-zzz/STTW_CONTROL/blob/a8a2a65cc8c3665d089775aa69702f7cf578c00e/docs/evidence/alpha_unified_results_20261015/INDEX.md)。scratch恢复阶段194个实际可恢复学习更新、计费cursor200（5个已完成但丢失更新＋第6槽未知储备保留），不能称完整200模型更新。research best slot100，末slot200 tracking更好但Dv左/右 .014916/.039075m/s、Dy .000492/−.004172m，不满足自身.02/.001门槛。初始与slot50旧严格1s保持失败30/10；slot100/150/200均30/30严格保持，所有阶段宽research保持均过。roll/corridor只诊断，不是当前方向差失败原因。source/reward与warm相同，但课程/初始化/验收/损耗不同，不能称初始化消融。两组全部300DEV无物理/域终止，训练仍有域终止；全部原始reward/路径/分箱已独立复算。动态not_run、未采用、0新增物理/PPO。精简证据只存于强偏好分支固定提交，避免重复模型/大日志；本分支方法索引指向同一发布包，当前事实以共享台账为准。
+
+---
+
 # Single strong-preference alpha modulation — 2026-10-14 implementation
 
 Purpose: strengthen the weak/asymmetric alpha response observed in the prior unified200 run, while retaining one shared policy and the same frozen local300/path/physical contract. Changes: Coverage alpha1 Actor fold initialization, hidden2/3 gain/shift conditioning, primary speed branch×2, endpoint-first reset sampling, and a separate preference best. No teacher, distillation, extra comparison arm, lower retraining or dynamic PPO. One authorized200-update experiment follows a single discarded8×16 engineering check. Dynamic six-case evaluation is conditional on fixed preference qualification and capped across resumed stages. Prior unified200 negative evidence remains intact. [Contract](path_strong_preference.md). Implementation CPU evidence is recorded in VALIDATION.md; training outcomes are PENDING in the shared research ledger.
