@@ -1040,3 +1040,12 @@ GPU工程补记：5ba2cd7单次8×16完成128策略转移/512底层tick，0工�
 无物理声明通过，six B0配置/source/路径完整检查通过并复用，0新基线ticks。CPU完整检查与GPU工程/正式启动收据随后追加；本节不宣称训练已启动或研究合格。最新研究事实和运行状态见共享PROJECT_STATE，原始运行拟runs/path_unified_scratch_200_20261014。
 
 CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初始化身份补充后受影响18项再次通过4.92s。独立最终审查无剩余P1/P2，git diff --check通过。旧Strong输出/课程/初始化/奖励保持回归；新Torch/Flax调制、scratch零输出/随机隐藏与alpha列、自身checkpoint恢复、固定分布、研究保持/排序、缓存/动态/报告覆盖。GPU工程与正式尚未启动。
+
+
+### scratch GPU检查与正式启动收据
+
+运行源码bdb989a2e2a30698b778144d047030590a970abb，已push origin/experiment/path-unified-scratch。唯一GPU工程完成128策略转移/512ticks，0DEV、0物理/路径域失败，4PPOepochs/16minibatches接受，KL .0041735112；setup42.139s、learner52.747s；工程rewardHTTP6016 step1=-.0325638764已读到，更新全部丢弃、不可作为父代。
+
+正式PID3918354/monitor3918356，原CLI+path_unified_scratch_run.json，单组200轮13,107,200策略转移上限。25个Actor/Critic/FiLM/std张量与工程update0逐值相同，Torch RNG相同，Adam空、父null；未导入工程update1。实际优化配置vmap_scan50/DirectCommandPPO/shared JAXcache/512×128；setup39.094s，复用six B0、0新基线物理。状态核验running/DEV0，完成0/200、训练0转移，DEV已1600ticks；当前尚未产生正式训练reward，不能称训练标量已核验。正式TB http://localhost:6017 已HTTP200及/data/environment精确归属本run独立logdir验证；首批后训练程序通过现有_verify_reward_http检查，失败按error停止。工程scalar不替代正式scalar。研究资格/旧严格资格PENDING，初始化评测不是偏好成功。
+
+本地入口runs/path_unified_scratch_200_20261014/INDEX.md；engineering_verification.json、formal_initialization_verification.json、formal_visibility_verification.json、training_launch.json、training/status.json、原始日志/TB/checkpoint保留。不改旧热启动或DVGC；监视器分别发送训练阶段/流水线完成与错误通知。任务本轮完成实现与启动，正式预算执行/DEV结果和训练reward核验仍在后台进行。
