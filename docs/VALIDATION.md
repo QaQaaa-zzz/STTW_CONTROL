@@ -2186,3 +2186,16 @@ CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初
 评测默认alpha_case_vmap_v1：同shape场景×alpha同进程合批、scan50、共享JAXcache、既有DirectCommandPPO；避免多进程重复模型/编译和竞争。scalar/vector执行CPU位点逐值相同，编译后的速度切换因果回归通过（发现并修复浮点20ms晚一步）。旧6场景/旧V2/旧奖励兼容。case declarations含speed script/四槽turn元数据SHA贯穿checkpoint/panel/source/best/dynamic/resume。
 
 CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1检查通过；抽象351/352接口声明通过、six旧B0完整source/model/path/时序检查0新physics复用。独立审查P1/P2已修复，GPU尚未运行；后续唯一8x16工程、预检、fresh正式启动收据在runs/path_conflict_exposure_v1_200_20261015。当前不能宣称训练/取舍成功或实际加速倍数。
+
+
+### 持续冲突GPU预检与正式启动收据（2026-10-15）
+
+运行源码823cdd7，已push origin/experiment/path-conflict-exposure-v1。唯一GPU工程128policy transitions/512lower ticks完成、PPO接受、无物理/路径域失败；setup44.814s、learner50.621s，更新丢弃。工程TB6008真实reward step1=-.0471900329已核验，不替代正式训练标量。
+
+预检完成26,216/64,000 active lower ticks，旧six B0复用，新six B0与four slowdown probe实际运行。左右U均满足预检冲突条件（B0失败、probe未失败且到达goal）；紧凑LR/RL probe真实失败，条件不满足。保留原始receipt及四场景PREFLIGHT_XY.png，不放宽门槛；按最新用户指令继续fresh200。B0新six compile38.865s/physics257.709s，probe four compile37.350s/physics316.179s；不同batch/资源下不能据此宣称历史加速倍数。variable B0在约3.58/3.66s失败，仅验证1s事件，未观察5s返回事件。
+
+正式PID807604/monitor807606，freshseed911501，setup42.028s；25policy张量和Torch RNG与工程update0一致、Adam空、parent=null，未导入工程update1。12B0完整物理轨迹全部复用。DEV0按10straight/20old-turn/30new-case三种shape顺序计算，每组scene×alpha并行，保留scan50/shared JAXcache/DirectCommandPPO。已保存straight初始64ticks与匹配B0数值核验通过rtol/atol2e-5，maxabs1.456961e-5；仅零输出初始化接口证据，不是任务成功。
+
+正式TB http://localhost:6009 HTTP200、独立training/tensorboard归属已核验；启动交接仍DEV0、0/200更新、0训练转移，正式reward尚未产生，标量PENDING，首批训练后程序自动HTTP核验。状态以后以实时training/status.json及共享台账为准。原始NPZ与日志保留；10条新预检轨迹逐步reward重建非终止maxabs3.247261e-7，终止tail maxabs.0089839453/maxrelative5.1152043e-6在既有容差内；旧six缓存仅复用物理，不比较旧rewardv1分数。资格审计同时保留相对原始请求与相对B0的减速量，未据此更改原预检receipt。
+
+完整证据入口runs/path_conflict_exposure_v1_200_20261015/INDEX.md；engineering_verification/formal_initialization_verification/formal_visibility_verification/parallel_numeric_verification及preflight/qualification_audit.json。CPU113项及GPU工程通过；200轮学习、阶段评测、资格和条件动态仍在执行或待执行，不声明研究成功。
