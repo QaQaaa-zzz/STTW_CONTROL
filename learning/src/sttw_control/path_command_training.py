@@ -109,19 +109,24 @@ class PathBatch:
     def reset(self,eid,episode,absolute_update=1):
         from .path_command_scenarios import sample_training_route
         pose=self.env.physics.helpers.pose(self.snapshot.data)
-        route=sample_training_route(self.seed,eid,episode,pose,self.config)
+        route=sample_training_route(self.seed,eid,episode,pose,self.config,absolute_update=absolute_update)
         if self.alpha is None:
             from .path_command_conditioning import sample_episode_alpha
             alpha=sample_episode_alpha(self.config['alpha_conditioning']['seed'],eid,episode,self.config,absolute_update)
         else:alpha=j.asarray(self.alpha)
         state=self.env.reset(self.snapshot,route.path,route.speed,alpha)
         return Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
-    def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
+    def current_speed(self,ep,state=None):
+        state=ep.state if state is None else state
+        if getattr(ep.route,'speed_values',None) is None:return ep.route.speed
+        from .path_command_scenarios import speed_request
+        return speed_request(ep.route.speed_values,ep.route.speed_switch_times,state.tick*self.config['timing']['lower_dt_s'])
+    def observation(self,ep):return self.env.observation(ep.state,ep.route.path,self.current_speed(ep),self.horizon)
     def advance_one(self,ep,z,absolute_update=1):
-        end,logs=self.env.policy_step(ep.state,z,ep.route.path,ep.route.speed,self.horizon)
-        final=self.env.observation(end,ep.route.path,ep.route.speed,self.horizon)
+        end,logs=self.env.policy_step(ep.state,z,ep.route.path,self.current_speed(ep),self.horizon)
+        final=self.env.observation(end,ep.route.path,self.current_speed(ep,end),self.horizon)
         flags=termination_flags(end.tick,end.physical.failed,end.fault|final[2],end.domain_exit,self.horizon,self.config,self.env.terminal_contract)
-        active=logs['active_tick'];ev=logs['actual_forward_speed']-ep.route.speed
+        active=logs['active_tick'];ev=logs['actual_forward_speed']-logs['v_user']
         sums=j.array([j.sum(active),j.sum(j.where(active,ev**2,0)),j.sum(j.where(active,logs['path_cross_track']**2,0)),j.sum(j.where(active,logs['path_heading_error']**2,0)),j.sum(logs['scored_tick_reward']),j.max(logs['peak_roll'])])
         totals=ep.totals+sums;totals=totals.at[5].set(j.maximum(ep.totals[5],sums[5]))
         from .path_command_statistics import step_statistics,merge_statistics,reset_statistics
@@ -214,7 +219,7 @@ def prepare(path,output,check_interface=False):
         from .path_command_conditioning import conditional_identity
         report.update(initialization_mode='scratch',upper_parent_checkpoint=None,
             maximum_dynamic_lower_ticks=0 if engineering else 24000,
-            complete_experiment_lower_tick_budget=53053312,
+            complete_experiment_lower_tick_budget=53301312 if plan.get('sampler_version')=='path_conflict_exposure_v1' else 53053312,
             upper_identity=conditional_identity(plan,cfg,source))
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],None if is_conditional(plan) else 0)
@@ -225,6 +230,8 @@ def prepare(path,output,check_interface=False):
         eps=jax.vmap(batch.reset)(j.arange(2,dtype=j.int32),j.zeros(2,j.int32))
         multi=jax.eval_shape(jax.vmap(batch.advance_one),eps,j.zeros((2,2)))
         report['abstract_batch_shapes']={'actor':list(multi[1][0].shape),'critic':list(multi[1][1].shape)}
+    if plan.get('sampler_version')=='path_conflict_exposure_v1':
+        report.update(maximum_validation_lower_ticks=0 if engineering else 784000,maximum_preflight_lower_ticks=64000)
     atomic_json(out/'PREPARATION.json',report);return report
 
 
@@ -368,11 +375,17 @@ def scratch_resume_budget(parent_status,saved,num_envs,rollout_steps,updates):
         update_semantics='absolute sampling budget slot; lost slots do not imply recovered PPO updates')
 
 
-def check_conditional_dev_budget(status,config,alphas):
+def check_conditional_dev_budget(status,config,alphas,case_count=None,role='full_dev'):
     """Reserve a full fixed panel before replaying any resumed DEV physics."""
-    reserve=len(alphas)*6*round(config['training_future_phase_C']['episode_s']/config['timing']['lower_dt_s'])
+    conflict=config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1'
+    reserve=len(alphas)*(case_count if case_count is not None else 12 if conflict else 6)*round(config['training_future_phase_C']['episode_s']/config['timing']['lower_dt_s'])
     consumed=status['validation_control_ticks_total']+status.get('parent_consumed_validation_control_ticks',0)
-    if consumed+reserve>600000:
+    if conflict:
+        caps={'full_dev':720000,'lightweight':64000}
+        if role not in caps:raise ValueError('unknown validation role')
+        role_consumed=status.get(role+'_control_ticks_total',0)+status.get('parent_consumed_'+role+'_control_ticks',0)
+        if role_consumed+reserve>caps[role]:raise RuntimeError('conditional '+role+' lineage budget exceeded before physics')
+    if consumed+reserve>(784000 if conflict else 600000):
         raise RuntimeError('insufficient remaining conditional DEV lineage budget; partial replay cannot expand declaration')
     return reserve
 
@@ -393,6 +406,7 @@ def train(path,output,*,execute=False,resume=None):
     from .path_command_policy import make_path_actor
     plan,cfg,source=load_plan(path);c=cfg['training_future_phase_C'];root=Path(output)
     conditional=is_conditional(plan);engineering=conditional and plan.get('engineering_check',False)
+    conflict=plan.get('sampler_version')=='path_conflict_exposure_v1'
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
     coverage_mode=plan.get('sampler_version')=='demand_exposure_v2' and not reward_fork and not conditional
     if conditional and resume and not (Path(resume)/'shared/last_completed.json').exists():raise ValueError('shared resume boundary missing')
@@ -439,7 +453,12 @@ def train(path,output,*,execute=False,resume=None):
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
     def account_validation(ticks):
         proposed=status['validation_control_ticks_total']+int(ticks)
-        if conditional and proposed+status.get('parent_consumed_validation_control_ticks',0)>600000:raise RuntimeError('conditional DEV lineage budget exceeded')
+        if conditional and proposed+status.get('parent_consumed_validation_control_ticks',0)>(784000 if conflict else 600000):raise RuntimeError('conditional DEV lineage budget exceeded')
+        if conflict:
+            role=status.get('active_validation_role','full_dev');cap={'full_dev':720000,'lightweight':64000}[role]
+            key=role+'_control_ticks_total';value=status.get(key,0)+int(ticks)
+            if value+status.get('parent_consumed_'+role+'_control_ticks',0)>cap:raise RuntimeError(role+' lineage budget exceeded')
+            status[key]=value
         status['validation_control_ticks_total']=proposed
     shared_eval_cache={}
     baseline_done=False;best_panels={};writer=None;algo=None;out=None;episodes=None;learner_ready=False
@@ -448,6 +467,10 @@ def train(path,output,*,execute=False,resume=None):
         status['parent_consumed_policy_transitions']=parent_status.get('policy_transitions_total',0)+parent_status.get('parent_consumed_policy_transitions',0)
         if conditional:status['parent_consumed_validation_control_ticks']=parent_status.get('validation_control_ticks_total',0)+parent_status.get('parent_consumed_validation_control_ticks',0)
         status['parent_reported_updates']=parent_status.get('completed_updates',0)
+        if conflict:
+            for role in ('full_dev','lightweight'):
+                status['parent_consumed_'+role+'_control_ticks']=parent_status.get(role+'_control_ticks_total',0)+parent_status.get('parent_consumed_'+role+'_control_ticks',0)
+            if sum(status['parent_consumed_'+role+'_control_ticks'] for role in ('full_dev','lightweight'))!=status['parent_consumed_validation_control_ticks']:raise ValueError('resume validation role accounting mismatch')
     update_status(stage='loading')
     try:
         for alpha in ([None] if conditional else plan['alphas']):
@@ -468,7 +491,7 @@ def train(path,output,*,execute=False,resume=None):
             batch=PathBatch(env,snapshot,cfg,plan['seed'],alpha)
             sample=batch.reset(j.int32(0),j.int32(0));env.set_log_template(sample.state,sample.route.path,sample.route.speed)
             strong=is_strong(cfg)
-            preference_selection=cfg.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1')
+            preference_selection=cfg.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1','path_conflict_preference_v1')
             reset=jax.jit(jax.vmap(batch.reset,in_axes=(0,0,None))) if strong else jax.jit(jax.vmap(batch.reset))
             def reset_batch(counters,absolute_update):
                 args=(j.arange(n,dtype=j.int32),counters)
@@ -576,9 +599,14 @@ def train(path,output,*,execute=False,resume=None):
                     from .path_command_cache import reuse_conditional_baseline
                     from .geometric_path import build_path
                     pose=np.asarray(env.physics.helpers.pose(snapshot.data))
-                    paths={route:build_path(route,pose,cfg) for route in cfg['stage_C_evaluation']['route_ids']}
+                    route_ids=cfg['stage_C_evaluation']['route_ids']
+                    if conflict:
+                        from .path_command_scenarios import explicit_case_declarations
+                        route_ids=sorted({d['route_id'] for d in explicit_case_declarations(cfg)})
+                    paths={route:build_path(route,pose,cfg) for route in route_ids}
                     cached=reuse_conditional_baseline(plan['baseline_parent'],root,cfg,source,paths)
-                    if len(cached)!=6:raise ValueError('conditional baseline requires six reusable cases')
+                    if not conflict and len(cached)!=6:raise ValueError('conditional baseline requires six reusable cases')
+                    if conflict and len(cached)!=12:raise ValueError('conflict training requires completed twelve-case preflight cache; no extra baseline physics authorized')
                 if (resume or coverage_mode or reward_fork) and not conditional:
                     from .path_command_cache import reuse_zero_upper
                     from .geometric_path import build_path
@@ -596,6 +624,7 @@ def train(path,output,*,execute=False,resume=None):
             def evaluate_shared(update,checkpoint):
                 from .path_command_evaluation import evaluate_conditional
                 from .path_command_selection import summarize_conditional,persist_conditional_best
+                if conflict:status['active_validation_role']='full_dev'
                 check_conditional_dev_budget(status,cfg,plan['alphas'])
                 destination=out/'validation'/f'update_{update:04d}';panels=evaluate_conditional(evaluator,export_actor(algo.policy),plan['alphas'],destination)
                 summary=summarize_conditional(panels,cfg)
@@ -610,6 +639,16 @@ def train(path,output,*,execute=False,resume=None):
                     atomic_json(destination/'preference_metrics.json',preference)
                     persist_preference_best(out,checkpoint,actor,preference,{**identity,'source_update':update,'validation_dir':str(destination.resolve())})
                 return summary
+            def evaluate_lightweight(update,checkpoint):
+                from .path_command_evaluation import evaluate_conditional
+                from .path_command_scenarios import explicit_case_declarations
+                names=[case['name'] for case in explicit_case_declarations(cfg) if case.get('evaluation_role')=='constant_pressure']
+                if len(names)!=4:raise ValueError('conflict lightweight declaration requires four pressure cases')
+                status['active_validation_role']='lightweight'
+                check_conditional_dev_budget(status,cfg,[0.,1.],case_count=4,role='lightweight')
+                destination=out/'lightweight'/f'update_{update:04d}'
+                evaluate_conditional(evaluator,export_actor(algo.policy),[0.,1.],destination,case_names=names,diagnostic_only=True)
+                atomic_json(destination/'source.json',dict(identity,source_update=update,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=digest(checkpoint),eligible_for_best=False,role='progress_diagnostic_only'))
             if conditional and not engineering and start_update in validation_schedule:
                 dev_started=time.monotonic()
                 if endpoint_resume:
@@ -661,6 +700,7 @@ def train(path,output,*,execute=False,resume=None):
                 sample_seconds=time.monotonic()-tick_start;opt_start=time.monotonic();update_status(stage='optimizing');metrics=algo.update();opt_seconds=time.monotonic()-opt_start;check_budget()
                 update_status(stage='optimized',completed_updates=update)
                 rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,plan);accepted+=int(metrics['accepted_epochs']>0)
+                if conflict and stop=='three_consecutive_hard_rejected_batches':stop=None
                 totals=np.sum(np.stack(rollout_stats),axis=(0,1));done_totals=np.sum(np.stack(completed_episodes),axis=(0,1));count=max(totals[0],1)
                 record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
                 if strong:
@@ -709,6 +749,8 @@ def train(path,output,*,execute=False,resume=None):
                 if coverage_pause:
                     atomic_json(out/'coverage_diagnosis.json',dict(reason='two consecutive complete ten-update windows below exposure target',sampler=cfg['training_sampler'],actual=coverage_summary,domain_failures_last_rollout=domain_failures,policy='save and pause; no silent sampler/reward/lower change'))
                     raise CoveragePause('strong demand exposure below target in two windows; saved boundary and diagnosis')
+                if conflict and not engineering and update in c.get('lightweight_validation_updates',[]) and not stop:
+                    dev_started=time.monotonic();evaluate_lightweight(update,checkpoint);status['dev_seconds']=status.get('dev_seconds',0)+time.monotonic()-dev_started
                 if conditional and update in validation_schedule and not stop:
                     dev_started=time.monotonic();evaluate_shared(update,checkpoint);status['dev_seconds']=status.get('dev_seconds',0)+time.monotonic()-dev_started
                 if not conditional and update in validation_schedule and not stop:

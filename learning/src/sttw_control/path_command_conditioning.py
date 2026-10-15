@@ -9,6 +9,7 @@ PLAN_SCHEMA='sttw_path_conditional_training_plan_v1'
 ALPHA_INDEX=336
 ALPHA_GRID=[0.,.25,.5,.75,1.]
 SCRATCH_SCHEMA='sttw_path_scratch_preference_training_plan_v1'
+CONFLICT_SCHEMA='sttw_path_conflict_exposure_training_plan_v1'
 STRONG_SCHEMA='sttw_path_strong_preference_training_plan_v1'
 CURRICULUM=[dict(updates_inclusive=[1,100],endpoint_probability_each=.5,uniform_probability=0.),dict(updates_inclusive=[101,200],endpoint_probability_each=.4,uniform_probability=.2)]
 
@@ -43,6 +44,7 @@ def execution_dimensions(plan,config):
 
 
 def validate_conditional_plan(plan,config):
+    if plan.get('schema')==CONFLICT_SCHEMA:return validate_conflict_plan(plan,config)
     c=config['training_future_phase_C'];a=config.get('alpha_conditioning',{})
     from .path_command_policy import architecture_identity
     architecture_identity(config)
@@ -83,6 +85,34 @@ def validate_conditional_plan(plan,config):
     if strong and not scratch and (config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_strong_preference_v1' or config.get('preference_selection_schema')!='path_strong_preference_v1'):raise ValueError('strong preference reward/selection contract mismatch')
     if not scratch and (not init.get('checkpoint') or len(init.get('checkpoint_sha256',''))!=64):raise ValueError('conditional parent identity missing')
     if plan.get('coverage_monitor')!={'target':.05,'check_every':10,'consecutive_low_windows':2}:raise ValueError('conditional exposure coverage monitor mismatch')
+
+
+def validate_conflict_plan(plan,config):
+    """Versioned exposure changes; inherited physical/reward/initialization contract."""
+    import copy
+    if not is_conditional(plan):raise ValueError('conflict shared conditional mode required')
+    if plan.get('seed')!=911501 or config['alpha_conditioning'].get('seed')!=911502:raise ValueError('conflict independent seed contract')
+    sampler=config['training_sampler']
+    if sampler.get('version')!='path_conflict_exposure_v1' or sampler.get('route_seed')!=910501 or sampler.get('speed_event_seed')!=911503:raise ValueError('conflict sampler seed/version contract')
+    if plan.get('sampler_version')!=sampler['version'] or plan['sampler_resolution'].get('training_sampler')!=sampler:raise ValueError('conflict sampler disconnected')
+    if plan.get('preference_selection_schema')!='path_conflict_preference_v1' or config.get('preference_selection_schema')!='path_conflict_preference_v1':raise ValueError('conflict preference contract')
+    if plan.get('scientific_threshold_policy')!='diagnostic_continue_declared_200':raise ValueError('scientific thresholds cannot stop conflict budget')
+    c=config['training_future_phase_C']
+    if c.get('validation_updates')!=[0,100,200] or c.get('lightweight_validation_updates')!=[50,150] or c.get('save_every')!=1:raise ValueError('conflict DEV/checkpoint schedule mismatch')
+    if plan.get('budget')!=dict(training_policy_transitions=13107200,training_lower_ticks=52428800,full_dev_lower_ticks=720000,lightweight_lower_ticks=64000,preflight_lower_ticks=64000,engineering_lower_ticks=512,dynamic_lower_ticks=24000,total_lower_ticks=53301312):raise ValueError('conflict declared budget mismatch')
+    # Reuse all inherited architecture, finite-mixture, scratch and PPO validation.
+    legacy_plan=copy.deepcopy(plan);legacy_cfg=copy.deepcopy(config)
+    legacy_plan['schema']=SCRATCH_SCHEMA;legacy_plan['sampler_version']='demand_exposure_v2'
+    legacy_plan['preference_selection_schema']=legacy_cfg['preference_selection_schema']='path_preference_research_v1'
+    legacy_cfg['training_future_phase_C']['validation_updates']=[0,50,100,150,200]
+    legacy_cfg['dynamic_preference_checks'].update(first_change_s=.5,return_s=6,trigger='qualified_research_preference')
+    legacy_cfg['dynamic_preference_checks'].pop('cases',None)
+    # Acceptance has its own new-version validation in selection.
+    reference=__import__('json').loads((Path(__file__).parents[2]/'configs/STTW_Path_Unified_Scratch.json').read_text())
+    legacy_cfg['preference_acceptance']=reference['preference_acceptance']
+    validate_conditional_plan(legacy_plan,legacy_cfg)
+    from .path_command_selection import resolve_preference_acceptance
+    resolve_preference_acceptance(config)
 
 
 def initialize_conditional_actor(algo,parent_checkpoint,expected_sha,*,expected_lower_sha=None,config=None):
@@ -138,6 +168,9 @@ def conditional_identity(plan,config,source):
         n,steps=execution_dimensions(plan,config)
         identity.update(initialization_mode='scratch',acceptance_sha256=config_hash(resolve_preference_acceptance(config)),
             declared_updates=plan['updates'],actual_batch_dimensions=[n,steps],declared_policy_transitions=n*steps*plan['updates'])
+    if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+        from .path_command_scenarios import explicit_case_declarations
+        identity['case_declarations_sha256']=config_hash(explicit_case_declarations(config))
     return identity
 
 
@@ -166,9 +199,12 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
     meta=json.loads(meta_file.read_text()) if meta_file.exists() else None
     expected=dict(schema='path_conditional_panel_v1',mode=MODE,alphas=grid,
         config_sha256=config_hash(config),actor_parameters_sha256=_conditional_parameter_digest(params))
-    if config.get('preference_selection_schema')=='path_preference_research_v1':
+    if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
         expected['acceptance_sha256']=config_hash(resolve_preference_acceptance(config))
+    if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+        from .path_command_scenarios import explicit_case_declarations
+        expected['case_declarations_sha256']=config_hash(explicit_case_declarations(config))
     if meta is not None and any(meta.get(k)!=v for k,v in expected.items()):raise ValueError('resume conditional panel identity mismatch')
     source=json.loads(source_file.read_text()) if source_file.exists() else None
     if source is not None:
@@ -189,7 +225,7 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
             panels={key:{name:dict(np.load(boundary/key/(name+'.npz'))) for name,_,_ in cases(config)} for key in grid}
             summary=summarize_conditional(panels,config)
             persist_conditional_best(out,source['checkpoint'],source['actor'],summary,{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
-            if config.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1'):
+            if config.get('preference_selection_schema') in ('path_strong_preference_v1','path_preference_research_v1','path_conflict_preference_v1'):
                 from .path_command_selection import summarize_preference,persist_preference_best
                 persist_preference_best(out,source['checkpoint'],source['actor'],summarize_preference(panels,config),{**identity,'source_update':update,'validation_dir':str(boundary.resolve())})
         else:evaluate(update,checkpoint)

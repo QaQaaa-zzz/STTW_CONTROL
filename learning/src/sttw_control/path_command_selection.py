@@ -6,6 +6,9 @@ from .preference_best import atomic_json,digest
 from .path_command_policy import SCHEMA
 
 def cases(config):
+    if config.get('preference_selection_schema')=='path_conflict_preference_v1':
+        from .path_command_scenarios import explicit_case_declarations
+        return [(d['name'],d['route_id'],float(d['speed_values'][0])) for d in explicit_case_declarations(config)]
     e=config['stage_C_evaluation']
     return [(f'{route}_{speed:.1f}',route,speed) for route in e['route_ids'] for speed in [e['low_speed_m_s'],e['conflict_speed_m_s']]]
 
@@ -301,7 +304,7 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
         **hashes,validation_dir=str(validation),panel_identity=meta,logical_identity=logical_identity,alphas=summary['alphas'],
         score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary.get('qualified',summary['qualified_task']),
         qualified_preference=summary.get('qualified_preference'),metrics=summary)
-    if _selection_schema==RESEARCH_PREFERENCE_SELECTION_SCHEMA:
+    if _selection_schema in (RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA):
         record.update(acceptance=summary['acceptance'],acceptance_sha256=summary['acceptance_sha256'],
             qualified_research_preference=summary['qualified_research_preference'],
             legacy_strict_preference_qualified=summary['legacy_strict_preference_qualified'])
@@ -311,6 +314,7 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
 
 PREFERENCE_SELECTION_SCHEMA='path_strong_preference_v1'
 RESEARCH_PREFERENCE_SELECTION_SCHEMA='path_preference_research_v1'
+CONFLICT_PREFERENCE_SELECTION_SCHEMA='path_conflict_preference_v1'
 
 
 def resolve_preference_acceptance(config):
@@ -323,7 +327,11 @@ def resolve_preference_acceptance(config):
         adjacent_speed_reverse_m_s=.01,adjacent_path_reverse_m=.01,
         roll_limit_role='diagnostic',corridor_limit_role='diagnostic')
     if schema==PREFERENCE_SELECTION_SCHEMA:return legacy
-    if schema!=RESEARCH_PREFERENCE_SELECTION_SCHEMA:raise ValueError('unknown preference selection schema')
+    if schema not in (RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA):raise ValueError('unknown preference selection schema')
+    if schema==CONFLICT_PREFERENCE_SELECTION_SCHEMA:
+        legacy.update(pressure_endpoint_path_rmse_m=.20,pressure_endpoint_speed_rmse_m_s=.15,
+            pressure_min_speed_gap_m_s=.05,pressure_min_path_gap_m=.02,
+            min_actual_speed_reduction_m_s=.10,max_actual_speed_offset_m_s=-.05)
     supplied=config.get('preference_acceptance')
     if not isinstance(supplied,dict) or set(supplied)!=set(legacy):
         raise ValueError('unknown or missing preference acceptance fields')
@@ -331,6 +339,9 @@ def resolve_preference_acceptance(config):
     for key,value in acceptance.items():
         if key.endswith('_role'):
             if value!='diagnostic':raise ValueError('research acceptance roles must be diagnostic')
+        elif key=='max_actual_speed_offset_m_s':
+            if isinstance(value,bool) or not isinstance(value,(int,float)) or not np.isfinite(value) or value>=0:
+                raise ValueError('actual speed offset must be finite and negative')
         else:
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not np.isfinite(value) or value<=0:
                 raise ValueError('preference acceptance numbers must be finite and positive')
@@ -446,6 +457,8 @@ def _summarize_strong_preference(panels,config):
 
 def summarize_preference(panels,config):
     acceptance=resolve_preference_acceptance(config)
+    if config['preference_selection_schema']==CONFLICT_PREFERENCE_SELECTION_SCHEMA:
+        return _summarize_conflict_preference(panels,config,acceptance)
     if config['preference_selection_schema']==PREFERENCE_SELECTION_SCHEMA:
         return _summarize_strong_preference(panels,config)
     from .preference_best import config_hash
@@ -500,8 +513,14 @@ def summarize_preference(panels,config):
 
 
 def preference_score_key(summary,update=0):
-    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema') not in (PREFERENCE_SELECTION_SCHEMA,RESEARCH_PREFERENCE_SELECTION_SCHEMA)
+    if (summary.get('schema')!=SCHEMA or summary.get('selection_schema') not in (PREFERENCE_SELECTION_SCHEMA,RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA)
             or not summary.get('all_declared_traces_complete')):raise ValueError('invalid strong preference identity')
+    if summary['selection_schema']==CONFLICT_PREFERENCE_SELECTION_SCHEMA:
+        key=(summary['physical_failures']+summary['tracking_domain_failures'],summary['research_goal_hold_failures'],
+             summary['highspeed_endpoint_failures'],summary['preference_direction_failures'],summary['old_regression_failures'],
+             summary['normalized_preference_deficit'],summary['worst_endpoint_normalized_error'],int(update))
+        if not all(np.isfinite(v) for v in key):raise ValueError('nonfinite conflict preference selection')
+        return key
     if summary['selection_schema']==RESEARCH_PREFERENCE_SELECTION_SCHEMA:
         key=(summary['physical_failures']+summary['tracking_domain_failures'],summary['incomplete_turn_conditions'],
             summary['research_goal_hold_failures'],summary['highspeed_endpoint_failures'],summary['preference_direction_failures'],
@@ -528,7 +547,13 @@ def persist_preference_best(root,checkpoint,actor,summary,identity):
     meta=json.loads((folder/'panel_identity.json').read_text())
     for key in ('architecture','reward_version','config_sha256'):
         if meta.get(key)!=identity.get(key):raise ValueError('strong preference panel identity mismatch '+key)
-    research=summary.get('selection_schema')==RESEARCH_PREFERENCE_SELECTION_SCHEMA
+    if summary.get('selection_schema')==CONFLICT_PREFERENCE_SELECTION_SCHEMA:
+        from .path_command_scenarios import explicit_case_declarations
+        sha=identity.get('case_declarations_sha256')
+        if not sha or meta.get('case_declarations_sha256')!=sha:raise ValueError('conflict preference declaration identity mismatch')
+        record=json.loads((folder/'source.json').read_text())
+        if record.get('case_declarations_sha256')!=sha:raise ValueError('conflict preference source declaration identity mismatch')
+    research=summary.get('selection_schema') in (RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA)
     if research:
         acceptance=summary.get('acceptance')
         sha=config_hash(acceptance)
@@ -545,3 +570,98 @@ def persist_preference_best(root,checkpoint,actor,summary,identity):
     return persist_conditional_best(root,checkpoint,actor,summary,identity,
         _selection_schema=summary['selection_schema'],_pointer='best_preference_model.json',
         _score=lambda m:preference_score_key(m,update),_generation='preference_best_generations')
+
+
+def _conflict_turn_metrics(trace,config):
+    """Equal weight per 0.5 m bin of each actual turn; connectors are excluded."""
+    starts=np.asarray(trace['turn_starts'],float);ends=np.asarray(trace['turn_ends'],float)
+    valid=np.asarray(trace['turn_mask'],bool);directions=np.asarray(trace['turn_directions'],float)
+    if any(a.shape!=(4,) for a in (starts,ends,valid,directions)):
+        raise ValueError('turn metadata must have four slots')
+    if not all(np.isfinite(a).all() for a in (starts,ends,directions)) or not valid.any():
+        raise ValueError('invalid turn metadata')
+    if np.any(ends[valid]<=starts[valid]) or np.any(np.abs(directions[valid])!=1):raise ValueError('invalid turn interval')
+    if np.any(starts[valid][1:]<ends[valid][:-1]):raise ValueError('overlapping turn intervals')
+    progress=np.asarray(trace['path_progress'],float);speed=np.asarray(trace['actual_forward_speed'],float)
+    request=np.broadcast_to(np.asarray(trace['v_user'],float),speed.shape)
+    path=np.asarray(trace['path_cross_track'],float);offset=np.asarray(trace['offsets'],float)[:,0]
+    arrays=(progress,speed,request,path,offset)
+    if any(a.shape!=speed.shape for a in arrays) or not all(np.isfinite(a).all() for a in arrays):
+        raise ValueError('nonfinite or malformed turn trace')
+    for key in ('physical_failure','domain_exit'):
+        terminal=np.asarray(trace.get(key,np.zeros(len(speed),bool)),bool)
+        if terminal[:-1].any():raise ValueError('turn trace continues after failure')
+    counts=[];edges=[];rows=[]
+    for lo,hi in zip(starts[valid],ends[valid]):
+        edge=np.append(np.arange(lo,hi,.5),hi);ns=[]
+        for i,(a,b) in enumerate(zip(edge[:-1],edge[1:])):
+            mask=(progress>=a)&((progress<=b) if i==len(edge)-2 else progress<b)
+            ns.append(int(mask.sum()))
+            if mask.any():rows.append([np.mean((speed[mask]-request[mask])**2),np.mean(path[mask]**2),
+                                      np.mean(speed[mask]),np.mean(request[mask]),np.mean(offset[mask])])
+        counts.append(ns);edges.append(edge.tolist())
+    complete=all(all(n) for n in counts)
+    means=np.mean(rows,axis=0) if complete else [None]*5
+    return dict(complete=complete,turn_bin_counts=counts,bin_counts=[n for turn in counts for n in turn],
+        turn_edges_m=edges,speed_rmse_m_s=float(np.sqrt(means[0])) if complete else None,
+        path_rmse_m=float(np.sqrt(means[1])) if complete else None,
+        mean_actual_speed_m_s=float(means[2]) if complete else None,
+        mean_original_speed_m_s=float(means[3]) if complete else None,
+        mean_actual_speed_offset_m_s=float(means[4]) if complete else None)
+
+
+def _summarize_conflict_preference(panels,config,acceptance):
+    from .preference_best import config_hash
+    names=[c[0] for c in cases(config)];old_names=names[:6]
+    if len(names)!=12 or set(panels)!={alpha_key(a) for a in conditional_grid(config)}:
+        raise ValueError('complete 12-case five-alpha conflict panel required')
+    if any(set(panel)!=set(names) for panel in panels.values()):raise ValueError('complete conflict cases required')
+    old_cfg=dict(config,preference_selection_schema=RESEARCH_PREFERENCE_SELECTION_SCHEMA)
+    old_cfg['preference_acceptance']={k:v for k,v in acceptance.items() if not k.startswith('pressure_') and k not in ('min_actual_speed_reduction_m_s','max_actual_speed_offset_m_s')}
+    old_panels={key:{n:panel[n] for n in old_names} for key,panel in panels.items()}
+    old=summarize_preference(old_panels,old_cfg)
+    result=summarize_conditional(panels,config)
+    result.update(selection_schema=CONFLICT_PREFERENCE_SELECTION_SCHEMA,acceptance=acceptance,
+        acceptance_sha256=config_hash(acceptance),preference_cases={},research_goal_hold_failures=0,
+        highspeed_endpoint_failures=0,preference_direction_failures=0,incomplete_turn_conditions=0,
+        old_regression_failures=old['highspeed_endpoint_failures']+old['incomplete_turn_conditions'],
+        old_research_metrics=old,legacy_strict_preference_qualified=old['legacy_strict_preference_qualified'],
+        legacy_strict_preference_metrics=old['legacy_strict_preference_metrics'],
+        qualification_role='diagnostic_continue_declared_budget',scientific_failure_action='continue_declared_200_updates')
+    for key,summary in result['per_alpha'].items():
+        for name,m in summary['cases'].items():
+            hold=preference_hold_metrics(panels[key][name],config,acceptance)
+            m.update(research_hold=hold,legacy_final_hold=m['final_hold'])
+            result['research_goal_hold_failures']+=int(not(m['goal'] and hold['final_hold']))
+    deficit=0.;worst=0.;missing=False
+    for name in ('left180_R1p8_2.8','right180_R1p8_2.8','compact_LR_2.8','compact_RL_2.8'):
+        metrics={key:_conflict_turn_metrics(panel[name],config) for key,panel in panels.items()}
+        incomplete=sum(not m['complete'] for m in metrics.values());result['incomplete_turn_conditions']+=incomplete
+        missing|=bool(incomplete);zero=metrics['alpha_0'];one=metrics['alpha_1']
+        ends=(zero['path_rmse_m'],one['speed_rmse_m_s'])
+        limits=(acceptance['pressure_endpoint_path_rmse_m'],acceptance['pressure_endpoint_speed_rmse_m_s'])
+        ef=[v is None or v>lim for v,lim in zip(ends,limits)];result['highspeed_endpoint_failures']+=sum(ef)
+        worst=max(worst,*[float(np.finfo(np.float32).max) if v is None else v/lim for v,lim in zip(ends,limits)])
+        dv=zero['speed_rmse_m_s']-one['speed_rmse_m_s'] if zero['complete'] and one['complete'] else None
+        dy=one['path_rmse_m']-zero['path_rmse_m'] if zero['complete'] and one['complete'] else None
+        reduction=zero['mean_original_speed_m_s']-zero['mean_actual_speed_m_s'] if zero['complete'] else None
+        values=(dv,dy,reduction,-zero['mean_actual_speed_offset_m_s'] if zero['complete'] else None)
+        mins=(acceptance['pressure_min_speed_gap_m_s'],acceptance['pressure_min_path_gap_m'],
+              acceptance['min_actual_speed_reduction_m_s'],-acceptance['max_actual_speed_offset_m_s'])
+        failures=[v is None or v<lim for v,lim in zip(values,mins)]
+        result['preference_direction_failures']+=sum(failures)+incomplete
+        deficit+=sum(1. if v is None else max(0.,(lim-v)/lim) for v,lim in zip(values,mins))
+        adjacent=list(zip(metrics.values(),list(metrics.values())[1:]))
+        reverse_speed=[b['speed_rmse_m_s']-a['speed_rmse_m_s'] if a['complete'] and b['complete'] else None for a,b in adjacent]
+        reverse_path=[a['path_rmse_m']-b['path_rmse_m'] if a['complete'] and b['complete'] else None for a,b in adjacent]
+        result['preference_cases'][name]=dict(per_alpha=metrics,all_alpha_complete_turn=not incomplete,
+            endpoint_main_failures=ef,D_v_m_s=dv,D_y_m=dy,gap_failures=failures[:2],
+            behavior_failures=failures[2:],alpha0_actual_speed_reduction_m_s=reduction,acceptance=acceptance,
+            adjacent_speed_reverse_changes_m_s=reverse_speed,adjacent_path_reverse_changes_m=reverse_path)
+    result.update(worst_endpoint_normalized_error=worst,normalized_preference_deficit=deficit,missing_turn_bins=missing,
+        missing_error_semantics='missing bins remain null and fail qualification; finite maximum rank sentinel')
+    result['qualified_research_preference']=not any(result[k] for k in ('physical_failures','tracking_domain_failures',
+        'research_goal_hold_failures','highspeed_endpoint_failures','preference_direction_failures','old_regression_failures'))
+    result['qualified_preference']=result['qualified_research_preference'];result['qualified']=result['qualified_preference']
+    result['score_tuple']=preference_score_key(result)
+    return result

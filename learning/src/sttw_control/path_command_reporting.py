@@ -510,7 +510,7 @@ def _conditional_last_receipt(learner,config,best):
     validate_actor_parameters(params,config)
     if meta.get('actor_parameters_sha256')!=_conditional_parameter_digest(params):
         raise ValueError('last validation Actor identity mismatch')
-    if config.get('preference_selection_schema')=='path_preference_research_v1':
+    if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
         sha=config_hash(resolve_preference_acceptance(config))
         if meta.get('acceptance_sha256')!=sha or source.get('acceptance_sha256')!=sha:
@@ -529,6 +529,7 @@ def _conditional_last_receipt(learner,config,best):
 
 
 def report_conditional_panel(root,config):
+    if config.get('preference_selection_schema')=='path_conflict_preference_v1':return report_conflict_panel(root,config)
     """All-alpha evidence for one disk-selected shared model; zero simulator calls."""
     from .path_command_selection import (cases,conditional_grid,alpha_key,summarize_conditional,
                                         CONDITIONAL_SELECTION_SCHEMA)
@@ -545,7 +546,7 @@ def report_conditional_panel(root,config):
     meta=json.loads((final/'panel_identity.json').read_text())
     if not meta.get('completed') or meta.get('alphas')!=alphas or meta.get('config_sha256')!=config_hash(config):
         raise ValueError('conditional final panel identity mismatch')
-    if config.get('preference_selection_schema')=='path_preference_research_v1':
+    if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
         acceptance_sha=config_hash(resolve_preference_acceptance(config))
         if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
@@ -737,3 +738,117 @@ def report_conditional_panel(root,config):
             lines.extend(['', 'Dynamic state: not_run; no dynamic receipt exists.'])
     (out/'INDEX.md').write_text('\n'.join(lines)+'\n')
     return result
+
+
+def report_conflict_preflight(root,cfg,receipt):
+    """Diagnostic XY comes first; all thresholds remain observations."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    root=Path(root);names=list(receipt['metrics']);fig,axes=plt.subplots(2,2,figsize=(13,11))
+    for name,ax in zip(names,axes.flat):
+        path=dict(np.load(root/'zero_upper'/f'{name}_path.npz'))
+        ax.plot(*path['xy'][path['s']<=float(path['goal'])+1].T,'k--',label='original fixed path')
+        curves,ca=plt.subplots(3,2,figsize=(13,10))
+        for folder,label in [('zero_upper','B0 frozen local300'),('slowdown_probe','probe delta_v=-.65')]:
+            d=dict(np.load(root/folder/f'{name}.npz'));t=d['time']+cfg['timing']['lower_dt_s']
+            ax.plot(*d['actual_xy'].T,label=label);failed=np.any(d['physical_failure']) or np.any(d['domain_exit'])
+            ax.plot(*d['actual_xy'][-1],marker='x' if failed else 'o')
+            for a,y,ylabel in [(ca[0,0],d['actual_forward_speed'],'Forward speed (m/s)'),(ca[0,1],d['path_cross_track'],'Path error (m)'),(ca[1,0],d['phi'],'Roll (rad)'),(ca[1,1],d['offsets'][:,0],'Applied speed correction (m/s)'),(ca[2,0],d['actual_delta'],'Actual steer (rad)'),(ca[2,1],d['scored_tick_reward'],'Per lower-step reward')]:a.plot(t,y,label=label);a.set_ylabel(ylabel)
+        ca[0,0].plot(t,d['v_user'],'k:',label='unchanged original request')
+        for a in ca.flat:a.set_xlabel('Time (s)');a.grid(alpha=.2);a.legend(fontsize=7)
+        curves.suptitle(name+' | preflight diagnostics; no optimizer or teacher');curves.tight_layout();curves.savefig(root/f'{name}_curves.png',dpi=110);plt.close(curves)
+        ax.set(title=name,xlabel='World X (m)',ylabel='World Y (m)');ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=7);ax.grid(alpha=.2)
+    fig.tight_layout();fig.savefig(root/'PREFLIGHT_XY.png',dpi=120);plt.close(fig)
+    lines=['# Bounded conflict preflight','','![Original/B0/probe XY](PREFLIGHT_XY.png)','',
+        f"Empirical conflict conditions all met: {receipt['all_conflict_conditions']}. Scientific thresholds are diagnostics; declared200 training continues.",
+        f"Actual lower ticks: {receipt['active_lower_ticks']}/64000. Matched B0 reused: {len(receipt['reused_baseline_cases'])}.",'',
+        'Probe is not a teacher, PPO sample, or imitation label. Original speed request is preserved, including all speed loss.','', '[Full per-case gates and negative evidence](receipt.json)','']
+    for name in names:lines.append(f'[{name} speed/path/roll/correction/reward]({name}_curves.png)')
+    (root/'INDEX.md').write_text('\n'.join(lines)+'\n')
+
+
+def report_conflict_panel(root,config):
+    """All twelve cases at the same selected Actor; last model shown separately."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from .path_command_selection import cases,conditional_grid,alpha_key,summarize_preference,preference_score_key,_conflict_turn_metrics
+    from .path_command_scenarios import explicit_case_declarations
+    from .preference_best import digest,config_hash,atomic_json
+    root=Path(root);learner=root/'shared';best=json.loads((learner/'best_preference_model.json').read_text())
+    definitions={d['name']:d for d in explicit_case_declarations(config)}
+    expected_hash=config_hash(list(definitions.values()))
+    if best.get('case_declarations_sha256')!=expected_hash:raise ValueError('report case/script/turn identity mismatch')
+    for key in ('checkpoint','actor'):
+        if digest(best[key])!=best[key+'_sha256']:raise ValueError('report selected weights changed')
+    last=_conditional_last_receipt(learner,config,best)
+    out=root/'report';out.mkdir(exist_ok=True)
+    records={}
+    candidates=[('selected',best['source_update'],Path(best['validation_dir']),best['checkpoint_sha256'])]
+    if last['state']=='verified_saved_panel':candidates.append(('last',last['source_update'],learner/'validation'/f"update_{last['source_update']:04d}",last['checkpoint_sha256']))
+    for label,update,folder,sha in candidates:
+        target=out/label;target.mkdir(exist_ok=True)
+        alphas={alpha_key(a):a for a in conditional_grid(config)}
+        panels={key:{name:dict(np.load(folder/key/f'{name}.npz')) for name in definitions} for key in alphas}
+        summary=summarize_preference(panels,config)
+        if label=='selected' and tuple(preference_score_key(summary,update))!=tuple(best['score_tuple']):raise ValueError('selected conflict score changed')
+        atomic_json(target/'metrics.json',summary)
+        allfig,axes=plt.subplots(4,3,figsize=(18,21));maximum_error=0.;diagnostics={}
+        for (name,declaration),ax in zip(definitions.items(),axes.flat):
+            path=dict(np.load(root/'zero_upper'/f'{name}_path.npz'));baseline=dict(np.load(root/'zero_upper'/f'{name}.npz'))
+            xyfig,xy=plt.subplots(figsize=(8,7));curves,cax=plt.subplots(3,2,figsize=(14,12));chain,ch=plt.subplots(3,2,figsize=(14,11))
+            partsfig,partsaxes=plt.subplots(11,2,figsize=(14,25))
+            mask=path['s']<=float(path['goal'])+1
+            for a in (ax,xy):a.plot(*path['xy'][mask].T,'k--',label='original fixed path');a.set(xlabel='World X (m)',ylabel='World Y (m)',title=name);a.set_aspect('equal',adjustable='datalim')
+            data={'B0':baseline,**{key:panels[key][name] for key in alphas}};diagnostics[name]={}
+            for key,d in data.items():
+                failed=bool(np.any(d['physical_failure']) or np.any(d['domain_exit']));t=d['time']+config['timing']['lower_dt_s']
+                for a in (ax,xy):a.plot(*d['actual_xy'].T,label=key);a.plot(*d['actual_xy'][-1],marker='x' if failed else 'o')
+                for a,y,unit in [(cax[0,0],d['actual_forward_speed']-d['v_user'],'Speed error (m/s)'),(cax[0,1],d['path_cross_track'],'Path error (m)'),(cax[1,0],d['phi'],'Roll (rad)'),(cax[1,1],d['offsets'][:,0],'Actual speed correction (m/s)')]:a.plot(t,y,label=key);a.set_ylabel(unit)
+                for column in (0,1):
+                    for field in ('nominal','governed'):ch[0,column].plot(t,d[field][:,column],label=key+' '+field)
+                    for field in ('target_offset','filtered_offset','offsets'):ch[1,column].plot(t,d[field][:,column],label=key+' '+field)
+                    ch[2,column].plot(t,d['final_command'][:,column],label=key+' command')
+                    ch[0,column].plot(t,d['actual_forward_speed'] if column==0 else d['actual_delta'],':',label=key+' actual')
+                starts=np.asarray(d['turn_starts']);valid=np.asarray(d['turn_mask'],bool)
+                first=float(starts[valid][0]) if valid.any() else None
+                direction=float(np.asarray(d['turn_directions'])[valid][0]) if valid.any() else 0.
+                onset=None
+                if first is not None:
+                    inward=(direction*d['path_cross_track']>.01)&(d['path_progress']<first)
+                    n=round(.1/config['timing']['lower_dt_s']);complete=np.flatnonzero(np.convolve(inward.astype(int),np.ones(n,dtype=int),'valid')==n) if len(inward)>=n else []
+                    if len(complete):onset=int(complete[0])
+                diagnostics[name][key]=dict(inward_onset_time_s=None if onset is None else float(d['time'][onset]),before_turn_distance_m=None if onset is None else first-float(d['path_progress'][onset]),definition='inward>1cm sustained0.1s before first real turn')
+                if key!='B0':
+                    alpha=alphas[key];r,parts=reward_series(d,alpha,config);br,bparts=reward_series(baseline,alpha,config)
+                    difference=float(np.max(np.abs(r-d['scored_tick_reward'])));maximum_error=max(maximum_error,difference)
+                    if not np.allclose(r,d['scored_tick_reward'],rtol=2e-4,atol=2e-6):raise ValueError('conflict per-step reward reconstruction mismatch '+name+'/'+key)
+                    steps=np.arange(1,len(r)+1);bs=np.arange(1,len(br)+1)
+                    for pi,(component,value) in enumerate(parts.items()):
+                        for column,ys,bys in ((0,value,bparts[component]),(1,np.cumsum(value),np.cumsum(bparts[component]))):
+                            partsaxes[pi,column].plot(steps,ys,label=key);partsaxes[pi,column].plot(bs,bys,'--',label=key+' B0');partsaxes[pi,column].set_ylabel(component)
+                    cax[2,0].plot(steps,r,label=key);cax[2,0].plot(bs,br,'--',label=key+' B0')
+                    cax[2,1].plot(steps,np.cumsum(r),label=key);cax[2,1].plot(bs,np.cumsum(br),'--',label=key+' B0')
+            for col,unit in ((0,'Speed (m/s)'),(1,'Steer (rad)')):ch[0,col].set_ylabel('Nominal/governed/actual '+unit);ch[1,col].set_ylabel('Target/filtered/applied '+unit)
+            ch[0,0].plot(t,d['v_user'],'k--',label='original request')
+            ch[2,0].set_ylabel('Final steer rate (rad/s)');ch[2,1].set_ylabel('Final axle rate (rad/s)')
+            cax[2,0].set_ylabel('Per lower-step reward');cax[2,1].set_ylabel('Cumulative reward')
+            for a in partsaxes.flat:a.grid(alpha=.2);a.legend(fontsize=5);a.set_xlabel('Actual lower steps')
+            for a in cax.flat:a.grid(alpha=.2);a.legend(fontsize=5);a.set_xlabel('Time (s); reward: lower steps')
+            for a in ch.flat:a.grid(alpha=.2);a.legend(fontsize=5);a.set_xlabel('Time (s)')
+            for a in (ax,xy):a.grid(alpha=.2);a.legend(fontsize=6)
+            title=f'{name} | {label} slot{update} SHA{sha[:12]} | seed911501 | no external disturbance; true failure endpoints'
+            xy.set_title(title,fontsize=8);curves.suptitle(title);chain.suptitle(title)
+            for fig,filename in ((xyfig,f'{name}_XY.png'),(curves,f'{name}_errors_rewards.png'),(chain,f'{name}_command_chain.png'),(partsfig,f'{name}_signed_components.png')):fig.tight_layout();fig.savefig(target/filename,dpi=110);plt.close(fig)
+        allfig.suptitle(f'{label} single Actor slot{update} | all12 cases, five alpha+B0');allfig.tight_layout();allfig.savefig(target/'ALL_XY.png',dpi=110);plt.close(allfig)
+        atomic_json(target/'anticipation_diagnostics.json',diagnostics)
+        records[label]=dict(source_update=update,checkpoint_sha256=sha,summary=summary,reward_audit_max_tick_error=maximum_error,physics_executed=0)
+    atomic_json(out/'paired_metrics.json',dict(selected_and_last=records,scientific_threshold_policy='diagnostic_continue_declared_200'))
+    lines=['# Conflict exposure: separate selected and last models','','![Selected five-alpha+B0 original-path XY](selected/ALL_XY.png)','',f"Selected slot{best['source_update']}; last slot{last['source_update']}. Old .302rad/.40m and adjacent monotonicity remain diagnostic.",'','[Selected and last qualification, legacy diagnostics and reward audit](paired_metrics.json)']
+    if 'last' in records:lines+=['','![Last five-alpha+B0 XY](last/ALL_XY.png)']
+    for label in records:
+        lines+=['',f'## {label}']
+        for name in definitions:lines.append(f'[{name} XY]({label}/{name}_XY.png) · [Errors,roll,correction,step/cumulative reward]({label}/{name}_errors_rewards.png) · [Original request→nominal→correction→commands→motion]({label}/{name}_command_chain.png) · [Signed step/cumulative components]({label}/{name}_signed_components.png)')
+    lines+=['','Original signed reward component sources are retained in all lower-step NPZ; different alpha returns are not physical performance rankings. Full failures and incomplete turns remain in metrics. No additional physics used for this report.']
+    (out/'INDEX.md').write_text('\n'.join(lines)+'\n')

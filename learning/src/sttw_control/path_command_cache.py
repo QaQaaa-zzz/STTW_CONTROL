@@ -296,6 +296,8 @@ def diagnostic_cache_identity(context,transform):
 
 def reuse_conditional_baseline(parent,root,cfg,source,expected_paths):
     """Reuse alpha-neutral B0 physics with an explicit training-only allowlist."""
+    if cfg.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+        return reuse_conflict_baseline(parent,root,cfg,source,expected_paths)
     from copy import deepcopy
     from .path_command_fork import physical_config_identity
     from .path_command_conditioning import MODE
@@ -324,3 +326,56 @@ def reuse_conditional_baseline(parent,root,cfg,source,expected_paths):
         scoring='per-alpha independent reconstruction; cached logged score is not a universal baseline score',
         physics_executed=0))
     return names
+
+
+def reuse_conflict_baseline(parent,root,cfg,source,expected_paths):
+    """Per-case cache reuse: full physics, raw path and published speed script pinned."""
+    from copy import deepcopy
+    from .path_command_scenarios import explicit_case_declarations,speed_request
+    parent=Path(parent);root=Path(root);manifest=json.loads((parent/'manifest.json').read_text())
+    def physical(config):
+        value=deepcopy(config)
+        for key in ('training_sampler','alpha_conditioning','preference_selection_schema','preference_acceptance','dynamic_preference_checks','scientific_threshold_policy','evaluation_execution'):value.pop(key,None)
+        for key in ('policy_type','alphas','initialization','architecture'):value.get('network',{}).pop(key,None)
+        for key in ('validation_updates','lightweight_validation_updates','updates_max','save_every','best_on'):value.get('training_future_phase_C',{}).pop(key,None)
+        from .path_command_fork import physical_config_identity
+        return physical_config_identity(value)
+    if physical(cfg)!=physical(manifest['config']):raise ValueError('conflict baseline physical identity mismatch')
+    if config_hash(source)!=config_hash(manifest['source']):raise ValueError('conflict baseline complete lower/model/source mismatch')
+    old_cases={name for name,_,_ in cases(manifest['config'])}
+    definitions=explicit_case_declarations(cfg);out=root/'zero_upper';out.mkdir(parents=True,exist_ok=True)
+    count=round(cfg['training_future_phase_C']['episode_s']/cfg['timing']['lower_dt_s']);receipt={}
+    prior_path=parent/'zero_upper_reuse.json'
+    prior=json.loads(prior_path.read_text()).get('cases',{}) if prior_path.exists() else {}
+    for declaration in definitions:
+        name=declaration['name'];file=parent/'zero_upper'/f'{name}.npz';pathfile=parent/'zero_upper'/f'{name}_path.npz'
+        if name not in old_cases or not(file.exists() and pathfile.exists()):continue
+        if name in prior:
+            for f,key in ((file,'trace_sha256'),(pathfile,'path_sha256')):
+                if key in prior[name] and digest(f)!=prior[name][key]:raise ValueError('cached conflict baseline changed '+name)
+        d=dict(np.load(file));p=dict(np.load(pathfile));expected=expected_paths[declaration['route_id']]
+        for key in ('s','xy','heading','curvature','goal','turn_end'):
+            np.testing.assert_allclose(p[key],np.asarray(getattr(expected,key)),rtol=0,atol=2e-6,err_msg='cached original path mismatch '+name)
+        n=len(d['time']);failed=np.asarray(d['physical_failure'])|np.asarray(d['domain_exit'])
+        if not 0<n<=count or (n<count and not failed[-1]) or np.any(failed[:-1]):raise ValueError('incomplete/beyond failure cached baseline '+name)
+        np.testing.assert_allclose(d['time'],np.arange(n)*cfg['timing']['lower_dt_s'],rtol=0,atol=2e-6)
+        values=np.asarray(declaration['speed_values']);times=np.asarray(declaration['speed_switch_times'])
+        # Actor/policy requests are constant within the original20ms interval.
+        policy_time=(np.arange(n)//4)*cfg['timing']['upper_dt_s']
+        expected_speed=np.where(policy_time>=times[1],values[2],np.where(policy_time>=times[0],values[1],values[0]))
+        np.testing.assert_allclose(d['v_user'],expected_speed,rtol=0,atol=1e-6,err_msg='cached speed script mismatch '+name)
+        for key in ('offsets','target_offset','filtered_offset'):np.testing.assert_array_equal(d[key],np.zeros_like(d[key]))
+        if any(np.any(d[k]) for k in ('policy_fault','lower_fault')):raise ValueError('engineering fault in cached baseline')
+        if any(not np.isfinite(a).all() for a in d.values() if np.issubdtype(a.dtype,np.number)):raise ValueError('nonfinite cached baseline')
+        for key in ('turn_starts','turn_ends','turn_directions','turn_mask'):
+            value=np.asarray(getattr(expected,key))
+            if key in p:np.testing.assert_array_equal(p[key],value)
+            p[key]=value;d[key]=value
+        d['speed_script_values']=values;d['speed_script_switch_times']=times
+        for key,value in [('speed_script_values',values),('speed_script_switch_times',times)]:
+            if key in np.load(file).files:np.testing.assert_array_equal(np.load(file)[key],value)
+        np.savez_compressed(out/file.name,**d);np.savez_compressed(out/pathfile.name,**p)
+        receipt[name]=dict(trace_sha256=digest(out/file.name),path_sha256=digest(out/pathfile.name),source=str(file.resolve()),source_trace_sha256=digest(file),steps=n,speed_script_sha256=config_hash(dict(values=values.tolist(),switch_times=times.tolist())))
+    atomic_json(root/'zero_upper_reuse.json',dict(parent=str(parent.resolve()),config_sha256=config_hash(cfg),source_sha256=config_hash(source),cases=receipt,physics_executed=0))
+    atomic_json(root/'baseline_reward_identity.json',dict(physical_identity=physical(cfg),reward_identity=config_hash(cfg['path_reward']),scoring='per-alpha independent reconstruction',physics_executed=0))
+    return set(receipt)

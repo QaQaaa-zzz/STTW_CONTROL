@@ -15,7 +15,8 @@ def dynamic_contract(config):
         raise ValueError('invalid dynamic enabled/trigger contract')
     if c['trigger']=='qualified_research_preference' and config.get('preference_selection_schema')!='path_preference_research_v1':
         raise ValueError('research dynamic trigger requires research selection schema')
-    expected={'rate_per_s':.5,'first_change_s':.5,'return_s':6.,'max_lower_ticks':24000}
+    conflict=config.get('preference_selection_schema')=='path_conflict_preference_v1'
+    expected={'rate_per_s':.5,'first_change_s':1. if conflict else .5,'return_s':4. if conflict else 6.,'max_lower_ticks':24000}
     if any(c.get(k)!=v for k,v in expected.items()):raise ValueError('dynamic alpha contract mismatch')
     if config['timing']['upper_dt_s']!=.02 or config['timing']['lower_dt_s']!=.005:
         raise ValueError('dynamic alpha requires unchanged 20ms/5ms timing')
@@ -50,10 +51,12 @@ def _metrics(trace,config,mode=None):
     if not np.array_equal(ticks,np.arange(n)) or not np.allclose(trace['time'],ticks*dt,atol=2e-6,rtol=0):
         raise ValueError('dynamic trace must be continuous true prefix from reset')
     request=np.asarray(trace['alpha_request']);applied=np.asarray(trace['alpha_applied'])
+    contract=dynamic_contract(config)
+    first=contract['first_change_s'];back=contract['return_s']
     initial=float(applied[0])
-    if mode is None:mode=1 if initial>.5 else (2 if np.any(request[ticks*dt>=6.]<.5) else 0)
-    expected_request=np.where(ticks*dt+1e-7<.5,1. if mode==1 else 0.,0. if mode==1 else 1.)
-    if mode==2:expected_request=np.where(ticks*dt+1e-7>=6.,0.,expected_request)
+    if mode is None:mode=1 if initial>.5 else (2 if np.any(request[ticks*dt>=back]<.5) else 0)
+    expected_request=np.where(ticks*dt+1e-7<first,1. if mode==1 else 0.,0. if mode==1 else 1.)
+    if mode==2:expected_request=np.where(ticks*dt+1e-7>=back,0.,expected_request)
     current=1. if mode==1 else 0.;expected_applied=np.empty(n)
     for start in range(0,n,4):
         current+=np.clip(expected_request[start]-current,-.01,.01);expected_applied[start:start+4]=current
@@ -107,11 +110,15 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
     if (meta.get('config_sha256')!=config_hash(cfg) or meta.get('architecture')!=architecture_identity(cfg)
             or meta.get('reward_version')!=reward_version(cfg) or not meta.get('completed')):
         raise ValueError('selected dynamic model identity mismatch')
-    if cfg.get('preference_selection_schema')=='path_preference_research_v1':
-        if best.get('selection_schema')!='path_preference_research_v1':
+    if cfg.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
+        if best.get('selection_schema')!=cfg['preference_selection_schema']:
             raise ValueError('selected dynamic preference selection identity mismatch')
         if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
             raise ValueError('selected dynamic preference acceptance identity mismatch')
+    if cfg.get('preference_selection_schema')=='path_conflict_preference_v1':
+        from .path_command_scenarios import explicit_case_declarations
+        sha=config_hash(explicit_case_declarations(cfg))
+        if meta.get('case_declarations_sha256')!=sha or best.get('case_declarations_sha256')!=sha:raise ValueError('dynamic case/script/turn identity mismatch')
     for key in ('actor','checkpoint'):
         if digest(best[key])!=best[key+'_sha256']:raise ValueError('selected dynamic '+key+' SHA mismatch')
     with Path(best['actor']).open('rb') as stream:params=pickle.load(stream)
@@ -120,6 +127,8 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
         raise ValueError('selected dynamic complete Actor identity mismatch')
     high=cfg['stage_C_evaluation']['conflict_speed_m_s']
     declared=[row for row in cases(cfg) if row[1]!='straight' and row[2]==high]
+    if cfg.get('preference_selection_schema')=='path_conflict_preference_v1':
+        declared=[row for row in cases(cfg) if row[0] in ('compact_LR_2.8','compact_RL_2.8')]
     if len(declared)!=2:raise ValueError('exactly two high-speed turns required')
     rows=[(name+'_'+label,route,speed,mode) for name,route,speed in declared
         for mode,label in enumerate(('0to1','1to0','0to1to0'))]
@@ -257,7 +266,7 @@ def report_dynamic_preference(root,cfg,receipt=None):
             for axis in group.flat:
                 axis.legend(fontsize=5);axis.grid(alpha=.2);axis.set_xlabel('Actual lower steps' if group is ca else 'Time (s), reward axes: actual lower steps')
                 if group is axes and axis not in axes[6]:
-                    axis.axvline(.5,color='k',ls=':');axis.axvline(6.,color='k',ls=':')
+                    axis.axvline(dynamic_contract(cfg)['first_change_s'],color='k',ls=':');axis.axvline(dynamic_contract(cfg)['return_s'],color='k',ls=':')
         fig.suptitle(base+' | '+receipt['checkpoint_sha256'][:12]+' | seed='+str(receipt.get('seed','UNKNOWN'))+' | no disturbance; actual prefixes stop at true failure');cf.suptitle(base+' signed per-step / cumulative reward components')
         fig.tight_layout();cf.tight_layout();fig.savefig(out/f'{base}_commands_errors_rewards.png');cf.savefig(out/f'{base}_components.png');plt.close(fig);plt.close(cf)
         lines.extend([f'![{base} XY]({base}_XY.png)',f'[Alpha, commands, errors, roll, per-step and cumulative rewards]({base}_commands_errors_rewards.png)',f'[Signed per-step and cumulative components]({base}_components.png)',''])

@@ -19,6 +19,9 @@ class Route:
     lateral_offset: object
     heading_offset: object
     sample_group: object = 0
+    sampling_stage: object = None
+    speed_values: object = None
+    speed_switch_times: object = None
 
 
 def sample_route(key,pose,config):
@@ -75,6 +78,14 @@ def validate_training_sampler(config):
     """Validate the frozen v2 reset contract; absent sampler preserves legacy."""
     sampler=config.get('training_sampler')
     if sampler is None:return
+    if isinstance(sampler,dict) and sampler.get('version')=='path_conflict_exposure_v1':
+        if sampler.get('route_seed')!=910501 or sampler.get('speed_event_seed')!=911503:
+            raise ValueError('conflict sampler independent seed identity differs')
+        conflict_groups=[dict(_V2_GROUPS[0]),dict(_V2_GROUPS[1],mode='double_u'),dict(_V2_GROUPS[2],mode='alternating_four')]
+        if sampler.get('groups') not in (_V2_GROUPS,conflict_groups):
+            raise ValueError('conflict sampler groups differ from declared 102/204/206 lanes')
+        legacy=dict(config,training_sampler=dict(sampler,version='demand_exposure_v2',route_seed=910201,groups=_V2_GROUPS))
+        return validate_training_sampler(legacy)
     if not isinstance(sampler,dict) or sampler.get('version')!='demand_exposure_v2':
         raise ValueError('unknown training_sampler version')
     for name,expected in [('route_seed',910201),('groups',_V2_GROUPS),('strong',_V2_STRONG)]:
@@ -93,7 +104,7 @@ def validate_training_sampler(config):
             if actual.get(name)!=value:raise ValueError('demand_exposure_v2 '+label+' contract changed: '+name)
 
 
-def sample_training_route(seed,env_id,episode,pose,config):
+def sample_training_route(seed,env_id,episode,pose,config,absolute_update=1):
     """Reset-only version dispatch; strong pairs reflect routes, never vehicle state.
 
     Pair members share random draws only at matching episode numbers. Independent
@@ -102,6 +113,8 @@ def sample_training_route(seed,env_id,episode,pose,config):
     """
     sampler=config.get('training_sampler')
     if sampler is None:return sample_route(episode_key(seed,env_id,episode),pose,config)
+    if sampler.get('version')=='path_conflict_exposure_v1':
+        return _sample_conflict_route(env_id,episode,pose,config,absolute_update)
     if sampler.get('version')!='demand_exposure_v2':raise ValueError('unknown training_sampler version')
     group=j.where(env_id<102,0,j.where(env_id<306,1,2)).astype(j.int32)
     def legacy(_):return _legacy_parameters(episode_key(sampler['route_seed'],env_id,episode),config)
@@ -119,3 +132,92 @@ def sample_training_route(seed,env_id,episode,pose,config):
         return group,radius,angle,speed,direction,lat,heading
     parameters=jax.lax.cond(group==0,legacy,strong,operand=None)
     return _integrate_route(pose,config['path'],*parameters,sample_group=group)
+
+
+def speed_request(values,times,time):
+    """Resolve only the request already published at this control boundary."""
+    # Events are quantized to20ms. Compare tick indices, not float32 products
+    # such as40*.005 vs a separately encoded .2 switch boundary.
+    now=j.floor(j.asarray(time)/.02+1e-4)
+    switches=j.rint(j.asarray(times)/.02)
+    return values[j.sum(now>=switches).astype(j.int32)]
+
+
+def _legacy_turn_metadata(route,config):
+    p=config['path'];angle=j.abs(route.angle);length=j.where(angle>0,angle*route.radius+p['curvature_transition_length_m'],0.)
+    start=p['straight_prefix_m'];end=start+length
+    starts=j.array([start,end+3.,0.,0.]);ends=j.array([end,end+3.+length,0.,0.])
+    mask=j.array([angle>0,(angle>0)&(route.family==2),False,False])
+    directions=j.sign(route.angle)*j.array([1.,-1.,0.,0.])
+    return route.path.replace(turn_starts=j.where(mask,starts,0.),turn_ends=j.where(mask,ends,0.),
+        turn_directions=j.where(mask,directions,0.),turn_mask=mask)
+
+
+def _persistent_route(pose,parameters,group,prefix,gap,angle):
+    family,radius,_,speed,direction,lat,heading_offset=parameters
+    s=j.arange(5001)*.02;ramp=.5;nturn=j.where(group==1,2,4)
+    length=angle*radius+ramp;starts=prefix+j.arange(4)*(length+gap);ends=starts+length
+    mask=j.arange(4)<nturn;directions=direction*j.array([1.,-1.,1.,-1.])
+    smooth=lambda u:j.clip(u,0,1)**2*(3-2*j.clip(u,0,1))
+    shapes=smooth((s[None,:]-starts[:,None])/ramp)*smooth((ends[:,None]-s[None,:])/ramp)
+    # Each discrete bend integrates to its declared angle exactly, including non-grid boundaries.
+    areas=j.sum((shapes[:,:-1]+shapes[:,1:])*.01,axis=1)
+    k=j.sum(shapes*(j.where(mask,directions*angle/areas,0.))[:,None],axis=0)
+    theta=j.concatenate([j.zeros(1),j.cumsum((k[:-1]+k[1:])*.01)])
+    x=j.concatenate([j.zeros(1),j.cumsum((j.cos(theta[:-1])+j.cos(theta[1:]))*.01)])
+    y=j.concatenate([j.zeros(1),j.cumsum((j.sin(theta[:-1])+j.sin(theta[1:]))*.01)])
+    anchor=pose[:2]+lat*j.array([-j.sin(pose[2]),j.cos(pose[2])]);yaw=pose[2]+heading_offset
+    xy=j.stack([anchor[0]+j.cos(yaw)*x-j.sin(yaw)*y,anchor[1]+j.sin(yaw)*x+j.cos(yaw)*y],axis=-1)
+    turn_end=ends[nturn-1]
+    path=Path(s,xy,theta+yaw,k,turn_end,turn_end+4.,j.where(mask,starts,0.),
+        j.where(mask,ends,0.),j.where(mask,directions,0.),mask)
+    return Route(path,speed,group,radius,direction*angle,lat,heading_offset,group)
+
+
+def _sample_conflict_route(env_id,episode,pose,config,absolute_update):
+    sampler=config['training_sampler'];stage=j.where(absolute_update<=40,1,j.where(absolute_update<=80,2,3)).astype(j.int32)
+    # Dispatch through the unmodified V2 arithmetic for phase one and ordinary lanes.
+    legacy_config=dict(config,training_sampler=dict(sampler,version='demand_exposure_v2'))
+    old=sample_training_route(0,env_id,episode,pose,legacy_config)
+    old=old.replace(path=_legacy_turn_metadata(old,config))
+    group=old.sample_group;pair_id=102+(env_id-102)//2
+    u=jax.random.uniform(episode_key(sampler['route_seed'],pair_id,episode),(10,))
+    direction=j.where((env_id-102)%2==0,1.,-1.)
+    radius=1.8+.2*u[3];angle=j.deg2rad(j.where(group==1,150.+30.*u[4],80.+20.*u[4]))
+    speed=j.where(stage==2,2.4+.3*u[5],2.7+.2*u[5])
+    lat=direction*j.where(u[6]<.2,-.1+.2*u[7],0.);heading=direction*j.where(u[6]<.2,-.05+.1*u[8],0.)
+    parameters=(group,radius,angle,speed,direction,lat,heading)
+    route=jax.lax.cond((stage>1)&(group>0),
+        lambda _: _persistent_route(pose,parameters,group,2.+3.*u[1],.5+.5*u[2],angle),lambda _:old,None)
+    events=jax.random.uniform(episode_key(sampler['speed_event_seed'],env_id,episode),(5,))
+    low=2.+.3*events[0];high=2.6+.3*events[1];first=j.where(events[2]<.5,low,high);second=j.where(events[2]<.5,high,low)
+    variable=(stage>1)&(group==0)
+    values=j.where(variable,j.array([first,second,first]),j.repeat(route.speed,3))
+    times=j.where(variable,j.round(j.array([1.+2.*events[3],5.+3.*events[4]])/.02)*.02,j.array([1.e30,1.e30]))
+    return route.replace(speed=values[0],sampling_stage=stage,speed_values=values,speed_switch_times=times)
+
+
+def explicit_case_declarations(config):
+    """Serializable geometry and command identities; legacy tuple consumers remain separate."""
+    e=config['stage_C_evaluation'];p=config['path'];rows=[]
+    for route in e['route_ids']:
+        for speed in [e['low_speed_m_s'],e['conflict_speed_m_s']]:
+            sign=-1 if route.startswith('right') else 1
+            geometry=dict(angles_rad=[] if route=='straight' else [sign*p['turn_angle_rad']],
+                radius_m=None if route=='straight' else p['turn_radius_m'],prefix_m=p['straight_prefix_m'],
+                gap_m=0.,curvature_transition_length_m=p['curvature_transition_length_m'],
+                goal_offset_m=p['goal_section_offset_after_turn_m'])
+            rows.append(dict(name=f'{route}_{speed:.1f}',route_id=route,speed_values=[speed]*3,
+                speed_switch_times=[1.e30,1.e30],evaluation_role='legacy_regression',geometry=geometry))
+    if config.get('training_sampler',{}).get('version')!='path_conflict_exposure_v1':return rows
+    for route in ['left180_R1p8','right180_R1p8','compact_LR','compact_RL']:
+        sign=-1 if route in ('right180_R1p8','compact_RL') else 1
+        angles=[sign*float(j.pi)] if '180' in route else [sign*float(j.pi)/2,-sign*float(j.pi)/2]
+        geometry=dict(angles_rad=angles,radius_m=1.8,prefix_m=4.,gap_m=.8 if len(angles)>1 else 0.,curvature_transition_length_m=.5,goal_offset_m=4.)
+        rows.append(dict(name=route+'_2.8',route_id=route,speed_values=[2.8]*3,
+            speed_switch_times=[1.e30,1.e30],evaluation_role='constant_pressure',geometry=geometry))
+    for route in ['compact_LR','compact_RL']:
+        geometry=next(r['geometry'] for r in rows if r['route_id']==route)
+        rows.append(dict(name=route+'_variable',route_id=route,speed_values=[2.3,2.8,2.3],
+            speed_switch_times=[1.,5.],evaluation_role='variable_speed_response',geometry=geometry))
+    return rows

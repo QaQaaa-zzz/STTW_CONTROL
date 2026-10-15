@@ -11,6 +11,10 @@ class Path:
     curvature: object
     turn_end: object
     goal: object
+    turn_starts: object = None
+    turn_ends: object = None
+    turn_directions: object = None
+    turn_mask: object = None
 
 @struct.dataclass
 class Projection:
@@ -22,6 +26,8 @@ class Projection:
 
 
 def build_path(name, pose, config, lateral_offset=0.):
+    if name in ('left180_R1p8','right180_R1p8','compact_LR','compact_RL'):
+        return _build_conflict_path(name,pose,lateral_offset)
     c=config['path']; ds=c['spacing_m']; pose=np.asarray(pose,float)
     if name=='straight':
         end=0.; length=80.
@@ -45,7 +51,13 @@ def build_path(name, pose, config, lateral_offset=0.):
     local=np.column_stack([np.interp(s,fine,x),np.interp(s,fine,y)])
     rot=np.array([[np.cos(pose[2]),-np.sin(pose[2])],[np.sin(pose[2]),np.cos(pose[2])]])
     xy=(local+np.array([0,lateral_offset]))@rot.T+pose[:2]
-    return Path(j.asarray(s),j.asarray(xy),j.asarray(np.interp(s,fine,heading)+pose[2]),j.asarray(curvature(s)),j.asarray(end),j.asarray(end+c['goal_section_offset_after_turn_m']))
+    path=Path(j.asarray(s),j.asarray(xy),j.asarray(np.interp(s,fine,heading)+pose[2]),j.asarray(curvature(s)),j.asarray(end),j.asarray(end+c['goal_section_offset_after_turn_m']))
+    if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+        turning=name!='straight';direction=1. if name=='left90_R2' else -1.
+        path=path.replace(turn_starts=j.array([c['straight_prefix_m'] if turning else 0.,0.,0.,0.]),
+            turn_ends=j.array([end,0.,0.,0.]),turn_directions=j.array([direction if turning else 0.,0.,0.,0.]),
+            turn_mask=j.array([turning,False,False,False]))
+    return path
 
 
 def at(path,s):
@@ -69,3 +81,30 @@ def project(path,xy,previous,distance,config):
 
 
 def wrap(angle):return j.arctan2(j.sin(angle),j.cos(angle))
+
+
+def _build_conflict_path(name,pose,lateral_offset=0.):
+    """Fixed original geometry; independent fine integration avoids grid angle bias."""
+    pose=np.asarray(pose,float);radius=1.8;ramp=.5;prefix=4.;gap=.8
+    angles=[np.pi] if '180' in name else [np.pi/2,np.pi/2]
+    sign=-1 if name in ('right180_R1p8','compact_RL') else 1
+    directions=np.array([sign*(-1)**i for i in range(len(angles))])
+    starts=[];ends=[];cursor=prefix
+    for angle in angles:
+        starts.append(cursor);ends.append(cursor+angle*radius+ramp);cursor=ends[-1]+gap
+    s=np.arange(5001)*.02;fine=np.arange(100001)*.001
+    def curvature(x):
+        k=np.zeros_like(x);smooth=lambda u:np.clip(u,0,1)**2*(3-2*np.clip(u,0,1))
+        for start,end,direction in zip(starts,ends,directions):
+            k+=direction*smooth((x-start)/ramp)*smooth((end-x)/ramp)/radius
+        return k
+    kk=curvature(fine);h=np.r_[0,np.cumsum((kk[:-1]+kk[1:])*.0005)]
+    x=np.r_[0,np.cumsum((np.cos(h[:-1])+np.cos(h[1:]))*.0005)]
+    y=np.r_[0,np.cumsum((np.sin(h[:-1])+np.sin(h[1:]))*.0005)]
+    local=np.column_stack([np.interp(s,fine,x),np.interp(s,fine,y)])
+    rot=np.array([[np.cos(pose[2]),-np.sin(pose[2])],[np.sin(pose[2]),np.cos(pose[2])]])
+    xy=(local+np.array([0,lateral_offset]))@rot.T+pose[:2]
+    pad=lambda values:j.asarray(np.pad(values,(0,4-len(values))))
+    return Path(j.asarray(s),j.asarray(xy),j.asarray(np.interp(s,fine,h)+pose[2]),
+        j.asarray(curvature(s)),j.asarray(ends[-1]),j.asarray(ends[-1]+4.),
+        pad(starts),pad(ends),pad(directions),j.arange(4)<len(angles))

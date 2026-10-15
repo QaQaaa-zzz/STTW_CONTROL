@@ -2175,3 +2175,14 @@ CPU最终冻结回归：任务书12测试模块90项通过，71.54s；预算/初
 源码5888a9e修正恢复sampling cursor与checkpoint模型来源分离，检查点带resume_accounting；scratch每完成一轮持久化Actor/Critic/FiLM/std/Adam/RNG/计数。34恢复/selection/training CPU+8cache/terminal检查通过，diff-check通过。恢复目录runs/path_unified_scratch_200_20261014/resume_20261014_01，PID22247/monitor22249；恢复u0模型25张量/Adam/Torch RNG逐值匹配，预算cursor6的checkpoint明确不是6轮模型更新。物理闭环prepared-bank重启，不是逐帧接续。B0和DEV0原始完整轨迹复用，新增DEV0 ticks=0。
 
 已实际完成恢复后首个PPO批次：absolute budget slot7，新65536策略转移/262144ticks，1recoverable learner update，4epochs接受；TB http://localhost:6006 HTTP真实shared/train/mean_step_reward step7=-.0759840906已核验，本resume独立logdir。不重启其他项目或旧warmstart。工程/科学合格仍PENDING，不将预算cursor7说成恢复了原7轮模型更新。恢复preflight/restoration/reward/checkpoint/launch收据原位保留，完整状态以共享台账和实时status为准。
+
+
+## 2026-10-15 持续冲突经验单网scratch新200轮
+
+任务书docs/path_conflict_exposure_plan.md，独立experiment/path-conflict-exposure-v1从75aa52c。一个共享Actor351/Critic352/128-128-64 ELU+现有调制，freshseed911501；route910501/alpha911502/events911503独立。奖励v2/底层local300/物理/时序/权限保持。课程新reset阶段1-40旧V2、41-80双U/四弯2.4-2.7、81-200持续弯2.7-2.9；102普通组在41后变速但Actor/Critic只见当前已发布请求，固定20ms事件边界/4lower ticks一致。
+
+最新用户指令覆盖任务书预检失败停止：预检/覆盖/资格/方向/滚转诊断门槛不足均记录但不终止声明200，不放宽数值、不追加预算。工程/nonfinite/身份/预算保护保留，hardKL拒绝保留回退并继续记录接受更新数。full DEV0/100/200(720000ticks)，light50/150仅4pressure端点(64000ticks)不选best；baseline/probe64000，工程512，conditionaldynamic24000，TRAIN52428800，总53301312lower ticks。full/light跨resume分角色及合计均限额，采样预算/实际learner更新/恢复损耗分记，每轮checkpoint。
+
+评测默认alpha_case_vmap_v1：同shape场景×alpha同进程合批、scan50、共享JAXcache、既有DirectCommandPPO；避免多进程重复模型/编译和竞争。scalar/vector执行CPU位点逐值相同，编译后的速度切换因果回归通过（发现并修复浮点20ms晚一步）。旧6场景/旧V2/旧奖励兼容。case declarations含speed script/四槽turn元数据SHA贯穿checkpoint/panel/source/best/dynamic/resume。
+
+CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1检查通过；抽象351/352接口声明通过、six旧B0完整source/model/path/时序检查0新physics复用。独立审查P1/P2已修复，GPU尚未运行；后续唯一8x16工程、预检、fresh正式启动收据在runs/path_conflict_exposure_v1_200_20261015。当前不能宣称训练/取舍成功或实际加速倍数。

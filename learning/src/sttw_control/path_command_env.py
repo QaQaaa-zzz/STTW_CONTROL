@@ -16,6 +16,11 @@ from .path_reference import pursuit,publish
 from .path_command_policy import correction_tick,assemble_observation
 from .path_command_reward import costs,failure_reward,reward_version
 
+def refresh_speed_request(state,v_user,config):
+    """Current issued request only; the geometric follower never regulates speed."""
+    return state.follower.command.at[0].set(v_user)
+
+
 def guard_lower_action(action,finite):
     """Preserve lower_fault while preventing invalid inference entering physics."""
     return j.where(finite,action,j.zeros_like(action))
@@ -116,6 +121,15 @@ class PathCommandEnv:
         self.zero_log=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
 
     def policy_step(self,s,z,path,v_user,horizon):
+        if self.config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+            # At a request boundary publish the new current speed before action
+            # execution. Other intervals retain the existing slew schedule exactly.
+            command=refresh_speed_request(s,v_user,self.config)
+            changed=command[0]!=s.follower.command[0]
+            nominal,rates=publish(s.physical.raw,command,self.config)
+            raw=s.physical.raw.at[0].set(j.where(changed,nominal[0],s.physical.raw[0]))
+            rate=s.nominal_rates.at[0].set(j.where(changed,rates[0],s.nominal_rates[0]))
+            s=s.replace(follower=s.follower.replace(command=command),physical=s.physical.replace(raw=raw),nominal_rates=rate)
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
         def step(st,_):
             stopped=st.physical.failed|st.fault|st.domain_exit

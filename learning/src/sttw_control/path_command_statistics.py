@@ -124,6 +124,21 @@ def step_statistics(logs,route,cfg):
             alpha_domain_failure_count=alpha_sum(logs['domain_exit']),
             alpha_cost_raw_sum=alpha_sum(raw),alpha_cost_effective_sum=alpha_sum(effective),
             alpha_cost_cap_count=alpha_sum(capped))
+    if cfg.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
+        # Sample-weighted event requests, never the route's initial scalar.
+        request=j.asarray(logs['v_user'])
+        result['route_speed_moments']=j.array([j.sum(masked(request)),j.sum(masked(request**2))])
+        bounds=[1.8,2.9]
+        bins=j.clip(j.floor((request-bounds[0])/(bounds[1]-bounds[0])*5),0,4)
+        result['route_speed_histogram']=j.sum((j.arange(5)[None,:]==bins[:,None])&active[:,None],axis=0)
+        stage=j.arange(1,4)==getattr(route,'sampling_stage',1)
+        group=j.arange(3)==getattr(route,'sample_group',0)
+        result['sampling_stage_count']=stage*count
+        result['sampling_stage_group_count']=stage[:,None]*group[None,:]*count
+        result['sampling_stage_group_strong_count']=stage[:,None]*group[None,:]*j.sum(active&(chi>=.5))
+        if 'upper_alpha' in logs:
+            result['sampling_stage_group_alpha_count']=stage[:,None,None]*group[None,:,None]*result['alpha_count'][None,None,:]
+            result['sampling_stage_group_alpha_strong_count']=stage[:,None,None]*group[None,:,None]*result['alpha_strong_count'][None,None,:]
     return result
 
 
@@ -218,4 +233,16 @@ def summarize_statistics(sumstats,cfg):
                     effective_mean=ratio(s['alpha_cost_effective_sum'][i,k],samples),
                     cap_fraction=ratio(s['alpha_cost_cap_count'][i,k],samples)) for k,key in enumerate(COST_KEYS)})
         result.update(alpha_groups=groups,alpha_group_semantics='active lower samples; exact endpoints and disjoint interior bins, not fixed-alpha DEV; reward includes actual terminal-tail charge')
+    if 'sampling_stage_count' in s:
+        den=s['sampling_stage_group_alpha_count']
+        strong=s['sampling_stage_group_alpha_strong_count']
+        fraction=np.divide(strong,den,out=np.full_like(strong,np.nan),where=den>0)
+        result['exposure_cross_statistics']=dict(axis_order=['sampled_stage','route_group','alpha_group'],
+            stage_names=['coverage_v2_1_40','sustained_41_80','sustained_81_200'],
+            route_group_names=['legacy','double_u','alternating_four'],alpha_group_names=list(ALPHA_GROUPS),
+            active_tick_count=den.tolist(),strong_demand_tick_count=strong.tolist(),
+            strong_demand_fraction=[[[None if not np.isfinite(x) else float(x) for x in row] for row in stage] for stage in fraction],
+            threshold_role='diagnostic_continue_declared_budget')
+        result['route_distribution']['sample_group_names']=['legacy','double_u','alternating_four']
+        result['route_distribution']['speed']['histogram_edges']=np.linspace(1.8,2.9,6).tolist()
     return result
