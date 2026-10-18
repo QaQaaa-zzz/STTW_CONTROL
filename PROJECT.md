@@ -1238,3 +1238,12 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 正式TB http://localhost:6009 HTTP200、独立training/tensorboard归属已核验；启动交接仍DEV0、0/200更新、0训练转移，正式reward尚未产生，标量PENDING，首批训练后程序自动HTTP核验。状态以后以实时training/status.json及共享台账为准。原始NPZ与日志保留；10条新预检轨迹逐步reward重建非终止maxabs3.247261e-7，终止tail maxabs.0089839453/maxrelative5.1152043e-6在既有容差内；旧six缓存仅复用物理，不比较旧rewardv1分数。资格审计同时保留相对原始请求与相对B0的减速量，未据此更改原预检receipt。
 
 完整证据入口runs/path_conflict_exposure_v1_200_20261015/INDEX.md；engineering_verification/formal_initialization_verification/formal_visibility_verification/parallel_numeric_verification及preflight/qualification_audit.json。CPU113项及GPU工程通过；200轮学习、阶段评测、资格和条件动态仍在执行或待执行，不声明研究成功。
+
+
+### 2026-10-15 持续冲突暴露 fresh200 最终结果
+
+任务与门槛见`docs/path_conflict_exposure_plan.md`，完整逐场景分析与首屏XY图见`runs/path_conflict_exposure_v1_200_20261015/training/report/ANALYSIS.md`。正式fresh seed911501完成200/200，13,107,200策略转移、52,428,800训练lower ticks；799/800 PPO epoch、3196/3200 minibatch接受，无nonfinite/hard-KL中止。选中与last都是update200，同一SHA`ddddda596ad73e221a6b60ffa7e459eedd20720526c838d876ce8b3c3fcdc8dd`。完整DEV0/100/200、轻量50/150均运行，12个场景×5 alpha完整交付；正式TensorBoard 6009重启供回看，并核实mean_step_reward完整200点。
+
+科学结果：update200面板60/60到达goal，0物理跌倒、0tracking-domain失败；但60/60均未达最后0.5s保持（速度误差60超限、航向53、路径12），故qualified_task/research_preference均false。4恒速冲突弯中，alpha0弯路径RMSE合格3/4（compact_RL .463m失败）；alpha1速度RMSE合格0/4。Dv=Ev(alpha0)-Ev(alpha1)依次.019/-.005/.018/.012m/s，均低于.05；Dy=Ey(alpha1)-Ey(alpha0)为-.008/-.016/.059/.007m，仅compact_LR超过.02。alpha0实际减速四场景均满足，说明整体减速存在但alpha间分离很弱。7个preference direction failure、5个high-speed endpoint failure、2项old-case regression。固定DEV加权归一误差update0/100/200为2.297/3.614/5.637，方向失败数14/8/7，显示局部改善伴随整体固定面板退化。0.302rad与0.40m仅诊断：滚转线以上累计13.825s、9/60 corridor超界、最大超0.536m。
+
+因此200轮足以完成本次有界假设检验并判断候选不合格；对目标能力显然不足。末40轮同课程训练奖励均值改善，但固定面板持续退化，不能推断再加轮数即可解决；原总预算不允许自动扩轮。按计划，固定alpha未达资格，条件动态alpha检查不触发。全套证据、paired奖励分项和限制见运行分析链接；详细XY、奖励和误差图见同目录report/INDEX。无额外物理仿真用于本次分析。
