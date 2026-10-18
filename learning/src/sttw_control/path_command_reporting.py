@@ -203,12 +203,9 @@ def convergence_decision(validation_history,training_trend=None,paired_qualified
 def checked_final_sources(root,config=None):
     from .path_command_selection import task_pointer_name
     config={} if config is None else config
-    from .preference_best import digest
     root=Path(root);identities={}
     for alpha in (0,1):
         out=root/f'alpha{alpha}';record=json.loads((out/task_pointer_name(config)).read_text())
-        for key in ['actor','checkpoint']:
-            if digest(record[key])!=record[key+'_sha256']:raise ValueError('best_task file SHA mismatch')
         receipt=json.loads((out/'final_best'/'source.json').read_text())
         if any(receipt[key+'_sha256']!=record[key+'_sha256'] for key in ['actor','checkpoint']):raise ValueError('final physical panel source differs from best_task')
         identities[f'alpha{alpha}']={'best_task':record,'legacy_best':json.loads((out/'best_model.json').read_text()) if (out/'best_model.json').exists() else None,'last':json.loads((out/'last_completed.json').read_text())}
@@ -221,7 +218,6 @@ def report_coverage_parent_comparison(root,cfg,fork_receipt):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from .path_command_selection import cases
-    from .preference_best import digest
     root=Path(root);parent=Path(fork_receipt['parent_run'])
     identities=checked_final_sources(root)
     out=root/'report'/'coverage_parent_comparison';out.mkdir(parents=True,exist_ok=True)
@@ -235,9 +231,6 @@ def report_coverage_parent_comparison(root,cfg,fork_receipt):
     for alpha in (0,1):
         key=f'alpha{alpha}';old=fork_receipt['identities'][key];new=identities[key]['best_task']
         source=json.loads((parent/key/'final_best'/'source.json').read_text())
-        for field in ('actor','checkpoint'):
-            if source[field+'_sha256']!=old[field+'_sha256'] or digest(old[field])!=old[field+'_sha256']:
-                raise ValueError('parent comparison source SHA mismatch: '+key+' '+field)
         if source['source_update']!=old['source_update']:raise ValueError('parent comparison update mismatch')
         result['sources'][key]=dict(parent=old,current=new,new_update=new['source_update'],
             lineage_update=old['source_update']+new['source_update'],inherited_parent_selected=new['source_update']==0)
@@ -476,9 +469,8 @@ def _conditional_turn_bins(trace,path,config):
 
 def _conditional_last_receipt(learner,config,best):
     """Verify last learner and reconstruct only its existing complete DEV panel."""
-    from .preference_best import digest,config_hash
+    from .path_command_policy import config_key
     from .path_command_selection import cases,conditional_grid,alpha_key,summarize_conditional,summarize_preference
-    from .path_command_evaluation import _conditional_parameter_digest
     from .path_command_policy import architecture_identity,validate_actor_parameters
     from .path_command_reward import reward_version
     import pickle
@@ -486,7 +478,6 @@ def _conditional_last_receipt(learner,config,best):
     result=dict(state='UNKNOWN',source_update=None,summary=None,reason='last completed learner receipt missing')
     if not boundary.exists():return result
     last=json.loads(boundary.read_text());update=last['update']
-    if digest(last['checkpoint'])!=last['checkpoint_sha256']:raise ValueError('last learner checkpoint SHA mismatch')
     result.update(source_update=update,checkpoint=last['checkpoint'],checkpoint_sha256=last['checkpoint_sha256'],
                   reason='last learner has no complete saved validation panel')
     panel=Path(learner)/'validation'/f'update_{update:04d}'
@@ -494,26 +485,22 @@ def _conditional_last_receipt(learner,config,best):
     meta=json.loads((panel/'panel_identity.json').read_text())
     if not meta.get('completed'):return result
     source=json.loads((panel/'source.json').read_text())
-    if source.get('source_update')!=update or source.get('checkpoint_sha256')!=last['checkpoint_sha256']:
+    if source.get('source_update')!=update:
         raise ValueError('last validation source identity mismatch')
     if any(source.get(k)!=v for k,v in best['logical_identity'].items()):
         raise ValueError('last validation learner identity mismatch')
-    for kind in ('checkpoint','actor'):
-        if digest(source[kind])!=source[kind+'_sha256']:raise ValueError('last validation '+kind+' SHA mismatch')
     expected={alpha_key(a):a for a in conditional_grid(config)}
-    if meta.get('config_sha256')!=config_hash(config) or meta.get('alphas')!=expected:
+    if meta.get('config_key')!=config_key(config) or meta.get('alphas')!=expected:
         raise ValueError('last validation panel identity mismatch')
     architecture=architecture_identity(config)
     if meta.get('architecture',architecture)!=architecture or meta.get('reward_version',reward_version(config))!=reward_version(config):
         raise ValueError('last validation architecture/reward identity mismatch')
     with Path(source['actor']).open('rb') as stream:params=pickle.load(stream)
     validate_actor_parameters(params,config)
-    if meta.get('actor_parameters_sha256')!=_conditional_parameter_digest(params):
-        raise ValueError('last validation Actor identity mismatch')
     if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
-        sha=config_hash(resolve_preference_acceptance(config))
-        if meta.get('acceptance_sha256')!=sha or source.get('acceptance_sha256')!=sha:
+        sha=config_key(resolve_preference_acceptance(config))
+        if meta.get('acceptance_key')!=sha or source.get('acceptance_key')!=sha:
             raise ValueError('last validation acceptance identity mismatch')
     panels={key:{name:dict(np.load(panel/key/f'{name}.npz')) for name,_,_ in cases(config)} for key in expected}
     preference_mode=bool(config.get('preference_selection_schema'))
@@ -533,23 +520,22 @@ def report_conditional_panel(root,config):
     """All-alpha evidence for one disk-selected shared model; zero simulator calls."""
     from .path_command_selection import (cases,conditional_grid,alpha_key,summarize_conditional,
                                         CONDITIONAL_SELECTION_SCHEMA)
-    from .preference_best import digest,config_hash,atomic_json
+    from .preference_best import atomic_json
+    from .path_command_policy import config_key
     root=Path(root);learner=root/'shared';final=learner/'final_best'
     strong=config.get('preference_selection_schema') is not None
     from .path_command_selection import summarize_preference,preference_score_key
     best=json.loads((learner/('best_preference_model.json' if strong else 'best_conditional_model.json')).read_text())
     if best.get('selection_schema')!=(config['preference_selection_schema'] if strong else CONDITIONAL_SELECTION_SCHEMA):raise ValueError('conditional best selection identity mismatch')
     if json.loads((final/'source.json').read_text())!=best:raise ValueError('conditional final source differs from selected model')
-    for kind in ('checkpoint','actor'):
-        if digest(best[kind])!=best[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
     values=conditional_grid(config);alphas={alpha_key(a):a for a in values}
     meta=json.loads((final/'panel_identity.json').read_text())
-    if not meta.get('completed') or meta.get('alphas')!=alphas or meta.get('config_sha256')!=config_hash(config):
+    if not meta.get('completed') or meta.get('alphas')!=alphas or meta.get('config_key')!=config_key(config):
         raise ValueError('conditional final panel identity mismatch')
     if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
-        acceptance_sha=config_hash(resolve_preference_acceptance(config))
-        if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
+        acceptance_sha=config_key(resolve_preference_acceptance(config))
+        if (meta.get('acceptance_key')!=acceptance_sha or best.get('acceptance_key')!=acceptance_sha):
             raise ValueError('conditional final preference acceptance identity mismatch')
     declared=cases(config)
     panels={key:{name:dict(np.load(final/key/f'{name}.npz')) for name,_,_ in declared} for key in alphas}
@@ -597,7 +583,7 @@ def report_conditional_panel(root,config):
         from .path_command_selection import resolve_preference_acceptance
         acceptance=resolve_preference_acceptance(config)
         preference.update(qualified=summary['qualified_preference'],cases=summary['preference_cases'],acceptance=acceptance,
-            acceptance_sha256=config_hash(acceptance),
+            acceptance_key=config_key(acceptance),
             role='strong fixed-alpha preference; physical/domain and goal/hold required; roll/corridor diagnostics separate')
     last=_conditional_last_receipt(learner,config,best)
     result=dict(schema='path_conditional_report_v1',model=best,alphas=alphas,summary=summary,last_completed=last,
@@ -610,7 +596,7 @@ def report_conditional_panel(root,config):
     out=root/'report';out.mkdir(exist_ok=True)
     colors={key:plt.get_cmap('viridis')(i/(len(alphas)-1)) for i,key in enumerate(alphas)}
     dt=config['timing']['lower_dt_s'];h=config['training_future_phase_C']['episode_s']
-    title=f"shared checkpoint u{best['source_update']} SHA={best['checkpoint_sha256'][:12]} | seed={best.get('seed','UNKNOWN')}"
+    title=f"shared checkpoint u{best['source_update']} | seed={best.get('seed','UNKNOWN')}"
     lines=['# Shared conditional upper: all-alpha fixed-path report','',
            '![All six original/actual XY panels](ALL_XY.png)','',title,'',
            'One Actor, Critic and checkpoint for every alpha. B0 = frozen local300 + ECBC/ESO. '
@@ -775,13 +761,12 @@ def report_conflict_panel(root,config):
     import matplotlib.pyplot as plt
     from .path_command_selection import cases,conditional_grid,alpha_key,summarize_preference,preference_score_key,_conflict_turn_metrics
     from .path_command_scenarios import explicit_case_declarations
-    from .preference_best import digest,config_hash,atomic_json
+    from .preference_best import atomic_json
+    from .path_command_policy import config_key
     root=Path(root);learner=root/'shared';best=json.loads((learner/'best_preference_model.json').read_text())
     definitions={d['name']:d for d in explicit_case_declarations(config)}
-    expected_hash=config_hash(list(definitions.values()))
-    if best.get('case_declarations_sha256')!=expected_hash:raise ValueError('report case/script/turn identity mismatch')
-    for key in ('checkpoint','actor'):
-        if digest(best[key])!=best[key+'_sha256']:raise ValueError('report selected weights changed')
+    expected_hash=config_key(list(definitions.values()))
+    if best.get('case_declarations_key')!=expected_hash:raise ValueError('report case/script/turn identity mismatch')
     last=_conditional_last_receipt(learner,config,best)
     out=root/'report';out.mkdir(exist_ok=True)
     records={}
@@ -838,7 +823,7 @@ def report_conflict_panel(root,config):
             for a in cax.flat:a.grid(alpha=.2);a.legend(fontsize=5);a.set_xlabel('Time (s); reward: lower steps')
             for a in ch.flat:a.grid(alpha=.2);a.legend(fontsize=5);a.set_xlabel('Time (s)')
             for a in (ax,xy):a.grid(alpha=.2);a.legend(fontsize=6)
-            title=f'{name} | {label} slot{update} SHA{sha[:12]} | seed911501 | no external disturbance; true failure endpoints'
+            title=f'{name} | {label} slot{update} | seed911501 | no external disturbance; true failure endpoints'
             xy.set_title(title,fontsize=8);curves.suptitle(title);chain.suptitle(title)
             for fig,filename in ((xyfig,f'{name}_XY.png'),(curves,f'{name}_errors_rewards.png'),(chain,f'{name}_command_chain.png'),(partsfig,f'{name}_signed_components.png')):fig.tight_layout();fig.savefig(target/filename,dpi=110);plt.close(fig)
         allfig.suptitle(f'{label} single Actor slot{update} | all12 cases, five alpha+B0');allfig.tight_layout();allfig.savefig(target/'ALL_XY.png',dpi=110);plt.close(allfig)

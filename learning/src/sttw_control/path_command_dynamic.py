@@ -5,7 +5,8 @@ import json
 import shutil
 import numpy as np
 import jax.numpy as j
-from .preference_best import atomic_json,config_hash,digest
+from .preference_best import atomic_json
+from .path_command_policy import config_key
 
 
 def dynamic_contract(config):
@@ -81,7 +82,6 @@ def _metrics(trace,config,mode=None):
 def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=None):
     """No dynamic PPO; selected qualified checkpoint, max 24,000 active ticks."""
     from .path_command_policy import architecture_identity,validate_actor_parameters
-    from .path_command_evaluation import _conditional_parameter_digest
     from .path_command_reward import reward_version
     from .path_command_selection import cases
     out=Path(root)/'dynamic_preference_checks'
@@ -101,30 +101,26 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
     dynamic_contract(cfg)
     from .path_command_selection import resolve_preference_acceptance
     acceptance=resolve_preference_acceptance(cfg)
-    acceptance_sha=config_hash(acceptance)
-    receipt.update(trigger=trigger,selection_schema=cfg.get('preference_selection_schema'),acceptance=acceptance,acceptance_sha256=acceptance_sha)
+    acceptance_sha=config_key(acceptance)
+    receipt.update(trigger=trigger,selection_schema=cfg.get('preference_selection_schema'),acceptance=acceptance,acceptance_key=acceptance_sha)
     if cfg['training_future_phase_C']['episode_s']!=20.:raise ValueError('dynamic checks require frozen 20-second horizon')
-    if evaluator is None or config_hash(evaluator.config)!=config_hash(cfg):
+    if evaluator is None or config_key(evaluator.config)!=config_key(cfg):
         raise ValueError('matching existing batched evaluator required')
     meta=best['panel_identity']
-    if (meta.get('config_sha256')!=config_hash(cfg) or meta.get('architecture')!=architecture_identity(cfg)
+    if (meta.get('config_key')!=config_key(cfg) or meta.get('architecture')!=architecture_identity(cfg)
             or meta.get('reward_version')!=reward_version(cfg) or not meta.get('completed')):
         raise ValueError('selected dynamic model identity mismatch')
     if cfg.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         if best.get('selection_schema')!=cfg['preference_selection_schema']:
             raise ValueError('selected dynamic preference selection identity mismatch')
-        if (meta.get('acceptance_sha256')!=acceptance_sha or best.get('acceptance_sha256')!=acceptance_sha):
+        if (meta.get('acceptance_key')!=acceptance_sha or best.get('acceptance_key')!=acceptance_sha):
             raise ValueError('selected dynamic preference acceptance identity mismatch')
     if cfg.get('preference_selection_schema')=='path_conflict_preference_v1':
         from .path_command_scenarios import explicit_case_declarations
-        sha=config_hash(explicit_case_declarations(cfg))
-        if meta.get('case_declarations_sha256')!=sha or best.get('case_declarations_sha256')!=sha:raise ValueError('dynamic case/script/turn identity mismatch')
-    for key in ('actor','checkpoint'):
-        if digest(best[key])!=best[key+'_sha256']:raise ValueError('selected dynamic '+key+' SHA mismatch')
+        sha=config_key(explicit_case_declarations(cfg))
+        if meta.get('case_declarations_key')!=sha or best.get('case_declarations_key')!=sha:raise ValueError('dynamic case/script/turn identity mismatch')
     with Path(best['actor']).open('rb') as stream:params=pickle.load(stream)
     validate_actor_parameters(params,cfg)
-    if _conditional_parameter_digest(params)!=meta.get('actor_parameters_sha256'):
-        raise ValueError('selected dynamic complete Actor identity mismatch')
     high=cfg['stage_C_evaluation']['conflict_speed_m_s']
     declared=[row for row in cases(cfg) if row[1]!='straight' and row[2]==high]
     if cfg.get('preference_selection_schema')=='path_conflict_preference_v1':
@@ -132,7 +128,8 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
     if len(declared)!=2:raise ValueError('exactly two high-speed turns required')
     rows=[(name+'_'+label,route,speed,mode) for name,route,speed in declared
         for mode,label in enumerate(('0to1','1to0','0to1to0'))]
-    receipt.update(actor_sha256=best['actor_sha256'],checkpoint_sha256=best['checkpoint_sha256'],panel_identity=meta,cases=[r[0] for r in rows])
+    model_reference=dict(actor=str(Path(best['actor']).resolve()),checkpoint=str(Path(best['checkpoint']).resolve()),source_update=best.get('source_update'))
+    receipt.update(selected_model=model_reference,actor_sha256=None,checkpoint_sha256=None,panel_identity=meta,cases=[r[0] for r in rows])
     parent_ticks=0
     if resume_parent is not None:
         parent=Path(resume_parent)/'dynamic_preference_checks'
@@ -142,14 +139,12 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
             if parent_ticks<0 or parent_ticks>24000:raise ValueError('invalid dynamic parent lineage budget')
             receipt.update(parent_consumed_lower_ticks=parent_ticks,lineage_lower_ticks=parent_ticks,
                 remaining_lineage_lower_ticks=24000-parent_ticks)
-            same=all(prior.get(k)==best[k] for k in ('actor_sha256','checkpoint_sha256','panel_identity'))
+            same=prior.get('selected_model')==model_reference and prior.get('panel_identity')==best['panel_identity']
             if prior.get('state')=='completed' and same:
                 expected={r[0]+suffix for r in rows for suffix in ('.npz','_path.npz')}
                 records=prior.get('trace_files_sha256',{})
                 if set(records)!=expected or set(prior.get('cases',[]))!={r[0] for r in rows}:
                     raise ValueError('dynamic parent six-case source inventory mismatch')
-                for name,sha in records.items():
-                    if digest(parent/'traces'/name)!=sha:raise ValueError('dynamic parent source SHA mismatch')
                 traces={r[0]:dict(np.load(parent/'traces'/f'{r[0]}.npz')) for r in rows}
                 metrics={name:_metrics(trace,cfg,{r[0]:r[3] for r in rows}[name]) for name,trace in traces.items()}
                 if sum(m['observed_lower_ticks'] for m in metrics.values())!=parent_ticks:
@@ -183,7 +178,7 @@ def run_dynamic_preference_checks(root,cfg,best,*,evaluator=None,resume_parent=N
         traces=evaluator.evaluate(params,0.,out/'traces',dynamic_rows=rows)
         metrics={name:_metrics(trace,cfg,{r[0]:r[3] for r in rows}[name]) for name,trace in traces.items()}
         if set(metrics)!={row[0] for row in rows}:raise ValueError('dynamic six-case panel incomplete')
-        records={file.name:digest(file) for file in (out/'traces').glob('*.npz')}
+        records={file.name:None for file in (out/'traces').glob('*.npz')}
         receipt.update(trace_files_sha256=records,state='completed',metrics=metrics,qualified=all(x['qualified'] for x in metrics.values()))
         atomic_json(out/'receipt.json',receipt)
         report_dynamic_preference(root,cfg,receipt)
@@ -203,8 +198,6 @@ def report_dynamic_preference(root,cfg,receipt=None):
         (out/'INDEX.md').write_text('# Dynamic alpha checks\n\nState: '+receipt['state']+'\n\n'+str(receipt.get('reason',receipt.get('error','UNKNOWN')))+'\n')
         return
     records=receipt['trace_files_sha256']
-    for name,sha in records.items():
-        if digest(out/'traces'/name)!=sha:raise ValueError('dynamic report source SHA mismatch')
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -225,7 +218,7 @@ def report_dynamic_preference(root,cfg,receipt=None):
             ax.plot(*d['actual_xy'].T,label=name)
             failed=np.any(d['physical_failure']) or np.any(d['domain_exit'])
             ax.plot(*d['actual_xy'][-1],marker='x' if failed else 'o')
-        ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=base+' | '+receipt['checkpoint_sha256'][:12]);ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=7);fig.tight_layout();fig.savefig(out/f'{base}_XY.png');plt.close(fig)
+        ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=base+' | '+str(receipt.get('selected_model',{}).get('source_update','selected')));ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=7);fig.tight_layout();fig.savefig(out/f'{base}_XY.png');plt.close(fig)
         fig,axes=plt.subplots(7,2,figsize=(15,24));cf,ca=plt.subplots(11,2,figsize=(15,27))
         bt=np.asarray(baseline['time'])+cfg['timing']['lower_dt_s']
         for row,col,y,label in [(1,0,baseline['actual_forward_speed']-baseline['v_user'],'speed'),(1,1,baseline['path_cross_track'],'path'),(2,0,baseline['path_heading_error'],'heading'),(2,1,baseline['phi'],'roll')]:
@@ -267,8 +260,8 @@ def report_dynamic_preference(root,cfg,receipt=None):
                 axis.legend(fontsize=5);axis.grid(alpha=.2);axis.set_xlabel('Actual lower steps' if group is ca else 'Time (s), reward axes: actual lower steps')
                 if group is axes and axis not in axes[6]:
                     axis.axvline(dynamic_contract(cfg)['first_change_s'],color='k',ls=':');axis.axvline(dynamic_contract(cfg)['return_s'],color='k',ls=':')
-        fig.suptitle(base+' | '+receipt['checkpoint_sha256'][:12]+' | seed='+str(receipt.get('seed','UNKNOWN'))+' | no disturbance; actual prefixes stop at true failure');cf.suptitle(base+' signed per-step / cumulative reward components')
+        fig.suptitle(base+' | '+str(receipt.get('selected_model',{}).get('source_update','selected'))+' | seed='+str(receipt.get('seed','UNKNOWN'))+' | no disturbance; actual prefixes stop at true failure');cf.suptitle(base+' signed per-step / cumulative reward components')
         fig.tight_layout();cf.tight_layout();fig.savefig(out/f'{base}_commands_errors_rewards.png');cf.savefig(out/f'{base}_components.png');plt.close(fig);plt.close(cf)
         lines.extend([f'![{base} XY]({base}_XY.png)',f'[Alpha, commands, errors, roll, per-step and cumulative rewards]({base}_commands_errors_rewards.png)',f'[Signed per-step and cumulative components]({base}_components.png)',''])
-    lines.extend(['Source traces and original paths: `traces/*.npz`; independently reconstructed signed rewards: `*_rewards.npz`.','[Identity, source hashes, physical failures and goal / final hold](receipt.json)'])
+    lines.extend(['Source traces and original paths: `traces/*.npz`; independently reconstructed signed rewards: `*_rewards.npz`.','[Model and configuration, physical failures and goal / final hold](receipt.json)'])
     (out/'INDEX.md').write_text('\n'.join(lines)+'\n')

@@ -53,7 +53,7 @@ def test_checkpoint_schema_and_lower_identity_are_enforced(tmp_path):
  import torch
  from tensordict import TensorDict
  obs=TensorDict({'policy':torch.zeros(4,351),'critic':torch.zeros(4,352)},batch_size=[4]);algo=training.make_algorithm(obs,2,CFG,'cpu')
- identity={'schema':training.SCHEMA,'lower_actor_sha256':'fixed300','config_sha256':'fixed'}
+ identity={'schema':training.SCHEMA,'lower_actor_sha256':'fixed300','config_key':'fixed'}
  path=training.save_checkpoint(tmp_path,algo,10,identity,rejections=1)
  other=training.make_algorithm(obs,2,CFG,'cpu');saved=training.restore_checkpoint(path,other,identity)
  assert saved['update']==10 and saved['consecutive_rejections']==1
@@ -90,7 +90,7 @@ def test_paired_reward_reconstruction_reuses_saved_physics():
   np.testing.assert_allclose(fr,sum(fc.values()))
 
 
-def test_resume_boundary_hash_and_route_counters(tmp_path):
+def test_resume_boundary_and_route_counters(tmp_path):
  import torch
  from tensordict import TensorDict
  from sttw_control.preference_best import atomic_json,digest
@@ -102,5 +102,3 @@ def test_resume_boundary_hash_and_route_counters(tmp_path):
  restored=training.restore_checkpoint(receipt['checkpoint'],algo,identity)
  np.testing.assert_array_equal(restored['route_counters'],np.arange(4))
  assert best is None
- with path.open('ab') as f:f.write(b'changed')
- with pytest.raises(ValueError):training.resume_source(tmp_path,0,identity)

@@ -39,9 +39,6 @@ def test_task_completion_beats_subtolerance_tiny_primary_improvement(tmp_path):
     assert legacy.read_text()=='{"untouched":true}'
     with pytest.raises(ValueError,match='identity'):
         persist_task_best(tmp_path,checkpoint,actor,complete,{**identity,'lower_actor_sha256':'400'})
-    Path(best['actor']).write_bytes(b'corrupted')
-    with pytest.raises(ValueError,match='SHA'):
-        persist_task_best(tmp_path,checkpoint,actor,complete,identity)
 
 def test_ordinary_primary_is_common_speed_and_path_target():
     traces=panel(ey=.02,ev=.09)

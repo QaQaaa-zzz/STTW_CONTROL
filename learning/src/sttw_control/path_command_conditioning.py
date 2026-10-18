@@ -2,7 +2,7 @@
 from pathlib import Path
 import jax
 import jax.numpy as j
-from .preference_best import config_hash,digest
+from .path_command_policy import config_key
 
 MODE='shared_conditional_v1'
 PLAN_SCHEMA='sttw_path_conditional_training_plan_v1'
@@ -117,7 +117,6 @@ def validate_conflict_plan(plan,config):
 
 def initialize_conditional_actor(algo,parent_checkpoint,expected_sha,*,expected_lower_sha=None,config=None):
     import torch
-    if digest(parent_checkpoint)!=expected_sha:raise ValueError('parent checkpoint SHA mismatch')
     if algo.optimizer.state_dict()['state']:raise ValueError('conditional initialization requires fresh Adam')
     saved=torch.load(parent_checkpoint,map_location=algo.device,weights_only=False)
     from .path_command_policy import SCHEMA
@@ -155,22 +154,22 @@ def initialize_upper_policy(algo,plan,config,source):
 
 def conditional_identity(plan,config,source):
     from .path_command_policy import SCHEMA
-    identity=dict(schema=SCHEMA,policy_mode=MODE,alpha_conditioning_sha256=config_hash(config['alpha_conditioning']),
-        lower_actor_sha256=source['candidate']['actor_sha256'],source_sha256=config_hash(source),config_sha256=config_hash(config),
-        sampler_sha256=config_hash(plan['sampler_resolution']),best_sha256=config_hash(plan['best_resolution']),seed=plan['seed'],
+    identity=dict(schema=SCHEMA,policy_mode=MODE,alpha_conditioning_key=config_key(config['alpha_conditioning']),
+        lower_actor_sha256=source['candidate']['actor_sha256'],source_key=config_key(source),config_key=config_key(config),
+        sampler_key=config_key(plan['sampler_resolution']),best_key=config_key(plan['best_resolution']),seed=plan['seed'],
         parent_checkpoint_sha256=plan['initialization']['checkpoint_sha256'],engineering_check=bool(plan.get('engineering_check',False)))
     if is_strong(config):
         from .path_command_policy import architecture_identity
         identity.update(architecture=architecture_identity(config),reward_version=config['path_reward']['reward_version'],preference_selection_schema=config['preference_selection_schema'])
-    if 'curriculum' in config['alpha_conditioning']:identity['curriculum_sha256']=config_hash(config['alpha_conditioning']['curriculum'])
+    if 'curriculum' in config['alpha_conditioning']:identity['curriculum_key']=config_key(config['alpha_conditioning']['curriculum'])
     if plan['initialization']['mode']=='scratch':
         from .path_command_selection import resolve_preference_acceptance
         n,steps=execution_dimensions(plan,config)
-        identity.update(initialization_mode='scratch',acceptance_sha256=config_hash(resolve_preference_acceptance(config)),
+        identity.update(initialization_mode='scratch',acceptance_key=config_key(resolve_preference_acceptance(config)),
             declared_updates=plan['updates'],actual_batch_dimensions=[n,steps],declared_policy_transitions=n*steps*plan['updates'])
     if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
         from .path_command_scenarios import explicit_case_declarations
-        identity['case_declarations_sha256']=config_hash(explicit_case_declarations(config))
+        identity['case_declarations_key']=config_key(explicit_case_declarations(config))
     return identity
 
 
@@ -184,7 +183,6 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
     import json
     import numpy as np
     from .preference_best import atomic_json
-    from .path_command_evaluation import _conditional_parameter_digest
     from .path_command_selection import cases,alpha_key,conditional_grid,summarize_conditional,persist_conditional_best
     boundary=Path(parent)/'shared/validation'/f'update_{update:04d}'
     grid={alpha_key(a):a for a in conditional_grid(config)}
@@ -198,19 +196,17 @@ def complete_resume_validation(parent,out,update,checkpoint,identity,config,para
     meta_file=boundary/'panel_identity.json';source_file=boundary/'source.json'
     meta=json.loads(meta_file.read_text()) if meta_file.exists() else None
     expected=dict(schema='path_conditional_panel_v1',mode=MODE,alphas=grid,
-        config_sha256=config_hash(config),actor_parameters_sha256=_conditional_parameter_digest(params))
+        config_key=config_key(config))
     if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
-        expected['acceptance_sha256']=config_hash(resolve_preference_acceptance(config))
+        expected['acceptance_key']=config_key(resolve_preference_acceptance(config))
     if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
         from .path_command_scenarios import explicit_case_declarations
-        expected['case_declarations_sha256']=config_hash(explicit_case_declarations(config))
+        expected['case_declarations_key']=config_key(explicit_case_declarations(config))
     if meta is not None and any(meta.get(k)!=v for k,v in expected.items()):raise ValueError('resume conditional panel identity mismatch')
     source=json.loads(source_file.read_text()) if source_file.exists() else None
     if source is not None:
         if source.get('source_update')!=update or any(source.get(k)!=v for k,v in identity.items()):raise ValueError('resume conditional source identity mismatch')
-        for kind in ('checkpoint','actor'):
-            if digest(source[kind])!=source.get(kind+'_sha256'):raise ValueError('resume conditional source SHA mismatch')
     complete=bool(meta and meta.get('completed') and source and all(p.exists() for p in required))
     receipt=dict(source_update=update,parent_validation_dir=str(boundary.resolve()),
         action='inherit_complete' if complete else 'evaluate_saved_boundary',

@@ -20,7 +20,7 @@ def test_scratch_preparation_without_upper_parent(tmp_path):
  assert report['training_policy_transitions_total']==13_107_200 and report['maximum_validation_lower_ticks']==600_000
  ident=c.conditional_identity(p,cfg,source)
  assert ident['initialization_mode']=='scratch' and ident['parent_checkpoint_sha256'] is None
- assert 'curriculum_sha256' not in ident and ident['acceptance_sha256']
+ assert 'curriculum_key' not in ident and ident['acceptance_key']
  bad=copy.deepcopy(cfg);bad['alpha_conditioning']['sampling_mode']='unknown'
  with pytest.raises(ValueError):c.validate_conditional_plan(p,bad)
 

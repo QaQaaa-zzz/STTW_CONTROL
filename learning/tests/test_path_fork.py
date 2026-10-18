@@ -24,7 +24,7 @@ def test_original_parent_identity_and_exact_whitelist():
     plan,cfg,source=fork_inputs();receipt=validate_fork_contract(plan,cfg,source)
     assert receipt['identities']['alpha0']['source_update']==100
     assert receipt['identities']['alpha1']['source_update']==150
-    assert receipt['original_identities']['alpha0']['config_sha256']!=__import__('sttw_control.preference_best',fromlist=['config_hash']).config_hash(cfg)
+    assert receipt['original_identities']['alpha0']['config_key']!=__import__('sttw_control.preference_best',fromlist=['config_hash']).config_key(cfg)
     for field in ('seed','best_resolution','terminal_contract'):
         bad=copy.deepcopy(plan);bad[field]='mutated'
         with pytest.raises(ValueError):validate_fork_contract(bad,cfg,source)

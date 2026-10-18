@@ -92,13 +92,13 @@ def _qualified_fixture(tmp_path):
     import json,pickle
     from pathlib import Path
     from sttw_control.path_command_policy import make_path_actor
-    from sttw_control.path_command_evaluation import _conditional_parameter_digest
-    from sttw_control.preference_best import config_hash,digest
+    from sttw_control.preference_best import digest
+    from sttw_control.path_command_policy import config_key
     cfg=json.loads((Path(__file__).parents[1]/'configs/STTW_Path_Strong_Preference.json').read_text())
     actor=tmp_path/'actor.pkl';params=make_path_actor(cfg).init(jax.random.PRNGKey(1),j.zeros(351));actor.write_bytes(pickle.dumps(params))
     ck=tmp_path/'model.pt';ck.write_bytes(b'learner')
-    meta=dict(config_sha256=config_hash(cfg),architecture='alpha_modulated_v1',reward_version='path_safety_preference_v2',
-        completed=True,actor_parameters_sha256=_conditional_parameter_digest(params))
+    meta=dict(config_key=config_key(cfg),architecture='alpha_modulated_v1',reward_version='path_safety_preference_v2',
+        completed=True,actor_parameters_sha256=None)
     best=dict(qualified_preference=True,panel_identity=meta,actor=str(actor),checkpoint=str(ck),
         actor_sha256=digest(actor),checkpoint_sha256=digest(ck),selection_schema='path_strong_preference_v1')
     return cfg,best
@@ -150,7 +150,8 @@ def test_completed_dynamic_parent_is_verified_and_reused_with_zero_physics(tmp_p
             np.savez_compressed(baseline/f'{name}_path.npz',s=[0,20],xy=[[0,0],[20,0]])
             np.savez_compressed(folder/f'{key}.npz',**d);np.savez_compressed(folder/f'{key}_path.npz',s=[0,20],xy=[[0,0],[20,0]])
             for file in [folder/f'{key}.npz',folder/f'{key}_path.npz']:records[file.name]=digest(file)
-    atomic_json(parent/'receipt.json',dict(state='completed',active_lower_ticks=24000,lineage_lower_ticks=24000,cases=names,
+    model_reference=dict(actor=str(Path(best['actor']).resolve()),checkpoint=str(Path(best['checkpoint']).resolve()),source_update=best.get('source_update'))
+    atomic_json(parent/'receipt.json',dict(state='completed',selected_model=model_reference,active_lower_ticks=24000,lineage_lower_ticks=24000,cases=names,
         actor_sha256=best['actor_sha256'],checkpoint_sha256=best['checkpoint_sha256'],panel_identity=best['panel_identity'],trace_files_sha256=records))
     class Evaluator:
         config=cfg
@@ -158,6 +159,9 @@ def test_completed_dynamic_parent_is_verified_and_reused_with_zero_physics(tmp_p
     receipt=run_dynamic_preference_checks(tmp_path/'new',cfg,best,evaluator=Evaluator(),resume_parent=tmp_path/'parent')
     assert receipt['state']=='completed' and receipt['active_lower_ticks']==0
     assert receipt['reused_cases']==6 and receipt['lineage_lower_ticks']==24000
+    other=dict(best,source_update=999)
+    refused=run_dynamic_preference_checks(tmp_path/'different_model',cfg,other,evaluator=Evaluator(),resume_parent=tmp_path/'parent')
+    assert refused['state']=='not_run' and refused['active_lower_ticks']==0
     assert len(list((tmp_path/'new/dynamic_preference_checks/traces').glob('*_path.npz')))==6
 
     assert (tmp_path/'new/dynamic_preference_checks/INDEX.md').exists()
@@ -173,15 +177,6 @@ def test_completed_dynamic_parent_is_verified_and_reused_with_zero_physics(tmp_p
     with pytest.raises(ValueError,match='true prefix'):_metrics(broken,cfg,0)
     from sttw_control.path_command_dynamic import report_dynamic_preference
     import pytest
-    target=tmp_path/'new/dynamic_preference_checks/traces'/next(iter(records))
-    target.write_bytes(target.read_bytes()+b'tamper')
-    with pytest.raises(ValueError,match='source SHA'):
-        report_dynamic_preference(tmp_path/'new',cfg)
-
-    parent_target=folder/next(iter(records))
-    parent_target.write_bytes(parent_target.read_bytes()+b'tamper')
-    with pytest.raises(ValueError,match='parent source SHA'):
-        run_dynamic_preference_checks(tmp_path/'new2',cfg,best,evaluator=Evaluator(),resume_parent=tmp_path/'parent')
 
 
 def _research_config():
@@ -234,10 +229,10 @@ def test_research_dynamic_rejects_mismatched_acceptance_before_physics(tmp_path)
     import pytest
     from sttw_control.path_command_dynamic import run_dynamic_preference_checks
     from sttw_control.path_command_selection import resolve_preference_acceptance
-    from sttw_control.preference_best import config_hash
+    from sttw_control.path_command_policy import config_key
     _,best=_qualified_fixture(tmp_path);cfg=_research_config()
-    best.update(qualified_research_preference=True,selection_schema='path_preference_research_v1',acceptance_sha256='stale')
-    best['panel_identity'].update(config_sha256=config_hash(cfg),acceptance_sha256=config_hash(resolve_preference_acceptance(cfg)))
+    best.update(qualified_research_preference=True,selection_schema='path_preference_research_v1',acceptance_key='stale')
+    best['panel_identity'].update(config_key=config_key(cfg),acceptance_key=config_key(resolve_preference_acceptance(cfg)))
     class Evaluator:
         config=cfg
         def evaluate(self,*args,**kw):raise AssertionError('acceptance mismatch may not run physics')

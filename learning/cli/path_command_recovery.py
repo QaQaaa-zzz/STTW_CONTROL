@@ -35,16 +35,13 @@ def main():
     from sttw_control.path_command_policy import PathCommandActor
     from sttw_control.frozen_local_lower import FrozenLocalLower
     from sttw_control.path_command_recovery import make_identity,capture_natural_snapshots,evaluate_pairs,validate_recovery_arm
-    from sttw_control.preference_best import digest,atomic_json,config_hash
+    from sttw_control.preference_best import atomic_json
+    from sttw_control.path_command_policy import config_key
     from sttw_control.path_command_fork import physical_config_identity
     from sttw_control.runtime import configure_compilation_cache
     request=json.loads(args.request.read_text());cfg=json.loads(Path(request['config']).read_text())
     source=json.loads(Path(request['source']).read_text());candidate=source['candidate']
     if candidate['source_update']!=300 or candidate['actor_sha256']!='d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc':raise ValueError('frozen local300 identity mismatch')
-    for key in ('actor','checkpoint'):
-        if digest(candidate[key])!=candidate[key+'_sha256']:raise ValueError('frozen lower SHA mismatch')
-    if digest(candidate['config'])!=candidate['config_file_sha256']:raise ValueError('lower config SHA mismatch')
-    if digest(source['prepared_bank'])!=source['prepared_bank_sha256']:raise ValueError('prepared bank SHA mismatch')
     with Path(candidate['actor']).open('rb') as f:lower_params=jax.tree.map(j.asarray,pickle.load(f))
     spec=json.loads((Path(source['upper_run'])/'alpha0/frozen_config_stage52.json').read_text())
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
@@ -61,15 +58,13 @@ def main():
     arms=None;prefix_charged=0
     if args.mode=='resume':
         capture=json.loads((Path(request['snapshots'])/'capture.json').read_text())
-        checksum=capture.pop('receipt_sha256',None)
-        if config_hash(capture)!=checksum:raise ValueError('capture receipt checksum mismatch')
         if not capture.get('completed') or capture.get('identity')!=identity:raise ValueError('completed compatible capture receipt required')
         prefix_charged=capture['active_prefix_lower_ticks']
         if not isinstance(prefix_charged,int) or not 0<=prefix_charged<=8000:raise ValueError('capture budget receipt mismatch')
         ticks=prefix_charged
         if set(request['arms'])!={'control0','candidate0','control1','candidate1'}:raise ValueError('four final selected arms required')
-        arms={'B0':dict(params=zero,actor_sha256=config_hash(jax.tree.map(lambda x:x.tolist(),zero)),alpha=0)}
-        arm_runners={config_hash(cfg):evaluator}
+        arms={'B0':dict(params=zero,actor_sha256=None,alpha=0)}
+        arm_runners={config_key(cfg):evaluator}
         for name,specification in request['arms'].items():
             root=Path(specification['run']);alpha=specification['alpha']
             run_status=json.loads((root/'status.json').read_text())
@@ -79,12 +74,10 @@ def main():
             selected=json.loads((root/f'alpha{alpha}'/'best_safety_task_model.json').read_text())
             validate_recovery_arm(name=name,alpha=alpha,manifest=manifest,run_status=run_status,training_status=training_status,
                 selected=selected,final_source=final_source,source=source,lower_sha256=identity['lower'])
-            for key in ('actor','checkpoint'):
-                if digest(selected[key])!=selected[key+'_sha256']:raise ValueError('selected arm SHA mismatch')
             armcfg=manifest['config']
             if physical_config_identity(armcfg)!=identity['physical_config']:raise ValueError('selected arm physical identity mismatch')
-            if selected.get('config_sha256')!=config_hash(armcfg):raise ValueError('selected arm config identity mismatch')
-            cfg_identity=config_hash(armcfg)
+            if selected.get('config_key')!=config_key(armcfg):raise ValueError('selected arm config identity mismatch')
+            cfg_identity=config_key(armcfg)
             if cfg_identity not in arm_runners:
                 arm_env=PathCommandEnv(armcfg,env.plant_spec,FrozenLocalLower(lower_params),terminal_contract='terminal_contract_v2')
                 if make_identity(arm_env,source)!=identity:raise ValueError('arm lower/model/controller/actuator identity mismatch')

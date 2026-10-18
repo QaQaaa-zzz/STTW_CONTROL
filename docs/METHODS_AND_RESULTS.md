@@ -1108,3 +1108,10 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 ### 2026-10-18 path_command 性能意见核验及实现
 
 用户要求先验证附件审查，只修当前path_command。正式循环确有硬开底层力诊断与零散主机同步，已改为诊断缺省关闭/显式可开、scan内训练日志投影、设备归约后集中回传，并保留每步工程故障门与每轮恢复checkpoint。附件基于minimal导出train.py，正式入口原本已消费日志统计；不把它的“完整logs全部丢弃”与“同步只剩1次”直接套用到正式训练。真实RSL终止GAE测试否定本链路double-bootstrap疑点；未移动pursuit/publish或调PPO/课程/奖励。126相关CPU通过，GPU独立24ticks/0PPO三实现完整闭环状态maxdiff0、日志116/111/59叶。广泛历史缓存测试受缺旧manifest限制。详见docs/VALIDATION.md同日节与runs/path_command_performance_check_20261018/gpu_receipt.json。原200轮结果冻结，不宣称学习改进或已测吞吐加速；下一次显式授权训练才测实际整批收益。
+
+
+### 2026-10-18 path_command 第二轮审查及计算简化
+
+目的：核验最新附件，取消实际仿真调用链SHA与重复检查，减少路径搜索、无效reset和逐步主机回传。采用局部窗口分块精确投影/直接均匀网格插值、vmap外reset门、固定四tick pursuit与逐tick发布、rollout末统计/工程fault host检查（fault设备锁存冻结，整批GAE/PPO前丢弃）。当前模型加载器只移除摘要元数据；不改物理、奖励、PPO、课程、权限或每轮checkpoint。
+
+190项相关CPU通过，最终衔接补测37项通过，GPU主要闭环量通过，qpos约1e-7/qvel9.5e-6/reward2.4e-7；全叶仍有qacc_smooth .00364、solver warmstart .000834差异，不能称全状态等价。四次有界尝试合计保守上限1024lower ticks，0PPO。8lane短检查未显示可据以声明的吞吐倍数，不是正式整批基准。原附件关于KL大规模拒绝、FiLM永久死锁、示例减速更低代价等主张不成立或缺证据，未据此改算法。新明文配置键不自动兼容历史SHA格式resume/fork；旧记录不改。具体数值、负证据与入口见docs/VALIDATION.md同日“第二轮审查与计算简化”及runs/path_command_cleanup_20261018/gpu_receipt.json。正式训练未启动，旧200轮不合格结论保留。

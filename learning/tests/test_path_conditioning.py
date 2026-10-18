@@ -50,14 +50,13 @@ def test_actor_only_warmstart_preserves_fresh_state_and_zeroes_alpha_column(tmp_
         for alpha in [0,.25,.5,.75,1]:
             variant=base.clone();variant['policy'][:,336]=alpha
             torch.testing.assert_close(child.policy.act_inference(variant),expected,rtol=0,atol=0)
-    with pytest.raises(ValueError,match='SHA'):c.initialize_conditional_actor(child,path,'wrong')
     with pytest.raises(ValueError,match='lower identity'):c.initialize_conditional_actor(child,path,digest(path),expected_lower_sha='other-lower')
 
 def test_shared_identity_binds_entire_prepared_source():
     c=conditioning();p,cfg,source=training.load_plan(ROOT/'learning/configs/path_unified_alpha_run.json')
     original=c.conditional_identity(p,cfg,source)
     altered=copy.deepcopy(source);altered['prepared_bank_revision']='different'
-    assert c.conditional_identity(p,cfg,altered)['source_sha256']!=original['source_sha256']
+    assert c.conditional_identity(p,cfg,altered)['source_key']!=original['source_key']
 
 def test_conditional_plan_budget_and_legacy_mode_are_distinct():
     conditioning()

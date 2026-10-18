@@ -2235,3 +2235,32 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 原有DirectCommandPPO、批量评测vmap/scan50、共享编译缓存入口继续使用。此次是工程等价性验证，不是原200轮的重新训练/能力复评；其0/60末段保持、未合格结论不变。
 
 提交前独立只读代码审查未发现阻断问题：训练字段覆盖、设备归约后的聚合形状、peak最大值语义、当步工程故障门、done/GAE和关闭力诊断均核对通过。审查没有另跑训练或仿真。
+
+
+## 2026-10-18 path_command 第二轮审查与计算简化
+
+范围：当前experiment/path-conflict-exposure-v1；依据用户最新附件与“9e-5是可以允许的，继续”。本节覆盖前一节的当步host故障门及未移动pursuit结论：新实现把host工程故障检查移到rollout末、GAE/PPO之前，设备侧仍立即锁存fault并冻结故障lane。正常lane可以完成当前rollout，整个故障rollout丢弃并保存故障状态，不进入优化。物理失败、真实终止、有限时域回报语义未改变。
+
+实现：
+
+- 几何投影只处理原窗口内有效线段，64段分块两遍搜索，保留距离最小值与近上次进度的tie规则；宽窗口继续分块，不截断到64段。均匀路径网格直接定位相邻真实float32节点并插值，保留旧linspace的实际间距和端点。
+- 整批reset条件放到vmap外，无终止时跳过路径生成；有终止仍完整重置闭环状态。四tick上层区间在最后tick更新pursuit，直接tick接口保留mod4调度，publish/slew仍逐lower tick执行。保留必要的步后mjx.forward，因为当前姿态和传感器读取依赖刷新结果。
+- 采样Python循环取消逐步device_get/设备布尔读取，描述统计和工程故障在rollout末集中回传。去掉重复生成路径扫描及重复qpos/qvel非有限检查，复用已计算的nonfinite标志。
+- 当前path_command、CLI和实际模型加载调用链不再计算文件、参数树或配置SHA；模型加载器仅移除XML/资产摘要元数据，物理变换不变。配置身份用规范JSON明文键；历史SHA字段为null或原样引用已有声明，不重新计算。动态轨迹缓存必须匹配模型路径、checkpoint路径和source_update，避免null SHA误复用。
+
+核验后未采用附件的其余算法改动：原200轮实际接受3196/3200 minibatch和799/800 epoch，采样耗时中位41.631s、优化.0892s，不支持“优化拒绝/大minibatch为主要瓶颈”的叙述；reset课程不瞬间切换全部活动环境。FiLM零输出初始化只在首批遮断隐藏层梯度，不是永久死锁；全局advantage归一化已开启。有限时域终点不是需要自动bootstrap的外部timeout。附件减速示例按现奖励重算：alpha1/chi1、ey=eh=roll_rate=offsets=0时，v2.65/phi.329代价率约494，v1.9/phi.19约570，并未证明减速更优。未任意修改奖励、失败尾罚、slew权限、KL算法、PPO参数、课程或每轮checkpoint。
+
+验证证据：
+
+- 22个相关CPU文件 **190 passed, 2 skipped / 82.35s**；最终缓存/诊断/课程/初始化衔接补测 **37 passed / 9.79s**。调度修改另有47 passed,1 skipped。skip为显式启用的GPU测试；未声称全库通过，历史缺失manifest的缓存检查限制仍在。
+- 新CPU局部投影测试以原全路径算法为参考，覆盖短/宽窗口、旧新路线、插值端点；整批reset无终止时不执行路线回调；fault模拟保证无GAE/优化/下一轮checkpoint。缓存补测覆盖不同模型更新号不能误复用。
+- 最终GPU **1 passed / 63.35s**，与83f0873原几何/逐lane reset比较：8个混合lane、4个策略区间、末次强制一路domain_exit以检验reset，上限256 lower ticks、0 PPO。qpos最大差1.0431e-7，qvel9.5367e-6，ctrl1.3709e-6，reward2.3842e-7；观测、控制器、历史、标志和统计通过rtol/atol2e-5比较，路线数组相同。
+- **全叶最大差.00363922（qacc_smooth），qacc .00109863，qacc_warmstart .00083351**。持久solver warmstart也有差异，不能称全闭环状态等价；逐叶数值已记录。前两次严格全状态比较失败后分项分析，后两次主要闭环量比较通过，最终一次包含四tick调度改动。总计4次有界尝试保守预留不超过1024 lower ticks，未动正式训练计数，未进行PPO。
+- 收据：`runs/path_command_cleanup_20261018/gpu_receipt.json`；复跑：`STTW_PATH_CLEANUP_GPU=1 STTW_PATH_CLEANUP_RECEIPT=runs/path_command_cleanup_20261018/gpu_receipt.json PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_playground/.venv/bin/python -m pytest -q -s learning/tests/test_path_local_projection.py -k gpu_cleanup`。
+- 8lane预热步约旧.263–.270s、新.259–.270s，编译旧7.134s/新35.309s；这不是512×128吞吐测试，**不宣称4–8倍加速或学习提升**。未启动正式训练，历史200轮及不合格结论不变。
+
+兼容范围：新生成的元数据将配置/source等摘要改为明文`*_key`，旧文件保持原样；**未适配历史SHA格式receipt的自动跨格式resume/fork/recovery**，不能用当前代码直接宣称精确续接已验证。旧轨迹物理复用仍按实际完整配置/模型/路径/时序检查。未添加迁移和额外运行时防御框架。
+
+最终只读代码审查无剩余阻断项，重点核对动态缓存模型身份、null SHA诊断、四tick follower与逐tick发布。审查没有新增仿真。
+
+提交前最终补测：显式`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES='' PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python -m pytest -q learning/tests/test_path_local_projection.py learning/tests/test_path_training_performance.py learning/tests/test_path_conditional_training.py`，**36 passed, 2 skipped / 8.24s**。此前同命令未固定CPU，自动使用GPU导致6个CPU mock的Torch设备不匹配及1个投影3.5e-6差异超过该CPU参考测试3e-6阈值（29通过/7失败/2跳过）；明确CPU后全部通过，没有为此修改实现或放宽阈值。GPU主要闭环量以显式GPU对照收据为准。

@@ -97,7 +97,7 @@ def test_schema_is_explicit_and_acceptance_hash_changes_with_threshold():
     cfg=config();s=selection.summarize_preference(research_panel(),cfg)
     cfg['preference_acceptance']['final_path_error_m']=.19
     changed=selection.summarize_preference(research_panel(),cfg)
-    assert changed['acceptance_sha256']!=s['acceptance_sha256']
+    assert changed['acceptance_key']!=s['acceptance_key']
     cfg['preference_selection_schema']='unknown'
     with pytest.raises(ValueError):selection.resolve_preference_acceptance(cfg)
     old=selection.resolve_preference_acceptance(strong_config())
@@ -122,35 +122,35 @@ def test_research_best_checks_and_persists_acceptance_identity(tmp_path):
     import jax
     import jax.numpy as j
     from sttw_control.path_command_policy import make_path_actor
-    from sttw_control.path_command_evaluation import _conditional_parameter_digest
-    from sttw_control.preference_best import config_hash,atomic_json
+    from sttw_control.preference_best import atomic_json
+    from sttw_control.path_command_policy import config_key
     cfg=config();summary=selection.summarize_preference(research_panel(),cfg)
     params=make_path_actor(cfg).init(jax.random.PRNGKey(9),j.zeros(351))
     actor=tmp_path/'actor.pkl';actor.write_bytes(pickle.dumps(params))
     checkpoint=tmp_path/'model.pt';checkpoint.write_bytes(b'learner')
     folder=tmp_path/'validation/update_0050';folder.mkdir(parents=True)
-    acceptance_sha=summary['acceptance_sha256']
+    acceptance_sha=summary['acceptance_key']
     identity=dict(policy_mode='shared_conditional_v1',seed=42,architecture='alpha_modulated_v1',
-        reward_version='path_safety_preference_v2',config_sha256=config_hash(cfg),
-        acceptance_sha256=acceptance_sha,source_update=50,validation_dir=str(folder))
+        reward_version='path_safety_preference_v2',config_key=config_key(cfg),
+        acceptance_key=acceptance_sha,source_update=50,validation_dir=str(folder))
     source={k:v for k,v in identity.items() if k!='validation_dir'}
-    source.update(checkpoint_sha256=selection.digest(checkpoint),actor_sha256=selection.digest(actor))
+    source.update(checkpoint_sha256=None,actor_sha256=None)
     atomic_json(folder/'source.json',source)
     meta=dict(schema='path_conditional_panel_v1',completed=True,mode='shared_conditional_v1',
         alphas=summary['alphas'],architecture=identity['architecture'],reward_version=identity['reward_version'],
-        config_sha256=identity['config_sha256'],acceptance_sha256=acceptance_sha,
-        actor_parameters_sha256=_conditional_parameter_digest(params))
+        config_key=identity['config_key'],acceptance_key=acceptance_sha,
+        actor_parameters_sha256=None)
     atomic_json(folder/'panel_identity.json',meta)
     best=selection.persist_preference_best(tmp_path,checkpoint,actor,summary,identity)
     assert best['selection_schema']=='path_preference_research_v1'
-    assert best['acceptance']==summary['acceptance'] and best['acceptance_sha256']==acceptance_sha
+    assert best['acceptance']==summary['acceptance'] and best['acceptance_key']==acceptance_sha
     assert best['qualified_research_preference'] and not best['legacy_strict_preference_qualified']
     # A changed threshold cannot inherit the prior pointer's score, even with unchanged weights.
     changed=deepcopy(cfg);changed['preference_acceptance']['final_path_error_m']=.19
     other=selection.summarize_preference(research_panel(),changed)
     with pytest.raises(ValueError,match='acceptance'):
         selection.persist_preference_best(tmp_path,checkpoint,actor,other,identity)
-    meta.pop('acceptance_sha256');atomic_json(folder/'panel_identity.json',meta)
+    meta.pop('acceptance_key');atomic_json(folder/'panel_identity.json',meta)
     with pytest.raises(ValueError,match='acceptance'):
         selection.persist_preference_best(tmp_path,checkpoint,actor,summary,identity)
 

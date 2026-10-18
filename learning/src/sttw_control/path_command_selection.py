@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,shutil
 import numpy as np
-from .preference_best import atomic_json,digest
+from .preference_best import atomic_json
 from .path_command_policy import SCHEMA
 
 def cases(config):
@@ -95,12 +95,11 @@ def persist_best(root,checkpoint,actor,summary,identity):
     incumbent=json.loads(pointer.read_text()) if pointer.exists() else None
     if incumbent and incumbent['schema']!=SCHEMA:raise ValueError('legacy best pointer cannot be overwritten')
     if incumbent and score_key(summary)>=tuple(incumbent['score_tuple']):return incumbent
-    sha=digest(checkpoint);generation=root/'best_generations'/sha;generation.mkdir(parents=True,exist_ok=True)
+    generation=root/'best_generations'/f"update_{identity.get('source_update',identity.get('update',0)):04d}";generation.mkdir(parents=True,exist_ok=True)
     for src,name in [(checkpoint,'best_model.pt'),(actor,'best_actor.pkl')]:
         dest=generation/name
-        if dest.exists() and digest(src)!=digest(dest):raise ValueError('immutable generation differs')
         if not dest.exists():shutil.copyfile(src,dest)
-    record=dict(identity,schema=SCHEMA,checkpoint=str((generation/'best_model.pt').resolve()),checkpoint_sha256=sha,actor=str((generation/'best_actor.pkl').resolve()),actor_sha256=digest(generation/'best_actor.pkl'),score_tuple=score_key(summary),qualified=summary['qualified'],metrics=summary)
+    record=dict(identity,schema=SCHEMA,checkpoint=str((generation/'best_model.pt').resolve()),checkpoint_sha256=None,actor=str((generation/'best_actor.pkl').resolve()),actor_sha256=None,score_tuple=score_key(summary),qualified=summary['qualified'],metrics=summary)
     atomic_json(generation/'selection.json',record);atomic_json(pointer,record);return record
 
 
@@ -115,19 +114,14 @@ def persist_task_best(root,checkpoint,actor,summary,identity):
             raise ValueError('task best pointer identity mismatch')
         if any(incumbent.get(k)!=v for k,v in identity.items() if k not in ('update','source_update','validation_update')):
             raise ValueError('task best learner/protocol identity mismatch')
-        for field in ('checkpoint','actor'):
-            if digest(incumbent[field])!=incumbent[field+'_sha256']:raise ValueError('task best file SHA mismatch')
         if key>=tuple(incumbent['score_tuple']):return incumbent
-    sha=digest(checkpoint);actor_sha=digest(actor)
-    generation=root/('safety_task_best_generations' if safety else 'task_best_generations')/sha;generation.mkdir(parents=True,exist_ok=True)
+    generation=root/('safety_task_best_generations' if safety else 'task_best_generations')/f"update_{identity.get('source_update',identity.get('update',0)):04d}";generation.mkdir(parents=True,exist_ok=True)
     for src,name in [(checkpoint,'best_model.pt'),(actor,'best_actor.pkl')]:
         dest=generation/name
-        if dest.exists() and digest(src)!=digest(dest):raise ValueError('immutable task generation differs')
         if not dest.exists():shutil.copyfile(src,dest)
-        if digest(src)!=digest(dest):raise ValueError('task generation copy SHA mismatch')
     record=dict(identity,schema=SCHEMA,selection_schema=summary['selection_schema'],
-        checkpoint=str((generation/'best_model.pt').resolve()),checkpoint_sha256=sha,
-        actor=str((generation/'best_actor.pkl').resolve()),actor_sha256=actor_sha,
+        checkpoint=str((generation/'best_model.pt').resolve()),checkpoint_sha256=None,
+        actor=str((generation/'best_actor.pkl').resolve()),actor_sha256=None,
         score_tuple=key,qualified_task=summary['qualified_task'],qualified_preference=None,
         qualified=summary['qualified_task'],metrics=summary)
     # Selection may be recomputed, but weights are immutable and every pointer is atomic.
@@ -273,8 +267,8 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
     if update is None:raise ValueError('conditional best requires source update identity')
     validation=Path(identity.get('validation_dir',root/'validation'/f'update_{int(update):04d}')).resolve()
     source=json.loads((validation/'source.json').read_text())
-    hashes={'checkpoint_sha256':digest(checkpoint),'actor_sha256':digest(actor)}
-    if any(source.get(k)!=v for k,v in hashes.items()) or source.get('source_update',source.get('update'))!=update:
+    hashes={'checkpoint_sha256':None,'actor_sha256':None}
+    if source.get('source_update',source.get('update'))!=update:
         raise ValueError('conditional validation source identity mismatch')
     logical_identity={k:v for k,v in identity.items() if k not in ('update','source_update','validation_update','validation_dir')}
     if any(source.get(k)!=v for k,v in logical_identity.items()):
@@ -285,27 +279,23 @@ def persist_conditional_best(root,checkpoint,actor,summary,identity,*,
     pointer=root/_pointer;incumbent=json.loads(pointer.read_text()) if pointer.exists() else None
     if incumbent:
         if incumbent.get('selection_schema')!=_selection_schema:raise ValueError('conditional best identity mismatch')
-        if any(incumbent['panel_identity'].get(k)!=meta.get(k) for k in ('schema','mode','alphas','config_sha256')):
+        if any(incumbent['panel_identity'].get(k)!=meta.get(k) for k in ('schema','mode','alphas','config_key')):
             raise ValueError('conditional best protocol identity mismatch')
         for k,v in identity.items():
             if k not in ('update','source_update','validation_update','validation_dir') and incumbent.get(k)!=v:
                 raise ValueError('conditional learner identity mismatch')
-        for kind in ('actor','checkpoint'):
-            if digest(incumbent[kind])!=incumbent[kind+'_sha256']:raise ValueError('conditional best SHA mismatch')
         if key>=tuple(incumbent['score_tuple']):return incumbent
-    generation=root/_generation/hashes['checkpoint_sha256'];generation.mkdir(parents=True,exist_ok=True)
+    generation=root/_generation/f'update_{int(update):04d}';generation.mkdir(parents=True,exist_ok=True)
     for original,name in ((checkpoint,'best_model.pt'),(actor,'best_actor.pkl')):
         dest=generation/name
-        if dest.exists() and digest(original)!=digest(dest):raise ValueError('immutable conditional generation differs')
         if not dest.exists():shutil.copyfile(original,dest)
-        if digest(original)!=digest(dest):raise ValueError('conditional generation copy SHA mismatch')
     record=dict(identity,schema=SCHEMA,selection_schema=_selection_schema,source_update=int(update),
         checkpoint=str((generation/'best_model.pt').resolve()),actor=str((generation/'best_actor.pkl').resolve()),
         **hashes,validation_dir=str(validation),panel_identity=meta,logical_identity=logical_identity,alphas=summary['alphas'],
         score_tuple=key,qualified_task=summary['qualified_task'],qualified=summary.get('qualified',summary['qualified_task']),
         qualified_preference=summary.get('qualified_preference'),metrics=summary)
     if _selection_schema in (RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA):
-        record.update(acceptance=summary['acceptance'],acceptance_sha256=summary['acceptance_sha256'],
+        record.update(acceptance=summary['acceptance'],acceptance_key=summary['acceptance_key'],
             qualified_research_preference=summary['qualified_research_preference'],
             legacy_strict_preference_qualified=summary['legacy_strict_preference_qualified'])
     atomic_json(generation/'selection.json',record);atomic_json(pointer,record)
@@ -461,12 +451,12 @@ def summarize_preference(panels,config):
         return _summarize_conflict_preference(panels,config,acceptance)
     if config['preference_selection_schema']==PREFERENCE_SELECTION_SCHEMA:
         return _summarize_strong_preference(panels,config)
-    from .preference_best import config_hash
+    from .path_command_policy import config_key
     legacy=_summarize_strong_preference(panels,dict(config,preference_selection_schema=PREFERENCE_SELECTION_SCHEMA))
     result=summarize_conditional(panels,config)
     result.update(selection_schema=RESEARCH_PREFERENCE_SELECTION_SCHEMA,
         qualification_role='fixed_alpha_research_behavior',acceptance=acceptance,
-        acceptance_sha256=config_hash(acceptance),preference_cases={},research_goal_hold_failures=0,
+        acceptance_key=config_key(acceptance),preference_cases={},research_goal_hold_failures=0,
         highspeed_endpoint_failures=0,preference_direction_failures=0,incomplete_turn_conditions=0,
         legacy_strict_preference_qualified=legacy['qualified_preference'],
         legacy_strict_preference_metrics=legacy)
@@ -538,34 +528,31 @@ def persist_preference_best(root,checkpoint,actor,summary,identity):
     update=identity.get('source_update',identity.get('update'))
     if update is None:raise ValueError('strong preference requires source update')
     from .path_command_policy import MODULATED_ARCHITECTURE,validate_actor_parameters
-    from .preference_best import config_hash
-    from .path_command_evaluation import _conditional_parameter_digest
+    from .path_command_policy import config_key
     import pickle
     if identity.get('architecture')!=MODULATED_ARCHITECTURE or identity.get('reward_version')!='path_safety_preference_v2':
         raise ValueError('strong preference architecture/reward identity mismatch')
     folder=Path(identity.get('validation_dir',Path(root)/'validation'/f'update_{int(update):04d}'))
     meta=json.loads((folder/'panel_identity.json').read_text())
-    for key in ('architecture','reward_version','config_sha256'):
+    for key in ('architecture','reward_version','config_key'):
         if meta.get(key)!=identity.get(key):raise ValueError('strong preference panel identity mismatch '+key)
     if summary.get('selection_schema')==CONFLICT_PREFERENCE_SELECTION_SCHEMA:
         from .path_command_scenarios import explicit_case_declarations
-        sha=identity.get('case_declarations_sha256')
-        if not sha or meta.get('case_declarations_sha256')!=sha:raise ValueError('conflict preference declaration identity mismatch')
+        sha=identity.get('case_declarations_key')
+        if not sha or meta.get('case_declarations_key')!=sha:raise ValueError('conflict preference declaration identity mismatch')
         record=json.loads((folder/'source.json').read_text())
-        if record.get('case_declarations_sha256')!=sha:raise ValueError('conflict preference source declaration identity mismatch')
+        if record.get('case_declarations_key')!=sha:raise ValueError('conflict preference source declaration identity mismatch')
     research=summary.get('selection_schema') in (RESEARCH_PREFERENCE_SELECTION_SCHEMA,CONFLICT_PREFERENCE_SELECTION_SCHEMA)
     if research:
         acceptance=summary.get('acceptance')
-        sha=config_hash(acceptance)
-        if summary.get('acceptance_sha256')!=sha or identity.get('acceptance_sha256')!=sha or meta.get('acceptance_sha256')!=sha:
+        sha=config_key(acceptance)
+        if summary.get('acceptance_key')!=sha or identity.get('acceptance_key')!=sha or meta.get('acceptance_key')!=sha:
             raise ValueError('research preference acceptance identity mismatch')
         # Source identity pins the SHA; the full acceptance is retained in the pointer.
         source=json.loads((folder/'source.json').read_text())
-        if source.get('acceptance_sha256')!=sha:raise ValueError('research preference source acceptance identity mismatch')
+        if source.get('acceptance_key')!=sha:raise ValueError('research preference source acceptance identity mismatch')
     with Path(actor).open('rb') as stream:params=pickle.load(stream)
     validate_actor_parameters(params,{'network':{'architecture':identity['architecture']}})
-    if _conditional_parameter_digest(params)!=meta.get('actor_parameters_sha256'):
-        raise ValueError('strong preference full Actor parameters identity mismatch')
     summary=dict(summary,score_tuple=preference_score_key(summary,update))
     return persist_conditional_best(root,checkpoint,actor,summary,identity,
         _selection_schema=summary['selection_schema'],_pointer='best_preference_model.json',
@@ -611,7 +598,7 @@ def _conflict_turn_metrics(trace,config):
 
 
 def _summarize_conflict_preference(panels,config,acceptance):
-    from .preference_best import config_hash
+    from .path_command_policy import config_key
     names=[c[0] for c in cases(config)];old_names=names[:6]
     if len(names)!=12 or set(panels)!={alpha_key(a) for a in conditional_grid(config)}:
         raise ValueError('complete 12-case five-alpha conflict panel required')
@@ -622,7 +609,7 @@ def _summarize_conflict_preference(panels,config,acceptance):
     old=summarize_preference(old_panels,old_cfg)
     result=summarize_conditional(panels,config)
     result.update(selection_schema=CONFLICT_PREFERENCE_SELECTION_SCHEMA,acceptance=acceptance,
-        acceptance_sha256=config_hash(acceptance),preference_cases={},research_goal_hold_failures=0,
+        acceptance_key=config_key(acceptance),preference_cases={},research_goal_hold_failures=0,
         highspeed_endpoint_failures=0,preference_direction_failures=0,incomplete_turn_conditions=0,
         old_regression_failures=old['highspeed_endpoint_failures']+old['incomplete_turn_conditions'],
         old_research_metrics=old,legacy_strict_preference_qualified=old['legacy_strict_preference_qualified'],

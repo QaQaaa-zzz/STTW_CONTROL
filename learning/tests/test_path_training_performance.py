@@ -30,7 +30,7 @@ def test_training_log_preserves_all_statistics_and_drops_debug_arrays():
 def test_compact_scan_matches_full_state_rewards_and_failure_tail(failure_tick,latent):
     env=minimal_env();old_tick=env.tick
     env.zero_log['lower_observation']=j.zeros(210)
-    def tick(s,z,path,speed):
+    def tick(s,z,path,speed,**kwargs):
         end,log=old_tick(s,z,path,speed)
         return end.replace(physical=Physical((end.tick==failure_tick)&(failure_tick>0))),log
     env.tick=tick
@@ -141,3 +141,24 @@ def test_gpu_full_diagnostics_and_compact_training_twin_state(tmp_path):
     destination=Path(os.environ.get('STTW_PATH_GPU_RECEIPT',str(tmp_path/'gpu_receipt.json')))
     destination.parent.mkdir(parents=True,exist_ok=True);destination.write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt))
+
+
+def test_batch_reset_guard_skips_all_route_work_on_nonterminal_steps():
+    from flax import struct
+    @struct.dataclass
+    class Episode:
+        env_id:object
+        episode:object
+        value:object
+    called=[]
+    def reset(eid,episode):
+        jax.debug.callback(lambda eid:called.append(int(eid)),eid)
+        return Episode(eid,episode,j.float32(99.))
+    ep=Episode(j.arange(3),j.array([1,4,2]),j.array([3.,5.,7.]))
+    run=jax.jit(lambda done,fault:training.reset_finished_batch(ep,dict(done=done,engineering_fault=fault),reset))
+    kept=run(j.zeros(3,bool),j.zeros(3,bool));jax.block_until_ready(kept)
+    assert called==[]
+    np.testing.assert_array_equal(kept.value,ep.value)
+    actual=run(j.array([False,True,True]),j.array([False,False,True]));jax.block_until_ready(actual)
+    np.testing.assert_array_equal(actual.value,[3.,99.,7.])
+    np.testing.assert_array_equal(actual.episode,[1,5,2])

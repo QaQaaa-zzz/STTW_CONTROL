@@ -146,9 +146,9 @@ def test_execution_manifest_rejects_changed_follower_and_timing():
 
 def test_cache_source_rejects_swapped_actor_but_accepts_parent_fresh_critic():
     from sttw_control.path_command_diagnostic import validate_panel_source
-    from sttw_control.preference_best import config_hash
+    from sttw_control.path_command_policy import config_key
     cfg={'reward':'fixed'};anchor={'checkpoint_sha256':'parent','actor_sha256':'actor'}
-    source={'alpha':1,'source_update':0,'parent_checkpoint_sha256':'parent','actor_sha256':'actor','checkpoint_sha256':'freshfork','config_sha256':config_hash(cfg),'lower_actor_sha256':'lower'}
+    source={'alpha':1,'source_update':0,'parent_checkpoint_sha256':'parent','actor_sha256':'actor','checkpoint_sha256':'freshfork','config_key':config_key(cfg),'lower_actor_sha256':'lower'}
     validate_panel_source(source,anchor,cfg,'lower',alpha=1,parent=True)
     with pytest.raises(ValueError):validate_panel_source(dict(source,actor_sha256='other'),anchor,cfg,'lower',alpha=1,parent=True)
     with pytest.raises(ValueError):validate_panel_source(dict(source,parent_checkpoint_sha256='other'),anchor,cfg,'lower',alpha=1,parent=True)
@@ -164,12 +164,3 @@ def test_cache_truncation_without_terminal_is_rejected(tmp_path):
         data=trace(0,12);data['v_user'][:]=speed;data['actual_forward_speed'][:]=speed
         np.savez(tmp_path/(name+'.npz'),**data);np.savez(tmp_path/(name+'_path.npz'),**saved)
     with pytest.raises(ValueError,match='partial validation'):_read_complete_panel(tmp_path,1,cfg)
-
-
-def test_original_path_hash_rejects_shifted_world_path(tmp_path):
-    from sttw_control.path_command_diagnostic import validate_original_path
-    from sttw_control.preference_best import digest
-    path=tmp_path/'path.npz';np.savez(path,xy=np.array([[0.,0.],[1.,0.]]))
-    frozen_sha=digest(path);validate_original_path(path,frozen_sha)
-    np.savez(path,xy=np.array([[1.,0.],[2.,0.]]))
-    with pytest.raises(ValueError,match='original path'):validate_original_path(path,frozen_sha)

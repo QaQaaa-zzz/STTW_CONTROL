@@ -89,7 +89,7 @@ def test_evaluate_conditional_writes_unambiguous_grid_and_rejects_duplicate(tmp_
     assert tuple(result)==KEYS
     meta=json.loads((tmp_path/'panel/panel_identity.json').read_text())
     assert meta['alphas']==dict(zip(KEYS,ALPHAS))
-    assert meta['completed'] and len(meta['actor_parameters_sha256'])==64
+    assert meta['completed'] and meta['actor_parameters_sha256'] is None
     assert (tmp_path/'panel/alpha_0p25/left90_R2_2.6.npz').exists()
     with pytest.raises(ValueError,match='alpha'):
         evaluation.evaluate_conditional(SavedEvaluator(),{},[0,.5,.5,1],tmp_path/'bad')
@@ -101,7 +101,7 @@ def test_one_conditional_best_and_final_reuse_preserve_all_alphas(tmp_path):
     out=tmp_path/'validation/update_0050'
     p=evaluation.evaluate_conditional(SavedEvaluator(),actor_parameters(),ALPHAS,out)
     summary=selection.summarize_conditional(p,config())
-    source=dict(mode='shared_conditional_v1',seed=42,source_update=50,checkpoint=str(ck),actor=str(actor),checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+    source=dict(mode='shared_conditional_v1',seed=42,source_update=50,checkpoint=str(ck),actor=str(actor),checkpoint_sha256=None,actor_sha256=None)
     (out/'source.json').write_text(json.dumps(source))
     identity=dict(mode='shared_conditional_v1',source_update=50,seed=42,validation_dir=str(out))
     (tmp_path/'best_task_model.json').write_text('historical')
@@ -114,7 +114,7 @@ def test_one_conditional_best_and_final_reuse_preserve_all_alphas(tmp_path):
     assert json.loads((tmp_path/'final_best/source.json').read_text())['actor_sha256']==best['actor_sha256']
     for key in KEYS:
         np.testing.assert_array_equal(reused[key]['left90_R2_2.6']['upper_alpha'],float(selection.alpha_value(key)))
-    source['actor_sha256']='incorrect';(out/'source.json').write_text(json.dumps(source))
+    source['source_update']=49;(out/'source.json').write_text(json.dumps(source))
     with pytest.raises(ValueError,match='source|SHA|identity'):
         evaluation.reuse_conditional_best(tmp_path,best,config())
 
@@ -148,8 +148,8 @@ def report_run(tmp_path):
     destination=learner/'validation/update_0050'
     p=evaluation.evaluate_conditional(ReportingEvaluator(),actor_parameters(),ALPHAS,destination)
     identity=dict(policy_mode='shared_conditional_v1',seed=42)
-    provenance=dict(identity,source_update=50,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=selection.digest(checkpoint),
-                    actor=str(actor.resolve()),actor_sha256=selection.digest(actor),validation_dir=str(destination.resolve()))
+    provenance=dict(identity,source_update=50,checkpoint=str(checkpoint.resolve()),checkpoint_sha256=None,
+                    actor=str(actor.resolve()),actor_sha256=None,validation_dir=str(destination.resolve()))
     (destination/'source.json').write_text(json.dumps(provenance))
     best=selection.persist_conditional_best(learner,checkpoint,actor,selection.summarize_conditional(p,cfg),
         dict(identity,source_update=50,validation_dir=str(destination.resolve())))
@@ -183,7 +183,7 @@ def test_conditional_best_rejects_protocol_change_even_without_caller_hash(tmp_p
         evaluator=SavedEvaluator();evaluator.config=cfg
         out=tmp_path/f'validation/update_{update:04d}'
         p=evaluation.evaluate_conditional(evaluator,actor_parameters(),ALPHAS,out)
-        source=dict(mode='shared_conditional_v1',source_update=update,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+        source=dict(mode='shared_conditional_v1',source_update=update,checkpoint_sha256=None,actor_sha256=None)
         (out/'source.json').write_text(json.dumps(source))
         return selection.summarize_conditional(p,cfg),dict(mode='shared_conditional_v1',source_update=update,validation_dir=str(out))
     summary,identity=candidate(0,config());selection.persist_conditional_best(tmp_path,ck,actor,summary,identity)
@@ -198,7 +198,7 @@ def test_conditional_source_cannot_relabel_learner_even_with_same_weight_hashes(
     actor=tmp_path/'actor.pkl';save_actor(actor)
     out=tmp_path/'validation/update_0050'
     p=evaluation.evaluate_conditional(SavedEvaluator(),actor_parameters(),ALPHAS,out)
-    source=dict(mode='other_policy',seed=7,source_update=50,checkpoint_sha256=selection.digest(ck),actor_sha256=selection.digest(actor))
+    source=dict(mode='other_policy',seed=7,source_update=50,checkpoint_sha256=None,actor_sha256=None)
     (out/'source.json').write_text(json.dumps(source))
     with pytest.raises(ValueError,match='source.*identity'):
         selection.persist_conditional_best(tmp_path,ck,actor,selection.summarize_conditional(p,config()),
@@ -223,22 +223,22 @@ def test_research_panel_pins_acceptance_identity(tmp_path):
     params=make_path_actor(cfg).init(jax.random.PRNGKey(9),j.zeros(351))
     evaluation.evaluate_conditional(evaluator,params,ALPHAS,tmp_path/'panel')
     meta=json.loads((tmp_path/'panel/panel_identity.json').read_text())
-    from sttw_control.preference_best import config_hash
-    assert meta['acceptance_sha256']==config_hash(selection.resolve_preference_acceptance(cfg))
+    from sttw_control.path_command_policy import config_key
+    assert meta['acceptance_key']==config_key(selection.resolve_preference_acceptance(cfg))
 
 
 def test_research_report_uses_research_pointer_and_documents_diagnostic_monotonicity(tmp_path,monkeypatch):
     import test_path_strong_selection as strong
     from test_path_dynamic_preference import _research_config
-    from sttw_control.preference_best import config_hash
+    from sttw_control.path_command_policy import config_key
     from sttw_control.path_command_reporting import report_conditional_panel
-    cfg=_research_config();sha=config_hash(selection.resolve_preference_acceptance(cfg))
+    cfg=_research_config();sha=config_key(selection.resolve_preference_acceptance(cfg))
     monkeypatch.setattr(strong,'config',lambda:cfg)
     persist=selection.persist_preference_best
     def research_candidate(root,checkpoint,actor,summary,identity):
-        identity=dict(identity,acceptance_sha256=sha)
+        identity=dict(identity,acceptance_key=sha)
         source=Path(identity['validation_dir'])/'source.json'
-        metadata=json.loads(source.read_text());metadata['acceptance_sha256']=sha
+        metadata=json.loads(source.read_text());metadata['acceptance_key']=sha
         source.write_text(json.dumps(metadata))
         return persist(root,checkpoint,actor,summary,identity)
     monkeypatch.setattr(selection,'persist_preference_best',research_candidate)
@@ -246,7 +246,7 @@ def test_research_report_uses_research_pointer_and_documents_diagnostic_monotoni
     result=report_conditional_panel(tmp_path,cfg)
     assert result['model']['selection_schema']=='path_preference_research_v1'
     assert result['preference']['qualified_research_preference']
-    assert result['preference']['acceptance_sha256']==sha
+    assert result['preference']['acceptance_key']==sha
     text=(tmp_path/'report/INDEX.md').read_text()
     assert 'Adjacent-alpha monotonicity role: diagnostic' in text
     assert 'Legacy strict preference diagnostic:' in text
@@ -263,6 +263,7 @@ def test_last_receipt_is_unknown_when_missing_and_rebuilt_when_saved(tmp_path):
     last=_conditional_last_receipt(learner,cfg,best)
     assert last['state']=='verified_saved_panel' and last['source_update']==50
     assert last['summary']['qualified_task']
-    data=json.loads((learner/'last_completed.json').read_text());data['checkpoint_sha256']='tampered'
-    (learner/'last_completed.json').write_text(json.dumps(data))
-    with pytest.raises(ValueError,match='last.*SHA'):_conditional_last_receipt(learner,cfg,best)
+    source_file=Path(best['validation_dir'])/'source.json'
+    data=json.loads(source_file.read_text());data['source_update']=49
+    source_file.write_text(json.dumps(data))
+    with pytest.raises(ValueError,match='last.*identity'):_conditional_last_receipt(learner,cfg,best)

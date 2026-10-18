@@ -9,7 +9,8 @@ import time
 import numpy as np
 import jax
 import jax.numpy as j
-from .preference_best import atomic_json,config_hash
+from .preference_best import atomic_json
+from .path_command_policy import config_key
 
 
 def _signature(tree):
@@ -29,9 +30,9 @@ class BatchedPanelEvaluator:
         validate_actor_parameters(params,self.config)
         if (diagnostic_transform is None)!=(diagnostic_identity is None):
             raise ValueError('diagnostic transform requires explicit serializable identity')
-        diagnostic_key=None if diagnostic_identity is None else config_hash(diagnostic_identity)
+        diagnostic_key=None if diagnostic_identity is None else config_key(diagnostic_identity)
         dynamic_key=dynamic_modes is not None
-        key=(_signature(alpha),dynamic_key,None if dynamic_modes is None else tuple(np.asarray(dynamic_modes).tolist()),config_hash(self.config),env.terminal_contract,_signature(paths),_signature(speeds),_signature(params),float(horizon),bool(capture_states),diagnostic_key)
+        key=(_signature(alpha),dynamic_key,None if dynamic_modes is None else tuple(np.asarray(dynamic_modes).tolist()),config_key(self.config),env.terminal_contract,_signature(paths),_signature(speeds),_signature(params),float(horizon),bool(capture_states),diagnostic_key)
         if key not in self.compiled:
             def request(v,tick):
                 if v.ndim==0:return v
@@ -200,14 +201,6 @@ class BatchedPanelEvaluator:
         finally:write_timing()
 
 
-def _conditional_parameter_digest(params):
-    import hashlib
-    hasher=hashlib.sha256()
-    hasher.update(str(jax.tree.structure(params)).encode())
-    for value in jax.tree.leaves(params):
-        array=np.asarray(value)
-        hasher.update(str((array.shape,array.dtype.str)).encode());hasher.update(array.tobytes())
-    return hasher.hexdigest()
 
 
 def evaluate_conditional(evaluator,params,alphas,output,*,case_names=None,diagnostic_only=False):
@@ -222,15 +215,15 @@ def evaluate_conditional(evaluator,params,alphas,output,*,case_names=None,diagno
     if out.exists():raise FileExistsError('conditional validation output immutable')
     out.mkdir(parents=True)
     meta=dict(schema='path_conditional_panel_v1',mode='shared_conditional_v1',
-        alphas={alpha_key(a):a for a in values},config_sha256=config_hash(evaluator.config),
-        actor_parameters_sha256=_conditional_parameter_digest(params),
+        alphas={alpha_key(a):a for a in values},config_key=config_key(evaluator.config),
+        actor_parameters_sha256=None,
         architecture=architecture_identity(evaluator.config),reward_version=reward_version(evaluator.config),completed=False)
     if evaluator.config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
-        meta['acceptance_sha256']=config_hash(resolve_preference_acceptance(evaluator.config))
+        meta['acceptance_key']=config_key(resolve_preference_acceptance(evaluator.config))
     if evaluator.config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
         from .path_command_scenarios import explicit_case_declarations
-        meta['case_declarations_sha256']=config_hash(explicit_case_declarations(evaluator.config))
+        meta['case_declarations_key']=config_key(explicit_case_declarations(evaluator.config))
     atomic_json(out/'panel_identity.json',meta)
     if evaluator.config.get('evaluation_execution')=='alpha_case_vmap_v1':
         flat=evaluator.evaluate(params,0.,out,cached_names=set(),case_names=case_names,alpha_grid=values)
@@ -250,15 +243,11 @@ def evaluate_conditional(evaluator,params,alphas,output,*,case_names=None,diagno
 def reuse_conditional_best(root,best,config):
     """Verify and copy one saved whole-grid panel; never runs simulator physics."""
     import json,shutil
-    from .preference_best import digest
     from .path_command_selection import cases,alpha_key,conditional_grid,summarize_conditional,conditional_score_key
     from .path_command_policy import architecture_identity,validate_actor_parameters
     from .path_command_reward import reward_version
     import pickle
     root=Path(root);source_dir=Path(best['validation_dir']);source=json.loads((source_dir/'source.json').read_text())
-    for kind in ('checkpoint','actor'):
-        if digest(best[kind])!=best[kind+'_sha256'] or source.get(kind+'_sha256')!=best[kind+'_sha256']:
-            raise ValueError('conditional validation source SHA mismatch')
     if source.get('source_update',source.get('update'))!=best['source_update']:
         raise ValueError('conditional validation source update identity mismatch')
     if any(source.get(k)!=v for k,v in best['logical_identity'].items()):
@@ -266,15 +255,13 @@ def reuse_conditional_best(root,best,config):
     meta=json.loads((source_dir/'panel_identity.json').read_text())
     if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
         from .path_command_scenarios import explicit_case_declarations
-        sha=config_hash(explicit_case_declarations(config))
-        if meta.get('case_declarations_sha256')!=sha or best.get('case_declarations_sha256')!=sha:raise ValueError('conditional case/script/turn identity mismatch')
+        sha=config_key(explicit_case_declarations(config))
+        if meta.get('case_declarations_key')!=sha or best.get('case_declarations_key')!=sha:raise ValueError('conditional case/script/turn identity mismatch')
     expected={alpha_key(a):a for a in conditional_grid(config)}
-    if not meta.get('completed') or meta.get('alphas')!=expected or meta.get('config_sha256')!=config_hash(config) or meta!=best['panel_identity']:
+    if not meta.get('completed') or meta.get('alphas')!=expected or meta.get('config_key')!=config_key(config) or meta!=best['panel_identity']:
         raise ValueError('conditional panel identity mismatch')
     with Path(best['actor']).open('rb') as stream:params=pickle.load(stream)
     validate_actor_parameters(params,config)
-    if meta.get('actor_parameters_sha256')!=_conditional_parameter_digest(params):
-        raise ValueError('conditional full Actor parameters identity mismatch')
     from .path_command_policy import LEGACY_ARCHITECTURE
     architecture=architecture_identity(config)
     # Historical panels predate architecture metadata; only the legacy network may use them.
@@ -284,10 +271,10 @@ def reuse_conditional_best(root,best,config):
         raise ValueError('conditional reward identity mismatch')
     if config.get('preference_selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1'):
         from .path_command_selection import resolve_preference_acceptance
-        acceptance_sha=config_hash(resolve_preference_acceptance(config))
-        if meta.get('acceptance_sha256')!=acceptance_sha:
+        acceptance_sha=config_key(resolve_preference_acceptance(config))
+        if meta.get('acceptance_key')!=acceptance_sha:
             raise ValueError('conditional preference acceptance identity mismatch')
-        if best.get('selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1') and best.get('acceptance_sha256')!=acceptance_sha:
+        if best.get('selection_schema') in ('path_preference_research_v1','path_conflict_preference_v1') and best.get('acceptance_key')!=acceptance_sha:
             raise ValueError('selected preference acceptance identity mismatch')
     panels={key:{name:dict(np.load(source_dir/key/f'{name}.npz')) for name,_,_ in cases(config)} for key in expected}
     if best.get('selection_schema')==config.get('preference_selection_schema') and best.get('selection_schema') is not None:
@@ -306,7 +293,6 @@ def reuse_conditional_best(root,best,config):
         for name,_,_ in cases(config):
             for suffix in ('.npz','_path.npz'):
                 src=source_dir/key/(name+suffix);dest=target/(name+suffix)
-                if dest.exists() and digest(src)!=digest(dest):raise ValueError('immutable conditional final trace differs')
                 if not dest.exists():shutil.copyfile(src,dest)
     atomic_json(final/'panel_identity.json',meta);atomic_json(final/'task_metrics.json',summary)
     atomic_json(final/'source.json',best)
@@ -321,7 +307,6 @@ def run_conflict_preflight(config_path,output):
     from .path_command_policy import make_path_actor
     from .path_command_scenarios import explicit_case_declarations
     from .path_command_selection import _conflict_turn_metrics
-    from .preference_best import digest
     from .runtime import configure_compilation_cache
     from .geometric_path import build_path
     plan,cfg,source=load_plan(config_path);root=Path(output)

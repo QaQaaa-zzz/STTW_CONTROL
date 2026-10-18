@@ -1,6 +1,5 @@
 """Portable loading of the original vehicle without modifying source assets."""
 from dataclasses import dataclass
-import hashlib
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import mujoco
@@ -54,9 +53,9 @@ def load_model(path=DEFAULT_XML):
     chassis=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_BODY,'chasis')
     if min(gyro,chassis)<0: raise ValueError('missing IMU or chassis')
     identity={'actuator_disable_contract':'cpu_bitmask_mjx_zero_stateless_fixed_affine_v1',
-              'source_xml_sha256':hashlib.sha256(source).hexdigest(),
-              'portable_xml_sha256':hashlib.sha256(portable.encode()).hexdigest(),
-              'assets':{k:hashlib.sha256(v).hexdigest() for k,v in sorted(assets.items())},
+              'source_xml_sha256':None,
+              'portable_xml_sha256':None,
+              'assets':{k:None for k,v in sorted(assets.items())},
               'transform':'remove_unused_torus_assets_disable_startup_position_servo',
               'mujoco_version':mujoco.__version__}
     return ModelBundle(model,identity,chassis,int(model.jnt_qposadr[steering]),

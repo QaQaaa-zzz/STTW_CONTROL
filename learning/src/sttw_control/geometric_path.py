@@ -1,5 +1,6 @@
 """Fixed world route, left-positive cross track and bounded local projection."""
 import numpy as np
+import jax
 import jax.numpy as j
 from flax import struct
 
@@ -60,24 +61,59 @@ def build_path(name, pose, config, lateral_offset=0.):
     return path
 
 
+def _grid_index(path,s):
+    """All generated routes use a uniform grid; use actual float32 knots."""
+    last=path.s.shape[0]-1
+    spacing=(path.s[-1]-path.s[0])/last
+    idx=j.clip(j.floor((s-path.s[0])/spacing).astype(j.int32),0,last-1)
+    # Grid rounding can put an exact knot on either side of the estimate.
+    idx=j.where(s<path.s[idx],j.maximum(idx-1,0),idx)
+    return j.where(s>=path.s[idx+1],j.minimum(idx+1,last-1),idx)
+
+
 def at(path,s):
-    return j.stack([j.interp(s,path.s,path.xy[:,0]),j.interp(s,path.s,path.xy[:,1])]),j.interp(s,path.s,path.heading),j.interp(s,path.s,path.curvature)
+    s=j.clip(s,path.s[0],path.s[-1]);idx=_grid_index(path,s)
+    fraction=(s-path.s[idx])/(path.s[idx+1]-path.s[idx])
+    interp=lambda values:values[idx]+fraction*(values[idx+1]-values[idx])
+    return interp(path.xy),interp(path.heading),interp(path.curvature)
 
 
 def project(path,xy,previous,distance,config):
     c=config['path'];lo=j.maximum(0.,previous-c['projection_backward_m'])
     hi=j.minimum(path.s[-1],previous+j.maximum(c['projection_forward_floor_m'],c['projection_forward_motion_multiplier']*distance+c['projection_forward_padding_m']))
-    a=path.xy[:-1];v=path.xy[1:]-a;span=path.s[1:]-path.s[:-1]
-    u=j.sum((xy-a)*v,axis=-1)/j.sum(v*v,axis=-1)
-    u=j.clip(u,j.clip((lo-path.s[:-1])/span,0,1),j.clip((hi-path.s[:-1])/span,0,1))
-    ss=path.s[:-1]+u*span;points=a+u[:,None]*v
-    valid=(path.s[1:]>=lo)&(path.s[:-1]<=hi)
-    d2=j.where(valid,j.sum((xy-points)**2,axis=-1),j.inf);minimum=j.min(d2)
-    # Tie tolerance only for floating-point identical projections.
-    idx=j.argmin(j.where(d2<=minimum+1e-10,j.abs(ss-previous),j.inf))
-    h=j.interp(ss[idx],path.s,path.heading);delta=xy-points[idx]
+    count=path.s.shape[0]-1;width=min(64,count)
+    start=_grid_index(path,lo)
+    start=j.where(path.s[start]>=lo,j.maximum(start-1,0),start)
+    def segment_data(base):
+        ids=base+j.arange(width);index=j.minimum(ids,count-1)
+        knots=path.s[index];span=path.s[index+1]-knots
+        a=path.xy[index];v=path.xy[index+1]-a
+        u=j.sum((xy-a)*v,axis=-1)/j.sum(v*v,axis=-1)
+        u=j.clip(u,j.clip((lo-knots)/span,0,1),j.clip((hi-knots)/span,0,1))
+        ss=knots+u*span;points=a+u[:,None]*v
+        valid=(ids<count)&(path.s[index+1]>=lo)&(knots<=hi)
+        d2=j.where(valid,j.sum((xy-points)**2,axis=-1),j.inf)
+        return ss,points,d2
+    def has_segments(carry):
+        base=carry[0]
+        return (base<count)&(path.s[j.minimum(base,count)]<=hi)
+    def minimum_step(carry):
+        base,minimum=carry;_,_,d2=segment_data(base)
+        return base+width,j.minimum(minimum,j.min(d2))
+    _,minimum=jax.lax.while_loop(has_segments,minimum_step,(start,j.asarray(j.inf,xy.dtype)))
+    # Second local pass preserves the original global min+1e-10 tie rule,
+    # even when an unusually wide motion window spans multiple blocks.
+    def nearest_step(carry):
+        base,best_distance,best_s,best_point=carry
+        ss,points,d2=segment_data(base)
+        delta=j.where(d2<=minimum+1e-10,j.abs(ss-previous),j.inf)
+        idx=j.argmin(delta);choose=delta[idx]<best_distance
+        return base+width,j.minimum(best_distance,delta[idx]),j.where(choose,ss[idx],best_s),j.where(choose,points[idx],best_point)
+    _,_,selected,point=jax.lax.while_loop(has_segments,nearest_step,
+        (start,j.asarray(j.inf,xy.dtype),path.s[0],path.xy[0]))
+    _,h,_=at(path,selected);delta=xy-point
     ey=-j.sin(h)*delta[0]+j.cos(h)*delta[1]
-    return Projection(j.maximum(previous,ss[idx]),ss[idx],points[idx],ey,h)
+    return Projection(j.maximum(previous,selected),selected,point,ey,h)
 
 
 def wrap(angle):return j.arctan2(j.sin(angle),j.cos(angle))

@@ -13,6 +13,20 @@ from sttw_control.preference_best import atomic_json,digest
 
 ROOT=Path(__file__).parents[2]
 
+from flax import struct
+@struct.dataclass
+class RunnerState:
+    tick:object
+    alpha:object
+    fault:object
+@struct.dataclass
+class RunnerRoute:
+    path:object
+    speed:object
+    family:object
+    sample_group:object
+
+
 @pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference','path_unified_scratch'])
 def test_preparation_counts_one_learner_and_engineering_has_no_dev(tmp_path,prefix):
     formal=training.prepare(ROOT/'learning/configs'/f'{prefix}_run.json',tmp_path/'formal')
@@ -56,23 +70,14 @@ def test_shared_checkpoint_resume_keeps_identity_rng_and_mixed_alpha_ppo(tmp_pat
 
 
 @pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json','path_unified_scratch_engineering.json'])
-def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch,plan_file):
+@pytest.mark.parametrize('engineering_fault',[False,True])
+def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch,plan_file,engineering_fault):
     """Exercise the real orchestration/PPO on a deterministic non-physical batch."""
     from flax import struct
     from sttw_control import path_command_statistics as statistics
     from sttw_control import path_command_evaluation as evaluation
     from sttw_control import direct_command_training
-    @struct.dataclass
-    class State:
-        tick:object
-        alpha:object
-        fault:object
-    @struct.dataclass
-    class Route:
-        path:object
-        speed:object
-        family:object
-        sample_group:object
+    State=RunnerState;Route=RunnerRoute
     class Batch:
         def __init__(self,env,snapshot,config,seed,alpha):
             assert alpha is None
@@ -84,9 +89,10 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
         def observation(self,ep):
             obs=j.zeros(351).at[336].set(ep.state.alpha)
             return obs,j.concatenate([obs,j.ones(1)]),ep.state.fault
-        def advance_one(self,ep,z,absolute_update=1):
+        def advance_one(self,ep,z,absolute_update=1,*,auto_reset=True):
             nxt=ep.replace(state=ep.state.replace(tick=ep.state.tick+4));obs=self.observation(nxt)
             flags={k:j.bool_(False) for k in ('engineering_fault','done','physical_failure','tracking_domain_failure')}
+            flags['engineering_fault']=j.asarray(engineering_fault)
             stats=dict(active_ticks=j.int32(4),rollout=j.array([4.,0.,0.,0.,-.01,0.]),completed_totals=j.zeros(6),
                 completed_component_costs=j.zeros(10),diagnostics={'count':j.float32(4)},component_caps={k:j.int32(0) for k in statistics.COST_KEYS})
             return nxt,obs,j.float32(-.01),flags,obs,stats
@@ -95,7 +101,11 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
     monkeypatch.setattr(training,'load_environment',lambda *args:(env,None))
     original=training.make_algorithm;calls=[]
     def cpu_algorithm(obs,steps,config,device):
-        calls.append((len(obs),steps));return original(obs,steps,config,'cpu')
+        calls.append((len(obs),steps));algo=original(obs,steps,config,'cpu')
+        if engineering_fault:
+            algo.compute_returns=lambda *a:pytest.fail('faulty rollout must not enter GAE')
+            algo.update=lambda *a:pytest.fail('faulty rollout must not optimize')
+        return algo
     monkeypatch.setattr(training,'make_algorithm',cpu_algorithm)
     monkeypatch.setattr(training,'_start_tensorboard',lambda root:{'url':'test-only'})
     monkeypatch.setattr(training,'_verify_reward_http',lambda *args:True)
@@ -106,6 +116,14 @@ def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeyp
     if plan_file=='path_unified_scratch_engineering.json':
         from sttw_control import path_command_conditioning as c
         monkeypatch.setattr(c,'initialize_conditional_actor',lambda *a,**kw:pytest.fail('scratch importing parent'))
+    if engineering_fault:
+        with pytest.raises(RuntimeError,match='discard rollout'):
+            training.train(ROOT/'learning/configs'/plan_file,out,execute=True)
+        status=json.loads((out/'status.json').read_text())
+        assert status['state']=='error' and status['policy_transitions_total']==128
+        assert not (out/'shared/checkpoints/update_0001.pt').exists()
+        assert (out/'shared/engineering_fault_states.pkl').exists()
+        return
     training.train(ROOT/'learning/configs'/plan_file,out,execute=True)
     status=json.loads((out/'status.json').read_text());receipt=json.loads((out/'shared/engineering_receipt.json').read_text())
     assert calls==[(8,16)] and status['state']=='completed' and status['shared_updates']==1
@@ -133,7 +151,7 @@ def test_resume_completes_only_saved_boundary_validation(tmp_path,monkeypatch,up
         boundary.mkdir(parents=True)
         atomic_json(boundary/'panel_identity.json',dict(schema='path_conditional_panel_v1',mode=conditioning.MODE,
             completed=completeness=='complete',alphas={selection.alpha_key(a):a for a in plan['alphas']},
-            config_sha256=training.config_hash(cfg),actor_parameters_sha256=evaluation._conditional_parameter_digest(params)))
+            config_key=training.config_key(cfg),actor_parameters_sha256=None))
         atomic_json(boundary/'source.json',dict(identity,source_update=update,checkpoint=str(checkpoint),checkpoint_sha256=digest(checkpoint),actor=str(actor),actor_sha256=digest(actor)))
         for alpha in plan['alphas']:
             folder=boundary/selection.alpha_key(alpha);folder.mkdir()

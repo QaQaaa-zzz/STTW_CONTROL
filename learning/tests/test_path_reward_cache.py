@@ -38,14 +38,15 @@ def test_initial_reward_candidate_and_final_panel_reuse_end_to_end(tmp_path):
     from sttw_control.path_command_fork import load_weights_only
     from sttw_control.path_command_cache import reuse_reward_parent,reuse_selected_validation
     from sttw_control.geometric_path import Path as FixedPath
-    from sttw_control.preference_best import config_hash,digest
+    from sttw_control.preference_best import digest
+    from sttw_control.path_command_policy import config_key
     parent=ROOT/'runs/path_reward_peak_review_20261011'
     manifest=json.loads((parent/'manifest.json').read_text());cfg=json.loads(json.dumps(manifest['config']))
     additions=load_plan(ROOT/'learning/configs/path_safety_candidate_run.json')[1]['path_reward']
     cfg['path_reward']=additions;cfg['task_selection_schema']='path_safety_task_v1'
     record=json.loads((parent/'alpha0/best_task_model.json').read_text())
-    identity={k:record[k] for k in ('schema','alpha','lower_actor_sha256','config_sha256','sampler_sha256','best_sha256','seed')}
-    identity['config_sha256']=config_hash(cfg)
+    identity={k:record[k] for k in ('schema','alpha','lower_actor_sha256','config_key','sampler_key','best_key','seed')}
+    identity['config_key']=config_key(cfg)
     obs=TensorDict({'policy':torch.zeros(8,351),'critic':torch.zeros(8,352)},batch_size=[8]);algo=make_algorithm(obs,16,cfg,'cpu')
     load_weights_only(algo,torch.load(record['checkpoint'],map_location='cpu',weights_only=False))
     ck=save_checkpoint(tmp_path/'alpha0/checkpoints',algo,0,identity)

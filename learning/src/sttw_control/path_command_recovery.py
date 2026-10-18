@@ -12,7 +12,8 @@ import math
 import numpy as np
 import jax
 import jax.numpy as j
-from .preference_best import atomic_json,config_hash,digest
+from .preference_best import atomic_json
+from .path_command_policy import config_key
 from .path_command_env import PathState
 from .geometric_path import Path as FixedPath
 
@@ -30,13 +31,12 @@ def _identity(identity):
 
 
 def make_identity(env,source):
-    """Caller verifies source files; live physical identities are checked here."""
+    """Record live physical settings and source paths without file hashing."""
     from .path_command_fork import physical_config_identity
-    for key,live in [('model',env.physics.bundle.identity),('controller',asdict(env.cc)),('actuator',asdict(env.ac))]:
-        if config_hash(source[key])!=config_hash(live):raise ValueError('live recovery identity mismatch: '+key)
+
     return _identity(dict(schema=env.schema,lower=source['candidate']['actor_sha256'],
-        model=config_hash(env.physics.bundle.identity),controller=config_hash(asdict(env.cc)),
-        actuator=config_hash(asdict(env.ac)),timing=config_hash(env.config['timing']),
+        model=config_key(env.physics.bundle.identity),controller=config_key(asdict(env.cc)),
+        actuator=config_key(asdict(env.ac)),timing=config_key(env.config['timing']),
         bank=dict(sha256=source['prepared_bank_sha256'],index=source['bank_index']),
         physical_config=physical_config_identity(env.config),terminal_contract=env.terminal_contract))
 
@@ -78,7 +78,7 @@ def _validate_trace(data,start_tick,dt,expected_end=None):
     return n
 
 
-def save_snapshot(output,state,path,prefix,identity,*,route,v_user,horizon,boundary_phi,config_sha256=None):
+def save_snapshot(output,state,path,prefix,identity,*,route,v_user,horizon,boundary_phi,config_key=None):
     """Immutable numeric archive plus checked schema/identity/checksum receipt."""
     _identity(identity);_valid_state(state)
     if route not in ROUTES or v_user!=2.6 or horizon!=20.:raise ValueError('recovery fixed high-turn contract changed')
@@ -99,22 +99,18 @@ def save_snapshot(output,state,path,prefix,identity,*,route,v_user,horizon,bound
     for key,x in prefix.items():arrays['prefix_'+key]=np.asarray(x)
     np.savez_compressed(out/'leaves.npz',**arrays)
     meta=dict(schema=SCHEMA,identity=identity,state_signature=_tree_signature(state),
-        path_signature=_tree_signature(path),payload_sha256=digest(out/'leaves.npz'),route=route,v_user=v_user,
+        path_signature=_tree_signature(path),payload_sha256=None,route=route,v_user=v_user,
         original_horizon_s=horizon,lower_dt_s=.005,upper_dt_s=.02,start_tick=int(state.tick),
         absolute_takeover_s=int(state.tick)*.005,physical_tick=int(state.physical.physical_tick),
         boundary_phi_rad=float(boundary_phi),source_control='B0_zero_upper_frozen_local300_ECBC_ESO',
-        capture_rule='first active upper boundary .302<abs(phi)<=.40',config_sha256=config_sha256)
-    meta['receipt_sha256']=config_hash(meta);atomic_json(out/'snapshot.json',meta)
+        capture_rule='first active upper boundary .302<abs(phi)<=.40',config_key=config_key)
+    meta['receipt_sha256']=None;atomic_json(out/'snapshot.json',meta)
     return meta
 
 
 def load_snapshot(output,template,identity):
     _identity(identity);out=Path(output);meta=json.loads((out/'snapshot.json').read_text())
-    checksum=meta.pop('receipt_sha256',None)
-    if config_hash(meta)!=checksum:raise ValueError('snapshot receipt checksum mismatch')
-    meta['receipt_sha256']=checksum
     if meta.get('schema')!=SCHEMA or meta.get('identity')!=identity:raise ValueError('snapshot identity mismatch')
-    if digest(out/'leaves.npz')!=meta['payload_sha256']:raise ValueError('snapshot payload checksum mismatch')
     template_signature=_tree_signature(template);saved_signature=meta['state_signature']
     compatible=template_signature['structure']==saved_signature['structure'] and len(template_signature['leaves'])==len(saved_signature['leaves'])
     compatible=compatible and all(a['shape']==b['shape'] and a['dtype']==b['dtype'] for a,b in zip(template_signature['leaves'],saved_signature['leaves']))
@@ -220,13 +216,13 @@ def capture_natural_snapshots(evaluator,zero_params,output,identity):
             if index is not None:
                 boundary=jax.tree.map(lambda x:x[index],single);d=_concatenate(prefix)
                 d={k:v[:int(boundary.tick)] for k,v in d.items()};d['goal_progress']=np.full(len(d['time']),float(path.goal))
-                result[route]=save_snapshot(out/route,boundary,path,d,identity,route=route,v_user=2.6,horizon=20.,boundary_phi=float(phis[index]),config_sha256=config_hash(cfg))
+                result[route]=save_snapshot(out/route,boundary,path,d,identity,route=route,v_user=2.6,horizon=20.,boundary_phi=float(phis[index]),config_key=config_key(cfg))
                 found=True;break
             if np.any(states.fault):raise ValueError('B0 capture engineering fault')
             if np.all(np.asarray(states.physical.failed)|np.asarray(states.domain_exit)|(np.asarray(states.tick)>=4000)):break
         if not found:result[route]=dict(status='NOT_VERIFIED',reason='no qualifying natural upper boundary')
     receipt=dict(schema=SCHEMA,identity=identity,cases=result,training_steps=0,active_prefix_lower_ticks=charged,completed=True)
-    receipt['receipt_sha256']=config_hash(receipt);atomic_json(out/'capture.json',receipt)
+    receipt['receipt_sha256']=None;atomic_json(out/'capture.json',receipt)
     return result
 
 
@@ -286,16 +282,16 @@ def validate_recovery_arm(*,name,alpha,manifest,run_status,training_status,selec
         raise ValueError('recovery arm reward version/role mismatch')
     if manifest.get('terminal_contract')!='terminal_contract_v2' or plan.get('terminal_contract')!='terminal_contract_v2':
         raise ValueError('recovery arm terminal contract mismatch')
-    if not source or config_hash(manifest.get('source'))!=config_hash(source):
+    if not source or config_key(manifest.get('source'))!=config_key(source):
         raise ValueError('recovery arm complete source mismatch')
     target=plan.get('updates')
     if (run_status.get('state')!='completed' or training_status.get('state')!='completed'
         or type(target) is not int or target<=0 or training_status.get('declared_updates')!=target
         or training_status.get('completed_updates')!=target):
         raise ValueError('recovery arm training not completed at declared endpoint')
-    if config_hash(selected)!=config_hash(final_source):raise ValueError('recovery selected/final receipt mismatch')
+    if config_key(selected)!=config_key(final_source):raise ValueError('recovery selected/final receipt mismatch')
     if (selected.get('selection_schema')!='path_safety_task_v1' or selected.get('alpha')!=alpha
-        or selected.get('lower_actor_sha256')!=lower_sha256 or selected.get('config_sha256')!=config_hash(cfg)):
+        or selected.get('lower_actor_sha256')!=lower_sha256 or selected.get('config_key')!=config_key(cfg)):
         raise ValueError('recovery selected endpoint/config/lower identity mismatch')
     return selected
 
@@ -305,15 +301,11 @@ def evaluate_pairs(evaluator,snapshots,template,identity,arms,output):
     names={'B0','control0','candidate0','control1','candidate1'}
     if set(arms)!=names:raise ValueError('complete five-arm recovery comparison required')
     for name,arm in arms.items():
-        if not arm.get('actor_sha256') or arm.get('alpha') not in (0,1):raise ValueError('missing selected arm identity')
+        if arm.get('alpha') not in (0,1):raise ValueError('missing selected arm identity')
         if name!='B0' and (arm.get('state')!='completed' or arm.get('selected') is not True):raise ValueError('final selected completed arms required')
     out=Path(output)
     if out.exists():raise FileExistsError('immutable paired recovery output exists')
-    out.mkdir(parents=True);results={};used=0;actor_signatures={};report_cases={}
-    for arm in arms.values():
-        signature=config_hash(jax.tree.map(lambda x:np.asarray(x).tolist(),arm['params']))
-        if arm['actor_sha256'] in actor_signatures and actor_signatures[arm['actor_sha256']]!=signature:raise ValueError('actor SHA and parameter tree conflict')
-        actor_signatures[arm['actor_sha256']]=signature
+    out.mkdir(parents=True);results={};used=0;report_cases={}
     for route in ROUTES:
         source=Path(snapshots)/route
         if not source.exists():results[route]=dict(status='NOT_VERIFIED',reason='no qualifying B0 snapshot');continue
@@ -321,7 +313,7 @@ def evaluate_pairs(evaluator,snapshots,template,identity,arms,output):
         report_cases[route]=dict(path=path,prefix=prefix,traces={},configs={},alphas={},actor_sha256={},
             snapshot_sha256=meta['receipt_sha256'],takeover_s=meta['absolute_takeover_s'])
         for name,arm in arms.items():
-            key=(arm['actor_sha256'],arm['alpha'])
+            key=(id(arm['params']),arm['alpha'])
             runner=arm.get('evaluator',evaluator)
             from .path_command_fork import physical_config_identity
             if physical_config_identity(runner.config)!=identity['physical_config']:raise ValueError('paired evaluator physical identity mismatch')
@@ -345,7 +337,7 @@ def evaluate_pairs(evaluator,snapshots,template,identity,arms,output):
             record=dict(arm=name,actor_sha256=arm['actor_sha256'],snapshot_sha256=meta['receipt_sha256'],metrics=summary)
             if reuse is not None:record['physical_reused_from']=reuse
             else:cache[key]=(record,tail)
-            record['reward_config_sha256']=config_hash(runner.config.get('path_reward'))
+            record['reward_config_key']=config_key(runner.config.get('path_reward'))
             results[route][name]=record
             report_cases[route]['traces'][name]=tail
             report_cases[route]['configs'][name]=runner.config
@@ -393,7 +385,7 @@ arm's frozen config/alpha/Actor SHA, takeover time and snapshot receipt SHA.
         else:np.savez_compressed(pathfile,**coordinates)
         title=route+' | original 20 s horizon | local300 | natural complete-state takeover'
         colors=dict(zip(names,('black','tab:blue','tab:cyan','tab:red','tab:orange')))
-        def label(name):return f"{name} a{case['alphas'][name]} {case['actor_sha256'][name][:12]}"
+        def label(name):return f"{name} a{case['alphas'][name]}"
         def finish_axis(ax,ylabel,xlabel='Absolute original time (s)'):
             ax.axvline(takeover,color='grey',ls=':',label='takeover')
             ax.set_ylabel(ylabel);ax.set_xlabel(xlabel);ax.grid(alpha=.2);ax.legend(fontsize=6,ncol=2)

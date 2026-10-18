@@ -31,7 +31,7 @@ class Episode:
 def minimal_env():
  env=PathCommandEnv.__new__(PathCommandEnv);env.config=CFG;env.cc=SimpleNamespace(dt=.005);env.terminal_contract='terminal_contract_v2';env.record_frame=lambda s:s
  env.zero_log=dict(active_tick=j.bool_(False),tick_reward=j.array(0.),raw_components={'offset_rate':j.array(0.)},effective_components={'offset_rate':j.array(0.)},component_capped={'offset_rate':j.bool_(False)})
- def tick(s,z,path,speed):
+ def tick(s,z,path,speed,**kwargs):
   return s.replace(tick=s.tick+1,domain_exit=s.trigger),{**env.zero_log,'active_tick':j.bool_(True),'tick_reward':j.array(-.01)}
  env.tick=tick;return env
 

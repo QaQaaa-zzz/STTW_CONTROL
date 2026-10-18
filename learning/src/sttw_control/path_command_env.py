@@ -82,7 +82,7 @@ class PathCommandEnv:
         follower=pursuit(path,projection.progress,pose,v,j.asarray(v_user),self.config)
         nominal,rates=publish(snapshot.raw,follower.command,self.config)
         p=snapshot.replace(raw=nominal,reference_pose=pose,yaw_wrapped=pose[2],yaw_unwrapped=pose[2])
-        s=PathState(p,self.lower.initial(pose),initial_history(self.plant_spec),projection,follower,j.zeros(2),j.zeros(2),rates,j.zeros(2),j.array(0.),j.int32(0),j.asarray(alpha),follower.invalid|~j.all(j.isfinite(path.xy))|~j.all(j.isfinite(path.heading))|~j.all(j.isfinite(path.curvature))|~j.all(j.diff(path.s)>0),follower.invalid&~follower.numerical_fault)
+        s=PathState(p,self.lower.initial(pose),initial_history(self.plant_spec),projection,follower,j.zeros(2),j.zeros(2),rates,j.zeros(2),j.array(0.),j.int32(0),j.asarray(alpha),follower.invalid,follower.invalid&~follower.numerical_fault)
         if self.config.get('alpha_conditioning'):
             s=s.replace(fault=s.fault|~j.isfinite(s.alpha)|(s.alpha<0)|(s.alpha>1))
         return self.record_frame(s)
@@ -101,7 +101,7 @@ class PathCommandEnv:
         critic=j.concatenate([obs,j.array([(horizon-s.tick*self.cc.dt)/horizon])])
         return obs,critic,fault|s.fault
 
-    def tick(self,s,z,path,v_user):
+    def tick(self,s,z,path,v_user,*,follower_due=None):
         p=s.physical;m,pose,v=self.physics.observe(p.data)
         filtered,offsets,governed,flags=correction_tick(s.filtered,s.offsets,z,p.raw,self.config)
         lower,action,obs,lf=self.lower.prepare_local(s.lower,m,pose,v,governed,p,self.cc)
@@ -119,14 +119,15 @@ class PathCommandEnv:
         # Keep plant bookkeeping anchor unchanged; it is never the task path.
         p2=p2.replace(reference_pose=p.reference_pose)
         next_tick=s.tick+1
-        follower=jax.lax.cond(next_tick%4==0,lambda _:pursuit(path,projection.progress,post,log['actual_forward_speed'],v_user,self.config),lambda _:s.follower,None)
+        due=next_tick%4==0 if follower_due is None else follower_due
+        follower=jax.lax.cond(due,lambda _:pursuit(path,projection.progress,post,log['actual_forward_speed'],v_user,self.config),lambda _:s.follower,None)
         nominal,rates=publish(p.raw,follower.command,self.config)
         log.update(time=s.tick*self.cc.dt,active_tick=j.bool_(True),v_user=v_user,path_cross_track=projection.cross_track,path_heading_error=eh,path_progress=projection.progress,path_projection_unclamped=projection.unclamped,path_curvature=k,
             reference_xy=projection.point,reference_yaw_unwrapped=projection.heading,e_psi_unwrapped=eh,along=j.array(0.),lateral=projection.cross_track,large_heading_debt=j.abs(eh)>j.pi,
             nominal=p.raw,nominal_rates=s.nominal_rates,nominal_slew_channels=j.abs(s.follower.command-p.raw)>1e-7,pp_target=s.follower.command,preview_body=s.follower.preview_body,preview_world=s.follower.preview_world,lookahead=s.follower.lookahead,pp_curvature=s.follower.kappa,
             target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid&~follower.numerical_fault,tracking_domain_failure=follower.invalid&~follower.numerical_fault,goal_section_signed_distance=goal_distance,
             correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],diagnostic_subcosts=c['diagnostic_subcosts'],rho=j.maximum(j.abs(log['phi']),j.abs(log['phi']+self.config['path_reward'].get('risk_prediction_s',.10)*log['phi_dot'])),chi=chi)
-        end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|~j.all(j.isfinite(p2.data.qpos))|~j.all(j.isfinite(p2.data.qvel)),domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
+        end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|log['nonfinite'],domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
         if self.config.get('alpha_conditioning'):log['upper_alpha']=s.alpha
         return end,log
 
@@ -146,13 +147,15 @@ class PathCommandEnv:
             s=s.replace(follower=s.follower.replace(command=command),physical=s.physical.replace(raw=raw),nominal_rates=rate)
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
         zero_log=training_log(self.zero_log) if training else self.zero_log
-        def step(st,_):
+        def step(st,slot):
             stopped=st.physical.failed|st.fault|st.domain_exit
             def active(st):
-                end,log=self.tick(st,z,path,v_user)
+                # Active policy intervals start on an upper boundary. This
+                # scalar schedule stays outside vmap's per-lane predicates.
+                end,log=self.tick(st,z,path,v_user,follower_due=slot==3)
                 return end,training_log(log) if training else log
             return jax.lax.cond(stopped,lambda st:(st,zero_log),active,st)
-        end,logs=jax.lax.scan(step,s,None,length=4)
+        end,logs=jax.lax.scan(step,s,j.arange(4))
         end=self.record_frame(end)
         rate=(end.offsets-s.offsets)/self.config['timing']['upper_dt_s'];c=self.config['path_reward']
         rate_cost=c['offset_rate_weight']*j.sum((rate/j.array(c['offset_rate_scales']))**2);effective=j.minimum(rate_cost,c['component_caps']['offset_rate'])

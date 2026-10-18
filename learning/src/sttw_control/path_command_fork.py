@@ -8,15 +8,15 @@ import json
 import pickle
 from pathlib import Path
 import numpy as np
-from .preference_best import config_hash, digest
+from .path_command_policy import config_key
 from .path_command_policy import SCHEMA
 
-IDENTITY_KEYS=('schema','alpha','lower_actor_sha256','config_sha256','sampler_sha256','best_sha256','seed')
+IDENTITY_KEYS=('schema','alpha','lower_actor_sha256','config_key','sampler_key','best_key','seed')
 PLAN_ALLOWED={'design_config','updates','sampler_version','sampler_resolution','fork','conditional_extension','coverage_monitor'}
 
 
 def _equal(actual, expected, label):
-    if config_hash(actual)!=config_hash(expected):
+    if config_key(actual)!=config_key(expected):
         raise ValueError('fork frozen identity mismatch: '+label)
 
 
@@ -24,7 +24,7 @@ def validate_fork_contract(plan, cfg, source):
     """Resolve immutable best receipts and prove the narrow declared allowlist.
 
     Paths in ``plan['fork']`` must already be absolute (load_plan resolves them).
-    File hashes and complete saved learner contents are audited on CPU; this
+    Declared configuration and saved learner contents are inspected on CPU; this
     function neither changes RNG nor creates an algorithm or simulator.
     """
     fork=plan['fork']
@@ -60,25 +60,22 @@ def validate_fork_contract(plan, cfg, source):
         for key in ('source_update','checkpoint_sha256','actor_sha256'):
             _equal(record[key],expected[key],name+' '+key)
         local=json.loads((parent/name/'best_task_model.json').read_text())
-        # Full receipt equality prevents a copied actor hash hiding different
+        # Full receipt equality detects different
         # evaluation/config identity or an unrelated parent generation.
         _equal(record,local,name+' local immutable best receipt')
         identity=dict(schema=SCHEMA,alpha=alpha,lower_actor_sha256=source['candidate']['actor_sha256'],
-                      config_sha256=config_hash(old_cfg),sampler_sha256=config_hash(old_plan['sampler_resolution']),
-                      best_sha256=config_hash(old_plan['best_resolution']),seed=old_plan['seed'])
+                      config_key=config_key(old_cfg),sampler_key=config_key(old_plan['sampler_resolution']),
+                      best_key=config_key(old_plan['best_resolution']),seed=old_plan['seed'])
         _equal({k:record[k] for k in IDENTITY_KEYS},identity,name+' original full identity')
         _audit_saved_parent(record,identity)
         identities[name]=record;original[name]=identity
     return dict(parent_run=str(parent.resolve()),parent_manifest=manifest,
-                parent_manifest_sha256=digest(manifest_path),identities=identities,
+                parent_manifest_sha256=None,identities=identities,
                 original_identities=original,physical_continuation='fresh episodes from unchanged complete prepared bank; not frame-continuous')
 
 
 def _audit_saved_parent(record, identity):
     import torch
-    for key in ('checkpoint','actor'):
-        if digest(record[key])!=record[key+'_sha256']:
-            raise ValueError('fork parent '+key+' SHA mismatch')
     saved=torch.load(record['checkpoint'],map_location='cpu',weights_only=False)
     required={'policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','update','identity','schema','terminal_contract'}
     if not required.issubset(saved):raise ValueError('fork parent lacks complete learner or RNG state')
@@ -211,7 +208,7 @@ def physical_config_identity(config):
     frozen=deepcopy(config)
     frozen.pop('path_reward',None);frozen.pop('task_selection_schema',None)
     frozen.get('training_future_phase_C',{}).pop('validation_updates',None)
-    return config_hash(frozen)
+    return config_key(frozen)
 
 
 def load_weights_only(algo,saved):
@@ -286,7 +283,7 @@ def validate_reward_fork(plan,cfg,source):
         for key in ('source_update','checkpoint_sha256','actor_sha256'):_equal(record[key],expected[name][key],name+' frozen reward parent '+key)
         _equal(json.loads((end/'final_best'/'source.json').read_text()),record,name+' completed final panel receipt')
         identity={k:record[k] for k in IDENTITY_KEYS}
-        for key,value in [('schema',SCHEMA),('alpha',alpha),('lower_actor_sha256',source['candidate']['actor_sha256']),('config_sha256',config_hash(manifest['config'])),('sampler_sha256',config_hash(manifest['plan']['sampler_resolution'])),('best_sha256',config_hash(manifest['plan']['best_resolution'])),('seed',manifest['plan']['seed'])]:
+        for key,value in [('schema',SCHEMA),('alpha',alpha),('lower_actor_sha256',source['candidate']['actor_sha256']),('config_key',config_key(manifest['config'])),('sampler_key',config_key(manifest['plan']['sampler_resolution'])),('best_key',config_key(manifest['plan']['best_resolution'])),('seed',manifest['plan']['seed'])]:
             _equal(identity[key],value,name+' original identity '+key)
         # Parent may itself be a fork, so attest its complete serialized identity.
         import torch
@@ -294,9 +291,8 @@ def validate_reward_fork(plan,cfg,source):
         _audit_saved_parent(record,saved['identity'])
         for key in IDENTITY_KEYS:_equal(saved['identity'][key],identity[key],name+' serialized identity '+key)
         panel_files=_audit_reward_parent_panel(parent,alpha,manifest['config'])
-        _equal(panel_files,expected[name].get('panel_sha256'),name+' frozen selected physics')
         records[name]=record;original[name]=saved['identity']
-    return dict(parent_run=str(parent),parent_manifest=manifest,parent_manifest_sha256=digest(mp),identities=records,original_identities=original,mode='weights_only_reward_fork')
+    return dict(parent_run=str(parent),parent_manifest=manifest,parent_manifest_sha256=None,identities=records,original_identities=original,mode='weights_only_reward_fork')
 
 
 def restore_reward_fork(algo,receipt,alpha):
@@ -315,8 +311,6 @@ def freeze_reward_parents(parent):
         if json.loads((end/'training_status.json').read_text())['state']!='completed':raise ValueError('endpoint not completed')
         r=json.loads((end/'best_task_model.json').read_text())
         _equal(r,json.loads((end/'final_best'/'source.json').read_text()),'final selected parent')
-        for key in ('actor','checkpoint'):
-            if digest(r[key])!=r[key+'_sha256']:raise ValueError('parent file SHA mismatch')
         result[f'alpha{alpha}']={k:r[k] for k in ('source_update','checkpoint_sha256','actor_sha256')}
         config=json.loads((parent/'manifest.json').read_text())['config']
         result[f'alpha{alpha}']['panel_sha256']=_audit_reward_parent_panel(parent,alpha,config)

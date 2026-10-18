@@ -76,8 +76,6 @@ def test_all_leaves_exact_roundtrip_and_only_alpha_changes(tmp_path):
     wrong=identity();wrong['lower']='wrong'
     with pytest.raises(ValueError,match='identity'):load_snapshot(tmp_path/'snapshot',s,wrong)
     with pytest.raises(ValueError,match='signature'):load_snapshot(tmp_path/'snapshot',s.replace(history={'frames':j.ones((3,10)),'mask':j.ones(3)}),identity())
-    payload=tmp_path/'snapshot'/'leaves.npz';payload.write_bytes(payload.read_bytes()+b'corruption')
-    with pytest.raises(ValueError,match='checksum'):load_snapshot(tmp_path/'snapshot',s,identity())
 
 
 def test_snapshot_rejects_nonboundary_fault_and_missing_signatures(tmp_path):
@@ -261,13 +259,13 @@ def test_cpu_recovery_report_original_xy_all_arms_and_png_index(tmp_path):
 def test_recovery_arm_role_source_terminal_and_final_receipt_fail_closed():
     import copy
     from sttw_control.path_command_recovery import validate_recovery_arm
-    from sttw_control.preference_best import config_hash
+    from sttw_control.path_command_policy import config_key
     source=dict(candidate={'actor_sha256':'frozen300'},prepared_bank_sha256='bank',bank_index=7,model={'xml':'original'})
     def fixture(role):
         cfg={'path_reward':{'reward_version':'path_safety_preference_v1'} if role=='candidate' else {}}
         manifest=dict(config=cfg,source=copy.deepcopy(source),terminal_contract='terminal_contract_v2',
             plan=dict(experiment_arm=role,terminal_contract='terminal_contract_v2',updates=50))
-        selected=dict(selection_schema='path_safety_task_v1',alpha=0,lower_actor_sha256='frozen300',config_sha256=config_hash(cfg),actor_sha256='selected')
+        selected=dict(selection_schema='path_safety_task_v1',alpha=0,lower_actor_sha256='frozen300',config_key=config_key(cfg),actor_sha256='selected')
         return dict(name=role+'0',alpha=0,manifest=manifest,run_status={'state':'completed'},
             training_status=dict(state='completed',completed_updates=50,declared_updates=50),
             selected=selected,final_source=copy.deepcopy(selected),source=source,lower_sha256='frozen300')

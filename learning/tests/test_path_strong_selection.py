@@ -108,10 +108,11 @@ def strong_saved_run(tmp_path):
     panels=evaluate_conditional(Evaluator(),params,ALPHAS,folder)
     identity=dict(policy_mode='shared_conditional_v1',seed=42,architecture='alpha_modulated_v1',
         reward_version='path_safety_preference_v2')
-    from sttw_control.preference_best import config_hash,atomic_json
-    identity['config_sha256']=config_hash(cfg)
+    from sttw_control.preference_best import atomic_json
+    from sttw_control.path_command_policy import config_key
+    identity['config_key']=config_key(cfg)
     source=dict(identity,source_update=50,checkpoint=str(checkpoint),actor=str(actor),
-        checkpoint_sha256=selection.digest(checkpoint),actor_sha256=selection.digest(actor))
+        checkpoint_sha256=None,actor_sha256=None)
     atomic_json(folder/'source.json',source)
     selection.persist_conditional_best(learner,checkpoint,actor,selection.summarize_conditional(panels,cfg),dict(identity,source_update=50,validation_dir=str(folder)))
     best=selection.persist_preference_best(learner,checkpoint,actor,selection.summarize_preference(panels,cfg),dict(identity,source_update=50,validation_dir=str(folder)))

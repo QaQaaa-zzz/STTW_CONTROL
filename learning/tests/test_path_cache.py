@@ -26,12 +26,12 @@ def test_cached_baseline_requires_same_identity_path_and_commands(tmp_path):
 
 def _fork_cache_fixture(tmp_path,alpha=0):
  import copy,shutil,torch
- from sttw_control.preference_best import config_hash
+ from sttw_control.path_command_policy import config_key
  from sttw_control.path_command_fork import validate_fork_contract
  from test_path_fork import fork_inputs
  plan,cfg,source=fork_inputs();receipt=validate_fork_contract(plan,cfg,source)
  record=receipt['identities'][f'alpha{alpha}'];identity=copy.deepcopy(receipt['original_identities'][f'alpha{alpha}'])
- identity.update(config_sha256=config_hash(cfg),sampler_sha256=config_hash(plan['sampler_resolution']),
+ identity.update(config_key=config_key(cfg),sampler_key=config_key(plan['sampler_resolution']),
                  parent_source_update=record['source_update'],parent_checkpoint_sha256=record['checkpoint_sha256'])
  out=tmp_path/f'alpha{alpha}';folder=out/'checkpoints';folder.mkdir(parents=True)
  checkpoint=folder/'update_0000.pt';saved=torch.load(record['checkpoint'],map_location='cpu',weights_only=False)
@@ -43,14 +43,15 @@ def _fork_cache_fixture(tmp_path,alpha=0):
 @pytest.mark.parametrize('alpha',[0,1])
 def test_fork_parent_reuse_registers_new_identity_and_selected_dev_without_physics(tmp_path,alpha):
  from sttw_control.path_command_cache import reuse_fork_parent,reuse_selected_validation
- from sttw_control.preference_best import digest,config_hash
+ from sttw_control.preference_best import digest
+ from sttw_control.path_command_policy import config_key
  receipt,out,cfg,identity,checkpoint=_fork_cache_fixture(tmp_path,alpha)
  traces=reuse_fork_parent(receipt,out,alpha,cfg,identity,checkpoint)
  assert len(traces)==6
  for pointer in ('best_model.json','best_task_model.json'):
   best=json.loads((out/pointer).read_text())
   assert best['source_update']==0
-  assert best['config_sha256']==config_hash(cfg)
+  assert best['config_key']==config_key(cfg)
   assert best['checkpoint_sha256']==digest(checkpoint)
   assert best['checkpoint_sha256']!=receipt['identities'][f'alpha{alpha}']['checkpoint_sha256']
  before={p.relative_to(out):digest(p) for p in out.rglob('*') if p.is_file()}

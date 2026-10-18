@@ -12,7 +12,8 @@ def main():
     parser.add_argument('--execute',action='store_true')
     args=parser.parse_args()
     from sttw_control.path_command_diagnostic import prepare_request,make_transform,compare_prefix,diagnostic_groups
-    from sttw_control.preference_best import atomic_json,config_hash,digest
+    from sttw_control.preference_best import atomic_json
+    from sttw_control.path_command_policy import config_key
     request=json.loads(args.request.read_text());receipt=prepare_request(request)
     if not args.execute:
         print(json.dumps({k:v for k,v in receipt.items() if k not in ('manifest','request','files','execution_manifests')},indent=2));return
@@ -43,7 +44,7 @@ def main():
             evaluator=evaluators[row['model']]
             with Path(record['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
             # Existing exports are complete Flax variables, preserving exact Actor identity.
-            context=dict(actor_sha256=record['actor_sha256'],checkpoint_sha256=record['checkpoint_sha256'],case_ids=[item['case'] for item in rows],prepared_bank_sha256=manifest['source']['prepared_bank_sha256'],config_sha256=config_hash(cfg))
+            context=dict(actor=record['actor'],checkpoint=record['checkpoint'],source_update=record.get('source_update'),case_ids=[item['case'] for item in rows],prepared_bank_sha256=manifest['source']['prepared_bank_sha256'],config_key=config_key(cfg))
             identity=dict(context=context,transform=row['transform'],cache_key=diagnostic_cache_identity(context,row['transform']))
             group_output=args.output/f'group_{group_index:02d}'
             traces=evaluator.evaluate(params,1,group_output,case_names=[item['case'] for item in rows],diagnostic_transform=make_transform(cfg,row['transform']),diagnostic_identity=identity)
@@ -54,7 +55,6 @@ def main():
                 atomic_json(row_output/'source.json',dict(model=record,diagnostic_identity=identity,batch_timings=str(group_output/'evaluation_timings.json')))
                 if row['model']=='u200':
                     original_path=Path(request['cached_panels']['u200'])/(row['case']+'.npz')
-                    if digest(original_path)!=receipt['files'][str(original_path)]:raise ValueError('prefix cache changed after preparation')
                     with np.load(original_path,allow_pickle=False) as z:original={k:z[k] for k in z.files}
                     atomic_json(row_output/'prefix_comparison.json',compare_prefix(original,traces[row['case']]))
         atomic_json(args.output/'ACCOUNTING.json',dict(active_lower_ticks=ticks,declared_budget=32000,training_updates=0,state='completed'))

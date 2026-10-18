@@ -210,7 +210,7 @@ def test_policy_step_logs_actual_partial_block_rate_and_tail(terminal_ticks):
     env.zero_log=dict(active_tick=j.bool_(False),tick_reward=j.array(0.),
         raw_components={'offset_rate':j.array(0.)},effective_components={'offset_rate':j.array(0.)},
         component_capped={'offset_rate':j.bool_(False)})
-    def tick(s,z,path,speed):
+    def tick(s,z,path,speed,**kwargs):
         end=s.replace(tick=s.tick+1,offsets=s.offsets+j.array([.005,-.002]),
                       physical=Physical(s.tick+1==terminal_ticks))
         return end,{**env.zero_log,'active_tick':j.bool_(True),'tick_reward':j.array(-.01)}

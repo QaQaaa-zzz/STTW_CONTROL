@@ -3,6 +3,11 @@ import jax.numpy as j
 from flax import linen as nn
 SCHEMA='sttw_geometric_path_actor351_v1'
 
+def config_key(value):
+    """Readable configuration identity/cache key; no content hashing."""
+    import json
+    return json.dumps(value,sort_keys=True,separators=(',',':'))
+
 def map_latent(z,config):
     c=config['residual_interface'];a=j.tanh(z)
     return j.stack([a[0]*j.where(a[0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),a[1]*c['steer_scale_rad']])
