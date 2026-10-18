@@ -16,6 +16,20 @@ from .path_reference import pursuit,publish
 from .path_command_policy import correction_tick,assemble_observation
 from .path_command_reward import costs,failure_reward,reward_version
 
+# Only these tick outputs feed PathBatch's reward and coverage statistics.
+# Project inside the scan body so unused diagnostic arrays are never stacked.
+_TRAINING_LOG_KEYS=frozenset((
+    'active_tick','tick_reward','scored_tick_reward','raw_components','effective_components','component_capped',
+    'actual_forward_speed','v_user','path_cross_track','path_heading_error','peak_roll',
+    'chi','path_progress','path_curvature','target_offset','filtered_offset','offsets',
+    'governed','nominal','lower_error','correction_rate_clipped','nominal_slew_channels',
+    'reference_clip_channels','upper_alpha','physical_failure','domain_exit'))
+
+
+def training_log(log):
+    """Static projection; reward/state calculations remain the full tick's."""
+    return {key:value for key,value in log.items() if key in _TRAINING_LOG_KEYS}
+
 def refresh_speed_request(state,v_user,config):
     """Current issued request only; the geometric follower never regulates speed."""
     return state.follower.command.at[0].set(v_user)
@@ -50,7 +64,7 @@ class PathCommandEnv:
         reward_version(config)
         self.terminal_contract=terminal_contract
         self.config=config;self.plant_spec=plant_spec;self.lower=lower
-        self.physics=TeleopEnv(config={**plant_spec,'lower_internal_diagnostics':True},backend='mjx')
+        self.physics=TeleopEnv(config={**plant_spec,'lower_internal_diagnostics':bool(config.get('lower_internal_diagnostics',False))},backend='mjx')
         self.cc=self.physics.cc;self.ac=self.physics.ac
         t=config['timing']
         actual=(float(self.physics.model.opt.timestep),self.physics.substeps,self.cc.dt,plant_spec['plant']['policy_dt_s'])
@@ -120,7 +134,7 @@ class PathCommandEnv:
         template=jax.eval_shape(lambda x:self.tick(x,j.zeros(2),path,v_user),s)[1]
         self.zero_log=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
 
-    def policy_step(self,s,z,path,v_user,horizon):
+    def policy_step(self,s,z,path,v_user,horizon,*,training=False):
         if self.config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
             # At a request boundary publish the new current speed before action
             # execution. Other intervals retain the existing slew schedule exactly.
@@ -131,9 +145,13 @@ class PathCommandEnv:
             rate=s.nominal_rates.at[0].set(j.where(changed,rates[0],s.nominal_rates[0]))
             s=s.replace(follower=s.follower.replace(command=command),physical=s.physical.replace(raw=raw),nominal_rates=rate)
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
+        zero_log=training_log(self.zero_log) if training else self.zero_log
         def step(st,_):
             stopped=st.physical.failed|st.fault|st.domain_exit
-            return jax.lax.cond(stopped,lambda st:(st,self.zero_log),lambda st:self.tick(st,z,path,v_user),st)
+            def active(st):
+                end,log=self.tick(st,z,path,v_user)
+                return end,training_log(log) if training else log
+            return jax.lax.cond(stopped,lambda st:(st,zero_log),active,st)
         end,logs=jax.lax.scan(step,s,None,length=4)
         end=self.record_frame(end)
         rate=(end.offsets-s.offsets)/self.config['timing']['upper_dt_s'];c=self.config['path_reward']

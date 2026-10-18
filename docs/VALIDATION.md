@@ -2208,3 +2208,30 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 科学结果：update200面板60/60到达goal，0物理跌倒、0tracking-domain失败；但60/60均未达最后0.5s保持（速度误差60超限、航向53、路径12），故qualified_task/research_preference均false。4恒速冲突弯中，alpha0弯路径RMSE合格3/4（compact_RL .463m失败）；alpha1速度RMSE合格0/4。Dv=Ev(alpha0)-Ev(alpha1)依次.019/-.005/.018/.012m/s，均低于.05；Dy=Ey(alpha1)-Ey(alpha0)为-.008/-.016/.059/.007m，仅compact_LR超过.02。alpha0实际减速四场景均满足，说明整体减速存在但alpha间分离很弱。7个preference direction failure、5个high-speed endpoint failure、2项old-case regression。固定DEV加权归一误差update0/100/200为2.297/3.614/5.637，方向失败数14/8/7，显示局部改善伴随整体固定面板退化。0.302rad与0.40m仅诊断：滚转线以上累计13.825s、9/60 corridor超界、最大超0.536m。
 
 因此200轮足以完成本次有界假设检验并判断候选不合格；对目标能力显然不足。末40轮同课程训练奖励均值改善，但固定面板持续退化，不能推断再加轮数即可解决；原总预算不允许自动扩轮。按计划，固定alpha未达资格，条件动态alpha检查不触发。全套证据、paired奖励分项和限制见运行分析链接；详细XY、奖励和误差图见同目录report/INDEX。无额外物理仿真用于本次分析。
+
+
+### 2026-10-18 path_command 性能审查与等价性修复
+
+范围：仅 `experiment/path-conflict-exposure-v1` 的正式 `path_command_env.py`、`path_command_training.py` 与相关测试。用户附件审查的是 `runs/minimal_code/sttw_core/train.py` 导出版；本轮修复正式 path_command 中同类问题，未改其他任务、通用 PPO/物理内核或既有导出包。原200轮、best指针、原始报告和训练配置保持冻结。未启动或续训。
+
+核验与处置：
+
+| 附件意见 | 正式实现核验及处理 |
+| --- | --- |
+| 逐策略步多处强制同步 | 成立，正式循环还逐步回传alpha、多个统计及限幅计数。移除循环内全状态 `block_until_ready`、Torch有限性主机读取及零散主机归约；在编译的批量步中归约，集中 `device_get(payload)`。保留每步工程故障门，成功步不回传完整物理状态。DLPack跨框架依赖仍存在；一次PyTree回传不等于一次物理拷贝，未宣称全rollout只有一次同步。 |
+| 巨型logs原样传出并丢弃 | 不适用于正式入口：原先已在JIT内消费logs并返回统计。进一步在四tick scan的body内静态裁剪训练不使用的诊断字段；奖励、分项、alpha/课程/覆盖/限幅和完整回合统计保留。完整 `policy_step` 默认仍供评测与奖励重建使用。 |
+| 硬开底层力诊断 | 成立。由任务配置 `lower_internal_diagnostics` 控制，缺省False；需要力min/max/触限子步/末力/ctrl诊断时显式设True。仅取消诊断收集，未更改实际ctrl/actuator_force、物理子步或失败判断。 |
+| 将pursuit/publish移出tick | 未采用。逐tick nominal slew、真实部分区间失败及恢复状态都有时序语义，不能以无失败且tick对齐的特例作等价依据。 |
+| 每10/20轮保存checkpoint | 未采用。当前scratch每轮完整可恢复边界是明确合同；保存频率、TensorBoard可见性及原子边界不改。 |
+| 失败尾罚叠加GAE/timeout | 未发现。实际RSL3.2.0 `process_env_step` 在extras有time_outs时才加bootstrap；正式调用传{}。`compute_returns` 的后继价值与GAE均乘1-done。新增真实RSL测试用后继V=-123验证物理/路径域终止回报仍恰为传入reward。 |
+| 缩rollout/改环境数、LR、KL等黄金配比 | 属于待实测调参建议，不能据此确认本任务最优。未更改512×128、PPO参数、奖励/网络/时序/预算。持续冲突课程与chi覆盖统计在当前版本已实现，不重复改分布。 |
+
+故障保证：非有限上层z先在原 `policy_step` 置fault，冻结当前区间物理推进；同一步payload工程门在RSL写入和下一次动作之前中止、保存故障状态，丢弃rollout，不进行优化。没有把工程故障推迟到rollout末。描述性统计的跨环境求和改由设备归约，浮点加法次序可能改变末位；不改变PPO的逐环境reward、done或物理状态。
+
+验证：先看到缺失训练日志投影/训练模式接口的失败，再实现并通过。相关15个测试文件（训练/终止/课程/统计/奖励/缓存/并行评测/恢复与实际DirectCommandPPO）合计 **126 passed, 1 skipped**，skip为需显式启用的GPU检查。另一次扩大历史缓存检查因当前工作树缺 `runs/path_reward_peak_review_20261011/manifest.json` 停在3个FileNotFoundError，不能称全库测试通过；未伪造旧产物或修改历史缓存代码。
+
+独立GPU数值检查 **1 passed**：原强制力诊断＋完整logs、关闭力诊断＋完整logs、关闭力诊断＋训练logs，三者从同一冻结prepared bank、相同seed/持续弯路线出发，每者2个策略区间（含当前速度请求变化），总计 **24 lower ticks / 0 PPO updates**。完整闭环状态全部叶子的最大绝对差 **0.0**；共同日志与全部训练统计逐项一致（assert rtol/atol1e-6）。logs叶数 **116 / 111 / 59**。三variant编译20.957/21.680/21.633秒，短步约.303–.352秒；没有充分预热/重复/整批训练，**不作加速倍数或学习提升结论**。原始收据：`runs/path_command_performance_check_20261018/gpu_receipt.json`；复跑入口：`STTW_PATH_GPU_CHECK=1 PYTHONPATH=learning/src XLA_PYTHON_CLIENT_PREALLOCATE=false /home/qy/mujoco_playground/.venv/bin/python -m pytest -q -s learning/tests/test_path_training_performance.py -k gpu_full`。常规CPU运行不要启用此环境变量。
+
+原有DirectCommandPPO、批量评测vmap/scan50、共享编译缓存入口继续使用。此次是工程等价性验证，不是原200轮的重新训练/能力复评；其0/60末段保持、未合格结论不变。
+
+提交前独立只读代码审查未发现阻断问题：训练字段覆盖、设备归约后的聚合形状、peak最大值语义、当步工程故障门、done/GAE和关闭力诊断均核对通过。审查没有另跑训练或仿真。

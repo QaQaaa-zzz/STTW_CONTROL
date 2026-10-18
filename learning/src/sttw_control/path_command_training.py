@@ -21,6 +21,24 @@ def termination_flags(tick,physical_failure,fault,domain_exit,horizon,config,ter
     return dict(physical_failure=physical_failure,tracking_domain_failure=tracking,engineering_fault=engineering,domain_exit=domain,finite_task_end=finite_end,done=done,bootstrap=~done,end_code=end_code)
 
 
+def training_step_payload(reward,flags,observation_fault,stats,sampled_alpha):
+    """Reduce on device, then transfer one compact tree at the per-step fault gate.
+
+    Diagnostics are already reduced across environments by advance_batch.
+    Keep the gate before RSL storage and the next action; never defer faults
+    until the end of a rollout or copy the full physical state on healthy steps.
+    """
+    return dict(reward=reward,rollout=j.sum(stats['rollout'],axis=0),
+        completed_totals=j.sum(stats['completed_totals'],axis=0),
+        completed_component_costs=j.sum(stats['completed_component_costs'],axis=0),
+        active_ticks=j.sum(stats['active_ticks']),episode_ends=j.sum(flags['done']),
+        physical_failures=j.sum(flags['physical_failure']),domain_failures=j.sum(flags['tracking_domain_failure']),
+        engineering_fault_count=j.sum(flags['engineering_fault']|observation_fault),
+        alpha_counts=j.stack((j.sum(sampled_alpha==0),j.sum(sampled_alpha==1),j.sum((sampled_alpha>0)&(sampled_alpha<1)))),
+        component_caps={key:j.sum(value) for key,value in stats['component_caps'].items()},
+        diagnostics=stats['diagnostics'])
+
+
 def make_algorithm(obs,steps,config,device='cuda'):
     import torch
     from rsl_rl.modules import ActorCritic
@@ -123,7 +141,7 @@ class PathBatch:
         return speed_request(ep.route.speed_values,ep.route.speed_switch_times,state.tick*self.config['timing']['lower_dt_s'])
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,self.current_speed(ep),self.horizon)
     def advance_one(self,ep,z,absolute_update=1):
-        end,logs=self.env.policy_step(ep.state,z,ep.route.path,self.current_speed(ep),self.horizon)
+        end,logs=self.env.policy_step(ep.state,z,ep.route.path,self.current_speed(ep),self.horizon,training=True)
         final=self.env.observation(end,ep.route.path,self.current_speed(ep,end),self.horizon)
         flags=termination_flags(end.tick,end.physical.failed,end.fault|final[2],end.domain_exit,self.horizon,self.config,self.env.terminal_contract)
         active=logs['active_tick'];ev=logs['actual_forward_speed']-logs['v_user']
@@ -561,8 +579,8 @@ def train(path,output,*,execute=False,resume=None):
                 if strong:nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one,in_axes=(0,0,None))(episodes,z,absolute_update)
                 else:nxt,obs_batch,reward,flags,final,stats=jax.vmap(batch.advance_one)(episodes,z)
                 stats['diagnostics']=reduce_statistics(stats['diagnostics'],axis=0)
-                return nxt,obs_batch,reward,flags,final,stats
-            merge_diagnostics=jax.jit(merge_statistics)
+                payload=training_step_payload(reward,flags,obs_batch[2],stats,episodes.state.alpha)
+                return nxt,obs_batch,reward,flags['done'],payload
             advance_args=(episodes,j.zeros((n,2)),j.int32(start_update+1)) if strong else (episodes,j.zeros((n,2)))
             advance=None if start_update>=endpoint_target else jax.jit(advance_batch).lower(*advance_args).compile()
             status['compile_and_setup_seconds']=time.monotonic()-started
@@ -673,35 +691,34 @@ def train(path,output,*,execute=False,resume=None):
                 with torch.no_grad():
                     for _ in range(steps):
                         check_budget()
-                        if strong:
-                            sampled=obs['policy'][:,336].detach().cpu().numpy()
-                            alpha_counts+= [np.sum(sampled==0),np.sum(sampled==1),np.sum((sampled>0)&(sampled<1))]
                         z=algo.act(obs)
-                        if not bool(torch.isfinite(z).all()):raise RuntimeError('nonfinite upper latent')
                         advance_args=(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()))
                         if strong:advance_args+= (j.int32(update),)
-                        episodes,next_obs,reward,flags,final,stats=advance(*advance_args)
-                        jax.block_until_ready(episodes)
-                        status['training_control_ticks_total']+=int(j.sum(stats['active_ticks']));status['policy_transitions_total']+=n
-                        if bool(j.any(flags['engineering_fault'])) or bool(j.any(next_obs[2])):
+                        episodes,next_obs,reward,done,payload=advance(*advance_args)
+                        # The environment guards nonfinite z before physics and
+                        # includes it in this same-step engineering fault gate.
+                        host=jax.device_get(payload)
+                        status['training_control_ticks_total']+=int(host['active_ticks']);status['policy_transitions_total']+=n
+                        if int(host['engineering_fault_count']):
                             with (out/'engineering_fault_states.pkl').open('wb') as f:pickle.dump(jax.device_get(episodes),f)
-                            status['engineering_fault_count']=int(j.sum(flags['engineering_fault']|next_obs[2]))
+                            status['engineering_fault_count']=int(host['engineering_fault_count'])
                             raise RuntimeError('nonfinite/observation/lower engineering fault; discard rollout, no optimizer update')
-                        obs=to_torch(next_obs[0],next_obs[1]);algo.process_env_step(obs,torch.utils.dlpack.from_dlpack(reward),torch.utils.dlpack.from_dlpack(flags['done']),{})
-                        rewards.append(np.asarray(reward));rollout_stats.append(np.asarray(stats['rollout']));completed_episodes.append(np.asarray(stats['completed_totals']))
-                        episode_ends+=int(j.sum(flags['done']));physical_failures+=int(j.sum(flags['physical_failure']));domain_failures+=int(j.sum(flags['tracking_domain_failure']))
-                        cost_totals_update+=np.asarray(j.sum(stats['completed_component_costs'],axis=0))
-                        diagnostic=stats['diagnostics']
+                        obs=to_torch(next_obs[0],next_obs[1]);algo.process_env_step(obs,torch.utils.dlpack.from_dlpack(reward),torch.utils.dlpack.from_dlpack(done),{})
+                        rewards.append(host['reward']);rollout_stats.append(host['rollout']);completed_episodes.append(host['completed_totals'])
+                        episode_ends+=int(host['episode_ends']);physical_failures+=int(host['physical_failures']);domain_failures+=int(host['domain_failures'])
+                        cost_totals_update+=host['completed_component_costs']
+                        if strong:alpha_counts+=host['alpha_counts']
+                        diagnostic=host['diagnostics']
                         if strong and 'alpha_strong_count' in diagnostic:alpha_demand_counts+=np.asarray(diagnostic['alpha_strong_count'])
-                        window_stats=diagnostic if window_stats is None else merge_diagnostics(window_stats,diagnostic)
-                        if coverage_mode or reward_fork or conditional:coverage_stats=diagnostic if coverage_stats is None else merge_diagnostics(coverage_stats,diagnostic)
-                        for key,count in stats['component_caps'].items():caps[key]=caps.get(key,0)+int(j.sum(count))
+                        window_stats=diagnostic if window_stats is None else merge_statistics(window_stats,diagnostic)
+                        if coverage_mode or reward_fork or conditional:coverage_stats=diagnostic if coverage_stats is None else merge_statistics(coverage_stats,diagnostic)
+                        for key,count in host['component_caps'].items():caps[key]=caps.get(key,0)+int(count)
                     algo.compute_returns(obs)
                 sample_seconds=time.monotonic()-tick_start;opt_start=time.monotonic();update_status(stage='optimizing');metrics=algo.update();opt_seconds=time.monotonic()-opt_start;check_budget()
                 update_status(stage='optimized',completed_updates=update)
                 rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,plan);accepted+=int(metrics['accepted_epochs']>0)
                 if conflict and stop=='three_consecutive_hard_rejected_batches':stop=None
-                totals=np.sum(np.stack(rollout_stats),axis=(0,1));done_totals=np.sum(np.stack(completed_episodes),axis=(0,1));count=max(totals[0],1)
+                totals=np.sum(np.stack(rollout_stats),axis=0);done_totals=np.sum(np.stack(completed_episodes),axis=0);count=max(totals[0],1)
                 record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
                 if strong:
                     from .path_command_conditioning import curriculum_probabilities

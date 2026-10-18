@@ -1103,3 +1103,8 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 科学结果：update200面板60/60到达goal，0物理跌倒、0tracking-domain失败；但60/60均未达最后0.5s保持（速度误差60超限、航向53、路径12），故qualified_task/research_preference均false。4恒速冲突弯中，alpha0弯路径RMSE合格3/4（compact_RL .463m失败）；alpha1速度RMSE合格0/4。Dv=Ev(alpha0)-Ev(alpha1)依次.019/-.005/.018/.012m/s，均低于.05；Dy=Ey(alpha1)-Ey(alpha0)为-.008/-.016/.059/.007m，仅compact_LR超过.02。alpha0实际减速四场景均满足，说明整体减速存在但alpha间分离很弱。7个preference direction failure、5个high-speed endpoint failure、2项old-case regression。固定DEV加权归一误差update0/100/200为2.297/3.614/5.637，方向失败数14/8/7，显示局部改善伴随整体固定面板退化。0.302rad与0.40m仅诊断：滚转线以上累计13.825s、9/60 corridor超界、最大超0.536m。
 
 因此200轮足以完成本次有界假设检验并判断候选不合格；对目标能力显然不足。末40轮同课程训练奖励均值改善，但固定面板持续退化，不能推断再加轮数即可解决；原总预算不允许自动扩轮。按计划，固定alpha未达资格，条件动态alpha检查不触发。全套证据、paired奖励分项和限制见运行分析链接；详细XY、奖励和误差图见同目录report/INDEX。无额外物理仿真用于本次分析。
+
+
+### 2026-10-18 path_command 性能意见核验及实现
+
+用户要求先验证附件审查，只修当前path_command。正式循环确有硬开底层力诊断与零散主机同步，已改为诊断缺省关闭/显式可开、scan内训练日志投影、设备归约后集中回传，并保留每步工程故障门与每轮恢复checkpoint。附件基于minimal导出train.py，正式入口原本已消费日志统计；不把它的“完整logs全部丢弃”与“同步只剩1次”直接套用到正式训练。真实RSL终止GAE测试否定本链路double-bootstrap疑点；未移动pursuit/publish或调PPO/课程/奖励。126相关CPU通过，GPU独立24ticks/0PPO三实现完整闭环状态maxdiff0、日志116/111/59叶。广泛历史缓存测试受缺旧manifest限制。详见docs/VALIDATION.md同日节与runs/path_command_performance_check_20261018/gpu_receipt.json。原200轮结果冻结，不宣称学习改进或已测吞吐加速；下一次显式授权训练才测实际整批收益。

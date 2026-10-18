@@ -1,3 +1,9 @@
+# path_command 性能审查修复 — 2026-10-18
+
+已验证用户附件与正式入口的差异，修复path_command硬开底层力诊断、训练scan冗余日志及逐步零散主机回传。保留当步故障中止、每轮恢复checkpoint、奖励/物理/PPO/课程/预算；126相关CPU通过，独立GPU24lower ticks/0PPO三实现完整状态最大差0。详情见[验证记录](docs/VALIDATION.md#2026-10-18-path_command-性能审查与等价性修复)。历史缓存全查受缺旧manifest限制；未启动训练，不宣称实测整批加速。当前研究事实以共享台账为准，旧200轮候选不合格结论不变。
+
+---
+
 # Scratch 独立结果图 — 2026-10-15
 
 [仅scratch：末轮200与选中100分别查看](docs/evidence/path_scratch_only_20261015/INDEX.md)。每张图只含同一scratch checkpoint的五α、原参考和匹配B0；新增高速弯局部图，不混合其他模型。复用已保存轨迹，0新增训练/仿真；选模指针和结论不变。
