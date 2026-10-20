@@ -231,3 +231,30 @@ def test_sparse_reset_runtime_flags_match_reference_on_real_route_sampler():
             # Use the user's accepted 9e-5 tolerance, never a relative escape.
             if np.asarray(a).dtype.kind in 'fc':np.testing.assert_allclose(a,b,rtol=0,atol=9e-5)
             else:np.testing.assert_array_equal(a,b)
+
+
+@pytest.mark.parametrize('count',[0,1,17,40])
+def test_sparse_reset_updates_only_new_observations(count):
+    from flax import struct
+    @struct.dataclass
+    class E:
+        env_id:object
+        episode:object
+        value:object
+    n=40;called=[]
+    ep=E(j.arange(n),j.zeros(n,j.int32),j.arange(n,dtype=j.float32))
+    def features(e):return j.stack([e.value,e.episode.astype(j.float32)]),j.stack([e.value+1,e.value+2]),e.episode%2==1
+    def observe(e):
+        jax.debug.callback(lambda eid:called.append(int(eid)),e.env_id)
+        return features(e)
+    def reset(eid,episode):return E(eid,episode,eid.astype(j.float32)+100)
+    def run(done,fault):
+        final=jax.vmap(features)(ep)
+        return training.reset_finished_batch(ep,dict(done=done,engineering_fault=fault),reset,final_observation=final,observe=observe)
+    eligible=(np.arange(n)<count)&(np.arange(n)!=5)
+    result,obs=jax.jit(run)(j.arange(n)<count,j.arange(n)==5)
+    jax.block_until_ready((result,obs));jax.effects_barrier()
+    expected=E(ep.env_id,j.asarray(eligible,j.int32),ep.value+j.asarray(eligible)*100)
+    for a,b in zip(jax.tree.leaves((result,obs)),jax.tree.leaves((expected,jax.vmap(features)(expected)))):
+        np.testing.assert_array_equal(a,b)
+    assert len(called)<=((int(eligible.sum())+15)//16)*16

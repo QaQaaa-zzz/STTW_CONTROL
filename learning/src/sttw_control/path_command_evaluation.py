@@ -50,14 +50,14 @@ class BatchedPanelEvaluator:
             def reset(paths,speeds,alpha):
                 return jax.vmap(lambda p,v,a:env.reset(self.snapshot,p,request(v,0),a))(paths,speeds,alpha) if alpha.ndim else jax.vmap(lambda p,v:env.reset(self.snapshot,p,request(v,0),alpha))(paths,speeds)
             reset_fn=jax.jit(reset).lower(paths,speeds,alpha).compile()
-            states=reset_fn(paths,speeds,alpha);jax.block_until_ready(states)
-            example=jax.tree.map(lambda x:x[0],states)
+            states=jax.eval_shape(reset,paths,speeds,alpha)
+            example=jax.tree.map(lambda x:jax.ShapeDtypeStruct(x.shape[1:],x.dtype),states)
             path=jax.tree.map(lambda x:x[0],paths)
-            env.set_log_template(example,path,request(speeds[0],example.tick))
+            env.set_log_template(example,path,request(speeds[0],j.int32(0)))
             template=jax.eval_shape(lambda state:env.policy_step(state,j.zeros(2),path,request(speeds[0],state.tick),horizon,evaluation=True),example)[1]
             zero_logs=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
             if diagnostic_transform is not None:
-                _,metadata=diagnostic_transform(j.zeros(2),example,path,request(speeds[0],example.tick),env)
+                _,metadata=jax.eval_shape(lambda state:diagnostic_transform(j.zeros(2),state,path,request(speeds[0],state.tick),env),example)
                 lower_ticks=round(self.config['timing']['upper_dt_s']/self.config['timing']['lower_dt_s'])
                 zero_logs=dict(zero_logs,**{'diagnostic_'+k:j.zeros((lower_ticks,)+v.shape,v.dtype) for k,v in metadata.items()})
             if dynamic_key:zero_logs=dict(zero_logs,alpha_request=j.zeros(4),alpha_applied=j.zeros(4))

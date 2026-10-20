@@ -1,0 +1,271 @@
+{
+  "geometry": {
+    "straight": {
+      "old_points": 4001,
+      "new_points": 5001,
+      "old_first_spacing": 0.019999999552965164,
+      "new_first_spacing": 0.019999999552965164,
+      "same_prefix_knots": true,
+      "same_prefix_xy": true,
+      "maximum_same_index_xy_difference_m": 0.0,
+      "old_goal": 4.0,
+      "new_goal": 4.0,
+      "maximum_common_progress_xy_difference_m": 0.0
+    },
+    "left90_R2": {
+      "old_points": 3834,
+      "new_points": 5001,
+      "old_first_spacing": 0.019995197653770447,
+      "new_first_spacing": 0.019999999552965164,
+      "same_prefix_knots": false,
+      "same_prefix_xy": false,
+      "maximum_same_index_xy_difference_m": 0.01840972900390625,
+      "old_goal": 10.641592979431152,
+      "new_goal": 10.641592979431152,
+      "maximum_common_progress_xy_difference_m": 7.62939453125e-06
+    },
+    "right90_R2": {
+      "old_points": 3834,
+      "new_points": 5001,
+      "old_first_spacing": 0.019995197653770447,
+      "new_first_spacing": 0.019999999552965164,
+      "same_prefix_knots": false,
+      "same_prefix_xy": false,
+      "maximum_same_index_xy_difference_m": 0.01840972900390625,
+      "old_goal": 10.641592979431152,
+      "new_goal": 10.641592979431152,
+      "maximum_common_progress_xy_difference_m": 7.62939453125e-06
+    }
+  },
+  "pure_pursuit_before_turn_at_s3_m": {
+    "1.5": {
+      "steer_rad": 0.0008560084388591349,
+      "lookahead_m": 1.7999999523162842
+    },
+    "2.0": {
+      "steer_rad": 0.021876664832234383,
+      "lookahead_m": 1.7999999523162842
+    },
+    "2.5": {
+      "steer_rad": 0.07784812152385712,
+      "lookahead_m": 1.7999999523162842
+    },
+    "3.0": {
+      "steer_rad": 0.1679200530052185,
+      "lookahead_m": 1.7999999523162842
+    }
+  },
+  "speed_step_response": {
+    "latent": [
+      -10.0,
+      0.0
+    ],
+    "target_offset_m_s": -1.0,
+    "sample_50_offset": -0.25000572204589844,
+    "sample_100_offset": -0.5000114440917969,
+    "sample_dt_s": 0.005,
+    "physical_rollouts": 0
+  },
+  "reward_counterexample": {
+    "old_minus_new_total_cost_excluding_posture_heading_transients": 0.09819990454707295,
+    "cost_derivative_dCy_dey_at_0p07": 140.0,
+    "bands": {
+      "0.04": {
+        "path_plus_primary_saving": 10.5,
+        "net_saving_excluding_posture_heading_transients": 5.498199999914505
+      },
+      "0.03": {
+        "path_plus_primary_saving": 11.699999809265137,
+        "net_saving_excluding_posture_heading_transients": 6.698199332342483
+      }
+    }
+  },
+  "saved_highspeed_steering": [
+    {
+      "case": "left90_R2_3.0",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.06789650022983551,
+      "maximum_target_steer_offset_rad": 0.07179396599531174
+    },
+    {
+      "case": "right90_R2_3.0",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.046149253845214844,
+      "maximum_target_steer_offset_rad": 0.049479592591524124
+    },
+    {
+      "case": "left90_R2_3.0",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.06802695989608765,
+      "maximum_target_steer_offset_rad": 0.07237270474433899
+    },
+    {
+      "case": "right90_R2_3.0",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.04659460484981537,
+      "maximum_target_steer_offset_rad": 0.049787696450948715
+    },
+    {
+      "case": "left90_R2_3.0",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.06835156679153442,
+      "maximum_target_steer_offset_rad": 0.07308774441480637
+    },
+    {
+      "case": "right90_R2_3.0",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.04676744341850281,
+      "maximum_target_steer_offset_rad": 0.05010448768734932
+    },
+    {
+      "case": "left90_R2_3.0",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.06849955022335052,
+      "maximum_target_steer_offset_rad": 0.07330022007226944
+    },
+    {
+      "case": "right90_R2_3.0",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.047111526131629944,
+      "maximum_target_steer_offset_rad": 0.050634969025850296
+    },
+    {
+      "case": "left90_R2_3.0",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.06848889589309692,
+      "maximum_target_steer_offset_rad": 0.07353713363409042
+    },
+    {
+      "case": "right90_R2_3.0",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.04718558490276337,
+      "maximum_target_steer_offset_rad": 0.05071955546736717
+    },
+    {
+      "case": "left90_R2_3.2",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.07978671789169312,
+      "maximum_target_steer_offset_rad": 0.08596009761095047
+    },
+    {
+      "case": "left90_R2_3.5",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.09600329399108887,
+      "maximum_target_steer_offset_rad": 0.1002277284860611
+    },
+    {
+      "case": "right90_R2_3.2",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.05322948098182678,
+      "maximum_target_steer_offset_rad": 0.058212727308273315
+    },
+    {
+      "case": "right90_R2_3.5",
+      "alpha": "alpha_0",
+      "maximum_actual_steer_offset_rad": 0.09537005424499512,
+      "maximum_target_steer_offset_rad": 0.10051462799310684
+    },
+    {
+      "case": "left90_R2_3.2",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.07998546957969666,
+      "maximum_target_steer_offset_rad": 0.08603569120168686
+    },
+    {
+      "case": "left90_R2_3.5",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.09607061743736267,
+      "maximum_target_steer_offset_rad": 0.10037290304899216
+    },
+    {
+      "case": "right90_R2_3.2",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.05310657620429993,
+      "maximum_target_steer_offset_rad": 0.05804746225476265
+    },
+    {
+      "case": "right90_R2_3.5",
+      "alpha": "alpha_0p25",
+      "maximum_actual_steer_offset_rad": 0.09637203812599182,
+      "maximum_target_steer_offset_rad": 0.10189419984817505
+    },
+    {
+      "case": "left90_R2_3.2",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.08007320761680603,
+      "maximum_target_steer_offset_rad": 0.08671926707029343
+    },
+    {
+      "case": "left90_R2_3.5",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.09620362520217896,
+      "maximum_target_steer_offset_rad": 0.1011909618973732
+    },
+    {
+      "case": "right90_R2_3.2",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.05301465094089508,
+      "maximum_target_steer_offset_rad": 0.057738710194826126
+    },
+    {
+      "case": "right90_R2_3.5",
+      "alpha": "alpha_0p5",
+      "maximum_actual_steer_offset_rad": 0.07996047288179398,
+      "maximum_target_steer_offset_rad": 0.08718014508485794
+    },
+    {
+      "case": "left90_R2_3.2",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.08015471696853638,
+      "maximum_target_steer_offset_rad": 0.08683916926383972
+    },
+    {
+      "case": "left90_R2_3.5",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.09628336131572723,
+      "maximum_target_steer_offset_rad": 0.10147789865732193
+    },
+    {
+      "case": "right90_R2_3.2",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.05392444133758545,
+      "maximum_target_steer_offset_rad": 0.06277149170637131
+    },
+    {
+      "case": "right90_R2_3.5",
+      "alpha": "alpha_0p75",
+      "maximum_actual_steer_offset_rad": 0.08267023414373398,
+      "maximum_target_steer_offset_rad": 0.08965229243040085
+    },
+    {
+      "case": "left90_R2_3.2",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.08045753836631775,
+      "maximum_target_steer_offset_rad": 0.08744706958532333
+    },
+    {
+      "case": "left90_R2_3.5",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.09632250666618347,
+      "maximum_target_steer_offset_rad": 0.10098163038492203
+    },
+    {
+      "case": "right90_R2_3.2",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.05798843502998352,
+      "maximum_target_steer_offset_rad": 0.06660003960132599
+    },
+    {
+      "case": "right90_R2_3.5",
+      "alpha": "alpha_1",
+      "maximum_actual_steer_offset_rad": 0.08524483442306519,
+      "maximum_target_steer_offset_rad": 0.09178511053323746
+    }
+  ],
+  "current_selection_schema": "path_conditional_task_v1",
+  "current_preference_selection_schema": null,
+  "maximum_saved_actual_steer_offset_rad": 0.09637203812599182,
+  "maximum_saved_target_steer_offset_rad": 0.10189419984817505,
+  "new_physics_ticks": 0,
+  "new_training_updates": 0
+}

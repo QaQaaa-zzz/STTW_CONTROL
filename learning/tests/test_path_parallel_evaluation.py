@@ -45,9 +45,12 @@ def test_real_compiled_parallel_lanes_match_serial_and_resolve_speed_causally():
  @struct.dataclass
  class State:
   alpha:object;tick:object;physical:object;fault:object;domain_exit:object
+ reset_calls=[]
  class Env:
   terminal_contract='terminal_contract_v2'
-  def reset(self,snapshot,path,v,a):return State(a,j.int32(0),Physical(j.bool_(False)),j.bool_(False),j.bool_(False))
+  def reset(self,snapshot,path,v,a):
+   jax.debug.callback(lambda _:reset_calls.append(1),a)
+   return State(a,j.int32(0),Physical(j.bool_(False)),j.bool_(False),j.bool_(False))
   def observation(self,state,path,v,h):return j.zeros(351).at[336].set(state.alpha).at[337].set(v),j.zeros(352),j.bool_(False)
   def set_log_template(self,*args):pass
   def policy_step(self,state,z,path,v,h,*,evaluation=False):
@@ -57,6 +60,7 @@ def test_real_compiled_parallel_lanes_match_serial_and_resolve_speed_causally():
  evaluator=BatchedPanelEvaluator(Env(),None,cfg);params=make_path_actor(cfg).init(jax.random.PRNGKey(0),j.zeros(351));paths=j.ones((3,2))
  speeds=j.ones(3)*2.;alpha=j.float32(.5)
  r,c=evaluator._compiled_group(paths,speeds,alpha,params,1.)
+ jax.effects_barrier();assert reset_calls==[], 'compilation must not execute reset'
  _,serial=c(r(paths,speeds,alpha),paths,speeds,params)
  vector=j.ones(3)*.5;r,c=evaluator._compiled_group(paths,speeds,vector,params,1.)
  _,parallel=c(r(paths,speeds,vector),paths,speeds,params)
