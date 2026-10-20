@@ -162,3 +162,72 @@ def test_batch_reset_guard_skips_all_route_work_on_nonterminal_steps():
     actual=run(j.array([False,True,True]),j.array([False,False,True]));jax.block_until_ready(actual)
     np.testing.assert_array_equal(actual.value,[3.,99.,7.])
     np.testing.assert_array_equal(actual.episode,[1,5,2])
+
+
+@pytest.mark.parametrize('count',[0,1,15,17,40])
+def test_sparse_reset_processes_every_terminal_without_full_batch_work(count):
+    from flax import struct
+    @struct.dataclass
+    class E:
+        env_id:object
+        episode:object
+        value:object
+    n=40;called=[]
+    def reset(eid,episode):
+        jax.debug.callback(lambda ids:called.append(np.asarray(ids).copy()),eid)
+        return E(eid,episode,eid.astype(j.float32)+100.)
+    ep=E(j.arange(n),j.arange(n),j.arange(n,dtype=j.float32))
+    done=j.arange(n)<count
+    actual=jax.jit(lambda:training.reset_finished_batch(ep,dict(done=done,engineering_fault=j.zeros(n,bool)),reset))()
+    jax.block_until_ready(actual)
+    np.testing.assert_array_equal(actual.episode,np.arange(n)+(np.arange(n)<count))
+    np.testing.assert_array_equal(actual.value,np.arange(n)+100.*(np.arange(n)<count))
+    assert sum(np.size(x) for x in called)<=((count+15)//16)*16
+
+
+def test_evaluation_scan_removes_only_unused_lower_observation_and_preserves_state():
+    env=minimal_env();env.zero_log['lower_observation']=j.zeros(210)
+    base=State(Physical(j.bool_(False)),j.bool_(False),j.bool_(False),j.zeros(2),j.int32(0),j.bool_(False))
+    full,logs=env.policy_step(base,j.zeros(2),None,2.,20.)
+    compact,small=env.policy_step(base,j.zeros(2),None,2.,20.,evaluation=True)
+    for a,b in zip(jax.tree.leaves(full),jax.tree.leaves(compact)):np.testing.assert_array_equal(a,b)
+    assert set(small)==set(logs)-{'lower_observation'}
+    for key in small:
+        for a,b in zip(jax.tree.leaves(small[key]),jax.tree.leaves(logs[key])):np.testing.assert_array_equal(a,b)
+
+
+def test_finite_task_end_cuts_value_but_rollout_cut_bootstraps():
+    import torch
+    from tensordict import TensorDict
+    obs=TensorDict({'policy':torch.zeros(2,351),'critic':torch.zeros(2,352)},batch_size=[2])
+    cfg=copy.deepcopy(CFG);cfg['training_future_phase_C']['minibatches']=1
+    algo=training.make_algorithm(obs,1,cfg,'cpu')
+    with torch.no_grad():
+        for p in algo.policy.critic.parameters():p.zero_()
+        list(algo.policy.critic.modules())[-1].bias.fill_(7.)
+        algo.act(obs)
+        flags=training.termination_flags(j.array([4000,100]),False,False,False,20.,cfg,'terminal_contract_v2')
+        algo.process_env_step(obs,torch.tensor([-1.,-1.]),torch.tensor(np.array(flags['done'])),{})
+        algo.compute_returns(obs)
+    np.testing.assert_allclose(algo.storage.returns[0,:,0].numpy(),[-1.,-1.+cfg['training_future_phase_C']['gamma']*7.],atol=1e-5)
+
+
+def test_sparse_reset_runtime_flags_match_reference_on_real_route_sampler():
+    from pathlib import Path
+    _,cfg,_=training.load_plan(Path(__file__).parents[1]/'configs/path_coverage_shared_run.json')
+    env=SimpleNamespace(physics=SimpleNamespace(helpers=SimpleNamespace(pose=lambda _:j.zeros(3))),reset=lambda snapshot,path,speed,alpha:alpha)
+    batch=training.PathBatch(env,SimpleNamespace(data=None),cfg,911401,None)
+    ep=jax.jit(jax.vmap(batch.reset))(j.arange(100,140),j.arange(40))
+    def pair(episodes,done,fault):
+        flags=dict(done=done,engineering_fault=fault)
+        expected=jax.vmap(lambda e,fl:training.reset_finished_episode(e,fl,batch.reset))(episodes,flags)
+        actual=training.reset_finished_batch(episodes,flags,batch.reset)
+        return expected,actual
+    compare=jax.jit(pair)
+    for done in [j.arange(40)==17,j.arange(40)%3==1,j.ones(40,bool)]:
+        expected,actual=compare(ep,done,j.arange(40)==9)
+        for a,b in zip(jax.tree.leaves(expected),jax.tree.leaves(actual)):
+            # Reset batch width changes floating-point prefix-scan reduction order.
+            # Use the user's accepted 9e-5 tolerance, never a relative escape.
+            if np.asarray(a).dtype.kind in 'fc':np.testing.assert_allclose(a,b,rtol=0,atol=9e-5)
+            else:np.testing.assert_array_equal(a,b)

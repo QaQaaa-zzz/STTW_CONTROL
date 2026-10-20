@@ -65,8 +65,38 @@ def make_algorithm(obs,steps,config,device='cuda'):
             else:torch.nn.init.orthogonal_(layers[-1].weight,1.)
         policy.log_std.copy_(torch.tensor(c['std_initial'],device=device).log())
     storage=RolloutStorage('rl',obs.batch_size[0],steps,obs,[2],device=device)
-    # Independent endpoint run: one KL group, avoiding missing-opposite-alpha NaN.
-    return DirectCommandPPO(policy,storage,num_learning_epochs=c['epochs'],num_mini_batches=c['minibatches'],clip_param=c['clip'],gamma=c['gamma'],lam=c['gae_lambda'],value_loss_coef=1.,entropy_coef=c['entropy'],use_clipped_value_loss=False,schedule='fixed',desired_kl=c['soft_kl'],normalize_advantage_per_mini_batch=False,device=device,actor_lr=c['actor_lr'],critic_lr=c['critic_lr'],adam_betas=(.9,.999),adam_epsilon=1e-5,weight_decay=0.,std_min=c['std_min'],std_max=c['std_max'],hard_kl=c['hard_kl'],actor_grad_limit=c['grad_clip_actor'],critic_grad_limit=c['grad_clip_critic'],kl_group_index=None)
+    algorithm=DirectCommandPPO
+    if config.get('alpha_conditioning',{}).get('mode')=='shared_conditional_v1':
+        class ConditionalPathPPO(DirectCommandPPO):
+            _full_rollout_kl=conditional_rollout_kl
+        algorithm=ConditionalPathPPO
+    # Conditional reporting includes all continuous samples in the mean and
+    # reports only endpoints actually present; missing groups are not faults.
+    return algorithm(policy,storage,num_learning_epochs=c['epochs'],num_mini_batches=c['minibatches'],clip_param=c['clip'],gamma=c['gamma'],lam=c['gae_lambda'],value_loss_coef=1.,entropy_coef=c['entropy'],use_clipped_value_loss=False,schedule='fixed',desired_kl=c['soft_kl'],normalize_advantage_per_mini_batch=False,device=device,actor_lr=c['actor_lr'],critic_lr=c['critic_lr'],adam_betas=(.9,.999),adam_epsilon=1e-5,weight_decay=0.,std_min=c['std_min'],std_max=c['std_max'],hard_kl=c['hard_kl'],actor_grad_limit=c['grad_clip_actor'],critic_grad_limit=c['grad_clip_critic'],kl_group_index=336 if config.get('alpha_conditioning',{}).get('mode')=='shared_conditional_v1' else None)
+
+
+def conditional_rollout_kl(algo):
+    """Path-only KL diagnostics; the stop rule remains full-rollout mean KL."""
+    import torch
+    from .direct_command_ppo import _finite_tensors
+    with torch.no_grad():
+        observations=algo.storage.observations.flatten(0,1)
+        old_mu=algo.storage.mu.flatten(0,1);old_std=algo.storage.sigma.flatten(0,1)
+        alpha=observations['policy'][:,336];std=algo.policy.log_std.exp()
+        if not _finite_tensors(old_mu,old_std,std,alpha) or bool((old_std<=0).any()):
+            return float('nan'),{}
+        totals=torch.zeros(3,device=old_mu.device,dtype=torch.float64)
+        counts=torch.zeros_like(totals)
+        for start in range(0,len(old_mu),16384):
+            end=min(start+16384,len(old_mu));new_mu=algo.policy.act_inference(observations[start:end])
+            kl=(torch.log(std/old_std[start:end])+(old_std[start:end].square()+(old_mu[start:end]-new_mu).square())/(2*std.square())-.5).sum(-1)
+            if not _finite_tensors(kl):return float('nan'),{}
+            totals[0]+=kl.sum();counts[0]+=len(kl)
+            for i,value in enumerate((0.,1.),1):
+                mask=alpha[start:end]==value
+                totals[i]+=torch.where(mask,kl,0.).sum();counts[i]+=mask.sum()
+        totals,counts=torch.stack((totals,counts)).cpu().tolist()
+        return totals[0]/counts[0],{str(i):totals[i+1]/counts[i+1] for i in (0,1) if counts[i+1]}
 
 
 def export_actor(policy):
@@ -109,10 +139,23 @@ def reset_finished_episode(ended,flags,reset):
 
 
 def reset_finished_batch(ended,flags,reset):
-    """A scalar condition outside vmap skips route generation on ordinary steps."""
-    return jax.lax.cond(j.any(flags['done']&~flags['engineering_fault']),
-        lambda _:jax.vmap(lambda ep,fl:reset_finished_episode(ep,fl,reset))(ended,flags),
-        lambda _:ended,None)
+    """Reset packed terminal lanes in chunks; process every end, including >16."""
+    eligible=flags['done']&~flags['engineering_fault'];n=eligible.shape[0]
+    width=min(16,n);slots=j.arange(width)
+    def packed_reset(_):
+        # Installed CPU XLA misfolds a closed one-hot reduction used as a
+        # while bound. The barrier preserves that scalar, with no extra math.
+        count=jax.lax.optimization_barrier(j.sum(eligible))
+        indices=j.nonzero(eligible,size=n,fill_value=0)[0]
+        def step(carry):
+            offset,episodes=carry
+            ids=indices[j.minimum(offset+slots,n-1)]
+            fresh=jax.vmap(reset)(ended.env_id[ids],ended.episode[ids]+1)
+            destination=j.where(offset+slots<count,ids,n)
+            episodes=jax.tree.map(lambda old,new:old.at[destination].set(new,mode='drop'),episodes,fresh)
+            return offset+width,episodes
+        return jax.lax.while_loop(lambda carry:carry[0]<count,step,(j.int32(0),ended))[1]
+    return jax.lax.cond(j.any(eligible),packed_reset,lambda _:ended,None)
 
 @struct.dataclass
 class Episode:
@@ -158,7 +201,7 @@ class PathBatch:
         ended=ep.replace(state=end,totals=totals,component_totals=cost_totals)
         nxt=reset_finished_episode(ended,flags,lambda eid,episode:self.reset(eid,episode,absolute_update)) if auto_reset else ended
         if auto_reset:diagnostics=merge_statistics(diagnostics,reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
-        obs=self.observation(nxt)
+        obs=self.observation(nxt) if auto_reset else final
         return nxt,obs,j.sum(logs['scored_tick_reward']),flags,final,dict(diagnostics=diagnostics,completed_component_costs=j.where(flags['done'],cost_totals,0.),rollout=sums,completed_totals=j.where(flags['done'],totals,0.),family=ep.route.family,episode=ep.episode,active_ticks=j.sum(active),component_caps={k:j.sum(v&active) for k,v in logs['component_capped'].items()})
 
 
@@ -555,9 +598,10 @@ def train(path,output,*,execute=False,resume=None):
             from .path_command_statistics import reduce_statistics,merge_statistics,reset_statistics
             def advance_batch(episodes,z,absolute_update=1):
                 advance_one=lambda ep,action:batch.advance_one(ep,action,absolute_update,auto_reset=False)
-                ended,_,reward,flags,_,stats=jax.vmap(advance_one)(episodes,z)
+                ended,final,reward,flags,_,stats=jax.vmap(advance_one)(episodes,z)
                 nxt=reset_finished_batch(ended,flags,lambda eid,episode:batch.reset(eid,episode,absolute_update))
-                obs_batch=jax.vmap(batch.observation)(nxt)
+                obs_batch=jax.lax.cond(j.any(flags['done']&~flags['engineering_fault']),
+                    lambda _:jax.vmap(batch.observation)(nxt),lambda _:final,None)
                 nxt=nxt.replace(state=nxt.state.replace(fault=nxt.state.fault|obs_batch[2]))
                 resets=jax.vmap(reset_statistics)(nxt.route,flags['done']&~flags['engineering_fault'])
                 stats['diagnostics']=merge_statistics(stats['diagnostics'],resets)

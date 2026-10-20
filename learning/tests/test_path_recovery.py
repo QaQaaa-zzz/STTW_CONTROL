@@ -140,7 +140,7 @@ def test_reused_compiled_executor_twin_continuation_contains_hidden_states():
             # ESO, delay, both histories and filters affect the next command.
             hidden=s.physical.controller.eso.sum()+s.physical.actuator.pending.sum()+s.lower.frames.sum()+s.history['frames'].sum()+s.filtered.sum()
             return j.ones(351)*hidden*.001,j.zeros(352),j.bool_(False)
-        def policy_step(self,s,z,path,v,horizon):
+        def policy_step(self,s,z,path,v,horizon,*,evaluation=False):
             end=s.replace(tick=s.tick+4,offsets=s.offsets+z*.001,filtered=s.filtered*.9+z*.01,
                 lower=s.lower.replace(frames=s.lower.frames*.99+z.sum()*.01),
                 physical=s.physical.replace(controller=s.physical.controller.replace(eso=s.physical.controller.eso+z.sum())))

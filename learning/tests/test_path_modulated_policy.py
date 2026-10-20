@@ -82,3 +82,23 @@ def test_wrong_architecture_and_malformed_parameters_are_rejected():
         pp.validate_actor_parameters(wrong, MOD)
     with pytest.raises(ValueError):
         pp.architecture_identity({'network': {'architecture': 'unknown'}})
+
+
+def test_zero_actor_output_delays_film_gradient_only_until_first_head_update():
+    from pathlib import Path
+    import json
+    from tensordict import TensorDict
+    from sttw_control.path_command_training import make_algorithm
+    cfg=json.loads((Path(__file__).parents[1]/'configs/STTW_Path_Coverage_Shared.json').read_text())
+    cfg['training_future_phase_C']['minibatches']=1
+    torch.manual_seed(11)
+    x=torch.randn(8,351);x[:,336]=torch.tensor([0.,1.]*4)
+    obs=TensorDict({'policy':x,'critic':torch.cat((x,torch.ones(8,1)),dim=-1)},batch_size=[8])
+    algo=make_algorithm(obs,1,cfg,'cpu');actor=algo.policy.actor
+    target=torch.randn(8,2)
+    assert torch.count_nonzero(actor(x))==0
+    (actor(x)-target).square().mean().backward()
+    assert all(torch.count_nonzero(getattr(actor,key).grad)==0 for key in MOD_KEYS)
+    algo.optimizer.step();algo.optimizer.zero_grad(set_to_none=True)
+    (actor(x)-target).square().mean().backward()
+    assert all(torch.count_nonzero(getattr(actor,key).grad)>0 for key in MOD_KEYS)

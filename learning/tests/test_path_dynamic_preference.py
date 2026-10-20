@@ -58,7 +58,7 @@ def test_real_compiled_batch_ramp_reward_alignment_and_failure_truncation():
             obs=j.zeros(351).at[336].set(state.alpha)
             return obs,j.zeros(352),j.bool_(False)
         def set_log_template(self,*args):pass
-        def policy_step(self,state,z,path,v,h):
+        def policy_step(self,state,z,path,v,h,*,evaluation=False):
             def one(st,_):
                 active=~st.physical.failed
                 nxt=st.replace(tick=st.tick+active.astype(j.int32),history=st.history+active.astype(j.int32),

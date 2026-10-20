@@ -50,7 +50,7 @@ def test_real_compiled_parallel_lanes_match_serial_and_resolve_speed_causally():
   def reset(self,snapshot,path,v,a):return State(a,j.int32(0),Physical(j.bool_(False)),j.bool_(False),j.bool_(False))
   def observation(self,state,path,v,h):return j.zeros(351).at[336].set(state.alpha).at[337].set(v),j.zeros(352),j.bool_(False)
   def set_log_template(self,*args):pass
-  def policy_step(self,state,z,path,v,h):
+  def policy_step(self,state,z,path,v,h,*,evaluation=False):
    def tick(st,_):return st.replace(tick=st.tick+1),dict(active_tick=j.bool_(True),v_user=v,upper_alpha=st.alpha)
    return jax.lax.scan(tick,state,None,length=4)
  cfg={'network':{'architecture':'alpha_modulated_v1'},'timing':{'upper_dt_s':.02,'lower_dt_s':.005}}
@@ -67,3 +67,16 @@ def test_real_compiled_parallel_lanes_match_serial_and_resolve_speed_causally():
  np.testing.assert_allclose(values[:10],2.);np.testing.assert_allclose(values[10:30],2.8);np.testing.assert_allclose(values[30:],2.3)
  # All four lower ticks share exactly the current policy request, including boundaries.
  np.testing.assert_array_equal(np.asarray(events['v_user']),np.broadcast_to(values[:,None,None],(50,3,4)))
+
+
+def test_evaluation_path_cache_reuses_original_route_without_changing_knots(monkeypatch):
+ from types import SimpleNamespace
+ from sttw_control.path_command_evaluation import BatchedPanelEvaluator
+ from sttw_control import geometric_path
+ calls=[];original=object()
+ monkeypatch.setattr(geometric_path,'build_path',lambda *a:(calls.append(a),original)[1])
+ env=SimpleNamespace(physics=SimpleNamespace(helpers=SimpleNamespace(pose=lambda _:np.zeros(3))))
+ e=BatchedPanelEvaluator(env,SimpleNamespace(data=None),{})
+ assert e.path_for_route('left90_R2') is original
+ assert e.path_for_route('left90_R2') is original
+ assert len(calls)==1

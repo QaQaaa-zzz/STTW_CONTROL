@@ -60,7 +60,7 @@ def test_shared_checkpoint_resume_keeps_identity_rng_and_mixed_alpha_ppo(tmp_pat
             algo.act(obs);algo.process_env_step(obs,-obs['policy'][:,336],torch.zeros(8,dtype=torch.bool),{})
         algo.compute_returns(obs)
     result=algo.update()
-    assert result['accepted_epochs']>0 and np.isfinite(result['mean_kl']) and set(result['kl_by_alpha'])=={'all'}
+    assert result['accepted_epochs']>0 and np.isfinite(result['mean_kl']) and set(result['kl_by_alpha'])=={'0','1'}
     path=training.save_checkpoint(tmp_path/'shared/checkpoints',algo,1,identity,route_counters=np.arange(8))
     atomic_json(tmp_path/'shared/last_completed.json',dict(schema=training.SCHEMA,update=1,checkpoint=str(path),checkpoint_sha256=digest(path)))
     receipt,best=training.resume_source(tmp_path,None,identity)
@@ -166,3 +166,22 @@ def test_resume_completes_only_saved_boundary_validation(tmp_path,monkeypatch,up
     assert receipt['parent_persisted_boundary_lower_ticks']==(0 if completeness=='missing' else 20)
     assert receipt['repeated_saved_lower_ticks']==(20 if completeness=='partial' else 0)
     assert json.loads((out/'resume_validation.json').read_text())==receipt
+
+
+@pytest.mark.parametrize('alphas',[[0.,.5,1.],[.25,.5,.75],[0.,0.,0.]])
+def test_conditional_kl_includes_interior_and_skips_absent_endpoints(alphas):
+    _,cfg,_=training.load_plan(ROOT/'learning/configs/path_coverage_shared_run.json')
+    cfg['training_future_phase_C']['minibatches']=1
+    n=len(alphas);obs=TensorDict({'policy':torch.zeros(n,351),'critic':torch.zeros(n,352)},batch_size=[n])
+    obs['policy'][:,336]=torch.tensor(alphas)
+    algo=training.make_algorithm(obs,1,cfg,'cpu')
+    with torch.no_grad():
+        algo.act(obs);algo.process_env_step(obs,torch.zeros(n),torch.zeros(n,dtype=torch.bool),{})
+        # Force a large change only in the continuous-alpha lane, leaving
+        # endpoints unchanged. The full mean must still include that lane.
+        algo.storage.mu[0,:,0]+=torch.where(obs['policy'][:,336]==.5,1.,0.)
+        mean,groups=algo._full_rollout_kl()
+        expected=((algo.storage.mu[0,:,0]/algo.policy.log_std.exp()[0])**2*.5).mean()
+    assert mean==pytest.approx(float(expected),rel=1e-6)
+    assert set(groups)=={str(v) for v in (0,1) if float(v) in alphas}
+    assert all(np.isfinite(v) for v in groups.values())

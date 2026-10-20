@@ -23,6 +23,15 @@ class BatchedPanelEvaluator:
         self.env=env;self.snapshot=snapshot;self.config=config
         self.check_budget=check_budget;self.status=status;self.account=account
         self.compiled={}
+        self.paths={}
+
+    def path_for_route(self,route):
+        """One immutable geometry per route for this fixed snapshot/config."""
+        from .geometric_path import build_path
+        if route not in self.paths:
+            pose=np.asarray(self.env.physics.helpers.pose(self.snapshot.data))
+            self.paths[route]=build_path(route,pose,self.config)
+        return self.paths[route]
 
     def _compiled_group(self,paths,speeds,alpha,params,horizon,*,capture_states=False,diagnostic_transform=None,diagnostic_identity=None,dynamic_modes=None):
         from .path_command_policy import make_path_actor,validate_actor_parameters
@@ -45,7 +54,7 @@ class BatchedPanelEvaluator:
             example=jax.tree.map(lambda x:x[0],states)
             path=jax.tree.map(lambda x:x[0],paths)
             env.set_log_template(example,path,request(speeds[0],example.tick))
-            template=jax.eval_shape(lambda state:env.policy_step(state,j.zeros(2),path,request(speeds[0],state.tick),horizon),example)[1]
+            template=jax.eval_shape(lambda state:env.policy_step(state,j.zeros(2),path,request(speeds[0],state.tick),horizon,evaluation=True),example)[1]
             zero_logs=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
             if diagnostic_transform is not None:
                 _,metadata=diagnostic_transform(j.zeros(2),example,path,request(speeds[0],example.tick),env)
@@ -66,13 +75,13 @@ class BatchedPanelEvaluator:
                         state=state.replace(fault=state.fault|fault)
                         z=actor.apply(params,obs)
                         if diagnostic_transform is None:
-                            nxt,logs=env.policy_step(state,z,path,current_request,horizon)
+                            nxt,logs=env.policy_step(state,z,path,current_request,horizon,evaluation=True)
                             if dynamic_key:logs=dict(logs,alpha_request=j.full(4,alpha_request),alpha_applied=j.full(4,state.alpha))
                             return nxt,logs
                         applied,metadata=diagnostic_transform(z,state,path,current_request,env)
                         # A transform cannot sanitize an original Actor fault.
                         state=state.replace(fault=state.fault|~j.all(j.isfinite(z)))
-                        nxt,logs=env.policy_step(state,applied,path,current_request,horizon)
+                        nxt,logs=env.policy_step(state,applied,path,current_request,horizon,evaluation=True)
                         logs=dict(logs,**{'diagnostic_'+k:j.broadcast_to(value,(logs['active_tick'].shape[0],)+value.shape) for k,value in metadata.items()})
                         return nxt,logs
                     return jax.lax.cond(active,advance,lambda state:(state,zero_logs),state)
@@ -86,7 +95,6 @@ class BatchedPanelEvaluator:
 
     def evaluate(self,params,alpha,output,cached_names=None,*,case_names=None,diagnostic_transform=None,diagnostic_identity=None,dynamic_rows=None,alpha_grid=None):
         from .path_command_selection import cases
-        from .geometric_path import build_path
         from .direct_command_training import flatten_logs
         started=time.perf_counter();out=Path(output)
         if out.exists() and cached_names is None:raise FileExistsError('validation output immutable')
@@ -126,7 +134,7 @@ class BatchedPanelEvaluator:
         upper_dt=self.config['timing']['upper_dt_s'];intervals=round(horizon/upper_dt)
         if abs(upper_dt-.02)>1e-12 or intervals%50:
             raise ValueError('batched evaluator requires existing 50Hz whole-second horizon')
-        traces={};groups={};pose=np.asarray(self.env.physics.helpers.pose(self.snapshot.data))
+        traces={};groups={}
         timing=dict(schema='path_batched_evaluation_v1',compile_seconds=0.,physics_seconds=0.,
             transfer_seconds=0.,file_seconds=0.,reset_seconds=0.,cached_cases=sorted(cached),
             chunk_policy_steps=50,lower_dt_s=self.config['timing']['lower_dt_s'],groups=[],completed=False,diagnostic_identity=diagnostic_identity)
@@ -149,8 +157,8 @@ class BatchedPanelEvaluator:
                     declaration=definition(name)
                     data['speed_script_values']=np.asarray(declaration['speed_values'])
                     data['speed_script_switch_times']=np.asarray(declaration['speed_switch_times'])
-                np.savez_compressed(out/f'{name}.npz',**data)
-                np.savez_compressed(out/f'{name}_path.npz',s=path.s,xy=path.xy,
+                np.savez(out/f'{name}.npz',**data)
+                np.savez(out/f'{name}_path.npz',s=path.s,xy=path.xy,
                     heading=path.heading,curvature=path.curvature,goal=path.goal,turn_end=path.turn_end,
                     **({field:np.asarray(getattr(path,field)) for field in ('turn_starts','turn_ends','turn_directions','turn_mask')} if conflict else {}))
                 traces[name]=data
@@ -162,7 +170,7 @@ class BatchedPanelEvaluator:
                     with np.load(out/f'{name}.npz') as archive:traces[name]={k:archive[k] for k in archive.files}
                     timing['file_seconds']+=time.perf_counter()-before
                     continue
-                path=build_path(route,pose,self.config)
+                path=self.path_for_route(route)
                 groups.setdefault(_signature(path),[]).append(((name,route,speed),path))
             for entries in groups.values():
                 self.check_budget();rows=[row for row,_ in entries]

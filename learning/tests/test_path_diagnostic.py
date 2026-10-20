@@ -51,7 +51,7 @@ def test_compiled_none_noop_and_transform_cache_separation():
         def reset(self,snapshot,path,v,alpha):return state(0)
         def set_log_template(self,*args):pass
         def observation(self,s,p,v,h):return j.zeros(351),j.zeros(352),j.bool_(False)
-        def policy_step(self,s,z,p,v,h):
+        def policy_step(self,s,z,p,v,h,*,evaluation=False):
             logs={k:j.asarray(value) for k,value in trace(0,4).items()}
             logs['time']=(s.tick+j.arange(4))*.005
             logs['latent_z']=j.broadcast_to(z,(4,2))
@@ -114,7 +114,7 @@ def test_subset_accounts_only_real_ticks_and_preserves_terminal(tmp_path,monkeyp
         def reset(self,snapshot,path,v,alpha):return state(0)
         def set_log_template(self,*args):pass
         def observation(self,s,p,v,h):return j.zeros(351),j.zeros(352),j.bool_(False)
-        def policy_step(self,s,z,p,v,h):
+        def policy_step(self,s,z,p,v,h,*,evaluation=False):
             logs={k:j.asarray(value) for k,value in trace(0,4).items()}
             logs['time']=(s.tick+j.arange(4))*.005
             logs['physical_failure']=j.full(4,s.tick>=4)

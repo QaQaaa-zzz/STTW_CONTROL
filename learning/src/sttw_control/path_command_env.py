@@ -30,6 +30,11 @@ def training_log(log):
     """Static projection; reward/state calculations remain the full tick's."""
     return {key:value for key,value in log.items() if key in _TRAINING_LOG_KEYS}
 
+
+def evaluation_log(log):
+    """Keep reward reconstruction/physics diagnostics, omit unused 210D input."""
+    return {key:value for key,value in log.items() if key!='lower_observation'}
+
 def refresh_speed_request(state,v_user,config):
     """Current issued request only; the geometric follower never regulates speed."""
     return state.follower.command.at[0].set(v_user)
@@ -135,7 +140,7 @@ class PathCommandEnv:
         template=jax.eval_shape(lambda x:self.tick(x,j.zeros(2),path,v_user),s)[1]
         self.zero_log=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
 
-    def policy_step(self,s,z,path,v_user,horizon,*,training=False):
+    def policy_step(self,s,z,path,v_user,horizon,*,training=False,evaluation=False):
         if self.config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
             # At a request boundary publish the new current speed before action
             # execution. Other intervals retain the existing slew schedule exactly.
@@ -146,14 +151,15 @@ class PathCommandEnv:
             rate=s.nominal_rates.at[0].set(j.where(changed,rates[0],s.nominal_rates[0]))
             s=s.replace(follower=s.follower.replace(command=command),physical=s.physical.replace(raw=raw),nominal_rates=rate)
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
-        zero_log=training_log(self.zero_log) if training else self.zero_log
+        project_log=training_log if training else evaluation_log if evaluation else lambda log:log
+        zero_log=project_log(self.zero_log)
         def step(st,slot):
             stopped=st.physical.failed|st.fault|st.domain_exit
             def active(st):
                 # Active policy intervals start on an upper boundary. This
                 # scalar schedule stays outside vmap's per-lane predicates.
                 end,log=self.tick(st,z,path,v_user,follower_due=slot==3)
-                return end,training_log(log) if training else log
+                return end,project_log(log)
             return jax.lax.cond(stopped,lambda st:(st,zero_log),active,st)
         end,logs=jax.lax.scan(step,s,j.arange(4))
         end=self.record_frame(end)
