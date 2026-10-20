@@ -64,7 +64,7 @@ def validate_conditional_plan(plan,config):
     if network.get('actor_dim')!=351 or network.get('critic_dim')!=352 or network.get('hidden')!=[128,128,64] or network.get('activation')!='elu':raise ValueError('conditional network351/352 contract mismatch')
     if plan.get('alphas')!=ALPHA_GRID or plan.get('task_selection_schema')!='path_conditional_task_v1' or config.get('task_selection_schema')!='path_conditional_task_v1':raise ValueError('conditional evaluation/selection mismatch')
     if plan.get('automatic_extension') or plan.get('conditional_extension'):raise ValueError('conditional budget cannot extend')
-    if plan.get('sampler_version')!='demand_exposure_v2' or plan['sampler_resolution'].get('training_sampler')!=config.get('training_sampler'):raise ValueError('conditional sampler disconnected')
+    if plan.get('sampler_version') not in ('demand_exposure_v2','demand_exposure_v3') or plan.get('sampler_version')!=config['training_sampler']['version'] or plan['sampler_resolution'].get('training_sampler')!=config.get('training_sampler'):raise ValueError('conditional sampler disconnected')
     if plan.get('terminal_contract')!='terminal_contract_v2' or plan.get('http_failure_policy')!='error':raise ValueError('conditional terminal/visibility contract mismatch')
     from .path_command_reward import reward_version
     reward_version(config)  # Reward choice is independent of alpha modulation.

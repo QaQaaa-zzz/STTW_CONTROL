@@ -1,3 +1,29 @@
+# 2026-10-20 高压力任务与侧倾超限惩罚配置
+
+用户要求提高训练和测试速度、缩小半径，并加强侧倾超限惩罚。新配置：[STTW_Path_HighDemand_Shared.json](../learning/configs/STTW_Path_HighDemand_Shared.json)，候选正式入口：[path_high_demand_shared_run.json](../learning/configs/path_high_demand_shared_run.json)。原Coverage配置与历史运行保留。
+
+| 参数 | 原Coverage | 新高压力配置 |
+|---|---|---|
+| roll/work权重 | 40 / 120 | 80 / 240 |
+| roll/work限顶 | 900 / 3000 | 1800 / 6000 |
+| 失败尾罚代价上界 | 5080.2 | 8980.2（新十项cap之和） |
+| 强弯训练速度 / 半径 | 2.4–2.6m/s / 2.0–2.2m | 2.8–3.2m/s / 1.6–1.8m |
+| 普通训练速度 / 半径 | 1.8–2.6m/s / 1.8–4m | 2.6–3.2m/s / 1.6–2.4m |
+| gentle半径 | 4m | 3m |
+| 固定DEV/测试速度 / 半径 | 2.0、2.6m/s / 2m | 2.8、3.2m/s / 1.6m |
+| 训练及测试直道前缀 | 3m | 10m |
+| 速度参考上限 | 3.0m/s | 3.5m/s |
+
+姿态阈值与尺度.26/.04、.30/.02rad、rollrate项不变；侧倾两项包含限顶后的有效代价均2倍。失败公式、额外−5、gamma=.997保持，只同步代价上界。χ仍按当前位置原始路径曲率及请求速度计算，primary带宽与其余奖励定义不变。上限3.5明确改变速度参考配置，使3.2请求仍有+.25修正余量；物理执行器、滤波和修正变化率权限未增加。固定底层仍是local300 update300、no-alpha210维10帧＋ECBC/ESO，上层α不传给底层。
+
+采样器demand_exposure_v3沿用原分组/采样算法，仅开放声明的任务范围、prefix、gentle半径；v2冻结校验继续生效。left90/right90使用配置半径，旧left90_R2/right90_R2名称兼容。新路径与速度不再复用旧物理基线：需要6个匹配B0回合，上限24000 lower ticks；5次DEV×6case×5α×4000=600000，验证合计624000。未来200轮候选训练52,428,800，加基线/DEV及独立512工程短测，总声明53,053,312 lower ticks。工程计划自身仅8×16×4=512，不沿用完整训练预算。匹配的新任务续训可复用父运行基线。
+
+验证：最终10个相关测试模块92 passed、2 GPU skipped（19.33s）；其中高压力模块4项通过。覆盖实际JIT/vmap512槽采样范围与102/204/206分组、左右路径曲率、gentle半径、跨α姿态代价精确加倍、cap总和与失败尾罚、配置加载、正式/工程prepare和验证预算边界。独立代码审查无核心阻塞，发现的工程预算陈旧说明已修正。
+
+实际prepare：runs/path_high_demand_shared_preparation_20261020/{formal,engineering}，均prepared_not_run，新增训练/物理交互为0。没有启动GPU物理短测、PPO或新评测；CPU回归不代表可行性、吞吐或α分离改善。共同姿态罚可能使两端都更保守；本配置同时改变奖励、速度和路径，不能作为单因素消融。后续必须用新任务匹配B0与跨α轨迹验证取舍，不能用旧Coverage回报直接比较新奖励。
+
+---
+
 # 2026-10-20 第三轮执行路径与数学审查
 
 本轮以e381cff为基线，用户要求正确则修改、错误则解释。只修改path_command_training/evaluation及相应测试；原Coverage奖励/χ、路径、local300、物理forward、控制时序与动作权限、每轮checkpoint均保留。无新训练/物理评测、无SHA扫描。逐项离线数值证据：[evidence.json](evidence/path_review3_20261020/evidence.json)；验证脚本留runs/path_review3_20261020/verify_claims.py，不增加生产模块。

@@ -220,7 +220,7 @@ def load_plan(path):
     if not conditional and (plan['alphas']!=[0,1] or not 1<=plan['updates']<=c['updates_initial'] or plan['automatic_extension']):raise ValueError('unapproved endpoint/budget extension')
     if source['candidate']['source_update']!=300:raise ValueError('frozen300 required')
     # These are explicit resolved details; reject silent changes to code constants.
-    expected={'ordinary_fraction':.3,'ordinary_straight_fraction':.5,'gentle_angle_deg':30,'gentle_radius_m':4,'single_turn_fraction':.5,'S_fraction':.2,'S_inter_bend_straight_m':3,'fixed_grid_length_m':100,'fixed_grid_points':5001}
+    expected={'ordinary_fraction':.3,'ordinary_straight_fraction':.5,'gentle_angle_deg':30,'gentle_radius_m':c.get('gentle_radius_m',4),'single_turn_fraction':.5,'S_fraction':.2,'S_inter_bend_straight_m':3,'fixed_grid_length_m':100,'fixed_grid_points':5001}
     if any(plan['sampler_resolution'].get(k)!=v for k,v in expected.items()):raise ValueError('sampler resolution differs from implementation')
     if cfg['path']['spacing_m']!=.02 or c['family_fraction']!={'straight_or_gentle':.3,'rounded_left_or_right_60_to_100_degrees':.5,'smooth_S_path':.2}:raise ValueError('sampler contract changed')
     if plan.get('terminal_contract','terminal_contract_v1') not in ['terminal_contract_v1','terminal_contract_v2']:raise ValueError('unknown terminal contract')
@@ -231,7 +231,7 @@ def load_plan(path):
     reward_fork=plan.get('initialization',{}).get('mode')=='weights_only_reward_fork'
     if conditional:
         if plan['initialization']['mode']!='scratch':plan['initialization']['checkpoint']=str((path.parent/plan['initialization']['checkpoint']).resolve())
-        plan['baseline_parent']=str((path.parent/plan['baseline_parent']).resolve())
+        if plan.get('baseline_parent') is not None:plan['baseline_parent']=str((path.parent/plan['baseline_parent']).resolve())
     elif reward_fork:
         from .path_command_fork import reward_validation_schedule
         reward_validation_schedule(plan,cfg)
@@ -295,6 +295,10 @@ def prepare(path,output,check_interface=False):
         report['abstract_batch_shapes']={'actor':list(multi[1][0].shape),'critic':list(multi[1][1].shape)}
     if plan.get('sampler_version')=='path_conflict_exposure_v1':
         report.update(maximum_validation_lower_ticks=0 if engineering else 784000,maximum_preflight_lower_ticks=64000)
+    if is_conditional(plan) and plan.get('baseline_parent') is None and not engineering:
+        baseline_ticks=6*round(c['episode_s']/cfg['timing']['lower_dt_s'])
+        report.update(baseline_physics='fresh_required',maximum_baseline_lower_ticks=baseline_ticks,
+            maximum_validation_lower_ticks=report['maximum_validation_lower_ticks']+baseline_ticks)
     atomic_json(out/'PREPARATION.json',report);return report
 
 
@@ -435,7 +439,7 @@ def check_conditional_dev_budget(status,config,alphas,case_count=None,role='full
         if role not in caps:raise ValueError('unknown validation role')
         role_consumed=status.get(role+'_control_ticks_total',0)+status.get('parent_consumed_'+role+'_control_ticks',0)
         if role_consumed+reserve>caps[role]:raise RuntimeError('conditional '+role+' lineage budget exceeded before physics')
-    if consumed+reserve>(784000 if conflict else 600000):
+    if consumed+reserve>config.get('evaluation_budget',{}).get('total_lower_ticks',784000 if conflict else 600000):
         raise RuntimeError('insufficient remaining conditional DEV lineage budget; partial replay cannot expand declaration')
     return reserve
 
@@ -498,7 +502,7 @@ def train(path,output,*,execute=False,resume=None):
         status['last_update_epoch']=time.time();atomic_json(root/'status.json',status)
     def account_validation(ticks):
         proposed=status['validation_control_ticks_total']+int(ticks)
-        if conditional and proposed+status.get('parent_consumed_validation_control_ticks',0)>(784000 if conflict else 600000):raise RuntimeError('conditional DEV lineage budget exceeded')
+        if conditional and proposed+status.get('parent_consumed_validation_control_ticks',0)>cfg.get('evaluation_budget',{}).get('total_lower_ticks',784000 if conflict else 600000):raise RuntimeError('conditional DEV lineage budget exceeded')
         if conflict:
             role=status.get('active_validation_role','full_dev');cap={'full_dev':720000,'lightweight':64000}[role]
             key=role+'_control_ticks_total';value=status.get(key,0)+int(ticks)
@@ -643,7 +647,8 @@ def train(path,output,*,execute=False,resume=None):
             evaluator.compiled=shared_eval_cache
             if not baseline_done and not engineering:
                 cached=set()
-                if conditional:
+                baseline_parent=plan.get('baseline_parent') or resume
+                if conditional and baseline_parent is not None:
                     from .path_command_cache import reuse_conditional_baseline
                     from .geometric_path import build_path
                     pose=np.asarray(env.physics.helpers.pose(snapshot.data))
@@ -652,7 +657,7 @@ def train(path,output,*,execute=False,resume=None):
                         from .path_command_scenarios import explicit_case_declarations
                         route_ids=sorted({d['route_id'] for d in explicit_case_declarations(cfg)})
                     paths={route:build_path(route,pose,cfg) for route in route_ids}
-                    cached=reuse_conditional_baseline(plan['baseline_parent'],root,cfg,source,paths)
+                    cached=reuse_conditional_baseline(baseline_parent,root,cfg,source,paths)
                     if not conflict and len(cached)!=6:raise ValueError('conditional baseline requires six reusable cases')
                     if conflict and len(cached)!=12:raise ValueError('conflict training requires completed twelve-case preflight cache; no extra baseline physics authorized')
                 if (resume or coverage_mode or reward_fork) and not conditional:

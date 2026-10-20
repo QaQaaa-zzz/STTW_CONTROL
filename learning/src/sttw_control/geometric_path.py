@@ -32,7 +32,7 @@ def build_path(name, pose, config, lateral_offset=0.):
     c=config['path']; ds=c['spacing_m']; pose=np.asarray(pose,float)
     if name=='straight':
         end=0.; length=80.
-    elif name in ('left90_R2','right90_R2'):
+    elif name in ('left90_R2','right90_R2','left90','right90'):
         ramp=c['curvature_transition_length_m']; k=1/c['turn_radius_m']
         plateau=abs(c['turn_angle_rad'])/k-ramp
         if plateau<0:raise ValueError('turn too short for curvature ramps')
@@ -43,7 +43,7 @@ def build_path(name, pose, config, lateral_offset=0.):
         if name=='straight':return np.zeros_like(x)
         u=(x-c['straight_prefix_m'])/ramp; w=(end-x)/ramp
         h=lambda a:np.clip(a,0,1)**2*(3-2*np.clip(a,0,1))
-        return (1 if name=='left90_R2' else -1)*k*h(u)*h(w)
+        return (1 if name in ('left90_R2','left90') else -1)*k*h(u)*h(w)
     # Integrate on a fine fixed grid, independently of wall clock/vehicle motion.
     fine=np.linspace(0,length,int(np.ceil(length/.001))+1);df=np.diff(fine)
     kk=curvature(fine);heading=np.r_[0,np.cumsum((kk[:-1]+kk[1:])*.5*df)]
@@ -54,7 +54,7 @@ def build_path(name, pose, config, lateral_offset=0.):
     xy=(local+np.array([0,lateral_offset]))@rot.T+pose[:2]
     path=Path(j.asarray(s),j.asarray(xy),j.asarray(np.interp(s,fine,heading)+pose[2]),j.asarray(curvature(s)),j.asarray(end),j.asarray(end+c['goal_section_offset_after_turn_m']))
     if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
-        turning=name!='straight';direction=1. if name=='left90_R2' else -1.
+        turning=name!='straight';direction=1. if name in ('left90_R2','left90') else -1.
         path=path.replace(turn_starts=j.array([c['straight_prefix_m'] if turning else 0.,0.,0.,0.]),
             turn_ends=j.array([end,0.,0.,0.]),turn_directions=j.array([direction if turning else 0.,0.,0.,0.]),
             turn_mask=j.array([turning,False,False,False]))

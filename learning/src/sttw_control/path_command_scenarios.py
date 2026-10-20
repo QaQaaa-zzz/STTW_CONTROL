@@ -33,7 +33,7 @@ def _legacy_parameters(key,config):
     family=j.where(u[0]<.3,0,j.where(u[0]<.8,1,2)).astype(j.int32)
     gentle=u[1]>=.5;direction=j.where(u[2]<.5,-1.,1.)
     radius=c['radius_range_m'][0]+u[3]*(c['radius_range_m'][1]-c['radius_range_m'][0])
-    radius=j.where(family==0,4.,radius)
+    radius=j.where(family==0,c.get('gentle_radius_m',4.),radius)
     angle=j.deg2rad(j.where(family==0,j.where(gentle,30.,0.),60.+40.*u[4]))
     speed=c['speed_range_m_s'][0]+u[5]*(c['speed_range_m_s'][1]-c['speed_range_m_s'][0])
     perturbed=u[6]<c['initial_route_pose_offset_fraction']
@@ -75,7 +75,7 @@ _V2_STRONG = dict(speed_m_s=[2.4,2.6], radius_m=[2.0,2.2], angle_deg=[90.,100.],
 
 
 def validate_training_sampler(config):
-    """Validate the frozen v2 reset contract; absent sampler preserves legacy."""
+    """Keep v2 frozen; v3 exposes speed/radius ranges in the run config."""
     sampler=config.get('training_sampler')
     if sampler is None:return
     if isinstance(sampler,dict) and sampler.get('version')=='path_conflict_exposure_v1':
@@ -86,9 +86,17 @@ def validate_training_sampler(config):
             raise ValueError('conflict sampler groups differ from declared 102/204/206 lanes')
         legacy=dict(config,training_sampler=dict(sampler,version='demand_exposure_v2',route_seed=910201,groups=_V2_GROUPS))
         return validate_training_sampler(legacy)
-    if not isinstance(sampler,dict) or sampler.get('version')!='demand_exposure_v2':
+    if not isinstance(sampler,dict) or sampler.get('version') not in ('demand_exposure_v2','demand_exposure_v3'):
         raise ValueError('unknown training_sampler version')
-    for name,expected in [('route_seed',910201),('groups',_V2_GROUPS),('strong',_V2_STRONG)]:
+    configured=sampler['version']=='demand_exposure_v3'
+    strong=dict(_V2_STRONG)
+    if configured:
+        for key in ('speed_m_s','radius_m'):
+            lo,hi=sampler['strong'][key]
+            if not 0<lo<=hi:raise ValueError('positive ordered strong ranges required')
+            strong[key]=[lo,hi]
+        strong['prefix_m']=config['path']['straight_prefix_m']
+    for name,expected in [('route_seed',910201),('groups',_V2_GROUPS),('strong',strong)]:
         if sampler.get(name)!=expected:raise ValueError('training_sampler '+name+' differs from demand_exposure_v2')
     c=config['training_future_phase_C'];p=config['path']
     expected_c=dict(num_envs=512,episode_s=20.,speed_range_m_s=[1.8,2.6],radius_range_m=[1.8,4.],
@@ -99,6 +107,13 @@ def validate_training_sampler(config):
     expected_p=dict(spacing_m=.02,straight_prefix_m=3.,curvature_transition_length_m=.5,
         goal_section_offset_after_turn_m=4.,curvature_ramp='3*u^2-2*u^3',
         path_is_fixed_before_rollout=True,reanchor_during_rollout=False,allow_online_teleop_future=False)
+    if configured:
+        for key in ('speed_range_m_s','radius_range_m'):
+            lo,hi=c[key]
+            if not 0<lo<=hi:raise ValueError('positive ordered training ranges required')
+            expected_c[key]=[lo,hi]
+        if c.get('gentle_radius_m',4.)<=0:raise ValueError('positive gentle radius required')
+        expected_p['straight_prefix_m']=p['straight_prefix_m']
     for label,actual,expected in [('training',c,expected_c),('geometry',p,expected_p)]:
         for name,value in expected.items():
             if actual.get(name)!=value:raise ValueError('demand_exposure_v2 '+label+' contract changed: '+name)
@@ -115,7 +130,7 @@ def sample_training_route(seed,env_id,episode,pose,config,absolute_update=1):
     if sampler is None:return sample_route(episode_key(seed,env_id,episode),pose,config)
     if sampler.get('version')=='path_conflict_exposure_v1':
         return _sample_conflict_route(env_id,episode,pose,config,absolute_update)
-    if sampler.get('version')!='demand_exposure_v2':raise ValueError('unknown training_sampler version')
+    if sampler.get('version') not in ('demand_exposure_v2','demand_exposure_v3'):raise ValueError('unknown training_sampler version')
     group=j.where(env_id<102,0,j.where(env_id<306,1,2)).astype(j.int32)
     def legacy(_):return _legacy_parameters(episode_key(sampler['route_seed'],env_id,episode),config)
     def strong(_):
