@@ -164,6 +164,8 @@ def test_conditional_report_covers_all_alphas_and_rebuilds_rewards(tmp_path):
     assert result['summary']['declared_episodes']==30
     assert set(result['cases'])==set(panel())
     assert set(result['cases']['left90_R2_2.6']['alphas'])==set(KEYS)
+    assert result['preference']['qualified'] is None
+    assert 'joint improvement' in result['preference']['role']
     assert result['reward_audit']['checked_policy_traces']==30
     assert result['reward_audit']['max_abs_tick_error']<1e-12
     assert (tmp_path/'report/ALL_XY.png').read_bytes()[:8]==b'\x89PNG\r\n\x1a\n'

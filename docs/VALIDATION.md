@@ -2264,3 +2264,18 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 最终只读代码审查无剩余阻断项，重点核对动态缓存模型身份、null SHA诊断、四tick follower与逐tick发布。审查没有新增仿真。
 
 提交前最终补测：显式`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES='' PYTHONPATH=learning/src /home/qy/mujoco_playground/.venv/bin/python -m pytest -q learning/tests/test_path_local_projection.py learning/tests/test_path_training_performance.py learning/tests/test_path_conditional_training.py`，**36 passed, 2 skipped / 8.24s**。此前同命令未固定CPU，自动使用GPU导致6个CPU mock的Torch设备不匹配及1个投影3.5e-6差异超过该CPU参考测试3e-6阈值（29通过/7失败/2跳过）；明确CPU后全部通过，没有为此修改实现或放宽阈值。GPU主要闭环量以显式GPU对照收据为准。
+
+
+## 2026-10-20 原Coverage奖励与单网alpha组合
+
+用户明确授权采用原Coverage奖励、原demand_exposure_v2场景分布、当前alpha调制单网fresh200；新增配置STTW_Path_Coverage_Shared.json与path_coverage_shared_run/engineering.json，不改旧配置/历史实验。path_reward逐值等于STTW_Path_Coverage_V2，reward_version字段缺省，速度primary乘数恢复1，预测roll/暴露/走廊奖励均未启用。底层local300、物理、.005/.02时序、实际修正及20ms差分/失败尾罚保持。网络架构与奖励分支解耦，scratch的preference selection/dynamic可独立关闭；身份记录允许原奖励版本None（仅元数据，配置中不写null）。
+
+新任务沿用当前Actor351/Critic352、128-128-64 ELU与alpha调制，fresh Actor/Critic/Adam，不导入上层parent；alpha每reset40%0/40%1/20%uniform、回合内固定。选模用同一checkpoint五alpha固定DEV共同任务表现；原Coverage的0.4m走廊只描述不排序/判合格，不要求某端点路径变差，legacy双向分离仅保留描述数据。新实验不称复现了旧端点成功或已证明单网成功。
+
+80项相关CPU通过（52.87s）；覆盖原奖励模组独立、奖励常数与null拒绝、fresh初始化、条件Actor/Critic、PPO编排、终止/动作20ms速率/尾罚、缓存与报告。新增目标测试先确认旧绑定拒绝后实现通过。提交前补测含新配置的mock工程正常/fault路径及最终报告。sixcase B0从旧scratch完整物理轨迹复用，source/model/path/时序及完整性核对通过，0新baseline physics；按新奖励各alpha独立重评分。独立只读代码审查无阻断，未执行额外仿真。
+
+唯一工程8×16检查完成128policy transitions/512lower ticks、0PPO正式更新（工程1次更新丢弃）。无物理/domain/工程fault，4/4epochs、16/16minibatches接受，meanKL .0041734；setup43.786s，采样5.005s、优化.235s。工程reward HTTP实读step1=-.0325638503，独立TB6006；不是正式训练进度或单网能力证明。原始工程收据runs/path_coverage_shared_200_20261020/engineering_verification.json。
+
+正式预算200×512×128=13,107,200policy transitions/52,428,800lower ticks；DEV0/50/100/150/200×6×5最多600,000ticks，engineering512、baseline0、dynamic0，总53,029,312ticks。20s保持原Coverage任务，旧10s泛用约定由本次明确原任务覆盖。无自动扩轮；物理/nonfinite错误保留状态，现有PPO拒绝策略保留。原优化geometry/reset、scan50/vmap评测、共享JAXcache、DirectCommandPPO、每轮checkpoint和noSHA调用链继续使用；未作当前整批吞吐加速结论。
+
+提交前最终补测：新配置工程正常/fault编排、原奖励与选模、报告逐步奖励重建，共34 passed/46.80s（显式JAX_PLATFORMS=cpu、CUDA_VISIBLE_DEVICES空）；包含最终报告joint improvement描述，未启动额外物理。

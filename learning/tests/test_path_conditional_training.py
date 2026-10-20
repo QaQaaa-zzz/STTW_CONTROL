@@ -27,7 +27,7 @@ class RunnerRoute:
     sample_group:object
 
 
-@pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference','path_unified_scratch'])
+@pytest.mark.parametrize('prefix',['path_unified_alpha','path_strong_preference','path_unified_scratch','path_coverage_shared'])
 def test_preparation_counts_one_learner_and_engineering_has_no_dev(tmp_path,prefix):
     formal=training.prepare(ROOT/'learning/configs'/f'{prefix}_run.json',tmp_path/'formal')
     smoke=training.prepare(ROOT/'learning/configs'/f'{prefix}_engineering.json',tmp_path/'smoke')
@@ -69,7 +69,7 @@ def test_shared_checkpoint_resume_keeps_identity_rng_and_mixed_alpha_ppo(tmp_pat
     for key,value in algo.policy.state_dict().items():torch.testing.assert_close(value,other.policy.state_dict()[key],rtol=0,atol=0)
 
 
-@pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json','path_unified_scratch_engineering.json'])
+@pytest.mark.parametrize('plan_file',['path_unified_alpha_engineering.json','path_strong_preference_engineering.json','path_unified_scratch_engineering.json','path_coverage_shared_engineering.json'])
 @pytest.mark.parametrize('engineering_fault',[False,True])
 def test_engineering_runner_uses_one_learner_and_never_runs_dev(tmp_path,monkeypatch,plan_file,engineering_fault):
     """Exercise the real orchestration/PPO on a deterministic non-physical batch."""

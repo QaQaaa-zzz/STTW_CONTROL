@@ -1115,3 +1115,10 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 目的：核验最新附件，取消实际仿真调用链SHA与重复检查，减少路径搜索、无效reset和逐步主机回传。采用局部窗口分块精确投影/直接均匀网格插值、vmap外reset门、固定四tick pursuit与逐tick发布、rollout末统计/工程fault host检查（fault设备锁存冻结，整批GAE/PPO前丢弃）。当前模型加载器只移除摘要元数据；不改物理、奖励、PPO、课程、权限或每轮checkpoint。
 
 190项相关CPU通过，最终衔接补测37项通过，GPU主要闭环量通过，qpos约1e-7/qvel9.5e-6/reward2.4e-7；全叶仍有qacc_smooth .00364、solver warmstart .000834差异，不能称全状态等价。四次有界尝试合计保守上限1024lower ticks，0PPO。8lane短检查未显示可据以声明的吞吐倍数，不是正式整批基准。原附件关于KL大规模拒绝、FiLM永久死锁、示例减速更低代价等主张不成立或缺证据，未据此改算法。新明文配置键不自动兼容历史SHA格式resume/fork；旧记录不改。具体数值、负证据与入口见docs/VALIDATION.md同日“第二轮审查与计算简化”及runs/path_command_cleanup_20261018/gpu_receipt.json。正式训练未启动，旧200轮不合格结论保留。
+
+
+### 2026-10-20 原Coverage奖励单网fresh200启动准备
+
+用户确认原Coverage完整10项奖励（无reward_version字段、无速度×2/预测roll/暴露/走廊）、原demand_exposure_v2分布，当前alpha调制Actor351/Critic352均scratch，冻结local300。独立新config/run，不复用旧上层权重/动作。alpha40/40/20固定每回合，五alpha同checkpoint比较；允许速度/路径共同改善，0.4m corridor只诊断，不用旧双向退化门槛作为成功条件。目标是先验证原奖励在共享网络的迁移能力，不声明已成功。
+
+80相关CPU通过、six B0完整物理轨迹复用0新baseline；唯一丢弃8×16工程512ticks无fault，PPO4epochs/16minibatches接受、TB6006真实rewardstep1核验。正式200×512×128，DEV0/50/100/150/200的6×5面板，最高53,029,312lower ticks（含工程），禁自动扩轮、禁dynamic。具体实现/限制见docs/VALIDATION.md与runs/path_coverage_shared_200_20261020/INDEX.md；正式启动和实际完成状态以共享台账及实时status为准，工程完成不等于正式200轮完成。

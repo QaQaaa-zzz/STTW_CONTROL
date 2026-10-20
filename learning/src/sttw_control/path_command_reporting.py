@@ -579,6 +579,9 @@ def report_conditional_panel(root,config):
     preference=dict(cases=preference_cases,qualified=bool(summary['qualified_task'] and len(preference_cases)==2
         and all(v['legacy_endpoint_difference_gate'] for v in preference_cases.values())),
         role='legacy common-task and endpoint preference diagnostics; interior curves are descriptive, not a monotonicity certificate')
+    if 'reward_version' not in config['path_reward']:
+        preference.update(legacy_divergence_qualified=preference['qualified'],qualified=None,
+            role='endpoint speed/path differences are descriptive; joint improvement is allowed; no required path degradation')
     if strong:
         from .path_command_selection import resolve_preference_acceptance
         acceptance=resolve_preference_acceptance(config)

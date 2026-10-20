@@ -1,3 +1,23 @@
+# Original Coverage reward with one alpha-conditioned Actor — 2026-10-20
+
+User-approved design: original Coverage reward, unchanged frozen local300/ECBC/ESO and physics; current Actor351/Critic352 alpha-modulated128-128-64 ELU, both fresh with fresh Adam. Original demand_exposure_v2 route distribution (102 ordinary /204 strong single /206 strong S); no continuous sharp-turn curriculum. Alpha reset mixture40% zero/40% one/20% uniform, fixed per episode. Same scratch/alpha/route seeds911401/911402/910201 retain a controlled comparison with previous scratch task; no upper parent or old action mixing.
+
+Reward is an exact copy of STTW_Path_Coverage_V2.path_reward, without reward_version (null rejected), extra speed multiplier or safety additions. Actual filtered/slew-limited offsets are scored; rate spans20ms. Chi uses original-path curvature and requested speed. Failed upper interval is replaced by the unchanged finite-horizon tail. Episode20s and .005/.02 timing preserve this exact path task, superseding generic older10s defaults for this user-approved experiment.
+
+One discarded8x16 engineering update (512lower ticks maximum) then one fresh200-update stage512x128:13,107,200policy transitions /52,428,800lower ticks. DEV0/50/100/150/200, same six Coverage route/speed cases x five alphas0/.25/.5/.75/1, maximum600,000lower ticks. Six matched old B0 traces reused with current reward reconstructed per alpha,0baseline physics. No dynamic-alpha simulation. Total maximum53,029,312lower ticks; no automatic extension. Fresh formal initialization must not import engineering update. Physics/nonfinite errors preserve state and stop; scientific quality/coverage is diagnostic, no unbounded retry.
+
+Best compares the fixed joint task panel; no required worsening of the other task. Physical/domain failure, posture, goal/final recovery and endpoint tracking remain independently reported;0.4m corridor is descriptive only. Original strict divergence qualification is not used as this experiment's success condition. Final report must start with same-scene all-alpha XY/reference/B0, and include per-step/cumulative reward and components, speed/path/heading errors and posture/true failure endpoints. Best means best among evaluated0/50/100/150/200 candidates, not all200 or guaranteed qualified.
+
+Implementation plan (writing-plans skill; execute inline):
+- [x] Regress original-reward alpha-modulated load, exact coefficients and null rejection. Update conditioning validation to independently select existing reward branch; optional preference/dynamic checks remain separate.
+- [x] Keep original task corridor diagnostic and avoid forced worse endpoint selection; verify summary ranking and numeric reward reconstruction.
+- [x] Reuse current optimized geometry/reset/scan50/batched eval/compilation cache/DirectCommandPPO and no SHA scans; test relevant behavior and baseline compatibility.
+- [x] Prepare declaration and locked ledger budget; discard one engineering update, verify finite PPO and real TensorBoard reward.
+- [ ] Commit/push source, launch independent fresh200 and watcher; verify current reward loaded over HTTP. Preserve live status, checkpoint each update, completion/error popups.
+- [ ] Finish stage/report/locked ledger and Git evidence; do not conflate running with200 completed or qualified.
+
+---
+
 # path_command 第二轮审查与计算简化 — 2026-10-18
 
 已按最新附件核验并实现：窗口内分块路径投影、均匀网格直接插值、vmap外整批reset门、固定四tick追踪调度、rollout末集中回传及工程故障检查；取消当前path_command调用链的SHA计算和重复路径扫描。奖励、物理、PPO、课程与每轮checkpoint合同保留。190项CPU通过，最终相关补测37项通过，GPU主要闭环量对照通过；求解器工作数组最大差约.00364另列。用户允许9e-5误差；没有宣称全状态等价或吞吐加速。新元数据使用明文配置键，历史SHA格式的自动跨格式resume/fork未适配。详见[验证记录](docs/VALIDATION.md#2026-10-18-path_command-第二轮审查与计算简化)。未启动正式训练，旧结果保持冻结；共享台账为当前事实入口。

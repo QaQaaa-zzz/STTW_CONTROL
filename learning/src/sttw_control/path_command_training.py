@@ -234,8 +234,8 @@ def prepare(path,output,check_interface=False):
     if is_conditional(plan) and plan['initialization']['mode']=='scratch':
         from .path_command_conditioning import conditional_identity
         report.update(initialization_mode='scratch',upper_parent_checkpoint=None,
-            maximum_dynamic_lower_ticks=0 if engineering else 24000,
-            complete_experiment_lower_tick_budget=53301312 if plan.get('sampler_version')=='path_conflict_exposure_v1' else 53053312,
+            maximum_dynamic_lower_ticks=0 if engineering or not cfg.get('dynamic_preference_checks',{}).get('enabled') else 24000,
+            complete_experiment_lower_tick_budget=plan.get('budget',{}).get('total_lower_ticks',53301312 if plan.get('sampler_version')=='path_conflict_exposure_v1' else 53053312),
             upper_identity=conditional_identity(plan,cfg,source))
     if check_interface:
         env,snapshot=load_environment(cfg,source,plan.get('terminal_contract','terminal_contract_v1'));batch=PathBatch(env,snapshot,cfg,plan['seed'],None if is_conditional(plan) else 0)

@@ -239,8 +239,17 @@ def summarize_conditional(panels,config):
     for k in ('physical_failures','tracking_domain_failures','task_failures','working_failures',
               'roll_exceedance_seconds','corridor_failures','goal_hold_failures'):
         result[k]=sum(s[k] for s in summaries)
-    result['qualified_task']=not any(result[k] for k in ('physical_failures','tracking_domain_failures',
-        'working_failures','corridor_failures','goal_hold_failures','endpoint_primary_failures'))
+    if 'reward_version' not in config['path_reward']:
+        # Original Coverage has no adopted corridor constraint. Keep measurements
+        # descriptive; neither rank nor qualify by an extra corridor threshold.
+        result['corridor_role']='diagnostic'
+        for summary in per_alpha.values():
+            fields=('physical_failures','tracking_domain_failures','working_failures','goal_hold_failures')
+            summary['qualified_task']=not any(summary[k] for k in fields) and (not summary['primary_band_failures'] if summary['primary_applicable'] else True)
+            summary['qualified']=summary['qualified_task']
+    fields=('physical_failures','tracking_domain_failures','working_failures','goal_hold_failures','endpoint_primary_failures')
+    if result.get('corridor_role')!='diagnostic':fields=fields+('corridor_failures',)
+    result['qualified_task']=not any(result[k] for k in fields)
     result['qualified']=result['qualified_task']
     result['score_tuple']=conditional_score_key(result)
     return result
@@ -253,6 +262,8 @@ def conditional_score_key(summary):
     fields=('physical_failures','tracking_domain_failures','working_failures','max_roll_excess_rad',
             'roll_exceedance_seconds','corridor_failures','max_corridor_excess_m','goal_hold_failures',
             'endpoint_primary_failures','mean_weighted_normalized_error','worst_error')
+    if summary.get('corridor_role')=='diagnostic':fields=tuple(k for k in fields if k not in ('corridor_failures','max_corridor_excess_m'))
+    summary['ranking_fields']=list(fields)
     key=tuple(summary[k] for k in fields)
     if not all(np.isfinite(v) for v in key):raise ValueError('nonfinite conditional selection')
     return key

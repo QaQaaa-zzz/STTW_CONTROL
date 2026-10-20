@@ -66,7 +66,8 @@ def validate_conditional_plan(plan,config):
     if plan.get('automatic_extension') or plan.get('conditional_extension'):raise ValueError('conditional budget cannot extend')
     if plan.get('sampler_version')!='demand_exposure_v2' or plan['sampler_resolution'].get('training_sampler')!=config.get('training_sampler'):raise ValueError('conditional sampler disconnected')
     if plan.get('terminal_contract')!='terminal_contract_v2' or plan.get('http_failure_policy')!='error':raise ValueError('conditional terminal/visibility contract mismatch')
-    if config['path_reward'].get('reward_version')!=('path_safety_preference_v2' if strong else 'path_safety_preference_v1'):raise ValueError('conditional reward version mismatch')
+    from .path_command_reward import reward_version
+    reward_version(config)  # Reward choice is independent of alpha modulation.
     if c['num_envs']!=512 or c['rollout_steps']!=128 or c['episode_s']!=20 or c['validation_updates']!=[0,50,100,150,200]:raise ValueError('conditional training dimensions/schedule mismatch')
     if plan.get('engineering_check',False):
         if plan['updates']!=1 or plan.get('engineering_dimensions')!=[8,16] or not plan.get('discard_engineering_update'):raise ValueError('engineering check must discard exactly 8x16 update')
@@ -75,12 +76,12 @@ def validate_conditional_plan(plan,config):
     if scratch:
         if init!={'mode':'scratch','parent_alpha':None,'checkpoint':None,'checkpoint_sha256':None}:raise ValueError('scratch initialization must have null upper parent identity')
         if config['network'].get('initialization')!='fresh_scratch':raise ValueError('scratch network initialization mismatch')
-        if config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_preference_research_v1' or config.get('preference_selection_schema')!='path_preference_research_v1':raise ValueError('scratch reward/selection mismatch')
+        if plan.get('preference_selection_schema')!=config.get('preference_selection_schema'):raise ValueError('scratch selection mismatch')
         from .path_command_selection import resolve_preference_acceptance
-        resolve_preference_acceptance(config)
-        from .path_command_dynamic import dynamic_contract
-        dynamic=dynamic_contract(config)
-        if dynamic.get('enabled') is not True or dynamic.get('trigger')!='qualified_research_preference':raise ValueError('scratch explicit dynamic contract mismatch')
+        if config.get('preference_selection_schema') is not None:resolve_preference_acceptance(config)
+        if config.get('dynamic_preference_checks',{}).get('enabled'):
+            from .path_command_dynamic import dynamic_contract
+            if dynamic_contract(config).get('trigger')!='qualified_research_preference':raise ValueError('scratch explicit dynamic contract mismatch')
     elif init.get('mode')!=('actor_only_fold_alpha1' if strong else 'actor_only_zero_alpha_column') or init.get('parent_alpha')!=(1 if strong else 0):raise ValueError('conditional actor-only initialization mismatch')
     if strong and not scratch and (config['path_reward'].get('primary_speed_multiplier')!=2 or plan.get('preference_selection_schema')!='path_strong_preference_v1' or config.get('preference_selection_schema')!='path_strong_preference_v1'):raise ValueError('strong preference reward/selection contract mismatch')
     if not scratch and (not init.get('checkpoint') or len(init.get('checkpoint_sha256',''))!=64):raise ValueError('conditional parent identity missing')
@@ -160,13 +161,15 @@ def conditional_identity(plan,config,source):
         parent_checkpoint_sha256=plan['initialization']['checkpoint_sha256'],engineering_check=bool(plan.get('engineering_check',False)))
     if is_strong(config):
         from .path_command_policy import architecture_identity
-        identity.update(architecture=architecture_identity(config),reward_version=config['path_reward']['reward_version'],preference_selection_schema=config['preference_selection_schema'])
+        identity.update(architecture=architecture_identity(config),reward_version=config['path_reward'].get('reward_version'),preference_selection_schema=config.get('preference_selection_schema'))
     if 'curriculum' in config['alpha_conditioning']:identity['curriculum_key']=config_key(config['alpha_conditioning']['curriculum'])
     if plan['initialization']['mode']=='scratch':
         from .path_command_selection import resolve_preference_acceptance
         n,steps=execution_dimensions(plan,config)
-        identity.update(initialization_mode='scratch',acceptance_key=config_key(resolve_preference_acceptance(config)),
+        identity.update(initialization_mode='scratch',
             declared_updates=plan['updates'],actual_batch_dimensions=[n,steps],declared_policy_transitions=n*steps*plan['updates'])
+    if plan['initialization']['mode']=='scratch' and config.get('preference_selection_schema') is not None:
+        identity['acceptance_key']=config_key(resolve_preference_acceptance(config))
     if config.get('training_sampler',{}).get('version')=='path_conflict_exposure_v1':
         from .path_command_scenarios import explicit_case_declarations
         identity['case_declarations_key']=config_key(explicit_case_declarations(config))
