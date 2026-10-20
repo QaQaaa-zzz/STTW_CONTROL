@@ -1,3 +1,9 @@
+# 原Coverage奖励单网200轮结果 — 2026-10-20
+
+[完整30条件分析、XY与每步奖励证据](runs/path_coverage_shared_200_20261020/training_parallel/report/ANALYSIS.md)。训练200/200、13,107,200转移完成；5次固定DEV，选中=last u200（五个已评候选最佳）。冻结local300不变，原Coverage奖励与当前alpha调制单网scratch。最终30/30无物理/domain失败且goal/final1s保持通过；高速弯alpha速度响应连续，右高速alpha1速度/路径共同改善。仍有左高速alpha1 χ>0速度.06208>.05、右高速alpha0路径.11961>.10，左高速alpha>=.25四条件越.302rad，整体qualified_task=false；不因右弯D_y<0判失败。新分析0仿真；完整事实与下一步以共享研究台账为准。
+
+---
+
 # Original Coverage reward with one alpha-conditioned Actor — 2026-10-20
 
 User-approved design: original Coverage reward, unchanged frozen local300/ECBC/ESO and physics; current Actor351/Critic352 alpha-modulated128-128-64 ELU, both fresh with fresh Adam. Original demand_exposure_v2 route distribution (102 ordinary /204 strong single /206 strong S); no continuous sharp-turn curriculum. Alpha reset mixture40% zero/40% one/20% uniform, fixed per episode. Same scratch/alpha/route seeds911401/911402/910201 retain a controlled comparison with previous scratch task; no upper parent or old action mixing.

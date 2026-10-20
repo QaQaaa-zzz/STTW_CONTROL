@@ -2283,3 +2283,14 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 启动后纠正：第一次正式目录training的配置漏接已采用evaluation_execution=alpha_case_vmap_v1，DEV0以逐alpha方式运行；发现后只停止本任务进程3380061，保留原目录、manifest及KeyboardInterrupt记录，0TRAIN转移/0PPO。已计DEV4800ticks；额外预留至多8000ticks覆盖该次初始DEV0及中断时未回传块，正式200轮TRAIN预算不变。修正当前配置启用场景×alpha合批，B0物理缓存比较忽略此纯评测调度元数据；不改变路线、模型或物理。新增正式目录training_parallel从fresh0启动，使用原已通过工程检查，不重复工程PPO；评测调度CPU及baseline复用补测通过后启动。总物理上限更正为53,037,312（先前53,029,312加初始DEV0重启预留8000）。旧顺序DEV记录保留，不能称首次启动已进入训练。
 
 调度纠正补测12 passed/1.59s（原奖励、条件缓存、跨alpha合批评测），six B0再次匹配复用0新physics；用户最新要求正式完成第3轮即停止人工轮询，训练继续200、TensorBoard及完成/错误通知保留。
+
+
+## 2026-10-20 Coverage单网200轮完成与离线结果复核
+
+正式training_parallel/source796032c完成200/200，13,107,200策略转移、52,428,800TRAINticks、600,000DEVticks；201个checkpoint（含u0）保留，固定DEV0/50/100/150/200全部30条件。选中与last均u200，范围仅五个已评候选。实际794epochs/3176minibatches全部接受（声明800/3200；u114/u119的target_kl各少3epochs），无hardKL/nonfinite中止。训练早期247次路径域终止、物理0/工程0，四个50轮窗口为244/2/1/0；不能用最终标准面板0终止覆盖这项负证据。
+
+从原始NPZ重算5次DEV score_tuple一致；独立重建最终30×4000实际控制步总奖励maxabs5.122e-8、分项5.484e-8。B0六条物理轨迹复用，按当前原Coverage奖励各alpha重新评分，未比较旧v2日志reward。TB6008 HTTP mean_step_reward实读完整200点，末点u200=-.00532002375。0新增physics/training，无SHA扫描；只生成PNG及精简JSON，原逐步NPZ保留。
+
+u200：30/30无物理/domain失败、goal/final1s保持通过、0走廊超界；4个左高速alpha=.25/.5/.75/1短时越.302rad，合计跨回合1.585s，最大.315111rad。χ>0端点两失败：左高速alpha1速度.062077>.05m/s、右高速alpha0横向.119613>.10m。因此全共同门槛qualified_task=false。完整弯等.5m分箱下，左高速alpha0→1 speed .076010→.055619m/s、path .091494→.095171m；右高速speed .085667→.044783、path .107146→.098636m。右弯两项改善允许，不能用旧D_y正门槛否定；不混用完整弯/chi窗口/全程RMSE。全部30条件同alpha回报25改善（straight2.0五条件下降），速度全程15改善、路径20改善。普通场景回归保留，未称整体全面优于B0。
+
+实际全图/逐条件解释见runs/path_coverage_shared_200_20261020/training_parallel/report/ANALYSIS.md；同目录analysis_evidence.json、TRAINING_DEV_TRENDS.png/HIGH_SPEED_XY_ZOOM.png，全部原XY/每步及累计奖励/有符号分项/误差图仍完整。只有一个训练seed、同prepared初态开发面板，无独立holdout或外扰评测；未自动续训、更换底层或新增奖励。

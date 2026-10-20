@@ -1124,3 +1124,10 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 80相关CPU通过、six B0完整物理轨迹复用0新baseline；唯一丢弃8×16工程512ticks无fault，PPO4epochs/16minibatches接受、TB6006真实rewardstep1核验。正式200×512×128，DEV0/50/100/150/200的6×5面板，最高53,029,312lower ticks（含工程），禁自动扩轮、禁dynamic。具体实现/限制见docs/VALIDATION.md与runs/path_coverage_shared_200_20261020/INDEX.md；正式启动和实际完成状态以共享台账及实时status为准，工程完成不等于正式200轮完成。
 
 启动工程更正：首个正式目录training漏接跨alpha合批评测flag，只完成DEV4800ticks、0TRAIN/0PPO后主动中断保留记录。修正evaluation_execution=alpha_case_vmap_v1，独立training_parallel fresh0启动，工程检查不重复。增加有界初始DEV0预留8000ticks，总上限53,037,312；正式200轮/13,107,200转移不变，详见VALIDATION启动纠正条。
+
+
+### 2026-10-20 原Coverage单网fresh200最终分析
+
+source796032c，local300固定，原Coverage十项奖励＋当前Actor351/Critic352 alpha调制scratch；200/200与全部5×30DEV完成。best=last u200，仅五个已评候选最佳。最终30/30物理/domain存活与goal/final1s保持通过，alpha连续速度响应在两个高速弯成立：完整弯速度RMSE左.0760→.0556、右.0857→.0448；右弯路径也.1071→.0986改善，不要求故意变差。仍有χ>0左alpha1速度.0621>.05、右alpha0路径.1196>.10，以及左高速四个非零alpha越.302rad，qualified_task=false。固定DEV误差.9094→.7710，中途u100回升；训练247次早期路径域终止保留，末50轮0次。straight2.0五alpha回报/速度/路径弱于B0，其余配对回报改善；不称全面优势或泛化证明。
+
+离线重建30条逐步reward最大差5.12e-8，5次DEV评分从原NPZ重算一致；新分析0仿真/0训练/noSHA。完整逐场景/五alpha/阶段/分项数据及XY先行图见runs/path_coverage_shared_200_20261020/training_parallel/report/ANALYSIS.md及同目录analysis_evidence.json。优先诊断左高速速度—侧倾及右alpha0路径分支，不自动加轮或新增走廊奖励。
