@@ -1122,3 +1122,5 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 用户确认原Coverage完整10项奖励（无reward_version字段、无速度×2/预测roll/暴露/走廊）、原demand_exposure_v2分布，当前alpha调制Actor351/Critic352均scratch，冻结local300。独立新config/run，不复用旧上层权重/动作。alpha40/40/20固定每回合，五alpha同checkpoint比较；允许速度/路径共同改善，0.4m corridor只诊断，不用旧双向退化门槛作为成功条件。目标是先验证原奖励在共享网络的迁移能力，不声明已成功。
 
 80相关CPU通过、six B0完整物理轨迹复用0新baseline；唯一丢弃8×16工程512ticks无fault，PPO4epochs/16minibatches接受、TB6006真实rewardstep1核验。正式200×512×128，DEV0/50/100/150/200的6×5面板，最高53,029,312lower ticks（含工程），禁自动扩轮、禁dynamic。具体实现/限制见docs/VALIDATION.md与runs/path_coverage_shared_200_20261020/INDEX.md；正式启动和实际完成状态以共享台账及实时status为准，工程完成不等于正式200轮完成。
+
+启动工程更正：首个正式目录training漏接跨alpha合批评测flag，只完成DEV4800ticks、0TRAIN/0PPO后主动中断保留记录。修正evaluation_execution=alpha_case_vmap_v1，独立training_parallel fresh0启动，工程检查不重复。增加有界初始DEV0预留8000ticks，总上限53,037,312；正式200轮/13,107,200转移不变，详见VALIDATION启动纠正条。

@@ -2279,3 +2279,7 @@ CPU完整112检查通过77.62s，真实旧B0缓存script/geometry身份附加1�
 正式预算200×512×128=13,107,200policy transitions/52,428,800lower ticks；DEV0/50/100/150/200×6×5最多600,000ticks，engineering512、baseline0、dynamic0，总53,029,312ticks。20s保持原Coverage任务，旧10s泛用约定由本次明确原任务覆盖。无自动扩轮；物理/nonfinite错误保留状态，现有PPO拒绝策略保留。原优化geometry/reset、scan50/vmap评测、共享JAXcache、DirectCommandPPO、每轮checkpoint和noSHA调用链继续使用；未作当前整批吞吐加速结论。
 
 提交前最终补测：新配置工程正常/fault编排、原奖励与选模、报告逐步奖励重建，共34 passed/46.80s（显式JAX_PLATFORMS=cpu、CUDA_VISIBLE_DEVICES空）；包含最终报告joint improvement描述，未启动额外物理。
+
+启动后纠正：第一次正式目录training的配置漏接已采用evaluation_execution=alpha_case_vmap_v1，DEV0以逐alpha方式运行；发现后只停止本任务进程3380061，保留原目录、manifest及KeyboardInterrupt记录，0TRAIN转移/0PPO。已计DEV4800ticks；额外预留至多8000ticks覆盖该次初始DEV0及中断时未回传块，正式200轮TRAIN预算不变。修正当前配置启用场景×alpha合批，B0物理缓存比较忽略此纯评测调度元数据；不改变路线、模型或物理。新增正式目录training_parallel从fresh0启动，使用原已通过工程检查，不重复工程PPO；评测调度CPU及baseline复用补测通过后启动。总物理上限更正为53,037,312（先前53,029,312加初始DEV0重启预留8000）。旧顺序DEV记录保留，不能称首次启动已进入训练。
+
+调度纠正补测12 passed/1.59s（原奖励、条件缓存、跨alpha合批评测），six B0再次匹配复用0新physics；用户最新要求正式完成第3轮即停止人工轮询，训练继续200、TensorBoard及完成/错误通知保留。

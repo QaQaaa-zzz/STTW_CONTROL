@@ -133,7 +133,8 @@
     "engineering_lower_ticks": 512,
     "dynamic_lower_ticks": 0,
     "baseline_lower_ticks": 0,
-    "total_lower_ticks": 53029312
+    "total_lower_ticks": 53037312,
+    "initial_dev0_restart_reserve_lower_ticks": 8000
   },
   "engineering_dimensions": [
     8,

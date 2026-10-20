@@ -15,6 +15,7 @@ def test_original_reward_is_independent_of_modulated_architecture(tmp_path):
  assert c['path_reward']==original['path_reward'] and c['training_sampler']==original['training_sampler']
  assert 'reward_version' not in c['path_reward'] and reward_version(c) is None
  assert c['network']['architecture']=='alpha_modulated_v1'
+ assert c['evaluation_execution']=='alpha_case_vmap_v1'
  assert c['alpha_conditioning']['endpoint_probability_each']==.4 and c['alpha_conditioning']['uniform_probability']==.2
  identity=conditional_identity(p,c,s)
  assert identity['reward_version'] is None and identity['initialization_mode']=='scratch'
@@ -22,7 +23,7 @@ def test_original_reward_is_independent_of_modulated_architecture(tmp_path):
  report=prepare(PLAN,tmp_path/'declaration')
  assert report['training_lower_ticks_total']==52428800
  assert report['maximum_validation_lower_ticks']==600000
- assert report['maximum_dynamic_lower_ticks']==0 and report['complete_experiment_lower_tick_budget']==53029312
+ assert report['maximum_dynamic_lower_ticks']==0 and report['complete_experiment_lower_tick_budget']==53037312
  for alpha,expected in [(0,0),(.5,2.5),(1,5)]:
   out=costs(alpha=alpha,chi=1.,ev=.1,ey=.1,eh=0.,peak_roll=.3,roll_rate=0.,speed=2.,offsets=j.zeros(2),offset_rate=j.zeros(2),config=c)
   assert float(out['raw']['primary'])==pytest.approx(expected,abs=1e-5)

@@ -457,5 +457,6 @@
     "max_lower_ticks": 24000,
     "enabled": false,
     "trigger": "qualified_research_preference"
-  }
+  },
+  "evaluation_execution": "alpha_case_vmap_v1"
 }
