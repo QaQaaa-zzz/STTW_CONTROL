@@ -1,0 +1,41 @@
+{
+  "parent_run": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_coverage_shared_200_20261020/training_parallel",
+  "model_record": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_coverage_shared_200_20261020/training_parallel/shared/best_conditional_model.json",
+  "source_update": 200,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "horizon_s": 10.0,
+  "prefix_m": 10.0,
+  "radius_m": 2.0,
+  "turns": [
+    "left90_R2",
+    "right90_R2"
+  ],
+  "physical_lower_tick_budget": 72000,
+  "training_updates": 0,
+  "checkpoint_changes": false,
+  "variants": [
+    {
+      "name": "cap3p0",
+      "requested_speeds": [
+        3.0
+      ],
+      "speed_reference_upper_m_s": 3.0
+    },
+    {
+      "name": "cap3p5",
+      "requested_speeds": [
+        3.2,
+        3.5
+      ],
+      "speed_reference_upper_m_s": 3.5
+    }
+  ],
+  "interpretation": "test frozen Actor behavior; do not force divergence, alter reward or train; distinguish speed retention, active slowdown and inside/outside path deviation",
+  "code_revision": "223a74683d2bd37005b5eef0a571852147c9e403"
+}

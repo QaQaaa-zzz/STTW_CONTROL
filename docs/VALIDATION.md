@@ -1,3 +1,9 @@
+# 2026-10-20 高速过弯偏好评测完成
+
+[全部XY、六工况五α结果与分析](evidence/path_coverage_highspeed_probe_20261020/ANALYSIS.md)。固定u200＋local300，无新训练；3.0/3.2/3.5m/s、R2左右弯、10m前缀、10s，共30策略＋6匹配B0，保存67,689lower ticks/72,000声明。3.0仍α1速度/路径共同改善；3.2/3.5出现α1稍快、α0更多减速/较小弯道路径RMSE，但速度差仅.024–.052m/s。3.2路径优势约2mm且最大外偏未呈预期排序；3.5外偏方向一致但弯后恢复失败，右α≥.5域退出3/5。策略0物理失败、3域失败、19/30最终保持、30/30越.302rad诊断线；不称强偏好已解决。3.2/3.5明确采用评测速度参考cap3.5，非原cap3.0合同；奖励/物理/动作/底层不变。原进程退出原因UNKNOWN，复用16完整回合，仅恢复20策略。
+
+---
+
 # Strong-preference CPU verification — 2026-10-14
 
 150 focused CPU checks passed in60.45s across22 files after the final dynamic-resume/report repair. Checks cover Torch/Flax modulation parity and gradients,384 added parameters per network, exact alpha1 Dense folding, fresh learner state, absolute-update reset curriculum, v2 reward regression and independent reconstruction, full-turn preference selection, shared pointer/report/cache/resume, and legacy terminal/fork/reward behavior. Real six-case B0 caches were identity checked with zero new physics; old alpha0/1 high-turn costs were independently rescored under v2. These are implementation checks, not learned preference or dynamic qualification. Dynamic repair covers causal applied-alpha schedules, contiguous true prefixes, float32 timing, complete-source SHA reuse, consumed partial-stage refusal, rendered XY and reward outputs, and source tamper rejection. Independent scoped final re-review confirms both dynamic P2 findings addressed with no new P1/P2. GPU evidence remains PENDING.
