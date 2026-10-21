@@ -1,12 +1,22 @@
+# 2026-10-20 按用户要求清理较早STTW派生结果
+
+磁盘仅约1.1GB可用；按2026-10-13T00:00:00-07:00为截止，排除近期日期目录/近期修改文件，以及所有lower/frozen/model_registry路径。删除903旧MP4、9413有同名PNG的旧PDF、829旧编译缓存文件、1个旧原始性能trace，共5,668,320,129bytes（5.28GiB），无删除失败；可用空间约6.4GB。全部模型/检查点、NPZ原轨迹、配置和指标保留；原始模型不因不再使用而删除。视频/PDF的旧报告链接可能失效，删除清单明确记录，未伪称旧交付仍完整。
+
+清单与验证：runs/storage_cleanup_20261020/{manifest,summary,verification}.json。已核对local300 Actor/checkpoint/config、R196/R244注册检查点及本次u0仍存在，清单中没有.pt/.pkl/.msgpack/.npz。仅删除STTW runs中符合筛选的文件，未改DVGC/JIT、未中断训练。
+
+---
+
 # 2026-10-20 HighDemand工程通过、正式200轮启动与Bark自动修复通知
 
 用户已授权执行先前准备的高压力配置。工程128policy/512lower ticks完成并丢弃更新；正式训练为scratch单一α网络200轮、固定local300 update300/210D/10frame。工程/正式u0的25个policy张量逐值相同，Adam state为空，未继承工程更新。源9766862、配置/物理/时序与既定预算不变：训练52428800、匹配新B0 24000、DEV600000、工程512，合计53053312lower ticks，不自动扩展。
 
 实际运行与收据：runs/path_high_demand_shared_200_20261020/INDEX.md、initialization_verification.json、engineering/shared/engineering_receipt.json、training_launch.json。正式TensorBoard http://localhost:6007 ，独立training/tensorboard的HTTP及data_location已核验；启动时正式reward等待首批，不能用工程6006标量代替。人工监督至第3轮即结束，后台训练/通知继续；实时状态及首3轮收据以运行目录为准。
 
-通知按用户要求采用Bark（STTW独立组），现有私有凭据仅只读引用、不复制或输出。测试推送HTTP200/Barkcode200；Bark后台跟踪训练阶段/流水线完成、错误、修复开始/结果，并保留投递/重试收据。既有桌面watchdog保留。报错可由run-local supervisor启动一次独立codex exec修复任务（最多30分钟），不是唤醒同一聊天；修复限定当前path_command工程问题，不改奖励/任务/物理/底层/预算。只能在恢复与预算继承可证明时恢复剩余阶段，不能静默重跑。修复未真实触发，合成故障测试验证了子进程启动/输出与三条生命周期提示，不代表实际修复能力已验证。监督器/Bark脚本位于运行目录，不改变生产训练数值路径，未修改JIT服务。
+通知按用户要求采用Bark（STTW独立组），现有私有凭据仅只读引用、不复制或输出。测试推送HTTP200/Barkcode200；Bark后台跟踪训练阶段/流水线完成、错误、候选修复开始/结果，并保留投递/重试收据。既有桌面watchdog保留。报错可由run-local supervisor启动一次独立codex exec修复任务（最多20分钟，独立CPU验证120秒），不是唤醒同一聊天；修复限定当前path_command工程问题，不改奖励/任务/物理/底层/预算。独立任务只在隔离工作树生成候选补丁，禁止修改生产工作树、自动应用或重启训练；恢复必须由前台核验检查点/预算后明确处理。修复未真实触发，合成故障测试验证了子进程启动/输出与三条生命周期提示，不代表实际修复能力已验证。监督器/Bark脚本位于运行目录，不改变生产训练数值路径，未修改JIT服务。
 
 当前启动状态不代表训练完成或偏好改善；仍需配对XY/逐步奖励与真实失败终点的阶段末证据。原配置准备与92项CPU回归记录保留在下方。
+
+最新全局runbook已读取；STTW有独立ACTIVE_RUN.json/hook_registration.json，未扩JIT allowlist。通知已切英文＋America/Los_Angeles（PDT/PST及数字偏移），只替换本次supervisor/Bark进程，训练PID4129271与既有watchdog保留。新候选钩子的合成fixture验证隔离工作树、仅候选结果及独立120秒CPU验证调度；真实修复尚未触发。英文测试推送HTTP200/code200。
 
 ---
 
