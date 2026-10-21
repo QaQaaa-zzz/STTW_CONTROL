@@ -1,3 +1,15 @@
+# 2026-10-20 HighDemand工程通过、正式200轮启动与Bark自动修复通知
+
+用户已授权执行先前准备的高压力配置。工程128policy/512lower ticks完成并丢弃更新；正式训练为scratch单一α网络200轮、固定local300 update300/210D/10frame。工程/正式u0的25个policy张量逐值相同，Adam state为空，未继承工程更新。源9766862、配置/物理/时序与既定预算不变：训练52428800、匹配新B0 24000、DEV600000、工程512，合计53053312lower ticks，不自动扩展。
+
+实际运行与收据：runs/path_high_demand_shared_200_20261020/INDEX.md、initialization_verification.json、engineering/shared/engineering_receipt.json、training_launch.json。正式TensorBoard http://localhost:6007 ，独立training/tensorboard的HTTP及data_location已核验；启动时正式reward等待首批，不能用工程6006标量代替。人工监督至第3轮即结束，后台训练/通知继续；实时状态及首3轮收据以运行目录为准。
+
+通知按用户要求采用Bark（STTW独立组），现有私有凭据仅只读引用、不复制或输出。测试推送HTTP200/Barkcode200；Bark后台跟踪训练阶段/流水线完成、错误、修复开始/结果，并保留投递/重试收据。既有桌面watchdog保留。报错可由run-local supervisor启动一次独立codex exec修复任务（最多30分钟），不是唤醒同一聊天；修复限定当前path_command工程问题，不改奖励/任务/物理/底层/预算。只能在恢复与预算继承可证明时恢复剩余阶段，不能静默重跑。修复未真实触发，合成故障测试验证了子进程启动/输出与三条生命周期提示，不代表实际修复能力已验证。监督器/Bark脚本位于运行目录，不改变生产训练数值路径，未修改JIT服务。
+
+当前启动状态不代表训练完成或偏好改善；仍需配对XY/逐步奖励与真实失败终点的阶段末证据。原配置准备与92项CPU回归记录保留在下方。
+
+---
+
 # 2026-10-20 高压力任务配置：提高侧倾代价、速度并缩小半径
 
 按用户要求新增HighDemand Shared配置，roll/work权重与cap同时2倍，失败尾罚bound同步8980.2；强弯训练2.8–3.2m/s、R1.6–1.8，固定DEV/测试2.8/3.2m/s、R1.6，训练/测试前缀10m、参考cap3.5。固定local300、物理、滤波/修正变化率、网络/PPO与原Coverage历史证据保持。v3采样与generic左右弯支持新配置，旧v2兼容。
