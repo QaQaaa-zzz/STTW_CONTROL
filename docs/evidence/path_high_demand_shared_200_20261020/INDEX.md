@@ -96,3 +96,7 @@ Last model common task: False; research preference: UNKNOWN; legacy strict prefe
 [Full per-alpha metrics, complete-turn bins, source NPZ paths and reward audit](conditional_metrics.json)
 [One shared checkpoint identity](identities.json)
 The complete original turn is used for equal-bin MSE metrics. Missing bins remain missing; no common-fragment shortcut. Middle-alpha primary thresholds are not invented. Intermediate-alpha trends and endpoint preference are reported separately from common physical diagnostics.
+
+## 2026-10-21追加复核
+
+[完整中文分析与自动通知核验](ANALYSIS.md) · [末轮全部XY](LAST200_ALL_XY.png) · [末轮每步奖励](LAST200_ALL_STEP_REWARDS.png) · [末轮累计奖励](LAST200_ALL_CUMULATIVE_REWARDS.png) · [复核数据](foreground_review.json)。均复用原轨迹，未追加仿真。
