@@ -1,3 +1,15 @@
+# 2026-10-20 出图后自动分析、远端发布与Bark报告链接
+
+用户明确授权：200轮出图后自动调用独立Codex分析，简要报告推送远端并Bark发送可点击链接。仅扩本次HighDemand运行的完成后处理，不新增训练/物理/自动采用模型，不修改失败修复钩子的candidate-only限制。
+
+既有supervisor在training.state=completed、completed_updates=200且INDEX/ALL_XY/metrics/identity齐备后启动一次独立分析（20分钟）。使用独立工作树，分析已保存的六场景×五α与匹配B0、best/last、失败/最终保持/侧倾/速度路径取舍，报告首图为XY，未知/反例保留；不把跨α奖励或变化后的旧奖励当物理排名。控制器仅提交docs/evidence/path_high_demand_shared_200_20261020/的ANALYSIS.md、已有PNG/指标与完整图表索引到当前origin/experiment/path-conflict-exposure-v1。成功后核对远端提交，再以不可变commit链接经Bark url字段发送；失败通知错误，不伪报已发布。已有Bark投递状态和单次任务收据防止监控重启后重复分析/推送。
+
+运行脚本/注册/测试位于runs/path_high_demand_shared_200_20261020/{analysis_after_report.py,post_analysis_registration.json,test_post_analysis.py}，后续产物post_analysis/。6项测试通过（0.16秒）：未完成不调度、仅报告目录允许、缺失链接拦截、本地临时Git远端正常及并发非fast-forward恢复、Bark可点击URL、未发布不发送成功链接。Codex与Bark在测试中模拟，Git使用真实临时本地仓库；未提前运行真实分析、未推送虚构报告。另一次真实Bark配置完成测试带已有分支链接，HTTP200/code200。
+
+只重启本次supervisor/Bark以加载后处理，保留原训练PID4129271及watchdog和通知去重；未恢复持续人工进度轮询。任务仍在后台按原预算执行；实际结果分析和报告URL须等待完成，当前只是工作流已配置。
+
+---
+
 # 2026-10-20 用户授权进一步清理非best过程模型
 
 本次在前一轮派生文件清理之后，按用户明确授权删除较早、未被best/后续引用保护的中间检查点载荷。截止仍为2026-10-13之前；近期结果、所有lower/frozen目录、注册R196/R244完整来源训练目录、local300及当前任务保留。解析5329份配置/选择/来源元数据并保留694条实际存在的引用；每个训练保留初始/最终，无法认证best的37个检查点目录不删除。
