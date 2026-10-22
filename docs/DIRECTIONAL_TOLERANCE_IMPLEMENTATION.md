@@ -21,3 +21,16 @@ PYTHONPATH=learning/src JAX_PLATFORMS=cuda,cpu XLA_PYTHON_CLIENT_PREALLOCATE=fal
 ```
 
 Do not rerun a completed panel merely to regenerate plots. One route, one speed, three onset times and a finite force grid are development evidence only. No calibrated force prediction from UCEDT is claimed by this implementation.
+
+
+## Training integration audit (2026-10-22)
+
+Source inspected: path_command_reward.costs/failure_reward, PathBatch.advance_one, and path_command_training.run. No reward or training changes made.
+
+- Current Coverage V2 sum(component_caps) = failure_cost_rate_bound = 5080.2. If a bounded tolerance cost with cap C is added, the failure-tail bound must include that cap (and any coefficient) under the same scale/time units. Otherwise the previously derived terminal-failure penalty may cease to dominate the future cost. Recomputed reporting and COST_KEYS/statistics dimensions must include the same component.
+- Existing reward is negative cost rate times scale 0.1 times lower dt 0.005; the PPO reward sums four lower ticks per upper interval 0.02. A per-upper tolerance cost must be integrated once with consistent duration, not accidentally multiplied four times.
+- Keep original chi and speed/path preference terms fixed. A tolerance proxy must not replace chi, relax the original reference, alter success thresholds, or add observation dimensions to an existing Actor.
+- Training uses restored Coverage model/optimizer identities only through explicit fork contracts. A changed reward is a new experiment and cannot masquerade as exact continuation under the old reward. Comparison arms must start from the same endpoint checkpoint and declare optimizer handling equally.
+- Current 20-second complete closed-loop probe rollouts are offline labels, not a low-cost per-step feature. Current six left-turn states include only one directional failure boundary; censored labels cannot be converted to exact regression targets. A cheap state proxy and route/state-separated validation remain prerequisites for reward adoption.
+
+Next integration evidence must include a zero-weight unchanged-transition/reward check, bounded/nonfinite/unknown-proxy behavior, component accounting plus failure-bound check, matched checkpoint/budget controls, and independent physical pulse outcomes. These checks supplement the scientific test of the proposed margin; they cannot replace it. No training has been launched by this audit.
