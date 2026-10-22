@@ -170,6 +170,19 @@ class Episode:
     totals: object
     component_totals: object
 
+def make_batched_advance(batch):
+    from .path_command_statistics import merge_statistics,reduce_statistics,reset_statistics
+    def step(episodes,z,context=1):
+        ended,final,reward,flags,_,stats=jax.vmap(lambda ep,a:batch.advance_one(ep,a,context,auto_reset=False))(episodes,z)
+        nxt,obs=reset_finished_batch(ended,flags,lambda eid,episode:batch.reset(eid,episode,context),final_observation=final,observe=batch.observation)
+        nxt=nxt.replace(state=nxt.state.replace(fault=nxt.state.fault|obs[2]))
+        resets=jax.vmap(reset_statistics)(nxt.route,flags['done']&~flags['engineering_fault'])
+        stats['diagnostics']=reduce_statistics(merge_statistics(stats['diagnostics'],resets),axis=0)
+        return nxt,obs,reward,flags['done'],training_step_payload(reward,flags,obs[2],stats,episodes.state.alpha)
+    return step
+
+
+
 class PathBatch:
     """Auto-reset only valid terminal episodes; faults stop the owning trainer."""
     def __init__(self,env,snapshot,config,seed,alpha):
@@ -604,17 +617,7 @@ def train(path,output,*,execute=False,resume=None):
                 if bool(j.any(fault)):raise RuntimeError('resume observation fault')
                 obs=to_torch(a,cr)
             from .path_command_statistics import reduce_statistics,merge_statistics,reset_statistics
-            def advance_batch(episodes,z,absolute_update=1):
-                advance_one=lambda ep,action:batch.advance_one(ep,action,absolute_update,auto_reset=False)
-                ended,final,reward,flags,_,stats=jax.vmap(advance_one)(episodes,z)
-                nxt,obs_batch=reset_finished_batch(ended,flags,lambda eid,episode:batch.reset(eid,episode,absolute_update),
-                    final_observation=final,observe=batch.observation)
-                nxt=nxt.replace(state=nxt.state.replace(fault=nxt.state.fault|obs_batch[2]))
-                resets=jax.vmap(reset_statistics)(nxt.route,flags['done']&~flags['engineering_fault'])
-                stats['diagnostics']=merge_statistics(stats['diagnostics'],resets)
-                stats['diagnostics']=reduce_statistics(stats['diagnostics'],axis=0)
-                payload=training_step_payload(reward,flags,obs_batch[2],stats,episodes.state.alpha)
-                return nxt,obs_batch,reward,flags['done'],payload
+            advance_batch=make_batched_advance(batch)
             advance_args=(episodes,j.zeros((n,2)),j.int32(start_update+1)) if strong else (episodes,j.zeros((n,2)))
             advance=None if start_update>=endpoint_target else jax.jit(advance_batch).lower(*advance_args).compile()
             status['compile_and_setup_seconds']=time.monotonic()-started

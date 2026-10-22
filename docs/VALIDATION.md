@@ -1,3 +1,9 @@
+# 2026-10-21 persistent v3与端点蒸馏课程接口
+
+v3/JAX与独立NumPy重建同步；端点先cap再混合；alpha0/共同成本不变。CPU相关134 passed/1既有GPU检查skipped；抽象v3批量步(2,351)/(2,352)、5通道统计验证。已验证历史原轨迹可作为继承验收的阳性对照；固定env_id划分避免64→32采样时训练/验证泄漏。新运行已按最新AGENTS改为10s/Bark-only；旧20s教师文件不改，继承比较为共同前10s。上述均不等于新学生闭环继承或课程训练成功；实际GPU检查由已声明8×16丢弃工程阶段执行。
+
+---
+
 # 2026-10-21 当前单网与历史Coverage双网的代码/结果文档包
 
 用户要求把当前核心代码、此前用于模仿奖励的双网络代码和结果、当前结果合并成文档。核实历史身份为path-feedback-v1/runs/path_coverage_v2_resume_20261011、原Coverage V2、两个独立端点各+200/u200，源码manifest版本2b0896a；非safety-v1/paired200退化候选。当前为HighDemand source9766862、best150/last200。

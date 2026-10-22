@@ -7,13 +7,15 @@ def huber(x):
 def reward_version(config):
  """An absent version preserves the frozen historical reward identity."""
  version=config['path_reward'].get('reward_version')
- if 'reward_version' in config['path_reward'] and version not in ('path_safety_preference_v1','path_safety_preference_v2'):
+ if 'reward_version' in config['path_reward'] and version not in ('path_safety_preference_v1','path_safety_preference_v2','path_persistent_preference_v3'):
   raise ValueError(f'unknown path reward version: {version!r}')
  if version=='path_safety_preference_v2':
   import math
   try:multiplier=float(config['path_reward']['primary_speed_multiplier'])
   except (KeyError,TypeError,ValueError) as e:raise ValueError('v2 requires finite positive primary speed multiplier') from e
   if not math.isfinite(multiplier) or multiplier<=0:raise ValueError('v2 requires finite positive primary speed multiplier')
+ if version=='path_persistent_preference_v3' and not 0<float(config['path_reward']['path_secondary_ratio'])<=1:
+  raise ValueError('path_secondary_ratio must be in (0,1]')
  return version
 
 def costs(*,alpha,chi,ev,ey,eh,peak_roll,roll_rate,speed,offsets,offset_rate,config,roll_angle=None):
@@ -42,7 +44,20 @@ def costs(*,alpha,chi,ev,ey,eh,peak_roll,roll_rate,speed,offsets,offset_rate,con
   raw['working_roll']+=diagnostic['working_exposure']
   raw['path']+=diagnostic['corridor']
  eff={k:j.minimum(v,c['component_caps'][k]) for k,v in raw.items()}
- return dict(raw=raw,effective=eff,capped={k:v>c['component_caps'][k] for k,v in raw.items()},diagnostic_subcosts=diagnostic,reward=-c['scale']*config['timing']['lower_dt_s']*sum(eff.values()))
+ capped={k:v>c['component_caps'][k] for k,v in raw.items()};extra={}
+ if version=='path_persistent_preference_v3':
+  channels=dict(speed0=(10-9*chi)*huber(ev/c['speed_scale_m_s']),speed1=10*huber(ev/c['speed_scale_m_s']),
+   path=10*(huber(ey/c['cross_track_scale_m'])+c['path_heading_factor']*huber(eh/c['path_heading_scale_rad'])),
+   primary0=c['primary_weight']*chi*huber(positive(j.abs(ey)-c['primary_path_band_m'])/c['primary_path_scale_m']),
+   primary1=c['primary_weight']*chi*huber(positive(j.abs(ev)-c['primary_speed_band_m_s'])/c['primary_speed_scale_m_s']))
+  limits={k:c['component_caps']['speed' if k.startswith('speed') else 'primary' if k.startswith('primary') else 'path'] for k in channels}
+  bounded={k:j.minimum(v,limits[k]) for k,v in channels.items()};flags={k:v>limits[k] for k,v in channels.items()}
+  factor=1-(1-c['path_secondary_ratio'])*alpha
+  raw.update(speed=(1-alpha)*channels['speed0']+alpha*channels['speed1'],path=factor*channels['path'],primary=(1-alpha)*channels['primary0']+alpha*channels['primary1'])
+  eff.update(speed=(1-alpha)*bounded['speed0']+alpha*bounded['speed1'],path=factor*bounded['path'],primary=(1-alpha)*bounded['primary0']+alpha*bounded['primary1'])
+  capped.update(speed=((alpha<1)&flags['speed0'])|((alpha>0)&flags['speed1']),path=flags['path'],primary=((alpha<1)&flags['primary0'])|((alpha>0)&flags['primary1']))
+  extra=dict(endpoint_raw=channels,endpoint_effective=bounded,endpoint_capped=flags)
+ return dict(raw=raw,effective=eff,capped=capped,**extra,diagnostic_subcosts=diagnostic,reward=-c['scale']*config['timing']['lower_dt_s']*sum(eff.values()))
 
 def failure_reward(remaining_intervals,config):
  reward_version(config)

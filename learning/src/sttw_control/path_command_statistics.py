@@ -106,6 +106,9 @@ def step_statistics(logs,route,cfg):
         reference_clip_count=clip,reference_clip_observed=clip_observed,
         cost_raw_sum=j.sum(masked(raw),axis=0),cost_effective_sum=j.sum(masked(effective),axis=0),
         cost_cap_count=j.sum(masked(capped),axis=0))
+    if 'endpoint_cost_raw' in logs:
+        for kind in ('raw','effective','capped'):
+            result['endpoint_cost_'+kind]=j.stack([j.sum(j.where(active,logs['endpoint_cost_'+kind][k],0)) for k in ('speed0','speed1','path','primary0','primary1')])
     if 'upper_alpha' in logs:
         alpha=j.asarray(logs['upper_alpha'])
         valid=j.isfinite(alpha)&(alpha>=0)&(alpha<=1)
@@ -245,4 +248,7 @@ def summarize_statistics(sumstats,cfg):
             threshold_role='diagnostic_continue_declared_budget')
         result['route_distribution']['sample_group_names']=['legacy','double_u','alternating_four']
         result['route_distribution']['speed']['histogram_edges']=np.linspace(1.8,2.9,6).tolist()
+    if 'endpoint_cost_raw' in s:
+        result['endpoint_channels']={k:dict(raw_mean=ratio(s['endpoint_cost_raw'][i]),effective_mean=ratio(s['endpoint_cost_effective'][i]),cap_fraction=ratio(s['endpoint_cost_capped'][i])) for i,k in enumerate(('speed0','speed1','path','primary0','primary1'))}
+        result['cap_semantics']='endpoint channel caps before alpha mixing; mixed raw is not clipped again'
     return result

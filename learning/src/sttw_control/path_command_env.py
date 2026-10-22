@@ -23,7 +23,8 @@ _TRAINING_LOG_KEYS=frozenset((
     'actual_forward_speed','v_user','path_cross_track','path_heading_error','peak_roll',
     'chi','path_progress','path_curvature','target_offset','filtered_offset','offsets',
     'governed','nominal','lower_error','correction_rate_clipped','nominal_slew_channels',
-    'reference_clip_channels','upper_alpha','physical_failure','domain_exit'))
+    'reference_clip_channels','upper_alpha','physical_failure','domain_exit',
+    'endpoint_cost_raw','endpoint_cost_effective','endpoint_cost_capped'))
 
 
 def training_log(log):
@@ -132,6 +133,8 @@ class PathCommandEnv:
             nominal=p.raw,nominal_rates=s.nominal_rates,nominal_slew_channels=j.abs(s.follower.command-p.raw)>1e-7,pp_target=s.follower.command,preview_body=s.follower.preview_body,preview_world=s.follower.preview_world,lookahead=s.follower.lookahead,pp_curvature=s.follower.kappa,
             target_offset=flags['target'],filtered_offset=filtered,offsets=offsets,latent_z=z,lower_error=j.stack([log['actual_forward_speed'],log['actual_delta']])-governed,lower_observation=obs,lower_action=action,lower_fault=~lf['finite'],policy_fault=flags['policy_fault']|s.fault,domain_exit=follower.invalid&~follower.numerical_fault,tracking_domain_failure=follower.invalid&~follower.numerical_fault,goal_section_signed_distance=goal_distance,
             correction_rate_clipped=flags['rate_clipped'],reference_clip_channels=flags['reference_clip_channels'],tick_reward=c['reward'],raw_components=c['raw'],effective_components=c['effective'],component_capped=c['capped'],diagnostic_subcosts=c['diagnostic_subcosts'],rho=j.maximum(j.abs(log['phi']),j.abs(log['phi']+self.config['path_reward'].get('risk_prediction_s',.10)*log['phi_dot'])),chi=chi)
+        if 'endpoint_raw' in c:
+            log.update(endpoint_cost_raw=c['endpoint_raw'],endpoint_cost_effective=c['endpoint_effective'],endpoint_cost_capped=c['endpoint_capped'])
         end=s.replace(physical=p2.replace(raw=nominal),lower=lower,projection=projection,follower=follower,filtered=filtered,offsets=offsets,nominal_rates=rates,previous_bounded=log['applied_residual'],yaw_rate=yaw_rate,tick=next_tick,fault=s.fault|~lf['finite']|flags['policy_fault']|follower.numerical_fault|log['nonfinite'],domain_exit=s.domain_exit|(follower.invalid&~follower.numerical_fault))
         if self.config.get('alpha_conditioning'):log['upper_alpha']=s.alpha
         return end,log
