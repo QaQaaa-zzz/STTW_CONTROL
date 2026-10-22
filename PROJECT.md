@@ -12,6 +12,8 @@
 - [ ] TensorBoard当前蒸馏loss/rollout reward/PPO reward、Bark与独立候选修复注册；按历史用户要求仅监督到PPO第3轮，之后后台继续。失败仅候选修复，不自动采用/重启。
 - [ ] 验收测试、必要工程运行，提交/推送；记录真实阶段/已完成预算/进度地址。蒸馏门槛：两端12回合无失败/目标保持通过，peak≤max(.302,教师+.01)，端点弯内主RMSE≤1.25×教师+.02，避免仅动作loss验收。
 
+实际启动：2026-10-22 America/Los_Angeles，数值源码45b793b，PID1237940；运行目录runs/path_distilled_v3_curriculum_400_20261021。当前教师数据采集中，尚未开始课程PPO；TensorBoard http://localhost:6006 已通过HTTP读到当前distillation/train/mean_step_reward，收据distillation_reward_http_live_verified.json；Bark启动消息HTTP200/code200，run-local错误监视器心跳已核验。当前阶段和预算以status.json为准，后台不因本次交接停止。
+
 当前工程证据：134项相关测试通过、1项既有GPU检查跳过；v3抽象批量Actor(2,351)/Critic(2,352)、端点通道(5,)通过。新数据/闭环/课程尚待执行。完成后复用项目内Bark和一次20分钟独立文档分析；仅报告目录允许远端发布，失败修复仍candidate-only。
 
 物理预算上限：teacher256000 + correction128000 + distill gate48000 + warmup524288 + engineering512 + PPO104857600 + 17 DEV panels1020000 + per-stage B0 max48000 = 106882400 lower ticks。DEV、gate按真实早停计数不补样本；无动态α实验，无额外自动续训。400轮不包含监督更新。预算计算在运行声明再次精确核对。
