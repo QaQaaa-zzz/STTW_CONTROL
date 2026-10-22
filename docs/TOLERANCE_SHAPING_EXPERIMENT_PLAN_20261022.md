@@ -23,7 +23,7 @@ No-cost arm leaves original reward unchanged. Disabled calculation bypasses inva
 ## Implementation tasks
 
 - [x] Pure JAX scalar margin/cost kernel with exact NumPy quadratic-reference tests, directional symmetry, insufficient budget, degenerate inputs, disabled bypass, vmap/JIT checks.
-- [ ] Current-state coefficient adapter matching controller._system; reward integration with optional component schema, all accumulators and failure bounds. Zero coefficient must preserve existing transitions/reward.
+- [x] Current-state coefficient adapter matching controller._system; reward integration with optional component schema, all accumulators and failure bounds. Zero coefficient must preserve existing transitions/reward.
 - [ ] Explicit weights-only new reward fork for all three arms from identical frozen Coverage u200 endpoint parents; actor and critic copied, optimizer reset identically. Preserve/check source hashes and original identity; no weakened resume checks. Freeze full run configs and seed/budget before any PPO.
 - [ ] Real short numerical/accounting smoke, then matched training with checked live TensorBoard reward and registered Bark. Reuse adopted vmap/scan/cache. No production training has started under this document.
 - [ ] Evaluate original task and pulse success, task error, nominal regression and incremental costs on a newly declared comparison panel, retaining current DEV for diagnostics. Fixed final update primary comparison avoids reward-scale-dependent best selection. Multi-seed replication and roll-only cost-matched control required before claiming dynamic-specific paper benefit.
@@ -31,3 +31,5 @@ No-cost arm leaves original reward unchanged. Disabled calculation bypasses inva
 Training step count and resources will be fixed in concrete launch manifests after integration/smoke, not guessed here. This document freezes the first cost candidate, not an already executable campaign. Current2.8 DEV is already used and cannot become unseen TEST. A poor candidate is rejected; do not redefine task thresholds to make it succeed.
 
 Terminal-window integration rule: do not initiate a hypothetical full0.1s pulse when less than0.1s remains. The adapter must mark this cost inactive for that terminal window (and preserve all original task costs); the standalone enabled kernel reports UNKNOWN for that invalid query. It must not silently shorten the declared pulse.
+
+Integration verification: b2dd78e,29 CPU tests; shaping_integration_smoke_v1 completed1600 lower ticks with frozen actors, exact zero-weight match in this smoke, valid accounting and bounded active dynamic cost. See docs/evidence/shaping_integration_smoke_20261022/REPORT.md. Learner fork and production campaign remain pending.
