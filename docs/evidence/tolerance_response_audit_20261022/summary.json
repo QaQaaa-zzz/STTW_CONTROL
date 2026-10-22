@@ -1,0 +1,401 @@
+{
+  "bounds": [
+    {
+      "alpha": 0,
+      "onset": 1,
+      "sign": -1,
+      "bound_N": 4.579455852508545,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "onset": 1,
+      "sign": 1,
+      "bound_N": 34.31352233886719,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "onset": 2,
+      "sign": -1,
+      "bound_N": 10.173273086547852,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "onset": 2,
+      "sign": 1,
+      "bound_N": 10.223005294799805,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "onset": 4,
+      "sign": -1,
+      "bound_N": 24.152881622314453,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "onset": 4,
+      "sign": 1,
+      "bound_N": 23.886096954345703,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 1,
+      "sign": -1,
+      "bound_N": 22.097387313842773,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 1,
+      "sign": 1,
+      "bound_N": 42.52397155761719,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 2,
+      "sign": -1,
+      "bound_N": 16.919410705566406,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 2,
+      "sign": 1,
+      "bound_N": 11.637147903442383,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 4,
+      "sign": -1,
+      "bound_N": 32.063907623291016,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "onset": 4,
+      "sign": 1,
+      "bound_N": 27.498449325561523,
+      "active_constraint": "roll"
+    }
+  ],
+  "validation": [
+    {
+      "name": "alpha0_t1_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t1_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t1_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t1_F-6",
+      "force_N": -6.0,
+      "predicted_pass": false,
+      "actual_pass": false,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t1_F-4",
+      "force_N": -4.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "boundary_focus_v1"
+    },
+    {
+      "name": "alpha0_t1_F-4.5",
+      "force_N": -4.5,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "boundary_focus_v1"
+    },
+    {
+      "name": "alpha0_t1_F-5",
+      "force_N": -5.0,
+      "predicted_pass": false,
+      "actual_pass": true,
+      "source": "boundary_focus_v1"
+    },
+    {
+      "name": "alpha0_t1_F-5.5",
+      "force_N": -5.5,
+      "predicted_pass": false,
+      "actual_pass": false,
+      "source": "boundary_focus_v1"
+    },
+    {
+      "name": "alpha0_t2_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t2_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t2_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t2_F-6",
+      "force_N": -6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t4_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t4_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t4_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha0_t4_F-6",
+      "force_N": -6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t1_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t1_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t1_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t1_F-6",
+      "force_N": -6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t2_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t2_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t2_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t2_F-6",
+      "force_N": -6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t4_F+3",
+      "force_N": 3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t4_F-3",
+      "force_N": -3.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t4_F+6",
+      "force_N": 6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    },
+    {
+      "name": "alpha1_t4_F-6",
+      "force_N": -6.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "source": "pulse_pilot_v1_attempt2"
+    }
+  ],
+  "responses": [
+    {
+      "alpha": 0,
+      "onset": 1,
+      "time": 1.100000023841858,
+      "roll_sensitivity_rad_per_N": 0.003401815891265869
+    },
+    {
+      "alpha": 0,
+      "onset": 1,
+      "time": 1.5,
+      "roll_sensitivity_rad_per_N": -0.003883540630340576
+    },
+    {
+      "alpha": 0,
+      "onset": 1,
+      "time": 1.7799999713897705,
+      "roll_sensitivity_rad_per_N": -0.009382247924804688
+    },
+    {
+      "alpha": 0,
+      "onset": 2,
+      "time": 2.0999999046325684,
+      "roll_sensitivity_rad_per_N": 0.0031337738037109375
+    },
+    {
+      "alpha": 0,
+      "onset": 2,
+      "time": 2.5,
+      "roll_sensitivity_rad_per_N": -0.010018765926361084
+    },
+    {
+      "alpha": 0,
+      "onset": 2,
+      "time": 2.7799999713897705,
+      "roll_sensitivity_rad_per_N": -0.009561538696289062
+    },
+    {
+      "alpha": 0,
+      "onset": 4,
+      "time": 4.099999904632568,
+      "roll_sensitivity_rad_per_N": 0.0032959580421447754
+    },
+    {
+      "alpha": 0,
+      "onset": 4,
+      "time": 4.5,
+      "roll_sensitivity_rad_per_N": -0.012459397315979004
+    },
+    {
+      "alpha": 0,
+      "onset": 4,
+      "time": 4.779999732971191,
+      "roll_sensitivity_rad_per_N": -0.003344237804412842
+    },
+    {
+      "alpha": 1,
+      "onset": 1,
+      "time": 1.100000023841858,
+      "roll_sensitivity_rad_per_N": 0.003384828567504883
+    },
+    {
+      "alpha": 1,
+      "onset": 1,
+      "time": 1.5,
+      "roll_sensitivity_rad_per_N": -0.0034371018409729004
+    },
+    {
+      "alpha": 1,
+      "onset": 1,
+      "time": 1.7799999713897705,
+      "roll_sensitivity_rad_per_N": -0.00374680757522583
+    },
+    {
+      "alpha": 1,
+      "onset": 2,
+      "time": 2.0999999046325684,
+      "roll_sensitivity_rad_per_N": 0.0033239126205444336
+    },
+    {
+      "alpha": 1,
+      "onset": 2,
+      "time": 2.5,
+      "roll_sensitivity_rad_per_N": -0.0033289194107055664
+    },
+    {
+      "alpha": 1,
+      "onset": 2,
+      "time": 2.7799999713897705,
+      "roll_sensitivity_rad_per_N": -0.003760814666748047
+    },
+    {
+      "alpha": 1,
+      "onset": 4,
+      "time": 4.099999904632568,
+      "roll_sensitivity_rad_per_N": 0.003350496292114258
+    },
+    {
+      "alpha": 1,
+      "onset": 4,
+      "time": 4.5,
+      "roll_sensitivity_rad_per_N": -0.009787321090698242
+    },
+    {
+      "alpha": 1,
+      "onset": 4,
+      "time": 4.779999732971191,
+      "roll_sensitivity_rad_per_N": -0.004970192909240723
+    }
+  ],
+  "correct": 27,
+  "total": 28,
+  "unsafe_predictions": 0,
+  "conservative_predictions": 1,
+  "scope": "Post-hoc DEV diagnostic, same six snapshots; not independent validation or certified tolerance. Linear roll prediction does not certify substep peaks, physical failures, domain, goal, or faults."
+}
