@@ -6,6 +6,7 @@ import jax
 import jax.numpy as j
 from flax import struct
 from .path_command_policy import SCHEMA
+from .path_command_reward import configured_cost_keys
 from .preference_best import atomic_json,config_hash,digest
 
 
@@ -106,7 +107,7 @@ class PathBatch:
         pose=self.env.physics.helpers.pose(self.snapshot.data)
         route=sample_training_route(self.seed,eid,episode,pose,self.config)
         state=self.env.reset(self.snapshot,route.path,route.speed,j.asarray(self.alpha))
-        return Episode(state,route,eid,episode,j.zeros(6),j.zeros(10))
+        return Episode(state,route,eid,episode,j.zeros(6),j.zeros(len(configured_cost_keys(self.config))))
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
     def advance_one(self,ep,z):
         end,logs=self.env.policy_step(ep.state,z,ep.route.path,ep.route.speed,self.horizon)
@@ -426,8 +427,9 @@ def train(path,output,*,execute=False,resume=None):
                     if coverage_mode and len(cached)!=6:raise ValueError('coverage fork requires all six existing baseline traces')
                 zero=PathCommandActor().init(jax.random.PRNGKey(0),j.zeros(351));evaluator.evaluate(zero,0,root/'zero_upper',cached_names=cached if (resume or coverage_mode) else None);baseline_done=True
                 status['reused_baseline_cases']=len(cached)
-            accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
-            from .path_command_statistics import summarize_statistics,COST_KEYS
+            accepted=0;http_verified=False;stop=None;update=start_update;window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(len(configured_cost_keys(cfg)));window_physical=0;window_domain=0
+            from .path_command_statistics import summarize_statistics
+            cost_keys=configured_cost_keys(cfg)
             coverage_stats=None;coverage_low=0;coverage_fraction=None;window_start=start_update+1;coverage_start=start_update+1
             if coverage_mode and endpoint_resume:
                 previous_coverage=out/'coverage'/f'update_{start_update:04d}.json'
@@ -438,7 +440,7 @@ def train(path,output,*,execute=False,resume=None):
             while update<endpoint_target:
                 update+=1
                 check_budget();tick_start=time.monotonic();update_status(state='running',stage='sampling',case=None,completed_intervals=None,alpha=alpha,completed_updates=update-1,declared_updates=endpoint_target)
-                rewards=[];rollout_stats=[];completed_episodes=[];caps={};episode_ends=0;physical_failures=0;domain_failures=0;cost_totals_update=np.zeros(10)
+                rewards=[];rollout_stats=[];completed_episodes=[];caps={};episode_ends=0;physical_failures=0;domain_failures=0;cost_totals_update=np.zeros(len(configured_cost_keys(cfg)))
                 with torch.no_grad():
                     for _ in range(steps):
                         check_budget();z=algo.act(obs)
@@ -463,16 +465,16 @@ def train(path,output,*,execute=False,resume=None):
                 update_status(stage='optimized',completed_updates=update)
                 rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,plan);accepted+=int(metrics['accepted_epochs']>0)
                 totals=np.sum(np.stack(rollout_stats),axis=(0,1));done_totals=np.sum(np.stack(completed_episodes),axis=(0,1));count=max(totals[0],1)
-                record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(COST_KEYS,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
+                record=dict(update=update,sampling_model_update=update-1,accepted_batches_this_stage=accepted,rejected_streak=rejections,optimizer=clean_numbers(metrics),mean_step_reward=float(np.mean(rewards)),reward_unit='policy interval .02s sum of four lower rewards including failure replacement',rollout_speed_rmse=float(np.sqrt(totals[1]/count)),rollout_path_rmse=float(np.sqrt(totals[2]/count)),rollout_heading_rmse=float(np.sqrt(totals[3]/count)),complete_episode_count=episode_ends,complete_episode_totals=done_totals.tolist(),physical_failures=physical_failures,tracking_domain_failures=domain_failures,engineering_faults=0,complete_episode_return_mean=None if not episode_ends else float(done_totals[4]/episode_ends),complete_episode_cost_integral_means=None if not episode_ends else dict(zip(cost_keys,(cost_totals_update/episode_ends).tolist())),log_std=algo.policy.log_std.detach().cpu().tolist(),learning_rates=[g['lr'] for g in algo.optimizer.param_groups],terminal_contract=env.terminal_contract,physical_steps=status['training_control_ticks_total'],policy_steps=status['policy_transitions_total'],component_cap_counts=caps,sample_seconds=sample_seconds,optimize_seconds=opt_seconds,stop_reason=stop)
                 if coverage_mode:record.update(new_update=update,lineage_update=identity['parent_source_update']+update,parent_source_update=identity['parent_source_update'])
                 window_episodes+=episode_ends;window_return+=done_totals[4];window_costs+=cost_totals_update;window_physical+=physical_failures;window_domain+=domain_failures
                 if update%25==0 or update==endpoint_target:
                     diagnostic=summarize_statistics(window_stats,cfg)
-                    diagnostic.update(update=update,complete_episode_count=window_episodes,complete_episode_return_mean=None if not window_episodes else float(window_return/window_episodes),complete_episode_cost_integral_means=None if not window_episodes else dict(zip(COST_KEYS,(window_costs/window_episodes).tolist())),physical_failure_count=window_physical,tracking_domain_failure_count=window_domain,engineering_fault_count=0,physical_failure_rate=None if not window_episodes else window_physical/window_episodes,tracking_domain_failure_rate=None if not window_episodes else window_domain/window_episodes)
+                    diagnostic.update(update=update,complete_episode_count=window_episodes,complete_episode_return_mean=None if not window_episodes else float(window_return/window_episodes),complete_episode_cost_integral_means=None if not window_episodes else dict(zip(cost_keys,(window_costs/window_episodes).tolist())),physical_failure_count=window_physical,tracking_domain_failure_count=window_domain,engineering_fault_count=0,physical_failure_rate=None if not window_episodes else window_physical/window_episodes,tracking_domain_failure_rate=None if not window_episodes else window_domain/window_episodes)
                     diagnostic.update(window_updates=update-window_start+1,engineering_failure_rate=0.,domain_failure_rate=window_domain/max(diagnostic['active_lower_samples'],1))
                     atomic_json(out/'statistics'/f'update_{update:04d}.json',diagnostic)
                     window_start=update+1
-                    window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(10);window_physical=0;window_domain=0
+                    window_stats=None;window_episodes=0;window_return=0.;window_costs=np.zeros(len(configured_cost_keys(cfg)));window_physical=0;window_domain=0
                 coverage_pause=False
                 if coverage_mode and update%10==0:
                     coverage_summary=summarize_statistics(coverage_stats,cfg);coverage_stats=None

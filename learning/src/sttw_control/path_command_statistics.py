@@ -8,8 +8,8 @@ not reset-count fractions. Missing logged clipping flags remain unavailable.
 import jax.numpy as j
 import numpy as np
 
-COST_KEYS=('speed','path','primary','roll','working_roll','roll_rate',
-           'overspeed','low_speed','offset_magnitude','offset_rate')
+from .path_command_reward import BASE_COST_KEYS as COST_KEYS,configured_cost_keys
+
 WINDOWS=('ordinary','bend','strong_demand','exit_straight',
          'geometric_turn','demand_positive','local_left','local_right')
 COMMANDS=('target_offset','filtered_offset','offsets','governed_minus_nominal')
@@ -46,6 +46,7 @@ def reset_statistics(route,reset=True):
 
 
 def step_statistics(logs,route,cfg):
+    cost_keys=configured_cost_keys(cfg)
     active=j.asarray(logs['active_tick'],bool)
     count=j.sum(active,dtype=j.float32)
     chi=logs['chi'];progress=logs['path_progress']
@@ -62,9 +63,9 @@ def step_statistics(logs,route,cfg):
     signs=j.stack((route.angle<0,route.angle==0,route.angle>0))
     commands=j.stack((logs['target_offset'],logs['filtered_offset'],logs['offsets'],
                        logs['governed']-logs['nominal']),axis=1)
-    raw=j.stack([logs['raw_components'][key] for key in COST_KEYS],axis=-1)
-    effective=j.stack([logs['effective_components'][key] for key in COST_KEYS],axis=-1)
-    capped=j.stack([logs['component_capped'][key] for key in COST_KEYS],axis=-1)
+    raw=j.stack([logs['raw_components'][key] for key in cost_keys],axis=-1)
+    effective=j.stack([logs['effective_components'][key] for key in cost_keys],axis=-1)
+    capped=j.stack([logs['component_capped'][key] for key in cost_keys],axis=-1)
     def window_sum(values):
         shape=masks.shape+(1,)*(values.ndim-1)
         return j.sum(j.where(masks.reshape(shape),values[:,None,...],0.),axis=0)
@@ -109,6 +110,7 @@ def step_statistics(logs,route,cfg):
 
 def summarize_statistics(sumstats,cfg):
     """JSON-safe summary of properly reduced trees, including saved v1 trees."""
+    cost_keys=configured_cost_keys(cfg)
     s={k:np.asarray(v,dtype=float) for k,v in sumstats.items()}
     if not all(np.isfinite(v).all() for v in s.values()):
         raise ValueError('nonfinite active training diagnostics')
@@ -141,7 +143,7 @@ def summarize_statistics(sumstats,cfg):
                     rms=ratio(np.sqrt(s['window_lower_error_sumsq'][i]*samples),samples)),
                 costs={key:dict(raw_mean=ratio(s['window_cost_raw_sum'][i,k],samples),
                     effective_mean=ratio(s['window_cost_effective_sum'][i,k],samples),
-                    cap_fraction=ratio(s['window_cost_cap_count'][i,k],samples)) for k,key in enumerate(COST_KEYS)})
+                    cap_fraction=ratio(s['window_cost_cap_count'][i,k],samples)) for k,key in enumerate(cost_keys)})
     commands={}
     for i,name in enumerate(COMMANDS):
         commands[name]=dict(channels=['delta_v_m_s','delta_delta_rad'],
@@ -174,4 +176,4 @@ def summarize_statistics(sumstats,cfg):
             amplitude_clip_channel_fraction=ratio(s['reference_clip_count'],float(s['reference_clip_observed'])),
             missing_flag_semantics='null means flag not recorded; never treated as zero clipping'),
         costs={key:dict(raw_mean=ratio(s['cost_raw_sum'][i]),effective_mean=ratio(s['cost_effective_sum'][i]),
-                         cap_fraction=ratio(s['cost_cap_count'][i])) for i,key in enumerate(COST_KEYS)})
+                         cap_fraction=ratio(s['cost_cap_count'][i])) for i,key in enumerate(cost_keys)})

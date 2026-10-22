@@ -15,6 +15,7 @@ from .geometric_path import project,at,wrap
 from .path_reference import pursuit,publish
 from .path_command_policy import correction_tick,assemble_observation
 from .path_command_reward import costs,failure_reward
+from .tolerance_shaping import tolerance_enabled,validate_tolerance_config,measurement_reserve
 
 def guard_lower_action(action,finite):
     """Preserve lower_fault while preventing invalid inference entering physics."""
@@ -42,6 +43,7 @@ class PathCommandEnv:
     task_mode='geometric_path'
     schema='sttw_geometric_path_actor351_v1'
     def __init__(self,config,plant_spec,lower,terminal_contract="terminal_contract_v1"):
+        validate_tolerance_config(config)
         self.terminal_contract=terminal_contract
         self.config=config;self.plant_spec=plant_spec;self.lower=lower
         self.physics=TeleopEnv(config={**plant_spec,'lower_internal_diagnostics':True},backend='mjx')
@@ -79,7 +81,7 @@ class PathCommandEnv:
         critic=j.concatenate([obs,j.array([(horizon-s.tick*self.cc.dt)/horizon])])
         return obs,critic,fault|s.fault
 
-    def tick(self,s,z,path,v_user,force_pulse=None):
+    def tick(self,s,z,path,v_user,force_pulse=None,horizon=None):
         p=s.physical;m,pose,v=self.physics.observe(p.data)
         filtered,offsets,governed,flags=correction_tick(s.filtered,s.offsets,z,p.raw,self.config)
         lower,action,obs,lf=self.lower.prepare_local(s.lower,m,pose,v,governed,p,self.cc)
@@ -90,7 +92,13 @@ class PathCommandEnv:
         projection=project(path,post[:2],s.projection.progress,j.linalg.norm(post[:2]-pose[:2]),self.config)
         eh=wrap(projection.heading-post[2]);_,_,k=at(path,projection.progress)
         ff=j.arctan(self.cc.wheelbase*k/j.cos(self.cc.caster));chi=j.clip((j.abs(ff/q_ratio(v_user,self.cc))-.18)/.12,0,1)
-        c=costs(alpha=s.alpha,chi=chi,ev=log['actual_forward_speed']-v_user,ey=projection.cross_track,eh=eh,peak_roll=log['peak_roll'],roll_rate=log['phi_dot'],speed=log['actual_forward_speed'],offsets=offsets,offset_rate=j.zeros(2),config=self.config)
+        tolerance_cost=None
+        if tolerance_enabled(self.config):
+            deadline=self.config['training_future_phase_C']['episode_s'] if horizon is None else horizon
+            reserve=measurement_reserve(m,p.controller,self.cc,remaining=deadline-s.tick*self.cc.dt,config=self.config)
+            tolerance_cost=reserve['cost_rate'];flags['policy_fault']=flags['policy_fault']|~reserve['valid']
+            log.update(tolerance_plus_N=reserve['plus_N'],tolerance_minus_N=reserve['minus_N'],tolerance_valid=reserve['valid'],tolerance_active=reserve['enabled'])
+        c=costs(alpha=s.alpha,chi=chi,ev=log['actual_forward_speed']-v_user,ey=projection.cross_track,eh=eh,peak_roll=log['peak_roll'],roll_rate=log['phi_dot'],speed=log['actual_forward_speed'],offsets=offsets,offset_rate=j.zeros(2),config=self.config,tolerance_cost=tolerance_cost)
         lower=self.lower.finish_local(lower,log['applied_residual'],yaw_rate)
         goal_point,goal_heading,_=at(path,path.goal)
         goal_distance=j.dot(post[:2]-goal_point,j.array([j.cos(goal_heading),j.sin(goal_heading)]))
@@ -113,9 +121,10 @@ class PathCommandEnv:
 
     def policy_step(self,s,z,path,v_user,horizon,force_pulse=None):
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
+        timing={'horizon':horizon} if tolerance_enabled(self.config) else {}
         def step(st,_):
             stopped=st.physical.failed|st.fault|st.domain_exit
-            return jax.lax.cond(stopped,lambda st:(st,self.zero_log),lambda st:self.tick(st,z,path,v_user) if force_pulse is None else self.tick(st,z,path,v_user,force_pulse),st)
+            return jax.lax.cond(stopped,lambda st:(st,self.zero_log),lambda st:self.tick(st,z,path,v_user,**timing) if force_pulse is None else self.tick(st,z,path,v_user,force_pulse,**timing),st)
         end,logs=jax.lax.scan(step,s,None,length=4)
         end=self.record_frame(end)
         rate=(end.offsets-s.offsets)/self.config['timing']['upper_dt_s'];c=self.config['path_reward']

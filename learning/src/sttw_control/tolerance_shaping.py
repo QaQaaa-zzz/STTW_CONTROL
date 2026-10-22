@@ -22,3 +22,35 @@ def model_reserve(*,z,b,lam,remaining,effort_budget,gamma,duration,target_force,
  minus=j.where(feasible,j.maximum(0.,(radius+j.sign(K)*coordinate)/denom),0.)
  cost=weight*j.clip(1-j.minimum(plus,minus)/j.where(target_force>0,target_force,1.),0.,1.)
  return dict(plus_N=j.where(valid,plus,j.nan),minus_N=j.where(valid,minus,j.nan),cost_rate=j.where(valid,cost,j.nan),valid=valid,enabled=j.array(True))
+
+
+def tolerance_enabled(config):
+ spec=config['path_reward'].get('tolerance')
+ return bool(spec and spec.get('weight',0)!=0)
+
+def validate_tolerance_config(config):
+ import math
+ if not tolerance_enabled(config):return
+ c=config['path_reward'];s=c['tolerance']
+ if s['method'] not in ('static','dynamic'):raise ValueError('invalid tolerance method')
+ for k in ('weight','gamma','effort_budget','duration','target_force'):
+  if not math.isfinite(s[k]):raise ValueError('nonfinite tolerance configuration')
+ if min(s[k] for k in ('weight','effort_budget','duration','target_force'))<=0 or s['gamma']==0 or s['duration']>1:raise ValueError('invalid tolerance parameters')
+ if c['component_caps'].get('tolerance')!=s['weight']:raise ValueError('tolerance cap must match weight')
+ if not math.isclose(sum(c['component_caps'].values()),c['failure_cost_rate_bound'],rel_tol=0,abs_tol=1e-6):raise ValueError('failure cost bound must match caps')
+
+def measurement_reserve(measurement,controller_state,controller_config,*,remaining,config):
+ import jax
+ from .controller import _system
+ if not tolerance_enabled(config):
+  return model_reserve(z=0.,b=0.,lam=1.,remaining=1.,effort_budget=0.,gamma=0.,duration=.1,target_force=1.,weight=0.,enabled=False)
+ spec=config['path_reward']['tolerance'];m=measurement
+ def active(_):
+  a1,a2,a4,_,_=_system(m[5]*.1,controller_state.gains,controller_config)
+  lam=j.sqrt(a4);z=a2/lam*m[2]+lam*m[0]+m[1]+controller_state.disturbance/lam
+  return model_reserve(z=z,b=a1+a2/lam,lam=lam,remaining=remaining,static=spec['method']=='static',**{k:spec[k] for k in ('effort_budget','gamma','duration','target_force','weight')})
+ def inactive(_):
+  return model_reserve(z=0.,b=0.,lam=1.,remaining=1.,effort_budget=0.,gamma=0.,duration=.1,target_force=1.,weight=0.,enabled=False)
+ result=jax.lax.cond(remaining>=spec['duration'],active,inactive,None)
+ result['valid']=result['valid']&j.isfinite(remaining)&(remaining>=0)
+ return result

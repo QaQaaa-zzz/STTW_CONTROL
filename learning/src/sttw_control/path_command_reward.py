@@ -1,10 +1,16 @@
 """Specified phase-C geometric costs. No training is launched by this module."""
 import jax.numpy as j
+from .tolerance_shaping import tolerance_enabled
+
+BASE_COST_KEYS=('speed','path','primary','roll','working_roll','roll_rate','overspeed','low_speed','offset_magnitude','offset_rate')
+
+def configured_cost_keys(config):
+ return BASE_COST_KEYS+(('tolerance',) if tolerance_enabled(config) else ())
 
 def huber(x):
  a=j.abs(x);return j.where(a<=1,x*x,2*a-1)
 
-def costs(*,alpha,chi,ev,ey,eh,peak_roll,roll_rate,speed,offsets,offset_rate,config):
+def costs(*,alpha,chi,ev,ey,eh,peak_roll,roll_rate,speed,offsets,offset_rate,config,tolerance_cost=None):
  c=config['path_reward'];positive=lambda x:j.maximum(x,0)
  raw=dict(speed=(10-9*chi*(1-alpha))*huber(ev/c['speed_scale_m_s']),
  path=(10-9*chi*alpha)*(huber(ey/c['cross_track_scale_m'])+c['path_heading_factor']*huber(eh/c['path_heading_scale_rad'])),
@@ -16,6 +22,9 @@ def costs(*,alpha,chi,ev,ey,eh,peak_roll,roll_rate,speed,offsets,offset_rate,con
  low_speed=c['low_speed_weight']*huber(positive(c['low_speed_start_m_s']-speed)/c['low_speed_scale_m_s']),
  offset_magnitude=c['offset_magnitude_weight']*j.sum((offsets/j.array(c['offset_magnitude_scales']))**2),
  offset_rate=c['offset_rate_weight']*j.sum((offset_rate/j.array(c['offset_rate_scales']))**2))
+ if tolerance_enabled(config):
+  if tolerance_cost is None:raise ValueError('enabled tolerance requires computed cost')
+  raw['tolerance']=tolerance_cost
  eff={k:j.minimum(v,c['component_caps'][k]) for k,v in raw.items()}
  return dict(raw=raw,effective=eff,capped={k:v>c['component_caps'][k] for k,v in raw.items()},reward=-c['scale']*config['timing']['lower_dt_s']*sum(eff.values()))
 
