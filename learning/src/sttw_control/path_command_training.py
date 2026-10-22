@@ -109,7 +109,7 @@ class PathBatch:
         state=self.env.reset(self.snapshot,route.path,route.speed,j.asarray(self.alpha))
         return Episode(state,route,eid,episode,j.zeros(6),j.zeros(len(configured_cost_keys(self.config))))
     def observation(self,ep):return self.env.observation(ep.state,ep.route.path,ep.route.speed,self.horizon)
-    def advance_one(self,ep,z):
+    def advance_one(self,ep,z,*,auto_reset=True):
         end,logs=self.env.policy_step(ep.state,z,ep.route.path,ep.route.speed,self.horizon)
         final=self.env.observation(end,ep.route.path,ep.route.speed,self.horizon)
         flags=termination_flags(end.tick,end.physical.failed,end.fault|final[2],end.domain_exit,self.horizon,self.config,self.env.terminal_contract)
@@ -120,9 +120,12 @@ class PathBatch:
         diagnostics=step_statistics(logs,ep.route,self.config)
         cost_totals=ep.component_totals+diagnostics['cost_effective_sum']*self.config['timing']['lower_dt_s']
         ended=ep.replace(state=end,totals=totals,component_totals=cost_totals)
-        nxt=reset_finished_episode(ended,flags,self.reset)
-        diagnostics=merge_statistics(diagnostics,reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
-        obs=self.observation(nxt)
+        if auto_reset:
+            nxt=reset_finished_episode(ended,flags,self.reset)
+            diagnostics=merge_statistics(diagnostics,reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
+            obs=self.observation(nxt)
+        else:
+            nxt,obs=ended,final
         return nxt,obs,j.sum(logs['scored_tick_reward']),flags,final,dict(diagnostics=diagnostics,completed_component_costs=j.where(flags['done'],cost_totals,0.),rollout=sums,completed_totals=j.where(flags['done'],totals,0.),family=ep.route.family,episode=ep.episode,active_ticks=j.sum(active),component_caps={k:j.sum(v&active) for k,v in logs['component_capped'].items()})
 
 
