@@ -61,3 +61,59 @@ def paired_counts(rows, baseline, candidate, alpha):
     regressed = sum(a[k] and not b[k] for k in a)
     return dict(n=len(a), baseline_success=sum(a.values()), candidate_success=sum(b.values()),
                 improved=improved, regressed=regressed, difference=improved-regressed)
+
+
+def resolve_comparison_actors(campaign):
+    """Resolve the fixed final actors only after every declared training job ends."""
+    import json
+    from pathlib import Path
+    from .preference_best import digest
+    root = Path(campaign).resolve()
+    definition = json.loads((root / 'campaign.json').read_text())
+    result = {}
+    for name in definition['jobs']:
+        job = root / name
+        status = json.loads((job / 'status.json').read_text())
+        if status.get('phase') != 'completed' or status.get('completed_updates') != 50:
+            raise ValueError('training not complete: ' + name)
+        plan = json.loads((job / 'plan.json').read_text())
+        manifest = json.loads((job / 'manifest.json').read_text())
+        receipt = json.loads((job / 'last_completed.json').read_text())
+        checkpoint = Path(receipt['checkpoint'])
+        actor = checkpoint.with_name('actor_0050.pkl')
+        if receipt['update'] != 50 or checkpoint.name != 'update_0050.pt' or checkpoint.parent.resolve() != (job / 'checkpoints').resolve():
+            raise ValueError('wrong final checkpoint: ' + name)
+        if digest(checkpoint) != receipt['checkpoint_sha256']:
+            raise ValueError('checkpoint changed: ' + name)
+        # Bind the exported Flax actor to the authenticated learner checkpoint.
+        import pickle
+        import torch
+        import numpy as np
+        saved = torch.load(checkpoint, map_location='cpu', weights_only=False)
+        with actor.open('rb') as stream:
+            exported = pickle.load(stream)['params']
+        if saved['update'] != 50 or saved['identity'] != manifest['identity']:
+            raise ValueError('learner checkpoint identity mismatch')
+        for i, layer in enumerate((0, 2, 4, 6)):
+            for field, tensor in [('kernel', saved['policy'][f'actor.{layer}.weight'].numpy().T),
+                                  ('bias', saved['policy'][f'actor.{layer}.bias'].numpy())]:
+                if not np.array_equal(np.asarray(exported[f'Dense_{i}'][field]), tensor):
+                    raise ValueError('exported actor differs from learner checkpoint')
+        identity = manifest['identity']
+        if identity['arm'] != plan['arm'] or identity['alpha'] != plan['alpha']:
+            raise ValueError('wrong policy identity: ' + name)
+        key = (plan['arm'] + '_update50', plan['alpha'])
+        if key in result:
+            raise ValueError('duplicate trained policy')
+        result[key] = dict(actor=str(actor), actor_sha256=digest(actor), checkpoint=str(checkpoint), checkpoint_sha256=receipt['checkpoint_sha256'], identity=identity)
+    if set(result) != {(arm + '_update50', alpha) for arm in ('baseline', 'static', 'dynamic') for alpha in (0, 1)}:
+        raise ValueError('incomplete comparison policy set')
+    plan = json.loads((root / definition['jobs'][0] / 'plan.json').read_text())
+    package = json.loads(Path(plan['package']).read_text())
+    for alpha in (0, 1):
+        record = package['model_selection'][f'alpha{alpha}']
+        for key in ('actor', 'checkpoint'):
+            if digest(record[key]) != record[key + '_sha256']:
+                raise ValueError('parent identity changed')
+        result[('parent', alpha)] = record
+    return result

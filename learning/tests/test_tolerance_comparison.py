@@ -22,3 +22,19 @@ def test_pairing_preserves_losses_and_rejects_missing_cases():
  rows=[row('a',0,True),row('a',2,False),row('b',0,False),row('b',2,True)]
  x=paired_counts(rows,'a','b',0);assert x['improved']==1 and x['regressed']==1 and x['difference']==0
  with pytest.raises(ValueError):paired_counts(rows[:-1],'a','b',0)
+
+def test_checkpoint_readiness_does_not_accept_partial_training(tmp_path):
+ import json
+ from sttw_control.tolerance_comparison import resolve_comparison_actors
+ (tmp_path/'campaign.json').write_text(json.dumps(dict(jobs=['baseline_alpha0'])))
+ job=tmp_path/'baseline_alpha0';job.mkdir()
+ (job/'status.json').write_text(json.dumps(dict(phase='running',completed_updates=49)))
+ with pytest.raises(ValueError,match='training not complete'):
+  resolve_comparison_actors(tmp_path)
+
+def test_paired_counts_reject_duplicate_and_unknown_outcomes():
+ row=dict(policy='a',route='r',speed=2.,alpha=0,onset_s=1.,force_N=0,success=True)
+ with pytest.raises(ValueError,match='duplicate'):
+  paired_counts([row,row,dict(row,policy='b')],'a','b',0)
+ with pytest.raises(ValueError,match='binary'):
+  paired_counts([row,dict(row,policy='b',success=None)],'a','b',0)
