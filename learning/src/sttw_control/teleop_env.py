@@ -55,7 +55,7 @@ class TeleopEnv:
         speed=jp.dot(jp.asarray(data.qvel[:2]),jp.array([jp.cos(p[2]),jp.sin(p[2])]))
         return m,p,speed
 
-    def _step(self,s,goal,bypass,exact_governed=False,control_override=None):
+    def _step(self,s,goal,bypass,exact_governed=False,control_override=None,force_pulse=None):
         h=self.helpers;dt=self.cc.dt
         m,_,_=self.observe(s.data)
         current=s.governor.current_reference
@@ -66,11 +66,24 @@ class TeleopEnv:
                 s.physical_tick*dt>3.,bypass)
         else:cs,act,log=control_override
         final=act.previous;ctrl=jp.array([0.,-final[1],final[0],final[0]])
+        # Optional diagnostic pulse: absolute controller time [start,end,fx,fy,fz].
+        # World force direction is fixed; equivalent point force at subtree COM.
+        hp=float(self.model.opt.timestep)
+        def pulse_wrench(data,index):
+            t=s.physical_tick*dt+index*hp
+            fraction=jp.maximum(0.,jp.minimum(t+hp,force_pulse[1])-jp.maximum(t,force_pulse[0]))/hp
+            force=force_pulse[2:5]*fraction
+            offset=data.subtree_com[self.bundle.chassis]-data.xipos[self.bundle.chassis]
+            return jp.concatenate([force,jp.cross(offset,force)])
+        impulse=jp.zeros(3)
         if self.backend=='cpu':
             d=mujoco.MjData(self.model);mujoco.mj_copyData(d,self.model,s.data)
             d.ctrl[:]=np.asarray(ctrl);d.xfrc_applied[:]=0;d.qfrc_applied[:]=0
             contact=False;peak_roll=0.;peak_rate=0.;finite=True
-            for _ in range(self.substeps):
+            for index in range(self.substeps):
+                if force_pulse is not None:
+                    d.xfrc_applied[self.bundle.chassis]=np.asarray(pulse_wrench(d,index))
+                impulse=impulse+jp.asarray(d.xfrc_applied[self.bundle.chassis,:3])*hp
                 mujoco.mj_step(self.model,d)
                 contact=contact or bool(h._contact_failure(d))
                 mm=np.asarray(h.measure(d));peak_roll=max(peak_roll,abs(mm[0]));peak_rate=max(peak_rate,abs(mm[1]))
@@ -78,12 +91,15 @@ class TeleopEnv:
             mujoco.mj_forward(self.model,d)
         else:
             d=s.data.replace(ctrl=ctrl,xfrc_applied=jp.zeros_like(s.data.xfrc_applied),qfrc_applied=jp.zeros_like(s.data.qfrc_applied))
-            def substep(_,carry):
-                d,contact,pr,pd,finite=carry
+            def substep(index,carry):
+                d,contact,pr,pd,finite,impulse=carry
+                if force_pulse is not None:
+                    d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(pulse_wrench(d,index)))
+                impulse=impulse+d.xfrc_applied[self.bundle.chassis,:3]*hp
                 d=h._mjx.step(h.mjx_model,d);mm=h.measure(d)
                 finite=finite&jp.all(jp.isfinite(d.qpos))&jp.all(jp.isfinite(d.qvel))&jp.all(jp.isfinite(d.act))
-                return d,contact|h._contact_failure(d),jp.maximum(pr,jp.abs(mm[0])),jp.maximum(pd,jp.abs(mm[1])),finite
-            initial=(d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True))
+                return d,contact|h._contact_failure(d),jp.maximum(pr,jp.abs(mm[0])),jp.maximum(pd,jp.abs(mm[1])),finite,impulse
+            initial=(d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True),jp.zeros(3,dtype=d.qpos.dtype))
             if self.spec.get('lower_internal_diagnostics',False):
                 limits=jp.asarray(self.model.actuator_forcerange);limited=jp.asarray(self.model.actuator_forcelimited)
                 def diagnostic_substep(i,carry):
@@ -92,10 +108,10 @@ class TeleopEnv:
                     return physical,jp.minimum(lo,force),jp.maximum(hi,force),hits+at_limit.astype(jp.int32)
                 result,force_min,force_max,force_hits=jax.lax.fori_loop(0,self.substeps,diagnostic_substep,
                     (initial,jp.full(self.model.nu,jp.inf),jp.full(self.model.nu,-jp.inf),jp.zeros(self.model.nu,jp.int32)))
-                d,contact,peak_roll,peak_rate,finite=result
+                d,contact,peak_roll,peak_rate,finite,impulse=result
                 log.update(actuator_force_min=force_min,actuator_force_max=force_max,actuator_force_limit_substeps=force_hits)
             else:
-                d,contact,peak_roll,peak_rate,finite=jax.lax.fori_loop(0,self.substeps,substep,initial)
+                d,contact,peak_roll,peak_rate,finite,impulse=jax.lax.fori_loop(0,self.substeps,substep,initial)
             d=h._mjx.forward(h.mjx_model,d)
         if self.spec.get('lower_internal_diagnostics',False):
             log.update(actuator_force_end=d.actuator_force,actuator_ctrl=ctrl)
@@ -111,7 +127,7 @@ class TeleopEnv:
         gov=s.governor.replace(current_reference=governed,last_goal=goal)
         state=s.replace(data=d,controller=cs,actuator=act,physical_tick=s.physical_tick+1,
             reference_pose=ref,yaw_wrapped=p[2],yaw_unwrapped=yaw,governor=gov,failed=failed)
-        log.update(actual_forward_speed=speed,wheel_speed_proxy=m[5]*.1,slip_proxy=m[5]*.1-speed,
+        log.update(applied_force_impulse=impulse,actual_forward_speed=speed,wheel_speed_proxy=m[5]*.1,slip_proxy=m[5]*.1-speed,
             actual_delta=m[2],actual_delta_rate=m[3],phi=m[0],phi_dot=m[1],
             yaw_wrapped=p[2],yaw_unwrapped=yaw,reference_yaw_unwrapped=ref[2],e_psi_unwrapped=error,
             actual_xy=p[:2],reference_xy=ref[:2],along=along,lateral=lateral,

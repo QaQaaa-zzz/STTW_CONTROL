@@ -79,13 +79,13 @@ class PathCommandEnv:
         critic=j.concatenate([obs,j.array([(horizon-s.tick*self.cc.dt)/horizon])])
         return obs,critic,fault|s.fault
 
-    def tick(self,s,z,path,v_user):
+    def tick(self,s,z,path,v_user,force_pulse=None):
         p=s.physical;m,pose,v=self.physics.observe(p.data)
         filtered,offsets,governed,flags=correction_tick(s.filtered,s.offsets,z,p.raw,self.config)
         lower,action,obs,lf=self.lower.prepare_local(s.lower,m,pose,v,governed,p,self.cc)
         preview=preview_controls(p.controller,m,governed,governed,p.physical_tick*self.cc.dt>3.,self.cc)
         override=controls(p.controller,p.actuator,m,governed,governed,p.physical_tick*self.cc.dt>3.,False,self.cc,self.ac,lower_action=guard_lower_action(action,lf['finite']),previewed=preview)
-        p2,log=self.physics._step(p,governed,False,exact_governed=True,control_override=override)
+        p2,log=self.physics._step(p,governed,False,exact_governed=True,control_override=override,force_pulse=force_pulse)
         _,post,_=self.physics.observe(p2.data);yaw_rate=(p2.yaw_unwrapped-p.yaw_unwrapped)/self.cc.dt
         projection=project(path,post[:2],s.projection.progress,j.linalg.norm(post[:2]-pose[:2]),self.config)
         eh=wrap(projection.heading-post[2]);_,_,k=at(path,projection.progress)
@@ -111,11 +111,11 @@ class PathCommandEnv:
         template=jax.eval_shape(lambda x:self.tick(x,j.zeros(2),path,v_user),s)[1]
         self.zero_log=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template)
 
-    def policy_step(self,s,z,path,v_user,horizon):
+    def policy_step(self,s,z,path,v_user,horizon,force_pulse=None):
         s=s.replace(fault=s.fault|~j.all(j.isfinite(z)))
         def step(st,_):
             stopped=st.physical.failed|st.fault|st.domain_exit
-            return jax.lax.cond(stopped,lambda st:(st,self.zero_log),lambda st:self.tick(st,z,path,v_user),st)
+            return jax.lax.cond(stopped,lambda st:(st,self.zero_log),lambda st:self.tick(st,z,path,v_user) if force_pulse is None else self.tick(st,z,path,v_user,force_pulse),st)
         end,logs=jax.lax.scan(step,s,None,length=4)
         end=self.record_frame(end)
         rate=(end.offsets-s.offsets)/self.config['timing']['upper_dt_s'];c=self.config['path_reward']
