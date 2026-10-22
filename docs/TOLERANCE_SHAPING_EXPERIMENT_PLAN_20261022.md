@@ -24,8 +24,8 @@ No-cost arm leaves original reward unchanged. Disabled calculation bypasses inva
 
 - [x] Pure JAX scalar margin/cost kernel with exact NumPy quadratic-reference tests, directional symmetry, insufficient budget, degenerate inputs, disabled bypass, vmap/JIT checks.
 - [x] Current-state coefficient adapter matching controller._system; reward integration with optional component schema, all accumulators and failure bounds. Zero coefficient must preserve existing transitions/reward.
-- [ ] Explicit weights-only new reward fork for all three arms from identical frozen Coverage u200 endpoint parents; actor and critic copied, optimizer reset identically. Preserve/check source hashes and original identity; no weakened resume checks. Freeze full run configs and seed/budget before any PPO.
-- [ ] Real short numerical/accounting smoke, then matched training with checked live TensorBoard reward and registered Bark. Reuse adopted vmap/scan/cache. No production training has started under this document.
+- [x] Explicit weights-only new reward fork for all three arms from identical frozen Coverage u200 endpoint parents; actor and critic copied, optimizer reset identically. Preserve/check source hashes and original identity; no weakened resume checks. Freeze full run configs and seed/budget before any PPO.
+- [ ] Real short numerical/accounting smoke, then matched training with checked live TensorBoard reward and registered Bark. Reuse adopted vmap/scan/cache. Production campaign tolerance_shaping_train_v1 has now started; completion and performance evaluation are pending.
 - [ ] Evaluate original task and pulse success, task error, nominal regression and incremental costs on a newly declared comparison panel, retaining current DEV for diagnostics. Fixed final update primary comparison avoids reward-scale-dependent best selection. Multi-seed replication and roll-only cost-matched control required before claiming dynamic-specific paper benefit.
 
 Training step count and resources will be fixed in concrete launch manifests after integration/smoke, not guessed here. This document freezes the first cost candidate, not an already executable campaign. Current2.8 DEV is already used and cannot become unseen TEST. A poor candidate is rejected; do not redefine task thresholds to make it succeed.
@@ -33,3 +33,9 @@ Training step count and resources will be fixed in concrete launch manifests aft
 Terminal-window integration rule: do not initiate a hypothetical full0.1s pulse when less than0.1s remains. The adapter must mark this cost inactive for that terminal window (and preserve all original task costs); the standalone enabled kernel reports UNKNOWN for that invalid query. It must not silently shorten the declared pulse.
 
 Integration verification: b2dd78e,29 CPU tests; shaping_integration_smoke_v1 completed1600 lower ticks with frozen actors, exact zero-weight match in this smoke, valid accounting and bounded active dynamic cost. See docs/evidence/shaping_integration_smoke_20261022/REPORT.md. Learner fork and production campaign remain pending.
+
+## Actual campaign launch
+
+Code6717ae1, runs/tolerance_shaping_train_v1. Three modes × two endpoints, each50 updates×512env×128steps; total19660800 policy transitions and at most78643200 lower ticks. Common base seed910301, alpha1 uses+1; sampler unchanged. No-cost/static/dynamic are sequential, optimizer/RNG reset identically for each new arm. Original u200 actor/critic/log_std identities verified. First baseline_alpha0 two updates completed with4 accepted epochs each and no physical/domain/nonfinite failure; HTTP reward scalar verified at http://localhost:6007 under baseline_alpha0. This is execution evidence, not candidate adoption.
+
+Predeclared comparison_protocol.json specifies new2.45/2.65m/s, left/right turns, onset0.8/1.5/2.5/3.5s,0±2±4±6±8N ×0.1s, all original20s criteria. Four policy groups including parent, total1152 cases. Final-update50 is the primary policy; no cross-reward best selection. Single-seed development evidence, not final TEST. Final evaluation execution still pending.
