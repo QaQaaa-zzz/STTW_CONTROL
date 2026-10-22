@@ -1,0 +1,12 @@
+{
+  "source_commit": "7cea794cb4342ba83377f9de496e593846133a7c",
+  "proposal_version": "path_persistent_preference_v3",
+  "actual_real_pair_count": 4,
+  "actual_real_undiscounted_pair_scores": 20,
+  "synthetic_state_count": 10000,
+  "local_checks_passed": 22,
+  "real_discounted_new_reward_verified": false,
+  "simulator_steps": 0,
+  "training_updates": 0,
+  "remote_repository_modified": false
+}

@@ -1,0 +1,689 @@
+{
+  "raw_trajectory_rescores": 450,
+  "config_common_items_match_current": true,
+  "reference_matches_independent_raw_formula": true,
+  "max_abs_tick_difference_from_float32_component_transform": 0.0002345177981624147,
+  "max_abs_total_difference": 0.00022163783614814747,
+  "max_abs_discounted_difference": 7.009342516539618e-05,
+  "simulator_steps": 0,
+  "training_updates": 0,
+  "path_cap_stats": [
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.0",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.0",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.0",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.6",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.6",
+      "method": "policy1",
+      "cap_count": 173,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "left90_R2_2.6",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.0",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.0",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.0",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.6",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.6",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "right90_R2_2.6",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.0",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.0",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.0",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.6",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.6",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "coverage_dual_u200",
+      "case": "straight_2.6",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_2.8",
+      "method": "B0",
+      "cap_count": 590,
+      "samples": 1848
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "left90_3.2",
+      "method": "B0",
+      "cap_count": 37,
+      "samples": 996
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_2.8",
+      "method": "B0",
+      "cap_count": 803,
+      "samples": 2228
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "right90_3.2",
+      "method": "B0",
+      "cap_count": 59,
+      "samples": 1056
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_2.8",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u150",
+      "case": "straight_3.2",
+      "method": "B0",
+      "cap_count": 312,
+      "samples": 2488
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_2.8",
+      "method": "B0",
+      "cap_count": 590,
+      "samples": 1848
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "left90_3.2",
+      "method": "B0",
+      "cap_count": 37,
+      "samples": 996
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_2.8",
+      "method": "B0",
+      "cap_count": 803,
+      "samples": 2228
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "right90_3.2",
+      "method": "B0",
+      "cap_count": 59,
+      "samples": 1056
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_2.8",
+      "method": "B0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "policy0",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "policy0.25",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "policy0.5",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "policy0.75",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "policy1",
+      "cap_count": 0,
+      "samples": 4000
+    },
+    {
+      "dataset": "high_demand_u200",
+      "case": "straight_3.2",
+      "method": "B0",
+      "cap_count": 312,
+      "samples": 2488
+    }
+  ],
+  "algebraic_path_probes": [
+    {
+      "ey": 0.0,
+      "path_cost": 0.0,
+      "reward_per_second": -0.0
+    },
+    {
+      "ey": 0.1,
+      "path_cost": 0.9999999999999998,
+      "reward_per_second": -0.09999999999999998
+    },
+    {
+      "ey": 0.3,
+      "path_cost": 4.999999999999998,
+      "reward_per_second": -0.49999999999999983
+    },
+    {
+      "ey": 1.0,
+      "path_cost": 18.999999999999996,
+      "reward_per_second": -1.8999999999999997
+    },
+    {
+      "ey": 1.05,
+      "path_cost": 19.999999999999996,
+      "reward_per_second": -1.9999999999999998
+    },
+    {
+      "ey": 1.1,
+      "path_cost": 19.999999999999996,
+      "reward_per_second": -1.9999999999999998
+    },
+    {
+      "ey": 2.0,
+      "path_cost": 19.999999999999996,
+      "reward_per_second": -1.9999999999999998
+    },
+    {
+      "ey": 10.0,
+      "path_cost": 19.999999999999996,
+      "reward_per_second": -1.9999999999999998
+    }
+  ],
+  "failure_bound_alpha0": 8980.2,
+  "failure_bound_alpha1": 8800.2,
+  "path_cap_alpha1": 20.0,
+  "path_saturation_pure_lateral_m": 1.05,
+  "objective_scope": "offline fixed-trajectory candidate reward, no integration or adoption"
+}

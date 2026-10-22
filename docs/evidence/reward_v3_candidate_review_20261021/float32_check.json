@@ -1,0 +1,18 @@
+{
+  "states": 10000,
+  "jax_x64": false,
+  "alpha0_vs_actual_legacy_jax_max_component_errors": {
+    "low_speed": 0.0,
+    "offset_magnitude": 0.0,
+    "offset_rate": 0.0,
+    "overspeed": 0.0,
+    "path": 0.0,
+    "primary": 0.0,
+    "roll": 0.0,
+    "roll_rate": 0.0,
+    "speed": 0.0,
+    "working_roll": 0.0
+  },
+  "float32_numpy_jax_max_cost_rate_error": 0.0013431087627395755,
+  "simulator_steps": 0
+}

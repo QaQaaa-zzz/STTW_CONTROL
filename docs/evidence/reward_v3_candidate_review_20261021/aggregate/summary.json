@@ -1,0 +1,9 @@
+{
+  "rescores": 450,
+  "physical_trajectories": 90,
+  "eps": 0.1,
+  "training_updates": 0,
+  "simulator_steps": 0,
+  "new_discounted_returns_verified": false,
+  "note": "Do not interpret the old high-demand policy labels as successful intended endpoint behavior."
+}

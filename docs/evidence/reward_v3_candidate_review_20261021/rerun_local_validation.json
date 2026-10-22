@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "name": "left90_R2_2.0 new endpoint ranking",
+      "passed": true,
+      "detail": "(-14.1466229657611, 2.296909153374484)"
+    },
+    {
+      "name": "left90_R2_2.6 new endpoint ranking",
+      "passed": true,
+      "detail": "(-57.941138827116724, 10.34610008886307)"
+    },
+    {
+      "name": "right90_R2_2.0 new endpoint ranking",
+      "passed": true,
+      "detail": "(-10.085392674225599, 0.5056424146961496)"
+    },
+    {
+      "name": "right90_R2_2.6 new endpoint ranking",
+      "passed": true,
+      "detail": "(-27.60022895009654, 4.224370787186597)"
+    },
+    {
+      "name": "alpha0 equals independent baseline, including cap-active states",
+      "passed": true,
+      "detail": "10000 synthetic states"
+    },
+    {
+      "name": "affine conditional cost for arbitrary alpha",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "global bound 8980.2 remains conservative",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: roll",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: working_roll",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: roll_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: overspeed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: low_speed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: offset_magnitude",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "common component unchanged: offset_rate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "perfect straight tracking has zero cost for all alpha",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "alpha1 straight path-offset penalty remains strictly positive",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "one extra second at ey=.3 adds 0.5 reward loss",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "stopping is penalized at both endpoints",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "safety cost at .32 rad identical at both endpoints",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "failure terminal replacement matches pinned formula",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "aggregate transform helper on synthetic data",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "JAX JIT / NumPy numerical agreement",
+      "passed": true,
+      "detail": "max_abs=1.8189894035458565e-12"
+    }
+  ],
+  "synthetic_states": 10000,
+  "real_historical_pairs": 4,
+  "exact_new_integrated_scores_on_real_pairs": 20,
+  "new_discounted_real_scores_verified": false,
+  "original_physical_npz_accessible": false,
+  "robot_simulation_steps": 0,
+  "ppo_updates": 0,
+  "summary": "Full-episode undiscounted historical preferences aligned; not a PPO success claim."
+}

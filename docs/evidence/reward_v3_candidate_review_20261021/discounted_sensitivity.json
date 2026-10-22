@@ -1,0 +1,126 @@
+[
+  {
+    "case": "left90_R2_2.0",
+    "discounted_alpha_crossover": 0.8252293374548779,
+    "epsilon_discounted_upper_for_B_preference": 0.26855739381747373,
+    "sensitivity": [
+      {
+        "eps": 0.05,
+        "discounted_delta": 2.2370649773443043
+      },
+      {
+        "eps": 0.075,
+        "discounted_delta": 1.9811751012035126
+      },
+      {
+        "eps": 0.1,
+        "discounted_delta": 1.7252852250627206
+      },
+      {
+        "eps": 0.125,
+        "discounted_delta": 1.469395348921929
+      },
+      {
+        "eps": 0.15,
+        "discounted_delta": 1.2135054727811372
+      },
+      {
+        "eps": 0.2,
+        "discounted_delta": 0.7017257204995535
+      }
+    ]
+  },
+  {
+    "case": "right90_R2_2.0",
+    "discounted_alpha_crossover": 0.9503961107171781,
+    "epsilon_discounted_upper_for_B_preference": 0.1465881284316875,
+    "sensitivity": [
+      {
+        "eps": 0.05,
+        "discounted_delta": 0.660780527497127
+      },
+      {
+        "eps": 0.075,
+        "discounted_delta": 0.489750055578296
+      },
+      {
+        "eps": 0.1,
+        "discounted_delta": 0.31871958365946484
+      },
+      {
+        "eps": 0.125,
+        "discounted_delta": 0.14768911174063382
+      },
+      {
+        "eps": 0.15,
+        "discounted_delta": -0.0233413601781971
+      },
+      {
+        "eps": 0.2,
+        "discounted_delta": -0.3654023040158594
+      }
+    ]
+  },
+  {
+    "case": "left90_R2_2.6",
+    "discounted_alpha_crossover": 0.8002152869356316,
+    "epsilon_discounted_upper_for_B_preference": 0.4114668816631387,
+    "sensitivity": [
+      {
+        "eps": 0.05,
+        "discounted_delta": 10.305631233009276
+      },
+      {
+        "eps": 0.075,
+        "discounted_delta": 9.592866678647322
+      },
+      {
+        "eps": 0.1,
+        "discounted_delta": 8.880102124285369
+      },
+      {
+        "eps": 0.125,
+        "discounted_delta": 8.167337569923415
+      },
+      {
+        "eps": 0.15,
+        "discounted_delta": 7.454573015561463
+      },
+      {
+        "eps": 0.2,
+        "discounted_delta": 6.029043906837556
+      }
+    ]
+  },
+  {
+    "case": "right90_R2_2.6",
+    "discounted_alpha_crossover": 0.8264898983506411,
+    "epsilon_discounted_upper_for_B_preference": 0.41757886318280324,
+    "sensitivity": [
+      {
+        "eps": 0.05,
+        "discounted_delta": 4.3087188950840085
+      },
+      {
+        "eps": 0.075,
+        "discounted_delta": 4.015671652257289
+      },
+      {
+        "eps": 0.1,
+        "discounted_delta": 3.7226244094305705
+      },
+      {
+        "eps": 0.125,
+        "discounted_delta": 3.4295771666038517
+      },
+      {
+        "eps": 0.15,
+        "discounted_delta": 3.136529923777133
+      },
+      {
+        "eps": 0.2,
+        "discounted_delta": 2.550435438123695
+      }
+    ]
+  }
+]

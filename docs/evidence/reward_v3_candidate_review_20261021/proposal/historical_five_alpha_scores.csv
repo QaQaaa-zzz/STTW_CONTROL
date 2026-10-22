@@ -1,0 +1,21 @@
+case,score_alpha,new_delta_policy1_minus_policy0,new_discounted_delta,source
+left90_R2_2.0,0.0,-14.1466229657611,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.0,0.25,-10.035739935977205,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.0,0.5,-5.924856906193308,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.0,0.75,-1.813973876409412,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.0,1.0,2.296909153374484,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.6,0.0,-57.941138827116724,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.6,0.25,-40.869329098121774,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.6,0.5,-23.797519369126828,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.6,0.75,-6.725709640131878,UNVERIFIED,exact affine transform of published component integrals
+left90_R2_2.6,1.0,10.34610008886307,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.0,0.0,-10.085392674225599,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.0,0.25,-7.437633901995161,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.0,0.5,-4.789875129764725,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.0,0.75,-2.1421163575342876,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.0,1.0,0.5056424146961496,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.6,0.0,-27.60022895009654,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.6,0.25,-19.644079015775755,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.6,0.5,-11.687929081454971,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.6,0.75,-3.731779147134187,UNVERIFIED,exact affine transform of published component integrals
+right90_R2_2.6,1.0,4.224370787186597,UNVERIFIED,exact affine transform of published component integrals

@@ -1,0 +1,8 @@
+{
+  "physical_trajectories": 90,
+  "rescores": 450,
+  "simulator_steps": 0,
+  "training_updates": 0,
+  "discounted_historical_endpoint_rankings_passed": true,
+  "validation_scope": "saved step-cost reweighting, not new trajectories; goal and recovery deadlines require original physical NPZ"
+}

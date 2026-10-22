@@ -1,0 +1,44 @@
+{
+  "source_commit": "7cea794cb4342ba83377f9de496e593846133a7c",
+  "source_path": "docs/evidence/reward_preference_audit_20261021/results.json",
+  "dataset": "coverage_dual_u200",
+  "units": "signed integrated reward, policy1 minus policy0",
+  "pairs": [
+    {
+      "case": "left90_R2_2.0",
+      "old_delta0": -14.1466229657611,
+      "old_delta1": -12.823603714804877,
+      "path_delta0": -17.21975976658356,
+      "path_delta1": -16.842488844837717,
+      "old_discounted_delta0": -8.146424362450507,
+      "old_discounted_delta1": -7.237428600829163
+    },
+    {
+      "case": "left90_R2_2.6",
+      "old_delta0": -57.941138827116724,
+      "old_delta1": -23.820539852711903,
+      "path_delta0": -47.54954313955037,
+      "path_delta1": -38.92159425553001,
+      "old_discounted_delta0": -35.56825424932915,
+      "old_discounted_delta1": -10.656407489414876
+    },
+    {
+      "case": "right90_R2_2.0",
+      "old_delta0": -10.085392674225599,
+      "old_delta1": -9.393811306783391,
+      "path_delta0": -11.32375333925159,
+      "path_delta1": -11.0318290554047,
+      "old_discounted_delta0": -6.106574647650714,
+      "old_discounted_delta1": -5.644258875363959
+    },
+    {
+      "case": "right90_R2_2.6",
+      "old_delta0": -27.60022895009654,
+      "old_delta1": -8.22758447876658,
+      "path_delta0": -18.94395163947372,
+      "path_delta1": -14.34635042990055,
+      "old_discounted_delta0": -17.73217490221702,
+      "old_discounted_delta1": -3.546231982798652
+    }
+  ]
+}

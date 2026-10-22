@@ -1,0 +1,53 @@
+{
+  "reward_version": "path_persistent_preference_v3",
+  "scale": 0.1,
+  "path_secondary_ratio": 0.1,
+  "speed_scale_m_s": 0.1,
+  "cross_track_scale_m": 0.1,
+  "path_heading_scale_rad": 0.1,
+  "path_heading_factor": 0.5,
+  "primary_weight": 20.0,
+  "primary_speed_band_m_s": 0.05,
+  "primary_path_band_m": 0.1,
+  "primary_speed_scale_m_s": 0.1,
+  "primary_path_scale_m": 0.1,
+  "roll_weight": 80.0,
+  "roll_start_rad": 0.26,
+  "roll_scale_rad": 0.04,
+  "working_roll_weight": 240.0,
+  "working_roll_start_rad": 0.3,
+  "working_roll_scale_rad": 0.02,
+  "roll_rate_weight": 1.0,
+  "roll_rate_start_rad_s": 0.8,
+  "roll_rate_scale_rad_s": 0.8,
+  "overspeed_weight": 2.0,
+  "overspeed_band_m_s": 0.05,
+  "overspeed_scale_m_s": 0.1,
+  "low_speed_weight": 4.0,
+  "low_speed_start_m_s": 1.5,
+  "low_speed_scale_m_s": 0.2,
+  "offset_magnitude_weight": 0.02,
+  "offset_magnitude_scales": [
+    1.0,
+    0.2
+  ],
+  "offset_rate_weight": 0.03,
+  "offset_rate_scales": [
+    1.0,
+    0.4
+  ],
+  "component_caps": {
+    "speed": 200.0,
+    "path": 200.0,
+    "primary": 400.0,
+    "roll": 1800.0,
+    "working_roll": 6000.0,
+    "roll_rate": 40.0,
+    "overspeed": 160.0,
+    "low_speed": 160.0,
+    "offset_magnitude": 0.2,
+    "offset_rate": 20.0
+  },
+  "failure_extra": 5.0,
+  "failure_cost_rate_bound": 8980.2
+}
