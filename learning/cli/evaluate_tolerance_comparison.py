@@ -17,13 +17,19 @@ from sttw_control.tolerance_comparison import comparison_layout,chunk_schedule,r
 from calibrate_directional_tolerance import KEEP
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--campaign',required=True);a=p.parse_args();campaign=Path(a.campaign).resolve();protocol=json.loads((campaign/'comparison_protocol.json').read_text());out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
+ p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--campaign',required=True);p.add_argument('--smoke',action='store_true');a=p.parse_args();campaign=Path(a.campaign).resolve();protocol=json.loads((campaign/'comparison_protocol.json').read_text());out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
+ if a.smoke:protocol=dict(protocol,policies=['parent'],speeds=[2.45],onsets=[.1],forces=[0,-2,2],simulation_duration_s=.24,max_lower_ticks=576,engineering_only=True)
  if (out/'manifest.json').exists():raise FileExistsError('immutable run exists')
  started=time.monotonic();completed=[];ticks=0;rows,branch_ids=comparison_layout(protocol);n=len(rows);ONSETS=protocol['onsets'];budget=protocol['max_lower_ticks']
  def status(phase,**kw):atomic_json(out/'status.json',dict(phase=phase,state=phase,pid=os.getpid(),checked_unix=time.time(),elapsed_s=time.monotonic()-started,completed_cases=len(completed),declared_cases=n*len(ONSETS),active_lower_ticks=ticks,maximum_panel_lower_ticks=budget,training_steps=0,**kw))
  status('initializing')
  try:
-  records=resolve_comparison_actors(campaign)
+  if a.smoke:
+   plan=json.loads((campaign/'baseline_alpha0/plan.json').read_text());package=json.loads(Path(plan['package']).read_text())
+   records={('parent',alpha):package['model_selection'][f'alpha{alpha}'] for alpha in [0,1]}
+   for record in records.values():
+    if digest(record['actor'])!=record['actor_sha256']:raise ValueError('parent actor changed')
+  else:records=resolve_comparison_actors(campaign)
   cfg=json.loads((campaign/'baseline_config.json').read_text())
   parent_plan=json.loads((campaign/'baseline_alpha0/plan.json').read_text())
   source=json.loads(Path(parent_plan['parent_manifest']).read_text())['source'];actors={}
@@ -34,7 +40,7 @@ def main():
   paths=jax.tree.map(lambda *xs:j.stack(xs),*[pathbank[c['route']] for c in rows]);params=jax.tree.map(lambda *xs:j.stack(xs),*[actors[(c['policy'],c['alpha'])] for c in rows]);speeds=j.asarray([c['speed'] for c in rows],j.float32);alphas=j.asarray([c['alpha'] for c in rows],j.float32);absolute_start=float(snapshot.physical_tick)*env.cc.dt
   reset=jax.jit(jax.vmap(lambda path,v,alpha:env.reset(snapshot,path,v,alpha)))
   initial=reset(paths,speeds,alphas);single=jax.tree.map(lambda x:x[0],initial);env.set_log_template(single,pathbank[rows[0]['route']],speeds[0]);actor=PathCommandActor()
-  manifest=dict(protocol=protocol,lane_layout=rows,checkpoint_identities={f'{k[0]}_alpha{k[1]}':v for k,v in records.items()},lower=source['candidate'],physical_identity=env.physics.bundle.identity,absolute_start=absolute_start,batch=n,scan_max=50,budget=budget,training_steps=0,preflight_declared_lower_ticks=0,compilation_cache=cache,git_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),prefix='own-policy genuine zero-force complete state shared only within same context',success='original full-episode physical/domain/work/goal/final1s labels; descriptive metrics retained regardless of adoption thresholds')
+  manifest=dict(engineering_only=a.smoke,protocol=protocol,lane_layout=rows,checkpoint_identities={f'{k[0]}_alpha{k[1]}':v for k,v in records.items()},lower=source['candidate'],physical_identity=env.physics.bundle.identity,absolute_start=absolute_start,batch=n,scan_max=50,budget=budget,training_steps=0,preflight_declared_lower_ticks=0,compilation_cache=cache,git_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),prefix='own-policy genuine zero-force complete state shared only within same context',success='original full-episode physical/domain/work/goal/final1s labels; descriptive metrics retained regardless of adoption thresholds')
   atomic_json(out/'manifest.json',manifest)
   for name,path in pathbank.items():np.savez_compressed(out/f'{name}_path.npz',xy=np.asarray(path.xy),s=np.asarray(path.s),goal=np.asarray(path.goal))
   def one(state,par,path,v,pulse):
@@ -48,7 +54,7 @@ def main():
    return compiled[length]
   for onset in ONSETS:
    states=initial;pulses=j.zeros((n,5));saved=[];directions=None
-   for start_tick,length,is_branch in chunk_schedule(onset):
+   for start_tick,length,is_branch in chunk_schedule(onset,duration=protocol.get('simulation_duration_s',20.)):
     if is_branch:
      states=jax.tree.map(lambda x:x[branch_index],states)
      saved=[{k:arr[:,np.asarray(branch_index)] for k,arr in block.items()} for block in saved]
@@ -69,8 +75,8 @@ def main():
     impulse_error=float(np.linalg.norm(impulse-expected));prefix=d['time']<onset-1e-5
     prefix_valid=not bool(np.any((d['physical_failure']|d['domain_exit']|(d['peak_roll']>b['working_roll_rad']))&prefix)) and count>=round(onset/.005)
     completed.append(dict(**c,name=name,onset_s=onset,success=not(physical or domain or work) and hold and goal,physical_failure=physical,domain_failure=domain,working_failure=work,final_hold=hold,goal=goal,ticks=count,peak_roll=float(d['peak_roll'].max()) if count else None,impulse=impulse.tolist(),expected_impulse=expected.tolist(),pulse_complete=fully_applied,impulse_error_Ns=impulse_error,prefix_valid=prefix_valid,speed_rmse=float(np.sqrt(np.mean((d['actual_forward_speed']-c['speed'])**2))) if count else None,cross_track_rmse=float(np.sqrt(np.mean(d['path_cross_track']**2))) if count else None,heading_rmse=float(np.sqrt(np.mean(d['path_heading_error']**2))) if count else None))
-   atomic_json(out/'results.json',dict(cases=completed,scope='finite DEV panel; no continuous boundary certification'))
-  comparisons={f'{alpha}_{baseline}_vs_{candidate}':paired_counts(completed,baseline,candidate,alpha) for alpha in [0,1] for baseline in ['parent','baseline_update50','static_update50'] for candidate in ['baseline_update50','static_update50','dynamic_update50'] if baseline!=candidate}
+   atomic_json(out/'results.json',dict(cases=completed,scope='engineering smoke only; short traces cannot assess task recovery' if a.smoke else 'finite DEV panel; no continuous boundary certification'))
+  comparisons={} if a.smoke else {f'{alpha}_{baseline}_vs_{candidate}':paired_counts(completed,baseline,candidate,alpha) for alpha in [0,1] for baseline in ['parent','baseline_update50','static_update50'] for candidate in ['baseline_update50','static_update50','dynamic_update50'] if baseline!=candidate}
   atomic_json(out/'paired_comparisons.json',comparisons)
   status('completed',stage='saved',preflight_lower_ticks=0)
  except BaseException as e:status('error',error=f'{type(e).__name__}: {e}');raise

@@ -8,15 +8,18 @@ from .tolerance_shaping import validate_tolerance_config
 
 SPEC=dict(weight=10.,gamma=.815560907125473,effort_budget=.030839085298575167,duration=.1,target_force=6.)
 
-def experiment_config(parent,mode):
+def experiment_config(parent,mode,reward_variant="historical"):
  if mode not in ('baseline','static','dynamic'):raise ValueError('unknown experiment arm')
- c=deepcopy(parent);c['training_future_phase_C'].update(updates_initial=50,updates_max=50,validation_updates=[],save_every=5)
+ c=deepcopy(parent)
+ if reward_variant=='persistent_v3':c['path_reward']=json.loads((Path(__file__).parents[2]/'configs/STTW_Tolerance_V3_Reward.json').read_text())
+ elif reward_variant!='historical':raise ValueError('unknown reward variant')
+ c['training_future_phase_C'].update(updates_initial=50,updates_max=50,validation_updates=[],save_every=5)
  if mode!='baseline':
   r=c['path_reward'];r['tolerance']=dict(method=mode,**SPEC);r['component_caps']['tolerance']=10.;r['failure_cost_rate_bound']+=10.
  return c
 
-def validate_training_config(config,parent,mode):
- if config_hash(config)!=config_hash(experiment_config(parent,mode)):raise ValueError('configuration differs outside declared reward and schedule fork')
+def validate_training_config(config,parent,mode,reward_variant="historical"):
+ if config_hash(config)!=config_hash(experiment_config(parent,mode,reward_variant)):raise ValueError('configuration differs outside declared reward and schedule fork')
  validate_tolerance_config(config)
 
 def restore_weights_only(algo,record):
@@ -55,7 +58,7 @@ def run(plan_path,output):
  update(stage='loading');writer=None
  try:
   parent=json.loads(Path(plan['parent_manifest']).read_text());pkg=json.loads(Path(plan['package']).read_text());record=pkg['model_selection'][f"alpha{plan['alpha']}"];cfg=json.loads(Path(plan['config']).read_text());source=parent['source']
-  validate_training_config(cfg,parent['config'],plan['arm'])
+  validate_training_config(cfg,parent['config'],plan['arm'],plan.get('reward_variant','historical'))
   if plan['updates']!=50 or plan['seed']!=910301 or plan['alpha'] not in (0,1):raise ValueError('experiment plan differs from declared protocol')
   if source['candidate']['actor_sha256']!=record['lower_actor_sha256']:raise ValueError('lower identity mismatch')
   torch.set_num_threads(2);seed=plan['seed']+plan['alpha'];torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
@@ -75,7 +78,7 @@ def run(plan_path,output):
   tb=json.loads(Path(plan['tensorboard_info']).read_text());writer=SummaryWriter(str(Path(tb['logdir'])/plan['run_name']));verified=False;rejections=0
   cp=save_checkpoint(root/'checkpoints',algo,0,identity,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=0,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
   for iteration in range(1,51):
-   update(stage='sampling',completed_updates=iteration-1,rollout_intervals=0);start=time.monotonic();rewards=[];diag=None;physical=domain=0
+   update(state='running',stage='sampling',completed_updates=iteration-1,rollout_intervals=0);start=time.monotonic();rewards=[];diag=None;physical=domain=0
    with torch.no_grad():
     for index in range(steps):
      z=algo.act(obs)
