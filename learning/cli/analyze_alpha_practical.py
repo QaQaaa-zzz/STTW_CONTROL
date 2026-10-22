@@ -27,10 +27,10 @@ def analyze(panel,output):
   pairs.append(dict(case=case,alpha1_speed_rmse_advantage=a['speed_rmse']-b['speed_rmse'],alpha0_path_rmse_advantage=b['path_rmse']-a['path_rmse']))
  result=dict(source=str(panel),classification='posthoc development sensitivity; no original labels changed',cases=rows,endpoint_comparison=pairs,sensitivity=sensitivity)
  (out/'analysis.json').write_text(json.dumps(result,indent=2))
- lines=['# Single-alpha practical sensitivity','',f'Source: {panel}', '', 'Post-hoc analysis of saved 10s trajectories; original pass/fail labels preserved. Limits below are diagnostic options, not a proven safety envelope. Training is not modified.','', '| Alpha | Full-trace speed RMSE | Full-trace path RMSE | Largest final path error |','|---|---:|---:|---:|']
+ lines=['# Single-alpha practical sensitivity','',f'Source: {panel}', '', 'Post-hoc analysis of saved 10s trajectories; original pass/fail labels preserved. Limits below are diagnostic options, not a proven safety envelope. Training is not modified.','', '| Alpha | Turn-window speed RMSE* | Turn-window path RMSE* | Largest final path error |','|---|---:|---:|---:|']
  for a in alphas:
   g=[r for r in rows if r['alpha']==a];lines.append(f"| {a:g} | {np.mean([r['speed_rmse'] for r in g]):.4f} m/s | {np.mean([r['path_rmse'] for r in g]):.4f} m | {max(r['tail_max_path_m'] for r in g):.4f} m |")
- lines+=['','## Endpoints','','| Case | Alpha1 speed advantage (m/s) | Alpha0 path advantage (m) |','|---|---:|---:|']
+ lines+=['','*Source metrics use geometric-turn samples for turning cases and the full trace for straight cases. Table values average the six case-level RMSEs; they are not pooled full-trajectory RMSE.','','## Endpoints','','| Case | Alpha1 speed advantage (m/s) | Alpha0 path advantage (m) |','|---|---:|---:|']
  for p in pairs:lines.append(f"| {p['case']} | {p['alpha1_speed_rmse_advantage']:.4f} | {p['alpha0_path_rmse_advantage']:.4f} |")
  lines+=['','## Sensitivity','','| Path limit (m) | Roll limit (rad) | Alpha | Pass / total |','|---:|---:|---:|---:|']
  for r in sensitivity:lines.append(f"| {r['path_limit_m']} | {r['roll_limit_rad']} | {r['alpha']:g} | {r['passed']}/{r['n']} |")

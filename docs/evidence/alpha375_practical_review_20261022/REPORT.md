@@ -4,13 +4,15 @@ Source: /home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path
 
 Post-hoc analysis of saved 10s trajectories; original pass/fail labels preserved. Limits below are diagnostic options, not a proven safety envelope. Training is not modified.
 
-| Alpha | Full-trace speed RMSE | Full-trace path RMSE | Largest final path error |
+| Alpha | Turn-window speed RMSE* | Turn-window path RMSE* | Largest final path error |
 |---|---:|---:|---:|
 | 0 | 0.3132 m/s | 0.1111 m | 0.0924 m |
 | 0.25 | 0.2715 m/s | 0.0906 m | 0.1105 m |
 | 0.5 | 0.1863 m/s | 0.1159 m | 0.1322 m |
 | 0.75 | 0.1084 m/s | 0.1780 m | 0.1565 m |
 | 1 | 0.0681 m/s | 0.2397 m | 0.1852 m |
+
+*Source metrics use geometric-turn samples for turning cases and the full trace for straight cases. Table values average the six case-level RMSEs; they are not pooled full-trajectory RMSE.
 
 ## Endpoints
 
