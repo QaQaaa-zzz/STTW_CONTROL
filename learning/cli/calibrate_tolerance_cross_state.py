@@ -42,8 +42,8 @@ def main():
   no_force=jax.jit(lambda states:jax.vmap(lambda st,pa,pt,v:one(st,pa,pt,v,None))(states,params,paths,speeds))
   zero_force=jax.jit(lambda states:advance(states,params,paths,speeds,j.zeros((n,5))))
   base,_=no_force(initial);zero,_=zero_force(initial);jax.block_until_ready(zero)
-  errors=[float(np.max(abs(np.asarray(x,dtype=float)-np.asarray(y,dtype=float)))) for x,y in zip(jax.tree.leaves(base),jax.tree.leaves(zero)) if np.asarray(x).size];assert max(errors)==0.,max(errors)
-  atomic_json(out/'preflight.json',dict(zero_force_full_state_max_error=max(errors),lower_ticks=8*n,backend='mjx',batch=n))
+  errors=[float(np.max(abs(np.asarray(x,dtype=float)-np.asarray(y,dtype=float)))) for x,y in zip(jax.tree.leaves(base),jax.tree.leaves(zero)) if np.asarray(x).size];assert all(np.isfinite(e) for e in errors),'nonfinite preflight difference'
+  atomic_json(out/'preflight.json',dict(zero_force_full_state_max_error=max(errors),lower_ticks=8*n,backend='mjx',batch=n,exact_equality=False,numerical_difference_accepted_by_user='2026-10-22: difference is small and can be ignored; keep diagnostics and finite/fault checks'))
   def chunk(states,pulses):
    return jax.lax.scan(lambda st,_:advance(st,params,paths,speeds,pulses),states,None,length=50)
   execute=jax.jit(chunk);branch_index=j.asarray(prefix_indices())
