@@ -15,3 +15,10 @@ def test_separated_efforts_and_scaling():
  assert choose_threshold([10.,20.,40.,50.],[True,True,False,False])==10*t
  rows=[dict(energy_dynamic=x,actual_success=y) for x,y in [(1.,True),(5.,False)]]
  assert score(rows,t,'dynamic')['correct']==2
+
+
+def test_score_serializes_numpy_model_energies():
+ import json
+ rows=[dict(energy_dynamic=np.float64(x),actual_success=y) for x,y in [(1.,True),(5.,False),(2.,False)]]
+ result=score(rows,3.,'dynamic')
+ assert json.loads(json.dumps(result))['false_safe']==1

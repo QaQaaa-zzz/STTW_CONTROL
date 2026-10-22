@@ -26,7 +26,7 @@ def choose_threshold(energy,labels):
 
 def score(rows,threshold,method):
  if threshold is None:return dict(status='UNIDENTIFIABLE_SINGLE_CLASS_CALIBRATION')
- predictions=[r[f'energy_{method}']<=threshold for r in rows];labels=[r['actual_success'] for r in rows]
+ predictions=[bool(r[f'energy_{method}']<=threshold) for r in rows];labels=[bool(r['actual_success']) for r in rows]
  pos=[p for p,y in zip(predictions,labels) if y];neg=[p for p,y in zip(predictions,labels) if not y]
  return dict(n=len(rows),correct=sum(p==y for p,y in zip(predictions,labels)),false_safe=sum(p and not y for p,y in zip(predictions,labels)),conservative=sum(not p and y for p,y in zip(predictions,labels)),success_recall=float(np.mean(pos)) if pos else None,failure_recall=float(np.mean(np.logical_not(neg))) if neg else None)
 
