@@ -1,0 +1,17 @@
+{
+  "state": "running",
+  "phase": "running",
+  "pid": 149565,
+  "arm": "uniform",
+  "alpha": 1,
+  "completed_updates": 9,
+  "declared_updates": 25,
+  "policy_transitions_total": 598016,
+  "training_control_ticks_total": 2392064,
+  "declared_policy_transitions": 1638400,
+  "stage": "sampling",
+  "checked_unix": 1792720740.6000736,
+  "rollout_intervals": 16,
+  "last_reward": -0.041098758578300476,
+  "tensorboard_reward_verified": true
+}

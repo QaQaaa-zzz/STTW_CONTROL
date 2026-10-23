@@ -1,0 +1,47 @@
+{
+  "stage": "predeclared development comparison; not final TEST",
+  "policies": [
+    "parent",
+    "baseline_update50",
+    "static_update50",
+    "dynamic_update50"
+  ],
+  "endpoints": [
+    0,
+    1
+  ],
+  "routes": [
+    "left90_R2",
+    "right90_R2"
+  ],
+  "speeds": [
+    2.45,
+    2.65
+  ],
+  "onsets": [
+    0.8,
+    1.5,
+    2.5,
+    3.5
+  ],
+  "forces": [
+    0,
+    -2,
+    2,
+    -4,
+    4,
+    -6,
+    6,
+    -8,
+    8
+  ],
+  "pulse_duration": 0.1,
+  "episode_s": 20,
+  "cases_per_arm": 288,
+  "total_cases": 1152,
+  "max_lower_ticks": 4608000,
+  "success": "unchanged original working roll/domain/goal/final1s task criteria",
+  "primary": "per-endpoint original full-task success and paired difference versus no-cost and static; report nominal regressions and task errors",
+  "past_failures": "retained in original success; separate descriptive prefix and suffix diagnostic",
+  "confidence": "one training seed and correlated case families; no multi-seed generalization claim"
+}

@@ -1,0 +1,12 @@
+{
+  "state": "running",
+  "phase": "running",
+  "pid": 67612,
+  "campaign": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1",
+  "evaluation": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_post_v1/evaluation",
+  "stage": "waiting_for_training",
+  "checked_unix": 1792720743.5946405,
+  "training_pid": 54472,
+  "policy_transitions": 4472832,
+  "completed_jobs": 2
+}

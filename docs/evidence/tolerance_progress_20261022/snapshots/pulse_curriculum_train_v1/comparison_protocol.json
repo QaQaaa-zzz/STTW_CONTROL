@@ -1,0 +1,63 @@
+{
+  "stage": "predeclared development comparison; not final TEST",
+  "policies": [
+    "parent",
+    "uniform_update25",
+    "guided_update25"
+  ],
+  "endpoints": [
+    0,
+    1
+  ],
+  "routes": [
+    "left90_R2",
+    "right90_R2"
+  ],
+  "speeds": [
+    2.45,
+    2.65
+  ],
+  "onsets": [
+    0.8,
+    1.5,
+    2.5,
+    3.5
+  ],
+  "forces": [
+    0,
+    -2,
+    2,
+    -4,
+    4,
+    -6,
+    6,
+    -8,
+    8
+  ],
+  "pulse_duration": 0.1,
+  "episode_s": 20,
+  "cases_per_arm": 288,
+  "total_cases": 864,
+  "max_lower_ticks": 3456000,
+  "success": "unchanged original working roll/domain/goal/final1s task criteria",
+  "primary": "paired guided versus uniform actual-pulse training; retain nominal outcomes and practical sensitivity; reused development panel",
+  "past_failures": "retained in original success; separate descriptive prefix and suffix diagnostic",
+  "confidence": "one training seed and correlated case families; no multi-seed generalization claim",
+  "config_file": "alpha0_config.json",
+  "source_plan": "uniform_alpha0/plan.json",
+  "comparisons": [
+    [
+      "parent",
+      "uniform_update25"
+    ],
+    [
+      "parent",
+      "guided_update25"
+    ],
+    [
+      "uniform_update25",
+      "guided_update25"
+    ]
+  ],
+  "figure_caption": "Parents: baseline u50; candidates: pulse-training u25; seed 910401 + alpha. Thick: pulse; x: original-label failure."
+}

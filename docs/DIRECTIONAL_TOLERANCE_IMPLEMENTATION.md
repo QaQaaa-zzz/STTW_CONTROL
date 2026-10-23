@@ -1,5 +1,7 @@
 # Directional tolerance diagnostic implementation
 
+> 最新阶段结果及运行快照见 [容扰度进展报告](TOLERANCE_PROGRESS_20261022.md)。下文保留编写时的设计/审计状态，不代表当前未启动。
+
 2026-10-22; isolated experiment/tolerance-calibration-20261022 based on 2b0896a.
 
 The numerical module derives from the supplied mathematical verification script. Its linear constraints now retain every strictly positive slope, independent of constraint units; supplied slope accuracy and model validity remain caller responsibilities. Nominal violations are not silently forgiven by an absolute epsilon. A numerically rank-deficient Gramian returns UNKNOWN_NUMERICAL and NaN margins, never a physical unreachability certificate. Input state normalization is still required. No arbitrary regularization is added.

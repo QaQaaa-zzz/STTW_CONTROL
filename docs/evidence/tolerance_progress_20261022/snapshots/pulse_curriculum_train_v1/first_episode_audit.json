@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-10-22T18:23:42.774491-07:00",
+  "interpretation": "First 8 updates only. Similar marginal force distributions do not measure state-conditional sampling benefit. Finish unchanged protocol before effectiveness judgement.",
+  "arms": {
+    "uniform_alpha0": {
+      "through_update": 8,
+      "force_histogram": [
+        36,
+        28,
+        37,
+        47,
+        26,
+        26,
+        32,
+        22
+      ],
+      "fired": 254,
+      "mean_abs_force_N": 4.811023622047244,
+      "completed": 512,
+      "fallback": 0,
+      "physical_failures": 0,
+      "domain_failures": 2,
+      "max_completed_impulse_error_Ns": 0.0008210539817810059
+    },
+    "guided_alpha0": {
+      "through_update": 8,
+      "force_histogram": [
+        39,
+        28,
+        37,
+        46,
+        24,
+        25,
+        35,
+        20
+      ],
+      "fired": 254,
+      "mean_abs_force_N": 4.874015748031496,
+      "completed": 512,
+      "fallback": 0,
+      "physical_failures": 0,
+      "domain_failures": 3,
+      "max_completed_impulse_error_Ns": 0.0008211135864257812
+    }
+  }
+}

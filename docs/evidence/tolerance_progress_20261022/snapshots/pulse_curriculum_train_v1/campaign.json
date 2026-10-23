@@ -1,0 +1,13 @@
+{
+  "jobs": [
+    "uniform_alpha0",
+    "guided_alpha0",
+    "uniform_alpha1",
+    "guided_alpha1"
+  ],
+  "total_policy_transitions": 6553600,
+  "max_workers": 2,
+  "updates_per_job": 25,
+  "code_revision": "d404ca4ac524ccbffe602009f6b811ed47ab1d46",
+  "experiment": "actual_pulse_curriculum_v1"
+}

@@ -1,0 +1,5 @@
+{
+  "update": 25,
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/uniform_alpha0/checkpoints/update_0025.pt",
+  "checkpoint_sha256": "d703ef0c9fd5d4a4f9dfa86a9c51f1e93cda02879fffcf5e058e70e6dc4c9213"
+}

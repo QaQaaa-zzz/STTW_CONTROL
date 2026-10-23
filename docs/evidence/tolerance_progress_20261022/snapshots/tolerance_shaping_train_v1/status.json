@@ -1,0 +1,18 @@
+{
+  "phase": "completed",
+  "state": "completed",
+  "pid": 2556201,
+  "scheduler": "parallel_v1",
+  "max_workers": 2,
+  "checked_unix": 1792692089.6718166,
+  "completed_jobs": 6,
+  "declared_jobs": 6,
+  "policy_transitions_total": 19660800,
+  "declared_policy_transitions": 19660800,
+  "training_control_ticks_total": 78643200,
+  "active_jobs": [],
+  "active_job": null,
+  "child_pids": {},
+  "stage": "training_complete",
+  "evaluation_status": "not_started"
+}

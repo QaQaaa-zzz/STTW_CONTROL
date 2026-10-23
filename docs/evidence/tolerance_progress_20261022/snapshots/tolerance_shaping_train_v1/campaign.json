@@ -1,0 +1,22 @@
+{
+  "jobs": [
+    "baseline_alpha0",
+    "static_alpha0",
+    "dynamic_alpha0",
+    "baseline_alpha1",
+    "static_alpha1",
+    "dynamic_alpha1"
+  ],
+  "code_revision": "6717ae14fd2bbbbf254f87f6322134507c815c6a",
+  "updates_per_job": 50,
+  "batch": 512,
+  "rollout_steps": 128,
+  "total_policy_transitions": 19660800,
+  "max_lower_ticks": 78643200,
+  "seed": 910301,
+  "initialization": "same u200 endpoint actor/critic/log_std; fresh optimizer; seed reset in each job",
+  "sampler": "unchanged Coverage V2",
+  "selection": "fixed update50",
+  "no_intermediate_evaluation": true,
+  "automatic_extension": false
+}

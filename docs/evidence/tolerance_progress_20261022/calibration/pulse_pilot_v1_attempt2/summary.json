@@ -1,0 +1,257 @@
+{
+  "cases": 42,
+  "success_count": 41,
+  "nominal": [
+    {
+      "alpha": 0,
+      "onset": 1.0,
+      "success": true
+    },
+    {
+      "alpha": 0,
+      "onset": 2.0,
+      "success": true
+    },
+    {
+      "alpha": 0,
+      "onset": 4.0,
+      "success": true
+    },
+    {
+      "alpha": 1,
+      "onset": 1.0,
+      "success": true
+    },
+    {
+      "alpha": 1,
+      "onset": 2.0,
+      "success": true
+    },
+    {
+      "alpha": 1,
+      "onset": 4.0,
+      "success": true
+    }
+  ],
+  "directions": [
+    {
+      "alpha": 0,
+      "onset": 1.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0
+      ],
+      "first_sampled_failure": 6.0,
+      "successful_grid_prefix": [
+        1.0,
+        3.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 0,
+      "onset": 1.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 0,
+      "onset": 2.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 0,
+      "onset": 2.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 0,
+      "onset": 4.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 0,
+      "onset": 4.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 1.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 1.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 2.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 2.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 4.0,
+      "sign": -1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    },
+    {
+      "alpha": 1,
+      "onset": 4.0,
+      "sign": 1,
+      "nominal_success": true,
+      "sampled_successes": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "first_sampled_failure": null,
+      "successful_grid_prefix": [
+        1.0,
+        3.0,
+        6.0
+      ],
+      "continuous_margin": "UNKNOWN"
+    }
+  ],
+  "physical_failures": 0,
+  "working_failures": 1,
+  "domain_failures": 0,
+  "hold_failures": 0,
+  "scope": "one route, one demand, deterministic development states; not formula validation or independent performance estimate"
+}

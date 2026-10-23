@@ -1,0 +1,25 @@
+{
+  "parent": {
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha1/checkpoints/update_0050.pt",
+    "checkpoint_sha256": "2c8e353e88c07e37279a409e04aaa6db248ee55dc1f3689730dedd9450046ec6",
+    "identity": {
+      "schema": "sttw_geometric_path_actor351_v1",
+      "alpha": 1,
+      "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "config_sha256": "6373455e642d225b88c9d9f2de8c6f2bed15cdd2580c5d4049c965c5e9785705",
+      "seed": 910301,
+      "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+      "parent_source_update": 200,
+      "experiment": "model_reserve_shaping_v1",
+      "arm": "baseline",
+      "initialization": "weights_only_fresh_optimizer"
+    }
+  },
+  "restored": [
+    "actor",
+    "critic",
+    "log_std"
+  ],
+  "optimizer": "fresh empty Adam",
+  "new_update": 0
+}

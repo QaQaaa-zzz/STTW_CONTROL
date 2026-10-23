@@ -1,0 +1,23 @@
+{
+  "phase": "running",
+  "state": "running",
+  "pid": 54472,
+  "scheduler": "parallel_v1",
+  "max_workers": 2,
+  "checked_unix": 1792720742.6494076,
+  "completed_jobs": 2,
+  "declared_jobs": 4,
+  "policy_transitions_total": 4472832,
+  "declared_policy_transitions": 6553600,
+  "training_control_ticks_total": 17891328,
+  "active_jobs": [
+    "uniform_alpha1",
+    "guided_alpha1"
+  ],
+  "active_job": "uniform_alpha1",
+  "child_pids": {
+    "uniform_alpha1": 149565,
+    "guided_alpha1": 149566
+  },
+  "stage": "training"
+}

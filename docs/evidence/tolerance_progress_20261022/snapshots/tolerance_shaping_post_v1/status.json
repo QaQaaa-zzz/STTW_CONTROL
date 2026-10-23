@@ -1,0 +1,15 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 2534729,
+  "campaign": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1",
+  "evaluation": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_post_v1/evaluation",
+  "stage": "report_ready_for_review",
+  "checked_unix": 1792693059.735739,
+  "training_pid": 2556201,
+  "policy_transitions": 19636224,
+  "completed_jobs": 5,
+  "child_pid": 3137595,
+  "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_post_v1/evaluation/report/REPORT.md",
+  "adoption_status": "pending_analysis"
+}

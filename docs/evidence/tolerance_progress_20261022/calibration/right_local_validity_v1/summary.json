@@ -1,0 +1,189 @@
+{
+  "baseline_replay_phi_errors": {
+    "0": 0.0,
+    "1": 0.0
+  },
+  "cases": 14,
+  "successes": 12,
+  "predictions": [
+    {
+      "alpha": 0,
+      "sign": -1,
+      "status": "PREDICTED",
+      "bound_N": 10.469986915588379,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 0,
+      "sign": 1,
+      "status": "PREDICTED",
+      "bound_N": 1.982056736946106,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "sign": -1,
+      "status": "PREDICTED",
+      "bound_N": 38.09672927856445,
+      "active_constraint": "roll"
+    },
+    {
+      "alpha": 1,
+      "sign": 1,
+      "status": "PREDICTED",
+      "bound_N": 2.5388996601104736,
+      "active_constraint": "roll"
+    }
+  ],
+  "validation": [
+    {
+      "name": "alpha0_t1_F+1",
+      "alpha": 0,
+      "force_N": 1.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.29246985912323,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha0_t1_F+2",
+      "alpha": 0,
+      "force_N": 2.0,
+      "predicted_pass": false,
+      "actual_pass": true,
+      "peak_roll": 0.30035626888275146,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha0_t1_F+3",
+      "alpha": 0,
+      "force_N": 3.0,
+      "predicted_pass": false,
+      "actual_pass": false,
+      "peak_roll": 0.3073427677154541,
+      "working_failure": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha0_t1_F-1",
+      "alpha": 0,
+      "force_N": -1.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.274827241897583,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha0_t1_F-2",
+      "alpha": 0,
+      "force_N": -2.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.27491164207458496,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha0_t1_F-5",
+      "alpha": 0,
+      "force_N": -5.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.2946277856826782,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F+1",
+      "alpha": 1,
+      "force_N": 1.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.29980897903442383,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F+2",
+      "alpha": 1,
+      "force_N": 2.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.301202654838562,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F+3",
+      "alpha": 1,
+      "force_N": 3.0,
+      "predicted_pass": false,
+      "actual_pass": false,
+      "peak_roll": 0.30272436141967773,
+      "working_failure": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F-1",
+      "alpha": 1,
+      "force_N": -1.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.2974659204483032,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F-2",
+      "alpha": 1,
+      "force_N": -2.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.2965097427368164,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    },
+    {
+      "name": "alpha1_t1_F-5",
+      "alpha": 1,
+      "force_N": -5.0,
+      "predicted_pass": true,
+      "actual_pass": true,
+      "peak_roll": 0.2941666841506958,
+      "working_failure": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "final_hold": true
+    }
+  ],
+  "scored": 12,
+  "correct": 11,
+  "unsafe_predictions": 0,
+  "conservative_predictions": 1,
+  "scope": "new route for tolerance calibration, not necessarily unseen by pretrained policies; two deterministic DEV states; no continuous certification"
+}

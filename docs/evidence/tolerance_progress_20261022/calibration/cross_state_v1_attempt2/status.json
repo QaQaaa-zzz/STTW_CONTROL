@@ -1,0 +1,14 @@
+{
+  "phase": "completed",
+  "state": "completed",
+  "pid": 2286097,
+  "checked_unix": 1792675668.9701142,
+  "elapsed_s": 1323.619343213999,
+  "completed_cases": 264,
+  "declared_cases": 264,
+  "active_lower_ticks": 1051152,
+  "maximum_panel_lower_ticks": 1056000,
+  "training_steps": 0,
+  "stage": "saved",
+  "preflight_lower_ticks": 704
+}

@@ -1,5 +1,7 @@
 # Model-margin shaping implementation plan
 
+> 最新阶段结果及运行快照见 [容扰度进展报告](TOLERANCE_PROGRESS_20261022.md)。下文保留编写时的设计/审计状态，不代表当前未启动。
+
 Goal: test whether derived directional recovery reserve helps the existing two middle policies preserve disturbance recovery while retaining the frozen local300 and original task contracts. This is an experimental shaping hypothesis, not adoption of a safety predictor.
 
 ## Evidence and design decision

@@ -1,0 +1,217 @@
+{
+  "cases": [
+    {
+      "name": "alpha0_t1_F+0",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": 0.0,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.2597886323928833,
+      "impulse": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected_impulse": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-0.25",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -0.25,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.2619204521179199,
+      "impulse": [
+        -0.0003173008153680712,
+        -0.024972330778837204,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.0003176266551496089,
+        -0.0249979821847272,
+        -0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-0.5",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -0.5,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.2639967203140259,
+      "impulse": [
+        -0.0006346016307361424,
+        -0.04994466155767441,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.0006352533102992178,
+        -0.0499959643694544,
+        -0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-4",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -4.0,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.29174530506134033,
+      "impulse": [
+        -0.005076813045889139,
+        -0.39955729246139526,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.005082026482393742,
+        -0.3999677149556352,
+        -0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-4.5",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -4.5,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.2956913709640503,
+      "impulse": [
+        -0.005711412522941828,
+        -0.4495019018650055,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.0057172797926929595,
+        -0.44996367932508957,
+        -0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-5",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -5.0,
+      "success": true,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": false,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.29975569248199463,
+      "impulse": [
+        -0.006346015725284815,
+        -0.4994468688964844,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.006352533102992177,
+        -0.499959643694544,
+        -0.0
+      ],
+      "pulse_complete": true
+    },
+    {
+      "name": "alpha0_t1_F-5.5",
+      "alpha": 0,
+      "onset_s": 1.0,
+      "force_N": -5.5,
+      "success": false,
+      "physical_failure": false,
+      "domain_failure": false,
+      "working_failure": true,
+      "final_hold": true,
+      "goal": true,
+      "ticks": 4000,
+      "peak_roll": 0.3035867214202881,
+      "impulse": [
+        -0.006980614271014929,
+        -0.5493910908699036,
+        0.0
+      ],
+      "expected_impulse": [
+        -0.006987786413291395,
+        -0.5499556080639985,
+        -0.0
+      ],
+      "pulse_complete": true
+    }
+  ],
+  "validation": [
+    {
+      "force_N": -4.0,
+      "predicted_success": true,
+      "actual_success": true,
+      "peak_roll": 0.29174530506134033
+    },
+    {
+      "force_N": -4.5,
+      "predicted_success": true,
+      "actual_success": true,
+      "peak_roll": 0.2956913709640503
+    },
+    {
+      "force_N": -5.0,
+      "predicted_success": false,
+      "actual_success": true,
+      "peak_roll": 0.29975569248199463
+    },
+    {
+      "force_N": -5.5,
+      "predicted_success": false,
+      "actual_success": false,
+      "peak_roll": 0.3035867214202881
+    }
+  ],
+  "smaller_probe_predictions": [
+    {
+      "probe_N": 0.25,
+      "secant_bound_N": 4.6027445793151855
+    },
+    {
+      "probe_N": 0.5,
+      "secant_bound_N": 4.638138771057129
+    }
+  ],
+  "baseline_replay_max_phi_difference": 0.0,
+  "scope": "one development state; local test, not independent generalization"
+}

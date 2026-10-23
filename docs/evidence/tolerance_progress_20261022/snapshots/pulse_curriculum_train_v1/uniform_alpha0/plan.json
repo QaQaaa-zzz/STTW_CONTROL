@@ -1,0 +1,28 @@
+{
+  "experiment": "actual_pulse_curriculum_v1",
+  "arm": "uniform",
+  "alpha": 0,
+  "updates": 25,
+  "seed": 910401,
+  "pulse_seed": 910402,
+  "parent_manifest": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha0/manifest.json",
+  "parent_record": {
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha0/checkpoints/update_0050.pt",
+    "checkpoint_sha256": "53367a687549dbcc6c67e052ad8e37f79accfd8a439d7bd66ffc416c9c173d12",
+    "identity": {
+      "schema": "sttw_geometric_path_actor351_v1",
+      "alpha": 0,
+      "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "config_sha256": "6373455e642d225b88c9d9f2de8c6f2bed15cdd2580c5d4049c965c5e9785705",
+      "seed": 910301,
+      "parent_checkpoint_sha256": "f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+      "parent_source_update": 200,
+      "experiment": "model_reserve_shaping_v1",
+      "arm": "baseline",
+      "initialization": "weights_only_fresh_optimizer"
+    }
+  },
+  "config": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/alpha0_config.json",
+  "tensorboard_info": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/tensorboard_server.json",
+  "run_name": "uniform_alpha0"
+}

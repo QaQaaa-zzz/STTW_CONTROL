@@ -1,0 +1,11 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 36702,
+  "checked_unix": 1792717664.2219403,
+  "elapsed_s": 133.96033906936646,
+  "active_lower_ticks": 768,
+  "maximum_lower_ticks": 768,
+  "training_steps": 0,
+  "stage": "verified"
+}

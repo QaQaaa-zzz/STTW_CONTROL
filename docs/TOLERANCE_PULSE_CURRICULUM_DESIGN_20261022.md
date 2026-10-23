@@ -1,5 +1,7 @@
 # Reserve-guided actual-pulse training design
 
+> 最新阶段结果及运行快照见 [容扰度进展报告](TOLERANCE_PROGRESS_20261022.md)。下文保留编写时的设计/审计状态，不代表当前未启动。
+
 ## Motivation and scope
 
 The completed reserve-shaping experiment used PathBatch.advance_one -> env.policy_step without force_pulse. It trained under the existing route/state distribution with a proxy penalty and evaluated external pulses afterward. This is evidence about reward-only transfer, not about learning recovery from external-force exposure. The six-job result remains unchanged and is not a successful robustness claim.

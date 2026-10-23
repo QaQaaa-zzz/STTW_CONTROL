@@ -1,0 +1,9 @@
+{
+  "tests": "directional_tolerance, tolerance_algebra, tolerance_pulse, pulse_training_fork, tolerance_shaping, tolerance_comparison, tolerance_report",
+  "result": "29 passed in 4.12s",
+  "relative_markdown_links": "all links within new publication checked",
+  "visual_check": "calibration/boundary_focus_v1/xy_and_roll.png",
+  "active_training": "not modified or restarted; status files are snapshots",
+  "source_code_before_report": "9630af9",
+  "models_and_full_trajectories": "retained server-side"
+}
