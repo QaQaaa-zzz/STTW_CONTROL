@@ -34,13 +34,14 @@ Files: margin_state_sampling.py, test_margin_state_sampling.py.
 - [x] P(state|force,alpha-bin) retains30% uniform support; focus near normalized-energy radius1 with bandwidth.2 and70% focused weight.
 - [x] Five alpha strata: exact endpoints and three interior bins. Force draw and alpha-bin draw independent of arm; nominal episodes uniform.
 - [x] Stratified risk permutation preserves per-force per-bin weight distribution; no physical randomization or reward change.
-- [ ] Review found within-bin interior-alpha marginal drift; formal comparison must use exact declared alpha values or an explicit matched conditional-alpha construction. No continuous-alpha matching claim. Export real-bank probability/exposure audit before formal training; expected matching is not claimed exact after early reset divergence.
+- [x] Review found and fixed within-bin alpha drift: exact_alpha_groups preserves actual alpha, including distinct values .1/.3 in one old bin.1024 paired draws verify exact matching; continuous singleton groups cannot be reweighted.
+- [ ] Export real-bank probability/exposure audit before formal training; expected matching is not claimed exact after early reset divergence.
 
 ## Task3 — Frozen preference pulse screen
 
 Files: preference_tolerance_screen.py and thin CLI; actual resolved declaration and status under a new run.
 
-- [ ] Resolve stage3 geometry R1.8, v2.6/2.8; original10s and V3.
+- [x] Resolved stage3 geometry R1.8, v2.6/2.8; original10s and V3.
 - [ ] Parentu325 only, alpha0/.25/.5/.75/1, two directions, two speeds, two onsets1/2s, forces0/±8/±12N:200cases,max400000lower ticks. Own-policy complete prefix shared across force branches. No PPO.
 - [ ] Preserve actual XY, signed errors, logged per-step rewards/components, pulse impulse and model features; report task recovery separately from working performance.
 - [ ] Verify200/200 and nominal preference behavior before choosing the new TRAIN bank distribution.

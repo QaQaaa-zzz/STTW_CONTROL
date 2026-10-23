@@ -15,29 +15,42 @@ def alpha_strata(alpha):
     return j.where(alpha==0,0,j.where(alpha==1,4,1+j.minimum((alpha*3).astype(j.int32),2)))
 
 
+def exact_alpha_groups(alpha):
+    """Host-side table identity; never mix different actual alpha values.
+
+    A useful guided bank needs repeated authentic contexts at each alpha.
+    Unique continuous alphas form singleton groups and cannot be reweighted.
+    """
+    alpha=np.asarray(alpha)
+    if alpha.ndim!=1 or not len(alpha) or not np.isfinite(alpha).all() or np.any((alpha<0)|(alpha>1)):
+        raise ValueError('finite alpha[N] in [0,1] required')
+    values,inverse=np.unique(alpha,return_inverse=True)
+    return values,j.asarray(inverse,dtype=j.int32)
+
+
 def stratified_permutation(groups,seed):
     groups=np.asarray(groups)
-    if groups.ndim!=1 or not len(groups) or not np.isin(groups,np.arange(5)).all():
-        raise ValueError('nonempty alpha strata 0..4 required')
+    if groups.ndim!=1 or not len(groups) or not np.issubdtype(groups.dtype,np.integer) or np.any(groups<0):
+        raise ValueError('nonempty nonnegative integer alpha groups required')
     rng=np.random.default_rng(seed);permutation=np.arange(len(groups))
     for group in np.unique(groups):
         ids=np.flatnonzero(groups==group);permutation[ids]=rng.permutation(ids)
     return permutation
 
 
-def state_probabilities(risk,groups,*,strength=.7,bandwidth=.2,target=1.):
-    """P(state | force, alpha stratum), shape [F,5,N].
+def state_probabilities(risk,groups,*,strength=.7,bandwidth=.2,target=1.,num_groups=5):
+    """P(state | force, alpha group), shape [F,num_groups,N].
 
     Focus near the predicted return boundary; retain uniform support. Empty
     strata are unreachable in draw(), but get a finite uniform fallback table.
     Invalid risk is never treated as measured low reserve.
     """
-    if not 0<=strength<=1 or not math.isfinite(bandwidth) or bandwidth<=0 or not math.isfinite(target):
+    if not 0<=strength<=1 or not math.isfinite(bandwidth) or bandwidth<=0 or not math.isfinite(target) or not isinstance(num_groups,int) or num_groups<1:
         raise ValueError('invalid declared sampler parameters')
     risk=j.asarray(risk);groups=j.asarray(groups)
     if risk.ndim!=2 or groups.shape!=(risk.shape[0],) or not risk.shape[0]:
         raise ValueError('risk[N,F] and matching groups[N] required')
-    mask=groups[None,:]==j.arange(5)[:,None]
+    mask=groups[None,:]==j.arange(num_groups)[:,None]
     count=mask.sum(-1,keepdims=True)
     base=j.where(count>0,mask/j.maximum(count,1),j.ones_like(mask,dtype=j.float32)/len(groups))
     weights=j.where(j.isfinite(risk),j.exp(-.5*((risk-target)/bandwidth)**2),0.).T[:,None,:]*mask[None,:,:]

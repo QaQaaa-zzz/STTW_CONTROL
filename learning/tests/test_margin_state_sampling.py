@@ -52,3 +52,17 @@ def test_invalid_risk_falls_back_to_uniform_without_dropping_states():
 def test_continuous_alphas_and_endpoints_have_separate_strata():
     actual=sampler.alpha_strata(j.array([0.,.1,.4,.8,1.]))
     np.testing.assert_array_equal(actual,[0,1,2,3,4])
+
+
+def test_exact_alpha_groups_prevent_within_bin_preference_drift():
+    alphas=np.array([.1,.1,.3,.3],np.float32)
+    values,groups=sampler.exact_alpha_groups(alphas)
+    np.testing.assert_array_equal(values,np.unique(alphas))
+    risk=j.array([[1.],[3.],[3.],[1.]])
+    uniform=sampler.state_probabilities(risk,groups,strength=0.,num_groups=len(values))
+    guided=sampler.state_probabilities(risk,groups,strength=.7,num_groups=len(values))
+    keys=jax.random.split(jax.random.PRNGKey(19),1024)
+    draws=lambda p:jax.jit(jax.vmap(lambda key:sampler.draw(key,p,groups)))(keys)
+    a,b=draws(uniform),draws(guided)
+    np.testing.assert_array_equal(alphas[a['state_index']],alphas[b['state_index']])
+    assert np.any(np.asarray(a['state_index'])!=np.asarray(b['state_index']))
