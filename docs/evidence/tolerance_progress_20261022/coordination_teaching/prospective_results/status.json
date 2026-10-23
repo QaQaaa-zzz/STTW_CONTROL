@@ -1,0 +1,13 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 2340063,
+  "declared_cases": 768,
+  "completed_cases": 768,
+  "active_lower_ticks": 1500856,
+  "training_steps": 0,
+  "stage": "reports_ready",
+  "checked_unix": 1792764004.6451094,
+  "panel": "turn130_R2p7",
+  "child_pid": 2356126
+}

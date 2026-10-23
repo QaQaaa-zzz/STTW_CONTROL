@@ -1,0 +1,2653 @@
+{
+  "files": [
+    {
+      "path": "REVIEW.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/REVIEW.md",
+      "sha256": "7be8358ce62d65dddc9e18eece51762960d17779160bc03927c5384fc8563e1e"
+    },
+    {
+      "path": "status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/status.json",
+      "sha256": "40d273fe37ebeb7d9c33c4fb614e667fb8ad7bc0637e6f52dc5a3da7c17001e1"
+    },
+    {
+      "path": "numeric_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/numeric_results.json",
+      "sha256": "38b4a34b263cc993c6ab0661feab30b7c6d0666e05669f12603859ebc6b857cb"
+    },
+    {
+      "path": "execution_manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/execution_manifest.json",
+      "sha256": "5df506280a41866c891491e15f35ed48ca1a71d9b73b9ed98fdfaf3e40c90822"
+    },
+    {
+      "path": "analysis/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analysis/summary.json",
+      "sha256": "f96ff0732836dc388219321a782db5f70f6b8d703fb1aacc9602e247d7b5505d"
+    },
+    {
+      "path": "analysis/primary_regressions.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analysis/primary_regressions.json",
+      "sha256": "e309318ed73b01bfa04454121174fa765bdefb1358e122440e80e35beddb9883"
+    },
+    {
+      "path": "analysis/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analysis/actual_xy.png",
+      "sha256": "ed9788355ea75af7a297ab8248ebccf6b3b6f03bd3af1ed514b4e18dc0f69882"
+    },
+    {
+      "path": "analysis/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analysis/scored_tick_reward.png",
+      "sha256": "54f6f1bb4c2d3a0b778ef9471cd252055ccbbe7fcb854e08d0ff86f9814da260"
+    },
+    {
+      "path": "analysis/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analysis/cumulative.png",
+      "sha256": "17c2941fa5e80b6a4e599a73dd3fa779694d0c1dd773dbc4ba62bcd6833accc2"
+    },
+    {
+      "path": "analyze.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/analyze.py",
+      "sha256": "071cda03e0e1150a8036883300fc365182665704b31e678672f3c1adc0dc6e1d"
+    },
+    {
+      "path": "turn70_R1p9/paired_task_changes.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/paired_task_changes.json",
+      "sha256": "e8ca3364e824bbc0e7e98ad78147a97c88ae2f6445d0e68e66b7a6096bc94603"
+    }
+  ],
+  "full_reports_server_files": [
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/REPORT.md",
+      "sha256": "9596ccd3564190d1d2a9f259d60e33926abe00f45c9ae5c14829e9cd384ad6ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/cases.csv",
+      "sha256": "05c4467b7c2222ee4fa1f5bd5508488546e9ddb00230802fcaa8e6366b5ca709"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "b5327894002e6a51e2aab7fefab8e5d1ed4a2aa6451bacbeef4f32c18b4ee11e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8.png",
+      "sha256": "d88fda6d0748bd8b1f6c4adfa6dbfd5c05d1ef330599b20ce52d7dd2ad9fcdcf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "7dcbb9301fecac764d606e3b73620845640cb8a9f902c30c939f1b406fe3e8f7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "5349b6bd3dcb8c126bb00901ae336457996136e1613619760af8990416fc6482"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "bb662eb2730a9e14a2cd8cc581975ef9bb558dbec298ced9aba669fb2a2eea5a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "99c2a49e5bf293da065733a04a6266f4682a71500f59c5a3eb2d93ca5f485bb0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "57bfbde445f3da4991d433afd27ff2e5a19d57c792dc58bbb5ec9c7e03db6111"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "e9ef48b64da97a14d6c857b4e62cfe8587336a447bf78a78c23e1880daf7b034"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "5ff4d422afbee127419c2de45774a4f711b3b48346b52536f4d49c0c5e664a33"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "4fbbd671bd8f028129363b02b9081e6e6906993e75e3b770259d7ba004fbc731"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "8d9a537393e827d428aa82aef7f095ac8ac0d4b315c918e97e1c76cd8e51c09f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8.png",
+      "sha256": "50beb73b7aba0b3100bf65b406900504ff73732a7737b86f70525720ae09dbea"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "29fe3048ad97100b103b5493e124a99f968d9fa42693ddffdc262caa645624cc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "ace62ab8c00a164cd23eb43e99c4dd2568cac5c80871db4ddb7e4176475b35a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "f7e0c3cd7be8900932ea985fa47882683897d6f5c647c5a258942e0f6ab7d37e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "5c39b0a4c8f154abd89a387340b7478e56b5a617e7a522f7d1ea46e257509e5f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "6af54a2936cafe8f74858080bfa364d415c7590411fd5eebf53912d0b7630324"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "f89026fd9498eeea1dedd90ee0ca63e81e8a0f9987bfbdbd9a7c1ddab9014ef1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "986499403d50bfb1e416854e610f2ece2a19284e7dd8eede548af151f2939654"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "5bd1f5c1e379f9942457415e6673948b8fa727e3ff162aacadbe5bf5679b243a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "57998cc58f3104d273975a0db9e0081670f35e2c065d71ed16ad6e6c254c71e2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8.png",
+      "sha256": "3187d3a41dc317cdc4c1aed7ee7a84eef9bf891b450abb0572a4557507ef1124"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "411e59670932e942e7045f8651f73361babccf96e7383988bdc514a591ef35cc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "7f2ed3df6dfe6f72038ecc969f5619b2c3082eed492304bc2c317caed77ae52b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "fbdac98d9ece1a13e55b994c517ca58c222161e6a371b6a8999ed2ffd34fd033"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "1d54e36bf2d77d9ead7fdea663107fe217a44eb9086eae0147be059e14e7871e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "9be3f61ccd402a361415634b97e96e956cf9de554fd74cd6790bdf1aa85a2512"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "1ef56495a79b73f8012093a7583f4db8de893bb7a717cd761b04229f5bef8998"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "d1dad2b5652dad9c797bfca5c259bdc87ea43992d6573d2370f593741cb4b5af"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "bd33d89378337902976848a41c7d5e376e04a4c30485880687d5557ddfb16931"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "3a10dc24b1de4fb5df60870a879c0c0f2ca7a3be48312abe6b4c6b2d3323dc02"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8.png",
+      "sha256": "69a8483ea98793fe9efbfa599be5fe92b14074650c18e9ec75c9fa55318941e3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "4d7e57012cb080cc3bbbf537f866fdc9f4043f57b4f93935173bf720e8ea1d1d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "0a0980078bd6ec3b448cb5c355cf71ba3e1d1a075f5ff06ec78a2644c6b23a0e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "35eff92ee0ca32c6c768ccb02819bbeb00925338cfe0dcb95ad547cb58e16d05"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "438301132033da0df2a20235f5f7a63402adcf2a6412607ae0da39a2991edc6b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "ab6f83012283d55a2bf001981fabcac161619ba292753488f4c2282f12ce58d2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "abac4241256cdf18dad7ad42849a70e87b14275c971617e7dd6a06adc823cdc1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "658f00ee9a2e603cdb3e8d55a5481673957733c94b1bb5ded5bfeb7c4c50c725"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_left70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "5596011d983297d973dfa9b236db59348b82d5a88a0ca8a4168eb7f64b9c8d68"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "ef1e351d63c0df982099400cd37e5df32392adc01cbeb53ebe30e88ba900fac9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8.png",
+      "sha256": "88288747784793fdc653ca6e1d97e83f9fc5b6e09f3e9656c6b91477c1a59180"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "ae4e08f3f20fbc70f5a86b03c5ff0edea448004ffa7e0034646ab46fcb4c7464"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "ce6e7b9a9afda8470ad4856dc588c19f07a25f144978b685da024385c24c77b0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "6aea7fd710c447280c7cb5c709712f9054deabbf025d6b1eef7a7779e9a8d231"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "7d4c126528d7d1e4ea06457c6544ad34e119b11da0a5dab2b0176f7bed8d7dcd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "7127054b62e08431a67928fe9199c150bc940c7b5f688922f76c34a70aefc763"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "974ea898ed5d5c168f1a95a076b8161d37673d975d2e736b4058e929077aa4f7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "54a30739d1fff5fab76ea21ebefc59a3273c3513ab58ae69f4c10e81de4f58c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "a3ff2bcb8c63e888094418420e5bc74e12b952d4324050da46c9cce3a972b9f2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "6224ced2d2db4360fe31ae7fec0279366b2a624d19a501cc437e35aae5022ee7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8.png",
+      "sha256": "9e632481076b8895b3940222b7b75d15aa697f30c1b6480ba062b96579a671a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "61df3e5166cb8d7ac1b2677f5b5f777def23336a7fa446e33b4acb7bf4dba390"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "19c4f2c95404e6336412ca75b27a4483cf8143d538de8e233c6081f6fbff7427"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "c1bce598c5bbf3097fa81b2c4cfa6810083980e5b90ea6c273aaa67bf4118be0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "1ad906c41d4d9bade137e556bf67d6cfb8fc59276f1279bc09ed20821d91ec1b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "022226e9842af1092dc7e0a5008c721c663c0709004551bcc4126b3c4b2ff0a5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "95c6519eeffe6fd32907ad873f8663a41ce3686efac4922ab2abe188d427bf1c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "28f7e0f520ad41931b15b843ae4f13772ff3e4d53e7285f94eca37bf2097590e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "72883484276e4b0bbee4b9920d7b3093022d7c79dc54495d3d4499a87a226e50"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "18034f380f10a5149c71dcc1ae4cb5760130d33f5a123f01242919130523dbd5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8.png",
+      "sha256": "5ef3ce595928c33b23363ad088c439fd3b772a8c6699a1afbb2738c9e5c43c9c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "92c28df9504cbab7a9eb792f103ac54a1aac45cc19ea1b0e9bde083809f0f01f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "fb1834234b9cee779f413a7dc7fe29f79900dfb34fb6d537f3be196381ca8824"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "4c2c3c968667d533f06a1ca1bac2c981391eca0abceda8a1e64e1eb129c68021"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "14cba746b5a11abcc3fab141659ce1f43d936654b657ed65a3a06450c3b88618"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "16535e7ca1b04e56f67e92911883b369fb208eef17b37c42c32b94ec3cc0e6df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "7eabb083f3f4c4025e952f747fe595fd324ec3df13bc907138c2aa34bab22ab4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "3c5853dcac4957d7570099c4f68316bed2500943857543492e0955ec65663280"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "a847fd1b3c966b10fdb96acda8e3e63becbea92ee26e06f094be22c5a842b3f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "7befa6ea2b08dc11310a07c87ad28dea054dc0d055278cb5d5adc56548fb5d63"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8.png",
+      "sha256": "fce599250ddbbc809d10c35340a455efa121335bd6c6269983a56a6e0d1952ae"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "cde792ad61b7586e88f5987cf10cbcd1b1eda812a1c7b92e6e48d56da0dc4b96"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "d58aaf4e1759661669618bf83e9d15ef2ae451df823ee30215ad9118b3a91111"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "da3cfe344cc70b7fb2137be04a7a5afc19fbfa29b53a450d7c0da6550a430338"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "46cf7093607b339956cf80012cdac94a74cbd9c7a3a129d0d35b7fb027f0842a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "b46af4bea2e30a7975626f297e9f0402a70856d742d96fd1db0d58a80af8ee4e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "ff7f1c0a7d3ebbfac4455b292571fa0543a7f8e6c418931a274dd71d674e4137"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "3115a131217441d699231007a1f025648d2b661a87cd93cee218a8c67d3f2820"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/parent_right70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "311774b621b195c6057ac658389a74a06cac6445198bd34966e889dbe620812d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "f0643b618b67b15af0328b8fc52c756f02bed99e85d8f346ccecf711f2f7f1a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8.png",
+      "sha256": "785fa6888a978fd7a878325c52bbfad0ac12675f659526ca8ea63360765862f7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "1293fd6f02ceb1716684193a8f2ca1160758fa03075015396ed4b28def041ff4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "86f7200f4dc4e72f58d613ec874c803bd4fa41be2bcfdea65895b498b0f4aaaa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "39694234e7f327b5fe071d29252976055b2756074154142de61729ef8c24dd67"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "80f205e34683bb7f15259e53823005161db7172d4fba8b4395acb0ba1a64354a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "3daf7e9aa8bfe9c21183d675fcae1da703e41b813503e92e755846dc7d9850d8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "fb447c298b06728548698b702159f5a845b904830b4d9193d1bdbe4a0733edb5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "5b7132fa68ec3dfd88eab00e3ced34bf2bb7e99911410407503d7b743730dc35"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "0cca20be3fa75a0a5475cbe47c9765578a3c406a1b8071e21d9b98648d884f01"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "64031b0140f53516a94cef4806ee4034e2e697856b53dc9306969edd82dcf4bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8.png",
+      "sha256": "c83c093f030d9b4090fcf58aa45f96a210368e310717b59ea170f974c6b1d29a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "f39211286e0673da19de29b8df848048c804c5393aae44c62f219e3981d26009"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "7eaa7a7a62db06795cff73880416704888608f643e15a85f1f79643341a8c751"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "432c370dc0dbba52f7d0bf40306b14784c2b0bdee406a9000c220ab9ec780af1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "e2f71ca9847e581d5656c13fb4a42043864e255117460d129ecaebab02fe86de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "888e8474ae748178847d5cc179ab8b641570ecf20cf911b3980e32bd11777f76"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "79c7e5f79ccab5515ec43490259d9dfabe68c8cc9613dbe18c1c2302fb60e249"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "6847e17f47fc904850020c18d63c4c3684b2400a9db8eb39bb771f1b8bf3db8c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "6070eb125be44564633e5e39d675b9480ad9472e2e78c516d26e22630c358239"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "09a6fd211a58e2cc8f83772bc4416145b1eb12ffce263433e2e5647a1623f099"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8.png",
+      "sha256": "b7c34f1637cb4052094b6c1871605989a98d5530815e277191055df202656a7f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "ebcb7bbdb467358707b98513bd1b97a3c9d767de49f06fbb9cc417785ad76755"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "f23652ae3b40b53c15576254ef485e2f355cc08869e8c887d278d1047fbdf8ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "bbeb92b33ac168c3985bdc8a6757a53da55cc1cd840da20c4e878305869b8cdd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "4cdc1ce5bc6d45635c34daee32f8ee64d961b5095f1ab4e272fe67a8f34844f7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "cdcd4c86295d4a7c4dc373a97ff77a4a88f05111710f0fd936c21a6a3a97cb15"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "ecd7cc0a4f09cf1c96a3397094fa7e0ea45aecaefde23fa5ab2dd21c82617f5b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "f559348ffcef9f1aeb6089ab96c3ef8a1b210cd201194687ba67d682dcbd4d04"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "31ca37ee02dc39e9698bff0e73d8290ff5189576e9dc0cf523bac31bc6a32f51"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "e297870832f4bc4356f85649dd7882eabec5698ff0625f8f205579ad2c0bd7c2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8.png",
+      "sha256": "0d8af1a3e0af5d594ecc61fb0e667fb08d9731c561a32c28d3f9f24c1a85c979"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "55fd20481e5184b76e800a823804c8c6a70ae19e3df8c7e8d817cafe70d5dd27"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "f733a6df3531433da6ae631d4d547e95bc85b0bb7195090e23d29da5e8fb9666"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "2588336d3dab6811def887902e7a53d0fb5ca840d21c5b91b6c8b1ab35e3891f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "752c4e3069ea679b06961f6e4cccc91e4cf39370b67a2ae1f302116cc3751a66"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "ef81857e3e62136e9e533f931b4780dc961a06f1523bf7e0db7ccbdddd6d5a9e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "7b44fbe3d12404e2cef1085f89cee5193a03a2acbcfd420a2da70bb54b66cc47"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "becd08e57b89cf4172708f49f8b5da2e44a6bd387cb164bbef09f2b729930c23"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_left70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "ab52bb5f726d6a33411eb66db3ab371fa9d4440edaef3cbd41091c05d12cb1fd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "6f8972203ade27adea9511ae11a3c1b1f609f0d4c3c2cb42245c18daa4193d2a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8.png",
+      "sha256": "029678d8bd2624be3094439cb42009687dd48fa8224ea35098857a85563d4171"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "290369810d8c48acc9d04061ad90485a2a9074899c1155564642d76fa012574d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "2fa7a74712e7ea9319fd0c7f8e0df57df1735330ae77689c16baefa05176715b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "557254b88fb0a99aca82b4a842aa8ae8fd7ccc7ad7faae0679fd244465cf2360"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "22d30031de16014d8ca1a1b063ee6f180566d722e5c6fb5e55536ac331c0803b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "080ba5c99bedcc471f524a0ca11d144f6a0abfced7f419f180be644cf39db1c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "655b11d0e00201b672e282dbc5c088f28a9e4a8a92af3a832475670058d5ced7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "299807167dc2eea8865ce67bc7e798732793d74b31c7d2590eab13753544a20f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "0638f318250d8f70d14fe43f5bd2ac907a6e3e64033072dcc25f5fd5251acfb5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "66fd9dab04bbc850675dee6880bdd0c76872e1b7a741b090c0f390b783982f6a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8.png",
+      "sha256": "7d2feb088edd7265050d179a2354842290a3aac72c479a60e70bbb5227e9ee16"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "80074a2d4e1321e174a9d52f2018ec77794c6ccfc80bce5a77da77a24347fe36"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "fbcde5831688f7c89e8db1bb25adf8cd39e2ae6dc9cc335f1111429a09177f3c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "b8e97596a7afdc8238bc7dcca08dcd3b16711b3e9ba79a651b45b7559de1d1f4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "6d1fc8118dc483c7ac3c553b0b4f00723c3efaad66e51c0908dbeac398a844fa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "92afa0db501c1b7a62e68435e03e1c74ae927dff2a3a1b196f4bf42a98fc8b09"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "1bfee8b7dcc4d073d9cffb3b82e763a8153317468aa96e2ea4c5d7d8af93f17c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "81e955a2fa1d1a9f9de22483e8c95665e8b4cf6e3f1f3748fc6596d648c13ee5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "6f799a58e02940e8d73caab547cf146d7bd2bfd031e2b787a94d3fb6e8bc69cd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "4427608aedf906b9e7445a35aede0854655d979b6608be825d91abcd3ef0dea1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8.png",
+      "sha256": "f526fdfc2b2e0024f0a944c9677490c8143d4354581ffebada526ba5cacc7f6e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "b14596edc3154f621f1b24f5de4ff228f5b8f03c2114d7fb4ebc4b52395571aa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "a2f986ddb75ef38c199ec7b0b9b19aef4d196767c1516aba19f7a00b2927ed3c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "3b270d45ed346f1a082aa1108e7bd6f766144097df8f7e3c52fa73616f248c70"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "99eca79f1302c007c569e78869eada608c6c6c7c1d7c22b3abaa90cc7d211ee4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "776c2c8def8e258a9652eef33df8a2dd019095acb7cff9d7b5d42d8e7fdd0391"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "419561395db81aa9602162d122e2246788f863f78e555ab76444fc900e6f95ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "18d5e5571cc01e6895919924f917033127d778ad274d4a37b45c48dcf36c45dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "4835668e2ddb06a33a01c6a452611bb26497df96514b00a45a690352aef693c7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "6e65a1e7392489b198c08d9a49a4a5df8b43ce7a51c81996328417358a4ab2e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8.png",
+      "sha256": "2d3678b1c5b7be7b9aafbca38494f7442af53ac763732ae743089e4c479b1655"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "5a1fabd3e501617f88117151a48f327a0d32c0ea8b51a6568b8ec75cce6231bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "c0365c70d6fa3beef755c90c61c7ae7fda05eb1dc259df5f3c791a07564fe63e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "044a945fa775896990724daadd8901ab065474e0963da7cd8cdf7a4124527968"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "01e0c68d0f8e922dd7686f82eafb43d2e195733b812f08b411bd552b4ab64323"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "c6a7dfaa26068972e4e552477c77e1c561f0ee9732c00d529b5464222b0184f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "9a9ab1c73a372c3f09178d2af96ac9cbfb2e2f68f5d64494afc9dc4743d52875"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "8ed652553c7da8da1a5060f802df736b1843e71fa9a03b042f15d6579093330d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918501_right70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "0749a99be16663a4f9e649a0b8d88bcaf214de9664e1dd71badcbcc35e543bb6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "d661f7eeb7ee78e4cbaf69dea0d88bf9569d38502029b4bb8772d8b7e41e41db"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8.png",
+      "sha256": "39cdea500a0650f3c1d31be763a3da60f8ba61e621bd38463d6b480db6e533a9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "695f025c545bb98f1c7aea703b5fae1cdc749fc93dac07a740536b72466cf92e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "99b5bbaaf350fff42d483ffe634bab12142444436ada814f2d7d8c6945f3e1bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "97242ba397ccb93d5461dd844de39b9f6d4f77cd68eb5ef913b9da739605bafb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "94fae376b573cb9e36bc4b515066779e1d69f274b33978ea856eaf063b9c8620"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "a514a245d6286107c76c0b6c69b477c9276e530df77b6b96c70e4f7d4f2520ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "1bbba7ee6cbf31bce1d9c479a43b7298b2c2acba82c0bb56fef0f0f7b1c20df3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "792b572cfd7589826d565a328da612a4bca229e36454212c38725c866bb8c34d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "2bb0aaef01d55d6a58fad7798e3e9e0b8e26b6c68fff7ca6c8dfae93d44e2d49"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "2a0a62bdd084dadb04c571b04840b45e0ea913a373f0e04d57d060b0e25d07a4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8.png",
+      "sha256": "64ad821d84c356673e43a1667a156579b4e086758d81b87b48b758d6cfe4afb1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "f21efa7e65437292c725541eaeca0253f572c95bc33824bd1ee69fd71c45cdb2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "c6787ce6ee5f23bffdcbbeb462de98c367f24422cf75ee45297b246c24d58095"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "52c121be851d56080ce75ac74938201e86ebb3b1c288d03a0617174c1a2f4120"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "63f8600ccd5e15636b9bb395f0c20184cc6df9fad466f5f3b8444888ec1a4add"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "bb3f2bef05b4a3008cbb599164659ced05950a2c2f9b9c2f41bd97558cb438ff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "eff452ad2e2956364999ff44b05ddedee06e8f51db8690f4d9f53d0baca5f50e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "ed237ff5be81aa7326c0f97f4a98f4b256931b855c1e8cc1c1ea950b959e688c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "a9ddc9563f027db1cc11609c43de620a870ac655c944cf8ffa5f91a36a03cb93"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "da40bdeabc2ba6b904bed8f71d84cb57e4525a9ec51fbe588a0f85d713c4094d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8.png",
+      "sha256": "a2fe0018faa88bb35b56b6cfecd4775bb4e7baf5a43c87a030ad6f5fb132483a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "3272c0cf56997d30886f28b6f1924ad2c0155611de9a2304535e4ca486be93c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "19c8e7e8d603589e1d0dfde56af42ed1c4be0df77131c8e6f21cd3dc7280b698"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "5b7ac1bf49d74d0dfee2e71c119d43d085cc8a344c703c22b04d488c6a0f277d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "32d8c3626a1e095ebca7bb62badb469407ebc36ad9c5e8af474a39d96100e7a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "1d90391b7b002621164359928e1992a2e3fc8b486946914b98320e9a3166587f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "7acc17cc0222ebb9b18aa182f6b2f769493ac529cbb163636484239e1fadc460"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "a519eded9e70f5aedd3aa6370c6321206194665a029a57ae07c3c879575076a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "60c96fb2a9b46b6e462d5590130d3c5ab732ff9f77a802688ecd04fad64d1638"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "a79ec58d7ac5b22b09dc4092f14b705cf1d18b8d1cddd49c05b22d6618d0d38e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8.png",
+      "sha256": "ca2a3e60625b6191547a144c067c421615111bae5a167686cceedb8c6f103efd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "0907258d78c324070c546e8c76df6aaedf48e0d20c5a4e1f878492b915d240fa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "60b54bd33f6ec3432160ea46f64cded1a272b906e9b3e0057ca4d85e62c0fbcd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "9f7d0077e1e0f8f37d2fe9e4281907e4c47792493afbd54cc39769fff6438387"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "661252a52f4b34a6a785d1a7c2aaa9c20bb2d9835c57742195322e43fbaa9f39"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "d2355ac555068c99bd38bb3e5caf2748f73761c8977d3559b1d445fe3115f407"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "2af3ba923d29162ebd5328d747de159af1b3da2784ec31b012956cf75135d58e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "4c1c47b6f367cf1581ba002a34298dd14d3fd9526f284de1b59b26b04bec457f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_left70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "3450f26eb0e82735a3d286dfd237aded664b2f749417dfb50666b03047f321f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "5a5904cf693ea27b9b33b2ddb5b873f24003454b19406d284f0881d85a295b52"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8.png",
+      "sha256": "4a523501db32069e1b1941537110626a3ea893230e26046e654bd1efb6d6cecd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "8037b11d115bd1072d47acea10c7b38ee61aeb4b4db423259c97faae5b9be2c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "95ab116490ba572aa100c84e541f70232fd0174eb527474b5faf3aa0e31baffe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "f97e79499f3447aaa5d2e95f7c2a874f1dd0cf33209a73a5b1d46f0ca53ed787"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "a485d88214f9b3de81df1cc6986e30cfd2c4499bc6df55a40fd527afc79b9066"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "2a2981894f9d8bfca09b1537f70c5ea59f99b2ca72df9fe4f7ff9e30b1639a57"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "65bb98d9d641603f703228c4a8b7dba83448e2a054e097663993c0013c02636a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "2d32c708d1a622828ae96cb372d25a2bfea1ce03d718fb3a76e5d0860287da19"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "985de94b9fe2e24060ed2e017580831eaf05bac9020cb91e690539f767095519"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "01f9a7ec5b2b8ae568b4f4f78a0ad953b34dc72c59d7e0ec7711a1f4f9d1cd24"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8.png",
+      "sha256": "bd2e0f7efb78d2bd49599c209dfd8bfc4e4e7771484fa473dcfeb7a700635e93"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "a63f8747dd073cf395169f8de9201d3a3bd022ac442a3cd1588c927c576f19a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "ee47d9d58d335a7e7709a4f93d36f85400887d26e7db55829c5e0eb337c6e05b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "f0aee2198adbd43b9b3ac175fd97e8a63b44a97c54e6ad5b5acca2c1cc3c5ac4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "3c0f8aa9e26c184deed27c716f2a0dab7872b2288d763a856bc049035ed2dac9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "253be7bc3b94ed883644e55d73ef91e5c62ac59079fdde26a4d143d02e58c940"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "2e2fb4cf1ef9ed32c80c404ba5c426781b2f1d7444e47ed282bb5d8fffb4c7ad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "d5f9f1017e8d686514369792902a0d23a38c76335f4f478f8983aba44263885c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "88b7446e1f9c08bf529f5b26cf529ff3d18d49f95de22aa8db7e4515ead915fe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "5b9432af078d78736d1f2323ce1d38206bbee3b817c44b5ab8216c736e7c0280"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8.png",
+      "sha256": "0d3a42fb86205c198c53e9f4731c2c44f3b7e7d9462b71f8ede9b8a7dcfddadf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "608c9608f3366a427d848bcce15a417df64a19c8a277b0e8222dedab24416b2b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "98f7ea9e513629843ddaae5cf03739b4ef0d9e33b550c280be214bd7ce8ea8b8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "f9d6320858bbfbd1c89238ab4bfd2eef494c5d6ecc9a4a7307fd9a67c6105d73"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "26d2127a7d1d340344b73a85823e52b47a1ba0826e35991aafdffee9a7d37a01"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "0cabbc05143edca51c5daea0fbc4b88955adc4868c18c4e6c77514e123329078"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "7bc3a85bbf3ae5865d2dd7cc9eeab43be95166bcdf3f855131a284e3ae50efaa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "4a06bc10d36dc58cb86bdf0d89d1a01f8a81d258cf7202b691934c4897fb947d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "3f5ae816613decfcfea231b2c63e5c9471f3be7741aeb68fa864d4aa6ea7f88d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "78999dc8fed084dd9d34523cef3700de289272286fa2a98a47214588fdcdb06f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8.png",
+      "sha256": "088dc9ffc965825b81fb4fbbd00c62f80893dd300a8ab8cdcbca534cfcebdb1f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "b3b970d81ba753c56bf06f9416c75698ab2172a213bbc5c59d715aa4fb61b7d4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "01ac2323ae9a382e60d611d46ff30a9d46574cc6efd7c41d8c6f91e296f63ef5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "1029f67d1eca10068872c46517b33356c8e757bd083b66bd3147a9fcf00f776c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "417c08b8c54543d4aea71077e9a771cc02ed6ad6623af8923c1b1153aa93d73e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "4ad200ea82b98fb99eaa827d63b89d1da67970ecc114d3b478d9a0806197ca6d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "a37b4c5beb6a6002495f664443971c91daa0619f8c135fd3ceacd7d48c03aed9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "95302fa2dde080664cb3bf4df547b9900adfd63a0b83599174f7421e30a2e3c1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918502_right70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "0fefbfad031711e95d637efc90bda8a4d23b7bd2e060cfb0cfe5bdabe8edfe59"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "e0a1a614cff094eacb6b00dad4f9a7ff773cf637fbb8d06ba58289de1552b431"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8.png",
+      "sha256": "166893a315dd80cf84d93d7ddf3214c62f056d648626fb1948d37039e2864f78"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "4a71ee64570255b8a20c92eba4b9a7f5c39e8068aa5096dbe3ce5dbd5651e43b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "6261cdca4fe411efcc8cc86ed66fb9a2fdd914485c1d846e550f16b70d80e85f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "8d49a62b3f8e8ecb1da2aafb5b1a9f8f9c0a6ed9e8bf0900b76d1c955026fbff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "831d42a9a336e20905b27ccf449026440a1b64c5c7968e33cc827fb13653776c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "fdeb1747a89ec2fe3ef5d91ff21f8cf19440f0236dfeb8c61ebb9aa1537d44a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "24adc9df55d4dda7859a8183426d741a132b08fad099daaa28701003c55cc6bd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "16740dce67b9e1f64834dabe89c9fc9f9845ce29495a72be26cef0545a40f680"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "2e1a8b33164859aa4332a74fe515d1ae31ce49d223d83c02440bd8e6d0339f95"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "0c3a12f45c990f771c046a1440a31b53aae4490267b9e8a8771f84a845303144"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8.png",
+      "sha256": "c64d6fc7636c7be9877ba4c88388bd0979fcfc4cbcec6e7c6d5a739d4e0b364e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "1bf070e2a41b48f2155765230207a8d278efdf70b87ebea76549f943937f96f8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "1fa89bf7b0b6676cedf43a8137bf8c45633f8cc4aa47899f07f4f459b0de4856"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "d2f4d42783dee920bf8c310fb2f0f96e0b157c312b98f2cfda20fc4afcfadf98"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "16efded33ab025836c462a11fb32ad1330f99436e7bef3bbf01f08a974c5e54e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "79619145205af1466521f09e653826ef8c27ec9b57dce47c13b02068ca99c2a9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "fe1eaad9f74886b20c431fb1527cf84c8f4aa9b522b4f2e2282e8aef1c2c795b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "c89666afe2d7cd01e0007e56a237e5c51f9709b7631d9925ec05e7a12502f67c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "23b81e4984f3ea20a52f30a3bc3245be826a55e3f743acf3fa3bdecf30674efa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "509f2ec781657a0f364d0016cf6c3d4cfeca99f52252059f6e8b3f0aa3402314"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8.png",
+      "sha256": "65f8774f0004173371c9602ea2d734fcd53e34100be5f8f991855be41960bbf4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "89f53bdf27ea03b859549709c3a95f995db34f0dc339cb4d76272d636df80a02"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "414876ddcd728d1cff38b54b582873c4bdffeb36aabfb39eb851873e749661f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "c8962731924885d92bbf09e9c9069a28c0acaba4f9611288bba8a40324c1b7f2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "da5f1cbbe4a1211de78f5bd2637439b4f0e2079c0079dfb0e35c1e1f2349385e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "44ea1c3e94cad7050d3cd8843d3c7310bff00213d6865b0e1a5c2b2fde88809e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "c0877c0c5702507ff551342cabf4ca9f37272b12e2e55099d35fa29a908281e7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "80a2d493b891bbc1c002eadea907d8bd6890806edafea8cdcac9870f5961e6f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "106284dc88504f92aba1337c14b4b233fabd90288301a233a74fb68bde8fb19a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "537c3e29f25714e34b7077a0d3a7f65e6cf304267547fb2c38c0672ab057f116"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8.png",
+      "sha256": "2c2d8af8d18a043c0350457396a3c7a5faf61621cfaf9923042906282ffeca49"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "adc96090999e6a20da19a7f50edbc1b0b00ef60f9b5635fd75ce6d80803cb45c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "f2d41c1cece8332f929900441f7c013fb45e98dc3b22dad471bd0cbafbf41df3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "b3e08f4f5a2c5fc2cc2b1cec45dc828aaef26ccf5489753d8fe90016b05321fd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "606cc25f94b73317c402db8bdb4c34faf0dba237c9927da84be535a1ba8506df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "d3746dd7e5492df7a86323adc986efcb8b82b0d973e03a699f1b9442439841e7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "b86bcdda0f5e0ed563d563917973539893fd9c6aaf82fe39f5b20282607a792f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "be70d2bb198d5853ef7007d60d53809bc05c715099d8e3385a3ae7a5db7227cc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_left70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "8ebdbbe50211010a7538daeb3af1a7fd1a951e763c15b5137a1fd5295216902b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8.pdf",
+      "sha256": "727090a4f9c899b787e09983684e910d572f8feaa0b283e01022e0752c511d41"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8.png",
+      "sha256": "e913618e943cb76b7b60e4f41f6c5f8f73ca573897e0d4ae4d907357eadf3991"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "4ce0c88f171d7106c31835384e4e4dde6ece022325a6ec699d0524a66dc83a6c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "4ef154f56b1f10c97c275e26c26dca9da95b519f866d55c91840cb5e0aa9469a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "f19ad2e9477f1192baca0dbbce9d5f47537cb9a7eeb8a35e75a191b51e74abf5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "89c46c94b5da4e28528c124768304936a96cdbe621d772d27b9fc068df06e320"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "7b0d3eccbbe662a20463a5bdababb29afd54cb451d9f03f3f382a3c4b1ac925b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a0_reward.png",
+      "sha256": "5e5afc179b25da5541959ff8099730dc28c3127c2bce6d896c6251ebd7576053"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "065faf3e97930657bf4770e7696d54ae8e667ec25fc6afe36ede5d70e60bcdb9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t1.8_a1_reward.png",
+      "sha256": "d20959c4366849268ae2f04433de5906761267fdc93ec78c21efb65e7f2027ce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8.pdf",
+      "sha256": "991dad9fd36a996328896c63d1c3b05a9b27ede71335c1a0b3943dbadc348472"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8.png",
+      "sha256": "5544649a27dfb9f67665a5b9661a823dd7d544fc6abe10901b3d5e1fd1035d9a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "4171a753ba8f1fb55ef5167f48f546473d2a78195795109627241b90ada2287e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "985d21df3143c01b37e47599333ad7a7ae3231b48f2e9d7443752562c87b0499"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "2f450ab8bb11723502fee6d82542ffea04ad4130f5dc3289452f674786b2a9b3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "b48c8b5bfa7d1c5b5d4971550554b6d9fe521628b42111d4a2bf4f3782be952c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "4336952f4e3b442d4763fe57e1fe33bdab8b8df949d6ee436f405063babf5b94"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a0_reward.png",
+      "sha256": "3f42714ccc6762ef5863a91badec6fb4077faf9d1d8e31717b38e8f4da17d910"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "1c77b3eb472964e25e20341e86e7f281cbfd4a0de9536b6cf4ab84d74b104d3a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.3_t2.8_a1_reward.png",
+      "sha256": "d08980ccbf1b361e45cb1cf0461870dceb74a74aabfa77822da0e791588e4908"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8.pdf",
+      "sha256": "0500ddbcb0bea682b3407e0811e60e49c9c8f281714ae1678ced3ccbc5916329"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8.png",
+      "sha256": "2102561a5099644c35af0b5944bff32a54334c3e788093952d691c3d85c2df4e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "8ae3c243064adb03da1438d17340e4256a745ceb2ba70369ec50f2391d193f85"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "50d63611c1d8e454f05a9fc9bc9dd8029a2af419cb81543579f2caec2881179b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "a7a949e569b9a778d14e72c6e586888e0f7092d6a37ba69b11fe0e3cbb7775f1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "c1b76045f74aaaa05fc0d1405ad93e02c030cec8d06f83718fb2fc35373dcf06"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "ab844ab0bd90e76a3924e4f58594a366db1c8ebfeb8e3b24208b17181f87c905"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a0_reward.png",
+      "sha256": "eb59e8df8d29ae9364936f79e07b1ac623dcd3bc0d6676f2a91af2e572956eb4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "3750566486e2e9533157cd23933c142b13a2dddcdd108c089062d77ff9f7fd2d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t1.8_a1_reward.png",
+      "sha256": "16cf4fbb801b3399632e71add6e87f701efc9e67c08d16d7f831f1dc92d03d0e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8.pdf",
+      "sha256": "061b72c2e22a27990d6f9de0db0228a425c13a6d3301d38cfceaa1f20c6647e0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8.png",
+      "sha256": "6484cc151c3bba5c8affcd8b276cae58b15195662309e6ae415ee201e67bb714"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "09d9d1540a3fb7f58a9c6397570004d468e2f37c972df416777c3fc2f52ec4ee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "fb23290c130884d3512b3a138dddb3ca7e170df23997ec95ecc9321682c39bb9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "88b010b8e2f96cb96a5d2010787cdae90d54c3d07078ad0848af5eef5007910a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "f88bf990ef05ec385e6a399b119739e0ee037230f06e01ffbe536a55ff7b40dc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "838889278c6c16d8c29acfc440252df04f2aa0f49467b950806288650f468394"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a0_reward.png",
+      "sha256": "78f61e67f0836f379bc52cff0e545b6f8a40583bf4bc03659c3a86793a2932d8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "18f43a5535e75c076cc43bc78726786689f84f773feecf6b85f0952883f2568e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/curves/seed918503_right70_R1p9_v2.7_t2.8_a1_reward.png",
+      "sha256": "89d14cfa32010dd0558120f1e05dacc1ac2b675c9c778e3491428aeb725257c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/paired_nominal_response.json",
+      "sha256": "8f65edeafe031989a29a1bdba7610b9673b21e59b7a98853d50cc73e9ec304f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn70_R1p9/analysis/summary.json",
+      "sha256": "38cad7cd635e543dc99b7d0f2815c05eca6a96ef2d0ec16049dcc9298e8f1f0a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/REPORT.md",
+      "sha256": "333c406c2fa4db92e1405d3ec738236b75d254af870363821bb8f6fd3717d880"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/cases.csv",
+      "sha256": "6dd82797815e4711cde01fd23bf09ca7c3d1a9f052452df8f83806db4828a901"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "ffa646cd9b03bf2d0306edc8e9ecf9cf8e4ba6771332cf5a2d7669ece3eadd7d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8.png",
+      "sha256": "c5c3a4dcb8ad02b6b864f44abaa04c3dbf3ef6339820796e2309facb359cc3d3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "8f8f87b6ed377735b1b29a0bbaf31bad5e165c968d4bc4aa9e8c152adebe8a19"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "990829bdb2e439e3d7532d0a192ea686aaee384f531d76188f4b7a0859390da6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "bf303972b4034d4eb4cc5a25dde3c75289b0e61206591fd76c987d541eb1b60e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "771c90f6e863e3b135e6f246c76576052d35379beac1a97d926cdc2ff3e2e65c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "b142c3a388c5a7e7356f01394358e6ed5c5d36d9194af551d3297e4638504532"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "831bb32e4db1d5e2abe9d5b54c205b88500addc285f4755d67163fd7fe38ac58"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "eb104c574a2f4fbfa0d2d29b37c8081f26e539535741628ce933790e42ead407"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "e53d6b75cbecb2c3f52e30e7cdd3b91adb17b35000d38f27c8ef304d1f751d9e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "20a2bbdf11b508e5768371d4ac534b1b0d7429555784c2372ceae1f5d4db4f77"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8.png",
+      "sha256": "d5a33400d004610699a906918ec403d8dc99e716efb0a825978aed33f3a7bce9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "c5b06e4032eb78fb3c4219f222f3f0306296b8a819d6214fd8d4553923a5a676"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "4c5cf9d7b451913d08892f389e97ed0279a5dd6cca21c8a0dc81b9e6e3ae4d36"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "9f184524d2b060e4368ac87bf4c94f96edb3b1b97acbc007f8daa28edf72f9b7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "5a11cccea069e4d509172b35f82732bf6bc9335b64db64325b7b9820ac23d945"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "0e09c2e1ed74d78b33c50dc9c5c8f5567d80b3b58126a16e2b6577e840310c8b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "7267f133cc6e8abc6dad5fbf42a7e1210beaa7921f24caf066fb8b827ff9fe0c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "cec3bde0a563e4cc49a5693c03bf6462cee2619aee55f63f0f80a3ba08e98385"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "86968113303adb89b05f74f5cdd394a674f5afe23457313b1fbac7473fa23a7c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "a0db931c7a01c9825510bf153f2a95bcaa97be8cf5801c174fa410f269a6a3ef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8.png",
+      "sha256": "e9518674466be3931c622d70b28abb6a80c93362f18ca9a6e26a8d72404eb3df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "f1b302c441f50a25d271e825f570899f9697a38949e839260fcc586ccb6ecb47"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "796a416d4ffe941fc49106c9a9f81c89c3e8933688a69c8f1fa4e2cdcfeaccfc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "e03f6183c25a1110d6c9efa84ebe0833e1687892e8a74a1110a416e94efb7930"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "0b00f566d26b814e891b865f7d0c19e7ae42fa3722b145540866c2bb05039e86"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "43489aaee1213ab56ff8876d579d28cbd5f769545ccd3b6fa14687ffc12feaf4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "64250c71bb8a29c923fc687c44529570000a0793bc7638ffdb328777b1273aad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "d1e36e7fb44b0a686f4a27092b7c8f0e816bfef82b2a987acc505902cb6f280a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "910fd9e17f46e72dfbe08974aa06c7feb5d8b61298eefe1a4d4e937e72a6401d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "4a3d3695d6cae68b5a7742e5c5d1d54627691d21dc2972346dd560d48faca738"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8.png",
+      "sha256": "7abe142e49b3663b19ec6ab057aa1812a6e57a013c28e3c331cf501c07424f91"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "7ee5b6a26bbe4d9231e80b9f3a842f2fb5c1577dc11d20ddbe274c92305b01b6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "70cbc0ad5e4c068a0ecfaaacbe370234f4bebdba6af0dfb5a637a9ae1ce10bdb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "fd568b55e0c8aa45621d45e84eaa600d76663b8f091d5758169c680daed5b8de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "31a8d2b994ab2d4d0e3804c9574aa7202ec55711ef2a07053e2546932bdd7dbf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "37c1ce33e3d5eec417fac0e26187410fc6a76363efccf5d5b4994f029b8a974b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "280bdad23a214c2e0a001a61d61ecfa9f09d8551ee4a1b8a44eb778d86e845fd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "6c0851344daf98188d0fcf427c359a1b64b0015f8e02b616c85ca80c7d626bf1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_left130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "b42ceb82ed94d598b46d215cab6426c08167aeea453c2adef1d458de7e0ba622"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "44becb2dd81bfe851e9cfe99dbfdd4ae03fdd5919cc4f4a6653aab0dc5b75883"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8.png",
+      "sha256": "0ee8864ae7406d737ff9639ad15d6e6c4e03a4accbca1716097b51290d72853b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "a5c03e5ea4cbb7af8c72b580bcc87f364631b478b7e8f31eb477f91cca43d795"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "0b98f2014ed8507e78dc3050dc2c09e46d7a6d0b1b8f9a1bfcafdb3d8d6b586b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "34feae7f4dfcb7a4ed5412ccd836191d1fa0b3ce7b1d6aed66776025755d606d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "1d1b24571117e2d105150bc64ad86348d6855102c19bf7d690d715a491f4c6ec"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "ac4f7ba3a817d98353ca157d91a25c1e4433784ebd1bdd96929b07dee0d35d1b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "4a357ba664dba621e41e4da0aacfbfed75642625d96623dd7e4223faeb846588"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "95750e9af765bb71cc3661974f8b8bfd0f112f66cad5db985393c356f5f2a182"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "3d9cede5a8c8d29f3697530ea926f8e39cc09ef9307d12555232b45b4545ac1e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "057dbc0c03a5af660198f4c008a8d4f3bc70ef899eb5a94ce1921063463e2e3f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8.png",
+      "sha256": "7a125e74582dbd5d88e5e40d32569c616352ae9ef524ba136b759769b76b6fe3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "38b59df5a1a93f3df1039148a560593059714700f92caf1543ebaa8f4209539c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "9cd28688df57ab27bfa7a77c17aa02e842a1a2bd74435002606e4c42ab07b537"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "8fdc15b76a96c4c85a73df3b095e19ac1b85947cfc08dfbc58fd7532b06cd758"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "e7645acc6ac3aa45816c2a4011fea33f086d967564f9ac1832575c6ba2ed4a6f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "eb4d638997d2d27a7a8038db4a88685c909072569dc2469e58df7accc07d13bb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "f4a261341b276714c11c0624799efa798fef7441a527990578b5a41fd6f67840"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "3b6e12a45264bbf73bb43ae14cd345af8851f5e6cbf1c75697a6b9b70bada2ef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "7018a15e67b0d785c1e8e3714832d4da28f715083829f898cc9d71089c9e53ed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "6849adcaeffa0c8733ec1d598da36b202afc7d19ce817d04471bae6a4c1513e7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8.png",
+      "sha256": "9650b01ecc2b13f8d8e96ff9122bfe2800f5dbdb57c185bb3adc352117a0b875"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "0b3b55e98b3bac544d1a0c5f41255d081b44f256c7757006ecac0d1c07b3853a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "7c4b8fbfa0765da25ac665a254834278e4974303a251ab1dd0091d5e516396a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "12130a03161ecff346c7201265476d014cc074edaf2f2f5a8dede95d82ac5547"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "8fd8d1859106c3f96b54a56d08e7608ac5214874652eec9b2711d71d63ade2a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "3e16a304960a7f775752a0ff680e5b47c8d60dba89e6d58a01c46c9097ae8b9d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "d3d44fcbed5c4b68da5627d06c370e8f7b0ea3bb9ed4fbeed3f2042123f0cdb8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "eab4f78d09bf1c9de6189be701aa57b33dff189b52ab5f13982d6b36a1a2504f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "9b86637d69dd427887c30aa1e717b35afdb79740800ee1d7bb98a52b9f21c14f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "1c9e9362a810ba81cf1a9ec4849c24dd76a84cdda877f0593d7a88ee35661879"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8.png",
+      "sha256": "85eff58aa973bf6b30c765faa96ea40fc400d3eabf443e4c612ec0ef1ea880cd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "7f3be88b2a43edc6db2bc00e31911ee13db0d82586007a4d77bebf3ea5af4284"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "32c51e90f54fc466b583c4313650659da3bf067e0468d0eb7b970a5dee48b391"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "553935942fee98616152a5a885ce7f26ac32805d992777e791113b051412178f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "19b847ea1a2e66f92f42877b7b4e59edfb669fc99772a1b1ad7073b3c08bbd8f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "9cccf66977fd44c8ceff57605edc5a9c80f4bbf6dd43c630f899d419ebaffe9d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "0713d0ff1b6c7e681c8db918a2b61585f255a786cd5e1fb0d337307ce201940a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "372df9ff7a260e668f05f79b704cad1754b1246c3755bcb72b023e30ec9d5cde"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/parent_right130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "ca9c5ab1860c9b33d64f0d8840783d0729cb4cacacb0995130e2d0204c55dee8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "df57cc14474a6e5b72bf912306b5a2f56e8fd19a4e84d9664330175fa1686d56"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8.png",
+      "sha256": "61d1f7540d4d20b28e4f42e9cf5ec45c8ce02c4174fe6198b2bc8b97746e8a03"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "4e0018835b503ad14d018dfc2bce6bfe378aaddc5a51d3e8e5d2604dc64de062"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "d34698cefdd51a9676fb1f3622594fe0952ff4bf0180973250588b2051f20201"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "5a3d9559d3b999533b420c86186f21b9ebd04e94149c82c7c586d6b6bf49669f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "7b06b9f8ea3ed1ea4a374de1cdb08b857db03e77025a80faaa42baee6cba328f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "be576739b7112ba1eb402349ad3608f17c1287e9353f95489c37cf2994baa4c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "4437d8315c6d1765aa85b82014402c77efdc64d6955de53c59952a7810749ab6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "c415a2c1a446f66fab1b5fbde2f44752fb61539ab36be3c1ee254442aa4c664f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "e9a7c9e4db8ab82f320a91f56aaed61d387aa628141730e929ee7dd3d1795301"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "3d6ce6eacb7ff52e04a5550230849204188c42db3f46e016561bad43de7c0af1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8.png",
+      "sha256": "5ae7b3101592e7ce3e9801ae187b93e105ed2a80465e391b54ae9fa776287bd3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "a9322f19c7babc59096fe9305b194a3afddf743d28fd68a2e6e08c5dc54e92d6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "0e7c1d909c424a6921a2950298317ceea1e6f0d96804b5ff74b105fd9b1054e5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "12fe547180361712e72887ee6bc52b89518df4c3b6e67b5a7e6fa4ae223205a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "84d7b4bac9dfe5d0f3e656f74624499458ce617b8b2526cd9582e4a8679f0a40"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "b0d26f37d77c143fdff3ee0f72635ef1281357a7f354039a7b3114d85986fb88"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "eb5c09fa7d185d26f025e685bea88d41952c876f18c893783e19a781da6c34b7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "1874fc8c78eefa933010b0ae761bd1915733053ec8caf1b8b454f3492f53a863"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "89f469bc3abdd65ac6ef6b2cc92d121b9dc9d5c3df4cd35ffc9e00cca6adaac1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "0f07da20ca374ea778627b1670c52285e6faf170c9e0e1fc1a2dfa41b42b52de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8.png",
+      "sha256": "4ec587bfc6466f00d1c152d25318f6929e3980e200b26792fec49bb8b21efac5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "9bc23fcf62d87969f73048b48a38781ca0eea2d95f01e0b28f6a86938f042210"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "9f6b881966a401ad105c75ba2cc9254cd2721013c1ffffb4ccc160b86104d62c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "1dd6905db6f1ff126b001c59096127215f8d9953109367f9802eb4008d75f9ce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "6933d1eab4ed82b2debf64fa38d37caff69ded6dc22b7c7a102a958ed4e7ce0b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "dc59174fe5759f160bf3e531158272e574834e604be67e529f5c936250b4edea"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "8289b222b6cbff22d19d5298015377b1e09ef1a833d1b83e5664cacefd167ff2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "7b3cad58303ddf2b60b1d96d9dfbff52dab5f3e4d7f5f69bb19629cd733ce696"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "7be48ef363dc4ac5aa076622d8dfdb16f778add954955c7f90bb627a045952c3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "533df3b935b8a59ad4994ec0a4c203f33f81b793e6a839d11dd45bacedaa5d80"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8.png",
+      "sha256": "a9b5882a605f4ce9ac8c3b90a658bd995975d4fb5cf2654ec1ffdadf82e98789"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "efa07bceeeee8de55ff122fd1c17075b95003a61f597ea5a7d482ec9e3b8044a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "4a8611d06f5813d8824562bef97526fd42b2a38db4955dc95188519d493c505a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "d9859bd37f085ee40696f50aefd80b1ff982f558e3ea5c2a5fa4d32f2835b992"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "8804ca0543d7b8f55b56e15bffa8f8594d46f76bd9fdc0a049b65697eaee01a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "6a6819e5c500cf6478bb4d08eca41c37c781d9c26a9d6364a9d1b24866e488db"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "448c26fef95b6b29361c90f1c0237ada6f6c65f4026f163eacf7a3c0bc5e8b3d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "3e05ec988ac53f2a322a9e568d4faf734c14c08cf69016048a544d15a54d7198"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_left130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "f5ed01826eee3733b50cc95a4daa131af117e1f027336050fd7ec42769518b1b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "21c4f6f406744102e550f81e314bfed726b1e80fa4dd4c8546affe680283be4a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8.png",
+      "sha256": "4a491e75358c4c311f983fb9cb72c2b44ab1b8b1f97320f451f5ad0e624ae61f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "57bb616d726d747caa47f2cc34ea76aab027fb664016a9317629cc1056428387"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "4ab7020cecb1368f97eb737c63dd6ebf6726036876e0bc8185946d01260ed3c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "160545f551dfdf4df162d0a7d87697d03cc741384db3e3042c125796063a181f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "7e8f0bb1c3bf50e428626b1788002fb547df0229139f9bd59684ee07b44eae56"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "257d5dbd73d6f4862b52d1149861d3c08f1c5310efc0f2af9c1453f8b44c9518"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "7ff17d2610542a2d3056acdc7972a93c135a6a833b3654fde40d27095f98a1c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "bc6efa49fe4f0ce011ec7de6600ffa239f17f5208d78a8a5e6ca901f47010b79"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "c9ed22013fc98b34a484b51d0c9413c1b426c4c5788ec721d2503fe9bfd8e41e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "72ef7fa9685b42972ad52885b385e83f4fa2e121c785fabbe94f4db3cf7e3230"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8.png",
+      "sha256": "c785b30a7bd81e363c21d8ebaf191b3f68917fba74a6d8b8b2c85e15ff8834c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "1d28c82e3db3cdde18194b96983ecbd4c5701e7eb0a4b5c96d7c34c64ca0ff35"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "7763425d76d027653570f3bca19e06b5d61d5f80c4566f5b75e1cd0f6a678798"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "f6b8e391e0ce92f60f91cfca0c0c6d04cd68ba539317223e61e001267214cc0a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "b371039f78e6e94081ac0169458b9eb4cc4876eff6f9cca847ecfda980205440"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "f6944a90519469010f44240733c8c8249af3f30eebe60814343d688a6cb09c66"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "bc5d0776f6f68b914f51230208327fdf2dd4c2f2496909db50c001ad6083172b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "197c787d8130cf65498a8fcf99e6218f252b0b61172f5397dd486c6adf7217c2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "dd0552b38d8521257355531c0d81283f68227dcc63fd83db0230c1af042a09ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "dec697473b337b31e918626a5afb19edae151788348a0dd504ef8801a23d880b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8.png",
+      "sha256": "c4f3385384ad3d6c66f3e3e1a73e3b2eeadbdc0cf37220bc8f51f376c0b11b8c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "817dde31ec1243d43695fa5a50d97a0c7f4038c0e16e7f034e843536a000034b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "364e3baad141b0275fbffef407e83cbeefd3b720f179f9b271b9fd868860fcfe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "adc12290a271e3a7a4cb52b53175d526a35533226a2a3f61e995856d9bb9490c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "cc3030067e85abb8c7d1dc9fe3f01cae02cdea88e6a3e36349f4ff9a2633cf22"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "5ad78c2f124675276aea09b1a8503311288b85f64738cbc2354e4bf0455e5e90"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "952e33e24c0c4274ce4a3aecdff29f4e2f0f0cfcf5def6c996c6e54f23bc42e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "39f2f75d04a49ff1f5ae34f4e086e20af89adbea2ea26f32735c08fad4137a42"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "91e94c2115c93f8d3527b5dd3c44a2ed560585f88cacb829c6f61955d418ef7f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "f71d549647a298f2f60625ee91eaa4e38dab49b67bdd5f35b9165a55c3657d8d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8.png",
+      "sha256": "ed573d98e337af6b65d01fdb917d8eb928fc792e07e206eef4b39f3c8c07c020"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "a087abbd388563c77cb47501f8b998b3f33911061ec53847a1e951eb5161e389"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "35d104429c075a892e80a9f72b1de05edf113d3efa76ecc8ac2f8907b287e7d4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "7bbdf5b0bc2737a34ec39dbf1746c18b647f3f7d5bfa14da18b6f16cb549ee81"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "232d0689d282bbb5e6c72012db0d2e46bef4d20c2b37e917ec50ea276e5c9ece"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "2d4a4c52dea8ec96b8b80228290c79ce23016045d74ef000886d190c874dce4f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "f1fc2fe036d9c7ee35fc28cb0e948b7216b52d8bcdb49f528eb067608f2fca5e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "4476a057cd7afc2f4782fb3a963aef76426145243c83ff041b9b261b8329df83"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918501_right130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "3dc1feaf80127ce71f7b772d37527a99d8642ab8889cc75f4934e91c775db5db"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "6e8734b230fc61929d6d3c1644261e681b93f327bb8df86fa92466ccc3ee9562"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8.png",
+      "sha256": "4f781aed65eac68c6202ef14cd0546f5d32b094237d0747fff151d6d4d67b869"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "8a5e5d967a431cb2c330d3eefe0a86a5aaea77012a434e2a39318f73e55bec74"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "5a9b8c6ce87eb19cee7d1d2cfe80827d4a1af2c60c857e9f4d787eceb028960e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "b9fa7e32ef320d49f1f4ad6fc4da401423e67a739447391f2be7430d28407ecd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "ba86d7f00fdafc85626970708a9f66cbc0f6875a720e6638fbd4dd5b7c85480b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "02b5ef31d7b2da01b2b882558f546b14bb57b0ec42c17bcdeea2f966d146d448"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "6cd0fb043dfb9205e484330f21ce766741317717a45302a3efc0adc56797f3b1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "837989edcdf120d629076908bf0598664f1bd68a41840ce2aa694d0500892983"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "9cbbb5e39df5e2434a72b8d1249a12df149aa991aebe54fef0f83354a20c7c06"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "909064206c373dce1ecc77d306b92cd968604264be2bd22104d620bbfaa4a2dc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8.png",
+      "sha256": "825b7148f7680645e27841d2935e1373ce795c33d85ebd4592a5c3655000a23e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "c52dccfa62075400790c6c934e49fc286435f8f404efb5fb1935f04ba8618f1c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "f8ac82d1c97306023422617593c058d25ab6491cca64dee35f9e2f6e48503f73"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "9edbefed274db5cbbbb5b5abc2596981807ebcda016dd5deb23b663a68c1f711"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "60a042709d4d131151e785772694cd8048b05d051357436d966762bd5e06ccbe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "c0e3cd1da436a7c1d17d6a6bcf77878788a8cdfdb5abafd5eb66e272874edb28"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "0013dc9c7245cdcd1de04e9a54676e7d8a1a10838ea2839992ae07f3f3221918"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "48054a46e4ade233c4c0cf02076107799df44989faafe6590ed54f4fe653da98"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "94485ecdadd31958b8b5504afc6ad85ad78547ce7583a986e212f0306438fcc0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "d302fa1ee319ef5aa5965f0cc43d27a56312032e070e7e95e45238ccd9855e46"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8.png",
+      "sha256": "feee1691e51fbe8d2ee9426b1dbf680521ecc351e6134a81c237198081757cc5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "18dc6af69bb5a2083cc47cc7c535ceebe07ac81f6d51dc12a38788f5160725d0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "98fb463f8ddd8d339ca10ad71971e1098cc34241bb91428158e8f85cbf29b70c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "a1b26a2fbdc106302ef44e891e5dae9a73e0ebe181a893c8555485d744e14bae"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "67f3b5ea1a9d7a41b97f05d6daf23aad7d04bfff416aac7bf6fa8077a175e75f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "0416607de3a94ee55fba4b70ec013db3eae32493e5ea434bb13167cf61a592a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "8a1bdad862c3ebb442af5f6cc8250a2fdb8b4a259738802f4834976d00789a62"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "63d57dbeb2c47e0630fcf5102a6a136f1c60280ae60b6626f45996a14e32839d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "f3bc95401f5d55f8f88eb5d9d56d52c42c0f06410874245944079430032bd0bd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "2ea9355f39a5a62a01deafd060f9f9d1e7032e627525c1e6fa6b98738fded8b9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8.png",
+      "sha256": "fb4e670bb7b119619c01b80e2f235a9b6ad15b7f187a45f2194619e98adacb60"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "7aad5557252a6c23eebf199870936192b0b52129ac1939dec7a1a932c3ef1894"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "075b62b97a5af1d502565f1c25f629034b6c25ffa8af6cd5dbb24e3a2ea21e1d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "8fe979780a86f29a66f11e4465298cf140e191c4f3f2347f23ac6aea6a6d51c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "c2c1a4bcc27df656047ad5fe24a0583cb85e78eb6ca9c532b08a6d18ad96e972"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "66fd69c2d5e6beece56ffd04a3fd64814fd65c9c0ac5ec69d7e00654dc14226a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "0f8dfefeaa88ab98c501035ebbcffdb34acd25d8f3df2448b94b71bacbe46c50"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "6138b6815cf54a346e26f307f38f5a9a6b6c1b03dfab070a433275de85690ec6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_left130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "3622c097a84465f5629b8a2892b7acf03d85e0a84b2f860691c89c6571354111"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "eb0cf826eb2e84f582ec7dc0bfbdf4fa8d9095fa24440c9b901556e8f2dea6c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8.png",
+      "sha256": "1fa41ab30622e5bf29f93c0316e38675174de3b0a32926996e5e75f0a396b01e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "e28a2e0520ff128d62978eddb15dd5295870381477ea052333b393f07cd58ed9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "55040a545ad8440d361758b8e39e0854ab5a367ef9d4856528a5023c83bbc71f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "3599bc0e88fdccaa8ed800a17bbf318e4bbc72890393a250f4d4d12808a3dd9d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "760feb7d69935bc00b8efd11e05258c63553eed07f91da5bc43c945b87502b3e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "b724f8717860887436d0f30efeaeebc381a1dd36120b246a3ed1449bae4337a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "4f475bfa92b87122da0ec997b0d1024069524916df331cac2fa9cea05d2b6284"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "78a8023acfa214417019c0e3ddb415deb6915ad255e94889b092a58251daf0b5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "cc84d2768dd9f6415208b6c4bfe3faf9931425ed7bb1a80d593eb4567618e9e7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "e379cfe58cc90b8c1190cbb549e7e8b98dc276dd0e4ace3e1ec0bbe6a575b8e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8.png",
+      "sha256": "55f6ffc97677b4f94d9dfe8cbc5771acb1c1ac7390be18aa44da4891bc84235c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "8485314d3b2cad24c5bf35e90844ea62394bb48d732c9511c215505e57f69643"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "ef5298060ccef6a0afbb3ad9837a6800e3d05ef0c1861ab569e19749c318afab"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "fc2ff9a58bf55b611a0179d44a7779d2ad90e0f575d639f5bc9d683a0ae9f61b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "fa9f84323b0834eba8d9ed9bfebeaa0951ff28ed4832a2a094d6f0a5c99cfa03"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "76144c3c563e7d2158a72e88dfb9192e5fdffc9f930069bd48680c447a3bd5d0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "111084152bcec02d7b3a9be5ea75125843177f5bcd97658de4e26791a54e9e51"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "e1989662ba91993e891c16c116dbe539ee77cd21285ed1a6bbc7b07918112e96"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "fc43bba3b3528325388915ae6c97ac6002a7a502fd2c20fc9079910686b3de06"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "a6d2e351720cb79e920113c95d5a577493881ca6801015a93ccac0ede035a8f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8.png",
+      "sha256": "6d176659d1865873ae761f4035462c16c4d9e62670326aea3a2793ae5511fb7d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "4592582147746cb13573b455c20d5a7236a9c339d9116f8d04d31bc7486a68c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "68464868c370a34d577c1f10d14fe4f100474eb6d30581be4d0c2c01aadcdedd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "f51b1c4bb4b0caab162eff44f9121c82def025de421a55627c81959270ad390d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "c667f030d3603bef743f7bfae60852cab79b80b8f83e71687d880075b77ea866"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "7eb2f64664dbd7ffd3c925c55313f441aad82b2f61911058210dfd5b5280d16c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "056b4831bcefee86c7984d75f0813bbb424c6d9a3e10e1878142fd4d33208407"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "0c8f3d57ef14280f99e5c82080b3f21e643d39e2f48b560480be72dbb7015da8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "b3eb9a4233489c57116007b0bf3811f764b2fdb39ec0bac8baf1898a8c944450"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "2a55ba2c80bc1b9db1c1673e0198168af313c08bfcead92c36e828933b392506"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8.png",
+      "sha256": "284e07e93a1c4358f7b205ce40d7ed43263a5b472fcd94fa2695f6a33621de9e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "fbb5d575e20c82ef62bc92d676bd36fe6d94508c832b9db4424036c5afbae487"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "3320e7b946f5b61a7062ac9d3532c7433ace1d13c6b3925b6ed206a308911cc6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "7ad1b090f78a0a5bac4d3ccf0513293e6133f67b5bf7d0a31b2ed93b47c4e082"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "0a8661bf363e29ebd21bf2de41871a811df7b9b46f50d80adeb0992b4b7569ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "e063dbeb642eae30be2a10d05ed52470138b97b300fa68463df42d190d05c0fb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "a62b0e70947cc3f0bb6130b87c67306971a72b980010b6bd753d9fdc8eb44a0b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "1df9af3b6561a4d04d37103adb56d2bbda10fbf284196034a00bc1b0ae158711"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918502_right130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "5ca8b6a75978dd938020565887a2bd8d84308b6ecc020de63f56c37c52e72c26"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "0778775fb671e90dd9b4286fb037730bbb02e5b11bf748725bd28e81debcfedf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8.png",
+      "sha256": "654333467232913d73582be6cb0acfd0a49cdfe8e3b42c24453026e834406544"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "26148a4480b30d9a58fdc180cab7041cba6f51b601427698679d5418aa1c7b56"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "457c1a04cd0482b8644b256522f3c8bf661b51749faad1a7382826643de15000"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "2ae018ee51277c3fbe2efcaabcb23675bae506fa99ef9b48c955e5e833c70d46"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "08a5463f05f9830e719d442b57a4130d5ba8cbf7d62f586ace3af72cad660508"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "147eff164d740adb78395bd92dfaa01a565344b0fd13f66803f74877a60f4595"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "bf32c72d8920311f24e62e8785a18ff17a0a75bcdc69108914d9fc9abf57487a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "78e99a1070d9efb1ce30b7ac92ca885aead6d1ab399699243d0f5d15d1ce28c3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "9af1b15e9134a47450377ef5651f8f88d6e88a90ea5297b3c6f2b8e88aa1eaed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "8f4da9068ec222629cabbf6b39b7fd7e25f6daaae7a77f4ea225026d06aa18d7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8.png",
+      "sha256": "eef2181cd85dfd435815ac39d5c1f853a600553b3475d7f6a9f31ea593ebb4c3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "cc20cdbaeffbdf1db41e76f162cc8752e2ffe81d73c7a8ab8c052a617fafe3e2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "e592d8ea845e42bb4761c692234d91096bb847ff0b14502a69cc36d14966faf8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "941111a7720096c9b99f3f81141dba4163a101cf517e3199ddf2267a5e24678c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "bc0128bfb35cdcc5b8aa171fc03bc81c05a32cd34bffa8466893c42bafb932da"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "a5ceb86ba6d834e124f6acc0bb6eb357f3e8d2ce7d4e4b6c5c563c6ca43530d4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "4df75508aa8524943a08c3480dd8d6acd2685b27d1e3ea0238440ca2dbd762d0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "9062554776d13dd0df573f625eb04f9d2c4fa0f07d024a5e3ac84a5a9913769e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "aaf1321be13e1fc5c0c8ae2a737b2038c64228e23ec7e2f3ffc8a164dc31a245"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "e6bf43d3a1ff58e116c6f5aa5d9a8bc4529bcba68ebb2243023ea2b45cfb4080"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8.png",
+      "sha256": "1e99691e9b083519cd348cda6da650b764c41d490ff2adb914a99b3ac281c916"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "8d644a571fbb087b8ee678f03190eec72b98fd8b5f651474a2f58c2dece6f45a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "72f004282a380a62e0c4727a78180e0744d2702368d50dac26c1c7152ae73743"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "b468d3461766539a4ec9da667721d3fa0f8430442ec957e609f52c86c309959b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "570419c0494c886cf964aec2fea4bc050fb58024132aeacb7688d656c9001440"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "15620b9b924f4de66ab3cf704b9356d446447b25894606725756e527cc41cea7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "c6c8f679cb5a164409452ef0933ac1c8823bd67ed58931298ad88b33814fc7a1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "5bec2912a5a06734dd06f67c995520ed54182cd5b7ab28cc03db39314447eea8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "beb3557845a518ad2815b43447273109f52abe2fc334f006154d4e2213ef3407"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "50dd40e2098534f2359f79d4233a9549cb9057674152d9ecb0e87a99cce474c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8.png",
+      "sha256": "be675e19754b40e8ce8770034fb9ebfb64d9c45ee817c2e0b50cf86b95b16831"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "893baa1adb26dbafbdd2d80ff9f8ac0791343fff7b08634076dc4dacf4dbd09a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "cb820460e4a7805ad098b78829bbd9df3fd75403f7affa59ae505d06bb25de1e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "e7689746033b8822e88cd02d1896e446af533f584705f2edb700636cdab86cc8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "bcf29973392ba1153c9203a20f8a6e2eebaa706a98e37f57efb0b6dcc6931642"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "f076aef5763353b1ec7f8ed431c137336f56bd4b8770a1d237f338b7b7cf15b9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "a1a7bb24cd6e773c3212fb5b6917ff97edfdc0ce29d53a0cb98f629d75561f05"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "b6a260407290972ba6efaf790758a117210aea1a50cd5468997a9b8532aec148"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_left130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "4fbe595aee2c9ee50d511effa55fc8287ec7929a645e2750fffa006d4f500aed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8.pdf",
+      "sha256": "783805eb31cff7e88837d3e26748526817fa8a3a4ff23fe614da448e2ccc46ba"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8.png",
+      "sha256": "82a2c8a8951b2474e8e0a35654d884f1a266a585d31f270f7f46ed1d8f4f07b1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0.2_reward.pdf",
+      "sha256": "3fd6b8ada06f36ae447957836d22b39bace49f4be7cf1f3cb33006eb99ba9873"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0.2_reward.png",
+      "sha256": "77b416e605d5b026a7aab6413ae142a9f5eb5a9664670b36a7d4980c5e975d68"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0.6_reward.pdf",
+      "sha256": "1e82757203550e2815ea5c7397449690ee97080fbb4469b93d736c75ccd19c04"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0.6_reward.png",
+      "sha256": "270cb230653c7306a9f05587fc30f5c4c1c25af64752da716873cf64206a1460"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0_reward.pdf",
+      "sha256": "9048492b205070ab52abd0e1fb3a82c5847833c32bf093a13b19ae46f14ea812"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a0_reward.png",
+      "sha256": "58a6ed755310ca8e813b8f4a284809028ebed960afa07ac368c425de4d5e2349"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a1_reward.pdf",
+      "sha256": "8e904d75912343cb25b1b6113255486a9b949a2ea2d23f19413261f4ec8200fc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t1.8_a1_reward.png",
+      "sha256": "32d3a92f21b8c01179bd68c8e9de0dc9f19c380c5ddd80519a00e8863f62761d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8.pdf",
+      "sha256": "057c587b343af9ec4ed97ed33cdeef7f8b459c0adb944935cf4a9d500e3df56f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8.png",
+      "sha256": "f033664e94fcfd9e7b672b1cd0f5ee6903b8277ded0f514bac8a4832f2be0034"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0.2_reward.pdf",
+      "sha256": "5fa45e4c16fe71ff74b71ea1d39ee0ad9480c7d3e4ca4b884fb6c406618bfc52"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0.2_reward.png",
+      "sha256": "0fcb48d624d2acab655d4f8e84826f3596456ec1db5d8f70243f55e6d949241a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0.6_reward.pdf",
+      "sha256": "f40248a6babaa820c21ef9e0dff5cb29d27bd4aebb3822931e310b282992187f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0.6_reward.png",
+      "sha256": "9afa421fd71ceb5d051f2b332af555f11fe9130371b4f00e9b8c585b6b0d2f1b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0_reward.pdf",
+      "sha256": "1922cc7740de9a482fc5b8f31eae507e4bd67b4d1ffa4560dc7904f17fdf7900"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a0_reward.png",
+      "sha256": "3721c293c966408806282929997fdb56ec76c6ce79620389105ec826c1ab5d12"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a1_reward.pdf",
+      "sha256": "f8ae3a279072ab3a29c5b463c8f0baa5afd8955a05142e2a7cc160b91d38c070"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.3_t2.8_a1_reward.png",
+      "sha256": "2874cc5cc9eb6559df1279c0f58ad6399a2343460f09741f73363a213c5fe418"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8.pdf",
+      "sha256": "c54ff3c4e58a0142da9882b1a75113a9959db21c23d56b10d80a1db38be93d41"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8.png",
+      "sha256": "4166a32bdb480bc4cec2c6dac9bf8632be962fe8f740d5aac7e44fa1a408658b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0.2_reward.pdf",
+      "sha256": "21bea2d10454a38a6e6cc8b2143c624c8b1e866331a9149993c094be7c32cffc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0.2_reward.png",
+      "sha256": "5ac9cacf24dce0c4712d2c0767f76c8743090646ec186b7464f6ead492e5784a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0.6_reward.pdf",
+      "sha256": "ec9e547deef9da0960e6882e447618b19ad4ce9db6d917afb2ae1e87952c5cc2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0.6_reward.png",
+      "sha256": "90b137ad8361a9fd8f6ad845a6ca3832a764d51416c8bdb6e2d8f8280ff192c9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0_reward.pdf",
+      "sha256": "f0d2453e9940227af6225afb8ed5325f9e351828574ae598f913f665ec3360c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a0_reward.png",
+      "sha256": "847466eadc0d6222947d0634243779c5e75ddb2c6d9d18d157e93a42724c8bf5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a1_reward.pdf",
+      "sha256": "0a672e247c2f331f02f2893a592ebb0e55be613f9aff2d59b96f3d5615eb0fc6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t1.8_a1_reward.png",
+      "sha256": "4e1b2c01ed48ddb1eb9b327eb2dcb4581b6ed6256ef3a9877caaf5bbab212b4d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8.pdf",
+      "sha256": "aa45592f7111bc35efc6fb415bed3a73affe9f672ac6467d9eddadfb6ac30f67"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8.png",
+      "sha256": "ffa63435a3c91e73189d1e9b5bae2d602fd96ca9de4c1e48d78602a1dcb6ed31"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0.2_reward.pdf",
+      "sha256": "034f96b67057d3df750e25259eb78a7c399f7b42518766a32a3c9f4901b884b4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0.2_reward.png",
+      "sha256": "566881395ca6081e9e1a0ea37d474a4113a56c176871159b0c89f3f83ed20baa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0.6_reward.pdf",
+      "sha256": "8ef1135df42c6abe8063db6ce90c186dc6c51faf53afe038c972664d736548a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0.6_reward.png",
+      "sha256": "4e17ebcdd7e9eb45fe73a45986043b2cb787e8a20213d7f3c88998d09f0ee819"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0_reward.pdf",
+      "sha256": "3afa8676528b7aafeaf49b7b412773b55838bcceee11065a0bf1bb8286438355"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a0_reward.png",
+      "sha256": "f3c6535b995c9b8c58022acdfdd75c5ff300be2babd4119e5be5dda771fbf9ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a1_reward.pdf",
+      "sha256": "5be375f741c09d90e37e12760e719207b562e005d37ac50d76ee8023b022765c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/curves/seed918503_right130_R2p7_v2.7_t2.8_a1_reward.png",
+      "sha256": "314465ad1241cb21f159b430a44e602e089961b48f2dd68193071587977470e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/paired_nominal_response.json",
+      "sha256": "4dc9e1b0cc02f817fd705896b0023569d99525ba3158a4d8c287d68dac846b09"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/turn130_R2p7/analysis/summary.json",
+      "sha256": "096e349b9ba188bbc0f81055df08fa466354201e2903489b4329f9acc7964616"
+    }
+  ]
+}

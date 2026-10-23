@@ -1,0 +1,69 @@
+{
+  "summary": [
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "cases": 96,
+      "task": 77,
+      "working": 53,
+      "domain": 10
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "cases": 96,
+      "task": 79,
+      "working": 50,
+      "domain": 5
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918502",
+      "cases": 96,
+      "task": 79,
+      "working": 50,
+      "domain": 5
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918503",
+      "cases": 96,
+      "task": 79,
+      "working": 50,
+      "domain": 5
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "cases": 96,
+      "task": 83,
+      "working": 41,
+      "domain": 5
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "cases": 96,
+      "task": 86,
+      "working": 41,
+      "domain": 0
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918502",
+      "cases": 96,
+      "task": 86,
+      "working": 41,
+      "domain": 0
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918503",
+      "cases": 96,
+      "task": 88,
+      "working": 41,
+      "domain": 0
+    }
+  ],
+  "selection": "all frozen actors; no reselection"
+}

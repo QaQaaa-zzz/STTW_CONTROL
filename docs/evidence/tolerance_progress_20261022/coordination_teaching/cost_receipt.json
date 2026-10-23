@@ -1,0 +1,50 @@
+{
+  "scope": "coordination teaching line only; excludes earlier tolerance/PPO/full-tail/coverage research and inherited parent training",
+  "stages": [
+    {
+      "stage": "train_probe",
+      "active_lower_ticks": 144000,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/status.json",
+      "status_sha256": "0b35deb2b5ae7a6e12d87e2d50ed5f164cbd5f4ae4227f2c4351962aae0e8f11"
+    },
+    {
+      "stage": "observation_collection",
+      "active_lower_ticks": 144000,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/status.json",
+      "status_sha256": "ddff867926ae935daaabe2501162b29d49e3ac03981f67d2fa3228cafa177cd2"
+    },
+    {
+      "stage": "train_check",
+      "active_lower_ticks": 48000,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/evaluation/status.json",
+      "status_sha256": "4e1454f808cdc4222d0eac710ddf1def3f725be1f3ac5bf954719bb4dbd363ce"
+    },
+    {
+      "stage": "low_speed_dev",
+      "active_lower_ticks": 120000,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/evaluation/status.json",
+      "status_sha256": "e9da4a15708d4d9a29ec7539838645d2d05147d5328a5974bfa680584134aa6c"
+    },
+    {
+      "stage": "standard_dev",
+      "active_lower_ticks": 815232,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/status.json",
+      "status_sha256": "ba3f6618b809a895f1b9f08eac2282593adb68acd23a154e6c57323cadd5a27c"
+    },
+    {
+      "stage": "two_seed_repeats",
+      "active_lower_ticks": 1870528,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/status.json",
+      "status_sha256": "33ad17f0f7be191347afa1163433bd66f83f771b81b57682b72a2ee8889541ed"
+    },
+    {
+      "stage": "prospective",
+      "active_lower_ticks": 1500856,
+      "status_path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_prospective_v1/status.json",
+      "status_sha256": "40d273fe37ebeb7d9c33c4fb614e667fb8ad7bc0637e6f52dc5a3da7c17001e1"
+    }
+  ],
+  "total_new_lower_ticks": 4642616,
+  "supervised_steps": 1200,
+  "PPO_steps": 0
+}
