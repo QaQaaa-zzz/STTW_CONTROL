@@ -61,6 +61,9 @@ class ShortRecoveryBatch:
         self.maximum_ticks=round(duration_s/.005)
         if base.horizon!=20. or self.maximum_ticks!=800:
             raise ValueError('short recovery preserves original20s task, with4s snippets')
+        self._install_bank(bank)
+
+    def _install_bank(self,bank):
         import numpy as np
         valid=np.flatnonzero(bank['valid'])
         if not len(valid):raise ValueError('no valid prefix states')
@@ -126,3 +129,41 @@ class ShortRecoveryBatch:
         counts=jax.vmap(reset_statistics)(nxt.route,flags['done']&~flags['engineering_fault'])
         stats['diagnostics']=merge_statistics(stats['diagnostics'],counts)
         return nxt,obs,reward,flags,final,stats
+
+
+class PreferenceRecoveryBatch(ShortRecoveryBatch):
+    """Exact-alpha matched state selection with independently drawn forces.
+
+    Reuses the existing scalar-reset/short-timeout mechanics; never modifies
+    captured alpha, physical state, history or original task clocks.
+    """
+    def __init__(self,base,bank,*,arm,seed,forces,effort_budget,gamma,
+                 duration_s=4.,strength=.7,bandwidth=.2,shuffle_seed=918204):
+        import numpy as np
+        from .margin_state_sampling import exact_alpha_groups,bank_risks,state_probabilities,stratified_permutation
+        if arm not in ('uniform','guided','shuffled'):raise ValueError('unknown matched state sampler arm')
+        self.base=base;self.seed=seed;self.arm=arm;self.maximum_ticks=round(duration_s/.005)
+        if not 0<duration_s<=base.horizon:raise ValueError('invalid recovery snippet')
+        forces=np.asarray(forces,np.float32)
+        if forces.ndim!=1 or not len(forces) or not np.isfinite(forces).all() or np.any(forces==0) or len(np.unique(forces))!=len(forces):raise ValueError('unique finite nonzero force levels required')
+        self.forces=j.asarray(forces);self._install_bank(bank)
+        values,self.groups=exact_alpha_groups(np.asarray(self.states.alpha));self.alpha_values=values
+        self.risks=bank_risks(self.states,base.env.cc,self.forces,effort_budget=effort_budget,gamma=gamma,duration=.1,horizon=base.horizon)
+        self.permutation=stratified_permutation(np.asarray(self.groups),shuffle_seed)
+        risk=self.risks[self.permutation] if arm=='shuffled' else self.risks
+        self.probabilities=state_probabilities(risk,self.groups,strength=0. if arm=='uniform' else strength,bandwidth=bandwidth,num_groups=len(values))
+
+    def reset(self,eid,episode):
+        from .margin_state_sampling import draw
+        key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.seed),eid),episode)
+        picked=draw(key,self.probabilities,self.groups)
+        idx=picked['state_index'];state=jax.tree.map(lambda x:x[idx],self.states)
+        route=jax.tree.map(lambda x:x[idx],self.routes)
+        force=j.where(picked['enabled'],self.forces[picked['force_index']-1],0.)
+        pose=self.base.env.physics.helpers.pose(state.physical.data)
+        vector=force*j.array([-j.sin(pose[2]),j.cos(pose[2]),0.])
+        start=state.physical.physical_tick*.005
+        pulse=j.concatenate([j.array([start,start+.1]),vector])
+        core=Episode(state,route,eid,episode,j.zeros(6),j.zeros(len(configured_cost_keys(self.base.config))))
+        fallback=picked['enabled']&~j.isfinite(self.risks[idx,picked['force_index']-1])
+        return RecoveryEpisode(core,state.tick,self.original_indices[idx],force,picked['force_index'],pulse,fallback,j.zeros(3))
