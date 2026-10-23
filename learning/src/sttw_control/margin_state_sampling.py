@@ -84,3 +84,37 @@ def bank_risks(states,controller,forces,*,effort_budget,gamma,duration,horizon):
         valid=(T>=duration)&(W>0)&j.all(j.isfinite(risk))
         return j.where(valid,risk,j.nan)
     return jax.vmap(one)(states)
+
+
+def audit_bank(bank_dir,output,*,draws=4096):
+    """Authenticate actual prefix clocks and matched draws before training."""
+    import json,pickle
+    from pathlib import Path
+    from .controller import ControllerConfig
+    from .preference_best import digest,atomic_json
+    bank_dir=Path(bank_dir);out=Path(output);out.mkdir(parents=True,exist_ok=False)
+    receipt=json.loads((bank_dir/'receipt.json').read_text());manifest=json.loads((bank_dir/'manifest.json').read_text())
+    for name,key in (('bank.pkl','bank_sha256'),('anchors.npz','anchors_sha256')):
+        if digest(bank_dir/name)!=receipt[key]:raise ValueError('TRAIN artifact identity changed')
+    with (bank_dir/'bank.pkl').open('rb') as stream:bank=pickle.load(stream)
+    ids=np.flatnonzero(bank['valid']);states=jax.tree.map(lambda x:j.asarray(x)[ids],bank['states'])
+    np.testing.assert_array_equal(np.asarray(states.tick),np.asarray(bank['onset_intervals'])[ids]*4)
+    np.testing.assert_array_equal(np.asarray(states.history.mask[:,-1]),True)
+    alpha=np.asarray(states.alpha);values,groups=exact_alpha_groups(alpha)
+    forces=j.array([-32.,-24.,-16.,-8.,8.,16.,24.,32.])
+    risks=bank_risks(states,ControllerConfig(**manifest['source']['controller']),forces,effort_budget=.030839085298575167,gamma=.815560907125473,duration=.1,horizon=manifest['original_task_horizon_s'])
+    permutation=stratified_permutation(np.asarray(groups),918204)
+    tables={arm:state_probabilities(risks[permutation] if arm=='shuffled' else risks,groups,strength=0. if arm=='uniform' else .7,num_groups=len(values)) for arm in ('uniform','guided','shuffled')}
+    keys=jax.random.split(jax.random.PRNGKey(918203),draws)
+    sampled={arm:jax.device_get(jax.jit(jax.vmap(lambda key:draw(key,p,groups)))(keys)) for arm,p in tables.items()}
+    baseline=sampled['uniform'];rows=[]
+    for arm,data in sampled.items():
+        for field in ('force_index','enabled'):np.testing.assert_array_equal(data[field],baseline[field])
+        np.testing.assert_array_equal(alpha[data['state_index']],alpha[baseline['state_index']])
+        np.testing.assert_array_equal(data['state_index'][~data['enabled']],baseline['state_index'][~baseline['enabled']])
+        chosen=np.asarray(risks)[data['state_index'][data['enabled']],data['force_index'][data['enabled']]-1]
+        rows.append(dict(arm=arm,draws=draws,nonzero=int(data['enabled'].sum()),state_changes_vs_uniform=int(np.sum(data['state_index']!=baseline['state_index'])),actual_alpha_matched=True,force_enable_matched=True,nominal_state_matched=True,mean_actual_model_risk=float(np.mean(chosen)),mean_distance_to_model_boundary=float(np.mean(abs(chosen-1)))))
+    np.savez_compressed(out/'probabilities.npz',risk=np.asarray(risks),alpha=alpha,original_indices=ids,forces=np.asarray(forces),permutation=permutation,**{k:np.asarray(v) for k,v in tables.items()})
+    result=dict(bank_sha256=receipt['bank_sha256'],valid_contexts=len(ids),history_newest_valid=True,original_clocks_preserved=True,physical_clock_minus_task_tick=np.unique(np.asarray(states.physical.physical_tick)-np.asarray(states.tick)).tolist(),valid_by_alpha=receipt['valid_by_alpha'],all_model_risks_finite=bool(np.isfinite(np.asarray(risks)).all()),matched_at_equal_reset_counters_only=True,rows=rows)
+    atomic_json(out/'audit.json',result)
+    return result

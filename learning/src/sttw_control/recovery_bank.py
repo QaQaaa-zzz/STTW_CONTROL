@@ -80,13 +80,15 @@ def collect_preference(declaration_path,output):
             if fault.any():raise RuntimeError('engineering fault during conditional TRAIN collection')
             observations.append(ob[::5].reshape(-1,351));means.append(mu[::5].reshape(-1,2));anchor_valid.append(valid[::5].reshape(-1))
             update(stage='collecting',task_seconds=(start+50)*.02)
-        _,captured,_,valid=jax.device_get(carry);valid=np.asarray(valid)
+        final,captured,bad,valid=jax.device_get(carry);valid=np.asarray(valid)
         if not valid.any():raise RuntimeError('no valid conditional TRAIN prefix')
         with (out/'bank.pkl').open('wb') as stream:pickle.dump(dict(states=captured,routes=jax.device_get(routes),valid=valid,onset_intervals=np.asarray(onsets),route_ids=ids),stream)
         mask=np.concatenate(anchor_valid);obs=np.concatenate(observations)[mask];mu=np.concatenate(means)[mask]
         np.savez_compressed(out/'anchors.npz',observations=obs,means=mu,log_std=log_std)
         counts={str(a):int(np.sum(valid&(alpha==a))) for a in declaration['alphas']}
-        atomic_json(out/'receipt.json',dict(bank_sha256=digest(out/'bank.pkl'),anchors_sha256=digest(out/'anchors.npz'),valid_contexts=int(valid.sum()),rejected_contexts=int((~valid).sum()),valid_by_alpha=counts,anchors=len(obs),actual_lower_ticks=ticks))
+        atomic_json(out/'receipt.json',dict(bank_sha256=digest(out/'bank.pkl'),anchors_sha256=digest(out/'anchors.npz'),valid_contexts=int(valid.sum()),rejected_contexts=int((~valid).sum()),valid_by_alpha=counts,anchors=len(obs),actual_lower_ticks=ticks,
+            nominal_complete_contexts=int(np.sum(np.asarray(final.tick)>=round(seconds/.005))),
+            nominal_physical_failures=int(np.sum(final.physical.failed)),nominal_domain_failures=int(np.sum(final.domain_exit))))
         update(state='completed',phase='completed',stage='bank_ready',valid_contexts=int(valid.sum()),valid_by_alpha=counts)
     except BaseException as exc:
         update(state='error',phase='error',error=f'{type(exc).__name__}: {exc}');raise

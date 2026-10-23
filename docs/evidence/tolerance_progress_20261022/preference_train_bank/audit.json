@@ -1,0 +1,53 @@
+{
+  "bank_sha256": "6ce48aa4c8004b6caf6ffc9759f6b7552e7c7054050e1f6a9ea788a955d80bc0",
+  "valid_contexts": 320,
+  "history_newest_valid": true,
+  "original_clocks_preserved": true,
+  "physical_clock_minus_task_tick": [
+    700
+  ],
+  "valid_by_alpha": {
+    "0.0": 128,
+    "0.25": 21,
+    "0.5": 22,
+    "0.75": 21,
+    "1.0": 128
+  },
+  "all_model_risks_finite": true,
+  "matched_at_equal_reset_counters_only": true,
+  "rows": [
+    {
+      "arm": "uniform",
+      "draws": 4096,
+      "nonzero": 3254,
+      "state_changes_vs_uniform": 0,
+      "actual_alpha_matched": true,
+      "force_enable_matched": true,
+      "nominal_state_matched": true,
+      "mean_actual_model_risk": 1.8207186460494995,
+      "mean_distance_to_model_boundary": 1.021589994430542
+    },
+    {
+      "arm": "guided",
+      "draws": 4096,
+      "nonzero": 3254,
+      "state_changes_vs_uniform": 1682,
+      "actual_alpha_matched": true,
+      "force_enable_matched": true,
+      "nominal_state_matched": true,
+      "mean_actual_model_risk": 1.4403743743896484,
+      "mean_distance_to_model_boundary": 0.5513951778411865
+    },
+    {
+      "arm": "shuffled",
+      "draws": 4096,
+      "nonzero": 3254,
+      "state_changes_vs_uniform": 1670,
+      "actual_alpha_matched": true,
+      "force_enable_matched": true,
+      "nominal_state_matched": true,
+      "mean_actual_model_risk": 1.8351130485534668,
+      "mean_distance_to_model_boundary": 1.0339181423187256
+    }
+  ]
+}

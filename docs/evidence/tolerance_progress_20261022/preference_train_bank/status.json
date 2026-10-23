@@ -1,0 +1,21 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1239598,
+  "training_steps": 0,
+  "declared_contexts": 320,
+  "maximum_lower_ticks": 512000,
+  "stage": "bank_ready",
+  "checked_unix": 1792739703.496069,
+  "elapsed_s": 181.9319369379955,
+  "active_lower_ticks": 511456,
+  "task_seconds": 8.0,
+  "valid_contexts": 320,
+  "valid_by_alpha": {
+    "0.0": 128,
+    "0.25": 21,
+    "0.5": 22,
+    "0.75": 21,
+    "1.0": 128
+  }
+}

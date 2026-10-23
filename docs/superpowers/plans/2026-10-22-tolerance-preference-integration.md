@@ -35,20 +35,20 @@ Files: margin_state_sampling.py, test_margin_state_sampling.py.
 - [x] Five alpha strata: exact endpoints and three interior bins. Force draw and alpha-bin draw independent of arm; nominal episodes uniform.
 - [x] Stratified risk permutation preserves per-force per-bin weight distribution; no physical randomization or reward change.
 - [x] Review found and fixed within-bin alpha drift: exact_alpha_groups preserves actual alpha, including distinct values .1/.3 in one old bin.1024 paired draws verify exact matching; continuous singleton groups cannot be reweighted.
-- [ ] Export real-bank probability/exposure audit before formal training; expected matching is not claimed exact after early reset divergence.
+- [x] Real320-context bank audit: 4096 paired draws/arm, force-enable/actualalpha/nominalstate exactly equal at equal counters. Guided changes1682states; true-risk distance-to-boundary1.022→.551, shuffled1.034. Actual training exposures still required after reset divergence.
 
 ## Task3 — Frozen preference pulse screen
 
 Files: preference_tolerance_screen.py and thin CLI; actual resolved declaration and status under a new run.
 
 - [x] Resolved stage3 geometry R1.8, v2.6/2.8; original10s and V3.
-- [ ] Parentu325 only, alpha0/.25/.5/.75/1, two directions, two speeds, two onsets1/2s, forces0/±8/±12N:200cases,max400000lower ticks. Own-policy complete prefix shared across force branches. No PPO.
-- [ ] Preserve actual XY, signed errors, logged per-step rewards/components, pulse impulse and model features; report task recovery separately from working performance.
-- [ ] Verify200/200 and nominal preference behavior before choosing the new TRAIN bank distribution.
+- [x] Original200case panel completed260.65s/alltaskpass; additional0/±20/±32N200case panel completed216.92s/task189/200,9domain2holdfail,0recordedfalls. Both original10s/V3/local300, own-prefix/noPPO.
+- [x] Saved actual XY, signed errors, logged rewards/components, impulses/features;96PNG/PDFpairs across two panels, task/working/physical labels separated.
+- [x] Nominal4/4 turns retain strictly decreasing speedRMSE withalpha; moderate/stress200/200 complete. Training band declared±8/16/24/32N, independent realprefixes.
 
 ## Task4 — Recovery learning utility experiment
 
-- [ ] Collect a new authentic single-network TRAIN prefix bank; alpha provenance and nominal parent anchors retained.
+- [x] Collected320authentic prefixes/25573anchors in181.93s/511456lower ticks, bank6ce48aa4c8004b6caf6ffc9759f6b7552e7c7054050e1f6a9ea788a955d80bc0. Originalclock/historyvalidated; allprefixesvalid, nominal full8scompletion not proven. Actualαcounts128/21/22/21/128; noDEVstates.
 - [ ] Resolve one shared reward/learner/force/alpha schedule for uniform/risk/shuffled arms; fresh immutable runs and critic warmup/parent retention.
 - [ ] Test sampler actual exposures, complete-state resets and snippet bootstrap; no silent20s→10s switch.
 - [ ] Run the declared matched campaign and paired full-task/preference evaluation; independent repeats and continuous metrics required before claiming method benefit.

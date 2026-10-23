@@ -1,0 +1,15 @@
+{
+  "bank_sha256": "6ce48aa4c8004b6caf6ffc9759f6b7552e7c7054050e1f6a9ea788a955d80bc0",
+  "anchors_sha256": "229e3ef822fcc6c1df489cf59aad5e3f728cf0e6739ef2d0d5b072ded0be8198",
+  "valid_contexts": 320,
+  "rejected_contexts": 0,
+  "valid_by_alpha": {
+    "0.0": 128,
+    "0.25": 21,
+    "0.5": 22,
+    "0.75": 21,
+    "1.0": 128
+  },
+  "anchors": 25573,
+  "actual_lower_ticks": 511456
+}
