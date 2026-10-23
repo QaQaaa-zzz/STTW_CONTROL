@@ -1,0 +1,67 @@
+{
+  "data_role": "post-observation mechanism diagnosis; no new fitting, thresholds or outcome claims; bins are descriptive not independent validation",
+  "parent_nonzero_cases": 320,
+  "parent_DEV_risk_bins": [
+    {
+      "lower_inclusive": 0,
+      "upper_exclusive": 1,
+      "n": 103,
+      "task_failure": 0,
+      "domain_failure": 0,
+      "working_failure": 67
+    },
+    {
+      "lower_inclusive": 1,
+      "upper_exclusive": 1.5,
+      "n": 53,
+      "task_failure": 0,
+      "domain_failure": 0,
+      "working_failure": 23
+    },
+    {
+      "lower_inclusive": 1.5,
+      "upper_exclusive": 2,
+      "n": 57,
+      "task_failure": 0,
+      "domain_failure": 0,
+      "working_failure": 25
+    },
+    {
+      "lower_inclusive": 2,
+      "upper_exclusive": 3,
+      "n": 65,
+      "task_failure": 2,
+      "domain_failure": 2,
+      "working_failure": 41
+    },
+    {
+      "lower_inclusive": 3,
+      "upper_exclusive": null,
+      "n": 42,
+      "task_failure": 9,
+      "domain_failure": 7,
+      "working_failure": 34
+    }
+  ],
+  "train_expected_enabled_draws": {
+    "uniform": {
+      "probability_risk_below_one": 0.2289062509807991,
+      "probability_risk_one_to_onepointfive": 0.18281250081636244,
+      "probability_risk_above_three": 0.11757812555733835,
+      "mean_risk": 1.8089025854060437
+    },
+    "guided": {
+      "probability_risk_below_one": 0.25460235655409635,
+      "probability_risk_one_to_onepointfive": 0.3833090940257534,
+      "probability_risk_above_three": 0.03527343913447112,
+      "mean_risk": 1.43171589724581
+    },
+    "shuffled": {
+      "probability_risk_below_one": 0.2255740717850131,
+      "probability_risk_one_to_onepointfive": 0.18449260992274502,
+      "probability_risk_above_three": 0.1350968932340038,
+      "mean_risk": 1.8308934986656706
+    }
+  },
+  "warning": "TRAIN bank and DEV contexts differ; easier sample selection is a hypothesis, not demonstrated by joining these separate populations"
+}

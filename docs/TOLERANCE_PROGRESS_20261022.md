@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 科学审查（2026-10-23）：[目标、公式适用性、创新定位及实验审查](evidence/tolerance_progress_20261022/preference_recovery_pilot/SCIENTIFIC_REVIEW.md)。三组训练已完成，共5,308,416策略转移；TensorBoard三组实际奖励均核验至27轮。中等扰动新600例完成：任务恢复均200/200，工作性能uniform/guided/shuffled=148/144/145，父策略143/200；尚不支持引导优势。强扰动600例也已完成：任务恢复父策略/uniform/guided/shuffled=189/186/190/193（各200例），真实引导未胜过打乱对照；名义直线评测按原协议接续，实时状态见runs/preference_recovery_post_v1/status.json。以下各更新保留为历史阶段快照。
+
 > 单网络恢复学习已启动（2026-10-23）：[三组匹配PPO协议、工程验证与运行快照](evidence/tolerance_progress_20261022/preference_recovery_pilot/README.md)。真实u325/V3/原10s、4s恢复片段，uniform/guided/shuffled各2轮Critic预热+25轮PPO；当前前两组运行、第三组排队。TensorBoard http://localhost:6008 的实际奖励已核验；训练完成后自动接续1240例新评测并复用400例已核验父策略结果。尚未获得训练后能力结论。
 
 

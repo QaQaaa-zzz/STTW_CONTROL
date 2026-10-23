@@ -1,4 +1,6 @@
-# Matched conditional recovery PPO pilot — active
+# Matched conditional recovery PPO pilot
+
+2026-10-23 scientific review: [研究问题、公式语义、实验因果性、当前结果与后续决策](SCIENTIFIC_REVIEW.md)。All three training arms completed27updates/25PPO each,5308416total policy transitions; HTTP TensorBoard reward verified through step27 for all arms. [Actual training exposure audit](training_exposure_audit.json) preserves unequal state/route/alpha exposure after early resets. Moderate600newcases complete: task200/200perarm; workingperformance uniform148/guided144/shuffled145, parent143/200. No demonstrated physical-guidance benefit on this saturated task panel. Strong and straight evaluation remain in the existing automatic pipeline; inspect live post status before treating this snapshot as current. No candidate adopted.
 
 This is the actual single-alpha u325 Actor/Critic, not the old dual-endpoint u50 experiment. All three arms use unchanged V3/local300/original10s task clock,4s snippets, the independent320-context prefix bank, same full parent weights and fresh Adam, and the same918301learner/918203pulse seeds. The intervention is conditional state sampling: uniform, physical-model boundary guidance, or within-exact-alpha shuffled guidance. Forces±8/16/24/32N,80%pulse, actualalpha strata128/21/22/21/128; nominal episodes uniformly sampled, with KL.05 on25573 parent action anchors. ActorLR3e-5,criticLR3e-4;2critic warmup+25PPO, fixedfinalcheckpoint.27is this pilot declaration, not an optimal training length or a source-code limit.
 
