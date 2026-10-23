@@ -1,0 +1,512 @@
+{
+  "scope": "used DEV, one training lineage, fixed75 primary; not independent final test or deployment qualification",
+  "status": {
+    "phase": "completed",
+    "pid": 2677421,
+    "stage": "fixed_panel_results_ready",
+    "completed_cases": 940,
+    "declared_cases": 940,
+    "active_lower_ticks": 1864564,
+    "training_steps": 0,
+    "checked_unix": 1792773292.9517817,
+    "panel": "low_speed",
+    "child_pid": 2810409
+  },
+  "sources": {
+    "runs/preference_full_tail_length75_post_v1/moderate/evaluation/results.json": "c222c1392b3cd51ef37fe7afeeb4335e712192a0ac42f1c2cfa460b6f118b2fc",
+    "runs/preference_full_tail_length75_post_v1/strong/evaluation/results.json": "7b6516856b3bbc060bff3705bd584ddb5e2973ce5f1540d01452144aa69532cf",
+    "runs/preference_full_tail_length75_post_v1/straight/evaluation/results.json": "c1967c75bd3cd61306c7764b04cd746a5cfb5329500f2c73405cd872f9d6ff97",
+    "runs/preference_full_tail_length75_post_v1/low_speed/evaluation/results.json": "586b9133142168b6687523b7fd5a61f3f6f8fc7651af1ea6b91041dc96c9660e"
+  },
+  "panels": {
+    "moderate": {
+      "ppo48": {
+        "task_recovered": {
+          "n": 200,
+          "baseline": 200,
+          "candidate": 200,
+          "gains": 0,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 200,
+          "baseline": 136,
+          "candidate": 145,
+          "gains": 9,
+          "losses": 0
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.25,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "ppo75": {
+        "task_recovered": {
+          "n": 200,
+          "baseline": 200,
+          "candidate": 200,
+          "gains": 0,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 200,
+          "baseline": 136,
+          "candidate": 142,
+          "gains": 8,
+          "losses": 2
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.25,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 40,
+            "baseline": 40,
+            "candidate": 40,
+            "gains": 0,
+            "losses": 0
+          }
+        ]
+      }
+    },
+    "strong": {
+      "ppo48": {
+        "task_recovered": {
+          "n": 200,
+          "baseline": 186,
+          "candidate": 184,
+          "gains": 1,
+          "losses": 3
+        },
+        "performance_success": {
+          "n": 200,
+          "baseline": 64,
+          "candidate": 64,
+          "gains": 2,
+          "losses": 2
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 40,
+            "baseline": 35,
+            "candidate": 34,
+            "gains": 0,
+            "losses": 1
+          },
+          {
+            "alpha": 0.25,
+            "n": 40,
+            "baseline": 38,
+            "candidate": 38,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 40,
+            "baseline": 38,
+            "candidate": 38,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 40,
+            "baseline": 39,
+            "candidate": 39,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 40,
+            "baseline": 36,
+            "candidate": 35,
+            "gains": 1,
+            "losses": 2
+          }
+        ]
+      },
+      "ppo75": {
+        "task_recovered": {
+          "n": 200,
+          "baseline": 186,
+          "candidate": 191,
+          "gains": 5,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 200,
+          "baseline": 64,
+          "candidate": 68,
+          "gains": 5,
+          "losses": 1
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 40,
+            "baseline": 35,
+            "candidate": 37,
+            "gains": 2,
+            "losses": 0
+          },
+          {
+            "alpha": 0.25,
+            "n": 40,
+            "baseline": 38,
+            "candidate": 38,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 40,
+            "baseline": 38,
+            "candidate": 38,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 40,
+            "baseline": 39,
+            "candidate": 39,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 40,
+            "baseline": 36,
+            "candidate": 39,
+            "gains": 3,
+            "losses": 0
+          }
+        ]
+      }
+    },
+    "straight": {
+      "ppo48": {
+        "task_recovered": {
+          "n": 10,
+          "baseline": 10,
+          "candidate": 10,
+          "gains": 0,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 10,
+          "baseline": 10,
+          "candidate": 10,
+          "gains": 0,
+          "losses": 0
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.25,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "ppo75": {
+        "task_recovered": {
+          "n": 10,
+          "baseline": 10,
+          "candidate": 10,
+          "gains": 0,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 10,
+          "baseline": 10,
+          "candidate": 10,
+          "gains": 0,
+          "losses": 0
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.25,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.75,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 2,
+            "baseline": 2,
+            "candidate": 2,
+            "gains": 0,
+            "losses": 0
+          }
+        ]
+      }
+    },
+    "low_speed": {
+      "ppo48": {
+        "task_recovered": {
+          "n": 60,
+          "baseline": 52,
+          "candidate": 54,
+          "gains": 3,
+          "losses": 1
+        },
+        "performance_success": {
+          "n": 60,
+          "baseline": 26,
+          "candidate": 27,
+          "gains": 2,
+          "losses": 1
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 12,
+            "baseline": 8,
+            "candidate": 9,
+            "gains": 1,
+            "losses": 0
+          },
+          {
+            "alpha": 0.125,
+            "n": 12,
+            "baseline": 9,
+            "candidate": 11,
+            "gains": 2,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 12,
+            "baseline": 12,
+            "candidate": 12,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.875,
+            "n": 12,
+            "baseline": 12,
+            "candidate": 12,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 12,
+            "baseline": 11,
+            "candidate": 10,
+            "gains": 0,
+            "losses": 1
+          }
+        ]
+      },
+      "ppo75": {
+        "task_recovered": {
+          "n": 60,
+          "baseline": 52,
+          "candidate": 56,
+          "gains": 4,
+          "losses": 0
+        },
+        "performance_success": {
+          "n": 60,
+          "baseline": 26,
+          "candidate": 29,
+          "gains": 3,
+          "losses": 0
+        },
+        "by_alpha": [
+          {
+            "alpha": 0.0,
+            "n": 12,
+            "baseline": 8,
+            "candidate": 8,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.125,
+            "n": 12,
+            "baseline": 9,
+            "candidate": 12,
+            "gains": 3,
+            "losses": 0
+          },
+          {
+            "alpha": 0.5,
+            "n": 12,
+            "baseline": 12,
+            "candidate": 12,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 0.875,
+            "n": 12,
+            "baseline": 12,
+            "candidate": 12,
+            "gains": 0,
+            "losses": 0
+          },
+          {
+            "alpha": 1.0,
+            "n": 12,
+            "baseline": 11,
+            "candidate": 12,
+            "gains": 1,
+            "losses": 0
+          }
+        ]
+      }
+    }
+  },
+  "record_totals": {
+    "ppo48": {
+      "n": 470,
+      "baseline": 448,
+      "candidate": 448,
+      "gains": 4,
+      "losses": 4
+    },
+    "ppo75": {
+      "n": 470,
+      "baseline": 448,
+      "candidate": 457,
+      "gains": 9,
+      "losses": 0
+    }
+  },
+  "totals_warning": "Panel records include repeated nominal controls; totals are bookkeeping, not independent sample counts."
+}
