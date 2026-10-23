@@ -1,0 +1,117 @@
+{
+  "scope": "Partial campaign: moderate complete; strong/straight/low-speed pending. Used DEV, no final-test or convergence claim.",
+  "sources": {
+    "runs/preference_full_tail_post_v1/moderate/evaluation/results.json": "8b52441ba1ba1a4e206207873a4458f9e7252e1cfba38ce25245b7df579771fd",
+    "runs/preference_full_tail_length75_post_v1/moderate/evaluation/results.json": "c222c1392b3cd51ef37fe7afeeb4335e712192a0ac42f1c2cfa460b6f118b2fc"
+  },
+  "comparisons": {
+    "ppo48": {
+      "task_recovered": {
+        "n": 200,
+        "baseline": 200,
+        "candidate": 200,
+        "gains": 0,
+        "losses": 0
+      },
+      "performance_success": {
+        "n": 200,
+        "baseline": 136,
+        "candidate": 145,
+        "gains": 9,
+        "losses": 0
+      },
+      "mean_paired_changes": {
+        "peak_roll_rad": -0.005281345248222351,
+        "peak_abs_path_m": -0.009446177966892719,
+        "tail_max_path_m": 0.007411952018737793,
+        "logged_return": 0.8121173810958863
+      },
+      "by_alpha": [
+        {
+          "alpha": 0.0,
+          "n": 40,
+          "baseline_performance": 32,
+          "candidate_performance": 33
+        },
+        {
+          "alpha": 0.25,
+          "n": 40,
+          "baseline_performance": 31,
+          "candidate_performance": 33
+        },
+        {
+          "alpha": 0.5,
+          "n": 40,
+          "baseline_performance": 26,
+          "candidate_performance": 28
+        },
+        {
+          "alpha": 0.75,
+          "n": 40,
+          "baseline_performance": 24,
+          "candidate_performance": 25
+        },
+        {
+          "alpha": 1.0,
+          "n": 40,
+          "baseline_performance": 23,
+          "candidate_performance": 26
+        }
+      ]
+    },
+    "ppo75": {
+      "task_recovered": {
+        "n": 200,
+        "baseline": 200,
+        "candidate": 200,
+        "gains": 0,
+        "losses": 0
+      },
+      "performance_success": {
+        "n": 200,
+        "baseline": 136,
+        "candidate": 142,
+        "gains": 8,
+        "losses": 2
+      },
+      "mean_paired_changes": {
+        "peak_roll_rad": -0.004340255856513977,
+        "peak_abs_path_m": -0.0033871655166149137,
+        "tail_max_path_m": -0.0006272363662719727,
+        "logged_return": 1.1967012786865234
+      },
+      "by_alpha": [
+        {
+          "alpha": 0.0,
+          "n": 40,
+          "baseline_performance": 32,
+          "candidate_performance": 33
+        },
+        {
+          "alpha": 0.25,
+          "n": 40,
+          "baseline_performance": 31,
+          "candidate_performance": 30
+        },
+        {
+          "alpha": 0.5,
+          "n": 40,
+          "baseline_performance": 26,
+          "candidate_performance": 28
+        },
+        {
+          "alpha": 0.75,
+          "n": 40,
+          "baseline_performance": 24,
+          "candidate_performance": 25
+        },
+        {
+          "alpha": 1.0,
+          "n": 40,
+          "baseline_performance": 23,
+          "candidate_performance": 26
+        }
+      ]
+    }
+  }
+}
