@@ -1,0 +1,82 @@
+[
+  {
+    "job": "uniform_alpha0",
+    "updates": 25,
+    "transitions": 1638400,
+    "force_histogram": [
+      114,
+      126,
+      115,
+      132,
+      117,
+      118,
+      122,
+      114
+    ],
+    "fired": 958,
+    "mean_abs_force_N": 4.949895615866389,
+    "physical_failures": 0,
+    "domain_failures": 10,
+    "fallback": 0
+  },
+  {
+    "job": "guided_alpha0",
+    "updates": 25,
+    "transitions": 1638400,
+    "force_histogram": [
+      129,
+      127,
+      112,
+      129,
+      106,
+      113,
+      131,
+      113
+    ],
+    "fired": 960,
+    "mean_abs_force_N": 5.05625,
+    "physical_failures": 0,
+    "domain_failures": 44,
+    "fallback": 0
+  },
+  {
+    "job": "uniform_alpha1",
+    "updates": 25,
+    "transitions": 1638400,
+    "force_histogram": [
+      116,
+      130,
+      118,
+      134,
+      119,
+      119,
+      124,
+      118
+    ],
+    "fired": 978,
+    "mean_abs_force_N": 4.959100204498977,
+    "physical_failures": 0,
+    "domain_failures": 127,
+    "fallback": 0
+  },
+  {
+    "job": "guided_alpha1",
+    "updates": 25,
+    "transitions": 1638400,
+    "force_histogram": [
+      130,
+      130,
+      105,
+      119,
+      105,
+      111,
+      135,
+      134
+    ],
+    "fired": 969,
+    "mean_abs_force_N": 5.174406604747162,
+    "physical_failures": 0,
+    "domain_failures": 101,
+    "fallback": 0
+  }
+]

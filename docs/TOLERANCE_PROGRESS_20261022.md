@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 最新：四组训练与864例评测已完成。[完整结果与研究判断](evidence/tolerance_progress_20261022/pulse_curriculum_results/diagnostics/CONCLUSIONS.md)。本报告后文“正在进行”段落保留为先前发布快照；当前未采用guided候选。
+
 ![左转局部边界：实际XY与侧倾](evidence/tolerance_progress_20261022/calibration/boundary_focus_v1/xy_and_roll.png)
 
 本报告是截至 2026-10-22T18:59:10.005456-07:00 的发布快照；运行状态以原机实时文件为准。代码分支：`experiment/tolerance-calibration-20261022`。单网络α成果在独立分支 `experiment/path-conflict-exposure-v1`，本轮容扰度实验使用两个独立中层端点网络和冻结local300。

@@ -1,0 +1,1802 @@
+{
+  "engineering_only": false,
+  "protocol": {
+    "stage": "predeclared development comparison; not final TEST",
+    "policies": [
+      "parent",
+      "uniform_update25",
+      "guided_update25"
+    ],
+    "endpoints": [
+      0,
+      1
+    ],
+    "routes": [
+      "left90_R2",
+      "right90_R2"
+    ],
+    "speeds": [
+      2.45,
+      2.65
+    ],
+    "onsets": [
+      0.8,
+      1.5,
+      2.5,
+      3.5
+    ],
+    "forces": [
+      0,
+      -2,
+      2,
+      -4,
+      4,
+      -6,
+      6,
+      -8,
+      8
+    ],
+    "pulse_duration": 0.1,
+    "episode_s": 20,
+    "cases_per_arm": 288,
+    "total_cases": 864,
+    "max_lower_ticks": 3456000,
+    "success": "unchanged original working roll/domain/goal/final1s task criteria",
+    "primary": "paired guided versus uniform actual-pulse training; retain nominal outcomes and practical sensitivity; reused development panel",
+    "past_failures": "retained in original success; separate descriptive prefix and suffix diagnostic",
+    "confidence": "one training seed and correlated case families; no multi-seed generalization claim",
+    "config_file": "alpha0_config.json",
+    "source_plan": "uniform_alpha0/plan.json",
+    "comparisons": [
+      [
+        "parent",
+        "uniform_update25"
+      ],
+      [
+        "parent",
+        "guided_update25"
+      ],
+      [
+        "uniform_update25",
+        "guided_update25"
+      ]
+    ],
+    "figure_caption": "Parents: baseline u50; candidates: pulse-training u25; seed 910401 + alpha. Thick: pulse; x: original-label failure."
+  },
+  "lane_layout": [
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "parent",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "uniform_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "left90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.45,
+      "alpha": 1,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 0,
+      "force_N": 8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 0
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 2
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 4
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 6
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": -8
+    },
+    {
+      "policy": "guided_update25",
+      "route": "right90_R2",
+      "speed": 2.65,
+      "alpha": 1,
+      "force_N": 8
+    }
+  ],
+  "checkpoint_identities": {
+    "uniform_update25_alpha0": {
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/uniform_alpha0/checkpoints/actor_0025.pkl",
+      "actor_sha256": "18046fb46c51da2758715d4cec5a1327ab6ab2b4f8039a6ac7f1196b07fb57b5",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/uniform_alpha0/checkpoints/update_0025.pt",
+      "checkpoint_sha256": "d703ef0c9fd5d4a4f9dfa86a9c51f1e93cda02879fffcf5e058e70e6dc4c9213",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 0,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "90fe7595d578e8d8724c5e18bec3499b7d2dc016e96ee22ff2b77845eb1b4196",
+        "seed": 910401,
+        "parent_checkpoint_sha256": "53367a687549dbcc6c67e052ad8e37f79accfd8a439d7bd66ffc416c9c173d12",
+        "parent_source_update": 50,
+        "experiment": "actual_pulse_curriculum_v1",
+        "arm": "uniform",
+        "initialization": "weights_only_fresh_optimizer"
+      }
+    },
+    "guided_update25_alpha0": {
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/guided_alpha0/checkpoints/actor_0025.pkl",
+      "actor_sha256": "dff0890af1061bc9e18b2e92ecfaf4b54ca61cef13a1dd0fcf79e98196b62c4b",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/guided_alpha0/checkpoints/update_0025.pt",
+      "checkpoint_sha256": "6d447579196d578e9ddfcaf625bd22ed9dc906317c0ae6915209d8327c480675",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 0,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "90fe7595d578e8d8724c5e18bec3499b7d2dc016e96ee22ff2b77845eb1b4196",
+        "seed": 910401,
+        "parent_checkpoint_sha256": "53367a687549dbcc6c67e052ad8e37f79accfd8a439d7bd66ffc416c9c173d12",
+        "parent_source_update": 50,
+        "experiment": "actual_pulse_curriculum_v1",
+        "arm": "guided",
+        "initialization": "weights_only_fresh_optimizer"
+      }
+    },
+    "uniform_update25_alpha1": {
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/uniform_alpha1/checkpoints/actor_0025.pkl",
+      "actor_sha256": "30ed3356cb058bc8ef6d6eb1eff71018d4976842d86e67332fafde2b91fc65a8",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/uniform_alpha1/checkpoints/update_0025.pt",
+      "checkpoint_sha256": "5de238f53e16814b394671e203aacb50f1c756099d4367aaf32796e6d4f041ed",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 1,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "90fe7595d578e8d8724c5e18bec3499b7d2dc016e96ee22ff2b77845eb1b4196",
+        "seed": 910401,
+        "parent_checkpoint_sha256": "2c8e353e88c07e37279a409e04aaa6db248ee55dc1f3689730dedd9450046ec6",
+        "parent_source_update": 50,
+        "experiment": "actual_pulse_curriculum_v1",
+        "arm": "uniform",
+        "initialization": "weights_only_fresh_optimizer"
+      }
+    },
+    "guided_update25_alpha1": {
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/guided_alpha1/checkpoints/actor_0025.pkl",
+      "actor_sha256": "e18363fa32e2db5331fe12f392f1a9d08737f69e4f03aa53180287c65066ee92",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/pulse_curriculum_train_v1/guided_alpha1/checkpoints/update_0025.pt",
+      "checkpoint_sha256": "f212d86f73ea8ea6e12e8276ffcd2bddc877200b949142c9cfa421907b052083",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 1,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "90fe7595d578e8d8724c5e18bec3499b7d2dc016e96ee22ff2b77845eb1b4196",
+        "seed": 910401,
+        "parent_checkpoint_sha256": "2c8e353e88c07e37279a409e04aaa6db248ee55dc1f3689730dedd9450046ec6",
+        "parent_source_update": 50,
+        "experiment": "actual_pulse_curriculum_v1",
+        "arm": "guided",
+        "initialization": "weights_only_fresh_optimizer"
+      }
+    },
+    "parent_alpha0": {
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha0/checkpoints/update_0050.pt",
+      "checkpoint_sha256": "53367a687549dbcc6c67e052ad8e37f79accfd8a439d7bd66ffc416c9c173d12",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 0,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "6373455e642d225b88c9d9f2de8c6f2bed15cdd2580c5d4049c965c5e9785705",
+        "seed": 910301,
+        "parent_checkpoint_sha256": "f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+        "parent_source_update": 200,
+        "experiment": "model_reserve_shaping_v1",
+        "arm": "baseline",
+        "initialization": "weights_only_fresh_optimizer"
+      },
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha0/checkpoints/actor_0050.pkl",
+      "actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166"
+    },
+    "parent_alpha1": {
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha1/checkpoints/update_0050.pt",
+      "checkpoint_sha256": "2c8e353e88c07e37279a409e04aaa6db248ee55dc1f3689730dedd9450046ec6",
+      "identity": {
+        "schema": "sttw_geometric_path_actor351_v1",
+        "alpha": 1,
+        "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+        "config_sha256": "6373455e642d225b88c9d9f2de8c6f2bed15cdd2580c5d4049c965c5e9785705",
+        "seed": 910301,
+        "parent_checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+        "parent_source_update": 200,
+        "experiment": "model_reserve_shaping_v1",
+        "arm": "baseline",
+        "initialization": "weights_only_fresh_optimizer"
+      },
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_shaping_train_v1/baseline_alpha1/checkpoints/actor_0050.pkl",
+      "actor_sha256": "fd4a47d35597248920f497b3e93cdf3d7fe11eaf0619ff6a93cab4ca406a1774"
+    }
+  },
+  "lower": {
+    "role": "integration_candidate",
+    "status": "diagnostic_only",
+    "adoption": "not_adopted",
+    "source_update": 300,
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+    "checkpoint_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+    "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+    "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "config": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
+    "config_file_sha256": "fc1770e4790ab8dccebc5d26e7ee62543eb59597cf6274062f5e1ea872551d3c",
+    "normalizer": {
+      "type": "fixed_SCALES",
+      "scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "clip": 5.0,
+      "actor_dim": 210,
+      "history": 10,
+      "fields": [
+        "roll",
+        "roll_rate",
+        "steer",
+        "steer_rate",
+        "measured_forward_speed",
+        "measured_world_yaw_rate",
+        "rear_speed_proxy",
+        "front_speed_proxy",
+        "local_command_speed",
+        "local_command_steer",
+        "local_command_speed_rate",
+        "local_command_steer_rate",
+        "previous_local_speed_reference",
+        "previous_local_steer_reference",
+        "previous_final_front_rate",
+        "previous_final_rear_rate",
+        "previous_applied_front_residual",
+        "previous_applied_rear_residual",
+        "ESO_equilibrium_shift",
+        "local_command_equilibrium_reference"
+      ]
+    },
+    "original_protocol_best": {
+      "source_update": 400,
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+      "checkpoint_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5"
+    },
+    "upper": {
+      "0": {
+        "source_update": 200,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_model.pt",
+        "checkpoint_sha256": "6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha0/best_generations/6afd105630cd7c7a02715f0c234eb39071c2c8800790a900dc02b248c23a59ae/best_actor.pkl",
+        "actor_sha256": "33f4eab8c863c733b0680f2f837ca3267bc3f67b3f1aac4f9e94b4d8f7e32af0"
+      },
+      "1": {
+        "source_update": 250,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_model.pt",
+        "checkpoint_sha256": "fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/v52-best-tracking/runs/preference_v52_tracking_best_start_20261009/alpha1/best_generations/fae95ab4634b021ad36be4e692493784fbbb123adcdfb20c2dd288553f801222/best_actor.pkl",
+        "actor_sha256": "a4dd005f78a9ce8a9f582f3fe8700da77a5d08c3241d64ef21cbc5f1668dc767"
+      }
+    },
+    "reason": "local7/7, verified inherited-state recovery, smaller straight bias and larger worst-speed margin than400; not componentwise dominance",
+    "two_different_late_checkpoints_passed": false,
+    "training_transitions": 0,
+    "maximum_new_control_ticks": 10400
+  },
+  "physical_identity": {
+    "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+    "source_xml_sha256": "2a0c1376cfd9e6edf9b156b834e8c803bedaa336d2fbb7edffd8405daec2acc6",
+    "portable_xml_sha256": "9b2002749a24ed47ccc9f88a9eacd044e460cb24ebc9d677ea9900029c40ea8e",
+    "assets": {
+      "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+      "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+      "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+      "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+      "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+      "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+    },
+    "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+    "mujoco_version": "3.6.0"
+  },
+  "absolute_start": 3.5,
+  "batch": 216,
+  "scan_max": 50,
+  "budget": 3456000,
+  "training_steps": 0,
+  "preflight_declared_lower_ticks": 0,
+  "compilation_cache": "/home/qy/STTW_CONTROL/runs/.jax_compilation_cache",
+  "git_head": "a5dfc4a9e7497a25b420f1ba8985778a7cbdeec3",
+  "prefix": "own-policy genuine zero-force complete state shared only within same context",
+  "success": "original full-episode physical/domain/work/goal/final1s labels; descriptive metrics retained regardless of adoption thresholds"
+}
