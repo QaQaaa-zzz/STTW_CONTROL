@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 后续扫描也已完成：[32个TRAIN完整状态、416例同状态带符号扫描](evidence/tolerance_progress_20261022/train_margin_scan_results/CONCLUSIONS.md)。不改参数，公式余量内281例均完成任务恢复，余量外另有127例恢复，表现保守；严格工作性能与物理边界分开，6例提前域退出后的物理存活UNKNOWN。未启动下一轮训练，当前重点是余量如何指导状态—方向采样，而非精确拟合或解冻底层。
+
 > 更新：4秒短恢复联合协议与完整864例DEV已结束。[本轮XY、奖励、结果与下一步](evidence/tolerance_progress_20261022/short_recovery_results/CONCLUSIONS.md)。α0原标准parent/uniform/guided=133/138/136；α1均141；真正任务恢复α0=142/144/142，α1均144。uniform α0保留为下一阶段冻结后缀候选，未宣布部署替换。接续TRAIN方向扫描已声明并启动：32状态×13力档=416例，无PPO；见[协议](TOLERANCE_SHORT_RECOVERY_PLAN_20261022.md)。以下旧“最新”块为此前20秒训练阶段的历史快照。
 
 > [外部评审逐项核查](TOLERANCE_EXTERNAL_REVIEW_AUDIT_20261022.md)与[补齐代码/逐例数据入口](evidence/tolerance_review_audit_20261022/CODE_AND_DATA_INDEX.md)：含时间尺度实测、采样测试及需纠正的归因。

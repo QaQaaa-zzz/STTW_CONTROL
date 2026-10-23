@@ -53,3 +53,5 @@
 保留训练谱系7,077,888策略转移；含原失败尝试丢弃但已执行的262,144转移，实际训练7,340,032；前缀采集和工程测试另计，不藏进保留谱系。此次DEV实际3,449,076lower ticks，864/864例，1158.10s。新扫描成本另立账，不归入本轮训练效果。
 
 一个训练种子、重复使用的DEV，不作多种子/独立最终测试结论。模型/物理/标签身份见[评价manifest](manifest.json)，逐例[results.json](results.json)，配对[paired_comparisons.json](paired_comparisons.json)。没有把奖励曲线或程序完成本身当作效果证明。
+
+后续执行更新：该416例扫描已完成，参见[完整扫描结果](../train_margin_scan_results/CONCLUSIONS.md)。未启动新一轮训练。

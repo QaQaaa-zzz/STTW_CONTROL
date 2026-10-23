@@ -1,0 +1,15 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1072964,
+  "training_steps": 0,
+  "stage": "dataset_ready",
+  "declared_cases": 416,
+  "checked_unix": 1792736198.6976929,
+  "elapsed_s": 245.2674704450037,
+  "active_lower_ticks": 1474984,
+  "completed_policy_intervals": 950,
+  "maximum_policy_intervals": 1000,
+  "completed_cases": 416,
+  "maximum_lower_ticks": 1664000
+}
