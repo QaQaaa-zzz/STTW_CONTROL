@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> [详细任务环境、训练分布与评测协议](TOLERANCE_TASK_AND_EVALUATION.md)：包含物理/reset、网络动作、随机训练与固定测试、扰动、失败条件及全部阈值。
+
 > 最新：四组训练与864例评测已完成。[完整结果与研究判断](evidence/tolerance_progress_20261022/pulse_curriculum_results/diagnostics/CONCLUSIONS.md)。本报告后文“正在进行”段落保留为先前发布快照；当前未采用guided候选。
 
 ![左转局部边界：实际XY与侧倾](evidence/tolerance_progress_20261022/calibration/boundary_focus_v1/xy_and_roll.png)
