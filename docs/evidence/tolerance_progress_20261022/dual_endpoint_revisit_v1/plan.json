@@ -1,0 +1,15 @@
+{
+  "project": "STTW_CONTROL",
+  "experiment_id": "dual_endpoint_tolerance_revisit_v1",
+  "question": "Revisit frozen dual endpoint policies using native limits and deadline, plus common 10s retrospective labels",
+  "panels": {
+    "alpha0": "94b7f9b31d662634f311a8248258417227b5e80683621229c8c8d4d5d28361c2",
+    "alpha1": "8b18ce204be15bf1fea2463c114700b56efa54ed07e641b0336f8d33f2e85667"
+  },
+  "maximum_lower_ticks": 144000,
+  "declared_cases": 36,
+  "training_steps": 0,
+  "wait_for": "runs/tolerance_recovery_opportunity_v1/evaluation/status.json",
+  "historical_correction": "Dual networks were tested in early pulse/short-recovery experiments; recent new acquisition and empirical tolerance panels omitted them.",
+  "comparison": "native20s is separate; clip saved dual traces at10s for same-deadline task labels against matching single-network endpoint cases; architecture/reward/3.0vs3.5 speed bound remain confounded, no architecture-causal claim"
+}
