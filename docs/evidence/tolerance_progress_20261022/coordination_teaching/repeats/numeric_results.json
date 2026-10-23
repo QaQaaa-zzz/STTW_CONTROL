@@ -1,0 +1,69 @@
+{
+  "summary": [
+    {
+      "panel": "moderate",
+      "policy": "seed918502",
+      "cases": 200,
+      "task": 200,
+      "working": 96,
+      "domain": 0
+    },
+    {
+      "panel": "moderate",
+      "policy": "seed918503",
+      "cases": 200,
+      "task": 200,
+      "working": 95,
+      "domain": 0
+    },
+    {
+      "panel": "strong",
+      "policy": "seed918502",
+      "cases": 200,
+      "task": 194,
+      "working": 56,
+      "domain": 4
+    },
+    {
+      "panel": "strong",
+      "policy": "seed918503",
+      "cases": 200,
+      "task": 195,
+      "working": 57,
+      "domain": 4
+    },
+    {
+      "panel": "low_speed",
+      "policy": "seed918502",
+      "cases": 60,
+      "task": 58,
+      "working": 28,
+      "domain": 0
+    },
+    {
+      "panel": "low_speed",
+      "policy": "seed918503",
+      "cases": 60,
+      "task": 58,
+      "working": 28,
+      "domain": 0
+    },
+    {
+      "panel": "straight",
+      "policy": "seed918502",
+      "cases": 10,
+      "task": 10,
+      "working": 10,
+      "domain": 0
+    },
+    {
+      "panel": "straight",
+      "policy": "seed918503",
+      "cases": 10,
+      "task": 10,
+      "working": 10,
+      "domain": 0
+    }
+  ],
+  "adoption": "no automatic selection"
+}

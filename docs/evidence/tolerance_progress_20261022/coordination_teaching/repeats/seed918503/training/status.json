@@ -1,0 +1,13 @@
+{
+  "phase": "completed",
+  "state": "completed",
+  "pid": 2285610,
+  "completed_updates": 400,
+  "declared_updates": 400,
+  "training_steps": 0,
+  "physics_ticks": 0,
+  "stage": "candidate_ready",
+  "checked_unix": 1792761888.9748764,
+  "loss": 0.0007820964674465358,
+  "elapsed_s": 1.1813383359985892
+}

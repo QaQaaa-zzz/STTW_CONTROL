@@ -1,0 +1,64 @@
+[
+  {
+    "panel": "moderate",
+    "seed": "seed918502",
+    "gains": 0,
+    "losses": 0,
+    "loss_contexts": [],
+    "target_n": 0,
+    "target_success": 0
+  },
+  {
+    "panel": "moderate",
+    "seed": "seed918503",
+    "gains": 0,
+    "losses": 0,
+    "loss_contexts": [],
+    "target_n": 0,
+    "target_success": 0
+  },
+  {
+    "panel": "strong",
+    "seed": "seed918502",
+    "gains": 6,
+    "losses": 1,
+    "loss_contexts": [
+      [
+        "right90_R1p8",
+        2.8,
+        1.0,
+        -32.0,
+        1.0
+      ]
+    ],
+    "target_n": 0,
+    "target_success": 0
+  },
+  {
+    "panel": "strong",
+    "seed": "seed918503",
+    "gains": 6,
+    "losses": 0,
+    "loss_contexts": [],
+    "target_n": 0,
+    "target_success": 0
+  },
+  {
+    "panel": "low_speed",
+    "seed": "seed918502",
+    "gains": 5,
+    "losses": 0,
+    "loss_contexts": [],
+    "target_n": 8,
+    "target_success": 6
+  },
+  {
+    "panel": "low_speed",
+    "seed": "seed918503",
+    "gains": 5,
+    "losses": 0,
+    "loss_contexts": [],
+    "target_n": 8,
+    "target_success": 6
+  }
+]

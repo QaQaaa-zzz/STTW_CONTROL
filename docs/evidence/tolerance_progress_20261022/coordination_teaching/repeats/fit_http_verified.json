@@ -1,0 +1,16 @@
+{
+  "url": "http://localhost:6016",
+  "runs": {
+    "seed918502/training/tensorboard/teaching": [
+      1792761878.8660114,
+      400,
+      0.0008870175224728882
+    ],
+    "seed918503/training/tensorboard/teaching": [
+      1792761888.8641644,
+      400,
+      0.0007820964674465358
+    ]
+  },
+  "checked_unix": 1792761896.3394501
+}

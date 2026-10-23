@@ -1,0 +1,18 @@
+{
+  "experiment_id": "preference_coordination_teaching_repeats_v1",
+  "seeds": [
+    918502,
+    918503
+  ],
+  "updates_per_seed": 400,
+  "panels": {
+    "moderate": 400,
+    "strong": 400,
+    "low_speed": 120,
+    "straight": 20
+  },
+  "maximum_new_lower_ticks": 1880000,
+  "role": "DEV optimization-seed repeat; same parent/dataset/snapshot, not independent data replication",
+  "selection": "fixed final400 for both seeds; report all seeds including original918501",
+  "tb_url": "http://localhost:6016"
+}

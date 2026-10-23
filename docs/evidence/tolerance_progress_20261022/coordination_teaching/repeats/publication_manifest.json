@@ -1,0 +1,2308 @@
+{
+  "files": [
+    {
+      "path": "REVIEW.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/REVIEW.md",
+      "sha256": "c5faadde14c81c9a006eb71a97850da025d379f1e28ac12942855d5c6745c3d0"
+    },
+    {
+      "path": "DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/DESIGN.md",
+      "sha256": "46187f5b57f969597608cf6cfecd63ac8c6e4dcf0ffdec5dff7556d880c6314c"
+    },
+    {
+      "path": "declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/declaration.json",
+      "sha256": "4fa2ec4848d7c06710f915234bc319744b8c354114de9a328d8f8a0130da01ca"
+    },
+    {
+      "path": "status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/status.json",
+      "sha256": "33ad17f0f7be191347afa1163433bd66f83f771b81b57682b72a2ee8889541ed"
+    },
+    {
+      "path": "numeric_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/numeric_results.json",
+      "sha256": "801682f4c9d13b684a61c368d2d3fb8cbdc36ab0a21e43825a82b4c57f7c01f7"
+    },
+    {
+      "path": "candidates.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/candidates.json",
+      "sha256": "e1bb135a9623ff29446e2603abfd830db9583298632867254b1022e4b7a2f179"
+    },
+    {
+      "path": "fit_http_verified.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/fit_http_verified.json",
+      "sha256": "58bcd8344c677b75b51bbcfa60f48116d883f1f4b27a3f242cb4a2f45525a9b8"
+    },
+    {
+      "path": "paired_partial_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/paired_partial_review.json",
+      "sha256": "dd1f5a5a57c2a1db07914a46d6679f7f661cd68faf59dc5d6bdf4055439a3065"
+    },
+    {
+      "path": "nominal_review/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/nominal_review/summary.json",
+      "sha256": "b8cd9bb806d7c114ebcf17b57aad698756b41fe290b61d2282b9bc5f10f4a8fa"
+    },
+    {
+      "path": "nominal_review/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/nominal_review/actual_xy.png",
+      "sha256": "2ea25cc2f766829cba0236f9215fd696c204d8766de7b0186380d1b27ab7b875"
+    },
+    {
+      "path": "nominal_review/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/nominal_review/scored_tick_reward.png",
+      "sha256": "478a680bd6352fd7ebda6cc05348ad3946a0cad9a0a848950a7470fc20d7c2f4"
+    },
+    {
+      "path": "nominal_review/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/nominal_review/cumulative.png",
+      "sha256": "b9af92fb3f08fa3fb84dd186f168ecefb8ba5a0abd3506eea317e0143ab5fecd"
+    },
+    {
+      "path": "nominal_review.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/nominal_review.py",
+      "sha256": "b95c9b7870698abdc931f316e84cbb995013609ab70fc2a3d1db6c77102ae07b"
+    },
+    {
+      "path": "seed918502/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/declaration.json",
+      "sha256": "afc70fef8e8503572044ec12e1f9f0720b81250cf8a8c72318d0a26e194f4be7"
+    },
+    {
+      "path": "seed918502/training/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/training/status.json",
+      "sha256": "2568fe25561279dd874129fdf0ba5d268950fa4211357cfc099cfc6157de84ac"
+    },
+    {
+      "path": "seed918502/training/initial_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/training/initial_fit.json",
+      "sha256": "02dfeed4923ae43c505392d7117e4227fafb1b45330e0463a2b5309c855c0d2d"
+    },
+    {
+      "path": "seed918502/training/final_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/training/final_fit.json",
+      "sha256": "fd86ebf245d50644830655639d90d1b450830a7da2bdb5ab34412b1bbeb2cbe1"
+    },
+    {
+      "path": "seed918502/training/metrics.jsonl",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/training/metrics.jsonl",
+      "sha256": "c56e50435ed67515bcbe2d7db4fd1f6b495dd80d3e56efcf22c720224a43a265"
+    },
+    {
+      "path": "seed918502/training/candidate_record.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918502/training/candidate_record.json",
+      "sha256": "edbdd75603a3e441bbd5f8a931fac272f25e1f5366ae7af07eac8c4c2f301a91"
+    },
+    {
+      "path": "seed918503/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/declaration.json",
+      "sha256": "02119d123dbefea9ff29d70916ad103103bb49596de10a821ddc6494130f691b"
+    },
+    {
+      "path": "seed918503/training/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/training/status.json",
+      "sha256": "08379ce661c1419ffea0a0620da867f39810c6445215d236b36197eba07f6b52"
+    },
+    {
+      "path": "seed918503/training/initial_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/training/initial_fit.json",
+      "sha256": "02dfeed4923ae43c505392d7117e4227fafb1b45330e0463a2b5309c855c0d2d"
+    },
+    {
+      "path": "seed918503/training/final_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/training/final_fit.json",
+      "sha256": "36f42d7ea2b4838db836da3a210472a04921f5153eef32ebd13a625ca99a0395"
+    },
+    {
+      "path": "seed918503/training/metrics.jsonl",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/training/metrics.jsonl",
+      "sha256": "0fd1006a1d981dfdc1dc51b69eefd8cb38766dd358f4cdfe4869c7b54ca4eb0d"
+    },
+    {
+      "path": "seed918503/training/candidate_record.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/seed918503/training/candidate_record.json",
+      "sha256": "6d9c01babca9c0c7eaf95b5dead17a8866248c46802e87bda8aa8565f28a586c"
+    }
+  ],
+  "full_reports_server_files": [
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/REPORT.md",
+      "sha256": "4518e16154cafe57a35e60561dc9e3824e371c4a0877dd5c5ca8a940fa9c6ea9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/cases.csv",
+      "sha256": "3b8df533be0227a8927033aa210f84d4f74582eaea54c5589afd937223a77805"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1.pdf",
+      "sha256": "62c952150e60b7b35c3e66e70a3a6c439247b3f1951bc091b61acfc36cfa4e82"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1.png",
+      "sha256": "3ac513039a46e0a9acda9a29006c7a517e2f557be07a86f2be5fdb0f1b6343d7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "f7eb8c9403f3ac51065272ddbc0a37d414a76578d173d40dfa2560fd6d71ad1f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "eb1f74e22d1071391925a701e135bcbae66b862db5138b046453add18cb7b1e1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "4b50182d9246bc4e905e7965d369283b3e428b91cf43bbb71ac7a7e588b1cc6f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "e0222ee5b5b71ec163eced489c58f91107420810b93cc75da7f4de2b9fbe039e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "82ee04ca48af60075023d4f9d9797a9553bfbd0d9931fbfae12af22a336778d3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "6f9b9d172ea227ef18e1671e96367ff76d37e7bd9def7d820599e97fb3f7dda6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "938b10b41108578e5518e75038bdb1e799343c7133bfac0025042a26475ac040"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "fa982990efce77523943bfc318b313e48a5473f4b96b01c91101f8d0fc7c5f8c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "64246af1c16b580e45d9e28e2dc50e81b48810c8a41de0d5cd119f8244222391"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "2016e9a6973258ca7414cdef237e5a2504258f477c8cf5b6a53658c41cd7d2f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2.pdf",
+      "sha256": "2e9e432095710b7359afb0a5d5434fa26a897d090eec0cb58fb4e3979a8f13bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2.png",
+      "sha256": "e0f54e07af68d8f01746faa20158c8a173489b95f29abc42db3800619bfba792"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "be67af70ded08df5eaec4a749413dde5ea4cd7c5029e7f3133daec0aee680548"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "4d9f0a8148b5a58f24d5c8948bab6f4dc18f1eab743293aabbbae15db6ada4dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "12f040300dc65475396ec02c73301286bc9b00c58eefb071ab09748743d7174e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "f8a19316d6ca76e6f1616529d848db21346f8d85ee421152f9555eac2c283e00"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "a57642513dda49b09c33cbc95ba26218721e6c35c4b926ad51fd04bd878d980a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "1060793d53fedf931529c385c8ec9cd22d7f725c89d64c49c3e9eae25c785bb6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "5292a132c19792b2a9a661ec565b39044dfbc517e8bd938713d3b711889429d9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "e9ac76f7b7880d64a53cd6630e1b13e96bc1f93dadd17b4b11664cad330b3339"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "08b918bb327d2ee99c0d171be3616d3f7c43fff756d7faee7d1282c4d5ddc682"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "ea17ae3669449f50b60ba84e6f81d36cf2d82078b77a51bb85f1e71eef9cdaca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1.pdf",
+      "sha256": "487c185f98e13c4acaca081168193c694b9e92001e29d1a0674c9385ae8fa575"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1.png",
+      "sha256": "471d4ef8a41cb658a69302e4eef14028754b86b49c6b970f256a418e05da239a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "cb1d7f6a4cbf1e0116248bb9c443bdb5ad43adaa23b2316c72fc132d98227c2d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "082b4f848f00c33a1b9303b76c83fb4a2b5cc023e3356ce49c8725be0204753b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "0a37e704fd677dc380c92fa1ea9a7e6569570158b22d2bb73d04c7b585ec40c3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "c69b38512cb31e8c5f63993d77bd5d54e9c9541afff377950d3ce4399fc6f1c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "7eaae462b848d0e93890eefaedc0c7b753981968ba09b6e293643c4cc772d785"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "6a5074d2d98736bbc965f7ec8958e7ecd8dd5763d03b331cdb43829cf16775df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "f799ee9a56a29bb1361bd1b728ec517ca70f1b75f1c61b9e9d5e8617b27f1b74"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "8842c40e8362fb6a72dda147843bcc038cd48c6f20e42404d98fa58c1b238080"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "2a675b29396e9d6e502a93d164caeff452a1b26284f69e04c509a9aa680c730d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "39335e547aa79a7cec7fcf6c529afa0dfb3d9c8e68649e7ff69b379e9283f02c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2.pdf",
+      "sha256": "3af7616147890a6568bad2064d342f52947c87fc83d820af08c6d214a2af88b4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2.png",
+      "sha256": "fca87eb39ae3cc3e7a3f587ac0ae9e8b1e015a21d7efdbf2ba6167ebfc558f24"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "ae8f0e0f25272864dd87b6cdf31959060f6b42ef0ef87d6ce03a2cf72ea2728c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "c7d924194f7429d1863cf46b94fc2d7d335964b5c8b892f061d5dfb333f6b692"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "8c150fc46f9100b4a8c1bc737c27ccac37788bc76e8c36bf313696d45a472c54"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "b841fd8b151bcd39ec0bb02581f2b1f6b2e79b1075381050699b8d1c10cf868e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "9ef28ba4d422979f5abacc3074fca23819e946254c9625b0d906504b6df02943"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "d9df22b4f1041dd30c376bbd12ad92f9c297e189b11be59853fa9bb2986a2b17"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "54ef0c00687bfde532fbd057368f3b98b95e79135e71a1c280f8c67a8db4ab11"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "9a4176fc28a5c2e1f3bf0fc4f771b88d68ade8ad7b3ffebe5b6feecb24f370cd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "52b70dac1a18c71674d654f1e7a64e0de6f985592909c1d76e65d9469093d286"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "d521002e1f68e59f02538e37e97487aa2360cf11a4a52338fbf1e961c2fd48c9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1.pdf",
+      "sha256": "54a0a9780c74119a3e1b5ab9277941c3e84766f874f2dfb6c7b0189b67e90838"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1.png",
+      "sha256": "9f39daf512e68f787dc5b2aee9f472956983a1bd0a214ff3363d893565cd98a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "24cc680bb4a676abf31c47829e71f5c736f6d30eb72fbce414d14e3d2b7cda2a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "af5b58dd06fba096c10e34b4fca831862cbdd4d30bf0e7376c2ff83dc3834e95"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "5b2c0eeaf6360216a34ff6a0b46bd8bc8f5813005fab0db015ab5f73e3f06027"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "d2d644b5abd4d5bf6a808f733b4a25fed74764c0ef27ed1e3425f96c918ffe7d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "d06180d714ca01f4882ffa7397e58b678ed0922bd82d62d3559bdfdec6445e28"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "e364b96c18bf8dc9f6ee5d2a6e2d2ab788253acfd5cc51131631606e02a022ed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "cd965f898ec970efc4b5b62706052f1c73decd08e2167db4515fd05b2f226b45"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "bbe578c9212b125e6c3f5893ca6c7d169c6145820921da1350767f7740e15866"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "209386e533fc76b4d3d44442dfadffce24c8bd7d025ee92bc011ad04ee47a832"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "2cee4605015f9ecd587b39e7886523a86184750957fc5014b462ed1700afc0d1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2.pdf",
+      "sha256": "2ad9d9ab79f71dba0bdc56b7afb7539a6293b5c293021f5ce63a2b41147f2921"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2.png",
+      "sha256": "f91f7c8338e126e8cdb96c214ab53b42d066df14dc0d0e4a44a6300c9ca6c0d5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "9153d6c260a0948d9526066910de96f1494f2dc14a7853ab669af7e8f332e77b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "44b32e1d1990b4183637863cbc914332af7302ee96bba3abac4382aee79059ef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "7892814cfec39b4188884f5d289be1246f6e7dd74889e1aec5dccfaa6d7b5962"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "2e23d05321e09414162729ba2c343cf416e344033f490058522e85ede06dae91"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "33efc8079092be2ec91fd53cab53296ae521ec417d723a21c0d5eb30eb866f56"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "05ba0dab61d8dc46213800d5e5a1b0c3d8b66eddedd4c3841f713c20238be136"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "08e1affaedafe50b38f93d779c9a4918f44442c5446c62a0afc7bd1b397af235"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "f1eb7ebbad170e1ca750454cede729dce937ecba56ca28df418db33971e5b900"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "ecc5a663152f380635063aa15aee3c9d2731bae1eb28c9e9d3f68759d9184e13"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "4a24a6a736cf6ced7bd0af4dfa97af9dc5b28a72d8bccd866ef65b012f5af1ee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1.pdf",
+      "sha256": "671b6cb6b05644b443c19ba4c5227ab915a8c540e929cb3cec86245ebaed8cb6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1.png",
+      "sha256": "28832eadc3f6c435637cd487d7d143de6708b8b77bae3aa0dd0f2a0090cefef0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "e39635b87c5d19da4949bd58cb41f81ebd2c39c8be27547deffd830bfb29a7ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "eb1f4a8e8eb10ad55f042c13c91e4df1728797cf7bb95e08b0ea76660da66135"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "59ae555cbadb357d79f1e0da8eb398f4ffcd9da0e25df6223082d9d4886bb9ad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "0eee123bc81002a9bc4f6ef53ae1b1b9d037af21993343fa4f68cacd83686d54"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "415d64f6135f9b31c8d5d99362f3228d91de206c2926c7460c460c64d3ff31ea"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "cded51b1f41a29b2d6cd1a48adc5377de3edd9908746b7d08420af3d104637de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "ff24f88c788dcdf792c3b547519279357d974f8c0f2b96b68ccfc8be323cb1a0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "5d6b338710265ed5de4f9339ebb1aa8f014faa18f131074354abab19704c3786"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "0f20dbecf3c7ce3ed4cdc3b22d30640e3c974ee6eb15151961db15aa27d447b6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "57a7f1e066b48395ec0ecf77eeaf6642140d619eb276d564aa88f3f7055018be"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2.pdf",
+      "sha256": "b984e4095dea741ebfc3cd9983de104a9d0fa6ac9411ec4481fd77c1ee2203c5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2.png",
+      "sha256": "cf7b33b8dece163047d103dd76d7cf485d272675be23dfbbdd549d26d5f3c86a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "548af2181de69fa57dc4a7a44c7c6a060abb7fa8107d7e0eea7520c4500411ec"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "1088dfe7a2235c098c7e1b28fa36d571798892ca86b436b88ac43af8390beed1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "8fb9d7723987ca03d6b1660b43a981e2858d330d8f820e2d16826fc23d7c090b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "dd18218448fe312509b19b732fd955a1e05d31feaa2a143a7733a9b74b038b31"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "c8ce5409779e4fc4e83a72d601b145f611629d758da4eabfe9c8dc44cffae70e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "a67962f7e2d2136ec3ebc88fca80a9ace4810b59f8774d49bb84648e77734ca2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "b8e53a1c38e6fc61de65d00e9c7223256fbb785b872b6287866dab2b1d9a6abd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "4c1a7adcd3ae265f8c55924c7974c31e819b0cafcb8c9c91b32c7e1b4b5443e3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "8df1654a8659860739b786b83d5bdebbb94e63c19745bda148718204d8c144a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "fe23684a4b6e4450491b6d73a20d4e5c6a17d3af9fed5c05ddd32264d084613a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1.pdf",
+      "sha256": "18c90a00253d23706e54cff78e46934eb57378ed1475cc224f49c9c2b05efada"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1.png",
+      "sha256": "17dce6240446f3fb5339c2e8c425cc44f14065194ad473636f0482fac0a7e3f2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "fea23e841c0ec937368c7b6345fe6d2d1b3791ac46740d508c09c153820b0c76"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "9af07871bd9c369830bdc9f10b3aa51f7968d1d7c9b3a2cc61f995d59336f8e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "555505287ff175ef0267b8406a267c43a23bc0248213f2f5e84b4b09718ac1e3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "2b78d467d768536d9d8f99cfdc6650a4fadaa305e42fb59d2582e69c43bed056"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "7f998b019b2960d80ba212825e0939ed1728ad81dd8cf4444e8b5a7392c95553"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "667b68547a80f31c8820bfe730a5f3b631d539013d7534d594664d68563e929b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "e1b9549288fa1ac566349298b2d6a52e0b5efac064cb0ee1a3ab101891a1e76b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "92657b222baad88bb99e62f06463d8846af040973684c4f53bf4a4a0bdaf9f8a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "f9208ffef720141ccb37e913a827f0d09f4f13b191b567031ba587442f00349c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "124c0d80c9b576f453c455eb262264937355899983e9de988b77ab6b08f4a3bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2.pdf",
+      "sha256": "6c29e8b04f8ae65ea70840b6b622a4bc254972529387d0d8e4d1ac03422f2ce3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2.png",
+      "sha256": "b6ca00092e067dc4d851993335cc6b22b491ff60d62b0bafd600e2640a169119"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "88eb90f7ba90a6b2a66eae053ef38da65b93b8198e0f4902a4ba21f7f0a29255"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "9afa55c3a782f2848e1362c2b540c1d09012eeaa3449720d5da0d845abaeede2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "68155ae44e4973f1c1181993e7b4f4545bf3c2110e1d9190dc30ebdf614ff93d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "0cc62838d7d9b37b8cc1830497e847ca1ab9288c47bc2f3ee1ea217cc11daa3e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "b727a87f316be7c184fabcfe34fb13685beda25375ac64a2621a8ea1a173e615"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "0edf9548773fcaa06e402ae949c54d42e2790d1cb4dd9ca0bd46b088c405d8fc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "6af1279e060ced85bbc7760f9b1f5e20b38640ee6baec2478259d33a6ad65fdf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "430014bb82d0e437b5a0dd06ca9cbd8e6e24ceddc88bf3944fd95a50019f3cff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "32fde45b773031d723714ba47352f2b185c2f30abf0562f549244fc1023d586a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "f4d8167e6d2aa0e443a7cc7da63e3925391d13741be276eb25a6bd7b8ee00d22"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1.pdf",
+      "sha256": "284f03b0b6014d4bb9534d7c18327c088478ccd95fb388b7d0ff657787815cdf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1.png",
+      "sha256": "9456ec2c8e870c31738f4cfab8c3281d7fcb797be8294a3a1d442b3d676d2ee1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "3159160331237d3a77ce3796594ca2197488b20db9bca70d48e3a3535ffdc2f1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "c5e0138936790d719bebd97e1fb57348c3d2f2ce834943cc9b3ca4fd4b4338aa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "d9000a05137728cc0d1fc4f82efc2b5ec821e26adf0744b60d4d7c4f2b1c2963"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "204402e4e7242c517d7e961be59050ef779d37c5de6ae39a2fd651c902bcb69f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "ba63581fcd2fee5192fc67269e605728d4d32ff68b2b1eaec0ff32bd17f3109f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "aa52676997a8bb69de86af1a6956b18fd1cc593b0a9988ede0ba584ad65a0cfe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "617f6bbffec5e4005d916e2d9fb1a56b8c6734c1b80c3f380340b4e8061a0cb7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "947344eb9a2267a88d73b36e6b0542f649cfca2dc65cf109c2cf966e43b6cf55"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "02c63fd431be582319e51d18e5aea7e7bd861d153f75e0366298759a51085d7c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "5f0a6c5ede8ca511b35f1ef1b999fcfb6240ed8293185f30f13900b072e0a332"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2.pdf",
+      "sha256": "d3f5097d2c51763fdef5857f079e48f73f3970738b44700309b8e12fdb65c1c3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2.png",
+      "sha256": "792f74d7abc992cd52879159e13c8fd07aff2a5148be4d498591b0e5b0efc70d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "56b5a056809b6afe3af9ad0c7f028300c812c377f5836ff545f0c22863be29bc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "a844a5346017b252219e747fa43b1aa01438025becf6e0991655e60508afe6a5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "b267bd38a7febfe9ce26bdf585595b157fc718cf5c9d9f5b2f6b2879855e14de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "e6f65043acaaf57f5c48784dca0886253568f8afe78c6b6f9d2e9459872de17a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "0c25e15fa428e707a4deff95679a81fe373aeedd26d8228092419e0f7e9f037b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "738b874e2e2c7bc15198d3a0c3fff22c3106b3da72420eb814932bc5e52dc2ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "80e0d72d3124b79e8fae43dc7a6e5a047c0bfd5c0abe7a8d073050f0a14ce750"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "699bf77eb3220e1365f89ad55519297160706f61fc7e1c59be257f9e3214db4a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "9c865782de1891cca96b3c49fcff49aa0a9160b9a66e5156af68794efbe8e17d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "3f5ff4ac5d8f20ab26a7ef7ff2daa2824188b2d6d1722e88d62c0720e6393333"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1.pdf",
+      "sha256": "cd523a5d6245aa04725a03dd00052a5e4eea6ac75cb2f97b6ea6455abd24a4ed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1.png",
+      "sha256": "5e420af6aec3705fccd09c22ee68bb2320c693886cc31d85ef4b9f0a429be104"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "7aefcc88b1260c5bcd5552add6482fada2082d1f347213e53ca9a92972caa317"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "fd2208aaa96d57eccbac07290f43842f4d69082fdcc5b6f365bada86746ac0a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "69a4caa78c2539fab5bca0a88966adee3a9d35e5a9f10397c2f5ca33072fe7ce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "36c262282a37739685a20b52a770ac6b816ffe37147096c80b396fc9fa9d982b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "3c4f3a4511e94f7a6f3287c95488740a610d09e3c79e74e5d0e9d89487187128"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "5d5a775eaa8f8734615938598f29f8b61dd4b282ae9ee52f4b16477eda8cd3fd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "78077fc54feedc72d44c3a685321869678b4f799d68064751eae90a020e8bfa4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "090f19022d0c192e5459175c353b41c77491558dd22a2e04f32cfdf8c2b015a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "1d38d5cc02a8543799a45346c55eda76308e58542edb44c0ae37c7a9b2c35b03"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "7fb68019c8940ea0782b855c03105c9d1c401b1c4c5a781857a720a22850ae57"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2.pdf",
+      "sha256": "c0e2782e19a6a7e8c7e081f30bcf1c560af6247603bea349da2ba0113790a2ee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2.png",
+      "sha256": "841e2e2e75b870df7b8dafa003610b23f763bf31ddac2a8ac27756e382486b8f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "a36a5f6188f13f960ca7fc772b3c85f63f8c70d2f78b31c869868f504a923b4e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "dbbfbb45f5914140e451b954d0a2fdf05309977fecf526948d93fc214d3b20dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "b78705c0a2fec1f6b702a6bc6757df0151c5429f4be884f9faf75df77f0fee2b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "5c933fc81d682919affd3805b8bd7081654905da7fe5db6ade56cb9af3a7587e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "0de02974297e90a6897ad876f18908baa0aa42e4bf174c1ddc1437045d582478"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "2e106776ddc3075eb4e18e41de1e9ab251dc33d5ab5fe9213048e19c76819699"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "4f0b8b370216563a0f3eb82765f02758816014fedff7521cff0e4876c6f6eede"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "10930da18bf814a5a01fa8a4f720220558e9b3b6d23c82a572434ee2bd11310f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "d9ce068e026f0c1554dcd7807eb19283bc87a7347160e02a6efe6ba98f0a4faf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "d6c310e3b7552fa3d4ec04fb6876bdad4c4324a3ec4c5579357e6340c1c24b4b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1.pdf",
+      "sha256": "a047298b8da4c2044a523684a6c465ef7886c6fb5d30631becbedb6f44b86c8c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1.png",
+      "sha256": "81e57ec70f0e5a296fedf4a8c6d5c010c622df86f281b24e6ab65bc253f66722"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "2aaaa8078ab9949ac0acf04109566ecf35b56a45d7a47e37ab5c71d168d62eaa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "810ef4a8b6cc28e2147ca102366d36d76ad190c26524cca5576ca627f771d999"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "e3d063ef7eca8b5b57f9aa13cf8c5914c97cfaf6615fa49efa917a2b9ecd4f97"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "832bb2efc9ecdbaff9b5c1cd1364df2c90a74e1b2bc6e3b4e058fabea86e916b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "f5baae5859a2e294951c17020ba2d69d71dddc9c5b3a7dce1653bcd6011d7517"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "5003ff163da2584128e301e87a48960f54b2d155aece0fc6d7c1ebad1668c98c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "74d22a2cf6e0bc94b7b9abf38d3115fa3ae29e92f2c1df5b012030671c1daea3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "6a50c10c6945d53abf8d87e5d2c37ecae1c5da03c1bcc8fa42bf23645b18436b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "a28960e4d2ca34df99bbe421f87263810c2915e1717dba8fb210209641e5d9a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "726528a38069dd3cfe1d208b5cfdd66c88808bb32929cb34469a85e2d2e4d61e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2.pdf",
+      "sha256": "29afb8d52bc60ca84baf01393ea97c381433bf5b7722b032d910c49b42de4787"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2.png",
+      "sha256": "1c4f4a78093a49396a819d0f986886663b941ce7e2b8e0e7cdc23ac8cbc2e38f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "f5fa52a29b5f9a28afa5bc7a0b20f63f449743784c6187791225059f9bf5640f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "aad45f5ca067314a8e43a8c12222697c953a19858310150fa465249f417264bf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "d81e62c5fc5dbca605f5ac0e5efa0f37ccd808f69c3ed3fdc0640734d2a691c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "8f1fccd2ee2f933f2366df5efbc25754a16cf1e41a0a8d88c0823f496e272c3e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "75b06d4f726f86dd2d5c606e9d388c8eb67f01ec1b4061117d5b766b876a9415"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "2a274cc277f11555e692fdc605172d58a56c7cfd75d56087537d99b43888ccc6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "faf683635c0ceded8a86415e42c06f3b86f987470c2557100816e0df80c9a2fe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "df329e573d2445acf88d0b8833c42ba1cc6ca99b5909ecffe215f71ebd08c009"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "1d07adce8057cd64e8497a861b7cb3f84e9f2c1b722617f1658f760082e8d0c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "c369853c8236cc2dbec4b98677a92fb7def7fd25c06d07241a7e798f529e78e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/paired_nominal_response.json",
+      "sha256": "93fd00194230027215d86d6870dd8e7aa73d05afe0fa118007dbf74a118ef947"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/moderate/analysis/summary.json",
+      "sha256": "04173cf947fba4a07c573cf6b17a780ae3f4c206086a48fdfb9f160411064d0e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/REPORT.md",
+      "sha256": "8226fc53d404de79d74f072473da8415adbb3dc5db4fd79adfeed55fe01a0aba"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/cases.csv",
+      "sha256": "79a2c953ee99ca514501a38d1165f49acb18bf0e79f2f09d9326cf21a2492d81"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1.pdf",
+      "sha256": "a70d8060854a263a33161e57be7d4ceb087a5046372f837855ba56071799f9c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1.png",
+      "sha256": "fef45279c9ee8fd2db123e84d4a3ca1dc931fa0a4258cb250683856a759b3d4b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "bcc85ef913a8cef5822c904098e2fb58d3fc97ce91e576d59126b147d1ca7531"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "663f0b84415c1ddb259121eebaf383a864d85ac2a5bd67e8bc1baec4912e9299"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "43c4a04589c62d126c8af83cea479729d0373c1b9dbc6509b8e1beb445e7c2e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "960b47153360d79c336c2cf6e9be971089add8d54927219525f69133a9088399"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "df6621b4f67e06ed76342f058a972592bdea3edfd7214cdf52138b8901aaa3d4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "0bec07da5836c25fd1098c4ee3b70b83396db6d32d7ec4ed75d785802a5f82dc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "ec9e189262224a450c9e72dfec7b8c90ad5af8cb73083eee78a8e4df2e8bb767"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "310333687d38b477390ec0f902c8c4d19a67b37cf0464d72495c523f542e36e4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "c0829feb5937c5b2bbb7a8aa87b92b75ee4e7fefe7d5205e989becdd541e4cad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "d0f5890145e6d17ed77b38226545eec1d70780cb7e6ba52e5105093900818aee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2.pdf",
+      "sha256": "0312828204ba9e0b1536c9e48019e7ab725cc94377d2a681cb39f15e80b37e7e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2.png",
+      "sha256": "0674fc15e78af376cf24fdd46c6cdbed649fc9076dcdd39b0449a5621b78991a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "10b61a1395396685ce0d59a6a305db8886358394fa48c2ba2ee647d0b5837f6b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "04b3576170fdd35003592e444208ee04166fe041915c4dd60a62e435e96d5e5a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "bf0412203c1aa731ab7d13f4adfa8689d73d4fc09d409593e1f350a65ee2ac3b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "b2a320864b4a7edb8fd69cc4ebdb024f4859aba2063be995be04fb68fcacba29"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "aa81d3345a4ff01902a8a3de3545e8023b18001ee33cf8a046f6b8bea215f3a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "bc6f2ac671d52d631f0649b409eef2797f8805240932e0223ea4e09c593d29f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "27a59d62d57ca305e4cf7b989bd02560590f094381cd036a1b5c87c190576acd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "d76945b080b4d7072f39c64724b0a181c732e80720cf8fbb6f97528d1980278a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "2478bb609fee906357bf6c0f21fcb4aa71536fee07389272171b1126922acc7b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "7838d6f41c636bda16967ec0143bbaf402eb4cc6ee07804c341d4966d33a93f7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1.pdf",
+      "sha256": "4f37ee3f7e04f53a6ced315ca9f8136c51837253678b215553f2d32361fbedfa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1.png",
+      "sha256": "2cf36c9531be6fce9ce0cc10a7d7f551aefcb2af8465aa6842d6987c46e37ac3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "74a4d4eea7b0419d41f099e151c20391a80e9ed6567b9d5f8b7023e9ee5be16a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "4a8e96ea311d1e8c7ae29ee8bdc77f40d6baf520c9adc215eaa2003ac0654fa0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "eb8325aba93150b27881e2da6c6713c60822bd07a89fbd346ee0d0bb4c82822e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "1e824bca2b59588139278a5dbf147ef063ed5f85f99aa0d71312e2b0db216121"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "7b7978364671927055e98cc8a236debd78109b6e0bd1c3ff8f61bafd57c22cad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "7bc131736ff69ca3e3568ae471ae92a0db35e7363783b666d81a366d78b62272"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "7bd9f3fb89750cf880989b03e63011d2cec58181d97f7769af2a33c2702dfc82"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "e615da7e088e2ee0b40b18b8bc3b80f9f6910e599670ef04795c8f6881975e14"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "f694be5601b718c3cf890f9729de586d3fb5aba14bcefa554df142e59b91d168"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "2d6476149bef2bd497f89d2467ad5a90b00214ce9b8363ff0307b9668f67f2d3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2.pdf",
+      "sha256": "cf49bf4f1effbe3d8ac9403b4fc35dacc424ee495fe6482d8a7af78e546cd88b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2.png",
+      "sha256": "ab4e2c10de0f6c02b8f70479f2dbf929ba0bea46a93185c2dfd7b5dabb64c075"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "621e53d65558755eb8fff30ad4e8c21f464759c4452993f752a1a6cdf3a73f04"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "68c81723163b911639a213f13e8831fd319a7b42ce9bfdcb5f74116eb6af46d8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "489f94fef6b2a8d706f41a5b7c394247fec23170192e7e376583cb67ffc52b51"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "57d2a9a3977ff77225e19995deb16931aed754ea206907d36790713e09339518"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "a95a049424569c7b89738eb8125d7e1943e4c5a8c8be7c0e3e517f6fd98f009a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "2ab84cf05457c5bdd444173f1d07f92e5d1b852ae8c9e387fa3ce72efa165b1d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "0b2790a090e510eeffce4361a1fbda36d122afc226843b049ebc5afba2ef8d01"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "3994ea15c63854649366babbc516dab0cdc85dff215545f1539278ed4f69a8f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "54b6463c14ca5a1d6c6424aaa1ff4c936d79cd874492d0e62a04361e16dc677e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "f0305e2d4c99c93cd19ed83f8a3719575e8d445d77013676b7286f0b9cf9b869"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1.pdf",
+      "sha256": "8b136ee52d9d6ab6777dfe7f41f10911f3da64978f6059566df578a14a4a2094"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1.png",
+      "sha256": "829bef9040a0187facaef96da3b7fb0f488306901ded57a6d6bb76720e95ad14"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "905004876572f311274d3f6ac022a8a7f991deec563df82ba723463bf6b5c921"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "812ecad09df3519fe36f5978a36a5f4359458cb3e46934d216923e9f349205d7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "22975616187d01f6fe786ba01ff0c498dbe1dba7b29ecc85c95c83f600260ef1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "571d231b1cf176e8f71ef42456726ac9b55c7d7da542bfa1aabfb1fb5e91ccef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "d6762ec75627c72de427abaf1be9a5d97f5f86519b75d99f95cb41331dd29d36"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "547a88076f885b86b95b5ba76a3aab39383c53ef5e230838b37de7c411ef12b7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "11c38457b603049a3be1c743f702a9bb6d54d4988cbac031a67c6ae8d846eb03"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "35f24f29880f6a76cceaea5470c3ac5f06e6d433b585e2da54c956c06795af4f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "809d2c0cc297e635ce8020fccfb890eda7b21ea8a7ea3fde479b7b208248b298"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "00662e7f9a7306fc8175f868f09a7fe355ca5bd109de6676fff4c53242e10b23"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2.pdf",
+      "sha256": "4dc4223da3586c654029c4ee0269c9b71eebaf99318efe170b228ad53a8520c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2.png",
+      "sha256": "0393cee0903a86a25c2cd245e9d957638233c183408a69d2a3afdd5a631bb235"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "5ed74b0e87fa85e3a99fa9b48b530b993001e9725a70516a64369296840879be"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "9ddc4d3fb2eaf7d9aef69e74ce8a636137aa264ad009d69aeb83615174fd64ef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "0bd498ebc611e98f86935495676575b84aa242d7ad0809caee5016c46e6daf30"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "8ef2c4fa585cc21e1ee3a83feb36a56a6e43da341a4ce867b7746cb5b5e6de9e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "a4c0270b8b9ce1141438cb66a67a27a700d3312ab5484afb5f4ef34e1abcfaa2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "c9be3bce89005e56eaee3cd85aa0ee9a1f277ec50f1eaa622c7216b05a682438"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "5343d9906cfa89816be91eded4158e13ba26371294da565d965611e06f701244"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "b3b43c54a5117d8a50f1627462dd88e697602b3d9ab8e2c5425497ae8041fbd6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "cff10f033d682ff3a856f781268b5412b535a0896664240205e1cdf244fbe958"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "ae90e9665ea815150b4cc78016f1fb48397dde8dcfba985e21e84aa64d8989b8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1.pdf",
+      "sha256": "0fbdb8cd793b53f0f7e7a84f6b8187c5b320c7b6b78dd525fc861a401f307a2d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1.png",
+      "sha256": "0f764e04017103b422eac3bfe690906ad1f2c1b3f827f64890bc61b4c2cf986d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "b825718915445e8593bf2bc28427a742bb7ccd7d99dcea41a4e9e7e73461e5cb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "9fc8b3daeaa7ef0ac0893723e8c806799edca0753be65b71f5e9a3d742e69d6e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "92db8543da4cd500e65cb099b8dfd6a400d8a2ecbd0c44db3b28e0a412af8a6d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "71e50d76c93b6a09daeffba6f2bb7ef726e655f802db02f12ef0eeea855257c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "679c349eb2d4d500e3c2e7823487172b039e0fd142ac0f9975b53a09ed5cde77"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "49a80fb9aae06787808bd6c5bee02db23aff3c0ef7312ac27bb914a3630a9274"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "4f158cec9f6e13bc0841c0727e798f0d949d217adf84f2047acf8fec97366968"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "cb4434d8f5bb725593345a8600cce3966725406f2de033369ddb87ce0af9b9cd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "03d54e726c3d1a6ec52fa5edad75c16a5ab192ddc66b8907958a828c7981fa5a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "f7637f015d5fc04aac37235a2b6baf4c5903c917db2de23dd821848da9ec768f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2.pdf",
+      "sha256": "055223abfcb11f0bb5a1c3bbe9c9761f437dfc8e111e58ac8d860c299393eff8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2.png",
+      "sha256": "453619824b4b042df5df89472dc15fe6fe6c5bfca4101f66a67c0713dd57a989"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "078f021e0cf8f00808f139f9b9fb90afd4f9610bac47713d6565b57e49a37531"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "33ac08d96010cb61ea2bc0e2910da2e7e2fcf073ee18a261be7b159fd3a3e8b4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "a7fff95257ba1cd521e16b1721863616d3d39b88a34514fc780d5f91640d7767"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "4c626f968c57004afadce06ea4d9c651ce1b870c86387405f9527a66daad41fe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "e513cc55c5e661d8e8d5a51088bb2063324b9006f7d944c99fef7a594572a1d8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "9e034d04ebe3465418ded651febbf7350652648966b6fe41a34427752ef0f1c7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "ef8a0bf774c2635a68b405c48039d54af49d4636c7d92428e73ec995e063917d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "0ecb0de18f2ef30fcbedfaa6840fe3abc2585fddfd4cc4980de5046502612167"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "c895a94a140a84f5877ad82d72f1c1f911bdf32dbafc36d19e75a812b611cefe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918502_right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "e18a0d70b3957be10abed63c367264ace7d779629f198a0850f53436c43e0f0b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1.pdf",
+      "sha256": "88bcbf8f3c03bd3edc751d46d1081a3cde2d78fbbe07213dda039f8e4ecd5375"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1.png",
+      "sha256": "5758a436ed0cee164998c2cea1f2b5c0a5e6cf5d4b3afa7f360882471ff8d069"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "26e2d4e0007ca028656f62d0654c590c0c0bd022bcc3bf5106fe47d1c55c36dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "6168243370c8ae1bd9537210166d878aeb3f9a6856e4b8389209895fc350556c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "bdaed0e5c59739f862ecaa4da23736d93f76b28481dcc21c3ddbdbe1b20ea862"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "03c7cece28a170a2e7f8fdd37bdd3b1ae3243474aeac3f96f1c0981c102ebe2c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "db2cdccbc907484b98ea31941a8619c06c2e356ee78f59306592b3facda3a647"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "f60b58ccbeec70c5be777d0f0f097205e9c24b55fa65fa97bca02484be315d3d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "04049368c0480a74dc2388d3dd01bc0f93855163b4130d904438264dd6ee7d73"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "360a93b47738269530ee7f69ea1c2c6e96b103c8fc54bc9ba3f387a876bd1f37"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "6c7f57ae1c77abbfd135ae2f8738a6010983bd77ee41d216ff9c9cb015d7995d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "99fadcc665625fedcd2051163265f12d4a6c5a4ba8d14741614bc8587a03e5ab"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2.pdf",
+      "sha256": "67d0a85ce494fe27af3bfeed78e6ad219f63657074024d955e11e50e0877f906"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2.png",
+      "sha256": "84119f04f3bedd930374c0d2a241f55c5d9323a8b1909f2807f7e724c65b9cb7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "3cf75ce648aba5500345eea23cbb77e73110ebb52722b25667279240404482b4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "01d8081a6fc027529af7fcc94024266fb8596aa575787386835c5f7baae72476"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "d967aa7969e5ab6e6f3b2c85c26a36dbdf7c1f8bbec540d90c78469d3192010e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "237031e265cf6aa5f897e63efa17f0d4db539b909ae1c34514dd9b5da3507e54"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "4d94c122d3202791ad6339faf40802783f8458bc93c239b274e9dffffd809823"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "fdfbaf66de820b92df199513e11f4c41c36a93f8598a12f2738a774354d39608"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "502c6867b6c212e3bc562d0e18124473d2d8da779195f5f088daff983c777834"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "f054e4a45f5bdf43780c8a90c3e1e704c14ce33eb5e6c7d8790a85a2fcb38d01"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "93484d1e9f963ea0e22eb0b02fc703b2267ffea8bae63e9134022c3bdd802a79"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "07be7e469a1d7f456c2c1abb19bb7dbe7a2204dbfdaafad4fa465b5be99fa4c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1.pdf",
+      "sha256": "b8cf18c1b6e071d24c993fa3ffb99ea25cbbacdbd3230b14f585363315cacf7c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1.png",
+      "sha256": "966fc3c8e99ae5e80aa706c07c25e8b94d7a6bdfbd9ac1934818f953ac98966c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "7ce8c1e32b32e0de80d803a0fede953953861f150383cdc57330e3f67a56af96"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "efca799247c0af3fd3740b09bf03bc3c88eade57c6b6d112e8c50694720232ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "105c8845a00c7c7af25d1393ee3f97074e357a6280f3c85edd7f5f4e1fed6c00"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "18536de9be87a38134e98f95af01190d39a3bccb7c1eb00c4fdbb76dce549457"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "b5efbbb7940828a972d11e45cf577d45ed1a150be7a7a752a3afc8b5d2f9d15e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "7b7253c4b325bd2d6b471dc15ec54e78110400d0cc555c1c745b2abed5bb9db7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "d1d441dd4cbd9dcb3b1fd710b161ee2a00486421f7deb2ae1666df42fe6871e6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "9a0c8335b444b622ff5c9de3e03bab7d374d3593a2f331a74b30c35c776f44da"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "212c76f5716e65864229409dc222f25bc1d8cdd4a1420ef131906f1713e83f93"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "9e9ad6630196708f966feb469ca5ddee03dece92e65877be669b3ce0519bc87b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2.pdf",
+      "sha256": "8eee36a9c7eaff950bf27d7d68166ff62a41fe6dfb6fcd16faedf5d402e2331d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2.png",
+      "sha256": "fca41c83db3c2f0b8c0c07a42e2910e6e6a063b8cab91595cc0b30266e4d7586"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "4eb34db362d9c0ec45c357097ed4c770b339444f2a8ecf803b2c30412dcfb3ae"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "04b43110367ceadf23e939487920984288f85d0ab9e5f4dd7a8d2ded12d803f1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "a54d6757acb6db80f1296605a5cf6919f72ae6989efa0fb653b51c709d084cdf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "a1f8cb41b972a02e74b55b88bde3d21499065ebf8f4f03bc3fd71e2c036bb4dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "c1944aa08e4b6ae043326aaa061d44b307c214fdb8689aae4d6edf53500ba7d0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "789ea5cf8236b2a87eb5084cc9b90dc5135809dc97e34aa0f1bae604b62d6b42"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "13df991cd90166c38c838a0b5365ed2f9403df11e8e36af705d0c7d8ae0bd27a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "6424a33cb41a798cc93240afa14d4a9a6d1cb79d7cc57af7c14b6a088cbf1411"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "da6b420b30bbf8fb8018bb3e9b4a50191f19b2a32e30c38325ff0dc1f41c0e9c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "fb23bd4202753aa5f51ff2b8926c7b141d90aaef1e36534353e71e52187d1f24"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1.pdf",
+      "sha256": "83267e487d0ea8371d7b97dfeb0ef5dd5dc178b5456f7f78bb2b89a78f804b02"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1.png",
+      "sha256": "e83b544a81e5b7a19679daa1e1575dab4f9c86e9a3acf0c9894fdd3092b2446b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "427a5b97239f88ad844734f621abcbf4c3db1d9d278ebeebe0f86de5c98a8318"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "5f8869743800ed69234b5eb81905118493c7c8b0db993cd03665d62bde5f6210"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "116d5cf08e14bdd9fc5741deb7d9ea8b525b435e91b11355bb98f150587f4df9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "9f1da9363f16659b80bb0b52ae099d2d4e904f08a06a3cefe405f88ab4a21efd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "6b844327a13966d2654d4dfe05687609fa67b18f6e6ec557f0a5560aafe57a0a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "917adb311d4dac4859b7358227c3436bdcc7287c5df5eeb3c8ff6f3c1bcacf1c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "d8008a42c8f977148d80a244ca7edf0e6bdf6293876a07fb97de25e27ba34535"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "097db596f5868aad4b05873d3cadfc559c7533d033e1cb62444e6bd05a45b50a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "5aed6a138dbe0782a03a42eabd7d4440da948a0518019780384d4d111c6beacf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "ecf2e603bc51ce1346c3f10f8965497b2dbb45ddbd31acb0064c8d6f0515e2ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2.pdf",
+      "sha256": "748395160bbd349c9b12c82baf1e41b43b63037a57edc3720f02c6d42e87f085"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2.png",
+      "sha256": "9f1aad9933489ac95e445d94328f5eabbc3f952fbc69223c1de452a79520c25c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "a7f408e0dc3eded5a534f609cfe0912be165aa92143210da8891422cd03ea075"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "4f5bc99fd75bd9e68b01b3814d3ccb332e7887cb33bbfc62aecabf19bbc7a3ea"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "7c8f046f66b30c0297be7a6ae7b4eb6bc84c921eb65e59df726b2d62379745df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "d22127a60f51f68f6151d72713a14818c7450791fec7c98bfb2d396dd9ea5b49"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "c6650206ad178a290e9791756b1cb6b1e0a40697a7a4969d8d0c8c8a5a77e952"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "f089f6d6a59c654966c5597016b0936862677c108e3865c58a07c28069e65af8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "c3e7834778d5704b0fc6b0ba93ebc75070a31fcda1c19099678d256ac05744ff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "419f50ae5b1022bf884f1c826d05db86b6919c828ef69a431b27e1daa3407b74"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "ca59da9e468c9f5c6accab3c9877be08b99e4f38ec0233435b17e1be7318506b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "aa0a32480d502c9dea3dd17ff830069bb013af61c0d5188f6d43c37614650c15"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1.pdf",
+      "sha256": "36b4f8c1501a978823cb4e21422a91050e1c054575bddf6f7a687712f2dd1344"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1.png",
+      "sha256": "86c3f80abe82a2faf55d64a607466e8098af0eddf148cda9309c8c64177b8db8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "9c456df0c140a1e1174d0e4e441d1425f240478db122c85d15f166bc41caf8b1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "d3a4cbdc00e63e0c4393cbeab7888678fa643df62bdd3318aa155eef8ff02f0f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "5871088de4920793746759e9c9ef4326c0eb784f10655e0226f01aebae53f85b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "b141ab94c09c5c373624c53c2e29c088b5567a1b70a445e122a22cfc05afd13c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "fcc2463968a45054fdfd7a2ba5f67a28dd07014cbe540ea1d91235f93726007c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "e67fb38ac951ac17fe3278a2c3a51a2988ad95a7a9e8b8ee68ac7ec7f80a6dc4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "dc4588bd606f0cb9da0d901f3c2930a9f77c82078d4df24cee6d37c48b40e8b8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "dc6567969166a06303462f5449fc31aca01f5e32e0620e769af95584b31058fc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "7e3de914d26ec359ac4eeb7d5c65fc23e9f863f1dc407d3bdd0eae449e44fa25"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "00d3ed7942951e3cbb150762679f185a336e7dcac49884c128451ffa25dd5654"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2.pdf",
+      "sha256": "bbadf6d5169fe929e5baf089cd6658100c7fdc7519097a4e0d68be437a521c6b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2.png",
+      "sha256": "b99ce909cfa7d1cf6a5e206df32fb149b0b8d28636dca9e25f6273a93afb0a50"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "b1fb5066167fffcb967faeb92029f0a86cc47b64f1f17ae1411ed1018f7855bd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "8a5bb6c9011147138bfe762f6bcaf4416f19d8e77b204394b2b0a605858ce101"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "58989563334ce9b2d1d67d47df6c01990eaa4d31ab27e64b30843f97b52d82ee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "0358c58c9db9d1b2cf440e3d77d19da18419d9b6a4ff3308da5821867eb46820"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "180df5605ce2afc148c88a434d067045622f345973c7e80b62218c1127f75a99"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "06e8175012fdd2e36aa67de21337b9a9533db8f709faf3b7c9c5d7ffab74c3d2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "3370aba7774ad792d1559d09c4097c3b197357276c0446f616b80268cd1c5285"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "10e6eb2e125aba7e01f302614074ae9a0e21f95c3f5eb3b2eebd1899d146cfb8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "ddd0fa692f7379b19dca7b467a7b1d7fcca81644afd2c32df32ec7f4fdf0d976"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/curves/seed918503_right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "1661eb213f0a67076c68b5cc69700bdc51c4ada91699fdf142ca552b1e1c7c06"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/paired_nominal_response.json",
+      "sha256": "6344e84397ffbeb849caa6cb85273a8927c7048ecc208344a09222cb3f0df4aa"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/strong/analysis/summary.json",
+      "sha256": "98e72c86efb0ee890fb0b3f5f22e6cd025808bf83d42e6e90567380331146127"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/REPORT.md",
+      "sha256": "97be4409fa4ea5afd3c5071937f239308aa645a30cb0b232df250e4fee10361d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/cases.csv",
+      "sha256": "dc25dff6ae6e183de82fb7d9940cdc2f0da9b73613b4727c6b1ef823171726e7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2.pdf",
+      "sha256": "42dd43c8a8ac3de722c68ab435daaf9c1e7f4af2548275e664a096b5ec2f57ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2.png",
+      "sha256": "5777b701963d9230524de2a235005c79bb108e98fb91fc4d37af86e58f41d42a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.125_reward.pdf",
+      "sha256": "1fd66a4bad1ab213afee20cc4e3c553323c8bc38239f2f697ee1e1434931cb47"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "e93e562193346f3824e9c0d67f5ede67f8e925c13665aaba8ef2904aba20edad"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.5_reward.pdf",
+      "sha256": "22219c503d003fbb820484472f0b969cee3920f67aedf116d8e72f5a2234d675"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "f6ba79e8547803f444442a82c7d6255e55e59edd66042d84a61a79542515823e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.875_reward.pdf",
+      "sha256": "48cf8800efaa97adab1cadbff274bf16e802d8298e0cd0e37c59d5b66b176da5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "691b5ad890614efdd5f67fb38b58499d809b5aec1e90032b500f190d8c650791"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0_reward.pdf",
+      "sha256": "c95b71fabe8974a873c84cb37eb1b6ccc358ae663d0d4048713145ecf72ae33e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "774db715f3d5e950b40f7030407f134f52d94d03591f6570f8bf1f2e2845e3b5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a1_reward.pdf",
+      "sha256": "40f09dd1bf5847a14502d766546d6e265faff11db8a2e591c8db400b5ef4b218"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "89b063d6c78ceef52d8e57843979b51f17c04aa99e437acb69f07f4598e0e36d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2.pdf",
+      "sha256": "560f78ec1ba44eacd5cb8eb0ae1b2a039df5b040e63b573317fb416112a326f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2.png",
+      "sha256": "ef02e3c008b60f71d989cb3a6d21f48522d6df1531780948a6c541efd74877c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.125_reward.pdf",
+      "sha256": "6d85fc49720949206489aac4e47cc1e7724f7f6e0972dc3b4aeef01fda1edde7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "e755eb863dd59d1359c7575cfbe053e1092d250cb3c31256ca6e68ede65b2afc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.5_reward.pdf",
+      "sha256": "f8c9854e980bd30f5796d5b57ce63bdcd3d0734a183158fb929435f770b85639"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "5ad6bd99d1db92f34f6449e6163435f4ca28c8d2c7fe54707c1a6e92b9b4e00f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.875_reward.pdf",
+      "sha256": "1a5c89f43791175b253ca374246bb7e14f2f7f6af4653da2f9f956844135e69d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "a88a2d2e215740240bf19e3d443e7df9f28c53f03f79dd93081e5e2b10f109b3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0_reward.pdf",
+      "sha256": "af437b14e5451636370b31f393d2105dbb98234a948d30854dcc7f7fb045c2e5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "3d8b8fb80283e67fd3256341983560b222050cfb049b01789eca85a71b2a29b1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a1_reward.pdf",
+      "sha256": "346efed27f0bb19a2aabe039bc38a26ae1bad7d892bfafe4336213c975287182"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_left120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "b9dc30d4a4ace77f191e8155599c3eef7458840aa454f098cac7e5fe7f5be7ce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2.pdf",
+      "sha256": "f6fde5f3a2ffa8bbeb5324bec39fc8a1c6bb7343bf1a6c6963efd97c6b863e57"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2.png",
+      "sha256": "e50bac7c3b294d695629e6829c7f99bdda8faba0a8553a2c690e5f731f73f26e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.125_reward.pdf",
+      "sha256": "f7a1bab4dfdfe76652718123c9f9cee3fc2a44b898620401af0b420ac36e78a1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "1184e592ad84e822663cc9d734cf2d7994a3479b9275b32d39bfcf117649d6c7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.5_reward.pdf",
+      "sha256": "746a026e7265ea2951460640b201a65a7854c0e04924b0ad3e50a0d6c0c64bcb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "343160e4012bb8a061357291fe75a936e6f7b0038ab07b53e84c4ff8b801000b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.875_reward.pdf",
+      "sha256": "9aa7f2eba4ef681c44327d75d9f214f714fcea382da32087d876966bb917c067"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "d34a49765707769e91b3151f6047b2ad6ff66c4df441cf887a71a1604454e26d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0_reward.pdf",
+      "sha256": "2a432f60c966ebea7d7ad4217b2193051808bf8726342476f44cb10e9b98245d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "2f478709d6b0f5f3e3a55589da15aca1eb73d9d7f42e9f24b0e51edd31abfa76"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a1_reward.pdf",
+      "sha256": "3461b244f017ae3013ed23fb308e6695b3a0a155fb4f484b180c6522dc51b152"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "6ae9d279819c30f070ba3765a78aed7622ec7f9613240b14be13a2106090b9ed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2.pdf",
+      "sha256": "3471dae2691c82de902cca1594892edad0d0be75ffcc888fcb5960a4f5c4a472"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2.png",
+      "sha256": "5b8767bda992fe82b08d371f866f8b200dc44a31df3a7754deb18388cd358117"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.125_reward.pdf",
+      "sha256": "e495a2a627e52bac2aedd497c0cba915f0c3da71701a316295765f612a6280ec"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "3d6b05fe7113ad868c71c532a367b3372a3235fedeedd49f97f2b7b5e6063f79"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.5_reward.pdf",
+      "sha256": "ed8c9d9b26afce16c960434e53dd2d971c2fa2b5d4f53bac4881be7e7f6278e3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "2546f07bc573b7b9b1704f2b9381bda820dd1b94ab517da1a3e63b7966277dd7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.875_reward.pdf",
+      "sha256": "458ae2a15a45067ccb393a80b6bc44b3a0120d80e88bf212224057cc8ed9001a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "a73f89812a9290d17799f30fee137a80a5835a138fc230b794f557b9e7cf9ead"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0_reward.pdf",
+      "sha256": "c79249f9dee88d31a770780dc6024cd2949e8122c6f1e4da0dc154600a7838cc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "20dc2c69af5bfdf72c752f190f25a8babde10f2e7f5dbd3173e44aff1ee54eaf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a1_reward.pdf",
+      "sha256": "b28219f3c5933778675457072101083a4ab01c02fb9b782251733765d4d7dfee"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918502_right120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "56bbde2c46e2250826986d484a83b4eb00b5deaa1fa906ae11cd5501e2daaaa4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2.pdf",
+      "sha256": "950692532ab9c57401bce08606f5f7aa3d038eee7ae499d4731757235c9a0e4a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2.png",
+      "sha256": "801cc8b9454515be8f1cf3d08792186309dc6f47a0d4387a7d13bf062b993418"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.125_reward.pdf",
+      "sha256": "142d3e020e06bf06bcacd5960e68d7930902df51da0eae5b66c3ed2d334408ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "4ac736a5bf765c63d8a06fe348e2e7df2225a98a58c4b302ec8fd75cb48c2f76"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.5_reward.pdf",
+      "sha256": "c3bdd6f63f3519c744f79d7d5469efe941e34fd229a7512312ff10b7200008d7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "d63f1532f85e6ab7ef3034157d7f85cad48e30015cf32b4af3df3a5da9221c99"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.875_reward.pdf",
+      "sha256": "ab764c997f89f8328e7f3fbd24ce94226f60b79e528e261905593d862e349989"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "3294c2b2850fde9d7c5d37c7eeff434c40682ba9cc5e8c2fd67e602165bfc990"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0_reward.pdf",
+      "sha256": "29a1ddb48943eff39b097e872e319ddbcd7230c5c97b351993135e2d8d04abb4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "52d2f859cca837670b6663a737a7aa6fcaf20db8e87f20cf7ac9a3a80c457b93"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a1_reward.pdf",
+      "sha256": "e07068176c6de24b2d7f17be9108e9770407bcd4c79db8f21c46b214cc22dcf3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "690d8d8f7e7f89656a4dab2e3d86fb1638a5c3620ef9fbc36e35c14cc5785805"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2.pdf",
+      "sha256": "3adc9ad885f9816f542e02672250abd5db8fa02c93e98c3dfbe07fe8a550bda3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2.png",
+      "sha256": "0e25824c7ef4f18717083efa3c7a5ea0268eb43e7b47d6b6531a422b0f4e07b3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.125_reward.pdf",
+      "sha256": "9959cfb0b63117ee7973afa8abb9ac2da83b2c9bdd33ee6be9220ff360baaf54"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "435398fc4196fde684555c51c056d004f0882a41d631acb238b54d0b404ae660"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.5_reward.pdf",
+      "sha256": "ffc53466dbdcb224189d59ab46296607996db915d31e7d2e2f66d1f335532ab4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "4e854520e0a05c7c269bcf037e8fa203b58fce469bd539b1bc2e0a88439a2f2a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.875_reward.pdf",
+      "sha256": "b8c9bb54177a680253b0f7fe23f18a41d1344eee8db83b1e96cc030fd7f47a6c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "8fd3013ef709ba61d758f77ba098895743e7c0b86b538294939c47982d1f8546"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0_reward.pdf",
+      "sha256": "20333ad2691af17f02df1171f4bb53e3163b0335eb9b4047c13e950cca1e8571"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "e1d74c20ea86b394febc6e0aff1cc1a91b4d8d4bc21051ee360458b968ca941a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a1_reward.pdf",
+      "sha256": "7499a4e6d81b5f0ac1cc76fa05ca7e7f0a64bbc9ba4044fb4203f0b163b1a18b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_left120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "517e5f51a952c46fcdf1a3d1b3db97ba41cae8b7ed1bdb97d250aaadb6c1fb05"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2.pdf",
+      "sha256": "13156fb92057bcf7636919c89649d3d3ad8ba8a7e846bfca1679930a7b2f9331"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2.png",
+      "sha256": "d8f66aa5411fb870933b6ff4cbba0a80916d5899aa21679ac3c1abb795f8066d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.125_reward.pdf",
+      "sha256": "1fb689703d205a5aa2be0eea2cc1a2d2262309d8b2701242f28331a31d2424d9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "bbfa226200c2426ac659a7cc891d7da5e4e0ade764b5c653cb14739a38eaa4c0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.5_reward.pdf",
+      "sha256": "d4d74a95d1db38a24084b89e004b25e698c4ebcf26aecc8e5ca7108b1a1560ff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "7be12a64f9285e4eaf8c247808d42e003e5f6a704f0836a4e5b5fdba5f292ae3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.875_reward.pdf",
+      "sha256": "a25f89a0f2f2347558955c8de797d2efc93275ef8bb51f9b52a910a625037582"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "c05af1e07a23f75b2e6605974e5fedddd8e38ccb6fd2aa4dc861725a7d9affce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0_reward.pdf",
+      "sha256": "55b9931d3ec708d3455ce58bf99f1846f1df275f61e83cbc41c0d61e968e55e5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "362453f945a1859d06039f7aed938f22d0f7709aed8db6615b7be7c9496e4788"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a1_reward.pdf",
+      "sha256": "a117fa0c764f3ada7b230de9dc01d2bc3e144bf4846c99d4b4845b883f939a18"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "d2c46c8adcd9cb26d15edf916de1e0d5073aad02317a63a2d8611bb1d25ba473"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2.pdf",
+      "sha256": "82ad1d23a38fb58f9c877e23fa61aac58f838393828a006fd122421c86a551f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2.png",
+      "sha256": "f1170f3855dffc252daee99ee978edfb119d91712b4521c7870b10fbc096ac38"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.125_reward.pdf",
+      "sha256": "b180b8e47d4dc0e5d72817c5f1371454d75f8a086cdf233c65f9381a9c39088d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "ed8841e18615365556722b89ded279d6ea66132de6b70f05f6c429df71374a38"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.5_reward.pdf",
+      "sha256": "ad553a6f056ddb02d59f4245ac0cab0d482b97eccb038d0a43be3a6b640da0b6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "8be45f5c39308deb08d2b5802f7263c5d0220b2e76a72e8176f8c31ae2b28fb4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.875_reward.pdf",
+      "sha256": "da6013d8599371917ae1909682982c02c6b568a914ce9b55c2d4cec4236c91c7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "2dcb214e767fac2b954c9efb1fe8c89ef2c753fc20d22b88e8f3af80577c6a99"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0_reward.pdf",
+      "sha256": "07b9049e282e7cdf1ea792f48e2a9f4452809e06883495be270bf9ff0b1cc45a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "1a925ac6b3692392473b3d6fa080e6633ece1870e4c00eb0c4da490ebdf54cf1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a1_reward.pdf",
+      "sha256": "85804ed092d64b2ed241bad095ee1956246b5537eaf7f6b3ac41385856adc6cc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/curves/seed918503_right120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "22e839b25dd7db63f50e9e70ce91046bc4bc4776f13b9e7f3c435adb52775f06"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/paired_nominal_response.json",
+      "sha256": "330f1d4a39412e17c9c268f4c58ac6370a9ff8b0935479e2db3b4f70ac310307"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/low_speed/analysis/summary.json",
+      "sha256": "ad4980762ad01f487d97f68d607e6f14981c42027032d7ab023ea6cf9c656ba5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/REPORT.md",
+      "sha256": "e7d03f0db3f1413c46283a2d19dec0f1ed1c86f62bb5e51fe7e2f8b07b926958"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/cases.csv",
+      "sha256": "e1ded1c113fd6403495d98ab24c76213f41f4e3ed9bd9bef49d2d30913a5f8e3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1.pdf",
+      "sha256": "2bb724d0f3477a800754cb79d2def65b002bb71637ac2f245fbe89a733c35026"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1.png",
+      "sha256": "cc891b67015f7ef8594127800611d995ce146f9842dec83144816b83b3a9ad42"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "912dc0b428b36921c6130b292010d685a740cfacd6c5eb47dd848aef1105ab26"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.25_reward.png",
+      "sha256": "7a03b6adfca36f2afcc0612c31160d2e28c49e88cf68296383be32c617bb74fb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "a7b84268be122c1277bb6b429e62f653dc0a0c2e4d7f90d2c7394dc970ad35b7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.5_reward.png",
+      "sha256": "5386d58473a11c9d24b276e5e0e76d51f7c6c92ca43fc076c482d28fbe8d98da"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "cd68e6ea7c6971d919b7dfb9d7189b4381e60171c3ff1444457ef1a8dafd6a54"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0.75_reward.png",
+      "sha256": "befdd6948408c839fe169bda39e3577b033dc190aa03480928c533a48604e927"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0_reward.pdf",
+      "sha256": "0c9b278447603e6349b5742560e6b349251cac030da49c04f5e9a8ccb920dde0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a0_reward.png",
+      "sha256": "ed646d600a47d3009c2ea0e3f8ef38cfd7cd709a584723aeaca51f120f6f5468"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a1_reward.pdf",
+      "sha256": "42605354e3e8b24ed4945a2a1d343408f307fa969d193e927e52274fbbef931d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.6_t1_a1_reward.png",
+      "sha256": "b95eb70316c17caa96cc935f10551694242259d0519c6ea510fd46a448dd642f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1.pdf",
+      "sha256": "93cc74031839db073184ed664bd5c7cef914dfa8df69ab887d6298577435dc11"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1.png",
+      "sha256": "7a7f5815c9944446542832d77a1556cf8f07a512673379b280f90a64c39dd766"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "b426cdded1712e9252a7798ade0661df484d96826fdd40b23032c165828638f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.25_reward.png",
+      "sha256": "c03f77d8d5c2b5c82adfd81054ec2da823b0f51fa8fa0f7f0531489c7f6c6cd2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "59ddc233722073cc4c5398ba6a36abf2875238e40f5d3bbfd47f287fb1ec242b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.5_reward.png",
+      "sha256": "a3926f2d8a48c4ff2cf290dbedc70635497465fed244d6d4d4563d5950b7ca91"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "b8a7ea01c12688d8d31570a031965eead215ca5bb966d4cb8b498873880f1d1a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0.75_reward.png",
+      "sha256": "8a20a7e9405da8a357fb3559afec3f9090e9329cdb3cb981e2746763cd4e8b0b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0_reward.pdf",
+      "sha256": "b0c7dc7076d0d7fb4e798ff15f48ec6570fea9500a61459ac000a8cf673dca97"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a0_reward.png",
+      "sha256": "9e9da43400f7a4872dfaeb41f04916bc29eaf588badecbc36fa7bdb695f5b10e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a1_reward.pdf",
+      "sha256": "7aedf7bfb2c42c1ba87ab932e0886ff8ea481b46be200891484f0f8ae6a574f2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918502_straight_v2.8_t1_a1_reward.png",
+      "sha256": "a31d810013ddb2f2dbee936380e759e59efc24eb112d63d69762703c356ebda3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1.pdf",
+      "sha256": "418b5fd5372d7ccb320f33e70d66fef4b8fbbcc78089fe58f9f1fa8af0c4cd61"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1.png",
+      "sha256": "5a4660b6854b12426f59a26be062e844a5f257c5b94ae259a696cc36ad4a22f9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "9f4ff3b6a4b5d1bdd8eb3b740f578f36916891bff5bdd3db398d179a93532ccf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.25_reward.png",
+      "sha256": "80556d65c627924249406041e9a70a4b955daa752eb60e99f458415a308d7608"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "2f245b330699647b4dafde803662d9406fc273b89b01f223519754f0b13eb4f3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.5_reward.png",
+      "sha256": "900789d723e0122f6ea105627a80d554570cf134f728d75ef7a552fcbc1a69c1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "ea879b680d43fd6c38115cb740966cb2a02a535f4c3073cd9556169f8dea9165"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0.75_reward.png",
+      "sha256": "4108b3a104d63401f92f32a0dc4808806f04debf6ddb76df82454cd7fd4ec20f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0_reward.pdf",
+      "sha256": "a110be38a814471e2da7f4ee9de68a41afc5f931eab424d6e0dae3cd2126a1df"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a0_reward.png",
+      "sha256": "3b2e3605849bf93c5a3a8c84dc76ad7d7676b12152e6b911413b4f72a365f58f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a1_reward.pdf",
+      "sha256": "6f09401a63f3d2fecaf36cd06c23fb6c437958aee5f1e9026c73ddbaf515a6dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.6_t1_a1_reward.png",
+      "sha256": "0be847ddcfdabe3ff5698267fdafb3a565704e3330aeb2507ddcf4953a1218f3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1.pdf",
+      "sha256": "c21a6efea0e7d66b3a019ec756ae5f147d23c40d3defe761d379e2253a2db47b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1.png",
+      "sha256": "e9b9af21aafe2335a696c7e21452cefbabe08448a2010887e1f1c1e93668805f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "77e7cc8ba2415c01184a606d23cb26136f330104e3796b96bf06923867891fed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.25_reward.png",
+      "sha256": "ebec61adbbff0183d52317ea7295abf90fa2de893c06abcd33594dfff2dd4eb1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "021f859c331bb2b632fdde0761f9aa10ec03c314c40f5ac942260b9b19ac5b14"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.5_reward.png",
+      "sha256": "7d0b66fc9346b9ce9e9edc25e50a04ae50610e02643850a5fdf477652733d777"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "f49a7b45ea8b5006ace754b5862a54c3f218abc6589cf57bebe114246cf9a0d6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0.75_reward.png",
+      "sha256": "d4c1887b664a0b29bf1d8a609e435bdb13f1f9c6dc3bbd66d0b54d23cdcbe875"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0_reward.pdf",
+      "sha256": "a636e42c5134d63f7b2928fdc13e9811e19cb90cfae95702c1e135cc318dd0a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a0_reward.png",
+      "sha256": "6e06bb2427f928873845ec8e10b1d4f834279eabaa30373eb30a39942276ee7f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a1_reward.pdf",
+      "sha256": "5774ca6c671a42833af23c922d72d2fe93aec3ed2aa3975c85f011650f35d922"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/curves/seed918503_straight_v2.8_t1_a1_reward.png",
+      "sha256": "2ac3c0bf9d0b90b5dd57fce43061d6858789e1106c9495e7fd6d074b013c64b2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/paired_nominal_response.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_repeats_v1/straight/analysis/summary.json",
+      "sha256": "ef60b78a7136ab94045e2f7d60b5143a0b1b0187090933e564716b61ff613503"
+    }
+  ],
+  "scope": "compact evidence; rawNPZ/checkpoints and full panel figures server-side"
+}

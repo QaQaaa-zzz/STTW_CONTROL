@@ -21,3 +21,5 @@ Lower full-tail duration and broader coverage alone had failed to improve the or
 [Probe](probe/analysis/REPORT.md) · [Teaching contract](records/TEACHING_PLAN.md) · [TRAIN closed loop](train_check/analysis/REPORT.md) · [Low-speed DEV](low_speed_dev/analysis/REPORT.md)
 
 [TensorBoard fit losses](http://localhost:6015): actual supervised fit scalars through400 verified; they are not rollout rewards. Raw checkpoints and full datasets stay server-side; publication_manifest.json maps compact evidence to sources.
+
+[Three optimization-seed results and all-alpha curves](repeats/REVIEW.md): all three preserve30/30 nominal tasks and4/4 speed-preference order; low-speed target6/8 repeated. Strong195/194/195, with the extra loss0.544mm above the path threshold. Roll tradeoff persists. Prospective protocol is frozen separately; its results are pending.

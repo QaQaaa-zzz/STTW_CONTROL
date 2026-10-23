@@ -1,0 +1,16 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 2284806,
+  "declared_cases": 940,
+  "completed_cases": 940,
+  "active_lower_ticks": 1870528,
+  "declared_supervised_updates": 800,
+  "completed_supervised_updates": 800,
+  "training_steps": 0,
+  "stage": "reports_ready",
+  "checked_unix": 1792763030.4387393,
+  "seed": 918503,
+  "child_pid": 2317889,
+  "panel": "straight"
+}
