@@ -55,3 +55,13 @@ Files: preference_tolerance_screen.py and thin CLI; actual resolved declaration 
 - [ ] Post pipeline in progress; moderate600andstrong600freshcasescomplete, strongtaskparent/uniform/guided/shuffled189/186/190/193per200, no physical-guidance superiority; nominalstraight/reporting remain. Original fixedfinal evaluation declaration:1240fresh cases/max2480000ticks plus400authenticatedcached parent cases; includes all30nominal cases/policy. Fixedfinalu27 export/learner/modulation identity verified before evaluation. Independent repeats and continuous metrics remain necessary before a method-benefit claim.
 
 This plan does not mark the objective achieved. Tasks3–4 must provide real runtime/model evidence; architecture compatibility alone is insufficient. Shared research ledger remains the sole current-state authority.
+
+## Task5 — TRAIN difficulty diagnosis before a new sampler
+
+The user authorized continued scientific iteration after reviewing the conservative-boundary mismatch. Reuse recovery_margin_scan.collect rather than a second simulator. Preserve legacy20s and select the actor factory/horizon from the authenticated bank config. Explicit state roles override the old every-fourth default. Keep original full clocks,9signed forces, V3 logged components and wheel proxy; no PPO or changed physics.
+
+- [ ] Add failing tests for10s/20s scan contracts, declaration budget/clock mismatch and calibration-state separation.
+- [ ] Implement config-derived deadline/actor, per-state alpha/features and optional declared roles in the existing collector; preserve old defaults.
+- [ ] Before execution declare60uniformly sampled TRAINstates,12/exactalpha,8calibration+4audit each, forces0/±8/±16/±24/±32N, parentu325 suffix,540cases/max1080000ticks,0PPO. Selected without DEV labels/modelrisk. Existing TRAIN bank was used by pilot learners; this is parent-difficulty calibration, not independent trained-policy generalization.
+- [ ] Register ChineseSTTW Bark before launch; one worker, no training extension. Verify actual collector output, summarize nominal viability and pulse-induced task failures separately, compare risk ranking in calibration/audit without tuning on audit.
+- [ ] Publish evidence/XY/reward diagnostics and update shared ledger; choose next sampler only after this result. Retain negative pilot and do not adopt shuffled from one-seed DEV alone.

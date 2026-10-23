@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from sttw_control import recovery_margin_scan as scan
 
 
@@ -36,3 +37,25 @@ def test_preference_screen_preserves_ten_second_half_second_hold_contract():
     d=data(10.);d['path_cross_track'][d['time']<9.5]=.2
     r=scan.outcome_labels(d,speed=2.45,goal_s=8.,working_roll=.302,horizon=10.,hold_s=.5)
     assert r['task_recovered'] and r['complete_horizon']
+
+
+@pytest.mark.parametrize('horizon',[10.,20.])
+def test_scan_contract_uses_original_config_deadline_and_explicit_state_roles(horizon):
+    manifest={'config':{'training_future_phase_C':{'episode_s':horizon}},
+              'original_task_horizon_s':horizon}
+    decl={'maximum_lower_ticks':int(6*horizon/.005),
+          'roles_by_bank_index':{'2':'calibration','9':'validation'}}
+    c=scan.scan_contract(decl,manifest,[2,9],[0,-8,8])
+    assert c['horizon_s']==horizon
+    assert c['maximum_policy_intervals']==round(horizon/.02)
+    assert c['roles']==['calibration','validation']
+
+
+def test_scan_contract_rejects_deadline_budget_and_role_drift():
+    m={'config':{'training_future_phase_C':{'episode_s':10.}},'original_task_horizon_s':10.}
+    d={'maximum_lower_ticks':8001,'roles_by_bank_index':{'2':'calibration','9':'validation'}}
+    with pytest.raises(ValueError,match='budget'):scan.scan_contract(d,m,[2,9],[0,8])
+    d['maximum_lower_ticks']=4000;d['roles_by_bank_index'].pop('9')
+    with pytest.raises(ValueError,match='roles'):scan.scan_contract(d,m,[2,9],[0])
+    m['original_task_horizon_s']=20.
+    with pytest.raises(ValueError,match='deadline'):scan.scan_contract(d,m,[2,9],[0])
