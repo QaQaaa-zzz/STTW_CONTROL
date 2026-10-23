@@ -8,6 +8,33 @@ from .tolerance_shaping import validate_tolerance_config
 
 SPEC=dict(weight=10.,gamma=.815560907125473,effort_budget=.030839085298575167,duration=.1,target_force=6.)
 
+def checkpoint_due(iteration,total,*,stop=False):
+ return iteration%5==0 or iteration==total or stop
+
+
+def restore_recovery_boundary(algo,record,identity):
+ from .path_command_training import restore_checkpoint
+ if digest(record['checkpoint'])!=record['checkpoint_sha256']:raise ValueError('recovery checkpoint hash mismatch')
+ saved=restore_checkpoint(record['checkpoint'],algo,identity)
+ if saved['update']!=record['update'] or not 2<=saved['update']<27:raise ValueError('invalid short recovery learner boundary')
+ counters=saved.get('route_counters')
+ if counters is None:raise ValueError('missing recovery route counters')
+ if record.get('cursor_source_metrics'):
+  metrics=Path(record['cursor_source_metrics'])
+  if digest(metrics)!=record['cursor_source_metrics_sha256']:raise ValueError('recovery cursor metrics changed')
+  rows=[json.loads(x) for x in metrics.read_text().splitlines()]
+  retained=[x for x in rows if x['update']<=saved['update']]
+  if [x['update'] for x in retained]!=list(range(1,saved['update']+1)):raise ValueError('missing retained update metrics')
+  expected=sum(x['optimizer'].get('accepted_minibatches',0) for x in retained if x['update']>2)*algo.parent_anchor_batch_size%len(algo.parent_anchor[0])
+  if expected!=record['parent_anchor_cursor']:raise ValueError('derived anchor cursor mismatch')
+ cursor=record.get('parent_anchor_cursor',saved.get('runtime_state',{}).get('parent_anchor_cursor'))
+ if cursor is None:raise ValueError('missing authenticated parent-anchor cursor')
+ if 'parent_anchor_cursor' in saved.get('runtime_state',{}) and cursor!=saved['runtime_state']['parent_anchor_cursor']:raise ValueError('anchor cursor mismatch')
+ if algo.parent_anchor is None or not 0<=cursor<len(algo.parent_anchor[0]):raise ValueError('invalid parent-anchor cursor')
+ algo.parent_anchor_cursor=cursor
+ return saved
+
+
 def experiment_config(parent,mode,reward_variant="historical"):
  if mode not in ('baseline','static','dynamic'):raise ValueError('unknown experiment arm')
  c=deepcopy(parent)
@@ -122,21 +149,32 @@ def run(plan_path,output):
    with np.load(bank_dir/'anchors.npz') as anchors:
     algo.configure_parent_anchor(torch.as_tensor(anchors['observations']),torch.as_tensor(anchors['means']),torch.as_tensor(anchors['log_std']),coefficient=.05,batch_size=512)
   identity=dict(schema=SCHEMA,alpha=plan['alpha'],lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),seed=plan['seed'],parent_checkpoint_sha256=record['checkpoint_sha256'],parent_source_update=50 if pulse_mode else 200,experiment='short_recovery_v1' if short_mode else 'actual_pulse_curriculum_v1' if pulse_mode else 'model_reserve_shaping_v1',arm=plan['arm'],initialization='weights_only_fresh_optimizer')
+  start_update=0;rejections=0
+  if plan.get('resume_record'):
+   if not short_mode:raise ValueError('recovery resume is only supported for short recovery')
+   saved=restore_recovery_boundary(algo,plan['resume_record'],identity);start_update=saved['update'];rejections=saved.get('consecutive_rejections',0)
+   counters=j.asarray(saved['route_counters'],j.int32)+1
+   episodes=reset(j.arange(n,dtype=j.int32),counters);jax.block_until_ready(episodes)
+   obs=to_torch(jax.jit(jax.vmap(batch.observation))(episodes))
+   status['policy_transitions_total']=start_update*n*steps
+   status['training_control_ticks_total']=plan['resume_record']['inherited_training_control_ticks']
+   atomic_json(root/'recovery_receipt.json',dict(source=plan['resume_record'],restored=['policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','parent_anchor_cursor'],environment='fresh complete bank reset at saved route counters+1; not frame-continuous',inherited_updates=start_update,discarded_unsaved_policy_transitions=plan['resume_record']['discarded_unsaved_policy_transitions']))
+  status['inherited_policy_transitions']=start_update*n*steps;status['executed_policy_transitions']=0
   atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='existing PathBatch vmap'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
   atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=20.,snippet_s=4. if short_mode else None,critic_warmup_updates=2 if short_mode else 0,ppo_updates=25 if short_mode else updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
   def advance_batch(ep,z):
    end,ob,r,fl,final,stats=jax.vmap(batch.advance_one)(ep,z);stats['diagnostics']=reduce_statistics(stats['diagnostics']);return end,ob,r,fl,stats,final
   update(stage='compiling');advance=jax.jit(advance_batch).lower(episodes,j.zeros((n,2))).compile()
-  tb=json.loads(Path(plan['tensorboard_info']).read_text());writer=SummaryWriter(str(Path(tb['logdir'])/plan['run_name']));verified=False;rejections=0
-  cp=save_checkpoint(root/'checkpoints',algo,0,identity,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=0,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
-  for iteration in range(1,updates+1):
+  tb=json.loads(Path(plan['tensorboard_info']).read_text());writer=SummaryWriter(str(Path(tb['logdir'])/plan['run_name']));verified=False
+  cp=save_checkpoint(root/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=start_update,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
+  for iteration in range(start_update+1,updates+1):
    update(state='running',stage='sampling',completed_updates=iteration-1,rollout_intervals=0);start=time.monotonic();rewards=[];diag=None;physical=domain=0;pulse_summary=dict(fired=0,fallback=0,completed=0,enabled_completed=0,force_histogram=[0]*8,max_completed_impulse_error_Ns=0.);joint_exposure=np.zeros((3,9),np.int64)
    with torch.no_grad():
     for index in range(steps):
      z=algo.act(obs)
      if not bool(torch.isfinite(z).all()):raise RuntimeError('nonfinite action')
      episodes,next_obs,reward,flags,stats,final_obs=advance(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()));jax.block_until_ready(episodes)
-     status['policy_transitions_total']+=n;status['training_control_ticks_total']+=int(j.sum(stats['active_ticks']))
+     status['policy_transitions_total']+=n;status['executed_policy_transitions']+=n;status['training_control_ticks_total']+=int(j.sum(stats['active_ticks']))
      if bool(j.any(flags['engineering_fault'])) or bool(j.any(next_obs[2])):
       with (root/'engineering_fault_states.pkl').open('wb') as f:pickle.dump(jax.device_get(episodes),f)
       raise RuntimeError('engineering fault; incomplete rollout discarded')
@@ -171,7 +209,7 @@ def run(plan_path,output):
     for key in ['fired','fallback','completed','enabled_completed','max_completed_impulse_error_Ns']:writer.add_scalar('pulse/'+key,pulse_summary[key],iteration)
    if short_mode:writer.add_scalar('retention/parent_kl',float(metrics['parent_kl']),iteration)
    writer.flush()
-   if iteration%5==0 or stop:
+   if checkpoint_due(iteration,updates,stop=stop):
     cp=save_checkpoint(root/'checkpoints',algo,iteration,identity,rejections=rejections,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=iteration,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
    if not verified and (iteration==1 or iteration%5==0):verified=_verify_reward_http(root,tb,plan['run_name'])
    update(completed_updates=iteration,stage='optimized',last_reward=reward,tensorboard_reward_verified=verified)

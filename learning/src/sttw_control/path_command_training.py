@@ -56,7 +56,7 @@ def save_checkpoint(root,algo,update,identity,*,rejections=0,route_counters=None
     import torch
     root=Path(root);root.mkdir(parents=True,exist_ok=True);path=root/f'update_{update:04d}.pt'
     if path.exists():raise FileExistsError(path)
-    saved=dict(schema=SCHEMA,identity=identity,update=update,route_counters=None if route_counters is None else np.asarray(route_counters),policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all() if torch.cuda.is_initialized() else None,numpy_rng=np.random.get_state(),python_rng=random.getstate(),consecutive_rejections=rejections,terminal_contract='terminal_contract_v2',environment_continuation='learner exact; physical/controller/history/filter restart from original prepared bank, not frame-continuous')
+    saved=dict(schema=SCHEMA,identity=identity,update=update,runtime_state=dict(parent_anchor_cursor=int(getattr(algo,'parent_anchor_cursor',0))),route_counters=None if route_counters is None else np.asarray(route_counters),policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),torch_rng=torch.get_rng_state(),cuda_rng=torch.cuda.get_rng_state_all() if torch.cuda.is_initialized() else None,numpy_rng=np.random.get_state(),python_rng=random.getstate(),consecutive_rejections=rejections,terminal_contract='terminal_contract_v2',environment_continuation='learner exact; physical/controller/history/filter restart from original prepared bank, not frame-continuous')
     temp=path.with_suffix('.tmp');torch.save(saved,temp);os.replace(temp,path)
     with (root/f'actor_{update:04d}.pkl').open('wb') as f:pickle.dump(jax.device_get(export_actor(algo.policy)),f)
     return path
