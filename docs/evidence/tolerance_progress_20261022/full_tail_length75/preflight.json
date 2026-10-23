@@ -1,0 +1,13 @@
+{
+  "checkpoint_sha256": "39e2055869bd803845e9d36da1f267a20b197481eac17e5ceef7528c35efb12e",
+  "source_identity_valid": true,
+  "optimizer_present": true,
+  "rng_present": true,
+  "route_counters_shape": [
+    512
+  ],
+  "parent_anchor_cursor": 216,
+  "schedule_only_valid": true,
+  "tests": "12passed",
+  "training_launched": false
+}

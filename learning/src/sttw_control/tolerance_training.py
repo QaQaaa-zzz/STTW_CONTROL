@@ -46,10 +46,30 @@ def checkpoint_due(iteration,total,*,stop=False):
  return iteration%5==0 or iteration==total or stop
 
 
-def restore_recovery_boundary(algo,record,identity,*,total_updates=27,warmup_updates=2):
+def schedule_resume_identity(record,identity,config):
+ """Authenticate a learner continuation allowing only a longer update schedule."""
+ extension=record.get('schedule_extension')
+ if extension is None:return identity
+ if config is None:raise ValueError('schedule continuation requires current config')
+ path=Path(extension['source_manifest'])
+ if digest(path)!=extension['source_manifest_sha256']:raise ValueError('source manifest changed')
+ source=json.loads(path.read_text());old=source['config'];expected=deepcopy(old)
+ old_total=old['training_future_phase_C']['updates_max']
+ new_total=config['training_future_phase_C']['updates_max']
+ if new_total<=old_total or record['update']!=old_total:raise ValueError('extension requires completed shorter schedule')
+ expected['training_future_phase_C'].update(updates_initial=new_total,updates_max=new_total)
+ if config_hash(expected)!=config_hash(config):raise ValueError('schedule extension changed task or learner settings')
+ old_identity=source['identity']
+ if old_identity['config_sha256']!=config_hash(old):raise ValueError('source config identity mismatch')
+ expected_identity=dict(old_identity,config_sha256=config_hash(config))
+ if expected_identity!=identity:raise ValueError('schedule extension changed lineage identity')
+ return old_identity
+
+
+def restore_recovery_boundary(algo,record,identity,*,total_updates=27,warmup_updates=2,config=None):
  from .path_command_training import restore_checkpoint
  if digest(record['checkpoint'])!=record['checkpoint_sha256']:raise ValueError('recovery checkpoint hash mismatch')
- saved=restore_checkpoint(record['checkpoint'],algo,identity)
+ saved=restore_checkpoint(record['checkpoint'],algo,schedule_resume_identity(record,identity,config))
  if saved['update']!=record['update'] or not warmup_updates<=saved['update']<total_updates:raise ValueError('invalid short recovery learner boundary')
  counters=saved.get('route_counters')
  if counters is None:raise ValueError('missing recovery route counters')
@@ -244,7 +264,7 @@ def run(plan_path,output):
   start_update=0;rejections=0
   if plan.get('resume_record'):
    if not short_mode:raise ValueError('recovery resume is only supported for short recovery')
-   saved=restore_recovery_boundary(algo,plan['resume_record'],identity,total_updates=updates,warmup_updates=warmup_updates);start_update=saved['update'];rejections=saved.get('consecutive_rejections',0)
+   saved=restore_recovery_boundary(algo,plan['resume_record'],identity,total_updates=updates,warmup_updates=warmup_updates,config=cfg);start_update=saved['update'];rejections=saved.get('consecutive_rejections',0)
    counters=j.asarray(saved['route_counters'],j.int32)+1
    episodes=reset(j.arange(n,dtype=j.int32),counters);jax.block_until_ready(episodes)
    obs=to_torch(jax.jit(jax.vmap(batch.observation))(episodes))
