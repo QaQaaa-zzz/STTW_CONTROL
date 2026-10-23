@@ -22,10 +22,12 @@ def collect_preference(declaration_path,output):
     import jax.numpy as j
     import torch
     from .path_command_training import load_environment
-    from .path_command_scenarios import sample_curriculum_route
+    from .path_command_scenarios import sample_curriculum_route,validate_recovery_coverage
     from .path_command_policy import make_path_actor,validate_actor_parameters
     from .runtime import configure_compilation_cache
     declaration=json.loads(Path(declaration_path).read_text());out=Path(output)
+    coverage=declaration.get('route_coverage')
+    validate_recovery_coverage(coverage)
     out.mkdir(parents=True,exist_ok=False);started=time.monotonic();ticks=0
     n=sum(declaration['alpha_counts']);seconds=declaration['nominal_collection_s'];h=declaration['config']['training_future_phase_C']['episode_s']
     steps=round(seconds/.02);maximum=n*round(seconds/.005)
@@ -43,7 +45,12 @@ def collect_preference(declaration_path,output):
         env,snapshot=load_environment(cfg,source,'terminal_contract_v2');pose=env.physics.helpers.pose(snapshot.data)
         ids=np.concatenate([np.linspace(0,511,count,dtype=np.int32) for count in declaration['alpha_counts']])
         alpha=np.repeat(declaration['alphas'],declaration['alpha_counts']).astype(np.float32)
-        routes=jax.jit(jax.vmap(lambda eid:sample_curriculum_route(declaration['route_seed'],eid,declaration['route_episode'],pose,cfg,declaration['stage_index'])))(j.asarray(ids))
+        routes=jax.jit(jax.vmap(lambda eid:sample_curriculum_route(declaration['route_seed'],eid,declaration['route_episode'],pose,cfg,declaration['stage_index'],coverage)))(j.asarray(ids))
+        actual=jax.device_get(routes)
+        atomic_json(out/'route_coverage.json',dict(declared=coverage,alpha=alpha.tolist(),route_ids=ids.tolist(),
+            speed_m_s=np.asarray(actual.speed).tolist(),radius_m=np.asarray(actual.radius).tolist(),
+            signed_angle_deg=np.rad2deg(np.asarray(actual.angle)).tolist(),family=np.asarray(actual.family).tolist(),
+            interpretation='sampled contexts before prefix validity filtering; valid mask and counts in final bank receipt'))
         states=jax.jit(jax.vmap(lambda path,v,a:env.reset(snapshot,path,v,a)))(routes.path,routes.speed,j.asarray(alpha))
         env.set_log_template(jax.tree.map(lambda x:x[0],states),jax.tree.map(lambda x:x[0],routes.path),routes.speed[0])
         actor=make_path_actor(cfg)

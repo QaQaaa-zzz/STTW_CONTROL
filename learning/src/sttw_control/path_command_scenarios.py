@@ -60,7 +60,26 @@ def episode_key(seed,env_id,episode):
     return jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(seed),env_id),episode)
 
 
-def sample_curriculum_route(seed,eid,episode,pose,cfg,stage):
+def validate_recovery_coverage(coverage):
+    """Validate an optional TRAIN-only route-distribution override."""
+    import math
+    if coverage is None:
+        return
+    required={'turn_fraction','seed','speed_m_s','radius_m','angle_deg'}
+    if set(coverage)!=required:
+        raise ValueError('recovery coverage requires exactly '+str(sorted(required)))
+    fraction=coverage['turn_fraction']
+    if not math.isfinite(fraction) or not 0<=fraction<=1:
+        raise ValueError('invalid recovery coverage fraction')
+    if type(coverage['seed']) is not int or not 0<=coverage['seed']<2**32:
+        raise ValueError('invalid recovery coverage seed')
+    for name in ('speed_m_s','radius_m','angle_deg'):
+        bounds=coverage[name]
+        if len(bounds)!=2 or not all(math.isfinite(x) for x in bounds) or not 0<bounds[0]<=bounds[1]:
+            raise ValueError('invalid recovery coverage range: '+name)
+
+
+def sample_curriculum_route(seed,eid,episode,pose,cfg,stage,coverage=None):
     """Existing conditional-policy curriculum sampler, with explicit stage.
 
     Ported from path-conflict-exposure-v1/path_command_curriculum.route_for_stage;
@@ -74,6 +93,14 @@ def sample_curriculum_route(seed,eid,episode,pose,cfg,stage):
     angle=j.deg2rad(j.where(group==0,j.where(u[0]<.5,0.,30.),90.+10*u[4]));radius=j.where(group==0,j.maximum(radius,3.),radius)
     sign=j.where(eid%2==0,1.,-1.)
     lat=j.where(u[6]<.2,-.1+.2*u[7],0.);heading=j.where(u[6]<.2,-.05+.1*u[8],0.)
+    if coverage is not None:
+        # A separate key keeps original geometry, offsets and stage draws intact.
+        extra=jax.random.uniform(episode_key(coverage['seed'],eid,episode),(4,))
+        selected=(group!=0)&(extra[0]<coverage['turn_fraction'])
+        draw=lambda name,index:coverage[name][0]+extra[index]*(coverage[name][1]-coverage[name][0])
+        speed=j.where(selected,draw('speed_m_s',1),speed)
+        radius=j.where(selected,draw('radius_m',2),radius)
+        angle=j.where(selected,j.deg2rad(draw('angle_deg',3)),angle)
     return _integrate_route(pose,cfg['path'],group,radius,angle,speed,sign,lat,heading,sample_group=group)
 
 
