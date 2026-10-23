@@ -1,0 +1,224 @@
+{
+  "experiment": "preference_witness_selection_v1",
+  "role": "TRAIN",
+  "question": "Do counterfactual recovery witnesses teach better than equally many random successful interventions?",
+  "sources": [
+    {
+      "run": "preference_train_coordination_records_v1",
+      "declaration_sha256": "10c64e97e16f81790497990da41138134ef4e803706208962df2527e0090fe8a",
+      "results_sha256": "7d65515f1bbf87b6a4109395a53979bf7e32e2a659a574d46637452750b2c0c1",
+      "cases": 72,
+      "lower_ticks": 144000
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "declaration_sha256": "ecdd20523a74062f0e36e07be6454556af67d9ff7005faa224db15ac331429d2",
+      "results_sha256": "ea566df20c0ddad21b1e1827c3c57da162f4d7f6870ebc23fd3f768c3e2fe492",
+      "cases": 168,
+      "lower_ticks": 322564
+    }
+  ],
+  "pool_size": 34,
+  "witness_count": 10,
+  "arms": [
+    "witness",
+    "random_success"
+  ],
+  "optimization_seeds": [
+    918501,
+    918502,
+    918503
+  ],
+  "selection_seeds": [
+    923501,
+    923502,
+    923503
+  ],
+  "updates": 400,
+  "batch_per_group": 128,
+  "acquisition_cost": "same already acquired240cases charged equally; no saving claim",
+  "evaluation": "predeclare before launch; same fixed DEV panels; no final TEST",
+  "training_launched": false,
+  "jobs": [
+    {
+      "name": "witness_918501",
+      "seed": 918501,
+      "arm": "witness",
+      "declaration_sha256": "a36d84b2ee29a4be71e92f2d2dd49e47afc948a9e52cac83e33131715e3b9d41",
+      "useful_selected": 10,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "879646dc4678a130894bab91c91208ed2fd0d817389fbfabcdc028bdd8c88d6f"
+        },
+        "recovery_tail": {
+          "samples": 2980,
+          "cases": 10,
+          "sha256": "6a569ddd2d17f9766459dfbef92935ddd2444670218a7e67acc93edfa6e88dac"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    },
+    {
+      "name": "random_success_918501",
+      "seed": 918501,
+      "arm": "random_success",
+      "declaration_sha256": "435980abd68054c10609cf3dde3b21e9ea0a1cfbfb830b393ff7a8ac62474ba3",
+      "useful_selected": 3,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "029c6d1d55038c1079acd9fed64b1a175d2d4309bfe955699e45849bf072beb1"
+        },
+        "recovery_tail": {
+          "samples": 3010,
+          "cases": 10,
+          "sha256": "732e1483b3514b0f4a588f57c35f300764316d421db0eccd2e701d9930e9152d"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    },
+    {
+      "name": "witness_918502",
+      "seed": 918502,
+      "arm": "witness",
+      "declaration_sha256": "0135575d8173dca060544b94e2023aff2c038e5c8528187e5e713810fec57ada",
+      "useful_selected": 10,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "879646dc4678a130894bab91c91208ed2fd0d817389fbfabcdc028bdd8c88d6f"
+        },
+        "recovery_tail": {
+          "samples": 2980,
+          "cases": 10,
+          "sha256": "6a569ddd2d17f9766459dfbef92935ddd2444670218a7e67acc93edfa6e88dac"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    },
+    {
+      "name": "random_success_918502",
+      "seed": 918502,
+      "arm": "random_success",
+      "declaration_sha256": "7d885cc0a0230afd57b0c8d479cf0b7f6fa92b4019da576500b9ca9e323adbd8",
+      "useful_selected": 1,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "22edfb868511c7cc6c47efe854ea162a22819cd01307d63b6af6767f614ee183"
+        },
+        "recovery_tail": {
+          "samples": 2890,
+          "cases": 10,
+          "sha256": "53ab3bdf309c0fb2767dc8ce2a75af48a96177ad0770ee7f2097da4dc29ba77a"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    },
+    {
+      "name": "witness_918503",
+      "seed": 918503,
+      "arm": "witness",
+      "declaration_sha256": "94951acb1ffaa72623bdc6fd5a8d4d54911ccec37a51e8f752131ea2a344abbf",
+      "useful_selected": 10,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "879646dc4678a130894bab91c91208ed2fd0d817389fbfabcdc028bdd8c88d6f"
+        },
+        "recovery_tail": {
+          "samples": 2980,
+          "cases": 10,
+          "sha256": "6a569ddd2d17f9766459dfbef92935ddd2444670218a7e67acc93edfa6e88dac"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    },
+    {
+      "name": "random_success_918503",
+      "seed": 918503,
+      "arm": "random_success",
+      "declaration_sha256": "e5b56fe54d392a51be1e3bda7578cd6456cbf527c53c16fcc853af53505de832",
+      "useful_selected": 3,
+      "groups": {
+        "intervention": {
+          "samples": 1000,
+          "cases": 10,
+          "sha256": "66f003dcf09e61c334aa518cfc7af11ddf79a906f0efbeceab7b5f6da1533616"
+        },
+        "recovery_tail": {
+          "samples": 2890,
+          "cases": 10,
+          "sha256": "5d6592502ff207f9b5e81a9d83715a4d4c26f077b69383ea756e993ea9d67991"
+        },
+        "control": {
+          "samples": 8500,
+          "cases": 17,
+          "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+        },
+        "nominal": {
+          "samples": 25573,
+          "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+          "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+          "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+        }
+      }
+    }
+  ]
+}
