@@ -1,0 +1,13 @@
+{
+  "url": "http://localhost:6040",
+  "run": "preference_full_tail_length75_v1_uniform",
+  "tag": "train/mean_step_reward",
+  "samples": [
+    [
+      1792769979.0918198,
+      28,
+      -2.2504148483276367
+    ]
+  ],
+  "checked_unix": 1792770009.6064715
+}

@@ -1,0 +1,7 @@
+{
+  "pid": 2657817,
+  "port": 6040,
+  "url": "http://localhost:6040",
+  "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/tensorboard",
+  "reward_scalar_verification": "pending first newly executed update"
+}

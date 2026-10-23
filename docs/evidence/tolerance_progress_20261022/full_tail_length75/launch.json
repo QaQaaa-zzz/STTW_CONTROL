@@ -1,0 +1,7 @@
+{
+  "plan_sha256": "67f918c73ca299a52362cd4a734658a69ba42d7ed5f874051946dc472a5ee7c2",
+  "tensorboard_url": "http://localhost:6040",
+  "code_revision": "1f10dfca4d549e01fb34408dc146de3ed5366cc8",
+  "training_started": false,
+  "controller_pid": 2657941
+}

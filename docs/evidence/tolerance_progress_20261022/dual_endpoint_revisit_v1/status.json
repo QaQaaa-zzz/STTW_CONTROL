@@ -1,0 +1,12 @@
+{
+  "phase": "completed",
+  "pid": 2617223,
+  "stage": "numeric_ready",
+  "completed_cases": 36,
+  "declared_cases": 36,
+  "active_lower_ticks": 130668,
+  "training_steps": 0,
+  "checked_unix": 1792769895.1559503,
+  "panel": "alpha1",
+  "child_pid": 2642554
+}

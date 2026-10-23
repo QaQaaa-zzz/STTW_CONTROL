@@ -6,4 +6,4 @@
 
 主比较固定最终75PPO对旧25PPO，另取现有保存节奏update50（48PPO）作描述，不能挑最好点替代主比较。先复用固定开发面板的旧25结果（身份/协议完全匹配才复用），同时报告原始u325及当前教学候选。报告受扰原任务成功、配对改善/退化、无扰保留、方向与alpha子组以及连续误差。该试验隔离长度因素，不是等交互成本方法优势证明；增加的训练交互完整计入。
 
-尚未启动：计划文件runs/preference_full_tail_length75_v1/uniform/plan.json。启动前接入独立TensorBoard并核验实际reward标量HTTP，登记中文STTW Bark完成/报错；等待双网评测释放GPU，单训练worker、512lane批量。没有固定墙钟截止，不无上限续训；终局结果后决定是否有必要继续。
+2026-10-23已排队，等待双网完成后启动；TensorBoard http://localhost:6040 已HTTP200，首个新reward已通过HTTP读取：step28=-2.2504148483。训练pid2663458运行中。计划文件runs/preference_full_tail_length75_v1/uniform/plan.json。启动前接入独立TensorBoard并核验实际reward标量HTTP，登记中文STTW Bark完成/报错；等待双网评测释放GPU，单训练worker、512lane批量。没有固定墙钟截止，不无上限续训；终局结果后决定是否有必要继续。
