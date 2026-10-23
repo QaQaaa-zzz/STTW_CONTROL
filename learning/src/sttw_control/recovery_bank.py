@@ -15,7 +15,8 @@ def select_complete_states(mask, old, current):
 def load_parent(campaign, alpha):
     campaign=Path(campaign)
     plan=json.loads((campaign/f'uniform_alpha{alpha}/plan.json').read_text())
-    record=plan['parent_record'];manifest=json.loads(Path(plan['parent_manifest']).read_text())
+    from .tolerance_comparison import resolve_comparison_actors
+    record=resolve_comparison_actors(campaign)[('parent',alpha)];manifest=json.loads(Path(plan['parent_manifest']).read_text())
     for key in ('actor','checkpoint'):
         if digest(record[key])!=record[key+'_sha256']:raise ValueError('parent identity changed')
     if record['identity']!=manifest['identity'] or record['identity']['alpha']!=alpha:
@@ -32,7 +33,6 @@ def collect(campaign,alpha,output,*,smoke=False):
     from .runtime import configure_compilation_cache
     import torch
     out=Path(output);out.mkdir(parents=True,exist_ok=False);started=time.monotonic()
-    plan,record,parent,cfg=load_parent(campaign,alpha)
     count=8 if smoke else 512;seconds=1.2 if smoke else 8.;intervals=round(seconds/.02)
     status=dict(phase='running',state='running',pid=os.getpid(),alpha=alpha,
                 collected_contexts=0,declared_contexts=count,active_lower_ticks=0,
@@ -42,6 +42,7 @@ def collect(campaign,alpha,output,*,smoke=False):
         atomic_json(out/'status.json',status)
     update(stage='loading')
     try:
+        plan,record,parent,cfg=load_parent(campaign,alpha)
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,snapshot=load_environment(cfg,parent['source'],'terminal_contract_v2')
         ids=j.asarray(np.linspace(0,511,count,dtype=np.int32));episode=100
