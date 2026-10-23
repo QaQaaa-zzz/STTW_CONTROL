@@ -40,7 +40,7 @@ def main():
     for pol in ('speed_off','steer_off'):
      maximum=max(maximum,float(np.max(np.abs(obs[pol]-obs['control']))));pairs+=1
    observation_audit.update(paired_observations=pairs,max_abs_difference=maximum)
-  reports.append(dict(run=name,role=decl['data_role'],window=decl['recovery_intervention'],summary=summary,observation_audit=observation_audit,cases=cases,sources={str(q):hashlib.sha256(q.read_bytes()).hexdigest() for q in [root/'declaration.json',run/'status.json',run/'results.json',*receipts]}))
+  reports.append(dict(run=name,role=decl['data_role'],prefix_context_count=len({tuple(r[k] for k in ('route','speed','alpha','onset_s')) for r in rows if r['policy']=='control'}),alpha_values=decl['alphas'],speed_values=decl['speeds'],window=decl['recovery_intervention'],summary=summary,observation_audit=observation_audit,cases=cases,sources={str(q):hashlib.sha256(q.read_bytes()).hexdigest() for q in [root/'declaration.json',run/'status.json',run/'results.json',*receipts]}))
  out=dict(scope='Existing TRAIN data; posthoc finite-bank union is not physical upper bound, deployable selector, or new test. No new simulations or fitting.',runs=reports)
  a.output.mkdir(parents=True,exist_ok=True);(a.output/'analysis.json').write_text(json.dumps(out,indent=2)+'\n')
  for r in reports:print(r['run'],r['summary'])

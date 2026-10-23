@@ -4,6 +4,15 @@
     {
       "run": "preference_train_coordination_records_v1",
       "role": "TRAIN teaching records; exact pilot contexts, no held-out claim",
+      "prefix_context_count": 8,
+      "alpha_values": [
+        0.0,
+        0.125
+      ],
+      "speed_values": [
+        2.25,
+        2.4
+      ],
       "window": {
         "start_s": 1.8,
         "end_s": 3.8,
@@ -623,6 +632,15 @@
     {
       "run": "tolerance_recovery_opportunity_v1",
       "role": "fresh TRAIN acquisition validation; model fixed before outcomes; may later supply demonstrations, never final TEST",
+      "prefix_context_count": 8,
+      "alpha_values": [
+        0.0,
+        0.25
+      ],
+      "speed_values": [
+        2.2,
+        2.55
+      ],
       "window": {
         "start_s": 2.4,
         "end_s": 4.4,
@@ -2362,6 +2380,15 @@
     {
       "run": "tolerance_teaching_search_pilot_v1",
       "role": "TRAIN feasibility; exhaustive outcomes used for retrospective fixed-budget search replay, not held-out generalization",
+      "prefix_context_count": 8,
+      "alpha_values": [
+        0.0,
+        0.3
+      ],
+      "speed_values": [
+        2.2,
+        2.5
+      ],
       "window": {
         "start_s": 2.72,
         "end_s": 4.72,

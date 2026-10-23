@@ -1,0 +1,129 @@
+{
+  "status": {
+    "phase": "completed",
+    "pid": 2722458,
+    "stage": "paired_results_ready",
+    "completed_cases": 1620,
+    "declared_cases": 1620,
+    "active_lower_ticks": 3211288,
+    "training_steps": 0,
+    "checked_unix": 1792775924.6549196,
+    "dependency": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/status.json",
+    "seed": 918503,
+    "panel": "low_speed",
+    "child_pid": 2932073
+  },
+  "results": {
+    "918501_strong": {
+      "n": 200,
+      "random_success": 191,
+      "witness": 192,
+      "gains": 3,
+      "losses": 2,
+      "working": {
+        "witness": 54,
+        "random_success": 54
+      }
+    },
+    "918501_straight": {
+      "n": 10,
+      "random_success": 10,
+      "witness": 10,
+      "gains": 0,
+      "losses": 0,
+      "working": {
+        "witness": 10,
+        "random_success": 10
+      }
+    },
+    "918501_low_speed": {
+      "n": 60,
+      "random_success": 58,
+      "witness": 57,
+      "gains": 0,
+      "losses": 1,
+      "working": {
+        "witness": 28,
+        "random_success": 28
+      }
+    },
+    "918502_strong": {
+      "n": 200,
+      "random_success": 191,
+      "witness": 192,
+      "gains": 2,
+      "losses": 1,
+      "working": {
+        "witness": 54,
+        "random_success": 58
+      }
+    },
+    "918502_straight": {
+      "n": 10,
+      "random_success": 10,
+      "witness": 10,
+      "gains": 0,
+      "losses": 0,
+      "working": {
+        "witness": 10,
+        "random_success": 10
+      }
+    },
+    "918502_low_speed": {
+      "n": 60,
+      "random_success": 56,
+      "witness": 56,
+      "gains": 1,
+      "losses": 1,
+      "working": {
+        "witness": 28,
+        "random_success": 27
+      }
+    },
+    "918503_strong": {
+      "n": 200,
+      "random_success": 191,
+      "witness": 193,
+      "gains": 2,
+      "losses": 0,
+      "working": {
+        "witness": 55,
+        "random_success": 59
+      }
+    },
+    "918503_straight": {
+      "n": 10,
+      "random_success": 10,
+      "witness": 10,
+      "gains": 0,
+      "losses": 0,
+      "working": {
+        "witness": 10,
+        "random_success": 10
+      }
+    },
+    "918503_low_speed": {
+      "n": 60,
+      "random_success": 59,
+      "witness": 56,
+      "gains": 0,
+      "losses": 3,
+      "working": {
+        "witness": 28,
+        "random_success": 29
+      }
+    }
+  },
+  "sources": {
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918501_strong/raw/results.json": "a805c33b188f2430012dc5ba071933222264c7021c438bc71041f4d0706c0196",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918501_straight/raw/results.json": "4dc5791778f77ea52e0a7df0b83837a16756f690174a69ccae2727b0fd5f464c",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918501_low_speed/raw/results.json": "d3e762268b7cb677fea3757be66a1a3be230274cfc6e2a0d5104db0659d97f4e",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918502_strong/raw/results.json": "3fa27d41e1bb0a38387223e34d0a05a3938d105403217e272b2320ea169c2d50",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918502_straight/raw/results.json": "427c30c5cb70f4667cb0fd28d80a74a4113d690b4a23173c94be03deeed684a5",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918502_low_speed/raw/results.json": "57d1505bf7cf238c78840efd65befeb576cc2e8cdcae5a16bcae798b90cc11e0",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918503_strong/raw/results.json": "ad0f24245cb09c9afe37ba33e1e183d1afa2522ddd3634322404a66f7f77b3ef",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918503_straight/raw/results.json": "e444c05b02ba9b67fb29835f9dfc859bec0654d0bc313c3390e0fbaf957cadde",
+    "runs/preference_witness_selection_v1/evaluation_attempt2/seed918503_low_speed/raw/results.json": "54494bb01bbae10c656189c50330409a5f13ff738053edfbb1f05d12e6f6a2c2"
+  },
+  "scope": "Used DEV, shared TRAIN corpus; optimization/subset repeats, not independent environments; aggregate counts repeat same contexts."
+}
