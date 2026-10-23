@@ -19,6 +19,7 @@ def evaluate(declaration_path,output):
     from .recovery_margin_scan import outcome_labels
     from .runtime import configure_compilation_cache
     from .recovery_intervention import intervention_layout,intervention_schedule,masked_target
+    from .recovery_teaching import teaching_enabled,extract_teaching
     decl=json.loads(Path(declaration_path).read_text());out=Path(output).resolve()
     out.mkdir(parents=True,exist_ok=True)
     if (out/'manifest.json').exists():raise FileExistsError('immutable preference screen exists')
@@ -26,6 +27,7 @@ def evaluate(declaration_path,output):
     rows=[dict(policy=p,route=r['name'],speed=v,alpha=a,force_N=f)
           for p,r,v,a,f in product(decl['policies'],decl['routes'],decl['speeds'],decl['alphas'],decl['forces_N'])]
     intervention=intervention_layout(decl,rows)
+    teaching=teaching_enabled(decl)
     count=len(rows)*len(decl['onsets_s']);maximum=count*round(horizon/.005)
     if maximum!=decl['maximum_lower_ticks']:raise ValueError('declared physics mismatch')
     n=len(rows);ticks=0;cases=[];started=time.monotonic()
@@ -73,10 +75,15 @@ def evaluate(declaration_path,output):
         def one(st,par,path,v,pulse,mask):
             obs,_,fault=env.observation(st,path,v,horizon)
             action=actor.apply(par,obs)
+            parent_action=action
             if intervention:
                 action=masked_target(action,st.tick,mask,intervention['start_tick'],intervention['end_tick'])
             end,log=env.policy_step(st.replace(fault=st.fault|fault),action,path,v,horizon,pulse)
-            return end,dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+            record=dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+            if teaching:
+                record.update(teaching_observation=j.broadcast_to(obs,(4,obs.shape[0])),
+                    teaching_target=j.broadcast_to(action,(4,2)),teaching_parent=j.broadcast_to(parent_action,(4,2)))
+            return end,record
         functions={}
         def execute(length,states,pulses):
             if length not in functions:
@@ -119,9 +126,13 @@ def evaluate(declaration_path,output):
             logs={k:np.concatenate([block[k] for block in saved],axis=0) for k in saved[0]}
             for idx,row in enumerate(rows):
                 data={k:x[:,idx].reshape((-1,)+x.shape[3:]) for k,x in logs.items()}
+                teaching_data=extract_teaching(data,cfg['timing']['upper_dt_s']) if teaching else None
+                data={k:v for k,v in data.items() if not k.startswith('teaching_')}
                 data={k:x[data['active_tick']] for k,x in data.items()}
                 name=f"{row['policy']}_{row['route']}_v{row['speed']:g}_a{row['alpha']:g}_t{onset:g}_f{row['force_N']:+g}"
                 np.savez_compressed(out/(name+'.npz'),**data)
+                if teaching:
+                    np.savez_compressed(out/(name+'_teaching.npz'),**teaching_data)
                 b=cfg['stage_B_baseline'];label=outcome_labels(data,speed=row['speed'],goal_s=float(pathbank[row['route']].goal),
                     working_roll=b['working_roll_rad'],horizon=horizon,hold_s=b['hold_s'])
                 before=data['time']<onset-1e-5
