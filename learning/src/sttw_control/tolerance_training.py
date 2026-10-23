@@ -19,7 +19,7 @@ def empty_rollout_totals(diagnostics):
    max_completed_impulse_error_Ns=j.array(0.)))
 
 
-def accumulate_rollout_totals(acc,reward,flags,stats):
+def accumulate_rollout_totals(acc,reward,flags,stats,*,force_levels=None):
  """Diagnostic reductions only; learner rewards and transitions are untouched."""
  import jax.numpy as j
  from .path_command_statistics import merge_statistics
@@ -31,8 +31,10 @@ def accumulate_rollout_totals(acc,reward,flags,stats):
  if 'recovery' in stats:
   r=stats['recovery']
   result['joint_exposure']=acc['joint_exposure'].at[r['family'],r['force_index']].add(r['active_ticks'])
+  if 'alpha_index' in r:
+   result['alpha_force_exposure']=acc['alpha_force_exposure'].at[r['alpha_index'],r['force_index']].add(r['active_ticks'])
  if 'pulse' in stats:
-  p=stats['pulse'];a=acc['pulse'];forces=j.array([-8.,-6.,-4.,-2.,2.,4.,6.,8.])
+  p=stats['pulse'];a=acc['pulse'];forces=j.array([-8.,-6.,-4.,-2.,2.,4.,6.,8.]) if force_levels is None else force_levels
   result['pulse']=dict(fired=a['fired']+j.sum(p['fired_now']),
    fallback=a['fallback']+j.sum(p['fallback_now']),completed=a['completed']+j.sum(p['completed']),
    enabled_completed=a['enabled_completed']+j.sum(p['completed']&p['enabled']),
@@ -119,6 +121,46 @@ def restore_pulse_parent(algo,record,source,alpha):
   if not torch.equal(algo.policy.state_dict()[k].detach().cpu(),v.detach().cpu()):raise ValueError('pulse weights copy differs')
  return dict(parent=record,restored=['actor','critic','log_std'],optimizer='fresh empty Adam',new_update=0)
 
+
+def restore_preference_parent(algo,record,source):
+ """Restore the complete declared conditional parent, without u50 assumptions."""
+ import torch,pickle,jax,numpy as np
+ from .path_command_training import export_actor
+ if algo.optimizer.state:raise ValueError('fresh optimizer required')
+ for key in ('actor','checkpoint'):
+  if digest(record[key])!=record[key+'_sha256']:raise ValueError('conditional parent checksum mismatch: '+key)
+ saved=torch.load(record['checkpoint'],map_location='cpu',weights_only=False)
+ if saved['identity']!=record['identity'] or saved['update']!=record['source_update']:raise ValueError('conditional parent identity mismatch')
+ if saved['identity']['lower_actor_sha256']!=source['candidate']['actor_sha256']:raise ValueError('conditional parent lower differs')
+ if config_hash(saved['identity']['reward'])!=config_hash(algo.policy.path_network_config['path_reward']):raise ValueError('conditional parent reward differs')
+ algo.policy.load_state_dict(saved['policy'],strict=True)
+ for key,value in saved['policy'].items():
+  if not torch.equal(algo.policy.state_dict()[key].detach().cpu(),value.detach().cpu()):raise ValueError('conditional weights copy differs')
+ with Path(record['actor']).open('rb') as stream:exported=pickle.load(stream)
+ live=export_actor(algo.policy)
+ if jax.tree.structure(live)!=jax.tree.structure(exported):raise ValueError('conditional exported Actor structure differs')
+ for a,b in zip(jax.tree.leaves(live),jax.tree.leaves(exported)):np.testing.assert_array_equal(np.asarray(a),np.asarray(b))
+ return dict(parent=record,restored=['actor','critic','log_std','all_alpha_modulation'],optimizer='fresh empty Adam',new_update=0)
+
+
+def validate_preference_training_plan(plan,cfg,parent,bank_manifest):
+ """Bind all three arms to one declaration and the actual conditional bank."""
+ if digest(plan['declaration'])!=plan['declaration_sha256']:raise ValueError('matched training declaration changed')
+ declaration=json.loads(Path(plan['declaration']).read_text())
+ for key in ('seed','pulse_seed','updates','forces_N','parent_record','optimizer_guard'):
+  if plan[key]!=declaration[key]:raise ValueError('preference plan differs from declaration: '+key)
+ if plan['arm'] not in declaration['arms'] or plan['alpha']!='conditional':raise ValueError('invalid conditional arm')
+ if len(plan['forces_N'])!=8 or 0 in plan['forces_N'] or len(set(plan['forces_N']))!=8:raise ValueError('eight unique nonzero force levels required')
+ if plan['updates']!=27:raise ValueError('this recovery pilot declares2critic+25PPO updates')
+ if digest(plan['parent_manifest'])!=declaration['parent_manifest_sha256']:raise ValueError('parent manifest changed')
+ for name,key in (('manifest.json','bank_manifest_sha256'),('receipt.json','bank_receipt_sha256')):
+  if digest(Path(plan['bank_dir'])/name)!=declaration[key]:raise ValueError('conditional bank metadata changed')
+ if config_hash(cfg)!=config_hash(short_training_config(bank_manifest['config'])):raise ValueError('conditional task differs beyond declared learner schedule')
+ if config_hash(parent['source'])!=config_hash(bank_manifest['source']):raise ValueError('conditional bank physical source differs')
+ for key in ('actor_sha256','checkpoint_sha256'):
+  if plan['parent_record'][key]!=bank_manifest['parent'][key]:raise ValueError('conditional bank parent differs')
+ return declaration
+
 def run(plan_path,output):
  import os,time,random,pickle,subprocess
  import numpy as np
@@ -136,7 +178,8 @@ def run(plan_path,output):
  from .runtime import configure_compilation_cache
  plan=json.loads(Path(plan_path).read_text());root=Path(output);root.mkdir(parents=True,exist_ok=True)
  if (root/'manifest.json').exists():raise FileExistsError('immutable training attempt exists')
- short_mode=plan.get('experiment')=='short_recovery_v1'
+ preference_mode=plan.get('experiment')=='preference_recovery_v1'
+ short_mode=preference_mode or plan.get('experiment')=='short_recovery_v1'
  pulse_mode=short_mode or plan.get('experiment')=='actual_pulse_curriculum_v1';updates=27 if short_mode else 25 if pulse_mode else 50
  status=dict(state='initializing',phase='running',pid=os.getpid(),arm=plan['arm'],alpha=plan['alpha'],completed_updates=0,declared_updates=updates,policy_transitions_total=0,training_control_ticks_total=0,declared_policy_transitions=updates*512*128)
  def update(**kw):
@@ -144,7 +187,10 @@ def run(plan_path,output):
  update(stage='loading');writer=None
  try:
   parent=json.loads(Path(plan['parent_manifest']).read_text());cfg=json.loads(Path(plan['config']).read_text());source=parent['source']
-  if pulse_mode:
+  if preference_mode:
+   record=plan['parent_record'];bank_dir=Path(plan['bank_dir']);bank_manifest=json.loads((bank_dir/'manifest.json').read_text())
+   declaration=validate_preference_training_plan(plan,cfg,parent,bank_manifest)
+  elif pulse_mode:
    record=plan['parent_record']
    if record['identity']!=parent['identity'] or record['identity']['config_sha256']!=config_hash(parent['config']):raise ValueError('parent manifest identity differs')
    if plan['arm'] not in ('uniform','guided') or plan['pulse_seed']!=(910602 if short_mode else 910402):raise ValueError('invalid pulse protocol')
@@ -153,10 +199,10 @@ def run(plan_path,output):
    pkg=json.loads(Path(plan['package']).read_text());record=pkg['model_selection'][f"alpha{plan['alpha']}"]
    validate_training_config(cfg,parent['config'],plan['arm'],plan.get('reward_variant','historical'))
    if source['candidate']['actor_sha256']!=record['lower_actor_sha256']:raise ValueError('lower identity mismatch')
-  if plan['updates']!=updates or plan['seed']!=(910601 if short_mode else 910401 if pulse_mode else 910301) or plan['alpha'] not in (0,1):raise ValueError('experiment plan differs from declared protocol')
-  optimizer_guard=json.loads(Path(parent['plan']['parent_manifest']).read_text())['plan'] if pulse_mode else parent['plan']
+  if not preference_mode and (plan['updates']!=updates or plan['seed']!=(910601 if short_mode else 910401 if pulse_mode else 910301) or plan['alpha'] not in (0,1)):raise ValueError('experiment plan differs from declared protocol')
+  optimizer_guard=plan['optimizer_guard'] if preference_mode else json.loads(Path(parent['plan']['parent_manifest']).read_text())['plan'] if pulse_mode else parent['plan']
   if not all(k in optimizer_guard for k in ('actor_lr_floor','hard_reject_consecutive_stop')):raise ValueError('missing optimizer guard contract')
-  torch.set_num_threads(2);seed=plan['seed']+plan['alpha'];torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
+  torch.set_num_threads(2);seed=plan['seed'] if preference_mode else plan['seed']+plan['alpha'];torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
   cache=configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache');c=cfg['training_future_phase_C'];n=c['num_envs'];steps=c['rollout_steps']
   if (n,steps)!=(512,128):raise ValueError('declared batch mismatch')
   env,snapshot=load_environment(cfg,source,'terminal_contract_v2');batch=PathBatch(env,snapshot,cfg,plan['seed'],plan['alpha'])
@@ -167,7 +213,10 @@ def run(plan_path,output):
    for name,key in [('bank.pkl','bank_sha256'),('anchors.npz','anchors_sha256')]:
     if digest(bank_dir/name)!=bank_receipt[key]:raise ValueError('recovery bank changed')
    with (bank_dir/'bank.pkl').open('rb') as f:bank=pickle.load(f)
-   batch=ShortRecoveryBatch(batch,bank,guided=plan['arm']=='guided',seed=plan['pulse_seed']+plan['alpha'],reserve_config=experiment_config(cfg,'dynamic'))
+   if preference_mode:
+    from .short_recovery import PreferenceRecoveryBatch
+    batch=PreferenceRecoveryBatch(batch,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'])
+   else:batch=ShortRecoveryBatch(batch,bank,guided=plan['arm']=='guided',seed=plan['pulse_seed']+plan['alpha'],reserve_config=experiment_config(cfg,'dynamic'))
   elif pulse_mode:
    from .tolerance_pulse import PulseBatch
    batch=PulseBatch(batch,guided=plan['arm']=='guided',pulse_seed=plan['pulse_seed'],reserve_config=experiment_config(cfg,'dynamic'))
@@ -176,11 +225,11 @@ def run(plan_path,output):
   def to_torch(obs):return TensorDict({'policy':torch.utils.dlpack.from_dlpack(obs[0]),'critic':torch.utils.dlpack.from_dlpack(obs[1])},batch_size=[n])
   initial=jax.jit(jax.vmap(batch.observation))(episodes)
   if bool(j.any(initial[2])):raise RuntimeError('initial observation fault')
-  obs=to_torch(initial);algo=make_algorithm(obs,steps,cfg,'cuda');receipt=restore_pulse_parent(algo,record,source,plan['alpha']) if pulse_mode else restore_weights_only(algo,record);atomic_json(root/'fork_receipt.json',receipt)
+  obs=to_torch(initial);algo=make_algorithm(obs,steps,cfg,'cuda');receipt=restore_preference_parent(algo,record,source) if preference_mode else restore_pulse_parent(algo,record,source,plan['alpha']) if pulse_mode else restore_weights_only(algo,record);atomic_json(root/'fork_receipt.json',receipt)
   if short_mode:
    with np.load(bank_dir/'anchors.npz') as anchors:
     algo.configure_parent_anchor(torch.as_tensor(anchors['observations']),torch.as_tensor(anchors['means']),torch.as_tensor(anchors['log_std']),coefficient=.05,batch_size=512)
-  identity=dict(schema=SCHEMA,alpha=plan['alpha'],lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),seed=plan['seed'],parent_checkpoint_sha256=record['checkpoint_sha256'],parent_source_update=50 if pulse_mode else 200,experiment='short_recovery_v1' if short_mode else 'actual_pulse_curriculum_v1' if pulse_mode else 'model_reserve_shaping_v1',arm=plan['arm'],initialization='weights_only_fresh_optimizer')
+  identity=dict(schema=SCHEMA,alpha=plan['alpha'],lower_actor_sha256=source['candidate']['actor_sha256'],config_sha256=config_hash(cfg),seed=plan['seed'],parent_checkpoint_sha256=record['checkpoint_sha256'],parent_source_update=record['source_update'] if preference_mode else 50 if pulse_mode else 200,experiment='preference_recovery_v1' if preference_mode else 'short_recovery_v1' if short_mode else 'actual_pulse_curriculum_v1' if pulse_mode else 'model_reserve_shaping_v1',arm=plan['arm'],initialization='weights_only_fresh_optimizer')
   start_update=0;rejections=0
   if plan.get('resume_record'):
    if not short_mode:raise ValueError('recovery resume is only supported for short recovery')
@@ -193,15 +242,16 @@ def run(plan_path,output):
    atomic_json(root/'recovery_receipt.json',dict(source=plan['resume_record'],restored=['policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','parent_anchor_cursor'],environment='fresh complete bank reset at saved route counters+1; not frame-continuous',inherited_updates=start_update,discarded_unsaved_policy_transitions=plan['resume_record']['discarded_unsaved_policy_transitions']))
   status['inherited_policy_transitions']=start_update*n*steps;status['executed_policy_transitions']=0
   atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='unchanged PathBatch physics; short recovery scalar batch-reset guard',statistics='device accumulation; per-step combined fault check'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
-  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=20.,snippet_s=4. if short_mode else None,critic_warmup_updates=2 if short_mode else 0,ppo_updates=25 if short_mode else updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
+  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=c['episode_s'],snippet_s=4. if short_mode else None,critic_warmup_updates=2 if short_mode else 0,ppo_updates=25 if short_mode else updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
   def advance_batch(ep,z,acc):
    end,ob,r,fl,final,stats=(batch.advance_batch(ep,z) if short_mode else jax.vmap(batch.advance_one)(ep,z))
    stats['diagnostics']=reduce_statistics(stats['diagnostics'])
-   acc=accumulate_rollout_totals(acc,r,fl,stats)
+   acc=accumulate_rollout_totals(acc,r,fl,stats,force_levels=batch.forces if preference_mode else None)
    checks=j.stack([j.any(fl['engineering_fault'])|j.any(ob[2]),j.any(fl['segment_timeout']) if short_mode else j.bool_(False)])
    return end,ob,r,fl,acc,final,checks
   abstract=jax.eval_shape(batch.advance_batch if short_mode else jax.vmap(batch.advance_one),episodes,j.zeros((n,2)))
   zero=empty_rollout_totals(reduce_statistics(jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),abstract[5]['diagnostics'])))
+  if preference_mode:zero['alpha_force_exposure']=j.zeros((len(batch.alpha_values),9),j.int32)
   update(stage='compiling');advance=jax.jit(advance_batch).lower(episodes,j.zeros((n,2)),zero).compile()
   tb=json.loads(Path(plan['tensorboard_info']).read_text());writer=SummaryWriter(str(Path(tb['logdir'])/plan['run_name']));verified=False
   cp=save_checkpoint(root/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=start_update,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
@@ -244,6 +294,7 @@ def run(plan_path,output):
    row=dict(update=iteration,sampling_model_update=iteration-1,mean_step_reward=reward,physical_failures=physical,domain_failures=domain,optimizer=clean_numbers(metrics),sample_seconds=sample_s,optimize_seconds=opt_s,policy_transitions_total=status['policy_transitions_total'],training_control_ticks_total=status['training_control_ticks_total'],diagnostics=diagnostic)
    if pulse_mode:row['pulse']=pulse_summary
    if short_mode:row.update(training_stage='critic_warmup' if iteration<=2 else 'ppo',completed_ppo_updates=max(0,iteration-2),route_force_active_lower_ticks=joint_exposure.tolist())
+   if preference_mode:row.update(alpha_values=batch.alpha_values.tolist(),alpha_force_active_lower_ticks=totals['alpha_force_exposure'].tolist(),force_levels_N=plan['forces_N'])
    with (root/'metrics.jsonl').open('a') as f:f.write(json.dumps(row,allow_nan=False)+'\n')
    writer.add_scalar('train/mean_step_reward',reward,iteration);writer.add_scalar('train/physical_failures',physical,iteration);writer.add_scalar('train/domain_failures',domain,iteration)
    for key in ['surrogate','value','entropy','mean_kl','accepted_epochs']:writer.add_scalar('ppo/'+key,float(metrics[key]),iteration)

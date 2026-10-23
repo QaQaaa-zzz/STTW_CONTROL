@@ -110,6 +110,8 @@ class ShortRecoveryBatch:
             fallback=ep.fallback,elapsed_ticks=elapsed,segment_timeout=flags['segment_timeout'],
             completed=flags['done'],impulse=ended.impulse,expected_impulse=.1*ep.pulse[2:],
             family=ep.route.family,active_ticks=stats['active_ticks'])
+        if hasattr(self,'alpha_values'):
+            stats['recovery']['alpha_index']=j.searchsorted(j.asarray(self.alpha_values),ep.state.alpha)
         if not auto_reset:return ended,final,reward,flags,final,stats
         def install(_):
             fresh=self.reset(ep.env_id,ep.episode+1)
@@ -167,3 +169,53 @@ class PreferenceRecoveryBatch(ShortRecoveryBatch):
         core=Episode(state,route,eid,episode,j.zeros(6),j.zeros(len(configured_cost_keys(self.base.config))))
         fallback=picked['enabled']&~j.isfinite(self.risks[idx,picked['force_index']-1])
         return RecoveryEpisode(core,state.tick,self.original_indices[idx],force,picked['force_index'],pulse,fallback,j.zeros(3))
+
+
+def check_preference_batch(plan_path,output):
+    """One real-size512-lane eight-step engineering run, without optimization."""
+    import json,pickle,time,os
+    from pathlib import Path
+    import numpy as np
+    from .preference_best import atomic_json
+    from .path_command_training import PathBatch,load_environment
+    from .path_command_policy import make_path_actor
+    from .tolerance_training import SPEC,validate_preference_training_plan
+    from .runtime import configure_compilation_cache
+    out=Path(output);out.mkdir(parents=True,exist_ok=False);started=time.monotonic();ticks=0
+    status=dict(state='running',phase='running',pid=os.getpid(),training_steps=0,maximum_lower_ticks=16384)
+    def update(**kw):
+        status.update(kw);status.update(checked_unix=time.time(),elapsed_s=time.monotonic()-started,active_lower_ticks=ticks)
+        atomic_json(out/'status.json',status)
+    update(stage='loading')
+    try:
+        plan=json.loads(Path(plan_path).read_text());cfg=json.loads(Path(plan['config']).read_text())
+        parent=json.loads(Path(plan['parent_manifest']).read_text());bankdir=Path(plan['bank_dir'])
+        bm=json.loads((bankdir/'manifest.json').read_text());validate_preference_training_plan(plan,cfg,parent,bm)
+        with (bankdir/'bank.pkl').open('rb') as stream:bank=pickle.load(stream)
+        configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
+        env,snapshot=load_environment(cfg,parent['source'],'terminal_contract_v2')
+        base=PathBatch(env,snapshot,cfg,plan['seed'],0.)
+        batch=PreferenceRecoveryBatch(base,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'])
+        initial=batch.reset(j.int32(0),j.int32(0));env.set_log_template(initial.state,initial.route.path,initial.route.speed)
+        episodes=jax.jit(jax.vmap(batch.reset))(j.arange(512,dtype=j.int32),j.zeros(512,j.int32))
+        with Path(plan['parent_record']['actor']).open('rb') as stream:params=jax.tree.map(j.asarray,pickle.load(stream))
+        actor=make_path_actor(cfg)
+        def step(ep):
+            obs=jax.vmap(batch.observation)(ep);action=actor.apply(params,obs[0])
+            end,ob,reward,flags,final,stats=batch.advance_batch(ep,action)
+            checks=j.array([j.any(obs[2])|j.any(flags['engineering_fault'])|j.any(ob[2]),j.sum(flags['physical_failure']),j.sum(flags['tracking_domain_failure'])])
+            return end,checks,j.sum(stats['active_ticks']),ob[0].shape[-1],ob[1].shape[-1]
+        advance=jax.jit(step);physical=domain=0
+        for index in range(8):
+            update(stage='stepping',completed_policy_steps=index)
+            episodes,checks,count,actor_dim,critic_dim=advance(episodes);checks=jax.device_get(checks);ticks+=int(count)
+            if checks[0]:raise RuntimeError('engineering fault in conditional batch')
+            physical+=int(checks[1]);domain+=int(checks[2])
+        ep=jax.device_get(episodes);complete=(np.asarray(ep.episode)==0)&(np.asarray(ep.force)!=0)
+        if not complete.any():raise RuntimeError('no complete pulse in engineering run')
+        error=np.linalg.norm(np.asarray(ep.impulse)[complete]-.1*np.asarray(ep.pulse)[complete,2:],axis=-1)
+        if ticks>16384 or int(actor_dim)!=351 or int(critic_dim)!=352:raise RuntimeError('batch contract changed')
+        atomic_json(out/'receipt.json',dict(batch=512,steps=8,active_lower_ticks=ticks,actor_dim=int(actor_dim),critic_dim=int(critic_dim),original_task_horizon_s=base.horizon,snippet_s=4.,physical_failures=physical,domain_failures=domain,complete_nonzero_pulses=int(complete.sum()),max_impulse_error_Ns=float(error.max()),training_steps=0,arm=plan['arm']))
+        update(state='completed',phase='completed',stage='engineering_ready',completed_policy_steps=8)
+    except BaseException as exc:
+        update(state='error',phase='error',error=f'{type(exc).__name__}: {exc}');raise
