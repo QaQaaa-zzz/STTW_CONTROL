@@ -32,3 +32,7 @@ recovery_opportunity_v1固定此前48个TRAIN非零力上下文记忆，比较�
 ## 已核对入口
 
 [RA-L作者说明](https://www.ieee-ras.org/publications/ra-l/ra-l-information-for-authors/)；已有文献比较见coordination_teaching/PAPER_AND_TOLERANCE_OPTIONS.md。论文就绪要求为本研究的判断，不冒称官方要求所有列出的消融或硬件形式。
+
+## 变速机制的模型边界
+
+已完成[变速坐标补项核验](evidence/tolerance_progress_20261022/variable_speed_derivation/DERIVATION.md)：冻结速度近似省略的坐标变化项可明确写出，但用真实未来轨迹算出的量只能作事后诊断。后续模型若指导干预，应预测干预条件下的闭环结果，并与纯数据预测及不使用预测的见证采集比较；不将补一项公式本身视作论文创新，不改变正在运行的长度对照。
