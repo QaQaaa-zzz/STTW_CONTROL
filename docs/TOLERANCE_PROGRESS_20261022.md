@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 校准尺度训练已启动（2026-10-23）：[本轮任务、复用依据、训练/评测协议与实时入口](evidence/tolerance_progress_20261022/preference_recovery_calibrated/README.md)。target2.5/bandwidth.5，公式参数不改；只新训练guided/shuffled，完整认证复用uniform对照。单GPU工作进程、各2轮Critic预热＋25轮PPO，新增3,538,944策略转移。512环境工程验证已完成；新TensorBoard http://localhost:6009 已核验guided第一轮真实奖励。训练结束自动接续1240例完整任务评测，当前未取得新策略能力结果、未采用候选。
+
 > TRAIN诊断已完成（2026-10-23）：[540例同状态结果、XY/奖励图与采样调整依据](evidence/tolerance_progress_20261022/preference_recovery_pilot/train_difficulty/CONCLUSIONS.md)。约153秒、786,672底层tick、0PPO。公式在状态检查集上有难度排序信息（描述性AUC .854，单用力大小.748），但原risk≈1关注区偏容易；保留γ/E_b，下一步检验更合适的采样难度尺度。已实现可声明的target/带宽，未启动新PPO；不把近似模型变成安全保证。
 
 > 完整回收与继续推进（2026-10-23）：三臂训练后的1240例新评测已全部完成，实际2,454,996底层tick；四策略名义任务均30/30，五个α的弯道速度偏好保留。[名义审计](evidence/tolerance_progress_20261022/preference_recovery_pilot/nominal_retention_audit.json)。现已启动540例TRAIN同状态难度诊断：60状态、9力档、40校准/20检查状态、原10秒截止、0PPO，判断模型风险是否对应真正困难的恢复状态。[声明](evidence/tolerance_progress_20261022/preference_recovery_pilot/train_difficulty_declaration.json)，进度runs/preference_train_difficulty_v1/evaluation/status.json。未采用新的训练候选。

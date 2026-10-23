@@ -1,0 +1,14 @@
+{
+  "pid": 1594716,
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-u",
+    "learning/cli/check_preference_recovery_batch.py",
+    "--plan",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1/guided/plan.json",
+    "--output",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1/engineering"
+  ],
+  "source_revision": "2a1ced820cf5b7ca1ff6af43d11bbaff8696ba57",
+  "launched_unix": 1792747270.6568182
+}

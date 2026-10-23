@@ -1,0 +1,29 @@
+{
+  "training_pid": 1599712,
+  "post_pid": 1599776,
+  "training_command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-u",
+    "learning/cli/parallel_tolerance_campaign.py",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1",
+    "--workers",
+    "1"
+  ],
+  "post_command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-u",
+    "learning/cli/finish_preference_recovery.py",
+    "--campaign",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1",
+    "--output",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_post_v1"
+  ],
+  "launched_unix": 1792747368.6956012,
+  "code_revision": "2a1ced820cf5b7ca1ff6af43d11bbaff8696ba57",
+  "fresh_jobs": [
+    "guided",
+    "shuffled"
+  ],
+  "reused_control": "uniform from preference_recovery_train_v1",
+  "max_workers": 1
+}

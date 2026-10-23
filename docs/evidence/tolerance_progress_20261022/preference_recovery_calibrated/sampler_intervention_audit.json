@@ -1,0 +1,36 @@
+{
+  "draws_per_arm": 4096,
+  "parameters": {
+    "target": 2.5,
+    "bandwidth": 0.5,
+    "strength": 0.7,
+    "shuffle_seed": 918204
+  },
+  "rows": [
+    {
+      "arm": "uniform",
+      "nonzero": 3254,
+      "mean_actual_risk": 1.8207186460494995,
+      "mass_risk_two_to_three": 0.3073140749846343,
+      "mass_risk_above_three": 0.1183159188690842,
+      "same_force_alpha_enable_nominal_at_equal_counters": true
+    },
+    {
+      "arm": "guided",
+      "nonzero": 3254,
+      "mean_actual_risk": 2.0071702003479004,
+      "mass_risk_two_to_three": 0.4446834665027658,
+      "mass_risk_above_three": 0.07037492317148125,
+      "same_force_alpha_enable_nominal_at_equal_counters": true
+    },
+    {
+      "arm": "shuffled",
+      "nonzero": 3254,
+      "mean_actual_risk": 1.8193557262420654,
+      "mass_risk_two_to_three": 0.3020897357098955,
+      "mass_risk_above_three": 0.11800860479409957,
+      "same_force_alpha_enable_nominal_at_equal_counters": true
+    }
+  ],
+  "interpretation": "same reset counters only; actual training episode counts can diverge; this proves distribution intervention not learned improvement"
+}

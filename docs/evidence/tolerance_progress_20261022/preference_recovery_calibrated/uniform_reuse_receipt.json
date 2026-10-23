@@ -1,0 +1,36 @@
+{
+  "record": {
+    "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/uniform/checkpoints/actor_0027.pkl",
+    "actor_sha256": "bd1501ba8cb2b5d5db29730bb964df77394078c79e9f48edee1561cf2a177b77",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/uniform/checkpoints/update_0027.pt",
+    "checkpoint_sha256": "d80e861e81abe067f2c77756c589e6b5b220714e4350bc2d6465809d15d20c84",
+    "identity": {
+      "schema": "sttw_geometric_path_actor351_v1",
+      "alpha": "conditional",
+      "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "config_sha256": "c9dcf0bfb21e359806303d5126d5cbf4abbbd435ab6f13ba61e4bba5e02f7321",
+      "seed": 918301,
+      "parent_checkpoint_sha256": "03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5",
+      "parent_source_update": 325,
+      "experiment": "preference_recovery_v1",
+      "arm": "uniform",
+      "initialization": "weights_only_fresh_optimizer"
+    },
+    "source_update": 27,
+    "training_reused_from": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1",
+    "training_declaration_sha256": "eaf4786e362cface3b65d5e1e0a90b46b54a87a6502197b76ba9980a47dc7dde"
+  },
+  "actual_320_state_uniform_table_bitwise_equal": true,
+  "bank_sha256": "6ce48aa4c8004b6caf6ffc9759f6b7552e7c7054050e1f6a9ea788a955d80bc0",
+  "old_sampler": {
+    "target": 1.0,
+    "bandwidth": 0.2
+  },
+  "new_sampler": {
+    "target": 2.5,
+    "bandwidth": 0.5,
+    "strength": 0.7,
+    "shuffle_seed": 918204
+  },
+  "independent_replicate": false
+}

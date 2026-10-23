@@ -1,0 +1,21 @@
+{
+  "phase": "running",
+  "state": "running",
+  "pid": 1599712,
+  "scheduler": "parallel_v1",
+  "max_workers": 1,
+  "checked_unix": 1792747658.6723719,
+  "completed_jobs": 0,
+  "declared_jobs": 2,
+  "policy_transitions_total": 368640,
+  "declared_policy_transitions": 3538944,
+  "training_control_ticks_total": 1474560,
+  "active_jobs": [
+    "guided"
+  ],
+  "active_job": "guided",
+  "child_pids": {
+    "guided": 1599744
+  },
+  "stage": "training"
+}

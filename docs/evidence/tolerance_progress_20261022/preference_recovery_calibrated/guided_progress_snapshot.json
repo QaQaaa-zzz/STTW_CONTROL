@@ -1,0 +1,42 @@
+[
+  {
+    "update": 1,
+    "stage": "critic_warmup",
+    "sampling_seconds": 42.284931289003,
+    "accepted_minibatches": 0,
+    "actor_bitwise_unchanged": true,
+    "parent_kl": 0.0
+  },
+  {
+    "update": 2,
+    "stage": "critic_warmup",
+    "sampling_seconds": 41.920258929007105,
+    "accepted_minibatches": 0,
+    "actor_bitwise_unchanged": true,
+    "parent_kl": 0.0
+  },
+  {
+    "update": 3,
+    "stage": "ppo",
+    "sampling_seconds": 40.699474063992966,
+    "accepted_minibatches": 16,
+    "actor_bitwise_unchanged": null,
+    "parent_kl": 0.0009908335196087137
+  },
+  {
+    "update": 4,
+    "stage": "ppo",
+    "sampling_seconds": 41.87287704899791,
+    "accepted_minibatches": 16,
+    "actor_bitwise_unchanged": null,
+    "parent_kl": 0.003411056866752915
+  },
+  {
+    "update": 5,
+    "stage": "ppo",
+    "sampling_seconds": 41.44892873900244,
+    "accepted_minibatches": 16,
+    "actor_bitwise_unchanged": null,
+    "parent_kl": 0.0036464567310758866
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "url": "http://localhost:6009",
+  "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1/tensorboard",
+  "scalar_verified": true,
+  "pid": 1597292,
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-m",
+    "tensorboard.main",
+    "--logdir",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_calibrated_v1/tensorboard",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "6009",
+    "--reload_interval",
+    "5"
+  ],
+  "started_unix": 1792747316.6958926,
+  "run": "guided",
+  "tag": "train/mean_step_reward",
+  "latest": [
+    1792747458.1778362,
+    1,
+    -3.605839967727661
+  ]
+}
