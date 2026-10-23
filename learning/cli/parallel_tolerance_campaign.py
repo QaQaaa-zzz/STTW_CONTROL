@@ -12,26 +12,31 @@ def alive(pid):
  except FileNotFoundError:return False
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('campaign');p.add_argument('--adopt-job',required=True);p.add_argument('--adopt-pid',type=int,required=True);p.add_argument('--workers',type=int,default=2);a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('campaign');p.add_argument('--adopt-job');p.add_argument('--adopt-pid',type=int);p.add_argument('--workers',type=int,default=2);a=p.parse_args()
  root=Path(a.campaign).resolve();definition=json.loads((root/'campaign.json').read_text());jobs=definition['jobs']
  if not 1<=a.workers<=2:raise ValueError('declared maximum two workers')
- cmd=Path(f'/proc/{a.adopt_pid}/cmdline').read_bytes().replace(b'\0',b' ').decode()
- if str(root/a.adopt_job) not in cmd or 'train_tolerance_shaping.py' not in cmd:raise ValueError('adopted process identity mismatch')
- running={a.adopt_job:(a.adopt_pid,None)};finished=set();order=[a.adopt_job,'dynamic_alpha0']+[x for x in jobs if x not in (a.adopt_job,'dynamic_alpha0')]
+ running={};finished=set();order=list(jobs)
+ if bool(a.adopt_job)!=bool(a.adopt_pid):raise ValueError('adoption needs both job and pid')
+ if a.adopt_job:
+  cmd=Path(f'/proc/{a.adopt_pid}/cmdline').read_bytes().replace(b'\0',b' ').decode()
+  if str(root/a.adopt_job) not in cmd or 'train_tolerance_shaping.py' not in cmd:raise ValueError('adopted process identity mismatch')
+  running[a.adopt_job]=(a.adopt_pid,None)
+  order=[a.adopt_job]+[x for x in ['dynamic_alpha0'] if x in jobs and x!=a.adopt_job]+[x for x in jobs if x not in (a.adopt_job,'dynamic_alpha0')]
+ expected_updates={name:json.loads((root/name/'plan.json').read_text())['updates'] for name in jobs}
  def states():return {name:json.loads((root/name/'status.json').read_text()) for name in jobs}
  def update(phase='running',**kw):
   s=states();atomic_json(root/'status.json',dict(phase=phase,state=phase,pid=os.getpid(),scheduler='parallel_v1',max_workers=a.workers,checked_unix=time.time(),completed_jobs=sum(x.get('phase')=='completed' for x in s.values()),declared_jobs=len(jobs),policy_transitions_total=sum(x.get('policy_transitions_total',0) for x in s.values()),declared_policy_transitions=definition['total_policy_transitions'],training_control_ticks_total=sum(x.get('training_control_ticks_total',0) for x in s.values()),active_jobs=list(running),active_job=next(iter(running),None),child_pids={k:v[0] for k,v in running.items()},**kw))
  try:
-  update(stage='adopted_existing_worker')
+  update(stage='adopted_existing_worker' if a.adopt_job else 'starting')
   while len(finished)<len(jobs):
    s=states()
    for name,(pid,process) in list(running.items()):
     live=process.poll() is None if process is not None else alive(pid)
     if not live:
-     if s[name].get('phase')!='completed' or s[name].get('completed_updates')!=50:raise RuntimeError(f'{name} ended without complete receipt')
+     if s[name].get('phase')!='completed' or s[name].get('completed_updates')!=expected_updates[name]:raise RuntimeError(f'{name} ended without complete receipt')
      if process is not None and process.returncode:raise RuntimeError(f'{name} exited {process.returncode}')
      receipt=json.loads((root/name/'last_completed.json').read_text())
-     if receipt['update']!=50:raise RuntimeError(f'{name} final checkpoint missing')
+     if receipt['update']!=expected_updates[name]:raise RuntimeError(f'{name} final checkpoint missing')
      finished.add(name);del running[name]
     elif s[name].get('phase') in ('error','failed'):raise RuntimeError(f'{name} reports failure')
    for name in order:
