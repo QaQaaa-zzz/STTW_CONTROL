@@ -65,9 +65,59 @@ class DirectCommandPPO(PPO):
         self.last_update = None
         self.temporal_spec = None
         self.accepted_policy_updates = 0
+        self.parent_anchor = None
+        self.parent_anchor_coefficient = 0.
+        self.parent_anchor_batch_size = 512
+        self.parent_anchor_cursor = 0
+
+    def configure_parent_anchor(self, observations, teacher_means, teacher_log_std,
+                                coefficient=.05, batch_size=512):
+        """Freeze nominal targets for KL(parent || learner), without a teacher graph.
+
+        Batches cycle deterministically across calls, independent of the PPO RNG.
+        This optional geometric-policy contract is disabled by default.
+        """
+        if (not isinstance(batch_size, int) or isinstance(batch_size, bool)
+                or batch_size <= 0 or not math.isfinite(coefficient) or coefficient < 0):
+            raise ValueError("parent anchor requires nonnegative finite coefficient and positive batch_size")
+        tensors = (observations, teacher_means, teacher_log_std)
+        if (not all(isinstance(x, torch.Tensor) and x.is_floating_point() for x in tensors)
+                or observations.ndim != 2 or observations.shape[1] != 351
+                or observations.shape[0] <= 0
+                or teacher_means.shape != (observations.shape[0], 2)
+                or teacher_log_std.shape != (2,)):
+            raise ValueError("parent anchor shapes must be [N,351], [N,2], [2] with N > 0")
+        device, dtype = self.policy.log_std.device, self.policy.log_std.dtype
+        frozen = tuple(x.detach().to(device=device, dtype=dtype).clone() for x in tensors)
+        std = frozen[2].exp()
+        if not _finite_tensors(*frozen, std) or bool((std <= 0).any()):
+            raise ValueError("parent anchor tensors and standard deviations must be finite and positive")
+        self.parent_anchor = frozen
+        self.parent_anchor_coefficient = float(coefficient)
+        self.parent_anchor_batch_size = batch_size
+        self.parent_anchor_cursor = 0
+
+    def parent_anchor_kl(self):
+        """Unweighted diagonal Gaussian KL, summed over actions, mean over rows."""
+        if self.parent_anchor is None or self.parent_anchor_coefficient == 0:
+            return self.policy.log_std.new_zeros(())
+        observations, teacher_means, teacher_log_std = self.parent_anchor
+        indices = (torch.arange(self.parent_anchor_batch_size, device=observations.device)
+                   + self.parent_anchor_cursor) % observations.shape[0]
+        self.parent_anchor_cursor = ((self.parent_anchor_cursor + self.parent_anchor_batch_size)
+                                     % observations.shape[0])
+        # Calling actor directly preserves the rollout distribution set by policy.act.
+        means = self.policy.actor(observations[indices])
+        learner_log_std = self.policy.log_std
+        row_kl = (learner_log_std - teacher_log_std
+                  + (teacher_log_std.exp().square()
+                     + (teacher_means[indices] - means).square())
+                  / (2 * learner_log_std.exp().square()) - .5).sum(-1)
+        return row_kl.mean()
 
     def _snapshot(self):
         return {
+            "parent_anchor_cursor": self.parent_anchor_cursor,
             "policy": copy.deepcopy(self.policy.state_dict()),
             "optimizer": copy.deepcopy(self.optimizer.state_dict()),
             "torch_rng": torch.get_rng_state().clone(),
@@ -78,6 +128,7 @@ class DirectCommandPPO(PPO):
         }
 
     def _restore(self, snapshot):
+        self.parent_anchor_cursor = snapshot["parent_anchor_cursor"]
         self.policy.load_state_dict(snapshot["policy"])
         self.optimizer.load_state_dict(snapshot["optimizer"])
         torch.set_rng_state(snapshot["torch_rng"].cpu())
@@ -198,7 +249,7 @@ class DirectCommandPPO(PPO):
         if self.storage.step != self.storage.num_transitions_per_env:
             raise ValueError("full rollout required before PPO update")
         if self.temporal_spec is not None:self.prepare_temporal_pairs()
-        sums = {"temporal":0., "value": 0., "surrogate": 0., "entropy": 0.,
+        sums = {"parent_kl": 0., "temporal":0., "value": 0., "surrogate": 0., "entropy": 0.,
                 "actor_grad_norm": 0., "critic_grad_norm": 0.}
         sums = {key: torch.zeros((),device=self.policy.log_std.device,dtype=torch.float64) for key in sums}
         attempted_grad_sums = {key: torch.zeros_like(sums["value"]) for key in ("actor","critic")}
@@ -241,6 +292,9 @@ class DirectCommandPPO(PPO):
                     temporal=self.temporal_loss(temporal_chunks[epoch_minibatches]) if self.temporal_spec is not None else surrogate_loss*0.
                     loss = (temporal + surrogate_loss + self.value_loss_coef * value_loss
                             - self.entropy_coef * entropy)
+                    parent_kl = self.parent_anchor_kl()
+                    if self.parent_anchor_coefficient:
+                        loss = loss + self.parent_anchor_coefficient * parent_kl
                     if not _finite_tensors(loss):
                         bad = True
                         break
@@ -266,6 +320,7 @@ class DirectCommandPPO(PPO):
                     if not _finite_tensors(*self.policy.parameters(), *optimizer_tensors):
                         bad = True
                         break
+                    epoch_sums["parent_kl"] += parent_kl.detach()
                     epoch_sums["temporal"] += temporal.detach()
                     epoch_sums["value"] += value_loss.detach()
                     epoch_sums["surrogate"] += surrogate_loss.detach()
