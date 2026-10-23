@@ -1,0 +1,1301 @@
+{
+  "summary": {
+    "control": {
+      "n": 56,
+      "success": 32
+    },
+    "speed_off": {
+      "n": 56,
+      "success": 32
+    },
+    "steer_off": {
+      "n": 56,
+      "success": 22
+    }
+  },
+  "useful_total": 4,
+  "curves": [
+    {
+      "budget": 12,
+      "data_opportunity": 2,
+      "hybrid_opportunity": 0,
+      "hybrid_failure": 2,
+      "analytic_risk": 2,
+      "abs_force": 2,
+      "uniform_exact_expectation": 1.0,
+      "uniform_p05_p95": [
+        0.0,
+        2.0
+      ]
+    },
+    {
+      "budget": 24,
+      "data_opportunity": 3,
+      "hybrid_opportunity": 2,
+      "hybrid_failure": 3,
+      "analytic_risk": 3,
+      "abs_force": 3,
+      "uniform_exact_expectation": 2.0,
+      "uniform_p05_p95": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "budget": 36,
+      "data_opportunity": 4,
+      "hybrid_opportunity": 4,
+      "hybrid_failure": 4,
+      "analytic_risk": 4,
+      "abs_force": 3,
+      "uniform_exact_expectation": 3.0,
+      "uniform_p05_p95": [
+        2.0,
+        4.0
+      ]
+    },
+    {
+      "budget": 48,
+      "data_opportunity": 4,
+      "hybrid_opportunity": 4,
+      "hybrid_failure": 4,
+      "analytic_risk": 4,
+      "abs_force": 4,
+      "uniform_exact_expectation": 4.0,
+      "uniform_p05_p95": [
+        4.0,
+        4.0
+      ]
+    }
+  ],
+  "records": [
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": true,
+        "steer_off": false
+      },
+      "either": true,
+      "control_task": false
+    },
+    {
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": true,
+        "steer_off": false
+      },
+      "either": true,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": true,
+        "steer_off": false
+      },
+      "either": true,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": true,
+        "steer_off": false
+      },
+      "either": true,
+      "control_task": false
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    },
+    {
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "useful": {
+        "speed_off": false,
+        "steer_off": false
+      },
+      "either": false,
+      "control_task": true
+    }
+  ],
+  "scores": {
+    "data_opportunity": [
+      0.3908876871530259,
+      0.24526857218190645,
+      0.39678367586801666,
+      0.24159573916954388,
+      0.4024999240660463,
+      0.23810279910521454,
+      0.37519739867910173,
+      0.12166226129291446,
+      0.38098099470148783,
+      0.11559523640088701,
+      0.38338983013680666,
+      0.11281794789020094,
+      0.25495082831706745,
+      0.12339514365475744,
+      0.3728254812177613,
+      0.11800600148471553,
+      0.3787178142786442,
+      0.1121643393045048,
+      0.24772480325418633,
+      0.0,
+      0.2505596949361826,
+      0.0,
+      0.2528442975082745,
+      0.0,
+      0.2505652502751972,
+      0.3785225213640418,
+      0.2467476469163062,
+      0.49185970689042213,
+      0.24197456874681275,
+      0.4924079468073496,
+      0.24079989130765828,
+      0.5035524648669969,
+      0.2388067109744614,
+      0.5044959062789784,
+      0.2384608936446119,
+      0.5041723147217761,
+      0.2437921278389835,
+      0.27389414169878973,
+      0.23603996412449363,
+      0.28108012331457866,
+      0.2266612799780514,
+      0.3928167073881862,
+      0.1211984071677234,
+      0.37748783079084214,
+      0.11618137812284708,
+      0.3813941793707657,
+      0.21932595553097178,
+      0.38375843516891234
+    ],
+    "hybrid_opportunity": [
+      0.3900941181938427,
+      0.11178088124188236,
+      0.4013653562566715,
+      0.11637272291238668,
+      0.3916818828770447,
+      0.15211055796017717,
+      0.37974402758112924,
+      0.11244741218219466,
+      0.3927561832161014,
+      0.1096951564167208,
+      0.3873988207961854,
+      0.12162942323257232,
+      0.14264618103266083,
+      0.11656978073059895,
+      0.37534199723654404,
+      0.11180975037857392,
+      0.38706997490978096,
+      0.1054732026131542,
+      0.13185784329973457,
+      0.0,
+      0.2520898238347717,
+      0.0,
+      0.36702013905774605,
+      0.0,
+      0.25675919505845407,
+      0.4981745447346477,
+      0.25451353101797786,
+      0.37654582991685354,
+      0.24669573753755394,
+      0.24388458536445282,
+      0.25268864742960384,
+      0.6167175967784444,
+      0.3395031635751275,
+      0.5083682356642881,
+      0.23103572012295523,
+      0.4945579191809736,
+      0.24129372422530773,
+      0.39845957278134875,
+      0.33080431443736824,
+      0.39819550761366185,
+      0.2088660315756377,
+      0.38037938717940173,
+      0.22888049454071524,
+      0.40006848411906404,
+      0.10684155458825327,
+      0.5051692377305708,
+      0.12074267717714084,
+      0.4751457992088225
+    ],
+    "hybrid_failure": [
+      0.76340134399029,
+      0.3696208535269004,
+      0.8797145408376802,
+      0.25790059050857067,
+      0.7880939175767392,
+      0.2839035142251225,
+      0.6341148134489569,
+      0.36227522873508217,
+      0.7626895677885963,
+      0.2414693300805705,
+      0.8792866580842758,
+      0.24784267543854943,
+      0.49900353330337327,
+      0.23406041277166917,
+      0.6352089471565637,
+      0.22817065811232695,
+      0.7574716582582198,
+      0.22762885206379557,
+      0.38898689040544626,
+      0.11195766565958558,
+      0.7354081714440261,
+      0.0,
+      0.8509883442347677,
+      0.11222451962167286,
+      0.3836291911133489,
+      0.7608995484836896,
+      0.38948188416580276,
+      0.7617769566207477,
+      0.4041636964783516,
+      0.7468792647752448,
+      0.36799727525935744,
+      0.7524571287665551,
+      0.46588786016155953,
+      0.7570633912409577,
+      0.3784307121388299,
+      0.7500808643083076,
+      0.24129372422530773,
+      0.5160842770130556,
+      0.33080431443736824,
+      0.64277796074589,
+      0.3183550234772725,
+      0.7676634607082033,
+      0.22888049454071524,
+      0.509812896061122,
+      0.10684155458825327,
+      0.7568753674514668,
+      0.12074267717714084,
+      0.7510779920904544
+    ],
+    "analytic_risk": [
+      2.197197549833895,
+      2.2754862960133884,
+      3.315368511295716,
+      3.3936572574752093,
+      4.433539472757537,
+      4.511828218937031,
+      2.158746133826194,
+      2.1013985185101163,
+      3.2237822969102714,
+      3.1664346815941937,
+      4.288818459994349,
+      4.231470844678271,
+      1.8504153459215078,
+      1.7680953508540058,
+      2.755043020115386,
+      2.672723025047884,
+      3.6596706943092645,
+      3.5773506992417627,
+      1.711563632119816,
+      1.798861035971224,
+      2.5891697991425757,
+      2.6764672029939844,
+      3.466775966165336,
+      3.5540733700167446,
+      2.2549500693338294,
+      2.492487702402557,
+      3.4418095122679255,
+      3.6793471453366533,
+      4.628668955202023,
+      4.86620658827075,
+      2.477698566781061,
+      1.897216899614089,
+      3.5714274333798484,
+      2.9909457662128762,
+      4.665156299978635,
+      4.084674632811664,
+      1.7942248586875775,
+      2.0473136464021735,
+      2.7546094849600156,
+      3.007698272674611,
+      3.7149941112324534,
+      3.9680828989470487,
+      1.7784103802817988,
+      2.026645773739409,
+      2.7296744187871007,
+      2.9779098122447105,
+      3.6809384572924024,
+      3.9291738507500122
+    ],
+    "abs_force": [
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0,
+      16.0,
+      16.0,
+      24.0,
+      24.0,
+      32.0,
+      32.0
+    ]
+  },
+  "orders": {
+    "data_opportunity": [
+      33,
+      35,
+      31,
+      29,
+      27,
+      4,
+      2,
+      41,
+      0,
+      47,
+      10,
+      45,
+      8,
+      16,
+      25,
+      43,
+      6,
+      14,
+      39,
+      37,
+      12,
+      22,
+      24,
+      20,
+      18,
+      26,
+      1,
+      36,
+      28,
+      3,
+      30,
+      32,
+      34,
+      5,
+      38,
+      40,
+      46,
+      13,
+      7,
+      42,
+      15,
+      44,
+      9,
+      11,
+      17,
+      23,
+      19,
+      21
+    ],
+    "hybrid_opportunity": [
+      31,
+      33,
+      45,
+      25,
+      35,
+      47,
+      2,
+      43,
+      37,
+      39,
+      8,
+      4,
+      0,
+      10,
+      16,
+      41,
+      6,
+      27,
+      14,
+      22,
+      32,
+      38,
+      24,
+      26,
+      30,
+      20,
+      28,
+      29,
+      36,
+      34,
+      42,
+      40,
+      5,
+      12,
+      18,
+      11,
+      46,
+      13,
+      3,
+      7,
+      15,
+      1,
+      9,
+      44,
+      17,
+      23,
+      19,
+      21
+    ],
+    "hybrid_failure": [
+      2,
+      10,
+      22,
+      4,
+      41,
+      0,
+      8,
+      27,
+      25,
+      16,
+      33,
+      45,
+      31,
+      47,
+      35,
+      29,
+      20,
+      39,
+      14,
+      6,
+      37,
+      43,
+      12,
+      32,
+      28,
+      26,
+      18,
+      24,
+      34,
+      1,
+      30,
+      7,
+      38,
+      40,
+      5,
+      3,
+      11,
+      9,
+      36,
+      13,
+      42,
+      15,
+      17,
+      46,
+      23,
+      19,
+      44,
+      21
+    ],
+    "analytic_risk": [
+      29,
+      34,
+      28,
+      5,
+      4,
+      10,
+      11,
+      35,
+      41,
+      47,
+      40,
+      46,
+      27,
+      16,
+      17,
+      32,
+      23,
+      22,
+      26,
+      3,
+      2,
+      8,
+      9,
+      39,
+      33,
+      45,
+      14,
+      38,
+      44,
+      21,
+      15,
+      20,
+      25,
+      30,
+      1,
+      24,
+      0,
+      6,
+      7,
+      37,
+      43,
+      31,
+      12,
+      19,
+      36,
+      42,
+      13,
+      18
+    ],
+    "abs_force": [
+      17,
+      35,
+      29,
+      5,
+      28,
+      47,
+      34,
+      23,
+      40,
+      41,
+      16,
+      11,
+      22,
+      4,
+      46,
+      10,
+      20,
+      27,
+      26,
+      2,
+      15,
+      9,
+      8,
+      32,
+      3,
+      39,
+      45,
+      38,
+      21,
+      33,
+      44,
+      14,
+      37,
+      6,
+      1,
+      25,
+      30,
+      19,
+      13,
+      42,
+      0,
+      43,
+      24,
+      18,
+      12,
+      31,
+      36,
+      7
+    ]
+  },
+  "actual_lower_ticks": 322564,
+  "model_sha256": "f0780d74c5683ec06265d856e2cea2107929b19012ef1b38f42212f194bc1a6d",
+  "results_sha256": "ea566df20c0ddad21b1e1827c3c57da162f4d7f6870ebc23fd3f768c3e2fe492",
+  "limitations": "Frozen ranking replay; all acquisition costs charged. 48 force queries share 8 prefix contexts. Permutation bands are not population confidence intervals. No Actor updates."
+}
