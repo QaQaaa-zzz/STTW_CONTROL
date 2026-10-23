@@ -13,6 +13,28 @@ def normalized_risk(features,force,*,effort_budget,gamma,duration):
     return abs(z+k*force)/math.sqrt(effort_budget*w)
 
 
+def paired_nominal_response(rows,traces,window=2.):
+    """Signed pulse response relative to own matched nominal, with no new label."""
+    context=lambda r:tuple(r[k] for k in ('policy','route','speed','alpha','onset_s'))
+    nominal={context(r):r for r in rows if r['force_N']==0}
+    result=[]
+    for row in rows:
+        if row['force_N']==0:continue
+        d=traces[row['name']];n=traces[nominal[context(row)]['name']]
+        count=min(len(d['time']),len(n['time']))
+        np.testing.assert_array_equal(d['time'][:count],n['time'][:count])
+        t=d['time'][:count];after=t>=row['onset_s']-1e-5
+        mask=after&(t<row['onset_s']+window-1e-5)
+        item=dict(name=row['name'],alpha=row['alpha'],force_N=row['force_N'],
+            window_complete=bool(mask.sum()==round(window/.005)))
+        for field in ('phi','path_cross_track','actual_forward_speed'):
+            delta=d[field][:count]-n[field][:count]
+            item[field+'_delta_rms_2s']=float(np.sqrt(np.mean(delta[mask]**2))) if mask.any() else None
+            item[field+'_peak_delta_post']=float(np.max(np.abs(delta[after]))) if after.any() else None
+        result.append(item)
+    return result
+
+
 def report(run,output):
     from .preference_best import atomic_json
     from .recovery_margin_scan import outcome_labels
@@ -46,6 +68,7 @@ def report(run,output):
             turn_path_rmse=rms(d['path_cross_track'],turn),
             wheel_proxy_rmse=rms(d['wheel_speed_proxy']-d['actual_forward_speed'],np.ones(len(d['time']),bool)))
         audit.append(a)
+    atomic_json(out/'paired_nominal_response.json',paired_nominal_response(audit,traces))
     summary=[]
     for alpha in decl['alphas']:
         group=[r for r in audit if r['alpha']==alpha]

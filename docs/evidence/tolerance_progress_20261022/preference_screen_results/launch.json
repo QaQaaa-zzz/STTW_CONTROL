@@ -1,0 +1,8 @@
+{
+  "pid": 1196924,
+  "started_unix": 1792738630.4548035,
+  "code_revision": "9a724199abae8ccdc932af3cf3815854681a72e6",
+  "status": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_tolerance_screen_v1/evaluation/status.json",
+  "project": "STTW_CONTROL",
+  "training_steps": 0
+}

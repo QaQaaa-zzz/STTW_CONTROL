@@ -1,5 +1,8 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 单网络整合更新（2026-10-23）：[真正u325单alpha网络的200例真实脉冲结果](evidence/tolerance_progress_20261022/preference_screen_results/CONCLUSIONS.md)已完成，所有alpha任务恢复40/40，工作性能33/31/28/25/26；V3/原10s任务/冻结local300保持不变，尚无新PPO。公式在160个非零样本中预测86余量内全部恢复，另74余量外也恢复；没有任务负例，不能判断区分能力。正在执行同任务0/±20/±32N的有界强脉冲诊断，目标是定位有实际改进空间的恢复工况，再建立独立TRAIN前缀和精确alpha/力档匹配的采样对照。旧双端点训练结果与此区分。
+
+
 > 后续扫描也已完成：[32个TRAIN完整状态、416例同状态带符号扫描](evidence/tolerance_progress_20261022/train_margin_scan_results/CONCLUSIONS.md)。不改参数，公式余量内281例均完成任务恢复，余量外另有127例恢复，表现保守；严格工作性能与物理边界分开，6例提前域退出后的物理存活UNKNOWN。未启动下一轮训练，当前重点是余量如何指导状态—方向采样，而非精确拟合或解冻底层。
 
 > 更新：4秒短恢复联合协议与完整864例DEV已结束。[本轮XY、奖励、结果与下一步](evidence/tolerance_progress_20261022/short_recovery_results/CONCLUSIONS.md)。α0原标准parent/uniform/guided=133/138/136；α1均141；真正任务恢复α0=142/144/142，α1均144。uniform α0保留为下一阶段冻结后缀候选，未宣布部署替换。接续TRAIN方向扫描已声明并启动：32状态×13力档=416例，无PPO；见[协议](TOLERANCE_SHORT_RECOVERY_PLAN_20261022.md)。以下旧“最新”块为此前20秒训练阶段的历史快照。
