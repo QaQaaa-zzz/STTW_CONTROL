@@ -1,0 +1,14 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1912647,
+  "stage": "reports_ready",
+  "training_steps": 0,
+  "completed_cases": 60,
+  "declared_cases": 60,
+  "cached_cases": 60,
+  "active_lower_ticks": 120000,
+  "checked_unix": 1792754777.9516997,
+  "dependency_pid": 1862322,
+  "evaluator_pid": 1931268
+}

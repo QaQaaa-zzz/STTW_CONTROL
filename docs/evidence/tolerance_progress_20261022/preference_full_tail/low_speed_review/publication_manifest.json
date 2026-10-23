@@ -1,0 +1,209 @@
+{
+  "files": [
+    {
+      "file": "REVIEW.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/REVIEW.md",
+      "sha256": "350eea02971b860305b6e9eb1c8f41b1eb24a6f3e4b992f48a9c5c7e2f96bb77"
+    },
+    {
+      "file": "continuous_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/continuous_review.json",
+      "sha256": "96f1bda721f3b6e1884650833838b2be2ab08626604b1123b049ac89184ebca7"
+    },
+    {
+      "file": "matched_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_results.json",
+      "sha256": "a7f1439cec3f08f906dc9ff88edf6ff48de6e528f01c9bc08f182916230e0d67"
+    },
+    {
+      "file": "declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/declaration.json",
+      "sha256": "4ccd639d33d5e0da0ccfdecd51508ca9bff5d0c9fb1e463aeb0f66909f006a88"
+    },
+    {
+      "file": "execution_manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/execution_manifest.json",
+      "sha256": "180b5ca9cd138159f1830af1c264422803ed0529eef856c3dac8e3bb5b3d537c"
+    },
+    {
+      "file": "status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/status.json",
+      "sha256": "8713da862a2a297585745f1024d20e9e1a06fee9c2bf1ff910e064aab79944b8"
+    },
+    {
+      "file": "plot_matched.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/plot_matched.py",
+      "sha256": "e7904c8377446f6aeda020446ddcb7deb8c142abcada5053d1d75624960aa5b3"
+    },
+    {
+      "file": "analysis/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/summary.json",
+      "sha256": "a5a7513e6129a7597f29b7f6386aaf5945631e78f2888d8b6c8e1341f329959d"
+    },
+    {
+      "file": "analysis/REPORT.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/REPORT.md",
+      "sha256": "aaf1d27295f0ab68ee39e4c095ccd9151439a7371375955acce584eda4d89df0"
+    },
+    {
+      "file": "analysis/paired_nominal_response.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/paired_nominal_response.json",
+      "sha256": "b5eb8d3b15ab5f0e4d93156a3d334116c03971acb4dc41a4aaf5714c1d290a73"
+    },
+    {
+      "file": "analysis/cases.csv",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/cases.csv",
+      "sha256": "fa1036396cce5fb582a326fa12b6fbfff1e08212658dc7b1688e82d76b404d63"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2.png",
+      "sha256": "70e1dc340f5a14c6575a063200c845c8e05ee541a56a1a29966aabf2e5ea8285"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2_a0_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "86ff24686eaa89438ddf7ff4a90e7fdbb922ae1d51c325a720837dd52b65b34d"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2_a0.875_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "52002458d69a0cfb1fca039eb41021d4ec6c46ac9fe7f82e04426e96bd036cdf"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2.png",
+      "sha256": "ca92423701310d183969dc0c8d37e24d2b571eb526917365a88bbbbb74dce645"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2_a1_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "5c1700b1279d3d15be2ec783cc5dda4c13cba746d5bc753e44870b5bc7e0a499"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2.png",
+      "sha256": "80845cc71dadd8196c261c57eeecbabb0ea77abf22fd75802e1209fbd82d380b"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2_a0.125_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "9a684cf10827c4a7187fdd0f5ccc8fb765b9b52f27f4176017fc7c62ba9bca1e"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2_a0.875_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2_a0.875_reward.png",
+      "sha256": "88ebf37f3fe089538ddf1a9a544c3f355b051e8868d4dda54e838395dd82133d"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2_a0.875_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "f7238d34185cc4558fc6159d759fc83a6f1eee01dbc3ff055dc6683239448e26"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2_a0.5_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "78b9beb6f1195198720aac84e0a9ef530caa804fdd9e6adc39c9b5a84fdd9c9c"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2.png",
+      "sha256": "f4b44f36578666622e55c51f2ab495f42d0a4e2ea82db2c4847dd263590a89e0"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2_a0.5_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2_a0.5_reward.png",
+      "sha256": "a6bd9e875d99bfd7ca1699cee8663cb8ebd9488dd720522bade0ac476a2e353d"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2_a0.5_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "bc9e2293ded0beb752422ea924dc119351013f8c849cc6095258ec72d4573cb2"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2_a0.5_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2_a0.5_reward.png",
+      "sha256": "5a4fbb76d4352d4b5f85f834f260da605f0c65c3c1a91b714df75da4f1a341a8"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2_a0.125_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "1b47d48052f4c3af81786d097110c77c578deb65b7c235673bad63d7c806e3ff"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2_a1_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "ef6dc1440d995297508c0a21fa613850df2be7865022d827ddada003110ca8b0"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2_a0.875_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2_a0.875_reward.png",
+      "sha256": "e29217bde06da77fabc7b80730bacc559354b8272e0588f2bfc171d491f856fd"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2_a0_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "2e67763a890f7e659d5a56ad0539519df0b001c0e93101990ce5b314fc29a025"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2_a0_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2_a0_reward.png",
+      "sha256": "6a8c9710af973358f8996178d4752453458bede0bc162573f4adaebabcabbe52"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2_a1_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2_a1_reward.png",
+      "sha256": "5492076d011181544e0a14387a8c54209e977aec88850891b863e388f30c3f47"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.35_t2_a0_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.35_t2_a0_reward.png",
+      "sha256": "d162f8e750181f7a7ad2519154ae5c39ac7e0241531a658e87f7c206fe9a1b2c"
+    },
+    {
+      "file": "analysis/curves/right120_R2p5_v2.75_t2_a0.125_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/right120_R2p5_v2.75_t2_a0.125_reward.png",
+      "sha256": "f5d7843eda9fd5ccdbf5596c76bd432f203d7cab32026aba772ec38595a54c4d"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.35_t2_a0.125_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.35_t2_a0.125_reward.png",
+      "sha256": "7cc1de68503e2cc06b0c3dd2a2828b6c48f756d3980c039a6052c461cfcde7a5"
+    },
+    {
+      "file": "analysis/curves/left120_R2p5_v2.75_t2_a1_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/analysis/curves/left120_R2p5_v2.75_t2_a1_reward.png",
+      "sha256": "a63f4703cd6b1845cf4ebdc6dfcc0352780046c93da1bc1ad99978bd39c482cf"
+    },
+    {
+      "file": "matched_curves/actual_forward_speed.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/actual_forward_speed.png",
+      "sha256": "14412028ac4243894db833c7cd8b7a1c199025b0025a1bb67e6c12fa3a63f06d"
+    },
+    {
+      "file": "matched_curves/path_heading_error.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/path_heading_error.png",
+      "sha256": "07e749089cf703d8ab2ee9390d9a0101171cf010a8c830c70df540a1c602e187"
+    },
+    {
+      "file": "matched_curves/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/actual_xy.png",
+      "sha256": "7942e14093a49d8ac607a49edd31638fb47739f07daa85fd18467894af012e6b"
+    },
+    {
+      "file": "matched_curves/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/cumulative.png",
+      "sha256": "01fefff3f31c3d062847d9ffa8f9ac8d68d9777924b30d7eb7f087d65d1db07e"
+    },
+    {
+      "file": "matched_curves/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/scored_tick_reward.png",
+      "sha256": "269c76cb2d06378594b48d9a0fc4a2ecb19df5946400eb4bb1442f4f84372b5c"
+    },
+    {
+      "file": "matched_curves/path_cross_track.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/matched_curves/path_cross_track.png",
+      "sha256": "1192e443fe64115b7f87d3d089528a8b518f811f5762eff53d30fe92745420c0"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "cases": [
+    {
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.6422385573387146,
+      "candidate_tail_path_m": 0.6479831337928772,
+      "tail_heading_abs_rad": 0.5312314033508301,
+      "tail_speed_abs_error_m_s": 0.20188498497009277
+    },
+    {
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.6716406345367432,
+      "candidate_tail_path_m": 0.430731862783432,
+      "tail_heading_abs_rad": 0.44548165798187256,
+      "tail_speed_abs_error_m_s": 0.2417764663696289
+    },
+    {
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.19660919904708862,
+      "candidate_tail_path_m": 0.10146396607160568,
+      "tail_heading_abs_rad": 0.1470002979040146,
+      "tail_speed_abs_error_m_s": 0.039621591567993164
+    },
+    {
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "parent_task": true,
+      "candidate_task": true,
+      "parent_tail_path_m": 0.01304003968834877,
+      "candidate_tail_path_m": 0.026876114308834076,
+      "tail_heading_abs_rad": 0.005564689636230469,
+      "tail_speed_abs_error_m_s": 0.018254756927490234
+    },
+    {
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.9967020750045776,
+      "candidate_tail_path_m": 0.8964003324508667,
+      "tail_heading_abs_rad": 0.5388534069061279,
+      "tail_speed_abs_error_m_s": 0.12441349029541016
+    },
+    {
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.7048975825309753,
+      "candidate_tail_path_m": 0.5450735092163086,
+      "tail_heading_abs_rad": 0.41429591178894043,
+      "tail_speed_abs_error_m_s": 0.40496110916137695
+    },
+    {
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.25833895802497864,
+      "candidate_tail_path_m": 0.2840688228607178,
+      "tail_heading_abs_rad": 0.3059791326522827,
+      "tail_speed_abs_error_m_s": 0.12055253982543945
+    },
+    {
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "parent_task": false,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.43058931827545166,
+      "candidate_tail_path_m": 0.2775111794471741,
+      "tail_heading_abs_rad": 0.2256014347076416,
+      "tail_speed_abs_error_m_s": 0.1943056583404541
+    },
+    {
+      "context": [
+        "right120_R2p5",
+        2.75,
+        1.0,
+        20.0,
+        2.0
+      ],
+      "parent_task": true,
+      "candidate_task": false,
+      "parent_tail_path_m": 0.08370167016983032,
+      "candidate_tail_path_m": 0.10015308111906052,
+      "tail_heading_abs_rad": 0.011409281753003597,
+      "tail_speed_abs_error_m_s": 0.016303539276123047
+    }
+  ],
+  "interpretation": "Some continuous improvement despite identical 1/8 target task count; several large residual errors persist. The additional alpha1 loss exceeds path threshold by only about0.2mm."
+}
