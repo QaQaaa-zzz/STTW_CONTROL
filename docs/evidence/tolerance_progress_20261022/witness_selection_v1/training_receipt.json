@@ -1,0 +1,148 @@
+{
+  "phase": "completed",
+  "jobs": [
+    {
+      "job": "witness_918501",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918501/training/actor.pkl",
+        "actor_sha256": "c1c0e525a2a5b1b81da6af877a0b6a73760bf7fb917de057f4ae687981bdc282",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918501/training/training_state.pkl",
+        "checkpoint_sha256": "239862c229aa7a18bc17787f97d64931f1609b768d39d77b8ae54ebac4939c58",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771107.8964915,
+        1,
+        0.011269677430391312
+      ],
+      "fit_last": [
+        1792771109.183163,
+        400,
+        0.0013644581194967031
+      ],
+      "elapsed_s": 1.8666256800061092
+    },
+    {
+      "job": "random_success_918501",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918501/training/actor.pkl",
+        "actor_sha256": "f8c3a363c431ba054b9d443560dbe5c4c9b144cd1dc61ebd7a1d4d3e03414d18",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918501/training/training_state.pkl",
+        "checkpoint_sha256": "a5115b1f963683e2f9cc8a3789733f2f567e30d53973cd71eacd25d45cad5804",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771204.5984344,
+        1,
+        0.007554792799055576
+      ],
+      "fit_last": [
+        1792771205.8790703,
+        400,
+        0.0011689657112583518
+      ],
+      "elapsed_s": 1.8623753460124135
+    },
+    {
+      "job": "witness_918502",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918502/training/actor.pkl",
+        "actor_sha256": "7f4796a026b277ce47b0ac8f49a7a84fb32e431a48526b125d7ac4b78591e6d0",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918502/training/training_state.pkl",
+        "checkpoint_sha256": "e68a07c2d93e8d3f7126bddb7b486a9c5668fbeacf5d5254fb09c9c7e74f3788",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771213.608101,
+        1,
+        0.0132368765771389
+      ],
+      "fit_last": [
+        1792771214.8961198,
+        400,
+        0.001259807264432311
+      ],
+      "elapsed_s": 1.8727636620169505
+    },
+    {
+      "job": "random_success_918502",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918502/training/actor.pkl",
+        "actor_sha256": "6ba279bd718809857303833deddf4e9289f15dc2b83d85f07494b1f955cf619d",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918502/training/training_state.pkl",
+        "checkpoint_sha256": "a9f75947d7fc82993ac941e7ea37b28037919ca189359aed9ea3e47729be7cad",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771218.6099582,
+        1,
+        0.007687100674957037
+      ],
+      "fit_last": [
+        1792771219.8887556,
+        400,
+        0.0011582555016502738
+      ],
+      "elapsed_s": 1.8576638929953333
+    },
+    {
+      "job": "witness_918503",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918503/training/actor.pkl",
+        "actor_sha256": "cab5b33671877a37bea5bd9c84dd3cfdbc0d85f46ec586e8368f0368c224f3f0",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/witness_918503/training/training_state.pkl",
+        "checkpoint_sha256": "e58aa1e5ac9f2716d9ab0bb5b9ff4c06106ea2c99fe0430debe7641153e3431f",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771223.62856,
+        1,
+        0.012438206933438778
+      ],
+      "fit_last": [
+        1792771224.9098644,
+        400,
+        0.0009985406650230289
+      ],
+      "elapsed_s": 1.8648479590192437
+    },
+    {
+      "job": "random_success_918503",
+      "candidate": {
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918503/training/actor.pkl",
+        "actor_sha256": "46885eeaed9aca33f4286fe39c9c6adcce0c26ee1ef7d1f33befe2c24e6e6c2a",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/random_success_918503/training/training_state.pkl",
+        "checkpoint_sha256": "d0635a5e5936075bdda4805505206dffa1cdde582509d525b6f587b20bf3ca8b",
+        "source_update": 400,
+        "kind": "supervised_actor_only_not_PPO_checkpoint"
+      },
+      "updates": 400,
+      "fit_first": [
+        1792771228.633405,
+        1,
+        0.01194676198065281
+      ],
+      "fit_last": [
+        1792771229.9099348,
+        400,
+        0.0008564823074266315
+      ],
+      "elapsed_s": 1.8574068940069992
+    }
+  ],
+  "total_supervised_updates": 2400,
+  "new_physics_ticks": 0,
+  "duplicate_updates": 0,
+  "checked_unix": 1792771291.3135912,
+  "evaluation": "pending, not a performance claim"
+}

@@ -1,0 +1,14 @@
+{
+  "cause": "TensorBoard logdir_spec added /. suffix; numerical training succeeded",
+  "original_controller_status": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/controller_attempt1_status.json",
+  "original_evaluation_status": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/evaluation/status.json",
+  "completed_teaching_reused": [
+    "witness_918501"
+  ],
+  "new_training_updates_due": 2000,
+  "discarded_training_updates": 0,
+  "controller_pid": 2722449,
+  "evaluation_pid": 2722458,
+  "evaluation_output": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1/evaluation_attempt2",
+  "first_scalar_http_checked": true
+}

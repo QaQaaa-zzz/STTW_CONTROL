@@ -1,0 +1,14 @@
+{
+  "phase": "completed",
+  "pid": 2722449,
+  "stage": "six_teaching_candidates_ready",
+  "completed_jobs": 6,
+  "declared_jobs": 6,
+  "completed_updates": 2400,
+  "declared_updates": 2400,
+  "physics_ticks": 0,
+  "checked_unix": 1792771230.995818,
+  "job": "random_success_918503",
+  "reused_completed": false,
+  "child_pid": 2723665
+}

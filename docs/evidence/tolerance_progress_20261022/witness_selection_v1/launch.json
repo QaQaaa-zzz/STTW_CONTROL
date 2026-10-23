@@ -1,0 +1,16 @@
+{
+  "tensorboard_url": "http://localhost:6041",
+  "tensorboard_pid": 2717970,
+  "cpu_affinity": [
+    28,
+    29,
+    30,
+    31
+  ],
+  "plan_sha256": "a686848e1244862ec3c542ebf50a311ae4e86dad71cc2c991a06144780536f8c",
+  "code_revision": "e79397d5ffcb983ba4cfb6a3d5fe835b4f486839",
+  "scalar": "fit/loss (supervised; no RL reward)",
+  "fit_verification": "pending first job",
+  "controller_pid": 2718009,
+  "evaluation_pid": 2718017
+}

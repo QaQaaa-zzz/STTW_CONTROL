@@ -1,0 +1,14 @@
+{
+  "phase": "error",
+  "pid": 2718009,
+  "stage": "teaching",
+  "completed_jobs": 0,
+  "declared_jobs": 6,
+  "completed_updates": 0,
+  "declared_updates": 2400,
+  "physics_ticks": 0,
+  "checked_unix": 1792771130.254797,
+  "job": "witness_918501",
+  "child_pid": 2718013,
+  "error": "RuntimeError('TensorBoard actual fit scalar unavailable')"
+}

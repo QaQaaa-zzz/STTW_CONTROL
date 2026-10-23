@@ -7,7 +7,7 @@ from sttw_control.preference_best import atomic_json,digest
 from sttw_control.preference_length_evaluation import paired_counts
 from sttw_control.preference_tolerance_reporting import report
 from prepare_short_recovery_campaign import register
-os.chdir(REPO);plan=json.loads((R/'evaluation_plan.json').read_text());out=R/'evaluation';out.mkdir(exist_ok=False)
+os.chdir(REPO);plan=json.loads((R/'evaluation_plan.json').read_text());out=R/(sys.argv[1] if len(sys.argv)>1 else 'evaluation');out.mkdir(exist_ok=False)
 s=dict(phase='running',pid=os.getpid(),stage='waiting',completed_cases=0,declared_cases=1620,active_lower_ticks=0,training_steps=0)
 def update(**kw):s.update(kw,checked_unix=time.time());atomic_json(out/'status.json',s)
 update()
