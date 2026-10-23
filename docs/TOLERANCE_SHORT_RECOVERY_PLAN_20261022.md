@@ -22,3 +22,11 @@
 - 冻结具体plan与effective_config后启动采集/训练；核对新checkpoint和实际进度，不覆盖旧run。
 
 本计划不是已完成实验结果；阶段状态在共享PROJECT_STATE维护。实现时发现合同不一致必须先更正再启动，不因测试通过宣称控制效果有效。
+
+## 已完成实现与预检（启动快照）
+
+代码644a591及其父提交已实现：TRAIN前缀bank/名义锚采集、4s wrapper、原20s时钟、超时最终观测bootstrap、两轮critic-only、父高斯KL、联合路径×力档活动tick统计、effective_config、有限调度和最终评测。37项相关CPU测试通过（后续调度补充23项复核亦通过）。
+
+首个bank smoke在加载父record时KeyError(actor)，发生在仿真前，0物理步，错误及通知保留；改为复用已有完整父模型解析器后，8个GPU TRAIN前缀全部采集成功（1920lower ticks）。随后均匀/引导各8条4s真实GPU片段通过，共12800lower ticks，两组各8次片段截断、5次非零推力，最大完整冲量误差0.0008211Ns，原时钟保留。这里不是性能结论。
+
+实际有限运行：`runs/short_recovery_train_v1`，准备控制器PID482564；正式bank采集alpha0/1 PID485649/485650各512contexts，状态见`prepare_status.json`及`banks/alpha{0,1}/status.json`。采集后自动启动最多2worker训练和独立TensorBoard；首reward产生后逐job核验HTTP。当前发布快照仍在采集，尚无训练曲线或控制效果结论。邮件/自动修复禁用，Bark已登记。
