@@ -211,7 +211,7 @@ def run(plan_path,output):
    writer.flush()
    if checkpoint_due(iteration,updates,stop=stop):
     cp=save_checkpoint(root/'checkpoints',algo,iteration,identity,rejections=rejections,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=iteration,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
-   if not verified and (iteration==1 or iteration%5==0):verified=_verify_reward_http(root,tb,plan['run_name'])
+   if not verified and (iteration==start_update+1 or iteration%5==0):verified=_verify_reward_http(root,tb,plan['run_name'])
    update(completed_updates=iteration,stage='optimized',last_reward=reward,tensorboard_reward_verified=verified)
    if stop:raise RuntimeError('optimizer stop: '+stop)
   update(state='completed',phase='completed',stage='training_complete',evaluation_status='not_started')
