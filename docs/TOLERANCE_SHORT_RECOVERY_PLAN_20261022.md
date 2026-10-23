@@ -30,3 +30,13 @@
 首个bank smoke在加载父record时KeyError(actor)，发生在仿真前，0物理步，错误及通知保留；改为复用已有完整父模型解析器后，8个GPU TRAIN前缀全部采集成功（1920lower ticks）。随后均匀/引导各8条4s真实GPU片段通过，共12800lower ticks，两组各8次片段截断、5次非零推力，最大完整冲量误差0.0008211Ns，原时钟保留。这里不是性能结论。
 
 实际有限运行：`runs/short_recovery_train_v1`，准备控制器PID482564；正式bank采集alpha0/1 PID485649/485650各512contexts，状态见`prepare_status.json`及`banks/alpha{0,1}/status.json`。采集后自动启动最多2worker训练和独立TensorBoard；首reward产生后逐job核验HTTP。当前发布快照仍在采集，尚无训练曲线或控制效果结论。邮件/自动修复禁用，Bark已登记。
+
+## 最终checkpoint错误与恢复（原始失败记录保留）
+
+原alpha0两组均完成27次learner更新，但旧保存条件仅`iteration%5==0`，最后保存u25，缺失u27；调度器据此报错，alpha1尚未启动。已修复为每5轮、最后一轮或停止时保存；新增27/25/2轮回归和新旧checkpoint恢复测试，共32项相关CPU测试通过。后续checkpoint保存父KL锚循环位置，避免恢复后重置保留采样进度。
+
+显式恢复入口`learning/cli/recover_short_recovery_campaign.py`启动新attempt `runs/short_recovery_train_v1_recovery1`，旧bank/anchors复用，旧失败状态不覆盖。alpha0从经hash验证的u25恢复policy/optimizer/随机数/拒绝计数，按原accepted_minibatches日志推导并验证KL游标；从已存route counters+1的完整bank状态开始，明确不是仿真逐帧接续。只补26/27两轮，alpha1按原配置从零完成27轮。
+
+计费：旧attempt实际3,538,944策略步；保留模型血缘3,276,800；丢失未保存的262,144步保留为成本。恢复attempt新执行上限3,801,088步，合计实际7,340,032，而最终模型血缘仍为原声明7,077,888步。不会把重算费用隐藏或计作新独立证据。
+
+恢复TensorBoard独立日志 `http://localhost:6012`，实际第26轮reward已通过HTTP核验（uniform −.03955267，guided −.04086924）；历史6011保持。Bark仅通知，自动修复与邮件仍禁用。恢复后自动衔接864例完整任务评测。
