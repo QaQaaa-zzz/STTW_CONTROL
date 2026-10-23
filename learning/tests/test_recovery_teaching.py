@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from sttw_control.recovery_teaching import teaching_enabled, extract_teaching
+from sttw_control.recovery_teaching import teaching_enabled, extract_teaching, select_training_rows
 
 
 def test_opt_in_requires_training_contract():
@@ -23,3 +23,15 @@ def test_pre_action_alignment_partial_terminal_and_parent_separate():
     np.testing.assert_allclose(got['parent_means'][:,0],[.5,.2])
     d['teaching_observation'][4,0]=np.nan
     with pytest.raises(ValueError):extract_teaching(d)
+
+
+def test_selection_keeps_regression_controls_not_failed_parent_actions():
+    common=dict(route='left',speed=2.3,alpha=0.,onset_s=1.7,domain_failure=False,physical_failure=False)
+    rows=[]
+    for force,base_ok,teacher_ok,gain in [(24,False,True,1),(-24,True,False,1),(16,False,True,-1)]:
+        rows.extend([dict(common,force_N=force,policy='control',task_recovered=base_ok,logged_return=-10),
+                     dict(common,force_N=force,policy='speed_off',task_recovered=teacher_ok,logged_return=-10+gain)])
+    recovery,retention=select_training_rows(rows)
+    assert [r['force_N'] for r in recovery]==[24]
+    assert [r['force_N'] for r in retention]==[-24]
+    with pytest.raises(ValueError):select_training_rows(rows+[rows[0]])

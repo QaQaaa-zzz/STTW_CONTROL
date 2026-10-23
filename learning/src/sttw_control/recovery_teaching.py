@@ -33,3 +33,22 @@ def extract_teaching(data, upper_dt=.02):
     if len(np.unique(np.rint(result['time']/upper_dt))) != len(result['time']):
         raise ValueError('duplicate policy decision')
     return result
+
+
+def select_training_rows(rows):
+    """Keep successful controls and reward-improving speed-off recovery pairs."""
+    key = lambda row: tuple(row[k] for k in ('route', 'speed', 'alpha', 'force_N', 'onset_s'))
+    controls = {key(r): r for r in rows if r['policy'] == 'control'}
+    if len(controls) != sum(r['policy'] == 'control' for r in rows):
+        raise ValueError('duplicate control context')
+    recovery = []
+    retention = [r for r in controls.values() if r['task_recovered'] and not r['domain_failure'] and not r['physical_failure']]
+    for row in rows:
+        if row['policy'] != 'speed_off':
+            continue
+        base = controls[key(row)]
+        if (row['task_recovered'] and not base['task_recovered']
+                and not row['domain_failure'] and not row['physical_failure']
+                and row['logged_return'] > base['logged_return']):
+            recovery.append(row)
+    return recovery, retention
