@@ -46,6 +46,11 @@
           "steer_off": 0
         }
       },
+      "observation_audit": {
+        "files": 72,
+        "paired_observations": 48,
+        "max_abs_difference": 0.0
+      },
       "cases": [
         {
           "context": {
@@ -659,6 +664,11 @@
           "speed_off": 4,
           "steer_off": 0
         }
+      },
+      "observation_audit": {
+        "files": 168,
+        "paired_observations": 112,
+        "max_abs_difference": 0.0
       },
       "cases": [
         {
@@ -2393,6 +2403,11 @@
           "speed_off": 6,
           "steer_off": 0
         }
+      },
+      "observation_audit": {
+        "files": 0,
+        "paired_observations": 0,
+        "max_abs_difference": null
       },
       "cases": [
         {

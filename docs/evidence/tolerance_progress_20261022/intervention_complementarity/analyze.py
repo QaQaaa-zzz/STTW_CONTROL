@@ -1,6 +1,7 @@
 """Offline finite-intervention complementarity; not a learned selector evaluation."""
 from pathlib import Path
 import argparse,json,hashlib
+import numpy as np
 RUNS=('preference_train_coordination_records_v1','tolerance_recovery_opportunity_v1','tolerance_teaching_search_pilot_v1')
 KEYS=('route','speed','alpha','force_N','onset_s')
 def main():
@@ -24,7 +25,22 @@ def main():
    cases.append(dict(context=dict(zip(KEYS,k)),arms=items))
   count=lambda fn:sum(fn(x['arms']) for x in cases)
   summary=dict(n=len(cases),success={pol:count(lambda g:g[pol]['success']) for pol in ('control','speed_off','steer_off')},union_success=count(lambda g:any(r['success'] for r in g.values())),control_speed_union=count(lambda g:g['control']['success'] or g['speed_off']['success']),steer_unique=count(lambda g:g['steer_off']['success'] and not(g['control']['success'] or g['speed_off']['success'])),gains={pol:count(lambda g:g[pol]['gain']) for pol in ('speed_off','steer_off')},harms={pol:count(lambda g:g[pol]['harm']) for pol in ('speed_off','steer_off')},useful={pol:count(lambda g:g[pol]['useful']) for pol in ('speed_off','steer_off')})
-  reports.append(dict(run=name,role=decl['data_role'],window=decl['recovery_intervention'],summary=summary,cases=cases,sources={str(q):hashlib.sha256(q.read_bytes()).hexdigest() for q in [root/'declaration.json',run/'status.json',run/'results.json',*receipts]}))
+  teaching_files=list(run.glob('*_teaching.npz'));observation_audit=dict(files=len(teaching_files),paired_observations=0,max_abs_difference=None)
+  if teaching_files:
+   assert len(teaching_files)==len(rows)
+   allgroups={}
+   for r in rows:allgroups.setdefault(tuple(r[x] for x in KEYS),{})[r['policy']]=r
+   maximum=0.;pairs=0
+   for arms in allgroups.values():
+    obs={}
+    for pol,row in arms.items():
+     with np.load(run/(row['name']+'_teaching.npz')) as data:
+      idx=np.flatnonzero(np.isclose(data['time'],decl['recovery_intervention']['start_s'],atol=1e-5));assert len(idx)==1
+      obs[pol]=data['observations'][idx[0]];assert obs[pol].shape==(351,) and np.isfinite(obs[pol]).all()
+    for pol in ('speed_off','steer_off'):
+     maximum=max(maximum,float(np.max(np.abs(obs[pol]-obs['control']))));pairs+=1
+   observation_audit.update(paired_observations=pairs,max_abs_difference=maximum)
+  reports.append(dict(run=name,role=decl['data_role'],window=decl['recovery_intervention'],summary=summary,observation_audit=observation_audit,cases=cases,sources={str(q):hashlib.sha256(q.read_bytes()).hexdigest() for q in [root/'declaration.json',run/'status.json',run/'results.json',*receipts]}))
  out=dict(scope='Existing TRAIN data; posthoc finite-bank union is not physical upper bound, deployable selector, or new test. No new simulations or fitting.',runs=reports)
  a.output.mkdir(parents=True,exist_ok=True);(a.output/'analysis.json').write_text(json.dumps(out,indent=2)+'\n')
  for r in reports:print(r['run'],r['summary'])
