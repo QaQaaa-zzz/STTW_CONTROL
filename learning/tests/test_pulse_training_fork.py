@@ -30,3 +30,14 @@ def test_parent_restore_and_wrong_endpoint_rejection(tmp_path):
     with pytest.raises(ValueError,match='wrong pulse parent'):restore_pulse_parent(algo,record,source,1)
     bad=dict(record,checkpoint_sha256='wrong')
     with pytest.raises(ValueError,match='checksum'):restore_pulse_parent(algo,bad,source,0)
+
+
+def test_short_config_preserves_original_task_horizon_and_reward():
+    from sttw_control.tolerance_training import short_training_config
+    parent=dict(path_reward={'scale':.1},training_future_phase_C={'num_envs':512,'rollout_steps':128,'episode_s':20.,'actor_lr':1e-4})
+    c=short_training_config(parent)
+    assert c['path_reward']==parent['path_reward']
+    assert c['training_future_phase_C']['episode_s']==20.
+    assert c['training_future_phase_C']['updates_initial']==27
+    assert c['training_future_phase_C']['actor_lr']==3e-5
+    assert parent['training_future_phase_C']['actor_lr']==1e-4

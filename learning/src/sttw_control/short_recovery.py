@@ -80,7 +80,12 @@ class ShortRecoveryBatch:
         elapsed=core.state.tick-ep.origin_tick
         flags=segment_flags(flags,elapsed,self.maximum_ticks)
         ended=ep.replace(core=core,impulse=ep.impulse+stats['applied_force_impulse'])
-        stats['recovery']=dict(started=ep.state.tick==ep.origin_tick,
+        started=ep.state.tick==ep.origin_tick
+        stats['pulse']=dict(fired_now=started&(ep.force!=0),force=ep.force,
+            fallback_now=started&ep.fallback,completed=flags['done'],enabled=ep.force!=0,
+            completed_impulse=j.where(flags['done'],ended.impulse,0.),
+            completed_expected_impulse=j.where(flags['done'],.1*ep.pulse[2:],0.))
+        stats['recovery']=dict(started=started,
             force=ep.force,force_index=ep.force_index,bank_index=ep.bank_index,
             fallback=ep.fallback,elapsed_ticks=elapsed,segment_timeout=flags['segment_timeout'],
             completed=flags['done'],impulse=ended.impulse,expected_impulse=.1*ep.pulse[2:],

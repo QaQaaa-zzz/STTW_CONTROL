@@ -70,8 +70,9 @@ def resolve_comparison_actors(campaign):
     from .preference_best import digest
     root = Path(campaign).resolve()
     definition = json.loads((root / 'campaign.json').read_text())
-    pulse = definition.get('experiment') == 'actual_pulse_curriculum_v1'
-    updates = 25 if pulse else 50
+    short = definition.get('experiment') == 'short_recovery_v1'
+    pulse = short or definition.get('experiment') == 'actual_pulse_curriculum_v1'
+    updates = 27 if short else 25 if pulse else 50
     result = {}
     for name in definition['jobs']:
         job = root / name
