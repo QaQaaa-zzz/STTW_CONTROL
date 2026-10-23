@@ -8,14 +8,14 @@ import json
 import numpy as np
 
 
-def outcome_labels(data,*,speed,goal_s,working_roll,horizon=20.):
+def outcome_labels(data,*,speed,goal_s,working_roll,horizon=20.,hold_s=1.):
     t=np.asarray(data['time']);n=len(t)
     if not n:raise ValueError('empty executed trajectory is UNKNOWN')
     physical=bool(np.any(data['physical_failure']))
     domain=bool(np.any(data['domain_exit']))
     complete=bool(t[-1]+.005>=horizon-1e-5)
-    tail=t>=horizon-1.-1e-5
-    hold=bool(complete and tail.sum()==200 and
+    tail=t>=horizon-hold_s-1e-5
+    hold=bool(complete and tail.sum()==round(hold_s/.005) and
         np.all(np.abs(data['path_cross_track'][tail])<=.1) and
         np.all(np.abs(data['path_heading_error'][tail])<=.05) and
         np.all(np.abs(data['actual_forward_speed'][tail]-speed)<=.1))

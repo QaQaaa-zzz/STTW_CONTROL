@@ -30,3 +30,9 @@ def test_final_hold_uses_original_deadline_and_all_three_errors():
         d=data();d[key][-1]+=delta
         r=scan.outcome_labels(d,speed=2.45,goal_s=8.,working_roll=.302)
         assert r['complete_horizon'] and not r['final_hold'] and not r['task_recovered']
+
+
+def test_preference_screen_preserves_ten_second_half_second_hold_contract():
+    d=data(10.);d['path_cross_track'][d['time']<9.5]=.2
+    r=scan.outcome_labels(d,speed=2.45,goal_s=8.,working_roll=.302,horizon=10.,hold_s=.5)
+    assert r['task_recovered'] and r['complete_horizon']
