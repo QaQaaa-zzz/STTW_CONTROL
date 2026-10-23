@@ -1,5 +1,8 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 单网络恢复学习已启动（2026-10-23）：[三组匹配PPO协议、工程验证与运行快照](evidence/tolerance_progress_20261022/preference_recovery_pilot/README.md)。真实u325/V3/原10s、4s恢复片段，uniform/guided/shuffled各2轮Critic预热+25轮PPO；当前前两组运行、第三组排队。TensorBoard http://localhost:6008 的实际奖励已核验；训练完成后自动接续1240例新评测并复用400例已核验父策略结果。尚未获得训练后能力结论。
+
+
 > 强脉冲结果（2026-10-23）：[单网u325的0/±20/±32N面板](evidence/tolerance_progress_20261022/preference_stress_results/CONCLUSIONS.md)完成200例，任务恢复189/200，9次域退出、2次末段保持不达标，无记录物理摔倒。全部11例发生在2s弯道起扰；独立320上下文TRAIN前缀采集已启动，随后检验精确alpha/力档匹配的均匀、真实余量、打乱余量三组恢复训练。
 
 
