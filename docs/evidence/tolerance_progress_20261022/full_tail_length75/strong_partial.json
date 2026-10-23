@@ -1,0 +1,250 @@
+{
+  "scope": "strong panel complete; full940 campaign partial",
+  "sources": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/strong/evaluation/results.json": "831bae7b77bd2bb9fa6495fa8aa2e25a7e8e9f35fe9410697857da791008acfc",
+    "runs/preference_full_tail_length75_post_v1/strong/evaluation/results.json": "7b6516856b3bbc060bff3705bd584ddb5e2973ce5f1540d01452144aa69532cf"
+  },
+  "policies": {
+    "ppo48": {
+      "n": 200,
+      "baseline": 186,
+      "candidate": 184,
+      "gains": 1,
+      "losses": 3,
+      "by_alpha": [
+        {
+          "alpha": 0.0,
+          "n": 40,
+          "baseline": 35,
+          "candidate": 34,
+          "gains": 0,
+          "losses": 1
+        },
+        {
+          "alpha": 0.25,
+          "n": 40,
+          "baseline": 38,
+          "candidate": 38,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 0.5,
+          "n": 40,
+          "baseline": 38,
+          "candidate": 38,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 0.75,
+          "n": 40,
+          "baseline": 39,
+          "candidate": 39,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 1.0,
+          "n": 40,
+          "baseline": 36,
+          "candidate": 35,
+          "gains": 1,
+          "losses": 2
+        }
+      ],
+      "changes": [
+        {
+          "case": [
+            "right90_R1p8",
+            2.8,
+            1.0,
+            32.0,
+            1.0
+          ],
+          "baseline_task": true,
+          "candidate_task": false,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.09178924560546875,
+          "candidate_tail_path": 0.10065078735351562
+        },
+        {
+          "case": [
+            "left90_R1p8",
+            2.8,
+            1.0,
+            -32.0,
+            2.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.10828208923339844,
+          "candidate_tail_path": 0.09883689880371094
+        },
+        {
+          "case": [
+            "right90_R1p8",
+            2.8,
+            0.0,
+            20.0,
+            2.0
+          ],
+          "baseline_task": true,
+          "candidate_task": false,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.07198238372802734,
+          "candidate_tail_path": 0.100341796875
+        },
+        {
+          "case": [
+            "right90_R1p8",
+            2.8,
+            1.0,
+            32.0,
+            2.0
+          ],
+          "baseline_task": true,
+          "candidate_task": false,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.09211254119873047,
+          "candidate_tail_path": 0.1002340316772461
+        }
+      ],
+      "working_success": 64,
+      "baseline_working_success": 64
+    },
+    "ppo75": {
+      "n": 200,
+      "baseline": 186,
+      "candidate": 191,
+      "gains": 5,
+      "losses": 0,
+      "by_alpha": [
+        {
+          "alpha": 0.0,
+          "n": 40,
+          "baseline": 35,
+          "candidate": 37,
+          "gains": 2,
+          "losses": 0
+        },
+        {
+          "alpha": 0.25,
+          "n": 40,
+          "baseline": 38,
+          "candidate": 38,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 0.5,
+          "n": 40,
+          "baseline": 38,
+          "candidate": 38,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 0.75,
+          "n": 40,
+          "baseline": 39,
+          "candidate": 39,
+          "gains": 0,
+          "losses": 0
+        },
+        {
+          "alpha": 1.0,
+          "n": 40,
+          "baseline": 36,
+          "candidate": 39,
+          "gains": 3,
+          "losses": 0
+        }
+      ],
+      "changes": [
+        {
+          "case": [
+            "right90_R1p8",
+            2.6,
+            1.0,
+            -32.0,
+            1.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.1048746109008789,
+          "candidate_tail_path": 0.08440589904785156
+        },
+        {
+          "case": [
+            "right90_R1p8",
+            2.8,
+            1.0,
+            -32.0,
+            1.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.10604476928710938,
+          "candidate_tail_path": 0.08125877380371094
+        },
+        {
+          "case": [
+            "left90_R1p8",
+            2.8,
+            1.0,
+            -32.0,
+            2.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": false,
+          "candidate_domain": false,
+          "baseline_tail_path": 0.10828208923339844,
+          "candidate_tail_path": 0.09057903289794922
+        },
+        {
+          "case": [
+            "right90_R1p8",
+            2.6,
+            0.0,
+            20.0,
+            2.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": true,
+          "candidate_domain": false,
+          "baseline_tail_path": null,
+          "candidate_tail_path": 0.09231376647949219
+        },
+        {
+          "case": [
+            "right90_R1p8",
+            2.8,
+            0.0,
+            32.0,
+            2.0
+          ],
+          "baseline_task": false,
+          "candidate_task": true,
+          "baseline_domain": true,
+          "candidate_domain": false,
+          "baseline_tail_path": null,
+          "candidate_tail_path": 0.08973026275634766
+        }
+      ],
+      "working_success": 68,
+      "baseline_working_success": 64
+    }
+  }
+}
