@@ -7,6 +7,18 @@ from .path_command_reward import configured_cost_keys
 from .tolerance_pulse import FORCES,force_probabilities
 
 
+def declared_snippet_seconds(declaration, config):
+    import math
+    duration=float(declaration['snippet_s'])
+    horizon=float(config['training_future_phase_C']['episode_s'])
+    dt=float(config['timing']['upper_dt_s'])
+    if declaration['original_task_horizon_s']!=horizon:
+        raise ValueError('recovery declaration changed original task horizon')
+    if not math.isfinite(duration) or not 0<duration<=horizon or not math.isclose(duration/dt,round(duration/dt),abs_tol=1e-8):
+        raise ValueError('snippet must align to control ticks within original horizon')
+    return duration
+
+
 def segment_flags(flags, elapsed_ticks, maximum_ticks):
     timeout=(elapsed_ticks>=maximum_ticks)&~flags['done']
     return dict(flags,done=flags['done']|timeout,segment_timeout=timeout)
@@ -195,7 +207,7 @@ def check_preference_batch(plan_path,output):
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,snapshot=load_environment(cfg,parent['source'],'terminal_contract_v2')
         base=PathBatch(env,snapshot,cfg,plan['seed'],0.)
-        batch=PreferenceRecoveryBatch(base,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],**declaration.get('state_sampler',{}))
+        batch=PreferenceRecoveryBatch(base,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],duration_s=declared_snippet_seconds(declaration,cfg),**declaration.get('state_sampler',{}))
         initial=batch.reset(j.int32(0),j.int32(0));env.set_log_template(initial.state,initial.route.path,initial.route.speed)
         episodes=jax.jit(jax.vmap(batch.reset))(j.arange(512,dtype=j.int32),j.zeros(512,j.int32))
         initial_enabled=episodes.force!=0
@@ -218,7 +230,7 @@ def check_preference_batch(plan_path,output):
         if not complete.any():raise RuntimeError('no complete pulse in engineering run')
         error=np.linalg.norm(np.asarray(ep.impulse)[complete]-.1*np.asarray(ep.pulse)[complete,2:],axis=-1)
         if ticks>16384 or int(actor_dim)!=351 or int(critic_dim)!=352:raise RuntimeError('batch contract changed')
-        atomic_json(out/'receipt.json',dict(batch=512,steps=8,active_lower_ticks=ticks,actor_dim=int(actor_dim),critic_dim=int(critic_dim),original_task_horizon_s=base.horizon,snippet_s=4.,physical_failures=physical,domain_failures=domain,complete_nonzero_pulses=int(complete.sum()),max_impulse_error_Ns=float(error.max()),training_steps=0,arm=plan['arm'],state_sampler=declaration.get('state_sampler',{}),initial_enabled_mean_model_risk=float(initial_risk)))
+        atomic_json(out/'receipt.json',dict(batch=512,steps=8,active_lower_ticks=ticks,actor_dim=int(actor_dim),critic_dim=int(critic_dim),original_task_horizon_s=base.horizon,snippet_s=batch.maximum_ticks*.005,physical_failures=physical,domain_failures=domain,complete_nonzero_pulses=int(complete.sum()),max_impulse_error_Ns=float(error.max()),training_steps=0,arm=plan['arm'],state_sampler=declaration.get('state_sampler',{}),initial_enabled_mean_model_risk=float(initial_risk)))
         update(state='completed',phase='completed',stage='engineering_ready',completed_policy_steps=8)
     except BaseException as exc:
         update(state='error',phase='error',error=f'{type(exc).__name__}: {exc}');raise

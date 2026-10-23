@@ -154,6 +154,8 @@ def validate_preference_training_plan(plan,cfg,parent,bank_manifest):
  """Bind all three arms to one declaration and the actual conditional bank."""
  if digest(plan['declaration'])!=plan['declaration_sha256']:raise ValueError('matched training declaration changed')
  declaration=json.loads(Path(plan['declaration']).read_text())
+ from .short_recovery import declared_snippet_seconds
+ declared_snippet_seconds(declaration,cfg)
  for key in ('seed','pulse_seed','updates','forces_N','parent_record','optimizer_guard'):
   if plan[key]!=declaration[key]:raise ValueError('preference plan differs from declaration: '+key)
  if plan['arm'] not in declaration['arms'] or plan['alpha']!='conditional':raise ValueError('invalid conditional arm')
@@ -223,8 +225,8 @@ def run(plan_path,output):
     if digest(bank_dir/name)!=bank_receipt[key]:raise ValueError('recovery bank changed')
    with (bank_dir/'bank.pkl').open('rb') as f:bank=pickle.load(f)
    if preference_mode:
-    from .short_recovery import PreferenceRecoveryBatch
-    batch=PreferenceRecoveryBatch(batch,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],**declaration.get('state_sampler',{}))
+    from .short_recovery import PreferenceRecoveryBatch,declared_snippet_seconds
+    batch=PreferenceRecoveryBatch(batch,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],duration_s=declared_snippet_seconds(declaration,cfg),**declaration.get('state_sampler',{}))
    else:batch=ShortRecoveryBatch(batch,bank,guided=plan['arm']=='guided',seed=plan['pulse_seed']+plan['alpha'],reserve_config=experiment_config(cfg,'dynamic'))
   elif pulse_mode:
    from .tolerance_pulse import PulseBatch
@@ -251,7 +253,7 @@ def run(plan_path,output):
    atomic_json(root/'recovery_receipt.json',dict(source=plan['resume_record'],restored=['policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','parent_anchor_cursor'],environment='fresh complete bank reset at saved route counters+1; not frame-continuous',inherited_updates=start_update,discarded_unsaved_policy_transitions=plan['resume_record']['discarded_unsaved_policy_transitions']))
   status['inherited_policy_transitions']=start_update*n*steps;status['executed_policy_transitions']=0
   atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='unchanged PathBatch physics; short recovery scalar batch-reset guard',statistics='device accumulation; per-step combined fault check'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
-  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=c['episode_s'],snippet_s=4. if short_mode else None,critic_warmup_updates=warmup_updates,ppo_updates=updates-warmup_updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
+  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=c['episode_s'],snippet_s=batch.maximum_ticks*.005 if short_mode else None,critic_warmup_updates=warmup_updates,ppo_updates=updates-warmup_updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
   def advance_batch(ep,z,acc):
    end,ob,r,fl,final,stats=(batch.advance_batch(ep,z) if short_mode else jax.vmap(batch.advance_one)(ep,z))
    stats['diagnostics']=reduce_statistics(stats['diagnostics'])
