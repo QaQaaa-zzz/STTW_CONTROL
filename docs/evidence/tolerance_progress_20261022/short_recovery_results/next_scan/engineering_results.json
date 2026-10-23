@@ -1,0 +1,388 @@
+{
+  "cases": [
+    {
+      "name": "bank000_f+0",
+      "bank_index": 0,
+      "force_N": 0.0,
+      "speed": 2.5524866580963135,
+      "family": 1,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.17315781116485596,
+      "peak_abs_path_m": 0.08731286227703094,
+      "tail_max_path_m": 0.020321965217590332,
+      "actual_suffix_ticks": 3480,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.0,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    },
+    {
+      "name": "bank000_f-2",
+      "bank_index": 0,
+      "force_N": -2.0,
+      "speed": 2.5524866580963135,
+      "family": 1,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.17662477493286133,
+      "peak_abs_path_m": 0.07985597848892212,
+      "tail_max_path_m": 0.020325060933828354,
+      "actual_suffix_ticks": 3480,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.00020526286971289665,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    },
+    {
+      "name": "bank000_f+2",
+      "bank_index": 0,
+      "force_N": 2.0,
+      "speed": 2.5524866580963135,
+      "family": 1,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.1811755895614624,
+      "peak_abs_path_m": 0.09628140181303024,
+      "tail_max_path_m": 0.020333535969257355,
+      "actual_suffix_ticks": 3480,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.00020526286971289665,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    },
+    {
+      "name": "bank511_f+0",
+      "bank_index": 511,
+      "force_N": 0.0,
+      "speed": 2.551287889480591,
+      "family": 2,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.25509822368621826,
+      "peak_abs_path_m": 0.2278999239206314,
+      "tail_max_path_m": 0.019331932067871094,
+      "actual_suffix_ticks": 3712,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.0,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    },
+    {
+      "name": "bank511_f-2",
+      "bank_index": 511,
+      "force_N": -2.0,
+      "speed": 2.551287889480591,
+      "family": 2,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.24787795543670654,
+      "peak_abs_path_m": 0.21623872220516205,
+      "tail_max_path_m": 0.019224166870117188,
+      "actual_suffix_ticks": 3712,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.0002052164782071486,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    },
+    {
+      "name": "bank511_f+2",
+      "bank_index": 511,
+      "force_N": 2.0,
+      "speed": 2.551287889480591,
+      "family": 2,
+      "data_role": "calibration",
+      "physical_failure": false,
+      "domain_failure": false,
+      "physical_survived_horizon": true,
+      "complete_horizon": true,
+      "final_hold": true,
+      "goal": true,
+      "working_failure": false,
+      "task_recovered": true,
+      "performance_success": true,
+      "peak_roll_rad": 0.27373969554901123,
+      "peak_abs_path_m": 0.23704059422016144,
+      "tail_max_path_m": 0.019333839416503906,
+      "actual_suffix_ticks": 3712,
+      "pulse_complete": true,
+      "impulse_error_Ns": 0.0002052164782071486,
+      "prefix_actor_sha256": "5fc76e83714c6c2b65bcc191632321af624e0c20d6b283187950373f76d1f166",
+      "suffix_actor_sha256": "e0fa01abc94f4c58385414ed7ee6a9fd5320d3e3c86256bf52ff1ad89f557b63"
+    }
+  ],
+  "boundaries": [
+    {
+      "bank_index": 0,
+      "direction": -1,
+      "task": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "performance": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "physical": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      }
+    },
+    {
+      "bank_index": 0,
+      "direction": 1,
+      "task": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "performance": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "physical": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      }
+    },
+    {
+      "bank_index": 511,
+      "direction": -1,
+      "task": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "performance": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "physical": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      }
+    },
+    {
+      "bank_index": 511,
+      "direction": 1,
+      "task": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "performance": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      },
+      "physical": {
+        "trials": [
+          {
+            "force_N": 0.0,
+            "success": true
+          },
+          {
+            "force_N": 2.0,
+            "success": true
+          }
+        ],
+        "last_prefix_grid_success_N": 2.0,
+        "first_grid_failure_N": null,
+        "success_after_failure_N": [],
+        "unknown_amplitudes_N": [],
+        "continuous_margin_N": null,
+        "status": "RIGHT_CENSORED"
+      }
+    }
+  ]
+}

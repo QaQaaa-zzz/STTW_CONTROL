@@ -1,0 +1,9 @@
+{
+  "pid": 1072964,
+  "started_unix": 1792735953.1789038,
+  "working_directory": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration",
+  "declaration": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/train_margin_scan_v1/declaration.json",
+  "output": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/train_margin_scan_v1/full",
+  "engineering_status": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/train_margin_scan_v1/smoke/status.json",
+  "training_steps": 0
+}

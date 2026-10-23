@@ -1,0 +1,50 @@
+{
+  "0_parent_vs_uniform_update27": {
+    "n": 144,
+    "baseline_success": 133,
+    "candidate_success": 138,
+    "improved": 5,
+    "regressed": 0,
+    "difference": 5
+  },
+  "0_parent_vs_guided_update27": {
+    "n": 144,
+    "baseline_success": 133,
+    "candidate_success": 136,
+    "improved": 3,
+    "regressed": 0,
+    "difference": 3
+  },
+  "0_uniform_update27_vs_guided_update27": {
+    "n": 144,
+    "baseline_success": 138,
+    "candidate_success": 136,
+    "improved": 0,
+    "regressed": 2,
+    "difference": -2
+  },
+  "1_parent_vs_uniform_update27": {
+    "n": 144,
+    "baseline_success": 141,
+    "candidate_success": 141,
+    "improved": 0,
+    "regressed": 0,
+    "difference": 0
+  },
+  "1_parent_vs_guided_update27": {
+    "n": 144,
+    "baseline_success": 141,
+    "candidate_success": 141,
+    "improved": 0,
+    "regressed": 0,
+    "difference": 0
+  },
+  "1_uniform_update27_vs_guided_update27": {
+    "n": 144,
+    "baseline_success": 141,
+    "candidate_success": 141,
+    "improved": 0,
+    "regressed": 0,
+    "difference": 0
+  }
+}

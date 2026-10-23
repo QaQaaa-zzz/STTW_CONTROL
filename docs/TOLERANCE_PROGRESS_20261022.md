@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 更新：4秒短恢复联合协议与完整864例DEV已结束。[本轮XY、奖励、结果与下一步](evidence/tolerance_progress_20261022/short_recovery_results/CONCLUSIONS.md)。α0原标准parent/uniform/guided=133/138/136；α1均141；真正任务恢复α0=142/144/142，α1均144。uniform α0保留为下一阶段冻结后缀候选，未宣布部署替换。接续TRAIN方向扫描已声明并启动：32状态×13力档=416例，无PPO；见[协议](TOLERANCE_SHORT_RECOVERY_PLAN_20261022.md)。以下旧“最新”块为此前20秒训练阶段的历史快照。
+
 > [外部评审逐项核查](TOLERANCE_EXTERNAL_REVIEW_AUDIT_20261022.md)与[补齐代码/逐例数据入口](evidence/tolerance_review_audit_20261022/CODE_AND_DATA_INDEX.md)：含时间尺度实测、采样测试及需纠正的归因。
 
 > [详细任务环境、训练分布与评测协议](TOLERANCE_TASK_AND_EVALUATION.md)：包含物理/reset、网络动作、随机训练与固定测试、扰动、失败条件及全部阈值。
