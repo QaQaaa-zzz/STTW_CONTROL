@@ -39,3 +39,32 @@ def test_paired_task_results_distinguish_improvement_and_regression():
     rows=paired_results(parent,{'guided':candidate},[0.])
     item=next(x for x in rows if x['comparison']=='u325_vs_guided' and x['alpha']==0 and x['metric']=='task_recovered')
     assert item['n']==3 and item['improved']==1 and item['regressed']==1 and item['difference']==0
+
+
+def test_uniform_reuse_allows_only_sampler_scale_change_and_rejects_contract_drift():
+    from copy import deepcopy
+    from sttw_control.preference_recovery_evaluation import validate_uniform_reuse
+    path=Path('runs/preference_recovery_train_v1/training_declaration.json')
+    if not path.exists():pytest.skip('authentic training declaration unavailable')
+    original=json.loads(path.read_text());new=deepcopy(original)
+    new['state_sampler']={'target':2.5,'bandwidth':.5,'strength':.7,'shuffle_seed':918204}
+    new['total_policy_transitions']=3538944
+    validate_uniform_reuse(original,new,'uniform')
+    for key,value in [('seed',42),('forces_N',[-8,8]),('updates',52),('parent_anchor_kl',.1),('config_sha256','changed'),('bank_receipt_sha256','changed')]:
+        changed=deepcopy(new);changed[key]=value
+        with pytest.raises(ValueError,match='reuse contract'):validate_uniform_reuse(original,changed,'uniform')
+    with pytest.raises(ValueError,match='uniform only'):validate_uniform_reuse(original,new,'guided')
+
+
+def test_actual_completed_uniform_reuse_authenticates_learner_and_source_declaration(tmp_path):
+    from sttw_control.preference_recovery_evaluation import candidate_record
+    source=Path('runs/preference_recovery_train_v1').resolve()
+    if not (source/'uniform/last_completed.json').exists():pytest.skip('completed external control unavailable')
+    original=source/'training_declaration.json';new=json.loads(original.read_text())
+    new['state_sampler']={'target':2.5,'bandwidth':.5}
+    new['reused_training']={'uniform':{'campaign':str(source),'declaration_sha256':digest(original)}}
+    record=candidate_record(tmp_path,'uniform',new)
+    assert record['training_reused_from']==str(source)
+    assert record['actor_sha256']==digest(record['actor']) and record['source_update']==27
+    new['reused_training']['uniform']['declaration_sha256']='changed'
+    with pytest.raises(ValueError,match='declaration identity'):candidate_record(tmp_path,'uniform',new)

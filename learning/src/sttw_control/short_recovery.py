@@ -190,14 +190,17 @@ def check_preference_batch(plan_path,output):
     try:
         plan=json.loads(Path(plan_path).read_text());cfg=json.loads(Path(plan['config']).read_text())
         parent=json.loads(Path(plan['parent_manifest']).read_text());bankdir=Path(plan['bank_dir'])
-        bm=json.loads((bankdir/'manifest.json').read_text());validate_preference_training_plan(plan,cfg,parent,bm)
+        bm=json.loads((bankdir/'manifest.json').read_text());declaration=validate_preference_training_plan(plan,cfg,parent,bm)
         with (bankdir/'bank.pkl').open('rb') as stream:bank=pickle.load(stream)
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,snapshot=load_environment(cfg,parent['source'],'terminal_contract_v2')
         base=PathBatch(env,snapshot,cfg,plan['seed'],0.)
-        batch=PreferenceRecoveryBatch(base,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'])
+        batch=PreferenceRecoveryBatch(base,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],**declaration.get('state_sampler',{}))
         initial=batch.reset(j.int32(0),j.int32(0));env.set_log_template(initial.state,initial.route.path,initial.route.speed)
         episodes=jax.jit(jax.vmap(batch.reset))(j.arange(512,dtype=j.int32),j.zeros(512,j.int32))
+        initial_enabled=episodes.force!=0
+        initial_ids=j.searchsorted(batch.original_indices,episodes.bank_index)
+        initial_risk=j.sum(j.where(initial_enabled,batch.risks[initial_ids,episodes.force_index-1],0.))/j.maximum(initial_enabled.sum(),1)
         with Path(plan['parent_record']['actor']).open('rb') as stream:params=jax.tree.map(j.asarray,pickle.load(stream))
         actor=make_path_actor(cfg)
         def step(ep):
@@ -215,7 +218,7 @@ def check_preference_batch(plan_path,output):
         if not complete.any():raise RuntimeError('no complete pulse in engineering run')
         error=np.linalg.norm(np.asarray(ep.impulse)[complete]-.1*np.asarray(ep.pulse)[complete,2:],axis=-1)
         if ticks>16384 or int(actor_dim)!=351 or int(critic_dim)!=352:raise RuntimeError('batch contract changed')
-        atomic_json(out/'receipt.json',dict(batch=512,steps=8,active_lower_ticks=ticks,actor_dim=int(actor_dim),critic_dim=int(critic_dim),original_task_horizon_s=base.horizon,snippet_s=4.,physical_failures=physical,domain_failures=domain,complete_nonzero_pulses=int(complete.sum()),max_impulse_error_Ns=float(error.max()),training_steps=0,arm=plan['arm']))
+        atomic_json(out/'receipt.json',dict(batch=512,steps=8,active_lower_ticks=ticks,actor_dim=int(actor_dim),critic_dim=int(critic_dim),original_task_horizon_s=base.horizon,snippet_s=4.,physical_failures=physical,domain_failures=domain,complete_nonzero_pulses=int(complete.sum()),max_impulse_error_Ns=float(error.max()),training_steps=0,arm=plan['arm'],state_sampler=declaration.get('state_sampler',{}),initial_enabled_mean_model_risk=float(initial_risk)))
         update(state='completed',phase='completed',stage='engineering_ready',completed_policy_steps=8)
     except BaseException as exc:
         update(state='error',phase='error',error=f'{type(exc).__name__}: {exc}');raise

@@ -3,10 +3,37 @@ from pathlib import Path
 import json
 
 
+def validate_uniform_reuse(original,current,arm):
+    """Uniform ignores focus parameters; every learning contract stays fixed.
+
+    This authorizes reuse of an already completed control, not a new seed or
+    evidence that a guided policy is interchangeable with another sampler.
+    """
+    if arm!='uniform':raise ValueError('training reuse supports uniform only')
+    keys=('experiment','project','parent_manifest_sha256','parent_record','bank_dir',
+          'bank_manifest_sha256','bank_receipt_sha256','config_sha256','seed','pulse_seed',
+          'updates','critic_warmup_updates','ppo_updates','num_envs','rollout_steps','forces_N',
+          'pulse_probability','pulse_duration_s','snippet_s','original_task_horizon_s','reward',
+          'parent_anchor_kl','actor_lr','critic_lr','optimizer_guard','initialization','checkpoint_selection')
+    for key in keys:
+        if key not in original or key not in current or original[key]!=current[key]:
+            raise ValueError('uniform reuse contract differs: '+key)
+
+
 def candidate_record(campaign,arm,declaration):
     import pickle,numpy as np,torch
     from .preference_best import digest,config_hash
     from .path_command_policy import SCHEMA,validate_actor_parameters,MODULATION_SHAPES
+    reuse=declaration.get('reused_training',{}).get(arm)
+    if reuse:
+        source=Path(reuse['campaign']);saved=source/'training_declaration.json'
+        if source.resolve()==Path(campaign).resolve() or digest(saved)!=reuse['declaration_sha256']:
+            raise ValueError('reused training declaration identity differs')
+        original=json.loads(saved.read_text())
+        if original.get('reused_training'):raise ValueError('nested training reuse is not supported')
+        validate_uniform_reuse(original,declaration,arm)
+        return dict(candidate_record(source,arm,original),training_reused_from=str(source.resolve()),
+                    training_declaration_sha256=reuse['declaration_sha256'])
     job=Path(campaign)/arm;status=json.loads((job/'status.json').read_text())
     updates=declaration['updates'];receipt=json.loads((job/'last_completed.json').read_text())
     if status['phase']!='completed' or status['completed_updates']!=updates or status['policy_transitions_total']!=updates*512*128:raise ValueError('conditional training incomplete')
@@ -14,6 +41,8 @@ def candidate_record(campaign,arm,declaration):
     if receipt['update']!=updates or learner.name!=f'update_{updates:04d}.pt' or learner.parent.resolve()!=(job/'checkpoints').resolve():raise ValueError('wrong final learner boundary')
     if digest(learner)!=receipt['checkpoint_sha256']:raise ValueError('conditional learner checksum changed')
     manifest=json.loads((job/'manifest.json').read_text());identity=manifest['identity']
+    if 'state_sampler' in declaration and manifest.get('plan',{}).get('declaration_sha256')!=digest(Path(campaign)/'training_declaration.json'):
+        raise ValueError('conditional sampler declaration differs from learner')
     saved=torch.load(learner,map_location='cpu',weights_only=False)
     if saved['schema']!=SCHEMA or saved['identity']!=identity or saved['update']!=updates:raise ValueError('conditional learner identity mismatch')
     if (identity['experiment']!='preference_recovery_v1' or identity['arm']!=arm or identity['alpha']!='conditional' or identity['seed']!=declaration['seed'] or identity['config_sha256']!=config_hash(manifest['config']) or identity['parent_checkpoint_sha256']!=declaration['parent_record']['checkpoint_sha256'] or identity['parent_source_update']!=declaration['parent_record']['source_update'] or identity['lower_actor_sha256']!=manifest['source']['candidate']['actor_sha256']):raise ValueError('wrong conditional learner lineage')
@@ -81,7 +110,7 @@ def finish(campaign,output,register_run):
             if train['phase'] in ('error','failed'):raise RuntimeError('conditional training campaign failed; preserve all workers/artifacts')
             stat=Path(f"/proc/{train['pid']}/stat")
             if not stat.exists() or stat.read_text().rsplit(')',1)[1].split()[0] in ('Z','X'):raise RuntimeError('training controller not live; evaluation not launched')
-            update(stage='waiting_for_training',completed_jobs=train.get('completed_jobs',0),declared_jobs=3,policy_transitions_total=train.get('policy_transitions_total',0))
+            update(stage='waiting_for_training',completed_jobs=train.get('completed_jobs',0),declared_jobs=len(campaign_info['jobs']),policy_transitions_total=train.get('policy_transitions_total',0))
             time.sleep(10)
         records={arm:candidate_record(root,arm,declaration) for arm in declaration['arms']}
         atomic_json(out/'candidate_records.json',records)
@@ -91,12 +120,12 @@ def finish(campaign,output,register_run):
         for panel,base_name in (('moderate','preference_tolerance_screen_v1'),('strong','preference_tolerance_stress_v1'),('straight',None)):
           if base_name:
             base=root.parent/base_name/'evaluation';saved=json.loads((base/'manifest.json').read_text())['declaration']
-            protocol=dict(saved,policies=records,maximum_lower_ticks=1200000,experiment_id='preference_recovery_post_v1_'+panel,
+            protocol=dict(saved,policies=records,maximum_lower_ticks=1200000,experiment_id=out.name+'_'+panel,
                 training_campaign=str(root),training_declaration_sha256=digest(root/'training_declaration.json'),data_role='matched development only; fixed-final candidates, no checkpoint selection',baseline_cached=str(base))
             parent_rows=cached_baseline(base,protocol,declaration['parent_record'])
           else:
             saved=json.loads((root.parent/'preference_tolerance_screen_v1/declaration.json').read_text())
-            protocol=dict(saved,policies={'u325':declaration['parent_record'],**records},routes=[dict(name='straight',builder='straight')],forces_N=[0.],onsets_s=[1.],maximum_lower_ticks=80000,experiment_id='preference_recovery_post_v1_straight',training_campaign=str(root),data_role='original two straight speeds and five-alpha nominal DEV, no new force cases')
+            protocol=dict(saved,policies={'u325':declaration['parent_record'],**records},routes=[dict(name='straight',builder='straight')],forces_N=[0.],onsets_s=[1.],maximum_lower_ticks=80000,experiment_id=out.name+'_straight',training_campaign=str(root),data_role='original two straight speeds and five-alpha nominal DEV, no new force cases')
           if protocol['maximum_lower_ticks']!=post_declaration['panels'][panel]['maximum_lower_ticks']:raise ValueError('post-evaluation budget differs from declaration')
           expected_cases=post_declaration['panels'][panel]['fresh_cases']
           folder=out/panel;folder.mkdir();atomic_json(folder/'declaration.json',protocol)

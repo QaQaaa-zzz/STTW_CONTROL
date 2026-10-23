@@ -67,3 +67,13 @@ The user authorized continued scientific iteration after reviewing the conservat
 - [x] Publish all540scalars+6compactXY/rewardpanels,full60statepanelsserver,updatedsharedledger. Newdeclaredtarget/bandwidthplumbingtestedwithuniformprobabilityinvariance/exactalpha-force-statepreservation. Retain oldnegativepilot; no newPPO yet.
 
 Next candidate: independently calibrated sampling center around2.5/bandwidth.5, fixedoriginalgamma/E_b; declare and test matcheduniform/physical/shuffled learning and full-task preference retention. These are exploratory development choices after examining the diagnostic; no safety guarantee, final-test claim or automatic adoption.
+
+## Task6 — Test calibrated sampling scale
+
+Use the existing training and post-evaluation pipeline. New guided/shuffled jobs keep the original parent,bank,V3,seed918301,pulse918203,2warmup+25PPO and all learner settings; target2.5/bandwidth.5 replaces1/.2. Original uniform learning is authenticated/reused because uniform probabilities do not depend on these parameters; it is not a new replicate. One GPU worker follows measured aggregate throughput. Fresh3538944policytransitions/max14155776lower ticks, no automatic extension. Post evaluation retains1240freshcases/max2480000ticks plus400exact parent cases, including re-evaluation of the reused uniform checkpoint.
+
+- [ ] Failing tests for reuse identity drift and actual final uniform export; reject changedseed/forces/budget/reward/parent/bank.
+- [ ] Add explicit uniform-only reuse provenance to existing candidate authentication; preserve normal candidate checks and use actual campaign job count in progress.
+- [ ] Freeze declaration/config/plan/post protocols, audit actual320-state uniform probability equality, register ChineseBark and separate actual TensorBoard before launching.
+- [ ] Launch existing scheduler with one worker and existing automatic final evaluator; verify actual reward scalar loaded over HTTP.
+- [ ] Analyze fixed-final task gains/losses and preference retention, then decide next iteration. Goal remains unfinished until useful recovery improvement plus retained preference is verified.
