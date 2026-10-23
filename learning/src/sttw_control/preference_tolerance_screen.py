@@ -15,16 +15,17 @@ def evaluate(declaration_path,output):
     from .path_command_policy import make_path_actor,validate_actor_parameters
     from .path_command_reward import configured_cost_keys
     from .geometric_path import build_path
-    from .tolerance_comparison import chunk_schedule
     from .tolerance_state_features import snapshot_features
     from .recovery_margin_scan import outcome_labels
     from .runtime import configure_compilation_cache
+    from .recovery_intervention import intervention_layout,intervention_schedule,masked_target
     decl=json.loads(Path(declaration_path).read_text());out=Path(output).resolve()
     out.mkdir(parents=True,exist_ok=True)
     if (out/'manifest.json').exists():raise FileExistsError('immutable preference screen exists')
     cfg=decl['config'];source=decl['source'];horizon=cfg['training_future_phase_C']['episode_s']
     rows=[dict(policy=p,route=r['name'],speed=v,alpha=a,force_N=f)
           for p,r,v,a,f in product(decl['policies'],decl['routes'],decl['speeds'],decl['alphas'],decl['forces_N'])]
+    intervention=intervention_layout(decl,rows)
     count=len(rows)*len(decl['onsets_s']);maximum=count*round(horizon/.005)
     if maximum!=decl['maximum_lower_ticks']:raise ValueError('declared physics mismatch')
     n=len(rows);ticks=0;cases=[];started=time.monotonic()
@@ -56,6 +57,8 @@ def evaluate(declaration_path,output):
             physical_identity=env.physics.bundle.identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             batch=n,cache=str(cache),training_steps=0,semantics='one frozen alpha-conditioned Actor; own zero-force complete prefix branched only within identical policy/alpha/path/speed context',
             labels='task return versus original working-performance; source hold/horizon preserved',reward_components=list(keys))
+        if intervention:
+            manifest['semantics']='same frozen Actor; complete control state and prefix copied across intervention arms after pulse; alpha and physical history preserved'
         atomic_json(out/'manifest.json',manifest)
         context=lambda r:tuple(r[k] for k in ('policy','route','speed','alpha'))
         zeros={context(r):i for i,r in enumerate(rows) if r['force_N']==0}
@@ -64,20 +67,35 @@ def evaluate(declaration_path,output):
             'path_cross_track','path_heading_error','path_progress','goal_section_signed_distance',
             'phi','phi_dot','actual_delta','peak_roll','physical_failure','domain_exit','policy_fault',
             'lower_fault','governed','nominal','applied_force_impulse','scored_tick_reward']
-        def one(st,par,path,v,pulse):
+        masks=j.asarray(intervention['masks']) if intervention else j.ones((n,2))
+        if intervention:
+            keep+=['latent_z','offsets','target_offset','lower_action','correction_rate_clipped','reference_clip_channels']
+        def one(st,par,path,v,pulse,mask):
             obs,_,fault=env.observation(st,path,v,horizon)
-            end,log=env.policy_step(st.replace(fault=st.fault|fault),actor.apply(par,obs),path,v,horizon,pulse)
+            action=actor.apply(par,obs)
+            if intervention:
+                action=masked_target(action,st.tick,mask,intervention['start_tick'],intervention['end_tick'])
+            end,log=env.policy_step(st.replace(fault=st.fault|fault),action,path,v,horizon,pulse)
             return end,dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
         functions={}
         def execute(length,states,pulses):
             if length not in functions:
                 functions[length]=jax.jit(lambda st,ps:jax.lax.scan(
-                    lambda s,_:jax.vmap(one)(s,params,paths,speeds,ps),st,None,length=length))
+                    lambda s,_:jax.vmap(one)(s,params,paths,speeds,ps,masks),st,None,length=length))
             return functions[length](states,pulses)
         absolute_start=float(snapshot.physical_tick)*env.cc.dt
         for onset in decl['onsets_s']:
             states=initial;pulses=j.zeros((n,5));saved=[];features={};vectors=None
-            for start,length,is_branch in chunk_schedule(onset,duration=horizon):
+            for start,length,is_branch in intervention_schedule(onset,horizon,intervention):
+                if intervention and start==intervention['start_step']:
+                    indices=j.asarray(intervention['source_indices'])
+                    states=jax.tree.map(lambda x:x[indices],states)
+                    pulses=pulses[indices]
+                    saved=[jax.tree.map(lambda x:x[:,np.asarray(indices)],block) for block in saved]
+                    atomic_json(out/f'intervention_branch_t{onset:g}.json',dict(
+                        task_seconds=start*.02,source_indices=intervention['source_indices'],
+                        complete_state_tree_copied=True,history_and_filter_preserved=True,
+                        alpha_unchanged=True,mask_semantics='zero target before existing filter; no instant state reset'))
                 if is_branch:
                     states=jax.tree.map(lambda x:x[branch_index],states)
                     saved=[jax.tree.map(lambda x:x[:,np.asarray(branch_index)],block) for block in saved]
