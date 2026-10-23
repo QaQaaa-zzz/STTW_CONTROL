@@ -1,0 +1,39 @@
+{
+  "experiment": "preference_recovery_post_v1",
+  "project": "STTW_CONTROL",
+  "recorded_unix": 1792741801.4079597,
+  "training_declaration": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/training_declaration.json",
+  "panels": {
+    "moderate": {
+      "fresh_cases": 600,
+      "cached_parent_cases": 200,
+      "maximum_lower_ticks": 1200000
+    },
+    "strong": {
+      "fresh_cases": 600,
+      "cached_parent_cases": 200,
+      "maximum_lower_ticks": 1200000
+    },
+    "straight": {
+      "fresh_cases": 40,
+      "cached_parent_cases": 0,
+      "maximum_lower_ticks": 80000
+    }
+  },
+  "fresh_cases": 1240,
+  "cached_cases": 400,
+  "maximum_lower_ticks": 2480000,
+  "training_steps": 0,
+  "nominal_unique_cases_per_policy": 30,
+  "policies": [
+    "u325",
+    "uniform",
+    "guided",
+    "shuffled"
+  ],
+  "checkpoint_selection": "samepredeclared fixedfinalu27; parentu325 unchanged",
+  "added_straight_reason": "Two original straight speeds \u00d7 fivealphas complete the original30nominal DEVcases perpolicy; turn nominal traces already in pulse panels",
+  "data_role": "development; correlated pairedcases; no finalTEST or statisticalindependentseedclaim",
+  "automatic_adoption": false,
+  "stop_rule": "stop on engineeringfault or incompletefixedfinalcheckpoint; no training restart"
+}

@@ -1,0 +1,11 @@
+{
+  "experiment": "preference_recovery_v1",
+  "jobs": [
+    "uniform",
+    "guided",
+    "shuffled"
+  ],
+  "total_policy_transitions": 5308416,
+  "max_workers": 2,
+  "training_declaration_sha256": "eaf4786e362cface3b65d5e1e0a90b46b54a87a6502197b76ba9980a47dc7dde"
+}

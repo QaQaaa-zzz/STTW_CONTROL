@@ -46,11 +46,11 @@ def checkpoint_due(iteration,total,*,stop=False):
  return iteration%5==0 or iteration==total or stop
 
 
-def restore_recovery_boundary(algo,record,identity):
+def restore_recovery_boundary(algo,record,identity,*,total_updates=27,warmup_updates=2):
  from .path_command_training import restore_checkpoint
  if digest(record['checkpoint'])!=record['checkpoint_sha256']:raise ValueError('recovery checkpoint hash mismatch')
  saved=restore_checkpoint(record['checkpoint'],algo,identity)
- if saved['update']!=record['update'] or not 2<=saved['update']<27:raise ValueError('invalid short recovery learner boundary')
+ if saved['update']!=record['update'] or not warmup_updates<=saved['update']<total_updates:raise ValueError('invalid short recovery learner boundary')
  counters=saved.get('route_counters')
  if counters is None:raise ValueError('missing recovery route counters')
  if record.get('cursor_source_metrics'):
@@ -59,7 +59,7 @@ def restore_recovery_boundary(algo,record,identity):
   rows=[json.loads(x) for x in metrics.read_text().splitlines()]
   retained=[x for x in rows if x['update']<=saved['update']]
   if [x['update'] for x in retained]!=list(range(1,saved['update']+1)):raise ValueError('missing retained update metrics')
-  expected=sum(x['optimizer'].get('accepted_minibatches',0) for x in retained if x['update']>2)*algo.parent_anchor_batch_size%len(algo.parent_anchor[0])
+  expected=sum(x['optimizer'].get('accepted_minibatches',0) for x in retained if x['update']>warmup_updates)*algo.parent_anchor_batch_size%len(algo.parent_anchor[0])
   if expected!=record['parent_anchor_cursor']:raise ValueError('derived anchor cursor mismatch')
  cursor=record.get('parent_anchor_cursor',saved.get('runtime_state',{}).get('parent_anchor_cursor'))
  if cursor is None:raise ValueError('missing authenticated parent-anchor cursor')
@@ -108,6 +108,13 @@ def short_training_config(parent):
  return c
 
 
+def preference_training_config(parent,declaration):
+ """Conditional schedule is data; historical dual-endpoint defaults stay fixed."""
+ c=pulse_training_config(parent)
+ c['training_future_phase_C'].update(updates_initial=declaration['updates'],updates_max=declaration['updates'],actor_lr=declaration['actor_lr'],critic_lr=declaration['critic_lr'])
+ return c
+
+
 def restore_pulse_parent(algo,record,source,alpha):
  import torch
  if algo.optimizer.state:raise ValueError('fresh optimizer required')
@@ -151,11 +158,11 @@ def validate_preference_training_plan(plan,cfg,parent,bank_manifest):
   if plan[key]!=declaration[key]:raise ValueError('preference plan differs from declaration: '+key)
  if plan['arm'] not in declaration['arms'] or plan['alpha']!='conditional':raise ValueError('invalid conditional arm')
  if len(plan['forces_N'])!=8 or 0 in plan['forces_N'] or len(set(plan['forces_N']))!=8:raise ValueError('eight unique nonzero force levels required')
- if plan['updates']!=27:raise ValueError('this recovery pilot declares2critic+25PPO updates')
+ if not 0<=declaration['critic_warmup_updates']<plan['updates'] or plan['updates']!=declaration['critic_warmup_updates']+declaration['ppo_updates']:raise ValueError('conditional learner budget inconsistent')
  if digest(plan['parent_manifest'])!=declaration['parent_manifest_sha256']:raise ValueError('parent manifest changed')
  for name,key in (('manifest.json','bank_manifest_sha256'),('receipt.json','bank_receipt_sha256')):
   if digest(Path(plan['bank_dir'])/name)!=declaration[key]:raise ValueError('conditional bank metadata changed')
- if config_hash(cfg)!=config_hash(short_training_config(bank_manifest['config'])):raise ValueError('conditional task differs beyond declared learner schedule')
+ if config_hash(cfg)!=config_hash(preference_training_config(bank_manifest['config'],declaration)):raise ValueError('conditional task differs beyond declared learner schedule')
  if config_hash(parent['source'])!=config_hash(bank_manifest['source']):raise ValueError('conditional bank physical source differs')
  for key in ('actor_sha256','checkpoint_sha256'):
   if plan['parent_record'][key]!=bank_manifest['parent'][key]:raise ValueError('conditional bank parent differs')
@@ -180,7 +187,7 @@ def run(plan_path,output):
  if (root/'manifest.json').exists():raise FileExistsError('immutable training attempt exists')
  preference_mode=plan.get('experiment')=='preference_recovery_v1'
  short_mode=preference_mode or plan.get('experiment')=='short_recovery_v1'
- pulse_mode=short_mode or plan.get('experiment')=='actual_pulse_curriculum_v1';updates=27 if short_mode else 25 if pulse_mode else 50
+ pulse_mode=short_mode or plan.get('experiment')=='actual_pulse_curriculum_v1';updates=plan['updates'] if preference_mode else 27 if short_mode else 25 if pulse_mode else 50
  status=dict(state='initializing',phase='running',pid=os.getpid(),arm=plan['arm'],alpha=plan['alpha'],completed_updates=0,declared_updates=updates,policy_transitions_total=0,training_control_ticks_total=0,declared_policy_transitions=updates*512*128)
  def update(**kw):
   status.update(kw);status['checked_unix']=time.time();atomic_json(root/'status.json',status)
@@ -201,6 +208,7 @@ def run(plan_path,output):
    if source['candidate']['actor_sha256']!=record['lower_actor_sha256']:raise ValueError('lower identity mismatch')
   if not preference_mode and (plan['updates']!=updates or plan['seed']!=(910601 if short_mode else 910401 if pulse_mode else 910301) or plan['alpha'] not in (0,1)):raise ValueError('experiment plan differs from declared protocol')
   optimizer_guard=plan['optimizer_guard'] if preference_mode else json.loads(Path(parent['plan']['parent_manifest']).read_text())['plan'] if pulse_mode else parent['plan']
+  warmup_updates=declaration['critic_warmup_updates'] if preference_mode else 2 if short_mode else 0
   if not all(k in optimizer_guard for k in ('actor_lr_floor','hard_reject_consecutive_stop')):raise ValueError('missing optimizer guard contract')
   torch.set_num_threads(2);seed=plan['seed'] if preference_mode else plan['seed']+plan['alpha'];torch.manual_seed(seed);np.random.seed(seed);random.seed(seed)
   cache=configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache');c=cfg['training_future_phase_C'];n=c['num_envs'];steps=c['rollout_steps']
@@ -233,7 +241,7 @@ def run(plan_path,output):
   start_update=0;rejections=0
   if plan.get('resume_record'):
    if not short_mode:raise ValueError('recovery resume is only supported for short recovery')
-   saved=restore_recovery_boundary(algo,plan['resume_record'],identity);start_update=saved['update'];rejections=saved.get('consecutive_rejections',0)
+   saved=restore_recovery_boundary(algo,plan['resume_record'],identity,total_updates=updates,warmup_updates=warmup_updates);start_update=saved['update'];rejections=saved.get('consecutive_rejections',0)
    counters=j.asarray(saved['route_counters'],j.int32)+1
    episodes=reset(j.arange(n,dtype=j.int32),counters);jax.block_until_ready(episodes)
    obs=to_torch(jax.jit(jax.vmap(batch.observation))(episodes))
@@ -242,7 +250,7 @@ def run(plan_path,output):
    atomic_json(root/'recovery_receipt.json',dict(source=plan['resume_record'],restored=['policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','parent_anchor_cursor'],environment='fresh complete bank reset at saved route counters+1; not frame-continuous',inherited_updates=start_update,discarded_unsaved_policy_transitions=plan['resume_record']['discarded_unsaved_policy_transitions']))
   status['inherited_policy_transitions']=start_update*n*steps;status['executed_policy_transitions']=0
   atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='unchanged PathBatch physics; short recovery scalar batch-reset guard',statistics='device accumulation; per-step combined fault check'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
-  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=c['episode_s'],snippet_s=4. if short_mode else None,critic_warmup_updates=2 if short_mode else 0,ppo_updates=25 if short_mode else updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
+  atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=c['episode_s'],snippet_s=4. if short_mode else None,critic_warmup_updates=warmup_updates,ppo_updates=updates-warmup_updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
   def advance_batch(ep,z,acc):
    end,ob,r,fl,final,stats=(batch.advance_batch(ep,z) if short_mode else jax.vmap(batch.advance_one)(ep,z))
    stats['diagnostics']=reduce_statistics(stats['diagnostics'])
@@ -285,7 +293,7 @@ def run(plan_path,output):
    reward=float(totals['reward_sum']/totals['reward_count'])
    status['training_control_ticks_total']=previous_ticks+int(totals['ticks'])
    sample_s=time.monotonic()-start;update(stage='optimizing');start=time.monotonic()
-   if short_mode and iteration<=2:
+   if short_mode and iteration<=warmup_updates:
     metrics=algo.value_only_update(c['epochs']);metrics.update(surrogate=0.,entropy=0.,mean_kl=0.,accepted_epochs=c['epochs'],parent_kl=0.)
     stop=False
    else:
@@ -293,7 +301,7 @@ def run(plan_path,output):
    opt_s=time.monotonic()-start;diagnostic=summarize_statistics(diag,cfg)
    row=dict(update=iteration,sampling_model_update=iteration-1,mean_step_reward=reward,physical_failures=physical,domain_failures=domain,optimizer=clean_numbers(metrics),sample_seconds=sample_s,optimize_seconds=opt_s,policy_transitions_total=status['policy_transitions_total'],training_control_ticks_total=status['training_control_ticks_total'],diagnostics=diagnostic)
    if pulse_mode:row['pulse']=pulse_summary
-   if short_mode:row.update(training_stage='critic_warmup' if iteration<=2 else 'ppo',completed_ppo_updates=max(0,iteration-2),route_force_active_lower_ticks=joint_exposure.tolist())
+   if short_mode:row.update(training_stage='critic_warmup' if iteration<=warmup_updates else 'ppo',completed_ppo_updates=max(0,iteration-warmup_updates),route_force_active_lower_ticks=joint_exposure.tolist())
    if preference_mode:row.update(alpha_values=batch.alpha_values.tolist(),alpha_force_active_lower_ticks=totals['alpha_force_exposure'].tolist(),force_levels_N=plan['forces_N'])
    with (root/'metrics.jsonl').open('a') as f:f.write(json.dumps(row,allow_nan=False)+'\n')
    writer.add_scalar('train/mean_step_reward',reward,iteration);writer.add_scalar('train/physical_failures',physical,iteration);writer.add_scalar('train/domain_failures',domain,iteration)

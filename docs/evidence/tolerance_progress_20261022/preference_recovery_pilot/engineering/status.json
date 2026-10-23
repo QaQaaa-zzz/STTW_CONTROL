@@ -1,0 +1,12 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1299587,
+  "training_steps": 0,
+  "maximum_lower_ticks": 16384,
+  "stage": "engineering_ready",
+  "checked_unix": 1792740845.3017921,
+  "elapsed_s": 41.025514565990306,
+  "active_lower_ticks": 16384,
+  "completed_policy_steps": 8
+}

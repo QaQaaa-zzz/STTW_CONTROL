@@ -35,6 +35,23 @@ def paired_nominal_response(rows,traces,window=2.):
     return result
 
 
+def screen_summary(audit,policies,alphas):
+    summary=[]
+    for policy in policies:
+      for alpha in alphas:
+        group=[r for r in audit if r['policy']==policy and r['alpha']==alpha]
+        nominal=[r for r in group if r['force_N']==0]
+        nonzero=[r for r in group if r['force_N']!=0]
+        inside=[r for r in nonzero if r['predicted_within'] is True]
+        summary.append(dict(policy=policy,alpha=alpha,n=len(group),task=sum(r['task_recovered'] for r in group),
+            performance=sum(r['performance_success'] for r in group),physical=sum(r['physical_failure'] for r in group),
+            domain=sum(r['domain_failure'] for r in group),nominal_task=sum(r['task_recovered'] for r in nominal),
+            nominal_n=len(nominal),nonzero_n=len(nonzero),predicted_within=len(inside),
+            false_optimistic=sum(not r['task_recovered'] for r in inside),
+            conservative=sum(r['task_recovered'] and r['predicted_within'] is False for r in nonzero)))
+    return summary
+
+
 def report(run,output):
     from .preference_best import atomic_json
     from .recovery_margin_scan import outcome_labels
@@ -60,7 +77,7 @@ def report(run,output):
             if label[k]!=row[k]:raise ValueError(f'logged label differs: {row["name"]}/{k}')
         reward=float(d['scored_tick_reward'].sum())
         if not np.isclose(reward,row['logged_return'],atol=1e-5):raise ValueError('logged reward sum differs')
-        turn=(d['path_progress']>=prefix)&(d['path_progress']<=turn_end)
+        turn=np.ones(len(d['time']),bool) if row['route'].startswith('straight') else (d['path_progress']>=prefix)&(d['path_progress']<=turn_end)
         rms=lambda x,m:float(np.sqrt(np.mean(np.asarray(x)[m]**2))) if m.any() else None
         risk=normalized_risk(row['prefix_features'],row['force_N'],**spec)
         a=dict(**row,predicted_risk=risk,predicted_within=None if risk is None else risk<=1,
@@ -69,24 +86,13 @@ def report(run,output):
             wheel_proxy_rmse=rms(d['wheel_speed_proxy']-d['actual_forward_speed'],np.ones(len(d['time']),bool)))
         audit.append(a)
     atomic_json(out/'paired_nominal_response.json',paired_nominal_response(audit,traces))
-    summary=[]
-    for alpha in decl['alphas']:
-        group=[r for r in audit if r['alpha']==alpha]
-        nominal=[r for r in group if r['force_N']==0]
-        nonzero=[r for r in group if r['force_N']!=0]
-        inside=[r for r in nonzero if r['predicted_within'] is True]
-        summary.append(dict(alpha=alpha,n=len(group),task=sum(r['task_recovered'] for r in group),
-            performance=sum(r['performance_success'] for r in group),physical=sum(r['physical_failure'] for r in group),
-            domain=sum(r['domain_failure'] for r in group),nominal_task=sum(r['task_recovered'] for r in nominal),
-            nominal_n=len(nominal),nonzero_n=len(nonzero),predicted_within=len(inside),
-            false_optimistic=sum(not r['task_recovered'] for r in inside),
-            conservative=sum(r['task_recovered'] and r['predicted_within'] is False for r in nonzero)))
-    contexts=sorted({(r['route'],r['speed'],r['onset_s']) for r in rows})
+    summary=screen_summary(audit,decl['policies'],decl['alphas'])
+    contexts=sorted({(r['policy'],r['route'],r['speed'],r['onset_s']) for r in rows})
     links=[]
-    for route,speed,onset in contexts:
-        selected=[r for r in audit if (r['route'],r['speed'],r['onset_s'])==(route,speed,onset)]
-        name=f'{route}_v{speed:g}_t{onset:g}'
-        fig,axes=plt.subplots(len(decl['forces_N']),4,figsize=(18,18),layout='constrained')
+    for policy,route,speed,onset in contexts:
+        selected=[r for r in audit if (r['policy'],r['route'],r['speed'],r['onset_s'])==(policy,route,speed,onset)]
+        name=(policy+'_' if len(decl['policies'])>1 else '')+f'{route}_v{speed:g}_t{onset:g}'
+        fig,axes=plt.subplots(len(decl['forces_N']),4,figsize=(18,18),layout='constrained',squeeze=False)
         for i,force in enumerate(decl['forces_N']):
             group=sorted([r for r in selected if r['force_N']==force],key=lambda r:r['alpha'])
             for r in group:
@@ -102,11 +108,11 @@ def report(run,output):
             path=np.load(run/(route+'_path.npz'));mask=path['s']<speed*horizon+1
             axes[i,0].plot(*path['xy'][mask].T,'k--',label='fixed reference');axes[i,0].set_aspect('equal',adjustable='datalim')
             axes[i,1].axhline(speed,color='k',ls='--');axes[i,3].axhline(b['working_roll_rad'],color='k',ls=':');axes[i,3].axhline(-b['working_roll_rad'],color='k',ls=':')
-        axes[0,0].legend(fontsize=7);fig.suptitle(f'u325 frozen | {name} | no new training')
+        axes[0,0].legend(fontsize=7);fig.suptitle(f'{policy} frozen evaluation | {name}')
         for ext in ('png','pdf'):fig.savefig(out/'curves'/f'{name}.{ext}',dpi=110)
         plt.close(fig);links.append(f'- [{name}](curves/{name}.png)')
         for alpha in decl['alphas']:
-            fig,axes=plt.subplots(len(decl['forces_N']),3,figsize=(17,16),layout='constrained')
+            fig,axes=plt.subplots(len(decl['forces_N']),3,figsize=(17,16),layout='constrained',squeeze=False)
             for i,force in enumerate(decl['forces_N']):
                 r=next(r for r in selected if r['alpha']==alpha and r['force_N']==force);d=traces[r['name']];t=d['time']
                 axes[i,0].plot(t,d['scored_tick_reward'],label='logged reward/5ms');axes[i,0].set_title(f'{force:+g}N | reward')
@@ -115,22 +121,22 @@ def report(run,output):
                 axes[i,2].plot(t,d['actual_forward_speed'],label='true body speed');axes[i,2].plot(t,d['wheel_speed_proxy'],label='rear wheel × 0.1m');axes[i,2].axhline(speed,color='k',ls='--',label='user speed [m/s]')
                 for ax in axes[i]:ax.axvspan(onset,onset+decl['duration_s'],alpha=.15,color='gray');ax.axvline(t[-1],color='r',alpha=.3);ax.set_xlabel('task time [s]');ax.grid(alpha=.2)
             for ax in axes[0]:ax.legend(fontsize=6)
-            fig.suptitle(f'u325 | {name} | α={alpha:g} | original V3 reward, true executed endpoint')
+            fig.suptitle(f'{policy} | {name} | α={alpha:g} | original V3 reward, true executed endpoint')
             for ext in ('png','pdf'):fig.savefig(out/'curves'/f'{name}_a{alpha:g}_reward.{ext}',dpi=100)
             plt.close(fig)
     atomic_json(out/'summary.json',dict(summary=summary,cases=audit,formula_parameters=spec))
     scalar=[{k:v for k,v in r.items() if not isinstance(v,(dict,list))} for r in audit]
     with (out/'cases.csv').open('w') as f:
         w=csv.DictWriter(f,fieldnames=list(scalar[0]));w.writeheader();w.writerows(scalar)
-    lines=['# Frozen single-alpha u325 real-pulse screen','',
-        '200-case development diagnostic; fixed local300, original V3 and10s/1s hold. This is a new frozen-policy evaluation, not training or final TEST.',
+    lines=['# Frozen single-alpha policy real-pulse evaluation','',
+        f'{len(rows)}-case development diagnostic; fixed local300, original V3 and10s/1s hold. This is a frozen-policy evaluation, not training or final TEST.',
         'Task recovery = no physical/domain failure + original goal + final1s path≤0.1m, heading≤0.05rad, speed≤0.1m/s. Performance additionally requires working roll≤0.302rad.',
-        'Zero-force controls appear twice across pulse onsets; nominal unique contexts are20. Cases are paired deterministic branches, not independent training seeds.',
+        f"Zero-force controls may repeat across pulse onsets; unique nominal contexts are{len({(r['route'],r['speed'],r['alpha']) for r in rows if r['force_N']==0})} per policy. Cases are paired deterministic branches, not independent training seeds.",
         'Formula parameters are frozen from earlier dual-network calibration; no fitting to this screen. Predicted outside does not imply unavoidable failure.','',
-        '| α | task | performance | physical | domain | nominal | predicted-within nonzero | optimistic task errors | conservative task passes |',
-        '|---|---|---|---|---|---|---|---|---|']
-    for r in summary:lines.append(f"| {r['alpha']:g} | {r['task']}/{r['n']} | {r['performance']}/{r['n']} | {r['physical']} | {r['domain']} | {r['nominal_task']}/{r['nominal_n']} | {r['predicted_within']} | {r['false_optimistic']} | {r['conservative']} |")
+        '| policy | α | task | performance | physical | domain | nominal | predicted-within nonzero | optimistic task errors | conservative task passes |',
+        '|---|---|---|---|---|---|---|---|---|---|']
+    for r in summary:lines.append(f"| {r['policy']} | {r['alpha']:g} | {r['task']}/{r['n']} | {r['performance']}/{r['n']} | {r['physical']} | {r['domain']} | {r['nominal_task']}/{r['nominal_n']} | {r['predicted_within']} | {r['false_optimistic']} | {r['conservative']} |")
     lines+=['','Per-context response overlays (all declared alphas; pulse shaded; actual endpoints marked):','']+links
-    lines+=['','Per-alpha reward/component/wheel-proxy PNG+PDF are alongside each overview. Raw logged arrays remain in the immutable run. No matched pure-ECBC real-pulse control was run in this diagnostic; comparisons here use the same u325 own nominal context.','',f"Source: {run}; code {manifest['code_revision']}; actual lower ticks {status['active_lower_ticks']}/{status['maximum_lower_ticks']}; PPO=0."]
+    lines+=['','Per-alpha reward/component/wheel-proxy PNG+PDF are alongside each overview. Raw logged arrays remain in the immutable run. No matched pure-ECBC real-pulse control was run in this diagnostic; each pulse response uses the same policy own nominal context.','',f"Source: {run}; code {manifest['code_revision']}; actual lower ticks {status['active_lower_ticks']}/{status['maximum_lower_ticks']}; evaluation PPO=0."]
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
     return summary

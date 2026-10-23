@@ -1,0 +1,20 @@
+{
+  "uniform_pid": 1308056,
+  "tensorboard": {
+    "pid": 1307932,
+    "url": "http://localhost:6008",
+    "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/tensorboard",
+    "scalar_verified": false
+  },
+  "started_unix": 1792740975.8430629,
+  "code_revision": "9027adf6d20b2c0dd9073e682584e6eca7adab14",
+  "engineering_receipt": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/engineering/receipt.json",
+  "next": "verify first actual reward HTTP then adopt live uniform with existing parallel scheduler max2workers",
+  "scheduler_pid": 1318514,
+  "scheduler_started_unix": 1792741194.3177068,
+  "uniform_first_reward_verified": [
+    1792741190.1127586,
+    4,
+    -2.3929355144500732
+  ]
+}

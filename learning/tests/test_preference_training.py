@@ -40,3 +40,13 @@ def test_declared_force_histogram_and_actual_alpha_exposure_are_not_old_force_gr
     assert result['alpha_force_exposure'][1,1]==4
     assert result['alpha_force_exposure'][4,8]==2
     assert int(result['alpha_force_exposure'].sum())==6
+
+
+def test_conditional_schedule_is_declared_without_hardcoded_update_limit():
+    parent={'path_reward':{},'training_future_phase_C':{'episode_s':10.,'actor_lr':.0001,'critic_lr':.0003}}
+    declaration=dict(updates=52,actor_lr=.00002,critic_lr=.0002)
+    cfg=training.preference_training_config(parent,declaration)
+    assert cfg['training_future_phase_C']['updates_max']==52
+    assert cfg['training_future_phase_C']['actor_lr']==.00002
+    assert parent['training_future_phase_C']['actor_lr']==.0001
+    assert cfg['training_future_phase_C']['episode_s']==10.

@@ -49,8 +49,8 @@ Files: preference_tolerance_screen.py and thin CLI; actual resolved declaration 
 ## Task4 — Recovery learning utility experiment
 
 - [x] Collected320authentic prefixes/25573anchors in181.93s/511456lower ticks, bank6ce48aa4c8004b6caf6ffc9759f6b7552e7c7054050e1f6a9ea788a955d80bc0. Originalclock/historyvalidated; allprefixesvalid, nominal full8scompletion not proven. Actualαcounts128/21/22/21/128; noDEVstates.
-- [ ] Resolve one shared reward/learner/force/alpha schedule for uniform/risk/shuffled arms; fresh immutable runs and critic warmup/parent retention.
-- [ ] Test sampler actual exposures, complete-state resets and snippet bootstrap; no silent20s→10s switch.
-- [ ] Run the declared matched campaign and paired full-task/preference evaluation; independent repeats and continuous metrics required before claiming method benefit.
+- [x] Bound shared declaration: same u325/V3/10s,27slots=2critic+25PPO,3arms,5308416transitions/max21233664lower ticks,seed918301/pulseseed918203,actor3e-5/critic3e-4,parentKL.05. First two workers running; exact warmupActor invariance and actualTB rewardHTTP verified.
+- [x] Actual512lane8step engineering completed16384ticks,432completepulses,41.03s,0physical/domain/engineering;351/352/original10s/4s snippet preserved. Actualalpha×force androute×force exposures in each training update. Existing timeoutbootstrap reused; full-task effects still pending.
+- [ ] Campaign currently running, fixedfinal evaluation callback prepared:1240fresh cases/max2480000ticks plus400authenticatedcached parent cases; includes all30nominal cases/policy. Fixedfinalu27 export/learner/modulation identity verified before evaluation. Independent repeats and continuous metrics remain necessary before a method-benefit claim.
 
 This plan does not mark the objective achieved. Tasks3–4 must provide real runtime/model evidence; architecture compatibility alone is insufficient. Shared research ledger remains the sole current-state authority.
