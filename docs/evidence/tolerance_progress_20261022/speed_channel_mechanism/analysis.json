@@ -1,0 +1,2828 @@
+{
+  "records": [
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.0,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 348,
+          "target_speed_offset": -0.09487725049257278,
+          "governed_speed": 2.0316035747528076,
+          "actual_speed": 1.9882407188415527,
+          "path_rms": 0.3705207109451294,
+          "roll_peak": 0.32829225063323975
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1752946376800537,
+          "actual_speed": 2.137423038482666,
+          "path_rms": 0.41530728340148926,
+          "roll_peak": 0.3295257091522217
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0_t2.6_f-18.npz": "5bf1558163d9acd903c92281215e337da1e5a6b4ac3887d849723e594c9274d8",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0_t2.6_f-18.npz": "a4ec2bc4b192194700092a82bc47ec0ce389cc422cb45c503744c6c307347df8"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.0,
+        18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.020688466727733612,
+          "governed_speed": 2.1467294692993164,
+          "actual_speed": 2.122584819793701,
+          "path_rms": 0.2939760684967041,
+          "roll_peak": 0.2671966552734375
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1803464889526367,
+          "actual_speed": 2.1561594009399414,
+          "path_rms": 0.24019378423690796,
+          "roll_peak": 0.26716816425323486
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0_t2.6_f+18.npz": "8530a7b4b32ce199d27b5577a992a081a6087fe5fd128a427fdb2cb08af212b6",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0_t2.6_f+18.npz": "838d72352921d8f9218c5b6e83626b7d365df781639dd06a22ba8628178a01d2"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.0,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 372,
+          "target_speed_offset": -0.10295084118843079,
+          "governed_speed": 2.022773265838623,
+          "actual_speed": 1.9775418043136597,
+          "path_rms": 0.35526910424232483,
+          "roll_peak": 0.34645044803619385
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1758360862731934,
+          "actual_speed": 2.1340012550354004,
+          "path_rms": 0.349413126707077,
+          "roll_peak": 0.3466235399246216
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0_t2.6_f-26.npz": "e179ca9eb569e3f931264a2649007d5c7526bc6aa04efedb662dd051c830679d",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0_t2.6_f-26.npz": "8fd501f669063288554eb0fe9cd5c7d764cea8c6036090abf67dbb501a3fa22f"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.0,
+        26.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.05322641506791115,
+          "governed_speed": 2.0776309967041016,
+          "actual_speed": 2.0491116046905518,
+          "path_rms": 0.6320421695709229,
+          "roll_peak": 0.3171447515487671
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1793360710144043,
+          "actual_speed": 2.1508028507232666,
+          "path_rms": 0.4403466284275055,
+          "roll_peak": 0.31439244747161865
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0_t2.6_f+26.npz": "c3d59086fb275701b0fa3d3ca5a3b4ad55f3f003cc2d8bad21e7929dc43c792e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0_t2.6_f+26.npz": "d688dbb57d03dc4fade1b3f0b23be67191ab18c29a01683cdad24bbacccd6dd1"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.3,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 380,
+          "target_speed_offset": -0.03051796928048134,
+          "governed_speed": 2.133310079574585,
+          "actual_speed": 2.091353416442871,
+          "path_rms": 0.4367303252220154,
+          "roll_peak": 0.33040642738342285
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1878204345703125,
+          "actual_speed": 2.1507489681243896,
+          "path_rms": 0.38292205333709717,
+          "roll_peak": 0.32726895809173584
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0.3_t2.6_f-18.npz": "4ddb8bf29677862643f7bc2c8ce92cd167f7e62eeb8d7dd9a282147cda448817",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0.3_t2.6_f-18.npz": "39e720f2f4426b2a5a3312f47abef07f506568b6d4cf7cf090ff02386a9a409c"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.3,
+        18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": 0.010250120423734188,
+          "governed_speed": 2.1903955936431885,
+          "actual_speed": 2.165559768676758,
+          "path_rms": 0.26858437061309814,
+          "roll_peak": 0.27004289627075195
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.188903570175171,
+          "actual_speed": 2.1635208129882812,
+          "path_rms": 0.21899789571762085,
+          "roll_peak": 0.26994311809539795
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0.3_t2.6_f+18.npz": "60895157cf4ece3735bdd2f99095e856b36fdbb58fbb8eb81be60d5b6a56755e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0.3_t2.6_f+18.npz": "9e92b7a30d707acd90eb581d9c562102cc70e39fd717790ea0bd98bac86598e3"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.3,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 388,
+          "target_speed_offset": -0.05017954856157303,
+          "governed_speed": 2.1116981506347656,
+          "actual_speed": 2.066380500793457,
+          "path_rms": 0.4039444625377655,
+          "roll_peak": 0.35621345043182373
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.188889503479004,
+          "actual_speed": 2.1471798419952393,
+          "path_rms": 0.3592739403247833,
+          "roll_peak": 0.3521604537963867
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0.3_t2.6_f-26.npz": "3b38ee5c65b90eb7bf7222d0f7ceff48fae42626bd86d62c9418c4782e92ca87",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0.3_t2.6_f-26.npz": "ae325c87f53ed324c54e2deaa6fdcfdf84acbf7a9613afc8bc3770057959d9c7"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.2,
+        0.3,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.012233387678861618,
+          "governed_speed": 2.146171808242798,
+          "actual_speed": 2.1174421310424805,
+          "path_rms": 0.5991213321685791,
+          "roll_peak": 0.31838154792785645
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.188481092453003,
+          "actual_speed": 2.1590049266815186,
+          "path_rms": 0.4187711775302887,
+          "roll_peak": 0.3161121606826782
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.2_a0.3_t2.6_f+26.npz": "d37dc6d8a5ba42c75376043c10359d50745f90aa570bb96e22e9ea0058bd0cd1",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.2_a0.3_t2.6_f+26.npz": "80175298fe48137da7750ba18a752edeb17a24d1376f7a237606d1bf77de63f4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.0,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 324,
+          "target_speed_offset": -0.07415307313203812,
+          "governed_speed": 2.3882412910461426,
+          "actual_speed": 2.3419015407562256,
+          "path_rms": 0.4581283628940582,
+          "roll_peak": 0.36831438541412354
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4835448265075684,
+          "actual_speed": 2.447200059890747,
+          "path_rms": 0.6347113251686096,
+          "roll_peak": 0.3600156307220459
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0_t2.6_f-18.npz": "ac2f2a62a688e72f6b4dbf2503ab893b7eaf772da12bceda59222797e6857b2d",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0_t2.6_f-18.npz": "0cefca369696803cdd55166bd30ee2ed054fc6a8775c309bec42982278653b97"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.0,
+        18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.03274260088801384,
+          "governed_speed": 2.451779365539551,
+          "actual_speed": 2.4207003116607666,
+          "path_rms": 0.3744133412837982,
+          "roll_peak": 0.29832184314727783
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.483551025390625,
+          "actual_speed": 2.454965591430664,
+          "path_rms": 0.3467741310596466,
+          "roll_peak": 0.298321008682251
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0_t2.6_f+18.npz": "f0e15906536c831a11cb3f19473a5e007b3ea3ee52294b739ee88910243721ab",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0_t2.6_f+18.npz": "72bbe1ffcf1aa0d2d1f04b32ef37922f6b88404aedd949782ffb82d00dc73a9e"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.0,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 292,
+          "target_speed_offset": -0.1378474235534668,
+          "governed_speed": 2.3178319931030273,
+          "actual_speed": 2.2502570152282715,
+          "path_rms": 0.32022833824157715,
+          "roll_peak": 0.42111897468566895
+        },
+        "speed_off": {
+          "ticks": 336,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4803967475891113,
+          "actual_speed": 2.4256749153137207,
+          "path_rms": 0.4100912809371948,
+          "roll_peak": 0.41997432708740234
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0_t2.6_f-26.npz": "072e7a778d51761e22982a9cff358c379cb7410101c29836fd075efa96d81cae",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0_t2.6_f-26.npz": "7ff677748360b3aa5dad535b7c0c7febd07726e9aee3505edff7b355e48196c3"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.0,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.06886027008295059,
+          "governed_speed": 2.382871150970459,
+          "actual_speed": 2.346360445022583,
+          "path_rms": 0.6983538866043091,
+          "roll_peak": 0.342679500579834
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4835329055786133,
+          "actual_speed": 2.4492900371551514,
+          "path_rms": 0.5773131251335144,
+          "roll_peak": 0.34267592430114746
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0_t2.6_f+26.npz": "0bccdd69a4e0d8a520a65f7aa4cc098bdd29f29dfda8a9515ae8553ef59acb40",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0_t2.6_f+26.npz": "6adb9a74400bc992c36f91a3a447e79c9baf6ff7d133d48e0e68a624eefad856"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.3,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 352,
+          "target_speed_offset": -0.016689477488398552,
+          "governed_speed": 2.4752397537231445,
+          "actual_speed": 2.4295690059661865,
+          "path_rms": 0.5141173601150513,
+          "roll_peak": 0.3771470785140991
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4961745738983154,
+          "actual_speed": 2.4576947689056396,
+          "path_rms": 0.6035759449005127,
+          "roll_peak": 0.367146372795105
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0.3_t2.6_f-18.npz": "5c12e1e9313892da3c703f06881abf45e0e5491eec2bd079003c150df53b582f",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0.3_t2.6_f-18.npz": "a9fd2840b5100c8615473866ae9ba5ec3e0ac892235e52cae673b605efc1f271"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.3,
+        18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": 0.012121587991714478,
+          "governed_speed": 2.5061497688293457,
+          "actual_speed": 2.4773964881896973,
+          "path_rms": 0.29630520939826965,
+          "roll_peak": 0.29824626445770264
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.49617338180542,
+          "actual_speed": 2.467207431793213,
+          "path_rms": 0.2592293918132782,
+          "roll_peak": 0.2982466220855713
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0.3_t2.6_f+18.npz": "ea158981c29ef435f89a01e6b9774237a32f3af45e3d50ae80878702a1be2a7a",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0.3_t2.6_f+18.npz": "87b79db6faa9cb62faace553a16ff4e42671549da1cdda8ef53bb1725430eb68"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.3,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 312,
+          "target_speed_offset": -0.06750880926847458,
+          "governed_speed": 2.4135072231292725,
+          "actual_speed": 2.349226713180542,
+          "path_rms": 0.3899170458316803,
+          "roll_peak": 0.42761898040771484
+        },
+        "speed_off": {
+          "ticks": 360,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4957358837127686,
+          "actual_speed": 2.445148468017578,
+          "path_rms": 0.47263288497924805,
+          "roll_peak": 0.418216347694397
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0.3_t2.6_f-26.npz": "931f063604119942a8f34b3b26e35685e0073906e8680b619f72ebc0cc89ba86",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0.3_t2.6_f-26.npz": "f2cdb7c56ce572d1475327e32277845a5a12cdd0dcb50f5d13e234d71b77412c"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "left100_R2p3",
+        2.5,
+        0.3,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.013187332078814507,
+          "governed_speed": 2.4718968868255615,
+          "actual_speed": 2.437577486038208,
+          "path_rms": 0.6138336062431335,
+          "roll_peak": 0.3440905809402466
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.496124029159546,
+          "actual_speed": 2.461358070373535,
+          "path_rms": 0.4854793846607208,
+          "roll_peak": 0.3437516689300537
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_left100_R2p3_v2.5_a0.3_t2.6_f+26.npz": "98e555c2c4cc327354cab28c8dc40357a8eedbbf3c5f1551df295f15ffafa54a",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_left100_R2p3_v2.5_a0.3_t2.6_f+26.npz": "520c52d65659534f1411addc6b071e2dc25851b106e093c65b08fd71b61483ae"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.0,
+        -18.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.049721840769052505,
+          "governed_speed": 2.094503402709961,
+          "actual_speed": 2.076295852661133,
+          "path_rms": 0.3017127811908722,
+          "roll_peak": 0.26354920864105225
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1734535694122314,
+          "actual_speed": 2.159050941467285,
+          "path_rms": 0.2221955806016922,
+          "roll_peak": 0.2634890079498291
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0_t2.6_f-18.npz": "adce132aab16156ab7a2a38d1b0b5e2404fdd3d68f0d7790c42be6e8270c13c9",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0_t2.6_f-18.npz": "0496def91ad44c43163d9527a36c4bd1eace2956e8b6e07e5fb52e06ef1057f4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.0,
+        18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 348,
+          "target_speed_offset": -0.21589051187038422,
+          "governed_speed": 1.925106406211853,
+          "actual_speed": 1.8875083923339844,
+          "path_rms": 0.3623781204223633,
+          "roll_peak": 0.30510175228118896
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1944384574890137,
+          "actual_speed": 2.1587462425231934,
+          "path_rms": 0.40748414397239685,
+          "roll_peak": 0.32868778705596924
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0_t2.6_f+18.npz": "25499c0b9f7cf344683ddbbff9758307024e132bca15776d1ac505385be549d2",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0_t2.6_f+18.npz": "acc269e41654d47e1cd162031aa93c56992444ba6a2626825c3f618beec1aca8"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.0,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.07124590873718262,
+          "governed_speed": 2.075624942779541,
+          "actual_speed": 2.0480575561523438,
+          "path_rms": 0.5733797550201416,
+          "roll_peak": 0.31433165073394775
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1709110736846924,
+          "actual_speed": 2.148350477218628,
+          "path_rms": 0.42113035917282104,
+          "roll_peak": 0.31382882595062256
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0_t2.6_f-26.npz": "d7e8c2609d375574733a45ceef8c7dc6b869f3b8a5ad7511525d3c3a6d1d413e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0_t2.6_f-26.npz": "4deebe2d25d63760cb45e2dd26315a021954e47cd3dc868dfe1ff912232804a2"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.0,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 356,
+          "target_speed_offset": -0.23451246321201324,
+          "governed_speed": 1.9261376857757568,
+          "actual_speed": 1.8826234340667725,
+          "path_rms": 0.3371444642543793,
+          "roll_peak": 0.3322650194168091
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1945598125457764,
+          "actual_speed": 2.152217149734497,
+          "path_rms": 0.38298699259757996,
+          "roll_peak": 0.3550337553024292
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0_t2.6_f+26.npz": "0d19b2a33bcc4c5e3786aac8ddc688eaf3077d9e8e84ecfd74450e4990db247c",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0_t2.6_f+26.npz": "342868090fd75c27222706361366b793dc90ffe2e94fd83ab02d1e47f197d489"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.3,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.01402741763740778,
+          "governed_speed": 2.144068956375122,
+          "actual_speed": 2.125419855117798,
+          "path_rms": 0.24550580978393555,
+          "roll_peak": 0.26459646224975586
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.175713539123535,
+          "actual_speed": 2.1601574420928955,
+          "path_rms": 0.1838100403547287,
+          "roll_peak": 0.2635575532913208
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0.3_t2.6_f-18.npz": "32fa9a9e33ec82ea4607c9ef8c04541433168d1bcf7ea50d733b3b337beba62e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0.3_t2.6_f-18.npz": "480c105e3b2b42358fb5a1283f7043cbe8eca583764b5a4ef4b6e156ed923904"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.3,
+        18.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.09543713927268982,
+          "governed_speed": 2.077218770980835,
+          "actual_speed": 2.0482709407806396,
+          "path_rms": 0.42747312784194946,
+          "roll_peak": 0.2964426279067993
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.190829277038574,
+          "actual_speed": 2.1596579551696777,
+          "path_rms": 0.3242139518260956,
+          "roll_peak": 0.31006932258605957
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0.3_t2.6_f+18.npz": "ebfc3ab12a4204493d4958e3968fcdd8a923c102553a027f027b179af0e7b34b",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0.3_t2.6_f+18.npz": "fee22bdb1dfe26221d608cf956fb141336ab091cb2be3fb4baf20eba653c8ad5"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.3,
+        -26.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.025158433243632317,
+          "governed_speed": 2.116886854171753,
+          "actual_speed": 2.090853691101074,
+          "path_rms": 0.5480334162712097,
+          "roll_peak": 0.3115144968032837
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1696372032165527,
+          "actual_speed": 2.1475768089294434,
+          "path_rms": 0.39096561074256897,
+          "roll_peak": 0.3089444637298584
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0.3_t2.6_f-26.npz": "1ccb1910328c798f534a79ee80113369a2928c87b67a51901ff14ad7178fe514",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0.3_t2.6_f-26.npz": "be6584d4f6669009ef4ca129ab0e6c5fd4dc5f67de72282038ed205cbd40e5b3"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.2,
+        0.3,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.10193651169538498,
+          "governed_speed": 2.0789849758148193,
+          "actual_speed": 2.048999786376953,
+          "path_rms": 0.3446699380874634,
+          "roll_peak": 0.30975496768951416
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1908555030822754,
+          "actual_speed": 2.156982183456421,
+          "path_rms": 0.3764408230781555,
+          "roll_peak": 0.3254178762435913
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.2_a0.3_t2.6_f+26.npz": "94629791419f7ba4c50d241f7b9d467e946d3d89a50be6f4c11e2b885cab5418",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.2_a0.3_t2.6_f+26.npz": "b47575ae3ce4ccd7d1d2739437d7bdcc923fd5f3970f92a6e001d3e970713c69"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.0,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.06695233285427094,
+          "governed_speed": 2.349895715713501,
+          "actual_speed": 2.3280060291290283,
+          "path_rms": 0.3921363651752472,
+          "roll_peak": 0.280947208404541
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.409365177154541,
+          "actual_speed": 2.3890628814697266,
+          "path_rms": 0.36297982931137085,
+          "roll_peak": 0.28008174896240234
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0_t2.6_f-18.npz": "6035957067192b3bece3af0c58ffc809a973c571a57e7e046841356b4538ce2b",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0_t2.6_f-18.npz": "f3fd0703c6edf1d08e59d9122fd29c18aee2eadebcb75bfe0003636ddd4618f0"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.0,
+        18.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 336,
+          "target_speed_offset": -0.2130763679742813,
+          "governed_speed": 2.170483112335205,
+          "actual_speed": 2.1357181072235107,
+          "path_rms": 0.4360042214393616,
+          "roll_peak": 0.3233693838119507
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.446645975112915,
+          "actual_speed": 2.419158935546875,
+          "path_rms": 0.42568182945251465,
+          "roll_peak": 0.30801188945770264
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0_t2.6_f+18.npz": "1c443398f6a51a6e652d011f375c6b2e5414b3571c23c96cfc696eecae7064ed",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0_t2.6_f+18.npz": "fac37e4a4122d4bdf24da5572cbedf900e31baa48b0386ad0f2df6ae61250a74"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.0,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.08254728466272354,
+          "governed_speed": 2.3306312561035156,
+          "actual_speed": 2.300455093383789,
+          "path_rms": 0.6935076117515564,
+          "roll_peak": 0.3235210180282593
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.400315284729004,
+          "actual_speed": 2.371861219406128,
+          "path_rms": 0.6074219346046448,
+          "roll_peak": 0.3218585252761841
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0_t2.6_f-26.npz": "5327aa5a4d36398e42c130283cb88ad26fc7468848d1200f926a314e12d79950",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0_t2.6_f-26.npz": "a71ac2cf3f92de853ec53c63f562d25296afc3103b4dfc243b750942781c316a"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.0,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 336,
+          "target_speed_offset": -0.2701718807220459,
+          "governed_speed": 2.1386096477508545,
+          "actual_speed": 2.0947766304016113,
+          "path_rms": 0.3675704002380371,
+          "roll_peak": 0.34641993045806885
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4479339122772217,
+          "actual_speed": 2.415379524230957,
+          "path_rms": 0.43336132168769836,
+          "roll_peak": 0.3556464910507202
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0_t2.6_f+26.npz": "be542b11e36bc96ba99511456b79805bf7a7d6f5ad9520c3d6d47d65d75d57bc",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0_t2.6_f+26.npz": "a061995c98416b2c7a66be3fd640e22cb8563cf6e9d9cfd01299c2290c03415e"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.3,
+        -18.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.03552485629916191,
+          "governed_speed": 2.427844762802124,
+          "actual_speed": 2.4068968296051025,
+          "path_rms": 0.2004081904888153,
+          "roll_peak": 0.278816819190979
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4707090854644775,
+          "actual_speed": 2.4520983695983887,
+          "path_rms": 0.1542840301990509,
+          "roll_peak": 0.2775663137435913
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0.3_t2.6_f-18.npz": "08569541d06684b32837399f497737fce0c90bedc3fc424e00e1e9405b4f1668",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0.3_t2.6_f-18.npz": "d95fa3af1d41079a15d76e51cfacbe5c77984bd738a31de5e9becbf74b0742e4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.3,
+        18.0,
+        2.6
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 392,
+          "target_speed_offset": -0.10930264741182327,
+          "governed_speed": 2.350085735321045,
+          "actual_speed": 2.3179638385772705,
+          "path_rms": 0.5777355432510376,
+          "roll_peak": 0.33130013942718506
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.481663465499878,
+          "actual_speed": 2.4509737491607666,
+          "path_rms": 0.3893194794654846,
+          "roll_peak": 0.32719385623931885
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0.3_t2.6_f+18.npz": "281e44fc8f10629f92bde26936140c6471fb609007209285aa07afdf33b535f7",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0.3_t2.6_f+18.npz": "baa58815111887e1a9526484a7bb01d77903ba051662719fe092942c352985f2"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.3,
+        -26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.05515895038843155,
+          "governed_speed": 2.3979828357696533,
+          "actual_speed": 2.369863271713257,
+          "path_rms": 0.4681989252567291,
+          "roll_peak": 0.3220787048339844
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4643654823303223,
+          "actual_speed": 2.4389755725860596,
+          "path_rms": 0.3625006675720215,
+          "roll_peak": 0.32051563262939453
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0.3_t2.6_f-26.npz": "64675e354450f7f743068b331970dbd7ef1cd74c52e3c933b066c79765ae469a",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0.3_t2.6_f-26.npz": "403fa2ddd7288fe63bc0fd7103876b89388da67e0a985d9ad97949e1c754878c"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "context": [
+        "right100_R2p3",
+        2.5,
+        0.3,
+        26.0,
+        2.6
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 388,
+          "target_speed_offset": -0.12663818895816803,
+          "governed_speed": 2.3333890438079834,
+          "actual_speed": 2.295243263244629,
+          "path_rms": 0.5283395648002625,
+          "roll_peak": 0.3638772964477539
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.481675386428833,
+          "actual_speed": 2.4444708824157715,
+          "path_rms": 0.4572400450706482,
+          "roll_peak": 0.37351739406585693
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/control_right100_R2p3_v2.5_a0.3_t2.6_f+26.npz": "e8369d98b9bed0e8279d2d5bf809eb724200be30e7396ff0bbed5918c264f54e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/evaluation/speed_off_right100_R2p3_v2.5_a0.3_t2.6_f+26.npz": "a896aedfe2c22ed89a34fce97aeb8d1794cd11a0de3708e868f306d995f264af"
+      },
+      "full_window": false
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.10427087545394897,
+          "governed_speed": 2.0237488746643066,
+          "actual_speed": 1.9847729206085205,
+          "path_rms": 0.2745043933391571,
+          "roll_peak": 0.30117714405059814
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.173874616622925,
+          "actual_speed": 2.1299452781677246,
+          "path_rms": 0.12166988104581833,
+          "roll_peak": 0.3108600378036499
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f-16.npz": "ebd63c7a433cd112c2177d043c8b1813324b18a2cc9695103cc71b3dbf064921",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f-16.npz": "5c1137d48714d1fe55bd3a8854ee377ad62cb6e0de832e497b90fd6fcb19c76e"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.10193528980016708,
+          "governed_speed": 2.033707857131958,
+          "actual_speed": 1.9971060752868652,
+          "path_rms": 0.18867337703704834,
+          "roll_peak": 0.23859810829162598
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.175049066543579,
+          "actual_speed": 2.135141372680664,
+          "path_rms": 0.1968953162431717,
+          "roll_peak": 0.24216365814208984
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f+16.npz": "48a23419b9efd0e79ed23388cc3a0d595d0f821cf2867fdb15702f7ee74c7e18",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f+16.npz": "61794c5e9b0adc064e84cc13d806797390a4c25ebb00c77f6049bc28ae32fd1d"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "kind": "loss",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.12366876006126404,
+          "governed_speed": 2.0034399032592773,
+          "actual_speed": 1.9590060710906982,
+          "path_rms": 0.30630233883857727,
+          "roll_peak": 0.33639657497406006
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.173931837081909,
+          "actual_speed": 2.1257314682006836,
+          "path_rms": 0.186793714761734,
+          "roll_peak": 0.3389095067977905
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f-24.npz": "bf2a73ff422a6b99df1e06a619e4593fed99a1ef23419e6d129d3171896eee49",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f-24.npz": "dcf3710c430268560e12d8a860ac5811820ca2508eb37607056d4b5c190c4388"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.10795074701309204,
+          "governed_speed": 2.039243698120117,
+          "actual_speed": 2.001474380493164,
+          "path_rms": 0.3112989664077759,
+          "roll_peak": 0.2771342992782593
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1757264137268066,
+          "actual_speed": 2.133416175842285,
+          "path_rms": 0.2996220886707306,
+          "roll_peak": 0.2756744623184204
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f+24.npz": "d81fcccaca6e950eae90f7f1f92739551defed422f60fdacb2b886b5ddd24382",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f+24.npz": "adf55179257a960aa5ca4d100384d8965e90384369fa2539b9d98ec4e65caed4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.12569984793663025,
+          "governed_speed": 2.024202585220337,
+          "actual_speed": 1.979034423828125,
+          "path_rms": 0.2685798704624176,
+          "roll_peak": 0.33604514598846436
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.17467999458313,
+          "actual_speed": 2.124851703643799,
+          "path_rms": 0.4110945463180542,
+          "roll_peak": 0.3372187614440918
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f-32.npz": "3589a4e10596665d10e4d04f387df9c4ce3a11159943b29f9919c4024ebb3202",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f-32.npz": "ea3da9749b28c7aedd066a799c815b6d2186033b56fe5398d8709274a819e645"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.08070521056652069,
+          "governed_speed": 2.0572845935821533,
+          "actual_speed": 2.022658586502075,
+          "path_rms": 0.5210260152816772,
+          "roll_peak": 0.3366129398345947
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1770431995391846,
+          "actual_speed": 2.135970115661621,
+          "path_rms": 0.37840941548347473,
+          "roll_peak": 0.33024466037750244
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0_t2.3_f+32.npz": "e2be2aff3706563aece0ee9e909927beadf802742ca54f28ba51946c6df051c8",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0_t2.3_f+32.npz": "e0c9cd43a30f908ff59d85bcdf17a15825bad41c05946bb67603fdc25f638fa3"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.0565100759267807,
+          "governed_speed": 2.0993587970733643,
+          "actual_speed": 2.0594184398651123,
+          "path_rms": 0.17409071326255798,
+          "roll_peak": 0.3052927255630493
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1836600303649902,
+          "actual_speed": 2.140885591506958,
+          "path_rms": 0.11870233714580536,
+          "roll_peak": 0.3075718879699707
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f-16.npz": "505a974b41431d2d77ca3e32ebb0e688d8074e49ca151f1e806f2db1aa67a8fd",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f-16.npz": "bb847ca3acaeede3f509f673fe780413016be27471f3cca067eccbe298c61775"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.05782490596175194,
+          "governed_speed": 2.106536626815796,
+          "actual_speed": 2.06945538520813,
+          "path_rms": 0.177524134516716,
+          "roll_peak": 0.2436690330505371
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.184340238571167,
+          "actual_speed": 2.1453921794891357,
+          "path_rms": 0.18868255615234375,
+          "roll_peak": 0.2436976432800293
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f+16.npz": "ecae63a0b0839c6b14313f60025e06a2dbff49f9f6aa1265372a04f6736c1374",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f+16.npz": "c0d3ec7505cb48a801ad0536ca5c2440f0cfbd7df709deab2d35e31b02446b41"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "kind": "loss",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.0773734599351883,
+          "governed_speed": 2.0759241580963135,
+          "actual_speed": 2.0313174724578857,
+          "path_rms": 0.23478463292121887,
+          "roll_peak": 0.33947694301605225
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.184149742126465,
+          "actual_speed": 2.1377363204956055,
+          "path_rms": 0.19635164737701416,
+          "roll_peak": 0.3385428190231323
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f-24.npz": "ad116a017bbea1ff9bd3e117f750a87a0e8826519bbfceb90b67aa251cab5574",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f-24.npz": "5bec021760c82f475286706ab7783c4e1c842383a749ff041e7312af2fc97ea0"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.06646905839443207,
+          "governed_speed": 2.096153497695923,
+          "actual_speed": 2.058182716369629,
+          "path_rms": 0.28169259428977966,
+          "roll_peak": 0.2790480852127075
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1851987838745117,
+          "actual_speed": 2.143350124359131,
+          "path_rms": 0.2820991575717926,
+          "roll_peak": 0.2787817716598511
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f+24.npz": "536da92e25d80539fb31dbe3fea21cae9b64b3c79fc82a349c52a0246532728b",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f+24.npz": "e5f07f543987600ca3abc27a31f64178e74fc436adb88c7b710496d98e0ba1ca"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.08288732171058655,
+          "governed_speed": 2.0875539779663086,
+          "actual_speed": 2.0424342155456543,
+          "path_rms": 0.28363269567489624,
+          "roll_peak": 0.3420858383178711
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.184600830078125,
+          "actual_speed": 2.1367850303649902,
+          "path_rms": 0.41320717334747314,
+          "roll_peak": 0.3403754234313965
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f-32.npz": "3f9d0f4610786c0e0d8c8d491ece3344592e9be2ebc3b8954ec3d1e27b732e07",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f-32.npz": "9c17ada711fb5bd8df5755e4c98cd8944854e783442a45c6754f37442333b877"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.2,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "kind": "loss",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.06594760715961456,
+          "governed_speed": 2.081022262573242,
+          "actual_speed": 2.0448389053344727,
+          "path_rms": 0.45775148272514343,
+          "roll_peak": 0.3353208303451538
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1854000091552734,
+          "actual_speed": 2.1442389488220215,
+          "path_rms": 0.3481849730014801,
+          "roll_peak": 0.3303292989730835
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.2_a0.25_t2.3_f+32.npz": "212a346216624f31eab3987b14c4f62b619fa16cb4a99fff9f0dc7ddf051e74d",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.2_a0.25_t2.3_f+32.npz": "fdb9485b0ce08e170e0bc82d45a6e66708de48eece36382c80dce76845156c87"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "kind": "loss",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.08539535850286484,
+          "governed_speed": 2.3918776512145996,
+          "actual_speed": 2.3468756675720215,
+          "path_rms": 0.32905247807502747,
+          "roll_peak": 0.3531738519668579
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.496267318725586,
+          "actual_speed": 2.454623222351074,
+          "path_rms": 0.16557416319847107,
+          "roll_peak": 0.34898173809051514
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f-16.npz": "3623471f5a6aacdbf1155c3717472a091be006b3a901eb041ace2a9187c492cf",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f-16.npz": "e73393783c0c4c5eb627d29f4551d84a847b3bb69578892106005f7e2df294f8"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.03259557858109474,
+          "governed_speed": 2.475177764892578,
+          "actual_speed": 2.4454352855682373,
+          "path_rms": 0.16677914559841156,
+          "roll_peak": 0.2935370206832886
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4952399730682373,
+          "actual_speed": 2.4647409915924072,
+          "path_rms": 0.16043773293495178,
+          "roll_peak": 0.29341280460357666
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f+16.npz": "569958c9f86daaf8c25149f99669d5f766decec73ff036e0a5aac38fa4a9c0b7",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f+16.npz": "ecfa1fcebee0f0f400dde34e496d2f9a2314961fa90c709137c12848f09d2045"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.10067368298768997,
+          "governed_speed": 2.3578295707702637,
+          "actual_speed": 2.3064322471618652,
+          "path_rms": 0.38207000494003296,
+          "roll_peak": 0.38899457454681396
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.499072313308716,
+          "actual_speed": 2.4518802165985107,
+          "path_rms": 0.23279550671577454,
+          "roll_peak": 0.3850976228713989
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f-24.npz": "d62ee179df69a3ae1bd0c78b6a612516122eee06156e253cbc7be97353467f64",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f-24.npz": "7520cd90951294a7af635a81c455cb64f8b5b34da37b8035ea0d1b730498bd02"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.0425986684858799,
+          "governed_speed": 2.4357759952545166,
+          "actual_speed": 2.4060559272766113,
+          "path_rms": 0.25631046295166016,
+          "roll_peak": 0.32988572120666504
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4938509464263916,
+          "actual_speed": 2.4627904891967773,
+          "path_rms": 0.2225416749715805,
+          "roll_peak": 0.32951676845550537
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f+24.npz": "b2ac3e4ca3904ac5d5050cb6cd71a79b3ae6e0e00cf1c740fe231acd0826faec",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f+24.npz": "eaf9722c0434cd3a8e583daee7623be39b98e0d814d184f6229c8e29737d2fe6"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.11096896231174469,
+          "governed_speed": 2.345958948135376,
+          "actual_speed": 2.2911696434020996,
+          "path_rms": 0.3508813679218292,
+          "roll_peak": 0.41147828102111816
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.5007009506225586,
+          "actual_speed": 2.449633836746216,
+          "path_rms": 0.32868140935897827,
+          "roll_peak": 0.4079481363296509
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f-32.npz": "3ac7a02bf66045b29f5f62ea5d8fed22706d725c8d74231f0780e5c051e51dbd",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f-32.npz": "0e27ec77f76767f49dcceb1fe549499a31c0aa93c3117d8340cebfd2f17abd93"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.044061027467250824,
+          "governed_speed": 2.4058821201324463,
+          "actual_speed": 2.374189853668213,
+          "path_rms": 0.433227002620697,
+          "roll_peak": 0.3723965883255005
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.492896795272827,
+          "actual_speed": 2.458876848220825,
+          "path_rms": 0.3193831443786621,
+          "roll_peak": 0.36949944496154785
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0_t2.3_f+32.npz": "f19ce292c455a35165b1a7db26ae4b8800100f171ce263fcf54294f5fc3e269c",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0_t2.3_f+32.npz": "dc4fee0a992c2d8dfba1d224a0774603a2eec8f6fb646cec1d17e1379a8523c6"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.02385878376662731,
+          "governed_speed": 2.487067937850952,
+          "actual_speed": 2.44350004196167,
+          "path_rms": 0.1995633840560913,
+          "roll_peak": 0.3513317108154297
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.522520065307617,
+          "actual_speed": 2.4807589054107666,
+          "path_rms": 0.21571870148181915,
+          "roll_peak": 0.348230242729187
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f-16.npz": "48fdd3a60def50a4fa6bb5f225d9046cc1a2074d540a9b436e955db528b18575",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f-16.npz": "c91f00f4e64c2b9eefa8f7934284bf6053a1f91c2552e5989f4278982b3ef65e"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.00856045726686716,
+          "governed_speed": 2.5174334049224854,
+          "actual_speed": 2.4857561588287354,
+          "path_rms": 0.14393679797649384,
+          "roll_peak": 0.2992943525314331
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.518867254257202,
+          "actual_speed": 2.486119031906128,
+          "path_rms": 0.14179520308971405,
+          "roll_peak": 0.2991374731063843
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f+16.npz": "82440a3265c09c89c7ae64b8b05dcb5d55604567f46a0640e6075eea251ac117",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f+16.npz": "fdaa9f41e7eec570b78504e28208bb06ce9c2d07b78c1c8653fd5fa674b07106"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.04351944103837013,
+          "governed_speed": 2.457714796066284,
+          "actual_speed": 2.408634662628174,
+          "path_rms": 0.27513521909713745,
+          "roll_peak": 0.3881998062133789
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.5233147144317627,
+          "actual_speed": 2.4768424034118652,
+          "path_rms": 0.28589096665382385,
+          "roll_peak": 0.3856590986251831
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f-24.npz": "73c4a6f113673afa3d4a10e21936495874f9c7ac7f0615eee8b2e043b1c946e6",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f-24.npz": "6d4059674c8992cf322ff5b1a3c521c31e4b0c512a22d0f975e4aff3eea9b6b2"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.01700630784034729,
+          "governed_speed": 2.489755392074585,
+          "actual_speed": 2.457803249359131,
+          "path_rms": 0.20515350997447968,
+          "roll_peak": 0.33628058433532715
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.5185582637786865,
+          "actual_speed": 2.4849700927734375,
+          "path_rms": 0.18207964301109314,
+          "roll_peak": 0.3358858823776245
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f+24.npz": "d8947c06c78c8ce30956c165a35fb4bff56b90e3153ea24081613afe9cfcafb1",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f+24.npz": "6a2c207bffa749e6df2d3c37674a27b55da1f424faab79b55f9bdd70592af913"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.06170029938220978,
+          "governed_speed": 2.4349236488342285,
+          "actual_speed": 2.381294012069702,
+          "path_rms": 0.3277600407600403,
+          "roll_peak": 0.41723549365997314
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.5237274169921875,
+          "actual_speed": 2.473599910736084,
+          "path_rms": 0.3816539943218231,
+          "roll_peak": 0.41469013690948486
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f-32.npz": "4f70f3871908c64e64f07f1de78bdf4f605f385f4a0c0b39796c0b3b949c8984",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f-32.npz": "76e7ae0d64a58221824a077468772f91fb76f404dda94ab9e1b0ffd2f63e963d"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "left125_R2p2",
+        2.55,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.021833520382642746,
+          "governed_speed": 2.4577553272247314,
+          "actual_speed": 2.423419713973999,
+          "path_rms": 0.3616321086883545,
+          "roll_peak": 0.37735915184020996
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.5175931453704834,
+          "actual_speed": 2.4811038970947266,
+          "path_rms": 0.25756314396858215,
+          "roll_peak": 0.3747977018356323
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_left125_R2p2_v2.55_a0.25_t2.3_f+32.npz": "7d9526e273db7ff71c580979ad7d8dc4cbf259752a1261b32ce601147bddf9cc",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_left125_R2p2_v2.55_a0.25_t2.3_f+32.npz": "d23f3eb46979cc7be1be66f0e379f905ba19fd88030ad221dfdb632ab299f321"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.14337249100208282,
+          "governed_speed": 1.9880568981170654,
+          "actual_speed": 1.9591567516326904,
+          "path_rms": 0.271013468503952,
+          "roll_peak": 0.23584234714508057
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1384952068328857,
+          "actual_speed": 2.1159796714782715,
+          "path_rms": 0.27757924795150757,
+          "roll_peak": 0.23491370677947998
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f-16.npz": "593889456c262f88d8917eebf5973207ea31c3636ad196d7e36b79d0c711d4bb",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f-16.npz": "26d4562851742d05b9ace43c66bd6d339edbc3a5a9b07710f89b158ecfeec383"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.18640360236167908,
+          "governed_speed": 1.940133810043335,
+          "actual_speed": 1.9123872518539429,
+          "path_rms": 0.24772004783153534,
+          "roll_peak": 0.2734636068344116
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.165308952331543,
+          "actual_speed": 2.129577398300171,
+          "path_rms": 0.12101149559020996,
+          "roll_peak": 0.29657864570617676
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f+16.npz": "2e78dcc28fc025cff6d829d3db73f99eb835acb710b0237dce29af7a795fd6de",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f+16.npz": "db04746264ed89d3dd99e2b0dc4428d72b7cb85ec42245753bca86ecc2602f18"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.07438623160123825,
+          "governed_speed": 2.044945478439331,
+          "actual_speed": 2.016484022140503,
+          "path_rms": 0.37591442465782166,
+          "roll_peak": 0.2712397575378418
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.134639263153076,
+          "actual_speed": 2.1123921871185303,
+          "path_rms": 0.3556899130344391,
+          "roll_peak": 0.2690235376358032
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f-24.npz": "3601aac14327c72a728b9c92bd5dd50a2167161a1469605d425c7775a47da4f6",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f-24.npz": "34361384e3a39dd7c78f39e1e760ff4ecd39ec5792a95b6189acf349cbeaaa0f"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.20943664014339447,
+          "governed_speed": 1.9342010021209717,
+          "actual_speed": 1.9034863710403442,
+          "path_rms": 0.20976883172988892,
+          "roll_peak": 0.29402387142181396
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1659719944000244,
+          "actual_speed": 2.1255807876586914,
+          "path_rms": 0.24177703261375427,
+          "roll_peak": 0.3145686388015747
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f+24.npz": "359aaca54c07fdf28e24223b340f9b2e9bd3907260de7b428fecdada71728ba0",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f+24.npz": "769aaaf6ae3fb372c7060d8039516c366afaa3d163c770963952b45267acb273"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.02984691597521305,
+          "governed_speed": 2.060945749282837,
+          "actual_speed": 2.0366852283477783,
+          "path_rms": 0.5458480715751648,
+          "roll_peak": 0.327602744102478
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1306464672088623,
+          "actual_speed": 2.1060056686401367,
+          "path_rms": 0.4243568480014801,
+          "roll_peak": 0.3183852434158325
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f-32.npz": "a44ba6d530e26572f900adc57be05b158e9d0532bb62243ba6f10133fa19dd77",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f-32.npz": "8400acb7ca3438241df0842c041c507d6f54c32e9e3e1869540b58edace13cb4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.2371751368045807,
+          "governed_speed": 1.9300769567489624,
+          "actual_speed": 1.9003229141235352,
+          "path_rms": 0.37791889905929565,
+          "roll_peak": 0.27163445949554443
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1666343212127686,
+          "actual_speed": 2.1289713382720947,
+          "path_rms": 0.6391966938972473,
+          "roll_peak": 0.29499173164367676
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0_t2.3_f+32.npz": "1ef13379a2bc767c3ca76e2468978fe76e67e2d8d24dadcd64eae844abec0da7",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0_t2.3_f+32.npz": "6112a5ff0e347d1452c08094ddd2537d39e2cbd3c606da3c211582a8a05b7f56"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.08689151704311371,
+          "governed_speed": 2.0353894233703613,
+          "actual_speed": 2.009117841720581,
+          "path_rms": 0.21761342883110046,
+          "roll_peak": 0.2535322904586792
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.168870687484741,
+          "actual_speed": 2.147946357727051,
+          "path_rms": 0.1961001604795456,
+          "roll_peak": 0.25273847579956055
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f-16.npz": "ec34d483d8f96a5a8b61f6ced5ef432089134188af7a6c6fcc0917d772b7d2dd",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f-16.npz": "d373842b566416cfc2565c1a28e750eadcf53530a80689cb1b55ef95371fc087"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.12694157660007477,
+          "governed_speed": 2.041924238204956,
+          "actual_speed": 2.0123445987701416,
+          "path_rms": 0.13434983789920807,
+          "roll_peak": 0.2780725955963135
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1881215572357178,
+          "actual_speed": 2.1521925926208496,
+          "path_rms": 0.1740783452987671,
+          "roll_peak": 0.297560453414917
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f+16.npz": "e73800a4aa4d0cd0b91fe6071d5fcbe648e09536084b476959c3d6570938464c",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f+16.npz": "faff9bba32b59cbf01011743d080e135a57147a96bccf16073af9bcf02bff78c"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.07212536036968231,
+          "governed_speed": 2.069769859313965,
+          "actual_speed": 2.0413877964019775,
+          "path_rms": 0.3060551583766937,
+          "roll_peak": 0.2893979549407959
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.1667287349700928,
+          "actual_speed": 2.143383741378784,
+          "path_rms": 0.2709890902042389,
+          "roll_peak": 0.288601279258728
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f-24.npz": "23105295c2c7c0dcd0918073aa7066f1b2978cac3113b4fa3cc83a59843f6f0e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f-24.npz": "7d8820e8b2379de12a39cf7d7c87c43d69a5c16685ea269d303547659bd5c77a"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.14024563133716583,
+          "governed_speed": 2.0337512493133545,
+          "actual_speed": 1.9990307092666626,
+          "path_rms": 0.19221974909305573,
+          "roll_peak": 0.3114652633666992
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.189640522003174,
+          "actual_speed": 2.148228168487549,
+          "path_rms": 0.2608148157596588,
+          "roll_peak": 0.32879209518432617
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f+24.npz": "a474fbcce7d706f9bab47af013902b2c72a2be8d5a259e5b5982951b31fb9c74",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f+24.npz": "0bd1527b6c9034f4ffc34c56a0e32848e4f7e10a2b611e78f303a985cdeaaa83"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.02957753650844097,
+          "governed_speed": 2.096121311187744,
+          "actual_speed": 2.0690665245056152,
+          "path_rms": 0.49382326006889343,
+          "roll_peak": 0.34251201152801514
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.165191411972046,
+          "actual_speed": 2.140101671218872,
+          "path_rms": 0.35414281487464905,
+          "roll_peak": 0.33835136890411377
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f-32.npz": "1a68c277cc5a37862d7ecc53c5a5e24e734c0e40014b3df3fb2c47a85bcd5d58",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f-32.npz": "f7d9025eef833d97024ce6fa400adda17ad6d22b41c7bcc91da26a5f5d88d54b"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.2,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.14400777220726013,
+          "governed_speed": 2.0427019596099854,
+          "actual_speed": 2.008331537246704,
+          "path_rms": 0.3161512315273285,
+          "roll_peak": 0.31150853633880615
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.190643072128296,
+          "actual_speed": 2.149496078491211,
+          "path_rms": 0.49980372190475464,
+          "roll_peak": 0.3302145004272461
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.2_a0.25_t2.3_f+32.npz": "5cdf2ad8ceddbb3cf943fb8efcbc5818e66841d52601ecef5a8891af5c9b6b5a",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.2_a0.25_t2.3_f+32.npz": "f9628a691fc0ef16e5d048099b23b9cfbae00565cb08dca78a49261acf955726"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.07323940843343735,
+          "governed_speed": 2.381997585296631,
+          "actual_speed": 2.367619037628174,
+          "path_rms": 0.17640486359596252,
+          "roll_peak": 0.2780536413192749
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4893863201141357,
+          "actual_speed": 2.4738824367523193,
+          "path_rms": 0.17382210493087769,
+          "roll_peak": 0.27665746212005615
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f-16.npz": "f1b5a9cfc914eeb6db17c91b9fe5f99f479fb19b059c8c8df42fceb49c7d9987",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f-16.npz": "c70889ca64e1de3f81384d982a0dc745e2b28c4d10bea01cb9abd3122c0d2cb5"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.2538212537765503,
+          "governed_speed": 2.2049245834350586,
+          "actual_speed": 2.171304225921631,
+          "path_rms": 0.3436241149902344,
+          "roll_peak": 0.3203463554382324
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4963736534118652,
+          "actual_speed": 2.463252544403076,
+          "path_rms": 0.21001659333705902,
+          "roll_peak": 0.3350423574447632
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f+16.npz": "28a492ae83914dd94b6d26eb92182f273016f4a577209e9ec6e5b86cd0599b45",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f+16.npz": "0ab37ee334099cedcd259d82ef1287272a8e7e18e6c234e3319e814e51a7fae8"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.07636943459510803,
+          "governed_speed": 2.348320722579956,
+          "actual_speed": 2.3298685550689697,
+          "path_rms": 0.25342482328414917,
+          "roll_peak": 0.31330645084381104
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4834954738616943,
+          "actual_speed": 2.466595411300659,
+          "path_rms": 0.21115927398204803,
+          "roll_peak": 0.3118255138397217
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f-24.npz": "b2e72a9139a24f8f7e26cae90e0629eeb5d0110e0706c5e1c9c5ca59fd3afcdb",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f-24.npz": "5d359f9d9fe47f86f8b572b687f2ab410c8207714e193960ecb75181a26c9df4"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.27012956142425537,
+          "governed_speed": 2.190309524536133,
+          "actual_speed": 2.1492199897766113,
+          "path_rms": 0.3696276843547821,
+          "roll_peak": 0.35633909702301025
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.496375322341919,
+          "actual_speed": 2.4566314220428467,
+          "path_rms": 0.28439679741859436,
+          "roll_peak": 0.36729466915130615
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f+24.npz": "5594df3f8404eee3c416de6462e558980ea42df681780faaa3a729d47ef62878",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f+24.npz": "057875dfcbcb737839cc5c0176ef4685ceb1dce3a521b1f6e0a1751ed0ae5479"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.09061779826879501,
+          "governed_speed": 2.345301628112793,
+          "actual_speed": 2.318577527999878,
+          "path_rms": 0.3973662853240967,
+          "roll_peak": 0.3573957681655884
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4791252613067627,
+          "actual_speed": 2.458479404449463,
+          "path_rms": 0.2832762897014618,
+          "roll_peak": 0.3526167869567871
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f-32.npz": "0e0b8dc00f9d08a944f0dccabe08d04b03ae8d4b9f5637a803f35758b3b64c68",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f-32.npz": "a26e63e6c6cffccf5320fdd6bede625fb7fd6c4e7d3ec204aebccbdf378a4afd"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.0,
+        32.0,
+        2.3
+      ],
+      "kind": "gain",
+      "useful": true,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.279892235994339,
+          "governed_speed": 2.1886332035064697,
+          "actual_speed": 2.1441967487335205,
+          "path_rms": 0.3183327317237854,
+          "roll_peak": 0.37280023097991943
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4963767528533936,
+          "actual_speed": 2.4534339904785156,
+          "path_rms": 0.44738808274269104,
+          "roll_peak": 0.38240230083465576
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0_t2.3_f+32.npz": "f164550f334366b6f83aa38c5501397fca40660535d4951c304040d13c2837d2",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0_t2.3_f+32.npz": "f80140b0dd3c15be291c2b15ed887ba10bb60a570163e1f8dc85f7a6d856e1b0"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.04254556819796562,
+          "governed_speed": 2.4132697582244873,
+          "actual_speed": 2.398195505142212,
+          "path_rms": 0.16503746807575226,
+          "roll_peak": 0.28622639179229736
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.46658992767334,
+          "actual_speed": 2.4505481719970703,
+          "path_rms": 0.18527115881443024,
+          "roll_peak": 0.28472745418548584
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f-16.npz": "f87cf3c1e1102990c6d1333f4f912df7b8f0d45cfaac426a1d3f28b35d73e58b",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f-16.npz": "a4d889015d104b1cde8bd8315872275428759581d2c1eb7408d44461fb7059ab"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        16.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.16965125501155853,
+          "governed_speed": 2.3185105323791504,
+          "actual_speed": 2.2878916263580322,
+          "path_rms": 0.17633631825447083,
+          "roll_peak": 0.30313003063201904
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4937784671783447,
+          "actual_speed": 2.464003324508667,
+          "path_rms": 0.342263787984848,
+          "roll_peak": 0.3116048574447632
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f+16.npz": "e063ab2cce1fec2203dad11bcfac8e7a9e853021b1243996564c98ee7f0e8224",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f+16.npz": "74367328c9685c64370206ea3d624eecfcc2a078a13c3be78c054ca50389edf6"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.036819878965616226,
+          "governed_speed": 2.3906939029693604,
+          "actual_speed": 2.3725783824920654,
+          "path_rms": 0.2185140699148178,
+          "roll_peak": 0.3206813335418701
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.460273504257202,
+          "actual_speed": 2.4427406787872314,
+          "path_rms": 0.19317884743213654,
+          "roll_peak": 0.31905925273895264
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f-24.npz": "5e2d7722ed2c18478ac12c960a7f1f9fd899cf0e8e971650dd284553e9a100e5",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f-24.npz": "ff784103bafe4b03ea81f8bb85dbc075f41e6f8c2fe5f1dde4cb90605d59e360"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        24.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.18084707856178284,
+          "governed_speed": 2.305835485458374,
+          "actual_speed": 2.2703301906585693,
+          "path_rms": 0.24271567165851593,
+          "roll_peak": 0.33846449851989746
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.494272232055664,
+          "actual_speed": 2.4590413570404053,
+          "path_rms": 0.42113953828811646,
+          "roll_peak": 0.34536468982696533
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f+24.npz": "a074180a8739f2e703ad2536b5e02d4f03e62f2a0c8a4b9649647b1d90f9a59e",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f+24.npz": "7de1bf8fc0142bddf42a2d4231359151a78cb218a4b0826ff468bb9c972e975a"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        -32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.045868877321481705,
+          "governed_speed": 2.3699867725372314,
+          "actual_speed": 2.345991611480713,
+          "path_rms": 0.3871479034423828,
+          "roll_peak": 0.36228954792022705
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.45768666267395,
+          "actual_speed": 2.4361989498138428,
+          "path_rms": 0.2615524232387543,
+          "roll_peak": 0.3577725887298584
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f-32.npz": "0c3f9e586691650f917435d7d318567f1d40c19ca55016a0277754c8e98c156b",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f-32.npz": "231dde884e7cd51d486f36eb31a066c24af34ddf0cd1b31c95f3a08241387c20"
+      },
+      "full_window": true
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "context": [
+        "right125_R2p2",
+        2.55,
+        0.25,
+        32.0,
+        2.3
+      ],
+      "kind": "same",
+      "useful": false,
+      "metrics": {
+        "control": {
+          "ticks": 400,
+          "target_speed_offset": -0.18137720227241516,
+          "governed_speed": 2.314765214920044,
+          "actual_speed": 2.278848648071289,
+          "path_rms": 0.3902270197868347,
+          "roll_peak": 0.34834396839141846
+        },
+        "speed_off": {
+          "ticks": 400,
+          "target_speed_offset": 0.0,
+          "governed_speed": 2.4947664737701416,
+          "actual_speed": 2.457709312438965,
+          "path_rms": 0.6383498907089233,
+          "roll_peak": 0.35571539402008057
+        }
+      },
+      "sources": {
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/control_right125_R2p2_v2.55_a0.25_t2.3_f+32.npz": "46f636605fc243b643846184cb089c8e58e8d545678951693d08a6cebe474d2c",
+        "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_recovery_opportunity_v1/evaluation/speed_off_right125_R2p2_v2.55_a0.25_t2.3_f+32.npz": "124eb950fa63ede797ea45a3168805061758cd31320588a75fcda80f48baac86"
+      },
+      "full_window": true
+    }
+  ],
+  "summary": {
+    "gain": {
+      "n": 10,
+      "complete_window_n": 8,
+      "control_negative_target": 8,
+      "actual_speed_increases": 8,
+      "mean_delta_actual_speed": 0.14019706845283508
+    },
+    "loss": {
+      "n": 4,
+      "complete_window_n": 4,
+      "control_negative_target": 4,
+      "actual_speed_increases": 4,
+      "mean_delta_actual_speed": 0.12007296085357666
+    },
+    "same": {
+      "n": 66,
+      "complete_window_n": 54,
+      "control_negative_target": 52,
+      "actual_speed_increases": 52,
+      "mean_delta_actual_speed": 0.10154499610265096
+    }
+  },
+  "limitations": "Posthoc TRAIN mechanistic description, not independent validation. Full-window summaries explicitly exclude early terminal traces; all cases retained."
+}
