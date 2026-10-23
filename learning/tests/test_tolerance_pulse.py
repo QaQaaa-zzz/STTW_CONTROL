@@ -66,3 +66,54 @@ def test_partial_substep_pulse_impulse_and_physical_effect():
     b,log=env._step(s,s.raw,True,force_pulse=j.array([.0001,.0049,0.,2.,0.]))
     np.testing.assert_allclose(log['applied_force_impulse'],[0.,.0096,0.],rtol=2e-5,atol=1e-9)
     assert np.linalg.norm(b.data.qvel-a.data.qvel)>1e-6
+
+
+def test_wrapper_forwards_pulse_and_resets_episode_state(monkeypatch):
+    from types import SimpleNamespace
+    from flax import struct
+    from sttw_control.tolerance_pulse import PulseBatch
+    import sttw_control.tolerance_shaping as shaping
+    import sttw_control.path_command_statistics as statistics
+    monkeypatch.setattr(shaping, 'measurement_reserve', lambda *a, **k:dict(plus_N=j.asarray(4.),minus_N=j.asarray(6.),valid=j.bool_(True)))
+    monkeypatch.setattr(statistics, 'reset_statistics', lambda *a: {})
+    monkeypatch.setattr(statistics, 'merge_statistics', lambda a,b: a)
+    @struct.dataclass
+    class Physical:
+        data: object
+        controller: object
+        physical_tick: object
+    @struct.dataclass
+    class State:
+        tick: object
+        physical: object
+    @struct.dataclass
+    class Core:
+        state: object
+        env_id: object
+        episode: object
+        route: object
+    class Base:
+        horizon=20.
+        def __init__(self):
+            self.fault=False
+            self.env=SimpleNamespace(cc=SimpleNamespace(dt=.005),physics=SimpleNamespace(observe=lambda d:(j.zeros(7),j.zeros(3),j.asarray(2.))))
+        def reset(self,eid,episode):return Core(State(j.int32(0),Physical(j.asarray(0.),j.asarray(0.),j.int32(2000))),eid,episode,j.asarray(0.))
+        def observation(self,ep):return (j.array([ep.state.tick]),j.zeros(1),j.bool_(False))
+        def advance_one(self,ep,z,*,auto_reset,force_pulse):
+            assert not auto_reset
+            flags=dict(done=j.bool_(True),engineering_fault=j.bool_(self.fault))
+            # Fake one control interval, deliberately a partial .02s pulse before termination.
+            stats=dict(diagnostics={},applied_force_impulse=.02*force_pulse[2:])
+            return ep,self.observation(ep),j.asarray(0.),flags,self.observation(ep),stats
+    base=Base();batch=PulseBatch(base,guided=True,pulse_seed=4,reserve_config={})
+    ep=batch.reset(j.int32(0),j.int32(2));ep=ep.replace(core=ep.core.replace(state=ep.state.replace(tick=j.int32(160))),pulse_state=ep.pulse_state.replace(enabled=j.bool_(True),onset_tick=j.int32(160)))
+    nxt,_,_,_,_,stats=batch.advance_one(ep,j.zeros(2))
+    assert int(nxt.episode)==3 and int(nxt.state.tick)==0
+    assert not bool(nxt.pulse_state.fired)
+    np.testing.assert_array_equal(nxt.impulse,j.zeros(3))
+    assert bool(stats['pulse']['fired_now'])
+    np.testing.assert_allclose(stats['pulse']['completed_impulse'],.2*stats['pulse']['completed_expected_impulse'],atol=1e-7)
+    assert np.linalg.norm(stats['pulse']['completed_impulse'])>0
+    base.fault=True
+    failed,_,_,_,_,_=batch.advance_one(ep,j.zeros(2))
+    assert int(failed.episode)==2 and bool(failed.pulse_state.fired)
