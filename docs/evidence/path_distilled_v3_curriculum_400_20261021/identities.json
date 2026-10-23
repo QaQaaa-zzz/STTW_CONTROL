@@ -1,0 +1,88 @@
+{
+  "source_manifest": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/manifest.json",
+  "source_training": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training",
+  "selected": {
+    "best_stage_1": {
+      "update": 50,
+      "stage": 0,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        0.9364619851112366,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0050_stage1",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0050.pkl",
+      "qualified": true
+    },
+    "best_stage_2": {
+      "update": 100,
+      "stage": 1,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.287335716187954,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0100_stage2",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0100.pkl",
+      "qualified": false
+    },
+    "best_stage_3": {
+      "update": 325,
+      "stage": 2,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        4.028743132948875,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0325_stage3",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0325.pkl",
+      "qualified": false
+    }
+  },
+  "last": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0400_stage3",
+  "status": {
+    "state": "completed",
+    "stage": "reported",
+    "pid": 1237940,
+    "declared_updates": 400,
+    "completed_updates": 400,
+    "lower_ticks": {
+      "teacher": 256000,
+      "correction": 0,
+      "distill_gate": 24000,
+      "warmup": 524288,
+      "engineering": 512,
+      "training": 104857600,
+      "dev": 1055956
+    },
+    "started_epoch": 1792653001.5164878,
+    "tensorboard_url": "http://localhost:6006",
+    "last_update_epoch": 1792683506.9656382,
+    "completed_intervals": 450,
+    "declared_intervals": 1000,
+    "compile_seconds": 35.91754058399965,
+    "completed_bc_updates": 8000,
+    "declared_bc_updates": 8000,
+    "validation_mse": 3.459640311120893e-06,
+    "validation_group_mse": [
+      4.57557962363353e-06,
+      6.586966264876537e-06,
+      3.3250572073484364e-07,
+      5.503464763023658e-06,
+      2.4238458991021616e-06,
+      1.3354784869079595e-06
+    ],
+    "case": "alpha_0/left90_R2_2.6,alpha_0/left90_R2_2.8,alpha_0/right90_R2_2.6,alpha_0/right90_R2_2.8,alpha_0p25/left90_R2_2.6,alpha_0p25/left90_R2_2.8,alpha_0p25/right90_R2_2.6,alpha_0p25/right90_R2_2.8,alpha_0p5/left90_R2_2.6,alpha_0p5/left90_R2_2.8,alpha_0p5/right90_R2_2.6,alpha_0p5/right90_R2_2.8,alpha_0p75/left90_R2_2.6,alpha_0p75/left90_R2_2.8,alpha_0p75/right90_R2_2.6,alpha_0p75/right90_R2_2.8,alpha_1/left90_R2_2.6,alpha_1/left90_R2_2.8,alpha_1/right90_R2_2.6,alpha_1/right90_R2_2.8",
+    "curriculum_stage": 3,
+    "accepted_updates": 400
+  }
+}

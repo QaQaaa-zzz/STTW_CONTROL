@@ -1,0 +1,90 @@
+{
+  "captured_at_utc": "2026-10-22T15:46:34.489825+00:00",
+  "role": "read-only evidence copies; source campaign unchanged",
+  "files": [
+    {
+      "snapshot": "source_snapshots/manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/manifest.json",
+      "sha256": "127547b47b8f58af7079089c71fda9c8f01bb4225c15f477b135ea35b0f9d1f9",
+      "bytes": 27062,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/declaration.json",
+      "sha256": "92e70603b0a9f914303509c1459367f2e0ac4c8ac5c21fc163b6c70c48e66d43",
+      "bytes": 403,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/status.json",
+      "sha256": "005235c6d83789bdb80c36b4cf5713cca87c9818ffb70b3a17bbfcd1db1919a6",
+      "bytes": 1387,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/distillation_gate.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/distillation_gate.json",
+      "sha256": "d0d11e25a363df0f0c3ab400ba75f209ec52492da42031ac168c7f5005ac6315",
+      "bytes": 10173,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/teacher_receipt.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/teacher_data/receipt.json",
+      "sha256": "58585c6eca9793dcce2716a4c27758f60f236c0b995bfdb39d944ace77c548e8",
+      "bytes": 352,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/training_manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/manifest.json",
+      "sha256": "14e645f95a64b8790beba142d8e17921fab7984cc45f7fdda58b15cd3cdb698f",
+      "bytes": 25244,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/training_status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/training_status.json",
+      "sha256": "034154b460426aff6284f567999ce9e3ef99a2ea7754f33d99226eb45d5e2d63",
+      "bytes": 82,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/last_completed.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/last_completed.json",
+      "sha256": "3ed21a9eafbb7191f2ec61950a1abefd129c538e5ea483125871ac7407eb3dd3",
+      "bytes": 199,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/best_stage_1.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/best_stage_1.json",
+      "sha256": "f08a1bada3cbeb9742498c23843dbbe4208aa7f3a62c34680314064f2f01250a",
+      "bytes": 460,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/best_stage_2.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/best_stage_2.json",
+      "sha256": "439ead81ad7e1ae30c6a76dd97c3276ac1b0bd34572bb5dda0ca72bdc2e0f233",
+      "bytes": 461,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/best_stage_3.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/best_stage_3.json",
+      "sha256": "abf913af6de2a40c1458c84b5170e511a6dab513dbf7ded8b6c563e161e8edaa",
+      "bytes": 461,
+      "identical_copy": true
+    },
+    {
+      "snapshot": "source_snapshots/initial_stage1_metrics.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0000_stage1/metrics.json",
+      "sha256": "7e529e9fcb61cf3dbb7702dce7cdf6b42171fa5bf5092172de989cd12f9de34d",
+      "bytes": 10707,
+      "identical_copy": true
+    }
+  ]
+}

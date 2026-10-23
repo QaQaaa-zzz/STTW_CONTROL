@@ -1,0 +1,15 @@
+{
+  "update": 100,
+  "stage": 1,
+  "score": [
+    0,
+    0,
+    0,
+    0,
+    1.287335716187954,
+    0.0
+  ],
+  "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0100_stage2",
+  "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0100.pkl",
+  "qualified": false
+}

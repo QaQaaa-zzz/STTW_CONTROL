@@ -1,0 +1,1098 @@
+{
+  "scenario_geometry": {
+    "best_stage_1": [
+      {
+        "case": "left90_R2_2.0",
+        "radius_m": 2.1999999344348926,
+        "max_abs_curvature_per_m": 0.4545454680919647
+      },
+      {
+        "case": "left90_R2_2.4",
+        "radius_m": 2.1999999344348926,
+        "max_abs_curvature_per_m": 0.4545454680919647
+      },
+      {
+        "case": "right90_R2_2.0",
+        "radius_m": 2.1999999344348926,
+        "max_abs_curvature_per_m": 0.4545454680919647
+      },
+      {
+        "case": "right90_R2_2.4",
+        "radius_m": 2.1999999344348926,
+        "max_abs_curvature_per_m": 0.4545454680919647
+      },
+      {
+        "case": "straight_2.0",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      },
+      {
+        "case": "straight_2.4",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      }
+    ],
+    "best_stage_2": [
+      {
+        "case": "left90_R2_2.4",
+        "radius_m": 2.0,
+        "max_abs_curvature_per_m": 0.5
+      },
+      {
+        "case": "left90_R2_2.6",
+        "radius_m": 2.0,
+        "max_abs_curvature_per_m": 0.5
+      },
+      {
+        "case": "right90_R2_2.4",
+        "radius_m": 2.0,
+        "max_abs_curvature_per_m": 0.5
+      },
+      {
+        "case": "right90_R2_2.6",
+        "radius_m": 2.0,
+        "max_abs_curvature_per_m": 0.5
+      },
+      {
+        "case": "straight_2.4",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      },
+      {
+        "case": "straight_2.6",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      }
+    ],
+    "best_stage_3": [
+      {
+        "case": "left90_R2_2.6",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "left90_R2_2.8",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "right90_R2_2.6",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "right90_R2_2.8",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "straight_2.6",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      },
+      {
+        "case": "straight_2.8",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      }
+    ],
+    "last400": [
+      {
+        "case": "left90_R2_2.6",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "left90_R2_2.8",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "right90_R2_2.6",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "right90_R2_2.8",
+        "radius_m": 1.7999999141693157,
+        "max_abs_curvature_per_m": 0.5555555820465088
+      },
+      {
+        "case": "straight_2.6",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      },
+      {
+        "case": "straight_2.8",
+        "radius_m": null,
+        "max_abs_curvature_per_m": 0.0
+      }
+    ]
+  },
+  "plot_semantics": {
+    "ALL_XY": "Exact alias of last400 XY_TURN_EXIT; turn/exit zoom, not a full-campaign overview",
+    "solid_rewards": "Each alpha observed trace reconstructed under its own alpha reward",
+    "dashed_rewards": "Same stage-local zero-upper local300 B0 trace independently rescored under each alpha; dashed color is not explicitly paired with solid color",
+    "B0": "Zero upper residual plus frozen local300; not distilled Actor or update0 policy",
+    "case_name_warning": "R2 in case filenames is a fixed label; actual turn radii are stage1 2.2m, stage2 2.0m, stage3 1.8m"
+  },
+  "same_alpha_reward_comparison": {
+    "0.0": {
+      "cases": 6,
+      "mean_return_best325": -8.414973715667594,
+      "mean_return_last400": -11.825031191840871,
+      "last400_return_improved_cases": 1
+    },
+    "0.25": {
+      "cases": 6,
+      "mean_return_best325": -11.590715334925376,
+      "mean_return_last400": -16.120807447286808,
+      "last400_return_improved_cases": 0
+    },
+    "0.5": {
+      "cases": 6,
+      "mean_return_best325": -14.298141492676464,
+      "mean_return_last400": -19.694863028746003,
+      "last400_return_improved_cases": 1
+    },
+    "0.75": {
+      "cases": 6,
+      "mean_return_best325": -12.79872126914554,
+      "mean_return_last400": -18.63482791519569,
+      "last400_return_improved_cases": 1
+    },
+    "1.0": {
+      "cases": 6,
+      "mean_return_best325": -7.055740041779238,
+      "mean_return_last400": -10.261989492660259,
+      "last400_return_improved_cases": 1
+    }
+  },
+  "scope": "saved NPZ CPU audit only; no simulator, optimizer, model loading, model adoption or source/config changes",
+  "reward_reconstruction_source_sha256": "95fe194e7551578c0b481caa5ac5e341f66c2125b312b520eeb81a981aaa39dc",
+  "method": "AST-extracted NumPy-only interval/cost/reward reconstruction from report source; compare every raw-derived step to logged scored_tick_reward; independently reconstruct saved curriculum metrics",
+  "config_reward_version": "path_persistent_preference_v3",
+  "selected_trace_count": 120,
+  "selected_saved_tick_count": 240000,
+  "raw_metrics_and_reward_mismatches": [],
+  "path_equality_checks": 270,
+  "path_equality_failures": [],
+  "max_step_reward_abs_difference": 1.5105605127851973e-07,
+  "max_cumulative_reward_abs_difference": 5.026834493548904e-06,
+  "reward_tolerance": {
+    "rtol": 0.0002,
+    "atol": 2e-06
+  },
+  "stage_summaries": {
+    "best_stage_1": {
+      "update": 50,
+      "stage": 1,
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "goal_failures": 0,
+      "hold_failures": 0,
+      "working_failures": 0,
+      "working_roll_exposure_s": 0.0,
+      "peak_roll_rad": 0.2814081907272339,
+      "hold_failure_causes": {
+        "hold_speed_failed": 0,
+        "hold_path_failed": 0,
+        "hold_heading_failed": 0
+      },
+      "endpoint_primary_failures": []
+    },
+    "best_stage_2": {
+      "update": 100,
+      "stage": 2,
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": false,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "goal_failures": 0,
+      "hold_failures": 0,
+      "working_failures": 0,
+      "working_roll_exposure_s": 0.0,
+      "peak_roll_rad": 0.296319842338562,
+      "hold_failure_causes": {
+        "hold_speed_failed": 0,
+        "hold_path_failed": 0,
+        "hold_heading_failed": 0
+      },
+      "endpoint_primary_failures": [
+        {
+          "alpha": 0.0,
+          "case": "left90_R2_2.6",
+          "path_rmse": 0.10332436859607697,
+          "speed_rmse": 0.07186504453420639
+        }
+      ]
+    },
+    "best_stage_3": {
+      "update": 325,
+      "stage": 3,
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": false,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "goal_failures": 0,
+      "hold_failures": 0,
+      "working_failures": 0,
+      "working_roll_exposure_s": 0.0,
+      "peak_roll_rad": 0.29763877391815186,
+      "hold_failure_causes": {
+        "hold_speed_failed": 0,
+        "hold_path_failed": 0,
+        "hold_heading_failed": 0
+      },
+      "endpoint_primary_failures": [
+        {
+          "alpha": 0.0,
+          "case": "left90_R2_2.6",
+          "path_rmse": 0.1464078277349472,
+          "speed_rmse": 0.3905029594898224
+        },
+        {
+          "alpha": 0.0,
+          "case": "left90_R2_2.8",
+          "path_rmse": 0.1353485882282257,
+          "speed_rmse": 0.39969828724861145
+        },
+        {
+          "alpha": 0.0,
+          "case": "right90_R2_2.6",
+          "path_rmse": 0.11172599345445633,
+          "speed_rmse": 0.4210987091064453
+        },
+        {
+          "alpha": 1.0,
+          "case": "left90_R2_2.6",
+          "path_rmse": 0.14558842778205872,
+          "speed_rmse": 0.0987827330827713
+        },
+        {
+          "alpha": 1.0,
+          "case": "left90_R2_2.8",
+          "path_rmse": 0.18469040095806122,
+          "speed_rmse": 0.1310066133737564
+        }
+      ]
+    },
+    "last400": {
+      "update": 400,
+      "stage": 3,
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "goal_failures": 0,
+      "hold_failures": 24,
+      "working_failures": 7,
+      "working_roll_exposure_s": 2.08,
+      "peak_roll_rad": 0.32436537742614746,
+      "hold_failure_causes": {
+        "hold_speed_failed": 0,
+        "hold_path_failed": 24,
+        "hold_heading_failed": 0
+      },
+      "endpoint_primary_failures": [
+        {
+          "alpha": 0.0,
+          "case": "right90_R2_2.6",
+          "path_rmse": 0.16846629977226257,
+          "speed_rmse": 0.41708409786224365
+        },
+        {
+          "alpha": 0.0,
+          "case": "right90_R2_2.8",
+          "path_rmse": 0.1636699140071869,
+          "speed_rmse": 0.4770154058933258
+        }
+      ]
+    }
+  },
+  "endpoint_pairs": [
+    {
+      "panel": "best_stage_1",
+      "case": "left90_R2_2.0",
+      "alpha0_path_rmse": 0.09225457161664963,
+      "alpha1_path_rmse": 0.07686670869588852,
+      "alpha0_speed_rmse": 0.02168257348239422,
+      "alpha1_speed_rmse": 0.01037962269037962,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": false,
+      "alpha1_mean_speed_minus_alpha0": -0.000141143798828125,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_1",
+      "case": "left90_R2_2.4",
+      "alpha0_path_rmse": 0.09364619851112366,
+      "alpha1_path_rmse": 0.1535491794347763,
+      "alpha0_speed_rmse": 0.03583322837948799,
+      "alpha1_speed_rmse": 0.009395952336490154,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.01850295066833496,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_1",
+      "case": "right90_R2_2.0",
+      "alpha0_path_rmse": 0.06789436936378479,
+      "alpha1_path_rmse": 0.06933053582906723,
+      "alpha0_speed_rmse": 0.022116046398878098,
+      "alpha1_speed_rmse": 0.026380065828561783,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.0065228939056396484,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_1",
+      "case": "right90_R2_2.4",
+      "alpha0_path_rmse": 0.06240003556013107,
+      "alpha1_path_rmse": 0.14455141127109528,
+      "alpha0_speed_rmse": 0.015550618059933186,
+      "alpha1_speed_rmse": 0.013407931663095951,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.012946844100952148,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_1",
+      "case": "straight_2.0",
+      "alpha0_path_rmse": 0.005878318101167679,
+      "alpha1_path_rmse": 0.04099813476204872,
+      "alpha0_speed_rmse": 0.04351109638810158,
+      "alpha1_speed_rmse": 0.03836098685860634,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": -0.004911184310913086,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_1",
+      "case": "straight_2.4",
+      "alpha0_path_rmse": 0.0039016169030219316,
+      "alpha1_path_rmse": 0.06711920350790024,
+      "alpha0_speed_rmse": 0.021913038566708565,
+      "alpha1_speed_rmse": 0.019713101908564568,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": -0.002834796905517578,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "left90_R2_2.4",
+      "alpha0_path_rmse": 0.08824801445007324,
+      "alpha1_path_rmse": 0.2913755178451538,
+      "alpha0_speed_rmse": 0.052614726126194,
+      "alpha1_speed_rmse": 0.03462895750999451,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.062058210372924805,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "left90_R2_2.6",
+      "alpha0_path_rmse": 0.10332436859607697,
+      "alpha1_path_rmse": 0.3623005449771881,
+      "alpha0_speed_rmse": 0.07186504453420639,
+      "alpha1_speed_rmse": 0.033971093595027924,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.07692313194274902,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "right90_R2_2.4",
+      "alpha0_path_rmse": 0.06659029424190521,
+      "alpha1_path_rmse": 0.16817305982112885,
+      "alpha0_speed_rmse": 0.08139809221029282,
+      "alpha1_speed_rmse": 0.01713470183312893,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.06038784980773926,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "right90_R2_2.6",
+      "alpha0_path_rmse": 0.0729009360074997,
+      "alpha1_path_rmse": 0.2169596552848816,
+      "alpha0_speed_rmse": 0.11820352077484131,
+      "alpha1_speed_rmse": 0.02147926390171051,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.08542227745056152,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "straight_2.4",
+      "alpha0_path_rmse": 0.004561362322419882,
+      "alpha1_path_rmse": 0.007131627760827541,
+      "alpha0_speed_rmse": 0.02818206697702408,
+      "alpha1_speed_rmse": 0.025869155302643776,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": -0.002428293228149414,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_2",
+      "case": "straight_2.6",
+      "alpha0_path_rmse": 0.005523297004401684,
+      "alpha1_path_rmse": 0.01783778704702854,
+      "alpha0_speed_rmse": 0.03847086802124977,
+      "alpha1_speed_rmse": 0.041406381875276566,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": -0.0011646747589111328,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "left90_R2_2.6",
+      "alpha0_path_rmse": 0.1464078277349472,
+      "alpha1_path_rmse": 0.14558842778205872,
+      "alpha0_speed_rmse": 0.3905029594898224,
+      "alpha1_speed_rmse": 0.0987827330827713,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": false,
+      "alpha1_mean_speed_minus_alpha0": 0.30539846420288086,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "left90_R2_2.8",
+      "alpha0_path_rmse": 0.1353485882282257,
+      "alpha1_path_rmse": 0.18469040095806122,
+      "alpha0_speed_rmse": 0.39969828724861145,
+      "alpha1_speed_rmse": 0.1310066133737564,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.29032444953918457,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "right90_R2_2.6",
+      "alpha0_path_rmse": 0.11172599345445633,
+      "alpha1_path_rmse": 0.4499058723449707,
+      "alpha0_speed_rmse": 0.4210987091064453,
+      "alpha1_speed_rmse": 0.02671837992966175,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.3695516586303711,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "right90_R2_2.8",
+      "alpha0_path_rmse": 0.08825316280126572,
+      "alpha1_path_rmse": 0.5619176626205444,
+      "alpha0_speed_rmse": 0.5243419408798218,
+      "alpha1_speed_rmse": 0.029442157596349716,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.47348999977111816,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "straight_2.6",
+      "alpha0_path_rmse": 0.04827692359685898,
+      "alpha1_path_rmse": 0.026048831641674042,
+      "alpha0_speed_rmse": 0.033968616276979446,
+      "alpha1_speed_rmse": 0.03914205729961395,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": false,
+      "alpha1_mean_speed_minus_alpha0": 0.004012584686279297,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "best_stage_3",
+      "case": "straight_2.8",
+      "alpha0_path_rmse": 0.050008755177259445,
+      "alpha1_path_rmse": 0.022389337420463562,
+      "alpha0_speed_rmse": 0.07762521505355835,
+      "alpha1_speed_rmse": 0.08234835416078568,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": false,
+      "alpha1_mean_speed_minus_alpha0": 0.00500798225402832,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "left90_R2_2.6",
+      "alpha0_path_rmse": 0.09122754633426666,
+      "alpha1_path_rmse": 0.31286630034446716,
+      "alpha0_speed_rmse": 0.379107266664505,
+      "alpha1_speed_rmse": 0.0348137728869915,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.3399655818939209,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "left90_R2_2.8",
+      "alpha0_path_rmse": 0.05250105261802673,
+      "alpha1_path_rmse": 0.41984251141548157,
+      "alpha0_speed_rmse": 0.3954591453075409,
+      "alpha1_speed_rmse": 0.03924328833818436,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.34298110008239746,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "right90_R2_2.6",
+      "alpha0_path_rmse": 0.16846629977226257,
+      "alpha1_path_rmse": 0.21906010806560516,
+      "alpha0_speed_rmse": 0.41708409786224365,
+      "alpha1_speed_rmse": 0.03185064345598221,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.37530970573425293,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "right90_R2_2.8",
+      "alpha0_path_rmse": 0.1636699140071869,
+      "alpha1_path_rmse": 0.28205379843711853,
+      "alpha0_speed_rmse": 0.4770154058933258,
+      "alpha1_speed_rmse": 0.0374021902680397,
+      "alpha1_speed_rmse_lower": true,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.4253060817718506,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "straight_2.6",
+      "alpha0_path_rmse": 0.08089504390954971,
+      "alpha1_path_rmse": 0.19230255484580994,
+      "alpha0_speed_rmse": 0.035504743456840515,
+      "alpha1_speed_rmse": 0.04145674780011177,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.0043795108795166016,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    },
+    {
+      "panel": "last400",
+      "case": "straight_2.8",
+      "alpha0_path_rmse": 0.08375463634729385,
+      "alpha1_path_rmse": 0.2085597962141037,
+      "alpha0_speed_rmse": 0.07748725265264511,
+      "alpha1_speed_rmse": 0.08325221389532089,
+      "alpha1_speed_rmse_lower": false,
+      "alpha0_path_rmse_lower": true,
+      "alpha1_mean_speed_minus_alpha0": 0.006864786148071289,
+      "scope": "actual occupied turn ticks for curves; whole trace for straight; descriptive paired scenario, no matched trajectory-time weighting; alpha1 is not required to worsen path"
+    }
+  ],
+  "same_stage_best325_last400": [
+    {
+      "alpha": 0.0,
+      "case": "straight_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.04827692359685898,
+      "last400_path_rmse": 0.08089504390954971,
+      "best325_speed_rmse": 0.033968616276979446,
+      "last400_speed_rmse": 0.035504743456840515,
+      "best325_total_reward": -3.250319564003191,
+      "last400_total_reward": -7.626374723268929,
+      "last_minus_best_reward": -4.376055159265738
+    },
+    {
+      "alpha": 0.0,
+      "case": "straight_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.050008755177259445,
+      "last400_path_rmse": 0.08375463634729385,
+      "best325_speed_rmse": 0.07762521505355835,
+      "last400_speed_rmse": 0.07748725265264511,
+      "best325_total_reward": -5.774314970852025,
+      "last400_total_reward": -10.404653064493445,
+      "last_minus_best_reward": -4.63033809364142
+    },
+    {
+      "alpha": 0.0,
+      "case": "left90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.1464078277349472,
+      "last400_path_rmse": 0.09122754633426666,
+      "best325_speed_rmse": 0.3905029594898224,
+      "last400_speed_rmse": 0.379107266664505,
+      "best325_total_reward": -10.49458125129166,
+      "last400_total_reward": -9.737866359644807,
+      "last_minus_best_reward": 0.7567148916468529
+    },
+    {
+      "alpha": 0.0,
+      "case": "left90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.1353485882282257,
+      "last400_path_rmse": 0.05250105261802673,
+      "best325_speed_rmse": 0.39969828724861145,
+      "last400_speed_rmse": 0.3954591453075409,
+      "best325_total_reward": -12.043636585737502,
+      "last400_total_reward": -14.166172246174916,
+      "last_minus_best_reward": -2.122535660437414
+    },
+    {
+      "alpha": 0.0,
+      "case": "right90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.11172599345445633,
+      "last400_path_rmse": 0.16846629977226257,
+      "best325_speed_rmse": 0.4210987091064453,
+      "last400_speed_rmse": 0.41708409786224365,
+      "best325_total_reward": -7.184848191875405,
+      "last400_total_reward": -13.10756978601677,
+      "last_minus_best_reward": -5.922721594141365
+    },
+    {
+      "alpha": 0.0,
+      "case": "right90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": true,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.08825316280126572,
+      "last400_path_rmse": 0.1636699140071869,
+      "best325_speed_rmse": 0.5243419408798218,
+      "last400_speed_rmse": 0.4770154058933258,
+      "best325_total_reward": -11.742141730245788,
+      "last400_total_reward": -15.907550971446359,
+      "last_minus_best_reward": -4.165409241200571
+    },
+    {
+      "alpha": 0.25,
+      "case": "straight_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.039851561188697815,
+      "last400_path_rmse": 0.10251860320568085,
+      "best325_speed_rmse": 0.03557667136192322,
+      "last400_speed_rmse": 0.0377487950026989,
+      "best325_total_reward": -2.2426783005742594,
+      "last400_total_reward": -9.281748368348751,
+      "last_minus_best_reward": -7.0390700677744915
+    },
+    {
+      "alpha": 0.25,
+      "case": "straight_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.043828219175338745,
+      "last400_path_rmse": 0.10840118676424026,
+      "best325_speed_rmse": 0.0786663219332695,
+      "last400_speed_rmse": 0.0789560079574585,
+      "best325_total_reward": -4.841178452312471,
+      "last400_total_reward": -12.436344154509115,
+      "last_minus_best_reward": -7.595165702196644
+    },
+    {
+      "alpha": 0.25,
+      "case": "left90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.12679557502269745,
+      "last400_path_rmse": 0.05618162453174591,
+      "best325_speed_rmse": 0.31740692257881165,
+      "last400_speed_rmse": 0.2816104590892792,
+      "best325_total_reward": -12.903695143631161,
+      "last400_total_reward": -14.826023483959439,
+      "last_minus_best_reward": -1.9223283403282778
+    },
+    {
+      "alpha": 0.25,
+      "case": "left90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.10862534493207932,
+      "last400_path_rmse": 0.07746364176273346,
+      "best325_speed_rmse": 0.33840885758399963,
+      "last400_speed_rmse": 0.3200737237930298,
+      "best325_total_reward": -16.109001251546257,
+      "last400_total_reward": -22.973924221758494,
+      "last_minus_best_reward": -6.864922970212238
+    },
+    {
+      "alpha": 0.25,
+      "case": "right90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.0576489195227623,
+      "last400_path_rmse": 0.1381073296070099,
+      "best325_speed_rmse": 0.3915163278579712,
+      "last400_speed_rmse": 0.33905717730522156,
+      "best325_total_reward": -12.236093729787719,
+      "last400_total_reward": -14.86018585375825,
+      "last_minus_best_reward": -2.624092123970531
+    },
+    {
+      "alpha": 0.25,
+      "case": "right90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.08142230659723282,
+      "last400_path_rmse": 0.1283770203590393,
+      "best325_speed_rmse": 0.4475971460342407,
+      "last400_speed_rmse": 0.43793177604675293,
+      "best325_total_reward": -21.211645131700386,
+      "last400_total_reward": -22.34661860138679,
+      "last_minus_best_reward": -1.134973469686404
+    },
+    {
+      "alpha": 0.5,
+      "case": "straight_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.027352971956133842,
+      "last400_path_rmse": 0.12790893018245697,
+      "best325_speed_rmse": 0.036913756281137466,
+      "last400_speed_rmse": 0.039425674825906754,
+      "best325_total_reward": -1.4992011673399317,
+      "last400_total_reward": -9.617165581219613,
+      "last_minus_best_reward": -8.117964413879681
+    },
+    {
+      "alpha": 0.5,
+      "case": "straight_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.03393632918596268,
+      "last400_path_rmse": 0.13697406649589539,
+      "best325_speed_rmse": 0.07983721047639847,
+      "last400_speed_rmse": 0.08044590055942535,
+      "best325_total_reward": -4.070431311909048,
+      "last400_total_reward": -12.875523686425742,
+      "last_minus_best_reward": -8.805092374516693
+    },
+    {
+      "alpha": 0.5,
+      "case": "left90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.11560254544019699,
+      "last400_path_rmse": 0.11116041243076324,
+      "best325_speed_rmse": 0.23186403512954712,
+      "last400_speed_rmse": 0.18292401731014252,
+      "best325_total_reward": -12.877381553477953,
+      "last400_total_reward": -17.093108677255213,
+      "last_minus_best_reward": -4.21572712377726
+    },
+    {
+      "alpha": 0.5,
+      "case": "left90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.11123865842819214,
+      "last400_path_rmse": 0.18899939954280853,
+      "best325_speed_rmse": 0.27569347620010376,
+      "last400_speed_rmse": 0.2063218653202057,
+      "best325_total_reward": -19.035191508104052,
+      "last400_total_reward": -31.071067520938662,
+      "last_minus_best_reward": -12.03587601283461
+    },
+    {
+      "alpha": 0.5,
+      "case": "right90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.144267275929451,
+      "last400_path_rmse": 0.10551660507917404,
+      "best325_speed_rmse": 0.2583739161491394,
+      "last400_speed_rmse": 0.2783341705799103,
+      "best325_total_reward": -18.23294083451271,
+      "last400_total_reward": -17.37329674691079,
+      "last_minus_best_reward": 0.8596440876019216
+    },
+    {
+      "alpha": 0.5,
+      "case": "right90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.2376643866300583,
+      "last400_path_rmse": 0.11206147819757462,
+      "best325_speed_rmse": 0.2840421199798584,
+      "last400_speed_rmse": 0.31990063190460205,
+      "best325_total_reward": -30.07370258071508,
+      "last400_total_reward": -30.139015959726002,
+      "last_minus_best_reward": -0.06531337901092371
+    },
+    {
+      "alpha": 0.75,
+      "case": "straight_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.01080037746578455,
+      "last400_path_rmse": 0.15787911415100098,
+      "best325_speed_rmse": 0.038055844604969025,
+      "last400_speed_rmse": 0.04055925831198692,
+      "best325_total_reward": -1.1886285529332754,
+      "last400_total_reward": -8.073053377776809,
+      "last_minus_best_reward": -6.884424824843533
+    },
+    {
+      "alpha": 0.75,
+      "case": "straight_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.018949585035443306,
+      "last400_path_rmse": 0.17076213657855988,
+      "best325_speed_rmse": 0.08106538653373718,
+      "last400_speed_rmse": 0.08185137063264847,
+      "best325_total_reward": -3.6373918761909025,
+      "last400_total_reward": -11.220290888676512,
+      "last_minus_best_reward": -7.58289901248561
+    },
+    {
+      "alpha": 0.75,
+      "case": "left90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.1241692304611206,
+      "last400_path_rmse": 0.21717102825641632,
+      "best325_speed_rmse": 0.1594635397195816,
+      "last400_speed_rmse": 0.08522428572177887,
+      "best325_total_reward": -10.487458906119292,
+      "last400_total_reward": -16.232336495889427,
+      "last_minus_best_reward": -5.744877589770136
+    },
+    {
+      "alpha": 0.75,
+      "case": "left90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.1370684802532196,
+      "last400_path_rmse": 0.31668463349342346,
+      "best325_speed_rmse": 0.20288579165935516,
+      "last400_speed_rmse": 0.1006680279970169,
+      "best325_total_reward": -17.629307724906177,
+      "last400_total_reward": -31.018077222447037,
+      "last_minus_best_reward": -13.38876949754086
+    },
+    {
+      "alpha": 0.75,
+      "case": "right90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.31520384550094604,
+      "last400_path_rmse": 0.1503254771232605,
+      "best325_speed_rmse": 0.10137934237718582,
+      "last400_speed_rmse": 0.11951524764299393,
+      "best325_total_reward": -17.277881717344876,
+      "last400_total_reward": -14.363724101279875,
+      "last_minus_best_reward": 2.914157616065001
+    },
+    {
+      "alpha": 0.75,
+      "case": "right90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.414940744638443,
+      "last400_path_rmse": 0.19575290381908417,
+      "best325_speed_rmse": 0.11451714485883713,
+      "last400_speed_rmse": 0.1430041491985321,
+      "best325_total_reward": -26.571658837378724,
+      "last400_total_reward": -30.90148540510448,
+      "last_minus_best_reward": -4.329826567725757
+    },
+    {
+      "alpha": 1.0,
+      "case": "straight_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.026048831641674042,
+      "last400_path_rmse": 0.19230255484580994,
+      "best325_speed_rmse": 0.03914205729961395,
+      "last400_speed_rmse": 0.04145674780011177,
+      "best325_total_reward": -1.2777605054056187,
+      "last400_total_reward": -4.112889737992699,
+      "last_minus_best_reward": -2.8351292325870805
+    },
+    {
+      "alpha": 1.0,
+      "case": "straight_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.022389337420463562,
+      "last400_path_rmse": 0.2085597962141037,
+      "best325_speed_rmse": 0.08234835416078568,
+      "last400_speed_rmse": 0.08325221389532089,
+      "best325_total_reward": -3.656707855957198,
+      "last400_total_reward": -6.838503880750806,
+      "last_minus_best_reward": -3.181796024793608
+    },
+    {
+      "alpha": 1.0,
+      "case": "left90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.14558842778205872,
+      "last400_path_rmse": 0.31286630034446716,
+      "best325_speed_rmse": 0.0987827330827713,
+      "last400_speed_rmse": 0.0348137728869915,
+      "best325_total_reward": -5.837085204569206,
+      "last400_total_reward": -7.451337973223399,
+      "last_minus_best_reward": -1.6142527686541932
+    },
+    {
+      "alpha": 1.0,
+      "case": "left90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.18469040095806122,
+      "last400_path_rmse": 0.41984251141548157,
+      "best325_speed_rmse": 0.1310066133737564,
+      "last400_speed_rmse": 0.03924328833818436,
+      "best325_total_reward": -12.715510864587664,
+      "last400_total_reward": -16.472319542594892,
+      "last_minus_best_reward": -3.7568086780072285
+    },
+    {
+      "alpha": 1.0,
+      "case": "right90_R2_2.6",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": false,
+      "best325_path_rmse": 0.4499058723449707,
+      "last400_path_rmse": 0.21906010806560516,
+      "best325_speed_rmse": 0.02671837992966175,
+      "last400_speed_rmse": 0.03185064345598221,
+      "best325_total_reward": -7.542830211987374,
+      "last400_total_reward": -7.217225634783576,
+      "last_minus_best_reward": 0.3256045772037979
+    },
+    {
+      "alpha": 1.0,
+      "case": "right90_R2_2.8",
+      "identical_stage_scenario": true,
+      "best325_hold": true,
+      "last400_hold": false,
+      "best325_working": false,
+      "last400_working": true,
+      "best325_path_rmse": 0.5619176626205444,
+      "last400_path_rmse": 0.28205379843711853,
+      "best325_speed_rmse": 0.029442157596349716,
+      "last400_speed_rmse": 0.0374021902680397,
+      "best325_total_reward": -11.304545608168368,
+      "last400_total_reward": -19.47966018661618,
+      "last_minus_best_reward": -8.175114578447811
+    }
+  ],
+  "caveats": [
+    "Reward return across alpha is not a common physical-quality ranking because weights differ.",
+    "Reward reconstruction reuses frozen report equations; agreement checks saved reward consistency, not an independent physics validation.",
+    "Best325 versus last400 comparisons use identical stage3 paths and speeds only; cross-stage scores cannot establish PPO improvement.",
+    "DEV is reused for selection and curriculum advancement, not a held-out test.",
+    "No requirement that alpha1 worsen path; report speed direction and path retention separately."
+  ]
+}

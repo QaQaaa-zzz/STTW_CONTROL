@@ -1,0 +1,71 @@
+{
+  "candidates": [
+    {
+      "panel": "update_0300_stage3",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0300_stage3",
+      "relaxed_pass": 30,
+      "n": 30,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "expected_turn_tradeoff": 2,
+      "turn_cases": 4,
+      "maximum_tail_path_m": 0.14237308502197266,
+      "maximum_peak_roll_rad": 0.3060108423233032,
+      "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/single_alpha_final_review_v1/update_0300_stage3/REPORT.md"
+    },
+    {
+      "panel": "update_0325_stage3",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0325_stage3",
+      "relaxed_pass": 30,
+      "n": 30,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "expected_turn_tradeoff": 3,
+      "turn_cases": 4,
+      "maximum_tail_path_m": 0.06423759460449219,
+      "maximum_peak_roll_rad": 0.29763877391815186,
+      "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/single_alpha_final_review_v1/update_0325_stage3/REPORT.md"
+    },
+    {
+      "panel": "update_0350_stage3",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0350_stage3",
+      "relaxed_pass": 30,
+      "n": 30,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "expected_turn_tradeoff": 3,
+      "turn_cases": 4,
+      "maximum_tail_path_m": 0.1437520980834961,
+      "maximum_peak_roll_rad": 0.31186461448669434,
+      "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/single_alpha_final_review_v1/update_0350_stage3/REPORT.md"
+    },
+    {
+      "panel": "update_0375_stage3",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0375_stage3",
+      "relaxed_pass": 30,
+      "n": 30,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "expected_turn_tradeoff": 4,
+      "turn_cases": 4,
+      "maximum_tail_path_m": 0.18520641326904297,
+      "maximum_peak_roll_rad": 0.3229571580886841,
+      "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/single_alpha_final_review_v1/update_0375_stage3/REPORT.md"
+    },
+    {
+      "panel": "update_0400_stage3",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0400_stage3",
+      "relaxed_pass": 24,
+      "n": 30,
+      "physical_failures": 0,
+      "domain_failures": 0,
+      "expected_turn_tradeoff": 4,
+      "turn_cases": 4,
+      "maximum_tail_path_m": 0.24008464813232422,
+      "maximum_peak_roll_rad": 0.32436537742614746,
+      "report": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/single_alpha_final_review_v1/update_0400_stage3/REPORT.md"
+    }
+  ],
+  "interpretation": "posthoc practical criteria; not automatic adoption",
+  "new_physics": 0
+}

@@ -1,0 +1,16 @@
+{
+  "status": "selected_development_candidate",
+  "update": 325,
+  "source_run": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021",
+  "architecture": "alpha_modulated_v1",
+  "identities_sha256": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0325.pkl": "fa4a05274190b606d2b814a78b75c598ebe91e48cf9795fc31678e5e916528de",
+    "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0325.pt": "03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5"
+  },
+  "evidence": "existing 30-case constant-alpha stage3 development panel; no new simulation",
+  "original_common_qualified": true,
+  "original_endpoint_primary_qualified": false,
+  "deployment_changed": false,
+  "dynamic_alpha_validated": false,
+  "decision": "Use update325 for subsequent single-alpha development; no additional training now. Retain update375/400 comparisons. Intermediate path error need not be strictly monotone."
+}

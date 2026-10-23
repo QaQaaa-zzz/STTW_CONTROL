@@ -1,0 +1,13 @@
+{
+  "policy_steps": 64000,
+  "lower_ticks_max": 256000,
+  "observation_dim": 351,
+  "supervision": "mapped physical target before filter",
+  "split": "fixed env IDs across teacher and student collection; no frame-level split",
+  "compile_seconds": 35.91754058399965,
+  "behavior": "teacher",
+  "endpoint_counts": {
+    "0": 32000,
+    "1": 32000
+  }
+}

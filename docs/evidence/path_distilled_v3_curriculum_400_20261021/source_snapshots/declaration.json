@@ -1,0 +1,18 @@
+{
+  "ppo_updates": 400,
+  "ppo_policy_steps": 26214400,
+  "lower_tick_caps": {
+    "teacher": 256000,
+    "correction": 128000,
+    "distill_gate": 48000,
+    "warmup": 524288,
+    "engineering": 512,
+    "training": 104857600,
+    "dev": 1068000
+  },
+  "total_lower_tick_cap": 106882400,
+  "bc_updates_max": 12000,
+  "teacher_actor_dim": 351,
+  "lower_actor_dim": 210,
+  "automatic_extension": false
+}

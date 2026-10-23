@@ -1,0 +1,319 @@
+{
+  "outcome": "complete",
+  "scope": "report analysis and CPU evidence checks completed; controller publication pending",
+  "checked_at_utc": "2026-10-22T15:52:37.138202+00:00",
+  "head_unchanged": "d7f79e4247fd0bfa7da1c1c34f637605139b58ee",
+  "all_changes_inside_report": true,
+  "changed_file_count": 46,
+  "source_snapshots_unchanged": [
+    "source_snapshots/manifest.json",
+    "source_snapshots/declaration.json",
+    "source_snapshots/status.json",
+    "source_snapshots/distillation_gate.json",
+    "source_snapshots/teacher_receipt.json",
+    "source_snapshots/training_manifest.json",
+    "source_snapshots/training_status.json",
+    "source_snapshots/last_completed.json",
+    "source_snapshots/best_stage_1.json",
+    "source_snapshots/best_stage_2.json",
+    "source_snapshots/best_stage_3.json",
+    "source_snapshots/initial_stage1_metrics.json"
+  ],
+  "live_teacher_lower_identity_hashes_verified": 7,
+  "saved_training_checkpoint_hashes_verified": 34,
+  "training": {
+    "sampling_slots": 400,
+    "accepted_updates": 400,
+    "accepted_epochs": 1490,
+    "target_kl_stops": 50,
+    "less_than_four_epochs": 44,
+    "stage_slots": {
+      "1": 50,
+      "2": 125,
+      "3": 225
+    },
+    "stage4_slots": 0
+  },
+  "analysis_han_characters": 730,
+  "analysis_visible_nonwhitespace_characters": 1145,
+  "first_image": "ALL_XY.png",
+  "all_xy_is_last400_turn_exit_crop": true,
+  "preserved_controller_panel_files": [
+    "best_stage_1/INDEX.md",
+    "best_stage_1/XY.png",
+    "best_stage_1/metrics.json",
+    "best_stage_1/XY_TURN_EXIT.png",
+    "best_stage_1/CUMULATIVE_REWARDS.png",
+    "best_stage_1/STEP_REWARDS.png",
+    "best_stage_2/INDEX.md",
+    "best_stage_2/XY.png",
+    "best_stage_2/metrics.json",
+    "best_stage_2/XY_TURN_EXIT.png",
+    "best_stage_2/CUMULATIVE_REWARDS.png",
+    "best_stage_2/STEP_REWARDS.png",
+    "best_stage_3/INDEX.md",
+    "best_stage_3/XY.png",
+    "best_stage_3/metrics.json",
+    "best_stage_3/XY_TURN_EXIT.png",
+    "best_stage_3/CUMULATIVE_REWARDS.png",
+    "best_stage_3/STEP_REWARDS.png",
+    "last400/INDEX.md",
+    "last400/XY.png",
+    "last400/metrics.json",
+    "last400/XY_TURN_EXIT.png",
+    "last400/CUMULATIVE_REWARDS.png",
+    "last400/STEP_REWARDS.png"
+  ],
+  "images_visually_inspected": 17,
+  "local_markdown_links_checked": 45,
+  "links": [
+    {
+      "document": "ANALYSIS.md",
+      "target": "ALL_XY.png"
+    },
+    {
+      "document": "ANALYSIS.md",
+      "target": "AUDIT_CAMPAIGN.json"
+    },
+    {
+      "document": "ANALYSIS.md",
+      "target": "source_snapshots/manifest.json"
+    },
+    {
+      "document": "ANALYSIS.md",
+      "target": "TRAJECTORY_METRICS.csv"
+    },
+    {
+      "document": "ANALYSIS.md",
+      "target": "TRAJECTORY_CHECKS.json"
+    },
+    {
+      "document": "ANALYSIS.md",
+      "target": "INDEX.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "ALL_XY.png"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "ANALYSIS.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "best_stage_1/INDEX.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "best_stage_2/INDEX.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "best_stage_3/INDEX.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "last400/INDEX.md"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "AUDIT_CAMPAIGN.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "AUDIT_CAMPAIGN.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "TRAJECTORY_CHECKS.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "TRAJECTORY_METRICS.csv"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "audit_saved_trajectories.py"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "SOURCE_SNAPSHOTS.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "source_snapshots/manifest.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "source_snapshots/declaration.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "source_snapshots/status.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "source_snapshots/distillation_gate.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "source_snapshots/initial_stage1_metrics.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "identities.json"
+    },
+    {
+      "document": "INDEX.md",
+      "target": "VERIFICATION.json"
+    },
+    {
+      "document": "best_stage_2/INDEX.md",
+      "target": "XY_TURN_EXIT.png"
+    },
+    {
+      "document": "best_stage_2/INDEX.md",
+      "target": "XY.png"
+    },
+    {
+      "document": "best_stage_2/INDEX.md",
+      "target": "STEP_REWARDS.png"
+    },
+    {
+      "document": "best_stage_2/INDEX.md",
+      "target": "CUMULATIVE_REWARDS.png"
+    },
+    {
+      "document": "best_stage_2/INDEX.md",
+      "target": "metrics.json"
+    },
+    {
+      "document": "best_stage_1/INDEX.md",
+      "target": "XY_TURN_EXIT.png"
+    },
+    {
+      "document": "best_stage_1/INDEX.md",
+      "target": "XY.png"
+    },
+    {
+      "document": "best_stage_1/INDEX.md",
+      "target": "STEP_REWARDS.png"
+    },
+    {
+      "document": "best_stage_1/INDEX.md",
+      "target": "CUMULATIVE_REWARDS.png"
+    },
+    {
+      "document": "best_stage_1/INDEX.md",
+      "target": "metrics.json"
+    },
+    {
+      "document": "last400/INDEX.md",
+      "target": "XY_TURN_EXIT.png"
+    },
+    {
+      "document": "last400/INDEX.md",
+      "target": "XY.png"
+    },
+    {
+      "document": "last400/INDEX.md",
+      "target": "STEP_REWARDS.png"
+    },
+    {
+      "document": "last400/INDEX.md",
+      "target": "CUMULATIVE_REWARDS.png"
+    },
+    {
+      "document": "last400/INDEX.md",
+      "target": "metrics.json"
+    },
+    {
+      "document": "best_stage_3/INDEX.md",
+      "target": "XY_TURN_EXIT.png"
+    },
+    {
+      "document": "best_stage_3/INDEX.md",
+      "target": "XY.png"
+    },
+    {
+      "document": "best_stage_3/INDEX.md",
+      "target": "STEP_REWARDS.png"
+    },
+    {
+      "document": "best_stage_3/INDEX.md",
+      "target": "CUMULATIVE_REWARDS.png"
+    },
+    {
+      "document": "best_stage_3/INDEX.md",
+      "target": "metrics.json"
+    }
+  ],
+  "cpu_recheck": {
+    "selected_trace_count": 120,
+    "selected_saved_tick_count": 240000,
+    "path_equality_checks": 270,
+    "raw_metrics_and_reward_mismatches": [],
+    "path_equality_failures": [],
+    "max_step_reward_abs_difference": 1.5105605127851973e-07,
+    "max_cumulative_reward_abs_difference": 5.026834493548904e-06
+  },
+  "cumulative_error_definition": "maximum absolute cumsum discrepancy across all saved ticks and selected traces; not only final return",
+  "independent_review": "promotion-rule distinction and reset-probability wording corrected; no remaining substantive finding",
+  "not_performed": [
+    "training",
+    "simulation",
+    "model adoption",
+    "source/config changes",
+    "commits",
+    "pushes",
+    "controller publication",
+    "Bark transmission"
+  ],
+  "report_files_sha256": {
+    "ALL_XY.png": "39aacf77a7cd84b4609ef37550c0c4afcccb2e4fc190acbe12bf8e7832476693",
+    "ANALYSIS.md": "a39673186949dd364f2c06435024c251fed82af153dc2ab0606a417feacf926e",
+    "AUDIT_CAMPAIGN.json": "13ca63057dec6b5133e5dbfc640f3e76f63d04dfbf064b6d7a497705aeac2141",
+    "INDEX.md": "0eaf5d85c6f3d12f647faf080ca3dac4e18e7e917b86f2ff7a706d67e9eecf85",
+    "SOURCE_SNAPSHOTS.json": "44aded0bb3fe6dc11d2aa0c89f12ba131222026ac9e521db7e027fcc7e325bf0",
+    "TRAJECTORY_CHECKS.json": "87ba621e490d1c2794cd6c66c547587a84e19c69ad8e37614edd4095aad0b439",
+    "TRAJECTORY_METRICS.csv": "2af769eace3a2f7825b91e51c3766f74f7b2126502cd49af3af21f2e2d4b8d85",
+    "audit_saved_trajectories.py": "0b57ea188df13c4b370ba209e6aa811a0eb14ef8bd95b13cd4fac6a91ef30710",
+    "best_stage_1/CUMULATIVE_REWARDS.png": "01b036428311e0d451b0fe5a0ca8a33d5122f7ff565ec00d1fda23bdbe4db29d",
+    "best_stage_1/INDEX.md": "cadef07ad91d7a0ccc1a2035f677ee58cff6490669e6712ebea861fb1bb121db",
+    "best_stage_1/STEP_REWARDS.png": "84b36fcbf754b725ae022813d4e1ff136c9c9a7cac0c457dd20a7b7d7aa307ca",
+    "best_stage_1/XY.png": "fccf19264ed3c74e8ea79b0334364e9435f09199e8f7140f7707dd755de022b5",
+    "best_stage_1/XY_TURN_EXIT.png": "a04919074360beb414c763c6456e283261269e82d196e7df84bd533924358468",
+    "best_stage_1/metrics.json": "6e5f95c85cf6e7aefef8c11fd3a27624a15d033326572f2410cb174613cedc66",
+    "best_stage_2/CUMULATIVE_REWARDS.png": "b97c6b8881bdb77ed3cec8a8c4f307d1fdd03941ace337f7a66f59d8b7559cf3",
+    "best_stage_2/INDEX.md": "54ed934f8e398138db421ac6844fe77453867f2a0bef41b6ad0a46398c9c9efc",
+    "best_stage_2/STEP_REWARDS.png": "e3aa530aeae11961491ba623f9fa93079c9029e33c8a58d7c2c0bc96b379f06f",
+    "best_stage_2/XY.png": "9dda4e97d2daa4a67530a775917daa05a3e901c24c335cbe182cb8c37d5aedad",
+    "best_stage_2/XY_TURN_EXIT.png": "e79f31d1a6030a5c38cc67a505e25e6a1f586d586170d186c94a59737e54fff2",
+    "best_stage_2/metrics.json": "5d8d39a3040712a3adada8c218c4dfd1b23dcaa5a812b800c98d682ed375c399",
+    "best_stage_3/CUMULATIVE_REWARDS.png": "5510f009bfa7847adb00ce65329cc2a8d1cf00a2691ef7b526ac56c525ba6d1e",
+    "best_stage_3/INDEX.md": "cb2dc0e0a04f4a2756c94ebbcd4d34749b41aef06a89d50299ed0099fb75c41e",
+    "best_stage_3/STEP_REWARDS.png": "4f292d20dcf2f6037e95047f101efb69907374d081de60abc2343a02ef829867",
+    "best_stage_3/XY.png": "0a7c1f1b260781722623c1f36d489831faa2a0961b9bf77d8c5a8fbcbfee89c1",
+    "best_stage_3/XY_TURN_EXIT.png": "88f73cc67a6f24d75c3058572c591fb21b7f7f3a9d0338c3fc3a437bde97e5ac",
+    "best_stage_3/metrics.json": "d5fb97aa34563c2e5325157f939864dd47b604532242dc9f93f678471a6470ff",
+    "identities.json": "d6db9b6c5e9334ef5bde2953d99c1ad0febfdeaa80d8705bd781ecd40e20e7e5",
+    "last400/CUMULATIVE_REWARDS.png": "c015691affbf7e3d0e48cb4b3301dc84ee7987ce7079475a651c562fcfad0195",
+    "last400/INDEX.md": "4c898dae21297e801179266b29a76b9a8de65e2dbecac12419f75353101abc72",
+    "last400/STEP_REWARDS.png": "6958073bb35109d8c941abe5828e249b3683929b45544c46194dc6dc60d66ad8",
+    "last400/XY.png": "3b90b6c8b5dfcb3aa9dea14119cea97661b295be044a4f6062b2ccc3c6651cf0",
+    "last400/XY_TURN_EXIT.png": "39aacf77a7cd84b4609ef37550c0c4afcccb2e4fc190acbe12bf8e7832476693",
+    "last400/metrics.json": "c49fdb1857f11462e005109b6561437b6103249654096a345c660a9b695826d9",
+    "source_snapshots/best_stage_1.json": "f08a1bada3cbeb9742498c23843dbbe4208aa7f3a62c34680314064f2f01250a",
+    "source_snapshots/best_stage_2.json": "439ead81ad7e1ae30c6a76dd97c3276ac1b0bd34572bb5dda0ca72bdc2e0f233",
+    "source_snapshots/best_stage_3.json": "abf913af6de2a40c1458c84b5170e511a6dab513dbf7ded8b6c563e161e8edaa",
+    "source_snapshots/declaration.json": "92e70603b0a9f914303509c1459367f2e0ac4c8ac5c21fc163b6c70c48e66d43",
+    "source_snapshots/distillation_gate.json": "d0d11e25a363df0f0c3ab400ba75f209ec52492da42031ac168c7f5005ac6315",
+    "source_snapshots/initial_stage1_metrics.json": "7e529e9fcb61cf3dbb7702dce7cdf6b42171fa5bf5092172de989cd12f9de34d",
+    "source_snapshots/last_completed.json": "3ed21a9eafbb7191f2ec61950a1abefd129c538e5ea483125871ac7407eb3dd3",
+    "source_snapshots/manifest.json": "127547b47b8f58af7079089c71fda9c8f01bb4225c15f477b135ea35b0f9d1f9",
+    "source_snapshots/status.json": "005235c6d83789bdb80c36b4cf5713cca87c9818ffb70b3a17bbfcd1db1919a6",
+    "source_snapshots/teacher_receipt.json": "58585c6eca9793dcce2716a4c27758f60f236c0b995bfdb39d944ace77c548e8",
+    "source_snapshots/training_manifest.json": "14e645f95a64b8790beba142d8e17921fab7984cc45f7fdda58b15cd3cdb698f",
+    "source_snapshots/training_status.json": "034154b460426aff6284f567999ce9e3ef99a2ea7754f33d99226eb45d5e2d63"
+  }
+}

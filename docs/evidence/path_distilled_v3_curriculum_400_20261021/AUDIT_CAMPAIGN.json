@@ -1,0 +1,1170 @@
+{
+  "schema": "posttraining_campaign_audit_v1",
+  "created_utc": "2026-10-22T15:44:06.883390+00:00",
+  "source_campaign": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021",
+  "execution": "read-only artifacts plus CPU numpy; no simulator or optimizer launch",
+  "state": {
+    "execution": "completed",
+    "stage": "reported",
+    "completed_sampling_slots": 400,
+    "accepted_updates": 400,
+    "task_qualification": "stage1 selected best qualified; stage2 selected best and all stage3 panels not endpoint-qualified; last400 not common-qualified",
+    "publication": "controller validation and publication pending"
+  },
+  "source_checks": {
+    "root_manifest_sha256": "127547b47b8f58af7079089c71fda9c8f01bb4225c15f477b135ea35b0f9d1f9",
+    "training_manifest_sha256": "14e645f95a64b8790beba142d8e17921fab7984cc45f7fdda58b15cd3cdb698f",
+    "metrics_sha256": "078e5addb22cc5aed297cfb0aa6583d2d56a0add6cbaf219b22f3f406fab6bfa",
+    "config_identical_between_manifests": true,
+    "frozen_source_identical_between_manifests": true,
+    "root_code_revision": "45b793b63fcf1f07f1f27967ba3b6df7b41e2455",
+    "training_code_revision": "d7f79e4247fd0bfa7da1c1c34f637605139b58ee",
+    "revision_difference": "Only PROJECT.md and docs/VALIDATION.md; four documentation lines added, git diff --stat inspected"
+  },
+  "budget": {
+    "declaration": {
+      "ppo_updates": 400,
+      "ppo_policy_steps": 26214400,
+      "lower_tick_caps": {
+        "teacher": 256000,
+        "correction": 128000,
+        "distill_gate": 48000,
+        "warmup": 524288,
+        "engineering": 512,
+        "training": 104857600,
+        "dev": 1068000
+      },
+      "total_lower_tick_cap": 106882400,
+      "bc_updates_max": 12000,
+      "teacher_actor_dim": 351,
+      "lower_actor_dim": 210,
+      "automatic_extension": false
+    },
+    "actual_lower_ticks": {
+      "teacher": 256000,
+      "correction": 0,
+      "distill_gate": 24000,
+      "warmup": 524288,
+      "engineering": 512,
+      "training": 104857600,
+      "dev": 1055956
+    },
+    "charged_total": 106718356,
+    "remaining_declared_cap": 164044
+  },
+  "optimizer": {
+    "rows": 400,
+    "slots_contiguous": true,
+    "accepted_counter_increases_each_slot": true,
+    "accepted_epochs": 1490,
+    "accepted_minibatches": 5960,
+    "accepted_epoch_distribution": {
+      "1": 29,
+      "4": 356,
+      "2": 8,
+      "3": 7
+    },
+    "hard_kl_stops": 0,
+    "nonfinite_stops": 0,
+    "target_kl_early_stops": 50
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "slots": 50,
+      "first_slot": 1,
+      "last_slot": 50,
+      "active_lower_samples": 13107200,
+      "physical_failures": 0,
+      "domain_failures": 0
+    },
+    {
+      "stage": 2,
+      "slots": 125,
+      "first_slot": 51,
+      "last_slot": 175,
+      "active_lower_samples": 32768000,
+      "physical_failures": 0,
+      "domain_failures": 38
+    },
+    {
+      "stage": 3,
+      "slots": 225,
+      "first_slot": 176,
+      "last_slot": 400,
+      "active_lower_samples": 58982400,
+      "physical_failures": 0,
+      "domain_failures": 346
+    },
+    {
+      "stage": 4,
+      "slots": 0,
+      "first_slot": null,
+      "last_slot": null,
+      "active_lower_samples": 0,
+      "physical_failures": 0,
+      "domain_failures": 0
+    }
+  ],
+  "curriculum": {
+    "config": {
+      "updates": 400,
+      "previous_fraction": 0.25,
+      "route_seed": 912003,
+      "minimum_stage_updates": 50,
+      "consecutive_passes": 2,
+      "stages": [
+        {
+          "speed_m_s": [
+            2.0,
+            2.4
+          ],
+          "radius_m": [
+            2.2,
+            2.6
+          ]
+        },
+        {
+          "speed_m_s": [
+            2.4,
+            2.6
+          ],
+          "radius_m": [
+            2.0,
+            2.2
+          ]
+        },
+        {
+          "speed_m_s": [
+            2.6,
+            2.8
+          ],
+          "radius_m": [
+            1.8,
+            2.0
+          ]
+        },
+        {
+          "speed_m_s": [
+            2.8,
+            3.2
+          ],
+          "radius_m": [
+            1.6,
+            1.8
+          ]
+        }
+      ],
+      "selection_order": [
+        "physical_failures",
+        "domain_failures",
+        "goal_hold_failures",
+        "working_failures",
+        "worst_preference_normalized_error",
+        "roll_exposure_seconds"
+      ],
+      "evaluation_every": 25
+    },
+    "promotion_updates": [
+      50,
+      175
+    ],
+    "promotion_rule": "At least50 stage slots and2 consecutive passing DEV panels. Stage1 requires common qualification only; later stages require common AND endpoint primary qualification. u0 does not count toward the advancement streak.",
+    "common_rule": "All30 five-alpha fixed DEV cases: no physical/domain failure, cross goal, complete10s and last1s abs speed error<=.1m/s, abs path error<=.1m, abs heading<=.05rad, peak roll<=.302rad. No .4m corridor gate.",
+    "endpoint_primary_rule": "For each turning case alpha0 geometric-turn path RMSE<=.1m; alpha1 geometric-turn speed RMSE<=.05m/s. Interior-alpha direction is descriptive.",
+    "selection_rule": [
+      "physical_failures",
+      "domain_failures",
+      "goal_hold_failures",
+      "working_failures",
+      "worst_preference_normalized_error",
+      "roll_exposure_seconds"
+    ],
+    "important": "Stage2 selected bestu100 fails endpoint gate; lateru150,u175 are qualified and advance. Selection and advancement are separate. Stage4 never sampled."
+  },
+  "selected_best": {
+    "1": {
+      "update": 50,
+      "stage": 0,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        0.9364619851112366,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0050_stage1",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0050.pkl",
+      "qualified": true
+    },
+    "2": {
+      "update": 100,
+      "stage": 1,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.287335716187954,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0100_stage2",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0100.pkl",
+      "qualified": false
+    },
+    "3": {
+      "update": 325,
+      "stage": 2,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        4.028743132948875,
+        0.0
+      ],
+      "validation": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0325_stage3",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0325.pkl",
+      "qualified": false
+    }
+  },
+  "validation_panels": [
+    {
+      "panel": "update_0000_stage1",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0000_stage1/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.7188986390829086,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0025_stage1",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0025_stage1/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.1166560184210539,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0050_stage1",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0050_stage1/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        0.9364619851112366,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0075_stage2",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0075_stage2/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        4,
+        1.1965307593345642,
+        0.895
+      ]
+    },
+    {
+      "panel": "update_0100_stage2",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0100_stage2/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.287335716187954,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0125_stage2",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0125_stage2/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        1,
+        1.34334035217762,
+        0.15
+      ]
+    },
+    {
+      "panel": "update_0150_stage2",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0150_stage2/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        1.9390048831701279,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0175_stage2",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0175_stage2/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": true,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        2.0930998027324677,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0200_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0200_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        15,
+        9,
+        2.905193269252777,
+        3.6550000000000002
+      ]
+    },
+    {
+      "panel": "update_0225_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0225_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        27,
+        5,
+        4.432488679885864,
+        2.47
+      ]
+    },
+    {
+      "panel": "update_0250_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0250_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        0,
+        8,
+        3.381391316652298,
+        1.745
+      ]
+    },
+    {
+      "panel": "update_0275_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0275_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        0,
+        5,
+        4.085603803396225,
+        1.455
+      ]
+    },
+    {
+      "panel": "update_0300_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0300_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        4,
+        1,
+        6.51990532875061,
+        0.14
+      ]
+    },
+    {
+      "panel": "update_0325_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0325_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": true,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        0,
+        0,
+        4.028743132948875,
+        0.0
+      ]
+    },
+    {
+      "panel": "update_0350_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0350_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        28,
+        3,
+        4.82424883171916,
+        0.52
+      ]
+    },
+    {
+      "panel": "update_0375_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0375_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        24,
+        4,
+        3.8389290124177933,
+        1.29
+      ]
+    },
+    {
+      "panel": "update_0400_stage3",
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/validation/update_0400_stage3/metrics.json",
+      "cases": 30,
+      "common_qualified": false,
+      "endpoint_primary_qualified": false,
+      "score": [
+        0,
+        0,
+        24,
+        7,
+        3.7593137100338936,
+        2.08
+      ]
+    }
+  ],
+  "identities": [
+    {
+      "role": "teacher_alpha0",
+      "kind": "actor",
+      "source_update": 200,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha0/task_best_generations/f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc/best_actor.pkl",
+      "sha256": "dfe97cec1f4cbaa3aa1492f65d7e00607366424ce20e8c24c52483236f350920",
+      "manifest_expected_sha256": "dfe97cec1f4cbaa3aa1492f65d7e00607366424ce20e8c24c52483236f350920",
+      "match": true
+    },
+    {
+      "role": "teacher_alpha0",
+      "kind": "checkpoint",
+      "source_update": 200,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha0/task_best_generations/f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc/best_model.pt",
+      "sha256": "f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+      "manifest_expected_sha256": "f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+      "match": true
+    },
+    {
+      "role": "teacher_alpha1",
+      "kind": "actor",
+      "source_update": 200,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_actor.pkl",
+      "sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+      "manifest_expected_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+      "match": true
+    },
+    {
+      "role": "teacher_alpha1",
+      "kind": "checkpoint",
+      "source_update": 200,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-feedback-v1/runs/path_coverage_v2_resume_20261011/alpha1/task_best_generations/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3/best_model.pt",
+      "sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+      "manifest_expected_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+      "match": true
+    },
+    {
+      "role": "frozen_local300",
+      "kind": "actor",
+      "source_update": 300,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+      "sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "manifest_expected_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+      "match": true
+    },
+    {
+      "role": "frozen_local300",
+      "kind": "checkpoint",
+      "source_update": 300,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_model.pt",
+      "sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+      "manifest_expected_sha256": "8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577",
+      "match": true
+    },
+    {
+      "role": "lower_original_protocol_best_distinct_from_local300",
+      "kind": "checkpoint",
+      "source_update": 400,
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5/best_model.pt",
+      "sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5",
+      "manifest_expected_sha256": "452e3a6f93047f91e16d332c2e67084b6018cdb4e133530e0bd9046147f68ca5",
+      "match": true
+    }
+  ],
+  "all_saved_training_checkpoints": [
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0000.pkl",
+      "sha256": "008688660700a9efadbe943254341ba4e7d151a7ffd1575286b9b3a253b398f9",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0025.pkl",
+      "sha256": "71bc6a9ca74f3a14674d3aca071a8956b9a652d396a529c76486bf41e9e35fe2",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0050.pkl",
+      "sha256": "1beea8a7e46b4e32fd3c381c40a694cc89236d8dc3b313d39b551e04956f6c0b",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0075.pkl",
+      "sha256": "2bd4473ab2254bf233a232fa615123687d65364dee0b5561740f5ec151765a2d",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0100.pkl",
+      "sha256": "af16d22d6dbed640b51fc6b1de52f094dd2d520bf1adbb9cd40d2dcff291374d",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0125.pkl",
+      "sha256": "322ddbeb57cc02eed0f6805045fdf2a91fbde30021339b8a19465fbf1261049f",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0150.pkl",
+      "sha256": "f0ea85d444d968f2d3cec734e38d16aa8b465ae1c4347bb6086375d1f81bc265",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0175.pkl",
+      "sha256": "71cc522e5e91c4677771b5e739b382b6eb217fb70be61a4d4229170756c2218e",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0200.pkl",
+      "sha256": "a5a4d0009d06528d9f281ce2633776a7eec2044a483d4ef3552ade51a56fec32",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0225.pkl",
+      "sha256": "2b6469c9f37ac3f120afbc7e7df561310802d089c838469a85fc548f394f5da9",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0250.pkl",
+      "sha256": "1069c0d0c4fc2164edd5fc2b405bed285c062657f82213236bde640abb702b3c",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0275.pkl",
+      "sha256": "93d3df899e966ce0f984bbdaebe4206fe2271b837ee18b224005f165559cf580",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0300.pkl",
+      "sha256": "f7e6e9883df453451010dcea7791375149de2480847f432bc7c9c43293a87df6",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0325.pkl",
+      "sha256": "fa4a05274190b606d2b814a78b75c598ebe91e48cf9795fc31678e5e916528de",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0350.pkl",
+      "sha256": "351e4f6943ca020d260bb1ea1bd6e3c9a54532c4f69cbe1f26d89ffda3ede37a",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0375.pkl",
+      "sha256": "4129cd5a1cfa7cb868d547c8c5e36cb9aa467104e0faae13a82e7fb47c97b787",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/actor_0400.pkl",
+      "sha256": "c533743343d0d879d3fca5d2ff08ea68a855bfe24e66eb1f83f284f7400343c5",
+      "bytes": 282028
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0000.pt",
+      "sha256": "7012cc95bc258278ae9ac905ae4d282e88f6f468a977379bd34d6a8b5801599c",
+      "bytes": 1164218
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0025.pt",
+      "sha256": "d1322e2780487b9f69b859b2ff4cfeae353e5d3a205cb3d8bbdce492389c4b3c",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0050.pt",
+      "sha256": "69236f9827d7250a1d715a9a6c31c9c986824d782bdda1dbbe7979475735e768",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0075.pt",
+      "sha256": "fc159a0891f162d6478f6963411742ff7cf0d19a4d801249e2488963f8a1f765",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0100.pt",
+      "sha256": "b73146f98f929fd59fd423172959e3634862cc99be41c029d4425bd8e1354326",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0125.pt",
+      "sha256": "6535c0ecebb25dc418c685add2fc02fe58a62055071991ce7ed8eb658f1f4e54",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0150.pt",
+      "sha256": "4313dbf8de92026c080c5fc8292f6d2a400a03c151af0610c7b1d4a31dfb41d6",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0175.pt",
+      "sha256": "6f8a45f68ed6c8c36b70c17ac43f32e328485e4edc0c4fbc0b34b67685c11218",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0200.pt",
+      "sha256": "b3df4d68714882c3be6eb4c2ff424ff2f67e25051d908503f59492cfe286a7a3",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0225.pt",
+      "sha256": "744b1b875dc5fc08fedb9228f97f681bbfca4bae5e6815ff67a0f5fddb5f3d36",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0250.pt",
+      "sha256": "d229a8d7b6d6e4c44c0ae16e53dd2cd6a49a7dbc7b2247f7a9ab857490d8487a",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0275.pt",
+      "sha256": "68c8cd1810b0c9d1598b005349712cc9116ffd82afd2349b91f1a1411282da40",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0300.pt",
+      "sha256": "f1aa9069328d9cd04bcb4f3fa415b32f1ac2b7ce0ca82644a543573ab05cf796",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0325.pt",
+      "sha256": "03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0350.pt",
+      "sha256": "5ecce3c875a6a220b190faee25a8736ceb66f61667ae023b018e7a51cabd105d",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0375.pt",
+      "sha256": "6f2f0da86e6461c9312bf4fd1035e8e625076b46a3d18f24996981886025bd1f",
+      "bytes": 1737763
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0400.pt",
+      "sha256": "40a8f8bd9e3e7864207d6fc131c4f18d024a6313caecb6438cfe1a3825484564",
+      "bytes": 1737763
+    }
+  ],
+  "distillation": {
+    "receipt": {
+      "policy_steps": 64000,
+      "lower_ticks_max": 256000,
+      "observation_dim": 351,
+      "supervision": "mapped physical target before filter",
+      "split": "fixed env IDs across teacher and student collection; no frame-level split",
+      "compile_seconds": 35.91754058399965,
+      "behavior": "teacher",
+      "endpoint_counts": {
+        "0": 32000,
+        "1": 32000
+      }
+    },
+    "dataset_cpu_check": {
+      "frames": 64000,
+      "endpoint_frames": {
+        "0": 32000,
+        "1": 32000
+      },
+      "train_frames": 50000,
+      "validation_frames": 14000,
+      "train_env_ids": 50,
+      "validation_env_ids": 14,
+      "overlap_env_ids": [],
+      "finite_observation_and_targets": true,
+      "phase_endpoint_train_validation": [
+        {
+          "alpha": 0,
+          "phase": 0,
+          "train": 4818,
+          "validation": 1011
+        },
+        {
+          "alpha": 0,
+          "phase": 1,
+          "train": 6850,
+          "validation": 1356
+        },
+        {
+          "alpha": 0,
+          "phase": 2,
+          "train": 14332,
+          "validation": 3633
+        },
+        {
+          "alpha": 1,
+          "phase": 0,
+          "train": 4337,
+          "validation": 1515
+        },
+        {
+          "alpha": 1,
+          "phase": 1,
+          "train": 6550,
+          "validation": 2283
+        },
+        {
+          "alpha": 1,
+          "phase": 2,
+          "train": 13113,
+          "validation": 4202
+        }
+      ]
+    },
+    "bc_updates": 8000,
+    "correction_ticks": 0,
+    "gate_passed": true,
+    "gate_case_count": 12,
+    "gate_rule": "no failure; goal+hold; peak <= max(.302,teacher+.01); own endpoint primary <=1.25*teacher+.02",
+    "student_actor_sha256": "008688660700a9efadbe943254341ba4e7d151a7ffd1575286b9b3a253b398f9",
+    "ppo_u0_actor_sha256": "008688660700a9efadbe943254341ba4e7d151a7ffd1575286b9b3a253b398f9",
+    "student_and_ppo_u0_byte_identical": true,
+    "initialization": "Compatible teacher-alpha0 weights initialize shared conditioned student; BC fits both old endpoint teachers. Fresh PPO optimizer and Critic,2 value-only warmup batches,discarded engineering8x16.",
+    "teacher_reward": "Frozen legacy reward: reward_version absent, roll weights40/120; teachers were not retrained under v3."
+  },
+  "reward": {
+    "raw_config": {
+      "scale": 0.1,
+      "huber": "x^2 if abs(x)<=1 else 2abs(x)-1",
+      "task": "geometric_path_not_issued_steer_tracking",
+      "chi": "clip((abs(delta_ff(path_curvature)/q(v_user))-.18)/.12,0,1)",
+      "speed_weight": "10-9*chi*(1-alpha)",
+      "path_weight": "10-9*chi*alpha",
+      "speed_scale_m_s": 0.1,
+      "cross_track_scale_m": 0.1,
+      "path_heading_scale_rad": 0.1,
+      "path_heading_factor": 0.5,
+      "primary_weight": 20.0,
+      "primary_speed_band_m_s": 0.05,
+      "primary_path_band_m": 0.1,
+      "primary_speed_scale_m_s": 0.1,
+      "primary_path_scale_m": 0.1,
+      "primary_gate": "chi; do not gate on network output",
+      "roll_weight": 80.0,
+      "roll_start_rad": 0.26,
+      "roll_scale_rad": 0.04,
+      "working_roll_weight": 240.0,
+      "working_roll_start_rad": 0.3,
+      "working_roll_scale_rad": 0.02,
+      "roll_rate_weight": 1.0,
+      "roll_rate_start_rad_s": 0.8,
+      "roll_rate_scale_rad_s": 0.8,
+      "overspeed_weight": 2.0,
+      "overspeed_band_m_s": 0.05,
+      "overspeed_scale_m_s": 0.1,
+      "low_speed_weight": 4.0,
+      "low_speed_start_m_s": 1.5,
+      "low_speed_scale_m_s": 0.2,
+      "offset_magnitude_weight": 0.02,
+      "offset_magnitude_scales": [
+        1.0,
+        0.2
+      ],
+      "offset_rate_weight": 0.03,
+      "offset_rate_scales": [
+        1.0,
+        0.4
+      ],
+      "offset_rate_dt_s": 0.02,
+      "old_time_heading_debt_cost": false,
+      "old_raw_steer_primary_cost": false,
+      "old_delta_ref_preservation_cost": false,
+      "old_time_recovery_gate": false,
+      "old_analytic_heading_recovery": false,
+      "longitudinal_time_position_cost": false,
+      "global_cost_clip": false,
+      "component_caps": {
+        "speed": 200.0,
+        "path": 200.0,
+        "primary": 400.0,
+        "roll": 1800.0,
+        "working_roll": 6000.0,
+        "roll_rate": 40.0,
+        "overspeed": 160.0,
+        "low_speed": 160.0,
+        "offset_magnitude": 0.2,
+        "offset_rate": 20.0
+      },
+      "failure_extra": 5.0,
+      "failure_cost_rate_bound": 8980.2,
+      "reward_version": "path_persistent_preference_v3",
+      "path_secondary_ratio": 0.1
+    },
+    "v3_formula": "C_path(alpha)=(1-0.9*alpha)*min(10*(Huber(ey/0.1)+0.5*Huber(eh/0.1)),200). alpha1 coefficient1 globally and effective cap20; no chi gate on this persistent path term. Primary weight20 remains chi gated.",
+    "alpha1_global_path_coefficient": 1.0,
+    "alpha1_effective_path_cap": 20.0,
+    "common_roll_weights": [
+      80,
+      240
+    ],
+    "common_roll_caps": [
+      1800,
+      6000
+    ],
+    "goal": "alpha0 path priority; alpha1 speed priority with allowable deviation. Simultaneous speed and path improvement is desirable; worse alpha1 path is not required."
+  },
+  "data_roles": {
+    "teacher_data": "Offline BC train/validation by disjoint fixed environment IDs, not frame split; no old trajectories replayed as on-policy PPO",
+    "training": "TRAIN random course; reused DEV, no holdout",
+    "fixed_validation": "Repeated five-alpha30-case DEV panels reused for stage advancement and checkpoint selection; no final holdout or multi-seed causal ablation.",
+    "baseline": "Each entered stage has zero-upper local300 B0, same fixed stage scenarios. B0 is not the distilled policy.",
+    "stage3_distilled_counterfactual": "MISSING: no saved initial distilled actor evaluation on stage3 scenarios; do not attribute stage3-vs-stage1 differences to PPO."
+  },
+  "matched_comparisons": [
+    {
+      "before": "update_0000_stage1",
+      "after": "update_0050_stage1",
+      "config_key_identical": true,
+      "path_npz_array_pairs": 30,
+      "path_arrays_identical": true,
+      "metric_aggregation": "unweighted descriptive mean of four per-case geometric-turn RMSE values; not pooled RMSE or independent-seed evidence",
+      "per_alpha": [
+        {
+          "alpha": 0,
+          "case_names": [
+            "left90_R2_2.0",
+            "left90_R2_2.4",
+            "right90_R2_2.0",
+            "right90_R2_2.4"
+          ],
+          "mean_turn_path_rmse_m_before": 0.05995982699096203,
+          "mean_turn_path_rmse_m_after": 0.07904879376292229,
+          "mean_turn_speed_rmse_m_s_before": 0.13690036535263062,
+          "mean_turn_speed_rmse_m_s_after": 0.023795616580173373
+        },
+        {
+          "alpha": 0.25,
+          "case_names": [
+            "left90_R2_2.0",
+            "left90_R2_2.4",
+            "right90_R2_2.0",
+            "right90_R2_2.4"
+          ],
+          "mean_turn_path_rmse_m_before": 0.05293537117540836,
+          "mean_turn_path_rmse_m_after": 0.05314983893185854,
+          "mean_turn_speed_rmse_m_s_before": 0.09470206731930375,
+          "mean_turn_speed_rmse_m_s_after": 0.02144853794015944
+        },
+        {
+          "alpha": 0.5,
+          "case_names": [
+            "left90_R2_2.0",
+            "left90_R2_2.4",
+            "right90_R2_2.0",
+            "right90_R2_2.4"
+          ],
+          "mean_turn_path_rmse_m_before": 0.08668979350477457,
+          "mean_turn_path_rmse_m_after": 0.05157707957550883,
+          "mean_turn_speed_rmse_m_s_before": 0.05662431055679917,
+          "mean_turn_speed_rmse_m_s_after": 0.01858286513015628
+        },
+        {
+          "alpha": 0.75,
+          "case_names": [
+            "left90_R2_2.0",
+            "left90_R2_2.4",
+            "right90_R2_2.0",
+            "right90_R2_2.4"
+          ],
+          "mean_turn_path_rmse_m_before": 0.14054536074399948,
+          "mean_turn_path_rmse_m_after": 0.0759885748848319,
+          "mean_turn_speed_rmse_m_s_before": 0.029565404634922743,
+          "mean_turn_speed_rmse_m_s_after": 0.016204655170440674
+        },
+        {
+          "alpha": 1,
+          "case_names": [
+            "left90_R2_2.0",
+            "left90_R2_2.4",
+            "right90_R2_2.0",
+            "right90_R2_2.4"
+          ],
+          "mean_turn_path_rmse_m_before": 0.20442590862512589,
+          "mean_turn_path_rmse_m_after": 0.11107445880770683,
+          "mean_turn_speed_rmse_m_s_before": 0.019940431229770184,
+          "mean_turn_speed_rmse_m_s_after": 0.014890893129631877
+        }
+      ]
+    },
+    {
+      "before": "update_0100_stage2",
+      "after": "update_0175_stage2",
+      "config_key_identical": true,
+      "path_npz_array_pairs": 30,
+      "path_arrays_identical": true,
+      "metric_aggregation": "unweighted descriptive mean of four per-case geometric-turn RMSE values; not pooled RMSE or independent-seed evidence",
+      "per_alpha": [
+        {
+          "alpha": 0,
+          "case_names": [
+            "left90_R2_2.4",
+            "left90_R2_2.6",
+            "right90_R2_2.4",
+            "right90_R2_2.6"
+          ],
+          "mean_turn_path_rmse_m_before": 0.08276590332388878,
+          "mean_turn_path_rmse_m_after": 0.0864376500248909,
+          "mean_turn_speed_rmse_m_s_before": 0.08102034591138363,
+          "mean_turn_speed_rmse_m_s_after": 0.1548748854547739
+        },
+        {
+          "alpha": 0.25,
+          "case_names": [
+            "left90_R2_2.4",
+            "left90_R2_2.6",
+            "right90_R2_2.4",
+            "right90_R2_2.6"
+          ],
+          "mean_turn_path_rmse_m_before": 0.10552463494241238,
+          "mean_turn_path_rmse_m_after": 0.07826785556972027,
+          "mean_turn_speed_rmse_m_s_before": 0.05273829586803913,
+          "mean_turn_speed_rmse_m_s_after": 0.11297579854726791
+        },
+        {
+          "alpha": 0.5,
+          "case_names": [
+            "left90_R2_2.4",
+            "left90_R2_2.6",
+            "right90_R2_2.4",
+            "right90_R2_2.6"
+          ],
+          "mean_turn_path_rmse_m_before": 0.1449036132544279,
+          "mean_turn_path_rmse_m_after": 0.12931749783456326,
+          "mean_turn_speed_rmse_m_s_before": 0.03487134352326393,
+          "mean_turn_speed_rmse_m_s_after": 0.06698544882237911
+        },
+        {
+          "alpha": 0.75,
+          "case_names": [
+            "left90_R2_2.4",
+            "left90_R2_2.6",
+            "right90_R2_2.4",
+            "right90_R2_2.6"
+          ],
+          "mean_turn_path_rmse_m_before": 0.19766781106591225,
+          "mean_turn_path_rmse_m_after": 0.20139912143349648,
+          "mean_turn_speed_rmse_m_s_before": 0.028361905831843615,
+          "mean_turn_speed_rmse_m_s_after": 0.029284975957125425
+        },
+        {
+          "alpha": 1,
+          "case_names": [
+            "left90_R2_2.4",
+            "left90_R2_2.6",
+            "right90_R2_2.4",
+            "right90_R2_2.6"
+          ],
+          "mean_turn_path_rmse_m_before": 0.2597021944820881,
+          "mean_turn_path_rmse_m_after": 0.2713075615465641,
+          "mean_turn_speed_rmse_m_s_before": 0.026803504209965467,
+          "mean_turn_speed_rmse_m_s_after": 0.02181102940812707
+        }
+      ]
+    },
+    {
+      "before": "update_0325_stage3",
+      "after": "update_0400_stage3",
+      "config_key_identical": true,
+      "path_npz_array_pairs": 30,
+      "path_arrays_identical": true,
+      "metric_aggregation": "unweighted descriptive mean of four per-case geometric-turn RMSE values; not pooled RMSE or independent-seed evidence",
+      "per_alpha": [
+        {
+          "alpha": 0,
+          "case_names": [
+            "left90_R2_2.6",
+            "left90_R2_2.8",
+            "right90_R2_2.6",
+            "right90_R2_2.8"
+          ],
+          "mean_turn_path_rmse_m_before": 0.12043389305472374,
+          "mean_turn_path_rmse_m_after": 0.11896620318293571,
+          "mean_turn_speed_rmse_m_s_before": 0.43391047418117523,
+          "mean_turn_speed_rmse_m_s_after": 0.41716647893190384
+        },
+        {
+          "alpha": 0.25,
+          "case_names": [
+            "left90_R2_2.6",
+            "left90_R2_2.8",
+            "right90_R2_2.6",
+            "right90_R2_2.8"
+          ],
+          "mean_turn_path_rmse_m_before": 0.09362303651869297,
+          "mean_turn_path_rmse_m_after": 0.10003240406513214,
+          "mean_turn_speed_rmse_m_s_before": 0.3737323135137558,
+          "mean_turn_speed_rmse_m_s_after": 0.34466828405857086
+        },
+        {
+          "alpha": 0.5,
+          "case_names": [
+            "left90_R2_2.6",
+            "left90_R2_2.8",
+            "right90_R2_2.6",
+            "right90_R2_2.8"
+          ],
+          "mean_turn_path_rmse_m_before": 0.1521932166069746,
+          "mean_turn_path_rmse_m_after": 0.1294344738125801,
+          "mean_turn_speed_rmse_m_s_before": 0.26249338686466217,
+          "mean_turn_speed_rmse_m_s_after": 0.24687017127871513
+        },
+        {
+          "alpha": 0.75,
+          "case_names": [
+            "left90_R2_2.6",
+            "left90_R2_2.8",
+            "right90_R2_2.6",
+            "right90_R2_2.8"
+          ],
+          "mean_turn_path_rmse_m_before": 0.2478455752134323,
+          "mean_turn_path_rmse_m_after": 0.2199835106730461,
+          "mean_turn_speed_rmse_m_s_before": 0.14456145465373993,
+          "mean_turn_speed_rmse_m_s_after": 0.11210292764008045
+        },
+        {
+          "alpha": 1,
+          "case_names": [
+            "left90_R2_2.6",
+            "left90_R2_2.8",
+            "right90_R2_2.6",
+            "right90_R2_2.8"
+          ],
+          "mean_turn_path_rmse_m_before": 0.33552559092640877,
+          "mean_turn_path_rmse_m_after": 0.3084556795656681,
+          "mean_turn_speed_rmse_m_s_before": 0.0714874709956348,
+          "mean_turn_speed_rmse_m_s_after": 0.03582747373729944
+        }
+      ]
+    }
+  ],
+  "caveats": [
+    "Multi-factor practical experiment: endpoint distillation, persistent path reward, stronger common roll penalties and curriculum changed together.",
+    "No deployment safety proof, model adoption or publication inferred.",
+    "Stage1 matchedu0→u50 shows alpha1 mean turn speed .0199404→.0148909 and path .204426→.111074, while alpha0 path .0599598→.0790488 worsens within .1 gate; do not claim uniform improvement.",
+    "Raw TRAIN reward changes across stages are confounded by changed scenario distribution; per-step sampling reward belongs to sampling_model_update=u-1."
+  ],
+  "frozen_contract": {
+    "actor_dim": 210,
+    "history_frames": 10,
+    "lower_has_alpha_input": false,
+    "lower_role": "diagnostic_only",
+    "adoption": "not_adopted",
+    "timing": {
+      "physics_dt_s_expected": 0.0002,
+      "physics_substeps_per_control_expected": 25,
+      "lower_dt_s": 0.005,
+      "upper_dt_s": 0.02,
+      "path_follower_dt_s": 0.02,
+      "do_not_silently_change_simulation_timing": true
+    },
+    "controller": {
+      "fixed_roll_reference": null,
+      "dt": 0.005,
+      "wo": 40.0,
+      "wc": 5.0,
+      "disturbance_filter": 8.0,
+      "minimum_speed": 0.5,
+      "max_steer_rate": 4.0,
+      "mass": 5.4,
+      "cg_forward": 0.164,
+      "cg_height": 0.2,
+      "wheelbase": 0.408,
+      "trail": 0.024,
+      "caster": 0.4363323129985824,
+      "gravity": 9.8
+    },
+    "actuator": {
+      "composition": "additive",
+      "project_base": false,
+      "dt": 0.005,
+      "steer_limit": 0.8,
+      "steer_rate_limit": 3.0,
+      "rear_rate_limit": 60.0,
+      "steer_residual_scale": 1.5,
+      "rear_residual_scale": 10.0,
+      "strength": 1.0,
+      "base_output_scale": 1.0,
+      "steer_acceleration": null,
+      "rear_acceleration": null,
+      "delay_steps": 0
+    },
+    "note": "Contracts inspected from identical root/training manifests; no physical execution or asset audit rerun."
+  }
+}

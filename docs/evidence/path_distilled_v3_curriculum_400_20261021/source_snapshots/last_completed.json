@@ -1,0 +1,5 @@
+{
+  "update": 400,
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/checkpoints/update_0400.pt",
+  "stage": 2
+}

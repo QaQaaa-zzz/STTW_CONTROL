@@ -1,0 +1,342 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "alpha": 0,
+      "case": "straight_2.0",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.018751516938209534,
+      "teacher": 0.018489282578229904,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.018751516938209534,
+            "speed_rmse_m_s": 0.047636522575446635,
+            "peak_roll_rad": 0.004171848297119141
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.018751516938209534,
+            "speed_rmse_m_s": 0.047636522575446635,
+            "peak_roll_rad": 0.004171848297119141
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 0,
+      "case": "straight_2.6",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.009730973280966282,
+      "teacher": 0.010368520393967628,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.009730973280966282,
+            "speed_rmse_m_s": 0.035849615336808104,
+            "peak_roll_rad": 0.007431745529174805
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.009730973280966282,
+            "speed_rmse_m_s": 0.035849615336808104,
+            "peak_roll_rad": 0.007431745529174805
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 0,
+      "case": "left90_R2_2.0",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.05175337567925453,
+      "teacher": 0.05131566524505615,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.030725406482815742,
+            "speed_rmse_m_s": 0.08186029193982486,
+            "peak_roll_rad": 0.16386795043945312
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.05175337567925453,
+            "speed_rmse_m_s": 0.15622128866042395,
+            "peak_roll_rad": 0.16386795043945312
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 0,
+      "case": "left90_R2_2.6",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.059857405722141266,
+      "teacher": 0.0601748451590538,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.03407251089811325,
+            "speed_rmse_m_s": 0.11605552078022316,
+            "peak_roll_rad": 0.25982797145843506
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.059857405722141266,
+            "speed_rmse_m_s": 0.2849696195702925,
+            "peak_roll_rad": 0.25982797145843506
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 0,
+      "case": "right90_R2_2.0",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.07147380709648132,
+      "teacher": 0.07351082563400269,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.03469998016953468,
+            "speed_rmse_m_s": 0.058428186477039776,
+            "peak_roll_rad": 0.18345355987548828
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.07147380709648132,
+            "speed_rmse_m_s": 0.0847906393811583,
+            "peak_roll_rad": 0.18345355987548828
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 0,
+      "case": "right90_R2_2.6",
+      "passed": true,
+      "primary": "path_rmse_m",
+      "student": 0.07766425609588623,
+      "teacher": 0.07753491401672363,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.06195361912250519,
+            "speed_rmse_m_s": 0.08863122764960615,
+            "peak_roll_rad": 0.2842693328857422
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.07766425609588623,
+            "speed_rmse_m_s": 0.21303066656363262,
+            "peak_roll_rad": 0.2842693328857422
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "straight_2.0",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.0455066574259256,
+      "teacher": 0.04594507940309638,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.00811792816966772,
+            "speed_rmse_m_s": 0.0455066574259256,
+            "peak_roll_rad": 0.008090376853942871
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.00811792816966772,
+            "speed_rmse_m_s": 0.0455066574259256,
+            "peak_roll_rad": 0.008090376853942871
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "straight_2.6",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.042311037430077615,
+      "teacher": 0.042373030214370735,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.012375838123261929,
+            "speed_rmse_m_s": 0.042311037430077615,
+            "peak_roll_rad": 0.011065959930419922
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.012375838123261929,
+            "speed_rmse_m_s": 0.042311037430077615,
+            "peak_roll_rad": 0.011065959930419922
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "left90_R2_2.0",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.015646591113171633,
+      "teacher": 0.01444551314735147,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.1791018545627594,
+            "speed_rmse_m_s": 0.04455168431587459,
+            "peak_roll_rad": 0.1647416353225708
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.23596957325935364,
+            "speed_rmse_m_s": 0.015646591113171633,
+            "peak_roll_rad": 0.1647416353225708
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "left90_R2_2.6",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.02735895796365671,
+      "teacher": 0.027268447622586116,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.42237889766693115,
+            "speed_rmse_m_s": 0.043759538838337386,
+            "peak_roll_rad": 0.2438141107559204
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.4542609453201294,
+            "speed_rmse_m_s": 0.02735895796365671,
+            "peak_roll_rad": 0.2438141107559204
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "right90_R2_2.0",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.017142786800744325,
+      "teacher": 0.01571420106503618,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.11805178225040436,
+            "speed_rmse_m_s": 0.04478405370360897,
+            "peak_roll_rad": 0.1983029842376709
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.18668603897094727,
+            "speed_rmse_m_s": 0.017142786800744325,
+            "peak_roll_rad": 0.1983029842376709
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    },
+    {
+      "alpha": 1,
+      "case": "right90_R2_2.6",
+      "passed": true,
+      "primary": "speed_rmse_m_s",
+      "student": 0.022980070604048344,
+      "teacher": 0.02255945403748395,
+      "metrics": {
+        "windows": {
+          "whole": {
+            "path_rmse_m": 0.22056731581687927,
+            "speed_rmse_m_s": 0.04168972151267939,
+            "peak_roll_rad": 0.29849350452423096
+          },
+          "spatial_turn": {
+            "path_rmse_m": 0.2967113256454468,
+            "speed_rmse_m_s": 0.022980070604048344,
+            "peak_roll_rad": 0.29849350452423096
+          }
+        },
+        "physical_failure": false,
+        "tracking_domain_failure": false,
+        "goal_crossed": true,
+        "final_hold": true,
+        "source_observed_seconds": 10.0,
+        "comparison_seconds": 10.0
+      }
+    }
+  ],
+  "threshold": "no failure; goal+hold; peak <= max(.302,teacher+.01); own endpoint primary <=1.25*teacher+.02"
+}

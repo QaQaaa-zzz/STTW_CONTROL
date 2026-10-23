@@ -1,0 +1,11 @@
+{
+  "code_base_commit": "d7f79e4247fd0bfa7da1c1c34f637605139b58ee",
+  "tests": "test_path_persistent_reward.py + test_path_distillation.py",
+  "result": "9 passed in 1.43s",
+  "candidate_checkpoint_hashes": "verified against local files",
+  "relative_markdown_links": "all resolve",
+  "visual_check": "best_stage_3/XY_TURN_EXIT.png inspected; straight panels compressed; use numeric metrics",
+  "raw_models": "server-side only; paths and hashes in candidate_selection.json",
+  "historical_publication_failure": "post_analysis/status.json retains prior git diff --cached --check failure; this publication uses a new commit on source branch",
+  "unrelated_edits": "existing docs/METHODS_AND_RESULTS.md changes excluded"
+}
