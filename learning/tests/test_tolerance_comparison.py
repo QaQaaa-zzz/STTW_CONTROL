@@ -38,3 +38,30 @@ def test_paired_counts_reject_duplicate_and_unknown_outcomes():
   paired_counts([row,row,dict(row,policy='b')],'a','b',0)
  with pytest.raises(ValueError,match='binary'):
   paired_counts([row,dict(row,policy='b',success=None)],'a','b',0)
+
+
+def test_pulse_resolver_fixed_final_and_shared_parent(tmp_path):
+ import json,pickle
+ import numpy as np
+ import torch
+ from sttw_control.tolerance_comparison import resolve_comparison_actors
+ from sttw_control.preference_best import digest
+ weights={};exported={}
+ for i,layer in enumerate((0,2,4,6)):
+  weights[f'actor.{layer}.weight']=torch.ones(2,2)*i;weights[f'actor.{layer}.bias']=torch.zeros(2)
+  exported[f'Dense_{i}']={'kernel':np.ones((2,2),np.float32)*i,'bias':np.zeros(2,np.float32)}
+ jobs=[]
+ for alpha in (0,1):
+  parent=tmp_path/f'parent{alpha}';parent.mkdir();cp=parent/'update_0050.pt';identity={'arm':'baseline','alpha':alpha}
+  torch.save({'identity':identity,'update':50,'policy':weights},cp)
+  with (parent/'actor_0050.pkl').open('wb') as f:pickle.dump({'params':exported},f)
+  rec={'checkpoint':str(cp),'checkpoint_sha256':digest(cp),'identity':identity}
+  for arm in ('uniform','guided'):
+   name=f'{arm}_alpha{alpha}';jobs.append(name);job=tmp_path/name;check=job/'checkpoints';check.mkdir(parents=True);ident={'arm':arm,'alpha':alpha}
+   (job/'status.json').write_text(json.dumps({'phase':'completed','completed_updates':25}));(job/'plan.json').write_text(json.dumps({'arm':arm,'alpha':alpha,'parent_record':rec}));(job/'manifest.json').write_text(json.dumps({'identity':ident}));final=check/'update_0025.pt';torch.save({'identity':ident,'update':25,'policy':weights},final)
+   with (check/'actor_0025.pkl').open('wb') as f:pickle.dump({'params':exported},f)
+   (job/'last_completed.json').write_text(json.dumps({'update':25,'checkpoint':str(final),'checkpoint_sha256':digest(final)}))
+ (tmp_path/'campaign.json').write_text(json.dumps({'experiment':'actual_pulse_curriculum_v1','jobs':jobs}))
+ assert len(resolve_comparison_actors(tmp_path))==6
+ path=tmp_path/'guided_alpha0/plan.json';plan=json.loads(path.read_text());plan['parent_record']['checkpoint_sha256']='changed';path.write_text(json.dumps(plan))
+ with pytest.raises(ValueError,match='different parents'):resolve_comparison_actors(tmp_path)

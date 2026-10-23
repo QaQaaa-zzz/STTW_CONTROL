@@ -41,14 +41,14 @@ def report(root):
    if len(pulse):ax.plot(xy[pulse,0],xy[pulse,1],color=color,lw=3,alpha=.55)
   ax.set(xlabel='World x (m)',ylabel='World y (m)',title=f'{route}, {speed:g} m/s, pulse {force:+g} N at {onset:g} s')
   ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2);ax.legend(fontsize=7,loc='best')
-  fig.text(.02,.01,'Parent u200; candidates u50; seed 910301 + alpha. Thick: pulse; x: failed trace endpoint.',fontsize=7)
+  fig.text(.02,.01,protocol.get('figure_caption','Parent u200; candidates u50; seed 910301 + alpha. Thick: pulse; x: failed trace endpoint.'),fontsize=7)
   fig.tight_layout(rect=(0,.03,1,1));name=f'xy_{route}_v{speed:g}_t{onset:g}_f{force:+g}.png';fig.savefig(out/name,dpi=140);plt.close(fig);figures.append(name)
  summaries=[]
  for alpha in protocol['endpoints']:
   for policy in protocol['policies']:
    group=[r for r in rows if r['alpha']==alpha and r['policy']==policy];nominal=[r for r in group if r['force_N']==0]
    summaries.append(dict(alpha=alpha,policy=policy,n=len(group),success=sum(r['success'] for r in group),nominal_n=len(nominal),nominal_success=sum(r['success'] for r in nominal),physical_failures=sum(r['physical_failure'] for r in group),domain_failures=sum(r['domain_failure'] for r in group),prefix_invalid=sum(not r['prefix_valid'] for r in group),speed_rmse_mean=float(np.mean([r['speed_rmse'] for r in group])),cross_track_rmse_mean=float(np.mean([r['cross_track_rmse'] for r in group]))))
- pairs={f'a{a}_{b}_vs_{c}':paired_counts(rows,b,c,a) for a in protocol['endpoints'] for b,c in [('parent','baseline_update50'),('baseline_update50','static_update50'),('baseline_update50','dynamic_update50'),('static_update50','dynamic_update50')]}
+ pairs={f'a{a}_{b}_vs_{c}':paired_counts(rows,b,c,a) for a in protocol['endpoints'] for b,c in protocol.get('comparisons',[('parent','baseline_update50'),('baseline_update50','static_update50'),('baseline_update50','dynamic_update50'),('static_update50','dynamic_update50')])}
  atomic_json(out/'summary.json',dict(summaries=summaries,paired=pairs,figures=figures,training_seeds=1))
  lines=['# Matched tolerance comparison','', 'One training seed; finite development panel. Original task labels retained as descriptive outcomes. Nominal rows repeat across pulse-onset groups and are not independent episodes. RMSE averages use actual trace length; early failures must be read alongside failure counts.','', '| Policy | Alpha | Full task | Zero force | Physical failures | Domain failures | Invalid prefix |','|---|---:|---:|---:|---:|---:|---:|']
  for r in summaries:lines.append(f"| {r['policy']} | {r['alpha']} | {r['success']}/{r['n']} | {r['nominal_success']}/{r['nominal_n']} | {r['physical_failures']} | {r['domain_failures']} | {r['prefix_invalid']} |")

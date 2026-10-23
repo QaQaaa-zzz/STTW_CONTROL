@@ -30,8 +30,8 @@ def main():
    for record in records.values():
     if digest(record['actor'])!=record['actor_sha256']:raise ValueError('parent actor changed')
   else:records=resolve_comparison_actors(campaign)
-  cfg=json.loads((campaign/'baseline_config.json').read_text())
-  parent_plan=json.loads((campaign/'baseline_alpha0/plan.json').read_text())
+  cfg=json.loads((campaign/protocol.get('config_file','baseline_config.json')).read_text())
+  parent_plan=json.loads((campaign/protocol.get('source_plan','baseline_alpha0/plan.json')).read_text())
   source=json.loads(Path(parent_plan['parent_manifest']).read_text())['source'];actors={}
   for key,record in records.items():
    with open(record['actor'],'rb') as f:actors[key]=jax.tree.map(j.asarray,pickle.load(f))
@@ -76,7 +76,7 @@ def main():
     prefix_valid=not bool(np.any((d['physical_failure']|d['domain_exit']|(d['peak_roll']>b['working_roll_rad']))&prefix)) and count>=round(onset/.005)
     completed.append(dict(**c,name=name,onset_s=onset,success=not(physical or domain or work) and hold and goal,physical_failure=physical,domain_failure=domain,working_failure=work,final_hold=hold,goal=goal,ticks=count,peak_roll=float(d['peak_roll'].max()) if count else None,impulse=impulse.tolist(),expected_impulse=expected.tolist(),pulse_complete=fully_applied,impulse_error_Ns=impulse_error,prefix_valid=prefix_valid,speed_rmse=float(np.sqrt(np.mean((d['actual_forward_speed']-c['speed'])**2))) if count else None,cross_track_rmse=float(np.sqrt(np.mean(d['path_cross_track']**2))) if count else None,heading_rmse=float(np.sqrt(np.mean(d['path_heading_error']**2))) if count else None))
    atomic_json(out/'results.json',dict(cases=completed,scope='engineering smoke only; short traces cannot assess task recovery' if a.smoke else 'finite DEV panel; no continuous boundary certification'))
-  comparisons={} if a.smoke else {f'{alpha}_{baseline}_vs_{candidate}':paired_counts(completed,baseline,candidate,alpha) for alpha in [0,1] for baseline in ['parent','baseline_update50','static_update50'] for candidate in ['baseline_update50','static_update50','dynamic_update50'] if baseline!=candidate}
+  comparisons={} if a.smoke else {f'{alpha}_{baseline}_vs_{candidate}':paired_counts(completed,baseline,candidate,alpha) for alpha in [0,1] for baseline,candidate in protocol.get('comparisons',[(b,c) for b in ['parent','baseline_update50','static_update50'] for c in ['baseline_update50','static_update50','dynamic_update50'] if b!=c])}
   atomic_json(out/'paired_comparisons.json',comparisons)
   status('completed',stage='saved',preflight_lower_ticks=0)
  except BaseException as e:status('error',error=f'{type(e).__name__}: {e}');raise
