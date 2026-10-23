@@ -1,0 +1,16 @@
+[
+  {
+    "attempt": "sampling_acceleration_review_v1",
+    "state": "error",
+    "stage": "compiling_optimized",
+    "reason": "benchmark fixture used different Python dataclass identities for old/new episodes; stopped before optimized physics",
+    "error_excerpt": "ValueError: Custom dataclass node type mismatch: expected type: <class 'sttw_control.short_recovery.RecoveryEpisode'>, value: RecoveryEpisode(core=Episode(state=PathState(physical=Snapshot(data=Data(time=Traced<float32[8]>with<DynamicJaxprTrace>, qpos=Traced<float32[8,11]>with<DynamicJaxprTrace>, qvel=Traced<float32[8,10]>with<DynamicJaxprTrace>, act=Traced<float32[8,1]>with<DynamicJaxprTrace>, history=Traced<float32[8,0]>with<DynamicJaxprTrace>, qacc_warmstart=Traced<float32[8,10]>with<DynamicJ"
+  },
+  {
+    "attempt": "sampling_acceleration_review_v1_attempt2",
+    "state": "error",
+    "stage": "checking_reference",
+    "reason": "blanket 2e-6 tolerance on all MJX derived leaves too strict; protocol and compilation unchanged; superseded by explicit control-channel tolerances",
+    "error_excerpt": "AssertionError: \nNot equal to tolerance rtol=2e-06, atol=2e-06\n5\nMismatched elements: 9 / 80 (11.2%)\nFirst 5 mismatches are at indices:\n [2, 1]: -0.725483775138855 (ACTUAL), -0.725501298904419 (DESIRED)\n [2, 2]: 0.2015969455242157 (ACTUAL), 0.20161738991737366 (DESIRED)\n [2, 3]: 7.00791072845459 (ACTUAL), 7.007987022399902 (DESIRED)\n [2, 4]: 1.4979362487792969 (ACTUAL), 1.4979859590530396 (DESIRED)\n [2, 5]: -2.7404799461364746 (ACTUAL), -2.7408227920532227 (DESIRED)\nMax absolute difference among"
+  }
+]

@@ -8,6 +8,38 @@ from .tolerance_shaping import validate_tolerance_config
 
 SPEC=dict(weight=10.,gamma=.815560907125473,effort_budget=.030839085298575167,duration=.1,target_force=6.)
 
+
+def empty_rollout_totals(diagnostics):
+ import jax
+ import jax.numpy as j
+ return dict(diagnostics=jax.tree.map(j.zeros_like,diagnostics),ticks=j.int32(0),
+  reward_sum=j.array(0.),reward_count=j.int32(0),physical=j.int32(0),domain=j.int32(0),
+  joint_exposure=j.zeros((3,9),j.int32),pulse=dict(fired=j.int32(0),fallback=j.int32(0),
+   completed=j.int32(0),enabled_completed=j.int32(0),force_histogram=j.zeros(8,j.int32),
+   max_completed_impulse_error_Ns=j.array(0.)))
+
+
+def accumulate_rollout_totals(acc,reward,flags,stats):
+ """Diagnostic reductions only; learner rewards and transitions are untouched."""
+ import jax.numpy as j
+ from .path_command_statistics import merge_statistics
+ result=dict(acc,diagnostics=merge_statistics(acc['diagnostics'],stats['diagnostics']),
+  ticks=acc['ticks']+j.sum(stats['active_ticks']),reward_sum=acc['reward_sum']+j.sum(reward),
+  reward_count=acc['reward_count']+reward.size,
+  physical=acc['physical']+j.sum(flags['physical_failure']),
+  domain=acc['domain']+j.sum(flags['tracking_domain_failure']))
+ if 'recovery' in stats:
+  r=stats['recovery']
+  result['joint_exposure']=acc['joint_exposure'].at[r['family'],r['force_index']].add(r['active_ticks'])
+ if 'pulse' in stats:
+  p=stats['pulse'];a=acc['pulse'];forces=j.array([-8.,-6.,-4.,-2.,2.,4.,6.,8.])
+  result['pulse']=dict(fired=a['fired']+j.sum(p['fired_now']),
+   fallback=a['fallback']+j.sum(p['fallback_now']),completed=a['completed']+j.sum(p['completed']),
+   enabled_completed=a['enabled_completed']+j.sum(p['completed']&p['enabled']),
+   force_histogram=a['force_histogram']+j.sum(p['fired_now'][:,None]&(p['force'][:,None]==forces),axis=0),
+   max_completed_impulse_error_Ns=j.maximum(a['max_completed_impulse_error_Ns'],j.max(j.abs(p['completed_impulse']-p['completed_expected_impulse']))))
+ return result
+
 def checkpoint_due(iteration,total,*,stop=False):
  return iteration%5==0 or iteration==total or stop
 
@@ -160,44 +192,55 @@ def run(plan_path,output):
    status['training_control_ticks_total']=plan['resume_record']['inherited_training_control_ticks']
    atomic_json(root/'recovery_receipt.json',dict(source=plan['resume_record'],restored=['policy','optimizer','torch_rng','cuda_rng','numpy_rng','python_rng','parent_anchor_cursor'],environment='fresh complete bank reset at saved route counters+1; not frame-continuous',inherited_updates=start_update,discarded_unsaved_policy_transitions=plan['resume_record']['discarded_unsaved_policy_transitions']))
   status['inherited_policy_transitions']=start_update*n*steps;status['executed_policy_transitions']=0
-  atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='existing PathBatch vmap'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
+  atomic_json(root/'manifest.json',dict(plan=plan,config=cfg,source=source,parent_manifest_sha256=digest(plan['parent_manifest']),identity=identity,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),execution_optimizations=dict(batch=n,rollout_steps=steps,cache=str(cache),ppo='DirectCommandPPO',physics='unchanged PathBatch physics; short recovery scalar batch-reset guard',statistics='device accumulation; per-step combined fault check'),selection=f'fixed final update{updates}; no intermediate selection',evaluation='separate matched development panel after campaign'))
   atomic_json(root/'effective_config.json',dict(config=cfg,experiment=identity['experiment'],original_task_horizon_s=20.,snippet_s=4. if short_mode else None,critic_warmup_updates=2 if short_mode else 0,ppo_updates=25 if short_mode else updates,weights_only_parent=record if pulse_mode else None,parent_anchor_kl=.05 if short_mode else 0.,bank_receipt=bank_receipt if short_mode else None))
-  def advance_batch(ep,z):
-   end,ob,r,fl,final,stats=jax.vmap(batch.advance_one)(ep,z);stats['diagnostics']=reduce_statistics(stats['diagnostics']);return end,ob,r,fl,stats,final
-  update(stage='compiling');advance=jax.jit(advance_batch).lower(episodes,j.zeros((n,2))).compile()
+  def advance_batch(ep,z,acc):
+   end,ob,r,fl,final,stats=(batch.advance_batch(ep,z) if short_mode else jax.vmap(batch.advance_one)(ep,z))
+   stats['diagnostics']=reduce_statistics(stats['diagnostics'])
+   acc=accumulate_rollout_totals(acc,r,fl,stats)
+   checks=j.stack([j.any(fl['engineering_fault'])|j.any(ob[2]),j.any(fl['segment_timeout']) if short_mode else j.bool_(False)])
+   return end,ob,r,fl,acc,final,checks
+  abstract=jax.eval_shape(batch.advance_batch if short_mode else jax.vmap(batch.advance_one),episodes,j.zeros((n,2)))
+  zero=empty_rollout_totals(reduce_statistics(jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),abstract[5]['diagnostics'])))
+  update(stage='compiling');advance=jax.jit(advance_batch).lower(episodes,j.zeros((n,2)),zero).compile()
   tb=json.loads(Path(plan['tensorboard_info']).read_text());writer=SummaryWriter(str(Path(tb['logdir'])/plan['run_name']));verified=False
   cp=save_checkpoint(root/'checkpoints',algo,start_update,identity,rejections=rejections,route_counters=episodes.episode);atomic_json(root/'last_completed.json',dict(update=start_update,checkpoint=str(cp.resolve()),checkpoint_sha256=digest(cp)))
   for iteration in range(start_update+1,updates+1):
-   update(state='running',stage='sampling',completed_updates=iteration-1,rollout_intervals=0);start=time.monotonic();rewards=[];diag=None;physical=domain=0;pulse_summary=dict(fired=0,fallback=0,completed=0,enabled_completed=0,force_histogram=[0]*8,max_completed_impulse_error_Ns=0.);joint_exposure=np.zeros((3,9),np.int64)
+   update(state='running',stage='sampling',completed_updates=iteration-1,rollout_intervals=0);start=time.monotonic();acc=zero
+   previous_ticks=status['training_control_ticks_total']
    with torch.no_grad():
     for index in range(steps):
      z=algo.act(obs)
      if not bool(torch.isfinite(z).all()):raise RuntimeError('nonfinite action')
-     episodes,next_obs,reward,flags,stats,final_obs=advance(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()));jax.block_until_ready(episodes)
-     status['policy_transitions_total']+=n;status['executed_policy_transitions']+=n;status['training_control_ticks_total']+=int(j.sum(stats['active_ticks']))
-     if bool(j.any(flags['engineering_fault'])) or bool(j.any(next_obs[2])):
+     episodes,next_obs,reward,flags,acc,final_obs,checks=advance(episodes,jax.dlpack.from_dlpack(z.detach().contiguous()),acc)
+     # One small transfer retains immediate fault interception. Diagnostics stay
+     # on device, and no whole MJX state tree is synchronized on normal steps.
+     fault,has_timeout=jax.device_get(checks)
+     status['policy_transitions_total']+=n;status['executed_policy_transitions']+=n
+     if fault:
+      status['training_control_ticks_total']=previous_ticks+int(acc['ticks'])
       with (root/'engineering_fault_states.pkl').open('wb') as f:pickle.dump(jax.device_get(episodes),f)
       raise RuntimeError('engineering fault; incomplete rollout discarded')
      obs=to_torch(next_obs);learner_reward=torch.utils.dlpack.from_dlpack(reward)
-     if short_mode:
+     if short_mode and has_timeout:
       from .short_recovery import bootstrap_segment_rewards
       learner_reward=bootstrap_segment_rewards(learner_reward,algo.policy.evaluate(to_torch(final_obs)),torch.utils.dlpack.from_dlpack(flags['segment_timeout']),c['gamma'])
-      rec=jax.device_get(stats['recovery']);np.add.at(joint_exposure,(np.asarray(rec['family']),np.asarray(rec['force_index'])),np.asarray(rec['active_ticks']))
      algo.process_env_step(obs,learner_reward,torch.utils.dlpack.from_dlpack(flags['done']),{})
-     rewards.append(np.asarray(reward));physical+=int(j.sum(flags['physical_failure']));domain+=int(j.sum(flags['tracking_domain_failure']));x=jax.device_get(stats['diagnostics']);diag=x if diag is None else merge_statistics(diag,x)
-     if pulse_mode:
-      p=jax.device_get(stats['pulse']);fired=np.asarray(p['fired_now']);pulse_summary['fired']+=int(fired.sum());pulse_summary['fallback']+=int(np.sum(p['fallback_now']));pulse_summary['completed']+=int(np.sum(p['completed']));pulse_summary['enabled_completed']+=int(np.sum(p['completed']&p['enabled']))
-      for fi,force in enumerate([-8,-6,-4,-2,2,4,6,8]):pulse_summary['force_histogram'][fi]+=int(np.sum(fired&(p['force']==force)))
-      pulse_summary['max_completed_impulse_error_Ns']=max(pulse_summary['max_completed_impulse_error_Ns'],float(np.max(np.abs(p['completed_impulse']-p['completed_expected_impulse']))))
-     if (index+1)%16==0:update(rollout_intervals=index+1)
+     if (index+1)%16==0:
+      status['training_control_ticks_total']=previous_ticks+int(acc['ticks'])
+      update(rollout_intervals=index+1)
     algo.compute_returns(obs)
+   totals=jax.device_get(acc);diag=totals['diagnostics'];physical=int(totals['physical']);domain=int(totals['domain'])
+   pulse_summary={k:np.asarray(v).tolist() for k,v in totals['pulse'].items()};joint_exposure=totals['joint_exposure']
+   reward=float(totals['reward_sum']/totals['reward_count'])
+   status['training_control_ticks_total']=previous_ticks+int(totals['ticks'])
    sample_s=time.monotonic()-start;update(stage='optimizing');start=time.monotonic()
    if short_mode and iteration<=2:
     metrics=algo.value_only_update(c['epochs']);metrics.update(surrogate=0.,entropy=0.,mean_kl=0.,accepted_epochs=c['epochs'],parent_kl=0.)
     stop=False
    else:
     metrics=algo.update();rejections,stop=handle_candidate_ppo_result(algo,metrics,rejections,optimizer_guard)
-   opt_s=time.monotonic()-start;reward=float(np.mean(rewards));diagnostic=summarize_statistics(diag,cfg)
+   opt_s=time.monotonic()-start;diagnostic=summarize_statistics(diag,cfg)
    row=dict(update=iteration,sampling_model_update=iteration-1,mean_step_reward=reward,physical_failures=physical,domain_failures=domain,optimizer=clean_numbers(metrics),sample_seconds=sample_s,optimize_seconds=opt_s,policy_transitions_total=status['policy_transitions_total'],training_control_ticks_total=status['training_control_ticks_total'],diagnostics=diagnostic)
    if pulse_mode:row['pulse']=pulse_summary
    if short_mode:row.update(training_stage='critic_warmup' if iteration<=2 else 'ppo',completed_ppo_updates=max(0,iteration-2),route_force_active_lower_ticks=joint_exposure.tolist())

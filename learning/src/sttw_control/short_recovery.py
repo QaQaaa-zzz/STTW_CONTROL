@@ -17,6 +17,23 @@ def bootstrap_segment_rewards(reward, final_value, timeouts, gamma):
     return reward+gamma*torch.where(timeouts,final_value.reshape_as(reward),torch.zeros_like(reward))
 
 
+def reset_finished_batch(batch,ended,final,flags):
+    """Scalar guard outside vmap: skip bank gathers on nonterminal batches.
+
+    Mixed terminal batches still generate candidates for every lane. Stateless
+    fold_in(eid, episode) keys and masked selection preserve the original resets.
+    Engineering faults are never reset, and final observations precede reset.
+    """
+    mask=flags['done']&~flags['engineering_fault']
+    def install(_):
+        candidates=jax.vmap(batch.reset)(ended.env_id,ended.episode+1)
+        initial=jax.vmap(batch.observation)(candidates)
+        def select(new,old):
+            return j.where(mask.reshape(mask.shape+(1,)*(old.ndim-1)),new,old)
+        return jax.tree.map(select,candidates,ended),jax.tree.map(select,initial,final)
+    return jax.lax.cond(j.any(mask),install,lambda _:(ended,final),None)
+
+
 @struct.dataclass
 class RecoveryEpisode:
     core: object
@@ -75,7 +92,7 @@ class ShortRecoveryBatch:
 
     def observation(self,ep):return self.base.observation(ep.core)
 
-    def advance_one(self,ep,z):
+    def advance_one(self,ep,z,*,auto_reset=True):
         core,_,reward,flags,final,stats=self.base.advance_one(ep.core,z,auto_reset=False,force_pulse=ep.pulse)
         elapsed=core.state.tick-ep.origin_tick
         flags=segment_flags(flags,elapsed,self.maximum_ticks)
@@ -90,8 +107,22 @@ class ShortRecoveryBatch:
             fallback=ep.fallback,elapsed_ticks=elapsed,segment_timeout=flags['segment_timeout'],
             completed=flags['done'],impulse=ended.impulse,expected_impulse=.1*ep.pulse[2:],
             family=ep.route.family,active_ticks=stats['active_ticks'])
-        nxt=jax.lax.cond(flags['done']&~flags['engineering_fault'],
-            lambda _:self.reset(ep.env_id,ep.episode+1),lambda _:ended,None)
+        if not auto_reset:return ended,final,reward,flags,final,stats
+        def install(_):
+            fresh=self.reset(ep.env_id,ep.episode+1)
+            return fresh,self.observation(fresh)
+        nxt,obs=jax.lax.cond(flags['done']&~flags['engineering_fault'],
+            install,lambda _:(ended,final),None)
         from .path_command_statistics import merge_statistics,reset_statistics
         stats['diagnostics']=merge_statistics(stats['diagnostics'],reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
-        return nxt,self.observation(nxt),reward,flags,final,stats
+        return nxt,obs,reward,flags,final,stats
+
+    def advance_batch(self,episodes,z):
+        """Use this directly, rather than vmap(advance_one), in the trainer."""
+        from .path_command_statistics import merge_statistics,reset_statistics
+        end,_,reward,flags,final,stats=jax.vmap(
+            lambda ep,action:self.advance_one(ep,action,auto_reset=False))(episodes,z)
+        nxt,obs=reset_finished_batch(self,end,final,flags)
+        counts=jax.vmap(reset_statistics)(nxt.route,flags['done']&~flags['engineering_fault'])
+        stats['diagnostics']=merge_statistics(stats['diagnostics'],counts)
+        return nxt,obs,reward,flags,final,stats
