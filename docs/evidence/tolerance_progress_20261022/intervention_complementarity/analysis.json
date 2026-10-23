@@ -1,0 +1,3527 @@
+{
+  "scope": "Existing TRAIN data; posthoc finite-bank union is not physical upper bound, deployable selector, or new test. No new simulations or fitting.",
+  "runs": [
+    {
+      "run": "preference_train_coordination_records_v1",
+      "role": "TRAIN teaching records; exact pilot contexts, no held-out claim",
+      "window": {
+        "start_s": 1.8,
+        "end_s": 3.8,
+        "control": "control",
+        "target_channel_masks": {
+          "control": [
+            1,
+            1
+          ],
+          "speed_off": [
+            0,
+            1
+          ],
+          "steer_off": [
+            1,
+            0
+          ]
+        }
+      },
+      "summary": {
+        "n": 16,
+        "success": {
+          "control": 9,
+          "speed_off": 10,
+          "steer_off": 9
+        },
+        "union_success": 15,
+        "control_speed_union": 15,
+        "steer_unique": 0,
+        "gains": {
+          "speed_off": 6,
+          "steer_off": 5
+        },
+        "harms": {
+          "speed_off": 5,
+          "steer_off": 5
+        },
+        "useful": {
+          "speed_off": 6,
+          "steer_off": 0
+        }
+      },
+      "cases": [
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -137.83062744140625,
+              "peak_roll": 0.3427814245223999,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -61.07343673706055,
+              "peak_roll": 0.3532900810241699,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -156.5302734375,
+              "peak_roll": 0.387500524520874,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -71.26261901855469,
+              "peak_roll": 0.2577594518661499,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -97.86348724365234,
+              "peak_roll": 0.25771355628967285,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -111.66488647460938,
+              "peak_roll": 0.2552412748336792,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.125,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -100.91780090332031,
+              "peak_roll": 0.34480011463165283,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -54.89881896972656,
+              "peak_roll": 0.3517380952835083,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -153.3822784423828,
+              "peak_roll": 0.3943049907684326,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.125,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -51.485965728759766,
+              "peak_roll": 0.2607206106185913,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -55.20698165893555,
+              "peak_roll": 0.2606673240661621,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -93.3929672241211,
+              "peak_roll": 0.25842738151550293,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -172.5118865966797,
+              "peak_roll": 0.37211406230926514,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -101.71209716796875,
+              "peak_roll": 0.38156652450561523,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -220.33396911621094,
+              "peak_roll": 0.42564964294433594,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -47.96932601928711,
+              "peak_roll": 0.2815507650375366,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -93.67762756347656,
+              "peak_roll": 0.2813953161239624,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -114.42001342773438,
+              "peak_roll": 0.27907121181488037,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.125,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -121.67068481445312,
+              "peak_roll": 0.3733118772506714,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -93.75782775878906,
+              "peak_roll": 0.380146861076355,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -229.33494567871094,
+              "peak_roll": 0.4340989589691162,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.125,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -39.62209701538086,
+              "peak_roll": 0.28449559211730957,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -48.96553421020508,
+              "peak_roll": 0.28436505794525146,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -112.3404541015625,
+              "peak_roll": 0.2876824140548706,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -81.10248565673828,
+              "peak_roll": 0.2680082321166992,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -87.72412872314453,
+              "peak_roll": 0.2667320966720581,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -78.39025115966797,
+              "peak_roll": 0.2681833505630493,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -119.67247772216797,
+              "peak_roll": 0.3198627233505249,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -56.859676361083984,
+              "peak_roll": 0.34582698345184326,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -167.45767211914062,
+              "peak_roll": 0.38318419456481934,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.125,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -65.562744140625,
+              "peak_roll": 0.27359211444854736,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -53.779518127441406,
+              "peak_roll": 0.2726612091064453,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -62.714542388916016,
+              "peak_roll": 0.2744399309158325,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.25,
+            "alpha": 0.125,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -74.94076538085938,
+              "peak_roll": 0.32362794876098633,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -52.577144622802734,
+              "peak_roll": 0.34614133834838867,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -145.91351318359375,
+              "peak_roll": 0.39473092555999756,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -71.15821838378906,
+              "peak_roll": 0.28305113315582275,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -110.27212524414062,
+              "peak_roll": 0.28148019313812256,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -122.08307647705078,
+              "peak_roll": 0.28309857845306396,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -121.94709777832031,
+              "peak_roll": 0.34062492847442627,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -83.30000305175781,
+              "peak_roll": 0.3634437322616577,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -184.0213623046875,
+              "peak_roll": 0.41217756271362305,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.125,
+            "force_N": -24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -59.498207092285156,
+              "peak_roll": 0.28907859325408936,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -62.987709045410156,
+              "peak_roll": 0.2877662181854248,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -88.49018096923828,
+              "peak_roll": 0.29045724868774414,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right115_R2p4",
+            "speed": 2.4,
+            "alpha": 0.125,
+            "force_N": 24.0,
+            "onset_s": 1.7
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -77.46532440185547,
+              "peak_roll": 0.34242379665374756,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -78.62055969238281,
+              "peak_roll": 0.3616844415664673,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -193.4401397705078,
+              "peak_roll": 0.42348670959472656,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        }
+      ],
+      "sources": {
+        "runs/preference_train_coordination_records_v1/declaration.json": "10c64e97e16f81790497990da41138134ef4e803706208962df2527e0090fe8a",
+        "runs/preference_train_coordination_records_v1/evaluation/status.json": "ddff867926ae935daaabe2501162b29d49e3ac03981f67d2fa3228cafa177cd2",
+        "runs/preference_train_coordination_records_v1/evaluation/results.json": "7d65515f1bbf87b6a4109395a53979bf7e32e2a659a574d46637452750b2c0c1",
+        "runs/preference_train_coordination_records_v1/evaluation/intervention_branch_t1.7.json": "08a82624be7a2a8bcf88c16b257721caf7915cc1e098a116086a31e67f5ae399"
+      }
+    },
+    {
+      "run": "tolerance_recovery_opportunity_v1",
+      "role": "fresh TRAIN acquisition validation; model fixed before outcomes; may later supply demonstrations, never final TEST",
+      "window": {
+        "start_s": 2.4,
+        "end_s": 4.4,
+        "control": "control",
+        "target_channel_masks": {
+          "control": [
+            1,
+            1
+          ],
+          "speed_off": [
+            0,
+            1
+          ],
+          "steer_off": [
+            1,
+            0
+          ]
+        }
+      },
+      "summary": {
+        "n": 48,
+        "success": {
+          "control": 24,
+          "speed_off": 24,
+          "steer_off": 14
+        },
+        "union_success": 30,
+        "control_speed_union": 28,
+        "steer_unique": 2,
+        "gains": {
+          "speed_off": 4,
+          "steer_off": 2
+        },
+        "harms": {
+          "speed_off": 4,
+          "steer_off": 12
+        },
+        "useful": {
+          "speed_off": 4,
+          "steer_off": 0
+        }
+      },
+      "cases": [
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -110.4515380859375,
+              "peak_roll": 0.30117714405059814,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -96.5316162109375,
+              "peak_roll": 0.3108600378036499,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -128.7711639404297,
+              "peak_roll": 0.33720481395721436,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -87.3564453125,
+              "peak_roll": 0.23859810829162598,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -91.3365707397461,
+              "peak_roll": 0.24216365814208984,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -103.129150390625,
+              "peak_roll": 0.24182868003845215,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -112.20706176757812,
+              "peak_roll": 0.33639657497406006,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -133.68992614746094,
+              "peak_roll": 0.3389095067977905,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -177.52276611328125,
+              "peak_roll": 0.3844454288482666,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -101.60697937011719,
+              "peak_roll": 0.2771342992782593,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -90.07899475097656,
+              "peak_roll": 0.2756744623184204,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -118.32475280761719,
+              "peak_roll": 0.27514564990997314,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -131.11874389648438,
+              "peak_roll": 0.33604514598846436,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -131.63365173339844,
+              "peak_roll": 0.3372187614440918,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -213.78530883789062,
+              "peak_roll": 0.3971076011657715,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -90.43523406982422,
+              "peak_roll": 0.3366129398345947,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -106.56012725830078,
+              "peak_roll": 0.33024466037750244,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -115.07038879394531,
+              "peak_roll": 0.3335529565811157,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -57.53607940673828,
+              "peak_roll": 0.3052927255630493,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -53.0707893371582,
+              "peak_roll": 0.3075718879699707,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -97.09048461914062,
+              "peak_roll": 0.35408079624176025,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -29.324350357055664,
+              "peak_roll": 0.2436690330505371,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -41.883148193359375,
+              "peak_roll": 0.2436976432800293,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -83.94358825683594,
+              "peak_roll": 0.25193893909454346,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -84.71762084960938,
+              "peak_roll": 0.33947694301605225,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -94.48464965820312,
+              "peak_roll": 0.3385428190231323,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -182.2538299560547,
+              "peak_roll": 0.39898836612701416,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -50.69921875,
+              "peak_roll": 0.2790480852127075,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -60.862083435058594,
+              "peak_roll": 0.2787817716598511,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -2855.08984375,
+              "peak_roll": 0.2778921127319336,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -97.18690490722656,
+              "peak_roll": 0.3420858383178711,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -74.71145629882812,
+              "peak_roll": 0.3403754234313965,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -221.82833862304688,
+              "peak_roll": 0.41240882873535156,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -37.95288848876953,
+              "peak_roll": 0.3353208303451538,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -49.76787567138672,
+              "peak_roll": 0.3303292989730835,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -99.25271606445312,
+              "peak_roll": 0.33367717266082764,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -121.14115905761719,
+              "peak_roll": 0.3531738519668579,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -94.08110046386719,
+              "peak_roll": 0.34898173809051514,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -231.05906677246094,
+              "peak_roll": 0.4208298921585083,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -16.96384048461914,
+              "peak_roll": 0.2935370206832886,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -15.88387393951416,
+              "peak_roll": 0.29341280460357666,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -80.47933197021484,
+              "peak_roll": 0.2992340326309204,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -203.6368408203125,
+              "peak_roll": 0.38899457454681396,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -184.89999389648438,
+              "peak_roll": 0.3850976228713989,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3838.95654296875,
+              "peak_roll": 0.4703139066696167,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -29.528676986694336,
+              "peak_roll": 0.32988572120666504,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -26.114452362060547,
+              "peak_roll": 0.32951676845550537,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -98.20912170410156,
+              "peak_roll": 0.32922542095184326,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3375.57568359375,
+              "peak_roll": 0.41147828102111816,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -234.5227813720703,
+              "peak_roll": 0.4079481363296509,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3914.09716796875,
+              "peak_roll": 0.5001938343048096,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -57.980621337890625,
+              "peak_roll": 0.3723965883255005,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -47.34799575805664,
+              "peak_roll": 0.36949944496154785,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -117.87577819824219,
+              "peak_roll": 0.37142229080200195,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -89.08506774902344,
+              "peak_roll": 0.3513317108154297,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -67.93048095703125,
+              "peak_roll": 0.348230242729187,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3752.511474609375,
+              "peak_roll": 0.45262086391448975,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -15.746206283569336,
+              "peak_roll": 0.2992943525314331,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -15.083996772766113,
+              "peak_roll": 0.2991374731063843,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -30.394882202148438,
+              "peak_roll": 0.30262553691864014,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -168.3600311279297,
+              "peak_roll": 0.3881998062133789,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -135.4653778076172,
+              "peak_roll": 0.3856590986251831,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3929.255859375,
+              "peak_roll": 0.4997093677520752,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -27.653911590576172,
+              "peak_roll": 0.33628058433532715,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -25.274892807006836,
+              "peak_roll": 0.3358858823776245,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -58.59092712402344,
+              "peak_roll": 0.3387564420700073,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -225.26251220703125,
+              "peak_roll": 0.41723549365997314,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -186.39283752441406,
+              "peak_roll": 0.41469013690948486,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -4010.722900390625,
+              "peak_roll": 0.5297073125839233,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -53.46938705444336,
+              "peak_roll": 0.37735915184020996,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -44.418766021728516,
+              "peak_roll": 0.3747977018356323,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -68.7400131225586,
+              "peak_roll": 0.3791099786758423,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -96.25480651855469,
+              "peak_roll": 0.23584234714508057,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -85.5770263671875,
+              "peak_roll": 0.23491370677947998,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -105.7445297241211,
+              "peak_roll": 0.23740124702453613,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -95.68048858642578,
+              "peak_roll": 0.2734636068344116,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -83.68183898925781,
+              "peak_roll": 0.29657864570617676,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -111.09674072265625,
+              "peak_roll": 0.3203667402267456,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -102.012451171875,
+              "peak_roll": 0.2712397575378418,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -93.19597625732422,
+              "peak_roll": 0.2690235376358032,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -110.5926284790039,
+              "peak_roll": 0.27115774154663086,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -100.84922790527344,
+              "peak_roll": 0.29402387142181396,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -98.43624877929688,
+              "peak_roll": 0.3145686388015747,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -136.77259826660156,
+              "peak_roll": 0.35252511501312256,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -111.06474304199219,
+              "peak_roll": 0.327602744102478,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -101.01995849609375,
+              "peak_roll": 0.3183852434158325,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -118.27320861816406,
+              "peak_roll": 0.32759082317352295,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -76.51200866699219,
+              "peak_roll": 0.27163445949554443,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -52.90492630004883,
+              "peak_roll": 0.29499173164367676,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -143.63400268554688,
+              "peak_roll": 0.35114824771881104,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -59.31708526611328,
+              "peak_roll": 0.2535322904586792,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -13.524545669555664,
+              "peak_roll": 0.25273847579956055,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -82.21585845947266,
+              "peak_roll": 0.2553907632827759,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -36.33247375488281,
+              "peak_roll": 0.2780725955963135,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -37.89931869506836,
+              "peak_roll": 0.297560453414917,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -80.71867370605469,
+              "peak_roll": 0.34556758403778076,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -62.36834716796875,
+              "peak_roll": 0.2893979549407959,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -28.466657638549805,
+              "peak_roll": 0.288601279258728,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -2893.4462890625,
+              "peak_roll": 0.29089856147766113,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -64.77555847167969,
+              "peak_roll": 0.3114652633666992,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -65.59146881103516,
+              "peak_roll": 0.32879209518432617,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -129.76425170898438,
+              "peak_roll": 0.3855956792831421,
+              "gain": true,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -41.43638229370117,
+              "peak_roll": 0.34251201152801514,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -29.880517959594727,
+              "peak_roll": 0.33835136890411377,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -85.92918395996094,
+              "peak_roll": 0.34520673751831055,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.2,
+            "alpha": 0.25,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -31.50617218017578,
+              "peak_roll": 0.31150853633880615,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -45.839866638183594,
+              "peak_roll": 0.3302145004272461,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -141.33001708984375,
+              "peak_roll": 0.3942408561706543,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -16.322769165039062,
+              "peak_roll": 0.2780536413192749,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -13.857004165649414,
+              "peak_roll": 0.27665746212005615,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -82.63325500488281,
+              "peak_roll": 0.2902029752731323,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -82.99542236328125,
+              "peak_roll": 0.3203463554382324,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -61.08456039428711,
+              "peak_roll": 0.3350423574447632,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -183.32882690429688,
+              "peak_roll": 0.3989051580429077,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -24.770292282104492,
+              "peak_roll": 0.31330645084381104,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -19.493907928466797,
+              "peak_roll": 0.3118255138397217,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -102.12016296386719,
+              "peak_roll": 0.31385338306427,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -135.41278076171875,
+              "peak_roll": 0.35633909702301025,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -136.34255981445312,
+              "peak_roll": 0.36729466915130615,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3715.24267578125,
+              "peak_roll": 0.443536639213562,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -47.55902862548828,
+              "peak_roll": 0.3573957681655884,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -35.99380111694336,
+              "peak_roll": 0.3526167869567871,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -118.5365982055664,
+              "peak_roll": 0.3578510284423828,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.0,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -159.1719512939453,
+              "peak_roll": 0.37280023097991943,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -150.84414672851562,
+              "peak_roll": 0.38240230083465576,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3785.7236328125,
+              "peak_roll": 0.4712785482406616,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -17.3665771484375,
+              "peak_roll": 0.28622639179229736,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -15.926390647888184,
+              "peak_roll": 0.28472745418548584,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -33.865875244140625,
+              "peak_roll": 0.2893174886703491,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 16.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -36.751220703125,
+              "peak_roll": 0.30313003063201904,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -28.617542266845703,
+              "peak_roll": 0.3116048574447632,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -179.03829956054688,
+              "peak_roll": 0.4048806428909302,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -24.460208892822266,
+              "peak_roll": 0.3206813335418701,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -20.643516540527344,
+              "peak_roll": 0.31905925273895264,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -45.06581115722656,
+              "peak_roll": 0.3241771459579468,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 24.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -70.76966857910156,
+              "peak_roll": 0.33846449851989746,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -66.66747283935547,
+              "peak_roll": 0.34536468982696533,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3667.78173828125,
+              "peak_roll": 0.44657647609710693,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": -32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -46.68193817138672,
+              "peak_roll": 0.36228954792022705,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -35.50532531738281,
+              "peak_roll": 0.3577725887298584,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -61.30473327636719,
+              "peak_roll": 0.36441683769226074,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right125_R2p2",
+            "speed": 2.55,
+            "alpha": 0.25,
+            "force_N": 32.0,
+            "onset_s": 2.3
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -75.19947814941406,
+              "peak_roll": 0.34834396839141846,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -93.9427261352539,
+              "peak_roll": 0.35571539402008057,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3683.0166015625,
+              "peak_roll": 0.46596014499664307,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        }
+      ],
+      "sources": {
+        "runs/tolerance_recovery_opportunity_v1/declaration.json": "ecdd20523a74062f0e36e07be6454556af67d9ff7005faa224db15ac331429d2",
+        "runs/tolerance_recovery_opportunity_v1/evaluation/status.json": "5352667e3b3f2d47240789cc25c03f141042bc94d88c6bb6cc4fa140e5cc2274",
+        "runs/tolerance_recovery_opportunity_v1/evaluation/results.json": "ea566df20c0ddad21b1e1827c3c57da162f4d7f6870ebc23fd3f768c3e2fe492",
+        "runs/tolerance_recovery_opportunity_v1/evaluation/intervention_branch_t2.3.json": "283b2283d8901081672f7152f0c50c3e4c6871fcd383d562b2777677f3ada4ba"
+      }
+    },
+    {
+      "run": "tolerance_teaching_search_pilot_v1",
+      "role": "TRAIN feasibility; exhaustive outcomes used for retrospective fixed-budget search replay, not held-out generalization",
+      "window": {
+        "start_s": 2.72,
+        "end_s": 4.72,
+        "control": "control",
+        "target_channel_masks": {
+          "control": [
+            1,
+            1
+          ],
+          "speed_off": [
+            0,
+            1
+          ],
+          "steer_off": [
+            1,
+            0
+          ]
+        }
+      },
+      "summary": {
+        "n": 32,
+        "success": {
+          "control": 13,
+          "speed_off": 19,
+          "steer_off": 5
+        },
+        "union_success": 19,
+        "control_speed_union": 19,
+        "steer_unique": 0,
+        "gains": {
+          "speed_off": 6,
+          "steer_off": 0
+        },
+        "harms": {
+          "speed_off": 0,
+          "steer_off": 8
+        },
+        "useful": {
+          "speed_off": 6,
+          "steer_off": 0
+        }
+      },
+      "cases": [
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3435.5439453125,
+              "peak_roll": 0.32829225063323975,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3270.113525390625,
+              "peak_roll": 0.3295257091522217,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3589.10986328125,
+              "peak_roll": 0.37590038776397705,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -20.512514114379883,
+              "peak_roll": 0.2671966552734375,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -16.693817138671875,
+              "peak_roll": 0.26716816425323486,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -85.34515380859375,
+              "peak_roll": 0.2658494710922241,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3412.7998046875,
+              "peak_roll": 0.34645044803619385,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3247.81689453125,
+              "peak_roll": 0.3466235399246216,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3635.21484375,
+              "peak_roll": 0.4066365957260132,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -104.36627197265625,
+              "peak_roll": 0.3171447515487671,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -31.765914916992188,
+              "peak_roll": 0.31439244747161865,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -103.86402893066406,
+              "peak_roll": 0.3150651454925537,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3369.617919921875,
+              "peak_roll": 0.33040642738342285,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -87.49179077148438,
+              "peak_roll": 0.32726895809173584,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3625.46435546875,
+              "peak_roll": 0.39474165439605713,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -14.482202529907227,
+              "peak_roll": 0.27004289627075195,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -12.022587776184082,
+              "peak_roll": 0.26994311809539795,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -23.173574447631836,
+              "peak_roll": 0.2694920301437378,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3384.87744140625,
+              "peak_roll": 0.35621345043182373,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3227.17724609375,
+              "peak_roll": 0.3521604537963867,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3687.90673828125,
+              "peak_roll": 0.42982590198516846,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -33.279884338378906,
+              "peak_roll": 0.31838154792785645,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -22.11125373840332,
+              "peak_roll": 0.3161121606826782,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -46.72904586791992,
+              "peak_roll": 0.3175429105758667,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3516.09326171875,
+              "peak_roll": 0.36831438541412354,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -136.01473999023438,
+              "peak_roll": 0.3600156307220459,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3758.75537109375,
+              "peak_roll": 0.44215714931488037,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -26.328580856323242,
+              "peak_roll": 0.29832184314727783,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -23.547500610351562,
+              "peak_roll": 0.298321008682251,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -50.6419792175293,
+              "peak_roll": 0.2968510389328003,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3652.89208984375,
+              "peak_roll": 0.42111897468566895,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3559.360107421875,
+              "peak_roll": 0.41997432708740234,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3899.83740234375,
+              "peak_roll": 0.5054320096969604,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -65.695556640625,
+              "peak_roll": 0.342679500579834,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -46.93764877319336,
+              "peak_roll": 0.34267592430114746,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -78.88499450683594,
+              "peak_roll": 0.34099578857421875,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3464.76513671875,
+              "peak_roll": 0.3771470785140991,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -124.93180084228516,
+              "peak_roll": 0.367146372795105,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3836.260986328125,
+              "peak_roll": 0.47618818283081055,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -18.612699508666992,
+              "peak_roll": 0.29824626445770264,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -16.835285186767578,
+              "peak_roll": 0.2982466220855713,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -20.505342483520508,
+              "peak_roll": 0.29849743843078613,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3615.827392578125,
+              "peak_roll": 0.42761898040771484,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3503.49072265625,
+              "peak_roll": 0.418216347694397,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3963.560546875,
+              "peak_roll": 0.5321782827377319,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "left100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -44.8480339050293,
+              "peak_roll": 0.3440905809402466,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -37.03128433227539,
+              "peak_roll": 0.3437516689300537,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -44.440914154052734,
+              "peak_roll": 0.3440190553665161,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -76.19224548339844,
+              "peak_roll": 0.26354920864105225,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -16.21849250793457,
+              "peak_roll": 0.2634890079498291,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -88.21945190429688,
+              "peak_roll": 0.26375746726989746,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3424.626708984375,
+              "peak_roll": 0.30510175228118896,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3211.3310546875,
+              "peak_roll": 0.32868778705596924,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3593.75390625,
+              "peak_roll": 0.37121379375457764,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -107.92633819580078,
+              "peak_roll": 0.31433165073394775,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -93.359130859375,
+              "peak_roll": 0.31382882595062256,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -102.07508087158203,
+              "peak_roll": 0.314522385597229,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.0,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3426.382568359375,
+              "peak_roll": 0.3322650194168091,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -3310.9921875,
+              "peak_roll": 0.3550337553024292,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3643.015869140625,
+              "peak_roll": 0.4080963134765625,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -14.501457214355469,
+              "peak_roll": 0.26459646224975586,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -10.135307312011719,
+              "peak_roll": 0.2635575532913208,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -36.16450500488281,
+              "peak_roll": 0.2652754783630371,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -71.77484130859375,
+              "peak_roll": 0.2964426279067993,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -58.047874450683594,
+              "peak_roll": 0.31006932258605957,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3574.1513671875,
+              "peak_roll": 0.37825703620910645,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -38.28982925415039,
+              "peak_roll": 0.3115144968032837,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -23.333385467529297,
+              "peak_roll": 0.3089444637298584,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -45.08974838256836,
+              "peak_roll": 0.31188762187957764,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.2,
+            "alpha": 0.3,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -70.93204498291016,
+              "peak_roll": 0.30975496768951416,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -66.3697280883789,
+              "peak_roll": 0.3254178762435913,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3558.96240234375,
+              "peak_roll": 0.4002784490585327,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -45.13612365722656,
+              "peak_roll": 0.280947208404541,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -31.290573120117188,
+              "peak_roll": 0.28008174896240234,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -74.97696685791016,
+              "peak_roll": 0.2810324430465698,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3456.346435546875,
+              "peak_roll": 0.3233693838119507,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -62.53487014770508,
+              "peak_roll": 0.30801188945770264,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3683.477783203125,
+              "peak_roll": 0.40698087215423584,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -52.563968658447266,
+              "peak_roll": 0.3235210180282593,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -55.917999267578125,
+              "peak_roll": 0.3218585252761841,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -100.23786163330078,
+              "peak_roll": 0.32374048233032227,
+              "gain": false,
+              "harm": true,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.0,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3480.714111328125,
+              "peak_roll": 0.34641993045806885,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -123.75483703613281,
+              "peak_roll": 0.3556464910507202,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3748.584716796875,
+              "peak_roll": 0.4460049867630005,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": -18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -15.622771263122559,
+              "peak_roll": 0.278816819190979,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -12.08926773071289,
+              "peak_roll": 0.2775663137435913,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -18.326692581176758,
+              "peak_roll": 0.2805957794189453,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": 18.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3349.060302734375,
+              "peak_roll": 0.33130013942718506,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -56.38759994506836,
+              "peak_roll": 0.32719385623931885,
+              "gain": true,
+              "harm": false,
+              "useful": true
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3757.414794921875,
+              "peak_roll": 0.4499627351760864,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": -26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": true,
+              "return_value": -30.03032684326172,
+              "peak_roll": 0.3220787048339844,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": true,
+              "return_value": -23.80205726623535,
+              "peak_roll": 0.32051563262939453,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": true,
+              "return_value": -37.757835388183594,
+              "peak_roll": 0.32470083236694336,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        },
+        {
+          "context": {
+            "route": "right100_R2p3",
+            "speed": 2.5,
+            "alpha": 0.3,
+            "force_N": 26.0,
+            "onset_s": 2.6
+          },
+          "arms": {
+            "control": {
+              "success": false,
+              "return_value": -3390.955078125,
+              "peak_roll": 0.3638772964477539,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "speed_off": {
+              "success": false,
+              "return_value": -123.82000732421875,
+              "peak_roll": 0.37351739406585693,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            },
+            "steer_off": {
+              "success": false,
+              "return_value": -3836.676025390625,
+              "peak_roll": 0.48835480213165283,
+              "gain": false,
+              "harm": false,
+              "useful": false
+            }
+          }
+        }
+      ],
+      "sources": {
+        "runs/tolerance_teaching_search_pilot_v1/declaration.json": "211a778cce9840560cb4e5ade2421df246d30a1e5a9784ce55b49be2c5a6a062",
+        "runs/tolerance_teaching_search_pilot_v1/evaluation/status.json": "3bf4ff1ff9424bf5fbc46c98a601c6721ee8a84fdf29a4b3e8c615e62fe3d387",
+        "runs/tolerance_teaching_search_pilot_v1/evaluation/results.json": "4294300ca99db4f8ae4e6b24ddc83df5088101e4becdc61e74fbfa1887023881",
+        "runs/tolerance_teaching_search_pilot_v1/evaluation/intervention_branch_t2.6.json": "3c42bde3d41d43b31a95b9b874747f819be6ec44e353d6f6380342e5b5097474"
+      }
+    }
+  ]
+}
