@@ -140,7 +140,7 @@ class PreferenceRecoveryBatch(ShortRecoveryBatch):
     captured alpha, physical state, history or original task clocks.
     """
     def __init__(self,base,bank,*,arm,seed,forces,effort_budget,gamma,
-                 duration_s=4.,strength=.7,bandwidth=.2,shuffle_seed=918204):
+                 duration_s=4.,strength=.7,bandwidth=.2,target=1.,shuffle_seed=918204):
         import numpy as np
         from .margin_state_sampling import exact_alpha_groups,bank_risks,state_probabilities,stratified_permutation
         if arm not in ('uniform','guided','shuffled'):raise ValueError('unknown matched state sampler arm')
@@ -153,7 +153,7 @@ class PreferenceRecoveryBatch(ShortRecoveryBatch):
         self.risks=bank_risks(self.states,base.env.cc,self.forces,effort_budget=effort_budget,gamma=gamma,duration=.1,horizon=base.horizon)
         self.permutation=stratified_permutation(np.asarray(self.groups),shuffle_seed)
         risk=self.risks[self.permutation] if arm=='shuffled' else self.risks
-        self.probabilities=state_probabilities(risk,self.groups,strength=0. if arm=='uniform' else strength,bandwidth=bandwidth,num_groups=len(values))
+        self.probabilities=state_probabilities(risk,self.groups,strength=0. if arm=='uniform' else strength,bandwidth=bandwidth,target=target,num_groups=len(values))
 
     def reset(self,eid,episode):
         from .margin_state_sampling import draw

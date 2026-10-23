@@ -1,5 +1,9 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> TRAIN诊断已完成（2026-10-23）：[540例同状态结果、XY/奖励图与采样调整依据](evidence/tolerance_progress_20261022/preference_recovery_pilot/train_difficulty/CONCLUSIONS.md)。约153秒、786,672底层tick、0PPO。公式在状态检查集上有难度排序信息（描述性AUC .854，单用力大小.748），但原risk≈1关注区偏容易；保留γ/E_b，下一步检验更合适的采样难度尺度。已实现可声明的target/带宽，未启动新PPO；不把近似模型变成安全保证。
+
+> 完整回收与继续推进（2026-10-23）：三臂训练后的1240例新评测已全部完成，实际2,454,996底层tick；四策略名义任务均30/30，五个α的弯道速度偏好保留。[名义审计](evidence/tolerance_progress_20261022/preference_recovery_pilot/nominal_retention_audit.json)。现已启动540例TRAIN同状态难度诊断：60状态、9力档、40校准/20检查状态、原10秒截止、0PPO，判断模型风险是否对应真正困难的恢复状态。[声明](evidence/tolerance_progress_20261022/preference_recovery_pilot/train_difficulty_declaration.json)，进度runs/preference_train_difficulty_v1/evaluation/status.json。未采用新的训练候选。
+
 > 科学审查（2026-10-23）：[目标、公式适用性、创新定位及实验审查](evidence/tolerance_progress_20261022/preference_recovery_pilot/SCIENTIFIC_REVIEW.md)。三组训练已完成，共5,308,416策略转移；TensorBoard三组实际奖励均核验至27轮。中等扰动新600例完成：任务恢复均200/200，工作性能uniform/guided/shuffled=148/144/145，父策略143/200；尚不支持引导优势。强扰动600例也已完成：任务恢复父策略/uniform/guided/shuffled=189/186/190/193（各200例），真实引导未胜过打乱对照；名义直线评测按原协议接续，实时状态见runs/preference_recovery_post_v1/status.json。以下各更新保留为历史阶段快照。
 
 > 单网络恢复学习已启动（2026-10-23）：[三组匹配PPO协议、工程验证与运行快照](evidence/tolerance_progress_20261022/preference_recovery_pilot/README.md)。真实u325/V3/原10s、4s恢复片段，uniform/guided/shuffled各2轮Critic预热+25轮PPO；当前前两组运行、第三组排队。TensorBoard http://localhost:6008 的实际奖励已核验；训练完成后自动接续1240例新评测并复用400例已核验父策略结果。尚未获得训练后能力结论。

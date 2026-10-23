@@ -50,3 +50,19 @@ def test_conditional_schedule_is_declared_without_hardcoded_update_limit():
     assert cfg['training_future_phase_C']['actor_lr']==.00002
     assert parent['training_future_phase_C']['actor_lr']==.0001
     assert cfg['training_future_phase_C']['episode_s']==10.
+
+
+def test_sampler_scale_is_declaration_bound_and_cannot_change_snippet_duration(tmp_path):
+    root=Path('runs/preference_recovery_train_v1')
+    if not (root/'guided/plan.json').exists():pytest.skip('external matched declaration unavailable')
+    plan=json.loads((root/'guided/plan.json').read_text())
+    decl=json.loads(Path(plan['declaration']).read_text());cfg=json.loads(Path(plan['config']).read_text())
+    parent=json.loads(Path(plan['parent_manifest']).read_text());bank=json.loads((Path(plan['bank_dir'])/'manifest.json').read_text())
+    dest=tmp_path/'declaration.json';plan['declaration']=str(dest)
+    decl['state_sampler']={'target':2.5,'bandwidth':.5}
+    dest.write_text(json.dumps(decl));plan['declaration_sha256']=digest(dest)
+    assert training.validate_preference_training_plan(plan,cfg,parent,bank)['state_sampler']==decl['state_sampler']
+    decl['state_sampler']['duration_s']=8.
+    dest.write_text(json.dumps(decl));plan['declaration_sha256']=digest(dest)
+    with pytest.raises(ValueError,match='sampler parameter'):
+        training.validate_preference_training_plan(plan,cfg,parent,bank)

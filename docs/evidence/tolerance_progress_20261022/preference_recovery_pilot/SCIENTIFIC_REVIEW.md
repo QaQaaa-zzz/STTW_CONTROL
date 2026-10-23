@@ -6,6 +6,8 @@
 
 ## 审查对象与结论
 
+后续回收：整条1240例新评测流水线现已完成，实际2,454,996底层tick。父策略和三个候选各30/30唯一名义任务及工作性能通过；四类弯道的速度RMSE在五个α上均严格下降，路径RMSE不处处单调。完整数据见 [nominal_retention_audit.json](nominal_retention_audit.json)。未采用新候选；下述“正在评测”保留审查时刻语境。新TRAIN难度诊断已按独立声明启动，不增加PPO。
+
 实际仓库为 STTW_CONTROL 的 tolerance-calibration worktree，分支 experiment/tolerance-calibration-20261022；不是 IDE 中的 RecoveryBridge/JIT。审查使用 scientific-critical-thinking 与 experimental-design 技能，核对源码、冻结声明、逐更新指标和完成的评测；下面的建议不是已经取得的结果。
 
 **保留研究目标，保留冻结底层，暂不把物理引导认定为有效方法。** 目标应表述为：同一个中层策略保持 α 对速度—路径取舍的调节，在受扰后更可靠地完成原始任务；考察方向性物理余量能否提高训练样本的价值。公式不必精确，然而“保守”与“适合挑选训练难例”是两个不同性质，必须分别验证。

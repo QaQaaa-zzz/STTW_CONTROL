@@ -59,3 +59,26 @@ def test_scan_contract_rejects_deadline_budget_and_role_drift():
     with pytest.raises(ValueError,match='roles'):scan.scan_contract(d,m,[2,9],[0])
     m['original_task_horizon_s']=20.
     with pytest.raises(ValueError,match='deadline'):scan.scan_contract(d,m,[2,9],[0])
+
+
+def test_difficulty_audit_excludes_nominal_failures_and_keeps_state_roles():
+    rows=[]
+    for idx,role,nominal in [(2,'calibration',True),(9,'validation',False)]:
+        for force,ok,risk in [(0,nominal,0.),(8,True,1.),(-8,False,2.)]:
+            rows.append(dict(bank_index=idx,data_role=role,alpha=0.,force_N=force,
+                             task_recovered=ok,domain_failure=not ok,
+                             performance_success=ok,physical_failure=False,predicted_risk=risk))
+    x=scan.difficulty_summary(rows)
+    a,b=x['by_role']
+    assert a['nominal_viable_states']==1 and a['pulse_cases']==2
+    assert a['pulse_task_losses']==1 and a['risk_failure_auc']==1.
+    assert a['force_magnitude_failure_auc']==.5
+    assert b['nominal_viable_states']==0 and b['pulse_cases']==0
+    assert b['risk_failure_auc'] is None
+
+
+def test_difficulty_audit_does_not_invent_auc_with_no_task_negatives():
+    rows=[dict(bank_index=2,data_role='validation',alpha=0.,force_N=f,
+               task_recovered=True,domain_failure=False,performance_success=True,
+               physical_failure=False,predicted_risk=abs(f)) for f in [0,8,-8]]
+    assert scan.difficulty_summary(rows)['by_role'][0]['risk_failure_auc'] is None

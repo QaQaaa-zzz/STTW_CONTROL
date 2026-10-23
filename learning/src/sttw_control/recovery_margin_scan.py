@@ -26,6 +26,57 @@ def scan_contract(declaration,manifest,ids,forces):
     return dict(horizon_s=horizon,maximum_policy_intervals=round(horizon/.02),roles=resolved)
 
 
+def difficulty_summary(rows):
+    """Describe fixed risk ranking, conditional on nominal task viability.
+
+    Cases share states/paths; these are descriptive AUCs, not independent
+    trials, confidence intervals, or a fitted/calibrated recovery probability.
+    """
+    def summarize(group):
+        nominal={r['bank_index']:r for r in group if r['force_N']==0}
+        if len(nominal)!=len({r['bank_index'] for r in group}):
+            raise ValueError('one nominal case required for every state')
+        pulse=[r for r in group if r['force_N']!=0 and nominal[r['bank_index']]['task_recovered']]
+        def auc(field):
+            pos=np.asarray([field(r) for r in pulse if not r['task_recovered']])
+            neg=np.asarray([field(r) for r in pulse if r['task_recovered']])
+            if not len(pos) or not len(neg):return None
+            if not np.isfinite(pos).all() or not np.isfinite(neg).all():raise ValueError('nonfinite risk')
+            return float(np.mean((pos[:,None]>neg[None,:])+.5*(pos[:,None]==neg[None,:])))
+        inside=[r for r in pulse if r['predicted_risk']<=1]
+        return dict(states=len(nominal),nominal_viable_states=sum(r['task_recovered'] for r in nominal.values()),
+            pulse_cases=len(pulse),pulse_task_losses=sum(not r['task_recovered'] for r in pulse),
+            pulse_domain_exits=sum(r['domain_failure'] for r in pulse),
+            pulse_physical_failures=sum(r['physical_failure'] for r in pulse),
+            within_model_radius=len(inside),within_model_task_losses=sum(not r['task_recovered'] for r in inside),
+            risk_failure_auc=auc(lambda r:r['predicted_risk']),force_magnitude_failure_auc=auc(lambda r:abs(r['force_N'])))
+    roles=sorted({r['data_role'] for r in rows})
+    return dict(by_role=[dict(data_role=role,**summarize([r for r in rows if r['data_role']==role])) for role in roles],
+        by_alpha=[dict(data_role=role,alpha=a,**summarize([r for r in rows if r['data_role']==role and r['alpha']==a]))
+                  for role in roles for a in sorted({r['alpha'] for r in rows if r['data_role']==role})],
+        interpretation='state-level calibration/audit only; conditional on own zero-force task success; correlated deterministic cases, no independent-training inference')
+
+
+def analyze_difficulty(run,output):
+    """Use frozen declared formula, without fitting or touching audit labels."""
+    from .preference_best import atomic_json,digest
+    from .preference_tolerance_reporting import normalized_risk
+    run=Path(run);out=Path(output)
+    status=json.loads((run/'status.json').read_text());manifest=json.loads((run/'manifest.json').read_text())
+    decl=manifest['declaration'];rows=json.loads((run/'results.json').read_text())['cases']
+    if status['phase']!='completed' or status['completed_cases']!=len(rows) or len(rows)!=len(decl['bank_indices'])*len(decl['forces_N']):
+        raise ValueError('difficulty scan incomplete')
+    expected={(i,float(f)) for i in decl['bank_indices'] for f in decl['forces_N']}
+    if len(rows)!=len({(r['bank_index'],r['force_N']) for r in rows}) or {(r['bank_index'],r['force_N']) for r in rows}!=expected:
+        raise ValueError('difficulty scan case identities differ')
+    features={r['bank_index']:r['features'] for r in manifest['features']}
+    audited=[dict(r,predicted_risk=normalized_risk(features[r['bank_index']],r['force_N'],**decl['formula_parameters'])) for r in rows]
+    result=dict(source=str(run.resolve()),results_sha256=digest(run/'results.json'),
+        formula_parameters=decl['formula_parameters'],summary=difficulty_summary(audited),cases=audited)
+    out.mkdir(parents=True,exist_ok=False);atomic_json(out/'summary.json',result)
+    return result
+
+
 def outcome_labels(data,*,speed,goal_s,working_roll,horizon=20.,hold_s=1.):
     t=np.asarray(data['time']);n=len(t)
     if not n:raise ValueError('empty executed trajectory is UNKNOWN')

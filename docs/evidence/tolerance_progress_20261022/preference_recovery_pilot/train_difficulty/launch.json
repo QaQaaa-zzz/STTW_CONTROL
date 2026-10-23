@@ -1,0 +1,16 @@
+{
+  "pid": 1544051,
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-u",
+    "learning/cli/scan_recovery_margin.py",
+    "--declaration",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_difficulty_v1/declaration.json",
+    "--output",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_difficulty_v1/evaluation"
+  ],
+  "code_revision": "da720b713551122e6f91ee3432e31da648f9aefa",
+  "launched_unix": 1792746175.3500826,
+  "active_run": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_difficulty_v1/ACTIVE_RUN.json",
+  "training_steps": 0
+}

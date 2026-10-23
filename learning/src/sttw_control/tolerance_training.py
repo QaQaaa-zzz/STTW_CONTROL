@@ -157,6 +157,7 @@ def validate_preference_training_plan(plan,cfg,parent,bank_manifest):
  for key in ('seed','pulse_seed','updates','forces_N','parent_record','optimizer_guard'):
   if plan[key]!=declaration[key]:raise ValueError('preference plan differs from declaration: '+key)
  if plan['arm'] not in declaration['arms'] or plan['alpha']!='conditional':raise ValueError('invalid conditional arm')
+ if set(declaration.get('state_sampler',{}))-{'target','bandwidth','strength','shuffle_seed'}:raise ValueError('unknown conditional state sampler parameter')
  if len(plan['forces_N'])!=8 or 0 in plan['forces_N'] or len(set(plan['forces_N']))!=8:raise ValueError('eight unique nonzero force levels required')
  if not 0<=declaration['critic_warmup_updates']<plan['updates'] or plan['updates']!=declaration['critic_warmup_updates']+declaration['ppo_updates']:raise ValueError('conditional learner budget inconsistent')
  if digest(plan['parent_manifest'])!=declaration['parent_manifest_sha256']:raise ValueError('parent manifest changed')
@@ -223,7 +224,7 @@ def run(plan_path,output):
    with (bank_dir/'bank.pkl').open('rb') as f:bank=pickle.load(f)
    if preference_mode:
     from .short_recovery import PreferenceRecoveryBatch
-    batch=PreferenceRecoveryBatch(batch,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'])
+    batch=PreferenceRecoveryBatch(batch,bank,arm=plan['arm'],seed=plan['pulse_seed'],forces=plan['forces_N'],effort_budget=SPEC['effort_budget'],gamma=SPEC['gamma'],**declaration.get('state_sampler',{}))
    else:batch=ShortRecoveryBatch(batch,bank,guided=plan['arm']=='guided',seed=plan['pulse_seed']+plan['alpha'],reserve_config=experiment_config(cfg,'dynamic'))
   elif pulse_mode:
    from .tolerance_pulse import PulseBatch
