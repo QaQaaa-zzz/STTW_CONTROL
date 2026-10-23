@@ -1,0 +1,11 @@
+{
+  "training_declaration_sha256": "db55556ab9b37452eee3c35e55422c358ed0f04184762b333dc2afa95f7f28ff",
+  "post_declaration_sha256": "30d75c26ca0b4491a2bc5bff97d2ce91122c551406a30b7864ca6a51cf9ea074",
+  "templates": {
+    "moderate": "36bbafe1174f3188221ae31ecffba3c97a7981a2a316d98740ce63aeeb25445e",
+    "strong": "655f6f96df1744caa01504b04fefc5246347be698214ad26aca8bcc4a824e5df",
+    "straight": "722a5ba72f3f0659a2ff502bc163987e84bdba1d64e2e9430a5cbbc76199469c"
+  },
+  "launcher_sha256": "0d02896e9ce0ed404942f01c51aa72e20e73432c1ba41c7b46cdcfcfb3bb1af6",
+  "code_revision": "0ea70de322bc5183567af44a5db8e94104298244"
+}

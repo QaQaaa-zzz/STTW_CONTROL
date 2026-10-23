@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "context": [
+        "right90_R1p8",
+        2.6,
+        1.0,
+        -32.0,
+        1.0
+      ],
+      "parent_tail_path_m": 0.0916910171508789,
+      "candidate_tail_path_m": 0.1048746109008789,
+      "candidate_path_excess_m": 0.004874610900878901,
+      "tail_heading_abs_rad": 0.014078021980822086,
+      "tail_speed_abs_error_m_s": 0.01783156394958496,
+      "candidate_domain": false,
+      "candidate_goal": true
+    },
+    {
+      "context": [
+        "right90_R1p8",
+        2.8,
+        1.0,
+        -32.0,
+        1.0
+      ],
+      "parent_tail_path_m": 0.08765888214111328,
+      "candidate_tail_path_m": 0.10604476928710938,
+      "candidate_path_excess_m": 0.0060447692871093694,
+      "tail_heading_abs_rad": 0.011934878304600716,
+      "tail_speed_abs_error_m_s": 0.015856027603149414,
+      "candidate_domain": false,
+      "candidate_goal": true
+    },
+    {
+      "context": [
+        "left90_R1p8",
+        2.8,
+        1.0,
+        -32.0,
+        2.0
+      ],
+      "parent_tail_path_m": 0.08467483520507812,
+      "candidate_tail_path_m": 0.10828208923339844,
+      "candidate_path_excess_m": 0.008282089233398432,
+      "tail_heading_abs_rad": 0.012344717979431152,
+      "tail_speed_abs_error_m_s": 0.015856027603149414,
+      "candidate_domain": false,
+      "candidate_goal": true
+    }
+  ],
+  "interpretation": "All three parent-to-full10 task losses at alpha1; path exceeds 0.1m by 4.9-8.3mm. Continuous deviations must accompany binary counts; do not call this catastrophic failure or modify frozen labels."
+}

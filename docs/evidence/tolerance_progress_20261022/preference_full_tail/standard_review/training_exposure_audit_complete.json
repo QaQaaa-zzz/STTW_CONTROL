@@ -1,0 +1,293 @@
+{
+  "scope": "complete matched 27 updates; descriptive training exposure, not paired task performance",
+  "arms": {
+    "full10": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_v1/uniform/metrics.jsonl",
+      "sha256": "447acc8475122ae9287e2ffd8bd6a579570b1d0ef9bd14908b87c61a4534d18f",
+      "updates": 27,
+      "policy_transitions": 1769472,
+      "active_lower_ticks": 7077888,
+      "pulses_fired": 4016,
+      "ended_disturbed_segments": 3622,
+      "domain_events": 429,
+      "physical_events": 0,
+      "fallbacks": 0,
+      "alpha_values": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "alpha_tick_fraction": [
+        0.39717045536747686,
+        0.06626213921440972,
+        0.06453959147135417,
+        0.06804854781539352,
+        0.40397926613136576
+      ],
+      "force_tick_fraction": [
+        0.21495338722511573,
+        0.08472301341869214,
+        0.09191385904947917,
+        0.09670963993778935,
+        0.10750834147135417,
+        0.10625938132957176,
+        0.10324492277922453,
+        0.09787608959056714,
+        0.09681136519820602
+      ],
+      "alpha_force_active_lower_ticks": [
+        [
+          587200,
+          213604,
+          267640,
+          276524,
+          325080,
+          301544,
+          322224,
+          253076,
+          264236
+        ],
+        [
+          88696,
+          35360,
+          48380,
+          33924,
+          48908,
+          67560,
+          50588,
+          52400,
+          43180
+        ],
+        [
+          100136,
+          34044,
+          47224,
+          36984,
+          47828,
+          52756,
+          33880,
+          49292,
+          54660
+        ],
+        [
+          82880,
+          51776,
+          42404,
+          49864,
+          50436,
+          56416,
+          49152,
+          56520,
+          42192
+        ],
+        [
+          662504,
+          264876,
+          244908,
+          287204,
+          288680,
+          273816,
+          274912,
+          281468,
+          280952
+        ]
+      ],
+      "route_force_active_lower_ticks": [
+        [
+          279256,
+          148084,
+          141620,
+          150272,
+          146884,
+          145768,
+          156460,
+          159056,
+          141652
+        ],
+        [
+          559992,
+          246300,
+          299072,
+          294112,
+          301468,
+          290652,
+          278724,
+          288280,
+          255628
+        ],
+        [
+          682168,
+          205276,
+          209864,
+          240116,
+          312580,
+          315672,
+          295572,
+          245420,
+          287940
+        ]
+      ],
+      "force_levels_N": [
+        0,
+        -32.0,
+        -24.0,
+        -16.0,
+        -8.0,
+        8.0,
+        16.0,
+        24.0,
+        32.0
+      ],
+      "sampling_seconds": 1104.2624646980403,
+      "optimization_seconds": 2.582216354931006,
+      "last_update_ordinary_fraction": 0.8624916076660156
+    },
+    "short4": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_recovery_train_v1/uniform/metrics.jsonl",
+      "sha256": "7d443c204ecd85ac7dc8c74b2fc9913002fd7f635c5a0c1f8396459e982a335e",
+      "updates": 27,
+      "policy_transitions": 1769472,
+      "active_lower_ticks": 7077888,
+      "pulses_fired": 7589,
+      "ended_disturbed_segments": 7194,
+      "domain_events": 804,
+      "physical_events": 0,
+      "fallbacks": 0,
+      "alpha_values": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "alpha_tick_fraction": [
+        0.3917801468460648,
+        0.06513468424479167,
+        0.06680976019965278,
+        0.06792930320457176,
+        0.40834610550491895
+      ],
+      "force_tick_fraction": [
+        0.21224240903501157,
+        0.08452917028356481,
+        0.0966960765697338,
+        0.09811683937355324,
+        0.10675444426359953,
+        0.10158284505208333,
+        0.10400616681134259,
+        0.09975066008391203,
+        0.09632138852719907
+      ],
+      "alpha_force_active_lower_ticks": [
+        [
+          576556,
+          219960,
+          270192,
+          280056,
+          300612,
+          280080,
+          306040,
+          263528,
+          275952
+        ],
+        [
+          91300,
+          35008,
+          42616,
+          39752,
+          41012,
+          64532,
+          52604,
+          48712,
+          45480
+        ],
+        [
+          100072,
+          39736,
+          51000,
+          46116,
+          49040,
+          52756,
+          40712,
+          53748,
+          39692
+        ],
+        [
+          91236,
+          45288,
+          48660,
+          47252,
+          51852,
+          53480,
+          44000,
+          52824,
+          46204
+        ],
+        [
+          643064,
+          258296,
+          271936,
+          281284,
+          313080,
+          268144,
+          292788,
+          287212,
+          274424
+        ]
+      ],
+      "route_force_active_lower_ticks": [
+        [
+          293084,
+          137184,
+          160712,
+          149136,
+          150180,
+          133032,
+          161608,
+          155164,
+          145460
+        ],
+        [
+          562156,
+          259484,
+          294288,
+          293284,
+          298056,
+          272440,
+          282616,
+          276832,
+          260892
+        ],
+        [
+          646988,
+          201620,
+          229404,
+          252040,
+          307360,
+          313520,
+          291920,
+          274028,
+          275400
+        ]
+      ],
+      "force_levels_N": [
+        0,
+        -32.0,
+        -24.0,
+        -16.0,
+        -8.0,
+        8.0,
+        16.0,
+        24.0,
+        32.0
+      ],
+      "sampling_seconds": 2140.3609235780314,
+      "optimization_seconds": 4.626191200048197,
+      "last_update_ordinary_fraction": 0.7208709716796875
+    }
+  },
+  "metric_semantics": "enabled_completed counts ended disturbed segments including failures/timeouts, not successful recoveries; fired counts pulse starts",
+  "interpretation": "Matched interactions and initialization; episode lengths, pulse events and state occupancy differ. Do not infer performance from training failures or reward."
+}
