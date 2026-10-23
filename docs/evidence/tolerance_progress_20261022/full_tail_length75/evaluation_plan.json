@@ -1,0 +1,57 @@
+{
+  "training": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1",
+  "training_declaration_sha256": "fd32e8b27a91937f6957682ef5c010ee3e91f97592ce787e8d664baf1055efcd",
+  "baseline_checkpoint_sha256": "39e2055869bd803845e9d36da1f267a20b197481eac17e5ceef7528c35efb12e",
+  "panels": {
+    "moderate": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/moderate",
+      "cases_per_policy": 200,
+      "source_hashes": {
+        "declaration.json": "f87440759aac680d109f7822509b98b6636dae55a12a907dcbc9aa62b485538d",
+        "evaluation/manifest.json": "a154602a33aa69b22e704dac22ba94ebabc72a4fc3e8004170dffbc6d7f2e85f",
+        "evaluation/results.json": "8b52441ba1ba1a4e206207873a4458f9e7252e1cfba38ce25245b7df579771fd",
+        "evaluation/status.json": "6e23ec707f4dd4b9a07f147a409e9e5f7c8cf89b932c7d9d24d6f1935c9cf64c"
+      }
+    },
+    "strong": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/strong",
+      "cases_per_policy": 200,
+      "source_hashes": {
+        "declaration.json": "6bece353f78dd39b047952bc48a291cb6d5812839b2236d530bef8544f75c5dd",
+        "evaluation/manifest.json": "eeb4d140a6a0d38e7c0b2ef1e53e15366c942fb9bffcebc2ed9ea0e6a9801940",
+        "evaluation/results.json": "831bae7b77bd2bb9fa6495fa8aa2e25a7e8e9f35fe9410697857da791008acfc",
+        "evaluation/status.json": "6c6cb0ec0e288ec2620c1cf861bf6d3552e77b05717a8dd3f07f868067d3051d"
+      }
+    },
+    "straight": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/straight",
+      "cases_per_policy": 10,
+      "source_hashes": {
+        "declaration.json": "948fdd501f0aefcbc2f60de8333e52065531f10ae5ce268b718cd89af2be6a54",
+        "evaluation/manifest.json": "29dad24ec3b37971459255603c2b19e14307ff1464b065ee655e77a43660e1e6",
+        "evaluation/results.json": "51a2e35d58dd33593063bd3218230c4aef058a27cf8eebf762f575a254ad9959",
+        "evaluation/status.json": "8edda5d0aa642f26de41f3ef73ac3c239ce762542c4f80b2bbbe6f8d29f2a5f5"
+      }
+    },
+    "low_speed": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1",
+      "cases_per_policy": 60,
+      "source_hashes": {
+        "declaration.json": "4ccd639d33d5e0da0ccfdecd51508ca9bff5d0c9fb1e463aeb0f66909f006a88",
+        "evaluation/manifest.json": "1157eb3c7415fb028bf0f1256fc5d180e942ea4aa8c890f4e084f422dff7ea2d",
+        "evaluation/results.json": "b6ef6e75d2584404473dbd8f66f72ba94b173241dc608b5decc6d28ada014dc3",
+        "evaluation/status.json": "38eb5895066328d7f5eb9890c2f77bba8b453d355e5002e9ee797c9d6b496e90"
+      }
+    }
+  },
+  "fixed_candidates": {
+    "ppo48": 50,
+    "ppo75": 77
+  },
+  "primary": "paired task recovery at75 vs25 PPO in strong200; nominal retention reported separately",
+  "secondary": "moderate200/straight10/low_speed60 and intermediate48 PPO descriptive; no best selection",
+  "fresh_cases": 940,
+  "maximum_lower_ticks": 1880000,
+  "training_steps": 0,
+  "data_role": "reused development panels; not independent TEST"
+}
