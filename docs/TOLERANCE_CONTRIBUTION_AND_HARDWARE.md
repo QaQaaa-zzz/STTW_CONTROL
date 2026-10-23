@@ -48,3 +48,20 @@
 ## 分析工具说明
 
 本记录使用 scientific-critical-thinking skill 分离观察、因果解释与待验证贡献。引用：Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)。作者与当前版本已由 arXiv 记录核对；使用该工具不构成研究结论的独立背书。
+
+## 仓库部署接口初查（b5ad8ab，源码检查，未上机）
+
+范围限定为当前 worktree 的 `mujoco_ros_ws20260313/mujoco_ros/` 与训练侧路径策略；不代表用户实际硬件仓库的情况。
+
+| 已核对项 | 源码事实 | 下一步需要对应的实机信息 |
+|---|---|---|
+| RobotState.msg | time、转向角/角速度、侧倾角/角速度、偏航角速度、前后轮轴速度；无 XY、航向角及车体真实前向速度 | 定位/航向与速度估计的来源、时间戳和误差；不能把轮速直接冒称真值 |
+| path_command_env.py::observation | Actor351 上下文包含 alpha、横向误差、航向误差正余弦、三处曲率、车体系预瞄点、原速度要求和滤波修正状态 | 路径投影、原始路径、位姿与控制时钟需同步；只导出网络权重不够 |
+| path_command_policy.py::correction_tick | 中层输出经 tanh、非对称速度缩放、滤波、变化率限制及参考限幅后进入底层 | 部署必须复用同一配置与状态更新顺序，不能直接当电机命令 |
+| ResidualCmd.msg 与 balance_control_node.cpp | residual_cmd 是归一化底层残差；composeCommand 在 ECBC 输出后组合它 | 不能把中层两维输出接到此 topic；需确定 local300 推理与中层参考入口的实际位置 |
+| BoardCmd.msg | target_steer_pos(rad)、target_rear_vel(rad/s)，与中层速度参考(m/s)单位不同 | 明确轮半径、轴速符号及一次性的单位变换 |
+| balance_control_node.cpp | roll/roll_rate 在 ECBC 调用处取负；速度换算使用硬编码0.1；配置控制频率200Hz | 与当前实车传感器约定和模型绑定核对；不能盲目再翻一次符号 |
+| control.launch | 默认 residual_enabled=false，启动基础控制节点；本次限定目录搜索未找到 Actor 推理节点 | 这不是 local300＋中层已部署证据；等待用户实际推理入口 |
+| 现有 CSV 日志 | 含状态、ESO、基础参考、残差及最终命令；无 alpha、世界 XY、原始路径、扰动量或 checkpoint 身份列 | 正式实验记录需补这些字段或同步日志关联，才能验证偏好和恢复 |
+
+优先级：确认用户实际部署入口 → 对齐观测/参考/底层接口 → 离线用保存观测比对推理及状态更新 → 校准真实闭环与测量 → 冻结正式实验。现阶段未改 ROS 控制代码，避免根据未知硬件猜测接口。
