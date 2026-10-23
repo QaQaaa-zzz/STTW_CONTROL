@@ -60,6 +60,23 @@ def episode_key(seed,env_id,episode):
     return jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(seed),env_id),episode)
 
 
+def sample_curriculum_route(seed,eid,episode,pose,cfg,stage):
+    """Existing conditional-policy curriculum sampler, with explicit stage.
+
+    Ported from path-conflict-exposure-v1/path_command_curriculum.route_for_stage;
+    this leaves the historical demand_exposure_v2 dispatcher unchanged.
+    """
+    key=episode_key(seed,eid,episode);u=jax.random.uniform(key,(12,))
+    level=j.maximum(0,stage-j.asarray((stage>0)&(u[10]<cfg['curriculum']['previous_fraction']),j.int32))
+    levels=cfg['curriculum']['stages'];speeds=j.asarray([x['speed_m_s'] for x in levels]);radii=j.asarray([x['radius_m'] for x in levels])
+    speed=speeds[level,0]+u[5]*(speeds[level,1]-speeds[level,0]);radius=radii[level,0]+u[3]*(radii[level,1]-radii[level,0])
+    group=j.where(eid<102,0,j.where(eid<306,1,2)).astype(j.int32)
+    angle=j.deg2rad(j.where(group==0,j.where(u[0]<.5,0.,30.),90.+10*u[4]));radius=j.where(group==0,j.maximum(radius,3.),radius)
+    sign=j.where(eid%2==0,1.,-1.)
+    lat=j.where(u[6]<.2,-.1+.2*u[7],0.);heading=j.where(u[6]<.2,-.05+.1*u[8],0.)
+    return _integrate_route(pose,cfg['path'],group,radius,angle,speed,sign,lat,heading,sample_group=group)
+
+
 _V2_GROUPS = [
     {'ids_inclusive':[0,101], 'count':102, 'mode':'legacy_sample_route'},
     {'ids_inclusive':[102,305], 'count':204, 'mode':'strong_single'},

@@ -66,3 +66,19 @@ def test_exact_alpha_groups_prevent_within_bin_preference_drift():
     a,b=draws(uniform),draws(guided)
     np.testing.assert_array_equal(alphas[a['state_index']],alphas[b['state_index']])
     assert np.any(np.asarray(a['state_index'])!=np.asarray(b['state_index']))
+
+
+def test_new_train_route_sampler_retains_existing_curriculum_distribution():
+    import json
+    from pathlib import Path
+    from sttw_control.path_command_scenarios import sample_curriculum_route
+    path=Path('/home/qy/STTW_CONTROL/runs/worktrees/path-conflict-exposure-v1/runs/path_distilled_v3_curriculum_400_20261021/training/manifest.json')
+    if not path.exists():
+        import pytest
+        pytest.skip('external curriculum source unavailable')
+    cfg=json.loads(path.read_text())['config'];ids=j.array([0,100,102,200,306,400,511])
+    routes=jax.jit(jax.vmap(lambda eid:sample_curriculum_route(918201,eid,741,j.zeros(3),cfg,2)))(ids)
+    np.testing.assert_array_equal(routes.family,[0,0,1,1,2,2,2])
+    assert np.all(np.asarray(routes.speed)>=2.4) and np.all(np.asarray(routes.speed)<=2.8)
+    assert np.isfinite(np.asarray(routes.path.xy)).all()
+    np.testing.assert_allclose(np.asarray(routes.path.s[:,1]-routes.path.s[:,0]),.02)
