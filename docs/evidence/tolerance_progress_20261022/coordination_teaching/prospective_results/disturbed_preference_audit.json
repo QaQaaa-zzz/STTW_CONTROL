@@ -1,0 +1,4445 @@
+{
+  "summary": [
+    {
+      "policy": "parent",
+      "total_contexts": 32,
+      "full_horizon_contexts": 24,
+      "excluded_early_end": 8,
+      "all_task_success": 15,
+      "speed_monotone": 23,
+      "speed_endpoint": 24,
+      "path_endpoint": 4
+    },
+    {
+      "policy": "seed918501",
+      "total_contexts": 32,
+      "full_horizon_contexts": 29,
+      "excluded_early_end": 3,
+      "all_task_success": 15,
+      "speed_monotone": 27,
+      "speed_endpoint": 29,
+      "path_endpoint": 8
+    }
+  ],
+  "contexts": [
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 348,
+          "speed_rmse": 0.30439168214797974,
+          "path_rmse": 0.3545425534248352,
+          "peak_roll": 0.3559516668319702
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 360,
+          "speed_rmse": 0.24351461231708527,
+          "path_rmse": 0.3858242928981781,
+          "peak_roll": 0.35889577865600586
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 420,
+          "speed_rmse": 0.1293308436870575,
+          "path_rmse": 0.5177608728408813,
+          "peak_roll": 0.3611496686935425
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03509487956762314,
+          "path_rmse": 0.8685693740844727,
+          "peak_roll": 0.3524976968765259
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 431,
+          "speed_rmse": 0.19474062323570251,
+          "path_rmse": 0.6594895720481873,
+          "peak_roll": 0.27992045879364014
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 423,
+          "speed_rmse": 0.17366661131381989,
+          "path_rmse": 0.6501801609992981,
+          "peak_roll": 0.2833601236343384
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06780949234962463,
+          "path_rmse": 1.2354395389556885,
+          "peak_roll": 0.2828322649002075
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.040948618203401566,
+          "path_rmse": 1.131204605102539,
+          "peak_roll": 0.2837848663330078
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0898611918091774,
+          "path_rmse": 0.19608661532402039,
+          "peak_roll": 0.2920924425125122
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0740697905421257,
+          "path_rmse": 0.19959895312786102,
+          "peak_roll": 0.29824984073638916
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.053896497935056686,
+          "path_rmse": 0.1854088008403778,
+          "peak_roll": 0.309950590133667
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03616689518094063,
+          "path_rmse": 0.16099780797958374,
+          "peak_roll": 0.3298741579055786
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.12240264564752579,
+          "path_rmse": 0.6119391322135925,
+          "peak_roll": 0.2334059476852417
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.10360965132713318,
+          "path_rmse": 0.41427189111709595,
+          "peak_roll": 0.2241506576538086
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.030993331223726273,
+          "path_rmse": 0.15777410566806793,
+          "peak_roll": 0.20184850692749023
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.022090338170528412,
+          "path_rmse": 0.15471434593200684,
+          "peak_roll": 0.21460318565368652
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 320,
+          "speed_rmse": 0.27294257283210754,
+          "path_rmse": 0.4358184337615967,
+          "peak_roll": 0.41681134700775146
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 340,
+          "speed_rmse": 0.20524181425571442,
+          "path_rmse": 0.48699134588241577,
+          "peak_roll": 0.42288362979888916
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 400,
+          "speed_rmse": 0.10592593997716904,
+          "path_rmse": 0.6360634565353394,
+          "peak_roll": 0.4348217248916626
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.028452077880501747,
+          "path_rmse": 0.8283472061157227,
+          "peak_roll": 0.4163072109222412
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1750035136938095,
+          "path_rmse": 0.9200945496559143,
+          "peak_roll": 0.3227931261062622
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1272096484899521,
+          "path_rmse": 0.8946954011917114,
+          "peak_roll": 0.31971728801727295
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06389696896076202,
+          "path_rmse": 0.828425943851471,
+          "peak_roll": 0.31515932083129883
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.028793146833777428,
+          "path_rmse": 0.7152705192565918,
+          "peak_roll": 0.32148241996765137
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.08716398477554321,
+          "path_rmse": 0.2540287971496582,
+          "peak_roll": 0.34022295475006104
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.061579592525959015,
+          "path_rmse": 0.22738775610923767,
+          "peak_roll": 0.34151220321655273
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.035190705209970474,
+          "path_rmse": 0.13745439052581787,
+          "peak_roll": 0.34461843967437744
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02645041048526764,
+          "path_rmse": 0.05547914281487465,
+          "peak_roll": 0.3533501625061035
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.12832650542259216,
+          "path_rmse": 0.4401509463787079,
+          "peak_roll": 0.27553272247314453
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09834318608045578,
+          "path_rmse": 0.2825896441936493,
+          "peak_roll": 0.26765596866607666
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.039591964334249496,
+          "path_rmse": 0.09948180615901947,
+          "peak_roll": 0.25058257579803467
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02023877017199993,
+          "path_rmse": 0.08116915822029114,
+          "peak_roll": 0.26516199111938477
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.178795725107193,
+          "path_rmse": 0.44744551181793213,
+          "peak_roll": 0.2900005578994751
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.12959976494312286,
+          "path_rmse": 0.27367153763771057,
+          "peak_roll": 0.3021494150161743
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.102460578083992,
+          "path_rmse": 0.3966415226459503,
+          "peak_roll": 0.3493131399154663
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05848204717040062,
+          "path_rmse": 0.08307991176843643,
+          "peak_roll": 0.3483651876449585
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.14853674173355103,
+          "path_rmse": 1.044420838356018,
+          "peak_roll": 0.2640262842178345
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1202838346362114,
+          "path_rmse": 0.8257846236228943,
+          "peak_roll": 0.24901831150054932
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.088482566177845,
+          "path_rmse": 0.576914370059967,
+          "peak_roll": 0.2360234260559082
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06313566118478775,
+          "path_rmse": 0.17568808794021606,
+          "peak_roll": 0.22334742546081543
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 384,
+          "speed_rmse": 0.38819649815559387,
+          "path_rmse": 0.4267663061618805,
+          "peak_roll": 0.3128577470779419
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.1512555330991745,
+          "path_rmse": 1.0621367692947388,
+          "peak_roll": 0.3059021234512329
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.07200786471366882,
+          "path_rmse": 0.5701500773429871,
+          "peak_roll": 0.32908809185028076
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.031180722638964653,
+          "path_rmse": 0.30478087067604065,
+          "peak_roll": 0.3241082429885864
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1299991011619568,
+          "path_rmse": 0.8223476409912109,
+          "peak_roll": 0.24695348739624023
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.10291007906198502,
+          "path_rmse": 0.8323706984519958,
+          "peak_roll": 0.2548621892929077
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.044475704431533813,
+          "path_rmse": 0.4988577365875244,
+          "peak_roll": 0.25362586975097656
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02738177217543125,
+          "path_rmse": 0.6294575929641724,
+          "peak_roll": 0.28460752964019775
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.14118215441703796,
+          "path_rmse": 0.2670615315437317,
+          "peak_roll": 0.3245042562484741
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.1350490152835846,
+          "path_rmse": 0.3602279722690582,
+          "peak_roll": 0.34257638454437256
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.11866758018732071,
+          "path_rmse": 0.3874044716358185,
+          "peak_roll": 0.39400506019592285
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.048749905079603195,
+          "path_rmse": 0.18365775048732758,
+          "peak_roll": 0.4009767770767212
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.17542564868927002,
+          "path_rmse": 0.9219740629196167,
+          "peak_roll": 0.3223752975463867
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.13175344467163086,
+          "path_rmse": 0.9963215589523315,
+          "peak_roll": 0.3314551115036011
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08751431107521057,
+          "path_rmse": 0.34939679503440857,
+          "peak_roll": 0.2824653387069702
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06804727762937546,
+          "path_rmse": 0.32814696431159973,
+          "peak_roll": 0.27011215686798096
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 352,
+          "speed_rmse": 0.47911933064460754,
+          "path_rmse": 0.47724270820617676,
+          "peak_roll": 0.3458658456802368
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.17864631116390228,
+          "path_rmse": 1.227251648902893,
+          "peak_roll": 0.3440709114074707
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0759291723370552,
+          "path_rmse": 0.3692812919616699,
+          "peak_roll": 0.3613351583480835
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.028684305027127266,
+          "path_rmse": 0.4900645315647125,
+          "peak_roll": 0.36410725116729736
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "parent",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.13261891901493073,
+          "path_rmse": 0.43816277384757996,
+          "peak_roll": 0.2738032341003418
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09733164310455322,
+          "path_rmse": 0.21563148498535156,
+          "peak_roll": 0.2726665735244751
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.04972091689705849,
+          "path_rmse": 0.38311848044395447,
+          "peak_roll": 0.3003019094467163
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.027539364993572235,
+          "path_rmse": 0.3765188753604889,
+          "peak_roll": 0.32121050357818604
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 420,
+          "speed_rmse": 0.0786113440990448,
+          "path_rmse": 0.5122280120849609,
+          "peak_roll": 0.36324238777160645
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 436,
+          "speed_rmse": 0.053434111177921295,
+          "path_rmse": 0.5550236701965332,
+          "peak_roll": 0.3664199113845825
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.01820916309952736,
+          "path_rmse": 1.1114234924316406,
+          "peak_roll": 0.3644219636917114
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.01812753826379776,
+          "path_rmse": 0.7005968689918518,
+          "peak_roll": 0.34803473949432373
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06586398929357529,
+          "path_rmse": 0.9267809987068176,
+          "peak_roll": 0.2790231704711914
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.043085623532533646,
+          "path_rmse": 0.8639850616455078,
+          "peak_roll": 0.27615153789520264
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.01972164399921894,
+          "path_rmse": 0.6780685186386108,
+          "peak_roll": 0.26375317573547363
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.016534164547920227,
+          "path_rmse": 0.7176079750061035,
+          "peak_roll": 0.2670867443084717
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0700603723526001,
+          "path_rmse": 0.2036692053079605,
+          "peak_roll": 0.30688750743865967
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05484806373715401,
+          "path_rmse": 0.20244988799095154,
+          "peak_roll": 0.31500089168548584
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03233564645051956,
+          "path_rmse": 0.18350830674171448,
+          "peak_roll": 0.3339322805404663
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0255070012062788,
+          "path_rmse": 0.16685381531715393,
+          "peak_roll": 0.34526681900024414
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08167286962270737,
+          "path_rmse": 0.4525584578514099,
+          "peak_roll": 0.24473857879638672
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.056162554770708084,
+          "path_rmse": 0.3481406271457672,
+          "peak_roll": 0.23594725131988525
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.029121797531843185,
+          "path_rmse": 0.174306720495224,
+          "peak_roll": 0.21728718280792236
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.020419670268893242,
+          "path_rmse": 0.15726831555366516,
+          "peak_roll": 0.2258824110031128
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 360,
+          "speed_rmse": 0.07289497554302216,
+          "path_rmse": 0.5488945245742798,
+          "peak_roll": 0.4339545965194702
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 372,
+          "speed_rmse": 0.04887847974896431,
+          "path_rmse": 0.568724513053894,
+          "peak_roll": 0.44122374057769775
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.018395928665995598,
+          "path_rmse": 1.2159186601638794,
+          "peak_roll": 0.43010568618774414
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.016979467123746872,
+          "path_rmse": 0.6999881267547607,
+          "peak_roll": 0.41020190715789795
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08515223860740662,
+          "path_rmse": 0.7130197882652283,
+          "peak_roll": 0.31504690647125244
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05595347657799721,
+          "path_rmse": 0.5977867841720581,
+          "peak_roll": 0.3032029867172241
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.01951122283935547,
+          "path_rmse": 0.5260829329490662,
+          "peak_roll": 0.30030572414398193
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.013704955577850342,
+          "path_rmse": 0.5958530306816101,
+          "peak_roll": 0.3126094341278076
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.059610478579998016,
+          "path_rmse": 0.28749775886535645,
+          "peak_roll": 0.3646916151046753
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.04293162375688553,
+          "path_rmse": 0.2364526093006134,
+          "peak_roll": 0.36968421936035156
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.028353216126561165,
+          "path_rmse": 0.154023677110672,
+          "peak_roll": 0.3738926649093628
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02530791237950325,
+          "path_rmse": 0.07348128408193588,
+          "peak_roll": 0.3727281093597412
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "left70_R1p9",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06605912744998932,
+          "path_rmse": 0.2724432945251465,
+          "peak_roll": 0.2843952178955078
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.04891633242368698,
+          "path_rmse": 0.1941780000925064,
+          "peak_roll": 0.28009283542633057
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.026494931429624557,
+          "path_rmse": 0.0971795916557312,
+          "peak_roll": 0.2671217918395996
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.021314315497875214,
+          "path_rmse": 0.0856589749455452,
+          "peak_roll": 0.2740541696548462
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.11465013772249222,
+          "path_rmse": 0.29095616936683655,
+          "peak_roll": 0.3178039789199829
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.07647768408060074,
+          "path_rmse": 0.308872252702713,
+          "peak_roll": 0.33947885036468506
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03536909073591232,
+          "path_rmse": 0.16726255416870117,
+          "peak_roll": 0.36041557788848877
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02473045140504837,
+          "path_rmse": 0.05864653363823891,
+          "peak_roll": 0.34681594371795654
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.0788165032863617,
+          "path_rmse": 0.9802405834197998,
+          "peak_roll": 0.2762552499771118
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06696370244026184,
+          "path_rmse": 0.7710033059120178,
+          "peak_roll": 0.2639538049697876
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06122356280684471,
+          "path_rmse": 0.370628297328949,
+          "peak_roll": 0.24207830429077148
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05486312508583069,
+          "path_rmse": 0.1704593002796173,
+          "peak_roll": 0.22368252277374268
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 436,
+          "speed_rmse": 0.11892944574356079,
+          "path_rmse": 0.555048942565918,
+          "peak_roll": 0.3417654037475586
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.04209998995065689,
+          "path_rmse": 0.8202164173126221,
+          "peak_roll": 0.3427799940109253
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.027911240234971046,
+          "path_rmse": 0.373611181974411,
+          "peak_roll": 0.3381016254425049
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.024411963298916817,
+          "path_rmse": 0.30833154916763306,
+          "peak_roll": 0.32277750968933105
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08001960068941116,
+          "path_rmse": 0.46296292543411255,
+          "peak_roll": 0.2465062141418457
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05008496344089508,
+          "path_rmse": 0.40049871802330017,
+          "peak_roll": 0.24452710151672363
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.023520834743976593,
+          "path_rmse": 0.3822689950466156,
+          "peak_roll": 0.25052332878112793
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.025495801120996475,
+          "path_rmse": 0.5146836638450623,
+          "peak_roll": 0.28134262561798096
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": false,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.09140294045209885,
+          "path_rmse": 0.3315139412879944,
+          "peak_roll": 0.3665999174118042
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.07362833619117737,
+          "path_rmse": 0.28560155630111694,
+          "peak_roll": 0.3846476078033447
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.040056172758340836,
+          "path_rmse": 0.05362550914287567,
+          "peak_roll": 0.408321738243103
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.027987094596028328,
+          "path_rmse": 0.22731849551200867,
+          "peak_roll": 0.3990821838378906
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08055811375379562,
+          "path_rmse": 0.9138752818107605,
+          "peak_roll": 0.3427494764328003
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07788219302892685,
+          "path_rmse": 0.6360708475112915,
+          "peak_roll": 0.31418347358703613
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07573111355304718,
+          "path_rmse": 0.3187570869922638,
+          "peak_roll": 0.2933204174041748
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06013531610369682,
+          "path_rmse": 0.29992279410362244,
+          "peak_roll": 0.2711012363433838
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0808785930275917,
+          "path_rmse": 0.8487302660942078,
+          "peak_roll": 0.37305498123168945
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05315142869949341,
+          "path_rmse": 0.5879915952682495,
+          "peak_roll": 0.3813469409942627
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.043089840561151505,
+          "path_rmse": 0.2893944978713989,
+          "peak_roll": 0.37808310985565186
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02249869517982006,
+          "path_rmse": 0.49110305309295654,
+          "peak_roll": 0.36250734329223633
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn70_R1p9",
+      "policy": "seed918501",
+      "context": [
+        "right70_R1p9",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07862909883260727,
+          "path_rmse": 0.18357320129871368,
+          "peak_roll": 0.28981590270996094
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05096698924899101,
+          "path_rmse": 0.20814475417137146,
+          "peak_roll": 0.29688501358032227
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.03454389050602913,
+          "path_rmse": 0.29796645045280457,
+          "peak_roll": 0.2933204174041748
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.030633997172117233,
+          "path_rmse": 0.36441299319267273,
+          "peak_roll": 0.3174917697906494
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.17564623057842255,
+          "path_rmse": 0.46167272329330444,
+          "peak_roll": 0.3648263216018677
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.13387958705425262,
+          "path_rmse": 0.3760609030723572,
+          "peak_roll": 0.3666282892227173
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.09595590829849243,
+          "path_rmse": 0.1762019395828247,
+          "peak_roll": 0.36605143547058105
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05642786994576454,
+          "path_rmse": 0.09009689837694168,
+          "peak_roll": 0.3628319501876831
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 427,
+          "speed_rmse": 0.28751036524772644,
+          "path_rmse": 0.6075025796890259,
+          "peak_roll": 0.3720114231109619
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 467,
+          "speed_rmse": 0.23801496624946594,
+          "path_rmse": 0.6960224509239197,
+          "peak_roll": 0.3736107349395752
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09165381640195847,
+          "path_rmse": 0.898455023765564,
+          "peak_roll": 0.37295353412628174
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.04407631233334541,
+          "path_rmse": 0.2214565873146057,
+          "peak_roll": 0.3572932481765747
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.1195363700389862,
+          "path_rmse": 0.5333383679389954,
+          "peak_roll": 0.2701294422149658
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.10007471591234207,
+          "path_rmse": 0.46762338280677795,
+          "peak_roll": 0.2740098237991333
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.06352517008781433,
+          "path_rmse": 0.47566014528274536,
+          "peak_roll": 0.28115952014923096
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0408545546233654,
+          "path_rmse": 0.45123499631881714,
+          "peak_roll": 0.2901010513305664
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.14962522685527802,
+          "path_rmse": 0.38298866152763367,
+          "peak_roll": 0.29202425479888916
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09082037210464478,
+          "path_rmse": 0.19147449731826782,
+          "peak_roll": 0.29525911808013916
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05304005369544029,
+          "path_rmse": 0.1353847235441208,
+          "peak_roll": 0.3034837245941162
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.03239131718873978,
+          "path_rmse": 0.09158781170845032,
+          "peak_roll": 0.3128165006637573
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.18557287752628326,
+          "path_rmse": 0.4042869508266449,
+          "peak_roll": 0.43513810634613037
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.14501024782657623,
+          "path_rmse": 0.24033516645431519,
+          "peak_roll": 0.43592214584350586
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.09509879350662231,
+          "path_rmse": 0.08726521581411362,
+          "peak_roll": 0.441436767578125
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.04720017686486244,
+          "path_rmse": 0.25374335050582886,
+          "peak_roll": 0.43484294414520264
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 355,
+          "speed_rmse": 0.3214748203754425,
+          "path_rmse": 0.47149792313575745,
+          "peak_roll": 0.43926024436950684
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 391,
+          "speed_rmse": 0.23852625489234924,
+          "path_rmse": 0.5530848503112793,
+          "peak_roll": 0.44053590297698975
+        },
+        {
+          "alpha": 0.6,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.061948373913764954,
+          "path_rmse": 0.7197390794754028,
+          "peak_roll": 0.43099522590637207
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.030317699536681175,
+          "path_rmse": 0.4030934274196625,
+          "peak_roll": 0.39941132068634033
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.15345075726509094,
+          "path_rmse": 0.3146178722381592,
+          "peak_roll": 0.3264446258544922
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.1295154094696045,
+          "path_rmse": 0.3298085629940033,
+          "peak_roll": 0.3297806978225708
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.08457183837890625,
+          "path_rmse": 0.3255012035369873,
+          "peak_roll": 0.33854055404663086
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03995527699589729,
+          "path_rmse": 0.3705975115299225,
+          "peak_roll": 0.34931981563568115
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09872870147228241,
+          "path_rmse": 0.18067172169685364,
+          "peak_roll": 0.3486478328704834
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08617687970399857,
+          "path_rmse": 0.15156489610671997,
+          "peak_roll": 0.3524206876754761
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.04773128777742386,
+          "path_rmse": 0.053811509162187576,
+          "peak_roll": 0.3792644739151001
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02560473047196865,
+          "path_rmse": 0.15799659490585327,
+          "peak_roll": 0.38657140731811523
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.13838784396648407,
+          "path_rmse": 0.8713191747665405,
+          "peak_roll": 0.2712864875793457
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.1082485243678093,
+          "path_rmse": 0.7711563110351562,
+          "peak_roll": 0.2797873020172119
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.06581395864486694,
+          "path_rmse": 0.5692646503448486,
+          "peak_roll": 0.2938181161880493
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0413469523191452,
+          "path_rmse": 0.6202157139778137,
+          "peak_roll": 0.2943810224533081
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.17414218187332153,
+          "path_rmse": 0.5842145681381226,
+          "peak_roll": 0.280514121055603
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.12311317026615143,
+          "path_rmse": 0.2375984638929367,
+          "peak_roll": 0.29496777057647705
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06923939287662506,
+          "path_rmse": 0.1227431669831276,
+          "peak_roll": 0.30590057373046875
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.03746821731328964,
+          "path_rmse": 0.19797831773757935,
+          "peak_roll": 0.31436455249786377
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.23057730495929718,
+          "path_rmse": 0.44469839334487915,
+          "peak_roll": 0.3356611728668213
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.16474179923534393,
+          "path_rmse": 0.25769326090812683,
+          "peak_roll": 0.33821725845336914
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.08847589790821075,
+          "path_rmse": 0.1254950314760208,
+          "peak_roll": 0.33882617950439453
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03401413559913635,
+          "path_rmse": 0.32178008556365967,
+          "peak_roll": 0.33371222019195557
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.21514233946800232,
+          "path_rmse": 1.0323395729064941,
+          "peak_roll": 0.328524112701416
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1724696159362793,
+          "path_rmse": 0.853813111782074,
+          "peak_roll": 0.3419034481048584
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07665230333805084,
+          "path_rmse": 0.19692054390907288,
+          "peak_roll": 0.328022837638855
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.03169223293662071,
+          "path_rmse": 0.41459596157073975,
+          "peak_roll": 0.31845033168792725
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.20050305128097534,
+          "path_rmse": 0.4194415807723999,
+          "peak_roll": 0.3267638683319092
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.16324183344841003,
+          "path_rmse": 0.40220221877098083,
+          "peak_roll": 0.3260427713394165
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.10373891890048981,
+          "path_rmse": 0.4245906174182892,
+          "peak_roll": 0.34758901596069336
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.052237123250961304,
+          "path_rmse": 0.5765726566314697,
+          "peak_roll": 0.37056541442871094
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.13679265975952148,
+          "path_rmse": 0.14502175152301788,
+          "peak_roll": 0.3191230297088623
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.15275238454341888,
+          "path_rmse": 0.1285918653011322,
+          "peak_roll": 0.33378756046295166
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.08989335596561432,
+          "path_rmse": 0.15714068710803986,
+          "peak_roll": 0.35563111305236816
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.03493884578347206,
+          "path_rmse": 0.37902262806892395,
+          "peak_roll": 0.3696547746658325
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": false,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.2501561939716339,
+          "path_rmse": 0.47624671459198,
+          "peak_roll": 0.4049462080001831
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.20873679220676422,
+          "path_rmse": 0.20714975893497467,
+          "peak_roll": 0.3966115713119507
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.10250359773635864,
+          "path_rmse": 0.3012230098247528,
+          "peak_roll": 0.38815343379974365
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03306014463305473,
+          "path_rmse": 0.6327558159828186,
+          "peak_roll": 0.3807281255722046
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "parent",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": false,
+          "turn_ticks": 387,
+          "speed_rmse": 0.49235284328460693,
+          "path_rmse": 0.5081413388252258,
+          "peak_roll": 0.38508641719818115
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.2051006555557251,
+          "path_rmse": 0.9088118076324463,
+          "peak_roll": 0.3798292875289917
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07623383402824402,
+          "path_rmse": 0.4240112900733948,
+          "peak_roll": 0.37435197830200195
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.030076444149017334,
+          "path_rmse": 0.6856930255889893,
+          "peak_roll": 0.3616964817047119
+        }
+      ],
+      "eligible_full_horizon": false,
+      "all_task_success": false,
+      "speed_monotone": null,
+      "speed_endpoint": null,
+      "path_endpoint": null
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05285913497209549,
+          "path_rmse": 0.1743936687707901,
+          "peak_roll": 0.3747035264968872
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03580319508910179,
+          "path_rmse": 0.11361295729875565,
+          "peak_roll": 0.37178969383239746
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02761751040816307,
+          "path_rmse": 0.09441230446100235,
+          "peak_roll": 0.36360251903533936
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.020967189222574234,
+          "path_rmse": 0.13285864889621735,
+          "peak_roll": 0.3561819791793823
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.053479406982660294,
+          "path_rmse": 0.8620175123214722,
+          "peak_roll": 0.37996602058410645
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.037225015461444855,
+          "path_rmse": 0.6711559891700745,
+          "peak_roll": 0.37612998485565186
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02306295745074749,
+          "path_rmse": 0.38932064175605774,
+          "peak_roll": 0.36639082431793213
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.020777950063347816,
+          "path_rmse": 0.21086615324020386,
+          "peak_roll": 0.35171568393707275
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.09278636425733566,
+          "path_rmse": 0.5221397876739502,
+          "peak_roll": 0.2759352922439575
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.07715853303670883,
+          "path_rmse": 0.46989113092422485,
+          "peak_roll": 0.2792431116104126
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.05129105597734451,
+          "path_rmse": 0.4388817846775055,
+          "peak_roll": 0.28516948223114014
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03533010557293892,
+          "path_rmse": 0.4324682354927063,
+          "peak_roll": 0.2913912534713745
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.10796751827001572,
+          "path_rmse": 0.2596414089202881,
+          "peak_roll": 0.29529738426208496
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.06621980667114258,
+          "path_rmse": 0.18998277187347412,
+          "peak_roll": 0.29476964473724365
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.038552459329366684,
+          "path_rmse": 0.12738610804080963,
+          "peak_roll": 0.30603063106536865
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.025290556252002716,
+          "path_rmse": 0.09144586324691772,
+          "peak_roll": 0.3138695955276489
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.06097685918211937,
+          "path_rmse": 0.07793953269720078,
+          "peak_roll": 0.44524645805358887
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.04521883651614189,
+          "path_rmse": 0.0957643985748291,
+          "peak_roll": 0.4428095817565918
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.029271775856614113,
+          "path_rmse": 0.17301982641220093,
+          "peak_roll": 0.43783843517303467
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.023070864379405975,
+          "path_rmse": 0.30796530842781067,
+          "peak_roll": 0.4267023801803589
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07123198360204697,
+          "path_rmse": 1.1593399047851562,
+          "peak_roll": 0.4498739242553711
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.04398836940526962,
+          "path_rmse": 0.9753037691116333,
+          "peak_roll": 0.44901859760284424
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02125958725810051,
+          "path_rmse": 0.3561093211174011,
+          "peak_roll": 0.42399656772613525
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.026567038148641586,
+          "path_rmse": 0.41069522500038147,
+          "peak_roll": 0.39846301078796387
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": false,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.11831969767808914,
+          "path_rmse": 0.320381760597229,
+          "peak_roll": 0.3373279571533203
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.09838797897100449,
+          "path_rmse": 0.31097686290740967,
+          "peak_roll": 0.3403913974761963
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.056574489921331406,
+          "path_rmse": 0.32373327016830444,
+          "peak_roll": 0.3469346761703491
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.032003406435251236,
+          "path_rmse": 0.364963561296463,
+          "peak_roll": 0.3556605577468872
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "left130_R2p7",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07310725748538971,
+          "path_rmse": 0.17135177552700043,
+          "peak_roll": 0.35866105556488037
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05821876600384712,
+          "path_rmse": 0.13832662999629974,
+          "peak_roll": 0.36531388759613037
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.0293335672467947,
+          "path_rmse": 0.0618826225399971,
+          "peak_roll": 0.38667333126068115
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.024631530046463013,
+          "path_rmse": 0.1574838012456894,
+          "peak_roll": 0.3903919458389282
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.06927170604467392,
+          "path_rmse": 0.7483322620391846,
+          "peak_roll": 0.2759131193161011
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.0551772341132164,
+          "path_rmse": 0.6419609785079956,
+          "peak_roll": 0.28385770320892334
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02829601615667343,
+          "path_rmse": 0.5050588846206665,
+          "peak_roll": 0.2929338216781616
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02035869099199772,
+          "path_rmse": 0.5927730202674866,
+          "peak_roll": 0.28972113132476807
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.1144927442073822,
+          "path_rmse": 0.3197585642337799,
+          "peak_roll": 0.2988179922103882
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05521966516971588,
+          "path_rmse": 0.14297686517238617,
+          "peak_roll": 0.30358827114105225
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.025941215455532074,
+          "path_rmse": 0.1254982352256775,
+          "peak_roll": 0.3112170696258545
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.021637292578816414,
+          "path_rmse": 0.21727122366428375,
+          "peak_roll": 0.311665415763855
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.07094886898994446,
+          "path_rmse": 0.15379782021045685,
+          "peak_roll": 0.3577378988265991
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.04177004098892212,
+          "path_rmse": 0.11220837384462357,
+          "peak_roll": 0.3561440706253052
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02992512471973896,
+          "path_rmse": 0.18649417161941528,
+          "peak_roll": 0.34645724296569824
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.024367112666368484,
+          "path_rmse": 0.33092445135116577,
+          "peak_roll": 0.3314427137374878
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.3,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07517167925834656,
+          "path_rmse": 0.6838677525520325,
+          "peak_roll": 0.35760247707366943
+        },
+        {
+          "alpha": 0.2,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.05746624246239662,
+          "path_rmse": 0.39021170139312744,
+          "peak_roll": 0.35614144802093506
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.02961054816842079,
+          "path_rmse": 0.2556147277355194,
+          "peak_roll": 0.3349759578704834
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.023756057024002075,
+          "path_rmse": 0.42179548740386963,
+          "peak_roll": 0.31674516201019287
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        -22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.11543957144021988,
+          "path_rmse": 0.3269684910774231,
+          "peak_roll": 0.3361092805862427
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.08663875609636307,
+          "path_rmse": 0.3231232166290283,
+          "peak_roll": 0.34150779247283936
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03934335336089134,
+          "path_rmse": 0.4054067134857178,
+          "peak_roll": 0.36049211025238037
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02377473935484886,
+          "path_rmse": 0.586840808391571,
+          "peak_roll": 0.36660337448120117
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        -22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09250033646821976,
+          "path_rmse": 0.12238419055938721,
+          "peak_roll": 0.3451131582260132
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.0724799707531929,
+          "path_rmse": 0.06868425011634827,
+          "peak_roll": 0.35376274585723877
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.029861653223633766,
+          "path_rmse": 0.23069703578948975,
+          "peak_roll": 0.3707551956176758
+        },
+        {
+          "alpha": 1.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.022288966923952103,
+          "path_rmse": 0.39623957872390747,
+          "peak_roll": 0.3686394691467285
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": true,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        22.0,
+        1.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.10199970752000809,
+          "path_rmse": 0.11078780889511108,
+          "peak_roll": 0.419785737991333
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.06359798461198807,
+          "path_rmse": 0.17031539976596832,
+          "peak_roll": 0.4090374708175659
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.03499455377459526,
+          "path_rmse": 0.39677679538726807,
+          "peak_roll": 0.3941373825073242
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1616,
+          "speed_rmse": 0.02451845072209835,
+          "path_rmse": 0.6430047750473022,
+          "peak_roll": 0.37825143337249756
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": true
+    },
+    {
+      "panel": "turn130_R2p7",
+      "policy": "seed918501",
+      "context": [
+        "right130_R2p7",
+        2.7,
+        22.0,
+        2.8
+      ],
+      "values": [
+        {
+          "alpha": 0.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.09645261615514755,
+          "path_rmse": 0.722048282623291,
+          "peak_roll": 0.4035407304763794
+        },
+        {
+          "alpha": 0.2,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.07522241771221161,
+          "path_rmse": 0.2484617978334427,
+          "peak_roll": 0.3919185400009155
+        },
+        {
+          "alpha": 0.6,
+          "task": true,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.029766356572508812,
+          "path_rmse": 0.48063570261001587,
+          "peak_roll": 0.37705278396606445
+        },
+        {
+          "alpha": 1.0,
+          "task": false,
+          "full_horizon": true,
+          "turn_ticks": 1415,
+          "speed_rmse": 0.022648097947239876,
+          "path_rmse": 0.6872695684432983,
+          "peak_roll": 0.35947370529174805
+        }
+      ],
+      "eligible_full_horizon": true,
+      "all_task_success": false,
+      "speed_monotone": true,
+      "speed_endpoint": true,
+      "path_endpoint": false
+    }
+  ],
+  "sources": [
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "a4a3ee0a6528f82f512aefa0b16b761fffa36e6180d2384b909f1d95e1ec58a4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "7a051a2f1049971134c8a1e69833398af2a376b723d891ba0735bff5d052e4f3"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "b869faf0a55fe2b28d762490af99bc45594435d0297b343ed3b93686e76baf43"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "b97bcbe6dfd1baa632faac67abbadd5f2644a0f355df57646777d4d1197b840e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "ef293ab18b33d8129545e192c2d5258b0fc9db43866eb7b68a66e0e1d8c6e2b6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "9d793371572209eab3b4977cc4c0d043a36228d956c717a7f3a4f6450a8e757b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "24d44db1ed1424a49b85bec6cbad6f3e9e17f07a0d89ec8b236d3c83f534f3e7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "edb42d3b85c44ea2ac7015c4b97d44deb54f8c97e279a6469f80aee334ca5579"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "0f04a08f8e0d342983d766073c0b17c53f8f4009573c339f537b329661e6381b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "ec1123dc497a79efc2944391fe37bd2dcc33ead836991aa53cc65d533cd70ab6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "558adb5d526eec38ca1b8f0ffe8605bf8deb47a5a3de620c8e36de04c5517796"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "52be7ae11c8ab515f67b070eb33361d55dd345d5503c0ce125ed8d9780b6083e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "fc9e392ff38b3345cf560b95705943436641d0857e9e38ad2d820a73a88ae8ef"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "b179b0451f7e08d4b9a528f341215e783955480c0ec89bf7cd409ae3cc9699b6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "0004187b6faa81a53176b92a64a82e81b3d74bd74ec0168320e21b3ee5718342"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "7a57253619d9a659a07c4b363fa4802894a4b2fd764d659e723837c60facd341"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "b8c483e20045a51a4e9d93ae81d05d915d6f024faec9e9b24980382de7250c5a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "d5b5ae33551925c05ddd020fd3c471d6c8a42134b061a5ee5f7648c7ce0eeaa9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "5c21f8f667caf431996855771de919ef49bffec123f182284398740a9a657735"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "2f74d198448abbbfab4f301bdb0fa77771bccd5a2e0eb4f7cc2e26ef2d1a1e36"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "90ce0c50307559da97f661eb1f9a966fe58910be7c607c8431a2b92830bcd3df"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "37f390f315d9fd63d6194b1d74b4ddf05fda9eb432a6a0b0b9ee23a1ed6d5397"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "3ed35e64c68ec3f7438640430696f587ce5449727a545011432a2eacdcc248a1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "73ae707fe15264e7d389c13eee208f04712943cede013d52ce56656963b792f7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "42282d369a1ac9e45158cf6ecac8fd5dc30eb017cf12d5d5fff2b565cb90aa56"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "72a7a3a0fc0b995c396aa132603d905785ccb4954d4298a697538b099ee9a665"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "70c95292f490db767ed9f353004f414c4dd091ab9d2c9364c920faec59d4bd58"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "f2eb367ef43a4679d0163922eacf46b2481e3d32989581c552a5923c794ca445"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "7e4e0455c8e5d90700744e17e30212fe9e6687411b1aa6ac7f7c01783adcb840"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "f4c148180bfd3479109301e4a87b45379f8fa8145df227b1e2020721582eb4ed"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "ce4ace193280edaaf3757eb9cf8c073070c8296ca0f9e0d8fe1d526f99b89a7f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "411d85499ad6048a7e655709983d025b3cbd53a016e648b1ea9cd50b0b757934"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "6d0b3db5bad801a7f38a38cab74581669cb858652928aad2e2daba28e14cf3b4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "7b0d1c4fd703ea0ee4e72427f792f460c3e4d726735398d39ed37724270e995e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "d2022614a4624338052de57d04d6f5dda9e044d7d6a2e7aa3cc330915bed71b2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "acc93137d76d44c8a1e81ed097fc7f203e15b4ca65ef77bf857c253a4b74a7b1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "4d48130603e7bbd0dac1807e1be18e77de2498c296643a6b5481f96e4c90cbf7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "8f99f90964386575dca39f20c554f0723477ebaeece1cabc63e2c11d59f62489"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "e6c0e64be133cf64fdb5c18bc8d7b5b9fdc0b690f1f5b02caaf61f214b054b2e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "029cff163191e8231f1abf334c5b903743b29335187486422184584a58448eae"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "60614162742484c12aee6e8b91ba04d28c6628e00e235c0c41e245b5fc5867a2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "2fe135998698373a72df1cb45f0618e63d3d6615a0ac2e6c58e328ac12c6315d"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "acd90ed14a1cd7caf7a07696bb91356f8de217d9a9a038149964ee41596d5aff"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "494d82b9f417aabbd6fe48d5ee9638f5c5e935334fbeec13101d6d4ab63f2053"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "46208579ecf3848ac599b7a22b7e4b7e2025b5e92544f8f83b8927a3def02090"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "d4aae7694745a87ef232526ed7467f89f6c544c170bc7c5b30b31130b8a6f851"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "3c4e99d9ac1560f6e95d813530bf45bfa4ad8613e22f774c3061a5f884235cbf"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "68d6e01fac28e5eb71d49897c58e6503a7d5874e69baa04ee9171a88cdebc60c"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "a83c30e9eb4758f855e3983d40dd4f7bb9f29d375b5f526b4cbe2360ab3e4cf9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "8a391994db1f1dc3e6a2a74af8642eef80f1e91756da244bbc114cff4ea34376"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "0861b1c115187c3c85618d7aa292aa7cabefb668a6bf1179d36719c00134a845"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "6d5a6f262011d6a7ddcddba2db3f6e0f50331ae94b3ddf2b52b5942173902e59"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "8e03d48a4be503138fb9322adb1bee09756c20cf4032928fbd045c816d456a7c"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "7fd8619b91387450abb52b4f2fbec27b8712fdc3dc9291ea60babbab13341136"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "52a1c8c3cd203a94b1938263e9466ac81350e6b56d92de87c50176fe7e6edef7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "90ea6edb861abac478f1440e73a27e8feb1dd3af14d31927188323b2c89f55ac"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "616d6b102c45a71d96a7e250c145894fdd2bb40f853b42114009fdbd6922eb29"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "eab7cd2718e85a5799aec54d97aa841be341013aa368098b362e56fd7030ae7b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "4bee333f2a4bd354dadcde532fbaae6de95cd1e6e3699e3785ec274445138802"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "6f801646a79f77f9273e35cf13a3b1b98a1208ab3cbe63b9041da30b3dc325fd"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "7f93ac42158a3cca82c41a3e3d8c5610d62700666e2d58db64a6b4e98599e646"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "f1995c9884152cf6d40a1eb8f13b72df8e3c95f256ba5baf72a7116ed4f2a94a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "a6f45262753b81a699451794a331a313788bc7724e081eb1758abe056d20d45e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "499896101ea40e9d8be33741a183b42cc7924542225f5277e89b0243491101f5"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "3d1100248000b3cde302ab499d4e60c2d22e095156a795ff160e16583228b924"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "beca1c005ea8165eb41ffec2779f00b76486e542503a32eb72fddf318cbd03e2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "da0a91ee4688d417e668acdf661e79520f4c0ad6369f5dc59cc68b64a33fbc1a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "0e27dd2b4605e54c76bfa1d5dbc0d3e08650d14e0f8989f086c6bdf892b60ccc"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "7de7381bf7492e0b745d2e7898de5b6098ce9b29187f7aeb1e5afd1fd78aac62"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "e7f64fc2921d706dd8be2f56d4d8de524f91eab0ef750c2744b1f8a5e04a3e91"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "bbb4edb8b2f2f1239d9878efc96cc6b16092bf08f245e60c53a501f0c46ccbd6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "2409d1e71cf2f5dd31ddefe4c8b18ed854c92cf465208ace8e0b54a9c3b72cc2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "7c25a2cb3248a06f0d0b93c088ba49b8969dbbeede3b09ad75a5225adfda172b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "1290a986ef6c2dd546a8fde0b71b5ce415f4ead11990f52444e3d211b78a011e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "f0ab92bf2414cc7b1763bbcc9d803521d50f3d8c3956fb1d26f1755ef66b97c1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "bb3ea2f8f2a1a85e6a9a70e93818b0968cc6c9c11779a591ee0174210e4b5a92"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "85524b4a8264871e94f6df7f4920a7a8d9066d131a1907ab5004dee4cf9c4439"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "f8b6ee8771359618b52370e9165396f2bc0fcfeacded3e82652e36be42fee7b7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "4b5b569c003d6e810f30f455dc24fb1f447286fc63ef6a8b61c04828ab2b4d33"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "12741078248015fe8a38b0954aabdde037c21f0412763d431297b0265ca1ec78"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "9b516fe99645ac4fc72fd6cf2934d8c0728009fb0b8929e04d9eda0a54abec7f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "aeab2e6643e99f0beb346aa37784bfa9106f41d62ad14d55f03b870a25f6d865"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "529d29186bc316f9b3d485305e5291aae13f026329dc46058c0069f68c93caea"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "62765dbb0bae0a24f76275d030c3ee6e4aa2631f3a2c14af7e9a39cc8af30468"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "f0ddb7921ea4869e65ab2ee59c5301951e7208b6e53b042323d8ce927f408912"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "ea85e13cb5c40a71b7328e865cb7cd9a1e74ecdd8eedcbf8659b79d99831bcaa"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "4611b707a0bc3db0aa9cd7d985e56c6a5680e6d507eb6e1402b7bfaddf9f4957"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "8654b4bce803a4a229a89fd871a23205882465d819d3b2bfecf2af252efa1e38"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "d90509a32c55f250c233c0bfc5145382fcf9e29926c1c4d7641c3b82efcb767f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "30303f7c614ff07f043d6fb0a02babaf4d4b00ae8f1a086af1821a81da2bd0f0"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "e69d383a85a72f6b03935c48af5d5b0630f832f9eef9f588d9618bd984a545db"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "2b19b025392d8360cbb589b3dffc5e5fe012b997b05baba5e3da052138d84306"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "f32e0f56a87b826ce7955d2dc31fcf3247aa0859e39513369dbec72200ca3686"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "100b9d2941758ef071981375965c33483ee03feccf9c1b15acae1f5dae932aae"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "73ea44360d525eb08f6a323acf9fc934c531cf34375f6e4031dd5b03d29ec174"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "e7b2e8755965ca10a9a3298cc0c21d27663f9537b012805e0fd31a9f1c80e543"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "ade6cd73cf63f466063d2e87281647e4b801b53eb12e10d2d8f7f0feaeb39d87"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "b182e62f20322632e43bc947ea8c8923f130245d9344986b2387d1a722093727"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "fdb377670da86efd8abf50a86fed53a5791581c14adcb02bde71fba40d428fee"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "14b23287894ebf2af1e17368778a36d85ac49cec09efe8f6cbf9ae7b2dfa91d7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "edf0ec8a1b6fb5abd38ce8497a1ed63c3dad84653d7bd6f5fd85a123b4dccda3"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "6a59b00e85dded4a6b2d791176bc4c612ddfb9f24681d0472a34c6182d20cb6d"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "d1c3a657346940e2465719c4cf1cc405017e6a1957b99242a893d804fad470f1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "26525f8c990fea0e9a1f53ffab07c24c276eba2c713cd23ecc2936b81f3120ea"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "0fbf62fba178ebfd707d197d3b29d5b72a27c5d4e18e9666228cd6b30d1d0633"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "8730f060621c3071d45652945e4291b16eca33c5d5454a10d7652d284eeda8c5"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "6eb897530746dccc26b63d4b08fc36d4a643708acdf7986dfd1d6848a11599c9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "977af357952441c5f1642847028e47ba58151d063b79b0c1a9e5e22a484866b3"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "73545e39161184a15c4e6c0ddfb6033f617d295642e26896009359b206cf098b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "ab50943dc919db716024ecea521cde82b179d583c4d5672e733390dd6e038570"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "127f285a4bf17b3a4db26b0cd8c094a97d6e8e392a06dd32c036676d9b9cd5a8"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "dff19d85db4f809fd448d4d96b4c519a436ce777fe59745c0c995268c1f48489"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "64a185f9f760146a97b054b04a3ea65b6297873d7224cfb6628fbdab29a65d95"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "b9af4006150ecd51693f93586992b2b151bdb53911725096a016f710a5d0830f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "e567e4de2a791f0f36ed4353383e9013f2dcad20eb3399ed0dd6c45e30bf6a7a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "b0e9e3eb21f870ed3c0eebedff706e14ad1c82429de521121028081053aaa483"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "afd9328e83f9e48b797f923e21007c41f9bfac9f432b20c6a721d3f33e5854da"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "cab829d15ced6754e17a2d81700f6d3f57284c0cc3f7a128a72b2739d3b431e8"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "0f562860d99f5ee7eca61db8d3b9a4ca31162ba7bd068b6a4ecf012fa2c4e603"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "99acef0d170b9096fae12376444e5eeba4bf38b6d1ee4ce32a8121dfb39fb849"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "b61f4c3b5c522037439763a755d5fe14d452d3d6f8a1868226846534b31c1841"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "aa21d4c004b9d5528891c5c560b84a69473fbb6ac765cbde33ffe7e2f029d238"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "82b61270c6532dff96460c6727b87f51df7236b34b29b21a4e81a8bbfc377655"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "0963a62559572e6bcac5d80d5a148646aeb2d12c289a36e0fdd9529ae060ad05"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "9cbf9e9b0a8483f0ec9faa29711a3e983141acb99f954e46f4a522d016a92035"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "5224ccfa8f13557af8befa80f204235fd54df4070edd6f8a537305cbe419141a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "c961ec889502975444d8f43852a1e10fa0293d3fa7d0a90e5408f11c00c2c806"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "406b5b594938a6d546b0ac5ea0a04c3d7422b45da3249e4bf0cbbbb38edb7b82"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "249d2493830d0d187336d8d2599dbf362badd36d2bc0eda2b9486c4afcecfb88"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "8d687089f791af1403a1549c2723ce7e13fff92174a8d872fbd945ba76458050"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "3e60ff5344ae748c6777c3f3734c0515306612146c19439302578cc9a6cb4f6a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "3f935aea4642e28ab8c177a64ff10e8e2de60ba496f0a7b413a1626c858a4773"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "06f72c8f1d8f2973e869387ec46e9ca47f0576e1ccb882eac245da7b7a6b96ab"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "e1848ba7064c2408b4a8df4d4a1431baaaadde1576600fe95c384fc6e6e561cb"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "345913af9594b6428a301c9063a365b6a46cb6e9a5122b76fb45d0891f96d6ee"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "aed1ec7ebb4419ca86e238984570a95d16fa47416189ef95dcb98a511df1bcc4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "8a55dd1ed8e6089885dfee988727da82fba98c0f9e3191fcebcf9a8194dad49b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "fe7274ce6bc9c0d747bc08ba6a22b3b03897a40949b0a8561942da76762e472b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "ec8fdf7b1614d79e1b98142fd6a76ea3bd7efaf80fd3412b6ab6070d4d934a61"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "a2d7a121329575412da2402a4ed64b01413c9d34069487e49679bdd1011904b8"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "78e08fbbd017b5533bc2145c82260527ac229121dec9cfebee2b16825588f3d7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "15a2f643bbd89b825db03198e2d154a114334e1a392c61129b16b592551f6f5a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "58f89f6c355aeaee6b08a210768c7da110e8861fcf3e5c1eb47c9c098ce6e9a3"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "3e5d245d57a65b04e5a91a3e6814f784c7c721141bf5ecd4d8ec7b0dad323929"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "63c61cbec7326ca74ad65e7e4b5a26690515c88d8842328ddd36e4d8dd77a212"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "4c702d31a189b4103bd97c61e7be2c98a1c1630d707a3beb81b168b672624400"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "318e2be091a478848e559d7b4cbd7f3d202470068c32f262f2c074f79d3387a9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "131ee6ecfbecd455be47f13c2eaca117d23780e7fe4de4e443183f0c13d33334"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "785c7278979c13f0a5c9864a9db24c5f3f8defc4f17ce289249c618f5b91f67f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "22dfa19805594dd9106078fd0a2830dad1993fed3dec4489a273fff4277a0766"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "0cd8a120f27bac2a6ef33ae8806aaa8c39bac3529a3960f88ed6583e5b58efb9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "33be47563c87c81efda0d88d96c7dd46c7f4851a10e3e601d48b7d7d5aa70de3"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "426d18cfe71d864beacea4b5a8957daaabd26187c317d86d5e39e1c95247347c"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "239d86f13bf90e75b725e8a3cbd9ac3312e5b8ba2c74eee98edb7c0932c46587"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "feda7f53144be282b145e48256f255f47c7fe2d6499cf4b151d6463a3213b7ce"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "0768c364bd5deb6ae25cc050b9db58af4c58d689b5f4645862173507dea22b75"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "8e7837c072e30c0800c298a0c5ef377370f89837562cc5896ba0b5411f6d99e6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "dd0a50f53d3c2bb24961aedb7ad236e257d710c82cad66ab1af1b735965bdc59"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "ca719c83774c15322b0348948a550919e08970fa354befca5b5a9a8f64e18d17"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_left130_R2p7_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "16613be5e751c3c9e3384ad17b3398177ec459ceeb8d79b2e61b6ad73fd9c2e1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "be1f896c00c732257e942c246b2c95d6fb0ade55ed442451afedeecdec184877"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "eecee6e5e535a2e5339eb1e7145c2275c8356fda9102be008b46937a91082616"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "111ddedf963025755710f69687de5e6846914d8bae071b5de6d589def9cac9fa"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "8281e6777953aa40717ec6c9325af3d2dcfbf3d2d38ea15b17c7dfa4bf9024da"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "276b30af79a7c00c189b497793530f6127d7e560564ab602a0d3e31f4f3b9ff1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "21a466fbcbbe87be1578173931c9f04ddab54ac6a172b7218d85c5448bb2f091"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "e786a784755d128fce8b4b04ba6f78b87d459cbcf80da0d5df2ba3b916f3ffca"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "644acbb42110ff38c38ab744092fdf75d46df7aaeeee76927bfdbcd2eb9b8f63"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "9f1bc68a9b2ada7916c41c3249061fd7ae15c5aafa5a1193d1d8033524422cb4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "aa87c6d1a751d82fc0f801cf2377dd70889d1864f7c5c651342271e046b7ee05"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "b42f0cdc6a55e917ace227b2d14186bc3fa870040a658617481d0830b14774ed"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "04018d22b177a5510c1b8cd7049ae72c31056de12e70861b5fb40c86f8df793a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "ab231dd267cacb7810ab766bf42fef57ee79945f9d39da507b0d1349ea7d5c95"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "63a503e2412dffc576147b58905ea7f3c285d71bba1ff46bd7671cb7b58a62b1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "fbdf971009ef0faaa31ebfb03a60d7451597116697e258ad4aa1a7efe885b274"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "993b3fb4c6c42a5f1fa8d61100a65fbc71e2d825839da0e62e86f96119e0a545"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "0d89ebdc8607e4d3ca342dd3b55f9597d78d7fcd06e530690e4f5589168d6fab"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "8b195d123229793309029efe8485d828498b81fec5cf74fce2d66d6c110ca8de"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "a881ae34a780aa39e9a6511ef2dd6be23f421a2f8dde1469dd96c7e326c6ba3b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "a24fe04bdec2d3f0b5f7445d8fa55b20a3979dc7271653718781b5a5911afc87"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "88db1ed575ff7e2e37cb27bac04966a9361ae37ee8b5d81dc8a8e26e23fe4ac9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "c1da758539b5f0d400557ce841f22ccd62026a5793cf9794456d4a504f5b898a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "cc6187b00cc9c2a8b5107903826d99a0775b02ae90ce17146685c356d2ab004a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "68e5eae2cfb6af8660db01dcca53190bf2a69f8d62af0d9f7077f2edd1036649"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "f29665ca73a906dd672fdf2128fe67073c8b69637e19c87aabbe5b6190689c84"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "86aae87540eeb509bed4fd93d1f0aeef50ad9fde5112d30529192bd09ce2bb71"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "56e12192751df67c82c8be8129e5922fb6a7411d5fb0290860e3afc9708f4fc7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "e7de8b6d73fff2adbbc1e4e73fdae09f6254d942f4449b1d392fa5456a9a24ee"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "5eac476425775c7c9ab50094bd82dfe359cdb3f8a1d7eccd148952af2135d8e5"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "c70b8fbc5b239cf3eb4be2c961011ffbf45433c36d9b118257b141f8dda731a4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "d182f773b06045b0487ef8a0b23e6b85b670f5868bef2981d67f38a1a609b851"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "1d94e3345d8204f818a1feb62ba46bdabd44aa76afcf636295c4cf3cbc909b66"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "b524e5e77c2679fcc9dec86fb047fbe79097c18359bd6da92b9cf4a2d18ae0bb"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "e3b0e6ad23fb95df6a1a6c3f97a43c97e20e0c57d7590cc3e9a3c44d1b0cec55"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "18d08c58bcdfadb2117cf305fe0a4d068238ef65f32d2f6e221fa74a621c425f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "4b579c44d491c4d19180bfb2ef1c18d287d741549bd1c3ee1fc87dde979434f2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "756dfbff11fd20d381507e7cd934049245a08bfb38ab5185f92623d570fa08f2"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "008f88a708357ae32bff49692f3192663a48ddaa8bac7a93679d2cd168511cb9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "4f496f5235c0a059e69970b1fdcaf217bdf961c038f7673160f25c4714077de5"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "1fc276e9bcfe1fd3e0ef916ae081da2f7dd5539ae50a7d6539842ea069355443"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "9cee3955b8858271c7df80961a70d2a2c7e5c55d3c319751e8f5061ca41cb739"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "b7bae773ad00f1efccceed4e9e9368a20bfe9c0af1adb3316a70caa1fa7f140b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "49d1cd8085d99b2ae8ea87e9cce41d7a2024c6f003b80e8d73696f35b0ff5e3d"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "8052d7d5aff4f92f595c36fb9fdefd677f22a395ce166114020bfaa0e8e6ab4e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "82e6c76f4c7eec0de48d50e6e0ce810ea4b70d8bd3f5b9d55f86c3dcdb3605d5"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "41e60c67fa53e5de6941b6df875b35b74642d82afb89e2d930a98f90a1e21c8f"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "9d6d213d95ba9c1134f99254d92551d855dc358bb881e8781f01ab69361c38aa"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "ae381ebc5b2e7a204ab21cc73ffb9eb369892e16f094a59de220a8de4e66460c"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "1a2d931320e3f2e543db955c4fbb27e0d1d589ad7de9cc1632e0608c60a05dfd"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "190b71bc9ecc78ad66b2c48e23e5508390fedeab420198b7ae904e7dbc912738"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "0b4a1292f211a94f28833c5ff42aa6319050ac5ab8a321a8d0bad03e77b45e94"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "7098ff12681ac3d8f1dfbe083ca6f521f43349e636c7c1492437715a48a52425"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "ea4e89baec552250beae80f98c6948bf2b3bb966ad9e1d735363600c806513ad"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "32cca23766cf056c374c609823c83a5b6783bfe4232fb83ece52300c983fc4e0"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "0d9c8039b2d96aa4cae7f898ff2612a1d5f47f2245a1a6c3b95ba1cf3e5f5a57"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "d1cf9e05af67e9f8c9d98d0bb36e61ac342bedd0b126fa25c9098f755656b161"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "6b64b02c0c7fa9fabb4c29e3e2fd8939232e2865c9d1b4a143196f417d2a60d4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "5769d51d2c7189f0b013e64d7a2ce8370e74936c4ecc444ad9a04476a05b0ae9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "e47cc5a3bf370bab7b9a96832bb43e96b6591a457f5db3f5a9a96657c6607deb"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "d6aec5ec1c781e7d081a349e64d7507388fa51ada97dfb40c05d104667655fb4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "8490ad9603294deafa26430b5420ff75d0686135f4dff4a63d58037abb5da43e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "3b42d7340813dd88d2830db20e90b24e385753bba00e848df791491668dc0a6d"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "a612fe2002af557620c486eea339345a0d4e1e57cb366cd6dc72d2b155b9a2ae"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_left130_R2p7_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "084e124c7338750078d69b24805357822ea67e24dcb7a39823a26aff2004634a"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0_t1.8_f-22.npz",
+      "sha256": "33abbe48315a90a4333dc5aac729dd1e096b6c7ee0f7025656409ef950f60f4e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.2_t1.8_f-22.npz",
+      "sha256": "9407b2523965fb557ba4194e961929000c6066930723fffd0dfe50eefc31029b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.6_t1.8_f-22.npz",
+      "sha256": "418cce3ea95e5a4f2aaf22540b3db4d289575cb7d7e8836da22c8bc9386a71ef"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a1_t1.8_f-22.npz",
+      "sha256": "4ba19c52c9f1a74748d351f559b9874ba061932f1bfa4de2a970f48249b2beeb"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0_t2.8_f-22.npz",
+      "sha256": "9a57e86407392ba6346eaab33bcb3d5bcc9894945e4eead89b0eead2fde3d825"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.2_t2.8_f-22.npz",
+      "sha256": "77d3709e6e921dd6a50d7168f59d5cbad60c7dfaae0bd5d5cbee532ca56ffa71"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.6_t2.8_f-22.npz",
+      "sha256": "4eef1c36e6b4594b3ffce287d703cdd6bd01125d7dfd21f35f2d2a8d8ef6ebc7"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a1_t2.8_f-22.npz",
+      "sha256": "31c0ef6c39993c00d6cad685d6523ddba5fd360fe8d4cc3cdab62f378129b196"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0_t1.8_f+22.npz",
+      "sha256": "2af345e592df84046cc96cab940130b5ef40e9eee5af3d4eeadcb140379cabbb"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.2_t1.8_f+22.npz",
+      "sha256": "d809479d46f16a9597cb185d525b6bed671286686cbb512ed5f5af126fb76a8b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.6_t1.8_f+22.npz",
+      "sha256": "8e0f75c41b660aff7023f56a858921cb206bcd025ee6d40ca13670d9bc1cba63"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a1_t1.8_f+22.npz",
+      "sha256": "fbd33f920c28e3bdd2386568d0635ec11df67a349d2d100626ef51bb129c61b4"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "fbafb0c5a81309df83617d0256b9b5cb8f3d084cf16285b7fe5fe3c10946226b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "e6116c54f2bb787b2f047418086c20fd95b5d4c634c59d55cd56756944349d48"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.6_t2.8_f+22.npz",
+      "sha256": "b5eba129d3f2c634519cb5c546fe3b45b3b16ac6b2ddc097e8d4f5d59bf88c74"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a1_t2.8_f+22.npz",
+      "sha256": "68f870540e8e0a799f4b3c6664e47c419391f3e53c3d4888ef9c73e2cbce8e5b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0_t1.8_f-22.npz",
+      "sha256": "8c4c5375defe44f92db6a48aa3cd70ea7a6f3807faecea3422fe83b1aea4d620"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.2_t1.8_f-22.npz",
+      "sha256": "a3edaa33c5196738c0e558c4ac0d0dad99812abef9f6bfd33b9cf1cf15a92ce9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.6_t1.8_f-22.npz",
+      "sha256": "7e28e497db42a020e035366bc5b8da9ffe2695a7a367224175565ef238c94f12"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a1_t1.8_f-22.npz",
+      "sha256": "2fc732d43d148393f6d2530134be8da0062669645973fa90a6bf3fcab77b8dfa"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0_t2.8_f-22.npz",
+      "sha256": "92df6d5b55916fa4a0b9da3be8e42622c2c9a1b71ca1c3bb85b87158988fdfc9"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.2_t2.8_f-22.npz",
+      "sha256": "2936abf0673d366d05eb9059f8e9fa610bf21518d7310a5142a9513239566eef"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.6_t2.8_f-22.npz",
+      "sha256": "81f907939a7eaf5a185d68faf77b3fb0bb94ab910eb0ab8dc2af4dba45011f4b"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a1_t2.8_f-22.npz",
+      "sha256": "8665564eb2f0b37777e0f7cbb5bb69e425bdc2490a1ab9223612d5e74148d6f8"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0_t1.8_f+22.npz",
+      "sha256": "8a31c2e25bfb198ea259c4d034f3964d2ebb4440f4e437370e1a1b481eaa6908"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.2_t1.8_f+22.npz",
+      "sha256": "4fca24a7f1ca9f043357e639b375aaa24ae2d4c1a7f2a5698b0f7dba10998d1e"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.6_t1.8_f+22.npz",
+      "sha256": "df3a25c2db181be1f229f0feacbc60dfd14bcdcf0d38523cf303f73a0fc5260c"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a1_t1.8_f+22.npz",
+      "sha256": "c4c25e7a34f1d5c3c8ecbf71d2669e0a49f6199f5ba2631fd5489816ad63ce0d"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0_t2.8_f+22.npz",
+      "sha256": "33d9e3a923cd3f4138628e162939e330355519a152f7d71281539fdce70c8e62"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.2_t2.8_f+22.npz",
+      "sha256": "525198267f111e447576514682712cb985097740f9e624a6473579d226ee57a6"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a0.6_t2.8_f+22.npz",
+      "sha256": "51374f1d7e451bd81dd4851df70d128cc304e0055dd0b3a8ae881e8f0e8981f1"
+    },
+    {
+      "path": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.7_a1_t2.8_f+22.npz",
+      "sha256": "f9784f232b401dfcd123123efcd2052fd33df343a5d8272ef0777bc61f5de127"
+    }
+  ],
+  "scope": "Exploratory existing pulse panel. Common recovery-time window after pulse end through original deadline; includes bend and outgoing straight. Full-horizon coverage reported; not restricted to task successes. Missing early ends not imputed as preference success."
+}
