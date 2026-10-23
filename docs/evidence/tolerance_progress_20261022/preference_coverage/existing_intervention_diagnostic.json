@@ -1,0 +1,984 @@
+{
+  "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_control_intervention_v1/evaluation",
+  "windows": "late 4.1 to actual endpoint; tail 9 to actual endpoint. Domain exits have shortened windows and are not comparable full-horizon RMS.",
+  "cases": [
+    {
+      "policy": "control",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.3896641433238983,
+      "late_path_rms": 0.6021733283996582,
+      "tail_heading_rms": 0.4787060022354126,
+      "rate_clipped_fraction": 0.3220338983050847,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.31054213643074036,
+      "late_path_rms": 0.3774479627609253,
+      "tail_heading_rms": 0.32741889357566833,
+      "rate_clipped_fraction": 0.3864406779661017,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.27975934743881226,
+      "late_path_rms": 0.4611058831214905,
+      "tail_heading_rms": 0.20591039955615997,
+      "rate_clipped_fraction": 0.34152542372881356,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.16532036662101746,
+      "late_path_rms": 0.17029689252376556,
+      "tail_heading_rms": 0.00904175080358982,
+      "rate_clipped_fraction": 0.16271186440677965,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.3793606460094452,
+      "late_path_rms": 0.506661057472229,
+      "tail_heading_rms": 0.47722312808036804,
+      "rate_clipped_fraction": 0.3305084745762712,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.34535345435142517,
+      "late_path_rms": 0.5691386461257935,
+      "tail_heading_rms": 0.39080020785331726,
+      "rate_clipped_fraction": 0.2093220338983051,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.2715546786785126,
+      "late_path_rms": 0.30361828207969666,
+      "tail_heading_rms": 0.2434588074684143,
+      "rate_clipped_fraction": 0.326271186440678,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "control",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.2787446677684784,
+      "late_path_rms": 0.41237378120422363,
+      "tail_heading_rms": 0.19520923495292664,
+      "rate_clipped_fraction": 0.2796610169491525,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.07332411408424377,
+      "late_path_rms": 0.10616597533226013,
+      "tail_heading_rms": 0.001508990186266601,
+      "rate_clipped_fraction": 0.07966101694915254,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.3903551995754242,
+      "late_path_rms": 0.5391828417778015,
+      "tail_heading_rms": 0.36879077553749084,
+      "rate_clipped_fraction": 0.17288135593220338,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.0405886173248291,
+      "late_path_rms": 0.07604444026947021,
+      "tail_heading_rms": 0.0006775539950467646,
+      "rate_clipped_fraction": 0.0,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.3424658179283142,
+      "late_path_rms": 0.45127347111701965,
+      "tail_heading_rms": 0.23662424087524414,
+      "rate_clipped_fraction": 0.23389830508474577,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.33830443024635315,
+      "late_path_rms": 0.451860249042511,
+      "tail_heading_rms": 0.26593732833862305,
+      "rate_clipped_fraction": 0.26610169491525426,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.26454320549964905,
+      "late_path_rms": 0.2661651372909546,
+      "tail_heading_rms": 0.33328869938850403,
+      "rate_clipped_fraction": 0.41271186440677965,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.19224724173545837,
+      "late_path_rms": 0.19192436337471008,
+      "tail_heading_rms": 0.02613826096057892,
+      "rate_clipped_fraction": 0.20254237288135593,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.048963114619255066,
+      "late_path_rms": 0.04938645288348198,
+      "tail_heading_rms": 0.0007993543986231089,
+      "rate_clipped_fraction": 0.01864406779661017,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.23149801790714264,
+      "late_path_rms": 0.5784879922866821,
+      "tail_heading_rms": 0.015613509342074394,
+      "rate_clipped_fraction": 0.2669491525423729,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.4511513113975525,
+      "late_path_rms": 1.2928028106689453,
+      "tail_heading_rms": 0.10679323971271515,
+      "rate_clipped_fraction": 0.15423728813559323,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.19625169038772583,
+      "late_path_rms": 0.6001990437507629,
+      "tail_heading_rms": 0.004048282280564308,
+      "rate_clipped_fraction": 0.16610169491525423,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.4475417137145996,
+      "late_path_rms": 1.315921664237976,
+      "tail_heading_rms": 0.11485996842384338,
+      "rate_clipped_fraction": 0.10932203389830508,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.40465787053108215,
+      "late_path_rms": 0.9328615069389343,
+      "tail_heading_rms": 0.04385137930512428,
+      "rate_clipped_fraction": 0.16186440677966102,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.20920351147651672,
+      "late_path_rms": 0.606502115726471,
+      "tail_heading_rms": 0.0011801107320934534,
+      "rate_clipped_fraction": 0.12033898305084746,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.4251004159450531,
+      "late_path_rms": 1.0708017349243164,
+      "tail_heading_rms": 0.05494749918580055,
+      "rate_clipped_fraction": 0.13983050847457626,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.20245584845542908,
+      "late_path_rms": 0.6146278381347656,
+      "tail_heading_rms": 0.0005031198379583657,
+      "rate_clipped_fraction": 0.07796610169491526,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.22514666616916656,
+      "late_path_rms": 0.3959839940071106,
+      "tail_heading_rms": 0.10843808203935623,
+      "rate_clipped_fraction": 0.3983050847457627,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": true,
+      "late_heading_rms": 0.8260440230369568,
+      "late_path_rms": 0.4445270895957947,
+      "tail_heading_rms": null,
+      "rate_clipped_fraction": 0.044444444444444446,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": true,
+      "domain": false,
+      "late_heading_rms": 0.1575549691915512,
+      "late_path_rms": 0.3886014521121979,
+      "tail_heading_rms": 0.004623754881322384,
+      "rate_clipped_fraction": 0.1669491525423729,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": true,
+      "late_heading_rms": 0.827193021774292,
+      "late_path_rms": 0.4261705279350281,
+      "tail_heading_rms": null,
+      "rate_clipped_fraction": 0.023255813953488372,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": true,
+      "late_heading_rms": 0.8122941851615906,
+      "late_path_rms": 0.4749012291431427,
+      "tail_heading_rms": null,
+      "rate_clipped_fraction": 0.5459183673469388,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.38629186153411865,
+      "late_path_rms": 0.5577499866485596,
+      "tail_heading_rms": 0.44753071665763855,
+      "rate_clipped_fraction": 0.27203389830508473,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": true,
+      "late_heading_rms": 0.7953371405601501,
+      "late_path_rms": 0.5178136825561523,
+      "tail_heading_rms": null,
+      "rate_clipped_fraction": 0.2602040816326531,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "task": false,
+      "domain": false,
+      "late_heading_rms": 0.28100839257240295,
+      "late_path_rms": 0.3903150260448456,
+      "tail_heading_rms": 0.21005307137966156,
+      "rate_clipped_fraction": 0.34491525423728814,
+      "reference_clip_fraction": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "paired": [
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.31634002923965454,
+      "path_rms_change": -0.49600735306739807
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.07981306314468384,
+      "path_rms_change": 0.16173487901687622
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.23917073011398315,
+      "path_rms_change": -0.38506144285202026
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "regressed",
+      "domain": false,
+      "heading_rms_change": 0.17714545130729675,
+      "path_rms_change": 0.2809765785932541
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": -0.04105621576309204,
+      "path_rms_change": -0.05480080842971802
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": -0.08081024885177612,
+      "path_rms_change": -0.30297350883483887
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.0793074369430542,
+      "path_rms_change": -0.11169391870498657
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.22978155314922333,
+      "path_rms_change": -0.36298732832074165
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.15816612541675568,
+      "path_rms_change": -0.023685336112976074
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.14060917496681213,
+      "path_rms_change": 0.91535484790802
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.08350765705108643,
+      "path_rms_change": 0.13909316062927246
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "regressed",
+      "domain": false,
+      "heading_rms_change": 0.28222134709358215,
+      "path_rms_change": 1.1456247717142105
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.025297224521636963,
+      "path_rms_change": 0.4262004494667053
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.13614994287490845,
+      "path_rms_change": 0.03736346960067749
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.15354573726654053,
+      "path_rms_change": 0.7671834528446198
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.07628881931304932,
+      "path_rms_change": 0.202254056930542
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": -0.16451747715473175,
+      "path_rms_change": -0.2061893343925476
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": true,
+      "heading_rms_change": 0.5155018866062164,
+      "path_rms_change": 0.06707912683486938
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "improved",
+      "domain": false,
+      "heading_rms_change": -0.12220437824726105,
+      "path_rms_change": -0.0725044310092926
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "left120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "regressed",
+      "domain": true,
+      "heading_rms_change": 0.6618726551532745,
+      "path_rms_change": 0.2558736354112625
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": true,
+      "heading_rms_change": 0.4329335391521454,
+      "path_rms_change": -0.031759828329086304
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.0,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.04093840718269348,
+      "path_rms_change": -0.011388659477233887
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        -20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": true,
+      "heading_rms_change": 0.5237824618816376,
+      "path_rms_change": 0.2141954004764557
+    },
+    {
+      "policy": "both_off",
+      "context": [
+        "right120_R2p5",
+        2.35,
+        0.125,
+        20.0,
+        2.0
+      ],
+      "outcome": "unchanged",
+      "domain": false,
+      "heading_rms_change": 0.0022637248039245605,
+      "path_rms_change": -0.022058755159378052
+    }
+  ]
+}

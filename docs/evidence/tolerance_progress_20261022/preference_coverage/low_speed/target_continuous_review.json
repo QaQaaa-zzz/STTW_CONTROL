@@ -1,0 +1,242 @@
+[
+  {
+    "policy": "coverage",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.5089918375015259,
+    "tail_heading": 0.5543164014816284,
+    "tail_speed_error": 0.3582857847213745
+  },
+  {
+    "policy": "coverage",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.4393695294857025,
+    "tail_heading": 0.400476336479187,
+    "tail_speed_error": 0.2950742244720459
+  },
+  {
+    "policy": "coverage",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.1785452961921692,
+    "tail_heading": 0.23143291473388672,
+    "tail_speed_error": 0.26072216033935547
+  },
+  {
+    "policy": "coverage",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": true,
+    "tail_max_path_m": 0.027233639732003212,
+    "tail_heading": 0.0027363302651792765,
+    "tail_speed_error": 0.016320228576660156
+  },
+  {
+    "policy": "coverage",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 1.017092227935791,
+    "tail_heading": 0.5756359100341797,
+    "tail_speed_error": 0.1864323616027832
+  },
+  {
+    "policy": "coverage",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.5268664360046387,
+    "tail_heading": 0.39168086647987366,
+    "tail_speed_error": 0.41653215885162354
+  },
+  {
+    "policy": "coverage",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.44394469261169434,
+    "tail_heading": 0.35249996185302734,
+    "tail_speed_error": 0.25139760971069336
+  },
+  {
+    "policy": "coverage",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.29807761311531067,
+    "tail_heading": 0.24736930429935455,
+    "tail_speed_error": 0.2334284782409668
+  },
+  {
+    "policy": "parent",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.6422385573387146,
+    "tail_heading": 0.5742839574813843,
+    "tail_speed_error": 0.3438382148742676
+  },
+  {
+    "policy": "parent",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.6716406345367432,
+    "tail_heading": 0.5266097187995911,
+    "tail_speed_error": 0.40725576877593994
+  },
+  {
+    "policy": "parent",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.19660919904708862,
+    "tail_heading": 0.32387542724609375,
+    "tail_speed_error": 0.2563021183013916
+  },
+  {
+    "policy": "parent",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": true,
+    "tail_max_path_m": 0.01304003968834877,
+    "tail_heading": 0.013135910034179688,
+    "tail_speed_error": 0.020015239715576172
+  },
+  {
+    "policy": "parent",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.9967020750045776,
+    "tail_heading": 0.5827076435089111,
+    "tail_speed_error": 0.14738035202026367
+  },
+  {
+    "policy": "parent",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.7048975825309753,
+    "tail_heading": 0.4690878391265869,
+    "tail_speed_error": 0.2831764221191406
+  },
+  {
+    "policy": "parent",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.25833895802497864,
+    "tail_heading": 0.30889812111854553,
+    "tail_speed_error": 0.15791893005371094
+  },
+  {
+    "policy": "parent",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.43058931827545166,
+    "tail_heading": 0.3080017566680908,
+    "tail_speed_error": 0.24773168563842773
+  },
+  {
+    "policy": "oldfull10",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.6479831337928772,
+    "tail_heading": 0.5312314033508301,
+    "tail_speed_error": 0.20188498497009277
+  },
+  {
+    "policy": "oldfull10",
+    "route": "left120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.430731862783432,
+    "tail_heading": 0.44548165798187256,
+    "tail_speed_error": 0.2417764663696289
+  },
+  {
+    "policy": "oldfull10",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.10146396607160568,
+    "tail_heading": 0.1470002979040146,
+    "tail_speed_error": 0.039621591567993164
+  },
+  {
+    "policy": "oldfull10",
+    "route": "left120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": true,
+    "tail_max_path_m": 0.026876114308834076,
+    "tail_heading": 0.005564689636230469,
+    "tail_speed_error": 0.018254756927490234
+  },
+  {
+    "policy": "oldfull10",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.8964003324508667,
+    "tail_heading": 0.5388534069061279,
+    "tail_speed_error": 0.12441349029541016
+  },
+  {
+    "policy": "oldfull10",
+    "route": "right120_R2p5",
+    "alpha": 0.0,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.5450735092163086,
+    "tail_heading": 0.41429591178894043,
+    "tail_speed_error": 0.40496110916137695
+  },
+  {
+    "policy": "oldfull10",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": -20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.2840688228607178,
+    "tail_heading": 0.3059791326522827,
+    "tail_speed_error": 0.12055253982543945
+  },
+  {
+    "policy": "oldfull10",
+    "route": "right120_R2p5",
+    "alpha": 0.125,
+    "force_N": 20.0,
+    "task_recovered": false,
+    "tail_max_path_m": 0.2775111794471741,
+    "tail_heading": 0.2256014347076416,
+    "tail_speed_error": 0.1943056583404541
+  }
+]

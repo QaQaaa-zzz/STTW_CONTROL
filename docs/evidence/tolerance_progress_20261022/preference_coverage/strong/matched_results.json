@@ -1,0 +1,253 @@
+{
+  "summary": [
+    {
+      "panel": "strong",
+      "policy": "parent",
+      "cases": 200,
+      "task": 189,
+      "working": 67,
+      "domain": 9,
+      "physical_unknown": 9
+    },
+    {
+      "panel": "strong",
+      "policy": "oldfull10",
+      "cases": 200,
+      "task": 186,
+      "working": 64,
+      "domain": 8,
+      "physical_unknown": 8
+    },
+    {
+      "panel": "strong",
+      "policy": "coverage",
+      "cases": 200,
+      "task": 177,
+      "working": 63,
+      "domain": 7,
+      "physical_unknown": 7
+    }
+  ],
+  "paired": [
+    {
+      "baseline": "parent",
+      "alpha": 0.0,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 35,
+      "candidate_success": 35,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.0,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 12,
+      "candidate_success": 13,
+      "improved": 1,
+      "regressed": 0,
+      "difference": 1
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.25,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 38,
+      "candidate_success": 38,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.25,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 13,
+      "candidate_success": 13,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.5,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 38,
+      "candidate_success": 38,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.5,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 14,
+      "candidate_success": 14,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.75,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 39,
+      "candidate_success": 39,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 0.75,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 14,
+      "candidate_success": 14,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "parent",
+      "alpha": 1.0,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 39,
+      "candidate_success": 27,
+      "improved": 0,
+      "regressed": 12,
+      "difference": -12
+    },
+    {
+      "baseline": "parent",
+      "alpha": 1.0,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 14,
+      "candidate_success": 9,
+      "improved": 0,
+      "regressed": 5,
+      "difference": -5
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.0,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 35,
+      "candidate_success": 35,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.0,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 13,
+      "candidate_success": 13,
+      "improved": 1,
+      "regressed": 1,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.25,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 38,
+      "candidate_success": 38,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.25,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 13,
+      "candidate_success": 13,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.5,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 38,
+      "candidate_success": 38,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.5,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 14,
+      "candidate_success": 14,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.75,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 39,
+      "candidate_success": 39,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 0.75,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 14,
+      "candidate_success": 14,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 1.0,
+      "metric": "task_recovered",
+      "n": 40,
+      "baseline_success": 36,
+      "candidate_success": 27,
+      "improved": 0,
+      "regressed": 9,
+      "difference": -9
+    },
+    {
+      "baseline": "oldfull10",
+      "alpha": 1.0,
+      "metric": "performance_success",
+      "n": 40,
+      "baseline_success": 10,
+      "candidate_success": 9,
+      "improved": 2,
+      "regressed": 3,
+      "difference": -1
+    }
+  ]
+}

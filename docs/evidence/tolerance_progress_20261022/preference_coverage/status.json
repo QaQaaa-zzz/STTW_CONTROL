@@ -1,0 +1,17 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1974722,
+  "training_steps": 0,
+  "declared_cases": 470,
+  "completed_cases": 470,
+  "cached_cases": 940,
+  "active_lower_ticks": 931680,
+  "stage": "reports_ready",
+  "checked_unix": 1792757663.9068344,
+  "completed_updates": 27,
+  "declared_updates": 27,
+  "panel": "low_speed",
+  "evaluator_pid": 2057935,
+  "adoption_status": "pending_research_review"
+}

@@ -1,0 +1,383 @@
+{
+  "cases": {
+    "moderate": [
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          0.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06422615051269531,
+        "candidate_tail_path_m": 0.1067953109741211,
+        "path_increase_m": 0.04256916046142578,
+        "excess_above_0p1_m": 0.006795310974121088,
+        "tail_heading_abs_rad": 0.00701487110927701,
+        "tail_speed_abs_error_m_s": 0.014912843704223633,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -8.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06081390380859375,
+        "candidate_tail_path_m": 0.10471248626708984,
+        "path_increase_m": 0.043898582458496094,
+        "excess_above_0p1_m": 0.004712486267089838,
+        "tail_heading_abs_rad": 0.006633878219872713,
+        "tail_speed_abs_error_m_s": 0.014926910400390625,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          8.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06689453125,
+        "candidate_tail_path_m": 0.1084299087524414,
+        "path_increase_m": 0.041535377502441406,
+        "excess_above_0p1_m": 0.0084299087524414,
+        "tail_heading_abs_rad": 0.007345200050622225,
+        "tail_speed_abs_error_m_s": 0.014916658401489258,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -12.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.05892372131347656,
+        "candidate_tail_path_m": 0.10352325439453125,
+        "path_increase_m": 0.04459953308105469,
+        "excess_above_0p1_m": 0.0035232543945312444,
+        "tail_heading_abs_rad": 0.006364583969116211,
+        "tail_speed_abs_error_m_s": 0.01496267318725586,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          12.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06798362731933594,
+        "candidate_tail_path_m": 0.10907840728759766,
+        "path_increase_m": 0.04109477996826172,
+        "excess_above_0p1_m": 0.00907840728759765,
+        "tail_heading_abs_rad": 0.007477522362023592,
+        "tail_speed_abs_error_m_s": 0.01497340202331543,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          0.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06422615051269531,
+        "candidate_tail_path_m": 0.1067953109741211,
+        "path_increase_m": 0.04256916046142578,
+        "excess_above_0p1_m": 0.006795310974121088,
+        "tail_heading_abs_rad": 0.00701487110927701,
+        "tail_speed_abs_error_m_s": 0.014912843704223633,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -8.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.061387062072753906,
+        "candidate_tail_path_m": 0.10499382019042969,
+        "path_increase_m": 0.04360675811767578,
+        "excess_above_0p1_m": 0.004993820190429682,
+        "tail_heading_abs_rad": 0.006657600402832031,
+        "tail_speed_abs_error_m_s": 0.014938116073608398,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          8.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06683921813964844,
+        "candidate_tail_path_m": 0.10846138000488281,
+        "path_increase_m": 0.041622161865234375,
+        "excess_above_0p1_m": 0.008461380004882807,
+        "tail_heading_abs_rad": 0.007336616516113281,
+        "tail_speed_abs_error_m_s": 0.014938592910766602,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -12.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06020641326904297,
+        "candidate_tail_path_m": 0.10423469543457031,
+        "path_increase_m": 0.044028282165527344,
+        "excess_above_0p1_m": 0.004234695434570307,
+        "tail_heading_abs_rad": 0.006519676186144352,
+        "tail_speed_abs_error_m_s": 0.014951467514038086,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          12.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06791114807128906,
+        "candidate_tail_path_m": 0.10910224914550781,
+        "path_increase_m": 0.04119110107421875,
+        "excess_above_0p1_m": 0.009102249145507807,
+        "tail_heading_abs_rad": 0.007491708733141422,
+        "tail_speed_abs_error_m_s": 0.014937400817871094,
+        "domain": false,
+        "goal": true
+      }
+    ],
+    "strong": [
+      {
+        "context": [
+          "right90_R1p8",
+          2.6,
+          1.0,
+          -32.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.0916910171508789,
+        "candidate_tail_path_m": 0.1121377944946289,
+        "path_increase_m": 0.02044677734375,
+        "excess_above_0p1_m": 0.0121377944946289,
+        "tail_heading_abs_rad": 0.011805416084825993,
+        "tail_speed_abs_error_m_s": 0.017139911651611328,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          0.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06422615051269531,
+        "candidate_tail_path_m": 0.1067953109741211,
+        "path_increase_m": 0.04256916046142578,
+        "excess_above_0p1_m": 0.006795310974121088,
+        "tail_heading_abs_rad": 0.00701487110927701,
+        "tail_speed_abs_error_m_s": 0.014912843704223633,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -20.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06845855712890625,
+        "candidate_tail_path_m": 0.10954570770263672,
+        "path_increase_m": 0.04108715057373047,
+        "excess_above_0p1_m": 0.009545707702636713,
+        "tail_heading_abs_rad": 0.007568359375,
+        "tail_speed_abs_error_m_s": 0.01493978500366211,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          20.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.06982898712158203,
+        "candidate_tail_path_m": 0.10983562469482422,
+        "path_increase_m": 0.04000663757324219,
+        "excess_above_0p1_m": 0.009835624694824213,
+        "tail_heading_abs_rad": 0.0076332101598382,
+        "tail_speed_abs_error_m_s": 0.014973878860473633,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -32.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.08765888214111328,
+        "candidate_tail_path_m": 0.12095165252685547,
+        "path_increase_m": 0.03329277038574219,
+        "excess_above_0p1_m": 0.020951652526855463,
+        "tail_heading_abs_rad": 0.009975791908800602,
+        "tail_speed_abs_error_m_s": 0.014844417572021484,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          32.0,
+          1.0
+        ],
+        "parent_tail_path_m": 0.0706033706665039,
+        "candidate_tail_path_m": 0.10989952087402344,
+        "path_increase_m": 0.03929615020751953,
+        "excess_above_0p1_m": 0.009899520874023432,
+        "tail_heading_abs_rad": 0.007621169555932283,
+        "tail_speed_abs_error_m_s": 0.01493525505065918,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "left90_R1p8",
+          2.8,
+          1.0,
+          -32.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.08467483520507812,
+        "candidate_tail_path_m": 0.1125326156616211,
+        "path_increase_m": 0.02785778045654297,
+        "excess_above_0p1_m": 0.012532615661621088,
+        "tail_heading_abs_rad": 0.008054970763623714,
+        "tail_speed_abs_error_m_s": 0.014928817749023438,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          0.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06422615051269531,
+        "candidate_tail_path_m": 0.1067953109741211,
+        "path_increase_m": 0.04256916046142578,
+        "excess_above_0p1_m": 0.006795310974121088,
+        "tail_heading_abs_rad": 0.00701487110927701,
+        "tail_speed_abs_error_m_s": 0.014912843704223633,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -20.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.059037208557128906,
+        "candidate_tail_path_m": 0.1034536361694336,
+        "path_increase_m": 0.04441642761230469,
+        "excess_above_0p1_m": 0.003453636169433588,
+        "tail_heading_abs_rad": 0.006380438804626465,
+        "tail_speed_abs_error_m_s": 0.014947891235351562,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          20.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.06981277465820312,
+        "candidate_tail_path_m": 0.11012458801269531,
+        "path_increase_m": 0.04031181335449219,
+        "excess_above_0p1_m": 0.010124588012695307,
+        "tail_heading_abs_rad": 0.00767624331638217,
+        "tail_speed_abs_error_m_s": 0.01494741439819336,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          -32.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.05544757843017578,
+        "candidate_tail_path_m": 0.10108089447021484,
+        "path_increase_m": 0.04563331604003906,
+        "excess_above_0p1_m": 0.0010808944702148382,
+        "tail_heading_abs_rad": 0.0059175495989620686,
+        "tail_speed_abs_error_m_s": 0.01499629020690918,
+        "domain": false,
+        "goal": true
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          1.0,
+          32.0,
+          2.0
+        ],
+        "parent_tail_path_m": 0.070953369140625,
+        "candidate_tail_path_m": 0.11071300506591797,
+        "path_increase_m": 0.03975963592529297,
+        "excess_above_0p1_m": 0.010713005065917963,
+        "tail_heading_abs_rad": 0.007778525818139315,
+        "tail_speed_abs_error_m_s": 0.014957427978515625,
+        "domain": false,
+        "goal": true
+      }
+    ]
+  },
+  "interpretation": "All parent-to-coverage task losses are alpha1 tail path threshold crossings, not domain or goal failures. Report continuous drift, correlated contexts and nominal bias; do not reject solely on binary count. Low-speed benefit and preference retention pending."
+}

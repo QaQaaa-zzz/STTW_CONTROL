@@ -1,0 +1,1397 @@
+{
+  "records": [
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.12783154845237732,
+        0.014630342833697796
+      ],
+      "peak_abs_offset": [
+        0.5071370601654053,
+        0.12805397808551788
+      ],
+      "cost_share": {
+        "speed": 0.1505739390850067,
+        "path": 0.6685600876808167,
+        "primary": 0.01208666991442442,
+        "roll": 0.05956956744194031,
+        "working_roll": 0.10912221670150757,
+        "roll_rate": 7.624667546224373e-07,
+        "overspeed": 1.0163599029056058e-07,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.8877428374253213e-05,
+        "offset_rate": 6.783386197639629e-05
+      },
+      "return_sum": -120.5958480834961
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.11489050090312958,
+        -0.005683141760528088
+      ],
+      "peak_abs_offset": [
+        0.32778263092041016,
+        0.05271320044994354
+      ],
+      "cost_share": {
+        "speed": 0.16484540700912476,
+        "path": 0.835068941116333,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 8.674047421664e-06,
+        "offset_rate": 7.712579099461436e-05
+      },
+      "return_sum": -10.238097190856934
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.11178351193666458,
+        0.0020868228748440742
+      ],
+      "peak_abs_offset": [
+        0.40209269523620605,
+        0.09065154194831848
+      ],
+      "cost_share": {
+        "speed": 0.25564083456993103,
+        "path": 0.7161658406257629,
+        "primary": 0.028043998405337334,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 1.3398856424373662e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.054957985819783e-05,
+        "offset_rate": 0.00012858204718213528
+      },
+      "return_sum": -62.67692565917969
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.10029091686010361,
+        -0.03117327205836773
+      ],
+      "peak_abs_offset": [
+        0.23395466804504395,
+        0.06174558401107788
+      ],
+      "cost_share": {
+        "speed": 0.2255483716726303,
+        "path": 0.7743692994117737,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.1349568922014441e-05,
+        "offset_rate": 7.092396845109761e-05
+      },
+      "return_sum": -8.243541717529297
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.09088253229856491,
+        0.01789119280874729
+      ],
+      "peak_abs_offset": [
+        0.45636630058288574,
+        0.12239976227283478
+      ],
+      "cost_share": {
+        "speed": 0.16879311203956604,
+        "path": 0.523710310459137,
+        "primary": 0.016048120334744453,
+        "roll": 0.09736352413892746,
+        "working_roll": 0.19396455585956573,
+        "roll_rate": 1.382133405058994e-06,
+        "overspeed": 1.0746598633204485e-07,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.875767884484958e-05,
+        "offset_rate": 0.00010003655188484117
+      },
+      "return_sum": -78.74004364013672
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.031770024448633194,
+        0.0076343291439116
+      ],
+      "peak_abs_offset": [
+        0.21828436851501465,
+        0.05277654528617859
+      ],
+      "cost_share": {
+        "speed": 0.2494133561849594,
+        "path": 0.7503402829170227,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.2097452529123984e-05,
+        "offset_rate": 0.0002243063208879903
+      },
+      "return_sum": -2.851445198059082
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": true,
+      "mean_offset": [
+        -0.027936123311519623,
+        -0.003727343399077654
+      ],
+      "peak_abs_offset": [
+        0.3593599796295166,
+        0.09646669030189514
+      ],
+      "cost_share": {
+        "speed": 0.23422501981258392,
+        "path": 0.7012577056884766,
+        "primary": 0.06431936472654343,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 3.454346426678967e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.6016103220172226e-05,
+        "offset_rate": 0.00017150140774901956
+      },
+      "return_sum": -27.03312110900879
+    },
+    {
+      "policy": "coverage",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": true,
+      "mean_offset": [
+        0.03778804466128349,
+        -0.009662262164056301
+      ],
+      "peak_abs_offset": [
+        0.03805208206176758,
+        0.010556849651038647
+      ],
+      "cost_share": {
+        "speed": 0.31956976652145386,
+        "path": 0.680335283279419,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 9.392642095917836e-05,
+        "offset_rate": 1.1011086371581769e-06
+      },
+      "return_sum": -0.08032869547605515
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.13365021347999573,
+        8.624920155853033e-05
+      ],
+      "peak_abs_offset": [
+        0.4390428066253662,
+        0.10767161846160889
+      ],
+      "cost_share": {
+        "speed": 0.18841716647148132,
+        "path": 0.7889310121536255,
+        "primary": 0.022382039576768875,
+        "roll": 0.00017806324467528611,
+        "working_roll": 0.0,
+        "roll_rate": 1.1233851182623766e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.0025921912747435e-05,
+        "offset_rate": 7.160221139201894e-05
+      },
+      "return_sum": -101.29084777832031
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.07799512147903442,
+        -0.05945981666445732
+      ],
+      "peak_abs_offset": [
+        0.13389253616333008,
+        0.10767161846160889
+      ],
+      "cost_share": {
+        "speed": 0.08980563282966614,
+        "path": 0.9101642966270447,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.2957386388734449e-05,
+        "offset_rate": 1.7136982933152467e-05
+      },
+      "return_sum": -17.254806518554688
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.13964346051216125,
+        -0.01721380650997162
+      ],
+      "peak_abs_offset": [
+        0.6305203437805176,
+        0.12102217972278595
+      ],
+      "cost_share": {
+        "speed": 0.17672207951545715,
+        "path": 0.6797549724578857,
+        "primary": 0.021255064755678177,
+        "roll": 0.05274873971939087,
+        "working_roll": 0.06941834092140198,
+        "roll_rate": 1.3158449974071118e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.0887067876174115e-05,
+        "offset_rate": 7.989767618710175e-05
+      },
+      "return_sum": -108.84751892089844
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.15290260314941406,
+        0.0743735060095787
+      ],
+      "peak_abs_offset": [
+        0.3786749839782715,
+        0.10064974427223206
+      ],
+      "cost_share": {
+        "speed": 0.25328660011291504,
+        "path": 0.7465706467628479,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 3.058540096390061e-05,
+        "offset_rate": 0.00011212145182071254
+      },
+      "return_sum": -12.563477516174316
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.10183949768543243,
+        0.003782261162996292
+      ],
+      "peak_abs_offset": [
+        0.38214409351348877,
+        0.10389773547649384
+      ],
+      "cost_share": {
+        "speed": 0.21131035685539246,
+        "path": 0.7618305087089539,
+        "primary": 0.026394719257950783,
+        "roll": 0.00033937356784008443,
+        "working_roll": 0.0,
+        "roll_rate": 2.1444365927436593e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.2803094907430932e-05,
+        "offset_rate": 0.00010209153697360307
+      },
+      "return_sum": -69.77318572998047
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.07353582978248596,
+        -0.045220594853162766
+      ],
+      "peak_abs_offset": [
+        0.19262313842773438,
+        0.07758793234825134
+      ],
+      "cost_share": {
+        "speed": 0.18670596182346344,
+        "path": 0.813198983669281,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.8306505808141083e-05,
+        "offset_rate": 7.676329551031813e-05
+      },
+      "return_sum": -8.453704833984375
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.09765798598527908,
+        -0.008779524825513363
+      ],
+      "peak_abs_offset": [
+        0.5525434017181396,
+        0.11328274011611938
+      ],
+      "cost_share": {
+        "speed": 0.17344516515731812,
+        "path": 0.6425666809082031,
+        "primary": 0.025177009403705597,
+        "roll": 0.07139726728200912,
+        "working_roll": 0.08729077130556107,
+        "roll_rate": 2.3496079393225955e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.1019202904426493e-05,
+        "offset_rate": 0.00010184273560298607
+      },
+      "return_sum": -78.36161804199219
+    },
+    {
+      "policy": "coverage",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.06812475621700287,
+        0.021611696109175682
+      ],
+      "peak_abs_offset": [
+        0.20569992065429688,
+        0.08076842874288559
+      ],
+      "cost_share": {
+        "speed": 0.23114746809005737,
+        "path": 0.7685917615890503,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.2629536033491604e-05,
+        "offset_rate": 0.00023812071594875306
+      },
+      "return_sum": -5.038663864135742
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.10715977102518082,
+        0.029562942683696747
+      ],
+      "peak_abs_offset": [
+        0.4809213876724243,
+        0.13709554076194763
+      ],
+      "cost_share": {
+        "speed": 0.11476998031139374,
+        "path": 0.6283921003341675,
+        "primary": 0.011264804750680923,
+        "roll": 0.07061798870563507,
+        "working_roll": 0.17488081753253937,
+        "roll_rate": 1.244203417627432e-06,
+        "overspeed": 1.491482208848538e-07,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.7388043488608673e-05,
+        "offset_rate": 5.5439057177864015e-05
+      },
+      "return_sum": -137.25555419921875
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.10389553755521774,
+        0.016185389831662178
+      ],
+      "peak_abs_offset": [
+        0.3261129856109619,
+        0.08854947984218597
+      ],
+      "cost_share": {
+        "speed": 0.14553003013134003,
+        "path": 0.8543816804885864,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.044323289534077e-05,
+        "offset_rate": 7.785003981553018e-05
+      },
+      "return_sum": -11.064308166503906
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.09545055031776428,
+        0.015037174336612225
+      ],
+      "peak_abs_offset": [
+        0.36302971839904785,
+        0.11651688814163208
+      ],
+      "cost_share": {
+        "speed": 0.1860753446817398,
+        "path": 0.7892225980758667,
+        "primary": 0.024581901729106903,
+        "roll": 1.4807278603257146e-06,
+        "working_roll": 0.0,
+        "roll_rate": 1.3775157015061268e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.0838868294958957e-05,
+        "offset_rate": 9.771402983460575e-05
+      },
+      "return_sum": -76.87750244140625
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.204045832157135,
+        0.0630684643983841
+      ],
+      "peak_abs_offset": [
+        0.36302971839904785,
+        0.11651688814163208
+      ],
+      "cost_share": {
+        "speed": 0.24221481382846832,
+        "path": 0.7576573491096497,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.5902902052621357e-05,
+        "offset_rate": 0.00010192732588620856
+      },
+      "return_sum": -14.831174850463867
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.07898077368736267,
+        0.025673486292362213
+      ],
+      "peak_abs_offset": [
+        0.4391162395477295,
+        0.13848410546779633
+      ],
+      "cost_share": {
+        "speed": 0.11823100596666336,
+        "path": 0.5283434391021729,
+        "primary": 0.01338806003332138,
+        "roll": 0.09683506935834885,
+        "working_roll": 0.24311183393001556,
+        "roll_rate": 1.5441657978954026e-06,
+        "overspeed": 2.5223474864333184e-08,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.7375472452840768e-05,
+        "offset_rate": 7.154783088481054e-05
+      },
+      "return_sum": -101.97268676757812
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.07691888511180878,
+        -0.016459112986922264
+      ],
+      "peak_abs_offset": [
+        0.19457721710205078,
+        0.03884206712245941
+      ],
+      "cost_share": {
+        "speed": 0.3412969708442688,
+        "path": 0.6585016250610352,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.1607298802118748e-05,
+        "offset_rate": 0.00018975224520545453
+      },
+      "return_sum": -4.222893714904785
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": true,
+      "mean_offset": [
+        -0.03040582872927189,
+        0.003653156803920865
+      ],
+      "peak_abs_offset": [
+        0.3135991096496582,
+        0.09479624032974243
+      ],
+      "cost_share": {
+        "speed": 0.19501802325248718,
+        "path": 0.7502326965332031,
+        "primary": 0.054533183574676514,
+        "roll": 4.167836959823035e-05,
+        "working_roll": 0.0,
+        "roll_rate": 2.941385446320055e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.3653063180972822e-05,
+        "offset_rate": 0.00015040331345517188
+      },
+      "return_sum": -33.29575729370117
+    },
+    {
+      "policy": "parent",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": true,
+      "mean_offset": [
+        0.03948218747973442,
+        -0.004151960834860802
+      ],
+      "peak_abs_offset": [
+        0.04099702835083008,
+        0.009968731552362442
+      ],
+      "cost_share": {
+        "speed": 0.8067734241485596,
+        "path": 0.19304220378398895,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 0.00011733559949789196,
+        "offset_rate": 6.716346251778305e-05
+      },
+      "return_sum": -0.03933302313089371
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.11044217646121979,
+        0.008490410633385181
+      ],
+      "peak_abs_offset": [
+        0.40165746212005615,
+        0.11992743611335754
+      ],
+      "cost_share": {
+        "speed": 0.16194790601730347,
+        "path": 0.8163124918937683,
+        "primary": 0.02136239968240261,
+        "roll": 0.00028904591454192996,
+        "working_roll": 0.0,
+        "roll_rate": 1.572365988522506e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.971576966752764e-05,
+        "offset_rate": 6.827228935435414e-05
+      },
+      "return_sum": -98.94658660888672
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.0467689149081707,
+        -0.056903187185525894
+      ],
+      "peak_abs_offset": [
+        0.09221410751342773,
+        0.10734876990318298
+      ],
+      "cost_share": {
+        "speed": 0.06144021451473236,
+        "path": 0.9385321140289307,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.1981476745859254e-05,
+        "offset_rate": 1.5657113181077875e-05
+      },
+      "return_sum": -16.843711853027344
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.10660076141357422,
+        -0.014033055864274502
+      ],
+      "peak_abs_offset": [
+        0.6045926809310913,
+        0.11530306935310364
+      ],
+      "cost_share": {
+        "speed": 0.13569064438343048,
+        "path": 0.7138100266456604,
+        "primary": 0.01825900934636593,
+        "roll": 0.054100267589092255,
+        "working_roll": 0.07805430889129639,
+        "roll_rate": 1.0932228633464547e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.851744127634447e-05,
+        "offset_rate": 6.705810665152967e-05
+      },
+      "return_sum": -110.54582214355469
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.014196016825735569,
+        0.06528953462839127
+      ],
+      "peak_abs_offset": [
+        0.19999980926513672,
+        0.11530306935310364
+      ],
+      "cost_share": {
+        "speed": 0.07378225773572922,
+        "path": 0.9261406660079956,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.5023167836479843e-05,
+        "offset_rate": 5.19781606271863e-05
+      },
+      "return_sum": -11.125324249267578
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.07821878790855408,
+        0.01630956120789051
+      ],
+      "peak_abs_offset": [
+        0.34066200256347656,
+        0.10818444192409515
+      ],
+      "cost_share": {
+        "speed": 0.1969481110572815,
+        "path": 0.7732168436050415,
+        "primary": 0.029173921793699265,
+        "roll": 0.0005284073413349688,
+        "working_roll": 0.0,
+        "roll_rate": 2.464599333507067e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.2911541236680932e-05,
+        "offset_rate": 0.00010945503163384274
+      },
+      "return_sum": -59.56159210205078
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        0.006017821840941906,
+        0.012455598451197147
+      ],
+      "peak_abs_offset": [
+        0.13895034790039062,
+        0.060950152575969696
+      ],
+      "cost_share": {
+        "speed": 0.07947121560573578,
+        "path": 0.920372724533081,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.5029984751890879e-05,
+        "offset_rate": 0.00014100453699938953
+      },
+      "return_sum": -3.6699156761169434
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.0866156741976738,
+        0.002215869026258588
+      ],
+      "peak_abs_offset": [
+        0.5235095024108887,
+        0.10091803222894669
+      ],
+      "cost_share": {
+        "speed": 0.15541577339172363,
+        "path": 0.6598095893859863,
+        "primary": 0.021471625193953514,
+        "roll": 0.07111208885908127,
+        "working_roll": 0.09207601845264435,
+        "roll_rate": 1.9847743715217803e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.0575653252308257e-05,
+        "offset_rate": 9.41136822802946e-05
+      },
+      "return_sum": -80.27654266357422
+    },
+    {
+      "policy": "parent",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.07965723425149918,
+        0.06124703586101532
+      ],
+      "peak_abs_offset": [
+        0.21748757362365723,
+        0.09865447133779526
+      ],
+      "cost_share": {
+        "speed": 0.16980712115764618,
+        "path": 0.8300073146820068,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 3.152122735627927e-05,
+        "offset_rate": 0.000154036475578323
+      },
+      "return_sum": -8.183157920837402
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.09000999480485916,
+        0.015904515981674194
+      ],
+      "peak_abs_offset": [
+        0.4303222894668579,
+        0.12831644713878632
+      ],
+      "cost_share": {
+        "speed": 0.11077747493982315,
+        "path": 0.623437225818634,
+        "primary": 0.008732959628105164,
+        "roll": 0.07602983713150024,
+        "working_roll": 0.18094494938850403,
+        "roll_rate": 1.025164351631247e-06,
+        "overspeed": 1.300351897270957e-07,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.538009018986486e-05,
+        "offset_rate": 6.107863737270236e-05
+      },
+      "return_sum": -124.35675811767578
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.05381527915596962,
+        -0.019480308517813683
+      ],
+      "peak_abs_offset": [
+        0.20931053161621094,
+        0.051628969609737396
+      ],
+      "cost_share": {
+        "speed": 0.07270139455795288,
+        "path": 0.9272422790527344,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 5.602145847660722e-06,
+        "offset_rate": 5.066846279078163e-05
+      },
+      "return_sum": -9.779256820678711
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.07495234161615372,
+        0.005511003080755472
+      ],
+      "peak_abs_offset": [
+        0.32546186447143555,
+        0.09496785700321198
+      ],
+      "cost_share": {
+        "speed": 0.1835976243019104,
+        "path": 0.7878848314285278,
+        "primary": 0.028375225141644478,
+        "roll": 1.0543715688982047e-05,
+        "working_roll": 0.0,
+        "roll_rate": 1.1012992473524719e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.8500770238460973e-05,
+        "offset_rate": 0.0001131334574893117
+      },
+      "return_sum": -63.472259521484375
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.06330177932977676,
+        -0.014745648950338364
+      ],
+      "peak_abs_offset": [
+        0.21810340881347656,
+        0.041235730051994324
+      ],
+      "cost_share": {
+        "speed": 0.11716485023498535,
+        "path": 0.8827583193778992,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 5.800044164061546e-06,
+        "offset_rate": 7.106171688064933e-05
+      },
+      "return_sum": -7.7911200523376465
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.04971715062856674,
+        0.01934073679149151
+      ],
+      "peak_abs_offset": [
+        0.3840519189834595,
+        0.12378951162099838
+      ],
+      "cost_share": {
+        "speed": 0.10497761517763138,
+        "path": 0.46638593077659607,
+        "primary": 0.010972331278026104,
+        "roll": 0.11973638087511063,
+        "working_roll": 0.29782554507255554,
+        "roll_rate": 1.94498420569289e-06,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.5375126167782582e-05,
+        "offset_rate": 8.49095667945221e-05
+      },
+      "return_sum": -82.60176086425781
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        0.02877449057996273,
+        0.02282644994556904
+      ],
+      "peak_abs_offset": [
+        0.046987056732177734,
+        0.04382873699069023
+      ],
+      "cost_share": {
+        "speed": 0.05798080191016197,
+        "path": 0.9414797425270081,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 5.098510882817209e-05,
+        "offset_rate": 0.0004884437075816095
+      },
+      "return_sum": -0.7928051948547363
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": true,
+      "mean_offset": [
+        -0.013642637059092522,
+        -0.0011587716871872544
+      ],
+      "peak_abs_offset": [
+        0.2742328643798828,
+        0.09616658091545105
+      ],
+      "cost_share": {
+        "speed": 0.17668145895004272,
+        "path": 0.7624942660331726,
+        "primary": 0.06056565046310425,
+        "roll": 7.507854024879634e-05,
+        "working_roll": 0.0,
+        "roll_rate": 2.4850973545653687e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.3824197342037223e-05,
+        "offset_rate": 0.00015958935546223074
+      },
+      "return_sum": -27.54549789428711
+    },
+    {
+      "policy": "oldfull10",
+      "route": "left120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": true,
+      "mean_offset": [
+        0.039773374795913696,
+        -0.00974365696310997
+      ],
+      "peak_abs_offset": [
+        0.039949655532836914,
+        0.011254435405135155
+      ],
+      "cost_share": {
+        "speed": 0.44398900866508484,
+        "path": 0.5558964014053345,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 0.00010947465489152819,
+        "offset_rate": 5.161016815691255e-06
+      },
+      "return_sum": -0.07288169115781784
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.10761941969394684,
+        0.0021518340799957514
+      ],
+      "peak_abs_offset": [
+        0.41461336612701416,
+        0.11176875233650208
+      ],
+      "cost_share": {
+        "speed": 0.16224028170108795,
+        "path": 0.8143755197525024,
+        "primary": 0.023078082129359245,
+        "roll": 0.00021529912191908807,
+        "working_roll": 0.0,
+        "roll_rate": 1.1871252070250193e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.933179191837553e-05,
+        "offset_rate": 7.128453580662608e-05
+      },
+      "return_sum": -96.4671859741211
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.031779542565345764,
+        -0.06502880156040192
+      ],
+      "peak_abs_offset": [
+        0.07134008407592773,
+        0.11176875233650208
+      ],
+      "cost_share": {
+        "speed": 0.04578259214758873,
+        "path": 0.9541850090026855,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.5521576642640866e-05,
+        "offset_rate": 1.696667641226668e-05
+      },
+      "return_sum": -16.178421020507812
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.11689673364162445,
+        -0.012345604598522186
+      ],
+      "peak_abs_offset": [
+        0.6211377382278442,
+        0.11336442828178406
+      ],
+      "cost_share": {
+        "speed": 0.1565133035182953,
+        "path": 0.7008889317512512,
+        "primary": 0.02016090787947178,
+        "roll": 0.05340028554201126,
+        "working_roll": 0.06894005089998245,
+        "roll_rate": 7.664284851216507e-08,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.9278120817034505e-05,
+        "offset_rate": 7.722125155851245e-05
+      },
+      "return_sum": -105.96839904785156
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.0,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.1310758888721466,
+        0.07533145695924759
+      ],
+      "peak_abs_offset": [
+        0.35880351066589355,
+        0.102786585688591
+      ],
+      "cost_share": {
+        "speed": 0.22507761418819427,
+        "path": 0.7747787833213806,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 3.018964343937114e-05,
+        "offset_rate": 0.00011339469347149134
+      },
+      "return_sum": -12.521376609802246
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.07452280819416046,
+        0.0112987719476223
+      ],
+      "peak_abs_offset": [
+        0.35503721237182617,
+        0.1079336404800415
+      ],
+      "cost_share": {
+        "speed": 0.18582908809185028,
+        "path": 0.7844826579093933,
+        "primary": 0.0291436780244112,
+        "roll": 0.00041667374898679554,
+        "working_roll": 0.0,
+        "roll_rate": 2.4022830302783404e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 2.193594627897255e-05,
+        "offset_rate": 0.00010574376210570335
+      },
+      "return_sum": -61.35259246826172
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": -20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        0.011233130469918251,
+        3.4789685741998255e-05
+      ],
+      "peak_abs_offset": [
+        0.1335129737854004,
+        0.05291718244552612
+      ],
+      "cost_share": {
+        "speed": 0.07050175964832306,
+        "path": 0.9293492436408997,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.3901480997446924e-05,
+        "offset_rate": 0.00013516507169697434
+      },
+      "return_sum": -3.7638092041015625
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "post_pulse",
+      "task": false,
+      "mean_offset": [
+        -0.08015160262584686,
+        -0.005537107121199369
+      ],
+      "peak_abs_offset": [
+        0.5506154298782349,
+        0.10458533465862274
+      ],
+      "cost_share": {
+        "speed": 0.15837682783603668,
+        "path": 0.6498160362243652,
+        "primary": 0.025868268683552742,
+        "roll": 0.07513374835252762,
+        "working_roll": 0.09068392217159271,
+        "roll_rate": 1.481283646853626e-07,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.9678940589074045e-05,
+        "offset_rate": 0.00010133424075320363
+      },
+      "return_sum": -73.75956726074219
+    },
+    {
+      "policy": "oldfull10",
+      "route": "right120_R2p5",
+      "alpha": 0.125,
+      "force": 20.0,
+      "window": "tail",
+      "task": false,
+      "mean_offset": [
+        -0.04349463805556297,
+        0.007346342317759991
+      ],
+      "peak_abs_offset": [
+        0.16445326805114746,
+        0.07743943482637405
+      ],
+      "cost_share": {
+        "speed": 0.1902725100517273,
+        "path": 0.8094804883003235,
+        "primary": 0.0,
+        "roll": 0.0,
+        "working_roll": 0.0,
+        "roll_rate": 0.0,
+        "overspeed": 0.0,
+        "low_speed": 0.0,
+        "offset_magnitude": 1.6433456039521843e-05,
+        "offset_rate": 0.00023062749824021012
+      },
+      "return_sum": -3.9178555011749268
+    }
+  ],
+  "limitations": "No latent action or clipping flags saved in standard screens; executed offset is governed minus nominal. Reward shares are descriptive, not causal attribution. Reward comparisons only within same alpha/context."
+}

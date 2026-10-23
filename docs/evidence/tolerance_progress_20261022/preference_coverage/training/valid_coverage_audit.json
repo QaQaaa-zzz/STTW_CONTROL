@@ -1,0 +1,32 @@
+{
+  "valid": 320,
+  "rejected": 0,
+  "per_alpha": [
+    {
+      "alpha": 0.0,
+      "valid": 128,
+      "expanded_valid": 53
+    },
+    {
+      "alpha": 0.25,
+      "valid": 21,
+      "expanded_valid": 7
+    },
+    {
+      "alpha": 0.5,
+      "valid": 22,
+      "expanded_valid": 10
+    },
+    {
+      "alpha": 0.75,
+      "valid": 21,
+      "expanded_valid": 7
+    },
+    {
+      "alpha": 1.0,
+      "valid": 128,
+      "expanded_valid": 53
+    }
+  ],
+  "bank_sha256": "83e90e107166542983e386eb711bc7efe6409291d73310b84d52713bab9d97b0"
+}

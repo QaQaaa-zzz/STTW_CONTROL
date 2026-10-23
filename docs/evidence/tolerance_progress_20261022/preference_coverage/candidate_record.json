@@ -1,0 +1,19 @@
+{
+  "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/checkpoints/actor_0027.pkl",
+  "actor_sha256": "2f58bca13ea48c6d15234f94fe70fd9926864f18f9c36dd6970116ce48639128",
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/checkpoints/update_0027.pt",
+  "checkpoint_sha256": "f7d4bd47bb6dbb6a99ae13063e4e3bbb918e8d9c2eb8a74b3c77409dfee803e7",
+  "identity": {
+    "schema": "sttw_geometric_path_actor351_v1",
+    "alpha": "conditional",
+    "lower_actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc",
+    "config_sha256": "c9dcf0bfb21e359806303d5126d5cbf4abbbd435ab6f13ba61e4bba5e02f7321",
+    "seed": 918301,
+    "parent_checkpoint_sha256": "03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5",
+    "parent_source_update": 325,
+    "experiment": "preference_recovery_v1",
+    "arm": "uniform",
+    "initialization": "weights_only_fresh_optimizer"
+  },
+  "source_update": 27
+}

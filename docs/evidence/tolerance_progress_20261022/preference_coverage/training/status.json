@@ -1,0 +1,14 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1966989,
+  "stage": "training_complete_evaluation_pending",
+  "declared_updates": 27,
+  "completed_updates": 27,
+  "declared_policy_transitions": 1769472,
+  "policy_transitions_total": 1769472,
+  "checked_unix": 1792756465.2366943,
+  "child_pid": 1970378,
+  "tensorboard_url": "http://localhost:6014",
+  "evaluation_status": "not_started"
+}

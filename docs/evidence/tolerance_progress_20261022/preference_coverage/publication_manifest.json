@@ -1,0 +1,230 @@
+{
+  "role": "Compact completed experiment evidence; raw checkpoints/NPZ and full panel figures remain at source paths. Analysis scripts retain runtime-relative lookup and should execute from original run directory.",
+  "files": [
+    {
+      "path": "NUMERICAL_REVIEW.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/NUMERICAL_REVIEW.md",
+      "sha256": "bd18d6dc9bd47bd6af2103edc8b516ab88daf7c817a6fe1d8bdde66da92fc3a0"
+    },
+    {
+      "path": "numeric_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/numeric_results.json",
+      "sha256": "1f10d6e25269561b9b31835e2e7df7d7a6625c6a0bed3351c6b0f18b1c8f6ffb"
+    },
+    {
+      "path": "status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/status.json",
+      "sha256": "14c429b4064a073383107e5744913cb993f0257fd14c2d089f0b391f80584c26"
+    },
+    {
+      "path": "declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/declaration.json",
+      "sha256": "847655f0515c0d786454a7ef8104f704ec658e2b016f5feddf98ea5a61156aca"
+    },
+    {
+      "path": "candidate_record.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/candidate_record.json",
+      "sha256": "c8ddc1d11ae6c449afdcb6da8bdcbfdf95f2f16cf182d4ab1751c0e9105c01ce"
+    },
+    {
+      "path": "standard_regression_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/standard_regression_review.json",
+      "sha256": "4ad6e9e0445bd60f93c81309a32f7929bfe8074224cc15d9e815bbbafb441dda"
+    },
+    {
+      "path": "command_reward_diagnostic.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/command_reward_diagnostic.json",
+      "sha256": "3728eb5d232d0d308ee74f499e8cf6a6463eaca9499c7f229b563bb14fe770e4"
+    },
+    {
+      "path": "existing_intervention_diagnostic.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/existing_intervention_diagnostic.json",
+      "sha256": "00ac8de07e235934d483705d32c48504dd2e3e4da064db04e1659583f06aed22"
+    },
+    {
+      "path": "nominal_review.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/nominal_review.py",
+      "sha256": "cbc57ae02604bae80fd163edb686a1eecb99b589f939290122b613c33fd2c562"
+    },
+    {
+      "path": "plot_low_speed_matched.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/plot_low_speed_matched.py",
+      "sha256": "e7ddecb8e8d30c7b8fac686f3df768305ffb3853fde32b1c95febe80b99fb9e7"
+    },
+    {
+      "path": "diagnose_target.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/diagnose_target.py",
+      "sha256": "8492d3e9aeb14416946ba230880dafa43f5ac4efc0e94424851feb0576c6d64e"
+    },
+    {
+      "path": "review_existing_intervention.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/review_existing_intervention.py",
+      "sha256": "11853d1ff29ddf0a361b952d340f7023638ff77400f62025db5d8b46e3fb2b17"
+    },
+    {
+      "path": "nominal_review/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/nominal_review/summary.json",
+      "sha256": "24d3403f121f7b168ffa3a786245553f3e4b4a4289bc18c6a1c6c47b46e39af8"
+    },
+    {
+      "path": "nominal_review/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/nominal_review/actual_xy.png",
+      "sha256": "cd05be4a0df0ff1656dfa27165f521367db3a5582a60df0b7df60fc2faa1f567"
+    },
+    {
+      "path": "nominal_review/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/nominal_review/cumulative.png",
+      "sha256": "3386d2fa3225392136392f7d8bbc2599aba213440da2943f92c167ed6ffac51c"
+    },
+    {
+      "path": "nominal_review/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/nominal_review/scored_tick_reward.png",
+      "sha256": "74f25fb476e43f915674102f47b8245168e0623cfa6dfedd027adc0924075c14"
+    },
+    {
+      "path": "matched_curves/command_reward_diagnostic.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/command_reward_diagnostic.png",
+      "sha256": "b6e33478456468b7f39c0b52a16be607b2c35620d60322719b01f690319b9a87"
+    },
+    {
+      "path": "matched_curves/actual_forward_speed.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/actual_forward_speed.png",
+      "sha256": "b25da95c575dfdd7a3648cb7d89501c3fdeda17612ce6e8672203060f9fbbdf2"
+    },
+    {
+      "path": "matched_curves/path_heading_error.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/path_heading_error.png",
+      "sha256": "1725c28e67dac063c144f5fa5110a32998b773d1e6ac7067fa37c77eb084cec0"
+    },
+    {
+      "path": "matched_curves/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/actual_xy.png",
+      "sha256": "3ccefca0b127d2a239168a1a4ad6ced86c7fc8d1fea0dab02e81fc1c6267cc6f"
+    },
+    {
+      "path": "matched_curves/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/cumulative.png",
+      "sha256": "0449446ad3c0211e7052cd887ec334c81a9612d6c935a79670f4f34d101ad33f"
+    },
+    {
+      "path": "matched_curves/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/scored_tick_reward.png",
+      "sha256": "9e864a627a6baf4bd2b281a00a4c0feeeb6e64fec612657fecb191581bd6cf95"
+    },
+    {
+      "path": "matched_curves/path_cross_track.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/matched_curves/path_cross_track.png",
+      "sha256": "5ddb8da578f6da0d25e4f0840ad3e07d8bd96a039dfd1e8bb5dfe50e64e39609"
+    },
+    {
+      "path": "moderate/matched_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/moderate/matched_results.json",
+      "sha256": "13aa41d4b458903d71c878d3baf3c8a4ab09b98bc158bed66d1e33dacd8bff1f"
+    },
+    {
+      "path": "moderate/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/moderate/declaration.json",
+      "sha256": "cc5d9e9785074860b3d0a457cc90341f10398aa1a52d4d01a7a4d3977140bf2c"
+    },
+    {
+      "path": "strong/matched_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/strong/matched_results.json",
+      "sha256": "9e4dd7e70fb2d72396da6c57e818763bf6c4d36cc5751f4b5c990ecb1f877151"
+    },
+    {
+      "path": "strong/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/strong/declaration.json",
+      "sha256": "c882b7cae8e9b4ed0b30b5b391de646b631ab2716331e49e2ca5f3813b84dd32"
+    },
+    {
+      "path": "straight/matched_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/straight/matched_results.json",
+      "sha256": "dc618983113fc701dc2ddd591ad0b2845faf4b74637e2c0d33a8eb9ce4c98a52"
+    },
+    {
+      "path": "straight/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/straight/declaration.json",
+      "sha256": "8b70021ab82b71c3b2ccdf01f55d7297f4c8260d67a901cbeddb066122e18552"
+    },
+    {
+      "path": "low_speed/matched_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/low_speed/matched_results.json",
+      "sha256": "478af1df258c5ffde2d3ce50b2d666c648b90a121fb2c610204ba1eac3268111"
+    },
+    {
+      "path": "low_speed/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/low_speed/declaration.json",
+      "sha256": "71a936a7fbb9055a7c0c46c914bd3656e7c45f3321ff1d808bc9b779dbe4a675"
+    },
+    {
+      "path": "low_speed/target_continuous_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_post_v1/low_speed/target_continuous_review.json",
+      "sha256": "bfb5a854b65d89edea83306b6a21c933b0a3d71728f758833d5ad27acbba9d23"
+    },
+    {
+      "path": "training/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/DESIGN.md",
+      "sha256": "44c99c56847066d9d8ec4e9f620442c1dcebc8ce2919f69f86fac7579823a282"
+    },
+    {
+      "path": "training/training_config.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/training_config.json",
+      "sha256": "be5f879938c2ae7c76722efc64995815e7c2758c282940aa6799a04e157ab355"
+    },
+    {
+      "path": "training/training_declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/training_declaration.json",
+      "sha256": "2140c115d1b55e81ef54bd3e104df8151b8210da3b513d62fd1dc933306a6d8d"
+    },
+    {
+      "path": "training/plan.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/plan.json",
+      "sha256": "37871d36bd0cdaca81c5dd6d737efad2c67e96718cd3f84a6f18267713c70488"
+    },
+    {
+      "path": "training/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/status.json",
+      "sha256": "4f8c9665ea5132a618005a6fcaad48155b07eac5af6c2bff6ccee3ce20be284b"
+    },
+    {
+      "path": "training/reward_http_verified.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/reward_http_verified.json",
+      "sha256": "566072cd0f77e0811d4315bf48da428b4f68774d15f3038d7dc3dba1c43f93ac"
+    },
+    {
+      "path": "training/sampled_coverage_audit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/sampled_coverage_audit.json",
+      "sha256": "7ef1d9d6f022c7475a7633168d7ea3477f2c99ad3decda960e5fe1c88d5c022c"
+    },
+    {
+      "path": "training/valid_coverage_audit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/valid_coverage_audit.json",
+      "sha256": "596d5646796c32a2fdb01404d5442fd72e826343cb8dd308aff2d5c064f71e34"
+    },
+    {
+      "path": "training/uniform/effective_config.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/effective_config.json",
+      "sha256": "eb4b3b9711bc80d83e9895becb5e7222586b2003f7570e3d6e79fdff620acf70"
+    },
+    {
+      "path": "training/uniform/fork_receipt.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/fork_receipt.json",
+      "sha256": "eff41117101a8ed3e4357f31580f31d11699f1e48f3be43a9b1322a4144ceb85"
+    },
+    {
+      "path": "training/uniform/manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/manifest.json",
+      "sha256": "4828e3bfa7bcbecdd7fc797c3af33aaa795bcd341276e162576b61979681cae6"
+    },
+    {
+      "path": "training/uniform/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/status.json",
+      "sha256": "495e478824f8dbd6366519d02c9c7dac57178e40c376ce366b721c84d76b01ff"
+    },
+    {
+      "path": "training/uniform/metrics.jsonl",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/uniform/metrics.jsonl",
+      "sha256": "cc7436a1f1089b00dc327ea4454b4ab7c3c53781659b8320c52e4ba7b0ac1090"
+    }
+  ]
+}
