@@ -4,7 +4,7 @@
 
 [每个底层tick奖励](nominal_review/scored_tick_reward.png) · [累计奖励](nominal_review/cumulative.png)
 
-固定final u27；父u325与旧4s uniform的820例认证复用，full10新410例完成，810,440新评测lower ticks。完整分项图仍由后台生成，本页只声明数值与名义同图已完成。单训练种子、开发面板，未采用候选。
+固定final u27；父u325与旧4s uniform的820例认证复用，full10新410例完成，810,440新评测lower ticks。完整分项报告已完成并附后。单训练种子、开发面板，未采用候选。
 
 | 策略 | 唯一无扰任务 | 中等扰动任务 | 强扰动任务 | 强扰动域退出 |
 |---|---:|---:|---:|---:|
@@ -17,3 +17,5 @@
 强扰动full10相对父策略0新增3丢失，相对short4为1新增1丢失。父策略丢失的3例全是α1末段路径超10cm约4.9–8.3mm，速度航向恢复且通过目标，不作重大失控解释。中等面板working143/148/136，新增越线幅度见moderate/CONTINUOUS_REVIEW.md；不据严格计数单独否决。
 
 本轮标准面板表现接近，未证明完整尾段提高抗扰。训练次数相同但full10扰动事件4016、short4为7589，尾段覆盖与事件数量存在取舍，训练事件数不是成功率。低速120°失败检查另在preference_full_tail_failure_check_v1运行，当前不据未完成结果下结论。
+
+完整分项：[中等扰动](moderate/analysis/REPORT.md) · [强扰动](strong/analysis/REPORT.md) · [直线](straight/analysis/REPORT.md)。共108张PNG；PDF与原始NPZ留在运行目录。

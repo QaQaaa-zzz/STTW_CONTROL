@@ -1,0 +1,486 @@
+{
+  "files": [
+    {
+      "file": "moderate/analysis/summary.json",
+      "sha256": "2669c51403c18d36dbef155a7ca91c1efba8ce4ce6ad5d8d0e16681ba06bcc67"
+    },
+    {
+      "file": "moderate/analysis/REPORT.md",
+      "sha256": "8f68aaeed252f7479a78121d4232d9b18802f11e746a749ca22061fbeea2b2cf"
+    },
+    {
+      "file": "moderate/analysis/paired_nominal_response.json",
+      "sha256": "e2c35515013dbdd13f0f93c630381fbbe8f89a6e9a7accbd70561492c2a6839a"
+    },
+    {
+      "file": "moderate/analysis/cases.csv",
+      "sha256": "c9ae4e120573d262823a797913618e074436863d01e0038a34b24c2cd8a45d5d"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "cfe97dd954f9ef5995b6f43b2ee6eaff5e7aeeac8313b104d85224348d03a9e1"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "b727ce83dfcf75ebbf68b8f9ccf952186999f20ba16098a24215650742460386"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "76f4400cb5822ac96bb622a311c58d282253a11b6c5af285ff009160245652e1"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "4ff92a075bfa5022d70f6ffc0e5f2a779a5b588b42f84e07d47a3703608306e8"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "e32c148d948fa46746f5fd221df23bea4cb3c6724fad3913e67a571b7cea95aa"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "4b94c658c2f1b8e9ba19059bdd377f0e8b221e1b5e1e932f94f69c75faa87d50"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "aa6e780fefbbd505fa83de33d16b322102859f7f66bdc4d067fbc02b8968a5db"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "e633cee07200c3a08cc475399347e8c056890d888480c9910205c21718a4e38a"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "3c0bdac5b8f19991c4b33778540e52c35c526c91b5f7399d9d7dc4ca3b4384bf"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "731933a67dbacc884d27f85231a5cfea50f5295654cee7048f168da1942531f4"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "b2b69077d75b3e7519b7a7ffa991d5ed19f01be7e084697823bcde15e242c73a"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2.png",
+      "sha256": "0d4c85a693a3276183c03652e1d8c06d3158fea577cb043edf1ced56b2cfbc94"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "218faefc1ae2a0ce33b6f14e0b354087fe7bb7d0a3a9ef164ca7f8e67e6d8789"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "efd6ac64b7c3a029c907fd6e6e5f488476305dbd18d8bb95803f43645d2184c4"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "0b4b97ad89f61ee214a44a5dde98341d73f787014a0f77842205692baff4be70"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2.png",
+      "sha256": "581926f2564b7398db739c46ace07b0267ce6826072af0e573384510d2f4d714"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "52c4adeaa7868a7a875a1644e75643b7512af5cee0ab3cbcb701bee2685c8f09"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "ccdc9b9df7d3c3392b3e5c142a287cc8843624aa6b160cad015cc9c010292a58"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2.png",
+      "sha256": "20f39806727dbf2fbab09e2608f857001bb3a1860dbd1c84485fc2101f7aa8ea"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "e2b385c93e000607654a1b9a0cb9ef934f29a3bbe47ffe9595d379e98e708c4b"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "07dc587b311e0c930f31726d7b4e7bb23e092fc8ad2f5c7e83fc4587fb4eaf77"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "177097963e1f9c132313d82321ea51e241dd4f7fa526c21b92d71204a5fa46cd"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "cab3fbf188e43e31b7014aaee5dd27fb02c23c64f5910032e0ed11a831abc0db"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "59c17bdecb64d1ea17e64567edd8ae22bb584d40e8e1dd937bbc6fe6fff49e97"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "77ef5666c3f0e7cad13a39befd8e0e0fbf12a0903a483e26cc1d7ab0af14475f"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1.png",
+      "sha256": "66024f1b84acc1bcb20497b4b921f7e5b4cdd6b9d457add04c04734eb514eadb"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "fb583d1e099ac42375c1c4561362621d43e688d238f46d36eaeef8a1b9657f93"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "d6761f58332e3a5a02eeff2b7734aad74ab39b3e9b7958d6fe317bbbe916fdc3"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "d72d2819b7a10a1fa83355a59cd9b1e0a76e59d8f874f51982e0564c04cb29b1"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "9d18f6862a921646be5a5d270cc42f5d97c72931927d7cb3abdad459dc3330bc"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "bb3e984785822d39bb8bc3db203393eab57be2b201e232e57434261f0efc8758"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "9571ffd5a8d1cbee978f850bc8bb2a6373d2016d07d513f1b457f57d39ea3416"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "9d8b2adf65acc0a9bb96e827996d68ed0ac94752df1a28f0004b4348d50d94a5"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "8097497094ae0cf069a0afe15590be840bf07cd9f156d7490dc318706e6d16f4"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "b0ccee95da8440c8e72eed75f4ded2bc797cb93b42c880dfc37f9459ba02ae46"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "9be300548468cef58960ab1e97933223508a578faba02384b5b65c971916951b"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1.png",
+      "sha256": "1ceb77ce5e213e5e580edbea754601236f047242567fadd7929719997e988598"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "b2ca274e9ef875448ca6c352b4930ef9fa3ae16800470785462c6baea8b7cfe7"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.8_t1.png",
+      "sha256": "2bffcce147c82538a2f9f4add5b263efde5ceb98015d4a49a49f54f19bfb01bb"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1.png",
+      "sha256": "82d23ae17d9ed951a95d27d4420fdffaa7c72abed4a5f25886c4d34dfbbb96bb"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "d3a15ba30f551c28ae6d9511e4e96d10a1e9c959bf6e39fb3eb6c4d15e6a25a8"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "2d26e96c9459ea8f52c575c71768b1cc71820269ac88bc242a8f049c3b7ced77"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "39efaf8465b585cc1b44809988ecad9d3fea999ee6f3c5c860daf0fa64836e0e"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "745ad5ead0bd399ce8240b46e32fd13b067504f0a4cea13776f56e8df29c9d83"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "9fc7002e6526387b3aedde88d81a7e28bfd4ff8f163db25629c76ede7ec85e40"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.6_t2.png",
+      "sha256": "c8a2909e923ec4dc548ca34af576c51c13ce8a5eb22962856db514d6432a4f2e"
+    },
+    {
+      "file": "moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "de2a837a09089328b4d6b81f20e6bbf2fd1541b58f86ea58346370781c3cf4b1"
+    },
+    {
+      "file": "moderate/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "24e9615b71fe7f7044904013da408a72419ed74a5a8f2cb03479093cd5f3684a"
+    },
+    {
+      "file": "strong/analysis/summary.json",
+      "sha256": "d257f0b610a3bf661df71bff6d47df9f6db5143c3d82db57d61de9b218bff38b"
+    },
+    {
+      "file": "strong/analysis/REPORT.md",
+      "sha256": "c48c8a8b77a6a0e7a4d71cc93c93d8c236bac445c0262c2c1f9cdb756aa71638"
+    },
+    {
+      "file": "strong/analysis/paired_nominal_response.json",
+      "sha256": "eb7f17672b661cd6a717c0c3e175283fdad95d6f123018a9951cad8e13350948"
+    },
+    {
+      "file": "strong/analysis/cases.csv",
+      "sha256": "97ff3929e3b7127e97d500f01bd0e145030c415126db8e3c84e488a29dfb6194"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "efccbd0662bf07bac78132142513fe7b647970379a29831466c179bf5c9f4602"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "1e58ffbd1d028bb301ed1ad02a9e27c70d9f98f205d77d0b217b2b76ec98c17c"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "58f07ef5560664202d8736955bdb5d2ef2a6600c0803b59868959ab4edbba5df"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "69eb8607aeb19935c32fa7783a9098c70511fb096b8d126fe1d3f456f95e270e"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "f1967786d5a4ccfdb8f30c041b786afca1de06b291901ab264dc4a60f8c79d3d"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "42becda6daa546c4958a8d61312e58d04e85d831abb473171cb4d46cf74c57e6"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "c12ef090ba00efa641e7dbd34a6e95713776c14c10e0948e1623cd6bf1fb1e9c"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "0d5dd24005733e88d88db92fe77eaf454e9a654aff04c191c6ed15b93ec18af5"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "0ea05c80f55ea7a887b084d4c3ff351928fccf8986c797126677b97aaed6206f"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "a64d682a85d612c751f6ec8f6a89b09ef7bb227873e1e8a1bf3677d2f8e8ab90"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "31636dfcece1265523d38a65f34d6a29abc0fd9b3e38261b48ae8bbfe3ca059f"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2.png",
+      "sha256": "5cca6cf8f4c7452a97f28db31930fb1c253efaf7d1be25c6d6b004d332673e20"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "9dc03bda49dce3b26b72613fdd6ef6f5207fa627ad0508f3bc9076f7032c3d39"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "a32a69a611544fc4faab6cb3b4647732b7842881ff4c6b51017c377ff08cd987"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "72a9daa88426fa792dbb87a0a0d3faa841013de969f1006436b5d5d81bad490d"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2.png",
+      "sha256": "13549401fec2c36372911c8db244214e092242267fd7e8265cefef1d112340d3"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "313cf18f95549009efbc4980f603e08c61926a0e3b4e14e0e103ee0ae00bc9a3"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "4758484f94dc186c1fd3a5833df61364fb5be9a4c28baf49df70e55e935deaea"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2.png",
+      "sha256": "18e6461aed42ac5d6a55bd51f5e682aff70534d518d164b63334a8e917965930"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "83b265e289c8e79fa46941b61573e6dcc50faf13ae7947d199d773eb8684ba60"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "26555c234cab204d756ad89597b1aa635a23460cc2cc752889ada0f4b06b8e9d"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "8843b55ecf4a18f095ab38f84c1c81b488bfb6a224ae727d6434f8882db6e650"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "f4a7844faba60c0dfbf160642e3d0101a93a9f9396a4a0261e0cddf824f511b5"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "1765943d07f291b093a8ccfe0fef028d7b6eee8484eb531600e49cae41476ad6"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "e04fd60842fb67d6d16b14c7cdc57320110e70d3cfc7d094b9433f4787bf76a1"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1.png",
+      "sha256": "b3beea76deab954c8dd5f9c893f4bbdb3f5d27a018e77d8e47913115615a4dca"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "996bb7d234ace481fb47002a0974e2134998bdeef2e7c19b4c6d9efd98f82735"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "567e8064df88c0b2d340894a58d7b98aacfa826ee0f4d1454e6ecbee99d06fc5"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "fad9cf0e87bbac78b8b78879114e3dcf198559a8e6efde540e4c640971399bea"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "86b6b31f5965c6edaf61a193ba4bf1f4fde3824291a977f11b7c1d4f6017ecad"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "e67fd38bcedc8511e82c27ebdc1e824eb9c0911cb6ad7cd5ae99f9ee983d8457"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "6b129d110f2217d3fa05d681bc7cd25d5cc994602bbcb70ba56c5b0ec444faa5"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "0ac52ca105a65b4be119b3467bf8f6ce73d47c01f9c85c40126f3c22601b4a00"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "bd3e0ed8375bd14239f3a13fa452af1c07826c1bcb9d72f076f5e1dde6eb7a56"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "6a1568e521ac5c42f7bbd81d9f7b83455827ee56ceaa75c71692fc51f006c76f"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "0d07a05e091d4f8833d9fa3110dc28454ab5550029181041e9460948e43b5ced"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1.png",
+      "sha256": "15b352f1f0b4459cac6c3dee4e735829bb2f59d2f67bc0ad7365e27efe01be43"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "a6630e1ad11c15ccf0f854a7b047cc3c268474ca071b7d76ff4f3900e2164751"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.8_t1.png",
+      "sha256": "f9fee092c635cb7ef073ee89ef45d3a7c4f4147a822c481477cbbc1bd39d62a8"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1.png",
+      "sha256": "15b7d23743d396ddbef3b38f7995261bf0323d9a932af1812f3d29fcc71f0ac2"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "35152e44c217adc143b9e04889004a36d2f1caa32cd32479572e0b6df9d145a8"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "5023a6cb092d1c7a70719353e149aac3fadb6fb488ef545198dc794ff909ab8e"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "9ba6f10be9997d3b05a4201d0c2cc0d5931d12725b73dd8d0096106bdc879bfd"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "22fe4a877b01a656054c6adb85e7382590ecf7ae0498745373ccd1375f833b5a"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "aea229f37e94352010b584919aa392b6545795edce58b001659e330738d417fb"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.6_t2.png",
+      "sha256": "b24533b9fecae57a77a82af851d1fe769e34c2c6a4f114dbffa96143a07c5b98"
+    },
+    {
+      "file": "strong/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "5cb01d27c5d6029562e459bbdff38801b8a3f849d5155dc334ceccd9f71d8c8e"
+    },
+    {
+      "file": "strong/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "c8ddb4fb1c7417d3ff133bc135da63dbb441168485d0c330606883ac721cb7a0"
+    },
+    {
+      "file": "straight/analysis/summary.json",
+      "sha256": "4d7ac9463dbe80617f01908627633f582cf989ff2f109a2dbe94f15122359f61"
+    },
+    {
+      "file": "straight/analysis/REPORT.md",
+      "sha256": "2ee3467276b35f64a56bd6ac3b4fc65b9ace663147f796883b1950ebd7c9c4d6"
+    },
+    {
+      "file": "straight/analysis/paired_nominal_response.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "straight/analysis/cases.csv",
+      "sha256": "39735a34f352f294ce87b822868e4ce9a07d505d7dde6ccaa3ef99fb38458af3"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1_a0_reward.png",
+      "sha256": "67782c9dfb5728456e0250440b0a2aa900871d6469f0fdb724b897e082523775"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1.png",
+      "sha256": "17460fc371e9b2cd7c5da97099697e651e910a86f9c7a448676e8ee71a666589"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1_a0.5_reward.png",
+      "sha256": "8a3d089eccc55ed78eda5a336807716a7b7f0c9ab2accdcd3c38cc160aeec634"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1.png",
+      "sha256": "13a91718fadac4ec7d4720d609d5203cc7ecb8262419275950bdc9fbe8582ac7"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1_a0.75_reward.png",
+      "sha256": "9825f57ed8a13972171135d538bf80552e7735482df873093617736557b0b041"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1_a0.5_reward.png",
+      "sha256": "e4c3b4379df4ccaa5a03a20f184cdb13fcad9f52850ff5b4c32b6747f97efaba"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1_a0.75_reward.png",
+      "sha256": "104362f1031b05d23eacb8a906c9a4d62a195af426145b7dd6ac9d4e4b8e4846"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1_a1_reward.png",
+      "sha256": "c7980afb193c045c5fd99b3485eb97d49884c9083f206930bff3666da0b29004"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1_a0.25_reward.png",
+      "sha256": "33dba39dba6147ac1f505c22d3c5b6548ed5c6bd1ebe84b6f7fe1c99ae222d77"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.8_t1_a1_reward.png",
+      "sha256": "10da1355bff79746a2d06484f154fa6a6f34afa9a96bbbbe3e0acaee384a12e7"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1_a0.25_reward.png",
+      "sha256": "f30bf2ff40ce4f6a21d9e42837356e6cfc59d336f42f30206483ffb55c0c04d8"
+    },
+    {
+      "file": "straight/analysis/curves/straight_v2.6_t1_a0_reward.png",
+      "sha256": "e5d74ff4473b9fec82bbe81720c7001ff073ca467feabf50e5e9f4d8842c7c2d"
+    }
+  ],
+  "png_count": 108,
+  "scope": "completed reports; raw NPZ and PDF remain in run directories"
+}
