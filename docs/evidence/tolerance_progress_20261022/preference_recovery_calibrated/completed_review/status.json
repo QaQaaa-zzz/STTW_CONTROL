@@ -1,0 +1,16 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1599776,
+  "training_steps": 0,
+  "stage": "reports_ready",
+  "checked_unix": 1792750940.82522,
+  "elapsed_s": 3571.8346321660065,
+  "completed_jobs": 2,
+  "declared_jobs": 2,
+  "policy_transitions_total": 3538944,
+  "panel": "straight",
+  "evaluator_pid": 1751262,
+  "evaluation_status": "complete",
+  "adoption_status": "pending_research_review"
+}
