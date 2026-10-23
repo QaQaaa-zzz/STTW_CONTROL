@@ -1,0 +1,91 @@
+{
+  "source_metrics": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_metrics.json",
+  "source_metrics_sha256": "b28b395407d548e868cec40512613ffb5304b0cfb8b13c0eb3fe712cdaef9718",
+  "bank": "/home/qy/STTW_CONTROL/runs/worktrees/frozen-lower-upper-endpoints/runs/frozen_R196_R244_upper_endpoints_250_20261008/R196_upper0/prepared_bank.pkl",
+  "bank_sha256": "6bb5fc54499ecc4451251bc984c1d4459a32977ba92f09fb53d3382c5bf535d0",
+  "current_screen_index": 3,
+  "states": [
+    {
+      "index": 0,
+      "preparation_initial_speed": 2.0,
+      "preparation_initial_roll": -0.009999999776482582,
+      "prepared_roll": -9.202957153320312e-05,
+      "prepared_roll_rate": 0.00014937602099962533,
+      "prepared_speed": 1.9603205919265747,
+      "prepared_steer": -0.00010548492718953639,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 1,
+      "preparation_initial_speed": 2.0,
+      "preparation_initial_roll": 0.009999999776482582,
+      "prepared_roll": 8.380413055419922e-05,
+      "prepared_roll_rate": -0.00013146860874257982,
+      "prepared_speed": 1.9603296518325806,
+      "prepared_steer": 9.624303493183106e-05,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 2,
+      "preparation_initial_speed": 2.299999952316284,
+      "preparation_initial_roll": -0.009999999776482582,
+      "prepared_roll": -7.343292236328125e-05,
+      "prepared_roll_rate": 0.00010805655620060861,
+      "prepared_speed": 2.254295587539673,
+      "prepared_steer": -6.259437941480428e-05,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 3,
+      "preparation_initial_speed": 2.299999952316284,
+      "preparation_initial_roll": 0.0,
+      "prepared_roll": -4.76837158203125e-06,
+      "prepared_roll_rate": 3.028936362170498e-06,
+      "prepared_speed": 2.254321813583374,
+      "prepared_steer": -3.855608611047501e-06,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 4,
+      "preparation_initial_speed": 2.299999952316284,
+      "preparation_initial_roll": 0.009999999776482582,
+      "prepared_roll": 7.736682891845703e-05,
+      "prepared_roll_rate": -0.00011727858509402722,
+      "prepared_speed": 2.2543222904205322,
+      "prepared_steer": 6.680932710878551e-05,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 5,
+      "preparation_initial_speed": 2.5999999046325684,
+      "preparation_initial_roll": -0.009999999776482582,
+      "prepared_roll": -6.282329559326172e-05,
+      "prepared_roll_rate": 8.887416333891451e-05,
+      "prepared_speed": 2.54826021194458,
+      "prepared_steer": -4.185401485301554e-05,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 6,
+      "preparation_initial_speed": 2.5999999046325684,
+      "preparation_initial_roll": 0.0,
+      "prepared_roll": 0.00016164779663085938,
+      "prepared_roll_rate": -0.0002482622512616217,
+      "prepared_speed": 2.5482916831970215,
+      "prepared_steer": 0.0001079782159649767,
+      "historical_preparation_passed": true
+    },
+    {
+      "index": 7,
+      "preparation_initial_speed": 2.5999999046325684,
+      "preparation_initial_roll": 0.009999999776482582,
+      "prepared_roll": 6.580352783203125e-05,
+      "prepared_roll_rate": -9.73221831372939e-05,
+      "prepared_speed": 2.5482423305511475,
+      "prepared_steer": 4.3987711251247674e-05,
+      "historical_preparation_passed": true
+    }
+  ],
+  "new_physics_ticks": 0,
+  "claim": "Existing prepared states are near upright after physical preparation; varying indices is a limited initial-speed sensitivity test, not independent broad generalization or unseen training seeds."
+}
