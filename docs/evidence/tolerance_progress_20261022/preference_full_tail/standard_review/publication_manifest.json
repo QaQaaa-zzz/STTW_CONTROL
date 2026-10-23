@@ -4,7 +4,9 @@
     {
       "file": "REPORT.md",
       "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/REPORT.md",
-      "sha256": "d1a331f108e1f361f88b132307c49361a7fe12eaec78decf6abe5f6a9b2a2c48"
+      "sha256": "d8ea5ab1ee7be98c7afaf35a13b125482777e08b082ddcdbc8391561fd0cd7f2",
+      "source_sha256": "d1a331f108e1f361f88b132307c49361a7fe12eaec78decf6abe5f6a9b2a2c48",
+      "publication_edit": "Updated rendering completion and appended relative detailed-report links; source run report retains publication-time wording."
     },
     {
       "file": "numeric_results.json",
