@@ -1,0 +1,10 @@
+{
+  "url": "http://localhost:6015/data/plugin/scalars/scalars?run=teaching&tag=fit%2Floss",
+  "last": [
+    1792759701.3901772,
+    400,
+    0.0010404459899291396
+  ],
+  "checked_unix": 1792759770.325273,
+  "semantics": "actual supervised fit loss, not rollout reward"
+}

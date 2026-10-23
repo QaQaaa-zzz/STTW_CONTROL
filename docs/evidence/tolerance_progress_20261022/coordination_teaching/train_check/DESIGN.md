@@ -1,0 +1,1 @@
+Fixed final400 Actor, original 24 TRAIN contexts, no masks or privileged timing/force inputs. Parent control24 reused from original probe, same config/reset/pulse. 48000 maximum new lower ticks, zero additional training. Report all outcomes and paired errors. A positive result triggers existing DEV panels, not automatic adoption.

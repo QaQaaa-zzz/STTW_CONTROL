@@ -1,0 +1,215 @@
+{
+  "files": [
+    {
+      "path": "probe/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/DESIGN.md",
+      "sha256": "8acf1cdfd67a2b0a4b3f0c726b97294ecc16ce701a5fe6852962d798a227afad"
+    },
+    {
+      "path": "probe/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/declaration.json",
+      "sha256": "6f0254197ab18719dc52239d41deb7d95ded3b9a6bb9be9db08d5d0fe2b3f936"
+    },
+    {
+      "path": "probe/evaluation/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/status.json",
+      "sha256": "0b35deb2b5ae7a6e12d87e2d50ed5f164cbd5f4ae4227f2c4351962aae0e8f11"
+    },
+    {
+      "path": "probe/evaluation/results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/results.json",
+      "sha256": "ca57b0954647c50553678dde3cc92f72e2854324cb188d19d19f0468dea03efb"
+    },
+    {
+      "path": "probe/analysis/REPORT.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/analysis/REPORT.md",
+      "sha256": "8259feaff0477cf0d349fa8e432cd8b43ed4abdc6ae964ccc8bdb2de3cb4bdaf"
+    },
+    {
+      "path": "probe/analysis/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/analysis/summary.json",
+      "sha256": "3e6feed3b082dfc9ce0ef8892062e95595c07fc890e357bfa2ad06940d504a69"
+    },
+    {
+      "path": "probe/analysis/all_cases_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/analysis/all_cases_xy.png",
+      "sha256": "8d0831cf687afed97862c6d3a1c16b53901cfddbbb05dc6b304583ee2b8a082a"
+    },
+    {
+      "path": "probe/analysis/gain_roll_audit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/analysis/gain_roll_audit.json",
+      "sha256": "096b874fb82b8e5b7d545921eed143e8c5d7c0221e72b2f489edef3950de511a"
+    },
+    {
+      "path": "probe/analysis/recovery_candidates.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/analysis/recovery_candidates.json",
+      "sha256": "41ff999f224ff8b8401c0acb74d67fe3301df31768d77fe4f9c93819b59c355f"
+    },
+    {
+      "path": "records/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/DESIGN.md",
+      "sha256": "8810ee1eeceea7d6082ff187d014efad0b10712ac368a127160d34bf0a08d674"
+    },
+    {
+      "path": "records/TEACHING_PLAN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/TEACHING_PLAN.md",
+      "sha256": "710a41b2ddf4d2472c1641f7ee5db115dee916bec110df0e2090df2a6534d588"
+    },
+    {
+      "path": "records/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/declaration.json",
+      "sha256": "10c64e97e16f81790497990da41138134ef4e803706208962df2527e0090fe8a"
+    },
+    {
+      "path": "records/evaluation/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/status.json",
+      "sha256": "ddff867926ae935daaabe2501162b29d49e3ac03981f67d2fa3228cafa177cd2"
+    },
+    {
+      "path": "records/record_verification.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/record_verification.json",
+      "sha256": "a258692fdeacd75b9f6835710b087754c028483e8154c09ed85ae50d8eff72bd"
+    },
+    {
+      "path": "records/dataset/manifest.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/dataset/manifest.json",
+      "sha256": "845e692e46426d4a619f8fd369fba7b1b4f4f656d4801087765b7f3071f1d971"
+    },
+    {
+      "path": "records/verify_records.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/verify_records.py",
+      "sha256": "f66f4d95dcb178be2f611b0aa574320485f4c137739ec9a918f76ded10912176"
+    },
+    {
+      "path": "records/build_dataset.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/build_dataset.py",
+      "sha256": "6a5a59dd82a1d5d0f404e964509cffaf7746049dd144790337f53bcd6178603e"
+    },
+    {
+      "path": "teaching/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/DESIGN.md",
+      "sha256": "710a41b2ddf4d2472c1641f7ee5db115dee916bec110df0e2090df2a6534d588"
+    },
+    {
+      "path": "teaching/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/declaration.json",
+      "sha256": "6f0abcf83e804ed69ecbba6abbf22330b58c163442c94ccc984596c56d889dd0"
+    },
+    {
+      "path": "teaching/fit_http_verified.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/fit_http_verified.json",
+      "sha256": "b679b3c3b49db5023bfe39769763cc578195d4384c1b9239d427350578809e47"
+    },
+    {
+      "path": "teaching/tensorboard_server.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/tensorboard_server.json",
+      "sha256": "e2338c6af9a5c6a99c4462f71664d2bbff3dc2f0d7a111819684dffb868342e7"
+    },
+    {
+      "path": "teaching/training/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/status.json",
+      "sha256": "c1fd8004bb74110e4367d32ca5335c028f06e868ebe30d4b85ac93c5fd8c893f"
+    },
+    {
+      "path": "teaching/training/initial_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/initial_fit.json",
+      "sha256": "02dfeed4923ae43c505392d7117e4227fafb1b45330e0463a2b5309c855c0d2d"
+    },
+    {
+      "path": "teaching/training/final_fit.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/final_fit.json",
+      "sha256": "2c9a31d324c4b3cd2a35895241f489476400438660dbd2f0cecd9989d20b6dc0"
+    },
+    {
+      "path": "teaching/training/metrics.jsonl",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/metrics.jsonl",
+      "sha256": "6db7e14a90bf07b8fa090f8a91a008b092ada9303969edc8c6689698aa5a6913"
+    },
+    {
+      "path": "teaching/training/candidate_record.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/candidate_record.json",
+      "sha256": "b0ff306f56f7fa8c293744b38507346856bae90cff471e0ee77ae2217816a4b5"
+    },
+    {
+      "path": "train_check/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/DESIGN.md",
+      "sha256": "5ecb8e78df894e181175eb69f42fa44588ce16e1e718a1adc4e45b12f1b68d5b"
+    },
+    {
+      "path": "train_check/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/declaration.json",
+      "sha256": "065ca9a0e1669c60f502b9498b3714c8769e841b62a6aa41a0a2afc38338087d"
+    },
+    {
+      "path": "train_check/evaluation/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/evaluation/status.json",
+      "sha256": "4e1454f808cdc4222d0eac710ddf1def3f725be1f3ac5bf954719bb4dbd363ce"
+    },
+    {
+      "path": "train_check/evaluation/results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/evaluation/results.json",
+      "sha256": "28c900adab223c703b8ec5496aaf81062eb0041d6caae8854e91850b77778f37"
+    },
+    {
+      "path": "train_check/analysis/REPORT.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/analysis/REPORT.md",
+      "sha256": "6796a61ff0e10d4b6ac9c1cd5399e9ce2bf2ea7f065133927260de772c10186c"
+    },
+    {
+      "path": "train_check/analysis/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/analysis/summary.json",
+      "sha256": "5447bae7d038cdc82d45a7df8e636b2ef4d44134a4a7bf4720fefc15822717ff"
+    },
+    {
+      "path": "train_check/analysis/all_cases_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/analysis/all_cases_xy.png",
+      "sha256": "8e22e5edc492903d9b409e38ab24c3cac3d0e9e57079e0b3919fbb4f89489607"
+    },
+    {
+      "path": "train_check/analyze.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_train_check_v1/analyze.py",
+      "sha256": "a44680b1281ea93df2a2b2fff52266fb24106fd9a20e1a7da0e14659c02e70c0"
+    },
+    {
+      "path": "low_speed_dev/DESIGN.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/DESIGN.md",
+      "sha256": "46f53566b09d000f661be1002d0aa28ef8aee7d7b95a9d1c1a13b7710edf764f"
+    },
+    {
+      "path": "low_speed_dev/declaration.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/declaration.json",
+      "sha256": "9a95906eafd644ddaccc445f976f2711aa92ea560411b98b60c517f3be65db69"
+    },
+    {
+      "path": "low_speed_dev/evaluation/status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/evaluation/status.json",
+      "sha256": "e9da4a15708d4d9a29ec7539838645d2d05147d5328a5974bfa680584134aa6c"
+    },
+    {
+      "path": "low_speed_dev/evaluation/results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/evaluation/results.json",
+      "sha256": "21e7d0d7c05c7c2c9b6d63ec7b012493a120aaa66a95c7aa8e57e758ec8bbc85"
+    },
+    {
+      "path": "low_speed_dev/analysis/REPORT.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/analysis/REPORT.md",
+      "sha256": "8610b49011b388f30654d282ef55343b7adbd93f0196a49bc1aa33f3fb31b028"
+    },
+    {
+      "path": "low_speed_dev/analysis/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/analysis/summary.json",
+      "sha256": "aaba110d391cb503243dc4933fda730e7e076dd86a77ce5dfd75058eb287988a"
+    },
+    {
+      "path": "low_speed_dev/analysis/all_cases_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/analysis/all_cases_xy.png",
+      "sha256": "bdf1b0bad5e26a0f94dca085f1782f2ad30582f641476d3ceec18385860dccdd"
+    },
+    {
+      "path": "low_speed_dev/analyze.py",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_low_speed_dev_v1/analyze.py",
+      "sha256": "8e857de3c4093ebd89662357bc377f79b5756ff36c9979d0a7192ac5a85ac999"
+    }
+  ],
+  "scope": "compact evidence; raw NPZ/checkpoints/dataset remain at named server sources. Standard410 DEV still pending; no adoption."
+}

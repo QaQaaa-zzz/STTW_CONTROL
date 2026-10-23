@@ -1,0 +1,259 @@
+{
+  "role": "TRAIN only; no DEV/TEST trajectories",
+  "groups": {
+    "intervention": {
+      "samples": 600,
+      "cases": 6,
+      "sha256": "80c131e57f0782aa1c725abd18ae658a97873c3b183967115f5af91011330e5f"
+    },
+    "recovery_tail": {
+      "samples": 1860,
+      "cases": 6,
+      "sha256": "fa3326efe9a9a136f66dc95eb34611da44f78392ac6bfd32c13f0369bafbb61c"
+    },
+    "control": {
+      "samples": 8500,
+      "cases": 17,
+      "sha256": "986f8fe8f0031ce3646993b8730013773e41573fe059cfb4de20493e6f925dd8"
+    },
+    "nominal": {
+      "samples": 25573,
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coverage_recovery_v1/bank/anchors.npz",
+      "source_sha256": "d4b73f9082edf74e1b1e516d8e8fb9c2c1fd82d24428052dd6a086635d3e320b",
+      "sha256": "51217c1f274b8c3b68debbe437e53d204fff2a60bca0ca64f6bc8d1cfd31786b"
+    }
+  },
+  "sources": [
+    {
+      "group": "intervention",
+      "case": 0,
+      "name": "speed_off_left115_R2p4_v2.25_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.25_a0_t1.7_f-24_teaching.npz",
+      "sha256": "39f75a84656fcb05880d39a0ec5569f7441d47d5179ce8ad31247f967df7c084"
+    },
+    {
+      "group": "intervention",
+      "case": 1,
+      "name": "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24_teaching.npz",
+      "sha256": "31d6a14d8a39bff9d7c27eab42b6797110a5b9e4a7cd095f7720c81f2a047509"
+    },
+    {
+      "group": "intervention",
+      "case": 2,
+      "name": "speed_off_left115_R2p4_v2.4_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.4_a0_t1.7_f-24_teaching.npz",
+      "sha256": "440b0ddcf5138c0509c45deddc71c7a274dd28aa62c4166d74e48f49682e2b7f"
+    },
+    {
+      "group": "intervention",
+      "case": 3,
+      "name": "speed_off_right115_R2p4_v2.25_a0_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.25_a0_t1.7_f+24_teaching.npz",
+      "sha256": "b3846970b3e54bafa414d8c72bd8ee8fbf09fcd9daad41a222e68dd6d8febdb2"
+    },
+    {
+      "group": "intervention",
+      "case": 4,
+      "name": "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24_teaching.npz",
+      "sha256": "c5a3dd90738cca8441b62f823f46ba11857e9a78071384d92a283c6d6be9d5c7"
+    },
+    {
+      "group": "intervention",
+      "case": 5,
+      "name": "speed_off_right115_R2p4_v2.4_a0_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.4_a0_t1.7_f+24_teaching.npz",
+      "sha256": "abf8fa759cdffb9d8378d123c2ab6086b440cf6eedb9f6ff4e0edc2afadc25e1"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 0,
+      "name": "speed_off_left115_R2p4_v2.25_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.25_a0_t1.7_f-24_teaching.npz",
+      "sha256": "39f75a84656fcb05880d39a0ec5569f7441d47d5179ce8ad31247f967df7c084"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 1,
+      "name": "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24_teaching.npz",
+      "sha256": "31d6a14d8a39bff9d7c27eab42b6797110a5b9e4a7cd095f7720c81f2a047509"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 2,
+      "name": "speed_off_left115_R2p4_v2.4_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_left115_R2p4_v2.4_a0_t1.7_f-24_teaching.npz",
+      "sha256": "440b0ddcf5138c0509c45deddc71c7a274dd28aa62c4166d74e48f49682e2b7f"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 3,
+      "name": "speed_off_right115_R2p4_v2.25_a0_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.25_a0_t1.7_f+24_teaching.npz",
+      "sha256": "b3846970b3e54bafa414d8c72bd8ee8fbf09fcd9daad41a222e68dd6d8febdb2"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 4,
+      "name": "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24_teaching.npz",
+      "sha256": "c5a3dd90738cca8441b62f823f46ba11857e9a78071384d92a283c6d6be9d5c7"
+    },
+    {
+      "group": "recovery_tail",
+      "case": 5,
+      "name": "speed_off_right115_R2p4_v2.4_a0_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/speed_off_right115_R2p4_v2.4_a0_t1.7_f+24_teaching.npz",
+      "sha256": "abf8fa759cdffb9d8378d123c2ab6086b440cf6eedb9f6ff4e0edc2afadc25e1"
+    },
+    {
+      "group": "control",
+      "case": 0,
+      "name": "control_left115_R2p4_v2.25_a0_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.25_a0_t1.7_f+0_teaching.npz",
+      "sha256": "3a9608eacaf881a90e550ea690de07de4b1d9a7b77b88005883f7778e9a1ee2a"
+    },
+    {
+      "group": "control",
+      "case": 1,
+      "name": "control_left115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.25_a0.125_t1.7_f+0_teaching.npz",
+      "sha256": "084b8b05f7657ecb41deb1be7b6141aa96858114da20ee8d34a2da811796ae12"
+    },
+    {
+      "group": "control",
+      "case": 2,
+      "name": "control_left115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.25_a0.125_t1.7_f+24_teaching.npz",
+      "sha256": "95b1c369ad26f9ba267bc8ec46deb69c19965188713f4c2402cf1b1ce0c0a03b"
+    },
+    {
+      "group": "control",
+      "case": 3,
+      "name": "control_left115_R2p4_v2.4_a0_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.4_a0_t1.7_f+0_teaching.npz",
+      "sha256": "eb2ccac90a303a5e4077133004b04c2e6cab0760c04ae0a7a22dfb5100aa7607"
+    },
+    {
+      "group": "control",
+      "case": 4,
+      "name": "control_left115_R2p4_v2.4_a0_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.4_a0_t1.7_f+24_teaching.npz",
+      "sha256": "f625755685dc6a6bc60ebba5ac5dde61359e7e2788beeec109f83c708d922e26"
+    },
+    {
+      "group": "control",
+      "case": 5,
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f+0_teaching.npz",
+      "sha256": "a468708ed2b3cc3da84598c5d4f1fad559f52e358d03a5f4cf6e1a661f22b119"
+    },
+    {
+      "group": "control",
+      "case": 6,
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f-24_teaching.npz",
+      "sha256": "4bf6ed175a504a1912718212216188c2e6787e8118d6a9bd4e09006fe7743408"
+    },
+    {
+      "group": "control",
+      "case": 7,
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f+24_teaching.npz",
+      "sha256": "1fa8590a18012f650a04c60a55794f3b6d82293224a21e5915bfecd692b3d9f8"
+    },
+    {
+      "group": "control",
+      "case": 8,
+      "name": "control_right115_R2p4_v2.25_a0_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.25_a0_t1.7_f+0_teaching.npz",
+      "sha256": "72fb7328ffef4cf6edc859393a9dcca27d99f830ae2cbfd2d2eb076d9977550c"
+    },
+    {
+      "group": "control",
+      "case": 9,
+      "name": "control_right115_R2p4_v2.25_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.25_a0_t1.7_f-24_teaching.npz",
+      "sha256": "5a388c0bcdfcf711194e7c27d36d476570dc371ec40b595d27314ef2a45a310e"
+    },
+    {
+      "group": "control",
+      "case": 10,
+      "name": "control_right115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.25_a0.125_t1.7_f+0_teaching.npz",
+      "sha256": "981aa941d71f9e73a8530d3a5c24f9e64a41606143d47c212e1b72c846a5629a"
+    },
+    {
+      "group": "control",
+      "case": 11,
+      "name": "control_right115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.25_a0.125_t1.7_f-24_teaching.npz",
+      "sha256": "6fe1a71584e21b9578aba8a5b03c7fd60bba1e00a531dcf8f76c52083ae9f755"
+    },
+    {
+      "group": "control",
+      "case": 12,
+      "name": "control_right115_R2p4_v2.4_a0_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.4_a0_t1.7_f+0_teaching.npz",
+      "sha256": "71c1c4a1c7e78e3fb46a8b33991319663db5e02708c8ae9ba83df3e2c609d111"
+    },
+    {
+      "group": "control",
+      "case": 13,
+      "name": "control_right115_R2p4_v2.4_a0_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.4_a0_t1.7_f-24_teaching.npz",
+      "sha256": "e5c11ea34d779b890bef4b805ed6c42b53a89227748e037c75b9521826e44a94"
+    },
+    {
+      "group": "control",
+      "case": 14,
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f+0_teaching.npz",
+      "sha256": "53532c607a9e1e05e323e40259848ce0b706f0701119297ab605a855ee9d906f"
+    },
+    {
+      "group": "control",
+      "case": 15,
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f-24_teaching.npz",
+      "sha256": "a5bcf4852227800fc6778b4d14de131bf0d935071432edabaeecff60584c0c52"
+    },
+    {
+      "group": "control",
+      "case": 16,
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "file": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_records_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f+24_teaching.npz",
+      "sha256": "9366d775247e563790abaddc02c81c069daf3c31027ed7d39da399c59b11d4d2"
+    }
+  ],
+  "recovery_cases": [
+    "speed_off_left115_R2p4_v2.25_a0_t1.7_f-24",
+    "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+    "speed_off_left115_R2p4_v2.4_a0_t1.7_f-24",
+    "speed_off_right115_R2p4_v2.25_a0_t1.7_f+24",
+    "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+    "speed_off_right115_R2p4_v2.4_a0_t1.7_f+24"
+  ],
+  "retention_cases": [
+    "control_left115_R2p4_v2.25_a0_t1.7_f+0",
+    "control_left115_R2p4_v2.25_a0.125_t1.7_f+0",
+    "control_left115_R2p4_v2.25_a0.125_t1.7_f+24",
+    "control_left115_R2p4_v2.4_a0_t1.7_f+0",
+    "control_left115_R2p4_v2.4_a0_t1.7_f+24",
+    "control_left115_R2p4_v2.4_a0.125_t1.7_f+0",
+    "control_left115_R2p4_v2.4_a0.125_t1.7_f-24",
+    "control_left115_R2p4_v2.4_a0.125_t1.7_f+24",
+    "control_right115_R2p4_v2.25_a0_t1.7_f+0",
+    "control_right115_R2p4_v2.25_a0_t1.7_f-24",
+    "control_right115_R2p4_v2.25_a0.125_t1.7_f+0",
+    "control_right115_R2p4_v2.25_a0.125_t1.7_f-24",
+    "control_right115_R2p4_v2.4_a0_t1.7_f+0",
+    "control_right115_R2p4_v2.4_a0_t1.7_f-24",
+    "control_right115_R2p4_v2.4_a0.125_t1.7_f+0",
+    "control_right115_R2p4_v2.4_a0.125_t1.7_f-24",
+    "control_right115_R2p4_v2.4_a0.125_t1.7_f+24"
+  ],
+  "semantics": "Targets are latent pre-filter commands. Group separation permits balanced sampling; no force/time/case oracle appended to actor obs. Recovery-tail teacher is restored parent evaluated on the intervention-induced state."
+}

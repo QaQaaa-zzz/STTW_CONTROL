@@ -1,0 +1,587 @@
+{
+  "cases": 72,
+  "samples": 36000,
+  "sampled_actor_recomputations": 2160,
+  "max_actor_error": 4.172325134277344e-07,
+  "task_label_changes": 0,
+  "max_roll_delta": 4.8041343688964844e-05,
+  "max_tail_path_delta": 0.025385499000549316,
+  "records": [
+    {
+      "name": "control_left115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "3a9608eacaf881a90e550ea690de07de4b1d9a7b77b88005883f7778e9a1ee2a",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_left115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "60d431d5662a58a6ebb1eda7326ae221aecbeb0376dcce451a86c59d57bdbb14",
+      "task_changed": false,
+      "peak_roll_delta": 5.960464477539062e-07,
+      "tail_path_delta": 0.009463131427764893
+    },
+    {
+      "name": "control_left115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "f69935163cfe3e965064a70b65bb2b415622a69459fb68454f0842507efb8e70",
+      "task_changed": false,
+      "peak_roll_delta": -9.5367431640625e-07,
+      "tail_path_delta": 0.0002154707908630371
+    },
+    {
+      "name": "control_left115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "084b8b05f7657ecb41deb1be7b6141aa96858114da20ee8d34a2da811796ae12",
+      "task_changed": false,
+      "peak_roll_delta": -1.7404556274414062e-05,
+      "tail_path_delta": -7.849745452404022e-05
+    },
+    {
+      "name": "control_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "9956e065123bd62e1cdc2c5a33ca76eaaebe8bdfffb07e95d5ee66f9c4a5b97f",
+      "task_changed": false,
+      "peak_roll_delta": 3.337860107421875e-06,
+      "tail_path_delta": -0.001004546880722046
+    },
+    {
+      "name": "control_left115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "95b1c369ad26f9ba267bc8ec46deb69c19965188713f4c2402cf1b1ce0c0a03b",
+      "task_changed": false,
+      "peak_roll_delta": -4.76837158203125e-07,
+      "tail_path_delta": -4.179961979389191e-05
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "eb2ccac90a303a5e4077133004b04c2e6cab0760c04ae0a7a22dfb5100aa7607",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 6.854534149169922e-06
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "3342480f08e6d58a3ed47519c4fdd91d0b8b07ee74a65aa82d090ac4cf60d6b7",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "f625755685dc6a6bc60ebba5ac5dde61359e7e2788beeec109f83c708d922e26",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "a468708ed2b3cc3da84598c5d4f1fad559f52e358d03a5f4cf6e1a661f22b119",
+      "task_changed": false,
+      "peak_roll_delta": -1.9073486328125e-06,
+      "tail_path_delta": -2.6036053895950317e-05
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "4bf6ed175a504a1912718212216188c2e6787e8118d6a9bd4e09006fe7743408",
+      "task_changed": false,
+      "peak_roll_delta": 7.152557373046875e-07,
+      "tail_path_delta": -3.070756793022156e-05
+    },
+    {
+      "name": "control_left115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "1fa8590a18012f650a04c60a55794f3b6d82293224a21e5915bfecd692b3d9f8",
+      "task_changed": false,
+      "peak_roll_delta": -5.960464477539062e-07,
+      "tail_path_delta": 8.322298526763916e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "72fb7328ffef4cf6edc859393a9dcca27d99f830ae2cbfd2d2eb076d9977550c",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "5a388c0bcdfcf711194e7c27d36d476570dc371ec40b595d27314ef2a45a310e",
+      "task_changed": false,
+      "peak_roll_delta": -5.960464477539062e-07,
+      "tail_path_delta": 2.130866050720215e-06
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "9f0af31282972863cd507f380880482acfd13928412860dc7983b896056dd552",
+      "task_changed": false,
+      "peak_roll_delta": -2.5033950805664062e-06,
+      "tail_path_delta": -0.025385499000549316
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "981aa941d71f9e73a8530d3a5c24f9e64a41606143d47c212e1b72c846a5629a",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "6fe1a71584e21b9578aba8a5b03c7fd60bba1e00a531dcf8f76c52083ae9f755",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "control_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "229c7e392ea5230f60817dde093e62cc484a9626e99858550c5fc0cc6b0d3a65",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 5.2869319915771484e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "71c1c4a1c7e78e3fb46a8b33991319663db5e02708c8ae9ba83df3e2c609d111",
+      "task_changed": false,
+      "peak_roll_delta": 4.887580871582031e-06,
+      "tail_path_delta": -5.58607280254364e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "e5c11ea34d779b890bef4b805ed6c42b53a89227748e037c75b9521826e44a94",
+      "task_changed": false,
+      "peak_roll_delta": 4.76837158203125e-07,
+      "tail_path_delta": 4.776567220687866e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "295cc0e4eccb0cda322c6d48012219609b2872c5dbf53a1af94f380b11a4025e",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-07,
+      "tail_path_delta": 0.0005345940589904785
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "53532c607a9e1e05e323e40259848ce0b706f0701119297ab605a855ee9d906f",
+      "task_changed": false,
+      "peak_roll_delta": -1.430511474609375e-06,
+      "tail_path_delta": -4.7791749238967896e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "a5bcf4852227800fc6778b4d14de131bf0d935071432edabaeecff60584c0c52",
+      "task_changed": false,
+      "peak_roll_delta": -9.5367431640625e-07,
+      "tail_path_delta": 7.722899317741394e-05
+    },
+    {
+      "name": "control_right115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "9366d775247e563790abaddc02c81c069daf3c31027ed7d39da399c59b11d4d2",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 3.283843398094177e-05
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "799f14c258901da779e83e56c94533b17d334f1de5e52ce06c7603fbbc247a8c",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "39f75a84656fcb05880d39a0ec5569f7441d47d5179ce8ad31247f967df7c084",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": -9.391456842422485e-06
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "b9ad03d9783d3a65287a089a6a838518596905359199d7808db0d1f40cb33b62",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-07,
+      "tail_path_delta": -0.00012123584747314453
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "7b5ee592fa38dfb00757f114cf21ac152c7c3d5ce279f0e30f8eba52ea6eee03",
+      "task_changed": false,
+      "peak_roll_delta": 1.430511474609375e-06,
+      "tail_path_delta": 0.00021115131676197052
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "31d6a14d8a39bff9d7c27eab42b6797110a5b9e4a7cd095f7720c81f2a047509",
+      "task_changed": false,
+      "peak_roll_delta": 3.337860107421875e-06,
+      "tail_path_delta": 2.0451843738555908e-05
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "9b46be5fcd0aa2c48c1dc4b67ffb209b74e72688b56862287a6230416219d8a6",
+      "task_changed": false,
+      "peak_roll_delta": 1.6689300537109375e-06,
+      "tail_path_delta": -1.4919787645339966e-05
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "aab6cd49050562050d555445fcd9aa1aa6cd6e8ee53b4c59c464b5695f7bc1ab",
+      "task_changed": false,
+      "peak_roll_delta": 5.960464477539062e-07,
+      "tail_path_delta": -2.3048371076583862e-05
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "440b0ddcf5138c0509c45deddc71c7a274dd28aa62c4166d74e48f49682e2b7f",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "47f431faa1a803acc8475d7ad35e50b02900b4ed6bc48318677e3390f533721b",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "086fd9f5a96ffe3f8df354ed8c09d7bce2b8d4f57ad3a236a830a9cf6721caf2",
+      "task_changed": false,
+      "peak_roll_delta": -1.7881393432617188e-06,
+      "tail_path_delta": 0.00042063742876052856
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "7cc56cd5f669d34c4db30fdf298dbade15959ba5788ef3dc4c5eac5363b53406",
+      "task_changed": false,
+      "peak_roll_delta": -3.2186508178710938e-06,
+      "tail_path_delta": 8.527189493179321e-06
+    },
+    {
+      "name": "speed_off_left115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "b4f92c1efafb72b4a1c22e31e61958e384795113e8bd9ae344bb89f17f10b127",
+      "task_changed": false,
+      "peak_roll_delta": -1.0728836059570312e-06,
+      "tail_path_delta": 5.7581812143325806e-05
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "057fc6aaf2f3a86ce9f4a1400169bed6d329d63f7ee648c476f36df17578c84e",
+      "task_changed": false,
+      "peak_roll_delta": 1.1920928955078125e-07,
+      "tail_path_delta": 8.575618267059326e-05
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "c98a683518ecc0b07fcce48025f5a399830e8afbf0747c8c55d368ff56980312",
+      "task_changed": false,
+      "peak_roll_delta": -7.152557373046875e-07,
+      "tail_path_delta": 0.020902633666992188
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "b3846970b3e54bafa414d8c72bd8ee8fbf09fcd9daad41a222e68dd6d8febdb2",
+      "task_changed": false,
+      "peak_roll_delta": -1.430511474609375e-06,
+      "tail_path_delta": 9.819865226745605e-06
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "fc7d10d4f450963c78fc12497c8a76a16a6d0d8d3d5158c320ad3f901a8f1888",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "08316e0dc80c09660ea57d664669cca834bc5b87feaf3ff05935b7bed9fd1723",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "c5a3dd90738cca8441b62f823f46ba11857e9a78071384d92a283c6d6be9d5c7",
+      "task_changed": false,
+      "peak_roll_delta": 5.960464477539062e-07,
+      "tail_path_delta": 4.4792890548706055e-05
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "879f57d10ac002ac25e625c9ce4a041a9fdb438a049aa78652be3e61f5de4319",
+      "task_changed": false,
+      "peak_roll_delta": 1.0728836059570312e-06,
+      "tail_path_delta": 2.5637447834014893e-05
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "a94c83afa6666108aa5ca6cb2b3f24fdec57be7574a872f10fff80f02e3e231f",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-07,
+      "tail_path_delta": -0.01008528470993042
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "abf8fa759cdffb9d8378d123c2ab6086b440cf6eedb9f6ff4e0edc2afadc25e1",
+      "task_changed": false,
+      "peak_roll_delta": 3.5762786865234375e-07,
+      "tail_path_delta": -1.3653188943862915e-05
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "14884c88090e579a13b722b56f4c24d2ddf2b63dea0e8983a17a81b9ec83b25b",
+      "task_changed": false,
+      "peak_roll_delta": -1.0728836059570312e-06,
+      "tail_path_delta": -3.859400749206543e-06
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "088886251a1b59e0f72367a9280b80a95df11ad69875b9d773cc8a4c99e0f12e",
+      "task_changed": false,
+      "peak_roll_delta": -1.3113021850585938e-06,
+      "tail_path_delta": -0.00024022161960601807
+    },
+    {
+      "name": "speed_off_right115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "11c74e81c523f4dc87d78f353e2a86b171af0254053cdb88368db4ad09a94dca",
+      "task_changed": false,
+      "peak_roll_delta": -4.76837158203125e-07,
+      "tail_path_delta": 2.7742236852645874e-05
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "15f024c73955a9394d16625856c10cf464f98d5941fcc67a79f369658b8c5263",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "26a107c323f685851f05fe3d150ca2e653f4f41787922f6c99cc61d36aef2cb5",
+      "task_changed": false,
+      "peak_roll_delta": 1.1920928955078125e-07,
+      "tail_path_delta": 1.025572419166565e-05
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "ed1a6768f94ef4aced47283efade2df321ae0b8f7619ba7b803db820baa58ffb",
+      "task_changed": false,
+      "peak_roll_delta": -7.152557373046875e-07,
+      "tail_path_delta": 5.9604644775390625e-06
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "787a55e014eabb51b9021ba40596cec0285cc6a91d3730eab871fa9dd9b02b16",
+      "task_changed": false,
+      "peak_roll_delta": 4.8041343688964844e-05,
+      "tail_path_delta": -1.619011163711548e-05
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "74cc7bfb41ed65b268dfb21c43af367d3597a483e135efaf550cf761bb10bfdf",
+      "task_changed": false,
+      "peak_roll_delta": -5.960464477539062e-07,
+      "tail_path_delta": 7.2605907917022705e-06
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "798a9eb4295148d98b7249b5c4d0d061edb4055c9dcf2bdc6b7ec73f34c17a4a",
+      "task_changed": false,
+      "peak_roll_delta": 1.1920928955078125e-06,
+      "tail_path_delta": 0.00036388635635375977
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "fca41a954c614ab06dd35c8135b359d1a3a7695b395f50412b02ddfe06c45575",
+      "task_changed": false,
+      "peak_roll_delta": 5.960464477539062e-07,
+      "tail_path_delta": 0.0001890026032924652
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "e838deaeaf0c5169e404207036fd18b0085729586cef6780ba94a2a201b432e8",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "9df2d8668c769e942d0a76b053015b455bc302fb5b5c3fddc67748962c904a6e",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "14dc1da9aa9306a2e7d89a45c7a7b2f1305eafcfee72c6d2c6330e5eed429f8b",
+      "task_changed": false,
+      "peak_roll_delta": 9.5367431640625e-07,
+      "tail_path_delta": 0.0002449154853820801
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "90a8e9c803d6253d0287f2fdc4968c9ac592a4eb084b4eba19c036cfcb9a061d",
+      "task_changed": false,
+      "peak_roll_delta": -1.6689300537109375e-06,
+      "tail_path_delta": -4.9058347940444946e-05
+    },
+    {
+      "name": "steer_off_left115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "661b8c3696b334ad839544eb5d68887a3e79ceba65880ff9a2e73ec4672366a2",
+      "task_changed": false,
+      "peak_roll_delta": -5.125999450683594e-06,
+      "tail_path_delta": -9.47117805480957e-05
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "6c69c2533585952b2ba0b19eaedc9c2e6e863a073a791be3c15e634e3d88a669",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-07,
+      "tail_path_delta": 7.662922143936157e-06
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "fae4bcacdfc7ecd771c559dc50e9d90e5c85aec21590d1d3966db6d7ddfe5a21",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 8.09505581855774e-06
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "4de6f95b7db80a41b9921681621a732cee3fc6d3d280027f0902185b14ce29b3",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-06,
+      "tail_path_delta": 0.0039209723472595215
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "34cf31b92589d4f0098471ceae710e84917287c602da3871e3ecbae63382eed5",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "25a6fc630cc1257ce5200f17ddfa787f8a594e1f0ae2a48b2eb0a7c528270512",
+      "task_changed": false,
+      "peak_roll_delta": 0.0,
+      "tail_path_delta": 0.0
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.25_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "be258978629388439fe7fac08508d8be0a94a42fe9e02be710bb2a5eb9d4199c",
+      "task_changed": false,
+      "peak_roll_delta": -4.76837158203125e-06,
+      "tail_path_delta": -0.00027861911803483963
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0_t1.7_f+0",
+      "samples": 500,
+      "sha256": "182f9e01f2ba54f89156515081cb44852020171620a33b6477dac3ee9bc8ce9c",
+      "task_changed": false,
+      "peak_roll_delta": -3.814697265625e-06,
+      "tail_path_delta": 2.4713575839996338e-05
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0_t1.7_f-24",
+      "samples": 500,
+      "sha256": "b014f5a7c69c5a64778e60a492caf4509c57a158e796b5173cdaa544be58c00b",
+      "task_changed": false,
+      "peak_roll_delta": -2.384185791015625e-07,
+      "tail_path_delta": 0.011896789073944092
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0_t1.7_f+24",
+      "samples": 500,
+      "sha256": "2e99081f72b1d4415cbb3ddb4466884fbc88672d6e7e8d40a5c7a16a42af9c91",
+      "task_changed": false,
+      "peak_roll_delta": -1.1920928955078125e-06,
+      "tail_path_delta": 3.960728645324707e-05
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0.125_t1.7_f+0",
+      "samples": 500,
+      "sha256": "7b706aaa368fff0bb26fde14e7aa10247bea6236841d6a5f364756ce66895212",
+      "task_changed": false,
+      "peak_roll_delta": -2.7418136596679688e-06,
+      "tail_path_delta": 1.7285346984863281e-06
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0.125_t1.7_f-24",
+      "samples": 500,
+      "sha256": "0a81c4ac367a139622f5ef5e7436921f2ed5e67ba0852beb53e0a5fbe5452569",
+      "task_changed": false,
+      "peak_roll_delta": -1.8715858459472656e-05,
+      "tail_path_delta": -0.0023107677698135376
+    },
+    {
+      "name": "steer_off_right115_R2p4_v2.4_a0.125_t1.7_f+24",
+      "samples": 500,
+      "sha256": "e1f5a4237f803ad7327ac1ea28677d9c5bb2286194eb3c9df1e2246627333ae7",
+      "task_changed": false,
+      "peak_roll_delta": 1.0848045349121094e-05,
+      "tail_path_delta": -2.4341046810150146e-05
+    }
+  ]
+}

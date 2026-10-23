@@ -1,0 +1,222 @@
+[
+  {
+    "policy": "speed_off",
+    "context": [
+      "left115_R2p4",
+      2.25,
+      0.0,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.14614224433898926,
+      "intervention": 0.3532900810241699,
+      "after": 0.05514705181121826
+    },
+    "control": {
+      "prefix": 0.14614224433898926,
+      "intervention": 0.34278082847595215,
+      "after": 0.20194017887115479
+    }
+  },
+  {
+    "policy": "speed_off",
+    "context": [
+      "left115_R2p4",
+      2.25,
+      0.125,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1496753692626953,
+      "intervention": 0.3517347574234009,
+      "after": 0.02619791030883789
+    },
+    "control": {
+      "prefix": 0.1496753692626953,
+      "intervention": 0.3447967767715454,
+      "after": 0.18133842945098877
+    }
+  },
+  {
+    "policy": "speed_off",
+    "context": [
+      "left115_R2p4",
+      2.4,
+      0.0,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1657630205154419,
+      "intervention": 0.38156652450561523,
+      "after": 0.08255255222320557
+    },
+    "control": {
+      "prefix": 0.1657630205154419,
+      "intervention": 0.37211406230926514,
+      "after": 0.21241557598114014
+    }
+  },
+  {
+    "policy": "speed_off",
+    "context": [
+      "right115_R2p4",
+      2.25,
+      0.0,
+      24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1560835838317871,
+      "intervention": 0.34582841396331787,
+      "after": 0.09118759632110596
+    },
+    "control": {
+      "prefix": 0.1560835838317871,
+      "intervention": 0.31986522674560547,
+      "after": 0.21826231479644775
+    }
+  },
+  {
+    "policy": "speed_off",
+    "context": [
+      "right115_R2p4",
+      2.25,
+      0.125,
+      24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1571434736251831,
+      "intervention": 0.3461407423019409,
+      "after": 0.035931944847106934
+    },
+    "control": {
+      "prefix": 0.1571434736251831,
+      "intervention": 0.32362794876098633,
+      "after": 0.1758202314376831
+    }
+  },
+  {
+    "policy": "speed_off",
+    "context": [
+      "right115_R2p4",
+      2.4,
+      0.0,
+      24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.179223895072937,
+      "intervention": 0.36344337463378906,
+      "after": 0.0835576057434082
+    },
+    "control": {
+      "prefix": 0.179223895072937,
+      "intervention": 0.3406250476837158,
+      "after": 0.21083486080169678
+    }
+  },
+  {
+    "policy": "steer_off",
+    "context": [
+      "left115_R2p4",
+      2.25,
+      0.0,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.14614224433898926,
+      "intervention": 0.3875004053115845,
+      "after": 0.15889930725097656
+    },
+    "control": {
+      "prefix": 0.14614224433898926,
+      "intervention": 0.34278082847595215,
+      "after": 0.20194017887115479
+    }
+  },
+  {
+    "policy": "steer_off",
+    "context": [
+      "left115_R2p4",
+      2.25,
+      0.125,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1496753692626953,
+      "intervention": 0.39430558681488037,
+      "after": 0.1406869888305664
+    },
+    "control": {
+      "prefix": 0.1496753692626953,
+      "intervention": 0.3447967767715454,
+      "after": 0.18133842945098877
+    }
+  },
+  {
+    "policy": "steer_off",
+    "context": [
+      "left115_R2p4",
+      2.4,
+      0.0,
+      -24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1657630205154419,
+      "intervention": 0.42564964294433594,
+      "after": 0.18120193481445312
+    },
+    "control": {
+      "prefix": 0.1657630205154419,
+      "intervention": 0.37211406230926514,
+      "after": 0.21241557598114014
+    }
+  },
+  {
+    "policy": "steer_off",
+    "context": [
+      "right115_R2p4",
+      2.25,
+      0.125,
+      24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.1571434736251831,
+      "intervention": 0.3947356939315796,
+      "after": 0.1657174825668335
+    },
+    "control": {
+      "prefix": 0.1571434736251831,
+      "intervention": 0.32362794876098633,
+      "after": 0.1758202314376831
+    }
+  },
+  {
+    "policy": "steer_off",
+    "context": [
+      "right115_R2p4",
+      2.4,
+      0.0,
+      24.0,
+      1.7
+    ],
+    "candidate": {
+      "prefix": 0.179223895072937,
+      "intervention": 0.41217875480651855,
+      "after": 0.19393134117126465
+    },
+    "control": {
+      "prefix": 0.179223895072937,
+      "intervention": 0.3406250476837158,
+      "after": 0.21083486080169678
+    }
+  }
+]

@@ -1,0 +1,1146 @@
+{
+  "summary": [
+    {
+      "policy": "control",
+      "cases": 24,
+      "task": 17,
+      "nonzero_task": 9,
+      "nonzero_n": 16,
+      "nominal_task": 8,
+      "nominal_n": 8,
+      "working": 15,
+      "domain": 0
+    },
+    {
+      "policy": "speed_off",
+      "cases": 24,
+      "task": 18,
+      "nonzero_task": 10,
+      "nonzero_n": 16,
+      "nominal_task": 8,
+      "nominal_n": 8,
+      "working": 10,
+      "domain": 0
+    },
+    {
+      "policy": "steer_off",
+      "cases": 24,
+      "task": 17,
+      "nonzero_task": 9,
+      "nonzero_n": 16,
+      "nominal_task": 8,
+      "nominal_n": 8,
+      "working": 10,
+      "domain": 0
+    }
+  ],
+  "paired": [
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.00048599764704704285,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.5911740176379681,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.6593964695930481,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 0.00028674304485321045,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.3208703398704529,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.03976987302303314,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0006856322288513184,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.5946101807057858,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.5815161019563675,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 1.4085322618484497e-05,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.00908569060266018,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0003677457571029663,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.00019372627139091492,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.3182978257536888,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.708046942949295,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.000159531831741333,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.007803069427609444,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.44977688044309616,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0002538450062274933,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.6849176287651062,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.5244349539279938,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0010337606072425842,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.06318454816937447,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "speed_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.010788027197122574,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 0.0015543289482593536,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.6066091861575842,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.7020617127418518,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 0.000341733917593956,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.322055596858263,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.25,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.7029846645891666,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 0.0006289072334766388,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.5988703891634941,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.05254911631345749,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 5.5480748414993286e-05,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.004244768992066383,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "left115_R2p4",
+        2.4,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.1774747632443905,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.004123233258724213,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": 0.00045523419976234436,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.1797870397567749,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0002538450062274933,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.003741743043065071,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.25,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.47114203963428736,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0006087757647037506,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.6760624051094055,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.0,
+        24.0,
+        1.7
+      ],
+      "baseline_task": false,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.5261786878108978,
+      "improved": true,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        0.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": true,
+      "domain": false,
+      "delta_tail_path": -0.0008622743189334869,
+      "improved": false,
+      "regressed": false
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        -24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": false,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": 0.11311423406004906,
+      "improved": false,
+      "regressed": true
+    },
+    {
+      "policy": "steer_off",
+      "context": [
+        "right115_R2p4",
+        2.4,
+        0.125,
+        24.0,
+        1.7
+      ],
+      "baseline_task": true,
+      "task": true,
+      "working": false,
+      "domain": false,
+      "delta_tail_path": -0.011897321790456772,
+      "improved": false,
+      "regressed": false
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "e9b2146ce95a343fd8d77e5316f6f55a11c656fd3a88d9c9fc356df134be05d1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "224ad1cead939ef778da4cf632d5f6e7e8183b84b838f40f51f2dfca7daff411"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "54b774c9705e619b40f809dbce4fb74570396d2e1a86a6808960179abd3b109f"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "7eac3ed00f2c43f9f00f9cf28098fb480d4ec92e65800f93fd96540135dbb622"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "6a82483b64be14b195110a6dd86c7a652fc83f48a0075ef9f4de0b6b4a0842f3"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "6831327ae5b4d6b74719ac2d9b88e31389b789471092e6f86566a972351e2e7e"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "02609b98a339136adc612268e066ccda8c2c47a7ff7c270d089bbeda8199de5f"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "f1b38a137112ef8ef0f9e79b03f54049f59949cb94ca754687b4bb16e746f8d5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "ecb758dc8f2d4216b543e7cbdcd398378c675634dc573005aa41955c1b995049"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "719fd520c14b4b0b97ff016545d644a1767dc03ba4a186ab50cd0c31e66bed15"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "c19263ef4ebeee05d2f3fc1b17dddc2bee1b5f9cae6092e2a693cafbf40452f9"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "179a2c0010539395a6ce7ff50b33c14b4aecb8ca01eba489ea2ddc52263ccecb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "5d3df45e14b1d67387748477da359e19a7fbfd99e4486d9e75ea502ad9a93b20"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "8797345be09c678cbdfcec0c6a16e09a71d75e18e7754f9dcbe1c397800a7348"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "f66e929efdeea51c71cefa94280d65d1d167204161cd07c1e679a8e420266a5b"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "e1c81620cd8657b286d858b2a28edeb2272b2f6cf62a70d6e63f2e9d91c0f70a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "19ffcc862813de96b9513768310c8f08dcfe9541b518acc00c021e3d82c3f941"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "a6b533a9ca80e4eb0d41dec9ad2b39d8f64a0fe9a17a5d62014edd92c8e13616"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "4edf37796ec61158fc8961af69e630a3151a964f3f66a2c6670228e185568d08"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "7547a0b08b65ba643fdc0ce78936185236a2d95ec8109deb152bcb945c2d2d1b"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "108b74054845eea6c30746de2451887450c267cdbd7d7f9a1bb114fd2fa35ec8"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "868a0b82b6b51c6bb21647f5d65eb05c8eb82f02d614f39a4b852cda50c74423"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "b14d3c5ceaa54d599a0172cc91912dda7e1f31c83b2fa7ab2173b703749ca7b2"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "e1312e26f94cec346c20a17a06718bfc70a68535ca01298a11c05d062e3add77"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "be322c74d9cb8b75738202285651a7dd52da6fb674a9cac456ebaf456fe109ae"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "5d3cb72c8ae995844fd4850a4735dc216f8690d40ac45408269720ba23c670f8"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "ea589bbc2e27a642aaf67f7cda80c0c3118b81d1f0cdd9d891718e5bca609962"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "ccfbd62e2288590e2085a8a47ca3e16ef1fc10e078b8038a0d30bbb8367886b0"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "f1c998f0642c88c48e3a9e32fa89bc98496377e6ed50a19b76b52eff6fdb340a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "df2597c109ba8927403dec4c631deb27741672f7825334b6b8cc8b7a238a6727"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "65419be2ae2e0eb522fab331fc16fa624bd69ce8d489dc3416f3aba6aa6d04e9"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "96d8b66a8d5fc5cdf278cbba9a40917cc64bfe1f4e6b76e1bd6fcd40c7a6b59a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "a0d71bc5742de9ab1db58c1dbdf9cbee791b2018e65a436d93f97a87fadee3ed"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_left115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "efa6551c02fbbbdfaa47002e204a150683ed5ff79c5fb231ad6cab3af6ebbfe0"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_left115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "c838cf78c3a86e08727081a8116271e975f6ce7a829b3de7f2a08e01d3be9859"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_left115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "5bee36d03832e35265788ed75a6928233b5a694008981a8f9672ccdab0677f8f"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "432c12ec48d9fc020944f6dd2c1d332e1a793533024f499466d4899112b5cdeb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "21ad06809bb36fc5714d4738f8e3ada447ef1e4c654b8b682107b7c59455f56c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0_t1.7_f-24.npz",
+      "sha256": "2e85d3ab0074b239d0008ef50f9821277adc8dfc49d9d826af72fa94167b6ceb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "5b34e907f78bcda2f1e62e739c9ffbb7cc29d69a53698ef9341cc84103e8f077"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "1e2f0419484ac1a9d6480c831f216040c42998146c25a2581e4d875393d19e53"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0_t1.7_f+0.npz",
+      "sha256": "dd7df6d5da58b7a468b5fa199521a37d56731a073ae2d2e87bc7d372008d6f4e"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "0000f788f9c8f1e01a8abedcd806254a8d95dc083527d7e19acf616b9e590eba"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "a386fc356d084b21fbce31ecbe88380de3af03850fa8ff4a560d175d3a29d5d5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0_t1.7_f+24.npz",
+      "sha256": "aa4a642a531584162093f66bfa1b65c3b899d47f8e048c37b5355dae93955fac"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "6250282c7dd184cccc0a5facd531f728f9d86377e9306130c27ca91e3044e404"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "f2d0c09cd1e920108c1e67d7d3f151a45888d38c279e118d3207e52ef60c437d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0.125_t1.7_f-24.npz",
+      "sha256": "9994d5fabaed5fc9da614bc879e83062f5c989e4f97dda2f744434a540ce0968"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "011e6b5ddbd5e3353477f1e0cfdfe8299fcd8396e15e603228e1f3f0163e1339"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "ded9741ff965bc8eda9f32d767f16599a2d48359494ba82448541add8668fbfb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0.125_t1.7_f+0.npz",
+      "sha256": "73968a7c434f11b83faceb494c688298852def3169d3cdc74c4b760fdf5a659b"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "2732a83dc3120ffab1295ee92e91a2cd90389da08d27edb3495257a3b99ba81a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "e02fc65f5e7d5f82da56bf87c1135de565a76fb71604aeded768ff5d1e75e78d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.25_a0.125_t1.7_f+24.npz",
+      "sha256": "13cca44d081cca339bd65275e5308844de7f068e31bb60ed47165894ed3352d3"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "3178c04e4eaef0f84d4b776036cc884031a653a8faa721ab92ebdd6a9384a239"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "481626027a9a05f1856c2b6c93095799b2b43a4e34b0a85583d638e95c371e82"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0_t1.7_f-24.npz",
+      "sha256": "da8827b1c6094b0fcf8c5e42781e20253c105072966e8f587c7ce2a7fb3fe247"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "1d7cc8c5ce7cca0c1c8ba1e0ba42372bff89003c608ac35cfdfdf4bb437ac000"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "7362ec0d71730fd39a184772e134e31943dd232d1dda14a68d778764b7dcc7cb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0_t1.7_f+0.npz",
+      "sha256": "470dd0de13f724ac94f88363c01d3194527798eeead0604ac6dc0728a4a7d8d1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "7a9d5d35aa5636e80f7458ce2edfafc903be43b1233d8e22dd1506de299d1f92"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "887bedf02d6cd6dd41a88ec35e494e7e32ab9f1e4034174c21f0f9f253c23bd1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0_t1.7_f+24.npz",
+      "sha256": "8a809b225c1d54ae9067afa381d3a014fd046e20314407795047c6d2b7b24d10"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "027869df610fc2cf774ac2092fd017c27c3bc7ce29d3f62bec3f4f47508eabc7"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "8238a184d06fc5d8507650141db7e0a726d5bb2b167c9db0fa8ef7103f4e5142"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0.125_t1.7_f-24.npz",
+      "sha256": "328a67a4dd082bed8a2ab655bd90ed31127201a5d8b9fa8bb3ae2817ea31ec11"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "38c2f14e1ccdd51981b1460f582f452d55baeb308f59a79204560ceb92243fa0"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "5d2e3ada168263f7aabe875f8594df00e8b7281903233f4c57120d042e1e0122"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0.125_t1.7_f+0.npz",
+      "sha256": "f999e7dac978c5981ce4636af3001dde3058861013c6a95dd8cb7e7f2b9addc7"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/control_right115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "64ef6dfd764325f61072f2fbd0bdc12a068f1592fb1527863c00b295241f1b23"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/speed_off_right115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "14d5be3dd9888bef08458e374fb2cafd9fe218123d573d5372f4ba4c3907d728"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_train_coordination_probe_v1/evaluation/steer_off_right115_R2p4_v2.4_a0.125_t1.7_f+24.npz",
+      "sha256": "9f759122d22162811f79fea8faccc14d51940ced1dd1c7bb5b16f9817654d89e"
+    }
+  ],
+  "interpretation": "TRAIN-only paired deterministic contexts; no independent seeds, learned actor, or safety certificate"
+}
