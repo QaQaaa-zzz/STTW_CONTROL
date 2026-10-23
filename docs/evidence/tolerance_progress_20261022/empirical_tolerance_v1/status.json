@@ -1,0 +1,15 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 2531704,
+  "training_steps": 0,
+  "declared_cases": 144,
+  "maximum_lower_ticks": 288000,
+  "stage": "screen_ready",
+  "checked_unix": 1792767324.9783576,
+  "elapsed_s": 244.1333351249923,
+  "active_lower_ticks": 285820,
+  "completed_cases": 144,
+  "onset_s": 2.2,
+  "task_seconds": 10.0
+}

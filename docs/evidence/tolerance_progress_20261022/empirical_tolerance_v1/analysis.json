@@ -1,0 +1,2699 @@
+{
+  "source_sha256": "0ba984f991433d854f76d240be6a70e2acba3b81ec4f4d3a80b8de8410a6b6d5",
+  "status": {
+    "state": "completed",
+    "phase": "completed",
+    "pid": 2531704,
+    "training_steps": 0,
+    "declared_cases": 144,
+    "maximum_lower_ticks": 288000,
+    "stage": "screen_ready",
+    "checked_unix": 1792767324.9783576,
+    "elapsed_s": 244.1333351249923,
+    "active_lower_ticks": 285820,
+    "completed_cases": 144,
+    "onset_s": 2.2,
+    "task_seconds": 10.0
+  },
+  "pairs": [
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.19211816787719727,
+      "candidate_roll": 0.1948331594467163,
+      "parent_tail_path": 0.041764769703149796,
+      "candidate_tail_path": 0.0407806932926178
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        -10.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.2846686840057373,
+      "candidate_roll": 0.2840770483016968,
+      "parent_tail_path": 0.6474266052246094,
+      "candidate_tail_path": 0.04004044458270073
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.22490715980529785,
+      "candidate_roll": 0.2278660535812378,
+      "parent_tail_path": 0.04166623204946518,
+      "candidate_tail_path": 0.0406876876950264
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        -20.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.3481401205062866,
+      "candidate_roll": 0.3533902168273926,
+      "parent_tail_path": null,
+      "candidate_tail_path": 0.03251980245113373
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2699834108352661,
+      "candidate_roll": 0.27379536628723145,
+      "parent_tail_path": 0.04051186889410019,
+      "candidate_tail_path": 0.04045172780752182
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        -30.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.3817020654678345,
+      "candidate_roll": 0.3882930278778076,
+      "parent_tail_path": null,
+      "candidate_tail_path": 0.03183735907077789
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3273742198944092,
+      "candidate_roll": 0.3262382745742798,
+      "parent_tail_path": 0.04183277115225792,
+      "candidate_tail_path": 0.04016207531094551
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        -40.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": false,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.36239731311798096,
+      "candidate_roll": 0.37052226066589355,
+      "parent_tail_path": 0.46544182300567627,
+      "candidate_tail_path": 0.03818465769290924
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.0,
+        40.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.41496145725250244,
+      "candidate_roll": 0.40851008892059326,
+      "parent_tail_path": 0.4388990104198456,
+      "candidate_tail_path": 0.04068492352962494
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.19350624084472656,
+      "candidate_roll": 0.20028960704803467,
+      "parent_tail_path": 0.02862761728465557,
+      "candidate_tail_path": 0.028097648173570633
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.29517364501953125,
+      "candidate_roll": 0.29461562633514404,
+      "parent_tail_path": 0.020440075546503067,
+      "candidate_tail_path": 0.02761092595756054
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.22853827476501465,
+      "candidate_roll": 0.23650193214416504,
+      "parent_tail_path": 0.029146961867809296,
+      "candidate_tail_path": 0.02791673131287098
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3488212823867798,
+      "candidate_roll": 0.35342276096343994,
+      "parent_tail_path": 0.06502296030521393,
+      "candidate_tail_path": 0.021150847896933556
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.27429258823394775,
+      "candidate_roll": 0.28259849548339844,
+      "parent_tail_path": 0.028703732416033745,
+      "candidate_tail_path": 0.02793663553893566
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        -30.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.3823390007019043,
+      "candidate_roll": 0.3883553743362427,
+      "parent_tail_path": 0.17483305931091309,
+      "candidate_tail_path": 0.02010650373995304
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3257638216018677,
+      "candidate_roll": 0.3329726457595825,
+      "parent_tail_path": 0.028564466163516045,
+      "candidate_tail_path": 0.02793663553893566
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.36788105964660645,
+      "candidate_roll": 0.37654638290405273,
+      "parent_tail_path": 0.020105581730604172,
+      "candidate_tail_path": 0.025622878223657608
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.3,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.40917015075683594,
+      "candidate_roll": 0.41229093074798584,
+      "parent_tail_path": 0.027182500809431076,
+      "candidate_tail_path": 0.027922751381993294
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2093524932861328,
+      "candidate_roll": 0.2176055908203125,
+      "parent_tail_path": 0.003796165809035301,
+      "candidate_tail_path": 0.0037193773314356804
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2988773584365845,
+      "candidate_roll": 0.29931020736694336,
+      "parent_tail_path": 0.0016706946771591902,
+      "candidate_tail_path": 0.0037327674217522144
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.24423539638519287,
+      "candidate_roll": 0.2512221336364746,
+      "parent_tail_path": 0.0041547431610524654,
+      "candidate_tail_path": 0.004047851078212261
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3500484228134155,
+      "candidate_roll": 0.34460580348968506,
+      "parent_tail_path": 0.030858812853693962,
+      "candidate_tail_path": 0.011293893679976463
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2906109094619751,
+      "candidate_roll": 0.2978318929672241,
+      "parent_tail_path": 0.002912472002208233,
+      "candidate_tail_path": 0.003527833614498377
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        -30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.39290952682495117,
+      "candidate_roll": 0.3866208791732788,
+      "parent_tail_path": 0.09404471516609192,
+      "candidate_tail_path": 0.023994509130716324
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3409460783004761,
+      "candidate_roll": 0.3459208011627197,
+      "parent_tail_path": 0.003314542816951871,
+      "candidate_tail_path": 0.0037124354857951403
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3924967050552368,
+      "candidate_roll": 0.38728630542755127,
+      "parent_tail_path": 0.014588285237550735,
+      "candidate_tail_path": 0.0026774343568831682
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        0.7,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.4198547601699829,
+      "candidate_roll": 0.4177631139755249,
+      "parent_tail_path": 0.004184353165328503,
+      "candidate_tail_path": 0.003943294752389193
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.21715307235717773,
+      "candidate_roll": 0.21941649913787842,
+      "parent_tail_path": 0.02473408356308937,
+      "candidate_tail_path": 0.02486499398946762
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2860832214355469,
+      "candidate_roll": 0.28533172607421875,
+      "parent_tail_path": 0.0271528922021389,
+      "candidate_tail_path": 0.026835966855287552
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2561861276626587,
+      "candidate_roll": 0.2607675790786743,
+      "parent_tail_path": 0.02460912987589836,
+      "candidate_tail_path": 0.024541620165109634
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3354901075363159,
+      "candidate_roll": 0.3309473991394043,
+      "parent_tail_path": 0.03386128321290016,
+      "candidate_tail_path": 0.03148087114095688
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.30337488651275635,
+      "candidate_roll": 0.3079155683517456,
+      "parent_tail_path": 0.025190703570842743,
+      "candidate_tail_path": 0.024776162579655647
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        -30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3836873769760132,
+      "candidate_roll": 0.3753845691680908,
+      "parent_tail_path": 0.052000317722558975,
+      "candidate_tail_path": 0.037746280431747437
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3517262935638428,
+      "candidate_roll": 0.35511744022369385,
+      "parent_tail_path": 0.02751515433192253,
+      "candidate_tail_path": 0.025390109047293663
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.39213240146636963,
+      "candidate_roll": 0.38179123401641846,
+      "parent_tail_path": 0.02793571539223194,
+      "candidate_tail_path": 0.02432691492140293
+    },
+    {
+      "context": [
+        "left105_R2p4",
+        2.35,
+        1.0,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.4250563383102417,
+      "candidate_roll": 0.42088520526885986,
+      "parent_tail_path": 0.03482619300484657,
+      "candidate_tail_path": 0.026681896299123764
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.18980038166046143,
+      "candidate_roll": 0.20315372943878174,
+      "parent_tail_path": 0.04109952971339226,
+      "candidate_tail_path": 0.04021725058555603
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.22381961345672607,
+      "candidate_roll": 0.24089395999908447,
+      "parent_tail_path": 0.04108196124434471,
+      "candidate_tail_path": 0.040011823177337646
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        10.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": false,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2699483633041382,
+      "candidate_roll": 0.2821544408798218,
+      "parent_tail_path": 0.636600136756897,
+      "candidate_tail_path": 0.3199286460876465
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        -20.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.26667046546936035,
+      "candidate_roll": 0.2850453853607178,
+      "parent_tail_path": 0.4342647194862366,
+      "candidate_tail_path": 0.040167734026908875
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3129469156265259,
+      "candidate_roll": 0.33305466175079346,
+      "parent_tail_path": 0.07403117418289185,
+      "candidate_tail_path": 0.03419608995318413
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        -30.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.31901609897613525,
+      "candidate_roll": 0.3366492986679077,
+      "parent_tail_path": 0.47976425290107727,
+      "candidate_tail_path": 0.03866499662399292
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.32417309284210205,
+      "candidate_roll": 0.3679821491241455,
+      "parent_tail_path": 0.06618088483810425,
+      "candidate_tail_path": 0.04324423149228096
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        -40.0,
+        2.2
+      ],
+      "parent": false,
+      "candidate": true,
+      "gain": true,
+      "loss": false,
+      "parent_roll": 0.39960741996765137,
+      "candidate_roll": 0.41465747356414795,
+      "parent_tail_path": 0.01783531717956066,
+      "candidate_tail_path": 0.035338904708623886
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.0,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.27368223667144775,
+      "candidate_roll": 0.3493788242340088,
+      "parent_tail_path": 0.03369087725877762,
+      "candidate_tail_path": 0.035446226596832275
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.19586944580078125,
+      "candidate_roll": 0.2080472707748413,
+      "parent_tail_path": 0.0288083553314209,
+      "candidate_tail_path": 0.028378088027238846
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.24012315273284912,
+      "candidate_roll": 0.24837636947631836,
+      "parent_tail_path": 0.028414640575647354,
+      "candidate_tail_path": 0.02827119641005993
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2719341516494751,
+      "candidate_roll": 0.28421008586883545,
+      "parent_tail_path": 0.014160355553030968,
+      "candidate_tail_path": 0.026408037170767784
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.28434813022613525,
+      "candidate_roll": 0.29356062412261963,
+      "parent_tail_path": 0.02826935425400734,
+      "candidate_tail_path": 0.02811712585389614
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.31966865062713623,
+      "candidate_roll": 0.3303617238998413,
+      "parent_tail_path": 0.024812782183289528,
+      "candidate_tail_path": 0.018006958067417145
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        -30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3353337049484253,
+      "candidate_roll": 0.34024930000305176,
+      "parent_tail_path": 0.027698902413249016,
+      "candidate_tail_path": 0.027863599359989166
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3557431697845459,
+      "candidate_roll": 0.36824965476989746,
+      "parent_tail_path": 0.050258249044418335,
+      "candidate_tail_path": 0.016241412609815598
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.41175413131713867,
+      "candidate_roll": 0.40643131732940674,
+      "parent_tail_path": 0.02603791281580925,
+      "candidate_tail_path": 0.026532497256994247
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.3,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.33808815479278564,
+      "candidate_roll": 0.35537660121917725,
+      "parent_tail_path": 0.02739075943827629,
+      "candidate_tail_path": 0.026801323518157005
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.21152067184448242,
+      "candidate_roll": 0.2208554744720459,
+      "parent_tail_path": 0.002440554555505514,
+      "candidate_tail_path": 0.0032738125883042812
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2538151741027832,
+      "candidate_roll": 0.26517367362976074,
+      "parent_tail_path": 0.002051446121186018,
+      "candidate_tail_path": 0.003050816711038351
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.26498866081237793,
+      "candidate_roll": 0.269550085067749,
+      "parent_tail_path": 0.0024831269402056932,
+      "candidate_tail_path": 0.0034625930711627007
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.29972124099731445,
+      "candidate_roll": 0.3110920190811157,
+      "parent_tail_path": 0.0023105668369680643,
+      "candidate_tail_path": 0.0030221277847886086
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3091198205947876,
+      "candidate_roll": 0.3121694326400757,
+      "parent_tail_path": 0.002299446612596512,
+      "candidate_tail_path": 0.0031613935716450214
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        -30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.34695935249328613,
+      "candidate_roll": 0.35642707347869873,
+      "parent_tail_path": 0.0025622518733143806,
+      "candidate_tail_path": 0.003229397814720869
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.34648215770721436,
+      "candidate_roll": 0.35205328464508057,
+      "parent_tail_path": 0.0020477615762501955,
+      "candidate_tail_path": 0.0029777127783745527
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.41504132747650146,
+      "candidate_roll": 0.4109729528427124,
+      "parent_tail_path": 0.0019371845992282033,
+      "candidate_tail_path": 0.003761950181797147
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        0.7,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.33658409118652344,
+      "candidate_roll": 0.3463451862335205,
+      "parent_tail_path": 0.0050185322761535645,
+      "candidate_tail_path": 0.0021130023524165154
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        0.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.21832382678985596,
+      "candidate_roll": 0.21926474571228027,
+      "parent_tail_path": 0.03192533180117607,
+      "candidate_tail_path": 0.029931018128991127
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        -10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2654017210006714,
+      "candidate_roll": 0.26528751850128174,
+      "parent_tail_path": 0.03264617174863815,
+      "candidate_tail_path": 0.03056880086660385
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        10.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.25356531143188477,
+      "candidate_roll": 0.2533496618270874,
+      "parent_tail_path": 0.03255709633231163,
+      "candidate_tail_path": 0.030389051884412766
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        -20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.31324875354766846,
+      "candidate_roll": 0.31159472465515137,
+      "parent_tail_path": 0.03245462849736214,
+      "candidate_tail_path": 0.030763354152441025
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        20.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.2992328405380249,
+      "candidate_roll": 0.29801666736602783,
+      "parent_tail_path": 0.033226825296878815,
+      "candidate_tail_path": 0.030889658257365227
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        -30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3602628707885742,
+      "candidate_roll": 0.35731804370880127,
+      "parent_tail_path": 0.03142104297876358,
+      "candidate_tail_path": 0.030766364187002182
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        30.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.345181941986084,
+      "candidate_roll": 0.343572735786438,
+      "parent_tail_path": 0.03370961546897888,
+      "candidate_tail_path": 0.03144856169819832
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        -40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.4245718717575073,
+      "candidate_roll": 0.41099417209625244,
+      "parent_tail_path": 0.025507695972919464,
+      "candidate_tail_path": 0.028705641627311707
+    },
+    {
+      "context": [
+        "right105_R2p4",
+        2.35,
+        1.0,
+        40.0,
+        2.2
+      ],
+      "parent": true,
+      "candidate": true,
+      "gain": false,
+      "loss": false,
+      "parent_roll": 0.3504284620285034,
+      "candidate_roll": 0.34648597240448,
+      "parent_tail_path": 0.03908463567495346,
+      "candidate_tail_path": 0.03647704795002937
+    }
+  ],
+  "curves": [
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.2846686840057373,
+          "tail_path": 0.6474266052246094
+        },
+        {
+          "force_N": -20.0,
+          "task": false,
+          "working": false,
+          "domain_exit": true,
+          "peak_roll": 0.3481401205062866,
+          "tail_path": null
+        },
+        {
+          "force_N": -30.0,
+          "task": false,
+          "working": false,
+          "domain_exit": true,
+          "peak_roll": 0.3817020654678345,
+          "tail_path": null
+        },
+        {
+          "force_N": -40.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.36239731311798096,
+          "tail_path": 0.46544182300567627
+        }
+      ],
+      "first_failed_sample_N": 10.0,
+      "sampled_all_pass_through_N": 0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.22490715980529785,
+          "tail_path": 0.04166623204946518
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2699834108352661,
+          "tail_path": 0.04051186889410019
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3273742198944092,
+          "tail_path": 0.04183277115225792
+        },
+        {
+          "force_N": 40.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41496145725250244,
+          "tail_path": 0.4388990104198456
+        }
+      ],
+      "first_failed_sample_N": 40.0,
+      "sampled_all_pass_through_N": 30.0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.3,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29517364501953125,
+          "tail_path": 0.020440075546503067
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3488212823867798,
+          "tail_path": 0.06502296030521393
+        },
+        {
+          "force_N": -30.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3823390007019043,
+          "tail_path": 0.17483305931091309
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.36788105964660645,
+          "tail_path": 0.020105581730604172
+        }
+      ],
+      "first_failed_sample_N": 30.0,
+      "sampled_all_pass_through_N": 20.0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": true
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.3,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.22853827476501465,
+          "tail_path": 0.029146961867809296
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.27429258823394775,
+          "tail_path": 0.028703732416033745
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3257638216018677,
+          "tail_path": 0.028564466163516045
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.40917015075683594,
+          "tail_path": 0.027182500809431076
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.7,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2988773584365845,
+          "tail_path": 0.0016706946771591902
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3500484228134155,
+          "tail_path": 0.030858812853693962
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.39290952682495117,
+          "tail_path": 0.09404471516609192
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3924967050552368,
+          "tail_path": 0.014588285237550735
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 0.7,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.24423539638519287,
+          "tail_path": 0.0041547431610524654
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2906109094619751,
+          "tail_path": 0.002912472002208233
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3409460783004761,
+          "tail_path": 0.003314542816951871
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.4198547601699829,
+          "tail_path": 0.004184353165328503
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 1.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2860832214355469,
+          "tail_path": 0.0271528922021389
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3354901075363159,
+          "tail_path": 0.03386128321290016
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3836873769760132,
+          "tail_path": 0.052000317722558975
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.39213240146636963,
+          "tail_path": 0.02793571539223194
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "left105_R2p4",
+      "alpha": 1.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2561861276626587,
+          "tail_path": 0.02460912987589836
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.30337488651275635,
+          "tail_path": 0.025190703570842743
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3517262935638428,
+          "tail_path": 0.02751515433192253
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.4250563383102417,
+          "tail_path": 0.03482619300484657
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.22381961345672607,
+          "tail_path": 0.04108196124434471
+        },
+        {
+          "force_N": -20.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.26667046546936035,
+          "tail_path": 0.4342647194862366
+        },
+        {
+          "force_N": -30.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.31901609897613525,
+          "tail_path": 0.47976425290107727
+        },
+        {
+          "force_N": -40.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.39960741996765137,
+          "tail_path": 0.01783531717956066
+        }
+      ],
+      "first_failed_sample_N": 20.0,
+      "sampled_all_pass_through_N": 10.0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.2699483633041382,
+          "tail_path": 0.636600136756897
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3129469156265259,
+          "tail_path": 0.07403117418289185
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.32417309284210205,
+          "tail_path": 0.06618088483810425
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.27368223667144775,
+          "tail_path": 0.03369087725877762
+        }
+      ],
+      "first_failed_sample_N": 10.0,
+      "sampled_all_pass_through_N": 0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": true
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.3,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.24012315273284912,
+          "tail_path": 0.028414640575647354
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.28434813022613525,
+          "tail_path": 0.02826935425400734
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3353337049484253,
+          "tail_path": 0.027698902413249016
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41175413131713867,
+          "tail_path": 0.02603791281580925
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.3,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2719341516494751,
+          "tail_path": 0.014160355553030968
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.31966865062713623,
+          "tail_path": 0.024812782183289528
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3557431697845459,
+          "tail_path": 0.050258249044418335
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.33808815479278564,
+          "tail_path": 0.02739075943827629
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.7,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2538151741027832,
+          "tail_path": 0.002051446121186018
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29972124099731445,
+          "tail_path": 0.0023105668369680643
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.34695935249328613,
+          "tail_path": 0.0025622518733143806
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41504132747650146,
+          "tail_path": 0.0019371845992282033
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 0.7,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.26498866081237793,
+          "tail_path": 0.0024831269402056932
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3091198205947876,
+          "tail_path": 0.002299446612596512
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.34648215770721436,
+          "tail_path": 0.0020477615762501955
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.33658409118652344,
+          "tail_path": 0.0050185322761535645
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 1.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2654017210006714,
+          "tail_path": 0.03264617174863815
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.31324875354766846,
+          "tail_path": 0.03245462849736214
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3602628707885742,
+          "tail_path": 0.03142104297876358
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.4245718717575073,
+          "tail_path": 0.025507695972919464
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "parent",
+      "route": "right105_R2p4",
+      "alpha": 1.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.25356531143188477,
+          "tail_path": 0.03255709633231163
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2992328405380249,
+          "tail_path": 0.033226825296878815
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.345181941986084,
+          "tail_path": 0.03370961546897888
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3504284620285034,
+          "tail_path": 0.03908463567495346
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2840770483016968,
+          "tail_path": 0.04004044458270073
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3533902168273926,
+          "tail_path": 0.03251980245113373
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3882930278778076,
+          "tail_path": 0.03183735907077789
+        },
+        {
+          "force_N": -40.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.37052226066589355,
+          "tail_path": 0.03818465769290924
+        }
+      ],
+      "first_failed_sample_N": 40.0,
+      "sampled_all_pass_through_N": 30.0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2278660535812378,
+          "tail_path": 0.0406876876950264
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.27379536628723145,
+          "tail_path": 0.04045172780752182
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3262382745742798,
+          "tail_path": 0.04016207531094551
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.40851008892059326,
+          "tail_path": 0.04068492352962494
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.3,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29461562633514404,
+          "tail_path": 0.02761092595756054
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35342276096343994,
+          "tail_path": 0.021150847896933556
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3883553743362427,
+          "tail_path": 0.02010650373995304
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.37654638290405273,
+          "tail_path": 0.025622878223657608
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.3,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.23650193214416504,
+          "tail_path": 0.02791673131287098
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.28259849548339844,
+          "tail_path": 0.02793663553893566
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3329726457595825,
+          "tail_path": 0.02793663553893566
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41229093074798584,
+          "tail_path": 0.027922751381993294
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.7,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29931020736694336,
+          "tail_path": 0.0037327674217522144
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.34460580348968506,
+          "tail_path": 0.011293893679976463
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3866208791732788,
+          "tail_path": 0.023994509130716324
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.38728630542755127,
+          "tail_path": 0.0026774343568831682
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 0.7,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2512221336364746,
+          "tail_path": 0.004047851078212261
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2978318929672241,
+          "tail_path": 0.003527833614498377
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3459208011627197,
+          "tail_path": 0.0037124354857951403
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.4177631139755249,
+          "tail_path": 0.003943294752389193
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 1.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.28533172607421875,
+          "tail_path": 0.026835966855287552
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3309473991394043,
+          "tail_path": 0.03148087114095688
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3753845691680908,
+          "tail_path": 0.037746280431747437
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.38179123401641846,
+          "tail_path": 0.02432691492140293
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "left105_R2p4",
+      "alpha": 1.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2607675790786743,
+          "tail_path": 0.024541620165109634
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3079155683517456,
+          "tail_path": 0.024776162579655647
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35511744022369385,
+          "tail_path": 0.025390109047293663
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.42088520526885986,
+          "tail_path": 0.026681896299123764
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.24089395999908447,
+          "tail_path": 0.040011823177337646
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2850453853607178,
+          "tail_path": 0.040167734026908875
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3366492986679077,
+          "tail_path": 0.03866499662399292
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41465747356414795,
+          "tail_path": 0.035338904708623886
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": false,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.2821544408798218,
+          "tail_path": 0.3199286460876465
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.33305466175079346,
+          "tail_path": 0.03419608995318413
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3679821491241455,
+          "tail_path": 0.04324423149228096
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3493788242340088,
+          "tail_path": 0.035446226596832275
+        }
+      ],
+      "first_failed_sample_N": 10.0,
+      "sampled_all_pass_through_N": 0,
+      "upper_censored": false,
+      "recovery_after_failed_sample": true
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.3,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.24837636947631836,
+          "tail_path": 0.02827119641005993
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29356062412261963,
+          "tail_path": 0.02811712585389614
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.34024930000305176,
+          "tail_path": 0.027863599359989166
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.40643131732940674,
+          "tail_path": 0.026532497256994247
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.3,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.28421008586883545,
+          "tail_path": 0.026408037170767784
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3303617238998413,
+          "tail_path": 0.018006958067417145
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.36824965476989746,
+          "tail_path": 0.016241412609815598
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35537660121917725,
+          "tail_path": 0.026801323518157005
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.7,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.26517367362976074,
+          "tail_path": 0.003050816711038351
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3110920190811157,
+          "tail_path": 0.0030221277847886086
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35642707347869873,
+          "tail_path": 0.003229397814720869
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.4109729528427124,
+          "tail_path": 0.003761950181797147
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 0.7,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.269550085067749,
+          "tail_path": 0.0034625930711627007
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3121694326400757,
+          "tail_path": 0.0031613935716450214
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35205328464508057,
+          "tail_path": 0.0029777127783745527
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.3463451862335205,
+          "tail_path": 0.0021130023524165154
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 1.0,
+      "sign": -1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": -10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.26528751850128174,
+          "tail_path": 0.03056880086660385
+        },
+        {
+          "force_N": -20.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.31159472465515137,
+          "tail_path": 0.030763354152441025
+        },
+        {
+          "force_N": -30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.35731804370880127,
+          "tail_path": 0.030766364187002182
+        },
+        {
+          "force_N": -40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.41099417209625244,
+          "tail_path": 0.028705641627311707
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    },
+    {
+      "policy": "seed918501",
+      "route": "right105_R2p4",
+      "alpha": 1.0,
+      "sign": 1,
+      "nominal_task": true,
+      "samples": [
+        {
+          "force_N": 10.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.2533496618270874,
+          "tail_path": 0.030389051884412766
+        },
+        {
+          "force_N": 20.0,
+          "task": true,
+          "working": true,
+          "domain_exit": false,
+          "peak_roll": 0.29801666736602783,
+          "tail_path": 0.030889658257365227
+        },
+        {
+          "force_N": 30.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.343572735786438,
+          "tail_path": 0.03144856169819832
+        },
+        {
+          "force_N": 40.0,
+          "task": true,
+          "working": false,
+          "domain_exit": false,
+          "peak_roll": 0.34648597240448,
+          "tail_path": 0.03647704795002937
+        }
+      ],
+      "first_failed_sample_N": null,
+      "sampled_all_pass_through_N": 40.0,
+      "upper_censored": true,
+      "recovery_after_failed_sample": false
+    }
+  ],
+  "totals": {
+    "parent": {
+      "task": 62,
+      "n": 72,
+      "domain": 2
+    },
+    "seed918501": {
+      "task": 70,
+      "n": 72,
+      "domain": 0
+    }
+  },
+  "interpretation": "Own-policy prefixes; discrete operational recovery, not common-onset causal comparison or continuous safety guarantee."
+}

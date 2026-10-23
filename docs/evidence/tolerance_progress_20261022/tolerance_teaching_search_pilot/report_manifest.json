@@ -1,0 +1,309 @@
+{
+  "files": [
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/summary.json",
+      "sha256": "77c16999f489eb47c3d6d04f09d4be0d24196f2dc359662c695663f92eaa017d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/REPORT.md",
+      "sha256": "0011f438ca80b6149427907b9d087854e200dbb5a143e824a917bae07067921c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/paired_nominal_response.json",
+      "sha256": "cd844552846a4f0284bb6b9ac879ef877092d2a22f3851e9c41dbb65d606bfff"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/cases.csv",
+      "sha256": "df04e948a618d5f65e147d58615bc6b5ecdde9abfad47a05a0d93bd278eb5eed"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "3a733b0257037f0b364cb56f0f3004d557964ab2e3fd85f1caf131df3566ebf1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6.png",
+      "sha256": "f982219d3be04ed9afac40dcafff8fe44b9ba07b6a114d5284b4795e1af97a7c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "3802384bd562a19f682aa76766170cde1a5c1ac287fe026f5f38c59ce85ab0f1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "d0edb281b75c84adbd2510d47d14abaaac5097238990a66b246fc2015704c06e"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "5722f418757a4f958ff6a3742fb121b754d08063c6e81a9a26528ac89d7f1299"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6.png",
+      "sha256": "c5411765f23620a1b66605a1095e755206ec887a1156c31afdec3547fc00ce4a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "7f38807efe0178cb10364295a550d731992be4696a14b38a363c8b592e7d7e80"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "efb73a58da5093d45723fdb3855ef20bf7b92da4eea09585ee0f80449a795583"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "3d5f89542c9bfeb8f82c42ccaee359a44babff42c6ac05aebf5f233005abc4d1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "2faf25d8305854319d7cf75ca19ca78ae652d75688e6f8f5bc19d4f364f0f1a2"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "b84c031b70162bfd7606fca92e0c2eef7324e8c5a5a081dd6251725c7c280de7"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "93b761a83bbe70c0f3a0caa1fd36c77d51607eb0b1e59c4f2238d0fbe6a54ead"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "0f6f3c838195cba8a27b44cfe79555c219d298085c0b4364f771511a8cf0bb90"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "6343e6ed071e0bea22bc2905795123b15ce38d5fbd9439846d27588e6055c81d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "402884ec611e40f57eb0f63b53e4a168e4aaf4b57d5fcabb007381b5b9af8c1d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6.png",
+      "sha256": "f8b36f346b7d7f924f0b4866cdf4eb48992b18f4e1791f14ba7db56db34b1bbc"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6.png",
+      "sha256": "2be6380b022a81ad0bd109d6b4898ed0e0933ffd38812a877346e58694ca1fc2"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "f61825af7d7592dd19bad2fa1b0646794b5ad7e51b37825a472d237ca0a7168b"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "6d7491624a7e21f77a1a5aa246333785f9f8bebb1f8f6907e0cfa031f194ca8c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "184814d63844651a9ff11b02094b00ed4b1cca9307c470c70da0909f05db53e4"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "52db3266f40e85a25766546cd86f909e0d2114783f7d54c28b1a870dc85c96e0"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "249d560bd21ea43d4dc2de9b86453fa0715d38989ca6ae83d1074f7de36b75f5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "c1eaffd877b4b30ffb3f1cb132d9d1358923332c2066b77c4788ef8122dd7b1c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "5a4b9aa035c97f984029ee0a0bf6de650613f9bef6566b6585fb85c119788ae5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "83c77ba7b19cb488da46923fce91d9206dfde28c0bfa8453ac7fb5c922aa1177"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "654ceb97b0af9b2bc36804cdf9f1587906d588e0fffb3cf8e34dc7d51173e377"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "ad834d4e0602c566242bcef251e9df91a0dc2cba9b580a1071fad98827e5924f"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "2324c9ea06f5fe6adc0dab8a0fb37b74a9e26bbc6116fc60e47b32b2dca304d6"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "5398d71478f8325057a499d260bd08ae945716e840953023ef2dbf18f4b891c9"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "2eb04e0564e9cabcc0e243e21751fbb5f860b8fe84d9872897f25961ee9bbad1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "56b3b0874485d25b63ef618dbe9ff1d2bbb64db206b22caa8d47188c67f573e6"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "10314c4b058887339a8838ef9e9d9e7557fb76a96c11b778d2cc8b99ca207d99"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "d64275dac891706c28f4bf2d8beac459e45c81f2bd89b6485ba20c64e58feb71"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "c1e423a6b19446bcf37dbfbf99550e6df89d27485c7ad2c8259d90d78ba40b61"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "aba79be702d6d344bd914888c96307eb15dcbb5e7886a7afd81d9e4a67ca4fbb"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "72bfec2b4277dac73230c6693a7e98e960363561b37c984782258f1a5a4695a5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "08b59f77bdd655a8ab2dd8ea31ec2c3786c85ddf6951ec8a5ca8d1b65249b684"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "a613066d05f695e468f3cfb13881b86ff3413758950174130054f1ebbb042a9c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "a75b4182c51e592be642cfcca1b88c211b14fd17175348409f38f456fd4dca55"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "2ba96b471571e996d9d83a1ea3c4420d5652880bc1fdd246bccec13a1e95d4a8"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "9cc71a77dfdaecd4a411c647e79385f3eb0ace887e8585a056e5462e3eaa06e2"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.2_t2.6.png",
+      "sha256": "27b3aeff0d82ae26022b467233fa43770ce18621b0f7c28d21d21409ce8a94a1"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "6222bcd620676b9bfd710e9654032d6555b3f0d11c104f2ae4520e45588e9e53"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6.png",
+      "sha256": "92b7ab80b331b547ba0be705e15b0b4ea8f44db1d367bf5b0bb347ef69f892ca"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6.png",
+      "sha256": "7b941a5432f3ee0e916b061d55b488a9190c0120245d7cff40d8d1492b10ff5d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "e3ac440df39d798bfc184ed1502c2146ec425566b4625fd265e4855c1f6bfa87"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6.png",
+      "sha256": "a07caecf11182029104c8f485359ff8dc8c6fcb124d50a21d5e7be5398b50d91"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "486d70e2e92bb368aef28eecff387892c2f67b318f0266c641e8ec2dd0e6a592"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6_a0.3_reward.pdf",
+      "sha256": "c08b2086482ea30ac52a1f4aaed24a6ceadeb9155ec42aefaa4098a51542491e"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6_a0_reward.png",
+      "sha256": "633f26211e82cede73b0a7824a56f627263d5b0a23b9746f7ca44527f4c0c50a"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "a44947cbbf9105d6adb437b385248dfa9cb2a4b2ca17e14131cd5a269b6a59f5"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "d41afb3e294d77ed39a791a88c05fea17a994325abcaef5f59102dbbdd897401"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "10529a1b5eb6a1bad6254da103fc0f80f4ed875cb943e591477707eed32032ba"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "1c2bee9f106f587b76dfb8e8e554abe9dcfa033613ee2013044c351a9d53ef51"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "6edeb75128e2a573c377d64b4d25b2c761491e35a5e346146fc6f80fd922b491"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_right100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "88782a9ce0f4fdc810b70ce781f30154d95420bda7a5b84f9b28a111673f4c9c"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6.png",
+      "sha256": "af8aa8842fa6725cfd6f7a7df85756e6aed1c64666eaf9be4d6a7860d1354369"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.5_t2.6.png",
+      "sha256": "1460d3a80f3dab1c7c17aac7569affff1c853fb4aeb1c3c7804889ca4b3ca090"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6_a0_reward.pdf",
+      "sha256": "9793ddfc7409b646e75c3970d471d71644e6fdaa6586017de291e55711190759"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "93204fa2ba5dfd20b5877ae36af51d2b049a6021c8530f39b3ca0e41c8aa30bc"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6.png",
+      "sha256": "cfd95b3937df41e3ef3b27d380cd9e38f2e488b2a7083f137e7de9c5c5dfe27b"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "3a53f4ec2f6c30be438ec64bced79fdb684826b61437d639901ec7f951a3881f"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6.png",
+      "sha256": "1536be180197659efa2d46ab2f931d2ade5e7c4cae675b8d4bf73dee7f089cb2"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_right100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "ad71e6887709c9071ed3973271e9e2d31501cf04d2b0f1919b60e960381ce2be"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.5_t2.6.pdf",
+      "sha256": "53c95ea8298c307259a5fec909541ccba15a478d6f723406bff78bcc074e1f5e"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6_a0.3_reward.png",
+      "sha256": "5a7430b68f5e61d68e93580d3e89f57c729f0d02d8437cb578f14fbb882ce4b0"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.5_t2.6_a0_reward.pdf",
+      "sha256": "e37efebcbe1b79705a2b1e1e893ce4d075b74ab96204a621d614a53e836f9c82"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_left100_R2p3_v2.2_t2.6.pdf",
+      "sha256": "bb7ebb02439ddf290cb18415a3d3fafab9a4170d46c0c5648f38bad414c75aaf"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/speed_off_right100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "db5cbfeab77c8dc3ae6e163ab1c4b6b6ebb56efbaf1fa304db55df169b352f3d"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/steer_off_left100_R2p3_v2.5_t2.6_a0.3_reward.pdf",
+      "sha256": "9bdab62577081603d9ef025cf91168c15973c7dd86b9a7f6324bbe2a9060cbbf"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6_a0_reward.png",
+      "sha256": "3b53d59e882c486382434eb17ab93d7d3c1674c319525e067c815701c7767342"
+    },
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/tolerance_teaching_search_pilot_v1/full_report/curves/control_left100_R2p3_v2.2_t2.6_a0.3_reward.png",
+      "sha256": "8a76f626f65967fd87fe277f7604a3285420ab3320c391f93f767a1c64cf11e7"
+    }
+  ],
+  "scope": "full reports remain server-side"
+}
