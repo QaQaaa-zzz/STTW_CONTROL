@@ -1,0 +1,8 @@
+{
+  "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/actor.pkl",
+  "actor_sha256": "fe8b4cc0ee56b80904ba1c8c52bbd6e78e39541883c3a8a0d6abafcde71361ac",
+  "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_v1/training/training_state.pkl",
+  "checkpoint_sha256": "017905b6f43eb96746efea79b9ec5f1d59255a93147d4df41e08a4f3992fbc3c",
+  "source_update": 400,
+  "kind": "supervised_actor_only_not_PPO_checkpoint"
+}

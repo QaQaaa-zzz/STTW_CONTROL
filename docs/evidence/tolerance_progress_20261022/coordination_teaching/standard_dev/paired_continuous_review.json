@@ -1,0 +1,173 @@
+{
+  "moderate": {
+    "task_changes": [],
+    "working_by_alpha": [
+      {
+        "alpha": 0.0,
+        "parent": 33,
+        "taught": 20,
+        "parent_max_roll": 0.3590918779373169,
+        "taught_max_roll": 0.37745392322540283
+      },
+      {
+        "alpha": 0.25,
+        "parent": 31,
+        "taught": 18,
+        "parent_max_roll": 0.35963499546051025,
+        "taught_max_roll": 0.3725430965423584
+      },
+      {
+        "alpha": 0.5,
+        "parent": 28,
+        "taught": 15,
+        "parent_max_roll": 0.35918498039245605,
+        "taught_max_roll": 0.36700356006622314
+      },
+      {
+        "alpha": 0.75,
+        "parent": 25,
+        "taught": 20,
+        "parent_max_roll": 0.3569563627243042,
+        "taught_max_roll": 0.3605903387069702
+      },
+      {
+        "alpha": 1.0,
+        "parent": 26,
+        "taught": 22,
+        "parent_max_roll": 0.3522148132324219,
+        "taught_max_roll": 0.35800766944885254
+      }
+    ]
+  },
+  "strong": {
+    "task_changes": [
+      {
+        "context": [
+          "left90_R1p8",
+          2.6,
+          0.75,
+          -32.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": false,
+        "tail_path": 0.08740425109863281,
+        "peak_roll": 0.42026400566101074
+      },
+      {
+        "context": [
+          "left90_R1p8",
+          2.6,
+          1.0,
+          -32.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": false,
+        "tail_path": 0.09223651885986328,
+        "peak_roll": 0.4085512161254883
+      },
+      {
+        "context": [
+          "left90_R1p8",
+          2.8,
+          0.5,
+          -32.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": true,
+        "tail_path": 0.08474445343017578,
+        "peak_roll": 0.4634130001068115
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.6,
+          0.0,
+          20.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": true,
+        "tail_path": 0.07170295715332031,
+        "peak_roll": 0.3387802839279175
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.6,
+          0.0,
+          32.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": true,
+        "tail_path": 0.09256935119628906,
+        "peak_roll": 0.3818387985229492
+      },
+      {
+        "context": [
+          "right90_R1p8",
+          2.8,
+          0.0,
+          32.0,
+          2.0
+        ],
+        "task": true,
+        "parent_task": false,
+        "domain": false,
+        "parent_domain": true,
+        "tail_path": 0.07680416107177734,
+        "peak_roll": 0.40529346466064453
+      }
+    ],
+    "working_by_alpha": [
+      {
+        "alpha": 0.0,
+        "parent": 12,
+        "taught": 11,
+        "parent_max_roll": 0.48724544048309326,
+        "taught_max_roll": 0.49961090087890625
+      },
+      {
+        "alpha": 0.25,
+        "parent": 13,
+        "taught": 11,
+        "parent_max_roll": 0.48012876510620117,
+        "taught_max_roll": 0.48209941387176514
+      },
+      {
+        "alpha": 0.5,
+        "parent": 14,
+        "taught": 10,
+        "parent_max_roll": 0.4707452058792114,
+        "taught_max_roll": 0.4634130001068115
+      },
+      {
+        "alpha": 0.75,
+        "parent": 14,
+        "taught": 12,
+        "parent_max_roll": 0.46031856536865234,
+        "taught_max_roll": 0.4616743326187134
+      },
+      {
+        "alpha": 1.0,
+        "parent": 14,
+        "taught": 13,
+        "parent_max_roll": 0.448766827583313,
+        "taught_max_roll": 0.4603341817855835
+      }
+    ]
+  }
+}

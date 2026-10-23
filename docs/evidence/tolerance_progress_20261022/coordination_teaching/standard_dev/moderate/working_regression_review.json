@@ -1,0 +1,15 @@
+{
+  "working_losses": 48,
+  "working_gains": 0,
+  "peak_roll_loss_min": 0.3022547960281372,
+  "peak_roll_loss_max": 0.34715044498443604,
+  "peak_roll_delta_min": 0.00867152214050293,
+  "peak_roll_delta_max": 0.06398820877075195,
+  "by_alpha": {
+    "0.0": 13,
+    "0.25": 13,
+    "0.5": 13,
+    "0.75": 5,
+    "1.0": 4
+  }
+}

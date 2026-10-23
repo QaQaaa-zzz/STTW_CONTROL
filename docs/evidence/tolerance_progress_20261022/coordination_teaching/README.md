@@ -4,7 +4,7 @@
 
 The fixed final400 supervised Actor improves the original low-speed DEV target subset from 1/8 to 6/8. All60 tasks improve 53→58, with five paired gains and zero regressions; nominal20/20 retained, working26→28, domain0. These contexts were not teaching samples, but were used in earlier development diagnosis: this is DEV evidence, not final TEST or multi-seed proof.
 
-Ordinary unmasked TRAIN rollout: parent17/24→taught23/24; disturbed9/16→15/16, nominal8/8, six gains/zero regressions, working15→14. Standard410 DEV and five-alpha nominal review are still running. Candidate is not adopted.
+Ordinary unmasked TRAIN rollout: parent17/24→taught23/24; disturbed9/16→15/16, nominal8/8, six gains/zero regressions, working15→14. Standard410 DEV completed: moderate200/200 retained, strong189→195/200, straight10/10 retained. Unique nominal30/30 tasks, speed preference monotone4/4, working30→24 with six peaks0.309–0.325rad. Candidate is retained as the leading development recovery candidate, not deployment-certified. [Completed standard review](standard_dev/REVIEW.md).
 
 ## What changed
 

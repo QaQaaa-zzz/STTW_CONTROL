@@ -1,0 +1,968 @@
+{
+  "compact_files": [
+    {
+      "path": "REVIEW.md",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/REVIEW.md",
+      "sha256": "5151406ea5672c9b80f1c03a64250627c41e6e5cd5ad53f65b5b1909df46c397"
+    },
+    {
+      "path": "numeric_results.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/numeric_results.json",
+      "sha256": "c75113fd0fe15e5b0ea3cc31a8986a5a768490d3b6f10643a2e3bb070b95f790"
+    },
+    {
+      "path": "status.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/status.json",
+      "sha256": "ba3f6618b809a895f1b9f08eac2282593adb68acd23a154e6c57323cadd5a27c"
+    },
+    {
+      "path": "candidate_record.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/candidate_record.json",
+      "sha256": "b0ff306f56f7fa8c293744b38507346856bae90cff471e0ee77ae2217816a4b5"
+    },
+    {
+      "path": "paired_continuous_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/paired_continuous_review.json",
+      "sha256": "23805a2d79e557288f5eccac73c2f06969fb6934ed213c19e47add407e7de5b0"
+    },
+    {
+      "path": "moderate/working_regression_review.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/working_regression_review.json",
+      "sha256": "46bb99f3547e77498906b569a03c4e72f5957f9f4b2953d13be3a9b4f1bc41df"
+    },
+    {
+      "path": "nominal_review/summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/nominal_review/summary.json",
+      "sha256": "bb130df83f8a1cce5a11149d8aeb3a35dddbbb1b8c4ac191d87cb582c1cfea3b"
+    },
+    {
+      "path": "nominal_review/actual_xy.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/nominal_review/actual_xy.png",
+      "sha256": "3227e60ab83522e49bace60fd2cbd0c39720d8e167943df5ba956eef36405880"
+    },
+    {
+      "path": "nominal_review/scored_tick_reward.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/nominal_review/scored_tick_reward.png",
+      "sha256": "4914b20d031a54a3d21d363b2ddc8b3327455a6c192ae7c11bdc0b393a16e156"
+    },
+    {
+      "path": "nominal_review/cumulative.png",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/nominal_review/cumulative.png",
+      "sha256": "e93c15b627a5bade455c785b16b1a6cac6e45aef58b70c3b519ea0c501c5f78a"
+    }
+  ],
+  "full_reports_server_files": [
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/REPORT.md",
+      "sha256": "95755d7bd042d400d1c6d79f6fe5c428bf35ba32db44d886cfb743d8b21d55cd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/cases.csv",
+      "sha256": "c00e1996434f8a982d3ee451a89e42748b1b101bf8c1b8b7ba34ad9d1ca8707a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1.pdf",
+      "sha256": "b11417d529e2da4088b292efb4710c72d7699ca629662d1083de19a828029f9b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1.png",
+      "sha256": "9f4a7979802b911689fca505d03b974bd56816bd7b1b872e485ddedb1a2f5170"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "43a6f2eb2f06906db98946d42ddb97bbef83b7973cc63e79c252375c93e8c2c9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "002afda0de202892e126ab5f8bc69c1b3c4ac1a2a1507430761b5cdaac5541b2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "77c63af542b0c6e913cc479afd3d82798a263a4cb17795e14c29a591d35cd623"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "e9ff0f3ffacceee6c29b0542e04420261b32e3ac990660872eb437b7b2c48de5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "63c855264554ae3c89723e6263f5d7969dd004f498da410054f04fd4a0144d9d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "2a6f0d51a6da6635edb8bc0b8516d686cf98d4e10229248d0d01c69f99c77928"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "6b7245ce8440585e95cbb5b515ecdfc8768b4e8a509629949a7bed5d11648df5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "7f889a4dd17ea74aaac2c9444e3270767a41ecee0572c1a8c0dabbe04f31fde4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "94c75807b4ac1bbbb32b0f2cb1c8f45a787880c619b0116bcdd8125d661f14f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "322ed3b3d8e9b044f68ffe3eb1aa0b7f4929f692449c94a5e830e4e63bfc87e8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2.pdf",
+      "sha256": "881b63b660d2876fa3b1f8779508762bd1b1f40748d568095a6de5063336b04e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2.png",
+      "sha256": "8f7f93a3f0cec2e1cd4813919c79cf4229e8d30d9ca6d992ef01fb41db123977"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "051a2e042774dfaa04151867933c379bb67e8a09ec889334fde2baa5a4d8de46"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "a9dff8706b4ecc3656b60cf10926de190c94c4a633d8f566da1a562d9b8fa0ed"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "98a264d771d8e5c7f224f2a6ec61f35cfdfb7a707488420e6d38ab108738bf07"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "b367ea80e2fc528cd4a48a42513a16ffafdf81c7b2553cddafe1e5e49c244f5d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "971ea1c17bcb9d34678173f9a26813b548c730596deee0d20fda67e7f299d130"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "1bc34ad6bfe98cc93e868c3b021c7bbe8aa287aa4c39deabd548ff2c7bebc3c1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "fd0231afe441db4e0f63e1934ef6fc8e78a50f6e75afecdf02c0e2a0fe6a5895"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "850fe25278f8eb7204b683cc98d9a8a896f545ddaa5192003524042b895787b4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "0a18bb5dfa1cb100954584fcebcbf5703882e2798c212b03694e8114b7cadc08"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "435360e7e14157699c7a9abfbf51c4c6c591a05f8c7cb1454faabdead38bb0c8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1.pdf",
+      "sha256": "738741a828995466332a9468a0c0eada4c6fff38aa427c21f523afc7167e06dd"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1.png",
+      "sha256": "d1539718e953c3a026c16936f1f41ee0a9d99ab25a997d39df8acf60463e3eb4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "b535813b7d9a7281c770580154d3a23928ca1c7f81ad40cfabdadc7e5a72be09"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "2c9fb21e93751859aeb2384e7389e53b23e2b52bde873d052d1071a8d6b7d927"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "4e0128c57cbcbf03734c44f88f77e75e9c08e17b897f422c258473cfc9958e60"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "a4fa3e31d5326bab6f7a899a9cfca5a82e84ff3f7d602fd81817b8150c3963a9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "fa954f6d74948a4bce0ea3e508f9b771f873fac44f836c18c6b254a334470269"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "e825f8ef0014a18792931182c2407c08a7cd3bb5b0da3a7f28c305e6376f601a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "7f96ef2fd338ce674cba823b474c60be08f4508629850b72b792fabe8cb8dbf1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "f024ef3cd7910e0c31ed47f434103d2429d8eba4f1a8ed0b654a717eec999555"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "823fc377db53693ca3da11e33c0a068cc2117ba97c071b3006f940727b713b7f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "3c789e42d2645db8c64e9ae15ea547718eba9553aaa99810115dbc0f8ca3e41b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2.pdf",
+      "sha256": "6be68f2fe19142b5fa948741d329c1a8aa5582bdd641ddaef877519b8f8618ce"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2.png",
+      "sha256": "8db31aed90d3ca4824e042217e1205f9936fa21d6a140ea641bac721776fc8b6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "fe84ef9f692ee1292dd08dc14c51f73d96dae1399b715ba25be932677205dbac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "28e7c31784651563b44a1976149c8706a4524bbc1fb4a78eaa50100fea11c841"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "18ebda7eb9a2169400d2c08b8939c89beb9783b52bac8c9251521d73771be517"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "238192cdf8398204e9f74adb0c2c07226855d0bab19bb91ee5de49fdbe29e6a0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "c1de02cf05b6d122c1a1b8d5dddf0e9eb12f1438b9f05b9c7163253f3b22bd0f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "1539992407aea17246ff5e64025975d9a815ab052bed926c50f2becef52b15c1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "6e7920c22d32fe9df464b87168244f35b62ef33d98796a9f39980b74cbe92e52"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "fb67c2d3d84dabe45c83a8aa8730615ea0e0bbabec79b193759524088db74d68"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "633101992be2607651cd910e2fff66e4710950d66ae9fce8cac24ccbb3a7e765"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "29f607b3af528ab051cc1a50f15efe8a0c6ff945a2bdf2a046aaa344499e40d9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1.pdf",
+      "sha256": "b90bbea7521cf9abab833d98afe9eb7ccadde27e1495d2b51737de53ba144a6c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1.png",
+      "sha256": "c07e303e5e6546fb06fe05aa2d79bcd2bd4c99b4b5f4c10e8c2ea25d0f729f94"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "126599155c371a6d9752a903aa87ec614d8dd12db8b53f3875f148b0f57ac346"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "2b4c4bd89646f25b483388967967276da50be2116fbc2e4d88b41b51dced0740"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "f325bc47de16cdc0077ef73eae33344073e683f970c11f8c75921d21dd6e830a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "1554dca43e8bbef377a0272419cce34da75c6f5478c26e767e2f16a611f7309c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "d5ebbbfa688f13d201cd57f6a8edd1bf6974a569e2df7fc3a62779dd7ce1401e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "6676a8e3b4000c06ed662f78e03a1170232e521d888241b22fa09654a226e6c0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "3922c69d0078af9e31033646e9956350c26c01fa735503105de0c024201fe019"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "841646b35474968f83e43f58ae244cc33b359118c694e1cb26ddf4c8b2839e02"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "938a3b968c812e5f75027ec6957a9d50ce5f86741ca0e9f30dba43fde6d46fcb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "c34f18594b128521c16015abafdbeb04afbda021d25a2cbb8329763060daea28"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2.pdf",
+      "sha256": "b2ce7f550e9e6de5d4643d9099efd33ff3e41529af4dd7860d368132bf7cb51e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2.png",
+      "sha256": "12071ecf8971ce48d874b8a80a938e69e21002dd54592f67fa70565da3741c21"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "eaa8e4a755b0b705664f7fa059bb2bb8ee7981227fa79e8f16c410d9a68e85a0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "af8ee26ac727dbe22f77128402971926671420a3e53bce9847f78116ddaf1bc0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "3436246530fb2ae9c06721693e78fb46ddd6bd051864540aab3e20d8b36bb4d3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "a2a3fa543642d5b5750dd46fee392c0d6a4933d82f75d938450c02c8ea2939bb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "4f138b21544071853269c5544138bed498e2138378471e0d13488b40e34e9a95"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "87c2aaeab5b7b2f82f52ce603ecffba8e635a89343423fa16b30d9093d9dc1af"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "15066065e09cdfbdc6bcf603b834db4a1a3626d6be1fc7b55c110e6073051716"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "00943be4d04b3ab82d1c5b88c40479960fbe35f0f5b05a22854fa7c9c7b4296d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "9d9ebef51399b674377db78d981171b236358f3ab654d83699d5e504ade0ddba"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "68fd5d3ada1221d74ed4857a7f91852ad0ceea5af80f45686189aa2f0563eec9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1.pdf",
+      "sha256": "6ffbfd450b764463cd4958454032fed91c32097da126a10378dbf728e275adf6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1.png",
+      "sha256": "1022d08fbca5f2f87f3548d37521ea13d44ce4a578babcfd6ab91c722e32929b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "31dbabf7d8ab8b4e15b409cee7de35f2f8f3c024146df8cf0cbc7c52b23806ef"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "b63c51f175cd1e0ad37e77adc2fe5ccea1a796abd2c9e50dc500125719ff7334"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "b50c5899bb6f7c77dab50eace840c5dee6b087c08cdbfae6cb1f0bf0d3113dfb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "41049dc2d710437a88178aae48e0e046d6ac891d20bd2eb4b49a905e60592fb2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "725b5d8499fd58a670c9937d6ae2db1737eba1f6b934b06ec6b63bea64c19bb1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "0010dda785b1e4ce40a3828bfd35f81e8c41b4ca1e0860ac9d5aa89adc459f4f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "6c5921d4ea70d8f6f7cda7334f4e08841c5dbcd2d43923a7e4d7d95c80a70cc9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "38b5b543e30743c59f938bef9e7467f0aff155bf2c13856bdb6274a1c3f0dc3d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "ad4c17ab9677195016a5038bf5f39b32a76bbfb949c10d6c21255837bb3721c6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "4d0a0dbeb5d9af204401806a50e90857959dc9a26ce2752687b8649f952525eb"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2.pdf",
+      "sha256": "65ed45ffa9c10923202a8a6d7fc6634841effeccb35ace5ec8b32ca6e89cb6f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2.png",
+      "sha256": "3d17ca8a132ce683edbe0e5b764c33a0504e3adb6c55a3d85dc8c8bf828699ca"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "9d0bd546ab815b9be5cc8a2cd30a335806596d7b2e13748b6e2249b4e45299de"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "4570c0d023b2e5b3f588e524ecdde8bdef70fb3aa844de711ea37020c8915060"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "5ddd22772dd6bc592be7f80e4c37028c53c3b32ce8edb34f6a695c9c412dc178"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "a8dd212a0608aaa78d9716df2d63d1bff05ebc3e717ded594233b941f5184363"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "93dcb3a31541f05bbaa35be15c5e1d32fba18feca807fbf3cbf50b6204c5fb68"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "13b1ef89d1785633b58c76a8e7659d8ed6c9c60a47b86d3b85411eb99fa14784"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "5fa7e98a236890b48fbb9480a7e961535b9204b7965d0b15d1f1c2a672e50501"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "a458a50ca912a253635021215f3dbd5f4b43b519ee96918206b20e9b4b835bc1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "75f3039413e171ec8fd41216dcf1760fe3c787b2f3fbab640cac6d498f419157"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "63f00f6d2c1411c280f9c2723b53b00f8c9af44c270b107b812aeb778404b20e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/paired_nominal_response.json",
+      "sha256": "05d959c4451b19d40fa243f0074426c8ece8967fbb3848e6436dbad48f7588c5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/moderate/analysis/summary.json",
+      "sha256": "d8924a9148cbc93a0aed989023dd1012ca10e243b4a2d5fba8dac952994cebcf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/REPORT.md",
+      "sha256": "4f4413991a505bc6451545b153e4c1a06aac14ddc31c8b853b5db993bf3c6278"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/cases.csv",
+      "sha256": "3872667800e830f73aacdf53bcc07e1035ac302c6cb8e8d16dc3a79e50d93dfe"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1.pdf",
+      "sha256": "0ca675c6cfd127f9f4b3792b971e98b7bd1c5f9406b5a971b1832a4c07c3f6b3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1.png",
+      "sha256": "6032a20f66c628f648b89b01dda363e6223fc70375ee97bfdfea45684af3d4f8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "888417d258d53810afd81829f91cfe99971c831deb2e4d81a8f76f2f256c2c44"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "26d9eb21f0b88ec0f1546403192ea68c480a2797f828d2ce61401c4bb4f69d62"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "0d4599d1907230a416fd2237663a8aeec789b865ef78dcda754ca20830ef34ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "830ad5ed1712b0335eeadff2fb07d5d242876ad2c4027ae4fd56500e31de2436"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "bcd0ef53d4b32b89dd5dfdd5bca7f498ee726488d4ee8e165f519bdbe5bdc39c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "e44e7327f36e654336ec79fd6918d229a564beed9468b2135e73aa5b70726217"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "b9d2b20d2e076e35c45aeccd4844da491a51f2337ae648454bac7042f6c9472b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "b1f8fcaef44325f42f53fc04e21b3361a451ad29e4dea8ce82c2d0ec16988495"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "bd4bf2f00d3345846b11f02e84f96c6c502c9f0402ed8b9dd35e585f71e7c478"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "fc356e6fd4b9b6962d95d68d36a81f3ac94ce732dfa98c4683a17d88928f9622"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2.pdf",
+      "sha256": "76e67f548eef69d842398879e82c2cfca8b2be89378c9b928a3ddf7a3ea6d894"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2.png",
+      "sha256": "ef8e7f9e790279480c98ca578ebddfde62c38461b441701e8fb3fea5f06580d4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "afe8df740833645843e9a221b7d980a4aab01ac65c4f1958c106ae92b1b5a75c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "afaf6ac72dc3222160c87768b2eea6ebe8a4ab51aeb764f5c5ed017526b2406b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "fb9b0b17a7cf9aad279d422e34c4030940415d104365ea1aad6505e815b4191f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "168def736c743509b38c35d455078d04f8757ad348e7dcc9a93a421099ac4ba0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "81617dacac186af39d9bcf5cf945b528aaf6e9b075cc381f3295d79251ecfa2f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "d47df2fad8978a5892155478987402029752f36c060cca5f444966670c6d3182"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "447eb094de2cea4f2e851dc17c0805e2d4c7211c404b6f35632400abee5d0629"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "fba9d94979c3d5324da30264c5678f03d52f7ff9857b138726257cb2ee975bdf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "3b41b1e34c376b077036fe0f9263dab24694302fb5e023ced6a38a4e770c3325"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "029c722f868021f13addae3f8cac0422abd7ab64789bd974a4b63918c731488e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1.pdf",
+      "sha256": "8dcd3f198bf38929039b88e66fdc24a0f1bfeb03d83456e04a1ed58991379053"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1.png",
+      "sha256": "570c38092f03dced145deb2c45f8097134ac959f258a20b319fc39fdabdf3691"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "9feb067392453c2efb2efd14867b894f9dec95982174160df525141ef8c7db4a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "4dbf6bf3fef7358a21d57582e0955baa0fc7c6ad2edac763ce4aa023038df047"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "31078019b6ec7d1c73250896ffcc1bf455d1934bfae23b1e6b1c9480b250d705"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "331a898313ea5e5fce86061cfd864a775d99ae1febe8fa6f9152b0e1cbe2d55e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "ac58b966c0a107ce39128ccfa527f64118495d598348ad5cdabfaecc785cde14"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "a2c80b4bd2e338e46fba5b412e2e0326ec77e782b1186c7ce30e37a1f357f7d5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "c50e3dc3aa8553feef1685c12ed7c061104d3613eb6e2a4007f7d0a3fd419758"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "62393f46260063c167bfe2d53c691cb670f4be3dbadb74decce5904205d7872a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "ec2481d2b6f1b6700fbfb050d652ace762ada8387af798e5047a1a5261940288"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "a425140099056828517d633dbbbf48e951cc12985ea8d20c6468688177b5cc02"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2.pdf",
+      "sha256": "6a786f26b83c11f799475c01de508bff8eccc7a10945fc5a87a26694a606a877"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2.png",
+      "sha256": "390bfca386589d065c173bcb5e040ee6688cf952d871ec30e0ab225dc9dc129f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "b93cdde74a94a73b87d4d54a7ce8b9b795a650bc8e3f9eb946e863ed87d9405f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "593b1b6755e83a39efec1ddb9284a4197fbfcca93c07053cf1be4f07834b1284"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "85a3d4edb9d9ba9340ff42ba2bbbd48d58e54007192c00cc5c59f688379623a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "b61c47b5d8837739ac27d5c53bd96dce7e824adbb69038d33f193190b4df4ea7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "e47da24a2588bf4b25a901f6b3fce087ddb514f3818e2d1f9535ea6a5e05f0a5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "33e2dc5a83896200d5215d0913cb6876c469f2b2b2a7f49adc8b56195db6eebc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "99796321a2210e13cda2d001470631e9374e62ee58ff9351795cfb5a41385575"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "1291afd6bd2f97bd663df4d86a27ba903a0d28f69cb90a82d4309a9439a59fbf"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "86467ead427ad038bcc6521a24edf568a687ccafd8bd09234ad180eebf75d813"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/left90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "d15520e1f9279c4ce2988d00d2a6c0d93044e1962d04021bcfb404da14ee00d1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1.pdf",
+      "sha256": "a181d06f7282a52a5d0190cab9eb907545588dd1c843a46e869a517d982c3832"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1.png",
+      "sha256": "e3cf8c5918bd7bf3296d97709c30ac193a2f56a38a528e9a5b55526e02ea757a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "228d56de554548a1488cfa4f4b09bfdae7a6c132e29e164324b26a241257bcc0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.25_reward.png",
+      "sha256": "852e210af9e739771daf024cf81a18fe1a4c36da3b38275c86516da86029e535"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "67880d428facd85f7f8cc55500d2e65f992e0d6a66e2166f06ce398054d36fc1"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.5_reward.png",
+      "sha256": "28f73f86f0b10b670e0adb2faea6dc5f418ad764e2df4fa8be843fe4dbc3d07a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "e8e1de08702bf9f8f1d2fb017590d6863d7dd2e779528f62c2424bda634f219d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0.75_reward.png",
+      "sha256": "318e931824f5b60b79f45a4502a1c6feeeac94265d0414370b2e6d63113a072d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.pdf",
+      "sha256": "f2f1faece82587212b15e2e8d896fc179cbdadfee38d9683252ba2bf583b8159"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a0_reward.png",
+      "sha256": "bd8f96c19d3023a0cdf7fc6a4d6e38fc2aadf63460b72d1c539cfa9f502a73b7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.pdf",
+      "sha256": "7cef64d200ea97b3924365019c320791af6ce4062acb5879587d4e0ccba6ae2a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t1_a1_reward.png",
+      "sha256": "7a2fbe96b383153127ed67b669577a590801e35c4c7743651f8e63ee0ad32dd2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2.pdf",
+      "sha256": "4e3da11f4e3411077a28e987aae7843eec6c814f6651337fd1eb7661376d47ab"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2.png",
+      "sha256": "ce151b38a7bfe6a93c4d8a4c9fa0ed77badb1fbafbdcf7cb17eca7d8422998a0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.pdf",
+      "sha256": "4ffccbef20c4ae893300a3e10656cbc17603cf5d6a906bcd40a62b48c6422413"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.25_reward.png",
+      "sha256": "e7efe6b52e46e6338fa59b70c94a9554cfa2233a8c207a9ec04fd5fddb654d9e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.pdf",
+      "sha256": "5a947d61376b10b4dd6c288380667b8bb7c6b0aef2ccbe517771ca3f929ab161"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.5_reward.png",
+      "sha256": "ee4a2fec54d2903c70f7a63c06d625d73e6ec81e7d638f502a120590115192a3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.pdf",
+      "sha256": "b671f7aa627c8eed893e6a88e32b6104eb998fe5fa2da1411d9688b3944b3c66"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0.75_reward.png",
+      "sha256": "c069570f8404c2516c1aa290af78c120732876a79625458766c9d058b4cddca6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.pdf",
+      "sha256": "879cf368a26657f3eaeeda8066e511dc2cdca20b776db48a1c9f4e7b16547ff2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a0_reward.png",
+      "sha256": "2bac698f6d84aa29b04be9269074f3a67ac63d20eeb8c482330680a467211e22"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.pdf",
+      "sha256": "a7a144d895b6006520f1e39f9285ec67f3ff4169c39bae5d618c31bf422132b6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.6_t2_a1_reward.png",
+      "sha256": "330ec13358ae06c8a03b2cd8ac34a3f21577142e0e666d81bb423a5342844f5e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1.pdf",
+      "sha256": "dc4ba6ba1a5ee8371bff25510948b78fa9453caed181dd778112c0ca969ef9a7"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1.png",
+      "sha256": "bac911b93a8c6ffa796fb0a0c46fb1766521c619e80a9d8368ae21952d1dac2d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "e89c40bed0bfb93c1eeac3ec1ab6928d282f09e002141db3e15f3e129e39d0a8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.25_reward.png",
+      "sha256": "6b4c289e3a60ac3fb70e4902c80eb0bc7b08747c7b90bf9965a4a158ee7db9a2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "c52133bac8656265b50e9e1f2f9871a71e1692d61f34db9d5c006aca12f82d4e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.5_reward.png",
+      "sha256": "108624949850246547a6e23831ce1d9623eb20d23c1fbd985ccc163c3fd7cb4d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "5c85b44d7fe793a99d03ba36a2c211793aea62b1c27207a796560154a8cbfe84"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0.75_reward.png",
+      "sha256": "2a1bdcddb016a65ab238648bfea9a149117103cc390545a31a66e2d405d88de3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.pdf",
+      "sha256": "c7decc5b8923f804dbd885c15a33cc42e8b4f0589555afd8e074f10a76702e1a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a0_reward.png",
+      "sha256": "85851c2de52eb73538b1d89208ef03b2d8b915cc7c81890de1eca96d1fd0268b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.pdf",
+      "sha256": "fa170fd38bbc378e7a3a029e8bd161402479c2eb771758b58626338fe4374848"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t1_a1_reward.png",
+      "sha256": "9b9566141fcc2fcd9579a511f0f65979b29d2fbffdd37d5f7840fecc5f33f02e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2.pdf",
+      "sha256": "843055838bccb9cdf34143016dc1dbea83a0637694eae045f14f7223f9c24321"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2.png",
+      "sha256": "2f0620642ad203ba51824a8bb11238614c9af2088d1993ea273d1b3abe75821b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.pdf",
+      "sha256": "eef0595de667a47ccde275abf0abc70e880f1203010b06d0bb82db19fa156fec"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.25_reward.png",
+      "sha256": "79240ecd7a077c43fab7b28db739590f289f984f572d1265ca3181f0d04a548b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.pdf",
+      "sha256": "ed6477a0378f8636a9406443f10f3705c314ffc4a7e3f292e7d3ca77574b92f6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.5_reward.png",
+      "sha256": "f565bdc13ea70b2517db165fd50dc8d09fab95fd275d713534c8217702a2870d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.pdf",
+      "sha256": "50791bb69463cc1e46ba9647a42e34aa9e97d043219b6e4535c5af9ff8cda9b2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0.75_reward.png",
+      "sha256": "cb1aec98c5684d89d8128b151d5f24dff61db4ff80ace46e170992e98206e1b2"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.pdf",
+      "sha256": "788fca3ed8d5ad1269ebd0987cd3786dda26327e7a01ed7685c7aad6d8173d98"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a0_reward.png",
+      "sha256": "0e162e8630768b8e36daa169694598fa26998fc9ec70f0e9ca204fa486a0040a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.pdf",
+      "sha256": "3a69854fea88e6576e7e0540853d2b939e447948da27775572fe55c82295921f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/curves/right90_R1p8_v2.8_t2_a1_reward.png",
+      "sha256": "e76dd4f2fe1793b00b55d78da7596be136a821bca57270f3b7497ba7d31dc0a6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/paired_nominal_response.json",
+      "sha256": "9c3f5bcf743d8a95c5552473daafc6dc987898d10b4068e073abf516b7614577"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/strong/analysis/summary.json",
+      "sha256": "3c82951b1d354a7269e4c1d8983bd8148816d4e65935d8e722425d75110ed2e6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/REPORT.md",
+      "sha256": "fd8af6fbcc9850ff6c45b2e51326f18e8df6c7ec292da682272ed2c3917a7e1a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/cases.csv",
+      "sha256": "76280aeebdaeeca7eafe90835a638d906cfdbf6bfbe00ecb97140e6afe9e60b5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1.pdf",
+      "sha256": "563b3915cf3a1cd4ef2b0845abf7b76fa9b7cebcb49fe6783ee85365c9fb410a"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1.png",
+      "sha256": "f36a3c5606d44ce31b184d134b6c46d313d5f8c83df47d45999113bf35a299da"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.25_reward.pdf",
+      "sha256": "cd6cc1abbf1e9a874652b05f98b9fe63dadff319788966fb02867713981557ec"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.25_reward.png",
+      "sha256": "fce24448037739878affc86154f9bebdebdcac9f0ae926e7b88f3dcec82ec434"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.5_reward.pdf",
+      "sha256": "9b90c04878a5ec748ddaefb748d15c8471da629e2887a43bbe82cadc821b7431"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.5_reward.png",
+      "sha256": "3be719880e3851c82a3269ed0e9fa935610b998c11921df7a5beddee3b54afc6"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.75_reward.pdf",
+      "sha256": "365f7312232b4129fb63f1a9d1cc1b74f83cd04f4598b4a3dd6bcc34f40ea32d"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0.75_reward.png",
+      "sha256": "a65c125f057956d83dc12c665af5f465b4ea8c77b4e45b9cb0e9d34a9f040446"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0_reward.pdf",
+      "sha256": "319136a46b25beb56197ab09bb019bc8d402e11ea863fc863bc1c041f9a2cd0f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a0_reward.png",
+      "sha256": "e49196a8d528442e63462495d9a5191ab8828f9b7c3cdb8c293106318645c840"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a1_reward.pdf",
+      "sha256": "6247f913459be4977668393338153ff05cf8075356f5407a2ba34e188d360db3"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.6_t1_a1_reward.png",
+      "sha256": "8efbc07c24811899857bc07c531fce31051d1803456c127e5156e203787b5226"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1.pdf",
+      "sha256": "172f30b1ce693665bf4bb25de6cfdb4543fc895b477d15571b663c44c319c417"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1.png",
+      "sha256": "a264f7d82178f4271537af41636169f20ba450ffe9c9817a65848e6eb7b4e092"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.25_reward.pdf",
+      "sha256": "e6ad0f93bf37ca727e2899e1477eb5735de10b84c05c5b4966aa8afafbfa82ea"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.25_reward.png",
+      "sha256": "5b88484f76d402965ccded09dcf11b2c6d395bd0dba7462144cde096d646eadc"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.5_reward.pdf",
+      "sha256": "b47170fed48012a51f38ed2d381e9b6910ec56ffadac59b5a3f26f528ed47c51"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.5_reward.png",
+      "sha256": "3c69ad2af58d5f7f49f7f8a8683a38c0045cabacd443a119cc98a7cae9c9e2b8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.75_reward.pdf",
+      "sha256": "43cbaf8dc2885c37013ee528b4501361a977bb7ffc7a5c74a3e52bd56410314c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0.75_reward.png",
+      "sha256": "159d3c65afe29e55717d0a6bd682713d6546f099f421d807b12022808321e842"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0_reward.pdf",
+      "sha256": "36f2cb1d01af85c7b990afa37333314a47a7bf81bd8803ed6a6d379a874e6426"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a0_reward.png",
+      "sha256": "a6553cfa535099ae128359cb8254a9ab3321348b309dbc950c5d5becf8fc644f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a1_reward.pdf",
+      "sha256": "4652b9412013413c9e8d13e60007af0db0796c052d70df6064129e3c578c025f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/curves/straight_v2.8_t1_a1_reward.png",
+      "sha256": "51767bf166920e86dcba0b6ed8fe5600c75edfc38c848585548ea1ec767d595c"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/paired_nominal_response.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_coordination_teaching_standard_dev_v1/straight/analysis/summary.json",
+      "sha256": "1451376074684c1f237a0bc2829307221a6e76e9ce2ceb6123ba9ba8029ae30e"
+    }
+  ]
+}
