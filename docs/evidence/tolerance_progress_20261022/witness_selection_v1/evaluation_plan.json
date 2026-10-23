@@ -1,0 +1,33 @@
+{
+  "training": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_witness_selection_v1",
+  "training_plan_sha256": "a686848e1244862ec3c542ebf50a311ae4e86dad71cc2c991a06144780536f8c",
+  "wait_for_gpu": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/status.json",
+  "panels": {
+    "strong": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/strong/declaration.json",
+      "source_sha256": "6bece353f78dd39b047952bc48a291cb6d5812839b2236d530bef8544f75c5dd",
+      "cases_per_policy": 200
+    },
+    "straight": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_post_v1/straight/declaration.json",
+      "source_sha256": "948fdd501f0aefcbc2f60de8333e52065531f10ae5ce268b718cd89af2be6a54",
+      "cases_per_policy": 10
+    },
+    "low_speed": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_failure_check_v1/declaration.json",
+      "source_sha256": "4ccd639d33d5e0da0ccfdecd51508ca9bff5d0c9fb1e463aeb0f66909f006a88",
+      "cases_per_policy": 60
+    }
+  },
+  "seeds": [
+    918501,
+    918502,
+    918503
+  ],
+  "primary": "witness minus random_success paired task recovery on strong200; each seed shown; no best selection",
+  "secondary": "nominal retention and low-speed60; continuous metrics; raw original parent reference is descriptive",
+  "fresh_cases": 1620,
+  "maximum_lower_ticks": 3240000,
+  "training_steps": 0,
+  "role": "previously used DEV, not independent TEST"
+}
