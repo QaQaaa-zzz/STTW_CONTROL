@@ -1,5 +1,8 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 2026-10-23 主线复核：一个α条件中层网络在速度—路径取舍下保持平衡并完成受扰后的原始任务。容扰度引导训练尚无额外收益证据，不再自动扫采样参数。当前完整尾段训练只检验4s片段是否漏学后续恢复，不能把其收益归于公式。标准配对评测后还需核验已定位的低速小α失败场景。当前决定与实时状态统一见[研究台账](/home/qy/STTW_CONTROL/research-hub/PROJECT_STATE.md)的“跟进结果与主线纠偏”；下列运行状态均为历史快照。
+
+
 > 同状态机制对照完成：[48例结果与XY](evidence/tolerance_progress_20261022/preference_control_intervention/README.md)。单通道干预有净改善也有退化，不直接部署。已启动[完整恢复尾段训练](evidence/tolerance_progress_20261022/preference_full_tail/README.md)，只改变片段上限，检验尾段学习；尚无新策略结果。
 
 > 新场景验证完成（2026-10-23）：[240例指标、96张轨迹/奖励图与控制诊断](evidence/tolerance_progress_20261022/preference_task_generalization/README.md)。两策略无扰任务各40/40，α速度偏好8/8组合保留；低速小α受扰恢复不足。已接续48例同状态有限干预诊断，实际结果待回收，不重新调容扰度代理。
@@ -35,7 +38,7 @@
 
 ![左转局部边界：实际XY与侧倾](evidence/tolerance_progress_20261022/calibration/boundary_focus_v1/xy_and_roll.png)
 
-本报告是截至 2026-10-22T18:59:10.005456-07:00 的发布快照；运行状态以原机实时文件为准。代码分支：`experiment/tolerance-calibration-20261022`。单网络α成果在独立分支 `experiment/path-conflict-exposure-v1`，本轮容扰度实验使用两个独立中层端点网络和冻结local300。
+以下正文是截至 2026-10-22T18:59:10.005456-07:00 的历史发布快照；运行状态以原机实时文件为准。代码分支：`experiment/tolerance-calibration-20261022`。单网络α成果在独立分支 `experiment/path-conflict-exposure-v1`，本轮容扰度实验使用两个独立中层端点网络和冻结local300。
 
 ## 1. 我们具体要解决什么问题
 
