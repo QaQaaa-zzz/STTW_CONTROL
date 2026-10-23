@@ -1,0 +1,55 @@
+{
+  "source_sha256": {
+    "runs/preference_full_tail_v1/uniform/metrics.jsonl": "447acc8475122ae9287e2ffd8bd6a579570b1d0ef9bd14908b87c61a4534d18f",
+    "runs/preference_full_tail_length75_v1/uniform/metrics.jsonl": "0114202eb30a1d60223dd0709adeca80022f0296b7aa22783fad6c424bfa9f5c"
+  },
+  "new_updates": 50,
+  "new_policy_transitions": 3276800,
+  "windows": {
+    "ppo1_5": {
+      "mean_step_reward": -0.8423235565423965,
+      "domain_failures": 13.8,
+      "physical_failures": 0,
+      "parent_kl": 0.0029057563428068534,
+      "value_loss": 66107.23703575134,
+      "pulse_fired": 798
+    },
+    "ppo21_25": {
+      "mean_step_reward": -0.917331051826477,
+      "domain_failures": 15.4,
+      "physical_failures": 0,
+      "parent_kl": 0.0036232117141480557,
+      "value_loss": 45547.80732421875,
+      "pulse_fired": 711
+    },
+    "ppo26_30": {
+      "mean_step_reward": -1.073908621072769,
+      "domain_failures": 18.4,
+      "physical_failures": 0,
+      "parent_kl": 0.0052105860930169,
+      "value_loss": 56749.58813171387,
+      "pulse_fired": 875
+    },
+    "ppo46_50": {
+      "mean_step_reward": -0.9840420007705688,
+      "domain_failures": 16.8,
+      "physical_failures": 0,
+      "parent_kl": 0.005798578416579403,
+      "value_loss": 39024.51064453125,
+      "pulse_fired": 668
+    },
+    "ppo71_75": {
+      "mean_step_reward": -0.8160006701946259,
+      "domain_failures": 13.6,
+      "physical_failures": 0,
+      "parent_kl": 0.01185382218536688,
+      "value_loss": 31573.028564453125,
+      "pulse_fired": 707
+    }
+  },
+  "new_pulses": 7259,
+  "hard_kl_stops": 0,
+  "nonfinite_stops": 0,
+  "sample_seconds": 2028.7720728209533,
+  "optimize_seconds": 5.425691042095423
+}
