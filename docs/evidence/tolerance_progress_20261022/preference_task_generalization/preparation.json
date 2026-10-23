@@ -1,0 +1,38 @@
+{
+  "state": "prepared_not_launched",
+  "cases": 240,
+  "training_steps": 0,
+  "maximum_lower_ticks": 480000,
+  "geometry_checks": [
+    {
+      "route": "left60_R2p2",
+      "goal_s": 9.803834915161133,
+      "turn_end_s": 5.803834438323975,
+      "horizon_s": 10.0,
+      "nominal_distance_at_min_speed": 23.5
+    },
+    {
+      "route": "right60_R2p2",
+      "goal_s": 9.803834915161133,
+      "turn_end_s": 5.803834438323975,
+      "horizon_s": 10.0,
+      "nominal_distance_at_min_speed": 23.5
+    },
+    {
+      "route": "left120_R2p5",
+      "goal_s": 12.735987663269043,
+      "turn_end_s": 8.735987663269043,
+      "horizon_s": 10.0,
+      "nominal_distance_at_min_speed": 23.5
+    },
+    {
+      "route": "right120_R2p5",
+      "goal_s": 12.735987663269043,
+      "turn_end_s": 8.735987663269043,
+      "horizon_s": 10.0,
+      "nominal_distance_at_min_speed": 23.5
+    }
+  ],
+  "model_identity_verified": true,
+  "scope": "path construction and actor schema only; no physics rollout"
+}

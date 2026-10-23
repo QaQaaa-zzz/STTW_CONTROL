@@ -1,0 +1,795 @@
+{
+  "scope": "all240simulationscomplete;renderingpending",
+  "by_alpha": [
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "alpha": 0.0,
+      "n": 12,
+      "task": 9,
+      "working": 8,
+      "domain": 2
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "alpha": 0.125,
+      "n": 12,
+      "task": 10,
+      "working": 9,
+      "domain": 2
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "alpha": 0.5,
+      "n": 12,
+      "task": 11,
+      "working": 10,
+      "domain": 1
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "alpha": 0.875,
+      "n": 12,
+      "task": 11,
+      "working": 8,
+      "domain": 0
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "alpha": 1.0,
+      "n": 12,
+      "task": 10,
+      "working": 8,
+      "domain": 0
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "alpha": 0.0,
+      "n": 12,
+      "task": 9,
+      "working": 8,
+      "domain": 2
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "alpha": 0.125,
+      "n": 12,
+      "task": 10,
+      "working": 9,
+      "domain": 2
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "alpha": 0.5,
+      "n": 12,
+      "task": 11,
+      "working": 10,
+      "domain": 1
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "alpha": 0.875,
+      "n": 12,
+      "task": 11,
+      "working": 9,
+      "domain": 0
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "alpha": 1.0,
+      "n": 12,
+      "task": 11,
+      "working": 8,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "alpha": 0.0,
+      "n": 12,
+      "task": 8,
+      "working": 4,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "alpha": 0.125,
+      "n": 12,
+      "task": 9,
+      "working": 5,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "alpha": 0.5,
+      "n": 12,
+      "task": 12,
+      "working": 6,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "alpha": 0.875,
+      "n": 12,
+      "task": 12,
+      "working": 6,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "alpha": 1.0,
+      "n": 12,
+      "task": 12,
+      "working": 5,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "alpha": 0.0,
+      "n": 12,
+      "task": 8,
+      "working": 4,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "alpha": 0.125,
+      "n": 12,
+      "task": 9,
+      "working": 5,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "alpha": 0.5,
+      "n": 12,
+      "task": 12,
+      "working": 6,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "alpha": 0.875,
+      "n": 12,
+      "task": 12,
+      "working": 6,
+      "domain": 0
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "alpha": 1.0,
+      "n": 12,
+      "task": 12,
+      "working": 6,
+      "domain": 0
+    }
+  ],
+  "nominal": [
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "route": "left60_R2p2",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.11181941628456116,
+          "speed_rmse": 0.2281123399734497,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.10803921520709991,
+          "speed_rmse": 0.21193671226501465,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.09350673854351044,
+          "speed_rmse": 0.1550784558057785,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.07928767055273056,
+          "speed_rmse": 0.08933772146701813,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.07636424899101257,
+          "speed_rmse": 0.06665438413619995,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "route": "left60_R2p2",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.12895573675632477,
+          "speed_rmse": 0.289372056722641,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.12105042487382889,
+          "speed_rmse": 0.27502918243408203,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.09924644231796265,
+          "speed_rmse": 0.21293722093105316,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.08508053421974182,
+          "speed_rmse": 0.1278441995382309,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.08403979986906052,
+          "speed_rmse": 0.09947151690721512,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "route": "right60_R2p2",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10550456494092941,
+          "speed_rmse": 0.20202785730361938,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.0905296802520752,
+          "speed_rmse": 0.19442103803157806,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.04687180742621422,
+          "speed_rmse": 0.12941524386405945,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.09731371700763702,
+          "speed_rmse": 0.02882426604628563,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.11902561783790588,
+          "speed_rmse": 0.017354575917124748,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "u325",
+      "route": "right60_R2p2",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.1003551185131073,
+          "speed_rmse": 0.3653145730495453,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.07725360244512558,
+          "speed_rmse": 0.345741331577301,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.0728624239563942,
+          "speed_rmse": 0.23010820150375366,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.1870528608560562,
+          "speed_rmse": 0.053836990147829056,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.21712270379066467,
+          "speed_rmse": 0.028870461508631706,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "route": "left60_R2p2",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10708215832710266,
+          "speed_rmse": 0.23719897866249084,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.10546580702066422,
+          "speed_rmse": 0.22609475255012512,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.09326059371232986,
+          "speed_rmse": 0.16978882253170013,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.08054426312446594,
+          "speed_rmse": 0.10445476323366165,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.07783913612365723,
+          "speed_rmse": 0.08174153417348862,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "route": "left60_R2p2",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.1256953477859497,
+          "speed_rmse": 0.29648110270500183,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.1188783049583435,
+          "speed_rmse": 0.2823168933391571,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.10060610622167587,
+          "speed_rmse": 0.22835655510425568,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.08809749037027359,
+          "speed_rmse": 0.14702993631362915,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.0866488441824913,
+          "speed_rmse": 0.11851031333208084,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "route": "right60_R2p2",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10752777755260468,
+          "speed_rmse": 0.21384297311306,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.09196114540100098,
+          "speed_rmse": 0.20269201695919037,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.0487193837761879,
+          "speed_rmse": 0.14054352045059204,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.09237100183963776,
+          "speed_rmse": 0.04241661727428436,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.11640126258134842,
+          "speed_rmse": 0.022166455164551735,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle60_R2p2",
+      "policy": "shuffled",
+      "route": "right60_R2p2",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10015120357275009,
+          "speed_rmse": 0.3693017065525055,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.07752563804388046,
+          "speed_rmse": 0.3505564033985138,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.07152875512838364,
+          "speed_rmse": 0.2420600801706314,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.1840730905532837,
+          "speed_rmse": 0.0724254921078682,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.2163591831922531,
+          "speed_rmse": 0.03592099994421005,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "route": "left120_R2p5",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.11427048593759537,
+          "speed_rmse": 0.22223950922489166,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.10706178098917007,
+          "speed_rmse": 0.20798513293266296,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.08331111073493958,
+          "speed_rmse": 0.14904887974262238,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.11081856489181519,
+          "speed_rmse": 0.0658184140920639,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.13436885178089142,
+          "speed_rmse": 0.04724641144275665,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "route": "left120_R2p5",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.13631312549114227,
+          "speed_rmse": 0.33243313431739807,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.1202666386961937,
+          "speed_rmse": 0.3073367476463318,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.13475874066352844,
+          "speed_rmse": 0.18572479486465454,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.22940342128276825,
+          "speed_rmse": 0.09189708530902863,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.26262155175209045,
+          "speed_rmse": 0.0690581202507019,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "route": "right120_R2p5",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10303974896669388,
+          "speed_rmse": 0.23275326192378998,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.07717795670032501,
+          "speed_rmse": 0.20465102791786194,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.10050223767757416,
+          "speed_rmse": 0.1182701513171196,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.24420498311519623,
+          "speed_rmse": 0.02510845847427845,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.2842957377433777,
+          "speed_rmse": 0.015793681144714355,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "u325",
+      "route": "right120_R2p5",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.08335257321596146,
+          "speed_rmse": 0.3813353180885315,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.06607938557863235,
+          "speed_rmse": 0.36147385835647583,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.2237398624420166,
+          "speed_rmse": 0.21557284891605377,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.45012566447257996,
+          "speed_rmse": 0.04945001378655434,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.5304371118545532,
+          "speed_rmse": 0.02736981399357319,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "route": "left120_R2p5",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10989107191562653,
+          "speed_rmse": 0.22813937067985535,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.10381237417459488,
+          "speed_rmse": 0.2137947380542755,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.08313551545143127,
+          "speed_rmse": 0.15921235084533691,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.1128218024969101,
+          "speed_rmse": 0.0765608549118042,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.13658379018306732,
+          "speed_rmse": 0.056758470833301544,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "route": "left120_R2p5",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.132246732711792,
+          "speed_rmse": 0.3328305780887604,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.11819729208946228,
+          "speed_rmse": 0.31118422746658325,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.1379997283220291,
+          "speed_rmse": 0.19842664897441864,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.23208986222743988,
+          "speed_rmse": 0.10461614280939102,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.2648145258426666,
+          "speed_rmse": 0.08160509169101715,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "route": "right120_R2p5",
+      "speed": 2.35,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.10116847604513168,
+          "speed_rmse": 0.2549254298210144,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.07578695565462112,
+          "speed_rmse": 0.22468741238117218,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.10128993541002274,
+          "speed_rmse": 0.14025576412677765,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.24183453619480133,
+          "speed_rmse": 0.033731814473867416,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.2810395061969757,
+          "speed_rmse": 0.021790828555822372,
+          "task": true
+        }
+      ]
+    },
+    {
+      "panel": "angle120_R2p5",
+      "policy": "shuffled",
+      "route": "right120_R2p5",
+      "speed": 2.75,
+      "values": [
+        {
+          "alpha": 0.0,
+          "path_rmse": 0.08132507652044296,
+          "speed_rmse": 0.3937930464744568,
+          "task": true
+        },
+        {
+          "alpha": 0.125,
+          "path_rmse": 0.07096938788890839,
+          "speed_rmse": 0.3778191804885864,
+          "task": true
+        },
+        {
+          "alpha": 0.5,
+          "path_rmse": 0.22296050190925598,
+          "speed_rmse": 0.23549792170524597,
+          "task": true
+        },
+        {
+          "alpha": 0.875,
+          "path_rmse": 0.4496244490146637,
+          "speed_rmse": 0.06759575009346008,
+          "task": true
+        },
+        {
+          "alpha": 1.0,
+          "path_rmse": 0.5254377722740173,
+          "speed_rmse": 0.03548932820558548,
+          "task": true
+        }
+      ]
+    }
+  ]
+}

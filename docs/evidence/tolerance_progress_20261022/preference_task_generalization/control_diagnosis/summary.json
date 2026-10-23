@@ -1,0 +1,1085 @@
+{
+  "scope": "offline120degcontrolresponses;no causal intervention",
+  "cases": [
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "path_rms_after5": 0.03614061325788498,
+      "nominal_steer_rms_after5": 0.01310940645635128,
+      "correction_steer_rms_after5": 0.013163977302610874,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.388883113861084,
+      "speed_reference_max_after5": 2.3925375938415527
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "path_rms_after5": 0.10214990377426147,
+      "nominal_steer_rms_after5": 0.06239096075296402,
+      "correction_steer_rms_after5": 0.024902749806642532,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.1831958293914795,
+      "speed_reference_max_after5": 2.3940844535827637
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "path_rms_after5": 0.23466403782367706,
+      "nominal_steer_rms_after5": 0.10754919797182083,
+      "correction_steer_rms_after5": 0.0375070795416832,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.1149892807006836,
+      "speed_reference_max_after5": 2.398895263671875
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.5_t2_f+0",
+      "path_rms_after5": 0.02289304882287979,
+      "nominal_steer_rms_after5": 0.007115972228348255,
+      "correction_steer_rms_after5": 0.008178750053048134,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.392258644104004,
+      "speed_reference_max_after5": 2.3939316272735596
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.5_t2_f+20",
+      "path_rms_after5": 0.017306417226791382,
+      "nominal_steer_rms_after5": 0.011189110577106476,
+      "correction_steer_rms_after5": 0.007306023966521025,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3724706172943115,
+      "speed_reference_max_after5": 2.394073963165283
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.5_t2_f-20",
+      "path_rms_after5": 0.028938112780451775,
+      "nominal_steer_rms_after5": 0.005122687201946974,
+      "correction_steer_rms_after5": 0.00545967323705554,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3901591300964355,
+      "speed_reference_max_after5": 2.394068717956543
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.875_t2_f+0",
+      "path_rms_after5": 0.033888280391693115,
+      "nominal_steer_rms_after5": 0.0036003461573272943,
+      "correction_steer_rms_after5": 0.005998110398650169,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3934051990509033,
+      "speed_reference_max_after5": 2.394127130508423
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.875_t2_f+20",
+      "path_rms_after5": 0.06363645941019058,
+      "nominal_steer_rms_after5": 0.0059628658927977085,
+      "correction_steer_rms_after5": 0.010493285953998566,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.391028881072998,
+      "speed_reference_max_after5": 2.394052505493164
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0.875_t2_f-20",
+      "path_rms_after5": 0.01956799253821373,
+      "nominal_steer_rms_after5": 0.0028810950461775064,
+      "correction_steer_rms_after5": 0.003766109934076667,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.393663167953491,
+      "speed_reference_max_after5": 2.3941290378570557
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0_t2_f+0",
+      "path_rms_after5": 0.040017854422330856,
+      "nominal_steer_rms_after5": 0.014677682891488075,
+      "correction_steer_rms_after5": 0.014516922645270824,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3870811462402344,
+      "speed_reference_max_after5": 2.391594886779785
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0_t2_f+20",
+      "path_rms_after5": 0.2353530377149582,
+      "nominal_steer_rms_after5": 0.12845322489738464,
+      "correction_steer_rms_after5": 0.042786605656147,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.0757932662963867,
+      "speed_reference_max_after5": 2.398770332336426
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a0_t2_f-20",
+      "path_rms_after5": 0.4137789309024811,
+      "nominal_steer_rms_after5": 0.14919377863407135,
+      "correction_steer_rms_after5": 0.05300947278738022,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.9913302659988403,
+      "speed_reference_max_after5": 2.3975985050201416
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a1_t2_f+0",
+      "path_rms_after5": 0.048638369888067245,
+      "nominal_steer_rms_after5": 0.006824576761573553,
+      "correction_steer_rms_after5": 0.008432759903371334,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3928513526916504,
+      "speed_reference_max_after5": 2.3940439224243164
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a1_t2_f+20",
+      "path_rms_after5": 0.06815279275178909,
+      "nominal_steer_rms_after5": 0.008058611303567886,
+      "correction_steer_rms_after5": 0.011213562451303005,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3909831047058105,
+      "speed_reference_max_after5": 2.3940188884735107
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.35_a1_t2_f-20",
+      "path_rms_after5": 0.03520409017801285,
+      "nominal_steer_rms_after5": 0.006287668831646442,
+      "correction_steer_rms_after5": 0.006719906814396381,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.393357038497925,
+      "speed_reference_max_after5": 2.3940744400024414
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.125_t2_f+0",
+      "path_rms_after5": 0.05676005035638809,
+      "nominal_steer_rms_after5": 0.01605280302464962,
+      "correction_steer_rms_after5": 0.01797192357480526,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.784393787384033,
+      "speed_reference_max_after5": 2.785128355026245
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.125_t2_f+20",
+      "path_rms_after5": 0.05520881712436676,
+      "nominal_steer_rms_after5": 0.01232900470495224,
+      "correction_steer_rms_after5": 0.013217954896390438,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7711756229400635,
+      "speed_reference_max_after5": 2.7852396965026855
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.125_t2_f-20",
+      "path_rms_after5": 0.2504357695579529,
+      "nominal_steer_rms_after5": 0.03263787925243378,
+      "correction_steer_rms_after5": 0.026761943474411964,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.5633745193481445,
+      "speed_reference_max_after5": 2.7892093658447266
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.5_t2_f+0",
+      "path_rms_after5": 0.06952892988920212,
+      "nominal_steer_rms_after5": 0.014685560949146748,
+      "correction_steer_rms_after5": 0.01821163482964039,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7878451347351074,
+      "speed_reference_max_after5": 2.788470983505249
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.5_t2_f+20",
+      "path_rms_after5": 0.059198811650276184,
+      "nominal_steer_rms_after5": 0.013697223737835884,
+      "correction_steer_rms_after5": 0.016621800139546394,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.787848472595215,
+      "speed_reference_max_after5": 2.7881884574890137
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.5_t2_f-20",
+      "path_rms_after5": 0.047344598919153214,
+      "nominal_steer_rms_after5": 0.012335393577814102,
+      "correction_steer_rms_after5": 0.014739534817636013,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.787806510925293,
+      "speed_reference_max_after5": 2.7880985736846924
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.875_t2_f+0",
+      "path_rms_after5": 0.11086154729127884,
+      "nominal_steer_rms_after5": 0.017251349985599518,
+      "correction_steer_rms_after5": 0.022196006029844284,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7884914875030518,
+      "speed_reference_max_after5": 2.7893624305725098
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.875_t2_f+20",
+      "path_rms_after5": 0.0967182070016861,
+      "nominal_steer_rms_after5": 0.015711739659309387,
+      "correction_steer_rms_after5": 0.01990502141416073,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7887027263641357,
+      "speed_reference_max_after5": 2.789346694946289
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0.875_t2_f-20",
+      "path_rms_after5": 0.11069090664386749,
+      "nominal_steer_rms_after5": 0.016982857137918472,
+      "correction_steer_rms_after5": 0.0221649631857872,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.788431167602539,
+      "speed_reference_max_after5": 2.789346933364868
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0_t2_f+0",
+      "path_rms_after5": 0.05898861214518547,
+      "nominal_steer_rms_after5": 0.016847744584083557,
+      "correction_steer_rms_after5": 0.01853293739259243,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7827374935150146,
+      "speed_reference_max_after5": 2.7835028171539307
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0_t2_f+20",
+      "path_rms_after5": 0.08305153250694275,
+      "nominal_steer_rms_after5": 0.014231821522116661,
+      "correction_steer_rms_after5": 0.01355613861232996,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.668398380279541,
+      "speed_reference_max_after5": 2.7854809761047363
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a0_t2_f-20",
+      "path_rms_after5": 0.3469642400741577,
+      "nominal_steer_rms_after5": 0.06128215789794922,
+      "correction_steer_rms_after5": 0.033500317484140396,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.37850022315979,
+      "speed_reference_max_after5": 2.7835049629211426
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a1_t2_f+0",
+      "path_rms_after5": 0.12583333253860474,
+      "nominal_steer_rms_after5": 0.019030028954148293,
+      "correction_steer_rms_after5": 0.024200936779379845,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7880024909973145,
+      "speed_reference_max_after5": 2.7895967960357666
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a1_t2_f+20",
+      "path_rms_after5": 0.1165044829249382,
+      "nominal_steer_rms_after5": 0.01825464516878128,
+      "correction_steer_rms_after5": 0.022713571786880493,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.788165330886841,
+      "speed_reference_max_after5": 2.7895963191986084
+    },
+    {
+      "case": "shuffled_left120_R2p5_v2.75_a1_t2_f-20",
+      "path_rms_after5": 0.13364115357398987,
+      "nominal_steer_rms_after5": 0.01950491964817047,
+      "correction_steer_rms_after5": 0.025374731048941612,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7878341674804688,
+      "speed_reference_max_after5": 2.7895965576171875
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "path_rms_after5": 0.03067043609917164,
+      "nominal_steer_rms_after5": 0.01146565843373537,
+      "correction_steer_rms_after5": 0.01148202270269394,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.390144109725952,
+      "speed_reference_max_after5": 2.3918936252593994
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "path_rms_after5": 0.22399580478668213,
+      "nominal_steer_rms_after5": 0.11623859405517578,
+      "correction_steer_rms_after5": 0.041256826370954514,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.101536512374878,
+      "speed_reference_max_after5": 2.398098945617676
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "path_rms_after5": 0.21393433213233948,
+      "nominal_steer_rms_after5": 0.11684074997901917,
+      "correction_steer_rms_after5": 0.040642835199832916,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.1328258514404297,
+      "speed_reference_max_after5": 2.398024559020996
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.5_t2_f+0",
+      "path_rms_after5": 0.05037475749850273,
+      "nominal_steer_rms_after5": 0.006788552273064852,
+      "correction_steer_rms_after5": 0.007347353268414736,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3908305168151855,
+      "speed_reference_max_after5": 2.3936996459960938
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.5_t2_f+20",
+      "path_rms_after5": 0.02605760097503662,
+      "nominal_steer_rms_after5": 0.005511135328561068,
+      "correction_steer_rms_after5": 0.005461335647851229,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3918097019195557,
+      "speed_reference_max_after5": 2.3936991691589355
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.5_t2_f-20",
+      "path_rms_after5": 0.057954952120780945,
+      "nominal_steer_rms_after5": 0.01464665774255991,
+      "correction_steer_rms_after5": 0.012702361680567265,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.338413953781128,
+      "speed_reference_max_after5": 2.3965487480163574
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.875_t2_f+0",
+      "path_rms_after5": 0.11257077753543854,
+      "nominal_steer_rms_after5": 0.01682412065565586,
+      "correction_steer_rms_after5": 0.019064215943217278,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.388634443283081,
+      "speed_reference_max_after5": 2.3940396308898926
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.875_t2_f+20",
+      "path_rms_after5": 0.13068212568759918,
+      "nominal_steer_rms_after5": 0.018946992233395576,
+      "correction_steer_rms_after5": 0.021921878680586815,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.387627601623535,
+      "speed_reference_max_after5": 2.394047975540161
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0.875_t2_f-20",
+      "path_rms_after5": 0.14156785607337952,
+      "nominal_steer_rms_after5": 0.021308142691850662,
+      "correction_steer_rms_after5": 0.024418316781520844,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3884778022766113,
+      "speed_reference_max_after5": 2.3940341472625732
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0_t2_f+0",
+      "path_rms_after5": 0.0357571616768837,
+      "nominal_steer_rms_after5": 0.013361833058297634,
+      "correction_steer_rms_after5": 0.01371471956372261,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3884661197662354,
+      "speed_reference_max_after5": 2.39080810546875
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0_t2_f+20",
+      "path_rms_after5": 0.37551650404930115,
+      "nominal_steer_rms_after5": 0.14678576588630676,
+      "correction_steer_rms_after5": 0.05335179343819618,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.996556282043457,
+      "speed_reference_max_after5": 2.3984014987945557
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a0_t2_f-20",
+      "path_rms_after5": 0.43088045716285706,
+      "nominal_steer_rms_after5": 0.16130872070789337,
+      "correction_steer_rms_after5": 0.05767744034528732,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.9945586919784546,
+      "speed_reference_max_after5": 2.3982536792755127
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a1_t2_f+0",
+      "path_rms_after5": 0.14142972230911255,
+      "nominal_steer_rms_after5": 0.023615889251232147,
+      "correction_steer_rms_after5": 0.02606881782412529,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3877899646759033,
+      "speed_reference_max_after5": 2.3939902782440186
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a1_t2_f+20",
+      "path_rms_after5": 0.17149129509925842,
+      "nominal_steer_rms_after5": 0.026948029175400734,
+      "correction_steer_rms_after5": 0.03058762103319168,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.385925054550171,
+      "speed_reference_max_after5": 2.3939905166625977
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.35_a1_t2_f-20",
+      "path_rms_after5": 0.17495127022266388,
+      "nominal_steer_rms_after5": 0.02815800905227661,
+      "correction_steer_rms_after5": 0.031431615352630615,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.386408805847168,
+      "speed_reference_max_after5": 2.3939805030822754
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.125_t2_f+0",
+      "path_rms_after5": 0.04503921419382095,
+      "nominal_steer_rms_after5": 0.01358121633529663,
+      "correction_steer_rms_after5": 0.014570463448762894,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7816457748413086,
+      "speed_reference_max_after5": 2.784778356552124
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.125_t2_f+20",
+      "path_rms_after5": 0.0796864926815033,
+      "nominal_steer_rms_after5": 0.029408710077404976,
+      "correction_steer_rms_after5": 0.015599719248712063,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6344447135925293,
+      "speed_reference_max_after5": 2.7861437797546387
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.125_t2_f-20",
+      "path_rms_after5": 0.040197525173425674,
+      "nominal_steer_rms_after5": 0.014651618897914886,
+      "correction_steer_rms_after5": 0.015348833054304123,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7772977352142334,
+      "speed_reference_max_after5": 2.7860560417175293
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.5_t2_f+0",
+      "path_rms_after5": 0.10285302251577377,
+      "nominal_steer_rms_after5": 0.012386440299451351,
+      "correction_steer_rms_after5": 0.01426989957690239,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7801172733306885,
+      "speed_reference_max_after5": 2.7878775596618652
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.5_t2_f+20",
+      "path_rms_after5": 0.08965232968330383,
+      "nominal_steer_rms_after5": 0.011040032841265202,
+      "correction_steer_rms_after5": 0.01289180014282465,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7812318801879883,
+      "speed_reference_max_after5": 2.787893056869507
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.5_t2_f-20",
+      "path_rms_after5": 0.09108398854732513,
+      "nominal_steer_rms_after5": 0.01128000020980835,
+      "correction_steer_rms_after5": 0.012781755067408085,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7806358337402344,
+      "speed_reference_max_after5": 2.7878682613372803
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.875_t2_f+0",
+      "path_rms_after5": 0.21018238365650177,
+      "nominal_steer_rms_after5": 0.03075253777205944,
+      "correction_steer_rms_after5": 0.03379440680146217,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.780258893966675,
+      "speed_reference_max_after5": 2.789228677749634
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.875_t2_f+20",
+      "path_rms_after5": 0.25537365674972534,
+      "nominal_steer_rms_after5": 0.035550739616155624,
+      "correction_steer_rms_after5": 0.03990230709314346,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.779132604598999,
+      "speed_reference_max_after5": 2.789128303527832
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0.875_t2_f-20",
+      "path_rms_after5": 0.1853734254837036,
+      "nominal_steer_rms_after5": 0.028322970494627953,
+      "correction_steer_rms_after5": 0.030286727473139763,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7812514305114746,
+      "speed_reference_max_after5": 2.7892305850982666
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0_t2_f+0",
+      "path_rms_after5": 0.04762807488441467,
+      "nominal_steer_rms_after5": 0.015120144002139568,
+      "correction_steer_rms_after5": 0.016337234526872635,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7813408374786377,
+      "speed_reference_max_after5": 2.783108711242676
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0_t2_f+20",
+      "path_rms_after5": 0.24831622838974,
+      "nominal_steer_rms_after5": 0.028899215161800385,
+      "correction_steer_rms_after5": 0.02975323796272278,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6619081497192383,
+      "speed_reference_max_after5": 2.7871458530426025
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a0_t2_f-20",
+      "path_rms_after5": 0.06574533134698868,
+      "nominal_steer_rms_after5": 0.030204318463802338,
+      "correction_steer_rms_after5": 0.017444249242544174,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.5791616439819336,
+      "speed_reference_max_after5": 2.7866837978363037
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a1_t2_f+0",
+      "path_rms_after5": 0.2625938355922699,
+      "nominal_steer_rms_after5": 0.04121194779872894,
+      "correction_steer_rms_after5": 0.04467085376381874,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.78037691116333,
+      "speed_reference_max_after5": 2.78936767578125
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a1_t2_f+20",
+      "path_rms_after5": 0.3092759847640991,
+      "nominal_steer_rms_after5": 0.045413848012685776,
+      "correction_steer_rms_after5": 0.050496842712163925,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7806859016418457,
+      "speed_reference_max_after5": 2.789348602294922
+    },
+    {
+      "case": "shuffled_right120_R2p5_v2.75_a1_t2_f-20",
+      "path_rms_after5": 0.22825704514980316,
+      "nominal_steer_rms_after5": 0.03806024044752121,
+      "correction_steer_rms_after5": 0.04023530334234238,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7813620567321777,
+      "speed_reference_max_after5": 2.789379119873047
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "path_rms_after5": 0.032973840832710266,
+      "nominal_steer_rms_after5": 0.012087357230484486,
+      "correction_steer_rms_after5": 0.0122110890224576,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.387951612472534,
+      "speed_reference_max_after5": 2.390608072280884
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "path_rms_after5": 0.14262500405311584,
+      "nominal_steer_rms_after5": 0.08011146634817123,
+      "correction_steer_rms_after5": 0.031061304733157158,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.161257266998291,
+      "speed_reference_max_after5": 2.3924074172973633
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "path_rms_after5": 0.3313901126384735,
+      "nominal_steer_rms_after5": 0.12674358487129211,
+      "correction_steer_rms_after5": 0.04491952806711197,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.1344757080078125,
+      "speed_reference_max_after5": 2.3938257694244385
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.5_t2_f+0",
+      "path_rms_after5": 0.020901532843708992,
+      "nominal_steer_rms_after5": 0.006283745169639587,
+      "correction_steer_rms_after5": 0.00744976382702589,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3910651206970215,
+      "speed_reference_max_after5": 2.3920624256134033
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.5_t2_f+20",
+      "path_rms_after5": 0.02340499870479107,
+      "nominal_steer_rms_after5": 0.020284147933125496,
+      "correction_steer_rms_after5": 0.008716740645468235,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3675007820129395,
+      "speed_reference_max_after5": 2.392150402069092
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.5_t2_f-20",
+      "path_rms_after5": 0.05751470848917961,
+      "nominal_steer_rms_after5": 0.005180417560040951,
+      "correction_steer_rms_after5": 0.007355693727731705,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.384730100631714,
+      "speed_reference_max_after5": 2.3921878337860107
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.875_t2_f+0",
+      "path_rms_after5": 0.03493058681488037,
+      "nominal_steer_rms_after5": 0.003964009694755077,
+      "correction_steer_rms_after5": 0.006064592394977808,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.392040729522705,
+      "speed_reference_max_after5": 2.3924026489257812
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.875_t2_f+20",
+      "path_rms_after5": 0.05218248814344406,
+      "nominal_steer_rms_after5": 0.004329257179051638,
+      "correction_steer_rms_after5": 0.008769095875322819,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.390960931777954,
+      "speed_reference_max_after5": 2.3924803733825684
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0.875_t2_f-20",
+      "path_rms_after5": 0.019446149468421936,
+      "nominal_steer_rms_after5": 0.003250857349485159,
+      "correction_steer_rms_after5": 0.003656976390630007,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3921761512756348,
+      "speed_reference_max_after5": 2.3924124240875244
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0_t2_f+0",
+      "path_rms_after5": 0.036673352122306824,
+      "nominal_steer_rms_after5": 0.013601233251392841,
+      "correction_steer_rms_after5": 0.013484081253409386,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3863441944122314,
+      "speed_reference_max_after5": 2.389680862426758
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0_t2_f+20",
+      "path_rms_after5": 0.39540740847587585,
+      "nominal_steer_rms_after5": 0.15838880836963654,
+      "correction_steer_rms_after5": 0.058953844010829926,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.9869701862335205,
+      "speed_reference_max_after5": 2.3942625522613525
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a0_t2_f-20",
+      "path_rms_after5": 0.4970250427722931,
+      "nominal_steer_rms_after5": 0.16182158887386322,
+      "correction_steer_rms_after5": 0.060545820742845535,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.975701093673706,
+      "speed_reference_max_after5": 2.3932015895843506
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a1_t2_f+0",
+      "path_rms_after5": 0.04998325556516647,
+      "nominal_steer_rms_after5": 0.007326919585466385,
+      "correction_steer_rms_after5": 0.008764526806771755,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3914239406585693,
+      "speed_reference_max_after5": 2.392409086227417
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a1_t2_f+20",
+      "path_rms_after5": 0.06548776477575302,
+      "nominal_steer_rms_after5": 0.007998146116733551,
+      "correction_steer_rms_after5": 0.010990866459906101,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3902487754821777,
+      "speed_reference_max_after5": 2.3923957347869873
+    },
+    {
+      "case": "u325_left120_R2p5_v2.35_a1_t2_f-20",
+      "path_rms_after5": 0.035267315804958344,
+      "nominal_steer_rms_after5": 0.006717164069414139,
+      "correction_steer_rms_after5": 0.006880235392600298,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3918814659118652,
+      "speed_reference_max_after5": 2.392411708831787
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.125_t2_f+0",
+      "path_rms_after5": 0.05590096861124039,
+      "nominal_steer_rms_after5": 0.015682736411690712,
+      "correction_steer_rms_after5": 0.017646314576268196,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.782820463180542,
+      "speed_reference_max_after5": 2.783203363418579
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.125_t2_f+20",
+      "path_rms_after5": 0.05675370246171951,
+      "nominal_steer_rms_after5": 0.011789444833993912,
+      "correction_steer_rms_after5": 0.012664701789617538,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.771751880645752,
+      "speed_reference_max_after5": 2.7829442024230957
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.125_t2_f-20",
+      "path_rms_after5": 0.34024477005004883,
+      "nominal_steer_rms_after5": 0.04609693959355354,
+      "correction_steer_rms_after5": 0.035559576004743576,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.5056090354919434,
+      "speed_reference_max_after5": 2.7858405113220215
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.5_t2_f+0",
+      "path_rms_after5": 0.06878118962049484,
+      "nominal_steer_rms_after5": 0.014664887450635433,
+      "correction_steer_rms_after5": 0.018106115981936455,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.785801410675049,
+      "speed_reference_max_after5": 2.7868199348449707
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.5_t2_f+20",
+      "path_rms_after5": 0.05747083202004433,
+      "nominal_steer_rms_after5": 0.013521854765713215,
+      "correction_steer_rms_after5": 0.016385357826948166,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7857959270477295,
+      "speed_reference_max_after5": 2.786375045776367
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.5_t2_f-20",
+      "path_rms_after5": 0.02976304106414318,
+      "nominal_steer_rms_after5": 0.009167608805000782,
+      "correction_steer_rms_after5": 0.010715804062783718,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7839863300323486,
+      "speed_reference_max_after5": 2.7858338356018066
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.875_t2_f+0",
+      "path_rms_after5": 0.10904661566019058,
+      "nominal_steer_rms_after5": 0.017290804535150528,
+      "correction_steer_rms_after5": 0.022152027115225792,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.786681890487671,
+      "speed_reference_max_after5": 2.7871603965759277
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.875_t2_f+20",
+      "path_rms_after5": 0.09833910316228867,
+      "nominal_steer_rms_after5": 0.016249844804406166,
+      "correction_steer_rms_after5": 0.02043311856687069,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7867767810821533,
+      "speed_reference_max_after5": 2.7871739864349365
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0.875_t2_f-20",
+      "path_rms_after5": 0.10537994652986526,
+      "nominal_steer_rms_after5": 0.016598548740148544,
+      "correction_steer_rms_after5": 0.021563036367297173,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7867047786712646,
+      "speed_reference_max_after5": 2.7871837615966797
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0_t2_f+0",
+      "path_rms_after5": 0.05632970482110977,
+      "nominal_steer_rms_after5": 0.016217192634940147,
+      "correction_steer_rms_after5": 0.017939522862434387,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.781221389770508,
+      "speed_reference_max_after5": 2.78164005279541
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0_t2_f+20",
+      "path_rms_after5": 0.08881265670061111,
+      "nominal_steer_rms_after5": 0.014569167047739029,
+      "correction_steer_rms_after5": 0.013123763725161552,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6655383110046387,
+      "speed_reference_max_after5": 2.782714605331421
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a0_t2_f-20",
+      "path_rms_after5": 0.47526222467422485,
+      "nominal_steer_rms_after5": 0.06552035361528397,
+      "correction_steer_rms_after5": 0.04098091647028923,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3298983573913574,
+      "speed_reference_max_after5": 2.781344413757324
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a1_t2_f+0",
+      "path_rms_after5": 0.12371239811182022,
+      "nominal_steer_rms_after5": 0.01899992860853672,
+      "correction_steer_rms_after5": 0.024123316630721092,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7863776683807373,
+      "speed_reference_max_after5": 2.7874393463134766
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a1_t2_f+20",
+      "path_rms_after5": 0.11723770946264267,
+      "nominal_steer_rms_after5": 0.01863323152065277,
+      "correction_steer_rms_after5": 0.02312881499528885,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.786400318145752,
+      "speed_reference_max_after5": 2.787442207336426
+    },
+    {
+      "case": "u325_left120_R2p5_v2.75_a1_t2_f-20",
+      "path_rms_after5": 0.1275511533021927,
+      "nominal_steer_rms_after5": 0.018984844908118248,
+      "correction_steer_rms_after5": 0.024664726108312607,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.78635573387146,
+      "speed_reference_max_after5": 2.787437677383423
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "path_rms_after5": 0.02808218076825142,
+      "nominal_steer_rms_after5": 0.01053549163043499,
+      "correction_steer_rms_after5": 0.010570469312369823,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3882808685302734,
+      "speed_reference_max_after5": 2.3902809619903564
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "path_rms_after5": 0.30470892786979675,
+      "nominal_steer_rms_after5": 0.13314811885356903,
+      "correction_steer_rms_after5": 0.04905134066939354,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.089512348175049,
+      "speed_reference_max_after5": 2.3928709030151367
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "path_rms_after5": 0.2604082524776459,
+      "nominal_steer_rms_after5": 0.1255442202091217,
+      "correction_steer_rms_after5": 0.04316040500998497,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.1177053451538086,
+      "speed_reference_max_after5": 2.393033027648926
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.5_t2_f+0",
+      "path_rms_after5": 0.048334456980228424,
+      "nominal_steer_rms_after5": 0.006568773649632931,
+      "correction_steer_rms_after5": 0.007131928112357855,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3888609409332275,
+      "speed_reference_max_after5": 2.3918848037719727
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.5_t2_f+20",
+      "path_rms_after5": 0.023423491045832634,
+      "nominal_steer_rms_after5": 0.004903452470898628,
+      "correction_steer_rms_after5": 0.0048624686896800995,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.390122890472412,
+      "speed_reference_max_after5": 2.3919060230255127
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.5_t2_f-20",
+      "path_rms_after5": 0.055941324681043625,
+      "nominal_steer_rms_after5": 0.016034487634897232,
+      "correction_steer_rms_after5": 0.012947745621204376,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3352982997894287,
+      "speed_reference_max_after5": 2.3938345909118652
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.875_t2_f+0",
+      "path_rms_after5": 0.11434844136238098,
+      "nominal_steer_rms_after5": 0.017638007178902626,
+      "correction_steer_rms_after5": 0.019868742674589157,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3872406482696533,
+      "speed_reference_max_after5": 2.392273187637329
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.875_t2_f+20",
+      "path_rms_after5": 0.1335729956626892,
+      "nominal_steer_rms_after5": 0.019928010180592537,
+      "correction_steer_rms_after5": 0.02290695533156395,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.386460781097412,
+      "speed_reference_max_after5": 2.3922717571258545
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0.875_t2_f-20",
+      "path_rms_after5": 0.14294423162937164,
+      "nominal_steer_rms_after5": 0.02206188254058361,
+      "correction_steer_rms_after5": 0.025152096524834633,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3874480724334717,
+      "speed_reference_max_after5": 2.392272472381592
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0_t2_f+0",
+      "path_rms_after5": 0.03307995945215225,
+      "nominal_steer_rms_after5": 0.012370947748422623,
+      "correction_steer_rms_after5": 0.012760336510837078,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3868865966796875,
+      "speed_reference_max_after5": 2.389129638671875
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0_t2_f+20",
+      "path_rms_after5": 0.4286821782588959,
+      "nominal_steer_rms_after5": 0.14671050012111664,
+      "correction_steer_rms_after5": 0.05320744588971138,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.006417751312256,
+      "speed_reference_max_after5": 2.393641948699951
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a0_t2_f-20",
+      "path_rms_after5": 0.5084394216537476,
+      "nominal_steer_rms_after5": 0.16649678349494934,
+      "correction_steer_rms_after5": 0.060700975358486176,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 1.9726563692092896,
+      "speed_reference_max_after5": 2.393430233001709
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a1_t2_f+0",
+      "path_rms_after5": 0.144048273563385,
+      "nominal_steer_rms_after5": 0.02461133524775505,
+      "correction_steer_rms_after5": 0.02704552933573723,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.386914014816284,
+      "speed_reference_max_after5": 2.3922855854034424
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a1_t2_f+20",
+      "path_rms_after5": 0.17506887018680573,
+      "nominal_steer_rms_after5": 0.02809593640267849,
+      "correction_steer_rms_after5": 0.03171143680810928,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3855836391448975,
+      "speed_reference_max_after5": 2.392299175262451
+    },
+    {
+      "case": "u325_right120_R2p5_v2.35_a1_t2_f-20",
+      "path_rms_after5": 0.17979581654071808,
+      "nominal_steer_rms_after5": 0.029432544484734535,
+      "correction_steer_rms_after5": 0.03274073824286461,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.3859198093414307,
+      "speed_reference_max_after5": 2.392301559448242
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.125_t2_f+0",
+      "path_rms_after5": 0.04289734363555908,
+      "nominal_steer_rms_after5": 0.013198290020227432,
+      "correction_steer_rms_after5": 0.01428086869418621,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.779986619949341,
+      "speed_reference_max_after5": 2.7829957008361816
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.125_t2_f+20",
+      "path_rms_after5": 0.16704796254634857,
+      "nominal_steer_rms_after5": 0.029399098828434944,
+      "correction_steer_rms_after5": 0.019827967509627342,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6380455493927,
+      "speed_reference_max_after5": 2.7853119373321533
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.125_t2_f-20",
+      "path_rms_after5": 0.03870023787021637,
+      "nominal_steer_rms_after5": 0.014233642257750034,
+      "correction_steer_rms_after5": 0.0147294532507658,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.776768445968628,
+      "speed_reference_max_after5": 2.783034563064575
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.5_t2_f+0",
+      "path_rms_after5": 0.10178857296705246,
+      "nominal_steer_rms_after5": 0.01251889392733574,
+      "correction_steer_rms_after5": 0.014363793656229973,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.778386354446411,
+      "speed_reference_max_after5": 2.785837173461914
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.5_t2_f+20",
+      "path_rms_after5": 0.08369757980108261,
+      "nominal_steer_rms_after5": 0.010660049505531788,
+      "correction_steer_rms_after5": 0.0123890470713377,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7796871662139893,
+      "speed_reference_max_after5": 2.785849094390869
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.5_t2_f-20",
+      "path_rms_after5": 0.0928650051355362,
+      "nominal_steer_rms_after5": 0.011734538711607456,
+      "correction_steer_rms_after5": 0.013196716085076332,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7786812782287598,
+      "speed_reference_max_after5": 2.785836935043335
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.875_t2_f+0",
+      "path_rms_after5": 0.21091188490390778,
+      "nominal_steer_rms_after5": 0.03154942765831947,
+      "correction_steer_rms_after5": 0.034395236521959305,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.780111312866211,
+      "speed_reference_max_after5": 2.786996841430664
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.875_t2_f+20",
+      "path_rms_after5": 0.2584693729877472,
+      "nominal_steer_rms_after5": 0.03667505085468292,
+      "correction_steer_rms_after5": 0.040897954255342484,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.779444456100464,
+      "speed_reference_max_after5": 2.7869937419891357
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0.875_t2_f-20",
+      "path_rms_after5": 0.1855347901582718,
+      "nominal_steer_rms_after5": 0.029010986909270287,
+      "correction_steer_rms_after5": 0.030752483755350113,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.780796766281128,
+      "speed_reference_max_after5": 2.786994457244873
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0_t2_f+0",
+      "path_rms_after5": 0.04619620367884636,
+      "nominal_steer_rms_after5": 0.014691617339849472,
+      "correction_steer_rms_after5": 0.015991561114788055,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.779118537902832,
+      "speed_reference_max_after5": 2.781468629837036
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0_t2_f+20",
+      "path_rms_after5": 0.3834483325481415,
+      "nominal_steer_rms_after5": 0.04048964008688927,
+      "correction_steer_rms_after5": 0.03727807104587555,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6410458087921143,
+      "speed_reference_max_after5": 2.788144826889038
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a0_t2_f-20",
+      "path_rms_after5": 0.05687631666660309,
+      "nominal_steer_rms_after5": 0.026009447872638702,
+      "correction_steer_rms_after5": 0.016872592270374298,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.6426868438720703,
+      "speed_reference_max_after5": 2.782689094543457
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a1_t2_f+0",
+      "path_rms_after5": 0.26856890320777893,
+      "nominal_steer_rms_after5": 0.04273129627108574,
+      "correction_steer_rms_after5": 0.04609435051679611,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7809197902679443,
+      "speed_reference_max_after5": 2.7873449325561523
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a1_t2_f+20",
+      "path_rms_after5": 0.31529900431632996,
+      "nominal_steer_rms_after5": 0.04691114276647568,
+      "correction_steer_rms_after5": 0.05194147303700447,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.7816367149353027,
+      "speed_reference_max_after5": 2.787346363067627
+    },
+    {
+      "case": "u325_right120_R2p5_v2.75_a1_t2_f-20",
+      "path_rms_after5": 0.23310117423534393,
+      "nominal_steer_rms_after5": 0.03941251337528229,
+      "correction_steer_rms_after5": 0.04147286340594292,
+      "reference_bound_fraction_after5": 0.0,
+      "speed_reference_min_after5": 2.781489133834839,
+      "speed_reference_max_after5": 2.7873430252075195
+    }
+  ]
+}

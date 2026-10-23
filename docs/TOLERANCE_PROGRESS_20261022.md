@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 新场景验证完成（2026-10-23）：[240例指标、96张轨迹/奖励图与控制诊断](evidence/tolerance_progress_20261022/preference_task_generalization/README.md)。两策略无扰任务各40/40，α速度偏好8/8组合保留；低速小α受扰恢复不足。已接续48例同状态有限干预诊断，实际结果待回收，不重新调容扰度代理。
+
 > 校准实验已完整回收（2026-10-23）：[任务复盘、连续指标与实际XY](evidence/tolerance_progress_20261022/preference_recovery_calibrated/completed_review/REVIEW.md)。1240例新评测完成；四策略名义任务30/30，guided强扰动189/200与父策略逐例一致，没有建立引导训练收益。候选未采用，不再自动扫代理参数。下一步按[新场景任务设计](PREFERENCE_TASK_GENERALIZATION_DESIGN_20261023.md)验证偏好与完整恢复；已启动240例验证，实时状态见 runs/preference_task_generalization_v1/status.json。下方内容均保留为阶段记录。
 
 > 校准尺度训练已启动（2026-10-23）：[本轮任务、复用依据、训练/评测协议与实时入口](evidence/tolerance_progress_20261022/preference_recovery_calibrated/README.md)。target2.5/bandwidth.5，公式参数不改；只新训练guided/shuffled，完整认证复用uniform对照。单GPU工作进程、各2轮Critic预热＋25轮PPO，新增3,538,944策略转移。512环境工程验证已完成；新TensorBoard http://localhost:6009 已核验guided第一轮真实奖励。训练结束自动接续1240例完整任务评测，当前未取得新策略能力结果、未采用候选。

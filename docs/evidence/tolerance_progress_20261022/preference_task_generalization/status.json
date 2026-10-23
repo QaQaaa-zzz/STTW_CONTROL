@@ -1,0 +1,14 @@
+{
+  "state": "completed",
+  "phase": "completed",
+  "pid": 1771707,
+  "training_steps": 0,
+  "declared_cases": 240,
+  "completed_cases": 240,
+  "active_lower_ticks": 467804,
+  "stage": "reports_ready",
+  "checked_unix": 1792751550.4948294,
+  "panel": "angle120_R2p5",
+  "evaluator_pid": 1780572,
+  "adoption_status": "pending_research_review"
+}

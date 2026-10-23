@@ -1,0 +1,10 @@
+{
+  "code_revision": "e9f4b8954111123edab6449de9d31528aefbf0ed",
+  "launcher_sha256": "966a13b201d44a01c72f2c752990a458d23c55d64a51c3a1fd6db0a0d31fbd6a",
+  "declarations": {
+    "angle60_R2p2": "c4155ebc7cb59ed2b47931cca2c8dff8cf68e8c553d1475770b9df14cf0e4957",
+    "angle120_R2p5": "79cfc6c1e560181e57982848469812d58e6eb7fbb2f535e20b67c8f74f55281c"
+  },
+  "maximum_lower_ticks": 480000,
+  "training_steps": 0
+}
