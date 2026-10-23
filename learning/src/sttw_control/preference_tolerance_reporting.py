@@ -62,6 +62,7 @@ def report(run,output):
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed':raise ValueError('screen incomplete; no result claim')
     manifest=json.loads((run/'manifest.json').read_text());decl=manifest['declaration'];cfg=manifest['config']
+    if decl.get('preference_switching'):raise ValueError('time-varying alpha needs switching report; fixed-alpha aggregation invalid')
     rows=json.loads((run/'results.json').read_text())['cases']
     if len(rows)!=status['declared_cases'] or len({r['name'] for r in rows})!=len(rows):raise ValueError('case accounting mismatch')
     out.mkdir(parents=True,exist_ok=False);(out/'curves').mkdir()

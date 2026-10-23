@@ -24,6 +24,13 @@ def evaluate(declaration_path,output):
     out.mkdir(parents=True,exist_ok=True)
     if (out/'manifest.json').exists():raise FileExistsError('immutable preference screen exists')
     cfg=decl['config'];source=decl['source'];horizon=cfg['training_future_phase_C']['episode_s']
+    switching=decl.get('preference_switching')
+    if switching:
+        from .preference_switching import validate_schedule,scheduled_alpha
+        validate_schedule(switching,horizon,cfg['timing']['upper_dt_s'])
+        if set(switching['modes'])!=set(decl['policies']) or decl.get('recovery_intervention') or decl.get('teaching_records'):
+            raise ValueError('switch diagnostic requires explicit modes, no intervention or teaching')
+        if any(a not in (0.,1.) for a in decl['alphas']):raise ValueError('switch diagnostic starts at endpoints')
     rows=[dict(policy=p,route=r['name'],speed=v,alpha=a,force_N=f)
           for p,r,v,a,f in product(decl['policies'],decl['routes'],decl['speeds'],decl['alphas'],decl['forces_N'])]
     intervention=intervention_layout(decl,rows)
@@ -62,6 +69,9 @@ def evaluate(declaration_path,output):
         if intervention:
             manifest['semantics']='same frozen Actor; complete control state and prefix copied across intervention arms after pulse; alpha and physical history preserved'
         atomic_json(out/'manifest.json',manifest)
+        if switching:
+            manifest['semantics']='explicit time-varying alpha; original task fixed; all physical/controller/history/filter state preserved'
+            atomic_json(out/'manifest.json',manifest)
         context=lambda r:tuple(r[k] for k in ('policy','route','speed','alpha'))
         zeros={context(r):i for i,r in enumerate(rows) if r['force_N']==0}
         branch_index=j.asarray([zeros[context(r)] for r in rows])
@@ -72,7 +82,13 @@ def evaluate(declaration_path,output):
         masks=j.asarray(intervention['masks']) if intervention else j.ones((n,2))
         if intervention:
             keep+=['latent_z','offsets','target_offset','lower_action','correction_rate_clipped','reference_clip_channels']
-        def one(st,par,path,v,pulse,mask):
+        def one(st,par,path,v,pulse,mask,initial_alpha,mode):
+            if switching:
+                a=scheduled_alpha(initial_alpha,st.tick,cfg['timing']['lower_dt_s'],switching['switch_s'],switching['ramp_s'],'fixed')
+                # Mode is a batched integer; all branches retain the same state tree.
+                step=scheduled_alpha(initial_alpha,st.tick,cfg['timing']['lower_dt_s'],switching['switch_s'],switching['ramp_s'],'step')
+                ramp=scheduled_alpha(initial_alpha,st.tick,cfg['timing']['lower_dt_s'],switching['switch_s'],switching['ramp_s'],'ramp')
+                st=st.replace(alpha=j.where(mode==0,a,j.where(mode==1,step,ramp)))
             obs,_,fault=env.observation(st,path,v,horizon)
             action=actor.apply(par,obs)
             parent_action=action
@@ -80,15 +96,17 @@ def evaluate(declaration_path,output):
                 action=masked_target(action,st.tick,mask,intervention['start_tick'],intervention['end_tick'])
             end,log=env.policy_step(st.replace(fault=st.fault|fault),action,path,v,horizon,pulse)
             record=dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+            if switching:record['alpha_actual']=j.full((4,),st.alpha)
             if teaching:
                 record.update(teaching_observation=j.broadcast_to(obs,(4,obs.shape[0])),
                     teaching_target=j.broadcast_to(action,(4,2)),teaching_parent=j.broadcast_to(parent_action,(4,2)))
             return end,record
+        mode_codes=j.asarray([{'fixed':0,'step':1,'ramp':2}[switching['modes'][r['policy']]] for r in rows]) if switching else j.zeros(n,dtype=j.int32)
         functions={}
         def execute(length,states,pulses):
             if length not in functions:
                 functions[length]=jax.jit(lambda st,ps:jax.lax.scan(
-                    lambda s,_:jax.vmap(one)(s,params,paths,speeds,ps,masks),st,None,length=length))
+                    lambda s,_:jax.vmap(one)(s,params,paths,speeds,ps,masks,alphas,mode_codes),st,None,length=length))
             return functions[length](states,pulses)
         absolute_start=float(snapshot.physical_tick)*env.cc.dt
         for onset in decl['onsets_s']:

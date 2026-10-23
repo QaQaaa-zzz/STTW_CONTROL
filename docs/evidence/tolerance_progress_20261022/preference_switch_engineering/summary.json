@@ -1,0 +1,167 @@
+{
+  "scope": "engineering only, one frozen75PPO, no external pulse; not method improvement",
+  "status": {
+    "state": "completed",
+    "phase": "completed",
+    "pid": 3958596,
+    "training_steps": 0,
+    "declared_cases": 12,
+    "maximum_lower_ticks": 24000,
+    "stage": "screen_ready",
+    "checked_unix": 1792799245.028256,
+    "elapsed_s": 191.0120711910131,
+    "active_lower_ticks": 24000,
+    "completed_cases": 12,
+    "onset_s": 1.0,
+    "task_seconds": 10.0
+  },
+  "metrics": [
+    {
+      "policy": "fixed",
+      "route": "left90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.23776209354400635,
+      "post_path_rmse": 0.07403658330440521,
+      "post_speed_rmse": 0.13357853889465332,
+      "return_value": -9.613049507141113
+    },
+    {
+      "policy": "fixed",
+      "route": "left90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.2783459424972534,
+      "post_path_rmse": 0.18367280066013336,
+      "post_speed_rmse": 0.03110590949654579,
+      "return_value": -5.408031940460205
+    },
+    {
+      "policy": "fixed",
+      "route": "right90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.24378669261932373,
+      "post_path_rmse": 0.06282519549131393,
+      "post_speed_rmse": 0.18012495338916779,
+      "return_value": -8.388433456420898
+    },
+    {
+      "policy": "fixed",
+      "route": "right90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.25802695751190186,
+      "post_path_rmse": 0.5235167741775513,
+      "post_speed_rmse": 0.019227229058742523,
+      "return_value": -7.519626140594482
+    },
+    {
+      "policy": "step",
+      "route": "left90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.22919785976409912,
+      "post_path_rmse": 0.15393562614917755,
+      "post_speed_rmse": 0.08118785172700882,
+      "return_value": -11.601787567138672
+    },
+    {
+      "policy": "step",
+      "route": "left90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.2908216714859009,
+      "post_path_rmse": 0.06058485060930252,
+      "post_speed_rmse": 0.10330536216497421,
+      "return_value": -7.788185119628906
+    },
+    {
+      "policy": "step",
+      "route": "right90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.23047494888305664,
+      "post_path_rmse": 0.2945473790168762,
+      "post_speed_rmse": 0.07036931812763214,
+      "return_value": -10.82392692565918
+    },
+    {
+      "policy": "step",
+      "route": "right90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.28670167922973633,
+      "post_path_rmse": 0.10653447359800339,
+      "post_speed_rmse": 0.19518639147281647,
+      "return_value": -19.65427589416504
+    },
+    {
+      "policy": "ramp",
+      "route": "left90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.23413550853729248,
+      "post_path_rmse": 0.11898241192102432,
+      "post_speed_rmse": 0.09476234018802643,
+      "return_value": -9.564916610717773
+    },
+    {
+      "policy": "ramp",
+      "route": "left90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.28872478008270264,
+      "post_path_rmse": 0.08432657271623611,
+      "post_speed_rmse": 0.053218990564346313,
+      "return_value": -12.128379821777344
+    },
+    {
+      "policy": "ramp",
+      "route": "right90_R1p8",
+      "initial_alpha": 0.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.2418506145477295,
+      "post_path_rmse": 0.242894247174263,
+      "post_speed_rmse": 0.1191527247428894,
+      "return_value": -12.668355941772461
+    },
+    {
+      "policy": "ramp",
+      "route": "right90_R1p8",
+      "initial_alpha": 1.0,
+      "task": true,
+      "working": true,
+      "peak_roll": 0.2760831117630005,
+      "post_path_rmse": 0.15622401237487793,
+      "post_speed_rmse": 0.18537014722824097,
+      "return_value": -28.41115951538086
+    }
+  ],
+  "prefix_max_abs_difference": 6.67572021484375e-06,
+  "sources": {
+    "runs/preference_switch_engineering_v1/raw/fixed_left90_R1p8_v2.6_a0_t1_f+0.npz": "6ce7dccc6d5e3d5484929f177f2905652423e5ef00bb3f97894faea81fd56f00",
+    "runs/preference_switch_engineering_v1/raw/fixed_left90_R1p8_v2.6_a1_t1_f+0.npz": "a9853da47efc1041b0cd6f136d73ab7b9a47d6d056e1ce4cb086d265956a97be",
+    "runs/preference_switch_engineering_v1/raw/fixed_right90_R1p8_v2.6_a0_t1_f+0.npz": "f4ca9237b55079084a5a5d25e10a88e4ace0d2566be2c220a8511becccc502d0",
+    "runs/preference_switch_engineering_v1/raw/fixed_right90_R1p8_v2.6_a1_t1_f+0.npz": "af47c801f26526fa10780de5706a4c32c7b33f77c56db61b9be008b66efcb192",
+    "runs/preference_switch_engineering_v1/raw/step_left90_R1p8_v2.6_a0_t1_f+0.npz": "028daf88a83c07cc97046a564c7df1abe19173d8c99a50bed612002cc9d8e84a",
+    "runs/preference_switch_engineering_v1/raw/step_left90_R1p8_v2.6_a1_t1_f+0.npz": "61b193b3aafb7f4090eda2cbdb54759d2f254282db71081a646d35877978ef46",
+    "runs/preference_switch_engineering_v1/raw/step_right90_R1p8_v2.6_a0_t1_f+0.npz": "43f202ac95fededbb193502e867ef1f186c1cc7f74eb3c7820f6b8e9c31076d4",
+    "runs/preference_switch_engineering_v1/raw/step_right90_R1p8_v2.6_a1_t1_f+0.npz": "05b3dd2c59645cd6ea493f7b0065058d22e8c7d7a9f95f307f4a09d9a3ec9551",
+    "runs/preference_switch_engineering_v1/raw/ramp_left90_R1p8_v2.6_a0_t1_f+0.npz": "1ed0d80d06c1ffcf24ea3ef5f089e24e2e371c42028a17de7d4cc3728beee47d",
+    "runs/preference_switch_engineering_v1/raw/ramp_left90_R1p8_v2.6_a1_t1_f+0.npz": "1df7996cf0c0c616b93506e2678107cc6ff35d4740ba40725f36a25ba3f5789b",
+    "runs/preference_switch_engineering_v1/raw/ramp_right90_R1p8_v2.6_a0_t1_f+0.npz": "db267fd181bf323f1390ecc8e351616ba529be147dc91386df9df8389967adbc",
+    "runs/preference_switch_engineering_v1/raw/ramp_right90_R1p8_v2.6_a1_t1_f+0.npz": "15f6bc8627142757f395633342f873244bbd120a02c70bcf197246ab6a891328"
+  }
+}
