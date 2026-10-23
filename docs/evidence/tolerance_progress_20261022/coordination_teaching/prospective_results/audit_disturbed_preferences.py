@@ -23,3 +23,11 @@ for pol in ('parent','seed918501'):
  g=[x for x in output if x['policy']==pol];ok=[x for x in g if x['eligible_full_horizon']]
  summary.append(dict(policy=pol,total_contexts=len(g),full_horizon_contexts=len(ok),excluded_early_end=len(g)-len(ok),all_task_success=sum(x['all_task_success'] for x in g),speed_monotone=sum(x['speed_monotone'] for x in ok),speed_endpoint=sum(x['speed_endpoint'] for x in ok),path_endpoint=sum(x['path_endpoint'] for x in ok)))
 p=Path('docs/evidence/tolerance_progress_20261022/coordination_teaching/prospective_results/disturbed_preference_audit.json');p.write_text(json.dumps(dict(summary=summary,contexts=output,sources=sources,scope='Exploratory existing pulse panel. Common recovery-time window after pulse end through original deadline; includes bend and outgoing straight. Full-horizon coverage reported; not restricted to task successes. Missing early ends not imputed as preference success.'),indent=2)+'\n');print(json.dumps(summary,indent=2))
+# Matched complete-context view: same denominator across policies.
+k=lambda r:(r['panel'],tuple(r['context']))
+a={k(r):r for r in output if r['policy']=='parent'}
+b={k(r):r for r in output if r['policy']=='seed918501'}
+ks=[x for x in a if a[x]['eligible_full_horizon'] and b[x]['eligible_full_horizon']]
+d=json.loads(p.read_text())
+d['matched_full_horizon']=dict(n=len(ks),parent={m:sum(a[x][m] for x in ks) for m in ['speed_monotone','speed_endpoint','path_endpoint']},candidate={m:sum(b[x][m] for x in ks) for m in ['speed_monotone','speed_endpoint','path_endpoint']},contexts=[list(x) for x in ks])
+p.write_text(json.dumps(d,indent=2)+'\n')
