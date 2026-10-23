@@ -1,0 +1,110 @@
+{
+  "scope": "paired existing DEV outcomes; different training interventions and budgets, not matched-total-cost causal comparison",
+  "same_declaration_fields": [
+    "config",
+    "source",
+    "routes",
+    "speeds",
+    "alphas",
+    "forces_N",
+    "onsets_s",
+    "duration_s"
+  ],
+  "same_physical_identity": true,
+  "unchanged_core_files": [
+    "preference_tolerance_screen.py",
+    "path_command_env.py",
+    "path_command_reward.py",
+    "path_command_policy.py",
+    "recovery_margin_scan.py"
+  ],
+  "revisions": [
+    "a02deeb24738f0a73407b1cb23e99c88923deb5c",
+    "6bec814c8bfb7e412cc7c530f8a871659c545ff4"
+  ],
+  "batch_sizes": [
+    100,
+    200
+  ],
+  "paired_task": {
+    "n": 200,
+    "baseline": 191,
+    "candidate": 195,
+    "gains": 4,
+    "losses": 0
+  },
+  "working_success": {
+    "ppo75": 68,
+    "taught": 57
+  },
+  "sources": {
+    "runs/preference_full_tail_length75_post_v1/strong/declaration.json": "37dc884ebb191e7624bf4941d7c84e08f04ceb64e3e1ce865fe5fe461c602309",
+    "runs/preference_full_tail_length75_post_v1/strong/evaluation/results.json": "7b6516856b3bbc060bff3705bd584ddb5e2973ce5f1540d01452144aa69532cf",
+    "runs/preference_full_tail_length75_post_v1/strong/evaluation/manifest.json": "e52086afb2ac970e068d30137c563fe55bad5963a3c793c9cce092d61baa6b35",
+    "runs/preference_coordination_teaching_standard_dev_v1/strong/declaration.json": "3c11786c644dbf774f6c37e0e300186bff7bb91a9dd43f4cbc393591a94163e8",
+    "runs/preference_coordination_teaching_standard_dev_v1/strong/evaluation/results.json": "d92d28de790ecf7aa34c35fa0394bcfd4d23287998d0b1716868530b6bd8e90c",
+    "runs/preference_coordination_teaching_standard_dev_v1/strong/evaluation/manifest.json": "ec4dcb50a10547f643751ad92fb405b4b3f58979c5f5c0774e94da73ace1f340"
+  },
+  "changes": [
+    {
+      "case": [
+        "left90_R1p8",
+        2.6,
+        0.75,
+        -32.0,
+        2.0
+      ],
+      "ppo75_success": false,
+      "taught_success": true,
+      "ppo75_domain": false,
+      "taught_domain": false,
+      "ppo75_tail_path": 0.1327219009399414,
+      "taught_tail_path": 0.08740425109863281
+    },
+    {
+      "case": [
+        "left90_R1p8",
+        2.6,
+        1.0,
+        -32.0,
+        2.0
+      ],
+      "ppo75_success": false,
+      "taught_success": true,
+      "ppo75_domain": false,
+      "taught_domain": false,
+      "ppo75_tail_path": 0.12095355987548828,
+      "taught_tail_path": 0.09223651885986328
+    },
+    {
+      "case": [
+        "left90_R1p8",
+        2.8,
+        0.5,
+        -32.0,
+        2.0
+      ],
+      "ppo75_success": false,
+      "taught_success": true,
+      "ppo75_domain": false,
+      "taught_domain": false,
+      "ppo75_tail_path": 0.18067359924316406,
+      "taught_tail_path": 0.08474445343017578
+    },
+    {
+      "case": [
+        "right90_R1p8",
+        2.6,
+        0.0,
+        32.0,
+        2.0
+      ],
+      "ppo75_success": false,
+      "taught_success": true,
+      "ppo75_domain": true,
+      "taught_domain": false,
+      "ppo75_tail_path": null,
+      "taught_tail_path": 0.09256935119628906
+    }
+  ]
+}
