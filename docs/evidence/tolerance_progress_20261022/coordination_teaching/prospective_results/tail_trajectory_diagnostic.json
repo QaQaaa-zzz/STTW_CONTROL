@@ -1,0 +1,869 @@
+{
+  "role": "posthoc_descriptive",
+  "records": [
+    {
+      "context": [
+        "left70_R1p9",
+        2.3,
+        0.0,
+        22.0,
+        2.8
+      ],
+      "policy": "parent",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_left70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "fc9e392ff38b3345cf560b95705943436641d0857e9e38ad2d820a73a88ae8ef",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": 0.05126452445983887,
+          "path_m": 0.014745544642210007,
+          "forward_speed": 2.333622932434082
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.1599740982055664,
+          "path_m": 0.07557246834039688,
+          "forward_speed": 2.28566837310791
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.3856816291809082,
+          "path_m": 0.22116795182228088,
+          "forward_speed": 2.014173984527588
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.295060396194458,
+          "path_m": -1.2345211505889893,
+          "forward_speed": 2.313161849975586
+        },
+        {
+          "time": 8.0,
+          "heading_rad": -0.018349288031458855,
+          "path_m": -0.07898125797510147,
+          "forward_speed": 2.3216350078582764
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.0021800994873046875,
+          "path_m": -0.017629047855734825,
+          "forward_speed": 2.315601110458374
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": 0.0026955606881529093,
+          "path_m": -0.03071342222392559,
+          "forward_speed": 2.3186378479003906
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.41304147243499756,
+          "path_abs_max": 0.38656309247016907,
+          "speed_abs_error_max": 0.4489346742630005
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.656532347202301,
+          "path_abs_max": 1.3708490133285522,
+          "speed_abs_error_max": 0.2858259677886963
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5147730112075806,
+          "path_abs_max": 1.2345211505889893,
+          "speed_abs_error_max": 0.21622490882873535
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.04647171124815941,
+          "path_abs_max": 0.07898125797510147,
+          "speed_abs_error_max": 0.02523207664489746
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.010417461395263672,
+          "path_abs_max": 0.030758071690797806,
+          "speed_abs_error_max": 0.018974781036376953
+        }
+      ]
+    },
+    {
+      "context": [
+        "left70_R1p9",
+        2.3,
+        0.0,
+        22.0,
+        2.8
+      ],
+      "policy": "seed918501",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_left70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "85524b4a8264871e94f6df7f4920a7a8d9066d131a1907ab5004dee4cf9c4439",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": 0.041606783866882324,
+          "path_m": 0.02195226587355137,
+          "forward_speed": 2.3094403743743896
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.16398406028747559,
+          "path_m": 0.08518800139427185,
+          "forward_speed": 2.2578048706054688
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.34250950813293457,
+          "path_m": 0.25115710496902466,
+          "forward_speed": 2.258563995361328
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.3954801559448242,
+          "path_m": -0.7738872766494751,
+          "forward_speed": 2.3133907318115234
+        },
+        {
+          "time": 8.0,
+          "heading_rad": 0.28160345554351807,
+          "path_m": 0.06287942826747894,
+          "forward_speed": 2.291707992553711
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.18004798889160156,
+          "path_m": -0.14295852184295654,
+          "forward_speed": 2.307765245437622
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": -0.0458219014108181,
+          "path_m": 0.28509217500686646,
+          "forward_speed": 2.1853439807891846
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.41049861907958984,
+          "path_abs_max": 0.4064825773239136,
+          "speed_abs_error_max": 0.21238327026367188
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5700423121452332,
+          "path_abs_max": 1.0325944423675537,
+          "speed_abs_error_max": 0.09537911415100098
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5088580846786499,
+          "path_abs_max": 0.7738872766494751,
+          "speed_abs_error_max": 0.19134092330932617
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.2912886142730713,
+          "path_abs_max": 0.21077094972133636,
+          "speed_abs_error_max": 0.2294919490814209
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.28500911593437195,
+          "path_abs_max": 0.2851768732070923,
+          "speed_abs_error_max": 0.13412046432495117
+        }
+      ]
+    },
+    {
+      "context": [
+        "right70_R1p9",
+        2.3,
+        0.0,
+        22.0,
+        2.8
+      ],
+      "policy": "parent",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "46208579ecf3848ac599b7a22b7e4b7e2025b5e92544f8f83b8927a3def02090",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.05087113380432129,
+          "path_m": 0.0023544260766357183,
+          "forward_speed": 2.319305658340454
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.16985845565795898,
+          "path_m": 0.0931449607014656,
+          "forward_speed": 2.28867244720459
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.4737766981124878,
+          "path_m": 0.12851980328559875,
+          "forward_speed": 2.022632360458374
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.23150712251663208,
+          "path_m": -1.6410382986068726,
+          "forward_speed": 2.3027491569519043
+        },
+        {
+          "time": 8.0,
+          "heading_rad": -0.1046447679400444,
+          "path_m": -0.20510739088058472,
+          "forward_speed": 2.3224034309387207
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.025344252586364746,
+          "path_m": -0.07732203602790833,
+          "forward_speed": 2.318941116333008
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": -0.006161093711853027,
+          "path_m": -0.04673832654953003,
+          "forward_speed": 2.3185341358184814
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.469295471906662,
+          "path_abs_max": 0.3612397611141205,
+          "speed_abs_error_max": 0.49725329875946045
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.7394967079162598,
+          "path_abs_max": 1.727607250213623,
+          "speed_abs_error_max": 0.27736759185791016
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.511618971824646,
+          "path_abs_max": 1.6410382986068726,
+          "speed_abs_error_max": 0.030629634857177734
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.1046447679400444,
+          "path_abs_max": 0.20510739088058472,
+          "speed_abs_error_max": 0.022410869598388672
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.025344252586364746,
+          "path_abs_max": 0.07732203602790833,
+          "speed_abs_error_max": 0.01920175552368164
+        }
+      ]
+    },
+    {
+      "context": [
+        "right70_R1p9",
+        2.3,
+        0.0,
+        22.0,
+        2.8
+      ],
+      "policy": "seed918501",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0_t2.8_f+22.npz",
+      "sha256": "73545e39161184a15c4e6c0ddfb6033f617d295642e26896009359b206cf098b",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.025862576439976692,
+          "path_m": 0.016078481450676918,
+          "forward_speed": 2.3043015003204346
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.1491938829421997,
+          "path_m": 0.0973653495311737,
+          "forward_speed": 2.266294479370117
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.36698484420776367,
+          "path_m": 0.20729908347129822,
+          "forward_speed": 2.27937912940979
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.4105386734008789,
+          "path_m": -0.7849922180175781,
+          "forward_speed": 2.3135242462158203
+        },
+        {
+          "time": 8.0,
+          "heading_rad": 0.26720452308654785,
+          "path_m": 0.015003666281700134,
+          "forward_speed": 2.283311605453491
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.21477411687374115,
+          "path_m": -0.07786989212036133,
+          "forward_speed": 2.314096450805664
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": 0.07455706596374512,
+          "path_m": 0.2142418920993805,
+          "forward_speed": 2.2750461101531982
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.3847019672393799,
+          "path_abs_max": 0.3885936737060547,
+          "speed_abs_error_max": 0.19985246658325195
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5750321745872498,
+          "path_abs_max": 1.067140817642212,
+          "speed_abs_error_max": 0.09001970291137695
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5093661546707153,
+          "path_abs_max": 0.7849922180175781,
+          "speed_abs_error_max": 0.19541049003601074
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.26923868060112,
+          "path_abs_max": 0.18576861917972565,
+          "speed_abs_error_max": 0.224900484085083
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.258402556180954,
+          "path_abs_max": 0.22987066209316254,
+          "speed_abs_error_max": 0.1266491413116455
+        }
+      ]
+    },
+    {
+      "context": [
+        "right70_R1p9",
+        2.3,
+        0.2,
+        22.0,
+        2.8
+      ],
+      "policy": "parent",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/parent_right70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "d4aae7694745a87ef232526ed7467f89f6c544c170bc7c5b30b31130b8a6f851",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.06060195341706276,
+          "path_m": 0.04087863862514496,
+          "forward_speed": 2.3231558799743652
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.17711210250854492,
+          "path_m": 0.13432307541370392,
+          "forward_speed": 2.2956080436706543
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.4781169593334198,
+          "path_m": 0.1471044272184372,
+          "forward_speed": 2.1200063228607178
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.2116517871618271,
+          "path_m": -1.65907883644104,
+          "forward_speed": 2.3086295127868652
+        },
+        {
+          "time": 8.0,
+          "heading_rad": -0.11359310150146484,
+          "path_m": -0.21943578124046326,
+          "forward_speed": 2.324068784713745
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.029576541855931282,
+          "path_m": -0.07730003446340561,
+          "forward_speed": 2.320625066757202
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": -0.0072727203369140625,
+          "path_m": -0.041696637868881226,
+          "forward_speed": 2.319850206375122
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.47387877106666565,
+          "path_abs_max": 0.3972545266151428,
+          "speed_abs_error_max": 0.42783796787261963
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.7170283794403076,
+          "path_abs_max": 1.7335866689682007,
+          "speed_abs_error_max": 0.1799936294555664
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.49402979016304016,
+          "path_abs_max": 1.65907883644104,
+          "speed_abs_error_max": 0.025135517120361328
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.11359310150146484,
+          "path_abs_max": 0.21943578124046326,
+          "speed_abs_error_max": 0.024068832397460938
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.029576541855931282,
+          "path_abs_max": 0.07730003446340561,
+          "speed_abs_error_max": 0.020758390426635742
+        }
+      ]
+    },
+    {
+      "context": [
+        "right70_R1p9",
+        2.3,
+        0.2,
+        22.0,
+        2.8
+      ],
+      "policy": "seed918501",
+      "source": "runs/preference_coordination_prospective_v1/turn70_R1p9/evaluation/seed918501_right70_R1p9_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "ab50943dc919db716024ecea521cde82b179d583c4d5672e733390dd6e038570",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.017171621322631836,
+          "path_m": 0.07877560704946518,
+          "forward_speed": 2.3069686889648438
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.13610506057739258,
+          "path_m": 0.15453985333442688,
+          "forward_speed": 2.269216537475586
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.3578517436981201,
+          "path_m": 0.2366522252559662,
+          "forward_speed": 2.298145294189453
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.426471084356308,
+          "path_m": -0.5496541261672974,
+          "forward_speed": 2.314331531524658
+        },
+        {
+          "time": 8.0,
+          "heading_rad": 0.27921390533447266,
+          "path_m": 0.1704142838716507,
+          "forward_speed": 2.291449785232544
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.1243196651339531,
+          "path_m": -0.030448127537965775,
+          "forward_speed": 2.3130648136138916
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": 0.05094170197844505,
+          "path_m": 0.0578574500977993,
+          "forward_speed": 2.304807186126709
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.3677203953266144,
+          "path_abs_max": 0.42300963401794434,
+          "speed_abs_error_max": 0.13314247131347656
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5298470854759216,
+          "path_abs_max": 0.888029932975769,
+          "speed_abs_error_max": 0.07530832290649414
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.4902540147304535,
+          "path_abs_max": 0.5496541261672974,
+          "speed_abs_error_max": 0.11287069320678711
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.2815752923488617,
+          "path_abs_max": 0.1704142838716507,
+          "speed_abs_error_max": 0.19229340553283691
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.14143645763397217,
+          "path_abs_max": 0.07669514417648315,
+          "speed_abs_error_max": 0.015549182891845703
+        }
+      ]
+    },
+    {
+      "context": [
+        "right130_R2p7",
+        2.3,
+        0.2,
+        22.0,
+        2.8
+      ],
+      "policy": "parent",
+      "source": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/parent_right130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "63a503e2412dffc576147b58905ea7f3c285d71bba1ff46bd7671cb7b58a62b1",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.07184553146362305,
+          "path_m": -0.05767840892076492,
+          "forward_speed": 2.172964096069336
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.24191127717494965,
+          "path_m": 0.029295941814780235,
+          "forward_speed": 2.261780023574829
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.4196521043777466,
+          "path_m": 0.047496140003204346,
+          "forward_speed": 1.9760669469833374
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.07228755950927734,
+          "path_m": -1.7505244016647339,
+          "forward_speed": 2.3016600608825684
+        },
+        {
+          "time": 8.0,
+          "heading_rad": -0.14206838607788086,
+          "path_m": -0.26777562499046326,
+          "forward_speed": 2.3247921466827393
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.0372924841940403,
+          "path_m": -0.08963647484779358,
+          "forward_speed": 2.3209095001220703
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": -0.009307862259447575,
+          "path_m": -0.044519804418087006,
+          "forward_speed": 2.3200700283050537
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.4767110347747803,
+          "path_abs_max": 0.298513799905777,
+          "speed_abs_error_max": 0.6775292158126831
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.611659586429596,
+          "path_abs_max": 1.7652528285980225,
+          "speed_abs_error_max": 0.3239330053329468
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.5012621283531189,
+          "path_abs_max": 1.7505244016647339,
+          "speed_abs_error_max": 0.025057554244995117
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.14206838607788086,
+          "path_abs_max": 0.26777562499046326,
+          "speed_abs_error_max": 0.024907588958740234
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.0372924841940403,
+          "path_abs_max": 0.08963647484779358,
+          "speed_abs_error_max": 0.020909547805786133
+        }
+      ]
+    },
+    {
+      "context": [
+        "right130_R2p7",
+        2.3,
+        0.2,
+        22.0,
+        2.8
+      ],
+      "policy": "seed918501",
+      "source": "runs/preference_coordination_prospective_v1/turn130_R2p7/evaluation/seed918501_right130_R2p7_v2.3_a0.2_t2.8_f+22.npz",
+      "sha256": "e6116c54f2bb787b2f047418086c20fd95b5d4c634c59d55cd56756944349d48",
+      "samples": [
+        {
+          "time": 2.7899999618530273,
+          "heading_rad": -0.0776200219988823,
+          "path_m": -0.031996313482522964,
+          "forward_speed": 2.21694016456604
+        },
+        {
+          "time": 3.0,
+          "heading_rad": -0.24800360202789307,
+          "path_m": 0.058459147810935974,
+          "forward_speed": 2.247044563293457
+        },
+        {
+          "time": 4.0,
+          "heading_rad": 0.1896674633026123,
+          "path_m": 0.30399012565612793,
+          "forward_speed": 2.2462515830993652
+        },
+        {
+          "time": 6.0,
+          "heading_rad": -0.244262233376503,
+          "path_m": -0.7609973549842834,
+          "forward_speed": 2.313831090927124
+        },
+        {
+          "time": 8.0,
+          "heading_rad": 0.2137906551361084,
+          "path_m": 0.3251033127307892,
+          "forward_speed": 2.3020553588867188
+        },
+        {
+          "time": 9.0,
+          "heading_rad": -0.00019884109497070312,
+          "path_m": -0.08003672957420349,
+          "forward_speed": 2.2784807682037354
+        },
+        {
+          "time": 9.989999771118164,
+          "heading_rad": 0.0030040740966796875,
+          "path_m": 0.07777298986911774,
+          "forward_speed": 2.309957504272461
+        }
+      ],
+      "windows": [
+        {
+          "interval": [
+            2.8,
+            4
+          ],
+          "ticks": 240,
+          "heading_abs_max": 0.48200738430023193,
+          "path_abs_max": 0.40302154421806335,
+          "speed_abs_error_max": 0.15384316444396973
+        },
+        {
+          "interval": [
+            4,
+            6
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.46469786763191223,
+          "path_abs_max": 0.8575820326805115,
+          "speed_abs_error_max": 0.06442666053771973
+        },
+        {
+          "interval": [
+            6,
+            8
+          ],
+          "ticks": 400,
+          "heading_abs_max": 0.4838559925556183,
+          "path_abs_max": 0.7609973549842834,
+          "speed_abs_error_max": 0.11475300788879395
+        },
+        {
+          "interval": [
+            8,
+            9
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.2831230163574219,
+          "path_abs_max": 0.3251033127307892,
+          "speed_abs_error_max": 0.19411587715148926
+        },
+        {
+          "interval": [
+            9,
+            10
+          ],
+          "ticks": 200,
+          "heading_abs_max": 0.14505745470523834,
+          "path_abs_max": 0.08003672957420349,
+          "speed_abs_error_max": 0.021519184112548828
+        }
+      ]
+    }
+  ]
+}
