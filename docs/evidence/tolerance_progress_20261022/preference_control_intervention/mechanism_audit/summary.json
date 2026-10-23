@@ -1,0 +1,396 @@
+{
+  "summary": [
+    {
+      "policy": "control",
+      "n": 12,
+      "task": 5,
+      "working": 5,
+      "domain": 0,
+      "physical": 0,
+      "nominal_task": 4
+    },
+    {
+      "policy": "speed_off",
+      "n": 12,
+      "task": 8,
+      "working": 5,
+      "domain": 0,
+      "physical": 0,
+      "nominal_task": 4
+    },
+    {
+      "policy": "steer_off",
+      "n": 12,
+      "task": 8,
+      "working": 4,
+      "domain": 0,
+      "physical": 0,
+      "nominal_task": 4
+    },
+    {
+      "policy": "both_off",
+      "n": 12,
+      "task": 5,
+      "working": 4,
+      "domain": 4,
+      "physical": 0,
+      "nominal_task": 4
+    }
+  ],
+  "paired": [
+    {
+      "candidate": "speed_off",
+      "alpha": 0.0,
+      "n": 6,
+      "baseline_success": 2,
+      "candidate_success": 3,
+      "improved": 1,
+      "regressed": 0,
+      "difference": 1
+    },
+    {
+      "candidate": "speed_off",
+      "alpha": 0.125,
+      "n": 6,
+      "baseline_success": 3,
+      "candidate_success": 5,
+      "improved": 3,
+      "regressed": 1,
+      "difference": 2
+    },
+    {
+      "candidate": "steer_off",
+      "alpha": 0.0,
+      "n": 6,
+      "baseline_success": 2,
+      "candidate_success": 4,
+      "improved": 2,
+      "regressed": 0,
+      "difference": 2
+    },
+    {
+      "candidate": "steer_off",
+      "alpha": 0.125,
+      "n": 6,
+      "baseline_success": 3,
+      "candidate_success": 4,
+      "improved": 2,
+      "regressed": 1,
+      "difference": 1
+    },
+    {
+      "candidate": "both_off",
+      "alpha": 0.0,
+      "n": 6,
+      "baseline_success": 2,
+      "candidate_success": 2,
+      "improved": 0,
+      "regressed": 0,
+      "difference": 0
+    },
+    {
+      "candidate": "both_off",
+      "alpha": 0.125,
+      "n": 6,
+      "baseline_success": 3,
+      "candidate_success": 3,
+      "improved": 1,
+      "regressed": 1,
+      "difference": 0
+    }
+  ],
+  "audit": [
+    {
+      "name": "control_left120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.03667018935084343
+    },
+    {
+      "name": "control_left120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.49614816904067993
+    },
+    {
+      "name": "control_left120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.39511725306510925
+    },
+    {
+      "name": "control_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.03290773555636406
+    },
+    {
+      "name": "control_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3329508900642395
+    },
+    {
+      "name": "control_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.14247998595237732
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.033074356615543365
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.5090059041976929
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.42885616421699524
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.028083359822630882
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.2632603645324707
+    },
+    {
+      "name": "control_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3007892668247223
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.030949924141168594
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.037280794233083725
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.5722652077674866
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.027901623398065567
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.0366184264421463
+    },
+    {
+      "name": "speed_off_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.47515276074409485
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.031077895313501358
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.46805593371391296
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.26491525769233704
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.02800700068473816
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.15247610211372375
+    },
+    {
+      "name": "speed_off_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.02527615614235401
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.04630580544471741
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3221321105957031
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 1.3978477716445923
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.042552199214696884
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3503832519054413
+    },
+    {
+      "name": "steer_off_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 1.42274808883667
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.030712304636836052
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.9981518387794495
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3312087953090668
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.0326957032084465
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 1.1549944877624512
+    },
+    {
+      "name": "steer_off_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.3425375819206238
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.04020567610859871
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.2185373455286026
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": null
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.03540828078985214
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.19424320757389069
+    },
+    {
+      "name": "both_off_left120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": null
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.031813379377126694
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.8823224902153015
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.5201277136802673
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0.125_t2_f+0",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.028510577976703644
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0.125_t2_f-20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 1.0130765438079834
+    },
+    {
+      "name": "both_off_right120_R2p5_v2.35_a0.125_t2_f+20",
+      "prefix_exact": true,
+      "target_mask_verified": true,
+      "path_rms_after5": 0.26999178528785706
+    }
+  ],
+  "control_vs_prior": {
+    "task_labels_identical": true,
+    "max_xy_difference_m": 0.024520397186279297
+  }
+}

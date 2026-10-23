@@ -1,0 +1,20 @@
+{
+  "url": "http://localhost:6013",
+  "logdir": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_v1/tensorboard",
+  "pid": 1841105,
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-m",
+    "tensorboard.main",
+    "--logdir",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_v1/tensorboard",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "6013",
+    "--reload_interval",
+    "5"
+  ],
+  "started_unix": 1792752582.36173,
+  "scalar_verified": false
+}

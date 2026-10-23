@@ -1,0 +1,13 @@
+{
+  "pid": 1844537,
+  "command": [
+    "/home/qy/mujoco_playground/.venv/bin/python",
+    "-u",
+    "learning/cli/train_tolerance_shaping.py",
+    "--plan",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_v1/plan.json",
+    "--output",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_v1/uniform"
+  ],
+  "started_unix": 1792752653.9321237
+}

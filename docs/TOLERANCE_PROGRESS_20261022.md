@@ -1,5 +1,7 @@
 # 容扰度研究：任务、已做工作、结果与下一步
 
+> 同状态机制对照完成：[48例结果与XY](evidence/tolerance_progress_20261022/preference_control_intervention/README.md)。单通道干预有净改善也有退化，不直接部署。已启动[完整恢复尾段训练](evidence/tolerance_progress_20261022/preference_full_tail/README.md)，只改变片段上限，检验尾段学习；尚无新策略结果。
+
 > 新场景验证完成（2026-10-23）：[240例指标、96张轨迹/奖励图与控制诊断](evidence/tolerance_progress_20261022/preference_task_generalization/README.md)。两策略无扰任务各40/40，α速度偏好8/8组合保留；低速小α受扰恢复不足。已接续48例同状态有限干预诊断，实际结果待回收，不重新调容扰度代理。
 
 > 校准实验已完整回收（2026-10-23）：[任务复盘、连续指标与实际XY](evidence/tolerance_progress_20261022/preference_recovery_calibrated/completed_review/REVIEW.md)。1240例新评测完成；四策略名义任务30/30，guided强扰动189/200与父策略逐例一致，没有建立引导训练收益。候选未采用，不再自动扫代理参数。下一步按[新场景任务设计](PREFERENCE_TASK_GENERALIZATION_DESIGN_20261023.md)验证偏好与完整恢复；已启动240例验证，实时状态见 runs/preference_task_generalization_v1/status.json。下方内容均保留为阶段记录。

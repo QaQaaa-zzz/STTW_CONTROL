@@ -1,0 +1,17 @@
+{
+  "batch": 512,
+  "steps": 8,
+  "active_lower_ticks": 16384,
+  "actor_dim": 351,
+  "critic_dim": 352,
+  "original_task_horizon_s": 10.0,
+  "snippet_s": 10.0,
+  "physical_failures": 0,
+  "domain_failures": 0,
+  "complete_nonzero_pulses": 432,
+  "max_impulse_error_Ns": 0.003284866688773036,
+  "training_steps": 0,
+  "arm": "uniform",
+  "state_sampler": {},
+  "initial_enabled_mean_model_risk": 1.9147660732269287
+}
