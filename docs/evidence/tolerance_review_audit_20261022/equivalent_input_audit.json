@@ -1,0 +1,341 @@
+{
+  "scope": "Algebraic equal-radius comparison in ideal fixed-coefficient scalar model; assumes control u is actual steer rate. Not certification or closed-loop bandwidth identification. E from old fitted task classifier, T=1s. U=3 is commanded actuator output limit, not established hard bound on measured steer rate.",
+  "rows": [
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.35124417187528,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -9.330721740140294,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.459779139920679,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.441104348028558,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.392879035948642,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.528322967308956,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.475126834256047,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -10.02276660640144,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 0,
+        "data_role": "calibration"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.456797879362453,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.439870388860504,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.717642656906918,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.3,
+        "alpha": 1,
+        "data_role": "calibration"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -11.456959721237652,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.156707616487758,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -13.157674095058516,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.00205314567308,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.2347247476075,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.09837657757192,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "left90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.174690306643278,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.400977336712124,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -12.92707913303325,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 0,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -15.98953664852504,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 1.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.428051484703904,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 2.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.423226509553594,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    },
+    {
+      "context": {
+        "route": "right90_R2",
+        "speed": 2.8,
+        "alpha": 1,
+        "data_role": "speed_transfer"
+      },
+      "onset_s": 4.0,
+      "lambda_u": 6.384505851490602,
+      "b_u": -16.096638100911274,
+      "equivalent_box_amplitude_rad_s": 0.31429123137620046,
+      "min_energy_boundary_initial_input_rad_s": 0.6275235154606628,
+      "nominal_peak_command_limit_rad_s": 3.0
+    }
+  ]
+}

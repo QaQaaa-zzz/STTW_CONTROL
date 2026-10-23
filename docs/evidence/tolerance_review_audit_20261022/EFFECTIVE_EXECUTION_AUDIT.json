@@ -1,0 +1,44 @@
+{
+  "kind": "retrospective effective-execution audit; not an effective_config written before historical runs",
+  "code_revision": "a7036d99e2488fd2cf74ccbc253c3c9986a935bb",
+  "episode_s": 20.0,
+  "dt": {
+    "physical": 0.0002,
+    "lower": 0.005,
+    "policy": 0.02
+  },
+  "physical_reset_bank_index": 3,
+  "sampler": "demand_exposure_v2",
+  "actual_group_counts": [
+    102,
+    204,
+    206
+  ],
+  "network_init": "weights_only actor/critic/log_std + fresh Adam; see fork receipts",
+  "first_experiment": {
+    "reward": "historical baseline + optional static/dynamic tolerance",
+    "external_force": false,
+    "updates_per_job": 50,
+    "jobs": 6
+  },
+  "second_experiment": {
+    "reward": "historical baseline, no tolerance term, no V3",
+    "external_force": true,
+    "pulse_duration_s": 0.1,
+    "pulse_enabled_probability": 0.5,
+    "onset_grid_s": [
+      0.8,
+      3.5,
+      0.02
+    ],
+    "updates_per_job": 25,
+    "jobs": 4
+  },
+  "actual_sample_logs": "*_metrics.jsonl diagnostics.route_distribution and pulse.force_histogram",
+  "not_logged": "joint route-by-force active recovery-tick occupancy, exact per-pulse reserve/probability vectors",
+  "path_display_label": {
+    "left90_R2": "left90_radius2.0m",
+    "right90_R2": "right90_radius2.0m"
+  },
+  "do_not_rename_historical_artifacts": true
+}

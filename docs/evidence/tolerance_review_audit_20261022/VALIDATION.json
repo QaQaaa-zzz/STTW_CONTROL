@@ -1,0 +1,14 @@
+{
+  "historical_source_commit": "a7036d99e2488fd2cf74ccbc253c3c9986a935bb",
+  "tests": "test_tolerance_policy_step_accounting + tolerance_reward_integration + tolerance_pulse + path_coverage_sampler",
+  "result": "28 passed in7.64s CPU",
+  "new_cases": 0,
+  "new_training_steps": 0,
+  "data_rows": {
+    "reward_shaping": 1152,
+    "pulse_curriculum": 864,
+    "training_updates_per_job": 25
+  },
+  "external_sources": "Primary DCM/capture point and PPO references checked; no exhaustive novelty claim",
+  "links": "local relative links resolve"
+}
