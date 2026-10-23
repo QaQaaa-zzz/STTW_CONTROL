@@ -92,4 +92,6 @@ class ShortRecoveryBatch:
             family=ep.route.family,active_ticks=stats['active_ticks'])
         nxt=jax.lax.cond(flags['done']&~flags['engineering_fault'],
             lambda _:self.reset(ep.env_id,ep.episode+1),lambda _:ended,None)
+        from .path_command_statistics import merge_statistics,reset_statistics
+        stats['diagnostics']=merge_statistics(stats['diagnostics'],reset_statistics(nxt.route,flags['done']&~flags['engineering_fault']))
         return nxt,self.observation(nxt),reward,flags,final,stats
