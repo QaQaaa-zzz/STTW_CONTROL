@@ -1,0 +1,123 @@
+{
+  "schema": "sttw_frozen_middle_registry_v1",
+  "root": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1",
+  "manifest_sha256": "b5ee0caa2c71ae666af7a57573ffe9994e67329fa72e6d7380c3f3e22efbfe60",
+  "current_primary_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "retarget_existing_aliases": false,
+  "records": {
+    "STTW_MIDDLE_DUAL_COVERAGE_U200_A0": {
+      "label": "双网络：独立α0端点",
+      "parents": [],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/dfe97cec1f4cbaa3aa1492f65d7e00607366424ce20e8c24c52483236f350920",
+      "actor_sha256": "dfe97cec1f4cbaa3aa1492f65d7e00607366424ce20e8c24c52483236f350920",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+      "checkpoint_sha256": "f4755e7a55b19ddb383fbac6230748188890e7d4a4c39ce962abeeac0d5929fc",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "2b0896af87ecf5507d546340e80cdf4c7f53824f",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_DUAL_COVERAGE_U200_A1": {
+      "label": "双网络：独立α1端点",
+      "parents": [],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+      "actor_sha256": "269d5f43753f798d16e43f140e9b5b0c596a5fa687c45acedbc26649a070f152",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+      "checkpoint_sha256": "a1e9b7f1e8d78c5335ab84b5a30068409cb6808378be113d6e56b6ede7079be3",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "2b0896af87ecf5507d546340e80cdf4c7f53824f",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_DISTILLED_BC": {
+      "label": "双端点蒸馏的单网络，尚未PPO微调",
+      "parents": [
+        "STTW_MIDDLE_DUAL_COVERAGE_U200_A0",
+        "STTW_MIDDLE_DUAL_COVERAGE_U200_A1"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/008688660700a9efadbe943254341ba4e7d151a7ffd1575286b9b3a253b398f9",
+      "actor_sha256": "008688660700a9efadbe943254341ba4e7d151a7ffd1575286b9b3a253b398f9",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/32223972da68834fe8a76f8c31ea21d538f327c5052989964133194fe182323a",
+      "checkpoint_sha256": "32223972da68834fe8a76f8c31ea21d538f327c5052989964133194fe182323a",
+      "checkpoint_kind": "supervised_actor_not_PPO_resume",
+      "code_commit": "45b793b63fcf1f07f1f27967ba3b6df7b41e2455",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_DISTILLED_V3_U325": {
+      "label": "蒸馏＋V3课程PPO的开发候选u325",
+      "parents": [
+        "STTW_MIDDLE_DISTILLED_BC"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/fa4a05274190b606d2b814a78b75c598ebe91e48cf9795fc31678e5e916528de",
+      "actor_sha256": "fa4a05274190b606d2b814a78b75c598ebe91e48cf9795fc31678e5e916528de",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5",
+      "checkpoint_sha256": "03b5067844e400e68315be7169279fb70c62432c720829e17c59512d4ff295f5",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "45b793b63fcf1f07f1f27967ba3b6df7b41e2455",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_DISTILLED_V3_U400_FINAL": {
+      "label": "同一400轮训练终点，保留波动/负结果",
+      "parents": [
+        "STTW_MIDDLE_DISTILLED_V3_U325"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/c533743343d0d879d3fca5d2ff08ea68a855bfe24e66eb1f83f284f7400343c5",
+      "actor_sha256": "c533743343d0d879d3fca5d2ff08ea68a855bfe24e66eb1f83f284f7400343c5",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/40a8f8bd9e3e7864207d6fc131c4f18d024a6313caecb6438cfe1a3825484564",
+      "checkpoint_sha256": "40a8f8bd9e3e7864207d6fc131c4f18d024a6313caecb6438cfe1a3825484564",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "45b793b63fcf1f07f1f27967ba3b6df7b41e2455",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_SNIPPET_PPO25_U27": {
+      "label": "原短恢复训练支路：2预热＋25PPO",
+      "parents": [
+        "STTW_MIDDLE_DISTILLED_V3_U325"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/bd1501ba8cb2b5d5db29730bb964df77394078c79e9f48edee1561cf2a177b77",
+      "actor_sha256": "bd1501ba8cb2b5d5db29730bb964df77394078c79e9f48edee1561cf2a177b77",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/d80e861e81abe067f2c77756c589e6b5b220714e4350bc2d6465809d15d20c84",
+      "checkpoint_sha256": "d80e861e81abe067f2c77756c589e6b5b220714e4350bc2d6465809d15d20c84",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "9027adf6d20b2c0dd9073e682584e6eca7adab14",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_FULLTAIL_PPO25_U27": {
+      "label": "完整尾段训练：2预热＋25PPO",
+      "parents": [
+        "STTW_MIDDLE_DISTILLED_V3_U325"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/d6d5b043bb1cb2a522cb84b74f41d9c07d2068f09342e90fd8b256b55ae4bde0",
+      "actor_sha256": "d6d5b043bb1cb2a522cb84b74f41d9c07d2068f09342e90fd8b256b55ae4bde0",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/39e2055869bd803845e9d36da1f267a20b197481eac17e5ceef7528c35efb12e",
+      "checkpoint_sha256": "39e2055869bd803845e9d36da1f267a20b197481eac17e5ceef7528c35efb12e",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "6f8b4137de138abcafcfeb19b70f68b099f59282",
+      "status": "historical_reference"
+    },
+    "STTW_MIDDLE_FULLTAIL_PPO75_U77": {
+      "label": "H75：完整尾段25PPO后精确续到75PPO",
+      "parents": [
+        "STTW_MIDDLE_FULLTAIL_PPO25_U27"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "actor_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/86cebb390ccf4a17d13e0b0a0db02f6273ab87857162359a5650a7e50ec64cf2",
+      "checkpoint_sha256": "86cebb390ccf4a17d13e0b0a0db02f6273ab87857162359a5650a7e50ec64cf2",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "1f10dfca4d549e01fb34408dc146de3ed5366cc8",
+      "status": "frozen_primary_comparator"
+    },
+    "STTW_MIDDLE_WITNESS_S918501_SUP400": {
+      "label": "恢复见证教学分支，非H75后继",
+      "parents": [
+        "STTW_MIDDLE_DISTILLED_V3_U325"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/c1c0e525a2a5b1b81da6af877a0b6a73760bf7fb917de057f4ae687981bdc282",
+      "actor_sha256": "c1c0e525a2a5b1b81da6af877a0b6a73760bf7fb917de057f4ae687981bdc282",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/objects/239862c229aa7a18bc17787f97d64931f1609b768d39d77b8ae54ebac4939c58",
+      "checkpoint_sha256": "239862c229aa7a18bc17787f97d64931f1609b768d39d77b8ae54ebac4939c58",
+      "checkpoint_kind": "supervised_actor_only_not_PPO_resume",
+      "code_commit": "c7ab23655f9fc2f5b7ee516b372cec4de8b0959c",
+      "status": "historical_reference"
+    }
+  }
+}
