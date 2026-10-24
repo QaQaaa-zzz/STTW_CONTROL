@@ -73,12 +73,12 @@ def prepare(root):
     print(root / 'design.json')
 
 
-def report(root, design):
+def report(root, design, output_name='analysis'):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import numpy as np
-    out = root / 'analysis'
+    out = root / output_name
     out.mkdir(exist_ok=False)
     figure, axes = plt.subplots(2, 2, figsize=(14, 12), layout='constrained')
     pairs, raw_hashes = [], {}
@@ -128,10 +128,10 @@ def report(root, design):
                 aa[4].plot(t, data['governed'][:, 0], color=color)
                 aa[4].plot(t, data['governed'][:, 1], '--', color=color)
                 idx = np.arange(0, len(t), 4)
-                reward = np.add.reduceat(np.nan_to_num(data['scored_tick_reward']), idx)
+                reward = np.add.reduceat(np.nan_to_num(data['scored_tick_reward']).astype(np.float64), idx)
                 scored = np.logical_or.reduceat(np.isfinite(data['scored_tick_reward']), idx)
                 costs = -.005 * manifest['config']['path_reward']['scale'] * np.add.reduceat(
-                    np.nan_to_num(data['effective_costs']), idx, axis=0)
+                    np.nan_to_num(data['effective_costs']).astype(np.float64), idx, axis=0)
                 reward[~scored] = np.nan
                 costs[~scored] = np.nan
                 np.testing.assert_allclose(np.nansum(reward), row['logged_suffix_return_while_upper_active'], atol=1e-4)
