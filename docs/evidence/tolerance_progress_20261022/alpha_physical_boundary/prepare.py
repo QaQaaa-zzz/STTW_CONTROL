@@ -2,6 +2,7 @@
 import argparse
 import json
 import sys
+import pickle
 from pathlib import Path
 from sttw_control.preference_best import atomic_json, digest
 from sttw_control.feature_comparison_evaluation import authenticated_parent_record
@@ -13,12 +14,28 @@ def main():
     p.add_argument('--route', choices=['left125_R2p2', 'right125_R2p2'], default='left125_R2p2')
     p.add_argument('--forces', type=float, nargs='+', default=[0., -48., 48., -80., 80., -112., 112.])
     p.add_argument('--design', default=str(Path(__file__).with_name('DESIGN.md')))
+    p.add_argument('--policy', choices=['H75', 'zero_middle'], default='H75')
     a = p.parse_args()
     base, root = Path.cwd(), Path(a.output).resolve()
     root.mkdir(parents=True, exist_ok=False)
     old = base/'runs/reserve_feature_expansion_v1/post_fixed_final_v1'
     model = json.loads((old/'models.json').read_text())['records']['H75']
     authenticated_parent_record(model)
+    parent_model = dict(model)
+    if a.policy == 'zero_middle':
+        import numpy as np
+        with Path(model['actor']).open('rb') as stream:
+            parameters = pickle.load(stream)
+        # Zero final affine map guarantees zero latent for every finite input.
+        # This is a constant policy, not a newly trained H75 checkpoint.
+        for key in ['kernel', 'bias']:
+            parameters['params']['Dense_3'][key] = np.zeros_like(parameters['params']['Dense_3'][key])
+        output = root/'zero_middle_actor.pkl'
+        with output.open('wb') as stream:
+            pickle.dump(parameters, stream)
+        model = dict(actor=str(output), actor_sha256=digest(output),
+                     semantics='constant zero middle latent; no training checkpoint',
+                     parent_actor=parent_model['actor'], parent_actor_sha256=parent_model['actor_sha256'])
     declaration = old/'high_nominal_retention/H75/declaration.json'
     if 0. not in a.forces or len(set(a.forces)) != len(a.forces):
         raise ValueError('Unique force grid with zero control required')
@@ -32,22 +49,24 @@ def main():
                'reference_reserve_gate', 'balance_probe', 'controller', 'closed_loop_kernel']]
     sha = {str(file.resolve()): digest(file) for file in files}
     sha[model['actor']] = model['actor_sha256']
-    sha[model['checkpoint']] = model['checkpoint_sha256']
+    sha[parent_model['checkpoint']] = parent_model['checkpoint_sha256']
+    alphas = [0.] if a.policy == 'zero_middle' else [0., 1.]
+    prefixes = 2*len(alphas)*2
     plan = dict(project='STTW_CONTROL', owner='Codex tolerance-calibration',
-                source_declaration=str(declaration), model=model,
+                source_declaration=str(declaration), model=model, parent_model=parent_model, policy_name=a.policy,
                 path_evidence_directory=str(old/'high_nominal_retention/H75/evaluation'),
                 route=a.route, builder='left90_R2' if a.route.startswith('left') else 'right90_R2', speeds=[2.45, 2.65],
-                alphas=[0., 1.], phase_fractions=[.2, .7],
+                alphas=alphas, phase_fractions=[.2, .7],
                 forces_N=a.forces,
                 pulse_duration_s=.1, observation_s=4., original_task_horizon_s=10.,
-                declared_prefixes=8, declared_cases=8*len(a.forces),
-                maximum_prepare_lower_ticks=8000, maximum_scan_lower_ticks=8*len(a.forces)*800,
-                maximum_total_lower_ticks=8000+8*len(a.forces)*800, training_steps=0,
+                declared_prefixes=prefixes, declared_cases=prefixes*len(a.forces),
+                maximum_prepare_lower_ticks=prefixes*1000, maximum_scan_lower_ticks=prefixes*len(a.forces)*800,
+                maximum_total_lower_ticks=prefixes*1000+prefixes*len(a.forces)*800, training_steps=0,
                 design=str(design), design_sha256=digest(design),
                 source_sha256=sha, prefix_source='actual frozen upper rollouts; complete state/history',
                 stop_rule='Finite grid once; no automatic force extension or engineering retry')
     atomic_json(root/'prepare_plan.json', plan)
-    atomic_json(root/'prepare_status.json', dict(phase='planned', completed_cases=0, declared_cases=8, active_lower_ticks=0, training_steps=0))
+    atomic_json(root/'prepare_status.json', dict(phase='planned', completed_cases=0, declared_cases=prefixes, active_lower_ticks=0, training_steps=0))
     atomic_json(root/'status.json', dict(phase='planned', completed_cases=0, declared_cases=plan['declared_cases'], active_lower_ticks=0, training_steps=0))
     atomic_json(root/'campaign_status.json', dict(phase='prepared', completed_cases=0, declared_cases=plan['declared_cases'], training_steps=0))
     sys.path.insert(0, str(base/'learning/cli'))

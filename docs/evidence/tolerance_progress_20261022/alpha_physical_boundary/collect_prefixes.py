@@ -19,7 +19,7 @@ def main():
     root = Path(a.run).resolve()
     plan = json.loads((root/'prepare_plan.json').read_text())
     state = dict(phase='running', pid=os.getpid(), stage='loading', completed_cases=0,
-                 declared_cases=8, active_lower_ticks=0, training_steps=0)
+                 declared_cases=plan['declared_prefixes'], active_lower_ticks=0, training_steps=0)
     def update(**kw):
         state.update(kw, checked_unix=time.time())
         atomic_json(root/'prepare_status.json', state)
@@ -67,8 +67,8 @@ def main():
         def one(s, speed, done):
             return jax.lax.cond(done, lambda _: (s, zeros), lambda _: advance(s, speed), None)
         execute = jax.jit(jax.vmap(one))
-        completed = np.zeros(4, bool)
-        counts = np.zeros(4, int)
+        completed = np.zeros(len(contexts), bool)
+        counts = np.zeros(len(contexts), int)
         targets = [float(cfg['path']['straight_prefix_m'])+f*(float(path.turn_end)-float(cfg['path']['straight_prefix_m'])) for f in plan['phase_fractions']]
         blocks, rows, snapshot_hashes = [], [], {}
         update(stage='genuine_upper_prefixes')
@@ -114,7 +114,7 @@ def main():
                 update(completed_cases=len(rows), upper_steps_executed=step+1)
             if completed.all():
                 break
-        if len(rows) != 8:
+        if len(rows) != plan['declared_prefixes']:
             raise ValueError('Geometric phases not reached within nominal10s')
         for i, context in enumerate(contexts):
             arrays = {key: np.concatenate([b[key][i] for b in blocks], axis=0) for key in blocks[0]}
@@ -127,21 +127,21 @@ def main():
         cases = []
         for row in rows:
             for force in plan['forces_N']:
-                cases.append(dict(state_id=row['state_id'], policy='H75', route=plan['route'],
+                cases.append(dict(state_id=row['state_id'], policy=plan.get('policy_name', 'H75'), route=plan['route'],
                                   requested_speed=row['speed'], alpha=row['alpha'], fraction=row['fraction'],
                                   snapshot=row['snapshot'], gate_mode=0, force_N=force))
         scan = dict(project='STTW_CONTROL', purpose='Alpha endpoints at matched geometric phases: physical force grid',
                     source_declaration=plan['source_declaration'],
                     path_evidence_directory=plan['path_evidence_directory'],
                     source_sha256={**plan['source_sha256'], **snapshot_hashes},
-                    actors={'H75': dict(path=plan['model']['actor'], sha256=plan['model']['actor_sha256'])},
+                    actors={plan.get('policy_name', 'H75'): dict(path=plan['model']['actor'], sha256=plan['model']['actor_sha256'])},
                     cases=cases, sensor_contract=dict(rear_wheel_radius_proxy_m=.1),
                     pulse_duration_s=.1, observation_s=4., maximum_lower_ticks=plan['maximum_scan_lower_ticks'],
                     training_steps=0, force_direction='capture heading lateral world vector',
                     termination='contact_only + common domain hold; not full task success',
                     stop_rule=plan['stop_rule'])
         atomic_json(root/'scan_plan.json', scan)
-        update(phase='completed', stage='eight_complete_upper_prefixes_saved', completed_cases=8)
+        update(phase='completed', stage='declared_complete_upper_prefixes_saved', completed_cases=plan['declared_prefixes'])
     except BaseException as exc:
         update(phase='error', error=repr(exc))
         raise
