@@ -35,6 +35,7 @@ def main():
         from sttw_control.path_command_policy import make_path_actor, validate_actor_parameters
         from sttw_control.path_command_reward import configured_cost_keys
         from sttw_control.reference_prefix import inverse_offset_target, prefix_action, prefix_schedule
+        from sttw_control.piecewise_reference import piecewise_action, validate_piecewise_schedule
         from sttw_control.reference_confirmation import validate_path_evidence
         from sttw_control.geometric_path import build_path
         from sttw_control.balance_probe import make_lower_tick, classify_contact_balance
@@ -94,6 +95,13 @@ def main():
         starts = j.asarray([int(s.tick) for s in snapshots], dtype=j.int32)
         delay_ticks, prefix_ticks = prefix_schedule(
             float(plan.get('prefix_start_delay_s', 0)), plan['prefix_duration_s'], env.cc.dt)
+        piecewise = 'piecewise_segment_durations_s' in plan
+        if piecewise:
+            checked_delay, segment_ends = validate_piecewise_schedule(
+                float(plan.get('prefix_start_delay_s', 0)), plan['piecewise_segment_durations_s'], env.cc.dt)
+            if checked_delay != delay_ticks or segment_ends[-1] != prefix_ticks:
+                raise ValueError('piecewise schedule differs from declared prefix')
+            segment_ends = j.asarray(segment_ends, dtype=j.int32)
         handback_ticks = delay_ticks + prefix_ticks
         deadline_tick = round(horizon / env.cc.dt)
         maximum_remaining_ticks = sum(deadline_tick - int(s.tick) for s in snapshots)
@@ -101,8 +109,15 @@ def main():
             raise ValueError('remaining suffix budget exceeds declaration')
         if any(int(s.tick) + handback_ticks >= deadline_tick for s in snapshots):
             raise ValueError('prefix boundary or remaining deadline invalid')
-        targets = j.stack([s.offsets + j.asarray(r['target_delta']) for s, r in zip(snapshots, cases)])
-        fixed, realized, clipped = jax.vmap(lambda target: inverse_offset_target(target, cfg))(targets)
+        if piecewise:
+            deltas = np.asarray([r['target_deltas'] for r in cases])
+            if deltas.shape != (len(cases),len(segment_ends),2) or not np.isfinite(deltas).all():
+                raise ValueError('invalid finite piecewise target roster')
+            targets = j.stack([s.offsets[None,:] + j.asarray(r['target_deltas']) for s,r in zip(snapshots,cases)])
+            fixed, realized, clipped = jax.vmap(jax.vmap(lambda target: inverse_offset_target(target,cfg)))(targets)
+        else:
+            targets = j.stack([s.offsets + j.asarray(r['target_delta']) for s, r in zip(snapshots, cases)])
+            fixed, realized, clipped = jax.vmap(lambda target: inverse_offset_target(target, cfg))(targets)
         masks = j.asarray([r['override_mask'] for r in cases], dtype=j.bool_)
         enabled = j.any(masks, axis=1)
         headings = np.asarray([float(env.physics.helpers.pose(s.physical.data)[2]) for s in snapshots])
@@ -123,8 +138,11 @@ def main():
         def normal(s, path, speed, pulse, start, target, mask, use):
             obs, _, fault = env.observation(s, path, speed, horizon)
             original = actor.apply(parameters, obs)
-            action, active = prefix_action(original, target, s.tick - start, prefix_ticks, use, mask,
-                                           start_ticks=delay_ticks)
+            if piecewise:
+                action, active = piecewise_action(original,target,segment_ends,s.tick-start,delay_ticks,use,mask)
+            else:
+                action, active = prefix_action(original, target, s.tick - start, prefix_ticks, use, mask,
+                                               start_ticks=delay_ticks)
             end, logs = env.policy_step(s.replace(fault=s.fault | fault), action, path, speed, horizon, pulse)
             data = {k: logs[k] for k in keep}
             data.update(time=logs['time'], relative_time=logs['time'] - start * env.cc.dt,
@@ -191,7 +209,7 @@ def main():
                     original_actor=declaration['policies']['H75'],
                     requested_targets=np.asarray(targets).tolist(), realized_targets=np.asarray(realized).tolist(),
                     target_clipped_channels=np.asarray(clipped).tolist(),
-                    executed_target_clipped_channels=np.asarray(clipped & masks).tolist(),
+                    executed_target_clipped_channels=np.asarray(clipped & (masks[:,None,:] if piecewise else masks)).tolist(),
                     maximum_remaining_lower_ticks=maximum_remaining_ticks,
                     path_evidence_checks=path_checks,
                     fallback_contract='hold last reference after domain exit; task ineligible; reward undefined, stored NaN',
@@ -240,7 +258,7 @@ def main():
             for key in ('peak_abs_path_m', 'tail_max_path_m'):
                 if labels[key] is not None and not np.isfinite(labels[key]):
                     labels[key] = None
-            impulse = trace['applied_force_impulse'].sum(axis=0)
+            impulse = trace['applied_force_impulse'].sum(axis=0, dtype=np.float64 if piecewise else None)
             expected = forces[i] * directions[i] * plan['pulse_duration_s']
             fault = bool(np.asarray(states.fault)[i])
             if fault:
@@ -248,7 +266,7 @@ def main():
             results.append({**row, **labels, **physical, 'name': name,
                             'final_fault': fault, 'fallback_triggered': bool(trace['fallback_active'].any()),
                             'joint_success': bool(labels['task_recovered'] and physical['balance_label'] == 'NO_FLOOR_CONTACT'),
-                            'logged_suffix_return_while_upper_active': float(np.nansum(trace['scored_tick_reward'])),
+                            'logged_suffix_return_while_upper_active': float(np.nansum(trace['scored_tick_reward'], dtype=np.float64 if piecewise else None)),
                             'impulse_Ns': impulse.tolist(), 'expected_impulse_Ns': expected.tolist(),
                             'impulse_error_Ns': float(np.linalg.norm(impulse - expected))})
         atomic_json(root / 'results.json', dict(cases=results))

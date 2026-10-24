@@ -48,3 +48,26 @@ def matched_target_families(seed):
     first = grid[order]
     second = grid[np.roll(order, shift)]
     return np.stack([first, first], axis=1), np.stack([first, second], axis=1)
+
+
+def mean_matched_library(seed):
+    """Sixteen sequences paired with unique constant mean-target controls.
+
+    Canonical rounding is declared before any physical outcome. Reused mean
+    controls are aliases, never independent trajectories or extra successes.
+    Matching target means does not match realized slew-limited reference dose.
+    """
+    _, temporal = matched_target_families(seed)
+    temporal = np.round(temporal, 12)
+    constants, sequences, lookup = [], [], {}
+    for i, targets in enumerate(temporal):
+        mean = tuple(np.round(targets.mean(axis=0), 12))
+        if mean not in lookup:
+            name = 'mean_%03d' % len(constants)
+            lookup[mean] = name
+            constants.append(dict(candidate=name, family='mean_constant',
+                                  target_deltas=[list(mean),list(mean)], override_mask=[True,True]))
+        sequences.append(dict(candidate='temporal_%03d' % i, family='temporal',
+                              target_deltas=targets.tolist(), override_mask=[True,True],
+                              mean_candidate=lookup[mean]))
+    return constants, sequences
