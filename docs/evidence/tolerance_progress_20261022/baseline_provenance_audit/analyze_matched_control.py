@@ -1,6 +1,8 @@
 """Compare every zero-middle branch with existing H75 endpoints; no simulation."""
 import argparse
 import json
+import hashlib
+import subprocess
 from collections import Counter
 from pathlib import Path
 
@@ -52,6 +54,7 @@ def main():
     parser.add_argument('--h75-campaign', type=Path)
     parser.add_argument('--midpoint-campaign', type=Path)
     parser.add_argument('--nominal-utility', type=Path)
+    parser.add_argument('--nominal-source-commit')
     args = parser.parse_args()
     base = Path.cwd()
     receipts, grouped, rows, new_ticks = {}, {}, [], 0
@@ -158,6 +161,7 @@ def main():
         losses = [p for p in paired if p['labels'][label]=='FLOOR_CONTACT' and p['labels']['zero_middle']=='NO_FLOOR_CONTACT']
         contrasts[label] = dict(gains=gains, losses=losses, net=len(gains)-len(losses))
     midpoint_comparisons, nominal = {}, None
+    historical_sources = []
     if args.midpoint_campaign:
         for comparator in ['zero_middle', 'H75_a0', 'H75_a1']:
             disturbed = [p for p in paired if p['force_N']]
@@ -167,7 +171,20 @@ def main():
         nominal_data = read(args.nominal_utility, receipts)
         for file, sha in nominal_data['input_sha256'].items():
             if digest(file) != sha:
-                raise ValueError('Frozen nominal evidence changed '+file)
+                # The historical scorer was subsequently extended. Authenticate
+                # its exact original bytes; raw evidence still must match live.
+                scorer = Path(__file__).with_name('audit_preference_utility.py').resolve()
+                if Path(file).resolve() != scorer or not args.nominal_source_commit:
+                    raise ValueError('Frozen nominal evidence changed '+file)
+                commit = subprocess.check_output(['git', 'rev-parse', args.nominal_source_commit+'^{commit}'], text=True).strip()
+                relative = str(scorer.relative_to(base))
+                blob = subprocess.check_output(['git', 'show', commit+':'+relative])
+                if hashlib.sha256(blob).hexdigest() != sha:
+                    raise ValueError('Original scorer does not match recorded evidence')
+                historical_sources.append(dict(file=file, source_commit=commit,
+                    recorded_sha256=sha, live_sha256=digest(file),
+                    authentication='Exact historical Git bytes, not current scorer'))
+                continue
             receipts[file] = sha
         nominal = []
         for side in ['left', 'right']:
@@ -194,6 +211,7 @@ def main():
                 new_lower_ticks=new_ticks, new_training_steps=0, reused_H75_cases=48,
                 reused_zero_cases=24 if args.midpoint_campaign else 0,
                 midpoint_comparisons=midpoint_comparisons, nominal_utility=nominal, strata=strata, raw_sha256=receipts,
+                authenticated_historical_sources=historical_sources,
                 analysis_source_sha256=digest(__file__),
                 scope='Own genuine prefixes at matched geometry. Existing DEV contexts; not same physical states or new method gains.'))
 
