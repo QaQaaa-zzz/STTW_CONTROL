@@ -43,3 +43,25 @@ J_{\rm full}(\theta)=\mathbb E_{\tau_{\rm pre}\sim p_\theta}
 当前不启动新full-episode强扰动训练，不恢复原六特征/即时切α/固定速度A3。若以后考虑准备导向研究，必须先回答可实现参考权限、与简单快速行驶/参考整形的差距、真实防摔标签及公平曝光；新论断不能只靠“之前训练不足”。现有名义迁移收益与物理抗扰负结果分别保留，硬件暂无程序不是数学或仿真结论。
 
 本审查采用Scientific Agent Skills的critical-thinking/brainstorming并由独立AI反审，不是人类同行评审。
+
+## 补充：训练终止语义与真实防摔目标的差别（2026-10-24）
+
+这是另一个机制问题，不替换上方准备前缀的历史结论。新增审计`audit_failure_learning_signal.py`读取每臂完整77条指标（2次critic预热＋75PPO），两阶段更新1–77无缺口/重叠；只读复用96条分支，0物理/优化。结果在`runs/failure_learning_signal_audit_v1/{audit.json,contract_authentication.json}`。
+
+|完整训练链|physical标记数|domain标记数|完成片段计数|实际起扰数|接受/尝试PPO minibatches|
+|---|---:|---:|---:|---:|---:|
+|uniform|328|7811|31471|26040|1200/1200|
+|physics|337|7878|31495|26053|1200/1200|
+|polynomial|320|7808|31453|26014|1200/1200|
+
+**计数不是互斥分类**：physical标记与domain可能同一步重叠，不直接相加为失败数或算互斥占比；physical也不是实际触地计数。全部PPO更新的hard-KL/nonfinite stop为0，接受仅说明未被优化守卫拒绝，不能证明恢复梯度充分或已学到。
+
+具体合同已核对：原manifest Git5872461的teleop_env/path_command_env/path_command_reward与现文件字节相同；load_environment、termination_flags、save_checkpoint函数AST亦相同，训练short_recovery/tolerance_training与声明SHA相同。标准训练加载原TeleopPhysics，其physical.failed包含真实非轮接触、峰roll>.7或非有限；terminal_contract_v2的domain_exit也吸收终止。path_command_env对physical.failed或domain_exit都用failure_reward替换该策略步奖励；形式为原10s剩余折扣成本尾项（extra5、scale.1、rate_bound8980.2、gamma.997）。剩余时长不同，实际惩罚不同；公式相同不代表逐例优势相同。4s片段超时会bootstrap，domain/physical终止不会因片段处理自动变成可续行状态。
+
+因此，此前训练与后来“contact-only＋共同domain-hold”的物理观察合同有差别。复用最新96条：α0/α.5/α1/zero的非零力完整无触地为2/3/4/4，其中全部都经历domain-handover；它们在旧任务合同下会停止获得后续物理观察。**这些不是训练片段的反事实续行**，不能说训练中的328等事件里有多少本可获救。当前96条没有越.7后仍无触地的样本，不能扩大该反例；既有独立单状态17例contact_continuation中确有转向*.85/−72N越.7后4s无触地并回区间，见原REPORT，不重跑。
+
+保存的标准checkpoint包含策略/优化器/RNG等，不包含rollout storage或逐例advantages；指标也只是聚合。故“风险被平均奖励淹没”“失败得到错误优势”均为UNKNOWN，不能从平均reward、value loss或接受率补推。
+
+**机制假设（未验证）**：现行任务吸收终止可能截断部分仍有紧急防摔价值的续行，使学习不能区分“偏离任务但存活”与“真实触地”。这不同于缺少准备前缀，也不证明它是阴性原因，更不证明改终止必有收益。独立AI反审支持将其保留为待检验问题，反对据此立即开训练。
+
+下一步若检验，必须保持所有方法相同的目标合同：用户已明确容扰度先以不摔倒定义，故将原任务表现与物理存活分列；不得把路径离域后换控制器存活包装成原Actor完成任务。若同完整状态续行多数依旧触地，则假设减弱；若仅靠放弃任务/fallback存活，只支持应急防摔价值；若普通PPO/简单规则在同合同下同样改善，则不能归因于新容扰学习方法。当前不改生产终止/奖励、不扩旧网格、不启动新训练。
