@@ -105,3 +105,15 @@ audit_parent_target_variation.py认证已有三批68raw，对14真实干预窗�
 独立反审指出无饱和时q_follow(t)−p(t)=q0−p(t0)，因此它是“干预窗内保留相对父目标的固定偏置”，不包装为新自适应容扰反馈。采纳该边界，先实现独立parent_target_following.py纯helper及latch_parent_target，未接环境。缺模块红后新4项＋既有31共35CPU通过：检测时/父目标不变时精确回旧latent、无饱和父增量、非对称速度及转向限幅、未选通道/窗外原Actor、非有限显式fault。原baseline和触发器未改；helper测试不证明完整80tick实际时序或闭环收益。
 
 后续集成合同：本臂本步Actor输出先锁存parent_anchor，再使用本步更新后的gate.fixed_latent/mask/active合成；首次无候选事件同样锁存，交回/曲率变号不重置。锚点始终物理坐标；域退出禁用helper，外层消费其engineering_fault。requested/realized_follow_target仅合成诊断，未选通道不能当实际目标，剂量以最终action映射及真实参考计算。尚未接入或派发新物理/训练，下一步只完成该合同的集成审查，再确定冻结比较；不改变alpha资格或先扩新场景。
+
+#### 真实carry接入与固定对照协议（2026-10-24，准备阶段）
+
+已实现following_causal_reference.py的FollowingState(gate,parent_anchor)，从task0初始化；normal中先本步锁存再合成，fallback只携带状态不再调用helper。父锚点不因窗口结束/曲率变号/无候选事件而重置；extra origin检查拒绝非零或非有限anchor。显式parent_following_v1选择匹配函数和初态，未知variant拒绝。新5项适配器测试先缺模块/缺初态工厂红后绿，与既有35合计40CPU通过。它们证明carry/接口与时序逻辑，不声称已通过GPU整链或物理收益。
+
+准备runs/parent_following_comparison_v1：同bank3完整原始初态、left1.8/right1.5、alpha0、0/±32N，各locked/following一支，共12全新轨迹，≤24000lower ticks，0训练/拟合。两臂使用同一检测器、源Actor/观测权限和适配器；locked实际执行receipt.locked_action，绝非原Actor无干预；following执行父相对偏置候选。本臂Actor从自己的实时观测计算。检测时可执行q0、.015阈值、80ticks、.15/.04原幅度、原滤波/slew/幅值/10s/fallback不变。零力/反向/提前终止/UNKNOWN全部保留，不改alpha资格。历史68轨迹继续保留作开发上下文，不继承新结局；这里6支强基线新采是为在新carry/合成路径下做匹配对照，明确计费，不称旧数据复用或独立训练种子。
+
+本面板强基线已具局部防摔收益，比较问题是能否保留这些能力并改善实质任务/参考代价，不要求凭同一面板再增加所有防摔例，更不要求全12成功。按净防摔及实质任务/代价裁决，保留每个gain/loss；若无可用优势或防摔净变差，停止本次合成方式，不调增益/幅度/时间/新场景。候选失败不撤销已验证locked基线。仍未证明连续alpha偏好保持、独立泛化或RA-L就绪。
+
+日志新增本臂parent target/anchor、locked action、following请求/实现目标及新增clip。报告核检测时动作与locked完全相同、anchor恒定、非选通道原Actor、窗口交回及实际跟随目标恒等式。实际参考偏移积分相对本臂nominal，单位[m,rad·s]；另列最大参考变化率[m/s²,rad/s]、物理/上层有效/实际干预时长。积分减少可能仅来自更早离域/触地，不能独立判effort改善，也不称执行器能量。
+
+独立AI反审未见启动阻断；采纳“失败只停止本次合成”及剂量覆盖时长说明。初准备包保留pre_review_preparation，pre_execution_review_receipt记录仅报告/统计修改且normal/fallback/one数值分支AST未变，0物理重新封存147源/plan SHA。中文Bark root/bank已登记、repair=false。实际启动/状态继续只看台账与run status；本页准备收据不冒充已运行。

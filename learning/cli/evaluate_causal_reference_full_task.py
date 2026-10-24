@@ -239,6 +239,43 @@ def prepare_transfer(root, reference):
     print(root/'design.json')
 
 
+def prepare_following(root, reference):
+    """Fresh matched locked/following pair; inherited runs are context only."""
+    from prepare_short_recovery_campaign import register
+    worktree=Path(__file__).resolve().parents[2]
+    status=json.loads((reference/'status.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=24:
+        raise ValueError('requires the completed original causal full-task panel')
+    old=json.loads((reference/'bank3/plan.json').read_text())
+    cases=[{**row,'arm':{'original':'locked','causal':'following'}[row['arm']]} for row in old['cases']]
+    assert len(cases)==12
+    for row in cases:
+        for field in ('capture_snapshot','schedule_source_raw'):
+            if digest(row[field])!=row[field+'_sha256']:raise ValueError('pulse context source changed')
+    root.mkdir(exist_ok=False)
+    sources=list((worktree/'learning/src/sttw_control').rglob('*.py'))+[Path(__file__).resolve()]
+    hashes={str(p):digest(p) for p in sources}
+    for source in sources:
+        dest=root/'source_at_launch'/source.relative_to(worktree);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(source.read_bytes())
+        assert digest(dest)==hashes[str(source)]
+    directory=root/'bank3';directory.mkdir()
+    plan={**old,'cases':cases,'declared_cases':12,'maximum_new_lower_ticks':24000,
+          'controller_variant':'parent_following_v1','comparison_mode':'locked_following',
+          'source_sha256':hashes,'scope':'Fresh matched target-composition comparison, alpha0 only; old outcomes not inherited.'}
+    atomic_json(directory/'plan.json',plan);path=str(directory/'plan.json')
+    design=dict(project='STTW_CONTROL',purpose='Test whether parent-target increments improve on the strong locked-target intervention under the same detector and permissions.',
+                plans=[path],plan_sha256={path:digest(path)},source_sha256=hashes,
+                declared_cases=12,maximum_new_lower_ticks=24000,training_steps=0,model_fits=0,
+                parent_context_run=str(reference),comparison_mode='locked_following',baseline_arm='locked',candidate_arm='following',
+                stop='Only bank3 left1.8/right1.5 × zero/±32 × locked/following. Report all gains/losses, nominal/opposite effects, task cost and reference effort. No gain, duration, threshold, alpha, force or context retuning. Judge net no-contact and meaningful task/effort effects, not perfection. If no usable advantage or worse no-contact balance, stop this composition claim.',
+                reuse='Old 68 trajectories retained as development evidence; these 12 are all fresh, including 6 matched strong-baseline lanes because the new carry/composition path must be compared fairly.')
+    atomic_json(root/'design.json',design)
+    atomic_json(root/'status.json',dict(phase='prepared',declared_cases=12,completed_cases=0,active_lower_ticks=0,training_steps=0,model_fits=0))
+    register(directory/'ACTIVE_RUN.json','STTW_CONTROL 父目标跟随与锁定强基线12条 bank3',directory/'status.json')
+    register(root/'ACTIVE_RUN.json','STTW_CONTROL 同权限目标合成对照与完整分析',root/'status.json')
+    print(root/'design.json')
+
+
 def execute_bank(root):
     import jax
     import jax.numpy as j
@@ -255,8 +292,12 @@ def execute_bank(root):
                                                        validate_causal_contract, validate_full_task_origin,
                                                        case_has_engineering_error)
     plan = json.loads((root / 'plan.json').read_text())
-    from sttw_control.reflected_causal_reference import select_reference_rule
-    causal_reference_action = select_reference_rule(plan.get('controller_variant','baseline'))
+    from sttw_control.reflected_causal_reference import select_reference_rule, initial_reference_state
+    variant=plan.get('controller_variant','baseline')
+    causal_reference_action = select_reference_rule(variant)
+    locked_comparison=plan.get('comparison_mode')=='locked_following'
+    if locked_comparison and (variant!='parent_following_v1' or {r['arm'] for r in plan['cases']}!={'locked','following'}):
+        raise ValueError('locked/following comparison requires its explicit controller and arm identities')
     state = dict(phase='running', pid=os.getpid(), stage='loading', declared_cases=len(plan['cases']),
                  completed_cases=0, active_lower_ticks=0, training_steps=0, model_fits=0)
     def update(**changes):
@@ -292,9 +333,12 @@ def execute_bank(root):
         stack = lambda values: jax.tree.map(lambda *xs: j.stack(xs), *values)
         # Complete task reset exactly once; no mid-task capture is used as state.
         path_states = [env.reset(initial, paths[r['route']], r['speed'], r['alpha']) for r in cases]
-        gate_states = [initial_gate() for _ in cases]
+        gate_states = [initial_reference_state(variant) for _ in cases]
         for s, gate in zip(path_states, gate_states):
             validate_full_task_origin(s.tick, s.physical.physical_tick, initial.physical_tick, gate)
+            if variant=='parent_following_v1':
+                from sttw_control.following_causal_reference import validate_following_origin
+                validate_following_origin(gate)
         captures = {}
         for row in cases:
             if digest(row['schedule_source_raw']) != row['schedule_source_raw_sha256'] or digest(row['capture_snapshot']) != row['capture_snapshot_sha256']:
@@ -309,7 +353,7 @@ def execute_bank(root):
         carry = (stack(path_states), stack(gate_states))
         path_batch = stack([paths[r['route']] for r in cases])
         speeds = j.asarray([r['speed'] for r in cases])
-        enabled = j.asarray([r['arm'] == 'causal' for r in cases])
+        enabled = j.asarray([r['arm'] == ('following' if locked_comparison else 'causal') for r in cases])
         absolute_start = int(initial.physical_tick) * env.cc.dt
         pulses = j.asarray([[absolute_start + r['pulse_onset_task_tick'] * env.cc.dt,
                              absolute_start + r['pulse_onset_task_tick'] * env.cc.dt + .1,
@@ -333,13 +377,15 @@ def execute_bank(root):
             original = actor.apply(parameters, obs)
             # No pulse, onset, route ID or true force is passed to this function.
             chosen, gate_after, receipt = causal_reference_action(original, obs, s.offsets, s.tick, gate, cfg)
-            action = j.where(use, chosen, original)
+            action = j.where(use, chosen, receipt['locked_action']) if locked_comparison else j.where(use, chosen, original)
             end, log = env.policy_step(s.replace(fault=s.fault | fault | receipt['engineering_fault']), action, path, speed, 10., pulse)
             data = {k: log[k] for k in keep}
             data.update(time=log['time'], relative_time=log['time'], upper_active=log['active_tick'],
                         fallback_active=j.zeros(4, dtype=j.bool_), upper_observation=j.broadcast_to(obs, (4, 351)),
                         original_policy_latent=j.broadcast_to(original, (4, 2)), executed_policy_latent=j.broadcast_to(action, (4, 2)),
-                        override_active=j.full(4, use & receipt['override_active']),
+                        locked_policy_latent=j.broadcast_to(receipt.get('locked_action',chosen),(4,2)),
+                        override_active=j.full(4, (use | locked_comparison) & receipt['override_active']),
+                        following_active=j.full(4, use & (variant=='parent_following_v1') & receipt['override_active']),
                         gate_signal=j.full(4, receipt['signal']), gate_valid=j.full(4, receipt['valid']),
                         gate_detected=j.full(4, receipt['detected']), gate_fired=j.full(4, gate_after.fired),
                         gate_start_tick=j.full(4, gate_after.start_tick), gate_mask=j.broadcast_to(gate_after.mask, (4, 2)),
@@ -347,9 +393,12 @@ def execute_bank(root):
                         gate_target_clipped=j.broadcast_to(receipt['target_clipped_channels'], (4, 2)),
                         gate_engineering_fault=j.full(4, receipt['engineering_fault']),
                         effective_costs=j.stack([log['effective_components'][k] for k in cost_keys], axis=-1))
+            for key in ('parent_target_anchor','parent_target_current','following_requested_target','following_realized_target'):
+                data[key]=j.broadcast_to(receipt.get(key,j.zeros(2)),(4,2))
+            data['following_target_clipped']=j.broadcast_to(receipt.get('following_target_clipped',j.zeros(2,dtype=j.bool_)) & use,(4,2))
             data['nonfinite'] |= log['policy_fault']
             return (end, gate_after), data
-        template = jax.eval_shape(normal, (path_states[0], initial_gate()), paths[cases[0]['route']], speeds[0], pulses[0], enabled[0])[1]
+        template = jax.eval_shape(normal, (path_states[0], gate_states[0]), paths[cases[0]['route']], speeds[0], pulses[0], enabled[0])[1]
         zero_block = jax.tree.map(lambda x: j.zeros(x.shape, x.dtype), template)
         zero_tick = jax.tree.map(lambda x: j.zeros(x.shape[1:], x.dtype), template)
 
@@ -368,12 +417,14 @@ def execute_bank(root):
                         data[key] = log[key]
                     for key in ('reference_xy', 'path_cross_track', 'path_heading_error', 'path_progress', 'goal_section_signed_distance',
                                 'latent_z', 'target_offset', 'chi', 'scored_tick_reward', 'effective_costs', 'upper_observation',
-                                'original_policy_latent', 'executed_policy_latent', 'gate_signal'):
+                                'original_policy_latent', 'executed_policy_latent', 'locked_policy_latent', 'gate_signal',
+                                'parent_target_current','following_requested_target','following_realized_target'):
                         data[key] = j.full_like(zero_tick[key], j.nan)
                     data.update(time=st.tick*env.cc.dt, relative_time=st.tick*env.cc.dt, domain_exit=j.bool_(True),
                                 fallback_active=j.bool_(True), governed=ref, nominal=st.physical.raw,
                                 offsets=st.offsets, filtered_offset=st.filtered, gate_fired=gate.fired,
-                                gate_start_tick=gate.start_tick, gate_mask=gate.mask, gate_target_offset=gate.target_offset)
+                                gate_start_tick=gate.start_tick, gate_mask=gate.mask, gate_target_offset=gate.target_offset,
+                                parent_target_anchor=getattr(gate,'parent_anchor',j.zeros(2)))
                     return end, data
                 stop = st.physical.failed | st.fault | (st.tick >= deadline)
                 return jax.lax.cond(stop, lambda st: (st, zero_tick), active, st)
@@ -433,7 +484,14 @@ def execute_bank(root):
                             'impulse_Ns':impulse.tolist(), 'expected_impulse_Ns':expected.tolist(), 'force_exposure':exposure,
                             'detection_time_s':None if not len(hits) else float(trace['time'][hits[0]]),
                             'detection_signal':None if not len(hits) else float(trace['gate_signal'][hits[0]]),
-                            'override_lower_ticks':int(trace['override_active'].sum()), 'baseline_gate_role':'shadow telemetry; only causal arm executes override'})
+                            'override_lower_ticks':int(trace['override_active'].sum()),
+                            'following_target_clip_lower_ticks':int(np.any(trace['following_target_clipped'],axis=1).sum()),
+                            'upper_active_seconds':float(trace['upper_active'].sum()*env.cc.dt),
+                            'override_seconds':float(trace['override_active'].sum()*env.cc.dt),
+                            'observed_physical_seconds':float(len(trace['time'])*env.cc.dt),
+                            'reference_offset_abs_integral_while_override':(env.cc.dt*np.sum(np.abs(trace['governed']-trace['nominal'])*trace['override_active'][:,None],axis=0,dtype=np.float64)).tolist(),
+                            'max_reference_rate_while_override':np.max(np.abs(np.diff(trace['governed'],axis=0,prepend=trace['governed'][:1]))/env.cc.dt*trace['override_active'][:,None],axis=0,initial=0).tolist(),
+                            'baseline_gate_role':'both arms execute the same gate; selected target locked or parent-relative' if locked_comparison else 'shadow telemetry; only causal arm executes override'})
         atomic_json(root / 'results.json', dict(cases=results))
         errors = sum(case_has_engineering_error(r['final_fault'], r['balance_label']) for r in results)
         update(phase='error' if errors else 'completed', stage='labels_ready', completed_cases=len(results), engineering_error_cases=errors)
@@ -449,6 +507,7 @@ def report(root, design):
     import matplotlib.pyplot as plt
     out=root/'analysis';out.mkdir(exist_ok=False)
     pairs, hashes, ticks = [], {}, 0
+    baseline_arm=design.get('baseline_arm','original');candidate_arm=design.get('candidate_arm','causal')
     for plan_path in design['plans']:
         directory=Path(plan_path).parent
         rows=json.loads((directory/'results.json').read_text())['cases']
@@ -458,7 +517,7 @@ def report(root, design):
         fig, axes=plt.subplots(2,columns,figsize=(6*columns,11),layout='constrained',squeeze=False)
         for p in range(len(rows)//2):
             baseline, causal=rows[2*p:2*p+2]
-            assert baseline['arm']=='original' and causal['arm']=='causal'
+            assert baseline['arm']==baseline_arm and causal['arm']==candidate_arm
             assert (baseline['route'],baseline['speed'],baseline['force_N'])==(causal['route'],causal['speed'],causal['force_N'])
             pair=dict(bank=directory.name,route=baseline['route'],speed=baseline['speed'],alpha=0.,force_N=baseline['force_N'],
                       baseline_safe=baseline['balance_label']=='NO_FLOOR_CONTACT',causal_safe=causal['balance_label']=='NO_FLOOR_CONTACT',
@@ -474,7 +533,7 @@ def report(root, design):
                 assert abs(float(data['time'][0]))<1e-6
                 active=data['upper_active'].astype(bool);override=data['override_active'].astype(bool)
                 log_ticks=np.rint(data['time']/.005).astype(np.int64)
-                expected_override=(active & (row['arm']=='causal') & data['gate_fired'].astype(bool)
+                expected_override=(active & (row['arm'] in ('causal','locked','following')) & data['gate_fired'].astype(bool)
                                    & data['gate_mask'].astype(bool).any(axis=1)
                                    & (log_ticks>=data['gate_start_tick']) & (log_ticks<data['gate_start_tick']+80))
                 np.testing.assert_array_equal(override,expected_override)
@@ -482,6 +541,26 @@ def report(root, design):
                 if row['arm']=='original':assert not override.any()
                 untouched=active[:,None] & ~(override[:,None] & data['gate_mask'].astype(bool))
                 np.testing.assert_array_equal(data['executed_policy_latent'][untouched],data['original_policy_latent'][untouched])
+                if design.get('comparison_mode')=='locked_following':
+                    np.testing.assert_array_equal(data['following_active'],override & (row['arm']=='following'))
+                    c=manifest['config']['residual_interface']
+                    def targets(z):
+                        a=np.tanh(z)
+                        return np.stack([a[:,0]*np.where(a[:,0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),a[:,1]*c['steer_scale_rad']],axis=-1)
+                    hits=np.flatnonzero(data['gate_detected'] & active)
+                    if len(hits):
+                        first=int(hits[0]);anchor=targets(data['original_policy_latent'][first:first+1])[0]
+                        np.testing.assert_allclose(data['parent_target_anchor'][first:],np.broadcast_to(anchor,data['parent_target_anchor'][first:].shape),atol=1e-6)
+                        np.testing.assert_array_equal(data['executed_policy_latent'][first],data['locked_policy_latent'][first])
+                    if row['arm']=='locked':
+                        np.testing.assert_array_equal(data['executed_policy_latent'][active],data['locked_policy_latent'][active])
+                    elif override.any():
+                        selected=override[:,None] & data['gate_mask'].astype(bool)
+                        parent=targets(data['original_policy_latent'])
+                        requested=targets(data['locked_policy_latent'])+(parent-data['parent_target_anchor'])*data['gate_mask']
+                        lo=np.array([-c['speed_negative_scale_m_s'],-c['steer_scale_rad']])*(1-1e-6)
+                        hi=np.array([c['speed_positive_scale_m_s'],c['steer_scale_rad']])*(1-1e-6)
+                        np.testing.assert_allclose(targets(data['executed_policy_latent'])[selected],np.clip(requested,lo,hi)[selected],atol=1e-6)
                 assert bool(data['contact_failure'].any())==row['event_contact']
                 if override.any():
                     t0=int(data['gate_start_tick'][override][0]);t=data['time'][override]
@@ -530,10 +609,18 @@ def report(root, design):
     xy_links=' · '.join(f'[{Path(p).parent.name}全部XY]({Path(p).parent.name}_all_xy.png)' for p in design['plans'])
     lines=['# 完整任务因果ESO参考规则', '', xy_links, '',
            f"目的：{design['purpose']}。本轮{design['declared_cases']}条真实全任务，声明的全部力档/反向/提前终止保留；原始参考固定。x=触地，方块=首次域退出，圆点=物理终点，点线=held-reference续行。此为固定DEV简单基线，非安全认证。", '',
-           '|bank|路径/速度|力N|原不触地|因果不触地|原联合|因果联合|检测秒|干预tick|暴露原/因果|', '|---|---|---:|---|---|---|---|---|---:|---|']
+           f'|bank|路径/速度|力N|{baseline_arm}不触地|{candidate_arm}不触地|{baseline_arm}联合|{candidate_arm}联合|检测秒|候选干预tick|两臂暴露|', '|---|---|---:|---|---|---|---|---|---:|---|']
     for p in pairs:lines.append(f"|{p['bank']}|{p['route']}/{p['speed']}|{p['force_N']}|{p['baseline_safe']}|{p['causal_safe']}|{p['baseline_joint']}|{p['causal_joint']}|{p['detection_time_s']}|{p['override_lower_ticks']}|{p['baseline_exposure']}/{p['causal_exposure']}|")
+    if design.get('comparison_mode')=='locked_following':
+        lines+=['', '两臂均实际执行因果gate；locked不是原Actor无干预。各臂父输出来自自己的当前状态。参考偏移积分相对各自当前nominal，仅在实际override期间累计，不称实际执行器能量或纯干预因果效应。积分较小可能来自更早退出/触地/较短窗口，必须结合下列时长和物理/任务结局，不单凭积分判优。', '',
+                '|bank/路径/力N|臂|物理观察/上层有效/干预秒|跟随目标新增clip ticks|参考偏移绝对积分 [m, rad·s]|窗口内最大参考变化率 [m/s², rad/s]|', '|---|---|---|---:|---|---|']
+        for plan_path in design['plans']:
+            directory=Path(plan_path).parent
+            for row in json.loads((directory/'results.json').read_text())['cases']:
+                lines.append(f"|{directory.name}/{row['route']}/{row['force_N']:g}|{row['arm']}|{row['observed_physical_seconds']:.3f}/{row['upper_active_seconds']:.3f}/{row['override_seconds']:.3f}|{row['following_target_clip_lower_ticks']}|{row['reference_offset_abs_integral_while_override']}|{row['max_reference_rate_while_override']}|")
+    stop_scope='若本比较无可用优势，停止本次目标合成方式，保留已验证的locked基线。' if design.get('comparison_mode')=='locked_following' else '若无净收益停止本门控，不扫阈值/延迟。'
     lines+=['',f'新增{ticks} lower ticks，0训练/拟合。逐20ms奖励、有符号分项、失败余项、所有XY/检测/参考曲线与原始SHA已保存。',
-            f"{len(design['plans'])}个初态bank，共同继承来源而非独立训练重复；阈值/规则在已看DEV上开发，没有独立泛化、连续alpha、噪声鲁棒或安全认证结论。若无净收益停止本门控，不扫阈值/延迟。"]
+            f"{len(design['plans'])}个初态bank，共同继承来源而非独立训练重复；阈值/规则在已看DEV上开发，没有独立泛化、连续alpha、噪声鲁棒或安全认证结论。{stop_scope}"]
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
     return ticks
 
@@ -667,12 +754,12 @@ def execute(root):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode',choices=('prepare','prepare-curve','prepare-transfer','run','bank'),required=True)
+    parser.add_argument('--mode',choices=('prepare','prepare-curve','prepare-transfer','prepare-following','run','bank'),required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--reference-run',type=Path)
     args=parser.parse_args()
-    if args.mode in ('prepare-curve','prepare-transfer'):
+    if args.mode in ('prepare-curve','prepare-transfer','prepare-following'):
         if args.reference_run is None:parser.error('--reference-run required for preparation')
-        {'prepare-curve':prepare_curve,'prepare-transfer':prepare_transfer}[args.mode](args.output.resolve(),args.reference_run.resolve())
+        {'prepare-curve':prepare_curve,'prepare-transfer':prepare_transfer,'prepare-following':prepare_following}[args.mode](args.output.resolve(),args.reference_run.resolve())
     else:
         {'prepare':prepare,'run':execute,'bank':execute_bank}[args.mode](args.output.resolve())

@@ -43,4 +43,16 @@ def select_reference_rule(variant):
         return causal_reference_action
     if variant == 'reflected_v1':
         return reflected_reference_action
+    if variant == 'parent_following_v1':
+        from .following_causal_reference import following_causal_reference_action
+        return following_causal_reference_action
     raise ValueError('unknown causal reference rule: ' + str(variant))
+
+
+def initial_reference_state(variant):
+    select_reference_rule(variant)  # Reject unknown variants before state creation.
+    if variant == 'parent_following_v1':
+        from .following_causal_reference import initial_following_state
+        return initial_following_state()
+    from .causal_reference_baseline import initial_gate
+    return initial_gate()
