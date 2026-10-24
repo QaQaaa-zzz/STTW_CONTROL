@@ -56,3 +56,22 @@ def confirmation_cases(prefixes, contexts, forces):
                                       override_mask=[value != 0 for value in delta], force_N=force))
             pairs.append(pair)
     return cases, pairs
+def supplemental_force_cases(reference_cases):
+    """Fixed ±16/±48 supplement; preserve the existing origin and pulse context."""
+    groups = {}
+    for row in reference_cases:
+        groups.setdefault((row['route'], row['speed'], row['alpha']), []).append(row)
+    output = []
+    required = {(force, arm) for force in (0., -32., 32.) for arm in ('original', 'causal')}
+    for rows in groups.values():
+        if len(rows) != 6 or {(r['force_N'], r['arm']) for r in rows} != required:
+            raise ValueError('reference must contain one complete matched 0/±32 panel')
+        common = {k: v for k, v in rows[0].items() if k not in ('force_N', 'arm')}
+        if any({k: v for k, v in r.items() if k not in ('force_N', 'arm')} != common for r in rows):
+            raise ValueError('reference pulse context or origin differs across paired cases')
+        for force in (-48., -16., 16., 48.):
+            for arm in ('original', 'causal'):
+                output.append(dict(common, force_N=force, arm=arm))
+    if not output:
+        raise ValueError('empty reference panel')
+    return output

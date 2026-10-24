@@ -8,12 +8,102 @@ import pickle
 import subprocess
 import sys
 import time
+import ast
 
 from sttw_control.preference_best import atomic_json
 
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def numerical_branches(source):
+    tree=ast.parse(source)
+    definitions={n.name:ast.dump(n,include_attributes=False) for n in ast.walk(tree)
+                 if isinstance(n,ast.FunctionDef) and n.name in ('normal','fallback','one')}
+    definitions['scan']=[ast.dump(n,include_attributes=False) for n in ast.walk(tree)
+                         if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='execute' for t in n.targets)]
+    return hashlib.sha256(json.dumps(definitions,sort_keys=True).encode()).hexdigest()
+
+
+def prepare_curve(root, reference):
+    import numpy as np
+    from prepare_short_recovery_campaign import register
+    from sttw_control.reference_confirmation import supplemental_force_cases
+    from sttw_control.balance_probe import classify_contact_balance
+    from sttw_control.recovery_margin_scan import outcome_labels
+    worktree=Path(__file__).resolve().parents[2]
+    prior=json.loads((reference/'design.json').read_text())
+    status=json.loads((reference/'status.json').read_text())
+    analysis=json.loads((reference/'analysis/analysis.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=24:
+        raise ValueError('requires the complete frozen 24-case causal panel')
+    if sum(not p['baseline_safe'] and p['causal_safe'] for p in analysis['pairs']) <= sum(p['baseline_safe'] and not p['causal_safe'] for p in analysis['pairs']):
+        raise ValueError('no net physical gain; do not start the conditional supplement')
+    metadata_paths=[reference/'design.json',reference/'status.json',reference/'analysis/analysis.json']
+    raw_checks=0
+    for plan_path,sha in prior['plan_sha256'].items():
+        if digest(plan_path)!=sha:raise ValueError('reference plan changed')
+        directory=Path(plan_path).parent
+        old_plan=json.loads(Path(plan_path).read_text())
+        manifest=json.loads((directory/'manifest.json').read_text())
+        if manifest['plan']!=old_plan:raise ValueError('reference manifest and pinned plan differ')
+        metadata_paths += [Path(plan_path),directory/'manifest.json',directory/'results.json']
+        for row in json.loads((directory/'results.json').read_text())['cases']:
+            raw=directory/(row['name']+'.npz')
+            if digest(raw)!=analysis['raw_sha256'][str(raw)]:raise ValueError('reference raw changed')
+            with np.load(raw) as archive:data={k:archive[k] for k in archive.files}
+            physical=classify_contact_balance(data,horizon_s=10.)
+            for key in ('balance_label','active_ticks','event_contact','full_observation'):
+                if physical[key]!=row[key]:raise ValueError('reference physical label/count differs from raw: '+key)
+            np.testing.assert_allclose(data['applied_force_impulse'].sum(axis=0,dtype=np.float64),row['impulse_Ns'],atol=1e-8)
+            path=directory/(row['route']+'_path.npz')
+            metadata_paths.append(path)
+            with np.load(path) as path_data:goal=float(path_data['goal'])
+            labels=outcome_labels(data,speed=row['speed'],goal_s=goal,working_roll=manifest['config']['stage_B_baseline']['working_roll_rad'],horizon=10.,hold_s=manifest['config']['stage_B_baseline']['hold_s'])
+            if labels['task_recovered']!=row['task_recovered'] or row['joint_success']!=bool(labels['task_recovered'] and physical['balance_label']=='NO_FLOOR_CONTACT'):
+                raise ValueError('reference task label differs from raw')
+            raw_checks+=1
+    reference_metadata_sha256={str(p):digest(p) for p in metadata_paths}
+    for path,sha in analysis['raw_sha256'].items():
+        if digest(path)!=sha:raise ValueError('reference raw identity changed')
+    allowed={'learning/cli/evaluate_causal_reference_full_task.py','learning/src/sttw_control/reference_confirmation.py'}
+    for path,sha in prior['source_sha256'].items():
+        if digest(path)!=sha and str(Path(path).relative_to(worktree)) not in allowed:
+            raise ValueError('numerical source changed since reference: '+path)
+    archived=reference/'source_at_launch/learning/cli/evaluate_causal_reference_full_task.py'
+    core=numerical_branches(Path(__file__).read_text())
+    if numerical_branches(archived.read_text())!=core:raise ValueError('numerical scan/control branches changed')
+    old_helper=ast.parse((reference/'source_at_launch/learning/src/sttw_control/reference_confirmation.py').read_text())
+    new_helper=ast.parse((worktree/'learning/src/sttw_control/reference_confirmation.py').read_text())
+    extract=lambda tree:ast.dump(next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='validate_path_evidence'),include_attributes=False)
+    if extract(old_helper)!=extract(new_helper):raise ValueError('path check helper changed')
+    root.mkdir(exist_ok=False)
+    sources=list((worktree/'learning/src/sttw_control').rglob('*.py'))+[Path(__file__).resolve()]
+    hashes={str(p):digest(p) for p in sources}
+    for path in sources:
+        dest=root/'source_at_launch'/path.relative_to(worktree);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(path.read_bytes())
+        assert digest(dest)==hashes[str(path)]
+    plans=[]
+    for old_plan in prior['plans']:
+        old=json.loads(Path(old_plan).read_text());cases=supplemental_force_cases(old['cases'])
+        assert len(cases)==16
+        directory=root/f"bank{old['bank_index']}";directory.mkdir()
+        plan={**old,'cases':cases,'declared_cases':16,'maximum_new_lower_ticks':32000,'source_sha256':hashes,
+              'scope':'fixed ±16/±48 supplement; reference 24 cases authenticated and reused, not rerun'}
+        atomic_json(directory/'plan.json',plan);plans.append(str(directory/'plan.json'))
+        register(directory/'ACTIVE_RUN.json',f"STTW_CONTROL 因果容扰曲线补测 bank{old['bank_index']}",directory/'status.json')
+    design=dict(project='STTW_CONTROL',purpose='Measure tested no-contact sets using fixed 16/32/48N magnitudes; no continuous safety claim.',
+                plans=plans,plan_sha256={p:digest(p) for p in plans},source_sha256=hashes,
+                declared_cases=32,maximum_new_lower_ticks=64000,training_steps=0,model_fits=0,
+                reference_run=str(reference),reference_raw_sha256=analysis['raw_sha256'],reference_cases_reused=24,
+                reference_metadata_sha256=reference_metadata_sha256,reference_raw_label_checks=raw_checks,
+                numeric_branch_sha256=core,reuse_boundary='Models/configs/physics sources/gate and numerical scan branches unchanged; only preparation/cardinality/report code generalized.',
+                stop='Only fixed ±16/±48 supplement. No automatic 64N, threshold/delay/action/bank changes or new fits. Ties at added forces are not failures; report complete set gains/losses.')
+    atomic_json(root/'design.json',design)
+    atomic_json(root/'status.json',dict(phase='prepared',declared_cases=32,completed_cases=0,active_lower_ticks=0,training_steps=0,model_fits=0))
+    register(root/'ACTIVE_RUN.json','STTW_CONTROL 因果防摔容扰集合：固定力档补测与合并分析',root/'status.json')
+    print(root/'design.json')
 
 
 def prepare(root):
@@ -97,7 +187,7 @@ def execute_bank(root):
                                                        validate_causal_contract, validate_full_task_origin,
                                                        case_has_engineering_error)
     plan = json.loads((root / 'plan.json').read_text())
-    state = dict(phase='running', pid=os.getpid(), stage='loading', declared_cases=12,
+    state = dict(phase='running', pid=os.getpid(), stage='loading', declared_cases=len(plan['cases']),
                  completed_cases=0, active_lower_ticks=0, training_steps=0, model_fits=0)
     def update(**changes):
         state.update(changes, checked_unix=time.time()); atomic_json(root / 'status.json', state)
@@ -292,8 +382,10 @@ def report(root, design):
         directory=Path(plan_path).parent
         rows=json.loads((directory/'results.json').read_text())['cases']
         manifest=json.loads((directory/'manifest.json').read_text())
-        fig, axes=plt.subplots(2,3,figsize=(18,11),layout='constrained')
-        for p in range(6):
+        columns=len(rows)//4
+        assert len(rows)%4==0
+        fig, axes=plt.subplots(2,columns,figsize=(6*columns,11),layout='constrained',squeeze=False)
+        for p in range(len(rows)//2):
             baseline, causal=rows[2*p:2*p+2]
             assert baseline['arm']=='original' and causal['arm']=='causal'
             assert (baseline['route'],baseline['speed'],baseline['force_N'])==(causal['route'],causal['speed'],causal['force_N'])
@@ -324,8 +416,11 @@ def report(root, design):
                     t0=int(data['gate_start_tick'][override][0]);t=data['time'][override]
                     assert t.min()>=t0*.005-2e-6 and t.max()<(t0+80)*.005+2e-6
                 label=f"{row['arm']}; {row['balance_label']}; task={row['task_recovered']}"
-                ax.plot(*data['actual_xy'].T,color=color,label=label)
-                ax.scatter(*data['actual_xy'][-1],color=color,marker='x' if row['event_contact'] else 's' if row['domain_failure'] else 'o')
+                domain=np.flatnonzero(data['domain_exit'].astype(bool));cut=int(domain[0]) if len(domain) else len(data['time'])-1
+                ax.plot(*data['actual_xy'][:cut+1].T,color=color,label=label)
+                if len(domain):
+                    ax.plot(*data['actual_xy'][cut:].T,':',color=color);ax.scatter(*data['actual_xy'][cut],color=color,marker='s')
+                ax.scatter(*data['actual_xy'][-1],color=color,marker='x' if row['event_contact'] else 'o')
                 prog=data['path_progress'][np.isfinite(data['path_progress'])]
                 if len(prog):progress.append(float(prog.max()))
                 t=data['time']
@@ -359,10 +454,10 @@ def report(root, design):
             detail.suptitle(title);detail.savefig(out/f'{directory.name}_pair{p}_timeseries.png');plt.close(detail)
             pairs.append(pair)
         fig.savefig(out/f'{directory.name}_all_xy.png');plt.close(fig)
-    assert len(pairs)==12 and ticks<=48000
+    assert len(pairs)==design['declared_cases']//2 and ticks<=design['maximum_new_lower_ticks']
     atomic_json(out/'analysis.json',dict(pairs=pairs,raw_sha256=hashes,active_lower_ticks=ticks,training_steps=0,model_fits=0))
     lines=['# 完整任务因果ESO简单基线', '', '[bank3全部XY](bank3_all_xy.png) · [bank0全部XY](bank0_all_xy.png)', '',
-           '目的：裁决不读取起扰/真实方向、从任务起点连续检测的完整反馈规则是否保留净收益。24条真实全任务，全部zero/反向/提前终止均保留。此为固定DEV简单基线，不是容扰度估计器或新颖方法。', '',
+           f"目的：{design['purpose']}。本轮{design['declared_cases']}条真实全任务，声明的全部力档/反向/提前终止保留；原始参考固定。x=触地，方块=首次域退出，圆点=物理终点，点线=held-reference续行。此为固定DEV简单基线，非安全认证。", '',
            '|bank|路径/速度|力N|原不触地|因果不触地|原联合|因果联合|检测秒|干预tick|暴露原/因果|', '|---|---|---:|---|---|---|---|---|---:|---|']
     for p in pairs:lines.append(f"|{p['bank']}|{p['route']}/{p['speed']}|{p['force_N']}|{p['baseline_safe']}|{p['causal_safe']}|{p['baseline_joint']}|{p['causal_joint']}|{p['detection_time_s']}|{p['override_lower_ticks']}|{p['baseline_exposure']}/{p['causal_exposure']}|")
     lines+=['',f'新增{ticks} lower ticks，0训练/拟合。逐20ms奖励、有符号分项、失败余项、所有XY/检测/参考曲线与原始SHA已保存。',
@@ -371,15 +466,114 @@ def report(root, design):
     return ticks
 
 
+def report_curve(root, design):
+    import numpy as np
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    out=root/'tolerance_curve';out.mkdir(exist_ok=False)
+    reference=Path(design['reference_run'])
+    for path,sha in design['reference_metadata_sha256'].items():
+        if digest(path)!=sha:raise ValueError('reference metadata changed during supplement')
+    samples={};hashes={};totals={}
+    for campaign in (reference,root):
+        campaign_design=json.loads((campaign/'design.json').read_text())
+        ticks=0
+        for plan in campaign_design['plans']:
+            directory=Path(plan).parent
+            manifest=json.loads((directory/'manifest.json').read_text())
+            bank=directory.name
+            original_plan=json.loads((reference/bank/'plan.json').read_text())
+            old_manifest=json.loads((reference/bank/'manifest.json').read_text())
+            assert manifest['config']==old_manifest['config'] and manifest['original_actor']==old_manifest['original_actor']
+            assert manifest['plan']['source_declaration']==original_plan['source_declaration']
+            for row in json.loads((directory/'results.json').read_text())['cases']:
+                template=next(c for c in original_plan['cases'] if (c['route'],c['speed'],c['alpha'],c['arm'],c['force_N'])==(row['route'],row['speed'],row['alpha'],row['arm'],32.))
+                for field in ('pulse_onset_task_tick','pulse_duration_s','world_direction','capture_snapshot','capture_snapshot_sha256','schedule_source_raw','schedule_source_raw_sha256'):
+                    if row[field]!=template[field]:raise ValueError('merged pulse context changed: '+field)
+                key=(bank,row['route'],row['speed'],row['alpha'],row['force_N'],row['arm'])
+                if key in samples:raise ValueError('force case repeated instead of exact reuse')
+                raw=directory/(row['name']+'.npz');hashes[str(raw)]=digest(raw)
+                if campaign==reference and hashes[str(raw)]!=design['reference_raw_sha256'][str(raw)]:
+                    raise ValueError('reference raw changed during supplement')
+                samples[key]=row;ticks+=row['active_ticks']
+        totals[campaign.name]=ticks
+    assert len(samples)==56
+    contexts=sorted({key[:4] for key in samples})
+    assert len(contexts)==4
+    fig,axes=plt.subplots(4,2,figsize=(13,15),layout='constrained')
+    curves=[]
+    for i,context in enumerate(contexts):
+        bank,route,speed,alpha=context
+        for column,sign in enumerate((-1,1)):
+            ax=axes[i,column]
+            for arm,color,marker in [('original','black','x'),('causal','tab:orange','o')]:
+                levels=[];labels=[]
+                for magnitude in (0.,16.,32.,48.):
+                    row=samples[(*context,sign*magnitude,arm)]
+                    label=row['balance_label']
+                    if label=='NO_FLOOR_CONTACT' and magnitude and row['force_exposure']!='full':
+                        label='UNCONFIRMED_FORCE_EXPOSURE'
+                    levels.append(magnitude);labels.append(label)
+                value=np.array([1. if x=='NO_FLOOR_CONTACT' else 0. if x=='FLOOR_CONTACT' else np.nan for x in labels])
+                ax.plot(levels,value,':',color=color,marker=marker,label=arm+' (tested points only)')
+                unknown=np.flatnonzero(np.isnan(value))
+                if len(unknown):ax.scatter(np.asarray(levels)[unknown],np.full(len(unknown),.5),color=color,marker='D',label='UNKNOWN')
+                safe=[f for f,l in zip(levels,labels) if l=='NO_FLOOR_CONTACT']
+                contacts=[f for f,l in zip(levels,labels) if l=='FLOOR_CONTACT']
+                nonmonotone=any(a<b for a in contacts for b in safe)
+                prefix=[]
+                for f,l in zip(levels,labels):
+                    if l!='NO_FLOOR_CONTACT':break
+                    prefix.append(f)
+                next_level=None if len(prefix)==len(levels) else levels[len(prefix)]
+                curves.append(dict(bank=bank,route=route,speed=speed,alpha=alpha,direction_sign=sign,arm=arm,
+                                   tested_magnitudes_N=levels,labels=labels,safe_tested_N=safe,contact_tested_N=contacts,
+                                   nonmonotone_on_tested_grid=nonmonotone,prefix_grid_safe_max_N=prefix[-1] if prefix else None,
+                                   next_tested_nonpass_N=next_level,upper_side_unidentified=len(prefix)==len(levels),
+                                   interpretation='Grid-only prefix, not a continuous safe radius or certified lower bound.'))
+            ax.set(title=f'{bank} {route} v{speed} alpha{alpha:g} direction {sign:+d}',xlabel='force magnitude /N',ylabel='observed no-contact')
+            ax.set_xticks([0,16,32,48]);ax.set_yticks([0,.5,1],['contact','UNKNOWN','no contact']);ax.set_ylim(-.1,1.1);ax.grid(alpha=.2);ax.legend(fontsize=7)
+    fig.suptitle('Fixed closed-loop tested force sets; .1s pulses, task0–10s. Dotted guides do not certify intermediate forces.')
+    fig.savefig(out/'tested_force_sets.png');plt.close(fig)
+    paired=[]
+    for context in contexts:
+        for force in (-48.,-32.,-16.,0.,16.,32.,48.):
+            b=samples[(*context,force,'original')];c=samples[(*context,force,'causal')]
+            bs=b['balance_label']=='NO_FLOOR_CONTACT' and (force==0 or b['force_exposure']=='full')
+            cs=c['balance_label']=='NO_FLOOR_CONTACT' and (force==0 or c['force_exposure']=='full')
+            paired.append(dict(bank=context[0],route=context[1],speed=context[2],alpha=context[3],force_N=force,
+                               physical_gain=b['balance_label']=='FLOOR_CONTACT' and cs,
+                               physical_loss=bs and c['balance_label']=='FLOOR_CONTACT',
+                               baseline_label=b['balance_label'],causal_label=c['balance_label'],
+                               baseline_exposure=b['force_exposure'],causal_exposure=c['force_exposure'],
+                               baseline_joint=b['joint_success'],causal_joint=c['joint_success']))
+    atomic_json(out/'analysis.json',dict(curves=curves,paired=paired,raw_sha256=hashes,unique_cases=56,new_cases=32,reused_cases=24,
+                                        acquisition_lower_ticks=totals,new_lower_ticks=totals[root.name],training_steps=0,model_fits=0))
+    lines=['# 固定闭环的方向性已测抗扰集合', '', '[本轮全部XY](../analysis/REPORT.md) · [继承24条XY](%s) · [力档集合图](tested_force_sets.png)'%(reference/'analysis/REPORT.md'), '',
+           '32条新完整任务＋24条认证复用，共56条唯一轨迹。零力点为同一轨迹，在正/负方向图中各显示一次，汇总不重复计数。原Actor/冻结因果规则，固定完整初态、推力时钟/世界方向、.1s脉冲和原10s观察。', '',
+           '|bank/状态|方向|方法|已测无触地N|已测触地N|网格非单调|', '|---|---:|---|---|---|---|']
+    for c in curves:lines.append(f"|{c['bank']}/{c['route']}/v{c['speed']}|{c['direction_sign']}|{c['arm']}|{c['safe_tested_N']}|{c['contact_tested_N']}|{c['nonmonotone_on_tested_grid']}|")
+    lines+=['',f"非零配对防摔gain/loss：{sum(p['physical_gain'] for p in paired if p['force_N']!=0)}/{sum(p['physical_loss'] for p in paired if p['force_N']!=0)}。逐例任务代价、暴露和原始标签在analysis.json。", '',
+            f"本轮新增{totals[root.name]} lower ticks；继承24条实际成本{totals[reference.name]}，两批共{sum(totals.values())}。旧模型训练、初始库及早期扫描为继承成本，未声称完整生命周期成本。0训练/拟合。", '',
+            '这些是有限力档的结果，不证明档位之间连续安全或更大力必失败。最高48N仍通过时上侧未辨识，不自动补64N。不按曲线调整gate/动作/阈值/时机。alpha0两情境、相关bank均为DEV，未证明连续alpha协调、独立泛化或实机结果。']
+    (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
+    with (root/'analysis/REPORT.md').open('a') as f:f.write('\n[合并旧24条的方向性已测抗扰集合](../tolerance_curve/REPORT.md)\n')
+
+
 def execute(root):
     design=json.loads((root/'design.json').read_text())
-    state=dict(phase='running',pid=os.getpid(),declared_cases=24,completed_cases=0,active_lower_ticks=0,training_steps=0,model_fits=0)
+    state=dict(phase='running',pid=os.getpid(),declared_cases=design['declared_cases'],completed_cases=0,active_lower_ticks=0,training_steps=0,model_fits=0)
     def update(**changes):
         state.update(changes,checked_unix=time.time());atomic_json(root/'status.json',state)
     update(stage='preflight')
     try:
         for path,sha in {**design['source_sha256'],**design['plan_sha256']}.items():
             if digest(path)!=sha:raise ValueError('source or plan changed: '+path)
+        for path,sha in design.get('reference_raw_sha256',{}).items():
+            if digest(path)!=sha:raise ValueError('reference raw changed: '+path)
+        for path,sha in design.get('reference_metadata_sha256',{}).items():
+            if digest(path)!=sha:raise ValueError('reference metadata changed: '+path)
         for plan in design['plans']:
             directory=Path(plan).parent
             with (directory/'execution.log').open('w') as log:
@@ -392,6 +586,8 @@ def execute(root):
             update(completed_cases=state['completed_cases']+child_state['completed_cases'])
         update(stage='analysis')
         ticks=report(root,design);assert ticks==state['active_lower_ticks']
+        if 'reference_run' in design:
+            report_curve(root,design)
         update(phase='completed',stage='reported',report=str(root/'analysis/REPORT.md'))
     except BaseException as exc:
         update(phase='error',error_type=type(exc).__name__,error=str(exc));raise
@@ -399,7 +595,12 @@ def execute(root):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode',choices=('prepare','run','bank'),required=True)
+    parser.add_argument('--mode',choices=('prepare','prepare-curve','run','bank'),required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--reference-run',type=Path)
     args=parser.parse_args()
-    {'prepare':prepare,'run':execute,'bank':execute_bank}[args.mode](args.output.resolve())
+    if args.mode=='prepare-curve':
+        if args.reference_run is None:parser.error('--reference-run required for prepare-curve')
+        prepare_curve(args.output.resolve(),args.reference_run.resolve())
+    else:
+        {'prepare':prepare,'run':execute,'bank':execute_bank}[args.mode](args.output.resolve())

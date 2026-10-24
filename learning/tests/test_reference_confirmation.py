@@ -70,3 +70,19 @@ def test_path_evidence_allows_declared_micron_roundoff_but_not_geometry_change()
     actual[1, 1] += .01
     with pytest.raises(AssertionError):
         validate_path_evidence(actual, expected, atol_m=1e-4)
+def test_supplemental_force_cases_keep_complete_context_and_do_not_repeat_reference_forces():
+    from sttw_control.reference_confirmation import supplemental_force_cases
+    cases = [dict(route=route, speed=speed, alpha=0., force_N=force, arm=arm,
+                  pulse_onset_task_tick=onset, world_direction=[.6, .8, 0.], capture_snapshot='original')
+             for route, speed, onset in [('left', 1.8, 464), ('right', 1.5, 488)]
+             for force in (0., -32., 32.) for arm in ('original', 'causal')]
+    output = supplemental_force_cases(cases)
+    assert len(output) == 16
+    assert {c['force_N'] for c in output} == {-48., -16., 16., 48.}
+    for c in output:
+        assert c['world_direction'] == [.6, .8, 0.]
+        assert c['capture_snapshot'] == 'original'
+        assert c['pulse_onset_task_tick'] == (464 if c['route'] == 'left' else 488)
+    with pytest.raises(ValueError): supplemental_force_cases(cases + [cases[0]])
+    bad = [dict(c) for c in cases]; bad[5]['pulse_onset_task_tick'] += 4
+    with pytest.raises(ValueError): supplemental_force_cases(bad)
