@@ -13,6 +13,7 @@ import numpy as np
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', type=Path, required=True)
+    parser.add_argument('--output', type=Path)
     args = parser.parse_args()
     root = args.run.resolve()
     status = json.loads((root / 'status.json').read_text())
@@ -21,7 +22,7 @@ def main():
     rows = json.loads((root / 'results.json').read_text())['cases']
     if status['phase'] != 'completed' or status['completed_cases'] != len(rows) or len(rows) != 45:
         raise ValueError('all 45 branches must complete')
-    out = root / 'analysis'
+    out = args.output.resolve() if args.output else root / 'analysis'
     out.mkdir(exist_ok=False)
     names = [c['name'] for c in plan['candidates']]
     colors = dict(zip(names, ['black', 'tab:red', 'tab:blue', 'tab:green', 'tab:orange']))
@@ -34,8 +35,15 @@ def main():
         if len(group) != 5 or {r['candidate'] for r in group} != set(names):
             raise ValueError('matched candidate roster differs')
         base = next(r for r in group if r['candidate'] == 'continue_original')
+        observed_progress = []
+        for row in group:
+            with np.load(root / (row['name'] + '.npz')) as data:
+                valid = data['path_progress'][np.isfinite(data['path_progress'])]
+                if len(valid):
+                    observed_progress.append(float(valid.max()))
         with np.load(root / (base['route'] + '_path.npz')) as path:
-            ax.plot(*path['xy'].T, '--', color='gray', label='original task')
+            display = path['s'] <= max(observed_progress) + 1
+            ax.plot(*path['xy'][display].T, '--', color='gray', label='original task (observed range + 1m)')
         detail, aa = plt.subplots(8, 1, figsize=(11, 18), layout='constrained')
         components, cc = plt.subplots(3, 2, figsize=(16, 13), layout='constrained')
         for slot, row in enumerate(sorted(group, key=lambda r: names.index(r['candidate']))):
@@ -94,6 +102,9 @@ def main():
             pairs.append(dict(state_id=sid, force_N=force, candidate=row['candidate'],
                               baseline_contact=base['event_contact'], contact=row['event_contact'],
                               baseline_joint=base['joint_success'], joint=row['joint_success'],
+                              contact_to_no_contact=bool(base['event_contact'] and row['balance_label'] == 'NO_FLOOR_CONTACT'),
+                              no_contact_to_contact=bool(base['balance_label'] == 'NO_FLOOR_CONTACT' and row['event_contact']),
+                              contact_to_joint_success=bool(base['event_contact'] and row['joint_success']),
                               joint_gain=bool(row['joint_success'] and not base['joint_success']),
                               joint_loss=bool(base['joint_success'] and not row['joint_success'])))
         cc.flat[-1].set_visible(False)
@@ -133,6 +144,9 @@ def main():
                                 joint=sum(r['joint_success'] for r in rr),
                                 unknown=sum(r['balance_label'] == 'UNKNOWN' for r in rr),
                                 domain_handover=sum(r['fallback_triggered'] for r in rr),
+                                contact_to_no_contact=sum(r['contact_to_no_contact'] for r in pp),
+                                no_contact_to_contact=sum(r['no_contact_to_contact'] for r in pp),
+                                contact_to_joint_success=sum(r['contact_to_joint_success'] for r in pp),
                                 joint_gain=sum(r['joint_gain'] for r in pp), joint_loss=sum(r['joint_loss'] for r in pp)))
     opportunities = []
     for sid, force in contexts:
@@ -145,6 +159,10 @@ def main():
                   source_raw_sha256=raw, new_lower_ticks=status['active_lower_ticks'], training_updates=0, model_fits=0,
                   limits='Deterministic DEV, all three nominal-task-success states conditional subset. Known onset privileged. Per-event oracle is not a deployable selector or physical upper bound. Unchanged original task deadline.')
     (out / 'analysis.json').write_text(json.dumps(result, indent=2) + '\n')
+    (out / 'report_source.json').write_text(json.dumps(dict(
+        reporter=str(Path(__file__).resolve()), reporter_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        source_results_sha256=hashlib.sha256((root / 'results.json').read_bytes()).hexdigest(),
+        changes='Post-run display crop and explicit contact-to-safe versus task recovery; raw outcomes unchanged.'), indent=2) + '\n')
     lines = ['# 有限参考干预能否交回原偏好策略', '',
              '目的：判断现有参考接口是否存在同时防摔和保住原任务的短暂干预，先核对有限机会，再考虑学习选择器。',
              '方法：完整8状态中全部3个名义任务成功状态；同完整快照、0/±32N×5候选，共45条。干预.4s，之后原alpha/H75继续，到原10s截止；原幅度/滤波/slew/历史不重置。速度和转向分别仅改自身通道。起扰时刻已知仅作离线机会诊断。', '',
@@ -154,7 +172,9 @@ def main():
     for r in summary:
         lines.append('|' + '|'.join(str(r[k]) for k in ['force_group', 'candidate', 'cases', 'contact', 'joint', 'unknown', 'domain_handover', 'joint_gain', 'joint_loss']) + '|')
     lines += ['', f"新增lower ticks：{status['active_lower_ticks']}；0训练、0拟合。", '',
-              '逐事件有限候选最优与速度候选并集仅是事后机会；若速度规则覆盖全部联合机会，则没有理由据此训练复杂模型。任一安全候选若仍丢原任务，不计联合恢复。候选清单、时长、力档不按本结果扩展。']
+              '逐事件有限候选最优与速度候选并集仅是事后机会；若速度规则覆盖全部联合机会，则没有理由据此训练复杂模型。任一安全候选若仍丢原任务，不计联合恢复。候选清单、时长、力档不按本结果扩展。', '',
+              '本组实证：speed_plus/steer_plus在同一个右1.5alpha0/−32N事件把触地变为不触地，但原任务仍未完成；steer_minus在左1.8alpha0/+32N实现任务恢复，但原策略该例本就未触地。原触地→未触地且任务成功的案例数为0，不能把两种改善拼成同一个联合救回。',
+              '候选名称仅指相对初始offset的目标正负，不保证实际参考差或实际运动方向；handback_dose_audit.json保留对原Actor的实际参考差。初始分析使用完整70m路径导致显示过远，当前图仅裁参考显示范围至观测progress+1m，实际轨迹和所有case均保留。']
     (out / 'REPORT.md').write_text('\n'.join(lines) + '\n')
     print(json.dumps(summary))
 
