@@ -53,6 +53,20 @@ def initial_gate():
     return GateState(j.bool_(False), j.int32(-1), j.zeros(2), j.zeros(2), j.zeros(2, dtype=j.bool_))
 
 
+def validate_full_task_origin(task_tick, physical_tick, initial_physical_tick, gate):
+    """Host preflight: do not silently restart detection at an onset snapshot."""
+    if int(task_tick) != 0 or int(physical_tick) != int(initial_physical_tick):
+        raise ValueError('causal validation must start at the declared complete task origin')
+    if (bool(gate.fired) or int(gate.start_tick) != -1 or bool(j.any(gate.mask))
+            or bool(j.any(gate.target_offset != 0)) or bool(j.any(gate.fixed_latent != 0))):
+        raise ValueError('gate must initialize once at task origin, never at pulse onset')
+
+
+def case_has_engineering_error(final_fault, balance_label):
+    """Transient logged numerical faults cannot become completed fall labels."""
+    return bool(final_fault or balance_label == 'ENGINEERING_ERROR')
+
+
 def causal_reference_action(original, observation, current_offset, tick, state, config):
     """One 50Hz decision, using only current/past deployable information.
 

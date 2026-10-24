@@ -98,3 +98,26 @@ def test_contract_rejects_same_dimension_with_different_field_order_or_timing():
     with pytest.raises(ValueError): validate_causal_contract(bad, fields)
     bad_fields = deepcopy(fields); bad_fields[18]['name'] = 'different_sensor'
     with pytest.raises(ValueError): validate_causal_contract(config, bad_fields)
+
+
+def test_full_task_origin_rejects_capture_time_reset_or_previously_fired_gate():
+    from sttw_control.causal_reference_baseline import validate_full_task_origin
+    validate_full_task_origin(0, 700, 700, initial_gate())
+    for task_tick, physical_tick, gate in ((400, 1100, initial_gate()),
+                                            (0, 1100, initial_gate()),
+                                            (0, 700, initial_gate()._replace(fired=j.bool_(True)))):
+        with pytest.raises(ValueError):
+            validate_full_task_origin(task_tick, physical_tick, 700, gate)
+
+
+def test_transient_nonfinite_label_stops_bank_even_without_final_fault():
+    from sttw_control.causal_reference_baseline import case_has_engineering_error
+    from sttw_control.balance_probe import classify_contact_balance
+    logs = dict(time=np.arange(4)*.005, active_tick=np.ones(4,bool), peak_roll=np.zeros(4),
+                nonfinite=np.array([False, True, False, False]), lower_fault=np.zeros(4,bool),
+                contact_failure=np.zeros(4,bool))
+    label = classify_contact_balance(logs, horizon_s=.02)['balance_label']
+    assert label == 'ENGINEERING_ERROR'
+    assert case_has_engineering_error(False, label)
+    assert case_has_engineering_error(True, 'NO_FLOOR_CONTACT')
+    assert not case_has_engineering_error(False, 'FLOOR_CONTACT')
