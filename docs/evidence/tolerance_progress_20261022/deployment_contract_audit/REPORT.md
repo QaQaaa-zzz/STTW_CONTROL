@@ -16,6 +16,8 @@
 
 [完整收据](../../../../runs/deployment_contract_audit_v1/receipt.json)、[确定性权重NPZ](../../../../runs/deployment_contract_audit_v1/weights.npz)、[实际16条观测及输出](../../../../runs/deployment_contract_audit_v1/real_prefix_inputs.npz)、[解析后的完整契约](../../../../runs/deployment_contract_audit_v1/CONTRACT.json)。权重和原始快照SHA均在收据，真实硬件数据条目数为0。
 
+另外从实际输出的weights.npz重新读取参数，未使用原Actor pickle，重建两网络并复核保存的16条观测/输出：[导出物回读核对](../../../../runs/deployment_contract_audit_v1/export_readback_receipt.json)。这验证交付字节本身可用，不只验证内存中的原权重。
+
 ## 三个具体的部署差距
 
 **残差尺度。** 当前ROS YAML为前/后1与5，冻结local300实际为1.5与10；其余200Hz、转角.8、角速度3/60、strength1在本轮核对一致。强制残差fresh的离线合成中，16条真实仿真输入都出现默认尺度与训练尺度的不同，最大约前.08023、后.40425rad/s。这个量是指令差，不是实车速度或抗扰能力差异。ROS launch默认residual_enabled=false，当前也没有因此启动网络。
@@ -46,4 +48,4 @@ ESO字段也须明确：C++ getEstimatedDisturbance()/getEstimatedEquilibrium()�
 
 已测到α与方向性物理能力的联系；物理特征和固定速度干预没有超越已有策略。当前需要补系统实现与可靠对照，而非再为“新颖性”加网络。这个离线结果补的是可复现实现证据，不补模型创新或硬件性能结论。原H75/local300的candidate/qualification状态保留；没有将它们改标为实机已采用。
 
-生成候选YAML的第一次辅助命令误用了缺yaml的系统Python，随后使用既有项目venv完成，未安装依赖或改变原配置；记录保留在run目录candidate_generation_attempt1.log，0新物理成本。
+两个辅助命令曾误用缺yaml/jax的系统Python，随后用既有项目venv完成，未安装依赖或改变原配置；attempt日志保留。通知初登记使用了相对路径，已只修正本组为绝对manifest/status，保留registration_repair.json，未重启服务或训练。0新物理成本。
