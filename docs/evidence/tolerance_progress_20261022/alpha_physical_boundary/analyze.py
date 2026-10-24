@@ -15,12 +15,14 @@ def main():
     a = p.parse_args()
     root = Path(a.run).resolve()
     status = json.loads((root/'campaign_status.json').read_text())
-    if status['phase'] != 'completed' or status['completed_cases'] != 56:
-        raise ValueError('Wait for all56 physical branches')
+    preparation = json.loads((root/'prepare_plan.json').read_text())
+    count = preparation['declared_cases']
+    if status['phase'] != 'completed' or status['completed_cases'] != count:
+        raise ValueError('Wait for every declared physical branch')
     prefix = json.loads((root/'prefix_results.json').read_text())['cases']
     plan = json.loads((root/'scan_plan.json').read_text())
     recorded = json.loads((root/'results.json').read_text())['cases']
-    if len(prefix) != 8 or len(recorded) != 56:
+    if len(prefix) != preparation['declared_prefixes'] or len(recorded) != count:
         raise ValueError('Coverage differs from fixed declaration')
     rows, traces, sources = [], {}, {}
     for row in recorded:
@@ -69,7 +71,7 @@ def main():
     paired = []
     for speed in [2.45, 2.65]:
         for fraction in [.2, .7]:
-            for force in [0., -48., 48., -80., 80., -112., 112.]:
+            for force in preparation['forces_N']:
                 rr = [next(r for r in rows if r['requested_speed']==speed and r['fraction']==fraction and r['alpha']==alpha and r['force_N']==force) for alpha in [0., 1.]]
                 paired.append(dict(speed=speed, fraction=fraction, force_N=force,
                                    alpha0=rr[0]['balance_label'], alpha1=rr[1]['balance_label'],
@@ -133,23 +135,23 @@ def main():
         plt.close(fig)
         links.append(tag)
     lines = ['# 冻结H75：几何相位匹配的α物理抗扰力档', '',
-             '八个完整真实中层前缀，56有符号分支；域内原H75，域退出后统一保持最后参考。'
+             f"八个完整真实中层前缀，{count}有符号分支；域内原H75，域退出后统一保持最后参考。"
              '跨α自身状态不同；这是完整偏好闭环＋共同fallback的能力，不是同状态切换救回或机械极限。', '',
-             '|速度|相位|α|−112|−80|−48|0|+48|+80|+112|',
-             '|---:|---:|---:|---|---|---|---|---|---|---|']
+             '|速度|相位|α|'+'|'.join(f'{f:+g}' for f in sorted(preparation['forces_N']))+'|',
+             '|---:|---:|---:|'+'|'.join('---' for _ in preparation['forces_N'])+'|']
     for key, group in sorted(groups.items()):
         values = []
-        for force in [-112., -80., -48., 0., 48., 80., 112.]:
+        for force in sorted(preparation['forces_N']):
             row = next(r for r in group if r['force_N']==force)
             values.append(('S' if row['balance_label']=='NO_FLOOR_CONTACT' else 'F' if row['balance_label']=='FLOOR_CONTACT' else '?')+('†' if row['fallback_triggered'] else ''))
         lines.append(f'|{key[0]:g}|{key[1]:g}|{key[2]:g}|'+'|'.join(values)+'|')
     lines += ['', 'S=完整4s无触地，F=真实非轮触地，?=未知；†表示曾交接到hold-last-reference。'
               '所有零力、失败、handover和实际前缀状态在analysis.json。方向网格不预设单调，最高已测通过只给下界。'
               '路径在fallback后NaN，不能将物理观察写作任务成功，也不虚构域外V3 reward。', '',
-              '## 全部28配对工况', '']
+              f'## 全部{len(paired)}配对工况', '']
     lines += [f'- [{tag}](cases/{tag}.png)' for tag in links]
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
-    print(out, 'all56 raw outcomes;28 paired-context figures')
+    print(out, count, 'raw outcomes;', len(paired), 'paired-context figures')
 
 
 if __name__ == '__main__':

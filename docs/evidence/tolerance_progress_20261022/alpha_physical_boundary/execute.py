@@ -16,7 +16,7 @@ def main():
     root = Path(a.run).resolve()
     plan = json.loads((root/'prepare_plan.json').read_text())
     state = dict(phase='running', pid=os.getpid(), stage='preparing', completed_cases=0,
-                 declared_cases=56, active_lower_ticks=0, training_steps=0)
+                 declared_cases=plan['declared_cases'], active_lower_ticks=0, training_steps=0)
     def update(**kw):
         state.update(kw, checked_unix=time.time())
         atomic_json(root/'campaign_status.json', state)
@@ -39,7 +39,7 @@ def main():
             if state['active_lower_ticks'] > plan['maximum_total_lower_ticks']:
                 raise ValueError('Total physics budget exceeded')
             update()
-        update(phase='completed', stage='all56_physical_outcomes_ready', completed_cases=56)
+        update(phase='completed', stage='all_declared_physical_outcomes_ready', completed_cases=plan['declared_cases'])
     except BaseException as exc:
         update(phase='error', error=repr(exc))
         raise

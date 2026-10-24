@@ -136,7 +136,7 @@ def main():
                     source_sha256={**plan['source_sha256'], **snapshot_hashes},
                     actors={'H75': dict(path=plan['model']['actor'], sha256=plan['model']['actor_sha256'])},
                     cases=cases, sensor_contract=dict(rear_wheel_radius_proxy_m=.1),
-                    pulse_duration_s=.1, observation_s=4., maximum_lower_ticks=44800,
+                    pulse_duration_s=.1, observation_s=4., maximum_lower_ticks=plan['maximum_scan_lower_ticks'],
                     training_steps=0, force_direction='capture heading lateral world vector',
                     termination='contact_only + common domain hold; not full task success',
                     stop_rule=plan['stop_rule'])
