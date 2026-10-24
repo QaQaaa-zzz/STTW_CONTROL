@@ -35,6 +35,7 @@ def main():
         from sttw_control.path_command_policy import make_path_actor, validate_actor_parameters
         from sttw_control.path_command_reward import configured_cost_keys
         from sttw_control.reference_prefix import inverse_offset_target, prefix_action
+        from sttw_control.reference_confirmation import validate_path_evidence
         from sttw_control.geometric_path import build_path
         from sttw_control.balance_probe import make_lower_tick, classify_contact_balance
         from sttw_control.recovery_margin_scan import outcome_labels
@@ -63,10 +64,12 @@ def main():
         pose = np.asarray(env.physics.helpers.pose(initial.data))
         paths = {r['name']: build_path(r['builder'], pose, cfg) for r in declaration['routes']}
         evidence = Path(plan['path_evidence_directory'])
+        path_checks = []
         for name, path in paths.items():
             with np.load(evidence / (name + '_path.npz')) as old:
-                if not np.allclose(np.asarray(path.xy), old['xy'], atol=1e-6, rtol=0):
-                    raise ValueError('task path differs')
+                tolerance = float(plan.get('path_evidence_atol_m', 1e-6))
+                difference = validate_path_evidence(path.xy, old['xy'], atol_m=tolerance)
+                path_checks.append(dict(route=name, max_abs_difference_m=difference, atol_m=tolerance))
             np.savez_compressed(root / (name + '_path.npz'), xy=np.asarray(path.xy),
                                 s=np.asarray(path.s), goal=np.asarray(path.goal))
         cases = plan['cases']
@@ -187,6 +190,7 @@ def main():
                     target_clipped_channels=np.asarray(clipped).tolist(),
                     executed_target_clipped_channels=np.asarray(clipped & masks).tolist(),
                     maximum_remaining_lower_ticks=maximum_remaining_ticks,
+                    path_evidence_checks=path_checks,
                     fallback_contract='hold last reference after domain exit; task ineligible; reward undefined, stored NaN',
                     deadline_tick=deadline_tick, prefix_ticks=prefix_ticks, initialization='full_snapshot_no_reset',
                     information_role='known onset offline opportunity only; not a deployed force detector or selector'))

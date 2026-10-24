@@ -11,6 +11,7 @@ import jax.numpy as j
 import numpy as np
 from sttw_control.preference_best import atomic_json, digest
 from sttw_control.geometric_capture import capture_first_crossing_block
+from sttw_control.reference_confirmation import capture_stop_reason, validate_path_evidence
 
 
 def main():
@@ -41,7 +42,10 @@ def main():
         pose = np.asarray(env.physics.helpers.pose(initial.data))
         path = build_path(plan['builder'], pose, cfg)
         with np.load(Path(plan['path_evidence_directory'])/(plan['route']+'_path.npz')) as old:
-            np.testing.assert_allclose(np.asarray(path.xy), old['xy'], atol=1e-6, rtol=0)
+            tolerance = float(plan.get('path_evidence_atol_m', 1e-6))
+            difference = validate_path_evidence(path.xy, old['xy'], atol_m=tolerance)
+        atomic_json(root/'path_evidence_check.json', dict(max_abs_difference_m=difference,
+                    atol_m=tolerance, role='artifact roundoff check, not changed task or physical model'))
         with Path(plan['model']['actor']).open('rb') as stream:
             parameters = jax.tree.map(j.asarray, pickle.load(stream))
         validate_actor_parameters(parameters, cfg)
@@ -79,6 +83,19 @@ def main():
             return capture_first_crossing_block(lambda st,done:jax.vmap(one)(st,speeds,done),
                 states,completed,j.asarray(targets[0]),lambda st:st.projection.progress,50)
         blocks, rows, snapshot_hashes = [], [], {}
+        def preserve_stopped_capture(reason):
+            with (root/'partial_capture_states.pkl').open('wb') as stream:
+                pickle.dump(jax.device_get(states), stream)
+            for i, context in enumerate(contexts):
+                arrays = {key: np.concatenate([b[key][i] for b in blocks], axis=0) for key in blocks[0]}
+                active = arrays['active_tick'].astype(bool)
+                np.savez_compressed(root/f"prefix_partial_v{context['speed']:g}_a{context['alpha']:g}.npz",
+                                    **{key: value[active] for key, value in arrays.items()})
+            atomic_json(root/'capture_stop.json', dict(reason=reason,
+                        fault=np.asarray(states.fault).tolist(), domain_exit=np.asarray(states.domain_exit).tolist(),
+                        physical_failed=np.asarray(states.physical.failed).tolist(),
+                        active_lower_ticks=state['active_lower_ticks']))
+            update(capture_stop_reason=reason)
         update(stage='genuine_upper_prefixes')
         for step in range(10 if single_phase else 500):
             if single_phase:
@@ -96,9 +113,12 @@ def main():
             if state['active_lower_ticks'] > plan['maximum_prepare_lower_ticks']:
                 raise ValueError('Prefix budget exceeded')
             progress = np.asarray(states.projection.progress)
-            invalid = np.asarray(states.fault|states.domain_exit|states.physical.failed)
-            if (invalid & ~completed).any():
-                raise ValueError('Nominal prefix invalid before declared geometric phases')
+            reason = capture_stop_reason(np.asarray(states.fault)&~completed,
+                                         np.asarray(states.domain_exit)&~completed,
+                                         np.asarray(states.physical.failed)&~completed)
+            if reason:
+                preserve_stopped_capture(reason)
+                raise ValueError('Nominal prefix stopped: '+reason)
             for i, context in enumerate(contexts):
                 while counts[i] < len(targets) and progress[i] >= targets[counts[i]]:
                     fraction = plan['phase_fractions'][counts[i]]
@@ -129,6 +149,7 @@ def main():
             if completed.all():
                 break
         if len(rows) != plan['declared_prefixes']:
+            preserve_stopped_capture('PHASE_NOT_REACHED')
             raise ValueError('Geometric phases not reached within nominal10s')
         for i, context in enumerate(contexts):
             arrays = {key: np.concatenate([b[key][i] for b in blocks], axis=0) for key in blocks[0]}
