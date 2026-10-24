@@ -48,15 +48,19 @@ def load_trace(path, row, receipts):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--zero-campaign', type=Path)
+    parser.add_argument('--h75-campaign', type=Path)
     args = parser.parse_args()
     base = Path.cwd()
     receipts, grouped, rows, new_ticks = {}, {}, [], 0
-    pair_status = read(base/'runs/zero_middle_pair_status.json', receipts)
+    if bool(args.zero_campaign) != bool(args.h75_campaign):
+        raise ValueError('Both campaign paths required together')
+    pair_status = read(args.zero_campaign/'campaign_status.json' if args.zero_campaign else base/'runs/zero_middle_pair_status.json', receipts)
     if pair_status['phase'] != 'completed' or pair_status['completed_cases'] != 24:
         raise ValueError('Wait for complete pair; no partial success report')
     for side, h75run in [('left', 'alpha_physical_boundary_v1'), ('right', 'alpha_physical_boundary_mirror_v1')]:
         for model, run in [('zero_middle', f'zero_middle_physical_{side}_v1'), ('H75', h75run)]:
-            root = base/'runs'/run
+            root = ((args.zero_campaign if model == 'zero_middle' else args.h75_campaign)/side).resolve() if args.zero_campaign else base/'runs'/run
             status = read(root/'campaign_status.json', receipts)
             if status['phase'] != 'completed':
                 raise ValueError('Incomplete source '+run)
@@ -65,7 +69,13 @@ def main():
                 new_ticks += status['active_lower_ticks']
                 if status['active_lower_ticks'] > preparation['maximum_total_lower_ticks']:
                     raise ValueError('Declared route budget exceeded')
-                read(root/'preexecution_verification.json', receipts)
+                if args.zero_campaign:
+                    if preparation['verified_zero_inputs'] < 116:
+                        raise ValueError('Missing constant policy verification')
+                    if digest(preparation['model']['actor']) != preparation['model']['actor_sha256']:
+                        raise ValueError('Zero actor changed')
+                else:
+                    read(root/'preexecution_verification.json', receipts)
             prefixes = read(root/'prefix_results.json', receipts)['cases']
             results = read(root/'results.json', receipts)['cases']
             if len(results) != preparation['declared_cases']:
