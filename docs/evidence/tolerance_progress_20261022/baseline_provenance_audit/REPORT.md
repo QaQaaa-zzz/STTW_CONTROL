@@ -51,3 +51,9 @@
 该对照尚未声明最终case预算或启动。先检查现有共同协议产物中是否已包含它；确实缺失后仅补必要分支，不重跑双网36例或旧六场景。不使用仅适用于受扰后有限窗口的intervention mask冒充从t0关闭中层。若简单跟随器已覆盖当前防摔优势，论文必须相应调整贡献判断；若存在清楚的偏好/路径收益，再决定独立确认范围。硬件基础程序位置仍待用户信息，独立仿真证据整理继续。
 
 方法工具参考：Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)。本轮核对arXiv当前记录；技能用于审查流程，不作为车辆控制创新或控制效果证据。
+
+## 训练不足的竞争解释：侧倾提前终止假设
+
+本轮另检查训练侧`teleop_env.py`的`peak_roll>.7`终止，与已完成左右H75 contact-only物理观察是否存在“训练先停、实际仍能恢复”的可见错配。[只读核对脚本](audit_training_roll_stop.py)和[逐文件SHA/结果](../../../../runs/training_roll_stop_reuse_audit_v1.json)已保存。
+
+左右物理面板的38条完整无触地分支，没有一条峰值超过0.7rad。因此这批现成轨迹没有为该解释提供证据，不据此改终止、奖励或再启动训练。它不证明所有未来状态都不会发生这类错配，也没有解决路径域退出与物理防摔是不同标签的问题。该核对0新增物理/优化，不把38个确定性分支当38个独立训练重复。
