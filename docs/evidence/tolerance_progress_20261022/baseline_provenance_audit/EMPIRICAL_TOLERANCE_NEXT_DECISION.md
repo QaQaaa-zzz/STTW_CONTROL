@@ -58,3 +58,18 @@ audit_lower_reflection_inference.py认证旧完整任务计划的4个唯一完�
 因此不假设冻结learned lower严格等变，不把上述小差异作为必须清零的新门槛，也不追数值根因。后续候选1若继续，应从各自真实完整任务起点进行左右新情境的配对实验，而不是反射旧完整物理快照或照搬旧成功标签。已有left1.5/right1.8名义轨迹与50%真实capture可复用作环境pulse时序/方向来源；它们只给环境，不给gate，旧lower-only分支结局不能冒充新的全任务闭环结果。
 
 拟验证的结构仅为：保持alpha0、.015事件阈值、80tick/原参考幅度/检测时锚定，按曲率符号变换ESO信号及转向调整符号，速度调整符号保持。对原left1.8/right1.5情境应逐输入还原旧规则；新的right1.8/left1.5需要真实验证，不能由接口代数直接推出。它仍保留1.5/1.8两速度档限制，不称已消除全部情境表或形成全速度规律。当前32条完成并按原规则裁决后再决定是否实现/运行，不提前改动封存源码。
+
+### 固定力集合结果与候选实现计划
+
+32条补测已完成，新增41032lower ticks；认证复用42384ticks的旧24条，合计56唯一轨迹/83416ticks。56原始SHA复核、全部新XY和力集合图目视通过；root及两bank均completed且PID退出。24非零配对不触地13→15，gain2/loss0；16N下双方通过、48N下双方失败，新增力档gain0/loss0，没有将ties当失败。两bank右弯负向的已测通过集合从{0,16}增为{0,16,32}，48仍触地；其他物理集合不变。未见网格非单调，不据此证明连续单调或精确临界力；不补64N/二分找边界。根报告runs/causal_empirical_force_sets_v1_attempt2/tolerance_curve/REPORT.md。Bark root accepted1792873602.948619，scan_errors空。
+
+**决定：** 局部收益保留；结束力档扩测。按既定候选1推进左右结构迁移，尚未声称增量方法成立。实施使用writing-plans与TDD技能，沿用户持续迭代授权推进，不增加待批准门槛；专题计划留在本页，当前事实仍以台账为准。
+
+- [x] 创建learning/tests/test_reflected_causal_reference.py并先观察缺模块失败：旧两情境逐决策还原、反侧新情境通道/目标、曲率反转后的锁定、80tick后交回、alpha1不扩展、非有限故障。
+- [x] 创建learning/src/sttw_control/reflected_causal_reference.py；仅将事件输入/既有gate存储临时变换到旧规则坐标，再将返回状态/动作变回，不改原causal_reference_baseline.py或Actor/物理状态。两速度档仍固定；不把参考坐标操作写成完整策略等变。
+- [x] 新4项与既有causal/reference/contact相关共31CPU通过；独立反审无信息泄漏与锁定方向阻断。explicit select_reference_rule未知variant拒绝另经缺函数红后绿。该步骤只证明接口合同，不作物理收益主张。
+- [x] 根据已保存真实left1.5/right1.8前缀核定环境pulse时序/方向及原始几何；12条完整任务配对CPU准备完成，145源/plan SHA封存，真实task onsets为512/448 ticks（2.56/2.24s）。保留zero/反向/提前终止/UNKNOWN；不改alpha、幅度、阈值、延迟或重选动作。候选未接入现有已完成实验，旧56原始结果不重跑。
+
+后续12条协议：同一bank3原始完整初态，left1.5/right1.8 × 0/±32N × original/reflected_v1，共12新完整轨迹，≤24000新lower ticks，0训练/拟合。两速度/弯向是新增完整闭环情境，旧名义/held-lower信息已看，仍标DEV，不叫独立TEST或独立seed。新captures只定位环境起扰时钟/方向；从task0初始化并连续携带gate，不在capture重置；原Actor臂也shadow gate但不执行修改。观察仍到原10s，真实触地/故障/域退出后held-reference规则不变。若迁移无净收益或出现名义/反向损失，完整保留并停止本版推广，不按方向重调；允许有失败，不要求全12成功。
+
+已准备runs/causal_turn_transfer_v1，显式controller_variant写入plan/manifest，复用完整任务执行器和通用报告，单bank XY链接正确。反审发现通用尾注误写两个初态，改为按实际bank数生成；准备前后包保留pre_review_preparation，pre_execution_review_receipt.json核数值normal/fallback/one AST不变，0物理时重新封存。启动/进度仅由共享台账和该run status维护，本页不冒充已执行结果。

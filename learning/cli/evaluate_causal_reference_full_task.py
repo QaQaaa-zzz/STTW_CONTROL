@@ -171,6 +171,74 @@ def prepare(root):
     print(root / 'design.json')
 
 
+def prepare_transfer(root, reference):
+    """Two new turn/speed contexts, original initial bank, no mirrored state."""
+    import numpy as np
+    from prepare_short_recovery_campaign import register
+    worktree = Path(__file__).resolve().parents[2]
+    old = json.loads((reference/'bank3/plan.json').read_text())
+    if json.loads((reference/'status.json').read_text())['phase'] != 'completed':
+        raise ValueError('parent full task evaluation is incomplete')
+    prefix_root = worktree/'runs/tight_midturn_capability_v1'
+    scan = prefix_root/'scan'
+    scan_manifest = json.loads((scan/'manifest.json').read_text())
+    scan_rows = json.loads((scan/'results.json').read_text())['cases']
+    cases = []
+    context_receipts = []
+    for side, speed in (('left',1.5),('right',1.8)):
+        prefix_file = prefix_root/side/'prefix_results.json'
+        prefix_data = json.loads(prefix_file.read_text())
+        row = next(x for x in prefix_data['cases'] if x['speed']==speed and x['alpha']==0.)
+        if digest(row['snapshot']) != row['snapshot_sha256']:
+            raise ValueError('authentic prefix changed')
+        if prefix_data['physical_identity'] != scan_manifest['physical_identity']:
+            raise ValueError('prefix and force-direction source physical identities differ')
+        matches = [(i,x) for i,x in enumerate(scan_rows)
+                   if scan_manifest['case_snapshot_paths'][i]==row['snapshot'] and x['force_N']==32.]
+        if len(matches)!=1: raise ValueError('ambiguous force direction source')
+        i, raw_row = matches[0]
+        raw = scan/(raw_row['name']+'.npz')
+        direction = np.asarray(raw_row['expected_impulse_Ns'])/(32.*.1)
+        np.testing.assert_allclose(np.linalg.norm(direction),1.,atol=1e-6)
+        with Path(row['snapshot']).open('rb') as stream: capture=pickle.load(stream)
+        onset = round(row['task_time_s']/.005)
+        if int(capture.tick)!=onset or int(capture.physical.physical_tick)!=scan_manifest['case_physical_ticks'][i]:
+            raise ValueError('prefix task/physical clocks disagree')
+        context_receipts.append(dict(prefix=str(prefix_file),sha256=digest(prefix_file),
+                                     scan_manifest_sha256=digest(scan/'manifest.json'),
+                                     scan_results_sha256=digest(scan/'results.json'),
+                                     source_role='environment pulse timing/direction only; old lower-only labels not reused'))
+        for force in (0.,-32.,32.):
+            for arm in ('original','causal'):
+                cases.append(dict(route=row['route'],speed=speed,alpha=0.,force_N=force,arm=arm,
+                                  pulse_onset_task_tick=onset,pulse_duration_s=.1,world_direction=direction.tolist(),
+                                  capture_snapshot=row['snapshot'],capture_snapshot_sha256=row['snapshot_sha256'],
+                                  schedule_source_raw=str(raw),schedule_source_raw_sha256=digest(raw)))
+    assert len(cases)==12 and len({(r['route'],r['speed'],r['force_N'],r['arm']) for r in cases})==12
+    root.mkdir(exist_ok=False)
+    sources=list((worktree/'learning/src/sttw_control').rglob('*.py'))+[Path(__file__).resolve()]
+    hashes={str(p):digest(p) for p in sources}
+    for source in sources:
+        dest=root/'source_at_launch'/source.relative_to(worktree);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(source.read_bytes())
+        assert digest(dest)==hashes[str(source)]
+    directory=root/'bank3';directory.mkdir()
+    plan={**old,'cases':cases,'declared_cases':12,'maximum_new_lower_ticks':24000,
+          'controller_variant':'reflected_v1','source_sha256':hashes,
+          'context_receipts':context_receipts,'scope':'DEV turn-side transfer of fixed two-speed alpha0 rule; no physical reflection or inherited outcome'}
+    atomic_json(directory/'plan.json',plan)
+    path=str(directory/'plan.json')
+    design=dict(project='STTW_CONTROL',purpose='Test fixed sign-structured reference rule on left1.5/right1.8 from genuine complete task origin.',
+                plans=[path],plan_sha256={path:digest(path)},source_sha256=hashes,
+                declared_cases=12,maximum_new_lower_ticks=24000,training_steps=0,model_fits=0,
+                parent_run=str(reference),controller_variant='reflected_v1',
+                stop='Only two new contexts × zero/±32 × original/candidate. Keep all failures and zero/opposite losses. No retuning action/channel/threshold/delay or force sweep.')
+    atomic_json(root/'design.json',design)
+    atomic_json(root/'status.json',dict(phase='prepared',declared_cases=12,completed_cases=0,active_lower_ticks=0,training_steps=0,model_fits=0))
+    register(directory/'ACTIVE_RUN.json','STTW_CONTROL 左右结构迁移12条 bank3',directory/'status.json')
+    register(root/'ACTIVE_RUN.json','STTW_CONTROL 固定参考规则左右迁移与全路径分析',root/'status.json')
+    print(root/'design.json')
+
+
 def execute_bank(root):
     import jax
     import jax.numpy as j
@@ -187,6 +255,8 @@ def execute_bank(root):
                                                        validate_causal_contract, validate_full_task_origin,
                                                        case_has_engineering_error)
     plan = json.loads((root / 'plan.json').read_text())
+    from sttw_control.reflected_causal_reference import select_reference_rule
+    causal_reference_action = select_reference_rule(plan.get('controller_variant','baseline'))
     state = dict(phase='running', pid=os.getpid(), stage='loading', declared_cases=len(plan['cases']),
                  completed_cases=0, active_lower_ticks=0, training_steps=0, model_fits=0)
     def update(**changes):
@@ -323,6 +393,7 @@ def execute_bank(root):
                     physical_identity=env.physics.bundle.identity, reward_components=list(cost_keys), path_checks=path_checks,
                     detector_initialization='once at task tick zero; carry never reset at pulse or capture',
                     initial_physical_tick=int(initial.physical_tick), detector_information='existing obs, current offset, original action, task tick only',
+                    controller_variant=plan.get('controller_variant','baseline'),
                     environment_only_pulses=np.asarray(pulses).tolist(), fallback='hold last reference; task ineligible and reward NaN'))
         saved = []
         for block in range(20):
@@ -456,12 +527,13 @@ def report(root, design):
         fig.savefig(out/f'{directory.name}_all_xy.png');plt.close(fig)
     assert len(pairs)==design['declared_cases']//2 and ticks<=design['maximum_new_lower_ticks']
     atomic_json(out/'analysis.json',dict(pairs=pairs,raw_sha256=hashes,active_lower_ticks=ticks,training_steps=0,model_fits=0))
-    lines=['# 完整任务因果ESO简单基线', '', '[bank3全部XY](bank3_all_xy.png) · [bank0全部XY](bank0_all_xy.png)', '',
+    xy_links=' · '.join(f'[{Path(p).parent.name}全部XY]({Path(p).parent.name}_all_xy.png)' for p in design['plans'])
+    lines=['# 完整任务因果ESO参考规则', '', xy_links, '',
            f"目的：{design['purpose']}。本轮{design['declared_cases']}条真实全任务，声明的全部力档/反向/提前终止保留；原始参考固定。x=触地，方块=首次域退出，圆点=物理终点，点线=held-reference续行。此为固定DEV简单基线，非安全认证。", '',
            '|bank|路径/速度|力N|原不触地|因果不触地|原联合|因果联合|检测秒|干预tick|暴露原/因果|', '|---|---|---:|---|---|---|---|---|---:|---|']
     for p in pairs:lines.append(f"|{p['bank']}|{p['route']}/{p['speed']}|{p['force_N']}|{p['baseline_safe']}|{p['causal_safe']}|{p['baseline_joint']}|{p['causal_joint']}|{p['detection_time_s']}|{p['override_lower_ticks']}|{p['baseline_exposure']}/{p['causal_exposure']}|")
     lines+=['',f'新增{ticks} lower ticks，0训练/拟合。逐20ms奖励、有符号分项、失败余项、所有XY/检测/参考曲线与原始SHA已保存。',
-            '两个初态同祖先，阈值/规则在已看DEV上开发；没有独立泛化、噪声鲁棒或安全认证结论。若无净收益停止本门控，不扫阈值/延迟。']
+            f"{len(design['plans'])}个初态bank，共同继承来源而非独立训练重复；阈值/规则在已看DEV上开发，没有独立泛化、连续alpha、噪声鲁棒或安全认证结论。若无净收益停止本门控，不扫阈值/延迟。"]
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
     return ticks
 
@@ -595,12 +667,12 @@ def execute(root):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode',choices=('prepare','prepare-curve','run','bank'),required=True)
+    parser.add_argument('--mode',choices=('prepare','prepare-curve','prepare-transfer','run','bank'),required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--reference-run',type=Path)
     args=parser.parse_args()
-    if args.mode=='prepare-curve':
-        if args.reference_run is None:parser.error('--reference-run required for prepare-curve')
-        prepare_curve(args.output.resolve(),args.reference_run.resolve())
+    if args.mode in ('prepare-curve','prepare-transfer'):
+        if args.reference_run is None:parser.error('--reference-run required for preparation')
+        {'prepare-curve':prepare_curve,'prepare-transfer':prepare_transfer}[args.mode](args.output.resolve(),args.reference_run.resolve())
     else:
         {'prepare':prepare,'run':execute,'bank':execute_bank}[args.mode](args.output.resolve())
