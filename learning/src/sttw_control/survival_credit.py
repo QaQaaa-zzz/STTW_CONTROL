@@ -73,15 +73,23 @@ def resolve_survival_credit(*, active_tick, actor_action_valid, contact_failure,
 
 
 def survival_ppo_loss(new_log_prob, old_log_prob, values, targets, mask, *,
-                      old_values, clip=.2):
+                      old_values, clip=.2, fixed_denominator=None):
     """Physical-objective PPO terms on resolved legal decisions only.
 
     Log probabilities are joint probabilities of sampled raw Actor actions.
     `old_values` and old log probabilities come from the frozen collection
     policy; do not recompute advantages using the changing minibatch Critic.
     Values are probabilities from a separate physical value head. There is no
-    task-loss coefficient or normalization here: combining objectives and
+    task-loss coefficient here: combining objectives and
     authenticating an on-policy collection belongs to the caller.
+
+    By default the Actor term is a legal-sample mean (legacy engineering use).
+    For a complete episode batch, supply a predeclared denominator such as
+    episode_count * maximum_decisions_per_episode. This preserves the scale
+    of a sum of score contributions when contact/hold changes action counts.
+    It must not be recomputed from the number of valid actions. Minibatch
+    sampling/reweighting remains the learner's responsibility. Critic MSE
+    remains a legal-sample mean, independent of Actor objective reduction.
 
     Index before arithmetic. Network evaluation must ALSO exclude invalid
     observations before forward, as in survival_ppo_batch: output masking alone
@@ -100,6 +108,10 @@ def survival_ppo_loss(new_log_prob, old_log_prob, values, targets, mask, *,
     count = int(mask.sum().item())
     if count == 0:
         raise ValueError('no resolved Actor decisions in this minibatch')
+    denominator = count if fixed_denominator is None else fixed_denominator
+    if (isinstance(denominator, bool) or not isinstance(denominator, (int, float))
+            or not math.isfinite(denominator) or denominator < count):
+        raise ValueError('finite fixed denominator at least the selected sample count required')
     new, old, value, target, baseline = [x[mask] for x in tensors]
     old, target, baseline = old.detach(), target.detach(), baseline.detach()
     if not all(bool(torch.isfinite(x).all()) for x in [new, old, value, target, baseline]):
@@ -111,13 +123,13 @@ def survival_ppo_loss(new_log_prob, old_log_prob, values, targets, mask, *,
     if not bool(torch.isfinite(ratio).all()):
         raise ValueError('nonfinite PPO likelihood ratio')
     advantage = target-baseline
-    actor_loss = -torch.minimum(ratio*advantage, ratio.clamp(1-clip, 1+clip)*advantage).mean()
+    actor_loss = -torch.minimum(ratio*advantage, ratio.clamp(1-clip, 1+clip)*advantage).sum()/denominator
     value_loss = (value-target).square().mean()
     return dict(actor_loss=actor_loss, value_loss=value_loss, samples=count)
 
 
 def survival_ppo_batch(evaluate_selected, observations, actions, old_log_prob,
-                       old_values, targets, mask, *, clip=.2):
+                       old_values, targets, mask, *, clip=.2, fixed_denominator=None):
     """Evaluate only legal resolved samples, then form physical PPO terms.
 
     `evaluate_selected(obs, actions)` returns differentiable joint log-prob and
@@ -143,4 +155,5 @@ def survival_ppo_batch(evaluate_selected, observations, actions, old_log_prob,
     log_prob, value = evaluate_selected(obs, action)
     selected = torch.ones(obs.shape[0], dtype=torch.bool, device=mask.device)
     return survival_ppo_loss(log_prob, old_log_prob[mask], value, targets[mask],
-                             selected, old_values=old_values[mask], clip=clip)
+                             selected, old_values=old_values[mask], clip=clip,
+                             fixed_denominator=fixed_denominator)
