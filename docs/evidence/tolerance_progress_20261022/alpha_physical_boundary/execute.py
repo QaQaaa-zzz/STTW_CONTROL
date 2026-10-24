@@ -22,9 +22,11 @@ def main():
         atomic_json(root/'campaign_status.json', state)
     update()
     try:
-        for stage, script, arguments, result_name in [
-            ('preparing', str(Path(__file__).with_name('collect_prefixes.py')), ['--run', str(root)], 'prepare_status.json'),
-            ('scanning', 'learning/cli/probe_sensor_gate_domain_hold.py', ['--plan', str(root/'scan_plan.json')], 'status.json')]:
+        stages = [('preparing', str(Path(__file__).with_name('collect_prefixes.py')), ['--run', str(root)], 'prepare_status.json')]
+        if plan.get('pre_scan_forecast_script'):
+            stages.append(('forecasting', plan['pre_scan_forecast_script'], ['--run', str(root)], 'forecast_status.json'))
+        stages.append(('scanning', 'learning/cli/probe_sensor_gate_domain_hold.py', ['--plan', str(root/'scan_plan.json')], 'status.json'))
+        for stage, script, arguments, result_name in stages:
             update(stage=stage)
             with (root/(stage+'.log')).open('x') as log:
                 child = subprocess.Popen([sys.executable, '-u', script, *arguments], stdout=log, stderr=subprocess.STDOUT)

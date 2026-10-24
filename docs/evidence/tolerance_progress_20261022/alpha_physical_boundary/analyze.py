@@ -69,8 +69,8 @@ def main():
                               observed_min_contact_N=min(contact) if contact else None,
                               observations=[dict(force_N=r['force_N'], label=r['balance_label'], controller_scope=r['controller_scope']) for r in ordered]))
     paired = []
-    for speed in [2.45, 2.65]:
-        for fraction in [.2, .7]:
+    for speed in preparation['speeds']:
+        for fraction in preparation['phase_fractions']:
             for force in preparation['forces_N']:
                 rr = [next(r for r in rows if r['requested_speed']==speed and r['fraction']==fraction and r['alpha']==alpha and r['force_N']==force) for alpha in [0., 1.]]
                 paired.append(dict(speed=speed, fraction=fraction, force_N=force,
