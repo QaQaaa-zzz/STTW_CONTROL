@@ -1,0 +1,3 @@
+Supplemental joint comparator, 2026-10-24. Original primary unchanged.
+Decision made after collection started/completed, before root agent inspected new outcome labels. An automated primary analysis has already accessed those labels; this is not preregistration or before-force prediction.
+Fit only old DEV48: logistic regression, six raw-state features [wheel speed, wheel speed squared, sign(force)*roll, sign(force)*roll rate, sign(force)*steer, sign(force)*ESO shift], DEV-only mean/SD, intercept unpenalized, sum binary log loss + 0.5*||weights||^2. Fixed penalty1, no sweep or policy/route identifier. Save coefficients and new input-only predictions before reading new labels. No new physics/PPO. Evaluate once; preserve all primary results and stop rules.
