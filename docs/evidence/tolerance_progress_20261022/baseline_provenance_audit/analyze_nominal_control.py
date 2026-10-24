@@ -71,7 +71,7 @@ def main():
     max_reconstruction_error = 0.
     for new_row in new_rows:
         speed = new_row['actual_requested_speed_m_s']
-        route = 'left125_R2p2' if new_row['builder'].startswith('left') else 'right125_R2p2'
+        route = plan.get('route_name_map', {'left90_R2':'left125_R2p2','right90_R2':'right125_R2p2'})[new_row['builder']]
         baseline = archive(run/'evaluation'/(new_row['name']+'.npz'), receipts)
         path = archive(run/'evaluation'/(new_row['name']+'_path.npz'), receipts)
         old_path = archive(prior/(route+'_path.npz'), receipts)

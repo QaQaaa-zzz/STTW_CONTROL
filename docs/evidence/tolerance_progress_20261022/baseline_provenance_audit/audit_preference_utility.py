@@ -6,11 +6,13 @@ from sttw_control.preference_best import atomic_json,digest
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    original=Path('runs/zero_middle_nominal_full_analysis_v1/analysis.json').resolve();data=json.loads(original.read_text())
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--source-analysis',type=Path,default=Path('runs/zero_middle_nominal_full_analysis_v1/analysis.json'))
+    p.add_argument('--zero-run',type=Path,default=Path('runs/zero_middle_nominal_full_v1'));a=p.parse_args()
+    original=a.source_analysis.resolve();data=json.loads(original.read_text())
     for file,sha in data['source_sha256'].items():
         if digest(file)!=sha:raise ValueError('Original nominal source changed '+file)
-    run=Path('runs/zero_middle_nominal_full_v1');plan=json.loads((run/'plan.json').read_text())
+    run=a.zero_run.resolve();plan=json.loads((run/'plan.json').read_text())
     declaration=Path(plan['source_declaration']);decl=json.loads(declaration.read_text());cfg=decl['config'];prior=Path(plan['original_H75_evaluation'])
     assert cfg['path_reward']['reward_version']=='path_persistent_preference_v3'
     from sttw_control.path_command_training import load_environment
@@ -46,7 +48,8 @@ def main():
             record=next(x for x in data['comparisons'] if x['route']==route and x['speed']==speed and x['alpha']==beta)
             trace=read(prior/(record['H75_labels']['name']+'.npz'));members.append((f'H75_a{beta:g}',beta,trace,record['H75']))
         for name,beta,trace,mm in members:
-            assert len(trace['time'])==2000 and not trace['physical_failure'].any() and not trace['domain_exit'].any()
+            if not len(trace['time']) or not np.isfinite(trace['scored_tick_reward']).all():
+                raise ValueError('Empty/nonfinite factual trajectory; preserve source failure')
             curvature=j.interp(j.asarray(trace['path_progress']),j.asarray(path['s']),j.asarray(path['curvature']))
             chi=j.clip((j.abs(j.arctan(cc.wheelbase*curvature/j.cos(cc.caster))/q_ratio(j.asarray(speed),cc))-.18)/.12,0,1)
             if 'effective_costs' in trace:effective=trace['effective_costs']
@@ -64,7 +67,7 @@ def main():
                 component_returns.append({key:float(-scale*all_costs[:,i].astype('float64').sum()) for i,key in enumerate(keys)})
             factual_error=abs(returns[alphas.index(beta)]-float(trace['scored_tick_reward'].astype('float64').sum()));max_return_error=max(max_return_error,factual_error)
             if factual_error>1e-3:raise ValueError('Return reconstruction failed')
-            rows.append(dict(route=route,speed=speed,policy=name,behavior_alpha=beta,utility_alphas=alphas,returns=returns,component_returns=component_returns,metrics={k:mm[k] for k in ['turn_speed_rmse_m_s','turn_path_rmse_m','peak_roll_rad']}))
+            rows.append(dict(route=route,speed=speed,policy=name,behavior_alpha=beta,utility_alphas=alphas,returns=returns,component_returns=component_returns,observed_ticks=len(trace['time']),complete_nominal_horizon=len(trace['time'])==2000,physical_failure=bool(trace['physical_failure'].any()),domain_exit=bool(trace['domain_exit'].any()),metrics={k:mm[k] for k in ['turn_speed_rmse_m_s','turn_path_rmse_m','peak_roll_rad']}))
         for name,_,_,mm in members:
             vector=np.array([mm[k] for k in ['turn_speed_rmse_m_s','turn_path_rmse_m','peak_roll_rad']])
             dominators=[]
@@ -100,7 +103,7 @@ def main():
     if max_linearity_error>1e-3:raise ValueError('Affine utility assumption failed')
     out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     atomic_json(out/'analysis.json',dict(trajectories=rows,comparisons=comparisons,pareto=pareto,coverage=coverage,max_linearity_error=max_linearity_error,max_component_error=max_component_error,max_return_error=max_return_error,input_sha256=receipts,new_physics_ticks=0,optimizer_updates=0,scope='Descriptive cross-scoring on24 existing nominal DEV trajectories. Row-wise best is retrospective utility comparator, not a deployed selector. Exact Pareto membership is numerical, not statistical or practical significance.'))
-    lines=['# 偏好功能的实际价值：完整名义轨迹交叉评分','','24条既有真实轨迹×五个评分偏好，0新物理/训练。同α成本重建后，只替换V3中依赖α的speed/path/primary项；修正幅度/变化率及其余成本保留真实日志，不把固定α1重评分冒充在线换α。',f'分量最大重建误差{max_component_error:g}，累计return最大误差{max_return_error:g}。','',
+    lines=['# 偏好功能的实际价值：名义任务轨迹交叉评分','','24条既有真实轨迹×五个评分偏好，0新物理/训练。同α成本重建后，只替换V3中依赖α的speed/path/primary项；修正幅度/变化率及其余成本保留真实日志，不把固定α1重评分冒充在线换α。',f"完整观察10s的轨迹{sum(r['complete_nominal_horizon'] for r in rows)}/24；提前终止的真实长度/触地/域退出逐条保存，原记录终止惩罚保留，不补齐轨迹。",f'分量最大重建误差{max_component_error:g}，累计return最大误差{max_return_error:g}。','',
            '|路线/速度|用户α|随α策略减两种简单策略中较佳者return|较佳简单策略|全部既有轨迹中最高分策略|','|---|---:|---:|---|---|']
     for r in comparisons:lines.append(f"|{r['route']}/{r['speed']}|{r['requested_alpha']}|{r['delta']:.5f}|{r['best_simple_policy']}|{r['best_factual_policy']}|")
     lines+=['','两种简单策略指zero和固定α1；逐工况挑较佳者是事后参照，不是可实现oracle算法。完整6×5return矩阵与速度/路径/roll三指标、全部精确Pareto支配关系保留analysis.json。分组奖励不能替代任务或不摔倒标签，也不把毫米级非支配性解释为实用优势。','',
