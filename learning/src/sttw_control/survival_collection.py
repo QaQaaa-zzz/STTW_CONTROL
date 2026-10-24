@@ -40,6 +40,17 @@ def evaluate_collection_networks(actor, task_critic, params, observation, critic
     return mean,task_value,physical
 
 
+def evaluate_collection_batch(actor, task_critic, parameters, observations, critic_observations):
+    """Use the actual per-environment parameter layout, including in checks.
+
+    A shared-parameter GEMM may select a different GPU precision/kernel than
+    the production batched-parameter matrix-vector layout. Do not use that
+    surrogate layout to declare production value/density agreement or failure.
+    """
+    return jax.vmap(lambda p,x,v:evaluate_collection_networks(actor,task_critic,p,x,v))(
+        parameters,observations,critic_observations)
+
+
 def make_survival_collection_step(env, actor, *, horizon_s, task_critic=None):
     """One actual upper interval; output one decision and four lower log slots.
 

@@ -64,7 +64,7 @@ def execute(root):
         from .contact_only_environment import load_environment_contact_only
         from .path_command_policy import make_path_actor,make_path_critic,export_torch_actor
         from .geometric_path import build_path
-        from .survival_collection import SurvivalCollectionState,make_survival_collection_step,evaluate_collection_networks
+        from .survival_collection import SurvivalCollectionState,make_survival_collection_step,evaluate_collection_batch
         from .survival_online_learner import OnlineSurvivalLearner
         from .survival_online_batch import assemble_online_arm
         plan=json.loads((root/'plan.json').read_text())
@@ -89,12 +89,18 @@ def execute(root):
         from .survival_task_credit import reconstruct_task_critic
         check_view=reconstruct_task_critic(check_obs,check_ticks,np.ones(len(check_obs),dtype=bool),dt_s=.005,horizon_s=10.)
         check_learner=learners['task_only'];check_params=check_learner.sampling_parameters()
-        values=jax.jit(jax.vmap(lambda x,v:evaluate_collection_networks(make_path_actor(cfg),make_path_critic(cfg),check_params,x,v)))(j.asarray(check_obs),j.asarray(check_view))
+        unique_observations=len(check_obs)
+        check_obs=np.tile(check_obs,(plan['total_envs']//unique_observations,1))
+        check_view=np.tile(check_view,(plan['total_envs']//unique_observations,1))
+        batched_check=jax.tree.map(lambda x:j.stack([x]*plan['total_envs']),check_params)
+        values=jax.jit(lambda p,x,v:evaluate_collection_batch(make_path_actor(cfg),make_path_critic(cfg),p,x,v))(
+            batched_check,j.asarray(check_obs),j.asarray(check_view))
         with torch.no_grad():expected=(check_learner.actor(torch.tensor(check_obs)).numpy(),
             check_learner.task_critic(torch.tensor(check_view)).squeeze(-1).numpy(),
             check_learner.physical_critic(torch.tensor(check_view)).squeeze(-1).numpy())
         for actual,target in zip(values,expected):np.testing.assert_allclose(np.asarray(actual),target,atol=1e-4,rtol=1e-5)
-        atomic_json(root/'prelaunch_value_check.json',dict(source_raw_sha256=digest(check_raw),actual_saved_observations=len(check_obs),
+        atomic_json(root/'prelaunch_value_check.json',dict(source_raw_sha256=digest(check_raw),actual_unique_saved_observations=unique_observations,
+            batched_rows=len(check_obs),parameter_layout='per_environment_parameters_matching_production',
             head_max_errors=[float(np.max(np.abs(np.asarray(a)-b))) for a,b in zip(values,expected)],new_physics_ticks=0,optimizer_steps=0))
         for port in range(6011,6031):
             with socket.socket() as sock:
