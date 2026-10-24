@@ -135,6 +135,23 @@ R1.1出现真实取舍：右弯v1.8，alpha1弯中速度RMSE约.034m/s、路径R
 
 归一化输入边界诊断：upper最高整轨迹分量占比.00060399（约.0604%），lower全部0；裁后数据只证明输入达到±5边界，不能量化被裁前幅度，也不能据此归因全部失败。zero两个alpha所有8配对长度/真实终止一致、latent均严格0；XY最大差1.52588e-5m、速度1.82390e-5m/s，保留数值差异且接受，不做精确回放追查。34项相关既有CPU数学/几何测试通过，新增诊断的真实维度和奖励记录已在32例核对。Bark正常完成3收据已接受，scan_errors空，未发重复消息。
 
-按用户要求回看已冻结双网络，而非过早否定单网络或全部偏好方法：low_tight_dual_nominal_review_v1准备16新槽≤32000ticks，原生legacy351D，无权重迁移/更新；共同新config仅architecture元数据适配原模型，teacher原context/history/norm/hidden/activation/timing核对一致。半径/速度/cap不再更改，H75/zero32轨迹原样复用。双网络每端点只用匹配alpha，对照评价统一使用V3重评分，不冒充原teacher训练奖励。既有run_tight_preference顺序4批执行；完成后pidfd进程退出触发合并48槽分析，不轮询或重跑基线。当前16槽结果PENDING，raw与analysis分别中文Bark登记，邮箱/自动修复停用，无push。
+按用户要求回看已冻结双网络，而非过早否定单网络或全部偏好方法：low_tight_dual_nominal_review_v1准备16新槽≤32000ticks，原生legacy351D，无权重迁移/更新；共同新config仅architecture元数据适配原模型，teacher原context/history/norm/hidden/activation/timing核对一致。半径/速度/cap不再更改，H75/zero32轨迹原样复用。双网络每端点只用匹配alpha，对照评价统一使用V3重评分，不冒充原teacher训练奖励。既有run_tight_preference顺序4批执行；完成后pidfd进程退出触发合并48槽分析，不轮询或重跑基线。启动时16槽结果PENDING（完成结果见下），raw与analysis分别中文Bark登记，邮箱/自动修复停用，无push。
 
 下一步先收回双网络名义对照；若进入防摔能力比较，R1.1的全部8个H75端点进入状态必须一并保留，不只选3个任务成功状态。能力仍须明确继续中层还是锁参考、力持续时间和观察窗；前者不能复用后者阈值。当前未启动该施扰阶段，不能写成防摔收益已证。原解析坐标仅解释性基线，不恢复为硬安全门槛。
+
+
+## 双端点回看完成；跟随器核对与几何相位能力测量
+
+**目的与方法。** 避免把H75在新分布中的失败直接归因于“单网络不行”，在同一新参考合同、R.9/1.1、左右、v1.5/1.8下，加载冻结双端点原生legacy351D；各只用匹配alpha，无权重转换或训练。H75/zero32条旧轨迹完全复用，双端点16条新执行，共48槽同图，统一V3评价不冒充teacher原训练奖励。
+
+**结果。** 双端点16/16完成18568新lower ticks，0触地，但仅2条完整10s、14域退出，原任务均未达标。R1.1为H75任务3/8、dual0/8、zero0/8；不推出H75在全分布普遍更强或其它控制器不可能完成任务。合并累计54440ticks=继承35872＋本轮18568，不全部算新成本。全部48槽XY与逐step奖励/signed分项在[合并报告](../../../../runs/low_tight_dual_nominal_review_v1/combined_analysis/REPORT.md)，[完整XY](../../../../runs/low_tight_dual_nominal_review_v1/combined_analysis/all_paths.png)已视觉检查。raw/analysis中文Bark两完成收据accepted，未push。
+
+**跟随器核对（0新积分）。** 用原bank、固定路径、post-tick XY/路径进度/heading error/速度重建PP，再按真实50Hz目标更新和200Hzslew发布，32条轨迹最大速度误差5.722e-8m/s、转角误差1.490e-7rad；没有发现发布时序错误。全部26域退出都满足预瞄点body-x<=.05m，不能当摔倒。R1.1零修正转向slew限制约70–73%时间，弯中转角跟踪RMSE.043–.052rad；这些是跟随负担的观察，不是证明lookahead或执行器是唯一根因。[离线报告](../../../../runs/low_tight_preference_nominal_v1_attempt2/follower_audit/REPORT.md)保留所有重建NPZ和first-half-turn实测量。
+
+按scientific-critical-thinking与独立AI反审，先考虑传统跟随器再做更多预测拟合。检索一手[Regulated Pure Pursuit论文](https://arxiv.org/abs/2305.20026)与[官方Nav2说明](https://github.com/ros-navigation/navigation2/blob/main/nav2_regulated_pure_pursuit_controller/README.md)，确认速度调节和自适应预瞄已有明确方法；没有把未有依据的.7/.4曲率规则当“强传统基线”，当前未实现/采用新follower。强常规基线仍是论文增量的后续需求，不能因zero差就宣称学习必要。
+
+**为何仍测一次弯中物理能力。** 反审建议若优先控制收益，先暂停能力预测迁移；该意见保留。用户已明确不要求所有任务成功、防摔与规划到达分开，因此不另加“名义必须全通过”的门槛。本次测量只回答偏好所形成的状态/参考有何抗推差异，不宣布新控制算法。既有3.2s快照进度多已到弯尾，不能当弯中状态；实测几何50%处alpha0速度约1.072–1.407m/s、alpha1约1.426–1.765m/s，存在值得量化的低速差异。不能只保留3个名义任务成功状态。
+
+新tight_midturn_capability_v1：同R1.1/共同新权限/原物理/固定H75和local300，从真实起点首个20ms跨越几何50%捕获，左右×两速度×两alpha共8完整状态；停止中层，锁定实际已执行governed参考，继承完整物理、ESO、执行器和local300历史。固定0/±16/±32/±48/±64N、.1s、4s，共72后缀，8零力与64非零分别分析；prefix≤16000＋suffix≤57600=73600新lower ticks，0新拟合/策略优化。64N档在新标签前加入，覆盖较快状态既有量级，非看标签后加档。此为相关DEV，不是同状态alpha切换因果、继续H75闭环的能力或连续阈值认证。
+
+**实现、验证与停止。** 单相位捕获采用vmap4＋scan50，各lane首次跨越后冻结整个state；不多积分来凑齐块，旧双相位流程不变。TDD先2项缺函数失败，再7项capture/条件模型测试通过（含跨块、不同lane首跨越和实际步数）。默认接口与新真实prefix-bundle接口分别0积分/0拟合逐值复现旧56条全部预测；旧模型、尺度、阈值/中心均冻结。生成的中层续行scan明确改名NOT_EXECUTED，实际扫描只运行固定参考底层。源码/权重/config SHA归档，全部8状态无论原任务是否成功均保留；不可有效捕获则保留不可用/失败成本，不改相位/替换状态；不加力档、不重拟合、不宣称未知力幅也安全。当前真实执行结果PENDING，根与各阶段中文Bark已登记。

@@ -22,6 +22,7 @@ def main():
         for path,sha in plan['source_sha256'].items():
             assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==sha
         results=json.loads((run/'results.json').read_text())['cases']
+        assert len(results)==len(plan['cases'])==len(prediction['cases'])
         prefixes=json.loads((run/'prefixes.json').read_text())['cases']
         source={p['state_id']:p for p in prefixes};traces={};rows=[];source_hashes=[]
         for case,observed,pred in zip(plan['cases'],results,prediction['cases']):
@@ -38,7 +39,7 @@ def main():
             rows.append(dict(**case,**label,name=observed['name'],scores=pred['probability_scores'],
                 analytic_capacity_N=pred['analytic_capacity_N'],analytic_predict_contact=pred['analytic_predict_contact'],
                 impulse_error_Ns=float(np.linalg.norm(np.asarray(observed['impulse_Ns'])-observed['expected_impulse_Ns']))))
-        assert len(rows)==56 and len(source)==8
+        assert len(rows)==len(plan['cases']) and len(source)==8
         methods=list(rows[0]['scores'])+['analytic'];metrics={}
         for method in methods:
             metrics[method]={}
@@ -82,7 +83,9 @@ def main():
         import matplotlib.pyplot as plt
         fig,axes=plt.subplots(2,4,figsize=(20,10),layout='constrained')
         decl=json.loads(Path(plan['source_declaration']).read_text());cc=decl['source']['controller']
-        colors={0.:'black',-32.:'tab:blue',32.:'tab:orange',-48.:'tab:green',48.:'tab:red',-64.:'tab:purple',64.:'tab:brown'}
+        force_grid=sorted({r['force_N'] for r in rows})
+        colors={f:plt.get_cmap('tab20')(i) for i,f in enumerate(force_grid)}
+        colors[0.]='black'
         for ax,item in zip(axes.flat,states):
             prefix=item['prefix'];sid=prefix['state_id'];state=pickle.loads(Path(prefix['snapshot']).read_bytes())
             origin=np.asarray(state.physical.data.qpos[:2]);yaw=float(state.physical.yaw_unwrapped)
@@ -109,7 +112,7 @@ def main():
                 ax.scatter(force,[r['balance_label']=='FLOOR_CONTACT' for r in rr],color='black',marker='x',label='actual contact')
                 ax.axhline(.5,color='gray',ls=':');ax.set(title=sid+f' side {side:+d}',xlabel='queried amplitude (N)',ylabel='conditional score',ylim=(-.05,1.05))
         axes[0,0].legend(fontsize=7);fig.savefig(run/'frozen_predictions_vs_outcomes.png',dpi=130);plt.close(fig)
-        update(phase='completed',stage='all_cases_and_plots_complete',cases=56)
+        update(phase='completed',stage='all_cases_and_plots_complete',cases=len(rows))
         print(json.dumps(metrics,indent=2))
     except BaseException as exc:
         update(phase='error',stage='analysis_error',error_type=type(exc).__name__,error=str(exc));raise

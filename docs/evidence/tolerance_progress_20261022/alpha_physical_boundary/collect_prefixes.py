@@ -10,6 +10,7 @@ import jax
 import jax.numpy as j
 import numpy as np
 from sttw_control.preference_best import atomic_json, digest
+from sttw_control.geometric_capture import capture_first_crossing_block
 
 
 def main():
@@ -70,13 +71,26 @@ def main():
         completed = np.zeros(len(contexts), bool)
         counts = np.zeros(len(contexts), int)
         targets = [float(cfg['path']['straight_prefix_m'])+f*(float(path.turn_end)-float(cfg['path']['straight_prefix_m'])) for f in plan['phase_fractions']]
+        if not targets or not np.isfinite(targets).all() or not np.all(np.diff(targets)>0):
+            raise ValueError('geometric capture phases must be finite, nonempty and increasing')
+        single_phase=len(targets)==1
+        @jax.jit
+        def execute_capture_block(states,speeds,completed):
+            return capture_first_crossing_block(lambda st,done:jax.vmap(one)(st,speeds,done),
+                states,completed,j.asarray(targets[0]),lambda st:st.projection.progress,50)
         blocks, rows, snapshot_hashes = [], [], {}
         update(stage='genuine_upper_prefixes')
-        for step in range(500):
-            previous_progress = np.asarray(states.projection.progress)
-            states, logs = execute(states, speeds, j.asarray(completed))
+        for step in range(10 if single_phase else 500):
+            if single_phase:
+                states,_,previous,logs=execute_capture_block(states,speeds,j.asarray(completed))
+                previous_progress=np.asarray(previous)
+            else:
+                previous_progress = np.asarray(states.projection.progress)
+                states, logs = execute(states, speeds, j.asarray(completed))
             jax.block_until_ready(states)
             host = jax.device_get(logs)
+            if single_phase:
+                host=jax.tree.map(lambda x:np.swapaxes(x,0,1).reshape((len(contexts),-1)+x.shape[3:]),host)
             blocks.append(host)
             state['active_lower_ticks'] += int(host['active_tick'].sum())
             if state['active_lower_ticks'] > plan['maximum_prepare_lower_ticks']:
@@ -84,9 +98,9 @@ def main():
             progress = np.asarray(states.projection.progress)
             invalid = np.asarray(states.fault|states.domain_exit|states.physical.failed)
             if (invalid & ~completed).any():
-                raise ValueError('Nominal prefix invalid before both geometric phases')
+                raise ValueError('Nominal prefix invalid before declared geometric phases')
             for i, context in enumerate(contexts):
-                while counts[i] < 2 and progress[i] >= targets[counts[i]]:
+                while counts[i] < len(targets) and progress[i] >= targets[counts[i]]:
                     fraction = plan['phase_fractions'][counts[i]]
                     sid = f"{plan['route']}_v{context['speed']:g}_a{context['alpha']:g}_phase{fraction:g}"
                     captured = jax.device_get(jax.tree.map(lambda x: x[i], states))
@@ -109,9 +123,9 @@ def main():
                                      snapshot=str(file), snapshot_sha256=snapshot_hashes[str(file)],
                                      complete_upper_history=True))
                     counts[i] += 1
-                completed[i] = counts[i] == 2
+                completed[i] = counts[i] == len(targets)
             if step % 25 == 0 or completed.all():
-                update(completed_cases=len(rows), upper_steps_executed=step+1)
+                update(completed_cases=len(rows), upper_steps_executed=(step+1)*(50 if single_phase else 1))
             if completed.all():
                 break
         if len(rows) != plan['declared_prefixes']:
