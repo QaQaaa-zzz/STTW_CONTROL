@@ -40,6 +40,6 @@ File: create `docs/evidence/tolerance_progress_20261022/baseline_provenance_audi
 
 ### Task3: Review, record and next interface
 
-- [ ] Run related failure-contract/continuation tests once alongside new tests; obtain read-only adversarial review of targets, actual action masking and loss gradients.
-- [ ] Record actual outcomes/limits in shared ledger under `.write.lock`, preserve both projects, commit only new module/test/audit/plan and intended documentation. Send Chinese Bark completion.
+- [x] Run related failure-contract/continuation tests alongside new tests; obtain read-only adversarial review of targets, actual action masking and loss gradients. Final27passed; clock-coverage and pre-forward/detach regressions implemented. Final96branch receipt is `runs/survival_tail_credit_audit_v3/receipt.json`,45survived/51contact,13disturbed hold survivors;0newphysics/updates.
+- [x] Record actual outcomes/limits in shared ledger under `.write.lock`, preserve both projects, commit only new module/test/audit/plan and intended documentation. Implementation commit959ca14, ledger revision1990. Chinese Bark first attempt failed; one retry accepted, original failure retained in `runs/survival_tail_credit_audit_v3/bark_receipt.json`.
 - [ ] Next integration must collect fresh stochastic complete episodes under a frozen collection policy, preserve old logprob and true pre-action observation, and resolve physical tails before updating. No claim that production PPO already uses this adapter.
