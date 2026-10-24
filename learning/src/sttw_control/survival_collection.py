@@ -26,12 +26,27 @@ class SurvivalCollectionState:
     handed_over: object
 
 
-def make_survival_collection_step(env, actor, *, horizon_s):
+def evaluate_collection_networks(actor, task_critic, params, observation, critic_observation):
+    """Pre-action means/values from one frozen parameter snapshot.
+
+    The optional dual-value mode takes dynamic Actor/Critic/physical parameters.
+    Legacy callers retain their constant-.5 baseline and no task value.
+    """
+    if task_critic is None:
+        return actor.apply(params, observation), j.float32(j.nan), j.float32(.5)
+    mean=actor.apply(params['actor'], observation)
+    task_value=task_critic.apply(params['task_critic'], critic_observation).reshape(())[()]
+    physical=jax.nn.sigmoid(critic_observation@params['physical']['kernel']+params['physical']['bias']).reshape(())[()]
+    return mean,task_value,physical
+
+
+def make_survival_collection_step(env, actor, *, horizon_s, task_critic=None):
     """One actual upper interval; output one decision and four lower log slots.
 
     env must already be the opt-in contact-only instance with zero_log installed.
-    The separate physical-value baseline is a declared constant .5, not a
-    trained probability estimator. Task scores retain the configured V3 costs
+    Legacy mode uses the declared constant .5 physical baseline. With optional
+    task_critic, dynamic parameters provide both frozen collection values.
+    Task scores retain the configured V3 costs
     under the diagnostic contact/domain terminal contract, never during hold.
     """
     from .balance_probe import make_lower_tick
@@ -57,16 +72,19 @@ def make_survival_collection_step(env, actor, *, horizon_s):
                      raw_costs=j.zeros(len(keys)), effective_costs=j.zeros(len(keys)))
     zero_block = jax.tree.map(lambda x:j.repeat(x[None], 4, axis=0), zero_tick)
     blank_decision = dict(valid=j.bool_(False), observation=j.full((351,), j.nan),
+        critic_observation=j.full((352,), j.nan), old_task_value=j.float32(j.nan),
         raw_action=j.full((2,), j.nan), mean=j.full((2,), j.nan), log_prob=j.float32(j.nan),
         physical_value=j.float32(j.nan), task_tick=j.int32(-1), rng_key=j.zeros(2, j.uint32))
     advance_hold = make_hold_last_tick(make_lower_tick(env, j.zeros(2)), dt=dt)
 
     def normal(carry, params, log_std, path, speed, pulse):
         state = carry.state
-        obs, _, observation_fault = env.observation(state, path, speed, horizon_s)
-        mean = actor.apply(params, obs)
+        obs, critic_obs, observation_fault = env.observation(state, path, speed, horizon_s)
+        mean, task_value, physical_value = evaluate_collection_networks(actor, task_critic, params, obs, critic_obs)
         action, log_prob, next_key = sample_gaussian_action(mean, log_std, carry.key)
         fault = observation_fault | ~j.all(j.isfinite(mean)) | ~j.all(j.isfinite(action)) | ~j.isfinite(log_prob)
+        if task_critic is not None:
+            fault = fault | ~j.isfinite(task_value) | ~j.isfinite(physical_value)
         end, logs = env.policy_step(state.replace(fault=state.fault|fault), action,
                                     path, speed, horizon_s, pulse)
         data = dict(zero_block)
@@ -87,7 +105,8 @@ def make_survival_collection_step(env, actor, *, horizon_s):
         handover = end.domain_exit & ~carry.handed_over
         held = j.where(handover, end.physical.governor.current_reference, carry.held_reference)
         decision = dict(valid=j.any(logs['active_tick'])&~fault, observation=obs,
-            raw_action=action, mean=mean, log_prob=log_prob, physical_value=j.float32(.5),
+            critic_observation=critic_obs, old_task_value=task_value,
+            raw_action=action, mean=mean, log_prob=log_prob, physical_value=physical_value,
             task_tick=state.tick, rng_key=carry.key)
         return carry.replace(state=end, key=next_key, held_reference=held,
                              handed_over=carry.handed_over|handover), (decision, data)
