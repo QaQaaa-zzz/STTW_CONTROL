@@ -99,3 +99,42 @@ runs/low_speed_tight_turn_nominal_v1只做8个真实6s无外扰前缀，原斜�
 [8工况全部XY](../../../../runs/low_speed_tight_turn_nominal_v1/all_paths.png) · [全部速度/侧倾/指令曲线](../../../../runs/low_speed_tight_turn_nominal_v1/speed_roll_reference.png)。8/8真实6秒前缀无触地，9600/9600 lower ticks，0外扰/0策略更新，所有失败/无效数为0。请求速度1.5/1.8，实际末速约1.370–1.665m/s；转角指令±.45/±.55，实际末侧倾绝对.236–.488rad；±.55的1.8请求工况末速分别1.568/1.540，已经有约.232/.260m/s速度代价。这证明该有限窗口内底层可以行驶，不证明无限稳定/抗扰改进/完整路径任务成功。
 
 还发现一个必须明确的接口边界：当前冻结H75的nominal follower steer_reference_max_rad=.3，而本次直接底层命令是.45/.55；故不能将这次结果当作原中层已验证紧弯路径。后续若开展完整中层新场景，应建立显式版本化、所有比较方法一致的参考协议，保留原follower与冻结权重；不能让简单基线因参考被截断而天然无法转弯，再据此声称学习优势。当前没有修改follower限制、奖励、物理或冻结网络，没有自动执行生成的8条零力后缀计划。
+
+
+## 低速紧弯：共同参考权限与论文问题收拢（32槽名义结果已完成）
+
+目的：现有R3温和低速状态未区分复杂容扰预测与简单速度规则，不能继续追调原公式。先检查更紧的真实几何任务能否产生有用的路径—速度选择，之后才有理由研究这些选择的防摔代价。
+
+新协议tight_common_authority_v1：H75原配置复制；名义steer cap .3→.6，governed cap .35→.65(<物理steer limit .8)，governed速度下限1.5→1.0；其余lookahead、slew、滤波、奖励、物理和权重不变。R.9/1.1、左右90度、v1.5/1.8、10s，H75与全参数零输出Actor，alpha0/1，共32执行槽≤64000lower ticks。没有策略优化或外扰。扩大权限与几何同时改变，是独立场景，不是单因素消融；冻结Actor未训练过该新合同，负结果不能直接解释为原策略的能力上限。
+
+运行路径runs/low_tight_preference_nominal_v1_attempt2；原v1仅配置准备0物理，补充观测诊断后由attempt2替代，未重启任何在运行进程。完整config/diff、源归档、zero推理验证与独立AI反审均在run目录。新日志opt-in记录真实upper351/lower210输入、chi、latent和offset；默认历史评测行为不变。zero两个alpha物理上为同一控制器，重复执行为各alpha奖励配对记录，不是独立重复。分析核对同物理轨迹，报告裁后输入达到边界5的占比，不冒充裁前幅值。
+
+本轮Scientific Agent Skills用于提出可证伪问题、固定设计和独立反审，不以技能输出作为方法有效性证据。34项已有条件模型/几何契约和奖励测试通过，新诊断日志仍须真实运行核对。后续分析必须覆盖全部32槽实际/原任务XY、速度/转角参考、轮速代理、侧倾、每20ms奖励、signed分项与真实失败终点；触地、域退出和完整10秒分别计数。
+
+### 文献核查后的创新边界（2026-10-24，有界检索，不是系统综述）
+
+检索词：preference conditioned policy safety constraints Pareto safe multi objective reinforcement learning viability disturbance robustness；bicycle robot steering balance disturbance rejection low speed region of attraction control barrier function。初始独立设想与反审在检索前形成。只按已打开一手来源判断：
+
+- [Huang等，CoRL/PMLR2022，LP3](https://proceedings.mlr.press/v164/huang22a.html)：已经研究通过学习目标偏好满足约束。因此“偏好＋安全”本身不能作为我们的新颖性。
+- [Mousa等，PROMO预印本2026](https://arxiv.org/abs/2610.01260)：已提出机器人单策略运行时偏好接口并报告仿真/实机结果。已读取摘要及HTML开篇，未复现其实验；不能把连续alpha单网络本身作为独创。
+- [Wang等，EABC2024](https://arxiv.org/abs/2410.19615)：单轨两轮车track stand、扰动平衡点适配和MPC已有研究，适用慢变化扰动的背景与我们矩形脉冲/运动转弯不同。已读摘要与HTML引言，未作数值方法对照。
+- 圆周运动CLF/CBF论文页面403，仅搜索摘要发现，不据此作已读全文/创新排除结论。
+
+据此把潜在科学问题限定为：固定强底层下，偏好选择产生的运行状态/参考，会怎样改变带方向、带持续时间和观察窗的经验防摔能力？能否在实际任务代价可接受时，用这种能力信息做出超过简单速度规则的选择？这仍是假设。先证明选择有任务用途，再证明其改变防摔结局，最后证明能力信息有额外决策价值；任一步不成立就停该局部分支，不以低速/紧弯/加特征本身冒充创新。
+
+流程软件来源：Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)。作者与当前版本信息本轮已核对arXiv记录；其方法流程贡献不等于外部同行验证。
+
+
+### 32槽实际结果与去留
+
+[全部实际/原任务XY](../../../../runs/low_tight_preference_nominal_v1_attempt2/analysis/all_paths.png)；[逐例全分项报告](../../../../runs/low_tight_preference_nominal_v1_attempt2/analysis/REPORT.md)。已视觉检查全部8组同图轨迹，含全部声明alpha和真实域退出终点。原始日志包含真实upper351/lower210、每lower tick costs/scored_reward；逐20ms reward和signed分项全部重建并核对sum，非只看均值回报。
+
+运行completed32/32，35872实际lower ticks，0外扰/0策略更新。0触地，但只有6条完整10s、26条提前域退出；26条不能当成完整防摔成功。R.9下H75两alpha和zero均0任务；R1.1下H75alpha0为2/4任务、alpha1为1/4，zero两alpha各0/4。合计H75在R1.1任务3/8，对应zero0/8；是同祖先确定性DEV评分槽，不是8独立随机重复或独立测试成功率。R.9无任务用途，停止往该半径加扰动。
+
+R1.1出现真实取舍：右弯v1.8，alpha1弯中速度RMSE约.034m/s、路径RMSE .248m，alpha0约.385m/s/.081m；alpha1最终回到原任务，alpha0后续域退出。因此不能把弯中局部路径更好等同完整任务更好，也不能把alpha1表现笼统归结为少减速就更好。左右/速度4个情形全部保留，未只挑该例。
+
+归一化输入边界诊断：upper最高整轨迹分量占比.00060399（约.0604%），lower全部0；裁后数据只证明输入达到±5边界，不能量化被裁前幅度，也不能据此归因全部失败。zero两个alpha所有8配对长度/真实终止一致、latent均严格0；XY最大差1.52588e-5m、速度1.82390e-5m/s，保留数值差异且接受，不做精确回放追查。34项相关既有CPU数学/几何测试通过，新增诊断的真实维度和奖励记录已在32例核对。Bark正常完成3收据已接受，scan_errors空，未发重复消息。
+
+按用户要求回看已冻结双网络，而非过早否定单网络或全部偏好方法：low_tight_dual_nominal_review_v1准备16新槽≤32000ticks，原生legacy351D，无权重迁移/更新；共同新config仅architecture元数据适配原模型，teacher原context/history/norm/hidden/activation/timing核对一致。半径/速度/cap不再更改，H75/zero32轨迹原样复用。双网络每端点只用匹配alpha，对照评价统一使用V3重评分，不冒充原teacher训练奖励。既有run_tight_preference顺序4批执行；完成后pidfd进程退出触发合并48槽分析，不轮询或重跑基线。当前16槽结果PENDING，raw与analysis分别中文Bark登记，邮箱/自动修复停用，无push。
+
+下一步先收回双网络名义对照；若进入防摔能力比较，R1.1的全部8个H75端点进入状态必须一并保留，不只选3个任务成功状态。能力仍须明确继续中层还是锁参考、力持续时间和观察窗；前者不能复用后者阈值。当前未启动该施扰阶段，不能写成防摔收益已证。原解析坐标仅解释性基线，不恢复为硬安全门槛。

@@ -82,6 +82,8 @@ def evaluate(declaration_path,output):
         masks=j.asarray(intervention['masks']) if intervention else j.ones((n,2))
         if intervention:
             keep+=['latent_z','offsets','target_offset','lower_action','correction_rate_clipped','reference_clip_channels']
+        if decl.get('record_policy_inputs', False):
+            keep+=['lower_observation','chi','latent_z','offsets','target_offset','reference_clip_channels'] if not intervention else ['lower_observation','chi']
         def one(st,par,path,v,pulse,mask,initial_alpha,mode):
             if switching:
                 a=scheduled_alpha(initial_alpha,st.tick,cfg['timing']['lower_dt_s'],switching['switch_s'],switching['ramp_s'],'fixed')
@@ -96,6 +98,8 @@ def evaluate(declaration_path,output):
                 action=masked_target(action,st.tick,mask,intervention['start_tick'],intervention['end_tick'])
             end,log=env.policy_step(st.replace(fault=st.fault|fault),action,path,v,horizon,pulse)
             record=dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+            if decl.get('record_policy_inputs', False):
+                record['upper_observation']=j.broadcast_to(obs,(4,obs.shape[0]))
             if switching:record['alpha_actual']=j.full((4,),st.alpha)
             if teaching:
                 record.update(teaching_observation=j.broadcast_to(obs,(4,obs.shape[0])),
