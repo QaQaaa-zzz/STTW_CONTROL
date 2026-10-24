@@ -61,3 +61,15 @@ x=[δ,φ,ω]ᵀ，A=[[0,0,0],[0,0,1],[a₂,a₄,0]]，B=[1,0,a₁]ᵀ。固定�
 实读12个lower-only完整快照，0新积分，视图12/12有效，源快照SHA前后不变。当前真实roll与冻结上层history最后roll最大差0.432643rad；说明该采集合同下upper history已过时，不是已证明在线Actor部署传感器故障。该观测问题在本轮新评估中被显式规避，未据此追改历史训练或归因为全部阴性根因。收据runs/physical_continuation_views_v1/receipt.json，脚本audit_continuation_views.py。
 
 现有probe_domain_hold_continuation已有实际续行结果，本轮不覆盖它或旧源身份；新可复用模块尚未接入正式训练/旧评测入口，真实步一致性与终止守卫的工程积分验证待下一步执行。未宣称中层在域外有恢复动作、未对fallback样本计算Actor损失、未证明新防摔收益。
+
+## 真实续行工程验证已完成
+
+[两快照全部XY对照](../../../../runs/physical_continuation_engineering_v1_attempt2/xy_comparison.png)；实际图位于worktree/runs/physical_continuation_engineering_v1_attempt2/xy_comparison.png。两完整快照来自旧domain_hold_continuation的case001/002（parent_u325曾控制、已域退出，历史−48/+48N已结束），本次都只运行冻结local300＋锁定参考，不再运行上层Actor，也不施加新力。
+
+两状态各比较抽取helper与旧inline实现的64步（每支0.32s），补验256物理步、0训练。两对时钟各增加64，触地/故障事件一致、全部未触地；固定参考与upper_history保留检查通过，源快照SHA未变。一对全终态逐值相同；另一对XY差最大1.90735e−6m、roll1.19209e−6rad、speed1.88351e−5m/s。全状态并非精确回放：qacc_smooth差.334656（该字段绝对值最大170.98），qacc_warmstart差.283417、qacc差.193855；完整numeric_difference_fields.json保留，不能只报微小位置差后宣称所有状态一致。不拿这些加速度字段作为精确动力学监督标签，也不因此追查所有求解器数值差异。
+
+第一次256步积分已完成但1e−6浮点断言失败，完整数组未在断言前保存而丢失；原错误status/log/plan不删除，其旧源经逆补丁重建并匹配启动前SHA保留source_at_launch.py。补验先保存raw_logs.npz/raw_final_states.pkl，再检查精确事件/时钟/参考/历史合同，并如实报告浮点差异，不要求位级相同。累计新增物理512步，不能只报补验256。补验全部Python依赖源已按启动SHA归档，已有冻结模型未改。
+
+该结果仅支持接口可继续用于固定参考物理数据采集，不是完整4s防摔验证、中层恢复、容扰预测成功或新方法收益。到此结束接口一致性补验，不扩状态/步长或追数值差异；下一步直接建立含安全/触地的闭环能力数据，使用固定完整合同并与简单状态预测比较。
+
+补验status completed，PID已退出；现有Bark服务完成accepted1792857185.5736895、scan_errors空。无活动新训练，无push。原准备Python依赖错误、首次断言失败和额外成本均已保留。
