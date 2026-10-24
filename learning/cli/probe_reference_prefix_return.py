@@ -34,7 +34,7 @@ def main():
         from sttw_control.contact_only_environment import load_environment_contact_only
         from sttw_control.path_command_policy import make_path_actor, validate_actor_parameters
         from sttw_control.path_command_reward import configured_cost_keys
-        from sttw_control.reference_prefix import inverse_offset_target, prefix_action
+        from sttw_control.reference_prefix import inverse_offset_target, prefix_action, prefix_schedule
         from sttw_control.reference_confirmation import validate_path_evidence
         from sttw_control.geometric_path import build_path
         from sttw_control.balance_probe import make_lower_tick, classify_contact_balance
@@ -92,12 +92,14 @@ def main():
         path_batch = stack([paths[r['route']] for r in cases])
         speeds = j.asarray([r['speed'] for r in cases])
         starts = j.asarray([int(s.tick) for s in snapshots], dtype=j.int32)
-        prefix_ticks = round(plan['prefix_duration_s'] / env.cc.dt)
+        delay_ticks, prefix_ticks = prefix_schedule(
+            float(plan.get('prefix_start_delay_s', 0)), plan['prefix_duration_s'], env.cc.dt)
+        handback_ticks = delay_ticks + prefix_ticks
         deadline_tick = round(horizon / env.cc.dt)
         maximum_remaining_ticks = sum(deadline_tick - int(s.tick) for s in snapshots)
         if maximum_remaining_ticks > plan['maximum_new_lower_ticks'] or maximum_remaining_ticks <= 0:
             raise ValueError('remaining suffix budget exceeds declaration')
-        if prefix_ticks % 4 or any(int(s.tick) + prefix_ticks >= deadline_tick for s in snapshots):
+        if any(int(s.tick) + handback_ticks >= deadline_tick for s in snapshots):
             raise ValueError('prefix boundary or remaining deadline invalid')
         targets = j.stack([s.offsets + j.asarray(r['target_delta']) for s, r in zip(snapshots, cases)])
         fixed, realized, clipped = jax.vmap(lambda target: inverse_offset_target(target, cfg))(targets)
@@ -121,7 +123,8 @@ def main():
         def normal(s, path, speed, pulse, start, target, mask, use):
             obs, _, fault = env.observation(s, path, speed, horizon)
             original = actor.apply(parameters, obs)
-            action, active = prefix_action(original, target, s.tick - start, prefix_ticks, use, mask)
+            action, active = prefix_action(original, target, s.tick - start, prefix_ticks, use, mask,
+                                           start_ticks=delay_ticks)
             end, logs = env.policy_step(s.replace(fault=s.fault | fault), action, path, speed, horizon, pulse)
             data = {k: logs[k] for k in keep}
             data.update(time=logs['time'], relative_time=logs['time'] - start * env.cc.dt,
@@ -192,11 +195,12 @@ def main():
                     maximum_remaining_lower_ticks=maximum_remaining_ticks,
                     path_evidence_checks=path_checks,
                     fallback_contract='hold last reference after domain exit; task ineligible; reward undefined, stored NaN',
-                    deadline_tick=deadline_tick, prefix_ticks=prefix_ticks, initialization='full_snapshot_no_reset',
+                    deadline_tick=deadline_tick, prefix_ticks=prefix_ticks, prefix_delay_ticks=delay_ticks,
+                    handback_ticks=handback_ticks, initialization='full_snapshot_no_reset',
                     information_role='known onset offline opportunity only; not a deployed force detector or selector'))
         saved = []
-        lengths = [prefix_ticks // 4]
-        remaining = int(np.ceil((deadline_tick - int(np.min(starts)) - prefix_ticks) / 4)) + 1
+        lengths = [handback_ticks // 4]
+        remaining = int(np.ceil((deadline_tick - int(np.min(starts)) - handback_ticks) / 4)) + 1
         lengths += [25] * int(np.ceil(remaining / 25))
         for block, length in enumerate(lengths):
             states, logs = execute(states, length)
@@ -213,7 +217,7 @@ def main():
                     pickle.dump(handback, stream)
                 atomic_json(root / 'handback_receipt.json', dict(
                     elapsed_ticks=(np.asarray(states.tick) - np.asarray(starts)).tolist(),
-                    intended_ticks=prefix_ticks, original_alpha=np.asarray(states.alpha).tolist(),
+                    intended_ticks=handback_ticks, original_alpha=np.asarray(states.alpha).tolist(),
                     physical_tick=np.asarray(states.physical.physical_tick).tolist(),
                     task_tick=np.asarray(states.tick).tolist(), reached_without_stop=np.asarray(
                         ~(states.physical.failed | states.fault | states.domain_exit)).tolist(),
