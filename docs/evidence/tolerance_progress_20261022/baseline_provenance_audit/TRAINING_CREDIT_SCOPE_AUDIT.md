@@ -107,3 +107,11 @@ J_{\rm full}(\theta)=\mathbb E_{\tau_{\rm pre}\sim p_\theta}
 该推导补足未来公平基线的目标接口，不是新Bellman理论、容扰估计成功或新方法收益。完整前缀+真实接触目标的组合有未隔离检验的空间，但此前full-episode/short-bank阴性都保留，不能写成以前没训练过。
 
 当前仅完成合同推导；没有修改生产环境/奖励/训练循环，没有新训练、TensorBoard或物理任务。下一实现先处理真实尾结局的采集与回传、两种done/discount和有效动作mask，待这些成立再确定最小同合同基线实验；不直接重启旧三臂、不加解析特征/监督器。若普通PPO/固定规则覆盖所需收益，就放弃额外容扰学习模块；若失败，先按完整合同解释，不默认增加模型或训练量。RA-L价值仍需联合机制或有说服力的系统证据，不能由这份设计宣称成立。
+
+### 目标回传helper与真实历史回读已实现（后续迭代）
+
+`survival_credit.py`新增完整episode resolver和Torch物理PPO损失适配，实际整数时钟连续覆盖、合法动作mask、网络前向前筛选/detach及旧logprob/value冻结均有回归；18新＋9相关共27CPU通过。`audit_survival_credit.py`对96分支全部原标签保持45survived/51contact，实际7172上层决策、38475历史lower转移、9843hold转移；13条受扰域外幸存仍给此前合法动作target1。新物理/优化均0，所有历史数据明确不合格作PPO新样本。最终当前源码收据/逐例目标为 `runs/survival_tail_credit_audit_v3/{receipt.json,REPORT.md,cases}`；早期v1/v2为同轮开发回读，不混原始实验或新增成本。
+
+独立反审发现初版缺物理覆盖校验，已补真正clock连续与精确窗末检查；自身检查补网络前向前排除NaN观测及detach原始数据。尚无新鲜随机完整prefix collector、跨rollout暂存/尾结局后更新、双目标优化器和实际训练；不把helper测试称整链收益。
+
+近邻核对新增[SafeExplorer](https://arxiv.org/html/2607.08925v2) §4.1/4.3/B.6，已有主策略mask与恢复尾段信用，故本地模块作为已知思想的物理目标基础，不作原创梯度/critic主张或全方法复现；原文核对与下一论文边界已写TASK_AND_PAPER_CLAIM_ALIGNMENT.md。当前下一步是完整fresh采样合同，RA-L联合容扰机制仍待建立，不以改名/更多helper替代实证。
