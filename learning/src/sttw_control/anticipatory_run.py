@@ -22,7 +22,7 @@ def physical_outcome(active,contact,fault,limit):
 
 
 def stage_indices(cases,stage):
-    if stage not in ('nominal','disturbed','endpoints','expert_relay','sequence_nominal','sequence_probe','timing'):raise ValueError('explicit stage required')
+    if stage not in ('nominal','disturbed','endpoints','expert_relay','sequence_nominal','sequence_probe','timing','reentry'):raise ValueError('explicit stage required')
     return [i for i,c in enumerate(cases) if c['stage']==stage]
 
 
@@ -99,7 +99,7 @@ def execute(root,stage,*,shape_only=False):
         active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0,checked_unix=time.time())
     def update(**kw):
         state.update(kw,checked_unix=time.time());atomic_json(target,state)
-    label={'timing':'冻结64策略隐藏时刻对照','endpoints':'历史中层端点回看','expert_relay':'旧端点因果短时借用','sequence_nominal':'完整任务参考序列名义机会','sequence_probe':'固定参考序列16条扰动探针'}.get(stage,'提前参考'+stage)
+    label={'reentry':'几何恢复后原alpha策略交回20条','timing':'冻结64策略隐藏时刻对照','endpoints':'历史中层端点回看','expert_relay':'旧端点因果短时借用','sequence_nominal':'完整任务参考序列名义机会','sequence_probe':'固定参考序列16条扰动探针'}.get(stage,'提前参考'+stage)
     update();register(directory/'ACTIVE_RUN.json',
         'STTW_CONTROL '+label+('零积分接口' if shape_only else '固定条件评测'),target)
     try:
@@ -162,6 +162,8 @@ def execute(root,stage,*,shape_only=False):
                     one=make_full_sequence_step(env,horizon_s=10.)
                 elif piece['runtime_kind']=='base':
                     one=make_reference_step(env,make_path_actor(piece['actor_config']),horizon_s=10.)
+                elif piece['runtime_kind']=='reentry':
+                    one=make_reference_step(env,make_path_actor(piece['actor_config']),horizon_s=10.,allow_reentry=True)
                 else:raise ValueError('unsupported runtime kind '+piece['runtime_kind'])
                 compiled[key]=build_chunk(one)
             chunk=compiled[key]
@@ -173,6 +175,9 @@ def execute(root,stage,*,shape_only=False):
             if any(abs(float(s.alpha)-c['state_alpha'])>1e-7 for s,c in zip(states,selected)):
                 raise ValueError('source user-alpha mismatch')
             carry=ReferenceEvaluationState(stack(states),stack([initial_gate() for _ in states]))
+            if piece['runtime_kind']=='reentry':
+                from .reference_reentry import ReentryEvaluationState
+                carry=ReentryEvaluationState(carry.state,carry.gate,j.zeros(n,j.int32))
             p=stack([parameters[c['actor_role']] for c in selected]);paths=stack([path]*n)
             speeds=j.asarray([c['requested_speed_m_s'] for c in selected],j.float32)
             start=np.asarray([float(s.physical.physical_tick)*.005 for s in states])

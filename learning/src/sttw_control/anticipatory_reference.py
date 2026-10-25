@@ -42,7 +42,7 @@ class ReferenceEvaluationState:
     gate: object
 
 
-def make_reference_step(env,actor,*,horizon_s):
+def make_reference_step(env,actor,*,horizon_s,allow_reentry=False):
     """One common four-lower-tick plant kernel for every candidate lane.
 
     At each50Hz boundary select an Actor/candidate or domain-exit zero target,
@@ -59,6 +59,9 @@ def make_reference_step(env,actor,*,horizon_s):
         s=carry.state
         stopped=s.physical.failed|s.fault|(s.tick>=round(horizon_s/local.cc.dt))
         disabled=s.domain_exit|zero_mode|stopped
+        if allow_reentry:
+            from .reference_reentry import actor_permission
+            disabled=~actor_permission(s.domain_exit,s.follower.invalid,carry.clean_blocks,zero_mode,stopped)
         obs,_,obs_fault=local.observation(s,path,speed,horizon_s)
         # SIMD may evaluate a dummy network row; no domain-exited observation
         # is fed to it and no Actor action is published outside its domain.
@@ -99,5 +102,13 @@ def make_reference_step(env,actor,*,horizon_s):
             raw_costs=j.stack([logs['raw_components'][k] for k in cost_keys],axis=-1),
             effective_costs=j.stack([logs['effective_components'][k] for k in cost_keys],axis=-1),
             horizon_reached=active&(ticks==round(horizon_s/local.cc.dt)-1))
+        if allow_reentry:
+            from .reference_reentry import next_clean_blocks
+            failures=logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['contact_failure']
+            clean=next_clean_blocks(carry.clean_blocks,active,logs['domain_exit'],failures)
+            data.update(zero_fallback=active&s.domain_exit&disabled,
+                reentry_actor_active=active&s.domain_exit&~disabled,
+                reentry_clean_blocks=j.repeat(carry.clean_blocks,4))
+            return carry.replace(state=end,gate=gate,clean_blocks=clean),data
         return carry.replace(state=end,gate=gate),data
     return step

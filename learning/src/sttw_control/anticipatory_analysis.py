@@ -22,13 +22,19 @@ def cost_accounting(data,*,scale,dt):
         component_integrals=(scale*dt*components.sum(axis=0)).tolist())
 
 
-def paired_changes(rows,*,baseline_role='parent'):
-    parents={(r['alpha'],r['event_id']):r for r in rows if r['role']==baseline_role}
-    if len(parents)!=sum(r['role']==baseline_role for r in rows):raise ValueError('duplicate parent key')
+def paired_changes(rows,*,baseline_role='parent',baseline_by_role=None):
+    roles=set(baseline_by_role.values()) if baseline_by_role is not None else {baseline_role}
+    parents={(r['role'],r['alpha'],r['event_id']):r for r in rows if r['role'] in roles}
+    if len(parents)!=sum(r['role'] in roles for r in rows):raise ValueError('duplicate parent key')
     pairs=[]
     for r in rows:
-        if r['role'] in (baseline_role,'zero_middle'):continue
-        p=parents[(r['alpha'],r['event_id'])]
+        if baseline_by_role is not None:
+            if r['role'] not in baseline_by_role:continue
+            reference=baseline_by_role[r['role']]
+        else:
+            if r['role'] in (baseline_role,'zero_middle'):continue
+            reference=baseline_role
+        p=parents[(reference,r['alpha'],r['event_id'])]
         unknown='unknown' in (r['category'],p['category'])
         safe=lambda x:x['category'] in ('safe_task','safe_task_failed')
         pairs.append(dict(case_id=r['case_id'],parent_case_id=p['case_id'],role=r['role'],
@@ -98,7 +104,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
             traveled_distance_m=distance,reference_speed_variation_m_s=float(variation[0]),
             reference_steer_variation_rad=float(variation[1]))
         rows.append(row);traces[r['case_id']]=dict(data,**geometry)
-    pairs=paired_changes(rows,baseline_role=plan.get('comparison_baseline_role','parent'))
+    pairs=paired_changes(rows,baseline_role=plan.get('comparison_baseline_role','parent'),baseline_by_role=plan.get('comparison_baseline_by_role'))
     atomic_json(out/'results.json',rows);save_csv(out/'results.csv',rows);save_csv(out/'paired_parent.csv',pairs)
     costs=[dict(case_id=r['case_id'],**dict(zip(cost_keys,r['component_integrals']))) for r in rows]
     save_csv(out/'cost_components.csv',costs)

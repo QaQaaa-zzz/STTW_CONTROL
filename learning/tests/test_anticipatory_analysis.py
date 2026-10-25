@@ -55,3 +55,13 @@ def test_explicit_recovery_baseline_pairs_same_source_state_not_parent_actor():
     rows=[dict(case_id='z',role='live_zero',alpha=0.,event_id='snapshot00',category='safe_task_failed',scored_cost=9.),dict(case_id='g',role='geo_fixed',alpha=0.,event_id='snapshot00',category='safe_task',scored_cost=7.)]
     pairs=paired_changes(rows,baseline_role='live_zero')
     assert len(pairs)==1 and pairs[0]['parent_case_id']=='z' and pairs[0]['joint_task_change']==1
+
+
+def test_role_specific_baselines_do_not_compare_physical_candidate_to_task_parent():
+    base=dict(alpha=.5,event_id='x',category='safe_task_failed',scored_cost=5.)
+    rows=[dict(base,role='task_only',case_id='t'),dict(base,role='physical_credit',case_id='p',scored_cost=7.),
+          dict(base,role='task_reentry',case_id='tr',category='safe_task',scored_cost=4.),dict(base,role='physical_reentry',case_id='pr',scored_cost=6.)]
+    pairs=paired_changes(rows,baseline_by_role={'task_reentry':'task_only','physical_reentry':'physical_credit'})
+    assert len(pairs)==2
+    assert pairs[0]['parent_case_id']=='t' and pairs[1]['parent_case_id']=='p'
+    assert pairs[0]['joint_task_change']==1 and pairs[1]['scored_cost_change']==-1.
