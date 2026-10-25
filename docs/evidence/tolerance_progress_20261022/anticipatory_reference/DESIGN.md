@@ -39,10 +39,14 @@ H75父、task_only64、physical_credit64、父＋1.5m/s参考下限，以及父�
 
 ## 本阶段代码与验证顺序
 
-- [ ] 将live零目标推进提取为显式latent动作的共用推进函数，旧零目标接口保留；接触/故障/时域和内部状态不变，先红绿测试。
-- [ ] 实现进度门控、有限修正到latent的反变换、单/双通道目标混合，以及每lane速度下限；通过原correction_tick测试真实滤波/clip语义。
-- [ ] 一次低层物理推进替代旧normal/live/held重复物理分支；Actor和候选不同但底层kernel共用，floor/zero以数据输入合并批次；不换物理引擎/模型/精度。
-- [ ] 使用既有完整初态、N12、5个upper步作同步GPU基准：旧与新各一次warm执行、一次计时执行，最多960实际lower ticks。首先比较有效域内物理状态/参考/接触及相同实际步数；只报告该形状的测得加速，不冒充75回合端到端加速或域退出语义等价。
+- [x] 将live零目标推进提取为显式latent动作的共用推进函数，旧零目标接口保留；接触/故障/时域和内部状态不变，先红绿测试。
+- [x] 实现进度门控、有限修正到latent的反变换、单/双通道目标混合，以及每lane速度下限；通过原correction_tick测试真实滤波/clip语义。
+- [x] 一次低层物理推进替代旧normal/live/held重复物理分支；Actor和候选不同但底层kernel共用，floor/zero以数据输入合并批次；不换物理引擎/模型/精度。
+- [x] 使用既有完整初态、N12、5个upper步作同步GPU基准：旧与新各一次warm执行、一次计时执行，最多960实际lower ticks。首先比较有效域内物理状态/参考/接触及相同实际步数；只报告该形状的测得加速，不冒充75回合端到端加速或域退出语义等价。
 - [ ] 成功后封存80事件矩阵、有效配置/模型身份、原始日志与Bark状态，首次执行；失败保留证据，不自动扩大性能扫参或任务候选。
 
 Scientific Agent Skills experimental-design、scientific-critical-thinking及optimize-for-gpu用于设计与性能取证，非独立同行评审。工具引用沿本项目相邻DECISION.md已核对的Kassis等(2026), DOI10.48550/arXiv.2609.00065。
+
+## 2026-10-25实际回收
+
+GPU基准已完成960真实步/0更新，暖执行旧3.9873s、新1.2752s，比例3.1267；仅域内0.1s一次测量。详见[回收与规划书对照](preparation/REVIEW.md)。已生成[80条件清单](preparation/case_inventory.json)，含16无扰/64受扰，执行状态prepared_not_executed。清单可复建，但执行器、完整评分和正式启动登记仍待完成。
