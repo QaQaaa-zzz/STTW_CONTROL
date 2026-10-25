@@ -17,6 +17,34 @@ def save_csv(path,rows):
         writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
 
 
+def xy_overviews(plt,out,rows,data,paths,index):
+    colors=dict(parent='#0072B2',task_only='#E69F00',physical_credit='#009E73',
+                parent_speed_floor='#CC79A7',zero_middle='#666666')
+    files=[]
+    for route in sorted({r['route'] for r in rows}):
+        selected=[r for r in rows if r['route']==route]
+        cloud=np.concatenate([data[r['case_id']]['actual_xy'][data[r['case_id']]['active_tick']] for r in selected])
+        lo=cloud.min(axis=0)-1;hi=cloud.max(axis=0)+1
+        path=paths[index[selected[0]['case_id']]['reference']]
+        fig,axes=plt.subplots(3,2,figsize=(14,17),layout='constrained')
+        for col,tail in enumerate(['held','live_zero']):
+            for rownum,alpha in enumerate([0.,.5,None]):
+                ax=axes[rownum,col];ax.plot(path['xy'][:,0],path['xy'][:,1],':',color='.6',label='Original path')
+                for r in selected:
+                    if r['tail_rule']!=tail or (alpha is not None and r['alpha'] not in (alpha,None)):continue
+                    d=data[r['case_id']];valid=d['active_tick'];xy=d['actual_xy'][valid]
+                    style='--' if r['alpha']==.5 else '-'
+                    label=r['role']+(f" a={r['alpha']:g}" if r['alpha'] is not None else ' alpha-independent')
+                    ax.plot(xy[:,0],xy[:,1],color=colors[r['role']],linestyle=style,linewidth=1.2,label=label)
+                    ax.scatter(*xy[-1],color=colors[r['role']],marker='x' if r['physical_outcome']=='contact' else 'o',s=24)
+                ax.set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]),xlabel='World X (m)',ylabel='World Y (m)',
+                       title=tail+(' | alpha 0 and .5' if alpha is None else f' | alpha {alpha:g}'))
+                ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2);ax.legend(fontsize=6)
+        fig.suptitle(route+' | all controllers, common world axes | x=contact, circle=observed end\nZero trajectories are factual aliases, not extra alpha trials.')
+        file='overview_'+route+'.png';fig.savefig(out/file,dpi=125);plt.close(fig);files.append(file)
+    return files
+
+
 def analyze(root):
     source_status=json.loads((root/'status.json').read_text())
     if source_status['phase']!='completed' or source_status['completed_cases']!=36:
@@ -125,6 +153,7 @@ def analyze(root):
             fig.suptitle(f"{a['role']} | {a['route']} | alpha={a['alpha']} | {a['force_N']:g}N | user speed={a['speed']:g}m/s\n"
                          'Square=domain event; x=contact; circle=observed end. Both tails use actual-pose task diagnostics.')
             name=f'pair_{num:02d}.png';fig.savefig(out/name,dpi=125);plt.close(fig);figures.append(dict(source_case_id=a['source_case_id'],file=name))
+        overviews=xy_overviews(plt,out,augmented,all_data,paths,byindex)
         lines=['# Held versus live original-path zero-correction pilot','',
             '36 factual DEV episodes / 18 paired source conditions. Two related route/event contexts; no independent seeds or nominal retention claim.',
             'All task errors are recomputed from actual XY and exact yaw under one original-path projection. Domain exit is allowed by this new recovery-task contract; historical488 labels unchanged.',
@@ -134,11 +163,14 @@ def analyze(root):
         for r in summary:lines.append(f"|{r['role']}|{r['tail_rule']}|{r['n']}|{r['survived']}|{r['joint_task_success']}|{r['contact']}|{r['unknown']}|{r['mean_observed_s']:.3f}|")
         lines+=['','Paired survival gain/loss: '+str(sum(r['survival_change']>0 for r in paired))+'/'+str(sum(r['survival_change']<0 for r in paired)),
                 'Paired joint-task gain/loss: '+str(sum(r['joint_task_change']>0 for r in paired))+'/'+str(sum(r['joint_task_change']<0 for r in paired)),
+                '', '## All-controller and cross-alpha actual XY','']
+        lines += [f'- [All controllers and alpha0/.5]({name})' for name in overviews]
+        lines += [
                 '', '## Actual XY and complete diagnostics','',
                 'Generated figures still require explicit visual review. Original prefix rewards/legacy domain penalty remain in raw arrays; they are not a new recovery-task total return.']
         lines += [f"- [{r['source_case_id']}]({r['file']})" for r in figures]
         (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
-        atomic_json(out/'receipt.json',dict(actual_episodes=36,paired_conditions=18,generated_figures=18,
+        atomic_json(out/'receipt.json',dict(actual_episodes=36,paired_conditions=18,generated_figures=18+len(overviews),
             physics_steps=0,optimizer_updates=0,figures_visually_reviewed=False,
             raw_sha256={r['file']:r['sha256'] for r in index},analysis_code_sha256=digest(__file__)))
         state.update(phase='completed',stage='numeric_analysis_and_figures_generated_pending_visual_review',checked_unix=time.time());atomic_json(out/'status.json',state)
