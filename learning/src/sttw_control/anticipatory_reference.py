@@ -68,8 +68,8 @@ def make_reference_step(env,actor,*,horizon_s):
         proposed,envelope,target=candidate_latent(original,s.physical.raw,
             s.projection.progress,path.turn_end,profile,local.config)
         causal_action,gate_candidate,receipt=causal_reference_action(original,safe_obs,
-            s.offsets,s.tick,carry.gate,local.config)
-        use_eso=(profile==4)&~disabled
+            s.offsets,s.tick,carry.gate,local.config,all_preferences=(profile==5))
+        use_eso=((profile==4)|(profile==5))&~disabled
         action=j.where(use_eso,causal_action,proposed)
         action=j.where(disabled,j.zeros(2),action)
         gate=jax.tree.map(lambda a,b:j.where(use_eso,a,b),gate_candidate,carry.gate)

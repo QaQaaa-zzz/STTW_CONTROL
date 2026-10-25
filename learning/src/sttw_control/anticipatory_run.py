@@ -22,7 +22,7 @@ def physical_outcome(active,contact,fault,limit):
 
 
 def stage_indices(cases,stage):
-    if stage not in ('nominal','disturbed','endpoints','expert_relay','sequence_nominal','sequence_probe'):raise ValueError('explicit stage required')
+    if stage not in ('nominal','disturbed','endpoints','expert_relay','sequence_nominal','sequence_probe','timing'):raise ValueError('explicit stage required')
     return [i for i,c in enumerate(cases) if c['stage']==stage]
 
 
@@ -99,7 +99,7 @@ def execute(root,stage,*,shape_only=False):
         active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0,checked_unix=time.time())
     def update(**kw):
         state.update(kw,checked_unix=time.time());atomic_json(target,state)
-    label={'endpoints':'历史中层端点回看','expert_relay':'旧端点因果短时借用','sequence_nominal':'完整任务参考序列名义机会','sequence_probe':'固定参考序列16条扰动探针'}.get(stage,'提前参考'+stage)
+    label={'timing':'冻结64策略隐藏时刻对照','endpoints':'历史中层端点回看','expert_relay':'旧端点因果短时借用','sequence_nominal':'完整任务参考序列名义机会','sequence_probe':'固定参考序列16条扰动探针'}.get(stage,'提前参考'+stage)
     update();register(directory/'ACTIVE_RUN.json',
         'STTW_CONTROL '+label+('零积分接口' if shape_only else '固定条件评测'),target)
     try:

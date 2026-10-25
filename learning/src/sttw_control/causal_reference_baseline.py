@@ -67,7 +67,7 @@ def case_has_engineering_error(final_fault, balance_label):
     return bool(final_fault or balance_label == 'ENGINEERING_ERROR')
 
 
-def causal_reference_action(original, observation, current_offset, tick, state, config):
+def causal_reference_action(original, observation, current_offset, tick, state, config, *, all_preferences=False):
     """One 50Hz decision, using only current/past deployable information.
 
     Restricted DEV rules: alpha0, requested 1.5m/s right turn and negative
@@ -84,7 +84,8 @@ def causal_reference_action(original, observation, current_offset, tick, state, 
              & (observation[PREVIOUS_FRAME_MASK] > .5) & (observation[LATEST_FRAME_MASK] > .5)
              & (j.abs(observation[LATEST_ESO]) < 5) & (j.abs(observation[PREVIOUS_ESO]) < 5))
     detected = ~state.fired & valid & ~engineering_fault & (j.abs(signal) >= THRESHOLD)
-    alpha0 = j.abs(observation[ALPHA]) < 1e-6
+    # Explicit new comparator only; historical alpha0-only default stays frozen.
+    alpha0 = (j.abs(observation[ALPHA]) < 1e-6) | all_preferences
     speed = 3. * observation[REQUESTED_SPEED]
     curvature = .6 * observation[CURVATURE_HERE]
     speed_rule = alpha0 & (j.abs(speed - 1.5) <= .05) & (curvature < 0) & (signal < 0)

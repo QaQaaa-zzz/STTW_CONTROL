@@ -121,3 +121,17 @@ def test_transient_nonfinite_label_stops_bank_even_without_final_fault():
     assert case_has_engineering_error(False, label)
     assert case_has_engineering_error(True, 'NO_FLOOR_CONTACT')
     assert not case_has_engineering_error(False, 'FLOOR_CONTACT')
+
+
+def test_all_preference_rule_is_explicit_and_keeps_original_alpha0_rule():
+    base=j.array([-.3,.7]);offset=j.array([-.4,.02]);tick=j.int32(300)
+    for alpha in [.5,.75]:
+        obs=observation(signal=-.03,alpha=alpha)
+        _,_,old=causal_reference_action(base,obs,offset,tick,initial_gate(),CONFIG)
+        assert not old['override_active']
+        _,_,new=causal_reference_action(base,obs,offset,tick,initial_gate(),CONFIG,all_preferences=True)
+        assert new['override_active']
+    obs=observation(signal=-.03,alpha=0.)
+    old=causal_reference_action(base,obs,offset,tick,initial_gate(),CONFIG)
+    new=causal_reference_action(base,obs,offset,tick,initial_gate(),CONFIG,all_preferences=True)
+    for a,b in zip(jax.tree.leaves(old),jax.tree.leaves(new)):np.testing.assert_array_equal(a,b)
