@@ -84,3 +84,18 @@ def test_real_step_handback_uses_current_history_and_keeps_cumulative_exit(monke
     bad=carry.replace(state=state.replace(follower=Follower(j.bool_(True))))
     end,logs=step(bad,None,path,j.float32(1.5),j.zeros(5),j.int32(0),j.float32(1.),j.bool_(False))
     assert not logs['actor_action_valid'].any() and int(end.clean_blocks)==0 and end.state.domain_exit
+
+
+def test_explicit_roles_give_every_controller_same_permission_without_changing_rules():
+    import pytest
+    roles={'parent':'parent_reentry','task_only':'task_reentry','physical_credit':'physical_reentry','floor':'floor_reentry','causal_eso_allalpha':'eso_reentry'}
+    original=[dict(case_id=f'{role}/{alpha}/{event}',role=role,actor_role=role if role in ['task_only','physical_credit'] else 'parent',alpha=alpha,state_alpha=alpha,event_id=event,stage='timing',profile=5 if role=='causal_eso_allalpha' else 0,reference_speed_floor_m_s=1.5 if role=='floor' else 1.)
+              for role in roles for alpha in [.5,.75] for event in ['zero','t380_F-32','t380_F+32','t580_F-32','t580_F+32']]
+    allcases=reentry_cases(original,roles=roles);assert len(allcases)==50
+    right=reentry_cases(original,roles={k:roles[k] for k in ['parent','floor','causal_eso_allalpha']});assert len(right)==30
+    for c in allcases:
+        old=next(x for x in original if x['case_id']==c['source_case_id'])
+        for key in ['alpha','state_alpha','event_id','actor_role','profile','reference_speed_floor_m_s']:assert c[key]==old[key]
+    with pytest.raises(ValueError):reentry_cases(original,roles={'zero_middle':'z'})
+    with pytest.raises(ValueError):reentry_cases(original[:-1],roles=roles)
+    with pytest.raises(ValueError):reentry_cases(original+original[:1],roles=roles)
