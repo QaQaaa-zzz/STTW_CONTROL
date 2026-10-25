@@ -1,0 +1,184 @@
+{
+  "scope": "All 12 frozen stochastic engineering episodes, alpha=.5, two old routes; no efficacy estimate.",
+  "interpretation": "Speed overwrite compares recorded original and issued latent at actual legal decisions; it is not a derivative or full closed-loop controllability test.",
+  "raw_decisions_sha256": "0fdbf604f6a8076aa9e44d4f3e8248ec4378cd8f440a4e5819a3a86addc42dd7",
+  "raw_physical_sha256": "4d09699e58593d1fa5522dffae0ddf4ea576358a56cff56eff4872e75273ad8d",
+  "tolerance_for_recorded_latent_comparison": 1e-06,
+  "cases": [
+    {
+      "case_index": 0,
+      "legal_decisions": 500,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 1.0,
+      "reentry_transitions": 0,
+      "reentry_task_times_s": [],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": 0.0,
+      "total_reward": -32.689986896686605
+    },
+    {
+      "case_index": 1,
+      "legal_decisions": 500,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 1.0,
+      "reentry_transitions": 0,
+      "reentry_task_times_s": [],
+      "speed_latent_overwritten_decisions": 48,
+      "speed_latent_overwritten_fraction": 0.096,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": 0.0,
+      "total_reward": -55.28158150185482
+    },
+    {
+      "case_index": 2,
+      "legal_decisions": 272,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.544,
+      "reentry_transitions": 2,
+      "reentry_task_times_s": [
+        3.54,
+        8.44
+      ],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -116.83507331833243,
+      "total_reward": -204.52673222409794
+    },
+    {
+      "case_index": 3,
+      "legal_decisions": 396,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.792,
+      "reentry_transitions": 1,
+      "reentry_task_times_s": [
+        6.84
+      ],
+      "speed_latent_overwritten_decisions": 39,
+      "speed_latent_overwritten_fraction": 0.09848484848484848,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -23.249254494905472,
+      "total_reward": -106.1393435767095
+    },
+    {
+      "case_index": 4,
+      "legal_decisions": 420,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.84,
+      "reentry_transitions": 1,
+      "reentry_task_times_s": [
+        5.3
+      ],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -17.915464732795954,
+      "total_reward": -76.20919687808782
+    },
+    {
+      "case_index": 5,
+      "legal_decisions": 417,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.834,
+      "reentry_transitions": 1,
+      "reentry_task_times_s": [
+        5.36
+      ],
+      "speed_latent_overwritten_decisions": 32,
+      "speed_latent_overwritten_fraction": 0.07673860911270983,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -18.57395200431347,
+      "total_reward": -79.17470676344237
+    },
+    {
+      "case_index": 6,
+      "legal_decisions": 500,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 1.0,
+      "reentry_transitions": 0,
+      "reentry_task_times_s": [],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": 0.0,
+      "total_reward": -24.149000061232073
+    },
+    {
+      "case_index": 7,
+      "legal_decisions": 500,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 1.0,
+      "reentry_transitions": 0,
+      "reentry_task_times_s": [],
+      "speed_latent_overwritten_decisions": 206,
+      "speed_latent_overwritten_fraction": 0.412,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": 0.0,
+      "total_reward": -62.17793851137685
+    },
+    {
+      "case_index": 8,
+      "legal_decisions": 141,
+      "active_upper_steps": 141,
+      "legal_decision_fraction": 1.0,
+      "reentry_transitions": 0,
+      "reentry_task_times_s": [],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": 0.0,
+      "total_reward": -4131.14423289377
+    },
+    {
+      "case_index": 9,
+      "legal_decisions": 426,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.852,
+      "reentry_transitions": 1,
+      "reentry_task_times_s": [
+        5.16
+      ],
+      "speed_latent_overwritten_decisions": 179,
+      "speed_latent_overwritten_fraction": 0.42018779342723006,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -16.67506579309702,
+      "total_reward": -65.30588454613462
+    },
+    {
+      "case_index": 10,
+      "legal_decisions": 408,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.816,
+      "reentry_transitions": 1,
+      "reentry_task_times_s": [
+        4.5600000000000005
+      ],
+      "speed_latent_overwritten_decisions": 0,
+      "speed_latent_overwritten_fraction": 0.0,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -20.613210443407297,
+      "total_reward": -68.21184672584059
+    },
+    {
+      "case_index": 11,
+      "legal_decisions": 347,
+      "active_upper_steps": 500,
+      "legal_decision_fraction": 0.694,
+      "reentry_transitions": 2,
+      "reentry_task_times_s": [
+        3.5,
+        7.1000000000000005
+      ],
+      "speed_latent_overwritten_decisions": 152,
+      "speed_latent_overwritten_fraction": 0.43804034582132567,
+      "steering_latent_max_difference": 0.0,
+      "fallback_reward_sum": -36.07411401346326,
+      "total_reward": -91.05398565548239
+    }
+  ],
+  "total_reentry_transitions": 9,
+  "physics_steps": 0,
+  "optimizer_updates": 0
+}
