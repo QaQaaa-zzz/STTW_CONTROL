@@ -120,3 +120,19 @@ def test_learned_floor_cases_change_only_declared_floor_and_identity():
     assert all(c['reference_speed_floor_m_s']==1. for c in reentry_cases(original,roles=roles))
     for invalid in [float('nan'),float('inf'),.9]:
         with pytest.raises(ValueError):reentry_cases(original,roles=roles,reference_speed_floor_m_s=invalid)
+
+
+def test_declared_support_profiles_clone_actor_event_matrix_without_floor_change():
+    import pytest
+    original=[dict(case_id=f'{role}/{a}/{event}',role=role,actor_role=role,alpha=a,state_alpha=a,event_id=event,stage='timing',profile=0,reference_speed_floor_m_s=1.)
+        for role in ['parent','task_only'] for a in [.5,.75]
+        for event in ['zero','t380_F-32','t380_F+32','t580_F-32','t580_F+32']]
+    roles={'parent':'parent_support','task_only':'task_support'}
+    cases=reentry_cases(original,roles=roles,reference_profiles=(6,7))
+    assert len(cases)==40 and len({c['case_id'] for c in cases})==40
+    for c in cases:
+        old=next(x for x in original if x['case_id']==c['source_case_id'])
+        assert c['reference_speed_floor_m_s']==1. and c['profile'] in [6,7]
+        for k in ['actor_role','alpha','state_alpha','event_id']:assert c[k]==old[k]
+    for profiles in [(6,6),(0,),()]:
+        with pytest.raises(ValueError):reentry_cases(original,roles=roles,reference_profiles=profiles)

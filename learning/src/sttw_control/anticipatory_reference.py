@@ -13,8 +13,32 @@ def progress_envelope(progress,prefix_end,turn_end):
     return smooth((progress-(prefix_end-1.5))/1.5)*smooth((turn_end+1.5-progress)/1.5)
 
 
+def early_support_envelope(progress,prefix_end,turn_end):
+    """Prepare over the inherited1.5m approach, release by geometric midturn."""
+    smooth=lambda u:(u:=j.clip(u,0.,1.))**2*(3.-2.*u)
+    half_turn=j.maximum((turn_end-prefix_end)/2.,1e-6)
+    return smooth((progress-(prefix_end-1.5))/1.5)*(1.-smooth((progress-prefix_end)/half_turn))
+
+
+def speed_support_latent(original,nominal,progress,turn_end,profile,config):
+    """Profiles6/early and7/constant, same target before the original filter.
+
+    This requests a nominal-plus-offset target of at least1.5m/s where
+    realizable. It is not a hard reference bound or an actual-speed guarantee.
+    Steering and all non-supporting original actions are preserved exactly.
+    """
+    gate=j.where(profile==6,early_support_envelope(progress,config['path']['straight_prefix_m'],turn_end),1.)
+    base=map_latent(original,config)
+    desired=j.maximum(base[0],1.5-nominal[0])
+    target=base.at[0].set(base[0]+gate*(desired-base[0]))
+    latent,realized,_=inverse_offset_target(target,config)
+    active=(gate>0)&(realized[0]>base[0])
+    action=original.at[0].set(j.where(active,latent[0],original[0]))
+    return action,gate,base.at[0].set(j.where(active,realized[0],base[0]))
+
+
 def candidate_latent(original,nominal,progress,turn_end,profile,config):
-    """Profiles0/base,1/speed,2/steer,3/joint; other profiles unchanged.
+    """Profiles0/base,1/speed,2/steer,3/joint,6/early,7/constant support.
 
     Return finite latents using the original asymmetric correction interface.
     Untouched channels remain exactly the original latent, including at gate0.
@@ -26,7 +50,10 @@ def candidate_latent(original,nominal,progress,turn_end,profile,config):
     target=j.where(mask,base+gate*(desired-base),base)
     latent,realized,_=inverse_offset_target(target,config)
     selected=j.where(mask&(gate>0),latent,original)
-    return selected,gate,j.where(mask&(gate>0),realized,base)
+    support,support_gate,support_target=speed_support_latent(original,nominal,progress,turn_end,profile,config)
+    use_support=(profile==6)|(profile==7)
+    return (j.where(use_support,support,selected),j.where(use_support,support_gate,gate),
+            j.where(use_support,support_target,j.where(mask&(gate>0),realized,base)))
 
 
 def floor_config(config,lower_bound):

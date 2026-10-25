@@ -24,11 +24,15 @@ def next_clean_blocks(previous,active,invalid,failure):
     return j.where(clean,j.minimum(j.asarray(previous)+1,16),0).astype(j.int32)
 
 
-def reentry_cases(original,*,roles=None,reference_speed_floor_m_s=None):
+def reentry_cases(original,*,roles=None,reference_speed_floor_m_s=None,reference_profiles=None):
     roles=dict(task_only='task_reentry',physical_credit='physical_reentry') if roles is None else dict(roles)
     supported={'parent','task_only','physical_credit','floor','causal_eso_allalpha'}
     if not roles or not set(roles)<=supported or len(set(roles.values()))!=len(roles):
         raise ValueError('unique declared Actor-based roles required')
+    if reference_profiles is not None:
+        reference_profiles=tuple(reference_profiles)
+        if not reference_profiles or len(set(reference_profiles))!=len(reference_profiles) or not set(reference_profiles)<={6,7}:
+            raise ValueError('unique explicit early/constant support profiles required')
     result=[]
     for c in original:
         if c['role'] not in roles:continue
@@ -39,16 +43,20 @@ def reentry_cases(original,*,roles=None,reference_speed_floor_m_s=None):
             if not math.isfinite(floor) or floor<float(c['reference_speed_floor_m_s']):
                 raise ValueError('finite reference floor must not widen original bounds')
             new['reference_speed_floor_m_s']=floor
-        result.append(new)
+        if reference_profiles is None:result.append(new)
+        else:
+            for profile in reference_profiles:
+                result.append(dict(new,profile=profile,role=new['role']+f'_profile{profile}',
+                    case_id=new['role']+f'_profile{profile}/'+c['case_id']))
     expected={(role,alpha,event) for role in roles for alpha in [.5,.75]
               for event in ['zero','t380_F-32','t380_F+32','t580_F-32','t580_F+32']}
     actual={(c['role'],c['alpha'],c['event_id']) for c in original if c['role'] in roles}
-    if len(result)!=10*len(roles) or actual!=expected or any(c['alpha']!=c['state_alpha'] for c in result):
+    if len(result)!=10*len(roles)*(len(reference_profiles) if reference_profiles is not None else 1) or actual!=expected or any(c['alpha']!=c['state_alpha'] for c in result):
         raise ValueError('exact declaredroles x twoalpha x fiveevents required')
     return result
 
 
-def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None):
+def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,reference_profiles=None):
     """Seal declared handback cases and their exact factual baseline references."""
     from .hidden_time_confirmation import authenticate_saved_endpoint
     source=Path(source).resolve();root=Path(root).resolve()
@@ -70,7 +78,7 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None):
         lo,hi=cfg['residual_interface']['speed_reference_bounds_m_s']
         if not math.isfinite(float(reference_speed_floor_m_s)) or not lo<=float(reference_speed_floor_m_s)<=hi:
             raise ValueError('reference floor must stay inside original configured bounds')
-    cases=reentry_cases(oldcases,roles=roles,reference_speed_floor_m_s=reference_speed_floor_m_s);count=len(cases)
+    cases=reentry_cases(oldcases,roles=roles,reference_speed_floor_m_s=reference_speed_floor_m_s,reference_profiles=reference_profiles);count=len(cases)
     # New roles share source native Actors and normalization. Only policy eligibility changes.
     for actor in {c['actor_role'] for c in cases}:
         auth['models'][actor]=dict(auth['models'][actor],runtime_kind='reentry')
@@ -104,6 +112,9 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None):
     if reference_speed_floor_m_s is not None:
         plan.update(reference_speed_floor_m_s=float(reference_speed_floor_m_s),
             purpose='Does the SAME existing reference floor on learned Actors retain task recovery and improve survival, with shared handback permission?')
+    if reference_profiles is not None:
+        plan.update(reference_profiles=list(reference_profiles),
+            purpose='Early versus constant speed support through the SAME original correction filter; no change to reference floor or user alpha.')
     atomic_json(root/'plan.json',plan)
     atomic_json(root/'status.json',dict(phase='prepared',declared_cases=count,completed_cases=0,inherited_cases=count,active_lower_ticks=0,optimizer_updates=0))
 

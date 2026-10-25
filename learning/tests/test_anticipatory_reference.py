@@ -57,3 +57,28 @@ def test_per_lane_floor_matches_original_clipping_and_does_not_mutate_config():
         np.testing.assert_allclose(np.asarray(a)[1],np.asarray(b),atol=1e-7)
     assert float(actual[2][1,0])==1.5 and bool(actual[3]['reference_clip_channels'][1,0])
     assert c==saved
+
+
+def test_early_support_releases_at_geometric_midturn_and_preserves_steering():
+    from sttw_control.anticipatory_reference import early_support_envelope,speed_support_latent
+    c=config();original=j.array([-.5,.7]);nominal=j.array([1.2,.1])
+    values=jax.vmap(lambda s:early_support_envelope(s,3.,7.))(j.array([1.5,2.25,3.,4.,5.,6.,7.]))
+    np.testing.assert_allclose(values,[0,.5,1,.5,0,0,0],atol=1e-6)
+    for s in [1.5,3.,5.]:assert abs(float(jax.grad(lambda p:early_support_envelope(p,3.,7.))(j.float32(s))))<1e-6
+    late,gate,_=speed_support_latent(original,nominal,j.float32(5.),j.float32(7.),j.int32(6),c)
+    np.testing.assert_array_equal(late,original);assert float(gate)==0
+    early,gate,target=speed_support_latent(original,nominal,j.float32(3.),j.float32(7.),j.int32(6),c)
+    assert early[1]==original[1] and float(gate)==1
+    np.testing.assert_allclose(map_latent(early,c)[0],.25,atol=1e-6)
+    dispatched,_,_=candidate_latent(original,nominal,j.float32(3.),j.float32(7.),j.int32(6),c)
+    np.testing.assert_allclose(map_latent(dispatched,c)[0],.25,atol=1e-6)
+    assert dispatched[1]==original[1]
+    for z in [j.array([30.,.7]),j.array([-.5,.7])]:
+        result,_,_=speed_support_latent(z,nominal,j.float32(10.),j.float32(7.),j.int32(7),c)
+        assert result[1]==z[1] and map_latent(result,c)[0]>=map_latent(z,c)[0]
+    _,offset,_,_=correction_tick(j.zeros(2),j.zeros(2),early,nominal,c)
+    assert offset[0]<=.5*.005+1e-7
+    # Existing profiles must remain bitwise unchanged when not supporting.
+    for profile in [0,4,5]:
+        result,_,_=candidate_latent(original,nominal,j.float32(3.),j.float32(7.),j.int32(profile),c)
+        np.testing.assert_array_equal(result,original)
