@@ -1,0 +1,172 @@
+{
+  "project": "STTW_CONTROL",
+  "records": [
+    {
+      "label": "source_task64",
+      "role": "parent_plain/parent_support",
+      "model": {
+        "arm": "task_only",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/online_preference_survival_v1_attempt3/task_only/checkpoints/learner_0064.pt",
+        "checkpoint_sha256": "a6b9417c574d28c2ae22aba5369f853faaeed19320d7af0c4fc6928a762b9dce",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/online_preference_survival_v1_attempt3/task_only/checkpoints/actor_0064.pkl",
+        "actor_sha256": "2d053213d3650c6b7b2f5279d95b175d9cac50bc10b7e3244668ee27e94ae34a",
+        "state_sha256": "1d5af50ab572fa1d77d8e43d37de13368654ad46490c7364f4c912dc00e87cd3",
+        "sampling_sha256": "e9328a4595cc6a27d6af3a142171f67e1a0e56d3a2c3db348d96bc54a99ad002",
+        "next_collection": 64,
+        "log_std": [
+          -1.4753185510635376,
+          -2.4051108360290527
+        ],
+        "runtime_kind": "reentry"
+      },
+      "reference_profiles": [
+        0,
+        7
+      ],
+      "adoption": "existing frozen source retained"
+    },
+    {
+      "label": "live64_plain",
+      "role": "trained_plain",
+      "model": {
+        "arm": "plain",
+        "profile": 0,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/plain/checkpoints/learner_0064.pt",
+        "checkpoint_sha256": "d65e015923edad03d3807f8deb484e96c1f7fc8634e25b2b9834445456d281d7",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/plain/checkpoints/actor_0064.pkl",
+        "actor_sha256": "35449bdf8d29af1cdb7404641a57938bae1e3cc92c1f4fbc0277621c041b54e6",
+        "fingerprint": "80b160e3bc7f38c80d60a4e998f931769e5143cf24676cd521c6ae980ac2e09a"
+      },
+      "reference_profiles": [
+        0
+      ],
+      "status": "frozen identity record; files not chmod or retargeted",
+      "adoption": "not adopted as whole-episode replacement; retained strong comparator",
+      "parent_checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/online_preference_survival_v1_attempt3/task_only/checkpoints/learner_0064.pt",
+      "parent_checkpoint_sha256": "a6b9417c574d28c2ae22aba5369f853faaeed19320d7af0c4fc6928a762b9dce"
+    },
+    {
+      "label": "live64_support",
+      "role": "trained_support",
+      "model": {
+        "arm": "support",
+        "profile": 7,
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/support/checkpoints/learner_0064.pt",
+        "checkpoint_sha256": "ae2d7b14c55284709c8d97a8e75db0ef13032d9acaaf57322f3fac9c896e8eaf",
+        "actor": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/support/checkpoints/actor_0064.pkl",
+        "actor_sha256": "c3b22c92d94aa757f678849c54c310a1a11782b7b31d162d75b6aac31097b3ad",
+        "fingerprint": "9955e4376e395fc8305beef946bfd93aa649ebc3238eeeb0224297ac3acfbac7"
+      },
+      "reference_profiles": [
+        7
+      ],
+      "status": "frozen identity record; files not chmod or retargeted",
+      "adoption": "not adopted as whole-episode replacement; retained strong comparator",
+      "parent_checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/online_preference_survival_v1_attempt3/task_only/checkpoints/learner_0064.pt",
+      "parent_checkpoint_sha256": "a6b9417c574d28c2ae22aba5369f853faaeed19320d7af0c4fc6928a762b9dce"
+    }
+  ],
+  "architecture": {
+    "history_frames": 16,
+    "frame_fields": 20,
+    "history_dt_s": 0.02,
+    "mask_fields": 16,
+    "context_fields": [
+      {
+        "name": "alpha",
+        "scale": 1.0
+      },
+      {
+        "name": "signed_cross_track_error_m",
+        "scale": 0.2
+      },
+      {
+        "name": "sin_path_heading_error",
+        "scale": 1.0
+      },
+      {
+        "name": "cos_path_heading_error",
+        "scale": 1.0
+      },
+      {
+        "name": "curvature_here_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "curvature_plus_0p5m_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "curvature_plus_1m_1_m",
+        "scale": 0.6
+      },
+      {
+        "name": "preview_body_x_m",
+        "scale": 1.8
+      },
+      {
+        "name": "preview_body_y_m",
+        "scale": 1.8
+      },
+      {
+        "name": "external_speed_m_s",
+        "scale": 3.0
+      },
+      {
+        "name": "previous_applied_speed_offset_m_s",
+        "scale": 1.0
+      },
+      {
+        "name": "previous_applied_steer_offset_rad",
+        "scale": 0.2
+      },
+      {
+        "name": "speed_filter_state_m_s",
+        "scale": 1.0
+      },
+      {
+        "name": "steer_filter_state_rad",
+        "scale": 0.2
+      },
+      {
+        "name": "lookahead_distance_m",
+        "scale": 1.8
+      }
+    ],
+    "actor_dim": 351,
+    "critic_dim": 352,
+    "critic_extra": "finite_task_remaining_fraction",
+    "hidden": [
+      128,
+      128,
+      64
+    ],
+    "activation": "elu",
+    "actions": 2,
+    "policy_type": "shared_conditional_v1",
+    "alphas": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "alpha_is_constant_per_episode": true,
+    "initialization": "endpoint_distillation",
+    "old_345_actor_weight_loading": false,
+    "norm": "fixed_physical_scales; clip_finite_normalized_values_at_5; never_sanitize_NaN",
+    "architecture": "alpha_modulated_v1"
+  },
+  "reward_version": "path_persistent_preference_v3",
+  "training_plan": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/plan.json",
+  "training_plan_sha256": "1fb131d99d60e2cf17c67a64752ac799cae720cfd7d541b7b254434182b756cb",
+  "environment_config": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/effective_config.json",
+  "environment_config_sha256": "2dff28c2e9750dca623f02d4376945ff268eaf283e6f256a02612bf19d385008",
+  "effective_training_contract": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/effective_training_contract.json",
+  "effective_training_contract_sha256": "6416286fef41080634f38980c6881716c8b78457dbf1e40315ed8700ca36a953",
+  "source_code_revision": "a410111b599ed4d297e9076708f9997d56706391",
+  "source_at_launch": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/matched_live_ppo_v1/source_at_launch",
+  "final_pair_sha256": "57dc4e3bc34b77805838c9d4be7a50a114fdeb7b7755f588df8978919f870a4e",
+  "lineage": "Original certified task64 -> common weights_only/new Adam -> two matched64 live/reentry continuations. Earlier dual/distillation ancestors remain historical records, not newly reauthenticated here.",
+  "no_alias_or_best_pointer_changed": true
+}
