@@ -1,6 +1,6 @@
 # 有限时因果借用新Actor、再回到原偏好：下一小验证
 
-状态：设计，未实现/prepare/启动。依据entry_recovery_factorial_v1完整40结果与inherited_rate_detector_audit，不是新的训练或已验证方法。
+状态：代码已实现并通过31相关CPU测试，待独立审查/prepare/shape/执行。依据entry_recovery_factorial_v1完整40结果与inherited_rate_detector_audit，不是新的训练或已验证方法。
 
 ## 要区分什么
 
@@ -27,3 +27,13 @@ AB在已知事件起点救回原A两次触地，但AB0/10原任务。BA可在两
 主比较：learned对A是否保住至少部分原触地且保留名义任务；再对同gate规则与恒定支持比较新增/丢失和原alpha连续代价。阈值边缘与大偏离分别报告。若仅存活且任务仍全部失败，不能称恢复任务；若简单规则覆盖，不称新方法贡献。若有控制增量，再锁定更多alpha/左右路/隐藏起扰时刻和持续时间确认；只有方向成立才考虑参考条件能力与状态相关交回，不训练大评分器。
 
 这里复用速率规则只是强因果基线，没有把它称为容扰阈值。旧E_min继续解释基线，不拟合E_b/gamma/T。本轮是一次有依据的后续控制机会，不是“切换就是新颖性”。
+
+## 实现与验证顺序
+
+沿既有隔离worktree串行执行，不再次询问已授权范围。
+- [x] 核对40结果及上一步传感器触发审计，设计已写定。
+- [x] 新建causal_recovery_relay.py与test_causal_recovery_relay.py：30条件、整参数选择、现时传感器gate、状态保留及释放回A。先观察缺模块失败，再20相关CPU通过。
+- [x] 新建causal_relay_run.py和evaluate_causal_relay.py，封存模型/源/20对角缓存；30lane scan动态参数、完整初末carry、无隐式重启。
+- [x] 新建causal_relay_analysis.py：50逻辑/五角色原alpha成本与XY，实际传感器/选择日志复核，未知/脉冲/终止成本分开。
+- [ ] 代码审查、CPU验证、真实carry shape、登记中文Bark及台账后单次执行。
+- [ ] 完整分析、全XY/关键时序目视、强规则裁决，只有非特权增量后独立确认。
