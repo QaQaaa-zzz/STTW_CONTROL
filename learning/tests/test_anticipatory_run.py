@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from sttw_control.anticipatory_run import flatten_ticks, physical_outcome, stage_indices, claim_stage
+from sttw_control.anticipatory_run import flatten_ticks, physical_outcome, stage_indices, claim_stage, architecture_groups
 
 
 def test_flatten_preserves_lane_and_tick_order():
@@ -36,3 +36,18 @@ def test_stage_accepts_only_preregistered_manifest_never_existing_data(tmp_path)
     with pytest.raises(FileExistsError):claim_stage(stage)
     fresh=tmp_path/'disturbed';claim_stage(fresh)
     assert fresh.is_dir()
+
+
+def test_groups_keep_plain_and_modulated_parameters_separate():
+    models={'plain':dict(actor_config=dict(network={})),
+            'mod':dict(actor_config=dict(network=dict(architecture='alpha_modulated_v1')))}
+    rows=[dict(actor_role='plain'),dict(actor_role='mod'),dict(actor_role='plain'),dict(actor_role='mod'),dict(actor_role='mod')]
+    groups=architecture_groups(list(range(5)),rows,models,{},batch_size=2)
+    assert sorted(i for g in groups for i in g['case_indices'])==list(range(5))
+    assert [len(g['case_indices']) for g in groups]==[2,2,1]
+    for g in groups:
+        assert len({rows[i]['actor_role'] for i in g['case_indices']})==1
+
+
+def test_endpoints_stage_is_explicit_and_does_not_mix_other_cases():
+    assert stage_indices([dict(stage='endpoints'),dict(stage='nominal')],'endpoints')==[0]

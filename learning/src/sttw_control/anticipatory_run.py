@@ -22,8 +22,24 @@ def physical_outcome(active,contact,fault,limit):
 
 
 def stage_indices(cases,stage):
-    if stage not in ('nominal','disturbed'):raise ValueError('explicit stage required')
+    if stage not in ('nominal','disturbed','endpoints'):raise ValueError('explicit stage required')
     return [i for i,c in enumerate(cases) if c['stage']==stage]
+
+
+def architecture_groups(indices,cases,models,common_config,*,batch_size=16):
+    """Keep incompatible parameter trees in separate compiled Actor groups."""
+    from .path_command_policy import architecture_identity
+    families={}
+    for i in indices:
+        cfg=models[cases[i]['actor_role']].get('actor_config',common_config)
+        family=architecture_identity(cfg)
+        families.setdefault(family,dict(actor_config=cfg,case_indices=[]))['case_indices'].append(i)
+    groups=[]
+    for family,item in families.items():
+        ids=item['case_indices']
+        for start in range(0,len(ids),batch_size):
+            groups.append(dict(architecture=family,actor_config=item['actor_config'],case_indices=ids[start:start+batch_size]))
+    return groups
 
 
 def claim_stage(directory):
@@ -119,18 +135,26 @@ def execute(root,stage,*,shape_only=False):
             with Path(model['actor']).open('rb') as f:parameters[role]=jax.tree.map(j.asarray,pickle.load(f))
         first=jax.tree.map(lambda a:j.asarray(a[cases[indices[0]]['source_batch_slot']]),source)
         env.set_log_template(first,path,j.float32(1.5))
-        step=make_reference_step(env,make_path_actor(cfg),horizon_s=10.)
-        @jax.jit
-        def chunk(c,p,paths,speeds,pulses,profiles,floors,zero):
-            return jax.lax.scan(lambda st,_:jax.vmap(step)(st,p,paths,speeds,pulses,profiles,floors,zero),c,None,length=50)
+        def build_chunk(step):
+            @jax.jit
+            def chunk(c,p,paths,speeds,pulses,profiles,floors,zero):
+                return jax.lax.scan(lambda st,_:jax.vmap(step)(st,p,paths,speeds,pulses,profiles,floors,zero),c,None,length=50)
+            return chunk
         stack=lambda values:jax.tree.map(lambda *x:j.stack(x),*values)
-        results=[];index=[];traces=[];began=time.monotonic()
+        results=[];index=[];traces=[];began=time.monotonic();compiled={}
         (directory/'cases').mkdir()
-        for group,offset in enumerate(range(0,len(indices),16)):
-            ids=indices[offset:offset+16];selected=[cases[i] for i in ids];n=len(ids)
+        groups=architecture_groups(indices,cases,auth['models'],cfg,batch_size=plan['batch_size'])
+        for group,piece in enumerate(groups):
+            ids=piece['case_indices'];selected=[cases[i] for i in ids];n=len(ids)
+            key=(piece['architecture'],n)
+            if key not in compiled:
+                compiled[key]=build_chunk(make_reference_step(env,make_path_actor(piece['actor_config']),horizon_s=10.))
+            chunk=compiled[key]
             states=[jax.tree.map(lambda a:j.asarray(a[c['source_batch_slot']]),source) for c in selected]
             if any(int(s.tick)!=0 or bool(s.physical.failed|s.fault|s.domain_exit) for s in states):
                 raise ValueError('invalid complete task0 initial state')
+            if plan.get('allow_task0_alpha_context_override',False):
+                states=[s.replace(alpha=j.float32(c['state_alpha'])) for s,c in zip(states,selected)]
             if any(abs(float(s.alpha)-c['state_alpha'])>1e-7 for s,c in zip(states,selected)):
                 raise ValueError('source user-alpha mismatch')
             carry=ReferenceEvaluationState(stack(states),stack([initial_gate() for _ in states]))
@@ -146,7 +170,7 @@ def execute(root,stage,*,shape_only=False):
             if shape_only:
                 shaped=jax.eval_shape(chunk,carry,*args)
                 assert shaped[1]['active_tick'].shape==(50,n,4)
-                traces.append(dict(group=group,batch=n,active_shape=list(shaped[1]['active_tick'].shape)))
+                traces.append(dict(group=group,batch=n,architecture=piece['architecture'],active_shape=list(shaped[1]['active_tick'].shape)))
                 continue
             if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('actual GPU required')
             gd=directory/f'group_{group:03d}';gd.mkdir()
@@ -182,9 +206,9 @@ def execute(root,stage,*,shape_only=False):
             raise ValueError('incomplete stage matrix')
         update(phase='completed',stage='interface_traced' if shape_only else 'collection_complete_analysis_pending')
         if not shape_only:
-            stages=[json.loads((root/s/'status.json').read_text()) for s in ['nominal','disturbed'] if (root/s/'status.json').exists()]
-            atomic_json(root/'status.json',dict(phase='completed' if len(stages)==2 and all(s['phase']=='completed' for s in stages) else 'partial',
-                completed_cases=sum(s['completed_cases'] for s in stages),declared_cases=80,
+            stages=[json.loads((root/s/'status.json').read_text()) for s in plan['stage_counts'] if (root/s/'status.json').exists()]
+            atomic_json(root/'status.json',dict(phase='completed' if len(stages)==len(plan['stage_counts']) and all(s['phase']=='completed' for s in stages) else 'partial',
+                completed_cases=sum(s['completed_cases'] for s in stages),declared_cases=sum(plan['stage_counts'].values()),
                 active_lower_ticks=sum(s['active_lower_ticks'] for s in stages),optimizer_updates=0,checked_unix=time.time()))
     except BaseException as exc:
         (directory/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise

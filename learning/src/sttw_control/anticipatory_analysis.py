@@ -45,6 +45,21 @@ def save_csv(path,rows):
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
 
 
+def load_analysis_cases(root,stage,plan):
+    results=json.loads((root/stage/'results.json').read_text())
+    index=json.loads((root/stage/'case_index.json').read_text())
+    if len(results)!=plan['stage_counts'][stage] or len(index)!=len(results):
+        raise ValueError('incomplete new physical stage inventory')
+    if plan.get('inherited_cases',0):
+        inherited=json.loads((root/'reuse_cases.json').read_text())
+        if len(inherited)!=plan['inherited_cases']:raise ValueError('incomplete inherited inventory')
+        results += [r['case'] for r in inherited];index += [r['index'] for r in inherited]
+        if len(results)!=plan['logical_cases']:raise ValueError('logical case accounting mismatch')
+    if len({r['case_id'] for r in results})!=len(results) or {r['case_id'] for r in index}!={r['case_id'] for r in results}:
+        raise ValueError('duplicate or mismatched actual/inherited identities')
+    return results,index
+
+
 def analyze(root,stage):
     from .rejoin_comparison import geometric_task_trace
     from .survival_endpoint_task_metrics import task_metrics
@@ -56,9 +71,8 @@ def analyze(root,stage):
     plan=json.loads((root/'plan.json').read_text())
     if digest(plan['path_file'])!=plan['path_sha256']:raise ValueError('original path drift')
     with np.load(plan['path_file']) as z:path={k:z[k] for k in z.files}
-    results=json.loads((source/'results.json').read_text())
-    index=json.loads((source/'case_index.json').read_text());byid={r['case_id']:r for r in index}
-    if len(results)!=plan['stage_counts'][stage] or len(byid)!=len(results):raise ValueError('incomplete stage inventory')
+    results,index=load_analysis_cases(root,stage,plan)
+    byid={r['case_id']:r for r in index}
     rows=[];traces={};cost_keys=list(configured_cost_keys(cfg))
     for r in results:
         item=byid[r['case_id']];file=root/item['file']
@@ -88,7 +102,7 @@ def analyze(root,stage):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    colors=dict(parent='#0072B2',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
+    colors=dict(parent='#0072B2',dual='#E69F00',bc='#009E73',v3='#CC79A7',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
         speed_gate='#D55E00',steer_gate='#56B4E9',joint_gate='#882255',causal_eso='#999933',zero_middle='#555555')
     figures=[]
     cloud=np.concatenate([d['actual_xy'][d['active_tick']] for d in traces.values()])
@@ -96,7 +110,9 @@ def analyze(root,stage):
     extent=np.vstack([cloud,task_path]);lo=extent.min(axis=0)-.5;hi=extent.max(axis=0)+.5
     for event in sorted({r['event_id'] for r in rows}):
         fig,axes=plt.subplots(1,2,figsize=(14,6),layout='constrained')
-        for ax,alpha in zip(axes,[0.,.5]):
+        alphas=sorted({r['alpha'] for r in rows if r['alpha'] is not None})
+        if len(alphas)!=2:raise ValueError('two declared alpha values required for paired XY overview')
+        for ax,alpha in zip(axes,alphas):
             ax.plot(path['xy'][:,0],path['xy'][:,1],':',color='.5',label='Original path')
             selected=[r for r in rows if r['event_id']==event and r['alpha'] in (alpha,None)]
             for r in selected:
@@ -129,7 +145,7 @@ def analyze(root,stage):
         key=f"{r['role']}/alpha{r['alpha']}";s=summary.setdefault(key,dict(n=0,safe_task=0,safe_task_failed=0,contact=0,unknown=0))
         s['n']+=1;s[r['category']]+=1
     atomic_json(out/'receipt.json',dict(stage=stage,source_status_sha256=digest(source/'status.json'),
-        raw_cases_sha_checked=len(rows),physics_steps=0,optimizer_updates=0,
+        raw_cases_sha_checked=len(rows),new_actual_cases=plan['stage_counts'][stage],inherited_cases=plan.get('inherited_cases',0),physics_steps=0,optimizer_updates=0,
         analyzer_sha256=digest(__file__),summary=summary,figures=figures,
         visual_review_complete=False,cost_keys=cost_keys,
         caveat='Related DEV branches. Original user-alpha cost; terminal block replacement separate from running costs. No post-hoc threshold change or controller adoption.'))

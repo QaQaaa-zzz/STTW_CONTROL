@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from sttw_control.anticipatory_analysis import cost_accounting, paired_changes
+from sttw_control.anticipatory_analysis import cost_accounting, paired_changes, load_analysis_cases
 
 
 def test_costs_ignore_padding_and_keep_terminal_replacement_separate():
@@ -25,3 +25,16 @@ def test_pairing_respects_alpha_and_event_and_preserves_losses():
     assert result[0]['physical_change']==-1 and result[0]['joint_task_change']==-1
     assert result[1]['physical_change']==0 and result[1]['joint_task_change']==1
     assert result[1]['scored_cost_change']==-2.
+
+
+def test_inherited_cases_are_not_counted_as_new_and_duplicates_rejected(tmp_path):
+    import json
+    stage=tmp_path/'endpoints';stage.mkdir()
+    (stage/'results.json').write_text(json.dumps([dict(case_id='new')]))
+    (stage/'case_index.json').write_text(json.dumps([dict(case_id='new',file='new.npz')]))
+    (tmp_path/'reuse_cases.json').write_text(json.dumps([dict(case=dict(case_id='old'),index=dict(case_id='old',file='/external/old.npz'))]))
+    plan=dict(stage_counts=dict(endpoints=1),inherited_cases=1,logical_cases=2)
+    rows,index=load_analysis_cases(tmp_path,'endpoints',plan)
+    assert len(rows)==2 and len(index)==2 and index[1]['file']=='/external/old.npz'
+    (tmp_path/'reuse_cases.json').write_text(json.dumps([dict(case=dict(case_id='new'),index=dict(case_id='new',file='new.npz'))]))
+    with pytest.raises(ValueError):load_analysis_cases(tmp_path,'endpoints',plan)
