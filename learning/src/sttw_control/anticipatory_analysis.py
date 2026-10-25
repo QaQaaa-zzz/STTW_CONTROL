@@ -91,6 +91,9 @@ def analyze(root,stage):
     colors=dict(parent='#0072B2',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
         speed_gate='#D55E00',steer_gate='#56B4E9',joint_gate='#882255',causal_eso='#999933',zero_middle='#555555')
     figures=[]
+    cloud=np.concatenate([d['actual_xy'][d['active_tick']] for d in traces.values()])
+    task_path=path['xy'][path['s']<=float(path['goal'])]
+    extent=np.vstack([cloud,task_path]);lo=extent.min(axis=0)-.5;hi=extent.max(axis=0)+.5
     for event in sorted({r['event_id'] for r in rows}):
         fig,axes=plt.subplots(1,2,figsize=(14,6),layout='constrained')
         for ax,alpha in zip(axes,[0.,.5]):
@@ -101,6 +104,7 @@ def analyze(root,stage):
                 ax.plot(xy[:,0],xy[:,1],color=colors[r['role']],label=r['role'])
                 ax.scatter(*xy[-1],color=colors[r['role']],marker='x' if r['category']=='contact' else 'o',s=25)
             ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'{event} | original alpha {alpha:g}')
+            ax.set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]))
             ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2);ax.legend(fontsize=7)
         name=f'xy_{event}.png';fig.savefig(out/name,dpi=125);plt.close(fig);figures.append(name)
     # Every factual case gets its own control/physics/reward trace, including failures.
