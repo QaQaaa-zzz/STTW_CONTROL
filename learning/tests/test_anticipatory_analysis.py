@@ -38,3 +38,14 @@ def test_inherited_cases_are_not_counted_as_new_and_duplicates_rejected(tmp_path
     assert len(rows)==2 and len(index)==2 and index[1]['file']=='/external/old.npz'
     (tmp_path/'reuse_cases.json').write_text(json.dumps([dict(case=dict(case_id='new'),index=dict(case_id='new',file='new.npz'))]))
     with pytest.raises(ValueError):load_analysis_cases(tmp_path,'endpoints',plan)
+
+
+def test_csv_keeps_late_metadata_from_inherited_cases(tmp_path):
+    import csv
+    from sttw_control.anticipatory_analysis import save_csv
+    path=tmp_path/'mixed.csv'
+    save_csv(path,[dict(case_id='new',cost=3.),dict(case_id='inherited',cost=4.,sequence_kind='sequence',sequence_index=26)])
+    with path.open() as f:
+        reader=csv.DictReader(f);rows=list(reader)
+        assert reader.fieldnames==['case_id','cost','sequence_kind','sequence_index']
+    assert rows[0]['sequence_kind']=='' and rows[1]['sequence_kind']=='sequence' and rows[1]['sequence_index']=='26'

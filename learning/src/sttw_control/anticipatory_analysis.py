@@ -42,7 +42,8 @@ def paired_changes(rows):
 def save_csv(path,rows):
     if not rows:return
     with path.open('w',newline='') as f:
-        w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+        fields=list(dict.fromkeys(key for row in rows for key in row))
+        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
 
 
 def load_analysis_cases(root,stage,plan):
@@ -60,13 +61,15 @@ def load_analysis_cases(root,stage,plan):
     return results,index
 
 
-def analyze(root,stage):
+def analyze(root,stage,*,analysis_name='analysis'):
+    if not analysis_name.startswith('analysis') or Path(analysis_name).name!=analysis_name:
+        raise ValueError('local named analysis directory required')
     from .rejoin_comparison import geometric_task_trace
     from .survival_endpoint_task_metrics import task_metrics
     from .path_command_reward import configured_cost_keys
     source=root/stage;status=json.loads((source/'status.json').read_text())
     if status['phase']!='completed':raise ValueError('completed physical stage required; do not rerun collection')
-    out=source/'analysis';out.mkdir(exist_ok=False)
+    out=source/analysis_name;out.mkdir(exist_ok=False)
     cfg=json.loads((root/'common_environment_config.json').read_text())
     plan=json.loads((root/'plan.json').read_text())
     if digest(plan['path_file'])!=plan['path_sha256']:raise ValueError('original path drift')
