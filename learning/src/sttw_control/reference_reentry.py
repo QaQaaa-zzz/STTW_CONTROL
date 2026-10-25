@@ -1,5 +1,6 @@
 """Explicit valid-domain handback opportunity, retaining all real closed-loop state."""
 import json
+import math
 from pathlib import Path
 import jax.numpy as j
 from flax import struct
@@ -23,7 +24,7 @@ def next_clean_blocks(previous,active,invalid,failure):
     return j.where(clean,j.minimum(j.asarray(previous)+1,16),0).astype(j.int32)
 
 
-def reentry_cases(original,*,roles=None):
+def reentry_cases(original,*,roles=None,reference_speed_floor_m_s=None):
     roles=dict(task_only='task_reentry',physical_credit='physical_reentry') if roles is None else dict(roles)
     supported={'parent','task_only','physical_credit','floor','causal_eso_allalpha'}
     if not roles or not set(roles)<=supported or len(set(roles.values()))!=len(roles):
@@ -31,8 +32,14 @@ def reentry_cases(original,*,roles=None):
     result=[]
     for c in original:
         if c['role'] not in roles:continue
-        result.append(dict(c,source_case_id=c['case_id'],case_id=roles[c['role']]+'/'+c['case_id'],
-            role=roles[c['role']],stage='reentry'))
+        new=dict(c,source_case_id=c['case_id'],case_id=roles[c['role']]+'/'+c['case_id'],
+            role=roles[c['role']],stage='reentry')
+        if reference_speed_floor_m_s is not None:
+            floor=float(reference_speed_floor_m_s)
+            if not math.isfinite(floor) or floor<float(c['reference_speed_floor_m_s']):
+                raise ValueError('finite reference floor must not widen original bounds')
+            new['reference_speed_floor_m_s']=floor
+        result.append(new)
     expected={(role,alpha,event) for role in roles for alpha in [.5,.75]
               for event in ['zero','t380_F-32','t380_F+32','t580_F-32','t580_F+32']}
     actual={(c['role'],c['alpha'],c['event_id']) for c in original if c['role'] in roles}
@@ -41,7 +48,7 @@ def reentry_cases(original,*,roles=None):
     return result
 
 
-def prepare_reentry(source,root,*,roles=None):
+def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None):
     """Seal declared handback cases and their exact factual baseline references."""
     from .hidden_time_confirmation import authenticate_saved_endpoint
     source=Path(source).resolve();root=Path(root).resolve()
@@ -58,7 +65,12 @@ def prepare_reentry(source,root,*,roles=None):
         if digest(source/name)!=prior['sealed_files'][str(source/name)]:raise ValueError('source input drift '+name)
     if digest(prior['source_initial_state'])!=prior['source_initial_state_sha256'] or digest(prior['path_file'])!=prior['path_sha256']:
         raise ValueError('complete task0 source/path drift')
-    cases=reentry_cases(oldcases,roles=roles);count=len(cases)
+    if reference_speed_floor_m_s is not None:
+        cfg=json.loads((source/'common_environment_config.json').read_text())
+        lo,hi=cfg['residual_interface']['speed_reference_bounds_m_s']
+        if not math.isfinite(float(reference_speed_floor_m_s)) or not lo<=float(reference_speed_floor_m_s)<=hi:
+            raise ValueError('reference floor must stay inside original configured bounds')
+    cases=reentry_cases(oldcases,roles=roles,reference_speed_floor_m_s=reference_speed_floor_m_s);count=len(cases)
     # New roles share source native Actors and normalization. Only policy eligibility changes.
     for actor in {c['actor_role'] for c in cases}:
         auth['models'][actor]=dict(auth['models'][actor],runtime_kind='reentry')
@@ -89,6 +101,9 @@ def prepare_reentry(source,root,*,roles=None):
         information='No futurepulse metadata to eligibility orActor; actualhistory/currentgeometry only. Event schedule physicalintegrator only.',
         stop_rule='Declared newcases only/contact/fault/horizon; no automatic retries, extra waiting thresholds, rollgates, geometryL/reward or training.',
         inference='Common-interface opportunity, not newmethod or safetycertification. Anyuseful gain must then faceparent/floor/ESO with SAME handbackpermission andleft confirmation beforeadoption.')
+    if reference_speed_floor_m_s is not None:
+        plan.update(reference_speed_floor_m_s=float(reference_speed_floor_m_s),
+            purpose='Does the SAME existing reference floor on learned Actors retain task recovery and improve survival, with shared handback permission?')
     atomic_json(root/'plan.json',plan)
     atomic_json(root/'status.json',dict(phase='prepared',declared_cases=count,completed_cases=0,inherited_cases=count,active_lower_ticks=0,optimizer_updates=0))
 

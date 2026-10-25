@@ -99,3 +99,24 @@ def test_explicit_roles_give_every_controller_same_permission_without_changing_r
     with pytest.raises(ValueError):reentry_cases(original,roles={'zero_middle':'z'})
     with pytest.raises(ValueError):reentry_cases(original[:-1],roles=roles)
     with pytest.raises(ValueError):reentry_cases(original+original[:1],roles=roles)
+
+
+def test_learned_floor_cases_change_only_declared_floor_and_identity():
+    import pytest
+    original=[dict(case_id=f'{role}/{alpha}/{event}',role=role,actor_role=role,
+        alpha=alpha,state_alpha=alpha,event_id=event,stage='timing',profile=0,
+        reference_speed_floor_m_s=1.,initial_state_index=7,pulse_duration_s=.1)
+        for role in ['task_only','physical_credit'] for alpha in [.5,.75]
+        for event in ['zero','t380_F-32','t380_F+32','t580_F-32','t580_F+32']]
+    roles={'task_only':'task_floor_reentry','physical_credit':'physical_floor_reentry'}
+    cases=reentry_cases(original,roles=roles,reference_speed_floor_m_s=1.5)
+    assert len(cases)==20
+    for old,new in zip(original,cases):
+        assert old['reference_speed_floor_m_s']==1.
+        assert new['reference_speed_floor_m_s']==1.5
+        for k in old:
+            if k not in ['case_id','role','stage','reference_speed_floor_m_s']:assert new[k]==old[k]
+        assert new['source_case_id']==old['case_id']
+    assert all(c['reference_speed_floor_m_s']==1. for c in reentry_cases(original,roles=roles))
+    for invalid in [float('nan'),float('inf'),.9]:
+        with pytest.raises(ValueError):reentry_cases(original,roles=roles,reference_speed_floor_m_s=invalid)
