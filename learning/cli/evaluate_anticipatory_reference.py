@@ -7,7 +7,7 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--phase',choices=['prepare','shape','execute'],required=True)
-    p.add_argument('--stage',choices=['nominal','disturbed','endpoints','expert_relay'],default='nominal')
+    p.add_argument('--stage',choices=['nominal','disturbed','endpoints','expert_relay','sequence_nominal'],default='nominal')
     p.add_argument('--inventory',type=Path,default=Path('docs/evidence/tolerance_progress_20261022/anticipatory_reference/preparation/case_inventory.json'))
     a=p.parse_args()
     if a.phase=='prepare':prepare(a.inventory.resolve(),a.output.resolve())

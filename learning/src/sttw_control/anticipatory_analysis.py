@@ -104,6 +104,8 @@ def analyze(root,stage):
     import matplotlib.pyplot as plt
     colors=dict(parent='#0072B2',relay_dual0='#E69F00',relay_dual1='#009E73',dual='#E69F00',bc='#009E73',v3='#CC79A7',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
         speed_gate='#D55E00',steer_gate='#56B4E9',joint_gate='#882255',causal_eso='#999933',zero_middle='#555555')
+    extra_roles=sorted({r['role'] for r in rows}-set(colors))
+    colors.update({role:plt.get_cmap('turbo')(i/max(1,len(extra_roles)-1)) for i,role in enumerate(extra_roles)})
     figures=[]
     cloud=np.concatenate([d['actual_xy'][d['active_tick']] for d in traces.values()])
     task_path=path['xy'][path['s']<=float(path['goal'])]
@@ -121,7 +123,7 @@ def analyze(root,stage):
                 ax.scatter(*xy[-1],color=colors[r['role']],marker='x' if r['category']=='contact' else 'o',s=25)
             ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'{event} | original alpha {alpha:g}')
             ax.set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]))
-            ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2);ax.legend(fontsize=7)
+            ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2);ax.legend(fontsize=5 if len(selected)>20 else 7,ncol=2 if len(selected)>20 else 1)
         name=f'xy_{event}.png';fig.savefig(out/name,dpi=125);plt.close(fig);figures.append(name)
     # Every factual case gets its own control/physics/reward trace, including failures.
     for number,r in enumerate(rows):
