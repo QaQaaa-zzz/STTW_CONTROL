@@ -49,3 +49,9 @@ def test_csv_keeps_late_metadata_from_inherited_cases(tmp_path):
         reader=csv.DictReader(f);rows=list(reader)
         assert reader.fieldnames==['case_id','cost','sequence_kind','sequence_index']
     assert rows[0]['sequence_kind']=='' and rows[1]['sequence_kind']=='sequence' and rows[1]['sequence_index']=='26'
+
+
+def test_explicit_recovery_baseline_pairs_same_source_state_not_parent_actor():
+    rows=[dict(case_id='z',role='live_zero',alpha=0.,event_id='snapshot00',category='safe_task_failed',scored_cost=9.),dict(case_id='g',role='geo_fixed',alpha=0.,event_id='snapshot00',category='safe_task',scored_cost=7.)]
+    pairs=paired_changes(rows,baseline_role='live_zero')
+    assert len(pairs)==1 and pairs[0]['parent_case_id']=='z' and pairs[0]['joint_task_change']==1

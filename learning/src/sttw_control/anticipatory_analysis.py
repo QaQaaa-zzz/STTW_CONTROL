@@ -22,12 +22,12 @@ def cost_accounting(data,*,scale,dt):
         component_integrals=(scale*dt*components.sum(axis=0)).tolist())
 
 
-def paired_changes(rows):
-    parents={(r['alpha'],r['event_id']):r for r in rows if r['role']=='parent'}
-    if len(parents)!=sum(r['role']=='parent' for r in rows):raise ValueError('duplicate parent key')
+def paired_changes(rows,*,baseline_role='parent'):
+    parents={(r['alpha'],r['event_id']):r for r in rows if r['role']==baseline_role}
+    if len(parents)!=sum(r['role']==baseline_role for r in rows):raise ValueError('duplicate parent key')
     pairs=[]
     for r in rows:
-        if r['role'] in ('parent','zero_middle'):continue
+        if r['role'] in (baseline_role,'zero_middle'):continue
         p=parents[(r['alpha'],r['event_id'])]
         unknown='unknown' in (r['category'],p['category'])
         safe=lambda x:x['category'] in ('safe_task','safe_task_failed')
@@ -98,7 +98,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
             traveled_distance_m=distance,reference_speed_variation_m_s=float(variation[0]),
             reference_steer_variation_rad=float(variation[1]))
         rows.append(row);traces[r['case_id']]=dict(data,**geometry)
-    pairs=paired_changes(rows)
+    pairs=paired_changes(rows,baseline_role=plan.get('comparison_baseline_role','parent'))
     atomic_json(out/'results.json',rows);save_csv(out/'results.csv',rows);save_csv(out/'paired_parent.csv',pairs)
     costs=[dict(case_id=r['case_id'],**dict(zip(cost_keys,r['component_integrals']))) for r in rows]
     save_csv(out/'cost_components.csv',costs)
@@ -124,6 +124,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
                 d=traces[r['case_id']];xy=d['actual_xy'][d['active_tick']]
                 ax.plot(xy[:,0],xy[:,1],color=colors[r['role']],label=r['role'])
                 ax.scatter(*xy[-1],color=colors[r['role']],marker='x' if r['category']=='contact' else 'o',s=25)
+                if r.get('handover_xy') is not None:ax.scatter(*r['handover_xy'],color=colors[r['role']],marker='s',s=22)
             ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'{event} | original alpha {alpha:g}')
             ax.set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]))
             ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2);ax.legend(fontsize=5 if len(selected)>20 else 7,ncol=2 if len(selected)>20 else 1)
@@ -141,6 +142,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
         ax[5].legend(fontsize=6);ax[5].set_ylabel('Signed cost components')
         for axy in axes.flat:
             axy.set_xlabel('Task time (s)');axy.grid(alpha=.2)
+            if r.get('handover_s') is not None:axy.axvline(r['handover_s'],color='.4',linestyle='--',alpha=.7)
             if r['force_N']:
                 onset=r['pulse_onset_task_tick']*.005;axy.axvspan(onset,onset+r['pulse_duration_s'],color='red',alpha=.1)
         fig.suptitle(r['case_id']+' | '+r['category']+' | actual endpoint retained')
@@ -150,7 +152,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
         key=f"{r['role']}/alpha{r['alpha']}";s=summary.setdefault(key,dict(n=0,safe_task=0,safe_task_failed=0,contact=0,unknown=0))
         s['n']+=1;s[r['category']]+=1
     atomic_json(out/'receipt.json',dict(stage=stage,source_status_sha256=digest(source/'status.json'),
-        raw_cases_sha_checked=len(rows),new_actual_cases=plan['stage_counts'][stage],inherited_cases=plan.get('inherited_cases',0),physics_steps=0,optimizer_updates=0,
+        raw_cases_sha_checked=len(rows),new_actual_cases=plan['stage_counts'][stage],inherited_cases=plan.get('inherited_cases',0),comparison_baseline_role=plan.get('comparison_baseline_role','parent'),new_case_unit=plan.get('new_case_unit','full_episode'),inherited_unique_prefix_ticks=plan.get('inherited_unique_prefix_ticks',0),physics_steps=0,optimizer_updates=0,
         analyzer_sha256=digest(__file__),summary=summary,figures=figures,
         visual_review_complete=False,cost_keys=cost_keys,
         caveat='Related DEV branches. Original user-alpha cost; terminal block replacement separate from running costs. No post-hoc threshold change or controller adoption.'))
@@ -159,7 +161,7 @@ def analyze(root,stage,*,analysis_name='analysis'):
         '成本按实际执行的原V3分量核对，终止控制块替换为失败余项的差额单列；短前缀成本小不能当更优。',
         '## 分组结局','', '|角色/alpha|n|任务且无触地|无触地任务失败|触地|未知|','|---|---:|---:|---:|---:|---:|']
     lines += ['|'+key+'|'+'|'.join(str(s[k]) for k in ['n','safe_task','safe_task_failed','contact','unknown'])+'|' for key,s in summary.items()]
-    lines += ['', '逐例原alpha成本见results.csv，各分量见cost_components.csv，匹配父策略的增失见paired_parent.csv。',
+    lines += ['', '逐例原alpha成本见results.csv，各分量见cost_components.csv，匹配声明基线的增失见paired_parent.csv。',
         'XY图与逐例完整时序已生成，尚需实际目视后才可声明图形审查完成。',
         '本阶段为开发筛查；不将同快照多个事件当独立重复，不把逐事件最佳候选当在线方法。']
     (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
