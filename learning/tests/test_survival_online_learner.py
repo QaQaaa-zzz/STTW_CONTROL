@@ -64,3 +64,10 @@ def test_boundary_restore_preserves_adam_for_identical_next_update():
 def test_checkpoint_does_not_pretend_to_resume_an_unfinished_collection():
     obj=learner();obj.freeze_collection()
     with pytest.raises(ValueError,match='boundary'):obj.checkpoint()
+
+
+def test_small_recorded_value_roundoff_is_logged_without_discarding_the_batch():
+    obj=learner();b=batch(obj);b['old_task']=b['old_task']+.0002
+    result=obj.update(b,warmup=True)
+    assert result['value_diagnostics']['task']['max_abs_error']>.0001
+    assert result['actor_steps']==0 and result['critic_steps']==2

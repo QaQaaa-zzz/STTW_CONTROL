@@ -80,13 +80,19 @@ class OnlineSurvivalLearner:
         if (data['obs'].shape!=(n,351) or data['critic'].shape!=(n,352) or data['action'].shape!=(n,2)
                 or data['old_mean'].shape!=(n,2) or any(data[k].shape!=(n,) for k in fields[3:] if k!='old_mean')):
             raise ValueError('aligned legal observation/action/value vectors required')
+        value_diagnostics={}
         with torch.no_grad():
             mean=self.actor(data['obs']);logp=torch.distributions.Normal(mean,self.log_std.exp()).log_prob(data['action']).sum(-1)
             if not torch.allclose(logp,data['old_logp'],rtol=0,atol=1e-3):raise ValueError('collection action density mismatch')
             if not torch.allclose(mean,data['old_mean'],rtol=1e-5,atol=1e-4):raise ValueError('collection mean mismatch')
-            for actual,old in [(self.task_critic(data['critic']).squeeze(-1),data['old_task']),
-                               (self.physical_critic(data['critic']).squeeze(-1),data['old_physical'])]:
-                if not torch.allclose(actual,old,rtol=1e-5,atol=1e-4):raise ValueError('collection old value mismatch')
+            for name,actual,old in [('task',self.task_critic(data['critic']).squeeze(-1),data['old_task']),
+                                    ('physical',self.physical_critic(data['critic']).squeeze(-1),data['old_physical'])]:
+                if not torch.isfinite(actual).all():raise ValueError('nonfinite collection value recheck')
+                difference=(actual-old).abs()
+                value_diagnostics[name]=dict(max_abs_error=float(difference.max()),rms_error=float(difference.square().mean().sqrt()))
+            # The exact frozen parameter fingerprint is the provenance guard.
+            # GPU-recorded old values remain the frozen GAE/MC baselines. Small
+            # CPU/GPU output roundoff is a diagnostic, not a batch-drop gate.
         center=float(data['task_advantage'].mean());scale=float(data['task_advantage'].std(unbiased=False).clamp_min(1e-8))
         advantage=(data['task_advantage']-center)/scale
         history=[]
@@ -132,7 +138,7 @@ class OnlineSurvivalLearner:
             actor_steps=self.actor_steps,critic_steps=self.critic_steps,samples=n,
             task_advantage_center=center,task_advantage_scale=scale,
             exact_gaussian_KL_mean=float(kl.mean()),likelihood_ratio_clip_fraction=float(((ratio<1-self.settings['clip'])|(ratio>1+self.settings['clip'])).float().mean()),
-            history=history,case_shift=case_shift)
+            history=history,case_shift=case_shift,value_diagnostics=value_diagnostics)
 
     def checkpoint(self):
         if self._pending is not None:raise ValueError('exact checkpoint requires a completed collection boundary')

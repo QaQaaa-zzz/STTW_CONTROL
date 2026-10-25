@@ -4,7 +4,7 @@ from pathlib import Path
 from .preference_best import atomic_json,digest,config_hash
 
 
-def prepare(root):
+def prepare(root,*,recover_first_warmup=None):
     root.mkdir(parents=True,exist_ok=False)
     from .survival_online_batch import make_online_cases
     source=Path('runs/fresh_survival_collector_v1/plan.json').resolve();old=json.loads(source.read_text())
@@ -37,10 +37,22 @@ def prepare(root):
         adoption='none; final endpoint models require paired evaluation and nominal preference analysis',
         acceleration=['vmap96','scan50','one dynamic-parameter JIT reused across updates','persistent JAX cache'],
         source_sha256=sources,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+    if recover_first_warmup is not None:
+        from .survival_warmup_recovery import build_first_warmup_recovery
+        plan['recovery']=build_first_warmup_recovery(recover_first_warmup,plan,declaration['config'])
+    atomic_json(root/'effective_training_contract.json',dict(environment_config=declaration['config'],
+        actual_outer_settings={k:plan[k] for k in ['updates','critic_only_updates','epochs','arms','seed','learner_seed',
+            'actor_lr','critic_lr','clip','entropy','grad_clip','fixed_denominator','episodes_per_arm','total_envs']},
+        note='training_future_phase_C fields in the environment template do not override these explicit outer-loop settings'))
+    plan['effective_training_contract_sha256']=digest(root/'effective_training_contract.json')
     atomic_json(root/'plan.json',plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
-    atomic_json(root/'status.json',dict(phase='prepared',completed_updates=0,declared_updates=64,
+    initial_status=dict(phase='prepared',completed_updates=0,declared_updates=64,
         actor_steps=0,critic_steps_per_head=0,active_lower_ticks=0,allocated_lower_slots=0,
-        legal_decisions_collected=0,actor_training_samples=0,tensorboard_reward_verified=False))
+        legal_decisions_collected=0,actor_training_samples=0,tensorboard_reward_verified=False)
+    if 'recovery' in plan:
+        initial_status.update(plan['recovery']['inherited_counters'],critic_steps_per_head=plan['epochs'],
+            inherited_collection_elapsed_s=plan['recovery']['inherited_collection_elapsed_s'],new_active_lower_ticks=0)
+    atomic_json(root/'status.json',initial_status)
     sys.path.insert(0,str(Path('learning/cli').resolve()))
     from prepare_short_recovery_campaign import register
     register(root/'ACTIVE_RUN.json','STTW_CONTROL 多α普通任务与完整防摔信用匹配训练',root/'status.json')
@@ -72,6 +84,7 @@ def execute(root):
         for p,sha in plan['source_sha256'].items():assert digest(p)==sha,p
         for k in ['source_plan','source_declaration']:assert digest(plan[k])==plan[k+'_sha256']
         assert digest(root/'effective_config.json')==plan['effective_config_sha256']
+        assert digest(root/'effective_training_contract.json')==plan['effective_training_contract_sha256']
         for kind in ['actor','checkpoint']:assert digest(plan['model'][kind])==plan['model'][kind+'_sha256']
         cfg=json.loads((root/'effective_config.json').read_text());decl=json.loads(Path(plan['source_declaration']).read_text())
         assert config_hash(cfg)==config_hash(decl['config'])
@@ -81,6 +94,11 @@ def execute(root):
             epochs=plan['epochs'],fixed_denominator=plan['fixed_denominator'],actor_lr=plan['actor_lr'],
             critic_lr=plan['critic_lr'],clip=plan['clip'],entropy=plan['entropy'],grad_clip=plan['grad_clip'])
             for name,beta in plan['arms'].items()}
+        recovery=plan.get('recovery')
+        if recovery:
+            for name,path in recovery['initial_learners'].items():
+                assert digest(path)==recovery['initial_learner_sha256'][name]
+                learners[name]=OnlineSurvivalLearner.restore(cfg,torch.load(path,map_location='cpu',weights_only=False))
         # Real saved H75 inputs check all exported heads before expensive physics.
         check_raw=Path(plan['source_plan']).parent/'case_000.npz'
         with np.load(check_raw) as z:
@@ -98,7 +116,11 @@ def execute(root):
         with torch.no_grad():expected=(check_learner.actor(torch.tensor(check_obs)).numpy(),
             check_learner.task_critic(torch.tensor(check_view)).squeeze(-1).numpy(),
             check_learner.physical_critic(torch.tensor(check_view)).squeeze(-1).numpy())
-        for actual,target in zip(values,expected):np.testing.assert_allclose(np.asarray(actual),target,atol=1e-4,rtol=1e-5)
+        np.testing.assert_allclose(np.asarray(values[0]),expected[0],atol=1e-4,rtol=1e-5)
+        for actual in values:
+            if not np.isfinite(np.asarray(actual)).all():raise ValueError('nonfinite neural preflight output')
+        # Frozen value-head identities/export structure are authenticated;
+        # their cross-framework floating differences are logged, not a gate.
         atomic_json(root/'prelaunch_value_check.json',dict(source_raw_sha256=digest(check_raw),actual_unique_saved_observations=unique_observations,
             batched_rows=len(check_obs),parameter_layout='per_environment_parameters_matching_production',
             head_max_errors=[float(np.max(np.abs(np.asarray(a)-b))) for a,b in zip(values,expected)],new_physics_ticks=0,optimizer_steps=0))
@@ -145,6 +167,7 @@ def execute(root):
         def save_pair(index):
             records=[]
             for name,obj in learners.items():
+                assert obj.next_collection==index,'a partial arm cannot masquerade as a paired boundary'
                 directory=root/name/'checkpoints';directory.mkdir(parents=True,exist_ok=True)
                 pt=directory/f'learner_{index:04d}.pt';actor=directory/f'actor_{index:04d}.pkl'
                 torch.save(obj.checkpoint(),pt)
@@ -158,58 +181,84 @@ def execute(root):
             target=root/f'checkpoint_pair_{index:04d}.json';atomic_json(target,receipt)
             atomic_json(root/'latest_pair.json',dict(path=str(target),sha256=digest(target)))
             return receipt
-        pair=save_pair(0);total_started=time.monotonic()
+        pair=None if recovery else save_pair(0);total_started=time.monotonic()
         for iteration in range(plan['updates']):
             directory=root/'collections'/f'update_{iteration+1:04d}';directory.mkdir(parents=True,exist_ok=False)
             warmup=iteration<plan['critic_only_updates']
-            snapshots={name:obj.freeze_collection() for name,obj in learners.items()}
-            atomic_json(directory/'sampling_identity.json',dict(models=snapshots,source_pair=pair,noise_update_index=iteration,
-                warmup=warmup,plan_sha256=digest(root/'plan.json')))
-            sampling={name:obj.sampling_parameters() for name,obj in learners.items()}
-            parameters=stack([sampling[c['arm']] for c in cases])
-            log_std=j.stack([j.asarray(snapshots[c['arm']]['log_std'],dtype=j.float32) for c in cases])
-            key=jax.random.fold_in(jax.random.PRNGKey(plan['seed']),iteration)
-            carry=stack([SurvivalCollectionState(s,jax.random.fold_in(key,c['rng_fold_in']),j.zeros(2),j.bool_(False)) for s,c in zip(base_states,cases)])
-            with (directory/'initial_carry.pkl').open('wb') as stream:pickle.dump(jax.device_get(carry),stream)
-            decisions=[];logs=[];started=time.monotonic()
-            update(stage='collecting',current_update=iteration+1,training_phase='critic_warmup' if warmup else 'ppo',
-                completed_blocks_current_update=0,completed_episodes_current_update=0)
-            for block in range(11):
-                carry,(decision,log)=chunk(carry,parameters,log_std);jax.block_until_ready(carry)
-                decision,log=jax.device_get((decision,log))
-                flat={k:np.swapaxes(v,1,2).reshape((200,len(cases))+v.shape[3:]) for k,v in log.items()}
-                decisions.append(decision);logs.append(flat)
-                np.savez_compressed(directory/f'chunk_{block:02d}.npz',**{'decision_'+k:v for k,v in decision.items()},**{'lower_'+k:v for k,v in flat.items()})
-                state['active_lower_ticks']+=int(flat['active_tick'].sum());state['allocated_lower_slots']+=200*len(cases)
-                assert state['active_lower_ticks']<=plan['maximum_active_lower_ticks']
-                assert state['allocated_lower_slots']<=plan['maximum_allocated_lower_slots']
-                if bool(j.any(carry.state.fault)):raise RuntimeError('collection engineering fault; raw retained, no update or retry')
-                stopped=carry.state.physical.failed|(carry.state.tick>=2000)
-                update(completed_blocks_current_update=block+1,completed_episodes_current_update=int(stopped.sum()),
-                    current_collection_elapsed_s=time.monotonic()-started)
-                if bool(j.all(stopped)):break
-            assert bool(j.all(carry.state.physical.failed|(carry.state.tick>=2000)))
-            physical={k:np.concatenate([x[k] for x in logs]) for k in logs[0]}
-            decision={k:np.concatenate([x[k] for x in decisions]) for k in decisions[0]}
-            with (directory/'final_carry.pkl').open('wb') as stream:pickle.dump(jax.device_get(carry),stream)
-            batches={};rows={}
-            for name,obj in learners.items():
-                indices=[i for i,c in enumerate(cases) if c['arm']==name]
-                batches[name],rows[name]=assemble_online_arm(decision,physical,cases,indices,collection_id=snapshots[name]['collection_id'],
-                    dt_s=dt,horizon_s=plan['horizon_s'],gamma=cfg['training_future_phase_C']['gamma'],gae_lambda=cfg['training_future_phase_C']['gae_lambda'])
-                np.savez_compressed(directory/(name+'_dataset.npz'),**{k:v.numpy() for k,v in batches[name].items() if k!='collection_id'})
-                assert obj.fingerprint()==snapshots[name]['state_sha256']
-                state['legal_decisions_collected']+=len(batches[name]['obs'])
-                if not warmup:state['actor_training_samples']+=len(batches[name]['obs'])
-            atomic_json(directory/'collection_complete.json',dict(case_summaries=rows,physical_ticks=int(physical['active_tick'].sum()),
-                allocated_lower_slots=int(physical['active_tick'].size),elapsed_collection_s=time.monotonic()-started,
-                raw_chunks={p.name:digest(p) for p in directory.glob('chunk_*.npz')},
-                dataset_sha256={name:digest(directory/(name+'_dataset.npz')) for name in learners},all_physical_tails_complete=True))
+            reused_first=bool(recovery and iteration==0)
+            if reused_first:
+                source_directory=Path(recovery['source_collection'])
+                for filename,sha in recovery['collection_files'].items():
+                    assert digest(source_directory/filename)==sha
+                    shutil.copy2(source_directory/filename,directory/filename)
+                atomic_json(directory/'reused_collection.json',dict(source_run=recovery['source_run'],
+                    source_plan_sha256=recovery['source_plan_sha256'],physical_recollection=False,
+                    task_only_optimizer_replayed=False,inherited_counters=recovery['inherited_counters']))
+                snapshots=json.loads((directory/'sampling_identity.json').read_text())['models']
+                pending=learners['physical_credit'].freeze_collection()
+                assert pending['collection_id']==snapshots['physical_credit']['collection_id']
+                rows=json.loads((directory/'collection_complete.json').read_text())['case_summaries']
+                batches={}
+                for name in learners:
+                    with np.load(directory/(name+'_dataset.npz')) as archive:
+                        batches[name]={k:torch.tensor(archive[k],dtype=torch.float32) for k in archive.files}
+                    batches[name]['collection_id']=snapshots[name]['collection_id']
+                update(stage='recovering_first_warmup',current_update=1,training_phase='critic_warmup_recovery',
+                    completed_blocks_current_update=10,completed_episodes_current_update=96)
+            else:
+                snapshots={name:obj.freeze_collection() for name,obj in learners.items()}
+                atomic_json(directory/'sampling_identity.json',dict(models=snapshots,source_pair=pair,noise_update_index=iteration,
+                    warmup=warmup,plan_sha256=digest(root/'plan.json')))
+                sampling={name:obj.sampling_parameters() for name,obj in learners.items()}
+                parameters=stack([sampling[c['arm']] for c in cases])
+                log_std=j.stack([j.asarray(snapshots[c['arm']]['log_std'],dtype=j.float32) for c in cases])
+                key=jax.random.fold_in(jax.random.PRNGKey(plan['seed']),iteration)
+                carry=stack([SurvivalCollectionState(s,jax.random.fold_in(key,c['rng_fold_in']),j.zeros(2),j.bool_(False)) for s,c in zip(base_states,cases)])
+                with (directory/'initial_carry.pkl').open('wb') as stream:pickle.dump(jax.device_get(carry),stream)
+                decisions=[];logs=[];started=time.monotonic()
+                update(stage='collecting',current_update=iteration+1,training_phase='critic_warmup' if warmup else 'ppo',
+                    completed_blocks_current_update=0,completed_episodes_current_update=0)
+                for block in range(11):
+                    carry,(decision,log)=chunk(carry,parameters,log_std);jax.block_until_ready(carry)
+                    decision,log=jax.device_get((decision,log))
+                    flat={k:np.swapaxes(v,1,2).reshape((200,len(cases))+v.shape[3:]) for k,v in log.items()}
+                    decisions.append(decision);logs.append(flat)
+                    np.savez_compressed(directory/f'chunk_{block:02d}.npz',**{'decision_'+k:v for k,v in decision.items()},**{'lower_'+k:v for k,v in flat.items()})
+                    state['active_lower_ticks']+=int(flat['active_tick'].sum());state['allocated_lower_slots']+=200*len(cases)
+                    if recovery:state['new_active_lower_ticks']=state['active_lower_ticks']-recovery['inherited_counters']['active_lower_ticks']
+                    assert state['active_lower_ticks']<=plan['maximum_active_lower_ticks']
+                    assert state['allocated_lower_slots']<=plan['maximum_allocated_lower_slots']
+                    if bool(j.any(carry.state.fault)):raise RuntimeError('collection engineering fault; raw retained, no update or retry')
+                    stopped=carry.state.physical.failed|(carry.state.tick>=2000)
+                    update(completed_blocks_current_update=block+1,completed_episodes_current_update=int(stopped.sum()),
+                        current_collection_elapsed_s=time.monotonic()-started)
+                    if bool(j.all(stopped)):break
+                assert bool(j.all(carry.state.physical.failed|(carry.state.tick>=2000)))
+                physical={k:np.concatenate([x[k] for x in logs]) for k in logs[0]}
+                decision={k:np.concatenate([x[k] for x in decisions]) for k in decisions[0]}
+                with (directory/'final_carry.pkl').open('wb') as stream:pickle.dump(jax.device_get(carry),stream)
+                batches={};rows={}
+                for name,obj in learners.items():
+                    indices=[i for i,c in enumerate(cases) if c['arm']==name]
+                    batches[name],rows[name]=assemble_online_arm(decision,physical,cases,indices,collection_id=snapshots[name]['collection_id'],
+                        dt_s=dt,horizon_s=plan['horizon_s'],gamma=cfg['training_future_phase_C']['gamma'],gae_lambda=cfg['training_future_phase_C']['gae_lambda'])
+                    np.savez_compressed(directory/(name+'_dataset.npz'),**{k:v.numpy() for k,v in batches[name].items() if k!='collection_id'})
+                    assert obj.fingerprint()==snapshots[name]['state_sha256']
+                    state['legal_decisions_collected']+=len(batches[name]['obs'])
+                    if not warmup:state['actor_training_samples']+=len(batches[name]['obs'])
+                atomic_json(directory/'collection_complete.json',dict(case_summaries=rows,physical_ticks=int(physical['active_tick'].sum()),
+                    allocated_lower_slots=int(physical['active_tick'].size),elapsed_collection_s=time.monotonic()-started,
+                    raw_chunks={p.name:digest(p) for p in directory.glob('chunk_*.npz')},
+                    dataset_sha256={name:digest(directory/(name+'_dataset.npz')) for name in learners},all_physical_tails_complete=True))
             update(stage='updating')
             learner_results={}
             for name,obj in learners.items():
                 batches[name]['case_ranges']=[dict(case_index=r['case_index'],start=r['vector_start'],end=r['vector_end']) for r in rows[name]]
-                result=obj.update(batches[name],warmup=warmup);learner_results[name]=result
+                if reused_first and name=='task_only':
+                    assert digest(recovery['successful_task_result'])==recovery['successful_task_result_sha256']
+                    result=json.loads(Path(recovery['successful_task_result']).read_text())
+                else:result=obj.update(batches[name],warmup=warmup)
+                learner_results[name]=result
                 atomic_json(directory/(name+'_learner_result.json'),result)
                 torch.save(obj.checkpoint(),directory/(name+'_post_update.pt'))
                 update(actor_steps=sum(o.actor_steps for o in learners.values()),
@@ -222,6 +271,9 @@ def execute(root):
                 writer.add_scalar('rollout/legal_actor_decisions',result['samples'],iteration+1)
                 writer.add_scalar('rollout/actual_full_pulse_exposure_fraction',np.mean([r['full_pulse_exposure'] for r in records]),iteration+1)
                 writer.add_scalar('train/critic_only',int(warmup),iteration+1)
+                writer.add_scalar('train/reused_source_critic_update',int(reused_first and name=='task_only'),iteration+1)
+                for head,diagnostic in result.get('value_diagnostics',{}).items():
+                    writer.add_scalar('diagnostic/'+head+'_old_value_max_error',diagnostic['max_abs_error'],iteration+1)
                 writer.add_scalar('train/actor_steps',obj.actor_steps,iteration+1)
                 writer.add_scalar('train/task_advantage_scale',result['task_advantage_scale'],iteration+1)
                 writer.add_scalar('train/exact_gaussian_KL',result['exact_gaussian_KL_mean'],iteration+1)

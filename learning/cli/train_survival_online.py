@@ -4,4 +4,9 @@ from pathlib import Path
 from sttw_control.survival_online_run import prepare,execute
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--execute',action='store_true')
-    args=p.parse_args();(execute if args.execute else prepare)(args.run.resolve())
+    p.add_argument('--recover-first-warmup',type=Path)
+    args=p.parse_args()
+    if args.execute:
+        if args.recover_first_warmup is not None:p.error('recovery source belongs to preparation, not execution')
+        execute(args.run.resolve())
+    else:prepare(args.run.resolve(),recover_first_warmup=args.recover_first_warmup)
