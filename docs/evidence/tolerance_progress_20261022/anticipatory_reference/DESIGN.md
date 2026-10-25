@@ -50,3 +50,9 @@ Scientific Agent Skills experimental-design、scientific-critical-thinking及opt
 ## 2026-10-25实际回收
 
 GPU基准已完成960真实步/0更新，暖执行旧3.9873s、新1.2752s，比例3.1267；仅域内0.1s一次测量。详见[回收与规划书对照](preparation/REVIEW.md)。已生成[80条件清单](preparation/case_inventory.json)，含16无扰/64受扰，执行状态prepared_not_executed。清单可复建，但执行器、完整评分和正式启动登记仍待完成。
+
+## 机制归因的预留边界
+
+门控保持到turn_end且随后平滑释放，覆盖入弯准备与受扰后的部分过程；即使80例有收益，也只能先称完整参考过程的机会。必须在后续同后缀控制的分叉或2×2设计中拆分前缀与恢复，不能直接宣称进入状态是唯一机制。原alpha不变，纯任务同候选选择和曲率规则仍须作为选择方法的对照。
+
+离线分析将核对active逐步成本与原十个分量，单列物理终止块替换项；匹配同alpha/event父策略增失，保留短前缀失败及所有XY/时序图。生成图形不等于完成目视审查。
