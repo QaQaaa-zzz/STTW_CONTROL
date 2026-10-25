@@ -9,7 +9,7 @@ from .path_command_reward import configured_cost_keys
 from .survival_credit import resolve_survival_credit
 
 
-def rescore_v3(physical, *, user_alpha, config):
+def rescore_v3(physical, *, user_alpha, config, include_components=False):
     """Replace only the three V3 preference-dependent cost channels.
 
     Factual terminal penalties and all non-preference costs are preserved.
@@ -33,9 +33,10 @@ def rescore_v3(physical, *, user_alpha, config):
                     c['path_heading_factor']*huber(eh/c['path_heading_scale_rad'])),'path')
     primary0=bounded(c['primary_weight']*chi*huber(np.maximum(np.abs(ey)-c['primary_path_band_m'],0)/c['primary_path_scale_m']),'primary')
     primary1=bounded(c['primary_weight']*chi*huber(np.maximum(np.abs(ev)-c['primary_speed_band_m_s'],0)/c['primary_speed_scale_m_s']),'primary')
-    target=(1-user_alpha)*speed0+user_alpha*speed1
-    target+=(1-(1-c['path_secondary_ratio'])*user_alpha)*path
-    target+=(1-user_alpha)*primary0+user_alpha*primary1
+    channels=np.stack([(1-user_alpha)*speed0+user_alpha*speed1,
+        (1-(1-c['path_secondary_ratio'])*user_alpha)*path,
+        (1-user_alpha)*primary0+user_alpha*primary1],axis=1)
+    target=channels.sum(axis=1)
     keys=configured_cost_keys(config)
     source=np.asarray(physical['effective_costs'],np.float64)[valid]
     source=source[:,[keys.index(k) for k in ('speed','path','primary')]].sum(axis=1)
@@ -43,8 +44,14 @@ def rescore_v3(physical, *, user_alpha, config):
     score=factual+c['scale']*config['timing']['lower_dt_s']*(source-target)
     if not np.isfinite(score).all():raise ValueError('nonfinite factual task data cannot be rescored')
     per_tick=np.full(valid.shape,np.nan);per_tick[valid]=score
-    return dict(user_alpha=float(user_alpha),task_valid_ticks=int(valid.sum()),
+    result=dict(user_alpha=float(user_alpha),task_valid_ticks=int(valid.sum()),
                 task_scored_return=float(score.sum()),per_lower_tick_reward=per_tick)
+    if include_components:
+        effective=np.asarray(physical['effective_costs'],np.float64)[valid].copy()
+        effective[:,[keys.index(k) for k in ('speed','path','primary')]]=channels
+        all_rows=np.full((valid.size,len(keys)),np.nan);all_rows[valid]=effective
+        result['per_lower_tick_effective_costs']=all_rows
+    return result
 
 
 def summarize_case(case, physical, decisions, *, horizon_s, dt_s, policy_id):

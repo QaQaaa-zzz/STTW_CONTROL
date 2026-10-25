@@ -73,3 +73,20 @@ def test_contact_at_window_boundary_wins_and_fault_remains_unknown():
 def test_incomplete_observation_is_pending_not_failure():
     case,p,d=episode();p['horizon_reached'][:]=False
     assert summarize_case(case,p,d,horizon_s=.04,dt_s=.005,policy_id='frozen')['outcome']=='pending'
+
+
+def test_rescored_components_support_same_user_alpha_baseline_plots():
+    cfg=reward_config();keys=configured_cost_keys(cfg)
+    kw=dict(chi=j.float32(.8),ev=j.float32(-.3),ey=j.float32(.2),eh=j.float32(.05),
+        peak_roll=j.float32(.2),roll_rate=j.float32(.3),speed=j.float32(1.2),offsets=j.zeros(2),offset_rate=j.zeros(2))
+    actual=costs(alpha=0.,config=cfg,**kw);target=costs(alpha=1.,config=cfg,**kw)
+    p=dict(active_tick=np.array([True,True]),task_reward_valid=np.array([True,False]),chi=np.array([.8,np.nan]),
+        actual_forward_speed=np.array([1.2,1.2]),requested_speed=np.array([1.5,1.5]),
+        path_cross_track=np.array([.2,np.nan]),path_heading_error=np.array([.05,np.nan]),
+        effective_costs=np.array([[float(actual['effective'][k]) for k in keys],[np.nan]*len(keys)]),
+        scored_tick_reward=np.array([float(actual['reward'])-37.,0.]))
+    got=rescore_v3(p,user_alpha=1.,config=cfg,include_components=True)
+    np.testing.assert_allclose(got['per_lower_tick_effective_costs'][0],
+        [float(target['effective'][k]) for k in keys],rtol=1e-5,atol=1e-5)
+    assert np.isnan(got['per_lower_tick_effective_costs'][1]).all()
+    assert got['per_lower_tick_reward'][0]==pytest.approx(float(target['reward'])-37.,abs=1e-5)
