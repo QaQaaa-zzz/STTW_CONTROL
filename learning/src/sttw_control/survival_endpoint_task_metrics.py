@@ -1,0 +1,78 @@
+"""Offline original task/working-band metrics on an explicit physical episode.
+
+No task errors are inferred during held-reference physics. These descriptive
+labels do not impose a new adoption gate or change the survival objective.
+"""
+import math
+import numpy as np
+
+
+def task_metrics(physical,*,speed,goal_s,config):
+    dt=float(config['timing']['lower_dt_s']);horizon=float(config['training_future_phase_C']['episode_s'])
+    band=config['stage_B_baseline'];limit=round(horizon/dt);hold=round(band['hold_s']/dt)
+    if not math.isclose(limit*dt,horizon,abs_tol=1e-8) or not 0<hold<=limit:
+        raise ValueError('task observation window and final hold must match logged clock')
+    active=np.asarray(physical['active_tick'],bool);valid=active & np.asarray(physical['task_reward_valid'],bool)
+    clock=np.asarray(physical['physical_tick']);seen=clock[active]
+    if (seen.size and (seen[0]!=0 or np.any(np.diff(seen)!=1) or seen[-1]>=limit)):
+        raise ValueError('missing, duplicated or out-of-window physical clock')
+    # A task prefix cannot become task-valid again after irreversible handover.
+    if np.any(np.diff(np.asarray(valid[active],np.int8))>0):raise ValueError('task observations resumed after invalid tail')
+    fault=active & (np.asarray(physical['nonfinite'],bool)|physical['lower_fault']|physical['policy_fault'])
+    domain=active & physical['domain_exit'];contact=active & physical['contact_failure']
+    irreversible=np.flatnonzero(domain|contact);faults=np.flatnonzero(fault)
+    # An earlier genuine domain exit already settles task failure even if a
+    # later held physical tail has an engineering-unknown outcome.
+    known_failure=bool(irreversible.size and (not faults.size or irreversible[0]<faults[0]))
+    complete=bool(seen.size==limit and valid.sum()==limit and not fault.any())
+    finite_fields=['actual_forward_speed','path_cross_track','path_heading_error','path_progress','goal_section_signed_distance','peak_roll']
+    if not all(np.isfinite(np.asarray(physical[k])[valid]).all() for k in finite_fields):
+        raise ValueError('nonfinite task observations must remain unknown, not scored')
+    speed_error=np.asarray(physical['actual_forward_speed'],float)-speed
+    ey=np.asarray(physical['path_cross_track'],float);eh=np.asarray(physical['path_heading_error'],float)
+    tail=valid & (clock>=limit-hold);tail_complete=bool(tail.sum()==hold and not fault.any())
+    within=bool(tail_complete and np.all(abs(ey[tail])<=band['final_y_error_m'])
+        and np.all(abs(eh[tail])<=band['final_path_heading_error_rad'])
+        and np.all(abs(speed_error[tail])<=band['final_speed_error_m_s']))
+    goal=bool(np.any(valid & (physical['goal_section_signed_distance']>=0) & (physical['path_progress']>=goal_s)))
+    recovered=False if known_failure else bool(goal and within) if complete else None
+    peak=np.asarray(physical['peak_roll'],float)
+    working=bool(np.any(peak[valid]>band['working_roll_rad'])) if valid.any() else None
+    rms=lambda x:float(np.sqrt(np.mean(x[valid]**2))) if valid.any() else None
+    tail_max=lambda x:float(np.max(np.abs(x[tail]))) if tail.any() else None
+    return dict(task_metric_status='observed_failure' if known_failure else 'complete' if complete else 'unknown',
+        task_observed_ticks=int(valid.sum()),task_observed_s=float(valid.sum()*dt),complete_task_observation=complete,
+        goal_crossed_while_task_valid=goal,final_hold=bool(complete and within),
+        task_recovered=recovered,working_failure=working,
+        physical_working_failure_observed=bool(np.any(peak[active]>band['working_roll_rad'])) if active.any() else None,
+        performance_success=None if recovered is None else bool(recovered and not working),
+        tail_observed_ticks=int(tail.sum()),tail_path_max_m=tail_max(ey),tail_heading_error_max_rad=tail_max(eh),
+        tail_speed_error_max_m_s=tail_max(speed_error),
+        task_speed_rmse_m_s=rms(speed_error),task_path_rmse_m=rms(ey),task_heading_rmse_rad=rms(eh),
+        task_speed_abs_error_integral_m=float(np.abs(speed_error[valid]).sum()*dt) if valid.any() else None,
+        task_path_abs_error_time_integral_m_s=float(np.abs(ey[valid]).sum()*dt) if valid.any() else None,
+        contract='Original configured goal/progress, final-hold bands; working-roll separate; no task data during held tail.')
+
+
+def zero_relative_cases(rows):
+    """Pair each actual force case with its own controller/noise/alpha zero case."""
+    key=lambda r:tuple(r[k] for k in ('panel','role','route','speed','alpha','replicate'))
+    zeros={};seen=set()
+    for r in rows:
+        if r['case_id'] in seen:raise ValueError('duplicate actual case identity')
+        seen.add(r['case_id'])
+        if not r.get('force_N',0.):
+            if key(r) in zeros:raise ValueError('duplicate own zero-force baseline')
+            zeros[key(r)]=r
+    changes=[]
+    for r in rows:
+        if not r.get('force_N',0.):continue
+        if key(r) not in zeros:raise ValueError('missing own zero-force baseline')
+        z=zeros[key(r)]
+        physical_change=(int(r['outcome']=='survived')-int(z['outcome']=='survived')
+            if r['outcome'] in ('contact','survived') and z['outcome'] in ('contact','survived') else None)
+        task_change=(int(r['task_recovered'])-int(z['task_recovered'])
+            if r['task_recovered'] is not None and z['task_recovered'] is not None else None)
+        changes.append(dict(case_id=r['case_id'],zero_case_id=z['case_id'],panel=r['panel'],role=r['role'],
+            alpha=r['alpha'],physical_change_vs_zero=physical_change,task_change_vs_zero=task_change))
+    return changes
