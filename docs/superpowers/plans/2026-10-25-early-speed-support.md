@@ -1,6 +1,6 @@
 # 提前平滑速度支持：一次机会验证
 
-状态：固定80已真实启动，结果PENDING；STTW_CONTROL，DEV，0训练。前轮floor组合120裁决为依据，不能称独立确认。
+状态：固定80全部完成，160配对分析已裁决；STTW_CONTROL，DEV，0训练。前轮floor组合120裁决为依据，不能称独立确认。
 
 问题：固定1.5参考下限补一次摔倒但损害普通策略任务，能否在入弯准备/早期提供支持、随后释放，保留更多原alpha任务？本次只试一个几何阶段定义，不扫节点/阈值/长度。
 
@@ -25,10 +25,12 @@ CONSTANT(profile7)：同一dv_support、同一反映射与滤波，全程g=1。�
 - [x] 先写测试：几何envelope光滑启停/弯中点归零；原steer及无介入latent精确保留；饱和下不减原动作、不扩大权限；通过真实correction_tick验证受原速率限制；声明profile矩阵无缺/重复、原alpha/源Actor/force/profile配置可定位。
 - [x] 准备层显式profile声明，默认旧20/50/30/40行为不变；当前模型/原状态/cache SHA认证、全部源封存，旧原始结果不改。
 - [x] 两route完整状态GPUshape、0积分；相关CPU测试通过，Bark仅现有中文通道/repairfalse，台账启动前登记后一次运行；900秒检查或真实进程退出事件。
-- [ ] 80新+80cache完整配对：EARLY vs同Actor CONSTANT、原Actor、硬floor；父Actor同样干预作简单规则。分无扰与受扰、逐route/alpha/事件、原alpha任务成本/真实触地/最大偏离/参考与实际速度/roll/steer/原任务接回；全部共享XY和reward曲线。
+- [x] 80新+80cache完整配对：EARLY vs同Actor CONSTANT、原Actor、硬floor；父Actor同样干预作简单规则。分无扰与受扰、逐route/alpha/事件、原alpha任务成本/真实触地/最大偏离/参考与实际速度/roll/steer/原任务接回；全部共享XY和reward曲线。
 
 若EARLY没有同接口CONSTANT覆盖不了的任务—未摔增量，停止这一阶段过程，不调弯中点/1.5/16块/幅值/观察窗继续追正例。若有可解释增量，仍须与同规则父Actor、普通训练和新起始情境比较；阶段规则本身不是方法新颖性。旧解析Emin不参与选择，本轮不拟合或开发新网络。若基本接口不成立，报告工程事实，不把过程输出越权硬塞给执行器。
 
 启动前验证：5360dde；35CPU通过2.01s；左右各2batch20 fullstate GPUshape exit0/0积分；根80cache+80new唯一160，子profile多次来源引用不当独立轨迹。11关键runtime SHA及plant step/16块资格AST核对，新增仅candidate规则与准备声明。
 
 真实启动：controller2237066/left2237074均/proc live，session77853，root/实际stage running，监控900秒。
+
+完整结果：80新160000实际5ms步，160分析exit0/0UNKNOWN。task EARLY受扰16未摔/5任务、nominal3任务，相对CONSTANT16/4与2有局部增量；对原task任务1新增1丢失，父EARLY比父CONSTANT净任务-1。新增正例受扰原alpha成本更高并有2.51m最大偏离，不宣称全面更优；名义成本改善另报。全部10共享XY、3细图和暴露敏感性图目视，77新/80cache细图未穷尽复审。保留候选，不调此曲线；下一前瞻确认仅设计，见相应计划。
