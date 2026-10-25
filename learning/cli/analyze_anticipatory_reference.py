@@ -9,7 +9,7 @@ from sttw_control.preference_best import atomic_json
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--stage',choices=['nominal','disturbed','endpoints','expert_relay','sequence_nominal'],required=True);a=p.parse_args()
+    p.add_argument('--stage',choices=['nominal','disturbed','endpoints','expert_relay','sequence_nominal','sequence_probe'],required=True);a=p.parse_args()
     root=a.output.resolve();target=root/a.stage/'analysis_status.json'
     if target.exists():raise FileExistsError('preserve existing analysis status '+str(target))
     state=dict(phase='running',stage='offline_original_alpha_analysis',pid=os.getpid(),
