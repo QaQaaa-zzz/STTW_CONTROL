@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from sttw_control.anticipatory_run import flatten_ticks, physical_outcome, stage_indices
+from sttw_control.anticipatory_run import flatten_ticks, physical_outcome, stage_indices, claim_stage
 
 
 def test_flatten_preserves_lane_and_tick_order():
@@ -26,3 +26,13 @@ def test_stage_selection_never_mixes_nominal_and_disturbed():
     assert stage_indices(rows,'nominal')==[1,2]
     assert stage_indices(rows,'disturbed')==[0]
     with pytest.raises(ValueError):stage_indices(rows,'all')
+
+
+def test_stage_accepts_only_preregistered_manifest_never_existing_data(tmp_path):
+    stage=tmp_path/'nominal';stage.mkdir()
+    (stage/'ACTIVE_RUN.json').write_text('{}')
+    claim_stage(stage)
+    (stage/'status.json').write_text('{}')
+    with pytest.raises(FileExistsError):claim_stage(stage)
+    fresh=tmp_path/'disturbed';claim_stage(fresh)
+    assert fresh.is_dir()

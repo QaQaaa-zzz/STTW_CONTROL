@@ -26,6 +26,14 @@ def stage_indices(cases,stage):
     return [i for i,c in enumerate(cases) if c['stage']==stage]
 
 
+def claim_stage(directory):
+    """Allow a notification-only preregistration; never overwrite run evidence."""
+    if directory.exists():
+        if any(p.name!='ACTIVE_RUN.json' for p in directory.iterdir()):
+            raise FileExistsError('stage already contains execution evidence: '+str(directory))
+    else:directory.mkdir()
+
+
 def prepare(inventory,root):
     from .survival_endpoint_models import authenticate_endpoint
     specification=json.loads(inventory.read_text());source=Path(specification['source_run'])
@@ -65,7 +73,7 @@ def prepare(inventory,root):
 def execute(root,stage,*,shape_only=False):
     from prepare_short_recovery_campaign import register
     directory=root/(stage+'_shape' if shape_only else stage)
-    directory.mkdir(exist_ok=False)
+    claim_stage(directory)
     target=directory/'status.json'
     state=dict(phase='running',stage='authenticate',pid=os.getpid(),completed_cases=0,
         active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0,checked_unix=time.time())
