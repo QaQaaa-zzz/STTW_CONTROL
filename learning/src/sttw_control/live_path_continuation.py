@@ -1,8 +1,8 @@
-"""Opt-in live original-path baseline after a tracking-domain exit.
+"""Opt-in live original-path advancement and its zero-correction baseline.
 
 This is a new recovery-task contract, not a change to historical termination.
-No Actor is evaluated. Zero correction targets still pass through the original
-environment's filter, rate limits, reference bounds and frozen lower kernel.
+No Actor is evaluated here. Latents pass through the original environment's
+filter, rate limits, reference bounds and frozen lower kernel.
 """
 import math
 import jax
@@ -10,7 +10,7 @@ import jax.numpy as j
 from .path_command_reward import failure_reward
 
 
-def make_live_path_step(env, *, horizon_s):
+def make_live_reference_step(env, *, horizon_s):
     """Advance up to four real lower ticks and update history once if active.
 
     Keep the accumulated domain-exit flag as telemetry. Contact, numerical
@@ -29,11 +29,15 @@ def make_live_path_step(env, *, horizon_s):
         raise ValueError('horizon must align to complete upper intervals')
     reward_config=env.config['path_reward']
 
-    def step(state,path,speed,pulse):
+    def step(state,action,path,speed,pulse):
+        action=j.asarray(action)
+        if action.shape!=(2,):raise ValueError('two latent reference channels required')
+        stopped=state.physical.failed|state.fault|(state.tick>=limit)
+        state=state.replace(fault=state.fault|(~stopped&~j.all(j.isfinite(action))))
         def lower_tick(s,_):
             stopped=s.physical.failed|s.fault|(s.tick>=limit)
             return jax.lax.cond(stopped,lambda x:(x,env.zero_log),
-                lambda x:env.tick(x,j.zeros(2),path,speed,pulse,horizon=horizon_s),s)
+                lambda x:env.tick(x,action,path,speed,pulse,horizon=horizon_s),s)
         end,logs=jax.lax.scan(lower_tick,state,None,length=4)
         active=logs['active_tick']
         n=j.sum(active)
@@ -55,4 +59,12 @@ def make_live_path_step(env, *, horizon_s):
         logs['physical_tick']=j.where(active,state.tick+j.cumsum(active)-1,-1)
         return end,logs
 
+    return step
+
+
+def make_live_path_step(env, *, horizon_s):
+    """Preserve the original four-argument exact-zero continuation interface."""
+    advance=make_live_reference_step(env,horizon_s=horizon_s)
+    def step(state,path,speed,pulse):
+        return advance(state,j.zeros(2),path,speed,pulse)
     return step

@@ -116,3 +116,21 @@ def test_mid_interval_stop_masks_padding_and_preserves_failure(reason):
 @pytest.mark.parametrize('horizon',[0.,-.1,float('nan'),.013])
 def test_invalid_or_unaligned_clock_is_rejected(horizon):
     with pytest.raises(ValueError):make_live_path_step(Env(),horizon_s=horizon)
+
+
+def test_explicit_latent_is_held_for_four_ticks_without_resetting_offset():
+    from sttw_control.live_path_continuation import make_live_reference_step
+    step=make_live_reference_step(Env(),horizon_s=.04)
+    state=initial();action=j.array([.4,-.3])
+    end,logs=jax.jit(step)(state,action,None,j.float32(1.5),None)
+    np.testing.assert_array_equal(logs['target_seen'],np.tile(np.asarray(action),(4,1)))
+    np.testing.assert_allclose(logs['offset_before'][0],state.offsets)
+    assert int(end.tick)==4 and int(end.history)==8
+
+
+def test_nonfinite_explicit_action_stops_before_any_physics_or_new_frame():
+    from sttw_control.live_path_continuation import make_live_reference_step
+    end,logs=jax.jit(make_live_reference_step(Env(),horizon_s=.04))(
+        initial(),j.array([j.nan,0.]),None,j.float32(1.5),None)
+    assert bool(end.fault) and int(end.tick)==0 and int(end.history)==7
+    assert not np.any(logs['active_tick'])
