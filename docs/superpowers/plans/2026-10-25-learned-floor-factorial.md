@@ -1,6 +1,6 @@
 # 学习策略与简单速度下限的组合强对照
 
-状态：已启动固定40条，结果PENDING。STTW_CONTROL；0训练。接续shared-permission210分析，不能视为独立确认。
+状态：40条全部完成，120逻辑对照已分析并裁决。STTW_CONTROL；0训练。接续shared-permission210分析，不能视为独立确认。
 
 ## 唯一要回答的问题
 
@@ -34,9 +34,11 @@
 - [x] 在当前工作树仅泛化准备层支持明确floor配置，默认旧运行不变；小测试先确认角色/原alpha/Actor/初始化与配置保留。
 - [x] 认证模型、初态、旧cache与runtime内核；完整状态GPU shape检查，封存运行计划和代码。
 - [x] 台账启动前登记、沿用项目中文Bark注册，确认仅Bark活跃；900秒检查。
-- [ ] 一次运行40条，不自动重试或扩训；故障保留并停止未启动部分。
-- [ ] 完整配对、全部共同XY及实际新积分成本裁决，之后再判断是否开发新的状态相关方法。
+- [x] 一次运行40条，不自动重试或扩训；故障保留并停止未启动部分。
+- [x] 完整配对、全部共同XY及实际新积分成本裁决，之后再判断是否开发新的状态相关方法。
 
 准备验证2026-10-25：code7f549d9、33CPU通过；左右各20实际完整状态shape exit0/0积分。40新与80精确cache唯一120，原控制6模块SHA与资格AST不变；root/plan/controller/清单已封存。
 
 真实启动：controller2122242/left2122244均/proc live，session33659；monitor next_poll=启动验证后900s，结果尚未检查。各阶段pending不提前标完成。
+
+完成：40/40与80000实际5ms步，0optimizer，80cache maxcostdelta0；120分析exit0，0UNKNOWN。task+floor未摔16/16任务4/16（原15与5），physical+floor16与4（原15与3），名义分别3→2、4→2/4。固定floor有真实生存收益和任务代价，不扩floor阈值/physical训练。完整结果与下一研究问题见docs/evidence/tolerance_progress_20261022/learned_floor_factorial。全部10XY与2新细图目视，其余38新/80cache细图未穷尽复审。
