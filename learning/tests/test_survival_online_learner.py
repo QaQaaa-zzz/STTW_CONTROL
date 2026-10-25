@@ -71,3 +71,18 @@ def test_small_recorded_value_roundoff_is_logged_without_discarding_the_batch():
     result=obj.update(b,warmup=True)
     assert result['value_diagnostics']['task']['max_abs_error']>.0001
     assert result['actor_steps']==0 and result['critic_steps']==2
+
+
+@pytest.mark.parametrize('mode,expected', [('legal_mean',-.3),('fixed_slots',-.15)])
+def test_entropy_gradient_respects_declared_sample_or_slot_normalization(mode,expected):
+    source=learner().checkpoint()
+    policy={'actor.'+k:v for k,v in source['actor'].items()}
+    policy.update({'critic.'+k:v for k,v in source['task_critic'].items()})
+    policy['log_std']=source['log_std']
+    obj=OnlineSurvivalLearner(CFG,policy,beta=0.,seed=43,epochs=1,fixed_denominator=4,
+        entropy=.3,grad_clip=1e6,entropy_normalization=mode)
+    b=batch(obj);b['task_advantage'].zero_()
+    obj.update(b,warmup=False)
+    torch.testing.assert_close(obj.log_std.grad,torch.full_like(obj.log_std,expected))
+    restored=OnlineSurvivalLearner.restore(CFG,obj.checkpoint())
+    assert restored.settings['entropy_normalization']==mode

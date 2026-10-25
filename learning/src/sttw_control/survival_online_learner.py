@@ -16,10 +16,14 @@ from .survival_learning import dual_ppo_loss
 
 class OnlineSurvivalLearner:
     def __init__(self,config,parent_policy,*,beta,seed,epochs=4,fixed_denominator=24000,
-                 actor_lr=1e-4,critic_lr=3e-4,clip=.2,entropy=.001,grad_clip=1.):
+                 actor_lr=1e-4,critic_lr=3e-4,clip=.2,entropy=.001,grad_clip=1.,
+                 entropy_normalization='legal_mean'):
+        if entropy_normalization not in ['legal_mean','fixed_slots']:
+            raise ValueError('explicit entropy normalization required')
         self.config=copy.deepcopy(config)
         self.settings=dict(beta=beta,seed=seed,epochs=epochs,fixed_denominator=fixed_denominator,
-            actor_lr=actor_lr,critic_lr=critic_lr,clip=clip,entropy=entropy,grad_clip=grad_clip)
+            actor_lr=actor_lr,critic_lr=critic_lr,clip=clip,entropy=entropy,grad_clip=grad_clip,
+            entropy_normalization=entropy_normalization)
         torch.manual_seed(seed)
         self.actor=make_torch_path_network(351,2,config)
         self.task_critic=make_torch_path_network(352,1,config)
@@ -105,8 +109,11 @@ class OnlineSurvivalLearner:
                 physical_values=self.physical_critic(data['critic']).squeeze(-1),physical_targets=data['physical_targets'],
                 old_physical_values=data['old_physical'],beta=self.settings['beta'],
                 fixed_denominator=self.settings['fixed_denominator'],clip=self.settings['clip'])
+            entropies=distribution.entropy().sum(-1)
+            entropy_term=(entropies.sum()/self.settings['fixed_denominator']
+                if self.settings['entropy_normalization']=='fixed_slots' else entropies.mean())
             total=(losses['task_value_loss']+losses['physical_value_loss']) if warmup else (
-                losses['total_loss']-self.settings['entropy']*distribution.entropy().sum(-1).mean())
+                losses['total_loss']-self.settings['entropy']*entropy_term)
             if not torch.isfinite(total):raise ValueError('nonfinite learner loss')
             total.backward();norms=[]
             for index,(group,optimizer) in enumerate(zip(self.groups,self.optimizers)):
