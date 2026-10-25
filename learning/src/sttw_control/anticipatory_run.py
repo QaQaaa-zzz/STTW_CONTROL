@@ -22,7 +22,7 @@ def physical_outcome(active,contact,fault,limit):
 
 
 def stage_indices(cases,stage):
-    if stage not in ('nominal','disturbed','endpoints'):raise ValueError('explicit stage required')
+    if stage not in ('nominal','disturbed','endpoints','expert_relay'):raise ValueError('explicit stage required')
     return [i for i,c in enumerate(cases) if c['stage']==stage]
 
 
@@ -31,14 +31,18 @@ def architecture_groups(indices,cases,models,common_config,*,batch_size=16):
     from .path_command_policy import architecture_identity
     families={}
     for i in indices:
-        cfg=models[cases[i]['actor_role']].get('actor_config',common_config)
-        family=architecture_identity(cfg)
-        families.setdefault(family,dict(actor_config=cfg,case_indices=[]))['case_indices'].append(i)
+        model=models[cases[i]['actor_role']]
+        cfg=model.get('actor_config',common_config)
+        runtime=model.get('runtime_kind','base')
+        teacher=model.get('teacher_actor_config')
+        family=(architecture_identity(cfg),runtime,architecture_identity(teacher) if teacher else None)
+        families.setdefault(family,dict(architecture=family[0],runtime_kind=runtime,
+            actor_config=cfg,teacher_actor_config=teacher,case_indices=[]))['case_indices'].append(i)
     groups=[]
     for family,item in families.items():
         ids=item['case_indices']
         for start in range(0,len(ids),batch_size):
-            groups.append(dict(architecture=family,actor_config=item['actor_config'],case_indices=ids[start:start+batch_size]))
+            groups.append(dict(item,case_indices=ids[start:start+batch_size]))
     return groups
 
 
@@ -95,8 +99,9 @@ def execute(root,stage,*,shape_only=False):
         active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0,checked_unix=time.time())
     def update(**kw):
         state.update(kw,checked_unix=time.time());atomic_json(target,state)
+    label={'endpoints':'历史中层端点回看','expert_relay':'旧端点因果短时借用'}.get(stage,'提前参考'+stage)
     update();register(directory/'ACTIVE_RUN.json',
-        'STTW_CONTROL 提前参考'+stage+('零积分接口' if shape_only else '固定条件评测'),target)
+        'STTW_CONTROL '+label+('零积分接口' if shape_only else '固定条件评测'),target)
     try:
         import jax
         import jax.numpy as j
@@ -146,9 +151,16 @@ def execute(root,stage,*,shape_only=False):
         groups=architecture_groups(indices,cases,auth['models'],cfg,batch_size=plan['batch_size'])
         for group,piece in enumerate(groups):
             ids=piece['case_indices'];selected=[cases[i] for i in ids];n=len(ids)
-            key=(piece['architecture'],n)
+            key=(piece['architecture'],piece['runtime_kind'],n)
             if key not in compiled:
-                compiled[key]=build_chunk(make_reference_step(env,make_path_actor(piece['actor_config']),horizon_s=10.))
+                if piece['runtime_kind']=='causal_expert':
+                    from .causal_expert_relay import make_expert_relay_step
+                    one=make_expert_relay_step(env,make_path_actor(piece['actor_config']),
+                        make_path_actor(piece['teacher_actor_config']),horizon_s=10.)
+                elif piece['runtime_kind']=='base':
+                    one=make_reference_step(env,make_path_actor(piece['actor_config']),horizon_s=10.)
+                else:raise ValueError('unsupported runtime kind '+piece['runtime_kind'])
+                compiled[key]=build_chunk(one)
             chunk=compiled[key]
             states=[jax.tree.map(lambda a:j.asarray(a[c['source_batch_slot']]),source) for c in selected]
             if any(int(s.tick)!=0 or bool(s.physical.failed|s.fault|s.domain_exit) for s in states):
@@ -170,7 +182,7 @@ def execute(root,stage,*,shape_only=False):
             if shape_only:
                 shaped=jax.eval_shape(chunk,carry,*args)
                 assert shaped[1]['active_tick'].shape==(50,n,4)
-                traces.append(dict(group=group,batch=n,architecture=piece['architecture'],active_shape=list(shaped[1]['active_tick'].shape)))
+                traces.append(dict(group=group,batch=n,architecture=piece['architecture'],runtime_kind=piece['runtime_kind'],active_shape=list(shaped[1]['active_tick'].shape)))
                 continue
             if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('actual GPU required')
             gd=directory/f'group_{group:03d}';gd.mkdir()

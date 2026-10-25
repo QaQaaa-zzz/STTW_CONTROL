@@ -102,16 +102,16 @@ def analyze(root,stage):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    colors=dict(parent='#0072B2',dual='#E69F00',bc='#009E73',v3='#CC79A7',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
+    colors=dict(parent='#0072B2',relay_dual0='#E69F00',relay_dual1='#009E73',dual='#E69F00',bc='#009E73',v3='#CC79A7',task_only='#E69F00',physical_credit='#009E73',floor='#CC79A7',
         speed_gate='#D55E00',steer_gate='#56B4E9',joint_gate='#882255',causal_eso='#999933',zero_middle='#555555')
     figures=[]
     cloud=np.concatenate([d['actual_xy'][d['active_tick']] for d in traces.values()])
     task_path=path['xy'][path['s']<=float(path['goal'])]
     extent=np.vstack([cloud,task_path]);lo=extent.min(axis=0)-.5;hi=extent.max(axis=0)+.5
+    alphas=sorted({r['alpha'] for r in rows if r['alpha'] is not None})
+    if not 1<=len(alphas)<=2:raise ValueError('one or two declared alpha values required for XY overview')
     for event in sorted({r['event_id'] for r in rows}):
-        fig,axes=plt.subplots(1,2,figsize=(14,6),layout='constrained')
-        alphas=sorted({r['alpha'] for r in rows if r['alpha'] is not None})
-        if len(alphas)!=2:raise ValueError('two declared alpha values required for paired XY overview')
+        fig,grid=plt.subplots(1,len(alphas),figsize=(7*len(alphas),6),squeeze=False,layout='constrained');axes=grid[0]
         for ax,alpha in zip(axes,alphas):
             ax.plot(path['xy'][:,0],path['xy'][:,1],':',color='.5',label='Original path')
             selected=[r for r in rows if r['event_id']==event and r['alpha'] in (alpha,None)]
