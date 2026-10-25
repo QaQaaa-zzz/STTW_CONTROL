@@ -56,7 +56,7 @@ def reentry_cases(original,*,roles=None,reference_speed_floor_m_s=None,reference
     return result
 
 
-def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,reference_profiles=None):
+def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,reference_profiles=None,declared_cases=None):
     """Seal declared handback cases and their exact factual baseline references."""
     from .hidden_time_confirmation import authenticate_saved_endpoint
     source=Path(source).resolve();root=Path(root).resolve()
@@ -64,7 +64,7 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,refe
     if status['phase']!='completed' or status['completed_cases']!=55:raise ValueError('complete right55 source required')
     prior=json.loads((source/'plan.json').read_text());oldcases=json.loads((source/'inventory.json').read_text())['cases']
     routes={c['route'] for c in oldcases}
-    if len(routes)!=1 or not routes<={'right90_R1p1','left90_R1p1'} or (roles is None and routes!={'right90_R1p1'}):
+    if len(routes)!=1 or not routes<={'right90_R1p1','left90_R1p1'} or (roles is None and declared_cases is None and routes!={'right90_R1p1'}):
         raise ValueError('one declared original route required')
     original=Path(json.loads((source.parent/'plan.json').read_text())['source_run'])
     training=Path(json.loads((source.parent/'plan.json').read_text())['source_training_run'])
@@ -78,7 +78,15 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,refe
         lo,hi=cfg['residual_interface']['speed_reference_bounds_m_s']
         if not math.isfinite(float(reference_speed_floor_m_s)) or not lo<=float(reference_speed_floor_m_s)<=hi:
             raise ValueError('reference floor must stay inside original configured bounds')
-    cases=reentry_cases(oldcases,roles=roles,reference_speed_floor_m_s=reference_speed_floor_m_s,reference_profiles=reference_profiles);count=len(cases)
+    if declared_cases is None:
+        cases=reentry_cases(oldcases,roles=roles,reference_speed_floor_m_s=reference_speed_floor_m_s,reference_profiles=reference_profiles)
+    else:
+        from .prospective_preference import validate_common_origin_cases
+        if roles is not None or reference_speed_floor_m_s is not None or reference_profiles is not None:
+            raise ValueError('explicit cases cannot be mixed with implicit case transformations')
+        cases=[dict(c) for c in declared_cases]
+        validate_common_origin_cases(cases,oldcases)
+    count=len(cases)
     # New roles share source native Actors and normalization. Only policy eligibility changes.
     for actor in {c['actor_role'] for c in cases}:
         auth['models'][actor]=dict(auth['models'][actor],runtime_kind='reentry')
@@ -86,6 +94,7 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,refe
     results={c['case_id']:c for c in json.loads((source/'timing/results.json').read_text())}
     reuse=[]
     for c in cases:
+        if declared_cases is not None:continue
         key=c['source_case_id'];item=dict(index[key]);file=source/item['file']
         if digest(file)!=item['sha256']:raise ValueError('baseline raw drift')
         item['file']=str(file.resolve());reuse.append(dict(case=results[key],index=item))
@@ -99,7 +108,7 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,refe
     for i,p in enumerate(sorted(sources)):(archive/f'{i:03d}_{p.name}').write_bytes(p.read_bytes())
     plan=dict(project='STTW_CONTROL',data_role='DEV',purpose='Does real-history originalalphaActor handback after16cleanblocks add useful task recovery without newfalls?',
         maximum_active_lower_ticks=2000*count,optimizer_updates=0,batch_size=20,steps_per_chunk=50,max_chunks=10,horizon_s=10.,lower_dt_s=.005,
-        stage_counts=dict(reentry=count),logical_cases=2*count,inherited_cases=count,
+        stage_counts=dict(reentry=count),logical_cases=count+len(reuse),inherited_cases=len(reuse),
         comparison_baseline_by_role={c['role']:old['case']['role'] for c,old in zip(cases,reuse)},
         sealed_files={str((root/n).resolve()):digest(root/n) for n in ['common_environment_config.json','source_declaration.json','authenticated_models.json','historical_identity_receipt.json','inventory.json','reuse_cases.json']},
         source_sha256={str(p.resolve()):digest(p) for p in sources},source_initial_state=prior['source_initial_state'],source_initial_state_sha256=prior['source_initial_state_sha256'],
@@ -115,8 +124,12 @@ def prepare_reentry(source,root,*,roles=None,reference_speed_floor_m_s=None,refe
     if reference_profiles is not None:
         plan.update(reference_profiles=list(reference_profiles),
             purpose='Early versus constant speed support through the SAME original correction filter; no change to reference floor or user alpha.')
+    if declared_cases is not None:
+        plan.update(allow_task0_alpha_context_override=True,
+            purpose='Prospective new timing and five user-alpha contexts, common complete origin; frozen reference rules.',
+            initial_context='Source slot0/sourcealpha0; only upper user-alpha assigned explicitly at task0. Physics, lower/history/filter/actuator clocks retained.')
     atomic_json(root/'plan.json',plan)
-    atomic_json(root/'status.json',dict(phase='prepared',declared_cases=count,completed_cases=0,inherited_cases=count,active_lower_ticks=0,optimizer_updates=0))
+    atomic_json(root/'status.json',dict(phase='prepared',declared_cases=count,completed_cases=0,inherited_cases=len(reuse),active_lower_ticks=0,optimizer_updates=0))
 
 
 def prepare_shared_reentry_campaign(source,pilot,output):
