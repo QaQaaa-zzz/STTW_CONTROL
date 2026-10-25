@@ -35,3 +35,15 @@ def test_gradient_geometry_uses_real_gradients_without_populating_or_updating_pa
     assert got['task_norm']==pytest.approx(1.) and got['physical_norm']==pytest.approx(np.sqrt(2))
     assert got['cosine']==pytest.approx(-1/np.sqrt(2)) and got['combined_norm']==pytest.approx(1.)
     assert p.grad is None and torch.equal(p,torch.tensor([2.,3.]))
+
+
+def test_separate_and_combined_clipping_only_differ_when_conflicting_clipped_terms_matter():
+    from sttw_control.survival_training_review import clipping_comparison
+    result=clipping_comparison(np.array([1.5,.5,1.,1.5]),np.ones(4),np.array([-.4,-.4,-.4,.4]),
+                              beta=1.,clip=.2,denominator=4)
+    assert result['positive_gap_rows']==2
+    assert result['separate_surrogate']==pytest.approx((.6+.18+.6+1.68)/4)
+    assert result['combined_surrogate']==pytest.approx((.72+.3+.6+1.68)/4)
+    assert result['combined_minus_separate']==pytest.approx(.06)
+    zero=clipping_comparison(np.array([1.5,.5]),np.ones(2),np.array([-.4,-.4]),beta=0.,clip=.2,denominator=2)
+    assert zero['combined_minus_separate']==0

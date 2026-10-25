@@ -46,3 +46,25 @@ def gradient_geometry(task_loss,physical_loss,parameters):
     return dict(task_norm=float(a),physical_norm=float(b),combined_norm=float(torch.linalg.vector_norm(task+physical)),
         cosine=float(torch.dot(task,physical)/(a*b)) if float(a*b)>0 else None,
         physical_to_task_norm=float(b/a) if float(a)>0 else None)
+
+
+def clipping_comparison(ratio,task_advantage,physical_advantage,*,beta,clip,denominator):
+    """Compare declared separate surrogates with scalarize-then-clip, read-only.
+
+    Uses the SAME frozen advantages/scales. There is no re-normalization,
+    optimizer step, performance claim or suggestion to change a live run.
+    """
+    r,a,b=[np.asarray(x,np.float64) for x in (ratio,task_advantage,physical_advantage)]
+    if (r.ndim!=1 or not r.size or r.shape!=a.shape or r.shape!=b.shape
+            or not all(np.isfinite(x).all() for x in (r,a,b)) or np.any(r<0)
+            or not np.isfinite(beta) or beta<0 or not 0<clip<1
+            or not np.isfinite(denominator) or denominator<r.size):
+        raise ValueError('aligned finite advantages, ratios, weight and denominator required')
+    clipped=np.clip(r,1-clip,1+clip)
+    surrogate=lambda x:np.minimum(r*x,clipped*x)
+    separate=surrogate(a)+beta*surrogate(b);combined=surrogate(a+beta*b)
+    gap=combined-separate
+    return dict(rows=int(r.size),conflicting_rows=int(np.sum(a*(beta*b)<0)),
+        clipped_ratio_rows=int(np.sum((r<1-clip)|(r>1+clip))),positive_gap_rows=int(np.sum(gap>1e-12)),
+        separate_surrogate=float(separate.sum()/denominator),combined_surrogate=float(combined.sum()/denominator),
+        combined_minus_separate=float(gap.sum()/denominator),max_row_gap=float(gap.max()))
