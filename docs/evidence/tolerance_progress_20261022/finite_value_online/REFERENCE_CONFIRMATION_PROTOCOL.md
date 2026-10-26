@@ -566,3 +566,45 @@ attempt2准备session72634 exit0，GPU shape47539 exit0（50×300×4、0物理�
 主50cm原目标到达、30cm等敏感性、整窗触地、无扰及双方存活原alpha代价、逐alpha/bank配对新增丢失及全360XY；不要求全部指标胜出，不池化旧相关分支。模型/表身份与原runtime/物理kernel AST认证沿用既有流程，单物理advance不改。源/计划/缓存SHA封存；预处理与GPU零积分shape通过后才实际积分；60结束或工程错误停止，不自动重试、训练或采用。
 
 实现复用nominal_table_ablation的共同准备逻辑，弱反馈case仅改gain与角色/身份；旧公共表消融行为保留。35相关CPU测试passed2.52s，覆盖全三alpha/事件保持、拒绝删条件/变半径/扫中间gain及原kernel回归。root runs/weak_feedback_initial_confirmation_v1全HDD，目前未prepare/shape/运行，收益PENDING。旧全局失败手册路径本次不存在；沿用当前可用的stage注册和中文Bark，不声称新建了独立自动修复或邮件通道，二者保持inactive。Transactions目标active、无push/实机。
+
+
+## 固定0.05对照完成：有代价取舍，未覆盖名义反馈全部到达增量（2026-10-26）
+
+先看全360实际XY：[左bank2](../../../../runs/weak_feedback_initial_confirmation_v1/analysis/all_xy_left80_R1p4_v1p2__bank2.png)、[左bank4](../../../../runs/weak_feedback_initial_confirmation_v1/analysis/all_xy_left80_R1p4_v1p2__bank4.png)、[右bank2](../../../../runs/weak_feedback_initial_confirmation_v1/analysis/all_xy_right100_R1p2_v1p5__bank2.png)、[右bank4](../../../../runs/weak_feedback_initial_confirmation_v1/analysis/all_xy_right100_R1p2_v1p5__bank4.png)。每图90条，六方法同原目标、真实终点与原参考。当前无新增训练/仿真在运行。
+
+执行3fc7335：prepare38959、shape34244、实际27061（PID1580254）均exit0；60新实际118927lower步/120000分配槽，197.270s含编译保存、0optimizer。300精确缓存576597历史实际/600000槽单列，联合360对应695524实际/720000槽，不是360新增或独立重复。分析session46333/PID1590745 exit0，360raw身份/时钟/物理、1800固定轨迹原alpha重计、独立反馈/当前进度/权限核验通过，UNKNOWN0。无扰12例/方法、受扰48例/方法，全三alpha、原两几何/两新真实进入状态及事件保持；没有新增中间gain或重训。
+
+|方法|受扰到达10/20/30/50cm|整窗不摔/48|无扰到达/12|无扰原alpha成本|
+|---|---|---:|---:|---:|
+|原task无支持|10/17/20/21|35|10|37.809|
+|原task短支持|10/17/21/24|45|10|37.809|
+|freeGAE短支持|8/17/20/23|45|12|39.390|
+|持续0.05反馈|13/20/32/35|47|12|50.519|
+|持续0.10反馈|19/25/34/39|47|12|61.026|
+|匹配名义反馈0.10|19/33/36/40|47|12|55.331|
+
+0.05对free短50cm到达新增12/丢0，防摔新增3/丢1；与双方存活44例原alpha成本平均+5.708。弱反馈本身也是值得保留的实用改进，不能只因为不到40/48就否定。它对持续.10到达新增2/丢6；对名义到达新增3/丢8，名义净多5/48（10.42百分点），不是零代价优势。
+
+弱反馈无扰成本比名义低约8.7%，比持续.10低约17.2%，但仍比free高约28.3%。与名义双方存活46例成本差（弱−名义）平均+0.164，弱在30/46更低，说明少数较大损失影响均值，不能仅用平均数称名义全面降低任务代价。与持续.10双方存活46例弱成本平均−.966，35/46更低。
+
+**三种反馈虽都47/48不摔，逐例不是相同防摔结果。** 弱反馈救住左bank2/a0/−32N（但距目标4.229m，未到达），却在左bank4/a0/+32N新增触地（距目标4.818m）；持续与名义在后者存活。各有1例物理新增/丢失，不能把相同总存活率写成相同能力集合。完整逐例对照在weak_decision_review.json。
+
+分起点每方法24受扰：bank2的free/.05/.10/名义到达13/21/20/20，不摔22/24/23/23；bank4到达10/14/19/20，不摔23/23/24/24。弱反馈在bank2更好，bank4更差，说明无法用单一gain大小给所有状态排序。分alpha每方法16受扰：alpha0到达8/11/14/13，alpha.5为9/12/12/14，alpha1为6/12/13/13；这些仍是相关开发分支，不作统计显著性或独立训练重复。
+
+实看四全XY、三细例及修正后的代价图。细例包括上述两例相反物理结果，以及左bank2/alpha.5/−16N：弱距.8053m、持续.5107m、名义.1061m；名义确有额外到达，不只阈值重标或防摔均值造成。余57细图/60分项未逐张审，visual_review_complete=false，decision_visual_review.json记录范围。
+
+### 偏好功能应单独核对，不能从到达提升推定完全保留
+
+无扰四context的端点方向诊断采用实际alpha0/1轨迹，全程速度绝对误差积分（m）与路径绝对误差时间积分（m·s）；不在同一条轨迹事后换评价alpha，也不把方向诊断升级为新的任务成功门槛。free短的alpha1速度误差更低4/4、alpha0路径误差更低3/4，两个方向同现3/4；弱反馈分别3/4、3/4、同现2/4；持续.10分别4/4、2/4、同现2/4；名义分别2/4、1/4、同现0/4。样本极小、涉及全程轨迹而非同状态瞬时因果效应；这些数字只说明新进入偏差下“原偏好完全保留”缺乏证据，不能据此判所有偏好机制无效，也不要求每场景都严格单调。名义反馈的高到达不能自动称为更好的偏好—抗扰协调。
+
+原逐context差值在nominal_preference_direction_review.json。下一研究要保留原alpha输入与评价，在匹配任务代价下比较抗扰；不要偷偷切alpha，或只凭最高到达率替代偏好任务。
+
+### 图表与科学表述修正
+
+原绘图title误沿用“New geometry confirmation”；本轮确为原两几何/新初态，没有新几何泛化证据。旧PNG/PDF原样保留，新独立目录[reviewed_tradeoff](../../../../runs/weak_feedback_initial_confirmation_v1/analysis/reviewed_tradeoff/nominal_cost_vs_disturbed_outcomes.png)更正为Fixed-reference DEV，均值横轴为各执行alpha的无扰原alpha代价，纵轴分别16个相关受扰分支的存活/到达。独立render_tradeoff可只重绘这个派生图，不重复全套360诊断或仿真。点不相连，不作连续Pareto边界或独立置信区间；每alpha4zero/16受扰/方法。PNG1367×960、约120dpi、RGBA实际全不透明，PDF同时保存；实看标题/轴/图例和点一致。此为研究审阅草图，不宣称已满足特定Transactions版式/无障碍认证。首元数据shell误用缺PIL的系统Python，改用既有项目venv后通过，无安装或物理重跑。
+
+scientific-visualization技能用于图表真实性核对及重绘，来源已再次核对当前arXiv v2（2026-09-02）、全作者与DOI，沿用本报告已有Kassis等(2026) *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*, https://doi.org/10.48550/arXiv.2609.00065 软件引用；不把技能应用当方法有效性验证。
+
+**决策**：弱反馈不能覆盖名义反馈全部到达表现，但揭示了更低无扰代价和状态相关防摔取舍；保留三种冻结候选，不宣称名义全面占优，不继续扫gain或表。alpha选表独有抗扰贡献的阴性结论不变。当前最可信成果仍是有限参考调整显著改善原组合的实际到达，而“低任务代价保留用户偏好”的方法证据尚弱，Transactions目标未完成；不硬接旧容扰公式、不追加大网络维持故事。
+
+下一最多三项：①冻结本批完整正负结果及强对照；②以现有数据明确原alpha偏好/代价兼容的适用范围，再预先声明独立路线或进入状态确认，当前未启动；③只有出现强简单对照解释不了的稳定增量才扩展方法，若仅通用反馈有效，就收缩方法贡献、停止表/信用网络扩训。无push/实机/自动采用。

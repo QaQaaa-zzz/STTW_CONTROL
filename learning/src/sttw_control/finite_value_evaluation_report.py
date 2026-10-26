@@ -305,6 +305,23 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
         handles,labels=axes[0,0].get_legend_handles_labels();figure.legend(handles,labels,loc='outside lower center',ncol=6,fontsize=8)
         figure.suptitle(context+f' | all{counters[context]} events /{sum(r["context"]==context for r in rows)} actual trajectories, original paths and true endpoints')
         name='all_xy_'+context+'.png';figure.savefig(out/name,dpi=120);plt.close(figure);figures.append(name)
+    return figures+render_tradeoff(out,rows,context_count=len(paths),goal_radius=goal_radius)
+
+
+def render_tradeoff(out,rows,*,context_count,goal_radius=None):
+    """Render derived tradeoff points without regenerating raw diagnostics."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from .reference_task_feedback import PROBE_ROLES
+    from .nominal_reference_feedback import NOMINAL_ROLES
+    from .nominal_table_ablation import SHARED_ROLE
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,)
+    used_roles=[role for role in available if any(r['role']==role for r in rows)]
+    colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
+    labels_by_role=role_labels(rows)
+    alphas=sorted({r['alpha'] for r in rows})
+    figures=[]
     tradeoff,axes=plt.subplots(2,len(alphas),figsize=(3.8*len(alphas),8),squeeze=False,layout='constrained')
     markers=dict(zip(used_roles,['o','s','^','D','P','X','v','*']))
     for column,alpha in enumerate(alphas):
@@ -312,7 +329,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             nominal=[r for r in rows if r['role']==role and r['alpha']==alpha and not r['force_N']]
             disturbed=[r for r in rows if r['role']==role and r['alpha']==alpha and r['force_N']]
             expected_disturbed=len({(r['context'],r['event_id']) for r in rows if r['alpha']==alpha and r['force_N']})
-            if len(nominal)!=len(paths) or len(disturbed)!=expected_disturbed:raise ValueError('matched route zeros and complete disturbed branches required')
+            if len(nominal)!=context_count or len(disturbed)!=expected_disturbed:raise ValueError('matched route zeros and complete disturbed branches required')
             unknown=sum(r['category']=='unknown' for r in nominal+disturbed)
             if unknown:
                 for ax in axes[:,column]:ax.text(.02,.98-used_roles.index(role)*.07,role+f': {unknown} UNKNOWN; omitted',
@@ -326,8 +343,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             ax.set(title=f'Original alpha{alpha:g}',xlabel='Mean nominal originalalpha cost',
                    ylabel='Disturbed survival' if row==0 else ('Disturbed goal arrival' if goal_radius is not None else 'Disturbed joint task success'),ylim=(-.05,1.05));ax.grid(alpha=.2)
     axes[0,-1].legend(fontsize=6)
-    tradeoff.suptitle(('New geometry confirmation: nominal cost / disturbed goal arrival; correlated branches, no continuous frontier or independent CI' if goal_radius is not None else
-        'Empirical cost / capability points: two old routes and eight correlated disturbed branches per alpha; no continuous frontier or independent CI'))
+    tradeoff.suptitle(('Fixed-reference DEV: nominal cost / disturbed goal arrival; correlated branches, no continuous frontier or independent CI' if goal_radius is not None else
+        'Empirical DEV cost / capability points; correlated branches, no continuous frontier or independent CI'))
     for suffix in ['png','pdf']:
         name='nominal_cost_vs_disturbed_outcomes.'+suffix;tradeoff.savefig(out/name,dpi=120);figures.append(name)
     plt.close(tradeoff)
