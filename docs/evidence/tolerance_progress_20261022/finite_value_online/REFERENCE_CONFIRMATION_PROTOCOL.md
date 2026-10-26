@@ -1489,3 +1489,26 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 新五张12情境XY总览全部实际目视，原false标记保持，新actual_visual_review.json限定实际审图范围；全部原逐事件细图未逐张查看。旧analysis数值容差错误保留，修正analysis_reconstructed_v2 completed360/360；物理无重跑、0新增训练/采用，不能据此称新方法或Trans投稿证据完成。
 
 证据：runs/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/{results.json,raw_audit.json,receipt.json,h75_review/README.md,h75_review/review.json,h75_review/actual_visual_review.json,h75_review/independent_review.md}；cross_use_matrix/{README.md,matrix.json,event_mechanism_readback.json}。本轮当前无活动物理/分析/训练，未push/实机/JIT/改冻结别名，Trans目标仍active。
+
+
+### 2026-10-26 固定任务基线与有限整回合并集：暂缓模型择优/一般控制库路线
+
+**目的**：找出同已知任务条件下真实互补，避免把跨速度面板切模型或事后看未来force选整条轨迹包装为协调方法。方法为只读复用已审完整360，与原source raw_audit/results身份关联；每族120，24无扰/96受扰，context/alpha/event逐一配对，脉冲时刻/方向/波形/请求/反馈/短支持身份核验。zero的有意零神经通道与full各自声明掩码分别核，不将它误当不同执行器权限。
+
+首次只读程序错误要求zero/full source_keep_channels相等，在任何输出前停止、0新物理/训练；错误receipt和中文Bark accepted保留。改为zero=[False,False]、H75/current=[True,True]的原声明核验后完整执行完成，不修改原轨迹/标签/控制。机器JSON一直记录真实配对；初稿文字把存活净+5误写5增0失，在交付前按JSON更正7增2失并存prose_correction，不能以净数冒充无损失。
+
+|受扰方法/诊断|到达/96|整窗存活/96|边界|
+|---|---:|---:|---|
+|固定current|72|85|真实已执行|
+|固定zero|56|90|真实已执行，共同goal/反馈/短支持仍在|
+|事后固定左zero/右current|72|90|从task0按几何取已有整轨迹；后验DEV规则，不看本次force/onset|
+|H75/current整回合并集|72|89|两指标分别事后择优，非同一部署策略|
+|zero/current整回合并集|76|92|两指标分别事后择优，非时序/物理上界|
+
+固定几何规则对current受扰到达4增4失、存活7增2失；无扰到达22/24对current24/24、全活。因此它能构成强简单对照，但不是逐例支配或原能力无损。四个zero-only到达均为左55°/R1.8请求1.1、prefix速度2.1/yaw±12、F-32、两个alpha；current-only共有20。右120°/R1.6请求1.4两端点各24受扰，current到达21/23、zero14/14且各全活；左弯两端点各24，current与zero到达均14/14，但存活current19/18对zero21/21，且逐例集合不同。不能把力方向解释成可事前使用标签。
+
+按global、原useralpha、固定geometry+alpha分组，各组事后选一个整回合模型的到达最大总数都72；进一步用完整entry身份+alpha事后分组可74，但该身份不默认可部署任务输入，不拟合查表器。H75对current未到达没有整回合补充，不应直接发展两权重整回合选择器；它的原生偏好保持价值仍保留。整回合并集绝不排除轨迹内混合/有限参考干预超过并集，亦非物理不可能证据。
+
+**研究裁决**：当前有价值结果是同冻结local300/有限参考闭环下的偏好与恢复能力取舍、current真实到达新增及强简单基线；还没有能解决取舍的新方法。非发起人AI复核同意先整合，不立即绕四个零基线胜例再扩库/新gate/盲续训。下一若做物理，必须先给可证伪假设：从预声明同一完整current前缀状态出发，固定少量可执行参考干预能否改善损失，同时保住匹配current-only/无扰情境；完整carry与原用户alpha不换、尾段完整、不扫参数、不成功后选例。阳性只证明局部控制机会，非部署选择器或投稿完成；阴性也仅否定有限集合。当前未封存/启动此新物理验证，不把构想登记成已实施。
+
+证据runs/h75_disturbed_common_interface_v1/static_task_baseline_review/{README.md,review.json,receipt.json,independent_review.md,prose_correction.json}；CLI review_static_task_baselines.py实际执行完成/0积分。全部XY复用analysis_reconstructed_v2/h75_review五总览，不重复图/改坐标。当前无本任务活动物理/分析/训练，原模型/用户dirty源码/远端/另一项目/实机不动，Trans目标active。
