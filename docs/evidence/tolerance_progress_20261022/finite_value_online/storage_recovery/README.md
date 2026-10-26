@@ -29,3 +29,12 @@
 首批46已完成且三臂完整checkpoint重新载入认证 `[176,184,184]`、next_collection46，均warmup=false；cached_physics_receipt证明新增物理0，配对计费恰为实际16,133,063/分配16,560,000。当前新物理47正在运行。HTTP真实reward46为free_GAE−65.7701、finite_GAE−64.8009、free_MC−66.9563；只证明训练可见性，不作控制优劣结论。TensorBoard http://localhost:48611 ，进度 `runs/finite_value_online_v1_recovery45/status.json`；monitoring记录下次+900秒。详细认证 `first_resumed_collection_receipt.json`。
 
 新的storage sequence按pidfd等待真实训练退出，training_status_reads0，不轮询训练曲线。仅完整64终点触发原300评价；其余错误停止保留，未增加优化或采用。旧两个失败run/owner及原始错误完整保留。恢复训练成功不等于控制方法有效或RA-L目标完成。
+
+
+## 后续主机重启：55边界
+
+原recovery45在55轮后、56的3块采样后再次主机重启。已认证最新完整55及三臂[212,220,220]，原56采样身份复现；3块ZIP/SHA完整，共实际/分配108000 lower步，但没有中间完整carry，不能直接拼接续跑。旧状态和全部文件保留，root状态已如实更正为host_reboot_interrupted。
+
+原位扩展恢复协调器支持递归原1..17/recovery18..45/recovery46..55来源；完整缓存46虽无本地chunk，按缓存receipt计费一次。只允许恢复协调器变更且核验旧source_at_launch SHA，其余数学、奖励、物理和优化源码仍须与旧封存SHA逐项一致。
+
+下一从55完整Adam重做未完成56的物理采样并执行原56..64各一次优化，不再warmup或重优化55。原已完成/当前有效采样槽上限23040000保留；已失败部分108000单列，并在recorded_total中合计，故已记录总上限23148000，未记录的重启费用仍UNKNOWN。不能将这次工程重试伪称在原全成本内。训练后原固定300不变。新prepare/shape/运行状态需见共享台账，不凭本节计划宣称启动。

@@ -1,7 +1,7 @@
 """Explicit foreground recovery from an authenticated retained boundary.
 
-Storage interruption: reuse authenticated collection46 without physics replay. No new
-optimization objective or automatic retry is introduced.
+Reuse complete cached collections or restart only an unfinished collection from
+its authenticated optimizer boundary. Abandoned work is charged separately.
 """
 import copy
 import json
@@ -53,9 +53,53 @@ def restore_models(config,plan):
 
 
 def validate_storage_source(state,boundary):
-    if (boundary!=45 or state.get('phase')!='error' or state.get('failure_kind')!='disk_full'
+    if (not 1<=boundary<64 or state.get('phase')!='error' or state.get('failure_kind') not in ['disk_full','host_reboot']
             or state.get('declared_updates')!=64 or state.get('completed_updates')!=boundary):
-        raise ValueError('latest complete45 disk-error boundary required')
+        raise ValueError('latest complete boundary of an explicitly interrupted original64 required')
+
+
+def authenticate_previous_runtime(source,plan,*,workdir=None):
+    workdir=Path(workdir or Path.cwd()).resolve();changed=[]
+    coordinator=workdir/'learning/src/sttw_control/finite_value_storage_recovery.py'
+    for file,sha in plan['source_sha256'].items():
+        file=Path(file)
+        snapshot=Path(source)/'source_at_launch'/file.relative_to(workdir)
+        if digest(snapshot)!=sha:raise ValueError('historical source snapshot changed: '+str(file))
+        current=digest(file)
+        if current!=sha:
+            if file!=coordinator:raise ValueError('sealed algorithm/runtime changed: '+str(file))
+            changed.append(dict(file=str(file),previous_sha256=sha,current_sha256=current,
+                                scope='recovery wiring/cost reporting only; original snapshot retained'))
+    return changed
+
+
+def collection_folder(source,index):
+    seen=set();source=Path(source)
+    while True:
+        resolved=source.resolve()
+        if resolved in seen:raise ValueError('cyclic recovery lineage')
+        seen.add(resolved);plan=json.loads((source/'plan.json').read_text())
+        if 'resume_source_run' not in plan or index>plan['resume_boundary']:
+            return source/'execution'/f'update_{index:04d}'
+        parent=Path(plan['resume_source_run'])
+        if digest(parent/'plan.json')!=plan['resume_source_plan_sha256']:raise ValueError('ancestor plan changed')
+        source=parent
+
+
+def collection_allocated_slots(folder):
+    chunks=list(Path(folder).glob('chunk_*.npz'));cache=Path(folder)/'cached_physics_receipt.json'
+    if cache.exists():
+        if chunks:raise ValueError('cached collection cannot also charge copied chunks')
+        return len(json.loads(cache.read_text())['chunk_files'])*36000
+    return len(chunks)*36000
+
+
+def reported_costs(state):
+    result=dict(state)
+    result['recorded_total_active_lower_ticks']=state['active_lower_ticks']+state.get('interrupted_active_lower_ticks',0)
+    result['recorded_total_allocated_lower_slots']=state['allocated_lower_slots']+state.get('interrupted_allocated_lower_slots',0)
+    result['counters_scope']='active/allocated counters: retained completed collections plus current attempt; recorded_total also includes abandoned partial attempts; unrecorded reboot work UNKNOWN'
+    return result
 
 
 def validate_cached_accounting(pair,state,cache):
@@ -78,8 +122,7 @@ def prepare(root,*,source,boundary):
     old=json.loads((source/'plan.json').read_text())
     if digest(source/'plan.json')!=json.loads((source/'prelaunch_receipt.json').read_text())['plan_sha256']:
         raise ValueError('original plan changed')
-    for file,sha in old['source_sha256'].items():
-        if digest(file)!=sha:raise ValueError('original training runtime changed: '+file)
+    runtime_changes=authenticate_previous_runtime(source,old)
     for file,sha in old['files_sha256'].items():
         if digest(source/file)!=sha:raise ValueError('original training input changed')
     pair_file=source/f'checkpoint_pair_{boundary:04d}.json';pair=json.loads(pair_file.read_text())
@@ -88,9 +131,27 @@ def prepare(root,*,source,boundary):
     if digest(Path(old['resume_source_run'])/'plan.json')!=old['resume_source_plan_sha256']:
         raise ValueError('original retained prefix plan changed')
     cache_file=source/'cached46_audit.json'
-    cache=json.loads(cache_file.read_text());validate_cached_accounting(pair,source_state,cache)
-    for record in cache['chunk_files']:
-        if digest(record['file'])!=record['sha256']:raise ValueError('cached chunk changed')
+    cache=None;abandoned_actual=abandoned_slots=0;partial_audit=None
+    if cache_file.exists() and boundary==45:
+        cache=json.loads(cache_file.read_text());validate_cached_accounting(pair,source_state,cache)
+        for record in cache['chunk_files']:
+            if digest(record['file'])!=record['sha256']:raise ValueError('cached chunk changed')
+    elif source_state['failure_kind']=='host_reboot':
+        partial_file=source/f'reboot{boundary}_boundary_audit.json'
+        partial_audit=json.loads(partial_file.read_text())
+        if (partial_audit.get('phase')!='completed' or partial_audit.get('latest_authenticated_boundary')!=boundary
+            or partial_audit.get('next_sampling_identity_reproduced') is not True
+            or partial_audit.get('physics_steps')!=0 or partial_audit.get('optimizer_updates')!=0
+            or partial_audit.get('intermediate_complete_carry_persisted') is not False):
+            raise ValueError('authenticated incomplete collection without saved intermediate carry required')
+        for record in partial_audit[f'partial{boundary+1}_chunks']:
+            if digest(record['file'])!=record['sha256']:raise ValueError('abandoned partial chunk changed')
+        abandoned_actual=partial_audit[f'partial{boundary+1}_recorded_actual_lower_ticks']
+        abandoned_slots=partial_audit[f'partial{boundary+1}_recorded_allocated_lower_slots']
+        if (pair['active_lower_ticks']+abandoned_actual!=source_state['active_lower_ticks']
+            or pair['allocated_lower_slots']+abandoned_slots!=source_state['allocated_lower_slots']):
+            raise ValueError('abandoned partial cost does not match last recorded status')
+    else:raise ValueError('complete cache or explicit reboot partial audit required')
     cfg=json.loads((source/'effective_config.json').read_text())
     models={record['arm']:record for record in pair['models']}
     learners=restore_models(cfg,dict(resume_models=models,resume_boundary=boundary))
@@ -100,8 +161,7 @@ def prepare(root,*,source,boundary):
     remaining_collections(json.loads((source/'training_cases.json').read_text()),boundary)
     actual=allocated=legal=actor_samples=0
     for index in range(1,boundary+1):
-        prefix_source=Path(old['resume_source_run']) if index<=old['resume_boundary'] else source
-        folder=prefix_source/'execution'/f'update_{index:04d}'
+        folder=collection_folder(source,index)
         receipt=json.loads((folder/'collection_complete.json').read_text())
         if not receipt['all_known']:raise ValueError('retained prefix has unknown outcome')
         for key,file in [('raw_decisions_sha256','decisions.npz'),('raw_physical_sha256','physical.npz')]:
@@ -113,23 +173,27 @@ def prepare(root,*,source,boundary):
             result=json.loads((folder/(name+'_learner_result.json')).read_text())
             legal+=result['samples']
             if index>2:actor_samples+=result['samples']
-        allocated+=len(list(folder.glob('chunk_*.npz')))*36000
+        allocated+=collection_allocated_slots(folder)
     if actual!=pair['active_lower_ticks'] or allocated!=pair['allocated_lower_slots']:
         raise ValueError('retained boundary cost mismatch')
     root.mkdir(parents=True,exist_ok=False)
     atomic_json(root/'prepare_status.json',dict(phase='running',pid=os.getpid()))
-    register(root/'ACTIVE_PREPARE.json','STTW_CONTROL 磁盘写满后三臂缓存恢复准备',root/'prepare_status.json')
+    register(root/'ACTIVE_PREPARE.json','STTW_CONTROL 中断后三臂原边界恢复准备',root/'prepare_status.json')
     try:
         for name in old['files_sha256']:shutil.copyfile(source/name,root/name)
         prefix=dict(source=str(source),source_plan_sha256=digest(source/'plan.json'),
             checkpoint_pair=str(pair_file),checkpoint_pair_sha256=digest(pair_file),boundary=boundary,
             retained_active_lower_ticks=actual,retained_allocated_lower_slots=allocated,
             retained_legal_decisions=legal,retained_actor_samples=actor_samples,
-            prefix_data='Recursive original1..17 and recovery18..45; no repeated optimization',
-            cached_collection=str(source/'execution/update_0046'),cached_audit=str(cache_file),
-            cached_audit_sha256=digest(cache_file),
-            cached_carry_sha256={name:digest(source/'execution/update_0046'/name) for name in ['initial_carry.pkl','final_carry.pkl']},cached_actual_lower_ticks=cache['cached_actual_lower_ticks'],
-            cached_allocated_lower_slots=cache['cached_allocated_lower_slots'],
+            prefix_data='Authenticated recursive completed lineage; no repeated optimization',
+            runtime_changes=runtime_changes,partial_audit=partial_audit,
+            interrupted_active_lower_ticks=abandoned_actual+old.get('resume_prefix',{}).get('interrupted_active_lower_ticks',0),
+            interrupted_allocated_lower_slots=abandoned_slots+old.get('resume_prefix',{}).get('interrupted_allocated_lower_slots',0),
+            cached_collection=str(source/'execution'/f'update_{boundary+1:04d}') if cache else None,
+            cached_audit=str(cache_file) if cache else None,cached_audit_sha256=digest(cache_file) if cache else None,
+            cached_carry_sha256={name:digest(source/'execution'/f'update_{boundary+1:04d}'/name) for name in ['initial_carry.pkl','final_carry.pkl']} if cache else {},
+            cached_actual_lower_ticks=cache['cached_actual_lower_ticks'] if cache else 0,
+            cached_allocated_lower_slots=cache['cached_allocated_lower_slots'] if cache else 0,
             unrecorded_pre_reboot_physical_and_optimizer_work='UNKNOWN; no full-cost claim across reboot',
             next_sampling_identity_reproduced=True,additional_optimizer_updates=0)
         atomic_json(root/'resume_contract.json',prefix)
@@ -137,8 +201,12 @@ def prepare(root,*,source,boundary):
         p.update(experiment='finite_value_online_v1_recovery_boundary'+str(boundary),
             resume_source_run=str(source),resume_source_plan_sha256=digest(source/'plan.json'),
             resume_boundary=boundary,resume_models=models,resume_prefix=prefix,
-            initialization='Exact45 Actor/Critic/logstd/Adam; cached46 data only, original47..64 physics and RNG indices',
-            remaining_updates=64-boundary,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            initialization=f'Exact{boundary} Actor/Critic/logstd/Adam; original remaining global sampling indices; complete cache only if authenticated',
+            remaining_updates=64-boundary,
+            maximum_recorded_allocated_lower_slots=old['maximum_allocated_lower_slots']+prefix['interrupted_allocated_lower_slots'],
+            engineering_reexecution_collection=boundary+1 if partial_audit else None,
+            cost_contract='Original64 logical collections plus explicit abandoned partial-attempt overhead; unrecorded reboot work UNKNOWN',
+            code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             stop='Original64 endpoint only; no retained prefix replay; any new error preserves and stops without automatic retry')
         files=list(Path('learning/src/sttw_control').glob('*.py'))+[Path('learning/cli/resume_finite_value_storage.py'),
             Path('docs/evidence/tolerance_progress_20261022/finite_value_online/RECOVERY_BOUNDARY.md')]
@@ -153,7 +221,10 @@ def prepare(root,*,source,boundary):
             active_lower_ticks=actual,allocated_lower_slots=allocated,legal_decisions_collected=legal,
             actor_training_samples=actor_samples,tensorboard_reward_verified=False,
             optimizer_steps_by_arm={name:[max(0,boundary-2)*4,boundary*4,boundary*4] for name in ROLES},
-            resume_boundary=boundary,retained_prefix_source=str(source)))
+            resume_boundary=boundary,retained_prefix_source=str(source),
+            interrupted_active_lower_ticks=prefix['interrupted_active_lower_ticks'],
+            interrupted_allocated_lower_slots=prefix['interrupted_allocated_lower_slots'],
+            maximum_recorded_allocated_lower_slots=p['maximum_allocated_lower_slots']+prefix['interrupted_allocated_lower_slots']))
         register(root/'ACTIVE_RUN.json','STTW_CONTROL 原三臂64轮从认证边界续训',root/'status.json')
         register(root/'ACTIVE_SHAPE.json','STTW_CONTROL 三臂恢复180路零积分shape',root/'shape/status.json')
         atomic_json(root/'prepare_status.json',dict(phase='completed',pid=os.getpid(),checked_unix=time.time()))
@@ -168,7 +239,8 @@ def execute(root,*,shape_only=False):
     directory=root/'shape' if shape_only else root/'execution';directory.mkdir(exist_ok=False)
     state=dict(previous,phase='running',stage='authenticating',pid=os.getpid());writers={}
     status_file=directory/'status.json' if shape_only else root/'status.json'
-    def update(**kw):state.update(kw,checked_unix=time.time());atomic_json(status_file,state)
+    def update(**kw):
+        state.update(kw,checked_unix=time.time());state.update(reported_costs(state));atomic_json(status_file,state)
     update()
     try:
         import torch,jax
@@ -260,7 +332,7 @@ def execute(root,*,shape_only=False):
             frozen={n:o.freeze_collection() for n,o in learners.items()}
             atomic_json(droot/'sampling_identity.json',dict(models=frozen,cases=cases,plan_sha256=digest(root/'plan.json')))
             decisions=[];physical=[];warmup=iteration<p['critic_only_updates']
-            if iteration==start:
+            if iteration==start and p['resume_prefix'].get('cached_collection'):
                 cache=Path(p['resume_prefix']['cached_collection'])
                 audit_file=Path(p['resume_prefix']['cached_audit'])
                 if digest(audit_file)!=p['resume_prefix']['cached_audit_sha256']:raise ValueError('cached audit changed')
@@ -343,6 +415,10 @@ def execute(root,*,shape_only=False):
             new_active_lower_ticks=state['active_lower_ticks']-p['resume_prefix']['retained_active_lower_ticks']-p['resume_prefix']['cached_actual_lower_ticks'],
             new_allocated_lower_slots=state['allocated_lower_slots']-p['resume_prefix']['retained_allocated_lower_slots']-p['resume_prefix']['cached_allocated_lower_slots'],
             cached_allocated_lower_slots=p['resume_prefix']['cached_allocated_lower_slots'],
+            interrupted_active_lower_ticks=p['resume_prefix']['interrupted_active_lower_ticks'],
+            interrupted_allocated_lower_slots=p['resume_prefix']['interrupted_allocated_lower_slots'],
+            recorded_total_active_lower_ticks=reported_costs(state)['recorded_total_active_lower_ticks'],
+            recorded_total_allocated_lower_slots=reported_costs(state)['recorded_total_allocated_lower_slots'],
             unrecorded_pre_reboot_work='UNKNOWN; excluded from retained-prefix plus resumed counters'))
         for k in ['actor','checkpoint']:assert digest(p['model'][k])==p['model'][k+'_sha256']
         update(phase='completed',stage='training_complete_evaluation_separate')
