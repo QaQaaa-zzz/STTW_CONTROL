@@ -433,3 +433,9 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 首attempt `runs/nominal_initial_confirmation_v1`，session21434 exit1，尚未创建inventory/shape/执行，0物理/0训练。原因是authenticate_models按角色名选择native checkpoint格式，prepare把feedback_010/feedback_nominal别名也传入，误按父模型格式读取freeGAE checkpoint；非模型损坏或控制失败。失败prepare_status和ERROR_RETAINED及中文Bark存证保留。初次补写receipt误对既有逻辑符号链接mkdir，写入前即失败；随后在真实HDD目标保存，未影响物理或已有数据。
 
 修复为只认证三native角色，再将两个反馈别名的actor/checkpoint路径和SHA、fingerprint/value_contract逐字段与认证freeGAE比较；没有放宽身份核验。新增回归测试覆盖正确native分派和拒绝别名权重变化，相关49 CPU passed3.02s。科学协议、力/时刻、完整起点、表和增益不改；首attempt不覆盖、不隐式重启，显式工程更正使用 `runs/nominal_initial_confirmation_v1_attempt2`。300回合/最多600000新增lower预算不变，首attempt物理花费0；新attempt仍需prepare/shape通过后实际执行。
+
+### 正式积分前消除新增重复物理分支
+
+attempt2准备session72634 exit0，GPU shape47539 exit0（50×300×4、0物理）。启动前检查发现，adapter若在两套完整kernel外做vmapped条件选择，JAX会计算两支后再选结果，造成不必要仿真开销，也使仅按选中轨迹计费不完整。故**未启动积分**，保留attempt2的prepare/shape与SUPERSEDED_BEFORE_EXECUTION.json。
+
+正式adapter改为先在当前误差/基准误差及反馈增益之间做标量选择，再只调用一次原make_evaluation_step；原恒定与名义反馈的数学映射、原物理/支持/权限实现保持。不是运行后删重复成本。新增JAX向量化图回归检查单次物理sentinel推进，并比较gain0/持续/名义三映射，相关50 CPU passed3.47s。新显式attempt3 `runs/nominal_initial_confirmation_v1_attempt3`沿原300科学协议，前两attempt均0物理，预算仍600000新增lower。此项是正式启动前工程加速，不算新增控制证据或已验证加速倍数。

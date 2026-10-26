@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from types import SimpleNamespace
 
 from sttw_control.nominal_initial_confirmation import initial_cases,verify_initial_feedback,authenticate_initial_models
 
@@ -69,3 +70,42 @@ def test_feedback_alias_authentication_uses_native_schema_without_weakening_iden
     assert seen==[{'parent_plain','parent_causal','free_GAE'}]
     models['feedback_nominal']['actor_sha256']='different'
     with pytest.raises(ValueError):authenticate_initial_models({},models)
+
+
+def test_vmapped_feedback_selection_advances_physics_only_once(monkeypatch):
+    import jax
+    import jax.numpy as j
+    import sttw_control.finite_value_evaluation as evaluation
+    from sttw_control.nominal_initial_confirmation import make_initial_confirmation_step
+    from sttw_control.reference_task_feedback import steering_feedback
+    cfg=dict(residual_interface=dict(speed_positive_scale_m_s=.25,speed_negative_scale_m_s=1.,steer_scale_rad=.2),
+        network=dict(context_fields=[dict(name='signed_cross_track_error_m',scale=.2),
+            dict(name='sin_path_heading_error',scale=1.),dict(name='cos_path_heading_error',scale=1.)]))
+    spec=dict(gains_rad=dict(feedback_005=.05,feedback_010=.1),path_scale_m=.5,heading_scale_rad=.3)
+    observation=j.asarray([2.,np.sin(.2),np.cos(.2)])
+    env=SimpleNamespace(config=cfg,cc=SimpleNamespace(dt=.005),observation=lambda *a:(observation,None,None))
+    state=SimpleNamespace(physical=SimpleNamespace(failed=j.bool_(False)),fault=j.bool_(False),tick=j.int32(0),
+        domain_exit=j.bool_(False),follower=SimpleNamespace(invalid=j.bool_(False)),projection=SimpleNamespace(progress=j.float32(.5)))
+    carry=SimpleNamespace(state=state,clean_blocks=j.int32(16))
+    class Actor:
+        def apply(self,p,obs):return p
+    def factory(env,actor,**kw):
+        def advance(carry,params,*args):
+            action=actor.apply(params,observation)
+            return carry,dict(active_tick=j.ones(4,bool),actor_action_valid=j.ones(4,bool),
+                issued_latent=j.tile(action,(4,1)),physical_sentinel=j.dot(action,action))
+        return advance
+    monkeypatch.setattr(evaluation,'make_evaluation_step',factory)
+    one=make_initial_confirmation_step(env,Actor(),horizon_s=10.,spec=spec,nominal_spec=spec)
+    params=dict(actor=j.asarray([[.2,.3]]*3),feedback_kind=j.asarray([0,3,1]),feedback_gain_rad=j.asarray([0.,.1,.1]),
+        nominal_table=dict(progress=j.asarray([[0.,1.]]*3),path_error=j.asarray([[.1,.1]]*3),heading_error=j.zeros((3,2))))
+    def advance(p):return one(carry,p,None,j.float32(1.2),None,j.int32(1))[1]
+    graph=jax.make_jaxpr(jax.vmap(lambda p:advance(p)['physical_sentinel']))(params)
+    assert sum(e.primitive.name=='dot_general' for e in graph.jaxpr.eqns)==1
+    logs=jax.vmap(advance)(params)
+    original=j.asarray([.2,.3])
+    np.testing.assert_array_equal(logs['issued_latent'][0,0],original)
+    constant=steering_feedback(original,.4,.2,.1,cfg,spec)[0]
+    nominal=steering_feedback(original,.3,.2,.1,cfg,spec)[0]
+    np.testing.assert_allclose(logs['issued_latent'][1,0],constant,atol=2e-6)
+    np.testing.assert_allclose(logs['issued_latent'][2,0],nominal,atol=2e-6)

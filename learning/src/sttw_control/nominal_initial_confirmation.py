@@ -59,26 +59,63 @@ def initial_cases(protocol, contexts, previous_cases):
     return cases
 
 
+class InitialFeedbackActor:
+    def __init__(self,actor,config,spec):
+        self.actor,self.config,self.spec=actor,config,spec
+
+    def apply(self,parameters,observation):
+        from .reference_task_feedback import context_geometry,steering_feedback
+        from .nominal_reference_feedback import adjusted_errors
+        import jax.numpy as j
+        original=self.actor.apply(parameters['actor'],observation)
+        ey,eh=context_geometry(observation,self.config)
+        dey,deh=adjusted_errors(ey,eh,*parameters['reference_error'])
+        is_nominal=parameters['feedback_kind']==1
+        return steering_feedback(original,j.where(is_nominal,dey,ey),j.where(is_nominal,deh,eh),
+            parameters['effective_gain'],self.config,self.spec)[0]
+
+
 def make_initial_confirmation_step(env,actor,*,horizon_s,spec,nominal_spec):
-    """Reuse BOTH frozen feedback kernels; this adapter only selects their kind."""
-    import jax
+    """Select feedback algebra BEFORE the one unchanged physical advance.
+
+    A vmapped cond around two entire physical kernels would evaluate both arms.
+    Only scalar/error selection is batched here, so no hidden duplicate physics.
+    """
     import jax.numpy as j
-    from .reference_task_feedback import make_feedback_evaluation_step
-    from .nominal_reference_feedback import make_nominal_evaluation_step,lookup_nominal
-    constant=make_feedback_evaluation_step(env,actor,horizon_s=horizon_s,spec=spec)
-    nominal=make_nominal_evaluation_step(env,actor,horizon_s=horizon_s,spec=nominal_spec)
+    from .reference_task_feedback import context_geometry,steering_feedback,validate_spec
+    from .nominal_reference_feedback import lookup_nominal,adjusted_errors
+    from .reference_reentry import actor_permission
+    from .finite_value_evaluation import make_evaluation_step
+    validate_spec(spec)
+    if any(spec[k]!=nominal_spec[k] for k in ['path_scale_m','heading_scale_rad']):
+        raise ValueError('same frozen feedback scales required')
+    advance=make_evaluation_step(env,InitialFeedbackActor(actor,env.config,spec),horizon_s=horizon_s)
     def step(carry,parameters,path,speed,pulse,mode):
-        def constant_branch(_):
-            end,logs=constant(carry,parameters,path,speed,pulse,mode)
-            active=logs['active_tick']
-            _,_,covered=lookup_nominal(carry.state.projection.progress,parameters['nominal_table'])
-            logs.update(feedback_effective_gain_rad=j.where(active,parameters['feedback_gain_rad'],j.nan),
-                nominal_progress_m=j.where(active,carry.state.projection.progress,j.nan),
-                nominal_profile_covered=active&covered,
-                nominal_path_error_m=j.where(active,0.,j.nan),nominal_heading_error_rad=j.where(active,0.,j.nan))
-            return end,logs
-        return jax.lax.cond(parameters['feedback_kind']==1,
-            lambda _:nominal(carry,parameters,path,speed,pulse,mode),constant_branch,None)
+        s=carry.state
+        stopped=s.physical.failed|s.fault|(s.tick>=round(horizon_s/env.cc.dt))
+        enabled=actor_permission(s.domain_exit,s.follower.invalid,carry.clean_blocks,j.bool_(False),stopped)
+        obs,_,_=env.observation(s,path,speed,horizon_s)
+        safe=j.where(enabled,obs,j.zeros_like(obs))
+        original=actor.apply(parameters['actor'],safe)
+        ey,eh=context_geometry(safe,env.config)
+        nominal_ey,nominal_eh,covered=lookup_nominal(s.projection.progress,parameters['nominal_table'])
+        is_nominal=parameters['feedback_kind']==1
+        ref_ey=j.where(is_nominal,nominal_ey,0.);ref_eh=j.where(is_nominal,nominal_eh,0.)
+        gain=j.where(is_nominal&~covered,0.,parameters['feedback_gain_rad'])
+        dey,deh=adjusted_errors(ey,eh,ref_ey,ref_eh)
+        proposed,requested,realized=steering_feedback(original,j.where(is_nominal,dey,ey),
+            j.where(is_nominal,deh,eh),gain,env.config,spec)
+        supplied=dict(parameters,reference_error=j.stack([ref_ey,ref_eh]),effective_gain=gain)
+        end,logs=advance(carry,supplied,path,speed,pulse,mode)
+        active=logs['active_tick'];legal=logs['actor_action_valid']
+        logs.update(original_actor_latent=j.where(legal[:,None],j.tile(original,(4,1)),j.nan),
+            feedback_actor_latent=j.where(legal[:,None],j.tile(proposed,(4,1)),j.nan),
+            feedback_path_error_m=j.where(active,ey,j.nan),feedback_heading_error_rad=j.where(active,eh,j.nan),
+            feedback_requested_steer_rad=j.where(legal,requested,0.),feedback_realized_steer_rad=j.where(legal,realized,0.),
+            feedback_effective_gain_rad=j.where(active,gain,j.nan),nominal_progress_m=j.where(active,s.projection.progress,j.nan),
+            nominal_profile_covered=active&covered,nominal_path_error_m=j.where(active,ref_ey,j.nan),
+            nominal_heading_error_rad=j.where(active,ref_eh,j.nan))
+        return end,logs
     return step
 
 
