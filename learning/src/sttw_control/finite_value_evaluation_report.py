@@ -198,6 +198,7 @@ def role_labels(rows):
 
 
 def goal_report(rows,roles):
+    baseline='parent_plain' if 'parent_plain' in roles else 'parent_causal' if 'parent_causal' in roles else roles[0]
     result={}
     for split,group in dict(all=rows,nominal=[r for r in rows if not r['force_N']],
                            disturbed=[r for r in rows if r['force_N']]).items():
@@ -211,13 +212,13 @@ def goal_report(rows,roles):
         groups={}
         for row in group:groups.setdefault((row['context'],row['alpha'],row['event_id']),{})[row['role']]=row
         for role in roles:
-            if role=='parent_plain':continue
+            if role==baseline:continue
             gain=loss=unknown=0
             for cell in groups.values():
-                a,b=cell['parent_plain']['goal_arrived'],cell[role]['goal_arrived']
+                a,b=cell[baseline]['goal_arrived'],cell[role]['goal_arrived']
                 if a is None or b is None:unknown+=1
                 else:gain+=b and not a;loss+=a and not b
-            pairs[role+'_vs_parent_plain']=dict(arrival_gains=gain,arrival_losses=loss,unknown=unknown)
+            pairs[role+'_vs_'+baseline]=dict(arrival_gains=gain,arrival_losses=loss,unknown=unknown)
         result[split]=dict(counts=counts,paired=pairs)
     return result
 

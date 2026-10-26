@@ -1,0 +1,22 @@
+{
+  "schema": "frozen_actor_feedback_geometry_transfer_v1",
+  "seed": 2026102697,
+  "bank_indices": [2, 4],
+  "alphas": [0.0, 0.5, 1.0],
+  "roles": ["parent_causal", "free_GAE", "parent_feedback_010", "feedback_010"],
+  "contexts": [
+    {"name": "left55_R1p8_v1p1", "source_base": "left80_R1p4_v1p2", "build_direction": "left", "angle_deg": 55.0, "radius_m": 1.8, "speed_m_s": 1.1},
+    {"name": "right120_R1p6_v1p4", "source_base": "right100_R1p2_v1p5", "build_direction": "right", "angle_deg": 120.0, "radius_m": 1.6, "speed_m_s": 1.4}
+  ],
+  "straight_prefix_m": 4.0,
+  "forces_N": [0.0, -16.0, 16.0, -32.0, 32.0],
+  "pulse_duration_s": 0.1,
+  "onset_upper_tick_range": [140, 241],
+  "feedback_gain_rad": 0.1,
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "hypothesis": "Frozen simple feedback benefits transfer to declared new task geometries and are not uniquely dependent on the later freeGAE Actor. This is not a claim of algorithmic novelty or independent training repeats.",
+  "initialization": "Reuse complete existing bank2/4 task0 physical700 states; change only projection and follower for immutable new paths. Anchor both bank variants to the same original path frame, not their individual poses. No qpos/qvel edits, extra settling, new snapshots or training.",
+  "events": "Each geometry/force uses one seeded onset shared across banks, alphas and all four methods. Fixed world direction is normal to the nominal mid-turn heading. No realized onset/force/duration is exposed to controllers.",
+  "stop": "240 entirely new episodes (192 disturbed,48 zero), maximum480000 lower slots, zero optimizer updates or cached trajectory substitution. No gain/table fitting, failed-case exclusion, alternate geometry retries, automatic extension, training or adoption. Report losses and limit scope if transfer fails."
+}

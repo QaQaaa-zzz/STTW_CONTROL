@@ -714,3 +714,22 @@ scientific-visualization技能用于图表真实性核对及重绘，来源已�
 **当前研究主线收拢**：在冻结底层和既有alpha中层接口上，研究有限参考调整带来的实际到达—防摔—原偏好过程代价取舍。保留工程/任务价值，暂停freeGAE额外续训、名义表索引或更大预测网络作为“必须有效”的方法分支。已有模型/代码/迭代历史不删、不替换已采用权重指针。不是停止整个项目，Transactions目标仍active，但不以堆模块掩盖贡献缺口。
 
 下一最多三项：①冻结本批完整正负结果与上述贡献裁决；②候选收缩为原task/free两个固定Actor×无附加反馈/固定.10反馈（共同短支持）的2×2，若继续新几何验证，只回答反馈收益是否迁移/是否依赖具体Actor，不靠新几何自动证明新颖性，当前未实现/启动；③在独立证据和具体控制增量明确后再写方法主张，若仅通用反馈有效就保留系统/任务研究成果而不强称新算法。名义候选留作历史/备选，后续不逐新路线拟合表追分；无push/实机。
+
+
+## 固定2×2 Actor—反馈新任务几何验证：启动前声明（2026-10-26）
+
+目的：前轮已表明父Actor加反馈能取得大部分实际到达提升，不能继续靠旧面板证明free训练/名义索引创新。本轮只回答：固定反馈改善是否迁移到声明的新任务条件，是否依赖特定冻结Actor？新任务阳性也不自动构成新算法或Transactions就绪；阴性则限定范围，不逐路线重调。
+
+固定两个native Actor原task_only64/freeGAE final64，各配0/0.10反馈，四组都保留同一原短支持、滤波slew/限幅/重入权限、local300、原user alpha。四role为parent_causal/free_GAE/parent_feedback_010/feedback_010。无名义表、无新模型、无权重/奖励/物理变化，不对新路线做zero拟合或名义表重建。
+
+新任务：left55_R1p8_v1p1（左55°、R1.8m、1.1m/s）和right120_R1p6_v1p4（右120°、R1.6m、1.4m/s），直线前缀4m、原0.5m曲率过渡/原turn_end后4m目标，原80m延伸、0.02m统一采样。几何、速度、前缀联合变化，不解释成只改变角度的单因素实验，也不声称所有路线参数均未出现在历史训练。
+
+各任务沿用真实bank2/4的旧完整task0/physical700状态，不新增/平移qpos/qvel或settle。新路径锚点从各原路径首点/首航向获得，bank2/4共享同一固定世界路径，不按自己的偏差重定位。仅用原rebind_path_context更新projection/follower；原physical/lower历史/控制器/执行器/滤波等字段保持，执行时逐对象核对。低速为新请求速度，初始实测仍约2.254m/s，不冒充起扰前必然已稳态低速。
+
+2新任务×2真实起点×3alpha×5力档0/±16/±32N×4方法=240全部新回合（192受扰48zero），每方法48受扰12zero；最大480000新lower实际/槽，0optimizer、0缓存。脉冲.1s，seed2026102697在2.8–4.8s的20ms格抽时刻；每几何/力档的时刻跨bank、alpha和全部方法共享，不用新的偏好比较掺入不同起扰时间。世界方向为原新路径半转角的法向，固定方向/原力定义，不按实际车身变换注入力。未来force/onset/duration不入控制。新seed不声称所有时刻数值均未曾用于其他任务。
+
+原50cm/10s首次触地故障前进入目标为主口径，无末段速度/航向保持；10/20/30cm、整窗触地、原alpha过程代价、无扰与双方存活成本、逐新任务/bank/alpha新增丢失和全240XY分报。训练重复仍只有旧具体冻结权重，两个进入状态同源bank，称DEV新任务确认而非独立训练重复或最终未见测试；不以零失败、全指标胜出或4/4偏好方向作新硬门槛。
+
+实现reference_feedback_transfer.py及feedback_geometry_transfer.json，沿用原make_feedback_evaluation_step/make_evaluation_step，原控制/初始化kernel AST与runtime SHA认证。已有目标汇总假定总有parent_plain；新2×2无需该额外臂，汇总只在缺plain时选择真实存在的parent_causal，不创造第五基线，旧报告行为保持。34相关CPU passed2.36s，含240完整共享事件/alpha/起点、拒绝删条件或换gain/半径、左右实际几何积分角度与R及锚点、汇总无虚构plain及旧回归。
+
+root runs/feedback_geometry_transfer_v1全HDD，当前未prepare/shape/积分，收益PENDING。先native/原状态路径身份准备→GPU50×240×4零积分shape→240实际。240完成或工程错误停，无自动重试/扩路线/改gain/表/训练/采用，Bark原stage注册、email/autofix inactive。下一至多三项：prepare、shape后执行、全XY与原2×2配对结果裁决。Transactions目标active，无push/实机。

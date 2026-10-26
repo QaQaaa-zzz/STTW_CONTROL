@@ -19,10 +19,15 @@ if __name__=='__main__':
     parser.add_argument('--shared-profile',action='store_true')
     parser.add_argument('--weak-feedback',action='store_true')
     parser.add_argument('--parent-feedback',action='store_true')
+    parser.add_argument('--geometry-transfer',action='store_true')
     parser.add_argument('--phase',choices=['prepare','shape','execute','analyze'],required=True)
     args=parser.parse_args()
     if args.phase=='prepare':
-        if args.parent_feedback:
+        if args.geometry_transfer:
+            if args.source_evaluation is None or args.protocol is None:parser.error('--geometry-transfer requires --source-evaluation and --protocol')
+            from sttw_control.reference_feedback_transfer import prepare_transfer
+            prepare_transfer(args.output,source=args.source_evaluation,protocol_file=args.protocol)
+        elif args.parent_feedback:
             if args.source_evaluation is None or args.protocol is None:parser.error('--parent-feedback requires --source-evaluation and --protocol')
             from sttw_control.nominal_table_ablation import prepare_parent_feedback
             prepare_parent_feedback(args.output,source=args.source_evaluation,protocol_file=args.protocol)
