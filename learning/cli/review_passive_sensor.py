@@ -5,6 +5,16 @@ import numpy as np
 from sttw_control.causal_reference_baseline import THRESHOLD
 
 
+def first_legal_latch(raw):
+    """Existing sensor/permission only: no force, onset or outcome required."""
+    active=raw['active_tick'].astype(bool);tick=raw['physical_tick']
+    decision=active&(tick%4==0)&raw['actor_action_valid'].astype(bool)
+    valid=decision&raw['probe_eso_history_valid'].astype(bool)
+    crossings=np.flatnonzero(valid&(np.abs(raw['probe_eso_signal'])>=THRESHOLD))
+    return (int(tick[crossings[0]]) if len(crossings) else None,
+            int(valid.sum()),int(decision.sum()),len(crossings))
+
+
 def review(root):
     root=Path(root).resolve()
     for file in ['status.json','analysis/status.json']:
@@ -27,18 +37,15 @@ def review(root):
             -(raw['probe_eso_latest'][active]-raw['probe_eso_previous'][active]),atol=1e-7)
         if raw['gate_detected'][active].any() or raw['gate_override'][active].any():
             raise ValueError('passive source must not actuate ESO gate')
-        decision=active&(tick%4==0)&raw['actor_action_valid'].astype(bool)
-        valid=decision&raw['probe_eso_history_valid'].astype(bool)
-        crossings=np.flatnonzero(valid&(np.abs(raw['probe_eso_signal'])>=THRESHOLD))
+        first_cross,valid_decisions,actor_decisions,crossings=first_legal_latch(raw)
         force=np.flatnonzero(active&np.any(raw['applied_force_impulse']!=0,axis=-1))
         first_force=int(tick[force[0]]) if len(force) else None
-        first_cross=int(tick[crossings[0]]) if len(crossings) else None
         dt=plan['lower_dt_s']
         delay=(first_cross-first_force)*dt if first_force is not None and first_cross is not None else None
         records.append(dict(case_id=row['case_id'],context=row['context'],force_N=row['force_N'],
             alpha=row['alpha'],first_measured_force_tick=first_force,first_fixed_threshold_cross_tick=first_cross,
-            first_latch_delay_from_force_s=delay,valid_decisions=int(valid.sum()),
-            actor_decisions=int(decision.sum()),threshold_crossing_decisions=len(crossings),
+            first_latch_delay_from_force_s=delay,valid_decisions=valid_decisions,
+            actor_decisions=actor_decisions,threshold_crossing_decisions=crossings,
             original_planned_onset_tick=row['pulse_onset_task_tick'],physical_outcome=row['physical_outcome'],
             goal_arrived=row['goal_arrived'],raw_sha256=row['raw_sha256']))
     nominal=[r for r in records if not r['force_N']];forced=[r for r in records if r['force_N']]

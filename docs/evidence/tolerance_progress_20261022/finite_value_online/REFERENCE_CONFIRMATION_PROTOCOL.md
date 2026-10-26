@@ -1312,3 +1312,10 @@ Scientific-brainstorming非发起人只读预启动反审无状态/阶段/报告
 Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻断，强调history_valid不等动作权限；review_passive_sensor已结合原actor_action_valid、active与50Hz边界。5相关CPU实际passed .61s，包括纯日志wrapper不改advance参数/输出/原gate字段；非GPU验证。新增补录与旧关闭gate路线不同在于不执行任何检测补偿，不能借此复活旧阈值/动作搜索。
 
 当前prepare/shape/实际均未启动、结果PENDING。先认证→shape→单次60实际→原raw/任务/XY审核→固定阈值只读时序，工程错保留停/Bark不自动重试。系统盘65GiB，原数据写HDD；目前无新采用Actor/训练/远端/JIT/实机操作。
+
+
+#### 被动补录prepare与shape完成，实际60已启动
+
+原prepare session69571 exit0/PID2525983，源17runtime/五AST/检查点导出/全部原初态路径认证完成，0积分。8628fb6实际dispatch session96060，controller2529474、execute2530612本轮/proc核live；shape2529477已completed、布局50×60×4。原60/≤120000lower/0训练合同执行，当前控制收益/时序结果PENDING，不把日志代码或shape当检测有效性。顺序shape→execute→只读原XY审核→passive_timing_review，完成/错误中文Bark自动保留，不自动扩实验或重试；后续沿同session96060回收，不因观察超时重启。
+
+只读timing CLI补独立first_legal_latch函数，其参数只需当前/过去signal、historyvalid、actor_action_valid、active和原clock，不需force/onset/结果；测试明确排除无权限行、历史无效行和4倍重复采样，实际1passed .18s。该更改只在未启动的后处理CLI，不改已封存物理runtime；最终JSON自记实际脚本SHA。时序诊断本身不是新gate策略或可部署救回证据。
