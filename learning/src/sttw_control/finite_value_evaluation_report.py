@@ -175,7 +175,7 @@ def role_labels(rows):
     labels={}
     for row in rows:
         label=row['role']
-        if 'feedback_gain_rad' in row:
+        if row.get('feedback_gain_rad',0)>0:
             label=f"free_GAE + steering {row['feedback_gain_rad']:g}rad"
         if row.get('causal_support') and label!='parent_causal':
             label+=' + short support'
@@ -225,12 +225,14 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     for r in rows:groups.setdefault((r['context'],r['alpha'],r['event_id']),[]).append(r)
     alphas=sorted({r['alpha'] for r in rows})
     columns=max(sum(key[0]==context for key in groups)//len(alphas) for context in paths)
-    overviews={context:plt.subplots(len(alphas),columns,figsize=(18,3.2*len(alphas)),squeeze=False,layout='constrained') for context in paths}
+    overviews={context:plt.subplots(len(alphas),columns,figsize=(max(18,3*columns),3.2*len(alphas)),squeeze=False,layout='constrained') for context in paths}
     counters={context:0 for context in paths}
+    cell_counters={(context,alpha):0 for context in paths for alpha in alphas}
     for number,((context,alpha,event),group) in enumerate(groups.items()):
         path=paths[context];reference=path['xy'][path['s']<=float(path['goal'])]
         fig,grid=plt.subplots(4,3,figsize=(15,14),layout='constrained');axes=list(grid.flat)
-        overview,oa=overviews[context];small=oa.flat[counters[context]];counters[context]+=1
+        overview,oa=overviews[context];small=oa[alphas.index(alpha),cell_counters[context,alpha]]
+        cell_counters[context,alpha]+=1;counters[context]+=1
         for ax in [axes[0],small]:ax.plot(reference[:,0],reference[:,1],':',color='.55');ax.scatter(*reference[-1],marker='*',color='k')
         if goal_radius is not None:
             from matplotlib.patches import Circle
@@ -279,7 +281,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
         for ax in ca[len(used):]:ax.set_visible(False)
         if group[0]['force_N']:
             start=group[0]['pulse_onset_task_tick']*.005
-            for ax in axes[1:]+used:ax.axvspan(start,start+.1,color='red',alpha=.08)
+            for ax in axes[1:]+used:ax.axvspan(start,start+group[0]['pulse_duration_s'],color='red',alpha=.08)
         title=f'{context} | original alpha{alpha:g} | {event} | deterministic DEV'
         fig.suptitle(title);cf.suptitle(title+' | signed and cumulative original reward components')
         for figure,prefix in [(fig,'paired'),(cf,'components')]:
@@ -296,7 +298,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
         for role in used_roles:
             nominal=[r for r in rows if r['role']==role and r['alpha']==alpha and not r['force_N']]
             disturbed=[r for r in rows if r['role']==role and r['alpha']==alpha and r['force_N']]
-            if len(nominal)!=2 or len(disturbed)!=8:raise ValueError('two route zeros/eight common disturbed branches required')
+            expected_disturbed=len({(r['context'],r['event_id']) for r in rows if r['alpha']==alpha and r['force_N']})
+            if len(nominal)!=len(paths) or len(disturbed)!=expected_disturbed:raise ValueError('matched route zeros and complete disturbed branches required')
             unknown=sum(r['category']=='unknown' for r in nominal+disturbed)
             if unknown:
                 for ax in axes[:,column]:ax.text(.02,.98-used_roles.index(role)*.07,role+f': {unknown} UNKNOWN; omitted',

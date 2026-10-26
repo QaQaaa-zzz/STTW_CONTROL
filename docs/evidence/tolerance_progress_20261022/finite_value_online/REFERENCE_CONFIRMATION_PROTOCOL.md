@@ -232,3 +232,16 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 下一要解决的控制问题明确为：**什么时候需要纠正、纠正多少，才能保留原alpha下的任务表现，同时兑现防摔和到达收益？** 当前始终加反馈造成的无扰成本上涨是实际待改进空间。普通反馈本身不是论文新颖性，必须有进一步可解释且超过这些基线的增量；本轮不以阳性就宣称Transactions证据已经充分。
 
 目视两全180XY概览、上述三详细正反例和代价图；其余27细例和30分项图未逐张审，visual_review_complete=false。系统盘仍约65GiB，全部新raw在HDD，未push。数据：[主要结果](../../../../runs/reference_feedback_new_geometry_v1/analysis/goal_summary.json)、[配对/半径/alpha审核](../../../../runs/reference_feedback_new_geometry_v1/analysis/feedback_decision_review.json)、[180逐例](../../../../runs/reference_feedback_new_geometry_v1/analysis/results.csv)。
+
+
+## 冻结两档反馈的新起扰时刻／时长确认：启动前声明（2026-10-26）
+
+问题：上一批0.10rad反馈的12/24到达，能否在未用于选反馈幅度的新扰动事件上延续？先不改控制器解决代价，以这项确认防止围绕固定30事件继续调参。继承相同两几何/源完整状态、原alpha0/.5/1、±16/±32N；新seed2026102667，起扰在2.80–4.80秒20ms网格抽样，并排除该context/alpha已用起扰时刻。同一context/alpha/force的.06/.14秒持续时间成对共享新时刻，不将时刻差误当时长效应。不同力档仍可不同时刻，不能据此拟合固定快照力阈值。
+
+五控制固定：原task无支持、原task短支持、freeGAE短支持、freeGAE短支持＋.05/.10rad反馈。freeGAE和task均原checkpoint，反馈配置与执行/禁用函数逐SHA/AST核对上一成功运行；不选best，不改奖励或alpha。两个无反馈Actor在共同包装器中用精确零反馈（已测零增量恒等）执行，原速度latent、支持门控、域与16block重入保持，原NN/反馈/最终发布日志分离。
+
+新增2context×3alpha×4force×2duration×5方法=240受扰回合，最多480000新lower实际/槽、0optimizer；五方法原零力各6共30条严格身份/元数据/rawSHA认证后复用，不重新仿真。联合270条；缓存30原始轨迹的60000 lower实际/槽单列，来源整批351533实际是已经花过的历史成本，不能混作本轮新花费。所有路径、初态和0.30m目标/10秒窗口不变。因初态/路径继承、同根分支相关，仍是新时刻/时长DEV确认，不是独立初态或独立训练重复/最终测试。
+
+主要报告两时长各24受扰/方法及合计48/方法，原目标30cm到达与整窗不摔分开；10/20/50cm敏感性、逐alpha新增/丢失、原alpha任务成本、无扰缓存代价和全270XY/分量图。图中扰动阴影使用实际.06/.14时长，所有alpha行各含8受扰事件＋原zero。保留任何失败，不扩时刻、幅度或方法；240结束或工程错误即停，无自动重试/训练/采用。
+
+代码`reference_feedback_confirmation.py`和配置`reference_feedback_time_confirmation.json`；48相关CPU通过2.33s，含排除旧时刻、时长配对、全五方法事件/alpha/权限匹配、禁止丢对照及不对齐时长、原标签和缓存。当前未prepare/shape/真实运行。计划root runs/reference_feedback_time_confirmation_v1全HDD；系统盘约65GiB、GPU空闲约23GiB，Bark active、email/autofix inactive。下一实际准备→GPU零积分shape→240与只读270分析，不按进行中结果调整方案。

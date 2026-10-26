@@ -1,0 +1,13 @@
+{
+  "schema": "reference_feedback_time_duration_confirmation_v1",
+  "seed": 2026102667,
+  "alphas": [0.0, 0.5, 1.0],
+  "forces_N": [-16.0, 16.0, -32.0, 32.0],
+  "durations_s": [0.06, 0.14],
+  "onset_upper_tick_range": [140, 241],
+  "exclude_source_onsets": true,
+  "horizon_s": 10.0,
+  "goal_radius_m": 0.3,
+  "roles": ["parent_plain", "parent_causal", "free_GAE", "feedback_005", "feedback_010"],
+  "stop": "240 new disturbed episodes; 30 exact nominal controls reused. No training, gain/threshold changes, automatic retry or model adoption."
+}
