@@ -85,7 +85,10 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
-            if 'actor_source_zero' in c:
+            if 'source_keep_channels' in c:
+                from .middle_channel_ablation import verify_channel_log
+                verify_channel_log(raw,c,cfg,p['feedback_spec'])
+            elif 'actor_source_zero' in c:
                 from .zero_middle_feedback import verify_zero_middle
                 verify_zero_middle(raw,c,cfg,p['feedback_spec'])
             elif p.get('initial_state_confirmation'):
@@ -189,6 +192,8 @@ def role_labels(rows):
         if row.get('feedback_gain_rad',0)>0:
             actor_label=('zero neural middle' if row.get('actor_source_zero') else
                          'parent task_only64' if row['role']=='parent_feedback_010' else 'free_GAE')
+            actor_label={'speed_only_feedback':'free_GAE neural speed only',
+                         'steer_only_feedback':'free_GAE neural steering only'}.get(row['role'],actor_label)
             label=f"{actor_label} + steering {row['feedback_gain_rad']:g}rad"
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
@@ -218,6 +223,9 @@ def goal_report(rows,roles):
         contrasts=[(role,baseline) for role in roles if role!=baseline]
         if 'zero_middle_feedback' in roles:
             contrasts += [('feedback_010','zero_middle_feedback'),('feedback_010','free_GAE')]
+        if 'speed_only_feedback' in roles:
+            contrasts += [('feedback_010','speed_only_feedback'),('feedback_010','steer_only_feedback')]
+        contrasts=[(a,b) for a,b in dict.fromkeys(contrasts) if a in roles and b in roles]
         for role,base in contrasts:
             gain=loss=unknown=0
             for cell in groups.values():
@@ -239,7 +247,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .nominal_reference_feedback import NOMINAL_ROLES
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
     from .zero_middle_feedback import ZERO_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES
+    from .middle_channel_ablation import CHANNEL_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
@@ -326,7 +335,8 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     from .nominal_reference_feedback import NOMINAL_ROLES
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
     from .zero_middle_feedback import ZERO_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES
+    from .middle_channel_ablation import CHANNEL_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     labels_by_role=role_labels(rows)

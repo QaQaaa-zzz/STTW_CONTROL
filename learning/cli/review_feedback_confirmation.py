@@ -45,6 +45,9 @@ def review(root,output):
     if 'zero_middle' in roles:
         targets+=['free_GAE','zero_middle_feedback']
         baselines+=['zero_middle','zero_middle_feedback']
+    if 'speed_only_feedback' in roles:
+        targets+=['speed_only_feedback','steer_only_feedback']
+        baselines+=['zero_middle_feedback','speed_only_feedback','steer_only_feedback']
     for target in targets:
         for baseline in baselines:
             if target==baseline or target not in roles or baseline not in roles:continue
