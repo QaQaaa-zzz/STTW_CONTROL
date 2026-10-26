@@ -1073,3 +1073,19 @@ runner/report显式opt-in，默认旧实验路径不变；wrapper只推进原ker
 “定向纯任务优化”与旧随机37库在算法上不同，但若只是追加候选数量，仍属重复搜索；暂缓CEM/MPC/能力模型，除非明确指出优化对象、对照和可改变决策的证据。若合理常规follower覆盖收益，则收缩为系统成果，不为Transactions重新制造补偿器；若仍有额外价值，再做独立完整初态确认和偏好机理，而不是继续换mask。现阶段不能声称Transactions方法创新已成立。
 
 有限公开来源检查仅定位Hoffmann等2007 ACC汽车轨迹跟踪原文（DOI 10.1109/ACC.2007.4282788；作者PDF链接https://robotics.stanford.edu/~gabeh/papers/hoffmann_stanley_control07.pdf），直接PDF抓取超时，仅见出版记录/原摘要，未逐式核对、未采用其公式，更不将汽车稳定性结论移植到本动态平衡两轮机器人。Scientific Agent Skills工具出处沿本报告既有引用。当前无活动仿真/训练，未push/硬件操作。
+
+## 有限目标预瞄：常规参考强对照执行前合同
+
+目的不是新增“安全层”，而是检查长尾参考追踪与有限目标到达任务的接口差异，是否解释部分神经增量。原任务、goal世界坐标、半径0.5m、10秒与全窗物理统计保持。普通目标追踪不当Transactions创新；即使有收益，也须给所有比较源相同规则，不让新方法独占终点处理。
+
+固定规则：原`progress+lookahead`越过goal、当前progress尚未过goal、原goal在车前（body x大于原有效性下限），且尚在0.5m圆外时，把Pure Pursuit目标设为原goal；否则使用原长尾预瞄。保持原几何曲率到转角映射、计划lookahead数值、速度请求、发布slew与最终约束。已进圆、目标在后、进度已过时不强追，不停车、不清历史、不延长任务。实际目标距离通过新world/body日志单独记录，不将原计划lookahead误称实际目标距离。
+
+新增`GoalPreviewEnv`显式代理，原env.tick与物理kernel源码不变，每5ms只调用原tick一次；20ms边界只替换下一步follower及从**输入raw**计算的nominal/rates。历史domain和真实fault保留。本步executed日志不追改为未来目标；outer step记录当前所持preview/command。处理了原sampler的copy.copy/floor_config：副本base及绑定observation共享副本生效config，不能绕过代理tick。独立NumPy从前一block真实末样本重建本block目标，并核每tick单次publish，首4tick保持原认证task0预瞄、之前不得有终点干预。
+
+原`middle_channel_feedback_v1`四context、bank2/4、alpha0/.5/1、F0±16±32N/.1秒及隐藏起扰时刻完全沿用。零神经、仅神经转向、完整神经三源各新增60，合180；原三个源同固定.10反馈与短支持各60共180精确缓存。联合360，≤360000新lower实际/槽，缓存历史实际另列、360000历史槽，0训练。构成目标预瞄×神经源的2×3完整对照，不是重开mask/gain搜索；不能称360新独立轨迹或最终测试。run固定`goal_preview_baseline_v1`，raw放HDD。
+
+主比较：每源启用前后到达/物理新增丢失、goal规则下zero/steer/full增量、原alpha成本和自身无扰代价、10/20/30/50cm、全部原XY/实际参考/奖励分项；记录各臂实际干预案例、首次时间与持续时长，区别“未触发”与“触发无收益”。若zero覆盖多数收益则收缩神经独有贡献；若只助学习源，仅称条件互补；若无收益，仅拒绝本固定规则，不宣称所有几何接回无效。不更换触发条件/lookahead/增益/半径或扩场景追正例，不自动重试。
+
+52CPU实际通过4.31秒，涵盖饱和前后几何、inactive精确回原、目标在后/圆内/已过、原航向domain、一次物理/一次slew、代理复制、三源同事件、六角色配对与独立目标/重复slew篡改拒绝。非发起人AI两轮只读审查，无静态启动阻断；不当实际GPU/控制收益。下一按prepare身份/缓存认证、零积分GPU shape、一次执行与360分析进行；当前此节为执行前声明，不是已得结果。
+
+本轮直接打开CMU原始报告[Coulter, 1992, CMU-RI-TR-92-01](https://publications.ri.cmu.edu/storage/publications/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf)，定点读描述/几何与实现（PDF页9–13，含前置封面页）。它已说明目标点变换到车体坐标、按圆弧几何求曲率的常规方法；本文的终点条件是本任务固定诊断变体，不声称报告已有相同触发式或为本动态平衡闭环提供稳定性保证。无外部上传本地数据，旧Stanley原PDF失败不假称读过。

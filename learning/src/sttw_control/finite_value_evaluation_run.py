@@ -359,10 +359,13 @@ def execute(root, *, shape_only=False):
                 params[role]=dict(actor=params[role],feedback_gain_rad=j.float32(model['feedback_gain_rad']))
             if p.get('zero_middle_comparison'):
                 params[role]['actor']=dict(native=params[role]['actor'],zero=j.bool_(model['actor_source_zero']))
-            if p.get('channel_ablation'):
+            if p.get('channel_ablation') or p.get('goal_preview_comparison'):
                 params[role]['actor']=dict(native=params[role]['actor'],keep_channels=j.asarray(model['source_keep_channels'],bool))
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2')
+        if p.get('goal_preview_comparison'):
+            from .goal_preview_baseline import GoalPreviewEnv
+            env=GoalPreviewEnv(env)
         origins={};paths={};context_receipts={}
         for context,c in p['contexts'].items():
             if digest(c['initial'])!=c['initial_sha256'] or digest(c['path'])!=c['path_sha256']:raise ValueError('complete starting context changed')
@@ -397,7 +400,10 @@ def execute(root, *, shape_only=False):
         pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
                            *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        if p.get('preference_speed_authority'):
+        if p.get('goal_preview_comparison'):
+            from .goal_preview_baseline import make_goal_step
+            one=make_goal_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
+        elif p.get('preference_speed_authority'):
             from .preference_speed_authority import make_authority_step
             one=make_authority_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
         elif p.get('channel_ablation'):

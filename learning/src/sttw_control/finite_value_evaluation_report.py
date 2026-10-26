@@ -85,7 +85,11 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
-            if c.get('preference_speed_authority'):
+            goal_audit=None
+            if c.get('goal_preview'):
+                from .goal_preview_baseline import verify_goal_log
+                goal_audit=verify_goal_log(raw,c,cfg,p['feedback_spec'],paths[c['context']])
+            elif c.get('preference_speed_authority'):
                 from .preference_speed_authority import verify_authority_log
                 verify_authority_log(raw,c,cfg,p['feedback_spec'])
             elif 'source_keep_channels' in c:
@@ -135,6 +139,8 @@ def analyze(root):
             rows.append(row);traces[c['case_id']]=dict(raw,**geometry)
             audits.append(dict(case_id=c['case_id'],raw_sha256=item['sha256'],reward_reconstruction=True,
                                physical_label_verified=True,measured_gate_replayed=True))
+            if goal_audit is not None:
+                audits[-1]['goal_preview']=goal_audit
             if len(rows)%30==0:update(completed_cases=len(rows))
         if actual!=state['active_lower_ticks']+cached_actual:raise ValueError('actual lower cost accounting mismatch')
         summary={name:paired_report(group,roles=roles) for name,group in dict(all=rows,
@@ -199,6 +205,10 @@ def role_labels(rows):
                          'steer_only_feedback':'free_GAE neural steering only',
                          'preference_speed_authority':'free_GAE physical speed offset x(1-alpha)'}.get(row['role'],actor_label)
             label=f"{actor_label} + steering {row['feedback_gain_rad']:g}rad"
+        if row.get('goal_preview'):
+            source={'goal_zero_feedback':'zero NN','goal_steer_feedback':'neural steering only',
+                    'goal_full_feedback':'full NN'}[row['role']]
+            label=f'Goal-preview PP / {source} + feedback 0.1rad'
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
         if row['role']=='feedback_shared':label='free_GAE (original alpha) + common alpha0.5 profile feedback 0.1rad'
@@ -225,6 +235,11 @@ def goal_report(rows,roles):
         groups={}
         for row in group:groups.setdefault((row['context'],row['alpha'],row['event_id']),{})[row['role']]=row
         contrasts=[(role,baseline) for role in roles if role!=baseline]
+        if 'goal_full_feedback' in roles:
+            contrasts += [(a,b) for a,b in [('goal_zero_feedback','zero_middle_feedback'),
+                ('goal_steer_feedback','steer_only_feedback'),('goal_full_feedback','feedback_010'),
+                ('goal_full_feedback','goal_zero_feedback'),('goal_steer_feedback','goal_zero_feedback'),
+                ('goal_full_feedback','goal_steer_feedback')]]
         if 'preference_speed_authority' in roles:
             contrasts += [('preference_speed_authority','feedback_010'),
                           ('preference_speed_authority','steer_only_feedback')]
@@ -256,7 +271,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .zero_middle_feedback import ZERO_ROLES
     from .middle_channel_ablation import CHANNEL_ROLES
     from .preference_speed_authority import AUTHORITY_ROLE
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)
+    from .goal_preview_baseline import GOAL_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
@@ -328,7 +344,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             for suffix in ['png','pdf']:figure.savefig(out/(base+'.'+suffix),dpi=110);figures.append(base+'.'+suffix)
             plt.close(figure)
     for context,(figure,axes) in overviews.items():
-        handles,labels=axes[0,0].get_legend_handles_labels();figure.legend(handles,labels,loc='outside lower center',ncol=6,fontsize=8)
+        handles,labels=axes[0,0].get_legend_handles_labels();figure.legend(handles,labels,loc='outside lower center',ncol=2 if any(r.get('goal_preview') for r in rows) else 6,fontsize=8)
         figure.suptitle(context+f' | all{counters[context]} events /{sum(r["context"]==context for r in rows)} actual trajectories, original paths and true endpoints')
         name='all_xy_'+context+'.png';figure.savefig(out/name,dpi=120);plt.close(figure);figures.append(name)
     return figures+render_tradeoff(out,rows,context_count=len(paths),goal_radius=goal_radius)
@@ -345,7 +361,8 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     from .zero_middle_feedback import ZERO_ROLES
     from .middle_channel_ablation import CHANNEL_ROLES
     from .preference_speed_authority import AUTHORITY_ROLE
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)
+    from .goal_preview_baseline import GOAL_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     labels_by_role=role_labels(rows)
