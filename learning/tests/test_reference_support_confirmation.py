@@ -112,3 +112,12 @@ def test_supported_candidate_preserves_events_and_uses_only_existing_gate():
         assert a['mode_index']==0 and b['mode_index']==1 and b['causal_support']
         assert {k:v for k,v in a.items() if k not in ['mode_index','causal_support']}=={k:v for k,v in b.items() if k not in ['mode_index','causal_support']}
     with pytest.raises(ValueError):supported_candidate_cases(original,'finite_GAE')
+
+
+def test_plot_labels_distinguish_supported_actor_and_reject_mode_mixing():
+    from sttw_control.finite_value_evaluation_report import role_labels
+    import pytest
+    assert role_labels([dict(role='free_GAE',causal_support=True)])['free_GAE']=='free_GAE + short support'
+    assert role_labels([dict(role='free_GAE',causal_support=False)])['free_GAE']=='free_GAE'
+    with pytest.raises(ValueError,match='mixed support'):
+        role_labels([dict(role='free_GAE',causal_support=True),dict(role='free_GAE',causal_support=False)])

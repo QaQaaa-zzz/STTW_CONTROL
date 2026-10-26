@@ -131,3 +131,27 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 主评价到达30cm（10/20/50cm辅报）、独立整窗不摔，列无扰保留、对原短规则和同Actor单独部署的新增/丢失、原alpha成本及全XY。所有结果DEV；允许失败，若组合无有用增量则停止扩组合，不继续遍历全部Actor和支持规则。先prepare身份认证和GPU零积分shape，再实际执行；30完成或工程错误停止，无自动重试/训练/采用。
 
 新root runs/frozen_candidate_short_support_v1全HDD。源码版本在提交后记录；系统盘约65GiB、GPU空闲约23GiB，现Bark active，email/autofix inactive。
+
+
+## 单网络＋同一短支持组合：完成结果（2026-10-26）
+
+实际执行code8b68cb4，prepare和GPU零积分shape通过，进程1112437完整退出，30/30、60000实际/分配lower步、0optimizer，执行188.60秒（含编译/保存，不当纯仿真吞吐）。120联合只读分析完成，90缓存171533旧lower步单列、总231533；600次固定轨迹alpha重计与全部raw/时钟/物理/原奖励/gate核验，UNKNOWN0。没有新训练或重跑基线。
+
+|方案|无扰到达/6|受扰到达/24|受扰不摔/24|
+|---|---:|---:|---:|
+|free_GAE单独（上一补评缓存）|6|6|21|
+|**free_GAE＋同短时支持**|**6**|**7**|**24**|
+|原task64＋同短时支持|5|9|22|
+|原task64＋全程支持|3|4|24|
+
+组合相对同Actor单独：受扰到达新增1/丢0，防摔新增3/丢0，无扰标签不变。新增到达是左alpha0/+32N，最近目标.0817m；另两项防摔救回不能冒称任务恢复。相对原task64＋短支持：无扰新增1/丢0；受扰到达新增0/丢2、防摔新增2/丢0。那两项防摔新增为左alpha.5/−32与alpha1/−32，虽没摔但距目标最近2.309m和4.857m，不是小精度误差。
+
+半径10/20/30/50cm下受扰到达：组合4/5/7/9；同Actor单独4/4/6/7；原task＋短7/8/9/9。50cm下组合与原短规则到达打平、存活更多，这是辅口径真实取舍；不能事后把主30cm改成50cm来声称主胜利。原alpha无扰均值组合32.76296、同Actor单独32.76331，微差不解释为改进；原task短支持31.74185。组合和原全程支持24受扰均存活，其原alpha平均成本65.0234与77.6693，仅描述这批原目标下结果，不据此声称各alpha都优或普遍Pareto保证。
+
+**裁决**：保留组合为“名义保留＋较强防摔”的候选及后续强基线；本次既不是全负结果，也未超过原短规则的主受扰到达。不自动替换已采用Actor，不扩展全部Actor×支持矩阵，不以继续加训解释一切。下一重点转到真实失败中的任务接续与有限双参考可控机会，而非再次验证同一种提速是否有效。
+
+全部120XY、原alpha奖励/分项图见runs/frozen_candidate_short_support_v1/analysis。图中`free_GAE + short support`是本组合，不是不带支持的旧free_GAE；此次补了显式模式图例，label_amendment保留报告源SHA变化，仅重绘派生图、0新物理。实际目视左右全120概览和左alpha0/+32救回、左alpha.5/−32只救住未到达、右alpha.5/+32丢失三个细例；余27细图及30分项图未逐张审，visual_review_complete=false。
+
+[全部左XY](../../../../runs/frozen_candidate_short_support_v1/analysis/all_xy_left80_R1p4_v1p2.png) · [全部右XY](../../../../runs/frozen_candidate_short_support_v1/analysis/all_xy_right100_R1p2_v1p5.png) · [主要结果](../../../../runs/frozen_candidate_short_support_v1/analysis/goal_summary.json) · [与同Actor单独的身份匹配比较](../../../../runs/frozen_candidate_short_support_v1/analysis/combination_pair_review.json)。
+
+补充定位：组合仍未到达的17个受扰例，最近目标距离中位1.225m、范围.3025–4.857m；仅2例在50cm内。9例触发过短支持、8例从未触发，因此不能把全部任务失败归因为提速造成偏航或释放太早。该统计是相关定位，未证明某个替代参考可救回；下一机会诊断必须同时含“曾支持”和“未支持”失败，并保留当前成功例，不能只挑能讲故事的失败。

@@ -166,6 +166,20 @@ def analyze(root):
         (out/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise
 
 
+
+def role_labels(rows):
+    """Make execution mode visible when a learned Actor also uses support."""
+    labels={}
+    for row in rows:
+        label=row['role']
+        if row.get('causal_support') and label!='parent_causal':
+            label+=' + short support'
+        if row['role'] in labels and labels[row['role']]!=label:
+            raise ValueError('mixed support modes under one displayed role')
+        labels[row['role']]=label
+    return labels
+
+
 def goal_report(rows,roles):
     result={}
     for split,group in dict(all=rows,nominal=[r for r in rows if not r['force_N']],
@@ -199,7 +213,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .path_command_reward import configured_cost_keys
     colors=dict(zip(ROLES,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9']))
     styles=dict(zip(ROLES,[':', '-.', ':', '--', '-', '-.']))
-    groups={};figures=[];cost_keys=list(configured_cost_keys(cfg))
+    groups={};figures=[];cost_keys=list(configured_cost_keys(cfg));labels_by_role=role_labels(rows)
     for r in rows:groups.setdefault((r['context'],r['alpha'],r['event_id']),[]).append(r)
     alphas=sorted({r['alpha'] for r in rows});used_roles=[role for role in ROLES if any(r['role']==role for r in rows)]
     columns=max(sum(key[0]==context for key in groups)//len(alphas) for context in paths)
@@ -219,7 +233,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
         clouds=[reference]
         for r in group:
             role=r['role'];d=traces[r['case_id']];a=d['active_tick'];t=d['physical_tick'][a]*.005;xy=d['actual_xy'][a]
-            clouds.append(xy);style=dict(color=colors[role],ls=styles[role],label=role)
+            clouds.append(xy);style=dict(color=colors[role],ls=styles[role],label=labels_by_role[role])
             for ax in [axes[0],small]:
                 ax.plot(xy[:,0],xy[:,1],**style);ax.scatter(*xy[-1],color=colors[role],marker='x' if r['category']=='contact' else 'o',s=24)
             for i,key in [(1,'path_cross_track'),(3,'path_heading_error'),(4,'phi'),(5,'actual_delta'),(10,'phi_dot')]:axes[i].plot(t,d[key][a],**style)
@@ -283,7 +297,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             x=float(np.mean([r['scored_cost'] for r in nominal]))
             physical=float(np.mean([r['category'] in ['safe_task','safe_task_failed'] for r in disturbed]))
             task=float(np.mean([r['goal_arrived'] is True if goal_radius is not None else r['category']=='safe_task' for r in disturbed]))
-            for ax,y in zip(axes[:,column],[physical,task]):ax.scatter(x,y,color=colors[role],marker=markers[role],label=role)
+            for ax,y in zip(axes[:,column],[physical,task]):ax.scatter(x,y,color=colors[role],marker=markers[role],label=labels_by_role[role])
         for row,ax in enumerate(axes[:,column]):
             ax.set(title=f'Original alpha{alpha:g}',xlabel='Mean nominal originalalpha cost',
                    ylabel='Disturbed survival' if row==0 else ('Disturbed goal arrival' if goal_radius is not None else 'Disturbed joint task success'),ylim=(-.05,1.05));ax.grid(alpha=.2)
