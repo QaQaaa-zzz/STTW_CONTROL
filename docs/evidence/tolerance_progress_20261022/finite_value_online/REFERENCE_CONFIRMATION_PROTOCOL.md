@@ -1512,3 +1512,20 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 **研究裁决**：当前有价值结果是同冻结local300/有限参考闭环下的偏好与恢复能力取舍、current真实到达新增及强简单基线；还没有能解决取舍的新方法。非发起人AI复核同意先整合，不立即绕四个零基线胜例再扩库/新gate/盲续训。下一若做物理，必须先给可证伪假设：从预声明同一完整current前缀状态出发，固定少量可执行参考干预能否改善损失，同时保住匹配current-only/无扰情境；完整carry与原用户alpha不换、尾段完整、不扫参数、不成功后选例。阳性只证明局部控制机会，非部署选择器或投稿完成；阴性也仅否定有限集合。当前未封存/启动此新物理验证，不把构想登记成已实施。
 
 证据runs/h75_disturbed_common_interface_v1/static_task_baseline_review/{README.md,review.json,receipt.json,independent_review.md,prose_correction.json}；CLI review_static_task_baselines.py实际执行完成/0积分。全部XY复用analysis_reconstructed_v2/h75_review五总览，不重复图/改坐标。当前无本任务活动物理/分析/训练，原模型/用户dirty源码/远端/另一项目/实机不动，Trans目标active。
+
+
+### 2026-10-26 同状态短暂停机会验证：固定设计、实现与零积分预检
+
+**问题与目的**：现有整回合不同策略生成不同受扰状态，不能据四zero-only成功说同一current状态可救。测试一项明确有限假设：同一current完整计划脉冲后状态，暂时将神经参考请求置零是否有增量。不是新检测器、自由控制优化或部署策略；成功只证明局部可控机会，不能直接声称方法新颖/可在线识别。
+
+**设计/条件**：runs/same_state_reference_pause_v1，固定全部原120current事件：12完整进入context×alpha0/1×force0/±16/±32N，原0.1s脉冲/原固定随机起扰时刻。模型、local300、原useralpha、原world路径/目标、共同goal-preview/短支持/反馈.1及参考权限保持。每例只执行一次current真实前缀，到原declared onset+20lower ticks（计划pulse结束，2.92–4.86s）freeze，literal repeat完整外层carry成三分支：full_current、只将神经steer源请求置零80lower ticks(.4s)、两神经源请求置零80ticks；之后都恢复原current控制律并观察到原10s。不是返回旧动作/轨迹，不reset历史/ESO/FIFO/滤波/offset/slew/短支持/gate/重入状态/物理或task时钟。actor合法性原样保留，不强制绕过gate发动作。
+
+计划分叉时刻是特权诊断信息，零力也在原声明synthetic time同样暂停，不冒充因果检测器。暂停只改变既有请求，实际变化经原filter/slew及幅值约束，非立即清除修正/关闭电机。固定窗根据原filter.08/.1s与参考slew选取，当前DEV结局已看过，不包装独立预注册。120不按成功/失败筛选，四zero-only和全部current-only/名义全部覆盖。切点前触地保留为未获干预机会、不替换；全事件与新前缀实际到达fork的子集分列。记录新prefix冲量及原数值容差暴露核验，不按未来force调整cutpoint。
+
+**工程实现**：same_state_reference_pause.py定义固定3mask/80tick、完整carry克隆、每lane prefix无假tick冻结、pause封装原make_goal_step。evaluate_same_state_pause.py已有prepare/shape/execute：vmap120前缀与vmap360尾段、scan50、sharedcache/cuda,cpu/CPUcallbacks，真正从common_fork_carry.pkl完整克隆，不从raw拼状态；full_current尾段本次新执行，旧raw仅旁证，不设精确重放门槛。保存fork逐叶相等、prefix预终止、pause合法tick/实际观测、冲量、完整尾段原XY/参考/奖励raw。prefix和suffix实际计费各自记录；逻辑360完整轨迹重复引用prefix不重复算物理；所有冻结lane/scanpadding槽仍计费。当前计划actual上界530736lower、allocated上界696000slots，0训练，无墙钟截断，prefix共享的实际节约要等运行测量才报告。
+
+**本轮已执行**：4CPU测试passed .66s，验证history/FIFO/ESO/RNG/filter/gate/clock逐叶克隆、冻结不积分/不改状态、暂停精确80ticks/恢复边界不reset、完整120/360inventory拒漏例。prepare session34006 exit0，source/model/checkpoint/normalizer/资产/完整bank/核心AST与原source认证，源码SHA/快照保存，0物理。shape driver session68731 parent2888995/child2888998已退出exit0，prefix(50,120,4)/suffix(50,360,4)图形检查完成，0实际lower/slots/训练；中文shape完成Bark accepted=true。CPU与shape不证明控制效果，360最终结果PENDING。
+
+**非发起人审阅与停止**：independent_design_review.md存第7步AI反审：支持有界执行，要求完整外层carry/全部预终止/实际冲量/新full尾段/明确暂停语义/全计费，以上已落实代码和协议。固定三分支先分别报告到达与触地gain/loss、原alpha成本/参考变化、名义保留；逐例最佳仅后验机会。一次结束，不按结果扩时长、切点或动作库，不加训/拟合旧公式。无增量仅否定本有限暂停集合，不否定全部协调；有增量也不直接采用控制器。
+
+**当前状态与下一步**：physical尚未启动，root status prepared/0积分；实际分析CLI和生产driver完成前不启动。接下来先补只读同状态三分支分析（含新prefixeligibility/全事件、原usercost、完整XY/有效请求、actual/padding正确计费）、封存driver/Bark后执行唯一固定物理，再据结果保留/关闭这一假设。原模型/用户dirty源码/远端/JIT/实机不动；Trans目标active。
