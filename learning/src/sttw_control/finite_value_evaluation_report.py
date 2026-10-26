@@ -351,7 +351,7 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     labels_by_role=role_labels(rows)
     alphas=sorted({r['alpha'] for r in rows})
     figures=[]
-    tradeoff,axes=plt.subplots(2,len(alphas),figsize=(3.8*len(alphas),8),squeeze=False,layout='constrained')
+    tradeoff,axes=plt.subplots(2,len(alphas),figsize=(max(10.,3.8*len(alphas)),8),squeeze=False,layout='constrained')
     markers=dict(zip(used_roles,['o','s','^','D','P','X','v','*']))
     for column,alpha in enumerate(alphas):
         for role in used_roles:
@@ -372,9 +372,9 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
             ax.set(title=f'Original alpha{alpha:g}',xlabel='Mean nominal originalalpha cost',
                    ylabel='Disturbed survival' if row==0 else ('Disturbed goal arrival' if goal_radius is not None else 'Disturbed joint task success'),ylim=(-.05,1.05));ax.grid(alpha=.2)
     axes[0,-1].legend(fontsize=6)
-    tradeoff.suptitle(('Fixed-reference DEV: nominal cost / disturbed goal arrival; correlated branches, no continuous frontier or independent CI' if goal_radius is not None else
-        'Empirical DEV cost / capability points; correlated branches, no continuous frontier or independent CI'))
+    tradeoff.suptitle(('Fixed-reference DEV: nominal cost / disturbed goal arrival\nCorrelated branches; no continuous frontier or independent CI' if goal_radius is not None else
+        'Empirical DEV cost / capability points\nCorrelated branches; no continuous frontier or independent CI'))
     for suffix in ['png','pdf']:
-        name='nominal_cost_vs_disturbed_outcomes.'+suffix;tradeoff.savefig(out/name,dpi=120);figures.append(name)
+        name='nominal_cost_vs_disturbed_outcomes.'+suffix;tradeoff.savefig(out/name,dpi=120,bbox_inches='tight');figures.append(name)
     plt.close(tradeoff)
     return figures
