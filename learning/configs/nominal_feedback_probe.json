@@ -1,0 +1,13 @@
+{
+  "schema": "nominal_deviation_and_existing_gate_probe_v1",
+  "roles": ["feedback_nominal", "feedback_gate"],
+  "feedback_gain_rad": 0.1,
+  "path_scale_m": 0.5,
+  "heading_scale_rad": 0.3,
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "nominal_source_role": "free_GAE",
+  "profile_index": "Current latched original path progress, before this control advance",
+  "out_of_profile_range": "Disable added steering feedback; original Actor and existing short speed support continue",
+  "stop": "108 new episodes: two frozen feedback variants x (48 disturbed + 6 nominal); reuse all270 source controls. No training, tuning, automatic retry or adoption."
+}

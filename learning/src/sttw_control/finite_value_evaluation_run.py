@@ -352,7 +352,10 @@ def execute(root, *, shape_only=False):
             for key in ['actor','checkpoint']:
                 if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen endpoint changed')
             with Path(model['actor']).open('rb') as stream:params[role]=jax.tree.map(j.asarray,pickle.load(stream))
-            if p.get('feedback_spec') is not None:
+            if p.get('nominal_feedback_spec') is not None:
+                params[role]=dict(actor=params[role],feedback_gain_rad=j.float32(model['feedback_gain_rad']),
+                                  feedback_kind=j.int32(model['feedback_kind']))
+            elif p.get('feedback_spec') is not None:
                 params[role]=dict(actor=params[role],feedback_gain_rad=j.float32(model['feedback_gain_rad']))
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2')
@@ -377,13 +380,22 @@ def execute(root, *, shape_only=False):
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         states=[origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
         carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
-        batch_paths=stack([paths[c['context']] for c in cases]);parameters=stack([params[c['role']] for c in cases])
+        batch_paths=stack([paths[c['context']] for c in cases])
+        if p.get('nominal_feedback_spec') is not None:
+            tables={}
+            for key,item in p['nominal_profiles'].items():
+                with np.load(item['file'],allow_pickle=False) as z:tables[key]={k:j.asarray(z[k]) for k in z.files}
+            parameters=stack([dict(params[c['role']],nominal_table=tables[f"{c['context']}/a{c['alpha']:g}"]) for c in cases])
+        else:parameters=stack([params[c['role']] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)
         pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
                            *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        if p.get('feedback_spec') is not None:
+        if p.get('nominal_feedback_spec') is not None:
+            from .nominal_reference_feedback import make_nominal_evaluation_step
+            one=make_nominal_evaluation_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['nominal_feedback_spec'])
+        elif p.get('feedback_spec') is not None:
             from .reference_task_feedback import make_feedback_evaluation_step
             one=make_feedback_evaluation_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
         else:one=make_evaluation_step(env,make_path_actor(cfg),horizon_s=10.)

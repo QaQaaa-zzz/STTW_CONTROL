@@ -85,7 +85,12 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
-            if 'feedback_gain_rad' in c:
+            if 'feedback_kind' in c:
+                from .nominal_reference_feedback import verify_nominal_feedback
+                profile=p['nominal_profiles'][f"{c['context']}/a{c['alpha']:g}"]
+                with np.load(profile['file'],allow_pickle=False) as z:table={k:z[k] for k in z.files}
+                verify_nominal_feedback(raw,c,cfg,p['nominal_feedback_spec'],table)
+            elif 'feedback_gain_rad' in c:
                 from .reference_task_feedback import verify_feedback_log
                 verify_feedback_log(raw,c,cfg,p['feedback_spec'])
             path=paths[c['context']];geometry=geometric_task_trace(raw,path,cfg,initial_xy=item['initial_xy'])
@@ -153,7 +158,7 @@ def analyze(root):
         for role,counts in summary['all']['role_counts'].items():lines.append('|'+role+'|'+'|'.join(str(counts[k]) for k in CATEGORIES)+'|')
         if 'goal_radius_m' in p:
             lines=[f'# 新几何低速：冻结策略与参考支持的{n}轨迹对照','',
-                '主要任务为进入原目标30cm区域，不要求末段保持。整窗触地和旧严格跟踪指标另存，不作主要任务门槛。','',
+                f"主要任务为进入原目标{p['goal_radius_m']*100:g}cm区域，不要求末段保持。整窗触地和旧严格跟踪指标另存，不作主要任务门槛。",'',
                 '|角色|目标到达|整窗未触地|触地|到达未知|','|---|---:|---:|---:|---:|']
             for role,counts in goal_report(rows,roles)['all']['counts'].items():
                 lines.append(f"|{role}|{counts['arrived']}|{counts['survived']}|{counts['contact']}|{counts['unknown']}|")
@@ -177,6 +182,8 @@ def role_labels(rows):
         label=row['role']
         if row.get('feedback_gain_rad',0)>0:
             label=f"free_GAE + steering {row['feedback_gain_rad']:g}rad"
+        if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
+        if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
         if row.get('causal_support') and label!='parent_causal':
             label+=' + short support'
         if row['role'] in labels and labels[row['role']]!=label:
@@ -217,7 +224,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .live_endpoint_analysis import block_reward_series
     from .path_command_reward import configured_cost_keys
     from .reference_task_feedback import PROBE_ROLES
-    available=ROLES+PROBE_ROLES
+    from .nominal_reference_feedback import NOMINAL_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
