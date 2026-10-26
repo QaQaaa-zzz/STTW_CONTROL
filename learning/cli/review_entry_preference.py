@@ -59,13 +59,19 @@ def review(root):
         script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),physics_steps=0,optimizer_updates=0,
         scope='Descriptive matched-alpha consequences; all event labels retained. Continuous means use the same events surviving for all three alpha over10s within each role, with exclusions counted. Different roles may have different survivor sets; the plotted points are not fair cross-role rankings. Do not compare different-alpha objective costs, infer a Pareto frontier or independent confidence intervals. Shared ancestor and frozen Actor; no independent training repeat.',visual_review_complete=False)
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    render(root,result,plan['evaluation_roles'])
+    print(json.dumps(summary,ensure_ascii=False))
+
+
+def render(root,result,roles,*,readable=False):
+    summary=result['summary']
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     fig,axes=plt.subplots(2,3,figsize=(13,8),layout='constrained')
     names={'goal_zero_feedback':'Zero neural middle','goal_steer_feedback':'Neural steering only','goal_full_feedback':'Full neural middle'}
     for row,split in enumerate(['nominal','disturbed']):
-        for col,role in enumerate(plan['evaluation_roles']):
+        for col,role in enumerate(roles):
             ax=axes[row,col];data=summary[split][role]
             for a,color,marker in [(0.,'#0072B2','o'),(.5,'#009E73','s'),(1.,'#D55E00','^')]:
                 point=data['means_on_same_common_events'][str(a)]
@@ -73,12 +79,30 @@ def review(root):
                     ax.scatter(point['path_rmse_m'],point['speed_rmse_m_s'],color=color,marker=marker,s=55,label=f'alpha={a:g}')
             ax.set(title=f'{names[role]} / {split}\nSame events: {data["common_full_window_events"]}/{data["total_matched_events"]}',
                    xlabel='Mean whole-task path RMSE (m)',ylabel='Mean whole-task speed RMSE (m/s)')
+            if readable:
+                # Do not visually magnify float32 noise in alpha-invariant
+                # zero-middle baselines. Keep each original point unchanged.
+                points=list(data['means_on_same_common_events'].values())
+                for axis,key,minimum in [('x','path_rmse_m',.05),('y','speed_rmse_m_s',.02)]:
+                    values=[p[key] for p in points if p[key] is not None]
+                    if values:
+                        center=(max(values)+min(values))/2
+                        half=max(minimum,max(values)-min(values))*0.65
+                        (ax.set_xlim if axis=='x' else ax.set_ylim)(max(0.,center-half),center+half)
+                ax.ticklabel_format(style='plain',axis='both',useOffset=False)
             ax.grid(alpha=.2);ax.legend(fontsize=8)
     fig.suptitle('Within-role matched alpha consequences — survivor sets may differ across roles\nDiscrete DEV points; arrival and contact losses retained in JSON; shared initial ancestor')
-    fig.savefig(root/'analysis/entry_preference_consequences.png',dpi=150,bbox_inches='tight');plt.close(fig)
-    print(json.dumps(summary,ensure_ascii=False))
+    name='entry_preference_consequences_readable.png' if readable else 'entry_preference_consequences.png'
+    fig.savefig(root/'analysis'/name,dpi=150,bbox_inches='tight');plt.close(fig)
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True)
-    review(parser.parse_args().run)
+    parser.add_argument('--render-readable',action='store_true')
+    args=parser.parse_args()
+    if args.render_readable:
+        root=args.run.resolve()
+        result=json.loads((root/'analysis/entry_preference_review.json').read_text())
+        plan=json.loads((root/'plan.json').read_text())
+        render(root,result,plan['evaluation_roles'],readable=True)
+    else:review(args.run)
