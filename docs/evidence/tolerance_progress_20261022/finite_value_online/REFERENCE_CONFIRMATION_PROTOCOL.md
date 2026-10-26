@@ -1414,3 +1414,15 @@ native四情境8原worldXY全图实际目视，初稿legend遮挡已保留，另
 scientific-brainstorming非发起人只读AI两次反审归档lineage_cost_mechanisms_v2/independent_review.md：同意优先原生复用，H75不是从未有偏好，当前瓶颈是迁移/保持未定位；不能因χ0推真实风险低或因原生激活认定其造成全部差异。下一优先核对当前权重同原生8例缓存，没有再只补8例（同任务/初态/接口/评价，只换认证权重）。若当前原生仍有效则保留迁移/覆盖解释；若丢失才定位这项能力退化，但不自动归因算法/训练不足。暂缓192新dual+H75低速扰动扩展，不新gate/调χ/拟合Emin/盲加训，不设置零regret/不摔门槛。H75/dual强对照及当前实用用途都保留，采用Actor/别名不改。
 
 证据runs/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/{lineage_cost_mechanisms_v2,h75_native_preference_v1}/{README.md,review.json}及native图/current_cache_lookup.json；原全120XY仍在lineage_nominal_review。当前无活动新物理/训练，无push/JIT/实机，Trans控制增量与独立证据仍未完成。
+
+### 2026-10-26 当前原生偏好8例：身份准备、0积分资产错误与新attempt2启动
+
+19bbb30实现专用prepare/driver/联合分析CLI，原H75四弯速×alpha0/1/F0/onset1的完整native config/source直接复用，8新current最大16000lower实际及槽、0训练；8H75实际16000/槽单列，联合16。当前fixed64 Actor/checkpoint/fingerprint先按原modern source认证，native architecture/inference用16条旧真实alpha0观测对现代Actor max差0，非新物理/两个端点完整行为检查。H75八raw逐SHA核。无goal-preview/feedback/short support/新终止规则；原生失败与domain/观察窗完整性分列，失败不筛选，另只读原目标50cm点圆不改变原native reward/control或撤销截面成功。
+
+为保留原native数值路径，用原native manifest tracked commit18d34d627611fe3660d332a3e83c4066638639d7的learning代码在本新run复制只读，归档/每文件SHA封存，不修改原历史snapshot。主physics/env/controller/actuator/path等核心AST与当前一致，新增policy/screen分支不混装，实际执行归档代码。原旧evaluator manifest code_revision只取launch工作树HEAD；launch_identity另记真正归档commit/档SHA与启动/分析脚本SHA，不冒称历史未提交patch不存在/依赖完全复原/精确重放。原接口、原prepared-bank完整snapshot与env.reset/history语义不变，仅换中层权重，不借其它policy受扰后快照。
+
+首attempt=current_native_preference_v1，原exec session3785 controller2756462/child2756467终结于loading FileNotFoundError：复制learning后，model.py相对ROOT下未绑定原mujoco_ros_ws20260313资产目录；0积分/0completed，不是策略失败或0/8成绩。此前preflight漏了此相对资产依赖。原status/日志/plan/中文错误Bark accepted=true均保留。24e8077修prepare路径绑定：先原load_model核sourceXML/portableXML/全部6mesh SHA/MuJoCo版本全等source，再新run中symlink原资产目录，不改字节/物理。新attempt2 prepare session51650 exit0，archive/currentActor/checkpoint/config/source/8cases与首attempt一致，repair_receipt记唯一绑定变化及0失败积分；不是自动重试服务/循环，不覆盖/重指向旧attempt1。
+
+实际通过attempt2归档model.load_model默认路径验证身份全等、六mesh匹配（0积分），archived_asset_preflight保存。新driver session80067实际启动，controller2765412/execute2765415本次/proc均live，evaluation screening/task_seconds0、elapsed7.15s/active_lower0（编译中）/completed0，8最终结果PENDING。原生vmap8/scan≤50/共享编译cache/cuda,cpu保留，无CPU隐藏GPU/新慢控制器。输出HDD current_native_preference_v1_attempt2，逻辑runs同名；系统盘65GiB。原默认loader继续核完整source资产/模型/底层/normalizer/bank身份。
+
+后续同session80067/原PID低频或进程退出事件回收，不因观察超时重启；顺序actual8→只读16含原H75分析/全XY/原user两目标成本，完成/错误显式中文Bark，失败保留停止，不扩场景/扰动/训练/预算。原registry/采用模型/用户dirty源码不动，无push/JIT/硬件操作，目标Trans未完成。此次问题修复及新启动已同步共享台账；不把prepare/编译当偏好通过结果。
