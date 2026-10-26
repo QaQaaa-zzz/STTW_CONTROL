@@ -644,3 +644,16 @@ scientific-visualization技能用于图表真实性核对及重绘，来源已�
 结果preference_phase_review.json逐轨迹存全部窗口、24端点对比、原SHA及脚本/模块SHA。所有阶段一次报全；这是看到旧结果后的探索性复审，不是事后宣称预注册确认，也不新增4/4硬门槛。当前物理标签/50cm主成功数/α输入/已采用Actor均未变。
 
 **决策及下一步**：继续保留普通反馈作为认真候选，收窄名义反馈的偏好保留主张，停止微调gain/表。在扩大几何前，还有一个更直接的归因缺口：当前.05/.10参考反馈只套在freeGAE final64上；原task普通续训父Actor仅测了短支持，尚未定位到同面板的“原task Actor＋同.10反馈”实测。旧parent_causal24/48对free短23/48已接近，因此不能把后续39/48的提升归功于freeGAE训练本身。下一只考虑固定.10反馈在原task Actor上的匹配对照，检查是否能复用更简单父模型；若覆盖当前表现，就去掉不必要的训练故事。此对照尚未实现/启动，不扫gain、不加训练；现阶段不据未穷尽检索断言历史绝无类似实验。之后才声明独立条件验证。Transactions目标继续active，无push/实机。
+
+
+## 原task父Actor＋相同0.10反馈：启动前声明（2026-10-26）
+
+目的：消除训练归因混淆。已有原task短24/48与free短23/48接近，但.10反馈39/48只在freeGAE final64上测过；不能以加反馈后的改善证明freeGAE训练有贡献。本轮只更换Actor，比较父网络能否以同样简单反馈取得相当实际到达、防摔、原alpha过程代价及偏好表现。父网络若覆盖收益就简化训练路线；没有覆盖也仅本DEV条件的配对证据，不自动归因为特定价值学习机制。
+
+原task_only64 Actor SHA2d053213d3650c6b7b2f5279d95b175d9cac50bc10b7e3244668ee27e94ae34a，沿原parent_causal native身份认证，与freeGAE SHA d3df2dfebaecb607cdd32ef2fac9d82d1120c848e3ba7d950eaf483742493286区分。原native模型各自加载，统一原观察/动作接口，不把父别名错送freeGAE native检查。两者均冻结；local300、真实prepared bank2/4初态及其控制/执行历史、原两路径、原alpha0/.5/1、.10反馈公式、短支持、滤波slew/限幅/权限/重入条件和2000lower窗完全保持。
+
+新60=四context×三alpha×0/±16/±32N，48受扰12zero，原.1s脉冲和所有起扰时刻逐case复用，不透露未来事件；最多120000新lower/槽、0optimizer。精确缓存原五方法300（576597历史lower/600000槽），联合360；不把另一批弱反馈60当新父网络对照，也不池化相关分支。只改case role/Actor身份字段，图例明确parent task_only64，原kernel AST不改，单物理advance保持。
+
+评价按已定50cm/10s首次实际到达及10/20/30cm敏感性、防摔单列、无扰及双方存活原alpha代价、逐bank/alpha新增丢失、全360XY；偏好另按已建立到达前/同持续时间窗口核查，不添加4/4或全指标胜出门槛。配置parent_feedback_confirmation.json；36相关CPU测试通过，覆盖case只换Actor不换反馈/事件/alpha与标签真实性、拒绝改gain/阈值/缺条件及旧回归。
+
+计划root runs/parent_actor_feedback_confirmation_v1全HDD，目前未prepare/shape/积分，收益PENDING。prepare核验native/缓存/原runtime与kernel，再GPU零积分shape，通过才积分；60结束或工程错误停，不自动重试/训练/采用，不扫gain或表。原stage注册+Bark保持，email/autofix inactive。下一至多三项：身份prepare→shape及真实60→全XY/配对结果和到达前偏好裁决。Transactions目标active，未push/实机。

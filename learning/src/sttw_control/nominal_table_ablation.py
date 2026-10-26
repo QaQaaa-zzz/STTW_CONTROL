@@ -10,6 +10,7 @@ from pathlib import Path
 from .preference_best import atomic_json,digest
 
 SHARED_ROLE='feedback_shared'
+PARENT_ROLE='parent_feedback_010'
 
 
 def nominal_profile_key(case):
@@ -54,6 +55,31 @@ def weak_feedback_cases(cases,protocol):
     return result
 
 
+def parent_feedback_cases(cases,protocol):
+    if (protocol['schema']!='parent_actor_fixed_feedback_v1'
+            or protocol['executed_alphas']!=[0.,.5,1.]
+            or protocol['feedback_gain_rad']!=.1 or protocol['goal_radius_m']!=.5
+            or protocol['actor_role']!='parent_causal'):
+        raise ValueError('fixed parent Actor/.10 feedback/full alpha protocol required')
+    result=[]
+    for original in cases:
+        if original['role']!='feedback_010':continue
+        if (original['feedback_kind']!=3 or original['feedback_gain_rad']!=.1
+                or original['mode_index']!=1 or not original['causal_support']):
+            raise ValueError('unchanged constant feedback and short support required')
+        case=copy.deepcopy(original)
+        case.update(role=PARENT_ROLE,actor_role='parent_causal',
+                    case_id=original['case_id'].rsplit('/',1)[0]+'/'+PARENT_ROLE)
+        result.append(case)
+    if len(result)!=60 or len({r['case_id'] for r in result})!=60:
+        raise ValueError('exact60 full-alpha episodes required')
+    return result
+
+
+def prepare_parent_feedback(root,*,source,protocol_file):
+    return _prepare_ablation(root,source=source,protocol_file=protocol_file,weak=False,parent=True)
+
+
 def prepare_shared_table(root,*,source,protocol_file):
     return _prepare_ablation(root,source=source,protocol_file=protocol_file,weak=False)
 
@@ -62,7 +88,7 @@ def prepare_weak_feedback(root,*,source,protocol_file):
     return _prepare_ablation(root,source=source,protocol_file=protocol_file,weak=True)
 
 
-def _prepare_ablation(root,*,source,protocol_file,weak):
+def _prepare_ablation(root,*,source,protocol_file,weak,parent=False):
     from .finite_value_evaluation_report import evaluation_inputs
     from .nominal_initial_confirmation import authenticate_initial_models
     from prepare_short_recovery_campaign import register
@@ -94,11 +120,12 @@ def _prepare_ablation(root,*,source,protocol_file,weak):
     authenticate_initial_models(cfg,old['models'])
     declared,records,indices,_=evaluation_inputs(source,old)
     if len(declared)!=300:raise ValueError('complete300 source required')
-    cases=weak_feedback_cases(declared,protocol) if weak else shared_cases(declared,protocol)
-    role='feedback_005' if weak else SHARED_ROLE
-    n_new=60 if weak else 40
-    n_cache=300 if weak else 200
-    label='固定0.05弱参考反馈对照' if weak else '固定公共alpha名义表消融'
+    cases=(parent_feedback_cases(declared,protocol) if parent else
+           weak_feedback_cases(declared,protocol) if weak else shared_cases(declared,protocol))
+    role=PARENT_ROLE if parent else 'feedback_005' if weak else SHARED_ROLE
+    n_new=60 if weak or parent else 40
+    n_cache=300 if weak or parent else 200
+    label='父Actor固定0.10参考反馈' if parent else '固定0.05弱参考反馈对照' if weak else '固定公共alpha名义表消融'
     cached=[c for c in declared if c['alpha'] in protocol['executed_alphas']]
     ids={c['case_id'] for c in cached}
     cached_records=[r for r in records if r['case_id'] in ids]
@@ -112,8 +139,9 @@ def _prepare_ablation(root,*,source,protocol_file,weak):
         file=(source/item['file']).resolve()
         if digest(file)!=item['sha256']:raise ValueError('cache raw changed')
         item['file']=str(file)
-    model=copy.deepcopy(old['models']['feedback_010' if weak else 'feedback_nominal'])
-    if weak:model.update(feedback_gain_rad=.05,feedback_kind=3)
+    model=copy.deepcopy(old['models']['parent_causal' if parent else 'feedback_010' if weak else 'feedback_nominal'])
+    if parent:model.update(feedback_gain_rad=.1,feedback_kind=3)
+    elif weak:model.update(feedback_gain_rad=.05,feedback_kind=3)
     root.mkdir(exist_ok=False)
     atomic_json(root/'prepare_status.json',dict(phase='running',pid=os.getpid()))
     register(root/'ACTIVE_PREPARE.json','STTW_CONTROL '+label+'准备',root/'prepare_status.json')
@@ -149,7 +177,7 @@ def _prepare_ablation(root,*,source,protocol_file,weak):
             source_reference_run=str(source),source_evaluation_plan_sha256=digest(source/'plan.json'),
             sealed_files=sealed,source_sha256=sources,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             initialization=old['initialization'],information=old['information'],stop=protocol['stop'],
-            data_role=('Same-event DEV fixed .05 weak-feedback control, full three original alphas. Exact300 previous controls reused; no profile fitting, gain sweep or training.' if weak else 'Same-event DEV mechanism ablation. Original Actor/user alpha0/1 stays fixed; only nominal table selector becomes .5. Alpha.5 is excluded because it has no intervention, not an independent repeated sample. Reuse exact200 endpoint controls from prior300; no profile fitting or gain search.'))
+            data_role=('Same-event DEV frozen parent task_only64 with fixed .10 feedback; full original alpha, same permissions/short support, exact300 cached controls. No additional training, gain sweep or fitting.' if parent else 'Same-event DEV fixed .05 weak-feedback control, full three original alphas. Exact300 previous controls reused; no profile fitting, gain sweep or training.' if weak else 'Same-event DEV mechanism ablation. Original Actor/user alpha0/1 stays fixed; only nominal table selector becomes .5. Alpha.5 is excluded because it has no intervention, not an independent repeated sample. Reuse exact200 endpoint controls from prior300; no profile fitting or gain search.'))
         atomic_json(root/'plan.json',plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
         atomic_json(root/'status.json',dict(phase='prepared',declared_cases=n_new,completed_cases=0,
             active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))

@@ -1,0 +1,11 @@
+{
+  "schema": "parent_actor_fixed_feedback_v1",
+  "executed_alphas": [0.0, 0.5, 1.0],
+  "actor_role": "parent_causal",
+  "feedback_gain_rad": 0.1,
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "hypothesis": "The frozen task_only64 parent plus the same simple steering feedback may explain the apparent benefit of the later freeGAE policy. Compare matched .10 feedback before attributing gains to that training.",
+  "intervention": "Replace only the freeGAE Actor with authenticated parent task_only64. Keep user alpha, feedback law/gain, short support, reference limits, initialization, events, physical model and observation contract fixed.",
+  "stop": "60 new episodes (48 disturbed,12 nominal), exact300 original controls, analysis360. No training, intermediate gain sweep, profile fitting, automatic retry or adoption. If parent covers performance, simplify the training story; if it does not, a single DEV panel still cannot prove a universal training advantage."
+}

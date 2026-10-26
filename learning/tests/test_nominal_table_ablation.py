@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from sttw_control.nominal_table_ablation import nominal_profile_key,shared_cases,weak_feedback_cases
+from sttw_control.nominal_table_ablation import nominal_profile_key,shared_cases,weak_feedback_cases,parent_feedback_cases
 
 
 def inputs():
@@ -64,3 +64,26 @@ def test_weak_feedback_preserves_full_alpha_events_and_only_changes_gain():
         wrong=copy.deepcopy(protocol);wrong[key]=value
         with pytest.raises(ValueError):weak_feedback_cases(source,wrong)
     with pytest.raises(ValueError):weak_feedback_cases(source[:-1],protocol)
+
+
+def test_parent_actor_control_changes_actor_identity_only_and_labels_truthfully():
+    _,source=inputs()
+    for row in source:
+        row.update(role='feedback_010',feedback_kind=3,
+                   case_id=row['case_id'].replace('feedback_nominal','feedback_010'))
+    original=copy.deepcopy(source)
+    protocol=json.loads((Path(__file__).parents[1]/'configs/parent_feedback_confirmation.json').read_text())
+    cases=parent_feedback_cases(source,protocol)
+    assert source==original and len(cases)==60
+    assert sum(not row['force_N'] for row in cases)==12
+    for before,after in zip(source,cases):
+        assert after['role']=='parent_feedback_010' and after['actor_role']=='parent_causal'
+        for key in before:
+            if key not in ['case_id','role','actor_role']:assert after[key]==before[key]
+    from sttw_control.finite_value_evaluation_report import role_labels
+    label=role_labels(cases)['parent_feedback_010']
+    assert 'parent task_only64' in label and 'free_GAE' not in label and 'short support' in label
+    for key,value in [('actor_role','free_GAE'),('feedback_gain_rad',.05),('goal_radius_m',.6)]:
+        wrong=copy.deepcopy(protocol);wrong[key]=value
+        with pytest.raises(ValueError):parent_feedback_cases(source,wrong)
+    with pytest.raises(ValueError):parent_feedback_cases(source[:-1],protocol)
