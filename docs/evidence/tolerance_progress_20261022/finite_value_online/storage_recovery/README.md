@@ -45,3 +45,8 @@
 新run `runs/finite_value_online_v1_recovery55`（全HDD），code482648b；prepare/180路零积分shape完成，训练323815与一次终点评价接续323816均实际核验。首56完整更新后新checkpoint载入确认三臂[216,224,224]/next56/warmup=false；原pending56采样身份和事件表逐字段复现。HTTP http://localhost:59393 已核三臂实际reward56，数值仅作可见性、不作为方法收益。当前第57批新物理，终点仍64；monitoring为900秒。
 
 第56完成的有效采样累计20160000槽，加旧中断108000后已记录总20268000槽，工程开销未隐去；其它未记录重启开销UNKNOWN。首次认证见first_resumed_collection_receipt.json。新评价接续waiting_training_exit/训练状态读取0，不重复旧owner。当前系统盘约64.56GiB可用，达到50GiB约定。实际终点及方法效果仍待回收，不代表Transactions目标完成。
+
+
+### 原固定终点已收回（2026-10-26）
+
+recovery55训练64/64、固定评价300/300与只读出图均完成；最终有效实际22,610,292/分配23,040,000 lower步，含失败108,000后已记录总22,718,292/23,148,000，额外未落盘费用UNKNOWN。评价600,000 lower步、0optimizer。工程接续没有形成新独立训练重复；[科学裁决](../DECISION.md)为价值结构未超过普通MC及父策略，不采用新权重，不再扩该训练。所有旧中断/损坏数据和来源保留。

@@ -118,3 +118,8 @@ H1最小下一步首先只读已有交回状态：A/B实际参考有无实质差
 显式恢复code6840b0c，新run runs/finite_value_online_v1_recovery17。91相关CPU测试、独立只读审查、180路GPU零积分shape通过；只执行原全局索引17..63，不更换seed/Actor/Critic/Adam，不重做warmup，不修改奖励、alpha或参考权限。恢复首个第18轮已真实完成，三臂[64,72,72]，原pending18身份逐字段复现；新TensorBoard http://localhost:59007 的三臂真实reward18已HTTP核验，原1..17日志不改。
 
 新训练PID105538、新事件接续110558已实核，接续绑定当前boot与实际训练进程，仍完整64后才执行同一已封存300，原未执行评价不重复计费。新的边界恢复协议见同级../finite_value_online/RECOVERY_BOUNDARY.md；未采用新权重，方法增量和RA-L目标仍待完整64/300控制证据，不能由恢复成功或当前奖励证明。
+
+
+## 固定终点裁决（2026-10-26）
+
+三臂64及300轨迹已完成；详见[完整裁决](../finite_value_online/DECISION.md)。finite_GAE任务9/50、free_MC14/50、父策略19/50；全部未触地，不能排名防摔。关闭价值结构加训/调参路线，不采用新权重。当前问题转向原路径的持续跟踪及支持结束后的任务接续；现有Pure Pursuit已有反馈，Actor合法域/重入与底层动态也须考虑，不把交回时机预设为唯一原因。以上带日期设计/运行描述保留为历史。
