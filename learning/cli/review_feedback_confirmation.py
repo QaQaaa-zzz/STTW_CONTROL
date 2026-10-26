@@ -76,7 +76,7 @@ def review(root,output):
                 both_survived_cost_lower=sum(x<0 for x in cost))
             pairs[target+'_vs_'+baseline]=result
     stratified={}
-    for field in ['bank_index','geometry_name','nominal_profile_context','alpha','pulse_duration_s']:
+    for field in ['bank_index','prefix_name','geometry_name','nominal_profile_context','alpha','pulse_duration_s']:
         values=sorted({r[field] for r in disturbed if field in r},key=str)
         stratified[field]={str(value):counts([r for r in disturbed if r.get(field)==value]) for value in values}
     digest=lambda file:hashlib.sha256(Path(file).read_bytes()).hexdigest()
