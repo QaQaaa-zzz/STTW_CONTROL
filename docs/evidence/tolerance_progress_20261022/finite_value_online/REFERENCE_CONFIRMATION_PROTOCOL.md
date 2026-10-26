@@ -1319,3 +1319,39 @@ Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻
 原prepare session69571 exit0/PID2525983，源17runtime/五AST/检查点导出/全部原初态路径认证完成，0积分。8628fb6实际dispatch session96060，controller2529474、execute2530612本轮/proc核live；shape2529477已completed、布局50×60×4。原60/≤120000lower/0训练合同执行，当前控制收益/时序结果PENDING，不把日志代码或shape当检测有效性。顺序shape→execute→只读原XY审核→passive_timing_review，完成/错误中文Bark自动保留，不自动扩实验或重试；后续沿同session96060回收，不因观察超时重启。
 
 只读timing CLI补独立first_legal_latch函数，其参数只需当前/过去signal、historyvalid、actor_action_valid、active和原clock，不需force/onset/结果；测试明确排除无权限行、历史无效行和4倍重复采样，实际1passed .18s。该更改只在未启动的后处理CLI，不改已封存物理runtime；最终JSON自记实际脚本SHA。时序诊断本身不是新gate策略或可部署救回证据。
+
+
+### 被动ESO补录完成：41/48事件力后可见，检测不能代替控制方法
+
+原session96060 exit0，60/60 completed，新增116690实际5ms lower/120000槽、234.229秒含编译保存，0训练；controller2529474/shape2529477/physics2530612/analysis2542267/timing2549049均本次/proc缺失。60raw审核与300原alpha固定轨迹重评分、12原XY概览及全部时序完成；原控制权限/零神经mask/参考/底层不改，没有因为记录信号而执行任何新检测动作。被动基线无扰到达11/12、全活12/12；受扰到达28/48、全活45/48，仅描述本基线，不冒称新增方法收益或精确重放一致。
+
+原.015归一化ESO阈值、整回合首次合法50Hz锁存：无扰12条0触发；受扰48条0提前、41在首次实测受力区间之后触发、7未触发。41条延迟为.04/.06/.08秒，中位.04秒，保留全部未触发。7条均在两个right120进入情境，且全部存活并到达目标，仍有429–483个合法观察决策；所以“外力事件没有越阈值”不能直接当作漏掉危险，也不调阈值去追求所有外力必触发。12无扰没有误触发只限这组相关DEV，不保证一般误报率。
+
+该信号可保留为已有观测中的有限事件线索，不是容扰半径、牛顿阈值、风险等级或控制成功预测。当前仅alpha.5/零神经源，启用神经动作后信号可变化；41事件可见不能转换成某个未执行开关的恢复率。非发起人AI只读反审认可此限定。下一不把检测器接入控制、不扫阈值，不以传感检测效果替代偏好控制方法。
+
+原physical完成Bark accepted=true；driver最终analysis完成通知网络URLError失败保留在dispatch_bark_receipts.jsonl，review完成补发accepted=true另存analysis/review_bark_receipt.json，未改写失败或重启任务。原时序图把触地终点与提前锁存都画orange x，目视后保留原图，新readable图把触地改空心红方块并明确标注；数值不变。first_latch独立CPU测试本轮1passed .17s（前块.18s保留），图非期刊版。实际目视3张XY及60事件时序初/修图，其他9概览和多数细节未逐看，decision_visual_review及原全图receipt明确partial。
+
+证据：runs/passive_sensor_probe_v1/analysis/{results,raw_audit,receipt,passive_timing_review,decision_visual_review,timing_figure_correction}.json及passive_first_event_timing_readable.png；原driver/plan/launch身份/所有stage日志保留。被动补录封存，当前本任务无活动训练/仿真。
+
+
+### 完整中层的偏好效用核对：有行为取舍，不等于已优化声明的偏好成本
+
+问题：原名义速度/路径RMSE随alpha变化，是否也意味着指定alpha对相同原用户目标更合适？本轮复用entry_history_confirmation_v1全部540实际轨迹与原2700目标重评分，不新增仿真。按context/role/event匹配180组三个实际执行alpha0/.5/1，分别在同一用户目标alpha0/.5/1下比较实际三轨迹成本；不假设换alpha后的动力学。新review_preference_utilities.py已exit0，所有失败成本保留，0训练。原全部108名义轨迹再按speed/path/primary与其它running成本分解，重建总cost对已存query差≤1e−6，无名义结果筛选。
+
+完整中层在同12名义事件上的平均原成本如下。每行固定用户目标，列为实际执行alpha；不能跨行把不同用户目标成本直接排名。
+
+|用户目标alpha|执行0|执行.5|执行1|
+|---|---:|---:|---:|
+|0|39.5964|37.5659|36.0615|
+|.5|31.0433|28.8970|27.6122|
+|1|22.4901|20.2282|19.1629|
+
+偏好三通道单独成本也在这些平均值上执行1最低，并非仅由alpha无关running通道补偿造成。对固定轨迹重评分时“alpha无关”并不表示不同策略行为下该成本相同。指定alpha相对逐事件三个实测候选最低成本的平均差为4.8046/1.5165/.0184；这是先逐事件取min再均值，不等于矩阵的对角值减该行最低均值，更不是已实现选择器或全局最优性差距。均值排序不证明alpha1逐例/跨工况支配；受扰矩阵/全部触地结局在JSON中，不能为了名义较低均值把部署alpha偷偷重映射为1。
+
+原名义RMSE路径优先/速度优先行为证据保留，也保留任务到达实用增益，不设置零regret新门槛。需要收缩的主张是：仅据RMSE取舍，尚不能宣称当前权重已经正确优化用户原效用。在新进入情境/既定规则下，存在效用对齐缺口；不据此宣布alpha整体无用、算法失效或必然训练不足。非发起人只读反审核了三实际轨迹匹配、原目标均值与逐事件regret区别，并支持此边界。
+
+这也限制了把“零神经正常阶段＋事件后才开转向”升级为论文主方法：即使检测完美，无扰阶段仍近似alpha不变；仅转向名义两误差随alpha1同时改善，不能直接替代完整网络的偏好用途。允许应急时暂时覆盖偏好，但须验证正常偏好与交回后果；不要求每瞬间都严格取舍，也不能因检测好就忽略偏好。
+
+证据：runs/entry_history_confirmation_v1/analysis/entry_preference_utility_review.json（540配对原目标记录/324名义成本分解）、entry_preference_objective_matrix.png；新矩阵实际目视，既有全部540XY/奖励/正负原样保留。旧冻结模型参数有界回读：registry/manifest与4个actor SHA核匹配，双网络两端为legacy、u325/H75有gain/shift调制叶，351→2宽度相同不等于运行兼容。lineage_parameter_inventory.json只证明身份/参数结构，输入排列/归一化、history、alpha入口、latent映射与原权限仍需核，不直接混装当前runner。
+
+下一优先先对冻结双网→u325单网→H75→当前权重做同口径名义偏好核对，先解决实际接口兼容和公平边界；用旧资产判断效用缺口是否特定迭代造成。不接新gate、不复活阈值库、不自动加训，尚未启动此模型对照。Transactions目标仍未完成：实用候选/机制见证保留，可部署偏好—抗扰控制增量及独立证据仍待建立。
