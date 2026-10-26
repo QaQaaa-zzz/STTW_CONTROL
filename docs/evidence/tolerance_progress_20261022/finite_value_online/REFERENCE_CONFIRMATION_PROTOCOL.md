@@ -1565,3 +1565,10 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 下一步重新整理贡献和假设：先对照用户提供的规划书、现有路线台账和原始文献，提出明确区别于换mask/检测触发/扩候选库的能力保持＋恢复增量机制，再判断是否值得新的有界验证。当前不启动其它物理或训练；Trans目标仍active。
 
 证据runs/same_state_reference_pause_v1/physical/{fork_receipt.json,scheduled_pulse_end_audit.json,cost_receipt.json}及analysis_partial_block_fix_v1/{README.md,results.json,summary.json,raw_audit.json,cost_effect_attribution.json,actual_visual_review.json,independent_review.md}。原analysis/错误receipt保留，新输出不冒充原严核验通过。
+
+
+### 放松到达口径后重新评估旧方案（2026-10-26）
+用户授权放宽任务标准。新增只读review_relaxed_goal_thresholds.py，在相同原world目标/10s/首次触地故障前，统一比较0.5/0.75/1m，无末段速度航向保持要求；0物理/0训练。两个完整360面板有关联和复用，禁止合计为720独立实验。读取已审计逐例最小距离，原0.5m全部复现，源SHA/配对gain-loss/未到达距离分布保存。
+受扰96：current到达72/74/75，H75 61/64/66，zero 56/62/68；同状态两个pause各72/74/76，full72/74/75。暂停1m下各1增0失，旧无新增到达结论须限定0.5/0.75m。新增为v2.1/yaw0/左55R1.8/alpha1/+32N，原最近2.07627m、暂停转向0.89592m、双通道0.95643m，三者全窗活；重新核三raw SHA、原目标、真实距离通过。不同于此前避免触地的一例，勿混同。名义current/H75/pause均24/24，zero22/24不随此三半径改变；受扰存活current/H75/zero85/85/90，pause86，各指标分列。
+裁决：1m作本轮统一探索口径（非用户亲定数值），保留0.5/0.75及原标签；不改raw/奖励/原alpha。短暂停从“无到达增量”细化为“宽目标下一个有限任务改善见证”，保留强对照，不升级主方法，不据单例扩暂停库或学习选择器。current余21个1m失败中16个最近仍超4m，后续应着重减少真实米级未到达，同时保住原生H75偏好用途与低速current增量；允许失败、以净改善而非全胜裁决。已重看+32N全XY，原0.5m圈未冒称1m；其余图继承之前审查。原生高速8/模型半径敏感性旧证据并列引用不混条件。
+证据runs/same_state_reference_pause_v1/relaxed_goal_review_v1/{README.md,review.json,positive_case_raw_recheck.json}，原XY全场景报告相对链接可查。当前未启动新训练/物理，未push/涉及JIT/实机。下一：沿统一宽目标与连续距离复查有希望旧方法；针对米级失败明确新协调假设，而非抬高末段门槛。
