@@ -503,3 +503,55 @@ attempt2准备session72634 exit0，GPU shape47539 exit0（50×300×4、0物理�
 实现nominal_table_ablation.py、nominal_table_ablation.json，runner和独立核验统一支持显式表alpha字段；默认无该字段严格保留旧自身表语义。原InitialFeedbackActor/make_initial_confirmation_step和make_evaluation_step AST不变，所有物理/权限/反馈数学实现不变。源身份认证三native及别名，200缓存逐实际字段/rawSHA；53相关CPU passed3.52s，含Actor alpha/force/time不变、只改表索引与case身份、拒绝中点重复/扫gain/换公共表、默认与中点恒等和旧回归。
 
 计划root runs/nominal_alpha_table_ablation_v1全HDD；当前未prepare/shape/实际积分，收益PENDING。系统65GiB、GPU约23GiB可用。40完成或工程错误停，无自动重试/训练/采用/push，不扩为多表矩阵。下一prepare→shape→40实际与240联合分析；沿原Bark完成/错误注册，email/autofix保持inactive。
+
+
+## alpha表消融完成与按到达目标重新审视旧方案（2026-10-26）
+
+本节接续前面的启动声明；前述PENDING是启动时历史状态，本节为已完成结果。用户再次允许放松任务标准。本次沿用已声明的原目标50cm到达口径，不再要求末段速度、航向、保持同时达标；10/20/30cm和整窗触地仍单列。50cm是当前工作阈值，不声称用户指定了这个精确数字，也不继续按结果扩大半径。
+
+先看实际XY：[右路bank2全部60轨迹](../../../../runs/nominal_alpha_table_ablation_v1/analysis/all_xy_right100_R1p2_v1p5__bank2.png)、[左路bank2](../../../../runs/nominal_alpha_table_ablation_v1/analysis/all_xy_left80_R1p4_v1p2__bank2.png)、[左路bank4](../../../../runs/nominal_alpha_table_ablation_v1/analysis/all_xy_left80_R1p4_v1p2__bank4.png)、[右路bank4](../../../../runs/nominal_alpha_table_ablation_v1/analysis/all_xy_right100_R1p2_v1p5__bank4.png)。实际/原始参考、原50cm目标圈及真实终点保持；不同表索引不改变Actor或用户alpha。
+
+### 本轮只问：按alpha选名义表是否必要？
+
+执行94f8356，prepare3921/shape56371/实际54199均exit0，分析88780 exit0。40新回合为两路线×bank2/4×alpha0/1×0/±16/±32N，0.1s脉冲、新共享时刻沿原封存；原freeGAE final64/冻结local300、短支持、参考权限、0.10rad反馈、原表字节和物理不变。公共表固定取旧bank3的alpha.5零扰响应，不由本轮表现挑选。alpha.5无处理差异，不额外复测。
+
+实际78904新lower步/80000分配槽，225.862s含编译保存，0训练。200精确旧端点对照缓存含386617历史lower步/400000旧槽；240联合465521实际lower步，不能称240新运行或独立重复。原全300沉没成本另计。240raw身份、时钟、物理、1200固定轨迹原alpha重计及独立反馈/插值/权限/advance前进度核验通过，UNKNOWN0；53相关CPU测试已通过。当前无新增训练或仿真在运行。
+
+每方法32受扰，另8无扰，不能与上节48分母直接比较：
+
+|方法|旧严格成功/32|到达10/20/30/50cm|整窗不摔/32|无扰原alpha成本|
+|---|---:|---|---:|---:|
+|原task无支持|3|5/11/13/13|24|40.778|
+|原task短支持|4|6/12/14/14|31|40.778|
+|freeGAE短支持|5|5/11/13/14|31|41.718|
+|持续0.10反馈|0|12/15/22/27|31|61.557|
+|匹配原alpha名义表|0|13/20/23/26|31|55.751|
+|固定公共alpha.5名义表|0|14/24/26/26|31|57.688|
+
+两名义表的50cm到达和防摔是**逐例相同**，并非新增丢失互抵：26/32到达、31/32不摔，配对均0新增/0丢失。公共表在30cm新增3/丢0、20cm新增4/丢0；10cm新增3/丢2。匹配表仍有小幅原alpha代价优势：双方存活31例，公共表减匹配表平均+1.294（公共更低10例、更高21例）；无扰公共成本57.688对匹配55.751。不能把精度优势等同全程路径/速度偏好代价优势。
+
+成本组成核对：alpha0双方存活15例，公共表总成本+1.982，其中路径+4.259、速度−1.986；alpha1双方存活16例公共表+0.650。这保留了部分连续代价取舍，但未证明按alpha选表带来独有到达/防摔能力。详见shared_table_decision_review.json和shared_table_component_review.json。
+
+真实例子：[右bank2/a0/−32N](../../../../runs/nominal_alpha_table_ablation_v1/analysis/paired_023_right100_R1p2_v1p5__bank2_a0.png)公共最近.1535m、匹配.3569m，二者都达到50cm，只有精度不同；[右bank4/a1/+32N](../../../../runs/nominal_alpha_table_ablation_v1/analysis/paired_039_right100_R1p2_v1p5__bank4_a1.png)公共.15005m、匹配.04796m，公共失去10cm精度，反例保留。四全XY及3细例已审，余37细图/40分项图未逐张审；visual_review_complete=false。
+
+**裁决**：撤回“按alpha索引名义表已证明独有抗扰贡献”的说法，停止围绕表索引加复杂度。保留反馈的实际到达收益和匹配表的小幅代价优势；不把这次阴性扩展为“偏好控制无效”。不自动替换已采用Actor/权重指针，不宣称已够Transactions投稿。
+
+### 不重跑物理，按用户的到达需求重新核算四组已有方案
+
+可复跑learning/cli/review_arrival_relaxation.py；输出本轮analysis/historical_arrival_relaxation.json，逐run保留原结果SHA、脚本SHA、分母、旧严格标签、10/20/30/50cm到达、到达后是否触地。旧标签和原始轨迹不覆盖。0新物理/0优化。这里核对四组已完成反馈实验，尚非所有历史路线的穷尽复审；多个run含精确缓存，绝不相加当独立样本。
+
+|实验条件/方法|旧严格成功|到达30cm|到达50cm|整窗不摔|
+|---|---:|---:|---:|---:|
+|原bank3新时刻：freeGAE短支持|6/48|17/48|20/48|44/48|
+|同条件持续0.05反馈|2/48|18/48|21/48|44/48|
+|同条件持续0.10反馈|0/48|22/48|26/48|46/48|
+|同条件匹配名义反馈|0/48|26/48|29/48|44/48|
+|新bank2/4：freeGAE短支持|6/48|20/48|23/48|45/48|
+|同条件持续0.10反馈|0/48|34/48|39/48|47/48|
+|同条件匹配名义反馈|0/48|36/48|40/48|47/48|
+
+原bank3时刻组reference_feedback_time_confirmation_v1与其精确缓存扩展nominal_feedback_probe_v1分别提供持续/名义对照，新bank2/4来自nominal_initial_confirmation_v1_attempt3；端点消融见上表。四组全体当前到达案例均活过原10s窗，未发现“先到达随后触地”被主成功数掩盖的案例。
+
+**推论**：严格性能标签曾把真正到达的轨迹记为失败。以用户当前需求，应恢复这些方案的任务价值：例如名义反馈在新进入状态不是“0/48完全无效”，而是40/48到达、47/48不摔；且30cm仍有36/48，并非全靠50cm阈值。但更换指标本身不是新增控制能力，也没有自动证明名义表优于简单反馈；后续以到达、防摔、原alpha过程代价同时解释取舍。旧解析容扰公式不因重标成功而变得有效，不复活拟合E_b/gamma/T。
+
+下一最多三项：①保留持续和名义反馈，按原目标到达主口径继续；②若需判断表的额外价值，只补早已提出且固定的0.05弱反馈在新bank2/4对照，尚未启动，不扫中间gain；③若简单反馈覆盖其收益，简化方法，把研究问题收拢到有限参考调整的任务代价—抗扰取舍，停止用复杂模块维持故事。全为DEV相关分支，仍需独立验证才能建立投稿证据；不push、不涉及实机。
