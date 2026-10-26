@@ -61,8 +61,16 @@ def review(root, *, analysis_name="analysis"):
             mean_own_endpoint_cost_gap_to_measured_pair_min=regret,
             own_endpoint_strictly_cheaper_contexts=counts,arithmetic_ties=ties,
             endpoint_outcomes=endpoint,all_context_details=details)
+    comparisons={}
+    for role in roles:
+        gain=loss=0
+        for context in contexts:
+            for alpha in [0.,1.]:
+                a=bykey[(role,context,alpha)]['goal_arrived']; b=bykey[('goal_full_feedback',context,alpha)]['goal_arrived']
+                gain+=int(a and not b); loss+=int(b and not a)
+        comparisons[role]=dict(arrival_gains_vs_current=gain,arrival_losses_vs_current=loss)
     out=analysis/'lineage_nominal_review';out.mkdir(exist_ok=False)
-    report=dict(families=reports,trajectories=120,objective_queries=600,new_physics_steps=0,optimizer_updates=0,
+    report=dict(families=reports,paired_vs_current=comparisons,trajectories=120,objective_queries=600,new_physics_steps=0,optimizer_updates=0,
         scope='All matched nominal DEV traces, including failures. Finite two-executed-endpoint comparisons, not global regret, an online selector, architecture-only ablation, native historical reproduction or independent TEST.')
     (out/'review.json').write_text(json.dumps(report,indent=2)+'\n')
     lines=['# 冻结迭代链名义偏好核对','',report['scope'],'',
