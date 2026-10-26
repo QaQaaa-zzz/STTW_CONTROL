@@ -85,6 +85,9 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
+            if 'feedback_gain_rad' in c:
+                from .reference_task_feedback import verify_feedback_log
+                verify_feedback_log(raw,c,cfg,p['feedback_spec'])
             path=paths[c['context']];geometry=geometric_task_trace(raw,path,cfg,initial_xy=item['initial_xy'])
             metric=task_metrics(dict(raw,**geometry,domain_exit=np.zeros_like(active),task_reward_valid=active),
                                 speed=c['requested_speed_m_s'],goal_s=float(path['goal']),config=cfg)
@@ -172,6 +175,8 @@ def role_labels(rows):
     labels={}
     for row in rows:
         label=row['role']
+        if 'feedback_gain_rad' in row:
+            label=f"free_GAE + steering {row['feedback_gain_rad']:g}rad"
         if row.get('causal_support') and label!='parent_causal':
             label+=' + short support'
         if row['role'] in labels and labels[row['role']]!=label:
@@ -211,11 +216,14 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     import matplotlib.pyplot as plt
     from .live_endpoint_analysis import block_reward_series
     from .path_command_reward import configured_cost_keys
-    colors=dict(zip(ROLES,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9']))
-    styles=dict(zip(ROLES,[':', '-.', ':', '--', '-', '-.']))
+    from .reference_task_feedback import PROBE_ROLES
+    available=ROLES+PROBE_ROLES
+    used_roles=[role for role in available if any(r['role']==role for r in rows)]
+    colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
+    styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
     groups={};figures=[];cost_keys=list(configured_cost_keys(cfg));labels_by_role=role_labels(rows)
     for r in rows:groups.setdefault((r['context'],r['alpha'],r['event_id']),[]).append(r)
-    alphas=sorted({r['alpha'] for r in rows});used_roles=[role for role in ROLES if any(r['role']==role for r in rows)]
+    alphas=sorted({r['alpha'] for r in rows})
     columns=max(sum(key[0]==context for key in groups)//len(alphas) for context in paths)
     overviews={context:plt.subplots(len(alphas),columns,figsize=(18,3.2*len(alphas)),squeeze=False,layout='constrained') for context in paths}
     counters={context:0 for context in paths}
@@ -283,7 +291,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
         figure.suptitle(context+f' | all{counters[context]} events /{sum(r["context"]==context for r in rows)} actual trajectories, original paths and true endpoints')
         name='all_xy_'+context+'.png';figure.savefig(out/name,dpi=120);plt.close(figure);figures.append(name)
     tradeoff,axes=plt.subplots(2,len(alphas),figsize=(3.8*len(alphas),8),squeeze=False,layout='constrained')
-    markers=dict(zip(ROLES,['o','s','^','D','P','X']))
+    markers=dict(zip(used_roles,['o','s','^','D','P','X','v','*']))
     for column,alpha in enumerate(alphas):
         for role in used_roles:
             nominal=[r for r in rows if r['role']==role and r['alpha']==alpha and not r['force_N']]
@@ -291,7 +299,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             if len(nominal)!=2 or len(disturbed)!=8:raise ValueError('two route zeros/eight common disturbed branches required')
             unknown=sum(r['category']=='unknown' for r in nominal+disturbed)
             if unknown:
-                for ax in axes[:,column]:ax.text(.02,.98-ROLES.index(role)*.07,role+f': {unknown} UNKNOWN; omitted',
+                for ax in axes[:,column]:ax.text(.02,.98-used_roles.index(role)*.07,role+f': {unknown} UNKNOWN; omitted',
                     transform=ax.transAxes,va='top',fontsize=5,color=colors[role])
                 continue
             x=float(np.mean([r['scored_cost'] for r in nominal]))

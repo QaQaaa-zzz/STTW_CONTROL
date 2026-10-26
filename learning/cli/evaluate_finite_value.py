@@ -11,12 +11,14 @@ if __name__=='__main__':
     parser.add_argument('--candidate-evaluation',type=Path)
     parser.add_argument('--protocol',type=Path)
     parser.add_argument('--supported-candidate',choices=['free_GAE'])
+    parser.add_argument('--feedback-protocol',type=Path)
+    parser.add_argument('--support-comparison',type=Path)
     parser.add_argument('--phase',choices=['prepare','shape','execute','analyze'],required=True)
     args=parser.parse_args()
     if args.phase=='prepare':
         if args.candidate_evaluation is not None:
             if args.source_evaluation is None:parser.error('--source-evaluation required for candidate extension')
-            prepare_candidate_extension(args.output,source=args.source_evaluation,candidates=args.candidate_evaluation,supported_candidate=args.supported_candidate)
+            prepare_candidate_extension(args.output,source=args.source_evaluation,candidates=args.candidate_evaluation,supported_candidate=args.supported_candidate,feedback_protocol=args.feedback_protocol,support_comparison=args.support_comparison)
         elif args.protocol is not None:
             if args.source_evaluation is None:parser.error('--source-evaluation is required with --protocol')
             prepare_reference_confirmation(args.output,source=args.source_evaluation,protocol_file=args.protocol)

@@ -16,7 +16,7 @@ from .finite_value_evaluation import endpoint_records, evaluation_inventory, mak
 from .preference_best import atomic_json, digest
 
 
-def prepare_candidate_extension(root, *, source, candidates, supported_candidate=None):
+def prepare_candidate_extension(root, *, source, candidates, supported_candidate=None, feedback_protocol=None, support_comparison=None):
     """Supplement frozen candidates only, retaining the completed90 baseline."""
     from .finite_value_evaluation import candidate_extension_cases, supported_candidate_cases, ROLES
     root=Path(root).resolve();source=Path(source).resolve();candidates=Path(candidates).resolve()
@@ -43,14 +43,25 @@ def prepare_candidate_extension(root, *, source, candidates, supported_candidate
         if isinstance(n,ast.FunctionDef) and n.name=='make_evaluation_step')
     if core(module/'finite_value_evaluation.py')!=core(source/'source_at_launch/learning/src/sttw_control/finite_value_evaluation.py'):
         raise ValueError('changed evaluation control kernel')
+    feedback_spec=None
+    if feedback_protocol is not None:
+        from .reference_task_feedback import validate_spec
+        feedback_protocol=Path(feedback_protocol).resolve()
+        feedback_spec=json.loads(feedback_protocol.read_text());validate_spec(feedback_spec)
+        if supported_candidate!='free_GAE' or support_comparison is None:raise ValueError('feedback needs declared free_GAE and exact supported baseline')
     roles=['free_GAE','finite_GAE','free_MC'] if supported_candidate is None else [supported_candidate]
     if supported_candidate is not None and supported_candidate!='free_GAE':raise ValueError('undeclared supported candidate')
     models={r:bank['models'][r] for r in roles}
     cfg=json.loads((source/'common_environment_config.json').read_text());authenticate_models(cfg,models)
     original=json.loads((source/'inventory.json').read_text())['cases']
     cases=candidate_extension_cases(original,roles) if supported_candidate is None else supported_candidate_cases(original,supported_candidate)
+    if feedback_spec is not None:
+        from .reference_task_feedback import feedback_cases
+        cases=feedback_cases(original,feedback_spec)
+        models={role:dict(models['free_GAE'],feedback_gain_rad=gain) for role,gain in feedback_spec['gains_rad'].items()}
     n=len(cases)
     evaluation_roles=list(ROLES) if supported_candidate is None else [*ROLES[:3],supported_candidate]
+    if feedback_spec is not None:evaluation_roles+=list(feedback_spec['gains_rad'])
     records=json.loads((source/'physical/results.json').read_text());indices=json.loads((source/'physical/case_index.json').read_text())
     ids={c['case_id'] for c in original}
     if len(original)!=90 or len(records)!=90 or len(indices)!=90 or len(ids)!=90 or ids!={c['case_id'] for c in records} or ids!={c['case_id'] for c in indices}:
@@ -62,6 +73,30 @@ def prepare_candidate_extension(root, *, source, candidates, supported_candidate
         file=(source/item['file']).resolve()
         if digest(file)!=item['sha256']:raise ValueError('cached raw trajectory changed')
         item['file']=str(file)
+    cache_active=json.loads((source/'status.json').read_text())['active_lower_ticks']
+    cache_slots=json.loads((source/'status.json').read_text())['allocated_lower_slots']
+    if feedback_spec is not None:
+        comparison=Path(support_comparison).resolve();cp=json.loads((comparison/'plan.json').read_text())
+        cs=json.loads((comparison/'status.json').read_text())
+        if cs['phase']!='completed' or cs['completed_cases']!=30 or cp.get('supported_candidate')!='free_GAE':raise ValueError('complete same-Actor support baseline required')
+        if digest(comparison/'plan.json')!=json.loads((comparison/'prelaunch_receipt.json').read_text())['plan_sha256']:raise ValueError('support declaration changed')
+        for file,expected in cp['sealed_files'].items():
+            if digest(file)!=expected:raise ValueError('support baseline sealed input changed')
+        if cp['contexts']!=old['contexts'] or digest(comparison/'common_environment_config.json')!=digest(source/'common_environment_config.json'):raise ValueError('support context/config differs')
+        if cp['models']['free_GAE']['actor_sha256']!=bank['models']['free_GAE']['actor_sha256']:raise ValueError('support baseline uses different Actor')
+        cd=json.loads((comparison/'inventory.json').read_text())['cases']
+        if cd!=supported_candidate_cases(original,'free_GAE'):raise ValueError('support events/permissions differ')
+        cr=json.loads((comparison/'physical/results.json').read_text());ci=json.loads((comparison/'physical/case_index.json').read_text())
+        if len(cr)!=30 or len(ci)!=30 or {x['case_id'] for x in cr}!={x['case_id'] for x in cd} or {x['case_id'] for x in ci}!={x['case_id'] for x in cd}:raise ValueError('support raw cases incomplete')
+        cb={x['case_id']:x for x in cr}
+        if any(any(cb[c['case_id']][k]!=v for k,v in c.items()) for c in cd):raise ValueError('support actual metadata differs')
+        for item in ci:
+            file=(comparison/item['file']).resolve()
+            if digest(file)!=item['sha256']:raise ValueError('support cached trajectory changed')
+            item['file']=str(file)
+        original+=cd;records+=cr;indices+=ci
+        cache_active+=cs['active_lower_ticks'];cache_slots+=cs['allocated_lower_slots']
+    cached_n=len(original)
     root.mkdir(exist_ok=False)
     from prepare_short_recovery_campaign import register
     atomic_json(root/'prepare_status.json',dict(phase='running',pid=os.getpid()))
@@ -72,26 +107,30 @@ def prepare_candidate_extension(root, *, source, candidates, supported_candidate
         source_status=json.loads((source/'status.json').read_text())
         cache=dict(source_run=str(source),source_plan_sha256=digest(source/'plan.json'),
             declared=original,records=records,indices=indices,
-            active_lower_ticks=source_status['active_lower_ticks'],allocated_lower_slots=source_status['allocated_lower_slots'])
+            active_lower_ticks=cache_active,allocated_lower_slots=cache_slots)
         atomic_json(root/'cache_receipt.json',cache)
+        if feedback_spec is not None:
+            shutil.copyfile(feedback_protocol,root/'feedback_protocol.json')
         atomic_json(root/'inventory.json',dict(cases=cases));atomic_json(root/'authenticated_models.json',models)
         files=list(module.glob('*.py'))+[Path('learning/cli/evaluate_finite_value.py')]
         sources={str(f.resolve()):digest(f) for f in files}
         for file in files:
             dest=root/'source_at_launch'/file.resolve().relative_to(Path.cwd());dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,dest)
         plan=dict(project='STTW_CONTROL',experiment='frozen_candidate_reference_extension',
-            models=models,contexts=old['contexts'],evaluation_roles=evaluation_roles,declared_cases=n,new_cases=n,cached_cases=90,analysis_cases=n+90,
-            supported_candidate=supported_candidate,
+            models=models,contexts=old['contexts'],evaluation_roles=evaluation_roles,declared_cases=n,new_cases=n,cached_cases=cached_n,analysis_cases=n+cached_n,
+            supported_candidate=supported_candidate,feedback_spec=feedback_spec,
             maximum_active_lower_ticks=2000*n,maximum_allocated_lower_slots=2000*n,optimizer_updates=0,
             horizon_s=10.,lower_dt_s=.005,goal_radius_m=old['goal_radius_m'],task_rule=old['task_rule'],
             endpoint_receipt=str(candidates/'authenticated_models.json'),endpoint_receipt_sha256=digest(candidates/'authenticated_models.json'),
             source_reference_run=str(source),candidate_source=str(candidates),
             cached_active_lower_ticks=cache['active_lower_ticks'],cached_allocated_lower_slots=cache['allocated_lower_slots'],
-            sealed_files={str(root/name):digest(root/name) for name in ['inventory.json','cache_receipt.json','authenticated_models.json','common_environment_config.json','source_declaration.json','protocol.json']},
+            sealed_files={str(root/name):digest(root/name) for name in ['inventory.json','cache_receipt.json','authenticated_models.json','common_environment_config.json','source_declaration.json','protocol.json']+(['feedback_protocol.json'] if feedback_spec is not None else [])},
             source_sha256=sources,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             data_role=('Supplement three frozen final64 candidates on the SAME30 new-geometry DEV events; exact90 reference trajectories reused, not independent repeats.' if supported_candidate is None else 'DEV complementarity probe: free_GAE is ALWAYS deployed with the unchanged measured short-support gate in this run; exact90 parent controls reused. No new training or independent repeat.'),
             information=old['information'],initialization=old['initialization'],
             stop=f'Only{n} missing candidate episodes; no training/baseline rerun/checkpoint selection/threshold tuning/automatic retry/model adoption.')
+        if feedback_spec is not None:
+            plan.update(data_role='DEV: two preregistered bounded steering feedback gains on the same frozen free_GAE plus unchanged short support; exact120 controls reused, no new training.',support_comparison=str(comparison))
         atomic_json(root/'plan.json',plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
         atomic_json(root/'status.json',dict(phase='prepared',declared_cases=n,completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
         register(root/'ACTIVE_RUN.json',f'STTW_CONTROL 冻结中层同事件{n}补评',root/'status.json')
@@ -313,6 +352,8 @@ def execute(root, *, shape_only=False):
             for key in ['actor','checkpoint']:
                 if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen endpoint changed')
             with Path(model['actor']).open('rb') as stream:params[role]=jax.tree.map(j.asarray,pickle.load(stream))
+            if p.get('feedback_spec') is not None:
+                params[role]=dict(actor=params[role],feedback_gain_rad=j.float32(model['feedback_gain_rad']))
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2')
         origins={};paths={};context_receipts={}
@@ -342,7 +383,10 @@ def execute(root, *, shape_only=False):
         pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
                            *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        one=make_evaluation_step(env,make_path_actor(cfg),horizon_s=10.)
+        if p.get('feedback_spec') is not None:
+            from .reference_task_feedback import make_feedback_evaluation_step
+            one=make_feedback_evaluation_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
+        else:one=make_evaluation_step(env,make_path_actor(cfg),horizon_s=10.)
         @jax.jit
         def chunk(carry,parameters,batch_paths,speeds,pulses,modes):
             return jax.lax.scan(lambda st,_:jax.vmap(one)(st,parameters,batch_paths,speeds,pulses,modes),carry,None,length=50)

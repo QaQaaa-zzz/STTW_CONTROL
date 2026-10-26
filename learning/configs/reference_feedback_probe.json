@@ -1,0 +1,9 @@
+{
+  "schema": "same_actor_reference_feedback_probe_v1",
+  "gains_rad": {"feedback_005": 0.05, "feedback_010": 0.1},
+  "path_scale_m": 0.5,
+  "heading_scale_rad": 0.3,
+  "observation": "Existing named clipped/scaled Actor context; no future pulse information",
+  "permission": "Same actor_permission and sixteen clean-block reentry wait",
+  "speed": "Unchanged source Actor output plus existing measured short-support rule"
+}

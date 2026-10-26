@@ -185,3 +185,14 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 这不是新控制贡献，而是诊断简单反馈是否覆盖改进空间。两档全部报告，不因一档失败不断扩库。比较新增/丢失到达、防摔、各alpha/名义代价和全部XY；若有有用取舍再在新事件确认，若两档均无用只否定这两个方案，不证明物理不可恢复。实施前需封存准确的观测字段、映射/投影/禁用与原Actor日志，验证零增量恒等和速度通道不变，再核验prepare/shape后才运行。当前未修改执行kernel、未准备或启动这项60回合。
 
 [逐例时间诊断](../../../../runs/frozen_candidate_short_support_v1/analysis/continuation_diagnostics/cases.json) · [分组摘要](../../../../runs/frozen_candidate_short_support_v1/analysis/continuation_diagnostics/summary.json) · [几何无效与Actor权限分解](../../../../runs/frozen_candidate_short_support_v1/analysis/continuation_diagnostics/domain_decomposition.json)。
+
+
+### 两档反馈已实现，实际启动前封存补充（2026-10-26）
+
+实现`reference_task_feedback.py`，配置`learning/configs/reference_feedback_probe.json`。两新增角色feedback_005/feedback_010共60回合；每角色同一free_GAE固定final64，原短支持规则mode1。原90父控制和上一free_GAE短支持30条共同逐身份与SHA复用，共180联合轨迹；新增120000 lower步上限，缓存231533历史实际/240000历史槽分开，不叫180新仿真。
+
+观测精确定义：使用当前决策已有351D Actor观测中的**命名**上下文字段和配置scale恢复路径误差、sin/cos航向差。原Actor观测已经clip到±5，因此反馈实际使用的路径误差也限于约±1m，航向由atan2恢复；这项实现细节在看控制结果前声明，不偷偷使用完整未来几何或修改原Actor输入。反馈为k*tanh(e_heading/.3-tilde_e_path/.5)，只改转向物理修正目标，投影回原±.2，原速度latent逐位保留、零反馈逐位恒等；随后既有短支持仍可改变速度目标。原Actor可用域、重入16block、滤波/slew及全底层未改。
+
+包装原执行kernel，不修改其状态推进或权限判定；日志分别保留source NN的original_actor_latent、feedback_actor_latent、当前反馈误差、期望/实现转向增量和最终issued_latent。离线独立NumPy核验物理映射/符号、速度latent不变及Actor禁用时零发布。图例分别标明0.05/0.1rad反馈和短支持，避免把该修正误算成网络自己学到。
+
+45相关CPU测试通过2.32s，含零增量/速度精确保留、符号/原边界、命名字段与scale、60事件不变、禁止越域发布、缓存身份与新增角色配对。准备代码额外认证同Actor短支持的30条原始轨迹/上下文/实际mode与元数据，再允许缓存。当前尚未prepare或积分；下一先实际身份准备→零积分GPU shape→60回合。无自动重试、事后扩档、改阈值/奖励、训练或采用，属于DEV强简单反馈机会诊断。

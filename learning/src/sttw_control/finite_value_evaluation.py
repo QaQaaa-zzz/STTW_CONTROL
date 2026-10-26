@@ -179,7 +179,8 @@ def verify_gate_log(raw, case):
 def paired_report(rows, *, roles=ROLES):
     if not rows or len({r['case_id'] for r in rows}) != len(rows):
         raise ValueError('unique nonempty evaluation cases required')
-    if not roles or not set(roles) <= set(ROLES):
+    from .reference_task_feedback import PROBE_ROLES
+    if not roles or not set(roles) <= set(ROLES+PROBE_ROLES):
         raise ValueError('known evaluation roles required')
     groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}
     for row in rows:
@@ -197,7 +198,8 @@ def paired_report(rows, *, roles=ROLES):
         group[role]=row; counts[role][category]+=1
     if any(set(group)!=set(roles) for group in groups.values()):
         raise ValueError('all six roles required in each paired event')
-    contrasts=[(role,base) for role in TRAIN_ROLES for base in ROLES[:3]]
+    contrasts=[(role,base) for role in (*TRAIN_ROLES,*PROBE_ROLES) for base in ROLES[:3]]
+    contrasts += [(role,'free_GAE') for role in PROBE_ROLES]
     contrasts += [('finite_GAE','free_GAE'),('finite_GAE','free_MC'),('free_MC','free_GAE'),
                   ('parent_causal','parent_plain'),('parent_support','parent_plain')]
     contrasts = [(a,b) for a,b in contrasts if a in roles and b in roles]
