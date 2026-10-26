@@ -1454,3 +1454,14 @@ scientific-brainstorming非发起人只读AI两次反审归档lineage_cost_mecha
 证据：runs/current_native_preference_v1_attempt2/analysis/{README.md,review.json,relaxed_arrival_sensitivity.json,visual_review.json,all_native_pair_xy.png}；原始身份、资产修复及缓存合同见该run的plan/cache_receipt/repair_receipt/launch_identity。
 
 非发起人AI复核进一步收拢下一问题：当前低速受扰改善是否已被H75配同一控制栈覆盖？先核匹配缓存，缺失才另封存必要的H75受扰端点对照；本轮未新启96例，不同时扩dual/新控制器。H75覆盖则收缩学习增量主张；current有新增有损失则研究能力保持与恢复取舍。中间task_only64补原生八例暂缓，其信息不如强基线直接。复核原文见本run analysis/independent_review.md。
+
+
+### 2026-10-26 H75低速受扰强对照：补齐缺口，不扩新机制
+
+目的：判断当前低速受扰到达收益是否已被旧H75加同一控制栈覆盖，避免仅对弱父模型形成新方法主张。缓存有界检索runs/*/plan.json中models含H75 Actor身份，只找到已完成lineage名义24及另一个无对应inventory的旧声明；未发现所需同事件受扰缓存，不声称全文件系统穷尽。检索收据在current_native_preference_v1_attempt2/analysis/h75_disturbed_cache_lookup.json。
+
+run=h75_disturbed_common_interface_v1。新96条仅H75：entry_history_confirmation_v1全部12完整进入情境（physical1020/task0/history16）、α0/1、±16/±32N横力、持续0.1s、各事件原锁定随机时刻、10s。保留原local300、共同扩参考权限、原goal-preview/短支持/反馈0.1rad；只换中层权重，不向控制器泄漏本次力/起扰时刻。不是裸H75抗扰或历史原生复现。原始世界目标0.5m到达，不加末段保持；0.75/1m仅敏感性，不要求全过。整窗触地、原α成本和参考变化、目标最小距离及配对新增/丢失分列。
+
+精确复用264条：已有current/zero各120（24无扰＋96受扰）及H75无扰24；全部原raw SHA/记录/声明逐身份核，缓存代价单列。96新最大192000lower/槽、0训练，vmap96/scan50、共享编译cache、cuda,cpu与CPUcallbacks；零积分shape后一次实际，再只读联合360并生成全部XY。不扩dual、不重跑基线、不选checkpoint/调门槛/自动重试。若H75覆盖主要收益，收缩后继学习增量主张；若current有新增有损失，则研究保持旧偏好能力和恢复用途的取舍，而非再造检测gate。简单规则/父模型的历史结果继续保留，本次同控制栈只比较Actor权重。
+
+prepare session25709实际exit0，认证264cache、四历史权重按原frozen registry/checkpoint导出认证，96事件逐字段除模型身份外完全等current原事件；核心数值文件/AST按原source核，不修改用户dirty代码。plan/source_at_launch/config/cache/models/input identities封存，所有raw在HDD。既有register/显式driver完成、报错中文Bark；automatic_repair=false。当前prepared，结果PENDING，接下来登记后启动固定driver。没有新训练/采用/推送/实机/另一项目操作。
