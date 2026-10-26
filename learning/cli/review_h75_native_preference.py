@@ -65,7 +65,7 @@ def review(source,out):
     matrix=[[float(np.mean([r['user_objective_costs'][str(u)] for r in records if r['alpha']==a])) for a in [0.,1.]] for u in [0.,1.]]
     out.mkdir(exist_ok=False)
     report=dict(records=records,cost_matrix_rows_user_cols_executed=matrix,
-        native_config_sha256=digest(source/'manifest.json'),frozen_actor_sha256=record['actor_sha256'],
+        source_manifest_sha256=digest(source/'manifest.json'),frozen_actor_sha256=record['actor_sha256'],
         primary_cost_observed_nonzero_all_eight=all(r['observed_primary_nonzero_ticks']>0 for r in records),
         actual_historical_trajectories=8,new_physics_steps=0,optimizer_updates=0,
         nominal_deduplication='ppo75 F0, onset1 only, alpha0/1, all four declared bends/speeds; onset2 and interior alphas retained at original source and not counted as repeats.',
