@@ -367,11 +367,12 @@ def execute(root, *, shape_only=False):
             from .goal_preview_baseline import GoalPreviewEnv
             env=GoalPreviewEnv(env)
         origins={};paths={};context_receipts={}
+        from .evaluation_clock import physical_origin,physical_pulse
         for context,c in p['contexts'].items():
             if digest(c['initial'])!=c['initial_sha256'] or digest(c['path'])!=c['path_sha256']:raise ValueError('complete starting context changed')
             with Path(c['initial']).open('rb') as stream:bank=pickle.load(stream).state
             original=jax.tree.map(lambda x:j.asarray(x[0]),bank)
-            if int(original.tick)!=0 or int(original.physical.physical_tick)!=700 or bool(original.physical.failed|original.fault|original.domain_exit):raise ValueError('original complete task0/physical700 required')
+            if int(original.tick)!=0 or int(original.physical.physical_tick)!=physical_origin(c) or bool(original.physical.failed|original.fault|original.domain_exit):raise ValueError('complete task0 and declared physical origin required')
             origins[context]=original
             with np.load(c['path'],allow_pickle=False) as z:paths[context]=GeometricPath(*(j.asarray(z[k]) for k in ['s','xy','heading','curvature','turn_end','goal']))
             if c.get('rebuild_path_context'):
@@ -381,7 +382,7 @@ def execute(root, *, shape_only=False):
                 if not all(getattr(original,name) is getattr(origins[context],name) for name in retained):
                     raise ValueError('new path initialization modified retained state')
                 context_receipts[context]=dict(retained_fields=retained,retained_objects_identical=True,
-                    changed_fields=['projection','follower'],physical_tick=700,task_tick=0,
+                    changed_fields=['projection','follower'],physical_tick=physical_origin(c),task_tick=0,
                     current_follower_invalid=bool(origins[context].follower.invalid))
         if context_receipts:atomic_json(out/'path_context_identity.json',context_receipts)
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
@@ -397,8 +398,7 @@ def execute(root, *, shape_only=False):
         else:parameters=stack([params[c['role']] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)
-        pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
-                           *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
+        pulses=j.asarray([physical_pulse(c,p['contexts'][c['context']]) for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
         if p.get('goal_preview_comparison'):
             from .goal_preview_baseline import make_goal_step
