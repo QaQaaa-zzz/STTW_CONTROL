@@ -38,3 +38,10 @@
 原位扩展恢复协调器支持递归原1..17/recovery18..45/recovery46..55来源；完整缓存46虽无本地chunk，按缓存receipt计费一次。只允许恢复协调器变更且核验旧source_at_launch SHA，其余数学、奖励、物理和优化源码仍须与旧封存SHA逐项一致。
 
 下一从55完整Adam重做未完成56的物理采样并执行原56..64各一次优化，不再warmup或重优化55。原已完成/当前有效采样槽上限23040000保留；已失败部分108000单列，并在recorded_total中合计，故已记录总上限23148000，未记录的重启费用仍UNKNOWN。不能将这次工程重试伪称在原全成本内。训练后原固定300不变。新prepare/shape/运行状态需见共享台账，不凭本节计划宣称启动。
+
+
+### 55恢复实际首批验证
+
+新run `runs/finite_value_online_v1_recovery55`（全HDD），code482648b；prepare/180路零积分shape完成，训练323815与一次终点评价接续323816均实际核验。首56完整更新后新checkpoint载入确认三臂[216,224,224]/next56/warmup=false；原pending56采样身份和事件表逐字段复现。HTTP http://localhost:59393 已核三臂实际reward56，数值仅作可见性、不作为方法收益。当前第57批新物理，终点仍64；monitoring为900秒。
+
+第56完成的有效采样累计20160000槽，加旧中断108000后已记录总20268000槽，工程开销未隐去；其它未记录重启开销UNKNOWN。首次认证见first_resumed_collection_receipt.json。新评价接续waiting_training_exit/训练状态读取0，不重复旧owner。当前系统盘约64.56GiB可用，达到50GiB约定。实际终点及方法效果仍待回收，不代表Transactions目标完成。
