@@ -57,7 +57,7 @@ def review(root):
     if out.exists():raise ValueError('keep old derived analysis immutable')
     result=dict(summary=summary,records=records,source_results_sha256=hashlib.sha256(results.read_bytes()).hexdigest(),
         script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),physics_steps=0,optimizer_updates=0,
-        scope='Descriptive matched-alpha consequences; all event labels retained. Continuous means use the same events surviving for all three alpha over10s, with exclusions counted. Do not compare different-alpha objective costs, infer a Pareto frontier or independent confidence intervals. Shared ancestor and frozen Actor; no independent training repeat.',visual_review_complete=False)
+        scope='Descriptive matched-alpha consequences; all event labels retained. Continuous means use the same events surviving for all three alpha over10s within each role, with exclusions counted. Different roles may have different survivor sets; the plotted points are not fair cross-role rankings. Do not compare different-alpha objective costs, infer a Pareto frontier or independent confidence intervals. Shared ancestor and frozen Actor; no independent training repeat.',visual_review_complete=False)
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     import matplotlib
     matplotlib.use('Agg')
@@ -74,7 +74,7 @@ def review(root):
             ax.set(title=f'{names[role]} / {split}\nSame events: {data["common_full_window_events"]}/{data["total_matched_events"]}',
                    xlabel='Mean whole-task path RMSE (m)',ylabel='Mean whole-task speed RMSE (m/s)')
             ax.grid(alpha=.2);ax.legend(fontsize=8)
-    fig.suptitle('Matched preference consequences — discrete DEV points, shared initial ancestor\nContinuous metrics condition on common10s survival; arrival and contact losses retained in JSON')
+    fig.suptitle('Within-role matched alpha consequences — survivor sets may differ across roles\nDiscrete DEV points; arrival and contact losses retained in JSON; shared initial ancestor')
     fig.savefig(root/'analysis/entry_preference_consequences.png',dpi=150,bbox_inches='tight');plt.close(fig)
     print(json.dumps(summary,ensure_ascii=False))
 
