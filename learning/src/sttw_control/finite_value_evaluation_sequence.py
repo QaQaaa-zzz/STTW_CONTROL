@@ -18,9 +18,10 @@ from .survival_endpoint_sequence import open_process_event,process_identity,requ
 
 def validate_training_identity(identity, training, workdir):
     cwd=Path(identity['cwd']).resolve();argv=identity['argv']
-    script=Path(workdir).resolve()/'learning/cli/train_finite_value.py'
+    scripts={Path(workdir).resolve()/'learning/cli'/name for name in
+             ['train_finite_value.py','resume_finite_value.py']}
     try:
-        matches=any((cwd/a).resolve()==script for a in argv)
+        matches=any((cwd/a).resolve() in scripts for a in argv)
         output=(cwd/argv[argv.index('--output')+1]).resolve()
         mode=argv[argv.index('--phase')+1]
     except (ValueError,IndexError):
