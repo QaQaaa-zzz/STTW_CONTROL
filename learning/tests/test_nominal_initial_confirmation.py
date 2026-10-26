@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from sttw_control.nominal_initial_confirmation import initial_cases,verify_initial_feedback
+from sttw_control.nominal_initial_confirmation import initial_cases,verify_initial_feedback,authenticate_initial_models
 
 
 def inputs():
@@ -56,3 +56,16 @@ def test_confirmation_audit_checks_current_progress_not_future_post_step(monkeyp
     with pytest.raises(AssertionError):verify_initial_feedback(raw,case,{},plan)
     raw['nominal_progress_m'][4:]=.4
     verify_initial_feedback(raw,case,{},plan)
+
+
+def test_feedback_alias_authentication_uses_native_schema_without_weakening_identity(monkeypatch):
+    import sttw_control.finite_value_evaluation_run as runner
+    seen=[]
+    monkeypatch.setattr(runner,'authenticate_models',lambda cfg,models:seen.append(set(models)))
+    native=dict(actor='actor',actor_sha256='sha',checkpoint='checkpoint',checkpoint_sha256='cp_sha',
+                fingerprint='identity',value_contract=dict(role='free_GAE'))
+    models={role:copy.deepcopy(native) for role in ['parent_plain','parent_causal','free_GAE','feedback_010','feedback_nominal']}
+    authenticate_initial_models({},models)
+    assert seen==[{'parent_plain','parent_causal','free_GAE'}]
+    models['feedback_nominal']['actor_sha256']='different'
+    with pytest.raises(ValueError):authenticate_initial_models({},models)

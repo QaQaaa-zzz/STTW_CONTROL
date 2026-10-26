@@ -16,6 +16,16 @@ from .preference_best import atomic_json,digest
 ROLES=('parent_plain','parent_causal','free_GAE','feedback_010','feedback_nominal')
 
 
+def authenticate_initial_models(config,models):
+    from .finite_value_evaluation_run import authenticate_models
+    authenticate_models(config,{r:models[r] for r in ['parent_plain','parent_causal','free_GAE']})
+    # Native checkpoint format belongs to free_GAE, not to its runtime aliases.
+    for role in ['feedback_010','feedback_nominal']:
+        for key in ['actor','actor_sha256','checkpoint','checkpoint_sha256','fingerprint','value_contract']:
+            if models[role][key]!=models['free_GAE'][key]:
+                raise ValueError('feedback alias differs from authenticated native Actor: '+role+'/'+key)
+
+
 def initial_cases(protocol, contexts, previous_cases):
     if (protocol['schema']!='nominal_feedback_real_initial_confirmation_v1'
             or protocol['roles']!=list(ROLES) or protocol['bank_indices']!=[2,4]
@@ -94,7 +104,6 @@ def prepare_initial_confirmation(root,*,source,protocol_file):
     import jax
     import jax.numpy as j
     from .contact_only_environment import load_environment_contact_only
-    from .finite_value_evaluation_run import authenticate_models
     from .geometric_path import Path as GeometricPath
     from prepare_short_recovery_campaign import register
     root=Path(root).resolve();source=Path(source).resolve();protocol_file=Path(protocol_file).resolve()
@@ -126,7 +135,7 @@ def prepare_initial_confirmation(root,*,source,protocol_file):
     models['feedback_nominal']=copy.deepcopy(old['models']['feedback_nominal'])
     for role,model in models.items():model.update(feedback_kind=1 if role=='feedback_nominal' else 3 if role=='feedback_010' else 0,
         feedback_gain_rad=.1 if role in ['feedback_nominal','feedback_010'] else 0.)
-    authenticate_models(cfg,models)
+    authenticate_initial_models(cfg,models)
     previous=json.loads((reference/'inventory.json').read_text())['cases']
     earlier=Path(ref['source_reference_run'])/'inventory.json'
     previous+=json.loads(earlier.read_text())['cases']
