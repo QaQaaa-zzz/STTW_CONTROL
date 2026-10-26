@@ -107,3 +107,14 @@ H1最小下一步首先只读已有交回状态：A/B实际参考有无实质差
 可能值得追问的差异，是在这个有限参考、完整历史且必须动态平衡的系统中，能否找到**简单规则做不到的原偏好任务接续增量**，并解释何种进入/交回状态造成差别。这仍是待测假设，不能由任务名称或把集合换名来证明新颖。现阶段裁决仍是：完成三臂及固定300；普通MC覆盖结构收益则保留普通方法；没有额外控制收益则停止结构。H1没有在本轮被启动，旧E_min/E_b/gamma/T不再拟合。
 
 工具方法引用仍为Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026), [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)；本轮已在线核对作者与当前arXiv记录。工具及AI反审不是实验有效性的证据。
+
+
+## 主机重启中断与保留17轮的恢复
+
+2026-10-25主机boot ID变化，原训练3548929/接续3629632缺失而原状态仍running；程序未记录traceback，重启原因未知。原两状态保留快照后登记host_reboot error，Bark两告警accepted。不能把此事件推断为PPO/模型错误。
+
+保留并认证原17完整批、三臂完整权重/Adam[60,68,68]、next_collection17以及原pending18采样身份。前缀实际5805780/分配6120000个5ms lower槽来自已落盘数据；未落盘额外物理/optimizer工作UNKNOWN，不能由单待记录块的条件估计宣称跨重启总费用精确。旧目录与未完整18永久保留。
+
+显式恢复code6840b0c，新run runs/finite_value_online_v1_recovery17。91相关CPU测试、独立只读审查、180路GPU零积分shape通过；只执行原全局索引17..63，不更换seed/Actor/Critic/Adam，不重做warmup，不修改奖励、alpha或参考权限。恢复首个第18轮已真实完成，三臂[64,72,72]，原pending18身份逐字段复现；新TensorBoard http://localhost:59007 的三臂真实reward18已HTTP核验，原1..17日志不改。
+
+新训练PID105538、新事件接续110558已实核，接续绑定当前boot与实际训练进程，仍完整64后才执行同一已封存300，原未执行评价不重复计费。新的边界恢复协议见同级../finite_value_online/RECOVERY_BOUNDARY.md；未采用新权重，方法增量和RA-L目标仍待完整64/300控制证据，不能由恢复成功或当前奖励证明。
