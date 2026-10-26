@@ -86,7 +86,10 @@ def analyze(root):
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
             goal_audit=None
-            if c.get('goal_preview'):
+            if c.get('stage_mechanism'):
+                from .steering_stage_mechanism import verify_stage_log
+                goal_audit=verify_stage_log(raw,c,cfg,p['feedback_spec'],paths[c['context']])
+            elif c.get('goal_preview'):
                 from .goal_preview_baseline import verify_goal_log
                 goal_audit=verify_goal_log(raw,c,cfg,p['feedback_spec'],paths[c['context']])
             elif c.get('preference_speed_authority'):
@@ -206,9 +209,12 @@ def role_labels(rows):
                          'preference_speed_authority':'free_GAE physical speed offset x(1-alpha)'}.get(row['role'],actor_label)
             label=f"{actor_label} + steering {row['feedback_gain_rad']:g}rad"
         if row.get('goal_preview'):
-            source={'goal_zero_feedback':'zero NN','goal_steer_feedback':'neural steering only',
-                    'goal_full_feedback':'full NN'}[row['role']]
-            label=f'Goal-preview PP / {source} + feedback 0.1rad'
+            if row.get('stage_mechanism'):
+                label='Privileged neural steering '+('after only' if row['stage_late_neural'] else 'before only')+' / common goal/feedback'
+            else:
+                source={'goal_zero_feedback':'zero NN','goal_steer_feedback':'neural steering only',
+                        'goal_full_feedback':'full NN'}[row['role']]
+                label=f'Goal-preview PP / {source} + feedback 0.1rad'
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
         if row['role']=='feedback_shared':label='free_GAE (original alpha) + common alpha0.5 profile feedback 0.1rad'
@@ -235,6 +241,8 @@ def goal_report(rows,roles):
         groups={}
         for row in group:groups.setdefault((row['context'],row['alpha'],row['event_id']),{})[row['role']]=row
         contrasts=[(role,baseline) for role in roles if role!=baseline]
+        from .steering_stage_mechanism import STAGE_ROLES
+        contrasts += [(a,b) for a in STAGE_ROLES for b in ['goal_zero_feedback','goal_steer_feedback']]
         if 'goal_full_feedback' in roles:
             contrasts += [(a,b) for a,b in [('goal_zero_feedback','zero_middle_feedback'),
                 ('goal_steer_feedback','steer_only_feedback'),('goal_full_feedback','feedback_010'),
@@ -272,7 +280,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .middle_channel_ablation import CHANNEL_ROLES
     from .preference_speed_authority import AUTHORITY_ROLE
     from .goal_preview_baseline import GOAL_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)
+    from .steering_stage_mechanism import STAGE_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
@@ -362,7 +371,8 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     from .middle_channel_ablation import CHANNEL_ROLES
     from .preference_speed_authority import AUTHORITY_ROLE
     from .goal_preview_baseline import GOAL_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)
+    from .steering_stage_mechanism import STAGE_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     labels_by_role=role_labels(rows)

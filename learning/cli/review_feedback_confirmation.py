@@ -58,6 +58,9 @@ def review(root,output):
     if 'goal_full_feedback' in roles:
         targets+=['goal_zero_feedback','goal_steer_feedback','goal_full_feedback']
         baselines+=['zero_middle_feedback','steer_only_feedback','goal_zero_feedback','goal_steer_feedback']
+    if 'neural_before_only' in roles:
+        targets+=['neural_before_only','neural_after_only','goal_steer_feedback']
+        baselines+=['goal_zero_feedback','neural_before_only','neural_after_only']
     for target in targets:
         for baseline in baselines:
             if target==baseline or target not in roles or baseline not in roles:continue

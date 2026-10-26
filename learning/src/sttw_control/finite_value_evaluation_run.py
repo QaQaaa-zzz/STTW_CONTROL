@@ -361,6 +361,8 @@ def execute(root, *, shape_only=False):
                 params[role]['actor']=dict(native=params[role]['actor'],zero=j.bool_(model['actor_source_zero']))
             if p.get('channel_ablation') or p.get('goal_preview_comparison'):
                 params[role]['actor']=dict(native=params[role]['actor'],keep_channels=j.asarray(model['source_keep_channels'],bool))
+            if p.get('steering_stage_mechanism'):
+                params[role]['stage_late_neural']=j.bool_(model['stage_late_neural'])
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2')
         if p.get('goal_preview_comparison'):
@@ -395,12 +397,17 @@ def execute(root, *, shape_only=False):
             for key,item in p['nominal_profiles'].items():
                 with np.load(item['file'],allow_pickle=False) as z:tables[key]={k:j.asarray(z[k]) for k in z.files}
             parameters=stack([dict(params[c['role']],nominal_table=tables[nominal_profile_key(c)]) for c in cases])
+        elif p.get('steering_stage_mechanism'):
+            parameters=stack([dict(params[c['role']],switch_task_tick=j.int32(c['pulse_onset_task_tick'])) for c in cases])
         else:parameters=stack([params[c['role']] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)
         pulses=j.asarray([physical_pulse(c,p['contexts'][c['context']]) for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        if p.get('goal_preview_comparison'):
+        if p.get('steering_stage_mechanism'):
+            from .steering_stage_mechanism import make_stage_step
+            one=make_stage_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
+        elif p.get('goal_preview_comparison'):
             from .goal_preview_baseline import make_goal_step
             one=make_goal_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
         elif p.get('preference_speed_authority'):
