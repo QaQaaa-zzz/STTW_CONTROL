@@ -20,6 +20,12 @@ def prefix_config(config, spec):
     result['path'].update(straight_prefix_m=.3, turn_radius_m=4.,
                           turn_angle_rad=float(np.deg2rad(abs(spec['turn_angle_deg']))),
                           curvature_transition_length_m=.2, straight_tail_m=75.)
+    # build_path's straight is80m. Give every curved prefix the same grid
+    # length without resampling curvature or changing the relevant geometry.
+    c=result['path']
+    plateau=c['turn_angle_rad']*c['turn_radius_m']-c['curvature_transition_length_m']
+    end=c['straight_prefix_m']+2*c['curvature_transition_length_m']+plateau
+    c['straight_tail_m']=80.-end
     return result
 
 

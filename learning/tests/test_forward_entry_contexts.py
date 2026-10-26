@@ -20,6 +20,18 @@ def test_prefix_declaration_is_fixed_and_config_isolation():
     assert proposed['path']['turn_angle_rad']>0
 
 
+def test_mixed_actual_paths_have_one_batch_shape():
+    from sttw_control.geometric_path import build_path
+    config={'path':{'spacing_m':.02,'goal_section_offset_after_turn_m':4.}}
+    paths=[]
+    for spec in prefix_inventory():
+        kind='straight' if spec['turn_angle_deg']==0 else ('left90_R2' if spec['turn_angle_deg']>0 else 'right90_R2')
+        paths.append(build_path(kind,[0.,0.,0.],prefix_config(config,spec)))
+    assert {p.s.shape for p in paths}=={(4001,)}
+    assert {p.xy.shape for p in paths}=={(4001,2)}
+    assert all(float(p.s[-1])==80. for p in paths)
+
+
 def test_relative_task_clock_preserves_all_dynamic_carry():
     @struct.dataclass
     class State:
