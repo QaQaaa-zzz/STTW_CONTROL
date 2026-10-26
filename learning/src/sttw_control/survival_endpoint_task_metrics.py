@@ -7,6 +7,56 @@ import math
 import numpy as np
 
 
+def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s):
+    """First entry into the ORIGINAL goal disk before contact/fault.
+
+    No heading/speed/hold or follower-domain condition is imposed. Arrival is
+    evaluated from measured sample positions; no interpolation is invented.
+    A later fall does not erase arrival and must be reported separately.
+    """
+    if not all(math.isfinite(x) and x > 0 for x in [radius_m, dt, horizon_s]):
+        raise ValueError('positive finite radius, dt and horizon required')
+    goal = np.asarray(goal_xy, float)
+    if goal.shape != (2,) or not np.isfinite(goal).all():
+        raise ValueError('finite original XY goal required')
+    active = np.asarray(physical['active_tick'], bool)
+    clock = np.asarray(physical['physical_tick'])
+    xy = np.asarray(physical['actual_xy'], float)
+    if active.ndim != 1 or clock.shape != active.shape or xy.shape != (len(active), 2):
+        raise ValueError('aligned physical clock and XY required')
+    ticks = clock[active]
+    limit = round(horizon_s / dt)
+    if not math.isclose(limit * dt, horizon_s, abs_tol=1e-8):
+        raise ValueError('horizon must align to physical ticks')
+    if not np.array_equal(ticks, np.arange(len(ticks))) or len(ticks) > limit:
+        raise ValueError('complete observed clock prefix required')
+    contact = active & np.asarray(physical['contact_failure'], bool)
+    fault = active & (np.asarray(physical['nonfinite'], bool) |
+                      physical['lower_fault'] | physical['policy_fault'])
+    # Finite positions before an explicit fault are required for an answer.
+    fault = fault | (active & ~np.isfinite(xy).all(axis=1))
+    fatal = np.flatnonzero(contact | fault)
+    stop = int(fatal[0]) if fatal.size else len(active)
+    valid = active & (np.arange(len(active)) < stop)
+    distance = np.linalg.norm(xy[valid] - goal, axis=1)
+    hits = np.flatnonzero(distance <= radius_m)
+    arrived = bool(hits.size)
+    if arrived:
+        outcome = 'arrived'
+    elif fatal.size:
+        outcome = 'unknown' if fault[stop] else 'contact_before_arrival'
+    else:
+        outcome = 'not_arrived' if len(ticks) == limit else 'unknown'
+    first = float((ticks[hits[0]] + 1) * dt) if arrived else None
+    return dict(goal_arrived=None if outcome == 'unknown' else arrived,
+        arrival_outcome=outcome, goal_radius_m=float(radius_m),
+        first_arrival_s=first,
+        minimum_upright_goal_distance_m=float(distance.min()) if distance.size else None,
+        contact_after_arrival=bool(arrived and contact.any()),
+        fault_after_arrival=bool(arrived and fault.any()),
+        contract='Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.')
+
+
 def task_metrics(physical,*,speed,goal_s,config):
     dt=float(config['timing']['lower_dt_s']);horizon=float(config['training_future_phase_C']['episode_s'])
     band=config['stage_B_baseline'];limit=round(horizon/dt);hold=round(band['hold_s']/dt)

@@ -3,6 +3,43 @@ import numpy as np
 import pytest
 
 
+def test_goal_arrival_is_spatial_not_goal_plane_or_final_hold():
+    from sttw_control.survival_endpoint_task_metrics import goal_arrival_metrics
+    p, _ = fixture()
+    p['actual_xy'] = np.array([[0., 1.], [.5, 1.], [1., 1.], [2., 1.],
+                              [2., 2.], [2., 3.], [2., 4.], [2., 5.]])
+    m = lambda: goal_arrival_metrics(p, goal_xy=[1, 0], radius_m=.3, dt=.005, horizon_s=.04)
+    assert m()['goal_arrived'] is False  # Passing the target plane is insufficient.
+    p['actual_xy'][2] = [1., .2]
+    p['path_heading_error'][:] = 2.; p['actual_forward_speed'][:] = .3
+    assert m()['goal_arrived'] is True
+    assert m()['first_arrival_s'] == pytest.approx(.015)
+
+
+def test_goal_arrival_preserves_later_fall_but_never_counts_fallen_position():
+    from sttw_control.survival_endpoint_task_metrics import goal_arrival_metrics
+    p, _ = fixture(); p['actual_xy'] = np.full((8, 2), 4.)
+    p['actual_xy'][4] = [1., 0.]; p['contact_failure'][5] = True
+    m = lambda: goal_arrival_metrics(p, goal_xy=[1, 0], radius_m=.3, dt=.005, horizon_s=.04)
+    assert m()['goal_arrived'] and m()['contact_after_arrival']
+    p['contact_failure'][3] = True
+    assert m()['goal_arrived'] is False and m()['arrival_outcome'] == 'contact_before_arrival'
+
+
+def test_goal_arrival_fault_partial_prefix_and_clock_semantics():
+    from sttw_control.survival_endpoint_task_metrics import goal_arrival_metrics
+    p, _ = fixture(); p['actual_xy'] = np.full((8, 2), 4.)
+    m = lambda: goal_arrival_metrics(p, goal_xy=[1, 0], radius_m=.3, dt=.005, horizon_s=.04)
+    p['lower_fault'][2] = True
+    assert m()['goal_arrived'] is None
+    p['lower_fault'][:] = False; p['active_tick'][4:] = False
+    assert m()['goal_arrived'] is None
+    p['actual_xy'][1] = [1., 0.]
+    assert m()['goal_arrived'] is True  # Observed arrival remains known.
+    p['physical_tick'][2] = 9
+    with pytest.raises(ValueError): m()
+
+
 def fixture():
     config=dict(timing={'lower_dt_s':.005},training_future_phase_C={'episode_s':.04},
         stage_B_baseline=dict(hold_s=.01,final_y_error_m=.1,final_path_heading_error_rad=.05,
