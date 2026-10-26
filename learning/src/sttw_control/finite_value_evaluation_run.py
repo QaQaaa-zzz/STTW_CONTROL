@@ -397,7 +397,10 @@ def execute(root, *, shape_only=False):
         pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
                            *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        if p.get('channel_ablation'):
+        if p.get('preference_speed_authority'):
+            from .preference_speed_authority import make_authority_step
+            one=make_authority_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
+        elif p.get('channel_ablation'):
             from .middle_channel_ablation import make_channel_step
             one=make_channel_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
         elif p.get('zero_middle_comparison'):

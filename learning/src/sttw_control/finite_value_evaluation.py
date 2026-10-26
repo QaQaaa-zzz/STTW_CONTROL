@@ -184,7 +184,8 @@ def paired_report(rows, *, roles=ROLES):
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
     from .zero_middle_feedback import ZERO_ROLES
     from .middle_channel_ablation import CHANNEL_ROLES
-    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES
+    from .preference_speed_authority import AUTHORITY_ROLE
+    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)
     if not roles or not set(roles) <= set(ROLES+PROBE_ROLES):
         raise ValueError('known evaluation roles required')
     groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}
@@ -212,6 +213,7 @@ def paired_report(rows, *, roles=ROLES):
     contrasts += [(a,b) for a,b in [('speed_only_feedback','zero_middle_feedback'),
                    ('steer_only_feedback','zero_middle_feedback'),('feedback_010','speed_only_feedback'),
                    ('feedback_010','steer_only_feedback')]]
+    contrasts += [(AUTHORITY_ROLE,b) for b in ('feedback_010','steer_only_feedback')]
     contrasts = [(a,b) for a,b in contrasts if a in roles and b in roles]
     comparisons={}
     for target,baseline in contrasts:
