@@ -96,3 +96,19 @@ def test_primary_arrival_and_later_contact_remain_separate():
     assert got['all']['paired']['parent_causal_vs_parent_plain']['arrival_gains']==1
     assert got['all']['counts']['parent_causal']['contact']==1
     assert paired_report(rows,roles=['parent_plain','parent_causal'])['comparisons']['parent_causal_vs_parent_plain']['physical_losses']==1
+
+
+def test_supported_candidate_preserves_events_and_uses_only_existing_gate():
+    from sttw_control.finite_value_evaluation import candidate_extension_cases,supported_candidate_cases
+    import pytest
+    protocol=dict(seed=2631,alphas=[0.,.5,1.],forces_N=[0.,-16.,16.,-32.,32.],
+                  onset_upper_tick_range=[140,241],pulse_duration_s=.1)
+    contexts={name:dict(speed_m_s=speed,world_direction=[0.,1.,0.]) for name,speed in [('left',1.2),('right',1.5)]}
+    original=confirmation_inventory(protocol,contexts)
+    plain=[c for c in candidate_extension_cases(original,['free_GAE','finite_GAE','free_MC']) if c['role']=='free_GAE']
+    supported=supported_candidate_cases(original,'free_GAE')
+    assert len(supported)==30 and sum(c['force_N']==0 for c in supported)==6
+    for a,b in zip(plain,supported):
+        assert a['mode_index']==0 and b['mode_index']==1 and b['causal_support']
+        assert {k:v for k,v in a.items() if k not in ['mode_index','causal_support']}=={k:v for k,v in b.items() if k not in ['mode_index','causal_support']}
+    with pytest.raises(ValueError):supported_candidate_cases(original,'finite_GAE')

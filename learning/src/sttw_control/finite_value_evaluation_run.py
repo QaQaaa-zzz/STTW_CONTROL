@@ -16,9 +16,9 @@ from .finite_value_evaluation import endpoint_records, evaluation_inventory, mak
 from .preference_best import atomic_json, digest
 
 
-def prepare_candidate_extension(root, *, source, candidates):
+def prepare_candidate_extension(root, *, source, candidates, supported_candidate=None):
     """Supplement frozen candidates only, retaining the completed90 baseline."""
-    from .finite_value_evaluation import candidate_extension_cases, ROLES
+    from .finite_value_evaluation import candidate_extension_cases, supported_candidate_cases, ROLES
     root=Path(root).resolve();source=Path(source).resolve();candidates=Path(candidates).resolve()
     old=json.loads((source/'plan.json').read_text());bank=json.loads((candidates/'plan.json').read_text())
     for directory in [source,candidates]:
@@ -43,10 +43,14 @@ def prepare_candidate_extension(root, *, source, candidates):
         if isinstance(n,ast.FunctionDef) and n.name=='make_evaluation_step')
     if core(module/'finite_value_evaluation.py')!=core(source/'source_at_launch/learning/src/sttw_control/finite_value_evaluation.py'):
         raise ValueError('changed evaluation control kernel')
-    roles=['free_GAE','finite_GAE','free_MC'];models={r:bank['models'][r] for r in roles}
+    roles=['free_GAE','finite_GAE','free_MC'] if supported_candidate is None else [supported_candidate]
+    if supported_candidate is not None and supported_candidate!='free_GAE':raise ValueError('undeclared supported candidate')
+    models={r:bank['models'][r] for r in roles}
     cfg=json.loads((source/'common_environment_config.json').read_text());authenticate_models(cfg,models)
     original=json.loads((source/'inventory.json').read_text())['cases']
-    cases=candidate_extension_cases(original,roles)
+    cases=candidate_extension_cases(original,roles) if supported_candidate is None else supported_candidate_cases(original,supported_candidate)
+    n=len(cases)
+    evaluation_roles=list(ROLES) if supported_candidate is None else [*ROLES[:3],supported_candidate]
     records=json.loads((source/'physical/results.json').read_text());indices=json.loads((source/'physical/case_index.json').read_text())
     ids={c['case_id'] for c in original}
     if len(original)!=90 or len(records)!=90 or len(indices)!=90 or len(ids)!=90 or ids!={c['case_id'] for c in records} or ids!={c['case_id'] for c in indices}:
@@ -76,21 +80,22 @@ def prepare_candidate_extension(root, *, source, candidates):
         for file in files:
             dest=root/'source_at_launch'/file.resolve().relative_to(Path.cwd());dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,dest)
         plan=dict(project='STTW_CONTROL',experiment='frozen_candidate_reference_extension',
-            models=models,contexts=old['contexts'],evaluation_roles=list(ROLES),declared_cases=90,new_cases=90,cached_cases=90,analysis_cases=180,
-            maximum_active_lower_ticks=180000,maximum_allocated_lower_slots=180000,optimizer_updates=0,
+            models=models,contexts=old['contexts'],evaluation_roles=evaluation_roles,declared_cases=n,new_cases=n,cached_cases=90,analysis_cases=n+90,
+            supported_candidate=supported_candidate,
+            maximum_active_lower_ticks=2000*n,maximum_allocated_lower_slots=2000*n,optimizer_updates=0,
             horizon_s=10.,lower_dt_s=.005,goal_radius_m=old['goal_radius_m'],task_rule=old['task_rule'],
             endpoint_receipt=str(candidates/'authenticated_models.json'),endpoint_receipt_sha256=digest(candidates/'authenticated_models.json'),
             source_reference_run=str(source),candidate_source=str(candidates),
             cached_active_lower_ticks=cache['active_lower_ticks'],cached_allocated_lower_slots=cache['allocated_lower_slots'],
             sealed_files={str(root/name):digest(root/name) for name in ['inventory.json','cache_receipt.json','authenticated_models.json','common_environment_config.json','source_declaration.json','protocol.json']},
             source_sha256=sources,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            data_role='Supplement three frozen final64 candidates on the SAME30 new-geometry DEV events; exact90 reference trajectories reused, not independent repeats.',
+            data_role=('Supplement three frozen final64 candidates on the SAME30 new-geometry DEV events; exact90 reference trajectories reused, not independent repeats.' if supported_candidate is None else 'DEV complementarity probe: free_GAE is ALWAYS deployed with the unchanged measured short-support gate in this run; exact90 parent controls reused. No new training or independent repeat.'),
             information=old['information'],initialization=old['initialization'],
-            stop='Only90 missing candidate episodes; no training/baseline rerun/checkpoint selection/threshold tuning/automatic retry/model adoption.')
+            stop=f'Only{n} missing candidate episodes; no training/baseline rerun/checkpoint selection/threshold tuning/automatic retry/model adoption.')
         atomic_json(root/'plan.json',plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
-        atomic_json(root/'status.json',dict(phase='prepared',declared_cases=90,completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
-        register(root/'ACTIVE_RUN.json','STTW_CONTROL 三冻结中层同事件90补评',root/'status.json')
-        register(root/'ACTIVE_SHAPE.json','STTW_CONTROL 三冻结中层90路shape',root/'shape/status.json')
+        atomic_json(root/'status.json',dict(phase='prepared',declared_cases=n,completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+        register(root/'ACTIVE_RUN.json',f'STTW_CONTROL 冻结中层同事件{n}补评',root/'status.json')
+        register(root/'ACTIVE_SHAPE.json',f'STTW_CONTROL 冻结中层{n}路shape',root/'shape/status.json')
         atomic_json(root/'prepare_status.json',dict(phase='completed',pid=os.getpid(),physics_steps=0,optimizer_updates=0))
     except BaseException as exc:
         (root/'prepare_traceback.txt').write_text(traceback.format_exc())

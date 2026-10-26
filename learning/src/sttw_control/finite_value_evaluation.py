@@ -44,6 +44,18 @@ def candidate_extension_cases(source_cases, candidate_roles):
     return rows
 
 
+
+def supported_candidate_cases(source_cases, role):
+    """One declared Actor with the existing measured gate, no event changes."""
+    if role != 'free_GAE':
+        raise ValueError('only predeclared free_GAE complementarity probe supported')
+    rows=candidate_extension_cases(source_cases,['free_GAE','finite_GAE','free_MC'])
+    rows=[c for c in rows if c['role']==role]
+    for case in rows:
+        case.update(mode_index=1,causal_support=True)
+    return rows
+
+
 def rebind_path_context(state, path, speed, env):
     """New task geometry only; retain all physical/lower/history/filter state."""
     import jax.numpy as j
