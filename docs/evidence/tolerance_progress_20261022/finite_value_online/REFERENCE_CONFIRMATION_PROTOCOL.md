@@ -1366,3 +1366,13 @@ Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻
 确定受扰各10：父、普通、floor在0.5/0.75/1m均0；物理信用0/0/1，整窗存活分别6/7/10/10（父/普通/物理/floor）。受扰最小目标距离中位父3.895、普通3.442、物理3.024、floor3.683m。随机受扰各40：物理在三阈值均2，其余均0；整窗存活23/25/39/40，最小距离中位3.959/3.617/3.513/3.641m。多数失败并非只差几十厘米，不以扩半径恢复物理信用优越性主张；floor保命而不到达的差别继续保留。原strict物理确定成功2/10不撤销，旧截面与新点圆并非嵌套。
 
 全部表/联合命中且整窗存活/距离分位见 `runs/online_survival_endpoint_evaluation_v2/goal_arrival_relaxed_v1/distance_sensitivity_v1/{README.md,summary.csv,receipt.json}`。本轮为派生数据独立重计，不重复冒称raw重放；原12XY继续作证，本轮实际复看左确定+32N一图，其余不新增全图审阅声明。无新首次命中时刻、held-tail恢复标签或安全认证。候选名义用途保留；下一仍先完成冻结双网、u325、H75、当前的接口公平核对及必要名义对照，不因放松标准盲目续训/扫奖励/复活gate。无活动新仿真训练、无push/JIT/实机。
+
+### 2026-10-26 冻结迭代链实际接口核验：区分权重迁移与原生能力
+
+上一轮为实际progress（旧488距离重计/台账2266）。本轮新增audit_middle_lineage_interface.py及lineage_inference.py，未改已有数值控制内核或用户dirty模块。双网A0/A1、u325、H75的registry/manifest/actor/checkpoint/resolved config身份认证；4个checkpoint完整Actor导出逐叶等于保存pkl，共同local300 Actor SHA均d408a94e…，底层checkpoint/normalizer一致。16条来自2个真实alpha端点轨迹的351D观测推理有限，Torch/JAX最大误差8.95e-8；双网原legacy与仅新增零FiLM的modulated输出差0，非动作混合/新训练。helper独立复制原参数、拒绝已有调制以防擦除，拒绝错误345D输入；2CPU测试实际passed .24s。提取helper后的完整audit_v2实际exit0（v1探索产物保留），0物理/0优化器。
+
+4套观测history16×20/context15/mask16/固定尺度clip5/351D一致。历史声明Git包6关键函数×4共24项AST相同，覆盖frame/observation/latent/filter；不冒称历史所有未提交runtime同版或完整仿真重放。physical frame同源stage52规格；规格文件中的旧actor345/context9不是当前geometric351/context15，不能误取整个旧network。下层身份/观测兼容已经获得证据，但接口权限不相同：双网速度[1.5,3.0]、u325/H75[1.5,3.5]；近期[1.0,3.5]m/s。旧参考转角.35/follower.3，近期.65/.6rad。故近期低速1.1/1.4对旧模型是越出原生权限的迁移，不能据负结果否定其原生高速用途或当架构消融。
+
+为下一必要比较已落盘next_comparison_declaration.json，execution planned_not_started：12原完整进入情境×alpha0/1×dual/u325/H75=72新无扰轨迹、最多144000新lower及分配槽；current/zero各24条原结果仅列48待认证缓存候选，联合120不冒称全新。全臂固定近期共同接口、原10s/50cm到达及10/20/30cm诊断，整窗触地分列；每实际轨迹按原用户alpha0/1效用重评分，保失败和全部12XY。双网只按固定alpha挑对应端点、不混合或插值。此比较回答common-expanded-interface权重迁移，不复现各自原生环境/奖励/训练；共享bank相关DEV不称独立repeat/最终TEST，不预设单调升级。无扰有区别才定位具体权限饱和/效用差距并决定原生确认，非盲加训。
+
+证据runs/entry_history_confirmation_v1/analysis/lineage_interface_audit_v2/{audit,verification,next_comparison_declaration}.json及README；v2已实际重新执行最终helper。专用历史认证/runner接线仍未实现，当前旧runner认证不被弱化，48缓存未宣称完成复用。未启动新仿真/训练、未改采用模型/冻结别名、无push/JIT/实机。下一按声明补接认证和批量runner再做该一次固定比较；先用原始轨迹回答模型用途，非以审计取代Trans需要的控制增量和独立证据。
