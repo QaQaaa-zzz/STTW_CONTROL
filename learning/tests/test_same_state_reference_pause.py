@@ -87,3 +87,26 @@ def test_inventory_keeps_all_nominal_and_disturbed_endpoints_without_outcome_fil
     with pytest.raises(ValueError):inventory(cases[:-1])
     bad=[dict(c) for c in cases];bad[0]['pulse_duration_s']=.14
     with pytest.raises(ValueError):inventory(bad)
+
+
+def test_analysis_keeps_pre_fork_terminal_cases_without_calling_them_intervened():
+    import importlib.util
+    from pathlib import Path
+    spec=importlib.util.spec_from_file_location('same_state_analysis',Path(__file__).parents[1]/'cli/analyze_same_state_pause.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    from sttw_control.same_state_reference_pause import ROLES
+    rows=[]
+    # One common-state opportunity and one terminal prefix. Never drop the latter.
+    for event,reached in [('eligible',True),('prefix_contact',False)]:
+        for i,role in enumerate(ROLES):
+            rows.append(dict(context='same',alpha=0.,event_id=event,case_id=event+'/'+role,role=role,force_N=-32.,reached_fork=reached,
+                goal_arrived=bool(reached and i==1),physical_outcome='survived' if reached else 'contact',
+                legal_suppression_ticks=80 if reached and i else 0,scored_cost=2.,minimum_upright_goal_distance_m=.2 if reached and i==1 else 3.))
+    report=module.summarize(rows)
+    assert report['all_events']['disturbed']['counts'][ROLES[0]]['n']==2
+    assert report['eligible_at_fork']['disturbed']['counts'][ROLES[0]]['n']==1
+    assert report['all_events']['disturbed']['paired_vs_new_full_current'][ROLES[1]]['arrival_gain']==1
+    assert report['eligible_at_fork']['nominal']['counts'][ROLES[0]]['n']==0
+    assert report['eligible_at_fork']['nominal']['counts'][ROLES[0]]['same_user_cost_by_alpha']['0.0'] is None
+    broken=[dict(r) for r in rows];broken[-1]['reached_fork']=True
+    with pytest.raises(ValueError):module.summarize(broken)

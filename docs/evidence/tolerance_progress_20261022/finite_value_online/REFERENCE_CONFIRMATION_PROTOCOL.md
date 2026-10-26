@@ -1529,3 +1529,14 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 **非发起人审阅与停止**：independent_design_review.md存第7步AI反审：支持有界执行，要求完整外层carry/全部预终止/实际冲量/新full尾段/明确暂停语义/全计费，以上已落实代码和协议。固定三分支先分别报告到达与触地gain/loss、原alpha成本/参考变化、名义保留；逐例最佳仅后验机会。一次结束，不按结果扩时长、切点或动作库，不加训/拟合旧公式。无增量仅否定本有限暂停集合，不否定全部协调；有增量也不直接采用控制器。
 
 **当前状态与下一步**：physical尚未启动，root status prepared/0积分；实际分析CLI和生产driver完成前不启动。接下来先补只读同状态三分支分析（含新prefixeligibility/全事件、原usercost、完整XY/有效请求、actual/padding正确计费）、封存driver/Bark后执行唯一固定物理，再据结果保留/关闭这一假设。原模型/用户dirty源码/远端/JIT/实机不动；Trans目标active。
+
+
+### 2026-10-26 同状态三分支分析/生产流程封存，准备执行
+
+新增analyze_same_state_pause.py只读完整360：逐raw SHA/事件身份/完整记录检查、所有已记录prefix字段逐样本三支一致、fork完整carry复制receipt/clock不重置、动态mask/80ticks/原gate/goal-preview/奖励重建和真实触地标签核验。按全事件与新prefix活到fork两人口、无扰/受扰、原useralpha报告固定三分支到达/存活/二者同时、gain/loss、原成本、请求合法性/神经请求变化。仅固定360，后验分支并集仅诊断。完整XY五张按force覆盖12context×两alpha×三分支，真实失败终点/同状态fork标记，原世界目标，不平滑/筛结果。
+
+计费再核logical total=3×prefix actual+suffix actual，new physics=prefix once+suffix actual，allocated=prefix slots+suffix slots；防止360逻辑轨迹把共用前缀重计成物理。预终止不冒充接受干预，full_current暂停窗只是对齐窗口、mask恒全开，legal_suppression_ticks另以真正去掉通道核计。
+
+原4测试加分析eligibility回归，共5CPU actual passed .64s，覆盖共同前缀触地保留、只在eligible子集去除、无名义样本明示0/None、三支eligibility不一致拒绝。额外只读一条历史full-current raw的API preflight：原gate/goal/ownreward重建、几何/目标/成本合并接口通过，analysis_preflight_receipt记录source raw SHA/脚本SHA及0新物理；它不是新分支控制结果。已完成shape(50,120,4)/(50,360,4)原样保持，无重复积分。
+
+生产dispatch.py封存既有shape后一次execute→analyze；completion_pipeline_identity.json锁定新分析/driver SHA，原plan/config/models/source文件不改。复用register与显式中文Bark物理结束/分析结束/报错；失败原位停止，不自动重试/扩训/扩mask库。所有新raw在HDD，系统盘65GiB/GPU空余23435MiB，未停止其它任务。当前仍prepared/最终PENDING，登记后启动固定driver；无新算法采用、push/JIT/实机。
