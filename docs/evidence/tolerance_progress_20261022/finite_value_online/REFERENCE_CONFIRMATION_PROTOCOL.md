@@ -1465,3 +1465,6 @@ run=h75_disturbed_common_interface_v1。新96条仅H75：entry_history_confirmat
 精确复用264条：已有current/zero各120（24无扰＋96受扰）及H75无扰24；全部原raw SHA/记录/声明逐身份核，缓存代价单列。96新最大192000lower/槽、0训练，vmap96/scan50、共享编译cache、cuda,cpu与CPUcallbacks；零积分shape后一次实际，再只读联合360并生成全部XY。不扩dual、不重跑基线、不选checkpoint/调门槛/自动重试。若H75覆盖主要收益，收缩后继学习增量主张；若current有新增有损失，则研究保持旧偏好能力和恢复用途的取舍，而非再造检测gate。简单规则/父模型的历史结果继续保留，本次同控制栈只比较Actor权重。
 
 prepare session25709实际exit0，认证264cache、四历史权重按原frozen registry/checkpoint导出认证，96事件逐字段除模型身份外完全等current原事件；核心数值文件/AST按原source核，不修改用户dirty代码。plan/source_at_launch/config/cache/models/input identities封存，所有raw在HDD。既有register/显式driver完成、报错中文Bark；automatic_repair=false。当前prepared，结果PENDING，接下来登记后启动固定driver。没有新训练/采用/推送/实机/另一项目操作。
+
+
+实际启动：原exec session81135，controller2805172，shape2805174已完成(50,96,4)/0积分，execute2806257实际/proc live。当前collecting第3块、57600active lower/57600slots、elapsed59.25秒、completed0（只在终点形成96记录），最终收益PENDING。不将编译/运行计为通过。原driver封存未改，自动物理→只读分析及Bark；观察超时不重启。新增review_h75_disturbed_comparison.py仅只读360分析后产出0.5/.75/1m到达、全窗触地、配对新增/丢失/目标距/原alpha成本和五张按力档覆盖全部360实际XY的工作图；已语法检查、未运行/未声称结果或视觉审查完成，不修改科学合同或已有driver。后续优先沿session81135收尾，再实际运行该readout并审图。
