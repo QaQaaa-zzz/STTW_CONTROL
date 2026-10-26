@@ -439,3 +439,53 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 attempt2准备session72634 exit0，GPU shape47539 exit0（50×300×4、0物理）。启动前检查发现，adapter若在两套完整kernel外做vmapped条件选择，JAX会计算两支后再选结果，造成不必要仿真开销，也使仅按选中轨迹计费不完整。故**未启动积分**，保留attempt2的prepare/shape与SUPERSEDED_BEFORE_EXECUTION.json。
 
 正式adapter改为先在当前误差/基准误差及反馈增益之间做标量选择，再只调用一次原make_evaluation_step；原恒定与名义反馈的数学映射、原物理/支持/权限实现保持。不是运行后删重复成本。新增JAX向量化图回归检查单次物理sentinel推进，并比较gain0/持续/名义三映射，相关50 CPU passed3.47s。新显式attempt3 `runs/nominal_initial_confirmation_v1_attempt3`沿原300科学协议，前两attempt均0物理，预算仍600000新增lower。此项是正式启动前工程加速，不算新增控制证据或已验证加速倍数。
+
+## 固定旧表跨两个真实进入状态：300回合完成（2026-10-26）
+
+先看全部实际XY：[左路bank2](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/all_xy_left80_R1p4_v1p2__bank2.png)、[左路bank4](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/all_xy_left80_R1p4_v1p2__bank4.png)、[右路bank2](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/all_xy_right100_R1p2_v1p5__bank2.png)、[右路bank4](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/all_xy_right100_R1p2_v1p5__bank4.png)。各图75条，同事件五方法叠加，原50cm目标和原路径保持。
+
+目的：检验旧bank3名义表不重拟合时，换真实进入偏差是否仍有实际控制收益。执行426ee92；attempt3 prepare27796、shape28882、执行20982均exit0。PID1415925完成300新回合、576597实际/600000分配lower步，173.15s含编译保存，0optimizer；无旧轨迹缓存。前两attempt均0物理，错误/前停记录保留。分析session63071 exit0，300raw身份/时钟/物理/1500次固定轨迹原alpha重计、独立反馈/插值/禁用与速度保持/旧gate核验，以及查询进度为advance前而非未来位置均通过，UNKNOWN0。新增源/协议/原六表/五模型身份封存；没有更改物理、alpha、增益或表。
+
+### 主50cm到达及整窗不摔
+
+|方案|无扰到达/12|受扰到达/48|整窗不摔/48|无扰原alpha平均成本|
+|---|---:|---:|---:|---:|
+|原task无支持|10|21|35|37.809|
+|原task短支持|10|24|45|37.809|
+|freeGAE短支持|12|23|45|39.390|
+|持续0.10rad反馈|12|39|47|61.026|
+|名义增量0.10rad|12|40|47|55.331|
+
+名义增量相对同网络短支持到达新增18/丢1，净+17（35.42个百分点）；防摔新增3/丢1，净+2。相对原task短支持到达新增17/丢1，防摔同为新增3/丢1。相对强持续反馈仅新增3/丢2（净+1），防摔0新增0丢；不能把40对39包装成已建立稳定方法优势。持续反馈本身对同网络到达新增16/丢0、防摔新增3/丢1，大部分新增能力已被这一简单强基线覆盖。
+
+分起点（每方法各24受扰）：bank2原task短/freeGAE短/持续/名义到达14/13/20/20，不摔23/22/23/23；bank4到达10/10/19/20，不摔22/23/24/24。两侧都有相对原组合的到达增量，不是仅一侧好、另一侧坏的汇总抵消；名义对持续仍只有bank4一例净增。
+
+10/20/30/50cm受扰到达：原task短10/17/21/24；freeGAE短8/17/20/23；持续反馈19/25/34/39；名义增量19/33/36/40。严格30cm也有增量，10cm两反馈打平。alpha0/.5/1各16受扰：free短8/9/6，持续14/12/13，名义13/14/13，故名义在alpha0比持续少1、alpha.5多2、alpha1打平；这些相关分支不当独立训练重复。
+
+### 无扰保持的适用范围必须收窄
+
+旧构表初态上名义代价基本保持的结论**没有完整外推**：新起点名义平均成本55.331对同网络39.390，约+40.5%；持续反馈61.026，名义比它低约9.3%。全部12zero都到达且没摔，仍有任务过程代价上涨，不能称新初态偏好无损，也不因此否定到达提升。
+
+新受扰与free双方存活44例，名义成本平均反而+2.352；与原task短双方存活44例+3.107；与持续反馈双方存活47例−1.132。故新起点上的总受扰均值下降主要包含少摔的效应，不把它误解成同等存活时相对原组合任务代价也下降。`initial_decision_review.json`保存各半径逐例新增/丢失、逐bank/alpha和共享存活成本，脚本 `learning/cli/review_feedback_confirmation.py` 可复跑；未重新拟合或模拟。
+
+### 正例、任务损失及新触地保留
+
+- [左bank2、alpha.5/−16N](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/paired_006_left80_R1p4_v1p2__bank2_a0.5.png)：同网络最近目标1.1718m，持续反馈.5107m略在50cm外，名义为.1061m到达。所有方法均活，这是实际任务改善，不称新增防摔。
+- [左bank2、alpha1/+16N](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/paired_012_left80_R1p4_v1p2__bank2_a1.png)：同网络.1086m、持续.4110m都到达，名义.6346m未到达，保留真实丢失，不改半径。
+- [左bank2、alpha0/−32N](../../../../runs/nominal_initial_confirmation_v1_attempt3/analysis/paired_003_left80_R1p4_v1p2__bank2_a0.png)：同网络存活但距目标1.2531m，持续与名义都触地。这是两种反馈相对原组合新增的物理失败，不隐去或混作任务失败；总体防摔仍净增2。
+
+四全300XY概览和上述3细例实看，余57细例/60分量图未逐张审，visual_review_complete=false。全部new数据仍原两路线/三个固定alpha，真实新起点仅两个且来自同一prepared bank，不能声称独立训练重复或广泛跨路线泛化。
+
+### 科学反审与零新物理的alpha表作用核查
+
+使用scientific-brainstorming：主代理在看到子代理提案前独立保存“alpha表作用/匹配与共享表消融”和“代价取舍/必要时固定弱.05对照”两项；子代理独立提出“现有偏好选择机会审计”和“alpha表索引消融”，后互作非提出者反审。事前标准为偏好机制信息、强对照公平、复用、可证伪和避免大训练。共享历史证据仍有锚定，AI意见非同行评审或方法验证；完整proposals/反证在scientific_brainstorming_review.json。
+
+本轮先做最小只读动作：固定实测Actor alpha和完整实际状态，将其名义表假想换成**预先固定的alpha.5表**，重建下一5ms的滤波、slew和限幅后转向参考。先对匹配表重建值与真实发布参考逐例核对通过，再解释替换差异；不推进未来物理，不改Actor的alpha，不凭此预测到达。60条名义反馈轨迹（含12zero）上：alpha0的9119个合法决策中4555个下一步参考差异>1e−4rad、均值绝对差.000670rad、最大.005022rad；alpha1为5186/9217、均值.000559rad、最大.005101rad；alpha.5按构造为零。1e−4仅描述计数分辨率，非采用门槛，覆盖变化均0。差异能穿过接口，但较小；**不能据非零就断言匹配alpha表提高了控制效果**。
+
+可复跑 `learning/cli/audit_nominal_alpha_effect.py`，输出alpha_table_reference_effect.json，0物理/0训练。首只读尝试session14230因误用内部字段offsets退出1；实际导出名为correction_offset/nominal_reference。错误alpha_table_reference_effect_error_001.json和中文Bark保留；修正真实字段后session2211 exit0，主300评测不受影响、没有重跑物理。
+
+文献本轮仅有界核对原始arXiv记录与摘要：[转向参考治理防侧翻](https://arxiv.org/abs/1608.02266)、[名义管束输出反馈MPC](https://arxiv.org/abs/1911.07360)已有相关思想；不能把查表相减/修改参考本身当新颖性，亦不能转借线性系统安全证明。本轮不是系统新颖性检索。技能软件来源已复核当前v2记录：Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026), *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*, https://doi.org/10.48550/arXiv.2609.00065 ，本报告保留引用。
+
+**决策**：有限任务反馈的实际到达/防摔增量在新真实进入状态上延续；名义表对强持续反馈只显示小幅到达和部分代价优势，旧初态的无扰保留尚不普遍。当前方法值得保留，但“偏好特异协调”及Transactions新颖性还没有得到充分支持。停止继续微调增益/表或自动加训；不以1/48净增讲大故事。
+
+下一最多三项：①冻结新300与全部错误/正负证据；②若继续检验机制，只预先声明一次匹配alpha表vs固定alpha.5公共表的有界物理消融，保持Actor/user alpha和评价不变，阴性就撤回alpha表的独有贡献；目前未实现/启动；③弱.05反馈仍是未排除的替代解释，只有必要时补固定对照，不扫中间gain。旧容扰公式仍只作解释对照，不因本批阳性硬接为安全保证。Trans目标继续active，未推送远端/未涉及实机。
