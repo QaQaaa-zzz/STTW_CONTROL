@@ -7,6 +7,13 @@ import numpy as np
 from .preference_best import atomic_json, digest
 
 
+def batch_size(cases, vectors):
+    n=len(cases)
+    if n not in (8,16) or np.asarray(vectors).shape!=(n,6):
+        raise ValueError('eight or sixteen real lanes required; no implicit padding')
+    return n
+
+
 def nominal_objective(*, physical_outcome, goal_arrived, cost):
     if physical_outcome=='unknown' or goal_arrived is None or not np.isfinite(cost):
         raise ValueError('unknown engineering outcome cannot become infeasible control')
@@ -92,32 +99,32 @@ class BiasRuntime:
         from .evaluation_clock import physical_pulse
         from .anticipatory_run import flatten_ticks
         out=Path(directory);out.mkdir(parents=True,exist_ok=False)
-        if len(cases)!=16 or np.asarray(vectors).shape!=(16,6):raise ValueError('fixed16-lane batch required; no uncounted padding')
+        n=batch_size(cases,vectors)
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         states=[self.origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
         targets=[bias_targets(v) for v in vectors]
         parameters=stack([dict(actor=dict(native=self.native,keep_channels=j.array([True,True])),feedback_gain_rad=j.float32(.1),
                                bias_positions=j.asarray(self.plan['contexts'][c['context']]['bias_positions_m']),bias_targets=j.asarray(t)) for c,t in zip(cases,targets)])
-        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(16,j.int32),stack([initial_relay() for _ in cases]))
+        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
         with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
         paths=stack([self.paths[c['context']] for c in cases]);speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
-        pulses=j.asarray([physical_pulse(c,self.plan['contexts'][c['context']]) for c in cases],j.float32);modes=j.ones(16,j.int32)
+        pulses=j.asarray([physical_pulse(c,self.plan['contexts'][c['context']]) for c in cases],j.float32);modes=j.ones(n,j.int32)
         data=[];active_ticks=0;allocated=0;start=time.monotonic()
         atomic_json(out/'inventory.json',dict(cases=cases,vectors=np.asarray(vectors).tolist()))
         for block in range(10):
             carry,logs=self.chunk(carry,parameters,paths,speeds,pulses,modes);jax.block_until_ready(carry)
             host,logs=jax.device_get((carry,logs));logs=flatten_ticks(logs);data.append(logs)
             np.savez_compressed(out/f'chunk_{block:02d}.npz',**logs)
-            active_ticks+=int(logs['active_tick'].sum());allocated+=3200
+            active_ticks+=int(logs['active_tick'].sum());allocated+=200*n
             atomic_json(out/'status.json',dict(phase='running',blocks=block+1,active_lower_ticks=active_ticks,allocated_lower_slots=allocated,elapsed_s=time.monotonic()-start))
             if np.any(host.state.fault):raise RuntimeError('engineering fault; complete chunk retained, no implicit retry')
             if np.all(host.state.physical.failed|(host.state.tick>=2000)):break
         with (out/'final_carry.pkl').open('wb') as f:pickle.dump(host,f)
         combined={k:np.concatenate([x[k] for x in data]) for k in data[0]}
         rows=[];(out/'cases').mkdir()
-        atomic_json(out/'status.json',dict(phase='physical_completed',stage='auditing',completed_physical_cases=16,
+        atomic_json(out/'status.json',dict(phase='physical_completed',stage='auditing',completed_physical_cases=n,
             active_lower_ticks=active_ticks,allocated_lower_slots=allocated,elapsed_s=time.monotonic()-start))
-        for lane in range(16):
+        for lane in range(n):
             np.savez_compressed(out/'cases'/f'case_{lane:02d}.npz',**{k:v[:,lane] for k,v in combined.items()})
         for lane,(case,t) in enumerate(zip(cases,targets)):
             raw={k:v[:,lane] for k,v in combined.items()};file=out/'cases'/f'case_{lane:02d}.npz'
@@ -127,5 +134,5 @@ class BiasRuntime:
             # JSON remains strict; infeasibility is explicit, not a null unknown.
             rows.append(encode_objective(row))
         atomic_json(out/'results.json',rows)
-        atomic_json(out/'status.json',dict(phase='completed',completed_cases=16,active_lower_ticks=active_ticks,allocated_lower_slots=allocated,elapsed_s=time.monotonic()-start,optimizer_updates=0))
+        atomic_json(out/'status.json',dict(phase='completed',completed_cases=n,active_lower_ticks=active_ticks,allocated_lower_slots=allocated,elapsed_s=time.monotonic()-start,optimizer_updates=0))
         return rows

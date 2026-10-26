@@ -11,10 +11,10 @@ import numpy as np
 from sttw_control.preference_best import atomic_json,digest
 
 
-def main(root):
-    root=root.resolve();out=root/'shape';out.mkdir(exist_ok=False)
+def main(root, batch_size=16):
+    root=root.resolve();out=root/('shape' if batch_size==16 else 'shape_batch8');out.mkdir(exist_ok=False)
     from prepare_short_recovery_campaign import register
-    register(root/'ACTIVE_SHAPE.json','STTW参考偏置真实模型零积分shape',out/'status.json')
+    register(root/('ACTIVE_SHAPE.json' if batch_size==16 else 'ACTIVE_SHAPE_BATCH8.json'),'STTW参考偏置真实模型零积分shape',out/'status.json')
     atomic_json(out/'status.json',dict(phase='running',pid=os.getpid(),physics_steps=0,optimizer_updates=0))
     try:
         p=json.loads((root/'plan.json').read_text())
@@ -43,13 +43,13 @@ def main(root):
                         bias_positions=j.asarray(ctx['bias_positions_m']),bias_targets=j.zeros((5,2),j.float32))
         speed=j.float32(ctx['speed_m_s']);env.set_log_template(state,path,speed)
         one=make_bias_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
-        repeat=lambda tree:jax.tree.map(lambda x:j.repeat(x[None],16,axis=0),tree)
+        repeat=lambda tree:jax.tree.map(lambda x:j.repeat(x[None],batch_size,axis=0),tree)
         shaped=jax.eval_shape(jax.vmap(one,in_axes=(0,0,None,0,0,0)),repeat(carry),repeat(parameters),path,
-                              j.full(16,speed),j.zeros((16,5),j.float32),j.ones(16,j.int32))
+                              j.full(batch_size,speed),j.zeros((batch_size,5),j.float32),j.ones(batch_size,j.int32))
         logs=shaped[1]
         for field in ['original_actor_latent','coordinated_actor_latent','reference_bias_target']:
-            if logs[field].shape!=(16,4,2):raise ValueError('unexpected bias log shape')
-        atomic_json(out/'receipt.json',dict(physics_steps=0,optimizer_updates=0,batch=16,context=name,alpha=.5,
+            if logs[field].shape!=(batch_size,4,2):raise ValueError('unexpected bias log shape')
+        atomic_json(out/'receipt.json',dict(physics_steps=0,optimizer_updates=0,batch=batch_size,context=name,alpha=.5,
             source_plan_sha256=digest(root/'plan.json'),shape_script_sha256=digest(__file__),
             scope='Actual current frozen Actor/complete source state/environment JAX trace only, one context layout. Not compilation/timing/control improvement, all-context rollout or replay equivalence.',
             logs={k:dict(shape=list(v.shape),dtype=str(v.dtype)) for k,v in logs.items()}))
@@ -60,4 +60,4 @@ def main(root):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);main(parser.parse_args().root)
+    parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);parser.add_argument('--batch-size',type=int,choices=[8,16],default=16);a=parser.parse_args();main(a.root,a.batch_size)
