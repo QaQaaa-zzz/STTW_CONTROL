@@ -91,7 +91,8 @@ def analyze(root):
                 goal_audit=verify_stage_log(raw,c,cfg,p['feedback_spec'],paths[c['context']])
             elif c.get('goal_preview'):
                 from .goal_preview_baseline import verify_goal_log
-                goal_audit=verify_goal_log(raw,c,cfg,p['feedback_spec'],paths[c['context']])
+                goal_audit=verify_goal_log(raw,c,cfg,p['feedback_spec'],paths[c['context']],
+                    expected_keep=c['source_keep_channels'] if c.get('lineage_family') else None)
             elif c.get('preference_speed_authority'):
                 from .preference_speed_authority import verify_authority_log
                 verify_authority_log(raw,c,cfg,p['feedback_spec'])
@@ -176,6 +177,9 @@ def analyze(root):
         lines=['# 固定64终点：价值/回报估计器三臂与简单强对照','',
             '300条确定性完整DEV轨迹；原alpha、任务与参考权限保持。图已生成待人工裁决，未采用新模型。','',
             '|角色|未摔且任务完成|未摔但任务失败|触地|未知|','|---|---:|---:|---:|---:|']
+        if p.get('lineage_comparison'):
+            lines[0]='# 冻结迭代链：共同近期接口下的名义权重迁移'
+            lines[2]='72条新轨迹＋48条认证缓存；低速相关DEV，非历史原生复现或架构单因素消融。原alpha、目标和共同参考权限保持；未采用新模型。'
         for role,counts in summary['all']['role_counts'].items():lines.append('|'+role+'|'+'|'.join(str(counts[k]) for k in CATEGORIES)+'|')
         if 'goal_radius_m' in p:
             lines=[f'# 新几何低速：冻结策略与参考支持的{n}轨迹对照','',
@@ -213,7 +217,7 @@ def role_labels(rows):
                 label='Privileged neural steering '+('after only' if row['stage_late_neural'] else 'before only')+' / common goal/feedback'
             else:
                 source={'goal_zero_feedback':'zero NN','goal_steer_feedback':'neural steering only',
-                        'goal_full_feedback':'full NN'}[row['role']]
+                        'goal_full_feedback':'full NN'}.get(row['role'],row.get('lineage_family',row['role']))
                 label=f'Goal-preview PP / {source} + feedback 0.1rad'
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
@@ -281,7 +285,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .preference_speed_authority import AUTHORITY_ROLE
     from .goal_preview_baseline import GOAL_ROLES
     from .steering_stage_mechanism import STAGE_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES+('lineage_dual','lineage_u325','lineage_h75')
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
@@ -372,7 +376,7 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     from .preference_speed_authority import AUTHORITY_ROLE
     from .goal_preview_baseline import GOAL_ROLES
     from .steering_stage_mechanism import STAGE_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES+('lineage_dual','lineage_u325','lineage_h75')
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     labels_by_role=role_labels(rows)

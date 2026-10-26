@@ -1,0 +1,18 @@
+"""Matched nominal transfer of frozen historical middle policies."""
+import argparse
+from pathlib import Path
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--source',type=Path);p.add_argument('--phase',choices=['prepare','shape','execute','analyze'],required=True)
+    a=p.parse_args()
+    if a.phase=='prepare':
+        if a.source is None:p.error('prepare requires source')
+        from sttw_control.middle_lineage_comparison import prepare
+        prepare(a.output,a.source)
+    elif a.phase=='analyze':
+        from sttw_control.finite_value_evaluation_report import analyze
+        analyze(a.output)
+    else:
+        from sttw_control.finite_value_evaluation_run import execute
+        execute(a.output,shape_only=a.phase=='shape')

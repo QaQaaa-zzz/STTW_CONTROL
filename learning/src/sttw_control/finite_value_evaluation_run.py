@@ -348,10 +348,16 @@ def execute(root, *, shape_only=False):
             raise ValueError('complete declared evaluation cases required')
         cfg=json.loads((root/'common_environment_config.json').read_text());decl=json.loads((root/'source_declaration.json').read_text())
         params={}
+        historical=None
+        if p.get('lineage_comparison'):
+            from .middle_lineage_comparison import authenticate_historical_models
+            historical=authenticate_historical_models(p['models'])
         for role,model in p['models'].items():
             for key in ['actor','checkpoint']:
                 if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen endpoint changed')
-            with Path(model['actor']).open('rb') as stream:params[role]=jax.tree.map(j.asarray,pickle.load(stream))
+            if historical is not None:params[role]=jax.tree.map(j.asarray,historical[role])
+            else:
+                with Path(model['actor']).open('rb') as stream:params[role]=jax.tree.map(j.asarray,pickle.load(stream))
             if p.get('nominal_feedback_spec') is not None:
                 params[role]=dict(actor=params[role],feedback_gain_rad=j.float32(model['feedback_gain_rad']),
                                   feedback_kind=j.int32(model['feedback_kind']))
@@ -399,7 +405,7 @@ def execute(root, *, shape_only=False):
             parameters=stack([dict(params[c['role']],nominal_table=tables[nominal_profile_key(c)]) for c in cases])
         elif p.get('steering_stage_mechanism'):
             parameters=stack([dict(params[c['role']],switch_task_tick=j.int32(c['pulse_onset_task_tick'])) for c in cases])
-        else:parameters=stack([params[c['role']] for c in cases])
+        else:parameters=stack([params[c.get('model_key',c['role'])] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)
         pulses=j.asarray([physical_pulse(c,p['contexts'][c['context']]) for c in cases],j.float32)
