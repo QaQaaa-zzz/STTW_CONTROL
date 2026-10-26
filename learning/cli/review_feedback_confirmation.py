@@ -40,8 +40,13 @@ def review(root,output):
         cell[row['role']]=row
     if any(set(cell)!=set(roles) for cell in groups.values()):raise ValueError('complete matched controls required')
     pairs={}
-    for target in ['feedback_nominal','feedback_010','feedback_shared','feedback_005','parent_feedback_010']:
-        for baseline in ['free_GAE','parent_causal','feedback_010','feedback_nominal']:
+    targets=['feedback_nominal','feedback_010','feedback_shared','feedback_005','parent_feedback_010']
+    baselines=['free_GAE','parent_causal','feedback_010','feedback_nominal']
+    if 'zero_middle' in roles:
+        targets+=['free_GAE','zero_middle_feedback']
+        baselines+=['zero_middle','zero_middle_feedback']
+    for target in targets:
+        for baseline in baselines:
             if target==baseline or target not in roles or baseline not in roles:continue
             result=dict(physical_gains=[],physical_losses=[],physical_unknown=0,radii={})
             cost=[]
