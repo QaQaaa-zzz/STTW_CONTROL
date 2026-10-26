@@ -14,6 +14,15 @@ def nominal_objective(*, physical_outcome, goal_arrived, cost):
     return float(cost) if physical_outcome=='survived' and goal_arrived else float('inf')
 
 
+def encode_objective(row):
+    """Strict JSON: known infeasible is explicit; unknown never becomes null."""
+    result=dict(row);score=float(result['objective'])
+    if np.isnan(score) or np.isneginf(score):raise ValueError('unknown objective cannot be encoded as infeasible')
+    feasible=bool(np.isfinite(score))
+    result.update(nominal_feasible=feasible,objective=score if feasible else None)
+    return result
+
+
 def score_raw(raw, case, config, path, *, targets=None, positions=None, feedback_spec=None):
     from .anticipatory_run import physical_outcome
     from .anticipatory_analysis import cost_accounting
@@ -116,8 +125,7 @@ class BiasRuntime:
                           positions=self.plan['contexts'][case['context']]['bias_positions_m'],feedback_spec=self.plan['feedback_spec'])
             row.update(raw_file=str(file.resolve()),raw_sha256=digest(file),vector=np.asarray(vectors[lane]).tolist())
             # JSON remains strict; infeasibility is explicit, not a null unknown.
-            row['nominal_feasible']=np.isfinite(row['objective']);row['objective']=row['objective'] if row['nominal_feasible'] else None
-            rows.append(row)
+            rows.append(encode_objective(row))
         atomic_json(out/'results.json',rows)
         atomic_json(out/'status.json',dict(phase='completed',completed_cases=16,active_lower_ticks=active_ticks,allocated_lower_slots=allocated,elapsed_s=time.monotonic()-start,optimizer_updates=0))
         return rows
