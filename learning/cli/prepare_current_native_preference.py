@@ -40,12 +40,20 @@ def prepare(root):
     for name in ['training_campaign','training_declaration_sha256','baseline_cached']:
         decl.pop(name,None)
     decl['initialization']='Original native prepared-bank snapshot and env.reset semantics; frozen current middle weights, no optimizer or extra support.'
+    from sttw_control.model import load_model
+    asset_root=Path('mujoco_ros_ws20260313').resolve()
+    model_identity=load_model(asset_root/'model/scalebike_scene_matlab.xml').identity
+    if model_identity!=decl['source']['model']:raise ValueError('original XML/mesh/portable model identity differs')
     root=Path(root).resolve();root.mkdir(exist_ok=False)
     atomic_json(root/'declaration.json',decl)
     runtime=root/'native_runtime';runtime.mkdir()
     commit=old['code_revision'];raw=subprocess.check_output(['git','archive','--format=tar',commit,'learning'])
     archive=gzip.compress(raw,mtime=0);(root/'native_source.tar.gz').write_bytes(archive)
     with tarfile.open(fileobj=io.BytesIO(raw),mode='r:') as tar:tar.extractall(runtime,filter='data')
+    (runtime/'mujoco_ros_ws20260313').symlink_to(asset_root,target_is_directory=True)
+    atomic_json(root/'asset_binding.json',dict(original_asset_root=str(asset_root),
+        binding=str(runtime/'mujoco_ros_ws20260313'),model_identity=model_identity,
+        scope='Read-only path binding to original source XML/meshes; no asset bytes or physical settings modified.'))
     for file in runtime.rglob('*'):
         if file.is_file():file.chmod(0o444)
     atomic_json(root/'cache_receipt.json',dict(source_run=str(source),source_manifest_sha256=digest(source/'manifest.json'),
