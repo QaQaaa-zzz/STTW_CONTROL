@@ -132,6 +132,7 @@ def analyze(root):
                 '三种参考支持使用同一父Actor；goal_summary为主要到达指标，旧严格跟踪仅作诊断。' if 'goal_radius_m' in p else
                 '结构/估计器比较同时改变优化条件，MC也改变优势目标；不能据单一曲线归因或称首次创新。',
                 '全部实际XY、20ms奖励/累计奖励及逐分量/累计分量已导出，轨迹在真实终点截止。',
+                '后续裁决看目标到达、整窗防摔、名义保留及原alpha代价；旧末段保持不作新任务门槛。' if 'goal_radius_m' in p else
                 '后续裁决需同时看防摔、名义保留、受扰末段、路径/速度误差及任务代价，不能只看RMSE。']
         (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
         update(phase='completed',stage='numeric_and_figures_complete_review_pending',completed_cases=n)
@@ -261,7 +262,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
             ax.set(title=f'Original alpha{alpha:g}',xlabel='Mean nominal originalalpha cost',
                    ylabel='Disturbed survival' if row==0 else ('Disturbed goal arrival' if goal_radius is not None else 'Disturbed joint task success'),ylim=(-.05,1.05));ax.grid(alpha=.2)
     axes[0,-1].legend(fontsize=6)
-    tradeoff.suptitle('Empirical cost / capability points: two old routes and eight correlated disturbed branches per alpha; no continuous frontier or independent CI')
+    tradeoff.suptitle(('New geometry confirmation: nominal cost / disturbed goal arrival; correlated branches, no continuous frontier or independent CI' if goal_radius is not None else
+        'Empirical cost / capability points: two old routes and eight correlated disturbed branches per alpha; no continuous frontier or independent CI'))
     for suffix in ['png','pdf']:
         name='nominal_cost_vs_disturbed_outcomes.'+suffix;tradeoff.savefig(out/name,dpi=120);figures.append(name)
     plt.close(tradeoff)
