@@ -13,19 +13,23 @@ from .preference_best import atomic_json,digest
 
 def analyze(root):
     root=Path(root).resolve();state=json.loads((root/'status.json').read_text())
-    if state.get('phase')!='completed' or state.get('completed_cases')!=300:
-        raise ValueError('complete300 evaluation required; do not rerun physics')
+    if state.get('phase')!='completed':
+        raise ValueError('complete declared evaluation required; do not rerun physics')
+    plan=json.loads((root/'plan.json').read_text());n=plan['declared_cases']
+    roles=plan.get('evaluation_roles',ROLES)
+    if state.get('phase')!='completed' or state.get('completed_cases')!=n:
+        raise ValueError('complete declared evaluation required; do not rerun physics')
     out=root/'analysis';out.mkdir(exist_ok=False)
     status=dict(phase='running',pid=os.getpid(),completed_cases=0,physics_steps=0,optimizer_updates=0)
     def update(**kw):status.update(kw,checked_unix=time.time());atomic_json(out/'status.json',status)
     update()
     from prepare_short_recovery_campaign import register
-    register(out/'ACTIVE_RUN.json','STTW_CONTROL 价值三臂固定300轨迹只读分析',out/'status.json')
+    register(out/'ACTIVE_RUN.json',f'STTW_CONTROL {n}轨迹偏好抗扰只读分析',out/'status.json')
     try:
         from .anticipatory_analysis import cost_accounting,save_csv
         from .anticipatory_run import physical_outcome
         from .rejoin_comparison import geometric_task_trace
-        from .survival_endpoint_task_metrics import task_metrics
+        from .survival_endpoint_task_metrics import task_metrics,goal_arrival_metrics
         from .preference_trace_rescore import rescore_trace_alpha
         from .live_endpoint_analysis import tracking_recovery_time
         p=json.loads((root/'plan.json').read_text())
@@ -41,7 +45,7 @@ def analyze(root):
         records=json.loads((root/'physical/results.json').read_text())
         indices=json.loads((root/'physical/case_index.json').read_text())
         ids={c['case_id'] for c in declared}
-        if (len(declared)!=300 or len(records)!=300 or len(indices)!=300 or len(ids)!=300
+        if (len(declared)!=n or len(records)!=n or len(indices)!=n or len(ids)!=n
                 or {c['case_id'] for c in records}!=ids or {c['case_id'] for c in indices}!=ids):
             raise ValueError('complete unique300 raw/index/definition records required')
         byid={c['case_id']:c for c in records};index={c['case_id']:c for c in indices}
@@ -81,16 +85,20 @@ def analyze(root):
                 causal_support_gate_s=float(np.sum(active&raw['relay_active'])*.005),
                 legal_support_s=float(np.sum(active&raw['actor_action_valid']&(raw['relay_profile']==7))*.005),
                 full_pulse_exposure=bool(np.allclose(impulse,expected,atol=.025,rtol=.05)))
+            if 'goal_radius_m' in p:
+                goal_xy=[np.interp(float(path['goal']),path['s'],path['xy'][:,i]) for i in [0,1]]
+                row.update(goal_arrival_metrics(raw,goal_xy=goal_xy,radius_m=p['goal_radius_m'],dt=.005,horizon_s=10.))
             rows.append(row);traces[c['case_id']]=dict(raw,**geometry)
             audits.append(dict(case_id=c['case_id'],raw_sha256=item['sha256'],reward_reconstruction=True,
                                physical_label_verified=True,measured_gate_replayed=True))
             if len(rows)%30==0:update(completed_cases=len(rows))
         if actual!=state['active_lower_ticks']:raise ValueError('actual lower cost accounting mismatch')
-        summary={name:paired_report(group) for name,group in dict(all=rows,
+        summary={name:paired_report(group,roles=roles) for name,group in dict(all=rows,
             nominal=[r for r in rows if not r['force_N']],disturbed=[r for r in rows if r['force_N']]).items()}
-        byalpha={str(a):paired_report([r for r in rows if r['alpha']==a]) for a in [0.,.25,.5,.75,1.]}
+        alphas=sorted({r['alpha'] for r in rows})
+        byalpha={str(a):paired_report([r for r in rows if r['alpha']==a],roles=roles) for a in alphas}
         zeros={(r['context'],r['role'],r['alpha']):r for r in rows if not r['force_N']}
-        if len(zeros)!=60:raise ValueError('one shared zero per route/role/alpha required')
+        if len(zeros)!=len(paths)*len(roles)*len(alphas):raise ValueError('one shared zero per route/role/alpha required')
         own=[]
         for r in rows:
             if not r['force_N']:continue
@@ -104,25 +112,59 @@ def analyze(root):
         save_csv(out/'own_zero_changes.csv',own);save_csv(out/'fixed_trace_objective_queries.csv',queries)
         pairs=[dict(comparison=name,**d) for name,v in summary['all']['comparisons'].items() for d in v['details']]
         save_csv(out/'paired_changes.csv',pairs);atomic_json(out/'raw_audit.json',audits)
-        figures=render(out,rows,traces,paths,cfg)
-        atomic_json(out/'receipt.json',dict(raw_cases=300,fixed_trace_queries=1500,actual_lower_ticks=actual,
+        if 'goal_radius_m' in p:
+            atomic_json(out/'goal_summary.json',goal_report(rows,roles))
+        figures=render(out,rows,traces,paths,cfg,goal_radius=p.get('goal_radius_m'))
+        atomic_json(out/'receipt.json',dict(raw_cases=n,fixed_trace_queries=n*5,actual_lower_ticks=actual,
             figures=figures,physics_steps=0,optimizer_updates=0,visual_review_complete=False,
-            scope='Old two route contexts; correlated event branches; one matched optimization repeat, not independent final test.'))
+            scope=p.get('data_role','Correlated DEV branches, not independent final test.')))
         lines=['# 固定64终点：价值/回报估计器三臂与简单强对照','',
             '300条确定性完整DEV轨迹；原alpha、任务与参考权限保持。图已生成待人工裁决，未采用新模型。','',
             '|角色|未摔且任务完成|未摔但任务失败|触地|未知|','|---|---:|---:|---:|---:|']
         for role,counts in summary['all']['role_counts'].items():lines.append('|'+role+'|'+'|'.join(str(counts[k]) for k in CATEGORIES)+'|')
+        if 'goal_radius_m' in p:
+            lines=['# 新几何低速：三种参考支持的固定90轨迹对照','',
+                '主要任务为进入原目标30cm区域，不要求末段保持。整窗触地和旧严格跟踪指标另存，不作主要任务门槛。','',
+                '|角色|目标到达|整窗未触地|触地|到达未知|','|---|---:|---:|---:|---:|']
+            for role,counts in goal_report(rows,roles)['all']['counts'].items():
+                lines.append(f"|{role}|{counts['arrived']}|{counts['survived']}|{counts['contact']}|{counts['unknown']}|")
         lines+=['','配对新增/丢失、原alpha成本与自身zero变化分别保存；未知不按失败或成功填补。',
+                '三种参考支持使用同一父Actor；goal_summary为主要到达指标，旧严格跟踪仅作诊断。' if 'goal_radius_m' in p else
                 '结构/估计器比较同时改变优化条件，MC也改变优势目标；不能据单一曲线归因或称首次创新。',
                 '全部实际XY、20ms奖励/累计奖励及逐分量/累计分量已导出，轨迹在真实终点截止。',
                 '后续裁决需同时看防摔、名义保留、受扰末段、路径/速度误差及任务代价，不能只看RMSE。']
         (out/'REPORT.md').write_text('\n'.join(lines)+'\n')
-        update(phase='completed',stage='numeric_and_figures_complete_review_pending',completed_cases=300)
+        update(phase='completed',stage='numeric_and_figures_complete_review_pending',completed_cases=n)
     except BaseException as exc:
         (out/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise
 
 
-def render(out,rows,traces,paths,cfg):
+def goal_report(rows,roles):
+    result={}
+    for split,group in dict(all=rows,nominal=[r for r in rows if not r['force_N']],
+                           disturbed=[r for r in rows if r['force_N']]).items():
+        counts={}
+        for role in roles:
+            rr=[r for r in group if r['role']==role]
+            counts[role]=dict(total=len(rr),arrived=sum(r['goal_arrived'] is True for r in rr),
+                unknown=sum(r['goal_arrived'] is None for r in rr),survived=sum(r['physical_outcome']=='survived' for r in rr),
+                contact=sum(r['physical_outcome']=='contact' for r in rr),mean_original_alpha_cost=float(np.mean([r['scored_cost'] for r in rr])) if rr else None)
+        pairs={}
+        groups={}
+        for row in group:groups.setdefault((row['context'],row['alpha'],row['event_id']),{})[row['role']]=row
+        for role in roles:
+            if role=='parent_plain':continue
+            gain=loss=unknown=0
+            for cell in groups.values():
+                a,b=cell['parent_plain']['goal_arrived'],cell[role]['goal_arrived']
+                if a is None or b is None:unknown+=1
+                else:gain+=b and not a;loss+=a and not b
+            pairs[role+'_vs_parent_plain']=dict(arrival_gains=gain,arrival_losses=loss,unknown=unknown)
+        result[split]=dict(counts=counts,paired=pairs)
+    return result
+
+
+def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -132,13 +174,19 @@ def render(out,rows,traces,paths,cfg):
     styles=dict(zip(ROLES,[':', '-.', ':', '--', '-', '-.']))
     groups={};figures=[];cost_keys=list(configured_cost_keys(cfg))
     for r in rows:groups.setdefault((r['context'],r['alpha'],r['event_id']),[]).append(r)
-    overviews={context:plt.subplots(5,5,figsize=(18,16),layout='constrained') for context in paths}
+    alphas=sorted({r['alpha'] for r in rows});used_roles=[role for role in ROLES if any(r['role']==role for r in rows)]
+    columns=max(sum(key[0]==context for key in groups)//len(alphas) for context in paths)
+    overviews={context:plt.subplots(len(alphas),columns,figsize=(18,3.2*len(alphas)),squeeze=False,layout='constrained') for context in paths}
     counters={context:0 for context in paths}
     for number,((context,alpha,event),group) in enumerate(groups.items()):
         path=paths[context];reference=path['xy'][path['s']<=float(path['goal'])]
         fig,grid=plt.subplots(4,3,figsize=(15,14),layout='constrained');axes=list(grid.flat)
         overview,oa=overviews[context];small=oa.flat[counters[context]];counters[context]+=1
         for ax in [axes[0],small]:ax.plot(reference[:,0],reference[:,1],':',color='.55');ax.scatter(*reference[-1],marker='*',color='k')
+        if goal_radius is not None:
+            from matplotlib.patches import Circle
+            goal=[np.interp(float(path['goal']),path['s'],path['xy'][:,i]) for i in [0,1]]
+            for ax in [axes[0],small]:ax.add_patch(Circle(goal,goal_radius,fill=False,color='black'))
         ncols=4;nrows=(2*(len(cost_keys)+1)+ncols-1)//ncols
         cf,cgrid=plt.subplots(nrows,ncols,figsize=(18,3*nrows),layout='constrained');ca=list(cgrid.flat)
         clouds=[reference]
@@ -183,7 +231,7 @@ def render(out,rows,traces,paths,cfg):
         if group[0]['force_N']:
             start=group[0]['pulse_onset_task_tick']*.005
             for ax in axes[1:]+used:ax.axvspan(start,start+.1,color='red',alpha=.08)
-        title=f'{context} | original alpha{alpha:g} | {event} | fixed64 deterministic DEV'
+        title=f'{context} | original alpha{alpha:g} | {event} | deterministic DEV'
         fig.suptitle(title);cf.suptitle(title+' | signed and cumulative original reward components')
         for figure,prefix in [(fig,'paired'),(cf,'components')]:
             base=f'{prefix}_{number:03d}_{context}_a{alpha:g}'
@@ -191,12 +239,12 @@ def render(out,rows,traces,paths,cfg):
             plt.close(figure)
     for context,(figure,axes) in overviews.items():
         handles,labels=axes[0,0].get_legend_handles_labels();figure.legend(handles,labels,loc='outside lower center',ncol=6,fontsize=8)
-        figure.suptitle(context+' | all25 events /150 actual trajectories, original paths and true endpoints')
+        figure.suptitle(context+f' | all{counters[context]} events /{sum(r["context"]==context for r in rows)} actual trajectories, original paths and true endpoints')
         name='all_xy_'+context+'.png';figure.savefig(out/name,dpi=120);plt.close(figure);figures.append(name)
-    tradeoff,axes=plt.subplots(2,5,figsize=(19,8),layout='constrained')
+    tradeoff,axes=plt.subplots(2,len(alphas),figsize=(3.8*len(alphas),8),squeeze=False,layout='constrained')
     markers=dict(zip(ROLES,['o','s','^','D','P','X']))
-    for column,alpha in enumerate([0.,.25,.5,.75,1.]):
-        for role in ROLES:
+    for column,alpha in enumerate(alphas):
+        for role in used_roles:
             nominal=[r for r in rows if r['role']==role and r['alpha']==alpha and not r['force_N']]
             disturbed=[r for r in rows if r['role']==role and r['alpha']==alpha and r['force_N']]
             if len(nominal)!=2 or len(disturbed)!=8:raise ValueError('two route zeros/eight common disturbed branches required')
@@ -207,11 +255,11 @@ def render(out,rows,traces,paths,cfg):
                 continue
             x=float(np.mean([r['scored_cost'] for r in nominal]))
             physical=float(np.mean([r['category'] in ['safe_task','safe_task_failed'] for r in disturbed]))
-            task=float(np.mean([r['category']=='safe_task' for r in disturbed]))
+            task=float(np.mean([r['goal_arrived'] is True if goal_radius is not None else r['category']=='safe_task' for r in disturbed]))
             for ax,y in zip(axes[:,column],[physical,task]):ax.scatter(x,y,color=colors[role],marker=markers[role],label=role)
         for row,ax in enumerate(axes[:,column]):
             ax.set(title=f'Original alpha{alpha:g}',xlabel='Mean nominal originalalpha cost',
-                   ylabel='Disturbed survival' if row==0 else 'Disturbed joint task success',ylim=(-.05,1.05));ax.grid(alpha=.2)
+                   ylabel='Disturbed survival' if row==0 else ('Disturbed goal arrival' if goal_radius is not None else 'Disturbed joint task success'),ylim=(-.05,1.05));ax.grid(alpha=.2)
     axes[0,-1].legend(fontsize=6)
     tradeoff.suptitle('Empirical cost / capability points: two old routes and eight correlated disturbed branches per alpha; no continuous frontier or independent CI')
     for suffix in ['png','pdf']:

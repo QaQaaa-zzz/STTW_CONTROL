@@ -8,6 +8,36 @@ ROLES = ('parent_plain', 'parent_causal', 'parent_support', *TRAIN_ROLES)
 CATEGORIES = ('safe_task', 'safe_task_failed', 'contact', 'unknown')
 
 
+def confirmation_inventory(protocol, contexts):
+    """Balanced new-geometry events; all three controls share every event."""
+    rng = np.random.default_rng(protocol['seed'])
+    cases = []
+    for context, spec in contexts.items():
+        for alpha in protocol['alphas']:
+            for force in protocol['forces_N']:
+                tick = int(rng.integers(*protocol['onset_upper_tick_range'])) * 4
+                for role, mode in [('parent_plain', 0), ('parent_causal', 1), ('parent_support', 2)]:
+                    event = f'F{force:g}_r0'
+                    cases.append(dict(case_id=f'{context}/a{alpha:g}/{event}/{role}',
+                        context=context, route=context, alpha=alpha, force_N=force,
+                        pulse_onset_task_tick=tick, pulse_duration_s=protocol['pulse_duration_s'],
+                        world_direction=spec['world_direction'], requested_speed_m_s=spec['speed_m_s'],
+                        role=role, actor_role=role, mode_index=mode, profile=7 if mode == 2 else 0,
+                        causal_support=mode == 1, event_id=event, replicate=0))
+    return cases
+
+
+def rebind_path_context(state, path, speed, env):
+    """New task geometry only; retain all physical/lower/history/filter state."""
+    import jax.numpy as j
+    from .geometric_path import project
+    from .path_reference import pursuit
+    _, pose, actual_speed = env.physics.observe(state.physical.data)
+    projection = project(path, pose[:2], j.float32(0), j.float32(0), env.config)
+    follower = pursuit(path, projection.progress, pose, actual_speed, speed, env.config)
+    return state.replace(projection=projection, follower=follower)
+
+
 def endpoint_records(plan, status, pair, *, plan_sha256):
     if (status.get('phase') != 'completed' or status.get('completed_updates') != 64
             or plan.get('updates') != 64 or pair.get('completed_updates') != 64
@@ -117,13 +147,15 @@ def verify_gate_log(raw, case):
     np.testing.assert_array_equal(raw['relay_profile'][active],expected[active])
 
 
-def paired_report(rows):
+def paired_report(rows, *, roles=ROLES):
     if not rows or len({r['case_id'] for r in rows}) != len(rows):
         raise ValueError('unique nonempty evaluation cases required')
-    groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in ROLES}
+    if not roles or not set(roles) <= set(ROLES):
+        raise ValueError('known evaluation roles required')
+    groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}
     for row in rows:
         role = row['role']; category = row['category']
-        if role not in ROLES or category not in CATEGORIES:
+        if role not in roles or category not in CATEGORIES:
             raise ValueError('declared role and four-way outcome required')
         force = row.get('force_N',0.)
         key = (row['context'],row['alpha'],row['event_id'],force,
@@ -134,11 +166,12 @@ def paired_report(rows):
         group=groups.setdefault(key,{})
         if role in group:raise ValueError('duplicate paired role')
         group[role]=row; counts[role][category]+=1
-    if any(set(group)!=set(ROLES) for group in groups.values()):
+    if any(set(group)!=set(roles) for group in groups.values()):
         raise ValueError('all six roles required in each paired event')
     contrasts=[(role,base) for role in TRAIN_ROLES for base in ROLES[:3]]
     contrasts += [('finite_GAE','free_GAE'),('finite_GAE','free_MC'),('free_MC','free_GAE'),
                   ('parent_causal','parent_plain'),('parent_support','parent_plain')]
+    contrasts = [(a,b) for a,b in contrasts if a in roles and b in roles]
     comparisons={}
     for target,baseline in contrasts:
         result=dict(known=0,unknown=0,physical_gains=0,physical_losses=0,

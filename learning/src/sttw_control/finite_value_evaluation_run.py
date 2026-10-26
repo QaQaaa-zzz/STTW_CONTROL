@@ -1,5 +1,7 @@
 """Authenticated fixed final64 six-role evaluation, separate from training."""
 import json
+import copy
+import ast
 import os
 import pickle
 import shutil
@@ -12,6 +14,100 @@ import numpy as np
 
 from .finite_value_evaluation import endpoint_records, evaluation_inventory, make_evaluation_step
 from .preference_best import atomic_json, digest
+
+
+def prepare_reference_confirmation(root, *, source, protocol_file):
+    """Reuse the parent and execution kernel; only declare new task geometries."""
+    from .geometric_path import build_path
+    from .finite_value_evaluation import confirmation_inventory
+    source = Path(source).resolve(); root = Path(root).resolve()
+    protocol_file = Path(protocol_file).resolve()
+    protocol = json.loads(protocol_file.read_text())
+    old = json.loads((source/'plan.json').read_text())
+    if json.loads((source/'status.json').read_text())['phase'] != 'completed':
+        raise ValueError('completed source evaluation required')
+    if digest(source/'plan.json') != json.loads((source/'prelaunch_receipt.json').read_text())['plan_sha256']:
+        raise ValueError('source evaluation declaration changed')
+    for file, expected in old['sealed_files'].items():
+        if digest(file) != expected: raise ValueError('source evaluation input changed')
+    runtime = ['anticipatory_reference.py','live_path_continuation.py','path_command_env.py',
+        'path_reference.py','path_command_reward.py','closed_loop_kernel.py','teleop_env.py',
+        'actuator.py','controller.py','direct_command_policy.py','path_command_policy.py','reference_reserve_gate.py']
+    module = Path(__file__).parent
+    for name in runtime:
+        if digest(module/name) != old['source_sha256'][str((module/name).resolve())]:
+            raise ValueError('changed frozen runtime: '+name)
+    def core(file):
+        return next(ast.dump(n, include_attributes=False) for n in ast.parse(file.read_text()).body
+                    if isinstance(n, ast.FunctionDef) and n.name == 'make_evaluation_step')
+    if core(module/'finite_value_evaluation.py') != core(source/'source_at_launch/learning/src/sttw_control/finite_value_evaluation.py'):
+        raise ValueError('changed causal reference execution')
+    cfg = json.loads((source/'common_environment_config.json').read_text())
+    roles = ['parent_plain', 'parent_causal', 'parent_support']
+    models = {role: old['models'][role] for role in roles}
+    authenticate_models(cfg, models)
+    root.mkdir(exist_ok=False)
+    from prepare_short_recovery_campaign import register
+    atomic_json(root/'prepare_status.json', dict(phase='running', pid=os.getpid()))
+    register(root/'ACTIVE_PREPARE.json','STTW_CONTROL 新几何低速参考支持准备',root/'prepare_status.json')
+    try:
+        for name in ['common_environment_config.json','source_declaration.json']:
+            shutil.copyfile(source/name, root/name)
+        shutil.copyfile(protocol_file, root/'protocol.json')
+        indices = json.loads((source/'physical/case_index.json').read_text())
+        contexts = {}; (root/'paths').mkdir()
+        for spec in protocol['contexts']:
+            origin = old['contexts'][spec['source_context']]
+            if digest(origin['initial']) != origin['initial_sha256']:
+                raise ValueError('complete starting state changed')
+            item = next(r for r in indices if r['case_id'].startswith(spec['source_context']+'/'))
+            pose = [*item['initial_xy'], item['initial_yaw']]
+            geometry = copy.deepcopy(cfg)
+            pc = geometry['path']; pc.update(straight_prefix_m=protocol['straight_prefix_m'],
+                turn_angle_rad=float(np.deg2rad(spec['angle_deg'])), turn_radius_m=spec['radius_m'])
+            end = pc['straight_prefix_m'] + pc['curvature_transition_length_m'] + pc['turn_angle_rad']*pc['turn_radius_m']
+            pc['straight_tail_m'] = 80. - end
+            path = build_path(spec['build_direction'], pose, geometry)
+            # Common fixed arc-length samples permit true SIMD across geometries.
+            grid = np.linspace(0, 80, 4001).astype(np.float32)
+            arrays = dict(s=grid, xy=np.column_stack([np.interp(grid,np.asarray(path.s),np.asarray(path.xy)[:,i]) for i in [0,1]]).astype(np.float32),
+                heading=np.interp(grid,np.asarray(path.s),np.asarray(path.heading)).astype(np.float32),
+                curvature=np.interp(grid,np.asarray(path.s),np.asarray(path.curvature)).astype(np.float32),
+                turn_end=np.asarray(path.turn_end), goal=np.asarray(path.goal))
+            path_file = root/'paths'/(spec['name']+'.npz'); np.savez_compressed(path_file, **arrays)
+            theta = pose[2] + (1 if spec['build_direction'].startswith('left') else -1)*np.deg2rad(spec['angle_deg'])/2
+            contexts[spec['name']] = dict(initial=origin['initial'], initial_sha256=origin['initial_sha256'],
+                path=str(path_file), path_sha256=digest(path_file), speed_m_s=spec['speed_m_s'],
+                geometry_config=geometry['path'], rebuild_path_context=True,
+                world_direction=[float(-np.sin(theta)),float(np.cos(theta)),0.])
+        cases = confirmation_inventory(protocol, contexts)
+        if len(cases) != 90: raise ValueError('declared90 cases required')
+        atomic_json(root/'inventory.json', dict(cases=cases))
+        atomic_json(root/'authenticated_models.json', models)
+        files=list(module.glob('*.py'))+[Path('learning/cli/evaluate_finite_value.py')]
+        sources={str(f.resolve()):digest(f) for f in files}
+        for file in files:
+            dest=root/'source_at_launch'/file.resolve().relative_to(Path.cwd());dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,dest)
+        plan=dict(project='STTW_CONTROL',experiment=protocol['experiment'], source_evaluation=str(source),
+            source_evaluation_plan_sha256=digest(source/'plan.json'), models=models,contexts=contexts,
+            evaluation_roles=roles,declared_cases=len(cases),new_cases=len(cases),cached_cases=0,
+            maximum_active_lower_ticks=180000,maximum_allocated_lower_slots=180000,optimizer_updates=0,
+            horizon_s=10.,lower_dt_s=.005,goal_radius_m=protocol['goal_radius_m'],task_rule=protocol['task_rule'],
+            endpoint_receipt=str(source/'authenticated_models.json'),endpoint_receipt_sha256=digest(source/'authenticated_models.json'),
+            seed=protocol['seed'],data_role='New geometry/low requested speed DEV confirmation; inherited physical initial contexts, correlated branches, no independent training repeats.',
+            sealed_files={str(root/f):digest(root/f) for f in ['protocol.json','common_environment_config.json','source_declaration.json','inventory.json','authenticated_models.json']},
+            source_sha256=sources, code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            information=protocol['information'],stop=protocol['stop'],
+            initialization='Retain source task0/physical700 physics, ESO, lower state, actuator/filter state and full history. Recompute only task projection and follower preview for the new immutable path; assign original user alpha. No qpos/qvel injection or settle reset.')
+        atomic_json(root/'plan.json', plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
+        atomic_json(root/'status.json',dict(phase='prepared',declared_cases=90,completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+        register(root/'ACTIVE_RUN.json','STTW_CONTROL 新几何低速三参考90回合',root/'status.json')
+        register(root/'ACTIVE_SHAPE.json','STTW_CONTROL 新几何低速90路shape',root/'shape/status.json')
+        atomic_json(root/'prepare_status.json',dict(phase='completed',pid=os.getpid(),physics_steps=0,optimizer_updates=0))
+    except BaseException as exc:
+        (root/'prepare_traceback.txt').write_text(traceback.format_exc())
+        atomic_json(root/'prepare_status.json',dict(phase='error',error=repr(exc),pid=os.getpid()))
+        raise
 
 
 def authenticate_models(cfg,models):
@@ -122,7 +218,9 @@ def execute(root, *, shape_only=False):
         for file,sha in {**p['sealed_files'],**p['source_sha256'],p['endpoint_receipt']:p['endpoint_receipt_sha256']}.items():
             if digest(file)!=sha:raise ValueError('sealed evaluation input changed: '+file)
         cases=json.loads((root/'inventory.json').read_text())['cases']
-        if len(cases)!=300:raise ValueError('complete300 sealed cases required')
+        n=p['declared_cases']
+        if len(cases)!=n or (p['experiment']=='finite_value_online_v1_fixed64_evaluation' and n!=300):
+            raise ValueError('complete declared evaluation cases required')
         cfg=json.loads((root/'common_environment_config.json').read_text());decl=json.loads((root/'source_declaration.json').read_text())
         params={}
         for role,model in p['models'].items():
@@ -131,7 +229,7 @@ def execute(root, *, shape_only=False):
             with Path(model['actor']).open('rb') as stream:params[role]=jax.tree.map(j.asarray,pickle.load(stream))
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2')
-        origins={};paths={}
+        origins={};paths={};context_receipts={}
         for context,c in p['contexts'].items():
             if digest(c['initial'])!=c['initial_sha256'] or digest(c['path'])!=c['path_sha256']:raise ValueError('complete starting context changed')
             with Path(c['initial']).open('rb') as stream:bank=pickle.load(stream).state
@@ -139,9 +237,19 @@ def execute(root, *, shape_only=False):
             if int(original.tick)!=0 or int(original.physical.physical_tick)!=700 or bool(original.physical.failed|original.fault|original.domain_exit):raise ValueError('original complete task0/physical700 required')
             origins[context]=original
             with np.load(c['path'],allow_pickle=False) as z:paths[context]=GeometricPath(*(j.asarray(z[k]) for k in ['s','xy','heading','curvature','turn_end','goal']))
+            if c.get('rebuild_path_context'):
+                from .finite_value_evaluation import rebind_path_context
+                origins[context]=rebind_path_context(original,paths[context],j.float32(c['speed_m_s']),env)
+                retained=[name for name in original.__dataclass_fields__ if name not in ['projection','follower']]
+                if not all(getattr(original,name) is getattr(origins[context],name) for name in retained):
+                    raise ValueError('new path initialization modified retained state')
+                context_receipts[context]=dict(retained_fields=retained,retained_objects_identical=True,
+                    changed_fields=['projection','follower'],physical_tick=700,task_tick=0,
+                    current_follower_invalid=bool(origins[context].follower.invalid))
+        if context_receipts:atomic_json(out/'path_context_identity.json',context_receipts)
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         states=[origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
-        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(300,j.int32),stack([initial_relay() for _ in cases]))
+        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
         batch_paths=stack([paths[c['context']] for c in cases]);parameters=stack([params[c['role']] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)
@@ -154,8 +262,8 @@ def execute(root, *, shape_only=False):
             return jax.lax.scan(lambda st,_:jax.vmap(one)(st,parameters,batch_paths,speeds,pulses,modes),carry,None,length=50)
         if shape_only:
             result=jax.eval_shape(chunk,carry,parameters,batch_paths,speeds,pulses,modes)
-            if result[1]['active_tick'].shape!=(50,300,4):raise ValueError('complete300 lower layout mismatch')
-            atomic_json(out/'receipt.json',dict(lower_shape=[50,300,4],physics_steps=0,optimizer_updates=0))
+            if result[1]['active_tick'].shape!=(50,n,4):raise ValueError('declared lower layout mismatch')
+            atomic_json(out/'receipt.json',dict(lower_shape=[50,n,4],physics_steps=0,optimizer_updates=0))
             update(phase='completed',stage='shape_complete');return
         if json.loads((root/'shape/status.json').read_text())['phase']!='completed':raise ValueError('shape must complete first')
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('actual GPU required')
@@ -165,7 +273,7 @@ def execute(root, *, shape_only=False):
             carry,data=chunk(carry,parameters,batch_paths,speeds,pulses,modes);jax.block_until_ready(carry);host,data=jax.device_get((carry,data));data=flatten_ticks(data);logs.append(data)
             np.savez_compressed(out/f'chunk_{block:02d}.npz',**data)
             with (out/'final_carry.pkl').open('wb') as stream:pickle.dump(host,stream)
-            state['active_lower_ticks']+=int(data['active_tick'].sum());state['allocated_lower_slots']+=60000
+            state['active_lower_ticks']+=int(data['active_tick'].sum());state['allocated_lower_slots']+=200*n
             if state['active_lower_ticks']>p['maximum_active_lower_ticks'] or state['allocated_lower_slots']>p['maximum_allocated_lower_slots']:raise ValueError('declared evaluation budget exceeded')
             update(stage='collecting',completed_blocks=block+1,elapsed_s=time.monotonic()-start)
             if np.any(host.state.fault):raise RuntimeError('engineering fault; raw retained, no implicit retry')
@@ -180,6 +288,6 @@ def execute(root, *, shape_only=False):
             index.append(dict(case_id=c['case_id'],file=str(file.relative_to(root)),sha256=digest(file),initial_xy=pose[:2].tolist(),initial_yaw=float(pose[2])))
         atomic_json(out/'results.json',results);atomic_json(out/'case_index.json',index)
         if any(r['physical_outcome']=='unknown' for r in results):raise ValueError('unknown endpoints preserved; evaluation incomplete')
-        update(phase='completed',stage='physical_complete_analysis_pending',completed_cases=300)
+        update(phase='completed',stage='physical_complete_analysis_pending',completed_cases=n)
     except BaseException as exc:
         (out/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise

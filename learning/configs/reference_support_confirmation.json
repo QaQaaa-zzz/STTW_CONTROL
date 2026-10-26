@@ -1,0 +1,18 @@
+{
+  "experiment": "reference_support_confirmation",
+  "seed": 2026102631,
+  "alphas": [0.0, 0.5, 1.0],
+  "forces_N": [0.0, -16.0, 16.0, -32.0, 32.0],
+  "onset_upper_tick_range": [140, 241],
+  "pulse_duration_s": 0.1,
+  "horizon_s": 10.0,
+  "goal_radius_m": 0.3,
+  "straight_prefix_m": 5.0,
+  "contexts": [
+    {"name": "left80_R1p4_v1p2", "source_context": "left", "build_direction": "left90_R2", "angle_deg": 80.0, "radius_m": 1.4, "speed_m_s": 1.2},
+    {"name": "right100_R1p2_v1p5", "source_context": "right", "build_direction": "right90_R2", "angle_deg": 100.0, "radius_m": 1.2, "speed_m_s": 1.5}
+  ],
+  "task_rule": "First actual XY entry into original 0.30m goal disk before contact/fault; no terminal heading/speed/hold requirement. Whole-window contact reported separately.",
+  "information": "Pulse parameters enter physics only. Causal controller uses the unchanged measured roll-rate gate (.8/.4rad/s, .6s). User alpha remains fixed.",
+  "stop": "90 declared episodes, no training/threshold/trigger tuning or automatic retry. Faults stop and preserve evidence. No automatic model adoption."
+}
