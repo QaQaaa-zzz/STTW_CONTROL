@@ -1426,3 +1426,31 @@ scientific-brainstorming非发起人只读AI两次反审归档lineage_cost_mecha
 实际通过attempt2归档model.load_model默认路径验证身份全等、六mesh匹配（0积分），archived_asset_preflight保存。新driver session80067实际启动，controller2765412/execute2765415本次/proc均live，evaluation screening/task_seconds0、elapsed7.15s/active_lower0（编译中）/completed0，8最终结果PENDING。原生vmap8/scan≤50/共享编译cache/cuda,cpu保留，无CPU隐藏GPU/新慢控制器。输出HDD current_native_preference_v1_attempt2，逻辑runs同名；系统盘65GiB。原默认loader继续核完整source资产/模型/底层/normalizer/bank身份。
 
 后续同session80067/原PID低频或进程退出事件回收，不因观察超时重启；顺序actual8→只读16含原H75分析/全XY/原user两目标成本，完成/错误显式中文Bark，失败保留停止，不扩场景/扰动/训练/预算。原registry/采用模型/用户dirty源码不动，无push/JIT/硬件操作，目标Trans未完成。此次问题修复及新启动已同步共享台账；不把prepare/编译当偏好通过结果。
+
+
+### 当前原生8例实际完成与放宽到达复核
+
+
+## 放宽到达标准后的裁决（2026-10-26）
+
+目的：复核“旧方案失败”有多少来自任务口径，同时检查当前恢复训练后的模型是否仍保留原生偏好。原4路线/速度情境×α0/1、10秒、无外扰、完整同源初态及H75原生参考接口，仅更换中层权重；8条新current、8条认证H75缓存。新实际16000 lower ticks，200.793秒含编译保存，0训练。全部16条完整观察，无原生物理失败或域退出；不能据无扰结果新增抗扰结论。
+
+目标是原世界坐标的目标点；进入圆内即计到达，不要求末段速度/航向/保持。0.5米是当前工作口径，0.75/1米为看过数据后的放宽敏感性，不包装成预注册主结果：
+
+|目标半径|current|H75|
+|---|---:|---:|
+|0.5米|4/8|6/8|
+|0.75米|5/8|7/8|
+|1米|6/8|8/8|
+
+旧截面目标两者均8/8，旧保持标记current0/8、H758/8，只保留作诊断，不再以保持否决到达；截面与点圆并非嵌套，不撤销旧成功。当前右弯α0离目标最小0.637/0.830米；右弯α1为1.371/1.799米，故有些失败很接近目标，有些仍有可见差距，不宜只靠放宽解释。
+
+两模型各四组均保留α0路径更准、α1速度更准；原用户成本矩阵均对角较小。相对偏好仍在，不能说最新模型忘掉了偏好。不过current所有8条匹配端点的路径RMSE均弱于H75；绝对原任务能力存在损失。祖先核对为H75→online_preference_survival_v1_attempt3/task_only64→finite_value_online系列free_GAE64（包含原55/45工程恢复链），并非H75直接到最后64轮；未做逐阶段原生对照，不将损失归因于最后一次训练或某一个模块。
+
+采用判断：不将current全局替换H75，也不丢弃current已记录的低速/恢复用途；冻结两者及dual历史强对照。眼下问题是“保住已有偏好任务能力，同时增加受扰后的到达机会”，不要求无敌或每例成功。后续先利用同一放宽到达口径整理已有受扰配对的新增/丢失及目标距离，不再先加检测器、硬拟合旧公式或盲目加训。只有出现强简单规则无法覆盖的可兑现收益空间，才提出最小参考协调增量。
+
+联合四情境十六条XY图已实际目视，visual_review.json记范围/哈希，原status中的自动生成false不覆盖。原加载失败0积分和错误Bark保留；物理完成、分析完成Bark均accepted=true。当前无新活动训练/物理，未改采用别名、原配置、用户α或物理，未push。
+
+证据：runs/current_native_preference_v1_attempt2/analysis/{README.md,review.json,relaxed_arrival_sensitivity.json,visual_review.json,all_native_pair_xy.png}；原始身份、资产修复及缓存合同见该run的plan/cache_receipt/repair_receipt/launch_identity。
+
+非发起人AI复核进一步收拢下一问题：当前低速受扰改善是否已被H75配同一控制栈覆盖？先核匹配缓存，缺失才另封存必要的H75受扰端点对照；本轮未新启96例，不同时扩dual/新控制器。H75覆盖则收缩学习增量主张；current有新增有损失则研究能力保持与恢复取舍。中间task_only64补原生八例暂缓，其信息不如强基线直接。复核原文见本run analysis/independent_review.md。
