@@ -1398,3 +1398,19 @@ Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻
 scientific-brainstorming第7步非发起人只读AI反审已返回并归档independent_review.md；非人工同行/独立物理复现。先独立提出A1/A2再据结果排序：优先复用120做原用户成本的分量—阶段—权限诊断（偏好通道/其余、到达前后、裁剪饱和）；若执行1优势在偏好通道/到达前且无饱和仍在，则单纯尾段/新权限解释被削弱，反之限制解释。不改原完整成本和alpha。仅当该读回不能区分迁移/原生能力时，优先旧原生raw确认，缺失再一次有界物理；均不要求新训练。当前不自动扩扰动/续训/造gate/拟合Emin，不以更多模块填贡献。强对照current/steer-only/zero、dual两真实端点/H75及各适用历史floor保留；u325链路诊断；after-only/ESO继续原有限角色。下一按A1后最多一次必要原生确认，再选择最小可部署控制增量；Trans证据仍不够、目标未完成。
 
 产物runs/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/{results,receipt,goal_summary,summary,raw_audit}.json及lineage_nominal_review/{README.md,review.json,all_xy_lineage_overview.png,xy_figure_provenance.json,visual_review.json,independent_review.md}。本轮无活动物理/训练，原错误不擦除，原采用模型/冻结别名不变；无push/JIT/实机。
+
+### 2026-10-26 A1/A2复用完成：低速需求分支未覆盖，H75原生偏好效用明确
+
+e1511fe新增两只读CLI和一个边界测试，无既有runtime/Actor/奖励/权限修改。本轮0新积分、0训练。A1读取全部120原raw并逐SHA核，240个user0/1完整成本重建对原600查询中对应项一致（tol1e-6）；共同到两执行端点首次任一入目标的时刻含该步为pre，其余post，所有未达轨迹保留。χ三互斥分区加回full、pre+post加回full、偏好+其它加回总数逐项验证；1CPU测试实际passed .18s，验证早到端点共同前缀、都未到、空需求掩码不成证据。输出lineage_cost_mechanisms_v2（v1探索留档）。
+
+重要条件更正：原120×2000个日志χ精确全0，非仅近零；原q(v_user)及原路径最大曲率的前馈侧倾坐标仅.05650/.10986rad，低于χ起点.18。故没覆盖该奖励的需求分支，不说明真实风险/动态需求低；V3仍保留随alpha变化的path次级权重，不能说偏好完全关掉。primary与alpha0速度折扣未激活；both_chi_active及高需求无触边掩码全空，不能把0代价差写成高需求验证通过。current user0完整ΔJ(exec0−exec1)=3.5349，其中偏好2.6266/其它.9083；共同pre8.161s差2.0235，speed+1.6861/path−.3291/low_speed+.7762。合法且无当下参考触边的共同pre7.692s仍差1.0966；不是全部到达后尾段或当下触边造成，但后验掩码不能排除先前限幅/history因果。旧共同参考框pre仅.823s，不能当原生重放。参考触边只是实际数值靠边界，不伪造clip事件。
+
+A2实际复用H75原preference_full_tail_length75_post_v1/moderate/evaluation的F0：固定onset1代表去除重复F0，只选原4弯速×两端点=8条，不选结果/不复制onset2或内点alpha为独立重复。manifest ppo75 Actor/checkpoint SHA对冻结H75认证，native residual/network/reward/timing/follower逐项对冻结config一致；八条完整10秒/2000 active、0冲量、全存活，旧goal/hold保留，不改作近期50cm点圆。raw没存χ：按原builder/原path_progress/原v_user/原controller q重建，明示重建量而非遥测；对各own端点10项effective costs、scored_tick_reward及累计数值核对，最大component绝对误差3.01e-5（rtol3e-5/atol3e-5，小差保留，无新物理gate）。八条实际primary均非零，χ重建active1.10–1.315s。模型与权限身份认证不冒称完整历史runtime重放。
+
+原生矩阵（行user0/1、列执行0/1）[[10.5511,53.7507],[29.8818,9.1671]]，与低速迁移不同，原用户偏好在这组已记录用途上明确对齐。四弯速alpha0路径RMSE.0605–.0720m，alpha1 .1703–.5993m；alpha0速度RMSE.1489–.2105m/s，alpha1 .0396–.0934m/s，每组α0路径更好/α1速度更好。右2.6例路径.0605 vs .4827m、速度.1777 vs .0396m/s。均值与逐例数值保留，不能再说H75从未学会偏好；不将两面板原始成本直接排名，也不将χ差单独当因果解释。速度/几何/参考权限/进入历史及额外控制同时不同，当前free_GAE原生能力尚未在此8例中评测。
+
+native四情境8原worldXY全图实际目视，初稿legend遮挡已保留，另存all_native_xy_readable.png将legend移出；参考仅原alpha0日志reference_xy采样，不伪造完整路径/新world目标，真实终点、等米比例、线型与颜色保留，无平滑/挑点，visual_review.json如实。已登记runs/*/plan.json有界缓存检索18个含当前Actor SHA的计划，均近期扩权限，无匹配原生8例候选；不是全文件系统无遗漏证明，未解析速度显式unknown不填负速度。
+
+scientific-brainstorming非发起人只读AI两次反审归档lineage_cost_mechanisms_v2/independent_review.md：同意优先原生复用，H75不是从未有偏好，当前瓶颈是迁移/保持未定位；不能因χ0推真实风险低或因原生激活认定其造成全部差异。下一优先核对当前权重同原生8例缓存，没有再只补8例（同任务/初态/接口/评价，只换认证权重）。若当前原生仍有效则保留迁移/覆盖解释；若丢失才定位这项能力退化，但不自动归因算法/训练不足。暂缓192新dual+H75低速扰动扩展，不新gate/调χ/拟合Emin/盲加训，不设置零regret/不摔门槛。H75/dual强对照及当前实用用途都保留，采用Actor/别名不改。
+
+证据runs/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/{lineage_cost_mechanisms_v2,h75_native_preference_v1}/{README.md,review.json}及native图/current_cache_lookup.json；原全120XY仍在lineage_nominal_review。当前无活动新物理/训练，无push/JIT/实机，Trans控制增量与独立证据仍未完成。
