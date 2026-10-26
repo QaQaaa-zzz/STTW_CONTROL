@@ -27,6 +27,10 @@ def review(root,output):
     def counts(group):
         return {role:dict(total=len(rr),survived=sum(r['physical_outcome']=='survived' for r in rr),
             unknown=sum(r['physical_outcome']=='unknown' for r in rr),
+            arrival_and_full_survival=sum(r['goal_arrived'] is True and r['physical_outcome']=='survived' for r in rr),
+            arrival_without_full_survival=sum(r['goal_arrived'] is True and r['physical_outcome']=='contact' for r in rr),
+            full_survival_without_arrival=sum(r['goal_arrived'] is False and r['physical_outcome']=='survived' for r in rr),
+            contact_without_arrival=sum(r['goal_arrived'] is False and r['physical_outcome']=='contact' for r in rr),
             arrivals={str(radius):sum(arrived(r,radius) is True for r in rr) for radius in radii},
             arrival_unknown={str(radius):sum(arrived(r,radius) is None for r in rr) for radius in radii},
             mean_original_alpha_cost=float(np.mean([r['scored_cost'] for r in rr])))
