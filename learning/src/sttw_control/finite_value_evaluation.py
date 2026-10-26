@@ -181,7 +181,8 @@ def paired_report(rows, *, roles=ROLES):
         raise ValueError('unique nonempty evaluation cases required')
     from .reference_task_feedback import PROBE_ROLES
     from .nominal_reference_feedback import NOMINAL_ROLES
-    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES
+    from .nominal_table_ablation import SHARED_ROLE
+    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,)
     if not roles or not set(roles) <= set(ROLES+PROBE_ROLES):
         raise ValueError('known evaluation roles required')
     groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}

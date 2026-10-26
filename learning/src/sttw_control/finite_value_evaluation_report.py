@@ -187,6 +187,7 @@ def role_labels(rows):
             label=f"free_GAE + steering {row['feedback_gain_rad']:g}rad"
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
+        if row['role']=='feedback_shared':label='free_GAE (original alpha) + common alpha0.5 profile feedback 0.1rad'
         if row.get('causal_support') and label!='parent_causal':
             label+=' + short support'
         if row['role'] in labels and labels[row['role']]!=label:
@@ -228,7 +229,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .path_command_reward import configured_cost_keys
     from .reference_task_feedback import PROBE_ROLES
     from .nominal_reference_feedback import NOMINAL_ROLES
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES
+    from .nominal_table_ablation import SHARED_ROLE
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,)
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))

@@ -1,0 +1,12 @@
+{
+  "schema": "nominal_table_alpha_index_ablation_v1",
+  "executed_alphas": [0.0, 1.0],
+  "nominal_profile_alpha": 0.5,
+  "feedback_gain_rad": 0.1,
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "hypothesis": "Own-alpha nominal response contributes actual outcome/cost value beyond the same frozen feedback using a prechosen common alpha.5 table. A comparable common-table result rejects alpha indexing as an established unique contribution on this panel.",
+  "intervention": "Change only nominal profile lookup to original alpha.5 zero table. Original Actor and reward receive user alpha0 or1, unchanged.",
+  "alpha05": "No treatment difference when Actor alpha=.5, so do not rerun or count it as a repeated independent condition.",
+  "stop": "40 new endpoint episodes (32 disturbed + 8 nominal); exact200 endpoint controls reused, analysis240. No profile fitting, gain/threshold sweep, training, automatic retry or adoption."
+}

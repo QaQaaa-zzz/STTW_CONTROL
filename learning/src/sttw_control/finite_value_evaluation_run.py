@@ -382,10 +382,11 @@ def execute(root, *, shape_only=False):
         carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
         batch_paths=stack([paths[c['context']] for c in cases])
         if p.get('nominal_feedback_spec') is not None:
+            from .nominal_table_ablation import nominal_profile_key
             tables={}
             for key,item in p['nominal_profiles'].items():
                 with np.load(item['file'],allow_pickle=False) as z:tables[key]={k:j.asarray(z[k]) for k in z.files}
-            parameters=stack([dict(params[c['role']],nominal_table=tables[f"{c['context']}/a{c['alpha']:g}"]) for c in cases])
+            parameters=stack([dict(params[c['role']],nominal_table=tables[nominal_profile_key(c)]) for c in cases])
         else:parameters=stack([params[c['role']] for c in cases])
         speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
         modes=j.asarray([c['mode_index'] for c in cases],j.int32)

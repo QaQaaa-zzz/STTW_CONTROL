@@ -489,3 +489,17 @@ attempt2准备session72634 exit0，GPU shape47539 exit0（50×300×4、0物理�
 **决策**：有限任务反馈的实际到达/防摔增量在新真实进入状态上延续；名义表对强持续反馈只显示小幅到达和部分代价优势，旧初态的无扰保留尚不普遍。当前方法值得保留，但“偏好特异协调”及Transactions新颖性还没有得到充分支持。停止继续微调增益/表或自动加训；不以1/48净增讲大故事。
 
 下一最多三项：①冻结新300与全部错误/正负证据；②若继续检验机制，只预先声明一次匹配alpha表vs固定alpha.5公共表的有界物理消融，保持Actor/user alpha和评价不变，阴性就撤回alpha表的独有贡献；目前未实现/启动；③弱.05反馈仍是未排除的替代解释，只有必要时补固定对照，不扫中间gain。旧容扰公式仍只作解释对照，不因本批阳性硬接为安全保证。Trans目标继续active，未推送远端/未涉及实机。
+
+## alpha名义表索引消融：实施及启动前声明（2026-10-26）
+
+上一goal轮为progress：新真实起点300实际结果和只读发布参考审计改变了结论边界。名义增量对强持续反馈只有40对39到达、无扰保持也条件性，不能继续以更大表或调gain维护偏好故事。本轮只检验一个因果因素：**相同用户/Actor alpha下，使用各自alpha名义表，是否比预先固定的公共alpha.5表有实际价值？**
+
+所有事件/路径/完整bank2/4初态、freeGAE final64、短支持、.10rad反馈增益、原滤波/slew/限幅/权限、原alpha目标函数保持。仅新增case字段nominal_profile_alpha=.5用于表查找，执行状态alpha仍原0/1，不向Actor传.5。两路线的公共表均来自原bank3的已有zero alpha.5，不由受扰结果挑选、平均或拟合；仍不重建新起点的表。接口外插/覆盖处理与前轮相同。
+
+只补有处理差异的端点：4context×2alpha(0/1)×5力档=40新（32受扰、8zero），最大80000 lower实际/槽、0optimizer。alpha.5两方法本来相同，明确不重跑、不计为独立重复；原300全结果保留。精确复用原五方法的同端点200条，联合240、6方法每方法32受扰+8zero；旧缓存物理成本按真实200子集求和、400000旧槽，与原全300沉没成本单列，不把原48受扰和本次32受扰混作同分母。所有XY覆盖四context/两个执行alpha/全部事件，公共表图例与Actor原alpha明确区分。
+
+主口径仍原目标50cm/10s、触地故障前首次实际进入，10/20/30cm、整窗不摔、无扰与双方存活的原alpha代价、新增/丢失分别报告。若公共表相当或更好，撤回“alpha索引已有独有控制贡献”的主张，不因指标不同就继续改表/扫增益；若匹配表有优势，也只视为此DEV面板的机制证据，不自动成为新算法或投稿就绪。此研究问题并不要求零失败、所有指标同时胜出。
+
+实现nominal_table_ablation.py、nominal_table_ablation.json，runner和独立核验统一支持显式表alpha字段；默认无该字段严格保留旧自身表语义。原InitialFeedbackActor/make_initial_confirmation_step和make_evaluation_step AST不变，所有物理/权限/反馈数学实现不变。源身份认证三native及别名，200缓存逐实际字段/rawSHA；53相关CPU passed3.52s，含Actor alpha/force/time不变、只改表索引与case身份、拒绝中点重复/扫gain/换公共表、默认与中点恒等和旧回归。
+
+计划root runs/nominal_alpha_table_ablation_v1全HDD；当前未prepare/shape/实际积分，收益PENDING。系统65GiB、GPU约23GiB可用。40完成或工程错误停，无自动重试/训练/采用/push，不扩为多表矩阵。下一prepare→shape→40实际与240联合分析；沿原Bark完成/错误注册，email/autofix保持inactive。

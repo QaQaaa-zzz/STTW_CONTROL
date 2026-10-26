@@ -122,7 +122,8 @@ def make_initial_confirmation_step(env,actor,*,horizon_s,spec,nominal_spec):
 def verify_initial_feedback(raw,case,config,plan):
     from .nominal_reference_feedback import verify_nominal_feedback
     from .reference_task_feedback import verify_feedback_log
-    profile=plan['nominal_profiles'][f"{case['context']}/a{case['alpha']:g}"]
+    from .nominal_table_ablation import nominal_profile_key
+    profile=plan['nominal_profiles'][nominal_profile_key(case)]
     with np.load(profile['file'],allow_pickle=False) as z:table={k:z[k] for k in z.files}
     if case['feedback_kind']==1:
         verify_nominal_feedback(raw,case,config,plan['nominal_feedback_spec'],table)
