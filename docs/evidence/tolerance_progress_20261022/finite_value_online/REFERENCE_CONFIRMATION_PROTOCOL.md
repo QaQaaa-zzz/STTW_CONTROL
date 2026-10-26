@@ -1376,3 +1376,11 @@ Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻
 为下一必要比较已落盘next_comparison_declaration.json，execution planned_not_started：12原完整进入情境×alpha0/1×dual/u325/H75=72新无扰轨迹、最多144000新lower及分配槽；current/zero各24条原结果仅列48待认证缓存候选，联合120不冒称全新。全臂固定近期共同接口、原10s/50cm到达及10/20/30cm诊断，整窗触地分列；每实际轨迹按原用户alpha0/1效用重评分，保失败和全部12XY。双网只按固定alpha挑对应端点、不混合或插值。此比较回答common-expanded-interface权重迁移，不复现各自原生环境/奖励/训练；共享bank相关DEV不称独立repeat/最终TEST，不预设单调升级。无扰有区别才定位具体权限饱和/效用差距并决定原生确认，非盲加训。
 
 证据runs/entry_history_confirmation_v1/analysis/lineage_interface_audit_v2/{audit,verification,next_comparison_declaration}.json及README；v2已实际重新执行最终helper。专用历史认证/runner接线仍未实现，当前旧runner认证不被弱化，48缓存未宣称完成复用。未启动新仿真/训练、未改采用模型/冻结别名、无push/JIT/实机。下一按声明补接认证和批量runner再做该一次固定比较；先用原始轨迹回答模型用途，非以审计取代Trans需要的控制增量和独立证据。
+
+### 2026-10-26 迭代链固定名义补测已启动
+
+10c83c2新增专用冻结registry认证/三历史角色及model_key接入，不改17数值runtime/5核心函数，旧固定64身份验证不弱化；双网按alpha端点选Actor，legacy仅内存零FiLM，同现有351D/近期共同参考权限。inventory/helper/原goal功能15CPU测试实际通过1.78s。prepare session65467 exit0，48条旧raw逐一SHA和metadata认证（不是48条新积分），72缺失事件与原12完整state/path封存。HDD新根lineage_nominal_common_interface_v1，逻辑runs同名，模型采用不变，无push/JIT/实机。
+
+原dispatch session65076实际启动，controller2646916/shape2646920本次/proc live；shape仍authenticating且0物理，不把其当72收益或评价完成。顺序shape→一次72actual→联合120analysis，≤144000新lower实际及槽、0训练，原48cache实际/96000slots单列。原完整carry/task0physical1020、短支持/反馈.1/goal/local300/alpha与10s50cm保持；只换历史权重及零FiLM推理表示，明确权重迁移不是原生能力或架构消融。runner默认scan50/vmap72/共享cache/cuda,cpu；失败停止保留、完成/报错中文Bark，既有register不启自动修复，driver身份在run中保存。
+
+下次优先沿session65076或dispatch_status中原PID回收，不因观察超时重启；低频/事件驱动，完成后先全12XY、到达/触地及原alpha效用，不预判新版必须更强。不再扩半径/参数，未有本次控制结果。全局通知文档两个旧路径本机缺失，已在台账明示，实际采用已有register及显式Bark driver，不冒称全局自动修复有效。
