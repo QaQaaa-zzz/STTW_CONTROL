@@ -1384,3 +1384,17 @@ Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻
 原dispatch session65076实际启动，controller2646916/shape2646920本次/proc live；shape仍authenticating且0物理，不把其当72收益或评价完成。顺序shape→一次72actual→联合120analysis，≤144000新lower实际及槽、0训练，原48cache实际/96000slots单列。原完整carry/task0physical1020、短支持/反馈.1/goal/local300/alpha与10s50cm保持；只换历史权重及零FiLM推理表示，明确权重迁移不是原生能力或架构消融。runner默认scan50/vmap72/共享cache/cuda,cpu；失败停止保留、完成/报错中文Bark，既有register不启自动修复，driver身份在run中保存。
 
 下次优先沿session65076或dispatch_status中原PID回收，不因观察超时重启；低频/事件驱动，完成后先全12XY、到达/触地及原alpha效用，不预判新版必须更强。不再扩半径/参数，未有本次控制结果。全局通知文档两个旧路径本机缺失，已在台账明示，实际采用已有register及显式Bark driver，不冒称全局自动修复有效。
+
+### 2026-10-26 冻结迭代链72＋48完成：旧用途保留，当前效用缺口不能归因最新退化
+
+原driver/session65076终结于汇总角色错误，物理72实际已completed、144000新lower/槽、126.799s含编译保存，0训练；原物理完成/汇总错误Bark均accepted=true，所有raw及错误原位保留。fcd6448仅修只读paired roles、空disturbed split和不存在扰动时不画NaN能力图，原数值控制kernel不改。19CPU测试实际passed1.63s。新analysis_corrected_roles_v1 session46303实际exit0、120/120complete；原analysis/error不覆盖、不重跑物理。共120raw认证、600原alpha固定轨迹查询，240000lower中144000新/96000cache（48原轨迹），不是120条新。08ad3d1保存读回CLI/全XY图CLI本地提交，未push。
+
+原10s/目标50cm下各24名义：zero到达22、current24、dual22、u32523、H7524；全部120整窗活，无未知。current对zero到达+2/-0，H75同样；dual+1/-1，u325+1/-0。current/H75总数同不代表动作/代价等价，不将名义存活当抗扰证据。各执行alpha0/1的路径RMSE均值(m)/速度RMSE(m/s)：current(.1149/.1644)→(.1237/.1537)；dual(.1830/.1494)→(.1016/.1474)；u325(.1477/.1924)→(.1448/.1556)；H75(.1282/.1802)→(.1249/.1544)。本次所有整窗都活，观察长度相同；当前有误差取舍，旧dual速度端点仍是强历史固定对照，不因版本旧而排除。
+
+原user0/1分别重评分两个实际执行端点（行user0/1，列执行0/1），均值成本current[[39.5964,36.0615],[22.4901,19.1629]]；dual[[48.9687,33.3270],[20.4279,17.5383]]；u325[[55.4984,42.5139],[29.5189,20.3060]]；H75[[48.1398,38.6354],[26.5874,19.7020]]。所有失败不筛（本次实际无触地）。各神经族平均执行1在两个用户目标均较低，现象并非最新current独有；current有限两端点mean自身对已测min差4.8046/.0033，小于旧三族user0差15.6418/13.5023/10.6819。不设零regret/绝对不摔门槛、不宣称原生偏好全失败或训练机制退化；zero微小成本差按浮点微差看，不包装偏好。两候选min不同于旧三alpha审计，不混用.0033与原三候选.0184；均值排序不等于逐例支配或在线选择器。
+
+共同近期接口（速度1.0–3.5、参考steer.65/follower.6）对旧原生floor1.5/steer.35/follower.3是迁移，且训练架构/奖励/数据不同。这里原user效用指当前任务的固定效用，不冒称所有历史训练原生奖励相同。12上下文共享bank3祖先，不是独立初态/训练repeat/TEST。不能用这些证据说“最近训坏，退回双网就解决”；保留当前/H75实用用途及旧强端点，不改采用Actor。原12XY和24详细时序/分量图保留；新all_xy_lineage_overview.png将全部12情境120真实worldXY画入共同每情境坐标，alpha线型/端点marker，所有active样本无平滑/筛选、真实终点/原目标圈保留。scientific-visualization用于工作审图，已实际目视新总览覆盖全部12＋原一张；其余原细图未逐张看，visual_review.json和原receipt visual_review_complete=false保留，不称投稿规范/完整逐图审查。
+
+scientific-brainstorming第7步非发起人只读AI反审已返回并归档independent_review.md；非人工同行/独立物理复现。先独立提出A1/A2再据结果排序：优先复用120做原用户成本的分量—阶段—权限诊断（偏好通道/其余、到达前后、裁剪饱和）；若执行1优势在偏好通道/到达前且无饱和仍在，则单纯尾段/新权限解释被削弱，反之限制解释。不改原完整成本和alpha。仅当该读回不能区分迁移/原生能力时，优先旧原生raw确认，缺失再一次有界物理；均不要求新训练。当前不自动扩扰动/续训/造gate/拟合Emin，不以更多模块填贡献。强对照current/steer-only/zero、dual两真实端点/H75及各适用历史floor保留；u325链路诊断；after-only/ESO继续原有限角色。下一按A1后最多一次必要原生确认，再选择最小可部署控制增量；Trans证据仍不够、目标未完成。
+
+产物runs/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/{results,receipt,goal_summary,summary,raw_audit}.json及lineage_nominal_review/{README.md,review.json,all_xy_lineage_overview.png,xy_figure_provenance.json,visual_review.json,independent_review.md}。本轮无活动物理/训练，原错误不擦除，原采用模型/冻结别名不变；无push/JIT/实机。
