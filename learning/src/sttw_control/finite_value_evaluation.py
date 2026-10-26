@@ -187,7 +187,7 @@ def paired_report(rows, *, roles=ROLES):
     from .preference_speed_authority import AUTHORITY_ROLE
     from .goal_preview_baseline import GOAL_ROLES
     from .steering_stage_mechanism import STAGE_ROLES
-    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES
+    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES+CHANNEL_ROLES+(AUTHORITY_ROLE,)+tuple(GOAL_ROLES)+STAGE_ROLES+('lineage_dual','lineage_u325','lineage_h75')
     if not roles or not set(roles) <= set(ROLES+PROBE_ROLES):
         raise ValueError('known evaluation roles required')
     groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}
@@ -221,6 +221,7 @@ def paired_report(rows, *, roles=ROLES):
         ('goal_full_feedback','goal_zero_feedback'),('goal_steer_feedback','goal_zero_feedback'),
         ('goal_full_feedback','goal_steer_feedback')]]
     contrasts += [(a,b) for a in STAGE_ROLES for b in ('goal_zero_feedback','goal_steer_feedback')]
+    contrasts += [(a,b) for a in ('lineage_dual','lineage_u325','lineage_h75') for b in ('goal_zero_feedback','goal_full_feedback')]
     contrasts = [(a,b) for a,b in contrasts if a in roles and b in roles]
     comparisons={}
     for target,baseline in contrasts:

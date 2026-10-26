@@ -36,7 +36,7 @@ def evaluation_inputs(root,plan):
     return declared,records,indices,cached_actual
 
 
-def analyze(root):
+def analyze(root, *, output_name="analysis"):
     root=Path(root).resolve();state=json.loads((root/'status.json').read_text())
     if state.get('phase')!='completed':
         raise ValueError('complete declared evaluation required; do not rerun physics')
@@ -44,7 +44,8 @@ def analyze(root):
     roles=plan.get('evaluation_roles',ROLES)
     if state.get('phase')!='completed' or state.get('completed_cases')!=n:
         raise ValueError('complete declared evaluation required; do not rerun physics')
-    out=root/'analysis';out.mkdir(exist_ok=False)
+    if Path(output_name).name!=output_name:raise ValueError('simple output directory name required')
+    out=root/output_name;out.mkdir(exist_ok=False)
     status=dict(phase='running',pid=os.getpid(),completed_cases=0,physics_steps=0,optimizer_updates=0)
     def update(**kw):status.update(kw,checked_unix=time.time());atomic_json(out/'status.json',status)
     update()
@@ -147,7 +148,7 @@ def analyze(root):
                 audits[-1]['goal_preview']=goal_audit
             if len(rows)%30==0:update(completed_cases=len(rows))
         if actual!=state['active_lower_ticks']+cached_actual:raise ValueError('actual lower cost accounting mismatch')
-        summary={name:paired_report(group,roles=roles) for name,group in dict(all=rows,
+        summary={name:(paired_report(group,roles=roles) if group else dict(empty_split=True,role_counts={role:{cat:0 for cat in CATEGORIES} for role in roles},comparisons={})) for name,group in dict(all=rows,
             nominal=[r for r in rows if not r['force_N']],disturbed=[r for r in rows if r['force_N']]).items()}
         alphas=sorted({r['alpha'] for r in rows})
         byalpha={str(a):paired_report([r for r in rows if r['alpha']==a],roles=roles) for a in alphas}
@@ -364,6 +365,7 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
 
 
 def render_tradeoff(out,rows,*,context_count,goal_radius=None):
+    if not any(r['force_N'] for r in rows):return []  # No fabricated disturbed metrics for nominal-only panels.
     """Render derived tradeoff points without regenerating raw diagnostics."""
     import matplotlib
     matplotlib.use('Agg')
