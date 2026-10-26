@@ -8,8 +8,8 @@ ROLES = ['goal_zero_feedback', 'lineage_h75', 'goal_full_feedback']
 LABELS = ['Zero neural', 'Frozen H75', 'Current free_GAE64']
 
 
-def review(root):
-    root=Path(root).resolve();analysis=root/'analysis'
+def review(root, analysis_name="analysis"):
+    root=Path(root).resolve();analysis=root/analysis_name
     if json.loads((analysis/'status.json').read_text())['phase']!='completed':
         raise ValueError('complete original audited analysis required; do not rerun physics')
     plan=json.loads((root/'plan.json').read_text())
@@ -30,6 +30,7 @@ def review(root):
                 rr=[r for r in subset if r['role']==role]
                 counts[role]=dict(n=len(rr),arrived=sum(r['minimum_upright_goal_distance_m']<=radius for r in rr),
                                   survived=sum(r['physical_outcome']=='survived' for r in rr),
+                                  arrived_and_survived=sum(r['minimum_upright_goal_distance_m']<=radius and r['physical_outcome']=='survived' for r in rr),
                                   median_min_goal_distance_m=float(np.median([r['minimum_upright_goal_distance_m'] for r in rr])),
                                   mean_scored_cost=float(np.mean([r['scored_cost'] for r in rr])),
                                   mean_reference_speed_variation=float(np.mean([r['reference_speed_variation_m_s'] for r in rr])),
@@ -50,7 +51,18 @@ def review(root):
                     arrival_loss=sum(d['arrival_baseline'] and not d['arrival_candidate'] for d in details),
                     survival_gain=sum(d['survived_candidate'] and not d['survived_baseline'] for d in details),
                     survival_loss=sum(d['survived_baseline'] and not d['survived_candidate'] for d in details),details=details)
-            report[str(radius)]=dict(counts=counts,pairs=pairs)
+            endpoint_counts={}
+            for alpha in [0.,1.]:
+                endpoint_counts[str(alpha)]={}
+                for role in ROLES:
+                    rr=[r for r in subset if r['role']==role and r['alpha']==alpha]
+                    endpoint_counts[str(alpha)][role]=dict(n=len(rr),
+                        arrived=sum(r['minimum_upright_goal_distance_m']<=radius for r in rr),
+                        survived=sum(r['physical_outcome']=='survived' for r in rr),
+                        arrived_and_survived=sum(r['minimum_upright_goal_distance_m']<=radius and r['physical_outcome']=='survived' for r in rr),
+                        mean_same_user_scored_cost=float(np.mean([r['scored_cost'] for r in rr])),
+                        median_min_goal_distance_m=float(np.median([r['minimum_upright_goal_distance_m'] for r in rr])))
+            report[str(radius)]=dict(counts=counts,pairs=pairs,by_executed_and_original_user_alpha=endpoint_counts)
         result[split]=report
     out=analysis/'h75_review';out.mkdir(exist_ok=False)
     (out/'review.json').write_text(json.dumps(dict(results=result,new_physics_steps=0,optimizer_updates=0,
@@ -62,7 +74,14 @@ def review(root):
         for radius,d in rr.items():
             c=d['counts'];n=c[ROLES[0]]['n'];values=[f"{c[r]['arrived']}/{n}" for r in ROLES]
             lines.append('|'+split+'|'+radius+'|'+'|'.join(values)+'|'+'/'.join(str(c[r]['survived']) for r in ROLES)+'|')
-    lines+=['','0.75/1米只是敏感性，不倒写预注册；配对新增/丢失、每例距离/成本及参考变化见review.json和原分析。未知不强填失败；所有物理失败都保留。共享祖先与同快照多力档不算独立样本，不作因果训练归因。',
+    lines+=['','## 两个用户偏好的分项（0.5米工作口径）','',
+            '|条件|原用户α|方法|到达|整窗存活|到达且整窗存活|同用户成本均值|',
+            '|---|---:|---|---:|---:|---:|---:|']
+    for split,rr in result.items():
+        for alpha,group in rr['0.5']['by_executed_and_original_user_alpha'].items():
+            for role,c in group.items():
+                lines.append(f"|{split}|{alpha}|{role}|{c['arrived']}/{c['n']}|{c['survived']}/{c['n']}|{c['arrived_and_survived']}/{c['n']}|{c['mean_same_user_scored_cost']:.4f}|")
+    lines+=['','不同α的原始成本尺度不同，分项只在相同原用户α下比较；不以混合α成本均值排名偏好能力。','', '0.75/1米只是敏感性，不倒写预注册；配对新增/丢失、每例距离/成本及参考变化见review.json和原分析。未知不强填失败；所有物理失败都保留。共享祖先与同快照多力档不算独立样本，不作因果训练归因。',
             '', 'XY图每个力档一张，包含12进入情境×两端α×三族的全部实际轨迹；灰线为原世界路径，原0.5m圆。点标真实终点，x为触地。无平滑/坐标重定位/成功筛选。仅工作图，不声明期刊规范。']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
     render(out,rows,plan)
@@ -106,4 +125,5 @@ def render(out, rows, plan):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',type=Path,required=True)
-    args=parser.parse_args();review(args.run)
+    parser.add_argument('--analysis-name',default='analysis')
+    args=parser.parse_args();review(args.run,args.analysis_name)

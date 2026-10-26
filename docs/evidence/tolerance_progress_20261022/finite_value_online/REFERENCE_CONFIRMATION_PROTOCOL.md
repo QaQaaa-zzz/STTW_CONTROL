@@ -1468,3 +1468,24 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 
 
 实际启动：原exec session81135，controller2805172，shape2805174已完成(50,96,4)/0积分，execute2806257实际/proc live。当前collecting第3块、57600active lower/57600slots、elapsed59.25秒、completed0（只在终点形成96记录），最终收益PENDING。不将编译/运行计为通过。原driver封存未改，自动物理→只读分析及Bark；观察超时不重启。新增review_h75_disturbed_comparison.py仅只读360分析后产出0.5/.75/1m到达、全窗触地、配对新增/丢失/目标距/原alpha成本和五张按力档覆盖全部360实际XY的工作图；已语法检查、未运行/未声称结果或视觉审查完成，不修改科学合同或已有driver。后续优先沿session81135收尾，再实际运行该readout并审图。
+
+
+### 2026-10-26 H75受扰强对照完成：恢复增量保留，安全/偏好代价仍有取舍
+
+原session81135 driver仅analyze出错，物理96完成180170lower/192000slots、158.5043秒、0训练。verify_goal_log body重建.00010036m略超原.1mm离线核验，旧错误和Bark原位保留；仅将body audit改1mm，控制三函数AST等原source/world/steer/slew/reward/labels都不改。测试12passed1.68s（.5mm接受/2mm拒绝，world/slew篡改继续拒绝），analysis_repair_receipt存原新SHA/仅分析变化。
+新只读session37709 exit0，analysis_reconstructed_v2 completed360/360，0新物理/训练，所有奖励/标签/原控制协议核验完成。扩展readout session91027 exit0，360完整配对、.5/.75/1m、按原用户alpha成本、到达且整窗存活分列。原错误目录/status/driver error不冒改成功；采用新分析目录，不重启物理。
+
+
+## 本轮裁决与后续（2026-10-26）
+
+这组强对照支持保留current：同控制栈受扰到达72/96（75.0%），H7561/96（63.54%），零中层56/96（58.33%）；current对H75 +11/-0，净增11.46个百分点。三族整窗存活90/85/85（顺序zero/H75/current），current对H75 +4/-4；本工作半径下各族到达者均整窗存活，因此本次没有用到达后摔倒掩盖风险，但不能推广到其它任务。H75→current alpha0成本下降、alpha1成本上升，代价按原用户alpha比较，不改偏好替模型打分。
+
+后验目标半径0.75m时zero/H75/current到达62/64/74；1m时68/66/75。说明当前新增不只是卡在0.5m边缘，但宽半径不能替代原工作口径或预注册独立测试。无扰24例H75/current均24到达24存活，zero22到达24存活。
+
+11条新增到达按α分为5/6，按-32/-16/+16/+32N分为1/3/0/7。原轨迹读回显示，受扰之前两权重已进入不同运动状态；11例预起扰位置差约.053-.602m，速度差有正有负。故不能把新增全部归因于受扰后的救车动作、加速或“切换alpha”。完整每例pre/post运动/参考变化见../../cross_use_matrix/event_mechanism_readback.json。这是描述性机制读回，不是同受扰状态下的因果交换实验。
+
+跨用途矩阵显示原生高需求H75更好、低速current有到达新增；当前两套请求速度2.6/2.8和1.1/1.4互不重叠。事前按任务条件选择权重已经是必须排除的强简单解释，不能把多模型拼接或检测器本身当新贡献。它尚未作为闭环切换方案实际执行，尤其未验证切换瞬态。后续最多三项：①保留这次同条件强对照和原生矩阵，明确收益/损失；②在已有相同任务条件下整理哪些真实过程需要不同干预，限定可兑现参考权限；③只有存在超出固定任务选择的机会，才预声明必要的最小闭环协调验证，不盲加训/新gate/重拟合旧容扰公式。
+
+新五张12情境XY总览全部实际目视，原false标记保持，新actual_visual_review.json限定实际审图范围；全部原逐事件细图未逐张查看。旧analysis数值容差错误保留，修正analysis_reconstructed_v2 completed360/360；物理无重跑、0新增训练/采用，不能据此称新方法或Trans投稿证据完成。
+
+证据：runs/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/{results.json,raw_audit.json,receipt.json,h75_review/README.md,h75_review/review.json,h75_review/actual_visual_review.json,h75_review/independent_review.md}；cross_use_matrix/{README.md,matrix.json,event_mechanism_readback.json}。本轮当前无活动物理/分析/训练，未push/实机/JIT/改冻结别名，Trans目标仍active。

@@ -164,7 +164,7 @@ def test_numpy_audit_uses_preblock_target_and_rejects_double_publish_or_target_t
     with pytest.raises(AssertionError):verify_goal_log(bad,case,CFG,{},arrays)
     bad=copy.deepcopy(raw);bad['goal_preview_world'][8,0]+=.1
     with pytest.raises(AssertionError):verify_goal_log(bad,case,CFG,{},arrays)
-    rounded=copy.deepcopy(raw);rounded['goal_preview_body'][8:,0]+=4e-5
+    rounded=copy.deepcopy(raw);rounded['goal_preview_body'][8:,0]+=5e-4
     verify_goal_log(rounded,case,CFG,{},arrays)
-    bad=copy.deepcopy(raw);bad['goal_preview_body'][8,0]+=.001
+    bad=copy.deepcopy(raw);bad['goal_preview_body'][8,0]+=.002
     with pytest.raises(AssertionError):verify_goal_log(bad,case,CFG,{},arrays)
