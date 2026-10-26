@@ -71,3 +71,14 @@ code758e740，prepare完成、38相关CPU测试通过，GPU零积分shape为50×
 下一先把已冻结的几个中层候选放到同样30个事件上，只补候选轨迹并精确复用本90基线；不重训、不改目标或事件、也不重跑基线。若已有权重能提供额外到达/防摔增量，就保留并解释；若仍被简单规则覆盖，再研究任务代价相关的有限参考协调，避免直接追加训练轮数。
 
 数据：[主要结果](../../../../runs/reference_support_new_geometry_v1/analysis/goal_summary.json)、[全部90逐例](../../../../runs/reference_support_new_geometry_v1/analysis/results.csv)、[半径敏感性](../../../../runs/reference_support_new_geometry_v1/goal_sensitivity/summary.csv)、[救回且到达](../../../../runs/reference_support_new_geometry_v1/analysis/paired_004_left80_R1p4_v1p2_a0.png)、[丢失到达](../../../../runs/reference_support_new_geometry_v1/analysis/paired_023_right100_R1p2_v1p5_a0.5.png)。
+
+
+## 三个冻结中层的同事件补评：启动前声明（2026-10-26）
+
+目的：此前新参考对照只测原task64，不能因此断言既有续训权重在新几何无效。本轮将free_GAE、finite_GAE、free_MC的**固定final64**都放入完全相同30事件，不选best、不根据这30事件挑checkpoint。它们来自先前已结束的同起点三臂训练，不构成三独立种子。原任务成功定义和控制仍按本页已封存协议，维持30cm主目标和独立整窗触地。
+
+只新增30事件×3个冻结Actor=90回合，最多180000新lower实际/槽、0optimizer。原/短支持/全程支持90条已完成轨迹全部逐SHA认证后只读复用（171533历史实际、180000历史分配），总比较180逻辑轨迹，不把缓存记成新增仿真。图与分析六角色共同叠加，缓存路径及成本单独记录。新候选不叠加速度支持，profile0、确定性均值动作；路径、完整初态/历史/滤波、原alpha、力幅/方向/时刻/时长和目标与对应原事件逐字段相同。
+
+来源：runs/reference_support_new_geometry_v1的封存事件/路径/90原始轨迹；三个Actor从runs/finite_value_online_v1_recovery55_fixed64_evaluation已认证模型声明读取，重新核native checkpoint、final64 Adam/fingerprint与导出Actor，不修改旧权重。共同环境cfg和父Actor SHA必须相同，缓存只在完整身份一致时复用。40相关CPU测试通过，包括只生成缺失候选、事件不变、缓存哈希/重复身份拒绝及原300协议默认保持。
+
+准备与零积分shape后执行，HDD新root runs/frozen_candidates_new_geometry_v1。数据角色仍DEV，旧90结果已被查看，补评不伪称最终未见测试。完成原90候选或工程错误停止，不自动扩训/重试/更改主阈值或采用。后续按真实目标到达、防摔、名义保留与原alpha成本判断可用权重，不以小样本全部无失败为要求。当前尚未启动实际补评。

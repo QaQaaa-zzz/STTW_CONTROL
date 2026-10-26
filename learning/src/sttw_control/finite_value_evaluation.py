@@ -27,6 +27,23 @@ def confirmation_inventory(protocol, contexts):
     return cases
 
 
+def candidate_extension_cases(source_cases, candidate_roles):
+    """Only missing policies; every event/initial context stays identical."""
+    if set(candidate_roles) != {'free_GAE','finite_GAE','free_MC'}:
+        raise ValueError('all three frozen final64 candidates required')
+    events=[c for c in source_cases if c['role']=='parent_plain']
+    if len(events)!=30 or len({(c['context'],c['alpha'],c['event_id']) for c in events})!=30:
+        raise ValueError('thirty unique declared source events required')
+    rows=[]
+    for event in events:
+        for role in candidate_roles:
+            c=copy.deepcopy(event)
+            c.update(role=role,actor_role=role,mode_index=0,profile=0,causal_support=False,
+                case_id=event['case_id'].rsplit('/',1)[0]+'/'+role)
+            rows.append(c)
+    return rows
+
+
 def rebind_path_context(state, path, speed, env):
     """New task geometry only; retain all physical/lower/history/filter state."""
     import jax.numpy as j

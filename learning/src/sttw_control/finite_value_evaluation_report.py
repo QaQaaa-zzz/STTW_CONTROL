@@ -11,6 +11,31 @@ from .finite_value_evaluation import ROLES,CATEGORIES,paired_report,verify_gate_
 from .preference_best import atomic_json,digest
 
 
+def evaluation_inputs(root,plan):
+    """Read completed new records and an explicitly sealed exact cache."""
+    root=Path(root)
+    declared=json.loads((root/'inventory.json').read_text())['cases']
+    records=json.loads((root/'physical/results.json').read_text())
+    indices=json.loads((root/'physical/case_index.json').read_text())
+    cached_actual=0
+    if plan.get('cached_cases'):
+        cache_file=root/'cache_receipt.json'
+        if digest(cache_file)!=plan['sealed_files'][str(cache_file.resolve())]:
+            raise ValueError('sealed cache receipt changed')
+        cache=json.loads(cache_file.read_text())
+        for field in ['declared','records','indices']:
+            if len(cache[field])!=plan['cached_cases']:raise ValueError('incomplete exact cache')
+        declared+=cache['declared'];records+=cache['records'];indices+=cache['indices']
+        cached_actual=cache['active_lower_ticks']
+    ids=[c['case_id'] for c in declared]
+    expected=plan['declared_cases']+plan.get('cached_cases',0)
+    if len(ids)!=expected or len(set(ids))!=expected or len(records)!=expected or len(indices)!=expected:
+        raise ValueError('unique complete new/cache records required')
+    if {c['case_id'] for c in records}!=set(ids) or {c['case_id'] for c in indices}!=set(ids):
+        raise ValueError('new/cache record identities differ')
+    return declared,records,indices,cached_actual
+
+
 def analyze(root):
     root=Path(root).resolve();state=json.loads((root/'status.json').read_text())
     if state.get('phase')!='completed':
@@ -41,9 +66,8 @@ def analyze(root):
         for context,c in p['contexts'].items():
             if digest(c['path'])!=c['path_sha256']:raise ValueError('original path changed')
             with np.load(c['path'],allow_pickle=False) as z:paths[context]={k:z[k] for k in z.files}
-        declared=json.loads((root/'inventory.json').read_text())['cases']
-        records=json.loads((root/'physical/results.json').read_text())
-        indices=json.loads((root/'physical/case_index.json').read_text())
+        declared,records,indices,cached_actual=evaluation_inputs(root,p)
+        n=p.get('analysis_cases',n)
         ids={c['case_id'] for c in declared}
         if (len(declared)!=n or len(records)!=n or len(indices)!=n or len(ids)!=n
                 or {c['case_id'] for c in records}!=ids or {c['case_id'] for c in indices}!=ids):
@@ -92,7 +116,7 @@ def analyze(root):
             audits.append(dict(case_id=c['case_id'],raw_sha256=item['sha256'],reward_reconstruction=True,
                                physical_label_verified=True,measured_gate_replayed=True))
             if len(rows)%30==0:update(completed_cases=len(rows))
-        if actual!=state['active_lower_ticks']:raise ValueError('actual lower cost accounting mismatch')
+        if actual!=state['active_lower_ticks']+cached_actual:raise ValueError('actual lower cost accounting mismatch')
         summary={name:paired_report(group,roles=roles) for name,group in dict(all=rows,
             nominal=[r for r in rows if not r['force_N']],disturbed=[r for r in rows if r['force_N']]).items()}
         alphas=sorted({r['alpha'] for r in rows})
@@ -115,7 +139,9 @@ def analyze(root):
         if 'goal_radius_m' in p:
             atomic_json(out/'goal_summary.json',goal_report(rows,roles))
         figures=render(out,rows,traces,paths,cfg,goal_radius=p.get('goal_radius_m'))
-        atomic_json(out/'receipt.json',dict(raw_cases=n,fixed_trace_queries=n*5,actual_lower_ticks=actual,
+        atomic_json(out/'receipt.json',dict(raw_cases=n,new_cases=p['declared_cases'],cached_cases=p.get('cached_cases',0),
+            new_actual_lower_ticks=state['active_lower_ticks'],cached_actual_lower_ticks=cached_actual,
+            fixed_trace_queries=n*5,actual_lower_ticks=actual,
             figures=figures,physics_steps=0,optimizer_updates=0,visual_review_complete=False,
             scope=p.get('data_role','Correlated DEV branches, not independent final test.')))
         lines=['# 固定64终点：价值/回报估计器三臂与简单强对照','',
@@ -123,13 +149,13 @@ def analyze(root):
             '|角色|未摔且任务完成|未摔但任务失败|触地|未知|','|---|---:|---:|---:|---:|']
         for role,counts in summary['all']['role_counts'].items():lines.append('|'+role+'|'+'|'.join(str(counts[k]) for k in CATEGORIES)+'|')
         if 'goal_radius_m' in p:
-            lines=['# 新几何低速：三种参考支持的固定90轨迹对照','',
+            lines=[f'# 新几何低速：冻结策略与参考支持的{n}轨迹对照','',
                 '主要任务为进入原目标30cm区域，不要求末段保持。整窗触地和旧严格跟踪指标另存，不作主要任务门槛。','',
                 '|角色|目标到达|整窗未触地|触地|到达未知|','|---|---:|---:|---:|---:|']
             for role,counts in goal_report(rows,roles)['all']['counts'].items():
                 lines.append(f"|{role}|{counts['arrived']}|{counts['survived']}|{counts['contact']}|{counts['unknown']}|")
         lines+=['','配对新增/丢失、原alpha成本与自身zero变化分别保存；未知不按失败或成功填补。',
-                '三种参考支持使用同一父Actor；goal_summary为主要到达指标，旧严格跟踪仅作诊断。' if 'goal_radius_m' in p else
+                '模型与参考模式按封存身份分别报告；goal_summary为主要到达指标，旧严格跟踪仅作诊断。' if 'goal_radius_m' in p else
                 '结构/估计器比较同时改变优化条件，MC也改变优势目标；不能据单一曲线归因或称首次创新。',
                 '全部实际XY、20ms奖励/累计奖励及逐分量/累计分量已导出，轨迹在真实终点截止。',
                 '后续裁决看目标到达、整窗防摔、名义保留及原alpha代价；旧末段保持不作新任务门槛。' if 'goal_radius_m' in p else

@@ -25,6 +25,45 @@ def test_ninety_cases_share_every_event_across_three_controls():
         assert common(group[0])==common(group[1])==common(group[2])
 
 
+def test_candidate_extension_adds_only_missing_policies_with_identical_events():
+    from sttw_control.finite_value_evaluation import candidate_extension_cases
+    protocol=dict(seed=2631,alphas=[0.,.5,1.],forces_N=[0.,-16.,16.,-32.,32.],
+                  onset_upper_tick_range=[140,241],pulse_duration_s=.1)
+    contexts={name:dict(speed_m_s=speed,world_direction=[0.,1.,0.]) for name,speed in [('left',1.2),('right',1.5)]}
+    original=confirmation_inventory(protocol,contexts)
+    candidates=candidate_extension_cases(original,['free_GAE','finite_GAE','free_MC'])
+    assert len(candidates)==90
+    assert not {c['case_id'] for c in candidates}&{c['case_id'] for c in original}
+    byevent={(c['context'],c['alpha'],c['event_id']):c for c in original if c['role']=='parent_plain'}
+    for c in candidates:
+        baseline=byevent[c['context'],c['alpha'],c['event_id']]
+        assert c['mode_index']==0 and c['profile']==0 and not c['causal_support']
+        for key in ['force_N','world_direction','pulse_onset_task_tick','pulse_duration_s','requested_speed_m_s']:
+            assert c[key]==baseline[key]
+
+
+def test_exact_cache_join_is_unique_and_immutable(tmp_path):
+    import json
+    import pytest
+    from sttw_control.finite_value_evaluation_report import evaluation_inputs
+    from sttw_control.preference_best import digest
+    (tmp_path/'physical').mkdir()
+    for file,value in [('inventory.json',dict(cases=[dict(case_id='new')])),
+                       ('physical/results.json',[dict(case_id='new')]),
+                       ('physical/case_index.json',[dict(case_id='new')])]:
+        (tmp_path/file).write_text(json.dumps(value))
+    cache=tmp_path/'cache_receipt.json'
+    payload=dict(declared=[dict(case_id='old')],records=[dict(case_id='old')],indices=[dict(case_id='old')],active_lower_ticks=123)
+    cache.write_text(json.dumps(payload))
+    plan=dict(declared_cases=1,cached_cases=1,sealed_files={str(cache.resolve()):digest(cache)})
+    d,r,i,cost=evaluation_inputs(tmp_path,plan)
+    assert len(d)==len(r)==len(i)==2 and cost==123
+    payload['declared'][0]['case_id']='new';cache.write_text(json.dumps(payload))
+    with pytest.raises(ValueError,match='cache receipt changed'):evaluation_inputs(tmp_path,plan)
+    plan['sealed_files'][str(cache.resolve())]=digest(cache)
+    with pytest.raises(ValueError,match='unique'):evaluation_inputs(tmp_path,plan)
+
+
 def test_rebind_changes_only_task_projection_and_preview():
     @dataclasses.dataclass(frozen=True)
     class State:

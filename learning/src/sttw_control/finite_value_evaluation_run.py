@@ -16,6 +16,87 @@ from .finite_value_evaluation import endpoint_records, evaluation_inventory, mak
 from .preference_best import atomic_json, digest
 
 
+def prepare_candidate_extension(root, *, source, candidates):
+    """Supplement frozen candidates only, retaining the completed90 baseline."""
+    from .finite_value_evaluation import candidate_extension_cases, ROLES
+    root=Path(root).resolve();source=Path(source).resolve();candidates=Path(candidates).resolve()
+    old=json.loads((source/'plan.json').read_text());bank=json.loads((candidates/'plan.json').read_text())
+    for directory in [source,candidates]:
+        if json.loads((directory/'status.json').read_text())['phase']!='completed':
+            raise ValueError('completed source evaluations required')
+        if digest(directory/'plan.json')!=json.loads((directory/'prelaunch_receipt.json').read_text())['plan_sha256']:
+            raise ValueError('source declaration changed')
+    for file,expected in {**old['sealed_files'],**bank['sealed_files']}.items():
+        if digest(file)!=expected:raise ValueError('sealed source input changed')
+    if digest(source/'common_environment_config.json')!=digest(candidates/'common_environment_config.json'):
+        raise ValueError('candidate environment/config differs from reference source')
+    if old['models']['parent_plain']['actor_sha256']!=bank['models']['parent_plain']['actor_sha256']:
+        raise ValueError('candidates and reference controls have different parent policies')
+    module=Path(__file__).parent
+    runtime=['anticipatory_reference.py','live_path_continuation.py','path_command_env.py',
+        'path_reference.py','path_command_reward.py','closed_loop_kernel.py','teleop_env.py',
+        'actuator.py','controller.py','direct_command_policy.py','path_command_policy.py','reference_reserve_gate.py']
+    for name in runtime:
+        if digest(module/name)!=old['source_sha256'][str((module/name).resolve())]:
+            raise ValueError('changed frozen control runtime')
+    core=lambda file:next(ast.dump(n,include_attributes=False) for n in ast.parse(file.read_text()).body
+        if isinstance(n,ast.FunctionDef) and n.name=='make_evaluation_step')
+    if core(module/'finite_value_evaluation.py')!=core(source/'source_at_launch/learning/src/sttw_control/finite_value_evaluation.py'):
+        raise ValueError('changed evaluation control kernel')
+    roles=['free_GAE','finite_GAE','free_MC'];models={r:bank['models'][r] for r in roles}
+    cfg=json.loads((source/'common_environment_config.json').read_text());authenticate_models(cfg,models)
+    original=json.loads((source/'inventory.json').read_text())['cases']
+    cases=candidate_extension_cases(original,roles)
+    records=json.loads((source/'physical/results.json').read_text());indices=json.loads((source/'physical/case_index.json').read_text())
+    ids={c['case_id'] for c in original}
+    if len(original)!=90 or len(records)!=90 or len(indices)!=90 or len(ids)!=90 or ids!={c['case_id'] for c in records} or ids!={c['case_id'] for c in indices}:
+        raise ValueError('complete90 source records required')
+    byid={c['case_id']:c for c in records}
+    if any(any(byid[c['case_id']][k]!=v for k,v in c.items()) for c in original):
+        raise ValueError('cached event metadata differs from original declaration')
+    for item in indices:
+        file=(source/item['file']).resolve()
+        if digest(file)!=item['sha256']:raise ValueError('cached raw trajectory changed')
+        item['file']=str(file)
+    root.mkdir(exist_ok=False)
+    from prepare_short_recovery_campaign import register
+    atomic_json(root/'prepare_status.json',dict(phase='running',pid=os.getpid()))
+    register(root/'ACTIVE_PREPARE.json','STTW_CONTROL 冻结中层同事件补评准备',root/'prepare_status.json')
+    try:
+        for name in ['common_environment_config.json','source_declaration.json','protocol.json']:
+            shutil.copyfile(source/name,root/name)
+        source_status=json.loads((source/'status.json').read_text())
+        cache=dict(source_run=str(source),source_plan_sha256=digest(source/'plan.json'),
+            declared=original,records=records,indices=indices,
+            active_lower_ticks=source_status['active_lower_ticks'],allocated_lower_slots=source_status['allocated_lower_slots'])
+        atomic_json(root/'cache_receipt.json',cache)
+        atomic_json(root/'inventory.json',dict(cases=cases));atomic_json(root/'authenticated_models.json',models)
+        files=list(module.glob('*.py'))+[Path('learning/cli/evaluate_finite_value.py')]
+        sources={str(f.resolve()):digest(f) for f in files}
+        for file in files:
+            dest=root/'source_at_launch'/file.resolve().relative_to(Path.cwd());dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,dest)
+        plan=dict(project='STTW_CONTROL',experiment='frozen_candidate_reference_extension',
+            models=models,contexts=old['contexts'],evaluation_roles=list(ROLES),declared_cases=90,new_cases=90,cached_cases=90,analysis_cases=180,
+            maximum_active_lower_ticks=180000,maximum_allocated_lower_slots=180000,optimizer_updates=0,
+            horizon_s=10.,lower_dt_s=.005,goal_radius_m=old['goal_radius_m'],task_rule=old['task_rule'],
+            endpoint_receipt=str(candidates/'authenticated_models.json'),endpoint_receipt_sha256=digest(candidates/'authenticated_models.json'),
+            source_reference_run=str(source),candidate_source=str(candidates),
+            cached_active_lower_ticks=cache['active_lower_ticks'],cached_allocated_lower_slots=cache['allocated_lower_slots'],
+            sealed_files={str(root/name):digest(root/name) for name in ['inventory.json','cache_receipt.json','authenticated_models.json','common_environment_config.json','source_declaration.json','protocol.json']},
+            source_sha256=sources,code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            data_role='Supplement three frozen final64 candidates on the SAME30 new-geometry DEV events; exact90 reference trajectories reused, not independent repeats.',
+            information=old['information'],initialization=old['initialization'],
+            stop='Only90 missing candidate episodes; no training/baseline rerun/checkpoint selection/threshold tuning/automatic retry/model adoption.')
+        atomic_json(root/'plan.json',plan);atomic_json(root/'prelaunch_receipt.json',dict(plan_sha256=digest(root/'plan.json')))
+        atomic_json(root/'status.json',dict(phase='prepared',declared_cases=90,completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+        register(root/'ACTIVE_RUN.json','STTW_CONTROL 三冻结中层同事件90补评',root/'status.json')
+        register(root/'ACTIVE_SHAPE.json','STTW_CONTROL 三冻结中层90路shape',root/'shape/status.json')
+        atomic_json(root/'prepare_status.json',dict(phase='completed',pid=os.getpid(),physics_steps=0,optimizer_updates=0))
+    except BaseException as exc:
+        (root/'prepare_traceback.txt').write_text(traceback.format_exc())
+        atomic_json(root/'prepare_status.json',dict(phase='error',error=repr(exc),pid=os.getpid()));raise
+
+
 def prepare_reference_confirmation(root, *, source, protocol_file):
     """Reuse the parent and execution kernel; only declare new task geometries."""
     from .geometric_path import build_path
