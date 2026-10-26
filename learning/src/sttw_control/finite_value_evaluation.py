@@ -182,7 +182,8 @@ def paired_report(rows, *, roles=ROLES):
     from .reference_task_feedback import PROBE_ROLES
     from .nominal_reference_feedback import NOMINAL_ROLES
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
-    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)
+    from .zero_middle_feedback import ZERO_ROLES
+    PROBE_ROLES=PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES
     if not roles or not set(roles) <= set(ROLES+PROBE_ROLES):
         raise ValueError('known evaluation roles required')
     groups = {}; counts = {role:{cat:0 for cat in CATEGORIES} for role in roles}
@@ -205,6 +206,8 @@ def paired_report(rows, *, roles=ROLES):
     contrasts += [(role,'free_GAE') for role in PROBE_ROLES]
     contrasts += [('finite_GAE','free_GAE'),('finite_GAE','free_MC'),('free_MC','free_GAE'),
                   ('parent_causal','parent_plain'),('parent_support','parent_plain')]
+    contrasts += [('free_GAE','zero_middle'),('feedback_010','zero_middle_feedback'),
+                  ('zero_middle_feedback','zero_middle')]
     contrasts = [(a,b) for a,b in contrasts if a in roles and b in roles]
     comparisons={}
     for target,baseline in contrasts:

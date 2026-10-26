@@ -827,3 +827,22 @@ free反馈对同Actor的48个事件：原任务受力前位置间距平均0.291m
 下一研究问题是用真实有限参考权限协调原alpha任务代价与到达/防摔，而非再次证明一个更宽松标签变好。先裁决是否值得做同完整状态历史的前缀/后缀机制对照；没有这项干预不能把本次离线相减包装为机制证明。若开发新方法，必须相对当前固定反馈强对照检验，成本作为取舍曲线报告；不凭本次诊断直接推出一个新gate或额外训练。当前无新仿真/训练运行，0新增物理步/optimizer，Transactions目标未完成，未push/实机。
 
 XY沿用上一节已核查的四全景（新任务全部240分支）：analysis/all_xy_left55_R1p8_v1p1__bank2.png、bank4对应图，以及all_xy_right120_R1p6_v1p4__bank2.png、bank4对应图；未重新生成或改变轨迹。
+
+
+## 神经中层存在性×固定反馈：缺失强对照预声明（2026-10-26）
+
+**问题/目的**：当前父/续训Actor都包含神经中层，只证明两权重有差别，尚未排除“原名义follower＋普通参考反馈＋既有短支持”已覆盖大部分收益。先检验学习中层在同反馈下是否仍有实际到达/整窗防摔/原alpha任务取舍增量，再决定做前缀后缀机制还是新方法；成本不作到达否决门槛。
+
+**候选产生与裁决记录**：scientific-brainstorming用于AI独立生成及非发起人反审。评价顺序事前定义为直接填补核心归因缺口、结论能改变下一行动、可复用程度、混杂/实现可行性；不编造数字评分或AI共识证明。root独立提出R1零中层强对照、R2可观测地标前后机制；独立agent提出I1首受力前后特权2×2、I2两参考通道留出。互见后反审认可先R1：机制分解可以解释反馈，但不能先排除普通控制已覆盖收益。I1/I2/R2均保留为后置提案，未实施、不当作事实。独立AI审查代表方法与实现视角，不代替作者/外部同行。
+
+技能引用沿本报告Kassis, Agarwal, He, Patel & Brueckner (2026), Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents, DOI https://doi.org/10.48550/arXiv.2609.00065；本轮实际核对arXiv当前v2（2026-09-02），未发现期刊版。仅访问公开书目，未向外部服务传本研究数据。
+
+**固定设计**：使用已完成feedback_geometry_transfer_v1的两个新任务、bank2/4完整起点、alpha0/.5/1、同0及±16/±32N/0.1秒/同世界方向及起扰时刻、原10秒。四臂为zero_middle、free_GAE、zero_middle_feedback、feedback_010，反馈增益只0/.10。新增前两种zero源组合120完整回合（每方法48受扰12zero），精确认证复用native两方法120，不重跑四组。新增最多240000实际lower ticks/分配槽，0optimizer；缓存历史实际步/240000槽另列。相关DEV分支，不独立训练重复或未触及测试。
+
+**权限与实现**：新SourceActor共用source_latent选择器，参数actor_source_zero=true时两维源latent严格零；仍认证同一free权重以保持树结构，并记录其native输出，仅不让其输出参与这两臂控制。没有零化权重、清carry/历史、改lower_alpha或关掉follower/local300。速度短支持和16clean-block重入同所有臂。zero没有上层alpha选择能力，仍按用户原alpha目标打分，不替它挑alpha或要求它显出偏好。原original_actor_latent继续指真实native网络；source_actor_latent记录实际反馈前零/native源，反馈输出和issued另列；独立verifier同时核零源和原feedback映射/权限。原make_feedback_evaluation_step及物理kernel不变，仅新plan显式opt-in包装。
+
+**待检验预测**：若同反馈下zero与free大致覆盖相同到达/存活，当前面板不支持大幅增益来自神经中层，收缩学习机制主张并保留实用系统成果；若free有明确逐例新增或更好的任务取舍，则保留具体学习策略价值，但尚不能归因freeGAE算法/协同机理/所有训练。zero无扰失败也只说明网络可能对名义任务有用，不自动证明抗扰协调。
+
+**汇总**：四个主对比free对zero、free反馈对zero反馈、zero反馈对zero、free反馈对free，逐例到达新增/丢失、整窗不摔、新增触地、原alpha成本及自身zero变化分列；保留0.1/.2/.3/.5m敏感性、全XY/每步和累计奖励。成本比较报告观察窗与双方存活子集，不以早触地低成本获胜。小速度差不设新失败门槛。
+
+**停止/去留**：只运行固定缺失120或工程错误即停；不据结果加gain/门槛/路线/支持策略/训练，也不改已采用模型指针。若zero覆盖则先收缩学习方法claim，不无限续训找正例；若有增量，再决定机制验证。当前源码接线反审提前发现认证role不匹配、汇总/绘图白名单缺zero及同反馈配对遗漏，均在prepare/物理前修复，未产生失败仿真。30CPU通过含JIT/vmap零源、接口零偏移、原事件/权限不变、源日志泄漏拒绝、四因子配对。GPU全链与物理收益仍PENDING。原全局失败手册/AGENTS路径本轮再次确认不存在；复用已有STTW Bark注册，email/autofix不启，不因此阻止已授权仿真。无push/实机。

@@ -85,7 +85,10 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
-            if p.get('initial_state_confirmation'):
+            if 'actor_source_zero' in c:
+                from .zero_middle_feedback import verify_zero_middle
+                verify_zero_middle(raw,c,cfg,p['feedback_spec'])
+            elif p.get('initial_state_confirmation'):
                 from .nominal_initial_confirmation import verify_initial_feedback
                 verify_initial_feedback(raw,c,cfg,p)
             elif 'feedback_kind' in c:
@@ -184,7 +187,8 @@ def role_labels(rows):
     for row in rows:
         label=row['role']
         if row.get('feedback_gain_rad',0)>0:
-            actor_label='parent task_only64' if row['role']=='parent_feedback_010' else 'free_GAE'
+            actor_label=('zero neural middle' if row.get('actor_source_zero') else
+                         'parent task_only64' if row['role']=='parent_feedback_010' else 'free_GAE')
             label=f"{actor_label} + steering {row['feedback_gain_rad']:g}rad"
         if row.get('feedback_kind')==1:label='free_GAE + nominal-deviation feedback 0.1rad'
         if row.get('feedback_kind')==2:label='free_GAE + existing-gate feedback 0.1rad'
@@ -211,14 +215,16 @@ def goal_report(rows,roles):
         pairs={}
         groups={}
         for row in group:groups.setdefault((row['context'],row['alpha'],row['event_id']),{})[row['role']]=row
-        for role in roles:
-            if role==baseline:continue
+        contrasts=[(role,baseline) for role in roles if role!=baseline]
+        if 'zero_middle_feedback' in roles:
+            contrasts += [('feedback_010','zero_middle_feedback'),('feedback_010','free_GAE')]
+        for role,base in contrasts:
             gain=loss=unknown=0
             for cell in groups.values():
-                a,b=cell[baseline]['goal_arrived'],cell[role]['goal_arrived']
+                a,b=cell[base]['goal_arrived'],cell[role]['goal_arrived']
                 if a is None or b is None:unknown+=1
                 else:gain+=b and not a;loss+=a and not b
-            pairs[role+'_vs_'+baseline]=dict(arrival_gains=gain,arrival_losses=loss,unknown=unknown)
+            pairs[role+'_vs_'+base]=dict(arrival_gains=gain,arrival_losses=loss,unknown=unknown)
         result[split]=dict(counts=counts,paired=pairs)
     return result
 
@@ -232,7 +238,8 @@ def render(out,rows,traces,paths,cfg,*,goal_radius=None):
     from .reference_task_feedback import PROBE_ROLES
     from .nominal_reference_feedback import NOMINAL_ROLES
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)
+    from .zero_middle_feedback import ZERO_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     styles=dict(zip(used_roles,[':', '-.', ':', '--', '-', '-.','--','-']))
@@ -318,7 +325,8 @@ def render_tradeoff(out,rows,*,context_count,goal_radius=None):
     from .reference_task_feedback import PROBE_ROLES
     from .nominal_reference_feedback import NOMINAL_ROLES
     from .nominal_table_ablation import SHARED_ROLE,PARENT_ROLE
-    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)
+    from .zero_middle_feedback import ZERO_ROLES
+    available=ROLES+PROBE_ROLES+NOMINAL_ROLES+(SHARED_ROLE,PARENT_ROLE)+ZERO_ROLES
     used_roles=[role for role in available if any(r['role']==role for r in rows)]
     colors=dict(zip(used_roles,['#0072B2','#E69F00','#CC79A7','#009E73','#D55E00','#56B4E9','#000000','#999999']))
     labels_by_role=role_labels(rows)
