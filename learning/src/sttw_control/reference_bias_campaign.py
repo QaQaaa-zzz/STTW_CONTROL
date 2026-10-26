@@ -82,11 +82,24 @@ def execute(root):
     from .reference_bias_runtime import BiasRuntime
     root=Path(root).resolve();out=root/'production';status_file=out/'status.json'
     previous=json.loads(status_file.read_text())
-    if previous['phase']!='prepared':raise ValueError('one prepared production only; no automatic restart')
+    recovery_file=out/'recovery_binding.json'
+    recovery=json.loads(recovery_file.read_text()) if recovery_file.exists() else None
+    if previous['phase']!='prepared' and not (previous['phase']=='error' and recovery):
+        raise ValueError('one prepared production or explicitly raw-recovered audit error only')
     contract=json.loads((out/'contract.json').read_text())
     if not contract.get('production_ready'):raise ValueError('production implementation not ready')
     if digest(out/'contract.json')!=json.loads((out/'seal.json').read_text())['contract_sha256']:raise ValueError('contract changed')
-    for file,sha in contract['source_sha256'].items():
+    sources=dict(contract['source_sha256'])
+    if recovery:
+        if recovery['original_contract_sha256']!=digest(out/'contract.json'):
+            raise ValueError('recovery belongs to another contract')
+        if previous!=recovery['original_status']:raise ValueError('recovery error identity changed')
+        if previous['completed_searches'] or previous['evaluation_cases'] or previous['recorded_physical_batches']!=1:
+            raise ValueError('only the single completed first physical batch may be recovered')
+        for file,change in recovery['source_changes'].items():
+            if change['old_sha256']!=sources.get(file):raise ValueError('source ancestry changed')
+            sources[file]=change['new_sha256']
+    for file,sha in sources.items():
         if digest(file)!=sha:raise ValueError('production source changed '+file)
     for file,key in [('plan.json','parent_plan_sha256'),('search_inventory.json','search_inventory_sha256'),('evaluation_events.json','event_inventory_sha256')]:
         if digest(root/file)!=contract[key]:raise ValueError('original declaration changed')
@@ -105,7 +118,10 @@ def execute(root):
         runtime=BiasRuntime(root)
         searches=json.loads((root/'search_inventory.json').read_text());events=json.loads((root/'evaluation_events.json').read_text());selected=[]
         for index,search in enumerate(searches):
-            job=out/'searches'/f'search_{index:02d}';job.mkdir(parents=True,exist_ok=False)
+            job=out/'searches'/f'search_{index:02d}'
+            if index==0 and recovery:
+                if json.loads((job/'search.json').read_text())!=search:raise ValueError('recovered search identity changed')
+            else:job.mkdir(parents=True,exist_ok=False)
             atomic_json(job/'search.json',search);all_rows=[];generation=0
             nominal=next(e for e in events if e['context']==search['context'] and e['alpha']==search['alpha'] and e['force_N']==0)
             def evaluate(vectors):

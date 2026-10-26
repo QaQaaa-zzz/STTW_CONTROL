@@ -36,7 +36,7 @@ def score_raw(raw, case, config, path, *, targets=None, positions=None, feedback
     from .survival_endpoint_task_metrics import goal_arrival_metrics
     from .preference_trace_rescore import rescore_trace_alpha
     from .finite_value_evaluation import verify_gate_log
-    from .reference_bias_optimization import verify_bias_log
+    from .reference_bias_float32_audit import verify_bias_log
     active=np.asarray(raw['active_tick'],bool)
     outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
     if targets is not None:
@@ -98,7 +98,20 @@ class BiasRuntime:
         from .reference_bias_optimization import bias_targets
         from .evaluation_clock import physical_pulse
         from .anticipatory_run import flatten_ticks
-        out=Path(directory);out.mkdir(parents=True,exist_ok=False)
+        out=Path(directory)
+        if (out/'audit_recovery.json').exists():
+            receipt=json.loads((out/'audit_recovery.json').read_text())
+            inventory=json.loads((out/'inventory.json').read_text())
+            if inventory['cases']!=cases or not np.array_equal(inventory['vectors'],vectors):
+                raise ValueError('recovery cannot reuse different candidate identities')
+            if digest(out/'results.json')!=receipt['results_sha256']:
+                raise ValueError('recovered scores changed')
+            rows=json.loads((out/'results.json').read_text())
+            if len(rows)!=len(cases):raise ValueError('incomplete recovered batch')
+            for row in rows:
+                if digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('recovered raw changed')
+            return rows
+        out.mkdir(parents=True,exist_ok=False)
         n=batch_size(cases,vectors)
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         states=[self.origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
