@@ -1,0 +1,10 @@
+{
+  "schema": "fixed_weak_feedback_real_initial_v1",
+  "executed_alphas": [0.0, 0.5, 1.0],
+  "feedback_gain_rad": 0.05,
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "hypothesis": "A pre-existing weak constant feedback may explain the nominal-table cost/outcome tradeoff without a profile. If it covers that benefit, simplify the method; its failure alone does not prove alpha-specific novelty.",
+  "intervention": "Only reduce feedback_010 constant steering gain from .10 to .05. All original three Actor alphas, physical bank2/4 starts, events, frozen lower, short support and reference permissions stay unchanged.",
+  "stop": "60 new episodes (48 disturbed,12 nominal), exact300 cached controls, analysis360. No intermediate gain sweep, profile fitting, training, automatic retry or adoption."
+}

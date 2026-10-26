@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from sttw_control.nominal_table_ablation import nominal_profile_key,shared_cases
+from sttw_control.nominal_table_ablation import nominal_profile_key,shared_cases,weak_feedback_cases
 
 
 def inputs():
@@ -43,3 +43,24 @@ def test_no_midpoint_repeats_or_posthoc_profile_gain_threshold_choices():
         wrong=copy.deepcopy(p);wrong[key]=value
         with pytest.raises(ValueError):shared_cases(source,wrong)
     with pytest.raises(ValueError):shared_cases(source[:-1],p)
+
+
+def test_weak_feedback_preserves_full_alpha_events_and_only_changes_gain():
+    _,source=inputs()
+    for row in source:
+        row.update(role='feedback_010',feedback_kind=3,
+                   case_id=row['case_id'].replace('feedback_nominal','feedback_010'))
+    original=copy.deepcopy(source)
+    protocol=json.loads((Path(__file__).parents[1]/'configs/weak_feedback_confirmation.json').read_text())
+    cases=weak_feedback_cases(source,protocol)
+    assert len(cases)==60 and source==original
+    assert sum(not row['force_N'] for row in cases)==12
+    assert set(row['alpha'] for row in cases)=={0.,.5,1.}
+    for before,after in zip(source,cases):
+        assert after['feedback_gain_rad']==.05 and after['role']=='feedback_005'
+        for key in before:
+            if key not in ['case_id','role','feedback_gain_rad']:assert after[key]==before[key]
+    for key,value in [('feedback_gain_rad',.075),('executed_alphas',[0.,1.]),('goal_radius_m',.6)]:
+        wrong=copy.deepcopy(protocol);wrong[key]=value
+        with pytest.raises(ValueError):weak_feedback_cases(source,wrong)
+    with pytest.raises(ValueError):weak_feedback_cases(source[:-1],protocol)
