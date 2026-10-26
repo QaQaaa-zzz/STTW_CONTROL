@@ -51,6 +51,9 @@ def review(root,output):
     if 'preference_speed_authority' in roles:
         targets+=['preference_speed_authority']
         baselines+=['steer_only_feedback']
+    if 'goal_full_feedback' in roles:
+        targets+=['goal_zero_feedback','goal_steer_feedback','goal_full_feedback']
+        baselines+=['zero_middle_feedback','steer_only_feedback','goal_zero_feedback','goal_steer_feedback']
     for target in targets:
         for baseline in baselines:
             if target==baseline or target not in roles or baseline not in roles:continue
