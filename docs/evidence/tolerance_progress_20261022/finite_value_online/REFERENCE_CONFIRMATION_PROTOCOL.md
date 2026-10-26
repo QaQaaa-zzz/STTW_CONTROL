@@ -1540,3 +1540,6 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 原4测试加分析eligibility回归，共5CPU actual passed .64s，覆盖共同前缀触地保留、只在eligible子集去除、无名义样本明示0/None、三支eligibility不一致拒绝。额外只读一条历史full-current raw的API preflight：原gate/goal/ownreward重建、几何/目标/成本合并接口通过，analysis_preflight_receipt记录source raw SHA/脚本SHA及0新物理；它不是新分支控制结果。已完成shape(50,120,4)/(50,360,4)原样保持，无重复积分。
 
 生产dispatch.py封存既有shape后一次execute→analyze；completion_pipeline_identity.json锁定新分析/driver SHA，原plan/config/models/source文件不改。复用register与显式中文Bark物理结束/分析结束/报错；失败原位停止，不自动重试/扩训/扩mask库。所有新raw在HDD，系统盘65GiB/GPU空余23435MiB，未停止其它任务。当前仍prepared/最终PENDING，登记后启动固定driver；无新算法采用、push/JIT/实机。
+
+
+实际启动：session46950，controller2916365/execute2916367本轮/proc live；dispatch execute，status authenticating/0lower/0completed，最终360结局PENDING。源封存protocol/model/actual与allocated公式不变，0训练，不重复已完成shape。后续沿同原handle事件回收/低频，不因观察超时重启；固定物理→只读分析及中文Bark已接入，失败保存停止。当前该任务唯一新活动物理，无模型采用/push/JIT/实机动作。
