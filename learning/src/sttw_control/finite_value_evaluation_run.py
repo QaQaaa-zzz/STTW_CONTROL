@@ -430,6 +430,11 @@ def execute(root, *, shape_only=False):
             from .reference_task_feedback import make_feedback_evaluation_step
             one=make_feedback_evaluation_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['feedback_spec'])
         else:one=make_evaluation_step(env,make_path_actor(cfg),horizon_s=10.)
+        if p.get('passive_sensor_probe'):
+            from .causal_reference_baseline import validate_causal_contract
+            from .passive_sensor_probe import attach_sensor_log
+            validate_causal_contract(cfg,env.plant_spec['network']['frame_fields'])
+            one=attach_sensor_log(one,env,horizon_s=10.)
         @jax.jit
         def chunk(carry,parameters,batch_paths,speeds,pulses,modes):
             return jax.lax.scan(lambda st,_:jax.vmap(one)(st,parameters,batch_paths,speeds,pulses,modes),carry,None,length=50)

@@ -1297,3 +1297,18 @@ Scientific-brainstorming非发起人只读预启动反审无状态/阶段/报告
 结论与去留：放松末段条件确实恢复了大量名义任务的到达证据，既有权重继续保留；受扰物理信用存在2/40点目标随机到达和4/40原截面线索，但仍只有原小情境/单训练对/相关alpha与噪声draw，速度下限覆盖存活总数，不能据此认定新机制普遍胜出或自动复活64物理信用扩训。旧任务到达与新圆定义分开，当前近期主面板50cm/10s工作口径不事后改成另一种定义。与最新720阶段机制的控制规则/情境不同，不合并总成功率，也不把后者收益归给旧physical_credit。
 
 新证据在runs/online_survival_endpoint_evaluation_v2/goal_arrival_relaxed_v1/{results.json,summary.csv,paired_changes.csv,receipt.json,reference_identity_audit.json,task_rule_relationship.json}；12张XY概览覆盖全部488，物理确定左右受扰两张和新名义右2.75一张已实际目视，其余9张含320随机轨迹未逐图看，visual_review_partial.json明确范围，原逐例奖励/累计/分量图继续链接../figures/INDEX.md。无新远端、实机或另一项目操作。
+
+
+### 缺失ESO遥测的被动补录：执行前合同
+
+本轮先查既有720日志和源码：profile0分支的gate_signal全NaN、gate_detected/override全false，表示未启用该检测链，不能据此认定旧ESO信号没有越阈值。实际Actor已有351D历史观测，但原raw未保留此ESO字段，不能从roll等字段伪造完整观测。
+
+问题：旧固定ESO差分阈值能否在原零神经强基线上给出有用的首次事件时序？本轮只补数据，不执行检测后动作/新gate，也不以“仅后段神经”的特权结果当部署收益。固定runs/passive_sensor_probe_v1：原12完整进入context×alpha.5×F0±16±32N/.1s=60条，使用全部对应事件/原onset，零神经通道、固定反馈.1、短支持、goal、滤波/权限及local300不变。原task0/physical1020完整carry不清，不拼接状态。60全为新积分记录，最多120000lower实际/槽，0训练；旧60不冒称新增重复或独立TEST。
+
+新增纯observation读取得到决策前最新/前一帧ESO、归一化差分和历史有效性，四个字段只附加日志，不进入advance、carry、gate或动作。数值每20ms读取并重复到四个5ms行，不当200Hz独立测量。实际351D/16×20/.02s与ESO字段名称/scale由原validate_causal_contract核；17原runtime SHA及五核心AST、同Actor/全部初态和路径身份先认证。无新精确重放门槛，不因微小批次差异重跑。
+
+后处理只用旧THRESHOLD=.015（归一化ESO位移历史，scale.3rad，不是牛顿或原始rad），在active50Hz且actor_action_valid与历史valid时算首次越阈值锁存；整回合不按已知力重置。报告无扰越阈值、受扰前首次锁存、力后延迟/从未锁存。真实力/时刻只用于事后标注，不进入信号；不扫描阈值，不把离线信号可用性等同切换后控制收益。只有alpha.5/相关DEV，不能扩大为各偏好或独立复现结论。
+
+Scientific-brainstorming非发起人只读实现审查无控制/prepare接线阻断，强调history_valid不等动作权限；review_passive_sensor已结合原actor_action_valid、active与50Hz边界。5相关CPU实际passed .61s，包括纯日志wrapper不改advance参数/输出/原gate字段；非GPU验证。新增补录与旧关闭gate路线不同在于不执行任何检测补偿，不能借此复活旧阈值/动作搜索。
+
+当前prepare/shape/实际均未启动、结果PENDING。先认证→shape→单次60实际→原raw/任务/XY审核→固定阈值只读时序，工程错保留停/Bark不自动重试。系统盘65GiB，原数据写HDD；目前无新采用Actor/训练/远端/JIT/实机操作。
