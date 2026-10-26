@@ -172,7 +172,8 @@ def verify_gate_log(raw, case):
     later=ticks[ticks>0]
     np.testing.assert_allclose(raw['relay_input_roll_rate'][later],raw['phi_dot'][later-1],atol=2e-6,rtol=2e-5)
     repeated=np.repeat(np.asarray(evaluation_profile(mode,gate)),4)
-    expected=np.zeros_like(raw['relay_profile']);expected[:len(repeated)]=repeated
+    # Contact may truncate the final four-tick policy block.
+    expected=np.zeros_like(raw['relay_profile']);n=min(len(expected),len(repeated));expected[:n]=repeated[:n]
     np.testing.assert_array_equal(raw['relay_profile'][active],expected[active])
 
 

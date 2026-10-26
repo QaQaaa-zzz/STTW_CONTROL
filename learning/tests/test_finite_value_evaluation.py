@@ -111,6 +111,11 @@ def test_gate_audit_checks_real_prior_measurement_and_profile(mode):
     verify_gate_log(raw,dict(mode_index=mode))
     padded={k:np.concatenate([v,np.zeros(4,dtype=v.dtype)]) for k,v in raw.items()}
     verify_gate_log(padded,dict(mode_index=mode))
+    # Preserve real contact-ending traces with a partial final policy block.
+    truncated={k:v[:6] for k,v in raw.items()}
+    verify_gate_log(truncated,dict(mode_index=mode))
+    corrupted={k:v.copy() for k,v in truncated.items()};corrupted['relay_profile'][-1]=3
+    with pytest.raises(AssertionError):verify_gate_log(corrupted,dict(mode_index=mode))
     raw['relay_profile'][4]=3
     with pytest.raises(AssertionError):verify_gate_log(raw,dict(mode_index=mode))
 

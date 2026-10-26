@@ -1543,3 +1543,25 @@ prepare session25709实际exit0，认证264cache、四历史权重按原frozen r
 
 
 实际启动：session46950，controller2916365/execute2916367本轮/proc live；dispatch execute，status authenticating/0lower/0completed，最终360结局PENDING。源封存protocol/model/actual与allocated公式不变，0训练，不重复已完成shape。后续沿同原handle事件回收/低频，不因观察超时重启；固定物理→只读分析及中文Bark已接入，失败保存停止。当前该任务唯一新活动物理，无模型采用/push/JIT/实机动作。
+
+
+### 2026-10-26 同状态三分支完整结果与关闭判断
+
+
+## 裁决：关闭固定短暂停的到达改善假设，保留有限防摔见证
+
+三固定分支：无扰24/24到达、24/24存活；受扰到达均72/96（每种pause都是0新增/0丢失），存活full85/96、两pause各86/96（各1新增/0丢失）。有限分支事后到达并集仍72、存活并集86，不能以事后选择包装新策略。
+
+全部120新前缀确实活到fork，逐叶完整carry克隆且时钟未重置，120冲量核验通过；两种pause每个120案例均改变合法神经请求。因此没有新增到达不是本次没获得干预机会/门控全部禁用造成的。原四zero-only到达案例未被救回。
+
+两pause救的是同一alpha1/left55_R1p8/v1.1/prefixv1.7yaw0/F-32：full最小目标距5.37858m，pause约5.37912m，均未到达。每例原成本改善约3288.55，其中终止替代罚减少3085.67，运行成本减少202.88。是真实的局部防摔收益，但不能写成任务恢复或大幅偏好跟踪提升，也不能由此认定速度通道普遍无用。名义成本两alpha略变差：full39.5993/19.1629，steerpause42.3655/20.1235，bothpause43.4855/20.1987（只同alpha比较）。
+
+本次新实际497998lower ticks=94632共享prefix一次＋403366suffix，allocated696000slots；逻辑360完整轨迹687262ticks=3×94632＋403366，重复prefix数据不重复计物理。新物理264.124s含compile/save，0训练。相关DEV/共享祖先，不是独立训练重复/最终TEST。
+
+原analysis错误来自触地末块不足4采样的旧核验假设，原status/traceback/driver error原样保留；只在离线verify_gate_log中按真实记录长度截取期望profile，没有填充物理/修改原raw或标签。新analysis_partial_block_fix_v1完整360已通过所有动态mask/原gate/goal/ownreward/物理标签/计费核验，22CPU测试通过2.06s；五张总览覆盖全部360已实际目视，原auto false不覆盖，新actual_visual_review限定范围。物理和修正分析完成/Bark均accepted。
+
+采用决定：不采用为主要到达改善方法，不新增触发检测器、不改.4s窗/切点/mask库追结果；一个存活见证保留作物理机制证据。结论只限此集合，不代表所有有限参考调整、提前状态塑形或学习协调不可能。冻结current的真实低速增量、H75原生偏好与zero/固定几何强基线继续保留。
+
+下一步重新整理贡献和假设：先对照用户提供的规划书、现有路线台账和原始文献，提出明确区别于换mask/检测触发/扩候选库的能力保持＋恢复增量机制，再判断是否值得新的有界验证。当前不启动其它物理或训练；Trans目标仍active。
+
+证据runs/same_state_reference_pause_v1/physical/{fork_receipt.json,scheduled_pulse_end_audit.json,cost_receipt.json}及analysis_partial_block_fix_v1/{README.md,results.json,summary.json,raw_audit.json,cost_effect_attribution.json,actual_visual_review.json,independent_review.md}。原analysis/错误receipt保留，新输出不冒充原严核验通过。

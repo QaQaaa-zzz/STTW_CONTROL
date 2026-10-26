@@ -46,7 +46,7 @@ def summarize(rows):
     return output
 
 
-def analyze(root):
+def analyze(root, output_name="analysis"):
     from sttw_control.anticipatory_run import physical_outcome
     from sttw_control.goal_preview_baseline import verify_goal_log
     from sttw_control.finite_value_evaluation import verify_gate_log
@@ -56,7 +56,8 @@ def analyze(root):
     from sttw_control.preference_trace_rescore import rescore_trace_alpha
     root=Path(root).resolve();physical=json.loads((root/'status.json').read_text())
     if physical['phase']!='completed' or physical['completed_cases']!=360:raise ValueError('complete new physical collection required')
-    out=root/'analysis';out.mkdir(exist_ok=False)
+    if Path(output_name).name!=output_name:raise ValueError('simple output directory required')
+    out=root/output_name;out.mkdir(exist_ok=False)
     status=dict(phase='running',pid=os.getpid(),completed_cases=0,new_physics_steps=0,optimizer_updates=0)
     def update(**kw):status.update(kw,checked_unix=time.time());atomic_json(out/'status.json',status)
     update()
@@ -172,4 +173,5 @@ def render(out,rows,paths):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',type=Path,required=True)
-    args=parser.parse_args();analyze(args.run)
+    parser.add_argument('--output-name',default='analysis')
+    args=parser.parse_args();analyze(args.run,args.output_name)
