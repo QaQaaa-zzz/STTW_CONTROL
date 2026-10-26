@@ -71,3 +71,13 @@ def test_factorial_reports_include_learning_increment_under_same_feedback():
     goal=goal_report(rows,roles)
     assert goal['disturbed']['paired']['feedback_010_vs_zero_middle_feedback']['arrival_gains']==1
     assert goal['disturbed']['paired']['feedback_010_vs_free_GAE']['arrival_gains']==1
+
+
+def test_parent_and_trained_aliases_keep_their_actual_native_metadata_contracts():
+    from sttw_control.zero_middle_feedback import verify_alias_identity
+    parent=dict(actor='p',actor_sha256='a',checkpoint='c',checkpoint_sha256='b')
+    verify_alias_identity(dict(parent),parent)
+    trained=dict(parent,fingerprint='f',value_contract={'mode':'free'})
+    verify_alias_identity(copy.deepcopy(trained),trained)
+    with pytest.raises(ValueError):verify_alias_identity(dict(parent,fingerprint='made_up'),parent)
+    with pytest.raises(ValueError):verify_alias_identity(dict(trained,fingerprint='changed'),trained)

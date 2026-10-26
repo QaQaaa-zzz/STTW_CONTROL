@@ -6,6 +6,14 @@ import jax.numpy as j
 ZERO_ROLES = ('zero_middle', 'zero_middle_feedback')
 
 
+def verify_alias_identity(alias, native):
+    for key in ['actor','actor_sha256','checkpoint','checkpoint_sha256']:
+        if alias[key] != native[key]:raise ValueError('feedback alias changed native identity')
+    for key in ['fingerprint','value_contract']:
+        if (key in alias) != (key in native) or alias.get(key) != native.get(key):
+            raise ValueError('feedback alias changed optional native identity')
+
+
 def source_latent(native, zero):
     return j.where(zero, j.zeros_like(native), native)
 
@@ -111,9 +119,7 @@ def prepare(root, source):
     cfg = json.loads((source/'common_environment_config.json').read_text())
     authenticate_models(cfg,{r:old['models'][r] for r in ['parent_causal','free_GAE']})
     for alias,native in [('feedback_010','free_GAE'),('parent_feedback_010','parent_causal')]:
-        for key in ['actor','actor_sha256','checkpoint','checkpoint_sha256','fingerprint','value_contract']:
-            if old['models'][alias][key] != old['models'][native][key]:
-                raise ValueError('feedback alias changed native identity')
+        verify_alias_identity(old['models'][alias], old['models'][native])
     declared, records, indices, _ = evaluation_inputs(source,old)
     cases = zero_cases(declared)
     cached = [c for c in declared if c['role'] in ['free_GAE','feedback_010']]
