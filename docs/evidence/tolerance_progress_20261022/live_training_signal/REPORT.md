@@ -59,3 +59,14 @@ plain全程仍由普通继承重拟合最好，故没有全局预测胜者。收
 原始入口：runs/live_training_signal_audit_v1（600任务指标/相位信号/50时刻值/全部64摘要/五XY）；runs/frozen_value_refit_v1（8权重身份/全部32epoch/whole-episode分区/固定终点/日志与通知）。Bark正常完成沿已有服务，不启邮件或自动修复，不push或涉及实机。
 
 分析采用Scientific Agent Skills scientific-critical-thinking、hypothesis-generation和experimental-design，已有软件引用：https://doi.org/10.48550/arXiv.2609.00065 。
+
+
+## 在线后果检验已启动（2026-10-25补记）
+
+实现提交c878bd5；48相关CPU测试通过，独立只读审查后补齐固定评价表与真实MC末段诊断。180路完整状态GPU shape完成（0积分）；runs/finite_value_online_v1已按上述原设计实际启动，执行PID3548929/session5756。第一轮实际reward仍待产生，不能将已启动TensorBoard服务当训练进展。
+
+三臂都从原task64 Actor/std出发，初始价值函数逐点为−.16D；free_GAE与finite_GAE比较参数化包，free_MC比较完整回合估计器。首次两轮只更新Critic，随后62轮Actor，每轮4epoch。原alpha、V3、冻结底层、参考权限和profile0保持。最多23,040,000个5ms lower控制槽（实际积分器0.2ms子步另有含义），真实步数与分配槽分开计。seed2026102574的50共同事件×六角色300条固定评价已写入并封存；评价尚未运行。
+
+这轮是训练信号的有界排查，不承担论文首次贡献。只有防摔、无扰保留和受扰持续跟踪的真实控制结果，才能决定后续路线。普通MC若覆盖结构收益，采用简单方法；只改善预测、不改善控制则停止结构，不再扫rate/尾窗/奖励权重。研究中心继续是有限参考权限下偏好与闭环抗扰的协调；参考条件能力或接回模块须由新的控制空间证据支持。
+
+进度入口为run/status.json与monitoring.json；中文STTW Bark已登记完成/错误，900秒或真实退出观察，邮件/自动修复不启，无远端push或硬件。当前运行身份和后续结局以共享台账最新记录为准。
