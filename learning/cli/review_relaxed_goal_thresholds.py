@@ -69,6 +69,6 @@ if __name__ == '__main__':
         for split, data in panel.items():
             for role, c in data['counts'].items():
                 a=c['arrivals'];lines.append(f"|{name}|{split}|{role}|{c['n']}|{a['0.5']}|{a['0.75']}|{a['1.0']}|{c['survived']}|")
-    lines += ['', '## 原始路径证据', '', '复用已覆盖全部场景/alpha/力档的真实XY图，不改变路径或目标位置。', '', '[整回合三模型全部XY与审计](../../h75_disturbed_common_interface_v1/analysis_reconstructed_v2/README.md)', '', '[同状态三分支全部XY与审计](../analysis_partial_block_fix_v1/README.md)', '', '## 解释边界', '', '到达与全窗不摔倒分开报告。更宽半径下新增到达不代表更强抗扰；反之，没有新增到达的策略也可以有独立的存活收益。放宽任务判据不能取消真实触地或把未知记成功。没有修改原用户alpha、动力学、策略或奖励。后续方案在统一任务半径下配对比较，允许失败，以净提升与任务代价裁决，不要求全胜。']
+    lines += ['', '## 原始路径证据', '', '复用已覆盖全部场景/alpha/力档的真实XY图，不改变路径或目标位置。', '', '[整回合三模型全部XY与审计](../../h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/README.md)', '', '[同状态三分支全部XY与审计](../analysis_partial_block_fix_v1/README.md)', '', '## 解释边界', '', '到达与全窗不摔倒分开报告。更宽半径下新增到达不代表更强抗扰；反之，没有新增到达的策略也可以有独立的存活收益。放宽任务判据不能取消真实触地或把未知记成功。没有修改原用户alpha、动力学、策略或奖励。后续方案在统一任务半径下配对比较，允许失败，以净提升与任务代价裁决，不要求全胜。']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
     print(json.dumps(result['panels'], ensure_ascii=False))

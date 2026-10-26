@@ -1582,3 +1582,6 @@ R3旧60摘要另重读/SHA记录，alpha.5/4context/16受扰：0.5/0.75/1m full1
 非发起人AI独立核两results并先提出“是否真正米级改善、如何保住正常full偏好”两个可证伪问题；前一已由288raw审计回答，后一未验证。明确after-only特权精确onset、正常zero阶段欠缺alpha用途、相关祖先DEV、滤波请求延续、代价与计费限制；新口径没有改变真实抗扰动力学。不能直接接旧ESO gate/复活暂停时长库。实际重看stage两个左弯完整60图，其他10场景沿用旧全覆盖视觉审核，原图圈0.5m未冒称1m；报告索引全12图覆盖720，审阅与数值重核范围分开。
 决策：保留after为强机制基线/R3宽目标可用候选，不强求全胜、不采用为已部署偏好抗扰方法。规划书第9节及full_task_reference_sequence.candidate_library实读，旧37为固定随机5结点库、非目标导向优化，因此不能用其失败排除有界定向纯任务优化；该方向作为下一待封存假设，非新颖性/已实现声明。先核同权限保留原full正常偏好、原alpha成本、真实10s和隐藏事件的优化合同，再决定一次诊断；若纯任务规划覆盖收益不强留容扰模块，旧Emin不拟合。当前未启动新搜索/控制/训练，所有原模型/registry/用户dirty数值源码/JIT/实机/远端不动。
 证据runs/same_state_reference_pause_v1/relaxed_goal_stage_review_v1/{README.md,review.json,stage_gap.json,midpoint_relaxed_readback.json,independent_review.md}，代码learning/cli/review_relaxed_goal_thresholds.py和review_stage_recovery_gap.py；原位REFERENCE_CONFIRMATION_PROTOCOL.md已增量记录。技能流程引用已核arxiv2609.00065当前v2作者/年份并加入专题报告，仅作工具来源不当方法证据。当前Trans控制方法、独立确认与最终期刊证据未完成，目标active。下一最多两项：封存保留偏好前提下定向纯任务参考优化的可证伪合同/强基线；只有真实闭环优化存在净增量才发展可部署近似与抗扰约束，不再扩小规则维持故事。
+
+
+阶段宽目标报告链接检查更正：首次交付检查发现生成器引用了不存在的h75 analysis根README，真实入口在analysis_reconstructed_v2/h75_review/README.md。未重算/改数字，修复本轮未交付报告与生成器链接，旧relaxed_goal_review_v1报告保留原样；link_validation_correction.json保留失败/修复范围。实际复查14个本地报告/全部XY链接均存在。非控制/标签/新物理错误，aff860a后仅小修本地提交，不push。
