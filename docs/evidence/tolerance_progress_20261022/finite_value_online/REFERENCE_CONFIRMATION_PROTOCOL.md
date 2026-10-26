@@ -979,7 +979,7 @@ channel_decision_review只读重算四半径与主要配对；channel_preference
 
 目的：确认哪些历史“任务失败”实际已经到达目标，避免把严格末段保持条件误当防摔或到达要求；利用现有完整轨迹检查是否值得保留简化的偏好权限规则。此次只有只读后处理，**0新增物理步、0训练更新**，不修改原始标签、物理或目标位置。
 
-执行：`learning/cli/review_arrival_relaxation.py runs/middle_channel_feedback_v1 runs/middle_channel_feedback_v1/analysis/arrival_relaxation_endpoint_review.json`。实际exit0，重新认证240份raw SHA，核对无重复、执行/分析completed、目标最短直立距离与到达标签一致、配对事件/方向/初态bank/参考相同。历史严格成功字段为`performance_success`，到达字段为`goal_arrived`；二者必须分开读取，不能沿用旧category作为新任务结果。
+执行：`learning/cli/review_arrival_relaxation.py --endpoint-root runs/middle_channel_feedback_v1 --output runs/middle_channel_feedback_v1/analysis/arrival_relaxation_endpoint_review.json`。实际exit0，重新认证240份raw SHA，核对无重复、执行/分析completed、目标最短直立距离与到达标签一致、配对事件/方向/初态bank/参考相同。历史严格成功字段为`performance_success`，到达字段为`goal_arrived`；二者必须分开读取，不能沿用旧category作为新任务结果。
 
 共同条件仍为前述两条弯道、bank2/4、三alpha、±16/±32N横向0.1秒脉冲、原10秒和冻结local300。主任务采用触地/故障前进入原XY目标0.5m圆，不加末速度/航向/保持要求；0.5m是用户允许放松后采用的工作阈值，不冒充用户指定精确数值。
 
