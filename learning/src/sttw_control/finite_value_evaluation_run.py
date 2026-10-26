@@ -392,7 +392,11 @@ def execute(root, *, shape_only=False):
         pulses=j.asarray([[(700+c['pulse_onset_task_tick'])*.005,(700+c['pulse_onset_task_tick'])*.005+c['pulse_duration_s'],
                            *[c['force_N']*d for d in c['world_direction']]] for c in cases],j.float32)
         env.set_log_template(states[0],paths[cases[0]['context']],speeds[0])
-        if p.get('nominal_feedback_spec') is not None:
+        if p.get('initial_state_confirmation'):
+            from .nominal_initial_confirmation import make_initial_confirmation_step
+            one=make_initial_confirmation_step(env,make_path_actor(cfg),horizon_s=10.,
+                spec=p['feedback_spec'],nominal_spec=p['nominal_feedback_spec'])
+        elif p.get('nominal_feedback_spec') is not None:
             from .nominal_reference_feedback import make_nominal_evaluation_step
             one=make_nominal_evaluation_step(env,make_path_actor(cfg),horizon_s=10.,spec=p['nominal_feedback_spec'])
         elif p.get('feedback_spec') is not None:

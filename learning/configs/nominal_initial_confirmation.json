@@ -1,0 +1,15 @@
+{
+  "schema": "nominal_feedback_real_initial_confirmation_v1",
+  "seed": 2026102681,
+  "bank_indices": [2, 4],
+  "alphas": [0.0, 0.5, 1.0],
+  "forces_N": [0.0, -16.0, 16.0, -32.0, 32.0],
+  "pulse_duration_s": 0.1,
+  "onset_upper_tick_range": [140, 241],
+  "goal_radius_m": 0.5,
+  "additional_report_radii_m": [0.1, 0.2, 0.3],
+  "roles": ["parent_plain", "parent_causal", "free_GAE", "feedback_010", "feedback_nominal"],
+  "nominal_profiles": "Use the six original bank3 profiles without changing any file bytes. No new nominal fitting, alpha changes or gain changes.",
+  "initialization": "Existing env.reset on real prepared physical bank2/4. Retain physical data, controller, actuator and governor. Task reset only, no qpos/qvel edits, path shifts, extra warmup or simulated physics during prepare.",
+  "stop": "300 new episodes, including60 nominal; all five controls run on all prescribed starts/events. No cache substitution, training, gain/threshold changes, automatic retry or adoption."
+}

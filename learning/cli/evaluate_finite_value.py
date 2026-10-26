@@ -15,10 +15,15 @@ if __name__=='__main__':
     parser.add_argument('--support-comparison',type=Path)
     parser.add_argument('--time-confirmation',action='store_true')
     parser.add_argument('--nominal-feedback',action='store_true')
+    parser.add_argument('--initial-confirmation',action='store_true')
     parser.add_argument('--phase',choices=['prepare','shape','execute','analyze'],required=True)
     args=parser.parse_args()
     if args.phase=='prepare':
-        if args.nominal_feedback:
+        if args.initial_confirmation:
+            if args.source_evaluation is None or args.protocol is None:parser.error('--initial-confirmation requires --source-evaluation and --protocol')
+            from sttw_control.nominal_initial_confirmation import prepare_initial_confirmation
+            prepare_initial_confirmation(args.output,source=args.source_evaluation,protocol_file=args.protocol)
+        elif args.nominal_feedback:
             if args.source_evaluation is None or args.protocol is None:parser.error('--nominal-feedback requires --source-evaluation and --protocol')
             from sttw_control.nominal_feedback_probe import prepare_nominal_probe
             prepare_nominal_probe(args.output,source=args.source_evaluation,protocol_file=args.protocol)

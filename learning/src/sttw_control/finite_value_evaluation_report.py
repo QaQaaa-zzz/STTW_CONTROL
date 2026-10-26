@@ -85,7 +85,10 @@ def analyze(root):
             outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
             if outcome!=c['physical_outcome']:raise ValueError('physical label changed')
             verify_gate_log(raw,c)
-            if 'feedback_kind' in c:
+            if p.get('initial_state_confirmation'):
+                from .nominal_initial_confirmation import verify_initial_feedback
+                verify_initial_feedback(raw,c,cfg,p)
+            elif 'feedback_kind' in c:
                 from .nominal_reference_feedback import verify_nominal_feedback
                 profile=p['nominal_profiles'][f"{c['context']}/a{c['alpha']:g}"]
                 with np.load(profile['file'],allow_pickle=False) as z:table={k:z[k] for k in z.files}
