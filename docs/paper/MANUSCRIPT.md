@@ -275,6 +275,21 @@ zero左2.8两条在3.54秒已到原目标，9.78秒才域停止；整窗存活�
 
 进一步在同90条上以五个历史用户权重重评已执行轨迹，90条有效奖励窗均等于实际执行窗，原请求速度保持1.5米/秒。无扰时，固定原策略执行α.5在全部五种历史V3权重下成本最低；全10候选共同存活的±16N上，全部运行成本仅user0选择原策略/.25，其余选择支持/.5，对第二低成本差.094–.290。排名未使用触地剩余罚；独立NumPy实现重计450行一致。但共同存活集合及候选赢家均事后选择，原10秒V3也不同于1米首达效用，不能据此开发或宣称必要的α选择器。训练不足、结构或迁移影响尚未分离，不否定其他原生偏好证据。[E032–E033]
 
+### 4.10 原物理信用终点的条件用途：不能由存活覆盖推整体无用
+
+对原online_preference_survival_v1_attempt3的固定task_only64/physical_credit64重新审查联合结局；它们不是后来free/finite GAE候选的别名。原488按已有认证最小距离重组，隐藏时刻110则重读全部原始轨迹及路径，复现原四半径440标签并计算当前1米首达；不改旧标签、不新增物理。两个面板及动作噪声样本不混为独立训练重复。[E038–E039,E041]
+
+|面板/条件|普通task64 到达/存活|物理credit64 到达/存活|floor 到达/存活|分母|
+|---|---|---|---|---:|
+|原确定性，无扰|10 / 10|10 / 10|2 / 10|10|
+|原确定性，受扰|0 / 7|1 / 10|0 / 10|10|
+|隐藏时刻，无扰|4 / 4|4 / 4|1 / 4|4|
+|隐藏时刻，受扰|6 / 15|7 / 15|4 / 16|16|
+
+隐藏受扰中credit对ordinary到达2增1失、存活0增0失；对floor到达5增2失、存活0增1失。floor覆盖存活表现不等于覆盖所有联合任务用途，但credit也不构成对floor整体支配。较小0.5米半径时credit到达2/16、ordinary4/16，不能只报当前7对6而掩盖尺度敏感性。两个新增最近距为.954对1.090米、.556对1.303米；丢失为4.678对.107米，包含真实米级退化。[E038–E039]
+
+以上支持保留旧信用终点的条件性任务用途，未证明原用户Jα改善、未知时刻防摔增量或信用训练的可重复机制，不自动恢复训练或采用为当前默认。全部命中在脉冲后；credit的7次受扰首达中3次Actor动作有效、4次禁用，只是当步遥测，不能将禁用Actor解释为恒参考尾段或将最后动作归因于整段收益。[E040]
+
 ## 5 早期解析容扰代理回答的是什么
 
 早期固定速度局部模型采用不稳定模态坐标和折算脉冲：
@@ -345,6 +360,8 @@ E024：native_zero_preference_v1/{plan,evaluation/status,analysis/review}.json�
 E026：native_equilibrium_rule_v1/{plan,evaluation/status,analysis/review}.json与analysis/independent_result_review.md，8新规则＋24缓存原生比较。E027：同run task_scope/review.json，H75-vs-rule首达前分量与误差。
 
 E028：native_goal_confirmation_v1/{plan,evaluation/status}.json及analysis/{summary,results,paired,receipt,independent_result_review}.json，新情境固定80与完整正负。E029：同run analysis/initial_carry_review.json，实际初态、80物理lane/60方法对认证及其核验范围。
+
+E038：joint_endpoint_tradeoff_review_v1/analysis/review.json，分面板联合结局及逐例增失；E039：同run independent_review.json，独立读回；E040：同run arrival_mode_audit.json，首达遥测；E041：同run model_identity_receipt.json，归档模型身份。
 
 E036：preference_capacity_order_v1/analysis/review.json，既有72原始分支的身份、物理标签、α配对及排序审查；E037：同run independent_review.json，独立NumPy重计，未重演物理或capture。
 

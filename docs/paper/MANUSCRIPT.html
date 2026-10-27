@@ -474,6 +474,51 @@ subject to:  frozen closed loop meets the declared disturbance-design requiremen
 <p>原策略/支持的整窗不触地为20/45与30/45，配对10增0失；到达为14/45与13/45，4增5失。受扰子集均到达9/40，是4新增与4丢失抵消；另1个到达丢失来自无扰。10个防摔改善中4个进入原目标圈，6个未进入，后者最近距离1.090–2.663米；全部到达者也整窗存活。这既反驳“防摔收益必然解决任务”，也不能说支持没有任何任务兑现。[E030–E031]</p>
 <p>该普通参考规则在扰动前已经改变进入状态，不能称同完整受扰状态的救回，也未证明学习选择器必要。旧10秒不能外推20秒；其参考权限、模型及任务栈与4.8不同，不能合并分母。保留条件性实测容扰增益，下一问题是如何在原用户效用下减少其任务代价；旧解析式未参与本组控制，不能承领这10个防摔改善。[E030–E031]</p>
 <p>进一步在同90条上以五个历史用户权重重评已执行轨迹，90条有效奖励窗均等于实际执行窗，原请求速度保持1.5米/秒。无扰时，固定原策略执行α.5在全部五种历史V3权重下成本最低；全10候选共同存活的±16N上，全部运行成本仅user0选择原策略/.25，其余选择支持/.5，对第二低成本差.094–.290。排名未使用触地剩余罚；独立NumPy实现重计450行一致。但共同存活集合及候选赢家均事后选择，原10秒V3也不同于1米首达效用，不能据此开发或宣称必要的α选择器。训练不足、结构或迁移影响尚未分离，不否定其他原生偏好证据。[E032–E033]</p>
+<h3>4.10 原物理信用终点的条件用途：不能由存活覆盖推整体无用</h3>
+<p>对原online_preference_survival_v1_attempt3的固定task_only64/physical_credit64重新审查联合结局；它们不是后来free/finite GAE候选的别名。原488按已有认证最小距离重组，隐藏时刻110则重读全部原始轨迹及路径，复现原四半径440标签并计算当前1米首达；不改旧标签、不新增物理。两个面板及动作噪声样本不混为独立训练重复。[E038–E039,E041]</p>
+<table>
+<thead>
+<tr>
+<th>面板/条件</th>
+<th>普通task64 到达/存活</th>
+<th>物理credit64 到达/存活</th>
+<th>floor 到达/存活</th>
+<th style="text-align: right;">分母</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原确定性，无扰</td>
+<td>10 / 10</td>
+<td>10 / 10</td>
+<td>2 / 10</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>原确定性，受扰</td>
+<td>0 / 7</td>
+<td>1 / 10</td>
+<td>0 / 10</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>隐藏时刻，无扰</td>
+<td>4 / 4</td>
+<td>4 / 4</td>
+<td>1 / 4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>隐藏时刻，受扰</td>
+<td>6 / 15</td>
+<td>7 / 15</td>
+<td>4 / 16</td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>
+<p>隐藏受扰中credit对ordinary到达2增1失、存活0增0失；对floor到达5增2失、存活0增1失。floor覆盖存活表现不等于覆盖所有联合任务用途，但credit也不构成对floor整体支配。较小0.5米半径时credit到达2/16、ordinary4/16，不能只报当前7对6而掩盖尺度敏感性。两个新增最近距为.954对1.090米、.556对1.303米；丢失为4.678对.107米，包含真实米级退化。[E038–E039]</p>
+<p>以上支持保留旧信用终点的条件性任务用途，未证明原用户Jα改善、未知时刻防摔增量或信用训练的可重复机制，不自动恢复训练或采用为当前默认。全部命中在脉冲后；credit的7次受扰首达中3次Actor动作有效、4次禁用，只是当步遥测，不能将禁用Actor解释为恒参考尾段或将最后动作归因于整段收益。[E040]</p>
 <h2>5 早期解析容扰代理回答的是什么</h2>
 <p>早期固定速度局部模型采用不稳定模态坐标和折算脉冲：</p>
 <pre><code class="language-text">λ = sqrt(a4),     b = a1 + a2/λ
@@ -553,6 +598,7 @@ E_min(F) = (z + Kτ F)² / W
 <p>E024：native_zero_preference_v1/{plan,evaluation/status,analysis/review}.json及analysis/independent_result_review.md，8新zero＋16缓存原生强对照。E025：同run task_scope/review.json，首达前分量、误差、侧倾及终止替换差。</p>
 <p>E026：native_equilibrium_rule_v1/{plan,evaluation/status,analysis/review}.json与analysis/independent_result_review.md，8新规则＋24缓存原生比较。E027：同run task_scope/review.json，H75-vs-rule首达前分量与误差。</p>
 <p>E028：native_goal_confirmation_v1/{plan,evaluation/status}.json及analysis/{summary,results,paired,receipt,independent_result_review}.json，新情境固定80与完整正负。E029：同run analysis/initial_carry_review.json，实际初态、80物理lane/60方法对认证及其核验范围。</p>
+<p>E038：joint_endpoint_tradeoff_review_v1/analysis/review.json，分面板联合结局及逐例增失；E039：同run independent_review.json，独立读回；E040：同run arrival_mode_audit.json，首达遥测；E041：同run model_identity_receipt.json，归档模型身份。</p>
 <p>E036：preference_capacity_order_v1/analysis/review.json，既有72原始分支的身份、物理标签、α配对及排序审查；E037：同run independent_review.json，独立NumPy重计，未重演物理或capture。</p>
 <p>E035：finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md，原始文献URL、阅读定位、实测定义与未验证边界；人类核验未记录。</p>
 <p>完整路径、SHA和核验范围在evidence_manifest.json；可复算跨面板脚本为learning/cli/audit_sttw_paper_claims.py。原报告与台账分别保留工程历史与当前研究事实。本文引用的数字经AI读取产物/配对重算；人类作者核验、完整相邻文献方法比较、最终期刊要求、独立确认以及硬件证据尚未完成。本稿不含虚构作者、资助、利益冲突声明、实机结果或提交记录。</p>

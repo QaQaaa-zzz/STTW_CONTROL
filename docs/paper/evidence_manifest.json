@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "3f493d4570208fba285f2d19bdc0434ecbbe701ee4e5f1a0207a9f0fce277afc",
-  "builder_sha256": "9e2731a9d34b22bbaede8518e146fb399881d1a2339343fd10a63540fd58073e",
+  "manuscript_sha256": "206948e4ada74d8c34a9180386ed28196c53151c4b79d4f87a03fb47be773550",
+  "builder_sha256": "5925a68ab0e20c4da22ba8f5431417ab1793270c165525e43355686829035d1c",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -225,6 +225,30 @@
     "E037": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/preference_capacity_order_v1/independent_review.json",
       "sha256": "ecc2d039e9a5898fc77340a9443a554ef87ae7555a8911183e9b9ddca46c8a43",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E038": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/joint_endpoint_tradeoff_review_v1/analysis/review.json",
+      "sha256": "c40820a8b3ee9aa283c42a537cbd4d5ffd373c15ef2882a31eab6bacd920834f",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E039": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/joint_endpoint_tradeoff_review_v1/independent_review.json",
+      "sha256": "12461810eb0291e9fbc9168713105c9facd73e22295953345dac7156abde355a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E040": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/joint_endpoint_tradeoff_review_v1/arrival_mode_audit.json",
+      "sha256": "b309585e5ac91415abf331704f5d3b30828fb97cedf8c77d5db6401897773076",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E041": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/joint_endpoint_tradeoff_review_v1/model_identity_receipt.json",
+      "sha256": "6bef63e9fcc39cf6fccff030855e574d6be7dd03601a7f810d0308ff4627dfe0",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

@@ -103,7 +103,11 @@ def evidence_manifest():
         'E034':ROOT/'runs/replanning_headroom_review_v1/review.json',
         'E035':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md',
         'E036':ROOT/'runs/preference_capacity_order_v1/analysis/review.json',
-        'E037':ROOT/'runs/preference_capacity_order_v1/independent_review.json'}
+        'E037':ROOT/'runs/preference_capacity_order_v1/independent_review.json',
+        'E038':ROOT/'runs/joint_endpoint_tradeoff_review_v1/analysis/review.json',
+        'E039':ROOT/'runs/joint_endpoint_tradeoff_review_v1/independent_review.json',
+        'E040':ROOT/'runs/joint_endpoint_tradeoff_review_v1/arrival_mode_audit.json',
+        'E041':ROOT/'runs/joint_endpoint_tradeoff_review_v1/model_identity_receipt.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
