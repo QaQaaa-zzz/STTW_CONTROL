@@ -20,6 +20,12 @@ def analyze(root):
     if status['phase']!='completed' or status['completed_cases']!=48:
         raise ValueError('all48 numerical trajectories must finish; no partial result selection')
     p=json.loads((root/'plan.json').read_text());index=json.loads((physical/'case_index.json').read_text())
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:
+        raise ValueError('declared plan changed')
+    for f,sha in {**p['input_sha256'],**p['source_sha256']}.items():
+        if digest(f)!=sha:raise ValueError('declared input or execution source changed '+f)
+    inventory=json.loads((root/'inventory.json').read_text())
+    if len(inventory)!=48:raise ValueError('declared48 missing')
     if len(index)!=48 or len({c['case_id'] for c in index})!=48:raise ValueError('complete unique fixed48 required')
     out.mkdir(exist_ok=False)
     paths={};goals={};trees={}
@@ -32,8 +38,9 @@ def analyze(root):
     # Actual initial carry readback, excluding only declared task geometry/alpha.
     import jax
     with (physical/'initial_carry.pkl').open('rb') as f:initial=pickle.load(f)
-    initial_checked=0;rows=[];raws={};actual=0
+    initial_checked=0;rows=[];raws={};actual=0;new_paths=[]
     for i,c in enumerate(index):
+        if any(c.get(k)!=v for k,v in inventory[i].items()):raise ValueError('case no longer matches declared inventory')
         if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('changed raw trace')
         np.testing.assert_allclose(c['original_goal_xy'],goals[c['context']],atol=1e-6,rtol=0)
         with Path(p['contexts'][c['context']]['initial']).open('rb') as f:bank=pickle.load(f).state
@@ -50,6 +57,12 @@ def analyze(root):
         with np.load(c['raw_file']) as z:raw={k:z[k] for k in z.files}
         raw_idx=np.flatnonzero(raw['active_tick']);n=len(raw_idx);actual+=n
         np.testing.assert_array_equal(raw['physical_tick'][raw_idx],np.arange(n))
+        file=physical/f'replanned_path_{i:02d}.npz'
+        if file.exists()!=c['replanned']:raise ValueError('replanning flag/path artifact disagree')
+        if file.exists():
+            with np.load(file) as z:
+                np.testing.assert_allclose([np.interp(float(z['goal']),z['s'],z['xy'][:,k]) for k in (0,1)],goals[c['context']],atol=3e-6,rtol=0)
+            new_paths.append(dict(case_id=c['case_id'],file=str(file),sha256=digest(file)))
         audit_pulse(raw,c)
         verify_correction_chain(raw,json.loads((root/'common_environment_config.json').read_text()),
                                 initial_filtered=np.asarray(loaded.filtered),initial_offsets=np.asarray(loaded.offsets))
@@ -105,6 +118,8 @@ def analyze(root):
             details=[]
             for k,c in cc.items():
                 b=bb[k];ch=c['horizons'][horizon];bh=b['horizons'][horizon]
+                for field in ('force_N','pulse_onset_task_tick','pulse_duration_s','world_direction','requested_speed_m_s'):
+                    if c[field]!=b[field]:raise ValueError('paired physical event differs '+field)
                 known=ch['goal_arrived'] is not None and bh['goal_arrived'] is not None and 'unknown' not in (ch['physical_outcome'],bh['physical_outcome'])
                 details.append(dict(key=k,known=known,candidate=c['case_id'],baseline=b['case_id'],
                     arrival_change=int(ch['goal_arrived'])-int(bh['goal_arrived']) if known else None,
@@ -114,9 +129,12 @@ def analyze(root):
                 survival_gain=sum(d['survival_change']==1 for d in details),survival_loss=sum(d['survival_change']==-1 for d in details),details=details)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     render(out,rows,raws,paths,goals,physical)
+    render(out,rows,raws,paths,goals,physical,task_only=True)
     atomic_json(out/'receipt.json',dict(phase='completed',analysis_physics_steps=0,raw_traces_sha_checked=48,
         complete_initial_dynamic_fields_checked=initial_checked,actual_lower_ticks=actual,
         allocated_lower_slots=status['allocated_lower_slots'],pulse_and_reference_chain_checked=48,
+        source_and_inventory_identity_checked=True,replanned_path_artifacts=new_paths,
+        scope='Initial PathState dynamic fields, physical pulse and issued-action filter chain checked. No independent replay of full neural inference or every runtime rebind carry leaf.',
         original_route_distance='Nearest original path sample up to goal; ~2cm spatial sampling, not exact segment distance or original V3 cost',
         cost_warning='Replanned-path score is diagnostic; 10s slice belongs to a 20s rollout, not the old 10s terminal penalty contract',
         figure_visual_review='pending'))
@@ -134,7 +152,7 @@ def analyze(root):
     print(json.dumps(dict(summary=summary,paired={k:{a:b for a,b in v.items() if a!='details'} for k,v in paired.items()})))
 
 
-def render(out,rows,raws,paths,goals,physical):
+def render(out,rows,raws,paths,goals,physical,*,task_only=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -151,10 +169,12 @@ def render(out,rows,raws,paths,goals,physical):
                 group=[r for r in rows if r['context']==context and r['alpha']==alpha and r['force_N']==force]
                 for r in group:
                     raw=raws[r['case_id']];a=raw['active_tick'].astype(bool);xy=raw['actual_xy'][a];c=colors[r['role']]
+                    arrival=r['horizons']['20']['first_arrival_s']
+                    if task_only and arrival is not None:xy=xy[:int(round(arrival/.005))]
                     ax.plot(*xy.T,c=c,lw=1.2,label=r['role'])
                     if len(xy)>=2000:ax.scatter(*xy[1999],c=c,marker='o',s=18)
-                    ax.scatter(*xy[-1],c=c,marker='x' if r['horizons']['20']['physical_outcome']=='contact' else 's',s=24)
-                    arrival=r['horizons']['20']['first_arrival_s']
+                    marker=('^' if arrival is not None else 'x' if r['horizons']['20']['physical_outcome']=='contact' else 's') if task_only else ('x' if r['horizons']['20']['physical_outcome']=='contact' else 's')
+                    ax.scatter(*xy[-1],c=c,marker=marker,s=24)
                     if arrival is not None:
                         at=int(round(arrival/.005))-1
                         ax.scatter(*xy[at],c=c,marker='^',s=32)
@@ -164,10 +184,12 @@ def render(out,rows,raws,paths,goals,physical):
                 ax.set_title(context.split('__')[1]+f' / original alpha={alpha:g}',fontsize=10)
                 ax.set(xlabel='World X (m)',ylabel='World Y (m)');ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.15)
         axes[0,0].legend(fontsize=7)
-        fig.suptitle(f'Original goal unchanged; force {force:+g} N / 0.1s; both methods 20s\nActual solid / plans dashed; circle=10s, square=20s, x=contact, triangle=first arrival')
-        fig.savefig(out/f'xy_force_{force:+g}.png',dpi=150,bbox_inches='tight');plt.close(fig)
+        detail=('Task ends at FIRST arrival / contact / 20s; full observation retained separately' if task_only else 'Actual solid / plans dashed; circle=10s, square=20s, x=contact, triangle=first arrival')
+        fig.suptitle(f'Original goal unchanged; force {force:+g} N / 0.1s; both methods 20s\n'+detail)
+        fig.savefig(out/f'{"task_" if task_only else ""}xy_force_{force:+g}.png',dpi=150,bbox_inches='tight');plt.close(fig)
+    if task_only:return
     # Full per-event dynamics, without selecting only successful replans.
-    diag=out/'diagnostics';diag.mkdir()
+    diag=out/'diagnostics';diag.mkdir(exist_ok=True)
     for context in contexts:
         for alpha in (0.,1.):
             for force in (0.,-32.,32.):
@@ -179,8 +201,9 @@ def render(out,rows,raws,paths,goals,physical):
                         ax.plot(t,raw[key][a],c=c,lw=1,label=r['role'])
                     axes[0].plot(t,raw['wheel_speed_proxy'][a],c=c,ls='--',alpha=.4)
                     axes[0].plot(t,raw['reference'][a,0],c=c,ls=':',alpha=.5)
-                for ax,label in zip(axes,('Speed m/s; faint dashed wheel / dotted ref','Actual steering rad','Roll rad','Roll rate rad/s')):
+                for ax,label in zip(axes,('Speed (m/s)','Actual steering (rad)','Roll (rad)','Roll rate (rad/s)')):
                     ax.set_ylabel(label);ax.grid(alpha=.15);ax.axvline(10,c='black',ls=':',lw=.6)
+                axes[0].set_title('Body solid; wheel proxy faint dashed; reference dotted',fontsize=9)
                 axes[0].legend(fontsize=7);axes[-1].set_xlabel('Task time (s)')
                 fig.suptitle(context+f' / alpha{alpha:g} / F{force:+g}N; no smoothing')
                 fig.savefig(diag/f'{context}_a{alpha:g}_F{force:+g}.png',dpi=130);plt.close(fig)
