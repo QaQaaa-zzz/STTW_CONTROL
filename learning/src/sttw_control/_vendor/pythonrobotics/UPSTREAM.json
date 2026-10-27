@@ -1,0 +1,29 @@
+{
+  "repository": "https://github.com/AtsushiSakai/PythonRobotics",
+  "commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+  "license": "MIT; full notice in LICENSE",
+  "files": {
+    "dubins.py": {
+      "upstream_path": "PathPlanning/DubinsPath/dubins_path_planner.py",
+      "local_sha256": "64ffeac2689e5d972b305586295fea23c790a6ccda6c22553f04450e95b4b143",
+      "original_mirror": "original/dubins.py.txt",
+      "original_mirror_sha256": "07fba67057d900d4c2b7794c9b0818a86342af8a520c914252dec620d94c61eb",
+      "changes": [
+        "Remove sys.path mutation and sys/pathlib imports",
+        "Use package-relative angle utility import; numerical planner unchanged"
+      ]
+    },
+    "angle.py": {
+      "upstream_path": "utils/angle.py",
+      "local_sha256": "62c3f0fdc76298d772d574b7a4357fded9265d1e0af048d87b5c8ca1a528017a",
+      "changes": []
+    },
+    "LICENSE": {
+      "upstream_path": "LICENSE",
+      "local_sha256": "ca6f10832a25c1cd07fa62872458ca336a6ea83ee2f2236216086bd7a5bbf264",
+      "changes": []
+    }
+  },
+  "retrieved_through": "GitHub connector, immutable commit URLs; no repository clone or installation",
+  "use": "Geometric planning baseline; not a new algorithm or physical safety guarantee"
+}
