@@ -1701,3 +1701,9 @@ source_type=actual_existing_raw_arithmetic；verification=artifact_checked。新
 240真实、384受扰逻辑完成，session94010 exit0；450267实际lower/480000槽、0训练，项目累计3780700。每法96：full79到达/84存活，context79/84，geometry78/84，alpha-only78/85。context继承无扰成本降19.128%/18.926%/6.799%，但总79/84包含到达2增2失、存活1增1失，不是逐例保留。alpha.5真实改善被alpha1退化抵消；对geometry仅多1例到达，未确立复杂选择必要性。保留有限取舍的时间迁移证据，停止固定lookup作为Transactions主方法继续调参，不替换现有冻结中层，不否定所有参考协调。
 
 新240raw与48继承名义/30旧raw全部审计；独立270唯一raw-context/432逻辑端点重算一致。9张全XY共108面板已目视；324诊断图生成、event18/58/62共9图实际目视，其余315未逐图审阅；未称期刊合规或独立TEST。报告Bark前两次网络失败保留，后一次最终通知调用无异常。当前无本任务活动进程、无新训练/物理追加/push。下一先由实际失败和权限缺口提出可反证的新控制增量，不继续改表追正结果。Transactions目标仍未完成。
+
+
+### 既有速度支持与Actor权限分离：源码已接入，尚未进行物理评价
+复用新时刻确认240份raw的机制读回显示：full12次触地中7次存在解析支持仍激活、但Actor禁用使整个target清零的.04–.26秒交集；另5次不具此入口。这只是因果候选，不保证能救。全部12次原支持trigger早于舵角近限，故不增加舵角预警阈值。详见runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/mechanism_readback/README.md及非发起人反审。
+原位最小修改anticipatory_reference.py：params显式support_independent_permission，缺省false；原profile7、Actor禁用且非终止/zero_mode时，仅保留原候选速度，转向修正0，网络权限/历史/重入及原gate规则不改。新增support_permission_override实际日志字段。17项相关CPU测试通过，包括JIT/vmap权限组合、旧默认路径、原真实reference工厂接线（物理advance用测试替身，非物理控制验证）。首次测试1项因Python对象identity断言失败，改为全部pytree值不变后通过；未改控制逻辑凑测试。read_reference_failure_mechanisms.py已py_compile，git diff --check通过。
+当前只完成kernel接线和针对性CPU检查；runtime显式参数、独立新日志审计、108轨迹新协议/封存/数值执行尚未完成，不把此修改当新控制效果。旧seal源码快照与历史raw保留，新工作源不再宣称匹配旧seal。下一完成新执行与审计接口，再做固定108候选对认证旧full108对照，0训练、不扫阈值/时长。若阳性先升级强简单基线，不直接充当Transactions贡献。

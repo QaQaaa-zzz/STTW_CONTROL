@@ -85,6 +85,25 @@ def test_real_step_handback_uses_current_history_and_keeps_cumulative_exit(monke
     end,logs=step(bad,None,path,j.float32(1.5),j.zeros(5),j.int32(0),j.float32(1.),j.bool_(False))
     assert not logs['actor_action_valid'].any() and int(end.clean_blocks)==0 and end.state.domain_exit
 
+    # Keep the network disabled and preserve its history/reentry contract,
+    # while allowing only the original relay's speed-support candidate.
+    low=bad.replace(state=bad.state.replace(physical=bad.state.physical.replace(raw=j.array([1.1,0.]))))
+    end,supported=step(low,{'support_independent_permission':j.bool_(True)},path,
+        j.float32(1.5),j.zeros(5),j.int32(7),j.float32(1.),j.bool_(False))
+    assert supported['support_permission_override'].all()
+    assert not supported['actor_action_valid'].any()
+    assert np.isnan(supported['original_actor_latent']).all()
+    np.testing.assert_allclose(np.tanh(supported['issued_latent'][:,0])*.25,.25,atol=1e-6)
+    np.testing.assert_array_equal(supported['issued_latent'][:,1],0.)
+    assert end.state.domain_exit and int(end.clean_blocks)==0
+    np.testing.assert_allclose(end.state.history_value,low.state.history_value+.1)
+    import jax
+    for before,after in zip(jax.tree.leaves(low.gate),jax.tree.leaves(end.gate)):
+        np.testing.assert_array_equal(after,before)
+    _,legacy=step(low,None,path,j.float32(1.5),j.zeros(5),j.int32(7),j.float32(1.),j.bool_(False))
+    assert not legacy['support_permission_override'].any()
+    np.testing.assert_array_equal(legacy['issued_latent'],np.zeros((4,2)))
+
 
 def test_explicit_roles_give_every_controller_same_permission_without_changing_rules():
     import pytest

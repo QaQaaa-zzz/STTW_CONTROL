@@ -63,6 +63,21 @@ def floor_config(config,lower_bound):
     return dict(config,residual_interface=interface)
 
 
+def apply_reference_permission(action, *, disabled, stopped, zero_mode,
+                               profile, independent_support=False):
+    """Keep the NN disabled; optionally retain only existing profile7 speed.
+
+    The caller already evaluated the original speed-support rule from a zero
+    NN action when disabled. Profile7 is selected by the existing relay, not
+    by this permission factor. No new detection, target or hold time is added.
+    Terminal and explicit zero modes always take precedence.
+    """
+    override = (j.asarray(independent_support, bool) & disabled &
+                j.logical_not(stopped) & j.logical_not(zero_mode) & (profile == 7))
+    ordinary = j.where(disabled, j.zeros_like(action), action)
+    return j.where(override, action.at[1].set(0.), ordinary), override
+
+
 @struct.dataclass
 class ReferenceEvaluationState:
     state: object
@@ -101,7 +116,11 @@ def make_reference_step(env,actor,*,horizon_s,allow_reentry=False):
             s.offsets,s.tick,carry.gate,local.config,all_preferences=(profile==5))
         use_eso=((profile==4)|(profile==5))&~disabled
         action=j.where(use_eso,causal_action,proposed)
-        action=j.where(disabled,j.zeros(2),action)
+        independent_support = (False if params is None else
+                               params.get('support_independent_permission', False))
+        action,support_override=apply_reference_permission(action,disabled=disabled,
+            stopped=stopped,zero_mode=zero_mode,profile=profile,
+            independent_support=independent_support)
         gate=jax.tree.map(lambda a,b:j.where(use_eso,a,b),gate_candidate,carry.gate)
         fault=(~disabled&obs_fault)|(use_eso&receipt['engineering_fault'])
         advance=make_live_reference_step(local,horizon_s=horizon_s)
@@ -114,6 +133,7 @@ def make_reference_step(env,actor,*,horizon_s,allow_reentry=False):
             'tick_reward','scored_tick_reward','physical_tick','chi']
         data={k:logs[k] for k in names}
         data.update(actual_yaw=logs['yaw_unwrapped'],reference=logs['governed'],
+            support_permission_override=active&support_override,
             nominal_reference=logs['nominal'],filtered_offset=logs['filtered_offset'],
             correction_offset=logs['offsets'],target_offset=logs['target_offset'],
             domain_invalid=logs['domain_exit'],
