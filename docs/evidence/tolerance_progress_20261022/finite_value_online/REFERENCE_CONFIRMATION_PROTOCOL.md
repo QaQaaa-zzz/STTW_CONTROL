@@ -1692,3 +1692,12 @@ source_type=existing360audited_traces+actual_figure_view+independent_summary_ari
 ### STTW 补可复用独立端点读回：旧360条全部一致，供新确认完成后复核
 source_type=actual_existing_raw_arithmetic；verification=artifact_checked。新增只读CLI audit_reference_capability_results.py，不导入原scorer或goal helper，按保存XY、连续原task物理时钟、首次真实contact和故障标记独立计算全部已声明半径的首次进入/最近目标距离和全10s存活，未知/不完整不转负样本。实际对旧production360条raw/原路径SHA逐条复核，360唯一raw-context、三半径到达/首次时间/连续距离及物理label/ticks全部一致，新增independent_endpoint_audit.json。没有新物理/训练/拟合，也不是新增精确重放门槛；非差异故障修复，不重新评价旧控制结论。
 上一goal轮为实际图与算术新增证据（2304，8f5d4d7），本轮该audit完成可复用交付，当前新time运行依旧同PID4030153/session94010和既定cell1405的20分钟后检查，未高频读取物理status或启动另一任务；不靠历史running文件当实时存活。仅新增CLI，不触碰执行binding所封存的运行/分析package及三入口。下一在既定检查返回后核实真实进程/终态，若完整则直接用--confirmation独立核验全部新240+继承30唯一raw和432逻辑，并审核全XY/四臂得失；不扩大实验。
+
+
+### 新时刻四臂确认已完成：保留取舍证据，结束固定查表扩展
+
+先看[early−32N全部XY](../../../../runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/xy_early_-32.png)、[late−32N全部XY](../../../../runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/xy_late_-32.png)及[原alpha成本—抗扰点](../../../../runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/capability_cost_points/observed_points.png)。完整目的/条件/具体方法/逐例结果/核验/推论见[6KB裁决报告](../../../../runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/DECISION.md)，反审与分alpha明细已链接其中。
+
+240真实、384受扰逻辑完成，session94010 exit0；450267实际lower/480000槽、0训练，项目累计3780700。每法96：full79到达/84存活，context79/84，geometry78/84，alpha-only78/85。context继承无扰成本降19.128%/18.926%/6.799%，但总79/84包含到达2增2失、存活1增1失，不是逐例保留。alpha.5真实改善被alpha1退化抵消；对geometry仅多1例到达，未确立复杂选择必要性。保留有限取舍的时间迁移证据，停止固定lookup作为Transactions主方法继续调参，不替换现有冻结中层，不否定所有参考协调。
+
+新240raw与48继承名义/30旧raw全部审计；独立270唯一raw-context/432逻辑端点重算一致。9张全XY共108面板已目视；324诊断图生成、event18/58/62共9图实际目视，其余315未逐图审阅；未称期刊合规或独立TEST。报告Bark前两次网络失败保留，后一次最终通知调用无异常。当前无本任务活动进程、无新训练/物理追加/push。下一先由实际失败和权限缺口提出可反证的新控制增量，不继续改表追正结果。Transactions目标仍未完成。
