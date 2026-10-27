@@ -1,4 +1,4 @@
-"""Read all fixed48 trajectories: original destination, two horizons, full XY."""
+"""Read a sealed24/48 comparison: original destination, two horizons, full XY."""
 import argparse
 import json
 import pickle
@@ -17,16 +17,19 @@ ROLES=('original_full','replan_full','original_zero','replan_zero')
 def analyze(root):
     root=root.resolve();physical=root/'physical';out=root/'analysis'
     status=json.loads((physical/'status.json').read_text())
-    if status['phase']!='completed' or status['completed_cases']!=48:
-        raise ValueError('all48 numerical trajectories must finish; no partial result selection')
     p=json.loads((root/'plan.json').read_text());index=json.loads((physical/'case_index.json').read_text())
+    count=p['cases'];roles=tuple(p.get('evaluation_roles',ROLES))
+    if count not in (24,48) or count!=12*len(roles) or not set(roles)<=set(ROLES):
+        raise ValueError('declared complete24/48 panel required')
+    if status['phase']!='completed' or status['completed_cases']!=count:
+        raise ValueError('all declared numerical trajectories must finish; no partial result selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:
         raise ValueError('declared plan changed')
     for f,sha in {**p['input_sha256'],**p['source_sha256']}.items():
         if digest(f)!=sha:raise ValueError('declared input or execution source changed '+f)
     inventory=json.loads((root/'inventory.json').read_text())
-    if len(inventory)!=48:raise ValueError('declared48 missing')
-    if len(index)!=48 or len({c['case_id'] for c in index})!=48:raise ValueError('complete unique fixed48 required')
+    if len(inventory)!=count:raise ValueError('declared cases missing')
+    if len(index)!=count or len({c['case_id'] for c in index})!=count:raise ValueError('complete unique panel required')
     out.mkdir(exist_ok=False)
     paths={};goals={};trees={}
     for context,c in p['contexts'].items():
@@ -98,11 +101,11 @@ def analyze(root):
             task_window_speed_abs_error_time_integral_m=float(abs(raw['actual_forward_speed'][:task_stop]-c['requested_speed_m_s']).sum()*.005),
             diagnostic_changed_path_scored_cost=float(-raw['scored_tick_reward'][raw['active_tick']].sum())))
         raws[c['case_id']]=raw
-    if actual!=status['active_lower_ticks']:raise ValueError('physical charge differs from all48 raw traces')
+    if actual!=status['active_lower_ticks']:raise ValueError('physical charge differs from all raw traces')
     summary={};paired={}
     for horizon in ('10','20'):
         summary[horizon]={}
-        for role in ROLES:
+        for role in roles:
             group=[r for r in rows if r['role']==role]
             if len(group)!=12:raise ValueError('all12 balanced events per role required')
             hs=[r['horizons'][horizon] for r in group]
@@ -112,6 +115,7 @@ def analyze(root):
                 unknown=sum(h['physical_outcome']=='unknown' or h['goal_arrived'] is None for h in hs),
                 arrived_and_survived=sum(h['goal_arrived'] is True and h['physical_outcome']=='survived' for h in hs))
         for candidate,baseline in [('replan_full','original_full'),('replan_zero','original_zero'),('replan_full','replan_zero')]:
+            if candidate not in roles or baseline not in roles:continue
             key=lambda r:(r['context'],r['alpha'],r['event_id'])
             cc={key(r):r for r in rows if r['role']==candidate};bb={key(r):r for r in rows if r['role']==baseline}
             if set(cc)!=set(bb) or len(cc)!=12:raise ValueError('paired event mismatch')
@@ -130,20 +134,21 @@ def analyze(root):
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     render(out,rows,raws,paths,goals,physical)
     render(out,rows,raws,paths,goals,physical,task_only=True)
-    atomic_json(out/'receipt.json',dict(phase='completed',analysis_physics_steps=0,raw_traces_sha_checked=48,
+    atomic_json(out/'receipt.json',dict(phase='completed',analysis_physics_steps=0,raw_traces_sha_checked=count,
         complete_initial_dynamic_fields_checked=initial_checked,actual_lower_ticks=actual,
-        allocated_lower_slots=status['allocated_lower_slots'],pulse_and_reference_chain_checked=48,
+        allocated_lower_slots=status['allocated_lower_slots'],pulse_and_reference_chain_checked=count,
         source_and_inventory_identity_checked=True,replanned_path_artifacts=new_paths,
         scope='Initial PathState dynamic fields, physical pulse and issued-action filter chain checked. No independent replay of full neural inference or every runtime rebind carry leaf.',
         original_route_distance='Nearest original path sample up to goal; ~2cm spatial sampling, not exact segment distance or original V3 cost',
         cost_warning='Replanned-path score is diagnostic; 10s slice belongs to a 20s rollout, not the old 10s terminal penalty contract',
         figure_visual_review='pending'))
-    lines=['# GitHub Dubins重规划固定48结果','','原目标1m首次触地前进入，无末端姿态/速度/保持门槛。完整与zero中层都保留相同几何反馈/冻结local300。',
+    lines=[f'# GitHub Dubins重规划固定{count}结果：'+p.get('middle_model_label','current/zero'),'',
+           '原目标1m首次触地前进入，无末端姿态/速度/保持门槛。全部方法保留相同几何反馈/冻结local300。',
            '原路与重规划均20秒；10秒是同轨迹前缀，不是新旧终止罚奖励比较。','','|窗口|方法|到达/12|不摔/12|触地/12|未知|','|---|---|---:|---:|---:|---:|']
     for h,ss in summary.items():
         for role,r in ss.items():lines.append(f'|{h}s|{role}|{r["arrived"]}|{r["survived"]}|{r["contact"]}|{r["unknown"]}|')
     lines+=['','首先看xy_force_+0.png及±32图：黑点线为原目标路径，彩虚线为新规划路径，实线为实际轨迹；圆点是10秒位置，方点是20秒终点，x是真实触地。',
-            '首达后不停车，因此20秒末位置不等于是否曾到达；first_arrival_s逐例保存。全部48/原alpha/原goal与失败保留，不选择最好个例。',
+            f'首达后不停车，因此20秒末位置不等于是否曾到达；first_arrival_s逐例保存。全部{count}/原alpha/原goal与失败保留，不选择最好个例。',
             '这是相关DEV、两个路线、一个进入历史与冻结模型；正结果首先属于放松原路线约束后的规划基线，不证明新抗扰机制/规划器创新/独立泛化。',
             '10/20秒完整窗口存活另列；到达后再摔仍计曾到达但不计整窗存活。规划后的path条件reward只诊断，不能作为同原固定路线效用。',
             '原路偏离统计为原路线到目标段离散采样最近距离，位置采样约2cm；task_window字段在首次到达/触地/故障/时限中最早者截止。',
@@ -171,7 +176,7 @@ def render(out,rows,raws,paths,goals,physical,*,task_only=False):
                     raw=raws[r['case_id']];a=raw['active_tick'].astype(bool);xy=raw['actual_xy'][a];c=colors[r['role']]
                     arrival=r['horizons']['20']['first_arrival_s']
                     if task_only and arrival is not None:xy=xy[:int(round(arrival/.005))]
-                    ax.plot(*xy.T,c=c,lw=1.2,label=r['role'])
+                    ax.plot(*xy.T,c=c,lw=1.2,label=(r.get('middle_model_label','')+' '+r['role']).strip())
                     if len(xy)>=2000:ax.scatter(*xy[1999],c=c,marker='o',s=18)
                     marker=('^' if arrival is not None else 'x' if r['horizons']['20']['physical_outcome']=='contact' else 's') if task_only else ('x' if r['horizons']['20']['physical_outcome']=='contact' else 's')
                     ax.scatter(*xy[-1],c=c,marker=marker,s=24)
@@ -219,4 +224,4 @@ if __name__=='__main__':
         if directory.exists():(directory/'analysis_error.txt').write_text(traceback.format_exc())
         notify(a.root,'STTW重规划结果分析报错','原轨迹不变，分析错误已保留；不重跑仿真。')
         raise
-    else:notify(a.root,'STTW重规划结果分析完成','48条轨迹的10/20秒到达、触地和全部XY图已生成，等待图形核对。')
+    else:notify(a.root,'STTW重规划结果分析完成','封存轨迹的10/20秒到达、触地和全部XY图已生成，等待图形核对。')

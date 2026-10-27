@@ -61,6 +61,73 @@ def prepare(source,root):
     return plan
 
 
+def prepare_h75(baseline,historical,root):
+    """Missing H75 arms only; inherit the already completed current/zero panel.
+
+    This is a frozen-weight comparison, not a new controller or an architecture
+    ablation. All four registry entries are authenticated by the existing loader
+    so its declared model/interface contract is not weakened for this one arm.
+    """
+    baseline=Path(baseline).resolve();historical=Path(historical).resolve();root=Path(root).resolve()
+    p=json.loads((baseline/'plan.json').read_text())
+    if digest(baseline/'plan.json')!=json.loads((baseline/'seal.json').read_text())['plan_sha256']:
+        raise ValueError('baseline declaration changed')
+    status=json.loads((baseline/'physical/status.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=48:
+        raise ValueError('completed48 comparison required; never rerun a pending baseline')
+    for f,sha in p['input_sha256'].items():
+        if digest(f)!=sha:raise ValueError('baseline scientific input changed '+f)
+    changes={}
+    for f,sha in p['source_sha256'].items():
+        if digest(f)!=sha:
+            if Path(f).name not in ('goal_replanning_run.py','run_goal_replanning.py'):
+                raise ValueError('baseline controller/planner source changed '+f)
+            changes[f]=dict(old_sha256=sha,new_sha256=digest(f),reason='Generic real-lane count/opt-in historical loader and CLI routing; old controller/planner modules unchanged')
+    if digest(baseline/'common_environment_config.json')!=digest(historical/'common_environment_config.json'):
+        raise ValueError('historical common-runtime config differs')
+    hp=json.loads((historical/'plan.json').read_text())
+    models=json.loads((historical/'authenticated_models.json').read_text())
+    if digest(historical/'authenticated_models.json')!=hp['endpoint_receipt_sha256']:
+        raise ValueError('historical recorded endpoint identity changed')
+    from .middle_lineage_comparison import authenticate_historical_models
+    authenticate_historical_models(models)
+    key='FULLTAIL_PPO75_U77';root.mkdir(parents=True,exist_ok=False)
+    for name in ('common_environment_config.json','source_declaration.json'):
+        (root/name).write_bytes((baseline/name).read_bytes())
+    original=json.loads((baseline/'inventory.json').read_text())
+    cases=[dict(c,actor_role='lineage_h75',middle_model_label='H75',
+                case_id=c['case_id']+'/H75') for c in original if c['role'] in ('original_full','replan_full')]
+    if len(cases)!=24:raise ValueError('exact missing24 H75 trajectories required')
+    cached=json.loads((baseline/'physical/case_index.json').read_text())
+    if len(cached)!=48:raise ValueError('all48 baseline traces required')
+    for c in cached:
+        if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('cached baseline trace changed')
+    atomic_json(root/'inventory.json',cases);atomic_json(root/'cached_baselines.json',cached)
+    atomic_json(root/'historical_models.json',models)
+    modules=list(Path(__file__).parent.rglob('*.py'))+[Path('learning/cli/run_goal_replanning.py').resolve()]
+    archive=root/'source';archive.mkdir()
+    for i,f in enumerate(modules):(archive/f'{i:03d}_{f.name}').write_bytes(f.read_bytes())
+    files=[root/n for n in ('common_environment_config.json','source_declaration.json','inventory.json','cached_baselines.json','historical_models.json')]
+    files.extend([baseline/'plan.json',baseline/'analysis/results.json',Path('learning/configs/frozen_middle_registry.json').resolve()])
+    for c in p['contexts'].values():files.extend(Path(c[k]) for k in ('initial','path'))
+    for m in models.values():files.extend(Path(m[k]) for k in ('actor','checkpoint'))
+    files.extend(Path(__file__).parent/'_vendor/pythonrobotics'/n for n in ('LICENSE','UPSTREAM.json'))
+    plan=dict(p,experiment=root.name,source=str(baseline),model=models[key],historical_model_key=key,
+        cases=24,evaluation_roles=['original_full','replan_full'],middle_model_label='H75',
+        maximum_active_lower_ticks=96000,maximum_allocated_lower_slots=96000,
+        cached_baseline_cases=48,baseline_source_changes=changes,
+        question='Do the frozen H75 preference weights retain useful behaviour under the SAME20s planner and strong zero/current controls?',
+        initialization='Frozen registry H75 weights only for inference; full original task0 carry retained, no optimizer',
+        baseline='48 verified cached current/zero trajectories; only missing24 H75 original/replan arms execute',
+        inference_adapter='Existing authenticate_historical_models and embed_legacy_actor from the frozen common-interface lineage comparison, not current64 optimizer restore',
+        stop='Exactly24 missing H75 trajectories; same20s/contact/fault; no new paths/events/radii/gates/training or automatic retries',
+        input_sha256={str(f.resolve()):digest(f) for f in files},
+        source_sha256={str(f.resolve()):digest(f) for f in modules})
+    atomic_json(root/'plan.json',plan);atomic_json(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    atomic_json(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+    return plan
+
+
 def load(root):
     import jax
     import jax.numpy as j
@@ -81,10 +148,16 @@ def load(root):
         if digest(f)!=sha:raise ValueError('sealed input/source changed '+f)
     cfg=json.loads((root/'common_environment_config.json').read_text())
     decl=json.loads((root/'source_declaration.json').read_text())
-    authenticate_models(cfg,dict(free_GAE=p['model']))
+    native=None
+    if p.get('historical_model_key'):
+        from .middle_lineage_comparison import authenticate_historical_models
+        native=authenticate_historical_models(json.loads((root/'historical_models.json').read_text()))[p['historical_model_key']]
+    else:authenticate_models(cfg,dict(free_GAE=p['model']))
     cache=configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
     env,_=load_environment_contact_only(cfg,decl['source'],'terminal_contract_v2');env=GoalPreviewEnv(env)
-    cases=json.loads((root/'inventory.json').read_text());states=[];paths=[];goals=[]
+    cases=json.loads((root/'inventory.json').read_text());n=len(cases)
+    if n!=p['cases'] or n not in (24,48):raise ValueError('sealed real24 or48 only; no padding')
+    states=[];paths=[];goals=[]
     for c in cases:
         context=p['contexts'][c['context']]
         with np.load(context['path']) as z:path=GeometricPath(*(j.asarray(z[k]) for k in ('s','xy','heading','curvature','turn_end','goal')))
@@ -96,7 +169,9 @@ def load(root):
         states.append(state);paths.append(path)
         goals.append([np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.xy)[:,i]) for i in (0,1)])
     stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
-    with Path(p['model']['actor']).open('rb') as f:native=jax.tree.map(j.asarray,pickle.load(f))
+    if native is None:
+        with Path(p['model']['actor']).open('rb') as f:native=pickle.load(f)
+    native=jax.tree.map(j.asarray,native)
     env.set_log_template(states[0],paths[0],j.float32(cases[0]['requested_speed_m_s']))
     one=make_goal_step(env,make_path_actor(cfg),horizon_s=20.,spec=p['feedback_spec'])
     @jax.jit
@@ -108,12 +183,12 @@ def load(root):
     @jax.jit
     def rebind_batch(carry,paths,speeds,mask):
         rebound=jax.vmap(lambda c,p,v:rebind_geometry(c,p,v,env))(carry,paths,speeds)
-        return jax.tree.map(lambda a,b:j.where(mask.reshape((48,)+(1,)*(a.ndim-1)),a,b),rebound,carry)
-    carry=CausalRelayState(stack(states),stack([initial_reference_gate() for _ in cases]),j.zeros(48,j.int32),stack([initial_gate() for _ in cases]))
+        return jax.tree.map(lambda a,b:j.where(mask.reshape((n,)+(1,)*(a.ndim-1)),a,b),rebound,carry)
+    carry=CausalRelayState(stack(states),stack([initial_reference_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_gate() for _ in cases]))
     parameters=stack([dict(actor=dict(native=native,keep_channels=j.asarray(c['source_keep_channels'])),feedback_gain_rad=j.float32(.1)) for c in cases])
     speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
     pulses=j.asarray([physical_pulse(c,p['contexts'][c['context']]) for c in cases],j.float32)
-    modes=j.ones(48,j.int32)
+    modes=j.ones(n,j.int32)
     return dict(root=root,plan=p,config=cfg,env=env,cases=cases,initial=states,
                 original_paths=paths,goals=np.asarray(goals),cache=cache,chunk=chunk,
                 measured_pose=measured_pose,rebind_batch=rebind_batch,
@@ -130,14 +205,17 @@ def run(root,*,shape_only=False):
     atomic_json(directory/'status.json',dict(phase='initializing',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0,pid=os.getpid()))
     try:
         runtime=load(root);carry,parameters,batched_paths,speeds,pulses,modes=runtime['args']
+        n=len(runtime['cases'])
         shaped=jax.eval_shape(runtime['chunk'],*runtime['args'])
-        atomic_json(directory/'shape_receipt.json',dict(real_lanes=48,padding=0,upper_steps=50,
+        rebound_shape=jax.eval_shape(runtime['rebind_batch'],carry,batched_paths,speeds,j.zeros(n,bool))
+        if jax.tree.structure(rebound_shape)!=jax.tree.structure(carry):raise ValueError('masked rebind changed carry structure')
+        atomic_json(directory/'shape_receipt.json',dict(real_lanes=n,padding=0,upper_steps=50,
                     active_log_shape=shaped[1]['active_tick'].shape,physics_steps=0,cache_directory=runtime['cache']))
         if shape_only:
             atomic_json(directory/'status.json',dict(phase='completed',physics_steps=0,optimizer_updates=0));return
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU required')
         with (directory/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
-        paths=list(runtime['original_paths']);changed=np.zeros(48,bool);arrived=np.zeros(48,bool)
+        paths=list(runtime['original_paths']);changed=np.zeros(n,bool);arrived=np.zeros(n,bool)
         decisions=[];logs_all=[];actual=0;slots=0
         for block in range(20):
             if block:
@@ -147,7 +225,7 @@ def run(root,*,shape_only=False):
                     carry.state.projection.cross_track,carry.state.follower.invalid,
                     carry.state.physical.failed,carry.state.fault,carry.state.tick,
                     carry.state.domain_exit,carry.clean_blocks))
-                mask=np.zeros(48,bool)
+                mask=np.zeros(n,bool)
                 for i,c in enumerate(runtime['cases']):
                     pose=poses[i]
                     if c['role'].startswith('replan') and replan_requested(
@@ -167,7 +245,7 @@ def run(root,*,shape_only=False):
             carry,logs=runtime['chunk'](carry,parameters,batched_paths,speeds,pulses,modes);jax.block_until_ready(carry)
             logs=jax.device_get(logs);logs=flatten_ticks(logs);logs_all.append(logs)
             np.savez_compressed(directory/f'chunk_{block:02d}.npz',**logs)
-            actual+=int(logs['active_tick'].sum());slots+=200*48
+            actual+=int(logs['active_tick'].sum());slots+=200*n
             fatal=logs['contact_failure']|logs['nonfinite']|logs['lower_fault']|logs['policy_fault']
             eligible=logs['active_tick']&(np.cumsum(fatal,axis=0)==0)
             distance=np.linalg.norm(logs['actual_xy']-runtime['goals'][None,:,:],axis=-1)
@@ -187,7 +265,7 @@ def run(root,*,shape_only=False):
             index.append(dict(c,raw_file=str(file),raw_sha256=digest(file),original_goal_xy=runtime['goals'][i].tolist(),replanned=bool(changed[i])))
         atomic_json(directory/'case_index.json',index)
         atomic_json(directory/'replanning_decisions.json',decisions)
-        atomic_json(directory/'status.json',dict(phase='completed',completed_cases=48,active_lower_ticks=actual,
+        atomic_json(directory/'status.json',dict(phase='completed',completed_cases=n,active_lower_ticks=actual,
             allocated_lower_slots=slots,replanned_cases=int(changed.sum()),optimizer_updates=0,elapsed_s=time.monotonic()-started))
     except BaseException as exc:
         (directory/'traceback.txt').write_text(traceback.format_exc())
