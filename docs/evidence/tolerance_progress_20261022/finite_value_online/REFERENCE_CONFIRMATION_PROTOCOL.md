@@ -2005,3 +2005,6 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 
 ### 旧信用20秒共同接续执行入口准备
 20s归档host及故障处理完成，CPU14项通过；实际GPU90路351观测/3763点/geometry-only shape通过，0积分。三次装配错误及原输出保留，不影响旧证据。固定90条结果PENDING；条件、目的、做法与去留见[协议](LEGACY_CREDIT_GOAL_CONTINUATION_PROTOCOL.md)。本组到达与防摔分开，不采用尚未定义的canonical Jα。
+
+### 固定旧信用90条完成：时间确有作用，简单基线覆盖主终点
+共同20s/一次因果规划下，受扰credit11/16到达15/16活，ordinary9/16与15/16；parent15/16与15/16，floor16/16与16/16、zero真实8/8与8/8。credit对ordinary3增1失、无防摔新增；floor/zero覆盖主终点。10→20s同轨迹parent8→15、ordinary3→9、credit7→11、floor8→16、zero5→8。独立90raw核数一致，349608active/360000slots/277.70s/75replans/0训练。全XY/任务前缀/奖励诊断已保存，原goal1m不加终速保持门槛。按固定协议封存，不扩条件，不把任务收益写容扰提升；详见[报告](LEGACY_CREDIT_GOAL_CONTINUATION_RESULTS.md)。

@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "206948e4ada74d8c34a9180386ed28196c53151c4b79d4f87a03fb47be773550",
-  "builder_sha256": "5925a68ab0e20c4da22ba8f5431417ab1793270c165525e43355686829035d1c",
+  "manuscript_sha256": "fb65d04dd37c4f9933b554fd7665703792c5325256f3e866c614d63000df0f6e",
+  "builder_sha256": "904849d5579c59fdcbd0774bd815b405077ec433a9443c366f1711069032914e",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -249,6 +249,36 @@
     "E041": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/joint_endpoint_tradeoff_review_v1/model_identity_receipt.json",
       "sha256": "6bef63e9fcc39cf6fccff030855e574d6be7dd03601a7f810d0308ff4627dfe0",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E042": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/analysis/review.json",
+      "sha256": "ced4fe710780f4ee1c6993988bc45421a82cb560eb879300122bddcf3f5267ec",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E043": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/independent_review.json",
+      "sha256": "a59131278357f8ae21a2a721d7e8553a56dab7a69bc101f35690ee357db8aba3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E044": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/execution_plan.json",
+      "sha256": "f127f4edc95ffe63be15d0d5bad25a2b35c51d28bde6dfe92fe68d6bcbc5fc34",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E045": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/diagnostics/receipt.json",
+      "sha256": "b8f27513f52b0be410a57c25b82bd871f9204669cc46f1ab2caf0c34cde50e1e",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E046": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/evaluation/status.json",
+      "sha256": "0574b12b0900c3753fc8d25304f79285a9d43ace41d819d581c3d511aa43f97e",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

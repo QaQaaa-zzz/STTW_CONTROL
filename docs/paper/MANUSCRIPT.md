@@ -290,6 +290,28 @@ zero左2.8两条在3.54秒已到原目标，9.78秒才域停止；整窗存活�
 
 以上支持保留旧信用终点的条件性任务用途，未证明原用户Jα改善、未知时刻防摔增量或信用训练的可重复机制，不自动恢复训练或采用为当前默认。全部命中在脉冲后；credit的7次受扰首达中3次Actor动作有效、4次禁用，只是当步遥测，不能将禁用Actor解释为恒参考尾段或将最后动作归因于整段收益。[E040]
 
+### 4.11 共同20秒任务接续：条件收益仍在，但简单基线覆盖主终点
+
+沿原隐藏时刻的左右90度/R1.1米、用户速度左1.8/右1.5米/秒、α=.5/.75和零力/1.9或2.9秒×±32N/.1秒事件，前瞻固定90条真实轨迹。保留三组原Actor与冻结底层、完整task0/physical700初态、原参考权限/滤波；共同采用既有16有效块交回和1秒普通规划边界下最多一次R1.8 Dubins到原世界目标。没有现代几何反馈、短速度支持、goal-preview或新训练。floor为父Actor加1.5米/秒参考下限，zero仅去除神经修正，保留普通跟随与冻结底层。[E044]
+
+|方法|受扰前10秒到达|受扰20秒到达|受扰20秒存活|真实受扰分母|
+|---|---:|---:|---:|---:|
+|parent H75|8|15|15|16|
+|ordinary64|3|9|15|16|
+|physical-credit64|7|11|15|16|
+|parent＋floor|8|16|16|16|
+|zero-middle|5|8|8|8|
+
+到达按原目标1米首次进入且早于触地/故障，不加末速、末航向或保持 veto；无扰四Actor角色各4/4、zero2/2均到达且存活，UNKNOWN0。zero的8条受扰是唯一物理轨迹，跨两α比较只是显式依赖复用，不能记为16独立样本。同批10秒与20秒切片表明确有晚到；原旧10秒运行还相差规划/交回合同，不能将旧新总差异全部归因延时。[E042–E043]
+
+credit对ordinary受扰到达3增1失、存活0增0失；对parent到达0增4失，对floor和逻辑共享zero均0增5失且存活0增1失。三条触地均在右弯α.5/1.9秒/−32N：parent3.010秒、ordinary2.470秒、credit2.560秒，延长观察不能使已触地者继续恢复。credit四条存活未到轨迹最近距为1.300/1.971/1.012/1.043米，后两例属于临界未达，不形容为根本失稳；.5/.75米半径下credit到达均8/16，ordinary均9/16，保留尺度敏感性。[E042–E043]
+
+![旧低速紧弯在共同接续合同下的任务前缀；菱形为原目标1米首达，叉为真实触地；zero跨α共享，完整20秒轨迹另存](../../runs/legacy_credit_goal_continuation_v1/diagnostics/task_prefix_right_t380_F-32.png)
+
+一次90路批量执行共349608实际lower ticks、360000分配槽，277.70秒含初始化/编译/I/O，75次因果重规划、0优化更新。全部raw由独立AI重新计算端点和配对；不是独立训练重复或物理重演。实际当前路线V3分项乘scale×.005重建运行奖励，最大日志残差4.77e−7，失败余项另列；只核本组，不能据此认证所有历史训练dt。改路后的V3仍非原用户canonical Jα。[E043,E045–E046]
+
+裁决：保留旧credit对匹配ordinary的条件到达用途，但该用途没有在本合同下形成超越父/简单规则的主终点增量，不恢复其为主要防摔方法。按预声明封存本家族，不扩力/时刻/路径/窗口/库或加训追差异。该覆盖不撤销4.10旧合同的条件用途，也不能扩大为所有路径—速度偏好效用已被覆盖；完整方法、连续值和全部XY见[结果报告](../evidence/tolerance_progress_20261022/finite_value_online/LEGACY_CREDIT_GOAL_CONTINUATION_RESULTS.md)。
+
 ## 5 早期解析容扰代理回答的是什么
 
 早期固定速度局部模型采用不稳定模态坐标和折算脉冲：
@@ -387,3 +409,5 @@ E035：finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md，�
 [7] Li, H., Wang, D., Wang, X., Liu, X., Liu, P., Bai, C., and Li, X. PCHC: Enabling Preference Conditioned Humanoid Control via Multi-Objective Reinforcement Learning. [arXiv:2603.24047v1](https://arxiv.org/abs/2603.24047)，2026。预印本。
 
 [8] Mahajan, I., Chen, C., Dümbgen, F., and Plancher, B. RAYA: Learning Where and When to Intervene for Robot Recovery. [arXiv:2609.21690v1](https://arxiv.org/abs/2609.21690)，2026。预印本。
+
+E042：legacy_credit_goal_continuation_v1/analysis/review.json；E043：同run independent_review.json；E044：execution_plan.json；E045：diagnostics/receipt.json；E046：evaluation/status.json。均AI artifact_checked，人类核验未记录。
