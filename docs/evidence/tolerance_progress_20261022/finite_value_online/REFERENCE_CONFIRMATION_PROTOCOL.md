@@ -1723,3 +1723,12 @@ run为runs/support_permission_factor_v1，原始数据HDD。54项相关CPU测试
 所有候选运行时权限/真实filter/slew/clip审计通过，后独立216 raw-context XY/contact/clock所有半径一致，奖励与真实pulse读回一致。全部9XY/108面板/216逻辑实际目视；324逐步奖励/跟踪/速度图已生成，实际目视event10三图与event70两图，余319未逐图目视；图与元数据见actual_visual_review.json/figure_provenance.json。数值stage历史pending字符串不改，execution_resolution记录后续分析/诊断complete；无新增物理重跑、训练、precision gate或他项目操作。新分析CLI只是物理结束后的只读代码，未改执行封存源码。分析初版说明字符串产生SyntaxWarning已修后真实诊断exit0；没有影响数值运行。
 按scientific-brainstorming做非发起人结果反审：其逐108候选raw再核SHA/override/正目标一致，支持关闭固定因素、不改默认，不把审查等同人类同行评审。另先独立生成、后共享核对的next_independent_options建议先裁决论文贡献，不继续发明模块。重要边界：原CEM/随机确实只名义优化，但旧lookup已做有限池受扰约束选择；当前栈内以聚合受扰结果驱动新连续候选优化的已执行run本次未定位到。这不证明该操作有效或新颖，也不足以自动启动。
 下一两项：原位整理claim—最强公平反驳者—已有证据，保留原alpha用途与真实系统收益；复用已有完整carry/合法参考见证界定残余机会，具体信息—动作—后果链未明确前不另开模型/搜索。Transactions长期目标active，方法新颖性与独立确认尚未完成。技能软件引用沿本报告已有Scientific Agent Skills条目，作为流程来源而非控制证据。
+
+
+### 论文主张与合法救回见证交叉复算：保留条件收益，停止把模块堆成贡献
+新增只读audit_sttw_paper_claims.py实际exit0，0新物理/训练。输出runs/support_permission_factor_v1/analysis/paper_claim_audit/{README.md,claims_readback.json,claim_registry.json}，README约6KB；7条C主张与7份源JSON SHA绑定，AI artifact_checked、人类作者核验未记录、submission_ready=false，不将报告完成当Transactions目标完成。
+独立重算原生16记录：H75/current各四上下文都保留α0路径更准/α1速度更准，平均原用户效用矩阵对角较低；1m到达H758/8、current6/8，均8活。匹配低速360中96受扰current/H75/zero为75/66/68到达、85/85/90活；current对H75到达9增0失、存活4增4失；对zero到达11增4失、存活2增7失。全部96配对原onset/力/时长/请求一致，原0.5/0.75敏感性和原全窗结局并列，未拼不同面板。不能因当前低速增益丢弃H75原生偏好，也不称全域升级或训练算法归因。
+同状态pause360重新配对，四正分支仅两个不同完整状态：v1.7/yaw0/左/α1/−32救存活但最近5.379m未到；v2.1/yaw0/+32把2.076→.896/.956m新增1m到达。共同fork tick752=3.76s、0.4秒两mask，原完整carry/history/filter已认证，当前独立review另读6raw SHA/实际target/reference。暂停神经steer不是实际steer目标归零，几何反馈/短速度支持仍存在；精确pulse-end切点是特权。旧非特权rollrate relay虽救回，但已被同gate解析速度支持覆盖。未定位到超强简单规则且在线信息能选动作的完整链，记UNKNOWN而非物理不可救。
+旧教学摘要与两个原source SHA核对，165/192对充分PPO164/192、6增5失；保留旧任务标签，不转成新到达/防摔。原lookup和权限因素已经结束，不靠这些结果启动新网络/搜索。独立论文主张反审支持上述边界，见paper_claim_independent_review.md、existing_witness_scope_review.md。
+本轮再次打开三原始arXiv摘要2510.10851(v2)、2608.00880(v1)、1608.02266(v1)，核对偏好跟踪/外力顺应、参考治理防侧翻、自行车RL相邻事实，限制宽泛首次性；不是系统综述，不证明具体任务已同条件解决。scientific-brainstorming/scientific-writing用于结构化复核；流程软件来源2609.00065当前v2/五作者/2026再次核对，引用保留于精简README，非控制证据。未传研究数据至外部服务。
+当前论文问题仍是有限参考权限下偏好、任务与动态平衡抗扰的协调；任务/系统贡献可以成立，不要求必须发明全新算法，但具体差异与充分确认尚缺。下一两项：形成围绕该任务/系统问题的证据提纲，区分成立功能/经验取舍与未证机制；只为明确的新信息缺口设计下一项判别工作，不默认再加模块或以尚未穷尽控制为启动依据。原冻结模型不换，本轮无训练/新物理/push/实机/JIT变更。
