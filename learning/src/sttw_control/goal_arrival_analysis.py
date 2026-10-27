@@ -90,7 +90,7 @@ def prepare_legacy_sources(worktree, output):
     return sources
 
 
-def analyze(sources, output, *, radius_m=.3):
+def analyze(sources, output, *, radius_m=.3, radius_authority=None):
     output = Path(output).resolve()
     output.mkdir(exist_ok=False)
     radii = sorted(set([.1, .2, .3, .5, radius_m]))
@@ -149,7 +149,7 @@ def analyze(sources, output, *, radius_m=.3):
         with (output / filename).open('w') as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     receipt = dict(sources=identities, working_radius_m=radius_m,
-        radius_authority='30cm is an explicitly stated working assumption, not a user-specified numerical value.',
+        radius_authority=radius_authority or 'Caller-supplied retrospective working radius; this receipt does not establish user authorization or preregistration.',
         radii_m=radii, physics_steps=0, optimizer_updates=0,
         semantics='Observed actual XY enters original target disk before contact/fault; first arrival, no terminal heading/speed/hold test. Later physical outcome reported separately.',
         limits='Retrospective reanalysis of old DEV data; no independent test or new control improvement; original labels and rewards unchanged.')
