@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "422846d0ac450fcd31d7fb1c888864a934032907048f06fa6f16d15660219481",
-  "builder_sha256": "079a3c927c47556b0c7f20b1bd34aa3c28fd1ca9d01f088b9769a580af8184e3",
+  "manuscript_sha256": "475aa333189c58caa34d13d7b5204dcc4645fb4fe57dac118ea4ca9ad7c5cbc4",
+  "builder_sha256": "20f43f6c196bef3b51ce50c83ed5d60639396f4a5af5b9af98a0a7336f57ca64",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -212,7 +212,7 @@
     },
     "E035": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md",
-      "sha256": "c6bb0c44d103f770050d41077aef11e576d6f06d65463d414ecc096c137a2c4a",
+      "sha256": "051476f501e67ca35b1c7dfbd84fc52eec4bff730e35e77abb4f8529b4862dfd",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -417,6 +417,18 @@
     "E069": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/utility_envelope/independent_review.json",
       "sha256": "d383bcc549e5dbc0c741639670a1eb163c6a962ddfd03ebfec7a80d4d0586f27",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E070": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/capability_zero_common3_review_v1/review.json",
+      "sha256": "ec4ee3314bf02a47f6d927b41e076d9ef82a1a0a6028066a4fbe3600239135be",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E071": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/capability_zero_common3_review_v1/independent_review.json",
+      "sha256": "a38bfe99a8475f807be5ef689b999650aaa30e0c3d76fa25b1d8d5fbeec64573",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
