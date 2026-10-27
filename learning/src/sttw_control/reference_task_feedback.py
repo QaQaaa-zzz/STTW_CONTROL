@@ -96,10 +96,15 @@ def make_feedback_evaluation_step(env, actor, *, horizon_s, spec):
     return step
 
 
-def verify_feedback_log(raw, case, config, spec):
+def verify_feedback_log(raw, case, config, spec, *, disabled_action_audit=None):
     legal=np.asarray(raw['actor_action_valid'],bool)
     disabled=np.asarray(raw['active_tick'],bool)&~legal
-    np.testing.assert_array_equal(raw['issued_latent'][disabled],np.zeros((disabled.sum(),2)))
+    if disabled_action_audit is None:
+        np.testing.assert_array_equal(raw['issued_latent'][disabled],np.zeros((disabled.sum(),2)))
+    else:
+        # An explicitly different permission protocol must check the original
+        # saved actions itself; never replace them with synthetic zero logs.
+        disabled_action_audit(raw)
     if not np.any(legal):
         return
     original=np.asarray(raw['original_actor_latent'])[legal]

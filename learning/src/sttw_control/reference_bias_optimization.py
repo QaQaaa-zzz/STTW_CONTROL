@@ -75,7 +75,7 @@ def make_bias_step(env, actor, *, horizon_s, spec):
     return step
 
 
-def verify_bias_log(raw, *, positions, targets, case, config, spec, path):
+def verify_bias_log(raw, *, positions, targets, case, config, spec, path,disabled_action_audit=None):
     """Independent NumPy reconstruction, followed by all original goal audits."""
     from .goal_preview_baseline import verify_goal_log
     legal = np.asarray(raw['actor_action_valid'], bool)
@@ -97,7 +97,8 @@ def verify_bias_log(raw, *, positions, targets, case, config, spec, path):
     zero = bias[legal]==0
     np.testing.assert_array_equal(coordinated[zero], native[zero])
     verify_goal_log(dict(raw, original_actor_latent=raw['coordinated_actor_latent']),
-                    case, config, spec, path, expected_keep=np.ones((len(active), 2), bool))
+                    case, config, spec, path, expected_keep=np.ones((len(active), 2), bool),
+                    disabled_action_audit=disabled_action_audit)
 
 
 def minimize_nominal_cost(evaluate, *, seed, population=16, generations=4, method='cem'):

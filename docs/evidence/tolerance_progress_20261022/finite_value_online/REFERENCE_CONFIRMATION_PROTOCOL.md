@@ -1707,3 +1707,9 @@ source_type=actual_existing_raw_arithmetic；verification=artifact_checked。新
 复用新时刻确认240份raw的机制读回显示：full12次触地中7次存在解析支持仍激活、但Actor禁用使整个target清零的.04–.26秒交集；另5次不具此入口。这只是因果候选，不保证能救。全部12次原支持trigger早于舵角近限，故不增加舵角预警阈值。详见runs/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/mechanism_readback/README.md及非发起人反审。
 原位最小修改anticipatory_reference.py：params显式support_independent_permission，缺省false；原profile7、Actor禁用且非终止/zero_mode时，仅保留原候选速度，转向修正0，网络权限/历史/重入及原gate规则不改。新增support_permission_override实际日志字段。17项相关CPU测试通过，包括JIT/vmap权限组合、旧默认路径、原真实reference工厂接线（物理advance用测试替身，非物理控制验证）。首次测试1项因Python对象identity断言失败，改为全部pytree值不变后通过；未改控制逻辑凑测试。read_reference_failure_mechanisms.py已py_compile，git diff --check通过。
 当前只完成kernel接线和针对性CPU检查；runtime显式参数、独立新日志审计、108轨迹新协议/封存/数值执行尚未完成，不把此修改当新控制效果。旧seal源码快照与历史raw保留，新工作源不再宣称匹配旧seal。下一完成新执行与审计接口，再做固定108候选对认证旧full108对照，0训练、不扫阈值/时长。若阳性先升级强简单基线，不直接充当Transactions贡献。
+
+
+### 支持权限固定108对照执行就绪（尚无新数值结果）
+run为runs/support_permission_factor_v1，原始数据HDD。54项相关CPU测试passed3.71s；首次扩展测试仅因PYTHONPATH缺learning/cli出现import error，补原有CLI路径后通过。独立NumPy审计显式接入新协议：原disabled全零默认不变，新协议核对真实issued/relay/profile/override和零steer，另按真实相邻状态核对target/filter/slew/bounds/antiwindup，不替换保存的动作。单条既有真实2000tick读回通过；最初float64递归滤波累计到4.025e-6后改成逐真实相邻状态转移核对，未放宽4e-6容差、未改物理。
+108条candidate包含全部96受扰+12无扰，与认证旧full108缓存配对；唯一控制变化为原支持权限分离，0训练。所有旧baseline raw SHA及实际pulse已复核；差异仅声明的5个旧源码模块，新源码/配置/完整起点/模型及真实批量封存，旧历史run不修改。runtime仅显式接受108真实lane，旧8/16默认保留；batch_inputs供真实执行及shape共用，无padding。真实GPU模型全108输入shape已完成、physics0；这不是数值或提速证明。
+下一按固定108×2000lower最大216000槽运行一次，之后全部XY/到达/物理存活/原alpha成本及全部得失裁决。失败保留partial成本+Bark，不自动重试；不扫阈值/时长，也不把权限修正本身当Transactions创新。

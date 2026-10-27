@@ -9,7 +9,7 @@ from .preference_best import atomic_json, digest
 
 def batch_size(cases, vectors, allowed=(8,16)):
     n=len(cases)
-    if n not in allowed or not set(allowed)<={8,16,64} or np.asarray(vectors).shape!=(n,6):
+    if n not in allowed or not set(allowed)<={8,16,64,108} or np.asarray(vectors).shape!=(n,6):
         raise ValueError('explicitly allowed real lanes required; no implicit padding')
     return n
 
@@ -30,7 +30,8 @@ def encode_objective(row):
     return result
 
 
-def score_raw(raw, case, config, path, *, targets=None, positions=None, feedback_spec=None):
+def score_raw(raw, case, config, path, *, targets=None, positions=None, feedback_spec=None,
+              initial_state=None):
     from .anticipatory_run import physical_outcome
     from .anticipatory_analysis import cost_accounting
     from .survival_endpoint_task_metrics import goal_arrival_metrics
@@ -40,7 +41,15 @@ def score_raw(raw, case, config, path, *, targets=None, positions=None, feedback
     active=np.asarray(raw['active_tick'],bool)
     outcome=physical_outcome(active,raw['contact_failure'],raw['nonfinite']|raw['lower_fault']|raw['policy_fault'],2000)
     if targets is not None:
-        verify_bias_log(raw,positions=positions,targets=targets,case=case,config=config,spec=feedback_spec,path=path)
+        disabled_audit=None
+        if case.get('support_independent_permission',False):
+            from .support_permission_audit import verify_disabled_support,verify_correction_chain
+            if initial_state is None:raise ValueError('permission audit requires real complete initial state')
+            verify_correction_chain(raw,config,initial_filtered=initial_state.filtered,
+                                    initial_offsets=initial_state.offsets)
+            disabled_audit=lambda trace:verify_disabled_support(trace,config,enabled=True)
+        verify_bias_log(raw,positions=positions,targets=targets,case=case,config=config,spec=feedback_spec,path=path,
+                        disabled_action_audit=disabled_audit)
         verify_gate_log(raw,case)
     point=[np.interp(float(path['goal']),path['s'],path['xy'][:,i]) for i in range(2)]
     goals={str(radius):goal_arrival_metrics(raw,goal_xy=point,radius_m=radius,dt=.005,horizon_s=10.) for radius in [.5,.75,1.]}
@@ -90,13 +99,28 @@ class BiasRuntime:
             return jax.lax.scan(lambda c,_:jax.vmap(one)(c,parameters,paths,speeds,pulses,modes),carry,None,length=50)
         self.chunk=chunk
 
-    def rollout(self,cases,vectors,directory,*,allowed_real_batch_sizes=(8,16)):
+    def batch_inputs(self,cases,vectors,*,allowed_real_batch_sizes=(8,16)):
+        """One source of actual unpadded inputs for shape checks and execution."""
         import jax
         import jax.numpy as j
         from .causal_reference_baseline import initial_gate
         from .causal_recovery_relay import CausalRelayState,initial_gate as initial_relay
         from .reference_bias_optimization import bias_targets
         from .evaluation_clock import physical_pulse
+        n=batch_size(cases,vectors,allowed_real_batch_sizes)
+        stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
+        states=[self.origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
+        targets=[bias_targets(v) for v in vectors]
+        parameters=stack([dict(actor=dict(native=self.native,keep_channels=j.array([True,True])),feedback_gain_rad=j.float32(.1),
+                               support_independent_permission=j.bool_(c.get('support_independent_permission',False)),
+                               bias_positions=j.asarray(self.plan['contexts'][c['context']]['bias_positions_m']),bias_targets=j.asarray(t)) for c,t in zip(cases,targets)])
+        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
+        paths=stack([self.paths[c['context']] for c in cases]);speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
+        pulses=j.asarray([physical_pulse(c,self.plan['contexts'][c['context']]) for c in cases],j.float32);modes=j.ones(n,j.int32)
+        return (carry,parameters,paths,speeds,pulses,modes),states,targets
+
+    def rollout(self,cases,vectors,directory,*,allowed_real_batch_sizes=(8,16)):
+        import jax
         from .anticipatory_run import flatten_ticks
         out=Path(directory)
         if (out/'audit_recovery.json').exists():
@@ -113,15 +137,9 @@ class BiasRuntime:
             return rows
         out.mkdir(parents=True,exist_ok=False)
         n=batch_size(cases,vectors,allowed_real_batch_sizes)
-        stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
-        states=[self.origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
-        targets=[bias_targets(v) for v in vectors]
-        parameters=stack([dict(actor=dict(native=self.native,keep_channels=j.array([True,True])),feedback_gain_rad=j.float32(.1),
-                               bias_positions=j.asarray(self.plan['contexts'][c['context']]['bias_positions_m']),bias_targets=j.asarray(t)) for c,t in zip(cases,targets)])
-        carry=CausalRelayState(stack(states),stack([initial_gate() for _ in cases]),j.zeros(n,j.int32),stack([initial_relay() for _ in cases]))
+        (carry,parameters,paths,speeds,pulses,modes),states,targets=self.batch_inputs(
+            cases,vectors,allowed_real_batch_sizes=allowed_real_batch_sizes)
         with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
-        paths=stack([self.paths[c['context']] for c in cases]);speeds=j.asarray([c['requested_speed_m_s'] for c in cases],j.float32)
-        pulses=j.asarray([physical_pulse(c,self.plan['contexts'][c['context']]) for c in cases],j.float32);modes=j.ones(n,j.int32)
         data=[];active_ticks=0;allocated=0;start=time.monotonic()
         atomic_json(out/'inventory.json',dict(cases=cases,vectors=np.asarray(vectors).tolist()))
         for block in range(10):
@@ -142,7 +160,8 @@ class BiasRuntime:
         for lane,(case,t) in enumerate(zip(cases,targets)):
             raw={k:v[:,lane] for k,v in combined.items()};file=out/'cases'/f'case_{lane:02d}.npz'
             row=score_raw(raw,case,self.cfg,self.path_arrays[case['context']],targets=t,
-                          positions=self.plan['contexts'][case['context']]['bias_positions_m'],feedback_spec=self.plan['feedback_spec'])
+                          positions=self.plan['contexts'][case['context']]['bias_positions_m'],feedback_spec=self.plan['feedback_spec'],
+                          initial_state=states[lane])
             row.update(raw_file=str(file.resolve()),raw_sha256=digest(file),vector=np.asarray(vectors[lane]).tolist())
             # JSON remains strict; infeasibility is explicit, not a null unknown.
             rows.append(encode_objective(row))

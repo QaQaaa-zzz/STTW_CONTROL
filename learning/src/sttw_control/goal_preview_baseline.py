@@ -100,7 +100,7 @@ def make_goal_step(env,actor,*,horizon_s,spec):
     return step
 
 
-def verify_goal_log(raw,case,config,spec,path,*,expected_keep=None):
+def verify_goal_log(raw,case,config,spec,path,*,expected_keep=None,disabled_action_audit=None):
     """NumPy replay of block-held target selection and single publish slew."""
     from .reference_task_feedback import verify_feedback_log
     legal=np.asarray(raw['actor_action_valid'],bool);active=np.asarray(raw['active_tick'],bool)
@@ -109,7 +109,8 @@ def verify_goal_log(raw,case,config,spec,path,*,expected_keep=None):
     checked=np.ones(len(active),bool) if expected_keep is None else active
     np.testing.assert_array_equal(raw['source_keep_channels'][checked],expected[checked])
     np.testing.assert_array_equal(raw['source_actor_latent'][legal],np.where(expected[legal],raw['original_actor_latent'][legal],0.))
-    verify_feedback_log(dict(raw,original_actor_latent=raw['source_actor_latent']),case,config,spec)
+    verify_feedback_log(dict(raw,original_actor_latent=raw['source_actor_latent']),case,config,spec,
+                        disabled_action_audit=disabled_action_audit)
     c=config['follower'];dt=config['timing']['lower_dt_s'];goal=float(path['goal'])
     point=np.array([np.interp(goal,path['s'],path['xy'][:,i]) for i in range(2)])
     selected=[];starts=np.flatnonzero(active&(raw['physical_tick']%4==0))
