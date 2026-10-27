@@ -135,6 +135,12 @@ subject to:  frozen closed loop meets the declared disturbance-design requiremen
 
 同中途状态实验则继承完整物理、ESO、local300历史/FIFO、滤波、limiter、gate与clock，逐叶克隆，不只匹配位置和速度。当前实验多数来自相关祖先、有限进入状态和已用于开发的面板。新起扰时刻检查仍是DEV迁移证据，不是独立最终TEST；跨力档或同快照多轨迹不是独立训练重复。
 
+### 3.4 实际训练覆盖与合同迁移
+
+H75的320个恢复bank上下文请求速度实际为2.409–2.799m/s、半径参数1.800–3.000m，原参考速度下限1.5m/s、转角上限0.35rad；近期4.12–4.15的1.5m/s、R1.1m及下限1.0m/s/转角上限0.65rad属于请求、几何与权限迁移。该bank范围不是完整生命周期观测支持，请求低于范围不等于物理速度或全部351维观测从未出现。匹配迁移比较的结果仍保留，但不外推H75原生或全部学习方法无实时反馈价值。[E059,E060]
+
+项目已补过训练覆盖：后继普通低速75PPO的160上下文请求1.533–1.941m/s，但半径参数2.216–3.467m、仍原权限；在线task_only/physical_credit64则已在左1.8/右1.5m/s、R1.1m和扩展权限训练。后者只有两任务、固定起扰时刻及左F0/+32、右F0/−32，不能当全方向覆盖，也不能称项目从未做过低速紧弯适配。本核对未分离权限、几何、奖励和训练量的因果作用，不据范围差异自动追加训练。[E059,E060]
+
 ## 4 已完成结果
 
 ### 4.1 原生偏好功能与后继权重代价
@@ -362,7 +368,7 @@ credit对ordinary受扰到达3增1失、存活0增0失；对parent到达0增4失
 
 因此简单规则防摔覆盖与局部任务表现差异可同时成立；单一早到达见证不建立神经必要性，也不支持恢复即时切α方法。4秒未到不是20秒任务失败，本次不延时重跑或改目标追正例。全部[48条实际XY及原目标](../../runs/preference_history_task_review_v1/all_xy_original_goal.png)与逐例/排除记录保留。[E055,E056]
 
-### 4.15 实时神经响应与名义参考程序：六条匹配机制对照
+### 4.15 迁移合同下实时神经响应与名义程序：六条匹配对照
 
 为区分实时反馈与名义参考节奏，复用4.13中左右两个α0完整快照的无扰裸latent程序，各200个50Hz发布，按相对任务时钟重放；实际跟随器、滤波、限幅、底层反馈及状态决定的域退出/held保持。α1源程序缺尾，不补造，故不在本比较中。新增0/±32N、0.1秒、4秒共6后缀，另18条实时α0/zero/速度支持经SHA认证缓存。[E057,E058]
 
@@ -489,3 +495,5 @@ E053：preference_history_baselines_v1/analysis/review.json，24新简单后缀�
 E055：preference_history_task_review_v1/review.json，既有48条原任务短窗诊断；E056：同run verification_receipt.json，同root另写NumPy直接重计目标/速度/算术，不是独立agent/人类或物理复现。AI artifact_checked，人类未记录。
 
 E057：nominal_program_feedback_v1/analysis/review.json，六条实际名义程序对照加18认证缓存；E058：同run independent_outcome_review.json，非提出者独立NumPy重计，不是独立物理/训练重复。AI artifact_checked，人类未记录。
+
+E059：nominal_program_feedback_v1/training_support_review/audit.json，实际bank参数/接口与已完成训练合同核对；E060：同目录independent_review.md，非提出者身份与范围核对。请求参数不等于物理速度/完整观测支持；AI artifact_checked，人类未记录。
