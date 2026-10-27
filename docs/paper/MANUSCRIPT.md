@@ -339,6 +339,21 @@ credit对ordinary受扰到达3增1失、存活0增0失；对parent到达0增4失
 
 ![H75全部24条机制诊断XY；真实接触用叉号、完整观察终点用圆号；保持等比例坐标](../../runs/preference_history_factorial_v1/analysis_verified/all_xy.png)
 
+### 4.13 匹配简单规则：后续α1的三例增益不具有必要性
+
+在4.12的相同四快照、世界力、时钟、滤波、权限与域后held合同下，新增zero latent和既有mode3速度支持各12条；原24条经SHA认证复用，不重跑。zero仅清零H75最终Dense输出仿射层，保留原物理/history/ESO/滤波carry；支持只将原后续α0的速度latent抬至既有atanh(.96)下界，转向输出不变。该下界是目标修正，不是实际速度保证。[E053,E054]
+
+|完整后缀规则|全12条件不触地／接触|受扰8条件不触地／接触|
+|---|---:|---:|
+|后续α0|7／5|3／5|
+|后续α1|10／2|6／2|
+|后续zero latent|11／1|7／1|
+|后续α0＋既有速度支持|11／1|7／1|
+
+两简单规则分别覆盖原3个后续α1存活增益，且在左/进入α1/+32N另增1例，各自相对α1为1增0失。没有FAULT/UNKNOWN，全部12条件逐例核对，四规则共同失败的右/进入α0/+32N不构成物理不可恢复证明。zero实际有效输出精确0，mode3逐发布速度max/转向保持、全部48 raw/时钟/冲量/held和物理身份经独立实现核验；新增17784个lower tick/21600槽，原14425缓存tick单列，0训练。[E053,E054]
+
+因此4.12的干预机制发现仍成立，但不能据3个正例主张需要神经偏好切换，本面板不再开发该学习选择器或扩力调参。两简单规则同标签不等于同轨迹/单通道因果机制；zero沿H75自身前缀接续，也不能推为从任务起点无需中层。这里未评价原goal/Jα或未知起扰时刻，不证明规则覆盖全部偏好价值。全部48条[XY与原始结果](../../runs/preference_history_baselines_v1/analysis/all_xy.png)保留。[E053,E054]
+
 ## 5 早期解析容扰代理回答的是什么
 
 早期固定速度局部模型采用不稳定模态坐标和折算脉冲：
@@ -452,3 +467,5 @@ E049：DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md，三原文方法/版本/限�
 E050：DUAL_NETWORK_COVERAGE_REVIEW.md；绑定dual_coverage_audit_v1/raw_readback.json与非提出者覆盖复审。120条既有raw身份/时钟/当前目标圆重算，早期受扰仅报告/身份核对；0新物理、非独立训练重复，AI artifact_checked，人类核验未记录。
 
 E051：preference_history_factorial_v1/analysis_verified/review.json，固定24条原始结果及六个四格描述性对照。E052：同run independent_outcome_review.json，非提出者原始轨迹独立重计，非独立物理/训练重复。AI artifact_checked，人类核验未记录。
+
+E053：preference_history_baselines_v1/analysis/review.json，24新简单后缀与24认证缓存的48条匹配结果；E054：同run independent_outcome_review.json，独立原始重计与实际干预核验。均AI artifact_checked，人类未记录。

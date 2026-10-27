@@ -118,7 +118,9 @@ def evidence_manifest():
         'E049':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md',
         'E050':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/DUAL_NETWORK_COVERAGE_REVIEW.md',
         'E051':ROOT/'runs/preference_history_factorial_v1/analysis_verified/review.json',
-        'E052':ROOT/'runs/preference_history_factorial_v1/independent_outcome_review.json'}
+        'E052':ROOT/'runs/preference_history_factorial_v1/independent_outcome_review.json',
+        'E053':ROOT/'runs/preference_history_baselines_v1/analysis/review.json',
+        'E054':ROOT/'runs/preference_history_baselines_v1/independent_outcome_review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
