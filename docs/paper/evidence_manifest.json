@@ -1,27 +1,206 @@
 {
-  "scope": "development only; common alphas shown, no independent training-seed uncertainty",
-  "inputs": {
-    "runs/priority_history_20260911/analysis/results.json": "ce106d1c5cc90f0380a719474e19b7063d100fe1b18162c6260ad3a760217590",
-    "runs/priority_survival_20260911/analysis/results.json": "e997ba269ec609c50840c73f8adf3378a50eeb6e934fc670d1da040abc96e2a7",
-    "runs/priority_fixed_roll_20260912/analysis/results.json": "bc0598ad8a75805de815dc59f0a5a0265f4665ddae0c0fba29168142a4a16205",
-    "runs/priority_fixed_roll_20260912/standard_results.json": "9920de1d7f06f068a79febfb88349923de0aaf076a998f18036588655ef8595e",
-    "runs/response_comparison_20260910/analysis/summary.json": "59cfa1327ae82a0e90729899d8c4e8c3ecf7391f3a59d04e9722c5d93322ff24",
-    "runs/priority_history_20260911/frozen/panel.json": "f9135127a59124d44cc7ff397e0d01481871ae9360f750e699117f76584acc64",
-    "runs/priority_history_20260911/frozen/task.json": "6edeefcea9a600b692dc44ef85f2d81ce22037237370482bcd6d8419e97e2b87",
-    "runs/priority_history_20260911/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
-    "runs/priority_history_20260911/training/checkpoints/update_0032/identity.json": "ab19e2ed7591266f822556d21cc0683c8eca324aa65d8d706dba6cd72ecdcf9a",
-    "runs/priority_survival_20260911/frozen/panel.json": "f9135127a59124d44cc7ff397e0d01481871ae9360f750e699117f76584acc64",
-    "runs/priority_survival_20260911/frozen/task.json": "d0aabfe76fe8b4e5b18fbaa13e1469b2ab9813d0d55b55c7384f4572cab7db5f",
-    "runs/priority_survival_20260911/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
-    "runs/priority_survival_20260911/training/checkpoints/update_0032/identity.json": "d67cf4eed461a385f1edbc0bbc878dfa892cb6b9df085309a501ccc0cbc6ad09",
-    "runs/priority_fixed_roll_20260912/frozen/panel.json": "a4c59179913df843444191aafe6ccacccd2551909f642b3b947c2e55adae1689",
-    "runs/priority_fixed_roll_20260912/frozen/task.json": "6462dc42608092000528b6efcde8f93ffe7be2f3a89c2f055501f484d183ceed",
-    "runs/priority_fixed_roll_20260912/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
-    "runs/priority_fixed_roll_20260912/training/checkpoints/update_0032/identity.json": "9db477508e5b016d477f9c0b836ed1588da84cf7acd64547732d5c86d452a724"
+  "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
+  "manuscript_sha256": "373b2f4a91a863037c9938582666632bc9a807c169c17c2e4e7959a9b77fea60",
+  "builder_sha256": "57afce5ec4d932cbc1032384ffd3c6bf764c2c482927e1b1df9a7325f17fa355",
+  "evidence_cutoff": "2026-10-27",
+  "submission_ready": false,
+  "human_approval": "not_recorded",
+  "sources": {
+    "E001": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/current_native_preference_v1_attempt2/analysis/review.json",
+      "sha256": "909288d9c4ef62862e5b65248bdff62d46efb59b0da90a4bf62e374920bea789",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E002": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/results.json",
+      "sha256": "c64050eeafcc60abc3ba187084f64eb39ddf606f23bff6a1ec42a84ee8dcf0ea",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E003": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/review.json",
+      "sha256": "758f1025eabb80e3c963557615c7bbbae80b67fcf785ee7d753909b8f6114472",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E004": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/same_state_reference_pause_v1/analysis_partial_block_fix_v1/results.json",
+      "sha256": "341cc43d112ba82599c64b5e4d95c45e7a94c5b6be10a7f78a38f7362a8c75d1",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E005": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/long_baseline_transfer/results.json",
+      "sha256": "bb0c2bd002c9851b14242c3702ab84e66a4ebf602f72c400d3cb3632df3c5bd1",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E006": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/reference_bias_opportunity_v1/preservation_timecheck_v1/analysis/summary.json",
+      "sha256": "25b12dc0d46c3753f97a2f79e808aa384efb1e7055a512df158583d74a706ac2",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E007": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/support_permission_factor_v1/analysis/summary.json",
+      "sha256": "eaccd40c09d1367944ec61b5bc4b01bcca678563e25e077956c40f1ffd93f398",
+      "verification": "AI artifact_checked; inherited raw audit, not repeated",
+      "human_verification": "not_recorded"
+    },
+    "E008": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/support_permission_factor_v1/common_environment_config.json",
+      "sha256": "2dff28c2e9750dca623f02d4376945ff268eaf283e6f256a02612bf19d385008",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E009": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/reference_bias_opportunity_v1/production/analysis/summary.json",
+      "sha256": "de54c00ec31dede816878cc30fb23c51e2812389fab2abc39a5621ddddd9ff1d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E010": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/support_permission_factor_v1/analysis/existing_witness_scope_review.md",
+      "sha256": "0b7f35d3a795af50d23405c93b7f2af0307976f83685f88732508faf8b40e229",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E011": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/contact_only_environment.py",
+      "sha256": "7446ed0bae09a967b6a60cf54225facce2f0bca81dda70f02a3f4ad4bfd8b768",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E012": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/frozen_middle_registry.json",
+      "sha256": "aa9a681d94e371f2b0efe91919277b37d4d79e78bfc5e919dae2318f5a919ca2",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E013": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/actuator.py",
+      "sha256": "057258a7975ddaa150553d3b61be64ad7426e22ef05e0ff6c1fae07ceba108f0",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E014": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/finite_value_online_v1_recovery55/plan.json",
+      "sha256": "955997e986283cbe2e9fd0f312cf63ce13eed2fdc859de9d1bc615db1daf4014",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E015": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/current_native_preference_v1_attempt2/plan.json",
+      "sha256": "853ec04f875202e42e4c7c8cf9719c0e5ea28557d9db3820807126841dc547c3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E016": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/online_preference_survival_v1_attempt3/plan.json",
+      "sha256": "130cc7dad39fe35bc90e68fc356390877c9897e2ee894bce4925927f01812626",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E017": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/path_command_policy.py",
+      "sha256": "71f14bb436426660f2db0d49f91fcb557d1c5a67ab80000286eb5fc290d51c00",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E018": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/path_command_env.py",
+      "sha256": "5b73f5fbb21d638548b14047ade41bebae2d88875f535c32d451dbfcf2fadfcc",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E019": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/reference_reserve_gate.py",
+      "sha256": "f7117d5ecd09c4c79860dabc01e98a444c08df2684abc00c62a051f6cbb6887c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E020": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/reference_reentry.py",
+      "sha256": "650dabfb8fb8ae8ef8271a848ee1590f031f56a5b7fa58387c3fc1ff64c06986",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    }
   },
-  "figures": [
-    "control_architecture",
-    "recovery_evidence",
-    "fixed_roll_errors"
-  ]
+  "claims_from_readback": [
+    {
+      "id": "C001",
+      "evidence": [
+        "E001"
+      ],
+      "statement": "冻结单网络在原生四上下文表达路径—速度偏好；H75和current均保留行为取舍及平均对角效用优势。",
+      "decision": "retain_system_function",
+      "limitation": "不自动证明新颖性或所有分布下偏好最优。"
+    },
+    {
+      "id": "C002",
+      "evidence": [
+        "E002",
+        "E003"
+      ],
+      "statement": "匹配低速受扰96例，current对H75的1m到达75对66，9增0失；两者整窗存活85，4增4失。",
+      "decision": "retain_conditional_arrival_gain",
+      "limitation": "固定权重用途差异，不是训练算法归因或安全支配。"
+    },
+    {
+      "id": "C003",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "statement": "current不是H75的全域升级：原生1m到达6/8对8/8；低速对zero到达11增4失、存活2增7失。",
+      "decision": "reject_global_replacement_claim",
+      "limitation": "zero仍含冻结底层/goal-preview/几何反馈/短支持，并非没有控制。"
+    },
+    {
+      "id": "C004",
+      "evidence": [
+        "E004"
+      ],
+      "statement": "固定同状态pause在1m下新增一个到达事件及另一个防摔事件，两种mask各救相同两事件。",
+      "decision": "retain_local_existence_witness",
+      "limitation": "四条正分支不是四个独立状态；精确pulse-end切点是特权，非部署方法。"
+    },
+    {
+      "id": "C005",
+      "evidence": [
+        "E005"
+      ],
+      "statement": "旧教学165/192对充分普通PPO164/192，6增5失。",
+      "decision": "reject_general_teaching_superiority",
+      "limitation": "旧任务成功定义，不换成当前1m到达或防摔标签。"
+    },
+    {
+      "id": "C006",
+      "evidence": [
+        "E006"
+      ],
+      "statement": "固定完整场景选择新时刻79/96到达84/96存活，与full相同；粗规则覆盖多数收益。",
+      "decision": "retain_finite_cost_tradeoff_only",
+      "limitation": "名义成本下降不代表受扰能力整体提高；不继续扩lookup。"
+    },
+    {
+      "id": "C007",
+      "evidence": [
+        "E007"
+      ],
+      "statement": "支持权限因素真实执行，96受扰到达和存活逐例0增0失。",
+      "decision": "close_permission_factor_not_all_reference_coordination",
+      "limitation": "保留延缓触地和连续距离改善，不称所有参考无效。"
+    }
+  ],
+  "image_role": "Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments",
+  "figures": {
+    "figures/control_architecture.pdf": "30d824409279ca07804f1688ae9e9d190c923b5df5b1532b357b67b0e64ab0c8",
+    "figures/control_architecture.png": "f86e4763fa2d1f24d6e4270df3df85abc17259218e3177b76316e6c0bc2e2f2e",
+    "figures/control_architecture.svg": "ad9efc04debf38e8be23995fe3259b287c48fb3fb9631d2b939ecdda977f556e"
+  },
+  "new_physics_steps": 0,
+  "optimizer_updates": 0
 }

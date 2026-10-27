@@ -1,0 +1,21 @@
+{
+  "original_evidence_cutoff": "2026-09-12",
+  "reason": "Preserve historical direct-motor-residual manuscript before reference-middle revision",
+  "source_commit": "d22419ca30489bab841b4a80f52ada4c24901d5e",
+  "files": {
+    "MANUSCRIPT.md": "3818dbd38efb32e66f92cfe0e7d5d61b24c64d27058d8811cba766805157b25a",
+    "MANUSCRIPT.html": "68109053031d47a63c6f762fbd5abe83d3a4a2c58d282a99166996bfe456707e",
+    "MANUSCRIPT.pdf": "1a380e1dbb27ca2fa5840445f387a600a3ce02d7bdf6c0f68f49e359266aa90c",
+    "build.py": "cc677150491d95671bba40e495e7335952af16560943b805867fe4383c24dae4",
+    "evidence_manifest.json": "9295ee2ffd1ea89883a9078ecf3aa16be0e7dc82020d9af8cb2ad12b4880fee1",
+    "figures/fixed_roll_errors.pdf": "33c97cb12138f9e24d634aaf021ff5c74a8d500a7249d1977e6b9e715353cf35",
+    "figures/recovery_evidence.svg": "8e48c531d1de2db89d0980561dcbe0a639b5c35a1952159bc64ce9f89286ff4e",
+    "figures/control_architecture.pdf": "0b0c0b4b4f4479068175a8bdce2d1549542adfd49ff60e0420133f3e1f6b4062",
+    "figures/recovery_evidence.png": "3fbdbc6d2b2afb232d4a348b59b1323a9de494b315c73236f75af2c811f52ded",
+    "figures/control_architecture.png": "ae8e349892a5649b70f00c628d0fcb2a132eebf2126775b8184bad86cb31e575",
+    "figures/fixed_roll_errors.svg": "13add0b55c52c902d8e46618cb4c3ba1514215cdde573f30e8b5bfe05c17b714",
+    "figures/recovery_evidence.pdf": "2964f403e743fdc9abef315e68682684b8cbe57084ee97bd9fdf561b52418fcf",
+    "figures/control_architecture.svg": "d7e37727c0edbaa7fac9ed914e999793397c1d8460c414f0445e0f7263c8aed1",
+    "figures/fixed_roll_errors.png": "64e07a6af6ad1063c55fbbdfe544b7221aa01467bc58e94c5635f96bbfff903c"
+  }
+}

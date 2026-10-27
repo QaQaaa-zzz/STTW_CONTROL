@@ -1,0 +1,27 @@
+{
+  "scope": "development only; common alphas shown, no independent training-seed uncertainty",
+  "inputs": {
+    "runs/priority_history_20260911/analysis/results.json": "ce106d1c5cc90f0380a719474e19b7063d100fe1b18162c6260ad3a760217590",
+    "runs/priority_survival_20260911/analysis/results.json": "e997ba269ec609c50840c73f8adf3378a50eeb6e934fc670d1da040abc96e2a7",
+    "runs/priority_fixed_roll_20260912/analysis/results.json": "bc0598ad8a75805de815dc59f0a5a0265f4665ddae0c0fba29168142a4a16205",
+    "runs/priority_fixed_roll_20260912/standard_results.json": "9920de1d7f06f068a79febfb88349923de0aaf076a998f18036588655ef8595e",
+    "runs/response_comparison_20260910/analysis/summary.json": "59cfa1327ae82a0e90729899d8c4e8c3ecf7391f3a59d04e9722c5d93322ff24",
+    "runs/priority_history_20260911/frozen/panel.json": "f9135127a59124d44cc7ff397e0d01481871ae9360f750e699117f76584acc64",
+    "runs/priority_history_20260911/frozen/task.json": "6edeefcea9a600b692dc44ef85f2d81ce22037237370482bcd6d8419e97e2b87",
+    "runs/priority_history_20260911/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
+    "runs/priority_history_20260911/training/checkpoints/update_0032/identity.json": "ab19e2ed7591266f822556d21cc0683c8eca324aa65d8d706dba6cd72ecdcf9a",
+    "runs/priority_survival_20260911/frozen/panel.json": "f9135127a59124d44cc7ff397e0d01481871ae9360f750e699117f76584acc64",
+    "runs/priority_survival_20260911/frozen/task.json": "d0aabfe76fe8b4e5b18fbaa13e1469b2ab9813d0d55b55c7384f4572cab7db5f",
+    "runs/priority_survival_20260911/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
+    "runs/priority_survival_20260911/training/checkpoints/update_0032/identity.json": "d67cf4eed461a385f1edbc0bbc878dfa892cb6b9df085309a501ccc0cbc6ad09",
+    "runs/priority_fixed_roll_20260912/frozen/panel.json": "a4c59179913df843444191aafe6ccacccd2551909f642b3b947c2e55adae1689",
+    "runs/priority_fixed_roll_20260912/frozen/task.json": "6462dc42608092000528b6efcde8f93ffe7be2f3a89c2f055501f484d183ceed",
+    "runs/priority_fixed_roll_20260912/frozen/training.json": "974c278e5cd39ed0794cfb820ce308e7467015ab09b7c4af307dfcac1d2ed8aa",
+    "runs/priority_fixed_roll_20260912/training/checkpoints/update_0032/identity.json": "9db477508e5b016d477f9c0b836ed1588da84cf7acd64547732d5c86d452a724"
+  },
+  "figures": [
+    "control_architecture",
+    "recovery_evidence",
+    "fixed_roll_errors"
+  ]
+}
