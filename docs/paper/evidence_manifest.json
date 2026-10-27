@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "606e6cd33070af326add39067553cbbd6c787bff66bd8bc4c1918fdb41c0d1b2",
-  "builder_sha256": "e5b4d2de2010544001eca371a217a705de1c2fa6fc6e40af4b803d04c5b7302a",
+  "manuscript_sha256": "3f493d4570208fba285f2d19bdc0434ecbbe701ee4e5f1a0207a9f0fce277afc",
+  "builder_sha256": "9e2731a9d34b22bbaede8518e146fb399881d1a2339343fd10a63540fd58073e",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -213,6 +213,18 @@
     "E035": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md",
       "sha256": "4a7a703b42891bc39d48a562c5e1f842cf0f77cc4f4183ccebf640728af600b9",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E036": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/preference_capacity_order_v1/analysis/review.json",
+      "sha256": "d456926da85bf037f13b1247a9d1cb09cdfc2ed3aab0c8e0cd57b75b71995d95",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E037": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/preference_capacity_order_v1/independent_review.json",
+      "sha256": "ecc2d039e9a5898fc77340a9443a554ef87ae7555a8911183e9b9ddca46c8a43",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
