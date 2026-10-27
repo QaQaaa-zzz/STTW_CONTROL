@@ -12,6 +12,98 @@ import numpy as np
 FRACTIONS=(0.,.25,.5,.75,1.)
 
 
+def native_cost_candidates(previous, config):
+    """Fixed ordinary grid, with no learned middle-policy dependency.
+
+    Index zero retains the previous target. The following 25 targets span a
+    fixed normalized5x5 grid; actual filtering and asymmetric permissions remain
+    the native environment's responsibility. A held target is not a held final
+    speed/steering reference. This grid is a finite comparator, not optimal MPC.
+    """
+    previous = np.asarray(previous, dtype=np.float32)
+    if previous.shape != (2,) or not np.isfinite(previous).all():
+        raise ValueError('finite previous two-channel latent required')
+    levels = np.array([-.95, -.475, 0., .475, .95], dtype=np.float32)
+    pairs = np.array([(a, b) for a in levels for b in levels], dtype=np.float32)
+    latents = np.concatenate([previous[None], np.arctanh(pairs)], axis=0)
+    c = config['residual_interface']
+    scales = np.array([c['speed_negative_scale_m_s'], c['speed_positive_scale_m_s'], c['steer_scale_rad']])
+    if not np.isfinite(scales).all() or np.any(scales <= 0):
+        raise ValueError('positive finite native reference scales required')
+    normalized = np.tanh(latents)
+    offsets = normalized * np.column_stack([
+        np.where(normalized[:, 0] >= 0, scales[1], scales[0]),
+        np.full(len(latents), scales[2])])
+    return dict(latents=latents, physical_offsets=offsets, previous_index=0, zero_index=13)
+
+
+def choose_native_cost(summary):
+    """Minimize original cost, retaining native failure penalties and exact ties.
+
+    An unknown forecast is an engineering error. Known failed predictions are
+    not called safe: they retain the native failure cost and remain visible.
+    First-index ties retain the previous candidate; no safety backup is claimed.
+    """
+    costs = np.asarray(summary['original_user_cost'], dtype=float)
+    finite = np.asarray(summary['finite'], dtype=bool)
+    if costs.ndim != 1 or costs.shape != finite.shape or not len(costs):
+        raise ValueError('matching nonempty candidate scores required')
+    if not finite.all() or not np.isfinite(costs).all():
+        raise ValueError('unknown native forecast; no optimistic candidate deletion')
+    return int(np.argmin(costs))
+
+
+def make_native_cost_preview(env, *, upper_steps=50, horizon_s=10., collect_trace=False):
+    """Use an original PathCommandEnv without modern feedback or middle NN.
+
+    The complete carry and original user alpha are forwarded unchanged at the
+    start. No future force argument is exposed. Original native physical/domain
+    termination, full remaining-task failure penalties and four-tick rewards
+    are retained. Only the finite forecast tail is truncated, with no invented
+    terminal value or equilibrium certificate.
+    """
+    import jax
+    import jax.numpy as j
+    if type(upper_steps) is not int or upper_steps <= 0:
+        raise ValueError('positive integral prediction steps required')
+    if not math.isfinite(horizon_s) or horizon_s <= 0 or abs(horizon_s/.02-round(horizon_s/.02)) > 1e-6:
+        raise ValueError('upper-aligned positive native horizon required')
+    if env.config['timing']['lower_dt_s'] != .005 or env.config['timing']['upper_dt_s'] != .02:
+        raise ValueError('native four-tick timing required')
+    limit = round(horizon_s/.005)
+
+    def idle(state):
+        log = jax.tree.map(lambda x: j.repeat(x[None], 4, axis=0), env.zero_log)
+        log['scored_tick_reward'] = j.zeros(4)
+        return state, log
+
+    def preview(origin, latent, path, speed):
+        def step(value, _):
+            current, ticks, cost, fault = value
+            _, _, obs_fault = env.observation(current, path, speed, horizon_s)
+            candidate = current.replace(fault=current.fault | obs_fault)
+            end, log = jax.lax.cond(current.tick < limit,
+                lambda s: env.policy_step(s, latent, path, speed, horizon_s, j.zeros(5)),
+                idle, candidate)
+            active = log['active_tick'].astype(bool)
+            reward = j.where(active, log['scored_tick_reward'], 0.)
+            fault = fault | end.fault | j.any(active & (log['policy_fault'] | log['lower_fault'])) | ~j.all(j.isfinite(reward))
+            trace = {k: log[k] for k in ('active_tick', 'actual_xy', 'governed', 'nominal',
+                     'actual_forward_speed', 'phi', 'peak_roll', 'physical_failure',
+                     'domain_exit', 'policy_fault', 'lower_fault', 'scored_tick_reward')} if collect_trace else None
+            return (end, ticks+j.sum(active, dtype=j.int32), cost-j.sum(reward), fault), trace
+        initial = (origin, j.int32(0), j.float32(0), j.bool_(False))
+        (end, ticks, cost, fault), trace = jax.lax.scan(step, initial, None, length=upper_steps)
+        finite = ~fault & j.isfinite(cost)
+        summary = dict(original_user_cost=cost, finite=finite, observed_lower_ticks=ticks,
+            allocated_lower_slots=j.int32(upper_steps*4),
+            requested_lower_ticks=j.minimum(upper_steps*4, j.maximum(0, limit-origin.tick)),
+            native_physical_failure=end.physical.failed, native_domain_exit=end.domain_exit,
+            end_task_tick=end.tick)
+        return (end, summary, trace) if collect_trace else (end, summary)
+    return preview
+
+
 @dataclass(frozen=True)
 class CandidateSet:
     fractions: np.ndarray

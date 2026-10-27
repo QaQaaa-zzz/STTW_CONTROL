@@ -54,3 +54,12 @@ X需包含物理、ECBC/ESO、执行器、local300与中层历史、参考滤波
 ## 可审查来源
 
 公开原文链接与定位、版本/DOI限制、本地源码和旧工程记录SHA：[source review](../../../../runs/legacy_credit_goal_continuation_v1/route_selection/dynamic_rg_source_review.json)。本轮没有上传内部材料到外部服务。科学流程沿scientific-brainstorming及scientific-writing，技能引用仍在主稿[4]。本报告为方法边界补充，非控制验证或投稿充分性声明。
+
+
+## 2026-10-27后续：原生偏好强对照工程合同
+
+新增原生固定中点缓存复核后，比较问题可以从“新治理能否提高低速二元成功”收敛为“普通同权限动态参考优化是否覆盖H75原生偏好效用”。这不推翻旧低速zero/floor覆盖，也不把普通治理列为新方法。旧bias-CEM保留Actor、迁移栈名义整回合固定偏置，与无中层NN原native滚动选择不同。
+
+先允许一次工程预测，完整合同和非提出者反审见[native_reference_cost_engineering_v1](../../../../runs/native_reference_cost_engineering_v1/REVIEW_AND_PROTOCOL.md)。现有path_reference_governor模块增加独立opt-in native成本接口，原五fraction默认路径保持；原native policy_step/完整carry/原α及失败费用不改。固定26候选（前target+5×5，含zero），仅source第一task0初态1秒、≤5200预测lower，0闭环回合/训练。真实26形状检查已完成且0积分，单元/接口测试8通过；数值未由这些检查证明。
+
+预测范围包括未知未来外力假设零和特权完整模拟carry。task0第一秒多在前直行，只验证接线/费用/计算，不能判断弯中效用、抗扰、实时性或安全。按原J选择保留已知失败罚，不称安全筛选；全部unknown不得删除。完整8条需后续单独审收益，不自动派发，不据预测排序调网格/视界追H75输赢。状态和实际数值仍以唯一台账为准。
