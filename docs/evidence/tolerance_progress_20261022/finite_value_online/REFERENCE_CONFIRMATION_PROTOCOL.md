@@ -1687,3 +1687,8 @@ source_type=actual_bind+nonoriginator_review+CPU_tests；verification=artifact_c
 ### STTW 等待新时刻确认期间补齐实测任务代价—抗扰点图
 source_type=existing360audited_traces+actual_figure_view+independent_summary_arithmetic；verification=artifact_checked。新增只读CLI plot_reference_capability_cost.py，未改正在执行的封存源/映射/物理；实际从旧production/analysis/results生成capability_cost_points/{observed_points.png,points.json,provenance.json,README.md,actual_visual_review.json}。3个原alpha×6方法共18点，横轴各alpha内4个无扰context平均成本相对完整中层比值，纵轴分别16受扰到达及全窗存活；不把无扰成本当受扰成本，不跨alpha比较原始成本。全部18点成本及各法合计到达/存活与原summary独立核对一致。实际目视1800×1050 PNG，原尺度/图例/标记/无插值线，重合保留不抖动；没有独立种子CI或连续Pareto边界/容扰牛顿阈值/期刊合规声明。科学可视化流程来源沿原报告已记Scientific Agent Skills，无新文献结论。
 该图把已知负结果表达清楚：纯名义参考优化可向较低任务成本移动，但在这个旧DEV面板并未整体提升防摔；保留为强对照，不为新方法背书。本次0新物理/训练。新时刻确认仍沿PID4030153/session94010原任务；本轮没有高频读运行status，用已安排functions.exec cell1405在约20分钟后回收同一session（读取超时不重启）。当前不能用新任务pending状态作新数值证据。下一等待既定检查，再收集完整raw/XY/奖励及四臂得失；如完成可复用同CLI --confirmation出新时间点图。
+
+
+### STTW 补可复用独立端点读回：旧360条全部一致，供新确认完成后复核
+source_type=actual_existing_raw_arithmetic；verification=artifact_checked。新增只读CLI audit_reference_capability_results.py，不导入原scorer或goal helper，按保存XY、连续原task物理时钟、首次真实contact和故障标记独立计算全部已声明半径的首次进入/最近目标距离和全10s存活，未知/不完整不转负样本。实际对旧production360条raw/原路径SHA逐条复核，360唯一raw-context、三半径到达/首次时间/连续距离及物理label/ticks全部一致，新增independent_endpoint_audit.json。没有新物理/训练/拟合，也不是新增精确重放门槛；非差异故障修复，不重新评价旧控制结论。
+上一goal轮为实际图与算术新增证据（2304，8f5d4d7），本轮该audit完成可复用交付，当前新time运行依旧同PID4030153/session94010和既定cell1405的20分钟后检查，未高频读取物理status或启动另一任务；不靠历史running文件当实时存活。仅新增CLI，不触碰执行binding所封存的运行/分析package及三入口。下一在既定检查返回后核实真实进程/终态，若完整则直接用--confirmation独立核验全部新240+继承30唯一raw和432逻辑，并审核全XY/四臂得失；不扩大实验。
