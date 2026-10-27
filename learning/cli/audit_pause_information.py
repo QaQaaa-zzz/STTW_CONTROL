@@ -169,5 +169,131 @@ def render(root,output_name):
         xy_scope='Two specified witnesses, full 10s or real contact endpoint; all-event XY remains inherited',physics_steps=0))
 
 
+def execution_chain(root,output_name,result_name):
+    root=Path(root).resolve();parent=root/output_name
+    if Path(result_name).name!=result_name:raise ValueError('simple execution output name required')
+    out=parent/result_name;out.mkdir(exist_ok=False)
+    contract=dict(question='When do existing issued-reference and actual-motion branches diverge, including after the mask returns?',
+        selection='Two previously identified positive context/alpha pairs, each retaining all 0/-32/+32 events; not new witnesses',
+        scope='Retrospective descriptive readback; directions have different onset clocks and are not a force-only causal contrast',
+        stages_lower_ticks=[[0,20],[20,80],[80,240],[240,320]],
+        incomplete='Retain observed common prefixes and explicit observation length, never pad to requested duration',
+        no_controller_fit=True,no_physics=True)
+    atomic_json(out/'contract.json',contract)
+    source=root/'analysis_partial_block_fix_v1/results.json';rows=json.loads(source.read_text())
+    previous=json.loads((parent/'summary.json').read_text())
+    contexts={(p['effect']['context'],p['effect']['alpha']) for p in previous['pause_neural_steer']['positive_events']}
+    selected=[r for r in rows if (r['context'],r['alpha']) in contexts and r['force_N'] in (0.,-32.,32.)]
+    if len(contexts)!=2 or len(selected)!=18:raise ValueError('fixed six three-way events required')
+    grouped={}
+    for r in selected:grouped.setdefault(r['prefix_index'],{})[r['role']]=r
+    if len(grouped)!=6 or any(set(g)!=set(ROLES) for g in grouped.values()):raise ValueError('complete event groups required')
+    checks=[];results=[]
+    for idx,g in sorted(grouped.items()):
+        b=g[ROLES[0]];f=b['fork_task_tick'];raw={}
+        for role,r in g.items():
+            file=Path(r['raw_file'])
+            if digest(file)!=r['raw_sha256']:raise ValueError('changed execution-chain raw')
+            with np.load(file) as z:d={k:np.asarray(z[k]) for k in z.files}
+            raw[role]=d;active=d['active_tick'].astype(bool)
+            np.testing.assert_allclose(d['reference'][active],d['nominal_reference'][active]+d['correction_offset'][active],atol=2e-6,rtol=2e-6)
+            restore=active&(d['physical_tick']>=f+80)
+            np.testing.assert_array_equal(d['source_keep_channels'][restore],np.ones((restore.sum(),2),bool))
+            checks.append(dict(case_id=r['case_id'],raw_sha256=r['raw_sha256'],reference_composition_verified=True,post_pause_mask_returns=True))
+        common_end=min(int(d['active_tick'].sum()) for d in raw.values())
+        event=dict(prefix_index=idx,context=b['context'],alpha=b['alpha'],force_N=b['force_N'],
+            pulse_onset_task_tick=b['pulse_onset_task_tick'],fork_task_tick=f,common_active_end_tick=common_end,
+            branches={role:dict(physical_outcome=r['physical_outcome'],arrival_1m=r['minimum_upright_goal_distance_m']<=1.,
+                minimum_goal_distance_m=r['minimum_upright_goal_distance_m'],physical_ticks=r['physical_ticks']) for role,r in g.items()},candidates={})
+        full=raw[ROLES[0]]
+        for role in ROLES[1:]:
+            d=raw[role];stages=[]
+            for start,end in contract['stages_lower_ticks']:
+                lo=f+start;hi=min(f+end,common_end);n=max(0,hi-lo)
+                stage=dict(start_s=start*.005,requested_end_s=end*.005,common_observed_ticks=n,common_observed_s=n*.005,complete=(hi==f+end))
+                if n:
+                    q=slice(lo,hi)
+                    rms=lambda x:float(np.sqrt(np.mean(np.asarray(x,dtype=float)**2)))
+                    for key,field in [('command_reference_rms_rad','reference'),('nominal_reference_rms_rad','nominal_reference'),('correction_offset_rms_rad','correction_offset'),('filter_memory_rms_rad','filtered_offset'),('target_offset_rms_rad','target_offset')]:
+                        stage[key]=rms(d[field][q,1]-full[field][q,1])
+                    stage['actual_steer_rms_rad']=rms(d['actual_delta'][q]-full['actual_delta'][q])
+                    stage['actual_speed_rms_m_s']=rms(d['actual_forward_speed'][q]-full['actual_forward_speed'][q])
+                    stage['wheel_proxy_rms_m_s']=rms(d['wheel_speed_proxy'][q]-full['wheel_speed_proxy'][q])
+                    stage['speed_reference_rms_m_s']=rms(d['reference'][q,0]-full['reference'][q,0])
+                    stage['roll_rms_difference_rad']=rms(d['phi'][q]-full['phi'][q])
+                    stage['full_mean_abs_actual_steer_rad']=float(np.mean(abs(full['actual_delta'][q])))
+                    stage['candidate_mean_abs_actual_steer_rad']=float(np.mean(abs(d['actual_delta'][q])))
+                    stage['full_actor_legal_ticks']=int(full['actor_action_valid'][q].sum())
+                    stage['candidate_actor_legal_ticks']=int(d['actor_action_valid'][q].sum())
+                    stage['full_relay_ticks']=int(full['relay_active'][q].sum())
+                    stage['candidate_relay_ticks']=int(d['relay_active'][q].sum())
+                stages.append(stage)
+            event['candidates'][role]=stages
+        results.append(event)
+    timing=[]
+    for context,alpha in sorted(contexts):
+        q=[r for r in results if r['context']==context and r['alpha']==alpha]
+        timing.append(dict(context=context,alpha=alpha,onset_ticks_by_force={str(r['force_N']):r['pulse_onset_task_tick'] for r in q},
+            same_onset_time=(len({r['pulse_onset_task_tick'] for r in q})==1),direction_only_causal_comparison=False))
+    atomic_json(out/'results.json',results);atomic_json(out/'timing_comparability.json',timing)
+    atomic_json(out/'receipt.json',dict(source=str(source),source_sha256=digest(source),script_sha256=digest(__file__),
+        raw_checks=checks,raw_files=18,events=6,physics_steps=0,optimizer_updates=0,
+        missing='Applied lower motor command/torque traces are not saved here; actual joint motion does not identify them'))
+    print(json.dumps(dict(events=6,raws=18,timing=timing),ensure_ascii=False))
+
+
+def render_execution_chain(root,output_name,result_name):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Circle
+    root=Path(root).resolve();out=root/output_name/result_name
+    results=json.loads((out/'results.json').read_text());allrows=json.loads((root/'analysis_partial_block_fix_v1/results.json').read_text())
+    by={(r['prefix_index'],r['role']):r for r in allrows};plan=json.loads((root/'plan.json').read_text())
+    fig,axes=plt.subplots(2,3,figsize=(13,9),layout='constrained')
+    for ax,event in zip(axes.flat,results):
+        context=event['context'];idx=event['prefix_index']
+        with np.load(plan['contexts'][context]['path']) as z:path={k:z[k] for k in z.files}
+        s=path['s'];goal=np.array([np.interp(float(path['goal']),s,path['xy'][:,i]) for i in [0,1]])
+        ax.plot(*path['xy'][s<=path['goal']].T,c='black',ls=':',label='Original path');ax.add_patch(Circle(goal,1,fill=False,ec='black',lw=.8));ax.scatter(*goal,c='black',marker='*',s=20)
+        for role,color,style in zip(ROLES,['#333333','#D55E00','#0072B2'],['-','--','-.']):
+            r=by[idx,role];file=Path(r['raw_file'])
+            if digest(file)!=r['raw_sha256']:raise ValueError('changed chain plotted raw')
+            with np.load(file) as z:xy=z['actual_xy'][z['active_tick'].astype(bool)]
+            ax.plot(*xy.T,c=color,ls=style,label=role);ax.scatter(*xy[-1],c=color,marker='o' if r['physical_outcome']=='survived' else 'x',s=30)
+            ax.scatter(*xy[r['fork_task_tick']-1],c=color,marker='s',s=18)
+        ax.set_aspect('equal',adjustable='datalim');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'{context.split("__")[0]}, alpha1, {event["force_N"]:+g}N\nonset={event["pulse_onset_task_tick"]*.005:g}s; event {idx}');ax.grid(alpha=.15)
+    axes.flat[0].legend(fontsize=7)
+    fig.suptitle('Six existing events: full 10s / actual contact endpoints, original 1m goal\nSame context across a row; force timing differs, so columns are NOT force-only causal contrasts')
+    fig.savefig(out/'six_events_xy.png',dpi=160,bbox_inches='tight',pad_inches=.15);plt.close(fig)
+    fig,axes=plt.subplots(6,3,figsize=(15,19),layout='constrained')
+    for row,event in enumerate(results):
+        idx=event['prefix_index'];f=event['fork_task_tick'];data={}
+        for role,color,style in [('full_current','#333333','-'),('pause_neural_steer','#D55E00','--')]:
+            r=by[idx,role]
+            with np.load(r['raw_file']) as z:d={k:z[k] for k in z.files}
+            data[role]=d;t=(d['physical_tick']+1-f)*.005;active=d['active_tick'].astype(bool);q=active&(t>=-.2)&(t<=1.6)
+            axes[row,0].plot(t[q],d['actual_forward_speed'][q],c=color,ls=style,label=role+' body')
+            axes[row,0].plot(t[q],d['reference'][q,0],c=color,ls=':',label=role+' reference')
+            axes[row,1].plot(t[q],d['actual_delta'][q],c=color,ls=style,label=role+' joint')
+            axes[row,1].plot(t[q],d['reference'][q,1],c=color,ls=':',label=role+' reference')
+        a,b=data['full_current'],data['pause_neural_steer'];n=event['common_active_end_tick'];t=(np.arange(n)+1-f)*.005;q=(t>=-.2)&(t<=1.6)
+        for name,key,color,style in [('target','target_offset','#0072B2','-'),('filter memory','filtered_offset','#D55E00','--'),('nominal','nominal_reference','#777777','-.')]:
+            axes[row,2].plot(t[q],(b[key][:n,1]-a[key][:n,1])[q],c=color,ls=style,label=name+' difference')
+        for col,label in enumerate(['Speed (m/s)','Steering (rad)','Pause - full (rad)']):
+            ax=axes[row,col];ax.axvline(0,c='#555555',lw=.8);ax.axvline(.4,c='#555555',lw=.8,ls=':');ax.axvspan(0,.4,color='#E69F00',alpha=.12)
+            ax.set(xlabel='Physical time from fork (s)',ylabel=label,title=f'event {idx}; {event["force_N"]:+g}N; onset={event["pulse_onset_task_tick"]*.005:g}s');ax.grid(alpha=.15)
+            if row==0:ax.legend(fontsize=6)
+    fig.suptitle('Existing execution chain: references are not motor commands; restoring the mask does not restore the trajectory\nOrange band = 0.4s neural steer pause; third column uses common observation only, with no post-contact padding')
+    fig.savefig(out/'six_events_execution_chain.png',dpi=150);plt.close(fig)
+    atomic_json(out/'figure_provenance.json',dict(events=6,raws=18,xy_roles=list(ROLES),local_response_roles=list(ROLES[:2]),
+        smoothing='none',time='post-tick (physical_tick+1-fork_tick)*0.005',cross_force_comparability='Different onset clocks; conditional references only',
+        missing_motor_commands=True,publication_status='Internal working figures; publisher requirements not checked'))
+
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('root',type=Path);p.add_argument('--output-name',default='observability_audit_v1');p.add_argument('--render-only',action='store_true');args=p.parse_args();render(args.root,args.output_name) if args.render_only else run(args.root,args.output_name)
+    p=argparse.ArgumentParser();p.add_argument('root',type=Path);p.add_argument('--output-name',default='observability_audit_v1');p.add_argument('--execution-output-name',default='execution_chain');mode=p.add_mutually_exclusive_group();mode.add_argument('--render-only',action='store_true');mode.add_argument('--execution-chain-only',action='store_true');mode.add_argument('--render-execution-only',action='store_true');args=p.parse_args()
+    if args.render_execution_only:render_execution_chain(args.root,args.output_name,args.execution_output_name)
+    elif args.execution_chain_only:execution_chain(args.root,args.output_name,args.execution_output_name)
+    elif args.render_only:render(args.root,args.output_name)
+    else:run(args.root,args.output_name)
