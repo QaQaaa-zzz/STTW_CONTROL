@@ -7,10 +7,10 @@ import numpy as np
 from .preference_best import atomic_json, digest
 
 
-def batch_size(cases, vectors):
+def batch_size(cases, vectors, allowed=(8,16)):
     n=len(cases)
-    if n not in (8,16) or np.asarray(vectors).shape!=(n,6):
-        raise ValueError('eight or sixteen real lanes required; no implicit padding')
+    if n not in allowed or not set(allowed)<={8,16,64} or np.asarray(vectors).shape!=(n,6):
+        raise ValueError('explicitly allowed real lanes required; no implicit padding')
     return n
 
 
@@ -90,7 +90,7 @@ class BiasRuntime:
             return jax.lax.scan(lambda c,_:jax.vmap(one)(c,parameters,paths,speeds,pulses,modes),carry,None,length=50)
         self.chunk=chunk
 
-    def rollout(self,cases,vectors,directory):
+    def rollout(self,cases,vectors,directory,*,allowed_real_batch_sizes=(8,16)):
         import jax
         import jax.numpy as j
         from .causal_reference_baseline import initial_gate
@@ -112,7 +112,7 @@ class BiasRuntime:
                 if digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('recovered raw changed')
             return rows
         out.mkdir(parents=True,exist_ok=False)
-        n=batch_size(cases,vectors)
+        n=batch_size(cases,vectors,allowed_real_batch_sizes)
         stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         states=[self.origins[c['context']].replace(alpha=j.float32(c['alpha'])) for c in cases]
         targets=[bias_targets(v) for v in vectors]

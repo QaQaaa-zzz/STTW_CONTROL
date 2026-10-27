@@ -38,15 +38,20 @@ def policy_rewards(raw, scale):
     return np.arange(n), scored, parts, scored-running
 
 
-def diagnose(root):
+def diagnose(root, *, confirmation=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    root = root.resolve(); source = root/'production/analysis'
+    root = root.resolve(); source = root/('preservation_timecheck_v1/analysis' if confirmation else 'production/analysis')
     if json.loads((source/'status.json').read_text())['phase'] != 'completed':
         raise ValueError('complete audited final analysis required')
     rows = json.loads((source/'results.json').read_text())
-    if len(rows) != 360: raise ValueError('all360 final traces required')
+    expected_rows=432 if confirmation else 360
+    expected_groups=108 if confirmation else 60
+    roles=['full','context_choice','geometry_alpha','alpha_only'] if confirmation else ROLES
+    colors=['#222222','#0072B2','#D55E00','#009E73'] if confirmation else COLORS
+    styles=['-','-','--',':'] if confirmation else STYLES
+    if len(rows) != expected_rows: raise ValueError('complete declared final traces required')
     cfg = json.loads((root/'common_environment_config.json').read_text())
     plan = json.loads((root/'plan.json').read_text())
     keys = configured_cost_keys(cfg)
@@ -58,8 +63,8 @@ def diagnose(root):
         group = groups.setdefault((r['context'], r['alpha'], r['event_id']), {})
         if r['role'] in group: raise ValueError('duplicate method')
         group[r['role']] = r
-    if len(groups) != 60 or any(set(g) != set(ROLES) for g in groups.values()):
-        raise ValueError('all60 matched six-method events required')
+    if len(groups) != expected_groups or any(set(g) != set(roles) for g in groups.values()):
+        raise ValueError('all declared matched method/events required')
     index = []
     for i, ((context, alpha, event), group) in enumerate(groups.items()):
         reward, aa = plt.subplots(4, 3, figsize=(15, 11), layout='constrained')
@@ -71,7 +76,7 @@ def diagnose(root):
         with np.load(path_file) as path:
             goal = np.array([np.interp(float(path['goal']), path['s'], path['xy'][:, j])
                              for j in range(2)])
-        for method_index, (role, color, style) in enumerate(zip(ROLES, COLORS, STYLES)):
+        for method_index, (role, color, style) in enumerate(zip(roles, colors, styles)):
             r = group[role]
             if digest(r['raw_file']) != r['raw_sha256']: raise ValueError('raw changed')
             with np.load(r['raw_file']) as z: raw = {k: z[k] for k in z.files}
@@ -98,7 +103,7 @@ def diagnose(root):
                 ax.plot(t, y, color=color, ls=style, label=label, lw=.9)
                 ax.scatter(t[-1], y[-1], marker='x' if r['physical_outcome']=='contact' else 'o',
                            s=12, color=color)
-            if role == 'goal_full_feedback':
+            if role in ['goal_full_feedback','full']:
                 bb.flat[0].plot(t, raw['requested_speed'][a], color='#555555', ls=':',
                                 label='Original requested speed', lw=1.5)
         for ax, title in zip(aa.flat, ['Actual scored reward /20ms', *keys, 'Terminal replacement']):
@@ -111,13 +116,14 @@ def diagnose(root):
                 ['m/s', 'm/s', 'm/s', 'rad', 'rad', 'rad', 'm', 'm']):
             ax.set(title=title, xlabel='Original task time (s)', ylabel=unit); ax.grid(alpha=.2)
         bb.flat[7].axhline(1., color='gray', ls=':', lw=.8)
-        r = group['cem']; start = r['pulse_onset_task_tick']*.005
+        for extra in list(cc.flat)[len(roles):]:extra.set_visible(False)
+        r = group[roles[0]]; start = r['pulse_onset_task_tick']*.005
         if r['force_N']:
             for axes, scale in [(aa, .02), (bb, 1.), (cc, 1.)]:
                 for ax in axes.flat:
                     ax.axvspan(start/scale, (start+r['pulse_duration_s'])/scale,
                                color='gray', alpha=.12)
-        title = f'{context} / original alpha{alpha} / force {r["force_N"]:g}N / seen DEV\nReal active samples only; true endpoints; no smoothing; all six methods'
+        title = f'{context} / original alpha{alpha} / {event} / force {r["force_N"]:g}N / seen-ancestor DEV\nReal active samples only; true endpoints; no smoothing; all {len(roles)} methods'
         for fig, axes, suffix in [(reward, aa, 'reward'), (tracking, bb, 'tracking'), (speed, cc, 'speed')]:
             handles, labels = axes.flat[0].get_legend_handles_labels()
             fig.legend(handles, labels, loc='outside lower center', ncol=3, fontsize=7)
@@ -127,22 +133,22 @@ def diagnose(root):
         index.append(dict(context=context, alpha=alpha, event_id=event, force_N=r['force_N'],
                           reward=f'event_{i:02d}_reward.png', tracking=f'event_{i:02d}_tracking.png',
                           speed=f'event_{i:02d}_speed.png',
-                          raw_sha256={role: group[role]['raw_sha256'] for role in ROLES}))
+                          raw_sha256={role: group[role]['raw_sha256'] for role in roles}))
         atomic_json(out/'status.json', dict(phase='running', completed_groups=i+1, new_physics_steps=0))
     atomic_json(out/'index.json', index)
-    (out/'README.md').write_text('# 全部60事件逐步奖励与跟踪诊断\n\n'
-        '原360条raw SHA复核；每图同初态/用户alpha/事件六方法。原10秒、真实终点、扰动阴影；'
+    (out/'README.md').write_text(f'# 全部{expected_groups}事件逐步奖励与跟踪诊断\n\n'
+        f'{expected_rows}逻辑轨迹原raw SHA复核，共享轨迹不当独立样本；每图同初态/用户alpha/事件全部方法。原10秒、真实终点、扰动阴影；'
         'after-only含特权起扰信息。原5ms奖励按原20ms时隙求和，10分项和terminal替代单列；'
         '缺测不补零或续线，图不平滑。轮速proxy减真实车体速度另列，不能当真值。'
         '原路径误差和原世界目标距离不随参考修改。无新积分/训练/候选选择，生成不等于目视审阅。'
         '索引和全部源SHA见index.json；PNG为研究诊断，未核期刊输出要求。\n\n' +
         '\n'.join(f'- {r["context"]} α{r["alpha"]} F{r["force_N"]:g}: '
                   f'[reward]({r["reward"]}) / [tracking]({r["tracking"]}) / [speed]({r["speed"]})' for r in index)+'\n')
-    atomic_json(out/'status.json', dict(phase='completed', groups=60, traces=360,
-        figures=180, new_physics_steps=0, visual_review_complete=False,
+    atomic_json(out/'status.json', dict(phase='completed', groups=expected_groups, traces=expected_rows,
+        figures=3*expected_groups, new_physics_steps=0, visual_review_complete=False,
         source_results_sha256=digest(source/'results.json'), script_sha256=digest(__file__)))
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(); p.add_argument('root', type=Path)
-    diagnose(p.parse_args().root)
+    p = argparse.ArgumentParser(); p.add_argument('root', type=Path);p.add_argument('--confirmation',action='store_true');a=p.parse_args()
+    diagnose(a.root,confirmation=a.confirmation)

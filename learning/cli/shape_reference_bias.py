@@ -12,9 +12,9 @@ from sttw_control.preference_best import atomic_json,digest
 
 
 def main(root, batch_size=16):
-    root=root.resolve();out=root/('shape' if batch_size==16 else 'shape_batch8');out.mkdir(exist_ok=False)
+    root=root.resolve();out=root/('shape' if batch_size==16 else f'shape_batch{batch_size}');out.mkdir(exist_ok=False)
     from prepare_short_recovery_campaign import register
-    register(root/('ACTIVE_SHAPE.json' if batch_size==16 else 'ACTIVE_SHAPE_BATCH8.json'),'STTW参考偏置真实模型零积分shape',out/'status.json')
+    register(root/('ACTIVE_SHAPE.json' if batch_size==16 else f'ACTIVE_SHAPE_BATCH{batch_size}.json'),'STTW参考偏置真实模型零积分shape',out/'status.json')
     atomic_json(out/'status.json',dict(phase='running',pid=os.getpid(),physics_steps=0,optimizer_updates=0))
     try:
         p=json.loads((root/'plan.json').read_text())
@@ -60,4 +60,4 @@ def main(root, batch_size=16):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);parser.add_argument('--batch-size',type=int,choices=[8,16],default=16);a=parser.parse_args();main(a.root,a.batch_size)
+    parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);parser.add_argument('--batch-size',type=int,choices=[8,16,64],default=16);a=parser.parse_args();main(a.root,a.batch_size)
