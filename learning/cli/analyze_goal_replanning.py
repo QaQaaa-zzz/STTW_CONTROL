@@ -68,11 +68,21 @@ def analyze(root):
             outcome=physical_outcome(cut['active_tick'],cut['contact_failure'],
                                      cut['nonfinite']|cut['lower_fault']|cut['policy_fault'],horizon*200)
             report[str(horizon)]=dict(**goal,physical_outcome=outcome)
+        arrival=report['20']['first_arrival_s']
+        task_stop=min(stop,int(round(arrival/.005))) if arrival is not None else stop
+        task_xy=raw['actual_xy'][:task_stop]
+        task_deviation=trees[c['context']].query(task_xy)[0] if len(task_xy) else np.array([])
         rows.append(dict(c,horizons=report,observed_s=n*.005,
             path_length_before_contact_or_fault_m=travelled,
             original_route_sample_distance_max_m=float(deviation.max()) if len(deviation) else None,
             original_route_sample_distance_time_integral_m_s=float(deviation.sum()*.005),
             speed_abs_error_before_contact_time_integral_m=float(abs(speed-c['requested_speed_m_s']).sum()*.005),
+            task_window_ends_at='first_arrival' if arrival is not None else 'first_contact_or_fault_or_horizon',
+            task_window_observed_s=task_stop*.005,
+            task_window_path_length_m=float(np.linalg.norm(np.diff(np.vstack([origin_xy,task_xy]),axis=0),axis=1).sum()),
+            task_window_original_route_sample_distance_max_m=float(task_deviation.max()) if len(task_deviation) else None,
+            task_window_original_route_sample_distance_time_integral_m_s=float(task_deviation.sum()*.005),
+            task_window_speed_abs_error_time_integral_m=float(abs(raw['actual_forward_speed'][:task_stop]-c['requested_speed_m_s']).sum()*.005),
             diagnostic_changed_path_scored_cost=float(-raw['scored_tick_reward'][raw['active_tick']].sum())))
         raws[c['case_id']]=raw
     if actual!=status['active_lower_ticks']:raise ValueError('physical charge differs from all48 raw traces')
@@ -118,7 +128,8 @@ def analyze(root):
             '首达后不停车，因此20秒末位置不等于是否曾到达；first_arrival_s逐例保存。全部48/原alpha/原goal与失败保留，不选择最好个例。',
             '这是相关DEV、两个路线、一个进入历史与冻结模型；正结果首先属于放松原路线约束后的规划基线，不证明新抗扰机制/规划器创新/独立泛化。',
             '10/20秒完整窗口存活另列；到达后再摔仍计曾到达但不计整窗存活。规划后的path条件reward只诊断，不能作为同原固定路线效用。',
-            '原路偏离统计为原路线到目标段离散采样最近距离，位置采样约2cm；路程、请求速度误差和原路线偏离均保留，不以另换路径制造零代价。']
+            '原路偏离统计为原路线到目标段离散采样最近距离，位置采样约2cm；task_window字段在首次到达/触地/故障/时限中最早者截止。',
+            '全观察窗before_contact字段亦保留，但正常到达后沿尾段继续行驶也会远离目标前路线段，不能用该全窗数值断言跟踪恶化。未完成轨迹短窗指标也不自动更优。']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
     print(json.dumps(dict(summary=summary,paired={k:{a:b for a,b in v.items() if a!='details'} for k,v in paired.items()})))
 
@@ -141,7 +152,7 @@ def render(out,rows,raws,paths,goals,physical):
                 for r in group:
                     raw=raws[r['case_id']];a=raw['active_tick'].astype(bool);xy=raw['actual_xy'][a];c=colors[r['role']]
                     ax.plot(*xy.T,c=c,lw=1.2,label=r['role'])
-                    ax.scatter(*xy[min(1999,len(xy)-1)],c=c,marker='o',s=18)
+                    if len(xy)>=2000:ax.scatter(*xy[1999],c=c,marker='o',s=18)
                     ax.scatter(*xy[-1],c=c,marker='x' if r['horizons']['20']['physical_outcome']=='contact' else 's',s=24)
                     arrival=r['horizons']['20']['first_arrival_s']
                     if arrival is not None:
