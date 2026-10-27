@@ -4,7 +4,7 @@
 <p>内部研究草稿；证据截止2026-10-27。当前稿更新任务、真实参考接口及已完成仿真结果，不宣称新抗扰协调算法、形式安全保证或实机验证已经成立。它不是投稿就绪稿，人类作者核验与具体Transactions期刊尚未确定。旧2026-09-12直接电机残差稿、导出件和图已逐文件校验归档到history/20260912_snapshot，不与本稿合并计数。</p>
 </blockquote>
 <h2>摘要</h2>
-<p>必须动态保持平衡的单轨机器人在跟踪弯道时，路径与速度偏好会改变其进入状态及受扰后的运动。本文研究冻结底层控制器下的偏好条件参考控制，并分别评价原任务效用、目标到达和真实触地。中层输出速度与转角参考修正，经原滤波、变化率和幅值限制后，由ECBC、ESO及冻结local300残差底层执行。已有原生四上下文试验及新增匹配zero对照显示H75可表达路径—速度取舍并降低工作侧倾，但H75/zero均8/8到达，不能以此宣称完成率提升；在匹配低速受扰面板中，当前权重的1米目标到达由H75的66/96提高到75/96，但整窗存活均为85/96，且逐例存在存活新增与丢失。原生较高速任务中H75又保留更好的到达和路径表现，故后继权重不是全域升级。另两路线20秒比较中，标准几何重规划使H75到达从9/12变为12/12、未新增存活；强zero原路亦12/12到达存活，故不构成新抗扰机制证据。同完整中途状态分支证明有限参考干预存在局部机会，但所用切点具有事件时刻特权。名义参考优化、固定参考选择迁移及解析支持权限分离未建立超过强简单对照的新抗扰机制。现有证据支持条件性的任务收益和任务—稳定性取舍，尚需针对具体任务差异的独立验证，不能把各模块的小正例拼成普遍安全方法。</p>
+<p>必须动态保持平衡的单轨机器人在跟踪弯道时，路径与速度偏好会改变其进入状态及受扰后的运动。本文研究冻结底层控制器下的偏好条件参考控制，并分别评价原任务效用、目标到达和真实触地。中层输出速度与转角参考修正，经原滤波、变化率和幅值限制后，由ECBC、ESO及冻结local300残差底层执行。已有原生四上下文试验及新增匹配zero对照显示H75可表达路径—速度取舍并降低工作侧倾，但H75/zero均8/8到达，不能以此宣称完成率提升；在匹配低速受扰面板中，当前权重的1米目标到达由H75的66/96提高到75/96，但整窗存活均为85/96，且逐例存在存活新增与丢失。原生较高速任务中H75又保留更好的到达和路径表现，故后继权重不是全域升级。另两路线20秒比较中，标准几何重规划使H75到达从9/12变为12/12、未新增存活；强zero原路亦12/12到达存活，故不构成新抗扰机制证据。另在新70度/R2.1、2.2米/秒的共同20秒重规划合同中，四法均20/20不触地，H75/current各18/20到达，zero/静态规则均20/20；未建立比较性容扰增量。同完整中途状态分支证明有限参考干预存在局部机会，但所用切点具有事件时刻特权。名义参考优化、固定参考选择迁移及解析支持权限分离未建立超过强简单对照的新抗扰机制。现有证据支持条件性的任务收益和任务—稳定性取舍，尚需针对具体任务差异的独立验证，不能把各模块的小正例拼成普遍安全方法。</p>
 <h2>1 研究问题和贡献边界</h2>
 <p>研究问题是：对于必须动态平衡的两轮机器人，用户路径—速度偏好如何改变任务收益和抗扰表现？在底层不重训、上层仅能修改有界参考的条件下，哪些收益可以兑现，哪些来自进入状态、任务标签或普通反馈？</p>
 <p>例如，同一条弯道上，路径优先策略与速度优先策略可能进入不同速度、侧倾和转向状态。随后同一世界方向外力产生的结果可以不同。但“更快”“更平稳”或某个解析余量更大都不自动意味着整段过程不摔，也不意味着受扰后能够到达原目标。</p>
@@ -421,6 +421,52 @@ subject to:  frozen closed loop meets the declared disturbance-design requiremen
 </table>
 <p>规则两端各4/4成本低zero，H75两端又各4/4低该规则；current α0只2/4低规则，不能由平均数宣称全域升级。规则全部静态速度网格有可行点且未发生latent权限饱和，但首达前真实峰值roll为0.334–0.418rad，仍高于静态0.3。H75为0.238–0.300rad。按各自首达窗，H75 α0路径RMSE4/4低规则、速度RMSE0/4低；α1速度RMSE4/4低、路径0/4低。两者均8/8到目标；这支持有条件的偏好取舍与工作成本优势，不支持完成率或真实防摔优势。[E026–E027]</p>
 <p>新8条实际16000lower ticks/16000槽、196.741秒含初始化/编译/I/O、0训练。32份raw和同用户10组配对经独立AI重算；规则target另用NumPy q/网格/反映射核验，latent最大差2.62e-7、原V3成本最大差8.1e-7。全32XY保留在E026源目录，原生停止语义及共享DEV关系不变。此比较不代表最优参考治理、全部传统规划器或独立测试；固定预算/网格不继续补考。下一应在冻结方法后检查新任务与扰动，而非重新拟合旧能量式。</p>
+<h3>4.8 新情境80条确认：全窗不触地一致，到达未超过简单对照</h3>
+<p>冻结四方法，在左右70度/R2.1米、请求2.2米/秒、α0/1下，完整交叉无扰与1.6/2.6秒各±32N、持续0.1秒五事件。每法20条（4无扰、16受扰），同prepared bank index3/physical700、原生参考权限、20秒原worldgoal1米、contact-only及相同发布mask；共用普通1秒一次因果Dubins重规划。它是新的共同任务合同，不能作旧native的单因素消融；新几何/需求与共同祖先也不是独立训练重复或最终TEST。[E028–E029]</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th style="text-align: right;">10秒到达/20</th>
+<th style="text-align: right;">20秒到达/20</th>
+<th style="text-align: right;">20秒不触地/20</th>
+<th style="text-align: right;">受扰到达/16</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H75</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>current</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>zero</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr>
+<td>静态规则</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>
+<p>无扰四法各4/4到达，全部80无触地/故障/未知。H75/current分别对zero或规则到达0增2失；H75与current各有1个对方未到达事件，不能称同样两个失败。四条未入圈轨迹最近原目标距离为1.060–1.339米，均已重规划且完整存活；这不是摔倒或离任务极远，不为制造成功事后改1米主口径。所有非零事件均在各自首次到达之前开始施加。[E028]</p>
+<p>实际320000lower ticks/320000槽，262.398秒含初始化/编译/I/O，16次重规划、0训练。所有raw、时钟、原目标、原用户速度、实际世界脉冲及参考滤波链经分析核对；独立AI另从80 raw重计端点/触地而不调用相同endpoint helper，结果一致。fresh native-only审计核80lane prepared物理字段及20组60个完整carry方法对，原α及真实滤波初值认证；这不是独立物理复现。完整5张任务XY与5张整窗XY保留，避免到达后行驶末点被误判；当前路径reward在改路后仅作诊断。[E028–E029]</p>
+<p>裁决：本组防摔结局全通过，因此没有比较性容扰优势的区分力；到达却已有强对照差异，不能笼统称整组无信息。保留原生偏好与较低工作侧倾的具体用途，不将其扩写为此新任务栈的到达或防摔优势。固定面板封存，不自动加力、改起扰时刻或延长到满足神经策略。此结果也不证明其他状态/方向/时长下容扰能力相同；后续先复盘已有真实触地证据及机制缺口，而非再开启同类调参。</p>
 <h2>5 早期解析容扰代理回答的是什么</h2>
 <p>早期固定速度局部模型采用不稳定模态坐标和折算脉冲：</p>
 <pre><code class="language-text">λ = sqrt(a4),     b = a1 + a2/λ
@@ -435,7 +481,7 @@ E_min(F) = (z + Kτ F)² / W
 <p>当前拟检验的组织假设是“偏好可能塑造进入状态，真实参考权限可能约束可兑现的闭环容扰表现，规划用于接续到原目标”；已有条件差异尚不足以识别整条因果链，三个环节必须有各自证据，不能由任务到达替代不触地。旧解析式失去控制模块地位，不代表容扰问题消失。</p>
 <p>任务与系统贡献仍是允许路线，并不要求每篇论文必须提出全新算法。但需要明确动态平衡、偏好和真实参考权限耦合所带来的具体问题，解释既有工作为什么没有在相同条件下回答它，并给出公平、独立的证据。当前不把更多曲线或一次小正例当作已经达到Transactions要求，也不要求策略无敌、每个指标全胜。</p>
 <h2>7 下一项独立验证的设计要求</h2>
-<p>以下为尚未执行的验证提纲，不是新实验结果或自动启动依据：</p>
+<p>新情境固定80已按4.8完成；以下是尚未完成的后续机制与独立验证要求，不是重跑该面板或自动启动新实验的依据：</p>
 <ol>
 <li>以完整路线/速度/起始状态组合划分验证来源，冻结模型、normalizer、参考权限、目标半径和停止语义后才评价；不同力档/时刻不能替代独立任务或独立训练重复。</li>
 <li>匹配H75、current、zero与任何已采用简单规则；若主张选择方法，还须排除固定任务条件选择和同权限普通反馈。无需人为要求零损失，报告全部增失和原α代价。</li>
@@ -451,6 +497,7 @@ E_min(F) = (z + Kτ F)² / W
 <p>E021：goal_replanning_github_v1/plan.json及_vendor/pythonrobotics/UPSTREAM.json，规划来源、完整运行合同。E022：同run的analysis/{summary,paired,receipt}.json及independent_result_review.md，固定48原始审计及完整结果。E023：goal_replanning_h75_v1/combined_analysis/{summary,paired,task_cost_readback,receipt}.json及DECISION.md，新24与缓存48的同条件结果。</p>
 <p>E024：native_zero_preference_v1/{plan,evaluation/status,analysis/review}.json及analysis/independent_result_review.md，8新zero＋16缓存原生强对照。E025：同run task_scope/review.json，首达前分量、误差、侧倾及终止替换差。</p>
 <p>E026：native_equilibrium_rule_v1/{plan,evaluation/status,analysis/review}.json与analysis/independent_result_review.md，8新规则＋24缓存原生比较。E027：同run task_scope/review.json，H75-vs-rule首达前分量与误差。</p>
+<p>E028：native_goal_confirmation_v1/{plan,evaluation/status}.json及analysis/{summary,results,paired,receipt,independent_result_review}.json，新情境固定80与完整正负。E029：同run analysis/initial_carry_review.json，实际初态、80物理lane/60方法对认证及其核验范围。</p>
 <p>完整路径、SHA和核验范围在evidence_manifest.json；可复算跨面板脚本为learning/cli/audit_sttw_paper_claims.py。原报告与台账分别保留工程历史与当前研究事实。本文引用的数字经AI读取产物/配对重算；人类作者核验、完整相邻文献方法比较、最终期刊要求、独立确认以及硬件证据尚未完成。本稿不含虚构作者、资助、利益冲突声明、实机结果或提交记录。</p>
 <h2>参考与流程软件</h2>
 <p>[1] Preference-Conditioned Multi-Objective RL for Integrated Command Tracking and Force Compliance in Humanoid Locomotion. <a href="https://arxiv.org/abs/2510.10851">arXiv:2510.10851</a>。本轮使用原始摘要级事实，未借其硬件结果为本项目背书。</p>

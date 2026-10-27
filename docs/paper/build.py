@@ -93,7 +93,9 @@ def evidence_manifest():
         'E024':ROOT/'runs/native_zero_preference_v1/analysis/review.json',
         'E025':ROOT/'runs/native_zero_preference_v1/task_scope/review.json',
         'E026':ROOT/'runs/native_equilibrium_rule_v1/analysis/review.json',
-        'E027':ROOT/'runs/native_equilibrium_rule_v1/task_scope/review.json'}
+        'E027':ROOT/'runs/native_equilibrium_rule_v1/task_scope/review.json',
+        'E028':ROOT/'runs/native_goal_confirmation_v1/analysis/summary.json',
+        'E029':ROOT/'runs/native_goal_confirmation_v1/analysis/initial_carry_review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),

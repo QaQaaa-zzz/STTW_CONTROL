@@ -1905,3 +1905,27 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 事前收益判断：正结果支持此新任务栈下有条件的偏好/触地/到达增量，仍不能归因旧native与新合同之间的某一因子。若强规则覆盖收益或只余工作侧倾成本，则缩小主张；若全部通过且差异小，视为无区分，不自动加力/换时刻补考。必须读回实际脉冲暴露、起扰相对真实弯道/首达的关系；若某臂首达后才施扰，只支持其整窗稳定性，不伪称到达恢复。不同alpha/法在同事件分享时刻、世界方向和冲量，但进入状态可能不同；80条是相关DEV，不是80独立样本/独立训练重复/最终TEST。
 
 未完成项明确保留：正式runner尚未实现/prepare/shape/启动；其必须先安装wrapper再set_log_template，认证native/vendor及模型/normalizer/物理/原goal身份，核20s终止费用，封存80case与实际成本合同后才执行。新模块和测试不是一组已完成受扰实验。旧规则/规划面板不补考、不重训/重拟合旧Emin，本轮没有实机/JIT/push。
+
+### 2026-10-27 新情境80已实际执行完成，全部结果分析进行中
+
+真实接线与封存：native_goal_run.py/薄CLI及batched pure rebind已本地cda4bae；13项相关CPU通过2.67秒，独立AI13项通过5.30秒。prepare实际exit0。原生真实模型shape session34662 exit0，12.887875秒、[50,80,4]、0padding、0积分/0allocated/0优化；两Actor树兼容。实际导入34个native模块与封存SHA匹配，loader核lower/model/bank；planner/vendor独立namespace、Path显式native alias。所有新case、effective_config、模型/normalizer来源、代码/input快照在runs/native_goal_confirmation_v1的plan/seal；prelaunch_receipt绑定同seal已完成shape/status，不热改执行源。物理起点700tick/3.5s，pulse使用绝对时钟+1.6/2.6s；20s终止费用核1000upper而非旧500。
+
+执行：按2341台账合同启动PID1094449/session82628，/proc命令与launch_receipt一致；一次固定80，共用原生权限/20s原goal1m/contact-only/相同16clean发布mask/普通1s一次因果重规划。约启动10.6分钟后才回收真实完成事件（本Python无os.pidfd_open，观察脚本一次AttributeError，改用/proc消失核事件并回收同session；未重启仿真、不混作数值错误）。原数值session实际exit0，status completed80/20blocks、320000actual/320000allocated、262.398005秒含初始化编译/I/O、16replans、0优化。未在运行时改任何sealed源/plan。CLI完成中文Bark沿原helper，不假称空回执accepted。
+
+分析：只读analyze_native_goal_confirmation.py按原goal10/20s分别调用已有到达/触地对象，新增两项被反审采纳的认证：manifest绑定plan/config/models/cases/source/goals；fresh native-only子进程读取实际initial_carry，核task0/physical700/原alpha/真实filter-offset初值、20组60完整carry方法对，以及80lane的prepared physical各叶（仅排除native reset允许的raw/refpose/yaw4字段）。初次只核representative physical0lane的initial_runtime_audit.json保留，未冒称原报告已覆盖80；改进helper输出initial_runtime_audit_all80.json实际exit0，另留helper与initial SHA，未重跑物理。
+
+全部rawSHA、实际clock、1%旧pulse容差、original correction chain、masked/zero目标、全部配对正负与XY由只读分析正在执行session80029，尚无本条最终结果。首达统计含入圈步，触地前统计不含触地当步；taskXY未到达者仍保留真实contact点，峰值窗区别明确。不同首达窗RMSE仅描述，各法相同事件会形成不同进入状态。重规划后current-path reward仅诊断，原user速度、原goal和原路偏离分别报告。图采用scientific-visualization内部证据工作流，沿论文已有Scientific Agent Skills引用，不宣称具体期刊图规合规。新分析源不在运行源seal内，未修改执行接口。
+
+下一只完成全部80分析、独立raw重计与全XY目视后裁决；全通过或强规则覆盖收益按已定停止边界收缩，不自动加力/扩库补考。当前本任务无活动物理/训练，只有CPU只读分析；无实机/JIT/push/新watcher。
+
+### 2026-10-27 固定80最终结果与路线裁决
+
+全部80分析session80029实际exit0，0额外物理。10s到达H75/current/zero/规则=16/17/20/20（各20），20s=18/18/20/20；四法均20/20整窗不触地，无fault/unknown。无扰各4/4到达，受扰各16中H75/current14、zero/规则16。两网络对zero/规则均0增2失，H75对current为1增1失；四条未达均已重规划并存活，最近原goal距分别1.060092–1.338717m，只比1m工作半径多约6–34cm，不称摔倒或极端失控，不事后改主口径凑成功。全部非零事件在各自首次到达前开始，最大world脉冲绝对误差.003284Ns，符合原1%合同。
+
+连续收益保留而不夸大：共同到达子集各9对，H75 alpha0对zero路径/速度RMSE均9/9更差，但peakroll8/9更低；alpha1路径5/9更低、速度3/9更低、peakroll9/9更低。各自首达窗与共同成功子集不同，这只是描述性取舍，不是原用户总效用支配或因果。当前路径reward不能代替原目标/原路径效用。最新结果支持低工作侧倾的条件用途，却没有本组到达/容扰增量，也不能把原生偏好功能直接外推到此需求域。
+
+认证/交付：80raw SHA/连续实际clock/原goal与原user v/全部pulse/原滤波链/屏蔽和zero目标均核；manifest绑定原plan/config/models/cases/source/goals，初态fresh native-only认证80物理lane和60完整方法对。独立AI另从全80raw不调用共同endpoint helper重算10/20结果及配对一致、全部source/input/native_expected_sources核通过，不是独立物理复现。主审实际看5任务+5全窗XY覆盖全部80，以及1动态/1components；其余19+19过程图生成未逐看，actual_visual_review.json明确；独立审阅另看3任务XY覆盖四未达例。无平滑、不把到达后20s末点当任务失败、未称期刊合规。
+
+结论/采用：此固定面板封存，不扫力/时刻/库或增加重规划次数补考；没有采用新权重或旧Emin。防摔全通过使比较性容扰无区分，但到达已有区分，不能笼统判全组无信息，更不能宣称所有任务NN无用。保留H75原生取舍与工程谱系/成熟规划接口；此新任务栈由简单方法覆盖二元指标，收缩其神经必要性主张。论文4.8及摘要/E028–E029已原位更新，并导出16页PDF2204929bytes约2.2MB，主审实际看新增第13页表与正文；未全稿审页、不投稿ready。
+
+下一先复用已有真正触地数据做只读机制审查，不扩本组：本轮实读preference_capability_grid/DECISION.md，旧右R1.1/1.5m/s、五alpha的0/±16/32/48/64网格确有实测边界差异，且其目标标签已在GOAL_ARRIVAL_REVIEW.md按旧30cm等半径复算过，不能又声称“第一次放松标准”。先检查该旧数据与当前1m/10或20s口径及参考权限的可比性/已做分析覆盖，再决定是否还有信息缺口。此项尚未新算、未新实验，不自动再训PPO或复活旧公式/支持曲线；后续实验仍须先用skill分析收益和反驳。当前数值/分析皆terminal，无活动训练/物理；代码/报告本地保留，不push/实机/JIT。

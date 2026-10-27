@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "9a13c9894e9bc3543aa301f069a3dc7b9cc1359e6167be725fe9de49f5c86558",
-  "builder_sha256": "1db87c76c28e9578afabd80fe5845bc84970c99d0f4ca1d3825e30faec5625d5",
+  "manuscript_sha256": "c491c5e2285e698a053514c7b20bbff748f9f40cf41d11ce8c5f2d73498bc60a",
+  "builder_sha256": "4539fc4c7d393d321f12d0f3c5c6018def603a1814a86f012655c02e80ab9a41",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -165,6 +165,18 @@
     "E027": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_equilibrium_rule_v1/task_scope/review.json",
       "sha256": "a3894f5e87d079c816d49f6ae50b1fb22211d4c29dc8e081f8b2382feceaf27e",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E028": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_goal_confirmation_v1/analysis/summary.json",
+      "sha256": "7b51db8f8b8ccb9e32a7c2388b2f45c8964a6e9e999922caa9f78c3d3df46ce9",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E029": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_goal_confirmation_v1/analysis/initial_carry_review.json",
+      "sha256": "9f9de5a30bfadebe0a99b7fc0e92ac347e82e044b9ffd312ccfa6a483e5ec27a",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
