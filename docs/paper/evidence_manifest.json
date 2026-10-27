@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "1f314647f887df03c1371817d7d505f17957fa53dd24a816ed827b14edecc10e",
-  "builder_sha256": "d9fc846d7a41cb1bba913173302b015814491723bc1f7c4e95aef5f2e26deb83",
+  "manuscript_sha256": "76b99459a0a8ba697ffb868a30749cf8521397f63400243d1410691252504a99",
+  "builder_sha256": "b744266d7016423f512427b6c21ebae31ca09116cce44be582b78632db57fe21",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -549,6 +549,11 @@
       "limitation": "保留延缓触地和连续距离改善，不称所有参考无效。"
     }
   ],
+  "detailed_evidence": {
+    "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/EVIDENCE_DETAILS.md",
+    "sha256": "66f0c8e566de9b11e9a5cfa6259643ba20a7eb0af7ab9abf6610e17798beb7d4",
+    "role": "Full historical evidence narrative; current research decisions remain in the shared ledger"
+  },
   "image_role": "Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments",
   "figures": {
     "figures/control_architecture.pdf": "30d824409279ca07804f1688ae9e9d190c923b5df5b1532b357b67b0e64ab0c8",

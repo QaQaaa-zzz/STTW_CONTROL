@@ -151,6 +151,9 @@ def evidence_manifest():
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
         evidence_cutoff='2026-10-27',submission_ready=False,human_approval='not_recorded',
         sources=sources,claims_from_readback=data['claims'],
+        detailed_evidence=dict(path=str(HERE/'EVIDENCE_DETAILS.md'),
+            sha256=digest(HERE/'EVIDENCE_DETAILS.md'),
+            role='Full historical evidence narrative; current research decisions remain in the shared ledger'),
         image_role='Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments',
         figures={str(p.relative_to(HERE)):digest(p) for p in FIG.glob('control_architecture.*')},
         new_physics_steps=0,optimizer_updates=0)
