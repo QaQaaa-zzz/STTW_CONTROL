@@ -1955,3 +1955,13 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 当前只封存这组固定规划家族及旧面板α选择器提案，不否定所有学习/规划。原生偏好、简单参考的实测容扰和目的地接续是分别成立的资产，不能拼成已验证新协调算法；重规划后当前path reward不等于原用户效用。既有task_cost_readback已覆盖首达前连续代价，直接复用而非再画同类图。
 
 继续scientific-brainstorming有界文献检查，原始Arslan2022 time governor已含闭环预测的进度治理且需点稳定前提；Wang等2024 EABC trackstand摘要表明不能泛称单轨车不能静止。下一仅核冻结接口是否满足静态参考稳定/停止前提及其真实权限，不从vmin直接推物理不可能、不声称新颖性、不启动新governor/floor/力档实验。报告提供两篇精确原链接及本轮阅读范围。0新物理/训练/拟合，无push/实机/JIT。
+
+### 2026-10-27 时间治理接口前提审查完成
+
+上述审查实际完成，目的/方法/条件/结果/推论见[接口前提审查](REFERENCE_GOVERNANCE_INTERFACE_AUDIT.md)。旧能力90/规划72参考范围[1,3.5]，native80为[1.5,3.5]，原接口不提供0速度参考；这不是实际速度下界或不能静止证明。progress由实测XY投影更新，不是独立virtual path time；pursuit速度取原v_user，不由goal标记自动停车。用户只需首达，不额外加停车任务。
+
+新audit_reference_governance_interface.py只作纯函数/源码审查：最终v2认证native归档三源码到原plan SHA、三生效config到执行plan、current/native六函数AST一致；45correction合成参数组与9goalmarker参数组实际检查，不构造env/Actor/物理积分。独立AI重算一致，既有预测治理5CPU通过。首次脚本路径重复拼接错误attempt1留档/Bark，修正后v1 exit0；v2加严身份绑定exit0，不覆盖v1或计为新物理。
+
+回读已存在path_reference_governor：五候选、1秒、1000预测ticks/slots、首次batch12.2068s、闭环治理0episode。其有限预览不依赖点稳定，但无终端不变集/认证backup，不能直接继承time governor定理或作递归安全保证；前提未证也不排除所有RG/建立新颖性。
+
+暂停的reference_scenario_search.py/958b8ed受扰生成问题确未执行，但只是普通scenario/CEM；新72/80强zero覆盖、改路后原用户效用未统一，当前不恢复，也不标already_failed。未来讨论需同goal/20秒/权限因果规划/原用户评价及random/F0/zero/静态规则强对照，设计与冻结评价分开，阴性不扩knots/force/轮数。下一先落实改路后原用户评价可重建范围，不新增停车任务、不重算终点表或新训选择器。Trans目标active、当前无已验证新协调增量，无push/实机/JIT。
