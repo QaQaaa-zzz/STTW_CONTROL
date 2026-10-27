@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "373b2f4a91a863037c9938582666632bc9a807c169c17c2e4e7959a9b77fea60",
-  "builder_sha256": "57afce5ec4d932cbc1032384ffd3c6bf764c2c482927e1b1df9a7325f17fa355",
+  "manuscript_sha256": "8b20456703cefa0b42f4fcb7680ccb281cbc8064513a7a732dc21034fe7ae3ca",
+  "builder_sha256": "c7befa4b710fb139a5c8b9451b6feeb4640f4bdca64730c868319fc20b83c93d",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -123,6 +123,24 @@
     "E020": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/reference_reentry.py",
       "sha256": "650dabfb8fb8ae8ef8271a848ee1590f031f56a5b7fa58387c3fc1ff64c06986",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E021": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_github_v1/plan.json",
+      "sha256": "379f975c557bd08296711da250ca41b47398315847e8fab3da8240bcec62346d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E022": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_github_v1/analysis/summary.json",
+      "sha256": "5088349d5adc46e05a7b5791802e05dabb225b7b6a1493ec3cd4b3f253c994ef",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E023": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_h75_v1/combined_analysis/summary.json",
+      "sha256": "78bcb2ad3660e94904ea0e37be2cb6afba85390ad1d6f0767bfef0e9cd07a80b",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
