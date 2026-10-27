@@ -58,3 +58,24 @@ H75对zero和equilibrium按原route/user speed/α配对，每阶段8相关配对
 ## 紧凑证据
 
 [阶段原记录与配对](../../../../runs/native_transition_mechanism_v1/analysis/review.json)、[阶段CSV](../../../../runs/native_transition_mechanism_v1/analysis/records.csv)、[配对CSV](../../../../runs/native_transition_mechanism_v1/analysis/pairs.csv)。[独立raw核验](../../../../runs/native_transition_mechanism_v1/independent_review.md)已完成：未先看主数值，独立读取32raw后重算320阶段、配对指标和stage summary一致；均值累加精度约1e−6，不要求bitwise相等。科学流程引用沿主稿[4]，AI核对不等于作者批准。
+
+
+## 补充：名义侧倾与奖励预算的算术核对（2026-10-27）
+
+目的：检验“正常转弯的侧倾被惩罚，所以近期负结果可能只是奖励错误”这一解释是否值得改奖励。按 scientific-brainstorming 1.4 做非提出者反审，scientific-writing 2.3 约束表述；流程引用沿主稿[4]。本补充为AI核对的内部解释，非人类批准或新控制实验。
+
+方法：实际读取 native_equilibrium_rule_v1/plan.json 的 initial_source.controller 与 config，调用既有 q_ratio 和 costs；不初始化物理、不推理Actor、不训练。设原任务误差为0，只把模型名义侧倾代作假想恒定 peak_roll，以隔离该成本的含义。模型为 δff=atan(Lκ/cos(caster))、φff=δff/q(v_user)。q来自原ECBC，并不是小车真实稳态侧倾；实际ESO偏移、local300、滤波及动态均未消除。χ=clip((|φff|−.18)/.12,0,1)是既有任务冲突门控，不是容扰度。
+
+|请求速度/半径|模型名义侧倾(rad)|χ|roll成本分量|working_roll成本分量|
+|---|---:|---:|---:|---:|
+|2.6m/s / 1.8m|.364803|1|339.214|1315.283|
+|2.8m/s / 1.8m|.424797|1|579.189|2755.136|
+|1.5m/s / 1.1m|.181132|.009436|0|0|
+
+表内为无量纲成本分量，不是每步或回合reward；原代码另乘scale=.1及lower_dt=.005。三点未触两个分量cap。高速两点即使按模型跟踪也收费，与原有工作侧倾预算相容，不能据此称bug；低速点反而不收费，因此该解释不能覆盖近期低速负结果。低速实测peak_roll仍可因动态超预算，表没有断言其真实轨迹费用为0。
+
+在速度下限和m2数值floor均不活动的正分支，q=gL/[cos(caster)(v²−a·trail·g/h)]，可反解给定模型预算b的速度：v²=a·trail·g/h+gLb/[cos(caster)|δff|]。R1.8、b=.30时为2.365041m/s，R1.1为1.897364m/s；与原q回代误差均小于1e−6rad。**它们只是模型预算交点，既非物理最高速度，也非安全或牛顿容扰阈值。** 现有静态equilibrium对照已经使用同q和.30预算，不将这次反解包装成新方法。
+
+决策：拒绝“因此改成相对名义侧倾奖励/放宽预算/重新加训”的跳步，封存本算术路线。较低侧倾或较低roll成本仍不能替代固定闭环、方向、波形和观察窗下的实际防摔测量；旧Emin也不恢复。真实容扰能力、用户偏好代价和首达目标继续分别报告。本轮新增物理/训练步数均0，未改变奖励、模型、场景或历史标签。
+
+[完整算术与源SHA](../../../../runs/nominal_program_feedback_v1/reward_semantics_review/arithmetic/review.json)、[理论参考曲线（不是实测轨迹或容扰图）](../../../../runs/nominal_program_feedback_v1/reward_semantics_review/arithmetic/model_reference_and_chi.png)、[独立反审](../../../../runs/nominal_program_feedback_v1/reward_semantics_review/independent_review.md)。实际目视曲线标识/单位与三个算术点一致，未生成新XY，因为没有新物理；原32轨迹见本报告开头。复算CLI：learning/cli/review_roll_reward_semantics.py。此次补充保留在机制报告，不为常规算术继续扩张主稿。
