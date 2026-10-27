@@ -63,3 +63,10 @@ X需包含物理、ECBC/ESO、执行器、local300与中层历史、参考滤波
 先允许一次工程预测，完整合同和非提出者反审见[native_reference_cost_engineering_v1](../../../../runs/native_reference_cost_engineering_v1/REVIEW_AND_PROTOCOL.md)。现有path_reference_governor模块增加独立opt-in native成本接口，原五fraction默认路径保持；原native policy_step/完整carry/原α及失败费用不改。固定26候选（前target+5×5，含zero），仅source第一task0初态1秒、≤5200预测lower，0闭环回合/训练。真实26形状检查已完成且0积分，单元/接口测试8通过；数值未由这些检查证明。
 
 预测范围包括未知未来外力假设零和特权完整模拟carry。task0第一秒多在前直行，只验证接线/费用/计算，不能判断弯中效用、抗扰、实时性或安全。按原J选择保留已知失败罚，不称安全筛选；全部unknown不得删除。完整8条需后续单独审收益，不自动派发，不据预测排序调网格/视界追H75输赢。状态和实际数值仍以唯一台账为准。
+
+
+### 同一工程合同的实际数值结果
+
+native_reference_cost_engineering_v1/session86181已正常exit0：26×200=5200预测lower，0整回合滚动治理/训练，编译18.647s、数值12.003s、全流程40.315s。费用argmin18对应速度offset +.11875m/s、steer0，26预测均有限且无原physical/domain事件；首秒主要前直行，仅证明接线和计算成本，不说明弯中优劣。原zero预测与缓存zero前200tickXY差5.54e−7m，按接受的数值误差记录，不加exact gate。预测12秒不称20ms实时。
+
+独立NPZ重计5200/费用加总/argmin/权限完成，最大加总差1.45e−6，未重新运行预测或重建全部V3。本次无失败/末窗，相关逻辑仅有代码和替身测试，不冒称真实失败验证。全部26预测XY和成本、工程限制与下一协议缺口见[完整工程结果](../../../../runs/native_reference_cost_engineering_v1/README.md)。没有据工程完成自动启动8条，也不把预测差值当闭环控制提升。
