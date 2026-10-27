@@ -3,13 +3,14 @@
     "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/control_architecture.svg": "ad9efc04debf38e8be23995fe3259b287c48fb3fb9631d2b939ecdda977f556e",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/current_native_preference_v1_attempt2/analysis/all_native_pair_xy.png": "efbf43766e36a1d35b07036f232d01a59d8d4c730e767157d75a86157aa0a770",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/all_xy_force_+32.png": "74578e9b93e3f3e6c8e7645d37713f5f4b4ac53e2747ce180f1c590efb91b4aa",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_h75_v1/combined_analysis/task_xy_force_+32.png": "a86a6e9381e2068b114e64b8d25e968ccecad6b2dfe00258d6e5ddc144eeefd0"
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_h75_v1/combined_analysis/task_xy_force_+32.png": "a86a6e9381e2068b114e64b8d25e968ccecad6b2dfe00258d6e5ddc144eeefd0",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_zero_preference_v1/analysis/all_native_three_xy.png": "72b6b734832e98deaac422cc26d45780a283e2fb0fef067c3620a877014442dd"
   },
-  "html_sha256": "7e0b17e52670605c79e08dcaf75fde9883a5f723317ca59f5f99177a0d208940",
+  "html_sha256": "a32020ba55a0f1316dbab93361706592b4e0ff0a56a502766d851e8cc8229292",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "1cc68b57ce931dcdc4dd631be26f7cb62d8468b076cb7948f3dd11d300ee6435",
-  "pdf_bytes": 1867832,
+  "pdf_sha256": "2b3a9e2f46d3608a401f6c43404d3701477b226249892481a247078cba1326e1",
+  "pdf_bytes": 2081757,
   "renderer": "existing local headless Chrome"
 }

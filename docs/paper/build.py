@@ -89,7 +89,9 @@ def evidence_manifest():
         'E020':ROOT/'learning/src/sttw_control/reference_reentry.py',
         'E021':ROOT/'runs/goal_replanning_github_v1/plan.json',
         'E022':ROOT/'runs/goal_replanning_github_v1/analysis/summary.json',
-        'E023':ROOT/'runs/goal_replanning_h75_v1/combined_analysis/summary.json'}
+        'E023':ROOT/'runs/goal_replanning_h75_v1/combined_analysis/summary.json',
+        'E024':ROOT/'runs/native_zero_preference_v1/analysis/review.json',
+        'E025':ROOT/'runs/native_zero_preference_v1/task_scope/review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
