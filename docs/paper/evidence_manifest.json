@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "62872a6487a3bdeb56efc9cbf92d486c1a93ba680e8a5cdd868d68d26146ed04",
-  "builder_sha256": "4b9352a299dd2464df9564305597f33aa3d13520f460d3a200131fdfab4e6040",
+  "manuscript_sha256": "fa71cd3f80ae7425fa48b267616e00650e64755e0fd8873c45544cfeae81107f",
+  "builder_sha256": "356cdd6cdcddc442249f66732b7fc2c1268cf407d3508fbaf1cbff4d76e567fc",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -297,6 +297,12 @@
     "E049": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md",
       "sha256": "d7b21b441616742b8112f3c916672d3a2200b0f9fd37cf1b89625b1f2c3cf3e2",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E050": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/DUAL_NETWORK_COVERAGE_REVIEW.md",
+      "sha256": "679a220efccbafa9398042386a99df42c321eff14fc2bc4de2f78f486c54faaf",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

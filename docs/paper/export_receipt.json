@@ -7,11 +7,11 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_zero_preference_v1/analysis/all_native_three_xy.png": "72b6b734832e98deaac422cc26d45780a283e2fb0fef067c3620a877014442dd",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/legacy_credit_goal_continuation_v1/diagnostics/task_prefix_right_t380_F-32.png": "0b6cceec1dfb0c804547b5c394d49dea43e9ab330cf0da85471fe7e141d879f5"
   },
-  "html_sha256": "053503e95e34bad4042b3fcf1e016f2c2e6176483a69b959bb3b1acf3de90024",
+  "html_sha256": "4fcef3c7065b019ff477d1089fd0a077a32ffcc6303d7849d5e35f03fc8b44be",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "03fde44d50a0056211d7e46126d0c4b4c0d6bd84b4a280f437f5434bcfa0c266",
-  "pdf_bytes": 2470019,
+  "pdf_sha256": "bceec5690516dc3e35f205e297c23d3627b9e25bcf57e213bb7eb1788441ee83",
+  "pdf_bytes": 2474829,
   "renderer": "existing local headless Chrome"
 }

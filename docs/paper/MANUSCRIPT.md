@@ -87,6 +87,10 @@ r_command = original filter/slew/bounds applied to (r0, Δr_target)
 
 双网络端点、蒸馏单网络及后续权重均已保留在冻结registry。H75是原生偏好基线；当前恢复候选来自H75→task_only64→free_GAE64系列，经recovery45、recovery55等工程恢复目录接续；recovery55计划从认证的第55边界完成余下9次更新，不是另一次独立训练。[E014–E016]不能把两个冻结权重的差异归因于最后一次更新、单个奖励项或某一种教学机制；若提出训练因果主张，仍需同初始化和匹配训练对照。也不能把各历史名字中的“75轮PPO”自动视为同一checkpoint。[E012]
 
+双网络亦有真实受扰历史：早期42例和同快照追加7例仅各出现1次working失败、无原physical_failure；追加零力基准复用，不能累加为独立重复。另一36例原生回访中α0域停7/18、α1域停0/18，原physical_failure均0；域停后的结局未知，不能据此给出防摔阈值或宣称双网从未测扰动。[E050]
+
+既有共同迁移接口120条名义轨迹本轮按原世界目标重新读回：双网/u325/H75/当前候选的1米到达均24/24，零中层加共同反馈22/24，全部无接触/故障。双网0.5米旧结果22/24原位保留；该面板没有扰动力，且双网权限有迁移，不能作原生架构消融或抗扰优势证据。身份、条件、分母及原XY入口见[双网覆盖核对](../evidence/tolerance_progress_20261022/finite_value_online/DUAL_NETWORK_COVERAGE_REVIEW.md)。[E050]
+
 ## 3 评价对象和数据角色
 
 ### 3.1 目标到达与不触地分开
@@ -427,3 +431,5 @@ E047：native_transition_mechanism_v1/analysis/review.json；E048：同run indep
 [11] Ayubirad, M., and Ossareh, H. R. A Machine Learning-Based Reference Governor for Nonlinear Systems With Application to Automotive Fuel Cells. [arXiv:2410.03894v2](https://arxiv.org/abs/2410.03894), 2025；[DOI](https://doi.org/10.1109/TCST.2025.3579514)。v2报告TCST录用；IEEE页面受验证限制，未核出版社全文。
 
 E049：DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md，三原文方法/版本/限制及已有预测器真实语义，不是闭环效果证据。
+
+E050：DUAL_NETWORK_COVERAGE_REVIEW.md；绑定dual_coverage_audit_v1/raw_readback.json与非提出者覆盖复审。120条既有raw身份/时钟/当前目标圆重算，早期受扰仅报告/身份核对；0新物理、非独立训练重复，AI artifact_checked，人类核验未记录。
