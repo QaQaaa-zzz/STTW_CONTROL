@@ -354,6 +354,14 @@ credit对ordinary受扰到达3增1失、存活0增0失；对parent到达0增4失
 
 因此4.12的干预机制发现仍成立，但不能据3个正例主张需要神经偏好切换，本面板不再开发该学习选择器或扩力调参。两简单规则同标签不等于同轨迹/单通道因果机制；zero沿H75自身前缀接续，也不能推为从任务起点无需中层。这里未评价原goal/Jα或未知起扰时刻，不证明规则覆盖全部偏好价值。全部48条[XY与原始结果](../../runs/preference_history_baselines_v1/analysis/all_xy.png)保留。[E053,E054]
 
+### 4.14 防摔覆盖不等于任务价值覆盖：已有48条的短窗复盘
+
+对4.13同一48条轨迹只读计算原目标1米首达、原路径影子投影误差和原请求速度误差，不新增物理或改变任务。路径投影从真实快照进度开始，域外影子误差不向控制器反馈。后续α0/α1/zero/速度支持的4秒内到达为2/12、3/12、2/12、2/12，其中受扰到达分别0/8、1/8、0/8、0/8。唯一受扰到达为右/进入α0/−32N/后续α1，3.590秒首入原目标圆；zero和速度支持同事件均不触地，但4秒内未到。[E055,E056]
+
+四规则共同完整存活7个事件的原路径影子RMSE均值依次为0.9067、0.9270、0.9377、0.9978米，原速度MAE为0.0786、0.0545、0.0665、0.1705m/s。它们是事后幸存子集上的无权重诊断，不是原Jα或总体支配。48条raw的目标/速度重计及配对算术由同一root另写NumPy复核，不冒称独立agent确认。[E055,E056]
+
+因此简单规则防摔覆盖与局部任务表现差异可同时成立；单一早到达见证不建立神经必要性，也不支持恢复即时切α方法。4秒未到不是20秒任务失败，本次不延时重跑或改目标追正例。全部[48条实际XY及原目标](../../runs/preference_history_task_review_v1/all_xy_original_goal.png)与逐例/排除记录保留。[E055,E056]
+
 ## 5 早期解析容扰代理回答的是什么
 
 早期固定速度局部模型采用不稳定模态坐标和折算脉冲：
@@ -469,3 +477,5 @@ E050：DUAL_NETWORK_COVERAGE_REVIEW.md；绑定dual_coverage_audit_v1/raw_readba
 E051：preference_history_factorial_v1/analysis_verified/review.json，固定24条原始结果及六个四格描述性对照。E052：同run independent_outcome_review.json，非提出者原始轨迹独立重计，非独立物理/训练重复。AI artifact_checked，人类核验未记录。
 
 E053：preference_history_baselines_v1/analysis/review.json，24新简单后缀与24认证缓存的48条匹配结果；E054：同run independent_outcome_review.json，独立原始重计与实际干预核验。均AI artifact_checked，人类未记录。
+
+E055：preference_history_task_review_v1/review.json，既有48条原任务短窗诊断；E056：同run verification_receipt.json，同root另写NumPy直接重计目标/速度/算术，不是独立agent/人类或物理复现。AI artifact_checked，人类未记录。
