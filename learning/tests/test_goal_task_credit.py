@@ -208,3 +208,65 @@ def test_partial_cost_population_is_rejected_before_network_forward():
             masks=masks, collected=data, objective_weights=dict(goal=1., cost=.1, survival=1.),
             fixed_denominator=6, cost_population_complete=False)
     assert not calls
+
+
+def clipping_packet(ratios=(1.5,), *, aggregation='scalarize_then_clip', conflict=True):
+    n = len(ratios)
+    new = torch.tensor(ratios).log().requires_grad_()
+    mask = torch.ones(n, dtype=torch.bool); empty = torch.zeros(n, dtype=torch.bool)
+    result = goal_task_ppo_loss(new_log_prob=new, old_log_prob=torch.zeros(n),
+        goal_values=torch.full((n,), .5), old_goal_values=torch.full((n,), .5),
+        goal_targets=torch.ones(n), goal_mask=mask,
+        cost_values=torch.zeros(n), old_cost_values=torch.zeros(n),
+        cost_targets=torch.full((n,), torch.nan), cost_mask=empty,
+        physical_values=torch.full((n,), .5), old_physical_values=torch.full((n,), .5),
+        physical_targets=torch.zeros(n) if conflict else torch.ones(n), physical_mask=mask,
+        objective_weights=dict(goal=1., cost=0., survival=1.), fixed_denominator=n,
+        cost_population_complete=True, actor_aggregation=aggregation)
+    return new, result
+
+
+@pytest.mark.parametrize('ratio', [.5, 1.5])
+def test_scalarize_before_clip_cancels_opposing_goal_and_survival_advantages(ratio):
+    logp, standard = clipping_packet((ratio,))
+    oldlogp, historical = clipping_packet((ratio,), aggregation='componentwise_clip')
+    assert standard['actor_aggregation'] == 'scalarize_then_clip'
+    assert standard['actor_loss'].item() == pytest.approx(0.)
+    assert historical['actor_loss'].item() == pytest.approx(.15, abs=1e-7)
+    assert torch.autograd.grad(standard['actor_loss'], logp)[0].item() == pytest.approx(0.)
+    assert abs(torch.autograd.grad(historical['actor_loss'], oldlogp)[0].item()) > 0
+
+
+def test_same_sign_advantages_have_same_loss_and_gradient_under_both_modes():
+    a, standard = clipping_packet((.5, 1., 1.5), conflict=False)
+    b, historical = clipping_packet((.5, 1., 1.5), aggregation='componentwise_clip', conflict=False)
+    torch.testing.assert_close(standard['actor_loss'], historical['actor_loss'])
+    torch.testing.assert_close(torch.autograd.grad(standard['actor_loss'], a)[0],
+                               torch.autograd.grad(historical['actor_loss'], b)[0])
+
+
+def test_scalarization_respects_distinct_goal_cost_survival_masks_and_nan_padding():
+    logp = torch.tensor([np.log(1.5), np.log(.5), np.nan], requires_grad=True)
+    first = torch.tensor([True, False, False]); physical = torch.tensor([True, True, False])
+    x = torch.tensor([.5, float('nan'), float('nan')], requires_grad=True)
+    target = torch.tensor([1., float('nan'), float('nan')], requires_grad=True)
+    result = goal_task_ppo_loss(new_log_prob=logp, old_log_prob=torch.tensor([0., 0., np.nan]),
+        goal_values=torch.tensor([.5, .5, np.nan]), old_goal_values=x, goal_targets=target, goal_mask=first,
+        cost_values=torch.zeros(3), old_cost_values=torch.zeros(3), cost_targets=torch.tensor([2., np.nan, np.nan]), cost_mask=first,
+        physical_values=torch.tensor([.5, .5, np.nan]), old_physical_values=torch.tensor([.5, .5, np.nan]),
+        physical_targets=torch.tensor([1., 0., np.nan]), physical_mask=physical,
+        objective_weights=dict(goal=1., cost=.1, survival=1.), fixed_denominator=3, cost_population_complete=True)
+    torch.testing.assert_close(result['scalarized_advantage'], torch.tensor([.8, -.5], dtype=logp.dtype))
+    assert result['actor_loss'].item() == pytest.approx(-(.96 - .4)/3, abs=1e-7)
+    result['actor_loss'].backward()
+    assert torch.isfinite(logp.grad).all() and logp.grad[2] == 0
+    assert x.grad is None and target.grad is None
+
+
+def test_unsupported_aggregation_is_rejected_before_network_forward():
+    r = arrived(); masks, data = torch_packet(r); calls = []
+    with pytest.raises(ValueError, match='aggregation'):
+        goal_task_ppo_batch(lambda *args: calls.append(True), torch.ones((6, 2)), torch.ones((6, 2)),
+            masks=masks, collected=data, objective_weights=dict(goal=1., cost=.1, survival=1.),
+            fixed_denominator=6, cost_population_complete=True, actor_aggregation='unknown')
+    assert calls == []

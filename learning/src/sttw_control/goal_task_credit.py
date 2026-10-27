@@ -96,15 +96,22 @@ def goal_task_ppo_loss(*, new_log_prob, old_log_prob,
                        goal_values, old_goal_values, goal_targets, goal_mask,
                        cost_values, old_cost_values, cost_targets, cost_mask,
                        physical_values, old_physical_values, physical_targets, physical_mask,
-                       objective_weights, fixed_denominator, cost_population_complete, clip=.2):
-    """Three separate PPO terms, with explicit caller weights for engineering use.
+                       objective_weights, fixed_denominator, cost_population_complete, clip=.2,
+                       actor_aggregation='scalarize_then_clip'):
+    """Scalarize masked objective advantages before clipping for ordinary PPO.
 
-    This weighted sum is NOT a lexicographic/chance-constrained solver and does
+    The historical componentwise_clip option clips each objective separately.
+    These are different surrogates when signed advantages conflict. Returned
+    actor_terms retain componentwise diagnostics and need not sum to actor_loss.
+
+    Neither aggregation is a lexicographic/chance-constrained solver and does
     not guarantee goal priority, alpha fidelity or a survival performance floor.
     Networks must be evaluated only on the union of legal resolved masks BEFORE
     calling this loss. Caller must freeze old values/log-prob for all PPO epochs.
     """
     import torch
+    if actor_aggregation not in ('scalarize_then_clip', 'componentwise_clip'):
+        raise ValueError('explicit supported Actor aggregation required')
     if (set(objective_weights) != {'goal', 'cost', 'survival'} or
             any(isinstance(w, bool) or not isinstance(w, (int, float)) or
                 not math.isfinite(w) or w < 0 for w in objective_weights.values()) or
@@ -161,15 +168,35 @@ def goal_task_ppo_loss(*, new_log_prob, old_log_prob,
         value_losses['cost'] = (values - targets.detach()).square().mean()
     else:
         terms['cost'], value_losses['cost'] = zero, zero
-    return dict(actor_loss=sum(objective_weights[k] * v for k, v in terms.items()),
-                actor_terms=terms, value_losses=value_losses)
+    componentwise = sum(objective_weights[k] * v for k, v in terms.items())
+    union = goal_mask | cost_mask | physical_mask
+    scalar_advantage = torch.zeros_like(new_log_prob)
+    for name, targets, baseline, mask, sign in [
+        ('goal', goal_targets, old_goal_values, goal_mask, 1.),
+        ('cost', cost_targets, old_cost_values, cost_mask, -1.),
+        ('survival', physical_targets, old_physical_values, physical_mask, 1.)]:
+        if bool(mask.any()):
+            # Select before arithmetic so missing post-goal targets stay unused.
+            scalar_advantage[mask] += objective_weights[name] * sign * (
+                targets[mask].detach() - baseline[mask].detach())
+    selected_advantage = scalar_advantage[union].detach()
+    ratio = (new_log_prob[union] - old_log_prob[union].detach()).exp()
+    scalarized = -torch.minimum(ratio * selected_advantage,
+        ratio.clamp(1 - clip, 1 + clip) * selected_advantage).sum() / fixed_denominator
+    actor_loss = scalarized if actor_aggregation == 'scalarize_then_clip' else componentwise
+    return dict(actor_loss=actor_loss, actor_terms=terms, value_losses=value_losses,
+                actor_aggregation=actor_aggregation, componentwise_actor_loss=componentwise,
+                scalarized_advantage=selected_advantage)
 
 
 def goal_task_ppo_batch(evaluate_selected, observations, actions, *, masks,
                         collected, objective_weights, fixed_denominator,
-                        cost_population_complete, clip=.2):
+                        cost_population_complete, clip=.2,
+                       actor_aggregation='scalarize_then_clip'):
     """Select legal known rows before network forward; never evaluate held NaNs."""
     import torch
+    if actor_aggregation not in ('scalarize_then_clip', 'componentwise_clip'):
+        raise ValueError('explicit supported Actor aggregation required')
     if set(masks) != {'goal', 'cost', 'survival'}:
         raise ValueError('three explicit objective masks required')
     goal, cost, survival = (masks[k] for k in ('goal', 'cost', 'survival'))
@@ -201,4 +228,5 @@ def goal_task_ppo_batch(evaluate_selected, observations, actions, *, masks,
         goal_mask=goal[union], cost_mask=cost[union], physical_mask=survival[union],
         **{k: v[union].detach() for k, v in collected.items()},
         objective_weights=objective_weights, fixed_denominator=fixed_denominator,
-        cost_population_complete=cost_population_complete, clip=clip)
+        cost_population_complete=cost_population_complete, clip=clip,
+        actor_aggregation=actor_aggregation)

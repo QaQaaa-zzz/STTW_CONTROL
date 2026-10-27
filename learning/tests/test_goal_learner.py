@@ -167,3 +167,15 @@ def test_pending_and_error_checkpoints_are_forensic_and_cannot_auto_resume():
     with pytest.raises(ValueError, match='forensic'): GoalLearner.restore(checkpoint)
     checkpoint['pending']['manifest'][0]['episode_id'] = 'mutated-copy'
     assert learner.pending_status()['manifest'][0]['episode_id'] == 'ep0'
+
+
+def test_aggregation_is_bound_and_v1_checkpoints_do_not_silently_change_algorithm():
+    learner, e, _ = setup()
+    assert learner.settings['actor_aggregation'] == 'scalarize_then_clip'
+    learner.settings['actor_aggregation'] = 'componentwise_clip'
+    with pytest.raises(ValueError, match='changed during'): learner.prepare_population([e])
+    learner, e, _ = setup(); learner.prepare_population([e]); learner.update(warmup=True)
+    saved = learner.checkpoint()
+    assert saved['schema'] == 'sttw_goal_learner_v2'
+    saved['schema'] = 'sttw_goal_learner_v1'
+    with pytest.raises(ValueError, match='v2'): GoalLearner.restore(saved)

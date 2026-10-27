@@ -88,7 +88,8 @@ def make_goal_collection_evaluator(config):
 
 def goal_network_ppo_terms(bundle, observation, critic_observation, context, actions, *,
                            masks, collected, objective_weights, fixed_denominator,
-                           cost_population_complete, clip=.2):
+                           cost_population_complete, clip=.2,
+                           actor_aggregation='scalarize_then_clip'):
     """Wire actual network parameters into the existing selected-row PPO terms.
 
     Only finite legal/resolved rows reach the network. This performs no optimizer
@@ -104,4 +105,5 @@ def goal_network_ppo_terms(bundle, observation, critic_observation, context, act
         return bundle.evaluate_actions(selected[:, :351], selected[:, 351:703], selected[:, 703:], raw_actions)
     return goal_task_ppo_batch(evaluate, packed, actions, masks=masks, collected=collected,
         objective_weights=objective_weights, fixed_denominator=fixed_denominator,
-        cost_population_complete=cost_population_complete, clip=clip)
+        cost_population_complete=cost_population_complete, clip=clip,
+        actor_aggregation=actor_aggregation)

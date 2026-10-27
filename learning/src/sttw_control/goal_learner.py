@@ -21,7 +21,9 @@ class GoalLearner:
     Objective weights are explicit; this is not lexicographic or constrained RL.
     """
     def __init__(self, bundle, *, objective_weights, epochs, actor_lr, value_lr,
-                 clip, entropy_coef, grad_clip):
+                 clip, entropy_coef, grad_clip, actor_aggregation='scalarize_then_clip'):
+        if actor_aggregation not in ('scalarize_then_clip', 'componentwise_clip'):
+            raise ValueError('explicit supported Actor aggregation required')
         if (set(objective_weights) != {'goal', 'cost', 'survival'} or
                 any(isinstance(x, bool) or not isinstance(x, (int, float)) or
                     not math.isfinite(x) or x < 0 for x in objective_weights.values()) or
@@ -33,7 +35,8 @@ class GoalLearner:
             raise ValueError('explicit valid ordinary PPO settings required')
         self.bundle = bundle
         self.settings = dict(objective_weights=copy.deepcopy(objective_weights), epochs=epochs,
-            actor_lr=actor_lr, value_lr=value_lr, clip=clip, entropy_coef=entropy_coef, grad_clip=grad_clip)
+            actor_lr=actor_lr, value_lr=value_lr, clip=clip, entropy_coef=entropy_coef, grad_clip=grad_clip,
+            actor_aggregation=actor_aggregation)
         self.actor_parameters = list(bundle.actor.parameters()) + list(bundle.goal_branch.parameters()) + [bundle.log_std]
         self.value_parameters = list(bundle.values.parameters())
         self.optimizers = [torch.optim.Adam(self.actor_parameters, lr=actor_lr),
@@ -152,7 +155,8 @@ class GoalLearner:
                 terms = goal_network_ppo_terms(self.bundle, b['observation'], b['critic_observation'],
                     b['context'], b['actions'], masks=b['masks'], collected=b['collected'],
                     objective_weights=self.settings['objective_weights'], fixed_denominator=b['fixed_denominator'],
-                    cost_population_complete=b['cost_population_complete'], clip=self.settings['clip'])
+                    cost_population_complete=b['cost_population_complete'], clip=self.settings['clip'],
+                    actor_aggregation=self.settings['actor_aggregation'])
                 # Empty-objective placeholders can be tied to logp. Exclude
                 # them so value-only warmup never reaches Actor via zero grads.
                 value = sum(loss for name, loss in terms['value_losses'].items()
@@ -194,7 +198,7 @@ class GoalLearner:
         Physical carry/RNG/raw files belong to the coordinator and are not
         implied by a learner checkpoint. No automatic resume or restart occurs.
         """
-        return copy.deepcopy(dict(schema='sttw_goal_learner_v1', config=self.bundle.config,
+        return copy.deepcopy(dict(schema='sttw_goal_learner_v2', config=self.bundle.config,
             settings=self.settings, network=self.bundle.state_dict(),
             optimizers=[opt.state_dict() for opt in self.optimizers],
             optimizer_steps=self.optimizer_steps, collection_index=self.collection_index,
@@ -205,8 +209,8 @@ class GoalLearner:
         """Restore completed-batch learner/Adam state only, not physical state."""
         from .path_command_policy import make_torch_path_network
         from .goal_networks import GoalNetworkBundle
-        if checkpoint.get('schema') != 'sttw_goal_learner_v1' or checkpoint.get('pending') is not None:
-            raise ValueError('completed-batch checkpoint required; pending/error is forensic only')
+        if checkpoint.get('schema') != 'sttw_goal_learner_v2' or checkpoint.get('pending') is not None:
+            raise ValueError('v2 completed-batch checkpoint required; v1 is not silently migrated and pending/error is forensic only')
         config = copy.deepcopy(checkpoint['config'])
         parent = make_torch_path_network(351, 2, config)
         bundle = GoalNetworkBundle(parent, config, checkpoint['network']['log_std'])
