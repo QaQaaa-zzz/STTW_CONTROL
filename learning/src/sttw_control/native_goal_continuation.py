@@ -111,6 +111,15 @@ class NativeGoalContinuation:
         s=carry.state
         if int(s.tick)%4:
             raise ValueError('geometry rebind requires an upper-block boundary')
+        return self.rebind_geometry(carry,path,v_user)
+
+    def rebind_geometry(self,carry,path,v_user):
+        """JAX-compatible binding; caller must certify the upper boundary.
+
+        This supports batched rebinding after a host-side boundary/mask check,
+        without dispatching one series of small GPU kernels per changed lane.
+        """
+        s=carry.state
         _,pose,speed=self.env.physics.observe(s.physical.data)
         projection=self._project(path,pose[:2],j.float32(0),j.float32(0),self.env.config)
         follower=self._pursuit(path,projection.progress,pose,speed,v_user,self.env.config)
