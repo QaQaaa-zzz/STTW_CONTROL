@@ -27,9 +27,10 @@ def main(root):
     for key in ('actor', 'checkpoint'):
         assert digest(model[key]) == declaration['policies']['ppo75'][key + '_sha256'] == model[key + '_sha256']
     selected = [r for r in json.loads((source / 'results.json').read_text())['cases']
-                if r['policy'] == 'ppo75' and r['force_N'] == 0 and r['onset_s'] == 1
+                if r['policy'] == 'ppo75' and r['force_N'] in plan.get('forces_N', [0.])
+                and r['onset_s'] in plan.get('onsets_s', [1.])
                 and r['alpha'] in plan['execution_alphas']]
-    assert len(selected) == 12
+    assert len(selected) == plan.get('expected_cases', 12)
     cc = ControllerConfig(**manifest['source']['controller'])
     keys = list(configured_cost_keys(cfg))
     assert keys == manifest['reward_components']
@@ -46,7 +47,10 @@ def main(root):
         active = raw['active_tick'].astype(bool)
         assert active.all() and 0 < len(active) <= 2000
         np.testing.assert_allclose(raw['time'], np.arange(len(active)) * .005, atol=2e-6, rtol=0)
-        assert not np.any(raw['applied_force_impulse'])
+        impulse = raw['applied_force_impulse']
+        exposed = np.flatnonzero(np.linalg.norm(impulse, axis=1) > 0)
+        if row['force_N'] == 0:
+            assert not len(exposed)
         assert not np.any(raw['policy_fault'] | raw['lower_fault'])
         np.testing.assert_allclose(raw['v_user'], row['speed'], atol=1e-6, rtol=0)
         path = build_path(builders[row['route']], np.zeros(3), cfg)
@@ -75,32 +79,48 @@ def main(root):
                                     task_channels=float(components[task_indices].sum()),
                                     components={k: float(v) for k, v in zip(keys, components)})
         records.append(dict(name=row['name'], route=row['route'], speed=row['speed'], execution_alpha=row['alpha'],
+                            force_N=row['force_N'], onset_s=row['onset_s'],
+                            actual_impulse_world_Ns=impulse.sum(axis=0).tolist(),
+                            actual_impulse_norm_Ns=float(np.linalg.norm(impulse.sum(axis=0))),
+                            expected_impulse_norm_Ns=abs(row['force_N']) * declaration['duration_s'],
+                            actual_exposed_ticks=len(exposed),
+                            first_exposure_time_s=float(raw['time'][exposed[0]]) if len(exposed) else None,
+                            last_exposure_time_s=float(raw['time'][exposed[-1]]) if len(exposed) else None,
+                            observation_covers_pulse=bool(len(active) * .005 >= row['onset_s'] + declaration['duration_s']),
                             raw_file=str(file), raw_sha256=digest(file), scores=scores,
                             complete=len(active) == 2000, physical_failure=bool(raw['physical_failure'].any()),
                             domain_exit=bool(raw['domain_exit'].any()), goal1m_before_stop=bool(len(hits)),
                             first_arrival_s=float((hits[0] + 1) * .005) if len(hits) else None,
                             own_reward_max_error=float(np.max(abs(own['scored_reward'] - raw['scored_tick_reward'])))))
         traces[row['name']] = raw
-    contexts = sorted({(r['route'], r['speed']) for r in records})
+    contexts = sorted({(r['route'], r['speed'], r['force_N'], r['onset_s']) for r in records})
     comparisons = []
-    for route, speed in contexts:
-        group = {r['execution_alpha']: r for r in records if (r['route'], r['speed']) == (route, speed)}
+    for route, speed, force, onset in contexts:
+        group = {r['execution_alpha']: r for r in records
+                 if (r['route'], r['speed'], r['force_N'], r['onset_s']) == (route, speed, force, onset)}
         assert set(group) == {0., .5, 1.}
         for user in plan['user_alphas']:
             a, b = group[user], group[.5]
-            comparisons.append(dict(route=route, speed=speed, user_alpha=user,
+            comparisons.append(dict(route=route, speed=speed, force_N=force, onset_s=onset, user_alpha=user,
                 matched_minus_midpoint={k: a['scores'][str(user)][k] - b['scores'][str(user)][k]
                                         for k in ('scored', 'running', 'task_channels')}))
     result = dict(records=records, comparisons=comparisons, source_sha256=identities,
                   plan_sha256=digest(root / 'analysis_plan.json'), cli_sha256=digest(__file__),
-                  new_physics_ticks=0, new_training_steps=0, historical_unique_traces=12,
+                  new_physics_ticks=0, new_training_steps=0, historical_unique_traces=len(records),
                   scope=plan['inference_limit'])
     (out / 'review.json').write_text(json.dumps(result, indent=2) + '\n')
-    render(out, records, traces, contexts, geometry)
+    events = sorted({(c[2], c[3]) for c in contexts})
+    for force, onset in events:
+        panel = [r for r in records if (r['force_N'], r['onset_s']) == (force, onset)]
+        output = out if events == [(0., 1.)] else out / f'force{force:+g}_onset{onset:g}'
+        if output != out:
+            output.mkdir()
+        render(output, panel, traces, sorted({(r['route'], r['speed']) for r in panel}), geometry,
+               force=force, onset=onset)
     print(json.dumps(comparisons, indent=2))
 
 
-def render(out, records, traces, contexts, geometry):
+def render(out, records, traces, contexts, geometry, *, force=0., onset=1.):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -120,7 +140,7 @@ def render(out, records, traces, contexts, geometry):
             ax.plot(*raw['actual_xy'].T, color=color, ls=style, label=f'H75 execution alpha={alpha:g}')
             ax.scatter(*raw['actual_xy'][-1], color=color, s=20, marker='x' if row['physical_failure'] else 'D' if row['domain_exit'] else 's')
         for r in baseline['records']:
-            if (r['family'], r['route'], r['speed']) != ('zero', route, speed):
+            if force != 0 or (r['family'], r['route'], r['speed']) != ('zero', route, speed):
                 continue
             assert digest(r['raw_file']) == r['raw_sha256']
             with np.load(r['raw_file']) as z:
@@ -137,7 +157,8 @@ def render(out, records, traces, contexts, geometry):
         ax.set_aspect('equal', adjustable='box'); ax.grid(alpha=.2)
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='outside lower center', ncol=3, fontsize=8)
-    fig.suptitle('Historical native10s: H75 u77 / bank3 / zero force\nFixed midpoint vs endpoints, real stops; square=10s, diamond=domain, x=physical failure')
+    fig.suptitle(f'Historical native10s: H75 u77 / bank3 / F={force:+g}N, onset={onset:g}s, duration=0.1s\nFixed midpoint vs endpoints; force fixed in world after each own onset heading; no force-matched zero' if force else
+                 'Historical native10s: H75 u77 / bank3 / zero force\nFixed midpoint vs endpoints, real stops; square=10s, diamond=domain, x=physical failure')
     fig.savefig(out / 'all_xy.png', dpi=150)
     plt.close(fig)
 

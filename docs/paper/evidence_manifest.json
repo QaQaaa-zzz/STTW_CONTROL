@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "d402b914a29e9c65ddc933fa549e44e51ba8361e455b711f808d0089fae73a7f",
-  "builder_sha256": "17827d728b45502c456610a5e8538ca967c68ddc6061daa5f5763f63c1fa136c",
+  "manuscript_sha256": "6cd8da8a805a47a01acc10a6a5a3a2f6748b36bd2ad0b46c02ba7f1328870771",
+  "builder_sha256": "964bf1d95e0b3763525dbc91540dc2cf8ec585283a8bf27d0a15cb7f50109fb7",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -381,6 +381,18 @@
     "E063": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/independent_review.json",
       "sha256": "14e5fa9259b65ff6f42153a013836ad0f1df4de48f81bc1736d3e0b246083e70",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E064": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/disturbed/analysis/review.json",
+      "sha256": "22cd362e5e3ef699549cae0724502759cc3d0190698f724a9632db3ed7c97b35",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E065": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/disturbed/independent_review.json",
+      "sha256": "ff4c091f2d77afd7fae40432fb568937915f7db58451fb2ebb87d86cdec567ab",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

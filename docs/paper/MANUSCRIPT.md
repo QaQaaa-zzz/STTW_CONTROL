@@ -176,6 +176,10 @@ H75的320个恢复bank上下文请求速度实际为2.409–2.799m/s、半径参
 
 对应端点在8个相关情境—用户配对中总成本均低于固定中点，原speed/path/primary三通道子和也均较低，故此比较的效用增量不只由roll成本驱动。三种执行偏好共12条均完整10秒并在原生停止前入原世界目标1m圆，原physical/domain标志均无事件；没有完成率差异。这支持这些已见原生任务上的偏好用途，未排除其它固定策略，也不证明全局最优、训练因果或抗扰增益。原10秒V3包含到达后成本，不能直接当作仅首达目标的效用。完整XY及逐例结果在原生固定中点报告；另一低速task64面板的固定中点较优结果继续保留，不能互相外推。[E062–E063]
 
+同源原设计小扰动也需单独检查。固定原有±8/±12N、1/2秒起扰、.1秒持续的全部96条H75历史轨迹（execution0/.5/1，每种32条），不新增力档或物理；192用户评分形成64个相关端点—中点比较。用户α0对应端点在29/32总成本、28/32三任务通道较低；用户α1分别30/32及32/32，原无扰逐例优势并非全部保留。原目标1m到达按执行0/.5/1分别31/32、32/32、28/32；五个未达最近距仅1.010–1.083m，应解释为原圆边界附近的标签损失，不能渲染为严重失败。96条均完整10秒、无原physical/domain/fault记录；本面板没有防摔二元增量，不能用费用优势代替更高容扰能力。[E064–E065]
+
+这些力在各策略自身起扰航向下取横向后固定于世界，实际配对方向差最大8.5063°，不是同世界力向量反事实。全部96条有20个5ms非零冲量记录且覆盖脉冲；没有同受扰zero强对照，不判断学习抗扰必要性。完整8组XY、五次总费用翻转、五个目标边界损失及连续距离均保留。结论仅为原已测小扰动下偏好效用多数保留，不是新控制方法、独立测试或连续安全力边界。[E064–E065]
+
 ### 4.2 同栈低速受扰：到达增益与存活代价并存
 
 ![低速三策略相同事件配对路径](../../runs/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/all_xy_force_+32.png)
@@ -518,3 +522,5 @@ E059：nominal_program_feedback_v1/training_support_review/audit.json，实际ba
 E061：nominal_program_feedback_v1/route_reframe/public_source_review.json，近邻实际读取范围/访问限制及公开源码核对；为候选路线边界，不是控制结果或系统综述。AI artifact_checked，人类未记录。
 
 E062：native_fixed_midpoint_review_v1/analysis/review.json，原生同源12真实缓存及24用户评分，固定中点对照，0新物理；E063：同run independent_review.json，非提出者独立NumPy重算，不是独立物理/训练重复。原physical标志回读不是重建MuJoCo接触；AI artifact_checked，人类未记录。
+
+E064：native_fixed_midpoint_review_v1/disturbed/analysis/review.json，96真实原生受扰缓存/192用户评分/64配对，0新物理；E065：同目录independent_review.json，非提出者独立NumPy及原world goal/实际冲量复核，非接触重建或独立物理重复。AI artifact_checked，人类未记录。
