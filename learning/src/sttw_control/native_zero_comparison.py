@@ -1,4 +1,4 @@
-"""Missing native zero-middle control; numerical imports use sealed old source.
+"""Native zero/static-reference controls; imports use sealed old source.
 
 No old snapshot is patched. This runner calls its original reset, observation,
 and policy_step with an explicit zero two-channel neural target. The nominal
@@ -82,6 +82,7 @@ def verify(root):
 
 def run(root, shape_only=False):
     root=Path(root).resolve();p=verify(root)
+    if p.get('target_policy','zero') not in ('zero','equilibrium'):raise ValueError('unknown target policy')
     if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':
         raise ValueError('prepared only; no implicit restart')
     native=Path(p['native_runtime_root'])
@@ -120,13 +121,22 @@ def run(root, shape_only=False):
         jax.block_until_ready(states)
         env.set_log_template(jax.tree.map(lambda x:x[0],states),bank[cases[0]['route']],speeds[0])
         keys=list(configured_cost_keys(cfg))
+        rule=None
+        if p.get('target_policy')=='equilibrium':
+            import importlib.util
+            from sttw_control.direct_command_policy import q_ratio
+            spec=importlib.util.spec_from_file_location('native_static_reference_rule',p['rule']['source'])
+            rule=importlib.util.module_from_spec(spec);spec.loader.exec_module(rule)
         keep=('active_tick','time','actual_xy','reference_xy','actual_forward_speed','wheel_speed_proxy','v_user',
               'path_cross_track','path_heading_error','path_progress','goal_section_signed_distance',
               'phi','phi_dot','actual_delta','peak_roll','physical_failure','domain_exit','policy_fault','lower_fault',
               'governed','nominal','applied_force_impulse','scored_tick_reward','latent_z','offsets','filtered_offset','target_offset','lower_action')
         def one(st,path,v):
             _,_,fault=env.observation(st,path,v,10.)
-            end,log=env.policy_step(st.replace(fault=st.fault|fault),j.zeros(2,dtype=st.filtered.dtype),path,v,10.,j.zeros(5))
+            z=j.zeros(2,dtype=st.filtered.dtype)
+            if rule is not None:
+                z,_=rule.target(st.physical.raw,st.alpha,cfg,lambda speed:q_ratio(speed,env.cc),p['rule']['budget_rad'],p['rule']['grid_points'])
+            end,log=env.policy_step(st.replace(fault=st.fault|fault),z,path,v,10.,j.zeros(5))
             return end,dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
         def chunk(st):
             return jax.lax.scan(lambda s,_:jax.vmap(one)(s,paths,speeds),st,None,length=50)
@@ -134,13 +144,13 @@ def run(root, shape_only=False):
         if shape_only:
             save(out/'receipt.json',dict(phase='completed',physics_steps=0,optimizer_updates=0,
                 native_runtime_root=str(native),active_tick_shape=list(shape[1]['active_tick'].shape),
-                source_sha256=p['runner_sha256'],zero_target='Explicit j.zeros(2) at original policy_step input; native filters and lower untouched'))
+                source_sha256=p['runner_sha256'],target_policy=p.get('target_policy','zero'),zero_target=rule is None))
             update(phase='completed');return
         for name,path in bank.items():np.savez_compressed(out/(name+'_path.npz'),xy=path.xy,s=path.s,goal=path.goal)
         with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(states),f)
         save(out/'manifest.json',dict(config=cfg,source=p['initial_source'],cases=cases,reward_components=keys,
             native_runtime_root=str(native),model_identity=env.physics.bundle.identity,plan_sha256=digest(root/'plan.json'),
-            cached_cases=16,training_steps=0,zero_target='No neural inference, literal zero target before original filters; complete frozen lower remains'))
+            cached_cases=p['cached_cases'],training_steps=0,target_policy=p.get('target_policy','zero'),target_semantics='Declared target before original filters; complete frozen lower remains'))
         fn=jax.jit(chunk);saved=[];active=0
         chunks=out/'chunks';chunks.mkdir()
         for block in range(10):
@@ -156,13 +166,14 @@ def run(root, shape_only=False):
         for i,c in enumerate(cases):
             raw={k:x[:,i].reshape((-1,)+x.shape[3:]) for k,x in logs.items()}
             raw={k:x[raw['active_tick'].astype(bool)] for k,x in raw.items()}
-            for f in ('latent_z','offsets','filtered_offset','target_offset','applied_force_impulse'):
+            fields=('latent_z','offsets','filtered_offset','target_offset','applied_force_impulse') if rule is None else ('applied_force_impulse',)
+            for f in fields:
                 if np.any(raw[f]):raise ValueError('zero native baseline has nonzero '+f)
-            name=f"zero_{c['route']}_v{c['speed']:g}_a{c['alpha']:g}_t1_f+0"
+            name=f"{c['policy']}_{c['route']}_v{c['speed']:g}_a{c['alpha']:g}_t1_f+0"
             file=out/(name+'.npz');np.savez_compressed(file,**raw)
             b=cfg['stage_B_baseline'];labels=outcome_labels(raw,speed=c['speed'],goal_s=float(bank[c['route']].goal),working_roll=b['working_roll_rad'],horizon=10.,hold_s=b['hold_s'])
             rows.append(dict(c,name=name,raw_file=str(file),raw_sha256=digest(file),**labels))
         save(out/'results.json',dict(cases=rows))
-        update(phase='completed',completed_cases=8,zero_target_checked_cases=8)
+        update(phase='completed',completed_cases=8,zero_target_checked_cases=8 if rule is None else 0)
     except BaseException as e:
         update(phase='error',error=repr(e));raise
