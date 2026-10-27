@@ -1965,3 +1965,15 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 回读已存在path_reference_governor：五候选、1秒、1000预测ticks/slots、首次batch12.2068s、闭环治理0episode。其有限预览不依赖点稳定，但无终端不变集/认证backup，不能直接继承time governor定理或作递归安全保证；前提未证也不排除所有RG/建立新颖性。
 
 暂停的reference_scenario_search.py/958b8ed受扰生成问题确未执行，但只是普通scenario/CEM；新72/80强zero覆盖、改路后原用户效用未统一，当前不恢复，也不标already_failed。未来讨论需同goal/20秒/权限因果规划/原用户评价及random/F0/zero/静态规则强对照，设计与冻结评价分开，阴性不扩knots/force/轮数。下一先落实改路后原用户评价可重建范围，不新增停车任务、不重算终点表或新训选择器。Trans目标active、当前无已验证新协调增量，无push/实机/JIT。
+
+### 2026-10-27 重规划偏好评价的两套几何视图完成，主定义待用户回复
+
+详细目的/做法/条件/结果/限制见[重规划后的偏好评价范围](REPLANNED_PREFERENCE_EVALUATION_SCOPE.md)。已异步询问并调用Bark：α0重规划后主要贴新路线、仍贴原路线计绕行代价，还是暂以到达防摔为主；当前尚无答复，不将推荐项/等待时间当同意。不先选总效用。此为缺少偏好定义，不是权限申请。
+
+继续复用72raw，从实际initial qpos[:2]（非差约3m的bookkeeping reference_pose）和projection0，用原有界单调投影重建原路ey/航向；当前执行路沿raw，原user速度保留，actual governed reference TV含initial governor值。各自首达/触地前/20s窗，不用短失败前缀排名。v1原件保留；v2补zero/replan同规划规则强对照，共8组，72 records逐字段相同。原始/初始/路径/分析SHA保存，0物理/优化。
+
+结果H75/replan对zero/original，α0/1原路ey RMSE差+.504/+.297m，而执行路差−.271/−.303m；同planner对zero/replan后H75 α0原/执行路均更差(+.372/+.029)，α1才原路更差/执行路略低(+.165/−.00384)。current α1反向为原路−.00163、执行路+.00706，不能称神经整体执行路更好。配对H75每α6/current每α5，子集不同/各自首达窗不同，只描述不作总体因果/Pareto排名。TV是参考变化非电机能量。
+
+16switch的5ms XY步长最大.00693m，但ey相邻步可跳1.591m、同postpose原/新路ey差1.596m，说明测量目标改变，不是瞬间横移米级；后续真实运动变化/已证原goal到达收益仍保留。56未换路全窗shadow/log最大差.000503m不追微差。独立AI全部直接指标/TV/聚合/switch另核，独立投影仅抽样2重规划+2未规划四例一致，其余68不冒称独立重投影。5既有CPU通过。scientific-brainstorming反审及data-analytics validate-data普通范围本地验证已用，不发布外部应用/上传研究材料。
+
+下一等待用户路径语义后只落实相应主评价，原goal首达/真实触地/原请求速度不变；期间两套诊断并存，不按任一事后视图恢复新训练/选择器/scenario。输出runs/preference_evaluation_scope_v1/analysis_matched_planner_v2及独立审查；本次待定义结果不添加论文主结果。Trans目标active，仍无已验证新控制增量，无push/实机/JIT。
