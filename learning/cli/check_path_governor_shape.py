@@ -1,4 +1,4 @@
-"""Real frozen-model shape check only; never executes a forecast or physics."""
+"""Real-model shape check, or one explicitly bound numerical preview batch."""
 import argparse
 import json
 import pickle
@@ -28,6 +28,12 @@ def main(source,out,execute_preview=False,binding=None):
         import jax
         import jax.numpy as j
         import numpy as np
+        from sttw_control.runtime import configure_compilation_cache
+        cache_directory=configure_compilation_cache()
+        atomic_json(out/'compilation_cache.json',dict(
+            directory=cache_directory,
+            enabled=bool(jax.config.jax_enable_compilation_cache),
+            scope='Configuration only; no cache-hit or timing improvement claim'))
         from sttw_control.contact_only_environment import load_environment_contact_only
         from sttw_control.goal_preview_baseline import GoalPreviewEnv
         from sttw_control.path_command_policy import make_path_actor

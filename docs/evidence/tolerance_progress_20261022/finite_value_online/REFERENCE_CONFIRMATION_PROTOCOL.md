@@ -1766,3 +1766,18 @@ run为runs/support_permission_factor_v1，原始数据HDD。54项相关CPU测试
 五CPU新测试通过，另与goal-preview/relay合计21通过2.05s。真实第一prefix完整carry（task680/physical1700）和真实冻结上/下层在CPU eval_shape得到五实际无padding候选全部summary[5]，0积分/optimizer；未复制模型替身冒称真实形状。独立AI另跑5测试并审嵌套接线，确认HeldProposalActor接到2维native候选、原feedback/relay/disabled仍在下游，没有接口绕权限或未来事件输入；其范围是旧数值接口/abstract，后新增trace采集仅观测。
 预声明一次工程前向：STTW-PATH-GOVERNOR-NUMERICAL-5，源same_state_reference_pause_v1首prefix（非正例挑选）、五候选各最多200lower，共≤1000实际/1000槽、0optimizer；这是已见DEV工程例，不是预测精度测试或新抗扰能力。用GPU vmap/scan(50)，compile和一次执行耗时分列，不为墙钟重复积分或凑满。完整原始carry/模型/路径身份，25输入/源码SHA及声明命令由runs/support_permission_factor_v1/analysis/path_governor_contract_shape/preview_execution_plan.json封存。输出path_governor_numerical_5；当前声明时未启动、0数值结果，错误保存未知计费，不自动重试/扩场景。此检查完成后只决定实现是否可用/计算是否允许，不宣称在线20ms实时。
 本轮重开TCST官方scope（ieeecss.org/publication/transactions-control-systems-technology）：包含控制系统设计/实现的研究、发展或应用，并非形式上必须新算法；不由scope推录用/当前稿已够。再次开2016 RG原文，保留已有参考治理先例，非全面综述。当前仍以Transactions为目标，旧暂停支线封存，无硬件/JIT/push。
+
+
+### 五候选预测数值检查完成：仅作为离线比较器（2026-10-27）
+目的与条件：验证当前真实路径中层＋冻结local300完整状态的预测接线和计算量；源首个已存完整状态，原alpha/任务时钟/物理不变，无未来事件输入，未来外力假定为零。一次五候选并行、各1秒，实际1000 lower ticks/1000槽、0训练，非五个独立任务或在线governor评价。
+结果：receipt/status completed，原执行exit0；五候选预测窗均未触地，选择fraction=1原请求，不额外干预。编译24.6336秒，首次五候选批执行12.2068秒。单次首次执行不等于重复预热延迟，但尚无20ms在线可用证据，因此保留离线比较用途，不自动扩大逐周期滚动。预测成本已由原trace奖励重建一致；未保存全部奖励分项，不把工程检查冒充完整控制实验。
+图与证据：runs/support_permission_factor_v1/analysis/path_governor_numerical_5/{receipt.json,analysis_receipt.json,preview_xy.png,preview_diagnostics.png}。XY为完整原参考/真实继承前缀＋五条模拟预测后缀，非实际在线治理轨迹；0新任务到达/抗扰提高标签。最新代码接口21相关CPU通过属于工程证据，未验证预测准确率/部署能力。未来性能工程须显式复核共享编译缓存配置；本次不追溯声称已启用全部既有加速。
+结论：常规预测强对照的当前栈数值接线成立，抗扰方法增益仍待证。保持原模型，停止暂停/权限/固定lookup补考；下一明确可计算的公平控制对照及同任务代价下的抗扰增量，不以新模块数量替代成果。
+
+
+### 下一问题收敛：直接检验参考优化的目标错配，暂不新增在线网络
+Scientific-brainstorming第7步非发起人复审已完成，next_decision_review.md保留独立生成、后读结果及反证。AI提案不是人类批准或方法有效证明；流程软件引用沿本报告已有Scientific Agent Skills条目。规划书本轮重读：以真实参考权限、原alpha、强普通规则和进入过程为中心；旧64/488的待完成描述已由后续实际台账取代，不重跑。
+唯一保留问题：保持原6维平滑加性偏置表示和完整Actor，若以多个设计扰动的真实闭环后果驱动新候选，而不是只优化force0成本，能否得到超越旧固定池且保留正常偏好的过程？旧lookup已经做受扰约束筛池，不能称首次用扰动选参考；新问题限于候选生成目标，不称标准scenario/CEM新颖。
+下一实现须固定一context/原alpha一向量，不读本次force/onset；设计事件只进离线评价。原用户任务成本、到达、不触地均单列；未知停止、不可映射负标签。固定分布random需相同设计事件、候选和全部rollout总成本，原full/zero/速度规则/旧名义CEM等强对照按完整身份适用，不把只对弱父模型的改善当增量。冻结所选过程后，才执行未参与优化的新事件；仍标相关DEV，不称独立TEST。
+进入物理前尚需落实：明确聚合目标及任务代价约束；设计/确认事件和既有baseline身份；批量与全部积分成本；缓存和源码封存；错误/阴性停止。当前仅保留有界问题，未封存新实验参数、未启动搜索或训练。若只拟合设计集、回到旧池、被同预算random或简单规则覆盖，关闭此固定表示，不加knots/力档/训练轮数补考。阳性先作为常规强基线，不自动升级Transactions贡献。
+工程收尾：check_path_governor_shape.py已对未来版本显式调用configure_compilation_cache并记录配置，不覆盖用户JAX设置，不改变旧4d2a075数值记录。旧入口另存于原numerical目录，当前25SHA旧seal有意不匹配新CLI，未来必须新封存。analyze_path_governor_preview.py已保存可重跑只读分析，原analysis_receipt pending视觉字段保留，另actual_visual_review实际记录两图SHA和目视范围。当前21相关CPU再次passed2.07s，py_compile/diff通过；没有为缓存再跑1000物理步。系统盘64GiB≥50GiB，无push/硬件/JIT。
