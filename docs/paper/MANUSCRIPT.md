@@ -38,6 +38,10 @@
 
 本文的约束是只能改变冻结闭环外的有限参考，不能直接自由选择执行器输入或修改底层优化问题。这一区别需要通过同权限强对照证明其控制后果，不能仅凭接口不同宣称新方法。固定奖励先验也不等于冻结底层网络。文献[1]还包含瞬时扰动测试，外力顺应目标与本文防摔力扫描仍应区分。上述新近文献按预印本引用；本轮核对[1,6–8]原文方法及相关评价段落，[2–3]仍限既有摘要范围，未完成系统综述或同条件复现。[E035]
 
+动态参考治理本身也有成熟先例：ERG通过Lyapunov子水平集调节参考变化[9]；预测安全过滤利用备份轨迹及终端安全集合修正学习输入[10]；MNN-RG用NN近似预测治理并以敏感度/余项界修正输出[11]。因此“冻结闭环外接NN并修正参考”并非本文独占结构。对应稳定性、模型/误差和光滑性等前提在本项目尚未建立，不能借用其证书；这也不排除其它治理理论或经验比较。[E049]
+
+现有有限预览比较器已经实现，但只对五个持latent候选进行过一次1秒工程预测（1000预测tick、0闭环治理回合），未来外力假定零。名义跟随器/反馈/滤波继续演化，固定latent不等于固定最终参考；选择最大通过fraction也非原Jα优化。其goal-preview/.1反馈/10秒栈不能直接移称旧原生或legacy20秒匹配基线，无终端集或认证backup。本稿不把该原型重新实现称为新方法，也不以理论前提未证制造研究空白。详细方法与读取范围见[动态治理核对](../evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md)。[E049]
+
 ## 2 系统与真实控制权限
 
 ### 2.1 分层接口
@@ -415,3 +419,11 @@ E035：finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md，�
 E042：legacy_credit_goal_continuation_v1/analysis/review.json；E043：同run independent_review.json；E044：execution_plan.json；E045：diagnostics/receipt.json；E046：evaluation/status.json。均AI artifact_checked，人类核验未记录。
 
 E047：native_transition_mechanism_v1/analysis/review.json；E048：同run independent_review.json，原生阶段分解与独立raw核验，非动态机制因果识别。
+
+[9] Garone, E., and Nicotra, M. Explicit Reference Governor for Continuous Time Nonlinear Systems Subject to Convex Constraints. [arXiv:1406.1738v1](https://arxiv.org/abs/1406.1738), 2014。核对该原始版本II/III，不冒称读过最终期刊版。
+
+[10] Wabersich, K. P., and Zeilinger, M. N. A predictive safety filter for learning-based control of constrained nonlinear dynamical systems. [arXiv:1812.05506v4](https://arxiv.org/abs/1812.05506), 2021。对应[DOI](https://doi.org/10.1016/j.automatica.2021.109597)出版社正文本轮不可访问，实际读arXiv方法版。
+
+[11] Ayubirad, M., and Ossareh, H. R. A Machine Learning-Based Reference Governor for Nonlinear Systems With Application to Automotive Fuel Cells. [arXiv:2410.03894v2](https://arxiv.org/abs/2410.03894), 2025；[DOI](https://doi.org/10.1109/TCST.2025.3579514)。v2报告TCST录用；IEEE页面受验证限制，未核出版社全文。
+
+E049：DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md，三原文方法/版本/限制及已有预测器真实语义，不是闭环效果证据。

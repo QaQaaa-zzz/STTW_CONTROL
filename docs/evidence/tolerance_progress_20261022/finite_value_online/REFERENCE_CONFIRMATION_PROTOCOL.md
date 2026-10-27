@@ -2011,3 +2011,6 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 
 ### 原生32阶段复盘：不以新指标重复包装旧roll优势
 Pareto三坐标路线经反审否决，未运行。另一次只读几何阶段分解完成并独立核32raw：恒曲率段H75对zero/静态规则各8/8更低mean|phi|，并伴随原α下持续参考取舍，不能声称低roll仅来自入出弯动态协调，也不能因非过渡仍低反推纯静态因果。320阶段保留缺段null、duration/rate/integral及9.78s域停未知尾；无新物理/训练/拟合/挑窗。详见[NATIVE_TRANSITION_MECHANISM_REVIEW.md](NATIVE_TRANSITION_MECHANISM_REVIEW.md)。
+
+### 动态参考治理原方法核对：补强近邻边界，不重建已有原型
+补读ERG2014 II/III、PSF2021 IV.1/IV.2、MNN-RG2025 II/III，NN+预测修正参考已有直接先例，不能凭冻结闭环结构独占新颖性。已有五候选governor只1000预测ticks/0闭环episodes，固定latent≠固定最终参考、未来力为零且不按Jα选优、绑定goal-preview/.1反馈/10s而非legacy20栈。未建立证书前提不排除其它RG或经验比较；不新增工作roll硬约束来制造任务差异。详见[DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md](DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md)，本轮0物理/训练/拟合。

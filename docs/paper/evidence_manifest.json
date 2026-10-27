@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "fd6354df1bc12f2a42b4e2cd6fce6d7d54fb654365c88b16dcfb1dca712f0763",
-  "builder_sha256": "f7e840315769ea7254107c5f0f9023956431dbf9a25d90705987101cc122ebfb",
+  "manuscript_sha256": "62872a6487a3bdeb56efc9cbf92d486c1a93ba680e8a5cdd868d68d26146ed04",
+  "builder_sha256": "4b9352a299dd2464df9564305597f33aa3d13520f460d3a200131fdfab4e6040",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -291,6 +291,12 @@
     "E048": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_transition_mechanism_v1/independent_review.json",
       "sha256": "acd21cee5096ce61c5e015aa7b28960ceffe56533d192165cc08faebe845723c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E049": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md",
+      "sha256": "d7b21b441616742b8112f3c916672d3a2200b0f9fd37cf1b89625b1f2c3cf3e2",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
