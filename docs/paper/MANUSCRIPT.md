@@ -170,6 +170,8 @@ E_min(F) = (z + Kτ F)² / W
 
 该式在其假设下衡量自由实际转向速率使终点z归零的最小L2控制努力。实际中层只能改有界参考，经过冻结闭环、历史、滤波与执行器后才改变实际速率；终点归零不保证中途不触地。变速和ESO变化也改变坐标导数。故本文不将能量预算拟合成经过验证的全过程防摔阈值，也不把代理的性能标签误判直接写成真实摔倒误判。原推导和适用性审计保留于[公式解释报告](../evidence/tolerance_progress_20261022/formula_explainer/README.md)，当前仅作解释对照。
 
+一个额外的代数检查限制了“低速不可恢复”的解释。对原固定速度三状态模型，能控矩阵行列式D=a4·a1²−a2²；当前系数在约1.206865米/秒处D=0，但失去控制的是稳定极点−sqrt(a4)，不稳定方向b_plus仍约−3.65743/s。因此不能从该根断言物理不可稳定，也不能以既有gain hold分支直接解释此前实际触地。该检查没有ESO/local300/执行器积分，不修改任何底层；一般的稳定模态不可控现象已有自行车研究先例[15]。完整推导、适用边界与图见[数学核查](../../runs/ecbc_modal_authority_math_v1/REPORT.md)。[E080–E081]
+
 ## 6 讨论与尚缺证据
 
 偏好网络内部能表达取舍，不等于比所有外部控制器更好；目标首达改善不等于整窗防摔改善；更低侧倾或更小局部能量指标也不等于更大可承受推力。当前最强证据是这些对象可分别测量且存在条件性任务收益。它没有形成在原alpha下、强简单控制尚未覆盖的普遍安全协调能力。
@@ -213,3 +215,5 @@ E_min(F) = (z + Kτ F)² / W
 [13] Liu, M., Chen, Z., Li, C., and Liang, B. A Novel Gradient-based Motion Planning for Single-Track Two-wheeled Robots in Complex Environments. IEEE VTC Spring, 2024. [官方论文PDF](https://ieeevtc.org/vtc2024spring/DATA/PID2024002005.pdf)。实际读II/III选定方法节，不冒称冻结学习闭环侧倾保证。
 
 [14] Zhang, M., Feng, Z., Zhang, X., Chen, X., Li, D., and Xiao, X. Composite safety control for non-coaxial two-wheeled robot with geometry-enhanced multi-step control barrier function. Control Engineering Practice, 168, 106732, 2026. [DOI](https://doi.org/10.1016/j.conengprac.2025.106732)。作者/卷年由Crossref核对；本次仅出版页摘要层面核对，未核完整假设。
+
+[15] Schwab, A. L., and Kooijman, J. D. G. Controllability of a bicycle. The Proceedings of the Asian Conference on Multibody Dynamics, 2010, session58786. [DOI](https://doi.org/10.1299/jsmeacmd.2010.5._58786-1_)。本轮仅核出版页摘要及元数据；Whipple-like模型与本文三状态近似不同，不搬用其保证。
