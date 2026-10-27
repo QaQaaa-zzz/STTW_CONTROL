@@ -40,7 +40,7 @@
 <h3>1.2 当前方法范围与后续验证问题</h3>
 <p>当前已实现的方法是冻结底层外的偏好条件参考修正，包含真实滤波、限幅、变化率及已声明的权限/重入语义；具体权重和训练迭代分别留存。原生效用、目标到达与真实触地的条件收益分开陈述，不把同一模型在部分条件有失败当作整体无效，也不要求策略在全部任务上占优。</p>
 <p>此前提出的“在达到目标容扰表现的参考方案中最小化原α代价”仍是一般研究命题，尚非已验证控制模块。已有参考库、支持/门控、信用学习和有限预测试验没有建立其独有抗扰增量；这些固定家族已封存，不再将该选择器作为默认下一步或以继续加训维持方法叙事。完整434时序读回确认任务收益并非都出现在Actor停用尾段，但也没有证明神经或重入的因果必要。[E072–E077]</p>
-<p>后续若验证条件偏好参考功能，需以真实接口、同原用户效用和强普通控制检验其可重复范围；若主张新增防摔或容扰协调，则需另有相应物理对照，不能用任务到达替代。这是两类证据要求，不是额外要求必须发明新算法，亦不预设网络必须胜过全部基线。当前尚无足够Transactions投稿证据，目标不因收缩未成立的模块主张而改变。</p>
+<p>新完成的固定52条原生几何验证中，H75相对自身固定偏好多数费用更低，但对zero仅3/12原J较低、任务三通道0/12较低，故条件用途不能外推普遍优越。[E078–E079] 后续若验证条件偏好参考功能，需以真实接口、同原用户效用和强普通控制检验其可重复范围；若主张新增防摔或容扰协调，则需另有相应物理对照，不能用任务到达替代。这是两类证据要求，不是额外要求必须发明新算法，亦不预设网络必须胜过全部基线。当前尚无足够Transactions投稿证据，目标不因收缩未成立的模块主张而改变。</p>
 <h3>1.3 相邻方法与本文尚待建立的差异</h3>
 <p>相关工作已有单策略偏好输入和跟踪—外力顺应取舍[1]、通过修改参考避免侧翻[2]及自行车机器人学习动态行为[3]。进一步的PROMO将运行时任务偏好与固定运动先验分开[6]；PCHC研究偏好条件单策略及分目标Critic[7]；RAYA以有限窗可恢复性预测修改MPC约束，并以有界调度改变任务权重[8]。因此“偏好＋抗扰＋调整参考或优先级”的组合本身不承担首次性。</p>
 <p>已有自行车RL也通过关节PD目标控制低层，其仿真策略/PD频率同为50/200Hz；防侧翻RG亦已分报约束效果与命令保真。因此“输出参考”或分层频率不承担独立新颖性。本文具体区别是任务级速度/转角参考作用于冻结平衡闭环，不能把关节目标与任务参考混为相同权限，也不能仅凭区别宣称新方法。[E035]</p>
@@ -509,6 +509,54 @@ subject to:  frozen closed loop meets the declared disturbance-design requiremen
 </table>
 <p>新增16条完整10秒，无原physical/domain/fault；预测方法四个未达全在α1，最近距3.224–3.733米。原50Hz H75在7/8配对总J更低，同频H75在5/8更低；预测方法亦有3/8同频较低，不能写逐例全胜。三任务通道合计上两种H75各7/8较低。预测方法在8/8总J低于zero/静态规则，但其working_roll成本全0，同频H75部分2.8米/秒工况该项更高，不能把总J排序解释成全部分量支配或更高容扰度。[E066–E067]</p>
 <p>本次实际32,000lower，预测1,966,649有效lower/2,080,000槽，0训练；编译46.687秒、预测659.025秒、实际推进130.898秒、全流程857.605秒。结果支持H75相对这套有限预测方法的条件用途，不能外推全部动态治理不如学习。全部实际XY/逐步与累计奖励/分项、反例及连续距离均保留于<a href="../../runs/native_reference_rollout_v1/README.md">固定结果</a>。没有因预测方法失利改网格、视界或再训补考。[E066–E067]</p>
+<h3>4.7.2 固定新几何52条：条件偏好保留，但简单控制多数费用更低</h3>
+<p>在前组之后固定75°/R2.1米与110°/R2.65米左右四路线、请求2.6米/秒、用户α0/.5/1，执行原native10秒及原停止合同。H75的50Hz、5Hz、既定26候选/1秒预测/5Hz普通动态参考选择、原静态平衡规则各12条，zero每路线1条共4条；共52真实轨迹、156固定轨迹跨用户评分。沿用同prepared bank3/seed77001，经原native reset，未换权重、训练或外力；同源初态及可能与课程邻近的几何不称独立TEST或训练重复。[E078–E079]</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th style="text-align: right;">1米首达/实际轨迹</th>
+<th style="text-align: right;">完整10秒无触地</th>
+<th>相应费用比较</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H75 50Hz</td>
+<td style="text-align: right;">12/12</td>
+<td style="text-align: right;">12/12</td>
+<td>对zero原J较低3/12、较高9/12</td>
+</tr>
+<tr>
+<td>H75 5Hz</td>
+<td style="text-align: right;">12/12</td>
+<td style="text-align: right;">12/12</td>
+<td>对grid同频原J较低8/12、较高4/12</td>
+</tr>
+<tr>
+<td>普通动态参考5Hz</td>
+<td style="text-align: right;">5/12</td>
+<td style="text-align: right;">12/12</td>
+<td>7条未入圈，均非物理/域停止</td>
+</tr>
+<tr>
+<td>静态平衡规则50Hz</td>
+<td style="text-align: right;">12/12</td>
+<td style="text-align: right;">12/12</td>
+<td>全部latent与target修正精确为0，本面板未激活</td>
+</tr>
+<tr>
+<td>zero 50Hz</td>
+<td style="text-align: right;">4/4</td>
+<td style="text-align: right;">4/4</td>
+<td>四真实轨迹跨三个用户费用评分，不计成12新轨迹</td>
+</tr>
+</tbody>
+</table>
+<p>全部52条无physical/contact/domain/fault，故本组不提供防摔增益或容扰力阈值证据。H75 50Hz对zero的原J差值为−2.150688至+13.314258；其任务三通道在12/12均高于zero，不能以总J的3例降低宣称任务项全胜。静态规则在本面板未激活，和zero不是两个不同有效干预；小数值差异不包装机制增量。110°两路线的6个用户组合，H75原J均高于zero；75°的6组则3低3高。[E078–E079]</p>
+<p>同一H75匹配用户α执行，对其余两个固定执行α共24个非自配对，原J20低4高；这支持条件偏好而非“原α总是最佳”的校准主张。50Hz对自身5Hz仅4/12原J较低、8/12较高，不能把频率本身当作稳定优势；同频对普通预测8/12较低、4例反向全保留。普通预测需要完整模拟状态和暂停仿真计算，且此处仅固定候选/视界；它的失利不证明全部RG/MPC劣于学习。[E078–E079]</p>
+<p>独立非提出者从52 raw重建156项十通道评分，并核全部50实际块、150预测候选组、argmin及实际发布。原J重建最大差5.842×10⁻⁶，主/独立156评分最大差约1.107×10⁻⁶。预测2,919,084有效lower、3,120,000槽；610条短候选均因预测域停止，无物理停止或未知，不能误写成真实执行摔倒。实际104,000lower/槽，0训练；编译48.211秒、预测1,610.789秒、实际推进157.200秒、全流程1,836.719秒，非实时性能证明。[E078–E079]</p>
+<p>裁决：本固定验证保留H75相对自身固定偏好和本有限预测基线的条件用途，同时明确zero多数原J及全部任务三项更低。它收缩普遍任务优越性的主张，不因原J负结果继续调候选、几何或加训。全部三张XY、12时序与12分量图、52逐例、156评分和全部费用反例见<a href="../../runs/native_frozen_geometry_validation_v1/analysis/RESULTS.md">完整结果</a>；图形已目视三张全XY及一张时序，未声称全部24诊断图均独立目视。当前仍不足以认定Transactions投稿证据充分。</p>
 <h3>4.8 新情境80条确认：全窗不触地一致，到达未超过简单对照</h3>
 <p>冻结四方法，在左右70度/R2.1米、请求2.2米/秒、α0/1下，完整交叉无扰与1.6/2.6秒各±32N、持续0.1秒五事件。每法20条（4无扰、16受扰），同prepared bank index3/physical700、原生参考权限、20秒原worldgoal1米、contact-only及相同发布mask；共用普通1秒一次因果Dubins重规划。它是新的共同任务合同，不能作旧native的单因素消融；新几何/需求与共同祖先也不是独立训练重复或最终TEST。[E028–E029]</p>
 <table>
@@ -858,4 +906,5 @@ E_min(F) = (z + Kτ F)² / W
 <p>[14] Zhang, M., Feng, Z., Zhang, X., Chen, X., Li, D., and Xiao, X. Composite safety control for non-coaxial two-wheeled robot with geometry-enhanced multi-step control barrier function. Control Engineering Practice, 168, 106732, 2026. <a href="https://doi.org/10.1016/j.conengprac.2025.106732">DOI</a>。作者/卷年由Crossref核对；本次仅出版页摘要层面核对，未核完整假设。</p>
 <p>E061：nominal_program_feedback_v1/route_reframe/public_source_review.json，近邻实际读取范围/访问限制及公开源码核对；为候选路线边界，不是控制结果或系统综述。AI artifact_checked，人类未记录。</p>
 <p>E062：native_fixed_midpoint_review_v1/analysis/review.json，原生同源12真实缓存及24用户评分，固定中点对照，0新物理；E063：同run independent_review.json，非提出者独立NumPy重算，不是独立物理/训练重复。原physical标志回读不是重建MuJoCo接触；AI artifact_checked，人类未记录。</p>
-<p>E064：native_fixed_midpoint_review_v1/disturbed/analysis/review.json，96真实原生受扰缓存/192用户评分/64配对，0新物理；E065：同目录independent_review.json，非提出者独立NumPy及原world goal/实际冲量复核，非接触重建或独立物理重复。AI artifact_checked，人类未记录。</p></body></html>
+<p>E064：native_fixed_midpoint_review_v1/disturbed/analysis/review.json，96真实原生受扰缓存/192用户评分/64配对，0新物理；E065：同目录independent_review.json，非提出者独立NumPy及原world goal/实际冲量复核，非接触重建或独立物理重复。AI artifact_checked，人类未记录。</p>
+<p>E078：native_frozen_geometry_validation_v1/analysis/review.json，52真实原生轨迹/156固定轨迹跨评分/84含自配对比较，完整原用户费用与全部反例。E079：同run independent_final_review.json，非提出者独立十通道重算、50块-final、150候选选择/发布与成本核验，非独立物理/训练重复，AI artifact_checked，人类未记录。</p></body></html>
