@@ -362,6 +362,14 @@ credit对ordinary受扰到达3增1失、存活0增0失；对parent到达0增4失
 
 因此简单规则防摔覆盖与局部任务表现差异可同时成立；单一早到达见证不建立神经必要性，也不支持恢复即时切α方法。4秒未到不是20秒任务失败，本次不延时重跑或改目标追正例。全部[48条实际XY及原目标](../../runs/preference_history_task_review_v1/all_xy_original_goal.png)与逐例/排除记录保留。[E055,E056]
 
+### 4.15 实时神经响应与名义参考程序：六条匹配机制对照
+
+为区分实时反馈与名义参考节奏，复用4.13中左右两个α0完整快照的无扰裸latent程序，各200个50Hz发布，按相对任务时钟重放；实际跟随器、滤波、限幅、底层反馈及状态决定的域退出/held保持。α1源程序缺尾，不补造，故不在本比较中。新增0/±32N、0.1秒、4秒共6后缀，另18条实时α0/zero/速度支持经SHA认证缓存。[E057,E058]
+
+实时H75、名义程序、zero、速度支持各6条件的不触地数为3、5、5、5；原目标1米首达均2，均为无扰。程序相对实时新增左/+32N及右/−32N两例存活、0丢失，简单规则亦覆盖；两例仅184/232个lower tick程序有效，之后进入原held。故不能将存活归因持续4秒程序执行，或由此认定反馈普遍有害。整个系统仍依赖底层反馈和实际权限交接，程序亦带特定起始状态的完整无扰轨迹先验。[E057,E058]
+
+新增4090实际lower tick/5400调度槽，0训练；独立NumPy逐24raw重计原目标、物理标签、时钟/脉冲/held和实际程序发布，结果一致。全部[24条实际XY及逐例限制](../../runs/nominal_program_feedback_v1/README.md)保留。该固定DEV结果收缩实时中层抗扰必要性的解释，不否定原生任务偏好用途；不扩α1缺尾/力/时长追正例，也不将4秒未达写成20秒任务失败。[E057,E058]
+
 ## 5 早期解析容扰代理回答的是什么
 
 早期固定速度局部模型采用不稳定模态坐标和折算脉冲：
@@ -479,3 +487,5 @@ E051：preference_history_factorial_v1/analysis_verified/review.json，固定24�
 E053：preference_history_baselines_v1/analysis/review.json，24新简单后缀与24认证缓存的48条匹配结果；E054：同run independent_outcome_review.json，独立原始重计与实际干预核验。均AI artifact_checked，人类未记录。
 
 E055：preference_history_task_review_v1/review.json，既有48条原任务短窗诊断；E056：同run verification_receipt.json，同root另写NumPy直接重计目标/速度/算术，不是独立agent/人类或物理复现。AI artifact_checked，人类未记录。
+
+E057：nominal_program_feedback_v1/analysis/review.json，六条实际名义程序对照加18认证缓存；E058：同run independent_outcome_review.json，非提出者独立NumPy重计，不是独立物理/训练重复。AI artifact_checked，人类未记录。
