@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "a352922799dcbaac19581546411ec6bf31ba3651cd6dfca36b624296c97822ef",
-  "builder_sha256": "dbf12df9ff608dff9d2295098541292a27d81667a48403e60f04a3546adc8f13",
+  "manuscript_sha256": "d402b914a29e9c65ddc933fa549e44e51ba8361e455b711f808d0089fae73a7f",
+  "builder_sha256": "17827d728b45502c456610a5e8538ca967c68ddc6061daa5f5763f63c1fa136c",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -212,7 +212,7 @@
     },
     "E035": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md",
-      "sha256": "f80da774c0319c69128b6aa63433194b85460f9f1fe976bd0d7e1b1dc6718372",
+      "sha256": "c6bb0c44d103f770050d41077aef11e576d6f06d65463d414ecc096c137a2c4a",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -369,6 +369,18 @@
     "E061": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/nominal_program_feedback_v1/route_reframe/public_source_review.json",
       "sha256": "767f59687560dd76a756b2063ec09302b16268fe70310830281156cf20cc74f1",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E062": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/analysis/review.json",
+      "sha256": "f1c7f43781e4fdf400f2aa51c75ce9ce1302e4b4ad0bb26bde6a856e591a0308",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E063": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/independent_review.json",
+      "sha256": "14e5fa9259b65ff6f42153a013836ad0f1df4de48f81bc1736d3e0b246083e70",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

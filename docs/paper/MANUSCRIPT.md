@@ -167,6 +167,15 @@ H75的320个恢复bank上下文请求速度实际为2.409–2.799m/s、半径参
 
 原生平均效用对角较低，支持偏好功能；current绝对路径能力弱于H75，不能称全域升级。在另一低速进入面板，完整中层对固定原用户效用的平均值反而可能执行α1较低，故偏好输入存在不等于任意分布下已最优对齐。后者不授权把用户α重新映射为1。
 
+固定折中策略也需检验。原同源实验已保存execution α=.5，新增只读核对将它与上面H75两端点比较，不新增仿真或扫描其它α。原用户α保持0/1，四个上下文的原V3平均成本如下。[E062–E063]
+
+|原用户α|执行α0|固定执行α.5|执行α1|
+|---|---:|---:|---:|
+|0|10.551095|22.556630|53.750655|
+|1|29.881797|16.953138|9.167071|
+
+对应端点在8个相关情境—用户配对中总成本均低于固定中点，原speed/path/primary三通道子和也均较低，故此比较的效用增量不只由roll成本驱动。三种执行偏好共12条均完整10秒并在原生停止前入原世界目标1m圆，原physical/domain标志均无事件；没有完成率差异。这支持这些已见原生任务上的偏好用途，未排除其它固定策略，也不证明全局最优、训练因果或抗扰增益。原10秒V3包含到达后成本，不能直接当作仅首达目标的效用。完整XY及逐例结果在原生固定中点报告；另一低速task64面板的固定中点较优结果继续保留，不能互相外推。[E062–E063]
+
 ### 4.2 同栈低速受扰：到达增益与存活代价并存
 
 ![低速三策略相同事件配对路径](../../runs/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/all_xy_force_+32.png)
@@ -507,3 +516,5 @@ E059：nominal_program_feedback_v1/training_support_review/audit.json，实际ba
 [14] Zhang, M., Feng, Z., Zhang, X., Chen, X., Li, D., and Xiao, X. Composite safety control for non-coaxial two-wheeled robot with geometry-enhanced multi-step control barrier function. Control Engineering Practice, 168, 106732, 2026. [DOI](https://doi.org/10.1016/j.conengprac.2025.106732)。作者/卷年由Crossref核对；本次仅出版页摘要层面核对，未核完整假设。
 
 E061：nominal_program_feedback_v1/route_reframe/public_source_review.json，近邻实际读取范围/访问限制及公开源码核对；为候选路线边界，不是控制结果或系统综述。AI artifact_checked，人类未记录。
+
+E062：native_fixed_midpoint_review_v1/analysis/review.json，原生同源12真实缓存及24用户评分，固定中点对照，0新物理；E063：同run independent_review.json，非提出者独立NumPy重算，不是独立物理/训练重复。原physical标志回读不是重建MuJoCo接触；AI artifact_checked，人类未记录。
