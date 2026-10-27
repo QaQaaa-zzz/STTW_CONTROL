@@ -1,6 +1,6 @@
 # 旧信用终点在共同20秒任务接续下是否仍有用途
 
-2026-10-27。当前阶段：**协议、隔离运行时与CPU输入预检完成；执行入口/GPU形状尚未完成，未启动物理或训练。** 本协议不是新抗扰方法，也不是已获得增益的实验报告。
+2026-10-27。当前阶段：**20秒host入口、故障处理、CPU测试及真实GPU零积分预检完成；固定90条物理比较待启动，结果PENDING。** 本协议不是新抗扰方法，也不是已获得增益的实验报告。
 
 ## 问题、信息价值与反例
 
@@ -64,3 +64,13 @@ CPU新鲜进程实际完成：90个原source slot加载，task0/physical700、�
 非发起者准备复审已核90事件/角色、floor/zero原定义、184模块复制与左右一致；记录在preparation_review.json/md。首次准备把zero的α=None和stateα0当普通策略比较而拒绝，0积分且未创建目标目录；错误及Bark保存在HDD相邻legacy_credit_goal_continuation_prepare_attempt1。修正原zero语义后准备成功，旧数据未改。
 
 下一步只接20秒归档内核与host规划编排，认证实际carry/脉冲/路径形状，运行真实GPU零积分shape及必要的行为检查，然后另立绑定本准备seal的最终执行合同。**当前没有执行结果、未部署新策略、未满足论文验证。**
+
+## 2026-10-27 执行入口核验
+
+`legacy_goal_run.py`与薄CLI显式调用归档20s/reentry内核；兼容架构合并为真实90路vmap、scan50块、既有共享编译缓存，无padding。重绑只替换projection/follower并逐叶核对其余carry不变。chunk先保存和计费，再检查终态fault、无contact解释的physical.failed及有效日志故障；重绑numerical_fault在下次积分前停止。反审发现的两处漏检已修复。CPU主机/既有planner共14项通过（1.20s）；这不是策略效果证明。
+
+实际GPU新鲜进程检查exit0，设备cuda:0，90条实际env观察351维，原模型/控制器/执行器身份匹配归档声明，单组shape[50,90,4]、原3763点及真实初态规划目标一致、几何only操作保持其余状态。耗时16.31秒、积分0。`shape/shape_receipt.json`绑定执行plan/SHA；原准备plan保持不可变，其未完成字段代表准备时点，执行进展以新execution_plan及prelaunch记录为准。
+
+装配错误分别存engineering_attempt1/2/3：误向zero_middle读取Actor SHA、隔离目录缺原相对配置/模型资源、资源路径祖先误一层及由此无execution plan拒绝。均0积分，错误/Bark记录保留。修正仅实际三Actor角色检查及显式原资源symlink/配置XML封存；未修改历史源、控制逻辑或物理。真实模型所有mesh身份仍由原加载器比对归档声明。
+
+科学收益判断沿前文：这是旧低速紧弯的共同任务接续裁决，若差异被普通规划/规则覆盖则封闭，不借新力档维持故事。真实物理与因果改进目前尚未得到结果。

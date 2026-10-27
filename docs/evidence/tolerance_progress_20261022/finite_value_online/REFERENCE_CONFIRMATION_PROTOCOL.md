@@ -2002,3 +2002,6 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 已认证既有reentry冻结源，184package模块复制到新HDD隔离目录；对hidden差异限已声明重入/编排文件，physics/lower/filter映射SHA不变。90原初态slot及同route除α外全carry逐叶相同、六组dummy351→2 CPU shape与实际import SHA通过。实际obs/20s host runner/GPUshape仍未完成，execution_ready=False，0积分；旧10s编排不能只改case字段冒充20s。准备器首次误判zero空α而拒绝，错误+Bark保留后按原语义修正，未改历史。独立准备反审核case/角色/source一致。
 
 新run legacy_credit_goal_continuation_v1已准备协议，不是已启动实验。后续使用共同既有16clean交回与最多一次1s因果Dubins，排除现代反馈/短支持/goalpreview；所有结果按原goal和真实contact分开，canonical Jα仍待用户。任何覆盖/全通过均封存，不扩力/缩时限追神经胜例；任务收益不冒称防摔或新方法。无push/实机/JIT。
+
+### 旧信用20秒共同接续执行入口准备
+20s归档host及故障处理完成，CPU14项通过；实际GPU90路351观测/3763点/geometry-only shape通过，0积分。三次装配错误及原输出保留，不影响旧证据。固定90条结果PENDING；条件、目的、做法与去留见[协议](LEGACY_CREDIT_GOAL_CONTINUATION_PROTOCOL.md)。本组到达与防摔分开，不采用尚未定义的canonical Jα。
