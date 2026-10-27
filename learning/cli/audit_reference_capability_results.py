@@ -6,11 +6,12 @@ import numpy as np
 from sttw_control.preference_best import atomic_json,digest
 
 
-def audit(root,*,confirmation=False):
-    root=root.resolve();source=root/('preservation_timecheck_v1/analysis' if confirmation else 'production/analysis')
+def audit(root,*,confirmation=False,support_permission=False):
+    if confirmation and support_permission:raise ValueError('one explicit analysis protocol only')
+    root=root.resolve();source=root/('analysis' if support_permission else 'preservation_timecheck_v1/analysis' if confirmation else 'production/analysis')
     if json.loads((source/'status.json').read_text())['phase']!='completed':raise ValueError('complete analysis required')
     file=source/'results.json';rows=json.loads(file.read_text())
-    if len(rows)!=(432 if confirmation else 360):raise ValueError('complete declared logical inventory required')
+    if len(rows)!=(216 if support_permission else 432 if confirmation else 360):raise ValueError('complete declared logical inventory required')
     plan=json.loads((root/'plan.json').read_text());goals={}
     for context,p in plan['contexts'].items():
         if digest(p['path'])!=p['path_sha256']:raise ValueError('original path changed')
@@ -55,5 +56,5 @@ def audit(root,*,confirmation=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('root',type=Path);p.add_argument('--confirmation',action='store_true');a=p.parse_args()
-    audit(a.root,confirmation=a.confirmation)
+    p=argparse.ArgumentParser();p.add_argument('root',type=Path);p.add_argument('--confirmation',action='store_true');p.add_argument('--support-permission',action='store_true');a=p.parse_args()
+    audit(a.root,confirmation=a.confirmation,support_permission=a.support_permission)

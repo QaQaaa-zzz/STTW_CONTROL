@@ -1713,3 +1713,13 @@ source_type=actual_existing_raw_arithmetic；verification=artifact_checked。新
 run为runs/support_permission_factor_v1，原始数据HDD。54项相关CPU测试passed3.71s；首次扩展测试仅因PYTHONPATH缺learning/cli出现import error，补原有CLI路径后通过。独立NumPy审计显式接入新协议：原disabled全零默认不变，新协议核对真实issued/relay/profile/override和零steer，另按真实相邻状态核对target/filter/slew/bounds/antiwindup，不替换保存的动作。单条既有真实2000tick读回通过；最初float64递归滤波累计到4.025e-6后改成逐真实相邻状态转移核对，未放宽4e-6容差、未改物理。
 108条candidate包含全部96受扰+12无扰，与认证旧full108缓存配对；唯一控制变化为原支持权限分离，0训练。所有旧baseline raw SHA及实际pulse已复核；差异仅声明的5个旧源码模块，新源码/配置/完整起点/模型及真实批量封存，旧历史run不修改。runtime仅显式接受108真实lane，旧8/16默认保留；batch_inputs供真实执行及shape共用，无padding。真实GPU模型全108输入shape已完成、physics0；这不是数值或提速证明。
 下一按固定108×2000lower最大216000槽运行一次，之后全部XY/到达/物理存活/原alpha成本及全部得失裁决。失败保留partial成本+Bark，不自动重试；不扫阈值/时长，也不把权限修正本身当Transactions创新。
+
+
+### 支持权限固定108完整结束：解除耦合有物理作用，但不增加主任务/存活
+全部XY与完整裁决见runs/support_permission_factor_v1/analysis/{README.md,DECISION.md}，先看xy_early_-32.png与xy_late_-32.png。实际session37815 exit0、PID61037消失；108真实同批，无padding，203037新lower/216000槽、0optimizer，205.206s含初始化/JIT/积分/I/O/审计。继承3780700单列，累计3983737，不当从零生命周期成本。
+96受扰full和权限分离均79到达/84全窗存活，逐例主到达0增0失、存活0增0失；每原alpha0/.5/1分别25/27、27/28、27/29（各32）。每法79到达且存活、5存活未到、12触地，unknown0，无到达后触地；12无扰全部到达/存活。0.5/.75m到达同76/77，预声明1.25m候选81/full80，不代替1m主指标。
+23候选实际override：7触地16存活，无扰0；正速度目标.10–.2499998，NN steer精确0。低初速左alpha.5 early−32触地延缓.31秒，共同首次触地前speed约.577→.991仍摔；高初速左alpha1 late−32最近目标距3.307→2.131m仍未到；低初速左alpha1 early−32末点目标距8.706→11.743m，两者存活未到。96配对最近距差均值−.01436m、中位0；仅1米级改善。解除耦合不是完全无作用，但该操纵不足以解释/解除主瓶颈。
+原alpha0/.5/1全受扰成本full618.274/498.026/354.464、候选618.960/499.943/354.580，含失败观察长度与终止替代，不全称跟踪变差；共同存活27/28/29例成本差−.440/−.187/+.131，仅条件比较。默认中层不替换，opt-in保存为有限工程对照，停止该因素阈值/时长补考；不以零损失完美门槛否定，也不扩大为所有参考协调无效/物理不可救。
+所有候选运行时权限/真实filter/slew/clip审计通过，后独立216 raw-context XY/contact/clock所有半径一致，奖励与真实pulse读回一致。全部9XY/108面板/216逻辑实际目视；324逐步奖励/跟踪/速度图已生成，实际目视event10三图与event70两图，余319未逐图目视；图与元数据见actual_visual_review.json/figure_provenance.json。数值stage历史pending字符串不改，execution_resolution记录后续分析/诊断complete；无新增物理重跑、训练、precision gate或他项目操作。新分析CLI只是物理结束后的只读代码，未改执行封存源码。分析初版说明字符串产生SyntaxWarning已修后真实诊断exit0；没有影响数值运行。
+按scientific-brainstorming做非发起人结果反审：其逐108候选raw再核SHA/override/正目标一致，支持关闭固定因素、不改默认，不把审查等同人类同行评审。另先独立生成、后共享核对的next_independent_options建议先裁决论文贡献，不继续发明模块。重要边界：原CEM/随机确实只名义优化，但旧lookup已做有限池受扰约束选择；当前栈内以聚合受扰结果驱动新连续候选优化的已执行run本次未定位到。这不证明该操作有效或新颖，也不足以自动启动。
+下一两项：原位整理claim—最强公平反驳者—已有证据，保留原alpha用途与真实系统收益；复用已有完整carry/合法参考见证界定残余机会，具体信息—动作—后果链未明确前不另开模型/搜索。Transactions长期目标active，方法新颖性与独立确认尚未完成。技能软件引用沿本报告已有Scientific Agent Skills条目，作为流程来源而非控制证据。

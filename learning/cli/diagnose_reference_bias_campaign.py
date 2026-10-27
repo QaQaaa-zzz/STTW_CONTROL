@@ -38,19 +38,20 @@ def policy_rewards(raw, scale):
     return np.arange(n), scored, parts, scored-running
 
 
-def diagnose(root, *, confirmation=False):
+def diagnose(root, *, confirmation=False,support_permission=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    root = root.resolve(); source = root/('preservation_timecheck_v1/analysis' if confirmation else 'production/analysis')
+    if confirmation and support_permission:raise ValueError('one explicit analysis protocol only')
+    root = root.resolve(); source = root/('analysis' if support_permission else 'preservation_timecheck_v1/analysis' if confirmation else 'production/analysis')
     if json.loads((source/'status.json').read_text())['phase'] != 'completed':
         raise ValueError('complete audited final analysis required')
     rows = json.loads((source/'results.json').read_text())
-    expected_rows=432 if confirmation else 360
-    expected_groups=108 if confirmation else 60
-    roles=['full','context_choice','geometry_alpha','alpha_only'] if confirmation else ROLES
-    colors=['#222222','#0072B2','#D55E00','#009E73'] if confirmation else COLORS
-    styles=['-','-','--',':'] if confirmation else STYLES
+    expected_rows=216 if support_permission else 432 if confirmation else 360
+    expected_groups=108 if (confirmation or support_permission) else 60
+    roles=['full','support_permission'] if support_permission else ['full','context_choice','geometry_alpha','alpha_only'] if confirmation else ROLES
+    colors=['#222222','#0072B2'] if support_permission else ['#222222','#0072B2','#D55E00','#009E73'] if confirmation else COLORS
+    styles=['-','--'] if support_permission else ['-','-','--',':'] if confirmation else STYLES
     if len(rows) != expected_rows: raise ValueError('complete declared final traces required')
     cfg = json.loads((root/'common_environment_config.json').read_text())
     plan = json.loads((root/'plan.json').read_text())
@@ -137,8 +138,8 @@ def diagnose(root, *, confirmation=False):
         atomic_json(out/'status.json', dict(phase='running', completed_groups=i+1, new_physics_steps=0))
     atomic_json(out/'index.json', index)
     (out/'README.md').write_text(f'# 全部{expected_groups}事件逐步奖励与跟踪诊断\n\n'
-        f'{expected_rows}逻辑轨迹原raw SHA复核，共享轨迹不当独立样本；每图同初态/用户alpha/事件全部方法。原10秒、真实终点、扰动阴影；'
-        'after-only含特权起扰信息。原5ms奖励按原20ms时隙求和，10分项和terminal替代单列；'
+        f'{expected_rows}逻辑轨迹原raw SHA复核，共享轨迹不当独立样本；每图同初态/用户alpha/事件全部方法。原10秒、真实终点、扰动阴影；'+
+        ('after-only含特权起扰信息。' if 'neural_after_only' in roles else '控制器不读取本次真实未来起扰。')+'原5ms奖励按原20ms时隙求和，10分项和terminal替代单列；'
         '缺测不补零或续线，图不平滑。轮速proxy减真实车体速度另列，不能当真值。'
         '原路径误差和原世界目标距离不随参考修改。无新积分/训练/候选选择，生成不等于目视审阅。'
         '索引和全部源SHA见index.json；PNG为研究诊断，未核期刊输出要求。\n\n' +
@@ -150,5 +151,5 @@ def diagnose(root, *, confirmation=False):
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(); p.add_argument('root', type=Path);p.add_argument('--confirmation',action='store_true');a=p.parse_args()
-    diagnose(a.root,confirmation=a.confirmation)
+    p = argparse.ArgumentParser(); p.add_argument('root', type=Path);p.add_argument('--confirmation',action='store_true');p.add_argument('--support-permission',action='store_true');a=p.parse_args()
+    diagnose(a.root,confirmation=a.confirmation,support_permission=a.support_permission)
