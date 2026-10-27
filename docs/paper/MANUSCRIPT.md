@@ -32,7 +32,11 @@
 
 这一提案的研究价值在于检验“同等抗扰表现下能否减少偏好代价，或同等任务代价下能否改善抗扰表现”。固定规则、充分普通训练、共同重规划和零中层必须保留；若收益被它们覆盖，则不把选择器或额外网络继续列作主要贡献。现有证据没有完成这项比较，因此正文不将该提案写成已提出并验证的方法，也不宣称Transactions投稿充分性。
 
-相关工作已有单策略偏好输入和跟踪—外力顺应取舍[1]，通过修改参考避免侧翻[2]，以及自行车机器人学习和编排动态行为[3]。这些工作限制了“偏好＋外力”“修改参考”“自行车RL”这样的宽泛首次性主张。本次对邻近工作只核对原始摘要，未完成系统综述或同条件复现。
+### 1.3 相邻方法与本文尚待建立的差异
+
+相关工作已有单策略偏好输入和跟踪—外力顺应取舍[1]、通过修改参考避免侧翻[2]及自行车机器人学习动态行为[3]。进一步的PROMO将运行时任务偏好与固定运动先验分开[6]；PCHC研究偏好条件单策略及分目标Critic[7]；RAYA以有限窗可恢复性预测修改MPC约束，并以有界调度改变任务权重[8]。因此“偏好＋抗扰＋调整参考或优先级”的组合本身不承担首次性。
+
+本文的约束是只能改变冻结闭环外的有限参考，不能直接自由选择执行器输入或修改底层优化问题。这一区别需要通过同权限强对照证明其控制后果，不能仅凭接口不同宣称新方法。固定奖励先验也不等于冻结底层网络。文献[1]还包含瞬时扰动测试，外力顺应目标与本文防摔力扫描仍应区分。上述新近文献按预印本引用；本轮核对[1,6–8]原文方法及相关评价段落，[2–3]仍限既有摘要范围，未完成系统综述或同条件复现。[E035]
 
 ## 2 系统与真实控制权限
 
@@ -285,6 +289,12 @@ E_min(F) = (z + Kτ F)² / W
 
 该式在其假设下衡量自由实际转向速率使终点z归零的最小L2控制努力。实际中层只能改有界参考，经过冻结闭环、历史、滤波与执行器后才改变实际速率；终点归零不保证中途不触地。变速和ESO变化也改变坐标导数。故本文不将能量预算拟合成经过验证的全过程防摔阈值，也不把代理的性能标签误判直接写成真实摔倒误判。原推导和适用性审计保留于[公式解释报告](../evidence/tolerance_progress_20261022/formula_explainer/README.md)，当前仅作解释对照。
 
+### 5.1 当前保留的实测容扰度
+
+实测容扰能力针对指定完整状态、闭环及参考规则、力方向/施力点/波形/时长/起扰时刻和观察窗。输出是各已测力档的PASS、CONTACT或UNKNOWN，并分别记录原目标首达；不是从旧解析式直接输出一个认证牛顿阈值。α及扰动前参考改变可同时改变进入状态，此时比较的是完整闭环结果，不是同一受扰状态的恢复。[E030–E031,E035]
+
+对固定方向的幅值网格0=a0<a1<…<am，只汇总从0开始逐档PASS的最长已测前缀；零力不通过或未知时该前缀能力未定义。UNKNOWN或CONTACT均阻断前缀，后续孤立PASS仍保留。此汇总不填补网格间隙、不证明单调性，也不把最大成功力档称连续安全边界。任务接续改善与该物理能力增量分开；第4.5节重规划的到达收益不能代替防摔收益。[E021–E023,E035]
+
 ## 6 讨论：现有成果和剩余科学问题
 
 已有证据并不为空：偏好功能在原生上下文中成立，当前权重有低速到达用途，合法参考存在局部后缀机会。困难在于这些事实尚未组成一个在原α下兼顾正常任务与抗扰、且强简单对照不能解释的可部署决策。将任务失败改叫摔倒、相对弱父模型的改善改叫方法创新，或将特权见证改叫在线选择，都会超出现有证据。
@@ -321,11 +331,13 @@ E026：native_equilibrium_rule_v1/{plan,evaluation/status,analysis/review}.json�
 
 E028：native_goal_confirmation_v1/{plan,evaluation/status}.json及analysis/{summary,results,paired,receipt,independent_result_review}.json，新情境固定80与完整正负。E029：同run analysis/initial_carry_review.json，实际初态、80物理lane/60方法对认证及其核验范围。
 
+E035：finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md，原始文献URL、阅读定位、实测定义与未验证边界；人类核验未记录。
+
 完整路径、SHA和核验范围在evidence_manifest.json；可复算跨面板脚本为learning/cli/audit_sttw_paper_claims.py。原报告与台账分别保留工程历史与当前研究事实。本文引用的数字经AI读取产物/配对重算；人类作者核验、完整相邻文献方法比较、最终期刊要求、独立确认以及硬件证据尚未完成。本稿不含虚构作者、资助、利益冲突声明、实机结果或提交记录。
 
 ## 参考与流程软件
 
-[1] Preference-Conditioned Multi-Objective RL for Integrated Command Tracking and Force Compliance in Humanoid Locomotion. [arXiv:2510.10851](https://arxiv.org/abs/2510.10851)。本轮使用原始摘要级事实，未借其硬件结果为本项目背书。
+[1] Preference-Conditioned Multi-Objective RL for Integrated Command Tracking and Force Compliance in Humanoid Locomotion. [arXiv:2510.10851](https://arxiv.org/abs/2510.10851)。原文方法与瞬时扰动评价段落已作AI核对，人类作者核验未记录；未借其硬件结果为本项目背书。
 
 [2] Bencatel, R., Girard, A., and Kolmanovsky, I. Reference Governor Strategies for Vehicle Rollover Avoidance. [arXiv:1608.02266](https://arxiv.org/abs/1608.02266)。相邻汽车防侧翻任务不等于本项目单轨闭环。
 
@@ -334,3 +346,10 @@ E028：native_goal_confirmation_v1/{plan,evaluation/status}.json及analysis/{sum
 [4] Kassis, T., Agarwal, V., He, Y., Patel, D., and Brueckner, A. M. (2026). Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. [DOI](https://doi.org/10.48550/arXiv.2609.00065)。scientific-brainstorming、scientific-writing与scientific-visualization用于证据/叙事/图表核对；流程工具不是控制有效性证据。当前arXiv v2书目已核，非人工同行评审。
 
 [5] Sakai, A., et al. PythonRobotics, Dubins path planner. [Pinned source](https://github.com/AtsushiSakai/PythonRobotics/tree/8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031/PathPlanning/DubinsPath), MIT license. 本项目仅复用其规划实现，不将源码依赖本身列为创新。
+
+
+[6] Mousa, A., Rachman, R., Karavis, N., Caprio, M., and Allmendinger, R. PROMO: Preference-conditioned Multi-Objective Reinforcement Learning for Quadrupedal Robots. [arXiv:2610.01260v1](https://arxiv.org/abs/2610.01260)，2026。预印本，非已核录用记录。
+
+[7] Li, H., Wang, D., Wang, X., Liu, X., Liu, P., Bai, C., and Li, X. PCHC: Enabling Preference Conditioned Humanoid Control via Multi-Objective Reinforcement Learning. [arXiv:2603.24047v1](https://arxiv.org/abs/2603.24047)，2026。预印本。
+
+[8] Mahajan, I., Chen, C., Dümbgen, F., and Plancher, B. RAYA: Learning Where and When to Intervene for Robot Recovery. [arXiv:2609.21690v1](https://arxiv.org/abs/2609.21690)，2026。预印本。
