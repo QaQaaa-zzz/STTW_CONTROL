@@ -6,11 +6,11 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/goal_replanning_h75_v1/combined_analysis/task_xy_force_+32.png": "a86a6e9381e2068b114e64b8d25e968ccecad6b2dfe00258d6e5ddc144eeefd0",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_zero_preference_v1/analysis/all_native_three_xy.png": "72b6b734832e98deaac422cc26d45780a283e2fb0fef067c3620a877014442dd"
   },
-  "html_sha256": "bc7df323413209a2a78153e32dc51635c978ccc629f105ba2715cdd71ed85154",
+  "html_sha256": "8b39fa67ca575d70fbc8aa3c4553a92593d4ec64c6f389ed5ce8024f70e8e97f",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "90e63ba398f7bc03ea55506d971cf73b63c3fad3b1097bab8fb2a8bcceacf06b",
-  "pdf_bytes": 2220752,
+  "pdf_sha256": "337d73e137bba9a36ab7c3237856227c44205b16c715a6c78cc4517b0feea6fe",
+  "pdf_bytes": 2221345,
   "renderer": "existing local headless Chrome"
 }

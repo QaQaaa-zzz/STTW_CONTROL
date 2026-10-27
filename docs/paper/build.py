@@ -99,7 +99,8 @@ def evidence_manifest():
         'E030':ROOT/'runs/capability_goal_joint_1m_v1/joint_review.json',
         'E031':ROOT/'runs/capability_goal_joint_1m_v1/independent_review.json',
         'E032':ROOT/'runs/capability_preference_utility_v1/review.json',
-        'E033':ROOT/'runs/capability_preference_utility_v1/independent_review.json'}
+        'E033':ROOT/'runs/capability_preference_utility_v1/independent_review.json',
+        'E034':ROOT/'runs/replanning_headroom_review_v1/review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
