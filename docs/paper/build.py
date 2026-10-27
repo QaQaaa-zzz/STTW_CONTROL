@@ -141,7 +141,9 @@ def evidence_manifest():
         'E072':ROOT/'runs/preference_direction_fullpanel_review_v1/review.json',
         'E073':ROOT/'runs/preference_direction_fullpanel_review_v1/independent_review.json',
         'E074':ROOT/'runs/preference_direction_fullpanel_review_v1/exposure_review/review.json',
-        'E075':ROOT/'runs/preference_direction_fullpanel_review_v1/exposure_review/independent_exposure.json'}
+        'E075':ROOT/'runs/preference_direction_fullpanel_review_v1/exposure_review/independent_exposure.json',
+        'E076':ROOT/'runs/preference_direction_fullpanel_review_v1/arrival_phase_review/review.json',
+        'E077':ROOT/'runs/preference_direction_fullpanel_review_v1/arrival_phase_review/independent_review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
