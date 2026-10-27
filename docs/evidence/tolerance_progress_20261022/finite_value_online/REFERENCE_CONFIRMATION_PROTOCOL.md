@@ -1994,3 +1994,11 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 [完整联合用途复核](JOINT_ENDPOINT_TRADEOFF_REVIEW.md)。重读用户规划书，不重跑已完成488；旧488当前1m敏感性已存在，本轮复用。hidden110原raw重新认证并按.5/.75/1m重计，1m受扰credit7到达/15存活、ordinary6/15、floor4/16、ESO5/16（各16），credit对ordinary到达2增1失、存活0增失；对floor到达5增2失、存活0增1失。无扰credit/ordinary各4到达，floor/ESO各1（分母4）。所以“floor全面覆盖信用用途”过宽，应保留条件到达收益，仍无新时刻防摔增量/训练机制证明。两个新增最近距.954vs1.090、.556vs1.303，丢失为4.678vs.107m，保留真实退化及小半径排序反转。未重建Jα，不合池/不复制zero/不将draw当独立种子。
 
 旧credit64（4ac4cfbb…）及其匹配ordinary模型跨488/110认证，不冒称后来free_GAE当前权重。独立AI逐110raw/440旧半径、488派生重组/配对一致。补审首达telemetry初次旧schema字段错误已留档/Bark、修正actor_action_valid/zero_fallback后完成；禁用Actor不等于恒参考held尾。0物理/训练/拟合，不恢复信用扩训/新网络/旧公式，不因当前80zero饱和自动补旧权重物理表；保留冻结比较资产。
+
+### 2026-10-27 旧紧弯信用模型的共同20秒接续：协议与隔离输入准备完成
+
+[目的、完整合同与停止条件](LEGACY_CREDIT_GOAL_CONTINUATION_PROTOCOL.md)。scientific-brainstorming非提出者有条件支持一次固定比较，重点排除旧严格/10s任务口径与普通规划覆盖，不为旧信用补正例。沿原hidden110的两R1.1路线/速度、α.5/.75与五事件，parent/task64/credit64/floor各20、zero10，共90真实/100逻辑、≤360000lower及槽、0训练。floor明确是parent Actor＋1.5下限，zero原α=None/state0，不复制为独立重复。新80的zero饱和不替代这组旧需求，但也不预设新收益。
+
+已认证既有reentry冻结源，184package模块复制到新HDD隔离目录；对hidden差异限已声明重入/编排文件，physics/lower/filter映射SHA不变。90原初态slot及同route除α外全carry逐叶相同、六组dummy351→2 CPU shape与实际import SHA通过。实际obs/20s host runner/GPUshape仍未完成，execution_ready=False，0积分；旧10s编排不能只改case字段冒充20s。准备器首次误判zero空α而拒绝，错误+Bark保留后按原语义修正，未改历史。独立准备反审核case/角色/source一致。
+
+新run legacy_credit_goal_continuation_v1已准备协议，不是已启动实验。后续使用共同既有16clean交回与最多一次1s因果Dubins，排除现代反馈/短支持/goalpreview；所有结果按原goal和真实contact分开，canonical Jα仍待用户。任何覆盖/全通过均封存，不扩力/缩时限追神经胜例；任务收益不冒称防摔或新方法。无push/实机/JIT。
