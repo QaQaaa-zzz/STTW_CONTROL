@@ -189,7 +189,22 @@ zero左2.8两条在3.54秒已到原目标，9.78秒才域停止；整窗存活�
 
 图5：原10秒完整观察/真实native终点，四context×两α×三方法；路径域停止用菱形，原生physical终点用x，不把域停画成摔倒。原目标1米圆用于观察到达，不能据20米远的后续终点否认早先首达。全部XY已主审目视，8组时序和8组原奖励分量图生成，主审各看1组，其余不称完成视觉审查。
 
-结论是H75原生功能获得匹配zero支持：可选择速度—路径取舍并降低工作侧倾；但zero仍8/8到原目标，尚无任务完成或真实防摔优势的证明。下一强比较应检查同工作侧倾预算的普通速度/转向参考规则能否解释该行为；该规则尚未实现，不能声称已超过它。无需为了得出正结果而把任务阈值重新收紧。
+结论是H75原生功能获得匹配zero支持：可选择速度—路径取舍并降低工作侧倾；但zero仍8/8到原目标，尚无任务完成或真实防摔优势的证明。下一强比较应检查同工作侧倾预算的普通速度/转向参考规则能否解释该行为；固定静态规则随后已按4.7节完成，收益边界见其结果；尚不能声称超过全部参考治理方法。无需为了得出正结果而把任务阈值重新收紧。
+
+### 4.7 静态平衡参考规则：H75保留收益，但不是通用传统控制比较
+
+新增8条普通参考规则并复用24条原生缓存。用原controller的q(v)定义静态phi_eq=delta_ref/q(v_ref)，预算0.3rad固定取原V3工作侧倾成本起点。α0固定nominal转角、在合法65速度格点中选最大静态通过速度；α1固定nominal速度、压缩转角至±0.3abs(q(v))。目标映回原latent权限并经过原filter/slew/bounds；原v_user/α/路径和评分不改。该静态工作量不是不摔倒容扰度，也不保证实际动态roll≤0.3。[E026]
+
+|方法|原目标1米到达/8|完整10秒/8|自身α0原成本均值|自身α1原成本均值|
+|---|---:|---:|---:|---:|
+|H75|8|8|10.551|9.167|
+|current|6|8|84.361|17.740|
+|zero|8|6|600.179|547.637|
+|静态参考规则|8|8|88.486|50.403|
+
+规则两端各4/4成本低zero，H75两端又各4/4低该规则；current α0只2/4低规则，不能由平均数宣称全域升级。规则全部静态速度网格有可行点且未发生latent权限饱和，但首达前真实峰值roll为0.334–0.418rad，仍高于静态0.3。H75为0.238–0.300rad。按各自首达窗，H75 α0路径RMSE4/4低规则、速度RMSE0/4低；α1速度RMSE4/4低、路径0/4低。两者均8/8到目标；这支持有条件的偏好取舍与工作成本优势，不支持完成率或真实防摔优势。[E026–E027]
+
+新8条实际16000lower ticks/16000槽、196.741秒含初始化/编译/I/O、0训练。32份raw和同用户10组配对经独立AI重算；规则target另用NumPy q/网格/反映射核验，latent最大差2.62e-7、原V3成本最大差8.1e-7。全32XY保留在E026源目录，原生停止语义及共享DEV关系不变。此比较不代表最优参考治理、全部传统规划器或独立测试；固定预算/网格不继续补考。下一应在冻结方法后检查新任务与扰动，而非重新拟合旧能量式。
 
 ## 5 早期解析容扰代理回答的是什么
 
@@ -234,6 +249,8 @@ E017：learning/src/sttw_control/path_command_policy.py，观测组装和参考�
 E021：goal_replanning_github_v1/plan.json及_vendor/pythonrobotics/UPSTREAM.json，规划来源、完整运行合同。E022：同run的analysis/{summary,paired,receipt}.json及independent_result_review.md，固定48原始审计及完整结果。E023：goal_replanning_h75_v1/combined_analysis/{summary,paired,task_cost_readback,receipt}.json及DECISION.md，新24与缓存48的同条件结果。
 
 E024：native_zero_preference_v1/{plan,evaluation/status,analysis/review}.json及analysis/independent_result_review.md，8新zero＋16缓存原生强对照。E025：同run task_scope/review.json，首达前分量、误差、侧倾及终止替换差。
+
+E026：native_equilibrium_rule_v1/{plan,evaluation/status,analysis/review}.json与analysis/independent_result_review.md，8新规则＋24缓存原生比较。E027：同run task_scope/review.json，H75-vs-rule首达前分量与误差。
 
 完整路径、SHA和核验范围在evidence_manifest.json；可复算跨面板脚本为learning/cli/audit_sttw_paper_claims.py。原报告与台账分别保留工程历史与当前研究事实。本文引用的数字经AI读取产物/配对重算；人类作者核验、完整相邻文献方法比较、最终期刊要求、独立确认以及硬件证据尚未完成。本稿不含虚构作者、资助、利益冲突声明、实机结果或提交记录。
 

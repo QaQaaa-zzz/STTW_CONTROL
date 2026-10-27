@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "356dc34718942455c2da2880b24ec712bc4c94f6fe223db3af8cd24f0bc8ee22",
-  "builder_sha256": "561038c9b1cfd5a1cae41772645f131e3b603f069a68055ce969ff48b1516d3e",
+  "manuscript_sha256": "9e462132cb47e7fb0ccda8bb6c77ec4a062e12bd762acfcc4fcae9eeaaba24cb",
+  "builder_sha256": "1db87c76c28e9578afabd80fe5845bc84970c99d0f4ca1d3825e30faec5625d5",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -153,6 +153,18 @@
     "E025": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_zero_preference_v1/task_scope/review.json",
       "sha256": "ded269e498602b6cbb895adf6cad71b9f90a167bf437602f7c8be725741fcccd",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E026": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_equilibrium_rule_v1/analysis/review.json",
+      "sha256": "3f2fac420c4ee078aa71a319f31d8bb46d1a3f51fa1b6a9f312c2e967b8fbbcf",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E027": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_equilibrium_rule_v1/task_scope/review.json",
+      "sha256": "a3894f5e87d079c816d49f6ae50b1fb22211d4c29dc8e081f8b2382feceaf27e",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

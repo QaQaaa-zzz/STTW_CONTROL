@@ -15,7 +15,7 @@ from sttw_control.path_command_reward import configured_cost_keys
 def review(root):
     p=json.loads((root/'plan.json').read_text());cfg=p['config'];cc=ControllerConfig(**p['initial_source']['controller'])
     source=root/'analysis/review.json';records=json.loads(source.read_text())['records'];out=root/'task_scope'
-    if len(records)!=24:raise ValueError('all24 needed')
+    if len(records)!=p['cached_cases']+8:raise ValueError('complete declared panel needed')
     keys=list(configured_cost_keys(cfg));scale=cfg['path_reward']['scale']*.005;rows=[]
     for r in records:
         file=Path(r['raw_file'])
@@ -47,19 +47,22 @@ def review(root):
             after_arrival_observed_s=(n-cut)*.005 if arrival is not None else None)
         rows.append(row)
     comparisons=[]
+    families={r['family'] for r in rows}
+    pairings=[(f,'zero') for f in families if f!='zero']
+    if 'equilibrium' in families:pairings += [('H75','equilibrium'),('current','equilibrium')]
     for alpha in (0.,1.):
-        for family in ('H75','current'):
+        for family,control in pairings:
             details=[]
             for r in rows:
                 if r['family']!=family or r['alpha']!=alpha:continue
-                b=next(b for b in rows if (b['family'],b['route'],b['speed'],b['alpha'])==('zero',r['route'],r['speed'],alpha))
+                b=next(b for b in rows if (b['family'],b['route'],b['speed'],b['alpha'])==(control,r['route'],r['speed'],alpha))
                 if not (r['arrived'] and b['arrived']):continue
                 details.append(dict(route=r['route'],speed=r['speed'],
                     arrival_time_delta_s=r['first_arrival_s']-b['first_arrival_s'],
                     prefix_component_delta={k:r['prefix_component_integrals'][k]-b['prefix_component_integrals'][k] for k in keys},
                     prefix_path_rmse_delta_m=r['prefix_path_rmse_m']-b['prefix_path_rmse_m'],
                     prefix_speed_rmse_delta_m_s=r['prefix_speed_rmse_m_s']-b['prefix_speed_rmse_m_s']))
-            comparisons.append(dict(model=family,alpha=alpha,both_arrived=len(details),details=details))
+            comparisons.append(dict(model=family,control=control,alpha=alpha,both_arrived=len(details),details=details))
     out.mkdir(exist_ok=False)
     atomic_json(out/'review.json',dict(records=rows,comparisons=comparisons,
         source_review_sha256=digest(source),analysis_source_sha256=digest(__file__),physics_steps=0,
