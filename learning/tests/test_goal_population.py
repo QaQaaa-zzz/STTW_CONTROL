@@ -69,3 +69,31 @@ def test_incomplete_costs_retained_in_population_block_original_cost_update():
             batch['context'], batch['actions'], masks=batch['masks'], collected=batch['collected'],
             objective_weights=dict(goal=1., cost=.1, survival=1.),
             fixed_denominator=batch['fixed_denominator'], cost_population_complete=batch['cost_population_complete'])
+
+
+def test_scaled_cost_targets_convert_raw_units_once_and_preserve_old_head_units():
+    _, cfg, e = episode()
+    e['decisions']['old_cost_value'][e['decisions']['valid']] = .3
+    raw = assemble([e], cfg)
+    scaled = assemble_goal_population([e], expected_episode_count=1, config=cfg,
+        collection_id='same', learner_id='same', horizon_s=.06, radius_m=1., cost_target_scale=100.)
+    mask = raw['masks']['cost']
+    torch.testing.assert_close(scaled['collected']['cost_targets'][mask],
+        raw['collected']['cost_targets'][mask] / 100.)
+    torch.testing.assert_close(scaled['collected']['old_cost_values'][mask], torch.tensor([.3]))
+    torch.testing.assert_close(scaled['raw_cost_targets'][mask], raw['collected']['cost_targets'][mask])
+    assert scaled['cost_target_scale'] == 100.
+    assert scaled['cost_population_complete'] == raw['cost_population_complete']
+    for name in ('goal', 'survival'):
+        torch.testing.assert_close(scaled['masks'][name], raw['masks'][name])
+    for name in ('goal_targets', 'physical_targets'):
+        m = raw['masks']['goal' if name == 'goal_targets' else 'survival']
+        torch.testing.assert_close(scaled['collected'][name][m], raw['collected'][name][m])
+
+
+@pytest.mark.parametrize('scale', [0., -1., float('nan'), float('inf'), True])
+def test_invalid_cost_units_are_rejected(scale):
+    _, cfg, e = episode()
+    with pytest.raises(ValueError, match='cost target scale'):
+        assemble_goal_population([e], expected_episode_count=1, config=cfg,
+            collection_id='same', learner_id='same', horizon_s=.06, radius_m=1., cost_target_scale=scale)

@@ -141,6 +141,8 @@ def test_completed_boundary_checkpoint_restores_adam_and_next_update_exactly(fir
     saved = learner.checkpoint(); restored = GoalLearner.restore(saved)
     assert restored.optimizer_steps == ([0, 2] if first_warmup else [2, 2]) and restored.collection_index == 1
     assert restored.fingerprint() == learner.fingerprint()
+    old_units = learner.checkpoint(); del old_units['settings']['cost_target_scale']
+    with pytest.raises(ValueError, match='explicit checkpoint C units'): GoalLearner.restore(old_units)
     # Fresh synthetic collection values from the new frozen heads; no old batch replay.
     d = e['decisions']; valid = d['valid']
     with torch.no_grad():
@@ -179,3 +181,23 @@ def test_aggregation_is_bound_and_v1_checkpoints_do_not_silently_change_algorith
     assert saved['schema'] == 'sttw_goal_learner_v2'
     saved['schema'] = 'sttw_goal_learner_v1'
     with pytest.raises(ValueError, match='v2'): GoalLearner.restore(saved)
+
+
+def test_explicit_cost_scale_is_frozen_and_restored_without_rescaling_recorded_head():
+    net, cfg, e = episode(); e['case'] = dict(alpha=.1, speed=1.8, profile=0)
+    learner = GoalLearner(net, objective_weights=dict(goal=1., cost=1., survival=1.),
+        epochs=1, actor_lr=1e-4, value_lr=3e-4, clip=.2, entropy_coef=0., grad_clip=1.,
+        cost_target_scale=100.)
+    manifest = [dict(episode_id=e['episode_id'], original_goal_xy=e['original_goal_xy'], case=e['case'])]
+    frozen = learner.freeze_collection(manifest, horizon_s=.06, radius_m=1.)
+    assert frozen['cost_target_scale'] == 100.
+    e['collection_id'] = frozen['collection_id']
+    learner.settings['cost_target_scale'] = 1.
+    with pytest.raises(ValueError, match='changed during'): learner.prepare_population([e])
+    learner.settings['cost_target_scale'] = 100.
+    learner.prepare_population([e]); learner.update(warmup=True)
+    restored = GoalLearner.restore(learner.checkpoint())
+    assert restored.settings['cost_target_scale'] == 100.
+    assert restored.fingerprint() == learner.fingerprint()
+    old_units = learner.checkpoint(); del old_units['settings']['cost_target_scale']
+    with pytest.raises(ValueError, match='explicit checkpoint C units'): GoalLearner.restore(old_units)

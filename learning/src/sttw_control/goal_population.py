@@ -7,14 +7,19 @@ from .goal_task_credit import goal_cost_population_complete
 
 
 def assemble_goal_population(episodes, *, expected_episode_count, config,
-                             collection_id, learner_id, horizon_s, radius_m):
+                             collection_id, learner_id, horizon_s, radius_m, cost_target_scale=1.):
     """Keep every declared episode, including no-action, unknown and failed rows.
 
     Caller authenticates inventory/source identity and unchanged collection
-    parameters. Count/unique episode IDs catch accidental local omissions and
+    parameters and scaled-C head units. Raw factual C targets alone are divided
+    by cost_target_scale; recorded old C is already in those units.
+    Count/unique episode IDs catch accidental local omissions and
     duplicates, not deliberate replacement or false external declarations.
     No costs, old values or actions are recomputed from the changing learner.
     """
+    if (isinstance(cost_target_scale, bool) or not isinstance(cost_target_scale, (int, float)) or
+            not math.isfinite(cost_target_scale) or cost_target_scale <= 0):
+        raise ValueError('finite positive explicit cost target scale required')
     if (isinstance(expected_episode_count, bool) or not isinstance(expected_episode_count, int) or
             expected_episode_count <= 0 or len(episodes) != expected_episode_count):
         raise ValueError('entire declared nonempty episode inventory required')
@@ -30,7 +35,7 @@ def assemble_goal_population(episodes, *, expected_episode_count, config,
         context='goal_context', actions='raw_action')
     old = dict(old_log_prob='log_prob', old_goal_values='old_goal_value',
         old_cost_values='old_cost_value', old_physical_values='physical_value')
-    arrays = {k: [] for k in (*sources, *old, 'goal_targets', 'cost_targets', 'physical_targets')}
+    arrays = {k: [] for k in (*sources, *old, 'goal_targets', 'cost_targets', 'physical_targets', 'raw_cost_targets')}
     masks = {k: [] for k in ('goal', 'cost', 'survival')}
     credits, summaries = [], []
     for e in episodes:
@@ -56,7 +61,11 @@ def assemble_goal_population(episodes, *, expected_episode_count, config,
             arrays[key].append(x)
         for key in masks: masks[key].append(result[key + '_mask'])
         for key in ('goal_targets', 'cost_targets', 'physical_targets'):
-            arrays[key].append(result['survival_targets' if key == 'physical_targets' else key])
+            target = result['survival_targets' if key == 'physical_targets' else key]
+            # New C heads and their recorded old values already use scaled
+            # units. Only raw factual targets are converted, exactly once.
+            arrays[key].append(target / cost_target_scale if key == 'cost_targets' else target)
+            if key == 'cost_targets': arrays['raw_cost_targets'].append(target)
         summaries.append(dict(episode_id=e['episode_id'], goal=credit['goal_outcome'],
             survival=credit['physical']['outcome'], cost_window_complete=credit['cost_window_complete'],
             physical_ticks=credit['physical']['physical_ticks'], actual_decisions=int(np.sum(d['valid']))))
@@ -65,6 +74,7 @@ def assemble_goal_population(episodes, *, expected_episode_count, config,
     return dict(**{k: tensors[k] for k in sources},
         collected={k: tensors[k] for k in (*old, 'goal_targets', 'cost_targets', 'physical_targets')},
         masks={k: torch.tensor(np.concatenate(v), dtype=torch.bool) for k, v in masks.items()},
+        raw_cost_targets=tensors['raw_cost_targets'],
         fixed_denominator=expected_episode_count * maximum,
         cost_population_complete=goal_cost_population_complete(credits),
-        summaries=summaries, collection_id=collection_id)
+        summaries=summaries, collection_id=collection_id, cost_target_scale=cost_target_scale)

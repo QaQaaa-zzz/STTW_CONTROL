@@ -21,7 +21,10 @@ class GoalLearner:
     Objective weights are explicit; this is not lexicographic or constrained RL.
     """
     def __init__(self, bundle, *, objective_weights, epochs, actor_lr, value_lr,
-                 clip, entropy_coef, grad_clip, actor_aggregation='scalarize_then_clip'):
+                 clip, entropy_coef, grad_clip, actor_aggregation='scalarize_then_clip', cost_target_scale=1.):
+        if (isinstance(cost_target_scale, bool) or not isinstance(cost_target_scale, (int, float)) or
+                not math.isfinite(cost_target_scale) or cost_target_scale <= 0):
+            raise ValueError('finite positive explicit cost target scale required')
         if actor_aggregation not in ('scalarize_then_clip', 'componentwise_clip'):
             raise ValueError('explicit supported Actor aggregation required')
         if (set(objective_weights) != {'goal', 'cost', 'survival'} or
@@ -36,7 +39,7 @@ class GoalLearner:
         self.bundle = bundle
         self.settings = dict(objective_weights=copy.deepcopy(objective_weights), epochs=epochs,
             actor_lr=actor_lr, value_lr=value_lr, clip=clip, entropy_coef=entropy_coef, grad_clip=grad_clip,
-            actor_aggregation=actor_aggregation)
+            actor_aggregation=actor_aggregation, cost_target_scale=cost_target_scale)
         self.actor_parameters = list(bundle.actor.parameters()) + list(bundle.goal_branch.parameters()) + [bundle.log_std]
         self.value_parameters = list(bundle.values.parameters())
         self.optimizers = [torch.optim.Adam(self.actor_parameters, lr=actor_lr),
@@ -78,6 +81,7 @@ class GoalLearner:
             horizon_s=horizon_s, radius_m=radius_m)
         return dict(collection_id=identity, parameter_fingerprint=fingerprint,
             inventory_sha256=inventory_sha, collection_index=self.collection_index,
+            cost_target_scale=self.settings['cost_target_scale'],
             parameters=self.bundle.sampling_parameters())
 
     def prepare_population(self, episodes):
@@ -97,7 +101,8 @@ class GoalLearner:
                 raise ValueError('original case/goal changed after collection was frozen')
         batch = assemble_goal_population(episodes, expected_episode_count=len(by_id),
             config=self.bundle.config, collection_id=p['collection_id'], learner_id=p['collection_id'],
-            horizon_s=p['horizon_s'], radius_m=p['radius_m'])
+            horizon_s=p['horizon_s'], radius_m=p['radius_m'],
+            cost_target_scale=self.settings['cost_target_scale'])
         p['population_diagnostics'] = copy.deepcopy(batch['summaries'])
         if any(r['survival'] == 'unknown' for r in batch['summaries']):
             p['phase'] = 'error'; p['error'] = 'engineering unknown population; preserve and stop'
@@ -211,6 +216,8 @@ class GoalLearner:
         from .goal_networks import GoalNetworkBundle
         if checkpoint.get('schema') != 'sttw_goal_learner_v2' or checkpoint.get('pending') is not None:
             raise ValueError('v2 completed-batch checkpoint required; v1 is not silently migrated and pending/error is forensic only')
+        if 'cost_target_scale' not in checkpoint['settings']:
+            raise ValueError('explicit checkpoint C units required; old raw-C checkpoints are not silently migrated')
         config = copy.deepcopy(checkpoint['config'])
         parent = make_torch_path_network(351, 2, config)
         bundle = GoalNetworkBundle(parent, config, checkpoint['network']['log_std'])
