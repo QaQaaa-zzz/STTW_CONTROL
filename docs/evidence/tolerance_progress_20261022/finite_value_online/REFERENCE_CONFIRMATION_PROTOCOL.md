@@ -2014,3 +2014,16 @@ Pareto三坐标路线经反审否决，未运行。另一次只读几何阶段�
 
 ### 动态参考治理原方法核对：补强近邻边界，不重建已有原型
 补读ERG2014 II/III、PSF2021 IV.1/IV.2、MNN-RG2025 II/III，NN+预测修正参考已有直接先例，不能凭冻结闭环结构独占新颖性。已有五候选governor只1000预测ticks/0闭环episodes，固定latent≠固定最终参考、未来力为零且不按Jα选优、绑定goal-preview/.1反馈/10s而非legacy20栈。未建立证书前提不排除其它RG或经验比较；不新增工作roll硬约束来制造任务差异。详见[DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md](DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md)，本轮0物理/训练/拟合。
+
+
+### 下一机制问题的收益筛选与六条准备（2026-10-27；尚未积分）
+
+沿scientific-brainstorming1.4，问题是识别实时中层反馈与名义参考节奏的贡献，而不是再造一个gate。root先考虑的状态触发支持/交回与既有360暂停、门控、交回重复，拒绝实施；设计扰动集合搜索尚未执行但标准scenario/CEM不是新颖性，仍不自动恢复；新风险网络缺行动后果验证，不采用。非提出者独立生成的候选为“同原用户α的名义裸latent时钟程序与实时H75对照”，生成/反审在runs/preference_history_task_review_v1/next_independent_questions.md及nominal_program_audit/design_review.md。评价标准预先取信息收益、是否不同于旧操作、实际接口可执行、强简单替代及阴性用途；不用虚假精确总分或AI共识作证据。
+
+定向查重：旧full_task_reference_sequence.py为37个随机/常值五进度结点offset，替代Actor、live域外继续，并非本次同快照H75无扰50Hz裸latent时间程序。held72恒最终参考、pause360短时mask后交回，也未隔离名义时变程序。该结论为定向已查范围，非全历史绝无同类实验或文献新颖性证明；未添加新外部文献主张。
+
+实际零积分提取审计显示：四个匹配原用户α的无扰来源中，左右α0均完整800个5ms tick/200个50Hz发布，四tick内裸latent严格重复；左右α1分别只有448/536个合法tick，之后域退出held、裸latent缺失。不得填零/延续/插值造出未观测Actor输出。因此只准备两条完整α0源的0/±32N/.1s×4秒共6后缀，α1明确未评估；这是按序列可用性缩小，不能推广全偏好域。3项提取器测试实际通过，包括缺尾拒绝、完整发布及块内输出异常。
+
+run=nominal_program_feedback_v1（HDD，工作树symlink），prepared/0积分；最多4800有效lower tick/5400调度槽，0前缀/训练。实际H75与原α0完整快照、物理/ESO/history/filter/原世界力/权限保持；只把后续神经proposal替换为源序列，按相对整数tasktick//4索引，不读实际未来事件。原Actor在实际观察上仍作旁观日志，不决定动作；nominal_program_latent/used与executed/original_policy_latent分列。真实当前状态照旧决定域退出与held，不照源名义域标记强行发布；下游几何跟随、滤波、slew、底层反馈仍保留。因此研究的是中层实时反馈相对名义程序的边际作用，不是全系统开环。
+
+18条同两状态的实时α0/zero/support SHA认证缓存不重跑。每个6事件报告contact/fault/UNKNOWN、原1m首达、最小目标距、原速度/影子路径误差和真实程序发布/交回；完整共同存活集合与排除标签分列。无扰重放差异仅报告，不能设精确重放门槛；4秒未到不是20秒失败。若名义程序覆盖实时结局与任务表现则收缩在线中层反馈必要性；若实时有益/有害都保留局部机制，不归因单一反馈增益、不宣称学习必要或新控制器。仅域交接后出现差异须明确其混合后果。所有结局停止，不扩力/时刻/程序/训练补考。源码实现与独立启动前反审、0积分接口预检完成后才可派发一次6条。

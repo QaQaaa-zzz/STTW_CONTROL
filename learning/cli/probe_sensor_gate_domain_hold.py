@@ -61,6 +61,18 @@ def main():
   forces=np.asarray([r['force_N'] for r in cases]);pulses=j.asarray(np.column_stack([absolute,absolute+plan['pulse_duration_s'],forces[:,None]*directions]),dtype=j.float32)
   keep=['active_tick','actual_xy','reference_xy','path_cross_track','path_heading_error','actual_forward_speed','phi','phi_dot','actual_delta','peak_roll','physical_failure','nonfinite','contact_failure','lower_fault','policy_fault','domain_exit','governed','nominal','latent_z','applied_force_impulse']
   horizon=cfg['training_future_phase_C']['episode_s'];limit=round(plan['observation_s']/env.cc.dt)
+  replay_enabled=any('nominal_program_file' in row for row in cases)
+  replay_programs=None
+  if replay_enabled:
+   if not all('nominal_program_file' in row for row in cases) or limit%4:raise ValueError('one complete publication program per case required')
+   programs=[]
+   for row in cases:
+    file=Path(row['nominal_program_file'])
+    if hashlib.sha256(file.read_bytes()).hexdigest()!=row['nominal_program_sha256']:raise ValueError('nominal program changed')
+    with np.load(file) as z:program=np.asarray(z['bare_latents'])
+    if program.shape!=(limit//4,2) or not np.isfinite(program).all():raise ValueError('complete finite bare-latent program required')
+    programs.append(program)
+   replay_programs=j.asarray(np.stack(programs))
   env.set_log_template(snapshots[0],paths[cases[0]['route']],speeds[0])
   if a.shape_only:
    actions=[]
@@ -74,19 +86,28 @@ def main():
    return
   from sttw_control.balance_probe import make_lower_tick
   lower_tick=make_lower_tick(env,snapshots[0].physical.governor.current_reference,contact_only=True)
-  def normal(s,gate,par,path,speed,pulse,t0,mode):
+  def normal(s,gate,par,path,speed,pulse,t0,mode,program=None):
    obs,_,fault=env.observation(s,path,speed,horizon);raw_action=actor.apply(par,obs)
+   proposal=raw_action
+   if replay_enabled:
+    relative_tick=s.tick-j.rint(t0/env.cc.dt).astype(j.int32)
+    index=relative_tick//4
+    fault=fault|(relative_tick<0)|(relative_tick%4!=0)|(index>=limit//4)
+    proposal=program[j.clip(index,0,limit//4-1)]
    measurement,_,_=env.physics.observe(s.physical.data)
    roll,roll_rate,steer,steer_rate,yaw_rate,rear_omega,front_omega=measurement
    risk=modal_risk(speed_proxy=rear_omega*wheel_radius,steer=steer,roll=roll,roll_rate=roll_rate,disturbance=s.physical.controller.disturbance,controller=env.cc,actuator=env.ac)
-   gate,action,gate_log=gate_step(gate,raw_action,rho=j.where(risk['fault'],j.nan,risk['rho']),roll_rate=roll_rate,mode=mode,dt=cfg['timing']['upper_dt_s'])
+   gate,action,gate_log=gate_step(gate,proposal,rho=j.where(risk['fault'],j.nan,risk['rho']),roll_rate=roll_rate,mode=mode,dt=cfg['timing']['upper_dt_s'])
    fault=fault|gate_log['fault']
    end,logs=env.policy_step(s.replace(fault=s.fault|fault),action,path,speed,horizon,pulse)
    data={k:logs[k] for k in keep};data.update(reference=logs['governed'],time=logs['time']-t0,fallback_active=j.zeros(4,dtype=bool),upper_active=logs['active_tick'])
    data['nonfinite']=logs['nonfinite']|logs['policy_fault']
    data['gate_active']=j.full(logs['time'].shape,gate_log['active']);data['gate_rho']=j.full(logs['time'].shape,risk['rho']);data['original_policy_latent']=j.broadcast_to(raw_action,logs['time'].shape+(2,));data['executed_policy_latent']=j.broadcast_to(action,logs['time'].shape+(2,))
+   if replay_enabled:
+    data['nominal_program_latent']=j.broadcast_to(proposal,logs['time'].shape+(2,))
+    data['nominal_program_used']=logs['active_tick']
    return (end,gate),data
-  template=jax.eval_shape(normal,snapshots[0],initial_gate(),actors[cases[0]['policy']],paths[cases[0]['route']],speeds[0],pulses[0],initial_time[0],modes[0])[1]
+  template=jax.eval_shape(normal,snapshots[0],initial_gate(),actors[cases[0]['policy']],paths[cases[0]['route']],speeds[0],pulses[0],initial_time[0],modes[0],replay_programs[0] if replay_enabled else None)[1]
   zero_block=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),template);zero_tick=jax.tree.map(lambda x:j.zeros(x.shape[1:],x.dtype),template)
   def fallback(s,gate,pulse,t0):
    def step(st,_):
@@ -101,14 +122,16 @@ def main():
     return jax.lax.cond(stop,lambda st:(st,zero_tick),active,st)
    end,logs=jax.lax.scan(step,s,None,length=4)
    return (end,gate),logs
-  def one(s,gate,par,path,speed,pulse,t0,mode):
+  def one(s,gate,par,path,speed,pulse,t0,mode,program=None):
    def active(carry):
     st,gs=carry
-    return jax.lax.cond(st.domain_exit,lambda _:fallback(st,gs,pulse,t0),lambda _:normal(st,gs,par,path,speed,pulse,t0,mode),None)
+    return jax.lax.cond(st.domain_exit,lambda _:fallback(st,gs,pulse,t0),lambda _:normal(st,gs,par,path,speed,pulse,t0,mode,program),None)
    stop=s.physical.failed|s.fault|((s.tick-j.rint(t0/env.cc.dt).astype(j.int32))>=limit)
    return jax.lax.cond(stop,lambda c:(c,zero_block),active,(s,gate))
   @jax.jit
   def execute(carry):
+   if replay_enabled:
+    return jax.lax.scan(lambda c,_:jax.vmap(one)(c[0],c[1],parameters,path_batch,speeds,pulses,initial_time,modes,replay_programs),carry,None,length=25)
    return jax.lax.scan(lambda c,_:jax.vmap(one)(c[0],c[1],parameters,path_batch,speeds,pulses,initial_time,modes),carry,None,length=25)
   atomic_json(root/'manifest.json',dict(plan=plan,termination_contract='contact_only_v1',middle_actor_active='until domain exit; then latched last-reference frozen-lower continuation',lower_frozen=True,full_history_preserved=True,path_domain_exit_is_unknown=False,fallback_contract='hold_last_governed_reference_v1; no upper restart, no physical/controller/local reset; upper history stays frozen after handover',physical_identity=env.physics.bundle.identity,reward_scope='not evaluated after handover; fallback has no task-performance claim',gate_uses_future_disturbance_information=False,gate_active='until domain exit only; then frozen held reference'))
   saved=[];update(stage='scanning')
