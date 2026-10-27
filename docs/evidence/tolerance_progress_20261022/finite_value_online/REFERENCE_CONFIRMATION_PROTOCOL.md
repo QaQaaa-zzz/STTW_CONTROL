@@ -2008,3 +2008,6 @@ P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无
 
 ### 固定旧信用90条完成：时间确有作用，简单基线覆盖主终点
 共同20s/一次因果规划下，受扰credit11/16到达15/16活，ordinary9/16与15/16；parent15/16与15/16，floor16/16与16/16、zero真实8/8与8/8。credit对ordinary3增1失、无防摔新增；floor/zero覆盖主终点。10→20s同轨迹parent8→15、ordinary3→9、credit7→11、floor8→16、zero5→8。独立90raw核数一致，349608active/360000slots/277.70s/75replans/0训练。全XY/任务前缀/奖励诊断已保存，原goal1m不加终速保持门槛。按固定协议封存，不扩条件，不把任务收益写容扰提升；详见[报告](LEGACY_CREDIT_GOAL_CONTINUATION_RESULTS.md)。
+
+### 原生32阶段复盘：不以新指标重复包装旧roll优势
+Pareto三坐标路线经反审否决，未运行。另一次只读几何阶段分解完成并独立核32raw：恒曲率段H75对zero/静态规则各8/8更低mean|phi|，并伴随原α下持续参考取舍，不能声称低roll仅来自入出弯动态协调，也不能因非过渡仍低反推纯静态因果。320阶段保留缺段null、duration/rate/integral及9.78s域停未知尾；无新物理/训练/拟合/挑窗。详见[NATIVE_TRANSITION_MECHANISM_REVIEW.md](NATIVE_TRANSITION_MECHANISM_REVIEW.md)。

@@ -248,6 +248,8 @@ zero左2.8两条在3.54秒已到原目标，9.78秒才域停止；整窗存活�
 
 新8条实际16000lower ticks/16000槽、196.741秒含初始化/编译/I/O、0训练。32份raw和同用户10组配对经独立AI重算；规则target另用NumPy q/网格/反映射核验，latent最大差2.62e-7、原V3成本最大差8.1e-7。全32XY保留在E026源目录，原生停止语义及共享DEV关系不变。此比较不代表最优参考治理、全部传统规划器或独立测试；固定预算/网格不继续补考。下一应在冻结方法后检查新任务与扰动，而非重新拟合旧能量式。
 
+对同32条进一步按原config的前直行、.5米入弯ramp、恒曲率段、.5米出弯ramp及出弯直行分解，首达前/后另分；这是已看过全局奖励后的事后DEV分析，0新增物理。恒曲率段H75相对zero和规则各8/8配对的平均绝对phi更低，差值分别−.158至−.081、−.084至−.052rad，故“低侧倾优势仅在入出弯过渡”不符合数据。α0该段平均速度参考比zero低.349–.503米/秒；α1速度参考差−.025至+.015米/秒，左右方向对齐后转向参考比zero小.036–.088rad。参考水平差异是重要替代解释，但阶段由投影进度定义、耗时不同、恒曲率也非已证稳态，不能据此认定静态原因或特殊动态补偿已识别。全部32raw的320阶段记录由独立AI另算一致；zero两条9.78秒域停未补未知尾段。均值post-tick roll、子步peak和真实容扰能力保持区分。[E047–E048]
+
 ### 4.8 新情境80条确认：全窗不触地一致，到达未超过简单对照
 
 冻结四方法，在左右70度/R2.1米、请求2.2米/秒、α0/1下，完整交叉无扰与1.6/2.6秒各±32N、持续0.1秒五事件。每法20条（4无扰、16受扰），同prepared bank index3/physical700、原生参考权限、20秒原worldgoal1米、contact-only及相同发布mask；共用普通1秒一次因果Dubins重规划。它是新的共同任务合同，不能作旧native的单因素消融；新几何/需求与共同祖先也不是独立训练重复或最终TEST。[E028–E029]
@@ -411,3 +413,5 @@ E035：finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md，�
 [8] Mahajan, I., Chen, C., Dümbgen, F., and Plancher, B. RAYA: Learning Where and When to Intervene for Robot Recovery. [arXiv:2609.21690v1](https://arxiv.org/abs/2609.21690)，2026。预印本。
 
 E042：legacy_credit_goal_continuation_v1/analysis/review.json；E043：同run independent_review.json；E044：execution_plan.json；E045：diagnostics/receipt.json；E046：evaluation/status.json。均AI artifact_checked，人类核验未记录。
+
+E047：native_transition_mechanism_v1/analysis/review.json；E048：同run independent_review.json，原生阶段分解与独立raw核验，非动态机制因果识别。

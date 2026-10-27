@@ -112,7 +112,9 @@ def evidence_manifest():
         'E043':ROOT/'runs/legacy_credit_goal_continuation_v1/independent_review.json',
         'E044':ROOT/'runs/legacy_credit_goal_continuation_v1/execution_plan.json',
         'E045':ROOT/'runs/legacy_credit_goal_continuation_v1/diagnostics/receipt.json',
-        'E046':ROOT/'runs/legacy_credit_goal_continuation_v1/evaluation/status.json'}
+        'E046':ROOT/'runs/legacy_credit_goal_continuation_v1/evaluation/status.json',
+        'E047':ROOT/'runs/native_transition_mechanism_v1/analysis/review.json',
+        'E048':ROOT/'runs/native_transition_mechanism_v1/independent_review.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
