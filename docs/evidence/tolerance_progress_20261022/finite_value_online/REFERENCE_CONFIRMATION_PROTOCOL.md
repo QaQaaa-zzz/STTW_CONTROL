@@ -1649,3 +1649,23 @@ source_type=actual_resumed_exit0+all360raw_audit+independent_XY_contact_clock_ar
 非发起人AI实读summary/独立raw读回并补连续指标，支持关闭该固定6维纯名义优化作为抗扰主方法，限制本表示/预算/已见DEV，不否定全部提前状态塑造/参考优化。采用not_adopted，不替换现有冻结模型；保留优化工具/无扰收益与规划书§9纯任务强对照，不扩搜索补考，不拟合旧Emin。更广研究对象仍是有限参考权限下偏好与真实抗扰协调，尚未建立Transactions新控制机制。
 证据production/analysis/{README.md,DECISION.md,summary.json,independent_raw_readback.json,continuous_distance_readback.json,actual_visual_review.json,independent_result_review.md,diagnostics/README.md}，原status/dispatch/selected_references/selection_frozen/contract/seals/原审计error/recovery均保留。数值完成和报告生成中文Bark已有调用记录（receipt null，不声称显式服务器accepted）；本轮诊断0新增物理完成。当前无本任务活动物理/训练/分析，不push/JIT/实机/他人dirty变更，Trans目标active未完成。
 下一最多两项：封存这一已回答纯任务强对照及可复用全部轨迹；暂停追加物理，针对新控制增量作假设裁决，须明确可获得状态/历史、实际参考后果与原alpha效用、为何可能超current/zero/简单几何/纯任务，若仅换mask/触发器/过程库则暂缓实现，不由阴性直接上MPC/扩网或加训。
+
+
+### STTW 路线复审：有限保留见证成立，简单规则覆盖多数收益；新时刻确认仅协议准备
+source_type=Scientific-Brainstorming_independent_AI_generation+primary_literature_abstracts+existing360trace_reanalysis+controller_source_inspection+nonoriginator_review+sealed_protocol_only；verification=artifact_checked。上一goal轮为progress（2298：3.3M级固定名义对照完成与独立复核/全XY/明确关闭名义抗扰主张）。本轮0新物理/0训练，不暂停长期目标，只暂停未经证据支持的复杂模块。
+问题重新对齐用户原目标：除了提高成功率，也检查能否在原alpha下以更低任务代价保留已测抗扰能力；不以旧Emin正确或100%通过为前提。独立候选代理未读root新方案先提出I1显式设计扰动后果的参考选择、I2参考响应残差补偿；root原候选为参考条件后果估计（先缺干预数据/机会）、直接响应补偿、偏好能力测量（支持材料不足单独满足主方法）。标准为信息增益/真实权限与可用输入/对已负结果的区别/强简单替代解释/新颖性证据/复用与可证伪性，定性评级不加权虚构胜者。新意idea与事实/假设分开，不把AI共识当同行验证。
+新实际数据复核：production/analysis/posthoc_preservation_opportunity.json、posthoc_coarse_selection_controls.json。仅从原full/CEM/random三个已测整过程，每context/原alpha固定一份，要求逐例保留full在四旧事件已到达/已存活，再按无扰原alpha成本选；同一组所有force/time使用同一选择，不按单次事件选最优。得到旧39/48到达、43/48存活均逐例保留，alpha0/.5/1无扰成本降19.128%/18.926%/6.799%。这是有限候选/有限已见事件上的后验保留见证，不能称物理上界、独立预测/部署方法或已获新控制增量；前文件UPPER OPPORTUNITY字样仅指所限候选上的诊断，当前更正其不能作一般性能上界。
+补最粗强对照后，alpha-only三组选择也同保39/43，降0/17.615/5.054%；旧geometry-family×alpha六组同保39/43，降13.054/18.499/6.435%。alpha-only仅指候选role选择，候选参考本身仍逐context/alpha优化；geometry-family混合左右和不同角度/半径，完整context混合初速度/初航向，不归因单个状态变量。粗规则覆盖多数见证，尚无必要开发复杂状态/历史风险网络。全数据平均受扰原成本也非全面改善：完整context选择alpha0/.5/1均成本310.339/483.252/456.509→300.926/485.086/460.097；共同存活原成本93.076/53.605/24.128→87.319/50.601/23.755。无扰收益/共同存活条件均值/全部失败余项分开，不包装整体支配。
+新关键源事实：evaluation_events同context/alpha四force本来对应不同起扰时刻，例如左低−16:752、+16:856、−32:716、+32:816 lower ticks，alpha间共享。故旧保留见证可能拟合force-time联合条件，不能解释同一时刻的力幅边界；不推广到其它真正同快照同onset的历史扫描。controller.py76–92实际与production source seal匹配，已经有reference−steer、roll/reference_roll、rollrate反馈及ESO扰动偏移，因此I2没有明确新增缺口，不直接再补一环；仍不证明所有响应补偿数学无效。
+文献有界检索（UTC2026-10-27，独立生成在先，原始页面/摘要级，非全文方法复现/系统综述）：PROMO arxiv2610.01260已运行时机器人偏好；LP3 PMLR164huang22a已约束多目标；PSF arxiv1812.05506已学习策略外预测过滤；Hatanaka/Takaba J-STAGE2004 DOI10.9746/sicetr1965.40.806已扰动下参考治理。它们挑战‘偏好+安全/参考治理’首次性，不能把标准情景优化作新方法。只定位近邻，不据无穷文献不存在宣称创新。Kassis等Scientific Agent Skills arxiv2609.00065当前作者/2026/v2已核并加入原位报告作流程软件来源，非实验依据。
+非发起人结果复审支持一次固定旧选择面对新时刻的确认，后据新粗对照补充必须加入alpha-only，四臂封顶；粗规则削弱复杂评分器必要性。新run reference_bias_opportunity_v1/preservation_timecheck_v1 已实际prepare协议与inventory/seal，仅0物理：full/context-choice/geometry-alpha/alpha-only，12任务×2新time×四力=384逻辑，严格按context/alpha/time/force/vector/其它物理输入相等去重240唯一，≤480000新lower/slots，0optimizer；48逻辑无扰=30原SHA缓存，原机会3330433继承单列，总新最大3810433。新force时间完全交叉，原alpha/10s/主1m与.5/.75敏感性保持，不加零损失采用硬门槛。
+新time一次seed8262701在每context旧非零时刻范围外早/晚0.2–0.6s抽取，所有alpha/method/force共享：左低672/944，右低564/1024，左高520/976，右高484/840（lower dt.005s）。明确可能跨阶段/力车体分量变化，是范围外时间/状态/暴露迁移而非单纯局部jitter。原世界力向量/作用点合同不变，controller不得读取本次真实未来event来选vector。原先单时刻假设prepare和一次旧time重复在0物理下发现，protocol_before_timing_audit/旧seal不覆盖；更正receipt保留。后添alpha-only的三臂旧协议也原样归档，四臂最终protocol/seal及全部384逻辑→240真实映射字段已实际核一致；无新结果影响这些修改。
+当前execution_ready=False、prepared_protocol_only：64×3+16×3真实批运行/shape尚未实现，不能把协议准备当已启动/新选择器成立。新映射对未来事件的效用PENDING；positive仅有限空间迁移而非Trans就绪，negative限定本次迁移、不用其要求新网络/MPC/预算补考。所有原Actor/registry/旧控制内核/历史结果/他人dirty源/JIT/实机/远端不动，系统盘仍满足50GiB。下一最多两项：接真实固定批执行/共享计费与全XY/奖励分析、验证64批并封存；然后只执行这一次四臂时间迁移确认，依据原alpha成本和全部gain/loss裁决，不再扩映射或从新time挑选择。
+
+
+本轮流程/近邻来源（已查原始页面）：
+- [PROMO：运行时偏好机器人策略](https://arxiv.org/abs/2610.01260)。本轮只核摘要，不能据此对比其全部实验。
+- [Huang等：A Constrained Multi-Objective Reinforcement Learning Framework](https://proceedings.mlr.press/v164/huang22a.html)。约束与多目标偏好结合已有先例。
+- [Wabersich与Zeilinger：Predictive safety filter](https://arxiv.org/abs/1812.05506)。状态与输入相关不确定性下过滤学习控制已有先例。
+- [Hatanaka与Takaba：Disturbance reference governor](https://www.jstage.jst.go.jp/article/sicetr1965/40/8/40_8_806/_article/-char/en/)。有界扰动下的参考治理为成熟近邻，不冒充我们的新理论。
+- Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). [Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents](https://doi.org/10.48550/arXiv.2609.00065)。当前arXiv记录v2已核，仅作为本轮科学流程软件来源。
