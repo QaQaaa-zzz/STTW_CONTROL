@@ -3,6 +3,79 @@ import numpy as np
 import pytest
 
 
+def goal_cost_fixture():
+    p, _ = fixture()
+    p['actual_xy'] = np.full((8, 2), 4.)
+    return p
+
+
+def running_metrics(p, costs, valid=None):
+    from sttw_control.survival_endpoint_task_metrics import goal_running_cost_metrics
+    return goal_running_cost_metrics(p, goal_xy=[1., 0.], radius_m=.3,
+        dt=.005, horizon_s=.04, running_tick_cost=costs,
+        cost_valid=np.ones(8, bool) if valid is None else valid)
+
+
+def test_goal_cost_includes_entry_tick_without_erasing_later_cost_or_fall():
+    p = goal_cost_fixture(); p['actual_xy'][2] = [1., 0.]
+    p['contact_failure'][6] = True
+    costs = np.column_stack([np.arange(1., 9.), np.full(8, 2.)])
+    r = running_metrics(p, costs)
+    assert r['goal_arrived'] and r['contact_after_arrival']
+    assert r['goal_entry_physical_tick'] == 2
+    assert r['pre_arrival_running_cost'] == [6., 6.]
+    assert r['post_arrival_observed_running_cost'] == [30., 10.]
+    np.testing.assert_equal(np.array(r['pre_arrival_running_cost']) +
+                            r['post_arrival_observed_running_cost'], r['full_observed_running_cost'])
+    assert r['observed_before_fatal_running_cost'] == [21., 12.]
+
+
+def test_goal_on_last_horizon_sample_counts_but_simultaneous_contact_does_not():
+    p = goal_cost_fixture(); p['actual_xy'][-1] = [1., 0.]
+    assert running_metrics(p, np.ones(8))['first_arrival_s'] == pytest.approx(.04)
+    p['contact_failure'][-1] = True
+    r = running_metrics(p, np.ones(8))
+    assert r['goal_arrived'] is False and r['pre_arrival_running_cost'] is None
+
+
+def test_measured_goal_with_missing_task_cost_is_not_turned_into_failure():
+    p = goal_cost_fixture(); p['actual_xy'][4] = [1., 0.]
+    p['domain_exit'][2:] = True  # Physics continues, task cost unavailable.
+    valid = np.arange(8) < 2
+    costs = np.where(valid, 1., np.nan)
+    r = running_metrics(p, costs, valid)
+    assert r['goal_arrived'] is True
+    assert r['pre_arrival_running_cost'] is None
+    assert r['full_observed_running_cost'] is None
+
+
+def test_missing_post_goal_cost_preserves_known_pre_goal_subtotal():
+    p = goal_cost_fixture(); p['actual_xy'][1] = [1., 0.]
+    valid = np.arange(8) < 4
+    costs = np.where(valid, 3., np.nan)
+    r = running_metrics(p, costs, valid)
+    assert r['pre_arrival_running_cost'] == 6.
+    assert r['post_arrival_observed_running_cost'] is None
+
+
+def test_partial_or_faulted_no_goal_observation_stays_unknown_and_padding_is_unscored():
+    p = goal_cost_fixture(); p['active_tick'][4:] = False
+    costs = np.where(p['active_tick'], 2., np.nan)
+    r = running_metrics(p, costs)
+    assert r['goal_arrived'] is None and r['pre_arrival_running_cost'] is None
+    assert r['full_observed_running_cost'] == 8.
+    assert r['full_observed_ticks'] == 4
+    p['lower_fault'][2] = True
+    assert running_metrics(p, costs)['observed_before_fatal_running_cost'] == 4.
+
+
+def test_cost_shape_sign_and_finite_validity_are_explicit():
+    p = goal_cost_fixture()
+    for costs in (np.ones(7), np.zeros((8, 0)), -np.ones(8), np.full(8, np.nan)):
+        with pytest.raises(ValueError):
+            running_metrics(p, costs)
+
+
 def test_goal_arrival_is_spatial_not_goal_plane_or_final_hold():
     from sttw_control.survival_endpoint_task_metrics import goal_arrival_metrics
     p, _ = fixture()

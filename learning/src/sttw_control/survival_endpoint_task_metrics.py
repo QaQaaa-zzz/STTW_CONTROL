@@ -57,6 +57,66 @@ def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s):
         contract='Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.')
 
 
+def goal_running_cost_metrics(physical, *, goal_xy, radius_m, dt, horizon_s,
+                              running_tick_cost, cost_valid):
+    """Separate factual running cost through goal entry from later cost.
+
+    ``running_tick_cost`` is an already scaled/integrated cost per lower tick,
+    either a vector or a matrix of named-by-caller components. It must exclude
+    terminal replacements. No reward formula, alpha, terminal penalty or
+    ranking is changed here. Missing task observations make the corresponding
+    cost subtotal unknown, while a measured goal entry stays a measured entry.
+    The sample reaching the disk is included in the pre-arrival interval.
+    """
+    arrival = goal_arrival_metrics(physical, goal_xy=goal_xy, radius_m=radius_m,
+                                   dt=dt, horizon_s=horizon_s)
+    active = np.asarray(physical['active_tick'], bool)
+    tick = np.asarray(physical['physical_tick'])
+    valid = np.asarray(cost_valid, bool)
+    costs = np.asarray(running_tick_cost, float)
+    if valid.shape != active.shape or costs.ndim not in (1, 2) or costs.shape[0] != active.size:
+        raise ValueError('running costs and validity must align with physical samples')
+    if costs.ndim == 2 and costs.shape[1] == 0:
+        raise ValueError('at least one running cost component required')
+    eligible = active & valid
+    if not np.isfinite(costs[eligible]).all() or np.any(costs[eligible] < 0):
+        raise ValueError('valid running costs must be finite nonnegative integrated costs')
+
+    # Use the measured hit and physical tick identity, never rounded arrival
+    # seconds, reference positions, path progress or a final-hold predicate.
+    xy = np.asarray(physical['actual_xy'], float)
+    fatal = active & (np.asarray(physical['contact_failure'], bool) |
+                      np.asarray(physical['nonfinite'], bool) |
+                      np.asarray(physical['lower_fault'], bool) |
+                      np.asarray(physical['policy_fault'], bool) |
+                      ~np.isfinite(xy).all(axis=1))
+    fatal_rows = np.flatnonzero(fatal)
+    before_fatal = active & (np.arange(active.size) <
+                             (fatal_rows[0] if fatal_rows.size else active.size))
+    hits = np.flatnonzero(before_fatal & (np.linalg.norm(xy - goal_xy, axis=1) <= radius_m))
+    hit = int(hits[0]) if hits.size else None
+    prefix = before_fatal if hit is None else active & (np.arange(active.size) <= hit)
+    after = np.zeros_like(active) if hit is None else active & (np.arange(active.size) > hit)
+
+    def subtotal(mask):
+        if not np.all(valid[mask]):
+            return None
+        value = costs[mask].sum(axis=0, dtype=np.float64)
+        return float(value) if costs.ndim == 1 else value.tolist()
+
+    return dict(arrival,
+        goal_entry_physical_tick=int(tick[hit]) if hit is not None else None,
+        pre_arrival_running_cost=subtotal(prefix) if hit is not None else None,
+        post_arrival_observed_running_cost=subtotal(after) if hit is not None else None,
+        pre_arrival_ticks=int(prefix.sum()) if hit is not None else None,
+        observed_before_fatal_running_cost=subtotal(before_fatal),
+        observed_before_fatal_ticks=int(before_fatal.sum()),
+        full_observed_running_cost=subtotal(active),
+        full_observed_ticks=int(active.sum()),
+        cost_contract='Per-lower-tick integrated running costs; entry tick included; '
+                      'no terminal replacement, no post-goal erasure, no new policy objective.')
+
+
 def task_metrics(physical,*,speed,goal_s,config):
     dt=float(config['timing']['lower_dt_s']);horizon=float(config['training_future_phase_C']['episode_s'])
     band=config['stage_B_baseline'];limit=round(horizon/dt);hold=round(band['hold_s']/dt)
