@@ -1739,3 +1739,12 @@ run为runs/support_permission_factor_v1，原始数据HDD。54项相关CPU测试
 原生、低速、pause、旧教学、新时刻和权限对照分别报告；旧能量式仅解释，不声称牛顿安全阈值。独立AI只读复核指出的CEM来源错位、零中层面板范围、执行器行程、351维组装和训练恢复链定位已改；20源SHA匹配，旧14归档SHA一致。当前源码定位不冒充全部历史使用同一版本。
 现有本地Markdown/Chrome离线导出9页PDF约1.5MB、嵌入实际XY，无新增依赖/外传研究内容。实际目视架构及PDF第1/2/4/5页，余5页未逐页目视；pdftotext可读、builder编译及diff检查通过。Matplotlib SVG尾空白初检失败已在当前生成器规范化后通过；旧归档原样。源码约20KB，evidence_manifest及export_receipt绑定来源；actual_manuscript_visual_review.json明确核验范围。引用Scientific Agent Skills作为流程来源，不作控制证据。
 这是内部研究草稿，非投稿就绪；具体Transactions刊物/完整相邻方法比较、人类作者核验和独立确认仍缺。下两项：把任务/系统差异与最强公平对照对应起来；只有明确在线信息—有限动作—后果链的新信息缺口后才实施下一判别实验，不复活已关闭调参族。0新积分/0训练、不换冻结模型、不push、不涉JIT/实机。
+
+
+### 同状态信息与短窗后果读回：危险检测不等于动作选择（2026-10-27）
+目的：在不新造gate/拟合阈值的前提下，检查两个已知参考暂停正例是否有因果可得信号，以及即时姿态指标能否说明动作收益。全120共同fork/360已见DEV raw逐SHA，九字段完整日志前缀逐值一致；完整carry认证继承原收据，非本轮逐叶重读。在线信息仅f−1最后完成lower tick；force/精确fork时间只元数据。两mask命中同两个状态，各1到达新增/1存活新增，不是四重复。
+51/120末|roll_rate|超过既有.8、44/120已有relay active；两正例均覆盖，24无扰皆未覆盖。但取样点仍已知pulse-end，不是部署选择器。防摔正例暂停后100ms最大采样|roll|+0.000748rad、末|roll_rate|+0.0253rad/s，400ms末+0.2695；到达正例400ms末|roll_rate|也+0.0798。局部姿态即时更小不是这些后缀有益的必要条件，不反推越大越好或所有短窗预测都无效。原参考改变经滤波/底层和后续运动才显现，不能用有符号平均转角差断言执行器无效或唯一救回机制。
+全部100ms窗口120，400ms仅117：3提前终止保持missing，117不是无偏全体。字段peak_abs_roll为5ms端点phi绝对值max，非0.2ms子步峰值，metric_definitions单列。名义仍全到达/存活但原alpha0/1成本增加：转向暂停+2.766/+0.961，双通道+3.886/+1.036。到达保留不能充当偏好代价零；救回成本差含终止替代。
+只读CLI audit_pause_information.py实际exit0，0积分/训练；原首版因短轨迹np.all切片误认完整而索引越界，旧observability_audit_v1/error保留，长度/active检查修复后新observability_audit_v1_window_fix输出。原数据未改、错误未变成控制失败，报错Bark调用。两张PNG实际查看，先XY（两个不同见证完整10s或触地终点）再局部时序/全120散点，post-tick时间明确、无平滑；全场景XY沿原五图，原图.5m圈不冒充新1m标签。独立非发起人AI抽查15raw SHA/特征/窗口一致；原120/360全审计与其15抽查范围区分。
+证据runs/same_state_reference_pause_v1/observability_audit_v1_window_fix/{README,analysis_contract,events,effects,summary,receipt,metric_definitions,final_provenance,independent_review}；新脚本SHA绑定。Scientific Brainstorming/Visualization仅流程，引用沿本报告已有条目。公开邻近三篇仍只重开摘要，未声称全文比较或新颖性证明。
+下一仅固定这两正例及同context/alpha反向力与无扰匹配反例，复用已有时序核对“参考→实际执行/转角→交回历史→尾段结局”的延迟链。若没有可检验非特权机制就保留机会见证，不升级方法，不因未穷尽而扩暂停库或训练。未启动新物理/阈值扫描，不换默认、不push/硬件/JIT；Transactions目标active且未就绪。
