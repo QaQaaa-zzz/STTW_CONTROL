@@ -1889,3 +1889,19 @@ source_type=actual_exit0+all32_raw_audits+independent_NumPy_targets_and_V3+direc
 P02建议的最小信息面板是左右镜像新几何×alpha0/1×四法×〔无扰、早期±F、晚期±F〕=80条，单速度/单力幅先固定，方向与时刻完整交叉、不先扫力。它是提案，不是已封存case/功效分析；准确新几何、速度/力/起扰时刻和越域权限仍待工程合同。即使全通过也不自动加力/换情境补考。此提醒被采用为下一实现必答项，本轮仅完成科研新点整理；所有新实验仍未prepare/shape/启动。
 
 论文新增段落非发起者P02只读审阅完成并采纳四项修订：①实际容扰数据明确通过/已触地失败/UNKNOWN，故障前未触地不能作集合负标签；②xi补路径/投影/follower/relay/gate/FIFO及适用随机状态，换几何后不称同完整状态；③整条偏好—状态—容扰链改为待检验组织假设，不由现有差异宣称因果；④rho与参考正则尚未确定，原J_alpha及参考变化分别报告，不宣称组合目标保留原用户全部排序。该AI文本反审未重跑物理/全raw，不代替人类作者核验。
+
+### 2026-10-27 新合同越域权限与实际推进接线：CPU工程验证完成
+
+目的：解决上一轮反审指出的实质未决项，避免“只把域停止改成不摔标签，但实际carry已经冻结”的假延时；同时避免让网络和静态规则拥有不同发布权限。该项是实验准备工程，不是新抗扰算法或新结果。
+
+实现：新增可独立按文件加载的native_goal_continuation.py，调用显式传入的原生env、project/pursuit与ContactOnlyPhysics，不修改归档源码、不将整个现代包混入原生包。原物理/ESO/local300/history/FIFO/filter/slew保持；域累计记录移到sidecar，原domain_exit停锁仅在状态生产处移除，真实contact/nonfinite/control fault仍锁住停止。H75/current/static rule共用目标发布mask，zero始终零新target。退出后须连续16个完整upper块有效，才在下一upper边界恢复发布；屏蔽目标经原滤波缓退，不清offset、不额外加速度支持。几何重绑仅在tick%4==0，换projection/follower并锁必要numerical fault，其余状态和sidecar均保留；重绑本身不新增clean块，已有完整块计数保留。
+
+重要审查更正：初版替身每lower重算invalid，但真实native pursuit/follower指令只50Hz更新，初版10项通过不足以支持“块内全部有效”。非发起者独立审阅发现后，选择每lower追加只读pursuit有效性查询（200Hz），其输出仅更新continuation_geometry_invalid/fault、累计退出与clean计数，不写回nominal/follower/raw。查询的numerical fault在当步保存后锁fault，随后原scan停止，不把非有限值当普通越域。原native domain日志仍按50Hz含义保留；两种遥测不混用。最终替身也按真实50Hz更新follower，短暂失效仅由新200Hz日志捕获。
+
+验证范围：归档真实PathCommandEnv.policy_step、set_log_template与correction_tick配微型确定性plant double，验证块内短暂invalid后的4tick仍推进、下一upper屏蔽、新invalid打断连续计数、第15/16块交界、roll>.7且同tickcontact/nonfinite、滤波尾迹、零策略历史更新、重绑边界及全非几何字段保留。独立AI修订审阅另10项CPU通过4.93秒；其要求补充只读几何查询独自数值fault分支已加入。最终适配11＋contact-only5＋既有goal-replanning9共25项CPU实际通过2.84秒，0MuJoCo积分/0优化。最初10失败为测试夹具缺cc.dt，补夹具后通过；随后上述时钟差异是实际设计修正，两者都保留于native_continuation_cpu_checks.json，不称从无失败。当前没有真实模型shape或80条控制效果。
+
+下一固定面板的收益与改进分析沿前述scientific-brainstorming及本轮重读idea_evaluation标准，P02认可有信息价值但未作统计功效保证：左右70度/R2.1m镜像新几何，原user速度2.2m/s、alpha0/1，H75/current/zero/staticrule四法；五事件为无扰及tau1.6/2.6秒各±32N持续0.1秒，共80条。速度低于旧2.6/2.8，仍保留原生1.5m/s参考下限及全部权限，不能称原生复现或必然更难。R2.1是原任务几何，R1.8是既有Dubins重规划几何，两者角色不同。初始新路径拟显式80m支持（tail=80-turn_end），原goal仍turn_end+4，不因形状统一移动目标。所有四法都用相同20s/contact-only合同及普通1s一次因果重规划，不给控制器本次力/时刻；无需再加原路臂来重复证明规划本身。
+
+事前收益判断：正结果支持此新任务栈下有条件的偏好/触地/到达增量，仍不能归因旧native与新合同之间的某一因子。若强规则覆盖收益或只余工作侧倾成本，则缩小主张；若全部通过且差异小，视为无区分，不自动加力/换时刻补考。必须读回实际脉冲暴露、起扰相对真实弯道/首达的关系；若某臂首达后才施扰，只支持其整窗稳定性，不伪称到达恢复。不同alpha/法在同事件分享时刻、世界方向和冲量，但进入状态可能不同；80条是相关DEV，不是80独立样本/独立训练重复/最终TEST。
+
+未完成项明确保留：正式runner尚未实现/prepare/shape/启动；其必须先安装wrapper再set_log_template，认证native/vendor及模型/normalizer/物理/原goal身份，核20s终止费用，封存80case与实际成本合同后才执行。新模块和测试不是一组已完成受扰实验。旧规则/规划面板不补考、不重训/重拟合旧Emin，本轮没有实机/JIT/push。

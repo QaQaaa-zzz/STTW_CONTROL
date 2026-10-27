@@ -1,0 +1,53 @@
+{
+  "purpose": "Test opt-in native termination/target-publication adaptation before new-context disturbance evaluation",
+  "new_physics_steps": 0,
+  "optimizer_updates": 0,
+  "real_model_shape_run": false,
+  "chronological_checks": [
+    {
+      "stage": "initial_cpu_fixture",
+      "tests": 10,
+      "status": "failed",
+      "reason": "Plant double omitted cc.dt required by actual archived policy_step; fixed fixture only; full traceback not persisted as a file"
+    },
+    {
+      "stage": "initial_adapter",
+      "tests": 10,
+      "status": "passed",
+      "seconds": 2.34,
+      "limitation": "Independent review then found native pursuit is 50Hz, unlike the first fixture; did not yet prove four-lower-tick validity"
+    },
+    {
+      "stage": "readonly_lower_validity_revision",
+      "tests": 15,
+      "status": "passed",
+      "seconds": 2.51,
+      "scope": "Adapter plus contact-only guards; native policy_step and correction filter with deterministic plant double"
+    },
+    {
+      "stage": "independent_revision_review",
+      "tests": 10,
+      "status": "passed",
+      "seconds": 4.93,
+      "scope": "Non-originator AI CPU check; no MuJoCo, no real-model shape",
+      "residual": "Requested direct geometry-query numerical-fault test; added before final suite"
+    }
+  ],
+  "final_suite": "learning/tests/test_native_goal_continuation.py learning/tests/test_contact_only_environment.py learning/tests/test_goal_replanning.py",
+  "pending_next": "Fresh native real-model runtime must install wrapper BEFORE set_log_template; formal80 scenario inventory and sealed source/model/physics identities still needed",
+  "adopted_contract": {
+    "native_command_cadence_Hz": 50,
+    "readonly_validity_cadence_Hz": 200,
+    "clean_complete_upper_blocks": 16,
+    "mask": "Same target mask for all nonzero policies; literal zero target unwinds original filters; no hard reference/history reset or added speed support",
+    "rebind": "Only at complete upper boundary; preserve prior full clean counts, all sidecar history and all non-geometry controller state; rebind adds zero clean blocks",
+    "stop": "Only actual contact, numerical/control fault or declared horizon; domain/working roll are telemetry"
+  },
+  "final_result": {
+    "status": "passed",
+    "tests": 25,
+    "seconds": 2.84,
+    "new_physics_steps": 0,
+    "optimizer_updates": 0
+  }
+}
