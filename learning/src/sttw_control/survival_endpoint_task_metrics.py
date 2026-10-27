@@ -67,6 +67,9 @@ def goal_running_cost_metrics(physical, *, goal_xy, radius_m, dt, horizon_s,
     ranking is changed here. Missing task observations make the corresponding
     cost subtotal unknown, while a measured goal entry stays a measured entry.
     The sample reaching the disk is included in the pre-arrival interval.
+    This inherits contact/fault-only arrival, not native-domain-stop arrival.
+    ``full_observed`` need not cover the horizon; it and post-arrival cost may
+    include valid logged samples at/after contact. ``before_fatal`` does not.
     """
     arrival = goal_arrival_metrics(physical, goal_xy=goal_xy, radius_m=radius_m,
                                    dt=dt, horizon_s=horizon_s)
