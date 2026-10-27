@@ -45,6 +45,7 @@ def summarize(raw, goal, *, scale, dt, keys):
         engineering_fault=bool(fault.any()), complete_horizon=len(active)==2000 and not terminal.any(),
         goal1m_before_native_stop=bool(len(hits)),
         first_arrival_s=float(raw['time'][hits[0]]) if len(hits) else None,
+        first_arrival_posttick_elapsed_s=float(raw['time'][hits[0]]+dt) if len(hits) else None,
         minimum_goal_distance_before_native_stop_m=float(distances.min()) if len(distances) else None,
         scored_cost=float(-reward.sum()), running_cost=float(-running.sum()),
         terminal_replacement_adjustment=float(running.sum()-reward.sum()),
@@ -113,6 +114,8 @@ def main(root):
         actor_s=sum(t['actor_s'] for t in timings),advance_s=sum(t['advance_s'] for t in timings),
         new_training_transitions=0,cached_cases=24),source_sha256=inputs,
         scope='All40 actual seen-DEV trajectories, no independent training repeats; ordinary privileged offline comparator, no perturbation/tolerance or real-time claim',
+        arrival_time_semantics='first_arrival_s is historical pre-tick log label; posttick elapsed adds lower_dt_s',
+        analysis_source_sha256=digest(__file__),
         cost_audit='Logged effective components and scored reward independently summed; full original cost formula reconstruction still a separate review')
     (out/'review.json').write_text(json.dumps(result,indent=2)+'\n')
     for name,rows in [('comparisons',comparisons),('records',[{k:v for k,v in r.items() if k!='components'} for r in records])]:
@@ -134,13 +137,17 @@ def plot(out,plan,traces,geometries,keys,scale,dt):
         geo=geometries[c['route']];a[0].plot(*geo['xy'].T,':',color='black',label='Original path')
         goal=np.array([np.interp(float(geo['goal']),geo['s'],geo['xy'][:,k]) for k in (0,1)])
         a[0].scatter(*goal,marker='*',color='black');a[0].add_patch(Circle(goal,1,fill=False,color='.5',lw=.7))
+        envelope=[goal[None,:]+[-1,-1],goal[None,:]+[1,1]]
         for role,(color,style) in styles.items():
             r=traces[(role,c['route'],c['speed'],c['alpha'])];t=r['time'];cost=-np.cumsum(r['scored_tick_reward'],dtype=float)
+            envelope.append(r['actual_xy'])
             for panel,x,y in [(0,r['actual_xy'][:,0],r['actual_xy'][:,1]),(1,t,r['scored_tick_reward']),
                 (2,t,cost),(3,t,r['path_cross_track']),(4,t,r['actual_forward_speed']),(5,t,r['phi'])]:
                 a[panel].plot(x,y,color=color,ls=style,lw=1,label=role)
             a[0].scatter(*r['actual_xy'][-1],color=color,s=20,marker='x' if r['physical_failure'].any() else 'D' if r['domain_exit'].any() else 's')
         a[0].set(xlabel='World X (m)',ylabel='World Y (m)');a[0].set_aspect('equal',adjustable='box')
+        points=np.concatenate(envelope);lo=points.min(axis=0)-.4;hi=points.max(axis=0)+.4
+        a[0].set_xlim(lo[0],hi[0]);a[0].set_ylim(lo[1],hi[1])
         for p,label in enumerate(['Scored reward / lower tick','Cumulative original cost','Path error (m)','Forward speed (m/s)','Roll (rad)'],1):
             a[p].set(xlabel='Task time (s)',ylabel=label);a[p].grid(alpha=.2)
         a[4].axhline(c['speed'],color='black',lw=.6,ls=':')

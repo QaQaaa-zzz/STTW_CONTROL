@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "97955cd6fbc1f5f818fef5cf353ddb23a9268c60a35275134476a0c8ac49250f",
-  "builder_sha256": "964bf1d95e0b3763525dbc91540dc2cf8ec585283a8bf27d0a15cb7f50109fb7",
+  "manuscript_sha256": "60a5d6b7a67870e43e71bdaeae304beb117d9d48d550832574f08ef240a267c1",
+  "builder_sha256": "66bc734fb773db7ac677dc4e359d33f8ce3e2d70ab025b3fa261c087764219ce",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -296,7 +296,7 @@
     },
     "E049": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md",
-      "sha256": "dec4264022eccaa6d07f240d18b6e977d38dedfc417963582f8daa9065ab388e",
+      "sha256": "2ad21df4abb961972894669f35672700dcccf45e72b0f4aa34b52cc3ef04b5b7",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -393,6 +393,18 @@
     "E065": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_fixed_midpoint_review_v1/disturbed/independent_review.json",
       "sha256": "ff4c091f2d77afd7fae40432fb568937915f7db58451fb2ebb87d86cdec567ab",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E066": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_reference_rollout_v1/analysis/review.json",
+      "sha256": "8af35197bbf60895ea9a633842eccd74369dd1ef5068289e66e71ac5923639a1",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E067": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_reference_rollout_v1/independent_final_review.json",
+      "sha256": "22eace58d9f7b987a2692106c41ab4eaa91a83271abf81905d5ed409ae5a8a91",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

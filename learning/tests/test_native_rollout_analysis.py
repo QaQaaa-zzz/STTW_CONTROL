@@ -41,6 +41,7 @@ def test_arrival_before_physical_stop_is_retained_without_hold_veto():
     row=score(raw,[3,0])
     assert row['goal1m_before_native_stop'] and row['native_physical_failure']
     assert row['first_arrival_s']==.01
+    assert row['first_arrival_posttick_elapsed_s']==.015
 
 
 def test_inactive_padding_cannot_be_silently_scored():

@@ -79,3 +79,9 @@ native_reference_cost_engineering_v1/session86181已正常exit0：26×200=5200�
 完整10秒最多50规划轮：≤1,996,800有效预测lower/2,080,000预测槽，与≤32,000实际lower/槽分列，0训练。约80分钟仅按旧单点线性粗估、不是新实测或墙钟停止上限。实际两模拟臂在墙钟预测时不推进物理，不能称真实计算延迟下的在线部署；完整模拟carry特权保留。16新条全部结束或工程错停止，不调网格/视界/频率/场景追NN输赢。
 
 10项root及非提出者接口/计费测试通过；真实模型shape[8,26]/[10,16,4]/[8,2]已完成0积分，数值尚未由此验证。原用户α/速度/原worldgoal1m、native物理/domain/fault和原成本分报，完整已知失败与unknown保留，几厘米目标边界不渲染严重失败。合同与完整反证逻辑见[native_reference_rollout_v1](../../../../runs/native_reference_rollout_v1/SCIENTIFIC_REVIEW.md)，实际运行状态只在唯一台账维护。本段不是新的控制结果或算法创新。
+
+## 同一固定整回合合同实际完成（替代上述PENDING状态）
+
+原session87250正常exit0，新16完整native10秒，0physical/domain/fault，0训练；grid目标首达4/8，H755Hz8/8，原50HzH75缓存8/8。grid四个未达均alpha1，最近距3.224–3.733m。原H75在7/8原J较低，同频H75在5/8较低，grid亦有3/8同频较低；两种H75在三任务通道各7/8较低。Grid全8总J低于zero/静态规则，但其working_roll成本全0，不能将总费排序等同全部稳定性/任务支配。无扰全存活不承领容扰增益。
+
+实际32,000lower；预测1,966,649有效/2,080,000槽，编译46.687s/预测659.025s/实际推进130.898s/全流程857.605s，0warmup/训练。本次实际明显快于旧80min线性外推，不用旧粗估冒充实测。原50HzH75/zero/equilibrium24条认证缓存复用。完整全40费用/首达、全部实际图/32配对、费用公平性、原始SHA和独立核验见[固定结果与局限](../../../../runs/native_reference_rollout_v1/README.md)及run/independent_final_review.json/md。保持固定候选/视界/频率，不因阴性扩展；结论只保留这套有限预测基线未覆盖H75条件任务用途，不证明所有RG/MPC失效。
