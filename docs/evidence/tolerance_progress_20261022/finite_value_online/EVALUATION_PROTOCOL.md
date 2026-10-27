@@ -81,3 +81,17 @@ scientific-brainstorming反审指出：不能把已存在强基线无法解释�
 **结论与下一步：**偏好影响抗扰不只通过受扰前进入状态；在这些相同完整低速状态上，后续控制确实改变了真实触地结局。这是有限DEV机制发现，不是原任务到达/原Jα、扰动阈值、因果检测、简单规则优势或Trans方法成熟的证明。先保留此固定面板，不扩力/时刻增加正例。下一必要问题是相同状态和发布权限下，零中层或既有简单速度支持能否覆盖这3例；需先做技能收益反审再决定有界对照，不因阳性直接训练/部署切α，也不能要求对照前先证明无法被覆盖。
 
 产物：[24条verified记录与六四格描述性对照](../../../../runs/preference_history_factorial_v1/analysis_verified/review.json)、[独立结果复核](../../../../runs/preference_history_factorial_v1/independent_outcome_review.md)、[左侧全部物理时序](../../../../runs/preference_history_factorial_v1/analysis_verified/left90_R1p1_physical_diagnostics.png)、[右侧全部物理时序](../../../../runs/preference_history_factorial_v1/analysis_verified/right90_R1p1_physical_diagnostics.png)。主审实际看全24 XY及右侧时序，未称左时序已人工逐线核验。旧分析器在静态补强前已经被原pipeline载入，原analysis完整保留；analysis_verified是修正latched final_fault/精确case绑定并补四格与诊断的0物理重算，24主标签/计数与原版一致。一次提取新字段的KeyError不影响实验；原XY被80m未来参考拉长，保留旧展示，修正仅视野且数值JSON逐字节一致，不删任何实际轨迹。
+
+## 同状态简单规则强对照：24缓存＋24新后缀
+
+问题：上述3例后续α1新增存活，是否也能由零修正或普通速度支持实现？这不是新的学习机制实验，更不能先假定神经控制必要。前述结果已看，故本次是后续DEV诊断，不是独立未见确认。
+
+scientific-brainstorming1.4收益反审支持一次固定对照：它直接检验简单参考水平这一替代解释；无论是否覆盖，都能限定论文主张。旧CONSTANT/held/legacy面板的起始状态、世界方向或fallback不同，不能替代本组匹配比较。非提出者要求全12条件报告增失、验证zero旁路和实际发布、保持原mode3及域交接，不能只挑原3个正例或以失败证明神经必要。
+
+`runs/preference_history_baselines_v1`复用原4完整快照的future0版本（各129叶不重置），每个仍施加0、±32N/0.1秒，观察4秒、相同世界向量/原接口/真实接触与故障停止/首次域退出后的hold-last规则。对每个前缀增加：①zero_latent，仅将同H75架构Dense_3输出仿射层kernel/bias置零，保留隐层及α调制，无输出旁路；②speed_support，原future0 H75＋既有gate mode3，速度latent=max(原输出,atanh(.96))、转向原样，原滤波/变化率/最终权限不变。支持从本诊断交接点开始，不声称在线检测到了扰动；zero不是全程零中层，更不是零底层，发布参考仍受初始offset/filter carry影响。
+
+原24条通过SHA及原plan/source检查作为缓存，不重跑。新增24后缀，最多19200实际5ms lower tick、21600调度槽，0前缀/训练；原14425历史tick分列。准备程序封存当前源码/原输入/原始缓存SHA/zero actor身份及GateConfig。257个有界观察（含α上下文变化）输出严格为零，网络实际最后返回为Dense(2)且无旁路；另做真实快照0积分shape核验。13项相关单元/接口测试通过，不等于物理收益。
+
+主分析对四种完整后缀规则逐12条件报告真实PASS/CONTACT/FAULT/UNKNOWN、同状态全部新增/丢失及原3例各自是否覆盖；全部48实际/参考XY、速度/转角/侧倾/发布时序和raw身份保留。新zero实际有效发布两latent须为0；mode3须逐发布核速度下界与转向不变。因规则会改变之后的状态及域退出，不能把后果单归因瞬时速度。全新的工程错保留并Bark停止、不自动重试；全过/全倒/相同结局也停止，不调force、时刻、boost或训练补考。
+
+覆盖则收缩“必须学习后续偏好选择”的主张，保留机制发现；未覆盖也仅排除这条固定速度规则或零修正，先解释已有时序/held参考，不自动开发选择器。原用户α、目标、正式20秒到达标准及改路后的Jα待答保持；本组不声称任务完成收益。
