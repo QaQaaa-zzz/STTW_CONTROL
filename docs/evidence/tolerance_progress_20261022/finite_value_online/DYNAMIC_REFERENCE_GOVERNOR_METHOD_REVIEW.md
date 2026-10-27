@@ -70,3 +70,12 @@ X需包含物理、ECBC/ESO、执行器、local300与中层历史、参考滤波
 native_reference_cost_engineering_v1/session86181已正常exit0：26×200=5200预测lower，0整回合滚动治理/训练，编译18.647s、数值12.003s、全流程40.315s。费用argmin18对应速度offset +.11875m/s、steer0，26预测均有限且无原physical/domain事件；首秒主要前直行，仅证明接线和计算成本，不说明弯中优劣。原zero预测与缓存zero前200tickXY差5.54e−7m，按接受的数值误差记录，不加exact gate。预测12秒不称20ms实时。
 
 独立NPZ重计5200/费用加总/argmin/权限完成，最大加总差1.45e−6，未重新运行预测或重建全部V3。本次无失败/末窗，相关逻辑仅有代码和替身测试，不冒称真实失败验证。全部26预测XY和成本、工程限制与下一协议缺口见[完整工程结果](../../../../runs/native_reference_cost_engineering_v1/README.md)。没有据工程完成自动启动8条，也不把预测差值当闭环控制提升。
+
+
+## 原生整回合同频对照的独立合同（数值结果PENDING）
+
+工程完成后经scientific-brainstorming独立设计/交叉反审，新增固定reference_grid_5hz8条和H75_5hz8条，复用原H7550Hz/zero/equilibrium24条；不以低频优化器对高频NN直接归因算法。两新臂每.2秒决策、持target10upper，原follower/history50Hz和底层200Hz不变；优化器无H75候选/前缀依赖，固定原26候选/1秒预测/原J及末窗native失败费用。
+
+完整10秒最多50规划轮：≤1,996,800有效预测lower/2,080,000预测槽，与≤32,000实际lower/槽分列，0训练。约80分钟仅按旧单点线性粗估、不是新实测或墙钟停止上限。实际两模拟臂在墙钟预测时不推进物理，不能称真实计算延迟下的在线部署；完整模拟carry特权保留。16新条全部结束或工程错停止，不调网格/视界/频率/场景追NN输赢。
+
+10项root及非提出者接口/计费测试通过；真实模型shape[8,26]/[10,16,4]/[8,2]已完成0积分，数值尚未由此验证。原用户α/速度/原worldgoal1m、native物理/domain/fault和原成本分报，完整已知失败与unknown保留，几厘米目标边界不渲染严重失败。合同与完整反证逻辑见[native_reference_rollout_v1](../../../../runs/native_reference_rollout_v1/SCIENTIFIC_REVIEW.md)，实际运行状态只在唯一台账维护。本段不是新的控制结果或算法创新。
