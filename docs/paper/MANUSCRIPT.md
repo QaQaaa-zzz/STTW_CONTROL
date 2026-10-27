@@ -42,6 +42,8 @@
 
 现有有限预览比较器已经实现，但只对五个持latent候选进行过一次1秒工程预测（1000预测tick、0闭环治理回合），未来外力假定零。名义跟随器/反馈/滤波继续演化，固定latent不等于固定最终参考；选择最大通过fraction也非原Jα优化。其goal-preview/.1反馈/10秒栈不能直接移称旧原生或legacy20秒匹配基线，无终端集或认证backup。本稿不把该原型重新实现称为新方法，也不以理论前提未证制造研究空白。详细方法与读取范围见[动态治理核对](../evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md)。[E049]
 
+有限通行空间也不能仅凭任务名称承担新颖性：已有单轨车窄地形RL集成[12]、避障与时间分配规划[13]，以及结合几何和侧倾约束的MPC近邻[14]。后者本次仅核出版页摘要与元数据，未读完整方法；不能据此断言与本冻结参考权限相同或直接借其保证。若未来加入真实通行边界，应作为另行声明的前瞻任务，并以相同强规划对照检验具体控制差异，不能沿既有网络轨迹画障碍或重标旧结果。当前未改场景，应用需求待确认。[E061]
+
 ## 2 系统与真实控制权限
 
 ### 2.1 分层接口
@@ -497,3 +499,11 @@ E055：preference_history_task_review_v1/review.json，既有48条原任务短�
 E057：nominal_program_feedback_v1/analysis/review.json，六条实际名义程序对照加18认证缓存；E058：同run independent_outcome_review.json，非提出者独立NumPy重计，不是独立物理/训练重复。AI artifact_checked，人类未记录。
 
 E059：nominal_program_feedback_v1/training_support_review/audit.json，实际bank参数/接口与已完成训练合同核对；E060：同目录independent_review.md，非提出者身份与范围核对。请求参数不等于物理速度/完整观测支持；AI artifact_checked，人类未记录。
+
+[12] Zheng, Q., Tian, Y., Deng, Y., Zhu, X., Chen, Z., and Liang, B. Reinforcement Learning-Based Control of Single-Track Two-Wheeled Robots in Narrow Terrain. Actuators, 12(3), 109, 2023. [DOI](https://doi.org/10.3390/act12030109)。本次实际读取出版页检索返回的方法选段/元数据，直接全文入口受限。
+
+[13] Liu, M., Chen, Z., Li, C., and Liang, B. A Novel Gradient-based Motion Planning for Single-Track Two-wheeled Robots in Complex Environments. IEEE VTC Spring, 2024. [官方论文PDF](https://ieeevtc.org/vtc2024spring/DATA/PID2024002005.pdf)。实际读II/III选定方法节，不冒称冻结学习闭环侧倾保证。
+
+[14] Zhang, M., Feng, Z., Zhang, X., Chen, X., Li, D., and Xiao, X. Composite safety control for non-coaxial two-wheeled robot with geometry-enhanced multi-step control barrier function. Control Engineering Practice, 168, 106732, 2026. [DOI](https://doi.org/10.1016/j.conengprac.2025.106732)。作者/卷年由Crossref核对；本次仅出版页摘要层面核对，未核完整假设。
+
+E061：nominal_program_feedback_v1/route_reframe/public_source_review.json，近邻实际读取范围/访问限制及公开源码核对；为候选路线边界，不是控制结果或系统综述。AI artifact_checked，人类未记录。

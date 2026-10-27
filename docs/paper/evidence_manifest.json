@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "532686b1dc6793db107ae1e15dfcb7796aa4fc48a05bef531698df7ccc2276cf",
-  "builder_sha256": "396ff83c9dbeca5d58f283c7b3a7797466959103f41a2c6c2b38209539e4d03e",
+  "manuscript_sha256": "a352922799dcbaac19581546411ec6bf31ba3651cd6dfca36b624296c97822ef",
+  "builder_sha256": "dbf12df9ff608dff9d2295098541292a27d81667a48403e60f04a3546adc8f13",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -212,7 +212,7 @@
     },
     "E035": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md",
-      "sha256": "4a7a703b42891bc39d48a562c5e1f842cf0f77cc4f4183ccebf640728af600b9",
+      "sha256": "f80da774c0319c69128b6aa63433194b85460f9f1fe976bd0d7e1b1dc6718372",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -363,6 +363,12 @@
     "E060": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/nominal_program_feedback_v1/training_support_review/independent_review.md",
       "sha256": "5d07be15cc49ccf7885921e4260480a90e92d1f4b75c6ae0bb99e840af6e2b1b",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E061": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/nominal_program_feedback_v1/route_reframe/public_source_review.json",
+      "sha256": "767f59687560dd76a756b2063ec09302b16268fe70310830281156cf20cc74f1",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }

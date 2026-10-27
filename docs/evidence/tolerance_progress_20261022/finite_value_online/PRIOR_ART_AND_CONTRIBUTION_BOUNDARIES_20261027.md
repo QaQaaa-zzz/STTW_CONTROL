@@ -40,3 +40,10 @@
 3. 得到该定义后，先完成已认证轨迹的同planner任务代价—物理结局比较。只有出现具体、可证伪且强简单基线未覆盖的信息缺口，才按scientific-brainstorming制定下一实验；阴性不自动扩大库或训练量。
 
 科学流程：scientific-writing用于来源、假设与已证结果分离；既有Scientific Agent Skills引用沿主稿[4]保留。AI辅助核对不是人类同行评议，本报告不设submission_ready。
+
+
+## 有限通行空间候选的近邻与开源适配核对（2026-10-27）
+
+原生偏好价值保留；开阔场景简单对照覆盖不能直接代表真实通道任务，但也不能为NN追正例任意加墙。独立生成/反审条件性保留有限空间候选，实际应用需求已问用户并Bark，尚待回答，未改场景或旧标签。原始来源新增：Zheng等2023 Actuators12(3)109已有窄地形RL集成；Liu等VTC2024官方PDF II/III已有运动学避障/曲率/时间分配；Zhang等CEP2026 168106732出版页摘要已有几何+多步侧倾CBF/MPC，全文未访问，不冒称同参考权限。故场景/CBF/MPC名称不是新颖性。完整[收益、反证、阅读边界及条件性路线](../../../../runs/nominal_program_feedback_v1/route_reframe/ROUTE_REFRAME_REVIEW.md)。
+
+PythonRobotics Hybrid A*默认正倒车/Reeds–Shepp，当前正速度参考不能原样执行；未增加依赖或接入。后续若应用成立必须真实车体几何、同权限强规划/规则/已适配策略、原goal/触地/碰障/偏好分项分别报告，不反加边界重标旧结果。0新物理/训练，无新控制结果或首次性声明。
