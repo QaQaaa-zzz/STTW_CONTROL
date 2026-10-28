@@ -135,7 +135,7 @@ def samestate_inventory(p):
 
 
 def new_confirmation_sources(p):
-    return p.get('source_initialization')=='prepared_bank_all_prefixes'
+    return p.get('source_initialization')=='prepared_bank_all_prefixes' or (p.get('mode')=='h75_late_state_tolerance48' and p.get('source_initialization')=='saved_task6_snapshot')
 
 
 def late_state_inventory(p):

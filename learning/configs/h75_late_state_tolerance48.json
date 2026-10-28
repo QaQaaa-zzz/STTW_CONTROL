@@ -98,7 +98,7 @@
       "source_group_id": "bank5/S_right_90_R1p8/fixed_half/task6"
     }
   ],
-  "source_initialization": "prepared_bank_all_prefixes",
+  "source_initialization": "saved_task6_snapshot",
   "bank_indices": [
     2,
     5
