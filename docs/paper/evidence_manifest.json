@@ -1,6 +1,6 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "2026cfa730a6e3c6a214ddd9ea196f48e08d661bbbfc3419171ebdd9cdc05cf1",
+  "manuscript_sha256": "328078aa938084ad999b9f57bb23297cc69abd6dd35586849f703e72e43b6b10",
   "builder_sha256": "b2d61fcd7f75fa7aeb0fd686b40888ccb05e797f4c557fdbc117ef9fb8eedb5c",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
@@ -1436,7 +1436,7 @@
     },
     "E239": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/root_endpoint_check.json",
-      "sha256": "08de17bcb1a98fb18eb2c8dfba833c1c8ac030c55e3e97023e52c7c1954b860e",
+      "sha256": "1a98eba8b1e0e923fcfb58e64cc2faf80bac284eb3712e51b070ec5d7399f1c1",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -1472,7 +1472,7 @@
     },
     "E245": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/root_endpoint_check.json",
-      "sha256": "e6ea0766fde691e23e8efc77cab8358311c46859e52066a194e81709fb383cb1",
+      "sha256": "bf2d95ee81032e50b6e1689fcf3836c43d0ce93f3ad2e78126a974368c4400e2",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },

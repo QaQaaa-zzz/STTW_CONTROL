@@ -7,11 +7,11 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png": "32a0952efa733754a810923e4fed1d9119ef23225b91b0c90a92c2ba51594c43",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png": "d5de2d79fd434f866fd4c6eebcb9253c72b1acbb670c4002f83b55bfba900e2a"
   },
-  "html_sha256": "39aade2c7e4a28bef066c0e822fe650079bd1c03c2d859e43094bbd059f80ef5",
+  "html_sha256": "275ae3a465dc3e942f392d60b4ca56dcf5fe389ff656206865b77a341d386a45",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "23ec241adc234cf0c9b3f2e931c36ed6c923a1ca0d73ea760447a27845789738",
-  "pdf_bytes": 1650025,
+  "pdf_sha256": "1e84b41bbfecc1f43c4b1f18bc5397a916a84fcdbdef9ad95dba0e1577160d0a",
+  "pdf_bytes": 1651060,
   "renderer": "existing local headless Chrome"
 }
