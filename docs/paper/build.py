@@ -281,7 +281,14 @@ def evidence_manifest():
         'E198':archive/'h75_task_aware_fallback72_v1/analysis/original_task_rescoring/results.json',
         'E199':archive/'h75_task_aware_fallback72_v1/root_common_cost_summary.json',
         'E200':archive/'h75_frozen_confirmation200_v1/plan.json',
-        'E201':archive/'h75_frozen_confirmation200_v1/status.json'}
+        'E201':archive/'h75_frozen_confirmation200_v1/status.json',
+        'E202':archive/'h75_frozen_confirmation200_v1/root_endpoint_check.json',
+        'E203':archive/'h75_frozen_confirmation200_v1/analysis/receipt.json',
+        'E204':archive/'h75_frozen_confirmation200_v1/root_outcome_pairs.json',
+        'E205':archive/'h75_frozen_confirmation200_v1/root_guard_behavior_comparison.json',
+        'E206':archive/'h75_frozen_confirmation200_v1/root_common_cost_summary.json',
+        'E207':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/receipt.json',
+        'E208':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/results.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
