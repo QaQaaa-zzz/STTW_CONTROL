@@ -76,3 +76,22 @@ def test_response_metadata_is_extensible_but_budget_contract_is_not():
     protocol['maximum_lower_ticks']+=1
     with pytest.raises(ValueError,match='maximum_lower_ticks'):
         response_inventory(protocol)
+
+
+def test_response_original_5001_support_matches_replanner_and_legacy_remains_4001():
+    from sttw_control.native_goal_run import response_protocol,extend_straight_support
+    from sttw_control.goal_replanning import dubins_goal_path
+    p=response_protocol()
+    original,_=dubins_goal_path([0.,0.,0.],[8.,3.],length_m=p['planner_support_m'],spacing_m=p['planner_spacing_m'])
+    supported=extend_straight_support(original,p['planner_points'],p['planner_spacing_m'])
+    assert supported is original
+    assert len(original.s)==p['planner_points']==5001
+    replanned,_=dubins_goal_path([1.,2.,.2],[8.,3.],length_m=p['planner_support_m'],spacing_m=p['planner_spacing_m'])
+    assert len(replanned.s)==len(supported.s)
+    legacy,_=dubins_goal_path([0.,0.,0.],[8.,3.])
+    assert len(legacy.s)==4001
+    extended=extend_straight_support(legacy,p['planner_points'],p['planner_spacing_m'])
+    for field in ('s','xy','heading','curvature'):
+        np.testing.assert_array_equal(np.asarray(getattr(extended,field))[:4001],np.asarray(getattr(legacy,field)))
+    assert float(extended.goal)==float(legacy.goal)
+    np.testing.assert_allclose(np.asarray(extended.s)[4001:]-float(legacy.s[-1]),np.arange(1,1001)*.02,atol=4e-6)

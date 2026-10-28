@@ -69,7 +69,7 @@ def validate_response_protocol(p):
     # Bounded authorized contract; descriptive metadata may be enriched freely.
     required=dict(horizon_s=10.,expected_cases=54,maximum_lower_ticks=108000,optimizer_updates=0,
         force_frame='worldY',initial_bank=3,duration_s=.1,goal_radius_m=1.,replanning_radius_m=1.8,
-        departure_m=1.,maximum_replans=1,replan_cadence_s=1.)
+        departure_m=1.,maximum_replans=1,replan_cadence_s=1.,planner_support_m=100.,planner_spacing_m=.02,planner_points=5001)
     for key,value in required.items():
         if p.get(key)!=value:raise ValueError('response contract mismatch '+key)
     if (p.get('forces_N')!=[-64.,-32.,32.,64.] or p.get('onsets_s')!=[1.6,4.] or
@@ -78,6 +78,22 @@ def validate_response_protocol(p):
         raise ValueError('response route/mapping/event contract mismatch')
 
 
+
+
+def extend_straight_support(path,target_points,spacing_m):
+    """Keep all original geometry samples; extend only a straight terminal ray."""
+    import jax.numpy as j
+    import numpy as np
+    extra=target_points-len(path.s)
+    if extra<0:raise ValueError('source path exceeds planner support')
+    if not extra:return path
+    if not np.allclose(np.asarray(path.curvature)[-2:],0.,atol=1e-8):
+        raise ValueError('only straight source support may extend')
+    tail=j.arange(1,extra+1)*spacing_m
+    return path.replace(s=j.concatenate([path.s,path.s[-1]+tail]),
+        xy=j.concatenate([path.xy,path.xy[-1]+tail[:,None]*j.array([j.cos(path.heading[-1]),j.sin(path.heading[-1])])]),
+        heading=j.concatenate([path.heading,j.full(extra,path.heading[-1])]),
+        curvature=j.concatenate([path.curvature,j.zeros(extra)]))
 
 def force_pulses(cases,physical_start):
     """Archived teleop pulse is a world vector, never rotated with route/body."""
@@ -263,17 +279,11 @@ def load(root):
             with np.load(Path(p['cached_source'])/'evaluation'/(c['route']+'_path.npz')) as old:
                 for field in ('s','xy','heading','curvature','turn_end','goal'):
                     if not np.array_equal(np.asarray(getattr(path,field)),old[field]):raise ValueError('original S path mismatch '+field)
-            # Extend only existing straight support. Original samples and goal stay intact.
-            extra=4001-len(path.s)
-            if extra<0:raise ValueError('source path exceeds planner support')
-            if extra:
-                ds=float(path.s[-1]-path.s[-2]);tail=j.arange(1,extra+1)*ds
-                path=path.replace(s=j.concatenate([path.s,path.s[-1]+tail]),
-                    xy=j.concatenate([path.xy,path.xy[-1]+tail[:,None]*j.array([j.cos(path.heading[-1]),j.sin(path.heading[-1])])]),
-                    heading=j.concatenate([path.heading,j.full(extra,path.heading[-1])]),curvature=j.concatenate([path.curvature,j.zeros(extra)]))
+            path=extend_straight_support(path,p['protocol']['planner_points'],p['protocol']['planner_spacing_m'])
             bank[c['route']]=path
     else:bank={c['route']:geometry.build_path(c['builder'],pose,cfg) for c in cases}
-    if any(len(path.s)!=4001 for path in bank.values()):raise ValueError('initial/replanned geometry support shape mismatch')
+    target_points=p['protocol']['planner_points'] if response else 4001
+    if any(len(path.s)!=target_points for path in bank.values()):raise ValueError('initial/replanned geometry support shape mismatch')
     stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
     paths=stack([bank[c['route']] for c in cases]);speeds=j.asarray([c['speed'] for c in cases]);alphas=j.asarray([c['alpha'] for c in cases])
     initial=jax.jit(jax.vmap(lambda path,v,a:env.initial(env.reset(snapshot,path,v,a))))(paths,speeds,alphas)
@@ -397,10 +407,10 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i])):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=1.8)
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode')=='h75_channel_response' else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         np.savez_compressed(directory/f'replanned_path_{i:02d}.npz',**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
-                        decisions.append(dict(case_id=cases[i]['case_id'],case_index=i,task_tick=int(ticks[i]),**meta))
+                        decisions.append(dict(case_id=cases[i]['case_id'],case_index=i,task_tick=int(ticks[i]),measured_pose=np.asarray(poses[i]).tolist(),cross_track_m=float(cross[i]),follower_invalid=bool(invalid[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),**meta))
                 if mask.any():
                     paths=jax.tree.map(lambda *x:j.stack(x),*path_list)
                     carry=runtime['bind'](carry,paths,j.asarray(mask))

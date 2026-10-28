@@ -62,5 +62,9 @@
     "uninformative": "All survive or all fail: finish as nondiscriminating, no force/time escalation.",
     "nominal_loss": "If nominal benefit disappears, report dependence on continuation/replanning; do not begin MLP.",
     "next_gate": "Task-survival cross-ordering motivates common-full-state preparation-time tests, not immediate online coordination or MLP adoption."
-  }
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points."
 }
