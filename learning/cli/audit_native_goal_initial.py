@@ -35,9 +35,10 @@ def audit(root,output):
             if strict_dtype and actual.dtype!=expected.dtype:raise ValueError('initial dtype mismatch '+label)
             if not np.array_equal(actual,expected,equal_nan=True):
                 raise ValueError('initial dynamic leaf mismatch '+label)
-    response=p.get('mode')=='h75_channel_response'
+    switching=p.get('mode')=='h75_channel_switching'
+    response=p.get('mode') in ('h75_channel_response','h75_channel_switching')
     count=len(cases)
-    if count!=(54 if response else 80):raise ValueError('declared initial inventory size mismatch')
+    if count!=(36 if switching else 54 if response else 80):raise ValueError('declared initial inventory size mismatch')
     state=carry.state
     np.testing.assert_array_equal(state.tick,np.zeros(count))
     np.testing.assert_array_equal(state.physical.physical_tick,np.full(count,int(snapshot.physical_tick)))
@@ -59,7 +60,7 @@ def audit(root,output):
         current=jax.tree.map(lambda x:x[i],carry)
         if key in groups:equal(current,groups[key],c['case_id']);pairs+=1
         else:groups[key]=current
-    expected_groups,expected_pairs=(36,18) if response else (20,60)
+    expected_groups,expected_pairs=(6,30) if switching else (36,18) if response else (20,60)
     if len(groups)!=expected_groups or pairs!=expected_pairs:raise ValueError('matched complete initial groups missing')
     if response:
         receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
@@ -75,6 +76,43 @@ def audit(root,output):
             expected=jax.tree.map(lambda x:x[j],native_carry)
             actual=jax.tree.map(lambda x:x[i],state)
             equal(actual,expected.replace(domain_exit=np.asarray(False)),f'cached original native reset lane{i}',strict_dtype=True)
+    switch_review=None;cached_filtered=None;cached_offsets=None
+    if switching:
+        task1=root/'evaluation/task1_complete_carry.pkl'
+        with task1.open('rb') as f:captured=pickle.load(f)
+        np.testing.assert_array_equal(captured.state.tick,np.full(count,200))
+        capture_groups={}
+        for i,c in enumerate(cases):
+            key=(c['route'],c['origin']);lane=jax.tree.map(lambda x:x[i],captured)
+            if key in capture_groups:equal(lane,capture_groups[key],str(key)+' task1',strict_dtype=True)
+            else:capture_groups[key]=lane
+        if len(capture_groups)!=4:raise ValueError('four complete task1 source groups required')
+        with np.load(root/'evaluation/task1_host_state.npz') as z:
+            for field in z.files:
+                groups={}
+                for i,c in enumerate(cases):
+                    key=(c['route'],c['origin'])
+                    if key in groups:np.testing.assert_array_equal(z[field][i],groups[key])
+                    else:groups[key]=z[field][i]
+        capture=json.loads((root/'evaluation/task1_capture_receipt.json').read_text())
+        if capture.get('groups')!=4 or capture.get('lanes_per_group')!=9 or not capture.get('all_leaves_exact') or capture.get('leaf_count')!=len(jax.tree.leaves(captured)):
+            raise ValueError('task1 full-carry host receipt mismatch')
+        prefix=capture['stay_prefix']
+        if not prefix.get('all_fields_within_tolerance') or not prefix.get('discrete_exact'):raise ValueError('task1 stay-prefix receipt mismatch')
+        stay=Path(p['stay_source']);stay_initial=stay/'evaluation/initial_carry.pkl'
+        receipt=json.loads((stay/'analysis/receipt.json').read_text())
+        if hashlib.sha256(stay_initial.read_bytes()).hexdigest()!=receipt['initial_carry_sha256']:raise ValueError('stay initial carry differs from recorded source analysis')
+        with stay_initial.open('rb') as f:cached=pickle.load(f)
+        cached_cases=json.loads((stay/'inventory.json').read_text())
+        for i,c in enumerate(cached_cases):
+            j=next(j for j,old in enumerate(old_cases) if old['route']==c['route'] and old['speed']==c['speed'] and old['policy']=='H75' and old['alpha']==c['alpha'])
+            expected=jax.tree.map(lambda x:x[j],native_carry)
+            actual=jax.tree.map(lambda x:x[i],cached.state)
+            equal(actual,expected.replace(domain_exit=np.asarray(False)),f'cached stay native initial lane{i}',strict_dtype=True)
+        cached_filtered=np.asarray(cached.state.filtered).tolist();cached_offsets=np.asarray(cached.state.offsets).tolist()
+        switch_review=dict(task1_complete_carry_sha256=hashlib.sha256(task1.read_bytes()).hexdigest(),
+            groups=4,lanes_per_group=9,complete_carry_leaves_exact=True,host_state_groups_exact=True,
+            task1_before_planning_and_switch=True,stay_initial_carry_sha256=receipt['initial_carry_sha256'])
     loaded={}
     for name,module in tuple(sys.modules.items()):
         if name=='sttw_control' or name.startswith('sttw_control.'):
@@ -90,6 +128,7 @@ def audit(root,output):
         task_ticks_zero=True,original_alpha_checked=True,prepared_physical_fields_checked=True,prepared_physical_lanes_checked=count,
         excluded_native_reset_fields=['raw','reference_pose','yaw_wrapped','yaw_unwrapped'],
         source_dtype_semantics='Prepared-bank leaves converted to actual loaded leaf dtypes, as in native j.asarray loader; matched-method comparisons exact without casts',
+        switching_capture=switch_review,cached_initial_filtered=cached_filtered,cached_initial_offsets=cached_offsets,
         pairing_contract='Full carry matched within route/event/state-alpha; physical bank fields checked across every lane. Different state alphas intentionally retained.',
         new_physics_steps=0,optimizer_updates=0,verification='AI array/structure audit, not independent control replay')
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')

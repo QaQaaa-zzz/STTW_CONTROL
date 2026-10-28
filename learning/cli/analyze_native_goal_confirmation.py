@@ -21,7 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode')=='h75_channel_response':return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -208,6 +208,9 @@ def render(root,rows,raws,paths,goals,keys):
 
 
 def response_method(case):
+    if case['mode'].startswith('switch_'):
+        if case['origin'] not in ('fixed1','hybrid') or case['mode']!='switch_'+case['origin'] or case['alpha']!=1.:raise ValueError('invalid switching origin')
+        return f"switch_{case['origin']}@{case['switch_s']:g}s"
     pair=(float(case['speed_alpha']),float(case['steer_alpha']))
     names={(.5,.5):'fixed0.5',(1.,1.):'fixed1',(1.,.5):'speed1_steer0.5'}
     if pair not in names or case['mode']!=('hybrid' if pair==(1.,.5) else 'H75'):
@@ -237,10 +240,20 @@ def audit_response_channels(raw,case):
                         ('composed_latent',2),('channel_alpha_pair',2),('latent_z',2),('query_observation',351)):
         values=np.asarray(raw[field])[active]
         if values.shape!=(n,width) or not np.isfinite(values).all():raise ValueError('invalid channel log '+field)
-    np.testing.assert_array_equal(raw['channel_alpha_pair'][active],np.tile(pair,(n,1)))
+    expected_pair=np.tile(pair,(len(active),1))
+    if case['mode'].startswith('switch_'):
+        tick=round(case['switch_s']/.005)
+        if tick%4 or abs(tick*.005-case['switch_s'])>1e-8:raise ValueError('switch not aligned to true upper boundary')
+        switched=np.arange(len(active))>=tick
+        expected_pair[switched]=[.5,.5]
+        np.testing.assert_array_equal(raw['origin_channel_alpha_pair'][active],np.tile(pair,(n,1)))
+        np.testing.assert_array_equal(raw['switch_tick'][active],np.full(n,tick))
+        np.testing.assert_array_equal(raw['switch_active'][active],switched[active])
+    np.testing.assert_array_equal(raw['channel_alpha_pair'][active],expected_pair[active])
     np.testing.assert_allclose(raw['query_observation'][active,336],case['alpha'],atol=1e-6,rtol=0)
     queries={.5:raw['queried_latent_alpha_half'],1.:raw['queried_latent_alpha_one']}
-    composed=np.column_stack([queries[pair[0]][:,0],queries[pair[1]][:,1]])
+    composed=np.column_stack([np.where(expected_pair[:,0]==.5,queries[.5][:,0],queries[1.][:,0]),
+                              np.where(expected_pair[:,1]==.5,queries[.5][:,1],queries[1.][:,1])])
     np.testing.assert_allclose(raw['composed_latent'][active],composed[active],atol=1e-6,rtol=0)
     permitted=active&np.asarray(raw['reference_target_permitted'],bool)
     np.testing.assert_allclose(raw['latent_z'][permitted],composed[permitted],atol=1e-6,rtol=0)
@@ -352,12 +365,121 @@ def response_summary(rows):
     return summary,paired
 
 
+def validate_switching_inventory(inventory,protocol):
+    actual=[]
+    for c in inventory:
+        response_method(c)
+        actual.append((c['route'],c['speed'],c['origin'],c['speed_alpha'],c['steer_alpha'],c['switch_s'],c['force_N'],c['onset_s'],c['duration_s']))
+    events=[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))
+    expected=[(r['route'],r['speed'],o['origin'],o['speed_alpha'],o['steer_alpha'],t,f,onset,protocol['duration_s'])
+              for r,o,t,(f,onset) in itertools.product(protocol['routes'],protocol['origins'],protocol['switch_times_s'],events)]
+    if sorted(actual)!=sorted(expected) or len(set(actual))!=len(actual):raise ValueError('switching inventory differs from declared protocol')
+
+
+def load_switching_cache(root,p,initial):
+    source=Path(p['stay_source']);run=source/'evaluation'
+    plan=json.loads((source/'plan.json').read_text());manifest=json.loads((run/'manifest.json').read_text())
+    if digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256'] or plan['mode']!='h75_channel_response':raise ValueError('stay source seal/mode mismatch')
+    status=json.loads((run/'status.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=54:raise ValueError('complete54 stay source required')
+    for key in ('config','initial_source','models','native_runtime_root'):
+        if plan[key]!=p[key]:raise ValueError('stay source interface mismatch '+key)
+    for key,expected in (('plan_sha256',digest(source/'plan.json')),('config',p['config']),('models',p['models']),('source',p['initial_source'])):
+        if manifest[key]!=expected:raise ValueError('stay manifest mismatch '+key)
+    source_inventory=json.loads((source/'inventory.json').read_text());validate_response_inventory(source_inventory,plan['protocol'])
+    if manifest['cases']!=source_inventory:raise ValueError('stay manifest inventory mismatch')
+    allrows=json.loads((run/'case_index.json').read_text())
+    if len(allrows)!=54:raise ValueError('complete stay case index required')
+    stored=json.loads((root/'cached_stay_records.json').read_text());selected=[];background=[]
+    for lane,row in enumerate(allrows):
+        if any(row.get(k)!=v for k,v in source_inventory[lane].items()):raise ValueError('stay source case identity drift')
+        if row['force_N'] not in (0.,*p['protocol']['forces_N']) or row['onset_s']!=p['protocol']['zero_onset_s']:continue
+        if row['alpha']==1. and row['mode'] in ('H75','hybrid'):
+            selected.append(dict(row,origin='fixed1' if row['mode']=='H75' else 'hybrid'))
+        elif row['alpha']==.5 and row['mode']=='H75':background.append(dict(row,origin='background',_cache_index=lane))
+    if stored!=selected or len(selected)!=12 or len(background)!=6:raise ValueError('exact12 stays and6 background cases required')
+    by_id={r['case_id']:i for i,r in enumerate(allrows)}
+    cached=[dict(r,_cache_index=by_id[r['case_id']]) for r in selected]+background
+    for r in cached:
+        if digest(r['raw_file'])!=r['raw_sha256']:raise ValueError('cached trace SHA drift')
+    return cached,manifest,dict(initial_filtered=initial['cached_initial_filtered'],initial_offsets=initial['cached_initial_offsets'])
+
+
+def audit_switch_prefixes(rows,raws,protocol):
+    stays={(r['route'],r['origin'],r['event']):r for r in rows if r.get('method','').startswith('stay_')}
+    result=[]
+    for r in rows:
+        if not r['mode'].startswith('switch_'):continue
+        other=stays[r['route'],r['origin'],r['event']];raw=raws[r['case_id']];old=raws[other['case_id']]
+        tick=round(r['switch_s']/.005)
+        if not np.asarray(raw['active_tick'][:tick]).all() or not np.asarray(old['active_tick'][:tick]).all():raise ValueError('complete physical prefix to switch required')
+        maximum={}
+        for field in protocol['prefix_comparison']['fields']:
+            a=np.asarray(raw[field][:tick]);b=np.asarray(old[field][:tick])
+            if a.dtype!=b.dtype or a.shape!=b.shape:raise ValueError('own-switch prefix dtype/shape mismatch '+field)
+            maximum[field]=float(np.max(np.abs(a.astype(float)-b.astype(float)))) if a.size else 0.
+            if np.issubdtype(a.dtype,np.inexact):
+                if not np.isfinite(a).all() or not np.isfinite(b).all():raise ValueError('nonfinite switch prefix '+field)
+                np.testing.assert_allclose(a,b,atol=protocol['prefix_comparison']['absolute_tolerance'],rtol=protocol['prefix_comparison']['relative_tolerance'],err_msg='own-switch stay prefix mismatch '+field)
+            else:np.testing.assert_array_equal(a,b,err_msg='own-switch discrete prefix mismatch '+field)
+        result.append(dict(case_id=r['case_id'],stay_case_id=other['case_id'],physical_prefix_ticks=tick,
+            switch_task_s=r['switch_s'],floating_fields_within_declared_tolerance=True,discrete_fields_exact=True,maximum_absolute_difference=maximum,fields=protocol['prefix_comparison']['fields']))
+    if len(result)!=36:raise ValueError('all36 own-switch prefixes required')
+    return result
+
+
+def switching_summary(rows):
+    stays={(r['route'],r['origin'],r['event']):r for r in rows if r['method'].startswith('stay_')}
+    groups={};paired=[]
+    for r in rows:
+        if not r['mode'].startswith('switch_'):continue
+        b=stays[r['route'],r['origin'],r['event']];a=r['horizons']['10'];h=b['horizons']['10']
+        known=a['goal_arrived'] is not None and h['goal_arrived'] is not None and 'unknown' not in (a['physical_outcome'],h['physical_outcome'])
+        item=dict(route=r['route'],origin=r['origin'],event=r['event'],switch_s=r['switch_s'],force_N=r['force_N'],candidate=r['case_id'],stay=b['case_id'],
+            contact_rescue=h['physical_outcome']=='contact' and a['physical_outcome']=='survived',
+            new_contact=h['physical_outcome']!='contact' and a['physical_outcome']=='contact',
+            new_fault_or_unknown=a['physical_outcome']=='unknown' or a['goal_arrived'] is None,
+            goal1m_gain=known and a['goal_arrived'] and not h['goal_arrived'],
+            goal1m_loss=known and h['goal_arrived'] and not a['goal_arrived'],
+            arrival_time_difference_s=(a['first_arrival_s']-h['first_arrival_s']) if a['first_arrival_s'] is not None and h['first_arrival_s'] is not None else None,
+            diagnostic_execution_path_user1_cost_difference=r['diagnostic_execution_path_user1_cost']-b['diagnostic_execution_path_user1_cost'],
+            speed_rmse_difference_m_s=r['full_observed_speed_rmse_m_s']-b['full_observed_speed_rmse_m_s'],
+            original_route_sample_distance_rmse_difference_m=r['original_route_sample_distance_rmse_m']-b['original_route_sample_distance_rmse_m'],
+            first_switch_at_force_onset=r['switch_s']==r['onset_s'],candidate_observed_ticks=r['active_lower_ticks'],stay_observed_ticks=b['active_lower_ticks'],
+            candidate_prefix=r['prefix'],stay_prefix=b['prefix'],candidate_outcome=a,stay_outcome=h)
+        paired.append(item);key=r['route']+'/'+r['origin'];groups.setdefault(key,[]).append(item)
+    if len(paired)!=36 or len(groups)!=4:raise ValueError('four full source groups required')
+    report={}
+    for key,items in groups.items():
+        nominal=[r for r in items if not r['force_N']];disturbed=[r for r in items if r['force_N']]
+        report[key]=dict(n=len(items),nominal=nominal,disturbed=disturbed,
+            nominal_without_new_contact_fault_or_goal_loss=all(not(r['new_contact'] or r['new_fault_or_unknown'] or r['goal1m_loss']) for r in nominal),
+            contact_rescues=sum(r['contact_rescue'] for r in disturbed),new_contacts=sum(r['new_contact'] for r in disturbed),goal_losses=sum(r['goal1m_loss'] for r in items))
+    return dict(source_groups=report,new_cases=36,cached_stays=12,cached_fixed_half_background=6,
+        adoption='not_automatically_adopted',cost_rule='No percentage improvement gate; execution-path user1 cost remains descriptive.',
+        scope='Known preparation times;1.6s switch precedes first pulse step and is not reactive. Fixed.5 background is not a same-state comparator.'),paired
+
+
+def response_plot_groups(rows):
+    if any(r.get('mode','').startswith('switch_') for r in rows):
+        return list(dict.fromkeys(r['event']+'__'+r['origin'] for r in rows if r['mode'].startswith('switch_')))
+    return list(dict.fromkeys(r['event'] for r in rows))
+
+
+def response_plot_selection(rows,label):
+    if any(r.get('mode','').startswith('switch_') for r in rows):
+        event,origin=label.rsplit('__',1)
+        return [r for r in rows if r['event']==event and (r.get('origin')==origin or r.get('origin')=='background')]
+    return [r for r in rows if r['event']==label]
+
+
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
+    switching=p.get('mode')=='h75_channel_switching';count=36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
-    if p['horizon_s']!=10. or p['cases']!=54 or len(inventory)!=54 or len(index)!=54 or status['phase']!='completed' or status['completed_cases']!=54:
-        raise ValueError('complete declared54 H10 cases required')
-    if len({c['case_id'] for c in index})!=54:raise ValueError('duplicate case identity')
+    if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
+        raise ValueError(f'complete declared{count} H10 cases required')
+    if len({c['case_id'] for c in index})!=count:raise ValueError('duplicate case identity')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
     for file,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(file)!=sha:raise ValueError('executed source/input drift '+file)
@@ -365,15 +487,21 @@ def analyze_response(root,p):
     for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models']),('cases',inventory),('source',p['initial_source'])):
         if manifest[key]!=expected:raise ValueError('manifest identity mismatch '+key)
     # Exactly three methods per route/event; nominal lanes are new physical trajectories.
-    validate_response_inventory(inventory,p['protocol'])
+    if switching:validate_switching_inventory(inventory,p['protocol'])
+    else:validate_response_inventory(inventory,p['protocol'])
     expected={(r['route'],r['event'],response_method(r)) for r in inventory}
-    if len(expected)!=54 or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=6:
+    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
     initial=json.loads((out/'initial_carry_review.json').read_text())
     paths={};goals={};trees={};raws={};rows=[];ticks=0;rebuilt={};executed={}
+    cache_rows,cache_manifest,cache_initial=(load_switching_cache(root,p,initial) if switching else ([],None,None))
+    index=index+cache_rows
     decisions=json.loads((run/'replanning_decisions.json').read_text());by_case={}
+    if switching:decisions+=json.loads((Path(p['stay_source'])/'evaluation/replanning_decisions.json').read_text())
+    selected_ids={c['case_id'] for c in index}
+    decisions=[d for d in decisions if d['case_id'] in selected_ids]
     for decision in decisions:
         case=decision['case_id']
         if case in by_case:raise ValueError('more than one replan')
@@ -389,13 +517,18 @@ def analyze_response(root,p):
             for field in ('goal','turn_end'):np.testing.assert_array_equal(path[field],z[field])
         trees[route]=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[route]]))
     for i,c in enumerate(index):
-        if any(c.get(k)!=v for k,v in inventory[i].items()):raise ValueError('case identity drift')
+        cached=i>=count
+        lane=c.get('_cache_index',i)
+        case_run=Path(p['stay_source'])/'evaluation' if cached else run
+        case_manifest=cache_manifest if cached else manifest
+        case_initial=cache_initial if cached else initial
+        if not cached and any(c.get(k)!=v for k,v in inventory[i].items()):raise ValueError('case identity drift')
         if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('raw SHA drift')
         goal=goals[c['route']]
         np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0)
-        np.testing.assert_allclose(manifest['original_goals_xy'][i],goal,atol=3e-6,rtol=0)
+        np.testing.assert_allclose(case_manifest['original_goals_xy'][lane],goal,atol=3e-6,rtol=0)
         with np.load(c['raw_file']) as z:raw=dict(z)
-        active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n
+        active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n if not cached else 0
         if not 0<n<=2000 or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('invalid actual clock prefix')
         clock=np.rint(raw['time']/.005).astype(np.int64)
         np.testing.assert_array_equal(clock[active],np.arange(n));np.testing.assert_allclose(raw['time'][active],np.arange(n)*.005,atol=3e-6,rtol=0)
@@ -403,17 +536,17 @@ def analyze_response(root,p):
         data=dict(raw,physical_tick=clock,policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
         pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']))
         channels=audit_response_channels(raw,c)
-        chain=verify_correction_chain(dict(data,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=initial['initial_filtered'][i],initial_offsets=initial['initial_offsets'][i])
+        chain=verify_correction_chain(dict(data,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=case_initial['initial_filtered'][lane],initial_offsets=case_initial['initial_offsets'][lane])
         cut={k:v[:2000] for k,v in data.items()}
         endpoint=goal_arrival_metrics(cut,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.)
         endpoint['physical_outcome']=physical_outcome(cut['active_tick'],cut['contact_failure'],cut['policy_fault']|cut['nonfinite']|cut['lower_fault'],2000)
         fault=data['policy_fault']|raw['nonfinite']|raw['lower_fault'];fatal=np.flatnonzero(active&(raw['contact_failure']|fault))
         stop=int(fatal[0]) if len(fatal) else n;arrival=endpoint['first_arrival_s'];task_stop=min(stop,round(arrival/.005)) if arrival is not None else stop
         path=paths[c['route']];distance=trees[c['route']].query(raw['actual_xy'][:n])[0]
-        replan=run/f'replanned_path_{i:02d}.npz';decision=by_case.get(c['case_id']);changed=None;replan_tick=n
+        replan=case_run/f'replanned_path_{lane:02d}.npz';decision=by_case.get(c['case_id']);changed=None;replan_tick=n
         if replan.exists()!=bool(c['replanned']) or bool(decision)!=bool(c['replanned']):raise ValueError('replan evidence mismatch')
         if decision:
-            if decision['case_index']!=i:raise ValueError('replan case index mismatch')
+            if decision['case_index']!=lane:raise ValueError('replan case index mismatch')
             replan_tick=decision['task_tick']
             from sttw_control.goal_replanning import replan_requested
             if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,
@@ -427,8 +560,12 @@ def analyze_response(root,p):
             executed[c['case_id']]=changed
         rebuilt[c['case_id']]=reconstruct_execution_path_reward(raw,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
         frame=onset_frame_impulse(raw,c,pulse)
-        rows.append(dict(c,method=response_method(c),horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
-            prefix=dict(ticks=task_stop,observed_s=task_stop*.005),
+        rows.append(dict(c,method=(('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached18' if cached else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+            prefix=dict(ticks=task_stop,observed_s=task_stop*.005,
+                original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance[:task_stop]**2))) if task_stop else None,
+                speed_rmse_m_s=float(np.sqrt(np.mean((raw['actual_forward_speed'][:task_stop]-c['speed'])**2))) if task_stop else None,
+                path_length_m=float(np.linalg.norm(np.diff(np.vstack([path['xy'][0],raw['actual_xy'][:task_stop]]),axis=0),axis=1).sum()),
+                diagnostic_execution_path_user1_cost=float(-rebuilt[c['case_id']]['user1_reward'][:task_stop].sum())),
             pulse_started_after_first_arrival=bool(arrival is not None and arrival<=c['onset_s']) if c['force_N'] else None,
             original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance**2))),
             original_route_sample_distance_max_m=float(distance.max()),
@@ -451,9 +588,14 @@ def analyze_response(root,p):
                        reconstructed_reward_components=rebuilt[c['case_id']]['running_components'],cumulative_reward_components=np.cumsum(rebuilt[c['case_id']]['running_components'],axis=0),terminal_adjustment=rebuilt[c['case_id']]['terminal_adjustment'])
         np.savez_compressed(out/f'case_{i:02d}_diagnostics.npz',**numeric)
     if ticks!=status['active_lower_ticks']:raise ValueError('raw tick charge mismatch')
-    summary,paired=response_summary(rows)
+    prefix_proof=audit_switch_prefixes(rows,raws,p['protocol']) if switching else None
+    if switching:
+        prefix_receipt=json.loads((run/'own_switch_prefix_receipt.json').read_text())
+        if not prefix_receipt.get('own_switch') or not prefix_receipt.get('all_fields_within_tolerance') or not prefix_receipt.get('discrete_exact'):
+            raise ValueError('runner own-switch prefix receipt incomplete')
+    summary,paired=switching_summary(rows) if switching else response_summary(rows)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
-    atomic_json(out/'receipt.json',dict(all_cases=54,horizons_s=[10],actual_lower_ticks=ticks,new_physics_steps=0,optimizer_updates=0,
+    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,horizons_s=[10],actual_lower_ticks=ticks,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
         checked='Raw SHA, full initial audit, config/model/goal/inventory, actual pulse/clock, masked channel composition, correction chain and reconstructed execution-path V3 channels/rewards.',
         limitation='Non-task reward components reused from authenticated raw logs, not independently rederived physics. Original-path distances are descriptive sampled nearest distances; execution-path V3 is not original-user utility after replan.'))
@@ -461,12 +603,16 @@ def analyze_response(root,p):
     lines=['# H75通道受扰响应：54条H10','','原始XY与执行路径优先；两tight S×三通道映射×九事件。六条无扰轨迹为本合同重新执行，不复用旧原生停止合同。',
         '','主终点：原世界目标1m首达；整10s真实触地单列。早期domain仅遥测，不算触地；重规划后不声称严格完成原S。',
         '','相关熟悉DEV、同祖先；无新训练。各法在起扰前已有不同状态，不能把转向通道替换解释为独立于速度的因果效应。']
-    for event in dict.fromkeys(r['event'] for r in rows):
+    if switching:
+        lines=['# H75同完整前缀准备时刻诊断：36新回合＋12原点stay＋6固定.5背景','','所有新回合H10；已知时刻切换不是未知起扰在线方案。任务1s完整状态相同，后续仅按原点配对比较，不声称起扰时状态相同或独立速度/转向因果效应。1.6s切换发生于首个脉冲步之前，不是反应式恢复。',
+               '','原点stay为同来源同合同物理缓存；固定.5背景从回合初态不同策略演化，不能作为同状态切换对照。主要比较触地挽救及无扰不新增触地/故障/原goal1m损失；不设百分比代价门槛。',
+               '','四个route/origin源组的全部事件和时刻保留。任务1s完整carry和主机状态逐叶核验；各分支至自身真实switch tick的原点前缀按预声明浮点容差匹配，dtype/离散字段精确匹配。']
+    for event in response_plot_groups(rows):
         lines+=['',f'## {event}','',f'![Original and executed XY](full_xy_{event}.png)','',f'![First-arrival prefixes](task_xy_{event}.png)']
-    lines+=['','执行路径V3图以相同user1重评分；运行本身alpha评分另行核验并保留。逐步/累计奖励和分项仅为诊断，不是重规划后原用户路径效用。原路线距离与执行路径误差分别保存；未完成短窗不能当更低完成代价。',
+    lines+=['','执行路径V3图以相同user1重评分；运行本身alpha评分另行核验并保留。逐步/累计奖励和分项仅为诊断，不是重规划后原用户路径效用。原路线距离与执行路径误差分别保存；全窗距离包含首达后运动，首达/真实失败前缀另列；未完成短窗不能当更低完成代价。',
         '世界Y脉冲投影使用日志起扰前upper yaw作一次onset-frame近似，不是逐物理子步积分。完整剂量/截断暴露、首达早于起扰、名义重规划逐例列出。4s若重规划，先规划后执行含脉冲的步。',
         '[逐例结果](results.json) · [无扰/受扰汇总](summary.json) · [全部配对得失](paired.json) · [核验](receipt.json)',
-        '全部54逐步原始帧、实际末点、重建奖励/累计分项、真速度/轮速代理与误差保留于case诊断NPZ；图见diagnostics。无20s数据或结论。']
+        '全部声明条件逐步原始帧、实际末点、重建奖励/累计分项、真速度/轮速代理与误差保留于case诊断NPZ；图见diagnostics。无20s数据或结论。']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
     return summary
 
@@ -477,15 +623,17 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
     out=root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
-    methods=('fixed0.5','fixed1','speed1_steer0.5');colors=('#0072B2','#D55E00','#008060')
-    for event in dict.fromkeys(r['event'] for r in rows):
+    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555')
+    for event in response_plot_groups(rows):
+        group=response_plot_selection(rows,event)
+        methods=list(dict.fromkeys(r['method'] for r in group));colors=palette[:len(methods)]
         for task in (False,True):
             fig,axes=plt.subplots(1,len(routes),figsize=(13,6),squeeze=False,layout='constrained')
             for ax,route in zip(axes.flat,routes):
                 path=paths[route];goal=goals[route];ax.plot(*path['xy'][path['s']<=path['goal']].T,'k-',lw=1,label='Original S to goal')
                 ax.add_patch(Circle(goal,1,fill=False,ec='black'));ax.scatter(*goal,c='black',marker='*')
                 for method,color in zip(methods,colors):
-                    r=next(r for r in rows if (r['route'],r['event'],r['method'])==(route,event,method));raw=raws[r['case_id']]
+                    r=next(r for r in group if (r['route'],r['method'])==(route,method));raw=raws[r['case_id']]
                     h=r['horizons']['10'];n=r['prefix']['ticks'] if task and h['goal_arrived'] else r['active_lower_ticks'];xy=raw['actual_xy'][:n]
                     if r['case_id'] in executed:
                         path2=executed[r['case_id']];ax.plot(*path2['xy'][path2['s']<=path2['goal']].T,c=color,ls='--',lw=.8,alpha=.65,label=method+' executed replan')
@@ -495,6 +643,9 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
                     if h['first_arrival_s'] is not None:
                         k=round(h['first_arrival_s']/.005)-1
                         if k<n:ax.scatter(*raw['actual_xy'][k],c=color,marker='^')
+                    if 'switch_s' in r:
+                        k=round(r['switch_s']/.005)-1
+                        if k<n:ax.scatter(*raw['actual_xy'][k],c=color,marker='o',facecolors='none',s=50,label=method+' switch')
                     if r['force_N']:
                         dose=np.flatnonzero(np.linalg.norm(raw['applied_force_impulse'][:n],axis=1)>1e-10)
                         if len(dose):ax.scatter(*raw['actual_xy'][dose].T,c=color,s=8,alpha=.5)
@@ -502,7 +653,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
             fig.suptitle(event+' / '+('first-arrival/contact prefix' if task else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
             fig.savefig(out/f'{"task" if task else "full"}_xy_{event}.png',dpi=140);plt.close(fig)
         for route in routes:
-            selected=[r for r in rows if r['route']==route and r['event']==event]
+            selected=[r for r in group if r['route']==route]
             path=paths[route];original_tree=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[route]]))
             fig,axes=plt.subplots(13,1,figsize=(12,28),sharex=True,layout='constrained')
             comp,cax=plt.subplots(len(keys)+1,2,figsize=(14,2.3*(len(keys)+1)),sharex=True,squeeze=False,layout='constrained')
@@ -519,6 +670,8 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
                     cax[k,0].plot(t,components[:,k],c=color,label=method,lw=.8);cax[k,1].plot(t,np.cumsum(components[:,k]),c=color,lw=.8)
                 if r['force_N']:
                     for ax in [*axes,*cax.flat]:ax.axvspan(r['onset_s'],r['onset_s']+r['duration_s'],color='gray',alpha=.07)
+                if 'switch_s' in r:
+                    for ax in [*axes,*cax.flat]:ax.axvline(r['switch_s'],c=color,ls='--',lw=.8)
                 if r['replan_task_tick'] is not None:
                     for ax in [*axes,*cax.flat]:ax.axvline(r['replan_task_tick']*.005,c=color,ls=':',lw=.6)
             for ax,label in zip(axes,('Speed: true/dotted wheel/dashed user (m/s)','True - wheel proxy (m/s)','True - original request (m/s)','Execution-path cross-track (m)','Execution-path heading error (rad)','Original goal distance (m)','Roll (rad)','Roll rate (rad/s)','Steer (rad)','Actual worldY mean force/tick (N)','Original route sample distance (m)','Diagnostic user1 reward / actual step','Diagnostic user1 cumulative reward')):

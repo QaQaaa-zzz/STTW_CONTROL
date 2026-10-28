@@ -163,3 +163,105 @@ def test_actual_permission_cannot_bypass_sixteen_clean_blocks_after_domain():
     m.audit_response_channels(raw,case)
     raw['reference_target_permitted'][4:]=True;raw['latent_z'][4:]=[.7,.3]
     with pytest.raises(ValueError,match='sixteen complete clean blocks'):m.audit_response_channels(raw,case)
+
+
+def switching_fixture():
+    rows=[];raws={}
+    for route in ('left','right'):
+        for origin in ('fixed1','hybrid'):
+            for event,force in (('zero',0.),('minus',-64.),('plus',64.)):
+                stay=route+origin+event
+                base=dict(route=route,origin=origin,event=event,force_N=force,onset_s=1.6,
+                    horizons={'10':dict(goal_arrived=True,physical_outcome='survived',first_arrival_s=6.)},
+                    diagnostic_execution_path_user1_cost=10.,full_observed_speed_rmse_m_s=.1,original_route_sample_distance_rmse_m=.2,
+                    active_lower_ticks=2000,prefix=dict(ticks=1200,observed_s=6.))
+                rows.append(dict(base,case_id=stay,mode='H75' if origin=='fixed1' else 'hybrid',method='stay_'+origin))
+                raw=dict(active_tick=np.ones(340,bool),time=np.arange(340)*.005,actual_xy=np.zeros((340,2)))
+                raws[stay]=raw
+                for switch in (1.,1.4,1.6):
+                    case=stay+str(switch)
+                    rows.append(dict(base,case_id=case,mode='switch_'+origin,method='switch_'+origin+'@'+str(switch),switch_s=switch))
+                    raws[case]={k:v.copy() for k,v in raw.items()}
+    return rows,raws
+
+
+def test_switch_at_actual_upper_tick280_not_scan_boundary_and_statealpha_stays_one():
+    raw,case=channel_raw();n=400
+    raw={k:np.broadcast_to(v[0],(n,)+v.shape[1:]).copy() for k,v in raw.items()}
+    case.update(mode='switch_hybrid',origin='hybrid',switch_s=1.4)
+    raw.update(reference_target_permitted=np.ones(n,bool),origin_channel_alpha_pair=np.tile([1.,.5],(n,1)),
+        switch_tick=np.full(n,280),switch_active=np.arange(n)>=280)
+    raw['channel_alpha_pair'][280:]=[.5,.5]
+    raw['composed_latent'][:]=[.7,.3];raw['composed_latent'][280:]=[.2,.3];raw['latent_z']=raw['composed_latent'].copy()
+    m.audit_response_channels(raw,case)
+    raw['switch_active'][280:300]=False
+    with pytest.raises(AssertionError):m.audit_response_channels(raw,case)
+
+
+def test_all_own_switch_prefixes_allow_only_predeclared_float_tolerance_and_exact_discrete():
+    rows,raws=switching_fixture()
+    protocol=dict(prefix_comparison=dict(fields=['active_tick','time','actual_xy'],absolute_tolerance=1e-5,relative_tolerance=1e-6))
+    candidate=next(r for r in rows if r.get('switch_s')==1.4)
+    raws[candidate['case_id']]['actual_xy'][279,0]=1e-6
+    proof=m.audit_switch_prefixes(rows,raws,protocol)
+    assert len(proof)==36 and {r['physical_prefix_ticks'] for r in proof}=={200,280,320}
+    raws[candidate['case_id']]['actual_xy'][279,0]=1e-3
+    with pytest.raises(AssertionError,match='stay prefix mismatch'):m.audit_switch_prefixes(rows,raws,protocol)
+    raws[candidate['case_id']]['actual_xy'][279,0]=0.
+    raws[candidate['case_id']]['active_tick'][250]=False
+    with pytest.raises(ValueError,match='complete physical prefix'):m.audit_switch_prefixes(rows,raws,protocol)
+
+
+def test_switching_summary_keeps_four_source_groups_and_nominal_goal_loss():
+    rows,_=switching_fixture()
+    stay=next(r for r in rows if r['route']=='right' and r['origin']=='hybrid' and r['event']=='minus' and r['method'].startswith('stay'))
+    stay['horizons']={'10':dict(goal_arrived=False,physical_outcome='contact',first_arrival_s=None)}
+    summary,paired=m.switching_summary(rows)
+    assert len(summary['source_groups'])==4 and len(paired)==36
+    assert summary['source_groups']['right/hybrid']['contact_rescues']==3
+    nominal=next(r for r in rows if r['route']=='right' and r['origin']=='hybrid' and r['event']=='zero' and r.get('switch_s')==1.6)
+    nominal['horizons']={'10':dict(goal_arrived=False,physical_outcome='survived',first_arrival_s=None)}
+    summary,paired=m.switching_summary(rows)
+    assert not summary['source_groups']['right/hybrid']['nominal_without_new_contact_fault_or_goal_loss']
+    assert any(r['goal1m_loss'] for r in paired if r['force_N']==0)
+    assert summary['adoption']=='not_automatically_adopted'
+
+
+def test_switching_inventory_uses_origin_and_every_true_switch_time():
+    protocol=dict(routes=[dict(route='route',speed=2.8)],origins=[dict(origin='hybrid',speed_alpha=1.,steer_alpha=.5)],
+        switch_times_s=[1.,1.4,1.6],forces_N=[-64.,64.],onsets_s=[1.6],zero_onset_s=1.6,duration_s=.1)
+    inventory=[]
+    for switch in protocol['switch_times_s']:
+        for force in (0.,-64.,64.):
+            inventory.append(dict(route='route',speed=2.8,origin='hybrid',mode='switch_hybrid',alpha=1.,speed_alpha=1.,steer_alpha=.5,
+                switch_s=switch,force_N=force,onset_s=1.6,duration_s=.1))
+    m.validate_switching_inventory(inventory,protocol)
+    inventory[-1]['switch_s']=1.5
+    with pytest.raises(ValueError,match='switching inventory'):m.validate_switching_inventory(inventory,protocol)
+
+
+def test_switching_render_keeps_each_origin_and_fixed_half_background(tmp_path,monkeypatch):
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    saved=[];monkeypatch.setattr(Figure,'savefig',lambda self,file,**kw:saved.append(Path(file).name))
+    (tmp_path/'analysis').mkdir()
+    raw,path,cfg,ctrl,keys=reward_fixture();n=8
+    path.update(xy=np.column_stack([path['s'],np.zeros(4)]),goal=np.asarray(3.))
+    raw.update(actual_xy=np.column_stack([np.arange(n)*.1,np.zeros(n)]),wheel_speed_proxy=np.ones(n),
+               phi=np.zeros(n),phi_dot=np.zeros(n),actual_delta=np.zeros(n),applied_force_impulse=np.zeros((n,3)))
+    rows=[];raws={};rebuilt={}
+    for origin in ('fixed1','hybrid'):
+        for switch in (1.,1.4,1.6,None):
+            case=origin+str(switch);method=('switch_'+origin+'@'+str(switch)) if switch else 'stay_'+origin
+            row=dict(route='route',event='zero',method=method,origin=origin,case_id=case,force_N=0.,active_lower_ticks=n,
+                mode='switch_'+origin if switch else 'H75',prefix=dict(ticks=n),
+                horizons={'10':dict(goal_arrived=False,physical_outcome='survived',first_arrival_s=None)},replan_task_tick=None)
+            if switch:row['switch_s']=switch
+            rows.append(row);raws[case]=raw;rebuilt[case]=m.reconstruct_execution_path_reward(raw,dict(alpha=1.),path,None,n,cfg,ctrl,keys)
+    rows.append(dict(rows[-1],origin='background',method='background_fixed0.5',case_id='background'))
+    raws['background']=raw;rebuilt['background']=rebuilt[rows[0]['case_id']]
+    m.render_response(tmp_path,rows,raws,dict(route=path),dict(route=np.array([3.,0.])),{},rebuilt,keys)
+    assert len(saved)==8
+    assert 'full_xy_zero__fixed1.png' in saved and 'full_xy_zero__hybrid.png' in saved
+    assert all(len(m.response_plot_selection(rows,label))==5 for label in m.response_plot_groups(rows))
