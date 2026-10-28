@@ -4,9 +4,15 @@
 
 > 内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。当前性能证据见E087–E228，开发机制试验与前瞻冻结确认分开报告。历史试验与反例保留于[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)及各节源报告。
 
-## 摘要
+## 摘要（中文审阅）
 
 本文研究冻结底层单轨机器人如何在有限参考权限内暂时偏离用户偏好、完成原任务并恢复偏好执行。当前原型冻结ECBC、ESO、local300及偏好条件H75网络，以41维输入、16→16 ReLU容扰MLP评价三个执行α候选，由非学习协调器结合任务代理、风险门和原参考滤波作选择；原世界目标不变，必要时共同执行一次因果Dubins重规划。当前仅验证回合内固定的用户α∈{0,0.5,1}，不宣称连续任意偏好能力。完整状态接续试验提供了准备时间改变真实触地结局的局部证据；在72个相关开发回合中，只改退化规则恢复原方案丢失的9个目标到达并保留其余63个。冻结候选的200回合前瞻确认中，三个用户下候选与guard均18/20到达、无触地；固定用户1为9/20到达且2例触地，速度支持则19/20到达且无触地。候选用户1的共同窗口任务费用比guard低约1.1%，但用户0/0.5的开发费用优势未复现，最终用户执行18/18/20也未超过guard。匹配训练条件的在线输入消融复用原全特征轨迹，新增60个速度＋查询模型回合；全特征最终执行用户为18/18/20，对照为13/0/15，但两者到达和触地计数相同，且全特征共同首达前成本均值略高。结果支持有边界的偏好协调用途，不证明容扰MLP必要性、全面优越性或安全保证，尚无实车证据。[E099–E101,E173–E174,E191–E208,E222–E227]
+
+## Abstract (English draft)
+
+Balancing robots must reconcile user tracking preferences with the transient demands of disturbance recovery. We investigate whether bounded reference changes can support this coordination without retraining a single-track robot’s lower controller. The implemented prototype freezes state feedback, an extended-state observer, a learned lower residual, and a preference-conditioned reference policy. A small supervised tolerance predictor evaluates three discrete preference candidates; a nonlearned coordinator combines these scores with a geometric task proxy, user-priority restoration, and a task-aware fallback. Reference limits and filtering remain active, and a shared one-shot replanner preserves the original world goal. Complete-state continuation experiments show that preparation time can change contact outcomes under specific disturbances. In related development conditions, changing only the fallback restored nine lost goal arrivals while retaining 63 successes. A frozen 200-episode confirmation found identical goal-arrival and contact counts for the candidate and a strong guard without the learned risk gate; a speed-support baseline achieved more arrivals for the speed-prioritized user. A matched online input ablation improved final user-preference execution with full-state features, without improving arrival or contact counts, and with slightly higher mean prearrival task costs. These results support a bounded role for preference coordination rather than uniform baseline superiority or predictor necessity. Evidence is limited to simulation, three fixed user preferences, and related prepared-state conditions; no hardware validation or safety guarantee is established.
+
+> Internal evidence note (not part of the abstract): E099–E103 support the continuation experiments; E191–E199 support the development comparison; E200–E208 support the frozen confirmation; E209–E228 support the matched input ablations. This English draft does not change the manuscript’s non-submission-ready status.
 
 ## 1 研究问题与相邻方法
 
