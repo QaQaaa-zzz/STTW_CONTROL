@@ -34,6 +34,8 @@ def _validate_h75_comparison(primary,supplement,primary_paths,supplement_paths):
     from .goal_endpoint_run import h75_supplement_cases
     if not supplement.get('h75_supplement',False) or supplement['cases']!=h75_supplement_cases(primary['cases']):
         raise ValueError('supplement is not the original48 H75 queries')
+    if primary.get('replanning')!=supplement.get('replanning'):
+        raise ValueError('H75 comparison contract differs: replanning')
     for key in ('training','endpoint','horizon_s','radius_m'):
         if primary[key]!=supplement[key]:raise ValueError('H75 comparison contract differs: '+key)
     for name in (str(Path(primary['training'])/'plan.json'),str(Path(primary['training'])/'effective_config.json'),primary['endpoint']):
@@ -157,6 +159,8 @@ def analyze(root,output=None,*,h75_root=None):
             'minimum_goal_distance includes a fatal sample; minimum_prefatal_goal_distance separately excludes it and must not be confused with goal admission.',
             'No p-values, independent-seed SD or continuous force threshold inferred from this deterministic DEV panel.',
             'Figures are internal provisional PNGs, not publisher-compliance evidence; manual visual review remains required.'])
+    if plan.get('replanning'):
+        report['interpretation'].append('Path costs computed against replanned geometry are execution-route diagnostics; they cannot be called original-route J. Original-goal admission and original reference plots retain the frozen task.')
     atomic_json(output/'results.json',report)
     with (output/'results.csv').open('w',newline='') as f:
         fields=[k for k in rows[0] if k not in ('pre_goal_component_cost','impulse_Ns','expected_impulse_Ns')]
@@ -166,6 +170,8 @@ def analyze(root,output=None,*,h75_root=None):
         '|面板|方法|物理轨迹|评分视图|到达|完整存活|到达且存活|存活未到|到达后接触|未到且接触|接触合计|未知|',
         '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
     for r in summary:lines.append('|'+ '|'.join(str(r[k]) for k in ['suite','role','physical_count','score_views','arrived','survived','arrived_alive','alive_not_arrived','arrived_contact','not_arrived_contact','contact','unknown'])+'|')
+    if plan.get('replanning'):
+        lines += ['', '警告：按重规划几何计算的路径费用仅为执行路径诊断，不能称为原始路线J；原始目标与原始参考保持不变。']
     lines += ['', '## 全例XY与原始费用图','']
     lines += [f'- [{f}](./{f})' for f in figures]
     lines += ['', '## 配对增失','', '|面板|对照|查询数（相关）|到达增/失|存活增/失|','|---|---|---:|---|---|']

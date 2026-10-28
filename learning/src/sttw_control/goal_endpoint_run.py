@@ -41,7 +41,7 @@ def load_h75_bundle(model,config):
     return bundle
 
 
-def prepare(training,root,*,h75_supplement=False):
+def prepare(training,root,*,h75_supplement=False,replan=False):
     training=Path(training).resolve();root=Path(root).resolve()
     state=json.loads((training/'status.json').read_text())
     if state['phase']!='completed' or state['collections_completed']!=64:raise ValueError('completed fixed64 training required, no best checkpoint selection')
@@ -97,6 +97,12 @@ def prepare(training,root,*,h75_supplement=False):
         data_role='related DEV joint geometry/speed/time transfer, not independent TEST or separate training repeats',
         stop=f'{len(cases)} fixed executions only; engineering error preserves partials and stops, no retry/condition extension',
         acceleration=[f'same-shape{6 if h75_supplement else 16}lane batches','scan50 blocks','dynamic parameter/path arguments','persistent cache'])
+    if replan:
+        plan['experiment_id']+='-PERIODIC-REPLAN'
+        plan['replanning']=dict(period_s=1.,period_task_ticks=200,task_ticks=list(range(200,2000,200)),
+            radius_m=1.8,support_m=80.,path_points=4001,methods='all including nominal',
+            trigger='measured current pose, pre-goal and physically live; no event oracle',
+            original_goal_unchanged=True,horizon_s=10.,maximum_plans_per_case=9)
     atomic_json(root/'plan.json',plan);atomic_json(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     atomic_json(root/'status.json',dict(phase='prepared',completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_steps=0))
 
@@ -123,6 +129,9 @@ def execute(root):
         if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed plan changed')
         for f,sha in dict(p['inputs'],**p['sources']).items():
             if digest(f)!=sha:raise ValueError('sealed input/source changed: '+f)
+        replanning=p.get('replanning')
+        if replanning:
+            from .goal_endpoint_replanning import pad_original_path,make_rebinding,update_paths
         training=Path(p['training']);old=json.loads((training/'plan.json').read_text())
         cfg=json.loads((training/'effective_config.json').read_text())
         declaration=json.loads((Path(old['source'])/'source_declaration.json').read_text())['source']
@@ -162,6 +171,8 @@ def execute(root):
                 np.savez_compressed(path_file,s=np.asarray(path.s),xy=np.asarray(path.xy),heading=np.asarray(path.heading),curvature=np.asarray(path.curvature),turn_end=np.asarray(path.turn_end),goal=np.asarray(path.goal))
                 path_records[suite+'/'+ctx]=dict(file=path_file.name,sha256=digest(path_file),original_goal_xy=goals[suite,ctx].tolist())
         atomic_json(root/'path_manifest.json',path_records)
+        # The manifest remains the unpadded original geometry for evaluation.
+        if replanning:paths={key:pad_original_path(path) for key,path in paths.items()}
         cases=p['cases'];stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
         env.set_log_template(bases['transfer','left'],paths['transfer','left'],j.float32(1.7))
         one=make_goal_evaluation_step(env,make_goal_collection_evaluator(cfg))
@@ -170,10 +181,13 @@ def execute(root):
             return jax.lax.scan(lambda st,_:jax.vmap(one)(st,param,path,speed,pulse,role,goal),carry,None,length=50)
         index=[];started=time.monotonic()
         batch=p['batch_size']
+        if replanning:rebinding,observe=make_rebinding(env,batch)
+        planning_events=[];planning_elapsed_s=0.;shape_receipts=[]
         for offset in range(0,len(cases),batch):
             selected=cases[offset:offset+batch]
             if len({np.shape(paths[c['suite'],c['context']].s) for c in selected})!=1:raise ValueError('same-shape path batch required')
-            bpath=stack([paths[c['suite'],c['context']] for c in selected])
+            current_paths=[paths[c['suite'],c['context']] for c in selected]
+            bpath=stack(current_paths)
             initial=stack([GoalEvaluationState(bases[c['suite'],c['context']].replace(alpha=j.float32(c['controller_alpha'])),initial_gate(),j.int32(0),j.bool_(False)) for c in selected])
             par=stack([parameters[0 if c['role'] in (0,4) else 1] for c in selected])
             speed=j.asarray([c['speed'] for c in selected],j.float32)
@@ -188,7 +202,27 @@ def execute(root):
             directory=root/f'batch_{offset//batch:02d}';directory.mkdir()
             with (directory/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(initial),f)
             carry=initial;logs=[]
+            if replanning:
+                # Abstract tracing only: zero physical integrations or updates.
+                shaped_carry,_=jax.eval_shape(chunk,initial,*args)
+                rebound_shape=jax.eval_shape(rebinding,initial,bpath,speed,j.ones(len(selected),dtype=j.bool_))
+                layout=lambda tree:(jax.tree.structure(tree),[(tuple(x.shape),str(x.dtype)) for x in jax.tree.leaves(tree)])
+                initial_layout=layout(initial)
+                if layout(shaped_carry)!=initial_layout or layout(rebound_shape)!=initial_layout:
+                    raise ValueError('chunk/rebinding carry pytree layout mismatch')
+                shape_receipts.append(dict(case_offset=offset,lanes=len(selected),physical_integrations=0,
+                    chunk_carry_matches=True,rebinding_carry_matches=True,
+                    carry_tree=str(initial_layout[0]),carry_leaves=initial_layout[1]))
+                atomic_json(root/'shape_receipt.json',dict(physical_integrations=0,batches=shape_receipts))
             for block in range(10):
+                if replanning and block>0:
+                    carry,bpath,elapsed=update_paths(root,carry=carry,paths=current_paths,speeds=speed,goals=goal,
+                        cases=selected,offset=offset,block=block,events=planning_events,observe=observe,rebinding=rebinding)
+                    jax.block_until_ready(carry)
+                    if layout(carry)!=initial_layout:raise ValueError('replanned carry layout changed')
+                    planning_elapsed_s+=elapsed
+                    args=(par,bpath,speed,args[3],role,goal)
+                    update(planning_elapsed_s=planning_elapsed_s,planning_count=len(planning_events))
                 update(stage='collecting',case_offset=offset,block=block,inflight_slots=batch*200,inflight_actual='unknown')
                 carry,data=chunk(carry,*args);jax.block_until_ready(carry);host,data=jax.device_get((carry,data));data=flatten_ticks(data)
                 update(stage='saving',active_lower_ticks=state['active_lower_ticks']+int(data['active_tick'].sum()),allocated_lower_slots=state['allocated_lower_slots']+int(data['active_tick'].size),inflight_slots=0,inflight_actual='known')
