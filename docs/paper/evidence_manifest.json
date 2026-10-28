@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "adb9565f73f9b56a39e81995ee3b0fa8264ff7bdcd7994069d0dc39827db46ca",
-  "builder_sha256": "d6496d1f78926a15a34d37984f60e2dd54c3fb786386e72cf7333a9254d80c91",
+  "manuscript_sha256": "0960551ac7710ab185f915abf5993d8748771d6cc06871dc31b4754aab1c4cb2",
+  "builder_sha256": "f4ec411816b6581bae1957aec5fcd0a7be55b11a8345a78990facca3d12ad30b",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -737,6 +737,30 @@
       "sha256": "a00a160a709a0dcb5cb1c0a75503090d4c28c64486273eb9a48a0d2cea448583",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E123": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_ranking_v1/resolved_config.json",
+      "sha256": "089b871d1c1e113efb0c4a204d8956864e978083894f8a0939b1eb71167d039c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E124": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_ranking_v1/selection_manifest.json",
+      "sha256": "6a0d4e2fb6e71b46512fab59f2a3793b390326fb5f7657b00e93703bae536d97",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E125": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_ranking_v1/development_metrics.json",
+      "sha256": "f0f08664dd24d2e316d846776c7c77498ff986e76cd9e82a7a6a3f6b2943df29",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E126": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_ranking_v1/training_metrics.json",
+      "sha256": "def9f869a5f1b6da4d753e6cd287ef3937a38b8afa20884d63e1c2e028f34d73",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -829,7 +853,11 @@
     "E119",
     "E120",
     "E121",
-    "E122"
+    "E122",
+    "E123",
+    "E124",
+    "E125",
+    "E126"
   ],
   "claims_from_readback": [
     {
