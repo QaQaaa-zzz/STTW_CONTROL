@@ -10,16 +10,32 @@ import sys
 sys.dont_write_bytecode=True
 
 
+def load_frozen_pickle_module(root,plan,filename,alias):
+    """Bind the sealed run's actual pickle class, without constructing physics."""
+    source=root/'source'/filename
+    expected=[sha for file,sha in plan['source_sha256'].items() if Path(file).name==filename]
+    if len(expected)!=1 or hashlib.sha256(source.read_bytes()).hexdigest()!=expected[0]:
+        raise ValueError('frozen pickle module identity mismatch '+filename)
+    spec=importlib.util.spec_from_file_location(alias,source)
+    module=importlib.util.module_from_spec(spec);sys.modules[alias]=module;spec.loader.exec_module(module)
+    return module
+
+
 def audit(root,output):
     import numpy as np
     p=json.loads((root/'plan.json').read_text());native=Path(p['native_runtime_root']).resolve()
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
-    source=Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_continuation.py'
-    spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
-    adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
+    tolerance=p.get('mode')=='tolerance_online120'
+    if tolerance:
+        load_frozen_pickle_module(root,p,'tolerance_coordination.py','_sttw_tolerance_coordination')
+    source=(root/'source/native_goal_continuation.py') if tolerance else Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_continuation.py'
+    if tolerance:adapter=load_frozen_pickle_module(root,p,'native_goal_continuation.py','_sttw_goal_continuation')
+    else:
+        spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
+        adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120')
     if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -28,6 +44,7 @@ def audit(root,output):
     with initial.open('rb') as f:carry=pickle.load(f)
     if online:
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
+        if tolerance and np.any(carry.prev_alpha!=1.):raise ValueError('online initial previous alpha must be one')
         carry=carry.native
     if p.get('mode')=='h75_samestate_bank144':
         return audit_bank144_initial(root,p,carry,output,jax,initial)
@@ -44,7 +61,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode')=='h75_online_confirmation100':
+    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -193,9 +210,10 @@ def audit(root,output):
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    if len(cases)!=100:raise ValueError('complete100 initial cases required')
-    np.testing.assert_array_equal(state.tick,np.zeros(100));np.testing.assert_array_equal(state.alpha,np.ones(100))
-    np.testing.assert_array_equal(state.filtered,np.zeros((100,2)));np.testing.assert_array_equal(state.offsets,np.zeros((100,2)))
+    tolerance=p.get('mode')=='tolerance_online120';count=120 if tolerance else 100;arms=6 if tolerance else 5
+    if len(cases)!=count:raise ValueError('complete declared initial cases required')
+    np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,np.ones(count))
+    np.testing.assert_array_equal(state.filtered,np.zeros((count,2)));np.testing.assert_array_equal(state.offsets,np.zeros((count,2)))
     for value in (state.fault,state.physical.failed,state.domain_exit,carry.ever_domain_exit,carry.clean_blocks):
         if np.any(value):raise ValueError('new bank initial stop/fault/clean latch')
     snapshots={b:jax.tree.map(lambda x:jax.numpy.asarray(x[b]),bank) for b in p['protocol']['bank_indices']}
@@ -222,12 +240,12 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
             np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
     leaves=jax.tree.leaves(carry)
-    if len(groups)!=20 or any(len(ids)!=5 for ids in groups.values()):raise ValueError('20 paired bank/route/event groups required')
+    if len(groups)!=20 or any(len(ids)!=arms for ids in groups.values()):raise ValueError('20 paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:
             for i in ids[1:]:np.testing.assert_array_equal(leaf[i],leaf[ids[0]])
     receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
-    if not receipt.get('all_five_arm_reset_leaves_exact') or receipt.get('new_bank_fingerprints')!=fingerprints:raise ValueError('fivearm reset receipt mismatch')
+    if not receipt.get('all_arm_reset_leaves_exact' if tolerance else 'all_five_arm_reset_leaves_exact') or receipt.get('new_bank_fingerprints')!=fingerprints:raise ValueError('paired reset receipt mismatch')
     loaded={name:str(Path(module.__file__).resolve()) for name,module in sys.modules.items() if (name=='sttw_control' or name.startswith('sttw_control.')) and getattr(module,'__file__',None)}
     native=Path(p['native_runtime_root']).resolve()
     if any(not Path(file).is_relative_to(native) for file in loaded.values()):raise ValueError('mixed native initial100 modules')
@@ -235,7 +253,7 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         source_bank_sha256=p['initial_source']['prepared_bank_sha256'],bank_indices=p['protocol']['bank_indices'],bank_fingerprints=fingerprints,
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
         initial_nominal_reference=np.asarray(state.physical.raw).tolist(),
-        matched_groups=20,lanes_per_group=5,complete_paired_native_leaves_exact=True,prepared_physical_lanes_checked=100,
+        matched_groups=20,lanes_per_group=arms,complete_paired_native_leaves_exact=True,prepared_physical_lanes_checked=count,
         original_paths_anchored_to_own_pose=True,online_initial_latch_false=True,native_only_modules=loaded,
         no_old_trajectory_reuse=True,new_physics_steps=0,optimizer_updates=0,
         data_role='Two prepared physical initial states, not independent training seeds.')
