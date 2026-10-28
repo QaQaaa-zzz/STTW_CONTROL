@@ -68,11 +68,25 @@ def control_diagram():
     svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
 
 
+def validate_evidence_references(manuscript, sources):
+    """Resolve bracketed evidence IDs, including inclusive citation ranges."""
+    referenced=set()
+    for bracket in re.findall(r'\[[^\]\n]*\]',manuscript):
+        for match in re.finditer(r'\bE(\d{3})(?:\s*[-–—]\s*E?(\d{3}))?',bracket):
+            start=int(match[1]);end=int(match[2] or match[1])
+            if end<start:raise ValueError('descending manuscript evidence range '+match[0])
+            referenced.update(f'E{number:03d}' for number in range(start,end+1))
+    missing=sorted(referenced-sources.keys())
+    if missing:raise ValueError('unresolved manuscript evidence references: '+', '.join(missing))
+    return sorted(referenced)
+
+
 def evidence_manifest():
     source=ROOT/'runs/support_permission_factor_v1/analysis/paper_claim_audit/claim_registry.json'
     data=json.loads(source.read_text());sources=copy.deepcopy(data['sources'])
     for record in sources.values():
         if digest(record['path'])!=record['sha256']:raise ValueError('changed manuscript evidence '+record['path'])
+    archive=Path('/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025')
     extra={
         'E008':ROOT/'runs/support_permission_factor_v1/common_environment_config.json',
         'E009':ROOT/'runs/reference_bias_opportunity_v1/production/analysis/summary.json',
@@ -152,16 +166,28 @@ def evidence_manifest():
         'E083':ROOT/'runs/ordinary_goal_learning_v1/first_actual_training_audit.json',
         'E084':ROOT/'learning/src/sttw_control/goal_endpoint_run.py',
         'E085':ROOT/'runs/goal_credit_cpu_v1/pulse_timing_first_real_collection_v2.json',
-        'E086':ROOT/'learning/src/sttw_control/goal_networks.py'}
+        'E086':ROOT/'learning/src/sttw_control/goal_networks.py',
+        'E087':archive/'ordinary_goal_learning_v1/training_review/summary.json',
+        'E088':archive/'ordinary_goal_endpoint_v1/analysis_with_h75/results.json',
+        'E089':archive/'ordinary_goal_endpoint_replan_v1/paired_replanning_review/summary.json',
+        'E090':archive/'ordinary_goal_endpoint_replan_v1/paired_replanning_review/raw_verification.json',
+        'E091':archive/'h75_native_s_capability_v1/analysis/review.json',
+        'E092':archive/'h75_nominal_preference_schedule_v1/analysis/review.json',
+        'E093':archive/'h75_nominal_preference_schedule_v1/analysis/independent_review.json',
+        'E094':archive/'h75_nominal_preference_schedule_v1/plan.json',
+        'E095':archive/'ordinary_goal_endpoint_replan_v1/plan.json',
+        'E096':archive/'h75_native_s_capability_v1/plan.json',
+        'E097':archive/'ordinary_goal_learning_v1/training_review/REVIEW.md'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
+    referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
-        evidence_cutoff='2026-10-27',submission_ready=False,human_approval='not_recorded',
-        sources=sources,claims_from_readback=data['claims'],
+        evidence_cutoff='2026-10-28',submission_ready=False,human_approval='not_recorded',
+        sources=sources,manuscript_evidence_references=referenced,claims_from_readback=data['claims'],
         detailed_evidence=dict(path=str(HERE/'EVIDENCE_DETAILS.md'),
             sha256=digest(HERE/'EVIDENCE_DETAILS.md'),
             role='Full historical evidence narrative; current research decisions remain in the shared ledger'),
-        image_role='Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments',
+        image_role='Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments',
         figures={str(p.relative_to(HERE)):digest(p) for p in FIG.glob('control_architecture.*')},
         new_physics_steps=0,optimizer_updates=0)
     (HERE/'evidence_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')

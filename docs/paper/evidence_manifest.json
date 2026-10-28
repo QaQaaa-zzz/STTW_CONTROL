@@ -1,8 +1,8 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "7a35da8915ef3201993140bcc5a46de6e1ba350d37a205531ac79f77ba495b8a",
-  "builder_sha256": "32bc6fb0b541ddf5da00d756b75997043d82c2643527008d95ef451007281ae3",
-  "evidence_cutoff": "2026-10-27",
+  "manuscript_sha256": "05f12a9e5a873010887e5efe187b64b8ce22c56883f11af526a0fbb97e24e0e7",
+  "builder_sha256": "c1c4f02d63f9d9a24387525cb7e6390e8ae90b24cd8abfccd9ee1690a82d32c2",
+  "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
   "sources": {
@@ -506,7 +506,7 @@
     },
     "E084": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/goal_endpoint_run.py",
-      "sha256": "9265ef819717efda3091a5978447449a6a97852aa9e2cf705a8dd77f17b3cfe8",
+      "sha256": "82c7e9efd110d803fbf5c6667c6412ddb775978f0bc6e9c47a5623b8a366a6da",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -521,8 +521,141 @@
       "sha256": "001ee516f5063bcb2188b705abed625940ca1922d9e5a387a088930b4a858707",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E087": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_learning_v1/training_review/summary.json",
+      "sha256": "d77b0b22aa9faa737c3b8a0aad07b568818e98f0137f345de60b6d46aa825c4d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E088": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_endpoint_v1/analysis_with_h75/results.json",
+      "sha256": "9586b468145e64c35fda9663ffcddb7767ae4c2823a27333c3687369e01d229d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E089": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_endpoint_replan_v1/paired_replanning_review/summary.json",
+      "sha256": "70d5c265d54803b5690d44113fbc135776240ef66d5266b420783ee5bd147b1e",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E090": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_endpoint_replan_v1/paired_replanning_review/raw_verification.json",
+      "sha256": "45b4cb9fd4f4f4971e53ea4a518a888c344c84fb0aaecf069b538275e2a5a7ff",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E091": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/review.json",
+      "sha256": "a06d972028bb80ae7448d5cd6d70b44b649b87f82ec0183b41e036b709db702e",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E092": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/review.json",
+      "sha256": "6958038a98c33dea0f5809bcdfc8a696d04db960a3da7b6c3e7ad62a5d64fe11",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E093": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/independent_review.json",
+      "sha256": "2c817cb98b235e202308182e2a0a57eb487b3999b36d384270862a66d7c9ceec",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E094": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/plan.json",
+      "sha256": "46a8bedf8163dc7fafdd5599231b6f1a0224de76d85e7e797813b9988439bede",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E095": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_endpoint_replan_v1/plan.json",
+      "sha256": "a4407b990988044d5e6629f260ad26393471051819131d2874c9578bab20a788",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E096": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/plan.json",
+      "sha256": "f55eeb399f0196564b4d91d1da8181f60628545c2a3adc6ffae612aae361a69b",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E097": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_learning_v1/training_review/REVIEW.md",
+      "sha256": "89061afdf1d5d6a5069be37994ca91cd97e447eb713a6e9a542f2620662d3e12",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
+  "manuscript_evidence_references": [
+    "E001",
+    "E002",
+    "E003",
+    "E008",
+    "E011",
+    "E012",
+    "E014",
+    "E015",
+    "E016",
+    "E017",
+    "E018",
+    "E021",
+    "E022",
+    "E023",
+    "E028",
+    "E029",
+    "E030",
+    "E031",
+    "E035",
+    "E038",
+    "E039",
+    "E040",
+    "E041",
+    "E042",
+    "E043",
+    "E044",
+    "E045",
+    "E046",
+    "E049",
+    "E050",
+    "E061",
+    "E062",
+    "E063",
+    "E064",
+    "E065",
+    "E068",
+    "E069",
+    "E070",
+    "E071",
+    "E072",
+    "E073",
+    "E074",
+    "E075",
+    "E076",
+    "E077",
+    "E078",
+    "E079",
+    "E080",
+    "E081",
+    "E082",
+    "E083",
+    "E084",
+    "E085",
+    "E086",
+    "E087",
+    "E088",
+    "E089",
+    "E090",
+    "E091",
+    "E092",
+    "E093",
+    "E094",
+    "E095",
+    "E096",
+    "E097"
+  ],
   "claims_from_readback": [
     {
       "id": "C001",
@@ -596,7 +729,7 @@
     "sha256": "995f7538564ef7704e14cce959591c37b053a4df6daadf5388440d20a22e68b8",
     "role": "Full historical evidence narrative; current research decisions remain in the shared ledger"
   },
-  "image_role": "Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments",
+  "image_role": "Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments",
   "figures": {
     "figures/control_architecture.pdf": "30d824409279ca07804f1688ae9e9d190c923b5df5b1532b357b67b0e64ab0c8",
     "figures/control_architecture.png": "f86e4763fa2d1f24d6e4270df3df85abc17259218e3177b76316e6c0bc2e2f2e",
