@@ -21,6 +21,11 @@ def audit(root,output):
     import jax
     initial=root/'evaluation/initial_carry.pkl'
     with initial.open('rb') as f:carry=pickle.load(f)
+    continuation=p.get('mode')=='h75_switching_continuation'
+    resumed=carry if continuation else None
+    if continuation:
+        failed_source=Path(p['continuation_source']['source'])
+        with (failed_source/'evaluation/initial_carry.pkl').open('rb') as f:carry=pickle.load(f)
     source_bank=Path(p['initial_source']['prepared_bank'])
     if hashlib.sha256(source_bank.read_bytes()).hexdigest()!=p['initial_source']['prepared_bank_sha256']:
         raise ValueError('original complete prepared bank identity drift')
@@ -35,8 +40,8 @@ def audit(root,output):
             if strict_dtype and actual.dtype!=expected.dtype:raise ValueError('initial dtype mismatch '+label)
             if not np.array_equal(actual,expected,equal_nan=True):
                 raise ValueError('initial dynamic leaf mismatch '+label)
-    switching=p.get('mode')=='h75_channel_switching'
-    response=p.get('mode') in ('h75_channel_response','h75_channel_switching')
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation')
+    response=p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation')
     count=len(cases)
     if count!=(36 if switching else 54 if response else 80):raise ValueError('declared initial inventory size mismatch')
     state=carry.state
@@ -81,24 +86,46 @@ def audit(root,output):
         task1=root/'evaluation/task1_complete_carry.pkl'
         with task1.open('rb') as f:captured=pickle.load(f)
         np.testing.assert_array_equal(captured.state.tick,np.full(count,200))
-        capture_groups={}
+        capture_groups={};capture_differences=[]
+        if continuation:
+            with (failed_source/'evaluation/task1_complete_carry.pkl').open('rb') as f:saved=pickle.load(f)
+            expected=jax.tree.map(jax.numpy.asarray,saved)
+            equal(resumed,expected,'own saved task1 continuation',strict_dtype=True)
+            equal(captured,resumed,'saved task1 vs resumed initial',strict_dtype=True)
         for i,c in enumerate(cases):
             key=(c['route'],c['origin']);lane=jax.tree.map(lambda x:x[i],captured)
-            if key in capture_groups:equal(lane,capture_groups[key],str(key)+' task1',strict_dtype=True)
+            if key in capture_groups:
+                if not continuation:equal(lane,capture_groups[key],str(key)+' task1',strict_dtype=True)
+                else:
+                    aa,ta=jax.tree.flatten(lane);bb,tb=jax.tree.flatten(capture_groups[key])
+                    if ta!=tb:raise ValueError('continuation group structure differs')
+                    differences=[]
+                    for leaf,(a,b) in enumerate(zip(aa,bb)):
+                        a=np.asarray(a);b=np.asarray(b)
+                        if a.dtype!=b.dtype or a.shape!=b.shape:raise ValueError('continuation group dtype/shape differs')
+                        delta=float(np.max(np.abs(a.astype(float)-b.astype(float)))) if a.size else 0.
+                        if delta or not np.array_equal(a,b,equal_nan=True):differences.append(dict(leaf=leaf,maximum_absolute_difference=delta,dtype=str(a.dtype)))
+                    capture_differences.append(dict(group=list(key),lane=i,differing_leaves=differences))
             else:capture_groups[key]=lane
         if len(capture_groups)!=4:raise ValueError('four complete task1 source groups required')
         with np.load(root/'evaluation/task1_host_state.npz') as z:
             for field in z.files:
-                groups={}
+                host_groups={}
                 for i,c in enumerate(cases):
                     key=(c['route'],c['origin'])
-                    if key in groups:np.testing.assert_array_equal(z[field][i],groups[key])
-                    else:groups[key]=z[field][i]
+                    if key in host_groups and not continuation:np.testing.assert_array_equal(z[field][i],host_groups[key])
+                    else:host_groups[key]=z[field][i]
+        if continuation:
+            with np.load(root/'evaluation/task1_host_state.npz') as actual,np.load(failed_source/'evaluation/task1_host_state.npz') as original:
+                for field in original.files:np.testing.assert_array_equal(actual[field],original[field])
         capture=json.loads((root/'evaluation/task1_capture_receipt.json').read_text())
-        if capture.get('groups')!=4 or capture.get('lanes_per_group')!=9 or not capture.get('all_leaves_exact') or capture.get('leaf_count')!=len(jax.tree.leaves(captured)):
-            raise ValueError('task1 full-carry host receipt mismatch')
-        prefix=capture['stay_prefix']
-        if not prefix.get('all_fields_within_tolerance') or not prefix.get('discrete_exact'):raise ValueError('task1 stay-prefix receipt mismatch')
+        if continuation:
+            if not capture.get('all_saved_leaves_preserved'):raise ValueError('own saved continuation receipt missing')
+        else:
+            if capture.get('groups')!=4 or capture.get('lanes_per_group')!=9 or not capture.get('all_leaves_exact') or capture.get('leaf_count')!=len(jax.tree.leaves(captured)):
+                raise ValueError('task1 full-carry host receipt mismatch')
+            prefix=capture['stay_prefix']
+            if not prefix.get('all_fields_within_tolerance') or not prefix.get('discrete_exact'):raise ValueError('task1 stay-prefix receipt mismatch')
         stay=Path(p['stay_source']);stay_initial=stay/'evaluation/initial_carry.pkl'
         receipt=json.loads((stay/'analysis/receipt.json').read_text())
         if hashlib.sha256(stay_initial.read_bytes()).hexdigest()!=receipt['initial_carry_sha256']:raise ValueError('stay initial carry differs from recorded source analysis')
@@ -111,7 +138,9 @@ def audit(root,output):
             equal(actual,expected.replace(domain_exit=np.asarray(False)),f'cached stay native initial lane{i}',strict_dtype=True)
         cached_filtered=np.asarray(cached.state.filtered).tolist();cached_offsets=np.asarray(cached.state.offsets).tolist()
         switch_review=dict(task1_complete_carry_sha256=hashlib.sha256(task1.read_bytes()).hexdigest(),
-            groups=4,lanes_per_group=9,complete_carry_leaves_exact=True,host_state_groups_exact=True,
+            groups=4,lanes_per_group=9,complete_carry_leaves_exact=not continuation,host_state_groups_exact=not continuation,
+            all_own_saved_leaves_preserved=continuation,approximate_group_differences=capture_differences,
+            numerical_amendment=p['protocol'].get('numerical_amendment'),
             task1_before_planning_and_switch=True,stay_initial_carry_sha256=receipt['initial_carry_sha256'])
     loaded={}
     for name,module in tuple(sys.modules.items()):
@@ -125,7 +154,8 @@ def audit(root,output):
         physical_tick=int(snapshot.physical_tick),native_only_modules=loaded,
         complete_matched_method_pairs=pairs,matched_groups=len(groups),
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
-        task_ticks_zero=True,original_alpha_checked=True,prepared_physical_fields_checked=True,prepared_physical_lanes_checked=count,
+        task_ticks_zero=not continuation,resume_task_tick=200 if continuation else 0,
+        initial_filter_scope='Original source task0 for fullH10 raw reconstruction; resumed task1 state separately preserved' if continuation else 'Task0 initial state',original_alpha_checked=True,prepared_physical_fields_checked=True,prepared_physical_lanes_checked=count,
         excluded_native_reset_fields=['raw','reference_pose','yaw_wrapped','yaw_unwrapped'],
         source_dtype_semantics='Prepared-bank leaves converted to actual loaded leaf dtypes, as in native j.asarray loader; matched-method comparisons exact without casts',
         switching_capture=switch_review,cached_initial_filtered=cached_filtered,cached_initial_offsets=cached_offsets,

@@ -12,6 +12,7 @@ if __name__=='__main__':
     parser.add_argument('--source',type=Path,default=Path('runs/native_zero_preference_v1'))
     parser.add_argument('--mode',choices=['legacy','h75_channel_response','h75_channel_switching','h75_switching_continuation'],default='legacy')
     parser.add_argument('--protocol',type=Path,default=None)
+    parser.add_argument('--charged-source',type=Path)
     args=parser.parse_args()
     if args.protocol is None:args.protocol=Path('learning/configs/h75_switching_continuation.json' if args.mode=='h75_switching_continuation' else 'learning/configs/h75_channel_switching.json' if args.mode=='h75_channel_switching' else 'learning/configs/h75_channel_response.json')
     file=Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_run.py'
@@ -19,7 +20,7 @@ if __name__=='__main__':
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     try:
         if args.stage=='prepare':
-            if args.mode=='h75_switching_continuation':module.prepare_continuation(args.source,args.root,args.protocol)
+            if args.mode=='h75_switching_continuation':module.prepare_continuation(args.source,args.root,args.protocol,charged_source=args.charged_source)
             elif args.mode=='h75_channel_switching':module.prepare_switching(args.source,args.root,args.protocol)
             elif args.mode=='h75_channel_response':module.prepare_response(args.source,args.root,args.protocol)
             else:module.prepare(args.source,args.root)

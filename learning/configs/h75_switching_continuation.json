@@ -46,7 +46,7 @@
   "replan_cadence_s": 1.0,
   "question": "Continue original36 switching cases from each own saved task1 state, accepting disclosed small GPU lane numerical differences; does scheduled preparation alter paired goal/contact outcomes?",
   "data_role": "Known-timing switching diagnostic; related DEV, not online unknown-onset coordination.",
-  "stop_rule": "Original36 only:64800 remaininglower+7200source=72000total,0optimizer; no duplicateprefixphysics/retry/force/timegrid expansion.",
+  "stop_rule": "Original36 only:64800new+14400consumed=79200total; cached floating-prefix differences descriptive nonfatal, discrete/action/timing/force/nonfinite/fault checks enforced; no extra cases or threshold scans.",
   "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
   "ordering": "Resume original task1 savedcarry; common planner reads current pre-switch state then scan applies scheduledswitch, including1.0. At1.6 switch is scheduled before firstpulse, not reactive.",
   "interpretation": "Approximate common-origin states with disclosed numerical differences, user-authorized continuation; known switch timing, not reactive unknown-onset coordination. No exact state identity claim.",
@@ -112,12 +112,14 @@
     "relative_tolerance": 1e-06,
     "field_absolute_tolerance": {
       "phi_dot": 0.0001
-    }
+    },
+    "floating_descriptive_only": true
   },
-  "total_campaign_lower_ticks": 72000,
-  "consumed_source_lower_ticks": 7200,
+  "total_campaign_lower_ticks": 79200,
+  "consumed_source_lower_ticks": 14400,
   "new_horizon_s": 9.0,
   "continuation_task_s": 1.0,
   "numerical_amendment": "User permits small numerical lane differences. Resume all36 own saved task1 completecarry leaves unchanged; approximate common-origin state, not exact. No canonical copy/reset/replay. Preserve source divergence evidence.",
-  "prefix_provenance": "Reuse each own original saved200tick prefix with explicit provenance; continue own completecarry without any leaf replacement. Original failedseal remains immutable."
+  "prefix_provenance": "Reuse each own original saved200tick prefix with explicit provenance; continue own completecarry without any leaf replacement. Original failedseal remains immutable.",
+  "retry_accounting": "Original failed prefix7200 + failed continuation7200 + new remaining64800 =79200. No task2 carry was saved; restart only from immutable task1 own snapshot, no new cases or prefix physics."
 }

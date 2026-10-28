@@ -169,7 +169,7 @@ def test_continuation_keeps_original36_inventory_and_counts_only_remaining_physi
     p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_switching_continuation.json').read_text())
     assert continuation_inventory(p)==switching_inventory(switching_protocol())
     assert p['maximum_lower_ticks']==36*9*200
-    assert p['maximum_lower_ticks']+p['consumed_source_lower_ticks']==72000
+    assert p['maximum_lower_ticks']+p['consumed_source_lower_ticks']==79200
     assert p['prefix_comparison']['field_absolute_tolerance']=={'phi_dot':1e-4}
 
 
@@ -193,3 +193,18 @@ def test_schedule_audit_checks_world_y_force_sign_and_declared_interval():
     logs['applied_force_impulse'][0,0,1]=.32
     with pytest.raises(ValueError,match='sign/timing'):
         audit_scheduled_pairs(logs,cases)
+
+
+def test_descriptive_float_prefix_reports_exceedance_but_still_rejects_discrete(tmp_path):
+    from sttw_control.native_goal_run import audit_stay_prefix
+    import pytest
+    file=tmp_path/'stay.npz';np.savez(file,time=np.arange(4)*.005,phi=np.zeros(4),active_tick=np.ones(4,bool))
+    cases=[dict(route='S',origin='fixed1',force_N=0.)];cache=[dict(cases[0],raw_file=str(file))]
+    logs=dict(time=(np.arange(4)*.005)[:,None],phi=np.full((4,1),.01),active_tick=np.ones((4,1),bool))
+    protocol=dict(prefix_comparison=dict(fields=list(logs),absolute_tolerance=1e-5,relative_tolerance=1e-6,floating_descriptive_only=True))
+    r=audit_stay_prefix(logs,cases,cache,protocol)
+    assert not r['all_fields_within_tolerance'] and r['exceeded_lane_field_counts']=={'phi':1}
+    assert r['maximum_absolute_difference']['phi']==.01
+    logs['active_tick'][0,0]=False
+    with pytest.raises(ValueError,match='prefix mismatch'):
+        audit_stay_prefix(logs,cases,cache,protocol)

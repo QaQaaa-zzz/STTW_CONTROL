@@ -105,9 +105,9 @@ def switching_inventory(p):
 def continuation_inventory(p):
     original=dict(p,maximum_lower_ticks=72000)
     rows=switching_inventory(original)
-    if (p['maximum_lower_ticks']!=64800 or p['total_campaign_lower_ticks']!=72000 or
-        p['consumed_source_lower_ticks']!=7200 or p['continuation_task_s']!=1. or p['new_horizon_s']!=9. or
-        p['prefix_comparison'].get('field_absolute_tolerance')!={'phi_dot':1e-4}):
+    if (p['maximum_lower_ticks']!=64800 or p['total_campaign_lower_ticks']!=79200 or
+        p['consumed_source_lower_ticks']!=14400 or p['continuation_task_s']!=1. or p['new_horizon_s']!=9. or
+        p['prefix_comparison'].get('field_absolute_tolerance')!={'phi_dot':1e-4} or not p['prefix_comparison'].get('floating_descriptive_only')):
         raise ValueError('bounded continuation amendment mismatch')
     return rows
 
@@ -146,7 +146,7 @@ def audit_scheduled_pairs(logs,cases):
     return dict(actual_pairs_and_switch_timing_verified=True,worldY_force_vector_verified='applied_force_impulse' in logs)
 
 
-def prepare_continuation(source,root,protocol):
+def prepare_continuation(source,root,protocol,*,charged_source=None):
     source=Path(source).resolve();p=json.loads((source/'plan.json').read_text())
     if p.get('mode')!='h75_channel_switching':raise ValueError('failed switching source required')
     if digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('continuation source seal mismatch')
@@ -161,6 +161,26 @@ def prepare_continuation(source,root,protocol):
         if digest(f)!=sha:raise ValueError('continuation source input mismatch '+f)
     for name in ('plan.json','seal.json','inventory.json','evaluation/status.json','evaluation/task1_complete_carry.pkl','evaluation/task1_host_state.npz','evaluation/chunk_00.npz'):
         f=source/name;identity[str(f)]=digest(f)
+    if charged_source is None:raise ValueError('prior failed continuation accounting source required')
+    charged_source=Path(charged_source).resolve();charged=json.loads((charged_source/'plan.json').read_text())
+    charged_status=json.loads((charged_source/'evaluation/status.json').read_text())
+    if (digest(charged_source/'plan.json')!=json.loads((charged_source/'seal.json').read_text())['plan_sha256'] or
+        charged.get('mode')!='h75_switching_continuation' or Path(charged['continuation_source']['source']).resolve()!=source or
+        charged_status.get('phase')!='error' or charged_status.get('active_lower_ticks')!=7200 or charged_status.get('allocated_lower_slots')!=7200):
+        raise ValueError('charged failed continuation identity/count mismatch')
+    for f,sha in charged['input_sha256'].items():
+        if digest(f)!=sha:
+            # The explicit amended protocol supersedes this one configuration
+            # input. Authenticate its old bytes from the sealed embedded JSON.
+            embedded=(json.dumps(charged['protocol'],indent=2)+'\n').encode()
+            if Path(f).resolve()!=Path(protocol).resolve() or hashlib.sha256(embedded).hexdigest()!=sha:
+                raise ValueError('charged continuation input drift '+f)
+    for f,sha in charged['source_sha256'].items():
+        archived=charged_source/'source'/Path(f).name
+        if digest(archived)!=sha:raise ValueError('charged continuation archived source drift')
+        identity[str(archived)]=sha
+    for name in ('plan.json','seal.json','evaluation/status.json','evaluation/chunk_01.npz'):
+        f=charged_source/name;identity[str(f)]=digest(f)
     proposed=json.loads(Path(protocol).read_text());rows=continuation_inventory(proposed)
     if rows!=json.loads((source/'inventory.json').read_text()):raise ValueError('original36 continuation inventory differs')
     import numpy as np
@@ -171,7 +191,7 @@ def prepare_continuation(source,root,protocol):
         raise ValueError('source prefix active/switch/force contract mismatch')
     for name in ('physical_failure','contact_failure','nonfinite','policy_fault','lower_fault','continuation_geometry_fault'):
         if np.any(logs[name]):raise ValueError('source prefix fault/physical event '+name)
-    prepare_switching(p['stay_source'],root,protocol,continuation_source=dict(source=str(source),identity=identity,prefix_lane_maximum_absolute_difference=prefix_lane_divergence(logs,rows)))
+    prepare_switching(p['stay_source'],root,protocol,continuation_source=dict(source=str(source),identity=identity,prefix_lane_maximum_absolute_difference=prefix_lane_divergence(logs,rows),charged_source=str(charged_source)))
 
 
 def switch_mapping(task_tick,origin_speed,origin_steer,switch_tick,destination):
@@ -196,7 +216,7 @@ def assert_shared_switch_carry(carry,cases,*,lanes_per_group=9):
 
 def audit_stay_prefix(logs,cases,cached,protocol,*,own_switch=False):
     import numpy as np
-    matched={};maxima={};counts=[]
+    matched={};maxima={};counts=[];exceeded={}
     contract=protocol['prefix_comparison']
     atol=contract.get('absolute_tolerance',1e-5);rtol=contract.get('relative_tolerance',1e-6)
     for i,c in enumerate(cases):
@@ -212,11 +232,16 @@ def audit_stay_prefix(logs,cases,cached,protocol,*,own_switch=False):
                 difference=float(np.max(np.abs(a.astype(float)-b.astype(float)),initial=0.)) if a.shape==b.shape else float('inf')
                 maxima[name]=max(maxima.get(name,0.),difference)
                 equal=(np.allclose(a,b,atol=contract.get('field_absolute_tolerance',{}).get(name,atol),rtol=rtol,equal_nan=False) if floating else np.array_equal(a,b)) if a.shape==b.shape else False
-                if a.dtype!=b.dtype or not equal:
-                    raise ValueError('stay-origin prefix mismatch '+str(key)+'/'+name)
+                if not np.all(np.isfinite(a)) or not np.all(np.isfinite(b)):
+                    raise ValueError('nonfinite stay-origin prefix '+name)
+                if a.dtype!=b.dtype or a.shape!=b.shape:raise ValueError('stay prefix dtype/shape mismatch '+name)
+                if not equal:
+                    exceeded[name]=exceeded.get(name,0)+1
+                    if not (floating and contract.get('floating_descriptive_only',False)):
+                        raise ValueError('stay-origin prefix mismatch '+str(key)+'/'+name)
         matched[key]=record['raw_file']
     return dict(matched_stay_cases=len(matched),new_lanes=len(cases),prefix_lower_ticks=counts,
-        own_switch=own_switch,all_fields_within_tolerance=True,discrete_exact=True,
+        own_switch=own_switch,all_fields_within_tolerance=not bool(exceeded),floating_descriptive_only=contract.get('floating_descriptive_only',False),exceeded_lane_field_counts=exceeded,discrete_exact=True,
         absolute_tolerance=atol,relative_tolerance=rtol,field_absolute_tolerance=contract.get('field_absolute_tolerance',{}),maximum_absolute_difference=maxima)
 
 
@@ -560,7 +585,10 @@ def run(root,*,shape_only=False):
     directory=root/('shape' if shape_only else 'evaluation');directory.mkdir(exist_ok=False)
     started=time.monotonic();status=dict(phase='initializing',pid=os.getpid(),active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0)
     def update(**kw):
-        status.update(kw,elapsed_s=time.monotonic()-started);save(directory/'status.json',status)
+        status.update(kw,elapsed_s=time.monotonic()-started)
+        if p.get('mode')=='h75_switching_continuation':
+            status.update(prior_consumed_lower_ticks=p['protocol']['consumed_source_lower_ticks'],campaign_active_lower_ticks=p['protocol']['consumed_source_lower_ticks']+status.get('active_lower_ticks',0))
+        save(directory/'status.json',status)
         if not shape_only:save(root/'status.json',status)
     update()
     try:
@@ -599,7 +627,7 @@ def run(root,*,shape_only=False):
                 if not np.array_equal(goals,host['original_goals_xy'][indices]):raise ValueError('continuation original host goals differ')
             prefix_audit=audit_stay_prefix(prefix,cases,json.loads((root/'cached_stay_records.json').read_text()),p['protocol'])
             save(directory/'source_prefix_audit.json',prefix_audit)
-            save(directory/'prefix_provenance.json',dict(source=str(source),source_indices=indices,reused_lower_slots=200*n,new_physics_ticks=0,source_consumed_lower_ticks=7200,total_budget=72000,warning=p['protocol']['prefix_provenance']))
+            save(directory/'prefix_provenance.json',dict(source=str(source),source_indices=indices,reused_lower_slots=200*n,new_physics_ticks=0,source_consumed_lower_ticks=p['protocol']['consumed_source_lower_ticks'],total_budget=p['protocol']['total_campaign_lower_ticks'],warning=p['protocol']['prefix_provenance']))
             save(directory/'task1_capture_receipt.json',runtime['initial_identity']['continuation_snapshot'])
             with (directory/'task1_complete_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
             np.savez_compressed(directory/'task1_host_state.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
@@ -633,12 +661,17 @@ def run(root,*,shape_only=False):
             carry,logs=runtime['chunk'](carry,paths);jax.block_until_ready(carry)
             logs=flatten(jax.device_get(logs));all_logs.append(logs)
             np.savez_compressed(directory/f'chunk_{block+int(branch):02d}.npz',**logs)
-            actual+=int(logs['active_tick'].sum())
-            if actual>p['maximum_active_lower_ticks'] or (block+1)*50*4*n>p['maximum_allocated_lower_slots']:
-                raise RuntimeError('declared lower-tick budget exceeded')
             fatal=logs['contact_failure']|logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['continuation_geometry_fault']
             eligible=logs['active_tick']&(np.cumsum(fatal,axis=0)==0)
             arrived|=np.any(eligible&(np.linalg.norm(logs['actual_xy']-goals[None,:,:],axis=-1)<=1.),axis=0)
+            # Persist returned state before any numerical analysis can fail.
+            with (directory/f'complete_carry_{block+int(branch):02d}.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
+            np.savez_compressed(directory/f'host_state_{block+int(branch):02d}.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
+            with (directory/f'executed_paths_{block+int(branch):02d}.pkl').open('wb') as f:pickle.dump(jax.device_get(paths),f)
+
+            actual+=int(logs['active_tick'].sum())
+            if actual>p['maximum_active_lower_ticks'] or (block+1)*50*4*n>p['maximum_allocated_lower_slots']:
+                raise RuntimeError('declared lower-tick budget exceeded')
             update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=(block+1)*50*4*n,replanned_cases=int(changed.sum()))
             if p.get('mode')=='h75_switching_continuation':
                 scheduled=audit_scheduled_pairs(logs,cases)

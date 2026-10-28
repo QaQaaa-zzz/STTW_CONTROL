@@ -21,7 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -413,19 +413,44 @@ def audit_switch_prefixes(rows,raws,protocol):
         other=stays[r['route'],r['origin'],r['event']];raw=raws[r['case_id']];old=raws[other['case_id']]
         tick=round(r['switch_s']/.005)
         if not np.asarray(raw['active_tick'][:tick]).all() or not np.asarray(old['active_tick'][:tick]).all():raise ValueError('complete physical prefix to switch required')
-        maximum={}
+        maximum={};exceeded={}
+        descriptive=protocol['prefix_comparison'].get('floating_descriptive_only',False)
         for field in protocol['prefix_comparison']['fields']:
             a=np.asarray(raw[field][:tick]);b=np.asarray(old[field][:tick])
             if a.dtype!=b.dtype or a.shape!=b.shape:raise ValueError('own-switch prefix dtype/shape mismatch '+field)
             maximum[field]=float(np.max(np.abs(a.astype(float)-b.astype(float)))) if a.size else 0.
             if np.issubdtype(a.dtype,np.inexact):
                 if not np.isfinite(a).all() or not np.isfinite(b).all():raise ValueError('nonfinite switch prefix '+field)
-                np.testing.assert_allclose(a,b,atol=protocol['prefix_comparison']['absolute_tolerance'],rtol=protocol['prefix_comparison']['relative_tolerance'],err_msg='own-switch stay prefix mismatch '+field)
+                atol=protocol['prefix_comparison'].get('field_absolute_tolerance',{}).get(field,protocol['prefix_comparison']['absolute_tolerance'])
+                outside=~np.isclose(a,b,atol=atol,rtol=protocol['prefix_comparison']['relative_tolerance'])
+                if np.any(outside):exceeded[field]=int(outside.sum())
+                if not descriptive:np.testing.assert_allclose(a,b,atol=atol,rtol=protocol['prefix_comparison']['relative_tolerance'],err_msg='own-switch stay prefix mismatch '+field)
             else:np.testing.assert_array_equal(a,b,err_msg='own-switch discrete prefix mismatch '+field)
         result.append(dict(case_id=r['case_id'],stay_case_id=other['case_id'],physical_prefix_ticks=tick,
-            switch_task_s=r['switch_s'],floating_fields_within_declared_tolerance=True,discrete_fields_exact=True,maximum_absolute_difference=maximum,fields=protocol['prefix_comparison']['fields']))
+            switch_task_s=r['switch_s'],floating_fields_within_declared_tolerance=not bool(exceeded),floating_descriptive_only=descriptive,tolerance_exceedance_element_counts=exceeded,discrete_fields_exact=True,maximum_absolute_difference=maximum,fields=protocol['prefix_comparison']['fields']))
     if len(result)!=36:raise ValueError('all36 own-switch prefixes required')
     return result
+
+
+def audit_continuation_prefix(root,p,rows,raws):
+    """Each lane keeps its own authenticated source history, without replay."""
+    source=Path(p['continuation_source']['source']);run=root/'evaluation'
+    provenance=json.loads((run/'prefix_provenance.json').read_text())
+    if provenance['source']!=str(source) or provenance['source_indices']!=list(range(36)) or provenance['reused_lower_slots']!=7200 or provenance['new_physics_ticks']!=0:
+        raise ValueError('own-source prefix provenance mismatch')
+    new=[r for r in rows if r['mode'].startswith('switch_')]
+    if len(new)!=36:raise ValueError('36 own-source prefixes required')
+    with np.load(source/'evaluation/chunk_00.npz') as original,np.load(run/'reused_source_prefix.npz') as reused:
+        if set(original.files)!=set(reused.files):raise ValueError('reused own-prefix fields differ')
+        for field in original.files:
+            np.testing.assert_array_equal(reused[field],original[field],err_msg='own source prefix was changed')
+            for lane,row in enumerate(new):
+                np.testing.assert_array_equal(raws[row['case_id']][field][:200],original[field][:,lane],err_msg='case history differs from own source prefix')
+    receipt=json.loads((run/'source_prefix_audit.json').read_text())
+    if not receipt.get('discrete_exact') or (not receipt.get('all_fields_within_tolerance') and not (p['protocol']['prefix_comparison'].get('floating_descriptive_only') and receipt.get('floating_descriptive_only'))):raise ValueError('source-prefix stay audit incomplete')
+    return dict(source=str(source),source_indices=list(range(36)),own_prefix_ticks=200,reused_lower_ticks=7200,
+                all_reused_source_fields_exact=True,new_physics_steps=0,
+                interpretation='Own source prefixes are exact; cross-lane origin states are only approximately matched under the user-authorized amendment.')
 
 
 def switching_summary(rows):
@@ -475,7 +500,8 @@ def response_plot_selection(rows,label):
 
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
-    switching=p.get('mode')=='h75_channel_switching';count=36 if switching else 54
+    continuation=p.get('mode')=='h75_switching_continuation'
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
         raise ValueError(f'complete declared{count} H10 cases required')
@@ -587,15 +613,16 @@ def analyze_response(root,p):
                        diagnostic_execution_path_user1_cumulative_components=np.cumsum(rebuilt[c['case_id']]['user1_running_components'],axis=0),
                        reconstructed_reward_components=rebuilt[c['case_id']]['running_components'],cumulative_reward_components=np.cumsum(rebuilt[c['case_id']]['running_components'],axis=0),terminal_adjustment=rebuilt[c['case_id']]['terminal_adjustment'])
         np.savez_compressed(out/f'case_{i:02d}_diagnostics.npz',**numeric)
-    if ticks!=status['active_lower_ticks']:raise ValueError('raw tick charge mismatch')
+    if ticks-(7200 if continuation else 0)!=status['active_lower_ticks']:raise ValueError('raw tick charge mismatch')
+    reused_prefix_proof=audit_continuation_prefix(root,p,rows,raws) if continuation else None
     prefix_proof=audit_switch_prefixes(rows,raws,p['protocol']) if switching else None
     if switching:
         prefix_receipt=json.loads((run/'own_switch_prefix_receipt.json').read_text())
-        if not prefix_receipt.get('own_switch') or not prefix_receipt.get('all_fields_within_tolerance') or not prefix_receipt.get('discrete_exact'):
+        if not prefix_receipt.get('own_switch') or not prefix_receipt.get('discrete_exact') or (not prefix_receipt.get('all_fields_within_tolerance') and not (p['protocol']['prefix_comparison'].get('floating_descriptive_only') and prefix_receipt.get('floating_descriptive_only'))):
             raise ValueError('runner own-switch prefix receipt incomplete')
     summary,paired=switching_summary(rows) if switching else response_summary(rows)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
-    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,horizons_s=[10],actual_lower_ticks=ticks,new_physics_steps=0,optimizer_updates=0,
+    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
         checked='Raw SHA, full initial audit, config/model/goal/inventory, actual pulse/clock, masked channel composition, correction chain and reconstructed execution-path V3 channels/rewards.',
         limitation='Non-task reward components reused from authenticated raw logs, not independently rederived physics. Original-path distances are descriptive sampled nearest distances; execution-path V3 is not original-user utility after replan.'))
@@ -604,9 +631,11 @@ def analyze_response(root,p):
         '','主终点：原世界目标1m首达；整10s真实触地单列。早期domain仅遥测，不算触地；重规划后不声称严格完成原S。',
         '','相关熟悉DEV、同祖先；无新训练。各法在起扰前已有不同状态，不能把转向通道替换解释为独立于速度的因果效应。']
     if switching:
-        lines=['# H75同完整前缀准备时刻诊断：36新回合＋12原点stay＋6固定.5背景','','所有新回合H10；已知时刻切换不是未知起扰在线方案。任务1s完整状态相同，后续仅按原点配对比较，不声称起扰时状态相同或独立速度/转向因果效应。1.6s切换发生于首个脉冲步之前，不是反应式恢复。',
+        lines=['# H75同完整前缀准备时刻诊断：36新回合＋12原点stay＋6固定.5背景','','所有新回合H10；已知时刻切换不是未知起扰在线方案。任务1s完整状态核验后按原点配对比较，不声称起扰时状态相同或独立速度/转向因果效应。1.6s切换发生于首个脉冲步之前，不是反应式恢复。',
                '','原点stay为同来源同合同物理缓存；固定.5背景从回合初态不同策略演化，不能作为同状态切换对照。主要比较触地挽救及无扰不新增触地/故障/原goal1m损失；不设百分比代价门槛。',
-               '','四个route/origin源组的全部事件和时刻保留。任务1s完整carry和主机状态逐叶核验；各分支至自身真实switch tick的原点前缀按预声明浮点容差匹配，dtype/离散字段精确匹配。']
+               '','四个route/origin源组的全部事件和时刻保留。任务1s完整carry和主机状态逐叶核验；各分支至自身真实switch tick的原点前缀按协议核查并报告浮点差异，dtype/离散字段精确匹配。']
+    if continuation:
+        lines+=['','用户授权数值修订：原36条各自task1完整carry原样续接，未复制代表状态、未reset；同原点状态仅近似匹配。保留原失败封存。此为工程失败后协议修订，不是科学结果调参。与缓存stay的所有有限浮点前缀差异仅描述、不作拒绝门槛；报告max及旧参考容差超出数（phi_dot 1e-4，其余1e-5/rtol1e-6）。非有限量、dtype、离散量、实际动作/时刻/力及故障仍严格核查。完整组差异见initial_carry_review.json。']
     for event in response_plot_groups(rows):
         lines+=['',f'## {event}','',f'![Original and executed XY](full_xy_{event}.png)','',f'![First-arrival prefixes](task_xy_{event}.png)']
     lines+=['','执行路径V3图以相同user1重评分；运行本身alpha评分另行核验并保留。逐步/累计奖励和分项仅为诊断，不是重规划后原用户路径效用。原路线距离与执行路径误差分别保存；全窗距离包含首达后运动，首达/真实失败前缀另列；未完成短窗不能当更低完成代价。',

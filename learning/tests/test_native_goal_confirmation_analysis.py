@@ -265,3 +265,51 @@ def test_switching_render_keeps_each_origin_and_fixed_half_background(tmp_path,m
     assert len(saved)==8
     assert 'full_xy_zero__fixed1.png' in saved and 'full_xy_zero__hybrid.png' in saved
     assert all(len(m.response_plot_selection(rows,label))==5 for label in m.response_plot_groups(rows))
+
+
+def test_continuation_phi_dot_amendment_does_not_relax_other_fields():
+    rows,raws=switching_fixture()
+    for raw in raws.values():raw['phi_dot']=np.zeros(340)
+    protocol=dict(prefix_comparison=dict(fields=['active_tick','actual_xy','phi_dot'],absolute_tolerance=1e-5,
+        relative_tolerance=1e-6,field_absolute_tolerance=dict(phi_dot=1e-4)))
+    candidate=next(r for r in rows if r.get('switch_s')==1.4)
+    raw=raws[candidate['case_id']];raw['phi_dot'][279]=5e-5
+    proof=m.audit_switch_prefixes(rows,raws,protocol)
+    assert len(proof)==36
+    raw['actual_xy'][279,0]=5e-5
+    with pytest.raises(AssertionError,match='stay prefix mismatch'):m.audit_switch_prefixes(rows,raws,protocol)
+
+
+def test_continuation_reuses_each_own_prefix_without_canonical_lane_copy(tmp_path):
+    import json
+    rows,raws=switching_fixture();new=[r for r in rows if r['mode'].startswith('switch_')]
+    source=tmp_path/'failed';run=tmp_path/'resumed';(source/'evaluation').mkdir(parents=True);(run/'evaluation').mkdir(parents=True)
+    arrays=dict(active_tick=np.ones((200,36),bool),time=np.tile(np.arange(200)[:,None]*.005,(1,36)),actual_xy=np.zeros((200,36,2)))
+    for lane,row in enumerate(new):
+        arrays['actual_xy'][:,lane,0]=lane*1e-7
+        for field in arrays:raws[row['case_id']][field][:200]=arrays[field][:,lane]
+    np.savez(source/'evaluation/chunk_00.npz',**arrays);np.savez(run/'evaluation/reused_source_prefix.npz',**arrays)
+    (run/'evaluation/prefix_provenance.json').write_text(json.dumps(dict(source=str(source),source_indices=list(range(36)),reused_lower_slots=7200,new_physics_ticks=0)))
+    (run/'evaluation/source_prefix_audit.json').write_text(json.dumps(dict(all_fields_within_tolerance=True,discrete_exact=True)))
+    plan=dict(continuation_source=dict(source=str(source)),protocol=dict(prefix_comparison={}))
+    assert m.audit_continuation_prefix(run,plan,rows,raws)['all_reused_source_fields_exact']
+    raws[new[1]['case_id']]['actual_xy'][:200]=raws[new[0]['case_id']]['actual_xy'][:200]
+    with pytest.raises(AssertionError,match='own source prefix'):m.audit_continuation_prefix(run,plan,rows,raws)
+
+
+def test_user_authorized_finite_float_prefix_differences_are_descriptive_only():
+    rows,raws=switching_fixture()
+    protocol=dict(prefix_comparison=dict(fields=['active_tick','actual_xy'],absolute_tolerance=1e-5,
+        relative_tolerance=1e-6,floating_descriptive_only=True))
+    candidate=next(r for r in rows if r.get('switch_s')==1.4)
+    raws[candidate['case_id']]['actual_xy'][279,0]=.001
+    proof=m.audit_switch_prefixes(rows,raws,protocol)
+    changed=next(r for r in proof if r['case_id']==candidate['case_id'])
+    assert changed['floating_descriptive_only'] and not changed['floating_fields_within_declared_tolerance']
+    assert changed['tolerance_exceedance_element_counts']==dict(actual_xy=1)
+    assert changed['maximum_absolute_difference']['actual_xy']==.001
+    raws[candidate['case_id']]['actual_xy'][279,0]=np.nan
+    with pytest.raises(ValueError,match='nonfinite switch prefix'):m.audit_switch_prefixes(rows,raws,protocol)
+    raws[candidate['case_id']]['actual_xy'][279,0]=0.
+    raws[candidate['case_id']]['active_tick'][279]=False
+    with pytest.raises(ValueError,match='complete physical prefix'):m.audit_switch_prefixes(rows,raws,protocol)
