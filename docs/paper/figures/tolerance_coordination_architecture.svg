@@ -87,7 +87,7 @@
 <text x="57" y="860" class="heading">State estimation</text>
 <text x="57" y="891" class="body">Pose / speed / roll / steer</text>
 <text x="57" y="917" class="body">Closed-loop history updates</text>
-<text x="57" y="943" class="body">Reset all hidden states</text>
+<text x="57" y="943" class="body">Preserve continuation state</text>
 <path d="M300 150 H350" class="wire"/>
 <path d="M650 150 H700" class="wire"/>
 <path d="M1000 150 H1050" class="wire"/>
