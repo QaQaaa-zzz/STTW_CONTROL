@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "3ee9276f6de6395737100d6b4ecaa62d044f1cad4c7b9fa6a0310dacb55a5380",
-  "builder_sha256": "c703edfa19691cb37ac115af431956311bb3f8ce15281c984360f7eeb406db13",
+  "manuscript_sha256": "466f3b4b52591d13ba95b99d25647e506b4133617f84349739f2406d78f9795e",
+  "builder_sha256": "7dfbc447e2e9c1689eed39cafa1051a880d81014607650ab2fc8f849466bf770",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -833,6 +833,36 @@
       "sha256": "306b534d0f6b036b07433a61d82442903724ad7473ff60babad15ff2b78d9428",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E139": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/plan.json",
+      "sha256": "f78d0350c1430bd1bd6b4e576a7a1ea1dda0c81c136b2538d59881d810ec92bf",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E140": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/evaluation/status.json",
+      "sha256": "a65e8d7816f50264836f09baabeea4d3f94e967a22de85bb75763af1b3872aa0",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E141": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/analysis_late/results.json",
+      "sha256": "cdcb4a8aec50866ea6db3f260dda604106bdc405d5f67679fd5a3065223a5ad3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E142": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/predictor_evaluation/metrics.json",
+      "sha256": "4b2bd909b13eee4c196da422f785f9cd633af4ba4d6cd7c58525c84100b8f74d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E143": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/predictor_evaluation/user_rejection.json",
+      "sha256": "2ea0529a59db0a4db73c9f5a7a32657339fe1c7b5c75e652465e03225fe4fce1",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -941,7 +971,12 @@
     "E135",
     "E136",
     "E137",
-    "E138"
+    "E138",
+    "E139",
+    "E140",
+    "E141",
+    "E142",
+    "E143"
   ],
   "claims_from_readback": [
     {
