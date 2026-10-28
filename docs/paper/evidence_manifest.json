@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "0c20690484f8524cae507b55acbb570115c918850a9a5377960ad1c380f99af7",
-  "builder_sha256": "4774823385e10ef02a6fbe4b80d49b6746f0ebce6b93cd460daa8fcb00956905",
+  "manuscript_sha256": "2917dbfb3871d4e47800b8001ff58b4fb60eabc28f7b1a31e2dad3646257b667",
+  "builder_sha256": "0068bfb0d50e3415c4b2f633beb2a7409c593e282bc7f393d4561175ba843599",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -887,6 +887,36 @@
       "sha256": "b996144bb23e220a412fc01ba8ddb4b7cb7174ca25b6d8dcb2aa89c7ffe4822a",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E148": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/plan.json",
+      "sha256": "6c7d40fb3a4de618770de96c17a1f058b7804b7e7b7b2f4cc8862947046dff31",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E149": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/status.json",
+      "sha256": "08d1c4b78f59948a6d7c892da780c27896e79ea79a48345ac401727fb4f6d440",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E150": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/analysis/root_method_summary.json",
+      "sha256": "42693f93d8e6d599725a95083743c58ef63f877b94fa77570b1a81256cfebf11",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E151": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/analysis/original_task_rescoring/results.json",
+      "sha256": "064d60c133105cf7a60ec50331bda2134a6b58f74aef94214b72fb781ddf1ad0",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E152": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/analysis/root_prearrival_alpha.json",
+      "sha256": "685146dc767b13c0483eabec95259e9297d938b662ef6f9a72eec16665167266",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1004,7 +1034,12 @@
     "E144",
     "E145",
     "E146",
-    "E147"
+    "E147",
+    "E148",
+    "E149",
+    "E150",
+    "E151",
+    "E152"
   ],
   "claims_from_readback": [
     {
