@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh"><meta charset="utf-8"><title>STTW current research draft</title><style>@page{size:A4;margin:16mm}body{font-family:"Noto Sans CJK SC",sans-serif;font-size:10pt;line-height:1.65;color:#243548;max-width:1100px;margin:24px auto}h1{font-size:19pt}h2{font-size:14pt;margin-top:1.4em}h3{font-size:11pt}h1,h2,h3{break-after:avoid}img{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:9pt}th,td{border-bottom:1px solid #ccd5de;padding:5px;vertical-align:top}tr{break-inside:avoid}blockquote{border-left:3px solid #647180;padding:5px 12px;background:#f2f5f7}pre{white-space:pre-wrap;background:#f2f5f7;padding:10px}a{color:#245b80}p{orphans:3;widows:3}@media print{body{margin:0;max-width:none}}</style><body><h1>冻结底层单轨机器人的偏好条件参考控制与闭环抗扰表现</h1>
 <p><strong>Preference Conditioned Reference Control and Closed Loop Disturbance Response of a Single Track Robot with a Frozen Lower Controller</strong></p>
 <blockquote>
-<p>内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。主文按科学问题组织；旧试验和反例保留于<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>，新增证据见主文E087–E131及源报告。普通目标学习、共同重规划和原生S弯筛查均已完成；本稿保留旧名义动态α负结果，并纳入修订后的在线几何原型，新增小型容扰MLP离线试点，尚未接入在线协调。</p>
+<p>内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。主文按科学问题组织；旧试验和反例保留于<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>，新增证据见主文E087–E138及源报告。普通目标学习、共同重规划和原生S弯筛查均已完成；本稿保留旧名义动态α负结果，并纳入修订后的在线几何原型，新增小型容扰MLP离线试点，尚未接入在线协调。</p>
 </blockquote>
 <h2>摘要</h2>
 <p>单轨机器人必须在任务执行中动态保持平衡，路径与速度偏好因而可能同时改变跟踪表现和受扰状态。本文研究冻结ECBC、ESO和local300底层外的偏好条件参考修正，并区分原用户效用、原目标首达与真实触地。已有原生四上下文中，匹配用户偏好的H75端点相对固定中点在8/8相关配对中费用更低；新增原生S弯中，H75严格任务通过10/12，而zero为0/4，但原目标首达分别为10/12与4/4。普通目标学习在另一低速紧弯接口中提高了目标到达；共同确定性重规划进一步改变所有方案的到达结局，不能将其收益归于新网络。一个预先固定参数的名义几何α往返规则仅严格通过3/4，原用户总代价高于固定α=0.5，因而未采用。新增准备时间诊断中，右紧S保持α1会触地，提前0.6秒切至α0.5则不触地且到达，施扰同刻切换仍触地；另有左S提前切换丢失到达的反例。进一步的因果几何预瞻原型在18个熟悉开发条件中到达17例、无触地，相对固定α1新增8例到达并消除1例触地；其二元结局与固定α0.5相同，16/18最终恢复用户α。随后冻结规则的两个准备初态100回合确认中，在线原目标首达18/20，对固定α1为9/20、固定0.5为16/20、固定0和Zero均20/20，全部不触地。该结果复现任务用途但不新增防摔证据；所有新增试验均为相关开发证据，尚无实车验证。按来源划分的首版容扰MLP改善了保留条件的概率评分，但α候选排序尚不稳定，未作为在线安全门使用。旧解析能量式仅作模型解释，不作为真实防摔阈值。[E062–E063,E087–E094,E099–E111,E116–E122]</p>
@@ -532,6 +532,67 @@ C(pi, r; xi, sigma) = { F &gt;= 0 : 完整闭环在[0,H]内无非轮触地 }
 </table>
 <p>bank2两模型均排序4/4，bank5分别4/8和8/8。辅助模型的候选排序收益在新来源复现，但BCE总体概率评分更好，两者没有全面支配关系。按0.5阈值两集成均检出24/30触地、误报0/114不触地，仍漏检6条触地；12/12排序不是安全保证或概率校准。单独优化种子存在明显差异，全部保留，不按本次结果更换种子。[E130–E131]</p>
 <p>本确认只增加两个准备祖先，路线仍是熟悉的左右紧S，全部条件从任务1秒分叉；不能称144个独立状态或全程在线泛化。结果支持保留排序辅助评价器、以BCE为比较进入有界在线协调验证；尚未证明相对固定0.5的自适应存活增量、偏好恢复或在线任务联合收益。不因这些局限继续搜索本次确认集的阈值和权重。完整模型/分bank/分来源指标见<a href="/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/predictor_evaluation/README.md">冻结预测报告</a>。[E130–E131]</p>
+<h2>4.16 冻结容扰评价的在线协调与原路径重评分</h2>
+<p>冻结第4.15节两组三种子集成，在两个准备初态×左右紧S×无扰/两起扰时刻（1.6、3.4秒）×正负64N、0.1秒的20个条件中比较六方法，共120个10秒回合。所有方法共享H75、底层、原参考滤波/权限及一次因果Dubins接回；原世界终点不改变。网络每50Hz查询三个候选α和四种固定假设（正负64N、准备0.2/0.6秒），不读取真实起扰标签。候选同时接受6m完整曲率节点任务检查；无合格候选退化至α=0.5。原网络仅在任务1秒来源训练，全程查询属于状态外推DEV，不称独立确认或安全概率校准。共236871实际lower ticks，0优化更新。[E132–E134]</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th style="text-align: right;">原终点1m首达</th>
+<th style="text-align: right;">10秒触地</th>
+<th style="text-align: right;">偏离后最终返回α_user=1</th>
+<th style="text-align: right;">共同首达前原任务三项代价均值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>排序辅助q</td>
+<td style="text-align: right;">19/20</td>
+<td style="text-align: right;">0/20</td>
+<td style="text-align: right;">9/20</td>
+<td style="text-align: right;">41.00</td>
+</tr>
+<tr>
+<td>BCE q</td>
+<td style="text-align: right;">19/20</td>
+<td style="text-align: right;">0/20</td>
+<td style="text-align: right;">18/20</td>
+<td style="text-align: right;">41.90</td>
+</tr>
+<tr>
+<td>仅任务约束</td>
+<td style="text-align: right;">19/20</td>
+<td style="text-align: right;">0/20</td>
+<td style="text-align: right;">20/20</td>
+<td style="text-align: right;">53.05</td>
+</tr>
+<tr>
+<td>既有几何规则</td>
+<td style="text-align: right;">18/20</td>
+<td style="text-align: right;">0/20</td>
+<td style="text-align: right;">15/20</td>
+<td style="text-align: right;">36.93</td>
+</tr>
+<tr>
+<td>固定α=0.5</td>
+<td style="text-align: right;">19/20</td>
+<td style="text-align: right;">0/20</td>
+<td style="text-align: right;">不适用</td>
+<td style="text-align: right;">37.24</td>
+</tr>
+<tr>
+<td>固定α=1</td>
+<td style="text-align: right;">9/20</td>
+<td style="text-align: right;">2/20</td>
+<td style="text-align: right;">不适用</td>
+<td style="text-align: right;">16.23</td>
+</tr>
+</tbody>
+</table>
+<p>代价采用冻结V3的speed/path/primary三个运行项，沿实际轨迹从task0独立重放固定原路径投影，不随接回重置。全部未接回窗口已对齐原生投影/任务项；每条件六方法取共同观察及共同首达前窗口。该代价不含全局终止替换或全部奖励项，固定α=1的低代价不能抵消其早失败和任务丢失，也不能据此称其最优。首达不是驻停或最终保持。两q及仅任务约束/固定0.5均有一个同条件未达反例；无扰四条件前五方法均4/4到达，固定1为2/4。[E133–E137]</p>
+<p>排序辅助q相对仅任务约束在19/20个条件降低共同首达前原任务三项代价，平均差−12.06；相对固定0.5只在2/20降低，平均差+3.75。因此存在任务过程收益线索，但未显示相对任务约束或固定0.5的额外到达/防摔收益，不能将共同收益全部归因网络。两q仍保留迭代价值，不设巨大优势门槛。[E136–E137]</p>
+<p>偏好恢复是当前具体缺口。排序/BCE q平均退化时长为7.127/6.574秒；几何允许但q拒绝用户α的时长分别3.478/2.092秒。最终返回多发生在首达后：首达前平均用户α时长分别仅0.064/0.631秒，任务约束为1.306秒。排序q在名义左S两个初态均未返回，BCE在四个名义条件均返回。离线候选排序更好不等于在线返回更合适；这些现象提示需检查全程状态上的实际容扰标签与恢复逻辑，但无真实扰动时存活不能直接判定假设扰动评分错误。[E138]</p>
+<p><a href="/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_online120_v1/analysis/README.md">完整20条件XY、逐步/累计奖励和协调诊断</a>保留所有反例；原路径三项与执行路径奖励明确分开。当前支持保留主线、优先改进任务进行中的用户偏好恢复，尚不采用为已验证泛化的最终控制器。</p>
 <h2>5 旧解析式的物理含义与适用限制</h2>
 <p>早期固定速度局部模型采用不稳定模态坐标和折算脉冲：</p>
 <pre><code class="language-text">λ = sqrt(a4),     b = a1 + a2/λ
@@ -546,10 +607,10 @@ E_min(F) = (z + Kτ F)² / W
 <p>偏好网络内部能表达取舍，不等于比所有外部控制器更好；目标首达改善不等于整窗防摔改善；更低侧倾或更小局部能量指标也不等于更大可承受推力。当前证据包括条件性任务收益与准备时间改变真实触地结局的局部效应。控制器不读取真实起扰时刻的几何原型已在熟悉开发条件下验证，第4.11节补充了新准备初态和起扰时刻的有限确认，仍不提供普遍安全保证。</p>
 <p>任务和系统研究可以形成论文贡献，不要求凭空发明全新算法，但必须明确相邻工作未回答的具体问题，并提供对应证据。准备时间试验给出了具体控制效应，但本稿仍需完成在线机制、适用范围及独立确认；大量相关DEV轨迹、不同栈正例或AI审查均不能替代独立确认。已有训练重复若配方不同，不能当同方法重复；当前实机部署未开始，不能补写硬件、作者、资助或审批事实。</p>
 <p>用户已明确原终点首达的重要性，并要求受扰后共同接回。原整窗V3含首达后跟踪费用，首达前费用和执行新路径费用各有不同用途，不能事后互换以改变排序。普通目标学习与共同接回已完成，前者有本DEV到达收益，后者也带来部分回退；均未提供本组防摔增量。原生S弯进一步显示固定中间偏好是强对照，当前名义往返规则未超过它。[E087–E094]</p>
-<p>以TCST为目标，现阶段应保留“偏好执行时序是否改变闭环容扰能力”的研究问题，而不能把“小型容扰MLP必不可少”当既定答案。第4.9–4.10节已提供准备时间和因果在线原型的局部证据；第4.11节已完成冻结规则的新初态/时刻五臂确认；第4.12节同态试采已获得正负标签及候选α差异；第4.13节首版预测试点概率评分改善但候选排序不稳定；第4.14节排序辅助及checkpoint选择对照改善了开发排序，第4.15节封存候选的新来源确认复现了排序用途但未验证在线协调；不能把同源条件数冒充独立状态覆盖。必要的固定偏好和速度支持对照用于定位增量，不把穷尽简单方案或巨大百分比优势作为研究门槛。原状态、候选α、扰动方向/持续时间及准备时间条件下的预测不触地概率是待研究对象；已训练首版小网络，但未验证基于该预测器的在线协调；第4.10节只验证了几何规则原型。若未来普通控制已覆盖收益，应缩减方法主张；若发现剩余机会，应先用有界机制试验区分参考时序、状态变化和任务接回效应，而不是恢复已关闭的参数搜索。[E092–E094]</p>
+<p>以TCST为目标，现阶段应保留“偏好执行时序是否改变闭环容扰能力”的研究问题，而不能把“小型容扰MLP必不可少”当既定答案。第4.9–4.10节已提供准备时间和因果在线原型的局部证据；第4.11节已完成冻结规则的新初态/时刻五臂确认；第4.12节同态试采已获得正负标签及候选α差异；第4.13节首版预测试点概率评分改善但候选排序不稳定；第4.14节排序辅助及checkpoint选择对照改善了开发排序，第4.15节封存候选的新来源确认复现了排序用途，第4.16节已完成120回合在线协调并发现返回偏好过于保守；不能把同源条件数冒充独立状态覆盖。必要的固定偏好和速度支持对照用于定位增量，不把穷尽简单方案或巨大百分比优势作为研究门槛。原状态、候选α、扰动方向/持续时间及准备时间条件下的预测不触地概率是待研究对象；已完成首版小网络及在线原型验证，但尚缺全时域容扰标签、任务期间及时返回及更广场景确认；第4.10节的几何规则与第4.16节学习评价器必须区分。若未来普通控制已覆盖收益，应缩减方法主张；若发现剩余机会，应先用有界机制试验区分参考时序、状态变化和任务接回效应，而不是恢复已关闭的参数搜索。[E092–E094]</p>
 <h2>7 证据可追溯性与完整记录</h2>
-<p>主文全部E编号对应<a href="evidence_manifest.json">evidence_manifest.json</a>的原始路径与SHA；旧试验的目的、配置、费用和反例在<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>保留；本次新增试验直接引用E087–E131及第4.6–4.15节的源报告，未假称旧明细已包含新结果。该明细是历史证据索引，唯一当前研究事实与下一步仍在共享研究台账。本文各数值为AI产物核验，人类作者核验未记录；没有把AI反审当人工同行评审。</p>
-<p>本次文稿更新与导出自身不新增仿真、优化或统计检验；第4.6–4.15节既有训练/评测按各自原合同计费；本次文档同步不改变活动实验状态，具体运行状态以唯一台账为准；不能把文档操作的零成本当研究总成本。没有重算封存52/434、重标负例或更换默认模型。旧2026-09-12直接电机残差稿和本次精简前26页稿分别SHA归档，不与当前任务混计。草稿保留非投稿就绪标记。</p>
+<p>主文全部E编号对应<a href="evidence_manifest.json">evidence_manifest.json</a>的原始路径与SHA；旧试验的目的、配置、费用和反例在<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>保留；本次新增试验直接引用E087–E138及第4.6–4.16节的源报告，未假称旧明细已包含新结果。该明细是历史证据索引，唯一当前研究事实与下一步仍在共享研究台账。本文各数值为AI产物核验，人类作者核验未记录；没有把AI反审当人工同行评审。</p>
+<p>本次文稿更新与导出自身不新增仿真、优化或统计检验；第4.6–4.16节既有训练/评测按各自原合同计费；本次文档同步不改变活动实验状态，具体运行状态以唯一台账为准；不能把文档操作的零成本当研究总成本。没有重算封存52/434、重标负例或更换默认模型。旧2026-09-12直接电机残差稿和本次精简前26页稿分别SHA归档，不与当前任务混计。草稿保留非投稿就绪标记。</p>
 <h2>参考与流程软件</h2>
 <p>[1] Preference-Conditioned Multi-Objective RL for Integrated Command Tracking and Force Compliance in Humanoid Locomotion. <a href="https://arxiv.org/abs/2510.10851">arXiv:2510.10851</a>。原文方法与瞬时扰动评价段落已作AI核对，人类作者核验未记录；未借其硬件结果为本项目背书。</p>
 <p>[2] Bencatel, R., Girard, A., and Kolmanovsky, I. Reference Governor Strategies for Vehicle Rollover Avoidance. <a href="https://arxiv.org/abs/1608.02266">arXiv:1608.02266</a>。相邻汽车防侧翻任务不等于本项目单轨闭环。</p>

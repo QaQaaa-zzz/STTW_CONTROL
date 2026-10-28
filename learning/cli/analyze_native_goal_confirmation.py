@@ -1416,7 +1416,7 @@ def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpo
         for ax,y in zip(axes[:3],(reward,np.cumsum(reward),raw['alpha_exec'][:n])):
             ax.plot(steps,y,c=color,label=method,lw=.8);ax.scatter(steps[-1],y[-1],c=color,marker='x' if row['horizons']['10']['physical_outcome']=='contact' else 's',s=16)
         for ax in axes:
-            if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,c='gray',alpha=.04)
+            if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,color='gray',alpha=.04)
             if row['replan_task_tick'] is not None:ax.axvline(row['replan_task_tick'],c=color,ls=':',lw=.6)
         if row['mode'] in ('q_rank','q_bce'):
             ax=axes[3 if row['mode']=='q_rank' else 4]

@@ -211,7 +211,14 @@ def evidence_manifest():
         'E128':archive/'h75_samestate_confirmation144_v1/analysis_confirmation/receipt.json',
         'E129':archive/'h75_samestate_confirmation144_v1/root_primary_label_check.json',
         'E130':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/metrics.json',
-        'E131':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/data_receipt.json'}
+        'E131':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/data_receipt.json',
+        'E132':archive/'h75_tolerance_online120_v1/plan.json',
+        'E133':archive/'h75_tolerance_online120_v1/analysis/results.json',
+        'E134':archive/'h75_tolerance_online120_v1/analysis/receipt.json',
+        'E135':archive/'h75_tolerance_online120_v1/root_endpoint_check.json',
+        'E136':archive/'h75_tolerance_online120_v1/analysis/original_task_rescoring/results.json',
+        'E137':archive/'h75_tolerance_online120_v1/analysis/original_task_rescoring/method_summary.json',
+        'E138':archive/'h75_tolerance_online120_v1/q_diagnostics/diagnostic.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
