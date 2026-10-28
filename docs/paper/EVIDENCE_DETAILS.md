@@ -580,3 +580,10 @@ E062：native_fixed_midpoint_review_v1/analysis/review.json，原生同源12真�
 E064：native_fixed_midpoint_review_v1/disturbed/analysis/review.json，96真实原生受扰缓存/192用户评分/64配对，0新物理；E065：同目录independent_review.json，非提出者独立NumPy及原world goal/实际冲量复核，非接触重建或独立物理重复。AI artifact_checked，人类未记录。
 
 E078：native_frozen_geometry_validation_v1/analysis/review.json，52真实原生轨迹/156固定轨迹跨评分/84含自配对比较，完整原用户费用与全部反例。E079：同run independent_final_review.json，非提出者独立十通道重算、50块-final、150候选选择/发布与成本核验，非独立物理/训练重复，AI artifact_checked，人类未记录。
+
+
+### 普通目标学习与固定终点评价的补录（2026-10-27 PT）
+
+E082：ordinary_goal_learning_v1/plan.json，已封存训练与评价合同，实际父task_only64、U=2G+S-.5Cpre/B、H10、1米原目标、36lane/64批/两批value热身，不是新模型结果或独立测试。E083：同run first_actual_training_audit.json，首真实两批的TB实际标量及15张量不变/价值Adam8步，属于运行证据，不代表终点改善。E084：goal_endpoint_run.py，固定128评价器实现；准备与物理执行仍待正式64末端，源码不冒结果。E085：goal_credit_cpu_v1/pulse_timing_first_real_collection_v2.json，首完整warmup36条真实raw时序兼容、输入SHA及数值尾量说明；旧v1误报记录保留，0新增物理/优化，非容扰增量。E086：goal_networks.py，原Actor加零初始化五维goal线性支路、独立G/C/S值头与Torch/JAX导出，AI源码核对，不代表训练已收敛或结构新颖。人类作者核验均not_recorded。
+
+本轮更新只修正文稿中“尚未接训练”的过时描述。原摘要和第4节历史结果不变；新增第2.1节明确当前普通学习分支的真实方法与尚未执行评价，没有把运行中标量写入效果表。普通目标学习不能单独辨别新增目标信息/G信用/学习优化，费用归一化的偏好信号弱化也明确保留；不因此调整正在训练的合同或扩旧实验家族。

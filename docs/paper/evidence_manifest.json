@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "8a0b32a9530e0ec5e3863eec8729ae5db2c6df200144ec1ed7b85b049f872c13",
-  "builder_sha256": "4c0910d348ef6cc6a7966f43e7bfc4397b56b1f7ef543c67db5226eb0e5ba8e3",
+  "manuscript_sha256": "7a35da8915ef3201993140bcc5a46de6e1ba350d37a205531ac79f77ba495b8a",
+  "builder_sha256": "32bc6fb0b541ddf5da00d756b75997043d82c2643527008d95ef451007281ae3",
   "evidence_cutoff": "2026-10-27",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -491,6 +491,36 @@
       "sha256": "ab3bdfe5a90c111f0cd3443df087d73994d6c28897c1080c83ef0849f2db9f9e",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E082": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_learning_v1/plan.json",
+      "sha256": "f085714d8ccc1effa0530ef4939478209f4a397c4a33709af7dde417f02ddc23",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E083": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_learning_v1/first_actual_training_audit.json",
+      "sha256": "4ed7be01b52a015d470de1a613975fcfe0667a712f29a6c015ca8b632f9d9d20",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E084": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/goal_endpoint_run.py",
+      "sha256": "9265ef819717efda3091a5978447449a6a97852aa9e2cf705a8dd77f17b3cfe8",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E085": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/goal_credit_cpu_v1/pulse_timing_first_real_collection_v2.json",
+      "sha256": "78352f1fccbada83cf719e8543d2fbc9c578a3a9f6fbbcedc22276645c132160",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E086": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/goal_networks.py",
+      "sha256": "001ee516f5063bcb2188b705abed625940ca1922d9e5a387a088930b4a858707",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "claims_from_readback": [
@@ -563,7 +593,7 @@
   ],
   "detailed_evidence": {
     "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/EVIDENCE_DETAILS.md",
-    "sha256": "66f0c8e566de9b11e9a5cfa6259643ba20a7eb0af7ab9abf6610e17798beb7d4",
+    "sha256": "995f7538564ef7704e14cce959591c37b053a4df6daadf5388440d20a22e68b8",
     "role": "Full historical evidence narrative; current research decisions remain in the shared ledger"
   },
   "image_role": "Architecture is a structural diagram; two XY figures are inherited actual trajectories, not new experiments",

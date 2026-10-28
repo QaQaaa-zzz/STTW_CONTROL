@@ -147,7 +147,12 @@ def evidence_manifest():
         'E078':ROOT/'runs/native_frozen_geometry_validation_v1/analysis/review.json',
         'E079':ROOT/'runs/native_frozen_geometry_validation_v1/independent_final_review.json',
         'E080':ROOT/'runs/ecbc_modal_authority_math_v1/analysis.json',
-        'E081':ROOT/'runs/ecbc_modal_authority_math_v1/independent_review.md'}
+        'E081':ROOT/'runs/ecbc_modal_authority_math_v1/independent_review.md',
+        'E082':ROOT/'runs/ordinary_goal_learning_v1/plan.json',
+        'E083':ROOT/'runs/ordinary_goal_learning_v1/first_actual_training_audit.json',
+        'E084':ROOT/'learning/src/sttw_control/goal_endpoint_run.py',
+        'E085':ROOT/'runs/goal_credit_cpu_v1/pulse_timing_first_real_collection_v2.json',
+        'E086':ROOT/'learning/src/sttw_control/goal_networks.py'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
