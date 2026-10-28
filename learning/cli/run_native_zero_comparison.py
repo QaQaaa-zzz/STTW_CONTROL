@@ -8,14 +8,18 @@ sys.dont_write_bytecode=True
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('stage',choices=['prepare','prepare-rule','shape','execute']);p.add_argument('root',type=Path)
+    p.add_argument('stage',choices=['prepare','prepare-rule','prepare-capability','shape','execute']);p.add_argument('root',type=Path)
     p.add_argument('--source',type=Path,default=Path('runs/current_native_preference_v1_attempt2'))
+    p.add_argument('--protocol',type=Path)
     a=p.parse_args()
     file=Path(__file__).resolve().parents[1]/'src/sttw_control/native_zero_comparison.py'
     spec=importlib.util.spec_from_file_location('native_zero_runner',file)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     try:
         if a.stage=='prepare':module.prepare(a.source,a.root)
+        elif a.stage=='prepare-capability':
+            if a.protocol is None:p.error('--protocol required')
+            module.prepare_capability(a.source,a.root,a.protocol)
         elif a.stage=='prepare-rule':
             file=file.with_name('native_equilibrium_rule.py')
             spec=importlib.util.spec_from_file_location('native_rule_preparer',file)
@@ -25,9 +29,9 @@ if __name__=='__main__':
     except BaseException:
         if a.stage=='execute':
             from engineer_reference_bias import notify
-            notify(a.root,'STTW原生参考对照报错','固定8条对照已停止，保存原始错误，不自动重试。')
+            notify(a.root,'STTW原生参考对照报错','固定原生对照已停止，保存原始错误，不自动重试。')
         raise
     else:
         if a.stage=='execute':
             from engineer_reference_bias import notify
-            notify(a.root,'STTW原生参考对照8条完成','原生接口固定8条已评测完，随后与缓存强基线比较偏好用途；没有训练或重规划。')
+            notify(a.root,'STTW原生参考对照完成','声明的原生固定对照已评测完，随后分析全部条件；没有训练或重规划。')

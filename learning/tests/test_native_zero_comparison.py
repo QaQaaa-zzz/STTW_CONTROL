@@ -32,3 +32,40 @@ def test_modern_package_cannot_silently_supply_native_physics(tmp_path):
     with pytest.raises(ValueError,match='modern sttw_control already imported'):
         run(root)
     assert not (root/'evaluation').exists()
+
+
+def capability_protocol():
+    return dict(experiment_id='native_capability_test',horizon_s=10.,alphas=[0.,.5,1.],expected_cases=16,maximum_lower_ticks=32000,
+        contexts=[dict(route=f's{int(a)}_{int(d)}',angle_deg=a,radius_m=r,speed=v,direction=d)
+                  for a,r,v in [(60.,2.2,2.6),(90.,1.8,2.8)] for d in [-1.,1.]])
+
+
+def test_capability_inventory_has_twelve_native_h75_and_four_zero():
+    from sttw_control.native_zero_comparison import capability_cases
+    cases=capability_cases(capability_protocol())
+    assert len(cases)==16
+    for route in {c['route'] for c in cases}:
+        rows=[c for c in cases if c['route']==route]
+        assert [(c['policy'],c['alpha']) for c in rows]==[('H75',0.),('H75',.5),('H75',1.),('zero',0.)]
+    assert all(c['force_N']==0 for c in cases)
+
+
+@pytest.mark.parametrize('change',['speed','radius','alpha','horizon','duplicate'])
+def test_capability_rejects_inventory_drift(change):
+    from sttw_control.native_zero_comparison import capability_cases
+    p=capability_protocol()
+    if change=='speed':p['contexts'][0]['speed']=1.8
+    elif change=='radius':p['contexts'][0]['radius_m']=1.1
+    elif change=='alpha':p['alphas']=[0.,1.]
+    elif change=='horizon':p['horizon_s']=16.
+    else:p['contexts'][0]['route']=p['contexts'][1]['route']
+    with pytest.raises(ValueError):capability_cases(p)
+
+
+def test_capability_geometry_remains_protocol_defined():
+    from sttw_control.native_zero_comparison import capability_cases
+    p=capability_protocol()
+    for c in p['contexts']:
+        c['angle_deg']+=5.
+        c['radius_m']+=.1
+    assert len(capability_cases(p))==16

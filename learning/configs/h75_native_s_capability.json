@@ -1,0 +1,58 @@
+{
+  "experiment_id": "STTW-H75-NATIVE-S-CAPABILITY-V1",
+  "question": "Can frozen H75 execute both bends and retain original preference under its native reference interface?",
+  "horizon_s": 10.0,
+  "alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "expected_cases": 16,
+  "maximum_lower_slots": 32000,
+  "contexts": [
+    {
+      "route": "S_left_60_R2p2",
+      "angle_deg": 60,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_60_R2p2",
+      "angle_deg": 60,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "angle_deg": 90,
+      "radius_m": 1.8,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "angle_deg": 90,
+      "radius_m": 1.8,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "data_role": "Prospective nominal DEV geometry coverage; one shared physical ancestor, not independent seeds or unseen training family.",
+  "training": false,
+  "disturbance": false,
+  "replanning": false,
+  "reason_no_replanning": "Nominal original-route capability: do not shortcut the required S path; disturbed task recovery remains a separate shared-replanning contract.",
+  "stop_rule": "Exactly16 nominal H10 executions; native domain/physical stops preserved; engineering faults retain raw and stop, no retry or condition tuning.",
+  "metrics": [
+    "originalXY/goal1m before fatal",
+    "secondbend reached",
+    "native goal-section and final1s tracking",
+    "true contact vs native-domain censoring",
+    "same-user full-observed-window V3 costs and paired zero",
+    "actual/wheelproxy/request speed; path/heading/roll errors"
+  ],
+  "adoption": "No model adoption or training extension from this descriptive panel alone.",
+  "maximum_lower_ticks": 32000
+}
