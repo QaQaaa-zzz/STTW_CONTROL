@@ -67,7 +67,7 @@ def candidate_features(observation,latents,yaw,interface):
 
 
 def candidate_probabilities(params,observation,latents,yaw,interface):
-    return infer_probabilities(params,candidate_features(observation,latents,yaw,interface).reshape(12,41)).reshape(2,3,4)
+    return infer_probabilities(params,candidate_features(observation,latents,yaw,interface).reshape(12,41)).reshape((-1,3,4))
 
 
 def preview_curvature(progress,path_s,path_curvature):
@@ -118,9 +118,10 @@ def export_predictors(manifest_path,output):
     # Present helper authenticates archived source independently of this module.
     pilot=file_module(Path(__file__).with_name('tolerance_predictor_pilot.py'),'_coordination_predictor_auth')
     raw_manifest=json.loads(Path(manifest_path).read_text())
-    generic=raw_manifest.get('format')=='sttw_frozen_predictor_candidates_v1'
+    user_mix=raw_manifest.get('format')=='sttw_frozen_user_mix_last_v1'
+    generic=user_mix or raw_manifest.get('format')=='sttw_frozen_predictor_candidates_v1'
     if generic:
-        manifest,source,frozen=verify_temporal_candidates(manifest_path)
+        manifest,source,frozen=(verify_user_mix_candidate if user_mix else verify_temporal_candidates)(manifest_path)
         labels=manifest['ensemble_labels'];source_root=Path(manifest['training_directory'])
     else:
         manifest,source,frozen=pilot.verify_confirmation_candidates(manifest_path)
@@ -136,7 +137,7 @@ def export_predictors(manifest_path,output):
                     value=state[f'{index}.{suffix}'].detach().cpu().numpy()
                     if prefix=='w':value=value.T
                     key=f'{prefix}{layer}'
-                    if key not in params:params[key]=np.empty((2,3)+value.shape,np.float32)
+                    if key not in params:params[key]=np.empty((len(labels),3)+value.shape,np.float32)
                     params[key][ai,seed]=value
     cfg=json.loads(Path(source['config']).read_text())
     if generic:
@@ -167,7 +168,7 @@ def export_predictors(manifest_path,output):
     shutil.copyfile(source_root/'source/tolerance_predictor_pilot.py',output/'frozen_predictor_source.py')
     for row in manifest['candidate_models']:shutil.copyfile(row['file'],output/f"{row['arm']}_seed{row['seed']}.pt")
     np.savez(output/'numerical_inputs.npz',features=features,jax_probabilities=actual)
-    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,matmul_precision='highest',maximum_probability_errors=errors,arm_order=labels,source_manifest_kind='temporal_mix_selected_and_last' if generic else 'legacy_ranking_selected',hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
+    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,matmul_precision='highest',maximum_probability_errors=errors,arm_order=labels,source_manifest_kind='user_mix_prior_fixed_last' if user_mix else 'temporal_mix_selected_and_last' if generic else 'legacy_ranking_selected',hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
     report['files_sha256']={p.name:sha(p) for p in output.iterdir() if p.is_file()}
     (output/'receipt.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     return report
@@ -261,3 +262,57 @@ def speedcap_latent(alpha1_latent,nominal,max_curvature,interface):
     z=alpha1_latent.at[0].set(j.arctanh(bounded))
     reachable=j.clip(nominal[0]+bounded*scale,lo,hi)
     return z,dict(cap_m_s=cap,requested_target_m_s=requested,reachable_target_m_s=reachable,h75_target_m_s=original,active=j.abs(reachable-original)>1e-6)
+
+
+def authenticate_user_mix_training(training,prepared):
+    """Authenticate the three fixed-final checkpoints without selecting by DEV."""
+    import torch
+    training=Path(training).resolve();prepared=Path(prepared).resolve()
+    required=['selection_manifest.json','source/tolerance_predictor_pilot.py','resolved_config.json','data_receipt.json','preparation_receipt.json']
+    for seed in (0,1,2):required.extend([f'bce_rank/seed{seed}/last_selected.pt',f'bce_rank/seed{seed}/last.pt',f'initial_seed{seed}.pt'])
+    files=_sealed_files(training,'selection_seal.json',required)
+    _sealed_files(prepared,'seal.json',['receipt.json','training.npz','training.json','development.npz','development.json'])
+    source=json.loads((training/'selection_manifest.json').read_text());receipt=json.loads((prepared/'receipt.json').read_text())
+    if (source['actual_optimizer_updates']!=3000 or source['new_physics_steps']!=0 or source['new_ppo_updates']!=0 or
+        source['implementation_sha256']!=sha(training/'source/tolerance_predictor_pilot.py') or source['source_snapshot_sha256']!=source['implementation_sha256'] or
+        source['config_sha256']!=sha(source['config']) or source['resolved_config_sha256']!=sha(training/'resolved_config.json') or
+        source['data_receipt_sha256']!=sha(training/'data_receipt.json') or receipt['config_sha256']!=source['config_sha256'] or
+        receipt['implementation_sha256']!=source['implementation_sha256'] or json.loads((training/'preparation_receipt.json').read_text())!=receipt):raise ValueError('fixed user mix source/preparation identity differs')
+    if len(source['selected'])!=3 or {(r['arm'],r['seed'],r['selector'],r['step']) for r in source['selected']}!={('bce_rank',s,'last',1000) for s in (0,1,2)}:raise ValueError('three fixed last1000 models required')
+    frozen=file_module(training/'source/tolerance_predictor_pilot.py','_user_mix_frozen_export')
+    cfg=frozen.validate_user_mix_config(json.loads(Path(source['config']).read_text()))
+    if cfg.get('bce_group_weights')!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('preregistered prior candidate required')
+    data=[]
+    for role in ('training','development'):
+        with np.load(prepared/(role+'.npz'),allow_pickle=False) as z:data.append(dict(full=z['full'].copy(),y=z['y'].copy(),**json.loads((prepared/(role+'.json')).read_text())))
+    frozen.validate_user_mix_datasets(*data)
+    for row in source['selected']:
+        seed=row['seed'];last=training/f'bce_rank/seed{seed}/last.pt'
+        if row['dim']!=41 or sha(row['file'])!=row['sha256'] or row['initial_sha256']!=sha(training/f'initial_seed{seed}.pt'):raise ValueError('fixed user checkpoint/init changed')
+        checkpoint=torch.load(last,map_location='cpu',weights_only=True);selected=torch.load(row['file'],map_location='cpu',weights_only=True)
+        if checkpoint['step']!=1000 or checkpoint['arm']!='bce_rank' or checkpoint['seed']!=seed or any(not torch.equal(v,selected['state_dict'][k]) for k,v in checkpoint['state_dict'].items()):raise ValueError('selected metadata differs from actual fixed last')
+    return source,files,frozen
+
+
+def freeze_user_mix_last(training,prepared,manifest_path,label='prior_rank_last'):
+    training=Path(training).resolve();prepared=Path(prepared).resolve();manifest_path=Path(manifest_path).resolve()
+    if label!='prior_rank_last':raise ValueError('fixed prior ensemble label required')
+    if manifest_path.exists() or manifest_path.with_suffix('.seal.json').exists():raise ValueError('fresh fixed-last manifest required')
+    source,_,_=authenticate_user_mix_training(training,prepared)
+    rows=[dict(arm=label,slot=0,seed=seed,dim=41,file=str(training/f'bce_rank/seed{seed}/last.pt'),sha256=sha(training/f'bce_rank/seed{seed}/last.pt'),step=1000,source_arm='bce_rank',source_selector='last',initial_sha256=sha(training/f'initial_seed{seed}.pt')) for seed in (0,1,2)]
+    manifest=dict(format='sttw_frozen_user_mix_last_v1',ensemble_labels=[label],candidate_models=rows,training_directory=str(training),prepared_directory=str(prepared),ranking_source_manifest_sha256=sha(training/'selection_manifest.json'),training_selection_seal_sha256=sha(training/'selection_seal.json'),prepared_seal_sha256=sha(prepared/'seal.json'),role='fixed final prior-matched user coverage candidate; engineering DEV only',new_optimizer_updates=0,new_physics_steps=0)
+    manifest_path.parent.mkdir(parents=True,exist_ok=True);manifest_path.write_text(json.dumps(manifest,indent=2)+'\n');manifest_path.with_suffix('.seal.json').write_text(json.dumps(dict(candidate_manifest_sha256=sha(manifest_path)),indent=2)+'\n')
+    return manifest
+
+
+def verify_user_mix_candidate(manifest_path):
+    manifest_path=Path(manifest_path).resolve();manifest=json.loads(manifest_path.read_text())
+    if sha(manifest_path)!=json.loads(manifest_path.with_suffix('.seal.json').read_text())['candidate_manifest_sha256']:raise ValueError('fixed user candidate manifest changed')
+    if manifest.get('format')!='sttw_frozen_user_mix_last_v1' or manifest['ensemble_labels']!=['prior_rank_last'] or len(manifest['candidate_models'])!=3:raise ValueError('single fixed prior ensemble required')
+    training=Path(manifest['training_directory']);prepared=Path(manifest['prepared_directory']);source,_,frozen=authenticate_user_mix_training(training,prepared)
+    for file,key in [(training/'selection_manifest.json','ranking_source_manifest_sha256'),(training/'selection_seal.json','training_selection_seal_sha256'),(prepared/'seal.json','prepared_seal_sha256')]:
+        if sha(file)!=manifest[key]:raise ValueError('fixed prior source seal changed')
+    if {(r['arm'],r['slot'],r['seed'],r['step']) for r in manifest['candidate_models']}!={('prior_rank_last',0,s,1000) for s in (0,1,2)}:raise ValueError('fixed prior candidate slots differ')
+    for row in manifest['candidate_models']:
+        if row['file']!=str(training/f"bce_rank/seed{row['seed']}/last.pt") or sha(row['file'])!=row['sha256']:raise ValueError('fixed prior checkpoint changed')
+    return manifest,source,frozen
