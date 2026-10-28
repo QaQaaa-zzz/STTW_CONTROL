@@ -10,17 +10,18 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('stage',choices=['prepare','prefix-shape','prefix','shape','execute']);parser.add_argument('root',type=Path)
     parser.add_argument('--source',type=Path,default=Path('runs/native_zero_preference_v1'))
-    parser.add_argument('--mode',choices=['tolerance_online120','legacy','h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144'],default='legacy')
+    parser.add_argument('--mode',choices=['h75_late_state_tolerance48','tolerance_online120','legacy','h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144'],default='legacy')
     parser.add_argument('--protocol',type=Path,default=None)
     parser.add_argument('--charged-source',type=Path)
     args=parser.parse_args()
-    if args.protocol is None:args.protocol=Path('learning/configs/h75_tolerance_online120.json' if args.mode=='tolerance_online120' else 'learning/configs/h75_samestate_bank144.json' if args.mode=='h75_samestate_bank144' else 'learning/configs/h75_samestate_tolerance72.json' if args.mode=='h75_samestate_tolerance72' else 'learning/configs/h75_online_confirmation100.json' if args.mode=='h75_online_confirmation100' else 'learning/configs/h75_online_scalar.json' if args.mode=='h75_online_scalar' else 'learning/configs/h75_switching_continuation.json' if args.mode=='h75_switching_continuation' else 'learning/configs/h75_channel_switching.json' if args.mode=='h75_channel_switching' else 'learning/configs/h75_channel_response.json')
+    if args.protocol is None:args.protocol=Path('learning/configs/h75_late_state_tolerance48.json' if args.mode=='h75_late_state_tolerance48' else 'learning/configs/h75_tolerance_online120.json' if args.mode=='tolerance_online120' else 'learning/configs/h75_samestate_bank144.json' if args.mode=='h75_samestate_bank144' else 'learning/configs/h75_samestate_tolerance72.json' if args.mode=='h75_samestate_tolerance72' else 'learning/configs/h75_online_confirmation100.json' if args.mode=='h75_online_confirmation100' else 'learning/configs/h75_online_scalar.json' if args.mode=='h75_online_scalar' else 'learning/configs/h75_switching_continuation.json' if args.mode=='h75_switching_continuation' else 'learning/configs/h75_channel_switching.json' if args.mode=='h75_channel_switching' else 'learning/configs/h75_channel_response.json')
     file=Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_run.py'
     spec=importlib.util.spec_from_file_location('_sttw_native_goal_runner',file)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     try:
         if args.stage=='prepare':
-            if args.mode=='tolerance_online120':module.prepare_tolerance(args.source,args.root,args.protocol)
+            if args.mode=='h75_late_state_tolerance48':module.prepare_late_state(args.source,args.root,args.protocol)
+            elif args.mode=='tolerance_online120':module.prepare_tolerance(args.source,args.root,args.protocol)
             elif args.mode=='h75_samestate_bank144':module.prepare_bank144(args.source,args.root,args.protocol)
             elif args.mode=='h75_samestate_tolerance72':module.prepare_samestate(args.source,args.root,args.protocol)
             elif args.mode=='h75_online_confirmation100':module.prepare_confirmation(args.source,args.root,args.protocol)

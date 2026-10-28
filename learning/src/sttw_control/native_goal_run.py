@@ -138,7 +138,51 @@ def new_confirmation_sources(p):
     return p.get('source_initialization')=='prepared_bank_all_prefixes'
 
 
+def late_state_inventory(p):
+    if (p['expected_cases']!=48 or p['source_task_s']!=6. or p['horizon_s']!=10. or p['new_horizon_s']!=4. or
+        p['maximum_prefix_lower_ticks']!=0 or p['maximum_lower_ticks']!=38400 or p['maximum_total_lower_ticks']!=38400 or
+        p['candidate_alphas']!=[0.,.5,1.] or p['preparation_s']!=[.2,.6] or p['forces_N']!=[-64.,64.] or
+        p['duration_s']!=.1 or p['primary_after_pulse_end_s']!=3. or p['optimizer_updates']!=0 or p['bank_indices']!=[2,5]):
+        raise ValueError('bounded late48 contract mismatch')
+    groups=p['source_groups']
+    if len(groups)!=4 or [g['source_index'] for g in groups]!=list(range(4)) or {(g['bank_index'],g['route'],g['origin']) for g in groups}!={(b,r,'fixed_half') for b in (2,5) for r in ('S_left_90_R1p8','S_right_90_R1p8')}:
+        raise ValueError('four fixed-half late source groups required')
+    rows=[]
+    for g,a,prep,force in itertools.product(groups,p['candidate_alphas'],p['preparation_s'],p['forces_N']):
+        onset=p['source_task_s']+prep
+        rows.append(dict(g,source_origin=g['origin'],speed=2.8,mode='samestate_scalar',mode_index=0,alpha=1.,candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=onset,duration_s=.1,force_N=force,primary_window_start_s=6.,primary_window_end_s=onset+.1+3.,case_id=f'{g["source_group_id"]}/alpha{a:g}/prep{prep:g}/F{force:+g}'))
+    return rows
+
+
+def late_source_rows(cases,groups):
+    rows=[]
+    for group in groups:
+        matches=[i for i,c in enumerate(cases) if c['bank_index']==group['bank_index'] and c['route']==group['route'] and c['mode']=='fixed_half' and c['force_N']==0.]
+        if len(matches)!=1:raise ValueError('one fixed-half nominal saved task6 source required')
+        rows.append(matches[0])
+    return rows
+
+
+def prepare_late_state(source,root,protocol):
+    source=Path(source).resolve();p=json.loads((source/'plan.json').read_text())
+    if p.get('mode')!='tolerance_online120' or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:
+        raise ValueError('sealed online120 frozen q ancestor required')
+    status=json.loads((source/'evaluation/status.json').read_text())
+    if status.get('phase')!='completed' or status.get('completed_cases')!=120:raise ValueError('completed online120 required')
+    late_state_inventory(json.loads(Path(protocol).read_text()))
+    identity={str(source/name):digest(source/name) for name in ('plan.json','seal.json','inventory.json','evaluation/complete_carry_05.pkl','evaluation/executed_paths_05.pkl','evaluation/host_state_05.npz')}
+    for f,sha in p['input_sha256'].items():
+        if digest(f)!=sha:raise ValueError('online120 input drift '+f)
+        identity[f]=sha
+    for f,sha in p['source_sha256'].items():
+        archived=source/'source'/Path(f).name
+        if digest(archived)!=sha:raise ValueError('online120 archived source drift')
+        identity[str(archived)]=sha
+    prepare_switching(p['stay_source'],root,protocol,samestate_source=dict(source=str(source),identity=identity,bank144=True,late=True))
+
+
 def bank144_inventory(p):
+    if p.get('mode')=='h75_late_state_tolerance48':return late_state_inventory(p)
     fresh=new_confirmation_sources(p)
     if (p['expected_cases']!=144 or p['maximum_lower_ticks']!=259200 or p['maximum_prefix_lower_ticks']!=(1600 if fresh else 800) or
         p['maximum_total_lower_ticks']!=(260800 if fresh else 260000) or p['horizon_s']!=10. or p['new_horizon_s']!=9. or
@@ -162,7 +206,7 @@ def bank144_inventory(p):
 
 def bank144_prefix_cases(p):
     fresh=new_confirmation_sources(p)
-    return [dict(g,source_origin=g['origin'],speed=2.8,mode='hybrid_prefix',mode_index=0,alpha=1.,speed_alpha=1.,steer_alpha=.5 if g['origin']=='hybrid' else 1.,
+    return [dict(g,source_origin=g['origin'],speed=2.8,mode='hybrid_prefix',mode_index=0,alpha=1.,speed_alpha=.5 if g['origin']=='fixed_half' else 1.,steer_alpha=.5 if g['origin'] in ('hybrid','fixed_half') else 1.,
         onset_s=0.,duration_s=.1,force_N=0.,case_id=g['source_group_id']+'/prefix') for g in p['source_groups'] if fresh or g['origin']=='hybrid']
 
 
@@ -639,8 +683,16 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
         coordinator.export_predictors(proposal['predictor_manifest'],root/'q')
         files.update({str(f.resolve()):digest(f) for f in (root/'q').rglob('*') if f.is_file()})
     save(root/'inventory.json',(bank144_inventory(proposal) if samestate_source.get('bank144') else samestate_inventory(proposal)) if samestate_source is not None else (tolerance_inventory(proposal) if proposal.get("mode")=="tolerance_online120" else confirmation_inventory(proposal)) if confirmation_source is not None else online_inventory(proposal) if online else continuation_inventory(proposal) if continuation_source is not None else response_inventory(proposal) if stay_source is None else switching_inventory(proposal));save(root/'effective_config.json',old['config'])
+    if proposal.get('mode')=='h75_late_state_tolerance48':
+        import shutil
+        original_q=Path(samestate_source['source'])/'q'
+        receipt=json.loads((original_q/'receipt.json').read_text())
+        for name,sha in receipt['files_sha256'].items():
+            if digest(original_q/name)!=sha:raise ValueError('frozen online q bundle drift')
+        shutil.copytree(original_q,root/'q')
+        files.update({str(f.resolve()):digest(f) for f in (root/'q').rglob('*') if f.is_file()})
     files.update({str(f.resolve()):digest(f) for f in (protocol,root/'inventory.json',root/'effective_config.json')})
-    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='tolerance_online120' if proposal.get('mode')=='tolerance_online120' else ('h75_samestate_bank144' if samestate_source.get('bank144') else 'h75_samestate_tolerance72') if samestate_source is not None else 'h75_online_confirmation100' if confirmation_source is not None else 'h75_online_scalar' if online else 'h75_switching_continuation' if continuation_source is not None else 'h75_channel_response' if stay_source is None else 'h75_channel_switching',
+    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=proposal['mode'] if proposal.get('mode') in ('tolerance_online120','h75_late_state_tolerance48') else ('h75_samestate_bank144' if samestate_source.get('bank144') else 'h75_samestate_tolerance72') if samestate_source is not None else 'h75_online_confirmation100' if confirmation_source is not None else 'h75_online_scalar' if online else 'h75_switching_continuation' if continuation_source is not None else 'h75_channel_response' if stay_source is None else 'h75_channel_switching',
         source=str(source),cached_source=str(cached),native_runtime_root=old['native_runtime_root'],
         native_expected_sources=old['native_source_sha256'],initial_source=old['initial_source'],
         models={'H75':old['h75']},config=old['config'],contexts=native['contexts'],cases=proposal['expected_cases'],horizon_s=proposal['horizon_s'],goal_radius_m=proposal['goal_radius_m'],
@@ -649,7 +701,7 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
         replanning=dict(period_s=proposal['replan_cadence_s'],radius_m=proposal['replanning_radius_m'],departure_m=proposal['departure_m'],maximum_per_case=proposal['maximum_replans'],information=proposal['replanning'],ordering=proposal['ordering']),
         scoring=proposal['scoring'],stop=proposal['stop_rule'],normalization=proposal['normalization'],initialization=proposal.get('initialization','Authenticated original native prepared bank/reset'),
         input_sha256=files,source_sha256={str(f.resolve()):digest(f) for f in modules})
-    if proposal.get('mode')=='tolerance_online120':
+    if proposal.get('mode') in ('tolerance_online120','h75_late_state_tolerance48'):
         plan['frozen_predictor_export']=dict(directory=str(root/'q'),receipt_sha256=digest(root/'q/receipt.json'),
             candidate_manifest_sha256=digest(root/'q/original_candidate_manifest.json'),
             arm_to_export_index=dict(q_rank=1,q_bce=0),seed_aggregation='equal mean of three sigmoid probabilities')
@@ -729,7 +781,7 @@ def verify(root):
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('changed plan')
     for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(f)!=sha:raise ValueError('changed sealed source/input '+f)
-    if json.loads((root/'inventory.json').read_text())!=(bank144_inventory(p['protocol']) if p.get('mode')=='h75_samestate_bank144' else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode')=='tolerance_online120' else inventory()):raise ValueError('fixed inventory changed')
+    if json.loads((root/'inventory.json').read_text())!=(bank144_inventory(p['protocol']) if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48') else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode')=='tolerance_online120' else inventory()):raise ValueError('fixed inventory changed')
     return p
 
 
@@ -763,21 +815,21 @@ def load(root,*,prefix_phase=False):
     planner=file_module(package.__name__+'.goal_replanning',folder/'goal_replanning.py')
     configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
     cfg=p['config'];tolerance=p.get('mode')=='tolerance_online120';confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance
-    fresh=p.get('mode')=='h75_samestate_bank144' and new_confirmation_sources(p['protocol'])
+    fresh=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48') and new_confirmation_sources(p['protocol'])
     if confirmation or fresh:
         env,prepared=load_confirmation_environment(cfg,p['initial_source'])
         snapshot=jax.tree.map(lambda x:j.asarray(x[p['protocol']['bank_indices'][0]]),prepared)
     else:env,snapshot=load_environment(cfg,p['initial_source'],'terminal_contract_v2')
     env=adapter.NativeGoalContinuation(env,contact_only_physics=contact.ContactOnlyPhysics,
                                         project=geometry.project,pursuit=pursuit)
-    bank144=p.get('mode')=='h75_samestate_bank144'
+    bank144=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48')
     cases=bank144_prefix_cases(p['protocol']) if bank144 and prefix_phase else json.loads((root/'inventory.json').read_text());pose=np.asarray(env.physics.helpers.pose(snapshot.data))
     samestate=p.get('mode')=='h75_samestate_tolerance72' or (bank144 and not prefix_phase)
     confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance
     online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100') or tolerance
     branch=p.get('mode')=='h75_switching_continuation'
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation')
-    response=tolerance or p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144')
+    response=tolerance or p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','h75_late_state_tolerance48')
     if (samestate or bank144) and not fresh:
         bank={}
         for route in sorted({case_path_key(c) for c in cases}):
@@ -818,7 +870,7 @@ def load(root,*,prefix_phase=False):
             lane_snapshots=stack([snapshots[c['bank_index']] for c in cases])
             initial=jax.jit(jax.vmap(lambda snap,path,v,a:env.initial(env.reset(snap,path,v,a))))(lane_snapshots,paths,speeds,alphas)
             if not bool(j.all((initial.state.tick==0)&(initial.state.physical.physical_tick==700)&(initial.state.alpha==1.))):raise ValueError('new prefix source clock/user mismatch')
-            initial_identity=dict(authenticated_prepared_bank=True,bank_state_fingerprints=p['protocol']['bank_state_fingerprints'],native_leaf_count=len(jax.tree.leaves(initial)),prefix_lanes=8,task_initialization='exact confirmation reset once; no reset at suffix')
+            initial_identity=dict(authenticated_prepared_bank=True,bank_state_fingerprints=p['protocol']['bank_state_fingerprints'],native_leaf_count=len(jax.tree.leaves(initial)),prefix_lanes=len(cases),task_initialization='exact confirmation reset once; no reset at suffix')
         elif prefix_phase:
             with (Path(p['samestate_source']['source'])/'evaluation/initial_carry.pkl').open('rb') as f:archived=pickle.load(f)
             initial=gather_source_carry(archived.native,[c['confirmation_row'] for c in cases])
@@ -833,7 +885,11 @@ def load(root,*,prefix_phase=False):
                 if digest(f)!=sha:raise ValueError('generated source identity drift')
             with (root/'sources/complete_carry.pkl').open('rb') as f:saved=pickle.load(f)
             initial=gather_source_carry(saved,[c['source_index'] for c in cases])
-            initial_identity=dict(all_source_copy_leaves_exact=True,native_leaf_count=len(jax.tree.leaves(initial)),source_groups=8,copies_per_source=18,source_receipt=sealed)
+            if p.get('mode')=='h75_late_state_tolerance48':
+                with (root/'sources/executed_paths.pkl').open('rb') as f:saved_paths=pickle.load(f)
+                paths=gather_source_carry(saved_paths,[c['source_index'] for c in cases])
+            if not bool(j.all(initial.state.tick==round(p['protocol']['source_task_s']/env.cc.dt))):raise ValueError('assembled source task clock mismatch')
+            initial_identity=dict(all_source_copy_leaves_exact=True,native_leaf_count=len(jax.tree.leaves(initial)),source_groups=len(p['protocol']['source_groups']),copies_per_source=len(cases)//len(p['protocol']['source_groups']),source_receipt=sealed)
     elif samestate:
         with (Path(p['samestate_source']['source'])/'evaluation/task1_complete_carry.pkl').open('rb') as f:saved=pickle.load(f)
         for c in p['protocol']['source_rows']:
@@ -1014,12 +1070,12 @@ def flatten(logs):
 
 def run(root,*,shape_only=False):
     root=Path(root).resolve();p=verify(root)
-    if not shape_only and json.loads((root/'status.json').read_text())['phase']!=('prefix_completed' if p.get('mode')=='h75_samestate_bank144' else 'prepared'):raise ValueError('prepared only; no implicit rerun')
+    if not shape_only and json.loads((root/'status.json').read_text())['phase']!=('prefix_completed' if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48') else 'prepared'):raise ValueError('prepared only; no implicit rerun')
     directory=root/('shape' if shape_only else 'evaluation');directory.mkdir(exist_ok=False)
     started=time.monotonic();status=dict(phase='initializing',pid=os.getpid(),active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0)
     def update(**kw):
         status.update(kw,elapsed_s=time.monotonic()-started)
-        if p.get('mode')=='h75_samestate_bank144':
+        if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):
             prefix_ticks=p['protocol']['maximum_prefix_lower_ticks']
             status.update(active_prefix_lower_ticks=prefix_ticks,allocated_prefix_lower_slots=prefix_ticks,total_new_active_lower_ticks=prefix_ticks+status.get('active_lower_ticks',0),total_new_allocated_lower_slots=prefix_ticks+status.get('allocated_lower_slots',0))
         if p.get('mode')=='h75_switching_continuation':
@@ -1043,7 +1099,9 @@ def run(root,*,shape_only=False):
         if shape_only:update(phase='completed',physics_steps=0);return
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU required for numerical evaluation')
         cases=runtime['cases'];path_list=[runtime['bank'][case_path_key(c)] for c in cases]
-        goals=np.array([[np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.xy)[:,axis]) for axis in (0,1)] for path in path_list])
+        original_path_list=path_list
+        if p.get('mode')=='h75_late_state_tolerance48':path_list=[jax.tree.map(lambda x:x[i],paths) for i in range(n)]
+        goals=np.array([[np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.xy)[:,axis]) for axis in (0,1)] for path in original_path_list])
         for name,path in runtime['bank'].items():np.savez_compressed(directory/(name+'_path.npz'),**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
         save(directory/'manifest.json',dict(config=p['config'],source=p['initial_source'],cases=cases,models=p['models'],
             original_goals_xy=goals.tolist(),reward_components=runtime['keys'],physics_identity=env.physics.bundle.identity,
@@ -1051,9 +1109,9 @@ def run(root,*,shape_only=False):
             data_role=p['data_role'],physical_start_s=runtime['physical_start_s'],initialization=p.get('initialization'),prepared_bank_indices=p['protocol'].get('bank_indices') if 'protocol' in p else None,prepared_state_fingerprints=p['protocol'].get('bank_state_fingerprints') if 'protocol' in p else None))
         with (directory/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
         all_logs=[];decisions=[];changed=np.zeros(n,bool);arrived=np.zeros(n,bool);actual=0
-        bank144=p.get('mode')=='h75_samestate_bank144'
-        samestate=p.get('mode') in ('h75_samestate_tolerance72','h75_samestate_bank144')
-        branch=p.get('mode') in ('h75_switching_continuation','h75_samestate_tolerance72','h75_samestate_bank144')
+        bank144=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48')
+        samestate=p.get('mode') in ('h75_samestate_tolerance72','h75_samestate_bank144','h75_late_state_tolerance48')
+        branch=p.get('mode') in ('h75_switching_continuation','h75_samestate_tolerance72','h75_samestate_bank144','h75_late_state_tolerance48')
         if branch:
             source=Path(p['samestate_source']['source'] if samestate else p['continuation_source']['source']);indices=[c['source_index'] for c in cases] if samestate else list(range(n))
             if not bank144:
@@ -1071,7 +1129,7 @@ def run(root,*,shape_only=False):
             if not samestate:
                 prefix_audit=audit_stay_prefix(prefix,cases,json.loads((root/'cached_stay_records.json').read_text()),p['protocol'])
                 save(directory/'source_prefix_audit.json',prefix_audit)
-            save(directory/'prefix_provenance.json',dict(source=str(source),source_indices=indices,reused_lower_slots=200*n,new_physics_ticks=0,source_consumed_lower_ticks=0 if samestate else p['protocol']['consumed_source_lower_ticks'],total_budget=p['maximum_active_lower_ticks'] if samestate else p['protocol']['total_campaign_lower_ticks'],warning='Source prefix reused for display only; suffix case logs begin at task1' if samestate else p['protocol']['prefix_provenance']))
+            save(directory/'prefix_provenance.json',dict(source=str(source),source_indices=indices,reused_lower_slots=round(p['protocol'].get('source_task_s',1.)/env.cc.dt)*n,new_physics_ticks=0,source_consumed_lower_ticks=0 if samestate else p['protocol']['consumed_source_lower_ticks'],total_budget=p['maximum_active_lower_ticks'] if samestate else p['protocol']['total_campaign_lower_ticks'],source_task_s=p['protocol'].get('source_task_s',1.),warning='Same complete source copied without physics; suffix clock remains original task time' if samestate else p['protocol']['prefix_provenance']))
             save(directory/'task1_capture_receipt.json',runtime['initial_identity'] if samestate else runtime['initial_identity']['continuation_snapshot'])
             with (directory/'task1_complete_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
             np.savez_compressed(directory/'task1_host_state.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
@@ -1086,7 +1144,7 @@ def run(root,*,shape_only=False):
                 cached=json.loads((root/'cached_stay_records.json').read_text())
                 capture['stay_prefix']=audit_stay_prefix(all_logs[0],cases,cached,p['protocol'])
                 save(directory/'task1_capture_receipt.json',capture)
-            if block or branch:
+            if block or (branch and p.get('mode')!='h75_late_state_tolerance48'):
                 poses= jax.device_get(runtime['measurements'](carry))
                 cross,invalid,failed,fault,ticks=jax.device_get((carry.state.projection.cross_track,carry.state.follower.invalid,carry.state.physical.failed,carry.state.fault,carry.state.tick))
                 mask=np.zeros(n,bool)
@@ -1094,7 +1152,7 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i])):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120') else {}))
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','h75_late_state_tolerance48') else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         np.savez_compressed(directory/f'replanned_path_{i:02d}.npz',**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
                         decisions.append(dict(case_id=cases[i]['case_id'],case_index=i,task_tick=int(ticks[i]),measured_pose=np.asarray(poses[i]).tolist(),cross_track_m=float(cross[i]),follower_invalid=bool(invalid[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),**meta))
@@ -1138,7 +1196,72 @@ def run(root,*,shape_only=False):
         (directory/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise
 
 
+def run_late_prefix(root,*,shape_only=False):
+    """Import four existing task6 snapshots, apply boundary planner, no physics."""
+    import jax
+    import jax.numpy as j
+    import numpy as np
+    root=Path(root).resolve();p=verify(root);protocol=p['protocol'];late_state_inventory(protocol)
+    if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':raise ValueError('fresh source import only')
+    out=root/('prefix_shape' if shape_only else 'prefix');out.mkdir(exist_ok=False)
+    started=time.monotonic();status=dict(phase='initializing',pid=os.getpid(),active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0)
+    def update(**kw):
+        status.update(kw,elapsed_s=time.monotonic()-started);save(out/'status.json',status)
+        if not shape_only:save(root/'status.json',status)
+    update()
+    try:
+        runtime=load(root,prefix_phase=True);env=runtime['env'];source=Path(p['samestate_source']['source'])
+        file_module('_sttw_tolerance_coordination',source/'source/tolerance_coordination.py')
+        original_cases=json.loads((source/'inventory.json').read_text())
+        rows=late_source_rows(original_cases,protocol['source_groups'])
+        with (source/'evaluation/complete_carry_05.pkl').open('rb') as f:saved=pickle.load(f).native
+        with (source/'evaluation/executed_paths_05.pkl').open('rb') as f:saved_paths=pickle.load(f)
+        carry=gather_source_carry(saved,rows);paths=gather_source_carry(saved_paths,rows)
+        if any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(carry) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('nonfinite saved late source')
+        with np.load(source/'evaluation/host_state_05.npz') as host:
+            changed=host['replanned'][rows].copy();arrived=host['ever_arrived'][rows].copy();goals=host['original_goals_xy'][rows].copy()
+        if not bool(j.all((carry.state.tick==1200)&(carry.state.physical.physical_tick==1900))) or bool(j.any(carry.state.fault|carry.state.physical.failed)):
+            raise ValueError('saved task6 source clock/failure invalid; no replacement')
+        if shape_only:
+            shaped=jax.eval_shape(runtime['bind'],carry,paths,j.zeros(4,bool))
+            save(out/'shape_receipt.json',dict(source_lanes=4,native_leaves=len(jax.tree.leaves(shaped)),physics_steps=0,import_rows=rows))
+            update(phase='completed',physics_steps=0);return
+        with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
+        poses=jax.device_get(runtime['measurements'](carry))
+        cross,invalid,failed,fault,ticks=jax.device_get((carry.state.projection.cross_track,carry.state.follower.invalid,carry.state.physical.failed,carry.state.fault,carry.state.tick))
+        path_list=[jax.tree.map(lambda x:x[i],paths) for i in range(4)];mask=np.zeros(4,bool);decisions=[]
+        for i in range(4):
+            requested=runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]))
+            meta={}
+            if requested:
+                path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],length_m=protocol['planner_support_m'],spacing_m=protocol['planner_spacing_m'])
+                path_list[i]=path;changed[i]=True;mask[i]=True
+            decisions.append(dict(source_index=i,source_row=rows[i],task_s=6.,task_tick=int(ticks[i]),requested=bool(requested),**meta))
+        if mask.any():
+            paths=jax.tree.map(lambda *x:j.stack(x),*path_list);carry=runtime['bind'](carry,paths,j.asarray(mask))
+        with (out/'complete_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
+        with (out/'executed_paths.pkl').open('wb') as f:pickle.dump(jax.device_get(paths),f)
+        np.savez_compressed(out/'host_state.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
+        save(out/'replanning_decisions.json',decisions)
+        sources=root/'sources';sources.mkdir(exist_ok=False)
+        for name in ('complete_carry.pkl','executed_paths.pkl','host_state.npz'):(sources/name).write_bytes((out/name).read_bytes())
+        observations=jax.jit(jax.vmap(lambda st,path,v:env.observation(st,path,v,p['horizon_s'])[0]))(carry.state,paths,runtime['speeds'])
+        np.savez_compressed(sources/'source_features.npz',native_observation_user1=np.asarray(observations),source_world_yaw=np.asarray(runtime['measurements'](carry))[:,2])
+        records=[]
+        for i,g in enumerate(protocol['source_groups']):
+            st=jax.tree.map(lambda x:x[i],carry);path=jax.tree.map(lambda x:x[i],paths)
+            np.savez_compressed(sources/f'executed_source_{i:02d}_path.npz',**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
+            records.append(dict(g,source_file=str(out/'complete_carry.pkl'),source_row=i,original_source_file=str(source/'evaluation/complete_carry_05.pkl'),original_source_row=rows[i],source_fingerprint=snapshot_fingerprint(jax.device_get(st)),native_leaf_count=len(jax.tree.leaves(st)),new_prefix_lower_ticks=0,imported_preplanner_carry_file=str(out/'initial_carry.pkl'),source_task_tick=1200,source_physical_tick=1900,planner_boundary_applied_s=6.,prepared_bank_index=g['bank_index'],prepared_state_fingerprint=protocol['bank_state_fingerprints'][str(g['bank_index'])]))
+        save(sources/'records.json',records)
+        files={str(f):digest(f) for f in list(sources.iterdir())+list(out.iterdir()) if f.is_file() and f.name!='status.json'}
+        save(sources/'seal.json',dict(plan_sha256=digest(root/'plan.json'),files=files,active_prefix_lower_ticks=0,allocated_prefix_lower_slots=0,selection='fixed-half nominal saved task6 metadata; no new integration',source_task_s=6.,planner_boundary_applied_s=6.))
+        update(phase='prefix_completed',completed_prefixes=4,source_groups=4,physics_steps=0)
+    except BaseException as exc:
+        (out/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise
+
+
 def run_prefix(root,*,shape_only=False):
+    if json.loads((Path(root)/'plan.json').read_text()).get('mode')=='h75_late_state_tolerance48':return run_late_prefix(root,shape_only=shape_only)
     """Collect declared task0..1 prefixes and freeze complete source state."""
     root=Path(root).resolve();p=verify(root)
     fresh=new_confirmation_sources(p['protocol']);prefix_budget=p['protocol']['maximum_prefix_lower_ticks'];n_prefix=8 if fresh else 4

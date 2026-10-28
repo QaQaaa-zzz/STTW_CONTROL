@@ -1,0 +1,116 @@
+{
+  "experiment_id": "STTW-H75-LATE-STATE-TOLERANCE48-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 48,
+  "maximum_lower_ticks": 38400,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "replan_cadence_s": 1.0,
+  "question": "Do frozen task1-trained tolerance predictors retain ranking and proper-score accuracy at common nominal task6 states?",
+  "data_role": "Late-state conditional risk DEV on familiar route/prepared banks; frozen online120 predictors; no fitting.",
+  "stop_rule": "Source import0physics plus48suffixes<=38400lower, total38400;0optimizer; no retries/search.",
+  "replanning": "Common one-shot causal Dubins at task1..6 before source freeze, then task7..9 for suffix if not already replanned/arrived/stopped; original worldgoal unchanged.",
+  "ordering": "Prefix common causal planner at1..6s before source observation; suffix first planner at7s; all candidates copy same complete state/path/host, user1 retained.",
+  "interpretation": "Primary no-fall source6 through pulseEND+3; faults invalid. Goal and fullH10 separate. Frozen q extrapolation, not calibration/safety certification.",
+  "scoring": "Primary source6 through pulseEND+3 no-contact; faults invalid. FullH10 contact and original worldgoal1m independent; preserve prefix ever_arrived.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Source task6 post common planner. Scalar alpha candidates applied immediately; hypothetical prep.2/.6 pulses at6.2/6.6, no event inputs to controller.",
+  "decision_rules": {
+    "feasibility": "Report per-source scalar-alpha/direction/preparation contact labels. Candidate/direction/preparation separation motivates later predictor review; all-positive labels do not authorize training a trivial classifier.",
+    "negative": "Preserve no-separation, pre-pulse contacts and engineeringinvalid; no force/state/threshold expansion.",
+    "outcomes": "Primary source-through-pulseEND+3s contact/physicalfailure; fullH10 and goal independent, missedgoal neverfall."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S paths/goal retained; saved task6 execution paths and host inherited exactly by all twelve suffixes per source.",
+  "new_horizon_s": 4.0,
+  "source_task_s": 6.0,
+  "candidate_alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "preparation_s": [
+    0.2,
+    0.6
+  ],
+  "primary_after_pulse_end_s": 3.0,
+  "initialization": "Import online120 fixed_half nominal complete_carry_05/executed_paths_05/host_state_05 for four bank2/5 route lanes; apply common task6 planner once; no new prefix integration.",
+  "source_features": "Native351 user1 observation after common task6 planning, before candidate/pulse publication.",
+  "maximum_prefix_lower_ticks": 0,
+  "maximum_total_lower_ticks": 38400,
+  "source_groups": [
+    {
+      "source_index": 0,
+      "bank_index": 2,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank2_S_left_90_R1p8",
+      "origin": "fixed_half",
+      "split": "late_state_development",
+      "source_group_id": "bank2/S_left_90_R1p8/fixed_half/task6"
+    },
+    {
+      "source_index": 1,
+      "bank_index": 2,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank2_S_right_90_R1p8",
+      "origin": "fixed_half",
+      "split": "late_state_development",
+      "source_group_id": "bank2/S_right_90_R1p8/fixed_half/task6"
+    },
+    {
+      "source_index": 2,
+      "bank_index": 5,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank5_S_left_90_R1p8",
+      "origin": "fixed_half",
+      "split": "late_state_development",
+      "source_group_id": "bank5/S_left_90_R1p8/fixed_half/task6"
+    },
+    {
+      "source_index": 3,
+      "bank_index": 5,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank5_S_right_90_R1p8",
+      "origin": "fixed_half",
+      "split": "late_state_development",
+      "source_group_id": "bank5/S_right_90_R1p8/fixed_half/task6"
+    }
+  ],
+  "source_initialization": "prepared_bank_all_prefixes",
+  "bank_indices": [
+    2,
+    5
+  ],
+  "bank_state_fingerprints": {
+    "2": "8709b6ef94ab87f0a9dff1575236bd534fc67a4afd3caf1b5d709a95c13b6d3b",
+    "5": "fa4d246fdc47906e46cf82c902487169d872b39908b48a0806ba361ba254a9ae"
+  },
+  "mode": "h75_late_state_tolerance48",
+  "prefix_origins": [
+    "fixed_half"
+  ],
+  "frozen_predictor_source": "online120/q unchanged six weights; no refit or threshold selection",
+  "historical_prefix_lower_ticks_reused": 4800
+}
