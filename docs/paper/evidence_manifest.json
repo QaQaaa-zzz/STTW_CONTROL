@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "28e4757bc8fb3f38f587ebfe88199d19c6f8ad58b966823517e6f872a3e29342",
-  "builder_sha256": "e8f8c3c32b1ce68c11b7a55327273c01675d5d1dd3969ee84ca20ea58fae6e3b",
+  "manuscript_sha256": "bd93f5b0815c59c286cd7fccb8094151f557600759f3f6720f5cb06eced5460e",
+  "builder_sha256": "d555d4dcb95105a0aedba3ec2a34b300c50bbe827b934ea87b46570a39f42f85",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -671,6 +671,30 @@
       "sha256": "f9f4b8416779848443de6523f316e12db414f87f21f60a30fb50c1aca825fcf9",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E112": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_tolerance_v1/analysis/results.json",
+      "sha256": "04c972fe79f61677d7b7178c4a99e3b9aee8e1f118e6f8c9d00f4f901b98ac89",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E113": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_tolerance_v1/analysis/receipt.json",
+      "sha256": "e60ad6926944f03a6d32bfb97e3fe496a22a512e615d21ea2657fc2353d79638",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E114": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_tolerance_v1/plan.json",
+      "sha256": "4c81dc11f8176d2544f9e155fbb36fbecab61ae472806769c6c048a0f03d3828",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E115": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_tolerance_v1/root_primary_label_check.json",
+      "sha256": "3c9ac2068ead1e1e30979212d1f0a138fc367ffa2ac3e2d9438ca5f2e2cf1c73",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -752,7 +776,11 @@
     "E108",
     "E109",
     "E110",
-    "E111"
+    "E111",
+    "E112",
+    "E113",
+    "E114",
+    "E115"
   ],
   "claims_from_readback": [
     {
