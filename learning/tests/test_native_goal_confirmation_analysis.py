@@ -667,3 +667,39 @@ def test_tolerance_summary_keeps_nominal_losses_and_twenty_pairs_per_comparison(
     assert not pair['nominal_no_new_contact_or_goal_loss']
     assert sum(d['goal1m_loss'] for d in pair['details'])==4
     assert summary['original_path_v3_aggregate'].startswith('not_yet_verified')
+
+
+def test_original_projection_numpy_matches_frozen_bounded_projection_scan():
+    import jax
+    import jax.numpy as j
+    from sttw_control.geometric_path import Path as NativePath,project
+    ss=np.linspace(0.,5.,251,dtype=np.float32);xy=np.column_stack([ss,.1*ss**2]).astype(np.float32);heading=np.arctan(.2*ss).astype(np.float32)
+    path=dict(s=ss,xy=xy,heading=heading,curvature=np.zeros_like(ss),turn_end=np.float32(4.),goal=np.float32(5.))
+    cfg={'path':dict(projection_backward_m=.1,projection_forward_floor_m=.3,projection_forward_motion_multiplier=2.,projection_forward_padding_m=.05)}
+    x=np.linspace(.01,1.,40,dtype=np.float32);actual=np.column_stack([x,.1*x*x+.04*np.sin(5*x)]).astype(np.float32)
+    native=NativePath(**{k:j.asarray(v) for k,v in path.items()})
+    def step(carry,point):
+        previous,old=carry;p=project(native,point,previous,j.linalg.norm(point-old),cfg)
+        return (p.progress,point),j.stack([p.progress,p.cross_track,p.heading])
+    _,expected=jax.jit(lambda points:jax.lax.scan(step,(j.float32(0.),j.asarray(xy[0])),points))(j.asarray(actual));expected=np.asarray(expected)
+    raw=dict(active_tick=np.ones(40,bool),actual_xy=actual,reference_yaw_unwrapped=expected[:,2],e_psi_unwrapped=expected[:,2]-.2)
+    result=m.original_path_projection_trace(raw,path,cfg)
+    np.testing.assert_allclose(result[:,:2],expected[:,:2],atol=2e-6,rtol=0)
+    np.testing.assert_allclose(result[:,2],expected[:,2]-.2,atol=2e-6,rtol=0)
+
+
+def test_original_task_rescore_keeps_original_path_after_replan_and_only_three_channels():
+    raw,path,cfg,ctrl,keys=reward_fixture();path.update(xy=np.column_stack([path['s'],np.zeros(4)]).astype(np.float32),heading=np.zeros(4,np.float32))
+    cfg['path']=dict(projection_backward_m=.1,projection_forward_floor_m=2.,projection_forward_motion_multiplier=2.,projection_forward_padding_m=.1)
+    raw.update(actual_xy=np.tile([1.,.2],(8,1)).astype(np.float32),reference_yaw_unwrapped=np.zeros(8),e_psi_unwrapped=np.zeros(8))
+    raw['path_cross_track'][4:]=0.;raw['effective_costs'][4:,keys.index('path')]=0.;raw['effective_costs'][:,keys.index('roll')]=99.
+    raw['physical_failure'][-1]=True
+    result,receipt=m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4)
+    assert receipt['validated_pre_replan_ticks']==4 and not receipt['full_total_reward_reconstructed']
+    assert result['task_step_costs'].shape==(8,3)
+    assert np.all(result['original_cross_track_m']>.19)
+    assert np.all(result['task_step_costs'][4:,1]>0.)
+    np.testing.assert_allclose(result['cumulative_task_costs'][-1],result['task_step_costs'].sum(axis=0))
+    raw['path_cross_track'][0]=.7
+    with pytest.raises(AssertionError,match='before replan'):
+        m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4)

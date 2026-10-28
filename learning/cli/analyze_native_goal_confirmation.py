@@ -1130,6 +1130,87 @@ def tolerance_common_windows(rows,raws,paths,goals):
             row['observed_phase_metrics']=phases
 
 
+def original_path_projection_trace(raw,path,config):
+    """NumPy equivalent of frozen project(), retaining original progress state."""
+    s=np.asarray(path['s'],np.float32);xy=np.asarray(path['xy'],np.float32);heading=np.asarray(path['heading'],np.float32)
+    n=int(np.asarray(raw['active_tick'],bool).sum());actual=np.asarray(raw['actual_xy'][:n],np.float32);c=config['path']
+    progress=np.float32(0.);previous=xy[0];values=np.empty((n,3),np.float32)
+    # Search bounds select the same valid segments as the native full-array mask.
+    for tick,point in enumerate(actual):
+        distance=np.linalg.norm(point-previous);lo=np.maximum(np.float32(0.),progress-np.float32(c['projection_backward_m']))
+        hi=np.minimum(s[-1],progress+np.maximum(np.float32(c['projection_forward_floor_m']),np.float32(c['projection_forward_motion_multiplier'])*distance+np.float32(c['projection_forward_padding_m'])))
+        first=max(0,int(np.searchsorted(s,lo,side='left'))-1);last=min(len(s)-1,int(np.searchsorted(s,hi,side='right')))
+        a=xy[first:last];v=xy[first+1:last+1]-a;span=s[first+1:last+1]-s[first:last]
+        u=np.sum((point-a)*v,axis=-1)/np.sum(v*v,axis=-1)
+        u=np.clip(u,np.clip((lo-s[first:last])/span,0.,1.),np.clip((hi-s[first:last])/span,0.,1.))
+        ss=s[first:last]+u*span;points=a+u[:,None]*v;d2=np.sum((point-points)**2,axis=-1)
+        idx=int(np.argmin(np.where(d2<=d2.min()+np.float32(1e-10),abs(ss-progress),np.float32(np.inf))))
+        h=np.float32(np.interp(ss[idx],s,heading));delta=point-points[idx]
+        cross=-np.sin(h)*delta[0]+np.cos(h)*delta[1]
+        yaw=np.float32(raw['reference_yaw_unwrapped'][tick])-np.float32(raw['e_psi_unwrapped'][tick]);angle=h-yaw
+        error=np.arctan2(np.sin(angle),np.cos(angle));progress=np.maximum(progress,ss[idx]);values[tick]=[progress,cross,error];previous=point
+    return values
+
+
+def rescore_original_task(raw,path,config,controller,keys,replan_tick=None):
+    """Only original alpha1 V3 task channels; never a reconstructed total reward."""
+    from analyze_native_frozen_validation import score
+    n=int(np.asarray(raw['active_tick'],bool).sum());projection=original_path_projection_trace(raw,path,config)
+    modified={k:np.asarray(v)[:n] for k,v in raw.items()}
+    modified.update(path_progress=projection[:,0],path_cross_track=projection[:,1],path_heading_error=projection[:,2],physical_failure=np.zeros(n,bool),domain_exit=np.zeros(n,bool))
+    _,data=score(modified,path,config,controller,keys,1.)
+    indices=[keys.index(k) for k in ('speed','path','primary')];effective=data['effective'][:,indices]
+    before=n if replan_tick is None else min(n,int(replan_tick));validation={}
+    for column,name,logged in ((0,'progress','path_progress'),(1,'cross_track','path_cross_track'),(2,'heading_error','path_heading_error')):
+        error=projection[:before,column]-np.asarray(raw[logged][:before]);validation[name+'_max_absolute_error']=float(np.max(abs(error))) if before else None
+        np.testing.assert_allclose(projection[:before,column],raw[logged][:before],atol=4e-4,rtol=2e-5,err_msg='original projection before replan differs '+name)
+    np.testing.assert_allclose(effective[:before],np.asarray(raw['effective_costs'])[:before,indices],atol=4e-4,rtol=2e-5,err_msg='original V3 task costs before replan differ')
+    step=effective*config['path_reward']['scale']*config['timing']['lower_dt_s']
+    return dict(original_progress_m=projection[:,0],original_cross_track_m=projection[:,1],original_heading_error_rad=projection[:,2],task_effective_cost_rates=effective,task_step_costs=step,cumulative_task_costs=np.cumsum(step,axis=0)),dict(validated_pre_replan_ticks=before,projection_errors=validation,task_component_names=['speed','path','primary'],terminal_replacement='Excluded from three running task channels; actual global failure replacement remains in original full reward diagnostics. Not allocated to a task channel.',full_total_reward_reconstructed=False)
+
+
+def rescore_original_task_analysis(root):
+    p=json.loads((root/'plan.json').read_text())
+    if p['mode']!='tolerance_online120':raise ValueError('original task rescoring currently requires tolerance_online120')
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
+    rows=json.loads((root/'analysis/results.json').read_text());index=json.loads((root/'evaluation/case_index.json').read_text())
+    if len(rows)!=120 or [r['case_id'] for r in rows]!=[r['case_id'] for r in index]:raise ValueError('complete authenticated main120 analysis required')
+    manifest=json.loads((root/'evaluation/manifest.json').read_text())
+    for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models'])):
+        if manifest[key]!=expected:raise ValueError('original rescore manifest drift '+key)
+    if json.loads((root/'analysis/receipt.json').read_text())['plan_sha256']!=digest(root/'plan.json'):raise ValueError('main analysis belongs to another plan')
+    raw={};paths={}
+    for row,declared in zip(rows,index):
+        if any(row.get(k)!=v for k,v in declared.items()):raise ValueError('main analysis case differs from authenticated raw index')
+        if digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('raw trace drift')
+        with np.load(row['raw_file']) as z:raw[row['case_id']]=dict(z)
+        key=analysis_path_key(row)
+        if key not in paths:
+            with np.load(root/'evaluation'/(key+'_path.npz')) as z:paths[key]=dict(z)
+    manifest=json.loads((root/'evaluation/manifest.json').read_text())
+    return write_original_task_rescoring(root,rows,raw,paths,p['config'],p['initial_source']['controller'],manifest['reward_components'])
+
+
+def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
+    """Add separate derived three-channel evidence; no physics or endpoint change."""
+    import time
+    started=time.monotonic()
+    out=root/'analysis'/'original_task_rescoring';out.mkdir(exist_ok=False);results=[];arrays={}
+    for lane,row in enumerate(rows):
+        values,receipt=rescore_original_task(raws[row['case_id']],paths[analysis_path_key(row)],config,controller,keys,row.get('replan_task_tick'))
+        arrays[row['case_id']]=values;np.savez_compressed(out/f'case_{lane:03d}.npz',**values)
+        results.append(dict(case_id=row['case_id'],bank_index=row['bank_index'],route=row['route'],event=row['event'],mode=row['mode'],actual_ticks=row['active_lower_ticks'],actual_physical_outcome=row['horizons']['10']['physical_outcome'],data_file=f'case_{lane:03d}.npz',**receipt))
+    for label in response_plot_groups(rows):
+        group=response_plot_selection(rows,label);common=min(r['active_lower_ticks'] for r in group);prefix=min(r['prefix']['ticks'] for r in group)
+        for row in group:
+            record=next(r for r in results if r['case_id']==row['case_id']);step=arrays[row['case_id']]['task_step_costs'];record['windows']={}
+            for name,n in (('actual_observed',len(step)),('own_pre_first_arrival',row['prefix']['ticks']),('common_actual',common),('common_pre_first_arrival',prefix)):
+                record['windows'][name]=dict(actual_ticks=n,observed_s=n*.005,three_task_costs=step[:n].sum(axis=0).tolist(),three_task_cost_sum=float(step[:n].sum()))
+    atomic_json(out/'results.json',results);atomic_json(out/'receipt.json',dict(analysis_source_sha256=digest(__file__),plan_sha256=digest(root/'plan.json'),main_analysis_results_sha256=digest(root/'analysis/results.json'),original_path_sha256={key:digest(root/'evaluation'/(key+'_path.npz')) for key in paths},elapsed_s=time.monotonic()-started,cases=len(rows),new_physics_steps=0,optimizer_updates=0,task_alpha=1.,projection='Frozen original world path from task0; no reset at executed-path Dubins replan; native bounded local projection/tie/monotone progress semantics.',scoring='Only frozen V3 speed/path/primary running cost channels. Other reward terms are not substituted or relabeled. Actual global terminal replacement excluded from these three channels; full observed reward retains it.',observation='Stop at actual failure/end. Common actual and common pre-first-arrival windows supplied; goal/contact unchanged. Offline original-task rescoring of actual executed trajectories, not hypothetical original-path-controlled trajectories.'))
+    (out/'README.md').write_text('# Original alpha1 task rescoring\n\nOnly frozen V3 speed/path/primary running costs on the immutable original path. Original projection state is replayed from task0 and never reset at Dubins replan. All pre-replan windows are checked against recorded native projection and task costs.\n\nActual trajectories stop at their real endpoints. Common observation/pre-first-arrival windows are provided. These three running channels exclude the global terminal reward replacement and are not a reconstructed total reward. Goal/contact outcomes are unchanged.\n\n[Per-case windows and validation](results.json) · [Scope receipt](receipt.json)\n')
+    return results
+
+
 def tolerance_online_summary(rows):
     expected=set(TOLERANCE_ARMS);methods={r['mode'] for r in rows}
     if methods!=expected:raise ValueError('all six tolerance arms required')
@@ -1443,5 +1524,8 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path)
     parser.add_argument('--include-heldout-labels',action='store_true',help='Explicit final evaluation only after root freezes the fitting recipe; unseals bank1 new labels')
+    parser.add_argument('--original-task-rescore-only',action='store_true',help='Add independent original-path three V3 task channels from completed main analysis, no physics')
     parser.add_argument('--include-confirmation-labels',action='store_true',help='Explicit sealed-predictor new-source banks2/5 confirmation only; never unseals historical banks')
-    args=parser.parse_args();analyze(args.root,include_heldout_labels=args.include_heldout_labels,include_confirmation_labels=args.include_confirmation_labels)
+    args=parser.parse_args()
+    if args.original_task_rescore_only:rescore_original_task_analysis(args.root.resolve())
+    else:analyze(args.root,include_heldout_labels=args.include_heldout_labels,include_confirmation_labels=args.include_confirmation_labels)
