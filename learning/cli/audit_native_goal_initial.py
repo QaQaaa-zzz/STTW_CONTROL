@@ -27,7 +27,7 @@ def audit(root,output):
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
     late=p.get('mode')=='h75_late_state_tolerance48'
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
     if late:
         original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
         load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
@@ -39,7 +39,7 @@ def audit(root,output):
         spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
         adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
     if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -48,7 +48,7 @@ def audit(root,output):
     with initial.open('rb') as f:carry=pickle.load(f)
     if online:
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
-        if tolerance and np.any(carry.prev_alpha!=1.):raise ValueError('online initial previous alpha must be one')
+        if tolerance and np.any(carry.prev_alpha!=np.asarray([c['alpha'] for c in json.loads((root/'inventory.json').read_text())])):raise ValueError('online initial previous alpha must be one')
         carry=carry.native
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):
         return audit_bank144_initial(root,p,carry,output,jax,initial)
@@ -65,7 +65,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120'):
+    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -212,7 +212,7 @@ def audit(root,output):
 
 
 def confirmation_initial_layout(plan):
-    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5)}
+    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5)}
     if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
     count,arms=expected[plan['mode']]
     if plan['protocol']['expected_cases']!=count or len(plan['protocol']['arms'])!=arms:
@@ -223,10 +223,10 @@ def confirmation_initial_layout(plan):
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
     count,arms=confirmation_initial_layout(p)
     if len(cases)!=count:raise ValueError('complete declared initial cases required')
-    np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,np.ones(count))
+    np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,[c['alpha'] for c in cases])
     np.testing.assert_array_equal(state.filtered,np.zeros((count,2)));np.testing.assert_array_equal(state.offsets,np.zeros((count,2)))
     for value in (state.fault,state.physical.failed,state.domain_exit,carry.ever_domain_exit,carry.clean_blocks):
         if np.any(value):raise ValueError('new bank initial stop/fault/clean latch')
@@ -253,8 +253,9 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         with np.load(root/'evaluation'/(c['path_key']+'_path.npz')) as z:
             np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
-    leaves=jax.tree.leaves(carry)
-    expected_groups=24 if p.get('mode')=='tolerance_broaden120' else 20
+    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode')=='user_preference120' else carry
+    leaves=jax.tree.leaves(neutral)
+    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120') else 20
     if len(groups)!=expected_groups or any(len(ids)!=arms for ids in groups.values()):raise ValueError(f'{expected_groups} paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:
@@ -363,7 +364,7 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
         for a,b in zip(aa,bb):
             if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('source ancestor dtype mismatch')
             np.testing.assert_array_equal(a,b)
-    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(count,source_tick));np.testing.assert_array_equal(state.alpha,np.ones(count))
+    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(count,source_tick));np.testing.assert_array_equal(state.alpha,[c['alpha'] for c in cases])
     np.testing.assert_array_equal(state.physical.physical_tick,np.full(count,700+source_tick))
     if np.any(state.fault|state.physical.failed):raise ValueError('source pool stopped state')
     with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
@@ -437,3 +438,48 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path);parser.add_argument('output',type=Path)
     args=parser.parse_args();audit(args.root.resolve(),args.output.resolve())
+
+
+def validate_user_preference_cache(source,*,config,models,protocol,initial_source=None,replanning=None):
+    """Authenticate96 saved trajectories and the fixed-half alpha independence contract."""
+    import ast
+    import numpy as np
+    source=Path(source).resolve();old=json.loads((source/'plan.json').read_text())
+    sha=lambda f:hashlib.sha256(Path(f).read_bytes()).hexdigest()
+    if old['mode']!='tolerance_broaden120' or sha(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed broaden120 cache required')
+    for key,value in [('config',config),('models',models)]+([('initial_source',initial_source)] if initial_source is not None else [])+([('replanning',replanning)] if replanning is not None else []):
+        if old[key]!=value:raise ValueError('cached identity differs '+key)
+    for key in ('bank_indices','bank_state_fingerprints','routes','forces_N','onsets_s','zero_onset_s','duration_s','rule'):
+        if old['protocol'][key]!=protocol[key]:raise ValueError('cached condition differs '+key)
+    status=json.loads((source/'evaluation/status.json').read_text());receipt=json.loads((source/'analysis/receipt.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=120 or receipt['all_cases']!=120 or receipt['plan_sha256']!=sha(source/'plan.json'):raise ValueError('complete authenticated broaden analysis required')
+    native=Path(old['native_runtime_root'])/'sttw_control/path_command_env.py';tree=ast.parse(native.read_text());uses=[]
+    for method in [x for x in ast.walk(tree) if isinstance(x,(ast.FunctionDef,ast.AsyncFunctionDef))]:
+        for node in ast.walk(method):
+            if isinstance(node,ast.Attribute) and node.attr=='alpha' and isinstance(node.value,ast.Name):uses.append((method.name,node.value.id))
+    if sorted(uses)!=[('observation','s'),('tick','s')]:raise ValueError('native state alpha has unreviewed physical dependencies')
+    tick=next(x for x in ast.walk(tree) if isinstance(x,ast.FunctionDef) and x.name=='tick')
+    alpha_calls=[x for x in ast.walk(tick) if isinstance(x,ast.Call) and any(k.arg=='alpha' and isinstance(k.value,ast.Attribute) and k.value.attr=='alpha' for k in x.keywords)]
+    if len(alpha_calls)!=1 or not isinstance(alpha_calls[0].func,ast.Name) or alpha_calls[0].func.id!='costs':raise ValueError('state alpha must only feed reward in tick')
+    identity={str(native):sha(native)}
+    for name in ('plan.json','seal.json','inventory.json','evaluation/case_index.json','evaluation/status.json','evaluation/manifest.json','analysis/results.json','analysis/receipt.json','q/receipt.json'):
+        identity[str(source/name)]=sha(source/name)
+    index=json.loads((source/'evaluation/case_index.json').read_text());rows=json.loads((source/'analysis/results.json').read_text())
+    if len(rows)!=120 or len(index)!=120 or [x['case_id'] for x in rows]!=[x['case_id'] for x in index]:raise ValueError('complete ordered cache inventory required')
+    selected=[(i,r) for i,r in enumerate(rows) if r['mode'] in ('temporal_rank_last','task_guard_only','fixed1','fixed_half')]
+    if len(selected)!=96:raise ValueError('96 cached physical cases required')
+    for i,row in selected:
+        if any(row.get(k)!=v for k,v in index[i].items()):raise ValueError('cached raw/index drift')
+        f=Path(row['raw_file'])
+        if sha(f)!=row['raw_sha256']:raise ValueError('cached raw drift')
+        identity[str(f)]=row['raw_sha256']
+        with np.load(f) as z:
+            n=int(np.asarray(z['active_tick'],bool).sum())
+            if n!=row['active_lower_ticks']:raise ValueError('cached endpoint mismatch')
+            np.testing.assert_array_equal(z['alpha_user'][:n],1.)
+            if row['mode']=='fixed_half':
+                np.testing.assert_array_equal(z['alpha_exec'][:n],.5)
+                np.testing.assert_allclose(z['query_observation'][:n,336],.5,atol=1e-6,rtol=0)
+                np.testing.assert_allclose(z['composed_latent'][:n],z['coord_latents'][:n,1],atol=1e-6,rtol=0)
+        for f in [source/'evaluation'/(row['path_key']+'_path.npz')]+([source/'evaluation'/f'replanned_path_{i:02d}.npz'] if row.get('replan_task_tick') is not None else []):identity[str(f)]=sha(f)
+    return dict(source=str(source),identity=identity,cached_cases=96,total_records=216,reuse_physics_only=True,raw_user_alpha=1.,effective_cached_fixed_half_user_alpha=.5,alpha_half_reuse_proof=dict(native_environment=str(native),native_environment_sha256=sha(native),state_alpha_uses=[list(x) for x in uses],physical_alpha_dependency=False,fixed_query_alpha=.5,all24_fixed_half_queries_checked=True,explanation='state.alpha feeds observation and costs only; fixed actor queries overwrite feature336; frozen predictor features exclude336. Original raw alpha1/reward retained; effectiveuser.5 rewards independently rebuilt.'))
