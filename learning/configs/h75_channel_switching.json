@@ -1,0 +1,114 @@
+{
+  "experiment_id": "STTW-H75-CHANNEL-SWITCHING-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 36,
+  "maximum_lower_ticks": 72000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    1.6
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "mappings": [
+    [
+      0.5,
+      0.5
+    ],
+    [
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      0.5
+    ]
+  ],
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "zero_onset_s": 1.6,
+  "replan_cadence_s": 1.0,
+  "question": "Does switching a common complete pre-force origin state to fixed alpha.5 alter goal/contact outcomes with .6/.2/0s declared preparation?",
+  "data_role": "Known-timing switching diagnostic; related DEV, not online unknown-onset coordination.",
+  "stop_rule": "Exactly36/H10/72000lower including shared prefix;0optimizer, no extra state-capture replay, retry, force/timegrid expansion or adoption.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "At task1.0 capture complete carry and check shared state first, then common planner reads pre-switch state, then scan applies switch. At1.6 switch and force begin at same upper boundary.",
+  "interpretation": "Pre-known switching times are diagnostic; no onset detector or unknown-onset policy claim. Original S error descriptive after replanning; goal1m and contact primary.",
+  "scoring": "Original worldgoal1m before contact/fault and full-window contact are primary. Original-route geometric distance and requested-speed errors separately. V3 costs rescored at user1 on execution paths remain diagnostic after replan, not the original-path user objective.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Exploratory selection after54 identified paired true-contact failures: switch at1.0/1.4/1.6 gives .6/.2/0s preparation before declared1.6 pulse. At zero preparation the switch is scheduled before first pulse tick, not a reactive onset response.",
+  "decision_rules": {
+    "primary": "Report paired stay-origin true-contact failure rescued without new physical contact, with goal1m arrival independently; no percentage threshold.",
+    "nominal_guard": "A candidate needs no new nominal contact/fault or goal1m loss against its matched stay origin across both routes; retain every reverse case.",
+    "interpretation": "Selected known-failure exploratory diagnostic; preparation timing is known in advance, not an unknown-onset coordinator or proof of universal benefit.",
+    "negative": "No paired contact rescue or nominal guard violation stops escalation; retain failures and partials, no threshold/timegrid/force expansion or automatic MLP training."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "switch_times_s": [
+    1.0,
+    1.4,
+    1.6
+  ],
+  "origins": [
+    {
+      "origin": "fixed1",
+      "speed_alpha": 1.0,
+      "steer_alpha": 1.0
+    },
+    {
+      "origin": "hybrid",
+      "speed_alpha": 1.0,
+      "steer_alpha": 0.5
+    }
+  ],
+  "destination_pair": [
+    0.5,
+    0.5
+  ],
+  "capture_task_s": 1.0,
+  "prefix_comparison": {
+    "fields": [
+      "active_tick",
+      "time",
+      "actual_xy",
+      "reference_xy",
+      "actual_forward_speed",
+      "wheel_speed_proxy",
+      "phi",
+      "phi_dot",
+      "actual_delta",
+      "path_cross_track",
+      "path_heading_error",
+      "path_progress",
+      "latent_z",
+      "governed",
+      "filtered_offset",
+      "target_offset",
+      "reference_target_permitted",
+      "clean_blocks_at_end",
+      "cumulative_domain_exit",
+      "applied_force_impulse"
+    ],
+    "absolute_tolerance": 1e-05,
+    "relative_tolerance": 1e-06
+  }
+}

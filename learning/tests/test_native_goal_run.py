@@ -95,3 +95,68 @@ def test_response_original_5001_support_matches_replanner_and_legacy_remains_400
         np.testing.assert_array_equal(np.asarray(getattr(extended,field))[:4001],np.asarray(getattr(legacy,field)))
     assert float(extended.goal)==float(legacy.goal)
     np.testing.assert_allclose(np.asarray(extended.s)[4001:]-float(legacy.s[-1]),np.arange(1,1001)*.02,atol=4e-6)
+
+
+def test_switching_inventory_has_bounded_36_and_origin_state_alpha_one():
+    from sttw_control.native_goal_run import switching_protocol,switching_inventory
+    rows=switching_inventory(switching_protocol())
+    assert len(rows)==len({r['case_id'] for r in rows})==36
+    assert {r['alpha'] for r in rows}=={1.}
+    assert {r['switch_s'] for r in rows}=={1.,1.4,1.6}
+    groups=defaultdict(list)
+    for r in rows:groups[r['route'],r['origin']].append(r)
+    assert len(groups)==4 and all(len(v)==9 for v in groups.values())
+    assert sum(r['force_N']==0 for r in rows)==12
+
+
+def test_switch_mapping_only_changes_declared_query_pairs_at_each_upper_boundary():
+    from sttw_control.native_goal_run import switch_mapping
+    for tick in (200,280,320):
+        before=switch_mapping(tick-4,1.,.5,tick,[.5,.5])
+        at=switch_mapping(tick,1.,.5,tick,[.5,.5])
+        np.testing.assert_array_equal(np.asarray(before),[1.,.5,False])
+        np.testing.assert_array_equal(np.asarray(at),[.5,.5,True])
+
+
+def test_capture_validates_all_state_leaves_across_nine_lanes_and_rejects_hidden_history_difference():
+    from sttw_control.native_goal_run import switching_protocol,switching_inventory,assert_shared_switch_carry
+    import pytest
+    rows=switching_inventory(switching_protocol())
+    groups={(r['route'],r['origin']):i for i,r in enumerate(rows)}
+    histories=np.array([[groups[r['route'],r['origin']]]*7 for r in rows])
+    carry=dict(tick=np.full(36,200),hidden_history=histories,clean=np.zeros(36))
+    receipt=assert_shared_switch_carry(carry,rows)
+    assert receipt['leaf_count']==3 and receipt['groups']==4
+    histories[1,4]+=1
+    with pytest.raises(ValueError,match='complete task1.0 carry'):
+        assert_shared_switch_carry(carry,rows)
+
+
+def test_stay_prefix_audit_uses_saved_raw_and_rejects_physical_mismatch(tmp_path):
+    from sttw_control.native_goal_run import audit_stay_prefix
+    import pytest
+    cases=[dict(route='S',origin='fixed1',force_N=0.)]*2
+    path=tmp_path/'stay.npz';np.savez(path,time=np.arange(200)*.005,actual_xy=np.zeros((200,2)))
+    logs=dict(time=np.broadcast_to((np.arange(200)*.005)[:,None],(200,2)).copy(),actual_xy=np.zeros((200,2,2)))
+    cached=[dict(cases[0],raw_file=str(path))]
+    p=dict(prefix_comparison=dict(fields=['time','actual_xy']))
+    assert audit_stay_prefix(logs,cases,cached,p)['all_fields_within_tolerance']
+    logs['actual_xy'][100,1,0]=.001
+    with pytest.raises(ValueError,match='prefix mismatch'):
+        audit_stay_prefix(logs,cases,cached,p)
+
+
+def test_own_switch_prefix_checks_280_tick_preparation_with_predeclared_float_tolerance(tmp_path):
+    from sttw_control.native_goal_run import audit_stay_prefix
+    import pytest
+    path=tmp_path/'stay.npz';np.savez(path,time=np.arange(400)*.005,actual_xy=np.zeros((400,2)),active_tick=np.ones(400,bool))
+    cases=[dict(route='S',origin='hybrid',force_N=-64.,switch_s=1.4)]
+    cached=[dict(cases[0],raw_file=str(path))]
+    logs=dict(time=(np.arange(400)*.005)[:,None],actual_xy=np.zeros((400,1,2)),active_tick=np.ones((400,1),bool))
+    p=dict(prefix_comparison=dict(fields=list(logs),absolute_tolerance=1e-5,relative_tolerance=1e-6))
+    logs['actual_xy'][279,0,0]=5e-6;logs['actual_xy'][280,0,0]=1.
+    r=audit_stay_prefix(logs,cases,cached,p,own_switch=True)
+    assert r['prefix_lower_ticks']==[280] and r['maximum_absolute_difference']['actual_xy']==5e-6
+    logs['active_tick'][279,0]=False
+    with pytest.raises(ValueError,match='prefix mismatch'):
+        audit_stay_prefix(logs,cases,cached,p,own_switch=True)
