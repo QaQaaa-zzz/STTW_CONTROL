@@ -27,7 +27,7 @@ def audit(root,output):
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
     late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
     if late:
         original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
         load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
@@ -39,7 +39,7 @@ def audit(root,output):
         spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
         adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
     if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -65,7 +65,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60'):
+    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -212,13 +212,17 @@ def audit(root,output):
 
 
 def confirmation_initial_layout(plan):
-    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3),'task_aware_fallback72':(72,3),'frozen_confirmation200':(200,10),'speed_query_online60':(60,3)}
+    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3),'task_aware_fallback72':(72,3),'frozen_confirmation200':(200,10),'speed_query_online60':(60,3),'guard_fallback_evaluation':(72,3)}
     if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
     count,arms=expected[plan['mode']]
     if plan['mode']=='frozen_confirmation200':
         variant=plan['protocol'].get('variant')
         if variant not in (None,'geometry_duration_extension_v1'):raise ValueError('unknown frozen confirmation variant')
         if variant=='geometry_duration_extension_v1':count,arms=240,10
+    if plan['mode']=='guard_fallback_evaluation':
+        stage=plan['protocol'].get('stage')
+        if stage not in ('extension','regression'):raise ValueError('unknown guard fallback stage')
+        count,arms=(72,3) if stage=='extension' else (60,3)
     if plan['protocol']['expected_cases']!=count or len(plan['protocol']['arms'])!=arms:
         raise ValueError('initial panel dimensions differ from declared mode')
     return count,arms
@@ -227,7 +231,7 @@ def confirmation_initial_layout(plan):
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
     count,arms=confirmation_initial_layout(p)
     if len(cases)!=count:raise ValueError('complete declared initial cases required')
     np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,[c['alpha'] for c in cases])
@@ -257,9 +261,9 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         with np.load(root/'evaluation'/(c['path_key']+'_path.npz')) as z:
             np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
-    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60') else carry
+    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation') else carry
     leaves=jax.tree.leaves(neutral)
-    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode')=='frozen_confirmation200' and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20
+    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode') in ('frozen_confirmation200','guard_fallback_evaluation') and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20
     if len(groups)!=expected_groups or any(len(ids)!=arms for ids in groups.values()):raise ValueError(f'{expected_groups} paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:
@@ -546,16 +550,16 @@ def validate_task_aware_cache(source,*,config,models,protocol,initial_source=Non
     return dict(source=str(source),identity=identity,cached_cases=288,total_records=360,reuse_physics_only=True,preserve_effective_user_identity=True)
 
 
-def validate_speed_query_cache(source,*,config,models,protocol,initial_source=None,replanning=None):
+def _validate_frozen_panel_cache(source,*,config,models,protocol,initial_source=None,replanning=None,source_count=200,total_records=260,source_variant=None):
     """Reuse the complete immutable200 full-input controls; no new baseline physics."""
     source=Path(source).resolve();old=json.loads((source/'plan.json').read_text());sha=lambda f:hashlib.sha256(Path(f).read_bytes()).hexdigest()
-    if old.get('mode')!='frozen_confirmation200' or sha(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed frozen200 cache required')
+    if old.get('mode')!='frozen_confirmation200' or old['protocol'].get('variant')!=source_variant or sha(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed frozen200 cache required')
     for key,value in [('config',config),('models',models)]+([('initial_source',initial_source)] if initial_source is not None else [])+([('replanning',replanning)] if replanning is not None else []):
         if old[key]!=value:raise ValueError('speed-query cache identity differs '+key)
     for key in ('bank_indices','bank_state_fingerprints','routes','forces_N','onsets_s','zero_onset_s','duration_s','force_frame','horizon_s','goal_radius_m','replanning_radius_m','departure_m','maximum_replans','replan_cadence_s','planner_support_m','planner_spacing_m','planner_points','coordination','rule','user_preference'):
         if old['protocol'][key]!=protocol[key]:raise ValueError('speed-query cached condition differs '+key)
     receipt=json.loads((source/'analysis/receipt.json').read_text());status=json.loads((source/'evaluation/status.json').read_text());rows=json.loads((source/'analysis/results.json').read_text());index=json.loads((source/'evaluation/case_index.json').read_text())
-    if receipt['all_cases']!=200 or receipt['plan_sha256']!=sha(source/'plan.json') or status.get('phase')!='completed' or status.get('completed_cases')!=200 or len(rows)!=200 or len(index)!=200:raise ValueError('complete full-input200 analysis required')
+    if receipt['all_cases']!=source_count or receipt['plan_sha256']!=sha(source/'plan.json') or status.get('phase')!='completed' or status.get('completed_cases')!=source_count or len(rows)!=source_count or len(index)!=source_count:raise ValueError('complete full-input200 analysis required')
     identity={}
     for name in ('plan.json','seal.json','inventory.json','evaluation/case_index.json','evaluation/status.json','evaluation/manifest.json','evaluation/replanning_decisions.json','evaluation/shape_receipt.json','analysis/results.json','analysis/receipt.json','q/receipt.json'):
         identity[str(source/name)]=sha(source/name)
@@ -574,5 +578,43 @@ def validate_speed_query_cache(source,*,config,models,protocol,initial_source=No
         for file in [source/'evaluation'/(row['path_key']+'_path.npz')]+([source/'evaluation'/f'replanned_path_{i:02d}.npz'] if row.get('replan_task_tick') is not None else []):identity[str(file)]=sha(file)
         groups.setdefault((row['bank_index'],row['route'],row['event']),[]).append((row['effective_user_alpha'],row['method']))
     expected={(u,m) for u in (0.,.5,1.) for m in ('task_aware','guard','fixed')}|{(1.,'speedcap')}
-    if len(groups)!=20 or any(len(v)!=10 or set(v)!=expected for v in groups.values()):raise ValueError('full200 ten-arm condition coverage differs')
-    return dict(source=str(source),identity=identity,cached_cases=200,total_records=260,reuse_physics_only=True,preserve_effective_user_identity=True,source_data_role=old['data_role'],reused_frozen_q_audit_receipt_sha256=sha(source/'analysis/receipt.json'))
+    if len(groups)!=source_count//10 or any(len(v)!=10 or set(v)!=expected for v in groups.values()):raise ValueError('full200 ten-arm condition coverage differs')
+    return dict(source=str(source),identity=identity,cached_cases=source_count,total_records=total_records,reuse_physics_only=True,preserve_effective_user_identity=True,source_data_role=old['data_role'],reused_frozen_q_audit_receipt_sha256=sha(source/'analysis/receipt.json'))
+
+
+def validate_speed_query_cache(source,*,config,models,protocol,initial_source=None,replanning=None):
+    return _validate_frozen_panel_cache(source,config=config,models=models,protocol=protocol,initial_source=initial_source,replanning=replanning)
+
+
+def validate_guard_fallback_cache(source,*,config,models,protocol,initial_source=None,replanning=None):
+    stage=protocol.get('stage')
+    if stage not in ('extension','regression'):raise ValueError('unknown guard fallback cache stage')
+    extension=stage=='extension'
+    checked=_validate_frozen_panel_cache(source,config=config,models=models,protocol=protocol,initial_source=initial_source,replanning=replanning,source_count=240 if extension else 200,total_records=312 if extension else 260,source_variant='geometry_duration_extension_v1' if extension else None)
+    if extension and json.loads((Path(source)/'plan.json').read_text())['protocol']['route_contexts']!=protocol['route_contexts']:raise ValueError('guard fallback cached route contexts differ')
+    checked.update(stage=stage,old_control_audit='Original sealed analysis receipt and original source core inherited; new guard fallback core not applied to old trajectories')
+    return checked
+
+
+def guard_fallback_stage1_gate(root):
+    """One declared promotion gate: any paired goal/contact rescue, no tuning."""
+    root=Path(root).resolve();sha=lambda f:hashlib.sha256(Path(f).read_bytes()).hexdigest()
+    plan=json.loads((root/'plan.json').read_text());status=json.loads((root/'evaluation/status.json').read_text());receipt=json.loads((root/'analysis/receipt.json').read_text())
+    if plan.get('mode')!='guard_fallback_evaluation' or plan['protocol'].get('stage')!='extension' or plan['cases']!=72 or sha(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed guard fallback extension stage required')
+    if status.get('phase')!='completed' or status.get('completed_cases')!=72 or status['active_lower_ticks']>144000 or receipt['all_cases']!=312 or receipt['plan_sha256']!=sha(root/'plan.json'):raise ValueError('complete stage1 physical/analysis evidence required')
+    rows=json.loads((root/'analysis/results.json').read_text());index=json.loads((root/'evaluation/case_index.json').read_text());declared=json.loads((root/'inventory.json').read_text())
+    if len(declared)!=72 or {r['case_id'] for r in declared}!={r['case_id'] for r in index}:raise ValueError('stage1 actual index differs from declared inventory')
+    if len(rows)!=312 or len(index)!=72 or len({r['case_id'] for r in rows})!=312:raise ValueError('complete unique stage1 inventory required')
+    key=lambda r:(r['effective_user_alpha'],r['bank_index'],r['route'],r['event'])
+    new={key(r):r for r in rows if r['method']=='guard_degraded'};old={key(r):r for r in rows if r['method']=='task_aware'}
+    if len(new)!=72 or set(new)!=set(old) or {r['case_id'] for r in new.values()}!={r['case_id'] for r in index}:raise ValueError('stage1 must pair all72 with oldtaskaware')
+    details=[];identity={str(root/name):sha(root/name) for name in ('plan.json','seal.json','inventory.json','evaluation/status.json','evaluation/case_index.json','analysis/results.json','analysis/receipt.json')}
+    for k,n in new.items():
+        o=old[k];a=n['horizons']['10'];b=o['horizons']['10']
+        if a['goal_arrived'] is None or b['goal_arrived'] is None or a['physical_outcome'] not in ('survived','contact') or b['physical_outcome'] not in ('survived','contact'):raise ValueError('unknown stage1 outcomes cannot authorize promotion')
+        for row in (n,o):
+            if sha(row['raw_file'])!=row['raw_sha256']:raise ValueError('stage1 paired raw identity changed')
+            identity[row['raw_file']]=row['raw_sha256']
+        details.append(dict(user=k[0],bank=k[1],route=k[2],event=k[3],goal_gain=bool(a['goal_arrived'] and not b['goal_arrived']),goal_loss=bool(b['goal_arrived'] and not a['goal_arrived']),contact_rescue=b['physical_outcome']=='contact' and a['physical_outcome']=='survived',new_contact=a['physical_outcome']=='contact' and b['physical_outcome']=='survived'))
+    gains=sum(r['goal_gain'] for r in details);rescues=sum(r['contact_rescue'] for r in details)
+    return dict(source=str(root),allowed=bool(gains or rescues),total_goal_gains=gains,total_contact_rescues=rescues,total_goal_losses=sum(r['goal_loss'] for r in details),total_new_contacts=sum(r['new_contact'] for r in details),compared_to='oldtaskaware only, not guard',identity=identity,paired_cases=72,details=details,rule='Any goal or contact rescue authorizes fixedstage2 even if losses elsewhere; zero rescues stops candidate')

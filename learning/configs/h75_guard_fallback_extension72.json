@@ -1,0 +1,170 @@
+{
+  "experiment_id": "STTW-H75-GUARD-FALLBACK-EXTENSION",
+  "horizon_s": 10.0,
+  "expected_cases": 72,
+  "maximum_lower_ticks": 144000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    2.6
+  ],
+  "duration_s": 0.15,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_60_R2p2",
+      "speed": 2.6
+    },
+    {
+      "route": "S_right_60_R2p2",
+      "speed": 2.6
+    },
+    {
+      "route": "S_left_120_R2p2",
+      "speed": 2.6
+    },
+    {
+      "route": "S_right_120_R2p2",
+      "speed": 2.6
+    }
+  ],
+  "zero_onset_s": 2.6,
+  "replan_cadence_s": 1.0,
+  "question": "Does user-priority task-feasible degraded fallback rescue task/contact outcomes and retain old-domain behavior?",
+  "data_role": "Counterexample-driven DEV mechanism revision; not unseen confirmation.",
+  "stop_rule": "Exactly72new H10/144000lower/0optimizer;totalcampaign132new/264000lowermax. Stage2 only ifstage1 hasatleast1goal/contactrescue versusoldtaskaware;otherwise stop. No errorretry/tuning.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Common planner at1..9s reads measured state before next chunk; latch is preserved when execution path changes. No event time, force, route label or task clock enters alpha decision.",
+  "interpretation": "Onlyuse_q+degraded+anytask fallback changes: task-feasibleuserfirst,otherwise taskfeasibleminproxy. Risk/latch/degraded retained; no claim wholeclosedloop equalsguard.",
+  "scoring": "Goal1m and truecontact primary, nominal losses retained; user1 execution-path costs diagnostic, original-S errors descriptive after replanning.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "ActualworldYpulse2.6..2.75s is outside fixed.1s hypothetical query duration; no actual event labels enter controller.",
+  "decision_rules": {
+    "primary": "Paired goal/contact/original-task loss versus fixed1 and task_guard_only; retain every case and nominal loss."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5
+  },
+  "bank_indices": [
+    1,
+    7
+  ],
+  "bank_state_fingerprints": {
+    "1": "03401dc2d7e141327714d104c1735d5452b01a2e7bc15a822f8b46e408ffbc46",
+    "7": "0f66e1f8ab333df229cbc85de7123fc922408a7f56348b3f7dc08773c281c509"
+  },
+  "arms": [
+    "user0_guardfallback",
+    "userhalf_guardfallback",
+    "user1_guardfallback"
+  ],
+  "initialization": "Authenticated prepared bank1/7 task0 native reset; same complete physical reset across ten methods, actualuser0/.5/1.",
+  "initial_bank_note": "initial_bank3 is ancestor metadata only; actual resetbanks1/7.",
+  "mode": "guard_fallback_evaluation",
+  "predictor_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/q/original_candidate_manifest.json",
+  "coordination": {
+    "frequency_hz": 50,
+    "candidate_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "hypothetical_forces_N": [
+      -64.0,
+      64.0
+    ],
+    "hypothetical_preparation_s": [
+      0.2,
+      0.6
+    ],
+    "hypothetical_duration_s": 0.1,
+    "aggregation": "minimum of four hypotheses after equal mean of three seed sigmoid probabilities",
+    "task_preview_m": 6.0,
+    "task_accel_limit_m_s2": 3.0,
+    "q_enter": 0.8,
+    "q_restore": 0.85,
+    "fallback_alpha": 0.5,
+    "initial_alpha": 1.0,
+    "outer_alpha_slew": false,
+    "dwell_s": 0.0,
+    "proxy_cost_weights": [
+      1.0,
+      0.1,
+      0.05,
+      0.02
+    ]
+  },
+  "arm_to_export_index": {
+    "user0_guardfallback": 0,
+    "userhalf_guardfallback": 0,
+    "user1_guardfallback": 0
+  },
+  "new_physical_cases": 72,
+  "cached_physical_cases": 240,
+  "comparison_total_records": 312,
+  "user_preference": {
+    "supported_users": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "speed_weight": ".1+.9*user",
+    "steer_weight": "1-.9*user",
+    "preference_weight": 0.05,
+    "switch_weight": 0.02,
+    "initial_previous_alpha": "user"
+  },
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training",
+  "predictor_prepared": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/prepared",
+  "task_aware_fallback": true,
+  "variant": "geometry_duration_extension_v1",
+  "route_contexts": [
+    {
+      "route": "S_left_60_R2p2",
+      "angle_deg": 60,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_60_R2p2",
+      "angle_deg": 60,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_120_R2p2",
+      "angle_deg": 120,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_120_R2p2",
+      "angle_deg": 120,
+      "radius_m": 2.2,
+      "speed": 2.6,
+      "direction": -1.0
+    }
+  ],
+  "stage": "extension",
+  "maximum_campaign_lower_ticks": 264000,
+  "guard_fallback": true,
+  "comparison_source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1"
+}
