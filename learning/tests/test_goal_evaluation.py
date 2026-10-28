@@ -148,6 +148,41 @@ def test_pulse_boundary_float_spill_uses_full_tick_scale_not_zero_expected_relat
     assert pulse_timing_diagnostic(p,c,dt=.005)['pulse_timing_status']=='mismatch'
 
 
+def test_h75_supplement_is_only_original_neural_queries_and_same_shape_batches():
+    import copy
+    from sttw_control.goal_endpoint_run import h75_supplement_cases
+    from sttw_control.goal_evaluation import evaluation_cases
+    original=evaluation_cases();snapshot=copy.deepcopy(original)
+    selected=h75_supplement_cases(original)
+    assert original==snapshot and len(original)==128
+    assert len(selected)==48 and len({c['case_id'] for c in selected})==48
+    for old,new in zip([c for c in original if c['role']==0],selected):
+        for key in old:
+            if key not in ('case_id','role','role_name'):assert new[key]==old[key]
+        assert new['role']==4 and new['role_name']=='frozen_H75'
+    assert all(len({c['suite'] for c in selected[i:i+6]})==1 for i in range(0,48,6))
+
+
+def test_h75_restore_uses_frozen_actor_and_ignores_goal_context(tmp_path):
+    import torch
+    from sttw_control.goal_endpoint_run import load_h75_bundle
+    from sttw_control.path_command_policy import make_torch_path_network
+    from sttw_control.preference_best import digest
+    cfg,_,_=synthetic_endpoint();actor=make_torch_path_network(351,2,cfg)
+    checkpoint=tmp_path/'checkpoint.pt';actor_file=tmp_path/'actor.pkl';actor_file.write_bytes(b'identity fixture')
+    policy={'actor.'+k:v for k,v in actor.state_dict().items()};policy['log_std']=torch.tensor([-1.,-2.])
+    torch.save(dict(policy=policy),checkpoint)
+    model=dict(actor=str(actor_file),actor_sha256=digest(actor_file),checkpoint=str(checkpoint),checkpoint_sha256=digest(checkpoint))
+    bundle=load_h75_bundle(model,cfg)
+    obs=torch.zeros(4,351);critic=torch.zeros(4,352)
+    with torch.no_grad():
+        a=bundle(obs,critic,torch.zeros(4,5))[0];b=bundle(obs,critic,torch.ones(4,5))[0]
+    assert torch.equal(a,b) and torch.equal(a,actor(obs))
+    assert all(not p.requires_grad for p in bundle.parameters())
+    actor_file.write_bytes(b'changed')
+    with pytest.raises(ValueError,match='H75 identity'):load_h75_bundle(model,cfg)
+
+
 def test_first_goal_is_retained_after_later_contact_and_legacy_terminal_block_is_not_running_cost():
     from sttw_control.goal_evaluation import score_endpoint_case
     cfg,p,case=synthetic_endpoint();p['contact_failure'][-1]=True;p['scored_tick_reward'][-4:]=[0,0,0,-1234.]

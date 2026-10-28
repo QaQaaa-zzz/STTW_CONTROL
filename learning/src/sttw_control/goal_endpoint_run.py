@@ -13,7 +13,35 @@ from .preference_best import atomic_json,digest
 from .goal_evaluation import evaluation_cases
 
 
-def prepare(training,root):
+def h75_supplement_cases(cases):
+    """Only the48 neural-policy queries; no new task/event selection."""
+    selected=[]
+    for case in cases:
+        if case['role']!=0:continue
+        c=copy.deepcopy(case)
+        c.update(role=4,role_name='frozen_H75',case_id=case['case_id'].replace('/fixed_endpoint64/','/frozen_H75/'))
+        selected.append(c)
+    if len(selected)!=48 or sum(c['suite']=='transfer' for c in selected)!=30:
+        raise ValueError('fixed48 H75 queries required')
+    return selected
+
+
+def load_h75_bundle(model,config):
+    """Restore frozen H75 Actor/logstd; goal branch remains exactly zero."""
+    import torch
+    from .goal_networks import GoalNetworkBundle
+    from .path_command_policy import make_torch_path_network
+    for name in ('actor','checkpoint'):
+        if digest(model[name])!=model[name+'_sha256']:raise ValueError('frozen H75 identity changed')
+    saved=torch.load(model['checkpoint'],map_location='cpu',weights_only=False)['policy']
+    actor=make_torch_path_network(351,2,config)
+    actor.load_state_dict({k[len('actor.'):]:v for k,v in saved.items() if k.startswith('actor.')},strict=True)
+    bundle=GoalNetworkBundle(actor,config,saved['log_std'])
+    bundle.requires_grad_(False)
+    return bundle
+
+
+def prepare(training,root,*,h75_supplement=False):
     training=Path(training).resolve();root=Path(root).resolve()
     state=json.loads((training/'status.json').read_text())
     if state['phase']!='completed' or state['collections_completed']!=64:raise ValueError('completed fixed64 training required, no best checkpoint selection')
@@ -35,6 +63,13 @@ def prepare(training,root):
     if (t!=dict(path_radius_m=1.25,angle_deg=90.,left_speed_m_s=1.7,right_speed_m_s=1.6,onsets_task_ticks=[360,640],forces_N=[0.,-32.,32.],duration_s=.1)
         or c!=dict(radius_m=1.1,left_speed_m_s=1.8,right_speed_m_s=1.5,onset_task_tick=500,forces_N=[0.,-32.,32.])):
         raise ValueError('implementation does not match preregistered DEV design')
+    model=None
+    if h75_supplement:
+        registry=Path('learning/configs/frozen_middle_registry.json').resolve()
+        model=json.loads(registry.read_text())['records']['STTW_MIDDLE_FULLTAIL_PPO75_U77']
+        for name in ('actor','checkpoint'):
+            if digest(model[name])!=model[name+'_sha256']:raise ValueError('frozen H75 identity changed')
+        cases=h75_supplement_cases(cases)
     mount=Path('/media/qy/6A7E3DB07E3D75C3');stat=os.statvfs('/home/qy/STTW_CONTROL')
     if not os.path.ismount(mount) or not root.is_relative_to(mount) or stat.f_bavail*stat.f_frsize<50*1024**3:
         raise ValueError('data-disk output and50GiB system space required')
@@ -42,21 +77,26 @@ def prepare(training,root):
     inputs=dict(original['inputs']);inputs[str(training/'plan.json')]=digest(training/'plan.json')
     inputs[str(training/'seal.json')]=digest(training/'seal.json')
     inputs[str(training/'effective_config.json')]=digest(training/'effective_config.json');inputs[str(endpoint)]=digest(endpoint)
+    if model is not None:
+        inputs[str(registry)]=digest(registry)
+        for name in ('actor','checkpoint'):inputs[model[name]]=model[name+'_sha256']
     sources={}
     for f in list(Path('learning/src/sttw_control').rglob('*.py'))+[Path('learning/cli/evaluate_goal_endpoint.py')]:
         sources[str(f.resolve())]=digest(f)
         target=root/'source_snapshot'/f;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,target)
-    plan=dict(project='STTW_CONTROL',experiment_id='STTW-ORDINARY-GOAL-ENDPOINT-V1',training=str(training),endpoint=str(endpoint),
-        training_design=design,cases=cases,unique_physical_cases=128,logical_user_score_views=192,
+    plan=dict(project='STTW_CONTROL',experiment_id='STTW-GOAL-ENDPOINT-H75-SUPPLEMENT-V1' if h75_supplement else 'STTW-ORDINARY-GOAL-ENDPOINT-V1',training=str(training),endpoint=str(endpoint),
+        training_design=design,cases=cases,unique_physical_cases=len(cases),logical_user_score_views=sum(len(c['user_alphas']) for c in cases),
+        h75_supplement=h75_supplement,control_model=model,
         training_source_differences={name:dict(training_sha256=sha,current_sha256=digest(name) if Path(name).exists() else None)
             for name,sha in original['sources'].items() if not Path(name).exists() or digest(name)!=sha},
-        maximum_lower_slots=256000,horizon_s=10.,radius_m=1.,batch_size=16,inputs=inputs,sources=sources,
+        maximum_lower_slots=len(cases)*2000,horizon_s=10.,radius_m=1.,batch_size=6 if h75_supplement else 16,inputs=inputs,sources=sources,
         code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-        control='deterministic mean, originalalpha, no optimizer; exact zero residual distinct from existing profile7 speed support',
+        control=('frozen H75 deterministic mean, zero goal branch, originalalpha/profile7/reentry, no optimizer' if h75_supplement else
+            'deterministic mean, originalalpha, no optimizer; exact zero residual distinct from existing profile7 speed support'),
         initialization='training_geometry: original full upper/lower task0; transfer: same original physical snapshot, env.reset for declared new task',
         data_role='related DEV joint geometry/speed/time transfer, not independent TEST or separate training repeats',
-        stop='128 fixed executions only; engineering error preserves partials and stops, no retry/condition extension',
-        acceleration=['same-shape16lane batches','scan50 blocks','dynamic parameter/path arguments','persistent cache'])
+        stop=f'{len(cases)} fixed executions only; engineering error preserves partials and stops, no retry/condition extension',
+        acceleration=[f'same-shape{6 if h75_supplement else 16}lane batches','scan50 blocks','dynamic parameter/path arguments','persistent cache'])
     atomic_json(root/'plan.json',plan);atomic_json(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     atomic_json(root/'status.json',dict(phase='prepared',completed_cases=0,active_lower_ticks=0,allocated_lower_slots=0,optimizer_steps=0))
 
@@ -94,6 +134,13 @@ def execute(root):
         saved=torch.load(old['model']['checkpoint'],map_location='cpu',weights_only=False);parent.load_state_dict(saved['actor'],strict=True)
         parent_bundle=GoalNetworkBundle(parent,cfg,saved['log_std'])
         parameters=[learned.bundle.sampling_parameters(),parent_bundle.sampling_parameters()]
+        if p.get('h75_supplement',False):
+            expected=h75_supplement_cases(evaluation_cases())
+            for c in expected:
+                c['world_direction']=next(x['world_direction'] for x in old['reference_cases'] if x['context']==c['context'])
+            if p['cases']!=expected or p['batch_size']!=6 or p['unique_physical_cases']!=48:
+                raise ValueError('fixed H75 supplement inventory changed')
+            parameters[0]=load_h75_bundle(p['control_model'],cfg).sampling_parameters()
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU evaluation required')
         env,_=load_environment_contact_only(cfg,declaration,'terminal_contract_v2')
@@ -122,13 +169,15 @@ def execute(root):
         def chunk(carry,param,path,speed,pulse,role,goal):
             return jax.lax.scan(lambda st,_:jax.vmap(one)(st,param,path,speed,pulse,role,goal),carry,None,length=50)
         index=[];started=time.monotonic()
-        for offset in range(0,len(cases),16):
-            selected=cases[offset:offset+16]
+        batch=p['batch_size']
+        for offset in range(0,len(cases),batch):
+            selected=cases[offset:offset+batch]
             if len({np.shape(paths[c['suite'],c['context']].s) for c in selected})!=1:raise ValueError('same-shape path batch required')
             bpath=stack([paths[c['suite'],c['context']] for c in selected])
             initial=stack([GoalEvaluationState(bases[c['suite'],c['context']].replace(alpha=j.float32(c['controller_alpha'])),initial_gate(),j.int32(0),j.bool_(False)) for c in selected])
-            par=stack([parameters[0 if c['role']==0 else 1] for c in selected])
-            speed=j.asarray([c['speed'] for c in selected],j.float32);role=j.asarray([c['role'] for c in selected],j.int32)
+            par=stack([parameters[0 if c['role'] in (0,4) else 1] for c in selected])
+            speed=j.asarray([c['speed'] for c in selected],j.float32)
+            role=j.asarray([0 if p.get('h75_supplement',False) else c['role'] for c in selected],j.int32)
             goal=j.asarray([goals[c['suite'],c['context']] for c in selected],j.float32)
             pulse=[]
             for c in selected:
@@ -136,11 +185,11 @@ def execute(root):
                 tick=int(bases[c['suite'],c['context']].physical.physical_tick)
                 pulse.append([(tick+c['pulse_onset_task_tick'])*.005,(tick+c['pulse_onset_task_tick'])*.005+.1,*[c['force_N']*d for d in direction]])
             args=(par,bpath,speed,j.asarray(pulse,j.float32),role,goal)
-            directory=root/f'batch_{offset//16:02d}';directory.mkdir()
+            directory=root/f'batch_{offset//batch:02d}';directory.mkdir()
             with (directory/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(initial),f)
             carry=initial;logs=[]
             for block in range(10):
-                update(stage='collecting',case_offset=offset,block=block,inflight_slots=3200,inflight_actual='unknown')
+                update(stage='collecting',case_offset=offset,block=block,inflight_slots=batch*200,inflight_actual='unknown')
                 carry,data=chunk(carry,*args);jax.block_until_ready(carry);host,data=jax.device_get((carry,data));data=flatten_ticks(data)
                 update(stage='saving',active_lower_ticks=state['active_lower_ticks']+int(data['active_tick'].sum()),allocated_lower_slots=state['allocated_lower_slots']+int(data['active_tick'].size),inflight_slots=0,inflight_actual='known')
                 np.savez_compressed(directory/f'chunk_{block:02d}.npz',**data);logs.append(data)
