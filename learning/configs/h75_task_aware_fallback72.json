@@ -1,0 +1,136 @@
+{
+  "experiment_id": "STTW-H75-TASK-AWARE-FALLBACK72-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 72,
+  "maximum_lower_ticks": 144000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    2.2
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_left_60_R2p2",
+      "speed": 2.6
+    },
+    {
+      "route": "S_right_60_R2p2",
+      "speed": 2.6
+    }
+  ],
+  "zero_onset_s": 2.2,
+  "replan_cadence_s": 1.0,
+  "question": "Does task-aware best-effort fallback retain proxy feasibility when all risk gates reject?",
+  "data_role": "One fallback-only engineering DEV ablation on unchanged24 conditions, no heldout claim.",
+  "stop_rule": "Exactly72new/H10/144000lower/0optimizer;288cached comparator records; no extension or retraining.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Common planner at1..9s reads measured state before next chunk; latch is preserved when execution path changes. No event time, force, route label or task clock enters alpha decision.",
+  "interpretation": "Only no-joint-eligible degraded fallback changes: task-feasible maximum qmin, then minimum proxy cost, then candidate index; no task-feasible candidate retains.5. Risk rejection/degraded and latch remain; no safety guarantee.",
+  "scoring": "Goal1m and truecontact primary, nominal losses retained; user1 execution-path costs diagnostic, original-S errors descriptive after replanning.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Fixed hypothetical queries are independent of real event timing; actual pulse at2.2s enters physics only.",
+  "decision_rules": {
+    "primary": "Paired goal/contact/original-task loss versus fixed1 and task_guard_only; retain every case and nominal loss."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5
+  },
+  "bank_indices": [
+    4,
+    6
+  ],
+  "bank_state_fingerprints": {
+    "4": "1863f7152f8f0d675a949e7f1ef27547f93875117e06fc6113d8b030bc49dce3",
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "arms": [
+    "user0_taskaware",
+    "userhalf_taskaware",
+    "user1_taskaware"
+  ],
+  "initialization": "Same authenticated prepared banks4/6 native reset with each actual user0/.5/1; no unmatched physics reuse.",
+  "initial_bank_note": "initial_bank3 is ancestor metadata only; actual reset banks4/6.",
+  "mode": "task_aware_fallback72",
+  "predictor_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/q/original_candidate_manifest.json",
+  "coordination": {
+    "frequency_hz": 50,
+    "candidate_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "hypothetical_forces_N": [
+      -64.0,
+      64.0
+    ],
+    "hypothetical_preparation_s": [
+      0.2,
+      0.6
+    ],
+    "hypothetical_duration_s": 0.1,
+    "aggregation": "minimum of four hypotheses after equal mean of three seed sigmoid probabilities",
+    "task_preview_m": 6.0,
+    "task_accel_limit_m_s2": 3.0,
+    "q_enter": 0.8,
+    "q_restore": 0.85,
+    "fallback_alpha": 0.5,
+    "initial_alpha": 1.0,
+    "outer_alpha_slew": false,
+    "dwell_s": 0.0,
+    "proxy_cost_weights": [
+      1.0,
+      0.1,
+      0.05,
+      0.02
+    ]
+  },
+  "arm_to_export_index": {
+    "user0_taskaware": 0,
+    "userhalf_taskaware": 0,
+    "user1_taskaware": 0
+  },
+  "new_physical_cases": 72,
+  "cached_physical_cases": 288,
+  "comparison_total_records": 360,
+  "comparison_source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1",
+  "user_preference": {
+    "supported_users": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "speed_weight": ".1+.9*user",
+    "steer_weight": "1-.9*user",
+    "preference_weight": 0.05,
+    "switch_weight": 0.02,
+    "initial_previous_alpha": "user"
+  },
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training",
+  "predictor_prepared": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/prepared",
+  "task_aware_fallback": true
+}
