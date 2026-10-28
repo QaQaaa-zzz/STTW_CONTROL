@@ -146,3 +146,66 @@ def test_acceptance_uses_separate_best_strict_simple_objectives_and_rejects_miss
     traces['tLalpha_schedule']['executed_alpha'][:]=.5
     out=module.scheduling_acceptance(records,scores,traces,paths,protocol['acceptance'],contexts)
     assert not out['gates']['alpha_returns_1_after_final_curve']
+
+
+def test_channel_composition_checks_each_separate_query_and_applied_target():
+    import pytest
+    raw = dict(time=np.arange(4), queried_latent_alpha_half=np.tile([.2,.3], (4,1)),
+               queried_latent_alpha_one=np.tile([.7,.8], (4,1)),
+               composed_latent=np.tile([.2,.8],(4,1)), latent_z=np.tile([.2,.8],(4,1)),
+               channel_alpha_pair=np.tile([.5,1.],(4,1)), original_user_alpha=np.ones(4))
+    row = dict(speed_alpha=.5, steer_alpha=1.)
+    assert module.verify_channel_composition(raw,row)==0.
+    raw['composed_latent'][2,1]=.3
+    with pytest.raises(AssertionError, match='composition mismatch'):
+        module.verify_channel_composition(raw,row)
+    raw['composed_latent'][2,1]=.8
+    raw['latent_z'][1,0]=.7
+    with pytest.raises(AssertionError, match='applied latent'):
+        module.verify_channel_composition(raw,row)
+
+
+def channel_fixture():
+    contexts=[dict(route='gL',angle_deg=60),dict(route='gR',angle_deg=60),
+              dict(route='tL',angle_deg=90),dict(route='tR',angle_deg=90)]
+    records=[]; scores=[]; traces={}
+    for c in contexts:
+        for strategy in ('fixed0','fixed0.5','fixed1','zero','speed0.5_steer1','speed1_steer0.5'):
+            case=c['route']+strategy
+            records.append(dict(route=c['route'],strategy=strategy,analysis_id=case,
+                                channel_strict=not(strategy=='fixed1' and c['angle_deg']==90)))
+            scores.append(dict(analysis_id=case,scored_cost=10.,task_channels=8.))
+            traces[case]=dict(actual_forward_speed=np.full(20,2.+(.1 if strategy.startswith('speed') else 0.)))
+    return records,scores,traces,{c['route']:{} for c in contexts},contexts
+
+
+def test_channel_descriptive_rules_retain_cost_exceptions_losses_and_actual_speed():
+    args=channel_fixture()
+    result=module.channel_interpretation(*args)
+    assert result['speed_half_steer_one_covers_fixed_half']
+    assert result['reverse_improves_fixed_one']
+    assert result['adoption']=='not_automatically_adopted'
+    assert np.isclose(result['per_route_differences'][0]['mean_signed_speed_difference_m_s'],.1)
+    # One route task-channel exception breaks coverage despite strict success.
+    next(s for s in args[1] if s['analysis_id']=='gLspeed0.5_steer1')['task_channels']=8.51
+    result=module.channel_interpretation(*args)
+    assert not result['speed_half_steer_one_covers_fixed_half']
+    assert result['cost_exceptions']
+    # A gentle strict loss vetoes a reverse tight gain.
+    next(r for r in args[0] if r['analysis_id']=='gRspeed1_steer0.5')['channel_strict']=False
+    result=module.channel_interpretation(*args)
+    assert not result['reverse_improves_fixed_one']
+    assert any(x['strict_loss'] for x in result['per_route_differences'])
+
+
+def test_channel_pair_identity_cannot_be_swapped_or_nonfinite():
+    import pytest
+    raw=dict(time=np.arange(2),queried_latent_alpha_half=np.zeros((2,2)),
+             queried_latent_alpha_one=np.ones((2,2)),composed_latent=np.tile([0.,1.],(2,1)),
+             latent_z=np.tile([0.,1.],(2,1)),channel_alpha_pair=np.tile([.5,1.],(2,1)),
+             original_user_alpha=np.ones(2))
+    with pytest.raises(AssertionError):
+        module.verify_channel_composition(raw,dict(speed_alpha=1.,steer_alpha=.5))
+    raw['queried_latent_alpha_one'][0,0]=np.nan
+    with pytest.raises(ValueError,match='invalid channel log'):
+        module.verify_channel_composition(raw,dict(speed_alpha=.5,steer_alpha=1.))

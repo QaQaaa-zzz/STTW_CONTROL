@@ -81,7 +81,7 @@ def verified_raw(row, root):
 
 
 def strategy(row):
-    if row['policy'] in ('alpha_schedule', 'curvature_speed'):
+    if row['policy'] in ('alpha_schedule', 'curvature_speed', 'speed0.5_steer1', 'speed1_steer0.5'):
         return row['policy']
     return 'zero' if row['policy'].lower() == 'zero' else f"fixed{float(row['alpha']):g}"
 
@@ -100,7 +100,10 @@ def sealed_panel(root, expected):
         if manifest[key] != plan['initial_source' if key == 'source' else key]:
             raise ValueError('frozen manifest identity mismatch: ' + key)
     rows = json.loads((root / 'evaluation/results.json').read_text())['cases']
-    inventory = lambda items: sorted((r['route'], r['policy'], float(r['alpha']), float(r['speed'])) for r in items)
+    def inventory(items):
+        return sorted((r['route'], r['policy'], float(r['alpha']), float(r['speed'])) +
+                      ((float(r['speed_alpha']), float(r['steer_alpha'])) if plan.get('mode') == 'native_channel_factorial_v1' else ())
+                      for r in items)
     if len(rows) != expected or inventory(rows) != inventory(plan['cases']):
         raise ValueError('result inventory differs from sealed plan')
     return plan, manifest, rows
@@ -183,9 +186,78 @@ def scheduling_acceptance(records, scores, traces, paths, acceptance, contexts):
                 scope='Exploratory familiar DEV nominal screen; no disturbed recovery, tolerance predictor, replanning or generalization claim.')
 
 
+def verify_channel_composition(raw, row):
+    """Check both queried vectors and exact per-channel composition every tick."""
+    n = len(raw['time'])
+    pair = (float(row['speed_alpha']), float(row['steer_alpha']))
+    if pair not in ((.5, 1.), (1., .5)):
+        raise ValueError('undeclared channel alpha pair')
+    for field in ('queried_latent_alpha_half', 'queried_latent_alpha_one', 'composed_latent', 'channel_alpha_pair', 'latent_z'):
+        a = np.asarray(raw[field])
+        if a.shape != (n, 2) or not np.isfinite(a).all():
+            raise ValueError('invalid channel log: ' + field)
+    np.testing.assert_array_equal(raw['channel_alpha_pair'], np.tile(pair, (n, 1)))
+    np.testing.assert_array_equal(raw['original_user_alpha'], np.ones(n))
+    queries = {.5: raw['queried_latent_alpha_half'], 1.: raw['queried_latent_alpha_one']}
+    expected = np.column_stack([queries[pair[0]][:, 0], queries[pair[1]][:, 1]])
+    np.testing.assert_allclose(raw['composed_latent'], expected, rtol=0, atol=1e-6,
+                               err_msg='channel composition mismatch')
+    np.testing.assert_allclose(raw['latent_z'], expected, rtol=0, atol=1e-6,
+                               err_msg='applied latent differs from composition')
+    return float(np.max(np.abs(raw['composed_latent'] - expected)))
+
+
+def channel_interpretation(records, scores, traces, paths, contexts):
+    """Frozen descriptive comparisons; no adoption or post-hoc threshold search."""
+    index = {(r['route'], r['strategy']): r for r in records}
+    costs = {r['analysis_id']: r for r in scores}
+    hybrid = ('speed0.5_steer1', 'speed1_steer0.5')
+    comparisons = []
+    tight_angle = max(c['angle_deg'] for c in contexts)
+    tight = {c['route'] for c in contexts if c['angle_deg'] == tight_angle}
+    for route in paths:
+        for name in hybrid:
+            a = index[route, name]; ac = costs[a['analysis_id']]
+            for baseline in ('fixed0.5', 'fixed1', 'fixed0', 'zero'):
+                b = index[route, baseline]; bc = costs[b['analysis_id']]
+                av = np.asarray(traces[a['analysis_id']]['actual_forward_speed'])
+                bv = np.asarray(traces[b['analysis_id']]['actual_forward_speed'])
+                n = min(len(av), len(bv)); delta = av[:n] - bv[:n]
+                comparisons.append(dict(route=route, hybrid=name, comparator=baseline,
+                    hybrid_strict=a['channel_strict'], comparator_strict=b['channel_strict'],
+                    strict_gain=bool(a['channel_strict'] and not b['channel_strict']),
+                    strict_loss=bool(b['channel_strict'] and not a['channel_strict']),
+                    total_cost_difference=ac['scored_cost']-bc['scored_cost'],
+                    task_channels_difference=ac['task_channels']-bc['task_channels'],
+                    component_cost_differences={k: ac['components'][k]-bc['components'][k] for k in ac.get('components', {})},
+                    total_cost_within_tolerance=ac['scored_cost'] <= 1.05*bc['scored_cost']+.1,
+                    task_cost_within_tolerance=ac['task_channels'] <= 1.05*bc['task_channels']+.1,
+                    common_observation_ticks=n, hybrid_observation_ticks=len(av), comparator_observation_ticks=len(bv),
+                    mean_signed_speed_difference_m_s=float(delta.mean()),
+                    mean_abs_speed_difference_m_s=float(abs(delta).mean()),
+                    maximum_abs_speed_difference_m_s=float(abs(delta).max())))
+    forward = [x for x in comparisons if x['hybrid']==hybrid[0] and x['comparator']=='fixed0.5']
+    reverse = [x for x in comparisons if x['hybrid']==hybrid[1] and x['comparator']=='fixed1']
+    aggregates = {}
+    for name in ('fixed0', 'fixed0.5', 'fixed1', 'zero') + hybrid:
+        group = [index[route, name] for route in paths]
+        aggregates[name] = dict(strict_count=sum(r['channel_strict'] for r in group), denominator=len(group),
+            total_cost=sum(costs[r['analysis_id']]['scored_cost'] for r in group),
+            task_channels=sum(costs[r['analysis_id']]['task_channels'] for r in group))
+    return dict(per_route_differences=comparisons, aggregates=aggregates,
+        speed_half_steer_one_covers_fixed_half=all(x['hybrid_strict'] and x['total_cost_within_tolerance'] and x['task_cost_within_tolerance'] for x in forward),
+        reverse_improves_fixed_one=all(x['hybrid_strict'] for x in reverse if x['route'] in tight) and any(x['strict_gain'] for x in reverse if x['route'] in tight) and not any(x['strict_loss'] for x in reverse),
+        cost_exceptions=[x for x in comparisons if not (x['total_cost_within_tolerance'] and x['task_cost_within_tolerance'])],
+        tolerance='Engineering descriptive bound per route: cost <= 1.05 * comparator + 0.1; not statistical significance.',
+        adoption='not_automatically_adopted',
+        interpretation='Total closed-loop channel substitution; actual speeds differ. No speed-matched or independent steering effect claim. Both hybrids failing does not establish synergy: composed actions may be out of training distribution.',
+        scope='Nominal familiar DEV; no disturbance, replanning or new training; single shared physical ancestor.')
+
+
 def analyze_scheduling(root):
     started = time.perf_counter()
     plan, manifest, newrows = sealed_panel(root, 8)
+    factorial = plan.get('mode') == 'native_channel_factorial_v1'
     source = Path(plan['source'])
     old, oldmanifest, cached = sealed_panel(source, 16)
     # The source records themselves, not merely whichever raw files still exist,
@@ -216,6 +288,10 @@ def analyze_scheduling(root):
     for f, sha in plan['input_sha256'].items():
         if digest(f) != sha:
             raise ValueError('sealed input changed: ' + f)
+    if factorial:
+        initial = json.loads((root / 'evaluation/initial_identity_receipt.json').read_text())
+        if not initial['original_paths_exact'] or not initial['all_initial_carry_leaves_exact'] or initial['physics_steps'] != 0:
+            raise ValueError('original full initial carry/path identity not established')
     dt = cfg['timing']['lower_dt_s']; horizon = plan['horizon_s']
     paths = {}
     geometry = {r['route']: r for r in json.loads((source / 'evaluation/geometry_receipt.json').read_text())}
@@ -244,7 +320,13 @@ def analyze_scheduling(root):
                 if np.any(raw[field]):
                     raise ValueError('invalid nominal trace: ' + field)
             dynamic = origin == root
-            if dynamic:
+            composition_error = None
+            if dynamic and factorial:
+                if row['policy'] not in ('speed0.5_steer1', 'speed1_steer0.5') or row['alpha'] != 1. or row['original_user_alpha'] != 1.:
+                    raise ValueError('invalid channel factorial case identity')
+                composition_error = verify_channel_composition(raw, row)
+                execution_alpha = 1.
+            elif dynamic:
                 if row['policy'] not in ('alpha_schedule', 'curvature_speed'):
                     raise ValueError('unexpected scheduling policy')
                 if row['alpha'] != 1. or row['original_user_alpha'] != 1.:
@@ -272,11 +354,16 @@ def analyze_scheduling(root):
                           record['original_goal_crossed_before_native_stop'] and not record['actual_contact'])
             if strict != bool(row['task_recovered']):
                 raise ValueError('native original-task strict label mismatch: ' + case)
+            if factorial:
+                record['channel_strict'] = strict
+                if dynamic:
+                    record['maximum_composition_abs_error'] = composition_error
             records.append(record); traces[case] = raw; series[case, 1.] = data
             scores.append(dict(analysis_id=case, route=row['route'], strategy=record['strategy'], evaluation_alpha=1., **result))
     if len(records) != 24 or len({(r['route'], r['strategy']) for r in records}) != 24:
         raise ValueError('exactly four routes by six strategies required')
-    acceptance = scheduling_acceptance(records, scores, traces, paths, plan['protocol']['acceptance'], plan['contexts'])
+    acceptance = (channel_interpretation(records, scores, traces, paths, plan['contexts']) if factorial else
+                  scheduling_acceptance(records, scores, traces, paths, plan['protocol']['acceptance'], plan['contexts']))
     out = root / 'analysis'; out.mkdir(exist_ok=False)
     render(out, records, traces, series, paths, keys, cfg, plan, scheduling=True)
     dump_csv(out / 'records.csv', records); dump_csv(out / 'scores.csv', scores)
@@ -286,17 +373,17 @@ def analyze_scheduling(root):
                   source_run=str(source), data_role='Exploratory familiar DEV; single shared physical ancestor',
                   analysis_total_s=time.perf_counter()-started)
     (out / 'review.json').write_text(json.dumps(report, indent=2, allow_nan=False)+'\n')
-    lines = ['# Nominal H75 original-user scheduling screen', '',
+    lines = ['# Nominal H75 original-user ' + ('channel factorial' if factorial else 'scheduling screen'), '',
              'Original XY trajectories first; all24 traces retain their native original-goal strict labels and true endpoints.', '',
-             'Cached fixed0/.5/1 and zero traces are SHA/manifest matched. All reward curves and objective costs use original user alpha=1 and the unchanged original speed/path. Dynamic executed-alpha runtime rewards are separately reconstructed; own-alpha costs are not the comparison objective.', '',
+             'Cached fixed0/.5/1 and zero traces are SHA/manifest matched. All reward curves and objective costs use original user alpha=1 and the unchanged original speed/path. Runtime rewards are separately reconstructed at their scoring alpha; hybrid runtime scoring alpha1 is not an executed scalar policy alpha. Own-alpha costs are not the comparison objective.', '',
              'Exploratory familiar DEV, one shared physical ancestor; no disturbance, replanning, tolerance predictor, independent TEST or stability claim. Missing or early-stopped outcomes remain censored/failed; no assumed full windows.', '']
     for route in paths:
         lines += [f'## {route}', '', f'![Original XY]({route}_xy.png)', '', f'![Overview]({route}_overview.png)', '',
                   f'[Diagnostics]({route}_diagnostics.png) · [Reward components]({route}_components.png) · [Rule/alpha traces]({route}_rules.png)', '']
-    lines += ['## Sealed acceptance', '', 'Nominal screening acceptance: ' + str(acceptance['accepted']), '',
+    lines += ['## Sealed acceptance', '', ('Descriptive channel substitution; no automatic adoption.' if factorial else 'Nominal screening acceptance: ' + str(acceptance['accepted'])), '',
               '```json', json.dumps(acceptance, indent=2), '```', '',
               '[All24 native outcomes](records.csv) · [Original user1 costs](scores.csv) · [Full review](review.json)', '',
-              'PNG, per-trace original XY NPZ/CSV, per-step/cumulative signed reward and components, errors, actual/wheel/request speeds, executed alpha and rule logs accompany this report. Unequal observed windows and terminal replacement remain explicit; low truncated cost is not task success.']
+              ('Channel queries are separate speed_alpha/steer_alpha pairs, never a single executed alpha. Strict channel comparison retains original task_recovered: original goal-section crossing, full H10 and last1s path<=0.1m/yaw<=0.05rad/speed<=0.1m/s with no native failure; original goal1m is separately reported. No new training. ' if factorial else '') + 'PNG, per-trace original XY NPZ/CSV, per-step/cumulative signed reward and components, errors, actual/wheel/request speeds, executed alpha and rule logs accompany this report. Unequal observed windows and terminal replacement remain explicit; low truncated cost is not task success.']
     (out / 'RESULTS.md').write_text('\n'.join(lines)+'\n')
     return report
 
@@ -304,7 +391,7 @@ def analyze_scheduling(root):
 def analyze(root):
     started = time.perf_counter()
     plan = json.loads((root / 'plan.json').read_text())
-    if plan.get('mode') == 'native_scheduling_v1':
+    if plan.get('mode') in ('native_scheduling_v1', 'native_channel_factorial_v1'):
         return analyze_scheduling(root)
     status = json.loads((root / 'evaluation/status.json').read_text())
     assert status['phase'] == 'completed', 'No interim outcome analysis'
@@ -410,7 +497,8 @@ def render(out, records, traces, series, paths, keys, cfg, plan, scheduling=Fals
             zero = row['policy'].lower() == 'zero'
             role = row.get('strategy', strategy(row))
             color = {'zero':'#555555', 'fixed0':'#0072B2', 'fixed0.5':'#D55E00', 'fixed1':'#009E73',
-                     'alpha_schedule':'#CC79A7', 'curvature_speed':'#E69F00'}[role]
+                     'alpha_schedule':'#CC79A7', 'curvature_speed':'#E69F00',
+                     'speed0.5_steer1':'#CC79A7', 'speed1_steer0.5':'#E69F00'}[role]
             label = ('zero (frozen lower + ECBC/ESO)' if zero else f'H75 alpha={alpha:g}') if not scheduling else role
             t = (np.arange(len(raw['time']))+1)*dt
             marker = 'x' if row['actual_contact'] else 'D' if row['native_domain_stop'] else 'v' if row['native_physical_stop'] else 's'
@@ -436,9 +524,14 @@ def render(out, records, traces, series, paths, keys, cfg, plan, scheduling=Fals
                 for field in ('phi','path_cross_track','path_heading_error','path_progress','actual_forward_speed','wheel_speed_proxy','v_user','physical_failure','domain_exit','contact_failure'):
                     numeric[field] = raw[field]
                 if scheduling:
-                    numeric['executed_alpha'] = raw.get('executed_alpha', np.full(len(t), alpha))
+                    if plan.get('mode') != 'native_channel_factorial_v1':
+                        numeric['executed_alpha'] = raw.get('executed_alpha', np.full(len(t), alpha))
+                    for field in ('queried_latent_alpha_half', 'queried_latent_alpha_one', 'composed_latent', 'channel_alpha_pair'):
+                        if field in raw:
+                            numeric[field] = raw[field]
                     numeric['original_user_alpha'] = np.ones(len(t))
                     numeric['actual_lower_step'] = np.arange(1, len(t)+1)
+                    numeric['runtime_scoring_alpha'] = np.full(len(t), 1. if 'channel_alpha_pair' in raw else alpha)
                     numeric['runtime_own_alpha_reward'] = raw['scored_tick_reward']
                     numeric['runtime_own_alpha_cumulative_reward'] = np.cumsum(raw['scored_tick_reward'])
                     numeric['cumulative_terminal_adjustment'] = np.cumsum(terminal)
@@ -468,6 +561,12 @@ def render(out, records, traces, series, paths, keys, cfg, plan, scheduling=Fals
             rules, rax = plt.subplots(3, 1, figsize=(12, 9), sharex=True, constrained_layout=True)
             for row in selected:
                 raw = traces[row['analysis_id']]
+                if 'channel_alpha_pair' in raw:
+                    t = (np.arange(len(raw['time']))+1)*dt
+                    for i, channel in enumerate(('speed', 'steer')):
+                        rax[0].plot(t, raw['channel_alpha_pair'][:,i], label=row['policy']+' '+channel+' query alpha')
+                        rax[1].plot(t, raw['composed_latent'][:,i], label=row['policy']+' composed '+channel)
+                    rax[2].plot(t, raw['governed'][:,0], label=row['policy']+' governed speed')
                 if row['policy'] not in ('alpha_schedule', 'curvature_speed'):
                     continue
                 t = (np.arange(len(raw['time']))+1)*dt
@@ -477,11 +576,11 @@ def render(out, records, traces, series, paths, keys, cfg, plan, scheduling=Fals
                         rax[1].plot(t, raw[field], label=row['policy']+' '+field)
                 rax[2].plot(t, raw['governed'][:,0], label=row['policy']+' governed speed')
                 rax[2].plot(t, raw['v_user'], '--', label=row['policy']+' original request')
-            for ax, ylabel in zip(rax, ('Executed alpha (unitless)', 'Declared rule logs (see labels)', 'Speed (m/s)')):
+            for ax, ylabel in zip(rax, ('Query alpha / scheduled alpha (unitless)', 'Declared rule logs (see labels)', 'Speed (m/s)')):
                 ax.set_ylabel(ylabel); ax.grid(alpha=.2); ax.legend(fontsize=6)
             rax[0].axhline(1., color='black', linestyle=':', label='original user1')
             rax[-1].set_xlabel('Elapsed s')
-            rules.suptitle(route+'; causal nominal rule/alpha logs; original user1; no disturbance')
+            rules.suptitle(route+'; nominal query-channel/rule logs; original user1; no disturbance')
             rules.savefig(out/f'{route}_rules.png',dpi=135); plt.close(rules)
         for ax in (xy, axes[0, 0]): ax.legend(fontsize=7)
         reward_xlabel = 'Actual lower step' if scheduling else 'Elapsed s'
