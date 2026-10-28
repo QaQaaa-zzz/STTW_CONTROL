@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1030" viewBox="0 0 1440 1030" role="img" aria-labelledby="title desc">
+<title id="title">Implemented frozen H75 tolerance coordination architecture</title>
+<desc id="desc">Fixed original path, goal and one of three user preferences feed a geometric follower and three frozen H75 candidate queries at fifty hertz. A frozen three-seed forty-one-input tolerance network averages sigmoid probabilities per hypothetical disturbance query, then takes the minimum across four hypotheses. A nonlearned coordinator combines a six-metre execution-path curvature proxy, user priority, risk thresholds, latch and publication permission. Its best-effort degraded fallback chooses the highest-score task-feasible candidate. The selected reference passes unchanged native bounds, filtering and slew limits into the frozen local300 residual with ECBC and ESO at two hundred hertz. Measured state closes the loop. A deterministic one-shot Dubins reconnection changes only the execution path while retaining the original goal. Hypothetical forces are not measured external disturbances and no safety guarantee is asserted.</desc>
+<metadata>Repo-native editable SVG. Sources: learning/src/sttw_control/tolerance_coordination.py, native_goal_run.py, native_goal_continuation.py, goal_replanning.py. Current task-aware candidate: 1b139d7; frozen prior_rank_last three-seed ensemble. No generated raster asset, new physics, or training.</metadata>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker>
+<marker id="blueArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0072B2"/></marker>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#172033}.heading{font-size:19px;font-weight:700}.body{font-size:17px}.small{font-size:15px}.wire{fill:none;stroke:#334155;stroke-width:2.4;stroke-linejoin:round;marker-end:url(#arrow)}.rewire{fill:none;stroke:#0072B2;stroke-width:2.4;stroke-dasharray:7 5;stroke-linejoin:round;marker-end:url(#blueArrow)}.label{font-size:15px;fill:#334155}.box{stroke-width:1.7;rx:12}</style></defs>
+<rect width="1440" height="1030" fill="#fff"/>
+<text x="40" y="35" font-size="27" font-weight="700">Implemented tolerance-informed preference coordination</text>
+<text x="40" y="60" class="small">Frozen learned components + explicit coordination rules; original task reference remains fixed</text>
+<rect class="box" x="40" y="85" width="260" height="130" fill="#f4f7fa" stroke="#64748b"/>
+<text x="57" y="115" class="heading">Original task request</text>
+<text x="57" y="146" class="body">Fixed global path + goal</text>
+<text x="57" y="172" class="body">Speed request v_user</text>
+<text x="57" y="198" class="body">Fixed α_user ∈ {0, 0.5, 1}</text>
+<rect class="box" x="350" y="85" width="300" height="130" fill="#f4f7fa" stroke="#64748b"/>
+<text x="367" y="115" class="heading">Geometric follower</text>
+<text x="367" y="146" class="body">Current execution path</text>
+<text x="367" y="172" class="body">+ pose / projection</text>
+<text x="367" y="198" class="body">→ nominal (v_nom, δ_nom)</text>
+<rect class="box" x="700" y="85" width="300" height="130" fill="#e9f3fb" stroke="#0072B2"/>
+<text x="717" y="115" class="heading">Frozen H75 Actor · 50 Hz</text>
+<text x="717" y="146" class="body">Same observation / history</text>
+<text x="717" y="172" class="body">Evaluate α = 0, 0.5, 1</text>
+<text x="717" y="198" class="body">→ 3 native residual latents</text>
+<rect class="box" x="1050" y="85" width="350" height="130" fill="#f4f7fa" stroke="#64748b"/>
+<text x="1067" y="115" class="heading">Three candidate references</text>
+<text x="1067" y="146" class="body">Native tanh offset mapping</text>
+<text x="1067" y="172" class="body">+ nominal reference</text>
+<text x="1067" y="198" class="body">Amplitude-clipped (v, δ) targets</text>
+<rect class="box" x="40" y="280" width="260" height="130" fill="#f4f7fa" stroke="#64748b"/>
+<text x="57" y="310" class="heading">Observed state</text>
+<text x="57" y="341" class="body">State estimates + histories</text>
+<text x="57" y="367" class="body">Path projection / validity</text>
+<text x="57" y="393" class="body">No true disturbance labels</text>
+<rect class="box" x="350" y="280" width="300" height="160" fill="#f4f7fa" stroke="#64748b"/>
+<text x="367" y="310" class="heading">Task feasibility proxy</text>
+<text x="367" y="341" class="body">6 m execution-path preview</text>
+<text x="367" y="367" class="body">κ_max = max |curvature|</text>
+<text x="367" y="393" class="body">Candidate v² κ_max ≤ 3 m/s²</text>
+<text x="367" y="419" class="body">No road-boundary test</text>
+<rect class="box" x="700" y="280" width="700" height="160" fill="#e9f3fb" stroke="#0072B2"/>
+<text x="717" y="310" class="heading">Frozen full-state q · prior ensemble</text>
+<text x="717" y="341" class="body">41 → 16 → 16 → 1, ReLU; sigmoid probabilities; 3 seeds</text>
+<text x="717" y="367" class="body">34 native state features + 7 candidate / disturbance-query inputs</text>
+<text x="717" y="393" class="body">Hypotheses: world Fy = ±64 N, duration 0.1 s, prep = 0.2 / 0.6 s</text>
+<text x="717" y="419" class="body">Mean probabilities across seeds, THEN min across 4 hypotheses</text>
+<rect class="box" x="40" y="500" width="260" height="230" fill="#eff7f3" stroke="#347c63"/>
+<text x="57" y="530" class="heading">One-shot Dubins rejoin</text>
+<text x="57" y="561" class="body">Deterministic, radius 1.8 m</text>
+<text x="57" y="587" class="body">Checks at task 1…9 s</text>
+<text x="57" y="613" class="body">If |cross-track| &gt; 1 m</text>
+<text x="57" y="639" class="body">or follower invalid, once</text>
+<text x="57" y="665" class="body">Current pose → original goal</text>
+<text x="57" y="691" class="body">Execution path only; no NN</text>
+<rect class="box" x="350" y="500" width="700" height="280" fill="#fff6e8" stroke="#b87c21"/>
+<text x="367" y="530" class="heading">Nonlearned coordinator · 50 Hz</text>
+<text x="367" y="561" class="body">User candidate first: task proxy + q ≥ 0.8 (0.85 while latched)</text>
+<text x="367" y="587" class="body">Otherwise: jointly eligible candidates minimize fixed proxy cost</text>
+<text x="367" y="613" class="body">w_v = 0.1 + 0.9α_user;  w_δ = 1 − 0.9α_user</text>
+<text x="367" y="639" class="body">Preference / switch penalties: 0.05(α−α_user)² + 0.02(α−α_prev)²</text>
+<text x="367" y="665" class="body">No joint-eligible candidate: max q among task-feasible candidates</text>
+<text x="367" y="691" class="body">Tie: lower proxy cost, then index; none task-feasible → α = 0.5</text>
+<text x="367" y="717" class="body">This fallback remains DEGRADED; it does not clear the risk latch</text>
+<text x="367" y="743" class="body">Publication permission off: hold previous α and latch</text>
+<rect class="box" x="1100" y="520" width="300" height="130" fill="#fff6e8" stroke="#b87c21"/>
+<text x="1117" y="550" class="heading">Selected reference</text>
+<text x="1117" y="581" class="body">Selected H75 candidate</text>
+<text x="1117" y="607" class="body">Scalar α_exec for BOTH</text>
+<text x="1117" y="633" class="body">speed and steering channels</text>
+<rect class="box" x="1100" y="730" width="300" height="130" fill="#f4f7fa" stroke="#64748b"/>
+<text x="1117" y="760" class="heading">Native reference interface</text>
+<text x="1117" y="791" class="body">Bounds + filters + slew</text>
+<text x="1117" y="817" class="body">Publication / handback rules</text>
+<text x="1117" y="843" class="body">No bypass of lower limits</text>
+<rect class="box" x="700" y="830" width="350" height="120" fill="#e9f3fb" stroke="#0072B2"/>
+<text x="717" y="860" class="heading">Frozen lower · 200 Hz</text>
+<text x="717" y="891" class="body">local300 learned residual</text>
+<text x="717" y="917" class="body">+ ECBC state feedback + ESO</text>
+<text x="717" y="943" class="body">Existing actuator constraints</text>
+<rect class="box" x="350" y="830" width="300" height="120" fill="#f4f7fa" stroke="#64748b"/>
+<text x="367" y="860" class="heading">Vehicle / simulator</text>
+<text x="367" y="891" class="body">Steering and rear-wheel input</text>
+<text x="367" y="917" class="body">Actual external disturbance</text>
+<text x="367" y="943" class="body">Acts here; not a q input</text>
+<rect class="box" x="40" y="830" width="260" height="120" fill="#f4f7fa" stroke="#64748b"/>
+<text x="57" y="860" class="heading">State estimation</text>
+<text x="57" y="891" class="body">Pose / speed / roll / steer</text>
+<text x="57" y="917" class="body">Closed-loop history updates</text>
+<text x="57" y="943" class="body">Reset all hidden states</text>
+<path d="M300 150 H350" class="wire"/>
+<path d="M650 150 H700" class="wire"/>
+<path d="M1000 150 H1050" class="wire"/>
+<path d="M1225 215 V280" class="wire"/>
+<text x="1110" y="248" class="label">candidate/query features</text>
+<path d="M500 215 V280" class="wire"/>
+<text x="365" y="254" class="label">path / nominal reference</text>
+<path d="M1050 215 V245 H675 V360 H650" class="wire"/>
+<text x="735" y="238" class="label">candidate targets</text>
+<path d="M300 330 H315 V175 H350" class="wire"/>
+<path d="M315 240 H850 V215" class="wire"/>
+<path d="M170 410 V465 H680 V350 H700" class="wire"/>
+<text x="380" y="460" class="label">current state features + candidate hypotheses</text>
+<path d="M170 410 V500" class="wire"/>
+<path d="M40 150 H10 V605 H40" class="rewire"/>
+<path d="M300 605 H335 V195 H350" class="rewire"/>
+<path d="M500 440 V500" class="wire"/>
+<path d="M1000 440 V500" class="wire"/>
+<text x="1010" y="478" class="label">q = min₄ mean₃ p</text>
+<path d="M1050 590 H1100" class="wire"/>
+<path d="M1250 650 V730" class="wire"/>
+<text x="1110" y="698" class="label">target, subject to permission</text>
+<path d="M1100 800 H1075 V880 H1050" class="wire"/>
+<path d="M700 890 H650" class="wire"/>
+<path d="M350 890 H300" class="wire"/>
+<path d="M40 890 H25 V345 H40" class="wire"/>
+<path d="M40 111 H5 V770 H325 V752 H350" fill="none" stroke="#7B4BA4" stroke-width="2.2" stroke-dasharray="3 4" marker-end="url(#arrow)"/>
+<text x="58" y="763" class="label" style="fill:#7B4BA4">Original α_user, v_user</text>
+<rect x="40" y="980" width="1360" height="34" rx="6" fill="#f1f5f9"/>
+<text x="56" y="1003" class="small">Hypothetical q probes are not real force measurements. Task/risk gates, bounds and one-shot replanning are engineering rules, not safety guarantees.</text>
+</svg>
