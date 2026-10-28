@@ -700,6 +700,14 @@ def test_original_task_rescore_keeps_original_path_after_replan_and_only_three_c
     assert np.all(result['original_cross_track_m']>.19)
     assert np.all(result['task_step_costs'][4:,1]>0.)
     np.testing.assert_allclose(result['cumulative_task_costs'][-1],result['task_step_costs'].sum(axis=0))
+    raw['effective_costs'][0,keys.index('path')]+=.002
+    with pytest.raises(AssertionError,match='task costs'):
+        m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4)
+    _,relaxed=m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4,broaden_cost_numerics=True)
+    assert relaxed['projection_errors']['broaden_float32_cost_tolerance']
+    raw['effective_costs'][0,keys.index('path')]+=.1
+    with pytest.raises(AssertionError,match='task costs'):
+        m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4,broaden_cost_numerics=True)
     raw['path_cross_track'][0]=.7
     with pytest.raises(AssertionError,match='before replan'):
         m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4)

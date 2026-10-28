@@ -1201,7 +1201,7 @@ def original_path_projection_trace(raw,path,config):
     return values
 
 
-def rescore_original_task(raw,path,config,controller,keys,replan_tick=None):
+def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,broaden_cost_numerics=False):
     """Only original alpha1 V3 task channels; never a reconstructed total reward."""
     from analyze_native_frozen_validation import score
     n=int(np.asarray(raw['active_tick'],bool).sum());projection=original_path_projection_trace(raw,path,config)
@@ -1213,7 +1213,19 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None):
     for column,name,logged in ((0,'progress','path_progress'),(1,'cross_track','path_cross_track'),(2,'heading_error','path_heading_error')):
         error=projection[:before,column]-np.asarray(raw[logged][:before]);validation[name+'_max_absolute_error']=float(np.max(abs(error))) if before else None
         np.testing.assert_allclose(projection[:before,column],raw[logged][:before],atol=4e-4,rtol=2e-5,err_msg='original projection before replan differs '+name)
-    np.testing.assert_allclose(effective[:before],np.asarray(raw['effective_costs'])[:before,indices],atol=4e-4,rtol=2e-5,err_msg='original V3 task costs before replan differ')
+    logged=np.asarray(raw['effective_costs'])[:before,indices]
+    if not np.isfinite(effective).all() or not np.isfinite(logged).all():raise ValueError('nonfinite original task costs')
+    error=effective[:before]-logged
+    validation['task_cost_max_absolute_error']=float(np.max(abs(error))) if before else None
+    validation['task_cost_outside_old_tolerance_elements']=int(np.sum(~np.isclose(effective[:before],logged,atol=4e-4,rtol=2e-5)))
+    validation['task_cost_max_relative_error']=float(np.max(abs(error)/np.maximum(abs(logged),1e-8))) if before else None
+    validation['broaden_float32_cost_tolerance']=bool(broaden_cost_numerics)
+    validation['task_cost_absolute_tolerance']=.003 if broaden_cost_numerics else 4e-4
+    validation['task_cost_relative_tolerance']=2e-4 if broaden_cost_numerics else 2e-5
+    validation['pre_replan_integrated_three_cost_difference']=(error.sum(axis=0)*config['path_reward']['scale']*config['timing']['lower_dt_s']).tolist()
+    # Broaden only: float32 bounded projection errors amplify in squared costs.
+    # Keep a finite absolute/relative bound and report the full accumulated effect.
+    np.testing.assert_allclose(effective[:before],logged,atol=validation['task_cost_absolute_tolerance'],rtol=validation['task_cost_relative_tolerance'],err_msg='original V3 task costs before replan differ')
     step=effective*config['path_reward']['scale']*config['timing']['lower_dt_s']
     return dict(original_progress_m=projection[:,0],original_cross_track_m=projection[:,1],original_heading_error_rad=projection[:,2],task_effective_cost_rates=effective,task_step_costs=step,cumulative_task_costs=np.cumsum(step,axis=0)),dict(validated_pre_replan_ticks=before,projection_errors=validation,task_component_names=['speed','path','primary'],terminal_replacement='Excluded from three running task channels; actual global failure replacement remains in original full reward diagnostics. Not allocated to a task channel.',full_total_reward_reconstructed=False)
 
@@ -1249,8 +1261,9 @@ def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
     import time
     started=time.monotonic()
     out=root/'analysis'/'original_task_rescoring';out.mkdir(exist_ok=False);results=[];arrays={}
+    descriptive=json.loads((root/'plan.json').read_text()).get('mode')=='tolerance_broaden120'
     for lane,row in enumerate(rows):
-        values,receipt=rescore_original_task(raws[row['case_id']],paths[analysis_path_key(row)],config,controller,keys,row.get('replan_task_tick'))
+        values,receipt=rescore_original_task(raws[row['case_id']],paths[analysis_path_key(row)],config,controller,keys,row.get('replan_task_tick'),broaden_cost_numerics=descriptive)
         arrays[row['case_id']]=values;np.savez_compressed(out/f'case_{lane:03d}.npz',**values)
         results.append(dict(case_id=row['case_id'],bank_index=row['bank_index'],route=row['route'],event=row['event'],mode=row['mode'],actual_ticks=row['active_lower_ticks'],actual_physical_outcome=row['horizons']['10']['physical_outcome'],data_file=f'case_{lane:03d}.npz',**receipt))
     for label in response_plot_groups(rows):
