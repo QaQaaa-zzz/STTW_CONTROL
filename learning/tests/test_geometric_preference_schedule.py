@@ -125,3 +125,22 @@ def test_invalid_scheduling_inventory(field,value):
 def test_no_silent_geometry_reselection():
     p=protocol();p['contexts']=contexts();p['contexts'][0]['speed']=2.5
     with pytest.raises(ValueError,match='cannot change'):scheduling_cases(p,contexts())
+
+
+def test_online_scalar_steps_without_outer_slew_and_uses_same_causal_spatial_preview():
+    import inspect
+    import jax.numpy as j
+    from sttw_control.geometric_preference_schedule import advance_scalar,OnlineCarry
+    r=dict(preview_m=1.5,engage_accel_m_s2=3.,release_accel_m_s2=2.7,active_alpha=.5)
+    assert tuple(inspect.signature(advance_scalar).parameters)==('latched','original_speed','path_s','curvature','progress','rule')
+    s=j.array([0.,1.,2.,3.]);k=j.array([0.,.5,.5,0.])
+    alpha,latch,log=advance_scalar(False,2.8,s,k,0.,r)
+    assert float(alpha)==.5 and bool(latch)
+    alpha,latch,_=advance_scalar(latch,2.8,s,j.array([0.,.36,.36,0.]),0.,r)
+    assert bool(latch) and float(alpha)==.5
+    alpha,latch,_=advance_scalar(latch,2.8,s,j.zeros(4),0.,r)
+    assert not bool(latch) and float(alpha)==1.
+    # Geometry rebinding preserves a separate latch and complete native state.
+    native=object();carry=OnlineCarry(native,j.bool_(True))
+    rebound=carry._replace(native='new geometry binding')
+    assert bool(rebound.latched) and carry.native is native

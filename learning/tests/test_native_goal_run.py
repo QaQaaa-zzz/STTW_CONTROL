@@ -208,3 +208,18 @@ def test_descriptive_float_prefix_reports_exceedance_but_still_rejects_discrete(
     logs['active_tick'][0,0]=False
     with pytest.raises(ValueError,match='prefix mismatch'):
         audit_stay_prefix(logs,cases,cache,protocol)
+
+
+def test_online_scalar_inventory_is18_and_preserves_world_pulse_pairing():
+    import json
+    from pathlib import Path
+    from sttw_control.native_goal_run import online_inventory,force_pulses
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_online_scalar.json').read_text())
+    rows=online_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==18
+    assert {r['alpha'] for r in rows}=={1.}
+    assert sum(r['force_N']==0 for r in rows)==2
+    assert p['maximum_lower_ticks']==18*10*200
+    assert {r['mode'] for r in rows}=={'online_scalar'}
+    pulses=np.asarray(force_pulses(rows,3.))
+    np.testing.assert_array_equal(pulses[:,[2,4]],0.)

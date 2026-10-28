@@ -82,3 +82,29 @@ def cap_speed_latent(z, nominal, speed_cap, active, config):
         rule_requested_speed=j.where(active,requested,proposed),
         rule_realizable_speed=realized,rule_speed_cap_binding=binds,
         rule_speed_authority_limited=binds&(j.abs(fraction)>1-eps))
+
+
+from typing import NamedTuple
+
+
+class OnlineCarry(NamedTuple):
+    native: object
+    latched: object
+
+    @property
+    def state(self):
+        return self.native.state
+
+
+def advance_scalar(latched, original_speed, path_s, curvature, progress, rule):
+    """Causal scalar-alpha step; original native action filters remain external.
+
+    No task clock, route identifier, event time or force enters this function.
+    The latch belongs to the sidecar and survives a geometry rebind.
+    """
+    import jax.numpy as j
+    max_k=preview_max_curvature(path_s,curvature,progress,rule['preview_m'])
+    proxy=original_speed**2*max_k
+    active=j.where(latched,proxy>=rule['release_accel_m_s2'],proxy>rule['engage_accel_m_s2'])
+    alpha=j.where(active,rule['active_alpha'],1.)
+    return alpha,active,dict(rule_preview_max_curvature=max_k,rule_accel_estimate=proxy,rule_alpha_target=alpha)

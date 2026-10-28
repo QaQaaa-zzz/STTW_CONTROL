@@ -102,6 +102,18 @@ def switching_inventory(p):
 
 
 
+
+def online_inventory(p):
+    base=dict(p,expected_cases=54,maximum_lower_ticks=108000,mappings=[[.5,.5],[1.,1.],[1.,.5]])
+    rows=response_inventory(base)
+    if p['expected_cases']!=18 or p['maximum_lower_ticks']!=36000 or p['rule']!=dict(preview_m=1.5,engage_accel_m_s2=3.,release_accel_m_s2=2.7,active_alpha=.5):
+        raise ValueError('bounded online scalar contract mismatch')
+    return [dict(c,mode='online_scalar',case_id=c['case_id'].replace('/a1_H75/','/online_scalar/')) for c in rows if c['alpha']==1. and c['mode']=='H75']
+
+
+def prepare_online(source,root,protocol):
+    return prepare_switching(source,root,protocol,online=True)
+
 def continuation_inventory(p):
     original=dict(p,maximum_lower_ticks=72000)
     rows=switching_inventory(original)
@@ -245,7 +257,7 @@ def audit_stay_prefix(logs,cases,cached,protocol,*,own_switch=False):
         absolute_tolerance=atol,relative_tolerance=rtol,field_absolute_tolerance=contract.get('field_absolute_tolerance',{}),maximum_absolute_difference=maxima)
 
 
-def prepare_switching(source,root,protocol,*,continuation_source=None):
+def prepare_switching(source,root,protocol,*,continuation_source=None,online=False):
     source=Path(source).resolve();stay=json.loads((source/'plan.json').read_text())
     if stay.get('mode')!='h75_channel_response':raise ValueError('sealed54 response source required')
     if digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('stay source seal mismatch')
@@ -260,14 +272,18 @@ def prepare_switching(source,root,protocol,*,continuation_source=None):
         if digest(f)!=sha:raise ValueError('stay input mismatch '+f)
     records=json.loads((source/'evaluation/case_index.json').read_text());selected=[]
     for r in records:
-        if r['alpha']!=1. or r['mode'] not in ('H75','hybrid') or r['force_N'] not in (0.,-64.,64.) or r['onset_s']!=1.6:continue
-        r=dict(r,origin='fixed1' if r['mode']=='H75' else 'hybrid')
+        if online:
+            if r['mode']!='H75' or r['alpha'] not in (.5,1.):continue
+        elif r['alpha']!=1. or r['mode'] not in ('H75','hybrid') or r['force_N'] not in (0.,-64.,64.) or r['onset_s']!=1.6:continue
+        r=dict(r,origin=('fixed'+format(r['alpha'],'g')) if online else 'fixed1' if r['mode']=='H75' else 'hybrid')
         if digest(r['raw_file'])!=r['raw_sha256']:raise ValueError('stay raw mismatch')
         selected.append(r);identity[r['raw_file']]=r['raw_sha256']
-    if len(selected)!=12 or len({(r['route'],r['origin'],r['force_N']) for r in selected})!=12:raise ValueError('exact12 matching stays required')
+    if online:
+        if len(selected)!=36 or len({(r['route'],r['alpha'],r['event']) for r in selected})!=36:raise ValueError('exact36 fixed-alpha cache required')
+    elif len(selected)!=12 or len({(r['route'],r['origin'],r['force_N']) for r in selected})!=12:raise ValueError('exact12 matching stays required')
     for name in ('plan.json','seal.json','evaluation/status.json','evaluation/case_index.json'):
         f=source/name;identity[str(f)]=digest(f)
-    prepare_response(stay['source'],root,protocol,stay_source=dict(source=str(source),plan=stay,records=selected,identity=identity),continuation_source=continuation_source)
+    prepare_response(stay['source'],root,protocol,stay_source=dict(source=str(source),plan=stay,records=selected,identity=identity,online=online),continuation_source=continuation_source)
 
 def extend_straight_support(path,target_points,spacing_m):
     """Keep all original geometry samples; extend only a straight terminal ray."""
@@ -315,7 +331,9 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
     cached=Path(old['cached_source']);native=json.loads((cached/'plan.json').read_text());authenticate(cached,native,16)
     if native.get('mode')!='native_capability_v1':raise ValueError('native S capability required')
     proposal=json.loads(protocol.read_text())
-    if stay_source is None:validate_response_protocol(proposal)
+    online=stay_source is not None and stay_source.get('online',False)
+    if online:online_inventory(proposal)
+    elif stay_source is None:validate_response_protocol(proposal)
     elif continuation_source is None:switching_inventory(proposal)
     else:continuation_inventory(proposal)
     if old['config']!=native['config'] or old['initial_source']!=native['initial_source'] or old['h75']!=native['h75']:
@@ -334,6 +352,7 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
     folder=Path(__file__).resolve().parent
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]
     modules.append(Path('learning/cli/run_native_goal_confirmation.py').resolve())
+    if online:modules.append(folder/'geometric_preference_schedule.py')
     if stay_source is not None:
         if any(stay_source['plan'][k]!=v for k,v in [('config',old['config']),('initial_source',old['initial_source']),('models',{'H75':old['h75']})]):raise ValueError('stay source full interface identity differs')
         if stay_source['plan']['native_runtime_root']!=old['native_runtime_root'] or stay_source['plan']['native_expected_sources']!=old['native_source_sha256']:
@@ -344,9 +363,9 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
     for f in modules:(root/'source'/f.name).write_bytes(f.read_bytes())
     if stay_source is not None:
         save(root/'cached_stay_records.json',stay_source['records']);files[str(root/'cached_stay_records.json')]=digest(root/'cached_stay_records.json')
-    save(root/'inventory.json',continuation_inventory(proposal) if continuation_source is not None else response_inventory(proposal) if stay_source is None else switching_inventory(proposal));save(root/'effective_config.json',old['config'])
+    save(root/'inventory.json',online_inventory(proposal) if online else continuation_inventory(proposal) if continuation_source is not None else response_inventory(proposal) if stay_source is None else switching_inventory(proposal));save(root/'effective_config.json',old['config'])
     files.update({str(f.resolve()):digest(f) for f in (protocol,root/'inventory.json',root/'effective_config.json')})
-    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='h75_switching_continuation' if continuation_source is not None else 'h75_channel_response' if stay_source is None else 'h75_channel_switching',
+    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='h75_online_scalar' if online else 'h75_switching_continuation' if continuation_source is not None else 'h75_channel_response' if stay_source is None else 'h75_channel_switching',
         source=str(source),cached_source=str(cached),native_runtime_root=old['native_runtime_root'],
         native_expected_sources=old['native_source_sha256'],initial_source=old['initial_source'],
         models={'H75':old['h75']},config=old['config'],contexts=native['contexts'],cases=proposal['expected_cases'],horizon_s=proposal['horizon_s'],goal_radius_m=proposal['goal_radius_m'],
@@ -431,7 +450,7 @@ def verify(root):
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('changed plan')
     for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(f)!=sha:raise ValueError('changed sealed source/input '+f)
-    if json.loads((root/'inventory.json').read_text())!=(continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else inventory()):raise ValueError('fixed inventory changed')
+    if json.loads((root/'inventory.json').read_text())!=(online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else inventory()):raise ValueError('fixed inventory changed')
     return p
 
 
@@ -468,9 +487,10 @@ def load(root):
     env=adapter.NativeGoalContinuation(env,contact_only_physics=contact.ContactOnlyPhysics,
                                         project=geometry.project,pursuit=pursuit)
     cases=json.loads((root/'inventory.json').read_text());pose=np.asarray(env.physics.helpers.pose(snapshot.data))
+    online=p.get('mode')=='h75_online_scalar'
     branch=p.get('mode')=='h75_switching_continuation'
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation')
-    response=p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation')
+    response=p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar')
     if response:
         from sttw_control.path_command_scenarios import _integrate_route
         bank={}
@@ -514,6 +534,9 @@ def load(root):
     if bool(j.any(initial.state.fault|initial.state.physical.failed)):
         raise ValueError('initial native task is invalid; not a physical failure result')
     env.set_log_template(jax.tree.map(lambda x:x[0],initial.state),bank[cases[0]['route']],speeds[0])
+    if online:
+        schedule=file_module('_sttw_online_scalar',folder/'geometric_preference_schedule.py')
+        initial=schedule.OnlineCarry(initial,j.zeros(len(cases),bool))
     actors={}
     for name,model in p['models'].items():
         with Path(model['actor']).open('rb') as f:actors[name]=jax.tree.map(j.asarray,pickle.load(f))
@@ -534,11 +557,16 @@ def load(root):
           'continuation_geometry_invalid','continuation_geometry_fault')
     switch_ticks=j.asarray([round(c.get('switch_s',1e9)/env.cc.dt) for c in cases],j.int32) if switching else j.zeros(n,j.int32)
     def one(carry,param,path,v,pulse,mode,sa,ta,st):
+        if online:
+            alpha_exec,latched,decision=schedule.advance_scalar(carry.latched,v,path.s,path.curvature,carry.state.projection.progress,p['protocol']['rule'])
+            carry=carry.native
         origin_pair=j.stack([sa,ta])
         if switching:sa,ta,switched=switch_mapping(carry.state.tick,sa,ta,st,p['protocol']['destination_pair'])
         if response:
             obs,_,_=env.observation(carry.state,path,v,horizon)
-            z,half,full=channel_queries(obs,lambda x:actor.apply(param,x),sa,ta)
+            if online:
+                queried=obs.at[336].set(alpha_exec);z=actor.apply(param,queried);half=full=j.zeros_like(z)
+            else:z,half,full=channel_queries(obs,lambda x:actor.apply(param,x),sa,ta)
         def target(obs,state):
             if response:return z
             return jax.lax.cond(mode==3,
@@ -548,8 +576,11 @@ def load(root):
         if response:
             ticks=lambda x:j.broadcast_to(x,log['active_tick'].shape+j.asarray(x).shape)
             log.update(queried_latent_alpha_half=ticks(half),queried_latent_alpha_one=ticks(full),channel_alpha_pair=ticks(j.stack([sa,ta])),composed_latent=ticks(z),query_observation=ticks(obs),pre_upper_yaw=ticks(env.physics.observe(carry.state.physical.data)[1][2]))
+        if online:
+            log.update(alpha_user=ticks(j.asarray(1.)),alpha_exec=ticks(alpha_exec),rule_latched=ticks(latched),query_observation=ticks(queried),channel_alpha_pair=ticks(j.stack([alpha_exec,alpha_exec])),**{k:ticks(x) for k,x in decision.items()})
+            end=schedule.OnlineCarry(end,latched)
         if switching:log.update(origin_channel_alpha_pair=ticks(origin_pair),switch_active=ticks(switched),switch_tick=ticks(st))
-        return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped')} if response else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+        return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target')} if online else {}),**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in (('channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped') if online else ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped'))} if response else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
     @jax.jit
     def chunk(carry,paths):
         return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes,speed_alpha,steer_alpha,switch_ticks),carry,None,length=50)
@@ -558,7 +589,10 @@ def load(root):
         return jax.vmap(lambda d:env.physics.observe(d)[1])(carry.state.physical.data)
     @jax.jit
     def bind(carry,paths,mask):
-        new=jax.vmap(env.rebind_geometry)(carry,paths,speeds)
+        if online:
+            native=jax.vmap(env.rebind_geometry)(carry.native,paths,speeds)
+            new=schedule.OnlineCarry(native,carry.latched)
+        else:new=jax.vmap(env.rebind_geometry)(carry,paths,speeds)
         return jax.tree.map(lambda a,b:j.where(mask.reshape((n,)+(1,)*(a.ndim-1)),a,b),new,carry)
     consumed={}
     for module in tuple(sys.modules.values()):
@@ -650,7 +684,7 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i])):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation') else {}))
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar') else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         np.savez_compressed(directory/f'replanned_path_{i:02d}.npz',**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
                         decisions.append(dict(case_id=cases[i]['case_id'],case_index=i,task_tick=int(ticks[i]),measured_pose=np.asarray(poses[i]).tolist(),cross_track_m=float(cross[i]),follower_invalid=bool(invalid[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),**meta))

@@ -1,0 +1,59 @@
+{
+  "experiment_id": "STTW-H75-ONLINE-SCALAR-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 18,
+  "maximum_lower_ticks": 36000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    -32.0,
+    32.0,
+    64.0
+  ],
+  "onsets_s": [
+    1.6,
+    4.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "zero_onset_s": 1.6,
+  "replan_cadence_s": 1.0,
+  "question": "Can one causal geometric preview scalar-alpha prototype retain nominal goal benefit and improve paired contact outcomes?",
+  "data_role": "One online causal scalar-alpha prototype, related DEV; revision of failed nominal slow-alpha schedule, not a threshold search.",
+  "stop_rule": "Exactly18/H10/36000lower/0optimizer; reuse fixed.5/1 caches, no baseline races, force/time/threshold sweep, retries or adoption.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Common planner at1..9s reads measured state before next chunk; latch is preserved when execution path changes. No event time, force, route label or task clock enters alpha decision.",
+  "interpretation": "Preview uses only current execution path/progress and original speed request. Immediate requested-alpha step removes old outer1/s alpha slew; native reference filters/rates/physics unchanged. Heuristic thresholds are not stability bounds.",
+  "scoring": "Goal1m and truecontact primary, nominal losses retained; user1 execution-path costs diagnostic, original-S errors descriptive after replanning.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Original-path curvature lobe centers s4.68/11m at requested2.8m/s imply1.67/3.93s; selected1.6/4.0 from reference geometry, not observed policy failures.",
+  "decision_rules": {
+    "primary": "Report paired contact rescue and no new nominal contact/fault/goal loss against fixed.5 and fixed1, without percentage gate.",
+    "negative": "Retain reverse cases; no automatic threshold tuning, new network or expanded force tests."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5
+  }
+}
