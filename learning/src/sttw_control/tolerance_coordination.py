@@ -78,25 +78,26 @@ def preview_curvature(progress,path_s,path_curvature):
     return j.maximum(j.max(knots),j.maximum(j.abs(j.interp(start,path_s,path_curvature)),j.abs(j.interp(end,path_s,path_curvature))))
 
 
-def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True):
+def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True,user_alpha=1.):
     """No time/event/route inputs; thresholds are engineering gates."""
     import jax.numpy as j
     permission=j.asarray(permission,dtype=bool);latched=j.asarray(latched,dtype=bool)
     alpha=j.array([0.,.5,1.],j.float32)
     task_mask=targets[:,0]**2*max_curvature<=3.
-    cost=((targets[:,0]-v_user)/1.)**2+.1*((targets[:,1]-nominal[1])/.2)**2+.05*(alpha-1.)**2+.02*(alpha-prev_alpha)**2
+    user_index=j.argmin(j.abs(alpha-user_alpha))
+    cost=(.1+.9*user_alpha)*((targets[:,0]-v_user)/1.)**2+(1.-.9*user_alpha)*((targets[:,1]-nominal[1])/.2)**2+.05*(alpha-user_alpha)**2+.02*(alpha-prev_alpha)**2
     quality=j.where(use_q,qmin>=.8,j.ones(3,dtype=bool))
-    restore=task_mask[2]&j.where(use_q,qmin[2]>=j.where(latched,.85,.8),True)
-    eligible=task_mask[:2]&quality[:2]
+    restore=task_mask[user_index]&j.where(use_q,qmin[user_index]>=j.where(latched,.85,.8),True)
+    eligible=task_mask&quality&(j.arange(3)!=user_index)
     degraded=(~restore)&(~j.any(eligible))
-    fallback=j.where(j.any(eligible),alpha[j.argmin(j.where(eligible,cost[:2],j.inf))],.5)
-    proposed=j.where(restore,1.,fallback)
+    fallback=j.where(j.any(eligible),alpha[j.argmin(j.where(eligible,cost,j.inf))],.5)
+    proposed=j.where(restore,alpha[user_index],fallback)
     chosen=j.where(permission,proposed,prev_alpha)
     new_latch=j.where(permission,~restore,latched)
     return dict(alpha=chosen,latched=new_latch,prev_alpha=chosen,task_mask=task_mask,proxy_cost=cost,degraded=permission&degraded,publication_withheld=~permission)
 
 
-def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1):
+def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.):
     import jax.numpy as j
     probabilities=candidate_probabilities(params,observation,latents,yaw,interface)[arm]
     qmin=j.min(probabilities,axis=-1)
@@ -104,7 +105,7 @@ def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_
     lo,hi=interface['speed_reference_bounds_m_s'];steer=interface['steer_reference_bound_rad']
     targets=j.stack([j.clip(unbounded[:,0],lo,hi),j.clip(unbounded[:,1],-steer,steer)],axis=-1)
     curvature=preview_curvature(path_progress,path_s,path_curvature)
-    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q)
+    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q,user_alpha=user_alpha)
     result.update(probabilities=probabilities,qmin=qmin,targets=targets,unbounded_targets=unbounded,target_clipped=targets!=unbounded,max_abs_curvature=curvature)
     return result
 
