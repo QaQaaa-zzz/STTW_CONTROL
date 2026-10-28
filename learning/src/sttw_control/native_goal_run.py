@@ -406,15 +406,59 @@ def prepare_task_aware(source,root,protocol):
     prepare_switching(old['stay_source'],root,protocol,online=True,confirmation_source=dict(source=str(source),identity=identity,tolerance=True))
 
 
+def frozen_confirmation_variant(p):
+    variant=p.get('variant')
+    if variant not in (None,'geometry_duration_extension_v1'):raise ValueError('unknown frozen confirmation variant')
+    return variant
+
+
 def frozen_confirmation_inventory(p):
+    variant=frozen_confirmation_variant(p)
     users=[('user0',0.),('userhalf',.5),('user1',1.)]
     methods=[('taskaware','task_aware',0),('guard','guard',1),('fixed','fixed',2)]
     declarations=[(f'{name}_{suffix}',user,method,code) for name,user in users for suffix,method,code in methods]+[('user1_speedcap',1.,'speedcap',3)]
     arms=[x[0] for x in declarations]
-    expected=dict(expected_cases=200,maximum_lower_ticks=400000,horizon_s=10.,optimizer_updates=0,bank_indices=[1,7],forces_N=[-64.,64.],onsets_s=[1.6,3.4],zero_onset_s=1.6,duration_s=.1,force_frame='worldY',routes=[dict(route=f'S_{side}_90_R1p8',speed=2.8) for side in ('left','right')],goal_radius_m=1.,replanning_radius_m=1.8,departure_m=1.,maximum_replans=1,replan_cadence_s=1.,planner_support_m=100.,planner_spacing_m=.02,planner_points=5001,arms=arms)
-    if any(p.get(k)!=v for k,v in expected.items()) or set(p['bank_state_fingerprints'])!={'1','7'} or p['arm_to_export_index']!={a:0 for a in arms}:raise ValueError('frozen confirmation200 contract differs')
-    events=[dict(event='zero',force_N=0.,onset_s=1.6)]+[dict(event=f't{t:g}_F{force:+g}',force_N=force,onset_s=t) for t,force in itertools.product((1.6,3.4),(-64.,64.))]
-    return [dict(**route,**event,bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_'+route['route'],case_id=f'bank{b}/{route["route"]}/{arm}/{event["event"]}',mode=arm,mode_index=i,alpha=user,user_alpha=user,effective_user_alpha=user,query_alpha=user,method=method,method_index=code,duration_s=.1) for b,route,event,(i,(arm,user,method,code)) in itertools.product(p['bank_indices'],p['routes'],events,enumerate(declarations))]
+    routes=[dict(route=f'S_{side}_90_R1p8',speed=2.8) for side in ('left','right')]
+    cases,budget,onsets,zero,duration=200,400000,[1.6,3.4],1.6,.1
+    if variant=='geometry_duration_extension_v1':
+        contexts=[dict(route=f'S_{side}_{angle}_R2p2',angle_deg=angle,radius_m=2.2,speed=2.6,direction=direction) for angle in (60,120) for side,direction in (('left',1.),('right',-1.))]
+        if p.get('route_contexts')!=contexts:raise ValueError('explicit four geometry contexts differ')
+        routes=[dict(route=c['route'],speed=c['speed']) for c in contexts]
+        cases,budget,onsets,zero,duration=240,480000,[2.6],2.6,.15
+    expected=dict(expected_cases=cases,maximum_lower_ticks=budget,horizon_s=10.,optimizer_updates=0,bank_indices=[1,7],forces_N=[-64.,64.],onsets_s=onsets,zero_onset_s=zero,duration_s=duration,force_frame='worldY',routes=routes,goal_radius_m=1.,replanning_radius_m=1.8,departure_m=1.,maximum_replans=1,replan_cadence_s=1.,planner_support_m=100.,planner_spacing_m=.02,planner_points=5001,arms=arms)
+    if any(p.get(k)!=v for k,v in expected.items()) or set(p['bank_state_fingerprints'])!={'1','7'} or p['arm_to_export_index']!={a:0 for a in arms}:raise ValueError('frozen confirmation contract differs')
+    events=[dict(event='zero',force_N=0.,onset_s=zero)]+[dict(event=f't{t:g}_F{force:+g}',force_N=force,onset_s=t) for t,force in itertools.product(onsets,(-64.,64.))]
+    return [dict(**route,**event,bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_'+route['route'],case_id=f'bank{b}/{route["route"]}/{arm}/{event["event"]}',mode=arm,mode_index=i,alpha=user,user_alpha=user,effective_user_alpha=user,query_alpha=user,method=method,method_index=code,duration_s=duration) for b,route,event,(i,(arm,user,method,code)) in itertools.product(p['bank_indices'],routes,events,enumerate(declarations))]
+
+
+def apply_route_context_variant(plan):
+    if plan['mode']=='frozen_confirmation200' and frozen_confirmation_variant(plan['protocol'])=='geometry_duration_extension_v1':
+        frozen_confirmation_inventory(plan['protocol'])
+        plan['contexts']=copy.deepcopy(plan['protocol']['route_contexts'])
+        plan['geometry_protocol_variant']='geometry_duration_extension_v1'
+    return plan
+
+
+def frozen_control_core_identity(current,archived):
+    """Compare deployed control functions plus recursively called local helpers."""
+    import ast
+    def functions(path):
+        tree=ast.parse(Path(path).read_text());return {node.name:node for node in tree.body if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef))}
+    roots={'infer_probabilities','native_offsets','candidate_features','candidate_probabilities','preview_curvature','choose_alpha','coordinate'}
+    maps=[functions(current),functions(archived)];names=set(roots)
+    for funcs in maps:
+        pending=list(roots);visited=set()
+        while pending:
+            name=pending.pop()
+            if name in visited:continue
+            if name not in funcs:raise ValueError('frozen control function missing '+name)
+            visited.add(name)
+            for node in ast.walk(funcs[name]):
+                if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id in funcs and node.func.id not in visited:pending.append(node.func.id)
+        names|=visited
+    digests=[{name:hashlib.sha256(ast.dump(funcs[name],include_attributes=False).encode()).hexdigest() for name in sorted(names)} for funcs in maps]
+    if digests[0]!=digests[1]:raise ValueError('frozen executable control core differs')
+    return dict(function_ast_sha256=digests[0],current_file_sha256=digest(current),archived_file_sha256=digest(archived),whole_files_equal=digest(current)==digest(archived),scope='control functions and recursively called local helpers; exporter-only file differences permitted')
 
 
 def prepare_frozen_confirmation(source,root,protocol):
@@ -423,15 +467,22 @@ def prepare_frozen_confirmation(source,root,protocol):
     status=json.loads((source/'evaluation/status.json').read_text())
     if status.get('phase')!='completed' or status.get('completed_cases')!=72:raise ValueError('completed candidate source required')
     kernel_entries=[sha for file,sha in old['source_sha256'].items() if Path(file).name=='tolerance_coordination.py']
-    if len(kernel_entries)!=1 or digest(Path(__file__).with_name('tolerance_coordination.py'))!=kernel_entries[0]:raise ValueError('frozen candidate kernel changed before confirmation')
-    for key in ('coordination','rule','duration_s','force_frame','horizon_s','goal_radius_m','replanning_radius_m','departure_m','maximum_replans','replan_cadence_s','planner_support_m','planner_spacing_m','planner_points','user_preference','predictor_training','predictor_prepared'):
+    core_identity=None
+    if frozen_confirmation_variant(proposal)=='geometry_duration_extension_v1':
+        archived=source/'source/tolerance_coordination.py'
+        if len(kernel_entries)!=1 or digest(archived)!=kernel_entries[0]:raise ValueError('archived frozen control source changed')
+        core_identity=frozen_control_core_identity(Path(__file__).with_name('tolerance_coordination.py'),archived)
+    elif len(kernel_entries)!=1 or digest(Path(__file__).with_name('tolerance_coordination.py'))!=kernel_entries[0]:raise ValueError('frozen candidate kernel changed before confirmation')
+    frozen_keys=('coordination','rule','force_frame','horizon_s','goal_radius_m','replanning_radius_m','departure_m','maximum_replans','replan_cadence_s','planner_support_m','planner_spacing_m','planner_points','user_preference','predictor_training','predictor_prepared')
+    if frozen_confirmation_variant(proposal) is None:frozen_keys+=('duration_s',)
+    for key in frozen_keys:
         if proposal[key]!=old['protocol'][key]:raise ValueError('frozen confirmation changes controller contract '+key)
     identity=dict(old['input_sha256'])
     for file,sha in identity.items():
         if digest(file)!=sha:raise ValueError('candidate input changed '+file)
     for name in ('plan.json','seal.json','evaluation/status.json'):
         identity[str(source/name)]=digest(source/name)
-    prepare_switching(old['stay_source'],root,protocol,online=True,confirmation_source=dict(source=str(source),identity=identity,tolerance=True,frozen_candidate_only=True))
+    prepare_switching(old['stay_source'],root,protocol,online=True,confirmation_source=dict(source=str(source),identity=identity,tolerance=True,frozen_candidate_only=True,frozen_core_identity=core_identity))
 
 
 def select_confirmation_arm(method,decision,permission,prev_alpha,prev_latch,user_alpha):
@@ -956,6 +1007,7 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
         replanning=dict(period_s=proposal['replan_cadence_s'],radius_m=proposal['replanning_radius_m'],departure_m=proposal['departure_m'],maximum_per_case=proposal['maximum_replans'],information=proposal['replanning'],ordering=proposal['ordering']),
         scoring=proposal['scoring'],stop=proposal['stop_rule'],normalization=proposal['normalization'],initialization=proposal.get('initialization','Authenticated original native prepared bank/reset'),
         input_sha256=files,source_sha256={str(f.resolve()):digest(f) for f in modules})
+    apply_route_context_variant(plan)
     if proposal.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','h75_late_state_tolerance48','h75_user_late_state192'):
         plan['frozen_predictor_export']=dict(directory=str(root/'q'),receipt_sha256=digest(root/'q/receipt.json'),
             candidate_manifest_sha256=digest(root/'q/original_candidate_manifest.json'),
@@ -979,7 +1031,7 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
         plan['comparison_source']=cache_helper.validate_task_aware_cache(confirmation_source['source'],config=plan['config'],models=plan['models'],protocol=proposal,initial_source=plan['initial_source'],replanning=plan['replanning'])
         for file,sha in plan['comparison_source']['identity'].items():plan['input_sha256'][file]=sha
     if proposal.get('mode')=='frozen_confirmation200':
-        plan['frozen_candidate_source']=dict(source=confirmation_source['source'],plan_sha256=digest(Path(confirmation_source['source'])/'plan.json'),control_source_sha256=json.loads((Path(confirmation_source['source'])/'plan.json').read_text())['source_sha256'],q_parameters_sha256=digest(root/'q/parameters.npz'),new_comparison_physics_only=True)
+        plan['frozen_candidate_source']=dict(source=confirmation_source['source'],plan_sha256=digest(Path(confirmation_source['source'])/'plan.json'),control_source_sha256=json.loads((Path(confirmation_source['source'])/'plan.json').read_text())['source_sha256'],q_parameters_sha256=digest(root/'q/parameters.npz'),new_comparison_physics_only=True,frozen_core_identity=confirmation_source.get('frozen_core_identity'))
     if proposal.get('mode')=='speed_query_online60':
         cache_helper=file_module('_sttw_speed_query_cache',Path('learning/cli/audit_native_goal_initial.py').resolve())
         plan['comparison_source']=cache_helper.validate_speed_query_cache(confirmation_source['source'],config=plan['config'],models=plan['models'],protocol=proposal,initial_source=plan['initial_source'],replanning=plan['replanning'])
@@ -1203,7 +1255,7 @@ def load(root,*,prefix_phase=False):
         comparison_initial=initial
         if p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60'):comparison_initial=initial.replace(state=initial.state.replace(alpha=j.ones_like(initial.state.alpha)))
         leaves=jax.tree.leaves(jax.device_get(comparison_initial))
-        if len(groups)!=(24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') else 20) or any(len(ids)!=(len(p['protocol']['arms']) if tolerance else 5) for ids in groups.values()):raise ValueError('newbank reset grouping mismatch')
+        if len(groups)!=(24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode')=='frozen_confirmation200' and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20) or any(len(ids)!=(len(p['protocol']['arms']) if tolerance else 5) for ids in groups.values()):raise ValueError('newbank reset grouping mismatch')
         if any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('five-arm complete physical reset differs')
         initial_identity=dict(user_alpha_neutralized_for_cross_user_reset=p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60'),new_bank_fingerprints=p['protocol']['bank_state_fingerprints'],all_five_arm_reset_leaves_exact=not tolerance,all_arm_reset_leaves_exact=True,native_leaf_count=len(leaves),groups=len(groups),original_paths_anchored_to_own_pose=True,no_old_trajectory_reuse=True)
     if tolerance and p.get('mode') not in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60'):

@@ -215,6 +215,10 @@ def confirmation_initial_layout(plan):
     expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3),'task_aware_fallback72':(72,3),'frozen_confirmation200':(200,10),'speed_query_online60':(60,3)}
     if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
     count,arms=expected[plan['mode']]
+    if plan['mode']=='frozen_confirmation200':
+        variant=plan['protocol'].get('variant')
+        if variant not in (None,'geometry_duration_extension_v1'):raise ValueError('unknown frozen confirmation variant')
+        if variant=='geometry_duration_extension_v1':count,arms=240,10
     if plan['protocol']['expected_cases']!=count or len(plan['protocol']['arms'])!=arms:
         raise ValueError('initial panel dimensions differ from declared mode')
     return count,arms
@@ -255,7 +259,7 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
     neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60') else carry
     leaves=jax.tree.leaves(neutral)
-    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') else 20
+    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode')=='frozen_confirmation200' and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20
     if len(groups)!=expected_groups or any(len(ids)!=arms for ids in groups.values()):raise ValueError(f'{expected_groups} paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:

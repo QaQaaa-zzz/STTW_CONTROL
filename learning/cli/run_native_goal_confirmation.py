@@ -6,6 +6,29 @@ import sys
 
 sys.dont_write_bytecode=True
 
+def notify_after_execution(root,title,body):
+    """Late notification imports must never alter native runtime initialization."""
+    try:
+        source=Path(__file__).resolve().parents[1]/'src'
+        sys.path.insert(0,str(source))
+        # A frozen package can already be loaded; sys.path alone cannot add its
+        # missing notification-only submodules. Extend only after run returns.
+        package=sys.modules.get('sttw_control')
+        if package is not None and hasattr(package,'__path__'):
+            package_path=str(source/'sttw_control')
+            if package_path not in package.__path__:package.__path__=list(package.__path__)+[package_path]
+        from engineer_reference_bias import notify
+        notify(Path(root),title,body)
+        return True
+    except BaseException as exc:
+        import json
+        print(f'Native evaluation notification failed: {exc!r}',file=sys.stderr)
+        try:
+            with (Path(root)/'notification_errors.jsonl').open('a') as f:f.write(json.dumps(dict(title=title,error=repr(exc)))+'\n')
+        except Exception:pass
+        return False
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('stage',choices=['prepare','prefix-shape','prefix','shape','execute']);parser.add_argument('root',type=Path)
@@ -42,10 +65,8 @@ if __name__=='__main__':
         else:module.run(args.root,shape_only=args.stage=='shape')
     except BaseException:
         if args.stage=='execute':
-            from engineer_reference_bias import notify
-            notify(args.root,'STTW native goal比较报错','已停止并保存partial原始数据和计费，不自动重试或扩力。')
+            notify_after_execution(args.root,'STTW native goal比较报错','已停止并保存partial原始数据和计费，不自动重试或扩力。')
         raise
     else:
         if args.stage=='execute':
-            from engineer_reference_bias import notify
-            notify(args.root,'STTW native goal比较完成','冻结面板比较完成，无训练；随后分析原目标到达、实际触地、偏好代价及完整XY。')
+            notify_after_execution(args.root,'STTW native goal比较完成','冻结面板比较完成，无训练；随后分析原目标到达、实际触地、偏好代价及完整XY。')
