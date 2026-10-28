@@ -305,3 +305,29 @@ def test_bank144_keeps_source_groups_and_label_splits_and_prefix_budget():
     assert {r['split'] for r in rows if r['bank_index']==1}=={'label_heldout'}
     assert p['maximum_total_lower_ticks']==4*200+144*1800==260000
     for r in rows:assert r['onset_s']==1.+r['preparation_s'] and r['query_alpha']==r['candidate_alpha']
+
+
+def test_confirmation144_declares_two_new_ancestors_and_all_eight_prefixes():
+    import pytest
+    import json
+    from pathlib import Path
+    from sttw_control.native_goal_run import bank144_inventory,bank144_prefix_cases
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_samestate_confirmation144.json').read_text())
+    rows=bank144_inventory(p);prefix=bank144_prefix_cases(p)
+    assert len(rows)==144 and len(prefix)==8
+    assert {r['bank_index'] for r in rows}=={2,5}
+    assert {r['split'] for r in rows}=={'new_confirmation'}
+    assert all('confirmation_row' not in r for r in rows)
+    assert [r['source_index'] for r in prefix]==list(range(8))
+    assert [(r['speed_alpha'],r['steer_alpha']) for r in prefix]==[(1.,1.),(1.,.5)]*4
+    assert all(r['force_N']==0. and r['alpha']==1. for r in prefix)
+    assert p['maximum_total_lower_ticks']==len(prefix)*200+len(rows)*1800==260800
+    groups=defaultdict(list)
+    for r in rows:groups[r['source_group_id']].append(r)
+    assert len(groups)==8 and all(len(v)==18 for v in groups.values())
+    for key,value in [('maximum_prefix_lower_ticks',800),('maximum_total_lower_ticks',260000),('bank_indices',[2,4])]:
+        bad=dict(p,**{key:value})
+        with pytest.raises(ValueError):bank144_inventory(bad)
+    import copy
+    bad=copy.deepcopy(p);bad['source_groups'][0]['split']='development'
+    with pytest.raises(ValueError):bank144_inventory(bad)

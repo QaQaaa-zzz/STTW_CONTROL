@@ -1,0 +1,147 @@
+{
+  "experiment_id": "STTW-H75-NEW-SOURCE-CONFIRMATION144-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 144,
+  "maximum_lower_ticks": 259200,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "replan_cadence_s": 1.0,
+  "question": "One frozen new-source confirmation of already sealed ranking predictors; no fitting or selection on these labels.",
+  "data_role": "All144 new_confirmation, two prepared-bank ancestors2/5; bank3 train, bank0 development, seen bank1 excluded. Ancestors are not independent training seeds.",
+  "stop_rule": "Exactly eight fixed1/hybrid1s prefixes1600lower plus144x9s suffix259200 =260800max;0optimizer; no search/retry/expansion.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "All candidate scalar alpha0/.5/1 apply immediately at common source task1 and hold; pulse onset1+prep. Source task1 common planner runs before publication. Origin defines state only, no ongoing hybrid.",
+  "interpretation": "Primary no-contact includes preparation and pulse fromsource through pulseEND+3s (task4.1/4.3/4.7). Pre-pulse contact is negative; numerical faults invalid, never successful survival. Goal arrival and fullH10 contact separate.",
+  "scoring": "True contact/physicalfailure labels and engineering invalid separate; user1 costs diagnostic, missedgoal notfall.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Candidate applied at source task1 for every case; preparation0/.2/.6 controls pulse onset1/1.2/1.6 only. No ongoing source-origin action after branch.",
+  "decision_rules": {
+    "feasibility": "Report per-source scalar-alpha/direction/preparation contact labels. Candidate/direction/preparation separation motivates later predictor review; all-positive labels do not authorize training a trivial classifier.",
+    "negative": "Preserve no-separation, pre-pulse contacts and engineeringinvalid; no force/state/threshold expansion.",
+    "outcomes": "Primary source-through-pulseEND+3s contact/physicalfailure; fullH10 and goal independent, missedgoal neverfall."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Exact confirmation original S integration at each prepared actual pose, same straight support to5001 points; original world goals fixed.",
+  "new_horizon_s": 9.0,
+  "source_task_s": 1.0,
+  "candidate_alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "preparation_s": [
+    0.0,
+    0.2,
+    0.6
+  ],
+  "primary_after_pulse_end_s": 3.0,
+  "initialization": "Authenticated complete prepared bank2/5; exact confirmation task initialization once, eight fixed1/hybrid1s prefixes. Freeze complete source carry before all144 suffixes; no reset at branch.",
+  "source_features": "Native351 user1 source observation before task1 planner; original fixed scales; sealed predictor only, no fitting.",
+  "maximum_prefix_lower_ticks": 1600,
+  "maximum_total_lower_ticks": 260800,
+  "source_groups": [
+    {
+      "source_index": 0,
+      "bank_index": 2,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank2_S_left_90_R1p8",
+      "origin": "fixed1",
+      "split": "new_confirmation",
+      "source_group_id": "bank2/S_left_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 1,
+      "bank_index": 2,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank2_S_left_90_R1p8",
+      "origin": "hybrid",
+      "split": "new_confirmation",
+      "source_group_id": "bank2/S_left_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 2,
+      "bank_index": 2,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank2_S_right_90_R1p8",
+      "origin": "fixed1",
+      "split": "new_confirmation",
+      "source_group_id": "bank2/S_right_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 3,
+      "bank_index": 2,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank2_S_right_90_R1p8",
+      "origin": "hybrid",
+      "split": "new_confirmation",
+      "source_group_id": "bank2/S_right_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 4,
+      "bank_index": 5,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank5_S_left_90_R1p8",
+      "origin": "fixed1",
+      "split": "new_confirmation",
+      "source_group_id": "bank5/S_left_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 5,
+      "bank_index": 5,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank5_S_left_90_R1p8",
+      "origin": "hybrid",
+      "split": "new_confirmation",
+      "source_group_id": "bank5/S_left_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 6,
+      "bank_index": 5,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank5_S_right_90_R1p8",
+      "origin": "fixed1",
+      "split": "new_confirmation",
+      "source_group_id": "bank5/S_right_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 7,
+      "bank_index": 5,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank5_S_right_90_R1p8",
+      "origin": "hybrid",
+      "split": "new_confirmation",
+      "source_group_id": "bank5/S_right_90_R1p8/hybrid"
+    }
+  ],
+  "source_initialization": "prepared_bank_all_prefixes",
+  "bank_indices": [
+    2,
+    5
+  ],
+  "bank_state_fingerprints": {
+    "2": "8709b6ef94ab87f0a9dff1575236bd534fc67a4afd3caf1b5d709a95c13b6d3b",
+    "5": "fa4d246fdc47906e46cf82c902487169d872b39908b48a0806ba361ba254a9ae"
+  }
+}

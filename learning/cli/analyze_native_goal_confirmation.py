@@ -18,10 +18,10 @@ COLORS=('#0072B2','#D55E00','#333333','#008060')
 STYLES=('-','--',':','-.')
 
 
-def analyze(root,include_heldout_labels=False):
+def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode')=='h75_samestate_bank144':return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels)
+    if p.get('mode')=='h75_samestate_bank144':return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
@@ -760,19 +760,26 @@ def samestate_summary(rows):
 
 
 def validate_bank144_inventory(rows,p):
+    fresh=p.get('source_initialization')=='prepared_bank_all_prefixes'
     groups={g['source_index']:g for g in p['source_groups']};actual=[]
     for c in rows:
         group=groups[c['source_index']]
         if any(c.get(k)!=v for k,v in group.items()):raise ValueError('bank source metadata drift')
-        if c['split']!=('development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
+        if c['split']!=('new_confirmation' if fresh else 'development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
         if not np.isclose(c['onset_s'],1.+c['preparation_s']) or not np.isclose(c['primary_window_end_s'],c['onset_s']+.1+3.):raise ValueError('bank conditional timing mismatch')
         actual.append((c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N']))
     expected=list(itertools.product(groups,p['candidate_alphas'],p['preparation_s'],p['forces_N']))
     if sorted(actual)!=sorted(expected) or len(set(actual))!=144:raise ValueError('complete144 conditional inventory required')
 
 
-def select_bank_label_lanes(index,include_heldout_labels=False):
+def select_bank_label_lanes(index,include_heldout_labels=False,include_confirmation_labels=False):
     """Select BEFORE any suffix raw open, scoring, plotting or label export."""
+    fresh=any(row.get('split')=='new_confirmation' for row in index)
+    if fresh:
+        if not include_confirmation_labels or include_heldout_labels:raise ValueError('new confirmation labels require explicit confirmation flag only')
+        if len(index)!=144 or {row['bank_index'] for row in index}!={2,5} or any(row['split']!='new_confirmation' for row in index):raise ValueError('new confirmation identity mismatch')
+        return list(enumerate(index))
+    if include_confirmation_labels:raise ValueError('confirmation flag cannot unseal historical labels')
     selected=[]
     for lane,row in enumerate(index):
         expected='development' if row['bank_index']==0 else 'label_heldout'
@@ -798,8 +805,12 @@ def enriched_bank_runtime_inventory(inventory,sources):
     return expected
 
 
-def analyze_bank144(root,p,*,include_heldout_labels=False):
-    run=root/'evaluation';out=root/('analysis_final' if include_heldout_labels else 'analysis_development')
+def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_labels=False):
+    fresh=p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes'
+    # Reject before opening suffix status/index/raw or generating any labels.
+    if fresh and (not include_confirmation_labels or include_heldout_labels):raise ValueError('explicit --include-confirmation-labels required')
+    if not fresh and include_confirmation_labels:raise ValueError('confirmation flag cannot unseal historical labels')
+    run=root/'evaluation';out=root/('analysis_confirmation' if fresh else 'analysis_final' if include_heldout_labels else 'analysis_development')
     status=json.loads((run/'status.json').read_text());inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     validate_bank144_inventory(inventory,p['protocol'])
     if status['phase']!='completed' or status['completed_cases']!=144 or len(index)!=144:raise ValueError('completed144 collection required')
@@ -815,7 +826,7 @@ def analyze_bank144(root,p,*,include_heldout_labels=False):
         if manifest[key]!=expected:raise ValueError('bank manifest identity mismatch '+key)
     for row,expected in zip(index,runtime_cases):
         if any(row.get(k)!=v for k,v in expected.items()):raise ValueError('bank runtime index/source fingerprint mismatch')
-    selected=select_bank_label_lanes(index,include_heldout_labels)
+    selected=select_bank_label_lanes(index,include_heldout_labels,include_confirmation_labels)
     # Nothing below opens unselected bank1 suffix traces or emits their labels.
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
@@ -873,22 +884,25 @@ def analyze_bank144(root,p,*,include_heldout_labels=False):
             user1_suffix_reward_components=data['user1_running_components'],cumulative_user1_suffix_components=np.cumsum(data['user1_running_components'],axis=0),terminal_adjustment=data['user1_terminal_adjustment'])
         np.savez_compressed(out/f'case_{lane:03d}_diagnostics.npz',**numeric)
     summary,paired=samestate_summary(rows)
-    summary.update(label_selection='final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
-        data_role='Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.')
+    summary.update(label_selection='new_confirmation_explicit_all144' if fresh else 'final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
+        data_role=p['data_role'] if fresh else 'Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.',confirmation_labels_accessed=fresh)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),analyzed_suffix_cases=len(rows),
-        analyzed_suffix_active_lower_ticks=ticks,active_new_hybrid_prefix_lower_ticks=initial['active_new_prefix_lower_ticks'],maximum_suffix_budget=259200,maximum_total_budget=260000,
+        analyzed_suffix_active_lower_ticks=ticks,active_new_hybrid_prefix_lower_ticks=initial['active_new_prefix_lower_ticks'],maximum_suffix_budget=259200,maximum_total_budget=p['protocol']['maximum_total_lower_ticks'],confirmation_labels_accessed=fresh,
         heldout_suffix_labels_accessed=include_heldout_labels,unselected_suffix_files_opened=0,new_physics_steps=0,optimizer_updates=0,
-        limitation='No unselected suffix labels/curves/counts exported. Prefix800 is a separate source-collection charge. Numeric validity on selected trajectories does not fit or validate a predictor.'))
+        limitation=f"Prefix{p['protocol']['maximum_prefix_lower_ticks']} is separate source collection. Two ancestors are not independent training seeds. No predictor fitting."))
     # Existing renderer expects root/analysis; pass an explicit output directory.
     render_response(root,rows,traces,paths,goals,executed,rebuilt,manifest['reward_components'],output_directory=out)
     lines=['# 分源容扰数据：'+('显式解封两bank最终评价' if include_heldout_labels else '仅bank0开发标签'),'',
         '默认不打开、不计算、不绘制、不导出bank1新后缀标签；bank1此前控制工况已见，不能称独立TEST。仅显式最终评价选项才解封。',
         '八个source身份可核查，但默认结果仅含bank0四source的72条件；不从全局活动步数反推或报告bank1失败。原bank3旧72用于训练，本轮bank0开发；未来按source祖先分组，禁止随机按行拆分。',
         '原source前缀不重跑也不拼接。XY仅展示task1..10实测后缀与原始/执行路径；主标签source至pulseEND+3s，准备期摔倒为负、fault为invalid。准备改变绝对起扰时刻与遭遇几何，不隔离纯时序。']
+    if fresh:
+        lines=['# 冻结预测器新来源确认：banks2/5 全144条件','','所有八个fixed1/hybrid前缀新生成，共1600lower；144后缀上限259200；无拟合、无bank1标签读取。两个祖先非独立训练种子。','XY仅展示task1..10实测后缀及固定原始路径；原任务/物理/主标签不变。']
     for label in response_plot_groups(rows):lines+=['',f'## {label}','',f'![Selected suffix XY](full_xy_{label}.png)']
     lines+=['','[所选逐例标签](results.json) · [按source分组](summary.json) · [配对](paired.json) · [身份与单独费用](receipt.json)',
         '本轮不拟合预测器。351源观测含真实速度/历史部署依赖，尚非最终小特征集。执行路径user1奖励仅诊断；四固定1来源复用，一秒hybrid源仅新800lower，后缀物理单独计费。']
+    if fresh:lines[-1]='本轮只确认封存预测器；没有拟合或在线替换。全部八来源前缀1600lower，后缀单独计费；351源观测含真实速度部署依赖。'
     (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
 
@@ -1228,4 +1242,5 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path)
     parser.add_argument('--include-heldout-labels',action='store_true',help='Explicit final evaluation only after root freezes the fitting recipe; unseals bank1 new labels')
-    args=parser.parse_args();analyze(args.root,include_heldout_labels=args.include_heldout_labels)
+    parser.add_argument('--include-confirmation-labels',action='store_true',help='Explicit sealed-predictor new-source banks2/5 confirmation only; never unseals historical banks')
+    args=parser.parse_args();analyze(args.root,include_heldout_labels=args.include_heldout_labels,include_confirmation_labels=args.include_confirmation_labels)

@@ -551,3 +551,23 @@ def test_bank144_runtime_inventory_adds_only_sealed_generated_source_fingerprint
     with pytest.raises(ValueError,match='fingerprint conflict'):m.enriched_bank_runtime_inventory(wrong,sources)
     sources[0]['bank_index']=1
     with pytest.raises(ValueError,match='source metadata'):m.enriched_bank_runtime_inventory(inventory,sources)
+
+
+def test_new_confirmation_labels_require_dedicated_flag_and_exclude_old_banks(tmp_path):
+    import json
+    from sttw_control.native_goal_run import bank144_inventory
+    p=json.loads((CLI.parents[0]/'configs/h75_samestate_confirmation144.json').read_text())
+    rows=bank144_inventory(p);m.validate_bank144_inventory(rows,p)
+    for heldout in (False,True):
+        with pytest.raises(ValueError,match='confirmation flag'):
+            m.select_bank_label_lanes(rows,include_heldout_labels=heldout)
+    assert len(m.select_bank_label_lanes(rows,include_confirmation_labels=True))==144
+    old,_=bank144_rows()
+    with pytest.raises(ValueError,match='historical'):
+        m.select_bank_label_lanes(old,include_confirmation_labels=True)
+    bad=[dict(r) for r in rows];bad[-1]['bank_index']=1
+    with pytest.raises(ValueError,match='identity'):
+        m.select_bank_label_lanes(bad,include_confirmation_labels=True)
+    # No suffix files exist: missing opt-in must reject before any label-file open.
+    with pytest.raises(ValueError,match='include-confirmation-labels'):
+        m.analyze_bank144(tmp_path,{'protocol':p})

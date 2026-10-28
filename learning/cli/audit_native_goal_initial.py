@@ -328,14 +328,38 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
     with np.load(root/'evaluation/task1_host_state.npz') as actual,np.load(root/'sources/host_state.npz') as source:
         for field in source.files:np.testing.assert_array_equal(actual[field],source[field][[c['source_index'] for c in cases]])
         if np.any(source['ever_arrived']|source['replanned']):raise ValueError('unarrived original-path source pool required')
+    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes':
+        bankfile=Path(p['initial_source']['prepared_bank'])
+        if hashlib.sha256(bankfile.read_bytes()).hexdigest()!=p['initial_source']['prepared_bank_sha256']:raise ValueError('prepared confirmation bank drift')
+        with bankfile.open('rb') as f:prepared=pickle.load(f)
+        for record in records:
+            if record['split']!='new_confirmation' or record['bank_index'] not in (2,5):raise ValueError('confirmation source identity mismatch')
+            file=record['prefix_initial_carry_file']
+            if file not in seal['files']:raise ValueError('prefix initialization not sealed')
+            if file not in loaded:
+                with Path(file).open('rb') as f:loaded[file]=pickle.load(f)
+            prefix_initial=jax.tree.map(lambda x:np.asarray(x)[record['prefix_initial_source_row']],loaded[file])
+            original_bank=jax.tree.map(lambda x:np.asarray(x)[record['bank_index']],prepared)
+            sha=hashlib.sha256()
+            for path,value in jax.tree_util.tree_flatten_with_path(original_bank)[0]:
+                a=np.asarray(value);sha.update(jax.tree_util.keystr(path).encode());sha.update(str(a.dtype).encode());sha.update(a.tobytes())
+            if sha.hexdigest()!=record['prepared_state_fingerprint'] or sha.hexdigest()!=p['protocol']['bank_state_fingerprints'][str(record['bank_index'])]:raise ValueError('prepared ancestor fingerprint mismatch')
+            # Exact original task reset changes only raw/reference pose/yaw fields.
+            for field in ('data','controller','actuator','physical_tick','governor','failed'):
+                actual_leaves=jax.tree.leaves(getattr(prefix_initial.state.physical,field));expected_leaves=jax.tree.leaves(getattr(original_bank,field))
+                if len(actual_leaves)!=len(expected_leaves):raise ValueError('prepared ancestor leaf structure mismatch')
+                for a,b in zip(actual_leaves,expected_leaves):
+                    if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('prepared ancestor dtype mismatch')
+                    np.testing.assert_array_equal(a,b)
+            if int(prefix_initial.state.tick)!=0 or int(prefix_initial.state.physical.physical_tick)!=700:raise ValueError('prefix initialization clock mismatch')
     prefix_ticks=seal['active_prefix_lower_ticks']
-    if prefix_ticks!=800 or seal['allocated_prefix_lower_slots']!=800:raise ValueError('exact800 new hybrid prefix ticks required')
+    if prefix_ticks!=p['protocol']['maximum_prefix_lower_ticks'] or seal['allocated_prefix_lower_slots']!=prefix_ticks:raise ValueError('exact declared prefix ticks required')
     result=dict(initial_carry_sha256=hashlib.sha256(initial.read_bytes()).hexdigest(),audit_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         source_groups=8,copies_per_source=18,all_complete_source_copy_leaves_exact=True,all_ancestor_provenance_exact=True,source_fingerprints=fingerprints,
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
         source_features_exact_within_group=True,all_host_state_copies_exact=True,active_new_prefix_lower_ticks=prefix_ticks,
         new_physics_steps=0,optimizer_updates=0,heldout_suffix_labels_accessed=False,
-        data_role='Source identity only; bank0 development, bank1 new suffix labels remain sealed. Two physical banks are not independent training seeds.')
+        data_role='Source identity only; '+p['data_role'])
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 
