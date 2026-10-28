@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "eea28f1b3da08c68d6ec259c708deda0f884fd01c0b7459c4b96a0214de7ed8a",
-  "builder_sha256": "ed46393c435096439aec4f6fee7ec72274aac5aaba7adc94374101264a010157",
+  "manuscript_sha256": "87afaf84e19dfd03db19b595a7d01f23e0b70845710636ae89bc7b1709221dc2",
+  "builder_sha256": "a19ce0534ee79a285c4ac0d77f823aab0f5466ba3ea8b84e7cf692e98738f246",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -953,6 +953,36 @@
       "sha256": "a86fa6060487b2b77037aa50f8bf8830c2f866e43610c76050755bb9af924bce",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E159": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/plan.json",
+      "sha256": "60ebc886593f95d2bed526b1e081fd502c0f9b4cdbf71af2093da072c54ad748",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E160": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/status.json",
+      "sha256": "4e3cb19208fc2ad915b3fb64a2c6f7217fbdfed38880dd7499dbc4a8a7022c03",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E161": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/analysis/root_user_summary.json",
+      "sha256": "1f76ecebbb00f27ec30cc323111dbe9d15152ebad90f4df13ba716c46b9091a3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E162": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/root_user_rejection.json",
+      "sha256": "871f029dbb193be730346fe0b2b342afb37dde9b67ef2a4757a04728c87c4dca",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E163": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/analysis/original_task_rescoring/results.json",
+      "sha256": "5cbeb24f53807708beaf4c41d644e4c82ab8cdc29c4d7ed6f59509abe29aa5b0",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1081,7 +1111,12 @@
     "E155",
     "E156",
     "E157",
-    "E158"
+    "E158",
+    "E159",
+    "E160",
+    "E161",
+    "E162",
+    "E163"
   ],
   "claims_from_readback": [
     {
