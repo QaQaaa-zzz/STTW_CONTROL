@@ -27,7 +27,7 @@ def audit(root,output):
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
     late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
     if late:
         original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
         load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
@@ -39,7 +39,7 @@ def audit(root,output):
         spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
         adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
     if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -65,7 +65,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120'):
+    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -212,7 +212,7 @@ def audit(root,output):
 
 
 def confirmation_initial_layout(plan):
-    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5)}
+    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3)}
     if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
     count,arms=expected[plan['mode']]
     if plan['protocol']['expected_cases']!=count or len(plan['protocol']['arms'])!=arms:
@@ -223,7 +223,7 @@ def confirmation_initial_layout(plan):
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
     count,arms=confirmation_initial_layout(p)
     if len(cases)!=count:raise ValueError('complete declared initial cases required')
     np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,[c['alpha'] for c in cases])
@@ -253,9 +253,9 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         with np.load(root/'evaluation'/(c['path_key']+'_path.npz')) as z:
             np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
-    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode')=='user_preference120' else carry
+    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('user_preference120','user_prior_online72') else carry
     leaves=jax.tree.leaves(neutral)
-    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120') else 20
+    expected_groups=24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72') else 20
     if len(groups)!=expected_groups or any(len(ids)!=arms for ids in groups.values()):raise ValueError(f'{expected_groups} paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:
@@ -483,3 +483,30 @@ def validate_user_preference_cache(source,*,config,models,protocol,initial_sourc
                 np.testing.assert_allclose(z['composed_latent'][:n],z['coord_latents'][:n,1],atol=1e-6,rtol=0)
         for f in [source/'evaluation'/(row['path_key']+'_path.npz')]+([source/'evaluation'/f'replanned_path_{i:02d}.npz'] if row.get('replan_task_tick') is not None else []):identity[str(f)]=sha(f)
     return dict(source=str(source),identity=identity,cached_cases=96,total_records=216,reuse_physics_only=True,raw_user_alpha=1.,effective_cached_fixed_half_user_alpha=.5,alpha_half_reuse_proof=dict(native_environment=str(native),native_environment_sha256=sha(native),state_alpha_uses=[list(x) for x in uses],physical_alpha_dependency=False,fixed_query_alpha=.5,all24_fixed_half_queries_checked=True,explanation='state.alpha feeds observation and costs only; fixed actor queries overwrite feature336; frozen predictor features exclude336. Original raw alpha1/reward retained; effectiveuser.5 rewards independently rebuilt.'))
+
+
+def validate_prior_online_cache(source,*,config,models,protocol,initial_source=None,replanning=None):
+    """Authenticate the complete prior user experiment, including its 96 ancestors."""
+    source=Path(source).resolve();old=json.loads((source/'plan.json').read_text())
+    sha=lambda f:hashlib.sha256(Path(f).read_bytes()).hexdigest()
+    if old['mode']!='user_preference120' or sha(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed user preference cache required')
+    for key,value in [('config',config),('models',models)]+([('initial_source',initial_source)] if initial_source is not None else [])+([('replanning',replanning)] if replanning is not None else []):
+        if old[key]!=value:raise ValueError('cached identity differs '+key)
+    for key in ('bank_indices','bank_state_fingerprints','routes','forces_N','onsets_s','zero_onset_s','duration_s','rule'):
+        if old['protocol'][key]!=protocol[key]:raise ValueError('cached condition differs '+key)
+    ancestor=validate_user_preference_cache(old['comparison_source']['source'],config=config,models=models,protocol=protocol,initial_source=initial_source,replanning=replanning)
+    if ancestor!=old['comparison_source']:raise ValueError('ancestor cache identity drift')
+    receipt=json.loads((source/'analysis/receipt.json').read_text());status=json.loads((source/'evaluation/status.json').read_text())
+    rows=json.loads((source/'analysis/results.json').read_text());index=json.loads((source/'evaluation/case_index.json').read_text())
+    if receipt['all_cases']!=216 or receipt['plan_sha256']!=sha(source/'plan.json') or status['phase']!='completed' or status['completed_cases']!=120 or len(rows)!=216 or len(index)!=120:raise ValueError('complete216 user comparison required')
+    identity=dict(ancestor['identity'])
+    for name in ('plan.json','seal.json','inventory.json','evaluation/case_index.json','evaluation/status.json','evaluation/manifest.json','evaluation/replanning_decisions.json','analysis/results.json','analysis/receipt.json','q/receipt.json'):
+        identity[str(source/name)]=sha(source/name)
+    for i,row in enumerate(rows):
+        if i<120 and any(row.get(k)!=v for k,v in index[i].items()):raise ValueError('cached raw/index drift')
+        if row['effective_user_alpha'] not in (0.,.5,1.) or row['method'] not in ('last','guard','fixed'):raise ValueError('cached effective identity drift')
+        if sha(row['raw_file'])!=row['raw_sha256']:raise ValueError('cached raw drift')
+        identity[row['raw_file']]=row['raw_sha256']
+        if i<120:
+            for f in [source/'evaluation'/(row['path_key']+'_path.npz')]+([source/'evaluation'/f'replanned_path_{i:02d}.npz'] if row.get('replan_task_tick') is not None else []):identity[str(f)]=sha(f)
+    return dict(source=str(source),identity=identity,cached_cases=216,total_records=288,reuse_physics_only=True,preserve_effective_user_identity=True)
