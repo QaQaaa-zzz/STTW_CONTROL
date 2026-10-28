@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "35d3ad1b8e179c46491204f8b5089563acecc0e43577ab735d7ed3b21c654cfd",
-  "builder_sha256": "448910435afe3f7ba82321bc052d3d2a709ddbb2fbf40a41a61596222abb7497",
+  "manuscript_sha256": "a2c60051b00544f780b921ce13607544220a6ac4ac6af15cd246b8701ee3f29c",
+  "builder_sha256": "1d77e3a83cecdbfd6d1a7e22109beb77180f3506c4a9d5ac5a09942b03f9475f",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -623,6 +623,30 @@
       "sha256": "a6bbd029f7ab5241df76539c5269d4d410c0e02a4777a3d7c47aca33bb67c99e",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E104": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_scalar_v1/analysis/results.json",
+      "sha256": "471f162268d4d2dca2c2931c90f80c94edc80e113c3868ee7eccd6865d8d8bda",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E105": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_scalar_v1/analysis/receipt.json",
+      "sha256": "8a5c916e9d5230034459b32c7e45b0a3d7837e4dbc2c27a52e21095e0dc4c453",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E106": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_scalar_v1/plan.json",
+      "sha256": "79e1618522becb2f131756757062e6bbc591eb16c31c7eaa386f819fdf2f8df4",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E107": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_scalar_v1/root_outcome_check.json",
+      "sha256": "c1865414f15c4dd98adfe90f2e7ec0cd49627d7c07dbb2e8698bfaddd0334120",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -696,7 +720,11 @@
     "E100",
     "E101",
     "E102",
-    "E103"
+    "E103",
+    "E104",
+    "E105",
+    "E106",
+    "E107"
   ],
   "claims_from_readback": [
     {
