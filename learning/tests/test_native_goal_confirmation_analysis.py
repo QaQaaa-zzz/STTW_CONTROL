@@ -753,3 +753,63 @@ def test_late_planner_may_only_change_projection_and_follower():
     audit.assert_late_planner_state_preserved(before,after,jax)
     bad=after._replace(state=after.state._replace(history=np.zeros(2)))
     with pytest.raises(AssertionError,match='retained native state'):audit.assert_late_planner_state_preserved(before,bad,jax)
+
+
+def test_online40_cache_verifier_binds_completed_old_analysis_and_physical_contract(tmp_path):
+    import copy,json
+    source=tmp_path/'old120';(source/'analysis').mkdir(parents=True);(source/'evaluation').mkdir()
+    protocol=dict(bank_indices=[2,5],bank_state_fingerprints={'2':'two','5':'five'},routes=[dict(route='left',speed=2.8),dict(route='right',speed=2.8)],forces_N=[-64.,64.],onsets_s=[1.6,3.4],zero_onset_s=1.6,duration_s=.1,rule={'preview_m':1.5})
+    old=dict(mode='tolerance_online120',config={'reward':'frozen'},initial_source={'bank':'original'},models={'H75':'frozen'},contexts=['left','right'],horizon_s=10.,replanning=dict(period_s=1.,radius_m=1.8,departure_m=1.,maximum_per_case=1,information='old text'),protocol=protocol)
+    (source/'plan.json').write_text(json.dumps(old));plan_sha=m.digest(source/'plan.json');(source/'seal.json').write_text(json.dumps({'plan_sha256':plan_sha}))
+    (source/'analysis/results.json').write_text('[]');(source/'analysis/receipt.json').write_text(json.dumps(dict(all_cases=120,plan_sha256=plan_sha)))
+    (source/'evaluation/case_index.json').write_text('[]');(source/'evaluation/status.json').write_text(json.dumps(dict(phase='completed',completed_cases=120)))
+    identity={str(f):m.digest(f) for f in source.rglob('*.json')}
+    plan=copy.deepcopy(old);plan['mode']='tolerance_online40';plan['replanning']['information']='same equations, new description'
+    plan['comparison_source']=dict(source=str(source),expected_cases=120,cached_methods=list(m.TOLERANCE_ARMS),new_methods=list(m.TEMPORAL_TOLERANCE_ARMS),total_records=160,identity=identity,reuse_physics_only=True)
+    assert m.verify_online40_comparison_source(tmp_path,plan)==source
+    changed=copy.deepcopy(plan);changed['config']['reward']='different'
+    with pytest.raises(ValueError,match='physical/task identity'):m.verify_online40_comparison_source(tmp_path,changed)
+    changed=copy.deepcopy(plan);del changed['comparison_source']['identity'][str(source/'analysis/results.json')]
+    with pytest.raises(ValueError,match='not sealed'):m.verify_online40_comparison_source(tmp_path,changed)
+    (source/'analysis/results.json').write_text('["changed"]')
+    with pytest.raises(ValueError,match='identity drift'):m.verify_online40_comparison_source(tmp_path,plan)
+
+
+def test_online40_combined_summary_counts_40_new_120_cached_and_eight_methods():
+    rows=[]
+    for bank in (2,5):
+        for route in ('left','right'):
+            for event,force in (('nominal',0.),('early_minus',-64.),('early_plus',64.),('late_minus',-64.),('late_plus',64.)):
+                for arm in m.TEMPORAL_TOLERANCE_ARMS+m.TOLERANCE_ARMS:
+                    rows.append(dict(bank_index=bank,route=route,path_key=f'bank{bank}_{route}',event=event,force_N=force,mode=arm,source_kind='new40' if arm in m.TEMPORAL_TOLERANCE_ARMS else 'cached120',case_id=f'{bank}/{route}/{event}/{arm}',horizons={'10':dict(goal_arrived=arm!='fixed1',physical_outcome='contact' if arm=='fixed1' else 'survived')},diagnostic_execution_path_user1_cost=2.,full_observed_speed_rmse_m_s=.1,original_route_sample_distance_rmse_m=.2,prefix=dict(ticks=100),alpha_rule={}))
+    summary,pairs=m.tolerance_online_summary(rows)
+    assert summary['new_cases']==40 and summary['cached_cases']==120
+    assert len(pairs)==28 and all(len(p['details'])==20 for p in pairs)
+    assert len(m.response_plot_groups(rows))==20
+    assert all(len(m.response_plot_selection(rows,label))==8 for label in m.response_plot_groups(rows))
+    pair=next(p for p in pairs if p['candidate']=='temporal_rank_selected' and p['baseline']=='fixed1')
+    assert all(d['contact_rescue'] for d in pair['details'])
+
+
+def test_temporal_candidate_requires_explicit_bundle_slot_without_bce_alias():
+    raw,case,path,interface,params=tolerance_audit_fixture();case['mode']='temporal_rank_selected'
+    with pytest.raises(ValueError,match='explicit bundle'):m.audit_tolerance_coordination(raw,case,path,None,interface,params)
+    result=m.audit_tolerance_coordination(raw,case,path,None,interface,params,arm_index=0)
+    assert result['independent_numpy_decisions_match']
+    params['b2'][1,:,:]=0.
+    with pytest.raises(AssertionError):m.audit_tolerance_coordination(raw,case,path,None,interface,params,arm_index=1)
+
+
+def test_eight_method_step_plot_does_not_drop_two_cached_methods(tmp_path,monkeypatch):
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    selected=[];raws={};rebuilt={};labels=[]
+    for arm in m.TEMPORAL_TOLERANCE_ARMS+m.TOLERANCE_ARMS:
+        selected.append(dict(mode=arm,method=arm,case_id=arm,active_lower_ticks=8,force_N=0.,replan_task_tick=None,horizons={'10':dict(physical_outcome='survived')}))
+        raws[arm]=dict(alpha_exec=np.ones(8),coord_qmin=np.full((8,3),.9),coord_degraded=np.zeros(8),coord_publication_withheld=np.zeros(8))
+        rebuilt[arm]=dict(user1_reward=-np.ones(8))
+    def capture(fig,*args,**kwargs):labels.extend(fig.axes[0].get_legend_handles_labels()[1])
+    monkeypatch.setattr(Figure,'savefig',capture)
+    m.render_tolerance_steps_and_decisions(tmp_path,'same_condition',selected,raws,rebuilt,'frozen')
+    assert set(labels)==set(m.TEMPORAL_TOLERANCE_ARMS+m.TOLERANCE_ARMS)

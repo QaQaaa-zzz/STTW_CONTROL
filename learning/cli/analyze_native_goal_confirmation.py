@@ -23,7 +23,7 @@ def analyze(root,include_heldout_labels=False,include_confirmation_labels=False)
     p=json.loads((root/'plan.json').read_text())
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -668,7 +668,7 @@ def switching_summary(rows):
 
 
 def response_plot_groups(rows):
-    if any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS for r in rows):
         return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index'])+'__route'+r['route'] for r in rows))
     if any(r.get('mode')=='samestate_scalar' for r in rows):
         return list(dict.fromkeys(r['event']+'__source'+str(r['source_index']) for r in rows))
@@ -680,7 +680,7 @@ def response_plot_groups(rows):
 
 
 def response_plot_selection(rows,label):
-    if any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS for r in rows):
         base,route=label.rsplit('__route',1);event,bank=base.rsplit('__bank',1)
         return [r for r in rows if r['event']==event and r['bank_index']==int(bank) and r['route']==route]
     if any(r.get('mode')=='samestate_scalar' for r in rows):
@@ -1030,14 +1030,21 @@ def analyze_samestate(root,p):
 
 
 TOLERANCE_ARMS=('q_rank','q_bce','task_guard_only','existing_geometry','fixed_half','fixed1')
+TEMPORAL_TOLERANCE_ARMS=('temporal_rank_selected','temporal_rank_last')
+
+
+def tolerance_comparison_arms(rows):
+    return TEMPORAL_TOLERANCE_ARMS+TOLERANCE_ARMS if any(r.get('mode') in TEMPORAL_TOLERANCE_ARMS for r in rows) else TOLERANCE_ARMS
 
 
 def load_tolerance_analysis_export(root,p):
     """Identity checks precede probability reads; no model selection or fitting."""
     directory=root/'q';receipt=json.loads((directory/'receipt.json').read_text())
     declared=p['frozen_predictor_export']
-    if Path(declared['directory'])!=directory or declared['receipt_sha256']!=digest(directory/'receipt.json') or declared['arm_to_export_index']!={'q_rank':1,'q_bce':0}:raise ValueError('declared frozen export identity mismatch')
-    if receipt['arm_order']!=['bce','bce_rank'] or receipt['new_optimizer_updates'] or receipt['new_physics_steps']:raise ValueError('invalid frozen q export')
+    expected_map={'temporal_rank_selected':0,'temporal_rank_last':1} if p['mode']=='tolerance_online40' else {'q_rank':1,'q_bce':0}
+    expected_order=['temporal_rank_selected','temporal_rank_last'] if p['mode']=='tolerance_online40' else ['bce','bce_rank']
+    if Path(declared['directory'])!=directory or declared['receipt_sha256']!=digest(directory/'receipt.json') or declared['arm_to_export_index']!=expected_map:raise ValueError('declared frozen export identity mismatch')
+    if receipt['arm_order']!=expected_order or receipt['new_optimizer_updates'] or receipt['new_physics_steps']:raise ValueError('invalid frozen q export')
     if max(receipt['maximum_probability_errors'].values())>2e-6:raise ValueError('Torch/JAX numerical import failed')
     for name,value in receipt['files_sha256'].items():
         if digest(directory/name)!=value:raise ValueError('frozen q export drift '+name)
@@ -1047,7 +1054,7 @@ def load_tolerance_analysis_export(root,p):
 
 def audit_tolerance_publication(raw,case):
     n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);permission=np.asarray(raw['reference_target_permitted'][:n],bool)
-    if case['mode'] not in TOLERANCE_ARMS or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
+    if case['mode'] not in TOLERANCE_ARMS+TEMPORAL_TOLERANCE_ARMS or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
     np.testing.assert_array_equal(raw['alpha_user'][:n],1.)
     np.testing.assert_array_equal(raw['coord_candidate_alpha'][:n],np.tile([0.,.5,1.],(n,1)))
     np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]))
@@ -1090,8 +1097,9 @@ def tolerance_alpha_statistics(raw):
     return dict(observed_s=n*.005,ever_departed=bool(len(departures)),ever_returned_after_departure=bool(len(returns)),final_returned_to_user=bool(len(departures) and alpha[-1]==1.),final_at_user=bool(alpha[-1]==1.),final_alpha=float(alpha[-1]),switch_count=len(switch),switch_times_s=(switch*.005).tolist(),departure_times_s=(departures*.005).tolist(),return_times_s=(returns*.005).tolist(),nonuser_duration_s=float(np.sum(alpha!=1.)*.005),degraded_duration_s=float(np.sum(raw['coord_degraded'][:n])*.005),permission_withheld_duration_s=float(np.sum(raw['coord_publication_withheld'][:n])*.005))
 
 
-def audit_tolerance_coordination(raw,case,original,replanned,interface,params):
-    n=int(np.asarray(raw['active_tick'],bool).sum());starts=np.arange(0,n,4);mode=case['mode'];arm=0 if mode=='q_bce' else 1
+def audit_tolerance_coordination(raw,case,original,replanned,interface,params,arm_index=None):
+    n=int(np.asarray(raw['active_tick'],bool).sum());starts=np.arange(0,n,4);mode=case['mode'];arm=arm_index if arm_index is not None else 0 if mode=='q_bce' else 1
+    if mode in TEMPORAL_TOLERANCE_ARMS and arm_index is None:raise ValueError('temporal predictor requires explicit bundle parameter index')
     prob,offsets=tolerance_numpy_probabilities(params,np.asarray(raw['query_observation'])[starts],np.asarray(raw['coord_latents'])[starts],np.asarray(raw['pre_upper_yaw'])[starts],interface,arm)
     np.testing.assert_allclose(raw['coord_probabilities'][starts],prob,atol=3e-5,rtol=3e-5)
     qmin=prob.min(axis=-1);np.testing.assert_allclose(raw['coord_qmin'][starts],qmin,atol=3e-5,rtol=3e-5)
@@ -1117,7 +1125,7 @@ def audit_tolerance_coordination(raw,case,original,replanned,interface,params):
         eligible=taskmask[:2] & ((qmin[j,:2]>=.8) if useq else True);degraded=not restore and not eligible.any()
         proposed=1. if restore else np.array([0.,.5])[np.argmin(np.where(eligible,cost[:2],np.inf))] if eligible.any() else .5
         permission=bool(raw['coord_permission'][tick])
-        np.testing.assert_array_equal(raw['coord_degraded'][tick],permission and degraded and mode in TOLERANCE_ARMS[:3])
+        np.testing.assert_array_equal(raw['coord_degraded'][tick],permission and degraded and mode in TOLERANCE_ARMS[:3]+TEMPORAL_TOLERANCE_ARMS)
         np.testing.assert_array_equal(raw['coord_publication_withheld'][tick],not permission)
         if mode=='existing_geometry':
             proxy=case['speed']**2*preview(1.5);nextlatch=proxy>=2.7 if latched else proxy>3.;proposed=.5 if nextlatch else 1.
@@ -1132,9 +1140,10 @@ def audit_tolerance_coordination(raw,case,original,replanned,interface,params):
 
 def tolerance_common_windows(rows,raws,paths,goals):
     """Common actual H10 and common pre-first-arrival windows; no new cost weights."""
+    arms=tolerance_comparison_arms(rows)
     for label in response_plot_groups(rows):
         group=response_plot_selection(rows,label)
-        if len(group)!=6 or {r['mode'] for r in group}!=set(TOLERANCE_ARMS):raise ValueError('six matching original-condition arms required')
+        if len(group)!=len(arms) or {r['mode'] for r in group}!=set(arms):raise ValueError('complete matching original-condition arms required')
         common=min(r['active_lower_ticks'] for r in group);prefix=min(r['prefix']['ticks'] for r in group)
         for row in group:
             raw=raws[row['case_id']];path=paths[analysis_path_key(row)];tree=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[analysis_path_key(row)]]))
@@ -1190,10 +1199,13 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None):
 
 def rescore_original_task_analysis(root):
     p=json.loads((root/'plan.json').read_text())
-    if p['mode']!='tolerance_online120':raise ValueError('original task rescoring currently requires tolerance_online120')
+    if p['mode'] not in ('tolerance_online120','tolerance_online40'):raise ValueError('original task rescoring requires a complete tolerance online analysis')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
     rows=json.loads((root/'analysis/results.json').read_text());index=json.loads((root/'evaluation/case_index.json').read_text())
-    if len(rows)!=120 or [r['case_id'] for r in rows]!=[r['case_id'] for r in index]:raise ValueError('complete authenticated main120 analysis required')
+    if p['mode']=='tolerance_online40':
+        cache_source=verify_online40_comparison_source(root,p)
+        index+=json.loads((cache_source/'evaluation/case_index.json').read_text())
+    if len(rows)!=len(index) or [r['case_id'] for r in rows]!=[r['case_id'] for r in index]:raise ValueError('complete authenticated main comparison analysis required')
     manifest=json.loads((root/'evaluation/manifest.json').read_text())
     for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models'])):
         if manifest[key]!=expected:raise ValueError('original rescore manifest drift '+key)
@@ -1201,7 +1213,8 @@ def rescore_original_task_analysis(root):
     raw={};paths={}
     for row,declared in zip(rows,index):
         if any(row.get(k)!=v for k,v in declared.items()):raise ValueError('main analysis case differs from authenticated raw index')
-        if digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('raw trace drift')
+        cached_verified=p['mode']=='tolerance_online40' and row.get('source_kind')=='cached120' and p['comparison_source']['identity'].get(row['raw_file'])==row['raw_sha256']
+        if not cached_verified and digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('raw trace drift')
         with np.load(row['raw_file']) as z:raw[row['case_id']]=dict(z)
         key=analysis_path_key(row)
         if key not in paths:
@@ -1231,17 +1244,17 @@ def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
 
 
 def tolerance_online_summary(rows):
-    expected=set(TOLERANCE_ARMS);methods={r['mode'] for r in rows}
-    if methods!=expected:raise ValueError('all six tolerance arms required')
+    arms=tolerance_comparison_arms(rows);expected=set(arms);methods={r['mode'] for r in rows}
+    if methods!=expected:raise ValueError('all declared tolerance comparison arms required')
     summary={};paired=[]
-    for arm in TOLERANCE_ARMS:
+    for arm in arms:
         summary[arm]={}
         for bank in sorted({r['bank_index'] for r in rows}):
             summary[arm][str(bank)]={}
             for subset in ('all','nominal','disturbed'):
                 group=[r for r in rows if r['mode']==arm and r['bank_index']==bank and (subset=='all' or bool(r['force_N'])==(subset=='disturbed'))]
                 summary[arm][str(bank)][subset]=dict(n=len(group),arrived=sum(r['horizons']['10']['goal_arrived'] is True for r in group),contact=sum(r['horizons']['10']['physical_outcome']=='contact' for r in group),unknown=sum(r['horizons']['10']['physical_outcome']=='unknown' for r in group),diagnostic_execution_path_user1_cost_sum=sum(r['diagnostic_execution_path_user1_cost'] for r in group))
-    for candidate,baseline in itertools.combinations(TOLERANCE_ARMS,2):
+    for candidate,baseline in itertools.combinations(arms,2):
         a={(r['bank_index'],r['route'],r['event']):r for r in rows if r['mode']==candidate};b={(r['bank_index'],r['route'],r['event']):r for r in rows if r['mode']==baseline}
         if set(a)!=set(b):raise ValueError('incomplete tolerance pairing')
         details=[]
@@ -1249,16 +1262,75 @@ def tolerance_online_summary(rows):
             other=b[key];x=r['horizons']['10'];y=other['horizons']['10'];known=x['goal_arrived'] is not None and y['goal_arrived'] is not None and 'unknown' not in (x['physical_outcome'],y['physical_outcome'])
             details.append(dict(bank_index=key[0],route=key[1],event=key[2],force_N=r['force_N'],candidate=r['case_id'],baseline=other['case_id'],goal1m_gain=known and x['goal_arrived'] and not y['goal_arrived'],goal1m_loss=known and y['goal_arrived'] and not x['goal_arrived'],contact_rescue=x['physical_outcome']=='survived' and y['physical_outcome']=='contact',new_contact=x['physical_outcome']=='contact' and y['physical_outcome']!='contact',diagnostic_execution_path_user1_cost_difference=r['diagnostic_execution_path_user1_cost']-other['diagnostic_execution_path_user1_cost'],full_speed_rmse_difference_m_s=r['full_observed_speed_rmse_m_s']-other['full_observed_speed_rmse_m_s'],full_original_route_distance_rmse_difference_m=r['original_route_sample_distance_rmse_m']-other['original_route_sample_distance_rmse_m'],candidate_prefix=r['prefix'],baseline_prefix=other['prefix'],candidate_matched_original_task=r.get('matched_original_task_metrics'),baseline_matched_original_task=other.get('matched_original_task_metrics')))
         paired.append(dict(candidate=candidate,baseline=baseline,details=details,nominal_no_new_contact_or_goal_loss=all(not(d['new_contact'] or d['goal1m_loss']) for d in details if not d['force_N'])))
-    return dict(method_bank_subset=summary,new_cases=len(rows),cached_cases=0,alpha_statistics=[dict(case_id=r['case_id'],**r['alpha_rule']) for r in rows],original_path_v3_aggregate='not_yet_verified; original route distance/speed/prefix metrics provided; execution-path user1 reward remains diagnostic',adoption='not_automatically_adopted',data_role='Seen prepared ancestors/familiar routes engineering DEV; full-time q queries extrapolate task1 training states.'),paired
+    return dict(method_bank_subset=summary,new_cases=sum(not r.get('source_kind','').startswith('cached') for r in rows),cached_cases=sum(r.get('source_kind','').startswith('cached') for r in rows),alpha_statistics=[dict(case_id=r['case_id'],**r['alpha_rule']) for r in rows],original_path_v3_aggregate='not_yet_verified; original route distance/speed/prefix metrics provided; execution-path user1 reward remains diagnostic',adoption='not_automatically_adopted',data_role='Seen prepared ancestors/familiar routes engineering DEV; full-time q queries extrapolate task1 training states.'),paired
+
+
+def verify_online40_comparison_source(root,p,verified_files=None):
+    comparison=p['comparison_source'];source=Path(comparison['source']).resolve();identity=comparison['identity']
+    if comparison.get('expected_cases')!=120 or comparison.get('total_records')!=160 or comparison.get('cached_methods')!=list(TOLERANCE_ARMS) or comparison.get('new_methods')!=list(TEMPORAL_TOLERANCE_ARMS) or not comparison.get('reuse_physics_only'):raise ValueError('declared40new+120cached comparison required')
+    for file,value in identity.items():
+        if (verified_files or {}).get(file)!=value and digest(file)!=value:raise ValueError('cached comparison identity drift '+file)
+    for name in ('analysis/results.json','analysis/receipt.json','evaluation/case_index.json','plan.json','seal.json'):
+        if str(source/name) not in identity:raise ValueError('cached comparison evidence not sealed '+name)
+    old=json.loads((source/'plan.json').read_text())
+    if old['mode']!='tolerance_online120' or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed online120 cache required')
+    for key in ('config','initial_source','models','contexts','horizon_s'):
+        if old[key]!=p[key]:raise ValueError('cached physical/task identity mismatch '+key)
+    for key in ('period_s','radius_m','departure_m','maximum_per_case'):
+        if old['replanning'][key]!=p['replanning'][key]:raise ValueError('cached planner contract mismatch '+key)
+    for key in ('bank_indices','bank_state_fingerprints','routes','forces_N','onsets_s','zero_onset_s','duration_s','rule'):
+        if old['protocol'][key]!=p['protocol'][key]:raise ValueError('cached condition mismatch '+key)
+    status=json.loads((source/'evaluation/status.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=120:raise ValueError('completed120 cache required')
+    receipt=json.loads((source/'analysis/receipt.json').read_text())
+    if receipt['plan_sha256']!=digest(source/'plan.json') or receipt['all_cases']!=120:raise ValueError('cached complete analysis receipt mismatch')
+    return source
+
+
+def load_online40_comparison_cache(root,p,paths,keys,verified_files=None):
+    """Reuse authenticated physical traces; only derived diagnostics recomputed."""
+    import copy
+    source=verify_online40_comparison_source(root,p,verified_files=verified_files);identity=p['comparison_source']['identity']
+    old=json.loads((source/'plan.json').read_text());old_map=old['frozen_predictor_export']['arm_to_export_index']
+    if old_map!={'q_rank':1,'q_bce':0}:raise ValueError('cached q_rank/BCE parameter identity changed')
+    old_q_receipt=source/'q/receipt.json'
+    if str(old_q_receipt) not in identity or json.loads(old_q_receipt.read_text())['arm_order']!=['bce','bce_rank']:raise ValueError('cached original predictor bundle identity missing')
+    index=json.loads((source/'evaluation/case_index.json').read_text());rows=copy.deepcopy(json.loads((source/'analysis/results.json').read_text()))
+    if len(rows)!=120 or len(index)!=120 or [r['case_id'] for r in rows]!=[r['case_id'] for r in index]:raise ValueError('all120 cached rows required')
+    if {r['mode'] for r in rows}!=set(TOLERANCE_ARMS):raise ValueError('all six cached baseline methods required')
+    for key,path in paths.items():
+        file=source/'evaluation'/(key+'_path.npz')
+        if str(file) not in identity:raise ValueError('cached original path not sealed')
+        with np.load(file) as z:
+            for field in ('s','xy','heading','curvature','turn_end','goal'):np.testing.assert_array_equal(z[field],path[field])
+    raws={};executed={};rebuilt={}
+    for lane,(row,declared) in enumerate(zip(rows,index)):
+        if any(row.get(k)!=v for k,v in declared.items()):raise ValueError('cached analysis/index identity mismatch')
+        if not row.get('alpha_rule',{}).get('independent_numpy_decisions_match'):raise ValueError('cached original q decisions were not independently verified')
+        file=row['raw_file']
+        if identity.get(file)!=row['raw_sha256']:raise ValueError('cached raw not sealed or changed')
+        with np.load(file) as z:raw=dict(z)
+        active=np.asarray(raw['active_tick'],bool);n=int(active.sum())
+        if n!=row['active_lower_ticks'] or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('cached actual endpoint mismatch')
+        changed=None;tick=row['replan_task_tick'];pathfile=source/'evaluation'/f'replanned_path_{lane:02d}.npz'
+        if tick is not None:
+            if str(pathfile) not in identity:raise ValueError('cached executed path not sealed')
+            with np.load(pathfile) as z:changed=dict(z)
+            executed[row['case_id']]=changed
+        data=reconstruct_execution_path_reward(raw,row,paths[analysis_path_key(row)],changed,n if tick is None else tick,p['config'],p['initial_source']['controller'],keys)
+        raws[row['case_id']]=raw;rebuilt[row['case_id']]=data
+        row.update(source_kind='cached120',cache_source=str(source),newly_simulated_lower_ticks=0,diagnostic_file=str(source/'analysis'/f'case_{lane:02d}_diagnostics.npz'))
+    return dict(rows=rows,raws=raws,executed=executed,rebuilt=rebuilt)
 
 
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
-    tolerance=p.get('mode')=='tolerance_online120'
-    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120')
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120')
+    temporal=p.get('mode')=='tolerance_online40'
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40')
+    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40')
     continuation=p.get('mode')=='h75_switching_continuation'
-    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=40 if temporal else 120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
         raise ValueError(f'complete declared{count} H10 cases required')
@@ -1275,7 +1347,7 @@ def analyze_response(root,p):
     elif switching:validate_switching_inventory(inventory,p['protocol'])
     else:validate_response_inventory(inventory,p['protocol'])
     expected={(analysis_path_key(r),r['event'],response_method(r)) for r in inventory}
-    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
+    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(8 if temporal else 24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
@@ -1346,7 +1418,7 @@ def analyze_response(root,p):
             executed[c['case_id']]=changed
         rebuilt[c['case_id']]=reconstruct_execution_path_reward(raw,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
         frame=onset_frame_impulse(raw,c,pulse)
-        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached36' if cached and online else 'cached18' if cached else 'new120' if tolerance else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),diagnostic_file=f'case_{i:02d}_diagnostics.npz',source_kind='cached36' if cached and online else 'cached18' if cached else 'new40' if temporal else 'new120' if tolerance else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
             floor_support=audit_floor_support(raw,c,p['config'],p['protocol']['existing_speed_floor_m_s'],initial['initial_nominal_reference'][lane]) if confirmation and not tolerance else None,
             prefix=dict(ticks=task_stop,observed_s=task_stop*.005,
                 original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance[:task_stop]**2))) if task_stop else None,
@@ -1384,7 +1456,10 @@ def analyze_response(root,p):
     if tolerance:
         params=load_tolerance_analysis_export(root,p)
         for row in rows:
-            row['alpha_rule']=audit_tolerance_coordination(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['config']['residual_interface'],params)
+            row['alpha_rule']=audit_tolerance_coordination(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['config']['residual_interface'],params,arm_index=p['frozen_predictor_export']['arm_to_export_index'].get(row['mode']))
+        if temporal:
+            cached=load_online40_comparison_cache(root,p,paths,manifest['reward_components'],verified_files={**p['source_sha256'],**p['input_sha256']})
+            rows.extend(cached['rows']);raws.update(cached['raws']);executed.update(cached['executed']);rebuilt.update(cached['rebuilt'])
         tolerance_common_windows(rows,raws,paths,goals)
     if online:
         for row in rows:
@@ -1392,7 +1467,7 @@ def analyze_response(root,p):
                 row['alpha_rule']=audit_online_rule(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['protocol']['rule'])
     summary,paired=tolerance_online_summary(rows) if tolerance else confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
-    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
+    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=(120 if temporal else len(cache_rows)),comparison_source=p.get('comparison_source'),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,cached_observed_lower_ticks=sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120'),total_observed_lower_ticks=ticks+sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120'),newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
         checked='Raw SHA, full initial audit, config/model/goal/inventory, actual pulse/clock, masked channel composition, correction chain and reconstructed execution-path V3 channels/rewards.',
         limitation='Non-task reward components reused from authenticated raw logs, not independently rederived physics. Original-path distances are descriptive sampled nearest distances; execution-path V3 is not original-user utility after replan.'))
@@ -1403,7 +1478,9 @@ def analyze_response(root,p):
     if confirmation:
         lines=['# 两初态五方法100回合确认','','全部100为本轮实际H10轨迹，不复用旧物理轨迹。两prepared bank不是独立训练种子；每bank/route/event五法完整原生初态配对。全部state/user/reward alpha=1，固定Actor查询alpha0/.5/1另列。',
                '','原世界goal1m与真实触地主终点；Zero+既有1.5m/s下限若未触发须标为本组等同Zero，不据此宣称排除了速度反馈支持。执行路径user1奖励仅诊断，重规划后不称原S严格完成。']
-    if tolerance:
+    if temporal:
+        lines=['# 时间状态混合容扰在线40新回合＋120缓存对照','','新物理40：temporal_rank_selected/temporal_rank_last，各20条件；旧六方法120条完整物理轨迹身份匹配后复用，共160记录/八方法/20条件。没有重跑旧物理；不同方法的真实失败、首达与样本分母均保留。','Selected与last为同混合rank训练的不同固定checkpoint选择，不能标成BCE两臂。原worldgoal、H75、物理、时序、执行权限、几何guard和容扰阈值不变。共同观察/首达前窗口由全部八法共同决定。']
+    elif tolerance:
         lines=['# 冻结容扰在线协调120回合','','全部120为本轮新H10物理：banks2/5×左右S×五事件×六方法；两个prepared祖先不是独立训练seed。已见来源/熟悉路线的在线工程DEV，非独立确认。', '','q_rank与q_bce为冻结三seed概率等权集成；task_guard_only用于分离几何guard收益。全程查询超出训练task1源分布，分数未校准为安全概率；fallback不是安全保证。原worldgoal1m、触地、无扰损失与原路径距离分别报告；重规划后执行路径user1奖励仅诊断。']
     elif online and not confirmation:
         lines=['# 因果几何预瞻scalar-alpha：18新回合＋36固定缓存','','控制器不使用起扰时刻或力标签，仅以当下执行路径/进度及原速度请求决定alpha；几何阈值是已知DEV上的工程启发式，不是稳定性界。无训练/阈值搜索。',
@@ -1428,8 +1505,9 @@ def analyze_response(root,p):
 
 def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpoint):
     import matplotlib.pyplot as plt
-    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00')
-    fig,axes=plt.subplots(7,1,figsize=(12,18),sharex=True,layout='constrained')
+    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00','#56B4E9','#7B3294')
+    qmethods=[r['mode'] for r in selected if r['mode'] in TEMPORAL_TOLERANCE_ARMS+('q_rank','q_bce')]
+    fig,axes=plt.subplots(5+len(qmethods),1,figsize=(12,14+2*len(qmethods)),sharex=True,layout='constrained')
     for color,row in zip(palette,selected):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];steps=np.arange(1,n+1);reward=rebuilt[row['case_id']]['user1_reward'];method=row['method']
         for ax,y in zip(axes[:3],(reward,np.cumsum(reward),raw['alpha_exec'][:n])):
@@ -1437,13 +1515,13 @@ def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpo
         for ax in axes:
             if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,color='gray',alpha=.04)
             if row['replan_task_tick'] is not None:ax.axvline(row['replan_task_tick'],c=color,ls=':',lw=.6)
-        if row['mode'] in ('q_rank','q_bce'):
-            ax=axes[3 if row['mode']=='q_rank' else 4]
+        if row['mode'] in qmethods:
+            ax=axes[3+qmethods.index(row['mode'])]
             for a,style in enumerate(('-','--',':')):ax.plot(steps,raw['coord_qmin'][:n,a],ls=style,label=f"{method} candidate alpha{[0,.5,1][a]}",lw=.8)
             ax.axhline(.8,c='gray',ls=':');ax.axhline(.85,c='gray',ls='--')
-        axes[5].plot(steps,raw['coord_degraded'][:n],c=color,label=method,lw=.8)
-        axes[6].plot(steps,raw['coord_publication_withheld'][:n],c=color,label=method,lw=.8)
-    for ax,title in zip(axes,('Diagnostic execution-path user1 reward / actual step','Cumulative diagnostic execution-path user1 reward','Actual executed alpha','q_rank: min over four hypotheses (uncalibrated)','q_bce: min over four hypotheses (uncalibrated)','Actual degraded fallback flag (not safety)','Native publication withheld flag')):
+        axes[-2].plot(steps,raw['coord_degraded'][:n],c=color,label=method,lw=.8)
+        axes[-1].plot(steps,raw['coord_publication_withheld'][:n],c=color,label=method,lw=.8)
+    for ax,title in zip(axes,['Diagnostic execution-path user1 reward / actual step','Cumulative diagnostic execution-path user1 reward','Actual executed alpha']+[name+': min over four hypotheses (uncalibrated)' for name in qmethods]+['Actual degraded fallback flag (not safety)','Native publication withheld flag']):
         ax.set_ylabel(title);ax.grid(alpha=.15);ax.legend(fontsize=6)
     axes[-1].set_xlabel('Actual lower-control transition step (dt=.005s)')
     fig.suptitle(label+' / '+checkpoint+' / user1; gray=intended disturbance, dotted=replan; actual failure endpoints retained')
@@ -1456,11 +1534,11 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
     out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
-    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows)
+    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS for r in rows)
     checkpoint='H75 frozen';late_display=any(r.get('trace_start_s')==6. for r in rows)
     if tolerance or late_display:
         plan=json.loads((root/'plan.json').read_text());checkpoint='H75 actor SHA '+plan['models']['H75']['actor_sha256'][:12]
-    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00')
+    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00','#56B4E9','#7B3294')
     for event in response_plot_groups(rows):
         group=response_plot_selection(rows,event)
         routes=sorted({analysis_path_key(r) for r in group})
