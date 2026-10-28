@@ -223,3 +223,35 @@ def test_online_scalar_inventory_is18_and_preserves_world_pulse_pairing():
     assert {r['mode'] for r in rows}=={'online_scalar'}
     pulses=np.asarray(force_pulses(rows,3.))
     np.testing.assert_array_equal(pulses[:,[2,4]],0.)
+
+
+def test_confirmation100_inventory_unique_paths_and_paired_bank_event_arms():
+    import json
+    from pathlib import Path
+    from sttw_control.native_goal_run import confirmation_inventory,case_path_key
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_online_confirmation100.json').read_text())
+    rows=confirmation_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==100
+    assert {r['bank_index'] for r in rows}=={0,1}
+    assert len({case_path_key(r) for r in rows})==4
+    groups=defaultdict(list)
+    for r in rows:groups[r['bank_index'],r['route'],r['event']].append(r)
+    assert len(groups)==20 and all(len(v)==5 for v in groups.values())
+    assert all({r['alpha'] for r in v}=={1.} for v in groups.values())
+    assert {r['query_alpha'] for r in rows if r['mode']=='fixed0'}=={0.}
+    assert {r['query_alpha'] for r in rows if r['mode']=='fixed_half'}=={.5}
+    assert {r['onset_s'] for r in rows}=={2.2,3.4}
+
+
+def test_existing_speed_floor_is_exact_zero_at_native_nominal_and_bounded_if_needed():
+    import jax.numpy as j
+    from sttw_control.native_goal_run import existing_floor_latent
+    cfg=dict(residual_interface=dict(speed_positive_scale_m_s=.25))
+    for speed in (2.,2.3,2.8):
+        z,log=existing_floor_latent(j.array([speed,.2]),cfg)
+        np.testing.assert_array_equal(z,[0.,0.]);assert not bool(log['support_active'])
+    z,log=existing_floor_latent(j.array([1.4,.2]),cfg)
+    np.testing.assert_allclose(np.tanh(float(z[0]))*.25,.1,atol=1e-7)
+    assert z[1]==0 and bool(log['support_active'])
+    z,log=existing_floor_latent(j.array([1.,.2]),cfg)
+    assert float(log['support_realized_target_offset'])<.25 and np.isfinite(np.asarray(z)).all()

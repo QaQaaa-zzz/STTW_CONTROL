@@ -1,0 +1,75 @@
+{
+  "experiment_id": "STTW-H75-ONLINE-CONFIRMATION100-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 100,
+  "maximum_lower_ticks": 200000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    2.2,
+    3.4
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "zero_onset_s": 2.2,
+  "replan_cadence_s": 1.0,
+  "question": "Does the unchanged causal scalar rule retain useful goal/contact behavior on two fixed-order new prepared states and new pulse timings?",
+  "data_role": "Bounded100-case confirmation on prepared states0/1, selected by fixed index not outcomes; familiar model/path family, not independent training seeds.",
+  "stop_rule": "Exactly100/H10/200000lower/0optimizer, no cachedphysical substitutions, retries, force/time/threshold sweeps or adoption.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Common planner at1..9s reads measured state before next chunk; latch is preserved when execution path changes. No event time, force, route label or task clock enters alpha decision.",
+  "interpretation": "Frozen preview1.5m/proxy3/2.7 stepalpha, no threshold tuning. Existing floor1.5 support is mathematicallyinactive for nominal>=2; report actual support and do not invent gain or native permission changes.",
+  "scoring": "Goal1m and truecontact primary, nominal losses retained; user1 execution-path costs diagnostic, original-S errors descriptive after replanning.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Confirmation onsets2.2/3.4s fixed before this run, different from prior DEV1.6/4.0s; not searched using confirmation outcomes.",
+  "decision_rules": {
+    "primary": "Report paired goal/contact changes primarily against user fixed1; report all gains and losses against fixed0/fixed.5/Zero support without a large-margin or dominance gate.",
+    "negative": "Retain reverse cases; no automatic threshold tuning, new network or expanded force tests."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5
+  },
+  "bank_indices": [
+    0,
+    1
+  ],
+  "bank_state_fingerprints": {
+    "0": "a8380fa55c471c3fca1a353a7dcef0930f45dcd2c8da4195d298c0e4969b5ed1",
+    "1": "03401dc2d7e141327714d104c1735d5452b01a2e7bc15a822f8b46e408ffbc46"
+  },
+  "arms": [
+    "online_scalar",
+    "fixed0",
+    "fixed_half",
+    "fixed1",
+    "zero_with_existing_speed_floor"
+  ],
+  "existing_speed_floor_m_s": 1.5,
+  "initialization": "Preparedbank8 states sameoriginalSHA; indices0/1 firstavailableexcluding3, raw2m/s measured1.96032 vs oldbank3 raw2.3. Full physical reset shared across5arms; ownpose anchors originalS. No old trajectories reused.",
+  "initial_bank_note": "initial_bank3 is inherited ancestor metadata only; actual confirmation resets use bank_indices0/1 and their fingerprints."
+}
