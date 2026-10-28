@@ -264,3 +264,113 @@ def score_selected(manifest,data):
         probability=np.mean([predictions[f'{name}/seed{s}'] for s in (0,1,2)],axis=0);predictions[name+'/ensemble']=probability;report[name+'/ensemble']=metrics(data['y'],probability,data['meta'])
     prior=np.full(len(data['y']),manifest['training_prior']);report['training_prior']=metrics(data['y'],prior,data['meta']);predictions['training_prior']=prior
     return report,predictions
+
+
+def validate_ranking_config(cfg):
+    validate_config(cfg)
+    if (cfg['models']!=['full_state_mlp'] or cfg['architecture']['activation']!='ReLU' or
+        cfg['training']['full_batch'] is not True or cfg['training']['precision']!='float32' or
+        cfg['ranking']!=dict(arms=['bce','bce_rank'],weight=.5,selectors=['brier','rank'],pairing='source_group_id/preparation_s/force_N; positive-negative only') or
+        cfg['budget']!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=6000,automatic_extensions=False) or
+        cfg['evaluation'].get('release')!='none; development-only experiment' or 'evaluation' in cfg['data']):
+        raise ValueError('frozen ranking configuration mismatch')
+    return cfg
+
+
+def discordant_pairs(y,meta):
+    """Positive/negative row indices only within the exact hypothetical condition."""
+    groups={}
+    for i,m in enumerate(meta):groups.setdefault((m['source_group_id'],m['preparation_s'],m['force_N']),[]).append(i)
+    pairs=[(a,b) for ids in groups.values() for a in ids for b in ids if y[a]==1 and y[b]==0]
+    return np.asarray(pairs,dtype=np.int64).reshape(-1,2)
+
+
+def ranking_loss(logits,pairs):
+    import torch
+    if len(pairs)==0:return logits.sum()*0.
+    indices=torch.as_tensor(pairs,dtype=torch.long,device=logits.device)
+    return torch.nn.functional.softplus(-(logits[indices[:,0]]-logits[indices[:,1]])).mean()
+
+
+def selector_key(selector,brier,rank,step):
+    if not math.isfinite(brier) or (rank is not None and not math.isfinite(rank)):raise ValueError('nonfinite selection score')
+    if selector=='brier':return (brier,step)
+    if selector=='rank':return (-(rank if rank is not None else -1.),brier,step)
+    raise ValueError('unknown selector')
+
+
+def ranking_fit(config,train_analysis,dev_analysis,output):
+    """Fixed scratch CPU comparison; never reads or releases bank1 labels."""
+    import torch
+    from torch.utils.tensorboard import SummaryWriter
+    config=Path(config).resolve();cfg=validate_ranking_config(json.loads(config.read_text()))
+    # Enforce the development boundary before even opening the training dataset.
+    if Path(dev_analysis).name!='analysis_development':raise ValueError('development-only artifact required')
+    output=Path(output).resolve()
+    if output.exists():raise ValueError('new ranking output only; no implicit retry')
+    torch.set_num_threads(1)
+    train=load_dataset(train_analysis,'training',cfg);dev=load_dataset(dev_analysis,'development',cfg)
+    if len(train['y'])!=72 or len(dev['y'])!=72 or len(np.unique(train['y']))!=2:raise ValueError('exact resolved train72/dev72 required')
+    output.mkdir(parents=True);updates=0;inflight=False;selected=[];progress={}
+    write_json(output/'data_receipt.json',dict(train={k:v for k,v in train.items() if k not in ('full','speed','y')},development={k:v for k,v in dev.items() if k not in ('full','speed','y')}))
+    write_json(output/'resolved_config.json',cfg)
+    snapshot=output/'source';snapshot.mkdir();(snapshot/'tolerance_predictor_pilot.py').write_bytes(Path(__file__).read_bytes())
+    pairs=discordant_pairs(train['y'],train['meta']);x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y'])
+    write_json(output/'status.json',dict(phase='initialized',actual_optimizer_updates=0,per_seed=progress))
+    try:
+        for seed in (0,1,2):
+            torch.manual_seed(seed);initial=copy.deepcopy(make_model(41).state_dict())
+            init_file=output/f'initial_seed{seed}.pt';torch.save(initial,init_file)
+            for arm in ('bce','bce_rank'):
+                model=make_model(41);model.load_state_dict(initial);optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
+                folder=output/arm/f'seed{seed}';folder.mkdir(parents=True);writer=SummaryWriter(str(folder/'tensorboard'));best={};rows=[]
+                writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
+                try:
+                    for step in range(1,1001):
+                        if updates>=6000:raise ValueError('ranking optimizer budget exhausted')
+                        model.train();optimizer.zero_grad();logits=model(x).squeeze(-1)
+                        bce=torch.nn.functional.binary_cross_entropy_with_logits(logits,y);rank=ranking_loss(logits,pairs)
+                        loss=bce+(.5 if arm=='bce_rank' else 0.)*rank
+                        if not torch.isfinite(loss):raise ValueError('nonfinite ranking loss')
+                        loss.backward()
+                        if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()):raise ValueError('nonfinite ranking gradient')
+                        inflight=True;optimizer.step();updates+=1;inflight=False
+                        row=dict(step=step,bce=float(bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()),development_brier=None,development_rank=None)
+                        for key in ('bce','rank_loss','total_loss'):writer.add_scalar('train/'+key,row[key],step)
+                        if step%100==0:
+                            score=metrics(dev['y'],predict(model,dev['full']),dev['meta']);db=score['brier'];dr=score['discordant_pair_ranking']['mean']
+                            writer.add_scalar('train/optimizer_updates',step,step)
+                            row.update(development_brier=db,development_rank=dr);writer.add_scalar('development/brier',db,step)
+                            if dr is not None:writer.add_scalar('development/rank',dr,step)
+                            for selector in ('brier','rank'):
+                                key=selector_key(selector,db,dr,step)
+                                if selector not in best or key<best[selector]['key']:
+                                    best[selector]=dict(key=key,step=step,development_brier=db,development_rank=dr,state_dict=copy.deepcopy(model.state_dict()))
+                            progress[f'{arm}/seed{seed}']=step
+                            write_json(output/'status.json',dict(phase='fitting',arm=arm,seed=seed,step=step,actual_optimizer_updates=updates,per_seed=progress));writer.flush()
+                        rows.append(row)
+                        with (folder/'history.jsonl').open('a') as log:log.write(json.dumps(row,allow_nan=False)+'\n')
+                    write_json(folder/'history.json',rows)
+                    for selector,record in best.items():
+                        state=record.pop('state_dict');record.pop('key');path=folder/f'{selector}_selected.pt'
+                        torch.save(dict(state_dict=state,arm=arm,seed=seed,selector=selector,dim=41,**record),path)
+                        selected.append(dict(arm=arm,seed=seed,selector=selector,dim=41,file=str(path),sha256=digest(path),initial_sha256=digest(init_file),**record))
+                finally:writer.close()
+        manifest=dict(experiment_id=cfg['experiment_id'],implementation_sha256=digest(__file__),source_snapshot_sha256=digest(snapshot/'tolerance_predictor_pilot.py'),config=str(config),config_sha256=digest(config),resolved_config_sha256=digest(output/'resolved_config.json'),data_receipt_sha256=digest(output/'data_receipt.json'),selected=selected,actual_optimizer_updates=updates,new_physics_steps=0,new_ppo_updates=0,heldout_release=False)
+        write_json(output/'selection_manifest.json',manifest)
+        for role,data in [('training',train),('development',dev)]:
+            scores={};predictions={}
+            for r in selected:
+                checkpoint=torch.load(r['file'],map_location='cpu',weights_only=True);model=make_model(41);model.load_state_dict(checkpoint['state_dict'])
+                name=f"{r['arm']}/{r['selector']}/seed{r['seed']}";p=predict(model,data['full']);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
+            for arm in ('bce','bce_rank'):
+                for selector in ('brier','rank'):
+                    name=f'{arm}/{selector}/ensemble';p=np.mean([predictions[f'{arm}/{selector}/seed{s}'] for s in (0,1,2)],axis=0);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
+            write_json(output/f'{role}_metrics.json',scores)
+            write_json(output/f'{role}_predictions.json',[dict(m,label=int(v),probabilities={k:float(p[i]) for k,p in predictions.items()}) for i,(m,v) in enumerate(zip(data['meta'],data['y']))])
+        artifacts=[p for p in output.rglob('*') if p.is_file() and p.name!='status.json']
+        write_json(output/'selection_seal.json',dict(artifacts_sha256={str(p.relative_to(output)):digest(p) for p in artifacts}))
+        write_json(output/'status.json',dict(phase='completed',actual_optimizer_updates=updates,per_seed=progress,selection_sealed=True,heldout_release=False))
+        return manifest
+    except BaseException as exc:
+        write_json(output/'status.json',dict(phase='error',actual_optimizer_updates=updates,per_seed=progress,optimizer_step_may_be_partial=inflight,error=repr(exc),heldout_release=False));raise

@@ -106,3 +106,57 @@ def test_resolved_label_must_agree_with_status():
     assert pilot.resolved_label(dict(label_status='no_fall',no_fall_through_window=True))==1.
     with pytest.raises(ValueError,match='contradiction'):
         pilot.resolved_label(dict(label_status='fall',no_fall_through_window=True))
+
+
+def ranking_config():
+    return json.loads((Path(__file__).resolve().parents[1]/'configs/h75_tolerance_predictor_ranking.json').read_text())
+
+
+def test_ranking_pairs_never_cross_source_preparation_or_force_and_gradient_orders_logits():
+    import torch
+    meta=[dict(source_group_id=s,preparation_s=p,force_N=f) for s,p,f in [('a',0,64),('a',0,64),('a',.6,64),('b',0,64),('a',0,-64)]]
+    pairs=pilot.discordant_pairs(np.array([1,0,0,0,0]),meta)
+    np.testing.assert_array_equal(pairs,[[0,1]])
+    logits=torch.zeros(5,requires_grad=True);loss=pilot.ranking_loss(logits,pairs);loss.backward()
+    assert logits.grad[0]<0 and logits.grad[1]>0
+    assert torch.equal(logits.grad[2:],torch.zeros(3))
+    assert pilot.ranking_loss(logits.detach()-.1*logits.grad,pairs)<loss.detach()
+
+
+def test_ranking_zero_pairs_is_differentiable_zero():
+    import torch
+    logits=torch.tensor([.2,-.3],requires_grad=True)
+    loss=pilot.ranking_loss(logits,np.empty((0,2),np.int64));loss.backward()
+    assert loss.item()==0 and torch.equal(logits.grad,torch.zeros(2))
+
+
+def test_ranking_selectors_share_tie_rules():
+    key=pilot.selector_key
+    assert key('rank',.2,.75,200)<key('rank',.1,.5,100)
+    assert key('rank',.1,.75,200)<key('rank',.2,.75,100)
+    assert key('rank',.1,.75,100)<key('rank',.1,.75,200)
+    assert key('brier',.1,0.,100)<key('brier',.1,1.,200)
+    assert key('rank',.1,None,100)>key('rank',.9,0.,100)
+
+
+def test_ranking_dev_final_guard_before_any_data_access(tmp_path,monkeypatch):
+    cfg=tmp_path/'config.json';cfg.write_text(json.dumps(ranking_config()))
+    def forbidden(*args,**kwargs):raise AssertionError('dataset accessed')
+    monkeypatch.setattr(pilot,'load_dataset',forbidden)
+    with pytest.raises(ValueError,match='development-only'):
+        pilot.ranking_fit(cfg,tmp_path/'train',tmp_path/'analysis_final',tmp_path/'out')
+    assert not (tmp_path/'out').exists()
+
+
+@pytest.mark.parametrize('field,value',[('updates_per_model_seed',1001),('maximum_total_optimizer_updates',6001),('full_batch',False),('seeds',[0,1,2,3]),('learning_rate',.002)])
+def test_ranking_budget_and_optimization_cannot_be_extended(field,value):
+    cfg=ranking_config();cfg['training'][field]=value
+    with pytest.raises(ValueError,match='frozen'):pilot.validate_ranking_config(cfg)
+
+
+def test_ranking_config_forbids_heldout_release_and_extra_arms():
+    cfg=ranking_config();pilot.validate_ranking_config(cfg)
+    cfg['data']['evaluation']='bank1'
+    with pytest.raises(ValueError,match='ranking'):pilot.validate_ranking_config(cfg)
+    cfg=ranking_config();cfg['ranking']['arms'].append('extra')
+    with pytest.raises(ValueError,match='ranking'):pilot.validate_ranking_config(cfg)
