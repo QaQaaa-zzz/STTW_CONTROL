@@ -19,8 +19,16 @@ def audit(root,output):
     spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
     adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
+    online=p.get('mode')=='h75_online_scalar'
+    if online:
+        schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
+        schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
+        schedule=importlib.util.module_from_spec(schedule_spec);sys.modules[schedule_spec.name]=schedule;schedule_spec.loader.exec_module(schedule)
     initial=root/'evaluation/initial_carry.pkl'
     with initial.open('rb') as f:carry=pickle.load(f)
+    if online:
+        if np.any(carry.latched):raise ValueError('online initial latch must be false')
+        carry=carry.native
     continuation=p.get('mode')=='h75_switching_continuation'
     resumed=carry if continuation else None
     if continuation:
@@ -41,9 +49,9 @@ def audit(root,output):
             if not np.array_equal(actual,expected,equal_nan=True):
                 raise ValueError('initial dynamic leaf mismatch '+label)
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation')
-    response=p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation')
+    response=p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar')
     count=len(cases)
-    if count!=(36 if switching else 54 if response else 80):raise ValueError('declared initial inventory size mismatch')
+    if count!=(18 if online else 36 if switching else 54 if response else 80):raise ValueError('declared initial inventory size mismatch')
     state=carry.state
     np.testing.assert_array_equal(state.tick,np.zeros(count))
     np.testing.assert_array_equal(state.physical.physical_tick,np.full(count,int(snapshot.physical_tick)))
@@ -65,7 +73,7 @@ def audit(root,output):
         current=jax.tree.map(lambda x:x[i],carry)
         if key in groups:equal(current,groups[key],c['case_id']);pairs+=1
         else:groups[key]=current
-    expected_groups,expected_pairs=(6,30) if switching else (36,18) if response else (20,60)
+    expected_groups,expected_pairs=(18,0) if online else (6,30) if switching else (36,18) if response else (20,60)
     if len(groups)!=expected_groups or pairs!=expected_pairs:raise ValueError('matched complete initial groups missing')
     if response:
         receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
@@ -142,6 +150,17 @@ def audit(root,output):
             all_own_saved_leaves_preserved=continuation,approximate_group_differences=capture_differences,
             numerical_amendment=p['protocol'].get('numerical_amendment'),
             task1_before_planning_and_switch=True,stay_initial_carry_sha256=receipt['initial_carry_sha256'])
+    if online:
+        stay=Path(p['stay_source']);stay_initial=stay/'evaluation/initial_carry.pkl'
+        receipt=json.loads((stay/'analysis/receipt.json').read_text())
+        if hashlib.sha256(stay_initial.read_bytes()).hexdigest()!=receipt['initial_carry_sha256']:raise ValueError('online cached initial carry drift')
+        with stay_initial.open('rb') as f:cached=pickle.load(f)
+        cached_cases=json.loads((stay/'inventory.json').read_text())
+        for i,c in enumerate(cached_cases):
+            j=next(j for j,old in enumerate(old_cases) if old['route']==c['route'] and old['speed']==c['speed'] and old['policy']=='H75' and old['alpha']==c['alpha'])
+            expected=jax.tree.map(lambda x:x[j],native_carry);actual=jax.tree.map(lambda x:x[i],cached.state)
+            equal(actual,expected.replace(domain_exit=np.asarray(False)),f'online source cached reset lane{i}',strict_dtype=True)
+        cached_filtered=np.asarray(cached.state.filtered).tolist();cached_offsets=np.asarray(cached.state.offsets).tolist()
     loaded={}
     for name,module in tuple(sys.modules.items()):
         if name=='sttw_control' or name.startswith('sttw_control.'):
@@ -154,6 +173,7 @@ def audit(root,output):
         physical_tick=int(snapshot.physical_tick),native_only_modules=loaded,
         complete_matched_method_pairs=pairs,matched_groups=len(groups),
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
+        online_native_initial_preserved=online,online_initial_latch_false=online,
         task_ticks_zero=not continuation,resume_task_tick=200 if continuation else 0,
         initial_filter_scope='Original source task0 for fullH10 raw reconstruction; resumed task1 state separately preserved' if continuation else 'Task0 initial state',original_alpha_checked=True,prepared_physical_fields_checked=True,prepared_physical_lanes_checked=count,
         excluded_native_reset_fields=['raw','reference_pose','yaw_wrapped','yaw_unwrapped'],

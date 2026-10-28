@@ -313,3 +313,40 @@ def test_user_authorized_finite_float_prefix_differences_are_descriptive_only():
     raws[candidate['case_id']]['actual_xy'][279,0]=0.
     raws[candidate['case_id']]['active_tick'][279]=False
     with pytest.raises(ValueError,match='complete physical prefix'):m.audit_switch_prefixes(rows,raws,protocol)
+
+
+def online_fixture():
+    n=12;alpha=np.repeat([.5,1.,1.],4)
+    raw=dict(active_tick=np.ones(n,bool),alpha_user=np.ones(n),alpha_exec=alpha,rule_latched=alpha==.5,
+        rule_preview_max_curvature=np.repeat([.5,.1,0.],4),rule_accel_estimate=np.repeat([3.92,.784,0.],4),rule_alpha_target=alpha,
+        channel_alpha_pair=np.column_stack([alpha,alpha]),query_observation=np.zeros((n,351)),
+        composed_latent=np.zeros((n,2)),latent_z=np.zeros((n,2)),reference_target_permitted=np.ones(n,bool),
+        actual_forward_speed=np.full(n,2.7),v_user=np.full(n,2.8),path_progress=np.repeat([1.8,2.5,3.5],4))
+    raw['query_observation'][:,336]=alpha
+    path=dict(s=np.arange(5,dtype=np.float32),curvature=np.array([0.,.5,0.,0.,0.],np.float32))
+    case=dict(mode='online_scalar',alpha=1.,speed=2.8,onset_s=1.6)
+    rule=dict(preview_m=1.5,engage_accel_m_s2=3.,release_accel_m_s2=2.7,active_alpha=.5)
+    return raw,path,case,rule
+
+
+def test_online_actual_scalar_query_and_independent_closed_interval_latch():
+    raw,path,case,rule=online_fixture()
+    m.audit_online_publication(raw,case)
+    result=m.audit_online_rule(raw,case,path,None,rule)
+    assert result['departure_from_one_times_s']==[0.]
+    assert result['return_to_one_times_s']==[.02]
+    assert result['completed_dwell_s']==[.02] and not result['unreturned_at_actual_endpoint']
+    assert np.isclose(result['speed_error_rmse_m_s'],.1)
+    raw['query_observation'][5,336]=.5
+    with pytest.raises(AssertionError):m.audit_online_publication(raw,case)
+
+
+def test_online_rule_latch_survives_rebound_and_reports_open_activation():
+    raw,path,case,rule=online_fixture();path['curvature'][:]=.5
+    replan=dict(path,curvature=np.full(5,2.85/7.84,np.float32));case['replan_task_tick']=8
+    raw['alpha_exec'][:]=.5;raw['rule_alpha_target'][:]=.5;raw['rule_latched'][:]=True
+    raw['rule_preview_max_curvature'][:8]=.5;raw['rule_accel_estimate'][:8]=3.92
+    raw['rule_preview_max_curvature'][8:]=2.85/7.84;raw['rule_accel_estimate'][8:]=2.85
+    result=m.audit_online_rule(raw,case,path,replan,rule)
+    assert result['departure_count']==1 and result['return_count']==0
+    assert result['unreturned_at_actual_endpoint'] and result['open_dwell_observed_s']==.06
