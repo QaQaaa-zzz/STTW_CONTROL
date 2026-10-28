@@ -165,14 +165,15 @@ def analyze(root,output=None,*,h75_root=None):
     with (output/'results.csv').open('w',newline='') as f:
         fields=[k for k in rows[0] if k not in ('pre_goal_component_cost','impulse_Ns','expected_impulse_Ns')]
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows({k:r[k] for k in fields} for r in rows)
-    lines=[f'# 固定64普通目标学习：完整{physical_count}物理轨迹评价','',
+    mode='周期重规划' if plan.get('replanning') else '固定路线'
+    lines=[f'# 固定64普通目标学习（{mode}）：完整{physical_count}物理轨迹评价','',
         '内部DEV记录，尚未人工核验投稿声明。先查全部XY，再解读配对变化；没有事后选checkpoint。','',
         '|面板|方法|物理轨迹|评分视图|到达|完整存活|到达且存活|存活未到|到达后接触|未到且接触|接触合计|未知|',
         '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
     for r in summary:lines.append('|'+ '|'.join(str(r[k]) for k in ['suite','role','physical_count','score_views','arrived','survived','arrived_alive','alive_not_arrived','arrived_contact','not_arrived_contact','contact','unknown'])+'|')
     if plan.get('replanning'):
-        lines += ['', '警告：按重规划几何计算的路径费用仅为执行路径诊断，不能称为原始路线J；原始目标与原始参考保持不变。']
-    lines += ['', '## 全例XY与原始费用图','']
+        lines += ['', f'模型身份：A64为冻结普通目标 learner_0064.pt（{plan["endpoint"]}）；parent64为原任务冻结64端点，H75为冻结H75对照。仅增加所有方法共用的周期重规划；未训练新网络。', '警告：按用户alpha在执行路径上评分；重规划几何路径费用仅为执行路径诊断，不能称为原始路线J；原始目标与原始参考保持不变。']
+    lines += ['', '## 全例XY与执行路径费用图' if plan.get('replanning') else '## 全例XY与原始费用图','']
     lines += [f'- [{f}](./{f})' for f in figures]
     lines += ['', '## 配对增失','', '|面板|对照|查询数（相关）|到达增/失|存活增/失|','|---|---|---:|---|---|']
     for suite in ('transfer','training_geometry'):
@@ -202,6 +203,7 @@ def _plot(output,key,items,root,cfg):
     from matplotlib.patches import Circle
     from .path_command_reward import configured_cost_keys
     suite,context,force,onset=key
+    replanning=bool(json.loads((root/'plan.json').read_text()).get('replanning'))
     colors=['#0072B2','#D55E00','#333333','#009E73','#AA4499'];styles={0.:'-',.5:'--',1.:'-.'}
     names=['A64','parent64','zero','zero+support','H75'];keys=configured_cost_keys(cfg)
     with plt.rc_context({'font.size':8,'savefig.facecolor':'white'}):
@@ -236,7 +238,7 @@ def _plot(output,key,items,root,cfg):
                 bars.append(v['pre_goal_component_cost']);bar_labels.append(legend+(' UNKNOWN' if v['pre_goal_component_cost'] is None else ''))
         ax[0,0].set(xlabel='World X (m)',ylabel='World Y (m)',title='Actual XY; square first goal, x contact, o end, triangle effective force')
         ax[0,0].set_aspect('equal',adjustable='datalim');ax[0,0].legend(fontsize=5)
-        ax[0,1].set(xlabel='Task time (s)',ylabel='Pre-contact running reward /20ms',title='Original user-alpha scoring; no terminal replacement')
+        ax[0,1].set(xlabel='Task time (s)',ylabel='Pre-contact running reward /20ms',title=('User alpha on EXECUTION path; no terminal replacement' if replanning else 'Original user-alpha scoring; no terminal replacement'))
         ax[0,1].legend(fontsize=5,ncol=2)
         ax[1,0].set(xlabel='Task time (s)',ylabel='Cumulative pre-contact running reward')
         values=np.array([b if b is not None else [np.nan]*len(keys) for b in bars]);bottom=np.zeros(len(values));palette=plt.get_cmap('tab20')
@@ -244,6 +246,6 @@ def _plot(output,key,items,root,cfg):
             height=-values[:,i];ax[1,1].bar(np.arange(len(values)),height,bottom=bottom,color=palette(i),label=name,hatch=['','/','\\','.','x'][i%5]);bottom+=np.nan_to_num(height)
         ax[1,1].axhline(0,color='black',linewidth=.5);ax[1,1].set(xticks=np.arange(len(values)),xticklabels=bar_labels,ylabel='Signed pre-goal cost (raw units)')
         ax[1,1].tick_params(axis='x',labelrotation=65,labelsize=5);ax[1,1].legend(fontsize=5,ncol=2)
-        fig.suptitle(f'{suite}/{context}, R={items[0][0]["case"]["path_radius_m"]}m, F={force:+g}N/.1s, onset={onset*.005:g}s; H10; related DEV')
+        fig.suptitle(f'{suite}/{context}, R={items[0][0]["case"]["path_radius_m"]}m, F={force:+g}N/.1s, onset={onset*.005:g}s; H10; {"periodic replanning" if replanning else "fixed route"}; related DEV')
         name=f'{suite}_{context}_F{force:+g}_t{onset}.png';fig.savefig(output/name,dpi=160);plt.close(fig)
     return name
