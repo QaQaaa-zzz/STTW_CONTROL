@@ -219,3 +219,109 @@ def test_confirmation_plan_rejects_old_banks_and_splits():
     pilot.validate_confirmation_plan(plan)
     plan['protocol']['bank_indices']=[0,1]
     with pytest.raises(ValueError,match='plan identity'):pilot.validate_confirmation_plan(plan)
+
+
+def temporal_config():
+    return json.loads((Path(__file__).resolve().parents[1]/'configs/h75_tolerance_predictor_temporal_mix.json').read_text())
+
+
+def temporal_fixture(early_bank,late_bank):
+    meta=[];y=[]
+    for source in range(4):
+        for alpha in (0.,.5,1.):
+            for preparation in (0.,.2,.6):
+                for force in (-64.,64.):
+                    meta.append(dict(case_id=f'bank{early_bank}/{len(meta)}',source_group_id=f'bank{early_bank}/early{source}',bank_index=early_bank,alpha=alpha,preparation_s=preparation,force_N=force,period='early'));y.append(float(alpha!=1.))
+    for source in range(2):
+        for alpha in (0.,.5,1.):
+            for preparation in (.2,.6):
+                for force in (-64.,64.):
+                    meta.append(dict(case_id=f'bank{late_bank}/{len(meta)}',source_group_id=f'bank{late_bank}/late{source}',bank_index=late_bank,alpha=alpha,preparation_s=preparation,force_N=force,period='late'));y.append(1.)
+    return dict(full=np.zeros((96,41),np.float32),y=np.asarray(y,np.float32),meta=meta,inputs={},excluded_invalid=[],audit={})
+
+
+def test_temporal_balanced_selector_is_not_96_sample_mean_and_ties_are_early():
+    data=temporal_fixture(0,5);y=data['y'];p=y.copy();p[:72]=1.-p[:72]
+    score,parts=pilot.temporal_selection(y,p,data['meta'])
+    assert score==.5 and parts==dict(early_brier=1.,late_brier=0.)
+    assert np.mean((p-y)**2)==.75
+    assert pilot.selector_key('brier',score,None,100)<pilot.selector_key('brier',score,None,200)
+
+
+def test_temporal_ancestor_split_and_only_early_ranking_pairs():
+    train=temporal_fixture(3,2);dev=temporal_fixture(0,5);pilot.validate_temporal_datasets(train,dev)
+    pairs=pilot.discordant_pairs(train['y'],train['meta'])
+    assert len(pairs)>0 and all(train['meta'][i]['period']=='early' for pair in pairs for i in pair)
+    train['meta'][-1]['bank_index']=5
+    with pytest.raises(ValueError,match='ancestor bank'):pilot.validate_temporal_datasets(train,dev)
+    train=temporal_fixture(3,2);train['y'][-1]=0
+    with pytest.raises(ValueError,match='late positive'):pilot.validate_temporal_datasets(train,dev)
+
+
+@pytest.mark.parametrize('mutation',[lambda c:c['ranking'].update(selectors=['rank']),lambda c:c['training'].update(updates_per_model_seed=1001),lambda c:c['temporal_mix'].update(train_late_bank=5),lambda c:c['budget'].update(automatic_extensions=True)])
+def test_temporal_frozen_recipe_no_search_or_implicit_extension(mutation):
+    cfg=temporal_config();pilot.validate_temporal_config(cfg);mutation(cfg)
+    with pytest.raises(ValueError,match='frozen'):pilot.validate_temporal_config(cfg)
+
+
+def test_temporal_prepare_declines_combined_development_before_data_access(tmp_path,monkeypatch):
+    cfg=tmp_path/'config.json';cfg.write_text(json.dumps(temporal_config()))
+    def forbidden(*args,**kwargs):raise AssertionError('data opened')
+    monkeypatch.setattr(pilot,'load_dataset',forbidden)
+    with pytest.raises(ValueError,match='development-only'):
+        pilot.prepare_temporal_mix(cfg,tmp_path/'train',tmp_path/'analysis_final',tmp_path/'late',tmp_path/'q',tmp_path/'prepared')
+
+
+def test_temporal_diagnostics_preserve_fall_admission_at_original_risk_gate():
+    data=temporal_fixture(0,5);p=np.full(96,.9)
+    diagnostics=pilot.temporal_diagnostics(data['y'],p,data['meta'])
+    assert diagnostics['early_falls']==24 and diagnostics['early_falls_not_rejected_08']==24
+    report=pilot.temporal_metrics(data,{'constant':p})['constant']
+    assert report['early']['fall_not_rejected_at_08']==24
+    assert report['early']['user_rejection']['0.8']['fall_but_not_rejected_rows']==16
+    assert report['late']['proper_and_ranking']['discordant_pair_ranking']['pairs']==0
+    assert report['late']['proper_and_ranking']['roc_auc'] is None
+
+
+def test_temporal_prepare_creates_six_loaded_initial_scalar_runs(tmp_path,monkeypatch):
+    from sttw_control import tolerance_coordination as coordinator
+    from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
+    cfg=tmp_path/'config.json';cfg.write_text(json.dumps(temporal_config()));q=tmp_path/'q';q.mkdir();(q/'receipt.json').write_text('{}')
+    train=temporal_fixture(3,2);dev=temporal_fixture(0,5)
+    def early(data):return dict(full=data['full'][:72],y=data['y'][:72],meta=[{k:v for k,v in m.items() if k!='period'} for m in data['meta'][:72]],inputs={},excluded_invalid=[],audit={})
+    monkeypatch.setattr(coordinator,'load_export',lambda _:None)
+    monkeypatch.setattr(pilot,'load_dataset',lambda path,role,cfg:early(train if role=='training' else dev))
+    late=dict(full=np.concatenate([train['full'][72:],dev['full'][72:]]),y=np.ones(48,np.float32),meta=train['meta'][72:]+dev['meta'][72:])
+    monkeypatch.setattr(pilot,'load_late_features',lambda _: (late,{}))
+    output=tmp_path/'run/prepared';receipt=pilot.prepare_temporal_mix(cfg,tmp_path/'old_train',tmp_path/'analysis_development',tmp_path/'late',q,output)
+    assert receipt['new_optimizer_updates']==0
+    for arm in ('bce','bce_rank'):
+        for seed in (0,1,2):
+            events=EventAccumulator(str(tmp_path/'run/tensorboard'/arm/f'seed{seed}')).Reload()
+            values=events.Scalars('train/optimizer_updates')
+            assert len(values)==1 and values[0].step==0 and values[0].value==0
+    with np.load(output/'training.npz') as z:assert z['full'].shape==(96,41)
+
+
+def test_temporal_late_feature_receipt_seal_and_bank_metadata(tmp_path):
+    train=temporal_fixture(3,2);dev=temporal_fixture(0,5)
+    features=np.concatenate([train['full'][72:],dev['full'][72:]]);y=np.ones(48,np.float32)
+    rows=[dict(m,label=1) for m in train['meta'][72:]+dev['meta'][72:]]
+    np.savez(tmp_path/'features_predictions.npz',features=features,labels=y)
+    pilot.write_json(tmp_path/'predictions.json',rows)
+    pilot.write_json(tmp_path/'receipt.json',dict(source_task_s=6.,resolved_rows=48,excluded_invalid=[],new_optimizer_updates=0))
+    pilot.write_json(tmp_path/'seal.json',{p.name:pilot.digest(p) for p in tmp_path.iterdir() if p.is_file()})
+    data,_=pilot.load_late_features(tmp_path)
+    assert data['full'].shape==(48,41) and sum(m['bank_index']==2 for m in data['meta'])==24
+    rows[0]['bank_index']=1;pilot.write_json(tmp_path/'predictions.json',rows)
+    with pytest.raises(ValueError,match='seal changed'):pilot.load_late_features(tmp_path)
+    seal=json.loads((tmp_path/'seal.json').read_text());seal['predictions.json']=pilot.digest(tmp_path/'predictions.json');pilot.write_json(tmp_path/'seal.json',seal)
+    with pytest.raises(ValueError,match='metadata mismatch'):pilot.load_late_features(tmp_path)
+
+
+def test_temporal_fit_checks_frozen_preparation_before_optimizer(tmp_path,monkeypatch):
+    cfg=tmp_path/'cfg.json';pilot.write_json(cfg,temporal_config());prepared=tmp_path/'prepared';prepared.mkdir()
+    (prepared/'training.npz').write_bytes(b'corrupt')
+    pilot.write_json(prepared/'seal.json',{'training.npz':'originalsha'})
+    monkeypatch.setattr(pilot,'ranking_fit',lambda *a,**k:pytest.fail('optimizer entered'))
+    with pytest.raises(ValueError,match='preparation changed'):pilot.temporal_mix_fit(cfg,prepared,tmp_path/'training')
