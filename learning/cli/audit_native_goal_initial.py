@@ -26,7 +26,7 @@ def audit(root,output):
     p=json.loads((root/'plan.json').read_text());native=Path(p['native_runtime_root']).resolve()
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
-    late=p.get('mode')=='h75_late_state_tolerance48'
+    late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
     tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120')
     if late:
         original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
@@ -50,7 +50,7 @@ def audit(root,output):
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
         if tolerance and np.any(carry.prev_alpha!=np.asarray([c['alpha'] for c in json.loads((root/'inventory.json').read_text())])):raise ValueError('online initial previous alpha must be one')
         carry=carry.native
-    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):
+    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):
         return audit_bank144_initial(root,p,carry,output,jax,initial)
     if p.get('mode')=='h75_samestate_tolerance72':
         return audit_samestate_initial(root,p,carry,output,jax,initial)
@@ -297,9 +297,9 @@ def audit_samestate_initial(root,p,carry,output,jax,initial):
     state=carry.state;np.testing.assert_array_equal(state.tick,np.full(72,200));np.testing.assert_array_equal(state.alpha,np.ones(72))
     for flag in (state.fault,state.physical.failed,state.domain_exit):
         if np.any(flag):raise ValueError('same-state source is stopped/invalid')
-    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
+    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation' if p.get('mode')=='h75_user_late_state192' else 'native_observation_user1']
     if features.shape!=(72,351) or not np.isfinite(features).all():raise ValueError('finite72x351 source features required')
-    np.testing.assert_allclose(features[:,336],1.,atol=1e-6,rtol=0)
+    np.testing.assert_allclose(features[:,336],[c.get('source_user_alpha',1.) for c in cases],atol=1e-6,rtol=0)
     for lane,c in enumerate(cases):groups.setdefault(c['source_index'],[]).append(lane)
     if len(groups)!=4 or any(len(ids)!=18 for ids in groups.values()):raise ValueError('four source groups18 copies required')
     for ids in groups.values():
@@ -332,7 +332,7 @@ def assert_late_planner_state_preserved(before,after,jax):
 
 def audit_bank144_initial(root,p,carry,output,jax,initial):
     import numpy as np
-    late=p.get('mode')=='h75_late_state_tolerance48';count=p['protocol'].get('expected_cases',144);group_count=len(p['protocol']['source_groups']);copies=count//group_count;source_tick=round(p['protocol'].get('source_task_s',1.)/.005)
+    late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192');count=p['protocol'].get('expected_cases',144);group_count=len(p['protocol']['source_groups']);copies=count//group_count;source_tick=round(p['protocol'].get('source_task_s',1.)/.005)
     seal=json.loads((root/'sources/seal.json').read_text())
     if seal['plan_sha256']!=hashlib.sha256((root/'plan.json').read_bytes()).hexdigest():raise ValueError('source pool plan identity mismatch')
     for file,sha in seal['files'].items():
@@ -367,9 +367,9 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
     state=carry.state;np.testing.assert_array_equal(state.tick,np.full(count,source_tick));np.testing.assert_array_equal(state.alpha,[c['alpha'] for c in cases])
     np.testing.assert_array_equal(state.physical.physical_tick,np.full(count,700+source_tick))
     if np.any(state.fault|state.physical.failed):raise ValueError('source pool stopped state')
-    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
+    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation' if p.get('mode')=='h75_user_late_state192' else 'native_observation_user1']
     if features.shape!=(count,351) or not np.isfinite(features).all():raise ValueError('finite144x351 source features required')
-    np.testing.assert_allclose(features[:,336],1.,atol=1e-6,rtol=0);groups={}
+    np.testing.assert_allclose(features[:,336],[c.get('source_user_alpha',1.) for c in cases],atol=1e-6,rtol=0);groups={}
     for lane,c in enumerate(cases):groups.setdefault(c['source_index'],[]).append(lane)
     if len(groups)!=group_count or any(len(ids)!=copies for ids in groups.values()):raise ValueError('declared source copy groups required')
     for ids in groups.values():

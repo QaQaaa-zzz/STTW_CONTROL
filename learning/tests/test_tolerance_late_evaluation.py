@@ -79,3 +79,32 @@ def test_source_seal_task6_identity_and_features(tmp_path):
     assert len(meta)==4 and features.shape==(4,351) and yaw.shape==(4,)
     (directory/'complete_carry.pkl').write_bytes(b'tampered')
     with pytest.raises(ValueError,match='artifact changed'):late.authenticate_late_sources(root)
+
+
+def test_user_late192_inventory_and_actual_user_rejection_not_candidate1():
+    cases=[]
+    for source in range(16):
+        user=0. if source%2==0 else .5
+        for template in inventory()[:12]:
+            c=copy.deepcopy(template);c.update(case_id=str(len(cases)),source_index=source,source_group_id=f'user_source{source}',bank_index=4 if source<8 else 6,source_user_alpha=user,alpha=user,split='late_user_development')
+            cases.append(c)
+    late.validate_inventory(cases,copy.deepcopy(cases))
+    meta=[dict(source_group_id='user0',source_user_alpha=0.,alpha=a,bank_index=4,preparation_s=p,force_N=f) for a in (0.,.5,1.) for p in (.2,.6) for f in (-64.,64.)]
+    probabilities=np.array([.7]*4+[.95]*8);report=late.rejection_report(np.ones(12),probabilities,meta)
+    assert report['0.85']['user_rows']==4 and report['0.85']['survived_but_rejected_rows']==4
+    assert report['four_hypothesis_user_gate']['user0']['qmin']==.7
+    cases[0]['alpha']=1.
+    with pytest.raises(ValueError,match='source user'):late.validate_inventory(cases,cases)
+
+
+def test_user_late_features_retain_source_user_identity_but_exclude_feature336():
+    from sttw_control import tolerance_predictor_pilot as frozen
+    indices=list(range(300,320))+list(range(337,351));cfg={'features':{'full_indices':indices}}
+    source=np.linspace(0.,1.,351,dtype=np.float32);source[336]=0.;query=source.copy();query[336]=.5
+    case=dict(source_user_alpha=0.,candidate_alpha=.5,force_N=-64.,duration_s=.1,preparation_s=.6)
+    interface=dict(speed_positive_scale_m_s=.25,speed_negative_scale_m_s=1.,steer_scale_rad=.2)
+    x=late.late_feature_row(source,query,np.array([.1,.2]),.3,case,interface,cfg,frozen)
+    assert x.shape==(41,) and x[34]==.5
+    np.testing.assert_array_equal(x[:34],source[indices])
+    case['source_user_alpha']=.5
+    with pytest.raises(ValueError,match='alpha mismatch'):late.late_feature_row(source,query,np.zeros(2),.3,case,interface,cfg,frozen)

@@ -872,3 +872,21 @@ def test_cached_half_original_rescore_uses_effective_user_not_raw_logged_user1()
     assert not np.allclose(half['task_step_costs'],one['task_step_costs'])
     np.testing.assert_array_equal(raw['effective_costs'],saved)
     assert receipt['projection_errors']['task_cost_max_absolute_error']<1e-4
+
+
+def test_user_late192_keeps_native_source_user_and_64_candidate_triplets():
+    import json
+    spec=importlib.util.spec_from_file_location('_late_inventory_runner',CLI/'../src/sttw_control/native_goal_run.py');runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
+    protocol=json.loads((CLI/'../configs/h75_user_late_state192.json').read_text());rows=runner.user_late_inventory(protocol)
+    m.validate_bank144_inventory(rows,protocol)
+    for row in rows:
+        row['event']=f"prep{row['preparation_s']:g}_F{row['force_N']:+g}"
+        row['method']=f"alpha{row['candidate_alpha']:g}"
+    groups=m.response_plot_groups(rows)
+    assert len(rows)==192 and len(groups)==64
+    for label in groups:
+        group=m.response_plot_selection(rows,label)
+        assert len(group)==3 and {r['candidate_alpha'] for r in group}=={0.,.5,1.}
+        assert len({r['source_user_alpha'] for r in group})==1
+    rows[0]['alpha']=1.
+    with pytest.raises(ValueError,match='user/query'):m.validate_bank144_inventory(rows,protocol)

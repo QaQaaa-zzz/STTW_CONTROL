@@ -21,7 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
+    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
@@ -455,7 +455,7 @@ def audit_online_publication(raw,case):
     for field in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target'):
         values=np.asarray(raw[field])[active]
         if values.shape!=(n,) or not np.isfinite(values).all():raise ValueError('invalid online scalar log '+field)
-    np.testing.assert_array_equal(raw['alpha_user'][active],np.ones(n))
+    np.testing.assert_array_equal(raw['alpha_user'][active],np.full(n,case.get('source_user_alpha',1.)))
     if case['mode']=='online_scalar':
         if not np.isin(alpha[active],[.5,1.]).all():raise ValueError('scalar alpha has undeclared slew/intermediate value')
     else:
@@ -703,7 +703,7 @@ def response_plot_selection(rows,label):
 def validate_samestate_inventory(rows,p):
     actual=[]
     for c in rows:
-        if c['mode']!='samestate_scalar' or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('same-state user/query identity drift')
+        if c['mode']!='samestate_scalar' or c['alpha']!=c.get('source_user_alpha',1.) or c['query_alpha']!=c['candidate_alpha']:raise ValueError('same-state user/query identity drift')
         if not np.isclose(c['onset_s'],p['source_task_s']+c['preparation_s'],atol=1e-8,rtol=0):raise ValueError('preparation/onset mismatch')
         if not np.isclose(c['primary_window_end_s'],c['onset_s']+c['duration_s']+p['primary_after_pulse_end_s']):raise ValueError('primary window mismatch')
         src=next(r for r in p['source_rows'] if r['source_index']==c['source_index'])
@@ -733,7 +733,7 @@ def samestate_primary_label(raw,case):
 
 def audit_samestate_query(raw,case):
     active=np.asarray(raw['active_tick'],bool);n=int(active.sum());alpha=case['candidate_alpha']
-    np.testing.assert_array_equal(raw['alpha_user'][active],np.ones(n));np.testing.assert_array_equal(raw['alpha_exec'][active],np.full(n,alpha))
+    np.testing.assert_array_equal(raw['alpha_user'][active],np.full(n,case.get('source_user_alpha',1.)));np.testing.assert_array_equal(raw['alpha_exec'][active],np.full(n,alpha))
     np.testing.assert_allclose(raw['query_observation'][active,336],alpha,atol=1e-6,rtol=0)
     np.testing.assert_array_equal(raw['channel_alpha_pair'][active],np.full((n,2),alpha))
     permitted=active&np.asarray(raw['reference_target_permitted'],bool)
@@ -744,7 +744,7 @@ def audit_samestate_query(raw,case):
     for start in range(0,n,4):
         for field in ('query_observation','composed_latent','alpha_exec','reference_target_permitted'):
             a=np.asarray(raw[field])[start:min(n,start+4)];np.testing.assert_array_equal(a,np.broadcast_to(a[0],a.shape))
-    return dict(candidate_alpha=alpha,state_user_alpha=1.,candidate_requested_at_source_s=case.get('primary_window_start_s',1.),
+    return dict(candidate_alpha=alpha,state_user_alpha=case.get('source_user_alpha',1.),candidate_requested_at_source_s=case.get('primary_window_start_s',1.),
         first_actual_permitted_query_s=float(raw['time'][np.flatnonzero(permitted)[0]]) if permitted.any() else None,
         permitted_ticks=int(permitted.sum()),masked_ticks=int((active&~permitted).sum()),checked='Scalar query held from common source; actual publication and native filters remain auditable')
 
@@ -753,7 +753,7 @@ def samestate_summary(rows):
     groups={};paired=[]
     for source in sorted({r['source_index'] for r in rows}):
         group=[r for r in rows if r['source_index']==source]
-        groups[str(source)]=dict(source_origin=group[0]['source_origin'],route=group[0]['route'],n_conditional_suffixes=len(group),
+        groups[str(source)]=dict(source_user_alpha=group[0].get('source_user_alpha',1.),source_origin=group[0]['source_origin'],route=group[0]['route'],n_conditional_suffixes=len(group),
             primary_no_fall=sum(r['primary']['no_fall_through_window'] is True for r in group),
             primary_fall=sum(r['primary']['no_fall_through_window'] is False for r in group),invalid=sum(r['primary']['no_fall_through_window'] is None for r in group),
             conditions=[dict(case_id=r['case_id'],alpha=r['candidate_alpha'],prep_s=r['preparation_s'],force_N=r['force_N'],primary=r['primary'],full_H10=r['horizons']['10']) for r in group])
@@ -775,12 +775,12 @@ def samestate_summary(rows):
 
 def validate_bank144_inventory(rows,p):
     fresh=p.get('source_initialization')=='prepared_bank_all_prefixes'
-    late=p.get('mode')=='h75_late_state_tolerance48'
+    late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
     groups={g['source_index']:g for g in p['source_groups']};actual=[]
     for c in rows:
         group=groups[c['source_index']]
         if any(c.get(k)!=v for k,v in group.items()):raise ValueError('bank source metadata drift')
-        if c['split']!=('late_state_development' if late else 'new_confirmation' if fresh else 'development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
+        if c['split']!=('late_user_development' if p.get('mode')=='h75_user_late_state192' else 'late_state_development' if late else 'new_confirmation' if fresh else 'development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=c.get('source_user_alpha',1.) or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
         if not np.isclose(c['onset_s'],p.get('source_task_s',1.)+c['preparation_s']) or not np.isclose(c['primary_window_end_s'],c['onset_s']+.1+3.):raise ValueError('bank conditional timing mismatch')
         actual.append((c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N']))
     expected=list(itertools.product(groups,p['candidate_alphas'],p['preparation_s'],p['forces_N']))
@@ -822,7 +822,7 @@ def enriched_bank_runtime_inventory(inventory,sources):
 
 def bank144_original_path_directory(root,p):
     """New banks own their generated paths; legacy banks inherit saved paths."""
-    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' or p.get('mode')=='h75_late_state_tolerance48':return root/'evaluation'
+    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' or p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192'):return root/'evaluation'
     return Path(p['samestate_source']['source'])/'evaluation'
 
 
@@ -835,7 +835,7 @@ def bank144_analysis_audit_target(out):
 
 
 def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_labels=False):
-    late=p.get('mode')=='h75_late_state_tolerance48'
+    late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
     fresh=p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' and not late
     count=p['protocol'].get('expected_cases',144);source_s=p['protocol'].get('source_task_s',1.);start_tick=round(source_s/.005);suffix_s=p['protocol'].get('new_horizon_s',9.);max_ticks=round(suffix_s/.005)
     # Reject before opening suffix status/index/raw or generating any labels.
@@ -926,7 +926,7 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
             user1_suffix_reward_components=data['user1_running_components'],cumulative_user1_suffix_components=np.cumsum(data['user1_running_components'],axis=0),terminal_adjustment=data['user1_terminal_adjustment'])
         np.savez_compressed(out/f'case_{lane:03d}_diagnostics.npz',**numeric)
     summary,paired=samestate_summary(rows)
-    summary.update(label_selection='late_same_state_all48' if late else 'new_confirmation_explicit_all144' if fresh else 'final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
+    summary.update(label_selection=('user_late_same_state_all192' if p.get('mode')=='h75_user_late_state192' else 'late_same_state_all48') if late else 'new_confirmation_explicit_all144' if fresh else 'final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
         data_role=p['data_role'] if fresh or late else 'Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.',confirmation_labels_accessed=fresh)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),analyzed_suffix_cases=len(rows),
@@ -942,10 +942,12 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
     if fresh:
         lines=['# 冻结预测器新来源确认：banks2/5 全144条件','','所有八个fixed1/hybrid前缀新生成，共1600lower；144后缀上限259200；无拟合、无bank1标签读取。两个祖先非独立训练种子。','XY仅展示task1..10实测后缀及固定原始路径；原任务/物理/主标签不变。']
     if late:lines=['# 晚期同态48后缀','','四个task6完整source×三alpha×两prep×两方向=48；16个同条件图每图三alpha。主窗source至pulseEND+3s，准备触地为负、fault为invalid。保持原worldgoal；source前已到达/接回标记保留；suffix仅展示真实task6..10轨迹，执行路径奖励为诊断。']
+    if p.get('mode')=='h75_user_late_state192':lines=['# 用户0/.5晚期同态192后缀','','16个完整task6源×三候选alpha×两prep×两方向；64个条件同图比较三候选。source用户alpha0/.5保留用于评分；候选同时查询H75两通道。主窗source至pulseEND+3s，准备期触地为负，故障invalid；整task10另报。0新前缀物理，suffix上限153600lower，0训练。']
     for label in response_plot_groups(rows):lines+=['',f'## {label}','',f'![Selected suffix XY](full_xy_{label}.png)']
     lines+=['','[所选逐例标签](results.json) · [按source分组](summary.json) · [配对](paired.json) · [身份与单独费用](receipt.json)',
         '本轮不拟合预测器。351源观测含真实速度/历史部署依赖，尚非最终小特征集。执行路径user1奖励仅诊断；四固定1来源复用，一秒hybrid源仅新800lower，后缀物理单独计费。']
     if late:lines[-1]='四个固定half task6完整源从封存online120复用，0新前缀物理；48后缀上限38400；零训练，冻结q另行评价；不把48分支当独立祖先。'
+    if p.get('mode')=='h75_user_late_state192':lines[-1]='全部16个用户0/.5的task6来源直接复用，真实新prefix=0；192后缀最多153600lower。冻结last slot1预测另行核验，非BCE；192分支不是192独立祖先。执行路径奖励按source用户评分，仅为诊断。'
     if fresh:lines[-1]='本轮只确认封存预测器；没有拟合或在线替换。全部八来源前缀1600lower，后缀单独计费；351源观测含真实速度部署依赖。'
     (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
@@ -1165,7 +1167,7 @@ def audit_tolerance_coordination(raw,case,original,replanned,interface,params,ar
         expected=proposed if permission else prev;nextlatch=nextlatch if permission else latched
         np.testing.assert_allclose(raw['alpha_exec'][tick],expected,atol=1e-7,rtol=0);assert bool(raw['rule_latched'][tick])==nextlatch
         prev=float(expected);latched=bool(nextlatch)
-    result=tolerance_alpha_statistics(raw,user);result.update(maximum_independent_probability_error=maxprob,independent_numpy_decisions_match=True,inputs='Current observation/three H75 candidates/nominal/execution path+progress/user1 request/permission and previous latch/alpha; fixed four hypothetical forces/preparations only. No actual force/onset/route/time in decision.',degraded_is_not_safety=True)
+    result=tolerance_alpha_statistics(raw,user);result.update(maximum_independent_probability_error=maxprob,independent_numpy_decisions_match=True,inputs='Current observation/three H75 candidates/nominal/execution path+progress/original speed request and declared user alpha/permission and previous latch/alpha; fixed four hypothetical forces/preparations only. No actual force/onset/route/time in decision.',degraded_is_not_safety=True)
     return result
 
 

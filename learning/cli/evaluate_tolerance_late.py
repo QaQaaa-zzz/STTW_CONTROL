@@ -1,4 +1,4 @@
-"""Evaluate frozen tolerance models on the declared task6 same-state DEV labels."""
+"""Evaluate frozen tolerance models on the declared task6 same-state48 or user192 DEV labels."""
 import argparse
 from pathlib import Path
 from sttw_control.tolerance_late_evaluation import evaluate_late
