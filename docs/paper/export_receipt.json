@@ -1,16 +1,14 @@
 {
   "images": {
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/control_architecture.svg": "ad9efc04debf38e8be23995fe3259b287c48fb3fb9631d2b939ecdda977f556e",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/current_native_preference_v1_attempt2/analysis/all_native_pair_xy.png": "efbf43766e36a1d35b07036f232d01a59d8d4c730e767157d75a86157aa0a770",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/h75_review/all_xy_force_+32.png": "74578e9b93e3f3e6c8e7645d37713f5f4b4ac53e2747ce180f1c590efb91b4aa",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/S_left_90_R1p8_xy.png": "5ce647419f41ef2ffbd66a3d909cee67c47564703af2165ef853531ce9eaa56b",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1_attempt2/analysis/full_xy_t1.6_F-64__fixed1.png": "2d513e6494b7eade70798e258487be3137de6e683d2f69f840b41e1f74c3d2a5"
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/tolerance_coordination_architecture.svg": "78dc7414531dd65f6ef4239b05b77a4676a843300e3e984b6f1a62235c76653e",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1_attempt2/analysis/full_xy_t1.6_F-64__fixed1.png": "2d513e6494b7eade70798e258487be3137de6e683d2f69f840b41e1f74c3d2a5",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_frozen_confirmation200_v1/analysis/task_xy_t1.6_F-64__bank1__routeS_right_90_R1p8__user1.0.png": "f8adfe32d13e74de8159c7cb47f33311d1bf555c4c6b019a0357185d5d24315b"
   },
-  "html_sha256": "69d6661e6f2f2c3e28d10c72af06fa8f66cb60492548f5041c2ce5bc99e2e032",
+  "html_sha256": "fbbdedaa76a682d5f2f6cfc6884b08d731e7a0eb1308b9dc91b11808553cada6",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "1f6bced996fb4521f4024530ba707012954aa6c66d2718ea04718e94c1534e91",
-  "pdf_bytes": 2441755,
+  "pdf_sha256": "2c1131b10dba6ab1ee5fadc68f553f8b3f5e878469296dec608fbd280bf84891",
+  "pdf_bytes": 1237930,
   "renderer": "existing local headless Chrome"
 }

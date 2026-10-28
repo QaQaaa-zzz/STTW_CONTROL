@@ -312,7 +312,7 @@ def evidence_manifest():
             sha256=digest(HERE/'EVIDENCE_DETAILS.md'),
             role='Full historical evidence narrative; current research decisions remain in the shared ledger'),
         image_role='Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments',
-        figures={str(p.relative_to(HERE)):digest(p) for p in FIG.glob('control_architecture.*')},
+        figures={str(p.relative_to(HERE)):digest(p) for p in sorted(FIG.glob('*architecture.*'))},
         new_physics_steps=0,optimizer_updates=0)
     (HERE/'evidence_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 
@@ -329,7 +329,7 @@ def export_draft(pdf=False):
         return f'![{alt}](data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()})'
     source=re.sub(r'!\[([^\]]*)\]\(([^)]+)\)',embed,source)
     body=markdown.markdown(source,extensions=['tables','fenced_code'])
-    css='''@page{size:A4;margin:16mm}body{font-family:"Noto Sans CJK SC",sans-serif;font-size:10pt;line-height:1.65;color:#243548;max-width:1100px;margin:24px auto}h1{font-size:19pt}h2{font-size:14pt;margin-top:1.4em}h3{font-size:11pt}h1,h2,h3{break-after:avoid}img{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:9pt}th,td{border-bottom:1px solid #ccd5de;padding:5px;vertical-align:top}tr{break-inside:avoid}blockquote{border-left:3px solid #647180;padding:5px 12px;background:#f2f5f7}pre{white-space:pre-wrap;background:#f2f5f7;padding:10px}a{color:#245b80}p{orphans:3;widows:3}@media print{body{margin:0;max-width:none}}'''
+    css='''@page{size:A4;margin:16mm}body{font-family:"Noto Sans CJK SC",sans-serif;font-size:10pt;line-height:1.65;color:#243548;max-width:1100px;margin:24px auto}h1{font-size:19pt}h2{font-size:14pt;margin-top:1.4em}h3{font-size:11pt}h1,h2,h3{break-after:avoid}img{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:9pt;break-inside:avoid}th,td{border-bottom:1px solid #ccd5de;padding:5px;vertical-align:top}tr{break-inside:avoid}blockquote{border-left:3px solid #647180;padding:5px 12px;background:#f2f5f7}pre{white-space:pre-wrap;background:#f2f5f7;padding:10px}a{color:#245b80}p{orphans:3;widows:3}@media print{body{margin:0;max-width:none}}'''
     html='<!doctype html><html lang="zh"><meta charset="utf-8"><title>STTW current research draft</title><style>'+css+'</style><body>'+body+'</body></html>'
     (HERE/'MANUSCRIPT.html').write_text(html)
     receipt=dict(images=image_inputs,html_sha256=digest(HERE/'MANUSCRIPT.html'),pdf_requested=pdf,
@@ -352,6 +352,6 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();group=parser.add_mutually_exclusive_group()
     group.add_argument('--figures-only',action='store_true');group.add_argument('--export-only',action='store_true')
     parser.add_argument('--pdf',action='store_true');args=parser.parse_args()
-    if not args.export_only:control_diagram()
+    if not args.export_only and not (FIG/'tolerance_coordination_architecture.svg').exists():control_diagram()
     evidence_manifest()
     if not args.figures_only:export_draft(pdf=args.pdf)
