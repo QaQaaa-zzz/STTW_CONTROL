@@ -42,3 +42,21 @@ def test_task_aware_inventory_same_bank_and_user_contract():
     assert len(rows)==72 and {r['method'] for r in rows}=={'task_aware'}
     rows[0]['method']='prior_last'
     with pytest.raises(ValueError,match='identity'):m.validate_prior_inventory(rows,p,task_aware=True)
+
+
+def test_degraded_user_execution_is_not_qualified_restoration():
+    import numpy as np
+    raw=dict(active_tick=np.ones(8,bool),alpha_exec=np.zeros(8),coord_degraded=np.ones(8,bool),coord_publication_withheld=np.zeros(8,bool),coord_latched_before=np.ones(8,bool),coord_qmin=np.full((8,3),.82),coord_task_mask=np.ones((8,3),bool),coord_permission=np.ones(8,bool),coord_task_aware_selected=np.ones(8,bool))
+    stats=m.tolerance_alpha_statistics(raw,0.)
+    assert stats['final_at_user'] and not stats['final_qualified_user_restoration']
+    assert not stats['final_risk_gate_satisfied'] and stats['final_user_restore_threshold']==.85
+    assert stats['user_execution_under_degraded_s']==.04
+    assert stats['fallback_selected_user_without_restore_s']==.04
+    raw['coord_latched_before'][:]=False
+    stats=m.tolerance_alpha_statistics(raw,0.)
+    assert stats['final_qualified_user_restoration'] and stats['final_risk_gate_satisfied']
+    assert stats['fallback_selected_user_without_restore_s']==0.
+    raw['coord_permission'][-1]=False
+    assert not m.tolerance_alpha_statistics(raw,0.)['final_qualified_user_restoration']
+    raw['coord_permission'][-1]=True;raw['coord_task_mask'][-1,0]=False
+    assert not m.tolerance_alpha_statistics(raw,0.)['final_qualified_user_restoration']

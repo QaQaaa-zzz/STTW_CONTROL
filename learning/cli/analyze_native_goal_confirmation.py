@@ -1129,7 +1129,25 @@ def tolerance_numpy_probabilities(params,obs,latents,yaw,interface,arm):
 def tolerance_alpha_statistics(raw,user_alpha=1.):
     n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);previous=np.r_[user_alpha,alpha[:-1]]
     departures=np.flatnonzero((previous==user_alpha)&(alpha!=user_alpha));returns=np.flatnonzero((previous!=user_alpha)&(alpha==user_alpha));switch=np.flatnonzero(previous!=alpha)
-    return dict(observed_s=n*.005,ever_departed=bool(len(departures)),ever_returned_after_departure=bool(len(returns)),final_returned_to_user=bool(len(departures) and alpha[-1]==user_alpha),final_at_user=bool(alpha[-1]==user_alpha),final_alpha=float(alpha[-1]),switch_count=len(switch),switch_times_s=(switch*.005).tolist(),departure_times_s=(departures*.005).tolist(),return_times_s=(returns*.005).tolist(),nonuser_duration_s=float(np.sum(alpha!=user_alpha)*.005),degraded_duration_s=float(np.sum(raw['coord_degraded'][:n])*.005),permission_withheld_duration_s=float(np.sum(raw['coord_publication_withheld'][:n])*.005))
+    result=dict(observed_s=n*.005,ever_departed=bool(len(departures)),ever_returned_after_departure=bool(len(returns)),final_returned_to_user=bool(len(departures) and alpha[-1]==user_alpha),final_at_user=bool(alpha[-1]==user_alpha),final_alpha=float(alpha[-1]),switch_count=len(switch),switch_times_s=(switch*.005).tolist(),departure_times_s=(departures*.005).tolist(),return_times_s=(returns*.005).tolist(),nonuser_duration_s=float(np.sum(alpha!=user_alpha)*.005),degraded_duration_s=float(np.sum(raw['coord_degraded'][:n])*.005),permission_withheld_duration_s=float(np.sum(raw['coord_publication_withheld'][:n])*.005))
+
+
+    # Being executed at the user's alpha is distinct from satisfying the
+    # risk/task/publication gate that would restore that alpha normally.
+    result['user_execution_under_degraded_s']=float(np.sum((alpha==user_alpha)&np.asarray(raw['coord_degraded'][:n],bool))*.005)
+    required=('coord_latched_before','coord_qmin','coord_task_mask','coord_permission')
+    available=all(k in raw for k in required)
+    result.update(user_restoration_gate_observed=available,final_user_qmin=None,final_user_restore_threshold=None,final_user_task_feasible=None,final_publication_permitted=None,final_risk_gate_satisfied=None,final_qualified_user_restoration=None,fallback_selected_user_without_restore_s=None)
+    if available:
+        ui=int(round(user_alpha*2));q=np.asarray(raw['coord_qmin'][:n])[:,ui]
+        threshold=np.where(np.asarray(raw['coord_latched_before'][:n],bool),.85,.8)
+        task=np.asarray(raw['coord_task_mask'][:n],bool)[:,ui];permission=np.asarray(raw['coord_permission'][:n],bool)
+        gate=(q>=threshold)&task&permission
+        result.update(final_user_qmin=float(q[-1]),final_user_restore_threshold=float(threshold[-1]),final_user_task_feasible=bool(task[-1]),final_publication_permitted=bool(permission[-1]),final_risk_gate_satisfied=bool(gate[-1]),final_qualified_user_restoration=bool(alpha[-1]==user_alpha and gate[-1]))
+        if 'coord_task_aware_selected' in raw:
+            selected=np.asarray(raw['coord_task_aware_selected'][:n],bool)
+            result['fallback_selected_user_without_restore_s']=float(np.sum(selected&(alpha==user_alpha)&~gate)*.005)
+    return result
 
 
 def audit_tolerance_coordination(raw,case,original,replanned,interface,params,arm_index=None):
@@ -1814,6 +1832,8 @@ def preference_summary(rows):
             group=[r for r in rows if r['effective_user_alpha']==user and r['method']==method]
             if len(group)!=24:raise ValueError('24 conditions per user/method required')
             summary[str(user)][method]=dict(cases=24,goal_arrived=sum(r['horizons']['10']['goal_arrived'] is True for r in group),contact=sum(r['horizons']['10']['physical_outcome']=='contact' for r in group),unknown=sum(r['horizons']['10']['physical_outcome']=='unknown' for r in group),final_at_user=sum(r['alpha_rule']['final_at_user'] for r in group),mean_deviation_s=float(np.mean([r['alpha_rule']['nonuser_duration_s'] for r in group])),mean_prearrival_user_s=float(np.mean([r['alpha_rule']['prearrival_alpha']['user_duration_s'] for r in group])))
+            gates=[r['alpha_rule'].get('final_qualified_user_restoration') for r in group]
+            summary[str(user)][method].update(final_qualified_user_restoration=sum(x is True for x in gates),restoration_gate_unknown=sum(x is None for x in gates),user_execution_under_degraded_s=sum(r['alpha_rule'].get('user_execution_under_degraded_s',0.) for r in group),fallback_selected_user_without_restore_s=sum(r['alpha_rule'].get('fallback_selected_user_without_restore_s') or 0. for r in group))
         for left,right in itertools.combinations(methods,2):
             a={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==left};b={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==right}
             paired.append(dict(effective_user_alpha=user,candidate=left,baseline=right,conditions=[dict(bank_index=k[0],route=k[1],event=k[2],candidate_case=a[k]['case_id'],baseline_case=b[k]['case_id'],candidate_goal=a[k]['horizons']['10']['goal_arrived'],baseline_goal=b[k]['horizons']['10']['goal_arrived'],candidate_contact=a[k]['horizons']['10']['physical_outcome'],baseline_contact=b[k]['horizons']['10']['physical_outcome'],candidate_matched_metrics=a[k]['matched_original_task_metrics'],baseline_matched_metrics=b[k]['matched_original_task_metrics']) for k in a]))
