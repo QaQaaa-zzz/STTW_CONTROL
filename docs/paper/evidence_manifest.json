@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "05cc2059d6eb3e39ede5efe0ab9eb1b12d59d4c40e80f09f4c2c6e2fd01f56bf",
-  "builder_sha256": "a8dee463359a3a3ba5b1fbf35655a629db2a947e9df1a1f1aa12105a0576626b",
+  "manuscript_sha256": "2026cfa730a6e3c6a214ddd9ea196f48e08d661bbbfc3419171ebdd9cdc05cf1",
+  "builder_sha256": "b2d61fcd7f75fa7aeb0fd686b40888ccb05e797f4c557fdbc117ef9fb8eedb5c",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1421,6 +1421,84 @@
       "sha256": "8ccb9ac3aa906884cd660d830f288fffc299d77177bc3176788165ff2785d8d9",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E237": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/plan.json",
+      "sha256": "15ec427cee52b253619476dcbc4a40300bfcd2b6a4743ad0bf3db75ffc064d7b",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E238": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/status.json",
+      "sha256": "66b4540170d8ebe8bf40e8b860d5b8230273c5da43351450064b5645f0be2720",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E239": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/root_endpoint_check.json",
+      "sha256": "08de17bcb1a98fb18eb2c8dfba833c1c8ac030c55e3e97023e52c7c1954b860e",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E240": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/receipt.json",
+      "sha256": "f4daaa1408a8b6fdd81f142de3f5be1c27034fecd5ec11cc70f5695b9f22d9ef",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E241": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/receipt.json",
+      "sha256": "239644e5dca15b518d762ba76cd6eb2aa7ce241cb9de77b157a39eae0c5c6635",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E242": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/projection_roundoff_resume.json",
+      "sha256": "3832dcd79b0e6caa5c68795e2f0afdad0df615c9ee54191b5f8a5767782a5ed9",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E243": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/plan.json",
+      "sha256": "9c1e607f88503ff36367d48c22c6f51c20f803869bd93e17ce5955b9b0f79684",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E244": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/status.json",
+      "sha256": "18f2010fe13f9275ea93009ef669949fb7f50a6c3f9e819e47680626a7997f9a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E245": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/root_endpoint_check.json",
+      "sha256": "e6ea0766fde691e23e8efc77cab8358311c46859e52066a194e81709fb383cb1",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E246": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/analysis/receipt.json",
+      "sha256": "d9100dacea5953d54c4ed86c27737c5f4aec4e8460285214affd6f81111c7d3d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E247": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/receipt.json",
+      "sha256": "1b7c093993aaf3584be0bb11cd9ff927db2cf5832b3301f6144aed341921ed80",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E248": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json",
+      "sha256": "0afeeb1569402a5ad03935b577950b1777c0b429fdf17fa0cf3da621607ecb1c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E249": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json",
+      "sha256": "8c17031fbc75c7468b19e138f8cb9f8c98e9e5d90b2e15ab01b123c11e9a57c3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1659,7 +1737,20 @@
     "E233",
     "E234",
     "E235",
-    "E236"
+    "E236",
+    "E237",
+    "E238",
+    "E239",
+    "E240",
+    "E241",
+    "E242",
+    "E243",
+    "E244",
+    "E245",
+    "E246",
+    "E247",
+    "E248",
+    "E249"
   ],
   "claims_from_readback": [
     {
@@ -1739,7 +1830,7 @@
     "figures/control_architecture.pdf": "30d824409279ca07804f1688ae9e9d190c923b5df5b1532b357b67b0e64ab0c8",
     "figures/control_architecture.png": "f86e4763fa2d1f24d6e4270df3df85abc17259218e3177b76316e6c0bc2e2f2e",
     "figures/control_architecture.svg": "ad9efc04debf38e8be23995fe3259b287c48fb3fb9631d2b939ecdda977f556e",
-    "figures/tolerance_coordination_architecture.svg": "78dc7414531dd65f6ef4239b05b77a4676a843300e3e984b6f1a62235c76653e"
+    "figures/tolerance_coordination_architecture.svg": "b6d81623cacee5ba6e6af6420628d24f80e5768dd41debeb56264afbf13b0cc0"
   },
   "new_physics_steps": 0,
   "optimizer_updates": 0

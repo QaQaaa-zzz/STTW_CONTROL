@@ -316,7 +316,20 @@ def evidence_manifest():
         'E233':archive/'h75_geometry_duration_extension240_v1/analysis/receipt.json',
         'E234':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/receipt.json',
         'E235':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/results.json',
-        'E236':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.md'}
+        'E236':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.md',
+        'E237':archive/'h75_guard_fallback_extension72_v1/plan.json',
+        'E238':archive/'h75_guard_fallback_extension72_v1/status.json',
+        'E239':archive/'h75_guard_fallback_extension72_v1/root_endpoint_check.json',
+        'E240':archive/'h75_guard_fallback_extension72_v1/analysis/receipt.json',
+        'E241':archive/'h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/receipt.json',
+        'E242':archive/'h75_guard_fallback_extension72_v1/projection_roundoff_resume.json',
+        'E243':archive/'h75_guard_fallback_regression60_v1/plan.json',
+        'E244':archive/'h75_guard_fallback_regression60_v1/status.json',
+        'E245':archive/'h75_guard_fallback_regression60_v1/root_endpoint_check.json',
+        'E246':archive/'h75_guard_fallback_regression60_v1/analysis/receipt.json',
+        'E247':archive/'h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/receipt.json',
+        'E248':archive/'h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json',
+        'E249':archive/'h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
