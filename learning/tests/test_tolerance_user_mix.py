@@ -54,3 +54,37 @@ def test_source_user_restore_diagnostics_and_separate_period_scores():
 def test_cannot_drop_or_duplicate_sourcegroup():
     train,dev=datasets();dev['meta'][-1]=copy.deepcopy(dev['meta'][-2])
     with pytest.raises(ValueError):validate_user_mix_datasets(train,dev)
+
+
+
+def test_prior_group_weights_normalized_and_original_failure_prior_restored():
+    from sttw_control.tolerance_predictor_pilot import user_mix_bce_weights
+    train,_=datasets();weights=user_mix_bce_weights(train['meta'],{'early':.75,'late':.125,'userlate':.125})
+    assert weights.sum()==pytest.approx(1.)
+    assert weights[:72].sum()==pytest.approx(.75)
+    assert weights[72:96].sum()==pytest.approx(.125)
+    assert weights[96:].sum()==pytest.approx(.125)
+    assert weights[train['y']==0].sum()==pytest.approx(15/96)
+    assert np.unique(weights[:72]).size==np.unique(weights[72:96]).size==np.unique(weights[96:]).size==1
+
+
+def test_raw_bce_unchanged_and_weighted_objective_matches_direct_sum():
+    import torch
+    from sttw_control.tolerance_predictor_pilot import bce_objective,user_mix_bce_weights
+    train,_=datasets();logits=torch.linspace(-2,3,192,requires_grad=True);labels=torch.as_tensor(train['y'])
+    raw,unweighted=bce_objective(logits,labels)
+    expected=torch.nn.functional.binary_cross_entropy_with_logits(logits,labels)
+    assert raw is unweighted
+    torch.testing.assert_close(raw,expected,rtol=0,atol=0)
+    weights=torch.as_tensor(user_mix_bce_weights(train['meta'],{'early':.75,'late':.125,'userlate':.125}))
+    raw,weighted=bce_objective(logits,labels,weights)
+    direct=sum(torch.nn.functional.binary_cross_entropy_with_logits(logits[a:b],labels[a:b])*total for a,b,total in [(0,72,.75),(72,96,.125),(96,192,.125)])
+    torch.testing.assert_close(weighted,direct)
+    weighted.backward()
+    torch.testing.assert_close(logits.grad,(logits.detach().sigmoid()-labels)*weights)
+
+
+def test_only_one_declared_prior_variant_allowed():
+    c=json.loads((Path(__file__).parents[1]/'configs/h75_tolerance_predictor_user_mix_prior.json').read_text());validate_user_mix_config(c)
+    c['bce_group_weights']['early']=.8
+    with pytest.raises(ValueError):validate_user_mix_config(c)

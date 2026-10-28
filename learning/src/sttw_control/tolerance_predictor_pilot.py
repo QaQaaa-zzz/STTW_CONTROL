@@ -332,6 +332,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
     write_json(output/'resolved_config.json',cfg)
     snapshot=output/'source';snapshot.mkdir();(snapshot/'tolerance_predictor_pilot.py').write_bytes(Path(__file__).read_bytes())
     pairs=discordant_pairs(train['y'],train['meta']);x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y'])
+    sample_weights=torch.as_tensor(user_mix_bce_weights(train['meta'],cfg['bce_group_weights'])) if user_mix and 'bce_group_weights' in cfg else None
     if temporal and any(train['meta'][i]['period']!='early' for pair in pairs for i in pair):raise ValueError('late ranking pairs forbidden by frozen all-positive dataset')
     timings['initialization_s']=time.monotonic()-started
     if temporal:write_json(output/'preparation_receipt.json',_prepared['receipt'])
@@ -351,15 +352,15 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                         if updates>=cfg['budget']['maximum_optimizer_updates']:raise ValueError('ranking optimizer budget exhausted')
                         optimized=time.monotonic()
                         model.train();optimizer.zero_grad();logits=model(x).squeeze(-1)
-                        bce=torch.nn.functional.binary_cross_entropy_with_logits(logits,y);rank=ranking_loss(logits,pairs)
-                        loss=bce+(.5 if arm=='bce_rank' else 0.)*rank
+                        bce,weighted_bce=bce_objective(logits,y,sample_weights);rank=ranking_loss(logits,pairs)
+                        loss=weighted_bce+(.5 if arm=='bce_rank' else 0.)*rank
                         if not torch.isfinite(loss):raise ValueError('nonfinite ranking loss')
                         loss.backward()
                         if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()):raise ValueError('nonfinite ranking gradient')
                         inflight=True;optimizer.step();updates+=1;inflight=False
                         timings['optimization_s']+=time.monotonic()-optimized
-                        row=dict(step=step,bce=float(bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()),development_brier=None,development_rank=None)
-                        for key in ('bce','rank_loss','total_loss'):writer.add_scalar('train/'+key,row[key],step)
+                        row=dict(step=step,bce=float(bce.detach()),weighted_bce=float(weighted_bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()),development_brier=None,development_rank=None)
+                        for key in ('bce','weighted_bce','rank_loss','total_loss'):writer.add_scalar('train/'+key,row[key],step)
                         if step%100==0:
                             validated=time.monotonic();dev_p=predict(model,dev['full'])
                             score=metrics(dev['y'],dev_p,dev['meta']);db=score['brier'];dr=score['discordant_pair_ranking']['mean']
@@ -652,10 +653,11 @@ def temporal_diagnostics(y,p,meta):
 def validate_user_mix_config(cfg):
     checked=copy.deepcopy(cfg);checked['training']['maximum_total_optimizer_updates']=6000
     validate_config(checked)
+    if 'bce_group_weights' in cfg and cfg['bce_group_weights']!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('only preregistered prior weight variant allowed')
     if (cfg['models']!=['full_state_mlp'] or cfg['architecture']['activation']!='ReLU' or cfg['training']['full_batch'] is not True or cfg['training']['precision']!='float32' or cfg['training']['maximum_total_optimizer_updates']!=3000 or cfg['training']['selection']!='fixed last1000; no development selection' or
         cfg['ranking']!=dict(arms=['bce_rank'],weight=.5,selectors=['last'],pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         cfg['budget']!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3000,automatic_extensions=False) or
-        cfg['user_mix']!=dict(train_user_bank=4,dev_user_bank=6,early_rows=72,oldlate_rows=24,userlate_rows=96,bce_weighting='equal per sample among all192; no class weights',selection='fixed last1000; no development selection',role='all seen engineering DEV; not independent TEST')):
+        cfg['user_mix']!=dict(train_user_bank=4,dev_user_bank=6,early_rows=72,oldlate_rows=24,userlate_rows=96,bce_weighting=('group totals early=.75 oldlate=.125 userlate=.125; uniform within group' if 'bce_group_weights' in cfg else 'equal per sample among all192; no class weights'),selection='fixed last1000; no development selection',role='all seen engineering DEV; not independent TEST')):
         raise ValueError('fixed user mix contract mismatch')
     return cfg
 
@@ -719,17 +721,38 @@ def prepare_user_mix(config,ancestor_prepared,user_evaluation,q_export,output):
         ids=[i for i,m in enumerate(meta) if m['bank_index']==bank];old=data[role]
         old.update(full=np.concatenate([old['full'],features[ids]]),y=np.concatenate([old['y'],labels[ids]]),meta=old['meta']+[dict(meta[i],period='userlate') for i in ids])
     validate_user_mix_datasets(data['training'],data['development'])
+    return _write_user_mix_prepared(config,cfg,data,q_export,output,started,dict(ancestor_prepared=str(Path(ancestor_prepared).resolve()),ancestor_seal_sha256=digest(Path(ancestor_prepared)/'seal.json'),user_evaluation=str(evaluation),user_evaluation_seal_sha256=digest(evaluation/'seal.json')))
+
+
+def _write_user_mix_prepared(config,cfg,data,q_export,output,started,source_identity):
+    from torch.utils.tensorboard import SummaryWriter
     output.mkdir(parents=True)
     for role,values in data.items():
         np.savez(output/(role+'.npz'),full=values['full'],y=values['y'])
         write_json(output/(role+'.json'),{k:v for k,v in values.items() if k not in ('full','y')})
+    if 'reference_dataset_files_sha256' in source_identity:
+        for name,sha in source_identity['reference_dataset_files_sha256'].items():
+            if digest(output/name)!=sha:raise ValueError('prior preparation changed sealed corpus bytes')
     tensorboard=output.parent/'tensorboard'
     for seed in (0,1,2):
         with SummaryWriter(str(tensorboard/'bce_rank'/f'seed{seed}')) as writer:writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
-    result=dict(config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),q_export=str(Path(q_export).resolve()),q_receipt_sha256=digest(Path(q_export)/'receipt.json'),tensorboard_root=str(tensorboard),ancestor_prepared=str(Path(ancestor_prepared).resolve()),ancestor_seal_sha256=digest(Path(ancestor_prepared)/'seal.json'),user_evaluation=str(evaluation),user_evaluation_seal_sha256=digest(evaluation/'seal.json'),preparation_s=time.monotonic()-started,new_optimizer_updates=0,new_physics_steps=0,roles=cfg['user_mix'])
+    result=dict(config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),q_export=str(Path(q_export).resolve()),q_receipt_sha256=digest(Path(q_export)/'receipt.json'),tensorboard_root=str(tensorboard),**source_identity,preparation_s=time.monotonic()-started,new_optimizer_updates=0,new_physics_steps=0,roles=cfg['user_mix'])
     write_json(output/'receipt.json',result);write_json(output/'seal.json',{p.name:digest(p) for p in output.iterdir() if p.is_file()})
     write_json(output.parent/'status.json',dict(phase='prepared',stage='prepared',actual_optimizer_updates=0,tensorboard_root=str(tensorboard)))
     return result
+
+
+def prepare_user_mix_reference(config,prepared_reference,output):
+    """Reuse byte-identical sealed192 corpus; only objective configuration differs."""
+    from sttw_control.tolerance_coordination import load_export
+    config=Path(config).resolve();cfg=validate_user_mix_config(json.loads(config.read_text()))
+    if 'bce_group_weights' not in cfg:raise ValueError('prepared reference requires explicit preregistered prior variant')
+    output=Path(output).resolve();started=time.monotonic()
+    if output.exists():raise ValueError('fresh prior preparation required')
+    data,receipt=_sealed_prepared_data(prepared_reference);validate_user_mix_datasets(data['training'],data['development'])
+    q_export=receipt['q_export'];load_export(q_export)
+    if digest(Path(q_export)/'receipt.json')!=receipt['q_receipt_sha256']:raise ValueError('reference comparator changed')
+    return _write_user_mix_prepared(config,cfg,data,q_export,output,started,dict(prepared_reference=str(Path(prepared_reference).resolve()),prepared_reference_seal_sha256=digest(Path(prepared_reference)/'seal.json'),reference_dataset_files_sha256={name:digest(Path(prepared_reference)/name) for name in ('training.npz','development.npz','training.json','development.json')}))
 
 
 def user_mix_fit(config,prepared,output,*,on_training_complete=None):
@@ -753,3 +776,24 @@ def user_mix_references(data,q_export):
     for seed in (0,1,2):
         model=make_model(41);model.load_state_dict(torch.load(Path(q_export)/f'temporal_rank_last_seed{seed}.pt',map_location='cpu',weights_only=True)['state_dict']);probabilities.append(predict(model,data['full']))
     return {'old_frozen_temporal_rank_last/ensemble':np.mean(probabilities,axis=0)}
+
+
+def user_mix_bce_weights(meta,group_totals):
+    """Normalized sample weights; no label-dependent weighting or resampling."""
+    if group_totals!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('undeclared group weight variant')
+    weights=np.zeros(len(meta),np.float32)
+    for group,total in group_totals.items():
+        ids=[i for i,m in enumerate(meta) if m['period']==group]
+        if len(ids)!={'early':72,'late':24,'userlate':96}[group]:raise ValueError('complete group inventory required for weights')
+        weights[ids]=total/len(ids)
+    if not np.isclose(weights.sum(),1.,atol=1e-7):raise ValueError('group weights not normalized')
+    return weights
+
+
+def bce_objective(logits,labels,sample_weights=None):
+    import torch
+    raw=torch.nn.functional.binary_cross_entropy_with_logits(logits,labels)
+    if sample_weights is None:return raw,raw
+    if sample_weights.shape!=labels.shape:raise ValueError('BCE sample weight shape differs')
+    weighted=(torch.nn.functional.binary_cross_entropy_with_logits(logits,labels,reduction='none')*sample_weights).sum()
+    return raw,weighted
