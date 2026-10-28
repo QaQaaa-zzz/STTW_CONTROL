@@ -314,7 +314,8 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
     from torch.utils.tensorboard import SummaryWriter
     started=time.monotonic();timings=dict(initialization_s=0.,sampling_s=0.,optimization_s=0.,validation_s=0.)
     config=Path(config).resolve();temporal=_prepared is not None
-    cfg=(validate_temporal_config if temporal else validate_ranking_config)(json.loads(config.read_text()))
+    raw_cfg=json.loads(config.read_text());user_mix='user_mix' in raw_cfg
+    cfg=(validate_user_mix_config if user_mix else validate_temporal_config if temporal else validate_ranking_config)(raw_cfg)
     # Enforce the development boundary before even opening the training dataset.
     if not temporal and Path(dev_analysis).name!='analysis_development':raise ValueError('development-only artifact required')
     output=Path(output).resolve()
@@ -322,10 +323,10 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
     torch.set_num_threads(1)
     if temporal:train,dev=_prepared['training'],_prepared['development']
     else:train=load_dataset(train_analysis,'training',cfg);dev=load_dataset(dev_analysis,'development',cfg)
-    expected=96 if temporal else 72
+    expected=192 if user_mix else 96 if temporal else 72
     if len(train['y'])!=expected or len(dev['y'])!=expected or len(np.unique(train['y']))!=2:raise ValueError('exact resolved training/development inventory required')
     selectors=cfg['ranking']['selectors']
-    if temporal:validate_temporal_datasets(train,dev)
+    if temporal:(validate_user_mix_datasets if user_mix else validate_temporal_datasets)(train,dev)
     output.mkdir(parents=True);updates=0;inflight=False;selected=[];progress={}
     write_json(output/'data_receipt.json',dict(train={k:v for k,v in train.items() if k not in ('full','speed','y')},development={k:v for k,v in dev.items() if k not in ('full','speed','y')}))
     write_json(output/'resolved_config.json',cfg)
@@ -339,7 +340,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
         for seed in (0,1,2):
             torch.manual_seed(seed);initial=copy.deepcopy(make_model(41).state_dict())
             init_file=output/f'initial_seed{seed}.pt';torch.save(initial,init_file)
-            for arm in ('bce','bce_rank'):
+            for arm in cfg['ranking']['arms']:
                 initialized=time.monotonic()
                 model=make_model(41);model.load_state_dict(initial);optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
                 folder=output/arm/f'seed{seed}';folder.mkdir(parents=True);writer=SummaryWriter(str(Path(_prepared['tensorboard_root'])/arm/f'seed{seed}' if temporal else folder/'tensorboard'));best={};rows=[]
@@ -347,7 +348,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                 timings['initialization_s']+=time.monotonic()-initialized
                 try:
                     for step in range(1,1001):
-                        if updates>=6000:raise ValueError('ranking optimizer budget exhausted')
+                        if updates>=cfg['budget']['maximum_optimizer_updates']:raise ValueError('ranking optimizer budget exhausted')
                         optimized=time.monotonic()
                         model.train();optimizer.zero_grad();logits=model(x).squeeze(-1)
                         bce=torch.nn.functional.binary_cross_entropy_with_logits(logits,y);rank=ranking_loss(logits,pairs)
@@ -364,7 +365,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                             score=metrics(dev['y'],dev_p,dev['meta']);db=score['brier'];dr=score['discordant_pair_ranking']['mean']
                             selection_score=db
                             if temporal:
-                                selection_score,period_scores=temporal_selection(dev['y'],dev_p,dev['meta'])
+                                selection_score,period_scores=(user_mix_selection if user_mix else temporal_selection)(dev['y'],dev_p,dev['meta'])
                                 period_scores.update(temporal_diagnostics(dev['y'],dev_p,dev['meta']))
                                 row.update(development_selection_score=selection_score,**period_scores)
                                 for metric,value in dict(selection_score=selection_score,**period_scores).items():writer.add_scalar('development/'+metric,value,step)
@@ -372,7 +373,8 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                             row.update(development_brier=db,development_rank=dr);writer.add_scalar('development/brier',db,step)
                             if dr is not None:writer.add_scalar('development/rank',dr,step)
                             for selector in selectors:
-                                key=selector_key('brier' if selector=='balanced_brier' else selector,selection_score,dr,step)
+                                if selector=='last' and step!=1000:continue
+                                key=selector_key('brier' if selector in ('balanced_brier','last') else selector,selection_score,dr,step)
                                 if selector not in best or key<best[selector]['key']:
                                     best[selector]=dict(key=key,step=step,development_brier=db,development_rank=dr,development_selection_score=selection_score,state_dict=copy.deepcopy(model.state_dict()))
                             timings['validation_s']+=time.monotonic()-validated
@@ -388,6 +390,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                         selected.append(dict(arm=arm,seed=seed,selector=selector,dim=41,file=str(path),sha256=digest(path),initial_sha256=digest(init_file),**record))
                 finally:writer.close()
         manifest=dict(experiment_id=cfg['experiment_id'],implementation_sha256=digest(__file__),source_snapshot_sha256=digest(snapshot/'tolerance_predictor_pilot.py'),config=str(config),config_sha256=digest(config),resolved_config_sha256=digest(output/'resolved_config.json'),data_receipt_sha256=digest(output/'data_receipt.json'),selected=selected,actual_optimizer_updates=updates,new_physics_steps=0,new_ppo_updates=0,heldout_release=False)
+        if user_mix:manifest.update(checkpoint_rule='fixed last1000 for all three seeds; no development selection',data_role='all seen engineering DEV; no independent TEST')
         write_json(output/'selection_manifest.json',manifest)
         if temporal:
             write_json(output/'status.json',dict(phase='training_completed',stage='training_completed',actual_optimizer_updates=updates,per_seed=progress,timings=timings))
@@ -403,13 +406,13 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
             for r in selected:
                 checkpoint=torch.load(r['file'],map_location='cpu',weights_only=True);model=make_model(41);model.load_state_dict(checkpoint['state_dict'])
                 name=f"{r['arm']}/{r['selector']}/seed{r['seed']}";p=predict(model,data['full']);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
-            for arm in ('bce','bce_rank'):
+            for arm in cfg['ranking']['arms']:
                 for selector in selectors:
                     name=f'{arm}/{selector}/ensemble';p=np.mean([predictions[f'{arm}/{selector}/seed{s}'] for s in (0,1,2)],axis=0);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
             if temporal:
-                probabilities=temporal_references(data,_prepared['q_export'])
+                probabilities=(user_mix_references if user_mix else temporal_references)(data,_prepared['q_export'])
                 probabilities.update(predictions)
-                for arm in ('bce','bce_rank'):
+                for arm in cfg['ranking']['arms']:
                     for seed in (0,1,2):
                         last=torch.load(output/arm/f'seed{seed}'/'last.pt',map_location='cpu',weights_only=True);model=make_model(41);model.load_state_dict(last['state_dict'])
                         probabilities[f'{arm}/last/seed{seed}']=predict(model,data['full'])
@@ -626,7 +629,7 @@ def temporal_metrics(data,probabilities):
     report={}
     for name,p in probabilities.items():
         report[name]={}
-        for period in ('early','late'):
+        for period in sorted({m['period'] for m in data['meta']}):
             ids=[i for i,m in enumerate(data['meta']) if m['period']==period];meta=[data['meta'][i] for i in ids];y=data['y'][ids];q=p[ids]
             gate=np.array([m['preparation_s'] in (.2,.6) for m in meta],bool)
             report[name][period]=dict(proper_and_ranking=metrics(y,q,meta),user_rejection=rejection_report(y[gate],q[gate],[m for m,keep in zip(meta,gate) if keep]),early_fall_missed_at_05=int(np.sum((y==0)&(q>=.5))) if period=='early' else None,fall_not_rejected_at_08=int(np.sum((y==0)&(q>=.8))),fall_not_rejected_at_085=int(np.sum((y==0)&(q>=.85))),falls=int(np.sum(y==0)))
@@ -635,8 +638,8 @@ def temporal_metrics(data,probabilities):
 
 def temporal_diagnostics(y,p,meta):
     y=np.asarray(y);p=np.asarray(p);values={}
-    for period in ('early','late'):
-        mask=np.array([m['period']==period for m in meta]);user=mask&np.array([m['alpha']==1. and m['preparation_s'] in (.2,.6) for m in meta])
+    for period in sorted({m['period'] for m in meta}):
+        mask=np.array([m['period']==period for m in meta]);user=mask&np.array([m['alpha']==m.get('source_user_alpha',1.) and m['preparation_s'] in (.2,.6) for m in meta])
         values[period+'_falls']=int(np.sum(mask&(y==0)))
         values[period+'_falls_missed_05']=int(np.sum(mask&(y==0)&(p>=.5)))
         values[period+'_user_rows']=int(user.sum())
@@ -644,3 +647,109 @@ def temporal_diagnostics(y,p,meta):
         values[period+'_falls_not_rejected_085']=int(np.sum(mask&(y==0)&(p>=.85)))
         for threshold,name in [(.8,'08'),(.85,'085')]:values[period+'_user_rejected_'+name]=int(np.sum(user&(p<threshold)))
     return values
+
+
+def validate_user_mix_config(cfg):
+    checked=copy.deepcopy(cfg);checked['training']['maximum_total_optimizer_updates']=6000
+    validate_config(checked)
+    if (cfg['models']!=['full_state_mlp'] or cfg['architecture']['activation']!='ReLU' or cfg['training']['full_batch'] is not True or cfg['training']['precision']!='float32' or cfg['training']['maximum_total_optimizer_updates']!=3000 or cfg['training']['selection']!='fixed last1000; no development selection' or
+        cfg['ranking']!=dict(arms=['bce_rank'],weight=.5,selectors=['last'],pairing='source_group_id/preparation_s/force_N; positive-negative only') or
+        cfg['budget']!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3000,automatic_extensions=False) or
+        cfg['user_mix']!=dict(train_user_bank=4,dev_user_bank=6,early_rows=72,oldlate_rows=24,userlate_rows=96,bce_weighting='equal per sample among all192; no class weights',selection='fixed last1000; no development selection',role='all seen engineering DEV; not independent TEST')):
+        raise ValueError('fixed user mix contract mismatch')
+    return cfg
+
+
+def validate_user_mix_datasets(train,dev):
+    for data,early_bank,late_bank,user_bank,falls in [(train,3,2,4,15),(dev,0,5,6,8)]:
+        if data['full'].shape!=(192,41) or data['y'].shape!=(192,) or len(data['meta'])!=192 or not np.isfinite(data['full']).all() or not np.isin(data['y'],[0,1]).all():raise ValueError('finite complete user mix192 required')
+        if len({m['case_id'] for m in data['meta']})!=192:raise ValueError('duplicate user mix case')
+        for period,count,bank in [('early',72,early_bank),('late',24,late_bank),('userlate',96,user_bank)]:
+            ids=[i for i,m in enumerate(data['meta']) if m['period']==period]
+            if len(ids)!=count or any(data['meta'][i]['bank_index']!=bank for i in ids):raise ValueError('user mix source bank/period split differs')
+            if period!='early' and not np.all(data['y'][ids]==1):raise ValueError('late labels differ from declared real inventory')
+            if period=='early' and np.sum(data['y'][ids]==0)!=falls:raise ValueError('early failures must be retained')
+        groups={}
+        for m in data['meta']:
+            if m['period']=='userlate':groups.setdefault(m['source_group_id'],[]).append(m)
+        expected={(a,p,f) for a in (0.,.5,1.) for p in (.2,.6) for f in (-64.,64.)}
+        expected_groups={f'bank{user_bank}/{route}/{origin}/task6' for route in ('S_left_90_R1p8','S_right_90_R1p8','S_left_60_R2p2','S_right_60_R2p2') for origin in ('user0_last','userhalf_last')}
+        if set(groups)!=expected_groups:raise ValueError('user late original source group identity differs')
+        if len(groups)!=8 or any(len(rows)!=12 or {(m['alpha'],m['preparation_s'],m['force_N']) for m in rows}!=expected for rows in groups.values()):raise ValueError('all user late source12 rows required')
+
+
+def _sealed_prepared_data(prepared):
+    prepared=Path(prepared).resolve();seal=json.loads((prepared/'seal.json').read_text())
+    for name in ('training.npz','development.npz','training.json','development.json','receipt.json'):
+        if name not in seal:raise ValueError('prepared seal incomplete')
+    for name,sha in seal.items():
+        if digest(prepared/name)!=sha:raise ValueError('prepared dataset changed')
+    datasets={}
+    for role in ('training','development'):
+        with np.load(prepared/(role+'.npz'),allow_pickle=False) as z:datasets[role]=dict(full=z['full'].copy(),y=z['y'].copy(),**json.loads((prepared/(role+'.json')).read_text()))
+    return datasets,json.loads((prepared/'receipt.json').read_text())
+
+
+def prepare_user_mix(config,ancestor_prepared,user_evaluation,q_export,output):
+    from torch.utils.tensorboard import SummaryWriter
+    from sttw_control.tolerance_coordination import load_export
+    config=Path(config).resolve();cfg=validate_user_mix_config(json.loads(config.read_text()));output=Path(output).resolve();started=time.monotonic()
+    if output.exists():raise ValueError('fresh user mix preparation required')
+    load_export(q_export)
+    data,ancestor_receipt=_sealed_prepared_data(ancestor_prepared);validate_temporal_datasets(data['training'],data['development'])
+    evaluation=Path(user_evaluation).resolve();seal=json.loads((evaluation/'seal.json').read_text())
+    for name,sha in seal.items():
+        if digest(evaluation/name)!=sha:raise ValueError('user late evaluation changed')
+    for name in ('features_predictions.npz','predictions.json','receipt.json'):
+        if name not in seal:raise ValueError('user late evaluation seal incomplete')
+    receipt=json.loads((evaluation/'receipt.json').read_text())
+    if receipt['source_task_s']!=6. or receipt['resolved_rows']!=192 or receipt['excluded_invalid'] or receipt['new_optimizer_updates']!=0:raise ValueError('real complete user late192 evaluation required')
+    inventory_path=evaluation.parent/'inventory.json'
+    if receipt.get('inputs_sha256',{}).get(str(inventory_path))!=digest(inventory_path):raise ValueError('user late original inventory changed')
+    declared=json.loads(inventory_path.read_text())
+    rows=json.loads((evaluation/'predictions.json').read_text())
+    if len(declared)!=192 or {m['case_id'] for m in declared}!={m['case_id'] for m in rows}:raise ValueError('user late labels differ from original declared inventory')
+    with np.load(evaluation/'features_predictions.npz',allow_pickle=False) as z:features=z['features'].copy();labels=z['labels'].copy()
+    if features.shape!=(192,41) or labels.shape!=(192,) or len(rows)!=192 or not np.isfinite(features).all() or not np.all(labels==1):raise ValueError('complete real positive userlate192 required')
+    meta=[]
+    for row,y in zip(rows,labels):
+        if row['label']!=y or row['source_user_alpha'] not in (0.,.5):raise ValueError('user late label/metadata mismatch')
+        meta.append({k:row[k] for k in ('case_id','source_group_id','bank_index','alpha','preparation_s','force_N','source_user_alpha')})
+    for role,bank in [('training',4),('development',6)]:
+        ids=[i for i,m in enumerate(meta) if m['bank_index']==bank];old=data[role]
+        old.update(full=np.concatenate([old['full'],features[ids]]),y=np.concatenate([old['y'],labels[ids]]),meta=old['meta']+[dict(meta[i],period='userlate') for i in ids])
+    validate_user_mix_datasets(data['training'],data['development'])
+    output.mkdir(parents=True)
+    for role,values in data.items():
+        np.savez(output/(role+'.npz'),full=values['full'],y=values['y'])
+        write_json(output/(role+'.json'),{k:v for k,v in values.items() if k not in ('full','y')})
+    tensorboard=output.parent/'tensorboard'
+    for seed in (0,1,2):
+        with SummaryWriter(str(tensorboard/'bce_rank'/f'seed{seed}')) as writer:writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
+    result=dict(config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),q_export=str(Path(q_export).resolve()),q_receipt_sha256=digest(Path(q_export)/'receipt.json'),tensorboard_root=str(tensorboard),ancestor_prepared=str(Path(ancestor_prepared).resolve()),ancestor_seal_sha256=digest(Path(ancestor_prepared)/'seal.json'),user_evaluation=str(evaluation),user_evaluation_seal_sha256=digest(evaluation/'seal.json'),preparation_s=time.monotonic()-started,new_optimizer_updates=0,new_physics_steps=0,roles=cfg['user_mix'])
+    write_json(output/'receipt.json',result);write_json(output/'seal.json',{p.name:digest(p) for p in output.iterdir() if p.is_file()})
+    write_json(output.parent/'status.json',dict(phase='prepared',stage='prepared',actual_optimizer_updates=0,tensorboard_root=str(tensorboard)))
+    return result
+
+
+def user_mix_fit(config,prepared,output,*,on_training_complete=None):
+    config=Path(config).resolve();validate_user_mix_config(json.loads(config.read_text()));data,receipt=_sealed_prepared_data(prepared)
+    if receipt['config_sha256']!=digest(config) or receipt['implementation_sha256']!=digest(__file__):raise ValueError('prepared user mix configuration/source changed')
+    if digest(Path(receipt['q_export'])/'receipt.json')!=receipt['q_receipt_sha256']:raise ValueError('old last comparator changed')
+    validate_user_mix_datasets(data['training'],data['development'])
+    data.update(receipt=receipt,q_export=receipt['q_export'],tensorboard_root=receipt['tensorboard_root'])
+    return ranking_fit(config,None,None,output,_prepared=data,on_training_complete=on_training_complete)
+
+
+def user_mix_selection(y,p,meta):
+    values={period+'_brier':float(np.mean((np.asarray(p)[[m['period']==period for m in meta]]-np.asarray(y)[[m['period']==period for m in meta]])**2)) for period in ('early','late','userlate')}
+    return float(np.mean((np.asarray(p)-np.asarray(y))**2)),values
+
+
+def user_mix_references(data,q_export):
+    import torch
+    from sttw_control.tolerance_coordination import load_export
+    load_export(q_export);probabilities=[]
+    for seed in (0,1,2):
+        model=make_model(41);model.load_state_dict(torch.load(Path(q_export)/f'temporal_rank_last_seed{seed}.pt',map_location='cpu',weights_only=True)['state_dict']);probabilities.append(predict(model,data['full']))
+    return {'old_frozen_temporal_rank_last/ensemble':np.mean(probabilities,axis=0)}

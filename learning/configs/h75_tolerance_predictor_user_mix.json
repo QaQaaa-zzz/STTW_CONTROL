@@ -1,0 +1,140 @@
+{
+  "experiment_id": "STTW-H75-TOLERANCE-USER-MIX-V1",
+  "purpose": "Bounded seen DEV user-late coverage fit; fixed last1000, no model selection or online replacement",
+  "data": {
+    "train": "sealed temporal prepared training96 + userlate bank4 96",
+    "development": "sealed temporal prepared development96 + userlate bank6 96",
+    "split_unit": "source bank; no random row split",
+    "prior_control_exposure": "all seen engineering DEV; no independent TEST"
+  },
+  "target": "No physical fall from common source task1 through hypothetical pulseEND+3seconds; preparation falls negative, faults invalid",
+  "features": {
+    "source_schema": "native clipped scaled H75 observation351",
+    "full_indices": [
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342,
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350
+    ],
+    "speed_indices": [
+      304
+    ],
+    "shared": [
+      "candidate_alpha",
+      "initial_native_target_speed_offset_div1",
+      "initial_native_target_steer_offset_div0.2",
+      "hypothetical_body_long_force_div64",
+      "hypothetical_body_lateral_force_div64",
+      "duration_div0.1",
+      "preparation_div0.6"
+    ],
+    "full_dim": 41,
+    "speed_dim": 8,
+    "force_transform": "Fx_body=Fy_world*sin(source_world_yaw); Fy_body=Fy_world*cos(source_world_yaw)",
+    "timing": "Source prebranch observation, latest history frame; prove alignment with actual source physical state and first query. Initial candidate offsets are native tanh mapping of first pre-force queried latent, not future applied references.",
+    "scaling": "Preserve native fixed scales/clipping; no fitted population normalizer",
+    "limitations": "Latest frame only, not full hidden history; true simulation forward speed requires deployment estimator. Speed-state ablation still receives full-H75-derived candidate offsets; not pure speed-only or future-speed forecast."
+  },
+  "models": [
+    "full_state_mlp"
+  ],
+  "architecture": {
+    "hidden": [
+      16,
+      16
+    ],
+    "activation": "ReLU",
+    "output": "one logit; sigmoid only for probability reporting"
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "full_batch": true,
+    "updates_per_model_seed": 1000,
+    "maximum_total_optimizer_updates": 3000,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "loss": "BCE + 0.5 mean softplus(-(positive_logit-negative_logit))",
+    "precision": "float32",
+    "device": "CPU",
+    "development_every_updates": 100,
+    "selection": "fixed last1000; no development selection",
+    "seed_aggregation": "Report every seed and equal-weight mean predictions; do not pick best seed",
+    "prior": "train no-fall fraction; clip only scoring probabilities to [1e-7,1-1e-7]",
+    "stop": "Fixed3000 total updates or engineering/nonfinite stop; no continuation",
+    "tensorboard": "reuse project6006 when compatible; verify HTTP and run scalars before fit; no other project service interruption"
+  },
+  "evaluation": {
+    "release": "none; development-only experiment",
+    "metrics": [
+      "Brier",
+      "logloss",
+      "threshold0.5 confusion",
+      "ROC-AUC and PR-AUC only if both classes",
+      "same-source/prep/direction alpha-discordant group pair ranking with denominator"
+    ],
+    "uncertainty": "descriptive groups; seeds are optimizer randomness, not independent physical states",
+    "single_class": "still report proper scores/confusion/prior; mark discrimination not identifiable",
+    "online": "No replacement or new controller rollouts; prediction performance distinct from selection gain"
+  },
+  "budget": {
+    "new_physics_steps": 0,
+    "new_ppo_updates": 0,
+    "maximum_optimizer_updates": 3000,
+    "automatic_extensions": false
+  },
+  "ranking": {
+    "arms": [
+      "bce_rank"
+    ],
+    "weight": 0.5,
+    "selectors": [
+      "last"
+    ],
+    "pairing": "source_group_id/preparation_s/force_N; positive-negative only"
+  },
+  "user_mix": {
+    "train_user_bank": 4,
+    "dev_user_bank": 6,
+    "early_rows": 72,
+    "oldlate_rows": 24,
+    "userlate_rows": 96,
+    "bce_weighting": "equal per sample among all192; no class weights",
+    "selection": "fixed last1000; no development selection",
+    "role": "all seen engineering DEV; not independent TEST"
+  }
+}
