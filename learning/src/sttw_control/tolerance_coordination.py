@@ -244,3 +244,19 @@ def verify_temporal_candidates(manifest_path):
             Path(row['file'])!=expected or sha(expected)!=row['sha256'] or row['initial_sha256']!=selected['initial_sha256'] or row['dim']!=41 or row['step']!=(selected['step'] if row['slot']==0 else 1000)):
             raise ValueError('temporal candidate weight identity changed')
     return manifest,source,frozen
+
+
+def speedcap_latent(alpha1_latent,nominal,max_curvature,interface):
+    """Cap only native alpha1 speed target; retain its steering latent exactly."""
+    import jax.numpy as j
+    offsets=native_offsets(alpha1_latent,interface)
+    lo,hi=interface['speed_reference_bounds_m_s']
+    original=j.clip(nominal[0]+offsets[0],lo,hi)
+    cap=j.where(max_curvature>0,j.sqrt(3./j.maximum(max_curvature,1e-12)),j.inf)
+    requested=j.minimum(original,cap)
+    desired=requested-nominal[0]
+    scale=j.where(desired>=0,interface['speed_positive_scale_m_s'],interface['speed_negative_scale_m_s'])
+    bounded=j.clip(desired/scale,-1.+1e-6,1.-1e-6)
+    z=alpha1_latent.at[0].set(j.arctanh(bounded))
+    reachable=j.clip(nominal[0]+bounded*scale,lo,hi)
+    return z,dict(cap_m_s=cap,requested_target_m_s=requested,reachable_target_m_s=reachable,h75_target_m_s=original,active=j.abs(reachable-original)>1e-6)

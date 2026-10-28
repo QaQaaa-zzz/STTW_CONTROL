@@ -1,0 +1,122 @@
+{
+  "experiment_id": "STTW-H75-TOLERANCE-BROADEN120-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 120,
+  "maximum_lower_ticks": 240000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    2.2
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_left_60_R2p2",
+      "speed": 2.6
+    },
+    {
+      "route": "S_right_60_R2p2",
+      "speed": 2.6
+    }
+  ],
+  "zero_onset_s": 2.2,
+  "replan_cadence_s": 1.0,
+  "question": "Frozen last tolerance coordination across new prepared states, four routes and fixed2.2s pulses versus active speed cap and scalar controls.",
+  "data_role": "Bounded frozen-candidate scenario extension; familiar routes; prepared states are not independent training seeds.",
+  "stop_rule": "Exactly120 new H10, maximum240000 lower ticks,0optimizer; no automatic extension or physical reruns.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Common planner at1..9s reads measured state before next chunk; latch is preserved when execution path changes. No event time, force, route label or task clock enters alpha decision.",
+  "interpretation": "Frozen temporal rank last slot1, no model reselection. Speed cap preserves alpha1 steering and original native authority/filter/permissions.",
+  "scoring": "Goal1m and truecontact primary, nominal losses retained; user1 execution-path costs diagnostic, original-S errors descriptive after replanning.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Fixed hypothetical queries are independent of real event timing; actual pulse at2.2s enters physics only.",
+  "decision_rules": {
+    "primary": "Paired goal/contact/original-task loss versus fixed1 and task_guard_only; retain every case and nominal loss."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5
+  },
+  "bank_indices": [
+    4,
+    6
+  ],
+  "bank_state_fingerprints": {
+    "4": "1863f7152f8f0d675a949e7f1ef27547f93875117e06fc6113d8b030bc49dce3",
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "arms": [
+    "temporal_rank_last",
+    "task_guard_only",
+    "fixed_half",
+    "fixed1",
+    "speedcap"
+  ],
+  "initialization": "Authenticated complete prepared banks4/6 reset; identical native reset across five arms; no old physical trajectory reuse.",
+  "initial_bank_note": "initial_bank3 is ancestor metadata only; actual reset banks4/6.",
+  "mode": "tolerance_broaden120",
+  "predictor_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1/online_candidate_manifest.json",
+  "coordination": {
+    "frequency_hz": 50,
+    "candidate_alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "hypothetical_forces_N": [
+      -64.0,
+      64.0
+    ],
+    "hypothetical_preparation_s": [
+      0.2,
+      0.6
+    ],
+    "hypothetical_duration_s": 0.1,
+    "aggregation": "minimum of four hypotheses after equal mean of three seed sigmoid probabilities",
+    "task_preview_m": 6.0,
+    "task_accel_limit_m_s2": 3.0,
+    "q_enter": 0.8,
+    "q_restore": 0.85,
+    "fallback_alpha": 0.5,
+    "initial_alpha": 1.0,
+    "outer_alpha_slew": false,
+    "dwell_s": 0.0,
+    "proxy_cost_weights": [
+      1.0,
+      0.1,
+      0.05,
+      0.02
+    ]
+  },
+  "arm_to_export_index": {
+    "temporal_rank_last": 1,
+    "task_guard_only": 1,
+    "fixed_half": 1,
+    "fixed1": 1,
+    "speedcap": 1
+  },
+  "new_physical_cases": 120
+}
