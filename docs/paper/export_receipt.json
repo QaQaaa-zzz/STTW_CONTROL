@@ -3,13 +3,14 @@
     "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/tolerance_coordination_architecture.svg": "78dc7414531dd65f6ef4239b05b77a4676a843300e3e984b6f1a62235c76653e",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1_attempt2/analysis/full_xy_t1.6_F-64__fixed1.png": "2d513e6494b7eade70798e258487be3137de6e683d2f69f840b41e1f74c3d2a5",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_frozen_confirmation200_v1/analysis/task_xy_t1.6_F-64__bank1__routeS_right_90_R1p8__user1.0.png": "f8adfe32d13e74de8159c7cb47f33311d1bf555c4c6b019a0357185d5d24315b",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/analysis/full_xy_t3.4_F+64__bank1__routeS_right_90_R1p8__user1.0.png": "c02ae9d6ce920669bfd129155cd06be0da12add13ba95907339e271926873ecf"
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/analysis/full_xy_t3.4_F+64__bank1__routeS_right_90_R1p8__user1.0.png": "c02ae9d6ce920669bfd129155cd06be0da12add13ba95907339e271926873ecf",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png": "32a0952efa733754a810923e4fed1d9119ef23225b91b0c90a92c2ba51594c43"
   },
-  "html_sha256": "aaed0039179e5825da38c59cd7a28a9a75ba69a861445c99457d8af8a527a8d7",
+  "html_sha256": "80d1bb2182950678212a26470c5785dda0fa47a379ab9a220c49751398ded7d9",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "733e76abd98201462ed9d2caa50e760fe402e1c7f594571dd13d8b314caf2cae",
-  "pdf_bytes": 1399545,
+  "pdf_sha256": "25c2da7c18abe803539726c272a39b73a081a27139bc640c75e56177fae84ae5",
+  "pdf_bytes": 1518685,
   "renderer": "existing local headless Chrome"
 }

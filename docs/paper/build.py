@@ -308,7 +308,15 @@ def evidence_manifest():
         'E225':archive/'h75_speed_query_online60_v1/root_pair_summary.json',
         'E226':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/full_mask_paired_costs.json',
         'E227':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/receipt.json',
-        'E228':archive/'h75_speed_query_online60_v1/alpha_time_comparison/INDEX.md'}
+        'E228':archive/'h75_speed_query_online60_v1/alpha_time_comparison/INDEX.md',
+        'E229':archive/'h75_geometry_duration_extension240_v1/plan.json',
+        'E230':archive/'h75_geometry_duration_extension240_v1/status.json',
+        'E231':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.json',
+        'E232':archive/'h75_geometry_duration_extension240_v1/root_contact_mechanism_check.json',
+        'E233':archive/'h75_geometry_duration_extension240_v1/analysis/receipt.json',
+        'E234':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/receipt.json',
+        'E235':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/results.json',
+        'E236':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.md'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',

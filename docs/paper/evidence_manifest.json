@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "3e0dec47a814076a08b756c486d638fd721225d9e022eb795165861839afe7c0",
-  "builder_sha256": "b3cd0715b7f50e18f3426cbde70e8bbb49c8574a640395877e88d6ace47801c7",
+  "manuscript_sha256": "05cc2059d6eb3e39ede5efe0ab9eb1b12d59d4c40e80f09f4c2c6e2fd01f56bf",
+  "builder_sha256": "a8dee463359a3a3ba5b1fbf35655a629db2a947e9df1a1f1aa12105a0576626b",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1373,6 +1373,54 @@
       "sha256": "9d19cb26995a52fc171fa32d60c2ec74fe191c9754584e4d3fa601eaa0b888d5",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E229": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/plan.json",
+      "sha256": "df2351ae6cea9105ca08013c3e6181170ed77e699de14881214e73c5f7d19dea",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E230": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/status.json",
+      "sha256": "f7427239c011b21cabc37575e0630f6cb75511b9dbe0c543d7d4cc105c8500b1",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E231": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/root_endpoint_check.json",
+      "sha256": "74880075acf355df3605ed4145c24265779c89f8daef4e1c3f72485d8cf4d625",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E232": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/root_contact_mechanism_check.json",
+      "sha256": "08faa1f9570be1ecce9918737281e086eb265d10cd9e0ec1542e0bcf9b0ea0a7",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E233": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/receipt.json",
+      "sha256": "9378b82f500a1dfe16e7176a526f42647f2f8c467995bd54403a07fc50ed9e7a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E234": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/receipt.json",
+      "sha256": "6f3ca9df1764e55e2062c560dc4ededb5d4f01539b46d2ca8912d9515fbebe6d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E235": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/results.json",
+      "sha256": "25d258d1fbfad3ccdf7a26e3f099594afb9eb380234e5fe5265ada1af184a563",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E236": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/root_endpoint_check.md",
+      "sha256": "8ccb9ac3aa906884cd660d830f288fffc299d77177bc3176788165ff2785d8d9",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1603,7 +1651,15 @@
     "E225",
     "E226",
     "E227",
-    "E228"
+    "E228",
+    "E229",
+    "E230",
+    "E231",
+    "E232",
+    "E233",
+    "E234",
+    "E235",
+    "E236"
   ],
   "claims_from_readback": [
     {

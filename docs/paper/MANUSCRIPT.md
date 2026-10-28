@@ -2,17 +2,17 @@
 
 **Preference Conditioned Reference Control and Closed Loop Disturbance Response of a Single Track Robot with a Frozen Lower Controller**
 
-> 内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。当前性能证据见E087–E228，开发机制试验与前瞻冻结确认分开报告。历史试验与反例保留于[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)及各节源报告。
+> 内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。当前性能证据见E087–E236，开发机制试验与前瞻冻结确认分开报告。历史试验与反例保留于[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)及各节源报告。
 
 ## 摘要（中文审阅）
 
-本文研究冻结底层单轨机器人如何在有限参考权限内暂时偏离用户偏好、完成原任务并恢复偏好执行。当前原型冻结ECBC、ESO、local300及偏好条件H75网络，以41维输入、16→16 ReLU容扰MLP评价三个执行α候选，由非学习协调器结合任务代理、风险门和原参考滤波作选择；原世界目标不变，必要时共同执行一次因果Dubins重规划。当前仅验证回合内固定的用户α∈{0,0.5,1}，不宣称连续任意偏好能力。完整状态接续试验提供了准备时间改变真实触地结局的局部证据；在72个相关开发回合中，只改退化规则恢复原方案丢失的9个目标到达并保留其余63个。冻结候选的200回合前瞻确认中，三个用户下候选与guard均18/20到达、无触地；固定用户1为9/20到达且2例触地，速度支持则19/20到达且无触地。候选用户1的共同窗口任务费用比guard低约1.1%，但用户0/0.5的开发费用优势未复现，最终用户执行18/18/20也未超过guard。匹配训练条件的在线输入消融复用原全特征轨迹，新增60个速度＋查询模型回合；全特征最终执行用户为18/18/20，对照为13/0/15，但两者到达和触地计数相同，且全特征共同首达前成本均值略高。结果支持有边界的偏好协调用途，不证明容扰MLP必要性、全面优越性或安全保证，尚无实车证据。[E099–E101,E173–E174,E191–E208,E222–E227]
+本文研究冻结底层单轨机器人如何在有限参考权限内暂时偏离用户偏好、完成原任务并恢复偏好执行。当前原型冻结ECBC、ESO、local300及偏好条件H75网络，以41维输入、16→16 ReLU容扰MLP评价三个执行α候选，由非学习协调器结合任务代理、风险门和原参考滤波作选择；原世界目标不变，必要时共同执行一次因果Dubins重规划。当前仅验证回合内固定的用户α∈{0,0.5,1}，不宣称连续任意偏好能力。完整状态接续试验提供了准备时间改变真实触地结局的局部证据；在72个相关开发回合中，只改退化规则恢复原方案丢失的9个目标到达并保留其余63个。冻结候选的200回合前瞻确认中，三个用户下候选与guard均18/20到达、无触地；固定用户1为9/20到达且2例触地，速度支持则19/20到达且无触地。候选用户1的共同窗口任务费用比guard低约1.1%，但用户0/0.5的开发费用优势未复现，最终用户执行18/18/20也未超过guard。匹配训练条件的在线输入消融复用原全特征轨迹，新增60个速度＋查询模型回合；全特征最终执行用户为18/18/20，对照为13/0/15，但两者到达和触地计数相同，且全特征共同首达前成本均值略高。几何及脉冲时长扩展又出现候选相对guard新增触地，暴露全部风险门不合格时退化选择的局限。结果支持有边界的偏好协调用途，不证明容扰MLP必要性、全面优越性或安全保证，尚无实车证据。[E099–E101,E173–E174,E191–E208,E222–E236]
 
 ## Abstract (English draft)
 
-Balancing robots must reconcile user tracking preferences with the transient demands of disturbance recovery. We investigate whether bounded reference changes can support this coordination without retraining a single-track robot’s lower controller. The implemented prototype freezes state feedback, an extended-state observer, a learned lower residual, and a preference-conditioned reference policy. A small supervised tolerance predictor evaluates three discrete preference candidates; a nonlearned coordinator combines these scores with a geometric task proxy, user-priority restoration, and a task-aware fallback. Reference limits and filtering remain active, and a shared one-shot replanner preserves the original world goal. Complete-state continuation experiments show that preparation time can change contact outcomes under specific disturbances. In related development conditions, changing only the fallback restored nine lost goal arrivals while retaining 63 successes. A frozen 200-episode confirmation found identical goal-arrival and contact counts for the candidate and a strong guard without the learned risk gate; a speed-support baseline achieved more arrivals for the speed-prioritized user. A matched online input ablation improved final user-preference execution with full-state features, without improving arrival or contact counts, and with slightly higher mean prearrival task costs. These results support a bounded role for preference coordination rather than uniform baseline superiority or predictor necessity. Evidence is limited to simulation, three fixed user preferences, and related prepared-state conditions; no hardware validation or safety guarantee is established.
+Balancing robots must reconcile user tracking preferences with the transient demands of disturbance recovery. We investigate whether bounded reference changes can support this coordination without retraining a single-track robot’s lower controller. The implemented prototype freezes state feedback, an extended-state observer, a learned lower residual, and a preference-conditioned reference policy. A small supervised tolerance predictor evaluates three discrete preference candidates; a nonlearned coordinator combines these scores with a geometric task proxy, user-priority restoration, and a task-aware fallback. Reference limits and filtering remain active, and a shared one-shot replanner preserves the original world goal. Complete-state continuation experiments show that preparation time can change contact outcomes under specific disturbances. In related development conditions, changing only the fallback restored nine lost goal arrivals while retaining 63 successes. A frozen 200-episode confirmation found identical goal-arrival and contact counts for the candidate and a strong guard without the learned risk gate; a speed-support baseline achieved more arrivals for the speed-prioritized user. A matched online input ablation improved final user-preference execution with full-state features, without improving arrival or contact counts, and with slightly higher mean prearrival task costs. A geometry-and-duration extension exposed additional contacts relative to the guard and limits of the degraded fallback. These results support a bounded role for preference coordination rather than uniform baseline superiority or predictor necessity. Evidence is limited to simulation, three fixed user preferences, and related prepared-state conditions; no hardware validation or safety guarantee is established.
 
-> Internal evidence note (not part of the abstract): E099–E103 support the continuation experiments; E191–E199 support the development comparison; E200–E208 support the frozen confirmation; E209–E228 support the matched input ablations. This English draft does not change the manuscript’s non-submission-ready status.
+> Internal evidence note (not part of the abstract): E099–E103 support the continuation experiments; E191–E199 support the development comparison; E200–E208 support the frozen confirmation; E209–E228 support the matched input ablations; E229–E236 document the geometry/duration extension and its counterexamples. This English draft does not change the manuscript’s non-submission-ready status.
 
 ## 1 研究问题与相邻方法
 
@@ -183,9 +183,30 @@ permission开启时，先检查用户候选。未锁存时要求Mᵤ且qᵤ≥0.
 
 全特征用户0.5的最终18/20与mask的0/20不表示mask首达前从未执行用户。最终差异可能在到达后形成，时间总量亦不能证明首次返回更早。保留的反例为bank1左弯、用户0.5、1.6秒+64N：full最终执行用户、mask最终为0，但full更晚到达（6.31比6.19秒），同一6.19秒窗口的用户执行5.27比5.35秒、原任务成本75.9887比64.7108。另一用户1实例两者均6.25秒到达，full首达前用户执行1.47比0.06秒，成本却59.2180比57.8421。全部20条件的[执行α时序](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/alpha_time_comparison/INDEX.md)逐步保留原用户线、实际执行、各方法首达和真实观察终点。[E228] 完整[配对摘要与全部条件索引](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/root_pair_summary.md)保留60张全程XY、60张任务窗XY、20张跨用户XY及逐步/累计奖励、误差和原任务重评分。该结果支持全状态信息对这组在线偏好执行有作用，未证明普遍必要性或目标/成本支配；默认全特征冻结方案保留，无新调参或在线采用变化。[E224–E227]
 
+冻结方案还接受了几何/时长扩展：已知bank1/7、左右60/120度弯（均R2.2米、2.6米/秒），名义或世界Y±64N于2.6秒施加0.15秒。三个用户各24条件，用户1另含速度支持，共240条全新物理轨迹；实际453852底层步、268.244秒、115次重规划、0优化。真实脉冲超过q固定0.1秒假设支持，几何与行程亦变化，故不是单因素时长消融或独立新初态测试。[E229–E230]
+
+![几何时长扩展中的候选触地反例](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png)
+
+图5：bank7右60度弯、用户0.5、世界Y−64N于2.6–2.75秒；候选与fixed在真实触地处停止，guard继续到达原目标。叉号是接触终点，不把短轨迹误作全10秒返回；原路径与guard执行改路分别保留。[E231–E233]
+
+|几何/时长扩展：到达/24；触地/24|用户0|用户0.5|用户1|
+|---|---:|---:|---:|
+|任务感知候选|15；2|16；2|15；2|
+|guard|15；2|18；0|19；1|
+|fixed|15；2|17；2|14；3|
+|速度支持|不适用|不适用|14；3|
+
+表6：候选三个用户的名义条件均8/8到达、0触地，失败集中于扰动条件；相对guard，用户0.5有1个到达得益/3个损失及2例新增触地，用户1有0得益/4损失及1例新增触地。相对fixed1则保留3得2失及1例触地救援；不同对照的局部正负结果均不能互相抵销。[E231]
+
+三例相对guard新增接触均为右60度弯、−64N。保存前缀显示，第一次执行分歧在扰动前1.22/1.28秒：三候选q均不达0.8，任务代理允许0与0.5；当前degraded规则按可行候选最大q选0，guard选0.5。此时q₀约0.655–0.746，不能称0已获风险合格。到起扰时两者已同为0.5，故仅看起扰动作会漏掉进入过程；随后候选再退化选0并于3.115/3.125秒接触，此前未重规划。已分化状态下的后续q/代理差异不是同状态反事实，不能据事后差异断言哪次选择是唯一充分原因。[E232]
+
+同用户全方法共同首达前的原三项成本均值，候选/guard为用户0的91.9803/99.0437、用户0.5的68.5375/64.8244、用户1的49.4932/32.8729；候选共同首达前用户执行时长在三个用户下均低于guard。用户0局部低费用不代表更高整体效能：接触会截短共同窗口，这三项又排除了全局失败替代，不能抵消已观测到的目标/接触损失，也不与先前不同条件或方法集合的费用直接比较。[E231,E234–E236]
+
+完整[扩展分析与全部条件图](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/README.md)、[逐条件结局](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/root_endpoint_check.md)与[保存数据机制核查](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/root_contact_mechanism_check.md)保留所有失败及未知/窗口定义。这组反例限制了现有退化规则的适用范围，不抹去已有开发与匹配输入收益；进一步退化修订尚未实现或验证，不能作为本文已获改善。[E229–E236]
+
 ## 5 讨论与结论边界
 
-本研究形成了可执行且可核查的偏好协调原型：在冻结底层和有限参考权限下，显式区分原用户、执行候选、任务代理、风险评价及原目标。完整状态接续说明准备时间在局部条件改变物理结局；开发闭环比较说明退化规则可恢复特定目标损失；冻结确认则约束了收益范围，保留guard同等到达、速度支持更高到达和若干更低成本反例。两类证据不能拼接成通用防摔定理。[E099–E101,E191–E208]
+本研究形成了可执行且可核查的偏好协调原型：在冻结底层和有限参考权限下，显式区分原用户、执行候选、任务代理、风险评价及原目标。完整状态接续说明准备时间在局部条件改变物理结局；开发闭环比较说明退化规则可恢复特定目标损失；冻结确认则约束了收益范围，保留guard同等到达、速度支持更高到达和若干更低成本反例。几何/时长扩展中候选相对guard新增触地，进一步表明“全部q不合格但按相对最高q退化”并非合格恢复；这组失败限制当前规则，而非已完成修复。上述证据不能拼接成通用防摔定理。[E099–E101,E191–E208,E229–E236]
 
 容扰预测器必要性尚未建立。全特征减少部分后段保守拒绝，真实负例回顾也优于匹配mask，但样本祖先相关、失败稀少、训练与开发同属DEV。匹配在线输入消融现已显示最终用户执行的局部收益，同时保留相同目标/触地结局及首达前成本均值略高的反面证据。前瞻确认用户1仅有局部成本优势，用户0/0.5开发优势未复现；最终偏好执行和目标到达也非同一指标。保留这一有限用途比将q或限幅解释为安全保证更符合证据。[E200–E227]
 
@@ -193,7 +214,7 @@ permission开启时，先检查用户候选。未锁存时要求Mᵤ且qᵤ≥0.
 
 ## 6 证据可追溯性与稿件状态
 
-全部E编号对应[evidence_manifest.json](evidence_manifest.json)中的源路径和身份。原主稿逐次4.1–4.28、普通目标学习支路、历史图与解析式及全部反例已原文保存在[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)的2026-10-28快照；它是证据附录，唯一主稿仍为本文，唯一研究事实与下一步仍由共享台账维护。原始报告提供全部条件和曲线，不以本文压缩表替代其完整分母。[E001–E228]
+全部E编号对应[evidence_manifest.json](evidence_manifest.json)中的源路径和身份。原主稿逐次4.1–4.28、普通目标学习支路、历史图与解析式及全部反例已原文保存在[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)的2026-10-28快照；它是证据附录，唯一主稿仍为本文，唯一研究事实与下一步仍由共享台账维护。原始报告提供全部条件和曲线，不以本文压缩表替代其完整分母。[E001–E236]
 
 本次重组只使用封存产物，不新增仿真、训练、阈值选择或统计检验。当前为中文内部研究草稿，不声称满足英文期刊投稿语言、篇幅或摘要格式要求。AI产物核验不等于人类作者核验；人类最终核验、作者/资助/伦理及审批事实仍未记录，不由仿真或AI审查代填。稿件保持非投稿就绪。
 
