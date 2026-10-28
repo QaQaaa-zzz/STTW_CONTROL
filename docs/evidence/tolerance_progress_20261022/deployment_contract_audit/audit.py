@@ -193,6 +193,30 @@ def boundary_files(source,case_index,tick,decisions):
         replan=directory/f'replanned_path_{case_index:02d}.npz')
 
 
+
+def compare_boundary_field(name,actual,expected):
+    """Absolute deployment-ABI tolerances; discrete decisions remain exact.
+
+    Latent 2e-4 implies <=0.2mm/s or0.04mrad before native filtering.
+    Reference channels are bounded separately in m/s and rad, not by rtol.
+    """
+    actual=np.asarray(actual);expected=np.asarray(expected)
+    if actual.shape!=expected.shape:raise ValueError('boundary field shape differs '+name)
+    exact=name in ('alpha_exec','rule_latched','coord_permission','coord_task_mask','coord_prev_alpha','coord_latched_before','coord_degraded','coord_guard_fallback_selected','q_eligible_08','q_restore_085')
+    bounds={'coord_latents':2e-4,'coord_probabilities':5e-5,'coord_qmin':5e-5,
+            'coord_proxy_cost':1e-4,'query_observation':1e-6,
+            'filtered_offset':np.array([1e-5,2e-6]),'offsets':np.array([1e-5,2e-6]),
+            'governed':np.array([1e-5,2e-6])}
+    error=np.abs(actual.astype(float)-expected.astype(float))
+    limit=0. if exact else bounds[name]
+    ok=bool(np.all(np.isfinite(actual)) and np.all(np.isfinite(expected)) and
+            (np.array_equal(actual,expected) if exact else np.all(error<=limit)))
+    unit=['m/s','rad'] if name in ('filtered_offset','offsets','governed') else 'normalized input' if name=='query_observation' else 'dimensionless'
+    return dict(exact=exact,passed=ok,unit=unit,max_absolute_error=float(np.max(error)),
+                absolute_limit=np.asarray(limit).tolist(),
+                per_channel_max_error=error.reshape(-1,error.shape[-1]).max(axis=0).tolist() if error.ndim else [float(error)],
+                worst_index=[int(x) for x in np.unravel_index(int(np.argmax(error)),error.shape)] if error.shape else [])
+
 def coordinator_replay(source,output):
     """Five saved-state next-control previews; never dispatch physics stepping."""
     import importlib.util
@@ -219,7 +243,7 @@ def coordinator_replay(source,output):
     q=coord.load_export(source/'q')
     decisions=json.loads((source/'evaluation/replanning_decisions.json').read_text())
     index=json.loads((source/'evaluation/case_index.json').read_text())
-    output.mkdir(parents=True);records=[];arrays={};identity={}
+    output.mkdir(parents=True);records=[];arrays={};identity={};diagnostics=[]
     def sha(path):
         import hashlib
         return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -254,13 +278,31 @@ def coordinator_replay(source,output):
         _,_,command=controls(state.physical.controller,state.physical.actuator,measurement,governed,governed,state.physical.physical_tick*env.cc.dt>3.,False,env.cc,env.ac,lower_action=action,previewed=preview)
         if sha(index[ci]['raw_file'])!=index[ci]['raw_sha256']:raise ValueError('saved raw identity changed')
         with np.load(index[ci]['raw_file']) as raw:
-            comparisons=dict(coord_latents=latents,coord_probabilities=cd['probabilities'],coord_qmin=cd['qmin'],coord_task_mask=cd['task_mask'],coord_proxy_cost=cd['proxy_cost'],alpha_exec=cd['alpha'],rule_latched=cd['latched'],coord_permission=permission,filtered_offset=filtered,offsets=offsets,governed=governed)
-            for key,value in comparisons.items():np.testing.assert_allclose(value,raw[key][tick],atol=2e-5,rtol=3e-5,err_msg=f'{ci}/{tick}/{key}')
-            np.testing.assert_allclose(obs.at[336].set(cd['alpha']),raw['query_observation'][tick],atol=2e-5,rtol=3e-5)
+            comparisons=dict(coord_latents=latents,coord_probabilities=cd['probabilities'],coord_qmin=cd['qmin'],coord_task_mask=cd['task_mask'],coord_proxy_cost=cd['proxy_cost'],alpha_exec=cd['alpha'],rule_latched=cd['latched'],coord_permission=permission,coord_prev_alpha=carry.prev_alpha,coord_latched_before=carry.latched,coord_degraded=cd['degraded'],coord_guard_fallback_selected=cd['guard_fallback_selected'],filtered_offset=filtered,offsets=offsets,governed=governed)
+            errors={key:compare_boundary_field(key,value,raw[key][tick]) for key,value in comparisons.items()}
+            for name,threshold in [('q_eligible_08',.8),('q_restore_085',.85)]:
+                errors[name]=compare_boundary_field(name,np.asarray(cd['qmin'])>=threshold,raw['coord_qmin'][tick]>=threshold)
+            observed=obs.at[336].set(cd['alpha'])
+            errors['query_observation']=compare_boundary_field('query_observation',observed,raw['query_observation'][tick])
+            delta=np.asarray(observed)-raw['query_observation'][tick]
+            saved_obs=j.asarray(raw['query_observation'][tick])
+            saved_input_latents=jax.vmap(lambda a:actor.apply(upper,saved_obs.at[336].set(a)))(j.array([0.,.5,1.]))
+            latent_from_obs_delta=float(np.max(np.abs(np.asarray(saved_input_latents)-np.asarray(latents))))
+            same_input_vs_record=float(np.max(np.abs(np.asarray(saved_input_latents)-raw['coord_latents'][tick])))
+            changed=np.flatnonzero(delta)
+            diagnostics.append(dict(case_index=ci,task_tick=tick,fields=errors,
+                observation_changed_indices=changed.tolist(),observation_deltas=delta[changed].tolist(),
+                latent_difference_from_observation_rebuild=latent_from_obs_delta,
+                latent_same_saved_observation_vs_record=same_input_vs_record,
+                upper_numpy_jax_max_error=float(np.max(np.abs(portable-np.asarray(latents)))),
+                lower_numpy_jax_max_error=float(np.max(np.abs(numpy_actor(env.lower.params,np.asarray(local_obs),squash=True)-np.asarray(action))))))
         identity[index[ci]['raw_file']]=sha(index[ci]['raw_file'])
         key=f'case{ci}_tick{tick}'
         arrays.update({key+'_'+k:np.asarray(val) for k,val in dict(upper_observation=obs,latents=latents,lower_observation=local_obs,lower_action=action,governed=governed,final_command=command['final_command']).items()})
         records.append(dict(case_index=ci,case_id=index[ci]['case_id'],task_tick=tick,rebound_before_preview=files['rebind'],permission=bool(permission),base=np.asarray(command['u_nom']).tolist(),action=np.asarray(action).tolist(),steer=float(measurement[2]),expected=np.asarray(command['final_command']).tolist(),raw_fields_compared=list(comparisons)+['query_observation']))
+    (output/'boundary_error_diagnostics.json').write_text(json.dumps(diagnostics,indent=2)+'\n')
+    failed=[(d['case_index'],d['task_tick'],k) for d in diagnostics for k,v in d['fields'].items() if not v['passed']]
+    if failed:raise AssertionError('boundary ABI comparisons failed '+str(failed))
     # Reuse the existing finite command driver; run only these five new previews.
     old=Path.cwd()/'runs/deployment_contract_audit_v1'
     shutil.copyfile(old/'compose_audit.cpp',output/'compose_audit.cpp')
@@ -275,11 +317,13 @@ def coordinator_replay(source,output):
         values=line.split();i=int(values[0]);cpp=np.array(list(map(float,values[2:])))
         np.testing.assert_allclose(cpp,records[i]['expected'],atol=1e-5,rtol=1e-6);records[i]['cpp_preview']=cpp.tolist()
     np.savez_compressed(output/'boundary_previews.npz',**arrays)
+    boundary_receipt=dict(source=str(source),physical_steps=0,optimizer_updates=0,boundary_previews=records,boundary_error_diagnostics=diagnostics,source_identity=identity)
+    (output/'boundary_receipt.json').write_text(json.dumps(boundary_receipt,indent=2)+'\n')
     helper=module('_coordinator_upper_replay',Path.cwd()/'learning/src/sttw_control/coordination_replay.py')
     windows=helper.replay_upper_windows(source,output/'upper_windows',runtime=runtime)
     for file in (source/'plan.json',source/'seal.json',source/'q/receipt.json',Path(__file__),header,old/'compose_audit.cpp'):
         identity[str(file.resolve())]=sha(file)
-    receipt=dict(source=str(source),physical_steps=0,optimizer_updates=0,boundary_previews=records,source_identity=identity,upper_windows=windows,scope='Saved-state next-control previews and saved-input upper replay only; lower/final command NumPy-JAX-C++ parity has no original issued-command log comparator; no hardware or timing claim.')
+    receipt=dict(source=str(source),physical_steps=0,optimizer_updates=0,boundary_previews=records,boundary_error_diagnostics=diagnostics,source_identity=identity,upper_windows=windows,scope='Saved-state next-control previews and saved-input upper replay only; lower actor NumPy/JAX and final command C++/Python composition parity have no original issued-command log comparator; full ECBC independent parity is not tested; no hardware or timing claim.')
     (output/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(output,'5 boundary previews;0physics;0optimizer')
     return receipt

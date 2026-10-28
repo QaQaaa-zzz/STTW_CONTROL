@@ -23,3 +23,22 @@ def test_only_five_declared_saved_boundaries():
     assert len(audit.BOUNDARIES)==5
     assert len({c for c,t in audit.BOUNDARIES})==4
     with pytest.raises(ValueError):audit.boundary_files('/saved',0,204,[])
+
+
+def test_continuous_bounds_are_absolute_and_channel_specific():
+    import numpy as np
+    result=audit.compare_boundary_field('coord_latents',np.array([2.79e-5]),np.zeros(1))
+    assert result['passed']
+    import json
+    json.dumps(result)
+    assert audit.compare_boundary_field('governed',np.array([.000009,.0000019]),np.zeros(2))['passed']
+    assert not audit.compare_boundary_field('governed',np.array([0.,.0000021]),np.zeros(2))['passed']
+    # Large absolute outputs cannot acquire a large relative allowance.
+    assert not audit.compare_boundary_field('governed',np.array([100.0002,0.]),np.array([100.,0.]))['passed']
+
+
+def test_discrete_decision_and_nonfinite_are_never_relaxed():
+    import numpy as np
+    for name in ('alpha_exec','coord_task_mask','rule_latched','coord_permission','q_eligible_08','q_restore_085'):
+        assert not audit.compare_boundary_field(name,np.array([1.]),np.array([1.-1e-8]))['passed']
+    assert not audit.compare_boundary_field('coord_qmin',np.array([np.nan]),np.array([0.]))['passed']
