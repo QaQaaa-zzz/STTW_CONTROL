@@ -23,7 +23,7 @@ def analyze(root,include_heldout_labels=False,include_confirmation_labels=False)
     p=json.loads((root/'plan.json').read_text())
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -670,7 +670,7 @@ def switching_summary(rows):
 
 def response_plot_groups(rows):
     if rows and all('effective_user_alpha' in r for r in rows):return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index'])+'__route'+r['route']+'__user'+str(r['effective_user_alpha']) for r in rows))
-    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS for r in rows):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS for r in rows):
         return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index'])+'__route'+r['route'] for r in rows))
     if any(r.get('mode')=='samestate_scalar' for r in rows):
         return list(dict.fromkeys(r['event']+'__source'+str(r['source_index']) for r in rows))
@@ -685,7 +685,7 @@ def response_plot_selection(rows,label):
     if rows and all('effective_user_alpha' in r for r in rows):
         base,user=label.rsplit('__user',1);base,route=base.rsplit('__route',1);event,bank=base.rsplit('__bank',1)
         return [r for r in rows if r['event']==event and r['bank_index']==int(bank) and r['route']==route and r['effective_user_alpha']==float(user)]
-    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS for r in rows):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS for r in rows):
         base,route=label.rsplit('__route',1);event,bank=base.rsplit('__bank',1)
         return [r for r in rows if r['event']==event and r['bank_index']==int(bank) and r['route']==route]
     if any(r.get('mode')=='samestate_scalar' for r in rows):
@@ -1039,6 +1039,7 @@ def analyze_samestate(root,p):
 TOLERANCE_ARMS=('q_rank','q_bce','task_guard_only','existing_geometry','fixed_half','fixed1')
 TEMPORAL_TOLERANCE_ARMS=('temporal_rank_selected','temporal_rank_last')
 BROADEN_TOLERANCE_ARMS=('temporal_rank_last','task_guard_only','fixed_half','fixed1','speedcap')
+TASK_AWARE_ARMS=('user0_taskaware','userhalf_taskaware','user1_taskaware')
 PRIOR_ARMS=('user0_prior','userhalf_prior','user1_prior')
 USER_PREFERENCE_ARMS=('user0_last','user0_guard','user0_fixed','userhalf_last','userhalf_guard')
 
@@ -1056,8 +1057,8 @@ def load_tolerance_analysis_export(root,p):
     expected_order=['temporal_rank_selected','temporal_rank_last'] if p['mode']=='tolerance_online40' else ['bce','bce_rank']
     if p['mode']=='user_preference120':
         expected_map={a:1 for a in USER_PREFERENCE_ARMS};expected_order=['temporal_rank_selected','temporal_rank_last']
-    if p['mode']=='user_prior_online72':
-        expected_map={a:0 for a in PRIOR_ARMS};expected_order=['prior_rank_last']
+    if p['mode'] in ('user_prior_online72','task_aware_fallback72'):
+        expected_map={a:0 for a in (TASK_AWARE_ARMS if p['mode']=='task_aware_fallback72' else PRIOR_ARMS)};expected_order=['prior_rank_last']
     if p['mode']=='tolerance_broaden120':
         expected_map={a:1 for a in BROADEN_TOLERANCE_ARMS};expected_order=['temporal_rank_selected','temporal_rank_last']
     if Path(declared['directory'])!=directory or declared['receipt_sha256']!=digest(directory/'receipt.json') or declared['arm_to_export_index']!=expected_map:raise ValueError('declared frozen export identity mismatch')
@@ -1071,7 +1072,7 @@ def load_tolerance_analysis_export(root,p):
 
 def audit_tolerance_publication(raw,case):
     n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);permission=np.asarray(raw['reference_target_permitted'][:n],bool)
-    if case['mode'] not in TOLERANCE_ARMS+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+('speedcap',) or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
+    if case['mode'] not in TOLERANCE_ARMS+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS+('speedcap',) or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
     np.testing.assert_array_equal(raw['alpha_user'][:n],case.get('alpha',1.))
     np.testing.assert_array_equal(raw['coord_candidate_alpha'][:n],np.tile([0.,.5,1.],(n,1)))
     np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]))
@@ -1133,11 +1134,11 @@ def tolerance_alpha_statistics(raw,user_alpha=1.):
 
 def audit_tolerance_coordination(raw,case,original,replanned,interface,params,arm_index=None):
     n=int(np.asarray(raw['active_tick'],bool).sum());starts=np.arange(0,n,4);mode=case['mode'];arm=arm_index if arm_index is not None else 0 if mode=='q_bce' else 1
-    if mode in TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS and arm_index is None:raise ValueError('temporal predictor requires explicit bundle parameter index')
+    if mode in TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS and arm_index is None:raise ValueError('temporal predictor requires explicit bundle parameter index')
     prob,offsets=tolerance_numpy_probabilities(params,np.asarray(raw['query_observation'])[starts],np.asarray(raw['coord_latents'])[starts],np.asarray(raw['pre_upper_yaw'])[starts],interface,arm)
     np.testing.assert_allclose(raw['coord_probabilities'][starts],prob,atol=3e-5,rtol=3e-5)
     qmin=prob.min(axis=-1);np.testing.assert_allclose(raw['coord_qmin'][starts],qmin,atol=3e-5,rtol=3e-5)
-    user=case.get('effective_user_alpha',1.);ui=int(round(user*2));others=np.array([a for a in range(3) if a!=ui]);user_mode=mode in USER_PREFERENCE_ARMS+PRIOR_ARMS
+    user=case.get('effective_user_alpha',1.);ui=int(round(user*2));others=np.array([a for a in range(3) if a!=ui]);user_mode=mode in USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS
     prev=user;latched=False;path=original;maxprob=float(np.max(abs(prob-raw['coord_probabilities'][starts])))
     for j,tick in enumerate(starts):
         if replanned is not None and case.get('replan_task_tick')==tick:path=replanned
@@ -1160,7 +1161,13 @@ def audit_tolerance_coordination(raw,case,original,replanned,interface,params,ar
         eligible=taskmask[others] & ((qmin[j,others]>=.8) if useq else True);degraded=not restore and not eligible.any()
         proposed=user if restore else np.array([0.,.5,1.])[others[np.argmin(np.where(eligible,cost[others],np.inf))]] if eligible.any() else .5
         permission=bool(raw['coord_permission'][tick])
-        np.testing.assert_array_equal(raw['coord_degraded'][tick],permission and degraded and mode in TOLERANCE_ARMS[:3]+TEMPORAL_TOLERANCE_ARMS+tuple(a for a in USER_PREFERENCE_ARMS+PRIOR_ARMS if not a.endswith('_fixed')))
+        if mode in TASK_AWARE_ARMS:
+            np.testing.assert_array_equal(raw['coord_task_aware_fallback'][tick],True)
+            selected=degraded and bool(taskmask.any())
+            if selected:
+                candidates=np.flatnonzero(taskmask);best=candidates[np.lexsort((candidates,cost[candidates],-qmin[j,candidates]))[0]];proposed=float(np.array([0.,.5,1.])[best])
+            np.testing.assert_array_equal(raw['coord_task_aware_selected'][tick],selected and permission)
+        np.testing.assert_array_equal(raw['coord_degraded'][tick],permission and degraded and mode in TOLERANCE_ARMS[:3]+TEMPORAL_TOLERANCE_ARMS+tuple(a for a in USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS if not a.endswith('_fixed')))
         np.testing.assert_array_equal(raw['coord_publication_withheld'][tick],not permission)
         if mode=='existing_geometry':
             proxy=case['speed']**2*preview(1.5);nextlatch=proxy>=2.7 if latched else proxy>3.;proposed=.5 if nextlatch else 1.
@@ -1250,18 +1257,18 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,bro
 
 def rescore_original_task_analysis(root):
     p=json.loads((root/'plan.json').read_text())
-    if p['mode'] not in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72'):raise ValueError('original task rescoring requires a complete tolerance online analysis')
+    if p['mode'] not in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72'):raise ValueError('original task rescoring requires a complete tolerance online analysis')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
     rows=json.loads((root/'analysis/results.json').read_text());index=json.loads((root/'evaluation/case_index.json').read_text())
     if p['mode']=='tolerance_online40':
         cache_source=verify_online40_comparison_source(root,p)
         index+=json.loads((cache_source/'evaluation/case_index.json').read_text())
-    if p['mode']=='user_prior_online72':
+    if p['mode'] in ('user_prior_online72','task_aware_fallback72'):
         source=Path(p['comparison_source']['source']);parents=json.loads((source/'analysis/results.json').read_text())
         index += [{k:r[k] for k in ('case_id','raw_file','raw_sha256','effective_user_alpha','method')} for r in parents]
     if p['mode']=='user_preference120':
         source=Path(p['comparison_source']['source']);parents=json.loads((source/'evaluation/case_index.json').read_text());lookup={r['case_id']:r for r in parents}
-        index+=[dict(lookup[r['cached_parent_case_id']],case_id=r['case_id']) for r in rows if r.get('source_kind') in ('cached_broaden','cached_preference')]
+        index+=[dict(lookup[r['cached_parent_case_id']],case_id=r['case_id']) for r in rows if r.get('source_kind') in ('cached_broaden','cached_preference','cached_prior')]
     if len(rows)!=len(index) or [r['case_id'] for r in rows]!=[r['case_id'] for r in index]:raise ValueError('complete authenticated main comparison analysis required')
     manifest=json.loads((root/'evaluation/manifest.json').read_text())
     for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models'])):
@@ -1285,7 +1292,7 @@ def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
     import time
     started=time.monotonic()
     out=root/'analysis'/'original_task_rescoring';out.mkdir(exist_ok=False);results=[];arrays={}
-    descriptive=json.loads((root/'plan.json').read_text()).get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72')
+    descriptive=json.loads((root/'plan.json').read_text()).get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72')
     for lane,row in enumerate(rows):
         values,receipt=rescore_original_task(raws[row['case_id']],paths[analysis_path_key(row)],config,controller,keys,row.get('replan_task_tick'),broaden_cost_numerics=descriptive,task_alpha=row.get('effective_user_alpha',1.),raw_alpha=row.get('raw_user_alpha',row.get('alpha',1.)))
         arrays[row['case_id']]=values;np.savez_compressed(out/f'case_{lane:03d}.npz',**values)
@@ -1383,13 +1390,14 @@ def load_online40_comparison_cache(root,p,paths,keys,verified_files=None):
 
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
-    prior=p.get('mode')=='user_prior_online72'
-    preference=p.get('mode') in ('user_preference120','user_prior_online72')
+    fallback=p.get('mode')=='task_aware_fallback72'
+    prior=p.get('mode') in ('user_prior_online72','task_aware_fallback72')
+    preference=p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72')
     broaden=p.get('mode')=='tolerance_broaden120'
     temporal=p.get('mode')=='tolerance_online40'
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
-    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72')
+    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72')
     continuation=p.get('mode')=='h75_switching_continuation'
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=72 if prior else 40 if temporal else 120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
@@ -1406,7 +1414,7 @@ def analyze_response(root,p):
     if broaden:
         if p.get('comparison_source'):raise ValueError('broaden120 cannot reuse old physics')
         if tuple(p['protocol']['arms'])!=BROADEN_TOLERANCE_ARMS or p['protocol']['bank_indices']!=[4,6]:raise ValueError('broaden120 arm/bank identity mismatch')
-    if prior:validate_prior_inventory(inventory,p['protocol'])
+    if prior:validate_prior_inventory(inventory,p['protocol'],task_aware=fallback)
     elif preference:validate_preference_inventory(inventory,p['protocol'])
     elif confirmation:validate_confirmation_inventory(inventory,p['protocol'])
     elif online:validate_online_inventory(inventory,p['protocol'])
@@ -1543,7 +1551,7 @@ def analyze_response(root,p):
     summary,paired=preference_summary(rows) if preference else tolerance_online_summary(rows) if tolerance else confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
     if broaden:summary['original_path_v3_aggregate']='independently reconstructed three running task channels; common windows; terminal/global other channels excluded'
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
-    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=(216 if prior else 96 if preference else 120 if temporal else len(cache_rows)),comparison_source=p.get('comparison_source'),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,cached_observed_lower_ticks=sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference'))),total_observed_lower_ticks=ticks+sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference'))),newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
+    atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=(288 if fallback else 216 if prior else 96 if preference else 120 if temporal else len(cache_rows)),comparison_source=p.get('comparison_source'),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,cached_observed_lower_ticks=sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference','cached_prior'))),total_observed_lower_ticks=ticks+sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference','cached_prior'))),newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
         checked='Raw SHA, full initial audit, config/model/goal/inventory, actual pulse/clock, masked channel composition, correction chain and reconstructed execution-path V3 channels/rewards.',
         limitation='Non-task reward components reused from authenticated raw logs, not independently rederived physics. Original-path distances are descriptive sampled nearest distances; execution-path V3 is not original-user utility after replan.'))
@@ -1555,7 +1563,9 @@ def analyze_response(root,p):
     if confirmation:
         lines=['# 两初态五方法100回合确认','','全部100为本轮实际H10轨迹，不复用旧物理轨迹。两prepared bank不是独立训练种子；每bank/route/event五法完整原生初态配对。全部state/user/reward alpha=1，固定Actor查询alpha0/.5/1另列。',
                '','原世界goal1m与真实触地主终点；Zero+既有1.5m/s下限若未触发须标为本组等同Zero，不据此宣称排除了速度反馈支持。执行路径user1奖励仅诊断，重规划后不称原S严格完成。']
-    if prior:
+    if fallback:
+        lines=['# 任务可行退化选择：72新物理＋288身份匹配缓存','','每用户五方法共同观察窗口，共360逻辑记录。只有无jointeligible时的退化选择改变；风险门未满足仍记degraded，不是安全保证。工程DEV，非独立测试；0优化更新。原raw与有效用户身份保持。']
+    elif prior:
         lines=['# 用户条件先验：72新物理＋216身份匹配缓存','','用户0/.5/1 × 24条件 × prior_last，合并原last/guard/fixed共288逻辑记录；每用户四方法共同窗口。工程DEV，非独立测试；0优化更新。原raw、奖励与有效用户身份保持。']
     elif preference:
         lines=['# 离散用户偏好120新物理＋96缓存','','216逻辑记录：用户0/.5/1 × last/guard/fixed × 24条件。仅120新增物理；原raw用户/奖励不改，fixedhalf缓存有效用户.5独立重评分。执行α与用户α分开；不同用户加权奖励不直接排名物理表现。']
@@ -1596,7 +1606,7 @@ def analyze_response(root,p):
 def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpoint):
     import matplotlib.pyplot as plt
     palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00','#56B4E9','#7B3294')
-    qmethods=[r['mode'] for r in selected if r['mode'] in TEMPORAL_TOLERANCE_ARMS+('q_rank','q_bce')+tuple(a for a in USER_PREFERENCE_ARMS+PRIOR_ARMS if a.endswith('_last') or a.endswith('_prior'))]
+    qmethods=[r['mode'] for r in selected if r['mode'] in TEMPORAL_TOLERANCE_ARMS+('q_rank','q_bce')+tuple(a for a in USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS if a.endswith('_last') or a.endswith('_prior') or a.endswith('_taskaware'))]
     fig,axes=plt.subplots(5+len(qmethods),1,figsize=(12,14+2*len(qmethods)),sharex=True,layout='constrained')
     for color,row in zip(palette,selected):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];steps=np.arange(1,n+1);reward=rebuilt[row['case_id']]['user1_reward'];method=row['method']
@@ -1640,7 +1650,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
     out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
-    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS for r in rows)
+    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS for r in rows)
     checkpoint='H75 frozen';late_display=any(r.get('trace_start_s')==6. for r in rows)
     if tolerance or late_display:
         plan=json.loads((root/'plan.json').read_text());checkpoint='H75 actor SHA '+plan['models']['H75']['actor_sha256'][:12]
@@ -1771,7 +1781,8 @@ def load_user_preference_cache(root,p,paths,keys):
 def preference_common_windows(rows,raws,paths,goals):
     for label in response_plot_groups(rows):
         group=response_plot_selection(rows,label)
-        if len(group) not in (3,4) or {r['method'] for r in group}!=({'last','guard','fixed','prior_last'} if len(group)==4 else {'last','guard','fixed'}):raise ValueError('three matched methods required for each user/condition')
+        methods=preference_methods(rows)
+        if len(group)!=len(methods) or {r['method'] for r in group}!=set(methods):raise ValueError('complete matched methods required for each user/condition')
         common=min(r['active_lower_ticks'] for r in group);prefix=min(r['prefix']['ticks'] for r in group)
         for row in group:
             raw=raws[row['case_id']];user=row['effective_user_alpha'];a=raw['alpha_exec'][:row['active_lower_ticks']];n=row['prefix']['ticks']
@@ -1787,8 +1798,14 @@ def preference_common_windows(rows,raws,paths,goals):
             row['matched_original_task_metrics']=metrics
 
 
+def preference_methods(rows):
+    methods=tuple(x for x in ('last','guard','fixed','prior_last','task_aware') if any(r['method']==x for r in rows))
+    if methods not in (('last','guard','fixed'),('last','guard','fixed','prior_last'),('last','guard','fixed','prior_last','task_aware')):raise ValueError('unsupported preference method set')
+    return methods
+
+
 def preference_summary(rows):
-    methods=('last','guard','fixed','prior_last') if any(r['method']=='prior_last' for r in rows) else ('last','guard','fixed')
+    methods=preference_methods(rows)
     if len(rows)!=72*len(methods) or len(response_plot_groups(rows))!=72:raise ValueError('complete user-condition groups required')
     summary={};paired=[]
     for user in (0.,.5,1.):
@@ -1800,13 +1817,13 @@ def preference_summary(rows):
         for left,right in itertools.combinations(methods,2):
             a={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==left};b={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==right}
             paired.append(dict(effective_user_alpha=user,candidate=left,baseline=right,conditions=[dict(bank_index=k[0],route=k[1],event=k[2],candidate_case=a[k]['case_id'],baseline_case=b[k]['case_id'],candidate_goal=a[k]['horizons']['10']['goal_arrived'],baseline_goal=b[k]['horizons']['10']['goal_arrived'],candidate_contact=a[k]['horizons']['10']['physical_outcome'],baseline_contact=b[k]['horizons']['10']['physical_outcome'],candidate_matched_metrics=a[k]['matched_original_task_metrics'],baseline_matched_metrics=b[k]['matched_original_task_metrics']) for k in a]))
-    return dict(new_cases=72 if len(methods)==4 else 120,cached_cases=216 if len(methods)==4 else 96,logical_records=len(rows),per_user_method=summary,cross_user_reward_ranking='invalid: different user weights',adoption='not_automatic',data_role='Frozen candidate discrete user preference bounded engineering validation; prepared banks are not training seeds'),paired
+    return dict(new_cases=120 if len(methods)==3 else 72,cached_cases=72*len(methods)-(120 if len(methods)==3 else 72),logical_records=len(rows),per_user_method=summary,cross_user_reward_ranking='invalid: different user weights',adoption='not_automatic',data_role='Frozen candidate discrete user preference bounded engineering validation; prepared banks are not training seeds'),paired
 
 
 def render_preference_crossuser(root,rows,raws,paths,goals,executed):
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
-    out=root/'analysis';colors={0.:'#0072B2',.5:'#D55E00',1.:'#008060'};styles={'last':'-','guard':'--','fixed':':','prior_last':'-.'}
+    out=root/'analysis';colors={0.:'#0072B2',.5:'#D55E00',1.:'#008060'};styles={'last':'-','guard':'--','fixed':':','prior_last':'-.','task_aware':(0,(3,1,1,1,1,1))}
     checkpoint=json.loads((root/'plan.json').read_text())['models']['H75']['actor_sha256'][:12]
     groups=list(dict.fromkeys((r['bank_index'],r['route'],r['event']) for r in rows))
     for bank,route,event in groups:
@@ -1824,15 +1841,16 @@ def render_preference_crossuser(root,rows,raws,paths,goals,executed):
 
 
 
-def validate_prior_inventory(rows,protocol):
-    if tuple(protocol['arms'])!=PRIOR_ARMS or len(rows)!=72:raise ValueError('72 prior cases required')
+def validate_prior_inventory(rows,protocol,task_aware=False):
+    arms=TASK_AWARE_ARMS if task_aware else PRIOR_ARMS
+    if tuple(protocol['arms'])!=arms or len(rows)!=72:raise ValueError('72 prior cases required')
     expected=set()
-    for b,r,a,(force,onset) in itertools.product(protocol['bank_indices'],protocol['routes'],PRIOR_ARMS,[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))):
+    for b,r,a,(force,onset) in itertools.product(protocol['bank_indices'],protocol['routes'],arms,[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))):
         expected.add((b,r['route'],a,force,onset,protocol['duration_s']))
     actual=set()
     for row in rows:
-        user=dict(zip(PRIOR_ARMS,(0.,.5,1.)))[row['mode']]
-        if any(row[k]!=user for k in ('alpha','user_alpha','effective_user_alpha','query_alpha')) or row['method']!='prior_last':raise ValueError('prior user identity mismatch')
+        user=dict(zip(arms,(0.,.5,1.)))[row['mode']]
+        if any(row[k]!=user for k in ('alpha','user_alpha','effective_user_alpha','query_alpha')) or row['method']!=('task_aware' if task_aware else 'prior_last'):raise ValueError('prior user identity mismatch')
         if row['initial_fingerprint']!=protocol['bank_state_fingerprints'][str(row['bank_index'])] or row['path_key']!=f"bank{row['bank_index']}_"+row['route']:raise ValueError('prior bank/path mismatch')
         actual.add((row['bank_index'],row['route'],row['mode'],row['force_N'],row['onset_s'],row['duration_s']))
     if actual!=expected:raise ValueError('complete prior conditions required')
@@ -1842,10 +1860,9 @@ def load_prior_online_cache(root,p,paths,keys):
     import copy,importlib.util
     spec=importlib.util.spec_from_file_location('_prior_cache_audit',Path(__file__).with_name('audit_native_goal_initial.py'));module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     source=Path(p['comparison_source']['source'])
-    checked=module.validate_prior_online_cache(source,config=p['config'],models=p['models'],protocol=p['protocol'],initial_source=p['initial_source'],replanning=p['replanning'])
+    checked=(module.validate_task_aware_cache if p['mode']=='task_aware_fallback72' else module.validate_prior_online_cache)(source,config=p['config'],models=p['models'],protocol=p['protocol'],initial_source=p['initial_source'],replanning=p['replanning'])
     if checked!=p['comparison_source']:raise ValueError('sealed prior cache metadata differs')
-    parent_plan=json.loads((source/'plan.json').read_text());ancestor=Path(parent_plan['comparison_source']['source'])
-    ancestor_rows=json.loads((ancestor/'analysis/results.json').read_text());ancestor_lanes={r['case_id']:i for i,r in enumerate(ancestor_rows)}
+    physical_indices={}
     for key,path in paths.items():
         with np.load(source/'evaluation'/(key+'_path.npz')) as z:
             for field in ('s','xy','heading','curvature','goal','turn_end'):np.testing.assert_allclose(z[field],path[field],atol=3e-6,rtol=1e-6)
@@ -1854,12 +1871,15 @@ def load_prior_online_cache(root,p,paths,keys):
         with np.load(row['raw_file']) as z:raw=dict(z)
         changed=None;tick=row['replan_task_tick']
         if tick is not None:
-            directory=ancestor if row.get('source_kind')=='cached_broaden' else source
-            index=ancestor_lanes[row['cached_parent_case_id']] if directory==ancestor else lane
-            with np.load(directory/'evaluation'/f'replanned_path_{index:02d}.npz') as z:changed=dict(z)
+            evaluation=Path(row['raw_file']).parent.parent
+            if evaluation not in physical_indices:
+                physical_indices[evaluation]={str(Path(r['raw_file']).resolve()):i for i,r in enumerate(json.loads((evaluation/'case_index.json').read_text()))}
+            index=physical_indices[evaluation][str(Path(row['raw_file']).resolve())]
+            with np.load(evaluation/f'replanned_path_{index:02d}.npz') as z:changed=dict(z)
             executed[row['case_id']]=changed
         data=reconstruct_execution_path_reward(raw,row,paths[analysis_path_key(row)],changed,row['active_lower_ticks'] if tick is None else tick,p['config'],p['initial_source']['controller'],keys)
-        row.update(source_kind='cached_preference',cache_source=str(source),newly_simulated_lower_ticks=0)
+        row.setdefault('cache_ancestry',[]).append(dict(source=str(source),source_kind=row.get('source_kind'),cache_source=row.get('cache_source')))
+        row.update(source_kind='cached_prior' if p['mode']=='task_aware_fallback72' else 'cached_preference',cache_source=str(source),newly_simulated_lower_ticks=0)
         row['alpha_rule']=tolerance_alpha_statistics(raw,row['effective_user_alpha'])
         raws[row['case_id']]=raw;rebuilt[row['case_id']]=data
     return dict(rows=rows,raws=raws,executed=executed,rebuilt=rebuilt)
