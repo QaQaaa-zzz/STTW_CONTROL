@@ -59,3 +59,8 @@ python learning/cli/freeze_middle_lineage.py \
 [四场景同图XY及完整报告](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/RESULTS.md)
 
 冻结H75 u77、本来参考权限、同local300/ECBC/ESO，60度R2.2/2.6m/s与90度R1.8/2.8m/s各左右S，alpha0/.5/1＋zero，每条10秒。全部16不触地且过第二弯；H75严格末窗任务10/12、zero0/4，但原目标1m首达H75 10/12、zero4/4。紧S的H75 alpha1两条未达原goal且末窗路径/航向未过；zero主要未通过末窗航向保持。H75总V3成本9/12低于zero，三任务通道仅2/12较低，不把总成本优势等同全部任务更好。单祖先、已训练S家族的DEV扩覆盖；无扰动、无重规划，不宣称抗扰/泛化或安全保证。唯一研究事实与后续仍以research-hub/STTW_PROJECT_STATE.md为准。
+
+
+### 名义几何偏好往返：未采用（2026-10-28）
+
+原生H75固定不变，四个相同S场景新增两种因果规则共8回合、0训练；原16固定轨迹复用。alpha往返严格3/4、原终点首达4/4，原user1费用123.7986；固定alpha.5严格4/4、费用118.9854。普通曲率限速严格2/4。左紧S往返末窗横向误差0.1637m超过0.1m，两温和S用户费用退化；拒绝本规则，不续调阈值或直接训练容扰MLP。没有否定所有调度或扰后恢复机会。全四XY、同用户奖励与独立复核见[完整报告](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/RESULTS.md)。
