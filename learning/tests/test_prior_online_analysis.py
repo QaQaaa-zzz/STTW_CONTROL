@@ -129,26 +129,27 @@ def test_speed_query_summary_has_260_records_and_variable_user_methods():
     with pytest.raises(ValueError):m.preference_summary(rows[:-1],speed_comparison=True)
 
 
-def test_full_mask_original_cost_windows_are_separate_from_all_methods(tmp_path,monkeypatch):
+@pytest.mark.parametrize('candidate,prefix',[('speed_query','full_mask'),('guard_degraded','old_new_candidate')])
+def test_full_mask_original_cost_windows_are_separate_from_all_methods(tmp_path,monkeypatch,candidate,prefix):
     import numpy as np
     (tmp_path/'analysis').mkdir();(tmp_path/'evaluation').mkdir()
     (tmp_path/'plan.json').write_text(json.dumps(dict(mode='speed_query_online60')))
     (tmp_path/'analysis/results.json').write_text('[]')
     np.savez(tmp_path/'evaluation/p_path.npz',s=np.array([0.,1.]))
     rows=[];raws={};path=dict(s=np.array([0.,1.]),goal=1.,xy=np.array([[0.,0.],[1.,0.]]));paths={'p':path};goals={'p':np.array([1.,0.])}
-    for method,n in (('guard',2),('fixed',8),('task_aware',8),('speedcap',8),('speed_query',6)):
+    for method,n in (('guard',2),('fixed',8),('task_aware',8),('speedcap',8),(candidate,6)):
         rows.append(dict(case_id=method,method=method,mode='user1_'+method,effective_user_alpha=1.,alpha=1.,event='zero',bank_index=1,route='left',path_key='p',speed=2.8,active_lower_ticks=n,prefix={'ticks':n},diagnostic_execution_path_user1_cost=0.,horizons={'10':dict(physical_outcome='complete',goal_arrived=False)} ,alpha_rule={}))
         raws[method]=dict(alpha_exec=np.ones(n),actual_forward_speed=np.full(n,2.8),actual_xy=np.zeros((n,2)))
-    m.preference_common_windows(rows,raws,paths,goals);m.full_mask_common_windows(rows,raws,paths,goals)
+    m.preference_common_windows(rows,raws,paths,goals);m.paired_candidate_common_windows(rows,raws,paths,goals,candidate=candidate,metric_key='candidate_pair_metrics')
     assert next(r for r in rows if r['method']=='task_aware')['matched_original_task_metrics']['same_actual_window']['actual_ticks']==2
-    assert next(r for r in rows if r['method']=='task_aware')['full_mask_matched_original_task_metrics']['same_actual_window']['actual_ticks']==6
+    assert next(r for r in rows if r['method']=='task_aware')['candidate_pair_metrics']['same_actual_window']['actual_ticks']==6
     monkeypatch.setattr(m,'rescore_original_task',lambda raw,*a,**k: (dict(task_step_costs=np.ones((len(raw['alpha_exec']),3))),{}))
     results=m.write_original_task_rescoring(tmp_path,rows,raws,paths,{},None,[])
-    for method in ('task_aware','speed_query'):
+    for method in ('task_aware',candidate):
         result=next(r for r in results if r['case_id']==method)
         assert result['windows']['common_pre_first_arrival']['actual_ticks']==2
-        assert result['windows']['full_mask_common_pre_first_arrival']['actual_ticks']==6
-        assert result['windows']['full_mask_common_pre_first_arrival']['three_task_cost_sum']==18.
+        assert result['windows'][prefix+'_common_pre_first_arrival']['actual_ticks']==6
+        assert result['windows'][prefix+'_common_pre_first_arrival']['three_task_cost_sum']==18.
 
 
 def test_speed_query_inventory_matches_new60_config():
@@ -207,3 +208,53 @@ def test_legacy_frozen_protocol_remains200_and_rejects_unknown_variant():
     assert layout['cases']==200 and layout['conditions']==20 and layout['user_groups']==60
     p['expected_cases']=240
     with pytest.raises(ValueError,match='declared'):m.frozen_confirmation_layout(p)
+
+
+def guard_stage_protocol(stage):
+    p=geometry_duration_protocol() if stage=='extension' else json.loads((CLI.parent/'configs/h75_frozen_confirmation200.json').read_text())
+    p.update(stage=stage,expected_cases=72 if stage=='extension' else 60,arms=list(m.GUARD_FALLBACK_ARMS))
+    return p
+
+
+@pytest.mark.parametrize('stage,new_count,logical,conditions',[('extension',72,312,24),('regression',60,260,20)])
+def test_guard_fallback_stage_layout_summary_and_rescue_gate(stage,new_count,logical,conditions):
+    import copy
+    p=guard_stage_protocol(stage);layout=m.guard_fallback_layout(p)
+    assert layout['new_cases']==new_count and layout['logical_cases']==logical
+    rows=[]
+    for user in (0.,.5,1.):
+        for i in range(conditions):
+            for method in ('task_aware','guard','fixed','guard_degraded')+(('speedcap',) if user==1. else ()):
+                goal=False;outcome='survived';ticks=2000
+                if method=='task_aware' and i==0:outcome='contact';ticks=600
+                if method=='guard_degraded' and i==0:goal=True
+                if user==.5 and i==1:
+                    if method=='task_aware':goal=True
+                    if method=='guard_degraded':outcome='contact';ticks=650
+                rows.append(dict(case_id=f'{user}/{i}/{method}',effective_user_alpha=user,method=method,event=str(i),bank_index=1,route='left',active_lower_ticks=ticks,horizons={'10':dict(goal_arrived=goal,physical_outcome=outcome)},alpha_rule=dict(final_at_user=True,nonuser_duration_s=0.,prearrival_alpha=dict(user_duration_s=1.)),matched_original_task_metrics={}))
+    summary,paired=m.preference_summary(rows,guard_layout=layout)
+    assert summary['new_cases']==new_count and summary['cached_cases']==logical-new_count
+    assert len(paired)==22 and all(len(x['conditions'])==conditions for x in paired)
+    gate=summary['new_vs_old'];assert gate['any_rescue'] and gate['total_goal_gains']==3 and gate['total_contact_rescues']==3
+    assert gate['total_goal_losses']==gate['total_new_contacts']==1
+    changed=copy.deepcopy(rows)
+    for r in changed:
+        if r['method']=='guard_degraded' and r['event']=='0':r['horizons']['10']=dict(goal_arrived=None,physical_outcome='unknown')
+    assert not m.new_vs_old_outcomes(changed,conditions)['any_rescue']
+    with pytest.raises(ValueError):m.preference_summary(rows[:-1],guard_layout=layout)
+
+
+def test_guard_degraded_numpy_audit_keeps_risk_latch_and_honors_permission(monkeypatch):
+    import numpy as np
+    n=8;user=.5;probs=np.tile(np.array([.6,.3,.2])[:,None],(1,4));targets=np.tile([2.8,0.],(3,1));task=np.ones(3,bool)
+    cost=.07*(np.array([0.,.5,1.])-user)**2
+    raw=dict(active_tick=np.ones(n,bool),alpha_exec=np.full(n,user),query_observation=np.zeros((n,351)),coord_latents=np.zeros((n,3,2)),pre_upper_yaw=np.zeros(n),coord_probabilities=np.tile(probs,(n,1,1)),coord_qmin=np.tile(probs[:,0],(n,1)),coord_pre_progress=np.zeros(n),path_progress=np.zeros(n),coord_latched_before=np.r_[np.zeros(4,bool),np.ones(4,bool)],coord_prev_alpha=np.full(n,user),coord_nominal=np.tile([2.8,0.],(n,1)),coord_targets=np.tile(targets,(n,1,1)),coord_unbounded_targets=np.tile(targets,(n,1,1)),coord_candidate_clipped=np.zeros((n,3,2),bool),coord_max_abs_curvature=np.full(n,.1),coord_task_mask=np.tile(task,(n,1)),coord_proxy_cost=np.tile(cost,(n,1)),coord_permission=np.r_[np.ones(4,bool),np.zeros(4,bool)],coord_degraded=np.r_[np.ones(4,bool),np.zeros(4,bool)],coord_publication_withheld=np.r_[np.zeros(4,bool),np.ones(4,bool)],coord_guard_fallback=np.ones(n,bool),coord_guard_fallback_selected=np.r_[np.ones(4,bool),np.zeros(4,bool)],coord_task_aware_selected=np.zeros(n,bool),rule_latched=np.ones(n,bool))
+    # Saved proxy includes both user preference and previous-action switch terms.
+    monkeypatch.setattr(m,'tolerance_numpy_probabilities',lambda *a:(np.tile(probs,(2,1,1)),np.zeros((2,3,2))))
+    interface=dict(speed_reference_bounds_m_s=[1.,3.],steer_reference_bound_rad=.3)
+    case=dict(mode='userhalf_guardfallback',method='guard_degraded',effective_user_alpha=user,speed=2.8)
+    result=m.audit_tolerance_coordination(raw,case,dict(s=np.array([0.,10.]),curvature=np.full(2,.1)),None,interface,{},arm_index=0)
+    assert result['final_at_user'] and not result['final_qualified_user_restoration']
+    assert result['guard_fallback_selected_user_without_restore_s']==.02
+    raw['coord_guard_fallback_selected'][4]=True
+    with pytest.raises(AssertionError):m.audit_tolerance_coordination(raw,case,dict(s=np.array([0.,10.]),curvature=np.full(2,.1)),None,interface,{},arm_index=0)
