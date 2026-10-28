@@ -813,3 +813,29 @@ def test_eight_method_step_plot_does_not_drop_two_cached_methods(tmp_path,monkey
     monkeypatch.setattr(Figure,'savefig',capture)
     m.render_tolerance_steps_and_decisions(tmp_path,'same_condition',selected,raws,rebuilt,'frozen')
     assert set(labels)==set(m.TEMPORAL_TOLERANCE_ARMS+m.TOLERANCE_ARMS)
+
+
+def test_broaden_five_arms_are_not_historical_eight_arm_union():
+    rows=[dict(mode=a,bank_index=b,route=r,event=e) for b in (4,6) for r in ('left90','right90','left60','right60') for e in ('zero','minus','plus') for a in m.BROADEN_TOLERANCE_ARMS]
+    assert len(rows)==120 and m.tolerance_comparison_arms(rows)==m.BROADEN_TOLERANCE_ARMS
+    groups=m.response_plot_groups(rows)
+    assert len(groups)==24
+    for group in groups:
+        selected=m.response_plot_selection(rows,group)
+        assert len(selected)==5 and {x['mode'] for x in selected}==set(m.BROADEN_TOLERANCE_ARMS)
+    assert len(m.tolerance_comparison_arms([dict(mode=a) for a in m.TEMPORAL_TOLERANCE_ARMS+m.TOLERANCE_ARMS]))==8
+
+
+def test_speedcap_actual_permission_and_inverse_native_target_audit():
+    interface=dict(speed_positive_scale_m_s=.25,speed_negative_scale_m_s=1.,speed_reference_bounds_m_s=[1.,3.])
+    n=8;z=np.tile([.2,.4],(n,1));nom=np.full(n,2.5);k=np.r_[np.zeros(4),np.ones(4)];original=nom+np.tanh(z[:,0])*.25
+    cap=np.r_[np.full(4,np.inf),np.full(4,np.sqrt(3.))];requested=np.minimum(original,cap);delta=requested-nom
+    bounded=np.clip(delta/np.where(delta>=0,.25,1.),-1+1e-6,1-1e-6);reachable=np.clip(nom+bounded*np.where(delta>=0,.25,1.),1.,3.)
+    permission=np.r_[np.ones(6,bool),np.zeros(2,bool)]
+    raw=dict(active_tick=np.ones(n,bool),coord_latents=np.tile(z[:,None,:],(1,3,1)),coord_nominal=np.column_stack([nom,np.zeros(n)]),coord_max_abs_curvature=k,
+             reference_target_permitted=permission,speedcap_cap_m_s=cap,speedcap_requested_target_m_s=requested,speedcap_reachable_target_m_s=reachable,speedcap_h75_target_m_s=original,
+             speedcap_active=permission&(abs(reachable-original)>1e-6),composed_latent=np.column_stack([np.arctanh(bounded),z[:,1]]))
+    result=m.audit_speedcap(raw,dict(mode='speedcap'),interface)
+    assert result['active_ticks']==2 and result['actual_activity_fraction']==.25
+    raw['speedcap_active'][-1]=True
+    with pytest.raises(AssertionError):m.audit_speedcap(raw,dict(mode='speedcap'),interface)
