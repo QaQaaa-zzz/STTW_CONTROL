@@ -258,3 +258,19 @@ def test_guard_degraded_numpy_audit_keeps_risk_latch_and_honors_permission(monke
     assert result['guard_fallback_selected_user_without_restore_s']==.02
     raw['coord_guard_fallback_selected'][4]=True
     with pytest.raises(AssertionError):m.audit_tolerance_coordination(raw,case,dict(s=np.array([0.,10.]),curvature=np.full(2,.1)),None,interface,{},arm_index=0)
+
+
+def test_actual_guard_projection_adjacent_float32_tie_is_bounded():
+    import numpy as np
+    f=json.loads((Path(__file__).with_name('fixtures')/'guard_projection_adjacent_tie.json').read_text())
+    path={k:np.asarray(v,np.float32) for k,v in f['path'].items()};logged=f['logged'];raw={k:np.asarray([v],np.float32) for k,v in logged.items()};projection=np.asarray([f['reconstructed']],np.float32)
+    proof=m.adjacent_projection_roundoff(path,raw['actual_xy'][0],projection[0,0],raw['path_progress'][0])
+    assert proof is not None and proof['gap_ulps']<=8 and proof['squared_distance_gap_m2']<1e-6
+    with pytest.raises(AssertionError):m.validate_original_projection(projection,raw,path,1)
+    receipt,mask=m.validate_original_projection(projection,raw,path,1,allow_adjacent_roundoff=True)
+    assert mask.tolist()==[True] and receipt['adjacent_float32_roundoff_frames']==1
+    assert receipt['progress_max_absolute_error']==pytest.approx(.006351470947265625)
+    wrong={k:v.copy() for k,v in raw.items()};wrong['path_progress'][0]+=.04
+    with pytest.raises(AssertionError):m.validate_original_projection(projection,wrong,path,1,allow_adjacent_roundoff=True)
+    wrong={k:v.copy() for k,v in raw.items()};wrong['path_cross_track'][0]+=.001
+    with pytest.raises(AssertionError):m.validate_original_projection(projection,wrong,path,1,allow_adjacent_roundoff=True)

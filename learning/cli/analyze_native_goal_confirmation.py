@@ -1263,6 +1263,35 @@ def original_path_projection_trace(raw,path,config):
     return values
 
 
+
+def adjacent_projection_roundoff(path,point,reconstructed_progress,logged_progress):
+    """Certify a local float32 adjacent-segment near-tie; never a path/time repair."""
+    s=np.asarray(path['s'],np.float32);xy=np.asarray(path['xy'],np.float32);point=np.asarray(point,np.float32)
+    segments=[int(np.clip(np.searchsorted(s,value,side='right')-1,0,len(s)-2)) for value in (reconstructed_progress,logged_progress)]
+    if abs(segments[0]-segments[1])!=1:return None
+    records=[]
+    for i,value in zip(segments,(reconstructed_progress,logged_progress)):
+        a=xy[i];v=xy[i+1]-a;u=np.clip(np.sum((point-a)*v)/np.sum(v*v),np.float32(0.),np.float32(1.));ss=s[i]+u*(s[i+1]-s[i]);delta=point-(a+u*v);d2=np.sum(delta*delta)
+        if abs(float(ss)-float(value))>2e-5:return None
+        records.append(dict(segment=i,projected_progress_m=float(ss),squared_distance_m2=float(d2)))
+    d2=np.float32(min(r['squared_distance_m2'] for r in records));ulp=float(abs(np.spacing(d2)));gap=abs(records[0]['squared_distance_m2']-records[1]['squared_distance_m2']);bound=min(1e-6,max(1e-10,8.*ulp))
+    if gap>bound:return None
+    return dict(segments=records,squared_distance_gap_m2=gap,float32_ulp_m2=ulp,gap_ulps=gap/ulp if ulp else 0.,maximum_gap_m2=bound)
+
+
+def validate_original_projection(projection,raw,path,before,*,allow_adjacent_roundoff=False):
+    columns=('path_progress','path_cross_track','path_heading_error');logged=np.column_stack([np.asarray(raw[k])[:before] for k in columns]);actual=projection[:before]
+    close=np.isclose(actual,logged,atol=4e-4,rtol=2e-5);eligible=np.zeros(before,bool);details=[]
+    for tick in np.flatnonzero(~close.all(axis=1)):
+        error=abs(actual[tick]-logged[tick])
+        proof=adjacent_projection_roundoff(path,raw['actual_xy'][tick],actual[tick,0],logged[tick,0]) if allow_adjacent_roundoff and error[0]<=.01 and error[2]<=.005 and close[tick,1] else None
+        if proof is None:raise AssertionError(f'original projection before replan differs outside bounded adjacent float32 tie at tick{tick}: {error.tolist()}')
+        eligible[tick]=True;details.append(dict(tick=int(tick),time_s=int(tick)*.005,absolute_errors=error.tolist(),**proof))
+    if len(details)>4:raise AssertionError('more than4 bounded projection tie frames in one case')
+    validation={name+'_max_absolute_error':float(np.max(abs(actual[:,i]-logged[:,i]))) if before else None for i,name in enumerate(('progress','cross_track','heading_error'))}
+    validation.update(adjacent_float32_roundoff_enabled=bool(allow_adjacent_roundoff),adjacent_float32_roundoff_frames=len(details),adjacent_float32_roundoff_details=details,adjacent_roundoff_progress_bound_m=.01,adjacent_roundoff_heading_bound_rad=.005,other_frames_original_projection_atol=4e-4,other_frames_original_projection_rtol=2e-5)
+    return validation,eligible
+
 def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,broaden_cost_numerics=False,task_alpha=1.,raw_alpha=1.):
     """Only original alpha1 V3 task channels; never a reconstructed total reward."""
     from analyze_native_frozen_validation import score
@@ -1272,9 +1301,7 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,bro
     _,data=score(modified,path,config,controller,keys,task_alpha)
     indices=[keys.index(k) for k in ('speed','path','primary')];effective=data['effective'][:,indices]
     before=n if replan_tick is None else min(n,int(replan_tick));validation={}
-    for column,name,logged in ((0,'progress','path_progress'),(1,'cross_track','path_cross_track'),(2,'heading_error','path_heading_error')):
-        error=projection[:before,column]-np.asarray(raw[logged][:before]);validation[name+'_max_absolute_error']=float(np.max(abs(error))) if before else None
-        np.testing.assert_allclose(projection[:before,column],raw[logged][:before],atol=4e-4,rtol=2e-5,err_msg='original projection before replan differs '+name)
+    validation,tie_frames=validate_original_projection(projection,raw,path,before,allow_adjacent_roundoff=broaden_cost_numerics)
     logged=np.asarray(raw['effective_costs'])[:before,indices]
     if task_alpha!=raw_alpha:
         _,rescaled=score(dict(modified,path_progress=np.asarray(raw['path_progress'])[:n],path_cross_track=np.asarray(raw['path_cross_track'])[:n],path_heading_error=np.asarray(raw['path_heading_error'])[:n]),path,config,controller,keys,task_alpha)
@@ -1290,7 +1317,16 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,bro
     validation['pre_replan_integrated_three_cost_difference']=(error.sum(axis=0)*config['path_reward']['scale']*config['timing']['lower_dt_s']).tolist()
     # Broaden only: float32 bounded projection errors amplify in squared costs.
     # Keep a finite absolute/relative bound and report the full accumulated effect.
-    np.testing.assert_allclose(effective[:before],logged,atol=validation['task_cost_absolute_tolerance'],rtol=validation['task_cost_relative_tolerance'],err_msg='original V3 task costs before replan differ')
+    np.testing.assert_allclose(effective[:before][~tie_frames],logged[~tie_frames],atol=validation['task_cost_absolute_tolerance'],rtol=validation['task_cost_relative_tolerance'],err_msg='original V3 task costs before replan differ')
+    if tie_frames.any():
+        # Only geometrically certified frames may use these finite rate bounds;
+        # retain independently reconstructed values and report integrated impact.
+        bounds=np.array([.3,.001,5.],float)
+        if np.any(abs(error[tie_frames])>bounds):raise AssertionError('adjacent-tie task cost rate exceeds finite component bounds')
+        impact=error[tie_frames].sum(axis=0)*config['path_reward']['scale']*config['timing']['lower_dt_s']
+        if np.any(abs(impact)>.005):raise AssertionError('adjacent-tie integrated task cost difference exceeds.005 per component')
+        validation.update(adjacent_roundoff_cost_rate_bounds=bounds.tolist(),adjacent_roundoff_cost_max_absolute_error=np.max(abs(error[tie_frames]),axis=0).tolist(),adjacent_roundoff_integrated_cost_difference=impact.tolist(),adjacent_roundoff_integrated_component_bound=.005)
+
     step=effective*config['path_reward']['scale']*config['timing']['lower_dt_s']
     return dict(original_progress_m=projection[:,0],original_cross_track_m=projection[:,1],original_heading_error_rad=projection[:,2],task_effective_cost_rates=effective,task_step_costs=step,cumulative_task_costs=np.cumsum(step,axis=0)),dict(validated_pre_replan_ticks=before,projection_errors=validation,task_component_names=['speed','path','primary'],terminal_replacement='Excluded from three running task channels; actual global failure replacement remains in original full reward diagnostics. Not allocated to a task channel.',full_total_reward_reconstructed=False)
 
