@@ -270,7 +270,16 @@ def evidence_manifest():
         'E187':archive/'h75_user_prior_online72_v1/analysis/receipt.json',
         'E188':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/receipt.json',
         'E189':archive/'h75_user_prior_online72_v1/root_common_cost_summary.json',
-        'E190':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/results.json'}
+        'E190':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/results.json',
+        'E191':archive/'h75_task_aware_fallback72_v1/plan.json',
+        'E192':archive/'h75_task_aware_fallback72_v1/status.json',
+        'E193':archive/'h75_task_aware_fallback72_v1/analysis/summary.json',
+        'E194':archive/'h75_task_aware_fallback72_v1/root_endpoint_check.json',
+        'E195':archive/'h75_task_aware_fallback72_v1/analysis/receipt.json',
+        'E196':archive/'h75_task_aware_fallback72_v1/analysis/results.json',
+        'E197':archive/'h75_task_aware_fallback72_v1/analysis/original_task_rescoring/receipt.json',
+        'E198':archive/'h75_task_aware_fallback72_v1/analysis/original_task_rescoring/results.json',
+        'E199':archive/'h75_task_aware_fallback72_v1/root_common_cost_summary.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',

@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "43df54e59b9f83af61166c733f36e1b36de9f1405ab31ee2f4c000ee43de18ca",
-  "builder_sha256": "42f849c18439c51f9a225a6f366570f0e3275c6d2ac763cccf119c2ccec2ef0e",
+  "manuscript_sha256": "fc25479f1369f82af45d8bd0f2b980aa533b593e4dead774b7dd417b1a20da06",
+  "builder_sha256": "a99fe7c982d2e46171147a6d2c3993b20b2b1eb9dcd90a332e2d4d229bc964b4",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1145,6 +1145,60 @@
       "sha256": "0606a2d7abe3cfad1acf7c9ba428055e5be4536b8d9385747e50517242c93e48",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E191": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/plan.json",
+      "sha256": "3045773c19cfdb320cf2acf54c4959fcf313876a210b0ec2a25d361b461d756a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E192": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/status.json",
+      "sha256": "9b2f34f28536c60091a0171dd8008476cc302d04319e3cc5a4d1201e8dbd15d3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E193": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/summary.json",
+      "sha256": "235e76243c4928011619e5acb6450011e010b8feb03157b0d82b1698a9ca5b26",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E194": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/root_endpoint_check.json",
+      "sha256": "eda8d8c485ed4caa9361ba47382c9214540ffa2d2d8adfe3bf8bc1180aa1edd8",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E195": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/receipt.json",
+      "sha256": "5b7e739af766cbded6dd6838e17366f2dbc151b85617b10ce4c70dc84268b4da",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E196": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/results.json",
+      "sha256": "9a40cdb37ceee540bb6533e89e3123b66d6253906c31f6dc9128c2f2bc3e3410",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E197": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/original_task_rescoring/receipt.json",
+      "sha256": "a2419353fd33d4229a4db0070eb05165e321df2fe882ec1ef7c60a06fc1ce01c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E198": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/original_task_rescoring/results.json",
+      "sha256": "e58a88bcad24797a1fdd0a2e750c61897bab372e5c549a24d1184c845d8a1f39",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E199": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/root_common_cost_summary.json",
+      "sha256": "bdf7b438396e75e6e721888cc77c617e685e071bc40c448433d1a0a1580ef66d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1305,7 +1359,16 @@
     "E187",
     "E188",
     "E189",
-    "E190"
+    "E190",
+    "E191",
+    "E192",
+    "E193",
+    "E194",
+    "E195",
+    "E196",
+    "E197",
+    "E198",
+    "E199"
   ],
   "claims_from_readback": [
     {
