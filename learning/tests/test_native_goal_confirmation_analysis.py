@@ -591,3 +591,79 @@ def test_confirmation_uses_own_generated_paths_and_preserves_partial_audit(tmp_p
     (out/'results.json').write_text('[]')
     with pytest.raises(ValueError,match='already contains'):
         m.bank144_analysis_audit_target(out)
+
+
+def tolerance_audit_fixture():
+    import jax.numpy as j
+    from sttw_control.tolerance_coordination import coordinate
+    interface=dict(speed_positive_scale_m_s=1.,speed_negative_scale_m_s=1.,steer_scale_rad=.2,speed_reference_bounds_m_s=[.5,3.],steer_reference_bound_rad=.3)
+    params={}
+    for k,shape in [('w0',(41,16)),('b0',(16,)),('w1',(16,16)),('b1',(16,)),('w2',(16,1)),('b2',(1,))]:params[k]=np.zeros((2,3)+shape,np.float32)
+    params['b2'][:]=np.log(9.)
+    path=dict(s=np.array([0.,10.],np.float32),curvature=np.ones(2,np.float32))
+    blocks=[];prev=1.;latched=False
+    for permission in (True,False):
+        cd=coordinate(params,j.zeros(351),j.zeros((3,2)),j.array(0.),j.array([2.8,0.]),j.array(2.8),j.array(0.),j.asarray(path['s']),j.asarray(path['curvature']),permission,latched,prev,interface)
+        alpha=float(cd['alpha']);obs=np.zeros(351,np.float32);obs[336]=alpha
+        block=dict(alpha_exec=alpha,alpha_user=1.,rule_latched=bool(cd['latched']),reference_target_permitted=permission,query_observation=obs,channel_alpha_pair=np.array([alpha,alpha]),composed_latent=np.zeros(2),latent_z=np.zeros(2),coord_latents=np.zeros((3,2)),coord_candidate_alpha=np.array([0.,.5,1.]),pre_upper_yaw=0.,coord_pre_progress=0.,coord_nominal=np.array([2.8,0.],np.float32),coord_latched_before=latched,coord_prev_alpha=prev,coord_permission=permission)
+        for key in ('probabilities','qmin','targets','task_mask','proxy_cost','degraded','publication_withheld','max_abs_curvature'):block['coord_'+key]=np.asarray(cd[key])
+        block['coord_unbounded_targets']=np.asarray(cd['unbounded_targets']);block['coord_candidate_clipped']=np.asarray(cd['target_clipped'])
+        blocks.append(block);prev=alpha;latched=bool(cd['latched'])
+    raw={key:np.repeat(np.stack([b[key] for b in blocks]),4,axis=0) for key in blocks[0]}
+    raw.update(active_tick=np.ones(8,bool),path_progress=np.zeros(8))
+    return raw,dict(mode='q_rank',speed=2.8),path,interface,params
+
+
+def test_tolerance_numpy_audit_matches_kernel_and_native_withheld_state():
+    raw,case,path,interface,params=tolerance_audit_fixture()
+    publication=m.audit_tolerance_publication(raw,case)
+    result=m.audit_tolerance_coordination(raw,case,path,None,interface,params)
+    assert publication['masked_ticks']==4
+    assert result['independent_numpy_decisions_match'] and result['degraded_duration_s']==.02
+    assert result['permission_withheld_duration_s']==.02 and result['final_alpha']==.5
+    assert result['switch_count']==1 and not result['ever_returned_after_departure']
+    # Actual force/route/onset are absent from the input case and cannot decide alpha.
+    raw['coord_probabilities'][0,0,0]=.1
+    with pytest.raises(AssertionError):m.audit_tolerance_coordination(raw,case,path,None,interface,params)
+
+
+def test_tolerance_twenty_condition_plots_cover_all_six_methods():
+    rows=[]
+    for bank in (2,5):
+        for route in ('left','right'):
+            for event in ('nominal','early_minus','early_plus','late_minus','late_plus'):
+                for arm in m.TOLERANCE_ARMS:rows.append(dict(bank_index=bank,route=route,event=event,mode=arm,path_key=f'bank{bank}_{route}'))
+    groups=m.response_plot_groups(rows)
+    assert len(groups)==20
+    assert all(len(m.response_plot_selection(rows,g))==6 for g in groups)
+    assert all({r['mode'] for r in m.response_plot_selection(rows,g)}==set(m.TOLERANCE_ARMS) for g in groups)
+
+
+def test_tolerance_independent_numpy_features_match_all_random_network_probabilities():
+    from sttw_control.tolerance_coordination import candidate_probabilities
+    import jax.numpy as j
+    raw,case,path,interface,params=tolerance_audit_fixture()
+    rng=np.random.default_rng(193)
+    params={k:rng.normal(0.,.1,v.shape).astype(np.float32) for k,v in params.items()}
+    obs=rng.normal(size=(2,351)).astype(np.float32);latents=rng.normal(size=(2,3,2)).astype(np.float32);yaw=np.array([.7,-.4],np.float32)
+    for arm in (0,1):
+        actual,_=m.tolerance_numpy_probabilities(params,obs,latents,yaw,interface,arm)
+        expected=np.stack([np.asarray(candidate_probabilities(params,j.asarray(o),j.asarray(z),j.asarray(y),interface))[arm] for o,z,y in zip(obs,latents,yaw)])
+        np.testing.assert_allclose(actual,expected,atol=2e-6,rtol=0)
+
+
+def test_tolerance_summary_keeps_nominal_losses_and_twenty_pairs_per_comparison():
+    rows=[]
+    for bank in (2,5):
+        for route in ('left','right'):
+            for event,force in (('nominal',0.),('early_minus',-64.),('early_plus',64.),('late_minus',-64.),('late_plus',64.)):
+                for arm in m.TOLERANCE_ARMS:
+                    loss=arm=='q_rank' and event=='nominal'
+                    rows.append(dict(bank_index=bank,route=route,event=event,force_N=force,mode=arm,case_id=f'{bank}/{route}/{event}/{arm}',horizons={'10':dict(goal_arrived=not loss,physical_outcome='survived')},diagnostic_execution_path_user1_cost=2.,full_observed_speed_rmse_m_s=.1,original_route_sample_distance_rmse_m=.2,prefix=dict(ticks=100),alpha_rule={}))
+    summary,pairs=m.tolerance_online_summary(rows)
+    assert summary['new_cases']==120 and len(pairs)==15
+    assert all(len(pair['details'])==20 for pair in pairs)
+    pair=next(p for p in pairs if p['candidate']=='q_rank' and p['baseline']=='fixed1')
+    assert not pair['nominal_no_new_contact_or_goal_loss']
+    assert sum(d['goal1m_loss'] for d in pair['details'])==4
+    assert summary['original_path_v3_aggregate'].startswith('not_yet_verified')

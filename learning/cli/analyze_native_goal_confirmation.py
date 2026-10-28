@@ -23,7 +23,7 @@ def analyze(root,include_heldout_labels=False,include_confirmation_labels=False)
     p=json.loads((root/'plan.json').read_text())
     if p.get('mode')=='h75_samestate_bank144':return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -668,6 +668,8 @@ def switching_summary(rows):
 
 
 def response_plot_groups(rows):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows):
+        return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index'])+'__route'+r['route'] for r in rows))
     if any(r.get('mode')=='samestate_scalar' for r in rows):
         return list(dict.fromkeys(r['event']+'__source'+str(r['source_index']) for r in rows))
     if any('path_key' in r for r in rows):
@@ -678,6 +680,9 @@ def response_plot_groups(rows):
 
 
 def response_plot_selection(rows,label):
+    if any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows):
+        base,route=label.rsplit('__route',1);event,bank=base.rsplit('__bank',1)
+        return [r for r in rows if r['event']==event and r['bank_index']==int(bank) and r['route']==route]
     if any(r.get('mode')=='samestate_scalar' for r in rows):
         event,source=label.rsplit('__source',1)
         return [r for r in rows if r['event']==event and r['source_index']==int(source)]
@@ -1005,12 +1010,155 @@ def analyze_samestate(root,p):
     (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
 
+TOLERANCE_ARMS=('q_rank','q_bce','task_guard_only','existing_geometry','fixed_half','fixed1')
+
+
+def load_tolerance_analysis_export(root,p):
+    """Identity checks precede probability reads; no model selection or fitting."""
+    directory=root/'q';receipt=json.loads((directory/'receipt.json').read_text())
+    declared=p['frozen_predictor_export']
+    if Path(declared['directory'])!=directory or declared['receipt_sha256']!=digest(directory/'receipt.json') or declared['arm_to_export_index']!={'q_rank':1,'q_bce':0}:raise ValueError('declared frozen export identity mismatch')
+    if receipt['arm_order']!=['bce','bce_rank'] or receipt['new_optimizer_updates'] or receipt['new_physics_steps']:raise ValueError('invalid frozen q export')
+    if max(receipt['maximum_probability_errors'].values())>2e-6:raise ValueError('Torch/JAX numerical import failed')
+    for name,value in receipt['files_sha256'].items():
+        if digest(directory/name)!=value:raise ValueError('frozen q export drift '+name)
+    if p['input_sha256'].get(str(directory/'receipt.json'))!=digest(directory/'receipt.json'):raise ValueError('q receipt not sealed in run')
+    with np.load(directory/'parameters.npz') as z:return dict(z)
+
+
+def audit_tolerance_publication(raw,case):
+    n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);permission=np.asarray(raw['reference_target_permitted'][:n],bool)
+    if case['mode'] not in TOLERANCE_ARMS or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
+    np.testing.assert_array_equal(raw['alpha_user'][:n],1.)
+    np.testing.assert_array_equal(raw['coord_candidate_alpha'][:n],np.tile([0.,.5,1.],(n,1)))
+    np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]))
+    np.testing.assert_allclose(raw['query_observation'][:n,336],alpha,atol=1e-6,rtol=0)
+    np.testing.assert_allclose(raw['latent_z'][:n][permission],raw['composed_latent'][:n][permission],atol=1e-6,rtol=0)
+    np.testing.assert_array_equal(raw['latent_z'][:n][~permission],0.)
+    held=('alpha_exec','rule_latched','query_observation','composed_latent','reference_target_permitted')+tuple(k for k in raw if k.startswith('coord_'))
+    for start in range(0,n,4):
+        for field in held:
+            x=np.asarray(raw[field])[start:min(start+4,n)]
+            if not np.isfinite(x).all():raise ValueError('nonfinite coordinator log '+field)
+            np.testing.assert_array_equal(x,np.broadcast_to(x[0],x.shape))
+        selected=int(np.argmin(abs(np.array([0.,.5,1.])-alpha[start])))
+        np.testing.assert_allclose(raw['composed_latent'][start],raw['coord_latents'][start,selected],atol=1e-6,rtol=0)
+        np.testing.assert_array_equal(raw['coord_permission'][start],permission[start])
+    return dict(actual_permitted_ticks=int(permission.sum()),masked_ticks=int((~permission).sum()),state_alpha=1.,checked='Scalar selected H75 candidate, exact block hold and native publication mask')
+
+
+def tolerance_numpy_probabilities(params,obs,latents,yaw,interface,arm):
+    """Independent fixed41-feature/three-sigmoid-mean inference; no labels."""
+    a=np.tanh(latents).astype(np.float32);offsets=np.stack([a[...,0]*np.where(a[...,0]>=0,interface['speed_positive_scale_m_s'],interface['speed_negative_scale_m_s']),a[...,1]*interface['steer_scale_rad']],axis=-1).astype(np.float32)
+    features=np.empty((len(obs),3,4,41),np.float32)
+    indices=list(range(300,320))+list(range(337,351));features[...,:34]=obs[:,None,None,indices]
+    features[...,34]=np.array([0.,.5,1.])[None,:,None];features[...,35]=offsets[:,:,0,None];features[...,36]=offsets[:,:,1,None]/.2
+    force=np.array([-1.,1.,-1.,1.],np.float32)
+    features[...,37]=np.sin(yaw)[:,None,None]*force;features[...,38]=np.cos(yaw)[:,None,None]*force
+    features[...,39]=1.;features[...,40]=np.array([.2,.2,.6,.6],np.float32)/.6
+    x=features.reshape(-1,41);probs=[]
+    for seed in range(3):
+        h=np.maximum(x@params['w0'][arm,seed]+params['b0'][arm,seed],0.)
+        h=np.maximum(h@params['w1'][arm,seed]+params['b1'][arm,seed],0.)
+        logit=(h@params['w2'][arm,seed]+params['b2'][arm,seed])[:,0]
+        probs.append(1./(1.+np.exp(-np.clip(logit,-80.,80.))))
+    return np.mean(probs,axis=0).reshape(len(obs),3,4),offsets
+
+
+def tolerance_alpha_statistics(raw):
+    n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);previous=np.r_[1.,alpha[:-1]]
+    departures=np.flatnonzero((previous==1.)&(alpha!=1.));returns=np.flatnonzero((previous!=1.)&(alpha==1.));switch=np.flatnonzero(previous!=alpha)
+    return dict(observed_s=n*.005,ever_departed=bool(len(departures)),ever_returned_after_departure=bool(len(returns)),final_returned_to_user=bool(len(departures) and alpha[-1]==1.),final_at_user=bool(alpha[-1]==1.),final_alpha=float(alpha[-1]),switch_count=len(switch),switch_times_s=(switch*.005).tolist(),departure_times_s=(departures*.005).tolist(),return_times_s=(returns*.005).tolist(),nonuser_duration_s=float(np.sum(alpha!=1.)*.005),degraded_duration_s=float(np.sum(raw['coord_degraded'][:n])*.005),permission_withheld_duration_s=float(np.sum(raw['coord_publication_withheld'][:n])*.005))
+
+
+def audit_tolerance_coordination(raw,case,original,replanned,interface,params):
+    n=int(np.asarray(raw['active_tick'],bool).sum());starts=np.arange(0,n,4);mode=case['mode'];arm=0 if mode=='q_bce' else 1
+    prob,offsets=tolerance_numpy_probabilities(params,np.asarray(raw['query_observation'])[starts],np.asarray(raw['coord_latents'])[starts],np.asarray(raw['pre_upper_yaw'])[starts],interface,arm)
+    np.testing.assert_allclose(raw['coord_probabilities'][starts],prob,atol=3e-5,rtol=3e-5)
+    qmin=prob.min(axis=-1);np.testing.assert_allclose(raw['coord_qmin'][starts],qmin,atol=3e-5,rtol=3e-5)
+    prev=1.;latched=False;path=original;maxprob=float(np.max(abs(prob-raw['coord_probabilities'][starts])))
+    for j,tick in enumerate(starts):
+        if replanned is not None and case.get('replan_task_tick')==tick:path=replanned
+        progress=0. if tick==0 or case.get('replan_task_tick')==tick else float(raw['path_progress'][tick-1])
+        np.testing.assert_allclose(raw['coord_pre_progress'][tick],progress,atol=1e-4,rtol=1e-6)
+        np.testing.assert_allclose(raw['coord_prev_alpha'][tick],prev,atol=1e-7,rtol=0);assert bool(raw['coord_latched_before'][tick])==latched
+        nominal=np.asarray(raw['coord_nominal'][tick]);unbounded=nominal[None,:]+offsets[j]
+        lo,hi=interface['speed_reference_bounds_m_s'];steer=interface['steer_reference_bound_rad'];targets=np.clip(unbounded,np.array([lo,-steer],np.float32),np.array([hi,steer],np.float32))
+        np.testing.assert_allclose(raw['coord_targets'][tick],targets,atol=3e-6,rtol=2e-6)
+        np.testing.assert_allclose(raw['coord_unbounded_targets'][tick],unbounded,atol=3e-6,rtol=2e-6)
+        np.testing.assert_array_equal(raw['coord_candidate_clipped'][tick],targets!=unbounded)
+        def preview(length):
+            lower=np.clip(progress,path['s'][0],path['s'][-1]);upper=min(lower+length,path['s'][-1]);mask=(path['s']>=lower)&(path['s']<=upper)
+            return max(abs(np.interp(lower,path['s'],path['curvature'])),abs(np.interp(upper,path['s'],path['curvature'])),float(np.max(abs(path['curvature'][mask]))) if mask.any() else 0.)
+        curvature=preview(6.);np.testing.assert_allclose(raw['coord_max_abs_curvature'][tick],curvature,atol=2e-5,rtol=2e-5)
+        taskmask=targets[:,0]**2*curvature<=3.;np.testing.assert_array_equal(raw['coord_task_mask'][tick],taskmask)
+        cost=(targets[:,0]-case['speed'])**2+.1*((targets[:,1]-nominal[1])/.2)**2+.05*(np.array([0.,.5,1.])-1.)**2+.02*(np.array([0.,.5,1.])-prev)**2
+        np.testing.assert_allclose(raw['coord_proxy_cost'][tick],cost,atol=3e-5,rtol=3e-5)
+        useq=mode!='task_guard_only';restore=bool(taskmask[2] and (not useq or qmin[j,2]>=(.85 if latched else .8)))
+        eligible=taskmask[:2] & ((qmin[j,:2]>=.8) if useq else True);degraded=not restore and not eligible.any()
+        proposed=1. if restore else np.array([0.,.5])[np.argmin(np.where(eligible,cost[:2],np.inf))] if eligible.any() else .5
+        permission=bool(raw['coord_permission'][tick])
+        np.testing.assert_array_equal(raw['coord_degraded'][tick],permission and degraded and mode in TOLERANCE_ARMS[:3])
+        np.testing.assert_array_equal(raw['coord_publication_withheld'][tick],not permission)
+        if mode=='existing_geometry':
+            proxy=case['speed']**2*preview(1.5);nextlatch=proxy>=2.7 if latched else proxy>3.;proposed=.5 if nextlatch else 1.
+        elif mode in ('fixed_half','fixed1'):proposed=.5 if mode=='fixed_half' else 1.;nextlatch=False
+        else:nextlatch=not restore
+        expected=proposed if permission else prev;nextlatch=nextlatch if permission else latched
+        np.testing.assert_allclose(raw['alpha_exec'][tick],expected,atol=1e-7,rtol=0);assert bool(raw['rule_latched'][tick])==nextlatch
+        prev=float(expected);latched=bool(nextlatch)
+    result=tolerance_alpha_statistics(raw);result.update(maximum_independent_probability_error=maxprob,independent_numpy_decisions_match=True,inputs='Current observation/three H75 candidates/nominal/execution path+progress/user1 request/permission and previous latch/alpha; fixed four hypothetical forces/preparations only. No actual force/onset/route/time in decision.',degraded_is_not_safety=True)
+    return result
+
+
+def tolerance_common_windows(rows,raws,paths,goals):
+    """Common actual H10 and common pre-first-arrival windows; no new cost weights."""
+    for label in response_plot_groups(rows):
+        group=response_plot_selection(rows,label)
+        if len(group)!=6 or {r['mode'] for r in group}!=set(TOLERANCE_ARMS):raise ValueError('six matching original-condition arms required')
+        common=min(r['active_lower_ticks'] for r in group);prefix=min(r['prefix']['ticks'] for r in group)
+        for row in group:
+            raw=raws[row['case_id']];path=paths[analysis_path_key(row)];tree=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[analysis_path_key(row)]]))
+            metrics={}
+            for name,n in (('same_actual_window',common),('same_pre_first_arrival_window',prefix)):
+                ev=raw['actual_forward_speed'][:n]-row['speed'];distance=tree.query(raw['actual_xy'][:n])[0]
+                metrics[name]=dict(actual_ticks=n,observed_s=n*.005,speed_rmse_m_s=float(np.sqrt(np.mean(ev**2))) if n else None,original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance**2))) if n else None,original_route_sample_distance_max_m=float(distance.max()) if n else None)
+            row['matched_original_task_metrics']=metrics
+            n=row['active_lower_ticks'];time=np.asarray(raw['time'][:n]);phases={}
+            for name,mask in (('before',time<row['onset_s']),('during',(time>=row['onset_s'])&(time<row['onset_s']+row['duration_s'])),('after',time>=row['onset_s']+row['duration_s'])):
+                phases[name]=dict(actual_ticks=int(mask.sum()),speed_rmse_m_s=float(np.sqrt(np.mean((raw['actual_forward_speed'][:n][mask]-row['speed'])**2))) if mask.any() else None,execution_cross_track_rmse_m=float(np.sqrt(np.mean(raw['path_cross_track'][:n][mask]**2))) if mask.any() else None)
+            row['observed_phase_metrics']=phases
+
+
+def tolerance_online_summary(rows):
+    expected=set(TOLERANCE_ARMS);methods={r['mode'] for r in rows}
+    if methods!=expected:raise ValueError('all six tolerance arms required')
+    summary={};paired=[]
+    for arm in TOLERANCE_ARMS:
+        summary[arm]={}
+        for bank in sorted({r['bank_index'] for r in rows}):
+            summary[arm][str(bank)]={}
+            for subset in ('all','nominal','disturbed'):
+                group=[r for r in rows if r['mode']==arm and r['bank_index']==bank and (subset=='all' or bool(r['force_N'])==(subset=='disturbed'))]
+                summary[arm][str(bank)][subset]=dict(n=len(group),arrived=sum(r['horizons']['10']['goal_arrived'] is True for r in group),contact=sum(r['horizons']['10']['physical_outcome']=='contact' for r in group),unknown=sum(r['horizons']['10']['physical_outcome']=='unknown' for r in group),diagnostic_execution_path_user1_cost_sum=sum(r['diagnostic_execution_path_user1_cost'] for r in group))
+    for candidate,baseline in itertools.combinations(TOLERANCE_ARMS,2):
+        a={(r['bank_index'],r['route'],r['event']):r for r in rows if r['mode']==candidate};b={(r['bank_index'],r['route'],r['event']):r for r in rows if r['mode']==baseline}
+        if set(a)!=set(b):raise ValueError('incomplete tolerance pairing')
+        details=[]
+        for key,r in a.items():
+            other=b[key];x=r['horizons']['10'];y=other['horizons']['10'];known=x['goal_arrived'] is not None and y['goal_arrived'] is not None and 'unknown' not in (x['physical_outcome'],y['physical_outcome'])
+            details.append(dict(bank_index=key[0],route=key[1],event=key[2],force_N=r['force_N'],candidate=r['case_id'],baseline=other['case_id'],goal1m_gain=known and x['goal_arrived'] and not y['goal_arrived'],goal1m_loss=known and y['goal_arrived'] and not x['goal_arrived'],contact_rescue=x['physical_outcome']=='survived' and y['physical_outcome']=='contact',new_contact=x['physical_outcome']=='contact' and y['physical_outcome']!='contact',diagnostic_execution_path_user1_cost_difference=r['diagnostic_execution_path_user1_cost']-other['diagnostic_execution_path_user1_cost'],full_speed_rmse_difference_m_s=r['full_observed_speed_rmse_m_s']-other['full_observed_speed_rmse_m_s'],full_original_route_distance_rmse_difference_m=r['original_route_sample_distance_rmse_m']-other['original_route_sample_distance_rmse_m'],candidate_prefix=r['prefix'],baseline_prefix=other['prefix'],candidate_matched_original_task=r.get('matched_original_task_metrics'),baseline_matched_original_task=other.get('matched_original_task_metrics')))
+        paired.append(dict(candidate=candidate,baseline=baseline,details=details,nominal_no_new_contact_or_goal_loss=all(not(d['new_contact'] or d['goal1m_loss']) for d in details if not d['force_N'])))
+    return dict(method_bank_subset=summary,new_cases=len(rows),cached_cases=0,alpha_statistics=[dict(case_id=r['case_id'],**r['alpha_rule']) for r in rows],original_path_v3_aggregate='not_yet_verified; original route distance/speed/prefix metrics provided; execution-path user1 reward remains diagnostic',adoption='not_automatically_adopted',data_role='Seen prepared ancestors/familiar routes engineering DEV; full-time q queries extrapolate task1 training states.'),paired
+
+
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
-    confirmation=p.get('mode')=='h75_online_confirmation100'
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100')
+    tolerance=p.get('mode')=='tolerance_online120'
+    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120')
     continuation=p.get('mode')=='h75_switching_continuation'
-    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=100 if confirmation else 18 if online else 36 if switching else 54
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
         raise ValueError(f'complete declared{count} H10 cases required')
@@ -1027,7 +1175,7 @@ def analyze_response(root,p):
     elif switching:validate_switching_inventory(inventory,p['protocol'])
     else:validate_response_inventory(inventory,p['protocol'])
     expected={(analysis_path_key(r),r['event'],response_method(r)) for r in inventory}
-    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(20 if confirmation else 2 if online else 12 if switching else 6):
+    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
@@ -1073,7 +1221,7 @@ def analyze_response(root,p):
         np.testing.assert_allclose(raw['v_user'][active],c['speed'],atol=2e-7,rtol=0)
         data=dict(raw,physical_tick=clock,policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
         pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']))
-        channels=audit_response_channels(raw,c)
+        channels=audit_tolerance_publication(raw,c) if tolerance else audit_response_channels(raw,c)
         chain=verify_correction_chain(dict(data,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=case_initial['initial_filtered'][lane],initial_offsets=case_initial['initial_offsets'][lane])
         cut={k:v[:2000] for k,v in data.items()}
         endpoint=goal_arrival_metrics(cut,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.)
@@ -1098,8 +1246,8 @@ def analyze_response(root,p):
             executed[c['case_id']]=changed
         rebuilt[c['case_id']]=reconstruct_execution_path_reward(raw,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
         frame=onset_frame_impulse(raw,c,pulse)
-        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached36' if cached and online else 'cached18' if cached else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
-            floor_support=audit_floor_support(raw,c,p['config'],p['protocol']['existing_speed_floor_m_s'],initial['initial_nominal_reference'][lane]) if confirmation else None,
+        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached36' if cached and online else 'cached18' if cached else 'new120' if tolerance else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+            floor_support=audit_floor_support(raw,c,p['config'],p['protocol']['existing_speed_floor_m_s'],initial['initial_nominal_reference'][lane]) if confirmation and not tolerance else None,
             prefix=dict(ticks=task_stop,observed_s=task_stop*.005,
                 original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance[:task_stop]**2))) if task_stop else None,
                 speed_rmse_m_s=float(np.sqrt(np.mean((raw['actual_forward_speed'][:task_stop]-c['speed'])**2))) if task_stop else None,
@@ -1133,11 +1281,16 @@ def analyze_response(root,p):
         prefix_receipt=json.loads((run/'own_switch_prefix_receipt.json').read_text())
         if not prefix_receipt.get('own_switch') or not prefix_receipt.get('discrete_exact') or (not prefix_receipt.get('all_fields_within_tolerance') and not (p['protocol']['prefix_comparison'].get('floating_descriptive_only') and prefix_receipt.get('floating_descriptive_only'))):
             raise ValueError('runner own-switch prefix receipt incomplete')
+    if tolerance:
+        params=load_tolerance_analysis_export(root,p)
+        for row in rows:
+            row['alpha_rule']=audit_tolerance_coordination(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['config']['residual_interface'],params)
+        tolerance_common_windows(rows,raws,paths,goals)
     if online:
         for row in rows:
             if row['mode']=='online_scalar':
                 row['alpha_rule']=audit_online_rule(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['protocol']['rule'])
-    summary,paired=confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
+    summary,paired=tolerance_online_summary(rows) if tolerance else confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
@@ -1150,7 +1303,9 @@ def analyze_response(root,p):
     if confirmation:
         lines=['# 两初态五方法100回合确认','','全部100为本轮实际H10轨迹，不复用旧物理轨迹。两prepared bank不是独立训练种子；每bank/route/event五法完整原生初态配对。全部state/user/reward alpha=1，固定Actor查询alpha0/.5/1另列。',
                '','原世界goal1m与真实触地主终点；Zero+既有1.5m/s下限若未触发须标为本组等同Zero，不据此宣称排除了速度反馈支持。执行路径user1奖励仅诊断，重规划后不称原S严格完成。']
-    elif online:
+    if tolerance:
+        lines=['# 冻结容扰在线协调120回合','','全部120为本轮新H10物理：banks2/5×左右S×五事件×六方法；两个prepared祖先不是独立训练seed。已见来源/熟悉路线的在线工程DEV，非独立确认。', '','q_rank与q_bce为冻结三seed概率等权集成；task_guard_only用于分离几何guard收益。全程查询超出训练task1源分布，分数未校准为安全概率；fallback不是安全保证。原worldgoal1m、触地、无扰损失与原路径距离分别报告；重规划后执行路径user1奖励仅诊断。']
+    elif online and not confirmation:
         lines=['# 因果几何预瞻scalar-alpha：18新回合＋36固定缓存','','控制器不使用起扰时刻或力标签，仅以当下执行路径/进度及原速度请求决定alpha；几何阈值是已知DEV上的工程启发式，不是稳定性界。无训练/阈值搜索。',
                '','两tight S、九事件，配对fixed.5/fixed1来自同原始54合同。共同原goal1m与真实触地为主，保留所有无扰任务/触地损失；不以百分比奖励优势作门槛。Alpha即时请求，原生参考滤波/限幅保留。']
     if switching:
@@ -1161,12 +1316,38 @@ def analyze_response(root,p):
         lines+=['','用户授权数值修订：原36条各自task1完整carry原样续接，未复制代表状态、未reset；同原点状态仅近似匹配。保留原失败封存。此为工程失败后协议修订，不是科学结果调参。与缓存stay的所有有限浮点前缀差异仅描述、不作拒绝门槛；报告max及旧参考容差超出数（phi_dot 1e-4，其余1e-5/rtol1e-6）。非有限量、dtype、离散量、实际动作/时刻/力及故障仍严格核查。完整组差异见initial_carry_review.json。']
     for event in response_plot_groups(rows):
         lines+=['',f'## {event}','',f'![Original and executed XY](full_xy_{event}.png)','',f'![First-arrival prefixes](task_xy_{event}.png)']
+        if tolerance:lines+=['',f'![Per-step rewards and coordination](steps_and_coordination_{event}.png)']
     lines+=['','执行路径V3图以相同user1重评分；运行本身alpha评分另行核验并保留。逐步/累计奖励和分项仅为诊断，不是重规划后原用户路径效用。原路线距离与执行路径误差分别保存；全窗距离包含首达后运动，首达/真实失败前缀另列；未完成短窗不能当更低完成代价。',
         '世界Y脉冲投影使用日志起扰前upper yaw作一次onset-frame近似，不是逐物理子步积分。完整剂量/截断暴露、首达早于起扰、名义重规划逐例列出。4s若重规划，先规划后执行含脉冲的步。',
         '[逐例结果](results.json) · [无扰/受扰汇总](summary.json) · [全部配对得失](paired.json) · [核验](receipt.json)',
         '全部声明条件逐步原始帧、实际末点、重建奖励/累计分项、真速度/轮速代理与误差保留于case诊断NPZ；图见diagnostics。无20s数据或结论。']
+    if tolerance:lines+=['','原路径V3加权聚合尚未核验，不能用执行路径奖励代替。已提供固定原路线距离/请求速度误差、同一实际窗口及同一首达前窗口配对；nominal损失逐条件保留。所有candidate latent/target、3×4概率/taskmask/proxy/原生权限逐步数据位于case诊断NPZ；独立NumPy重建概率与因果选择全部核查。']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
     return summary
+
+
+def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpoint):
+    import matplotlib.pyplot as plt
+    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00')
+    fig,axes=plt.subplots(7,1,figsize=(12,18),sharex=True,layout='constrained')
+    for color,row in zip(palette,selected):
+        raw=raws[row['case_id']];n=row['active_lower_ticks'];steps=np.arange(1,n+1);reward=rebuilt[row['case_id']]['user1_reward'];method=row['method']
+        for ax,y in zip(axes[:3],(reward,np.cumsum(reward),raw['alpha_exec'][:n])):
+            ax.plot(steps,y,c=color,label=method,lw=.8);ax.scatter(steps[-1],y[-1],c=color,marker='x' if row['horizons']['10']['physical_outcome']=='contact' else 's',s=16)
+        for ax in axes:
+            if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,c='gray',alpha=.04)
+            if row['replan_task_tick'] is not None:ax.axvline(row['replan_task_tick'],c=color,ls=':',lw=.6)
+        if row['mode'] in ('q_rank','q_bce'):
+            ax=axes[3 if row['mode']=='q_rank' else 4]
+            for a,style in enumerate(('-','--',':')):ax.plot(steps,raw['coord_qmin'][:n,a],ls=style,label=f"{method} candidate alpha{[0,.5,1][a]}",lw=.8)
+            ax.axhline(.8,c='gray',ls=':');ax.axhline(.85,c='gray',ls='--')
+        axes[5].plot(steps,raw['coord_degraded'][:n],c=color,label=method,lw=.8)
+        axes[6].plot(steps,raw['coord_publication_withheld'][:n],c=color,label=method,lw=.8)
+    for ax,title in zip(axes,('Diagnostic execution-path user1 reward / actual step','Cumulative diagnostic execution-path user1 reward','Actual executed alpha','q_rank: min over four hypotheses (uncalibrated)','q_bce: min over four hypotheses (uncalibrated)','Actual degraded fallback flag (not safety)','Native publication withheld flag')):
+        ax.set_ylabel(title);ax.grid(alpha=.15);ax.legend(fontsize=6)
+    axes[-1].set_xlabel('Actual lower-control transition step (dt=.005s)')
+    fig.suptitle(label+' / '+checkpoint+' / user1; gray=intended disturbance, dotted=replan; actual failure endpoints retained')
+    fig.savefig(out/f'steps_and_coordination_{label}.png',dpi=125);plt.close(fig)
 
 
 def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_directory=None):
@@ -1175,7 +1356,11 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
     out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
-    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555')
+    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows)
+    checkpoint='H75 frozen'
+    if tolerance:
+        plan=json.loads((root/'plan.json').read_text());checkpoint='H75 actor SHA '+plan['models']['H75']['actor_sha256'][:12]
+    palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00')
     for event in response_plot_groups(rows):
         group=response_plot_selection(rows,event)
         routes=sorted({analysis_path_key(r) for r in group})
@@ -1203,10 +1388,11 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
                         dose=np.flatnonzero(np.linalg.norm(raw['applied_force_impulse'][:n],axis=1)>1e-10)
                         if len(dose):ax.scatter(*raw['actual_xy'][dose].T,c=color,s=8,alpha=.5)
                 ax.set(title=route,xlabel='World X (m)',ylabel='World Y (m)');ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=6);ax.grid(alpha=.15)
-            fig.suptitle(event+' / '+('first-arrival/contact prefix' if task else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
+            fig.suptitle((checkpoint+' / ' if tolerance else '')+event+' / '+('first-arrival/contact prefix' if task else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
             fig.savefig(out/f'{"task" if task else "full"}_xy_{event}.png',dpi=140);plt.close(fig)
         for route in routes:
             selected=[r for r in group if analysis_path_key(r)==route]
+            if tolerance:render_tolerance_steps_and_decisions(out,event,selected,raws,rebuilt,checkpoint)
             path=paths[route];original_tree=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[route]]))
             fig,axes=plt.subplots(13,1,figsize=(12,28),sharex=True,layout='constrained')
             comp,cax=plt.subplots(len(keys)+1,2,figsize=(14,2.3*(len(keys)+1)),sharex=True,squeeze=False,layout='constrained')
