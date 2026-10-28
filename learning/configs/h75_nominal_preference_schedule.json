@@ -1,0 +1,45 @@
+{
+  "experiment_id": "STTW-H75-NOMINAL-PREFERENCE-SCHEDULE-V1",
+  "question": "Does reversible causal preference adjustment offer task-feasible original-user benefit beyond fixed preference and ordinary speed capping?",
+  "horizon_s": 10.0,
+  "original_user_alpha": 1.0,
+  "expected_cases": 8,
+  "maximum_lower_ticks": 16000,
+  "rule": {
+    "preview_m": 1.5,
+    "engage_accel_m_s2": 3.0,
+    "release_accel_m_s2": 2.7,
+    "active_alpha": 0.5,
+    "alpha_rate_per_s": 1.0,
+    "upper_dt_s": 0.02
+  },
+  "acceptance": {
+    "require_all_routes_strict": true,
+    "require_no_contact_domain_or_fault": true,
+    "gentle_cost_max_ratio_to_fixed1": 1.05,
+    "gentle_cost_max_additive": 0.1,
+    "aggregate_total_cost_reduction_fraction": 0.05,
+    "aggregate_task_channels_reduction_fraction": 0.05,
+    "comparison": "Independently minimize aggregate total cost and task_channels over simple controllers (fixed0,fixed0.5,fixed1,curvature_speed) passing all four strict tasks; require schedule <=0.95 times each separate minimum.",
+    "return_alpha_tolerance": 1e-06,
+    "return_condition": "After final original curve, must return to original user alpha=1 before native horizon; report last active time and duration.",
+    "failure_policy": "Retain all losses and raw; no parameter search, extra routes, retries or automatic MLP training. Engineering failure stops with partial evidence.",
+    "gentle_guard_formula": "schedule_cost <= 1.05 * fixed1_cost + 0.1"
+  },
+  "data_role": "Exploratory familiar nominal DEV, four prior S contexts and one shared ancestor. Rules selected after seeing fixed baseline results; not independent TEST or preregistered confirmatory proof.",
+  "parameter_rationale": "One heuristic engineering setting, not a physical safety threshold: 1.5m spatial preview, lateral acceleration proxy hysteresis 3.0/2.7m/s^2, half-second alpha transition. No threshold optimization on this screen.",
+  "training": false,
+  "disturbance": false,
+  "replanning": false,
+  "reason_no_replanning": "Nominal screen must follow original S route rather than shortcut required bends. Any later disturbed evaluation uses shared causal replanning under a separate declaration.",
+  "scoring": "Original user alpha1, original fixed path/goal and original speed request; runtime alpha weights audited separately. Task/goal/contact/domain outcomes separate, full observed-window and termination accounting.",
+  "stop_rule": "Exactly8 H10 native trajectories, at most16000 lower ticks, no optimization or implicit retries.",
+  "baseline_reuse": "Completed original native16 only after raw/model/config/initialstate/path identity checks; no baseline rerun.",
+  "adoption": "No claim of tolerance benefit or requirement for learned tolerance prediction from nominal results.",
+  "diagnostics": [
+    "Per-route total and task-channel differences and worst degradation, even when aggregate gate passes.",
+    "Hindsight best strict fixed policy per route; descriptive comparator only, not a deployed selector.",
+    "Gentle routes also exceed3.0m/s^2 proxy: not inactive controls.",
+    "One curvature-speed rule cannot exclude all possible speed scheduling algorithms."
+  ]
+}

@@ -135,6 +135,93 @@ def prepare_capability(source,root,protocol):
     save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
 
 
+def scheduling_cases(protocol, contexts):
+    """Exactly the four completed S routes, with two H75 scheduling arms."""
+    import importlib.util
+    helper=Path(__file__).with_name('geometric_preference_schedule.py')
+    spec=importlib.util.spec_from_file_location('native_schedule_validation',helper)
+    rule=importlib.util.module_from_spec(spec);spec.loader.exec_module(rule)
+    rule.validate_rule(protocol['rule'])
+    if (protocol.get('horizon_s')!=10. or protocol.get('original_user_alpha')!=1. or
+        protocol.get('expected_cases')!=8 or protocol.get('maximum_lower_ticks')!=16000 or
+        len(contexts)!=4):
+        raise ValueError('schedule requires fixed user1, same four contexts, H10 and8/16000 budget')
+    if 'contexts' in protocol and protocol['contexts']!=contexts:
+        raise ValueError('scheduling cannot change completed capability contexts')
+    # Reuse the original geometry validation without inventing new contexts.
+    capability_cases(dict(contexts=contexts,horizon_s=10.,alphas=[0.,.5,1.],
+                          expected_cases=16,maximum_lower_ticks=32000))
+    return [dict(c,alpha=1.,original_user_alpha=1.,policy=arm,force_N=0.,onset_s=1.)
+            for c in contexts for arm in ('alpha_schedule','curvature_speed')]
+
+
+def prepare_scheduling(source, root, protocol):
+    """Seal a new nominal8 panel while retaining the completed native16."""
+    source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve()
+    old=json.loads((source/'plan.json').read_text())
+    if (digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256'] or
+        old.get('mode')!='native_capability_v1'):
+        raise ValueError('sealed native capability source required')
+    status=json.loads((source/'evaluation/status.json').read_text())
+    if status.get('phase')!='completed' or status.get('completed_cases')!=16:
+        raise ValueError('completed native capability16 required; do not rerun it')
+    for f,sha in {**old['input_sha256'],**old['native_source_sha256']}.items():
+        if digest(f)!=sha:raise ValueError('capability source identity changed '+f)
+    # Current runner now adds an opt-in branch. Verify the numerical runner used
+    # for cached evidence against its immutable launch snapshot, not live code.
+    archived_runners={}
+    for f,sha in old['runner_sha256'].items():
+        snapshot=source/'source'/Path(f).name
+        if not snapshot.exists() or digest(snapshot)!=sha:
+            raise ValueError('capability runner snapshot identity changed '+str(snapshot))
+        archived_runners[str(snapshot)]=sha
+    review=json.loads((source/'analysis/review.json').read_text())
+    records=review['records']
+    def key(c):return (c['route'],c['speed'],c['policy'],c['alpha'])
+    if (len(records)!=16 or len({key(c) for c in records})!=16 or
+            {key(c) for c in records}!={key(c) for c in old['cases']}):
+        raise ValueError('complete cached16 capability case inventory required')
+    for r in records:
+        if digest(r['raw_file'])!=r['raw_sha256']:raise ValueError('cached capability raw changed')
+    # Models, initial prepared carry and original route data are scientific inputs.
+    identity={**old['input_sha256'],**old['native_source_sha256'],**archived_runners}
+    for owner in (old['h75'],old['initial_source']['candidate']):
+        for name in ('actor','checkpoint'):
+            f=owner[name];sha=owner[name+'_sha256']
+            if digest(f)!=sha:raise ValueError('native model identity changed '+f)
+            identity[f]=sha
+    proposal=json.loads(protocol.read_text());cases=scheduling_cases(proposal,old['contexts'])
+    helper=Path(__file__).with_name('geometric_preference_schedule.py').resolve()
+    own=[Path(__file__).resolve(),Path('learning/cli/run_native_zero_comparison.py').resolve(),helper]
+    scientific=[source/'plan.json',source/'seal.json',source/'analysis/review.json',
+        source/'evaluation/status.json',source/'evaluation/manifest.json',source/'evaluation/results.json',
+        source/'evaluation/initial_carry.pkl',protocol]
+    scientific += [source/'evaluation'/(c['route']+'_path.npz') for c in old['contexts']]
+    identity.update({str(f):digest(f) for f in scientific})
+    root.mkdir(exist_ok=False);(root/'source').mkdir()
+    for f in own:(root/'source'/f.name).write_bytes(f.read_bytes())
+    save(root/'cached_records.json',records)
+    identity[str(root/'cached_records.json')]=digest(root/'cached_records.json')
+    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='native_scheduling_v1',
+        source=str(source),cached_source=str(source),native_runtime_root=old['native_runtime_root'],
+        native_source_sha256=old['native_source_sha256'],
+        runner_sha256={str(f):digest(f) for f in own},input_sha256=identity,
+        config=old['config'],initial_source=old['initial_source'],h75=old['h75'],cases=cases,contexts=old['contexts'],
+        protocol=proposal,rule=dict(source=str(helper),source_sha256=digest(helper),**proposal['rule']),
+        cached_cases=16,new_cases=8,maximum_new_lower_ticks=16000,maximum_allocated_lower_slots=16000,
+        horizon_s=10.,optimizer_updates=0,target_policy='scheduling',original_user_alpha=1.,
+        cache_identity=dict(plan_sha256=digest(source/'plan.json'),records_sha256=digest(source/'analysis/review.json'),
+            case_inventory=[dict(route=r['route'],speed=r['speed'],policy=r['policy'],alpha=r['alpha'],
+                raw_file=r['raw_file'],raw_sha256=r['raw_sha256']) for r in records]),
+        initialization='Original complete native prepared bank/reset, alpha1 and latchfalse; no state reset at scheduling transitions.',
+        scoring='Fixed original user1/original v_user/original full S geometry; executed-alpha own native reward separately reconstructed.',
+        control='Frozen H75 at50Hz; schedule alpha before observation OR cap H75 proposed speed via original latent mapping; same physical filters/rates/bounds/ESO/history/local300.',
+        stop='Exactly8 nominal H10 trajectories, native stops;0force/0replan/0training; preserve error evidence without implicit retry/tuning.',
+        optimizations=['same-shape vmap8','scan50 chunks','shared JAX compilation cache','single compiled function reused'])
+    save(root/'plan.json',plan);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+
+
 def verify(root):
     root=Path(root).resolve();p=json.loads((root/'plan.json').read_text())
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:
@@ -148,7 +235,7 @@ def verify(root):
 
 def run(root, shape_only=False):
     root=Path(root).resolve();p=verify(root)
-    if p.get('target_policy','zero') not in ('zero','equilibrium','capability'):raise ValueError('unknown target policy')
+    if p.get('target_policy','zero') not in ('zero','equilibrium','capability','scheduling'):raise ValueError('unknown target policy')
     if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':
         raise ValueError('prepared only; no implicit restart')
     native=Path(p['native_runtime_root'])
@@ -179,9 +266,10 @@ def run(root, shape_only=False):
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         cfg=p['config'];env,snapshot=load_environment(cfg,p['initial_source'],'terminal_contract_v2')
         cases=p['cases'];n=len(cases);capability=p.get('mode')=='native_capability_v1'
+        scheduling=p.get('mode')=='native_scheduling_v1'
         assert n==(16 if capability else 8)
         pose=np.asarray(env.physics.helpers.pose(snapshot.data))
-        if capability:
+        if capability or scheduling:
             from sttw_control.path_command_scenarios import _integrate_route
             bank={c['route']:_integrate_route(pose,cfg['path'],2,c['radius_m'],np.deg2rad(c['angle_deg']),
                   c['speed'],c['direction'],0.,0.).path for c in p['contexts']}
@@ -194,20 +282,55 @@ def run(root, shape_only=False):
                     goal_s_m=float(bank[c['route']].goal)))
             save(out/'geometry_receipt.json',receipt)
         else:bank={c['route']:build_path(c['builder'],pose,cfg) for c in cases}
+        if scheduling:
+            # Same fixed original paths, not references altered by scheduling.
+            for name,path in bank.items():
+                with np.load(Path(p['source'])/'evaluation'/(name+'_path.npz'),allow_pickle=False) as archived:
+                    for field in ('s','xy','heading','curvature','turn_end','goal'):
+                        if not np.array_equal(np.asarray(getattr(path,field)),archived[field]):
+                            raise ValueError('cached original path differs '+name+'/'+field)
         paths=jax.tree.map(lambda *v:j.stack(v),*[bank[c['route']] for c in cases])
         speeds=j.asarray([c['speed'] for c in cases]);alphas=j.asarray([c['alpha'] for c in cases])
         states=jax.jit(jax.vmap(lambda path,v,a:env.reset(snapshot,path,v,a)))(paths,speeds,alphas)
         jax.block_until_ready(states)
+        if scheduling:
+            # Compare ALL original closed-loop state leaves to the matching
+            # cached alpha1 initialization. No filter/observer/history rebuild.
+            with (Path(p['source'])/'evaluation/initial_carry.pkl').open('rb') as f:
+                archived=pickle.load(f)
+            old_cases=json.loads((Path(p['source'])/'plan.json').read_text())['cases']
+            indices=[next(i for i,c in enumerate(old_cases) if c['route']==case['route'] and
+                c['speed']==case['speed'] and c['policy']=='H75' and c['alpha']==1.) for case in cases]
+            expected=jax.tree.map(lambda x:np.asarray(x)[indices],archived)
+            aa,ta=jax.tree.flatten(jax.device_get(states));bb,tb=jax.tree.flatten(expected)
+            differences=[]
+            for i,(a,b) in enumerate(zip(aa,bb)):
+                if np.array_equal(a,b,equal_nan=True):continue
+                delta=np.abs(np.asarray(a,dtype=float)-np.asarray(b,dtype=float)) if a.shape==b.shape else None
+                differences.append(dict(leaf=i,actual_shape=list(a.shape),expected_shape=list(b.shape),
+                    dtype=str(a.dtype),maximum_abs_difference=None if delta is None else float(np.nanmax(delta))))
+            if ta!=tb or differences:
+                save(out/'initial_identity_receipt.json',dict(original_paths_exact=True,
+                    all_initial_carry_leaves_exact=False,tree_structure_equal=ta==tb,
+                    differences=differences,physics_steps=0))
+                raise ValueError('cached native initial carry differs from original alpha1; see initial_identity_receipt.json')
+            save(out/'initial_identity_receipt.json',dict(original_paths_exact=True,
+                all_initial_carry_leaves_exact=True,leaves=len(aa),cached_alpha=1.,
+                initial_schedule_alpha=1.,initial_latch=False,physics_steps=0))
         env.set_log_template(jax.tree.map(lambda x:x[0],states),bank[cases[0]['route']],speeds[0])
         keys=list(configured_cost_keys(cfg))
         actor=params=None
-        neural=j.asarray([c['policy']=='H75' for c in cases])
-        neural_indices=np.asarray([i for i,c in enumerate(cases) if c['policy']=='H75'],dtype=np.int32)
-        if capability:
+        neural_indices=np.asarray([i for i,c in enumerate(cases) if c['policy']=='H75' or scheduling],dtype=np.int32)
+        if capability or scheduling:
             from sttw_control.path_command_policy import make_path_actor
             actor=make_path_actor(cfg)
             with Path(p['h75']['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
-        rule=None
+        rule=None;schedule=None
+        if scheduling:
+            import importlib.util
+            spec=importlib.util.spec_from_file_location('native_geometric_preference_schedule',p['rule']['source'])
+            schedule=importlib.util.module_from_spec(spec);spec.loader.exec_module(schedule)
+            schedule.validate_rule(p['protocol']['rule'])
         if p.get('target_policy')=='equilibrium':
             import importlib.util
             from sttw_control.direct_command_policy import q_ratio
@@ -218,7 +341,7 @@ def run(root, shape_only=False):
               'phi','phi_dot','actual_delta','peak_roll','physical_failure','domain_exit','policy_fault','lower_fault',
               'governed','nominal','applied_force_impulse','scored_tick_reward','latent_z','offsets','filtered_offset','target_offset','lower_action')
         template=jax.eval_shape(lambda st:env.policy_step(st,j.zeros(2),bank[cases[0]['route']],speeds[0],10.,j.zeros(5)),jax.tree.map(lambda x:x[0],states))[1]
-        if capability and any(k not in template for k in ('active_tick','contact_failure','nonfinite')):
+        if (capability or scheduling) and any(k not in template for k in ('active_tick','contact_failure','nonfinite')):
             raise ValueError('native capability requires active/contact/nonfinite logs')
         keep=keep+tuple(k for k in ('contact_failure','nonfinite') if k in template)
         def one(st,path,v,z):
@@ -237,17 +360,66 @@ def run(root, shape_only=False):
                     targets=targets.at[neural_indices].set(jax.vmap(lambda x:actor.apply(params,x))(obs))
                 return jax.vmap(one)(s,paths,speeds,targets)
             return jax.lax.scan(step,st,None,length=50)
+        if scheduling:
+            is_alpha=j.asarray([c['policy']=='alpha_schedule' for c in cases])
+            rule_config=p['protocol']['rule']
+            def schedule_chunk(carry):
+                def step(carry,_):
+                    s,latched=carry
+                    def decision(st,path,v,latch):
+                        return schedule.advance(st.alpha,latch,v,path.s,path.curvature,
+                                                st.projection.progress,rule_config)
+                    alpha,latch,diagnostics=jax.vmap(decision)(s,paths,speeds,latched)
+                    enabled=~(s.physical.failed|s.fault|s.domain_exit)
+                    latch=j.where(enabled,latch,latched)
+                    alpha=j.where(enabled&is_alpha,alpha,s.alpha)
+                    s=s.replace(alpha=alpha)
+                    def act(st,path,v):
+                        obs,_,fault=env.observation(st,path,v,10.)
+                        return actor.apply(params,obs),fault
+                    targets,fault=jax.vmap(act)(s,paths,speeds)
+                    def cap(z,st,cap,active,alpha_arm):
+                        return schedule.cap_speed_latent(z,st.physical.raw,cap,
+                                                         active&~alpha_arm,cfg)
+                    targets,speed_audit=jax.vmap(cap)(targets,s,diagnostics['rule_speed_target'],latch,is_alpha)
+                    s=s.replace(fault=s.fault|fault)
+                    end,logs=jax.vmap(one)(s,paths,speeds,targets)
+                    # Persist audit quantities per actual physical tick. Latents
+                    # are held over four ticks; physical.raw continues its normal
+                    # native publish updates and is never overwritten by the rule.
+                    def ticks(x):return j.broadcast_to(x[:,None],logs['active_tick'].shape)
+                    logs.update({k:ticks(v) for k,v in {**diagnostics,**speed_audit}.items()})
+                    logs['rule_active']=ticks(latch)
+                    logs['original_user_alpha']=j.ones_like(logs['time'])
+                    logs['executed_alpha']=ticks(alpha)
+                    logs['rule_applied_prefilter_target']=logs['nominal']+logs['target_offset']
+                    # Native chi is a post-step geometry weight; preserve it for
+                    # executed-alpha reward verification and original-user rescore.
+                    # Reconstruct chi from the same logged progress and fixed path.
+                    from sttw_control.direct_command_policy import q_ratio
+                    def chi_of(path,progress,v):
+                        k=j.interp(progress,path.s,path.curvature)
+                        ff=j.arctan(env.cc.wheelbase*k/j.cos(env.cc.caster))
+                        return j.clip((j.abs(ff/q_ratio(v,env.cc))-.18)/.12,0.,1.)
+                    chi=jax.vmap(chi_of)(paths,logs['path_progress'],speeds)
+                    logs['reward_chi']=chi
+                    return (end,latch),logs
+                return jax.lax.scan(step,carry,None,length=50)
+            chunk=schedule_chunk
+            states=(states,j.zeros(n,dtype=j.bool_))
         shape=jax.eval_shape(chunk,states)
         if shape_only:
             save(out/'receipt.json',dict(phase='completed',physics_steps=0,optimizer_updates=0,
                 native_runtime_root=str(native),active_tick_shape=list(shape[1]['active_tick'].shape),
-                source_sha256=p['runner_sha256'],target_policy=p.get('target_policy','zero'),zero_target=rule is None and not capability))
+                source_sha256=p['runner_sha256'],target_policy=p.get('target_policy','zero'),zero_target=rule is None and not capability and not scheduling))
             update(phase='completed');return
         for name,path in bank.items():np.savez_compressed(out/(name+'_path.npz'),**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
-        with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(states),f)
-        save(out/'manifest.json',dict(config=cfg,source=p['initial_source'],cases=cases,reward_components=keys,
+        with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(states[0] if scheduling else states),f)
+        manifest=dict(config=cfg,source=p['initial_source'],cases=cases,reward_components=keys,
             native_runtime_root=str(native),model_identity=env.physics.bundle.identity,plan_sha256=digest(root/'plan.json'),
-            cached_cases=p['cached_cases'],training_steps=0,target_policy=p.get('target_policy','zero'),target_semantics='Declared target before original filters; complete frozen lower remains'))
+            cached_cases=p['cached_cases'],training_steps=0,target_policy=p.get('target_policy','zero'),target_semantics='Declared target before original filters; complete frozen lower remains')
+        if scheduling:manifest.update(original_user_alpha=1.,schedule_rule=p['rule'])
+        save(out/'manifest.json',manifest)
         before=time.monotonic()
         fn=jax.jit(chunk).lower(states).compile()
         update(compile_s=time.monotonic()-before,sampling_s=0.,inflight_block=None)
@@ -265,7 +437,7 @@ def run(root, shape_only=False):
             np.savez_compressed(chunks/f'chunk_{block:02d}.npz',**host)
             active+=int(host['active_tick'].sum())
             update(phase='running',completed_blocks=block+1,active_lower_ticks=active,allocated_lower_slots=(block+1)*n*200)
-            if np.any(host['policy_fault']|host['lower_fault']) or np.any(np.asarray(states.fault)):
+            if np.any(host['policy_fault']|host['lower_fault']) or np.any(np.asarray((states[0] if scheduling else states).fault)):
                 raise RuntimeError('native engineering fault; no negative control label or automatic retry')
         logs={k:np.concatenate([b[k] for b in saved],axis=0) for k in saved[0]};rows=[]
         for i,c in enumerate(cases):

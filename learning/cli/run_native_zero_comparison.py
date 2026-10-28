@@ -8,7 +8,7 @@ sys.dont_write_bytecode=True
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('stage',choices=['prepare','prepare-rule','prepare-capability','shape','execute']);p.add_argument('root',type=Path)
+    p.add_argument('stage',choices=['prepare','prepare-rule','prepare-capability','prepare-scheduling','shape','execute']);p.add_argument('root',type=Path)
     p.add_argument('--source',type=Path,default=Path('runs/current_native_preference_v1_attempt2'))
     p.add_argument('--protocol',type=Path)
     a=p.parse_args()
@@ -20,6 +20,9 @@ if __name__=='__main__':
         elif a.stage=='prepare-capability':
             if a.protocol is None:p.error('--protocol required')
             module.prepare_capability(a.source,a.root,a.protocol)
+        elif a.stage=='prepare-scheduling':
+            if a.protocol is None:p.error('--protocol required')
+            module.prepare_scheduling(a.source,a.root,a.protocol)
         elif a.stage=='prepare-rule':
             file=file.with_name('native_equilibrium_rule.py')
             spec=importlib.util.spec_from_file_location('native_rule_preparer',file)
