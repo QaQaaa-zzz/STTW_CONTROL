@@ -247,7 +247,21 @@ def evidence_manifest():
         'E164':archive/'h75_user_late_state192_v1/plan.json',
         'E165':archive/'h75_user_late_state192_v1/status.json',
         'E166':archive/'h75_user_late_state192_v1/predictor_evaluation/metrics.json',
-        'E167':archive/'h75_user_late_state192_v1/predictor_evaluation/user_rejection.json'}
+        'E167':archive/'h75_user_late_state192_v1/predictor_evaluation/user_rejection.json',
+        'E168':archive/'h75_tolerance_predictor_user_mix_v1/training/resolved_config.json',
+        'E169':archive/'h75_tolerance_predictor_user_mix_v1/prepared/receipt.json',
+        'E170':archive/'h75_tolerance_predictor_user_mix_v1/training/selection_manifest.json',
+        'E171':archive/'h75_tolerance_predictor_user_mix_v1/training/development_temporal_metrics.json',
+        'E172':archive/'h75_tolerance_predictor_user_mix_v1/training/bce_rank/seed0/history.json',
+        'E173':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/resolved_config.json',
+        'E174':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/selection_manifest.json',
+        'E175':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/development_temporal_metrics.json',
+        'E176':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed0/history.json',
+        'E177':archive/'h75_tolerance_predictor_user_mix_prior_v1/prepared/receipt.json',
+        'E178':archive/'h75_tolerance_predictor_user_mix_v1/training/status.json',
+        'E179':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/status.json',
+        'E180':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed1/history.json',
+        'E181':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed2/history.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',

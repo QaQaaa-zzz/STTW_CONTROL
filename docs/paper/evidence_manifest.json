@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "42c130f6914fdf8d66f3d0cf9b157443a6bc746107b2c314d49e851783193b0b",
-  "builder_sha256": "d4b53a03c3f19e7b52272f66b10ad1dce091fa883ba9311ed7940b0bd58a9432",
+  "manuscript_sha256": "8c73d4f69eb3ae6545032d01b47791bff250b54588e2a0525bc6bd213d5cfa8b",
+  "builder_sha256": "8a2fefdc46f3d083613617c8f4e527e66e6a14e7c9b50f64e528eedaf319e328",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1007,6 +1007,90 @@
       "sha256": "cdbe63210f3b10746af016508e81e096a6d22fae6e0ef4a73131c1f3e963d217",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E168": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/training/resolved_config.json",
+      "sha256": "f3a985b3f5a23a165185f290d504751e61caa669fcfbb415ff61541f7bdd8712",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E169": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/prepared/receipt.json",
+      "sha256": "e20d9c5233f73599699d5930240808102c692f7ef7e7ffccddea1e5e93b4bb75",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E170": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/training/selection_manifest.json",
+      "sha256": "c8d6b89a641fa4a6a94ab1f6d9651acf470addb0ca24a5ede78bc10cca05ab08",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E171": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/training/development_temporal_metrics.json",
+      "sha256": "96789e8ce1b268cd44ed32670d91c6e97abd9dbf3856bb964758af9cc67c4773",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E172": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/training/bce_rank/seed0/history.json",
+      "sha256": "11f25430b2e20d8394fcce1b2ff632d048c9f0457da0114aa6373e808a7c89dc",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E173": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/resolved_config.json",
+      "sha256": "91b1852756ffece47147cc1258d4cd67a9690c22f17219eb7b652bd5a3387341",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E174": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/selection_manifest.json",
+      "sha256": "25ed69a92dd16a94f0a30c9a5d1445c42afbbcb2c3fea2cee3d117a4450544ee",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E175": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/development_temporal_metrics.json",
+      "sha256": "cfb63a255e3bd49c348222eeaba42c09a87fad68cdde909274fa7fd3ee2b8c9c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E176": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed0/history.json",
+      "sha256": "929dc700a366b11fd8ecef8f27f7c83a01ccf7501636d4bc9eed42fd49ca24ec",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E177": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/prepared/receipt.json",
+      "sha256": "3548a7743f0c1494a244dfe65670edc0bc51a2fbad602699cfe79cb1742e4afa",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E178": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1/training/status.json",
+      "sha256": "32ba4cad36b41248bfb63514eb0247cf669d51899fb7ce6e263ff87f0c8a7a89",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E179": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/status.json",
+      "sha256": "a2544c1315cacc0fb094aeb1e494d89b7199ed8d91aaf02a4931e29b0bba5d2d",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E180": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed1/history.json",
+      "sha256": "546af8877ffc8d05a59af73f9c05a7156f844b1d0ff33ffec35c4b5e4243a353",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E181": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed2/history.json",
+      "sha256": "c9bb2e56fd6437a25a0defe81b6084b897caf5e6c583b884e950ae7fe0f9d152",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1144,7 +1228,21 @@
     "E164",
     "E165",
     "E166",
-    "E167"
+    "E167",
+    "E168",
+    "E169",
+    "E170",
+    "E171",
+    "E172",
+    "E173",
+    "E174",
+    "E175",
+    "E176",
+    "E177",
+    "E178",
+    "E179",
+    "E180",
+    "E181"
   ],
   "claims_from_readback": [
     {
