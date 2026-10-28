@@ -1439,6 +1439,7 @@ def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
     speed_comparison=p.get('mode')=='speed_query_online60'
     frozen=p.get('mode')=='frozen_confirmation200'
+    frozen_layout=frozen_confirmation_layout(p['protocol']) if frozen else None
     fallback=p.get('mode')=='task_aware_fallback72'
     prior=p.get('mode') in ('user_prior_online72','task_aware_fallback72')
     preference=p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
@@ -1448,7 +1449,7 @@ def analyze_response(root,p):
     confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
     online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60')
     continuation=p.get('mode')=='h75_switching_continuation'
-    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=60 if speed_comparison else 200 if frozen else 72 if prior else 40 if temporal else 120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=60 if speed_comparison else frozen_layout['cases'] if frozen else 72 if prior else 40 if temporal else 120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
         raise ValueError(f'complete declared{count} H10 cases required')
@@ -1472,7 +1473,7 @@ def analyze_response(root,p):
     elif switching:validate_switching_inventory(inventory,p['protocol'])
     else:validate_response_inventory(inventory,p['protocol'])
     expected={(analysis_path_key(r),r['event'],response_method(r),r.get('effective_user_alpha')) for r in inventory}
-    if len(expected)!=count or len({r['route'] for r in inventory})!=(2 if frozen or speed_comparison else 4 if broaden or preference else 2) or sum(not r['force_N'] for r in inventory)!=(12 if speed_comparison else 40 if frozen else 24 if prior else 40 if broaden or preference else 8 if temporal else 24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
+    if len(expected)!=count or len({r['route'] for r in inventory})!=(frozen_layout['routes'] if frozen else 2 if speed_comparison else 4 if broaden or preference else 2) or sum(not r['force_N'] for r in inventory)!=(12 if speed_comparison else frozen_layout['nominal_cases'] if frozen else 24 if prior else 40 if broaden or preference else 8 if temporal else 24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
@@ -1543,7 +1544,7 @@ def analyze_response(root,p):
             executed[c['case_id']]=changed
         rebuilt[c['case_id']]=reconstruct_execution_path_reward(raw,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
         frame=onset_frame_impulse(raw,c,pulse)
-        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),diagnostic_file=f'case_{i:02d}_diagnostics.npz',source_kind='cached36' if cached and online else 'cached18' if cached else 'new60' if speed_comparison else 'new200' if frozen else 'new72' if prior else 'new40' if temporal else 'new120' if tolerance else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),diagnostic_file=f'case_{i:02d}_diagnostics.npz',source_kind='cached36' if cached and online else 'cached18' if cached else 'new60' if speed_comparison else f'new{count}' if frozen else 'new72' if prior else 'new40' if temporal else 'new120' if tolerance else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
             floor_support=audit_floor_support(raw,c,p['config'],p['protocol']['existing_speed_floor_m_s'],initial['initial_nominal_reference'][lane]) if confirmation and not tolerance else None,
             prefix=dict(ticks=task_stop,observed_s=task_stop*.005,
                 original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance[:task_stop]**2))) if task_stop else None,
@@ -1603,7 +1604,7 @@ def analyze_response(root,p):
         for row in rows:
             if row['mode']=='online_scalar':
                 row['alpha_rule']=audit_online_rule(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['protocol']['rule'])
-    summary,paired=preference_summary(rows,frozen_confirmation=frozen,speed_comparison=speed_comparison) if preference else tolerance_online_summary(rows) if tolerance else confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
+    summary,paired=preference_summary(rows,frozen_confirmation=frozen,speed_comparison=speed_comparison,frozen_layout=frozen_layout) if preference else tolerance_online_summary(rows) if tolerance else confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
     if broaden:summary['original_path_v3_aggregate']='independently reconstructed three running task channels; common windows; terminal/global other channels excluded'
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=(200 if speed_comparison else 0 if frozen else 288 if fallback else 216 if prior else 96 if preference else 120 if temporal else len(cache_rows)),comparison_source=p.get('comparison_source'),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,cached_observed_lower_ticks=sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference','cached_prior','cached_frozen200'))),total_observed_lower_ticks=ticks+sum(r['active_lower_ticks'] for r in rows if r.get('source_kind')=='cached120' or (preference and r.get('source_kind') in ('cached_broaden','cached_preference','cached_prior','cached_frozen200'))),newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
@@ -1622,7 +1623,7 @@ def analyze_response(root,p):
     if speed_comparison:
         lines=['# 匹配输入在线机制消融：60新物理＋200冻结缓存','','候选是固定同训练配方单独训练的speed+query输入消融q，不是对full模型相同权重即时遮罩；原fullprior taskaware与guard/fixed/cap缓存保留原q审计身份、raw用户及奖励；不同q门通过仅各自模型诊断，不是共同真实安全标签。260逻辑记录，相关已见条件DEV机制消融，非新的前瞻确认。完整/遮罩两方法共同实际与首达前原任务费用单列，不以加入候选后的全方法窗口替换旧200数字。0优化更新。先看目标到达/触地/故障与真实终点，再解释费用；早失败缩短共同窗口不能据低截断费用称优。']
     elif frozen:
-        lines=['# 冻结候选后的前瞻组合确认200','','全部200为新物理：banks1/7、左右90R1.8、v2.8、五事件；user0/.5各taskaware/guard/fixed，user1另有speedcap。每用户共同3/4方法窗口。冻结三seed prior q与taskaware规则后声明，不按本结果选checkpoint；不声称全项目历史从未看过。guard/fixed/speedcap不使用q决策，其模型gate仅为事后诊断，合格恢复记N/A。0优化更新、无旧轨迹缓存。']
+        lines=frozen_confirmation_intro(p['protocol'],frozen_layout)
     elif fallback:
         lines=['# 任务可行退化选择：72新物理＋288身份匹配缓存','','每用户五方法共同观察窗口，共360逻辑记录。只有无jointeligible时的退化选择改变；风险门未满足仍记degraded，不是安全保证。工程DEV，非独立测试；0优化更新。原raw与有效用户身份保持。']
     elif prior:
@@ -1865,12 +1866,13 @@ def preference_methods(rows):
     return methods
 
 
-def preference_summary(rows,frozen_confirmation=False,speed_comparison=False):
-    conditions=20 if frozen_confirmation or speed_comparison else 24
+def preference_summary(rows,frozen_confirmation=False,speed_comparison=False,frozen_layout=None):
+    frozen_layout=frozen_layout or dict(cases=200,conditions=20,user_groups=60,variant=None)
+    conditions=frozen_layout['conditions'] if frozen_confirmation else 20 if speed_comparison else 24
     if speed_comparison:
         if len(rows)!=260 or len(response_plot_groups(rows))!=60:raise ValueError('260 records/60 user-condition groups required')
     elif frozen_confirmation:
-        if len(rows)!=200 or len(response_plot_groups(rows))!=60:raise ValueError('200 records/60 user-condition groups required')
+        if len(rows)!=frozen_layout['cases'] or len(response_plot_groups(rows))!=frozen_layout['user_groups']:raise ValueError('complete frozen records/user-condition groups required')
     else:
         methods=preference_methods(rows)
         if len(rows)!=72*len(methods) or len(response_plot_groups(rows))!=72:raise ValueError('complete user-condition groups required')
@@ -1894,7 +1896,11 @@ def preference_summary(rows,frozen_confirmation=False,speed_comparison=False):
         for left,right in itertools.combinations(methods,2):
             a={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==left};b={(r['bank_index'],r['route'],r['event']):r for r in rows if r['effective_user_alpha']==user and r['method']==right}
             paired.append(dict(effective_user_alpha=user,candidate=left,baseline=right,conditions=[dict(bank_index=k[0],route=k[1],event=k[2],candidate_case=a[k]['case_id'],baseline_case=b[k]['case_id'],candidate_goal=a[k]['horizons']['10']['goal_arrived'],baseline_goal=b[k]['horizons']['10']['goal_arrived'],candidate_contact=a[k]['horizons']['10']['physical_outcome'],baseline_contact=b[k]['horizons']['10']['physical_outcome'],candidate_matched_metrics=a[k]['matched_original_task_metrics'],baseline_matched_metrics=b[k]['matched_original_task_metrics'],candidate_full_mask_metrics=a[k].get('full_mask_matched_original_task_metrics'),baseline_full_mask_metrics=b[k].get('full_mask_matched_original_task_metrics')) for k in a]))
-    report=dict(new_cases=60 if speed_comparison else 200 if frozen_confirmation else 120 if len(methods)==3 else 72,cached_cases=200 if speed_comparison else 0 if frozen_confirmation else 72*len(methods)-(120 if len(methods)==3 else 72),logical_records=len(rows),per_user_method=summary,cross_user_reward_ranking='invalid: different user weights',adoption='not_automatic',data_role='Matched input online ablation on already seen related conditions; cached original q audit inherited; not independent confirmation' if speed_comparison else 'Frozen prospective combination confirmation; prepared banks not training seeds; no checkpoint selection on these results' if frozen_confirmation else 'Frozen candidate discrete user preference bounded engineering validation; prepared banks are not training seeds')
+    report=dict(new_cases=60 if speed_comparison else frozen_layout['cases'] if frozen_confirmation else 120 if len(methods)==3 else 72,cached_cases=200 if speed_comparison else 0 if frozen_confirmation else 72*len(methods)-(120 if len(methods)==3 else 72),logical_records=len(rows),per_user_method=summary,cross_user_reward_ranking='invalid: different user weights',adoption='not_automatic',data_role='Matched input online ablation on already seen related conditions; cached original q audit inherited; not independent confirmation' if speed_comparison else 'Frozen prospective combination confirmation; prepared banks not training seeds; no checkpoint selection on these results' if frozen_confirmation else 'Frozen candidate discrete user preference bounded engineering validation; prepared banks are not training seeds')
+    if frozen_confirmation:
+        report['protocol_variant']=frozen_layout['variant']
+        report['conditions_per_user_method']=conditions
+        if frozen_layout['variant']=='geometry_duration_extension_v1':report['data_role']='Frozen capability-domain geometry/actual-duration extension on reused banks1/7; actual0.15s beyond frozen0.1s hypothetical queries; not new independent initial states'
     if speed_comparison:
         report['full_mask_task_outcomes']={}
         for user in (0.,.5,1.):
@@ -1927,18 +1933,47 @@ def render_preference_crossuser(root,rows,raws,paths,goals,executed):
 
 
 
+
+def frozen_confirmation_layout(protocol):
+    """Only explicitly registered variants may alter the historical200 layout."""
+    variant=protocol.get('variant')
+    if variant not in (None,'geometry_duration_extension_v1'):raise ValueError('unknown frozen confirmation variant')
+    if tuple(protocol['arms'])!=FROZEN_CONFIRMATION_ARMS:raise ValueError('frozen ten-arm contract required')
+    events=[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))
+    banks=protocol['bank_indices'];routes=protocol['routes']
+    if len(set(banks))!=len(banks) or len({r['route'] for r in routes})!=len(routes) or len(set(events))!=len(events):raise ValueError('unique frozen conditions required')
+    conditions=len(banks)*len(routes)*len(events);cases=conditions*len(FROZEN_CONFIRMATION_ARMS)
+    layout=dict(variant=variant,conditions=conditions,cases=cases,routes=len(routes),user_groups=3*conditions,nominal_cases=len(banks)*len(routes)*len(FROZEN_CONFIRMATION_ARMS))
+    if variant is None:
+        if cases!=200 or conditions!=20 or len(routes)!=2 or layout['nominal_cases']!=40:raise ValueError('legacy frozen200 layout must remain unchanged')
+    else:
+        expected_routes={'S_left_60_R2p2','S_right_60_R2p2','S_left_120_R2p2','S_right_120_R2p2'}
+        if banks!=[1,7] or {r['route'] for r in routes}!=expected_routes or any(r['speed']!=2.6 for r in routes) or protocol['forces_N']!=[-64.,64.] or protocol['onsets_s']!=[2.6] or protocol['zero_onset_s']!=2.6 or protocol['duration_s']!=.15 or cases!=240:raise ValueError('geometry-duration extension differs from registered protocol')
+    if protocol['expected_cases']!=cases:raise ValueError('declared frozen case count differs from protocol')
+    return layout
+
+
+def frozen_confirmation_intro(protocol,layout):
+    routes=', '.join(f"{r['route']} ({r['speed']:g}m/s)" for r in protocol['routes'])
+    text=f"全部{layout['cases']}为新物理：banks{protocol['bank_indices']}；{routes}；实际力{protocol['forces_N']}N、起扰{protocol['onsets_s']}s、持续{protocol['duration_s']:g}s，含无扰。每用户{layout['conditions']}条件、同用户3/4方法共同窗口。user0/.5各taskaware/guard/fixed，user1另有speedcap。冻结候选后声明，不按本结果选checkpoint；guard/fixed/speedcap不使用q决策，其模型gate仅为事后诊断，合格恢复记N/A。0优化更新。"
+    if layout['variant']=='geometry_duration_extension_v1':
+        scope='能力域几何/实际持续时间扩展：四路均R2.2m、v2.6m/s，60/120度只改变转角与行程，不代表不同曲率/速度；复用已用banks1/7，不称新独立初态或独立训练seed；实际0.15s脉冲相对冻结q的±64N/0.1s假想查询属于持续时间外推。q查询、网络、控制器和原任务成功门均不因本扩展更改。'
+    else:scope='原冻结200组合确认范围；不声称全项目历史从未看过这些banks。'
+    return [f"# 冻结候选组合确认{layout['cases']}",'',text,'',scope]
+
 def validate_frozen_confirmation_inventory(rows,protocol):
-    if tuple(protocol['arms'])!=FROZEN_CONFIRMATION_ARMS or len(rows)!=200:raise ValueError('200 declared frozen confirmation cases required')
+    layout=frozen_confirmation_layout(protocol)
+    if len(rows)!=layout['cases']:raise ValueError('complete declared frozen confirmation cases required')
     expected=set()
     for b,r,a,(force,onset) in itertools.product(protocol['bank_indices'],protocol['routes'],FROZEN_CONFIRMATION_ARMS,[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))):
-        expected.add((b,r['route'],a,force,onset,protocol['duration_s']))
+        expected.add((b,r['route'],r['speed'],a,force,onset,protocol['duration_s']))
     actual=set()
     for row in rows:
         user=0. if row['mode'].startswith('user0_') else .5 if row['mode'].startswith('userhalf_') else 1.
         method={'taskaware':'task_aware','guard':'guard','fixed':'fixed','speedcap':'speedcap'}[row['mode'].rsplit('_',1)[1]]
         if any(row[k]!=user for k in ('alpha','user_alpha','effective_user_alpha','query_alpha')) or row['method']!=method:raise ValueError('frozen confirmation user/method identity mismatch')
         if row['initial_fingerprint']!=protocol['bank_state_fingerprints'][str(row['bank_index'])] or row['path_key']!=f"bank{row['bank_index']}_"+row['route']:raise ValueError('frozen confirmation bank/path mismatch')
-        actual.add((row['bank_index'],row['route'],row['mode'],row['force_N'],row['onset_s'],row['duration_s']))
+        actual.add((row['bank_index'],row['route'],row['speed'],row['mode'],row['force_N'],row['onset_s'],row['duration_s']))
     if actual!=expected:raise ValueError('complete frozen confirmation conditions required')
 
 def validate_prior_inventory(rows,protocol,task_aware=False):

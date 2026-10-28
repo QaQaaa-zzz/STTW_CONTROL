@@ -159,3 +159,51 @@ def test_speed_query_inventory_matches_new60_config():
     assert len(rows)==60 and len(m.response_plot_groups(rows))==60
     rows[0]['method']='task_aware'
     with pytest.raises(ValueError,match='identity'):m.validate_speed_query_inventory(rows,p)
+
+
+def geometry_duration_protocol():
+    p=json.loads((CLI.parent/'configs/h75_frozen_confirmation200.json').read_text())
+    p.update(variant='geometry_duration_extension_v1',expected_cases=240,maximum_lower_ticks=480000,onsets_s=[2.6],zero_onset_s=2.6,duration_s=.15,routes=[dict(route=f'S_{direction}_{angle}_R2p2',speed=2.6) for angle in (60,120) for direction in ('left','right')])
+    return p
+
+
+def test_frozen_geometry_variant_derived_counts_and_speed_identity():
+    import itertools
+    p=geometry_duration_protocol();layout=m.frozen_confirmation_layout(p)
+    assert layout==dict(variant='geometry_duration_extension_v1',conditions=24,cases=240,routes=4,user_groups=72,nominal_cases=80)
+    rows=[]
+    for bank,route,arm,(force,onset) in itertools.product(p['bank_indices'],p['routes'],p['arms'],[(0.,p['zero_onset_s'])]+list(itertools.product(p['forces_N'],p['onsets_s']))):
+        user=0. if arm.startswith('user0_') else .5 if arm.startswith('userhalf_') else 1.
+        method={'taskaware':'task_aware','guard':'guard','fixed':'fixed','speedcap':'speedcap'}[arm.rsplit('_',1)[1]]
+        rows.append(dict(case_id=f'{bank}/{route["route"]}/{arm}/{force}',bank_index=bank,route=route['route'],speed=route['speed'],mode=arm,alpha=user,user_alpha=user,effective_user_alpha=user,query_alpha=user,method=method,force_N=force,onset_s=onset,duration_s=p['duration_s'],initial_fingerprint=p['bank_state_fingerprints'][str(bank)],path_key=f'bank{bank}_'+route['route']))
+    m.validate_frozen_confirmation_inventory(rows,p)
+    rows[0]['speed']=2.8
+    with pytest.raises(ValueError,match='complete frozen confirmation conditions'):m.validate_frozen_confirmation_inventory(rows,p)
+    p.pop('variant')
+    with pytest.raises(ValueError,match='legacy'):m.frozen_confirmation_layout(p)
+    p['variant']='unregistered_extension'
+    with pytest.raises(ValueError,match='unknown'):m.frozen_confirmation_layout(p)
+
+
+def test_frozen_geometry_summary_and_report_cover_all24_conditions():
+    p=geometry_duration_protocol();layout=m.frozen_confirmation_layout(p);rows=[]
+    for user in (0.,.5,1.):
+        for i in range(24):
+            for method in ('task_aware','guard','fixed')+(('speedcap',) if user==1. else ()):
+                rows.append(dict(case_id=f'{user}/{i}/{method}',effective_user_alpha=user,method=method,event=str(i),bank_index=1,route='left',horizons={'10':dict(goal_arrived=False,physical_outcome='contact')},alpha_rule=dict(final_at_user=False,nonuser_duration_s=1.,prearrival_alpha=dict(user_duration_s=0.)),matched_original_task_metrics={}))
+    summary,paired=m.preference_summary(rows,frozen_confirmation=True,frozen_layout=layout)
+    assert summary['new_cases']==240 and summary['logical_records']==240 and summary['cached_cases']==0
+    assert len(paired)==12 and all(len(x['conditions'])==24 for x in paired)
+    assert summary['per_user_method']['0.0']['task_aware']['contact']==24
+    assert summary['protocol_variant']=='geometry_duration_extension_v1'
+    intro='\n'.join(m.frozen_confirmation_intro(p,layout))
+    assert '240' in intro and '0.15' in intro and '0.1s' in intro and '不称新独立初态' in intro
+    assert 'S_left_120_R2p2' in intro and 'R1.8' not in intro
+    with pytest.raises(ValueError):m.preference_summary(rows[:-1],frozen_confirmation=True,frozen_layout=layout)
+
+
+def test_legacy_frozen_protocol_remains200_and_rejects_unknown_variant():
+    p=json.loads((CLI.parent/'configs/h75_frozen_confirmation200.json').read_text());layout=m.frozen_confirmation_layout(p)
+    assert layout['cases']==200 and layout['conditions']==20 and layout['user_groups']==60
+    p['expected_cases']=240
+    with pytest.raises(ValueError,match='declared'):m.frozen_confirmation_layout(p)
