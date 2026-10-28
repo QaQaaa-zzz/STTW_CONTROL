@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "8c73d4f69eb3ae6545032d01b47791bff250b54588e2a0525bc6bd213d5cfa8b",
-  "builder_sha256": "8a2fefdc46f3d083613617c8f4e527e66e6a14e7c9b50f64e528eedaf319e328",
+  "manuscript_sha256": "43df54e59b9f83af61166c733f36e1b36de9f1405ab31ee2f4c000ee43de18ca",
+  "builder_sha256": "42f849c18439c51f9a225a6f366570f0e3275c6d2ac763cccf119c2ccec2ef0e",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1091,6 +1091,60 @@
       "sha256": "c9bb2e56fd6437a25a0defe81b6084b897caf5e6c583b884e950ae7fe0f9d152",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E182": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/plan.json",
+      "sha256": "78320c7ea671c7575b96fc3b3d801661a55a9b4fbe090d7901b04bf4ae5717ef",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E183": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/status.json",
+      "sha256": "eca7d174e2ef1ebd714897c269b43afb880feb0f4daaf9d8a9811dda15d8bb0a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E184": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/analysis/summary.json",
+      "sha256": "81df49eda9c22a005da7c81b28672d9c594f5ca6f4b33b0dd82878aa4e4d4295",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E185": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/root_endpoint_check.json",
+      "sha256": "ab0a4cf124451fdd94411d61c66a1b665f9b691f4af0ea973eabb6d7ea890814",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E186": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/root_failure_audit.json",
+      "sha256": "1421c97ad7bc568902147ec69da6adfe1d4c3cab9c516daa83530897cd5fbc1c",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E187": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/analysis/receipt.json",
+      "sha256": "857d3ad366c164e595c6885fae4fdabaaeefecc86c7cef666885b1581856a066",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E188": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/analysis/original_task_rescoring/receipt.json",
+      "sha256": "3a0ee62f78258b7b2c380e4d541e8f6c63e3834de4d894fd103b598eb1476bb9",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E189": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/root_common_cost_summary.json",
+      "sha256": "cfd49e97312ccf9488ff7c015dee96422f3e178511631fa9ecb0aab42eb1f134",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E190": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/analysis/original_task_rescoring/results.json",
+      "sha256": "0606a2d7abe3cfad1acf7c9ba428055e5be4536b8d9385747e50517242c93e48",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1242,7 +1296,16 @@
     "E178",
     "E179",
     "E180",
-    "E181"
+    "E181",
+    "E182",
+    "E183",
+    "E184",
+    "E185",
+    "E186",
+    "E187",
+    "E188",
+    "E189",
+    "E190"
   ],
   "claims_from_readback": [
     {

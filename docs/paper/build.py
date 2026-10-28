@@ -261,7 +261,16 @@ def evidence_manifest():
         'E178':archive/'h75_tolerance_predictor_user_mix_v1/training/status.json',
         'E179':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/status.json',
         'E180':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed1/history.json',
-        'E181':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed2/history.json'}
+        'E181':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed2/history.json',
+        'E182':archive/'h75_user_prior_online72_v1/plan.json',
+        'E183':archive/'h75_user_prior_online72_v1/status.json',
+        'E184':archive/'h75_user_prior_online72_v1/analysis/summary.json',
+        'E185':archive/'h75_user_prior_online72_v1/root_endpoint_check.json',
+        'E186':archive/'h75_user_prior_online72_v1/root_failure_audit.json',
+        'E187':archive/'h75_user_prior_online72_v1/analysis/receipt.json',
+        'E188':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/receipt.json',
+        'E189':archive/'h75_user_prior_online72_v1/root_common_cost_summary.json',
+        'E190':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/results.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
