@@ -286,3 +286,22 @@ def test_gather_source_carry_preserves_hidden_physics_history_filter_and_sidecar
     for name,value in saved.items():
         np.testing.assert_array_equal(result[name],value[indices])
         assert result[name].dtype==value.dtype
+
+
+def test_bank144_keeps_source_groups_and_label_splits_and_prefix_budget():
+    import json
+    from pathlib import Path
+    from sttw_control.native_goal_run import bank144_inventory,bank144_prefix_cases
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_samestate_bank144.json').read_text())
+    rows=bank144_inventory(p);prefix=bank144_prefix_cases(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==144
+    assert len(prefix)==4 and {r['confirmation_row'] for r in prefix}=={3,28,53,78}
+    assert all(r['speed_alpha']==1. and r['steer_alpha']==.5 and r['force_N']==0. for r in prefix)
+    groups=defaultdict(list)
+    for r in rows:groups[r['source_group_id']].append(r)
+    assert len(groups)==8 and all(len(v)==18 for v in groups.values())
+    assert all(len({r['split'] for r in v})==1 for v in groups.values())
+    assert {r['split'] for r in rows if r['bank_index']==0}=={'development'}
+    assert {r['split'] for r in rows if r['bank_index']==1}=={'label_heldout'}
+    assert p['maximum_total_lower_ticks']==4*200+144*1800==260000
+    for r in rows:assert r['onset_s']==1.+r['preparation_s'] and r['query_alpha']==r['candidate_alpha']

@@ -1,0 +1,146 @@
+{
+  "experiment_id": "STTW-H75-SAMESTATE-BANK144-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 144,
+  "maximum_lower_ticks": 259200,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "replan_cadence_s": 1.0,
+  "question": "Do eight bank-grouped complete source states provide candidate-dependent contact labels for a later frozen small-predictor pilot?",
+  "data_role": "Bank3 old72 training; bank0 development; bank1 new labels held out until fit recipe frozen. Prior bank1 control seen; no rowrandom split or independent TEST claim.",
+  "stop_rule": "Exactly four hybrid1s prefixes800lower plus144\u00d79s suffix259200 =260000newmax;0optimizer. Reuse4fixed1task1 snapshots; no reset/replay/search/retry/automatic expansion.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "All candidate scalar alpha0/.5/1 apply immediately at common source task1 and hold; pulse onset1+prep. Source task1 common planner runs before publication. Origin defines state only, no ongoing hybrid.",
+  "interpretation": "Primary no-contact includes preparation and pulse fromsource through pulseEND+3s (task4.1/4.3/4.7). Pre-pulse contact is negative; numerical faults invalid, never successful survival. Goal arrival and fullH10 contact separate.",
+  "scoring": "True contact/physicalfailure labels and engineering invalid separate; user1 costs diagnostic, missedgoal notfall.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Candidate applied at source task1 for every case; preparation0/.2/.6 controls pulse onset1/1.2/1.6 only. No ongoing source-origin action after branch.",
+  "decision_rules": {
+    "feasibility": "Report per-source scalar-alpha/direction/preparation contact labels. Candidate/direction/preparation separation motivates later predictor review; all-positive labels do not authorize training a trivial classifier.",
+    "negative": "Preserve no-separation, pre-pulse contacts and engineeringinvalid; no force/state/threshold expansion.",
+    "outcomes": "Primary source-through-pulseEND+3s contact/physicalfailure; fullH10 and goal independent, missedgoal neverfall."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "new_horizon_s": 9.0,
+  "source_task_s": 1.0,
+  "candidate_alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "preparation_s": [
+    0.0,
+    0.2,
+    0.6
+  ],
+  "primary_after_pulse_end_s": 3.0,
+  "initialization": "Reuse confirmation100 fixed1nominal task1 rows3/28/53/78 nativecarry. Four hybridprefixes from corresponding saved initial.native states exactly1s speed1/steer.5, noforce; freeze resulting fullstates before suffixes.",
+  "source_features": "Native351 user1 observation before task1planner; no candidate/force/preptime/outcomes in feature vector. Bank/source group split immutable; bank1 labels not inspected before later fit recipe freeze.",
+  "maximum_prefix_lower_ticks": 800,
+  "maximum_total_lower_ticks": 260000,
+  "source_groups": [
+    {
+      "source_index": 0,
+      "confirmation_row": 3,
+      "bank_index": 0,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank0_S_left_90_R1p8",
+      "origin": "fixed1",
+      "split": "development",
+      "source_group_id": "bank0/S_left_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 1,
+      "confirmation_row": 3,
+      "bank_index": 0,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank0_S_left_90_R1p8",
+      "origin": "hybrid",
+      "split": "development",
+      "source_group_id": "bank0/S_left_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 2,
+      "confirmation_row": 28,
+      "bank_index": 0,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank0_S_right_90_R1p8",
+      "origin": "fixed1",
+      "split": "development",
+      "source_group_id": "bank0/S_right_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 3,
+      "confirmation_row": 28,
+      "bank_index": 0,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank0_S_right_90_R1p8",
+      "origin": "hybrid",
+      "split": "development",
+      "source_group_id": "bank0/S_right_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 4,
+      "confirmation_row": 53,
+      "bank_index": 1,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank1_S_left_90_R1p8",
+      "origin": "fixed1",
+      "split": "label_heldout",
+      "source_group_id": "bank1/S_left_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 5,
+      "confirmation_row": 53,
+      "bank_index": 1,
+      "route": "S_left_90_R1p8",
+      "path_key": "bank1_S_left_90_R1p8",
+      "origin": "hybrid",
+      "split": "label_heldout",
+      "source_group_id": "bank1/S_left_90_R1p8/hybrid"
+    },
+    {
+      "source_index": 6,
+      "confirmation_row": 78,
+      "bank_index": 1,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank1_S_right_90_R1p8",
+      "origin": "fixed1",
+      "split": "label_heldout",
+      "source_group_id": "bank1/S_right_90_R1p8/fixed1"
+    },
+    {
+      "source_index": 7,
+      "confirmation_row": 78,
+      "bank_index": 1,
+      "route": "S_right_90_R1p8",
+      "path_key": "bank1_S_right_90_R1p8",
+      "origin": "hybrid",
+      "split": "label_heldout",
+      "source_group_id": "bank1/S_right_90_R1p8/hybrid"
+    }
+  ]
+}
