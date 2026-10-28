@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "466f3b4b52591d13ba95b99d25647e506b4133617f84349739f2406d78f9795e",
-  "builder_sha256": "7dfbc447e2e9c1689eed39cafa1051a880d81014607650ab2fc8f849466bf770",
+  "manuscript_sha256": "0c20690484f8524cae507b55acbb570115c918850a9a5377960ad1c380f99af7",
+  "builder_sha256": "4774823385e10ef02a6fbe4b80d49b6746f0ebce6b93cd460daa8fcb00956905",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -863,6 +863,30 @@
       "sha256": "2ea0529a59db0a4db73c9f5a7a32657339fe1c7b5c75e652465e03225fe4fce1",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E144": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1/training/resolved_config.json",
+      "sha256": "fd1a99b00206d2516b18298fc7ca4ebb96c42c1c7b8711776476cde686c404bd",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E145": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1/training/selection_manifest.json",
+      "sha256": "eca93ddb97e662d5836bea2acd234463988e7a30caca69299c706fb9002102ad",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E146": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1/training/development_temporal_metrics.json",
+      "sha256": "e1e196f6844a763091788cf29b34e7bf0357efae82cdba006a13e5df27d78765",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E147": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1/training/timings.json",
+      "sha256": "b996144bb23e220a412fc01ba8ddb4b7cb7174ca25b6d8dcb2aa89c7ffe4822a",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -976,7 +1000,11 @@
     "E140",
     "E141",
     "E142",
-    "E143"
+    "E143",
+    "E144",
+    "E145",
+    "E146",
+    "E147"
   ],
   "claims_from_readback": [
     {
