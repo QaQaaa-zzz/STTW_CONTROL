@@ -847,3 +847,28 @@ def test_speedcap_actual_permission_and_inverse_native_target_audit():
     assert result['active_ticks']==2 and result['actual_activity_fraction']==.25
     raw['speedcap_active'][-1]=True
     with pytest.raises(AssertionError):m.audit_speedcap(raw,dict(mode='speedcap'),interface)
+
+
+def test_discrete_user_groups_preserve_three_methods_and_raw_user():
+    rows=[dict(mode=f'user{u}_{a}',method=a,effective_user_alpha=u,raw_user_alpha=1.,bank_index=b,route=r,event=e) for u in (0.,.5,1.) for b in (4,6) for r in ('left90','right90','left60','right60') for e in ('zero','minus','plus') for a in ('last','guard','fixed')]
+    assert len(rows)==216 and len(m.response_plot_groups(rows))==72
+    for label in m.response_plot_groups(rows):
+        group=m.response_plot_selection(rows,label)
+        assert len(group)==3 and len({r['effective_user_alpha'] for r in group})==1
+        assert {r['method'] for r in group}=={'last','guard','fixed'}
+    raw=dict(active_tick=np.ones(8,bool),alpha_exec=np.r_[np.zeros(4),np.full(4,.5)],coord_degraded=np.zeros(8),coord_publication_withheld=np.zeros(8))
+    stats=m.tolerance_alpha_statistics(raw,0.)
+    assert stats['nonuser_duration_s']==.02 and not stats['final_at_user']
+    assert m.tolerance_alpha_statistics(raw,.5)['final_at_user']
+
+
+def test_cached_half_original_rescore_uses_effective_user_not_raw_logged_user1():
+    raw,path,cfg,ctrl,keys=reward_fixture();path.update(xy=np.column_stack([path['s'],np.zeros(4)]).astype(np.float32),heading=np.zeros(4,np.float32))
+    cfg['path']=dict(projection_backward_m=.1,projection_forward_floor_m=2.,projection_forward_motion_multiplier=2.,projection_forward_padding_m=.1)
+    raw.update(actual_xy=np.tile([1.,.2],(8,1)).astype(np.float32),reference_yaw_unwrapped=np.zeros(8),e_psi_unwrapped=np.zeros(8))
+    saved=raw['effective_costs'].copy()
+    half,receipt=m.rescore_original_task(raw,path,cfg,ctrl,keys,task_alpha=.5,raw_alpha=1.)
+    one,_=m.rescore_original_task(raw,path,cfg,ctrl,keys)
+    assert not np.allclose(half['task_step_costs'],one['task_step_costs'])
+    np.testing.assert_array_equal(raw['effective_costs'],saved)
+    assert receipt['projection_errors']['task_cost_max_absolute_error']<1e-4
