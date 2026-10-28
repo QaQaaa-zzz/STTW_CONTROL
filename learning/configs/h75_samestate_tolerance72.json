@@ -1,0 +1,88 @@
+{
+  "experiment_id": "STTW-H75-SAMESTATE-TOLERANCE72-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 72,
+  "maximum_lower_ticks": 129600,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "replan_cadence_s": 1.0,
+  "question": "Can identical complete native source states yield candidate-alpha/direction/preparation dependent contact labels?",
+  "data_role": "Four familiar DEV source states selected by fixed metadata; bounded label feasibility, not independent generalization or predictor training.",
+  "stop_rule": "Exactly72 new9s suffixes/129600newlower/0optimizer; no prefix replay, oldbranch cache, force/state/alpha search or automatic expansion.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "All candidate scalar alpha0/.5/1 apply immediately at common source task1 and hold; pulse onset1+prep. Source task1 common planner runs before publication. Origin defines state only, no ongoing hybrid.",
+  "interpretation": "Primary no-contact includes preparation and pulse fromsource through pulseEND+3s (task4.1/4.3/4.7). Pre-pulse contact is negative; numerical faults invalid, never successful survival. Goal arrival and fullH10 contact separate.",
+  "scoring": "True contact/physicalfailure labels and engineering invalid separate; user1 costs diagnostic, missedgoal notfall.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Candidate applied at source task1 for every case; preparation0/.2/.6 controls pulse onset1/1.2/1.6 only. No ongoing source-origin action after branch.",
+  "decision_rules": {
+    "feasibility": "Report per-source scalar-alpha/direction/preparation contact labels. Candidate/direction/preparation separation motivates later predictor review; all-positive labels do not authorize training a trivial classifier.",
+    "negative": "Preserve no-separation, pre-pulse contacts and engineeringinvalid; no force/state/threshold expansion.",
+    "outcomes": "Primary source-through-pulseEND+3s contact/physicalfailure; fullH10 and goal independent, missedgoal neverfall."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "new_horizon_s": 9.0,
+  "source_task_s": 1.0,
+  "candidate_alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "preparation_s": [
+    0.0,
+    0.2,
+    0.6
+  ],
+  "source_rows": [
+    {
+      "source_index": 0,
+      "route": "S_left_90_R1p8",
+      "origin": "fixed1",
+      "fingerprint": "1103bb5a9730d777552a46d4e5da36a9b78fce8a89e33de62a5effa6f62204df"
+    },
+    {
+      "source_index": 9,
+      "route": "S_left_90_R1p8",
+      "origin": "hybrid",
+      "fingerprint": "f1169e5f8b229d2808691b15e934c2513d72a342cac01351930bedbba85fe5a5"
+    },
+    {
+      "source_index": 18,
+      "route": "S_right_90_R1p8",
+      "origin": "fixed1",
+      "fingerprint": "156a0108faab2ab59167f488e01a47661048a63f1a2710ef684a9d5031c1279f"
+    },
+    {
+      "source_index": 27,
+      "route": "S_right_90_R1p8",
+      "origin": "hybrid",
+      "fingerprint": "0c3c82214843245c97c15affc01fc4c2424f0e694858a7f0d1509b177445b160"
+    }
+  ],
+  "primary_after_pulse_end_s": 3.0,
+  "initialization": "Gather complete131leaf source task1 state rows0/9/18/27 without any env/lower/filter/history/ESO reset;18 exact initialcopies/source. Copy host originalgoal/arrival/replan/path.",
+  "source_features": "Native351 observation at source on saved executionpath, useralpha1, before source planner. No candidatealpha/preptime/force/onset/outcome in sourcefeature vector; full hiddenstate separately preserved."
+}

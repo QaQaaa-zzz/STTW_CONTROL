@@ -255,3 +255,34 @@ def test_existing_speed_floor_is_exact_zero_at_native_nominal_and_bounded_if_nee
     assert z[1]==0 and bool(log['support_active'])
     z,log=existing_floor_latent(j.array([1.,.2]),cfg)
     assert float(log['support_realized_target_offset'])<.25 and np.isfinite(np.asarray(z)).all()
+
+
+def test_samestate72_candidates_apply_immediately_preparation_only_moves_force_and_window():
+    from pathlib import Path
+    import json
+    from sttw_control.native_goal_run import samestate_inventory
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_samestate_tolerance72.json').read_text())
+    rows=samestate_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==72
+    groups=defaultdict(list)
+    for r in rows:groups[r['source_index']].append(r)
+    assert set(groups)=={0,9,18,27} and all(len(v)==18 for v in groups.values())
+    assert {r['candidate_alpha'] for r in rows}=={0.,.5,1.}
+    for r in rows:
+        assert r['query_alpha']==r['candidate_alpha'] and r['alpha']==1.
+        assert 'switch_s' not in r
+        assert r['onset_s']==1.+r['preparation_s']
+        assert r['primary_window_start_s']==1.
+        assert np.isclose(r['primary_window_end_s'],r['onset_s']+.1+3.)
+    np.testing.assert_allclose(sorted({r['primary_window_end_s'] for r in rows}),[4.1,4.3,4.7])
+    assert p['maximum_lower_ticks']==72*9*200
+
+
+def test_gather_source_carry_preserves_hidden_physics_history_filter_and_sidecars():
+    from sttw_control.native_goal_run import gather_source_carry
+    saved=dict(qpos=np.arange(8*11,dtype=np.float32).reshape(8,11),eso=np.arange(32,dtype=np.float32).reshape(8,4),history=np.arange(8*4*3,dtype=np.float32).reshape(8,4,3),filtered=np.arange(16,dtype=np.float32).reshape(8,2),clean=np.arange(8,dtype=np.int32),fault=np.zeros(8,bool))
+    indices=[0]*18+[3]*18
+    result=gather_source_carry(saved,indices)
+    for name,value in saved.items():
+        np.testing.assert_array_equal(result[name],value[indices])
+        assert result[name].dtype==value.dtype
