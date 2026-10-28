@@ -433,3 +433,65 @@ def test_confirmation_xy_panels_keep_two_routes_per_bank_and_five_methods(tmp_pa
     assert len(saved)==16
     assert 'full_xy_zero__bank0.png' in saved and 'full_xy_zero__bank1.png' in saved
     assert len(set(saved))==len(saved)
+
+
+def tolerance_fixture(n=1800):
+    raw=dict(active_tick=np.ones(n,bool),time=1.+np.arange(n)*.005,policy_fault=np.zeros(n,bool),lower_fault=np.zeros(n,bool),
+        nonfinite=np.zeros(n,bool),continuation_geometry_fault=np.zeros(n,bool),contact_failure=np.zeros(n,bool),physical_failure=np.zeros(n,bool),domain_exit=np.ones(n,bool))
+    case=dict(primary_window_start_s=1.,primary_window_end_s=4.3,onset_s=1.2,duration_s=.1)
+    return raw,case
+
+
+def test_same_state_primary_includes_preparation_and_ignores_later_contact():
+    raw,case=tolerance_fixture();raw['contact_failure'][900]=True;raw['physical_failure'][900]=True
+    assert m.samestate_primary_label(raw,case)['no_fall_through_window'] is True
+    raw['contact_failure'][20]=True;raw['physical_failure'][20]=True
+    result=m.samestate_primary_label(raw,case)
+    assert result['no_fall_through_window'] is False and result['prep_contact'] and result['prep_physical_failure']
+    assert result['label_status']=='fall'
+
+
+def test_same_state_fault_is_invalid_not_negative_and_complete_window_required():
+    raw,case=tolerance_fixture();raw['policy_fault'][100]=True
+    result=m.samestate_primary_label(raw,case)
+    assert result['no_fall_through_window'] is None and result['label_status']=='invalid_fault'
+    raw,case=tolerance_fixture(200)
+    assert m.samestate_primary_label(raw,case)['label_status']=='invalid_incomplete'
+    raw['contact_failure'][-1]=True;raw['physical_failure'][-1]=True
+    assert m.samestate_primary_label(raw,case)['no_fall_through_window'] is False
+
+
+def test_same_state_primary_includes_transition_ending_at_declared_window_endpoint():
+    raw,case=tolerance_fixture();end=round((case['primary_window_end_s']-1.)/.005)
+    raw['contact_failure'][end]=True;raw['physical_failure'][end]=True
+    assert m.samestate_primary_label(raw,case)['no_fall_through_window'] is True
+    raw['contact_failure'][end-1]=True;raw['physical_failure'][end-1]=True
+    assert m.samestate_primary_label(raw,case)['no_fall_through_window'] is False
+
+
+def test_same_state_inventory_source_groups_and_paired_labels_are_not_independent_states():
+    import json
+    p=json.loads((CLI.parents[0]/'configs/h75_samestate_tolerance72.json').read_text());rows=[]
+    for src,alpha,prep,force in m.itertools.product(p['source_rows'],p['candidate_alphas'],p['preparation_s'],p['forces_N']):
+        case=dict(route=src['route'],source_index=src['source_index'],source_origin=src['origin'],source_fingerprint=src['fingerprint'],
+            mode='samestate_scalar',alpha=1.,query_alpha=alpha,candidate_alpha=alpha,preparation_s=prep,force_N=force,duration_s=.1,onset_s=1.+prep,
+            primary_window_start_s=1.,primary_window_end_s=1.+prep+.1+3.,case_id=f"{src['source_index']}_{alpha}_{prep}_{force}")
+        raw,_=tolerance_fixture();case.update(primary=m.samestate_primary_label(raw,case),horizons={'10':dict(goal_arrived=False,physical_outcome='survived')},
+            event=f'prep{prep}_F{force}')
+        rows.append(case)
+    m.validate_samestate_inventory(rows,p);summary,paired=m.samestate_summary(rows)
+    assert summary['conditional_suffixes']==72 and summary['independent_source_states']==4
+    assert all(g['n_conditional_suffixes']==18 for g in summary['source_groups'].values())
+    assert len(paired)==72 and len(m.response_plot_groups(rows))==24
+    assert all(len(m.response_plot_selection(rows,key))==3 for key in m.response_plot_groups(rows))
+    rows[-1]['onset_s']+=.02
+    with pytest.raises(ValueError,match='preparation/onset'):m.validate_samestate_inventory(rows,p)
+
+
+def test_same_state_candidate_query_changes_immediately_at_source_with_real_mask():
+    raw,path,case,rule=online_fixture();n=len(raw['active_tick']);case.update(candidate_alpha=0.)
+    raw['alpha_exec'][:]=0.;raw['query_observation'][:,336]=0.;raw['channel_alpha_pair'][:]=0.;raw['time']=1.+np.arange(n)*.005
+    result=m.audit_samestate_query(raw,case)
+    assert result['first_actual_permitted_query_s']==1.
+    raw['reference_target_permitted'][4:8]=False;raw['latent_z'][4:8]=.1
+    with pytest.raises(AssertionError):m.audit_samestate_query(raw,case)

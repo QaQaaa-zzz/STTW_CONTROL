@@ -21,6 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
+    if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
@@ -666,6 +667,8 @@ def switching_summary(rows):
 
 
 def response_plot_groups(rows):
+    if any(r.get('mode')=='samestate_scalar' for r in rows):
+        return list(dict.fromkeys(r['event']+'__source'+str(r['source_index']) for r in rows))
     if any('path_key' in r for r in rows):
         return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index']) for r in rows))
     if any(r.get('mode','').startswith('switch_') for r in rows):
@@ -674,6 +677,9 @@ def response_plot_groups(rows):
 
 
 def response_plot_selection(rows,label):
+    if any(r.get('mode')=='samestate_scalar' for r in rows):
+        event,source=label.rsplit('__source',1)
+        return [r for r in rows if r['event']==event and r['source_index']==int(source)]
     if any('path_key' in r for r in rows):
         event,bank=label.rsplit('__bank',1)
         return [r for r in rows if r['event']==event and r['bank_index']==int(bank)]
@@ -681,6 +687,159 @@ def response_plot_selection(rows,label):
         event,origin=label.rsplit('__',1)
         return [r for r in rows if r['event']==event and (r.get('origin')==origin or r.get('origin')=='background')]
     return [r for r in rows if r['event']==label]
+
+
+def validate_samestate_inventory(rows,p):
+    actual=[]
+    for c in rows:
+        if c['mode']!='samestate_scalar' or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('same-state user/query identity drift')
+        if not np.isclose(c['onset_s'],p['source_task_s']+c['preparation_s'],atol=1e-8,rtol=0):raise ValueError('preparation/onset mismatch')
+        if not np.isclose(c['primary_window_end_s'],c['onset_s']+c['duration_s']+p['primary_after_pulse_end_s']):raise ValueError('primary window mismatch')
+        src=next(r for r in p['source_rows'] if r['source_index']==c['source_index'])
+        if (c['route'],c['source_origin'],c['source_fingerprint'])!=(src['route'],src['origin'],src['fingerprint']):raise ValueError('source metadata mismatch')
+        actual.append((c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N']))
+    expected=list(itertools.product([r['source_index'] for r in p['source_rows']],p['candidate_alphas'],p['preparation_s'],p['forces_N']))
+    if sorted(actual)!=sorted(expected) or len(set(actual))!=72:raise ValueError('complete declared72 conditional suffixes required')
+
+
+def samestate_primary_label(raw,case):
+    """Primary contact label includes preparation, not merely post-onset recovery."""
+    active=np.asarray(raw['active_tick'],bool);clock=np.rint(np.asarray(raw['time'])/.005).astype(int)
+    begin=round(case['primary_window_start_s']/.005);end=round(case['primary_window_end_s']/.005)
+    window=active&(clock>=begin)&(clock<end)
+    faults=np.asarray(raw['policy_fault'],bool)|raw['lower_fault']|raw['nonfinite']|raw['continuation_geometry_fault']
+    fault=bool(np.any(window&faults));contact=bool(np.any(window&raw['contact_failure']));physical=bool(np.any(window&raw['physical_failure']))
+    complete=np.array_equal(clock[window],np.arange(begin,end))
+    valid=not fault and (complete or contact or physical)
+    return dict(no_fall_through_window=bool(not(contact or physical)) if valid else None,
+        label_status='invalid_fault' if fault else 'fall' if contact or physical else 'no_fall' if complete else 'invalid_incomplete',
+        window_start_s=case['primary_window_start_s'],window_end_s=case['primary_window_end_s'],
+        observed_window_ticks=int(window.sum()),complete_window=complete,contact_in_window=contact,physical_failure_in_window=physical,
+        prep_contact=bool(np.any(window&(clock<round(case['onset_s']/.005))&raw['contact_failure'])),
+        prep_physical_failure=bool(np.any(window&(clock<round(case['onset_s']/.005))&raw['physical_failure'])),
+        fault_in_window=fault,contract='Source task1 through pulse END+3s; preparation fall is negative; faults/nonfinite invalid, missed goal is never a fall.')
+
+
+def audit_samestate_query(raw,case):
+    active=np.asarray(raw['active_tick'],bool);n=int(active.sum());alpha=case['candidate_alpha']
+    np.testing.assert_array_equal(raw['alpha_user'][active],np.ones(n));np.testing.assert_array_equal(raw['alpha_exec'][active],np.full(n,alpha))
+    np.testing.assert_allclose(raw['query_observation'][active,336],alpha,atol=1e-6,rtol=0)
+    np.testing.assert_array_equal(raw['channel_alpha_pair'][active],np.full((n,2),alpha))
+    permitted=active&np.asarray(raw['reference_target_permitted'],bool)
+    np.testing.assert_allclose(raw['latent_z'][permitted],raw['composed_latent'][permitted],atol=1e-6,rtol=0)
+    np.testing.assert_array_equal(raw['latent_z'][active&~permitted],0)
+    for field in ('query_observation','composed_latent','latent_z'):
+        if not np.isfinite(np.asarray(raw[field])[active]).all():raise ValueError('nonfinite candidate evidence '+field)
+    for start in range(0,n,4):
+        for field in ('query_observation','composed_latent','alpha_exec','reference_target_permitted'):
+            a=np.asarray(raw[field])[start:min(n,start+4)];np.testing.assert_array_equal(a,np.broadcast_to(a[0],a.shape))
+    return dict(candidate_alpha=alpha,state_user_alpha=1.,candidate_requested_at_source_s=1.,
+        first_actual_permitted_query_s=float(raw['time'][np.flatnonzero(permitted)[0]]) if permitted.any() else None,
+        permitted_ticks=int(permitted.sum()),masked_ticks=int((active&~permitted).sum()),checked='Scalar query held from common source; actual publication and native filters remain auditable')
+
+
+def samestate_summary(rows):
+    groups={};paired=[]
+    for source in sorted({r['source_index'] for r in rows}):
+        group=[r for r in rows if r['source_index']==source]
+        groups[str(source)]=dict(source_origin=group[0]['source_origin'],route=group[0]['route'],n_conditional_suffixes=len(group),
+            primary_no_fall=sum(r['primary']['no_fall_through_window'] is True for r in group),
+            primary_fall=sum(r['primary']['no_fall_through_window'] is False for r in group),invalid=sum(r['primary']['no_fall_through_window'] is None for r in group),
+            conditions=[dict(case_id=r['case_id'],alpha=r['candidate_alpha'],prep_s=r['preparation_s'],force_N=r['force_N'],primary=r['primary'],full_H10=r['horizons']['10']) for r in group])
+        for prep,force in itertools.product(sorted({r['preparation_s'] for r in group}),sorted({r['force_N'] for r in group})):
+            conditions=[r for r in group if r['preparation_s']==prep and r['force_N']==force]
+            for a,b in itertools.combinations(conditions,2):
+                known=a['primary']['no_fall_through_window'] is not None and b['primary']['no_fall_through_window'] is not None
+                paired.append(dict(source_index=source,preparation_s=prep,force_N=force,candidate=a['case_id'],comparator=b['case_id'],candidate_alpha=a['candidate_alpha'],comparator_alpha=b['candidate_alpha'],
+                    primary_no_fall_change=int(a['primary']['no_fall_through_window'])-int(b['primary']['no_fall_through_window']) if known else None,
+                    candidate_primary=a['primary'],comparator_primary=b['primary'],candidate_full_H10=a['horizons']['10'],comparator_full_H10=b['horizons']['10']))
+    if len(groups)!=4 or any(g['n_conditional_suffixes']!=18 for g in groups.values()):raise ValueError('four source groups18 conditions required')
+    return dict(source_groups=groups,conditional_suffixes=72,independent_source_states=4,
+        adoption='no_learner_trained',interpretation='Familiar shared-ancestor state-conditional preparation/hypothetical-onset response only; preparation also changes absolute pulse onset and encountered geometry, so it does not isolate pure timing at the same force phase.72 suffixes are not72 independent states. No automatic force/state search or classifier training.'),paired
+
+
+def analyze_samestate(root,p):
+    run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
+    inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    validate_samestate_inventory(inventory,p['protocol'])
+    if status['phase']!='completed' or status['completed_cases']!=72 or len(index)!=72:raise ValueError('completed72 suffixes required; no partial scoring')
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('same-state plan drift')
+    for file,sha in {**p['source_sha256'],**p['input_sha256']}.items():
+        if digest(file)!=sha:raise ValueError('same-state source/input drift '+file)
+    manifest=json.loads((run/'manifest.json').read_text())
+    for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models']),('cases',inventory),('source',p['initial_source'])):
+        if manifest[key]!=expected:raise ValueError('same-state manifest drift '+key)
+    source=Path(p['samestate_source']['source']);out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
+    subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
+    initial=json.loads((out/'initial_carry_review.json').read_text());paths={};goals={};traces={};rebuilt={};executed={};rows=[];ticks=0
+    provenance=json.loads((run/'prefix_provenance.json').read_text())
+    if provenance['source']!=str(source) or provenance['source_indices']!=[c['source_index'] for c in inventory] or provenance['new_physics_ticks']!=0:raise ValueError('display-prefix provenance mismatch')
+    with np.load(run/'reused_source_prefix.npz') as z:prefix=dict(z)
+    with np.load(source/'evaluation/reused_source_prefix.npz') as z:
+        for field in z.files:np.testing.assert_array_equal(prefix[field],z[field][:,[c['source_index'] for c in inventory]])
+    for route in sorted({c['route'] for c in inventory}):
+        with np.load(run/(route+'_path.npz')) as z:paths[route]=dict(z)
+        with np.load(source/'evaluation'/(route+'_path.npz')) as z:
+            for field in z.files:np.testing.assert_array_equal(paths[route][field],z[field])
+        path=paths[route];goals[route]=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)])
+    decision_rows=json.loads((run/'replanning_decisions.json').read_text());decisions={d['case_id']:d for d in decision_rows}
+    if len(decisions)!=len(decision_rows):raise ValueError('more than one replan per same-state case')
+    for lane,c in enumerate(index):
+        if any(c.get(k)!=v for k,v in inventory[lane].items()):raise ValueError('same-state case inventory drift')
+        if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('same-state raw drift')
+        with np.load(c['raw_file']) as z:raw=dict(z)
+        active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n
+        if not 0<n<=1800 or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('suffix active prefix broken')
+        np.testing.assert_allclose(raw['time'][active],1.+np.arange(n)*.005,atol=3e-6,rtol=0)
+        np.testing.assert_allclose(raw['v_user'][active],c['speed'],atol=2e-7,rtol=0)
+        goal=goals[c['route']];np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0);np.testing.assert_allclose(manifest['original_goals_xy'][lane],goal,atol=3e-6,rtol=0)
+        query=audit_samestate_query(raw,c)
+        physical_tick=np.rint(raw['time']/.005).astype(int)
+        pulse=audit_pulse(dict(raw,physical_tick=physical_tick),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']))
+        chain=verify_correction_chain(dict(raw,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=initial['initial_filtered'][lane],initial_offsets=initial['initial_offsets'][lane])
+        full={field:np.concatenate([prefix[field][:,lane],value]) for field,value in raw.items() if field in prefix}
+        full['physical_tick']=np.rint(full['time']/.005).astype(int);full['policy_fault']=full['policy_fault']|full['continuation_geometry_fault']
+        outcome=goal_arrival_metrics(full,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);outcome['physical_outcome']=physical_outcome(full['active_tick'],full['contact_failure'],full['policy_fault']|full['nonfinite']|full['lower_fault'],2000)
+        path=paths[c['route']];decision=decisions.get(c['case_id']);changed=None;replan_tick=200+n
+        replan=run/f'replanned_path_{lane:02d}.npz'
+        if replan.exists()!=bool(c['replanned']) or bool(decision)!=bool(c['replanned']):raise ValueError('same-state replan evidence mismatch')
+        if decision:
+            replan_tick=decision['task_tick']
+            if decision['case_index']!=lane or replan_tick not in range(200,1801,200):raise ValueError('same-state replan boundary mismatch')
+            from sttw_control.goal_replanning import replan_requested
+            if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,cross_track_m=decision['cross_track_m'],follower_invalid=decision['follower_invalid'],already_replanned=False,contact=decision['contact'],fault=decision['fault'],ever_arrived=decision['ever_arrived']):raise ValueError('same-state replan lacks measured trigger')
+            np.testing.assert_allclose(decision['measured_pose'][:2],full['actual_xy'][replan_tick-1],atol=3e-6,rtol=0)
+            with np.load(replan) as z:changed=dict(z)
+            np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,a]) for a in (0,1)],goal,atol=3e-6,rtol=0);executed[c['case_id']]=changed
+        data=reconstruct_execution_path_reward(full,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
+        rebuilt[c['case_id']]=data;traces[c['case_id']]=full
+        arrival=outcome['first_arrival_s'];fatal=np.flatnonzero(full['active_tick']&(full['contact_failure']|full['policy_fault']|full['nonfinite']|full['lower_fault']))
+        stop=int(fatal[0]) if len(fatal) else 200+n;task_stop=min(stop,round(arrival/.005)) if arrival is not None else stop
+        event=f"prep{c['preparation_s']:g}_F{c['force_N']:+g}"
+        rows.append(dict(c,event=event,source_group_id=f"source{c['source_index']}",source_feature_file='../evaluation/source_features.npz',source_feature_row=lane,diagnostic_file=f'case_{lane:02d}_diagnostics.npz',method=f"alpha{c['candidate_alpha']:g}",primary=samestate_primary_label(raw,c),horizons={'10':outcome},active_lower_ticks=200+n,new_suffix_lower_ticks=n,
+            prefix=dict(ticks=task_stop),pulse=pulse,query=query,correction_chain=chain,prefix_role='200 original ticks are reused display/history only; primary label and new cost charge use task1 suffix',
+            replan_task_tick=None if decision is None else replan_tick,diagnostic_execution_path_user1_cost=float(-data['user1_reward'].sum()),
+            actual_final_xy=raw['actual_xy'][n-1].tolist()))
+        numeric={k:v[:n] for k,v in raw.items()};numeric.update(primary_window_mask=(physical_tick[:n]<round(c['primary_window_end_s']/.005)),
+            reconstructed_user1_suffix_reward=data['user1_reward'][200:200+n],cumulative_user1_suffix_reward=np.cumsum(data['user1_reward'][200:200+n]),
+            user1_suffix_reward_components=data['user1_running_components'][200:200+n],cumulative_user1_suffix_components=np.cumsum(data['user1_running_components'][200:200+n],axis=0),
+            terminal_adjustment=data['user1_terminal_adjustment'][200:200+n])
+        np.savez_compressed(out/f'case_{lane:02d}_diagnostics.npz',**numeric)
+    if ticks!=status['active_lower_ticks'] or ticks>129600:raise ValueError('suffix physical charge mismatch')
+    summary,paired=samestate_summary(rows);atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
+    atomic_json(out/'receipt.json',dict(new_suffix_cases=72,source_states=4,new_active_lower_ticks=ticks,reused_display_prefix_lower_ticks=14400,new_physics_steps=0,optimizer_updates=0,
+        plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
+        checked='All raw/source/config/model identities, exact complete-state copies, source features/host state, display-prefix provenance, actual candidate query+mask/filter, world pulse and per-step user1 execution-path rewards.',
+        limitation='Four shared-ancestor familiar source states; no learned predictor. Reused prefix is not newly sampled or72 independent ancestor states. Non-task components remain authenticated raw terms; execution-path costs are diagnostic after replan.'))
+    render_response(root,rows,traces,paths,goals,executed,rebuilt,manifest['reward_components'])
+    lines=['# 同完整状态容扰72后缀','','四个source task1完整状态，各18个alpha/准备时间/方向条件；不是72个独立初态。所有候选task1立即切换并持有，准备时间也改变绝对起扰时刻与遭遇几何，属于状态条件下的准备/假设起扰响应，不能隔离同一施力相位的纯时序效应。无reset、无新训练、无原前缀物理重跑。',
+        '','主标签覆盖source至pulse END+3s（task4.1/4.3/4.7）；准备期触地为负，fault/nonfinite为invalid，未到目标不算摔倒。完整H10真实触地及原goal1m另列。',
+        '','XY原前200步为注明来源的显示前缀；候选查询/实际发布/filter与后缀数据单独保留。执行路径user1奖励仅诊断，不是重规划后的原S效用。']
+    for label in response_plot_groups(rows):lines+=['',f'## {label}','',f'![Full original/executed XY](full_xy_{label}.png)','',f'![First-arrival prefix](task_xy_{label}.png)']
+    lines+=['','[全部逐例标签](results.json) · [四source分组](summary.json) · [同源alpha配对](paired.json) · [状态/发布/奖励核验](receipt.json)',
+        '仅本固定试采，不自动扩大力值/状态或训练分类器。原72后缀与源prefix身份均保留；实际失败终点截止。',
+        '源351维观测包含真实速度/历史等仿真部署依赖，尚未选择最终小特征集。未来训练/验证必须按source祖先分组，禁止随机按72行拆分造成同源泄漏；四源也不是独立训练种子。']
+    (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
 
 def analyze_response(root,p):

@@ -29,6 +29,8 @@ def audit(root,output):
     if online:
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
         carry=carry.native
+    if p.get('mode')=='h75_samestate_tolerance72':
+        return audit_samestate_initial(root,p,carry,output,jax,initial)
     continuation=p.get('mode')=='h75_switching_continuation'
     resumed=carry if continuation else None
     if continuation:
@@ -235,6 +237,47 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         original_paths_anchored_to_own_pose=True,online_initial_latch_false=True,native_only_modules=loaded,
         no_old_trajectory_reuse=True,new_physics_steps=0,optimizer_updates=0,
         data_role='Two prepared physical initial states, not independent training seeds.')
+    output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+
+
+def audit_samestate_initial(root,p,carry,output,jax,initial):
+    import numpy as np
+    source=Path(p['samestate_source']['source']);file=source/'evaluation/task1_complete_carry.pkl'
+    if hashlib.sha256(file.read_bytes()).hexdigest()!=p['input_sha256'][str(file)]:raise ValueError('same-state source carry SHA drift')
+    with file.open('rb') as f:saved=pickle.load(f)
+    cases=json.loads((root/'inventory.json').read_text());actual,ta=jax.tree.flatten(carry);original,tb=jax.tree.flatten(saved)
+    if len(cases)!=72 or ta!=tb:raise ValueError('complete72 source-copy structure required')
+    for a,b in zip(actual,original):
+        a=np.asarray(a);b=np.asarray(b)
+        if a.dtype!=b.dtype:raise ValueError('source-copy dtype drift')
+        for lane,c in enumerate(cases):np.testing.assert_array_equal(a[lane],b[c['source_index']])
+    fingerprints={};groups={}
+    for c in p['protocol']['source_rows']:
+        selected=jax.tree.map(lambda x:np.asarray(x)[c['source_index']],saved);sha=hashlib.sha256()
+        for path,value in jax.tree_util.tree_flatten_with_path(selected)[0]:
+            a=np.asarray(value);sha.update(jax.tree_util.keystr(path).encode());sha.update(str(a.dtype).encode());sha.update(a.tobytes())
+        if sha.hexdigest()!=c['fingerprint']:raise ValueError('complete source fingerprint mismatch')
+        fingerprints[str(c['source_index'])]=sha.hexdigest()
+    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(72,200));np.testing.assert_array_equal(state.alpha,np.ones(72))
+    for flag in (state.fault,state.physical.failed,state.domain_exit):
+        if np.any(flag):raise ValueError('same-state source is stopped/invalid')
+    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
+    if features.shape!=(72,351) or not np.isfinite(features).all():raise ValueError('finite72x351 source features required')
+    np.testing.assert_allclose(features[:,336],1.,atol=1e-6,rtol=0)
+    for lane,c in enumerate(cases):groups.setdefault(c['source_index'],[]).append(lane)
+    if len(groups)!=4 or any(len(ids)!=18 for ids in groups.values()):raise ValueError('four source groups18 copies required')
+    for ids in groups.values():
+        for lane in ids[1:]:np.testing.assert_array_equal(features[lane],features[ids[0]])
+    with np.load(root/'evaluation/task1_host_state.npz') as host,np.load(source/'evaluation/task1_host_state.npz') as old:
+        indices=[c['source_index'] for c in cases]
+        for field in old.files:np.testing.assert_array_equal(host[field],old[field][indices])
+    receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
+    if not receipt.get('all_source_copy_leaves_exact') or receipt.get('source_fingerprints')!=fingerprints:raise ValueError('source-copy receipt mismatch')
+    result=dict(initial_carry_sha256=hashlib.sha256(initial.read_bytes()).hexdigest(),source_carry_sha256=hashlib.sha256(file.read_bytes()).hexdigest(),
+        audit_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),source_groups=4,copies_per_source=18,source_fingerprints=fingerprints,
+        all_complete_source_copy_leaves_exact=True,all_host_state_copies_exact=True,source_features_exact_within_group=True,
+        initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
+        new_physics_steps=0,optimizer_updates=0,data_role='Four familiar physical ancestor states;72 conditional suffixes are not independent source states.')
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 
