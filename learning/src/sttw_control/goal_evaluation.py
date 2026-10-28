@@ -178,7 +178,7 @@ def score_endpoint_case(physical,case,goal_xy,*,config,horizon_s=10.,goal_radius
         prefatal=finite_observed & ~contact & ~fault
         upright_distance=np.linalg.norm(np.asarray(physical['actual_xy'])[prefatal]-np.asarray(goal_xy),axis=1)
         speed_error=np.asarray(physical['actual_forward_speed'])-np.asarray(physical['requested_speed'])
-        rmse=lambda x:float(np.sqrt(np.mean(np.asarray(x)[rows]**2))) if rows.any() else None
+        rmse=lambda x,mask=rows:float(np.sqrt(np.mean(np.asarray(x)[mask]**2))) if mask.any() else None
         costs_known=credit['cost_window_complete'] and stop is not None
         pre_cost=float(tick_cost[prefix].sum(dtype=np.float64)) if costs_known else None
         # Legacy scored return replaces an entire contact-ending upper block.
@@ -200,6 +200,9 @@ def score_endpoint_case(physical,case,goal_xy,*,config,horizon_s=10.,goal_radius
             minimum_prefatal_goal_distance_m=float(upright_distance.min()) if len(upright_distance) else None,
             measured_precontact_duration_s=float(rows.sum()*dt),speed_rmse_m_s=rmse(speed_error),
             path_rmse_m=rmse(physical['path_cross_track']),heading_rmse_rad=rmse(physical['path_heading_error']),
+            measured_pre_goal_duration_s=float(prefix.sum()*dt) if stop is not None else None,
+            pre_goal_path_rmse_m=rmse(physical['path_cross_track'],prefix),
+            pre_goal_speed_rmse_m_s=rmse(speed_error,prefix),
             physical_ticks=credit['physical']['physical_ticks'],pre_goal_cost=pre_cost,
             full_precontact_running_cost=float(tick_cost[rows].sum(dtype=np.float64)),legacy_scored_return=float(scored.sum(dtype=np.float64)),
             pre_goal_component_cost=(scale*dt*components[prefix].sum(axis=0)).tolist() if costs_known else None,

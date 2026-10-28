@@ -231,3 +231,90 @@ def test_analysis_binds_original_generated_goal_before_scoring(tmp_path):
     atomic_json(root/'physics_receipt.json',dict(plan_sha256=digest(root/'plan.json'),case_index_sha256=digest(root/'case_index.json'),path_manifest_sha256=digest(root/'path_manifest.json')))
     with pytest.raises(ValueError,match='original path goal mismatch'):analyze(root)
     assert not (root/'analysis').exists()
+
+
+def _synthetic_completed_panel(root,training,cases,*,h75=False):
+    """Small synthetic records under the full inventory; never physical evidence."""
+    from sttw_control.preference_best import atomic_json,digest
+    root.mkdir();paths={}
+    for suite in ('transfer','training_geometry'):
+        for context in ('left','right'):
+            file=root/f'path_{suite}_{context}.npz'
+            np.savez(file,s=[0.,1.],xy=[[0.,0.],[1.,0.]],goal=0.)
+            paths[suite+'/'+context]=dict(file=file.name,sha256=digest(file),original_goal_xy=[0.,0.])
+    inputs={str(p):digest(p) for p in training.iterdir()}
+    names=('teleop_env.py','path_command_env.py','live_path_continuation.py','anticipatory_reference.py',
+           'reference_reentry.py','goal_evaluation.py','goal_endpoint_run.py','geometric_path.py','contact_only_environment.py')
+    plan=dict(training=str(training),endpoint=str(training/'endpoint.pt'),horizon_s=10.,radius_m=1.,
+        h75_supplement=h75,cases=cases,inputs=inputs,sources={'/synthetic/'+n:'shared-source-fixture' for n in names})
+    index=[]
+    for i,c in enumerate(cases):
+        _,raw,_=synthetic_endpoint();raw['horizon_reached'][:]=False
+        file=root/f'case_{i:03d}.npz';np.savez(file,**raw)
+        index.append(dict(case=c,file=file.name,sha256=digest(file),original_goal_xy=[0.,0.]))
+    atomic_json(root/'plan.json',plan);atomic_json(root/'case_index.json',index);atomic_json(root/'path_manifest.json',paths)
+    atomic_json(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    atomic_json(root/'physics_receipt.json',dict(plan_sha256=digest(root/'plan.json'),case_index_sha256=digest(root/'case_index.json'),path_manifest_sha256=digest(root/'path_manifest.json'),active_lower_ticks=len(cases)*12,allocated_lower_slots=len(cases)*12))
+    atomic_json(root/'status.json',dict(phase='completed',completed_cases=len(cases)))
+    return plan,paths
+
+
+def test_joint_h75_analysis_preserves_primary_aliases_all_queries_and_unknowns(tmp_path,monkeypatch):
+    from sttw_control.goal_endpoint_analysis import analyze
+    from sttw_control.goal_endpoint_run import h75_supplement_cases
+    from sttw_control.goal_evaluation import evaluation_cases
+    from sttw_control.preference_best import atomic_json
+    cfg,_,_=synthetic_endpoint();training=tmp_path/'training';training.mkdir()
+    atomic_json(training/'effective_config.json',cfg);atomic_json(training/'plan.json',dict(fixture=True))
+    (training/'endpoint.pt').write_bytes(b'synthetic checkpoint identity')
+    cases=evaluation_cases()
+    for c in cases:c['world_direction']=[0.,1.,0.]
+    root=tmp_path/'primary';other=tmp_path/'h75'
+    _synthetic_completed_panel(root,training,cases)
+    _synthetic_completed_panel(other,training,h75_supplement_cases(cases),h75=True)
+    # This verifies scoring/aggregation and identity plumbing, not raster layout.
+    monkeypatch.setattr('sttw_control.goal_endpoint_analysis._plot',lambda *a:'synthetic_plot_not_rendered.png')
+    result=analyze(root,h75_root=other)
+    assert len(result['score_views'])==240
+    assert len({r['case_id'] for r in result['score_views']})==176
+    assert sum(s['physical_count'] for s in result['physical_summary'])==176
+    assert sum(s['unknown'] for s in result['physical_summary'])==176
+    h75_pairs=[p for p in result['paired_query_changes'] if p['baseline']=='frozen_H75']
+    assert len(h75_pairs)==48 and all(p['survival_change'] is None for p in h75_pairs)
+    assert all(p['path_rmse_m_difference'] is None for p in h75_pairs)
+    assert len([p for p in result['preference_endpoint_pairs'] if p['role']=='frozen_H75'])==16
+    primary=analyze(root)
+    assert len(primary['score_views'])==192
+    assert all(p['baseline']!='frozen_H75' for p in primary['paired_query_changes'])
+
+
+def test_h75_comparison_rejects_wrong_event_and_control_source_before_scoring():
+    import copy
+    from sttw_control.goal_endpoint_analysis import _validate_h75_comparison
+    from sttw_control.goal_endpoint_run import h75_supplement_cases
+    from sttw_control.goal_evaluation import evaluation_cases
+    cases=evaluation_cases()
+    names=('teleop_env.py','path_command_env.py','live_path_continuation.py','anticipatory_reference.py',
+           'reference_reentry.py','goal_evaluation.py','goal_endpoint_run.py','geometric_path.py','contact_only_environment.py','controller.py')
+    primary=dict(cases=cases,training='/synthetic/training',endpoint='/synthetic/endpoint.pt',horizon_s=10.,radius_m=1.,
+        inputs={'/synthetic/training/plan.json':'p','/synthetic/training/effective_config.json':'c','/synthetic/endpoint.pt':'e'},
+        sources={'/synthetic/'+n:'same' for n in names})
+    other=copy.deepcopy(primary);other.update(h75_supplement=True,cases=h75_supplement_cases(cases))
+    _validate_h75_comparison(primary,other,{}, {})
+    changed=copy.deepcopy(other);changed['cases'][0]['pulse_onset_task_tick']+=1
+    with pytest.raises(ValueError,match='original48 H75 queries'):
+        _validate_h75_comparison(primary,changed,{}, {})
+    changed=copy.deepcopy(other);changed['sources']['/synthetic/controller.py']='changed'
+    with pytest.raises(ValueError,match='shared runtime dependency'):
+        _validate_h75_comparison(primary,changed,{}, {})
+
+
+def test_goal_tracking_window_does_not_charge_after_arrival_as_pre_goal_error(monkeypatch):
+    from sttw_control.goal_evaluation import score_endpoint_case
+    cfg,p,case=synthetic_endpoint();p['path_cross_track'][:]=2.;p['path_cross_track'][0]=.1
+    # Keep cost construction independent of the window metric under test.
+    monkeypatch.setattr('sttw_control.goal_evaluation.rescore_original_components',lambda *a,**kw:p['effective_costs'])
+    v=score_endpoint_case(p,case,[0.,0.],config=cfg,horizon_s=.06)[0]
+    assert v['goal']=='arrived' and v['measured_pre_goal_duration_s']==pytest.approx(.005)
+    assert v['pre_goal_path_rmse_m']==pytest.approx(.1)
+    assert v['path_rmse_m']==pytest.approx(np.sqrt((.1**2+11*2**2)/12))
