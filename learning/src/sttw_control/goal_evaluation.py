@@ -111,6 +111,44 @@ def rescore_original_components(physical,*,user_alpha,config,recorded_alpha=None
     return out
 
 
+def pulse_timing_diagnostic(physical,case,*,dt):
+    """Compare per-lower-tick world impulses on the logged task clock.
+
+    A contact-ending tick is still physically executed. Missing future ticks
+    are unobserved, not evidence of an incorrectly applied pulse. This checks
+    the lower-tick integral only, not within-tick wrench/lever-arm dynamics.
+    """
+    active=np.asarray(physical['active_tick'],bool)
+    ticks=np.asarray(physical['physical_tick'])[active]
+    impulses=np.asarray(physical['applied_force_impulse'],float)[active]
+    if impulses.shape!=(len(ticks),3) or not math.isfinite(dt) or dt<=0:
+        raise ValueError('explicit lower-tick impulse and positive dt required')
+    if not np.isfinite(impulses).all() or not np.isfinite(ticks).all():
+        return dict(pulse_timing_status='unknown',pulse_observation='unknown',
+            pulse_max_tick_impulse_error_Ns=None,first_applied_task_tick=None,last_applied_task_tick=None)
+    start=case['pulse_onset_task_tick']*dt
+    end=start+case.get('pulse_duration_s',.1)
+    direction=np.asarray(case.get('world_direction',[0.,0.,0.]),float)
+    if case['force_N']!=0 and 'world_direction' not in case:
+        raise ValueError('explicit original world force direction required')
+    duration=np.maximum(0.,np.minimum((ticks+1)*dt,end)-np.maximum(ticks*dt,start))
+    expected=duration[:,None]*case['force_N']*direction
+    # Apply the existing 1% exposure tolerance to a full-tick impulse scale,
+    # including zero-expected boundary ticks. Relative tolerance on expected=0
+    # alone spuriously flags float32 absolute-clock overlap spill at an edge.
+    tolerance=1e-5+.01*np.abs(case['force_N']*direction)*dt
+    matches=(np.abs(impulses-expected)<=tolerance).all()
+    applied=np.linalg.norm(impulses,axis=1)>float(np.linalg.norm(tolerance))
+    full=abs(float(duration.sum())-case.get('pulse_duration_s',.1))<dt*1e-3
+    observation=('zero_force' if case['force_N']==0 else 'full_window' if full else
+        'partial_window' if duration.sum()>0 else 'before_pulse')
+    return dict(pulse_timing_status='matched_observed_ticks' if matches else 'mismatch',
+        pulse_observation=observation,
+        pulse_max_tick_impulse_error_Ns=float(np.max(np.abs(impulses-expected))) if len(ticks) else None,
+        first_applied_task_tick=int(ticks[applied][0]) if applied.any() else None,
+        last_applied_task_tick=int(ticks[applied][-1]) if applied.any() else None)
+
+
 def score_endpoint_case(physical,case,goal_xy,*,config,horizon_s=10.,goal_radius_m=1.):
     """First original-goal hit and whole-window S, with explicit raw-cost aliases."""
     from .goal_task_credit import resolve_goal_task_credit
@@ -118,6 +156,7 @@ def score_endpoint_case(physical,case,goal_xy,*,config,horizon_s=10.,goal_radius
     fault=np.logical_or.reduce([physical[k] for k in ('nonfinite','lower_fault','policy_fault')])
     contact=np.asarray(physical['contact_failure'],bool)
     dt=float(config['timing']['lower_dt_s']);scale=float(config['path_reward']['scale'])
+    pulse_diagnostic=pulse_timing_diagnostic(physical,case,dt=dt)
     # These are legal reference decisions, not per-lower-tick repeated actions.
     action=np.zeros_like(active);action[::4]=np.asarray(physical['actor_action_valid'],bool)[::4]
     views=[]
@@ -165,5 +204,6 @@ def score_endpoint_case(physical,case,goal_xy,*,config,horizon_s=10.,goal_radius
             full_precontact_running_cost=float(tick_cost[rows].sum(dtype=np.float64)),legacy_scored_return=float(scored.sum(dtype=np.float64)),
             pre_goal_component_cost=(scale*dt*components[prefix].sum(axis=0)).tolist() if costs_known else None,
             impulse_Ns=impulse.tolist(),expected_impulse_Ns=expected.tolist(),pulse_exposure=exposure,
-            contact_time_s=(credit['physical']['terminal_index']+1)*dt if credit['physical']['outcome']=='contact' else None))
+            contact_time_s=(credit['physical']['terminal_index']+1)*dt if credit['physical']['outcome']=='contact' else None,
+            **pulse_diagnostic))
     return views

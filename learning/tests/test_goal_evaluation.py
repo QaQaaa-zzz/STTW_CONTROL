@@ -104,6 +104,50 @@ def synthetic_endpoint():
     return cfg,p,case
 
 
+@pytest.mark.parametrize('mode',['exact','shifted','early_contact','zero_force'])
+def test_pulse_timing_distinguishes_shift_from_same_integral_and_truncated_observation(mode):
+    from sttw_control.goal_evaluation import pulse_timing_diagnostic
+    dt=.005;n=40;onset=10;duration=.1
+    p=dict(active_tick=np.ones(n,bool),physical_tick=np.arange(n),applied_force_impulse=np.zeros((n,3)))
+    c=dict(force_N=32.,world_direction=[0.,1.,0.],pulse_onset_task_tick=onset,pulse_duration_s=duration)
+    p['applied_force_impulse'][10:30,1]=32*dt
+    if mode=='shifted':
+        p['applied_force_impulse'][:]=0;p['applied_force_impulse'][11:31,1]=32*dt
+        assert p['applied_force_impulse'].sum()==pytest.approx(32*duration)
+    elif mode=='early_contact':
+        p['active_tick'][15:]=False;p['applied_force_impulse'][15:]=0
+    elif mode=='zero_force':
+        c['force_N']=0.;p['applied_force_impulse'][:]=0.
+    d=pulse_timing_diagnostic(p,c,dt=dt)
+    assert d['pulse_timing_status']==('mismatch' if mode=='shifted' else 'matched_observed_ticks')
+    assert d['pulse_observation']==('partial_window' if mode=='early_contact' else 'zero_force' if mode=='zero_force' else 'full_window')
+    if mode=='early_contact':
+        assert d['first_applied_task_tick']==10 and d['last_applied_task_tick']==14
+
+
+def test_pulse_timing_preserves_unknown_and_unobserved_pre_pulse_tail():
+    from sttw_control.goal_evaluation import pulse_timing_diagnostic
+    p=dict(active_tick=np.ones(4,bool),physical_tick=np.arange(4),applied_force_impulse=np.zeros((4,3)))
+    c=dict(force_N=-32.,world_direction=[1.,0.,0.],pulse_onset_task_tick=10,pulse_duration_s=.1)
+    d=pulse_timing_diagnostic(p,c,dt=.005)
+    assert d['pulse_observation']=='before_pulse' and d['pulse_timing_status']=='matched_observed_ticks'
+    assert d['first_applied_task_tick'] is None
+    p['applied_force_impulse'][0]=np.nan
+    assert pulse_timing_diagnostic(p,c,dt=.005)['pulse_timing_status']=='unknown'
+
+
+def test_pulse_boundary_float_spill_uses_full_tick_scale_not_zero_expected_relative_tolerance():
+    from sttw_control.goal_evaluation import pulse_timing_diagnostic
+    p=dict(active_tick=np.ones(40,bool),physical_tick=np.arange(40),applied_force_impulse=np.zeros((40,3)))
+    c=dict(force_N=32.,world_direction=[0.,1.,0.],pulse_onset_task_tick=10,pulse_duration_s=.1)
+    p['applied_force_impulse'][10:30,1]=.16
+    p['applied_force_impulse'][30,1]=2e-5
+    d=pulse_timing_diagnostic(p,c,dt=.005)
+    assert d['pulse_timing_status']=='matched_observed_ticks' and d['last_applied_task_tick']==29
+    p['applied_force_impulse'][30,1]=.16
+    assert pulse_timing_diagnostic(p,c,dt=.005)['pulse_timing_status']=='mismatch'
+
+
 def test_first_goal_is_retained_after_later_contact_and_legacy_terminal_block_is_not_running_cost():
     from sttw_control.goal_evaluation import score_endpoint_case
     cfg,p,case=synthetic_endpoint();p['contact_failure'][-1]=True;p['scored_tick_reward'][-4:]=[0,0,0,-1234.]

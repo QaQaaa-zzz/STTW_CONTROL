@@ -51,7 +51,9 @@ def analyze(root,output=None):
                 arrived_alive=counts['arrived','survived'],alive_not_arrived=counts['not_arrived','survived'],
                 arrived_contact=counts['arrived','contact'],not_arrived_contact=counts['not_arrived','contact'],
                 contact=sum(r['survival']=='contact' for r in distinct.values()),
-                unknown=sum(r['survival'] not in ('survived','contact') for r in distinct.values())))
+                unknown=sum(r['survival'] not in ('survived','contact') for r in distinct.values()),
+                pulse_timing_mismatches=sum(r['pulse_timing_status']=='mismatch' for r in distinct.values()),
+                pulse_timing_unknown=sum(r['pulse_timing_status']=='unknown' for r in distinct.values())))
     match=defaultdict(dict)
     for row in rows:
         key=tuple(row[k] for k in ('suite','context','force_N','onset_task_tick','user_alpha'))
@@ -64,7 +66,8 @@ def analyze(root,output=None):
         for role,b in comparison.items():
             if role=='fixed_endpoint64':continue
             item=dict(suite=key[0],context=key[1],force_N=key[2],onset_task_tick=key[3],user_alpha=key[4],baseline=role,
-                learned_case_id=a['case_id'],baseline_case_id=b['case_id'],learned_exposure=a['pulse_exposure'],baseline_exposure=b['pulse_exposure'])
+                learned_case_id=a['case_id'],baseline_case_id=b['case_id'],learned_exposure=a['pulse_exposure'],baseline_exposure=b['pulse_exposure'],
+                learned_pulse_timing=a['pulse_timing_status'],baseline_pulse_timing=b['pulse_timing_status'])
             for name,known,positive in [('goal',('arrived','not_arrived'),'arrived'),('survival',('survived','contact'),'survived')]:
                 item[name+'_change']=int(a[name]==positive)-int(b[name]==positive) if a[name] in known and b[name] in known else None
             item['raw_pre_goal_cost_difference']=a['pre_goal_cost']-b['pre_goal_cost'] if a['pre_goal_cost'] is not None and b['pre_goal_cost'] is not None else None
@@ -112,6 +115,7 @@ def analyze(root,output=None):
         '最近距分别列包含致命tick与prefatal两种；speed/path/heading RMSE附实际观察时长。偏好端点差只在两端均完整10s时描述，失败仍在主表，不以自身α加权费用变化证明偏好响应。',
         'Cpre到首达或触地前，完整running排除接触/故障tick；canonical legacy scored单列整块终止替代。图上费用是原单位、非优化时除B后的数值。',
         '实际/预期世界冲量和受力none/partial/full分开保留；起扰前已触地的差异不能直接解释为抗扰提升，触地/未完整受力样本仍保留原分母。zero保留原路径跟随器和冻结底层，只将中层参考修正置零。',
+        '另核每个实际执行lower tick的冲量与设计起止窗口重叠，报告pulse_timing_status及实际首末受力task tick；相同总冲量不代表时序相同。提前触地后未执行的脉冲尾段属于未观察，不能误报施力错误。该核验不认证子步内力臂动态。',
         '图表先供内部审阅；正式论文需人工核对全图/原始结果与具体期刊要求。scientific-visualization1.4辅助图形设计，不认证研究结论。',
         '方法流程引用：Kassis等，Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents，2026，https://doi.org/10.48550/arXiv.2609.00065。','']
     (output/'RESULTS.md').write_text('\n'.join(lines))
