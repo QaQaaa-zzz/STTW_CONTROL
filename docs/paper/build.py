@@ -206,7 +206,12 @@ def evidence_manifest():
         'E123':archive/'h75_tolerance_predictor_ranking_v1/resolved_config.json',
         'E124':archive/'h75_tolerance_predictor_ranking_v1/selection_manifest.json',
         'E125':archive/'h75_tolerance_predictor_ranking_v1/development_metrics.json',
-        'E126':archive/'h75_tolerance_predictor_ranking_v1/training_metrics.json'}
+        'E126':archive/'h75_tolerance_predictor_ranking_v1/training_metrics.json',
+        'E127':archive/'h75_samestate_confirmation144_v1/analysis_confirmation/results.json',
+        'E128':archive/'h75_samestate_confirmation144_v1/analysis_confirmation/receipt.json',
+        'E129':archive/'h75_samestate_confirmation144_v1/root_primary_label_check.json',
+        'E130':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/metrics.json',
+        'E131':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/data_receipt.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',

@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "0960551ac7710ab185f915abf5993d8748771d6cc06871dc31b4754aab1c4cb2",
-  "builder_sha256": "f4ec411816b6581bae1957aec5fcd0a7be55b11a8345a78990facca3d12ad30b",
+  "manuscript_sha256": "c0ad530ee78a4223a39dcad56b9fec4e38b6cdabc9c45c9316285e9c5812c19c",
+  "builder_sha256": "5f27bcb33e66d1f8c3a0b2777d56009e0626f5df1684f45814047f607745bbb2",
   "evidence_cutoff": "2026-10-28",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -761,6 +761,36 @@
       "sha256": "def9f869a5f1b6da4d753e6cd287ef3937a38b8afa20884d63e1c2e028f34d73",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E127": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/analysis_confirmation/results.json",
+      "sha256": "83a9084354650775109b73feed155c07746415170017d274207c8cf108fa5cf5",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E128": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/analysis_confirmation/receipt.json",
+      "sha256": "3de96044c0fc112235d26585193b5ad0ceac11ff26c4fa6b4b36d1b6e80c8bda",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E129": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/root_primary_label_check.json",
+      "sha256": "8ec62055845fb9fd1cbbc7ba74b90fc820b1aae8ba3b989f28513d74a4ec27be",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E130": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/predictor_evaluation/metrics.json",
+      "sha256": "7bbaaea6f8e1687eb4e01ad279871445d9033464c2bff9d845f5125f904caaea",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E131": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/predictor_evaluation/data_receipt.json",
+      "sha256": "269bdebd7bbfcf8177cee433c37ab070aec5416aad3924dea17c605b80399986",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -857,7 +887,12 @@
     "E123",
     "E124",
     "E125",
-    "E126"
+    "E126",
+    "E127",
+    "E128",
+    "E129",
+    "E130",
+    "E131"
   ],
   "claims_from_readback": [
     {
