@@ -26,10 +26,11 @@
 
 原始空间路径p(s)、速度请求和世界目标在回合开始时给定。跟随器产生名义参考r₀=[v₀,δ₀]。冻结H75读取351维观测（16帧×20字段、16个有效掩码、15个上下文），分别以a∈{0,0.5,1}查询两维latent zₐ。回合内固定用户u与实际执行a不同：u定义原任务权重及优先恢复对象，临时改变a不重写u。底层为ECBC、ESO及冻结local300残差；底层自身lower_alpha不随中层变量改变。中层50Hz、底层200Hz，每底层tick含25物理子步。[E008,E017–E018,E191]
 
-候选首先按原接口映射并裁剪到参考边界，再参与任务代理和代价计算：
+候选首先按原接口映射并裁剪到参考边界，再参与任务代理和代价计算；数值边界来自冻结接口配置。[E200]
 
 ```text
-r_a = clip_reference(r_0 + native_offsets(z_a))
+r_a = clip_reference(r_0 + native_offsets(z_a),
+                     speed=[1.5, 3.5] m/s, steer=[-0.35, 0.35] rad)
 native_offsets(z) = [tanh(z_v) × (0.25 if z_v ≥ 0 else 1.0),
                      tanh(z_δ) × 0.2]     [m/s, rad]
 r_command = native_publish(original_filter/slew/bounds(r_a_exec), permission)
@@ -38,6 +39,13 @@ r_command = native_publish(original_filter/slew/bounds(r_a_exec), permission)
 这些是参考目标而非自由执行器动作。原publication mask、滤波、slew与约束继续作用，实际输出还依赖物理、ESO、历史和执行器状态。共同的一次因果Dubins重规划根据测得任务偏离更新执行路径，保留原世界goal和原路径评分；不将改路后的执行路径误作原用户任务。[E017–E018,E182,E191,E197–E199]
 
 ### 2.2 容扰评价与任务代理
+
+监督标签从同一完整闭环快照克隆分支，执行候选a准备τ秒，再施加假设脉冲；窗口从源时刻至脉冲结束后3秒。整窗无触地/物理失败为y=1，准备期失败亦为0；故障或未完整观察且无已知失败者无效。输入仅取源时刻最新观测和初始候选查询，不含完整隐藏carry或未来结果。按来源bank分训练/开发各192条（early72、oldlate24、userlate96），均为DEV。组内均权，BCE组总权重为0.75/0.125/0.125；排序只配同源、同准备、同方向的正负候选。三seed全批量AdamW，学习率/权重衰减均0.001，各1000步固定last；无PPO或按DEV重选。[E164–E166,E173–E174,E177]
+
+```text
+loss = sum_g w_g mean_i∈g BCEWithLogits(l_i, y_i)
+     + 0.5 mean_(+,−)∈P softplus(−(l_+ − l_−))
+```
 
 小型MLP为41→16→16→1，隐层ReLU，输出sigmoid概率。34个当前观测字段加7个候选/假设查询字段，不等于完整闭环Markov状态。查询字段包含候选a、两通道H75偏移和四个固定扰动假设：准备0.2/0.6秒×世界Y正负64N，持续0.1秒。各seed先输出概率，三seed概率取均值，然后对四假设取最小值：
 
