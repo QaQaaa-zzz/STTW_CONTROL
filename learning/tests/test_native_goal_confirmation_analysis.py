@@ -703,3 +703,53 @@ def test_original_task_rescore_keeps_original_path_after_replan_and_only_three_c
     raw['path_cross_track'][0]=.7
     with pytest.raises(AssertionError,match='before replan'):
         m.rescore_original_task(raw,path,cfg,ctrl,keys,replan_tick=4)
+
+
+def test_late48_dynamic_clock_inventory_labels_and_sixteen_three_alpha_panels():
+    import json
+    from sttw_control.native_goal_run import bank144_inventory
+    p=json.loads((CLI.parents[0]/'configs/h75_late_state_tolerance48.json').read_text());rows=bank144_inventory(p)
+    m.validate_bank144_inventory(rows,p)
+    assert len(rows)==48 and {r['primary_window_start_s'] for r in rows}=={6.}
+    assert {round(r['primary_window_end_s'],1) for r in rows}=={9.3,9.7}
+    for row in rows:
+        n=800;raw=dict(time=6.+np.arange(n)*.005,active_tick=np.ones(n,bool))
+        for key in ('policy_fault','lower_fault','nonfinite','continuation_geometry_fault','contact_failure','physical_failure'):raw[key]=np.zeros(n,bool)
+        result=m.samestate_primary_label(raw,row)
+        assert result['no_fall_through_window'] is True
+        assert 'task6' in result['contract']
+        raw['contact_failure'][10]=True;raw['physical_failure'][10]=True
+        negative=m.samestate_primary_label(raw,row)
+        assert negative['prep_contact'] and negative['no_fall_through_window'] is False
+        raw['policy_fault'][10]=True
+        assert m.samestate_primary_label(raw,row)['no_fall_through_window'] is None
+        row.update(primary=result,horizons={'10':dict(goal_arrived=False,physical_outcome='survived')},event=f"prep{row['preparation_s']}_F{row['force_N']}")
+    summary,paired=m.samestate_summary(rows)
+    assert summary['conditional_suffixes']==48 and len(paired)==48
+    assert len(m.response_plot_groups(rows))==16
+    assert all(len(m.response_plot_selection(rows,label))==3 for label in m.response_plot_groups(rows))
+    assert all(g['n_conditional_suffixes']==12 for g in summary['source_groups'].values())
+    rows[-1]['onset_s']=1.6
+    with pytest.raises(ValueError,match='timing'):m.validate_bank144_inventory(rows,p)
+
+
+def test_late_planner_may_only_change_projection_and_follower():
+    import jax
+    from typing import NamedTuple
+    spec=importlib.util.spec_from_file_location('late_initial_audit',CLI/'audit_native_goal_initial.py');audit=importlib.util.module_from_spec(spec);spec.loader.exec_module(audit)
+    class Geometry(NamedTuple):
+        progress: object
+    class State(NamedTuple):
+        projection: object
+        follower: object
+        physical: object
+        history: object
+        fault: object
+    class Carry(NamedTuple):
+        state: object
+        clean: object
+    before=Carry(State(Geometry(np.float32(2.)),Geometry(np.float32(3.)),np.array([1.,2.]),np.array([4.,5.]),np.bool_(False)),np.int32(16))
+    after=before._replace(state=before.state._replace(projection=Geometry(np.float32(0.)),follower=Geometry(np.float32(8.))))
+    audit.assert_late_planner_state_preserved(before,after,jax)
+    bad=after._replace(state=after.state._replace(history=np.zeros(2)))
+    with pytest.raises(AssertionError,match='retained native state'):audit.assert_late_planner_state_preserved(before,bad,jax)

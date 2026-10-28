@@ -21,7 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode')=='h75_samestate_bank144':return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
+    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
@@ -723,7 +723,7 @@ def samestate_primary_label(raw,case):
         observed_window_ticks=int(window.sum()),complete_window=complete,contact_in_window=contact,physical_failure_in_window=physical,
         prep_contact=bool(np.any(window&(clock<round(case['onset_s']/.005))&raw['contact_failure'])),
         prep_physical_failure=bool(np.any(window&(clock<round(case['onset_s']/.005))&raw['physical_failure'])),
-        fault_in_window=fault,contract='Source task1 through pulse END+3s; preparation fall is negative; faults/nonfinite invalid, missed goal is never a fall.')
+        fault_in_window=fault,contract=f"Source task{case['primary_window_start_s']:g} through pulse END+3s; preparation fall is negative; faults/nonfinite invalid, missed goal is never a fall.")
 
 
 def audit_samestate_query(raw,case):
@@ -739,7 +739,7 @@ def audit_samestate_query(raw,case):
     for start in range(0,n,4):
         for field in ('query_observation','composed_latent','alpha_exec','reference_target_permitted'):
             a=np.asarray(raw[field])[start:min(n,start+4)];np.testing.assert_array_equal(a,np.broadcast_to(a[0],a.shape))
-    return dict(candidate_alpha=alpha,state_user_alpha=1.,candidate_requested_at_source_s=1.,
+    return dict(candidate_alpha=alpha,state_user_alpha=1.,candidate_requested_at_source_s=case.get('primary_window_start_s',1.),
         first_actual_permitted_query_s=float(raw['time'][np.flatnonzero(permitted)[0]]) if permitted.any() else None,
         permitted_ticks=int(permitted.sum()),masked_ticks=int((active&~permitted).sum()),checked='Scalar query held from common source; actual publication and native filters remain auditable')
 
@@ -759,22 +759,27 @@ def samestate_summary(rows):
                 paired.append(dict(source_index=source,preparation_s=prep,force_N=force,candidate=a['case_id'],comparator=b['case_id'],candidate_alpha=a['candidate_alpha'],comparator_alpha=b['candidate_alpha'],
                     primary_no_fall_change=int(a['primary']['no_fall_through_window'])-int(b['primary']['no_fall_through_window']) if known else None,
                     candidate_primary=a['primary'],comparator_primary=b['primary'],candidate_full_H10=a['horizons']['10'],comparator_full_H10=b['horizons']['10']))
-    if len(groups) not in (4,8) or any(g['n_conditional_suffixes']!=18 for g in groups.values()):raise ValueError('declared source groups18 conditions required')
+    dimensions=[sorted({r[k] for r in rows}) for k in ('candidate_alpha','preparation_s','force_N')]
+    expected=set(itertools.product(*dimensions))
+    for source in groups:
+        actual=[(r['candidate_alpha'],r['preparation_s'],r['force_N']) for r in rows if str(r['source_index'])==source]
+        if len(actual)!=len(expected) or set(actual)!=expected:raise ValueError('complete same-state Cartesian source conditions required')
     return dict(source_groups=groups,conditional_suffixes=len(rows),independent_source_states=len(groups),
         adoption='no_learner_trained',interpretation='Familiar shared-ancestor state-conditional preparation/hypothetical-onset response only; preparation also changes absolute pulse onset and encountered geometry, so it does not isolate pure timing at the same force phase.Conditional suffixes are not independent source states. No automatic force/state search or classifier training.'),paired
 
 
 def validate_bank144_inventory(rows,p):
     fresh=p.get('source_initialization')=='prepared_bank_all_prefixes'
+    late=p.get('mode')=='h75_late_state_tolerance48'
     groups={g['source_index']:g for g in p['source_groups']};actual=[]
     for c in rows:
         group=groups[c['source_index']]
         if any(c.get(k)!=v for k,v in group.items()):raise ValueError('bank source metadata drift')
-        if c['split']!=('new_confirmation' if fresh else 'development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
-        if not np.isclose(c['onset_s'],1.+c['preparation_s']) or not np.isclose(c['primary_window_end_s'],c['onset_s']+.1+3.):raise ValueError('bank conditional timing mismatch')
+        if c['split']!=('late_state_development' if late else 'new_confirmation' if fresh else 'development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
+        if not np.isclose(c['onset_s'],p.get('source_task_s',1.)+c['preparation_s']) or not np.isclose(c['primary_window_end_s'],c['onset_s']+.1+3.):raise ValueError('bank conditional timing mismatch')
         actual.append((c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N']))
     expected=list(itertools.product(groups,p['candidate_alphas'],p['preparation_s'],p['forces_N']))
-    if sorted(actual)!=sorted(expected) or len(set(actual))!=144:raise ValueError('complete144 conditional inventory required')
+    if sorted(actual)!=sorted(expected) or len(set(actual))!=p.get('expected_cases',144):raise ValueError('complete declared conditional inventory required')
 
 
 def select_bank_label_lanes(index,include_heldout_labels=False,include_confirmation_labels=False):
@@ -812,7 +817,7 @@ def enriched_bank_runtime_inventory(inventory,sources):
 
 def bank144_original_path_directory(root,p):
     """New banks own their generated paths; legacy banks inherit saved paths."""
-    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes':return root/'evaluation'
+    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' or p.get('mode')=='h75_late_state_tolerance48':return root/'evaluation'
     return Path(p['samestate_source']['source'])/'evaluation'
 
 
@@ -825,14 +830,16 @@ def bank144_analysis_audit_target(out):
 
 
 def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_labels=False):
-    fresh=p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes'
+    late=p.get('mode')=='h75_late_state_tolerance48'
+    fresh=p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' and not late
+    count=p['protocol'].get('expected_cases',144);source_s=p['protocol'].get('source_task_s',1.);start_tick=round(source_s/.005);suffix_s=p['protocol'].get('new_horizon_s',9.);max_ticks=round(suffix_s/.005)
     # Reject before opening suffix status/index/raw or generating any labels.
     if fresh and (not include_confirmation_labels or include_heldout_labels):raise ValueError('explicit --include-confirmation-labels required')
-    if not fresh and include_confirmation_labels:raise ValueError('confirmation flag cannot unseal historical labels')
-    run=root/'evaluation';out=root/('analysis_confirmation' if fresh else 'analysis_final' if include_heldout_labels else 'analysis_development')
+    if not fresh and not late and include_confirmation_labels:raise ValueError('confirmation flag cannot unseal historical labels')
+    run=root/'evaluation';out=root/('analysis_late' if late else 'analysis_confirmation' if fresh else 'analysis_final' if include_heldout_labels else 'analysis_development')
     status=json.loads((run/'status.json').read_text());inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     validate_bank144_inventory(inventory,p['protocol'])
-    if status['phase']!='completed' or status['completed_cases']!=144 or len(index)!=144:raise ValueError('completed144 collection required')
+    if status['phase']!='completed' or status['completed_cases']!=count or len(index)!=count:raise ValueError('completed declared suffix collection required')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('bank plan drift')
     for file,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(file)!=sha:raise ValueError('bank collection source/input drift '+file)
@@ -845,7 +852,7 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
         if manifest[key]!=expected:raise ValueError('bank manifest identity mismatch '+key)
     for row,expected in zip(index,runtime_cases):
         if any(row.get(k)!=v for k,v in expected.items()):raise ValueError('bank runtime index/source fingerprint mismatch')
-    selected=select_bank_label_lanes(index,include_heldout_labels,include_confirmation_labels)
+    selected=list(enumerate(index)) if late else select_bank_label_lanes(index,include_heldout_labels,include_confirmation_labels)
     # Nothing below opens unselected bank1 suffix traces or emits their labels.
     audit_target=bank144_analysis_audit_target(out);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(audit_target)],check=True)
@@ -862,53 +869,63 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
     decision_rows=[d for d in json.loads((run/'replanning_decisions.json').read_text()) if d['case_id'] in selected_ids];decisions={d['case_id']:d for d in decision_rows}
     if len(decisions)!=len(decision_rows):raise ValueError('more than one bank replan per case')
     with np.load(root/'sources/host_state.npz') as host:
-        if np.any(host['ever_arrived']|host['replanned']):raise ValueError('source antecedent must be original-path/unarrived')
+        source_host={k:host[k].copy() for k in host.files}
+        if not late and np.any(host['ever_arrived']|host['replanned']):raise ValueError('source antecedent must be original-path/unarrived')
     for lane,c in selected:
         if any(c.get(k)!=v for k,v in inventory[lane].items()):raise ValueError('selected bank inventory drift')
         if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('selected bank raw SHA drift')
         with np.load(c['raw_file']) as z:raw=dict(z)
         active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n
-        if not 0<n<=1800 or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('bank suffix observation prefix broken')
-        np.testing.assert_allclose(raw['time'][active],1.+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_allclose(raw['v_user'][active],c['speed'],atol=2e-7,rtol=0)
+        if not 0<n<=max_ticks or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('bank suffix observation prefix broken')
+        np.testing.assert_allclose(raw['time'][active],source_s+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_allclose(raw['v_user'][active],c['speed'],atol=2e-7,rtol=0)
         key=analysis_path_key(c);goal=goals[key]
         np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0);np.testing.assert_allclose(manifest['original_goals_xy'][lane],goal,atol=3e-6,rtol=0)
         query=audit_samestate_query(raw,c);clock=np.rint(raw['time']/.005).astype(int)
         pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=.1))
         chain=verify_correction_chain(dict(raw,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=initial['initial_filtered'][lane],initial_offsets=initial['initial_offsets'][lane])
-        physical=dict(raw,physical_tick=clock-200,policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
-        outcome=goal_arrival_metrics(physical,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=9.)
+        physical=dict(raw,physical_tick=clock-start_tick,policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
+        outcome=goal_arrival_metrics(physical,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=suffix_s)
         relative_arrival=outcome['first_arrival_s']
-        if relative_arrival is not None:outcome['first_arrival_s']=relative_arrival+1.
-        outcome.update(physical_outcome=physical_outcome(raw['active_tick'],raw['contact_failure'],physical['policy_fault']|raw['lower_fault']|raw['nonfinite'],1800),
-            observation_contract='Source task1 was valid/unarrived; observed suffix task1..10, no original prefix rerun or display. First arrival uses original task clock.')
-        decision=decisions.get(c['case_id']);replan=run/f'replanned_path_{lane:02d}.npz';changed=None;replan_tick=200+n
-        if bool(decision)!=bool(c['replanned']) or replan.exists()!=bool(c['replanned']):raise ValueError('bank replan evidence mismatch')
+        if relative_arrival is not None:outcome['first_arrival_s']=relative_arrival+source_s
+        outcome.update(physical_outcome=physical_outcome(raw['active_tick'],raw['contact_failure'],physical['policy_fault']|raw['lower_fault']|raw['nonfinite'],max_ticks),
+            observation_contract=f'Source task{source_s:g}; observed actual suffix to10, first arrival uses original task clock; prefix-goal flag retained separately.')
+        source_id=c['source_index'];antecedent_replanned=bool(source_host['replanned'][source_id]);antecedent_arrived=bool(source_host['ever_arrived'][source_id])
+        outcome['goal_arrived_before_source']=antecedent_arrived
+        outcome['goal_arrived_in_suffix']=outcome['goal_arrived']
+        if antecedent_arrived:outcome.update(goal_arrived=True,first_arrival_s=None)
+        source_execution=paths[key]
+        if late:
+            with np.load(root/'sources'/f'executed_source_{source_id:02d}_path.npz') as z:source_execution=dict(z)
+        decision=decisions.get(c['case_id']);replan=run/f'replanned_path_{lane:02d}.npz';changed=None;replan_tick=start_tick+n
+        if (bool(decision) or antecedent_replanned)!=bool(c['replanned']) or replan.exists()!=bool(decision):raise ValueError('bank replan evidence mismatch')
         if decision:
             replan_tick=decision['task_tick']
-            if decision['case_index']!=lane or replan_tick not in range(200,1801,200):raise ValueError('bank replan clock mismatch')
+            if decision['case_index']!=lane or replan_tick not in range(start_tick,1801,200):raise ValueError('bank replan clock mismatch')
             from sttw_control.goal_replanning import replan_requested
             if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,cross_track_m=decision['cross_track_m'],follower_invalid=decision['follower_invalid'],already_replanned=False,contact=decision['contact'],fault=decision['fault'],ever_arrived=decision['ever_arrived']):raise ValueError('bank replan lacks measured trigger')
             with np.load(replan) as z:changed=dict(z)
             np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,a]) for a in (0,1)],goal,atol=3e-6,rtol=0);executed[c['case_id']]=changed
-        data=reconstruct_execution_path_reward(raw,c,paths[key],changed,replan_tick-200,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=200)
+        data=reconstruct_execution_path_reward(raw,c,source_execution,changed,replan_tick-start_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick)
+        if late and changed is None and antecedent_replanned:executed[c['case_id']]=source_execution
         rebuilt[c['case_id']]=data;traces[c['case_id']]=raw
         fault=physical['policy_fault']|raw['lower_fault']|raw['nonfinite'];fatal=np.flatnonzero(active&(raw['contact_failure']|fault));stop=int(fatal[0]) if len(fatal) else n
         task_stop=min(stop,round(relative_arrival/.005)) if relative_arrival is not None else stop
         event=f"prep{c['preparation_s']:g}_F{c['force_N']:+g}"
         rows.append(dict(c,event=event,method=f"alpha{c['candidate_alpha']:g}",source_fingerprint=source_by_id[c['source_index']]['source_fingerprint'],
             source_feature_file='../evaluation/source_features.npz',source_feature_row=lane,diagnostic_file=f'case_{lane:03d}_diagnostics.npz',
-            primary=samestate_primary_label(raw,c),horizons={'10':outcome},active_lower_ticks=n,new_suffix_lower_ticks=n,trace_start_s=1.,prefix=dict(ticks=task_stop),
+            inherited_execution_path_file=str(root/'sources'/f'executed_source_{source_id:02d}_path.npz') if late else None,
+            primary=samestate_primary_label(raw,c),horizons={'10':outcome},active_lower_ticks=n,new_suffix_lower_ticks=n,trace_start_s=source_s,prefix=dict(ticks=task_stop),
             pulse=pulse,query=query,correction_chain=chain,replan_task_tick=None if decision is None else replan_tick,
             diagnostic_execution_path_user1_cost=float(-data['user1_reward'].sum()),actual_final_xy=raw['actual_xy'][n-1].tolist()))
         numeric={k:v[:n] for k,v in raw.items()};numeric.update(user1_suffix_reward=data['user1_reward'],cumulative_user1_suffix_reward=np.cumsum(data['user1_reward']),
             user1_suffix_reward_components=data['user1_running_components'],cumulative_user1_suffix_components=np.cumsum(data['user1_running_components'],axis=0),terminal_adjustment=data['user1_terminal_adjustment'])
         np.savez_compressed(out/f'case_{lane:03d}_diagnostics.npz',**numeric)
     summary,paired=samestate_summary(rows)
-    summary.update(label_selection='new_confirmation_explicit_all144' if fresh else 'final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
-        data_role=p['data_role'] if fresh else 'Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.',confirmation_labels_accessed=fresh)
+    summary.update(label_selection='late_same_state_all48' if late else 'new_confirmation_explicit_all144' if fresh else 'final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
+        data_role=p['data_role'] if fresh or late else 'Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.',confirmation_labels_accessed=fresh)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),analyzed_suffix_cases=len(rows),
-        analyzed_suffix_active_lower_ticks=ticks,active_new_hybrid_prefix_lower_ticks=initial['active_new_prefix_lower_ticks'],maximum_suffix_budget=259200,maximum_total_budget=p['protocol']['maximum_total_lower_ticks'],confirmation_labels_accessed=fresh,
+        analyzed_suffix_active_lower_ticks=ticks,active_new_hybrid_prefix_lower_ticks=initial['active_new_prefix_lower_ticks'],maximum_suffix_budget=p['protocol']['maximum_lower_ticks'],maximum_total_budget=p['protocol']['maximum_total_lower_ticks'],confirmation_labels_accessed=fresh,
         heldout_suffix_labels_accessed=include_heldout_labels,unselected_suffix_files_opened=0,new_physics_steps=0,optimizer_updates=0,
         limitation=f"Prefix{p['protocol']['maximum_prefix_lower_ticks']} is separate source collection. Two ancestors are not independent training seeds. No predictor fitting."))
     # Existing renderer expects root/analysis; pass an explicit output directory.
@@ -919,9 +936,11 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
         '原source前缀不重跑也不拼接。XY仅展示task1..10实测后缀与原始/执行路径；主标签source至pulseEND+3s，准备期摔倒为负、fault为invalid。准备改变绝对起扰时刻与遭遇几何，不隔离纯时序。']
     if fresh:
         lines=['# 冻结预测器新来源确认：banks2/5 全144条件','','所有八个fixed1/hybrid前缀新生成，共1600lower；144后缀上限259200；无拟合、无bank1标签读取。两个祖先非独立训练种子。','XY仅展示task1..10实测后缀及固定原始路径；原任务/物理/主标签不变。']
+    if late:lines=['# 晚期同态48后缀','','四个task6完整source×三alpha×两prep×两方向=48；16个同条件图每图三alpha。主窗source至pulseEND+3s，准备触地为负、fault为invalid。保持原worldgoal；source前已到达/接回标记保留；suffix仅展示真实task6..10轨迹，执行路径奖励为诊断。']
     for label in response_plot_groups(rows):lines+=['',f'## {label}','',f'![Selected suffix XY](full_xy_{label}.png)']
     lines+=['','[所选逐例标签](results.json) · [按source分组](summary.json) · [配对](paired.json) · [身份与单独费用](receipt.json)',
         '本轮不拟合预测器。351源观测含真实速度/历史部署依赖，尚非最终小特征集。执行路径user1奖励仅诊断；四固定1来源复用，一秒hybrid源仅新800lower，后缀物理单独计费。']
+    if late:lines[-1]='四个固定half task6完整源从封存online120复用，0新前缀物理；48后缀上限38400；零训练，冻结q另行评价；不把48分支当独立祖先。'
     if fresh:lines[-1]='本轮只确认封存预测器；没有拟合或在线替换。全部八来源前缀1600lower，后缀单独计费；351源观测含真实速度部署依赖。'
     (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
@@ -1438,8 +1457,8 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
     from matplotlib.patches import Circle
     out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
     tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4] for r in rows)
-    checkpoint='H75 frozen'
-    if tolerance:
+    checkpoint='H75 frozen';late_display=any(r.get('trace_start_s')==6. for r in rows)
+    if tolerance or late_display:
         plan=json.loads((root/'plan.json').read_text());checkpoint='H75 actor SHA '+plan['models']['H75']['actor_sha256'][:12]
     palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555','#E69F00')
     for event in response_plot_groups(rows):
@@ -1454,6 +1473,9 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
                 for method,color in zip(methods,colors):
                     r=next(r for r in group if (analysis_path_key(r),r['method'])==(route,method));raw=raws[r['case_id']]
                     h=r['horizons']['10'];n=r['prefix']['ticks'] if task and h['goal_arrived'] else r['active_lower_ticks'];xy=raw['actual_xy'][:n]
+                    if r.get('inherited_execution_path_file'):
+                        with np.load(r['inherited_execution_path_file']) as z:inherited=dict(z)
+                        ax.plot(*inherited['xy'][inherited['s']<=inherited['goal']].T,c=color,ls=':',lw=.8,alpha=.7,label=method+' inherited source execution path')
                     if r['case_id'] in executed:
                         path2=executed[r['case_id']];ax.plot(*path2['xy'][path2['s']<=path2['goal']].T,c=color,ls='--',lw=.8,alpha=.65,label=method+' executed replan')
                     if n:
@@ -1469,7 +1491,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
                         dose=np.flatnonzero(np.linalg.norm(raw['applied_force_impulse'][:n],axis=1)>1e-10)
                         if len(dose):ax.scatter(*raw['actual_xy'][dose].T,c=color,s=8,alpha=.5)
                 ax.set(title=route,xlabel='World X (m)',ylabel='World Y (m)');ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=6);ax.grid(alpha=.15)
-            fig.suptitle((checkpoint+' / ' if tolerance else '')+event+' / '+('first-arrival/contact prefix' if task else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
+            fig.suptitle((checkpoint+' / ' if tolerance or late_display else '')+event+' / '+('first-arrival/contact prefix' if task else 'actual task6..10 suffix endpoint' if late_display else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
             fig.savefig(out/f'{"task" if task else "full"}_xy_{event}.png',dpi=140);plt.close(fig)
         for route in routes:
             selected=[r for r in group if analysis_path_key(r)==route]

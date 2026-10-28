@@ -26,7 +26,11 @@ def audit(root,output):
     p=json.loads((root/'plan.json').read_text());native=Path(p['native_runtime_root']).resolve()
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
+    late=p.get('mode')=='h75_late_state_tolerance48'
     tolerance=p.get('mode')=='tolerance_online120'
+    if late:
+        original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
+        load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
     if tolerance:
         load_frozen_pickle_module(root,p,'tolerance_coordination.py','_sttw_tolerance_coordination')
     source=(root/'source/native_goal_continuation.py') if tolerance else Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_continuation.py'
@@ -46,7 +50,7 @@ def audit(root,output):
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
         if tolerance and np.any(carry.prev_alpha!=1.):raise ValueError('online initial previous alpha must be one')
         carry=carry.native
-    if p.get('mode')=='h75_samestate_bank144':
+    if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48'):
         return audit_bank144_initial(root,p,carry,output,jax,initial)
     if p.get('mode')=='h75_samestate_tolerance72':
         return audit_samestate_initial(root,p,carry,output,jax,initial)
@@ -210,7 +214,11 @@ def audit(root,output):
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    tolerance=p.get('mode')=='tolerance_online120';count=120 if tolerance else 100;arms=6 if tolerance else 5
+    late=p.get('mode')=='h75_late_state_tolerance48'
+    tolerance=p.get('mode')=='tolerance_online120'
+    if late:
+        original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
+        load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination');count=120 if tolerance else 100;arms=6 if tolerance else 5
     if len(cases)!=count:raise ValueError('complete declared initial cases required')
     np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,np.ones(count))
     np.testing.assert_array_equal(state.filtered,np.zeros((count,2)));np.testing.assert_array_equal(state.offsets,np.zeros((count,2)))
@@ -301,15 +309,29 @@ def audit_samestate_initial(root,p,carry,output,jax,initial):
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 
+def assert_late_planner_state_preserved(before,after,jax):
+    """Task6 pure geometry binding may change projection/follower only."""
+    import numpy as np
+    aa,ta=jax.tree_util.tree_flatten_with_path(before);bb,tb=jax.tree_util.tree_flatten_with_path(after)
+    if ta!=tb:raise ValueError('late planner changed source tree structure')
+    for (path,a),(other,b) in zip(aa,bb):
+        key=jax.tree_util.keystr(path)
+        if key!=jax.tree_util.keystr(other):raise ValueError('late planner changed leaf identity')
+        if key.startswith('.state.projection.') or key.startswith('.state.follower.'):continue
+        if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('late planner changed retained dtype '+key)
+        np.testing.assert_array_equal(a,b,err_msg='late planner changed retained native state '+key)
+
+
 def audit_bank144_initial(root,p,carry,output,jax,initial):
     import numpy as np
+    late=p.get('mode')=='h75_late_state_tolerance48';count=p['protocol'].get('expected_cases',144);group_count=len(p['protocol']['source_groups']);copies=count//group_count;source_tick=round(p['protocol'].get('source_task_s',1.)/.005)
     seal=json.loads((root/'sources/seal.json').read_text())
     if seal['plan_sha256']!=hashlib.sha256((root/'plan.json').read_bytes()).hexdigest():raise ValueError('source pool plan identity mismatch')
     for file,sha in seal['files'].items():
         if hashlib.sha256(Path(file).read_bytes()).hexdigest()!=sha:raise ValueError('source pool seal drift')
     with (root/'sources/complete_carry.pkl').open('rb') as f:saved=pickle.load(f)
     records=json.loads((root/'sources/records.json').read_text());cases=json.loads((root/'inventory.json').read_text())
-    if len(records)!=8 or len(cases)!=144:raise ValueError('eight source pool/144 copies required')
+    if len(records)!=group_count or len(cases)!=count:raise ValueError('declared source pool/copies required')
     actual,ta=jax.tree.flatten(carry);original,tb=jax.tree.flatten(saved)
     if ta!=tb:raise ValueError('source pool copy structure drift')
     for a,b in zip(actual,original):
@@ -334,24 +356,25 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
         for a,b in zip(aa,bb):
             if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('source ancestor dtype mismatch')
             np.testing.assert_array_equal(a,b)
-    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(144,200));np.testing.assert_array_equal(state.alpha,np.ones(144))
+    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(count,source_tick));np.testing.assert_array_equal(state.alpha,np.ones(count))
+    np.testing.assert_array_equal(state.physical.physical_tick,np.full(count,700+source_tick))
     if np.any(state.fault|state.physical.failed):raise ValueError('source pool stopped state')
     with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
-    if features.shape!=(144,351) or not np.isfinite(features).all():raise ValueError('finite144x351 source features required')
+    if features.shape!=(count,351) or not np.isfinite(features).all():raise ValueError('finite144x351 source features required')
     np.testing.assert_allclose(features[:,336],1.,atol=1e-6,rtol=0);groups={}
     for lane,c in enumerate(cases):groups.setdefault(c['source_index'],[]).append(lane)
-    if len(groups)!=8 or any(len(ids)!=18 for ids in groups.values()):raise ValueError('eight18-copy source groups required')
+    if len(groups)!=group_count or any(len(ids)!=copies for ids in groups.values()):raise ValueError('declared source copy groups required')
     for ids in groups.values():
         for lane in ids[1:]:np.testing.assert_array_equal(features[lane],features[ids[0]])
     with np.load(root/'evaluation/task1_host_state.npz') as actual,np.load(root/'sources/host_state.npz') as source:
         for field in source.files:np.testing.assert_array_equal(actual[field],source[field][[c['source_index'] for c in cases]])
-        if np.any(source['ever_arrived']|source['replanned']):raise ValueError('unarrived original-path source pool required')
-    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes':
+        if not late and np.any(source['ever_arrived']|source['replanned']):raise ValueError('unarrived original-path source pool required')
+    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes' and not late:
         bankfile=Path(p['initial_source']['prepared_bank'])
         if hashlib.sha256(bankfile.read_bytes()).hexdigest()!=p['initial_source']['prepared_bank_sha256']:raise ValueError('prepared confirmation bank drift')
         with bankfile.open('rb') as f:prepared=pickle.load(f)
         for record in records:
-            if record['split']!='new_confirmation' or record['bank_index'] not in (2,5):raise ValueError('confirmation source identity mismatch')
+            if record['split']!=('late_state_development' if late else 'new_confirmation') or record['bank_index'] not in (2,5):raise ValueError('confirmation source identity mismatch')
             file=record['prefix_initial_carry_file']
             if file not in seal['files']:raise ValueError('prefix initialization not sealed')
             if file not in loaded:
@@ -370,10 +393,33 @@ def audit_bank144_initial(root,p,carry,output,jax,initial):
                     if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('prepared ancestor dtype mismatch')
                     np.testing.assert_array_equal(a,b)
             if int(prefix_initial.state.tick)!=0 or int(prefix_initial.state.physical.physical_tick)!=700:raise ValueError('prefix initialization clock mismatch')
+    if late:
+        prefile=root/'prefix/initial_carry.pkl'
+        if str(prefile) not in seal['files']:raise ValueError('late imported preplanner carry is not sealed')
+        with prefile.open('rb') as f:preplanner=pickle.load(f)
+        for record in records:
+            file=record['original_source_file']
+            if file not in loaded:
+                with Path(file).open('rb') as f:loaded[file]=pickle.load(f)
+            ancestor=loaded[file].native if hasattr(loaded[file],'native') else loaded[file]
+            before=jax.tree.map(lambda x:np.asarray(x)[record['source_index']],preplanner)
+            original=jax.tree.map(lambda x:np.asarray(x)[record['original_source_row']],ancestor)
+            aa,ta=jax.tree.flatten(before);bb,tb=jax.tree.flatten(original)
+            if ta!=tb:raise ValueError('late imported original tree differs')
+            for a,b in zip(aa,bb):
+                if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('late imported original dtype differs')
+                np.testing.assert_array_equal(a,b)
+            after=jax.tree.map(lambda x:np.asarray(x)[record['source_index']],saved)
+            assert_late_planner_state_preserved(before,after,jax)
+        with (root/'sources/executed_paths.pkl').open('rb') as f:source_paths=pickle.load(f)
+        for record in records:
+            path=jax.tree.map(lambda x:np.asarray(x)[record['source_index']],source_paths)
+            with np.load(root/'sources'/f"executed_source_{record['source_index']:02d}_path.npz") as z:
+                for key in ('s','xy','heading','curvature','turn_end','goal'):np.testing.assert_array_equal(z[key],getattr(path,key))
     prefix_ticks=seal['active_prefix_lower_ticks']
     if prefix_ticks!=p['protocol']['maximum_prefix_lower_ticks'] or seal['allocated_prefix_lower_slots']!=prefix_ticks:raise ValueError('exact declared prefix ticks required')
     result=dict(initial_carry_sha256=hashlib.sha256(initial.read_bytes()).hexdigest(),audit_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        source_groups=8,copies_per_source=18,all_complete_source_copy_leaves_exact=True,all_ancestor_provenance_exact=True,source_fingerprints=fingerprints,
+        source_groups=group_count,copies_per_source=copies,source_task_tick=source_tick,source_physical_tick=700+source_tick,late_original_import_all_leaves_exact=late,task6_planner_preserved_non_geometry_state=late,all_complete_source_copy_leaves_exact=True,all_ancestor_provenance_exact=True,source_fingerprints=fingerprints,
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
         source_features_exact_within_group=True,all_host_state_copies_exact=True,active_new_prefix_lower_ticks=prefix_ticks,
         new_physics_steps=0,optimizer_updates=0,heldout_suffix_labels_accessed=False,
