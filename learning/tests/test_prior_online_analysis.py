@@ -113,3 +113,49 @@ def test_speedcap_publication_preserves_steering_and_independent_speed_audit():
     raw['composed_latent'][:]=candidate;raw['latent_z'][:]=candidate
     m.audit_tolerance_publication(raw,dict(mode='user1_fixed',method='fixed',alpha=1.))
     assert m.is_speedcap_case(dict(mode='speedcap'))
+
+
+def test_speed_query_summary_has_260_records_and_variable_user_methods():
+    rows=[]
+    for user in (0.,.5,1.):
+        methods=('task_aware','guard','fixed','speed_query')+(('speedcap',) if user==1. else ())
+        for i in range(20):
+            for method in methods:
+                rows.append(dict(case_id=f'{user}/{i}/{method}',effective_user_alpha=user,method=method,event=str(i),bank_index=1,route='left',horizons={'10':dict(goal_arrived=True,physical_outcome='complete')},alpha_rule=dict(final_at_user=True,nonuser_duration_s=0.,prearrival_alpha=dict(user_duration_s=1.)),matched_original_task_metrics={}))
+    summary,paired=m.preference_summary(rows,speed_comparison=True)
+    assert summary['new_cases']==60 and summary['cached_cases']==200 and summary['logical_records']==260
+    assert len(paired)==22 and all(len(x['conditions'])==20 for x in paired)
+    assert 'speedcap' not in summary['per_user_method']['0.0']
+    with pytest.raises(ValueError):m.preference_summary(rows[:-1],speed_comparison=True)
+
+
+def test_full_mask_original_cost_windows_are_separate_from_all_methods(tmp_path,monkeypatch):
+    import numpy as np
+    (tmp_path/'analysis').mkdir();(tmp_path/'evaluation').mkdir()
+    (tmp_path/'plan.json').write_text(json.dumps(dict(mode='speed_query_online60')))
+    (tmp_path/'analysis/results.json').write_text('[]')
+    np.savez(tmp_path/'evaluation/p_path.npz',s=np.array([0.,1.]))
+    rows=[];raws={};path=dict(s=np.array([0.,1.]),goal=1.,xy=np.array([[0.,0.],[1.,0.]]));paths={'p':path};goals={'p':np.array([1.,0.])}
+    for method,n in (('guard',2),('fixed',8),('task_aware',8),('speedcap',8),('speed_query',6)):
+        rows.append(dict(case_id=method,method=method,mode='user1_'+method,effective_user_alpha=1.,alpha=1.,event='zero',bank_index=1,route='left',path_key='p',speed=2.8,active_lower_ticks=n,prefix={'ticks':n},diagnostic_execution_path_user1_cost=0.,horizons={'10':dict(physical_outcome='complete',goal_arrived=False)} ,alpha_rule={}))
+        raws[method]=dict(alpha_exec=np.ones(n),actual_forward_speed=np.full(n,2.8),actual_xy=np.zeros((n,2)))
+    m.preference_common_windows(rows,raws,paths,goals);m.full_mask_common_windows(rows,raws,paths,goals)
+    assert next(r for r in rows if r['method']=='task_aware')['matched_original_task_metrics']['same_actual_window']['actual_ticks']==2
+    assert next(r for r in rows if r['method']=='task_aware')['full_mask_matched_original_task_metrics']['same_actual_window']['actual_ticks']==6
+    monkeypatch.setattr(m,'rescore_original_task',lambda raw,*a,**k: (dict(task_step_costs=np.ones((len(raw['alpha_exec']),3))),{}))
+    results=m.write_original_task_rescoring(tmp_path,rows,raws,paths,{},None,[])
+    for method in ('task_aware','speed_query'):
+        result=next(r for r in results if r['case_id']==method)
+        assert result['windows']['common_pre_first_arrival']['actual_ticks']==2
+        assert result['windows']['full_mask_common_pre_first_arrival']['actual_ticks']==6
+        assert result['windows']['full_mask_common_pre_first_arrival']['three_task_cost_sum']==18.
+
+
+def test_speed_query_inventory_matches_new60_config():
+    from sttw_control.native_goal_run import tolerance_inventory
+    p=json.loads((CLI.parent/'configs/h75_speed_query_online60.json').read_text())
+    rows=tolerance_inventory(p)
+    m.validate_speed_query_inventory(rows,p)
+    assert len(rows)==60 and len(m.response_plot_groups(rows))==60
+    rows[0]['method']='task_aware'
+    with pytest.raises(ValueError,match='identity'):m.validate_speed_query_inventory(rows,p)
