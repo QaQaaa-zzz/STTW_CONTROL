@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 import pytest
 from sttw_control import tolerance_coordination as coordinator
@@ -132,3 +133,65 @@ def test_nonzero_float32_networks_match_torch_probabilities():
         expected.append(np.mean(probabilities,axis=0))
     actual=np.asarray(coordinator.infer_probabilities(params,features))
     np.testing.assert_allclose(actual,np.asarray(expected),rtol=0,atol=2e-6)
+
+
+def _temporal_export_fixture(tmp_path):
+    import json
+    import torch
+    from sttw_control import tolerance_predictor_pilot as pilot
+    training=tmp_path/'training';prepared=tmp_path/'prepared';training.mkdir();prepared.mkdir();(training/'source').mkdir()
+    snapshot=training/'source/tolerance_predictor_pilot.py';snapshot.write_bytes(Path(pilot.__file__).read_bytes())
+    cfg=json.loads((Path(pilot.__file__).parents[2]/'configs/h75_tolerance_predictor_temporal_mix.json').read_text())
+    config=tmp_path/'config.json';config.write_text(json.dumps(cfg))
+    receipt=dict(config_sha256=coordinator.sha(config),implementation_sha256=coordinator.sha(snapshot))
+    (prepared/'receipt.json').write_text(json.dumps(receipt));(training/'preparation_receipt.json').write_text(json.dumps(receipt))
+    for role,early_bank,late_bank in [('training',3,2),('development',0,5)]:
+        meta=[dict(case_id=f'{role}/{i}',source_group_id=f'bank{early_bank}/source{i//18}',bank_index=early_bank,period='early') for i in range(72)]+[dict(case_id=f'{role}/{i}',source_group_id=f'bank{late_bank}/late{i//12}',bank_index=late_bank,period='late') for i in range(72,96)]
+        np.savez(prepared/f'{role}.npz',full=np.random.default_rng(3).normal(size=(96,41)).astype(np.float32),y=np.r_[np.tile([0,1],36),np.ones(24)].astype(np.float32))
+        (prepared/f'{role}.json').write_text(json.dumps(dict(meta=meta)))
+    (prepared/'seal.json').write_text(json.dumps({p.name:coordinator.sha(p) for p in prepared.iterdir()}))
+    selected=[]
+    for seed in (0,1,2):
+        torch.manual_seed(seed);initial=pilot.make_model(41).state_dict();initial_file=training/f'initial_seed{seed}.pt';torch.save(initial,initial_file)
+        for arm in ('bce','bce_rank'):
+            directory=training/arm/f'seed{seed}';directory.mkdir(parents=True)
+            path=directory/'balanced_brier_selected.pt';step=[400,300,300][seed]
+            torch.save(dict(state_dict=initial,arm=arm,seed=seed,step=step),path)
+            selected.append(dict(arm=arm,seed=seed,selector='balanced_brier',dim=41,file=str(path),sha256=coordinator.sha(path),step=step,initial_sha256=coordinator.sha(initial_file)))
+            if arm=='bce_rank':
+                last={k:v.clone() for k,v in initial.items()};last['4.bias']+=.3
+                torch.save(dict(state_dict=last,arm=arm,seed=seed,step=1000),directory/'last.pt')
+    (training/'resolved_config.json').write_text(json.dumps(cfg));(training/'data_receipt.json').write_text('{}')
+    source=dict(actual_optimizer_updates=6000,new_physics_steps=0,new_ppo_updates=0,implementation_sha256=coordinator.sha(snapshot),source_snapshot_sha256=coordinator.sha(snapshot),config=str(config),config_sha256=coordinator.sha(config),resolved_config_sha256=coordinator.sha(training/'resolved_config.json'),data_receipt_sha256=coordinator.sha(training/'data_receipt.json'),selected=selected)
+    (training/'selection_manifest.json').write_text(json.dumps(source))
+    (training/'selection_seal.json').write_text(json.dumps(dict(artifacts_sha256={str(p.relative_to(training)):coordinator.sha(p) for p in training.rglob('*') if p.is_file()})))
+    return training,prepared
+
+
+def test_named_selected_last_freeze_and_export_never_calls_them_bce(tmp_path):
+    training,prepared=_temporal_export_fixture(tmp_path);path=tmp_path/'candidate_manifest.json'
+    manifest=coordinator.freeze_temporal_candidates(training,prepared,path)
+    assert manifest['ensemble_labels']==['temporal_rank_selected','temporal_rank_last']
+    assert [r['step'] for r in manifest['candidate_models']]==[400,300,300,1000,1000,1000]
+    assert all(r['source_arm']=='bce_rank' for r in manifest['candidate_models'])
+    coordinator.verify_temporal_candidates(path)
+    report=coordinator.export_predictors(path,tmp_path/'q')
+    assert report['arm_order']==manifest['ensemble_labels'] and report['real_training_rows']==96
+    assert report['source_manifest_kind']=='temporal_mix_selected_and_last'
+    assert max(report['maximum_probability_errors'].values())<=2e-6
+    params=coordinator.load_export(tmp_path/'q')
+    assert params['w0'].shape==(2,3,41,16)
+    np.testing.assert_allclose(params['b2'][1]-params['b2'][0],.3,atol=1e-7)
+    assert not list((tmp_path/'q').glob('bce_seed*.pt'))
+
+
+def test_temporal_last_tamper_and_slot_substitution_are_rejected(tmp_path):
+    import json
+    training,prepared=_temporal_export_fixture(tmp_path);path=tmp_path/'candidate_manifest.json'
+    coordinator.freeze_temporal_candidates(training,prepared,path)
+    content=json.loads(path.read_text());content['candidate_models'][0]['slot']=1;path.write_text(json.dumps(content))
+    path.with_suffix('.seal.json').write_text(json.dumps(dict(candidate_manifest_sha256=coordinator.sha(path))))
+    with pytest.raises(ValueError,match='two complete'):coordinator.verify_temporal_candidates(path)
+    path.unlink();path.with_suffix('.seal.json').unlink();coordinator.freeze_temporal_candidates(training,prepared,path)
+    (training/'bce_rank/seed0/last.pt').write_bytes(b'changed')
+    with pytest.raises(ValueError,match='artifact changed'):coordinator.verify_temporal_candidates(path)

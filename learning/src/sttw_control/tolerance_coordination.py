@@ -116,9 +116,16 @@ def export_predictors(manifest_path,output):
     if output.exists():raise ValueError('fresh export directory required')
     # Present helper authenticates archived source independently of this module.
     pilot=file_module(Path(__file__).with_name('tolerance_predictor_pilot.py'),'_coordination_predictor_auth')
-    manifest,source,frozen=pilot.verify_confirmation_candidates(manifest_path)
+    raw_manifest=json.loads(Path(manifest_path).read_text())
+    generic=raw_manifest.get('format')=='sttw_frozen_predictor_candidates_v1'
+    if generic:
+        manifest,source,frozen=verify_temporal_candidates(manifest_path)
+        labels=manifest['ensemble_labels'];source_root=Path(manifest['training_directory'])
+    else:
+        manifest,source,frozen=pilot.verify_confirmation_candidates(manifest_path)
+        labels=['bce','bce_rank'];source_root=Path(manifest_path).parent
     params={};models={}
-    for ai,arm in enumerate(('bce','bce_rank')):
+    for ai,arm in enumerate(labels):
         for seed in (0,1,2):
             row=next(r for r in manifest['candidate_models'] if r['arm']==arm and r['seed']==seed)
             state=torch.load(row['file'],map_location='cpu',weights_only=True)['state_dict']
@@ -131,9 +138,14 @@ def export_predictors(manifest_path,output):
                     if key not in params:params[key]=np.empty((2,3)+value.shape,np.float32)
                     params[key][ai,seed]=value
     cfg=json.loads(Path(source['config']).read_text())
-    receipt=json.loads((Path(manifest_path).parent/'data_receipt.json').read_text())
-    training_analysis=next(Path(p).parent for p in receipt['train']['inputs'] if p.endswith('/initial_carry_review.json'))
-    data=frozen.load_dataset(training_analysis,'training',cfg)
+    if generic:
+        training_file=Path(manifest['prepared_directory'])/'training.npz'
+        with np.load(training_file,allow_pickle=False) as z:features=z['full'].copy()
+        data=dict(full=features,inputs={str(training_file):sha(training_file)})
+    else:
+        receipt=json.loads((source_root/'data_receipt.json').read_text())
+        training_analysis=next(Path(p).parent for p in receipt['train']['inputs'] if p.endswith('/initial_carry_review.json'))
+        data=frozen.load_dataset(training_analysis,'training',cfg)
     rng=np.random.default_rng(75);features=np.concatenate([data['full'],rng.uniform(-5,5,(128,41)).astype(np.float32)])
     import jax.numpy as j
     import jax.nn as nn
@@ -148,12 +160,87 @@ def export_predictors(manifest_path,output):
         if not np.isfinite(error) or error>2e-6:raise ValueError(f'Torch/JAX frozen predictor mismatch: arm={arm} seed={seed} maximum_absolute_probability_error={error:.9g}, tolerance=2e-6, matmul_precision=highest')
     output.mkdir(parents=True);np.savez(output/'parameters.npz',**params)
     shutil.copyfile(manifest_path,output/'original_candidate_manifest.json')
-    shutil.copyfile(Path(manifest_path).parent/'selection_manifest.json',output/'ranking_source_manifest.json')
+    if generic:shutil.copyfile(Path(manifest_path).with_suffix('.seal.json'),output/'original_candidate_manifest.seal.json')
+    shutil.copyfile(source_root/'selection_manifest.json',output/'ranking_source_manifest.json')
     shutil.copyfile(source['config'],output/'ranking_config.json')
-    shutil.copyfile(Path(manifest_path).parent/'source/tolerance_predictor_pilot.py',output/'frozen_predictor_source.py')
+    shutil.copyfile(source_root/'source/tolerance_predictor_pilot.py',output/'frozen_predictor_source.py')
     for row in manifest['candidate_models']:shutil.copyfile(row['file'],output/f"{row['arm']}_seed{row['seed']}.pt")
     np.savez(output/'numerical_inputs.npz',features=features,jax_probabilities=actual)
-    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,matmul_precision='highest',maximum_probability_errors=errors,arm_order=['bce','bce_rank'],hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
+    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,matmul_precision='highest',maximum_probability_errors=errors,arm_order=labels,source_manifest_kind='temporal_mix_selected_and_last' if generic else 'legacy_ranking_selected',hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
     report['files_sha256']={p.name:sha(p) for p in output.iterdir() if p.is_file()}
     (output/'receipt.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     return report
+
+
+def _sealed_files(directory,seal_name,required):
+    directory=Path(directory).resolve();seal=json.loads((directory/seal_name).read_text())
+    files=seal.get('artifacts_sha256',seal)
+    for name in required:
+        if name not in files or sha(directory/name)!=files[name]:raise ValueError('frozen temporal artifact changed: '+name)
+    return files
+
+
+def authenticate_temporal_training(training,prepared):
+    training=Path(training).resolve();prepared=Path(prepared).resolve()
+    required=['selection_manifest.json','source/tolerance_predictor_pilot.py','resolved_config.json','data_receipt.json','preparation_receipt.json']
+    for seed in (0,1,2):required.extend([f'bce_rank/seed{seed}/balanced_brier_selected.pt',f'bce_rank/seed{seed}/last.pt',f'initial_seed{seed}.pt'])
+    files=_sealed_files(training,'selection_seal.json',required)
+    _sealed_files(prepared,'seal.json',['receipt.json','training.npz','training.json','development.npz','development.json'])
+    source=json.loads((training/'selection_manifest.json').read_text());receipt=json.loads((prepared/'receipt.json').read_text())
+    if (source['actual_optimizer_updates']!=6000 or source['new_physics_steps']!=0 or source['new_ppo_updates']!=0 or
+        source['implementation_sha256']!=sha(training/'source/tolerance_predictor_pilot.py') or
+        source['source_snapshot_sha256']!=source['implementation_sha256'] or
+        source['config_sha256']!=sha(source['config']) or source['resolved_config_sha256']!=sha(training/'resolved_config.json') or
+        source['data_receipt_sha256']!=sha(training/'data_receipt.json') or receipt['config_sha256']!=source['config_sha256'] or
+        receipt['implementation_sha256']!=source['implementation_sha256'] or
+        json.loads((training/'preparation_receipt.json').read_text())!=receipt):raise ValueError('frozen temporal preparation/source identity mismatch')
+    expected={(a,s,'balanced_brier') for a in ('bce','bce_rank') for s in (0,1,2)}
+    if len(source['selected'])!=6 or {(r['arm'],r['seed'],r['selector']) for r in source['selected']}!=expected:raise ValueError('six temporal selected models required')
+    for row in source['selected']:
+        if row['dim']!=41 or sha(row['file'])!=row['sha256']:raise ValueError('temporal selected checkpoint changed')
+    frozen=file_module(training/'source/tolerance_predictor_pilot.py','_temporal_frozen_export')
+    frozen.validate_temporal_config(json.loads(Path(source['config']).read_text()))
+    with np.load(prepared/'training.npz',allow_pickle=False) as z:data=dict(full=z['full'].copy(),y=z['y'].copy(),**json.loads((prepared/'training.json').read_text()))
+    with np.load(prepared/'development.npz',allow_pickle=False) as z:dev=dict(full=z['full'].copy(),y=z['y'].copy(),**json.loads((prepared/'development.json').read_text()))
+    frozen.validate_temporal_datasets(data,dev)
+    return source,files,frozen
+
+
+def freeze_temporal_candidates(training,prepared,manifest_path,*,labels=('temporal_rank_selected','temporal_rank_last')):
+    """Freeze named selected/last ensembles without changing their source recipe."""
+    import torch
+    training=Path(training).resolve();prepared=Path(prepared).resolve();manifest_path=Path(manifest_path).resolve()
+    if manifest_path.exists() or manifest_path.with_suffix('.seal.json').exists():raise ValueError('fresh temporal candidate manifest only')
+    if len(labels)!=2 or len(set(labels))!=2 or any(not name.replace('_','').isalnum() for name in labels):raise ValueError('two distinct safe ensemble labels required')
+    source,files,_=authenticate_temporal_training(training,prepared);rows=[]
+    for slot,label in enumerate(labels):
+        for seed in (0,1,2):
+            selected=next(r for r in source['selected'] if r['arm']=='bce_rank' and r['seed']==seed)
+            path=Path(selected['file']) if slot==0 else training/f'bce_rank/seed{seed}/last.pt'
+            checkpoint=torch.load(path,map_location='cpu',weights_only=True)
+            if checkpoint['arm']!='bce_rank' or checkpoint['seed']!=seed or checkpoint['step']!=(selected['step'] if slot==0 else 1000):raise ValueError('temporal checkpoint metadata mismatch')
+            rows.append(dict(arm=label,slot=slot,seed=seed,dim=41,file=str(path),sha256=sha(path),step=checkpoint['step'],source_arm='bce_rank',source_selector='balanced_brier' if slot==0 else 'last',initial_sha256=selected['initial_sha256']))
+    manifest=dict(format='sttw_frozen_predictor_candidates_v1',ensemble_labels=list(labels),candidate_models=rows,training_directory=str(training),prepared_directory=str(prepared),ranking_source_manifest_sha256=sha(training/'selection_manifest.json'),training_selection_seal_sha256=sha(training/'selection_seal.json'),prepared_seal_sha256=sha(prepared/'seal.json'),role='seen mixed-time engineering DEV candidates; selected vs fixed final step, no new selection',new_optimizer_updates=0,new_physics_steps=0)
+    manifest_path.parent.mkdir(parents=True,exist_ok=True);manifest_path.write_text(json.dumps(manifest,indent=2,allow_nan=False)+'\n')
+    manifest_path.with_suffix('.seal.json').write_text(json.dumps(dict(candidate_manifest_sha256=sha(manifest_path)),indent=2)+'\n')
+    return manifest
+
+
+def verify_temporal_candidates(manifest_path):
+    manifest_path=Path(manifest_path).resolve();manifest=json.loads(manifest_path.read_text())
+    seal=json.loads(manifest_path.with_suffix('.seal.json').read_text())
+    if sha(manifest_path)!=seal['candidate_manifest_sha256']:raise ValueError('temporal candidate manifest changed')
+    labels=manifest['ensemble_labels'];rows=manifest['candidate_models']
+    if (manifest.get('format')!='sttw_frozen_predictor_candidates_v1' or len(labels)!=2 or len(set(labels))!=2 or any(not name.replace('_','').isalnum() for name in labels) or len(rows)!=6 or
+        {(r['arm'],r['slot'],r['seed']) for r in rows}!={(a,i,s) for i,a in enumerate(labels) for s in (0,1,2)}):raise ValueError('two complete named temporal ensembles required')
+    training=Path(manifest['training_directory']);prepared=Path(manifest['prepared_directory'])
+    if (sha(training/'selection_manifest.json')!=manifest['ranking_source_manifest_sha256'] or
+        sha(training/'selection_seal.json')!=manifest['training_selection_seal_sha256'] or sha(prepared/'seal.json')!=manifest['prepared_seal_sha256']):raise ValueError('temporal source seal changed')
+    source,_,frozen=authenticate_temporal_training(training,prepared)
+    for row in rows:
+        selected=next(r for r in source['selected'] if r['arm']=='bce_rank' and r['seed']==row['seed'])
+        expected=Path(selected['file']) if row['slot']==0 else training/f"bce_rank/seed{row['seed']}/last.pt"
+        if (row['source_arm']!='bce_rank' or row['source_selector']!=('balanced_brier' if row['slot']==0 else 'last') or
+            Path(row['file'])!=expected or sha(expected)!=row['sha256'] or row['initial_sha256']!=selected['initial_sha256'] or row['dim']!=41 or row['step']!=(selected['step'] if row['slot']==0 else 1000)):
+            raise ValueError('temporal candidate weight identity changed')
+    return manifest,source,frozen
