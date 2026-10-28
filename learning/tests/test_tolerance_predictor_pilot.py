@@ -160,3 +160,62 @@ def test_ranking_config_forbids_heldout_release_and_extra_arms():
     with pytest.raises(ValueError,match='ranking'):pilot.validate_ranking_config(cfg)
     cfg=ranking_config();cfg['ranking']['arms'].append('extra')
     with pytest.raises(ValueError,match='ranking'):pilot.validate_ranking_config(cfg)
+
+
+def test_confirmation_identity_verification_precedes_all_label_access(tmp_path,monkeypatch):
+    opened=[]
+    monkeypatch.setattr(pilot,'load_dataset',lambda *a,**k:opened.append(True))
+    with pytest.raises(FileNotFoundError):pilot.confirmation_evaluate(tmp_path/'missing_manifest',tmp_path/'analysis_confirmation',tmp_path/'output')
+    assert opened==[]
+    monkeypatch.undo()
+    with pytest.raises(ValueError,match='explicit confirmation'):
+        pilot.load_dataset(tmp_path/'analysis_final','new_confirmation',config(),confirmation=True)
+
+
+def test_confirmation_exact_split_bank_inventory():
+    declared=[dict(case_id=str(i),source_group_id=f's{i//18}',bank_index=2 if i<72 else 5,split='new_confirmation') for i in range(144)]
+    records=[dict(case_id=c['case_id'],bank_index=c['bank_index']) for c in declared]
+    pilot.validate_confirmation_inventory(declared,records)
+    declared[0]['split']='development'
+    with pytest.raises(ValueError,match='split/bank'):pilot.validate_confirmation_inventory(declared,records)
+    declared[0]['split']='new_confirmation';records[0]['bank_index']=1
+    with pytest.raises(ValueError,match='record bank'):pilot.validate_confirmation_inventory(declared,records)
+
+
+def test_confirmation_reports_overall_bank_source_and_same_condition_ranking():
+    meta=[dict(source_group_id=f's{i//2}',bank_index=2 if i<2 else 5,preparation_s=0.,force_N=64.) for i in range(4)]
+    report=pilot.grouped_confirmation_metrics([1,0,1,0],[.9,.1,.2,.8],meta)
+    assert report['overall']['n']==4
+    assert report['overall']['discordant_pair_ranking']['pairs']==2
+    assert set(report['per_bank'])=={'2','5'} and set(report['per_source'])=={'s0','s1'}
+    assert report['per_source']['s0']['discordant_pair_ranking']['mean']==1
+    assert report['per_source']['s1']['discordant_pair_ranking']['mean']==0
+
+
+@pytest.mark.parametrize('tamper',['checkpoint','source','manifest'])
+def test_confirmation_sealed_identity_tamper_before_label_access(tmp_path,monkeypatch,tamper):
+    cfg=tmp_path/'config.json';cfg.write_text('{}')
+    snapshot=tmp_path/'source/tolerance_predictor_pilot.py';snapshot.parent.mkdir();snapshot.write_bytes(Path(pilot.__file__).read_bytes())
+    candidates=[]
+    for arm,selector in [('bce','rank'),('bce_rank','brier')]:
+        for seed in (0,1,2):
+            checkpoint=tmp_path/f'{arm}{seed}.pt';checkpoint.write_bytes(b'checkpoint')
+            candidates.append(dict(arm=arm,selector=selector,seed=seed,dim=41,file=str(checkpoint),sha256=pilot.digest(checkpoint)))
+    source=dict(selected=candidates,implementation_sha256=pilot.digest(snapshot),source_snapshot_sha256=pilot.digest(snapshot),config=str(cfg),config_sha256=pilot.digest(cfg))
+    pilot.write_json(tmp_path/'selection_manifest.json',source)
+    manifest=dict(candidate_models=candidates,ranking_source_manifest_sha256=pilot.digest(tmp_path/'selection_manifest.json'),bank_indices=[2,5],training_prior=57/72,new_optimizer_updates=0)
+    path=tmp_path/'new_source_confirmation_manifest.json';pilot.write_json(path,manifest)
+    pilot.verify_confirmation_candidates(path)
+    if tamper=='checkpoint':Path(candidates[0]['file']).write_bytes(b'changed')
+    elif tamper=='source':snapshot.write_bytes(b'changed')
+    else:(tmp_path/'selection_manifest.json').write_text('{}')
+    def forbidden(*args,**kwargs):raise AssertionError('new labels accessed')
+    monkeypatch.setattr(pilot,'load_dataset',forbidden)
+    with pytest.raises(ValueError,match='changed'):pilot.confirmation_evaluate(path,tmp_path/'analysis_confirmation',tmp_path/'output')
+
+
+def test_confirmation_plan_rejects_old_banks_and_splits():
+    plan=dict(mode='h75_samestate_bank144',protocol=dict(source_initialization='prepared_bank_all_prefixes',bank_indices=[2,5],source_groups=[dict(source_group_id=str(i),split='new_confirmation',bank_index=2 if i<4 else 5) for i in range(8)]))
+    pilot.validate_confirmation_plan(plan)
+    plan['protocol']['bank_indices']=[0,1]
+    with pytest.raises(ValueError,match='plan identity'):pilot.validate_confirmation_plan(plan)

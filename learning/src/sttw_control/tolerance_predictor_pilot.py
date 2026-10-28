@@ -93,9 +93,10 @@ def resolved_label(primary):
     if value!=float(status=='no_fall'):raise ValueError('primary label/status contradiction')
     return value
 
-def load_dataset(analysis,role,cfg,*,released=False,audit_fn=source_audit):
+def load_dataset(analysis,role,cfg,*,released=False,audit_fn=source_audit,confirmation=False,feature_fn=feature_row):
     """Only a development-only analysis is permitted during fitting."""
     analysis=Path(analysis).resolve()
+    if role=='new_confirmation' and (not confirmation or analysis.name!='analysis_confirmation'):raise ValueError('explicit confirmation-only artifact required')
     if role=='evaluation' and not released:raise ValueError('held-out labels require sealed selection release')
     if role=='development' and analysis.name!='analysis_development':raise ValueError('development-only artifact required; do not open combined labels')
     root=analysis.parent;plan=json.loads((root/'plan.json').read_text())
@@ -103,15 +104,22 @@ def load_dataset(analysis,role,cfg,*,released=False,audit_fn=source_audit):
     reviewed=json.loads((analysis/'initial_carry_review.json').read_text())
     if reviewed.get('initial_carry_sha256')!=digest(root/'evaluation/initial_carry.pkl') or not reviewed.get('all_complete_source_copy_leaves_exact'):
         raise ValueError('saved source-state provenance does not match analysis')
+    if role=='new_confirmation':validate_confirmation_plan(plan)
     records=json.loads((analysis/'results.json').read_text())
-    bank={'training':3,'development':0,'evaluation':1}[role]
+    bank={'training':3,'development':0,'evaluation':1,'new_confirmation':None}[role]
     if role=='development' and any(r.get('bank_index')!=0 for r in records):raise ValueError('held-out contamination in development artifact')
-    records=[r for r in records if r.get('bank_index',3)==bank]
-    if len(records)!=72 or len({r['case_id'] for r in records})!=72:raise ValueError('exact bank72 inventory required')
+    if role=='new_confirmation':
+        if len(records)!=144 or len({r['case_id'] for r in records})!=144 or any(r.get('bank_index') not in (2,5) for r in records):raise ValueError('exact confirmation144 banks2/5 required')
+    else:
+        records=[r for r in records if r.get('bank_index',3)==bank]
+        if len(records)!=72 or len({r['case_id'] for r in records})!=72:raise ValueError('exact bank72 inventory required')
     declared=json.loads((root/'inventory.json').read_text());byid={r['case_id']:i for i,r in enumerate(declared)}
+    if role=='new_confirmation':validate_confirmation_inventory(declared,records)
     audit=audit_fn(root)
     with np.load(root/'evaluation/source_features.npz',allow_pickle=False) as data:sources=data['native_observation_user1']
     full=[];speed=[];labels=[];meta=[];inputs={str(analysis/'initial_carry_review.json'):digest(analysis/'initial_carry_review.json'),str(root/'plan.json'):digest(root/'plan.json'),str(analysis/'results.json'):digest(analysis/'results.json'),str(root/'evaluation/initial_carry.pkl'):digest(root/'evaluation/initial_carry.pkl'),str(root/'evaluation/source_features.npz'):digest(root/'evaluation/source_features.npz')}
+    if role=='new_confirmation':
+        inputs[str(root/'inventory.json')]=digest(root/'inventory.json');inputs[str(root/'seal.json')]=digest(root/'seal.json')
     feature_groups={};candidate_queries={};excluded=[]
     for record in records:
         lane=byid[record['case_id']];case=declared[lane]
@@ -128,14 +136,14 @@ def load_dataset(analysis,role,cfg,*,released=False,audit_fn=source_audit):
             if not data['active_tick'][0] or abs(float(data['time'][0])-1.)>1e-6 or not data['reference_target_permitted'][0]:raise ValueError('first prebranch candidate query missing')
             query=data['query_observation'][0];latent=data['composed_latent'][0];yaw=float(data['pre_upper_yaw'][0])
         if abs(math.atan2(math.sin(yaw-float(audit['source_yaw'][lane])),math.cos(yaw-float(audit['source_yaw'][lane]))))>1e-6:raise ValueError('first pre-force yaw mismatch')
-        x,s=feature_row(sources[lane],query,latent,yaw,case,plan['config']['residual_interface'],cfg)
+        x,s=feature_fn(sources[lane],query,latent,yaw,case,plan['config']['residual_interface'],cfg)
         group=case.get('source_group_id',f"bank3/source{case['source_index']}")
         if group in feature_groups:np.testing.assert_array_equal(sources[lane],feature_groups[group])
         feature_groups[group]=sources[lane]
         pair=(group,case['candidate_alpha'])
         if pair in candidate_queries:np.testing.assert_allclose(latent,candidate_queries[pair],atol=1e-6,rtol=1e-6)
         candidate_queries[pair]=latent
-        full.append(x);speed.append(s);labels.append(label);meta.append(dict(case_id=case['case_id'],source_group_id=group,bank_index=bank,alpha=case['candidate_alpha'],preparation_s=case['preparation_s'],force_N=case['force_N']))
+        full.append(x);speed.append(s);labels.append(label);meta.append(dict(case_id=case['case_id'],source_group_id=group,bank_index=case['bank_index'] if role=='new_confirmation' else bank,alpha=case['candidate_alpha'],preparation_s=case['preparation_s'],force_N=case['force_N']))
     if not labels:raise ValueError('no resolved pilot labels')
     return dict(full=np.asarray(full,np.float32),speed=np.asarray(speed,np.float32),y=np.asarray(labels,np.float32),meta=meta,inputs=inputs,excluded_invalid=excluded,audit=dict(latest_frame_is_source_tick200=True,first_query_before_first_force_step=True,source_groups=len(feature_groups),candidate_query_invariant_to_hypothetical_event=True,normalization='native fixed scales/clip; no fitted scaler'))
 
@@ -374,3 +382,75 @@ def ranking_fit(config,train_analysis,dev_analysis,output):
         return manifest
     except BaseException as exc:
         write_json(output/'status.json',dict(phase='error',actual_optimizer_updates=updates,per_seed=progress,optimizer_step_may_be_partial=inflight,error=repr(exc),heldout_release=False));raise
+
+
+def validate_confirmation_plan(plan):
+    protocol=plan['protocol']
+    groups=protocol['source_groups']
+    if (plan.get('mode')!='h75_samestate_bank144' or protocol.get('source_initialization')!='prepared_bank_all_prefixes' or
+        protocol.get('bank_indices')!=[2,5] or len(groups)!=8 or
+        len({g['source_group_id'] for g in groups})!=8 or
+        any(g.get('split')!='new_confirmation' or g.get('bank_index') not in (2,5) for g in groups)):
+        raise ValueError('new confirmation plan identity mismatch')
+
+
+def verify_confirmation_candidates(manifest_path):
+    """Authenticate the preselected six models and frozen implementation before data."""
+    import importlib.util
+    manifest_path=Path(manifest_path).resolve();root=manifest_path.parent
+    manifest=json.loads(manifest_path.read_text());source_path=root/'selection_manifest.json'
+    if digest(source_path)!=manifest['ranking_source_manifest_sha256']:raise ValueError('ranking source manifest changed')
+    source=json.loads(source_path.read_text());snapshot=root/'source/tolerance_predictor_pilot.py'
+    if digest(snapshot)!=source['implementation_sha256'] or digest(snapshot)!=source['source_snapshot_sha256']:raise ValueError('frozen ranking source changed')
+    expected={(a,s,k) for a,k in [('bce','rank'),('bce_rank','brier')] for s in (0,1,2)}
+    candidates=manifest['candidate_models']
+    if (len(candidates)!=6 or {(r['arm'],r['seed'],r['selector']) for r in candidates}!=expected or
+        manifest['bank_indices']!=[2,5] or manifest['training_prior']!=57/72 or manifest['new_optimizer_updates']!=0):raise ValueError('frozen confirmation candidates mismatch')
+    for r in candidates:
+        if r not in source['selected'] or r['dim']!=41 or digest(r['file'])!=r['sha256']:raise ValueError('confirmation checkpoint changed')
+    if digest(source['config'])!=source['config_sha256']:raise ValueError('ranking config changed')
+    spec=importlib.util.spec_from_file_location('_frozen_confirmation_predictor',snapshot);frozen=importlib.util.module_from_spec(spec);spec.loader.exec_module(frozen)
+    return manifest,source,frozen
+
+
+def grouped_confirmation_metrics(y,p,meta,metric_fn=metrics):
+    result={'overall':metric_fn(y,p,meta),'per_bank':{},'per_source':{}}
+    for key,field in [('per_bank','bank_index'),('per_source','source_group_id')]:
+        for value in sorted({m[field] for m in meta}):
+            ids=[i for i,m in enumerate(meta) if m[field]==value]
+            result[key][str(value)]=metric_fn(np.asarray(y)[ids],np.asarray(p)[ids],[meta[i] for i in ids])
+    return result
+
+
+def confirmation_evaluate(manifest_path,analysis,output):
+    import torch
+    manifest,source,frozen=verify_confirmation_candidates(manifest_path) # MUST precede label access.
+    output=Path(output).resolve()
+    if output.exists():raise ValueError('new confirmation output only; no overwrite')
+    cfg=json.loads(Path(source['config']).read_text())
+    data=load_dataset(analysis,'new_confirmation',cfg,confirmation=True,audit_fn=frozen.source_audit,feature_fn=frozen.feature_row)
+    if len(data['meta'])+len(data['excluded_invalid'])!=144:raise ValueError('confirmation inventory incomplete')
+    predictions={};report={}
+    for r in manifest['candidate_models']:
+        model=frozen.make_model(41);model.load_state_dict(torch.load(r['file'],map_location='cpu',weights_only=True)['state_dict'])
+        name=f"{r['arm']}/{r['selector']}/seed{r['seed']}";predictions[name]=frozen.predict(model,data['full'])
+    for arm,selector in [('bce','rank'),('bce_rank','brier')]:
+        predictions[f'{arm}/{selector}/ensemble']=np.mean([predictions[f'{arm}/{selector}/seed{s}'] for s in (0,1,2)],axis=0)
+    predictions['original_training_prior']=np.full(len(data['y']),57/72)
+    for name,p in predictions.items():report[name]=grouped_confirmation_metrics(data['y'],p,data['meta'],frozen.metrics)
+    output.mkdir(parents=True)
+    write_json(output/'metrics.json',report)
+    write_json(output/'predictions.json',[dict(m,label=int(v),probabilities={k:float(p[i]) for k,p in predictions.items()}) for i,(m,v) in enumerate(zip(data['meta'],data['y']))])
+    write_json(output/'data_receipt.json',dict(inputs=data['inputs'],audit=data['audit'],excluded_invalid=data['excluded_invalid'],candidate_manifest_sha256=digest(manifest_path),frozen_source_sha256=source['implementation_sha256'],evaluator_sha256=digest(__file__),new_optimizer_updates=0,new_physics_steps=0))
+    write_json(output/'seal.json',{p.name:digest(p) for p in output.iterdir() if p.is_file()})
+    return report
+
+
+def validate_confirmation_inventory(declared,records):
+    if (len(declared)!=144 or len({c['case_id'] for c in declared})!=144 or
+        {c['case_id'] for c in declared}!={r['case_id'] for r in records} or
+        len({c['source_group_id'] for c in declared})!=8 or
+        any(c.get('split')!='new_confirmation' or c.get('bank_index') not in (2,5) for c in declared)):
+        raise ValueError('confirmation inventory split/bank mismatch')
+    byid={c['case_id']:c for c in declared}
+    if any(r['bank_index']!=byid[r['case_id']]['bank_index'] for r in records):raise ValueError('confirmation record bank mismatch')
