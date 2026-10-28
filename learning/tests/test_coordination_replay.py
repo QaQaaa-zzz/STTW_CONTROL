@@ -75,3 +75,27 @@ def test_decision_memory_can_change_across_upper_blocks():
     packets, _ = replay_window(raw, case, 4, 16, cb)
     assert [c[0] for c in calls] == [0., 1., 0.]
     assert [p['alpha'] for p in packets[::4]] == [1., 0., 1.]
+
+
+def test_comparison_bounds_never_allow_discrete_or_q_gate_changes():
+    from sttw_control.coordination_replay import COMPARISONS, compare_packets
+    raw, case, cb, _ = fixture()
+    packets, _ = replay_window(raw, case, 4, 8, cb)
+    # Construct matching reference, then introduce small engineering differences.
+    for name, (field, _) in COMPARISONS.items():
+        values = np.asarray([p[name] for p in packets])
+        raw[field] = np.zeros((20,)+values.shape[1:], dtype=values.dtype)
+        raw[field][4:8] = values
+    raw['composed_latent'][4, 0] += 1.5e-4
+    assert not compare_packets(packets, raw, 4, 8)['failed_fields']
+    raw['coord_qmin'][4, 0] = .79999
+    packets[0]['qmin'] = list(packets[0]['qmin'])
+    packets[0]['qmin'][0] = .80001  # numeric error tiny, qualification differs
+    raw['governed'][4, 1] += 3e-5  # exceeds steering bound, independently reported
+    raw['alpha_exec'][4] = .50000001  # discrete identity requires exact comparison
+    result = compare_packets(packets, raw, 4, 8)
+    assert 'qmin' not in result['failed_fields']
+    assert 'q_gate_0.8' in result['failed_fields']
+    assert 'governed' in result['failed_fields']
+    assert 'alpha' in result['failed_fields']
+    assert result['maximum_component_absolute_errors']['governed'][1] > 2e-5
