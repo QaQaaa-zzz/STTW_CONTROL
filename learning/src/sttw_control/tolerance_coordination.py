@@ -285,6 +285,7 @@ def authenticate_user_mix_training(training,prepared):
     if len(source['selected'])!=3 or {(r['arm'],r['seed'],r['selector'],r['step']) for r in source['selected']}!={('bce_rank',s,'last',1000) for s in (0,1,2)}:raise ValueError('three fixed last1000 models required')
     frozen=file_module(training/'source/tolerance_predictor_pilot.py','_user_mix_frozen_export')
     cfg=frozen.validate_user_mix_config(json.loads(Path(source['config']).read_text()))
+    require_unmasked_online_inputs(cfg)
     if cfg.get('bce_group_weights')!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('preregistered prior candidate required')
     data=[]
     for role in ('training','development'):
@@ -320,3 +321,7 @@ def verify_user_mix_candidate(manifest_path):
     for row in manifest['candidate_models']:
         if row['file']!=str(training/f"bce_rank/seed{row['seed']}/last.pt") or sha(row['file'])!=row['sha256']:raise ValueError('fixed prior checkpoint changed')
     return manifest,source,frozen
+
+
+def require_unmasked_online_inputs(config):
+    if config.get('feature_mask_keep_indices') is not None:raise ValueError('offline feature-mask ablation cannot be exported as an unmasked online predictor')

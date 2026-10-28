@@ -179,9 +179,10 @@ def make_model(dim):
     return torch.nn.Sequential(torch.nn.Linear(dim,16),torch.nn.ReLU(),torch.nn.Linear(16,16),torch.nn.ReLU(),torch.nn.Linear(16,1))
 
 
-def predict(model,x):
+def predict(model,x,*,feature_mask_keep_indices=None):
     import torch
     model.eval()
+    x=apply_feature_mask(x,feature_mask_keep_indices)
     with torch.no_grad():return torch.sigmoid(model(torch.as_tensor(x,dtype=torch.float32)).squeeze(-1)).numpy()
 
 
@@ -325,13 +326,16 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
     else:train=load_dataset(train_analysis,'training',cfg);dev=load_dataset(dev_analysis,'development',cfg)
     expected=192 if user_mix else 96 if temporal else 72
     if len(train['y'])!=expected or len(dev['y'])!=expected or len(np.unique(train['y']))!=2:raise ValueError('exact resolved training/development inventory required')
+    mask=cfg.get('feature_mask_keep_indices')
+    mask_metadata={} if mask is None else dict(feature_mask_keep_indices=mask,input_information='speed plus candidate/disturbance query; offline-only, not pure speed')
+    if mask is not None:validate_matched_full_prior(cfg)
     selectors=cfg['ranking']['selectors']
     if temporal:(validate_user_mix_datasets if user_mix else validate_temporal_datasets)(train,dev)
     output.mkdir(parents=True);updates=0;inflight=False;selected=[];progress={}
     write_json(output/'data_receipt.json',dict(train={k:v for k,v in train.items() if k not in ('full','speed','y')},development={k:v for k,v in dev.items() if k not in ('full','speed','y')}))
     write_json(output/'resolved_config.json',cfg)
     snapshot=output/'source';snapshot.mkdir();(snapshot/'tolerance_predictor_pilot.py').write_bytes(Path(__file__).read_bytes())
-    pairs=discordant_pairs(train['y'],train['meta']);x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y'])
+    pairs=discordant_pairs(train['y'],train['meta']);x=torch.as_tensor(apply_feature_mask(train['full'],mask));y=torch.as_tensor(train['y'])
     sample_weights=torch.as_tensor(user_mix_bce_weights(train['meta'],cfg['bce_group_weights'])) if user_mix and 'bce_group_weights' in cfg else None
     if temporal and any(train['meta'][i]['period']!='early' for pair in pairs for i in pair):raise ValueError('late ranking pairs forbidden by frozen all-positive dataset')
     timings['initialization_s']=time.monotonic()-started
@@ -340,6 +344,10 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
     try:
         for seed in (0,1,2):
             torch.manual_seed(seed);initial=copy.deepcopy(make_model(41).state_dict())
+            if mask is not None:
+                matched=torch.load(Path(cfg['matched_full_prior_training'])/f'initial_seed{seed}.pt',map_location='cpu',weights_only=True)
+                if set(initial)!=set(matched) or any(not torch.equal(v,matched[k]) for k,v in initial.items()):raise ValueError('same-seed initial tensors differ from matched full prior')
+                initial=copy.deepcopy(matched)
             init_file=output/f'initial_seed{seed}.pt';torch.save(initial,init_file)
             for arm in cfg['ranking']['arms']:
                 initialized=time.monotonic()
@@ -362,7 +370,7 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                         row=dict(step=step,bce=float(bce.detach()),weighted_bce=float(weighted_bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()),development_brier=None,development_rank=None)
                         for key in ('bce','weighted_bce','rank_loss','total_loss'):writer.add_scalar('train/'+key,row[key],step)
                         if step%100==0:
-                            validated=time.monotonic();dev_p=predict(model,dev['full'])
+                            validated=time.monotonic();dev_p=predict(model,dev['full'],feature_mask_keep_indices=mask)
                             score=metrics(dev['y'],dev_p,dev['meta']);db=score['brier'];dr=score['discordant_pair_ranking']['mean']
                             selection_score=db
                             if temporal:
@@ -384,13 +392,14 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
                         rows.append(row)
                         with (folder/'history.jsonl').open('a') as log:log.write(json.dumps(row,allow_nan=False)+'\n')
                     write_json(folder/'history.json',rows)
-                    if temporal:torch.save(dict(state_dict=model.state_dict(),arm=arm,seed=seed,step=1000,role='last; not selected'),folder/'last.pt')
+                    if temporal:torch.save(dict(state_dict=model.state_dict(),arm=arm,seed=seed,step=1000,role='last; not selected',**mask_metadata),folder/'last.pt')
                     for selector,record in best.items():
                         state=record.pop('state_dict');record.pop('key');path=folder/f'{selector}_selected.pt'
-                        torch.save(dict(state_dict=state,arm=arm,seed=seed,selector=selector,dim=41,**record),path)
-                        selected.append(dict(arm=arm,seed=seed,selector=selector,dim=41,file=str(path),sha256=digest(path),initial_sha256=digest(init_file),**record))
+                        torch.save(dict(state_dict=state,arm=arm,seed=seed,selector=selector,dim=41,**record,**mask_metadata),path)
+                        selected.append(dict(arm=arm,seed=seed,selector=selector,dim=41,file=str(path),sha256=digest(path),initial_sha256=digest(init_file),**record,**mask_metadata))
                 finally:writer.close()
         manifest=dict(experiment_id=cfg['experiment_id'],implementation_sha256=digest(__file__),source_snapshot_sha256=digest(snapshot/'tolerance_predictor_pilot.py'),config=str(config),config_sha256=digest(config),resolved_config_sha256=digest(output/'resolved_config.json'),data_receipt_sha256=digest(output/'data_receipt.json'),selected=selected,actual_optimizer_updates=updates,new_physics_steps=0,new_ppo_updates=0,heldout_release=False)
+        if mask is not None:manifest.update(feature_mask_keep_indices=mask,matched_full_prior_training=cfg['matched_full_prior_training'],matched_full_prior_manifest_sha256=cfg['matched_full_prior_manifest_sha256'],input_information=mask_metadata['input_information'])
         if user_mix:manifest.update(checkpoint_rule='fixed last1000 for all three seeds; no development selection',data_role='all seen engineering DEV; no independent TEST')
         write_json(output/'selection_manifest.json',manifest)
         if temporal:
@@ -406,17 +415,17 @@ def ranking_fit(config,train_analysis,dev_analysis,output,*,_prepared=None,on_tr
             scores={};predictions={}
             for r in selected:
                 checkpoint=torch.load(r['file'],map_location='cpu',weights_only=True);model=make_model(41);model.load_state_dict(checkpoint['state_dict'])
-                name=f"{r['arm']}/{r['selector']}/seed{r['seed']}";p=predict(model,data['full']);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
+                name=f"{r['arm']}/{r['selector']}/seed{r['seed']}";p=predict(model,data['full'],feature_mask_keep_indices=checkpoint.get('feature_mask_keep_indices'));predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
             for arm in cfg['ranking']['arms']:
                 for selector in selectors:
                     name=f'{arm}/{selector}/ensemble';p=np.mean([predictions[f'{arm}/{selector}/seed{s}'] for s in (0,1,2)],axis=0);predictions[name]=p;scores[name]=metrics(data['y'],p,data['meta'])
             if temporal:
-                probabilities=(user_mix_references if user_mix else temporal_references)(data,_prepared['q_export'])
+                probabilities=user_mix_references(data,_prepared['q_export'],full_prior_training=cfg.get('matched_full_prior_training')) if user_mix else temporal_references(data,_prepared['q_export'])
                 probabilities.update(predictions)
                 for arm in cfg['ranking']['arms']:
                     for seed in (0,1,2):
                         last=torch.load(output/arm/f'seed{seed}'/'last.pt',map_location='cpu',weights_only=True);model=make_model(41);model.load_state_dict(last['state_dict'])
-                        probabilities[f'{arm}/last/seed{seed}']=predict(model,data['full'])
+                        probabilities[f'{arm}/last/seed{seed}']=predict(model,data['full'],feature_mask_keep_indices=last.get('feature_mask_keep_indices'))
                     probabilities[f'{arm}/last/ensemble']=np.mean([probabilities[f'{arm}/last/seed{s}'] for s in (0,1,2)],axis=0)
                 write_json(output/f'{role}_temporal_metrics.json',temporal_metrics(data,probabilities))
                 write_json(output/f'{role}_temporal_predictions.json',[dict(m,label=int(v),probabilities={k:float(p[i]) for k,p in probabilities.items()}) for i,(m,v) in enumerate(zip(data['meta'],data['y']))])
@@ -651,6 +660,8 @@ def temporal_diagnostics(y,p,meta):
 
 
 def validate_user_mix_config(cfg):
+    if 'feature_mask_keep_indices' in cfg:
+        if cfg['feature_mask_keep_indices']!=[4]+list(range(34,41)) or cfg.get('bce_group_weights')!={'early':.75,'late':.125,'userlate':.125} or not cfg.get('matched_full_prior_training') or not cfg.get('matched_full_prior_manifest_sha256'):raise ValueError('only declared matched speed+query mask allowed')
     checked=copy.deepcopy(cfg);checked['training']['maximum_total_optimizer_updates']=6000
     validate_config(checked)
     if 'bce_group_weights' in cfg and cfg['bce_group_weights']!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('only preregistered prior weight variant allowed')
@@ -737,6 +748,7 @@ def _write_user_mix_prepared(config,cfg,data,q_export,output,started,source_iden
     for seed in (0,1,2):
         with SummaryWriter(str(tensorboard/'bce_rank'/f'seed{seed}')) as writer:writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
     result=dict(config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),q_export=str(Path(q_export).resolve()),q_receipt_sha256=digest(Path(q_export)/'receipt.json'),tensorboard_root=str(tensorboard),**source_identity,preparation_s=time.monotonic()-started,new_optimizer_updates=0,new_physics_steps=0,roles=cfg['user_mix'])
+    if 'feature_mask_keep_indices' in cfg:result.update(feature_mask_keep_indices=cfg['feature_mask_keep_indices'],matched_full_prior_training=cfg['matched_full_prior_training'],matched_full_prior_manifest_sha256=cfg['matched_full_prior_manifest_sha256'],input_information='speed plus candidate/disturbance query; offline-only, not pure speed')
     write_json(output/'receipt.json',result);write_json(output/'seal.json',{p.name:digest(p) for p in output.iterdir() if p.is_file()})
     write_json(output.parent/'status.json',dict(phase='prepared',stage='prepared',actual_optimizer_updates=0,tensorboard_root=str(tensorboard)))
     return result
@@ -750,6 +762,11 @@ def prepare_user_mix_reference(config,prepared_reference,output):
     output=Path(output).resolve();started=time.monotonic()
     if output.exists():raise ValueError('fresh prior preparation required')
     data,receipt=_sealed_prepared_data(prepared_reference);validate_user_mix_datasets(data['training'],data['development'])
+    if 'feature_mask_keep_indices' in cfg:
+        validate_matched_full_prior(cfg)
+        full_prepared=Path(cfg['matched_full_prior_training']).parent/'prepared'
+        for name in ('training.npz','development.npz','training.json','development.json'):
+            if digest(Path(prepared_reference)/name)!=digest(full_prepared/name):raise ValueError('ablation corpus differs from matched full prior')
     q_export=receipt['q_export'];load_export(q_export)
     if digest(Path(q_export)/'receipt.json')!=receipt['q_receipt_sha256']:raise ValueError('reference comparator changed')
     return _write_user_mix_prepared(config,cfg,data,q_export,output,started,dict(prepared_reference=str(Path(prepared_reference).resolve()),prepared_reference_seal_sha256=digest(Path(prepared_reference)/'seal.json'),reference_dataset_files_sha256={name:digest(Path(prepared_reference)/name) for name in ('training.npz','development.npz','training.json','development.json')}))
@@ -769,13 +786,20 @@ def user_mix_selection(y,p,meta):
     return float(np.mean((np.asarray(p)-np.asarray(y))**2)),values
 
 
-def user_mix_references(data,q_export):
+def user_mix_references(data,q_export,*,full_prior_training=None):
     import torch
     from sttw_control.tolerance_coordination import load_export
     load_export(q_export);probabilities=[]
     for seed in (0,1,2):
         model=make_model(41);model.load_state_dict(torch.load(Path(q_export)/f'temporal_rank_last_seed{seed}.pt',map_location='cpu',weights_only=True)['state_dict']);probabilities.append(predict(model,data['full']))
-    return {'old_frozen_temporal_rank_last/ensemble':np.mean(probabilities,axis=0)}
+    result={'old_frozen_temporal_rank_last/ensemble':np.mean(probabilities,axis=0)}
+    if full_prior_training is not None:
+        for seed in (0,1,2):
+            model=make_model(41);checkpoint=torch.load(Path(full_prior_training)/f'bce_rank/seed{seed}/last.pt',map_location='cpu',weights_only=True)
+            if checkpoint.get('feature_mask_keep_indices') is not None:raise ValueError('matched full prior must be unmasked')
+            model.load_state_dict(checkpoint['state_dict']);result[f'full_prior_fixed_last/seed{seed}']=predict(model,data['full'])
+        result['full_prior_fixed_last/ensemble']=np.mean([result[f'full_prior_fixed_last/seed{s}'] for s in (0,1,2)],axis=0)
+    return result
 
 
 def user_mix_bce_weights(meta,group_totals):
@@ -797,3 +821,22 @@ def bce_objective(logits,labels,sample_weights=None):
     if sample_weights.shape!=labels.shape:raise ValueError('BCE sample weight shape differs')
     weighted=(torch.nn.functional.binary_cross_entropy_with_logits(logits,labels,reduction='none')*sample_weights).sum()
     return raw,weighted
+
+
+def apply_feature_mask(features,keep_indices=None):
+    """Copy only for the one declared offline input ablation; source arrays stay intact."""
+    x=np.asarray(features)
+    if keep_indices is None:return x
+    if list(keep_indices)!=[4]+list(range(34,41)) or x.shape[-1]!=41:raise ValueError('declared speed+query mask on full41 required')
+    masked=np.zeros_like(x);masked[...,keep_indices]=x[...,keep_indices]
+    return masked
+
+
+def validate_matched_full_prior(cfg):
+    root=Path(cfg['matched_full_prior_training']);manifest=json.loads((root/'selection_manifest.json').read_text());seal=json.loads((root/'selection_seal.json').read_text())['artifacts_sha256']
+    if digest(root/'selection_manifest.json')!=cfg['matched_full_prior_manifest_sha256'] or manifest['actual_optimizer_updates']!=3000 or digest(manifest['config'])!=manifest['config_sha256']:raise ValueError('matched full prior identity changed')
+    for name in ['selection_manifest.json']+[f'initial_seed{s}.pt' for s in (0,1,2)]+[f'bce_rank/seed{s}/last.pt' for s in (0,1,2)]:
+        if digest(root/name)!=seal.get(name):raise ValueError('matched full prior checkpoint/init changed')
+    prior_cfg=json.loads(Path(manifest['config']).read_text())
+    if prior_cfg.get('feature_mask_keep_indices') is not None or prior_cfg.get('bce_group_weights')!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('matched full prior must use original full inputs and same objective')
+    return manifest
