@@ -21,7 +21,7 @@ STYLES=('-','--',':','-.')
 def analyze(root):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -207,7 +207,13 @@ def render(root,rows,raws,paths,goals,keys):
         plt.close(fig);plt.close(comp)
 
 
+def analysis_path_key(case):
+    return case.get('path_key',case['route'])
+
+
 def response_method(case):
+    if case.get('path_key'):
+        return {'fixed_half':'fixed0.5'}.get(case['mode'],case['mode'])
     if case['mode']=='online_scalar':return 'online_scalar'
     if case['mode'].startswith('switch_'):
         if case['origin'] not in ('fixed1','hybrid') or case['mode']!='switch_'+case['origin'] or case['alpha']!=1.:raise ValueError('invalid switching origin')
@@ -234,7 +240,7 @@ def validate_response_inventory(inventory,protocol):
 
 
 def audit_response_channels(raw,case):
-    if case['mode']=='online_scalar':return audit_online_publication(raw,case)
+    if case['mode']=='online_scalar' or 'path_key' in case:return audit_online_publication(raw,case)
     active=np.asarray(raw['active_tick'],bool);n=int(active.sum())
     pair=(float(case['speed_alpha']),float(case['steer_alpha']))
     response_method(case)
@@ -367,6 +373,70 @@ def response_summary(rows):
     return summary,paired
 
 
+def validate_confirmation_inventory(inventory,p):
+    actual=[]
+    for c in inventory:
+        if c['alpha']!=1. or c['mode'] not in p['arms'] or c['path_key']!=f"bank{c['bank_index']}_"+c['route']:raise ValueError('invalid bank-aware confirmation identity')
+        if c['initial_fingerprint']!=p['bank_state_fingerprints'][str(c['bank_index'])]:raise ValueError('case bank fingerprint mismatch')
+        expected_query={'fixed0':0.,'fixed_half':.5}.get(c['mode'],1.)
+        if c['query_alpha']!=expected_query:raise ValueError('query alpha differs from arm identity')
+        actual.append((c['bank_index'],c['route'],c['speed'],c['mode'],c['force_N'],c['onset_s'],c['duration_s']))
+    events=[(0.,p['zero_onset_s'])]+list(itertools.product(p['forces_N'],p['onsets_s']))
+    expected=[(b,r['route'],r['speed'],arm,f,t,p['duration_s']) for b,r,arm,(f,t) in itertools.product(p['bank_indices'],p['routes'],p['arms'],events)]
+    if sorted(actual)!=sorted(expected) or len(set(actual))!=len(actual):raise ValueError('confirmation inventory differs from bank/route/event/arm protocol')
+
+
+def audit_floor_support(raw,case,config,floor,initial_nominal):
+    active=np.asarray(raw['active_tick'],bool);n=int(active.sum());zero=case['mode']=='zero_with_existing_speed_floor'
+    scale=config['residual_interface']['speed_positive_scale_m_s'];realized=[]
+    for start in range(0,n,4):
+        end=min(start+4,n);nominal=np.asarray(raw['support_nominal_reference'][start])
+        np.testing.assert_allclose(nominal,np.asarray(initial_nominal) if start==0 else raw['nominal'][start],atol=4e-6,rtol=0)
+        for field in ('support_nominal_reference','support_floor','support_requested_offset','support_realized_target_offset','support_active','neural_query_active'):
+            a=np.asarray(raw[field])[start:end];np.testing.assert_array_equal(a,np.broadcast_to(a[0],a.shape))
+        desired=max(0.,floor-float(nominal[0]));bounded=np.clip(desired/scale,-1.+1e-6,1.-1e-6);target=bounded*scale
+        for field,value in (('support_floor',floor),('support_requested_offset',desired),('support_realized_target_offset',target),('support_active',target>0)):
+            np.testing.assert_allclose(raw[field][start],value if zero else 0.,atol=3e-6,rtol=1e-5)
+        if zero:
+            np.testing.assert_allclose(raw['composed_latent'][start],[np.arctanh(bounded),0.],atol=3e-6,rtol=1e-5)
+            realized.extend([target]*(end-start))
+    return dict(neural_query=not zero,observed_support_active_ticks=int(np.sum(raw['support_active'][active])),
+        maximum_realized_target_offset_m_s=float(max(realized,default=0.)),
+        equivalent_to_zero_in_observed_run=bool(zero and not np.any(raw['support_active'][active])),
+        interpretation='Existing pre-filter nominal speed floor; when inactive this arm is effectively zero neural correction in these conditions, not evidence excluding speed-feedback support.')
+
+
+def confirmation_summary(rows):
+    summaries={};pairs=[]
+    for method in ('online_scalar','fixed0','fixed0.5','fixed1','zero_with_existing_speed_floor'):
+        summaries[method]={}
+        for bank in sorted({r['bank_index'] for r in rows}):
+            summaries[method][str(bank)]={}
+            for subset in ('all','nominal','disturbed'):
+                group=[r for r in rows if r['method']==method and r['bank_index']==bank and (subset=='all' or bool(r['force_N'])==(subset=='disturbed'))]
+                summaries[method][str(bank)][subset]=dict(n=len(group),arrived=sum(r['horizons']['10']['goal_arrived'] is True for r in group),
+                    contact=sum(r['horizons']['10']['physical_outcome']=='contact' for r in group),unknown=sum(r['horizons']['10']['physical_outcome']=='unknown' or r['horizons']['10']['goal_arrived'] is None for r in group),
+                    survived=sum(r['horizons']['10']['physical_outcome']=='survived' for r in group))
+    online=[r for r in rows if r['mode']=='online_scalar']
+    for method in ('fixed0','fixed0.5','fixed1','zero_with_existing_speed_floor'):
+        baseline={(r['bank_index'],r['route'],r['event']):r for r in rows if r['method']==method};details=[]
+        for c in online:
+            b=baseline[c['bank_index'],c['route'],c['event']];a=c['horizons']['10'];h=b['horizons']['10'];known=a['goal_arrived'] is not None and h['goal_arrived'] is not None and 'unknown' not in (a['physical_outcome'],h['physical_outcome'])
+            details.append(dict(bank_index=c['bank_index'],route=c['route'],event=c['event'],force_N=c['force_N'],candidate=c['case_id'],baseline=b['case_id'],
+                candidate_outcome=a,baseline_outcome=h,candidate_prefix=c['prefix'],baseline_prefix=b['prefix'],
+                contact_rescue=h['physical_outcome']=='contact' and a['physical_outcome']=='survived',new_contact=h['physical_outcome']!='contact' and a['physical_outcome']=='contact',
+                new_fault_or_unknown=a['physical_outcome']=='unknown' or a['goal_arrived'] is None,goal1m_gain=known and bool(a['goal_arrived'] and not h['goal_arrived']),goal1m_loss=known and bool(h['goal_arrived'] and not a['goal_arrived']),
+                arrival_time_difference_s=a['first_arrival_s']-h['first_arrival_s'] if a['first_arrival_s'] is not None and h['first_arrival_s'] is not None else None,
+                speed_rmse_difference_m_s=c['full_observed_speed_rmse_m_s']-b['full_observed_speed_rmse_m_s'],
+                diagnostic_execution_path_user1_cost_difference=c['diagnostic_execution_path_user1_cost']-b['diagnostic_execution_path_user1_cost']))
+        pairs.append(dict(candidate='online_scalar',baseline=method,details=details,
+            nominal_no_new_contact_fault_or_goal_loss=all(not(x['new_contact'] or x['new_fault_or_unknown'] or x['goal1m_loss']) for x in details if not x['force_N'])))
+    return dict(method_bank_subset=summaries,new_cases=len(rows),cached_cases=0,
+        unreturned_last_activations=[dict(case_id=r['case_id'],alpha_rule=r['alpha_rule']) for r in online if r['alpha_rule']['unreturned_at_actual_endpoint']],
+        floor_support=[dict(case_id=r['case_id'],**r['floor_support']) for r in rows if r['mode']=='zero_with_existing_speed_floor'],
+        adoption='not_automatically_adopted',data_role='Two prepared bank states, related DEV, not independent training seeds; all100 physics newly executed.'),pairs
+
+
 def validate_online_inventory(inventory,p):
     actual=[]
     for c in inventory:
@@ -383,7 +453,13 @@ def audit_online_publication(raw,case):
         values=np.asarray(raw[field])[active]
         if values.shape!=(n,) or not np.isfinite(values).all():raise ValueError('invalid online scalar log '+field)
     np.testing.assert_array_equal(raw['alpha_user'][active],np.ones(n))
-    if not np.isin(alpha[active],[.5,1.]).all():raise ValueError('scalar alpha has undeclared slew/intermediate value')
+    if case['mode']=='online_scalar':
+        if not np.isin(alpha[active],[.5,1.]).all():raise ValueError('scalar alpha has undeclared slew/intermediate value')
+    else:
+        np.testing.assert_array_equal(alpha[active],np.full(n,case['query_alpha']))
+        np.testing.assert_array_equal(raw['rule_latched'][active],np.zeros(n,bool))
+    if 'path_key' in case:
+        np.testing.assert_array_equal(raw['neural_query_active'][active],np.full(n,case['mode']!='zero_with_existing_speed_floor'))
     np.testing.assert_array_equal(raw['channel_alpha_pair'][active],np.column_stack([alpha[active],alpha[active]]))
     np.testing.assert_allclose(raw['query_observation'][active,336],alpha[active],atol=1e-6,rtol=0)
     permitted=active&np.asarray(raw['reference_target_permitted'],bool)
@@ -401,7 +477,7 @@ def audit_online_publication(raw,case):
             if clean!=prior or not 0<=clean<=16:raise ValueError('online clean counter changed')
             if start and raw['cumulative_domain_exit'][start-1] and clean<16 and np.any(permitted[start:end]):raise ValueError('online publication before clean handback')
     return dict(actual_permitted_ticks=int(permitted.sum()),masked_ticks=int((active&~permitted).sum()),state_alpha=1.,
-        checked='One actual scalar-alpha query in slot336 for both channels; instantaneous requested alpha, actual native publication mask/filter chain retained')
+        checked=('No neural query; logged existing speed-floor support latent with actual native publication mask/filter chain' if case['mode']=='zero_with_existing_speed_floor' else 'One scalar-alpha query in slot336 for both channels; actual native publication mask/filter chain retained'))
 
 
 def audit_online_rule(raw,case,original,replanned,rule):
@@ -590,12 +666,17 @@ def switching_summary(rows):
 
 
 def response_plot_groups(rows):
+    if any('path_key' in r for r in rows):
+        return list(dict.fromkeys(r['event']+'__bank'+str(r['bank_index']) for r in rows))
     if any(r.get('mode','').startswith('switch_') for r in rows):
         return list(dict.fromkeys(r['event']+'__'+r['origin'] for r in rows if r['mode'].startswith('switch_')))
     return list(dict.fromkeys(r['event'] for r in rows))
 
 
 def response_plot_selection(rows,label):
+    if any('path_key' in r for r in rows):
+        event,bank=label.rsplit('__bank',1)
+        return [r for r in rows if r['event']==event and r['bank_index']==int(bank)]
     if any(r.get('mode','').startswith('switch_') for r in rows):
         event,origin=label.rsplit('__',1)
         return [r for r in rows if r['event']==event and (r.get('origin')==origin or r.get('origin')=='background')]
@@ -604,9 +685,10 @@ def response_plot_selection(rows,label):
 
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
-    online=p.get('mode')=='h75_online_scalar'
+    confirmation=p.get('mode')=='h75_online_confirmation100'
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100')
     continuation=p.get('mode')=='h75_switching_continuation'
-    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=18 if online else 36 if switching else 54
+    switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
     if p['horizon_s']!=10. or p['cases']!=count or len(inventory)!=count or len(index)!=count or status['phase']!='completed' or status['completed_cases']!=count:
         raise ValueError(f'complete declared{count} H10 cases required')
@@ -618,20 +700,21 @@ def analyze_response(root,p):
     for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models']),('cases',inventory),('source',p['initial_source'])):
         if manifest[key]!=expected:raise ValueError('manifest identity mismatch '+key)
     # Exactly three methods per route/event; nominal lanes are new physical trajectories.
-    if online:validate_online_inventory(inventory,p['protocol'])
+    if confirmation:validate_confirmation_inventory(inventory,p['protocol'])
+    elif online:validate_online_inventory(inventory,p['protocol'])
     elif switching:validate_switching_inventory(inventory,p['protocol'])
     else:validate_response_inventory(inventory,p['protocol'])
-    expected={(r['route'],r['event'],response_method(r)) for r in inventory}
-    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(2 if online else 12 if switching else 6):
+    expected={(analysis_path_key(r),r['event'],response_method(r)) for r in inventory}
+    if len(expected)!=count or len({r['route'] for r in inventory})!=2 or sum(not r['force_N'] for r in inventory)!=(20 if confirmation else 2 if online else 12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
     initial=json.loads((out/'initial_carry_review.json').read_text())
     paths={};goals={};trees={};raws={};rows=[];ticks=0;rebuilt={};executed={}
-    cache_rows,cache_manifest,cache_initial=(load_switching_cache(root,p,initial) if switching or online else ([],None,None))
+    cache_rows,cache_manifest,cache_initial=(load_switching_cache(root,p,initial) if (switching or online) and not confirmation else ([],None,None))
     index=index+cache_rows
     decisions=json.loads((run/'replanning_decisions.json').read_text());by_case={}
-    if switching or online:decisions+=json.loads((Path(p['stay_source'])/'evaluation/replanning_decisions.json').read_text())
+    if (switching or online) and not confirmation:decisions+=json.loads((Path(p['stay_source'])/'evaluation/replanning_decisions.json').read_text())
     selected_ids={c['case_id'] for c in index}
     decisions=[d for d in decisions if d['case_id'] in selected_ids]
     for decision in decisions:
@@ -640,13 +723,14 @@ def analyze_response(root,p):
         tick=decision['task_tick']
         if tick not in range(200,1801,200):raise ValueError('replan outside declared1..9s boundaries')
         by_case[case]=decision
-    for route in {r['route'] for r in inventory}:
+    for route in {analysis_path_key(r) for r in inventory}:
         with np.load(run/(route+'_path.npz')) as z:paths[route]=dict(z)
         path=paths[route];goals[route]=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)])
-        with np.load(Path(p['cached_source'])/'evaluation'/(route+'_path.npz')) as z:
-            for field in ('s','xy','heading','curvature'):
-                np.testing.assert_array_equal(path[field][:len(z[field])],z[field],err_msg='original path prefix changed')
-            for field in ('goal','turn_end'):np.testing.assert_array_equal(path[field],z[field])
+        if not confirmation:
+            with np.load(Path(p['cached_source'])/'evaluation'/(route+'_path.npz')) as z:
+                for field in ('s','xy','heading','curvature'):
+                    np.testing.assert_array_equal(path[field][:len(z[field])],z[field],err_msg='original path prefix changed')
+                for field in ('goal','turn_end'):np.testing.assert_array_equal(path[field],z[field])
         trees[route]=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[route]]))
     for i,c in enumerate(index):
         cached=i>=count
@@ -656,7 +740,7 @@ def analyze_response(root,p):
         case_initial=cache_initial if cached else initial
         if not cached and any(c.get(k)!=v for k,v in inventory[i].items()):raise ValueError('case identity drift')
         if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('raw SHA drift')
-        goal=goals[c['route']]
+        goal=goals[analysis_path_key(c)]
         np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0)
         np.testing.assert_allclose(case_manifest['original_goals_xy'][lane],goal,atol=3e-6,rtol=0)
         with np.load(c['raw_file']) as z:raw=dict(z)
@@ -674,7 +758,7 @@ def analyze_response(root,p):
         endpoint['physical_outcome']=physical_outcome(cut['active_tick'],cut['contact_failure'],cut['policy_fault']|cut['nonfinite']|cut['lower_fault'],2000)
         fault=data['policy_fault']|raw['nonfinite']|raw['lower_fault'];fatal=np.flatnonzero(active&(raw['contact_failure']|fault))
         stop=int(fatal[0]) if len(fatal) else n;arrival=endpoint['first_arrival_s'];task_stop=min(stop,round(arrival/.005)) if arrival is not None else stop
-        path=paths[c['route']];distance=trees[c['route']].query(raw['actual_xy'][:n])[0]
+        path=paths[analysis_path_key(c)];distance=trees[analysis_path_key(c)].query(raw['actual_xy'][:n])[0]
         replan=case_run/f'replanned_path_{lane:02d}.npz';decision=by_case.get(c['case_id']);changed=None;replan_tick=n
         if replan.exists()!=bool(c['replanned']) or bool(decision)!=bool(c['replanned']):raise ValueError('replan evidence mismatch')
         if decision:
@@ -692,7 +776,8 @@ def analyze_response(root,p):
             executed[c['case_id']]=changed
         rebuilt[c['case_id']]=reconstruct_execution_path_reward(raw,c,path,changed,replan_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'])
         frame=onset_frame_impulse(raw,c,pulse)
-        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached36' if cached and online else 'cached18' if cached else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+        rows.append(dict(c,method=(response_method(c) if online else ('stay_'+c['origin']) if cached and c.get('origin')!='background' else 'background_fixed0.5' if cached else response_method(c)),source_kind='cached36' if cached and online else 'cached18' if cached else 'new100' if confirmation else 'new18' if online else 'new36' if switching else 'new54',horizons={'10':endpoint},active_lower_ticks=n,pulse=pulse,onset_frame=frame,correction_chain=chain,channels=channels,
+            floor_support=audit_floor_support(raw,c,p['config'],p['protocol']['existing_speed_floor_m_s'],initial['initial_nominal_reference'][lane]) if confirmation else None,
             prefix=dict(ticks=task_stop,observed_s=task_stop*.005,
                 original_route_sample_distance_rmse_m=float(np.sqrt(np.mean(distance[:task_stop]**2))) if task_stop else None,
                 speed_rmse_m_s=float(np.sqrt(np.mean((raw['actual_forward_speed'][:task_stop]-c['speed'])**2))) if task_stop else None,
@@ -729,8 +814,8 @@ def analyze_response(root,p):
     if online:
         for row in rows:
             if row['mode']=='online_scalar':
-                row['alpha_rule']=audit_online_rule(raws[row['case_id']],row,paths[row['route']],executed.get(row['case_id']),p['protocol']['rule'])
-    summary,paired=online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
+                row['alpha_rule']=audit_online_rule(raws[row['case_id']],row,paths[analysis_path_key(row)],executed.get(row['case_id']),p['protocol']['rule'])
+    summary,paired=confirmation_summary(rows) if confirmation else online_summary(rows) if online else switching_summary(rows) if switching else response_summary(rows)
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
     atomic_json(out/'receipt.json',dict(all_cases=len(rows),new_cases=count,cached_cases=len(cache_rows),prefix_proof=prefix_proof,reused_prefix_proof=reused_prefix_proof,numerical_amendment=p['protocol'].get('numerical_amendment'),campaign_budget=p['protocol'].get('total_campaign_lower_ticks'),horizons_s=[10],actual_lower_ticks=ticks,newly_simulated_lower_ticks=status['active_lower_ticks'],reused_source_lower_ticks=7200 if continuation else 0,new_physics_steps=0,optimizer_updates=0,
         plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),initial_carry_sha256=initial['initial_carry_sha256'],
@@ -740,7 +825,10 @@ def analyze_response(root,p):
     lines=['# H75通道受扰响应：54条H10','','原始XY与执行路径优先；两tight S×三通道映射×九事件。六条无扰轨迹为本合同重新执行，不复用旧原生停止合同。',
         '','主终点：原世界目标1m首达；整10s真实触地单列。早期domain仅遥测，不算触地；重规划后不声称严格完成原S。',
         '','相关熟悉DEV、同祖先；无新训练。各法在起扰前已有不同状态，不能把转向通道替换解释为独立于速度的因果效应。']
-    if online:
+    if confirmation:
+        lines=['# 两初态五方法100回合确认','','全部100为本轮实际H10轨迹，不复用旧物理轨迹。两prepared bank不是独立训练种子；每bank/route/event五法完整原生初态配对。全部state/user/reward alpha=1，固定Actor查询alpha0/.5/1另列。',
+               '','原世界goal1m与真实触地主终点；Zero+既有1.5m/s下限若未触发须标为本组等同Zero，不据此宣称排除了速度反馈支持。执行路径user1奖励仅诊断，重规划后不称原S严格完成。']
+    elif online:
         lines=['# 因果几何预瞻scalar-alpha：18新回合＋36固定缓存','','控制器不使用起扰时刻或力标签，仅以当下执行路径/进度及原速度请求决定alpha；几何阈值是已知DEV上的工程启发式，不是稳定性界。无训练/阈值搜索。',
                '','两tight S、九事件，配对fixed.5/fixed1来自同原始54合同。共同原goal1m与真实触地为主，保留所有无扰任务/触地损失；不以百分比奖励优势作门槛。Alpha即时请求，原生参考滤波/限幅保留。']
     if switching:
@@ -768,6 +856,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
     palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555')
     for event in response_plot_groups(rows):
         group=response_plot_selection(rows,event)
+        routes=sorted({analysis_path_key(r) for r in group})
         methods=list(dict.fromkeys(r['method'] for r in group));colors=palette[:len(methods)]
         for task in (False,True):
             fig,axes=plt.subplots(1,len(routes),figsize=(13,6),squeeze=False,layout='constrained')
@@ -775,7 +864,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
                 path=paths[route];goal=goals[route];ax.plot(*path['xy'][path['s']<=path['goal']].T,'k-',lw=1,label='Original S to goal')
                 ax.add_patch(Circle(goal,1,fill=False,ec='black'));ax.scatter(*goal,c='black',marker='*')
                 for method,color in zip(methods,colors):
-                    r=next(r for r in group if (r['route'],r['method'])==(route,method));raw=raws[r['case_id']]
+                    r=next(r for r in group if (analysis_path_key(r),r['method'])==(route,method));raw=raws[r['case_id']]
                     h=r['horizons']['10'];n=r['prefix']['ticks'] if task and h['goal_arrived'] else r['active_lower_ticks'];xy=raw['actual_xy'][:n]
                     if r['case_id'] in executed:
                         path2=executed[r['case_id']];ax.plot(*path2['xy'][path2['s']<=path2['goal']].T,c=color,ls='--',lw=.8,alpha=.65,label=method+' executed replan')
@@ -795,7 +884,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
             fig.suptitle(event+' / '+('first-arrival/contact prefix' if task else 'full actual H10 endpoint')+'; dashed=executed replan; dots=actual worldY exposure')
             fig.savefig(out/f'{"task" if task else "full"}_xy_{event}.png',dpi=140);plt.close(fig)
         for route in routes:
-            selected=[r for r in group if r['route']==route]
+            selected=[r for r in group if analysis_path_key(r)==route]
             path=paths[route];original_tree=cKDTree(np.vstack([path['xy'][path['s']<=path['goal']],goals[route]]))
             fig,axes=plt.subplots(13,1,figsize=(12,28),sharex=True,layout='constrained')
             comp,cax=plt.subplots(len(keys)+1,2,figsize=(14,2.3*(len(keys)+1)),sharex=True,squeeze=False,layout='constrained')

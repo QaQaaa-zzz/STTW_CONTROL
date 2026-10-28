@@ -19,7 +19,7 @@ def audit(root,output):
     spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
     adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode')=='h75_online_scalar'
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100')
     if online:
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -40,6 +40,8 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
+    if p.get('mode')=='h75_online_confirmation100':
+        return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
         if ta!=tb:raise ValueError('initial structure mismatch '+label)
@@ -181,6 +183,58 @@ def audit(root,output):
         switching_capture=switch_review,cached_initial_filtered=cached_filtered,cached_initial_offsets=cached_offsets,
         pairing_contract='Full carry matched within route/event/state-alpha; physical bank fields checked across every lane. Different state alphas intentionally retained.',
         new_physics_steps=0,optimizer_updates=0,verification='AI array/structure audit, not independent control replay')
+    output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+
+
+def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
+    import numpy as np
+    cases=json.loads((root/'inventory.json').read_text());state=carry.state
+    if len(cases)!=100:raise ValueError('complete100 initial cases required')
+    np.testing.assert_array_equal(state.tick,np.zeros(100));np.testing.assert_array_equal(state.alpha,np.ones(100))
+    np.testing.assert_array_equal(state.filtered,np.zeros((100,2)));np.testing.assert_array_equal(state.offsets,np.zeros((100,2)))
+    for value in (state.fault,state.physical.failed,state.domain_exit,carry.ever_domain_exit,carry.clean_blocks):
+        if np.any(value):raise ValueError('new bank initial stop/fault/clean latch')
+    snapshots={b:jax.tree.map(lambda x:jax.numpy.asarray(x[b]),bank) for b in p['protocol']['bank_indices']}
+    fingerprints={};groups={}
+    for b,snapshot in snapshots.items():
+        sha=hashlib.sha256()
+        for path,value in jax.tree_util.tree_flatten_with_path(snapshot)[0]:
+            a=np.asarray(value);sha.update(jax.tree_util.keystr(path).encode());sha.update(str(a.dtype).encode());sha.update(a.tobytes())
+        fingerprints[str(b)]=sha.hexdigest()
+        if sha.hexdigest()!=p['protocol']['bank_state_fingerprints'][str(b)]:raise ValueError('new bank fingerprint mismatch')
+    for i,c in enumerate(cases):
+        snapshot=snapshots[c['bank_index']]
+        if c['initial_fingerprint']!=fingerprints[str(c['bank_index'])]:raise ValueError('case snapshot fingerprint differs')
+        physical=jax.tree.map(lambda x:x[i],state.physical)
+        for field in snapshot.__dataclass_fields__:
+            if field in ('raw','reference_pose','yaw_wrapped','yaw_unwrapped'):continue
+            actual,ta=jax.tree.flatten(getattr(physical,field));expected,tb=jax.tree.flatten(getattr(snapshot,field))
+            if ta!=tb:raise ValueError('newbank physical structure drift '+field)
+            for a,b in zip(actual,expected):
+                a=np.asarray(a);b=np.asarray(b)
+                if a.dtype!=b.dtype or not np.array_equal(a,b,equal_nan=True):raise ValueError('newbank complete physical snapshot drift '+field)
+        key=(c['bank_index'],c['route'],c['event']);groups.setdefault(key,[]).append(i)
+        with np.load(root/'evaluation'/(c['path_key']+'_path.npz')) as z:
+            np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
+            np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
+    leaves=jax.tree.leaves(carry)
+    if len(groups)!=20 or any(len(ids)!=5 for ids in groups.values()):raise ValueError('20 paired bank/route/event groups required')
+    for ids in groups.values():
+        for leaf in leaves:
+            for i in ids[1:]:np.testing.assert_array_equal(leaf[i],leaf[ids[0]])
+    receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
+    if not receipt.get('all_five_arm_reset_leaves_exact') or receipt.get('new_bank_fingerprints')!=fingerprints:raise ValueError('fivearm reset receipt mismatch')
+    loaded={name:str(Path(module.__file__).resolve()) for name,module in sys.modules.items() if (name=='sttw_control' or name.startswith('sttw_control.')) and getattr(module,'__file__',None)}
+    native=Path(p['native_runtime_root']).resolve()
+    if any(not Path(file).is_relative_to(native) for file in loaded.values()):raise ValueError('mixed native initial100 modules')
+    result=dict(initial_carry_sha256=hashlib.sha256(initial.read_bytes()).hexdigest(),audit_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        source_bank_sha256=p['initial_source']['prepared_bank_sha256'],bank_indices=p['protocol']['bank_indices'],bank_fingerprints=fingerprints,
+        initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
+        initial_nominal_reference=np.asarray(state.physical.raw).tolist(),
+        matched_groups=20,lanes_per_group=5,complete_paired_native_leaves_exact=True,prepared_physical_lanes_checked=100,
+        original_paths_anchored_to_own_pose=True,online_initial_latch_false=True,native_only_modules=loaded,
+        no_old_trajectory_reuse=True,new_physics_steps=0,optimizer_updates=0,
+        data_role='Two prepared physical initial states, not independent training seeds.')
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 

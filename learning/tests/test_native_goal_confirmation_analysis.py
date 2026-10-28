@@ -350,3 +350,86 @@ def test_online_rule_latch_survives_rebound_and_reports_open_activation():
     result=m.audit_online_rule(raw,case,path,replan,rule)
     assert result['departure_count']==1 and result['return_count']==0
     assert result['unreturned_at_actual_endpoint'] and result['open_dwell_observed_s']==.06
+
+
+def test_confirmation_inventory_keeps_bank_paths_and_state_query_alpha_separate():
+    import json
+    p=json.loads((CLI.parents[0]/'configs/h75_online_confirmation100.json').read_text());rows=[]
+    events=[(0.,p['zero_onset_s'])]+list(m.itertools.product(p['forces_N'],p['onsets_s']))
+    for bank,route,arm,(force,onset) in m.itertools.product(p['bank_indices'],p['routes'],p['arms'],events):
+        rows.append(dict(bank_index=bank,route=route['route'],speed=route['speed'],mode=arm,alpha=1.,
+            query_alpha={'fixed0':0.,'fixed_half':.5}.get(arm,1.),initial_fingerprint=p['bank_state_fingerprints'][str(bank)],
+            path_key=f"bank{bank}_"+route['route'],event=str(force)+str(onset),force_N=force,onset_s=onset,duration_s=p['duration_s']))
+    m.validate_confirmation_inventory(rows,p)
+    assert len({m.analysis_path_key(r) for r in rows})==4
+    assert len(m.response_plot_groups(rows))==10
+    rows[-1]['path_key']='bank0_'+rows[-1]['route']
+    with pytest.raises(ValueError,match='bank-aware'):m.validate_confirmation_inventory(rows,p)
+
+
+def test_fixed_zero_query_keeps_user_state_one_and_floor_reports_inactive_zero():
+    raw,path,case,rule=online_fixture();n=len(raw['active_tick'])
+    case.update(mode='fixed0',path_key='bank0_route',query_alpha=0.)
+    raw['alpha_exec'][:]=0.;raw['rule_latched'][:]=False;raw['query_observation'][:,336]=0.;raw['channel_alpha_pair'][:]=0.
+    raw['neural_query_active']=np.ones(n,bool)
+    m.audit_online_publication(raw,case)
+    raw['alpha_user'][0]=0.
+    with pytest.raises(AssertionError):m.audit_online_publication(raw,case)
+    raw['alpha_user'][:]=1.;case.update(mode='zero_with_existing_speed_floor',query_alpha=1.)
+    raw['alpha_exec'][:]=1.;raw['query_observation'][:,336]=1.;raw['channel_alpha_pair'][:]=1.
+    raw['neural_query_active'][:]=False;raw['support_nominal_reference']=np.tile([2.,0.],(n,1));raw['nominal']=raw['support_nominal_reference'].copy()
+    raw.update(support_floor=np.full(n,1.5),support_requested_offset=np.zeros(n),support_realized_target_offset=np.zeros(n),support_active=np.zeros(n,bool))
+    m.audit_online_publication(raw,case)
+    result=m.audit_floor_support(raw,case,dict(residual_interface=dict(speed_positive_scale_m_s=.4)),1.5,[2.,0.])
+    assert result['equivalent_to_zero_in_observed_run'] and result['observed_support_active_ticks']==0
+
+
+def test_floor_support_uses_logged_preupper_nominal_and_original_latent_mapping():
+    raw,path,case,rule=online_fixture();n=len(raw['active_tick']);case.update(mode='zero_with_existing_speed_floor')
+    raw.update(support_nominal_reference=np.tile([1.4,0.],(n,1)),nominal=np.tile([1.4,0.],(n,1)),
+        support_floor=np.full(n,1.5),support_requested_offset=np.full(n,.1),support_realized_target_offset=np.full(n,.1),
+        support_active=np.ones(n,bool),neural_query_active=np.zeros(n,bool))
+    raw['composed_latent'][:]=[np.arctanh(.25),0.]
+    result=m.audit_floor_support(raw,case,dict(residual_interface=dict(speed_positive_scale_m_s=.4)),1.5,[1.4,0.])
+    assert not result['equivalent_to_zero_in_observed_run'] and result['observed_support_active_ticks']==n
+    raw['composed_latent'][4,0]=0.
+    with pytest.raises(AssertionError):m.audit_floor_support(raw,case,dict(residual_interface=dict(speed_positive_scale_m_s=.4)),1.5,[1.4,0.])
+
+
+def test_confirmation_summary_pairs_only_same_bank_and_retains_floor_identity():
+    rows=[]
+    for bank,route,event,method in m.itertools.product((0,1),('left','right'),('zero','t2minus','t2plus','t3minus','t3plus'),
+        ('online_scalar','fixed0','fixed0.5','fixed1','zero_with_existing_speed_floor')):
+        rows.append(dict(bank_index=bank,route=route,event=event,method=method,mode=method,force_N=0. if event=='zero' else 64.,
+            case_id=str(bank)+route+event+method,horizons={'10':dict(goal_arrived=True,physical_outcome='survived',first_arrival_s=6.)},
+            prefix=dict(ticks=1200),alpha_rule=dict(unreturned_at_actual_endpoint=False),
+            floor_support=dict(equivalent_to_zero_in_observed_run=True),full_observed_speed_rmse_m_s=.2,diagnostic_execution_path_user1_cost=10.))
+    summary,paired=m.confirmation_summary(rows)
+    assert summary['new_cases']==100 and summary['cached_cases']==0
+    assert len(paired)==4 and all(len(p['details'])==20 for p in paired)
+    assert summary['method_bank_subset']['online_scalar']['0']['all']['n']==10
+    assert summary['method_bank_subset']['online_scalar']['1']['nominal']['n']==2
+    assert len(summary['floor_support'])==20
+    for p in paired:
+        for d in p['details']:assert d['candidate'][0]==d['baseline'][0]
+
+
+def test_confirmation_xy_panels_keep_two_routes_per_bank_and_five_methods(tmp_path,monkeypatch):
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib.figure import Figure
+    saved=[];monkeypatch.setattr(Figure,'savefig',lambda self,file,**kw:saved.append(Path(file).name))
+    (tmp_path/'analysis').mkdir();raw,path,cfg,ctrl,keys=reward_fixture();n=8
+    path.update(xy=np.column_stack([path['s'],np.zeros(4)]),goal=np.asarray(3.))
+    raw.update(actual_xy=np.column_stack([np.arange(n)*.1,np.zeros(n)]),wheel_speed_proxy=np.ones(n),phi=np.zeros(n),phi_dot=np.zeros(n),
+        actual_delta=np.zeros(n),applied_force_impulse=np.zeros((n,3)),alpha_exec=np.ones(n),rule_accel_estimate=np.zeros(n))
+    rows=[];raws={};rebuilt={};paths={};goals={}
+    for bank,route,method in m.itertools.product((0,1),('left','right'),('online_scalar','fixed0','fixed0.5','fixed1','zero_with_existing_speed_floor')):
+        key=f'bank{bank}_'+route;case=key+method;paths[key]=path;goals[key]=np.array([3.,0.])
+        rows.append(dict(bank_index=bank,route=route,path_key=key,event='zero',method=method,mode=method,case_id=case,force_N=0.,active_lower_ticks=n,
+            prefix=dict(ticks=n),horizons={'10':dict(goal_arrived=False,physical_outcome='survived',first_arrival_s=None)},replan_task_tick=None))
+        raws[case]=raw;rebuilt[case]=m.reconstruct_execution_path_reward(raw,dict(alpha=1.),path,None,n,cfg,ctrl,keys)
+    m.render_response(tmp_path,rows,raws,paths,goals,{},rebuilt,keys)
+    assert len(saved)==16
+    assert 'full_xy_zero__bank0.png' in saved and 'full_xy_zero__bank1.png' in saved
+    assert len(set(saved))==len(saved)
