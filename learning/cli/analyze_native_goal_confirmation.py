@@ -18,9 +18,10 @@ COLORS=('#0072B2','#D55E00','#333333','#008060')
 STYLES=('-','--',':','-.')
 
 
-def analyze(root):
+def analyze(root,include_heldout_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
+    if p.get('mode')=='h75_samestate_bank144':return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
@@ -306,7 +307,7 @@ def onset_frame_impulse(raw,case,pulse):
         limitation='Onset pre-upper yaw approximation, not an exact body-frame substep impulse integral.')
 
 
-def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,config,controller,keys):
+def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,config,controller,keys,start_tick=0):
     """Rebuild native V3 task channels on the path actually active at each tick."""
     from analyze_native_frozen_validation import score
     n=int(np.asarray(raw['active_tick'],bool).sum());effective=np.asarray(raw['effective_costs'][:n],float).copy();user1=effective.copy()
@@ -325,7 +326,7 @@ def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,co
     running=-effective.sum(axis=1)*config['path_reward']['scale']*.005
     reward=running.copy();fatal=np.flatnonzero(np.asarray(raw['physical_failure'][:n],bool))
     if len(fatal):
-        end=int(fatal[0]);block=end//4*4;remaining=round(10/.02)-end//4
+        end=int(fatal[0]);block=end//4*4;remaining=round(10/.02)-(start_tick+end)//4
         c=config['path_reward'];gamma=config['training_future_phase_C']['gamma']
         penalty=-c['failure_extra']-c['scale']*.02*c['failure_cost_rate_bound']*(1-gamma**remaining)/(1-gamma)
         reward[block:]=0.;reward[end]=penalty
@@ -753,9 +754,142 @@ def samestate_summary(rows):
                 paired.append(dict(source_index=source,preparation_s=prep,force_N=force,candidate=a['case_id'],comparator=b['case_id'],candidate_alpha=a['candidate_alpha'],comparator_alpha=b['candidate_alpha'],
                     primary_no_fall_change=int(a['primary']['no_fall_through_window'])-int(b['primary']['no_fall_through_window']) if known else None,
                     candidate_primary=a['primary'],comparator_primary=b['primary'],candidate_full_H10=a['horizons']['10'],comparator_full_H10=b['horizons']['10']))
-    if len(groups)!=4 or any(g['n_conditional_suffixes']!=18 for g in groups.values()):raise ValueError('four source groups18 conditions required')
-    return dict(source_groups=groups,conditional_suffixes=72,independent_source_states=4,
-        adoption='no_learner_trained',interpretation='Familiar shared-ancestor state-conditional preparation/hypothetical-onset response only; preparation also changes absolute pulse onset and encountered geometry, so it does not isolate pure timing at the same force phase.72 suffixes are not72 independent states. No automatic force/state search or classifier training.'),paired
+    if len(groups) not in (4,8) or any(g['n_conditional_suffixes']!=18 for g in groups.values()):raise ValueError('declared source groups18 conditions required')
+    return dict(source_groups=groups,conditional_suffixes=len(rows),independent_source_states=len(groups),
+        adoption='no_learner_trained',interpretation='Familiar shared-ancestor state-conditional preparation/hypothetical-onset response only; preparation also changes absolute pulse onset and encountered geometry, so it does not isolate pure timing at the same force phase.Conditional suffixes are not independent source states. No automatic force/state search or classifier training.'),paired
+
+
+def validate_bank144_inventory(rows,p):
+    groups={g['source_index']:g for g in p['source_groups']};actual=[]
+    for c in rows:
+        group=groups[c['source_index']]
+        if any(c.get(k)!=v for k,v in group.items()):raise ValueError('bank source metadata drift')
+        if c['split']!=('development' if c['bank_index']==0 else 'label_heldout') or c['alpha']!=1. or c['query_alpha']!=c['candidate_alpha']:raise ValueError('bank split/user/query identity mismatch')
+        if not np.isclose(c['onset_s'],1.+c['preparation_s']) or not np.isclose(c['primary_window_end_s'],c['onset_s']+.1+3.):raise ValueError('bank conditional timing mismatch')
+        actual.append((c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N']))
+    expected=list(itertools.product(groups,p['candidate_alphas'],p['preparation_s'],p['forces_N']))
+    if sorted(actual)!=sorted(expected) or len(set(actual))!=144:raise ValueError('complete144 conditional inventory required')
+
+
+def select_bank_label_lanes(index,include_heldout_labels=False):
+    """Select BEFORE any suffix raw open, scoring, plotting or label export."""
+    selected=[]
+    for lane,row in enumerate(index):
+        expected='development' if row['bank_index']==0 else 'label_heldout'
+        if row['split']!=expected:raise ValueError('bank label seal metadata mismatch')
+        if row['bank_index']==0 or include_heldout_labels:selected.append((lane,row))
+    if len(selected)!=(144 if include_heldout_labels else 72):raise ValueError('declared bank label selection incomplete')
+    return selected
+
+
+def enriched_bank_runtime_inventory(inventory,sources):
+    """Runtime adds only the generated, sealed complete-source fingerprint."""
+    by_id={r['source_index']:r for r in sources}
+    if len(by_id)!=len(sources):raise ValueError('duplicate generated source identity')
+    expected=[]
+    for case in inventory:
+        source=by_id[case['source_index']]
+        for key in ('bank_index','route','origin','path_key','split','source_group_id'):
+            if case[key]!=source[key]:raise ValueError('generated source metadata differs '+key)
+        fingerprint=source['source_fingerprint']
+        if not isinstance(fingerprint,str) or len(fingerprint)!=64:raise ValueError('invalid generated source fingerprint')
+        if 'source_fingerprint' in case and case['source_fingerprint']!=fingerprint:raise ValueError('sealed/runtime source fingerprint conflict')
+        expected.append(dict(case,source_fingerprint=fingerprint))
+    return expected
+
+
+def analyze_bank144(root,p,*,include_heldout_labels=False):
+    run=root/'evaluation';out=root/('analysis_final' if include_heldout_labels else 'analysis_development')
+    status=json.loads((run/'status.json').read_text());inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    validate_bank144_inventory(inventory,p['protocol'])
+    if status['phase']!='completed' or status['completed_cases']!=144 or len(index)!=144:raise ValueError('completed144 collection required')
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('bank plan drift')
+    for file,sha in {**p['source_sha256'],**p['input_sha256']}.items():
+        if digest(file)!=sha:raise ValueError('bank collection source/input drift '+file)
+    manifest=json.loads((run/'manifest.json').read_text())
+    sources=json.loads((root/'sources/records.json').read_text());source_seal=json.loads((root/'sources/seal.json').read_text())
+    records_file=str(root/'sources/records.json')
+    if source_seal['plan_sha256']!=digest(root/'plan.json') or source_seal['files'].get(records_file)!=digest(records_file):raise ValueError('generated source records seal mismatch')
+    runtime_cases=enriched_bank_runtime_inventory(inventory,sources)
+    for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models']),('cases',runtime_cases),('source',p['initial_source'])):
+        if manifest[key]!=expected:raise ValueError('bank manifest identity mismatch '+key)
+    for row,expected in zip(index,runtime_cases):
+        if any(row.get(k)!=v for k,v in expected.items()):raise ValueError('bank runtime index/source fingerprint mismatch')
+    selected=select_bank_label_lanes(index,include_heldout_labels)
+    # Nothing below opens unselected bank1 suffix traces or emits their labels.
+    out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
+    subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
+    initial=json.loads((out/'initial_carry_review.json').read_text());sources=json.loads((root/'sources/records.json').read_text());source_by_id={r['source_index']:r for r in sources}
+    source=Path(p['samestate_source']['source']);paths={};goals={};traces={};executed={};rebuilt={};rows=[];ticks=0
+    # Only selected bank paths/decisions are used for label-bearing diagnostics.
+    for key in sorted({analysis_path_key(c) for _,c in selected}):
+        with np.load(run/(key+'_path.npz')) as z:paths[key]=dict(z)
+        with np.load(source/'evaluation'/(key+'_path.npz')) as z:
+            for field in z.files:np.testing.assert_array_equal(paths[key][field],z[field])
+        path=paths[key];goals[key]=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)])
+    selected_ids={c['case_id'] for _,c in selected}
+    decision_rows=[d for d in json.loads((run/'replanning_decisions.json').read_text()) if d['case_id'] in selected_ids];decisions={d['case_id']:d for d in decision_rows}
+    if len(decisions)!=len(decision_rows):raise ValueError('more than one bank replan per case')
+    with np.load(root/'sources/host_state.npz') as host:
+        if np.any(host['ever_arrived']|host['replanned']):raise ValueError('source antecedent must be original-path/unarrived')
+    for lane,c in selected:
+        if any(c.get(k)!=v for k,v in inventory[lane].items()):raise ValueError('selected bank inventory drift')
+        if digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('selected bank raw SHA drift')
+        with np.load(c['raw_file']) as z:raw=dict(z)
+        active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n
+        if not 0<n<=1800 or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('bank suffix observation prefix broken')
+        np.testing.assert_allclose(raw['time'][active],1.+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_allclose(raw['v_user'][active],c['speed'],atol=2e-7,rtol=0)
+        key=analysis_path_key(c);goal=goals[key]
+        np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0);np.testing.assert_allclose(manifest['original_goals_xy'][lane],goal,atol=3e-6,rtol=0)
+        query=audit_samestate_query(raw,c);clock=np.rint(raw['time']/.005).astype(int)
+        pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=.1))
+        chain=verify_correction_chain(dict(raw,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=initial['initial_filtered'][lane],initial_offsets=initial['initial_offsets'][lane])
+        physical=dict(raw,physical_tick=clock-200,policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
+        outcome=goal_arrival_metrics(physical,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=9.)
+        relative_arrival=outcome['first_arrival_s']
+        if relative_arrival is not None:outcome['first_arrival_s']=relative_arrival+1.
+        outcome.update(physical_outcome=physical_outcome(raw['active_tick'],raw['contact_failure'],physical['policy_fault']|raw['lower_fault']|raw['nonfinite'],1800),
+            observation_contract='Source task1 was valid/unarrived; observed suffix task1..10, no original prefix rerun or display. First arrival uses original task clock.')
+        decision=decisions.get(c['case_id']);replan=run/f'replanned_path_{lane:02d}.npz';changed=None;replan_tick=200+n
+        if bool(decision)!=bool(c['replanned']) or replan.exists()!=bool(c['replanned']):raise ValueError('bank replan evidence mismatch')
+        if decision:
+            replan_tick=decision['task_tick']
+            if decision['case_index']!=lane or replan_tick not in range(200,1801,200):raise ValueError('bank replan clock mismatch')
+            from sttw_control.goal_replanning import replan_requested
+            if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,cross_track_m=decision['cross_track_m'],follower_invalid=decision['follower_invalid'],already_replanned=False,contact=decision['contact'],fault=decision['fault'],ever_arrived=decision['ever_arrived']):raise ValueError('bank replan lacks measured trigger')
+            with np.load(replan) as z:changed=dict(z)
+            np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,a]) for a in (0,1)],goal,atol=3e-6,rtol=0);executed[c['case_id']]=changed
+        data=reconstruct_execution_path_reward(raw,c,paths[key],changed,replan_tick-200,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=200)
+        rebuilt[c['case_id']]=data;traces[c['case_id']]=raw
+        fault=physical['policy_fault']|raw['lower_fault']|raw['nonfinite'];fatal=np.flatnonzero(active&(raw['contact_failure']|fault));stop=int(fatal[0]) if len(fatal) else n
+        task_stop=min(stop,round(relative_arrival/.005)) if relative_arrival is not None else stop
+        event=f"prep{c['preparation_s']:g}_F{c['force_N']:+g}"
+        rows.append(dict(c,event=event,method=f"alpha{c['candidate_alpha']:g}",source_fingerprint=source_by_id[c['source_index']]['source_fingerprint'],
+            source_feature_file='../evaluation/source_features.npz',source_feature_row=lane,diagnostic_file=f'case_{lane:03d}_diagnostics.npz',
+            primary=samestate_primary_label(raw,c),horizons={'10':outcome},active_lower_ticks=n,new_suffix_lower_ticks=n,trace_start_s=1.,prefix=dict(ticks=task_stop),
+            pulse=pulse,query=query,correction_chain=chain,replan_task_tick=None if decision is None else replan_tick,
+            diagnostic_execution_path_user1_cost=float(-data['user1_reward'].sum()),actual_final_xy=raw['actual_xy'][n-1].tolist()))
+        numeric={k:v[:n] for k,v in raw.items()};numeric.update(user1_suffix_reward=data['user1_reward'],cumulative_user1_suffix_reward=np.cumsum(data['user1_reward']),
+            user1_suffix_reward_components=data['user1_running_components'],cumulative_user1_suffix_components=np.cumsum(data['user1_running_components'],axis=0),terminal_adjustment=data['user1_terminal_adjustment'])
+        np.savez_compressed(out/f'case_{lane:03d}_diagnostics.npz',**numeric)
+    summary,paired=samestate_summary(rows)
+    summary.update(label_selection='final_all_banks_explicitly_unsealed' if include_heldout_labels else 'bank0_development_only',heldout_labels_accessed=include_heldout_labels,
+        data_role='Old bank3 training; bank0 development; bank1 new labels held until frozen fitting recipe. Prior bank1 control seen; not independent TEST.')
+    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'paired.json',paired)
+    atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),analysis_source_sha256=digest(__file__),analyzed_suffix_cases=len(rows),
+        analyzed_suffix_active_lower_ticks=ticks,active_new_hybrid_prefix_lower_ticks=initial['active_new_prefix_lower_ticks'],maximum_suffix_budget=259200,maximum_total_budget=260000,
+        heldout_suffix_labels_accessed=include_heldout_labels,unselected_suffix_files_opened=0,new_physics_steps=0,optimizer_updates=0,
+        limitation='No unselected suffix labels/curves/counts exported. Prefix800 is a separate source-collection charge. Numeric validity on selected trajectories does not fit or validate a predictor.'))
+    # Existing renderer expects root/analysis; pass an explicit output directory.
+    render_response(root,rows,traces,paths,goals,executed,rebuilt,manifest['reward_components'],output_directory=out)
+    lines=['# 分源容扰数据：'+('显式解封两bank最终评价' if include_heldout_labels else '仅bank0开发标签'),'',
+        '默认不打开、不计算、不绘制、不导出bank1新后缀标签；bank1此前控制工况已见，不能称独立TEST。仅显式最终评价选项才解封。',
+        '八个source身份可核查，但默认结果仅含bank0四source的72条件；不从全局活动步数反推或报告bank1失败。原bank3旧72用于训练，本轮bank0开发；未来按source祖先分组，禁止随机按行拆分。',
+        '原source前缀不重跑也不拼接。XY仅展示task1..10实测后缀与原始/执行路径；主标签source至pulseEND+3s，准备期摔倒为负、fault为invalid。准备改变绝对起扰时刻与遭遇几何，不隔离纯时序。']
+    for label in response_plot_groups(rows):lines+=['',f'## {label}','',f'![Selected suffix XY](full_xy_{label}.png)']
+    lines+=['','[所选逐例标签](results.json) · [按source分组](summary.json) · [配对](paired.json) · [身份与单独费用](receipt.json)',
+        '本轮不拟合预测器。351源观测含真实速度/历史部署依赖，尚非最终小特征集。执行路径user1奖励仅诊断；四固定1来源复用，一秒hybrid源仅新800lower，后缀物理单独计费。']
+    (out/'README.md').write_text('\n'.join(lines)+'\n');return summary
 
 
 def analyze_samestate(root,p):
@@ -1006,12 +1140,12 @@ def analyze_response(root,p):
     return summary
 
 
-def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
+def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_directory=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
-    out=root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
+    out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
     palette=('#0072B2','#D55E00','#008060','#CC79A7','#555555')
     for event in response_plot_groups(rows):
         group=response_plot_selection(rows,event)
@@ -1031,7 +1165,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
                         ax.plot(*xy.T,c=color,label=method);marker='^' if task and h['goal_arrived'] else 'x' if h['physical_outcome']=='contact' else 's' if h['physical_outcome']=='survived' else 'D'
                         ax.scatter(*xy[-1],c=color,marker=marker,s=30)
                     if h['first_arrival_s'] is not None:
-                        k=round(h['first_arrival_s']/.005)-1
+                        k=round((h['first_arrival_s']-r.get('trace_start_s',0.))/.005)-1
                         if k<n:ax.scatter(*raw['actual_xy'][k],c=color,marker='^')
                     if 'switch_s' in r:
                         k=round(r['switch_s']/.005)-1
@@ -1069,7 +1203,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
             for k,name in enumerate(list(keys)+['terminal replacement']):cax[k,0].set_ylabel(name);cax[k,1].set_ylabel('Cumulative '+name)
             cax[0,0].legend(fontsize=6)
             for ax in [axes[-1],*cax[-1]]:ax.set_xlabel('Actual post-tick time (s)')
-            title=route+' / '+event+' / H10 actual endpoints; vertical lines=replan, gray=intended pulse; no new training'
+            title=route+' / '+event+' / actual observed endpoints; vertical lines=replan, gray=intended pulse; no new training'
             fig.suptitle(title+'\nExecution-path errors/rewards are diagnostic; original goal unchanged')
             comp.suptitle(title+'\nSigned per-step and cumulative user1 execution-path reward components; no original-user utility ranking')
             fig.savefig(diag/f'{route}_{event}.png',dpi=125);comp.savefig(diag/f'{route}_{event}_components.png',dpi=125);plt.close(fig);plt.close(comp)
@@ -1093,4 +1227,5 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path)
-    analyze(parser.parse_args().root)
+    parser.add_argument('--include-heldout-labels',action='store_true',help='Explicit final evaluation only after root freezes the fitting recipe; unseals bank1 new labels')
+    args=parser.parse_args();analyze(args.root,include_heldout_labels=args.include_heldout_labels)

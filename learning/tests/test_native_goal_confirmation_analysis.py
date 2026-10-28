@@ -495,3 +495,59 @@ def test_same_state_candidate_query_changes_immediately_at_source_with_real_mask
     assert result['first_actual_permitted_query_s']==1.
     raw['reference_target_permitted'][4:8]=False;raw['latent_z'][4:8]=.1
     with pytest.raises(AssertionError):m.audit_samestate_query(raw,case)
+
+
+def bank144_rows():
+    import json
+    p=json.loads((CLI.parents[0]/'configs/h75_samestate_bank144.json').read_text());rows=[]
+    for group,alpha,prep,force in m.itertools.product(p['source_groups'],p['candidate_alphas'],p['preparation_s'],p['forces_N']):
+        rows.append(dict(group,source_origin=group['origin'],mode='samestate_scalar',alpha=1.,candidate_alpha=alpha,query_alpha=alpha,
+            preparation_s=prep,force_N=force,onset_s=1.+prep,duration_s=.1,primary_window_start_s=1.,primary_window_end_s=1.+prep+.1+3.,
+            case_id=f"{group['source_index']}_{alpha}_{prep}_{force}",raw_file='heldout-never-open' if group['bank_index']==1 else 'dev'))
+    return rows,p
+
+
+def test_bank144_default_label_selection_never_selects_bank1_raw_or_metrics():
+    rows,p=bank144_rows();m.validate_bank144_inventory(rows,p)
+    selected=m.select_bank_label_lanes(rows)
+    assert len(selected)==72 and all(c['bank_index']==0 for _,c in selected)
+    assert all(c['raw_file']=='dev' for _,c in selected)
+    assert {c['source_index'] for _,c in selected}=={0,1,2,3}
+    unsealed=m.select_bank_label_lanes(rows,include_heldout_labels=True)
+    assert len(unsealed)==144 and {c['bank_index'] for _,c in unsealed}=={0,1}
+    rows[-1]['split']='development'
+    with pytest.raises(ValueError,match='seal metadata'):m.select_bank_label_lanes(rows)
+
+
+def test_bank144_development_summary_exports_no_heldout_source_or_label():
+    rows,_=bank144_rows();selected=m.select_bank_label_lanes(rows);development=[]
+    for _,r in selected:
+        development.append(dict(r,primary=dict(no_fall_through_window=True),horizons={'10':dict(goal_arrived=True,physical_outcome='survived')}))
+    summary,paired=m.samestate_summary(development)
+    assert summary['conditional_suffixes']==72 and set(summary['source_groups'])=={'0','1','2','3'}
+    assert all(p['source_index'] in (0,1,2,3) for p in paired)
+    assert len(paired)==72
+
+
+def test_suffix_reward_terminal_keeps_absolute_task_clock_without_prefix_replay():
+    raw,path,cfg,ctrl,keys=reward_fixture();raw['time']=1.+np.arange(8)*.005;raw['physical_failure'][-1]=True
+    remaining=500-(200+7)//4;c=cfg['path_reward'];g=cfg['training_future_phase_C']['gamma']
+    raw['scored_tick_reward'][4:]=0.
+    raw['scored_tick_reward'][7]=-c['failure_extra']-c['scale']*.02*c['failure_cost_rate_bound']*(1-g**remaining)/(1-g)
+    result=m.reconstruct_execution_path_reward(raw,dict(alpha=1.),path,None,8,cfg,ctrl,keys,start_tick=200)
+    np.testing.assert_allclose(result['reward'],raw['scored_tick_reward'])
+    with pytest.raises(AssertionError,match='per-step reward'):
+        m.reconstruct_execution_path_reward(raw,dict(alpha=1.),path,None,8,cfg,ctrl,keys)
+
+
+def test_bank144_runtime_inventory_adds_only_sealed_generated_source_fingerprint():
+    inventory,p=bank144_rows()
+    sources=[dict(g,source_fingerprint=f"{g['source_index']:064x}") for g in p['source_groups']]
+    expected=m.enriched_bank_runtime_inventory(inventory,sources)
+    assert len(expected)==144 and expected[0]['source_fingerprint']==sources[0]['source_fingerprint']
+    assert 'source_fingerprint' not in inventory[0]
+    assert {k:v for k,v in expected[18].items() if k!='source_fingerprint'}==inventory[18]
+    wrong=[dict(c) for c in inventory];wrong[0]['source_fingerprint']='f'*64
+    with pytest.raises(ValueError,match='fingerprint conflict'):m.enriched_bank_runtime_inventory(wrong,sources)
+    sources[0]['bank_index']=1
+    with pytest.raises(ValueError,match='source metadata'):m.enriched_bank_runtime_inventory(inventory,sources)

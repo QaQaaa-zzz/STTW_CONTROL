@@ -20,7 +20,7 @@ def audit(root,output):
     adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
     online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100')
-    if online:
+    if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
         schedule=importlib.util.module_from_spec(schedule_spec);sys.modules[schedule_spec.name]=schedule;schedule_spec.loader.exec_module(schedule)
@@ -29,6 +29,8 @@ def audit(root,output):
     if online:
         if np.any(carry.latched):raise ValueError('online initial latch must be false')
         carry=carry.native
+    if p.get('mode')=='h75_samestate_bank144':
+        return audit_bank144_initial(root,p,carry,output,jax,initial)
     if p.get('mode')=='h75_samestate_tolerance72':
         return audit_samestate_initial(root,p,carry,output,jax,initial)
     continuation=p.get('mode')=='h75_switching_continuation'
@@ -278,6 +280,62 @@ def audit_samestate_initial(root,p,carry,output,jax,initial):
         all_complete_source_copy_leaves_exact=True,all_host_state_copies_exact=True,source_features_exact_within_group=True,
         initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
         new_physics_steps=0,optimizer_updates=0,data_role='Four familiar physical ancestor states;72 conditional suffixes are not independent source states.')
+    output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+
+
+def audit_bank144_initial(root,p,carry,output,jax,initial):
+    import numpy as np
+    seal=json.loads((root/'sources/seal.json').read_text())
+    if seal['plan_sha256']!=hashlib.sha256((root/'plan.json').read_bytes()).hexdigest():raise ValueError('source pool plan identity mismatch')
+    for file,sha in seal['files'].items():
+        if hashlib.sha256(Path(file).read_bytes()).hexdigest()!=sha:raise ValueError('source pool seal drift')
+    with (root/'sources/complete_carry.pkl').open('rb') as f:saved=pickle.load(f)
+    records=json.loads((root/'sources/records.json').read_text());cases=json.loads((root/'inventory.json').read_text())
+    if len(records)!=8 or len(cases)!=144:raise ValueError('eight source pool/144 copies required')
+    actual,ta=jax.tree.flatten(carry);original,tb=jax.tree.flatten(saved)
+    if ta!=tb:raise ValueError('source pool copy structure drift')
+    for a,b in zip(actual,original):
+        a=np.asarray(a);b=np.asarray(b)
+        if a.dtype!=b.dtype:raise ValueError('source pool dtype drift')
+        for lane,c in enumerate(cases):np.testing.assert_array_equal(a[lane],b[c['source_index']])
+    fingerprints={};loaded={}
+    for record,declared in zip(records,p['protocol']['source_groups']):
+        if any(record[k]!=v for k,v in declared.items()):raise ValueError('source pool metadata drift')
+        lane=record['source_index'];selected=jax.tree.map(lambda x:np.asarray(x)[lane],saved);sha=hashlib.sha256()
+        for path,value in jax.tree_util.tree_flatten_with_path(selected)[0]:
+            a=np.asarray(value);sha.update(jax.tree_util.keystr(path).encode());sha.update(str(a.dtype).encode());sha.update(a.tobytes())
+        if sha.hexdigest()!=record['source_fingerprint']:raise ValueError('assembled source fingerprint mismatch')
+        fingerprints[str(lane)]=sha.hexdigest()
+        file=record['source_file']
+        if file not in loaded:
+            with Path(file).open('rb') as f:loaded[file]=pickle.load(f)
+        original_source=loaded[file].native if hasattr(loaded[file],'native') else loaded[file]
+        ancestor=jax.tree.map(lambda x:np.asarray(x)[record['source_row']],original_source)
+        aa,at=jax.tree.flatten(selected);bb,bt=jax.tree.flatten(ancestor)
+        if at!=bt:raise ValueError('source ancestor structure mismatch')
+        for a,b in zip(aa,bb):
+            if np.asarray(a).dtype!=np.asarray(b).dtype:raise ValueError('source ancestor dtype mismatch')
+            np.testing.assert_array_equal(a,b)
+    state=carry.state;np.testing.assert_array_equal(state.tick,np.full(144,200));np.testing.assert_array_equal(state.alpha,np.ones(144))
+    if np.any(state.fault|state.physical.failed):raise ValueError('source pool stopped state')
+    with np.load(root/'evaluation/source_features.npz') as z:features=z['native_observation_user1']
+    if features.shape!=(144,351) or not np.isfinite(features).all():raise ValueError('finite144x351 source features required')
+    np.testing.assert_allclose(features[:,336],1.,atol=1e-6,rtol=0);groups={}
+    for lane,c in enumerate(cases):groups.setdefault(c['source_index'],[]).append(lane)
+    if len(groups)!=8 or any(len(ids)!=18 for ids in groups.values()):raise ValueError('eight18-copy source groups required')
+    for ids in groups.values():
+        for lane in ids[1:]:np.testing.assert_array_equal(features[lane],features[ids[0]])
+    with np.load(root/'evaluation/task1_host_state.npz') as actual,np.load(root/'sources/host_state.npz') as source:
+        for field in source.files:np.testing.assert_array_equal(actual[field],source[field][[c['source_index'] for c in cases]])
+        if np.any(source['ever_arrived']|source['replanned']):raise ValueError('unarrived original-path source pool required')
+    prefix_ticks=seal['active_prefix_lower_ticks']
+    if prefix_ticks!=800 or seal['allocated_prefix_lower_slots']!=800:raise ValueError('exact800 new hybrid prefix ticks required')
+    result=dict(initial_carry_sha256=hashlib.sha256(initial.read_bytes()).hexdigest(),audit_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        source_groups=8,copies_per_source=18,all_complete_source_copy_leaves_exact=True,all_ancestor_provenance_exact=True,source_fingerprints=fingerprints,
+        initial_filtered=np.asarray(state.filtered).tolist(),initial_offsets=np.asarray(state.offsets).tolist(),
+        source_features_exact_within_group=True,all_host_state_copies_exact=True,active_new_prefix_lower_ticks=prefix_ticks,
+        new_physics_steps=0,optimizer_updates=0,heldout_suffix_labels_accessed=False,
+        data_role='Source identity only; bank0 development, bank1 new suffix labels remain sealed. Two physical banks are not independent training seeds.')
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 
