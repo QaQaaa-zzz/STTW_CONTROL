@@ -111,3 +111,24 @@ def test_exact_thresholds_and_task_guard_equality():
     # Exact v²*k==3 is admitted; restore .85 and enter .8 use inclusive checks.
     result=coordinator.choose_alpha(targets,3.,j.array([1.,0.]),1.,j.array([.8,.8,.85]),True,True,.5)
     assert np.asarray(result['task_mask']).all() and float(result['alpha'])==1
+
+
+def test_nonzero_float32_networks_match_torch_probabilities():
+    import torch
+    rng=np.random.default_rng(75)
+    features=rng.uniform(-5,5,(128,41)).astype(np.float32);params={}
+    for layer,shape in enumerate(((41,16),(16,16),(16,1))):
+        params[f'w{layer}']=rng.normal(0,.7,(2,3)+shape).astype(np.float32)
+        params[f'b{layer}']=rng.normal(0,.3,(2,3,shape[1])).astype(np.float32)
+    expected=[]
+    for arm in range(2):
+        probabilities=[]
+        for seed in range(3):
+            x=torch.as_tensor(features)
+            for layer in range(3):
+                x=x@torch.as_tensor(params[f'w{layer}'][arm,seed])+torch.as_tensor(params[f'b{layer}'][arm,seed])
+                if layer<2:x=torch.relu(x)
+            probabilities.append(torch.sigmoid(x[:,0]).numpy())
+        expected.append(np.mean(probabilities,axis=0))
+    actual=np.asarray(coordinator.infer_probabilities(params,features))
+    np.testing.assert_allclose(actual,np.asarray(expected),rtol=0,atol=2e-6)

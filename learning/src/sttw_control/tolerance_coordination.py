@@ -43,9 +43,9 @@ def infer_probabilities(params,features):
     import jax.numpy as j
     import jax.nn as nn
     x=j.asarray(features,j.float32)
-    h=nn.relu(j.einsum('ni,asij->asnj',x,j.asarray(params['w0']))+j.asarray(params['b0'])[:,:,None,:])
-    h=nn.relu(j.einsum('asni,asij->asnj',h,j.asarray(params['w1']))+j.asarray(params['b1'])[:,:,None,:])
-    logits=(j.einsum('asni,asij->asnj',h,j.asarray(params['w2']))+j.asarray(params['b2'])[:,:,None,:])[...,0]
+    h=nn.relu(j.einsum('ni,asij->asnj',x,j.asarray(params['w0']),precision='highest')+j.asarray(params['b0'])[:,:,None,:])
+    h=nn.relu(j.einsum('asni,asij->asnj',h,j.asarray(params['w1']),precision='highest')+j.asarray(params['b1'])[:,:,None,:])
+    logits=(j.einsum('asni,asij->asnj',h,j.asarray(params['w2']),precision='highest')+j.asarray(params['b2'])[:,:,None,:])[...,0]
     return nn.sigmoid(logits).mean(axis=1)
 
 
@@ -138,14 +138,14 @@ def export_predictors(manifest_path,output):
     import jax.numpy as j
     import jax.nn as nn
     # Check each of six models, not only the ensemble.
-    h=nn.relu(j.einsum('ni,asij->asnj',j.asarray(features),j.asarray(params['w0']))+j.asarray(params['b0'])[:,:,None,:])
-    h=nn.relu(j.einsum('asni,asij->asnj',h,j.asarray(params['w1']))+j.asarray(params['b1'])[:,:,None,:])
-    actual=np.asarray(nn.sigmoid((j.einsum('asni,asij->asnj',h,j.asarray(params['w2']))+j.asarray(params['b2'])[:,:,None,:])[...,0]))
+    h=nn.relu(j.einsum('ni,asij->asnj',j.asarray(features),j.asarray(params['w0']),precision='highest')+j.asarray(params['b0'])[:,:,None,:])
+    h=nn.relu(j.einsum('asni,asij->asnj',h,j.asarray(params['w1']),precision='highest')+j.asarray(params['b1'])[:,:,None,:])
+    actual=np.asarray(nn.sigmoid((j.einsum('asni,asij->asnj',h,j.asarray(params['w2']),precision='highest')+j.asarray(params['b2'])[:,:,None,:])[...,0]))
     errors={}
     for (arm,seed),model in models.items():
         expected=frozen.predict(model,features);error=float(np.max(np.abs(expected-actual[arm,seed])))
         errors[f'{arm}/seed{seed}']=error
-        if not np.isfinite(error) or error>2e-6:raise ValueError('Torch/JAX frozen predictor mismatch')
+        if not np.isfinite(error) or error>2e-6:raise ValueError(f'Torch/JAX frozen predictor mismatch: arm={arm} seed={seed} maximum_absolute_probability_error={error:.9g}, tolerance=2e-6, matmul_precision=highest')
     output.mkdir(parents=True);np.savez(output/'parameters.npz',**params)
     shutil.copyfile(manifest_path,output/'original_candidate_manifest.json')
     shutil.copyfile(Path(manifest_path).parent/'selection_manifest.json',output/'ranking_source_manifest.json')
@@ -153,7 +153,7 @@ def export_predictors(manifest_path,output):
     shutil.copyfile(Path(manifest_path).parent/'source/tolerance_predictor_pilot.py',output/'frozen_predictor_source.py')
     for row in manifest['candidate_models']:shutil.copyfile(row['file'],output/f"{row['arm']}_seed{row['seed']}.pt")
     np.savez(output/'numerical_inputs.npz',features=features,jax_probabilities=actual)
-    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,maximum_probability_errors=errors,arm_order=['bce','bce_rank'],hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
+    report=dict(candidate_manifest_sha256=sha(manifest_path),ranking_source_manifest_sha256=manifest['ranking_source_manifest_sha256'],frozen_predictor_source_sha256=source['implementation_sha256'],coordination_source_sha256=sha(__file__),training_inputs_sha256=data['inputs'],real_training_rows=len(data['full']),deterministic_random_rows=128,absolute_tolerance=2e-6,matmul_precision='highest',maximum_probability_errors=errors,arm_order=['bce','bce_rank'],hypothesis_order=[dict(preparation_s=p,force_N=f) for p,f in ((.2,-64),(.2,64),(.6,-64),(.6,64))],new_optimizer_updates=0,new_physics_steps=0)
     report['files_sha256']={p.name:sha(p) for p in output.iterdir() if p.is_file()}
     (output/'receipt.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     return report
