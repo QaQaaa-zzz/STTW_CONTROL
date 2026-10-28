@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh"><meta charset="utf-8"><title>STTW current research draft</title><style>@page{size:A4;margin:16mm}body{font-family:"Noto Sans CJK SC",sans-serif;font-size:10pt;line-height:1.65;color:#243548;max-width:1100px;margin:24px auto}h1{font-size:19pt}h2{font-size:14pt;margin-top:1.4em}h3{font-size:11pt}h1,h2,h3{break-after:avoid}img{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:9pt}th,td{border-bottom:1px solid #ccd5de;padding:5px;vertical-align:top}tr{break-inside:avoid}blockquote{border-left:3px solid #647180;padding:5px 12px;background:#f2f5f7}pre{white-space:pre-wrap;background:#f2f5f7;padding:10px}a{color:#245b80}p{orphans:3;widows:3}@media print{body{margin:0;max-width:none}}</style><body><h1>冻结底层单轨机器人的偏好条件参考控制与闭环抗扰表现</h1>
 <p><strong>Preference Conditioned Reference Control and Closed Loop Disturbance Response of a Single Track Robot with a Frozen Lower Controller</strong></p>
 <blockquote>
-<p>内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。当前性能证据见E087–E208，开发机制试验与前瞻冻结确认分开报告。历史试验与反例保留于<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>及各节源报告。</p>
+<p>内部研究主稿，证据截止2026-10-28，目标期刊为IEEE Transactions on Control Systems Technology（TCST），非投稿就绪。人类作者核验及最终独立验证尚未完成。当前性能证据见E087–E221，开发机制试验与前瞻冻结确认分开报告。历史试验与反例保留于<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>及各节源报告。</p>
 </blockquote>
 <h2>摘要</h2>
 <p>本文研究冻结底层单轨机器人如何在有限参考权限内暂时偏离用户偏好、完成原任务并恢复偏好执行。当前原型冻结ECBC、ESO、local300及偏好条件H75网络，以41维输入、16→16 ReLU容扰MLP评价三个执行α候选，由非学习协调器结合任务代理、风险门和原参考滤波作选择；原世界目标不变，必要时共同执行一次因果Dubins重规划。当前仅验证回合内固定的用户α∈{0,0.5,1}，不宣称连续任意偏好能力。完整状态接续试验提供了准备时间改变真实触地结局的局部证据；在72个相关开发回合中，只改退化规则恢复原方案丢失的9个目标到达并保留其余63个。冻结候选的200回合前瞻确认中，三个用户下候选与guard均18/20到达、无触地；固定用户1为9/20到达且2例触地，速度支持则19/20到达且无触地。候选用户1的共同窗口任务费用比guard低约1.1%，但用户0/0.5的开发费用优势未复现，最终用户执行18/18/20也未超过guard。该结果支持有边界的偏好协调用途，不证明容扰MLP必要性、全面优越性或安全保证，尚无实车证据。[E099–E101,E173–E174,E191–E208]</p>
@@ -993,6 +993,75 @@ C(pi, r; xi, sigma) = { F &gt;= 0 : 完整闭环在[0,H]内无非轮触地 }
 <p>用户1候选相对guard的同用户费用均值低约1.1%，是可保留的小幅局部效用信号；用户0/0.5却高于guard，第4.25节对应开发优势未在本确认组复现。只统计原速度、路径、primary三个运行分量，不含其他奖励与全局终止替换；用户1两条fixed提前触地时，共同窗口在实际终点截止。即使统一观察窗口，fixed1较低费用也不能替代其9/20到达与2例触地，不能据此称其整体最优。跨用户及不同方法集合的共同窗口数值不直接排名。[E206–E208]</p>
 <p>相同目标/触地结局不等于控制行为相同。候选与guard在用户0/0.5/1分别有17/20、18/20、17/20条件的执行α时序不同，全部20回合共同200秒中的差异时长分别为12.00、10.74、5.64秒；分叉后闭环状态不同，不能把这项行为对照解释为同状态风险评分或某个输入特征的因果增量。[E205]</p>
 <p>本轮在冻结后保留了用户1的有限效用收益，也明确了用户0/0.5费用与终末偏好的不足，以及speedcap和guard的强对照表现。它不支持容扰MLP必不可少或候选全面优于简单方案；该小幅效用信号保留为后续可复现性检验的对象，其意义须与条件覆盖和反例一起判断。未依据本确认数据新增训练、重选seed/checkpoint或降低风险阈值；是否正式采用及后续机制研究仍须按明确范围决定，不把本轮确认转成事后参数搜索。[E200–E208]</p>
+<h2>4.27 速度＋查询匹配输入消融：后段保守性的有限证据</h2>
+<p>为检查附加状态特征的作用，本次仅改变风险MLP输入：在41维向量中保留零基索引4及34–40，即速度和七个候选/假设扰动查询字段，其余33项置零。沿用第4.23节prior的同一封存192条训练、192条开发数据、组权重、41→16→16网络容量、三seed逐值相同初始化及优化设置，各seed固定1000步取last；全特征prior直接复用冻结权重，未重新拟合。新消融实际完成3000次优化更新，fit记录总用时4.204秒，0新物理/PPO更新；数据仍全为已看工程DEV，不称独立TEST。[E173–E174,E209–E211,E213,E217]</p>
+<table>
+<thead>
+<tr>
+<th>开发分组；三seed概率均值</th>
+<th style="text-align: right;">全特征prior Brier / logloss</th>
+<th style="text-align: right;">速度＋查询mask Brier / logloss</th>
+<th>门诊断：全特征 / mask</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>早期72条，含8条触地</td>
+<td style="text-align: right;">0.098247 / 0.421885</td>
+<td style="text-align: right;">0.103460 / 0.326699</td>
+<td>0.8门触地误放：0/8 / 0/8</td>
+</tr>
+<tr>
+<td>旧后段24条，全正</td>
+<td style="text-align: right;">4.49015×10⁻⁹ / 0.000027</td>
+<td style="text-align: right;">0.015950 / 0.072417</td>
+<td>0.85门用户误拒：0/8 / 1/8</td>
+</tr>
+<tr>
+<td>用户后段96条，全正</td>
+<td style="text-align: right;">1.71657×10⁻⁵ / 0.001669</td>
+<td style="text-align: right;">0.052178 / 0.193879</td>
+<td>0.85门用户误拒：0/32 / 5/32</td>
+</tr>
+</tbody>
+</table>
+<p>全特征的早期Brier略低，mask的早期logloss反而更低，两者在早期仅2个结局差异组、4个正负候选对中均正确排序4/4，不能据此宣称全特征在早期风险识别全面更好。用户后段按四假设取最小值后，全特征拒绝0/8来源，mask拒绝4/8来源；32条用户查询不是32个独立状态。两个后段分组均无负标签，无法据其概率误差或误拒评价失败辨别能力与结局差异排序。[E212]</p>
+<p>逐seed也保留反例：早期0.8门触地误放，全特征为2/8、2/8、0/8，mask为1/8、0/8、0/8；用户后段0.85门误拒，全特征各0/32，mask分别6/32、7/32、5/32。ensemble的0/8不意味着每个seed均通过。mask训练loss均下降，但三个seed的用户后段开发Brier从第200步到固定第1000步分别由0.02745升至0.05187、0.02443升至0.05272、0.03556升至0.06093；这不支持收敛，也不推断追加训练就能修复。未据开发曲线改选checkpoint、seed或阈值。[E212,E214–E216]</p>
+<p>这项同容量消融为“本文全特征输入可减少这些后段条件的保守拒绝”提供有限证据，不能推广为q整体优越性、在线收益或必要性。这里的全特征是声明的41维表示，并非完整闭环carry；mask也不是纯速度预测器：H75候选偏移间接包含其完整观测信息，体坐标假设力还携带航向。结果只绑定本次固定训练配方和DEV条件，不自动追加拟合或替换在线模型。[E209–E212,E217]</p>
+<p><a href="/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_speed_query_ablation_v1/README.md">逐seed训练/开发曲线及全部分层指标</a>保留全特征与mask两种指标方向、各seed和非单调开发记录；出图仅使用已保存日志，没有新增训练或物理。</p>
+<h2>4.28 冻结历史144分支回顾评分：保留真实失败但不称独立holdout</h2>
+<p>将第4.27节两种固定last1000三seed模型一次性用于已保存的144条历史早期分支，保留30条真实触地、114条不触地及原有限观察窗。评分复用八个来源组，0新物理、0优化更新，用时约3.68秒，未改阈值、选seed或重拟合。banks2/5的后段祖先曾进入训练/开发，其早期历史结果也已看过，因此这是相关来源的回顾迁移评分，不是独立holdout或144个独立训练重复。[E218–E221]</p>
+<table>
+<thead>
+<tr>
+<th>冻结ensemble</th>
+<th style="text-align: right;">Brier</th>
+<th style="text-align: right;">logloss</th>
+<th style="text-align: right;">触地误放 .8 / .85（各30条）</th>
+<th style="text-align: right;">不触地误拒 .8 / .85（各114条）</th>
+<th style="text-align: right;">差异候选排序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全特征prior</td>
+<td style="text-align: right;">0.011151</td>
+<td style="text-align: right;">0.042313</td>
+<td style="text-align: right;">0/30；0/30</td>
+<td style="text-align: right;">3/114；4/114</td>
+<td style="text-align: right;">12/12</td>
+</tr>
+<tr>
+<td>速度＋查询mask</td>
+<td style="text-align: right;">0.034099</td>
+<td style="text-align: right;">0.122787</td>
+<td style="text-align: right;">2/30；2/30</td>
+<td style="text-align: right;">9/114；10/114</td>
+<td style="text-align: right;">12/12</td>
+</tr>
+</tbody>
+</table>
+<p>在这组有真实负例的分支上，全特征模型的概率误差和两门误判均较少，而两ensemble的12/12排序无法区分其门误差。三个全特征seed均0/30触地误放，三个mask seed均2/30；全特征seed0排序仅11/12，其余全特征seed及mask各seed为12/12，不能把ensemble完全排序扩展成所有seed都完全正确。mask两条误放位于bank5右转的fixed1/hybrid两个来源组；逐bank、八来源及各seed的完整分母和反例见<a href="/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_prior_speed_retrospective144_v1/README.md">回顾报告</a>。这补充了附加状态输入的局部作用证据，仍不等于全分布优越、在线因果收益或MLP必要性；速度＋查询保留H75间接状态信息的限制不变。[E219–E221]</p>
 <h2>5 旧解析式的物理含义与适用限制</h2>
 <p>早期固定速度局部模型采用不稳定模态坐标和折算脉冲：</p>
 <pre><code class="language-text">λ = sqrt(a4),     b = a1 + a2/λ
@@ -1005,12 +1074,12 @@ E_min(F) = (z + Kτ F)² / W
 <p>一个额外的代数检查限制了“低速不可恢复”的解释。对原固定速度三状态模型，能控矩阵行列式D=a4·a1²−a2²；当前系数在约1.206865米/秒处D=0，但失去控制的是稳定极点−sqrt(a4)，不稳定方向b_plus仍约−3.65743/s。因此不能从该根断言物理不可稳定，也不能以既有gain hold分支直接解释此前实际触地。该检查没有ESO/local300/执行器积分，不修改任何底层；一般的稳定模态不可控现象已有自行车研究先例[15]。完整推导、适用边界与图见<a href="../../runs/ecbc_modal_authority_math_v1/REPORT.md">数学核查</a>。[E080–E081]</p>
 <h2>6 讨论与尚缺证据</h2>
 <p>当前证据支持两个层次的有限结论：完整状态接续的准备时间试验显示参考执行时序可以改变特定扰动下的真实触地结局；开发配对闭环比较则显示，冻结同一prior评价器后，只改退化选择即可恢复9个丢失目标并保留63个到达。该开发组所有方法均无触地；冻结200回合确认中，候选和guard仍共享相同目标/触地结局，用户1费用仅有局部差异。不能把开发任务收益或较低局部费用直接换算为通用防摔能力或可承受牛顿阈值。[E099–E101,E191–E196,E202–E208]</p>
-<p>原型已实现，但评价器必要性仍未证明。guard与固定偏好在若干指标上更强，覆盖训练曾降低早期失败识别能力；开发组用户1费用高于prior和guard，冻结确认用户0/0.5费用也高于guard，用户1则有约1.1%的局部降低。这些差异限制了“学习评分越高，整体任务越好”的解释。任务可行退化是可保留的协调机制候选，不是小型MLP相对所有普通控制不可替代的证据。应分别检验用户效用、目标首达、真实触地及偏好恢复，不能把任何一项替代其余指标。[E169–E175,E184,E193–E208]</p>
+<p>原型已实现，但评价器必要性仍未证明。guard与固定偏好在若干指标上更强，覆盖训练曾降低早期失败识别能力；开发组用户1费用高于prior和guard，冻结确认用户0/0.5费用也高于guard，用户1则有约1.1%的局部降低。这些差异限制了“学习评分越高，整体任务越好”的解释。任务可行退化是可保留的协调机制候选，不是小型MLP相对所有普通控制不可替代的证据。同容量速度＋查询消融支持附加状态输入对后段保守拒绝的局部作用，但早期DEV logloss方向相反，历史144回顾评分也不是独立holdout，且尚无对应在线消融，不改变这一必要性边界（第4.27–4.28节）。应分别检验用户效用、目标首达、真实触地及偏好恢复，不能把任何一项替代其余指标。[E169–E175,E184,E193–E212,E218–E221]</p>
 <p>最终执行用户α与通过自身q/task/permission恢复门也须分开。后者是模型依赖的工程诊断，不是独立安全真值；不以q决策的guard/fixed不应被事后q计数降级。原路径、首达前共同窗口和新执行路径各回答不同问题，不能事后互换使排序有利。相关工程DEV与冻结200回合确认须分开：后者的bank未用于本预测器拟合，但来源仍相关，不能称全研究从未接触。三优化seed和同源条件分支也不是独立物理祖先，尚未验证连续任意用户偏好或实机部署。[E193–E208]</p>
 <p>冻结200回合确认及完整分析现已完成，其结果同时支持有限用途与明确局限。后续判断应保留这组冻结证据和强对照，而不是无上限调阈值、加训或搜索施扰来证明q优势。任务和系统研究可以形成贡献，但仍需界定与相邻工作的区别及适用范围；人类作者核验、实机证据、作者/资助/审批事实均不能由AI审查或仿真补写。[E200–E208]</p>
 <h2>7 证据可追溯性与完整记录</h2>
-<p>主文全部E编号对应<a href="evidence_manifest.json">evidence_manifest.json</a>的原始路径与SHA；旧试验的目的、配置、费用和反例在<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>保留；本次新增试验直接引用E087–E208及第4.6–4.26节的源报告，冻结确认的计划、实际费用、全部结局与反例分别绑定原始证据，未假称旧明细已包含新结果。该明细是历史证据索引，唯一当前研究事实与下一步仍在共享研究台账。本文各数值为AI产物核验，人类作者核验未记录；没有把AI反审当人工同行评审。</p>
-<p>本次文稿更新与导出自身不新增仿真、优化或统计检验；第4.6–4.26节既有训练/评测按各自原合同计费；本次文档同步不改变活动实验状态，具体运行状态以唯一台账为准；不能把文档操作的零成本当研究总成本。没有重算封存52/434、重标负例或更换默认模型。旧2026-09-12直接电机残差稿和本次精简前26页稿分别SHA归档，不与当前任务混计。草稿保留非投稿就绪标记。</p>
+<p>主文全部E编号对应<a href="evidence_manifest.json">evidence_manifest.json</a>的原始路径与SHA；旧试验的目的、配置、费用和反例在<a href="EVIDENCE_DETAILS.md">EVIDENCE_DETAILS.md</a>保留；本次新增试验直接引用E087–E221及第4.6–4.28节的源报告，冻结确认的计划、实际费用、全部结局与反例分别绑定原始证据，未假称旧明细已包含新结果。该明细是历史证据索引，唯一当前研究事实与下一步仍在共享研究台账。本文各数值为AI产物核验，人类作者核验未记录；没有把AI反审当人工同行评审。</p>
+<p>本次文稿更新与导出自身不新增仿真、优化或统计检验；第4.6–4.28节既有训练/评测按各自原合同计费；本次文档同步不改变活动实验状态，具体运行状态以唯一台账为准；不能把文档操作的零成本当研究总成本。没有重算封存52/434、重标负例或更换默认模型。旧2026-09-12直接电机残差稿和本次精简前26页稿分别SHA归档，不与当前任务混计。草稿保留非投稿就绪标记。</p>
 <h2>参考与流程软件</h2>
 <p>[1] Preference-Conditioned Multi-Objective RL for Integrated Command Tracking and Force Compliance in Humanoid Locomotion. <a href="https://arxiv.org/abs/2510.10851">arXiv:2510.10851</a>。原文方法与瞬时扰动评价段落已作AI核对，人类作者核验未记录；未借其硬件结果为本项目背书。</p>
 <p>[2] Bencatel, R., Girard, A., and Kolmanovsky, I. Reference Governor Strategies for Vehicle Rollover Avoidance. <a href="https://arxiv.org/abs/1608.02266">arXiv:1608.02266</a>。相邻汽车防侧翻任务不等于本项目单轨闭环。</p>

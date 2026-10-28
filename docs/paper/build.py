@@ -288,7 +288,20 @@ def evidence_manifest():
         'E205':archive/'h75_frozen_confirmation200_v1/root_guard_behavior_comparison.json',
         'E206':archive/'h75_frozen_confirmation200_v1/root_common_cost_summary.json',
         'E207':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/receipt.json',
-        'E208':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/results.json'}
+        'E208':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/results.json',
+        'E209':archive/'h75_tolerance_speed_query_ablation_v1/training/resolved_config.json',
+        'E210':archive/'h75_tolerance_speed_query_ablation_v1/prepared/receipt.json',
+        'E211':archive/'h75_tolerance_speed_query_ablation_v1/training/selection_manifest.json',
+        'E212':archive/'h75_tolerance_speed_query_ablation_v1/training/development_temporal_metrics.json',
+        'E213':archive/'h75_tolerance_speed_query_ablation_v1/training/status.json',
+        'E214':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed0/history.json',
+        'E215':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed1/history.json',
+        'E216':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed2/history.json',
+        'E217':archive/'h75_tolerance_speed_query_ablation_v1/summary.json',
+        'E218':archive/'h75_prior_speed_retrospective144_v1/identity_receipt.json',
+        'E219':archive/'h75_prior_speed_retrospective144_v1/metrics.json',
+        'E220':archive/'h75_prior_speed_retrospective144_v1/pair_ranking.json',
+        'E221':archive/'h75_prior_speed_retrospective144_v1/predictions.json'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
