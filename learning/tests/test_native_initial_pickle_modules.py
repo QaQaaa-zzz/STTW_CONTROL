@@ -31,3 +31,11 @@ def test_frozen_sidecar_unpickles_after_alias_registration(tmp_path):
         with pytest.raises(ValueError,match='identity mismatch'):
             helper().load_frozen_pickle_module(tmp_path,plan,source.name,alias)
     finally:sys.modules.pop(alias,None)
+
+
+@pytest.mark.parametrize('mode,count,arms',[('h75_online_confirmation100',100,5),('tolerance_online120',120,6),('tolerance_online40',40,2)])
+def test_initial_confirmation_layout_is_defined_for_each_panel(mode,count,arms):
+    audit=helper();plan=dict(mode=mode,protocol=dict(expected_cases=count,arms=list(range(arms))))
+    assert audit.confirmation_initial_layout(plan)==(count,arms)
+    plan['protocol']['expected_cases']+=1
+    with pytest.raises(ValueError):audit.confirmation_initial_layout(plan)

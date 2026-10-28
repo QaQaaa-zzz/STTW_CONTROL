@@ -27,7 +27,7 @@ def audit(root,output):
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
     late=p.get('mode')=='h75_late_state_tolerance48'
-    tolerance=p.get('mode')=='tolerance_online120'
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40')
     if late:
         original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
         load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
@@ -39,7 +39,7 @@ def audit(root,output):
         spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
         adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
     import jax
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40')
     if online or p.get('mode')=='h75_samestate_bank144':
         schedule_source=Path(__file__).resolve().parents[1]/'src/sttw_control/geometric_preference_schedule.py'
         schedule_spec=importlib.util.spec_from_file_location('_sttw_online_scalar',schedule_source)
@@ -65,7 +65,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120'):
+    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -211,14 +211,20 @@ def audit(root,output):
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 
+def confirmation_initial_layout(plan):
+    expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2)}
+    if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
+    count,arms=expected[plan['mode']]
+    if plan['protocol']['expected_cases']!=count or len(plan['protocol']['arms'])!=arms:
+        raise ValueError('initial panel dimensions differ from declared mode')
+    return count,arms
+
+
 def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
     import numpy as np
     cases=json.loads((root/'inventory.json').read_text());state=carry.state
-    late=p.get('mode')=='h75_late_state_tolerance48'
-    tolerance=p.get('mode')=='tolerance_online120'
-    if late:
-        original=Path(p['samestate_source']['source']);original_plan=json.loads((original/'plan.json').read_text())
-        load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination');count=120 if tolerance else 100;arms=6 if tolerance else 5
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40')
+    count,arms=confirmation_initial_layout(p)
     if len(cases)!=count:raise ValueError('complete declared initial cases required')
     np.testing.assert_array_equal(state.tick,np.zeros(count));np.testing.assert_array_equal(state.alpha,np.ones(count))
     np.testing.assert_array_equal(state.filtered,np.zeros((count,2)));np.testing.assert_array_equal(state.offsets,np.zeros((count,2)))
