@@ -31,7 +31,12 @@ def numpy_actor(parameters, observation, *, modulated=False, squash=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--mode', choices=['legacy','coordinator-replay'], default='legacy')
+    parser.add_argument('--source', type=Path)
     args = parser.parse_args()
+    if args.mode == 'coordinator-replay':
+        if args.source is None:parser.error('--source required for coordinator-replay')
+        return coordinator_replay(args.source, Path(args.output))
     root = Path(args.output).resolve()
     root.mkdir(parents=True, exist_ok=False)
     import jax
@@ -173,6 +178,111 @@ std::cout<<id<<" "<<profile<<" "<<std::setprecision(17)<<y.steer<<" "<<y.rear<<"
         max_real_default_delta=np.max(np.abs([x['default_profile_delta'] for x in inputs[:16]]),axis=0).tolist(),
         scope=contract['scope']))
     print(root, '16real inputs+6synthetic commands; NumPy/JAX and C++/Python parity;0physics')
+
+
+BOUNDARIES=((0,200),(5,1200),(68,1400),(3,800),(3,1000))
+
+
+def boundary_files(source,case_index,tick,decisions):
+    """Saved carry is pre-host-bind; block paths are those used in that block."""
+    if (case_index,tick) not in BOUNDARIES:raise ValueError('undeclared replay boundary')
+    directory=Path(source)/'evaluation';previous=tick//200-1
+    return dict(carry=directory/f'complete_carry_{previous:02d}.pkl',
+        paths=directory/f'executed_paths_{previous:02d}.pkl',
+        rebind=any(d['case_index']==case_index and d['task_tick']==tick for d in decisions),
+        replan=directory/f'replanned_path_{case_index:02d}.npz')
+
+
+def coordinator_replay(source,output):
+    """Five saved-state next-control previews; never dispatch physics stepping."""
+    import importlib.util
+    import sys
+    source=Path(source).resolve();output=Path(output).resolve()
+    if output.exists():raise FileExistsError(output)
+    plan=json.loads((source/'plan.json').read_text())
+    if plan.get('mode')!='guard_fallback_evaluation' or plan['protocol'].get('stage')!='extension':raise ValueError('adopted extension72 source required')
+    def module(name,path):
+        spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
+    runner=module('_coordinator_replay_runner',source/'source/native_goal_run.py')
+    runtime=runner.load(source)
+    import jax
+    import jax.numpy as j
+    from sttw_control.path_command_policy import make_path_actor,correction_tick
+    from sttw_control.closed_loop_kernel import controls,preview_controls
+    from sttw_control.geometric_path import Path as NativePath
+    env=runtime['env'];cfg=runtime['config'];coord=sys.modules['_sttw_tolerance_coordination'];adapter=sys.modules['_sttw_goal_continuation']
+    # An accidental future integration call is an audit error, never a replay.
+    def forbidden(*args,**kwargs):raise AssertionError('physics integration forbidden in saved-state replay')
+    env.physics._step=forbidden
+    actor=make_path_actor(cfg)
+    with Path(plan['models']['H75']['actor']).open('rb') as f:upper=pickle.load(f)
+    q=coord.load_export(source/'q')
+    decisions=json.loads((source/'evaluation/replanning_decisions.json').read_text())
+    index=json.loads((source/'evaluation/case_index.json').read_text())
+    output.mkdir(parents=True);records=[];arrays={};identity={}
+    def sha(path):
+        import hashlib
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    for ci,tick in BOUNDARIES:
+        files=boundary_files(source,ci,tick,decisions)
+        for name in ('carry','paths'):identity[str(files[name])]=sha(files[name])
+        with files['carry'].open('rb') as f:batch=pickle.load(f)
+        with files['paths'].open('rb') as f:paths=pickle.load(f)
+        carry=jax.tree.map(lambda x:j.asarray(x[ci]),batch);path=jax.tree.map(lambda x:j.asarray(x[ci]),paths)
+        if int(carry.state.tick)!=tick:raise ValueError('saved boundary tick differs')
+        v=float(index[ci]['speed'])
+        if files['rebind']:
+            with np.load(files['replan']) as z:path=NativePath(*(j.asarray(z[k]) for k in ('s','xy','heading','curvature','turn_end','goal')))
+            carry=coord.OnlineCarry(env.rebind_geometry(carry.native,path,v),carry.latched,carry.prev_alpha)
+            identity[str(files['replan'])]=sha(files['replan'])
+        state=carry.state
+        obs,_,fault=env.observation(state,path,v,10.)
+        latents=jax.vmap(lambda a:actor.apply(upper,obs.at[336].set(a)))(j.array([0.,.5,1.]))
+        portable=np.stack([numpy_actor(upper,np.asarray(obs.at[336].set(a)),modulated=True) for a in (0.,.5,1.)])
+        np.testing.assert_allclose(portable,latents,atol=5e-6,rtol=3e-5)
+        measurement,pose,speed=env.physics.observe(state.physical.data)
+        permission=adapter.target_permission(carry.native)&~fault
+        cd=coord.coordinate(q,obs,latents,pose[2],state.physical.raw,v,state.projection.progress,path.s,path.curvature,permission,carry.latched,carry.prev_alpha,cfg['residual_interface'],arm=0,user_alpha=state.alpha,task_aware_fallback=True,guard_fallback=True)
+        selected=int(j.argmin(j.abs(j.array([0.,.5,1.])-cd['alpha'])))
+        # Native policy publication supplies zero latent on withheld permission.
+        z=j.where(permission,latents[selected],j.zeros(2))
+        filtered,offsets,governed,flags=correction_tick(state.filtered,state.offsets,z,state.physical.raw,cfg)
+        _,action,local_obs,lf=env.lower.prepare_local(state.lower,measurement,pose,speed,governed,state.physical,env.cc)
+        np.testing.assert_allclose(numpy_actor(env.lower.params,np.asarray(local_obs),squash=True),action,atol=5e-6,rtol=3e-5)
+        if not bool(lf['finite']):raise ValueError('preview lower input nonfinite')
+        preview=preview_controls(state.physical.controller,measurement,governed,governed,state.physical.physical_tick*env.cc.dt>3.,env.cc)
+        _,_,command=controls(state.physical.controller,state.physical.actuator,measurement,governed,governed,state.physical.physical_tick*env.cc.dt>3.,False,env.cc,env.ac,lower_action=action,previewed=preview)
+        if sha(index[ci]['raw_file'])!=index[ci]['raw_sha256']:raise ValueError('saved raw identity changed')
+        with np.load(index[ci]['raw_file']) as raw:
+            comparisons=dict(coord_latents=latents,coord_probabilities=cd['probabilities'],coord_qmin=cd['qmin'],coord_task_mask=cd['task_mask'],coord_proxy_cost=cd['proxy_cost'],alpha_exec=cd['alpha'],rule_latched=cd['latched'],coord_permission=permission,filtered_offset=filtered,offsets=offsets,governed=governed)
+            for key,value in comparisons.items():np.testing.assert_allclose(value,raw[key][tick],atol=2e-5,rtol=3e-5,err_msg=f'{ci}/{tick}/{key}')
+            np.testing.assert_allclose(obs.at[336].set(cd['alpha']),raw['query_observation'][tick],atol=2e-5,rtol=3e-5)
+        identity[index[ci]['raw_file']]=sha(index[ci]['raw_file'])
+        key=f'case{ci}_tick{tick}'
+        arrays.update({key+'_'+k:np.asarray(val) for k,val in dict(upper_observation=obs,latents=latents,lower_observation=local_obs,lower_action=action,governed=governed,final_command=command['final_command']).items()})
+        records.append(dict(case_index=ci,case_id=index[ci]['case_id'],task_tick=tick,rebound_before_preview=files['rebind'],permission=bool(permission),base=np.asarray(command['u_nom']).tolist(),action=np.asarray(action).tolist(),steer=float(measurement[2]),expected=np.asarray(command['final_command']).tolist(),raw_fields_compared=list(comparisons)+['query_observation']))
+    # Reuse the existing finite command driver; run only these five new previews.
+    old=Path.cwd()/'runs/deployment_contract_audit_v1'
+    shutil.copyfile(old/'compose_audit.cpp',output/'compose_audit.cpp')
+    header=Path.cwd()/'mujoco_ros_ws20260313/mujoco_ros/include/mujoco_ros/ECBC/residual_command.h'
+    shutil.copyfile(header,output/'residual_command.h')
+    subprocess.run(['g++','-std=c++17','-O2',str(output/'compose_audit.cpp'),'-o',str(output/'compose_audit')],check=True,capture_output=True)
+    lines=[' '.join(map(str,[i,1,*r['base'],*r['action'],r['steer'],env.cc.dt,env.ac.steer_limit,env.ac.steer_rate_limit,env.ac.rear_rate_limit,env.ac.steer_residual_scale,env.ac.rear_residual_scale,env.ac.strength])) for i,r in enumerate(records)]
+    (output/'command_inputs.txt').write_text('\n'.join(lines)+'\n')
+    result=subprocess.run([str(output/'compose_audit')],input='\n'.join(lines)+'\n',text=True,capture_output=True,check=True)
+    (output/'command_outputs.txt').write_text(result.stdout)
+    for line in result.stdout.splitlines():
+        values=line.split();i=int(values[0]);cpp=np.array(list(map(float,values[2:])))
+        np.testing.assert_allclose(cpp,records[i]['expected'],atol=1e-5,rtol=1e-6);records[i]['cpp_preview']=cpp.tolist()
+    np.savez_compressed(output/'boundary_previews.npz',**arrays)
+    helper=module('_coordinator_upper_replay',Path.cwd()/'learning/src/sttw_control/coordination_replay.py')
+    windows=helper.replay_upper_windows(source,output/'upper_windows',runtime=runtime)
+    for file in (source/'plan.json',source/'seal.json',source/'q/receipt.json',Path(__file__),header,old/'compose_audit.cpp'):
+        identity[str(file.resolve())]=sha(file)
+    receipt=dict(source=str(source),physical_steps=0,optimizer_updates=0,boundary_previews=records,source_identity=identity,upper_windows=windows,scope='Saved-state next-control previews and saved-input upper replay only; lower/final command NumPy-JAX-C++ parity has no original issued-command log comparator; no hardware or timing claim.')
+    (output/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    print(output,'5 boundary previews;0physics;0optimizer')
+    return receipt
 
 
 if __name__=='__main__':
