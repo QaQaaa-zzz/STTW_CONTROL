@@ -571,3 +571,23 @@ def test_new_confirmation_labels_require_dedicated_flag_and_exclude_old_banks(tm
     # No suffix files exist: missing opt-in must reject before any label-file open.
     with pytest.raises(ValueError,match='include-confirmation-labels'):
         m.analyze_bank144(tmp_path,{'protocol':p})
+
+
+def test_confirmation_uses_own_generated_paths_and_preserves_partial_audit(tmp_path):
+    root=tmp_path/'new_run';ancestor=tmp_path/'old_confirmation100'
+    own=root/'evaluation';old=ancestor/'evaluation';own.mkdir(parents=True);old.mkdir(parents=True)
+    name='bank2_S_left_90_R1p8_path.npz'
+    np.savez(own/name,xy=np.array([[1.,2.],[3.,4.]]))
+    new={'protocol':{'source_initialization':'prepared_bank_all_prefixes'},'samestate_source':{'source':str(ancestor)}}
+    directory=m.bank144_original_path_directory(root,new)
+    assert directory==own and not (old/name).exists()
+    with np.load(directory/name) as z:np.testing.assert_array_equal(z['xy'],[[1.,2.],[3.,4.]])
+    assert m.bank144_original_path_directory(root,dict(new,protocol={}))==old
+    out=root/'analysis_confirmation';target=m.bank144_analysis_audit_target(out)
+    assert target==out/'initial_carry_review.json'
+    target.write_text('preserved audit')
+    assert m.bank144_analysis_audit_target(out)==out/'initial_carry_review_recheck.json'
+    assert target.read_text()=='preserved audit'
+    (out/'results.json').write_text('[]')
+    with pytest.raises(ValueError,match='already contains'):
+        m.bank144_analysis_audit_target(out)

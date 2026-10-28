@@ -805,6 +805,20 @@ def enriched_bank_runtime_inventory(inventory,sources):
     return expected
 
 
+def bank144_original_path_directory(root,p):
+    """New banks own their generated paths; legacy banks inherit saved paths."""
+    if p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes':return root/'evaluation'
+    return Path(p['samestate_source']['source'])/'evaluation'
+
+
+def bank144_analysis_audit_target(out):
+    """Resume only the known pre-results failure, preserving its audit artifact."""
+    if not out.exists():
+        out.mkdir();return out/'initial_carry_review.json'
+    if {x.name for x in out.iterdir()}!={'initial_carry_review.json'}:raise ValueError('analysis output already contains derived results; use a fresh output')
+    return out/'initial_carry_review_recheck.json'
+
+
 def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_labels=False):
     fresh=p['protocol'].get('source_initialization')=='prepared_bank_all_prefixes'
     # Reject before opening suffix status/index/raw or generating any labels.
@@ -828,14 +842,15 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
         if any(row.get(k)!=v for k,v in expected.items()):raise ValueError('bank runtime index/source fingerprint mismatch')
     selected=select_bank_label_lanes(index,include_heldout_labels,include_confirmation_labels)
     # Nothing below opens unselected bank1 suffix traces or emits their labels.
-    out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
-    subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
-    initial=json.loads((out/'initial_carry_review.json').read_text());sources=json.loads((root/'sources/records.json').read_text());source_by_id={r['source_index']:r for r in sources}
-    source=Path(p['samestate_source']['source']);paths={};goals={};traces={};executed={};rebuilt={};rows=[];ticks=0
+    audit_target=bank144_analysis_audit_target(out);helper=Path(__file__).with_name('audit_native_goal_initial.py')
+    subprocess.run([sys.executable,'-B',str(helper),str(root),str(audit_target)],check=True)
+    if audit_target.name!='initial_carry_review.json' and audit_target.read_bytes()!=(out/'initial_carry_review.json').read_bytes():raise ValueError('rechecked initial audit differs from preserved audit')
+    initial=json.loads(audit_target.read_text());sources=json.loads((root/'sources/records.json').read_text());source_by_id={r['source_index']:r for r in sources}
+    original_paths=bank144_original_path_directory(root,p);paths={};goals={};traces={};executed={};rebuilt={};rows=[];ticks=0
     # Only selected bank paths/decisions are used for label-bearing diagnostics.
     for key in sorted({analysis_path_key(c) for _,c in selected}):
         with np.load(run/(key+'_path.npz')) as z:paths[key]=dict(z)
-        with np.load(source/'evaluation'/(key+'_path.npz')) as z:
+        with np.load(original_paths/(key+'_path.npz')) as z:
             for field in z.files:np.testing.assert_array_equal(paths[key][field],z[field])
         path=paths[key];goals[key]=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)])
     selected_ids={c['case_id'] for _,c in selected}
