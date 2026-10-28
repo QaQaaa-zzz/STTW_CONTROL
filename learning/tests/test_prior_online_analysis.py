@@ -100,3 +100,16 @@ def test_frozen_confirmation_inventory_and_initial_layout():
     assert audit.confirmation_initial_layout(dict(mode='frozen_confirmation200',protocol=p))==(200,10)
     rows[0]['method']='speedcap'
     with pytest.raises(ValueError,match='identity'):m.validate_frozen_confirmation_inventory(rows,p)
+
+
+def test_speedcap_publication_preserves_steering_and_independent_speed_audit():
+    import numpy as np
+    n=4;candidate=np.array([.2,.3]);composed=np.array([.1,.3])
+    raw=dict(active_tick=np.ones(n,bool),alpha_exec=np.ones(n),alpha_user=np.ones(n),reference_target_permitted=np.ones(n,bool),coord_candidate_alpha=np.tile([0.,.5,1.],(n,1)),channel_alpha_pair=np.ones((n,2)),query_observation=np.pad(np.ones((n,1)),((0,0),(336,14))),latent_z=np.tile(composed,(n,1)),composed_latent=np.tile(composed,(n,1)),rule_latched=np.zeros(n,bool),coord_latents=np.tile(candidate,(n,3,1)),coord_permission=np.ones(n,bool))
+    case=dict(mode='user1_speedcap',method='speedcap',alpha=1.)
+    assert m.is_speedcap_case(case)
+    m.audit_tolerance_publication(raw,case)
+    with pytest.raises(AssertionError):m.audit_tolerance_publication(raw,dict(mode='user1_fixed',method='fixed',alpha=1.))
+    raw['composed_latent'][:]=candidate;raw['latent_z'][:]=candidate
+    m.audit_tolerance_publication(raw,dict(mode='user1_fixed',method='fixed',alpha=1.))
+    assert m.is_speedcap_case(dict(mode='speedcap'))

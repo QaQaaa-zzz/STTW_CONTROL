@@ -1046,7 +1046,7 @@ USER_PREFERENCE_ARMS=('user0_last','user0_guard','user0_fixed','userhalf_last','
 
 
 def tolerance_comparison_arms(rows):
-    if any(r.get('mode')=='speedcap' for r in rows):return BROADEN_TOLERANCE_ARMS
+    if any(is_speedcap_case(r) for r in rows):return BROADEN_TOLERANCE_ARMS
     return TEMPORAL_TOLERANCE_ARMS+TOLERANCE_ARMS if any(r.get('mode') in TEMPORAL_TOLERANCE_ARMS for r in rows) else TOLERANCE_ARMS
 
 
@@ -1071,6 +1071,10 @@ def load_tolerance_analysis_export(root,p):
     with np.load(directory/'parameters.npz') as z:return dict(z)
 
 
+def is_speedcap_case(case):
+    return case.get('method',case.get('mode'))=='speedcap'
+
+
 def audit_tolerance_publication(raw,case):
     n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);permission=np.asarray(raw['reference_target_permitted'][:n],bool)
     if case['mode'] not in TOLERANCE_ARMS+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS+FROZEN_CONFIRMATION_ARMS+('speedcap',) or not np.isin(alpha,[0.,.5,1.]).all():raise ValueError('undeclared tolerance alpha/arm')
@@ -1087,7 +1091,7 @@ def audit_tolerance_publication(raw,case):
             if not np.isfinite(x).all():raise ValueError('nonfinite coordinator log '+field)
             np.testing.assert_array_equal(x,np.broadcast_to(x[0],x.shape))
         selected=int(np.argmin(abs(np.array([0.,.5,1.])-alpha[start])))
-        if case['mode']!='speedcap':np.testing.assert_allclose(raw['composed_latent'][start],raw['coord_latents'][start,selected],atol=1e-6,rtol=0)
+        if not is_speedcap_case(case):np.testing.assert_allclose(raw['composed_latent'][start],raw['coord_latents'][start,selected],atol=1e-6,rtol=0)
         np.testing.assert_array_equal(raw['coord_permission'][start],permission[start])
     return dict(actual_permitted_ticks=int(permission.sum()),masked_ticks=int((~permission).sum()),state_alpha=case.get('alpha',1.),checked='Scalar selected H75 candidate, exact block hold and native publication mask')
 
@@ -1101,9 +1105,9 @@ def audit_speedcap(raw,case,interface):
     requested=np.minimum(original,cap);desired=requested-nom;scale=np.where(desired>=0,positive,negative);bounded=np.clip(desired/scale,-1.+1e-6,1.-1e-6);reachable=np.clip(nom+bounded*scale,lo,hi)
     for field,expected in [('cap_m_s',cap),('requested_target_m_s',requested),('reachable_target_m_s',reachable),('h75_target_m_s',original)]:
         np.testing.assert_allclose(raw['speedcap_'+field][:n],expected,atol=3e-5,rtol=3e-5)
-    permission=np.asarray(raw['reference_target_permitted'][:n],bool);active=(case.get('method',case['mode'])=='speedcap')&permission&(abs(reachable-original)>1e-6)
+    permission=np.asarray(raw['reference_target_permitted'][:n],bool);active=(is_speedcap_case(case))&permission&(abs(reachable-original)>1e-6)
     np.testing.assert_array_equal(raw['speedcap_active'][:n],active)
-    if case.get('method',case['mode'])=='speedcap':
+    if is_speedcap_case(case):
         np.testing.assert_allclose(raw['composed_latent'][:n,0],np.arctanh(bounded),atol=2e-3,rtol=3e-5)
         np.testing.assert_allclose(raw['composed_latent'][:n,1],z[:,1],atol=1e-6,rtol=0)
     return dict(active_ticks=int(active.sum()),observed_ticks=n,permitted_ticks=int(permission.sum()),actual_activity_fraction=float(active.mean()),active_duration_s=float(active.sum()*.005),maximum_target_reduction_m_s=float(np.max(original-reachable)),filtered_reference='native governed log, correction chain audited; never directly overwritten')
@@ -1657,7 +1661,7 @@ def render_tolerance_steps_and_decisions(out,label,selected,raws,rebuilt,checkpo
     axes[-1].set_xlabel('Actual lower-control transition step (dt=.005s)')
     fig.suptitle(label+' / '+checkpoint+' / effective user='+str(selected[0].get('effective_user_alpha',1.))+'; gray=intended disturbance, dotted=replan; actual failure endpoints retained')
     fig.savefig(out/f'steps_and_coordination_{label}.png',dpi=125);plt.close(fig)
-    capped=[r for r in selected if r.get('method',r['mode'])=='speedcap']
+    capped=[r for r in selected if is_speedcap_case(r)]
     if capped:
         row=capped[0];raw=raws[row['case_id']];n=row['active_lower_ticks'];steps=np.arange(1,n+1)
         fig,axes=plt.subplots(3,1,figsize=(12,8),sharex=True,layout='constrained')
