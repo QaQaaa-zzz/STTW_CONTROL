@@ -301,7 +301,14 @@ def evidence_manifest():
         'E218':archive/'h75_prior_speed_retrospective144_v1/identity_receipt.json',
         'E219':archive/'h75_prior_speed_retrospective144_v1/metrics.json',
         'E220':archive/'h75_prior_speed_retrospective144_v1/pair_ranking.json',
-        'E221':archive/'h75_prior_speed_retrospective144_v1/predictions.json'}
+        'E221':archive/'h75_prior_speed_retrospective144_v1/predictions.json',
+        'E222':archive/'h75_speed_query_online60_v1/plan.json',
+        'E223':archive/'h75_speed_query_online60_v1/status.json',
+        'E224':archive/'h75_speed_query_online60_v1/analysis/receipt.json',
+        'E225':archive/'h75_speed_query_online60_v1/root_pair_summary.json',
+        'E226':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/full_mask_paired_costs.json',
+        'E227':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/receipt.json',
+        'E228':archive/'h75_speed_query_online60_v1/alpha_time_comparison/INDEX.md'}
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
