@@ -44,6 +44,106 @@ def inventory():
                 ('left','right'),(0.,1.),enumerate(('H75','current','zero','equilibrium')),events)]
 
 
+
+def response_protocol():
+    return json.loads((Path(__file__).resolve().parents[2]/'configs/h75_channel_response.json').read_text())
+
+
+def response_inventory(protocol=None):
+    p=response_protocol() if protocol is None else protocol
+    validate_response_protocol(p)
+    events=[dict(event='zero',onset_s=p['zero_onset_s'],force_N=0.)]
+    events += [dict(event=f't{t:g}_F{f:+g}',onset_s=t,force_N=f)
+               for t,f in itertools.product(p['onsets_s'],p['forces_N'])]
+    rows=[]
+    for route,(sa,ta),event in itertools.product(p['routes'],p['mappings'],events):
+        mode='H75' if sa==ta else 'hybrid';alpha=sa if sa==ta else 1.
+        rows.append(dict(case_id=f'{route["route"]}/a{alpha:g}_{mode}/{event["event"]}',
+            **route,alpha=alpha,mode=mode,mode_index=0,speed_alpha=sa,steer_alpha=ta,
+            duration_s=p['duration_s'],**event))
+    if len(rows)!=p['expected_cases']:raise ValueError('response inventory size mismatch')
+    return rows
+
+
+def validate_response_protocol(p):
+    # Bounded authorized contract; descriptive metadata may be enriched freely.
+    required=dict(horizon_s=10.,expected_cases=54,maximum_lower_ticks=108000,optimizer_updates=0,
+        force_frame='worldY',initial_bank=3,duration_s=.1,goal_radius_m=1.,replanning_radius_m=1.8,
+        departure_m=1.,maximum_replans=1,replan_cadence_s=1.)
+    for key,value in required.items():
+        if p.get(key)!=value:raise ValueError('response contract mismatch '+key)
+    if (p.get('forces_N')!=[-64.,-32.,32.,64.] or p.get('onsets_s')!=[1.6,4.] or
+        p.get('mappings')!=[[.5,.5],[1.,1.],[1.,.5]] or p.get('zero_onset_s')!=1.6 or
+        {(r['route'],r['speed']) for r in p.get('routes',[])}!={('S_left_90_R1p8',2.8),('S_right_90_R1p8',2.8)}):
+        raise ValueError('response route/mapping/event contract mismatch')
+
+
+
+def force_pulses(cases,physical_start):
+    """Archived teleop pulse is a world vector, never rotated with route/body."""
+    return [[physical_start+c['onset_s'],physical_start+c['onset_s']+c['duration_s'],
+             0.,c['force_N'],0.] for c in cases]
+
+def channel_queries(obs,apply,speed_alpha,steer_alpha):
+    """Same observation except native alpha336; one composed publication."""
+    import jax.numpy as j
+    half=apply(obs.at[336].set(.5));full=apply(obs.at[336].set(1.))
+    return j.stack([j.where(speed_alpha==.5,half[0],full[0]),
+                    j.where(steer_alpha==.5,half[1],full[1])]),half,full
+
+
+def prepare_response(source,root,protocol):
+    source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
+    old=json.loads((source/'plan.json').read_text())
+    def authenticate(directory,plan,expected_cases):
+        if digest(directory/'plan.json')!=json.loads((directory/'seal.json').read_text())['plan_sha256']:
+            raise ValueError('source seal changed')
+        if json.loads((directory/'evaluation/status.json').read_text()).get('phase')!='completed' or json.loads((directory/'evaluation/status.json').read_text()).get('completed_cases')!=expected_cases:
+            raise ValueError('completed source required')
+        for f,sha in {**plan['input_sha256'],**plan['native_source_sha256']}.items():
+            if digest(f)!=sha:raise ValueError('source identity changed '+f)
+        for f,sha in plan['runner_sha256'].items():
+            archived=directory/'source'/Path(f).name
+            if digest(archived)!=sha:raise ValueError('archived runner changed '+str(archived))
+    authenticate(source,old,8)
+    if old.get('mode')!='native_channel_factorial_v1':raise ValueError('native channel factorial source required')
+    cached=Path(old['cached_source']);native=json.loads((cached/'plan.json').read_text());authenticate(cached,native,16)
+    if native.get('mode')!='native_capability_v1':raise ValueError('native S capability required')
+    proposal=json.loads(protocol.read_text())
+    validate_response_protocol(proposal)
+    if old['config']!=native['config'] or old['initial_source']!=native['initial_source'] or old['h75']!=native['h75']:
+        raise ValueError('native source/config/initial/model mismatch')
+    if old['initial_source']['bank_index']!=3:raise ValueError('native bank3 required')
+    files={**old['input_sha256'],**native['input_sha256'],**old['native_source_sha256']}
+    for directory in (source,cached):
+        for name in ('plan.json','seal.json','evaluation/status.json','evaluation/initial_carry.pkl'):
+            f=directory/name;files[str(f)]=digest(f)
+    for c in native['contexts']:
+        f=cached/'evaluation'/(c['route']+'_path.npz');files[str(f)]=digest(f)
+    for owner in (old['h75'],old['initial_source']['candidate']):
+        for key in ('actor','checkpoint'):
+            if digest(owner[key])!=owner[key+'_sha256']:raise ValueError('model changed')
+            files[owner[key]]=owner[key+'_sha256']
+    folder=Path(__file__).resolve().parent
+    modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]
+    modules.append(Path('learning/cli/run_native_goal_confirmation.py').resolve())
+    root.mkdir(exist_ok=False);(root/'source').mkdir()
+    for f in modules:(root/'source'/f.name).write_bytes(f.read_bytes())
+    save(root/'inventory.json',response_inventory(proposal));save(root/'effective_config.json',old['config'])
+    files.update({str(f.resolve()):digest(f) for f in (protocol,root/'inventory.json',root/'effective_config.json')})
+    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='h75_channel_response',
+        source=str(source),cached_source=str(cached),native_runtime_root=old['native_runtime_root'],
+        native_expected_sources=old['native_source_sha256'],initial_source=old['initial_source'],
+        models={'H75':old['h75']},config=old['config'],contexts=native['contexts'],cases=proposal['expected_cases'],horizon_s=proposal['horizon_s'],goal_radius_m=proposal['goal_radius_m'],
+        chunks=int(proposal['horizon_s']/proposal['replan_cadence_s']),steps_per_chunk=50,maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],
+        optimizer_updates=0,protocol=proposal,data_role=proposal['data_role'],question=proposal['question'],
+        replanning=dict(period_s=proposal['replan_cadence_s'],radius_m=proposal['replanning_radius_m'],departure_m=proposal['departure_m'],maximum_per_case=proposal['maximum_replans'],information=proposal['replanning'],ordering=proposal['ordering']),
+        scoring=proposal['scoring'],stop=proposal['stop_rule'],normalization=proposal['normalization'],
+        input_sha256=files,source_sha256={str(f.resolve()):digest(f) for f in modules})
+    save(root/'plan.json',plan);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+
+
 def storage_guard(root):
     mount=Path('/media/qy/6A7E3DB07E3D75C3')
     if not os.path.ismount(mount) or not Path(root).resolve().is_relative_to(mount):
@@ -116,7 +216,7 @@ def verify(root):
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('changed plan')
     for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(f)!=sha:raise ValueError('changed sealed source/input '+f)
-    if json.loads((root/'inventory.json').read_text())!=inventory():raise ValueError('fixed80 inventory changed')
+    if json.loads((root/'inventory.json').read_text())!=(response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else inventory()):raise ValueError('fixed inventory changed')
     return p
 
 
@@ -153,12 +253,44 @@ def load(root):
     env=adapter.NativeGoalContinuation(env,contact_only_physics=contact.ContactOnlyPhysics,
                                         project=geometry.project,pursuit=pursuit)
     cases=json.loads((root/'inventory.json').read_text());pose=np.asarray(env.physics.helpers.pose(snapshot.data))
-    bank={c['route']:geometry.build_path(c['builder'],pose,cfg) for c in cases}
+    response=p.get('mode')=='h75_channel_response'
+    if response:
+        from sttw_control.path_command_scenarios import _integrate_route
+        bank={}
+        for c in p['contexts']:
+            if c['route'] not in {r['route'] for r in cases}:continue
+            path=_integrate_route(pose,cfg['path'],2,c['radius_m'],np.deg2rad(c['angle_deg']),c['speed'],c['direction'],0.,0.).path
+            with np.load(Path(p['cached_source'])/'evaluation'/(c['route']+'_path.npz')) as old:
+                for field in ('s','xy','heading','curvature','turn_end','goal'):
+                    if not np.array_equal(np.asarray(getattr(path,field)),old[field]):raise ValueError('original S path mismatch '+field)
+            # Extend only existing straight support. Original samples and goal stay intact.
+            extra=4001-len(path.s)
+            if extra<0:raise ValueError('source path exceeds planner support')
+            if extra:
+                ds=float(path.s[-1]-path.s[-2]);tail=j.arange(1,extra+1)*ds
+                path=path.replace(s=j.concatenate([path.s,path.s[-1]+tail]),
+                    xy=j.concatenate([path.xy,path.xy[-1]+tail[:,None]*j.array([j.cos(path.heading[-1]),j.sin(path.heading[-1])])]),
+                    heading=j.concatenate([path.heading,j.full(extra,path.heading[-1])]),curvature=j.concatenate([path.curvature,j.zeros(extra)]))
+            bank[c['route']]=path
+    else:bank={c['route']:geometry.build_path(c['builder'],pose,cfg) for c in cases}
     if any(len(path.s)!=4001 for path in bank.values()):raise ValueError('initial/replanned geometry support shape mismatch')
     stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
     paths=stack([bank[c['route']] for c in cases]);speeds=j.asarray([c['speed'] for c in cases]);alphas=j.asarray([c['alpha'] for c in cases])
     initial=jax.jit(jax.vmap(lambda path,v,a:env.initial(env.reset(snapshot,path,v,a))))(paths,speeds,alphas)
     jax.block_until_ready(initial)
+    if response:
+        cached=Path(p['cached_source'])
+        with (cached/'evaluation/initial_carry.pkl').open('rb') as f:archived=pickle.load(f)
+        old_cases=json.loads((cached/'plan.json').read_text())['cases']
+        indices=[next(i for i,c in enumerate(old_cases) if c['route']==case['route'] and c['speed']==case['speed'] and c['policy']=='H75' and c['alpha']==case['alpha']) for case in cases]
+        expected=jax.tree.map(lambda x:np.asarray(x)[indices],archived)
+        # Only the documented continuation domain latch is adapted; full native reset identity is exact.
+        raw=jax.jit(jax.vmap(lambda path,v,a:env.reset(snapshot,path,v,a)))(paths,speeds,alphas)
+        aa,ta=jax.tree.flatten(jax.device_get(raw));bb,tb=jax.tree.flatten(expected)
+        if ta!=tb or len(aa)!=len(bb) or any(a.dtype!=b.dtype or not np.array_equal(a,b,equal_nan=True) for a,b in zip(aa,bb)):
+            raise ValueError('cached source native reset mismatch; no compatibility weakening')
+        initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
+
     if bool(j.any(initial.state.fault|initial.state.physical.failed)):
         raise ValueError('initial native task is invalid; not a physical failure result')
     env.set_log_template(jax.tree.map(lambda x:x[0],initial.state),bank[cases[0]['route']],speeds[0])
@@ -169,9 +301,10 @@ def load(root):
     for params in actors.values():
         if jax.eval_shape(actor.apply,params,j.zeros(351)).shape!=(2,):raise ValueError('native Actor shape mismatch')
     params=stack([actors[c['mode'] if c['mode'] in actors else 'H75'] for c in cases])
+    n=len(cases);horizon=p['horizon_s'];speed_alpha=j.asarray([c.get('speed_alpha',c['alpha']) for c in cases]);steer_alpha=j.asarray([c.get('steer_alpha',c['alpha']) for c in cases])
     modes=j.asarray([c['mode_index'] for c in cases],j.int32)
     physical_start=float(snapshot.physical_tick)*env.cc.dt
-    pulses=j.asarray([[physical_start+c['onset_s'],physical_start+c['onset_s']+c['duration_s'],0.,c['force_N'],0.] for c in cases])
+    pulses=j.asarray(force_pulses(cases,physical_start))
     keys=list(configured_cost_keys(cfg))
     keep=('active_tick','time','actual_xy','reference_xy','actual_forward_speed','wheel_speed_proxy','v_user',
           'path_cross_track','path_heading_error','path_progress','phi','phi_dot','actual_delta','peak_roll',
@@ -179,23 +312,30 @@ def load(root):
           'governed','nominal','applied_force_impulse','scored_tick_reward','latent_z','offsets','filtered_offset','target_offset',
           'reference_target_permitted','cumulative_domain_exit','clean_blocks_at_publication','clean_blocks_at_end',
           'continuation_geometry_invalid','continuation_geometry_fault')
-    def one(carry,param,path,v,pulse,mode):
+    def one(carry,param,path,v,pulse,mode,sa,ta):
+        if response:
+            obs,_,_=env.observation(carry.state,path,v,horizon)
+            z,half,full=channel_queries(obs,lambda x:actor.apply(param,x),sa,ta)
         def target(obs,state):
+            if response:return z
             return jax.lax.cond(mode==3,
                 lambda _:rule.target(state.physical.raw,state.alpha,cfg,lambda x:q_ratio(x,env.cc),p['rule']['budget_rad'],p['rule']['grid_points'])[0],
                 lambda _:actor.apply(param,obs),None)
-        end,log=env.policy_step(carry,path,v,20.,target,pulse,zero_mode=mode==2)
-        return end,dict({k:log[k] for k in keep},effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+        end,log=env.policy_step(carry,path,v,horizon,target,pulse,zero_mode=mode==2)
+        if response:
+            ticks=lambda x:j.broadcast_to(x,log['active_tick'].shape+j.asarray(x).shape)
+            log.update(queried_latent_alpha_half=ticks(half),queried_latent_alpha_one=ticks(full),channel_alpha_pair=ticks(j.stack([sa,ta])),composed_latent=ticks(z),query_observation=ticks(obs),pre_upper_yaw=ticks(env.physics.observe(carry.state.physical.data)[1][2]))
+        return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped')} if response else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
     @jax.jit
     def chunk(carry,paths):
-        return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes),carry,None,length=50)
+        return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes,speed_alpha,steer_alpha),carry,None,length=50)
     @jax.jit
     def measurements(carry):
         return jax.vmap(lambda d:env.physics.observe(d)[1])(carry.state.physical.data)
     @jax.jit
     def bind(carry,paths,mask):
         new=jax.vmap(env.rebind_geometry)(carry,paths,speeds)
-        return jax.tree.map(lambda a,b:j.where(mask.reshape((80,)+(1,)*(a.ndim-1)),a,b),new,carry)
+        return jax.tree.map(lambda a,b:j.where(mask.reshape((n,)+(1,)*(a.ndim-1)),a,b),new,carry)
     consumed={}
     for module in tuple(sys.modules.values()):
         file=getattr(module,'__file__',None)
@@ -207,7 +347,7 @@ def load(root):
     terminal20=float(failure_reward(1000,cfg));terminal10=float(failure_reward(500,cfg))
     return dict(plan=p,config=cfg,cases=cases,env=env,initial=initial,paths=paths,bank=bank,speeds=speeds,
                 chunk=chunk,bind=bind,measurements=measurements,planner=planner,keys=keys,
-                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10)
+                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10,initial_identity=initial_identity if response else None)
 
 
 def flatten(logs):
@@ -228,13 +368,14 @@ def run(root,*,shape_only=False):
         import jax
         import jax.numpy as j
         import numpy as np
-        runtime=load(root);carry=runtime['initial'];paths=runtime['paths'];env=runtime['env']
+        n=p['cases'];runtime=load(root);carry=runtime['initial'];paths=runtime['paths'];env=runtime['env']
         shaped=jax.eval_shape(runtime['chunk'],carry,paths)
-        jax.eval_shape(runtime['bind'],carry,paths,j.zeros(80,bool))
-        receipt=dict(active_shape=list(shaped[1]['active_tick'].shape),real_lanes=80,padding=0,physics_steps=0,
+        jax.eval_shape(runtime['bind'],carry,paths,j.zeros(n,bool))
+        receipt=dict(active_shape=list(shaped[1]['active_tick'].shape),real_lanes=n,padding=0,physics_steps=0,
                      consumed_native_sources=runtime['consumed'],physical_start_s=runtime['physical_start_s'],
                      terminal_cost20=runtime['terminal20'],terminal_cost10=runtime['terminal10'],
                      log_template_after_wrapper=True,planner_path_type='Explicit native Path alias; only planner/vendor namespace isolated')
+        if runtime['initial_identity'] is not None:receipt.update(runtime['initial_identity'])
         save(directory/'shape_receipt.json',receipt)
         if shape_only:update(phase='completed',physics_steps=0);return
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU required for numerical evaluation')
@@ -246,13 +387,13 @@ def run(root,*,shape_only=False):
             plan_sha256=digest(root/'plan.json'),clock='time is task pre-tick, actual_xy is post-tick; pulse uses task time plus physical_start_s',
             data_role=p['data_role'],physical_start_s=runtime['physical_start_s']))
         with (directory/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
-        all_logs=[];decisions=[];changed=np.zeros(80,bool);arrived=np.zeros(80,bool);actual=0
-        for block in range(20):
+        all_logs=[];decisions=[];changed=np.zeros(n,bool);arrived=np.zeros(n,bool);actual=0
+        for block in range(p['chunks']):
             if block:
                 poses= jax.device_get(runtime['measurements'](carry))
                 cross,invalid,failed,fault,ticks=jax.device_get((carry.state.projection.cross_track,carry.state.follower.invalid,carry.state.physical.failed,carry.state.fault,carry.state.tick))
-                mask=np.zeros(80,bool)
-                for i in range(80):
+                mask=np.zeros(n,bool)
+                for i in range(n):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i])):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
@@ -268,10 +409,12 @@ def run(root,*,shape_only=False):
             logs=flatten(jax.device_get(logs));all_logs.append(logs)
             np.savez_compressed(directory/f'chunk_{block:02d}.npz',**logs)
             actual+=int(logs['active_tick'].sum())
+            if actual>p['maximum_active_lower_ticks'] or (block+1)*50*4*n>p['maximum_allocated_lower_slots']:
+                raise RuntimeError('declared lower-tick budget exceeded')
             fatal=logs['contact_failure']|logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['continuation_geometry_fault']
             eligible=logs['active_tick']&(np.cumsum(fatal,axis=0)==0)
             arrived|=np.any(eligible&(np.linalg.norm(logs['actual_xy']-goals[None,:,:],axis=-1)<=1.),axis=0)
-            update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=(block+1)*16000,replanned_cases=int(changed.sum()))
+            update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=(block+1)*50*4*n,replanned_cases=int(changed.sum()))
             if np.any(logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['continuation_geometry_fault']) or bool(j.any(carry.state.fault)):
                 raise RuntimeError('engineering fault: partial raw retained, no negative label or automatic retry')
             if bool(j.all(carry.state.physical.failed)):break
@@ -281,6 +424,6 @@ def run(root,*,shape_only=False):
             index.append(dict(c,raw_file=str(file),raw_sha256=digest(file),original_goal_xy=goals[i].tolist(),replanned=bool(changed[i])))
         with (directory/'final_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
         save(directory/'case_index.json',index);save(directory/'replanning_decisions.json',decisions)
-        update(phase='completed',completed_cases=80)
+        update(phase='completed',completed_cases=n)
     except BaseException as exc:
         (directory/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise

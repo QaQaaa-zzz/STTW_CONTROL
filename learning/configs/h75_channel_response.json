@@ -1,0 +1,66 @@
+{
+  "experiment_id": "STTW-H75-CHANNEL-RESPONSE-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 54,
+  "maximum_lower_ticks": 108000,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    -32.0,
+    32.0,
+    64.0
+  ],
+  "onsets_s": [
+    1.6,
+    4.0
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "mappings": [
+    [
+      0.5,
+      0.5
+    ],
+    [
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      0.5
+    ]
+  ],
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "zero_onset_s": 1.6,
+  "replan_cadence_s": 1.0,
+  "question": "How do fixed and hybrid H75 channel mappings affect goal arrival and contact under paired worldY pulses?",
+  "data_role": "Related DEV goal-arrival/contact characterization; not nominal native replay or mandatory S completion",
+  "stop_rule": "Exactly54 cases/H10/108000 lower slots/0optimizer; preserve partial errors without retries, force escalation, tuning or automatic adoption.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "At task4s, host planner reads pre-pulse state before next scan chunk applies the pulse; identical ordering for every mapping.",
+  "interpretation": "Identical worldY vectors are paired, not equal body-lateral forces; hybrid is an out-of-training channel composition. Original S errors are descriptive after replanning; no mandatory S completion claim.",
+  "scoring": "Original worldgoal1m before contact/fault and full-window contact are primary. Original-route geometric distance and requested-speed errors separately. V3 costs rescored at user1 on execution paths remain diagnostic after replan, not the original-path user objective.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Original-path curvature lobe centers s4.68/11m at requested2.8m/s imply1.67/3.93s; selected1.6/4.0 from reference geometry, not observed policy failures.",
+  "decision_rules": {
+    "local_conflict_witness": "Nominal task benefit retained under this common contract, with paired hybrid contact where fixed.5 survives; retain reverse cases. Roll/domain/task failure are not contact.",
+    "dominance": "Hybrid covers task and survival of fixed.5 only in declared conditions: weakens additional coordination need here, not universal necessity.",
+    "uninformative": "All survive or all fail: finish as nondiscriminating, no force/time escalation.",
+    "nominal_loss": "If nominal benefit disappears, report dependence on continuation/replanning; do not begin MLP.",
+    "next_gate": "Task-survival cross-ordering motivates common-full-state preparation-time tests, not immediate online coordination or MLP adoption."
+  }
+}
