@@ -1,0 +1,123 @@
+{
+  "experiment_id": "STTW-H75-SWITCHING-CONTINUATION-V1",
+  "horizon_s": 10.0,
+  "expected_cases": 36,
+  "maximum_lower_ticks": 64800,
+  "optimizer_updates": 0,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "onsets_s": [
+    1.6
+  ],
+  "duration_s": 0.1,
+  "force_frame": "worldY",
+  "initial_bank": 3,
+  "mappings": [
+    [
+      0.5,
+      0.5
+    ],
+    [
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      0.5
+    ]
+  ],
+  "goal_radius_m": 1.0,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "maximum_replans": 1,
+  "routes": [
+    {
+      "route": "S_left_90_R1p8",
+      "speed": 2.8
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "speed": 2.8
+    }
+  ],
+  "zero_onset_s": 1.6,
+  "replan_cadence_s": 1.0,
+  "question": "Continue original36 switching cases from each own saved task1 state, accepting disclosed small GPU lane numerical differences; does scheduled preparation alter paired goal/contact outcomes?",
+  "data_role": "Known-timing switching diagnostic; related DEV, not online unknown-onset coordination.",
+  "stop_rule": "Original36 only:64800 remaininglower+7200source=72000total,0optimizer; no duplicateprefixphysics/retry/force/timegrid expansion.",
+  "replanning": "One shot from own measured state when abs execution cross-track >1m OR follower invalid, at task1..9s boundaries; original worldgoal unchanged; no true force/onset/end information.",
+  "ordering": "Resume original task1 savedcarry; common planner reads current pre-switch state then scan applies scheduledswitch, including1.0. At1.6 switch is scheduled before firstpulse, not reactive.",
+  "interpretation": "Approximate common-origin states with disclosed numerical differences, user-authorized continuation; known switch timing, not reactive unknown-onset coordination. No exact state identity claim.",
+  "scoring": "Original worldgoal1m before contact/fault and full-window contact are primary. Original-route geometric distance and requested-speed errors separately. V3 costs rescored at user1 on execution paths remain diagnostic after replan, not the original-path user objective.",
+  "normalization": "Original native frame/context scales and archived H75 architecture; no learned observation normalizer.",
+  "timing_rationale": "Exploratory selection after54 identified paired true-contact failures: switch at1.0/1.4/1.6 gives .6/.2/0s preparation before declared1.6 pulse. At zero preparation the switch is scheduled before first pulse tick, not a reactive onset response.",
+  "decision_rules": {
+    "primary": "Report paired stay-origin true-contact failure rescued without new physical contact, with goal1m arrival independently; no percentage threshold.",
+    "nominal_guard": "A candidate needs no new nominal contact/fault or goal1m loss against its matched stay origin across both routes; retain every reverse case.",
+    "interpretation": "Selected known-failure exploratory diagnostic; preparation timing is known in advance, not an unknown-onset coordinator or proof of universal benefit.",
+    "negative": "No paired contact rescue or nominal guard violation stops escalation; retain failures and partials, no threshold/timegrid/force expansion or automatic MLP training."
+  },
+  "planner_support_m": 100.0,
+  "planner_spacing_m": 0.02,
+  "planner_points": 5001,
+  "geometry_support": "Original S samples and worldgoal unchanged; only straight support may extend to common planner shape, without resampling original points.",
+  "switch_times_s": [
+    1.0,
+    1.4,
+    1.6
+  ],
+  "origins": [
+    {
+      "origin": "fixed1",
+      "speed_alpha": 1.0,
+      "steer_alpha": 1.0
+    },
+    {
+      "origin": "hybrid",
+      "speed_alpha": 1.0,
+      "steer_alpha": 0.5
+    }
+  ],
+  "destination_pair": [
+    0.5,
+    0.5
+  ],
+  "capture_task_s": 1.0,
+  "prefix_comparison": {
+    "fields": [
+      "active_tick",
+      "time",
+      "actual_xy",
+      "reference_xy",
+      "actual_forward_speed",
+      "wheel_speed_proxy",
+      "phi",
+      "phi_dot",
+      "actual_delta",
+      "path_cross_track",
+      "path_heading_error",
+      "path_progress",
+      "latent_z",
+      "governed",
+      "filtered_offset",
+      "target_offset",
+      "reference_target_permitted",
+      "clean_blocks_at_end",
+      "cumulative_domain_exit",
+      "applied_force_impulse"
+    ],
+    "absolute_tolerance": 1e-05,
+    "relative_tolerance": 1e-06,
+    "field_absolute_tolerance": {
+      "phi_dot": 0.0001
+    }
+  },
+  "total_campaign_lower_ticks": 72000,
+  "consumed_source_lower_ticks": 7200,
+  "new_horizon_s": 9.0,
+  "continuation_task_s": 1.0,
+  "numerical_amendment": "User permits small numerical lane differences. Resume all36 own saved task1 completecarry leaves unchanged; approximate common-origin state, not exact. No canonical copy/reset/replay. Preserve source divergence evidence.",
+  "prefix_provenance": "Reuse each own original saved200tick prefix with explicit provenance; continue own completecarry without any leaf replacement. Original failedseal remains immutable."
+}

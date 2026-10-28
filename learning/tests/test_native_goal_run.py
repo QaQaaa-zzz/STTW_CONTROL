@@ -160,3 +160,36 @@ def test_own_switch_prefix_checks_280_tick_preparation_with_predeclared_float_to
     logs['active_tick'][279,0]=False
     with pytest.raises(ValueError,match='prefix mismatch'):
         audit_stay_prefix(logs,cases,cached,p,own_switch=True)
+
+
+def test_continuation_keeps_original36_inventory_and_counts_only_remaining_physics():
+    from pathlib import Path
+    import json
+    from sttw_control.native_goal_run import continuation_inventory,switching_inventory,switching_protocol
+    p=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_switching_continuation.json').read_text())
+    assert continuation_inventory(p)==switching_inventory(switching_protocol())
+    assert p['maximum_lower_ticks']==36*9*200
+    assert p['maximum_lower_ticks']+p['consumed_source_lower_ticks']==72000
+    assert p['prefix_comparison']['field_absolute_tolerance']=={'phi_dot':1e-4}
+
+
+def test_schedule_audit_rejects_switch_using_wrong_boundary():
+    from sttw_control.native_goal_run import audit_scheduled_pairs
+    import pytest
+    cases=[dict(switch_s=1.4,speed_alpha=1.,steer_alpha=.5)]
+    logs=dict(active_tick=np.ones((8,1),bool),time=(np.arange(276,284)*.005)[:,None],channel_alpha_pair=np.array([[[1.,.5]]]*4+[[[.5,.5]]]*4),switch_active=np.array([[False]]*4+[[True]]*4))
+    assert audit_scheduled_pairs(logs,cases)['actual_pairs_and_switch_timing_verified']
+    logs['channel_alpha_pair'][3,0]=[.5,.5]
+    with pytest.raises(ValueError,match='pair/timing'):
+        audit_scheduled_pairs(logs,cases)
+
+
+def test_schedule_audit_checks_world_y_force_sign_and_declared_interval():
+    from sttw_control.native_goal_run import audit_scheduled_pairs
+    import pytest
+    cases=[dict(switch_s=1.6,speed_alpha=1.,steer_alpha=.5,force_N=-64.,onset_s=1.6,duration_s=.1)]
+    logs=dict(active_tick=np.ones((4,1),bool),time=(np.arange(320,324)*.005)[:,None],channel_alpha_pair=np.full((4,1,2),.5),switch_active=np.ones((4,1),bool),applied_force_impulse=np.tile([0.,-.32,0.],(4,1,1)))
+    assert audit_scheduled_pairs(logs,cases)['worldY_force_vector_verified']
+    logs['applied_force_impulse'][0,0,1]=.32
+    with pytest.raises(ValueError,match='sign/timing'):
+        audit_scheduled_pairs(logs,cases)
