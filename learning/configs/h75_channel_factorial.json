@@ -1,0 +1,31 @@
+{
+  "experiment_id": "STTW-H75-CHANNEL-FACTORIAL-V1",
+  "horizon_s": 10.0,
+  "original_user_alpha": 1.0,
+  "expected_cases": 8,
+  "maximum_lower_ticks": 16000,
+  "channel_alpha_pairs": [
+    [
+      0.5,
+      1.0
+    ],
+    [
+      1.0,
+      0.5
+    ]
+  ],
+  "training": false,
+  "disturbance": false,
+  "replanning": false,
+  "scoring": "Original user1/full fixed S path/speed request; strict native task, goal, survival and costs separately per case.",
+  "data_role": "Familiar nominal DEV, shared H75 ancestor; fixed.5/1 cached not rerun.",
+  "interpretation": "Hybrid out-of-training action combinations; not deployable scalar-alpha coordinator; no speed-matched causal claim.",
+  "comparison": "Compare each hybrid against both fixed.5 and fixed1 on each same context, including strict task, goal, contact/domain/fault, user1 total/task costs, observed speed and path errors; retain losses and observation length. No automatic adoption.",
+  "stop_rule": "Exactly8/H10/maximum16000lower;0optimizer/force/replanning; native stops, preserve partial raw and stop on engineering error; no implicit retries or expansion.",
+  "exploratory_falsification_rules": {
+    "speed_half_steer_one": "Covers fixed.5 only if all four contexts pass strict native task and both per-route original-user1 total and task-channel costs <=1.05*fixed.5+0.1. This weakens necessity of the changed steering mapping in these nominal contexts only.",
+    "speed_one_steer_half": "Improves fixed1 only if tight-context strict gains occur with no strict losses elsewhere. Report both costs and actual speed changes; no claim of force tolerance or speed-matched causal effect.",
+    "negative": "Two failing hybrids do not alone establish coordination necessity; out-of-training pairing and closed-loop speed changes remain limitations.",
+    "followup": "No threshold or route reruns, automatic MLP training, implicit retries or automatic adoption. Engineering failure stops and retains partial raw."
+  }
+}

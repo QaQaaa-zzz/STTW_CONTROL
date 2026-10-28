@@ -155,7 +155,50 @@ def scheduling_cases(protocol, contexts):
             for c in contexts for arm in ('alpha_schedule','curvature_speed')]
 
 
-def prepare_scheduling(source, root, protocol):
+def channel_factorial_cases(protocol, contexts):
+    """Two channel swaps only; source nominal user alpha remains one."""
+    if (protocol.get('horizon_s') != 10. or protocol.get('original_user_alpha') != 1. or
+        protocol.get('expected_cases') != 8 or protocol.get('maximum_lower_ticks') != 16000 or
+        protocol.get('channel_alpha_pairs') != [[.5, 1.], [1., .5]] or
+        any(protocol.get(k) is not False for k in ('training', 'disturbance', 'replanning'))):
+        raise ValueError('channel factorial requires fixed user1, two hybrids, H10 and8/16000, no training/force/replan')
+    if 'contexts' in protocol and protocol['contexts'] != contexts:
+        raise ValueError('channel factorial cannot change cached contexts')
+    capability_cases(dict(contexts=contexts,horizon_s=10.,alphas=[0.,.5,1.],
+                          expected_cases=16,maximum_lower_ticks=32000))
+    return [dict(c,alpha=1.,original_user_alpha=1.,speed_alpha=a,steer_alpha=b,
+                 policy=f'speed{a:g}_steer{b:g}',force_N=0.,onset_s=1.)
+            for c in contexts for a,b in protocol['channel_alpha_pairs']]
+
+
+def channel_factorial_decision(state, path, speed, speed_alpha, observe, actor_apply, policy_step):
+    """Query one current observation twice, then advance native physics once.
+
+    Alpha slot336 is the native H75 unit-scale alpha; histories and state alpha
+    are never rebuilt or replaced. This is an out-of-training action pairing.
+    """
+    import jax.numpy as j
+    obs,_,fault=observe(state,path,speed,10.)
+    if obs.shape != (351,):
+        raise ValueError('channel factorial requires native351 observation')
+    half=actor_apply(obs.at[336].set(.5))
+    full=actor_apply(obs.at[336].set(1.))
+    z=j.stack([j.where(speed_alpha == .5,half[0],full[0]),
+               j.where(speed_alpha == .5,full[1],half[1])])
+    end,logs=policy_step(state.replace(fault=state.fault|fault),z,path,speed,10.,j.zeros(5))
+    shape=logs['active_tick'].shape
+    def ticks(x):return j.broadcast_to(x,shape+j.asarray(x).shape)
+    logs.update(queried_latent_alpha_half=ticks(half),queried_latent_alpha_one=ticks(full),
+                composed_latent=ticks(z),channel_alpha_pair=ticks(j.array([speed_alpha,1.5-speed_alpha])),
+                original_user_alpha=j.ones(shape))
+    return end,logs
+
+
+def prepare_channel_factorial(source, root, protocol):
+    return prepare_scheduling(source, root, protocol, channel_factorial=True)
+
+
+def prepare_scheduling(source, root, protocol, *, channel_factorial=False):
     """Seal a new nominal8 panel while retaining the completed native16."""
     source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve()
     old=json.loads((source/'plan.json').read_text())
@@ -190,7 +233,7 @@ def prepare_scheduling(source, root, protocol):
             f=owner[name];sha=owner[name+'_sha256']
             if digest(f)!=sha:raise ValueError('native model identity changed '+f)
             identity[f]=sha
-    proposal=json.loads(protocol.read_text());cases=scheduling_cases(proposal,old['contexts'])
+    proposal=json.loads(protocol.read_text());cases=(channel_factorial_cases if channel_factorial else scheduling_cases)(proposal,old['contexts'])
     helper=Path(__file__).with_name('geometric_preference_schedule.py').resolve()
     own=[Path(__file__).resolve(),Path('learning/cli/run_native_zero_comparison.py').resolve(),helper]
     scientific=[source/'plan.json',source/'seal.json',source/'analysis/review.json',
@@ -202,14 +245,14 @@ def prepare_scheduling(source, root, protocol):
     for f in own:(root/'source'/f.name).write_bytes(f.read_bytes())
     save(root/'cached_records.json',records)
     identity[str(root/'cached_records.json')]=digest(root/'cached_records.json')
-    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='native_scheduling_v1',
+    plan=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode='native_channel_factorial_v1' if channel_factorial else 'native_scheduling_v1',
         source=str(source),cached_source=str(source),native_runtime_root=old['native_runtime_root'],
         native_source_sha256=old['native_source_sha256'],
         runner_sha256={str(f):digest(f) for f in own},input_sha256=identity,
         config=old['config'],initial_source=old['initial_source'],h75=old['h75'],cases=cases,contexts=old['contexts'],
-        protocol=proposal,rule=dict(source=str(helper),source_sha256=digest(helper),**proposal['rule']),
+        protocol=proposal,rule=dict(source=str(helper),source_sha256=digest(helper),**proposal.get('rule',{})),
         cached_cases=16,new_cases=8,maximum_new_lower_ticks=16000,maximum_allocated_lower_slots=16000,
-        horizon_s=10.,optimizer_updates=0,target_policy='scheduling',original_user_alpha=1.,
+        horizon_s=10.,optimizer_updates=0,target_policy='channel_factorial' if channel_factorial else 'scheduling',original_user_alpha=1.,
         cache_identity=dict(plan_sha256=digest(source/'plan.json'),records_sha256=digest(source/'analysis/review.json'),
             case_inventory=[dict(route=r['route'],speed=r['speed'],policy=r['policy'],alpha=r['alpha'],
                 raw_file=r['raw_file'],raw_sha256=r['raw_sha256']) for r in records]),
@@ -218,6 +261,12 @@ def prepare_scheduling(source, root, protocol):
         control='Frozen H75 at50Hz; schedule alpha before observation OR cap H75 proposed speed via original latent mapping; same physical filters/rates/bounds/ESO/history/local300.',
         stop='Exactly8 nominal H10 trajectories, native stops;0force/0replan/0training; preserve error evidence without implicit retry/tuning.',
         optimizations=['same-shape vmap8','scan50 chunks','shared JAX compilation cache','single compiled function reused'])
+    if channel_factorial:
+        plan.update(initialization='Exact original native alpha1 full carry; same current observation/history for both queries.',
+            scoring='Original user alpha1 and fixed original speed/full S path, native task and goal separately.',
+            control='At50Hz query H75 alpha.5/1 on identical current observation except slot336; compose speed/steer latent before original native filters/limits and lower200Hz.',
+            interpretation='Hybrid out-of-training action combinations; not a deployable scalar-alpha coordinator. Total closed-loop mapping replacement, not speed-matched causal effect.')
+        plan.pop('rule')
     save(root/'plan.json',plan);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
 
@@ -235,7 +284,7 @@ def verify(root):
 
 def run(root, shape_only=False):
     root=Path(root).resolve();p=verify(root)
-    if p.get('target_policy','zero') not in ('zero','equilibrium','capability','scheduling'):raise ValueError('unknown target policy')
+    if p.get('target_policy','zero') not in ('zero','equilibrium','capability','scheduling','channel_factorial'):raise ValueError('unknown target policy')
     if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':
         raise ValueError('prepared only; no implicit restart')
     native=Path(p['native_runtime_root'])
@@ -266,10 +315,12 @@ def run(root, shape_only=False):
         configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
         cfg=p['config'];env,snapshot=load_environment(cfg,p['initial_source'],'terminal_contract_v2')
         cases=p['cases'];n=len(cases);capability=p.get('mode')=='native_capability_v1'
+        factorial=p.get('mode')=='native_channel_factorial_v1'
         scheduling=p.get('mode')=='native_scheduling_v1'
+        cached_native=scheduling or factorial
         assert n==(16 if capability else 8)
         pose=np.asarray(env.physics.helpers.pose(snapshot.data))
-        if capability or scheduling:
+        if capability or cached_native:
             from sttw_control.path_command_scenarios import _integrate_route
             bank={c['route']:_integrate_route(pose,cfg['path'],2,c['radius_m'],np.deg2rad(c['angle_deg']),
                   c['speed'],c['direction'],0.,0.).path for c in p['contexts']}
@@ -282,7 +333,7 @@ def run(root, shape_only=False):
                     goal_s_m=float(bank[c['route']].goal)))
             save(out/'geometry_receipt.json',receipt)
         else:bank={c['route']:build_path(c['builder'],pose,cfg) for c in cases}
-        if scheduling:
+        if cached_native:
             # Same fixed original paths, not references altered by scheduling.
             for name,path in bank.items():
                 with np.load(Path(p['source'])/'evaluation'/(name+'_path.npz'),allow_pickle=False) as archived:
@@ -293,7 +344,7 @@ def run(root, shape_only=False):
         speeds=j.asarray([c['speed'] for c in cases]);alphas=j.asarray([c['alpha'] for c in cases])
         states=jax.jit(jax.vmap(lambda path,v,a:env.reset(snapshot,path,v,a)))(paths,speeds,alphas)
         jax.block_until_ready(states)
-        if scheduling:
+        if cached_native:
             # Compare ALL original closed-loop state leaves to the matching
             # cached alpha1 initialization. No filter/observer/history rebuild.
             with (Path(p['source'])/'evaluation/initial_carry.pkl').open('rb') as f:
@@ -305,7 +356,7 @@ def run(root, shape_only=False):
             aa,ta=jax.tree.flatten(jax.device_get(states));bb,tb=jax.tree.flatten(expected)
             differences=[]
             for i,(a,b) in enumerate(zip(aa,bb)):
-                if np.array_equal(a,b,equal_nan=True):continue
+                if a.dtype==b.dtype and np.array_equal(a,b,equal_nan=True):continue
                 delta=np.abs(np.asarray(a,dtype=float)-np.asarray(b,dtype=float)) if a.shape==b.shape else None
                 differences.append(dict(leaf=i,actual_shape=list(a.shape),expected_shape=list(b.shape),
                     dtype=str(a.dtype),maximum_abs_difference=None if delta is None else float(np.nanmax(delta))))
@@ -316,12 +367,13 @@ def run(root, shape_only=False):
                 raise ValueError('cached native initial carry differs from original alpha1; see initial_identity_receipt.json')
             save(out/'initial_identity_receipt.json',dict(original_paths_exact=True,
                 all_initial_carry_leaves_exact=True,leaves=len(aa),cached_alpha=1.,
-                initial_schedule_alpha=1.,initial_latch=False,physics_steps=0))
+                initial_state_alpha=1.,initial_schedule_alpha=1. if scheduling else None,
+                initial_latch=False if scheduling else None,physics_steps=0))
         env.set_log_template(jax.tree.map(lambda x:x[0],states),bank[cases[0]['route']],speeds[0])
         keys=list(configured_cost_keys(cfg))
         actor=params=None
-        neural_indices=np.asarray([i for i,c in enumerate(cases) if c['policy']=='H75' or scheduling],dtype=np.int32)
-        if capability or scheduling:
+        neural_indices=np.asarray([i for i,c in enumerate(cases) if c['policy']=='H75' or cached_native],dtype=np.int32)
+        if capability or cached_native:
             from sttw_control.path_command_policy import make_path_actor
             actor=make_path_actor(cfg)
             with Path(p['h75']['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
@@ -341,7 +393,7 @@ def run(root, shape_only=False):
               'phi','phi_dot','actual_delta','peak_roll','physical_failure','domain_exit','policy_fault','lower_fault',
               'governed','nominal','applied_force_impulse','scored_tick_reward','latent_z','offsets','filtered_offset','target_offset','lower_action')
         template=jax.eval_shape(lambda st:env.policy_step(st,j.zeros(2),bank[cases[0]['route']],speeds[0],10.,j.zeros(5)),jax.tree.map(lambda x:x[0],states))[1]
-        if (capability or scheduling) and any(k not in template for k in ('active_tick','contact_failure','nonfinite')):
+        if (capability or cached_native) and any(k not in template for k in ('active_tick','contact_failure','nonfinite')):
             raise ValueError('native capability requires active/contact/nonfinite logs')
         keep=keep+tuple(k for k in ('contact_failure','nonfinite') if k in template)
         def one(st,path,v,z):
@@ -407,11 +459,27 @@ def run(root, shape_only=False):
                 return jax.lax.scan(step,carry,None,length=50)
             chunk=schedule_chunk
             states=(states,j.zeros(n,dtype=j.bool_))
+        if factorial:
+            context_fields=cfg['network']['context_fields']
+            if (len(context_fields)!=15 or context_fields[0] != dict(name='alpha',scale=1.)):
+                raise ValueError('native alpha slot336 identity differs')
+            speed_alpha=j.asarray([c['speed_alpha'] for c in cases])
+            def factorial_chunk(st):
+                def step(s,_):
+                    end,logs=jax.vmap(lambda state,path,v,a:channel_factorial_decision(
+                        state,path,v,a,env.observation,lambda obs:actor.apply(params,obs),env.policy_step))(
+                            s,paths,speeds,speed_alpha)
+                    costs=j.stack([logs['effective_components'][k] for k in keys],axis=-1)
+                    audit=('queried_latent_alpha_half','queried_latent_alpha_one','composed_latent',
+                           'channel_alpha_pair','original_user_alpha')
+                    return end,dict({k:logs[k] for k in keep+audit},effective_costs=costs)
+                return jax.lax.scan(step,st,None,length=50)
+            chunk=factorial_chunk
         shape=jax.eval_shape(chunk,states)
         if shape_only:
             save(out/'receipt.json',dict(phase='completed',physics_steps=0,optimizer_updates=0,
                 native_runtime_root=str(native),active_tick_shape=list(shape[1]['active_tick'].shape),
-                source_sha256=p['runner_sha256'],target_policy=p.get('target_policy','zero'),zero_target=rule is None and not capability and not scheduling))
+                source_sha256=p['runner_sha256'],target_policy=p.get('target_policy','zero'),zero_target=rule is None and not capability and not cached_native))
             update(phase='completed');return
         for name,path in bank.items():np.savez_compressed(out/(name+'_path.npz'),**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
         with (out/'initial_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(states[0] if scheduling else states),f)
@@ -419,6 +487,8 @@ def run(root, shape_only=False):
             native_runtime_root=str(native),model_identity=env.physics.bundle.identity,plan_sha256=digest(root/'plan.json'),
             cached_cases=p['cached_cases'],training_steps=0,target_policy=p.get('target_policy','zero'),target_semantics='Declared target before original filters; complete frozen lower remains')
         if scheduling:manifest.update(original_user_alpha=1.,schedule_rule=p['rule'])
+        if factorial:manifest.update(original_user_alpha=1.,channel_alpha_pairs=p['protocol']['channel_alpha_pairs'],
+            interpretation=p['interpretation'],observation_alpha_slot=336,observation_alpha_scale=1.)
         save(out/'manifest.json',manifest)
         before=time.monotonic()
         fn=jax.jit(chunk).lower(states).compile()
