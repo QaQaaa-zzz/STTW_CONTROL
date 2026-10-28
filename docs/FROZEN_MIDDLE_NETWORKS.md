@@ -53,3 +53,9 @@ python learning/cli/freeze_middle_lineage.py \
 蒸馏、V3奖励和课程同时改变，不能把效果全部归因于奖励。恢复教学与普通加长PPO的差异很小，见[长度对照](evidence/tolerance_progress_20261022/long_baseline_transfer/RESULTS.md)；精选见证对随机成功示范整体净0，见[见证对照](evidence/tolerance_progress_20261022/witness_selection_v1/final/RESULTS.md)。六维物理特征等880例负结果及原模型仍保留在原运行树，见[未采用决定](evidence/tolerance_progress_20261022/reserve_feature_expansion/CONCLUSIONS.md)，不画成通向H75的升级节点。
 
 完整名义偏好、物理防摔、公式误判和接管的证据分别见[证据地图](evidence/tolerance_progress_20261022/baseline_provenance_audit/PAPER_EVIDENCE_MAP.md)。冻结不是采用声明、成功声明或对未来改动的禁止；后续仿真必须在新版本/新运行中迭代，并与这些固定基线比较。
+
+## H75原生连续S弯能力补测（2026-10-28）
+
+[四场景同图XY及完整报告](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/RESULTS.md)
+
+冻结H75 u77、本来参考权限、同local300/ECBC/ESO，60度R2.2/2.6m/s与90度R1.8/2.8m/s各左右S，alpha0/.5/1＋zero，每条10秒。全部16不触地且过第二弯；H75严格末窗任务10/12、zero0/4，但原目标1m首达H75 10/12、zero4/4。紧S的H75 alpha1两条未达原goal且末窗路径/航向未过；zero主要未通过末窗航向保持。H75总V3成本9/12低于zero，三任务通道仅2/12较低，不把总成本优势等同全部任务更好。单祖先、已训练S家族的DEV扩覆盖；无扰动、无重规划，不宣称抗扰/泛化或安全保证。唯一研究事实与后续仍以research-hub/STTW_PROJECT_STATE.md为准。
