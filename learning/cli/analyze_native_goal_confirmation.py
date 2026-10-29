@@ -2876,6 +2876,7 @@ def analyze_fixed_h75_capability(root,p):
             vmax=lambda mask:float(np.max(raw['actual_forward_speed'][:n][mask])) if mask.any() else None
             premax=vmax(pre);duringmax=vmax(during);limit=p['protocol']['low_speed_evidence_gate']['true_forward_speed_max_m_s']
             rows[-1].update(load_kind='equivalent_worldY_force_not_wind_field',pre_load_max_speed_m_s=premax,during_load_upright_max_speed_m_s=duringmax,onset_speed_mean_m_s=float(np.mean(raw['actual_forward_speed'][:n][near])) if near.any() else None,low_speed_gate_passed=bool(premax is not None and duringmax is not None and max(premax,duringmax)<=limit),gate_contract='preload and applied-load upright active samples; contact step/after-contact excluded',observed_world_force_impulse_Ns=raw['applied_force_impulse'][:n].sum(axis=0).tolist(),pre_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][pre]))*180/np.pi) if pre.any() else None,during_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][during]))*180/np.pi) if during.any() else None)
+            rows[-1].update(onset_roll_mean_rad=float(np.mean(raw['phi'][:n][near])) if near.any() else None,onset_roll_rate_mean_rad_s=float(np.mean(raw['phi_dot'][:n][near])) if near.any() else None)
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
     plot_groups=[(route,event) for route,event in sorted({(r['route'],r['event']) for r in rows})] if load_screen else [(route,None) for route in sorted({r['route'] for r in rows})]
@@ -2917,12 +2918,27 @@ def analyze_fixed_h75_capability(root,p):
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
+        pairs=paired_low_speed_load_outcomes(rows);atomic_json(out/'paired_outcomes.json',pairs)
         with (out/'README.md').open('a') as f:
             f.write('\n## Complete paired-load trace index\n\nEach XY panel above has companion `_traces.png` (true/governed/wheel speed, estimation error, steer, roll, roll rate, original cross-track/heading, per-step and cumulative reward) and `_components.png` (signed per-step/cumulative components and terminal adjustment). All actual transitions stop at true failure. No smoothing or manufactured uncertainty; these are deterministic exploratory cases, not independent training replicates. Full execution-path reward is independently rebuilt and checked against recorded per-step reward; original-path task costs remain separate from changing execution references. No extra baseline rollout was requested.\n\n')
             for name in links:
                 stem=name.removesuffix('_xy.png');f.write(f'- [{stem}: traces]({stem}_traces.png), [reward components]({stem}_components.png)\n')
             f.write('\nVisualization workflow: Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. https://doi.org/10.48550/arXiv.2609.00065 (metadata checked2026-10-29). Internal diagnostic figures; journal export requirements not audited.\n')
     return summary
+
+
+def paired_low_speed_load_outcomes(rows):
+    """Report every signed event, including opposite/null results and speed violations."""
+    pairs=[]
+    for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
+        group=sorted([r for r in rows if (r['route'],r['event'])==(route,event)],key=lambda r:r['alpha'])
+        if len(group)!=2 or [r['alpha'] for r in group]!=[0.,1.]:raise ValueError('exact alpha0/1 event pair required')
+        a,b=group
+        if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')):raise ValueError('same intended event and initial model required')
+        outcomes=[r['endpoint']['physical_outcome'] for r in group];low=all(r['low_speed_gate_passed'] for r in group)
+        contrast='alpha0_contact_alpha1_survived' if outcomes==['contact','survived'] else 'alpha1_contact_alpha0_survived' if outcomes==['survived','contact'] else 'no_endpoint_contrast'
+        pairs.append(dict(route=route,event=event,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,contrast=contrast,desired_witness=bool(low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
+    return dict(pairs=pairs,total_pairs=len(pairs),desired_witnesses=sum(p['desired_witness'] for p in pairs),scope='Exploratory intended identical world-Y force; actual delivered impulse truncates on physical failure. No wind-speed calibration or unseen-condition claim.')
 
 
 def render_paired_load_diagnostics(out,group,raws,component_names,stem):
