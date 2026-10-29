@@ -195,3 +195,25 @@ def test_temporal_last_tamper_and_slot_substitution_are_rejected(tmp_path):
     path.unlink();path.with_suffix('.seal.json').unlink();coordinator.freeze_temporal_candidates(training,prepared,path)
     (training/'bce_rank/seed0/last.pt').write_bytes(b'changed')
     with pytest.raises(ValueError,match='artifact changed'):coordinator.verify_temporal_candidates(path)
+
+
+def test_five_candidates_query_and_select_quarter_preferences(interface):
+    import jax
+    import jax.numpy as j
+    grid=(0.,.25,.5,.75,1.)
+    obs=j.zeros(351);latents=j.zeros((5,2))
+    features=coordinator.candidate_features(obs,latents,0.,interface,candidate_alphas=grid)
+    assert features.shape==(5,4,41)
+    np.testing.assert_array_equal(features[:,:,34],np.tile(np.array(grid)[:,None],(1,4)))
+    params={}
+    for layer,shape in enumerate(((41,16),(16,16),(16,1))):
+        params[f'w{layer}']=np.zeros((2,3)+shape,np.float32)
+        params[f'b{layer}']=np.zeros((2,3,shape[1]),np.float32)
+    assert coordinator.candidate_probabilities(params,obs,latents,0.,interface,candidate_alphas=grid).shape==(2,5,4)
+    choose=jax.jit(lambda user,q:coordinator.choose_alpha(j.tile(j.array([2.,0.]),(5,1)),.1,j.array([2.,0.]),2.,q,True,False,user,user_alpha=user,candidate_alphas=grid))
+    for user in grid:
+        assert float(choose(user,j.ones(5))['alpha'])==user
+    # Only the quarter candidate is risk-qualified: it must actually be executed.
+    for index in (1,3):
+        q=j.zeros(5).at[index].set(.9)
+        assert float(choose(1.,q)['alpha'])==grid[index]

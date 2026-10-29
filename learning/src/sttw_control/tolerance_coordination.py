@@ -59,19 +59,21 @@ def native_offsets(latents,interface):
     return j.stack([a[...,0]*j.where(a[...,0]>=0,interface['speed_positive_scale_m_s'],interface['speed_negative_scale_m_s']),a[...,1]*interface['steer_scale_rad']],axis=-1)
 
 
-def candidate_features(observation,latents,yaw,interface):
+def candidate_features(observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.)):
     import jax.numpy as j
     offsets=native_offsets(latents,interface)
-    alpha=j.array([0.,.5,1.],j.float32)
+    alpha=j.asarray(candidate_alphas,j.float32)
+    count=alpha.shape[0]
     force=j.array([-64.,64.,-64.,64.],j.float32)
     preparation=j.array([.2,.2,.6,.6],j.float32)
-    shared=j.stack([j.broadcast_to(alpha[:,None],(3,4)),j.broadcast_to(offsets[:,0,None],(3,4)),j.broadcast_to(offsets[:,1,None]/.2,(3,4)),j.broadcast_to(force[None,:]*j.sin(yaw)/64.,(3,4)),j.broadcast_to(force[None,:]*j.cos(yaw)/64.,(3,4)),j.ones((3,4),j.float32),j.broadcast_to(preparation[None,:]/.6,(3,4))],axis=-1)
+    shared=j.stack([j.broadcast_to(alpha[:,None],(count,4)),j.broadcast_to(offsets[:,0,None],(count,4)),j.broadcast_to(offsets[:,1,None]/.2,(count,4)),j.broadcast_to(force[None,:]*j.sin(yaw)/64.,(count,4)),j.broadcast_to(force[None,:]*j.cos(yaw)/64.,(count,4)),j.ones((count,4),j.float32),j.broadcast_to(preparation[None,:]/.6,(count,4))],axis=-1)
     indices=j.array(list(range(300,320))+list(range(337,351)))
-    return j.concatenate([j.broadcast_to(observation[indices],(3,4,34)),shared],axis=-1)
+    return j.concatenate([j.broadcast_to(observation[indices],(count,4,34)),shared],axis=-1)
 
 
-def candidate_probabilities(params,observation,latents,yaw,interface):
-    return infer_probabilities(params,candidate_features(observation,latents,yaw,interface).reshape(12,41)).reshape((-1,3,4))
+def candidate_probabilities(params,observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.)):
+    features=candidate_features(observation,latents,yaw,interface,candidate_alphas=candidate_alphas)
+    return infer_probabilities(params,features.reshape(-1,41)).reshape((-1,len(candidate_alphas),4))
 
 
 def preview_curvature(progress,path_s,path_curvature):
@@ -82,17 +84,18 @@ def preview_curvature(progress,path_s,path_curvature):
     return j.maximum(j.max(knots),j.maximum(j.abs(j.interp(start,path_s,path_curvature)),j.abs(j.interp(end,path_s,path_curvature))))
 
 
-def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True,user_alpha=1.,task_aware_fallback=False,guard_fallback=False):
+def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.)):
     """No time/event/route inputs; thresholds are engineering gates."""
     import jax.numpy as j
     permission=j.asarray(permission,dtype=bool);latched=j.asarray(latched,dtype=bool)
-    alpha=j.array([0.,.5,1.],j.float32)
+    alpha=j.asarray(candidate_alphas,j.float32)
+    count=alpha.shape[0]
     task_mask=targets[:,0]**2*max_curvature<=3.
     user_index=j.argmin(j.abs(alpha-user_alpha))
     cost=(.1+.9*user_alpha)*((targets[:,0]-v_user)/1.)**2+(1.-.9*user_alpha)*((targets[:,1]-nominal[1])/.2)**2+.05*(alpha-user_alpha)**2+.02*(alpha-prev_alpha)**2
-    quality=j.where(use_q,qmin>=.8,j.ones(3,dtype=bool))
+    quality=j.where(use_q,qmin>=.8,j.ones(count,dtype=bool))
     restore=task_mask[user_index]&j.where(use_q,qmin[user_index]>=j.where(latched,.85,.8),True)
-    eligible=task_mask&quality&(j.arange(3)!=user_index)
+    eligible=task_mask&quality&(j.arange(count)!=user_index)
     degraded=(~restore)&(~j.any(eligible))
     fallback=j.where(j.any(eligible),alpha[j.argmin(j.where(eligible,cost,j.inf))],.5)
     task_candidates=task_mask&(qmin==j.max(j.where(task_mask,qmin,-j.inf)))
@@ -107,15 +110,15 @@ def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,pr
     return dict(alpha=chosen,latched=new_latch,prev_alpha=chosen,task_mask=task_mask,proxy_cost=cost,degraded=permission&degraded,publication_withheld=~permission,task_aware_fallback=j.asarray(task_aware_fallback),task_aware_selected=permission&task_aware_selected,guard_fallback=j.asarray(guard_fallback),guard_fallback_selected=permission&guard_selected)
 
 
-def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False):
+def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.)):
     import jax.numpy as j
-    probabilities=candidate_probabilities(params,observation,latents,yaw,interface)[arm]
+    probabilities=candidate_probabilities(params,observation,latents,yaw,interface,candidate_alphas=candidate_alphas)[arm]
     qmin=j.min(probabilities,axis=-1)
     unbounded=nominal[None,:]+native_offsets(latents,interface)
     lo,hi=interface['speed_reference_bounds_m_s'];steer=interface['steer_reference_bound_rad']
     targets=j.stack([j.clip(unbounded[:,0],lo,hi),j.clip(unbounded[:,1],-steer,steer)],axis=-1)
     curvature=preview_curvature(path_progress,path_s,path_curvature)
-    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q,user_alpha=user_alpha,task_aware_fallback=task_aware_fallback,guard_fallback=guard_fallback)
+    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q,user_alpha=user_alpha,task_aware_fallback=task_aware_fallback,guard_fallback=guard_fallback,candidate_alphas=candidate_alphas)
     result.update(probabilities=probabilities,qmin=qmin,targets=targets,unbounded_targets=unbounded,target_clipped=targets!=unbounded,max_abs_curvature=curvature)
     return result
 
