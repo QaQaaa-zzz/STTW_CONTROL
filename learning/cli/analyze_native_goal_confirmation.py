@@ -2607,7 +2607,8 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
     previous=np.r_[user_alpha,alpha[:-1]];switch=alpha!=previous;returned=(previous!=user_alpha)&(alpha==user_alpha);qualified=(alpha==user_alpha)&restore&permission
     if dwell_s:qualified=qualified&np.asarray(raw['coord_restore_published'][:n],bool)
     dwell_audit=audit_five_alpha_dwell(raw,dwell_s,user_alpha=user_alpha,guard_fallback=guard_fallback) if dwell_s else None
-    masks=dict(full=np.ones(n,bool),before_pulse=t<case['onset_s'],during_pulse=(t>=case['onset_s'])&(t<case['onset_s']+case['duration_s']),after_pulse=t>=case['onset_s']+case['duration_s'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
+    phases=dict(online_phase_masks(t,case))
+    masks=dict(full=np.ones(n,bool),before_pulse=phases['before'],during_pulse=phases['during'],after_pulse=phases['after'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
     if case.get('force_N',1.)==0.:masks={k:v for k,v in masks.items() if k not in ('before_pulse','during_pulse','after_pulse')};masks['nominal_full']=np.ones(n,bool)
     result={}
     for name,m in masks.items():
@@ -2623,7 +2624,7 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
         rawalpha=np.asarray(raw['coord_raw_alpha'][:n]);rawswitch=rawalpha!=np.r_[user_alpha,rawalpha[:-1]]
         for name,mask in masks.items():
             result[name].update(raw_chooser_nonuser_ticks=int(np.sum(mask&(rawalpha!=user_alpha))),raw_chooser_switches=int(np.sum(mask&rawswitch)),held_ticks=int(np.sum(mask&raw['coord_held'][:n])),held_execution_differs_from_raw_ticks=int(np.sum(mask&(rawalpha!=alpha))),task_mask_bypass_ticks=int(np.sum(mask&(raw['coord_hold_release_reason'][:n]==2))),raw_restore_requested_ticks=int(np.sum(mask&restore)),actual_restore_published_ticks=int(np.sum(mask&raw['coord_restore_published'][:n])))
-    return dict(dwell_audit=dwell_audit,user_alpha=user_alpha,fallback_alpha=.5,actual_alpha_dwell=online_alpha_dwell_intervals(raw,user_alpha=user_alpha),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Fixed fallback.5 alone never proves qualified user restoration. For guard runs legacy fallback_half_ticks is degraded .5 occupancy; executed_fixed_half_fallback_ticks from replayed dwell provenance is authoritative.')
+    return dict(dwell_audit=dwell_audit,user_alpha=user_alpha,fallback_alpha=.5,actual_alpha_dwell=online_alpha_dwell_intervals(raw,user_alpha=user_alpha),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),phase_clock_contract='Event phases use integer task lower ticks. First-goal windows retain historical raw-time comparison against first_arrival_s-.005; this patch does not change that separate convention.',contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Fixed fallback.5 alone never proves qualified user restoration. For guard runs legacy fallback_half_ticks is degraded .5 occupancy; executed_fixed_half_fallback_ticks from replayed dwell provenance is authoritative.')
 
 
 def validate_online_panel(cases,protocol):
@@ -2647,8 +2648,9 @@ def validate_online_panel(cases,protocol):
 def online_phase_masks(time,case,nominal=False):
     time=np.asarray(time)
     if nominal:return [('nominal',np.ones(len(time),bool))]
-    start=case['onset_s'];end=start+case['duration_s']
-    return [('before',time<start),('during',(time>=start)&(time<end)),('after',time>=end)]
+    # Raw time is float32; integer task-clock boundaries preserve exact exposure.
+    ticks=np.rint(time/.005).astype(np.int64);start=round(case['onset_s']/.005);end=start+round(case['duration_s']/.005)
+    return [('before',ticks<start),('during',(ticks>=start)&(ticks<end)),('after',ticks>=end)]
 
 
 def render_disturbed_user_panel(out,rows,raws,paths):
@@ -2659,7 +2661,7 @@ def render_disturbed_user_panel(out,rows,raws,paths):
         for ax,force in zip(axes,[-64.,64.]):
             group=sorted([r for r in rows if r['route']==route and r['force_N']==force],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];ax[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
             for r in group:
-                raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"User={r['alpha']:g}";line=ax[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();ax[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');pulse=(t>=r['onset_s'])&(t<r['onset_s']+r['duration_s']);ax[0].scatter(*raw['actual_xy'][:n][pulse].T,color=color,s=6);ax[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);ax[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
+                raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"User={r['alpha']:g}";line=ax[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();ax[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');pulse=dict(online_phase_masks(t,r))['during'];ax[0].scatter(*raw['actual_xy'][:n][pulse].T,color=color,s=6);ax[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);ax[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
             onset=group[0]['onset_s'];ax[0].set(xlabel='World X (m)',ylabel='World Y (m)',title=f'WorldY {force:+g}N; dots=actual pulse exposure');ax[0].set_aspect('equal');ax[1].set(xlabel='Task time (s)',ylabel='Executed alpha');ax[2].set(xlabel='Task time (s)',ylabel='Max candidate min4 probability')
             for a in ax[1:]:a.axvspan(onset,onset+.15,color='grey',alpha=.2)
             for a in ax:a.legend();a.grid(alpha=.2)

@@ -167,3 +167,16 @@ def test_phases_use_actual_case_onset_not_historical_two_point_two():
     np.testing.assert_array_equal(masks['before'],[True,False,False,False,False])
     np.testing.assert_array_equal(masks['during'],[False,True,True,False,False])
     np.testing.assert_array_equal(masks['after'],[False,False,False,True,True])
+
+
+@pytest.mark.parametrize('onset',[1.8,2.12,2.4,2.64,1.96,2.66,2.28])
+def test_float32_event_phases_have_exact_thirty_actual_lower_ticks(onset):
+    time=np.arange(2000,dtype=np.float32)*np.float32(.005)
+    phases=dict(m.online_phase_masks(time,dict(onset_s=onset,duration_s=.15)))
+    assert phases['during'].sum()==30
+    np.testing.assert_array_equal(np.flatnonzero(phases['during']),np.arange(round(onset/.005),round(onset/.005)+30))
+    r=raw([.5]*2000,np.full((2000,5),.1));r['time']=time
+    stats=m.five_alpha_online_statistics(r,dict(onset_s=onset,duration_s=.15))
+    assert stats['windows']['during_pulse']['observed_ticks']==30
+    assert stats['windows']['before_pulse']['observed_ticks']==round(onset/.005)
+    assert stats['windows']['after_pulse']['observed_ticks']==2000-round(onset/.005)-30
