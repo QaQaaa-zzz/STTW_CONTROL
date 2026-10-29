@@ -3,7 +3,7 @@ import pytest
 
 from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
 from sttw_control.tolerance_coordination import select_from_alpha_range
-from sttw_control.preference_outcome_prediction import merge_outcome_datasets,audit_query_feature_alignment,prepare_dataset,SCHEMA
+from sttw_control.preference_outcome_prediction import merge_outcome_datasets,audit_query_feature_alignment,prepare_dataset,return_outcome_features,failure_before_return_deadline,SCHEMA
 
 
 def example():
@@ -113,3 +113,25 @@ def test_returning_policy_cannot_be_silently_labeled_as_hold_alpha42(tmp_path):
     (tmp_path/'analysis').mkdir();(tmp_path/'plan.json').write_text(json.dumps(dict(protocol=dict(causal_preference_return=dict(user_alpha=0.)))))
     (tmp_path/'analysis/results.json').write_text('[]')
     with pytest.raises(ValueError,match='user-conditioned policy schema'):prepare_dataset(tmp_path,tmp_path/'wrong_dataset')
+
+
+def test_return_features_preserve_native_state_and_explicitly_condition_on_original_user():
+    obs,z,case,interface=example()
+    held=outcome_features(obs,z,0.,case,interface);returned=return_outcome_features(obs,z,0.,case,interface,0.)
+    np.testing.assert_array_equal(returned[:42],held);assert returned.shape==(43,) and returned[42]==0.
+    assert return_outcome_features(obs,z,0.,case,interface,1.)[42]==1.
+    with pytest.raises(ValueError,match='original user'):return_outcome_features(obs,z,0.,case,interface,None)
+    assert failure_before_return_deadline(2.94,1.,2.)
+    assert not failure_before_return_deadline(2.98,1.,2.)
+    assert not failure_before_return_deadline(3.2,1.,2.)
+    assert not failure_before_return_deadline(None,1.,2.)
+
+
+def test_return43_query_requires_user_and_keeps_actor_observation351():
+    obs,_,_,interface=example()
+    export=dict(mean=np.zeros(43),scale=np.ones(43),w0=np.zeros((1,43,16)),b0=np.zeros((1,16)),w1=np.zeros((1,16,16)),b1=np.zeros((1,16)),w2=np.zeros((1,16,4)),b2=np.array([[3.,3.,np.log1p(.2),np.log1p(2.)]]))
+    args=(export,obs,[0.,.5,1.],np.zeros((3,2)),0.,1.,[dict(force_N=0.,duration_s=.4,preparation_s=0.)],interface)
+    options=dict(no_fall_threshold=.8,task_threshold=.5,max_path_error_m=4.)
+    with pytest.raises(ValueError,match='original user'):plan_alpha_intervals(*args,**options)
+    result=plan_alpha_intervals(*args,**options,original_user_alpha=0.)
+    assert result['estimated_intervals']==[[0.,1.]] and obs.shape==(351,)

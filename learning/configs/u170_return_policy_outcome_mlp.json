@@ -1,0 +1,44 @@
+{
+  "experiment_id": "STTW-U170-RETURN-POLICY-OUTCOME-MLP-V1",
+  "architecture": {
+    "input_dim": 43,
+    "hidden": [
+      16,
+      16
+    ],
+    "outputs": 4,
+    "activation": "ELU"
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "updates_per_seed": 5000,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "head_loss_weights": [
+      1.0,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "device": "cpu",
+    "cpu_threads": 1,
+    "selection": "fixed_last",
+    "log_every_updates": 100
+  },
+  "budget": {
+    "physics_ticks": 0,
+    "optimizer_updates": 15000
+  },
+  "data_role": "232 known policy queries from188 physical episodes:185 identical-alpha continuation queries,44 pre-return contact queries and3 real feedback-return episodes. All TRAIN, with provenance and old roles preserved. No fresh validation or independent-repeat claim.",
+  "stop_rule": "Three fixed5000update CPU supervised models, no automatic extra updates, no PPO or physics. Bind return43 to the exact feedback-return policy and original-user input; freeze predictions before the two new timing cases.",
+  "outputs": [
+    "no_fall_probability",
+    "survived_goal_probability",
+    "original_path_rmse_m",
+    "upright_peak_abs_speed_m_s"
+  ]
+}

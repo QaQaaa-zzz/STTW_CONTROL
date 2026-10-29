@@ -248,11 +248,11 @@ def query_boundary_alpha(folder,configuration,observation,latents,yaw,task_time_
     plan=prediction.plan_alpha_intervals(export,observation,configuration['candidate_alphas'],latents,yaw,task_time_s,
         configuration['hypotheses'],interface,no_fall_threshold=configuration['no_fall_threshold'],
         task_threshold=configuration['task_threshold'],max_path_error_m=configuration['max_path_error_m'],
-        interval_function=coordination.feasible_alpha_intervals)
+        interval_function=coordination.feasible_alpha_intervals,original_user_alpha=user_alpha)
     decision=coordination.select_from_alpha_range(plan,user_alpha=user_alpha,previous_alpha=user_alpha,
         publication_permitted=permission)
     return dict(plan=plan,decision=decision,actual_future_event_input=False,
-        execution='Single causal decision at restored task boundary, held afterwards; not continuous online replanning.')
+        execution='Selected preparation alpha followed by the bound feedback-return policy.' if len(export['mean'])==43 else 'Single causal decision at restored task boundary, held afterwards; not continuous online replanning.')
 
 
 def targeted_base_review_inventory(p):
@@ -416,10 +416,10 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
     if proposal.get('range_planner_boundary'):
         modules += [folder/'preference_outcome_prediction.py',folder/'tolerance_coordination.py']
-    elif proposal.get('causal_preference_return'):
+    if proposal.get('causal_preference_return'):
         module=file_module('_sttw_return_rule_prepare',folder/'tolerance_coordination.py')
         module.validate_preference_return_rule(proposal['causal_preference_return'])
-        modules.append(folder/'tolerance_coordination.py')
+        if not proposal.get('range_planner_boundary'):modules.append(folder/'tolerance_coordination.py')
     expected_sources=json.loads((transition/'native_expected_sources.json').read_text())
     for file,expected in expected_sources.items():
         if digest(file)!=expected:raise ValueError('new native source drift')
@@ -445,7 +445,13 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         if digest(manifest)!=boundary['manifest_sha256'] or digest(parameters)!=boundary['parameters_sha256']:raise ValueError('boundary predictor identity differs')
         trained=json.loads(manifest.read_text())
         if trained['parameters_sha256']!=boundary['parameters_sha256'] or trained['source_model']['actor_sha256']!=model['actor_sha256']:raise ValueError('boundary predictor middle differs')
-        if boundary['candidate_alphas']!=[0.,.25,.5,.75,1.] or not boundary['hypotheses']:raise ValueError('declared five-grid hypothetical boundary queries required')
+        grid=boundary['candidate_alphas']
+        if (not {0.,.25,.5,.75,1.}.issubset(set(grid)) or grid!=sorted(set(grid)) or any(not math.isfinite(a) or not 0<=a<=1 for a in grid) or not boundary['hypotheses']):raise ValueError('declared sorted grid retaining all original five settings required')
+        return_rule=proposal.get('causal_preference_return')
+        if return_rule:
+            expected=dict(kind='sensor_gated_return_v1',parameters={k:v for k,v in return_rule.items() if k!='user_alpha'},implementation_sha256=digest(folder/'tolerance_coordination.py'))
+            if trained['schema']!='sttw_conditional_outcome43_return_v1' or trained.get('continuation_policy')!=expected:raise ValueError('return-predictor future policy differs from actual controller')
+        elif trained['schema']!='sttw_conditional_outcome42_v1':raise ValueError('returning predictor cannot evaluate a held-alpha controller')
         files += [manifest,parameters]
     if proposal.get('frozen_prediction'):
         frozen=proposal['frozen_prediction'];file=Path(frozen['manifest'])
@@ -2272,12 +2278,6 @@ def load(root,*,prefix_phase=False):
         if jax.eval_shape(actor.apply,params,j.zeros(351)).shape!=(2,):raise ValueError('native Actor shape mismatch')
     params=stack([actors[c['mode'] if c['mode'] in actors else 'H75'] for c in cases])
     n=len(cases);horizon=p['horizon_s'];speed_alpha=j.asarray([c.get('query_alpha',c.get('speed_alpha',c['alpha'])) for c in cases]);steer_alpha=j.asarray([c.get('query_alpha',c.get('steer_alpha',c['alpha'])) for c in cases])
-    if returning:
-        return_module=file_module('_sttw_preference_return',folder/'tolerance_coordination.py')
-        return_rule=return_module.validate_preference_return_rule(p['protocol']['causal_preference_return'])
-        initial=initial.replace(state=initial.state.replace(alpha=j.full(n,return_rule['user_alpha'],dtype=initial.state.alpha.dtype)))
-        initial=return_module.PreferenceReturnCarry(initial,speed_alpha,j.zeros(n,j.int32),initial.state.tick,j.zeros(n,j.int32))
-        initial_identity.update(original_user_alpha=return_rule['user_alpha'],initial_executing_alphas=np.asarray(speed_alpha).tolist(),causal_preference_return=True)
     if capability and p['protocol'].get('range_planner_boundary'):
         boundary=p['protocol']['range_planner_boundary'];receipts=[];selected=[];by_route={}
         for i,case in enumerate(cases):
@@ -2285,11 +2285,12 @@ def load(root,*,prefix_phase=False):
             user=float(case['original_user_alpha']);state=lane.state.replace(alpha=j.asarray(user,lane.state.alpha.dtype))
             path=jax.tree.map(lambda x:x[i],paths)
             obs,_,fault=env.observation(state,path,speeds[i],horizon)
-            queries=jax.vmap(lambda a:obs.at[336].set(a))(j.asarray(boundary['candidate_alphas']))
+            query_grid=sorted(set(boundary['candidate_alphas']+[user]))
+            queries=jax.vmap(lambda a:obs.at[336].set(a))(j.asarray(query_grid))
             latent=jax.vmap(lambda x:actor.apply(actors['H75'],x))(queries)
             yaw=float(env.physics.observe(state.physical.data)[1][2])
             permission=bool(adapter.target_permission(lane)&~fault)
-            receipt=query_boundary_alpha(folder,boundary,np.asarray(obs),np.asarray(latent),yaw,float(state.tick)*env.cc.dt,cfg['residual_interface'],user,permission)
+            receipt=query_boundary_alpha(folder,dict(boundary,candidate_alphas=query_grid),np.asarray(obs),np.asarray(latent),yaw,float(state.tick)*env.cc.dt,cfg['residual_interface'],user,permission)
             chosen=receipt['decision']['selected_alpha']
             if chosen!=case['alpha']:raise ValueError('actual NN choice differs from sealed expected candidate; no physical execution')
             signature=dict(plan=receipt['plan'],decision=receipt['decision'])
@@ -2298,6 +2299,12 @@ def load(root,*,prefix_phase=False):
         speed_alpha=j.asarray(selected);steer_alpha=speed_alpha
         initial=initial.replace(state=initial.state.replace(alpha=speed_alpha))
         save(root/'range_planner_decisions.json',dict(actual_future_event_input=False,same_source_actual_event_decisions_identical=True,decisions=receipts))
+    if returning:
+        return_module=file_module('_sttw_preference_return',folder/'tolerance_coordination.py')
+        return_rule=return_module.validate_preference_return_rule(p['protocol']['causal_preference_return'])
+        initial=initial.replace(state=initial.state.replace(alpha=j.full(n,return_rule['user_alpha'],dtype=initial.state.alpha.dtype)))
+        initial=return_module.PreferenceReturnCarry(initial,speed_alpha,j.zeros(n,j.int32),initial.state.tick,j.zeros(n,j.int32))
+        initial_identity.update(original_user_alpha=return_rule['user_alpha'],initial_executing_alphas=np.asarray(speed_alpha).tolist(),causal_preference_return=True)
     modes=j.asarray([c['mode_index'] for c in cases],j.int32)
     physical_start=float(snapshot.physical_tick)*env.cc.dt
     pulses=j.asarray(force_pulses(cases,physical_start))

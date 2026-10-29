@@ -13,6 +13,7 @@ import numpy as np
 
 
 SCHEMA='sttw_conditional_outcome42_v1'
+RETURN_SCHEMA='sttw_conditional_outcome43_return_v1'
 STATE_INDICES=tuple(range(300,320))+tuple(range(337,351))
 
 
@@ -37,11 +38,17 @@ def outcome_features(observation,latent,source_yaw,case,interface):
     return features
 
 
-def prepare_dataset(run,output,*,partition_override=None,release_note=None):
+def return_outcome_features(observation,latent,source_yaw,case,interface,original_user_alpha):
+    if original_user_alpha is None or not np.isfinite(original_user_alpha) or not 0<=original_user_alpha<=1:raise ValueError('explicit original user alpha required for returning-policy43')
+    return np.r_[outcome_features(observation,latent,source_yaw,case,interface),original_user_alpha].astype(np.float32)
+
+
+def prepare_dataset(run,output,*,partition_override=None,release_note=None,policy_schema=SCHEMA):
     """Freeze all declared TRAIN/DEV groups after successful independent analysis."""
     run=Path(run).resolve();output=Path(output).resolve()
     plan=json.loads((run/'plan.json').read_text());rows=json.loads((run/'analysis/results.json').read_text())
-    if plan['protocol'].get('causal_preference_return'):raise ValueError('preference-return labels need an explicit user-conditioned policy schema; hold-alpha42 is incompatible')
+    rule=plan['protocol'].get('causal_preference_return')
+    if bool(rule)!=(policy_schema==RETURN_SCHEMA) or policy_schema not in (SCHEMA,RETURN_SCHEMA):raise ValueError('preference-return labels need an explicit user-conditioned policy schema; hold-alpha42 is incompatible')
     status=json.loads((run/'evaluation/status.json').read_text());receipt=json.loads((run/'analysis/receipt.json').read_text())
     shape=json.loads((run/'evaluation/shape_receipt.json').read_text());parent_partition=plan['protocol'].get('dataset_partition')
     partition=parent_partition if partition_override is None else partition_override
@@ -52,6 +59,7 @@ def prepare_dataset(run,output,*,partition_override=None,release_note=None):
         raise ValueError('complete authenticated conditional branch analysis required')
     inputs={};sha=lambda path:hashlib.sha256(Path(path).read_bytes()).hexdigest()
     input_paths=[run/'plan.json',run/'analysis/results.json',run/'analysis/receipt.json',run/'evaluation/shape_receipt.json']
+    if rule:input_paths.append(run/'source/tolerance_coordination.py')
     declared_groups=None
     if plan['protocol'].get('excluded_completed_cases') or plan['protocol'].get('range_planner_boundary'):
         input_paths.append(run/'inventory.json');declared_groups={}
@@ -75,7 +83,8 @@ def prepare_dataset(run,output,*,partition_override=None,release_note=None):
         if row['route'] in source_observations:
             np.testing.assert_allclose(neutral,source_observations[row['route']],atol=1e-6,rtol=0,err_msg='same-state source query differs beyond alpha')
         else:source_observations[row['route']]=neutral
-        xs.append(outcome_features(obs,raw['composed_latent'][0],raw['pre_upper_yaw'][0],row,plan['config']['residual_interface']))
+        if rule and not row.get('preference_return_audit',{}).get('independent_sensor_permission_clock_audit'):raise ValueError('independently audited feedback return required')
+        xs.append(return_outcome_features(obs,raw['composed_latent'][0],raw['pre_upper_yaw'][0],row,plan['config']['residual_interface'],row['original_user_alpha']) if rule else outcome_features(obs,raw['composed_latent'][0],raw['pre_upper_yaw'][0],row,plan['config']['residual_interface']))
         with np.load(row['diagnostic_task_file']) as z:cross=np.asarray(z['original_cross_track_m'])
         survived=row['endpoint']['physical_outcome']=='survived';goal=survived and row['endpoint']['goal_arrived']
         first=row['endpoint']['first_arrival_s'];stop=min(n,round((first-row['source_task_start_s'])/.005)) if goal else n
@@ -88,6 +97,7 @@ def prepare_dataset(run,output,*,partition_override=None,release_note=None):
         dev=partition.get('all_development',False) or (row['force_N']==partition.get('development_force_N') and row['preparation_s']==partition.get('development_preparation_s'))
         roles.append('development' if dev else 'training')
         metadata.append(dict(case_id=row['case_id'],group=row['route']+'/'+row['event'],route=row['route'],alpha=row['alpha'],force_N=row['force_N'],preparation_s=row['preparation_s'],source_task_start_s=row['source_task_start_s'],path_rmse_to_goal_or_window_m=path_rmse,full_upright_max_abs_speed_m_s=peak,no_fall=survived,task_completed=bool(goal),regression_targets_valid=survived,role=roles[-1]))
+        if rule:metadata[-1].update(physical_case_id=row['case_id'],original_user_alpha=row['original_user_alpha'],label_origin='executed_feedback_return')
     if roles.count('training')!=partition['training_rows'] or roles.count('development')!=partition['development_rows']:
         raise ValueError('predeclared TRAIN/DEV counts differ')
     for group in {m['group'] for m in metadata}:
@@ -99,8 +109,15 @@ def prepare_dataset(run,output,*,partition_override=None,release_note=None):
     np.savez_compressed(output/'dataset.npz',features=np.asarray(xs),targets=np.asarray(ys,np.float32),regression_mask=np.asarray(masks,np.float32),roles=np.asarray(roles))
     manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),unchanged_alpha_replay='checked' if has_unchanged else 'not applicable: no unchanged-alpha zero-force branch; complete source-copy proof retained',limitations='Related-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
     if partition_override is not None:manifest.update(parent_partition=parent_partition,release_note=release_note)
+    if rule:
+        manifest.update(schema=RETURN_SCHEMA,feature_dimension=43,continuation_policy=dict(kind='sensor_gated_return_v1',parameters={k:v for k,v in rule.items() if k!='user_alpha'},implementation_sha256=sha(run/'source/tolerance_coordination.py')))
+        manifest['query_features']=manifest['query_features']+['original_user_alpha']
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     return manifest
+
+
+def prepare_return_dataset(run,output,**kwargs):
+    return prepare_dataset(run,output,policy_schema=RETURN_SCHEMA,**kwargs)
 
 
 def merge_outcome_datasets(datasets,output,*,release_note):
@@ -110,7 +127,7 @@ def merge_outcome_datasets(datasets,output,*,release_note):
     sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
     for directory in datasets:
         directory=Path(directory).resolve();file=directory/'manifest.json';meta=json.loads(file.read_text());datafile=directory/'dataset.npz'
-        if meta['schema']!=SCHEMA or sha(datafile)!=meta['dataset_sha256']:raise ValueError('parent dataset identity differs')
+        if meta['schema'] not in (SCHEMA,RETURN_SCHEMA) or sha(datafile)!=meta['dataset_sha256']:raise ValueError('parent dataset identity differs')
         for source,expected in meta['inputs_sha256'].items():
             if sha(source)!=expected:raise ValueError('parent evidence changed '+source)
         contract={k:meta[k] for k in ('schema','feature_dimension','state_indices','query_features','targets')}
@@ -121,6 +138,7 @@ def merge_outcome_datasets(datasets,output,*,release_note):
             payload=dict(config=source_plan['config'],initial_source=source_plan['initial_source'],physics_identity=receipt['physics_identity'])
             physical_contract=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
         contract['physical_contract_sha256']=physical_contract
+        contract['continuation_policy']=meta.get('continuation_policy')
         if reference is None:reference=contract
         elif reference!=contract:raise ValueError('cannot merge different feature or frozen-middle identities')
         with np.load(datafile) as z:data=dict(z)
@@ -134,17 +152,85 @@ def merge_outcome_datasets(datasets,output,*,release_note):
     merged={key:np.concatenate([part[key] for part in parts]) for key in ('features','targets','regression_mask')}
     merged['roles']=np.full(len(records),'training');output.mkdir(parents=True,exist_ok=False)
     np.savez_compressed(output/'dataset.npz',**merged)
-    manifest=dict(meta,schema=SCHEMA,source_run=None,physical_contract_sha256=reference['physical_contract_sha256'],source_datasets=parents,records=records,
+    manifest=dict(meta,schema=reference['schema'],source_run=None,physical_contract_sha256=reference['physical_contract_sha256'],source_datasets=parents,records=records,
         partition=dict(training_rows=len(records),development_rows=0,unit='Explicit release of all known parent rows for this refit only'),
         release_note=release_note,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),
         limitations='Related states and already observed outcomes; all rows TRAIN. Parent DEV evidence remains unchanged. No independent validation or online control claim.')
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
 
 
+def failure_before_return_deadline(contact_s,start_s,minimum_preparation_s,margin_s=.05):
+    return contact_s is not None and np.isfinite(contact_s) and contact_s<start_s+minimum_preparation_s-margin_s
+
+
+def derive_return_training_dataset(held_dataset,actual_return_dataset,output):
+    """Reuse identical programs and pre-return failure prefixes, never futures.
+
+    A held trajectory is exactly the same alpha program when its original-user
+    destination equals its candidate. A contact before any return is possible
+    also remains a negative query for another destination. These are derived
+    supervision queries sharing physical evidence, not new simulation episodes.
+    """
+    held_dataset=Path(held_dataset).resolve();actual_return_dataset=Path(actual_return_dataset).resolve();output=Path(output).resolve()
+    sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    held=json.loads((held_dataset/'manifest.json').read_text());actual=json.loads((actual_return_dataset/'manifest.json').read_text())
+    if held['schema']!=SCHEMA or actual['schema']!=RETURN_SCHEMA or held['source_model']['actor_sha256']!=actual['source_model']['actor_sha256']:raise ValueError('explicit held42 and executed-return43 datasets with same Actor required')
+    inputs={}
+    for directory,meta in ((held_dataset,held),(actual_return_dataset,actual)):
+        if sha(directory/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('parent outcome dataset changed')
+        for path,expected in meta['inputs_sha256'].items():
+            if sha(path)!=expected:raise ValueError('parent evidence changed '+path)
+        inputs.update({str(directory/'manifest.json'):sha(directory/'manifest.json'),str(directory/'dataset.npz'):sha(directory/'dataset.npz')})
+    run=Path(actual['source_run']);plan=json.loads((run/'plan.json').read_text());rule=plan['protocol']['causal_preference_return'];policy=actual['continuation_policy']
+    receipt=json.loads((run/'analysis/receipt.json').read_text());payload=dict(config=plan['config'],initial_source=plan['initial_source'],physics_identity=receipt['physics_identity'])
+    contract=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    if held['physical_contract_sha256']!=contract:raise ValueError('held/return physical contracts differ')
+    if policy['parameters']!={k:v for k,v in rule.items() if k!='user_alpha'}:raise ValueError('return policy parameter identity differs')
+    evidence={};visited=set()
+    def collect(directory):
+        directory=Path(directory)
+        if str(directory) in visited:return
+        visited.add(str(directory));meta=json.loads((directory/'manifest.json').read_text())
+        if meta.get('source_run'):
+            file=Path(meta['source_run'])/'analysis/results.json';expected=meta['inputs_sha256'][str(file)]
+            if sha(file)!=expected:raise ValueError('failure-time evidence changed')
+            inputs[str(file)]=expected
+            evidence.update({r['case_id']:r for r in json.loads(file.read_text())})
+        else:
+            for parent in meta['source_datasets']:
+                file=Path(parent['dataset'])/'manifest.json'
+                if sha(file)!=meta['inputs_sha256'][str(file)]:raise ValueError('parent source mapping changed')
+                collect(parent['dataset'])
+    collect(held_dataset)
+    with np.load(held_dataset/'dataset.npz') as z:old=dict(z)
+    with np.load(actual_return_dataset/'dataset.npz') as z:executed=dict(z)
+    xs=[];ys=[];masks=[];records=[]
+    for i,row in enumerate(held['records']):
+        physical=evidence[row['case_id']];candidate=float(row['alpha']);user=float(rule['user_alpha'])
+        requests=[(candidate,'held_equivalent_user_equals_candidate')]
+        if candidate!=user and old['targets'][i,0]==0. and failure_before_return_deadline(physical.get('contact_pre_tick_s'),row['source_task_start_s'],rule['minimum_preparation_s']):requests.append((user,'before_any_return_contact'))
+        for destination,origin in requests:
+            xs.append(np.r_[old['features'][i],destination]);ys.append(old['targets'][i]);masks.append(old['regression_mask'][i])
+            records.append(dict(row,case_id=row['case_id']+f'/return_policy_user{destination:g}/{origin}',physical_case_id=row['case_id'],
+                original_user_alpha=destination,source_original_user_alpha=physical.get('original_user_alpha',physical.get('user_alpha',candidate)),
+                role='training',label_origin=origin,parent_dataset=str(held_dataset)))
+    for i,row in enumerate(actual['records']):
+        xs.append(executed['features'][i]);ys.append(executed['targets'][i]);masks.append(executed['regression_mask'][i]);records.append(dict(row,role='training',parent_dataset=str(actual_return_dataset)))
+    if len({r['case_id'] for r in records})!=len(records):raise ValueError('duplicate return-policy query identity')
+    output.mkdir(parents=True,exist_ok=False);np.savez_compressed(output/'dataset.npz',features=np.asarray(xs,np.float32),targets=np.asarray(ys,np.float32),regression_mask=np.asarray(masks,np.float32),roles=np.full(len(records),'training'))
+    counts={origin:sum(r['label_origin']==origin for r in records) for origin in sorted({r['label_origin'] for r in records})}
+    manifest=dict(actual,source_run=None,physical_contract_sha256=contract,source_held_dataset=str(held_dataset),source_return_dataset=str(actual_return_dataset),
+        records=records,partition=dict(training_rows=len(records),development_rows=0,unit='Policy-conditioned supervision queries; shared physical cases are not independent episodes'),
+        unique_physical_cases=len({r['physical_case_id'] for r in records}),label_origin_counts=counts,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),
+        causal_derivation=dict(negative_prefix_margin_s=.05,minimum_preparation_s=rule['minimum_preparation_s'],identity_property='Destination equals preparation alpha: no alpha change at any phase',physical_reexecution=False),
+        limitations='Known related physical cases and explicitly derived equivalent-action supervision. New feedback policy has only the executed return cases above. No independent TEST, calibrated probabilities or continuous alpha safety guarantee.')
+    (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
+
+
 def predict_outcomes(export,features):
     """CPU NumPy inference from the exact frozen multi-head ensemble export."""
     x=np.asarray(features,np.float32)
-    if x.ndim not in (1,2) or x.shape[-1]!=42 or not np.isfinite(x).all():raise ValueError('finite conditional42 feature vector/matrix required')
+    if x.ndim not in (1,2) or x.shape[-1]!=len(export['mean']) or x.shape[-1] not in (42,43) or not np.isfinite(x).all():raise ValueError('finite matching conditional42/43 feature vector/matrix required')
     x=np.clip((x-export['mean'])/export['scale'],-5.,5.)
     h=np.einsum('...i,sij->s...j',x,export['w0'])+export['b0'][:,None,:] if x.ndim==2 else np.einsum('i,sij->sj',x,export['w0'])+export['b0']
     h=np.where(h>=0,h,np.expm1(np.minimum(h,0.)))
@@ -156,7 +242,7 @@ def predict_outcomes(export,features):
     return np.concatenate([probabilities,continuous],axis=-1).mean(axis=0)
 
 
-def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,source_yaw,task_time_s,hypotheses,interface,*,no_fall_threshold,task_threshold,max_path_error_m,interval_function=None):
+def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,source_yaw,task_time_s,hypotheses,interface,*,no_fall_threshold,task_threshold,max_path_error_m,interval_function=None,original_user_alpha=None):
     """Return risk/task/path-constrained candidate ranges without a future-event input.
 
     Hypotheses are the caller-declared disturbance family, not a feed of actual
@@ -175,7 +261,7 @@ def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,s
             case['onset_s']=task_time_s+case['preparation_s'] if case['force_N'] else 0.
             if case['force_N'] and case['onset_s']+case['duration_s']>10.:raise ValueError('hypothetical event extends beyond supported task horizon')
             query=np.asarray(observation,np.float32).copy();query[336]=alpha
-            features.append(outcome_features(query,latent,source_yaw,case,interface))
+            features.append(return_outcome_features(query,latent,source_yaw,case,interface,original_user_alpha) if len(export['mean'])==43 else outcome_features(query,latent,source_yaw,case,interface))
     forecast=predict_outcomes(export,np.stack(features)).reshape(len(grid),len(hypotheses),4)
     aggregate=np.c_[forecast[:,:,0].min(axis=1),forecast[:,:,1].min(axis=1),forecast[:,:,2].max(axis=1),forecast[:,:,3].max(axis=1)]
     result=feasible_alpha_intervals(grid,aggregate[:,0],aggregate[:,1],aggregate[:,2],no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
@@ -203,6 +289,8 @@ class FrozenAlphaRangePlanner:
         if config['network']['actor_dim']!=351:raise ValueError('native351 state schema required')
         self.interface=config['residual_interface']
         with np.load(self.directory/'parameters.npz') as z:self.parameters=dict(z)
+        expected_dim=43 if self.manifest.get('schema')==RETURN_SCHEMA else 42
+        if len(self.parameters['mean'])!=expected_dim or (expected_dim==43 and self.manifest.get('continuation_policy',{}).get('kind')!='sensor_gated_return_v1'):raise ValueError('outcome feature/policy schema differs')
         with Path(middle['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
         actor=PathCommandActor(architecture=config['network']['architecture'])
         self.middle_query=jax.jit(lambda x:actor.apply(params,x))
@@ -216,7 +304,8 @@ class FrozenAlphaRangePlanner:
         # Preserve an explicitly requested user preference even off the standard grid.
         grid=np.unique(np.r_[candidate_alphas,user]);queries=np.repeat(obs[None,:],len(grid),axis=0);queries[:,336]=grid
         latents=np.asarray(self.middle_query(j.asarray(queries)))
-        result=plan_alpha_intervals(self.parameters,obs,grid,latents,source_yaw,task_time_s,hypotheses,self.interface,no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
+        result=plan_alpha_intervals(self.parameters,obs,grid,latents,source_yaw,task_time_s,hypotheses,self.interface,no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m,original_user_alpha=user)
+        if self.manifest.get('schema')==RETURN_SCHEMA:result['continuation_policy']=self.manifest['continuation_policy']
         result.update(user_alpha=user,conditioning_alpha_before_query=float(obs[336]),middle_id=self.manifest['source_model']['registry_id'],outcome_parameters_sha256=self.manifest['parameters_sha256'],query_seconds=time.monotonic()-started,scope='Query API only; caller controls execution and restores preference. Related-state alpha interpolation validated, not universal control/safety certification.')
         return result
 
@@ -269,13 +358,13 @@ def freeze_query_predictions(protocol,training,output):
     for case in cases:
         obs=source[case['route']][0].copy();obs[336]=case['alpha'];queries.append(obs)
     latents=np.asarray(actor.apply(params,j.asarray(np.stack(queries))))
-    features=np.stack([outcome_features(obs,z,source[c['route']][1],c,parent['config']['residual_interface']) for obs,z,c in zip(queries,latents,cases)])
+    features=np.stack([return_outcome_features(obs,z,source[c['route']][1],c,parent['config']['residual_interface'],c['original_user_alpha']) if fitted['schema']==RETURN_SCHEMA else outcome_features(obs,z,source[c['route']][1],c,parent['config']['residual_interface']) for obs,z,c in zip(queries,latents,cases)])
     prediction=predict_outcomes(export,features)
     output.parent.mkdir(parents=True,exist_ok=True)
     if output.exists() or output.with_suffix('.npz').exists():raise FileExistsError('frozen prospective prediction already exists')
     np.savez_compressed(output.with_suffix('.npz'),features=features,prediction=prediction,case_ids=np.asarray([c['case_id'] for c in cases]))
     import datetime
-    result=dict(schema=SCHEMA,recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical alpha interpolation labels. Known source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
+    result=dict(schema=fitted['schema'],recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical query labels. Known source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
     output.write_text(json.dumps(result,indent=2)+'\n');return result
 
 
@@ -288,8 +377,8 @@ def audit_query_feature_alignment(frozen,observed,export):
     No observed outcome labels enter this numerical check.
     """
     frozen=np.asarray(frozen);observed=np.asarray(observed)
-    if frozen.shape!=observed.shape or frozen.ndim!=2 or frozen.shape[1]!=42:raise ValueError('matching conditional42 features required')
-    error=abs(observed-frozen);bound=np.full(42,5e-5);bound[36]=2e-4
+    if frozen.shape!=observed.shape or frozen.ndim!=2 or frozen.shape[1] not in (42,43):raise ValueError('matching conditional42/43 features required')
+    error=abs(observed-frozen);bound=np.full(frozen.shape[1],5e-5);bound[36]=2e-4
     if not np.isfinite(error).all() or np.any(error>bound+3e-5*abs(frozen)):raise ValueError('observed source features exceed bounded Actor roundoff')
     expected=predict_outcomes(export,frozen);actual=predict_outcomes(export,observed);drift=abs(expected-actual)
     if np.any(drift[:,:2]>5e-3) or np.any(drift[:,2:]>1e-2):raise ValueError('Actor roundoff changes outcome predictions materially')
@@ -308,7 +397,7 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     frozen_manifest=Path(frozen_manifest).resolve();dataset=Path(dataset).resolve();output=Path(output).resolve()
     frozen=json.loads(frozen_manifest.read_text());meta=json.loads((dataset/'manifest.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
     training=Path(frozen['training']);fitted=json.loads((training/'manifest.json').read_text())
-    if meta['schema']!=SCHEMA or sha(dataset/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('new probe dataset identity changed')
+    if meta['schema']!=fitted['schema'] or sha(dataset/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('new probe dataset identity changed')
     if sha(frozen['query_data'])!=frozen['query_data_sha256'] or sha(training/'manifest.json')!=frozen['training_manifest_sha256'] or sha(training/'parameters.npz')!=frozen['parameters_sha256']:
         raise ValueError('prospective model/predictions changed after freeze')
     with np.load(frozen['query_data']) as z:query=dict(z)
@@ -328,22 +417,23 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     with np.load(parent/'dataset.npz') as z:reference=dict(z)
     with np.load(training/'parameters.npz') as z:export=dict(z)
     reference_prediction=predict_outcomes(export,reference['features']);wanted={r['group'] for r in meta['records']};combined=[]
+    users={r['group']:r.get('original_user_alpha') for r in meta['records']}
     for records,truth,prediction,role in ((parent_meta['records'],reference['targets'],reference_prediction,'training_reference'),(meta['records'],data['targets'],query['prediction'],'fresh_alpha_probe')):
-        combined.extend(dict(record=r,target=t.tolist(),prediction=p.tolist(),role=role) for r,t,p in zip(records,truth,prediction) if r['group'] in wanted)
+        combined.extend(dict(record=r,target=t.tolist(),prediction=p.tolist(),role=role) for r,t,p in zip(records,truth,prediction) if r['group'] in wanted and (meta['schema']!=RETURN_SCHEMA or r['original_user_alpha']==users[r['group']]))
     groups=[]
     examples=frozen['interval_examples']
     for group in sorted(wanted):
         members=sorted([r for r in combined if r['record']['group']==group],key=lambda r:r['record']['alpha']);grid=[r['record']['alpha'] for r in members]
-        if len(grid)!=len(set(grid)) or not {0.,.25,.5,.75,1.}.issubset(set(grid)):raise ValueError('unique checked points including all original five training references required')
+        if len(grid)!=len(set(grid)):raise ValueError('duplicate checked alpha points in same user query group')
         prediction=np.asarray([r['prediction'] for r in members]);truth=np.asarray([r['target'] for r in members]);ranges=[]
         for risk in examples['no_fall_thresholds']:
             for limit in examples['path_rmse_limits_m']:
                 plan=feasible_alpha_intervals(grid,prediction[:,0],prediction[:,1],prediction[:,2],no_fall_threshold=risk,task_threshold=examples['task_threshold'],max_path_error_m=limit)
                 observed=(truth[:,0]==1)&(truth[:,1]==1)&(np.expm1(truth[:,2])<=limit)
                 plan.update(observed_qualified_mask=observed.tolist(),false_feasible_alpha=[a for a,p,t in zip(grid,plan['feasible_mask'],observed) if p and not t]);ranges.append(plan)
-        groups.append(dict(group=group,candidates=members,plans=ranges))
+        groups.append(dict(group=group,candidates=members,plans=ranges,original_five_reference_complete={0.,.25,.5,.75,1.}.issubset(set(grid))))
     output.mkdir(parents=True,exist_ok=False)
-    result=dict(schema=SCHEMA,feature_alignment_audit=alignment,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Range tables include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
+    result=dict(schema=fitted['schema'],feature_alignment_audit=alignment,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state query validation only. Range tables show only checked points and explicitly mark incomplete original-five references; unqueried candidates and continuous interiors remain unverified. No road/safety guarantee; empty sets preserved.')
     (output/'results.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metric,indent=2)+'\n')
     physical_run=Path(meta['source_run']);first=next(r for r in meta['records'] if r['force_N']!=0)
     event=first['group'].split('/')[-1];xy=physical_run/'analysis'/(first['route']+'_'+event+'_fixed_candidate_xy.png')
@@ -370,13 +460,14 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
     from torch import nn
     from torch.utils.tensorboard import SummaryWriter
     dataset=Path(dataset).resolve();output=Path(output).resolve();cfg=json.loads(Path(config).read_text())
-    if (cfg['architecture']['input_dim']!=42 or cfg['architecture']['hidden']!=[16,16] or cfg['architecture']['outputs']!=4
+    feature_dim=cfg['architecture']['input_dim'];schema=SCHEMA if feature_dim==42 else RETURN_SCHEMA
+    if (feature_dim not in (42,43) or cfg['architecture']['hidden']!=[16,16] or cfg['architecture']['outputs']!=4
         or cfg['training']['device']!='cpu' or cfg['training']['selection']!='fixed_last'
         or cfg['budget']['physics_ticks']!=0
         or cfg['budget']['optimizer_updates']!=len(cfg['training']['seeds'])*cfg['training']['updates_per_seed']):
         raise ValueError('declared small multi-output CPU fit contract differs')
     meta=json.loads((dataset/'manifest.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-    if meta['schema']!=SCHEMA or meta['dataset_sha256']!=sha(dataset/'dataset.npz'):raise ValueError('prepared dataset identity changed')
+    if meta['schema']!=schema or meta['feature_dimension']!=feature_dim or meta['dataset_sha256']!=sha(dataset/'dataset.npz'):raise ValueError('prepared dataset identity changed')
     for p,h in meta['inputs_sha256'].items():
         if sha(p)!=h:raise ValueError('prepared source changed '+p)
     with np.load(dataset/'dataset.npz') as z:data=dict(z)
@@ -393,7 +484,7 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
     save_status();torch.set_num_threads(cfg['training'].get('cpu_threads',1));tx=torch.tensor(normalized);ty=torch.tensor(y);tm=torch.tensor(mask)
     weights=torch.tensor(cfg['training']['head_loss_weights']);models=[];history=[]
     for seed in cfg['training']['seeds']:
-        torch.manual_seed(seed);model=nn.Sequential(nn.Linear(42,16),nn.ELU(),nn.Linear(16,16),nn.ELU(),nn.Linear(16,4))
+        torch.manual_seed(seed);model=nn.Sequential(nn.Linear(feature_dim,16),nn.ELU(),nn.Linear(16,16),nn.ELU(),nn.Linear(16,4))
         optimizer=torch.optim.AdamW(model.parameters(),lr=cfg['training']['learning_rate'],weight_decay=cfg['training']['weight_decay'])
         writer=SummaryWriter(str(output/'tensorboard'/f'seed{seed}'))
         for step in range(1,cfg['training']['updates_per_seed']+1):
@@ -411,7 +502,7 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
                 for key,value in rec.items():
                     if key not in ('seed','step'):writer.add_scalar(key,value,step)
                 writer.flush();save_status()
-        torch.save(dict(state_dict=model.state_dict(),seed=seed,schema=SCHEMA,mean=mean,scale=scale,dataset_sha256=meta['dataset_sha256']),output/'checkpoints'/f'seed{seed}.pt')
+        torch.save(dict(state_dict=model.state_dict(),seed=seed,schema=schema,mean=mean,scale=scale,dataset_sha256=meta['dataset_sha256']),output/'checkpoints'/f'seed{seed}.pt')
         writer.close();models.append(model)
     status.update(stage='training_complete',state='completed',training_seconds=time.monotonic()-started);save_status()
     if on_training_complete:
@@ -425,7 +516,8 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
     np.testing.assert_allclose(prediction,reference,atol=3e-5,rtol=3e-5,err_msg='NumPy export inference differs from training model')
     np.savez_compressed(output/'parameters.npz',**export);np.savez_compressed(output/'predictions.npz',prediction=prediction,targets=y,roles=data['roles'])
     metrics=dict(training=outcome_metrics(y[train],prediction[train],mask[train]),development=outcome_metrics(y[dev],prediction[dev],mask[dev]) if dev.any() else None)
-    result=dict(schema=SCHEMA,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
+    result=dict(schema=schema,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
+    if schema==RETURN_SCHEMA:result['continuation_policy']=meta['continuation_policy']
     (output/'manifest.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metrics,indent=2)+'\n')
     import matplotlib
     matplotlib.use('Agg')
