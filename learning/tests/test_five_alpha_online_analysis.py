@@ -265,3 +265,12 @@ def test_load_witness_requires_survival_goal_and_both_actual_low_speed_gates(low
     assert m.paired_low_speed_load_outcomes(rows)['desired_witnesses']==0
     rows[1]['force_N']=-16.
     with pytest.raises(ValueError,match='same intended'):m.paired_low_speed_load_outcomes(rows)
+
+
+def test_conditional_primary_window_does_not_relabel_or_discard_extension_failure():
+    raw=dict(active_tick=np.ones(8,bool),time=.01+np.arange(8)*.005,contact_failure=np.array([False]*7+[True]))
+    primary,window=m.declared_primary_suffix(raw,dict(source_task_start_s=.01),horizon_s=.04)
+    assert len(primary['time'])==6 and not primary['contact_failure'].any()
+    assert window['observed_full_lower_ticks']==8 and window['post_primary_extension_lower_ticks']==2
+    assert window['post_primary_extension_contact'] is True
+    assert raw['contact_failure'][-1] and len(raw['time'])==8

@@ -395,10 +395,13 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     files=list(dict.fromkeys(files))
     if proposal.get('capability_variant')=='S_goal_extension':
         files += [Path(proposal['goal_source']['run'])/'plan.json']+[Path(r['file']) for r in proposal['goal_source']['paths'].values()]
-    steps=planning_chunk_steps(10.,10.)
+    source_ticks={c['state_source']['source_task_tick'] for c in proposal['route_contexts'] if 'state_source' in c}
+    if len(source_ticks)>1:raise ValueError('one declared source task clock per batched continuation required')
+    remaining_s=10.-next(iter(source_ticks))*.005 if source_ticks else 10.
+    steps=planning_chunk_steps(10.,remaining_s)
     p=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=CAPABILITY_MODE,source=str(transition),
         native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
-        config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
+        config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=len(steps),steps_per_chunk=5,chunk_upper_steps=steps,
         maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,
         initialization=("Authenticated full native source carries; only candidate alpha changes, original task clock retained. " if any('state_source' in c for c in proposal['route_contexts']) else f"Fresh new-physics prepared bank{bank_index}, original native task reset; ")+f"{model['registry_id']} declared alpha={proposal['alphas']}; no q or additional baseline.",data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),

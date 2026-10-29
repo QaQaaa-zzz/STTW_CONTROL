@@ -2812,6 +2812,20 @@ def validate_fixed_capability_cases(cases,protocol):
         if c['mode']!='H75' or c['force_N']!=0. or c['bank_index']!=(0 if targeted else 6) or any(c.get(k,c['alpha'])!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')):raise ValueError('fixed capability case identity differs')
 
 
+def declared_primary_suffix(raw,case,horizon_s=10.):
+    """Preserve full raw and separately score the predeclared original task window."""
+    active=np.asarray(raw['active_tick'],bool);full=int(active.sum());start=case.get('source_task_start_s',0.)
+    if not np.array_equal(np.flatnonzero(active),np.arange(full)):raise ValueError('contiguous actual suffix required')
+    if 'source_task_start_s' not in case and full>round(horizon_s/.005):raise ValueError('unexpected nonconditional extension')
+    limit=round((horizon_s-start)/.005)
+    if limit<=0:raise ValueError('source starts beyond declared horizon')
+    primary={k:np.asarray(v)[:limit] for k,v in raw.items()}
+    n=int(np.asarray(primary['active_tick'],bool).sum())
+    return primary,dict(observed_full_lower_ticks=full,post_primary_extension_lower_ticks=full-n,
+        post_primary_extension_contact=bool(np.any(np.asarray(raw['contact_failure'])[limit:][active[limit:]])),
+        primary_task_start_s=float(start),primary_task_end_s=float(horizon_s))
+
+
 def analyze_fixed_h75_capability(root,p):
     """Fresh-physics fixedH75 nominal capability panel; no coordinator/baseline."""
     import matplotlib
@@ -2844,7 +2858,8 @@ def analyze_fixed_h75_capability(root,p):
     for lane,c in enumerate(index):
         if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('capability case/raw identity differs')
         with np.load(c['raw_file']) as z:raw=dict(z)
-        n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=n
+        raw,window=declared_primary_suffix(raw,c)
+        n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=window['observed_full_lower_ticks']
         if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(raw['active_tick']),np.arange(n)):raise ValueError('invalid capability actual prefix')
         start_s=c.get('source_task_start_s',0.);start_tick=round(start_s/.005)
         np.testing.assert_allclose(raw['time'][:n],start_s+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
@@ -2868,8 +2883,10 @@ def analyze_fixed_h75_capability(root,p):
             np.testing.assert_allclose(float(path['goal']),source['new_goal_s'],atol=1e-6,rtol=0)
             np.testing.assert_allclose(goal,c['new_goal_xy'],atol=3e-6,rtol=0)
         fault=raw['policy_fault']|raw['continuation_geometry_fault']|raw['lower_fault']|raw['nonfinite'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault);endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.,start_tick=start_tick);endpoint['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000-start_tick)
-        updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']]);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
+        primary_decisions=[d for d in decisions if d['case_id']==c['case_id'] and d['task_tick']<start_tick+n]
+        updates=audit_selection_replans(run,dict(c,replanned=bool(primary_decisions)),lane,raw,path,goal,primary_decisions);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
         rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(start_s+np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t+start_tick for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
+        rows[-1].update(window)
         if load_screen:
             rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick,path_updates=updates)
             original.update(rebuilt)
