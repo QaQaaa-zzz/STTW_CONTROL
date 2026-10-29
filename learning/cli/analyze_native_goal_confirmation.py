@@ -18,9 +18,140 @@ COLORS=('#0072B2','#D55E00','#333333','#008060')
 STYLES=('-','--',':','-.')
 
 
+def audit_selection_replans(run,case,lane,raw,path,goal,decisions):
+    """Check every saved path and causal trigger; original goal cannot move."""
+    from sttw_control.goal_replanning import replan_requested
+    updates=[];n=int(np.asarray(raw['active_tick'],bool).sum());previous=0
+    for d in decisions:
+        tick=d['task_tick']
+        if d['case_index']!=lane or tick%20 or not previous<tick<n:raise ValueError('invalid10Hz planning record')
+        if not replan_requested(xy=d['measured_pose'][:2],goal_xy=goal,cross_track_m=d['cross_track_m'],follower_invalid=d['follower_invalid'],already_replanned=bool(updates),contact=d['contact'],fault=d['fault'],ever_arrived=d['ever_arrived'],continuous_replanning=True):raise ValueError('noncausal planning record')
+        np.testing.assert_allclose(d['measured_pose'][:2],raw['actual_xy'][tick-1],atol=3e-6,rtol=0)
+        np.testing.assert_allclose(d['cross_track_m'],raw['path_cross_track'][tick-1],atol=3e-6,rtol=0)
+        f=run/d['path_file']
+        if f.name!=f'replanned_path_{lane:02d}_tick{tick:04d}.npz':raise ValueError('unexpected per-update path filename')
+        with np.load(f) as z:changed=dict(z)
+        np.testing.assert_allclose(changed['xy'][0],d['measured_pose'][:2],atol=3e-6,rtol=0)
+        np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,k]) for k in (0,1)],goal,atol=3e-6,rtol=0)
+        if np.any(np.diff(changed['s'])<=0):raise ValueError('replanned arclength is not ordered')
+        updates.append((tick,changed));previous=tick
+    if bool(updates)!=case['replanned']:raise ValueError('replanning flag mismatch')
+    return updates
+
+
+def analyze_middle_selection(root,p):
+    from sttw_control.native_goal_run import middle_selection_inventory
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Circle
+    import time
+    started=time.monotonic();run=root/'evaluation';out=root/'analysis'
+    inventory=middle_selection_inventory(p['protocol']);status=json.loads((run/'status.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=len(inventory) or len(index)!=len(inventory):raise ValueError('complete declared selection required')
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan changed')
+    for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
+        if digest(f)!=sha:raise ValueError('selection source/input changed '+f)
+    manifest=json.loads((run/'manifest.json').read_text())
+    for key,expected in [('plan_sha256',digest(root/'plan.json')),('cases',inventory),('models',p['models']),('config',p['config'])]:
+        if manifest[key]!=expected:raise ValueError('manifest mismatch '+key)
+    out.mkdir(exist_ok=False);(out/'diagnostics').mkdir()
+    helper=Path(__file__).with_name('audit_native_goal_initial.py')
+    subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
+    initial=json.loads((out/'initial_carry_review.json').read_text());keys=manifest['reward_components'];rows=[];views={};paths={};goals={}
+    decisions=json.loads((run/'replanning_decisions.json').read_text());bycase={c['case_id']:[] for c in index}
+    for d in decisions:bycase[d['case_id']].append(d)
+    for key in {c['path_key'] for c in index}:
+        with np.load(run/(key+'_path.npz')) as z:paths[key]=dict(z)
+        path=paths[key];goals[key]=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,k]) for k in (0,1)])
+    ticks=0
+    for lane,c in enumerate(index):
+        if any(c[k]!=v for k,v in inventory[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('case/raw identity mismatch')
+        with np.load(c['raw_file']) as z:raw=dict(z)
+        active=raw['active_tick'];n=int(active.sum());ticks+=n
+        if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('invalid actual prefix')
+        np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0)
+        np.testing.assert_allclose(raw['v_user'][:n],c['speed'],atol=2e-7,rtol=0)
+        if c['mode']=='zero':np.testing.assert_array_equal(raw['composed_latent'][:n],0.)
+        else:np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']))
+        data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=raw['policy_fault']|raw['continuation_geometry_fault'])
+        pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']))
+        chain=verify_correction_chain(dict(data,issued_latent=raw['latent_z'],nominal_reference=raw['nominal'],reference=raw['governed'],correction_offset=raw['offsets']),p['config'],initial_filtered=initial['initial_filtered'][lane],initial_offsets=initial['initial_offsets'][lane])
+        path=paths[c['path_key']];goal=goals[c['path_key']]
+        np.testing.assert_allclose(goal,c['original_goal_xy'],atol=3e-6,rtol=0)
+        endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.)
+        endpoint['physical_outcome']=physical_outcome(active,raw['contact_failure'],data['policy_fault']|raw['nonfinite']|raw['lower_fault'],2000)
+        updates=audit_selection_replans(run,c,lane,raw,path,goal,bycase[c['case_id']])
+        fatal=np.flatnonzero(active&(raw['contact_failure']|data['policy_fault']|raw['nonfinite']|raw['lower_fault']))
+        before=int(fatal[0]) if len(fatal) else n
+        stop=min(before,round(endpoint['first_arrival_s']/.005)) if endpoint['first_arrival_s'] is not None else before
+        scores={}
+        for user in p['protocol']['alphas'] if c['mode']=='zero' else [c['alpha']]:
+            case=dict(c,effective_user_alpha=user)
+            rebuilt=reconstruct_execution_path_reward(raw,case,path,None,n,p['config'],p['initial_source']['controller'],keys,path_updates=updates)
+            original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],keys,updates[0][0] if updates else None,task_alpha=user,raw_alpha=c['alpha'],broaden_cost_numerics=True)
+            diag=dict(time=raw['time'][:n],actual_xy=raw['actual_xy'][:n],actual_speed=raw['actual_forward_speed'][:n],wheel_speed=raw['wheel_speed_proxy'][:n],speed_error=raw['actual_forward_speed'][:n]-c['speed'],phi=raw['phi'][:n],actual_delta=raw['actual_delta'][:n],nominal=raw['nominal'][:n],governed=raw['governed'][:n],reward=rebuilt['user1_reward'],reward_components=rebuilt['user1_running_components'],terminal_adjustment=rebuilt['user1_terminal_adjustment'],**original)
+            f=out/'diagnostics'/f'case_{lane:03d}_user{user:g}.npz';np.savez_compressed(f,**diag)
+            views[c['case_id'],user]=diag
+            scores[str(user)]=dict(diagnostic_file=str(f),original_task_cost_full=original['task_step_costs'].sum(axis=0).tolist(),original_task_cost_to_arrival_or_failure=original['task_step_costs'][:stop].sum(axis=0).tolist(),execution_path_reward=float(diag['reward'].sum()),reconstruction=check)
+        rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,prefix_ticks=stop,replan_count=len(updates),replan_ticks=[t for t,_ in updates],pulse=pulse,correction_chain=chain,scores=scores,pulse_after_first_arrival=bool(endpoint['first_arrival_s'] is not None and endpoint['first_arrival_s']<=c['onset_s']) if c['force_N'] else None))
+    if ticks!=status['active_lower_ticks']:raise ValueError('physical accounting mismatch')
+    summary={}
+    for model in [*p['protocol']['models'],'zero']:
+        group=[r for r in rows if r['mode']==model];summary[model]={}
+        for alpha in p['protocol']['alphas'] if model!='zero' else [0.]:
+            subset=[r for r in group if r['alpha']==alpha];hs=[r['endpoint'] for r in subset]
+            summary[model][str(alpha)]=dict(n=len(hs),goal=sum(x['goal_arrived'] is True for x in hs),contact=sum(x['physical_outcome']=='contact' for x in hs),survived=sum(x['physical_outcome']=='survived' for x in hs),unknown=sum(x['physical_outcome']=='unknown' for x in hs))
+    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary)
+    paired=[]
+    for alpha in p['protocol']['alphas']:
+        for route,event in sorted({(r['route'],r['event']) for r in rows}):
+            group=[r for r in rows if r['route']==route and r['event']==event and (r['alpha']==alpha or r['mode']=='zero')]
+            common=min(r['prefix_ticks'] for r in group)
+            for a,b in itertools.combinations(group,2):
+                ca=views[a['case_id'],alpha]['task_step_costs'][:common].sum(axis=0);cb=views[b['case_id'],alpha]['task_step_costs'][:common].sum(axis=0)
+                paired.append(dict(route=route,event=event,alpha=alpha,first=a['mode'],second=b['mode'],first_goal=a['endpoint']['goal_arrived'],second_goal=b['endpoint']['goal_arrived'],first_contact=a['endpoint']['physical_outcome']=='contact',second_contact=b['endpoint']['physical_outcome']=='contact',common_prearrival_ticks=common,original_three_cost_first_minus_second=(ca-cb).tolist()))
+    atomic_json(out/'paired.json',paired)
+    # Every declared route/event/user is visible; zero physical data are reused, rewards rescored.
+    colors={'H75':'#0072B2','W400':'#D55E00','u325':'#009E73','zero':'#555555'};styles={'H75':'-','W400':'--','u325':'-.','zero':':'};links=[]
+    for route,event in sorted({(r['route'],r['event']) for r in rows}):
+        group=[r for r in rows if r['route']==route and r['event']==event];path=paths[group[0]['path_key']];goal=goals[group[0]['path_key']]
+        fig,axes=plt.subplots(5,5,figsize=(22,18),layout='constrained')
+        for ai,alpha in enumerate(p['protocol']['alphas']):
+            ax=axes[ai];ax[0].plot(*path['xy'][path['s']<=path['goal']].T,color='black',lw=.7,label='Original reference');ax[0].add_patch(Circle(goal,1,fill=False,color='black'));ax[0].scatter(*goal,marker='*',color='black')
+            for r in group:
+                if r['mode']!='zero' and r['alpha']!=alpha:continue
+                d=views[r['case_id'],alpha];style=dict(color=colors[r['mode']],ls=styles[r['mode']],label=r['mode']);t=d['time'];end='x' if r['endpoint']['physical_outcome']=='contact' else 's'
+                ax[0].plot(*d['actual_xy'].T,**style);ax[0].scatter(*d['actual_xy'][-1],marker=end,color=colors[r['mode']],s=15)
+                for a,y in zip(ax[1:],[d['reward'],np.cumsum(d['reward']),d['speed_error'],d['original_cross_track_m']]):a.plot(t,y,**style)
+            for a,title in zip(ax,['XY (m)','Execution-path reward / step','Cumulative execution-path reward','True speed error (m/s)','Original-path cross error (m)']):
+                a.set_title(f'User alpha={alpha:g}: {title}');a.grid(alpha=.2);a.legend(fontsize=7)
+                if a is not ax[0]:
+                    a.set_xlabel('Task time (s)')
+                    if group[0]['force_N']:a.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.15)
+            ax[0].set_aspect('equal')
+        fig.suptitle(f'{route} | {event} | frozen H75/W400/u325 | bank6 | H10 | 10Hz reconnection\nReward uses actual changing execution path: diagnostics, not original-task model ranking')
+        name=f'{route}_{event}_overview.png';fig.savefig(out/name,dpi=120);plt.close(fig);links.append(name)
+        fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained')
+        for ax,model in zip(axes,p['protocol']['models']):
+            ax.plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+            zero=next(r for r in group if r['mode']=='zero');ax.plot(*views[zero['case_id'],0.]['actual_xy'].T,color='.5',ls='--',label='zero')
+            for alpha in p['protocol']['alphas']:
+                r=next(r for r in group if r['mode']==model and r['alpha']==alpha);d=views[r['case_id'],alpha]
+                line=ax.plot(*d['actual_xy'].T,label=f'alpha={alpha:g}')[0];ax.scatter(*d['actual_xy'][-1],marker='x' if r['endpoint']['physical_outcome']=='contact' else 's',color=line.get_color(),s=15)
+            ax.add_patch(Circle(goal,1,fill=False,color='black'));ax.set(title=model,xlabel='World X (m)',ylabel='World Y (m)');ax.set_aspect('equal');ax.legend(fontsize=8)
+        fig.suptitle(f'{route} | {event} | same model across all five alpha | bank6, H10')
+        name=f'{route}_{event}_crossalpha_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    atomic_json(out/'receipt.json',dict(all_cases=len(rows),neural_cases=315,zero_physical_cases=21,diagnostic_user_views=len(views),actual_lower_ticks=ticks,optimizer_updates=0,analysis_elapsed_s=time.monotonic()-started,source_sha256=digest(__file__),initial_audit_source_sha256=digest(helper),plan_sha256=digest(root/'plan.json'),replan_count=len(decisions),figures=len(links),limits='Shared ancestor DEV selection. Geometry-only repeated reconnection; no safety or realtime certificate. No complete independent reconstruction of non-task reward components.'))
+    lines=['# Three frozen middle policies, five preferences and10Hz reconnection','', 'XY is the first column of each overview. Each cross-alpha figure retains all five preferences and the same zero baseline.','', 'All original goal/contact results: results.json; per-user counts: summary.json; common-window pairwise original-task costs: paired.json. Execution-path reward is diagnostic only.','', 'Raw checkpoint identities, alpha, route and perturbation remain in each case. Zero has21 physical episodes, not105 independent episodes. This is related DEV selection, not unseen TEST.','']
+    lines += [f'![{name}]({name})' for name in links]
+    (out/'README.md').write_text('\n'.join(lines)+'\n');print(json.dumps(summary))
+
+
 def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
+    if p.get('mode')=='middle_selection':return analyze_middle_selection(root,p)
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
     if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):return analyze_response(root,p)
@@ -308,11 +439,15 @@ def onset_frame_impulse(raw,case,pulse):
         limitation='Onset pre-upper yaw approximation, not an exact body-frame substep impulse integral.')
 
 
-def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,config,controller,keys,start_tick=0):
+def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,config,controller,keys,start_tick=0,*,path_updates=None):
     """Rebuild native V3 task channels on the path actually active at each tick."""
     from analyze_native_frozen_validation import score
     n=int(np.asarray(raw['active_tick'],bool).sum());effective=np.asarray(raw['effective_costs'][:n],float).copy();user1=effective.copy()
     cuts=[(0,n,original)] if replanned is None else [(0,replan_tick,original),(replan_tick,n,replanned)]
+    if path_updates is not None:
+        boundaries=[(0,original)]+list(path_updates)
+        if any(t<=0 or t>=n for t,_ in path_updates) or any(b[0]<=a[0] for a,b in zip(boundaries,boundaries[1:])):raise ValueError('ordered active replan ticks required')
+        cuts=[(t,boundaries[i+1][0] if i+1<len(boundaries) else n,path) for i,(t,path) in enumerate(boundaries)]
     for start,end,path in cuts:
         if start>=end:continue
         segment={k:np.asarray(v)[start:end] for k,v in raw.items()}

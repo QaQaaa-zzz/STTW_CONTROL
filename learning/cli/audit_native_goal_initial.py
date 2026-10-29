@@ -23,7 +23,7 @@ def load_frozen_pickle_module(root,plan,filename,alias):
 
 def audit(root,output):
     import numpy as np
-    p=json.loads((root/'plan.json').read_text());native=Path(p['native_runtime_root']).resolve()
+    p=json.loads((root/'plan.json').read_text());selection=p.get('mode')=='middle_selection';native=Path(p['native_runtime_root']).resolve()
     if 'sttw_control' in sys.modules:raise ValueError('fresh native-only audit process required')
     sys.path.insert(0,str(native))
     late=p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192')
@@ -33,8 +33,8 @@ def audit(root,output):
         load_frozen_pickle_module(original,original_plan,'tolerance_coordination.py','_sttw_tolerance_coordination')
     if tolerance:
         load_frozen_pickle_module(root,p,'tolerance_coordination.py','_sttw_tolerance_coordination')
-    source=(root/'source/native_goal_continuation.py') if tolerance else Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_continuation.py'
-    if tolerance:adapter=load_frozen_pickle_module(root,p,'native_goal_continuation.py','_sttw_goal_continuation')
+    source=(root/'source/native_goal_continuation.py') if tolerance or selection else Path(__file__).resolve().parents[1]/'src/sttw_control/native_goal_continuation.py'
+    if tolerance or selection:adapter=load_frozen_pickle_module(root,p,'native_goal_continuation.py','_sttw_goal_continuation')
     else:
         spec=importlib.util.spec_from_file_location('_sttw_goal_continuation',source)
         adapter=importlib.util.module_from_spec(spec);sys.modules[spec.name]=adapter;spec.loader.exec_module(adapter)
@@ -65,7 +65,7 @@ def audit(root,output):
     with source_bank.open('rb') as f:bank=pickle.load(f)
     snapshot=jax.tree.map(lambda x:x[p['initial_source']['bank_index']],bank)
     cases=json.loads((root/'inventory.json').read_text())
-    if p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):
+    if p.get('mode') in ('middle_selection','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):
         return audit_confirmation_initial(root,p,carry,bank,output,jax,initial)
     def equal(a,b,label,*,native_load_cast=False,strict_dtype=False):
         aa,ta=jax.tree.flatten(a);bb,tb=jax.tree.flatten(b)
@@ -212,6 +212,10 @@ def audit(root,output):
 
 
 def confirmation_initial_layout(plan):
+    if plan.get('mode')=='middle_selection':
+        count=len(plan['protocol']['bank_indices'])*len(plan['protocol']['route_contexts'])*(1+len(plan['protocol']['forces_N']))*16
+        if count!=plan['cases'] or count!=plan['protocol']['expected_cases']:raise ValueError('selection initial layout differs')
+        return count,16
     expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3),'task_aware_fallback72':(72,3),'frozen_confirmation200':(200,10),'speed_query_online60':(60,3),'guard_fallback_evaluation':(72,3)}
     if plan.get('mode')=='frozen_transfer_evaluation':
         protocol=plan['protocol'];arms=len(protocol['arms']);count=len(protocol['bank_indices'])*len(protocol['routes'])*(int(protocol.get('include_nominal',True))+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms
@@ -265,15 +269,15 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         with np.load(root/'evaluation'/(c['path_key']+'_path.npz')) as z:
             np.testing.assert_allclose(z['xy'][0],snapshot.data.qpos[:2],atol=3e-6,rtol=0)
             np.testing.assert_allclose(z['heading'][0],state.physical.reference_pose[i,2],atol=3e-6,rtol=0)
-    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else carry
+    neutral=carry.replace(state=carry.state.replace(alpha=jax.numpy.zeros_like(carry.state.alpha))) if p.get('mode') in ('middle_selection','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else carry
     leaves=jax.tree.leaves(neutral)
-    expected_groups=count//arms if p.get('mode')=='frozen_transfer_evaluation' else 24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode') in ('frozen_confirmation200','guard_fallback_evaluation','frozen_transfer_evaluation') and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20
+    expected_groups=count//arms if p.get('mode') in ('frozen_transfer_evaluation','middle_selection') else 24 if p.get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72') or (p.get('mode') in ('frozen_confirmation200','guard_fallback_evaluation','frozen_transfer_evaluation') and p['protocol'].get('variant')=='geometry_duration_extension_v1') else 20
     if len(groups)!=expected_groups or any(len(ids)!=arms for ids in groups.values()):raise ValueError(f'{expected_groups} paired bank/route/event groups required')
     for ids in groups.values():
         for leaf in leaves:
             for i in ids[1:]:np.testing.assert_array_equal(leaf[i],leaf[ids[0]])
     receipt=json.loads((root/'evaluation/shape_receipt.json').read_text())
-    if not receipt.get('all_arm_reset_leaves_exact' if tolerance else 'all_five_arm_reset_leaves_exact') or receipt.get('new_bank_fingerprints')!=fingerprints:raise ValueError('paired reset receipt mismatch')
+    if not receipt.get('all_arm_reset_leaves_exact' if tolerance or p.get('mode')=='middle_selection' else 'all_five_arm_reset_leaves_exact') or receipt.get('new_bank_fingerprints')!=fingerprints:raise ValueError('paired reset receipt mismatch')
     loaded={name:str(Path(module.__file__).resolve()) for name,module in sys.modules.items() if (name=='sttw_control' or name.startswith('sttw_control.')) and getattr(module,'__file__',None)}
     native=Path(p['native_runtime_root']).resolve()
     if any(not Path(file).is_relative_to(native) for file in loaded.values()):raise ValueError('mixed native initial100 modules')

@@ -47,3 +47,29 @@ def test_continuous_reconnection_uses_departure_then_latches_until_goal_or_failu
     for state in [dict(contact=True),dict(fault=True),dict(ever_arrived=True),dict(xy=[19.5,0.])]:
         assert not replan_requested(**dict(args,already_replanned=True,**state))
     with pytest.raises(ValueError):replan_requested(**dict(args,scheduled_time_s=2.8,task_time_s=2.8))
+
+
+def cli(name):
+    import importlib.util
+    spec=importlib.util.spec_from_file_location(name,Path(__file__).parents[1]/'cli'/f'{name}.py')
+    m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+
+
+def test_selection_initial_audit_layout_accepts_all_physical_lanes():
+    m=cli('audit_native_goal_initial');p=protocol()
+    assert m.confirmation_initial_layout(dict(mode='middle_selection',protocol=p,cases=336))==(336,16)
+
+
+def test_repeated_path_reward_uses_each_actual_path_without_resetting_failure_clock(monkeypatch):
+    import numpy as np
+    import sys,types
+    m=cli('analyze_native_goal_confirmation')
+    def score(raw,path,cfg,controller,keys,alpha):
+        return {},dict(effective=np.full((len(raw['active_tick']),1),path['cost']))
+    monkeypatch.setitem(sys.modules,'analyze_native_frozen_validation',types.SimpleNamespace(score=score))
+    effective=np.array([1.,1.,2.,2.,3.,3.,3.,3.])[:,None]
+    raw=dict(active_tick=np.ones(8,bool),effective_costs=effective,physical_failure=np.zeros(8,bool),scored_tick_reward=-effective[:,0]*.005)
+    cfg=dict(path_reward=dict(scale=1.))
+    result=m.reconstruct_execution_path_reward(raw,dict(alpha=.25),dict(cost=1.),None,8,cfg,{},['speed'],path_updates=[(2,dict(cost=2.)),(4,dict(cost=3.))])
+    np.testing.assert_allclose(result['reward'],raw['scored_tick_reward'])
+    with pytest.raises(ValueError):m.reconstruct_execution_path_reward(raw,dict(alpha=.25),dict(cost=1.),None,8,cfg,{},['speed'],path_updates=[(4,dict(cost=2.)),(2,dict(cost=3.))])
