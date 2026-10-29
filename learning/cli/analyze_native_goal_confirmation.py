@@ -2786,8 +2786,8 @@ def validate_fixed_capability_cases(cases,protocol):
     if protocol.get('capability_variant')=='low_speed_lateral_load':
         expected={(a,float(f),float(t)) for a in (0.,1.) for f in protocol['forces_N'] for t in protocol['onsets_s']}|{(a,0.,0.) for a in (0.,1.)}
         observed={(c['alpha'],c['force_N'],c['onset_s']) for c in cases}
-        if len(cases)!=34 or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas']!=[0.,1.]:raise ValueError('complete paired low-speed load inventory required')
-        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=2. or c['duration_s']!=.6 or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
+        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas']!=[0.,1.]:raise ValueError('complete paired low-speed load inventory required')
+        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=2. or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
         return
     targeted=protocol.get('capability_variant')=='targeted_base_review'

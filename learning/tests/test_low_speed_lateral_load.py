@@ -34,7 +34,7 @@ def test_full_load_grid_and_identical_world_force_across_alpha():
     assert cfg['low_speed_evidence_gate']['true_forward_speed_max_m_s']==2.1
 
 
-@pytest.mark.parametrize('key,value',[('alphas',[0,.5,1]),('forces_N',[-16,16]),('onsets_s',[2.]),('duration_s',.1),('force_frame','bodyY'),('maximum_lower_ticks',68001),('candidate_model',{'registry_id':'candidate'})])
+@pytest.mark.parametrize('key,value',[('alphas',[0,.5,1]),('forces_N',[-16,16]),('onsets_s',[2.]),('duration_s',-1.),('force_frame','bodyY'),('maximum_lower_ticks',68001),('candidate_model',{'registry_id':'candidate'})])
 def test_changed_screen_contract_rejected(key,value):
     cfg=config();cfg[key]=value
     with pytest.raises(ValueError):fixed_h75_capability_inventory(cfg)

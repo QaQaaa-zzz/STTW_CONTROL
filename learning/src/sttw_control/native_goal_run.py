@@ -132,22 +132,38 @@ CAPABILITY_MODE='fixed_h75_capability'
 def low_speed_lateral_load_inventory(p):
     """Complete paired world-Y equivalent lateral-load screen; never a wind speed."""
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
-        alphas=[0.,1.],horizon_s=10.,expected_cases=34,maximum_lower_ticks=68000,
-        optimizer_updates=0,planning_frequency_hz=10.,forces_N=[-16.,-12.,-8.,-4.,4.,8.,12.,16.],
-        onsets_s=[1.6,2.],duration_s=.6,force_frame='worldY',zero_onset_s=0.,
+        alphas=[0.,1.],horizon_s=10.,
+        optimizer_updates=0,planning_frequency_hz=10.,force_frame='worldY',zero_onset_s=0.,
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
-    if any(p.get(k)!=value for k,value in required.items()) or p.get('candidate_model') is not None:
-        raise ValueError('frozen paired low-speed lateral-load contract differs')
+    if any(p.get(k)!=value for k,value in required.items()):
+        raise ValueError('paired low-speed lateral-load contract differs')
+    forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
+    count=2*(1+len(forces)*len(onsets))
+    if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
+        or any(not math.isfinite(f) or f==0 for f in forces)
+        or not math.isfinite(duration) or duration<=0
+        or any(not math.isfinite(t) or t<=0 or t+duration>10 for t in onsets)
+        or p['expected_cases']!=count or p['maximum_lower_ticks']!=2000*count):
+        raise ValueError('unique finite paired load grid and exact budget required')
+    candidate=p.get('candidate_model')
+    if candidate is not None and (not candidate.get('registry_id') or candidate['registry_id']==SELECTION_MODELS['H75']):
+        raise ValueError('explicit distinct candidate identity required')
+    if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
+        raise ValueError('complete candidate artifact identity required')
     contexts=p['route_contexts']
-    expected=dict(route='left90_R0p9_v2p0',family=1,radius_m=.9,angle_deg=90.,speed=2.,direction=1.,goal_offset_after_turn_m=4.)
-    if contexts!=[expected]:raise ValueError('single original low-speed tight-turn geometry required')
+    if (len(contexts)!=1 or contexts[0]['family']!=1 or contexts[0]['angle_deg']!=90.
+        or contexts[0]['speed']!=2. or contexts[0]['direction']!=1.
+        or not math.isfinite(contexts[0]['radius_m']) or contexts[0]['radius_m']<=0
+        or contexts[0].get('goal_offset_after_turn_m')!=4.):
+        raise ValueError('single declared low-speed tight-turn geometry required')
     events=[dict(event='zero',force_N=0.,onset_s=0.)]+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
     route=contexts[0]['route']
+    identity=candidate['registry_id'] if candidate else p['model_id']
     return [dict(route=route,speed=2.,**event,duration_s=p['duration_s'],force_frame='worldY',
-        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/H75/a{alpha:g}/{event['event']}",
-        mode='H75',mode_index=0,model_id=p['model_id'],alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
+        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/{identity}/a{alpha:g}/{event['event']}",
+        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
         for event,alpha in itertools.product(events,p['alphas'])]
 
 
@@ -447,7 +463,7 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     for i,c in enumerate(cases):
         key=(c['bank_index'],c['route'],c['event']) if panel_kind=='disturbed_two_user' else (c['bank_index'],c['route'])
         groups.setdefault(key,[]).append(i)
-    if panel_kind=='disturbed_two_user':expected_route_count*=17
+    if panel_kind=='disturbed_two_user':expected_route_count*=len({c['event'] for c in cases})
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
     if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
