@@ -64,3 +64,100 @@ python learning/cli/freeze_middle_lineage.py \
 ### 名义几何偏好往返：未采用（2026-10-28）
 
 原生H75固定不变，四个相同S场景新增两种因果规则共8回合、0训练；原16固定轨迹复用。alpha往返严格3/4、原终点首达4/4，原user1费用123.7986；固定alpha.5严格4/4、费用118.9854。普通曲率限速严格2/4。左紧S往返末窗横向误差0.1637m超过0.1m，两温和S用户费用退化；拒绝本规则，不续调阈值或直接训练容扰MLP。没有否定所有调度或扰后恢复机会。全四XY、同用户奖励与独立复核见[完整报告](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/RESULTS.md)。
+
+
+## H75测试总入口与中层选型复核（2026-10-28）
+
+此处集中导航已有证据，不将不同任务、接口、观察窗或重复缓存相加为总成功率。当前事实及待办仍以研究台账为准。本次只核验报告/汇总与文件存在，未重新积分全部历史轨迹。
+
+### 先看原生XY：H75到底怎样行驶
+
+- [S_left_60_R2p2：三档α与zero实际/原参考轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/S_left_60_R2p2_xy.png)
+- [S_right_60_R2p2：三档α与zero实际/原参考轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/S_right_60_R2p2_xy.png)
+- [S_left_90_R1p8：三档α与zero实际/原参考轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/S_left_90_R1p8_xy.png)
+- [S_right_90_R1p8：三档α与zero实际/原参考轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/S_right_90_R1p8_xy.png)
+
+四个S场景中，H75严格任务10/12且原1m目标到达10/12，全部不触地；两条失败均为紧S的α=1。zero到达4/4，但严格末窗任务0/4。因此H75的价值是具体偏好与跟踪表现，不能解释为所有场景到达率都高于zero。无扰测试不能证明抗扰。
+
+### 历史五档测试：H75并非只测过三档
+
+[完整长度比较](evidence/tolerance_progress_20261022/full_tail_length75/FINAL_RESULTS.md) · [逐alpha数字](evidence/tolerance_progress_20261022/full_tail_length75/FINAL_RESULTS.json) · [训练审计](evidence/tolerance_progress_20261022/full_tail_length75/TRAINING_AUDIT.md)
+
+|旧面板|H75任务通过|解释|
+|---|---:|---|
+|中等扰动|200/200|包含重复零扰动基准|
+|强扰动|191/200|α=0/.25/.5/.75/1分别37/38/38/39/39，各40|
+|直线|10/10|五档各2|
+|低速检查|56/60|不是任意低速的保证|
+
+这些标签要求无原生物理/域失败、原目标及末1秒路径/航向/速度容差，与最近仅原1m目标首达的口径不同。470记录含重复名义条件，不是470个独立初态。H75相对完整尾段25PPO为9增0失；48PPO中间点为4增4失，不能用轮数或奖励平台证明收敛。
+
+- [moderate：全部逐alpha轨迹、奖励和误差](/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/moderate/analysis/REPORT.md)
+- [strong：全部逐alpha轨迹、奖励和误差](/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/strong/analysis/REPORT.md)
+- [straight：全部逐alpha轨迹、奖励和误差](/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/straight/analysis/REPORT.md)
+- [low_speed：全部逐alpha轨迹、奖励和误差](/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_post_v1/low_speed/analysis/REPORT.md)
+
+### 其他候选：本轮排除双端点及任务型新测试
+
+|候选|核实的既有证据|选型意义|
+|---|---|---|
+|H75，FULLTAIL_PPO75_U77|上述五档面板；跨几何164/192，含工作侧倾102/192|当前比较基准，尚不声称统一任务下最优|
+|W400，WITNESS_S918501_SUP400|旧强扰动195/200、低速58/60；跨几何165/192、含工作侧倾91/192|优先补当前统一任务；净+1同时有6增5失，不按均值直接替换|
+|u325，DISTILLED_V3_U325|原开发候选；跨几何parent160/192、含工作侧倾94/192|同族单网主要候选；名称parent仅对应该报告身份|
+|u400、短恢复25、完整尾段25、纯BC|冻结Actor均存在且本次SHA核对一致；已有负结果/训练波动|先复用历史筛选，未声明普遍不如H75，不默认全部重跑|
+
+[跨几何配对结果及全部XY入口](evidence/tolerance_progress_20261022/long_baseline_transfer/RESULTS.md)。W400是从u325分叉的恢复教学，不是H75后继，也不是普通goal任务型网络；其training_state是监督状态，不能当PPO恢复包。上述七个非dual Actor本次均核实文件与注册SHA一致。双端点及parent_task64/ordinary_goal64等任务型按用户要求不纳入新测试。
+
+### 原生、扰动与协调实验目录索引
+
+下表列出数据盘所有以h75_命名的实验目录及可见报告。包含失败或未完成尝试；目录存在不等于实验完成。与H75有关但不以h75命名的早期实验由上文历史报告及下方补充入口覆盖。本索引不是对全项目所有旧目录的穷尽审计。
+
+|实验目录|报告入口（缺失者直接标出）|
+|---|---|
+|h75_channel_factorial_v1|[analysis/RESULTS.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_channel_factorial_v1/analysis/RESULTS.md)|
+|h75_channel_response_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_channel_response_v1)；无该层完整报告入口|
+|h75_channel_response_v1_attempt2|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_channel_response_v1_attempt2/analysis/README.md)|
+|h75_channel_switching_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_channel_switching_v1)；无该层完整报告入口|
+|h75_coordinator_cpu_latency_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_coordinator_cpu_latency_v1)；无该层完整报告入口|
+|h75_disturbed_common_interface_v1|[analysis_reconstructed_v2/REPORT.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_disturbed_common_interface_v1/analysis_reconstructed_v2/REPORT.md)|
+|h75_frozen_confirmation200_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_frozen_confirmation200_v1/analysis/README.md)|
+|h75_frozen_transfer48_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_frozen_transfer48_v1/analysis/README.md)|
+|h75_geometry_duration_extension240_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/README.md)|
+|h75_guard_fallback_extension72_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/README.md)|
+|h75_guard_fallback_regression60_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_regression60_v1/analysis/README.md)|
+|h75_late_state_tolerance48_v1|[analysis_late/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_late_state_tolerance48_v1/analysis_late/README.md)|
+|h75_native_s_capability_v1|[analysis/RESULTS.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/RESULTS.md)|
+|h75_nominal_preference_schedule_v1|[analysis/RESULTS.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_nominal_preference_schedule_v1/analysis/RESULTS.md)|
+|h75_online_confirmation_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_confirmation_v1/analysis/README.md)|
+|h75_online_scalar_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_online_scalar_v1/analysis/README.md)|
+|h75_prior_speed_retrospective144_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_prior_speed_retrospective144_v1)；无该层完整报告入口|
+|h75_replan_timing_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_replan_timing_v1/analysis/README.md)|
+|h75_samestate_bank144_v1|[analysis_development/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_bank144_v1/analysis_development/README.md) · [analysis_final/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_bank144_v1/analysis_final/README.md)|
+|h75_samestate_confirmation144_v1|[analysis_confirmation/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_confirmation144_v1/analysis_confirmation/README.md)|
+|h75_samestate_tolerance_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_samestate_tolerance_v1/analysis/README.md)|
+|h75_speed_query_online60_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/analysis/README.md)|
+|h75_switching_continuation_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1)；无该层完整报告入口|
+|h75_switching_continuation_v1_attempt2|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1_attempt2/analysis/README.md)|
+|h75_task_aware_fallback72_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_task_aware_fallback72_v1/analysis/README.md)|
+|h75_tolerance_broaden120_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_broaden120_v1/analysis/README.md)|
+|h75_tolerance_online120_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_online120_v1/analysis/README.md)|
+|h75_tolerance_online120_v1_prepare_failed_precision|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_online120_v1_prepare_failed_precision)；无该层完整报告入口|
+|h75_tolerance_predictor_pilot_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_pilot_v1)；无该层完整报告入口|
+|h75_tolerance_predictor_ranking_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_ranking_v1)；无该层完整报告入口|
+|h75_tolerance_predictor_temporal_mix_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_temporal_mix_v1)；无该层完整报告入口|
+|h75_tolerance_predictor_user_mix_prior_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_prior_v1)；无该层完整报告入口|
+|h75_tolerance_predictor_user_mix_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_user_mix_v1)；无该层完整报告入口|
+|h75_tolerance_speed_query_ablation_v1|[原始目录/状态](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_speed_query_ablation_v1)；无该层完整报告入口|
+|h75_tolerance_temporal_online40_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_temporal_online40_v1/analysis/README.md)|
+|h75_user_late_state192_v1|[analysis_late/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_late_state192_v1/analysis_late/README.md)|
+|h75_user_preference120_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_preference120_v1/analysis/README.md)|
+|h75_user_prior_online72_v1|[analysis/README.md](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_user_prior_online72_v1/analysis/README.md)|
+
+补充入口（历史对照中含用户本轮排除的新测试候选，但旧证据保留）：
+
+- [固定路径任务迁移：不是H75原生接口](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/ordinary_goal_endpoint_v1/analysis_with_h75/RESULTS.md)
+- [原生H75与zero/其他网络](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_zero_preference_v1/analysis/README.md)
+- [原生H75与平衡规则](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/native_equilibrium_rule_v1/analysis/README.md)
+- [历史同接口模型比较：仅无扰动](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/REPORT.md)
+
+尚未完成：当前共同接回条件下H75/W400/u325的五档配对选型；新五档协调器闭环；2.8/3s实际转角机制图及接回修复。不能把旧域成绩当作这些工作已经通过。
