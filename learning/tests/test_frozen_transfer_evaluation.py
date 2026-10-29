@@ -91,6 +91,7 @@ def test_scheduled_timing_probe_preserves_budget_and_only_declared_event():
     rows=tolerance_inventory(p);m=module('analyze_native_goal_confirmation')
     m.validate_frozen_transfer_inventory(rows,p)
     assert len(rows)==4 and all(r['force_N']==64 for r in rows)
+    assert module('audit_native_goal_initial').confirmation_initial_layout(dict(mode=p['mode'],protocol=p,cases=4,maximum_active_lower_ticks=8000))==(4,4)
     steps=scheduled_chunk_steps(p)
     assert sum(steps)==500 and 140 in np.cumsum(steps)
     assert steps[:4]==[50,50,40,10]

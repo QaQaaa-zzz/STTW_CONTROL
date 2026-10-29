@@ -214,7 +214,7 @@ def audit(root,output):
 def confirmation_initial_layout(plan):
     expected={'h75_online_confirmation100':(100,5),'tolerance_online120':(120,6),'tolerance_online40':(40,2),'tolerance_broaden120':(120,5),'user_preference120':(120,5),'user_prior_online72':(72,3),'task_aware_fallback72':(72,3),'frozen_confirmation200':(200,10),'speed_query_online60':(60,3),'guard_fallback_evaluation':(72,3)}
     if plan.get('mode')=='frozen_transfer_evaluation':
-        protocol=plan['protocol'];arms=len(protocol['arms']);count=len(protocol['bank_indices'])*len(protocol['routes'])*(1+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms
+        protocol=plan['protocol'];arms=len(protocol['arms']);count=len(protocol['bank_indices'])*len(protocol['routes'])*(int(protocol.get('include_nominal',True))+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms
         if plan['cases']!=count or protocol['expected_cases']!=count or plan['maximum_active_lower_ticks']!=count*2000:raise ValueError('transfer initial count/budget mismatch')
         return count,arms
     if plan.get('mode') not in expected:raise ValueError('unsupported initial panel mode')
