@@ -155,6 +155,7 @@ def analyze_middle_selection(root,p):
 def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
+    if p.get('mode')=='native_five_alpha_online':return analyze_five_alpha_online14(root,p)
     if p.get('mode')=='five_alpha_tolerance_labels':return analyze_five_alpha_labels(root,p)
     if p.get('mode')=='middle_selection':return analyze_middle_selection(root,p)
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
@@ -2543,6 +2544,77 @@ def analyze_five_alpha_labels(root,p):
     atomic_json(out/'receipt.json',receipt)
     (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+five_alpha_role_metadata(p)['data_role']+'\n\nPartition: '+five_alpha_role_metadata(p)['data_partition']+'; declared training/development rows: '+str(partition['training_rows'])+'/'+str(partition['development_rows'])+'.\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Full H10 outcome includes recorded pre-source arrival latch, not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
     return receipt
+
+
+def five_alpha_online_statistics(raw,case,first_arrival_s=None):
+    """Retrospective windows; fallback at user alpha is not qualified restoration."""
+    n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);t=np.asarray(raw['time'][:n]);alpha=np.asarray(raw['alpha_exec'][:n]);q=np.asarray(raw['coord_qmin'][:n]);task=np.asarray(raw['coord_task_mask'][:n],bool);permission=np.asarray(raw['coord_permission'][:n],bool);latched=np.asarray(raw['coord_latched_before'][:n],bool)
+    if q.shape!=(n,5) or task.shape!=(n,5) or not np.isfinite(q).all() or not np.isin(alpha,grid).all():raise ValueError('five-alpha coordinator evidence malformed')
+    risk=q>=.8;eligible=risk&task;restore=task[:,2]&(q[:,2]>=np.where(latched,.85,.8));others=eligible.copy();others[:,2]=False;all_degraded=~restore&~others.any(axis=1)
+    np.testing.assert_array_equal(raw['coord_degraded'][:n],permission&all_degraded)
+    if 'coord_eligible' in raw:np.testing.assert_array_equal(raw['coord_eligible'][:n],others)
+    if 'coord_probabilities' in raw:np.testing.assert_allclose(q,np.min(raw['coord_probabilities'][:n],axis=-1),atol=1e-6,rtol=0)
+    if 'coord_candidate_alpha' in raw:np.testing.assert_array_equal(raw['coord_candidate_alpha'][:n],np.tile(grid,(n,1)))
+    if 'coord_restore_requested' in raw:np.testing.assert_array_equal(raw['coord_restore_requested'][:n],restore)
+    if 'coord_restore_published' in raw:np.testing.assert_array_equal(raw['coord_restore_published'][:n],restore&permission)
+    np.testing.assert_array_equal(raw['alpha_user'][:n],.5)
+    np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]));np.testing.assert_allclose(raw['query_observation'][:n,336],alpha,atol=1e-6,rtol=0)
+    previous=np.r_[.5,alpha[:-1]];switch=alpha!=previous;returned=(previous!=.5)&(alpha==.5);qualified=(alpha==.5)&restore&permission
+    masks=dict(full=np.ones(n,bool),before_pulse=t<case['onset_s'],during_pulse=(t>=case['onset_s'])&(t<case['onset_s']+case['duration_s']),after_pulse=t>=case['onset_s']+case['duration_s'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
+    result={}
+    for name,m in masks.items():
+        result[name]=dict(observed_ticks=int(m.sum()),observed_s=float(m.sum()*.005),alpha_occupancy_s={str(a):float(np.sum(m&(alpha==a))*.005) for a in grid},switch_count=int(np.sum(m&switch)),nonuser_ticks=int(np.sum(m&(alpha!=.5))),return_to_user_events=int(np.sum(m&returned)),qualified_return_events=int(np.sum(m&returned&qualified)),any_risk_eligible_ticks=int(np.sum(m&risk.any(axis=1))),any_task_and_risk_eligible_ticks=int(np.sum(m&eligible.any(axis=1))),all_degraded_ticks=int(np.sum(m&all_degraded)),operational_degraded_ticks=int(np.sum(m&permission&all_degraded)),permission_withheld_ticks=int(np.sum(m&~permission)),qualified_user_ticks=int(np.sum(m&qualified)),fallback_user_ticks=int(np.sum(m&(alpha==.5)&all_degraded)),qmin_min_by_alpha=q[m].min(axis=0).tolist() if m.any() else None,qmin_max_by_alpha=q[m].max(axis=0).tolist() if m.any() else None)
+    return dict(windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Static fallback.5 never counts as restored.')
+
+
+def analyze_five_alpha_online14(root,p):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    run=root/'evaluation';out=root/'analysis';protocol=p['protocol'];status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    if status['phase']!='completed' or status['completed_cases']!=14 or len(index)!=14 or len(cases)!=14:raise ValueError('complete14 diagnostic required')
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('online14 plan changed')
+    for f,sha in p['input_sha256'].items():
+        if digest(f)!=sha:raise ValueError('online14 input changed '+f)
+    for f,sha in p['source_sha256'].items():
+        if digest(root/'source'/Path(f).name)!=sha:raise ValueError('online14 archived source changed '+f)
+    manifest=json.loads((run/'manifest.json').read_text())
+    for key,val in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
+        if manifest[key]!=val:raise ValueError('online14 manifest changed '+key)
+    if len({c['route'] for c in cases})!=7 or {(c['route'],c['force_N']) for c in cases}!={(c['route'],f) for c in cases for f in (-64.,64.)}:raise ValueError('seven routes paired signs required')
+    out.mkdir(exist_ok=False);rows=[];raws={};paths={};ticks=0;links=[];decisions=json.loads((run/'replanning_decisions.json').read_text())
+    for lane,c in enumerate(index):
+        if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('online14 row identity changed')
+        if c['bank_index']!=6 or c['alpha']!=.5 or c['onset_s']!=2.2 or c['duration_s']!=.15:raise ValueError('online14 declaration differs')
+        with np.load(c['raw_file']) as z:raw=dict(z)
+        n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=n
+        if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(raw['active_tick']),np.arange(n)):raise ValueError('invalid online14 observed prefix')
+        np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0)
+        key=c['path_key']
+        if key not in paths:
+            with np.load(run/(key+'_path.npz')) as z:paths[key]=dict(z)
+        path=paths[key];goal=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)]);np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0)
+        fault=raw['policy_fault']|raw['nonfinite']|raw['lower_fault']|raw['continuation_geometry_fault'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault)
+        outcome=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);outcome['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
+        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s']);pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=440,pulse_duration_s=.15));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
+        original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=.5,raw_alpha=.5,broaden_cost_numerics=True)
+        phase={}
+        for name,m in [('before',raw['time'][:n]<2.2),('during',(raw['time'][:n]>=2.2)&(raw['time'][:n]<2.35)),('after',raw['time'][:n]>=2.35)]:
+            contact=np.asarray(raw['contact_failure'][:n],bool)&m;speed=raw['actual_forward_speed'][:n]-c['speed'];phase[name]=dict(actual_ticks=int(m.sum()),contact=bool(contact.any()),fault=bool(np.any(fault[:n]&m)),speed_rmse_m_s=float(np.sqrt(np.mean(speed[m]**2))) if m.any() else None,original_user_running_three_costs=original['task_step_costs'][m].sum(axis=0).tolist())
+        rows.append(dict(c,horizons={'10':outcome},coordinator=stats,phases=phase,pulse=pulse,replan_ticks=[t for t,_ in updates],original_user_alpha=.5,original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,observed_ticks=n))
+        raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
+    if ticks!=status['active_lower_ticks'] or ticks>28000:raise ValueError('online14 physics budget mismatch')
+    for route in sorted({c['route'] for c in cases}):
+        group=[r for r in rows if r['route']==route];path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+        for r in group:
+            raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"WorldY {r['force_N']:+g}N";line=axes[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();axes[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');axes[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);axes[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
+        axes[0].set(xlabel='World X (m)',ylabel='World Y (m)');axes[0].set_aspect('equal');axes[1].set(xlabel='Task time (s)',ylabel='Executed alpha');axes[2].set(xlabel='Task time (s)',ylabel='Max candidate min4 probability');axes[2].axhline(.8,color='k',ls='--');axes[2].axhline(.85,color='k',ls=':')
+        for ax in axes:ax.legend();ax.grid(alpha=.2)
+        for ax in axes[1:]:ax.axvspan(2.2,2.35,color='grey',alpha=.2)
+        fig.suptitle(f'{route} | online five-alpha | user.5 | bank6 | H10 | full1000 ensemble | actual endpoints');name=route+'_online14_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    atomic_json(out/'results.json',rows);atomic_json(out/'receipt.json',dict(cases=14,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,plan_sha256=digest(root/'plan.json'),limits='Related familiar bank6 DEV diagnostic, no paired comparator or causal gain claim. Three original-user running task channels only; terminal/non-task total reward reconstruction deferred. Logged coordinator gates audited; independent MLP probabilities not yet reconstructed.'))
+    (out/'README.md').write_text('# Five-alpha online14 diagnostic\n\n'+'\n\n'.join(f'![XY and coordinator traces]({f})' for f in links)+'\n\nNo fixed-alpha or baseline comparator. Originaluser .5 costs are three running task channels, not coordinator proxy or full reward. Per-case goal/contact, before/during/after phases and before-first-goal coordinator behavior are in results.json. Static fallback.5 is distinct from qualified user restoration. Related known-route DEV; no closed-loop gain or safety certificate.\n')
+    return rows
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path)
