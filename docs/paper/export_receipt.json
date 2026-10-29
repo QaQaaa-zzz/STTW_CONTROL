@@ -1,17 +1,13 @@
 {
   "images": {
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/tolerance_coordination_architecture.svg": "b6d81623cacee5ba6e6af6420628d24f80e5768dd41debeb56264afbf13b0cc0",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_switching_continuation_v1_attempt2/analysis/full_xy_t1.6_F-64__fixed1.png": "2d513e6494b7eade70798e258487be3137de6e683d2f69f840b41e1f74c3d2a5",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_frozen_confirmation200_v1/analysis/task_xy_t1.6_F-64__bank1__routeS_right_90_R1p8__user1.0.png": "f8adfe32d13e74de8159c7cb47f33311d1bf555c4c6b019a0357185d5d24315b",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_speed_query_online60_v1/analysis/full_xy_t3.4_F+64__bank1__routeS_right_90_R1p8__user1.0.png": "c02ae9d6ce920669bfd129155cd06be0da12add13ba95907339e271926873ecf",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_geometry_duration_extension240_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png": "32a0952efa733754a810923e4fed1d9119ef23225b91b0c90a92c2ba51594c43",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_guard_fallback_extension72_v1/analysis/full_xy_t2.6_F-64__bank7__routeS_right_60_R2p2__user0.5.png": "d5de2d79fd434f866fd4c6eebcb9253c72b1acbb670c4002f83b55bfba900e2a"
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/left90_R1p3_v2p0_t2.2_F+24_fixed_candidate_xy.png": "9931fdf3d4db5b08af0464c26070a05acc7f7b6fe1845b9849c5c876117f9ec5",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_policy_nn_confirmation_v1/analysis/left90_R1p3_v2p0_source_t1p0_a0_prep0.925_F+24_fixed_candidate_xy.png": "60884553df6640d7839f5bdfab1ca8cb0dea576a3de6285facbef5cebe9ad9c2"
   },
-  "html_sha256": "275ae3a465dc3e942f392d60b4ca56dcf5fe389ff656206865b77a341d386a45",
+  "html_sha256": "9eec6566c66440d7d3c8f6e48ef97ebf1fee477f0b9aa5908d03accf42fc5e41",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "1e84b41bbfecc1f43c4b1f18bc5397a916a84fcdbdef9ad95dba0e1577160d0a",
-  "pdf_bytes": 1651060,
+  "pdf_sha256": "d272e8f15458f549b21840ef4526a1071719fbcebb60c58104aaa2136a0e6622",
+  "pdf_bytes": 1312763,
   "renderer": "existing local headless Chrome"
 }
