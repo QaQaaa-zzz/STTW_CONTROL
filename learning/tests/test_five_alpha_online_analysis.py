@@ -61,3 +61,24 @@ def test_denied_publication_retains_deadline_and_task_mask_bypasses_hold():
     a=m.audit_five_alpha_dwell(r,.2)
     assert a['decisions'][1]['hold_until_tick']==40
     assert a['decisions'][2]['release_reason']==2 and a['decisions'][2]['hold_until_tick']==48
+
+
+@pytest.mark.parametrize('user',[0.,.25,.75,1.])
+def test_nominal_nonuser_half_fallback_is_not_user_return(user):
+    r=raw([.5]*4+[user]*4,np.r_[np.full((4,5),.1),np.full((4,5),.9)])
+    r['alpha_user'][:]=user
+    stats=m.five_alpha_online_statistics(r,dict(alpha=user,user_alpha=user,force_N=0.,onset_s=2.2,duration_s=.15))
+    full=stats['windows']['full']
+    assert full['fallback_half_nonuser_ticks']==4
+    assert full['fallback_user_ticks']==0
+    assert full['qualified_return_events']==1
+    assert full['nonuser_ticks']==4 and full['switch_count']==2
+    assert 'nominal_full' in stats['windows'] and 'during_pulse' not in stats['windows']
+
+
+def test_dwell_uses_original_user_as_initial_alpha():
+    r=dwell_fixture(12);r['alpha_user'][:]=0.;r['coord_prev_alpha'][:4]=0.
+    audited=m.audit_five_alpha_dwell(r,.2,user_alpha=0.)
+    assert audited['independent_numpy_match']
+    assert audited['decisions'][0]['executed_alpha']==.25
+    assert audited['decisions'][0]['hold_until_tick']==40

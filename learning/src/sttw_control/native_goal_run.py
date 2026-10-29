@@ -192,14 +192,36 @@ def five_alpha_online_inventory(p):
         planning_frequency_hz=10.,onset_s=2.2,duration_s=.15,forces_N=[-64.,64.],force_frame='worldY',
         candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,
         task_aware_fallback=False,guard_fallback=False)
+    nominal=p.get('panel_kind')=='nominal_five_user'
+    if p.get('panel_kind','disturbed_single_user') not in ('disturbed_single_user','nominal_five_user'):raise ValueError('unknown online panel kind')
+    if nominal:
+        required.pop('user_alpha');required.update(expected_cases=35,maximum_lower_ticks=70000,forces_N=[0.],user_alphas=[0.,.25,.5,.75,1.],alpha_dwell_s=.2)
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('bounded five-alpha online contract differs')
     if isinstance(p.get('alpha_dwell_s',0.),bool) or p.get('alpha_dwell_s',0.) not in (0.,.2):raise ValueError('online dwell must be opt-in .2s')
     if any(p.get(k)!=v for k,v in dict(planner_points=5001,planner_spacing_m=.02,planner_support_m=100.).items()):raise ValueError('online path support differs')
     if set(p['bank_state_fingerprints'])!={'6'} or len(p['route_contexts'])!=7 or len({c['route'] for c in p['route_contexts']})!=7:raise ValueError('seven route/bank identities required')
+    if nominal:
+        return [dict(route=c['route'],speed=c['speed'],bank_index=6,initial_fingerprint=p['bank_state_fingerprints']['6'],path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/coordinator/a{user:g}/zero',mode='H75',mode_index=0,model_id=p['model_id'],alpha=user,query_alpha=user,user_alpha=user,effective_user_alpha=user,event='zero',force_N=0.,onset_s=p['onset_s'],duration_s=p['duration_s']) for c,user in itertools.product(p['route_contexts'],p['user_alphas'])]
     return [dict(route=c['route'],speed=c['speed'],bank_index=6,initial_fingerprint=p['bank_state_fingerprints']['6'],
         path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/coordinator/a0.5/F{force:+g}',
         mode='H75',mode_index=0,model_id=p['model_id'],alpha=.5,query_alpha=.5,user_alpha=.5,effective_user_alpha=.5,
         event=f't2.2_F{force:+g}',force_N=force,onset_s=2.2,duration_s=.15) for c,force in itertools.product(p['route_contexts'],p['forces_N'])]
+
+
+def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=None):
+    """Check original reset leaves; only user alpha is neutralized for pairing."""
+    import jax
+    import jax.numpy as j
+    import numpy as np
+    alphas=j.asarray([c['alpha'] for c in cases])
+    if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==alphas)&(initial.state.physical.physical_tick==physical_tick))):raise ValueError('online initial clocks/user differ')
+    neutral=initial.replace(state=initial.state.replace(alpha=j.zeros_like(initial.state.alpha)))
+    leaves=jax.tree.leaves(jax.device_get(neutral))
+    groups={}
+    for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route']),[]).append(i)
+    expected_group_size=5 if panel_kind=='nominal_five_user' else 2
+    if len(groups)!=7 or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
+    return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
 
 def prepare_five_alpha_online(source,root,protocol):
@@ -228,9 +250,9 @@ def prepare_five_alpha_online(source,root,protocol):
     p=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=FIVE_ONLINE_MODE,source=str(source),
         native_runtime_root=old['native_runtime_root'],native_expected_sources=old['native_expected_sources'],initial_source=old['initial_source'],
         config=old['config'],models={'H75':old['models']['H75']},contexts=proposal['route_contexts'],protocol=proposal,
-        cases=14,horizon_s=10.,goal_radius_m=1.,steps_per_chunk=5,chunks=100,chunk_upper_steps=steps,
-        maximum_active_lower_ticks=28000,maximum_allocated_lower_slots=28000,optimizer_updates=0,replanning=old['replanning'],
-        data_role=proposal['data_role'],initialization='Authenticated native bank6 reset, unchanged complete native carry plus separate latch and previous alpha. Initial user/previous alpha=.5.',
+        cases=len(rows),horizon_s=10.,goal_radius_m=1.,steps_per_chunk=5,chunks=100,chunk_upper_steps=steps,
+        maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,replanning=old['replanning'],
+        data_role=proposal['data_role'],initialization='Authenticated native bank6 reset, unchanged complete native carry plus separate latch and previous alpha. Initial previous alpha equals each declared user; optional hold deadline0.',
         scoring=proposal['scoring'],stop=proposal['stop_rule'],input_sha256={str(file):digest(file) for file in files},source_sha256={str(file):digest(file) for file in modules})
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
@@ -1775,10 +1797,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if five_online:
-        if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==.5)&(initial.state.physical.physical_tick==snapshot.physical_tick))):raise ValueError('online initial clocks/user differ')
-        leaves=jax.tree.leaves(jax.device_get(initial))
-        if any(any(not np.array_equal(x[2*i],x[2*i+1],equal_nan=True) for i in range(7)) for x in leaves):raise ValueError('online force-pair initial states differ')
-        initial_identity=dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),initial_user_alpha=.5,initial_previous_alpha=.5)
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind=p['protocol'].get('panel_kind'))
     elif native_prefix:
         if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==.5)&(initial.state.physical.physical_tick==snapshot.physical_tick))):raise ValueError('native prefix initialization differs')
         initial_identity=dict(authenticated_native_prefix=True,prefix_lanes=len(cases),native_leaf_count=len(jax.tree.leaves(initial)),new_bank_fingerprints=p['protocol']['bank_state_fingerprints'],collection_s=p['collection_s'],task_horizon_s=p['horizon_s'])

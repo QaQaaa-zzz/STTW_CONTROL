@@ -59,3 +59,61 @@ def test_arm_zero_inference_uses_immutable_common_observation():
     assert result['probabilities'].shape==(5,4) and result['qmin'].shape==(5,)
     assert result['alpha']==.5 and result['degraded']
     assert obs[336]==.5
+
+
+def test_nominal_panel_all_users_zero_force_exact_budget_and_frozen_candidate():
+    base=config();p=json.loads((Path(__file__).parents[1]/'configs/h75_five_alpha_online_nominal_users.json').read_text());rows=five_alpha_online_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==35
+    assert sum(planning_chunk_steps(10.,10.))*4*len(rows)==70000
+    assert p['predictor_training']==base['predictor_training'] and p['export_manifest_sha256']==base['export_manifest_sha256']
+    assert p['candidate_alphas']==base['candidate_alphas'] and p['alpha_dwell_s']==.2
+    assert p['route_contexts']==base['route_contexts']
+    for route in {r['route'] for r in rows}:
+        rr=[r for r in rows if r['route']==route]
+        assert [r['user_alpha'] for r in rr]==[0.,.25,.5,.75,1.]
+        assert all(r['alpha']==r['query_alpha']==r['user_alpha']==r['effective_user_alpha'] and r['force_N']==0 and r['event']=='zero' for r in rr)
+
+
+@pytest.mark.parametrize('user',[0.,.25,.5,.75,1.])
+def test_each_user_restores_its_own_index_and_fallback_remains_half(user):
+    grid=(0.,.25,.5,.75,1.);targets=j.tile(j.array([[2.6,0.]]),(5,1));q=j.zeros(5).at[grid.index(user)].set(.9)
+    choose=lambda scores:choose_alpha(targets,0.,j.array([2.6,0.]),2.6,scores,True,True,1.-user,user_alpha=user,candidate_alphas=grid)
+    restored=choose(q)
+    assert restored['alpha']==user and not restored['latched']
+    fallback=choose(j.zeros(5))
+    assert fallback['alpha']==.5 and fallback['latched'] and fallback['degraded']
+
+
+@pytest.mark.parametrize('field,value',[('expected_cases',34),('maximum_lower_ticks',70001),('user_alphas',[0,.5,1]),('forces_N',[-64,64]),('alpha_dwell_s',0.)])
+def test_nominal_panel_rejects_changed_scope(field,value):
+    p=json.loads((Path(__file__).parents[1]/'configs/h75_five_alpha_online_nominal_users.json').read_text());p[field]=value
+    with pytest.raises(ValueError):five_alpha_online_inventory(p)
+
+
+def test_nominal_initial_audit_neutralizes_only_user_and_keeps_hidden_state():
+    from flax import struct
+    from sttw_control.native_goal_run import audit_five_alpha_online_initial
+    @struct.dataclass
+    class Physical:
+        physical_tick: object
+    @struct.dataclass
+    class State:
+        alpha: object
+        tick: object
+        physical: object
+        history: object
+    @struct.dataclass
+    class Carry:
+        state: object
+        latch_history: object
+    p=json.loads((Path(__file__).parents[1]/'configs/h75_five_alpha_online_nominal_users.json').read_text());cases=five_alpha_online_inventory(p)
+    users=j.array([c['alpha'] for c in cases]);history=j.repeat(j.arange(7),5)
+    initial=Carry(State(users,j.zeros(35,j.int32),Physical(j.full(35,700,j.int32)),history),history+10)
+    audit=audit_five_alpha_online_initial(initial,cases,700,panel_kind='nominal_five_user')
+    assert audit['alpha_neutralized_only'] and audit['initial_hold_until_tick']==0
+    np.testing.assert_array_equal(initial.state.alpha,users)
+    assert audit['initial_user_alphas']==[c['alpha'] for c in cases]
+    bad=initial.replace(state=initial.state.replace(history=history.at[1].set(999)))
+    with pytest.raises(ValueError,match='neutralization'):audit_five_alpha_online_initial(bad,cases,700,panel_kind='nominal_five_user')
+    bad=initial.replace(state=initial.state.replace(alpha=users.at[0].set(.5)))
+    with pytest.raises(ValueError,match='clocks/user'):audit_five_alpha_online_initial(bad,cases,700,panel_kind='nominal_five_user')
