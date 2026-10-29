@@ -38,6 +38,40 @@ def feasible_alpha_intervals(candidate_alphas,no_fall_probability,task_probabili
         interpretation='Consecutive qualifying queried samples; continuous interior unverified. Model estimates, no safety guarantee.')
 
 
+def select_from_alpha_range(plan,*,user_alpha,previous_alpha,publication_permitted=True,
+                            preference_weight=1.,switch_weight=.1):
+    """Choose a queried feasible point while preserving the original preference.
+
+    Never interpolate interval endpoints into unqueried actions. Empty sets and
+    denied publication hold the previous action with an explicit degraded flag;
+    this fallback is not asserted feasible. A feasible user value wins before
+    smoothing costs, so the original preference is restored when available.
+    """
+    values=np.asarray([user_alpha,previous_alpha,preference_weight,switch_weight],float)
+    if (not np.isfinite(values).all() or not 0<=user_alpha<=1 or not 0<=previous_alpha<=1
+        or preference_weight<=0 or switch_weight<0):
+        raise ValueError('valid user/previous alpha and finite nonnegative weights required')
+    grid=np.asarray(plan['candidate_alphas'],float);mask=np.asarray(plan['feasible_mask'],bool)
+    if (grid.ndim!=1 or not len(grid) or mask.shape!=grid.shape or not np.isfinite(grid).all()
+        or np.any(np.diff(grid)<=0) or np.any((grid<0)|(grid>1))):
+        raise ValueError('valid queried grid and one feasibility mask per alpha required')
+    feasible=grid[mask]
+    if not publication_permitted:
+        selected=float(previous_alpha);reason='publication_denied'
+    elif not len(feasible):
+        selected=float(previous_alpha);reason='empty_range_hold_previous'
+    elif np.any(feasible==user_alpha):
+        selected=float(user_alpha);reason='original_preference_feasible'
+    else:
+        cost=preference_weight*(feasible-user_alpha)**2+switch_weight*(feasible-previous_alpha)**2
+        selected=float(feasible[np.argmin(cost)]);reason='nearest_feasible_preference'
+    return dict(selected_alpha=selected,user_alpha=float(user_alpha),previous_alpha=float(previous_alpha),
+        reason=reason,changed=selected!=previous_alpha,
+        selected_is_predicted_feasible=bool(np.any(feasible==selected)),
+        degraded=not publication_permitted or not len(feasible),
+        interpretation='Selects queried points only; model feasibility is not a safety guarantee.')
+
+
 class OnlineCarry(NamedTuple):
     native: Any
     latched: Any

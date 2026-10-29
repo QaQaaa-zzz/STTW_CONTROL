@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
+from sttw_control.tolerance_coordination import select_from_alpha_range
 
 
 def example():
@@ -46,3 +47,27 @@ def test_original_user_preference_is_separate_from_current_conditioning_alpha():
     result=planner.query(obs,0.,1.6,[dict(force_N=0.,duration_s=.4,preparation_s=0.)],user_alpha=.3,candidate_alphas=[0.,.25,.5])
     assert result['user_alpha']==.3 and result['conditioning_alpha_before_query']==.5
     assert .3 in result['feasible_candidates']
+
+
+def test_range_selection_preserves_user_and_restores_after_temporary_deviation():
+    plan=dict(candidate_alphas=[0.,.25,.5,.75,1.],feasible_mask=[False,False,True,False,False])
+    first=select_from_alpha_range(plan,user_alpha=0.,previous_alpha=0.)
+    assert first['selected_alpha']==.5 and first['changed'] and not first['degraded']
+    plan['feasible_mask']=[True,True,True,True,True]
+    returned=select_from_alpha_range(plan,user_alpha=0.,previous_alpha=.5,switch_weight=100.)
+    assert returned['selected_alpha']==0. and returned['reason']=='original_preference_feasible'
+
+
+def test_empty_range_and_permission_denial_do_not_invent_feasible_actions():
+    plan=dict(candidate_alphas=[0.,.25,.5,.75,1.],feasible_mask=[False]*5)
+    held=select_from_alpha_range(plan,user_alpha=0.,previous_alpha=.75)
+    assert held['selected_alpha']==.75 and held['degraded'] and not held['selected_is_predicted_feasible']
+    plan['feasible_mask'][2]=True
+    denied=select_from_alpha_range(plan,user_alpha=0.,previous_alpha=.75,publication_permitted=False)
+    assert denied['selected_alpha']==.75 and denied['reason']=='publication_denied'
+
+
+def test_disconnected_range_selection_never_commands_unqueried_interior():
+    plan=dict(candidate_alphas=[0.,.25,.5,.75,1.],feasible_mask=[True,True,False,True,True])
+    result=select_from_alpha_range(plan,user_alpha=.5,previous_alpha=.75)
+    assert result['selected_alpha']==.75 and result['selected_is_predicted_feasible']
