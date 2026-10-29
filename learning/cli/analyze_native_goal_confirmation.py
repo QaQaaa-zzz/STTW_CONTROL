@@ -2427,6 +2427,30 @@ def five_alpha_feature_rows(cases,sources,raws,interface):
     return np.asarray(features,np.float32)
 
 
+def render_five_alpha_xy(root,p,rows,raws):
+    """Render saved-data XY only; does not rebuild labels, rewards or receipts."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    root=Path(root);run=root/'evaluation';out=root/'analysis';links=[]
+    for source,prep,force in sorted({(c['source_index'],c['preparation_s'],c['force_N']) for c in rows}):
+        group=[r for r in rows if (r['source_index'],r['preparation_s'],r['force_N'])==(source,prep,force)];first=group[0]
+        with np.load(run/(first['path_key']+'_path.npz')) as z:path=dict(z)
+        fig,ax=plt.subplots(figsize=(8,7),layout='constrained');ax.plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+        for r in group:
+            raw=raws[r['case_id']];n=r['new_suffix_lower_ticks'];line=ax.plot(*raw['actual_xy'][:n].T,label=f"alpha={r['candidate_alpha']:g}")[0]
+            ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's')
+            mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
+            ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
+        ax.scatter(*first['original_goal_xy'],marker='*',color='k')
+        model=p['models']['H75'];identity='H75 checkpoint SHA '+model.get('checkpoint_sha256',model.get('actor_sha256','unknown'))[:12]
+        fig.suptitle(identity,fontsize=11)
+        ax.set(xlabel='World X (m)',ylabel='World Y (m)')
+        ax.set_title(f"{first['route']} | source{source} at task {first['source_task_s']:g}s | bank{first['bank_index']}\nprep {prep:g}s | worldY {force:+g}N for .15s | source alpha={first['source_user_alpha']:g}\nActual source suffix and endpoints; dots=force exposure; no reset",fontsize=10)
+        ax.set_aspect('equal');ax.legend();ax.grid(alpha=.2);name=f'source{source}_prep{prep:g}_F{force:+g}_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    return links
+
+
 def analyze_five_alpha_labels(root,p):
     """Native parent/child readback; no physics, fitting or baseline creation."""
     import matplotlib
@@ -2494,18 +2518,7 @@ def analyze_five_alpha_labels(root,p):
         if ticks!=status['active_lower_ticks']:raise ValueError('physical accounting mismatch')
         features=five_alpha_feature_rows(cases,sources,raws,p['config']['residual_interface']);labels=np.array([np.nan if resolved_label(r['primary']) is None else resolved_label(r['primary']) for r in rows],np.float32)
         out.mkdir(exist_ok=False)
-        for source,prep,force in sorted({(c['source_index'],c['preparation_s'],c['force_N']) for c in cases}):
-            group=[r for r in rows if (r['source_index'],r['preparation_s'],r['force_N'])==(source,prep,force)];first=group[0]
-            with np.load(run/(first['path_key']+'_path.npz')) as z:path=dict(z)
-            fig,ax=plt.subplots(figsize=(8,7),layout='constrained');ax.plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
-            for r in group:
-                raw=raws[r['case_id']];n=r['new_suffix_lower_ticks'];line=ax.plot(*raw['actual_xy'][:n].T,label=f"alpha={r['candidate_alpha']:g}")[0]
-                ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's')
-                mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
-                ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
-            ax.scatter(*first['original_goal_xy'],marker='*',color='k');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f"H75 frozen | {first['route']} | source{source} | prep{prep:g}s | worldY {force:+g}N / .15s\nSource suffix only; source alpha=.5; bank6 initialization seed from source_case_id; actual endpoints; no reset")
-            model=p['models']['H75'];fig.suptitle('Checkpoint: '+str(model.get('checkpoint',model.get('actor',model.get('path',model.get('sha256','H75; identity in results.json'))))))
-            ax.set_aspect('equal');ax.legend();ax.grid(alpha=.2);name=f'source{source}_prep{prep:g}_F{force:+g}_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        links=render_five_alpha_xy(root,p,rows,raws)
     atomic_json(out/'results.json',rows)
     summary=[]
     for source,alpha in sorted({(r['source_index'],r['candidate_alpha']) for r in rows}):
