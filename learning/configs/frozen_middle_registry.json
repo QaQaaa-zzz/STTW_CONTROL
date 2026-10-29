@@ -2,7 +2,7 @@
   "schema": "sttw_frozen_middle_registry_v1",
   "root": "/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1",
   "manifest_sha256": "b5ee0caa2c71ae666af7a57573ffe9994e67329fa72e6d7380c3f3e22efbfe60",
-  "current_primary_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "current_primary_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
   "retarget_existing_aliases": false,
   "records": {
     "STTW_MIDDLE_DUAL_COVERAGE_U200_A0": {
@@ -118,6 +118,29 @@
       "checkpoint_kind": "supervised_actor_only_not_PPO_resume",
       "code_commit": "c7ab23655f9fc2f5b7ee516b372cec4de8b0959c",
       "status": "historical_reference"
+    },
+    "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170": {
+      "label": "H75低速混合续训U170：实用综合选型固定底座",
+      "parents": [
+        "STTW_MIDDLE_FULLTAIL_PPO75_U77"
+      ],
+      "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+      "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+      "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+      "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+      "checkpoint_kind": "PPO_state",
+      "code_commit": "cb25303f4cc27370a8aafecc63faabfc60a5e2da",
+      "status": "adopted_fixed_primary",
+      "frozen_manifest": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json",
+      "frozen_manifest_sha256": "1f9bf2260fbce1d6430e3b42e0745a56e4da11e3027937c71b37f1aab84a9a79",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/analysis/practical_review.json",
+      "interface": "unchanged frozen H75 middle interface; alpha grid0/.25/.5/.75/1 remains available"
     }
-  }
+  },
+  "extension_manifests": [
+    {
+      "path": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json",
+      "sha256": "1f9bf2260fbce1d6430e3b42e0745a56e4da11e3027937c71b37f1aab84a9a79"
+    }
+  ]
 }

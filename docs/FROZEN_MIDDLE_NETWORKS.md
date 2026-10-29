@@ -5,6 +5,16 @@
 实际冻结包：[middle_lineage_20261024_v1](/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/manifest.json)。
 稳定入口：[机器可读注册表](../learning/configs/frozen_middle_registry.json)。模型不再通过会变化的best/last路径定位。
 
+## 2026-10-29 低速混合U170固定底座
+
+已按用户最新实用综合标准采用 `STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170`，原H75及其冻结包保持不变。新独立冻结包：[/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json](/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json)。注册表 `current_primary_id` 已更新；旧 `root/manifest_sha256` 仍指历史九模型包，新模型通过 `extension_manifests`/逐记录manifest定位，不能把历史包当新增模型来源。
+
+从H75加载权重补充低速/紧弯与原任务混合训练，u170含2次critic预热＋168次新PPO。完整200PPO已经结束，未默认采用最后一轮。按TRAIN近期奖励趋势先选U170，随后仅做4场景×alpha0/.5/1=12回合DEV；12/12首次到达、0触地、完整10秒、0接回触发。10Hz持续接回保持启用；本批无偏离触发不表示移除了重规划。
+
+两个低速场景实际全窗速度均≤2.1m/s。2m/s、R1.3末2秒横向最大误差约4.7–8.1cm，三个alpha最低实速为1.448/1.594/1.660m/s，出弯收敛。1.6m/s、R.9的alpha0/.5仍有摆动（末2秒横向最大约.205/.073m、航向最大.308/.201rad），不称全面解决；S右弯末窗偏差.263–.381m接受作为继续研究的限制。普通单弯完成且末窗偏差约.15–.18m。没有新增外扰结果，不能推断容扰收益。
+
+本轮统一bank0，与历史bank6不构成严格配对；不称全面超过H75。五档alpha接口保留，仅本次少量选型测0/.5/1。完整12条件、XY图及限制：[选型结果](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/analysis/README.md)。实际原路径误差/任务成本已独立重建，完整奖励诊断未完成，不能称完整奖励验收。
+
 ## 真实继承关系
 
 ```mermaid
