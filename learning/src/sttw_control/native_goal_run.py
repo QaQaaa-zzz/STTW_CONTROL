@@ -139,6 +139,11 @@ def fixed_h75_capability_inventory(p):
     elif variant=='low_speed_tight_turn':required.update(expected_cases=20,maximum_lower_ticks=40000)
     elif variant is not None:raise ValueError('unknown capability variant')
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('fixed H75 capability contract differs')
+    candidate=p.get('candidate_model')
+    if candidate is not None:
+        if variant!='low_speed_tight_turn':raise ValueError('candidate override only for declared low-speed capability')
+        if p.get('base_model_id',SELECTION_MODELS['H75'])!=SELECTION_MODELS['H75']:raise ValueError('candidate base must remain frozen H75')
+        if not candidate.get('registry_id') or candidate['registry_id']==SELECTION_MODELS['H75']:raise ValueError('candidate requires a distinct explicit identity')
     contexts=p['route_contexts']
     if variant=='S_goal_extension':
         if p.get('goal_extension_m')!=3. or len(contexts)!=2 or {c['route'] for c in contexts}!={'S_left_90_R1p8','S_right_90_R1p8'} or any(c['family']!=2 or c.get('goal_distance_m')!=p['goal_source']['paths'][c['route']]['new_goal_s'] for c in contexts):raise ValueError('two S-route goal-only extension required')
@@ -148,7 +153,7 @@ def fixed_h75_capability_inventory(p):
     elif len(contexts)!=7 or len({c['route'] for c in contexts})!=7 or {c['family'] for c in contexts}!={0,1,2}:raise ValueError('seven original route identities required')
     return [dict(route=c['route'],speed=c['speed'],event='zero',force_N=0.,onset_s=0.,duration_s=.15,
         bank_index=6,path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/H75/a{a:g}/zero',
-        mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,
+        mode='H75',mode_index=0,model_id=candidate['registry_id'] if candidate else p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,
         **({k:p['goal_source']['paths'][c['route']][k] for k in ('old_goal_xy','new_goal_xy')}|{'goal_extension_m':3.} if variant=='S_goal_extension' else {}))
         for c,a in itertools.product(contexts,p['alphas'])]
 
@@ -167,6 +172,58 @@ def validate_goal_extension_source(proposal,initial_source):
             if r['old_goal_s']!=old or r['new_goal_s']!=new or new>path['s'][-1] or not np.allclose(point(old),r['old_goal_xy'],atol=1e-9) or not np.allclose(point(new),r['new_goal_xy'],atol=1e-9):raise ValueError('goal extension metadata differs')
             window=(path['s']>=old)&(path['s']<=new)
             if np.any(path['curvature'][window]!=0):raise ValueError('goal extension must stay on existing exit straight')
+
+
+def authenticate_capability_candidate(candidate, frozen_model, initial_source, native_config):
+    """Validate an explicit mixed-training candidate without importing native runtime."""
+    import numpy as np
+    import torch
+    required={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256',
+              'training_manifest','training_manifest_sha256','source_update'}
+    if set(candidate)!=required or not isinstance(candidate['source_update'],int) or candidate['source_update']<=0:
+        raise ValueError('explicit complete candidate identity required')
+    for name in ('actor','checkpoint','training_manifest'):
+        if digest(candidate[name])!=candidate[name+'_sha256']:raise ValueError('candidate artifact changed: '+name)
+    manifest=json.loads(Path(candidate['training_manifest']).read_text());cfg=manifest['config']
+    canonical=lambda value:hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    identity=manifest['identity']
+    if identity['config_sha256']!=canonical(cfg):raise ValueError('candidate training config identity differs')
+    if identity['parent_checkpoint_sha256']!=frozen_model['checkpoint_sha256'] or cfg['finetuning']['parent']['checkpoint_sha256']!=frozen_model['checkpoint_sha256']:
+        raise ValueError('candidate is not frozen H75 continuation')
+    if manifest['source']!=initial_source or identity['lower_actor_sha256']!=initial_source['candidate']['actor_sha256']:
+        raise ValueError('candidate physical bank/model/lower differs')
+    for key in ('network','timing','residual_interface','path_reward','follower'):
+        if cfg[key]!=native_config[key]:raise ValueError('candidate native interface differs: '+key)
+    if cfg['network'].get('architecture')!='alpha_modulated_v1' or cfg['network']['actor_dim']!=351:
+        raise ValueError('candidate requires original351 alpha-modulated architecture')
+    saved=torch.load(candidate['checkpoint'],map_location='cpu',weights_only=False)
+    if saved['update']!=candidate['source_update'] or saved['identity']!=identity:raise ValueError('candidate learner identity/update differs')
+    # Same numeric Dense-transpose export as path_command_policy.export_torch_actor,
+    # without importing modern sttw_control into the sealed native process.
+    weights=saved['policy'];values={}
+    for i,index in enumerate((0,2,4,6)):
+        values[f'Dense_{i}']={'kernel':weights[f'actor.{index}.weight'].detach().cpu().numpy().T,
+                              'bias':weights[f'actor.{index}.bias'].detach().cpu().numpy()}
+    for key in ('gain_2','shift_2','gain_3','shift_3'):values[key]=weights['actor.'+key].detach().cpu().numpy()
+    expected_actor_keys={f'actor.{index}.{field}' for index in (0,2,4,6) for field in ('weight','bias')}|{'actor.'+key for key in ('gain_2','shift_2','gain_3','shift_3')}
+    if {key for key in weights if key.startswith('actor.')}!=expected_actor_keys:raise ValueError('candidate actor parameter structure differs')
+    with Path(candidate['actor']).open('rb') as stream:actor=pickle.load(stream)
+    with Path(frozen_model['actor']).open('rb') as stream:base=pickle.load(stream)
+    def compare(actual,expected):
+        if isinstance(expected,dict):
+            if not isinstance(actual,dict) or set(actual)!=set(expected):raise ValueError('candidate exported actor structure differs')
+            for key in expected:compare(actual[key],expected[key])
+        else:
+            a,b=np.asarray(actual),np.asarray(expected)
+            if a.shape!=b.shape or not np.isfinite(a).all():raise ValueError('candidate actor shape/nonfinite differs')
+            np.testing.assert_array_equal(a,b)
+    compare(actor,{'params':values})
+    def shape(value):
+        if isinstance(value,dict):return {key:shape(item) for key,item in value.items()}
+        return np.asarray(value).shape
+    if shape(actor)!=shape(base):raise ValueError('candidate incompatible with frozen Actor')
+    return dict(candidate,checkpoint_kind='PPO_state',role='explicit_training_candidate_not_frozen_H75',
+                base_model_id=SELECTION_MODELS['H75'],verification='checkpoint identity, physical source and exact Torch-to-Actor export; zero physics')
 
 
 def prepare_fixed_h75_capability(transition,root,protocol):
@@ -195,6 +252,8 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     model=previous['models']['H75']
     for key in ('actor','checkpoint'):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint differs')
+    if proposal.get('candidate_model'):
+        model=authenticate_capability_candidate(proposal['candidate_model'],model,source,previous['config'])
     if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('prepare in fresh process before modern control package import')
     sys.path.insert(0,str(native))
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
@@ -210,6 +269,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     for file in modules:(root/'source'/file.name).write_bytes(file.read_bytes())
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
+    if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
     if proposal.get('capability_variant')=='S_goal_extension':
         files += [Path(proposal['goal_source']['run'])/'plan.json']+[Path(r['file']) for r in proposal['goal_source']['paths'].values()]
     steps=planning_chunk_steps(10.,10.)
@@ -217,7 +277,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
         config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
         maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,
-        initialization='Fresh new-physics prepared bank6, original native task reset; frozen H75 five alpha; no q or additional baseline.',data_role=proposal['data_role'],
+        initialization=f"Fresh new-physics prepared bank6, original native task reset; {model['registry_id']} five alpha; no q or additional baseline.",data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
         stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))

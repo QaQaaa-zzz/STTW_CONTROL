@@ -2807,6 +2807,12 @@ def analyze_fixed_h75_capability(root,p):
     import matplotlib.pyplot as plt
     run=root/'evaluation';out=root/'analysis';cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text());status=json.loads((run/'status.json').read_text());validate_fixed_capability_cases(cases,p['protocol'])
     extended=p['protocol'].get('capability_variant')=='S_goal_extension'
+    candidate=p['protocol'].get('candidate_model')
+    model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
+    if candidate:
+        for key in ('actor','checkpoint','registry_id'):
+            if p['models']['H75'][key]!=candidate[key]:raise ValueError('candidate model identity differs')
+        if any(c.get('model_id')!=candidate['registry_id'] for c in cases):raise ValueError('candidate case identity differs')
     if extended:
         for source in p['protocol']['goal_source']['paths'].values():
             if digest(source['file'])!=source['sha256']:raise ValueError('extended source path identity differs')
@@ -2871,13 +2877,13 @@ def analyze_fixed_h75_capability(root,p):
             color=line.get_color();axes[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['endpoint']['physical_outcome']=='contact' else 's');axes[1].plot(t,raw['actual_forward_speed'][:n],color=color,label=label);axes[2].plot(t,raw['phi'][:n]*180/np.pi,color=color,label=label)
         axes[0].set(xlabel='World X (m)',ylabel='World Y (m)');axes[0].set_aspect('equal');axes[1].set(xlabel='Task time (s)',ylabel='True forward speed (m/s)');axes[2].set(xlabel='Task time (s)',ylabel='Roll (deg)')
         for ax in axes:ax.legend();ax.grid(alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | frozenH75 {checkpoint} | all five fixed alpha | bank6/H10/force0 | new wheel friction.8 | actual endpoints');name=route+'_fixed_h75_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | {model_label} {checkpoint} | all five fixed alpha | bank6/H10/force0 | new wheel friction.8 | actual endpoints');name=route+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     summary={str(a):dict(cases=len({r['route'] for r in rows}),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
     if extended:
         for item in summary.values():
             item.update(goal_rate=item['goal']/item['cases'],contact_rate=item['contact']/item['cases'])
-    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],limits='Fresh front/rearfriction.8 preparedbank fixedH75 capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. Total non-task/terminal reward reconstruction deferred.'))
-    (out/'README.md').write_text('# Fresh-physics fixed H75 five-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} nominal cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
+    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. Total non-task/terminal reward reconstruction deferred.'))
+    (out/'README.md').write_text(f'# Fresh-physics {model_label} five-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} nominal cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     return summary

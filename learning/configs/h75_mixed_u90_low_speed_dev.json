@@ -1,0 +1,80 @@
+{
+  "experiment_id": "STTW-H75-MIXED-U90-LOW-SPEED-DEV",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 20,
+  "maximum_lower_ticks": 40000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    0.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R0p9_v1p6",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R1p3_v1p6",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R0p9_v2p0",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R1p3_v2p0",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "data_role": "Related DEV checkpoint90 (88 new PPO updates), no checkpoint selection or final claim; old H75 exact20 raw reused as paired reference.",
+  "scoring": "All20 original goal/contact, actual XY, true speed/governed speed and inclination; preserve frozen1.5m/s reference floor. Lower true speeds possible but not assumed dangerous without observed evidence.",
+  "stop_rule": "Atmost20 H10 episodes/max40000 lower ticks,0optimizer/0external force; stop and preserve partial on engineering error. No auto expansion, limit or physical change.",
+  "capability_variant": "low_speed_tight_turn",
+  "question": "Exploratory fixed-H75 screen: can tight low-speed tracking make alpha0 reach the frozen 1.5m/s governed floor and lose balance while another alpha remains viable? No forced outcome; all failures retained.",
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U90",
+    "actor": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/checkpoints/actor_0090.pkl",
+    "actor_sha256": "08721bc6f7a20fd9dd5fe52ea0ff9b065f7c9d63c89be53993e6acf8f46a41e2",
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/checkpoints/update_0090.pt",
+    "checkpoint_sha256": "42b854a179b69629dc6415c430fd04a807643b157490057d0e26563d3e31cbcf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 90
+  }
+}
