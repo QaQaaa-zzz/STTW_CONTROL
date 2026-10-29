@@ -2626,11 +2626,54 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
     return dict(dwell_audit=dwell_audit,user_alpha=user_alpha,fallback_alpha=.5,actual_alpha_dwell=online_alpha_dwell_intervals(raw,user_alpha=user_alpha),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Fixed fallback.5 alone never proves qualified user restoration. For guard runs legacy fallback_half_ticks is degraded .5 occupancy; executed_fixed_half_fallback_ticks from replayed dwell provenance is authoritative.')
 
 
+def validate_online_panel(cases,protocol):
+    """Authenticate the full panel and route-specific seeded event metadata."""
+    kind=protocol.get('panel_kind','disturbed_single_user');nominal=kind=='nominal_five_user';multi=kind=='disturbed_five_user';count=70 if multi else 35 if nominal else 14
+    if kind not in ('disturbed_single_user','nominal_five_user','disturbed_five_user') or len(cases)!=count:raise ValueError('complete declared online panel required')
+    routes={c['route'] for c in cases};grid=[0.,.25,.5,.75,1.]
+    expected={(r,a,f) for r in routes for a in (grid if nominal or multi else [.5]) for f in ([0.] if nominal else [-64.,64.])}
+    if len(routes)!=7 or {(c['route'],c['alpha'],c['force_N']) for c in cases}!=expected:raise ValueError('online route/user/force product differs')
+    if multi:
+        import hashlib
+        if protocol.get('onset_seed')!=20261029 or 'onset_s' in protocol:raise ValueError('route onset seed/global clock contract differs')
+        if protocol.get('onset_algorithm')!="SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50":raise ValueError('route onset algorithm differs')
+        onsets={r:(int.from_bytes(hashlib.sha256(f"20261029:{r}".encode()).digest()[:8],'big')%61+80)/50 for r in routes}
+        if protocol.get('onset_by_route_s')!=onsets:raise ValueError('seeded route onset map differs')
+    for c in cases:
+        if c['bank_index']!=6 or c['duration_s']!=.15 or c['onset_s']!=(onsets[c['route']] if multi else 2.2) or c.get('user_alpha',c['alpha'])!=c['alpha']:raise ValueError('case original-user/event identity differs')
+    return dict(nominal=nominal,disturbed_users=multi,cases=count)
+
+
+def online_phase_masks(time,case,nominal=False):
+    time=np.asarray(time)
+    if nominal:return [('nominal',np.ones(len(time),bool))]
+    start=case['onset_s'];end=start+case['duration_s']
+    return [('before',time<start),('during',(time>=start)&(time<end)),('after',time>=end)]
+
+
+def render_disturbed_user_panel(out,rows,raws,paths):
+    import matplotlib.pyplot as plt
+    links=[]
+    for route in sorted({r['route'] for r in rows}):
+        fig,axes=plt.subplots(2,3,figsize=(18,12),layout='constrained')
+        for ax,force in zip(axes,[-64.,64.]):
+            group=sorted([r for r in rows if r['route']==route and r['force_N']==force],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];ax[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+            for r in group:
+                raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"User={r['alpha']:g}";line=ax[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();ax[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');pulse=(t>=r['onset_s'])&(t<r['onset_s']+r['duration_s']);ax[0].scatter(*raw['actual_xy'][:n][pulse].T,color=color,s=6);ax[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);ax[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
+            onset=group[0]['onset_s'];ax[0].set(xlabel='World X (m)',ylabel='World Y (m)',title=f'WorldY {force:+g}N; dots=actual pulse exposure');ax[0].set_aspect('equal');ax[1].set(xlabel='Task time (s)',ylabel='Executed alpha');ax[2].set(xlabel='Task time (s)',ylabel='Max candidate min4 probability')
+            for a in ax[1:]:a.axvspan(onset,onset+.15,color='grey',alpha=.2)
+            for a in ax:a.legend();a.grid(alpha=.2)
+            ax[2].axhline(.8,color='k',ls='--');ax[2].axhline(.85,color='k',ls=':')
+        fig.suptitle(f'{route} | all five original users | bank6/H10 | same H75/full1000q/guard/.2conditionalhold | pulse at {onset:g}s for.15s | actual failure endpoints');name=route+'_disturbed_five_user_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    return links
+
+
 def analyze_five_alpha_online14(root,p):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    run=root/'evaluation';out=root/'analysis';protocol=p['protocol'];nominal=protocol.get('panel_kind')=='nominal_five_user';expected_cases=35 if nominal else 14;status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    run=root/'evaluation';out=root/'analysis';protocol=p['protocol'];status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+    panel=validate_online_panel(cases,protocol);nominal=panel['nominal'];disturbed_users=panel['disturbed_users'];expected_cases=panel['cases']
     if status['phase']!='completed' or status['completed_cases']!=expected_cases or len(index)!=expected_cases or len(cases)!=expected_cases:raise ValueError('complete14 diagnostic required')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('online14 plan changed')
     for f,sha in p['input_sha256'].items():
@@ -2640,13 +2683,10 @@ def analyze_five_alpha_online14(root,p):
     manifest=json.loads((run/'manifest.json').read_text())
     for key,val in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
         if manifest[key]!=val:raise ValueError('online14 manifest changed '+key)
-    if nominal:
-        if len({c['route'] for c in cases})!=7 or {(c['route'],c['alpha'],c['force_N']) for c in cases}!={(c['route'],a,0.) for c in cases for a in (0.,.25,.5,.75,1.)}:raise ValueError('nominal sevenroutes fiveusers required')
-    elif len({c['route'] for c in cases})!=7 or {(c['route'],c['force_N']) for c in cases}!={(c['route'],f) for c in cases for f in (-64.,64.)}:raise ValueError('seven routes paired signs required')
     out.mkdir(exist_ok=False);rows=[];raws={};paths={};ticks=0;links=[];decisions=json.loads((run/'replanning_decisions.json').read_text())
     for lane,c in enumerate(index):
         if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('online14 row identity changed')
-        if c['bank_index']!=6 or (nominal and c['force_N']!=0.) or (not nominal and (c['alpha']!=.5 or c['onset_s']!=2.2 or c['duration_s']!=.15)):raise ValueError('online declaration differs')
+        if c['bank_index']!=6:raise ValueError('online bank identity differs')
         user=float(c.get('user_alpha',c['alpha']))
         if user!=c['alpha']:raise ValueError('original user identity differs')
         with np.load(c['raw_file']) as z:raw=dict(z)
@@ -2663,13 +2703,14 @@ def analyze_five_alpha_online14(root,p):
         stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.),guard_fallback=protocol.get('guard_fallback',False));pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
         original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=user,raw_alpha=user,broaden_cost_numerics=True)
         phase={}
-        phase_masks=[('nominal',np.ones(n,bool))] if nominal else [('before',raw['time'][:n]<2.2),('during',(raw['time'][:n]>=2.2)&(raw['time'][:n]<2.35)),('after',raw['time'][:n]>=2.35)]
+        phase_masks=online_phase_masks(raw['time'][:n],c,nominal)
         for name,m in phase_masks:
             contact=np.asarray(raw['contact_failure'][:n],bool)&m;speed=raw['actual_forward_speed'][:n]-c['speed'];phase[name]=dict(actual_ticks=int(m.sum()),contact=bool(contact.any()),fault=bool(np.any(fault[:n]&m)),speed_rmse_m_s=float(np.sqrt(np.mean(speed[m]**2))) if m.any() else None,original_user_running_three_costs=original['task_step_costs'][m].sum(axis=0).tolist())
         rows.append(dict(c,horizons={'10':outcome},coordinator=stats,phases=phase,pulse=pulse,replan_ticks=[t for t,_ in updates],original_user_alpha=user,original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,observed_ticks=n))
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected_cases*2000:raise ValueError('online14 physics budget mismatch')
-    for route in sorted({c['route'] for c in cases}):
+    if disturbed_users:links=render_disturbed_user_panel(out,rows,raws,paths)
+    for route in ([] if disturbed_users else sorted({c['route'] for c in cases})):
         group=[r for r in rows if r['route']==route];path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
         for r in group:
             raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"User alpha={r['alpha']:g}" if nominal else f"WorldY {r['force_N']:+g}N";line=axes[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();axes[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');axes[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);axes[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
@@ -2679,7 +2720,7 @@ def analyze_five_alpha_online14(root,p):
             for ax in axes[1:]:ax.axvspan(2.2,2.35,color='grey',alpha=.2)
         fig.suptitle(f'{route} | online five-alpha | '+('nominal fiveusers' if nominal else 'user.5 forces')+' | bank6 | H10 | full1000 ensemble | actual endpoints');name=route+('_nominal_five_user_xy.png' if nominal else '_online14_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     atomic_json(out/'results.json',rows);atomic_json(out/'receipt.json',dict(cases=expected_cases,panel_kind=protocol.get('panel_kind','paired_force'),active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,plan_sha256=digest(root/'plan.json'),limits='Related familiar bank6 DEV diagnostic, no paired comparator or causal gain claim. Three original-user running task channels only; terminal/non-task total reward reconstruction deferred. Logged coordinator gates audited; independent MLP probabilities not yet reconstructed.'))
-    (out/'README.md').write_text(('# Nominal five-user35 diagnostic\n\n' if nominal else '# Five-alpha online14 diagnostic\n\n')+'\n\n'.join(f'![XY and coordinator traces]({f})' for f in links)+'\n\nNo fixed-alpha or baseline comparator. Each original-user cost is three running task channels; no cross-user weighted-cost ranking, not coordinator proxy or full reward. Per-case goal/contact, before/during/after phases and before-first-goal coordinator behavior are in results.json. Static fallback.5 is distinct from qualified user restoration. In guard runs legacy fallback_half_ticks describes degraded .5 occupancy; executed_fixed_half_fallback_ticks uses effective dwell provenance. Raw guard requested/selected/published may differ from actual held execution. Related known-route DEV; no closed-loop gain or safety certificate.\n')
+    (out/'README.md').write_text(('# Disturbed five-user70 diagnostic\n\n' if disturbed_users else '# Nominal five-user35 diagnostic\n\n' if nominal else '# Five-alpha online14 diagnostic\n\n')+'\n\n'.join(f'![XY and coordinator traces]({f})' for f in links)+'\n\nNo fixed-alpha or baseline comparator. Each original-user cost is three running task channels; no cross-user weighted-cost ranking, not coordinator proxy or full reward. Per-case goal/contact, before/during/after phases and before-first-goal coordinator behavior are in results.json. Static fallback.5 is distinct from qualified user restoration. In guard runs legacy fallback_half_ticks describes degraded .5 occupancy; executed_fixed_half_fallback_ticks uses effective dwell provenance. Raw guard requested/selected/published may differ from actual held execution. Related known-route DEV; no closed-loop gain or safety certificate.\n')
     return rows
 
 if __name__=='__main__':

@@ -137,3 +137,33 @@ def test_held_fixedhalf_origin_survives_new_raw_guard_user_request():
     assert s['raw_guard_user_retention_ticks']==4
     assert s['executed_guard_user_ticks']==0
     assert s['executed_fixed_half_fallback_ticks']==8
+
+
+def disturbed_panel_fixture():
+    import json
+    cfg=json.loads((Path(__file__).resolve().parents[1]/'configs/h75_five_alpha_online_disturbed_users.json').read_text())
+    rows=[dict(route=r['route'],alpha=u,user_alpha=u,bank_index=6,force_N=f,onset_s=cfg['onset_by_route_s'][r['route']],duration_s=.15) for r in cfg['route_contexts'] for u in [0.,.25,.5,.75,1.] for f in [-64.,64.]]
+    return cfg,rows
+
+
+def test_disturbed_seventy_exact_product_and_seeded_route_timing():
+    cfg,rows=disturbed_panel_fixture();p=m.validate_online_panel(rows,cfg)
+    assert p==dict(nominal=False,disturbed_users=True,cases=70)
+    assert {r['route']:round(r['onset_s']*50) for r in rows}=={'straight_v2p6':106,'left70_R1p9':120,'right70_R1p9':90,'left130_R2p7':132,'right130_R2p7':98,'S_left_90_R1p8':133,'S_right_90_R1p8':114}
+    rows[0]['onset_s']+=.02
+    with pytest.raises(ValueError,match='event identity'):m.validate_online_panel(rows,cfg)
+
+
+def test_disturbed_panel_rejects_missing_sibling_or_global_event_clock():
+    cfg,rows=disturbed_panel_fixture();bad=rows[:-1]+[rows[0]]
+    with pytest.raises(ValueError,match='product'):m.validate_online_panel(bad,cfg)
+    cfg['onset_s']=2.2
+    with pytest.raises(ValueError,match='global clock'):m.validate_online_panel(rows,cfg)
+
+
+def test_phases_use_actual_case_onset_not_historical_two_point_two():
+    case=dict(onset_s=1.8,duration_s=.15)
+    masks=dict(m.online_phase_masks(np.array([1.79,1.8,1.9,1.95,2.2]),case))
+    np.testing.assert_array_equal(masks['before'],[True,False,False,False,False])
+    np.testing.assert_array_equal(masks['during'],[False,True,True,False,False])
+    np.testing.assert_array_equal(masks['after'],[False,False,False,True,True])

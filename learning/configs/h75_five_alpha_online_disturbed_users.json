@@ -1,0 +1,120 @@
+{
+  "experiment_id": "STTW-H75-FIVE-ALPHA-DISTURBED-USERS",
+  "mode": "native_five_alpha_online",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "bank_state_fingerprints": {
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "horizon_s": 10.0,
+  "expected_cases": 70,
+  "maximum_lower_ticks": 140000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "duration_s": 0.15,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "force_frame": "worldY",
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "arm": 0,
+  "hypothetical_duration_s": 0.15,
+  "task_aware_fallback": false,
+  "guard_fallback": true,
+  "route_contexts": [
+    {
+      "route": "straight_v2p6",
+      "family": 0,
+      "radius_m": 2.0,
+      "angle_deg": 0.0,
+      "speed": 2.6,
+      "direction": 1.0,
+      "goal_distance_m": 20.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "left130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_bank4_full_fit_v1/training",
+  "export_manifest_sha256": "ed543b15f0f42ed98e4e8b085f4402f054c0c970607edfaa4595c69a0b6206da",
+  "data_role": "Known bank6 related DEV: one deterministic predeclared onset perroute shared across allfiveusers and bothforcesigns. Not independent TEST or coverage of the full timingrange; no baseline/training/deployment.",
+  "scoring": "Per user/route/force originalgoal/contact, preference retention and qualified-restoration vs degradedguard; actual percase pulse timing, shared original references and allfailures retained.",
+  "stop_rule": "Seventy H10 episodes maximum140000lower,0optimizer; fixed seed20261029 route-onset map before results, no redraw or outcome filtering. Freeze H75/q/guard/.2hold/10Hz. Stop onengineeringerror retainingpartials; no automaticretry/expansion.",
+  "alpha_dwell_s": 0.2,
+  "panel_kind": "disturbed_five_user",
+  "user_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "onset_seed": 20261029,
+  "onset_algorithm": "SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50",
+  "onset_by_route_s": {
+    "straight_v2p6": 2.12,
+    "left70_R1p9": 2.4,
+    "right70_R1p9": 1.8,
+    "left130_R2p7": 2.64,
+    "right130_R2p7": 1.96,
+    "S_left_90_R1p8": 2.66,
+    "S_right_90_R1p8": 2.28
+  }
+}

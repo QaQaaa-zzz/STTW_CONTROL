@@ -186,6 +186,15 @@ def prepare_native_source_prefix(source,root,protocol):
 FIVE_ONLINE_MODE='native_five_alpha_online'
 
 
+ROUTE_ONSET_ALGORITHM="SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50"
+
+
+def deterministic_route_onsets(routes,seed):
+    """Frozen causal-experiment metadata; never an input to the coordinator."""
+    if type(seed) is not int or seed<0 or any(type(route) is not str or not route for route in routes) or len(set(routes))!=len(routes):raise ValueError('integer onset seed and unique route names required')
+    return {route:(int.from_bytes(hashlib.sha256(f'{seed}:{route}'.encode('utf-8')).digest()[:8],'big')%61+80)/50 for route in routes}
+
+
 def five_alpha_online_inventory(p):
     required=dict(mode=FIVE_ONLINE_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],user_alpha=.5,
         horizon_s=10.,expected_cases=14,maximum_lower_ticks=28000,optimizer_updates=0,
@@ -194,13 +203,23 @@ def five_alpha_online_inventory(p):
         task_aware_fallback=False)
     if type(p.get('guard_fallback',False)) is not bool:raise ValueError('guard_fallback must be an explicit boolean')
     nominal=p.get('panel_kind')=='nominal_five_user'
-    if p.get('panel_kind','disturbed_single_user') not in ('disturbed_single_user','nominal_five_user'):raise ValueError('unknown online panel kind')
+    disturbed_users=p.get('panel_kind')=='disturbed_five_user'
+    if p.get('panel_kind','disturbed_single_user') not in ('disturbed_single_user','nominal_five_user','disturbed_five_user'):raise ValueError('unknown online panel kind')
     if nominal:
         required.pop('user_alpha');required.update(expected_cases=35,maximum_lower_ticks=70000,forces_N=[0.],user_alphas=[0.,.25,.5,.75,1.],alpha_dwell_s=.2)
+    if disturbed_users:
+        required.pop('user_alpha');required.pop('onset_s')
+        required.update(expected_cases=70,maximum_lower_ticks=140000,user_alphas=[0.,.25,.5,.75,1.],alpha_dwell_s=.2,guard_fallback=True)
+        if 'onset_s' in p:raise ValueError('route-timed panel cannot declare a global onset')
+        if any(type(a) not in (int,float) or not math.isfinite(a) for key in ('candidate_alphas','user_alphas') for a in p[key]):raise ValueError('five-alpha grids require finite numeric entries')
+        expected_onsets=deterministic_route_onsets([c['route'] for c in p['route_contexts']],p['onset_seed'])
+        if p.get('onset_algorithm')!=ROUTE_ONSET_ALGORITHM or p.get('onset_by_route_s')!=expected_onsets or any(type(v) not in (int,float) or not math.isfinite(v) for v in p['onset_by_route_s'].values()):raise ValueError('declared deterministic route onset map differs')
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('bounded five-alpha online contract differs')
     if isinstance(p.get('alpha_dwell_s',0.),bool) or p.get('alpha_dwell_s',0.) not in (0.,.2):raise ValueError('online dwell must be opt-in .2s')
     if any(p.get(k)!=v for k,v in dict(planner_points=5001,planner_spacing_m=.02,planner_support_m=100.).items()):raise ValueError('online path support differs')
     if set(p['bank_state_fingerprints'])!={'6'} or len(p['route_contexts'])!=7 or len({c['route'] for c in p['route_contexts']})!=7:raise ValueError('seven route/bank identities required')
+    if disturbed_users:
+        return [dict(route=c['route'],speed=c['speed'],bank_index=6,initial_fingerprint=p['bank_state_fingerprints']['6'],path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/coordinator/a{user:g}/t{onset:g}_F{force:+g}',mode='H75',mode_index=0,model_id=p['model_id'],alpha=user,query_alpha=user,user_alpha=user,effective_user_alpha=user,event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset,duration_s=p['duration_s']) for c,user,force in itertools.product(p['route_contexts'],p['user_alphas'],p['forces_N']) for onset in [p['onset_by_route_s'][c['route']]]]
     if nominal:
         return [dict(route=c['route'],speed=c['speed'],bank_index=6,initial_fingerprint=p['bank_state_fingerprints']['6'],path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/coordinator/a{user:g}/zero',mode='H75',mode_index=0,model_id=p['model_id'],alpha=user,query_alpha=user,user_alpha=user,effective_user_alpha=user,event='zero',force_N=0.,onset_s=p['onset_s'],duration_s=p['duration_s']) for c,user in itertools.product(p['route_contexts'],p['user_alphas'])]
     return [dict(route=c['route'],speed=c['speed'],bank_index=6,initial_fingerprint=p['bank_state_fingerprints']['6'],
@@ -220,7 +239,7 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     leaves=jax.tree.leaves(jax.device_get(neutral))
     groups={}
     for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route']),[]).append(i)
-    expected_group_size=5 if panel_kind=='nominal_five_user' else 2
+    expected_group_size={'nominal_five_user':5,'disturbed_five_user':10}.get(panel_kind,2)
     if len(groups)!=7 or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
