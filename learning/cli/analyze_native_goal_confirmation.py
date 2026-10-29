@@ -2834,8 +2834,16 @@ def analyze_fixed_h75_capability(root,p):
     run=root/'evaluation';out=root/'analysis';cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text());status=json.loads((run/'status.json').read_text());validate_fixed_capability_cases(cases,p['protocol'])
     extended=p['protocol'].get('capability_variant')=='S_goal_extension'
     load_screen=p['protocol'].get('capability_variant')=='low_speed_lateral_load'
+    boundary=p['protocol'].get('range_planner_boundary')
     candidate=p['protocol'].get('candidate_model')
     model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
+    boundary_decisions={}
+    if boundary:
+        receipt=json.loads((root/'range_planner_decisions.json').read_text())
+        if receipt['actual_future_event_input'] is not False or receipt['same_source_actual_event_decisions_identical'] is not True:raise ValueError('causal boundary decision audit missing')
+        boundary_decisions={r['case_id']:r for r in receipt['decisions']}
+        if len(boundary_decisions)!=len(cases):raise ValueError('one boundary decision per physical case required')
+        model_label+=' | NN range selected at task1.6s; held afterwards'
     if candidate:
         for key in ('actor','checkpoint','registry_id'):
             if p['models']['H75'][key]!=candidate[key]:raise ValueError('candidate model identity differs')
@@ -2884,9 +2892,13 @@ def analyze_fixed_h75_capability(root,p):
             np.testing.assert_allclose(goal,c['new_goal_xy'],atol=3e-6,rtol=0)
         fault=raw['policy_fault']|raw['continuation_geometry_fault']|raw['lower_fault']|raw['nonfinite'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault);endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.,start_tick=start_tick);endpoint['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000-start_tick)
         primary_decisions=[d for d in decisions if d['case_id']==c['case_id'] and d['task_tick']<start_tick+n]
-        updates=audit_selection_replans(run,dict(c,replanned=bool(primary_decisions)),lane,raw,path,goal,primary_decisions);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
+        if boundary:
+            decision=boundary_decisions[c['case_id']]['decision']
+            if decision['selected_alpha']!=c['alpha'] or decision['user_alpha']!=c['original_user_alpha']:raise ValueError('actual boundary execution or original preference differs')
+        updates=audit_selection_replans(run,dict(c,replanned=bool(primary_decisions)),lane,raw,path,goal,primary_decisions);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c.get('original_user_alpha',c['alpha']),raw_alpha=c['alpha'],broaden_cost_numerics=True)
         rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(start_s+np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t+start_tick for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
         rows[-1].update(window)
+        if boundary:rows[-1]['range_planner_decision']=boundary_decisions[c['case_id']]
         if load_screen:
             rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick,path_updates=updates)
             original.update(rebuilt)
@@ -2920,7 +2932,7 @@ def analyze_fixed_h75_capability(root,p):
             axes[0].add_patch(Circle(group[0]['old_goal_xy'],1.,fill=False,edgecolor='black',linestyle='--',label='Old goal disk'))
             axes[0].add_patch(Circle(group[0]['new_goal_xy'],1.,fill=False,edgecolor='#009E73',label='New goal disk (+3m)'))
         for r in group:
-            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"Fixed alpha={r['alpha']:g}"
+            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"NN alpha={r['alpha']:g} (user={r['original_user_alpha']:g})" if boundary else f"Fixed alpha={r['alpha']:g}"
             if extended:
                 arrival=r['endpoint']['first_arrival_s'];cut=min(n,round(arrival/.005)) if arrival is not None else n
                 line=axes[0].plot(*raw['actual_xy'][:cut].T,label=label)[0]
@@ -2931,7 +2943,7 @@ def analyze_fixed_h75_capability(root,p):
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | {model_label} {checkpoint} | {len(p['protocol']['alphas'])} fixed alpha | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
         if load_screen:
             render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
@@ -2940,6 +2952,8 @@ def analyze_fixed_h75_capability(root,p):
             item.update(goal_rate=item['goal']/item['cases'],contact_rate=item['contact']/item['cases'])
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],execution_reward_reconstructed=load_screen,limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. '+('Execution-path full reward and terminal adjustment rebuilt against logs.' if load_screen else 'Total non-task/terminal reward reconstruction deferred.')))
     (out/'README.md').write_text(f'# Fresh-physics {model_label} {len(p['protocol']['alphas'])}-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} {'paired equivalent-lateral-load' if load_screen else 'nominal'} cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
+    if boundary:
+        (out/'README.md').write_text('# Causal NN-range boundary execution\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+f'\n\n{expected} new integration DEV cases. Small network queried the current full native state at task1.6s against the predeclared hypothetical family; chosen alpha was executed and held afterwards. Actual future gust timings were not supplied. Original user alpha and its three task costs are preserved independently of executed alpha and its reconstructed reward. This is not continuous online coordination or preference-restoration validation. No new matched fixed-user baseline was requested; cached different event timings do not prove paired superiority.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
@@ -2972,7 +2986,7 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
     """Unsmoothed paired traces, actual failure cutoff and independently rebuilt reward."""
     import matplotlib.pyplot as plt
     fig,axes=plt.subplots(3,3,figsize=(15,11),layout='constrained')
-    comp,caxes=plt.subplots(2,len(group),figsize=(max(15,4*len(group)),9),layout='constrained')
+    comp,caxes=plt.subplots(2,len(group),figsize=(max(15,4*len(group)),9),layout='constrained',squeeze=False)
     labels=['True / governed / wheel speed (m/s)','True minus wheel speed (m/s)','Actual / governed steer (rad)',
             'Roll (deg)','Roll rate (deg/s)','Original cross-track (m)',
             'Original heading error (rad)','Reward per actual lower step','Cumulative reward']
