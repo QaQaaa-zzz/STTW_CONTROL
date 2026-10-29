@@ -1,0 +1,98 @@
+{
+  "experiment_id": "STTW-U170-TCST-LEFT24-CANDIDATES-V1",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    0
+  ],
+  "alphas": [
+    0.5,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 2,
+  "maximum_lower_ticks": 4000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    24.0
+  ],
+  "duration_s": 0.4,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R1p1_v1p8",
+      "family": 1,
+      "radius_m": 1.1,
+      "angle_deg": 90.0,
+      "speed": 1.8,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1",
+        "plan_sha256": "47e9c5b6af8ccab37e82a7d524d2d48f71ffec9b02102323948a6bf025ea7f44",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/evaluation/complete_carry_09.pkl",
+        "carry_sha256": "eeb3a8ff1c1281f463001362fd321a7160369a397f9575567607471623e36f3f",
+        "source_lane": 0,
+        "source_task_tick": 200,
+        "source_physical_tick": 900,
+        "source_alpha": 0.0,
+        "parent_route": "left90_R1p1_v1p8",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/evaluation/bank0_left90_R1p1_v1p8_path.npz",
+        "path_sha256": "0eb4c3c42cd5213e4418828c0c1a4ca8a15386918cb50f5eeb70c8e6a8b2fada"
+      }
+    }
+  ],
+  "data_role": "Two exploratory DEV probes selected after frozen predictor empty-range failure; not an independent test.",
+  "scoring": "Original goal, full upright true speed, actual XY and original user0 reward; empty-range hold previous is degraded, not predicted feasible.",
+  "stop_rule": "Exactly2 continuations to originaltask10/contact, no automatic repeats or expansion.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Can preparation alpha0.5 or1 plus the unchanged feedback return succeed in the failed left24N case?",
+  "onsets_s": [
+    1.0
+  ],
+  "force_frame": "world_fixed_vector",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.1,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 1.8,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  },
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "force_direction_world": [
+    -0.7173560908995228,
+    0.6967067093471654,
+    0.0
+  ],
+  "include_nominal": false,
+  "causal_preference_return": {
+    "user_alpha": 0.0,
+    "minimum_preparation_s": 2.0,
+    "stable_hold_s": 0.3,
+    "max_abs_roll_rad": 0.2617993877991494,
+    "max_abs_roll_rate_rad_s": 0.35,
+    "minimum_forward_speed_m_s": 1.5,
+    "alpha_rate_per_s": 1.0
+  },
+  "dataset_partition": {
+    "training_rows": 0,
+    "development_rows": 2,
+    "all_development": true,
+    "unit": "post-failure candidate diagnosis"
+  }
+}
