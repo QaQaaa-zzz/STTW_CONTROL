@@ -2827,6 +2827,57 @@ def declared_primary_suffix(raw,case,horizon_s=10.):
         primary_task_start_s=float(start),primary_task_end_s=float(horizon_s))
 
 
+def compare_return_to_cached_hold(root,cached_runs):
+    """Paired physical/alpha-user costs; authenticate caches, never simulate."""
+    import matplotlib.pyplot as plt
+    root=Path(root);p=json.loads((root/'plan.json').read_text());out=root/'analysis'
+    if not p['protocol'].get('causal_preference_return'):raise ValueError('causal-return experiment required')
+    rows=json.loads((out/'results.json').read_text());pool=[];plans={};paired=[]
+    for directory in map(Path,cached_runs):
+        old=json.loads((directory/'plan.json').read_text())
+        if digest(directory/'plan.json')!=json.loads((directory/'seal.json').read_text())['plan_sha256']:raise ValueError('cached hold plan changed')
+        if old['config']!=p['config'] or old['initial_source']!=p['initial_source'] or old['models']!=p['models']:raise ValueError('cached hold physical/controller identity differs')
+        plans[str(directory)]=old
+        pool += [dict(r,cached_run=str(directory)) for r in json.loads((directory/'analysis/results.json').read_text())]
+    keys=json.loads((root/'evaluation/manifest.json').read_text())['reward_components']
+    for i,row in enumerate(rows):
+        fields=('route','alpha','force_N','onset_s','duration_s','source_task_start_s','model_id','bank_index')
+        matches=[r for r in pool if all(r[k]==row[k] for k in fields) and r.get('force_direction_world')==row.get('force_direction_world')]
+        if len(matches)!=1:raise ValueError('one exact cached hold counterpart required')
+        old=matches[0];directory=Path(old['cached_run']);old_plan=plans[str(directory)]
+        context=lambda plan:next(c['state_source'] for c in plan['contexts'] if c['route']==row['route'])
+        if context(p)!=context(old_plan) or old_plan['protocol'].get('causal_preference_return'):raise ValueError('cached counterpart source or continuation differs')
+        if digest(old['raw_file'])!=old['raw_sha256']:raise ValueError('cached raw changed')
+        with np.load(row['raw_file']) as z:newraw=dict(z)
+        with np.load(old['raw_file']) as z:oldraw=dict(z)
+        prefix={}
+        for key in ('actual_xy','actual_forward_speed','phi','actual_delta','governed','offsets','filtered_offset'):
+            a=newraw[key][:20];b=oldraw[key][:20];np.testing.assert_allclose(a,b,atol=1e-4,rtol=2e-5,err_msg='pre-return physical prefix differs '+key);prefix[key]=float(np.max(abs(a-b)))
+        with np.load(directory/'evaluation'/(old['path_key']+'_path.npz')) as z:path=dict(z)
+        decisions=[d for d in json.loads((directory/'evaluation/replanning_decisions.json').read_text()) if d['case_id']==old['case_id']]
+        index=json.loads((directory/'evaluation/case_index.json').read_text());lane=next(j for j,c in enumerate(index) if c['case_id']==old['case_id'])
+        updates=audit_selection_replans(directory/'evaluation',dict(old,replanned=bool(decisions)),lane,oldraw,path,np.asarray(old['original_goal_xy']),decisions)
+        original,_=rescore_original_task(oldraw,path,p['config'],p['initial_source']['controller'],keys,updates[0][0] if updates else None,task_alpha=row['original_user_alpha'],raw_alpha=old.get('raw_user_alpha',old['alpha']),broaden_cost_numerics=True)
+        rebuilt=reconstruct_execution_path_reward(oldraw,dict(old,effective_user_alpha=row['original_user_alpha']),path,None,None,p['config'],p['initial_source']['controller'],keys,start_tick=round(row['source_task_start_s']/.005),path_updates=updates)
+        n=row['active_lower_ticks'];m=old['active_lower_ticks'];common=min(n,m)
+        with np.load(row['diagnostic_task_file']) as z:newtask=dict(z)
+        paired.append(dict(case_id=row['case_id'],cached_case_id=old['case_id'],cached_run=str(directory),prefix_first20_max_errors=prefix,
+            return_endpoint=row['endpoint'],held_endpoint=old['endpoint'],return_audit=row['preference_return_audit'],common_ticks=common,
+            common_original_user_three_costs_return=newtask['task_step_costs'][:common].sum(axis=0).tolist(),common_original_user_three_costs_held=original['task_step_costs'][:common].sum(axis=0).tolist()))
+        fig,axes=plt.subplots(1,3,figsize=(16,5),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+        for raw,count,reward,label,style in ((newraw,n,newtask['reward'],'Feedback return','-'),(oldraw,m,rebuilt['user1_reward'],'Cached held alpha', '--')):
+            axes[0].plot(*raw['actual_xy'][:count].T,ls=style,label=label);steps=np.arange(1,count+1)
+            axes[1].plot(steps,reward[:count],ls=style,label=label);axes[2].plot(steps,np.cumsum(reward[:count]),ls=style,label=label)
+        axes[0].set(xlabel='World X (m)',ylabel='World Y (m)');axes[0].set_aspect('equal');axes[1].set(xlabel='Actual lower steps',ylabel='Original-user reward / step');axes[2].set(xlabel='Actual lower steps',ylabel='Cumulative original-user reward')
+        for ax in axes:ax.legend();ax.grid(alpha=.2)
+        fig.suptitle(f"U170 | prepare{row['alpha']:g} | original user{row['original_user_alpha']:g} | gust task{row['onset_s']:g}s | cached hold comparison")
+        fig.savefig(out/f'cached_hold_comparison_{i:02d}.png',dpi=140);plt.close(fig)
+    result=dict(pairs=paired,new_physics_ticks=0,scope='Same source/controller/actual event. Original-user reward rescored on cached physical trajectories; original-path three costs separate. No independent replicate or wider safety claim.')
+    atomic_json(out/'cached_hold_comparison.json',result)
+    with (out/'README.md').open('a') as f:f.write('\n## Paired cached held-alpha comparison\n\n'+'\n\n'.join(f'![XY and common-user step/cumulative reward](cached_hold_comparison_{i:02d}.png)' for i in range(len(paired)))+'\n\nCached physical episodes were not rerun. Both rewards use the original user alpha; original-path cost channels and first20-step prefix audit are retained in cached_hold_comparison.json.\n')
+    return result
+
+
 def audit_causal_preference_return(raw,case,rule):
     """Independent NumPy audit; no actual force/onset/end is read here."""
     n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.float32(case['alpha']);user=np.float32(rule['user_alpha']);count=0;phase=0
