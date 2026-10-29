@@ -99,6 +99,31 @@ def predict_outcomes(export,features):
     return np.concatenate([probabilities,continuous],axis=-1).mean(axis=0)
 
 
+def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,source_yaw,task_time_s,hypotheses,interface,*,no_fall_threshold,task_threshold,max_path_error_m):
+    """Return risk/task/path-constrained candidate ranges without a future-event input.
+
+    Hypotheses are the caller-declared disturbance family, not a feed of actual
+    scheduled gusts. Predictions remain empirical and domain-limited; an empty
+    set is preserved instead of inventing a safe fallback alpha.
+    """
+    from .tolerance_coordination import feasible_alpha_intervals
+    grid=np.asarray(candidate_alphas,float);latents=np.asarray(candidate_latents,np.float32)
+    if grid.ndim!=1 or latents.shape!=(len(grid),2) or not hypotheses:raise ValueError('candidate latents and nonempty hypothetical disturbance family required')
+    features=[]
+    for alpha,latent in zip(grid,latents):
+        for hypothesis in hypotheses:
+            case=dict(hypothesis,alpha=float(alpha),source_task_start_s=float(task_time_s))
+            case['onset_s']=task_time_s+case['preparation_s'] if case['force_N'] else 0.
+            if case['force_N'] and case['onset_s']+case['duration_s']>10.:raise ValueError('hypothetical event extends beyond supported task horizon')
+            query=np.asarray(observation,np.float32).copy();query[336]=alpha
+            features.append(outcome_features(query,latent,source_yaw,case,interface))
+    forecast=predict_outcomes(export,np.stack(features)).reshape(len(grid),len(hypotheses),4)
+    aggregate=np.c_[forecast[:,:,0].min(axis=1),forecast[:,:,1].min(axis=1),forecast[:,:,2].max(axis=1),forecast[:,:,3].max(axis=1)]
+    result=feasible_alpha_intervals(grid,aggregate[:,0],aggregate[:,1],aggregate[:,2],no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
+    result.update(candidate_outcomes=aggregate.tolist(),hypothetical_disturbances=hypotheses,task_time_s=float(task_time_s),aggregation='Worst predicted no-fall/task probability and path/speed bound across declared hypothetical queries.',model_scope='Estimated ranges from a small related-domain predictor; no calibrated risk or continuous-interior guarantee. No actual future event schedule is read.')
+    return result
+
+
 def release_development_for_refit(dataset,output):
     """Explicit new-stage release; original failed TRAIN/DEV experiment stays intact."""
     dataset=Path(dataset).resolve();output=Path(output).resolve();meta=json.loads((dataset/'manifest.json').read_text())
@@ -151,6 +176,58 @@ def freeze_query_predictions(protocol,training,output):
     import datetime
     result=dict(schema=SCHEMA,recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical alpha interpolation labels. Known four source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
     output.write_text(json.dumps(result,indent=2)+'\n');return result
+
+
+def evaluate_frozen_queries(frozen_manifest,dataset,output):
+    """Score only fresh physical probes; old training points only annotate ranges."""
+    from .tolerance_coordination import feasible_alpha_intervals
+    frozen_manifest=Path(frozen_manifest).resolve();dataset=Path(dataset).resolve();output=Path(output).resolve()
+    frozen=json.loads(frozen_manifest.read_text());meta=json.loads((dataset/'manifest.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    training=Path(frozen['training']);fitted=json.loads((training/'manifest.json').read_text())
+    if meta['schema']!=SCHEMA or sha(dataset/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('new probe dataset identity changed')
+    if sha(frozen['query_data'])!=frozen['query_data_sha256'] or sha(training/'manifest.json')!=frozen['training_manifest_sha256'] or sha(training/'parameters.npz')!=frozen['parameters_sha256']:
+        raise ValueError('prospective model/predictions changed after freeze')
+    with np.load(frozen['query_data']) as z:query=dict(z)
+    with np.load(dataset/'dataset.npz') as z:data=dict(z)
+    if [r['case_id'] for r in meta['records']]!=query['case_ids'].tolist() or not np.all(data['roles']=='development'):
+        raise ValueError('all new physical probe identities/roles must match frozen queries')
+    np.testing.assert_allclose(data['features'],query['features'],atol=5e-5,rtol=3e-5,err_msg='observed source features differ from prospective features')
+    metric=outcome_metrics(data['targets'],query['prediction'],data['regression_mask'])
+    default=(query['prediction'][:,0]>=.8)&(query['prediction'][:,1]>=.5)&(query['prediction'][:,2]<=4.)
+    actual=(data['targets'][:,0]==1)&(data['targets'][:,1]==1)&(np.expm1(data['targets'][:,2])<=4.)
+    disturbed=np.asarray([r['force_N']!=0 for r in meta['records']])
+    metric.update(qualified_new_candidates=int(default.sum()),qualified_new_disturbed_candidates=int((default&disturbed).sum()),false_feasible_new_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and not actual[i]],false_no_fall_qualified_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and data['targets'][i,0]==0],scope='New32 interior-alpha probes only; no training rows included in these metrics. Example thresholds q.8/task.5/pathRMSE4m.')
+    metric['qualified_new_speed_violations']=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and r['full_upright_max_abs_speed_m_s']>2.1]
+    parent=Path(fitted['dataset']);parent_meta=json.loads((parent/'manifest.json').read_text())
+    if sha(parent/'manifest.json')!=fitted['dataset_manifest_sha256']:raise ValueError('training reference metadata changed')
+    with np.load(parent/'dataset.npz') as z:reference=dict(z)
+    with np.load(training/'parameters.npz') as z:export=dict(z)
+    reference_prediction=predict_outcomes(export,reference['features']);wanted={r['group'] for r in meta['records']};combined=[]
+    for records,truth,prediction,role in ((parent_meta['records'],reference['targets'],reference_prediction,'training_reference'),(meta['records'],data['targets'],query['prediction'],'fresh_alpha_probe')):
+        combined.extend(dict(record=r,target=t.tolist(),prediction=p.tolist(),role=role) for r,t,p in zip(records,truth,prediction) if r['group'] in wanted)
+    groups=[]
+    examples=frozen['interval_examples']
+    for group in sorted(wanted):
+        members=sorted([r for r in combined if r['record']['group']==group],key=lambda r:r['record']['alpha']);grid=[r['record']['alpha'] for r in members]
+        if grid!=[0.,.125,.25,.375,.5,.625,.75,.875,1.]:raise ValueError('old five and fresh four must form exactly the checked nine-point grid')
+        prediction=np.asarray([r['prediction'] for r in members]);truth=np.asarray([r['target'] for r in members]);ranges=[]
+        for risk in examples['no_fall_thresholds']:
+            for limit in examples['path_rmse_limits_m']:
+                plan=feasible_alpha_intervals(grid,prediction[:,0],prediction[:,1],prediction[:,2],no_fall_threshold=risk,task_threshold=examples['task_threshold'],max_path_error_m=limit)
+                observed=(truth[:,0]==1)&(truth[:,1]==1)&(np.expm1(truth[:,2])<=limit)
+                plan.update(observed_qualified_mask=observed.tolist(),false_feasible_alpha=[a for a,p,t in zip(grid,plan['feasible_mask'],observed) if p and not t]);ranges.append(plan)
+        groups.append(dict(group=group,candidates=members,plans=ranges))
+    output.mkdir(parents=True,exist_ok=False)
+    result=dict(schema=SCHEMA,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Nine-point range plots include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
+    (output/'results.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metric,indent=2)+'\n')
+    physical_run=Path(meta['source_run']);first=next(r for r in meta['records'] if r['force_N']!=0)
+    event=first['group'].split('/')[-1];xy=physical_run/'analysis'/(first['route']+'_'+event+'_fixed_candidate_xy.png')
+    lines=['# Prospective alpha-interior prediction check','',f'![New physical alpha trajectories]({xy})','',f'All actual XY / reward / component panels: [{physical_run.name}]({physical_run}/analysis/README.md).','','```json',json.dumps(metric,indent=2),'```','','New32 metrics above exclude all training rows. Old5 plus new4 below are an explicitly mixed nine-point candidate reference, not nine independent held-out cases.','', '|Source / challenge|Estimated intervals at q>=.8, task>=.5, pathRMSE<=4m|False feasible sampled alpha|','|---|---|---|']
+    for g in groups:
+        p=next(p for p in g['plans'] if p['no_fall_threshold']==.8 and p['max_path_error_m']==4.)
+        lines.append(f"|{g['group']}|{p['estimated_intervals']}|{p['false_feasible_alpha']}|")
+    lines+=['','Tight path limits can yield an empty set. This API predicts approximate candidate ranges and never certifies their unsampled interiors. Hypothetical force/preparation inputs are not a stream of actual future gust times.','',result['limits']]
+    (output/'README.md').write_text('\n'.join(lines)+'\n');return result
 
 
 def outcome_metrics(target,prediction,mask):
