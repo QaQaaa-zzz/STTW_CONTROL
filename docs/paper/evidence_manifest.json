@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "649660f427223d589e1d4d1fc093400e22ca037e0cbfad0b2f81cba033a9a6bf",
-  "builder_sha256": "695d90a2e3711cb27a13fd50f79d0fa4ebcbf8a8b4744d05206a447340407244",
+  "manuscript_sha256": "8423d82f4051097e9404552d3929cbe07d7a31e69070ceefea4da6d23924cc78",
+  "builder_sha256": "482948a09a413db14c8b9d8d64e30889b1296f95d3d6ebaa1be359ee788cfc24",
   "evidence_cutoff": "2026-10-29",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1562,7 +1562,7 @@
     },
     "E260": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/preference_outcome_prediction.py",
-      "sha256": "759bec6bf209b7fa675571055765ca8855026c76a5f6b6a1786e7534b3d24455",
+      "sha256": "b3a16b11c6e0304b92070bca746952a33ec101aa610d5488edff4b30829a8d80",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -1643,6 +1643,18 @@
       "sha256": "687a59025166858e43bf9184529ec53c13111fe691186bf1f813222f429eaa5f",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E274": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_left24_candidates_v1/analysis/results.json",
+      "sha256": "77cd66e0ea7137dbce1285b334e127b5c3895d199bd5316e981d840914427d99",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E275": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.json",
+      "sha256": "b12ad5d0f0016c925c80a294e4d2fc34a1a09045aad56794982b554fb422cbb2",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1669,7 +1681,9 @@
     "E270",
     "E271",
     "E272",
-    "E273"
+    "E273",
+    "E274",
+    "E275"
   ],
   "historical_claims_from_readback": [
     {

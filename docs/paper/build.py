@@ -355,6 +355,8 @@ def evidence_manifest():
         'E271':archive/'u170_tcst_mirrored_sources_v1/analysis/prospective_boundary_queries.json',
         'E272':archive/'u170_tcst_mirrored_sources_v1/analysis/geometry_preview_diagnostic.json',
         'E273':archive/'u170_tcst_mirrored_sources_v1/analysis/query_feature_coverage.json',
+        'E274':archive/'u170_tcst_left24_candidates_v1/analysis/results.json',
+        'E275':archive/'u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
