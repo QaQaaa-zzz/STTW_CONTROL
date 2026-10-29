@@ -1,0 +1,62 @@
+{
+  "experiment_id": "STTW-H75-LOW-SPEED-LATERAL-LOAD-SCREEN",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    0
+  ],
+  "alphas": [
+    0.0,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 34,
+  "maximum_lower_ticks": 68000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    -16.0,
+    -12.0,
+    -8.0,
+    -4.0,
+    4.0,
+    8.0,
+    12.0,
+    16.0
+  ],
+  "duration_s": 0.6,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R0p9_v2p0",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "data_role": "Exploratory paired DEV screen of frozen H75 only; full signed load/onset/alpha grid plus paired nominal. World-Y equivalent lateral load in newtons, not an aerodynamic wind field or wind speed. No selected outcome is assumed.",
+  "scoring": "All34 original goal/contact, actual XY, true/governed speed, path error, roll/contact failure endpoint and actual force impulse. Pair identical load direction, amplitude, onset and duration across alpha; no alpha-dependent forcing. Fresh prepared bank0 starts at actual1.960317m/s. Low-speed interpretation requires true body forward speed <=2.1m/s before and during applied load; retain every violation without changing governor.",
+  "stop_rule": "Exactly34 H10 cases or true failure endpoints, max68000 actual/allocated lower ticks,0optimizer; stop on engineering error without retries or expansion. This is equivalent lateral-load exploration; actual wind-field confirmation is a separate declared experiment.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Does the same declared world-Y lateral load produce differing physical failures for alpha0 versus alpha1 on the original tight low-speed left turn? Retain all opposite and null results.",
+  "onsets_s": [
+    1.6,
+    2.0
+  ],
+  "force_frame": "worldY",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.1,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 2.0,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  }
+}

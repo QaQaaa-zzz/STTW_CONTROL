@@ -1,0 +1,64 @@
+"""Paired equivalent lateral load, without integrating physical dynamics."""
+import copy
+import itertools
+import json
+from pathlib import Path
+
+import jax.numpy as j
+import numpy as np
+import pytest
+from flax import struct
+from sttw_control.native_goal_run import (
+    fixed_h75_capability_inventory,force_pulses,audit_five_alpha_online_initial)
+
+
+def config():
+    return json.loads((Path(__file__).parents[1]/'configs/h75_low_speed_lateral_load_screen.json').read_text())
+
+
+def test_full_load_grid_and_identical_world_force_across_alpha():
+    cfg=config();rows=fixed_h75_capability_inventory(cfg)
+    assert len(rows)==len({row['case_id'] for row in rows})==34
+    assert {(r['force_N'],r['onset_s'],r['alpha']) for r in rows if r['force_N']}==set(itertools.product(cfg['forces_N'],cfg['onsets_s'],cfg['alphas']))
+    assert {(r['force_N'],r['onset_s'],r['alpha']) for r in rows if not r['force_N']}=={(0.,0.,0.),(0.,0.,1.)}
+    for i in range(0,34,2):
+        a,b=rows[i:i+2]
+        assert a['alpha']==0. and b['alpha']==1.
+        assert {k:v for k,v in a.items() if k not in ('alpha','query_alpha','user_alpha','effective_user_alpha','case_id')}=={k:v for k,v in b.items() if k not in ('alpha','query_alpha','user_alpha','effective_user_alpha','case_id')}
+        pulses=force_pulses([a,b],3.5)
+        np.testing.assert_array_equal(pulses[0],pulses[1])
+        np.testing.assert_allclose(pulses[0],[3.5+a['onset_s'],4.1+a['onset_s'],0,a['force_N'],0])
+    assert cfg['maximum_lower_ticks']==len(rows)*2000
+    assert {r['bank_index'] for r in rows}=={0}
+    assert all(r['path_key'].startswith('bank0_') for r in rows)
+    assert cfg['low_speed_evidence_gate']['true_forward_speed_max_m_s']==2.1
+
+
+@pytest.mark.parametrize('key,value',[('alphas',[0,.5,1]),('forces_N',[-16,16]),('onsets_s',[2.]),('duration_s',.1),('force_frame','bodyY'),('maximum_lower_ticks',68001),('candidate_model',{'registry_id':'candidate'})])
+def test_changed_screen_contract_rejected(key,value):
+    cfg=config();cfg[key]=value
+    with pytest.raises(ValueError):fixed_h75_capability_inventory(cfg)
+
+
+def test_two_alpha_per_event_reset_audit_preserves_complete_pairing():
+    @struct.dataclass
+    class Physical:
+        physical_tick: object
+    @struct.dataclass
+    class State:
+        alpha: object
+        tick: object
+        physical: object
+        history: object
+    @struct.dataclass
+    class Carry:
+        state: object
+        hidden: object
+    rows=fixed_h75_capability_inventory(config());alpha=j.array([r['alpha'] for r in rows])
+    values=j.repeat(j.arange(17),2)
+    initial=Carry(State(alpha,j.zeros(34,j.int32),Physical(j.full(34,700,j.int32)),values),values+10)
+    receipt=audit_five_alpha_online_initial(initial,rows,700,panel_kind='disturbed_two_user',expected_route_count=1)
+    assert receipt['paired_reset_all_leaves_exact']
+    bad=initial.replace(hidden=initial.hidden.at[1].set(999))
+    with pytest.raises(ValueError,match='neutralization'):
+        audit_five_alpha_online_initial(bad,rows,700,panel_kind='disturbed_two_user',expected_route_count=1)

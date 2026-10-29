@@ -232,3 +232,25 @@ def test_low_speed_tight_turn_requires_declared_four_routes_and_all_alphas():
     m.validate_fixed_capability_cases(rows,protocol)
     with pytest.raises(ValueError,match='complete'):
         m.validate_fixed_capability_cases(rows[:-1],protocol)
+
+
+def test_low_speed_load_panel_requires_same_forcing_for_both_alphas():
+    import json
+    from pathlib import Path
+    protocol=json.loads((Path(__file__).parents[1]/'configs/h75_low_speed_lateral_load_screen.json').read_text())
+    rows=[dict(alpha=a,force_N=f,onset_s=t,bank_index=0,mode='H75',speed=2.,duration_s=.6,user_alpha=a,query_alpha=a,effective_user_alpha=a,route='left90_R0p9_v2p0') for a in (0.,1.) for f,t in [(0.,0.)]+[(f,t) for f in protocol['forces_N'] for t in protocol['onsets_s']]]
+    m.validate_fixed_capability_cases(rows,protocol)
+    rows[-1]['onset_s']=2.1
+    with pytest.raises(ValueError,match='complete paired'):
+        m.validate_fixed_capability_cases(rows,protocol)
+
+
+def test_targeted_base_review_uses_three_alphas_at_low_speed_initial_bank():
+    import json
+    from pathlib import Path
+    protocol=json.loads((Path(__file__).parents[1]/'configs/h75_mixed_u170_targeted_base_review.json').read_text())
+    rows=[dict(route=c['route'],alpha=a,mode='H75',force_N=0.,bank_index=0) for c in protocol['route_contexts'] for a in protocol['alphas']]
+    m.validate_fixed_capability_cases(rows,protocol)
+    rows[0]['bank_index']=6
+    with pytest.raises(ValueError,match='identity'):
+        m.validate_fixed_capability_cases(rows,protocol)

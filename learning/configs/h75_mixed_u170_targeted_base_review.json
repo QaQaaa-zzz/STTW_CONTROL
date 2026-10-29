@@ -1,0 +1,92 @@
+{
+  "experiment_id": "STTW-H75-MIXED-U170-TARGETED-BASE-REVIEW",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    0
+  ],
+  "alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 12,
+  "maximum_lower_ticks": 24000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    0.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R0p9_v1p6",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R1p3_v2p0",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0,
+      "goal_distance_m": 19.65486717224121
+    }
+  ],
+  "data_role": "Related targeted DEV of a single TRAIN-reward-selected candidate; all12 declared cases retained. Uniform bank0 actual1.9603m/s reset for both low and normal tasks; normal cases accelerate from that state. Not paired with historical bank6 H75 raw, not independent TEST.",
+  "scoring": "All12 full H10/contact/goal and original XY. Last2s absolute cross-track max<=.2m, absolute heading max<=.1rad, absolute true-speed request error max<=.2m/s reported per case; retain continuous exceedances without automatic rejection. Low-speed evidence alone requires actual true forward speed<=2.1m/s; normal2.6/2.8m/s tasks are not low-speed robustness evidence.",
+  "stop_rule": "Exactly12 H10/stopped-at-failure cases, max24000lower,0optimizer/0force; preserve all engineering/physical failures. No retry, automatic extra candidate or panel expansion.",
+  "capability_variant": "targeted_base_review",
+  "question": "Is this single training-reward-ranked mixed candidate practically usable across two low-speed and two normal tasks? No requirement to dominate frozen H75 on every task; adoption requires user XY review.",
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/checkpoints/actor_0170.pkl",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/checkpoints/update_0170.pt",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "acceptance_review": {
+    "full_horizon_cases": 12,
+    "no_contact_failure_cases": 12,
+    "goal_cases": 12,
+    "late_window_s": 2.0,
+    "max_abs_cross_track_m": 0.2,
+    "max_abs_heading_rad": 0.1,
+    "max_abs_true_speed_error_m_s": 0.2,
+    "tolerance_exceedance": "report continuously; user XY review determines practical adoption, no automatic rejection",
+    "low_speed_true_forward_max_m_s": 2.1,
+    "low_speed_routes": [
+      "left90_R0p9_v1p6",
+      "left90_R1p3_v2p0"
+    ]
+  }
+}

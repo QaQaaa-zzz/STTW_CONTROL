@@ -2783,12 +2783,20 @@ def analyze_five_alpha_online14(root,p):
     return rows
 
 def validate_fixed_capability_cases(cases,protocol):
-    grid=[0.,.25,.5,.75,1.];routes={c['route'] for c in cases}
+    if protocol.get('capability_variant')=='low_speed_lateral_load':
+        expected={(a,float(f),float(t)) for a in (0.,1.) for f in protocol['forces_N'] for t in protocol['onsets_s']}|{(a,0.,0.) for a in (0.,1.)}
+        observed={(c['alpha'],c['force_N'],c['onset_s']) for c in cases}
+        if len(cases)!=34 or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas']!=[0.,1.]:raise ValueError('complete paired low-speed load inventory required')
+        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=2. or c['duration_s']!=.6 or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
+        if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
+        return
+    targeted=protocol.get('capability_variant')=='targeted_base_review'
+    grid=[0.,.5,1.] if targeted else [0.,.25,.5,.75,1.];routes={c['route'] for c in cases}
     variant=protocol.get('capability_variant');extended=variant=='S_goal_extension'
-    if variant not in (None,'S_goal_extension','low_speed_tight_turn'):raise ValueError('unknown capability variant')
+    if variant not in (None,'S_goal_extension','low_speed_tight_turn','targeted_base_review'):raise ValueError('unknown capability variant')
     low_speed=variant=='low_speed_tight_turn'
-    expected_routes={c['route'] for c in protocol['route_contexts']} if low_speed else {'S_left_90_R1p8','S_right_90_R1p8'} if extended else routes
-    if protocol['alphas']!=grid or len(cases)!=(20 if low_speed else 10 if extended else 35) or len(routes)!=(4 if low_speed else 2 if extended else 7) or routes!=expected_routes or {(c['route'],c['alpha']) for c in cases}!={(r,a) for r in routes for a in grid}:raise ValueError('complete declared route fivefixedalpha capability panel required')
+    expected_routes={c['route'] for c in protocol['route_contexts']} if low_speed or targeted else {'S_left_90_R1p8','S_right_90_R1p8'} if extended else routes
+    if protocol['alphas']!=grid or len(cases)!=(12 if targeted else 20 if low_speed else 10 if extended else 35) or len(routes)!=(4 if targeted or low_speed else 2 if extended else 7) or routes!=expected_routes or {(c['route'],c['alpha']) for c in cases}!={(r,a) for r in routes for a in grid}:raise ValueError('complete declared route fivefixedalpha capability panel required')
     if extended:
         if protocol.get('goal_extension_m')!=3. or protocol.get('expected_cases')!=10 or protocol.get('maximum_lower_ticks')!=20000:raise ValueError('S goal extension contract differs')
         for c in cases:
@@ -2797,7 +2805,7 @@ def validate_fixed_capability_cases(cases,protocol):
             for key in ('old_goal_xy','new_goal_xy'):
                 if c.get(key)!=source[key]:raise ValueError('S goal extension case goal identity differs')
     for c in cases:
-        if c['mode']!='H75' or c['force_N']!=0. or c['bank_index']!=6 or any(c.get(k,c['alpha'])!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')):raise ValueError('fixed capability case identity differs')
+        if c['mode']!='H75' or c['force_N']!=0. or c['bank_index']!=(0 if targeted else 6) or any(c.get(k,c['alpha'])!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')):raise ValueError('fixed capability case identity differs')
 
 
 def analyze_fixed_h75_capability(root,p):
@@ -2807,6 +2815,7 @@ def analyze_fixed_h75_capability(root,p):
     import matplotlib.pyplot as plt
     run=root/'evaluation';out=root/'analysis';cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text());status=json.loads((run/'status.json').read_text());validate_fixed_capability_cases(cases,p['protocol'])
     extended=p['protocol'].get('capability_variant')=='S_goal_extension'
+    load_screen=p['protocol'].get('capability_variant')=='low_speed_lateral_load'
     candidate=p['protocol'].get('candidate_model')
     model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
     if candidate:
@@ -2833,7 +2842,12 @@ def analyze_fixed_h75_capability(root,p):
         with np.load(c['raw_file']) as z:raw=dict(z)
         n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=n
         if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(raw['active_tick']),np.arange(n)):raise ValueError('invalid capability actual prefix')
-        np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);np.testing.assert_array_equal(raw['applied_force_impulse'][:n],0.)
+        np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
+        if load_screen:
+            t=raw['time'][:n];overlap=np.maximum(0.,np.minimum(t+.005,c['onset_s']+c['duration_s'])-np.maximum(t,c['onset_s']))
+            expected_force=np.column_stack([np.zeros(n),overlap*c['force_N'],np.zeros(n)])
+            np.testing.assert_allclose(raw['applied_force_impulse'][:n],expected_force,atol=3e-5,rtol=.005)
+        else:np.testing.assert_array_equal(raw['applied_force_impulse'][:n],0.)
         permission=np.asarray(raw['reference_target_permitted'][:n],bool);np.testing.assert_allclose(raw['latent_z'][:n][permission],raw['composed_latent'][:n][permission],atol=1e-6,rtol=0);np.testing.assert_array_equal(raw['latent_z'][:n][~permission],0.)
         key=c['path_key']
         if key not in paths:
@@ -2851,10 +2865,18 @@ def analyze_fixed_h75_capability(root,p):
         fault=raw['policy_fault']|raw['continuation_geometry_fault']|raw['lower_fault']|raw['nonfinite'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault);endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);endpoint['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
         updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']]);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
         rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
+        if load_screen:
+            t=raw['time'][:n];upright=np.cumsum(raw['contact_failure'][:n]|raw['physical_failure'][:n]|fault[:n])==0
+            pre=(t<c['onset_s'])&upright;during=(t>=c['onset_s'])&(t<c['onset_s']+c['duration_s'])&upright
+            near=(t>=c['onset_s']-.05)&(t<c['onset_s'])&upright
+            vmax=lambda mask:float(np.max(raw['actual_forward_speed'][:n][mask])) if mask.any() else None
+            premax=vmax(pre);duringmax=vmax(during);limit=p['protocol']['low_speed_evidence_gate']['true_forward_speed_max_m_s']
+            rows[-1].update(load_kind='equivalent_worldY_force_not_wind_field',pre_load_max_speed_m_s=premax,during_load_upright_max_speed_m_s=duringmax,onset_speed_mean_m_s=float(np.mean(raw['actual_forward_speed'][:n][near])) if near.any() else None,low_speed_gate_passed=bool(premax is not None and duringmax is not None and max(premax,duringmax)<=limit),gate_contract='preload and applied-load upright active samples; contact step/after-contact excluded',observed_world_force_impulse_Ns=raw['applied_force_impulse'][:n].sum(axis=0).tolist(),pre_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][pre]))*180/np.pi) if pre.any() else None,during_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][during]))*180/np.pi) if during.any() else None)
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
-    for route in sorted({r['route'] for r in rows}):
-        group=sorted([r for r in rows if r['route']==route],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+    plot_groups=[(route,event) for route,event in sorted({(r['route'],r['event']) for r in rows})] if load_screen else [(route,None) for route in sorted({r['route'] for r in rows})]
+    for route,event in plot_groups:
+        group=sorted([r for r in rows if r['route']==route and (event is None or r['event']==event)],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
         # Show the continuing controller reference beyond the arrival target.
         # Limit display to observed progress plus preview, keeping XY readable.
         observed_end=max(float(np.max(raws[r['case_id']]['path_progress'][:r['active_lower_ticks']])) for r in group)
@@ -2877,13 +2899,15 @@ def analyze_fixed_h75_capability(root,p):
             color=line.get_color();axes[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['endpoint']['physical_outcome']=='contact' else 's');axes[1].plot(t,raw['actual_forward_speed'][:n],color=color,label=label);axes[2].plot(t,raw['phi'][:n]*180/np.pi,color=color,label=label)
         axes[0].set(xlabel='World X (m)',ylabel='World Y (m)');axes[0].set_aspect('equal');axes[1].set(xlabel='Task time (s)',ylabel='True forward speed (m/s)');axes[2].set(xlabel='Task time (s)',ylabel='Roll (deg)')
         for ax in axes:ax.legend();ax.grid(alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | {model_label} {checkpoint} | all five fixed alpha | bank6/H10/force0 | new wheel friction.8 | actual endpoints');name=route+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
-    summary={str(a):dict(cases=len({r['route'] for r in rows}),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
+        if load_screen and group[0]['force_N']!=0.:
+            for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | {model_label} {checkpoint} | {len(p['protocol']['alphas'])} fixed alpha | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
     if extended:
         for item in summary.values():
             item.update(goal_rate=item['goal']/item['cases'],contact_rate=item['contact']/item['cases'])
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. Total non-task/terminal reward reconstruction deferred.'))
-    (out/'README.md').write_text(f'# Fresh-physics {model_label} five-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} nominal cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
+    (out/'README.md').write_text(f'# Fresh-physics {model_label} {len(p['protocol']['alphas'])}-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} {'paired equivalent-lateral-load' if load_screen else 'nominal'} cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     return summary

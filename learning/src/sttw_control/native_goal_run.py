@@ -129,7 +129,53 @@ def prepare_middle_selection(source,root,protocol):
 CAPABILITY_MODE='fixed_h75_capability'
 
 
+def low_speed_lateral_load_inventory(p):
+    """Complete paired world-Y equivalent lateral-load screen; never a wind speed."""
+    required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
+        alphas=[0.,1.],horizon_s=10.,expected_cases=34,maximum_lower_ticks=68000,
+        optimizer_updates=0,planning_frequency_hz=10.,forces_N=[-16.,-12.,-8.,-4.,4.,8.,12.,16.],
+        onsets_s=[1.6,2.],duration_s=.6,force_frame='worldY',zero_onset_s=0.,
+        planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
+    if any(p.get(k)!=value for k,value in required.items()) or p.get('candidate_model') is not None:
+        raise ValueError('frozen paired low-speed lateral-load contract differs')
+    contexts=p['route_contexts']
+    expected=dict(route='left90_R0p9_v2p0',family=1,radius_m=.9,angle_deg=90.,speed=2.,direction=1.,goal_offset_after_turn_m=4.)
+    if contexts!=[expected]:raise ValueError('single original low-speed tight-turn geometry required')
+    events=[dict(event='zero',force_N=0.,onset_s=0.)]+[
+        dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
+        for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
+    route=contexts[0]['route']
+    return [dict(route=route,speed=2.,**event,duration_s=p['duration_s'],force_frame='worldY',
+        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/H75/a{alpha:g}/{event['event']}",
+        mode='H75',mode_index=0,model_id=p['model_id'],alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
+        for event,alpha in itertools.product(events,p['alphas'])]
+
+
+def targeted_base_review_inventory(p):
+    """Small predeclared mixed-task DEV review of one explicit trained candidate."""
+    required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
+        alphas=[0.,.5,1.],horizon_s=10.,expected_cases=12,maximum_lower_ticks=24000,
+        optimizer_updates=0,planning_frequency_hz=10.,forces_N=[0.],duration_s=.15,
+        planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
+    if any(p.get(k)!=v for k,v in required.items()) or not p.get('candidate_model'):
+        raise ValueError('explicit candidate targeted review contract differs')
+    expected=[
+        dict(route='left90_R0p9_v1p6',family=1,radius_m=.9,angle_deg=90.,speed=1.6,direction=1.,goal_offset_after_turn_m=4.),
+        dict(route='left90_R1p3_v2p0',family=1,radius_m=1.3,angle_deg=90.,speed=2.,direction=1.,goal_offset_after_turn_m=4.),
+        dict(route='left70_R1p9',family=1,radius_m=1.9,angle_deg=70.,speed=2.6,direction=1.),
+        dict(route='S_right_90_R1p8',family=2,radius_m=1.8,angle_deg=90.,speed=2.8,direction=-1.,goal_distance_m=19.65486717224121)]
+    if p['route_contexts']!=expected:raise ValueError('four predeclared targeted geometries required')
+    identity=p['candidate_model']['registry_id']
+    if identity==SELECTION_MODELS['H75']:raise ValueError('targeted candidate must not impersonate frozen H75')
+    return [dict(route=c['route'],speed=c['speed'],event='zero',force_N=0.,onset_s=0.,duration_s=.15,
+        bank_index=0,path_key=f"bank0_{c['route']}",case_id=f"bank0/{c['route']}/{identity}/a{alpha:g}/zero",
+        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
+        for c,alpha in itertools.product(p['route_contexts'],p['alphas'])]
+
+
 def fixed_h75_capability_inventory(p):
+    if p.get('capability_variant')=='low_speed_lateral_load':return low_speed_lateral_load_inventory(p)
+    if p.get('capability_variant')=='targeted_base_review':return targeted_base_review_inventory(p)
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],
         alphas=[0.,.25,.5,.75,1.],horizon_s=10.,expected_cases=35,maximum_lower_ticks=70000,
         optimizer_updates=0,planning_frequency_hz=10.,forces_N=[0.],duration_s=.15,
@@ -245,7 +291,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         originals={c['route']:c for c in previous['contexts']}
         if any({k:v for k,v in c.items() if k!='goal_distance_m'}!=originals.get(c['route']) for c in proposal['route_contexts']):raise ValueError('original S curve/speed changed')
         validate_goal_extension_source(proposal,source)
-    elif proposal.get('capability_variant')=='low_speed_tight_turn':
+    elif proposal.get('capability_variant') in ('low_speed_tight_turn','low_speed_lateral_load','targeted_base_review'):
         if previous['config']['path']['goal_section_offset_after_turn_m']!=4. or previous['config']['residual_interface']['speed_reference_bounds_m_s']!=[1.5,3.5]:raise ValueError('low-speed screen preserves exit goal and frozen speed authority')
     elif previous['contexts']!=proposal['route_contexts']:raise ValueError('original routes differ')
     if previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('frozen H75 identity differs')
@@ -257,9 +303,11 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('prepare in fresh process before modern control package import')
     sys.path.insert(0,str(native))
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
-    snapshot=jax.tree.map(lambda x:np.asarray(x[6]),bank)
+    bank_index=proposal['bank_indices'][0]
+    if proposal.get('capability_variant') in ('low_speed_lateral_load','targeted_base_review'):source=dict(source,bank_index=bank_index)
+    snapshot=jax.tree.map(lambda x:np.asarray(x[bank_index]),bank)
     if bool(snapshot.failed) or int(snapshot.physical_tick)!=700 or any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(snapshot) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('fresh bank6 clock/failure invalid; no replacement')
-    proposal=dict(proposal,bank_state_fingerprints={'6':snapshot_fingerprint(snapshot)})
+    proposal=dict(proposal,bank_state_fingerprints={str(bank_index):snapshot_fingerprint(snapshot)})
     folder=Path(__file__).resolve().parent
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
     expected_sources=json.loads((transition/'native_expected_sources.json').read_text())
@@ -277,7 +325,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
         config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
         maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,
-        initialization=f"Fresh new-physics prepared bank6, original native task reset; {model['registry_id']} five alpha; no q or additional baseline.",data_role=proposal['data_role'],
+        initialization=f"Fresh new-physics prepared bank{bank_index}, original native task reset; {model['registry_id']} declared alpha={proposal['alphas']}; no q or additional baseline.",data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
         stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
@@ -396,8 +444,11 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     neutral=initial.replace(state=initial.state.replace(alpha=j.zeros_like(initial.state.alpha)))
     leaves=jax.tree.leaves(jax.device_get(neutral))
     groups={}
-    for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route']),[]).append(i)
-    expected_group_size={'nominal_five_user':5,'disturbed_five_user':10}.get(panel_kind,2)
+    for i,c in enumerate(cases):
+        key=(c['bank_index'],c['route'],c['event']) if panel_kind=='disturbed_two_user' else (c['bank_index'],c['route'])
+        groups.setdefault(key,[]).append(i)
+    if panel_kind=='disturbed_two_user':expected_route_count*=17
+    expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
     if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
@@ -2001,7 +2052,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='nominal_five_user',expected_route_count=len(p['contexts']))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='disturbed_two_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
     elif five_online:
@@ -2222,7 +2273,7 @@ def load(root,*,prefix_phase=False):
     terminal20=float(failure_reward(1000,cfg));terminal10=float(failure_reward(500,cfg))
     return dict(plan=p,config=cfg,cases=cases,env=env,initial=initial,paths=paths,bank=bank,speeds=speeds,
                 chunk=chunk,bind=bind,measurements=measurements,planner=planner,keys=keys,
-                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10,initial_identity=initial_identity if response else None,source_host=label_host if labels else None)
+                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10,initial_identity=initial_identity if response or capability else None,source_host=label_host if labels else None)
 
 
 def flatten(logs):
