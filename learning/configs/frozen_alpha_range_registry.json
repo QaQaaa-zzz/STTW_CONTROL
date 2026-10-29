@@ -15,8 +15,10 @@
       "architecture": "3-seed ensemble of42-16ELU-16ELU-4,1028parameters per seed",
       "validation": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_conditional_outcome_mlp_v2/prospective_evaluation/results.json",
       "validation_sha256": "6095a83f41659440099095bb76a9ec3fbd5efe3e631b346dcb42647e6da230ac",
-      "scope": "Known four-state prospective alpha interpolation, not integrated actuator coordination or universal safety",
-      "code_commit": "9dcbe5a1eaabb467bc8541f8f4d586357fa5bb2a"
+      "scope": "Known four-state alpha-interpolation query prototype. Four actual boundary executions at new preparation timings gave3 contact failures; not reliable online control or a continuous risk interval.",
+      "code_commit": "9dcbe5a1eaabb467bc8541f8f4d586357fa5bb2a",
+      "online_control_status": "not_adopted_after_preparation_time_failures",
+      "integration_evidence": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_nn_range_boundary_v1/analysis/integration_decision.json"
     }
   }
 }

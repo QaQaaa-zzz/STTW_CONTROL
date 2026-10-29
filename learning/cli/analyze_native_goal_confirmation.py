@@ -2963,7 +2963,52 @@ def analyze_fixed_h75_capability(root,p):
             for name in links:
                 stem=name.removesuffix('_xy.png');f.write(f'- [{stem}: traces]({stem}_traces.png), [reward components]({stem}_components.png)\n')
             f.write('\nVisualization workflow: Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. https://doi.org/10.48550/arXiv.2609.00065 (metadata checked2026-10-29). Internal diagnostic figures; journal export requirements not audited.\n')
+    if p['protocol'].get('excluded_completed_cases'):write_reused_preparation_matrix(root,p)
     return summary
+
+
+def write_reused_preparation_matrix(root,p):
+    """Join authenticated cached trajectories into the full temporal XY matrix."""
+    import matplotlib.pyplot as plt
+    out=root/'analysis';rows=json.loads((out/'results.json').read_text())
+    joined=[dict(r,evidence_run=str(root),reused_physical_case=False) for r in rows]
+    for reused in p['protocol']['excluded_completed_cases']:
+        old=Path(reused['run']);receipt=json.loads((old/'analysis/receipt.json').read_text())
+        if not receipt['execution_reward_reconstructed']:raise ValueError('reused case needs complete reward audit')
+        matches=[r for r in json.loads((old/'analysis/results.json').read_text()) if r['case_id']==reused['case_id']]
+        if len(matches)!=1 or digest(matches[0]['raw_file'])!=reused['raw_sha256']:raise ValueError('reused trajectory changed')
+        joined.append(dict(matches[0],evidence_run=str(old),reused_physical_case=True))
+    grid=p['protocol']['alphas'];preps=p['protocol']['onsets_s'];routes=sorted({r['route'] for r in joined})
+    if len(joined)!=len(routes)*len(grid)*len(preps) or len({r['case_id'] for r in joined})!=len(joined):raise ValueError('incomplete or duplicate combined temporal matrix')
+    styles=['-',':','-.','--',(0,(5,2,1,2))];colors=['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00'];links=[];cells=[]
+    for route in routes:
+        fig,axes=plt.subplots(1,len(preps),figsize=(6*len(preps),6),layout='constrained',squeeze=False,sharex=True,sharey=True)
+        for column,prep in enumerate(preps):
+            ax=axes[0,column];group=sorted([r for r in joined if r['route']==route and r['preparation_s']==prep],key=lambda r:r['alpha'])
+            if [r['alpha'] for r in group]!=grid:raise ValueError('missing candidate in combined temporal cell')
+            with np.load(root/'evaluation'/(group[0]['path_key']+'_path.npz')) as z:path=dict(z)
+            ref=path['xy'][path['s']<=path['goal']];ax.plot(*ref.T,'k:',label='Original reference')
+            goal=group[0]['original_goal_xy'];ax.scatter(*goal,color='black',marker='*',s=60,label='Original goal')
+            feasible=[]
+            for i,r in enumerate(group):
+                with np.load(r['raw_file']) as z:raw=dict(z)
+                n=r['active_lower_ticks'];xy=raw['actual_xy'][:n];end=r['endpoint'];contact=end['physical_outcome']=='contact'
+                label=f"alpha={r['alpha']:g}: {'contact' if contact else 'goal' if end['goal_arrived'] else 'no goal'}"
+                ax.plot(*xy.T,color=colors[i],ls=styles[i],label=label);ax.scatter(*xy[-1],color=colors[i],marker='x' if contact else 's')
+                if end['physical_outcome']=='survived' and end['goal_arrived'] and r['low_speed_full_upright_gate_passed']:feasible.append(r['alpha'])
+            cells.append(dict(route=route,preparation_s=prep,observed_survive_goal_low_speed_candidates=feasible))
+            ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'Preparation {prep:g}s; load +24N for .4s');ax.set_aspect('equal');ax.grid(alpha=.2);ax.legend(fontsize=8)
+        fig.suptitle(f'{route} | U170 2cd5865a6d4e | five held-alpha suffixes from task1.6s | cached4 + new26; no new baseline')
+        name=route+'_preparation_matrix_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    joint=[]
+    for route in routes:
+        sets=[set(c['observed_survive_goal_low_speed_candidates']) for c in cells if c['route']==route]
+        joint.append(dict(route=route,observed_joint_candidates=sorted(set.intersection(*sets))))
+    atomic_json(out/'combined_temporal_matrix.json',dict(new_physical_cases=len(rows),reused_physical_cases=len(joined)-len(rows),rows=joined,cells=cells,joint=joint,
+        scope='Observed finite matrix only: survived, original goal and upright speed<=2.1m/s. No path-error qualification, unseen-time guarantee or model validation claim. Four integration DEV cases explicitly reused as exploratory evidence; raw runs and roles remain intact.'))
+    import re
+    report=out/'README.md';text=re.sub(r'\n## Complete temporal matrix with cached cases\n.*?(?=\n## |\Z)','',report.read_text(),flags=re.S)
+    report.write_text(text+'\n## Complete temporal matrix with cached cases\n\n'+'\n\n'.join(f'![All five alpha actual/reference XY across preparation times]({name})' for name in links)+'\n\nCombined30 contains26 new physical cases and4 authenticated cached cases; none was rerun. Complete cell outcomes and intersections are in combined_temporal_matrix.json. These are observed finite candidates, not a learned guaranteed interval.\n')
 
 
 def paired_low_speed_load_outcomes(rows):

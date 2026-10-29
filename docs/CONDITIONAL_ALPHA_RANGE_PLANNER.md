@@ -5,6 +5,8 @@
 实现：[preference_outcome_prediction.py](../learning/src/sttw_control/preference_outcome_prediction.py)。
 入口为 `FrozenAlphaRangePlanner`，保持冻结中层与底层不变，不启动PPO。
 
+V2已做一次真实边界接管验证：从两个原任务1.6s状态查询，再在新的准备时间.3/.5s施加相同24N等效风载荷，四条推荐中三条触地，一条存活并到原目标。此前32条alpha插值结果不能推出准备时间鲁棒性。注册表保留V2作为实验查询原型，明确不采用为可靠在线控制器；证据见 `u170_nn_range_boundary_v1/analysis/integration_decision.json`。以下示例演示接口，不能据其非空输出认定实际可行。
+
 ```python
 from sttw_control.preference_outcome_prediction import FrozenAlphaRangePlanner
 
