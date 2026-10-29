@@ -13,8 +13,9 @@ def main():
     p.add_argument('--config',default='learning/configs/h75_low_speed_mixed_finetune.json')
     p.add_argument('--output',required=True)
     p.add_argument('--execute',action='store_true')
+    p.add_argument('--resume')
     a=p.parse_args()
-    result=(train if a.execute else prepare)(a.config,a.output)
+    result=(train if a.execute else prepare)(a.config,a.output,resume=a.resume)
     if not a.execute:print("prepared_not_run; policy transitions="+str(result["policy_transitions"])+"; physics=0")
 
 

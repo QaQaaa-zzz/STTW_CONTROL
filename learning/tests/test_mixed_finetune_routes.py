@@ -30,3 +30,24 @@ def test_mixture_covers_both_directions_and_retained_tasks():
     s=(~low)&(r.family==2)&np.isclose(r.radius,1.8)&np.isclose(r.speed,2.8)
     assert np.any(s)
     np.testing.assert_allclose(r.path.goal[s]-r.path.turn_end[s],7.,atol=2e-6)
+
+
+def test_schedule_extension_preserves_distribution_and_authenticates_boundary(tmp_path):
+    from copy import deepcopy
+    from sttw_control.path_mixed_finetuning import validate_schedule_extension
+    from sttw_control.preference_best import atomic_json,config_hash,digest
+    import pytest
+    old=dict(training_future_phase_C=dict(updates_initial=52,updates_max=52,best_on='final52',num_envs=512,rollout_steps=128),finetuning=dict(warmup_updates=2,budget=dict(ppo_updates=50,policy_transitions=52*65536,maximum_lower_ticks=52*65536*4),stop_rule='old',distribution=dict(low_fraction=.5)))
+    atomic_json(tmp_path/'effective_config.json',old)
+    identity=dict(config_sha256=config_hash(old));atomic_json(tmp_path/'manifest.json',dict(config=old,identity=identity))
+    cp=tmp_path/'checkpoints/update_0052.pt';cp.parent.mkdir();cp.write_bytes(b'checkpoint')
+    atomic_json(tmp_path/'status.json',dict(state='completed',completed_updates=52,final_checkpoint=str(cp),policy_transitions_total=52*65536))
+    atomic_json(tmp_path/'last_completed.json',dict(update=52,checkpoint=str(cp),checkpoint_sha256=digest(cp)))
+    new=deepcopy(old);new['training_future_phase_C'].update(updates_initial=202,updates_max=202,best_on='final202');f=new['finetuning'];f['budget'].update(ppo_updates=200,policy_transitions=202*65536,maximum_lower_ticks=202*65536*4);f['schedule_extension']=dict(source_run=str(tmp_path),source_config_sha256=digest(tmp_path/'effective_config.json'),source_final_update=52);f['stop_rule']='extended'
+    assert validate_schedule_extension(new,tmp_path,completed=True)['target_update']==202
+    bad=deepcopy(new);bad['finetuning']['distribution']['low_fraction']=.6
+    with pytest.raises(ValueError,match='non-schedule'):
+        validate_schedule_extension(bad,tmp_path,completed=True)
+    cp.write_bytes(b'changed')
+    with pytest.raises(ValueError,match='SHA'):
+        validate_schedule_extension(new,tmp_path,completed=True)
