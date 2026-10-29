@@ -2866,6 +2866,10 @@ def analyze_fixed_h75_capability(root,p):
         updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']]);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
         rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
         if load_screen:
+            rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],path_updates=updates)
+            original.update(rebuilt)
+            rows[-1]['execution_reward_reconstructed']=True
+            rows[-1]['diagnostic_task_file']=str(out/f'case_{lane:02d}_original_task.npz')
             t=raw['time'][:n];upright=np.cumsum(raw['contact_failure'][:n]|raw['physical_failure'][:n]|fault[:n])==0
             pre=(t<c['onset_s'])&upright;during=(t>=c['onset_s'])&(t<c['onset_s']+c['duration_s'])&upright
             near=(t>=c['onset_s']-.05)&(t<c['onset_s'])&upright
@@ -2902,15 +2906,56 @@ def analyze_fixed_h75_capability(root,p):
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
         checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];fig.suptitle(f'{route} | {model_label} {checkpoint} | {len(p['protocol']['alphas'])} fixed alpha | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        if load_screen:
+            render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
     if extended:
         for item in summary.values():
             item.update(goal_rate=item['goal']/item['cases'],contact_rate=item['contact']/item['cases'])
-    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. Total non-task/terminal reward reconstruction deferred.'))
+    atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],execution_reward_reconstructed=load_screen,limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. '+('Execution-path full reward and terminal adjustment rebuilt against logs.' if load_screen else 'Total non-task/terminal reward reconstruction deferred.')))
     (out/'README.md').write_text(f'# Fresh-physics {model_label} {len(p['protocol']['alphas'])}-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} {'paired equivalent-lateral-load' if load_screen else 'nominal'} cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
+    if load_screen:
+        with (out/'README.md').open('a') as f:
+            f.write('\n## Complete paired-load trace index\n\nEach XY panel above has companion `_traces.png` (true/governed/wheel speed, estimation error, steer, roll, roll rate, original cross-track/heading, per-step and cumulative reward) and `_components.png` (signed per-step/cumulative components and terminal adjustment). All actual transitions stop at true failure. No smoothing or manufactured uncertainty; these are deterministic exploratory cases, not independent training replicates. Full execution-path reward is independently rebuilt and checked against recorded per-step reward; original-path task costs remain separate from changing execution references. No extra baseline rollout was requested.\n\n')
+            for name in links:
+                stem=name.removesuffix('_xy.png');f.write(f'- [{stem}: traces]({stem}_traces.png), [reward components]({stem}_components.png)\n')
+            f.write('\nVisualization workflow: Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. https://doi.org/10.48550/arXiv.2609.00065 (metadata checked2026-10-29). Internal diagnostic figures; journal export requirements not audited.\n')
     return summary
+
+
+def render_paired_load_diagnostics(out,group,raws,component_names,stem):
+    """Unsmoothed paired traces, actual failure cutoff and independently rebuilt reward."""
+    import matplotlib.pyplot as plt
+    fig,axes=plt.subplots(3,3,figsize=(15,11),layout='constrained')
+    comp,caxes=plt.subplots(2,2,figsize=(15,9),layout='constrained')
+    labels=['True / governed / wheel speed (m/s)','True minus wheel speed (m/s)','Actual / governed steer (rad)',
+            'Roll (deg)','Roll rate (deg/s)','Original cross-track (m)',
+            'Original heading error (rad)','Reward per actual lower step','Cumulative reward']
+    for column,row in enumerate(group):
+        raw=raws[row['case_id']];n=row['active_lower_ticks'];t=raw['time'][:n]+.005;steps=np.arange(1,n+1)
+        with np.load(row['diagnostic_task_file']) as z:d=dict(z)
+        color,style=('#0072B2','-') if row['alpha']==0 else ('#D55E00','--');label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
+        series=[raw['actual_forward_speed'][:n],raw['actual_forward_speed'][:n]-raw['wheel_speed_proxy'][:n],raw['actual_delta'][:n],raw['phi'][:n]*180/np.pi,raw['phi_dot'][:n]*180/np.pi,d['original_cross_track_m'],d['original_heading_error_rad'],d['reward'],np.cumsum(d['reward'])]
+        for k,(ax,y) in enumerate(zip(axes.flat,series)):
+            x=steps if k>=7 else t;ax.plot(x,y,color=color,ls=style,lw=1.1,label=label)
+            ax.scatter(x[-1],y[-1],color=color,marker='x' if row['endpoint']['physical_outcome']=='contact' else 's',s=20)
+            if row['force_N']:ax.axvspan((row['onset_s']/.005 if k>=7 else row['onset_s']),( (row['onset_s']+row['duration_s'])/.005 if k>=7 else row['onset_s']+row['duration_s']),color='gray',alpha=.09)
+        axes[0,0].plot(t,raw['governed'][:n,0],color=color,ls=':',lw=.8,label=f"alpha{row['alpha']:g} governed")
+        axes[0,0].plot(t,raw['wheel_speed_proxy'][:n],color=color,ls='-.',lw=.7,label=f"alpha{row['alpha']:g} wheel estimate")
+        axes[0,2].plot(t,raw['governed'][:n,1],color=color,ls=':',lw=.8)
+        for k,key in enumerate(component_names):
+            values=d['running_components'][:,k]
+            for rr,y in enumerate((values,np.cumsum(values))):caxes[rr,column].plot(steps,y,lw=.8,label=key)
+        for rr,y in enumerate((d['terminal_adjustment'],np.cumsum(d['terminal_adjustment']))):
+            ax=caxes[rr,column];ax.plot(steps,y,color='black',ls='--',label='terminal adjustment');ax.set(xlabel='Actual lower steps',ylabel='Signed reward' if rr==0 else 'Cumulative signed reward',title=f"alpha={row['alpha']:g}");ax.grid(alpha=.2);ax.legend(fontsize=7,ncol=3)
+            if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,color='gray',alpha=.12)
+    for k,(ax,label) in enumerate(zip(axes.flat,labels)):
+        ax.set(xlabel='Actual lower steps' if k>=7 else 'Task time (s)',ylabel=label);ax.grid(alpha=.2);ax.legend(fontsize=7)
+    title=f"{group[0]['model_id']} | {group[0]['route']} | {group[0]['event']} | equivalent world-Y load; shade=applied interval"
+    fig.suptitle(title);comp.suptitle(title+' | execution-path reward, not cross-alpha utility ranking')
+    fig.savefig(out/(stem+'_traces.png'),dpi=130);comp.savefig(out/(stem+'_components.png'),dpi=130);plt.close(fig);plt.close(comp)
 
 
 if __name__=='__main__':

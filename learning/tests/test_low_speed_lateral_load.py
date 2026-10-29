@@ -40,6 +40,19 @@ def test_changed_screen_contract_rejected(key,value):
     with pytest.raises(ValueError):fixed_h75_capability_inventory(cfg)
 
 
+def test_adopted_base_and_configured_event_grid_keep_pairing_and_budget():
+    path=Path(__file__).parents[1]/'configs/u170_low_speed_lateral_load_screen.json'
+    cfg=json.loads(path.read_text());rows=fixed_h75_capability_inventory(cfg)
+    assert {r['model_id'] for r in rows}=={cfg['candidate_model']['registry_id']}
+    assert cfg['route_contexts'][0]['radius_m']==1.3
+    assert len(rows)==34
+    smaller=copy.deepcopy(cfg);smaller.update(forces_N=[-12.,12.],onsets_s=[2.2],expected_cases=6,maximum_lower_ticks=12000)
+    rows=fixed_h75_capability_inventory(smaller)
+    assert len(rows)==6
+    for a,b in zip(rows[::2],rows[1::2]):
+        np.testing.assert_array_equal(force_pulses([a],3.5),force_pulses([b],3.5))
+
+
 def test_two_alpha_per_event_reset_audit_preserves_complete_pairing():
     @struct.dataclass
     class Physical:
