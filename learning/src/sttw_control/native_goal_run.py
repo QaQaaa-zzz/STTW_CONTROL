@@ -126,6 +126,68 @@ def prepare_middle_selection(source,root,protocol):
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',optimizer_updates=0,active_lower_ticks=0,allocated_lower_slots=0))
 
 
+CAPABILITY_MODE='fixed_h75_capability'
+
+
+def fixed_h75_capability_inventory(p):
+    required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],
+        alphas=[0.,.25,.5,.75,1.],horizon_s=10.,expected_cases=35,maximum_lower_ticks=70000,
+        optimizer_updates=0,planning_frequency_hz=10.,forces_N=[0.],duration_s=.15,
+        planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
+    if any(p.get(k)!=v for k,v in required.items()):raise ValueError('fixed H75 capability contract differs')
+    contexts=p['route_contexts']
+    if len(contexts)!=7 or len({c['route'] for c in contexts})!=7 or {c['family'] for c in contexts}!={0,1,2}:raise ValueError('seven original route identities required')
+    return [dict(route=c['route'],speed=c['speed'],event='zero',force_N=0.,onset_s=0.,duration_s=.15,
+        bank_index=6,path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/H75/a{a:g}/zero',
+        mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a)
+        for c,a in itertools.product(contexts,p['alphas'])]
+
+
+def prepare_fixed_h75_capability(transition,root,protocol):
+    """Authenticate a completed fresh-physics bank; no integration or old bank reuse."""
+    import jax
+    import numpy as np
+    transition=Path(transition).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
+    proposal=json.loads(protocol.read_text());rows=fixed_h75_capability_inventory(proposal)
+    previous=json.loads((transition/'plan.json').read_text());status=json.loads((transition/'status.json').read_text())
+    if digest(transition/'plan.json')!=json.loads((transition/'seal.json').read_text())['plan_sha256'] or previous.get('mode')!='native_physics_transition':raise ValueError('sealed physics transition required')
+    if status.get('phase')!='completed' or status.get('actual_preparation_lower_ticks')!=5600 or status.get('old_prepared_state_reused') is not False or previous.get('old_bank_reuse') is not False:raise ValueError('completed fresh eight-state preparation required')
+    for file,expected in {**previous['inputs'],**previous['copied_files_sha256']}.items():
+        if digest(file)!=expected:raise ValueError('transition identity drift '+file)
+    source=json.loads((transition/'initial_source.json').read_text());native=Path(previous['native_runtime_root']).resolve()
+    if Path(source['prepared_bank']).resolve()!=transition/'prepared_bank.pkl' or digest(source['prepared_bank'])!=source['prepared_bank_sha256']:raise ValueError('fresh bank identity differs')
+    xml=native.parents[1]/'mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml'
+    if digest(xml)!=source['model']['source_xml_sha256'] or source['model']==previous['old_model_identity']:raise ValueError('new physical model identity differs')
+    if previous['contexts']!=proposal['route_contexts'] or previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('original routes/frozen H75 identity differs')
+    model=previous['models']['H75']
+    for key in ('actor','checkpoint'):
+        if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint differs')
+    if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('prepare in fresh process before modern control package import')
+    sys.path.insert(0,str(native))
+    with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
+    snapshot=jax.tree.map(lambda x:np.asarray(x[6]),bank)
+    if bool(snapshot.failed) or int(snapshot.physical_tick)!=700 or any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(snapshot) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('fresh bank6 clock/failure invalid; no replacement')
+    proposal=dict(proposal,bank_state_fingerprints={'6':snapshot_fingerprint(snapshot)})
+    folder=Path(__file__).resolve().parent
+    modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
+    expected_sources=json.loads((transition/'native_expected_sources.json').read_text())
+    for file,expected in expected_sources.items():
+        if digest(file)!=expected:raise ValueError('new native source drift')
+    root.mkdir(exist_ok=False);(root/'source').mkdir()
+    for file in modules:(root/'source'/file.name).write_bytes(file.read_bytes())
+    save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
+    files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
+    steps=planning_chunk_steps(10.,10.)
+    p=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=CAPABILITY_MODE,source=str(transition),
+        native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
+        config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=35,horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
+        maximum_active_lower_ticks=70000,maximum_allocated_lower_slots=70000,optimizer_updates=0,
+        initialization='Fresh new-physics prepared bank6, original native task reset; frozen H75 five alpha; no q or additional baseline.',data_role=proposal['data_role'],
+        replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
+        stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
+    save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+
+
 PREFIX_MODE='native_h75_source_prefix'
 
 
@@ -1672,7 +1734,7 @@ def verify(root):
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('changed plan')
     for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(f)!=sha:raise ValueError('changed sealed source/input '+f)
-    if json.loads((root/'inventory.json').read_text())!=(five_alpha_online_inventory(p['protocol']) if p.get('mode')==FIVE_ONLINE_MODE else native_source_prefix_inventory(p['protocol']) if p.get('mode')==PREFIX_MODE else five_alpha_label_inventory(p['protocol'],task_s=p.get('source_task_s')) if p.get('mode')==LABEL_MODE else middle_selection_inventory(p['protocol']) if p.get('mode')==SELECTION_MODE else bank144_inventory(p['protocol']) if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else inventory()):raise ValueError('fixed inventory changed')
+    if json.loads((root/'inventory.json').read_text())!=(fixed_h75_capability_inventory(p['protocol']) if p.get('mode')==CAPABILITY_MODE else five_alpha_online_inventory(p['protocol']) if p.get('mode')==FIVE_ONLINE_MODE else native_source_prefix_inventory(p['protocol']) if p.get('mode')==PREFIX_MODE else five_alpha_label_inventory(p['protocol'],task_s=p.get('source_task_s')) if p.get('mode')==LABEL_MODE else middle_selection_inventory(p['protocol']) if p.get('mode')==SELECTION_MODE else bank144_inventory(p['protocol']) if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else inventory()):raise ValueError('fixed inventory changed')
     return p
 
 
@@ -1708,7 +1770,8 @@ def load(root,*,prefix_phase=False):
     labels=p.get('mode')==LABEL_MODE
     native_prefix=p.get('mode')==PREFIX_MODE
     five_online=p.get('mode')==FIVE_ONLINE_MODE
-    selection=p.get('mode') in (SELECTION_MODE,PREFIX_MODE,FIVE_ONLINE_MODE)
+    capability=p.get('mode')==CAPABILITY_MODE
+    selection=p.get('mode') in (SELECTION_MODE,PREFIX_MODE,FIVE_ONLINE_MODE,CAPABILITY_MODE)
     cfg=p['config'];tolerance=five_online or p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation');confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance or selection
     fresh=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') and new_confirmation_sources(p['protocol'])
     if confirmation or fresh or labels:
@@ -1817,7 +1880,11 @@ def load(root,*,prefix_phase=False):
             raise ValueError('cached source native reset mismatch; no compatibility weakening')
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
-    if five_online:
+    if capability:
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='nominal_five_user')
+        for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
+        initial_identity['authenticated_fixed_h75_capability']=True
+    elif five_online:
         initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind=p['protocol'].get('panel_kind'))
     elif native_prefix:
         if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==.5)&(initial.state.physical.physical_tick==snapshot.physical_tick))):raise ValueError('native prefix initialization differs')
@@ -2142,7 +2209,7 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=int(ticks[i])*env.cc.dt,continuous_replanning=p['replanning'].get('continuous_replanning',False)):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (CAPABILITY_MODE,FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         path_file=f'replanned_path_{i:02d}_tick{int(ticks[i]):04d}.npz' if p['replanning'].get('continuous_replanning',False) else f'replanned_path_{i:02d}.npz'
                         np.savez_compressed(directory/path_file,**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
