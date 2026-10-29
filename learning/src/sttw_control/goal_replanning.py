@@ -82,8 +82,11 @@ def rebind_geometry(carry, path, speed, env):
 
 def replan_requested(*, xy, goal_xy, cross_track_m, follower_invalid, already_replanned,
                      contact, fault, ever_arrived=False, arrival_radius_m=1., departure_m=1.,
-                     scheduled_time_s=None, task_time_s=None):
-    """One-shot causal baseline request; no true force/onset/end input.
+                     scheduled_time_s=None, task_time_s=None, continuous_replanning=False):
+    """Causal departure trigger; optionally keep updating an active reconnection.
+
+    Default remains one-shot. Continuous mode preserves the original route until
+    departure/invalidity, then requests updates at the caller-declared cadence.
 
     Invoke at a declared ordinary planning cadence, not at a privileged pulse
     end. The thresholds define this baseline, not success or safety gates.
@@ -91,12 +94,13 @@ def replan_requested(*, xy, goal_xy, cross_track_m, follower_invalid, already_re
     values=np.r_[xy,goal_xy,cross_track_m,arrival_radius_m,departure_m]
     if not np.isfinite(values).all() or min(arrival_radius_m,departure_m)<=0:
         raise ValueError('finite measured geometry and positive thresholds required')
+    if continuous_replanning and scheduled_time_s is not None:raise ValueError('scheduled one-shot and continuous replanning are distinct protocols')
     if scheduled_time_s is not None:
         if task_time_s is None or not np.isfinite([scheduled_time_s,task_time_s]).all() or scheduled_time_s<=0:
             raise ValueError('finite positive scheduled time and measured task time required')
         return bool(not (already_replanned or contact or fault or ever_arrived)
                     and np.linalg.norm(np.asarray(xy)-goal_xy)>arrival_radius_m
                     and abs(task_time_s-scheduled_time_s)<1e-8)
-    return bool(not (already_replanned or contact or fault or ever_arrived)
+    return bool(not ((already_replanned and not continuous_replanning) or contact or fault or ever_arrived)
                 and np.linalg.norm(np.asarray(xy)-goal_xy)>arrival_radius_m
-                and (follower_invalid or abs(cross_track_m)>departure_m))
+                and ((continuous_replanning and already_replanned) or follower_invalid or abs(cross_track_m)>departure_m))

@@ -1,0 +1,105 @@
+{
+  "mode": "middle_selection",
+  "experiment_id": "STTW-MIDDLE-SELECTION-FIVE-ALPHA",
+  "models": {
+    "H75": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+    "W400": "STTW_MIDDLE_WITNESS_S918501_SUP400",
+    "u325": "STTW_MIDDLE_DISTILLED_V3_U325"
+  },
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "bank_indices": [
+    6
+  ],
+  "bank_state_fingerprints": {
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "route_contexts": [
+    {
+      "route": "straight_v2p6",
+      "family": 0,
+      "radius_m": 2.0,
+      "angle_deg": 0.0,
+      "speed": 2.6,
+      "direction": 1.0,
+      "goal_distance_m": 20.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "left130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "onset_s": 2.2,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "duration_s": 0.15,
+  "horizon_s": 10.0,
+  "optimizer_updates": 0,
+  "force_frame": "worldY",
+  "expected_cases": 336,
+  "maximum_lower_ticks": 672000,
+  "data_role": "Related DEV model selection: one prepared ancestor; no independent training-seed or heldout generalization claim",
+  "question": "Which frozen single middle policy best supports five user preferences under common original-goal and causal replanning conditions?",
+  "scoring": "Per route/user/event paired original goal first entry within1m before failure; completeH10 contact/fault, original-path/velocity costs and preference behavior separately. Report gains/losses; no cross-alpha reward ranking. Zero physical trajectory is rescored across five users.",
+  "stop_rule": "Exactly336 physical episodes, engineering/nonfinite error stops; no training/retries or budget extension. Select by task/contact plus finite preference tradeoffs; no requirement to dominate every metric.",
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "replan_cadence_s": 0.1,
+  "maximum_replans": 100,
+  "replanning_radius_m": 1.8,
+  "departure_m": 1.0,
+  "goal_radius_m": 1.0,
+  "planning_frequency_hz": 10.0
+}
