@@ -509,13 +509,13 @@ def five_alpha_online_inventory(p):
         event=f't2.2_F{force:+g}',force_N=force,onset_s=2.2,duration_s=.15) for c,force in itertools.product(p['route_contexts'],p['forces_N'])]
 
 
-def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=None,expected_route_count=7):
+def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=None,expected_route_count=7,task_tick=0):
     """Check original reset leaves; only user alpha is neutralized for pairing."""
     import jax
     import jax.numpy as j
     import numpy as np
     alphas=j.asarray([c['alpha'] for c in cases])
-    if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==alphas)&(initial.state.physical.physical_tick==physical_tick))):raise ValueError('online initial clocks/user differ')
+    if not bool(j.all((initial.state.tick==task_tick)&(initial.state.alpha==alphas)&(initial.state.physical.physical_tick==physical_tick))):raise ValueError('online initial clocks/user differ')
     neutral=initial.replace(state=initial.state.replace(alpha=j.zeros_like(initial.state.alpha)))
     leaves=jax.tree.leaves(jax.device_get(neutral))
     groups={}
@@ -2131,7 +2131,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
         if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True

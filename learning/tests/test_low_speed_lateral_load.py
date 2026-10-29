@@ -95,6 +95,10 @@ def test_two_alpha_per_event_reset_audit_preserves_complete_pairing(alphas):
     initial=Carry(State(alpha,j.zeros(n,j.int32),Physical(j.full(n,700,j.int32)),values),values+10)
     receipt=audit_five_alpha_online_initial(initial,rows,700,panel_kind='disturbed_declared_user',expected_route_count=1)
     assert receipt['paired_reset_all_leaves_exact']
+    continued=initial.replace(state=initial.state.replace(tick=j.full(n,320,j.int32),physical=Physical(j.full(n,1020,j.int32))))
+    assert audit_five_alpha_online_initial(continued,rows,1020,panel_kind='disturbed_declared_user',expected_route_count=1,task_tick=320)['paired_reset_all_leaves_exact']
+    with pytest.raises(ValueError,match='clocks/user'):
+        audit_five_alpha_online_initial(continued,rows,1020,panel_kind='disturbed_declared_user',expected_route_count=1)
     bad=initial.replace(hidden=initial.hidden.at[1].set(999))
     with pytest.raises(ValueError,match='neutralization'):
         audit_five_alpha_online_initial(bad,rows,700,panel_kind='disturbed_declared_user',expected_route_count=1)
