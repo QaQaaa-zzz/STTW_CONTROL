@@ -2821,7 +2821,7 @@ def analyze_fixed_h75_capability(root,p):
     for key,value in [('cases',cases),('models',p['models']),('config',p['config']),('plan_sha256',digest(root/'plan.json'))]:
         if manifest[key]!=value:raise ValueError('capability manifest differs '+key)
     if set(p['models'])!={'H75'}:raise ValueError('frozenH75 only capability panel')
-    out.mkdir(exist_ok=False);rows=[];raws={};paths={};ticks=0;links=[];decisions=json.loads((run/'replanning_decisions.json').read_text())
+    out.mkdir(exist_ok=True);rows=[];raws={};paths={};ticks=0;links=[];decisions=json.loads((run/'replanning_decisions.json').read_text())
     for lane,c in enumerate(index):
         if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('capability case/raw identity differs')
         with np.load(c['raw_file']) as z:raw=dict(z)
@@ -2849,6 +2849,14 @@ def analyze_fixed_h75_capability(root,p):
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
     for route in sorted({r['route'] for r in rows}):
         group=sorted([r for r in rows if r['route']==route],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+        # Show the continuing controller reference beyond the arrival target.
+        # Limit display to observed progress plus preview, keeping XY readable.
+        observed_end=max(float(np.max(raws[r['case_id']]['path_progress'][:r['active_lower_ticks']])) for r in group)
+        beyond=(path['s']>=float(path['goal'])-.02)&(path['s']<=max(float(path['goal'])+1.,observed_end+2.))
+        axes[0].plot(*path['xy'][beyond].T,color='grey',ls='--',lw=1,label='Continuing reference after goal')
+        if not extended:
+            goal_xy=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,k]) for k in (0,1)])
+            axes[0].scatter(*goal_xy,color='black',marker='*',s=70,label='Task goal (reference continues)')
         if extended:
             from matplotlib.patches import Circle
             axes[0].add_patch(Circle(group[0]['old_goal_xy'],1.,fill=False,edgecolor='black',linestyle='--',label='Old goal disk'))
