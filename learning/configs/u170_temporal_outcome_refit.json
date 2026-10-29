@@ -1,5 +1,5 @@
 {
-  "experiment_id": "STTW-U170-TEMPORAL-OUTCOME-REFIT-V3",
+  "experiment_id": "STTW-U170-TEMPORAL-OUTCOME-REFIT-V4",
   "architecture": {
     "input_dim": 42,
     "hidden": [
@@ -15,7 +15,7 @@
       1,
       2
     ],
-    "updates_per_seed": 1000,
+    "updates_per_seed": 5000,
     "learning_rate": 0.001,
     "weight_decay": 0.001,
     "head_loss_weights": [
@@ -31,10 +31,10 @@
   },
   "budget": {
     "physics_ticks": 0,
-    "optimizer_updates": 3000
+    "optimizer_updates": 15000
   },
   "data_role": "177 known related outcomes, five source states: prior100 TRAIN, known32 alpha DEV, known4 boundary DEV, known6 timing DEV and35 new time/early TRAIN. Known DEV explicitly released for this refit; original roles/results unchanged. No DEV during fit; new prospective physical validation required.",
-  "stop_rule": "Three1000update supervised CPU models; nonfinite/errors stop, no automatic extra updates or physics. Frozen U170 and lower unchanged.",
+  "stop_rule": "Three fixed5000update supervised CPU models on the same177 known labels; nonfinite/errors stop, no automatic extra updates or physics. U170/lower frozen. No DEV checkpoint selection.",
   "outputs": [
     "no_fall_probability",
     "survived_goal_probability",
