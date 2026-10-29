@@ -4,6 +4,33 @@ import pytest
 from sttw_control import tolerance_coordination as coordinator
 
 
+def return_rule():
+    return dict(user_alpha=0.,minimum_preparation_s=2.,stable_hold_s=.3,max_abs_roll_rad=np.pi/12,
+        max_abs_roll_rate_rad_s=.35,minimum_forward_speed_m_s=1.5,alpha_rate_per_s=1.)
+
+
+def test_causal_return_waits_then_ramps_and_pauses_on_unstable_or_denied_state():
+    rule=coordinator.validate_preference_return_rule(return_rule())
+    step=lambda alpha,count,phase,tick,roll=0.,permit=True:coordinator.advance_preference_return(alpha,count,phase,0,tick,roll,0.,2.,permit,rule)
+    waiting=step(.875,0,0,396);assert waiting['alpha']==.875 and waiting['stable_ticks']==0
+    counting=step(.875,0,0,400);assert counting['alpha']==.875 and counting['stable_ticks']==4
+    ramp=step(.875,56,0,456);assert float(ramp['alpha'])==pytest.approx(.855) and ramp['phase']==1
+    paused=step(ramp['alpha'],60,1,460,roll=.4);assert paused['alpha']==ramp['alpha'] and paused['stable_ticks']==0
+    denied=step(ramp['alpha'],60,1,460,permit=False);assert denied['alpha']==ramp['alpha']
+    done=step(.01,60,1,464);assert done['alpha']==0. and done['phase']==2
+    bad=dict(rule,actual_gust_end_s=2.4)
+    with pytest.raises(ValueError,match='causal return rule'):coordinator.validate_preference_return_rule(bad)
+
+
+def test_return_to_same_preference_never_changes_the_physical_actor_condition():
+    rule=return_rule();rule['user_alpha']=.875
+    for tick in (0,400,800):
+        for permission in (False,True):
+            for roll in (0.,.5):
+                result=coordinator.advance_preference_return(.875,0,0,0,tick,roll,0.,2.,permission,rule)
+                assert result['alpha']==.875 and not result['changed']
+
+
 def test_alpha_interval_output_preserves_unsafe_interior_and_explicit_empty_set():
     grid=[0.,.25,.5,.75,1.]
     kwargs=dict(no_fall_threshold=.9,task_threshold=.8,max_path_error_m=.3)

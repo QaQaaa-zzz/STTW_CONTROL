@@ -41,6 +41,7 @@ def prepare_dataset(run,output,*,partition_override=None,release_note=None):
     """Freeze all declared TRAIN/DEV groups after successful independent analysis."""
     run=Path(run).resolve();output=Path(output).resolve()
     plan=json.loads((run/'plan.json').read_text());rows=json.loads((run/'analysis/results.json').read_text())
+    if plan['protocol'].get('causal_preference_return'):raise ValueError('preference-return labels need an explicit user-conditioned policy schema; hold-alpha42 is incompatible')
     status=json.loads((run/'evaluation/status.json').read_text());receipt=json.loads((run/'analysis/receipt.json').read_text())
     shape=json.loads((run/'evaluation/shape_receipt.json').read_text());parent_partition=plan['protocol'].get('dataset_partition')
     partition=parent_partition if partition_override is None else partition_override

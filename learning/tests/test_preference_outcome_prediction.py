@@ -3,7 +3,7 @@ import pytest
 
 from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
 from sttw_control.tolerance_coordination import select_from_alpha_range
-from sttw_control.preference_outcome_prediction import merge_outcome_datasets,audit_query_feature_alignment,SCHEMA
+from sttw_control.preference_outcome_prediction import merge_outcome_datasets,audit_query_feature_alignment,prepare_dataset,SCHEMA
 
 
 def example():
@@ -106,3 +106,10 @@ def test_bounded_actor_roundoff_does_not_relax_state_or_feasibility_checks():
     with pytest.raises(ValueError,match='exceed bounded'):audit_query_feature_alignment(frozen,altered,export)
     export['w0'][0,36,0]=1.;export['w1'][0,0,0]=1.;export['w2'][0,0,0]=20.;export['b2'][0,0]=np.log(.7998/(1-.7998))
     with pytest.raises(ValueError,match='changes default feasibility'):audit_query_feature_alignment(frozen,observed,export)
+
+
+def test_returning_policy_cannot_be_silently_labeled_as_hold_alpha42(tmp_path):
+    import json
+    (tmp_path/'analysis').mkdir();(tmp_path/'plan.json').write_text(json.dumps(dict(protocol=dict(causal_preference_return=dict(user_alpha=0.)))))
+    (tmp_path/'analysis/results.json').write_text('[]')
+    with pytest.raises(ValueError,match='user-conditioned policy schema'):prepare_dataset(tmp_path,tmp_path/'wrong_dataset')

@@ -461,7 +461,7 @@ def reconstruct_execution_path_reward(raw,case,original,replanned,replan_tick,co
         segment={k:np.asarray(v)[start:end] for k,v in raw.items()}
         # Domain telemetry is not fatal in this new contact-only contract.
         segment['physical_failure']=np.zeros(end-start,bool);segment['domain_exit']=np.zeros(end-start,bool)
-        _,data=score(segment,path,config,controller,keys,float(case['alpha']))
+        _,data=score(segment,path,config,controller,keys,float(case.get('raw_user_alpha',case['alpha'])))
         np.testing.assert_allclose(effective[start:end],data['effective'],atol=4e-4,rtol=2e-5,
             err_msg='execution-path V3 reward components differ')
         effective[start:end]=data['effective']
@@ -2791,7 +2791,8 @@ def validate_fixed_capability_cases(cases,protocol):
         expected={signature(c) for c in declared};observed={signature(c) for c in cases}
         if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0]:raise ValueError('complete paired low-speed load inventory required')
         speeds={c['route']:c['speed'] for c in protocol['route_contexts']}
-        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
+        user=lambda c:protocol['causal_preference_return']['user_alpha'] if protocol.get('causal_preference_return') else c['alpha']
+        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or c['query_alpha']!=c['alpha'] or any(c[k]!=user(c) for k in ('user_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
         return
     targeted=protocol.get('capability_variant')=='targeted_base_review'
@@ -2826,6 +2827,34 @@ def declared_primary_suffix(raw,case,horizon_s=10.):
         primary_task_start_s=float(start),primary_task_end_s=float(horizon_s))
 
 
+def audit_causal_preference_return(raw,case,rule):
+    """Independent NumPy audit; no actual force/onset/end is read here."""
+    n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.float32(case['alpha']);user=np.float32(rule['user_alpha']);count=0;phase=0
+    start_tick=round(case['source_task_start_s']/.005);changes=[];restored=[]
+    np.testing.assert_allclose(raw['alpha_user'][:n],user,atol=1e-6,rtol=0)
+    for start in range(0,n,4):
+        stop=min(n,start+4);tick=round(float(raw['time'][start])/.005)
+        roll=raw['return_pre_roll'][start];rate=raw['return_pre_roll_rate'][start];speed=raw['return_pre_speed'][start];permission=bool(raw['return_permission'][start])
+        stable=bool(permission and np.isfinite([roll,rate,speed]).all() and abs(roll)<=np.float32(rule['max_abs_roll_rad']) and abs(rate)<=np.float32(rule['max_abs_roll_rate_rad_s']) and speed>=np.float32(rule['minimum_forward_speed_m_s']))
+        eligible=tick-start_tick>=round(rule['minimum_preparation_s']/.005);count=count+4 if stable and eligible else 0
+        returning=phase==1 or (eligible and count>=round(rule['stable_hold_s']/.005));previous=alpha
+        if returning and stable:
+            step=np.float32(rule['alpha_rate_per_s']*.02);alpha=np.float32(alpha+np.clip(np.float32(user-alpha),-step,step))
+        if phase==2:alpha=user
+        done=bool(abs(alpha-user)<=1e-6)
+        if done:alpha=user
+        phase=2 if done else 1 if returning else phase
+        values=dict(return_stable=stable,return_eligible=eligible,return_age_ticks=tick-start_tick,
+            return_stable_ticks=count,return_phase=phase,return_start_tick=start_tick,return_changed=bool(alpha!=previous))
+        for key,value in values.items():np.testing.assert_array_equal(raw[key][start:stop],value)
+        np.testing.assert_allclose(raw['alpha_exec'][start:stop],alpha,atol=2e-6,rtol=0)
+        if alpha!=previous:changes.append(float(raw['time'][start]))
+        if done:restored.append(float(raw['time'][start]))
+    return dict(independent_sensor_permission_clock_audit=True,actual_event_labels_used=False,
+        first_return_command_s=changes[0] if changes else None,first_original_alpha_s=restored[0] if restored else None,
+        original_user_alpha=float(user),final_executing_alpha=float(alpha),changed_upper_steps=len(changes))
+
+
 def analyze_fixed_h75_capability(root,p):
     """Fresh-physics fixedH75 nominal capability panel; no coordinator/baseline."""
     import matplotlib
@@ -2835,6 +2864,7 @@ def analyze_fixed_h75_capability(root,p):
     extended=p['protocol'].get('capability_variant')=='S_goal_extension'
     load_screen=p['protocol'].get('capability_variant')=='low_speed_lateral_load'
     boundary=p['protocol'].get('range_planner_boundary')
+    return_rule=p['protocol'].get('causal_preference_return')
     candidate=p['protocol'].get('candidate_model')
     model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
     boundary_decisions={}
@@ -2870,7 +2900,10 @@ def analyze_fixed_h75_capability(root,p):
         n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=window['observed_full_lower_ticks']
         if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(raw['active_tick']),np.arange(n)):raise ValueError('invalid capability actual prefix')
         start_s=c.get('source_task_start_s',0.);start_tick=round(start_s/.005)
-        np.testing.assert_allclose(raw['time'][:n],start_s+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
+        np.testing.assert_allclose(raw['time'][:n],start_s+np.arange(n)*.005,atol=3e-6,rtol=0)
+        return_audit=audit_causal_preference_return(raw,c,return_rule) if return_rule else None
+        executed=raw['alpha_exec'][:n] if return_rule else np.full(n,c['alpha'])
+        np.testing.assert_allclose(raw['channel_alpha_pair'][:n],np.column_stack([executed,executed]),atol=1e-6,rtol=0);np.testing.assert_allclose(raw['query_observation'][:n,336],executed,atol=1e-6,rtol=0)
         if load_screen:
             t=raw['time'][:n];overlap=np.maximum(0.,np.minimum(t+.005,c['onset_s']+c['duration_s'])-np.maximum(t,c['onset_s']))
             expected_force=(overlap*c['force_N'])[:,None]*np.asarray(c.get('force_direction_world',[0.,1.,0.]))
@@ -2895,9 +2928,10 @@ def analyze_fixed_h75_capability(root,p):
         if boundary:
             decision=boundary_decisions[c['case_id']]['decision']
             if decision['selected_alpha']!=c['alpha'] or decision['user_alpha']!=c['original_user_alpha']:raise ValueError('actual boundary execution or original preference differs')
-        updates=audit_selection_replans(run,dict(c,replanned=bool(primary_decisions)),lane,raw,path,goal,primary_decisions);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c.get('original_user_alpha',c['alpha']),raw_alpha=c['alpha'],broaden_cost_numerics=True)
+        updates=audit_selection_replans(run,dict(c,replanned=bool(primary_decisions)),lane,raw,path,goal,primary_decisions);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c.get('original_user_alpha',c['alpha']),raw_alpha=c.get('raw_user_alpha',c['alpha']),broaden_cost_numerics=True)
         rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(start_s+np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t+start_tick for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
         rows[-1].update(window)
+        if return_rule:rows[-1]['preference_return_audit']=return_audit
         if boundary:rows[-1]['range_planner_decision']=boundary_decisions[c['case_id']]
         if load_screen:
             rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick,path_updates=updates)
@@ -2932,7 +2966,7 @@ def analyze_fixed_h75_capability(root,p):
             axes[0].add_patch(Circle(group[0]['old_goal_xy'],1.,fill=False,edgecolor='black',linestyle='--',label='Old goal disk'))
             axes[0].add_patch(Circle(group[0]['new_goal_xy'],1.,fill=False,edgecolor='#009E73',label='New goal disk (+3m)'))
         for r in group:
-            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"NN alpha={r['alpha']:g} (user={r['original_user_alpha']:g})" if boundary else f"Fixed alpha={r['alpha']:g}"
+            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"Prepare alpha={r['alpha']:g}, return user={r['original_user_alpha']:g}" if return_rule else f"NN alpha={r['alpha']:g} (user={r['original_user_alpha']:g})" if boundary else f"Fixed alpha={r['alpha']:g}"
             if extended:
                 arrival=r['endpoint']['first_arrival_s'];cut=min(n,round(arrival/.005)) if arrival is not None else n
                 line=axes[0].plot(*raw['actual_xy'][:cut].T,label=label)[0]
@@ -2943,7 +2977,7 @@ def analyze_fixed_h75_capability(root,p):
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
         if load_screen:
             render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
@@ -2953,7 +2987,14 @@ def analyze_fixed_h75_capability(root,p):
     atomic_json(out/'results.json',rows);atomic_json(out/'summary.json',summary);atomic_json(out/'receipt.json',dict(plan_sha256=digest(root/'plan.json'),cases=expected,active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,physics_identity=manifest['physics_identity'],execution_reward_reconstructed=load_screen,limits=f'Fresh front/rearfriction.8 preparedbank {model_label} capability panel; not oldphysics comparison, baseline or independentTEST. Goal disk arrival and contact separate; differentalpha weighted running costs are not ranked. '+('Execution-path full reward and terminal adjustment rebuilt against logs.' if load_screen else 'Total non-task/terminal reward reconstruction deferred.')))
     (out/'README.md').write_text(f'# Fresh-physics {model_label} {len(p['protocol']['alphas'])}-alpha capability\n\n'+'\n\n'.join(f'![All five fixed-alpha XY]({f})' for f in links)+f'\n\n{expected} {'paired equivalent-lateral-load' if load_screen else 'nominal'} cases; no coordinator, zero-policy baseline or oldphysics performance comparison. Originalgoal arrival/contact/timing in results.json; eachalpha original-user3running costs retained without crossalpha weightedcost ranking.\n')
     if boundary:
-        (out/'README.md').write_text('# Causal NN-range boundary execution\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+f'\n\n{expected} new integration DEV cases. Small network queried the current full native state at task1.6s against the predeclared hypothetical family; chosen alpha was executed and held afterwards. Actual future gust timings were not supplied. Original user alpha and its three task costs are preserved independently of executed alpha and its reconstructed reward. This is not continuous online coordination or preference-restoration validation. No new matched fixed-user baseline was requested; cached different event timings do not prove paired superiority.\n')
+        (out/'README.md').write_text('# Causal NN-range boundary execution\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+f'\n\n{expected} new integration DEV cases. Small network queried the current full native state at the declared task boundary against the predeclared hypothetical family; chosen alpha was executed and held afterwards. Actual future gust timings were not supplied. Original user alpha and its three task costs are preserved independently of executed alpha and its reconstructed reward. This is not continuous online coordination or preference-restoration validation. No new matched fixed-user baseline was requested; cached different event timings do not prove paired superiority.\n')
+    if return_rule:
+        fig,ax=plt.subplots(figsize=(10,4),layout='constrained')
+        for i,r in enumerate(rows):
+            raw=raws[r['case_id']];n=r['active_lower_ticks'];ax.plot(raw['time'][:n],raw['alpha_exec'][:n],ls=['-',':','--','-.'][i%4],label=f"case onset={r['onset_s']:g}s")
+        ax.axhline(return_rule['user_alpha'],color='black',ls='--',lw=.8,label='Original user alpha');ax.set(xlabel='Task time (s)',ylabel='Executing alpha',ylim=(-.05,1.05));ax.legend();ax.grid(alpha=.2)
+        fig.savefig(out/'causal_preference_return_alpha.png',dpi=140);plt.close(fig)
+        (out/'README.md').write_text('# Causal preparation and preference return\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+'\n\n![Actual executing alpha](causal_preference_return_alpha.png)\n\nFrozen U170 prepares at the declared alpha, then returns toward the original user alpha using current roll, roll rate, true-speed input and publication permission after a fixed minimum preparation age and stable dwell. No actual gust onset/end enters the rule. This is a deterministic feedback-return experiment, not a validated new outcome network. Original user reward and all components are independently reconstructed; the H75 Actor sees executing alpha. Old hold-alpha42 labels cannot silently represent this new continuation policy.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
@@ -3043,7 +3084,7 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];t=raw['time'][:n]+.005;steps=np.arange(1,n+1)
         source_start=row.get('source_task_start_s',0.)
         with np.load(row['diagnostic_task_file']) as z:d=dict(z)
-        color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}.get(row['alpha'],(plt.get_cmap('tab10')(column%10),['-',':','-.','--'][column%4]));label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
+        color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}.get(row['alpha'],(plt.get_cmap('tab10')(column%10),['-',':','-.','--'][column%4]));label=(f"prepare={row['alpha']:g}, user={row['original_user_alpha']:g}" if 'preference_return_audit' in row else f"alpha={row['alpha']:g}")+f" / {row['endpoint']['physical_outcome']}"
         series=[raw['actual_forward_speed'][:n],raw['actual_forward_speed'][:n]-raw['wheel_speed_proxy'][:n],raw['actual_delta'][:n],raw['phi'][:n]*180/np.pi,raw['phi_dot'][:n]*180/np.pi,d['original_cross_track_m'],d['original_heading_error_rad'],d['reward'],np.cumsum(d['reward'])]
         for k,(ax,y) in enumerate(zip(axes.flat,series)):
             x=steps if k>=7 else t;ax.plot(x,y,color=color,ls=style,lw=1.1,label=label)

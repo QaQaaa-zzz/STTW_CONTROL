@@ -186,6 +186,10 @@ def low_speed_lateral_load_inventory(p):
         rows[-1]['onset_s']=onset
         rows[-1]['event']=event_name
         if boundary:rows[-1]['original_user_alpha']=context['state_source']['source_alpha']
+        if p.get('causal_preference_return'):
+            user=p['causal_preference_return']['user_alpha']
+            rows[-1].update(original_user_alpha=user,raw_user_alpha=user,user_alpha=user,effective_user_alpha=user,
+                case_id=rows[-1]['case_id']+f'/return_user{user:g}')
     if any('state_source' in c for c in contexts) and not all('state_source' in c for c in contexts):raise ValueError('all conditional contexts require explicit sources')
     excluded_ids={r['case_id'] for r in excluded}
     if not excluded_ids.issubset({r['case_id'] for r in rows}):raise ValueError('reused case outside declared complete query matrix')
@@ -412,6 +416,10 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
     if proposal.get('range_planner_boundary'):
         modules += [folder/'preference_outcome_prediction.py',folder/'tolerance_coordination.py']
+    elif proposal.get('causal_preference_return'):
+        module=file_module('_sttw_return_rule_prepare',folder/'tolerance_coordination.py')
+        module.validate_preference_return_rule(proposal['causal_preference_return'])
+        modules.append(folder/'tolerance_coordination.py')
     expected_sources=json.loads((transition/'native_expected_sources.json').read_text())
     for file,expected in expected_sources.items():
         if digest(file)!=expected:raise ValueError('new native source drift')
@@ -2082,6 +2090,7 @@ def load(root,*,prefix_phase=False):
     native_prefix=p.get('mode')==PREFIX_MODE
     five_online=p.get('mode')==FIVE_ONLINE_MODE
     capability=p.get('mode')==CAPABILITY_MODE
+    returning=capability and bool(p['protocol'].get('causal_preference_return'))
     selection=p.get('mode') in (SELECTION_MODE,PREFIX_MODE,FIVE_ONLINE_MODE,CAPABILITY_MODE)
     cfg=p['config'];tolerance=five_online or p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation');confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance or selection
     fresh=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') and new_confirmation_sources(p['protocol'])
@@ -2263,6 +2272,12 @@ def load(root,*,prefix_phase=False):
         if jax.eval_shape(actor.apply,params,j.zeros(351)).shape!=(2,):raise ValueError('native Actor shape mismatch')
     params=stack([actors[c['mode'] if c['mode'] in actors else 'H75'] for c in cases])
     n=len(cases);horizon=p['horizon_s'];speed_alpha=j.asarray([c.get('query_alpha',c.get('speed_alpha',c['alpha'])) for c in cases]);steer_alpha=j.asarray([c.get('query_alpha',c.get('steer_alpha',c['alpha'])) for c in cases])
+    if returning:
+        return_module=file_module('_sttw_preference_return',folder/'tolerance_coordination.py')
+        return_rule=return_module.validate_preference_return_rule(p['protocol']['causal_preference_return'])
+        initial=initial.replace(state=initial.state.replace(alpha=j.full(n,return_rule['user_alpha'],dtype=initial.state.alpha.dtype)))
+        initial=return_module.PreferenceReturnCarry(initial,speed_alpha,j.zeros(n,j.int32),initial.state.tick,j.zeros(n,j.int32))
+        initial_identity.update(original_user_alpha=return_rule['user_alpha'],initial_executing_alphas=np.asarray(speed_alpha).tolist(),causal_preference_return=True)
     if capability and p['protocol'].get('range_planner_boundary'):
         boundary=p['protocol']['range_planner_boundary'];receipts=[];selected=[];by_route={}
         for i,case in enumerate(cases):
@@ -2295,7 +2310,9 @@ def load(root,*,prefix_phase=False):
           'continuation_geometry_invalid','continuation_geometry_fault')
     switch_ticks=j.asarray([round(c.get('switch_s',1e9)/env.cc.dt) for c in cases],j.int32) if switching else j.zeros(n,j.int32)
     def one(carry,param,path,v,pulse,mode,sa,ta,st):
-        if tolerance:
+        if returning:
+            sidecar=carry;carry=carry.native
+        elif tolerance:
             sidecar=carry;carry=carry.native
         elif online:
             alpha_exec,latched,decision=schedule.advance_scalar(carry.latched,v,path.s,path.curvature,carry.state.projection.progress,p['protocol']['rule'])
@@ -2308,6 +2325,12 @@ def load(root,*,prefix_phase=False):
         if switching:sa,ta,switched=switch_mapping(carry.state.tick,sa,ta,st,p['protocol']['destination_pair'])
         if response:
             obs,_,obs_fault=env.observation(carry.state,path,v,horizon)
+            if returning:
+                measurement,_,true_speed=env.physics.observe(carry.state.physical.data)
+                return_permission=adapter.target_permission(carry)&~obs_fault
+                returned=return_module.advance_preference_return(sidecar.alpha_exec,sidecar.stable_ticks,sidecar.phase,
+                    sidecar.start_tick,carry.state.tick,measurement[0],measurement[1],true_speed,return_permission,return_rule)
+                sa=ta=returned['alpha']
             if five_online:
                 candidate_alpha=j.asarray(p['protocol']['candidate_alphas'])
                 queries=jax.vmap(lambda a:obs.at[336].set(a))(candidate_alpha)
@@ -2406,6 +2429,12 @@ def load(root,*,prefix_phase=False):
             ticks=lambda x:j.broadcast_to(x,log['active_tick'].shape+j.asarray(x).shape)
             log.update(queried_latent_alpha_half=ticks(half),queried_latent_alpha_one=ticks(full),channel_alpha_pair=ticks(j.stack([sa,ta])),composed_latent=ticks(z),query_observation=ticks(obs),pre_upper_yaw=ticks(env.physics.observe(carry.state.physical.data)[1][2]))
         if samestate:log.update(query_observation=ticks(queried),channel_alpha_pair=ticks(j.stack([sa,sa])),alpha_user=ticks(carry.state.alpha),alpha_exec=ticks(sa))
+        if returning:
+            log.update(query_observation=ticks(queried),alpha_user=ticks(carry.state.alpha),alpha_exec=ticks(sa),
+                return_pre_roll=ticks(measurement[0]),return_pre_roll_rate=ticks(measurement[1]),return_pre_speed=ticks(true_speed),
+                return_permission=ticks(return_permission),return_start_tick=ticks(sidecar.start_tick),
+                **{'return_'+key:ticks(value) for key,value in returned.items() if key!='alpha'})
+            end=return_module.PreferenceReturnCarry(end,sa,returned['stable_ticks'],sidecar.start_tick,returned['phase'])
         if confirmation and not tolerance and not selection:
             log.update(neural_query_active=ticks(mode!=4),support_nominal_reference=ticks(carry.state.physical.raw),rule_pre_upper_progress=ticks(carry.state.projection.progress),**{k:ticks(j.where(mode==4,x,j.zeros_like(x))) for k,x in support.items()})
         if online:
@@ -2415,7 +2444,7 @@ def load(root,*,prefix_phase=False):
                 end=coordination.DwellOnlineCarry(end,latched,alpha_exec,dwell['hold_until_tick']) if five_online and p['protocol'].get('alpha_dwell_s',0.) else coordination.OnlineCarry(end,latched,alpha_exec)
             else:end=schedule.OnlineCarry(end,latched)
         if switching:log.update(origin_channel_alpha_pair=ticks(origin_pair),switch_active=ticks(switched),switch_tick=ticks(st))
-        return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('alpha_user','alpha_exec')} if samestate else {}),**({k:log[k] for k in ('neural_query_active','support_nominal_reference','rule_pre_upper_progress','support_floor','support_requested_offset','support_realized_target_offset','support_active')} if confirmation and not tolerance and not selection else {}),**({k:log[k] for k in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target')} if online else {}),**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in (('channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped') if online or samestate else ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped'))} if response else {}),**({k:log[k] for k in (*coord_log,'rule_pre_upper_progress')} if tolerance else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
+        return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('alpha_user','alpha_exec')} if samestate or returning else {}),**({k:log[k] for k in log if k.startswith('return_')} if returning else {}),**({k:log[k] for k in ('neural_query_active','support_nominal_reference','rule_pre_upper_progress','support_floor','support_requested_offset','support_realized_target_offset','support_active')} if confirmation and not tolerance and not selection else {}),**({k:log[k] for k in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target')} if online else {}),**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in (('channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped') if online or samestate else ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped'))} if response else {}),**({k:log[k] for k in (*coord_log,'rule_pre_upper_progress')} if tolerance else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
     @partial(jax.jit,static_argnames=('upper_steps',))
     def chunk(carry,paths,upper_steps=50):
         return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes,speed_alpha,steer_alpha,switch_ticks),carry,None,length=upper_steps)
@@ -2424,7 +2453,9 @@ def load(root,*,prefix_phase=False):
         return jax.vmap(lambda d:env.physics.observe(d)[1])(carry.state.physical.data)
     @jax.jit
     def bind(carry,paths,mask):
-        if online:
+        if returning:
+            new=carry._replace(native=jax.vmap(env.rebind_geometry)(carry.native,paths,speeds))
+        elif online:
             native=jax.vmap(env.rebind_geometry)(carry.native,paths,speeds)
             new=(coordination.DwellOnlineCarry(native,carry.latched,carry.prev_alpha,carry.hold_until_tick) if five_online and p['protocol'].get('alpha_dwell_s',0.) else coordination.OnlineCarry(native,carry.latched,carry.prev_alpha)) if tolerance else schedule.OnlineCarry(native,carry.latched)
         else:new=jax.vmap(env.rebind_geometry)(carry,paths,speeds)

@@ -72,6 +72,51 @@ def select_from_alpha_range(plan,*,user_alpha,previous_alpha,publication_permitt
         interpretation='Selects queried points only; model feasibility is not a safety guarantee.')
 
 
+class PreferenceReturnCarry(NamedTuple):
+    native: Any
+    alpha_exec: Any
+    stable_ticks: Any
+    start_tick: Any
+    phase: Any
+
+    @property
+    def state(self):
+        return self.native.state
+
+
+def validate_preference_return_rule(rule):
+    keys={'user_alpha','minimum_preparation_s','stable_hold_s','max_abs_roll_rad',
+          'max_abs_roll_rate_rad_s','minimum_forward_speed_m_s','alpha_rate_per_s'}
+    if set(rule)!=keys or not np.isfinite(list(rule.values())).all():raise ValueError('explicit finite causal return rule required')
+    if not 0<=rule['user_alpha']<=1 or any(rule[k]<=0 for k in keys-{'user_alpha'}):raise ValueError('valid preference and positive return limits required')
+    if any(abs(rule[k]/.02-round(rule[k]/.02))>1e-6 for k in ('minimum_preparation_s','stable_hold_s')):raise ValueError('return durations must match50Hz upper ticks')
+    return rule
+
+
+def advance_preference_return(previous_alpha,stable_ticks,phase,start_tick,current_tick,
+                              roll,roll_rate,speed,permission,rule):
+    """Causal50Hz return, using current sensors/permission and plan age only.
+
+    No actual gust onset/end or disturbance labels are accepted. Phase0 waits,
+    phase1 ramps and pauses if current conditions cease to qualify, phase2
+    holds the original user preference. It does not certify future safety.
+    """
+    import jax.numpy as j
+    user=j.asarray(rule['user_alpha'],dtype=j.asarray(previous_alpha).dtype);age=current_tick-start_tick
+    stable=permission&j.isfinite(roll)&j.isfinite(roll_rate)&j.isfinite(speed)&(j.abs(roll)<=rule['max_abs_roll_rad'])&(j.abs(roll_rate)<=rule['max_abs_roll_rate_rad_s'])&(speed>=rule['minimum_forward_speed_m_s'])
+    eligible=age>=round(rule['minimum_preparation_s']/.005)
+    count=j.where(stable&eligible,stable_ticks+4,0)
+    returning=(phase==1)|(eligible&(count>=round(rule['stable_hold_s']/.005)))
+    delta=j.clip(user-previous_alpha,-rule['alpha_rate_per_s']*.02,rule['alpha_rate_per_s']*.02)
+    alpha=j.where(returning&stable,previous_alpha+delta,previous_alpha)
+    alpha=j.where(phase==2,user,alpha)
+    completed=j.abs(alpha-user)<=1e-6
+    alpha=j.where(completed,user,alpha)
+    next_phase=j.where(completed,2,j.where(returning,1,phase))
+    return dict(alpha=alpha,stable_ticks=count,phase=next_phase,stable=stable,
+        eligible=eligible,age_ticks=age,changed=alpha!=previous_alpha)
+
+
 class OnlineCarry(NamedTuple):
     native: Any
     latched: Any
