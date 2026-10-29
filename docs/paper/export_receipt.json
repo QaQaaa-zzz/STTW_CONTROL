@@ -1,15 +1,16 @@
 {
   "images": {
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/left90_R1p3_v2p0_t2.2_F+24_fixed_candidate_xy.png": "9931fdf3d4db5b08af0464c26070a05acc7f7b6fe1845b9849c5c876117f9ec5",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_causal_preference_return_v1/analysis/cached_hold_comparison_02.png": "5a4856a046a8970d0b3018cc8eb1f2cfadaf3f0e95acdb54a7316ba16c04c9ee",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_policy_nn_confirmation_v1/analysis/left90_R1p3_v2p0_source_t1p0_a0_prep0.925_F+24_fixed_candidate_xy.png": "60884553df6640d7839f5bdfab1ca8cb0dea576a3de6285facbef5cebe9ad9c2",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_gust_v1/analysis/left90_R1p1_v1p8_prep1_F+24_fixed_candidate_xy.png": "bb71cae66ba995afa552355e890818a5169fea8742e95157fb3e52a3d8cbff52",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.png": "fb3553f60eb6082032b93481722af8810c9aaf3f0f03dd72d3afbaad34bd8f74"
   },
-  "html_sha256": "1c232650ca7d53efb41712c83cd4288623c49af85e72327671ffb31c8280cecf",
+  "html_sha256": "188d5d7032a296cd0b6a7f906dcfaa74bb553c926ed5d20c4cdee818e8b84259",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "16a035d97eaf7f8e760303774d529a8a34a5686940e7d6b8b7630f0c19541614",
-  "pdf_bytes": 1909676,
+  "pdf_sha256": "e8fa6bd9452508fb61a86b26d8d0b836a794ba509bdff7906d1690ba01a3de3f",
+  "pdf_bytes": 2082603,
   "renderer": "existing local headless Chrome"
 }
