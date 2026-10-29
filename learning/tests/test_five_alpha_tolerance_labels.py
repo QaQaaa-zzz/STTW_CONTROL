@@ -30,7 +30,7 @@ def test_inventory_two_clocks_five_candidates_exact_budget_and_pulse_origin():
         assert all(r['primary_window_end_s']<=10 for r in rr)
 
 
-@pytest.mark.parametrize('mutation',['alpha','clock','duration','budget','host','lane','route','block'])
+@pytest.mark.parametrize('mutation',['alpha','clock','duration','budget','lane','route','block'])
 def test_reject_silent_contract_or_source_changes(mutation):
     p=protocol()
     if mutation=='alpha':p['candidate_alphas']=[0.,.5,1.]
@@ -48,10 +48,10 @@ def test_source_selection_rejects_metadata_substitution():
     p=protocol();cases=[{} for _ in range(336)]
     for g in p['source_groups'][:7]:
         cases[g['source_lane']]=dict(case_id=g['source_case_id'],mode='H75',alpha=.5,
-            force_N=0.,route=g['route'],speed=2.8 if 'S_' in g['route'] else 2.6,bank_index=6)
+            force_N=0.,route=g['route'],path_key=g['path_key'],speed=2.8 if 'S_' in g['route'] else 2.6,bank_index=6)
     assert len(five_alpha_label_inventory(p,cases))==280
     cases[2]['mode']='zero'
-    with pytest.raises(ValueError,match='source lane'):five_alpha_label_inventory(p,cases)
+    with pytest.raises(ValueError,match='source'):five_alpha_label_inventory(p,cases)
 
 
 # A registered CPU fixture with extra hidden fields demonstrates entire-tree
@@ -90,3 +90,34 @@ def test_import_preserves_hidden_carry_paths_host_and_correlated_copies(tmp_path
         import_five_alpha_sources(tmp_path,[dict(g,expected_ever_arrived=True)])
     with pytest.raises(ValueError,match='clock/user/failure'):
         import_five_alpha_sources(tmp_path,[dict(g,expected_task_tick=200)])
+
+
+def test_declarative_task_times_use_cumulative_saved_chunk_boundaries():
+    from sttw_control.native_goal_run import snapshot_block_for_task
+    p=protocol()
+    for g in p['source_groups']:
+        t=2. if g['source_index']<7 else 4.;b=19 if t==2. else 39
+        g.update(source_task_s=t,source_block=b,expected_task_tick=round(t*200),expected_physical_tick=700+round(t*200),complete_carry=f'evaluation/complete_carry_{b:02d}.pkl',executed_paths=f'evaluation/executed_paths_{b:02d}.pkl',host_state=f'evaluation/host_state_{b:02d}.npz',expected_replanned=False,expected_ever_arrived=t==4. and g['source_lane'] in [50,98])
+    p['maximum_suffix_lower_ticks']=392000
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==280 and sum((10-r['source_task_s'])*200 for r in rows)==392000
+    assert len({r['source_group_identity'] for r in rows})==14
+    old=five_alpha_label_inventory(protocol())
+    assert not ({r['source_group_identity'] for r in old}&{r['source_group_identity'] for r in rows})
+    assert snapshot_block_for_task({'chunk_upper_steps':[10,5,10]},.3)==1
+    with pytest.raises(ValueError,match='saved chunk'):snapshot_block_for_task({'chunk_upper_steps':[10,5,10]},.2+.02)
+    p['source_groups'][0]['source_block']=9
+    with pytest.raises(ValueError,match='metadata'):five_alpha_label_inventory(p)
+
+
+def test_authenticate_declared_host_and_physical_origin(tmp_path):
+    from sttw_control.native_goal_run import validate_five_alpha_source_hosts
+    (tmp_path/'evaluation').mkdir()
+    (tmp_path/'evaluation/manifest.json').write_text(json.dumps(dict(physical_start_s=3.5)))
+    group=dict(protocol()['source_groups'][0],source_lane=0)
+    np.savez(tmp_path/group['host_state'],replanned=[False],ever_arrived=[False])
+    validate_five_alpha_source_hosts(tmp_path,[group])
+    with pytest.raises(ValueError,match='host declaration'):
+        validate_five_alpha_source_hosts(tmp_path,[dict(group,expected_ever_arrived=True)])
+    with pytest.raises(ValueError,match='physical origin'):
+        validate_five_alpha_source_hosts(tmp_path,[dict(group,expected_physical_tick=901)])

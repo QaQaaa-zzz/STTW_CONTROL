@@ -2459,8 +2459,11 @@ def analyze_five_alpha_labels(root,p):
     from sttw_control.tolerance_predictor_pilot import resolved_label
     protocol=p.get('protocol',p);out=root/'analysis'
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('five-alpha plan drift')
-    for f,sha in {**p.get('source_sha256',{}),**p.get('input_sha256',{})}.items():
-        if digest(f)!=sha:raise ValueError('five-alpha sealed source/input drift '+f)
+    for f,sha in p.get('input_sha256',{}).items():
+        if digest(f)!=sha:raise ValueError('five-alpha sealed input drift '+f)
+    for f,sha in p.get('source_sha256',{}).items():
+        archived=root/'source'/Path(f).name
+        if digest(archived)!=sha:raise ValueError('five-alpha sealed archived source drift '+str(archived))
     children=p.get('children')
     if children:
         rows=[];xs=[];ys=[];links=[];ticks=0
@@ -2474,7 +2477,8 @@ def analyze_five_alpha_labels(root,p):
             with np.load(child/'analysis/features_labels.npz') as z:xs.append(z['features']);ys.append(z['labels'])
             links.extend(str(f.relative_to(root)) for f in sorted((child/'analysis').glob('*_xy.png')))
         validate_five_alpha_cases(rows,protocol)
-        if len(rows)!=280 or ticks>364000:raise ValueError('parent budget/inventory mismatch')
+        budget=p.get('maximum_active_lower_ticks',protocol['maximum_suffix_lower_ticks'])
+        if len(rows)!=protocol['expected_cases'] or ticks>budget:raise ValueError('parent budget/inventory mismatch')
         out.mkdir(exist_ok=False);features=np.concatenate(xs);labels=np.concatenate(ys)
     else:
         run=root/'evaluation';status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
@@ -2484,8 +2488,6 @@ def analyze_five_alpha_labels(root,p):
         manifest=json.loads((run/'manifest.json').read_text())
         for key,value in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
             if manifest[key]!=value:raise ValueError('five-alpha manifest drift '+key)
-        for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
-            if digest(f)!=sha:raise ValueError('five-alpha source/input drift '+f)
         source_records=json.loads((run/'source_records.json').read_text())
         if len(source_records)!=7:raise ValueError('seven complete-state source identities required')
         for record in source_records:

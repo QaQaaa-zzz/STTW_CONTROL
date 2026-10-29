@@ -129,35 +129,50 @@ def prepare_middle_selection(source,root,protocol):
 LABEL_MODE='five_alpha_tolerance_labels'
 
 
-def five_alpha_label_inventory(p, source_cases=None, task_s=None):
-    """Fixed related-DEV source branching contract; no outcome-based replacement."""
+def snapshot_block_for_task(source_plan, task_s):
+    """Locate a saved AFTER-chunk / BEFORE-next-planner task boundary."""
+    target=task_s*200
+    if not math.isfinite(target) or target!=round(target):raise ValueError('source must be an exact lower-tick boundary')
+    cumulative=0
+    for block,steps in enumerate(source_plan['chunk_upper_steps']):
+        cumulative+=steps*4
+        if cumulative==target:return block
+        if cumulative>target:break
+    raise ValueError('source task time is not a saved chunk boundary')
+
+
+def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=None):
+    """Declarative related-DEV branching, authenticated against source metadata."""
     required=dict(mode=LABEL_MODE,model_id='STTW_MIDDLE_FULLTAIL_PPO75_U77',
         candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-64.,64.],
         force_frame='worldY',duration_s=.15,horizon_s=10.,primary_after_pulse_end_s=3.,
-        planning_frequency_hz=10.,expected_source_states=14,expected_cases=280,
-        maximum_new_prefix_lower_ticks=0,maximum_suffix_lower_ticks=364000,optimizer_updates=0)
+        planning_frequency_hz=10.,maximum_new_prefix_lower_ticks=0,optimizer_updates=0)
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('five-alpha label contract differs')
-    groups=p['source_groups'];routes=['straight_v2p6','left70_R1p9','right70_R1p9','left130_R2p7','right130_R2p7','S_left_90_R1p8','S_right_90_R1p8']
-    lanes=[2,50,98,146,194,242,290]
-    if len(groups)!=14 or [g['source_index'] for g in groups]!=list(range(14)):raise ValueError('fourteen exact source groups required')
-    if task_s is not None and task_s not in (1.,6.):raise ValueError('source group clock must be1 or6')
+    if source_cases is None:source_cases=json.loads((Path(p['source'])/'inventory.json').read_text())
+    if source_plan is None:source_plan=json.loads((Path(p['source'])/'plan.json').read_text())
+    groups=p['source_groups'];count=p['expected_source_states']
+    if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
+    times=sorted({g['source_task_s'] for g in groups})
+    if task_s is not None and task_s not in times:raise ValueError('undeclared source group clock')
+    nominal={i for i,c in enumerate(source_cases) if c.get('mode')=='H75' and c.get('alpha')==.5 and c.get('force_N')==0.}
+    if not nominal or any({g['source_lane'] for g in groups if g['source_task_s']==t}!=nominal for t in times):raise ValueError('all nominal source lanes required at each clock')
+    if len({(g['source_task_s'],g['source_lane']) for g in groups})!=len(groups):raise ValueError('duplicate complete source group')
+    budget=sum(round((p['horizon_s']-g['source_task_s'])*200)*20 for g in groups)
+    if p['expected_cases']!=count*20 or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
     rows=[]
-    for idx,g in enumerate(groups):
-        t=1. if idx<7 else 6.;block=9 if t==1. else 59;route=routes[idx%7]
-        expected=dict(source_task_s=t,source_block=block,source_lane=lanes[idx%7],route=route,
-            path_key='bank6_'+route,bank_index=6,source_user_alpha=.5,
-            complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
-            executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',
-            expected_task_tick=round(t/.005),expected_physical_tick=700+round(t/.005),
-            expected_ever_arrived=t==6. and 1<=idx%7<=4,expected_replanned=t==6. and idx%7==5)
-        if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source metadata differs '+str(idx))
-        speed=2.8 if idx%7>=5 else 2.6
-        if source_cases is not None:
-            c=source_cases[g['source_lane']]
-            if any(c.get(k)!=v for k,v in dict(case_id=g['source_case_id'],mode='H75',alpha=.5,force_N=0.,route=route,speed=speed,bank_index=6).items()):raise ValueError('source lane identity differs')
+    for g in groups:
+        idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,t)
+        if t<=0 or t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p['horizon_s']:raise ValueError('source label window outside horizon')
+        lane=g['source_lane'];c=source_cases[lane]
+        expected=dict(source_block=block,source_user_alpha=.5,complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
+            executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',expected_task_tick=round(t*200),
+            source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
+        if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
+        if not isinstance(g['expected_ever_arrived'],bool) or not isinstance(g['expected_replanned'],bool):raise ValueError('explicit boolean source host flags required')
         if task_s is not None and t!=task_s:continue
+        identity=f"{Path(p['source']).resolve()}@{p['source_plan_sha256']}/tasktick{g['expected_task_tick']}/{g['source_case_id']}"
         for a,prep,force in itertools.product(p['candidate_alphas'],p['preparation_s'],p['forces_N']):
-            rows.append(dict(g,source_origin='saved_nominal_half',speed=speed,mode='H75',mode_index=0,
+            rows.append(dict(g,source_group_identity=identity,source_origin='saved_nominal_half',speed=c['speed'],mode='H75',mode_index=0,
                 alpha=.5,user_alpha=.5,candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=t+prep,
                 duration_s=.15,force_N=force,primary_window_start_s=t,primary_window_end_s=t+prep+.15+3.,
                 case_id=f'source{idx}/alpha{a:g}/prep{prep:g}/F{force:+g}'))
@@ -195,23 +210,37 @@ def import_five_alpha_sources(source, cases):
     return stack(car),stack(paths),dict(replanned=np.asarray(changed),ever_arrived=np.asarray(arrived),original_goals_xy=np.asarray(goals))
 
 
+def validate_five_alpha_source_hosts(source,groups):
+    """Authenticate declared host flags and physical origin before preparation."""
+    source=Path(source)
+    import numpy as np
+    manifest=json.loads((source/'evaluation/manifest.json').read_text())
+    physical_origin_tick=round(manifest['physical_start_s']*200)
+    for g in groups:
+        if g['expected_physical_tick']!=physical_origin_tick+g['expected_task_tick']:raise ValueError('source physical origin differs')
+        with np.load(source/g['host_state']) as host:
+            i=g['source_lane']
+            if bool(host['replanned'][i])!=g['expected_replanned'] or bool(host['ever_arrived'][i])!=g['expected_ever_arrived']:raise ValueError('source host declaration differs')
+
+
 def prepare_five_alpha_labels(source,root,protocol):
     source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
     proposal=json.loads(protocol.read_text());old=json.loads((source/'plan.json').read_text());cs=json.loads((source/'inventory.json').read_text())
-    rows=five_alpha_label_inventory(proposal,cs)
+    rows=five_alpha_label_inventory(proposal,cs,source_plan=old)
     if str(source)!=proposal['source'] or digest(source/'plan.json')!=proposal['source_plan_sha256'] or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('selection source identity differs')
     status=json.loads((source/'evaluation/status.json').read_text())
-    if old.get('mode')!=SELECTION_MODE or status.get('phase')!='completed' or status.get('completed_cases')!=336:raise ValueError('completed selection source required')
+    if old.get('mode')!=SELECTION_MODE or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
     if old['models']['H75']['registry_id']!=proposal['model_id'] or not old['replanning'].get('continuous_replanning') or old['replanning']['period_s']!=.1:raise ValueError('frozen native H75/10Hz identity differs')
     for file,sha in {**old['input_sha256'],**old['native_expected_sources']}.items():
         if digest(file)!=sha:raise ValueError('source input/native drift '+file)
     for file,sha in old['source_sha256'].items():
         if digest(source/'source'/Path(file).name)!=sha:raise ValueError('archived source drift')
+    validate_five_alpha_source_hosts(source,proposal['source_groups'])
     folder=Path(__file__).resolve().parent
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
-    files=[protocol,source/'plan.json',source/'seal.json',source/'inventory.json',source/'evaluation/status.json']
+    files=[protocol,source/'plan.json',source/'seal.json',source/'inventory.json',source/'evaluation/status.json',source/'evaluation/manifest.json']
     files += [source/name for name in {g[k] for g in proposal['source_groups'] for k in ('complete_carry','executed_paths','host_state')}]
-    files += [source/'evaluation'/(g['path_key']+'_path.npz') for g in proposal['source_groups'][:7]]
+    files += [source/'evaluation'/(key+'_path.npz') for key in sorted({g['path_key'] for g in proposal['source_groups']})]
     for k in ('actor','checkpoint'):
         model=old['models']['H75']
         if digest(model[k])!=model[k+'_sha256']:raise ValueError('H75 drift')
@@ -223,29 +252,29 @@ def prepare_five_alpha_labels(source,root,protocol):
         initial_source=old['initial_source'],config=old['config'],models={'H75':old['models']['H75']},
         contexts=old['contexts'],horizon_s=10.,goal_radius_m=1.,steps_per_chunk=5,optimizer_updates=0,
         protocol={**proposal,'planner_points':5001,'planner_spacing_m':.02,'planner_support_m':100.,
-                  'bank_indices':[6],'bank_state_fingerprints':old['protocol']['bank_state_fingerprints']},
+                  'bank_indices':sorted({g['bank_index'] for g in proposal['source_groups']}),'bank_state_fingerprints':old['protocol']['bank_state_fingerprints']},
         replanning=old['replanning'],data_role=proposal['data_role'],scoring=proposal['label'],
         input_sha256={str(file):digest(file) for file in files},source_sha256={str(file):digest(file) for file in modules})
     children=[]
-    for t in (1.,6.):
+    for t in sorted({g['source_task_s'] for g in proposal['source_groups']}):
         child=root/f'task{t:g}';child.mkdir();(child/'source').mkdir()
         for file in modules:(child/'source'/file.name).write_bytes(file.read_bytes())
-        rr=five_alpha_label_inventory(proposal,cs,t);save(child/'inventory.json',rr);save(child/'effective_config.json',old['config'])
-        budget=int((10.-t)*200*len(rr));steps=planning_chunk_steps(10.,10.-t)
+        rr=five_alpha_label_inventory(proposal,cs,t,old);save(child/'inventory.json',rr);save(child/'effective_config.json',old['config'])
+        budget=round((10.-t)*200*len(rr));steps=planning_chunk_steps(10.,10.-t)
         plan=dict(common,source_task_s=t,cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
             maximum_active_lower_ticks=budget,maximum_allocated_lower_slots=budget)
         plan['input_sha256']={**common['input_sha256'],str(child/'inventory.json'):digest(child/'inventory.json'),str(child/'effective_config.json'):digest(child/'effective_config.json')}
         save(child/'plan.json',plan);save(child/'seal.json',dict(plan_sha256=digest(child/'plan.json')))
         save(child/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0));children.append(str(child))
     save(root/'inventory.json',rows)
-    parent=dict(common,label_parent=True,children=children,cases=280,maximum_active_lower_ticks=364000,maximum_allocated_lower_slots=364000)
+    parent=dict(common,label_parent=True,children=children,cases=len(rows),maximum_active_lower_ticks=proposal['maximum_suffix_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_suffix_lower_ticks'])
     parent['input_sha256']={**common['input_sha256'],str(root/'inventory.json'):digest(root/'inventory.json'),**{str(Path(c)/n):digest(Path(c)/n) for c in children for n in ('plan.json','seal.json')}}
     save(root/'plan.json',parent);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
 
 
 def run_five_alpha_label_groups(root,shape_only=False):
-    """Two fixed clock groups; execution is never retried implicitly."""
+    """Declared clock groups; execution is never retried implicitly."""
     root=Path(root);p=verify(root)
     if not p.get('label_parent'):raise ValueError('label parent required')
     if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':raise ValueError('prepared only')
@@ -256,11 +285,11 @@ def run_five_alpha_label_groups(root,shape_only=False):
             run(child,shape_only=shape_only)
             if not shape_only:
                 st=json.loads((Path(child)/'status.json').read_text());active+=st['active_lower_ticks'];allocated+=st['allocated_lower_slots']
-                if active>364000 or allocated>364000:raise RuntimeError('label campaign budget exceeded')
+                if active>p['maximum_active_lower_ticks'] or allocated>p['maximum_allocated_lower_slots']:raise RuntimeError('label campaign budget exceeded')
                 save(root/'status.json',dict(phase='running',pid=os.getpid(),active_lower_ticks=active,allocated_lower_slots=allocated,optimizer_updates=0))
         if shape_only:
-            save(root/'shape_receipt.json',dict(phase='completed',physics_steps=0,groups=p['children'],lanes_per_group=140))
-        else:save(root/'status.json',dict(phase='completed',active_lower_ticks=active,allocated_lower_slots=allocated,optimizer_updates=0,completed_cases=280))
+            save(root/'shape_receipt.json',dict(phase='completed',physics_steps=0,groups=p['children'],lanes_per_group=[json.loads((Path(c)/'plan.json').read_text())['cases'] for c in p['children']]))
+        else:save(root/'status.json',dict(phase='completed',active_lower_ticks=active,allocated_lower_slots=allocated,optimizer_updates=0,completed_cases=p['cases']))
     except BaseException as exc:
         if not shape_only:
             # Include a failed child's last returned block, without claiming inflight work was zero.

@@ -13,7 +13,7 @@ if __name__=='__main__':
     userprep=sub.add_parser('user-mix-prepare');userprep.add_argument('--config',type=Path,required=True);userprep.add_argument('--ancestor-prepared',type=Path,required=True);userprep.add_argument('--user-evaluation',type=Path,required=True);userprep.add_argument('--q-export',type=Path,required=True);userprep.add_argument('--output',type=Path,required=True)
     priorprep=sub.add_parser('user-mix-prior-prepare');priorprep.add_argument('--config',type=Path,required=True);priorprep.add_argument('--prepared-reference',type=Path,required=True);priorprep.add_argument('--output',type=Path,required=True)
     userfit=sub.add_parser('user-mix-fit');userfit.add_argument('--config',type=Path,required=True);userfit.add_argument('--prepared',type=Path,required=True);userfit.add_argument('--output',type=Path,required=True)
-    five=sub.add_parser('five-alpha-fit');five.add_argument('--config',type=Path,required=True);five.add_argument('--analysis',type=Path,required=True);five.add_argument('--output',type=Path,required=True)
+    five=sub.add_parser('five-alpha-fit');five.add_argument('--config',type=Path,required=True);five.add_argument('--analysis',type=Path,nargs='+',help='Defaults to dataset.analysis or dataset.analyses in frozen config');five.add_argument('--output',type=Path,required=True)
     confirm=sub.add_parser('confirmation-eval');confirm.add_argument('--manifest',type=Path,required=True);confirm.add_argument('--analysis',type=Path,required=True);confirm.add_argument('--output',type=Path,required=True)
     test=sub.add_parser('eval');test.add_argument('--output',type=Path,required=True);test.add_argument('--heldout-analysis',type=Path,required=True)
     args=parser.parse_args()
