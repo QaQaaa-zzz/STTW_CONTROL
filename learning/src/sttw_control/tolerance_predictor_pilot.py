@@ -844,6 +844,24 @@ def validate_matched_full_prior(cfg):
     return manifest
 
 
+def five_alpha_partition(protocol):
+    """Role is sealed before sampling; bank4 is an additive training-only batch."""
+    train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
+    split=protocol['fitting_split'];kind=protocol.get('data_partition','mixed')
+    if not split['declared_before_new_labels'] or set(split['training_routes'])&set(split['development_routes']):raise ValueError('predeclared disjoint role split required')
+    if kind=='training_only':
+        expected_train,expected_dev,total,bank=train|dev,set(),560,4
+        groups=protocol['source_groups']
+        if len(groups)!=28 or {g['source_task_s'] for g in groups}!={1.,2.,4.,6.}:raise ValueError('training-only bank4 requires28states at1/2/4/6')
+        if {(g['route'],g['source_task_s']) for g in groups}!={(r,t) for r in train|dev for t in (1.,2.,4.,6.)}:raise ValueError('training-only full route/time product required')
+    elif kind=='mixed':expected_train,expected_dev,total,bank=train,dev,280,6
+    else:raise ValueError('unknown sealed data partition')
+    if set(split['training_routes'])!=expected_train or set(split['development_routes'])!=expected_dev or {g['bank_index'] for g in protocol['source_groups']}!={bank}:raise ValueError('frozen route/bank partition changed')
+    ntrain=sum(g['route'] in expected_train for g in protocol['source_groups'])*20;ndev=total-ntrain
+    if protocol['expected_cases']!=total or split['expected_training_rows']!=ntrain or split['expected_development_rows']!=ndev:raise ValueError('sealed partition counts differ')
+    return dict(kind=kind,training_routes=expected_train,development_routes=expected_dev,cases=total,training_rows=ntrain,development_rows=ndev,bank=bank)
+
+
 def validate_five_alpha_fit_config(cfg):
     """Separate opt-in budget; historical pilot schemas remain unchanged."""
     t=cfg['training'];b=cfg['budget'];f=cfg['features'];d=cfg['dataset']
@@ -852,8 +870,8 @@ def validate_five_alpha_fit_config(cfg):
         raise ValueError('fixed per-seed updates must be an integer in1..1000')
     analyses=d.get('analyses')
     batches=len(analyses) if analyses is not None else 1
-    if batches not in (1,2) or (analyses is not None and (not isinstance(analyses,list) or len(set(analyses))!=batches or 'analysis' in d)):
-        raise ValueError('one or two distinct analysis batches required')
+    if batches not in (1,2,3) or (analyses is not None and (not isinstance(analyses,list) or len(set(analyses))!=batches or 'analysis' in d)):
+        raise ValueError('one to three distinct analysis batches required')
     if (cfg['mode']!='five_alpha_fit' or cfg['architecture']['hidden']!=[16,16] or
         t['seeds']!=[0,1,2] or t['updates_per_model_seed']!=steps or
         t['maximum_total_optimizer_updates']!=3*steps or t['learning_rate']!=.001 or
@@ -862,7 +880,7 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows'])!=(280*batches,160*batches,120*batches)):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120)},2:{(560,320,240)},3:{(1120,880,240)}}[batches])):
         raise ValueError('frozen five-alpha fitting contract mismatch')
     return cfg
 
@@ -884,9 +902,7 @@ def _load_five_alpha_single(analysis,cfg):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint changed')
         inputs[str(model[key])]=model[key+'_sha256']
     protocol=plan['protocol'];split=protocol['fitting_split']
-    if not split['declared_before_new_labels'] or set(split['training_routes'])&set(split['development_routes']):raise ValueError('predeclared disjoint route split required')
-    expected_train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};expected_dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
-    if set(split['training_routes'])!=expected_train or set(split['development_routes'])!=expected_dev:raise ValueError('frozen route split changed')
+    partition=five_alpha_partition(protocol);expected_train=partition['training_routes'];expected_dev=partition['development_routes'];total=partition['cases']
     if protocol.get('planning_frequency_hz')!=10. or not plan.get('replanning',{}).get('continuous_replanning') or plan['replanning'].get('period_s')!=.1:raise ValueError('only native10Hz labels accepted; old1Hz data excluded')
     def sealed(p,directory):
         for file,sha in p['input_sha256'].items():
@@ -900,8 +916,8 @@ def _load_five_alpha_single(analysis,cfg):
             inputs[str(snapshot)]=sha
     sealed(plan,root)
     records=read(analysis/'results.json');declared=read(root/'inventory.json')
-    if len(records)!=280 or len(declared)!=280 or len({r['case_id'] for r in records})!=280:raise ValueError('complete unique280 cases required')
-    children={};child_records={}
+    if len(records)!=total or len(declared)!=total or len({r['case_id'] for r in records})!=total:raise ValueError('complete unique declared cases required')
+    children={};child_records={};physical_sources=[]
     for item in plan['children']:
         child=Path(item);child=child if child.is_absolute() else root/child
         cp=read(child/'plan.json');cs=read(child/'seal.json');cr=read(child/'analysis/receipt.json')
@@ -909,6 +925,10 @@ def _load_five_alpha_single(analysis,cfg):
         sealed(cp,child)
         source_records=read(child/'evaluation/source_records.json')
         if len(source_records)!=7 or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
+        for record in source_records:
+            fingerprint=record.get('pre_boundary_fingerprint')
+            if not isinstance(fingerprint,str) or len(fingerprint)!=64:raise ValueError('exact complete-carry source fingerprint required')
+            physical_sources.append(fingerprint)
         rows=read(child/'analysis/results.json');cases=read(child/'inventory.json')
         if len(rows)!=140 or len(cases)!=140:raise ValueError('child140 required')
         path=child/'evaluation/source_features.npz';inputs[str(path)]=digest(path)
@@ -918,8 +938,8 @@ def _load_five_alpha_single(analysis,cfg):
             children[r['case_id']]=(child,i,c,sources);child_records[r['case_id']]=r
     feature_path=analysis/'features_labels.npz';inputs[str(feature_path)]=digest(feature_path)
     with np.load(feature_path,allow_pickle=False) as z:features=z['features'].copy();labels=z['labels'].copy();case_ids=z['case_ids'].copy();roles=z['fitting_role'].copy();valid=z['valid'].copy()
-    if features.shape!=(280,41) or labels.shape!=(280,) or not np.isfinite(features).all():raise ValueError('finite280x41 features required')
-    states={};queries={};excluded=[];meta=[];all_roles=[];source_roles={};actual=set()
+    if features.shape!=(total,41) or labels.shape!=(total,) or not np.isfinite(features).all():raise ValueError('finite declared Nx41 features required')
+    states={};queries={};excluded=[];meta=[];all_roles=[];source_roles={};actual=set();dev_identity=[]
     for i,(record,case) in enumerate(zip(records,declared)):
         cid=record['case_id']
         if record!=child_records.get(cid) or any(record.get(k)!=v for k,v in case.items()) or str(case_ids[i])!=cid:raise ValueError('parent child row identity differs')
@@ -959,13 +979,14 @@ def _load_five_alpha_single(analysis,cfg):
         label=resolved_label(record['primary']);expected_valid=label is not None
         if bool(valid[i])!=expected_valid or (expected_valid and labels[i]!=label) or (not expected_valid and not np.isnan(labels[i])):raise ValueError('label cache differs')
         meta.append(dict(case_id=cid,source_group_id=f'source{group}',route=c['route'],alpha=alpha,preparation_s=c['preparation_s'],force_N=c['force_N'],lifecycle_role=record['lifecycle_role']))
+        if role=='development':dev_identity.append(dict(case_id=cid,features=features[i].tolist(),label=label,valid=expected_valid,raw_sha256=record['raw_sha256']))
         if not expected_valid:excluded.append(dict(meta[-1],role=role,reason=status))
     expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in [.2,.6] for f in [-64.,64.]}
-    if actual!=expected or all_roles.count('training')!=160 or all_roles.count('development')!=120:raise ValueError('full predeclared split/product required')
+    if actual!=expected or all_roles.count('training')!=partition['training_rows'] or all_roles.count('development')!=partition['development_rows']:raise ValueError('full predeclared split/product required')
     data={}
     for role in ('training','development'):
         ids=[i for i,r in enumerate(all_roles) if r==role and valid[i]]
-        if not ids:raise ValueError('no valid '+role+' labels')
+        if not ids and not (role=='development' and partition['kind']=='training_only'):raise ValueError('no valid '+role+' labels')
         data[role]=dict(full=features[ids],y=labels[ids],meta=[meta[i] for i in ids])
     coverage={}
     for role in ('training','development'):
@@ -975,7 +996,7 @@ def _load_five_alpha_single(analysis,cfg):
             for value in sorted({m[key] for m in meta}):
                 ids=[i for i,m in enumerate(meta) if all_roles[i]==role and m[key]==value]
                 coverage[role][key][str(value)]=dict(declared_rows=len(ids),valid_rows=sum(bool(valid[i]) for i in ids),invalid_rows=sum(not bool(valid[i]) for i in ids))
-    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=160,declared_development_rows=120,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],data_role='Related bank6 DEV, route grouped, not independent TEST')
+    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'],data_partition=partition['kind'],physical_source_fingerprints=physical_sources,development_identity_rows=dev_identity,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],data_role=f'Related bank{partition["bank"]} native10Hz {partition["kind"]} batch; not independent TEST')
     return data
 
 
@@ -985,28 +1006,63 @@ def load_five_alpha_dataset(analysis,cfg):
     configured=cfg['dataset'].get('analyses')
     if analysis is None:analysis=configured or cfg['dataset']['analysis']
     paths=list(analysis) if isinstance(analysis,(list,tuple)) else [analysis]
-    if len(paths) not in (1,2) or len({str(Path(p).resolve()) for p in paths})!=len(paths):raise ValueError('one or two distinct analyses required')
+    if len(paths) not in (1,2,3) or len({str(Path(p).resolve()) for p in paths})!=len(paths):raise ValueError('one to three distinct analyses required')
     d=cfg['dataset']
-    if (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows'])!=(280*len(paths),160*len(paths),120*len(paths)):raise ValueError('declared aggregate row counts differ')
     if configured is not None and [str(Path(p).resolve()) for p in paths]!=[str(Path(p).resolve()) for p in configured]:raise ValueError('analyses must match frozen config')
     batches=[_load_five_alpha_single(path,cfg) for path in paths]
-    if len(batches)==1:return batches[0]
+    totals=(sum(b['receipt']['declared_training_rows']+b['receipt']['declared_development_rows'] for b in batches),sum(b['receipt']['declared_training_rows'] for b in batches),sum(b['receipt']['declared_development_rows'] for b in batches))
+    if totals!=(d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']):raise ValueError('declared aggregate row counts differ')
+    if len(batches)==1:
+        verify_five_alpha_development_freeze(batches[0],cfg);return batches[0]
     if configured is None or [str(Path(p).resolve()) for p in paths]!=[str(Path(p).resolve()) for p in configured]:raise ValueError('multiple analyses must match frozen config')
-    seen=set();inputs={};excluded=[];coverage={};identities=[]
+    seen=set();physical_seen=set();inputs={};excluded=[];coverage={};identities=[];dev_identity=[]
     combined={role:dict(full=[],y=[],meta=[]) for role in ('training','development')}
     for batch in batches:
         receipt=batch['receipt'];namespace=receipt['run_namespace'];keys={tuple(k) for k in receipt['source_semantic_keys']}
         if seen&keys:raise ValueError('duplicate semantic source snapshot/task/case across batches')
+        fingerprints=set(receipt['physical_source_fingerprints'])
+        if len(fingerprints)!=receipt['source_groups'] or physical_seen&fingerprints:raise ValueError('physical complete-state source collision')
+        physical_seen|=fingerprints
+        dev_identity.extend(dict(r,case_id=namespace+'/'+r['case_id']) for r in receipt['development_identity_rows'])
         seen|=keys;identities.append(receipt['frozen_model_identity']);inputs.update(receipt['inputs']);coverage[namespace]=receipt['coverage']
         for row in receipt['excluded_invalid']:excluded.append(dict(row,run_namespace=namespace,source_group_id=namespace+'/'+row['source_group_id'],case_id=namespace+'/'+row['case_id']))
         for role in combined:
             source=batch[role];combined[role]['full'].append(source['full']);combined[role]['y'].append(source['y'])
             combined[role]['meta'].extend(dict(row,run_namespace=namespace,source_group_id=namespace+'/'+row['source_group_id'],case_id=namespace+'/'+row['case_id']) for row in source['meta'])
-    if identities[0]!=identities[1]:raise ValueError('combined frozen model identities differ')
+    if any(identity!=identities[0] for identity in identities[1:]):raise ValueError('combined frozen model identities differ')
     for role in combined:
         combined[role]['full']=np.concatenate(combined[role]['full']);combined[role]['y']=np.concatenate(combined[role]['y'])
-    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=320,declared_development_rows=240,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],data_role='Two related bank6 native10Hz DEV batches; same route split across all times; no independent TEST')
+    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=totals[1],declared_development_rows=totals[2],physical_source_fingerprints=sorted(physical_seen),development_identity_rows=dev_identity,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],data_role='Related native10Hz batches; existing bank6 route split and additive bank4 training-only sources; no independent TEST')
+    verify_five_alpha_development_freeze(combined,cfg)
     return combined
+
+
+def write_five_alpha_development_freeze(data,path):
+    """Explicit snapshot writer; caller chooses when to freeze existing DEV."""
+    rows=data['receipt']['development_identity_rows']
+    if len(rows)!=240 or len({r['case_id'] for r in rows})!=240:raise ValueError('exact240 declared development rows required')
+    write_json(path,dict(schema='five_alpha_development_freeze_v1',rows=rows))
+    return dict(file=str(Path(path).resolve()),sha256=digest(path))
+
+
+def verify_five_alpha_development_freeze(data,cfg):
+    frozen=cfg['dataset'].get('development_freeze')
+    if frozen is None:return
+    file=Path(frozen['file']).resolve()
+    if digest(file)!=frozen['sha256']:raise ValueError('development freeze hash changed')
+    payload=json.loads(file.read_text());rows=payload['rows'];current=data['receipt']['development_identity_rows']
+    if len(rows)!=240 or len(current)!=240:raise ValueError('exact frozen240 DEV rows required')
+    if payload['schema']=='sttw_development_freeze_v1':
+        for path,sha in payload['inputs'].items():
+            if data['receipt']['inputs'].get(path)!=sha:raise ValueError('frozen development authenticated inputs changed')
+        old={r['case_id']:{k:r[k] for k in ('case_id','features','label')} for r in rows}
+        new={r['case_id']:{k:r[k] for k in ('case_id','features','label')} for r in current}
+        if any(not r['valid'] for r in current):raise ValueError('frozen development valid population changed')
+    elif payload['schema']=='five_alpha_development_freeze_v1':
+        old={r['case_id']:r for r in rows};new={r['case_id']:r for r in current}
+    else:raise ValueError('unknown development freeze schema')
+    if len(old)!=240 or len(new)!=240 or old!=new:raise ValueError('frozen development IDs/features/labels/raw hashes changed')
+    data['receipt']['inputs'][str(file)]=frozen['sha256'];data['receipt']['development_freeze_verified']=True
 
 
 def five_alpha_grouped_metrics(y,p,meta):

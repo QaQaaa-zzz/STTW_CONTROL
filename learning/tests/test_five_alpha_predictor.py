@@ -54,7 +54,7 @@ def dataset(tmp_path):
                         r=dict(c,raw_file=str(f),raw_sha256=m.digest(f),fitting_role=role,primary=dict(label_status='fall',no_fall_through_window=False))
                         x,_=m.feature_row(source,query,latent,0.,c,common['config']['residual_interface'],cfg,expected_source_alpha=.5)
                         cases.append(c);rows.append(r);states.append(source);features.append(x);roles.append(role)
-            source_records.append(dict(case_indices=list(range(start,len(cases))),all_twenty_siblings_exact=True))
+            source_records.append(dict(pre_boundary_fingerprint=m.hashlib.sha256(f'{t}/{g["source_index"]}'.encode()).hexdigest(),case_indices=list(range(start,len(cases))),all_twenty_siblings_exact=True))
         save(child/'inventory.json',cases);save(child/'analysis/results.json',rows)
         np.savez(child/'evaluation/source_features.npz',native_observation=np.array(states),source_world_yaw=np.zeros(140))
         save(child/'evaluation/source_records.json',source_records)
@@ -116,6 +116,9 @@ def make_second_batch(analysis):
             raw=child/'evaluation'/Path(record['raw_file']).name
             with np.load(raw) as z:data=dict(z)
             data['time']=np.array([t]);np.savez(raw,**data);record['raw_file']=str(raw);record['raw_sha256']=m.digest(raw)
+        src=child/'evaluation/source_records.json';sr=json.loads(src.read_text())
+        for i,r in enumerate(sr):r['pre_boundary_fingerprint']=m.hashlib.sha256(f'second/{child.name}/{i}'.encode()).hexdigest()
+        src.write_text(json.dumps(sr))
         (child/'inventory.json').write_text(json.dumps(cases));(child/'analysis/results.json').write_text(json.dumps(records));(child/'plan.json').write_text(json.dumps(cp));sha=m.digest(child/'plan.json')
         (child/'seal.json').write_text(json.dumps(dict(plan_sha256=sha)));(child/'analysis/receipt.json').write_text(json.dumps(dict(plan_sha256=sha)))
     for g in parent['protocol']['source_groups']:g['source_task_s']={1.:2.,6.:4.}[g['source_task_s']]
@@ -156,3 +159,55 @@ def test_short_fit_budget_matches_three_fixed_seeds():
         with pytest.raises(ValueError):m.validate_five_alpha_fit_config(bad)
     bad=copy.deepcopy(cfg);bad['budget']['maximum_optimizer_updates']=3000
     with pytest.raises(ValueError):m.validate_five_alpha_fit_config(bad)
+
+
+def make_training_only_batch(analysis,second):
+    import shutil
+    root=analysis.parent.parent/'bank4';root.mkdir();base=json.loads((analysis.parent/'plan.json').read_text());protocol=base['protocol'];groups=[];rows=[];cases=[];children=[];features=[]
+    for batch_index,src in enumerate([analysis,second]):
+        pp=json.loads((src.parent/'plan.json').read_text())
+        for g in pp['protocol']['source_groups']:
+            g['source_index']+=batch_index*14;g['bank_index']=4;g['source_case_id']=g['source_case_id'].replace('bank6/','bank4/');groups.append(g)
+        for old in pp['children']:
+            child=root/(f'b{batch_index}_'+Path(old).name);shutil.copytree(old,child);children.append(str(child));rr=json.loads((child/'analysis/results.json').read_text());cc=json.loads((child/'inventory.json').read_text())
+            for r,c in zip(rr,cc):
+                for obj in [r,c]:obj['source_index']+=batch_index*14;obj['bank_index']=4;obj['case_id']='bank4/'+str(obj['source_index'])+'/'+obj['case_id'];obj['source_case_id']=obj['source_case_id'].replace('bank6/','bank4/')
+                r['fitting_role']='training'
+                f=child/'evaluation'/Path(r['raw_file']).name;r['raw_file']=str(f);r['raw_sha256']=m.digest(f)
+            (child/'analysis/results.json').write_text(json.dumps(rr));(child/'inventory.json').write_text(json.dumps(cc));rows+=rr;cases+=cc
+            sr=json.loads((child/'evaluation/source_records.json').read_text())
+            for i,r in enumerate(sr):r['pre_boundary_fingerprint']=m.hashlib.sha256(f'bank4/{child.name}/{i}'.encode()).hexdigest()
+            (child/'evaluation/source_records.json').write_text(json.dumps(sr))
+        with np.load(src/'features_labels.npz') as z:features.append(z['features'])
+    protocol.update(source_groups=groups,data_partition='training_only',expected_cases=560,source_plan_sha256='bank4source',expected_source_states=28)
+    protocol['fitting_split'].update(training_routes=sorted({g['route'] for g in groups}),development_routes=[],expected_training_rows=560,expected_development_rows=0)
+    for child in map(Path,children):
+        cp=json.loads((child/'plan.json').read_text());cp['protocol']=protocol;(child/'plan.json').write_text(json.dumps(cp));sha=m.digest(child/'plan.json');(child/'seal.json').write_text(json.dumps(dict(plan_sha256=sha)));(child/'analysis/receipt.json').write_text(json.dumps(dict(plan_sha256=sha)))
+    (root/'source').mkdir();shutil.copy(analysis.parent/'source/live_module.py',root/'source/live_module.py');base.update(protocol=protocol,children=children);(root/'plan.json').write_text(json.dumps(base));sha=m.digest(root/'plan.json');(root/'seal.json').write_text(json.dumps(dict(plan_sha256=sha)));(root/'inventory.json').write_text(json.dumps(cases));(root/'analysis').mkdir();(root/'analysis/receipt.json').write_text(json.dumps(dict(plan_sha256=sha)));(root/'analysis/results.json').write_text(json.dumps(rows))
+    np.savez(root/'analysis/features_labels.npz',features=np.concatenate(features),labels=np.zeros(560),valid=np.ones(560,bool),case_ids=np.array([r['case_id'] for r in rows]),fitting_role=np.full(560,'training'))
+    return root/'analysis'
+
+
+def test_training_only_combines_without_changing_frozen_dev(dataset):
+    analysis,cfg=dataset;second=make_second_batch(analysis);training=make_training_only_batch(analysis,second)
+    cfg=copy.deepcopy(cfg);cfg['dataset'].pop('analysis');cfg['dataset'].update(analyses=[str(analysis),str(second)],expected_cases=560,expected_training_rows=320,expected_development_rows=240)
+    old=m.load_five_alpha_dataset(None,cfg);freeze=analysis.parent/'freeze.json'
+    payload=dict(schema='sttw_development_freeze_v1',rows=[dict(case_id=r['case_id'],features=r['features'],label=r['label'],meta={}) for r in old['receipt']['development_identity_rows']],inputs=old['receipt']['inputs']);freeze.write_text(json.dumps(payload))
+    cfg['dataset'].update(analyses=[str(analysis),str(second),str(training)],expected_cases=1120,expected_training_rows=880,expected_development_rows=240,development_freeze=dict(file=str(freeze),sha256=m.digest(freeze)))
+    m.validate_five_alpha_fit_config(cfg);data=m.load_five_alpha_dataset(None,cfg)
+    assert data['training']['full'].shape==(880,41)
+    assert data['development']['full'].shape==(240,41)
+    assert data['receipt']['development_freeze_verified']
+    np.testing.assert_array_equal(data['development']['full'],old['development']['full'])
+    assert data['receipt']['source_groups']==56
+    bad=copy.deepcopy(data);bad['receipt']['development_identity_rows'][0]['label']=1
+    with pytest.raises(ValueError,match='frozen development'):m.verify_five_alpha_development_freeze(bad,cfg)
+
+
+def test_physical_source_collision_rejected_across_different_semantics(dataset):
+    analysis,cfg=dataset;second=make_second_batch(analysis)
+    first_plan=json.loads((analysis.parent/'plan.json').read_text());second_plan=json.loads((second.parent/'plan.json').read_text())
+    a=Path(first_plan['children'][0])/'evaluation/source_records.json';b=Path(second_plan['children'][0])/'evaluation/source_records.json'
+    aa=json.loads(a.read_text());bb=json.loads(b.read_text());bb[0]['pre_boundary_fingerprint']=aa[0]['pre_boundary_fingerprint'];b.write_text(json.dumps(bb))
+    cfg=copy.deepcopy(cfg);cfg['dataset'].pop('analysis');cfg['dataset'].update(analyses=[str(analysis),str(second)],expected_cases=560,expected_training_rows=320,expected_development_rows=240)
+    with pytest.raises(ValueError,match='physical complete-state source collision'):m.load_five_alpha_dataset(None,cfg)

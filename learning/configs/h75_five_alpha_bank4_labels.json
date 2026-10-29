@@ -1,0 +1,65 @@
+{
+  "experiment_id": "STTW-H75-FIVE-ALPHA-BANK4-TRAINING-LABELS",
+  "mode": "five_alpha_tolerance_labels",
+  "status": "draft_pending_completed_prefix_and_actual_source_flags",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_bank4_source_prefix_v1",
+  "source_plan_sha256": null,
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "source_groups": [],
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "preparation_s": [
+    0.2,
+    0.6
+  ],
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "force_frame": "worldY",
+  "duration_s": 0.15,
+  "horizon_s": 10.0,
+  "primary_after_pulse_end_s": 3.0,
+  "planning_frequency_hz": 10.0,
+  "expected_source_states": 28,
+  "expected_cases": 560,
+  "maximum_new_prefix_lower_ticks": 0,
+  "maximum_suffix_lower_ticks": 756000,
+  "optimizer_updates": 0,
+  "initialization": "Import full carry/path/host at task1/2/4/6 BEFORE boundary planner; preserve user alpha.5, filters, ESO, histories, clocks, arrival and replanning state. Actual source flags required; never guessed from bank6.",
+  "replanning": "Current adopted10Hz continuous reconnection, original goal and actual arrival/contact latches retained; no new geometry redesign.",
+  "label": "No contact from source through pulse end+3s, including preparation failure. Engineering/nonfinite faults invalid, not negative. FullH10 contact and original goal separate.",
+  "source_selection": "All seven nominal bank4 H75 alpha.5 routes at task1/2/4/6, no outcome filtering or failed-source replacement.",
+  "data_role": "All bank4 rows training-only; existing bank6 DEV240 unchanged. Related prepared initial state, not independent training seed or TEST.",
+  "stop_rule": "Maximum560 suffixes/756000lower/0optimizer; stop on engineering error; no automatic retry, force sweep, source replacement or fit.",
+  "readiness": "Not executable: source plan hash and complete source inventory must be populated from completed authenticated prefix snapshots.",
+  "source_lifecycle_limits": "Read actual bank4 source flags after prefix execution; postarrival labels separately marked.",
+  "fitting_split": {
+    "training_routes": [
+      "straight_v2p6",
+      "left70_R1p9",
+      "right70_R1p9",
+      "left130_R2p7",
+      "right130_R2p7",
+      "S_left_90_R1p8",
+      "S_right_90_R1p8"
+    ],
+    "development_routes": [],
+    "unit": "All new bank4 states and siblings training-only",
+    "expected_training_rows": 560,
+    "expected_development_rows": 0,
+    "role": "Training coverage extension; original DEV240 frozen",
+    "declared_before_new_labels": true,
+    "fit_not_yet_authorized_by_this_protocol": true
+  },
+  "data_partition": "training_only",
+  "development_freeze": {
+    "file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_five_alpha_bank4_labels_v1/protocol/frozen_development240.json",
+    "sha256": "f0286ca252d1d29e79fe18a79152d9a2ddc246f9d302526ef3ddbcdb79e44b91"
+  }
+}

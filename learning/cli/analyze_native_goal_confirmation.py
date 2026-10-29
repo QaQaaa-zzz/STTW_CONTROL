@@ -2456,8 +2456,8 @@ def analyze_five_alpha_labels(root,p):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    from sttw_control.tolerance_predictor_pilot import resolved_label
-    protocol=p.get('protocol',p);out=root/'analysis'
+    from sttw_control.tolerance_predictor_pilot import resolved_label,five_alpha_partition
+    protocol=p.get('protocol',p);partition=five_alpha_partition(protocol);out=root/'analysis'
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('five-alpha plan drift')
     for f,sha in p.get('input_sha256',{}).items():
         if digest(f)!=sha:raise ValueError('five-alpha sealed input drift '+f)
@@ -2514,7 +2514,9 @@ def analyze_five_alpha_labels(root,p):
             if outcome['first_arrival_s'] is not None:outcome['first_arrival_s']+=start*.005
             if g['expected_ever_arrived']:outcome['goal_arrived']=True
             outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
-            split=protocol['fitting_split'];role='training' if c['route'] in split['training_routes'] else 'development'
+            if c['bank_index']!=partition['bank']:raise ValueError('source bank identity changed')
+            role='training' if c['route'] in partition['training_routes'] else 'development' if c['route'] in partition['development_routes'] else None
+            if role is None:raise ValueError('undeclared source role')
             rows.append(dict(c,primary=samestate_primary_label(raw,c),horizons={'10':outcome},lifecycle_role=g['lifecycle_role'],fitting_role=role,checkpoint_identity=p['models']['H75'],source_group_id=f"source{c['source_index']}",query=query,pulse=pulse,new_suffix_lower_ticks=n))
             raws[c['case_id']]=raw
         if ticks!=status['active_lower_ticks']:raise ValueError('physical accounting mismatch')

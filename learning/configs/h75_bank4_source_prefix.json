@@ -1,0 +1,88 @@
+{
+  "experiment_id": "STTW-H75-BANK4-SOURCE-PREFIX",
+  "mode": "native_h75_source_prefix",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    4
+  ],
+  "bank_state_fingerprints": {
+    "4": "1863f7152f8f0d675a949e7f1ef27547f93875117e06fc6113d8b030bc49dce3"
+  },
+  "alpha": 0.5,
+  "horizon_s": 10.0,
+  "collection_s": 6.0,
+  "capture_task_s": [
+    1.0,
+    2.0,
+    4.0,
+    6.0
+  ],
+  "expected_cases": 7,
+  "maximum_lower_ticks": 8400,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "route_contexts": [
+    {
+      "route": "straight_v2p6",
+      "family": 0,
+      "radius_m": 2.0,
+      "angle_deg": 0.0,
+      "speed": 2.6,
+      "direction": 1.0,
+      "goal_distance_m": 20.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "left130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "data_role": "Training source collection only. Another prepared bank state from the same ancestor, not an independent training seed. Existing development labels unchanged; no outcome-based replacement.",
+  "stop_rule": "Seven nominal frozen H75 alpha.5 sources to task6 only, maximum8400lower, zero optimizer. Engineering errors stop with partials retained, no retry or replacement. Physical failures retained without substituting sources."
+}
