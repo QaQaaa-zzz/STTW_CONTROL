@@ -1,0 +1,125 @@
+{
+  "experiment_id": "STTW-U170-EARLY-FIVE-ALPHA-LABELS-V1",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    0
+  ],
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 9,
+  "maximum_lower_ticks": 18000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    24.0
+  ],
+  "duration_s": 0.4,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R1p3_v2p0_source_t1p0_a0",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1",
+        "plan_sha256": "e47ce7180dab006fd2ada759c2bf3ceb6eb098a35eb2a0a6666355adb7536d35",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/complete_carry_09.pkl",
+        "carry_sha256": "466af369c3c979f89237de54948bdaa1351e746d723916aaa9995fdb016f8b2d",
+        "source_lane": 0,
+        "source_task_tick": 200,
+        "source_physical_tick": 900,
+        "source_alpha": 0.0,
+        "parent_route": "left90_R1p3_v2p0",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/bank0_left90_R1p3_v2p0_path.npz",
+        "path_sha256": "90b0fd51c6349da3c354f2e46b8721990e03566bd3dc8b0691d79849cbb5655c"
+      }
+    }
+  ],
+  "data_role": "Nine new exploratory training branches plus six explicitly released earlier timing DEV branches; no new baseline method or PPO.",
+  "scoring": "Complete five-alpha early source matrix, original goal/contact, actual low-speed, original path errors and full reward; no automatic predictor adoption.",
+  "stop_rule": "Exactly9 new branches to original task10/contact. Reuse prior6 without rerun. Engineering errors stop and preserve evidence.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Complete early-state candidate labels around the successful .75 intervention for outcome-network refit.",
+  "onsets_s": [
+    0.9,
+    1.0,
+    1.1
+  ],
+  "force_frame": "world_fixed_vector",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.1,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 2.0,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  },
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "force_direction_world": [
+    -0.7173560908995228,
+    0.6967067093471654,
+    0.0
+  ],
+  "include_nominal": false,
+  "excluded_completed_cases": [
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a0.75/prep0.9_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "a7de44affacbd6f89815d2923590dbc75237ba94ba82c90ce504cb566ea1fedb"
+    },
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a1/prep0.9_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "85cde1a95e8075a989dfaf15b82423dfee65fec6539dd64103612279338b0523"
+    },
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a0.75/prep1_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "72d6e78fbd3d809d456da05c4f981256c487fda376839a54fe98cd9511413b5d"
+    },
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a1/prep1_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "5293cba1414be8361458799fb7ffce4036d7683792b104583c1c4bd29880b8d3"
+    },
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a0.75/prep1.1_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "75ed0047d107bc53be943133fa9b12be8b76d6e97af9c665b8a648b8562fc13f"
+    },
+    {
+      "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a1/prep1.1_F+24",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_earlier_preference_switch_v1",
+      "raw_sha256": "a1786754d439238ed1d60e6345ab1aa53dd3d5d16785b6d67e16028401e5aabe"
+    }
+  ],
+  "dataset_partition": {
+    "training_rows": 9,
+    "development_rows": 0,
+    "unit": "nine new candidate labels; earlier six retain their original records and may be explicitly released for refit"
+  }
+}

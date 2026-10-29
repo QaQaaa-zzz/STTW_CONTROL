@@ -2957,7 +2957,8 @@ def analyze_fixed_h75_capability(root,p):
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
-        pairs=paired_low_speed_load_outcomes(rows);atomic_json(out/'paired_outcomes.json',pairs)
+        pairs=paired_low_speed_load_outcomes(rows,declared_alphas=p['protocol']['alphas']) if not p['protocol'].get('excluded_completed_cases') else dict(scope='Endpoint pairs are assembled from the complete cached/new matrix below.')
+        atomic_json(out/'paired_outcomes.json',pairs)
         with (out/'README.md').open('a') as f:
             f.write('\n## Complete paired-load trace index\n\nEach XY panel above has companion `_traces.png` (true/governed/wheel speed, estimation error, steer, roll, roll rate, original cross-track/heading, per-step and cumulative reward) and `_components.png` (signed per-step/cumulative components and terminal adjustment). All actual transitions stop at true failure. No smoothing or manufactured uncertainty; these are deterministic exploratory cases, not independent training replicates. Full execution-path reward is independently rebuilt and checked against recorded per-step reward; original-path task costs remain separate from changing execution references. No extra baseline rollout was requested.\n\n')
             for name in links:
@@ -2998,22 +2999,25 @@ def write_reused_preparation_matrix(root,p):
                 if end['physical_outcome']=='survived' and end['goal_arrived'] and r['low_speed_full_upright_gate_passed']:feasible.append(r['alpha'])
             cells.append(dict(route=route,preparation_s=prep,observed_survive_goal_low_speed_candidates=feasible))
             ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'Preparation {prep:g}s; load +24N for .4s');ax.set_aspect('equal');ax.grid(alpha=.2);ax.legend(fontsize=8)
-        fig.suptitle(f'{route} | U170 2cd5865a6d4e | five held-alpha suffixes from task1.6s | cached4 + new26; no new baseline')
+        source_s=group[0]['source_task_start_s'];fig.suptitle(f'{route} | U170 2cd5865a6d4e | five held-alpha suffixes from task{source_s:g}s | cached{len(joined)-len(rows)} + new{len(rows)}')
         name=route+'_preparation_matrix_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     joint=[]
     for route in routes:
         sets=[set(c['observed_survive_goal_low_speed_candidates']) for c in cells if c['route']==route]
         joint.append(dict(route=route,observed_joint_candidates=sorted(set.intersection(*sets))))
     atomic_json(out/'combined_temporal_matrix.json',dict(new_physical_cases=len(rows),reused_physical_cases=len(joined)-len(rows),rows=joined,cells=cells,joint=joint,
-        scope='Observed finite matrix only: survived, original goal and upright speed<=2.1m/s. No path-error qualification, unseen-time guarantee or model validation claim. Four integration DEV cases explicitly reused as exploratory evidence; raw runs and roles remain intact.'))
+        scope='Observed finite matrix only: survived, original goal and upright speed<=2.1m/s. No path-error qualification, unseen-time guarantee or model validation claim. Cached DEV cases explicitly reused as exploratory evidence; raw runs and roles remain intact.'))
+    atomic_json(out/'paired_outcomes.json',paired_low_speed_load_outcomes(joined,declared_alphas=grid))
     import re
     report=out/'README.md';text=re.sub(r'\n## Complete temporal matrix with cached cases\n.*?(?=\n## |\Z)','',report.read_text(),flags=re.S)
-    report.write_text(text+'\n## Complete temporal matrix with cached cases\n\n'+'\n\n'.join(f'![All five alpha actual/reference XY across preparation times]({name})' for name in links)+'\n\nCombined30 contains26 new physical cases and4 authenticated cached cases; none was rerun. Complete cell outcomes and intersections are in combined_temporal_matrix.json. These are observed finite candidates, not a learned guaranteed interval.\n')
+    report.write_text(text+'\n## Complete temporal matrix with cached cases\n\n'+'\n\n'.join(f'![All five alpha actual/reference XY across preparation times]({name})' for name in links)+f'\n\nCombined{len(joined)} contains{len(rows)} new physical cases and{len(joined)-len(rows)} authenticated cached cases; none was rerun. Complete cell outcomes and intersections are in combined_temporal_matrix.json. These are observed finite candidates, not a learned guaranteed interval.\n')
 
 
-def paired_low_speed_load_outcomes(rows):
+def paired_low_speed_load_outcomes(rows,*,declared_alphas=None):
     """Report every signed event, including opposite/null results and speed violations."""
     pairs=[]
+    if declared_alphas is not None and not {0.,1.}.issubset(set(declared_alphas)):
+        return dict(pairs=[],total_pairs=0,desired_witnesses=0,endpoint_comparison='not applicable: both endpoints were not declared; physical rows remain reported')
     for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
         group=sorted([r for r in rows if (r['route'],r['event'])==(route,event) and r['alpha'] in (0.,1.)],key=lambda r:r['alpha'])
         if not group:continue  # Interior-only probes retain every row; endpoint contrasts live in the parent dataset.

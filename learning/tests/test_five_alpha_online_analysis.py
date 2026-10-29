@@ -267,6 +267,14 @@ def test_load_witness_requires_survival_goal_and_both_actual_low_speed_gates(low
     with pytest.raises(ValueError,match='same intended'):m.paired_low_speed_load_outcomes(rows)
 
 
+def test_declared_nonendpoint_grid_does_not_require_new_endpoint_baseline():
+    row=dict(route='turn',event='force',force_N=24.,alpha=1.)
+    result=m.paired_low_speed_load_outcomes([row],declared_alphas=[.75,1.])
+    assert result['total_pairs']==0 and result['desired_witnesses']==0
+    with pytest.raises(ValueError,match='exact alpha0/1'):
+        m.paired_low_speed_load_outcomes([row],declared_alphas=[0.,1.])
+
+
 def test_conditional_primary_window_does_not_relabel_or_discard_extension_failure():
     raw=dict(active_tick=np.ones(8,bool),time=.01+np.arange(8)*.005,contact_failure=np.array([False]*7+[True]))
     primary,window=m.declared_primary_suffix(raw,dict(source_task_start_s=.01),horizon_s=.04)
