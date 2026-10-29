@@ -4,6 +4,7 @@ Load this orchestration by file in a fresh process. It never trains, silently
 restarts, or changes old runs. Physics is available only through execute.
 """
 import copy
+from functools import partial
 import hashlib
 import importlib.util
 import itertools
@@ -467,6 +468,21 @@ def frozen_control_core_identity(current,archived):
 TRANSFER_METHOD_CODES={'guard_degraded':0,'guard':1,'fixed':2,'speedcap':3}
 
 
+def transfer_events(p):
+    events=([dict(event='zero',force_N=0.,onset_s=p['zero_onset_s'])] if p.get('include_nominal',True) else [])
+    return events+[dict(event=f't{t:g}_F{force:+g}',force_N=force,onset_s=t) for t,force in itertools.product(p['onsets_s'],p['forces_N'])]
+
+
+def scheduled_chunk_steps(p):
+    """Split only the ordinary host interval containing a declared timing probe."""
+    t=p.get('scheduled_replan_s')
+    if t is None:return None
+    if p.get('mode')!='frozen_transfer_evaluation' or not math.isfinite(t) or not 0<t<p['horizon_s'] or abs(t/.02-round(t/.02))>1e-8:
+        raise ValueError('scheduled replanning must be a finite interior upper tick in transfer evaluation')
+    ends=sorted(set([round(v/.02) for v in range(1,int(p['horizon_s'])+1)]+[round(t/.02)]))
+    return [b-a for a,b in zip([0]+ends[:-1],ends)]
+
+
 def frozen_transfer_inventory(p):
     """Explicit cartesian protocol; no source episodes are cached as new data."""
     declarations=p['method_declarations'];arms=p['arms'];routes=p['routes'];banks=p['bank_indices']
@@ -476,7 +492,7 @@ def frozen_transfer_inventory(p):
     if not routes or len({r['route'] for r in routes})!=len(routes):raise ValueError('unique declared transfer routes required')
     contexts=p['route_contexts']
     if [(c['route'],c['speed']) for c in contexts]!=[(r['route'],r['speed']) for r in routes] or any(c['direction'] not in (-1.,1.) or c['angle_deg']<=0 or c['radius_m']<=0 or c['speed']<=0 for c in contexts):raise ValueError('explicit transfer geometry required')
-    events=[dict(event='zero',force_N=0.,onset_s=p['zero_onset_s'])]+[dict(event=f't{t:g}_F{force:+g}',force_N=force,onset_s=t) for t,force in itertools.product(p['onsets_s'],p['forces_N'])]
+    events=transfer_events(p);scheduled_chunk_steps(p)
     if len({(e['force_N'],e['onset_s']) for e in events})!=len(events) or any(e['onset_s']<0 or e['onset_s']+p['duration_s']>p['horizon_s'] for e in events):raise ValueError('unique finite transfer events within horizon required')
     count=len(banks)*len(routes)*len(events)*len(arms)
     if p['horizon_s']!=10. or p['expected_cases']!=count or p['maximum_lower_ticks']!=count*2000 or p['optimizer_updates']!=0 or p['force_frame']!='worldY' or p['arm_to_export_index']!={a:0 for a in arms}:raise ValueError('transfer cartesian count/budget/q identity differs')
@@ -1127,6 +1143,8 @@ def prepare_response(source,root,protocol,*,stay_source=None,continuation_source
         scoring=proposal['scoring'],stop=proposal['stop_rule'],normalization=proposal['normalization'],initialization=proposal.get('initialization','Authenticated original native prepared bank/reset'),
         input_sha256=files,source_sha256={str(f.resolve()):digest(f) for f in modules})
     apply_route_context_variant(plan)
+    if proposal.get('scheduled_replan_s') is not None:
+        plan['chunk_upper_steps']=scheduled_chunk_steps(proposal);plan['chunks']=len(plan['chunk_upper_steps'])
     if proposal.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192'):
         plan['frozen_predictor_export']=dict(directory=str(root/'q'),receipt_sha256=digest(root/'q/receipt.json'),
             candidate_manifest_sha256=digest(root/'q/original_candidate_manifest.json'),
@@ -1510,9 +1528,9 @@ def load(root,*,prefix_phase=False):
             else:end=schedule.OnlineCarry(end,latched)
         if switching:log.update(origin_channel_alpha_pair=ticks(origin_pair),switch_active=ticks(switched),switch_tick=ticks(st))
         return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('alpha_user','alpha_exec')} if samestate else {}),**({k:log[k] for k in ('neural_query_active','support_nominal_reference','rule_pre_upper_progress','support_floor','support_requested_offset','support_realized_target_offset','support_active')} if confirmation and not tolerance else {}),**({k:log[k] for k in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target')} if online else {}),**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in (('channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped') if online or samestate else ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped'))} if response else {}),**({k:log[k] for k in (*coord_log,'rule_pre_upper_progress')} if tolerance else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
-    @jax.jit
-    def chunk(carry,paths):
-        return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes,speed_alpha,steer_alpha,switch_ticks),carry,None,length=50)
+    @partial(jax.jit,static_argnames=('upper_steps',))
+    def chunk(carry,paths,upper_steps=50):
+        return jax.lax.scan(lambda c,_:jax.vmap(one)(c,params,paths,speeds,pulses,modes,speed_alpha,steer_alpha,switch_ticks),carry,None,length=upper_steps)
     @jax.jit
     def measurements(carry):
         return jax.vmap(lambda d:env.physics.observe(d)[1])(carry.state.physical.data)
@@ -1626,7 +1644,7 @@ def run(root,*,shape_only=False):
                 mask=np.zeros(n,bool)
                 for i in range(n):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
-                        follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i])):
+                        follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=int(ticks[i])*env.cc.dt):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
                         path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
@@ -1636,7 +1654,7 @@ def run(root,*,shape_only=False):
                     paths=jax.tree.map(lambda *x:j.stack(x),*path_list)
                     carry=runtime['bind'](carry,paths,j.asarray(mask))
                 save(directory/'replanning_decisions.json',decisions)
-            carry,logs=runtime['chunk'](carry,paths);jax.block_until_ready(carry)
+            carry,logs=runtime['chunk'](carry,paths,upper_steps=p.get('chunk_upper_steps',[50]*p['chunks'])[block]);jax.block_until_ready(carry)
             logs=flatten(jax.device_get(logs));all_logs.append(logs)
             np.savez_compressed(directory/f'chunk_{block+int(branch):02d}.npz',**logs)
             fatal=logs['contact_failure']|logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['continuation_geometry_fault']
@@ -1648,9 +1666,9 @@ def run(root,*,shape_only=False):
             with (directory/f'executed_paths_{block+int(branch):02d}.pkl').open('wb') as f:pickle.dump(jax.device_get(paths),f)
 
             actual+=int(logs['active_tick'].sum())
-            if actual>p['maximum_active_lower_ticks'] or (block+1)*50*4*n>p['maximum_allocated_lower_slots']:
+            if actual>p['maximum_active_lower_ticks'] or sum(p.get('chunk_upper_steps',[50]*p['chunks'])[:block+1])*4*n>p['maximum_allocated_lower_slots']:
                 raise RuntimeError('declared lower-tick budget exceeded')
-            update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=(block+1)*50*4*n,replanned_cases=int(changed.sum()))
+            update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=sum(p.get('chunk_upper_steps',[50]*p['chunks'])[:block+1])*4*n,replanned_cases=int(changed.sum()))
             if p.get('mode')=='h75_switching_continuation':
                 scheduled=audit_scheduled_pairs(logs,cases)
                 save(directory/'scheduled_pair_receipt.json',dict(scheduled,completed_blocks=block+1))

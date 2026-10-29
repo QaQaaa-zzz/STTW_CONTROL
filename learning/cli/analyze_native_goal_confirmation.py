@@ -907,7 +907,7 @@ def analyze_bank144(root,p,*,include_heldout_labels=False,include_confirmation_l
             replan_tick=decision['task_tick']
             if decision['case_index']!=lane or replan_tick not in range(start_tick,1801,200):raise ValueError('bank replan clock mismatch')
             from sttw_control.goal_replanning import replan_requested
-            if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,cross_track_m=decision['cross_track_m'],follower_invalid=decision['follower_invalid'],already_replanned=False,contact=decision['contact'],fault=decision['fault'],ever_arrived=decision['ever_arrived']):raise ValueError('bank replan lacks measured trigger')
+            if not replan_requested(xy=np.asarray(decision['measured_pose'])[:2],goal_xy=goal,cross_track_m=decision['cross_track_m'],follower_invalid=decision['follower_invalid'],already_replanned=False,contact=decision['contact'],fault=decision['fault'],ever_arrived=decision['ever_arrived'],scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=replan_tick*.005):raise ValueError('bank replan lacks measured trigger')
             with np.load(replan) as z:changed=dict(z)
             np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,a]) for a in (0,1)],goal,atol=3e-6,rtol=0);executed[c['case_id']]=changed
         data=reconstruct_execution_path_reward(raw,c,source_execution,changed,replan_tick-start_tick,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick)
@@ -1750,7 +1750,7 @@ def render_response(root,rows,raws,paths,goals,executed,rebuilt,keys,output_dire
     import matplotlib.pyplot as plt
     from matplotlib.patches import Circle
     out=output_directory or root/'analysis';diag=out/'diagnostics';diag.mkdir();routes=sorted(paths)
-    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS for r in rows)
+    tolerance=any(r.get('mode') in TOLERANCE_ARMS[:4]+TEMPORAL_TOLERANCE_ARMS+USER_PREFERENCE_ARMS+PRIOR_ARMS+TASK_AWARE_ARMS+SPEED_QUERY_ARMS+GUARD_FALLBACK_ARMS for r in rows)
     checkpoint='H75 frozen';late_display=any(r.get('trace_start_s')==6. for r in rows)
     if tolerance or late_display:
         plan=json.loads((root/'plan.json').read_text());checkpoint='H75 actor SHA '+plan['models']['H75']['actor_sha256'][:12]
@@ -1986,12 +1986,12 @@ def frozen_transfer_layout(protocol):
     declarations=protocol['method_declarations'];arms=protocol['arms']
     if [d['arm'] for d in declarations]!=arms or len(set(arms))!=len(arms):raise ValueError('unique transfer declarations required')
     if len(declarations)!=4 or {d['method'] for d in declarations}!={'guard_degraded','guard','fixed','speedcap'} or any(d['user_alpha']!=1. for d in declarations):raise ValueError('declared user1 four-method transfer required')
-    events=[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))
+    events=([(0.,protocol['zero_onset_s'])] if protocol.get('include_nominal',True) else [])+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))
     banks=protocol['bank_indices'];routes=protocol['routes']
     if len(set(banks))!=len(banks) or len({r['route'] for r in routes})!=len(routes) or len(set(events))!=len(events):raise ValueError('unique transfer cartesian conditions required')
     conditions=len(banks)*len(routes)*len(events);cases=conditions*len(arms)
     if protocol['expected_cases']!=cases or protocol['maximum_lower_ticks']!=cases*2000 or protocol['horizon_s']!=10. or protocol['optimizer_updates']!=0:raise ValueError('transfer declared count/budget differs')
-    return dict(variant='frozen_transfer_evaluation',cases=cases,conditions=conditions,routes=len(routes),user_groups=conditions,nominal_cases=len(banks)*len(routes)*len(arms),users=[1.],methods=[d['method'] for d in declarations])
+    return dict(variant='frozen_transfer_evaluation',cases=cases,conditions=conditions,routes=len(routes),user_groups=conditions,nominal_cases=len(banks)*len(routes)*len(arms)*int(protocol.get('include_nominal',True)),users=[1.],methods=[d['method'] for d in declarations])
 
 
 def validate_frozen_transfer_inventory(rows,protocol):
@@ -2003,7 +2003,7 @@ def validate_frozen_transfer_inventory(rows,protocol):
         if d is None or row['method']!=d['method'] or any(row[k]!=d['user_alpha'] for k in ('alpha','user_alpha','effective_user_alpha','query_alpha')):raise ValueError('transfer user/method mismatch')
         if row['initial_fingerprint']!=protocol['bank_state_fingerprints'][str(row['bank_index'])] or row['path_key']!=f"bank{row['bank_index']}_"+row['route']:raise ValueError('transfer bank/path mismatch')
         actual.append((row['bank_index'],row['route'],row['speed'],row['mode'],row['force_N'],row['onset_s'],row['duration_s']))
-    expected=[(b,r['route'],r['speed'],a,f,t,protocol['duration_s']) for b,r,a,(f,t) in itertools.product(protocol['bank_indices'],protocol['routes'],protocol['arms'],[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s'])))]
+    expected=[(b,r['route'],r['speed'],a,f,t,protocol['duration_s']) for b,r,a,(f,t) in itertools.product(protocol['bank_indices'],protocol['routes'],protocol['arms'],([(0.,protocol['zero_onset_s'])] if protocol.get('include_nominal',True) else [])+list(itertools.product(protocol['forces_N'],protocol['onsets_s'])))]
     if sorted(actual)!=sorted(expected):raise ValueError('complete transfer condition coverage required')
 
 
@@ -2028,6 +2028,8 @@ def frozen_confirmation_layout(protocol):
 
 
 def frozen_confirmation_intro(protocol,layout):
+    if protocol.get('mode')=='frozen_transfer_evaluation' and protocol.get('scheduled_replan_s') is not None:
+        return [f"# 重规划时机诊断：{protocol['scheduled_replan_s']}s",'',f"{layout['cases']}个新H10回合，用户指定时刻的一次几何接回；对照原保存轨迹，不是新的前瞻确认。模型/物理/脉冲/原goal不变，仅规划时机改变。"]
     if protocol.get('mode')=='frozen_transfer_evaluation':
         return [f"# 冻结控制组合确认{layout['cases']}",'',f"全部{layout['cases']}为新H10物理，{layout['conditions']}条件×四user1方法；banks{protocol['bank_indices']}，原始goal1m与真实contact分别报告；q+guardfallback对无qguard为主比较，fixed1/speedcap为简单对照。0优化，全部条件/失败保留。",'',"仅改变声明初态/几何/实际脉冲组合，不称全研究未见TEST或独立训练seed；0.15s实际脉冲相对冻结0.1s假设外推。控制、q三seed/H75/lower、门槛和one-shot接回全冻结；guard/fixed/cap的qgate只作诊断，非其控制恢复门。用户0/.5未新增确认。"]
     routes=', '.join(f"{r['route']} ({r['speed']:g}m/s)" for r in protocol['routes'])

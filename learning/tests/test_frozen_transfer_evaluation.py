@@ -82,3 +82,21 @@ def test_transfer_rescore_writes_all_method_windows_without_cached_old_pair(tmp_
     assert all(r['windows']['common_actual']['actual_ticks']==4 for r in results)
     assert all(r['windows']['common_pre_first_arrival']['actual_ticks']==2 for r in results)
     assert not (tmp_path/'analysis/original_task_rescoring/old_new_candidate_paired_costs.json').exists()
+
+
+def test_scheduled_timing_probe_preserves_budget_and_only_declared_event():
+    from sttw_control.native_goal_run import scheduled_chunk_steps
+    from sttw_control.goal_replanning import replan_requested
+    p=json.loads((ROOT/'learning/configs/h75_replan_timing.json').read_text())
+    rows=tolerance_inventory(p);m=module('analyze_native_goal_confirmation')
+    m.validate_frozen_transfer_inventory(rows,p)
+    assert len(rows)==4 and all(r['force_N']==64 for r in rows)
+    steps=scheduled_chunk_steps(p)
+    assert sum(steps)==500 and 140 in np.cumsum(steps)
+    assert steps[:4]==[50,50,40,10]
+    args=dict(xy=[0,0],goal_xy=[5,0],cross_track_m=0.,follower_invalid=False,already_replanned=False,contact=False,fault=False,scheduled_time_s=2.8)
+    assert replan_requested(**args,task_time_s=2.8)
+    assert not replan_requested(**args,task_time_s=3.)
+    assert not replan_requested(**dict(args,already_replanned=True),task_time_s=2.8)
+    assert not replan_requested(**dict(args,contact=True),task_time_s=2.8)
+    assert scheduled_chunk_steps(protocol()) is None
