@@ -2845,7 +2845,7 @@ def analyze_fixed_h75_capability(root,p):
         np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
         if load_screen:
             t=raw['time'][:n];overlap=np.maximum(0.,np.minimum(t+.005,c['onset_s']+c['duration_s'])-np.maximum(t,c['onset_s']))
-            expected_force=np.column_stack([np.zeros(n),overlap*c['force_N'],np.zeros(n)])
+            expected_force=(overlap*c['force_N'])[:,None]*np.asarray(c.get('force_direction_world',[0.,1.,0.]))
             np.testing.assert_allclose(raw['applied_force_impulse'][:n],expected_force,atol=3e-5,rtol=.005)
         else:np.testing.assert_array_equal(raw['applied_force_impulse'][:n],0.)
         permission=np.asarray(raw['reference_target_permitted'][:n],bool);np.testing.assert_allclose(raw['latent_z'][:n][permission],raw['composed_latent'][:n][permission],atol=1e-6,rtol=0);np.testing.assert_array_equal(raw['latent_z'][:n][~permission],0.)
@@ -2877,6 +2877,7 @@ def analyze_fixed_h75_capability(root,p):
             premax=vmax(pre);duringmax=vmax(during);limit=p['protocol']['low_speed_evidence_gate']['true_forward_speed_max_m_s']
             rows[-1].update(load_kind='equivalent_worldY_force_not_wind_field',pre_load_max_speed_m_s=premax,during_load_upright_max_speed_m_s=duringmax,onset_speed_mean_m_s=float(np.mean(raw['actual_forward_speed'][:n][near])) if near.any() else None,low_speed_gate_passed=bool(premax is not None and duringmax is not None and max(premax,duringmax)<=limit),gate_contract='preload and applied-load upright active samples; contact step/after-contact excluded',observed_world_force_impulse_Ns=raw['applied_force_impulse'][:n].sum(axis=0).tolist(),pre_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][pre]))*180/np.pi) if pre.any() else None,during_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][during]))*180/np.pi) if during.any() else None)
             rows[-1].update(onset_roll_mean_rad=float(np.mean(raw['phi'][:n][near])) if near.any() else None,onset_roll_rate_mean_rad_s=float(np.mean(raw['phi_dot'][:n][near])) if near.any() else None)
+            if 'force_direction_world' in c:rows[-1]['load_kind']='equivalent_fixed_world_vector_force_not_wind_field'
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
     plot_groups=[(route,event) for route,event in sorted({(r['route'],r['event']) for r in rows})] if load_screen else [(route,None) for route in sorted({r['route'] for r in rows})]
@@ -2934,11 +2935,11 @@ def paired_low_speed_load_outcomes(rows):
         group=sorted([r for r in rows if (r['route'],r['event'])==(route,event)],key=lambda r:r['alpha'])
         if len(group)!=2 or [r['alpha'] for r in group]!=[0.,1.]:raise ValueError('exact alpha0/1 event pair required')
         a,b=group
-        if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')):raise ValueError('same intended event and initial model required')
+        if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')) or a.get('force_direction_world',[0.,1.,0.])!=b.get('force_direction_world',[0.,1.,0.]):raise ValueError('same intended event and initial model required')
         outcomes=[r['endpoint']['physical_outcome'] for r in group];low=all(r['low_speed_gate_passed'] for r in group)
         contrast='alpha0_contact_alpha1_survived' if outcomes==['contact','survived'] else 'alpha1_contact_alpha0_survived' if outcomes==['survived','contact'] else 'no_endpoint_contrast'
         pairs.append(dict(route=route,event=event,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,contrast=contrast,desired_witness=bool(low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
-    return dict(pairs=pairs,total_pairs=len(pairs),desired_witnesses=sum(p['desired_witness'] for p in pairs),scope='Exploratory intended identical world-Y force; actual delivered impulse truncates on physical failure. No wind-speed calibration or unseen-condition claim.')
+    return dict(pairs=pairs,total_pairs=len(pairs),desired_witnesses=sum(p['desired_witness'] for p in pairs),scope='Exploratory intended identical fixed world-vector force (default world-Y); actual delivered impulse truncates on physical failure. No wind-speed calibration or unseen-condition claim.')
 
 
 def render_paired_load_diagnostics(out,group,raws,component_names,stem):
@@ -2969,7 +2970,7 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
             if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,color='gray',alpha=.12)
     for k,(ax,label) in enumerate(zip(axes.flat,labels)):
         ax.set(xlabel='Actual lower steps' if k>=7 else 'Task time (s)',ylabel=label);ax.grid(alpha=.2);ax.legend(fontsize=7)
-    title=f"{group[0]['model_id']} | {group[0]['route']} | {group[0]['event']} | equivalent world-Y load; shade=applied interval"
+    title=f"{group[0]['model_id']} | {group[0]['route']} | {group[0]['event']} | equivalent fixed world-vector load; shade=applied interval"
     fig.suptitle(title);comp.suptitle(title+' | execution-path reward, not cross-alpha utility ranking')
     fig.savefig(out/(stem+'_traces.png'),dpi=130);comp.savefig(out/(stem+'_components.png'),dpi=130);plt.close(fig);plt.close(comp)
 

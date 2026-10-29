@@ -53,6 +53,15 @@ def test_adopted_base_and_configured_event_grid_keep_pairing_and_budget():
         np.testing.assert_array_equal(force_pulses([a],3.5),force_pulses([b],3.5))
 
 
+def test_common_fixed_world_vector_is_not_rotated_per_alpha():
+    cfg=config();cfg.update(force_frame='world_fixed_vector',force_direction_world=[-.8,.6,0.])
+    rows=fixed_h75_capability_inventory(cfg);a,b=next((a,b) for a,b in zip(rows[::2],rows[1::2]) if a['force_N']==16.)
+    pulses=force_pulses([a,b],3.5)
+    np.testing.assert_array_equal(pulses[0],pulses[1]);np.testing.assert_allclose(pulses[0][2:],[-12.8,9.6,0.])
+    cfg['force_direction_world']=[-1.,1.,0.]
+    with pytest.raises(ValueError,match='unit horizontal'):fixed_h75_capability_inventory(cfg)
+
+
 def test_two_alpha_per_event_reset_audit_preserves_complete_pairing():
     @struct.dataclass
     class Physical:

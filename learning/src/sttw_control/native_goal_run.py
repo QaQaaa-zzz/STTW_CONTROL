@@ -133,10 +133,15 @@ def low_speed_lateral_load_inventory(p):
     """Complete paired world-Y equivalent lateral-load screen; never a wind speed."""
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
         alphas=[0.,1.],horizon_s=10.,
-        optimizer_updates=0,planning_frequency_hz=10.,force_frame='worldY',zero_onset_s=0.,
+        optimizer_updates=0,planning_frequency_hz=10.,zero_onset_s=0.,
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
     if any(p.get(k)!=value for k,value in required.items()):
         raise ValueError('paired low-speed lateral-load contract differs')
+    direction=p.get('force_direction_world',[0.,1.,0.])
+    if (len(direction)!=3 or any(not math.isfinite(x) for x in direction)
+        or direction[2]!=0. or abs(sum(x*x for x in direction)-1.)>1e-6
+        or p['force_frame']!=('world_fixed_vector' if 'force_direction_world' in p else 'worldY')):
+        raise ValueError('explicit fixed unit horizontal world force direction required')
     forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
     count=2*(1+len(forces)*len(onsets))
     if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
@@ -161,7 +166,8 @@ def low_speed_lateral_load_inventory(p):
         for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
     route=contexts[0]['route']
     identity=candidate['registry_id'] if candidate else p['model_id']
-    return [dict(route=route,speed=2.,**event,duration_s=p['duration_s'],force_frame='worldY',
+    return [dict(route=route,speed=2.,**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
+        **({'force_direction_world':direction} if 'force_direction_world' in p else {}),
         bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/{identity}/a{alpha:g}/{event['event']}",
         mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
         for event,alpha in itertools.product(events,p['alphas'])]
@@ -1715,7 +1721,7 @@ def extend_straight_support(path,target_points,spacing_m):
 def force_pulses(cases,physical_start):
     """Archived teleop pulse is a world vector, never rotated with route/body."""
     return [[physical_start+c['onset_s'],physical_start+c['onset_s']+c['duration_s'],
-             0.,c['force_N'],0.] for c in cases]
+             *[c['force_N']*x for x in c.get('force_direction_world',[0.,1.,0.])]] for c in cases]
 
 def channel_queries(obs,apply,speed_alpha,steer_alpha):
     """Same observation except native alpha336; one composed publication."""
