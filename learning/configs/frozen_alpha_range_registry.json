@@ -1,0 +1,22 @@
+{
+  "schema": "sttw_frozen_alpha_range_registry_v1",
+  "current_query_candidate_id": "STTW_ALPHA_RANGE_U170_OUTCOME_V2",
+  "records": {
+    "STTW_ALPHA_RANGE_U170_OUTCOME_V2": {
+      "role": "experimental_query_only",
+      "directory": "/home/qy/STTW_CONTROL/runs/model_registry/alpha_range_outcome_u170_v2",
+      "files_sha256": {
+        "manifest.json": "bbd9cc64eb3ecbbfeed34c2b399bb76c4808d7d2502cb681c0aaa2642fcb546a",
+        "parameters.npz": "13a216ee24c3e289d862713eec425dc8adae572aca5fef2ed1bab5d8aa9287ea",
+        "config.json": "cf629a8d8cf0d4beb1345bf9f44d82bdbc0ce0bed175d382126200cf93f3e42c"
+      },
+      "middle_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+      "feature_schema": "sttw_conditional_outcome42_v1",
+      "architecture": "3-seed ensemble of42-16ELU-16ELU-4,1028parameters per seed",
+      "validation": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_conditional_outcome_mlp_v2/prospective_evaluation/results.json",
+      "validation_sha256": "6095a83f41659440099095bb76a9ec3fbd5efe3e631b346dcb42647e6da230ac",
+      "scope": "Known four-state prospective alpha interpolation, not integrated actuator coordination or universal safety",
+      "code_commit": "9dcbe5a1eaabb467bc8541f8f4d586357fa5bb2a"
+    }
+  }
+}

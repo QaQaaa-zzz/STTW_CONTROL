@@ -25,6 +25,9 @@ def outcome_features(observation,latent,source_yaw,case,interface):
     if not 0<=start<10 or prep<0 or (case['force_N'] and abs(case['onset_s']-start-prep)>1e-6):
         raise ValueError('explicit source clock and hypothetical preparation required')
     direction=np.asarray(case.get('force_direction_world',[0.,1.,0.]),float)
+    if (direction.shape!=(3,) or not np.isfinite(direction).all() or abs(np.linalg.norm(direction)-1.)>1e-6
+        or direction[2]!=0. or not np.isfinite([case['force_N'],case['duration_s'],start,prep]).all() or case['duration_s']<=0):
+        raise ValueError('finite signed force, positive duration and unit horizontal world direction required')
     world=case['force_N']*direction;yaw=float(source_yaw)
     body=np.array([np.cos(yaw)*world[0]+np.sin(yaw)*world[1],-np.sin(yaw)*world[0]+np.cos(yaw)*world[1]])
     a=np.tanh(z);target=np.array([a[0]*(interface['speed_positive_scale_m_s'] if a[0]>=0 else interface['speed_negative_scale_m_s']),a[1]*interface['steer_scale_rad']])
