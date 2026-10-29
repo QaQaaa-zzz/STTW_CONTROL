@@ -1,0 +1,109 @@
+{
+  "experiment_id": "STTW-H75-FIVE-ALPHA-NOMINAL-USERS-GUARD",
+  "mode": "native_five_alpha_online",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "bank_state_fingerprints": {
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "horizon_s": 10.0,
+  "expected_cases": 35,
+  "maximum_lower_ticks": 70000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "onset_s": 2.2,
+  "duration_s": 0.15,
+  "forces_N": [
+    0.0
+  ],
+  "force_frame": "worldY",
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "arm": 0,
+  "hypothetical_duration_s": 0.15,
+  "task_aware_fallback": false,
+  "guard_fallback": true,
+  "route_contexts": [
+    {
+      "route": "straight_v2p6",
+      "family": 0,
+      "radius_m": 2.0,
+      "angle_deg": 0.0,
+      "speed": 2.6,
+      "direction": 1.0,
+      "goal_distance_m": 20.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "left130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_bank4_full_fit_v1/training",
+  "export_manifest_sha256": "ed543b15f0f42ed98e4e8b085f4402f054c0c970607edfaa4595c69a0b6206da",
+  "data_role": "Known bank6 nominal five-user research candidate diagnostic; q labels used source user.5, features exclude useralpha but user-dependent closed-loop states may differ. No independent TEST, baseline, training or deployment.",
+  "scoring": "Per user/route original goal/contact and original-user costs; five users overlaid perroute, zero applied force. Fixedfallbackalpha.5 is distinct from user restoration. Current curvature proxy is not complete task feasibility.",
+  "stop_rule": "Thirty-five nominal H10 episodes maximum70000lower,0optimizer; no force or additional baseline. FrozenH75/q/thresholds/.2conditionalhold; engineering errors stop retainingpartials, no automaticretry/expansion. Explicit guard fallback only: if degraded and some task-mask candidate exists, prefer feasible requested user, otherwise minimum original proxy over feasible candidates. Keep degraded/latch; no feasible task candidate retains fixed.5. Not risk-qualified restoration or safety.",
+  "alpha_dwell_s": 0.2,
+  "panel_kind": "nominal_five_user",
+  "user_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ]
+}

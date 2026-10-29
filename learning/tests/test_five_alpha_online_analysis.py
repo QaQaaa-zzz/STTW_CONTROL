@@ -82,3 +82,58 @@ def test_dwell_uses_original_user_as_initial_alpha():
     assert audited['independent_numpy_match']
     assert audited['decisions'][0]['executed_alpha']==.25
     assert audited['decisions'][0]['hold_until_tick']==40
+
+
+def guard_fixture(user=0.,executed=0.,task=None,cost=None):
+    r=raw([executed]*4,np.full((4,5),.1));r['alpha_user'][:]=user
+    if task is not None:r['coord_task_mask'][:]=task
+    tick=np.zeros(4,int);changed=executed!=user;deadline=40 if changed else 0;requested=bool(r['coord_task_mask'][0].any())
+    r.update(coord_proxy_cost=np.tile(np.zeros(5) if cost is None else cost,(4,1)),coord_dwell_tick=tick,coord_raw_alpha=np.full(4,executed),coord_raw_latched=np.ones(4,bool),coord_latched_before=np.zeros(4,bool),coord_prev_alpha=np.full(4,user),coord_hold_until_before=tick,coord_hold_until_tick=np.full(4,deadline),coord_hold_remaining_ticks=np.full(4,deadline),coord_hold_release_reason=tick,coord_held=np.zeros(4,bool),coord_alpha_changed=np.full(4,changed),rule_latched=np.ones(4,bool),coord_guard_fallback=np.ones(4,bool),coord_guard_fallback_requested=np.full(4,requested),coord_guard_fallback_selected=np.full(4,requested),coord_guard_fallback_alpha=np.full(4,executed),coord_guard_fallback_published=np.full(4,requested),coord_restore_published=np.zeros(4,bool))
+    return r
+
+
+def test_guard_retains_feasible_user_under_degraded_without_restoring():
+    r=guard_fixture();stats=m.five_alpha_online_statistics(r,dict(alpha=0.,force_N=0.,onset_s=2.2,duration_s=.15),dwell_s=.2,guard_fallback=True)
+    w=stats['windows']['full']
+    assert w['executed_guard_user_ticks']==4 and w['qualified_user_ticks']==0
+    assert w['guard_user_without_qualified_restore_ticks']==4
+    assert w['fallback_half_ticks']==0 and w['fallback_user_ticks']==4
+    assert w['executed_fixed_half_fallback_ticks']==0
+    assert stats['dwell_audit']['decisions'][0]['effective_latched']
+
+
+def test_guard_selects_lowest_cost_task_candidate_or_fixedhalf_without_tasks():
+    r=guard_fixture(executed=.75,task=[False,True,False,True,False],cost=[0.,2.,0.,1.,0.])
+    a=m.audit_five_alpha_dwell(r,.2,user_alpha=0.,guard_fallback=True)
+    assert a['execution_origin_by_tick']==['guard_other']*4
+    r=guard_fixture(executed=.5,task=[False]*5)
+    a=m.audit_five_alpha_dwell(r,.2,user_alpha=0.,guard_fallback=True)
+    assert a['execution_origin_by_tick']==['fixed_half']*4
+
+
+def test_guard_published_cannot_be_claimed_when_held_or_denied():
+    r=guard_fixture();r['coord_permission'][:]=False;r['coord_degraded'][:]=False;r['coord_guard_fallback_selected'][:]=False;r['coord_guard_fallback_published'][:]=False;r['coord_raw_latched'][:]=False;r['rule_latched'][:]=False;r['coord_hold_release_reason']=np.full(4,3)
+    a=m.audit_five_alpha_dwell(r,.2,user_alpha=0.,guard_fallback=True)
+    assert a['execution_origin_by_tick']==['initial_user']*4
+    r['coord_guard_fallback_published'][:]=True
+    with pytest.raises(AssertionError):m.audit_five_alpha_dwell(r,.2,user_alpha=0.,guard_fallback=True)
+
+
+def test_guard_user_half_is_not_actual_fixedhalf_fallback():
+    r=guard_fixture(user=.5,executed=.5)
+    s=m.five_alpha_online_statistics(r,dict(alpha=.5,force_N=0.,onset_s=2.2,duration_s=.15),dwell_s=.2,guard_fallback=True)['windows']['full']
+    assert s['fallback_half_ticks']==4  # Historical degraded occupancy key.
+    assert s['executed_fixed_half_fallback_ticks']==0
+    assert s['executed_guard_user_ticks']==4 and s['qualified_user_ticks']==0
+
+
+def test_held_fixedhalf_origin_survives_new_raw_guard_user_request():
+    r=guard_fixture(executed=.5,task=[False]*5)
+    r={k:np.concatenate([v,v]) for k,v in r.items()}
+    r['time']=np.arange(8)*.005;r['coord_dwell_tick'][4:]=4;r['coord_task_mask'][4:]=True;r['coord_raw_alpha'][4:]=0.;r['coord_prev_alpha'][4:]=.5;r['coord_latched_before'][4:]=True;r['coord_hold_until_before'][4:]=40;r['coord_hold_remaining_ticks'][4:]=36;r['coord_held'][4:]=True;r['coord_alpha_changed'][4:]=False
+    for k in ['coord_guard_fallback_requested','coord_guard_fallback_selected']:r[k][4:]=True
+    r['coord_guard_fallback_alpha'][4:]=0.;r['coord_guard_fallback_published'][4:]=False
+    s=m.five_alpha_online_statistics(r,dict(alpha=0.,force_N=0.,onset_s=2.2,duration_s=.15),dwell_s=.2,guard_fallback=True)['windows']['full']
+    assert s['raw_guard_user_retention_ticks']==4
+    assert s['executed_guard_user_ticks']==0
+    assert s['executed_fixed_half_fallback_ticks']==8

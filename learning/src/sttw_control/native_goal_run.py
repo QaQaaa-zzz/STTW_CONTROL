@@ -191,7 +191,8 @@ def five_alpha_online_inventory(p):
         horizon_s=10.,expected_cases=14,maximum_lower_ticks=28000,optimizer_updates=0,
         planning_frequency_hz=10.,onset_s=2.2,duration_s=.15,forces_N=[-64.,64.],force_frame='worldY',
         candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,
-        task_aware_fallback=False,guard_fallback=False)
+        task_aware_fallback=False)
+    if type(p.get('guard_fallback',False)) is not bool:raise ValueError('guard_fallback must be an explicit boolean')
     nominal=p.get('panel_kind')=='nominal_five_user'
     if p.get('panel_kind','disturbed_single_user') not in ('disturbed_single_user','nominal_five_user'):raise ValueError('unknown online panel kind')
     if nominal:
@@ -1892,7 +1893,7 @@ def load(root,*,prefix_phase=False):
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
                     carry.state.projection.progress,path.s,path.curvature,permission,sidecar.latched,sidecar.prev_alpha,
                     cfg['residual_interface'],candidate_alphas=tuple(p['protocol']['candidate_alphas']),
-                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],arm=0,use_q=True,user_alpha=carry.state.alpha)
+                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False)
                 alpha_exec,latched=cd['alpha'],cd['latched']
                 dwell=None
                 if p['protocol'].get('alpha_dwell_s',0.):
@@ -1909,6 +1910,10 @@ def load(root,*,prefix_phase=False):
                     coord_permission=permission,coord_pre_progress=carry.state.projection.progress,coord_latched_before=sidecar.latched,
                     coord_nominal=carry.state.physical.raw,coord_candidate_clipped=cd['target_clipped'],coord_unbounded_targets=cd['unbounded_targets'],
                     coord_eligible=eligible,coord_restore_requested=restore,coord_restore_published=restore&permission)
+                if p['protocol'].get('guard_fallback',False):
+                    guard_requested=(~restore)&(~j.any(eligible))&j.any(cd['task_mask'])
+                    guard_published=cd['guard_fallback_selected']&(j.asarray(True) if dwell is None else ~dwell['held'])&(alpha_exec==cd['alpha'])
+                    coord_log.update(coord_guard_fallback=cd['guard_fallback'],coord_guard_fallback_requested=guard_requested,coord_guard_fallback_selected=cd['guard_fallback_selected'],coord_guard_fallback_alpha=cd['alpha'],coord_guard_fallback_published=guard_published)
                 if dwell is not None:
                     coord_log.update(coord_raw_alpha=cd['alpha'],coord_raw_latched=cd['latched'],coord_dwell_tick=carry.state.tick,coord_hold_until_before=sidecar.hold_until_tick,coord_hold_until_tick=dwell['hold_until_tick'],coord_hold_remaining_ticks=dwell['remaining_ticks'],coord_hold_release_reason=dwell['release_reason'],coord_held=dwell['held'],coord_alpha_changed=dwell['alpha_changed'])
                     coord_log['coord_restore_published']=restore&permission&~dwell['held']&~latched&(alpha_exec==carry.state.alpha)
