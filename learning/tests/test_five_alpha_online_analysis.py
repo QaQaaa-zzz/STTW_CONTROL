@@ -275,6 +275,13 @@ def test_declared_nonendpoint_grid_does_not_require_new_endpoint_baseline():
         m.paired_low_speed_load_outcomes([row],declared_alphas=[0.,1.])
 
 
+def test_selected_endpoint_is_not_a_paired_fixed_endpoint_experiment():
+    row=dict(route='turn',event='force',force_N=20.,alpha=0.)
+    result=m.paired_low_speed_load_outcomes([row],declared_alphas=[0.,.25,.5,.75,1.],selected_boundary=True)
+    assert result['total_pairs']==0 and result['desired_witnesses']==0
+    assert 'network-selected' in result['endpoint_comparison']
+
+
 def test_conditional_primary_window_does_not_relabel_or_discard_extension_failure():
     raw=dict(active_tick=np.ones(8,bool),time=.01+np.arange(8)*.005,contact_failure=np.array([False]*7+[True]))
     primary,window=m.declared_primary_suffix(raw,dict(source_task_start_s=.01),horizon_s=.04)

@@ -5,7 +5,13 @@
 实现：[preference_outcome_prediction.py](../learning/src/sttw_control/preference_outcome_prediction.py)。
 入口为 `FrozenAlphaRangePlanner`，保持冻结中层与底层不变，不启动PPO。
 
-V2已做一次真实边界接管验证：从两个原任务1.6s状态查询，再在新的准备时间.3/.5s施加相同24N等效风载荷，四条推荐中三条触地，一条存活并到原目标。此前32条alpha插值结果不能推出准备时间鲁棒性。注册表保留V2作为实验查询原型，明确不采用为可靠在线控制器；证据见 `u170_nn_range_boundary_v1/analysis/integration_decision.json`。以下示例演示接口，不能据其非空输出认定实际可行。
+历史V2（恒定alpha后续策略，42特征）已做一次真实边界接管验证：从两个原任务1.6s状态查询，再在新的准备时间.3/.5s施加相同24N等效风载荷，四条推荐中三条触地，一条存活并到原目标。此前32条alpha插值结果不能推出准备时间鲁棒性。注册表保留V2作为实验查询原型，明确不采用为可靠在线控制器；证据见 `u170_nn_range_boundary_v1/analysis/integration_decision.json`。以下示例演示接口，不能据其非空输出认定实际可行。
+
+当前反馈返回版本使用 `sttw_conditional_outcome43_return_v1`：在旧42特征外显式加入原始 `user_alpha`，预测的是“先执行候选α，再按冻结传感器规则恢复用户α”的完整后续方案。不能将恒定α的42模型用于这个返回方案。模型manifest绑定返回规则参数及实现SHA；仿真prepare会拒绝策略、参数或实现身份不一致的组合。
+
+冻结返回规则为：准备至少2s；当前侧倾绝对值≤15°、角速度≤0.35rad/s、前向速度≥1.5m/s且参考允许发布，连续满足0.3s后按每秒1α平滑返回用户值；条件变坏时暂停。计时从当前方案开始，不读取真实扰动起止标签。现有真速度输入的实车估计依赖仍保留。调用 `FrozenAlphaRangePlanner.query` 不会自动执行该规则；实际执行入口为 `run_native_goal_confirmation.py` 的 `range_planner_boundary` 配合 `causal_preference_return`，且保持完整物理/ESO/滤波/历史状态。
+
+当前返回版本已完成两条网络实际选择与一条区间上端验证：在2m/s、R1.3m左弯的原任务1s状态，查询固定24N假设族，估计区间[0.875,1]，选0.875；两条新起扰时刻均存活到达并恢复用户0，上端1的另一条测试也成功。它们是同一相关状态的有限原型验证；轨迹绕行明显、概率未校准。详细结果与后续状态以唯一研究台账及对应run为准，不据这三条宣称所有连续α或新弯道可行。
 
 ```python
 from sttw_control.preference_outcome_prediction import FrozenAlphaRangePlanner
@@ -17,7 +23,7 @@ plan = planner.query(
     current_task_time_s,          # 保留原任务时钟，不重置回合
     hypothetical_disturbances,   # 预先声明的假设扰动族
     user_alpha=original_user_alpha, # 与当前执行α分开保留
-    candidate_alphas=[0., .25, .5, .75, 1.],
+    candidate_alphas=[0., .25, .5, .75, .875, 1.],
     no_fall_threshold=.8,
     task_threshold=.5,
     max_path_error_m=4.,          # 原路径RMSE限制；不是瞬时横向边界

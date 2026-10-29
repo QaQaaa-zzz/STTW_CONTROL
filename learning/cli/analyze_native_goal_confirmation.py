@@ -3050,7 +3050,7 @@ def analyze_fixed_h75_capability(root,p):
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
-        pairs=paired_low_speed_load_outcomes(rows,declared_alphas=p['protocol']['alphas']) if not p['protocol'].get('excluded_completed_cases') else dict(scope='Endpoint pairs are assembled from the complete cached/new matrix below.')
+        pairs=paired_low_speed_load_outcomes(rows,declared_alphas=p['protocol']['alphas'],selected_boundary=bool(boundary)) if not p['protocol'].get('excluded_completed_cases') else dict(scope='Endpoint pairs are assembled from the complete cached/new matrix below.')
         atomic_json(out/'paired_outcomes.json',pairs)
         with (out/'README.md').open('a') as f:
             f.write('\n## Complete paired-load trace index\n\nEach XY panel above has companion `_traces.png` (true/governed/wheel speed, estimation error, steer, roll, roll rate, original cross-track/heading, per-step and cumulative reward) and `_components.png` (signed per-step/cumulative components and terminal adjustment). All actual transitions stop at true failure. No smoothing or manufactured uncertainty; these are deterministic exploratory cases, not independent training replicates. Full execution-path reward is independently rebuilt and checked against recorded per-step reward; original-path task costs remain separate from changing execution references. No extra baseline rollout was requested.\n\n')
@@ -3106,9 +3106,11 @@ def write_reused_preparation_matrix(root,p):
     report.write_text(text+'\n## Complete temporal matrix with cached cases\n\n'+'\n\n'.join(f'![All five alpha actual/reference XY across preparation times]({name})' for name in links)+f'\n\nCombined{len(joined)} contains{len(rows)} new physical cases and{len(joined)-len(rows)} authenticated cached cases; none was rerun. Complete cell outcomes and intersections are in combined_temporal_matrix.json. These are observed finite candidates, not a learned guaranteed interval.\n')
 
 
-def paired_low_speed_load_outcomes(rows,*,declared_alphas=None):
+def paired_low_speed_load_outcomes(rows,*,declared_alphas=None,selected_boundary=False):
     """Report every signed event, including opposite/null results and speed violations."""
     pairs=[]
+    if selected_boundary:
+        return dict(pairs=[],total_pairs=0,desired_witnesses=0,endpoint_comparison='not applicable: one network-selected alpha per source/event, not a paired endpoint experiment; all physical rows remain reported')
     if declared_alphas is not None and not {0.,1.}.issubset(set(declared_alphas)):
         return dict(pairs=[],total_pairs=0,desired_witnesses=0,endpoint_comparison='not applicable: both endpoints were not declared; physical rows remain reported')
     for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
