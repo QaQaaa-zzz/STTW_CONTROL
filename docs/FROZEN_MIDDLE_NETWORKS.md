@@ -70,6 +70,15 @@ python learning/cli/freeze_middle_lineage.py \
 
 此处集中导航已有证据，不将不同任务、接口、观察窗或重复缓存相加为总成功率。当前事实及待办仍以研究台账为准。本次只核验报告/汇总与文件存在，未重新积分全部历史轨迹。
 
+### 不只有S弯：已有非S测试入口
+
+- [直线：H75五档各2条，10/10旧严格任务通过](../runs/preference_full_tail_length75_post_v1/straight/analysis/REPORT.md)。该表nominal全部，不能称为非零扰动直线恢复证据。
+- [左右90°单弯：中等脉冲](../runs/preference_full_tail_length75_post_v1/moderate/analysis/REPORT.md)、[强脉冲](../runs/preference_full_tail_length75_post_v1/strong/analysis/REPORT.md)：五档及全部上下文图。
+- [左右70°/R1.9，速度2.3/2.7](../runs/preference_long_baseline_transfer_v1/turn70_R1p9/analysis/REPORT.md)：H75 78/96旧任务通过。
+- [左右130°/R2.7](../runs/preference_long_baseline_transfer_v1/turn130_R2p7/analysis/REPORT.md)：H75 86/96旧任务通过。两跨几何面板历史α为0/.2/.6/1，不冒充当前五档。
+
+本轮统一选型应覆盖直线、左右单弯及连续S，不只沿用近期S面板。具体新预算仍待封存，以上为已完成历史报告。
+
 ### 先看原生XY：H75到底怎样行驶
 
 - [S_left_60_R2p2：三档α与zero实际/原参考轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_native_s_capability_v1/analysis/S_left_60_R2p2_xy.png)
