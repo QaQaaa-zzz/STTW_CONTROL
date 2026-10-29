@@ -152,5 +152,9 @@
     "training_rows": 0,
     "development_rows": 32,
     "unit": "fresh alpha interpolation probes; all32 evaluation only"
+  },
+  "frozen_prediction": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_conditional_outcome_mlp_v2/prospective_queries.json",
+    "manifest_sha256": "3684510615b7c82f16c1930d2c8812efdeb574921d26cf08cfc7510f8b378fda"
   }
 }
