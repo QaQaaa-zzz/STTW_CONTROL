@@ -1,0 +1,100 @@
+{
+  "experiment_id": "STTW-H75-FIVE-ALPHA-BANK4-COVERAGE-PREDICTOR",
+  "mode": "five_alpha_fit",
+  "dataset": {
+    "expected_cases": 1120,
+    "expected_training_rows": 880,
+    "expected_development_rows": 240,
+    "analyses": [
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_five_alpha_tolerance_labels_v1/analysis",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_five_alpha_midtask_labels_v1/analysis",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_five_alpha_bank4_labels_v1/sampling/analysis"
+    ],
+    "development_freeze": {
+      "file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_five_alpha_bank4_labels_v1/protocol/frozen_development240.json",
+      "sha256": "f0286ca252d1d29e79fe18a79152d9a2ddc246f9d302526ef3ddbcdb79e44b91"
+    }
+  },
+  "architecture": {
+    "hidden": [
+      16,
+      16
+    ]
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "updates_per_model_seed": 200,
+    "maximum_total_optimizer_updates": 600,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "optimizer": "AdamW",
+    "ranking_weight": 0.5,
+    "device": "CPU",
+    "fixed_last": true,
+    "full_batch": true
+  },
+  "budget": {
+    "new_physics_steps": 0,
+    "new_ppo_updates": 0,
+    "maximum_optimizer_updates": 600,
+    "automatic_extensions": false
+  },
+  "selection": "Fixed last200 perseed declared before this fit, equal probability ensemble; no checkpoint or seed selection",
+  "target": "Source through hypothetical pulseEND+3 no contact, preparation falls negative, faults incomplete unknown",
+  "data_role": "Two original bank6 mixed batches plus one bank4 training-only batch. Original DEV240 IDs/features/labels and authenticated inputs frozen. Related DEV, not independent TEST.",
+  "activation": "Only after all560 new suffixes and label audit complete, authenticated1120 rows combine as880training/240development and DEV freeze passes. No automatic training on partial data.",
+  "limits": "Probability calibration and closed-loop benefit must be measured, not inferred from loss. No new baseline models. Old model retained pending review.",
+  "stop_rule": "600total optimizer updates or engineering/nonfinite stop; no automatic continuation",
+  "tensorboard": "Reuse project6006 if compatible; verify HTTP and thisrun scalars. No other project interruption.",
+  "features": {
+    "full_indices": [
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342,
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350
+    ],
+    "speed_indices": [
+      304
+    ],
+    "full_dim": 41
+  },
+  "ranking": {
+    "weight": 0.5,
+    "pairing": "source_group_id/preparation_s/force_N; positive-negative only"
+  },
+  "purpose": "Same authenticated560 rows and architecture; change only fixed update count to diagnose observed late overfitting"
+}
