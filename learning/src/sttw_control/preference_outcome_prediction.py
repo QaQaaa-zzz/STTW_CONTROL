@@ -6,6 +6,7 @@ form inputs; later physical outcomes are targets only.
 """
 import hashlib
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -81,3 +82,104 @@ def prepare_dataset(run,output):
     manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),limitations='Related four-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     return manifest
+
+
+def predict_outcomes(export,features):
+    """CPU NumPy inference from the exact frozen multi-head ensemble export."""
+    x=np.asarray(features,np.float32)
+    if x.ndim not in (1,2) or x.shape[-1]!=42 or not np.isfinite(x).all():raise ValueError('finite conditional42 feature vector/matrix required')
+    x=np.clip((x-export['mean'])/export['scale'],-5.,5.)
+    h=np.einsum('...i,sij->s...j',x,export['w0'])+export['b0'][:,None,:] if x.ndim==2 else np.einsum('i,sij->sj',x,export['w0'])+export['b0']
+    h=np.where(h>=0,h,np.expm1(np.minimum(h,0.)))
+    h=np.einsum('s...i,sij->s...j',h,export['w1'])+(export['b1'][:,None,:] if x.ndim==2 else export['b1'])
+    h=np.where(h>=0,h,np.expm1(np.minimum(h,0.)))
+    logits=np.einsum('s...i,sij->s...j',h,export['w2'])+(export['b2'][:,None,:] if x.ndim==2 else export['b2'])
+    probabilities=1./(1.+np.exp(-np.clip(logits[...,:2],-60.,60.)))
+    continuous=np.expm1(np.clip(logits[...,2:],0.,10.))
+    return np.concatenate([probabilities,continuous],axis=-1).mean(axis=0)
+
+
+def outcome_metrics(target,prediction,mask):
+    truth=np.asarray(target);p=np.asarray(prediction);valid=np.asarray(mask)[:,0]>0
+    return dict(rows=len(truth),no_fall_brier=float(np.mean((p[:,0]-truth[:,0])**2)),
+        task_brier=float(np.mean((p[:,1]-truth[:,1])**2)),
+        no_fall_accuracy=float(np.mean((p[:,0]>=.5)==truth[:,0])),task_accuracy=float(np.mean((p[:,1]>=.5)==truth[:,1])),
+        path_rmse_prediction_error_m=float(np.sqrt(np.mean((p[valid,2]-np.expm1(truth[valid,2]))**2))) if valid.any() else None,
+        peak_speed_prediction_error_m_s=float(np.sqrt(np.mean((p[valid,3]-np.expm1(truth[valid,3]))**2))) if valid.any() else None)
+
+
+def fit_outcomes(dataset,output,config,*,on_training_complete=None):
+    """Fixed-last supervised CPU pilot; does not update any control network."""
+    import torch
+    from torch import nn
+    from torch.utils.tensorboard import SummaryWriter
+    dataset=Path(dataset).resolve();output=Path(output).resolve();cfg=json.loads(Path(config).read_text())
+    if (cfg['architecture']['input_dim']!=42 or cfg['architecture']['hidden']!=[16,16] or cfg['architecture']['outputs']!=4
+        or cfg['training']['device']!='cpu' or cfg['training']['selection']!='fixed_last'
+        or cfg['budget']['physics_ticks']!=0
+        or cfg['budget']['optimizer_updates']!=len(cfg['training']['seeds'])*cfg['training']['updates_per_seed']):
+        raise ValueError('declared small multi-output CPU fit contract differs')
+    meta=json.loads((dataset/'manifest.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    if meta['schema']!=SCHEMA or meta['dataset_sha256']!=sha(dataset/'dataset.npz'):raise ValueError('prepared dataset identity changed')
+    for p,h in meta['inputs_sha256'].items():
+        if sha(p)!=h:raise ValueError('prepared source changed '+p)
+    with np.load(dataset/'dataset.npz') as z:data=dict(z)
+    train=data['roles']=='training';dev=data['roles']=='development'
+    x=data['features'];y=data['targets'];mask=data['regression_mask']
+    mean=x[train].mean(axis=0);scale=np.maximum(x[train].std(axis=0),.05)
+    normalized=np.clip((x-mean)/scale,-5.,5.).astype(np.float32)
+    output.mkdir(parents=True,exist_ok=False);(output/'checkpoints').mkdir();started=time.monotonic()
+    (output/'config.json').write_text(json.dumps(cfg,indent=2)+'\n')
+    status=dict(state='running',stage='training',completed_updates=0,declared_updates=cfg['budget']['optimizer_updates'],physics_ticks=0)
+    def save_status():
+        tmp=output/'status.tmp';tmp.write_text(json.dumps(status,indent=2)+'\n');tmp.replace(output/'status.json')
+    save_status();torch.set_num_threads(cfg['training'].get('cpu_threads',1));tx=torch.tensor(normalized);ty=torch.tensor(y);tm=torch.tensor(mask)
+    weights=torch.tensor(cfg['training']['head_loss_weights']);models=[];history=[]
+    for seed in cfg['training']['seeds']:
+        torch.manual_seed(seed);model=nn.Sequential(nn.Linear(42,16),nn.ELU(),nn.Linear(16,16),nn.ELU(),nn.Linear(16,4))
+        optimizer=torch.optim.AdamW(model.parameters(),lr=cfg['training']['learning_rate'],weight_decay=cfg['training']['weight_decay'])
+        writer=SummaryWriter(str(output/'tensorboard'/f'seed{seed}'))
+        for step in range(1,cfg['training']['updates_per_seed']+1):
+            optimizer.zero_grad();logits=model(tx[train]);binary=nn.functional.binary_cross_entropy_with_logits(logits[:,:2],ty[train,:2],reduction='none')
+            regression=nn.functional.smooth_l1_loss(logits[:,2:],ty[train,2:],reduction='none')
+            loss=(binary*weights[:2]).sum(dim=1).mean()+((regression*tm[train])*weights[2:]).sum()/torch.clamp(tm[train].sum(),min=1.)
+            if not torch.isfinite(loss):raise ValueError('nonfinite supervised loss; stop without retry')
+            loss.backward();optimizer.step();status['completed_updates']+=1
+            if step==1 or step%cfg['training']['log_every_updates']==0:
+                with torch.no_grad():d=model(tx[dev]);prob=torch.sigmoid(d[:,:2]).numpy()
+                rec=dict(seed=seed,step=step,loss=float(loss.detach()),no_fall_dev_brier=float(np.mean((prob[:,0]-y[dev,0])**2)),task_dev_brier=float(np.mean((prob[:,1]-y[dev,1])**2)))
+                history.append(rec)
+                for key,value in rec.items():
+                    if key not in ('seed','step'):writer.add_scalar(key,value,step)
+                writer.flush();save_status()
+        torch.save(dict(state_dict=model.state_dict(),seed=seed,schema=SCHEMA,mean=mean,scale=scale,dataset_sha256=meta['dataset_sha256']),output/'checkpoints'/f'seed{seed}.pt')
+        writer.close();models.append(model)
+    status.update(stage='training_complete',state='completed',training_seconds=time.monotonic()-started);save_status()
+    if on_training_complete:
+        on_training_complete(output);status['stage_notified']=True;save_status()
+    export=dict(mean=mean,scale=scale)
+    for layer_index,model_index in enumerate((0,2,4)):
+        export[f'w{layer_index}']=np.stack([m[model_index].weight.detach().numpy().T for m in models]);export[f'b{layer_index}']=np.stack([m[model_index].bias.detach().numpy() for m in models])
+    prediction=predict_outcomes(export,x)
+    with torch.no_grad():
+        logits=torch.stack([m(tx) for m in models]).numpy();reference=np.concatenate([1./(1.+np.exp(-np.clip(logits[...,:2],-60,60))),np.expm1(np.clip(logits[...,2:],0,10))],axis=-1).mean(axis=0)
+    np.testing.assert_allclose(prediction,reference,atol=3e-5,rtol=3e-5,err_msg='NumPy export inference differs from training model')
+    np.savez_compressed(output/'parameters.npz',**export);np.savez_compressed(output/'predictions.npz',prediction=prediction,targets=y,roles=data['roles'])
+    metrics=dict(training=outcome_metrics(y[train],prediction[train],mask[train]),development=outcome_metrics(y[dev],prediction[dev],mask[dev]))
+    result=dict(schema=SCHEMA,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related four-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
+    (output/'manifest.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metrics,indent=2)+'\n')
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    fig,axes=plt.subplots(1,3,figsize=(14,4),layout='constrained')
+    for seed in cfg['training']['seeds']:
+        records=[r for r in history if r['seed']==seed]
+        for ax,key in zip(axes,['loss','no_fall_dev_brier','task_dev_brier']):
+            ax.plot([r['step'] for r in records],[r[key] for r in records],marker='.',label=f'seed{seed}')
+            ax.set(xlabel='Supervised updates',ylabel=key);ax.grid(alpha=.2);ax.legend()
+    fig.suptitle(f'Conditional outcome MLP / TRAIN{int(train.sum())} DEV{int(dev.sum())} / fixed last; DEV is related, not independent TEST')
+    fig.savefig(output/'training_progress.png',dpi=140);plt.close(fig)
+    (output/'source.py').write_bytes(Path(__file__).read_bytes())
+    result['implementation_sha256']=sha(output/'source.py');(output/'manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+    status.update(stage='pipeline_complete',export_numpy_verified=True,total_seconds=time.monotonic()-started);save_status()
+    return result

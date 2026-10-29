@@ -1,0 +1,44 @@
+{
+  "experiment_id": "STTW-U170-CONDITIONAL-OUTCOME-MLP-PILOT",
+  "architecture": {
+    "input_dim": 42,
+    "hidden": [
+      16,
+      16
+    ],
+    "outputs": 4,
+    "activation": "ELU"
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "updates_per_seed": 1000,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "head_loss_weights": [
+      1.0,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "device": "cpu",
+    "cpu_threads": 1,
+    "selection": "fixed_last",
+    "log_every_updates": 100
+  },
+  "budget": {
+    "physics_ticks": 0,
+    "optimizer_updates": 3000
+  },
+  "data_role": "Related four-state conditional TRAIN80/DEV20, group partition frozen before branch sampling. DEV diagnostics do not make independent TEST; no old q labels or physical changes.",
+  "stop_rule": "Three1000update supervised CPU models; nonfinite/errors stop, no automatic extra updates or physics. Frozen U170 and lower unchanged.",
+  "outputs": [
+    "no_fall_probability",
+    "survived_goal_probability",
+    "original_path_rmse_m",
+    "upright_peak_abs_speed_m_s"
+  ]
+}
