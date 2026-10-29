@@ -1,0 +1,174 @@
+{
+  "experiment_id": "STTW-H75-FRICTION08-STAGE-COVERAGE-FIT",
+  "mode": "five_alpha_fit",
+  "dataset": {
+    "analyses": [
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_stage_coverage_v1/nonS_labels/analysis",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_stage_coverage_v1/S_labels/analysis"
+    ],
+    "expected_cases": 280,
+    "expected_training_rows": 160,
+    "expected_development_rows": 120,
+    "collection_kind": "limited_route_subset",
+    "physics_identity": {
+      "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+      "source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+      "portable_xml_sha256": "9e5c7de46245008e0efd9d3ab3729bfb987a87f79c08a2159459e562a0f4ba56",
+      "assets": {
+        "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+        "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+        "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+        "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+        "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+        "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+      },
+      "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+      "mujoco_version": "3.6.0"
+    },
+    "analysis_plan_sha256s": {
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_stage_coverage_v1/nonS_labels/analysis": "e02b3e72eac3aa8dec13da9a7cb283141354b541f4a247e630591b9307aacd13",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_stage_coverage_v1/S_labels/analysis": "b49f92b623df37f8eabef4bfab5aeb3eee9d3455a25c62478a13ce71e7f748d0"
+    },
+    "source_route_times": [
+      [
+        "straight_v2p6",
+        1.0
+      ],
+      [
+        "left70_R1p9",
+        1.0
+      ],
+      [
+        "right70_R1p9",
+        1.0
+      ],
+      [
+        "left130_R2p7",
+        1.0
+      ],
+      [
+        "right130_R2p7",
+        1.0
+      ],
+      [
+        "straight_v2p6",
+        3.0
+      ],
+      [
+        "left70_R1p9",
+        3.0
+      ],
+      [
+        "right70_R1p9",
+        3.0
+      ],
+      [
+        "left130_R2p7",
+        3.0
+      ],
+      [
+        "right130_R2p7",
+        3.0
+      ],
+      [
+        "S_left_90_R1p8",
+        1.0
+      ],
+      [
+        "S_right_90_R1p8",
+        1.0
+      ],
+      [
+        "S_left_90_R1p8",
+        3.0
+      ],
+      [
+        "S_right_90_R1p8",
+        3.0
+      ]
+    ]
+  },
+  "architecture": {
+    "hidden": [
+      16,
+      16
+    ]
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "updates_per_model_seed": 1000,
+    "maximum_total_optimizer_updates": 3000,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "optimizer": "AdamW",
+    "ranking_weight": 0.5,
+    "device": "CPU",
+    "fixed_last": true,
+    "full_batch": true
+  },
+  "budget": {
+    "new_physics_steps": 0,
+    "new_ppo_updates": 0,
+    "maximum_optimizer_updates": 3000,
+    "automatic_extensions": false
+  },
+  "selection": "Fixed last1000 perseed; equal ensemble, no DEV selection.",
+  "target": "Source through hypothetical pulseEND+3 no contact, preparation falls negative, faults incomplete unknown",
+  "data_role": "Only two sealed newphysics route-subset batches;160train120relatedDEV; no old S task2 labels or historical physics mixing.",
+  "activation": "PENDING completed280 label results review and separate explicit fit authorization; no automatic execution.",
+  "limits": "Probability calibration and closed-loop benefit must be measured, not inferred from loss. No new baseline models. Old model retained pending review.",
+  "stop_rule": "3000 maximum updates or engineering/nonfinite stop, no automatic continuation. Training and pipeline completion notifications separate.",
+  "tensorboard": "Reuse project6006 if compatible; verify HTTP and thisrun scalars. No other project interruption.",
+  "features": {
+    "full_indices": [
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342,
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350
+    ],
+    "speed_indices": [
+      304
+    ],
+    "full_dim": 41
+  },
+  "ranking": {
+    "weight": 0.5,
+    "pairing": "source_group_id/preparation_s/force_N; positive-negative only"
+  },
+  "purpose": "Scratch fixed1000 perseed fit using wider task1/3 source states, nonS original goals plus adopted extended S goals.",
+  "initialization": "Scratch seeds0/1/2; training-only normalizer; no old checkpoint transport."
+}

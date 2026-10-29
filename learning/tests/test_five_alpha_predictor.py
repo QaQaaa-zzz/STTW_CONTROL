@@ -231,3 +231,32 @@ def test_limited_collection_loader_rejects_wrong_identity(identity):
     cfg['dataset'][identity]={} if identity=='physics_identity' else '0'*64
     with pytest.raises(ValueError,match='physics/plan identity'):
         m.load_five_alpha_dataset(None,cfg)
+
+
+def test_stage_subset_partition_and_explicit_two_plan_fit():
+    cfg=json.loads((ROOT/'learning/configs/h75_friction08_stage_coverage_fit.json').read_text())
+    m.validate_five_alpha_fit_config(cfg)
+    sizes=[]
+    for name in ('nonS','extendedS'):
+        p=json.loads((ROOT/f'learning/configs/h75_friction08_wide_{name}_labels.json').read_text())
+        part=m.five_alpha_partition(p);sizes.append((part['cases'],part['training_rows'],part['development_rows']))
+        bad=copy.deepcopy(p);bad['source_groups'][0]['source_task_s']=bad['source_groups'][-1]['source_task_s']
+        with pytest.raises(ValueError,match='route/time'):m.five_alpha_partition(bad)
+    assert tuple(map(sum,zip(*sizes)))==(280,160,120)
+    bad=copy.deepcopy(cfg);bad['dataset']['analysis_plan_sha256s'].pop(next(iter(bad['dataset']['analysis_plan_sha256s'])))
+    with pytest.raises(ValueError,match='two explicit'):m.validate_five_alpha_fit_config(bad)
+
+
+def test_stage_subset_cannot_mix_physics_or_historical_batches(monkeypatch):
+    cfg=json.loads((ROOT/'learning/configs/h75_friction08_stage_coverage_fit.json').read_text())
+    def batch(kind,physics,n,nt,nd):
+        return dict(receipt=dict(data_partition=kind,physics_identity=physics,declared_training_rows=nt,declared_development_rows=nd,source_route_times=[(f'r{i}',t) for i in range(n) for t in (1.,3.)]))
+    a=batch('limited_route_subset',{'xml':'new'},5,120,80);b=batch('mixed',{'xml':'new'},2,40,40)
+    batches=iter([a,b]);monkeypatch.setattr(m,'_load_five_alpha_single',lambda *args:next(batches))
+    with pytest.raises(ValueError,match='cannot mix historical'):m.load_five_alpha_dataset(None,cfg)
+    b=batch('limited_route_subset',{'xml':'old'},2,40,40)
+    # Distinct route names give complete semantic coverage, isolating physics check.
+    b['receipt']['source_route_times']=[(f'r{i}',t) for i in (5,6) for t in (1.,3.)]
+    cfg['dataset']['source_route_times']=a['receipt']['source_route_times']+b['receipt']['source_route_times']
+    batches=iter([a,b])
+    with pytest.raises(ValueError,match='mixed physics'):m.load_five_alpha_dataset(None,cfg)

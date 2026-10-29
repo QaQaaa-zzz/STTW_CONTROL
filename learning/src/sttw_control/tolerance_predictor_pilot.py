@@ -858,6 +858,11 @@ def five_alpha_partition(protocol):
         expected_train,expected_dev,total,bank=train,dev,140,6
         groups=protocol['source_groups']
         if protocol.get('collection_end_s')!=5.76 or protocol.get('require_ongoing_sources') is not True or len(groups)!=7 or {g['route'] for g in groups}!=train|dev or any(g['source_task_s']!=2. or g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('sealed ongoing limited140 contract required')
+    elif kind=='limited_route_subset':
+        routes=set(protocol['source_routes']);groups=protocol['source_groups']
+        times={g['source_task_s'] for g in groups};duration=protocol.get('label_collection_duration_s',0.)
+        expected_train,expected_dev,total,bank=train&routes,dev&routes,len(groups)*20,6
+        if not routes or not routes<=train|dev or len(routes)!=len(protocol['source_routes']) or not math.isfinite(duration) or duration<max(protocol['preparation_s'])+protocol['duration_s']+protocol['primary_after_pulse_end_s'] or protocol.get('require_ongoing_sources') is not True or len(groups)!=len(routes)*len(times) or {(g['route'],g['source_task_s']) for g in groups}!={(r,t) for r in routes for t in times} or any(g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('sealed route/time subset contract differs')
     elif kind=='mixed':expected_train,expected_dev,total,bank=train,dev,280,6
     else:raise ValueError('unknown sealed data partition')
     if set(split['training_routes'])!=expected_train or set(split['development_routes'])!=expected_dev or {g['bank_index'] for g in protocol['source_groups']}!={bank}:raise ValueError('frozen route/bank partition changed')
@@ -884,9 +889,10 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120),(140,80,60)},2:{(560,320,240)},3:{(1120,880,240)}}[batches])):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches])):
         raise ValueError('frozen five-alpha fitting contract mismatch')
     if d['expected_cases']==140 and (batches!=1 or d.get('collection_kind')!='limited_collection' or not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256')):raise ValueError('limited140 requires explicit physics and plan identity')
+    if d.get('collection_kind')=='limited_route_subset' and (batches!=2 or not isinstance(d.get('physics_identity'),dict) or set(d.get('analysis_plan_sha256s',{}))!=set(analyses) or not d.get('source_route_times')):raise ValueError('route subset requires two explicit physics-bound plans')
     return cfg
 
 
@@ -907,9 +913,12 @@ def _load_five_alpha_single(analysis,cfg):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint changed')
         inputs[str(model[key])]=model[key+'_sha256']
     protocol=plan['protocol'];split=protocol['fitting_split']
-    if 'collection_end_s' in protocol:
+    if 'collection_end_s' in protocol or protocol.get('data_partition')=='limited_route_subset':
         d=cfg['dataset']
-        if d.get('collection_kind')!='limited_collection' or d.get('physics_identity')!=plan['initial_source']['model'] or d.get('analysis_plan_sha256')!=seal['plan_sha256']:raise ValueError('limited collection physics/plan identity differs')
+        if protocol.get('data_partition')=='limited_route_subset':
+            if d.get('collection_kind')!='limited_route_subset' or d.get('physics_identity')!=plan['initial_source']['model'] or d.get('analysis_plan_sha256s',{}).get(str(analysis))!=seal['plan_sha256']:raise ValueError('route subset physics/plan identity differs')
+        else:
+            if d.get('collection_kind')!='limited_collection' or d.get('physics_identity')!=plan['initial_source']['model'] or d.get('analysis_plan_sha256')!=seal['plan_sha256']:raise ValueError('limited collection physics/plan identity differs')
         if receipt.get('full_h10_outcomes_claimed',False):raise ValueError('limited collection cannot claim H10')
     partition=five_alpha_partition(protocol);expected_train=partition['training_routes'];expected_dev=partition['development_routes'];total=partition['cases']
     if protocol.get('planning_frequency_hz')!=10. or not plan.get('replanning',{}).get('continuous_replanning') or plan['replanning'].get('period_s')!=.1:raise ValueError('only native10Hz labels accepted; old1Hz data excluded')
@@ -931,16 +940,17 @@ def _load_five_alpha_single(analysis,cfg):
         child=Path(item);child=child if child.is_absolute() else root/child
         cp=read(child/'plan.json');cs=read(child/'seal.json');cr=read(child/'analysis/receipt.json')
         if cs['plan_sha256']!=digest(child/'plan.json') or cr['plan_sha256']!=cs['plan_sha256'] or cp['models']!=plan['models'] or cp['config']!=plan['config']:raise ValueError('child frozen identity differs')
-        if 'collection_end_s' in protocol and cp.get('initial_source',{}).get('model')!=plan['initial_source']['model']:raise ValueError('child physics identity differs')
+        if ('collection_end_s' in protocol or protocol.get('data_partition')=='limited_route_subset') and cp.get('initial_source',{}).get('model')!=plan['initial_source']['model']:raise ValueError('child physics identity differs')
         sealed(cp,child)
         source_records=read(child/'evaluation/source_records.json')
-        if len(source_records)!=7 or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
+        expected_groups=sum(g['source_task_s']==cp.get('source_task_s') for g in protocol['source_groups']) if partition['kind']=='limited_route_subset' else 7
+        if len(source_records)!=expected_groups or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
         for record in source_records:
             fingerprint=record.get('pre_boundary_fingerprint')
             if not isinstance(fingerprint,str) or len(fingerprint)!=64:raise ValueError('exact complete-carry source fingerprint required')
             physical_sources.append(fingerprint)
         rows=read(child/'analysis/results.json');cases=read(child/'inventory.json')
-        if len(rows)!=140 or len(cases)!=140:raise ValueError('child140 required')
+        if len(rows)!=expected_groups*20 or len(cases)!=expected_groups*20:raise ValueError('complete declared child product required')
         path=child/'evaluation/source_features.npz';inputs[str(path)]=digest(path)
         with np.load(path,allow_pickle=False) as z:sources={k:z[k].copy() for k in z.files}
         for i,(r,c) in enumerate(zip(rows,cases)):
@@ -1006,7 +1016,7 @@ def _load_five_alpha_single(analysis,cfg):
             for value in sorted({m[key] for m in meta}):
                 ids=[i for i,m in enumerate(meta) if all_roles[i]==role and m[key]==value]
                 coverage[role][key][str(value)]=dict(declared_rows=len(ids),valid_rows=sum(bool(valid[i]) for i in ids),invalid_rows=sum(not bool(valid[i]) for i in ids))
-    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'],data_partition=partition['kind'],physical_source_fingerprints=physical_sources,development_identity_rows=dev_identity,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],physics_identity=plan.get('initial_source',{}).get('model'),data_role=f'Related bank{partition["bank"]} native10Hz {partition["kind"]} batch; not independent TEST')
+    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'],data_partition=partition['kind'],source_route_times=[[g['route'],g['source_task_s']] for g in protocol['source_groups']],physical_source_fingerprints=physical_sources,development_identity_rows=dev_identity,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],physics_identity=plan.get('initial_source',{}).get('model'),data_role=f'Related bank{partition["bank"]} native10Hz {partition["kind"]} batch; not independent TEST')
     return data
 
 
@@ -1023,6 +1033,11 @@ def load_five_alpha_dataset(analysis,cfg):
     totals=(sum(b['receipt']['declared_training_rows']+b['receipt']['declared_development_rows'] for b in batches),sum(b['receipt']['declared_training_rows'] for b in batches),sum(b['receipt']['declared_development_rows'] for b in batches))
     if totals!=(d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']):raise ValueError('declared aggregate row counts differ')
     if len(batches)>1 and any(b['receipt']['data_partition']=='limited_collection' for b in batches):raise ValueError('limited collection cannot mix historical data')
+    if any(b['receipt']['data_partition']=='limited_route_subset' for b in batches) and any(b['receipt']['data_partition']!='limited_route_subset' for b in batches):raise ValueError('route subset cannot mix historical data')
+    if cfg['dataset'].get('collection_kind')=='limited_route_subset':
+        semantic=[tuple(k) for b in batches for k in b['receipt']['source_route_times']]
+        expected=[tuple(k) for k in cfg['dataset']['source_route_times']]
+        if len(semantic)!=len(set(semantic)) or len(expected)!=len(set(expected)) or set(semantic)!=set(expected):raise ValueError('complete declared nonoverlapping route/time coverage required')
     if any(b['receipt']['physics_identity']!=batches[0]['receipt']['physics_identity'] for b in batches[1:]):raise ValueError('mixed physics datasets forbidden')
     if len(batches)==1:
         verify_five_alpha_development_freeze(batches[0],cfg);return batches[0]
@@ -1044,7 +1059,7 @@ def load_five_alpha_dataset(analysis,cfg):
     if any(identity!=identities[0] for identity in identities[1:]):raise ValueError('combined frozen model identities differ')
     for role in combined:
         combined[role]['full']=np.concatenate(combined[role]['full']);combined[role]['y']=np.concatenate(combined[role]['y'])
-    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=totals[1],declared_development_rows=totals[2],physical_source_fingerprints=sorted(physical_seen),development_identity_rows=dev_identity,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],data_role='Related native10Hz batches; existing bank6 route split and additive bank4 training-only sources; no independent TEST')
+    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=totals[1],declared_development_rows=totals[2],physical_source_fingerprints=sorted(physical_seen),development_identity_rows=dev_identity,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],physics_identity=batches[0]['receipt']['physics_identity'],data_partition=cfg['dataset'].get('collection_kind','historical_combined'),data_role='Related native10Hz batches; existing bank6 route split and additive bank4 training-only sources; no independent TEST')
     verify_five_alpha_development_freeze(combined,cfg)
     return combined
 
