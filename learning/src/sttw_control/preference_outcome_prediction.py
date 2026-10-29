@@ -17,6 +17,29 @@ RETURN_SCHEMA='sttw_conditional_outcome43_return_v1'
 STATE_INDICES=tuple(range(300,320))+tuple(range(337,351))
 
 
+
+FORWARD_PREVIEW_OFFSETS_M=(1.5,2.,3.)
+
+
+def geometric_preview_features(path_s,path_curvature,source_progress_m):
+    """Signed original-path curvature at explicit forward distances, in 1/m.
+
+    Uses the current projection and known task geometry, never future measured
+    states or gust labels. Experimental feature preparation only: existing
+    42/43-dimensional frozen predictors remain unchanged. Sparse samples are
+    not a continuous-path feasibility check or a safety bound.
+    """
+    s=np.asarray(path_s,float);curvature=np.asarray(path_curvature,float)
+    if (s.ndim!=1 or len(s)<2 or curvature.shape!=s.shape
+        or not np.isfinite(s).all() or not np.isfinite(curvature).all()
+        or not np.isfinite(source_progress_m) or not np.all(np.diff(s)>0)):
+        raise ValueError('finite ordered path coordinates and matching curvature required')
+    query=float(source_progress_m)+np.asarray(FORWARD_PREVIEW_OFFSETS_M)
+    if source_progress_m<s[0] or query[-1]>s[-1]:
+        raise ValueError('declared forward preview must lie in known path support')
+    return np.interp(query,s,curvature).astype(np.float32)
+
+
 def outcome_features(observation,latent,source_yaw,case,interface):
     obs=np.asarray(observation,np.float32);z=np.asarray(latent,np.float32)
     if obs.shape!=(351,) or z.shape!=(2,) or not np.isfinite(np.r_[obs,z,source_yaw]).all():

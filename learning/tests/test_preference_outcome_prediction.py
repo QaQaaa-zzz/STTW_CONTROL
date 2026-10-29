@@ -135,3 +135,20 @@ def test_return43_query_requires_user_and_keeps_actor_observation351():
     with pytest.raises(ValueError,match='original user'):plan_alpha_intervals(*args,**options)
     result=plan_alpha_intervals(*args,**options,original_user_alpha=0.)
     assert result['estimated_intervals']==[[0.,1.]] and obs.shape==(351,)
+
+
+def test_forward_geometry_preview_distinguishes_mirrored_upcoming_bends():
+    from sttw_control.preference_outcome_prediction import geometric_preview_features
+    s=np.array([0.,1.,1.5,2.,3.,4.]);k=np.array([0.,0.,.4,.8,.3,0.])
+    left=geometric_preview_features(s,k,0.)
+    np.testing.assert_allclose(left,[.4,.8,.3])
+    np.testing.assert_array_equal(geometric_preview_features(s,-k,0.),-left)
+    np.testing.assert_array_equal(geometric_preview_features(s+7.,k,7.),left)
+    np.testing.assert_array_equal(geometric_preview_features(s,k*0.,0.),np.zeros(3))
+
+
+def test_forward_geometry_preview_rejects_missing_support_and_invalid_path():
+    from sttw_control.preference_outcome_prediction import geometric_preview_features
+    with pytest.raises(ValueError,match='support'):geometric_preview_features([0.,2.],[0.,1.],0.)
+    with pytest.raises(ValueError,match='ordered'):geometric_preview_features([0.,4.,3.],[0.,1.,0.],0.)
+    with pytest.raises(ValueError,match='ordered'):geometric_preview_features([0.,4.],[0.,np.nan],0.)
