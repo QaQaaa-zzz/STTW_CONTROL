@@ -2924,7 +2924,7 @@ def analyze_fixed_h75_capability(root,p):
         if receipt['actual_future_event_input'] is not False or receipt['same_source_actual_event_decisions_identical'] is not True:raise ValueError('causal boundary decision audit missing')
         boundary_decisions={r['case_id']:r for r in receipt['decisions']}
         if len(boundary_decisions)!=len(cases):raise ValueError('one boundary decision per physical case required')
-        model_label+=' | NN range selected at task1.6s; held afterwards'
+        model_label+=' | NN range selected at declared source time'
     if candidate:
         for key in ('actor','checkpoint','registry_id'):
             if p['models']['H75'][key]!=candidate[key]:raise ValueError('candidate model identity differs')
@@ -3045,7 +3045,8 @@ def analyze_fixed_h75_capability(root,p):
             raw=raws[r['case_id']];n=r['active_lower_ticks'];ax.plot(raw['time'][:n],raw['alpha_exec'][:n],ls=['-',':','--','-.'][i%4],label=f"case onset={r['onset_s']:g}s")
         ax.axhline(return_rule['user_alpha'],color='black',ls='--',lw=.8,label='Original user alpha');ax.set(xlabel='Task time (s)',ylabel='Executing alpha',ylim=(-.05,1.05));ax.legend();ax.grid(alpha=.2)
         fig.savefig(out/'causal_preference_return_alpha.png',dpi=140);plt.close(fig)
-        (out/'README.md').write_text('# Causal preparation and preference return\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+'\n\n![Actual executing alpha](causal_preference_return_alpha.png)\n\nFrozen U170 prepares at the declared alpha, then returns toward the original user alpha using current roll, roll rate, true-speed input and publication permission after a fixed minimum preparation age and stable dwell. No actual gust onset/end enters the rule. This is a deterministic feedback-return experiment, not a validated new outcome network. Original user reward and all components are independently reconstructed; the H75 Actor sees executing alpha. Old hold-alpha42 labels cannot silently represent this new continuation policy.\n')
+        selection_note=('The frozen outcome network queried the current state, produced an estimated alpha range, and selected the preparation alpha; this run tests that selection with feedback return at the declared new gust timings. This is related-state validation, not calibrated risk or continuous-interior certification. ' if boundary else 'This is a deterministic feedback-return experiment; it does not itself validate an outcome network. ')
+        (out/'README.md').write_text('# Causal preparation and preference return\n\n'+'\n\n'.join(f'![Actual/reference XY]({f})' for f in links)+'\n\n![Actual executing alpha](causal_preference_return_alpha.png)\n\nFrozen U170 prepares at the declared alpha, then returns toward the original user alpha using current roll, roll rate, true-speed input and publication permission after a fixed minimum preparation age and stable dwell. No actual gust onset/end enters the rule. '+selection_note+'Original user reward and all components are independently reconstructed; the H75 Actor sees executing alpha. Old hold-alpha42 labels cannot silently represent this new continuation policy.\n')
     if extended:
         with (out/'README.md').open('a') as f:f.write('\nS_goal_extension: old goal outlined black, new goal disk green (+3m along the existing exit straight); solid actual XY before first new-goal entry, dashed afterward. All actual samples retained through physical termination. This is a changed task goal, not evidence that the original task improved.\n')
     if load_screen:
