@@ -356,6 +356,17 @@ def snapshot_block_for_task(source_plan, task_s):
     raise ValueError('source task time is not a saved chunk boundary')
 
 
+def label_collection_steps(protocol, source_task_s):
+    """Stop collection on an upper boundary, preserving the native H10 task."""
+    end=protocol.get('collection_end_s',protocol['horizon_s'])
+    if isinstance(end,bool) or not isinstance(end,(int,float)) or not math.isfinite(end) or not source_task_s<end<=protocol['horizon_s']:
+        raise ValueError('invalid label collection endpoint')
+    upper=(end-source_task_s)*50
+    if abs(upper-round(upper))>1e-9:raise ValueError('collection endpoint must be an upper boundary')
+    count=round(upper);whole,tail=divmod(count,5)
+    return [5]*whole+([tail] if tail else [])
+
+
 def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=None):
     """Declarative related-DEV branching, authenticated against source metadata."""
     required=dict(mode=LABEL_MODE,model_id='STTW_MIDDLE_FULLTAIL_PPO75_U77',
@@ -372,7 +383,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     nominal={i for i,c in enumerate(source_cases) if c.get('mode')=='H75' and c.get('alpha')==.5 and c.get('force_N')==0.}
     if not nominal or any({g['source_lane'] for g in groups if g['source_task_s']==t}!=nominal for t in times):raise ValueError('all nominal source lanes required at each clock')
     if len({(g['source_task_s'],g['source_lane']) for g in groups})!=len(groups):raise ValueError('duplicate complete source group')
-    budget=sum(round((p['horizon_s']-g['source_task_s'])*200)*20 for g in groups)
+    budget=sum(sum(label_collection_steps(p,g['source_task_s']))*4*20 for g in groups)
     if p['expected_cases']!=count*20 or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
     rows=[]
     for g in groups:
@@ -383,6 +394,8 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
             executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',expected_task_tick=round(t*200),
             source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
         if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
+        if p.get('require_ongoing_sources',False) is not False and (p['require_ongoing_sources'] is not True or g['expected_ever_arrived']):raise ValueError('ongoing-only sources required')
+        if t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p.get('collection_end_s',p['horizon_s'])+1e-9:raise ValueError('primary label window outside collection')
         if not isinstance(g['expected_ever_arrived'],bool) or not isinstance(g['expected_replanned'],bool):raise ValueError('explicit boolean source host flags required')
         if task_s is not None and t!=task_s:continue
         identity=f"{Path(p['source']).resolve()}@{p['source_plan_sha256']}/tasktick{g['expected_task_tick']}/{g['source_case_id']}"
@@ -444,7 +457,7 @@ def prepare_five_alpha_labels(source,root,protocol):
     rows=five_alpha_label_inventory(proposal,cs,source_plan=old)
     if str(source)!=proposal['source'] or digest(source/'plan.json')!=proposal['source_plan_sha256'] or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('selection source identity differs')
     status=json.loads((source/'evaluation/status.json').read_text())
-    if old.get('mode') not in (SELECTION_MODE,PREFIX_MODE) or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
+    if old.get('mode') not in (SELECTION_MODE,PREFIX_MODE,CAPABILITY_MODE) or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
     if old['models']['H75']['registry_id']!=proposal['model_id'] or not old['replanning'].get('continuous_replanning') or old['replanning']['period_s']!=.1:raise ValueError('frozen native H75/10Hz identity differs')
     for file,sha in {**old['input_sha256'],**old['native_expected_sources']}.items():
         if digest(file)!=sha:raise ValueError('source input/native drift '+file)
@@ -475,8 +488,8 @@ def prepare_five_alpha_labels(source,root,protocol):
         child=root/f'task{t:g}';child.mkdir();(child/'source').mkdir()
         for file in modules:(child/'source'/file.name).write_bytes(file.read_bytes())
         rr=five_alpha_label_inventory(proposal,cs,t,old);save(child/'inventory.json',rr);save(child/'effective_config.json',old['config'])
-        budget=round((10.-t)*200*len(rr));steps=planning_chunk_steps(10.,10.-t)
-        plan=dict(common,source_task_s=t,cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
+        steps=label_collection_steps(proposal,t);budget=sum(steps)*4*len(rr)
+        plan=dict(common,source_task_s=t,collection_end_s=proposal.get('collection_end_s',10.),cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
             maximum_active_lower_ticks=budget,maximum_allocated_lower_slots=budget)
         plan['input_sha256']={**common['input_sha256'],str(child/'inventory.json'):digest(child/'inventory.json'),str(child/'effective_config.json'):digest(child/'effective_config.json')}
         save(child/'plan.json',plan);save(child/'seal.json',dict(plan_sha256=digest(child/'plan.json')))

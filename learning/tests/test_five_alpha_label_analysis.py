@@ -70,3 +70,28 @@ def test_role_metadata_uses_sealed_training_only_bank4_protocol():
     old,_=inventory();legacy=m.five_alpha_role_metadata(dict(protocol=old))
     assert legacy['data_partition']=='mixed'
     assert (legacy['declared_training_rows'],legacy['declared_development_rows'])==(160,120)
+
+
+def test_limited_collection_partition_and_scope_do_not_claim_h10():
+    import copy
+    p,_=inventory();p=copy.deepcopy(p);p.update(collection_end_s=5.76,expected_cases=140,expected_source_states=7,require_ongoing_sources=True)
+    p['source_groups']=p['source_groups'][:7]
+    for g in p['source_groups']:g['source_task_s']=2.
+    p['fitting_split'].update(expected_training_rows=80,expected_development_rows=60)
+    result=m.label_analysis_partition(p)
+    assert result['cases']==140 and result['training_rows']==80
+    assert m.label_plot_outcome(dict(collection_outcome=dict(physical_outcome='survived'),horizons={}))['physical_outcome']=='survived'
+    p['source_groups'][0]['expected_ever_arrived']=True
+    with pytest.raises(ValueError,match='ongoing'):m.label_analysis_partition(p)
+
+
+def test_primary_label_uses_exact_end_not_longer_collection_boundary():
+    n=752;raw=dict(time=2.+np.arange(n)*.005,active_tick=np.ones(n,bool))
+    for k in ('policy_fault','lower_fault','nonfinite','continuation_geometry_fault','contact_failure','physical_failure'):raw[k]=np.zeros(n,bool)
+    contact=680  # task5.4: after prep.2 labelend5.35, before prep.6 labelend5.75.
+    raw['contact_failure'][contact]=True;raw['active_tick'][contact+1:]=False
+    short=dict(primary_window_start_s=2.,primary_window_end_s=5.35,onset_s=2.2)
+    long=dict(primary_window_start_s=2.,primary_window_end_s=5.75,onset_s=2.6)
+    assert m.samestate_primary_label(raw,short)['label_status']=='no_fall'
+    assert m.samestate_primary_label(raw,long)['label_status']=='fall'
+    assert m.samestate_primary_label(raw,short)['observed_window_ticks']==670

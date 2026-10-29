@@ -2441,7 +2441,7 @@ def render_five_alpha_xy(root,p,rows,raws):
         fig,ax=plt.subplots(figsize=(8,7),layout='constrained');ax.plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
         for r in group:
             raw=raws[r['case_id']];n=r['new_suffix_lower_ticks'];line=ax.plot(*raw['actual_xy'][:n].T,label=f"alpha={r['candidate_alpha']:g}")[0]
-            ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's')
+            ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if label_plot_outcome(r)['physical_outcome']=='contact' else 's')
             mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
             ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
         ax.scatter(*first['original_goal_xy'],marker='*',color='k')
@@ -2453,10 +2453,27 @@ def render_five_alpha_xy(root,p,rows,raws):
     return links
 
 
+def label_analysis_partition(protocol):
+    """Opt-in fresh task2 collection; historical fullH10 partitions unchanged."""
+    from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    if 'collection_end_s' not in protocol:return five_alpha_partition(protocol)
+    groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes={g['route'] for g in groups}
+    if protocol['collection_end_s']!=5.76 or protocol['expected_cases']!=140 or len(groups)!=7 or len(routes)!=7 or any(g['source_task_s']!=2. or g['bank_index']!=6 or g['source_user_alpha']!=.5 for g in groups):raise ValueError('limited fresh task2 collection contract differs')
+    if protocol.get('require_ongoing_sources',False) and any(g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('limited collection requires ongoing source states')
+    if not split['declared_before_new_labels'] or train&dev or train|dev!=routes:raise ValueError('limited label roles must be predeclared and exhaustive')
+    nt=sum(g['route'] in train for g in groups)*20;nd=140-nt
+    if split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('limited label declared split differs')
+    return dict(kind=protocol.get('data_partition','limited_collection'),training_routes=train,development_routes=dev,cases=140,training_rows=nt,development_rows=nd,bank=6)
+
+
+def label_plot_outcome(row):
+    return row['collection_outcome'] if 'collection_outcome' in row else row['horizons']['10']
+
+
 def five_alpha_role_metadata(plan):
     """Describe sealed batch role without changing labels or historical artifacts."""
     from sttw_control.tolerance_predictor_pilot import five_alpha_partition
-    protocol=plan.get('protocol',plan);partition=five_alpha_partition(protocol)
+    protocol=plan.get('protocol',plan);partition=label_analysis_partition(protocol)
     role=protocol.get('data_role',plan.get('data_role'))
     if not role:role=f"Related bank{partition['bank']} {partition['kind']} batch; no independent TEST"
     return dict(data_role=role,data_partition=partition['kind'],source_bank_index=partition['bank'],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'])
@@ -2468,7 +2485,8 @@ def analyze_five_alpha_labels(root,p):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from sttw_control.tolerance_predictor_pilot import resolved_label,five_alpha_partition
-    protocol=p.get('protocol',p);partition=five_alpha_partition(protocol);out=root/'analysis'
+    protocol=p.get('protocol',p);partition=label_analysis_partition(protocol);limited='collection_end_s' in protocol;collection_end=float(protocol.get('collection_end_s',10.));out=root/'analysis'
+    if limited and p.get('collection_end_s',collection_end)!=collection_end:raise ValueError('plan/protocol collection end mismatch')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('five-alpha plan drift')
     for f,sha in p.get('input_sha256',{}).items():
         if digest(f)!=sha:raise ValueError('five-alpha sealed input drift '+f)
@@ -2514,21 +2532,22 @@ def analyze_five_alpha_labels(root,p):
             if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('five-alpha case/raw drift')
             with np.load(c['raw_file']) as z:raw=dict(z)
             active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n;start=round(c['primary_window_start_s']/.005)
-            if n<=0 or n>2000-start or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('suffix prefix invalid')
+            if n<=0 or n>round(collection_end/.005)-start or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('suffix prefix invalid')
             np.testing.assert_allclose(raw['time'][:n],(start+np.arange(n))*.005,atol=3e-6,rtol=0)
             query=audit_samestate_query(raw,c);clock=np.rint(raw['time']/.005).astype(int)
             pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=.15))
             faults=raw['policy_fault']|raw['continuation_geometry_fault']|raw['nonfinite']|raw['lower_fault']
-            outcome=goal_arrival_metrics(dict(raw,physical_tick=clock-start,policy_fault=faults),goal_xy=c['original_goal_xy'],radius_m=1.,dt=.005,horizon_s=10-start*.005)
+            outcome=goal_arrival_metrics(dict(raw,physical_tick=clock-start,policy_fault=faults),goal_xy=c['original_goal_xy'],radius_m=1.,dt=.005,horizon_s=collection_end-start*.005)
             g=next(g for g in protocol['source_groups'] if g['source_index']==c['source_index'])
-            outcome.update(physical_outcome=physical_outcome(active,raw['contact_failure'],faults,2000-start),goal_arrived_before_source=g['expected_ever_arrived'],goal_arrived_in_suffix=outcome['goal_arrived'])
+            outcome.update(physical_outcome=physical_outcome(active,raw['contact_failure'],faults,round(collection_end/.005)-start),goal_arrived_before_source=g['expected_ever_arrived'],goal_arrived_in_suffix=outcome['goal_arrived'])
             if outcome['first_arrival_s'] is not None:outcome['first_arrival_s']+=start*.005
             if g['expected_ever_arrived']:outcome['goal_arrived']=True
-            outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
+            if limited:outcome.update(collection_start_s=start*.005,collection_end_s=collection_end,fullH10_observed=False,observation_contract='Only source task2 through collection5.76; original-goal entry/contact here are collection-only, no fullH10 outcome. Primary labels use each exact pulseEND+3 end, not collectionend.')
+            else:outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
             if c['bank_index']!=partition['bank']:raise ValueError('source bank identity changed')
             role='training' if c['route'] in partition['training_routes'] else 'development' if c['route'] in partition['development_routes'] else None
             if role is None:raise ValueError('undeclared source role')
-            rows.append(dict(c,primary=samestate_primary_label(raw,c),horizons={'10':outcome},lifecycle_role=g['lifecycle_role'],fitting_role=role,checkpoint_identity=p['models']['H75'],source_group_id=f"source{c['source_index']}",query=query,pulse=pulse,new_suffix_lower_ticks=n))
+            rows.append(dict(c,primary=samestate_primary_label(raw,c),**(dict(collection_outcome=outcome,horizons={}) if limited else dict(horizons={'10':outcome})),lifecycle_role=g['lifecycle_role'],fitting_role=role,checkpoint_identity=p['models']['H75'],source_group_id=f"source{c['source_index']}",query=query,pulse=pulse,new_suffix_lower_ticks=n))
             raws[c['case_id']]=raw
         if ticks!=status['active_lower_ticks']:raise ValueError('physical accounting mismatch')
         features=five_alpha_feature_rows(cases,sources,raws,p['config']['residual_interface']);labels=np.array([np.nan if resolved_label(r['primary']) is None else resolved_label(r['primary']) for r in rows],np.float32)
@@ -2538,12 +2557,12 @@ def analyze_five_alpha_labels(root,p):
     summary=[]
     for source,alpha in sorted({(r['source_index'],r['candidate_alpha']) for r in rows}):
         group=[r for r in rows if r['source_index']==source and r['candidate_alpha']==alpha]
-        summary.append(dict(source_index=source,candidate_alpha=alpha,route=group[0]['route'],lifecycle_role=group[0]['lifecycle_role'],cases=len(group),fall=sum(r['primary']['label_status']=='fall' for r in group),no_fall=sum(r['primary']['label_status']=='no_fall' for r in group),invalid=sum(r['primary']['label_status'].startswith('invalid') for r in group),goal_H10=sum(r['horizons']['10']['goal_arrived'] is True for r in group)))
+        summary.append(dict(source_index=source,candidate_alpha=alpha,route=group[0]['route'],lifecycle_role=group[0]['lifecycle_role'],cases=len(group),fall=sum(r['primary']['label_status']=='fall' for r in group),no_fall=sum(r['primary']['label_status']=='no_fall' for r in group),invalid=sum(r['primary']['label_status'].startswith('invalid') for r in group),**({'goal_within_collection':sum(r['collection_outcome']['goal_arrived'] is True for r in group)} if limited else {'goal_H10':sum(r['horizons']['10']['goal_arrived'] is True for r in group)})))
     atomic_json(out/'summary.json',summary)
     np.savez_compressed(out/'features_labels.npz',features=features,labels=labels,valid=np.isfinite(labels),case_ids=np.array([r['case_id'] for r in rows]),fitting_role=np.array([r['fitting_role'] for r in rows]))
-    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',**five_alpha_role_metadata(p))
+    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,collection_end_s=collection_end,fullH10_observed=not limited,primary_label_ends_s=sorted({c['primary_window_end_s'] for c in rows}),valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',**five_alpha_role_metadata(p))
     atomic_json(out/'receipt.json',receipt)
-    (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+five_alpha_role_metadata(p)['data_role']+'\n\nPartition: '+five_alpha_role_metadata(p)['data_partition']+'; declared training/development rows: '+str(partition['training_rows'])+'/'+str(partition['development_rows'])+'.\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Full H10 outcome includes recorded pre-source arrival latch, not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
+    (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+five_alpha_role_metadata(p)['data_role']+'\n\nPartition: '+five_alpha_role_metadata(p)['data_partition']+'; declared training/development rows: '+str(partition['training_rows'])+'/'+str(partition['development_rows'])+'.\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Outcome scope is declared in receipt.json: limited collections are not H10 evaluations; primary labels always stop at each exact pulse END+3 endpoint. Recorded pre-source arrival is not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
     return receipt
 
 

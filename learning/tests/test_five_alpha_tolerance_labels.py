@@ -121,3 +121,19 @@ def test_authenticate_declared_host_and_physical_origin(tmp_path):
         validate_five_alpha_source_hosts(tmp_path,[dict(group,expected_ever_arrived=True)])
     with pytest.raises(ValueError,match='physical origin'):
         validate_five_alpha_source_hosts(tmp_path,[dict(group,expected_physical_tick=901)])
+
+
+def test_bounded_collection_preserves_h10_and_exact_primary_windows():
+    from sttw_control.native_goal_run import label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/h75_friction08_tolerance_labels.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==140 and p['horizon_s']==10.
+    assert label_collection_steps(p,2.)==[5]*37+[3]
+    assert sum(label_collection_steps(p,2.))*4*len(rows)==105280
+    np.testing.assert_allclose(sorted({r['primary_window_end_s'] for r in rows}),[5.35,5.75])
+    assert all(not r['expected_ever_arrived'] for r in rows)
+    for key,value in [('collection_end_s',5.74),('collection_end_s',5.761),('require_ongoing_sources','yes')]:
+        changed=copy.deepcopy(p);changed[key]=value
+        with pytest.raises(ValueError):five_alpha_label_inventory(changed)
+    p['source_groups'][0]['expected_ever_arrived']=True
+    with pytest.raises(ValueError,match='ongoing'):five_alpha_label_inventory(p)
