@@ -387,7 +387,10 @@ def snapshot_block_for_task(source_plan, task_s):
 
 def label_collection_steps(protocol, source_task_s):
     """Stop collection on an upper boundary, preserving the native H10 task."""
-    end=protocol.get('collection_end_s',protocol['horizon_s'])
+    if 'label_collection_duration_s' in protocol and 'collection_end_s' in protocol:raise ValueError('choose relative or absolute label collection endpoint')
+    duration=protocol.get('label_collection_duration_s')
+    if duration is not None and (isinstance(duration,bool) or not isinstance(duration,(int,float)) or not math.isfinite(duration) or duration<=0):raise ValueError('invalid label collection duration')
+    end=source_task_s+duration if duration is not None else protocol.get('collection_end_s',protocol['horizon_s'])
     if isinstance(end,bool) or not isinstance(end,(int,float)) or not math.isfinite(end) or not source_task_s<end<=protocol['horizon_s']:
         raise ValueError('invalid label collection endpoint')
     upper=(end-source_task_s)*50
@@ -410,6 +413,11 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     times=sorted({g['source_task_s'] for g in groups})
     if task_s is not None and task_s not in times:raise ValueError('undeclared source group clock')
     nominal={i for i,c in enumerate(source_cases) if c.get('mode')=='H75' and c.get('alpha')==.5 and c.get('force_N')==0.}
+    if 'source_routes' in p:
+        routes=p['source_routes']
+        available={source_cases[i]['route'] for i in nominal}
+        if not isinstance(routes,list) or not routes or len(set(routes))!=len(routes) or not set(routes)<=available:raise ValueError('explicit unique available source routes required')
+        nominal={i for i in nominal if source_cases[i]['route'] in routes}
     if not nominal or any({g['source_lane'] for g in groups if g['source_task_s']==t}!=nominal for t in times):raise ValueError('all nominal source lanes required at each clock')
     if len({(g['source_task_s'],g['source_lane']) for g in groups})!=len(groups):raise ValueError('duplicate complete source group')
     budget=sum(sum(label_collection_steps(p,g['source_task_s']))*4*20 for g in groups)
@@ -424,7 +432,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
             source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
         if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
         if p.get('require_ongoing_sources',False) is not False and (p['require_ongoing_sources'] is not True or g['expected_ever_arrived']):raise ValueError('ongoing-only sources required')
-        if t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p.get('collection_end_s',p['horizon_s'])+1e-9:raise ValueError('primary label window outside collection')
+        if t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>t+sum(label_collection_steps(p,t))*.02+1e-9:raise ValueError('primary label window outside collection')
         if not isinstance(g['expected_ever_arrived'],bool) or not isinstance(g['expected_replanned'],bool):raise ValueError('explicit boolean source host flags required')
         if task_s is not None and t!=task_s:continue
         identity=f"{Path(p['source']).resolve()}@{p['source_plan_sha256']}/tasktick{g['expected_task_tick']}/{g['source_case_id']}"
@@ -484,6 +492,7 @@ def prepare_five_alpha_labels(source,root,protocol):
     source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
     proposal=json.loads(protocol.read_text());old=json.loads((source/'plan.json').read_text());cs=json.loads((source/'inventory.json').read_text())
     rows=five_alpha_label_inventory(proposal,cs,source_plan=old)
+    if 'physics_identity' in proposal and proposal['physics_identity']!=old['initial_source']['model']:raise ValueError('label source physics identity differs')
     if str(source)!=proposal['source'] or digest(source/'plan.json')!=proposal['source_plan_sha256'] or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('selection source identity differs')
     status=json.loads((source/'evaluation/status.json').read_text())
     if old.get('mode') not in (SELECTION_MODE,PREFIX_MODE,CAPABILITY_MODE) or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
@@ -518,7 +527,7 @@ def prepare_five_alpha_labels(source,root,protocol):
         for file in modules:(child/'source'/file.name).write_bytes(file.read_bytes())
         rr=five_alpha_label_inventory(proposal,cs,t,old);save(child/'inventory.json',rr);save(child/'effective_config.json',old['config'])
         steps=label_collection_steps(proposal,t);budget=sum(steps)*4*len(rr)
-        plan=dict(common,source_task_s=t,collection_end_s=proposal.get('collection_end_s',10.),cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
+        plan=dict(common,source_task_s=t,collection_end_s=t+sum(steps)*.02,cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
             maximum_active_lower_ticks=budget,maximum_allocated_lower_slots=budget)
         plan['input_sha256']={**common['input_sha256'],str(child/'inventory.json'):digest(child/'inventory.json'),str(child/'effective_config.json'):digest(child/'effective_config.json')}
         save(child/'plan.json',plan);save(child/'seal.json',dict(plan_sha256=digest(child/'plan.json')))

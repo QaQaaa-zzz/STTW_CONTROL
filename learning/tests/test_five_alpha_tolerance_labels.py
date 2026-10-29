@@ -137,3 +137,24 @@ def test_bounded_collection_preserves_h10_and_exact_primary_windows():
         with pytest.raises(ValueError):five_alpha_label_inventory(changed)
     p['source_groups'][0]['expected_ever_arrived']=True
     with pytest.raises(ValueError,match='ongoing'):five_alpha_label_inventory(p)
+
+
+def test_relative_collection_and_explicit_route_subsets():
+    from sttw_control.native_goal_run import label_collection_steps
+    totals=[]
+    for part,count,train,dev in [('nonS',200,120,80),('extendedS',80,40,40)]:
+        p=json.loads((Path(__file__).parents[1]/f'configs/h75_friction08_wide_{part}_labels.json').read_text())
+        rows=five_alpha_label_inventory(p)
+        assert len(rows)==count
+        assert {r['route'] for r in rows}==set(p['source_routes'])
+        assert p['maximum_suffix_lower_ticks']==count*752
+        assert (p['fitting_split']['expected_training_rows'],p['fitting_split']['expected_development_rows'])==(train,dev)
+        for t in (1.,3.):assert label_collection_steps(p,t)==[5]*37+[3]
+        bad=copy.deepcopy(p);bad['source_routes'].append('undeclared')
+        with pytest.raises(ValueError,match='source routes'):five_alpha_label_inventory(bad)
+        bad=copy.deepcopy(p);bad['source_routes'].pop()
+        with pytest.raises(ValueError,match='source lanes'):five_alpha_label_inventory(bad)
+        bad=copy.deepcopy(p);bad['collection_end_s']=5.76
+        with pytest.raises(ValueError,match='relative or absolute'):five_alpha_label_inventory(bad)
+        totals.append(p['maximum_suffix_lower_ticks'])
+    assert sum(totals)==210560

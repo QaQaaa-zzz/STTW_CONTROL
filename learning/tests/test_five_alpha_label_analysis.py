@@ -95,3 +95,29 @@ def test_primary_label_uses_exact_end_not_longer_collection_boundary():
     assert m.samestate_primary_label(raw,short)['label_status']=='no_fall'
     assert m.samestate_primary_label(raw,long)['label_status']=='fall'
     assert m.samestate_primary_label(raw,short)['observed_window_ticks']==670
+
+
+def test_declared_route_subset_duration_product_and_roles():
+    import copy
+    p,_=inventory();p=copy.deepcopy(p)
+    # Two routes, two times; role declarations cover the exact selected routes.
+    source=p['source_groups'][:2];routes=[g['route'] for g in source]
+    p.update(data_partition='limited_route_subset',source_routes=routes,label_collection_duration_s=3.76,require_ongoing_sources=True,expected_cases=80,expected_source_states=4)
+    p['source_groups']=[dict(g,source_index=i*2+j,source_task_s=t,expected_ever_arrived=False,lifecycle_role='ongoing_task') for i,t in enumerate([1.,3.]) for j,g in enumerate(source)]
+    p['fitting_split'].update(training_routes=routes[:1],development_routes=routes[1:],expected_training_rows=40,expected_development_rows=40)
+    result=m.label_analysis_partition(p)
+    assert (result['cases'],result['training_rows'],result['development_rows'])==(80,40,40)
+    assert m.five_alpha_role_metadata(dict(protocol=p))['data_partition']=='limited_route_subset'
+    p['source_groups'][-1]['source_task_s']=1.
+    with pytest.raises(ValueError,match='product'):m.label_analysis_partition(p)
+
+
+@pytest.mark.parametrize('source_s',[1.,3.])
+def test_duration_primary_windows_ignore_later_collection_fall(source_s):
+    n=752;raw=dict(time=source_s+np.arange(n)*.005,active_tick=np.ones(n,bool))
+    for k in ('policy_fault','lower_fault','nonfinite','continuation_geometry_fault','contact_failure','physical_failure'):raw[k]=np.zeros(n,bool)
+    raw['contact_failure'][751]=True  # finalcollectiontransition, after exact .6 primary end
+    c=dict(primary_window_start_s=source_s,primary_window_end_s=source_s+3.75,onset_s=source_s+.6)
+    assert m.samestate_primary_label(raw,c)['label_status']=='no_fall'
+    raw['active_tick'][700:]=False
+    assert m.samestate_primary_label(raw,c)['label_status'].startswith('invalid')

@@ -2456,6 +2456,16 @@ def render_five_alpha_xy(root,p,rows,raws):
 def label_analysis_partition(protocol):
     """Opt-in fresh task2 collection; historical fullH10 partitions unchanged."""
     from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    if 'label_collection_duration_s' in protocol:
+        groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes=set(protocol['source_routes'])
+        if protocol.get('data_partition')!='limited_route_subset' or protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True:raise ValueError('duration collection requires explicit3.76s ongoing scope')
+        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-64.,64.]:raise ValueError('duration collection branch product differs')
+        if len(routes)!=len(protocol['source_routes']) or {g['route'] for g in groups}!=routes or {g['source_task_s'] for g in groups}!={1.,3.}:raise ValueError('duration source routes/times differ')
+        if len(groups)!=len(routes)*2 or len({(g['route'],g['source_task_s']) for g in groups})!=len(groups) or len({g['source_index'] for g in groups})!=len(groups):raise ValueError('duration source product incomplete')
+        if any(g['bank_index']!=6 or g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('duration collection requires ongoing half-user bank6 sources')
+        cases=len(groups)*20;nt=sum(g['route'] in train for g in groups)*20;nd=cases-nt
+        if protocol['expected_cases']!=cases or protocol['expected_source_states']!=len(groups) or not split['declared_before_new_labels'] or train&dev or train|dev!=routes or split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('duration sealed counts/split differ')
+        return dict(kind=protocol.get('data_partition','duration_limited_collection'),training_routes=train,development_routes=dev,cases=cases,training_rows=nt,development_rows=nd,bank=6)
     if 'collection_end_s' not in protocol:return five_alpha_partition(protocol)
     groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes={g['route'] for g in groups}
     if protocol['collection_end_s']!=5.76 or protocol['expected_cases']!=140 or len(groups)!=7 or len(routes)!=7 or any(g['source_task_s']!=2. or g['bank_index']!=6 or g['source_user_alpha']!=.5 for g in groups):raise ValueError('limited fresh task2 collection contract differs')
@@ -2485,8 +2495,8 @@ def analyze_five_alpha_labels(root,p):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from sttw_control.tolerance_predictor_pilot import resolved_label,five_alpha_partition
-    protocol=p.get('protocol',p);partition=label_analysis_partition(protocol);limited='collection_end_s' in protocol;collection_end=float(protocol.get('collection_end_s',10.));out=root/'analysis'
-    if limited and p.get('collection_end_s',collection_end)!=collection_end:raise ValueError('plan/protocol collection end mismatch')
+    protocol=p.get('protocol',p);partition=label_analysis_partition(protocol);duration_limited='label_collection_duration_s' in protocol;limited='collection_end_s' in protocol or duration_limited;collection_end=float(p['source_task_s']+protocol['label_collection_duration_s'] if duration_limited and 'source_task_s' in p else protocol.get('collection_end_s',10.));out=root/'analysis'
+    if limited and not np.isclose(p.get('collection_end_s',collection_end),collection_end,atol=1e-9,rtol=0):raise ValueError('plan/protocol collection end mismatch')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('five-alpha plan drift')
     for f,sha in p.get('input_sha256',{}).items():
         if digest(f)!=sha:raise ValueError('five-alpha sealed input drift '+f)
@@ -2513,12 +2523,13 @@ def analyze_five_alpha_labels(root,p):
         run=root/'evaluation';status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
         child_protocol=dict(protocol,source_groups=[g for g in protocol['source_groups'] if g['source_task_s']==p['source_task_s']])
         validate_five_alpha_cases(cases,child_protocol)
-        if status['phase']!='completed' or status['completed_cases']!=140 or len(index)!=140:raise ValueError('complete child140 required')
+        expected_child=len(child_protocol['source_groups'])*20
+        if status['phase']!='completed' or status['completed_cases']!=expected_child or len(index)!=expected_child:raise ValueError('complete declared child product required')
         manifest=json.loads((run/'manifest.json').read_text())
         for key,value in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
             if manifest[key]!=value:raise ValueError('five-alpha manifest drift '+key)
         source_records=json.loads((run/'source_records.json').read_text())
-        if len(source_records)!=7:raise ValueError('seven complete-state source identities required')
+        if len(source_records)!=len(child_protocol['source_groups']) or len({r['source_index'] for r in source_records})!=len(source_records):raise ValueError('declared complete-state source identities required')
         for record in source_records:
             lanes=[i for i,c in enumerate(cases) if c['source_index']==record['source_index']]
             g=next(g for g in child_protocol['source_groups'] if g['source_index']==record['source_index'])
@@ -2542,7 +2553,7 @@ def analyze_five_alpha_labels(root,p):
             outcome.update(physical_outcome=physical_outcome(active,raw['contact_failure'],faults,round(collection_end/.005)-start),goal_arrived_before_source=g['expected_ever_arrived'],goal_arrived_in_suffix=outcome['goal_arrived'])
             if outcome['first_arrival_s'] is not None:outcome['first_arrival_s']+=start*.005
             if g['expected_ever_arrived']:outcome['goal_arrived']=True
-            if limited:outcome.update(collection_start_s=start*.005,collection_end_s=collection_end,fullH10_observed=False,observation_contract='Only source task2 through collection5.76; original-goal entry/contact here are collection-only, no fullH10 outcome. Primary labels use each exact pulseEND+3 end, not collectionend.')
+            if limited:outcome.update(collection_start_s=start*.005,collection_end_s=collection_end,fullH10_observed=False,observation_contract=f'Only source task{start*.005:g} through collection{collection_end:g}; original-goal entry/contact here are collection-only, no fullH10 outcome. Primary labels use each exact pulseEND+3 end, not collectionend.')
             else:outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
             if c['bank_index']!=partition['bank']:raise ValueError('source bank identity changed')
             role='training' if c['route'] in partition['training_routes'] else 'development' if c['route'] in partition['development_routes'] else None
@@ -2560,7 +2571,7 @@ def analyze_five_alpha_labels(root,p):
         summary.append(dict(source_index=source,candidate_alpha=alpha,route=group[0]['route'],lifecycle_role=group[0]['lifecycle_role'],cases=len(group),fall=sum(r['primary']['label_status']=='fall' for r in group),no_fall=sum(r['primary']['label_status']=='no_fall' for r in group),invalid=sum(r['primary']['label_status'].startswith('invalid') for r in group),**({'goal_within_collection':sum(r['collection_outcome']['goal_arrived'] is True for r in group)} if limited else {'goal_H10':sum(r['horizons']['10']['goal_arrived'] is True for r in group)})))
     atomic_json(out/'summary.json',summary)
     np.savez_compressed(out/'features_labels.npz',features=features,labels=labels,valid=np.isfinite(labels),case_ids=np.array([r['case_id'] for r in rows]),fitting_role=np.array([r['fitting_role'] for r in rows]))
-    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,collection_end_s=collection_end,fullH10_observed=not limited,primary_label_ends_s=sorted({c['primary_window_end_s'] for c in rows}),valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',**five_alpha_role_metadata(p))
+    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,collection_end_s=(None if duration_limited and children else collection_end),collection_ends_s=sorted({r['collection_outcome']['collection_end_s'] for r in rows}) if limited else [10.],fullH10_observed=not limited,primary_label_ends_s=sorted({c['primary_window_end_s'] for c in rows}),valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',**five_alpha_role_metadata(p))
     atomic_json(out/'receipt.json',receipt)
     (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+five_alpha_role_metadata(p)['data_role']+'\n\nPartition: '+five_alpha_role_metadata(p)['data_partition']+'; declared training/development rows: '+str(partition['training_rows'])+'/'+str(partition['development_rows'])+'.\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Outcome scope is declared in receipt.json: limited collections are not H10 evaluations; primary labels always stop at each exact pulse END+3 endpoint. Recorded pre-source arrival is not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
     return receipt
