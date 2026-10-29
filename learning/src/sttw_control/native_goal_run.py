@@ -132,18 +132,19 @@ CAPABILITY_MODE='fixed_h75_capability'
 def low_speed_lateral_load_inventory(p):
     """Complete paired world-Y equivalent lateral-load screen; never a wind speed."""
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
-        alphas=[0.,1.],horizon_s=10.,
+        horizon_s=10.,
         optimizer_updates=0,planning_frequency_hz=10.,zero_onset_s=0.,
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
     if any(p.get(k)!=value for k,value in required.items()):
         raise ValueError('paired low-speed lateral-load contract differs')
+    if p['alphas'] not in ([0.,1.],[0.,.25,.5,.75,1.]):raise ValueError('two endpoints or all five declared preferences required')
     direction=p.get('force_direction_world',[0.,1.,0.])
     if (len(direction)!=3 or any(not math.isfinite(x) for x in direction)
         or direction[2]!=0. or abs(sum(x*x for x in direction)-1.)>1e-6
         or p['force_frame']!=('world_fixed_vector' if 'force_direction_world' in p else 'worldY')):
         raise ValueError('explicit fixed unit horizontal world force direction required')
     forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
-    count=2*(1+len(forces)*len(onsets))
+    count=len(p['alphas'])*(1+len(forces)*len(onsets))
     if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
@@ -467,10 +468,11 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     leaves=jax.tree.leaves(jax.device_get(neutral))
     groups={}
     for i,c in enumerate(cases):
-        key=(c['bank_index'],c['route'],c['event']) if panel_kind=='disturbed_two_user' else (c['bank_index'],c['route'])
+        key=(c['bank_index'],c['route'],c['event']) if panel_kind in ('disturbed_two_user','disturbed_declared_user') else (c['bank_index'],c['route'])
         groups.setdefault(key,[]).append(i)
-    if panel_kind=='disturbed_two_user':expected_route_count*=len({c['event'] for c in cases})
+    if panel_kind in ('disturbed_two_user','disturbed_declared_user'):expected_route_count*=len({c['event'] for c in cases})
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
+    if panel_kind=='disturbed_declared_user':expected_group_size=len({c['alpha'] for c in cases})
     if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
@@ -2074,7 +2076,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='disturbed_two_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
     elif five_online:

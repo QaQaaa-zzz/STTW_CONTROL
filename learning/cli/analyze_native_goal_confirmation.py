@@ -2784,9 +2784,9 @@ def analyze_five_alpha_online14(root,p):
 
 def validate_fixed_capability_cases(cases,protocol):
     if protocol.get('capability_variant')=='low_speed_lateral_load':
-        expected={(a,float(f),float(t)) for a in (0.,1.) for f in protocol['forces_N'] for t in protocol['onsets_s']}|{(a,0.,0.) for a in (0.,1.)}
+        expected={(a,float(f),float(t)) for a in protocol['alphas'] for f in protocol['forces_N'] for t in protocol['onsets_s']}|{(a,0.,0.) for a in protocol['alphas']}
         observed={(c['alpha'],c['force_N'],c['onset_s']) for c in cases}
-        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas']!=[0.,1.]:raise ValueError('complete paired low-speed load inventory required')
+        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas'] not in ([0.,1.],[0.,.25,.5,.75,1.]):raise ValueError('complete paired low-speed load inventory required')
         if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=2. or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
         return
@@ -2934,7 +2934,7 @@ def paired_low_speed_load_outcomes(rows):
     """Report every signed event, including opposite/null results and speed violations."""
     pairs=[]
     for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
-        group=sorted([r for r in rows if (r['route'],r['event'])==(route,event)],key=lambda r:r['alpha'])
+        group=sorted([r for r in rows if (r['route'],r['event'])==(route,event) and r['alpha'] in (0.,1.)],key=lambda r:r['alpha'])
         if len(group)!=2 or [r['alpha'] for r in group]!=[0.,1.]:raise ValueError('exact alpha0/1 event pair required')
         a,b=group
         if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')) or a.get('force_direction_world',[0.,1.,0.])!=b.get('force_direction_world',[0.,1.,0.]):raise ValueError('same intended event and initial model required')
@@ -2949,14 +2949,14 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
     """Unsmoothed paired traces, actual failure cutoff and independently rebuilt reward."""
     import matplotlib.pyplot as plt
     fig,axes=plt.subplots(3,3,figsize=(15,11),layout='constrained')
-    comp,caxes=plt.subplots(2,2,figsize=(15,9),layout='constrained')
+    comp,caxes=plt.subplots(2,len(group),figsize=(max(15,4*len(group)),9),layout='constrained')
     labels=['True / governed / wheel speed (m/s)','True minus wheel speed (m/s)','Actual / governed steer (rad)',
             'Roll (deg)','Roll rate (deg/s)','Original cross-track (m)',
             'Original heading error (rad)','Reward per actual lower step','Cumulative reward']
     for column,row in enumerate(group):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];t=raw['time'][:n]+.005;steps=np.arange(1,n+1)
         with np.load(row['diagnostic_task_file']) as z:d=dict(z)
-        color,style=('#0072B2','-') if row['alpha']==0 else ('#D55E00','--');label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
+        color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}[row['alpha']];label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
         series=[raw['actual_forward_speed'][:n],raw['actual_forward_speed'][:n]-raw['wheel_speed_proxy'][:n],raw['actual_delta'][:n],raw['phi'][:n]*180/np.pi,raw['phi_dot'][:n]*180/np.pi,d['original_cross_track_m'],d['original_heading_error_rad'],d['reward'],np.cumsum(d['reward'])]
         for k,(ax,y) in enumerate(zip(axes.flat,series)):
             x=steps if k>=7 else t;ax.plot(x,y,color=color,ls=style,lw=1.1,label=label)

@@ -62,7 +62,8 @@ def test_common_fixed_world_vector_is_not_rotated_per_alpha():
     with pytest.raises(ValueError,match='unit horizontal'):fixed_h75_capability_inventory(cfg)
 
 
-def test_two_alpha_per_event_reset_audit_preserves_complete_pairing():
+@pytest.mark.parametrize('alphas',[[0.,1.],[0.,.25,.5,.75,1.]])
+def test_two_alpha_per_event_reset_audit_preserves_complete_pairing(alphas):
     @struct.dataclass
     class Physical:
         physical_tick: object
@@ -76,11 +77,12 @@ def test_two_alpha_per_event_reset_audit_preserves_complete_pairing():
     class Carry:
         state: object
         hidden: object
-    rows=fixed_h75_capability_inventory(config());alpha=j.array([r['alpha'] for r in rows])
-    values=j.repeat(j.arange(17),2)
-    initial=Carry(State(alpha,j.zeros(34,j.int32),Physical(j.full(34,700,j.int32)),values),values+10)
-    receipt=audit_five_alpha_online_initial(initial,rows,700,panel_kind='disturbed_two_user',expected_route_count=1)
+    cfg=config();n=17*len(alphas);cfg.update(alphas=alphas,expected_cases=n,maximum_lower_ticks=n*2000)
+    rows=fixed_h75_capability_inventory(cfg);alpha=j.array([r['alpha'] for r in rows])
+    values=j.repeat(j.arange(17),len(alphas))
+    initial=Carry(State(alpha,j.zeros(n,j.int32),Physical(j.full(n,700,j.int32)),values),values+10)
+    receipt=audit_five_alpha_online_initial(initial,rows,700,panel_kind='disturbed_declared_user',expected_route_count=1)
     assert receipt['paired_reset_all_leaves_exact']
     bad=initial.replace(hidden=initial.hidden.at[1].set(999))
     with pytest.raises(ValueError,match='neutralization'):
-        audit_five_alpha_online_initial(bad,rows,700,panel_kind='disturbed_two_user',expected_route_count=1)
+        audit_five_alpha_online_initial(bad,rows,700,panel_kind='disturbed_declared_user',expected_route_count=1)
