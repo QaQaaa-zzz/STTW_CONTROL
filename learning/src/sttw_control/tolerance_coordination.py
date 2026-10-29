@@ -59,20 +59,22 @@ def native_offsets(latents,interface):
     return j.stack([a[...,0]*j.where(a[...,0]>=0,interface['speed_positive_scale_m_s'],interface['speed_negative_scale_m_s']),a[...,1]*interface['steer_scale_rad']],axis=-1)
 
 
-def candidate_features(observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.)):
+def candidate_features(observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.),hypothetical_duration_s=.1):
     import jax.numpy as j
+    if not np.isfinite(hypothetical_duration_s) or hypothetical_duration_s<=0:
+        raise ValueError('positive finite hypothetical duration required')
     offsets=native_offsets(latents,interface)
     alpha=j.asarray(candidate_alphas,j.float32)
     count=alpha.shape[0]
     force=j.array([-64.,64.,-64.,64.],j.float32)
     preparation=j.array([.2,.2,.6,.6],j.float32)
-    shared=j.stack([j.broadcast_to(alpha[:,None],(count,4)),j.broadcast_to(offsets[:,0,None],(count,4)),j.broadcast_to(offsets[:,1,None]/.2,(count,4)),j.broadcast_to(force[None,:]*j.sin(yaw)/64.,(count,4)),j.broadcast_to(force[None,:]*j.cos(yaw)/64.,(count,4)),j.ones((count,4),j.float32),j.broadcast_to(preparation[None,:]/.6,(count,4))],axis=-1)
+    shared=j.stack([j.broadcast_to(alpha[:,None],(count,4)),j.broadcast_to(offsets[:,0,None],(count,4)),j.broadcast_to(offsets[:,1,None]/.2,(count,4)),j.broadcast_to(force[None,:]*j.sin(yaw)/64.,(count,4)),j.broadcast_to(force[None,:]*j.cos(yaw)/64.,(count,4)),j.full((count,4),hypothetical_duration_s/.1,j.float32),j.broadcast_to(preparation[None,:]/.6,(count,4))],axis=-1)
     indices=j.array(list(range(300,320))+list(range(337,351)))
     return j.concatenate([j.broadcast_to(observation[indices],(count,4,34)),shared],axis=-1)
 
 
-def candidate_probabilities(params,observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.)):
-    features=candidate_features(observation,latents,yaw,interface,candidate_alphas=candidate_alphas)
+def candidate_probabilities(params,observation,latents,yaw,interface,*,candidate_alphas=(0.,.5,1.),hypothetical_duration_s=.1):
+    features=candidate_features(observation,latents,yaw,interface,candidate_alphas=candidate_alphas,hypothetical_duration_s=hypothetical_duration_s)
     return infer_probabilities(params,features.reshape(-1,41)).reshape((-1,len(candidate_alphas),4))
 
 
@@ -110,9 +112,9 @@ def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,pr
     return dict(alpha=chosen,latched=new_latch,prev_alpha=chosen,task_mask=task_mask,proxy_cost=cost,degraded=permission&degraded,publication_withheld=~permission,task_aware_fallback=j.asarray(task_aware_fallback),task_aware_selected=permission&task_aware_selected,guard_fallback=j.asarray(guard_fallback),guard_fallback_selected=permission&guard_selected)
 
 
-def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.)):
+def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.),hypothetical_duration_s=.1):
     import jax.numpy as j
-    probabilities=candidate_probabilities(params,observation,latents,yaw,interface,candidate_alphas=candidate_alphas)[arm]
+    probabilities=candidate_probabilities(params,observation,latents,yaw,interface,candidate_alphas=candidate_alphas,hypothetical_duration_s=hypothetical_duration_s)[arm]
     qmin=j.min(probabilities,axis=-1)
     unbounded=nominal[None,:]+native_offsets(latents,interface)
     lo,hi=interface['speed_reference_bounds_m_s'];steer=interface['steer_reference_bound_rad']

@@ -305,5 +305,24 @@
   "data_role": "Related single-bank DEV label extension, not independent TEST. Group source states by route before any fitting; no random sibling split. Do not mix old1Hz labels as validation of10Hz.",
   "stop_rule": "At most280 suffixes/364000lower,0optimizer; stop on engineering error, no automatic retry/force sweep/source replacement. Review labels before separate bounded MLP fit authorization under continuing project scope.",
   "readiness": "Needs native sampler/import and analyzer integration plus exact state/timing checks; this file does not launch or claim completed physics.",
-  "source_lifecycle_limits": "Four task6 single-turn sources already arrived; retain as post-arrival survival labels, not task recovery examples. Ten sources are ongoing-task states. No outcome-based replacement."
+  "source_lifecycle_limits": "Four task6 single-turn sources already arrived; retain as post-arrival survival labels, not task recovery examples. Ten sources are ongoing-task states. No outcome-based replacement.",
+  "fitting_split": {
+    "training_routes": [
+      "straight_v2p6",
+      "left70_R1p9",
+      "right130_R2p7",
+      "S_left_90_R1p8"
+    ],
+    "development_routes": [
+      "right70_R1p9",
+      "left130_R2p7",
+      "S_right_90_R1p8"
+    ],
+    "unit": "route: both source times and all sibling candidates/preparations/directions stay together",
+    "expected_training_rows": 160,
+    "expected_development_rows": 120,
+    "role": "Related bank6 DEV, mirrored geometries, not independent final TEST",
+    "declared_before_new_labels": true,
+    "fit_not_yet_authorized_by_this_protocol": true
+  }
 }

@@ -217,3 +217,20 @@ def test_five_candidates_query_and_select_quarter_preferences(interface):
     for index in (1,3):
         q=j.zeros(5).at[index].set(.9)
         assert float(choose(1.,q)['alpha'])==grid[index]
+
+
+def test_five_alpha_new_duration_matches_offline_source_user_features(interface):
+    import jax.numpy as j
+    from sttw_control.tolerance_predictor_pilot import feature_row
+    obs=np.linspace(-1,1,351,dtype=np.float32);obs[336]=.5
+    grid=(0.,.25,.5,.75,1.);latents=np.zeros((5,2),np.float32)
+    actual=np.asarray(coordinator.candidate_features(j.asarray(obs),j.asarray(latents),.37,interface,candidate_alphas=grid,hypothetical_duration_s=.15))
+    cfg=dict(features=dict(full_indices=list(range(300,320))+list(range(337,351)),speed_indices=[304]))
+    for a,alpha in enumerate(grid):
+        query=obs.copy();query[336]=alpha
+        for h,(prep,force) in enumerate(((.2,-64),(.2,64),(.6,-64),(.6,64))):
+            expected,_=feature_row(obs,query,latents[a],.37,dict(candidate_alpha=alpha,force_N=force,duration_s=.15,preparation_s=prep),interface,cfg,expected_source_alpha=.5)
+            np.testing.assert_allclose(actual[a,h],expected,atol=2e-7)
+    for duration in (0.,-1.,np.nan):
+        with pytest.raises(ValueError,match='duration'):
+            coordinator.candidate_features(j.asarray(obs),j.asarray(latents),0.,interface,candidate_alphas=grid,hypothetical_duration_s=duration)
