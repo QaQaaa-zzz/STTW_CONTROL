@@ -1,0 +1,10 @@
+{
+  "source_xml": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml",
+  "expected_source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+  "preparation_ticks": 700,
+  "maximum_preparation_lower_ticks": 5600,
+  "evaluation_bank_index": 6,
+  "shared_jax_cache": "/home/qy/STTW_CONTROL/runs/.jax_compilation_cache",
+  "note": "User-authorized both wheels sliding friction .8. Fresh original8condition ECBC bank; old q calibration remains old physics. No task evaluation or training launched by prepare.",
+  "expected_plant_spec_sha256": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c"
+}
