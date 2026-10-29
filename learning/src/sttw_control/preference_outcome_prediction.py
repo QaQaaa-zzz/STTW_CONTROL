@@ -155,15 +155,17 @@ class FrozenAlphaRangePlanner:
         actor=PathCommandActor(architecture=config['network']['architecture'])
         self.middle_query=jax.jit(lambda x:actor.apply(params,x))
 
-    def query(self,observation,source_yaw,task_time_s,hypotheses,*,candidate_alphas=(0.,.125,.25,.375,.5,.625,.75,.875,1.),no_fall_threshold=.8,task_threshold=.5,max_path_error_m=4.):
+    def query(self,observation,source_yaw,task_time_s,hypotheses,*,user_alpha=None,candidate_alphas=(0.,.125,.25,.375,.5,.625,.75,.875,1.),no_fall_threshold=.8,task_threshold=.5,max_path_error_m=4.):
         import jax.numpy as j
         started=time.monotonic();obs=np.asarray(observation,np.float32)
-        if obs.shape!=(351,) or not np.isfinite(obs).all() or not 0<=obs[336]<=1:raise ValueError('current native351 observation with valid user alpha required')
+        if obs.shape!=(351,) or not np.isfinite(obs).all() or not 0<=obs[336]<=1:raise ValueError('current native351 observation with valid conditioning alpha required')
+        user=float(obs[336]) if user_alpha is None else float(user_alpha)
+        if not np.isfinite(user) or not 0<=user<=1:raise ValueError('finite original user alpha in[0,1] required')
         # Preserve an explicitly requested user preference even off the standard grid.
-        grid=np.unique(np.r_[candidate_alphas,float(obs[336])]);queries=np.repeat(obs[None,:],len(grid),axis=0);queries[:,336]=grid
+        grid=np.unique(np.r_[candidate_alphas,user]);queries=np.repeat(obs[None,:],len(grid),axis=0);queries[:,336]=grid
         latents=np.asarray(self.middle_query(j.asarray(queries)))
         result=plan_alpha_intervals(self.parameters,obs,grid,latents,source_yaw,task_time_s,hypotheses,self.interface,no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
-        result.update(user_alpha=float(obs[336]),middle_id=self.manifest['source_model']['registry_id'],outcome_parameters_sha256=self.manifest['parameters_sha256'],query_seconds=time.monotonic()-started,scope='Query API only; caller controls execution and restores preference. Related-state alpha interpolation validated, not universal control/safety certification.')
+        result.update(user_alpha=user,conditioning_alpha_before_query=float(obs[336]),middle_id=self.manifest['source_model']['registry_id'],outcome_parameters_sha256=self.manifest['parameters_sha256'],query_seconds=time.monotonic()-started,scope='Query API only; caller controls execution and restores preference. Related-state alpha interpolation validated, not universal control/safety certification.')
         return result
 
 

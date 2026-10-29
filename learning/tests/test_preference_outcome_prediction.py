@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals
+from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
 
 
 def example():
@@ -35,3 +35,14 @@ def test_range_planner_uses_worst_declared_hypothesis_and_preserves_empty_set():
     worst=plan_alpha_intervals(export,obs,[0.,.5,1.],np.zeros((3,2)),np.pi/2,1.6,[nominal,gust],interface,**kwargs)
     assert safe['estimated_intervals']==[[0.,1.]]
     assert worst['empty'] and worst['estimated_intervals']==[]
+
+
+def test_original_user_preference_is_separate_from_current_conditioning_alpha():
+    planner=FrozenAlphaRangePlanner.__new__(FrozenAlphaRangePlanner)
+    planner.parameters=dict(mean=np.zeros(42),scale=np.ones(42),w0=np.zeros((1,42,16)),b0=np.zeros((1,16)),w1=np.zeros((1,16,16)),b1=np.zeros((1,16)),w2=np.zeros((1,16,4)),b2=np.array([[2.,3.,np.log1p(.2),np.log1p(2.)]]))
+    planner.middle_query=lambda x:np.zeros((x.shape[0],2))
+    planner.manifest=dict(source_model=dict(registry_id='fixture'),parameters_sha256='fixture')
+    obs,_,_,planner.interface=example()
+    result=planner.query(obs,0.,1.6,[dict(force_N=0.,duration_s=.4,preparation_s=0.)],user_alpha=.3,candidate_alphas=[0.,.25,.5])
+    assert result['user_alpha']==.3 and result['conditioning_alpha_before_query']==.5
+    assert .3 in result['feasible_candidates']
