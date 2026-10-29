@@ -288,7 +288,7 @@ def audit_confirmation_initial(root,p,carry,bank,output,jax,initial):
         matched_groups=expected_groups,lanes_per_group=arms,complete_paired_native_leaves_exact=True,prepared_physical_lanes_checked=count,
         original_paths_anchored_to_own_pose=True,online_initial_latch_false=True,native_only_modules=loaded,
         no_old_trajectory_reuse=True,new_physics_steps=0,optimizer_updates=0,
-        data_role='Two prepared physical initial states, not independent training seeds.')
+        data_role=f"{len(p['protocol']['bank_indices'])} prepared physical initial states, not independent training seeds.")
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 
 

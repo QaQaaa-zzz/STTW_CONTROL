@@ -123,12 +123,16 @@ def analyze_middle_selection(root,p):
                 if r['mode']!='zero' and r['alpha']!=alpha:continue
                 d=views[r['case_id'],alpha];style=dict(color=colors[r['mode']],ls=styles[r['mode']],label=r['mode']);t=d['time'];end='x' if r['endpoint']['physical_outcome']=='contact' else 's'
                 ax[0].plot(*d['actual_xy'].T,**style);ax[0].scatter(*d['actual_xy'][-1],marker=end,color=colors[r['mode']],s=15)
-                for a,y in zip(ax[1:],[d['reward'],np.cumsum(d['reward']),d['speed_error'],d['original_cross_track_m']]):a.plot(t,y,**style)
+                for column,(a,y) in enumerate(zip(ax[1:],[d['reward'],np.cumsum(d['reward']),d['speed_error'],d['original_cross_track_m']]),1):a.plot(np.arange(1,len(t)+1) if column<=2 else t,y,**style)
             for a,title in zip(ax,['XY (m)','Execution-path reward / step','Cumulative execution-path reward','True speed error (m/s)','Original-path cross error (m)']):
                 a.set_title(f'User alpha={alpha:g}: {title}');a.grid(alpha=.2);a.legend(fontsize=7)
                 if a is not ax[0]:
-                    a.set_xlabel('Task time (s)')
-                    if group[0]['force_N']:a.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.15)
+                    reward_axis=a is ax[1] or a is ax[2]
+                    a.set_xlabel('Actual control steps (200 Hz)' if reward_axis else 'Task time (s)')
+                    if group[0]['force_N']:
+                        scale=200 if reward_axis else 1
+                        shift=1 if reward_axis else 0
+                        a.axvspan(group[0]['onset_s']*scale+shift,(group[0]['onset_s']+group[0]['duration_s'])*scale+shift,color='grey',alpha=.15)
             ax[0].set_aspect('equal')
         fig.suptitle(f'{route} | {event} | frozen H75/W400/u325 | bank6 | H10 | 10Hz reconnection\nReward uses actual changing execution path: diagnostics, not original-task model ranking')
         name=f'{route}_{event}_overview.png';fig.savefig(out/name,dpi=120);plt.close(fig);links.append(name)
