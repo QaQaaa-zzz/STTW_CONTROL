@@ -1,6 +1,6 @@
 {
   "schema": "sttw_frozen_alpha_range_registry_v1",
-  "current_query_candidate_id": "STTW_ALPHA_RANGE_U170_OUTCOME_V2",
+  "current_query_candidate_id": "STTW_ALPHA_RANGE_U170_RETURN_V1",
   "records": {
     "STTW_ALPHA_RANGE_U170_OUTCOME_V2": {
       "role": "experimental_query_only",
@@ -19,6 +19,39 @@
       "code_commit": "9dcbe5a1eaabb467bc8541f8f4d586357fa5bb2a",
       "online_control_status": "not_adopted_after_preparation_time_failures",
       "integration_evidence": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_nn_range_boundary_v1/analysis/integration_decision.json"
+    },
+    "STTW_ALPHA_RANGE_U170_RETURN_V1": {
+      "role": "finite_domain_closed_loop_planning_prototype",
+      "directory": "/home/qy/STTW_CONTROL/runs/model_registry/alpha_range_return_u170_v1",
+      "files_sha256": {
+        "manifest.json": "2c05ca6c3ed70e35ebfed1bcadf2a402c47fc1e6168dd7727e546f419249373c",
+        "parameters.npz": "67ad7f65d50a01430e868c525f28cf78671f2914cf926396d0ea092d26789f4e",
+        "config.json": "d91b2c145b4156679607126fbc38bb88bef90a3bd72bcd5ec55507f7920f760c",
+        "integration_decision.json": "913314f614d2bd48c4fa22280c359a0419dc93953efc1ebee4a772b633c7713f"
+      },
+      "middle_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+      "feature_schema": "sttw_conditional_outcome43_return_v1",
+      "architecture": "3-seed ensemble of43-16ELU-16ELU-4,1044parameters per seed",
+      "online_control_status": "adopted_for_declared_simulation_prototype_only",
+      "continuation_policy": {
+        "kind": "sensor_gated_return_v1",
+        "parameters": {
+          "minimum_preparation_s": 2.0,
+          "stable_hold_s": 0.3,
+          "max_abs_roll_rad": 0.2617993877991494,
+          "max_abs_roll_rate_rad_s": 0.35,
+          "minimum_forward_speed_m_s": 1.5,
+          "alpha_rate_per_s": 1.0
+        },
+        "implementation_sha256": "6aab8d9b056801a152326157e190305b00520a3d9601caeca85eb663b9df13e5"
+      },
+      "validation": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_policy_nn_confirmation_v1/analysis/results.json",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_range_upper_endpoint_v1/analysis/results.json",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_cross_source_confirmation_v1/analysis/results.json"
+      ],
+      "scope": "Five fresh related-state physical cases across two low-speed left-turn geometries: all survived, reached original goals and ended at user0. Three distinct source states; no independent holdout/repeats, calibrated probabilities, road or continuous-interior guarantee. Boundary NN selection plus bound sensor-feedback return, not continuously replanned NN scheduling.",
+      "code_commit": "9cb7981"
     }
   }
 }

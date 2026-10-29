@@ -13,6 +13,10 @@
 
 当前返回版本已完成两条网络实际选择与一条区间上端验证：在2m/s、R1.3m左弯的原任务1s状态，查询固定24N假设族，估计区间[0.875,1]，选0.875；两条新起扰时刻均存活到达并恢复用户0，上端1的另一条测试也成功。它们是同一相关状态的有限原型验证；轨迹绕行明显、概率未校准。详细结果与后续状态以唯一研究台账及对应run为准，不据这三条宣称所有连续α或新弯道可行。
 
+冻结入口由 `learning/configs/frozen_alpha_range_registry.json` 的 `STTW_ALPHA_RANGE_U170_RETURN_V1` 定位（模型包 `/home/qy/STTW_CONTROL/runs/model_registry/alpha_range_return_u170_v1`）。另外两条不同低速弯道源状态的20N验证均由同一冻结网络建议保留用户0：2m/s、R1.3m给区间[0,.5]，1.6m/s、R.9m给{0}，两条实际选择0后都存活到原终点。合计五条新物理验证均成功，但源状态/邻近持恒定α标签曾参与开发，不能称独立泛化测试。实际执行只选择被查询的候选，不据网格端点认证整个连续区间。
+
+抗扰阈值控制的是模型分数筛选。例如同一早状态查询中，阈值.8给[.875,1]，.9999给{1}；这不是99.99%真实不摔保证。不同源状态的24N查询可返回空集合，空集必须保留。
+
 ```python
 from sttw_control.preference_outcome_prediction import FrozenAlphaRangePlanner
 
@@ -67,3 +71,13 @@ decision = select_from_alpha_range(
 ```
 
 原用户α合格时优先保持或恢复；否则在已查询且合格的点中最小化与原用户α、上次执行α的平方距离（默认权重1、0.1）。不会从区间端点插出未经查询的动作。空集合或当前参考禁止发布时，显式保持上次执行值，并返回 `degraded=True`，不称该回退安全或可行。该函数只返回候选和原因；接入仿真执行、驻留和连续调度仍需对应运行证据，不能以单元测试冒充闭环实验。
+
+
+## 原型证据入口
+
+- 低速相同24N扰动的五档对比：[原始XY与逐步诊断](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/README.md)。α0在2.675s触地，α1完整10s存活但未到达；不把存活混称任务完成，也不证明速度是唯一因果变量。
+- 网络选.875、两个新起扰时刻：[XY、α、每步奖励与分项](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_policy_nn_confirmation_v1/analysis/README.md)。原终点6.935/6.980s，恢复user0。
+- 区间上端1：[XY及已缓存恒定1配对](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_range_upper_endpoint_v1/analysis/README.md)。恢复后6.735s到达，旧恒定1相同事件未到。
+- 不同低速弯道源状态：[两场景XY与完整诊断](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_cross_source_confirmation_v1/analysis/README.md)。模型实际选择保持0，4.930/6.960s到达。
+
+以上完成的是有限开发域的仿真规划原型。未验证实车、空气动力风速、窄车道约束、概率校准或未查询连续内部；这些不属于已交付能力。原先失败模型及原始数据保留，不将已开发场景重新命名为独立测试。
