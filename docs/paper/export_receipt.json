@@ -5,11 +5,11 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_gust_v1/analysis/left90_R1p1_v1p8_prep1_F+24_fixed_candidate_xy.png": "bb71cae66ba995afa552355e890818a5169fea8742e95157fb3e52a3d8cbff52",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.png": "fb3553f60eb6082032b93481722af8810c9aaf3f0f03dd72d3afbaad34bd8f74"
   },
-  "html_sha256": "1f5a63aed8c2f9ce155b3d6082a75e3027849f1907bd8fafff831d5b3f4642eb",
+  "html_sha256": "1c232650ca7d53efb41712c83cd4288623c49af85e72327671ffb31c8280cecf",
   "pdf_requested": true,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
-  "pdf_sha256": "c67b3e3cfe128ee987a5763c37c92c4b704598d6b8f941eb7341cb4ed9ae970d",
-  "pdf_bytes": 1854738,
+  "pdf_sha256": "16a035d97eaf7f8e760303774d529a8a34a5686940e7d6b8b7630f0c19541614",
+  "pdf_bytes": 1909676,
   "renderer": "existing local headless Chrome"
 }
