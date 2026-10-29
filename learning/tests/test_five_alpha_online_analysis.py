@@ -202,3 +202,12 @@ def test_soft_cost_validity_and_historical_hard_mask_are_independently_audited()
 def test_soft_invalid_selected_reference_cannot_claim_permission():
     r,interface=soft_fixture();r['coord_selected_reference_valid'][:]=False
     with pytest.raises(AssertionError):m.audit_soft_curvature_task(r,dict(alpha=.5,speed=2.),interface)
+
+
+def test_fixed_h75_capability_requires_allfive_alphas_without_zero_baseline():
+    routes=['straight','left70','right70','left130','right130','Sleft','Sright'];grid=[0.,.25,.5,.75,1.]
+    rows=[dict(route=r,alpha=a,user_alpha=a,query_alpha=a,effective_user_alpha=a,force_N=0.,bank_index=6,mode='H75') for r in routes for a in grid]
+    m.validate_fixed_capability_cases(rows,dict(alphas=grid))
+    rows[0]['mode']='zero'
+    with pytest.raises(ValueError,match='identity'):m.validate_fixed_capability_cases(rows,dict(alphas=grid))
+    with pytest.raises(ValueError,match='complete'):m.validate_fixed_capability_cases(rows[:-1],dict(alphas=grid))
