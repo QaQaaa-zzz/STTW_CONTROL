@@ -86,5 +86,9 @@
     "development_rows": 2,
     "all_development": true,
     "unit": "fresh alpha probe after model/prediction freeze"
+  },
+  "frozen_prediction": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_temporal_outcome_mlp_v4/prospective_alpha_queries.json",
+    "manifest_sha256": "0daa51f1489ecb7f31d32db956440e4ec61b978d525a924a6c81d302134490c6"
   }
 }

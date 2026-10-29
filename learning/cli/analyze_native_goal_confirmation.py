@@ -2983,7 +2983,7 @@ def write_reused_preparation_matrix(root,p):
     if len(joined)!=len(routes)*len(grid)*len(preps) or len({r['case_id'] for r in joined})!=len(joined):raise ValueError('incomplete or duplicate combined temporal matrix')
     styles=['-',':','-.','--',(0,(5,2,1,2))];colors=['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00'];links=[];cells=[]
     for route in routes:
-        fig,axes=plt.subplots(1,len(preps),figsize=(6*len(preps),6),layout='constrained',squeeze=False,sharex=True,sharey=True)
+        fig,axes=plt.subplots(1,len(preps),figsize=(6*len(preps),7.2),layout='constrained',squeeze=False,sharex=True,sharey=True)
         for column,prep in enumerate(preps):
             ax=axes[0,column];group=sorted([r for r in joined if r['route']==route and r['preparation_s']==prep],key=lambda r:r['alpha'])
             if [r['alpha'] for r in group]!=grid:raise ValueError('missing candidate in combined temporal cell')
@@ -2998,8 +2998,8 @@ def write_reused_preparation_matrix(root,p):
                 ax.plot(*xy.T,color=colors[i],ls=styles[i],label=label);ax.scatter(*xy[-1],color=colors[i],marker='x' if contact else 's')
                 if end['physical_outcome']=='survived' and end['goal_arrived'] and r['low_speed_full_upright_gate_passed']:feasible.append(r['alpha'])
             cells.append(dict(route=route,preparation_s=prep,observed_survive_goal_low_speed_candidates=feasible))
-            ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'Preparation {prep:g}s; load +24N for .4s');ax.set_aspect('equal');ax.grid(alpha=.2);ax.legend(fontsize=8)
-        source_s=group[0]['source_task_start_s'];fig.suptitle(f'{route} | U170 2cd5865a6d4e | five held-alpha suffixes from task{source_s:g}s | cached{len(joined)-len(rows)} + new{len(rows)}')
+            source_s=group[0]['source_task_start_s'];ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'Gust at task{source_s+prep:g}s; prepare{prep:g}s\nLoad +24N for .4s');ax.set_aspect('equal');ax.grid(alpha=.2);ax.legend(fontsize=8)
+        fig.suptitle(f'{route} | U170 2cd5865a6d4e\nFive held-alpha suffixes from task{source_s:g}s | cached{len(joined)-len(rows)} + new{len(rows)}',fontsize=11)
         name=route+'_preparation_matrix_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     joint=[]
     for route in routes:
