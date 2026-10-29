@@ -211,3 +211,23 @@ def test_physical_source_collision_rejected_across_different_semantics(dataset):
     aa=json.loads(a.read_text());bb=json.loads(b.read_text());bb[0]['pre_boundary_fingerprint']=aa[0]['pre_boundary_fingerprint'];b.write_text(json.dumps(bb))
     cfg=copy.deepcopy(cfg);cfg['dataset'].pop('analysis');cfg['dataset'].update(analyses=[str(analysis),str(second)],expected_cases=560,expected_training_rows=320,expected_development_rows=240)
     with pytest.raises(ValueError,match='physical complete-state source collision'):m.load_five_alpha_dataset(None,cfg)
+
+
+def test_limited_collection_explicit_fit_contract():
+    cfg=json.loads((ROOT/'learning/configs/h75_friction08_tolerance_fit.json').read_text())
+    m.validate_five_alpha_fit_config(cfg)
+    protocol=json.loads((ROOT/'learning/configs/h75_friction08_tolerance_labels.json').read_text())
+    part=m.five_alpha_partition(protocol)
+    assert (part['kind'],part['cases'],part['training_rows'],part['development_rows'])==('limited_collection',140,80,60)
+    bad=copy.deepcopy(cfg);del bad['dataset']['physics_identity']
+    with pytest.raises(ValueError,match='physics'):m.validate_five_alpha_fit_config(bad)
+    protocol['source_groups'][0]['expected_ever_arrived']=True
+    with pytest.raises(ValueError,match='ongoing'):m.five_alpha_partition(protocol)
+
+
+@pytest.mark.parametrize('identity',['physics_identity','analysis_plan_sha256'])
+def test_limited_collection_loader_rejects_wrong_identity(identity):
+    cfg=json.loads((ROOT/'learning/configs/h75_friction08_tolerance_fit.json').read_text())
+    cfg['dataset'][identity]={} if identity=='physics_identity' else '0'*64
+    with pytest.raises(ValueError,match='physics/plan identity'):
+        m.load_five_alpha_dataset(None,cfg)

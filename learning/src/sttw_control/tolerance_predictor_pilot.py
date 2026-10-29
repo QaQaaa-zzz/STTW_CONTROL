@@ -847,13 +847,17 @@ def validate_matched_full_prior(cfg):
 def five_alpha_partition(protocol):
     """Role is sealed before sampling; bank4 is an additive training-only batch."""
     train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
-    split=protocol['fitting_split'];kind=protocol.get('data_partition','mixed')
+    split=protocol['fitting_split'];kind=protocol.get('data_partition','limited_collection' if 'collection_end_s' in protocol else 'mixed')
     if not split['declared_before_new_labels'] or set(split['training_routes'])&set(split['development_routes']):raise ValueError('predeclared disjoint role split required')
     if kind=='training_only':
         expected_train,expected_dev,total,bank=train|dev,set(),560,4
         groups=protocol['source_groups']
         if len(groups)!=28 or {g['source_task_s'] for g in groups}!={1.,2.,4.,6.}:raise ValueError('training-only bank4 requires28states at1/2/4/6')
         if {(g['route'],g['source_task_s']) for g in groups}!={(r,t) for r in train|dev for t in (1.,2.,4.,6.)}:raise ValueError('training-only full route/time product required')
+    elif kind=='limited_collection':
+        expected_train,expected_dev,total,bank=train,dev,140,6
+        groups=protocol['source_groups']
+        if protocol.get('collection_end_s')!=5.76 or protocol.get('require_ongoing_sources') is not True or len(groups)!=7 or {g['route'] for g in groups}!=train|dev or any(g['source_task_s']!=2. or g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('sealed ongoing limited140 contract required')
     elif kind=='mixed':expected_train,expected_dev,total,bank=train,dev,280,6
     else:raise ValueError('unknown sealed data partition')
     if set(split['training_routes'])!=expected_train or set(split['development_routes'])!=expected_dev or {g['bank_index'] for g in protocol['source_groups']}!={bank}:raise ValueError('frozen route/bank partition changed')
@@ -880,8 +884,9 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120)},2:{(560,320,240)},3:{(1120,880,240)}}[batches])):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120),(140,80,60)},2:{(560,320,240)},3:{(1120,880,240)}}[batches])):
         raise ValueError('frozen five-alpha fitting contract mismatch')
+    if d['expected_cases']==140 and (batches!=1 or d.get('collection_kind')!='limited_collection' or not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256')):raise ValueError('limited140 requires explicit physics and plan identity')
     return cfg
 
 
@@ -902,6 +907,10 @@ def _load_five_alpha_single(analysis,cfg):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint changed')
         inputs[str(model[key])]=model[key+'_sha256']
     protocol=plan['protocol'];split=protocol['fitting_split']
+    if 'collection_end_s' in protocol:
+        d=cfg['dataset']
+        if d.get('collection_kind')!='limited_collection' or d.get('physics_identity')!=plan['initial_source']['model'] or d.get('analysis_plan_sha256')!=seal['plan_sha256']:raise ValueError('limited collection physics/plan identity differs')
+        if receipt.get('full_h10_outcomes_claimed',False):raise ValueError('limited collection cannot claim H10')
     partition=five_alpha_partition(protocol);expected_train=partition['training_routes'];expected_dev=partition['development_routes'];total=partition['cases']
     if protocol.get('planning_frequency_hz')!=10. or not plan.get('replanning',{}).get('continuous_replanning') or plan['replanning'].get('period_s')!=.1:raise ValueError('only native10Hz labels accepted; old1Hz data excluded')
     def sealed(p,directory):
@@ -922,6 +931,7 @@ def _load_five_alpha_single(analysis,cfg):
         child=Path(item);child=child if child.is_absolute() else root/child
         cp=read(child/'plan.json');cs=read(child/'seal.json');cr=read(child/'analysis/receipt.json')
         if cs['plan_sha256']!=digest(child/'plan.json') or cr['plan_sha256']!=cs['plan_sha256'] or cp['models']!=plan['models'] or cp['config']!=plan['config']:raise ValueError('child frozen identity differs')
+        if 'collection_end_s' in protocol and cp.get('initial_source',{}).get('model')!=plan['initial_source']['model']:raise ValueError('child physics identity differs')
         sealed(cp,child)
         source_records=read(child/'evaluation/source_records.json')
         if len(source_records)!=7 or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
@@ -996,7 +1006,7 @@ def _load_five_alpha_single(analysis,cfg):
             for value in sorted({m[key] for m in meta}):
                 ids=[i for i,m in enumerate(meta) if all_roles[i]==role and m[key]==value]
                 coverage[role][key][str(value)]=dict(declared_rows=len(ids),valid_rows=sum(bool(valid[i]) for i in ids),invalid_rows=sum(not bool(valid[i]) for i in ids))
-    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'],data_partition=partition['kind'],physical_source_fingerprints=physical_sources,development_identity_rows=dev_identity,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],data_role=f'Related bank{partition["bank"]} native10Hz {partition["kind"]} batch; not independent TEST')
+    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,run_namespace=digest(root/'plan.json'),source_semantic_keys=[[protocol['source_plan_sha256'],g['source_task_s'],g['source_case_id']] for g in protocol['source_groups']],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'],data_partition=partition['kind'],physical_source_fingerprints=physical_sources,development_identity_rows=dev_identity,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],physics_identity=plan.get('initial_source',{}).get('model'),data_role=f'Related bank{partition["bank"]} native10Hz {partition["kind"]} batch; not independent TEST')
     return data
 
 
@@ -1012,6 +1022,8 @@ def load_five_alpha_dataset(analysis,cfg):
     batches=[_load_five_alpha_single(path,cfg) for path in paths]
     totals=(sum(b['receipt']['declared_training_rows']+b['receipt']['declared_development_rows'] for b in batches),sum(b['receipt']['declared_training_rows'] for b in batches),sum(b['receipt']['declared_development_rows'] for b in batches))
     if totals!=(d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']):raise ValueError('declared aggregate row counts differ')
+    if len(batches)>1 and any(b['receipt']['data_partition']=='limited_collection' for b in batches):raise ValueError('limited collection cannot mix historical data')
+    if any(b['receipt']['physics_identity']!=batches[0]['receipt']['physics_identity'] for b in batches[1:]):raise ValueError('mixed physics datasets forbidden')
     if len(batches)==1:
         verify_five_alpha_development_freeze(batches[0],cfg);return batches[0]
     if configured is None or [str(Path(p).resolve()) for p in paths]!=[str(Path(p).resolve()) for p in configured]:raise ValueError('multiple analyses must match frozen config')
