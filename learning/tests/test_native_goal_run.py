@@ -4,6 +4,19 @@ import numpy as np
 from sttw_control.native_goal_run import inventory,flatten
 
 
+def test_outcome_forecast_is_bound_to_the_actual_return_policy(tmp_path):
+    import pytest
+    from sttw_control.native_goal_run import validate_outcome_continuation,digest
+    source=tmp_path/'tolerance_coordination.py';source.write_text('guard implementation')
+    rule=dict(user_alpha=0.,minimum_preparation_s=2.,stable_hold_s=.3)
+    trained=dict(schema='sttw_conditional_outcome43_return_v1',continuation_policy=dict(kind='sensor_gated_return_v1',parameters={k:v for k,v in rule.items() if k!='user_alpha'},implementation_sha256=digest(source)))
+    validate_outcome_continuation(trained,dict(causal_preference_return=rule),tmp_path)
+    with pytest.raises(ValueError,match='future policy differs'):validate_outcome_continuation(trained,dict(causal_preference_return=dict(rule,minimum_preparation_s=1.)),tmp_path)
+    with pytest.raises(ValueError,match='held-alpha'):validate_outcome_continuation(trained,{},tmp_path)
+    source.write_text('changed guard')
+    with pytest.raises(ValueError,match='future policy differs'):validate_outcome_continuation(trained,dict(causal_preference_return=rule),tmp_path)
+
+
 def test_all_eighty_cases_match_world_events_across_methods_and_alpha():
     rows=inventory()
     assert len(rows)==len({r['case_id'] for r in rows})==80

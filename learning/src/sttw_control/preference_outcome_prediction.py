@@ -265,7 +265,7 @@ def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,s
     forecast=predict_outcomes(export,np.stack(features)).reshape(len(grid),len(hypotheses),4)
     aggregate=np.c_[forecast[:,:,0].min(axis=1),forecast[:,:,1].min(axis=1),forecast[:,:,2].max(axis=1),forecast[:,:,3].max(axis=1)]
     result=feasible_alpha_intervals(grid,aggregate[:,0],aggregate[:,1],aggregate[:,2],no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
-    result.update(candidate_outcomes=aggregate.tolist(),hypothetical_disturbances=hypotheses,task_time_s=float(task_time_s),aggregation='Worst predicted no-fall/task probability and path/speed bound across declared hypothetical queries.',model_scope='Estimated ranges from a small related-domain predictor; no calibrated risk or continuous-interior guarantee. No actual future event schedule is read.')
+    result.update(candidate_outcomes=aggregate.tolist(),hypothetical_disturbances=hypotheses,task_time_s=float(task_time_s),aggregation='Minimum predicted no-fall/task scores and maximum path/speed predictions across declared hypothetical queries; not certified bounds.',model_scope='Estimated ranges from a small related-domain predictor; no calibrated risk or continuous-interior guarantee. No actual future event schedule is read.')
     return result
 
 
@@ -398,6 +398,7 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     frozen=json.loads(frozen_manifest.read_text());meta=json.loads((dataset/'manifest.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
     training=Path(frozen['training']);fitted=json.loads((training/'manifest.json').read_text())
     if meta['schema']!=fitted['schema'] or sha(dataset/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('new probe dataset identity changed')
+    if meta['schema']==RETURN_SCHEMA and meta.get('continuation_policy')!=fitted.get('continuation_policy'):raise ValueError('observed continuation differs from forecast policy')
     if sha(frozen['query_data'])!=frozen['query_data_sha256'] or sha(training/'manifest.json')!=frozen['training_manifest_sha256'] or sha(training/'parameters.npz')!=frozen['parameters_sha256']:
         raise ValueError('prospective model/predictions changed after freeze')
     with np.load(frozen['query_data']) as z:query=dict(z)

@@ -255,6 +255,14 @@ def query_boundary_alpha(folder,configuration,observation,latents,yaw,task_time_
         execution='Selected preparation alpha followed by the bound feedback-return policy.' if len(export['mean'])==43 else 'Single causal decision at restored task boundary, held afterwards; not continuous online replanning.')
 
 
+def validate_outcome_continuation(trained,proposal,folder):
+    rule=proposal.get('causal_preference_return')
+    if rule:
+        expected=dict(kind='sensor_gated_return_v1',parameters={k:v for k,v in rule.items() if k!='user_alpha'},implementation_sha256=digest(Path(folder)/'tolerance_coordination.py'))
+        if trained['schema']!='sttw_conditional_outcome43_return_v1' or trained.get('continuation_policy')!=expected:raise ValueError('return-predictor future policy differs from actual controller')
+    elif trained['schema']!='sttw_conditional_outcome42_v1':raise ValueError('returning predictor cannot evaluate a held-alpha controller')
+
+
 def targeted_base_review_inventory(p):
     """Small predeclared mixed-task DEV review of one explicit trained candidate."""
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
@@ -447,18 +455,19 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         if trained['parameters_sha256']!=boundary['parameters_sha256'] or trained['source_model']['actor_sha256']!=model['actor_sha256']:raise ValueError('boundary predictor middle differs')
         grid=boundary['candidate_alphas']
         if (not {0.,.25,.5,.75,1.}.issubset(set(grid)) or grid!=sorted(set(grid)) or any(not math.isfinite(a) or not 0<=a<=1 for a in grid) or not boundary['hypotheses']):raise ValueError('declared sorted grid retaining all original five settings required')
-        return_rule=proposal.get('causal_preference_return')
-        if return_rule:
-            expected=dict(kind='sensor_gated_return_v1',parameters={k:v for k,v in return_rule.items() if k!='user_alpha'},implementation_sha256=digest(folder/'tolerance_coordination.py'))
-            if trained['schema']!='sttw_conditional_outcome43_return_v1' or trained.get('continuation_policy')!=expected:raise ValueError('return-predictor future policy differs from actual controller')
-        elif trained['schema']!='sttw_conditional_outcome42_v1':raise ValueError('returning predictor cannot evaluate a held-alpha controller')
+        validate_outcome_continuation(trained,proposal,folder)
         files += [manifest,parameters]
     if proposal.get('frozen_prediction'):
         frozen=proposal['frozen_prediction'];file=Path(frozen['manifest'])
         if digest(file)!=frozen['manifest_sha256']:raise ValueError('prospective prediction changed before prepare')
         record=json.loads(file.read_text());data=Path(record['query_data'])
         if digest(data)!=record['query_data_sha256'] or [c['case_id'] for c in record['cases']]!=[c['case_id'] for c in rows]:raise ValueError('prospective query identity differs')
-        files += [file,data]
+        trained_file=Path(record['training'])/'manifest.json'
+        if digest(trained_file)!=record['training_manifest_sha256']:raise ValueError('prospective fitted model changed')
+        validate_outcome_continuation(json.loads(trained_file.read_text()),proposal,folder)
+        parameters_file=trained_file.parent/'parameters.npz'
+        if digest(parameters_file)!=record['parameters_sha256']:raise ValueError('prospective fitted weights changed')
+        files += [file,data,trained_file,parameters_file]
     for context in proposal['route_contexts']:
         if 'state_source' in context:
             ss=context['state_source'];files += [Path(ss['run'])/'plan.json',Path(ss['run'])/'seal.json',Path(ss['carry_file']),Path(ss['path_file'])]
