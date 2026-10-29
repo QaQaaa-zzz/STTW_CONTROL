@@ -258,8 +258,10 @@ def test_targeted_base_review_uses_three_alphas_at_low_speed_initial_bank():
 
 @pytest.mark.parametrize('low,goal,second,expected',[(True,True,'survived',1),(False,True,'survived',0),(True,False,'survived',0),(True,True,'contact',0)])
 def test_load_witness_requires_survival_goal_and_both_actual_low_speed_gates(low,goal,second,expected):
-    common=dict(route='turn',event='force',force_N=-12.,onset_s=2.2,duration_s=.6,bank_index=0,model_id='frozen',speed=2.,onset_speed_mean_m_s=1.5)
+    common=dict(route='turn',event='force',force_N=-12.,onset_s=2.2,duration_s=.6,bank_index=0,model_id='frozen',speed=2.,onset_speed_mean_m_s=1.5,low_speed_full_upright_gate_passed=True)
     rows=[dict(common,alpha=0.,case_id='a0',low_speed_gate_passed=True,endpoint=dict(physical_outcome='contact',goal_arrived=False)),dict(common,alpha=1.,case_id='a1',low_speed_gate_passed=low,endpoint=dict(physical_outcome=second,goal_arrived=goal))]
     assert m.paired_low_speed_load_outcomes(rows)['desired_witnesses']==expected
+    rows[1]['low_speed_full_upright_gate_passed']=False
+    assert m.paired_low_speed_load_outcomes(rows)['desired_witnesses']==0
     rows[1]['force_N']=-16.
     with pytest.raises(ValueError,match='same intended'):m.paired_low_speed_load_outcomes(rows)

@@ -2877,6 +2877,8 @@ def analyze_fixed_h75_capability(root,p):
             premax=vmax(pre);duringmax=vmax(during);limit=p['protocol']['low_speed_evidence_gate']['true_forward_speed_max_m_s']
             rows[-1].update(load_kind='equivalent_worldY_force_not_wind_field',pre_load_max_speed_m_s=premax,during_load_upright_max_speed_m_s=duringmax,onset_speed_mean_m_s=float(np.mean(raw['actual_forward_speed'][:n][near])) if near.any() else None,low_speed_gate_passed=bool(premax is not None and duringmax is not None and max(premax,duringmax)<=limit),gate_contract='preload and applied-load upright active samples; contact step/after-contact excluded',observed_world_force_impulse_Ns=raw['applied_force_impulse'][:n].sum(axis=0).tolist(),pre_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][pre]))*180/np.pi) if pre.any() else None,during_load_max_abs_roll_deg=float(np.max(np.abs(raw['phi'][:n][during]))*180/np.pi) if during.any() else None)
             rows[-1].update(onset_roll_mean_rad=float(np.mean(raw['phi'][:n][near])) if near.any() else None,onset_roll_rate_mean_rad_s=float(np.mean(raw['phi_dot'][:n][near])) if near.any() else None)
+            whole_speed=float(np.max(np.abs(raw['actual_forward_speed'][:n][upright]))) if upright.any() else None
+            rows[-1].update(full_upright_max_abs_speed_m_s=whole_speed,low_speed_full_upright_gate_passed=bool(whole_speed is not None and whole_speed<=limit))
             if 'force_direction_world' in c:rows[-1]['load_kind']='equivalent_fixed_world_vector_force_not_wind_field'
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
@@ -2937,8 +2939,9 @@ def paired_low_speed_load_outcomes(rows):
         a,b=group
         if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')) or a.get('force_direction_world',[0.,1.,0.])!=b.get('force_direction_world',[0.,1.,0.]):raise ValueError('same intended event and initial model required')
         outcomes=[r['endpoint']['physical_outcome'] for r in group];low=all(r['low_speed_gate_passed'] for r in group)
+        full_low=all(r.get('low_speed_full_upright_gate_passed',False) for r in group)
         contrast='alpha0_contact_alpha1_survived' if outcomes==['contact','survived'] else 'alpha1_contact_alpha0_survived' if outcomes==['survived','contact'] else 'no_endpoint_contrast'
-        pairs.append(dict(route=route,event=event,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,contrast=contrast,desired_witness=bool(low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
+        pairs.append(dict(route=route,event=event,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,low_speed_full_upright_both=full_low,contrast=contrast,desired_witness=bool(low and full_low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
     return dict(pairs=pairs,total_pairs=len(pairs),desired_witnesses=sum(p['desired_witness'] for p in pairs),scope='Exploratory intended identical fixed world-vector force (default world-Y); actual delivered impulse truncates on physical failure. No wind-speed calibration or unseen-condition claim.')
 
 
