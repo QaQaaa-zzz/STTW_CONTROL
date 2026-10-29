@@ -6,11 +6,11 @@
 
 ## 摘要（中文审阅）
 
-单轨机器人在低速转弯时，路径跟踪与速度保持的偏好会改变后续抗扰表现；较小的名义跟踪误差或侧倾角并不直接代表较大的扰动余量。本文研究冻结控制行为下的容扰度引导偏好区间规划。固定中层U170提供路径—速度偏好条件下的参考修正，一个小型监督预测器联合评价候选偏好、准备时间和后续偏好恢复策略的不触地、原目标到达及原路径误差。非学习协调器优先保留用户偏好，在模型筛选的候选集合中选择执行值；准备后依据当前姿态、速度和参考权限平滑恢复用户偏好，10Hz几何接回保持原任务目标。低速左弯的同一24N等效阵风下，固定α=0触地而α=1存活，但后者未到原目标。模型冻结后的五条新仿真覆盖两个低速弯道、三个来源状态，其中四条实际使用网络选择，另一条验证预测区间上端；全部存活并到达原目标。结果支持有限开发域中的控制机制与实现可行性，不构成连续区间安全认证、预测概率校准或独立泛化证明。[E250–E258]
+单轨机器人在低速转弯时，路径跟踪与速度保持的偏好会改变后续抗扰表现；较小的名义跟踪误差或侧倾角并不直接代表较大的扰动余量。本文研究冻结控制行为下的容扰度引导偏好区间规划。固定中层U170提供路径—速度偏好条件下的参考修正，一个小型监督预测器联合评价候选偏好、准备时间和后续偏好恢复策略的不触地、原目标到达及原路径误差。非学习协调器优先保留用户偏好，在模型筛选的候选集合中选择执行值；准备后依据当前姿态、速度和参考权限平滑恢复用户偏好，10Hz几何接回保持原任务目标。低速左弯的同一24N等效阵风下，固定α=0触地而α=1存活，但后者未到原目标。模型冻结后的五条新仿真覆盖两个低速弯道、三个来源状态，其中四条实际使用网络选择，另一条验证预测区间上端；全部存活并到达原目标。随后冻结模型的左右镜像新几何测试中，四条均触发空集退化，三条完成原任务、一条触地，显示预测覆盖与调度能力仍有限。结果支持有限开发域中的控制机制与实现可行性，不构成连续区间安全认证、预测概率校准或独立泛化证明。[E250–E258,E269–E272]
 
 ## Abstract
 
-Low-speed turning exposes a coupling between tracking preferences and disturbance tolerance in single-track robots. We study preference-range planning while keeping the reference-generating middle policy and the lower controller frozen. A compact supervised predictor evaluates candidate preferences, preparation time, and a specified feedback-restoration policy through no-contact, original-goal, and path-error outcomes. A nonlearned selector retains the user preference when predicted feasible and otherwise selects a queried candidate. Sensor-based restoration subsequently returns execution toward the original preference, while geometric replanning preserves the original goal. In a low-speed turning example, an identical equivalent gust caused contact for the path-prioritized setting, whereas the speed-prioritized setting survived but missed the goal. Five new simulations after model freezing, covering two low-speed geometries and three source states, all survived and reached the original goal; four used neural range selection and one tested an estimated range endpoint. The evidence supports a finite-domain control prototype. Continuous interval safety, calibrated probabilities, independent generalization, and hardware performance remain unestablished.
+Low-speed turning exposes a coupling between tracking preferences and disturbance tolerance in single-track robots. We study preference-range planning while keeping the reference-generating middle policy and the lower controller frozen. A compact supervised predictor evaluates candidate preferences, preparation time, and a specified feedback-restoration policy through no-contact, original-goal, and path-error outcomes. A nonlearned selector retains the user preference when predicted feasible and otherwise selects a queried candidate. Sensor-based restoration subsequently returns execution toward the original preference, while geometric replanning preserves the original goal. In a low-speed turning example, an identical equivalent gust caused contact for the path-prioritized setting, whereas the speed-prioritized setting survived but missed the goal. Five new simulations after model freezing, covering two low-speed geometries and three source states, all survived and reached the original goal; four used neural range selection and one tested an estimated range endpoint. A subsequent prospective mirrored-geometry panel produced empty feasible sets in all four cases: the degraded unchanged-preference execution reached the goal in three cases and contacted the ground in one. The evidence supports a finite-domain control prototype and exposes limitations in predictive coverage. Continuous interval safety, calibrated probabilities, independent generalization, and hardware performance remain unestablished.
 
 ## 1 研究问题与贡献定位
 
@@ -19,6 +19,12 @@ Low-speed turning exposes a coupling between tracking preferences and disturbanc
 拟向TCST呈现三项控制层面的贡献。第一，以低速转弯的同扰动实验刻画偏好、准备时间与闭环抗扰结局的耦合。第二，把“候选α及其后续返回策略”作为预测对象，联合筛选容扰与任务表现，输出可多段的候选区间。第三，将区间选择、传感器反馈返回和原目标几何接回组合，展示原任务完成的闭环实例。MLP、分层控制或加入α本身不作为首次性主张；正式新颖性论证还需与最接近的偏好控制、参考治理及学习恢复预测文献逐项对照。旧稿的文献记录可作入口，但不同旧物理/策略下的基线结论不能直接支持本版优势。
 
 TCST强调具体控制工程问题中的技术贡献，涵盖分析、设计、仿真及硬件。当前整理按完整Paper组织，版面尚未套用IEEE双栏模板；官方投稿上限为Paper 16页、Brief Paper 8页，含图。此为2026-10-29核对的编辑要求，并不意味着本文已经达到录用条件。[R1,R2]
+
+### 1.1 近邻工作的边界
+
+分层残差学习已用于无人自行车路径跟踪：Huo等将姿态与位置子任务分别与传统控制器结合，并在物理仿真中评价跟踪与复杂地形表现。[R3] Persson等把内环反馈线性化与外环自适应DeePO结合，通过仿真和实车评价侧倾角及角速度跟踪。[R4] 另有扰动下轨迹—平衡协调工作采用饱和型速度规划器、快速滑模控制与RBF网络近似器。[R5] 因此，分层、残差、学习增强或速度—平衡协调都不是本文可单独主张的新颖点。
+
+本文拟强调的研究对象是：冻结的偏好条件控制器在不同准备时间和后续返回策略下形成的闭环容扰能力，以及如何据此暂时偏离并恢复用户偏好。该定位是依据已核验方法描述形成的差异化论点，尚不构成“已有文献均未研究此问题”的证明。本轮仅核验R3出版方摘要与方法摘录、R4作者预印本摘要、R5出版方摘要；完整相关工作仍须覆盖参考治理与学习恢复预测，不能将摘要未提及的机制断言为全文不存在。
 
 ## 2 问题定义与实际控制系统
 
@@ -115,13 +121,32 @@ A_ok = {a in A_query : min_d q_no-contact(a,d) >= eta_q,
 
 新五条在默认筛选门槛下未出现预测可行而触地/未到达的案例，但路径预测存在误差；更严格2m路径门槛下，先前两条时刻验证存在一次误判。速度峰值头在上端案例低估约0.276m/s，因此不能用其作约束证书。五条正例不足以校准失败风险。[E257,E258]
 
+### 4.5 前瞻镜像场景：空集退化与一个失败
+
+在模型和阈值冻结后，新增1.8m/s、R1.1m的左右90°弯，bank0、α_user=0。两条无扰动源轨迹分别于4.815s和4.880s到原目标，全10s存活，最高真实速度均为1.95944m/s。随后从各自task1.0s完整状态续接，每方向20/24N世界固定方向等效阵风，实际起扰2.0s、持续0.4s。控制器查询预先给定的20/24N×准备0.9/1.0/1.1s家族，不读取实际事件时序。四条均得到空集，执行“保持此前α=0”的退化规则，不能计为网络找到可行偏好的成功案例。[E269–E271]
+
+| 方向 | 力幅值(N) | 原目标到达(s) | 物理结局 | 续接窗直立最高真速(m/s) |
+|---|---:|---:|---|---:|
+| 左弯 | 20 | 5.590 | 全10s存活 | 1.83220 |
+| 左弯 | 24 | 未到达 | 2.465s触地 | 1.82098 |
+| 右弯 | 20 | 5.310 | 全10s存活 | 1.83653 |
+| 右弯 | 24 | 5.430 | 全10s存活 | 1.83653 |
+
+![新左弯24N：空集退化保持α0后触地，轨迹在真实失败处截止](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_gust_v1/analysis/left90_R1p1_v1p8_prep1_F+24_fixed_candidate_xy.png)
+
+全部四条实际XY、每步与累计奖励及分项：[完整镜像阵风面板](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_gust_v1/analysis/README.md)。
+
+四条均独立重建原用户奖励并核对实际α，全部保持0，无偏好返回动作。三条完成任务并不证明整个假设家族可行，也不能直接把聚合空集判作错误；但本轮未提供有效偏好调度，且左右同24N的结局不同，限制了现有模型的可用范围。场景为新几何开发验证，bank0仍共享，不是独立训练种子统计。[E270,E271]
+
+一个具体的观测缺口是：task1s查询的当前、前0.5m和1m曲率均为0；原路径前方约1.5–3m才包含有符号弯道，前2m曲率约±0.9091/m。两源各有12个查询特征超出既有训练范围，但未触发归一化截断。该诊断提示更远几何预览与训练状态覆盖值得修正，尚未证明它们是预测外推失准的唯一原因。不得把当前空集分数解释成校准后的真实失效概率，也不因发现失败就修改阈值隐藏结果。[E272]
+
 ## 5 面向TCST的论点与最小后续工作
 
 现有数据已经形成可写作的应用控制故事：路径优先可能降低未来容扰能力，过晚切换可能失效，提前准备与反馈恢复可以同时服务存活和原目标。论文价值应落在这一闭环问题、可执行的策略条件预测及实际效果上，不要求所有场景全面领先。但目前五条成功轨迹仍不足以支撑宽泛可靠性或神经预测器不可替代性。
 
-后续按以下顺序推进，均为尚未执行的工作，而非当前结果：
+后续按以下顺序推进；已完成的镜像面板见4.5，下面的修正与验证尚未执行：
 
-1. **冻结后的独立小面板。** 保持模型、规则、阈值及物理，预先锁定少量新的初态/左右弯/起扰组合，报告全部成功与失败及同一统计单位的结果；不在看到结果后改条件仍称独立测试。不为凑成功扩大训练，也不穷举checkpoint。
+1. **针对新失败修正预测。** 保留冻结模型的四条镜像结果，先检验更远几何预览和少量配对候选数据能否改善左弯24N的选择；不改物理、底座和成功标准。若新样本用于训练，明确改为开发数据并另设新的验证条件，不能继续称未见测试。不穷举checkpoint或无界延长PPO训练。
 2. **任务与方法归因。** 先整理已有同源恒定α缓存，展示准备、保持与返回的差异，分开到达、触地、原用户代价和路径偏离。现有固定.5成功反例必须保留。新的速度支持或外部强基线按用户当前决定暂不启动；是否需要补充由最后主张决定，而不是要求大幅胜过某个指定基线。
 3. **实车与论文定稿。** 在明确实车授权及传感器/执行接口后验证关键低速转弯—扰动—恢复过程；同步完成最近邻文献对照、作者核验和IEEE格式。实车尚未执行，不把仿真触地或等效力结果写成硬件验证。
 
@@ -133,10 +158,16 @@ A_ok = {a in A_query : min_d q_no-contact(a,d) >= eta_q,
 
 ## 证据与流程说明
 
-E250–E268为本版当前证据，路径与SHA由本地builder解析；每项标记AI artifact_checked，人类核验未记录。旧E001–E249保留在历史主稿与证据明细，不能与当前物理/策略混算分母。本文仅在本地整理与导出；未上传未发表稿件、未投稿。作者、基金、利益冲突、数据公开许可与最终AI披露尚待人类确认，不编造声明。
+E250–E272为本版当前证据，路径与SHA由本地builder解析；每项标记AI artifact_checked，人类核验未记录。旧E001–E249保留在历史主稿与证据明细，不能与当前物理/策略混算分母。本文仅在本地整理与导出；未上传未发表稿件、未投稿。作者、基金、利益冲突、数据公开许可与最终AI披露尚待人类确认，不编造声明。
 
 [R1] IEEE Control Systems Society. Transactions on Control Systems Technology: Aim & Scope. https://www.ieeecss.org/publication/transactions-control-systems-technology （访问2026-10-29）。
 
 [R2] IEEE Control Systems Society. Author Information: Transactions on Control Systems Technology. https://www.ieeecss.org/publication/transactions-control-systems-technology/author-info （访问2026-10-29）。
+
+[R3] Huo, B., Yu, L., Liu, Y., and Chen, Z. Hierarchical residual reinforcement learning based path tracking control method for unmanned bicycle. Robotics and Autonomous Systems, 190, 104996, 2025. https://doi.org/10.1016/j.robot.2025.104996 （出版方检索摘要及摘录核对2026-10-29，全文直接访问受限）。
+
+[R4] Persson, N., Zhao, F., Kaheni, M., Dörfler, F., and Papadopoulos, A. V. An Adaptive Data-Enabled Policy Optimization Approach for Autonomous Bicycle Control. arXiv:2502.13676, 2025. https://arxiv.org/abs/2502.13676 （作者预印本摘要核对2026-10-29；此处引用该版本，不混用未核验期刊卷页）。
+
+[R5] Coordinated Trajectory Tracking and Self-Balancing Control for Unmanned Bicycle Robot Against Disturbances. Actuators, 15(1), 49, 2026. https://doi.org/10.3390/act15010049 （出版方摘要核对2026-10-29；作者列表及全文待核验，内部草稿暂存条目）。
 
 流程软件：Kassis, T., Agarwal, V., He, Y., Patel, D., and Brueckner, A. M. Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. 2026. https://doi.org/10.48550/arXiv.2609.00065 （当前arXiv v2元数据核对2026-10-29）。scientific-writing用于本地证据组织与表述检查，不是控制方法或实验性能依据。

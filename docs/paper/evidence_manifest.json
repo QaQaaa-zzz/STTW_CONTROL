@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "cbd0bfbc5a3c992bbc7455a9d7f765e3e628f043f35a98eab9a49e93700c159c",
-  "builder_sha256": "c4fc0a4025c0c42998008b68b69089eb127462ec1b6c6037e37e2fb438d88bce",
+  "manuscript_sha256": "81fdcb3f7dcc00e9c953d6c9c68ed460047ac044c17741651027987a1424386c",
+  "builder_sha256": "f098ea16fc493d9066f1c590aa5378074419e3ee21c4bbbf69a2305e07ecbbe7",
   "evidence_cutoff": "2026-10-29",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1568,7 +1568,7 @@
     },
     "E261": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/native_goal_run.py",
-      "sha256": "7cda3e2bc200670ac59c9d73f00afe480686bac989a9b98b3d6eafaae70748fd",
+      "sha256": "d104be146797e27a5bd6505e69e3a3218adec25c7d2de6e028a9140ffd7ba5db",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -1613,6 +1613,30 @@
       "sha256": "d91b2c145b4156679607126fbc38bb88bef90a3bd72bcd5ec55507f7920f760c",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E269": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/analysis/results.json",
+      "sha256": "83ce887be2ced2e4580ce83449cbf081a9a7fa3ff0fb5c248b2f89e2d1065911",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E270": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_gust_v1/analysis/results.json",
+      "sha256": "d5f1d891f45d97adfab352281ed260816dce0f67c956b4e23e290f82c5959a24",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E271": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/analysis/prospective_boundary_queries.json",
+      "sha256": "74737cfd514b3fa16520bf48b3b745f05fd9307d72e1ec47b37e8ceb45966b75",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E272": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/analysis/geometry_preview_diagnostic.json",
+      "sha256": "bf5c4a4534ac8115b6ac4a7bfd0b94f22bfdaa7be5c449e1595dd4057e239f67",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1634,7 +1658,11 @@
     "E265",
     "E266",
     "E267",
-    "E268"
+    "E268",
+    "E269",
+    "E270",
+    "E271",
+    "E272"
   ],
   "historical_claims_from_readback": [
     {

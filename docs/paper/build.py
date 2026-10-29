@@ -350,6 +350,10 @@ def evidence_manifest():
         'E266':archive/'u170_return_policy_outcome_mlp_v1/cross_source_queries_v1.json',
         'E267':archive/'u170_temporal_nn_boundary_v4/analysis/results.json',
         'E268':archive/'u170_return_policy_outcome_mlp_v1/config.json',
+        'E269':archive/'u170_tcst_mirrored_sources_v1/analysis/results.json',
+        'E270':archive/'u170_tcst_mirrored_gust_v1/analysis/results.json',
+        'E271':archive/'u170_tcst_mirrored_sources_v1/analysis/prospective_boundary_queries.json',
+        'E272':archive/'u170_tcst_mirrored_sources_v1/analysis/geometry_preview_diagnostic.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
