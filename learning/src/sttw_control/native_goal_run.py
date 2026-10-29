@@ -149,7 +149,9 @@ def low_speed_lateral_load_inventory(p):
     boundary=p.get('range_planner_boundary')
     context_grids=[c.get('boundary_expected_alphas',p['alphas']) if boundary else p['alphas'] for c in contexts]
     if any(not g or any(a not in p['alphas'] for a in g) or len(set(g))!=len(g) for g in context_grids):raise ValueError('boundary execution candidates must be declared grid points')
-    count=sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))
+    excluded=p.get('excluded_completed_cases',[])
+    if len({r['case_id'] for r in excluded})!=len(excluded):raise ValueError('unique reused complete cases required')
+    count=sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))-len(excluded)
     if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
@@ -185,7 +187,9 @@ def low_speed_lateral_load_inventory(p):
         rows[-1]['event']=event_name
         if boundary:rows[-1]['original_user_alpha']=context['state_source']['source_alpha']
     if any('state_source' in c for c in contexts) and not all('state_source' in c for c in contexts):raise ValueError('all conditional contexts require explicit sources')
-    return rows
+    excluded_ids={r['case_id'] for r in excluded}
+    if not excluded_ids.issubset({r['case_id'] for r in rows}):raise ValueError('reused case outside declared complete query matrix')
+    return [r for r in rows if r['case_id'] not in excluded_ids]
 
 
 def restore_conditional_capability_states(plan,cases,paths):
@@ -416,6 +420,18 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
     if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
+    for reused in proposal.get('excluded_completed_cases',[]):
+        archive=Path(reused['run']);index=json.loads((archive/'evaluation/case_index.json').read_text());status=json.loads((archive/'evaluation/status.json').read_text())
+        matches=[r for r in index if r['case_id']==reused['case_id']]
+        if status['phase']!='completed' or len(matches)!=1 or digest(matches[0]['raw_file'])!=reused['raw_sha256'] or matches[0]['raw_sha256']!=reused['raw_sha256']:raise ValueError('reused physical case identity differs')
+        archived=json.loads((archive/'plan.json').read_text())
+        if archived['config']!=previous['config'] or archived['models']['H75']['actor_sha256']!=model['actor_sha256']:raise ValueError('reused physics/model/config differs')
+        route=matches[0]['route'];current_context=next(c for c in proposal['route_contexts'] if c['route']==route)
+        old_context=next(c for c in archived['contexts'] if c['route']==route)
+        clean=lambda c:{k:v for k,v in c.items() if k!='boundary_expected_alphas'}
+        if clean(current_context)!=clean(old_context):raise ValueError('reused complete source/geometry differs')
+        if digest(archive/'plan.json')!=json.loads((archive/'seal.json').read_text())['plan_sha256']:raise ValueError('reused source seal differs')
+        files += [archive/'plan.json',archive/'seal.json',archive/'evaluation/status.json',archive/'evaluation/case_index.json',Path(matches[0]['raw_file'])]
     if proposal.get('range_planner_boundary'):
         boundary=proposal['range_planner_boundary'];manifest=Path(boundary['manifest']);parameters=Path(boundary['parameters'])
         if digest(manifest)!=boundary['manifest_sha256'] or digest(parameters)!=boundary['parameters_sha256']:raise ValueError('boundary predictor identity differs')
@@ -565,7 +581,7 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     for i,c in enumerate(cases):
         key=(c['bank_index'],c['route'],c['event']) if panel_kind in ('disturbed_two_user','disturbed_declared_user') else (c['bank_index'],c['route'])
         groups.setdefault(key,[]).append(i)
-    if panel_kind in ('disturbed_two_user','disturbed_declared_user'):expected_route_count*=len({c['event'] for c in cases})
+    if panel_kind in ('disturbed_two_user','disturbed_declared_user','disturbed_declared_subset'):expected_route_count*=len({c['event'] for c in cases})
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
     if panel_kind=='disturbed_declared_user':expected_group_size=len({c['alpha'] for c in cases})
     if panel_kind=='boundary_selected_user':
@@ -573,7 +589,10 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
         groups={}
         for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route'],c['event']),[]).append(i)
         expected_route_count*=len({c['event'] for c in cases})
-    if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
+    if panel_kind=='disturbed_declared_subset':
+        groups={}
+        for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route'],c['event']),[]).append(i)
+    if len(groups)!=expected_route_count or (panel_kind!='disturbed_declared_subset' and any(len(ids)!=expected_group_size for ids in groups.values())) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
 
@@ -2179,7 +2198,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_subset' if p['protocol'].get('excluded_completed_cases') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
         if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True

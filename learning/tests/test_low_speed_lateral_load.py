@@ -28,6 +28,17 @@ def test_nn_boundary_inventory_only_runs_selected_points_and_new_gust_timings():
     assert p['maximum_lower_ticks']==8000 and p['optimizer_updates']==0
 
 
+def test_preparation_coverage_reuses_four_completed_cases_without_dropping_other_alphas():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_preparation_time_coverage.json').read_text())
+    rows=fixed_h75_capability_inventory(p);excluded={r['case_id'] for r in p['excluded_completed_cases']}
+    assert len(rows)==26 and not ({r['case_id'] for r in rows}&excluded)
+    assert {r['alpha'] for r in rows}=={0.,.25,.5,.75,1.}
+    assert {r['preparation_s'] for r in rows}=={.3,.4,.5}
+    assert len({r['case_id'] for r in rows}|excluded)==30
+    bad=copy.deepcopy(p);bad['excluded_completed_cases'][0]['case_id']='not-a-declared-case'
+    with pytest.raises(ValueError,match='outside declared'):fixed_h75_capability_inventory(bad)
+
+
 def test_full_load_grid_and_identical_world_force_across_alpha():
     cfg=config();rows=fixed_h75_capability_inventory(cfg)
     assert len(rows)==len({row['case_id'] for row in rows})==34
