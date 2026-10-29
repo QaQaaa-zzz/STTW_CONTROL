@@ -202,6 +202,7 @@ def five_alpha_online_inventory(p):
         candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,
         task_aware_fallback=False)
     if type(p.get('guard_fallback',False)) is not bool:raise ValueError('guard_fallback must be an explicit boolean')
+    if p.get('curvature_task_mode','hard') not in ('hard','soft_penalty'):raise ValueError('unknown curvature task mode')
     nominal=p.get('panel_kind')=='nominal_five_user'
     disturbed_users=p.get('panel_kind')=='disturbed_five_user'
     if p.get('panel_kind','disturbed_single_user') not in ('disturbed_single_user','nominal_five_user','disturbed_five_user'):raise ValueError('unknown online panel kind')
@@ -1912,7 +1913,13 @@ def load(root,*,prefix_phase=False):
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
                     carry.state.projection.progress,path.s,path.curvature,permission,sidecar.latched,sidecar.prev_alpha,
                     cfg['residual_interface'],candidate_alphas=tuple(p['protocol']['candidate_alphas']),
-                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False)
+                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False,curvature_task_mode=p['protocol'].get('curvature_task_mode','hard'))
+                native_permission=permission
+                if p['protocol'].get('curvature_task_mode','hard')=='soft_penalty':
+                    # Invalid proposed reference is an engineering fault, not a
+                    # safe midpoint fallback. Reuse the native fault/withhold path.
+                    carry=carry.replace(state=carry.state.replace(fault=carry.state.fault|cd['candidate_reference_fault']))
+                    permission=permission&~cd['candidate_reference_fault']
                 alpha_exec,latched=cd['alpha'],cd['latched']
                 dwell=None
                 if p['protocol'].get('alpha_dwell_s',0.):
@@ -1929,6 +1936,9 @@ def load(root,*,prefix_phase=False):
                     coord_permission=permission,coord_pre_progress=carry.state.projection.progress,coord_latched_before=sidecar.latched,
                     coord_nominal=carry.state.physical.raw,coord_candidate_clipped=cd['target_clipped'],coord_unbounded_targets=cd['unbounded_targets'],
                     coord_eligible=eligible,coord_restore_requested=restore,coord_restore_published=restore&permission)
+                if p['protocol'].get('curvature_task_mode','hard')=='soft_penalty':
+                    coord_log.update({'coord_'+key:cd[key] for key in ('historical_hard_task_mask','valid_target_mask','original_proxy_cost','proxy_accel','curvature_excess','curvature_excess_penalty','selected_reference_valid','candidate_reference_fault')})
+                    coord_log['coord_native_permission']=native_permission
                 if p['protocol'].get('guard_fallback',False):
                     guard_requested=(~restore)&(~j.any(eligible))&j.any(cd['task_mask'])
                     guard_published=cd['guard_fallback_selected']&(j.asarray(True) if dwell is None else ~dwell['held'])&(alpha_exec==cd['alpha'])

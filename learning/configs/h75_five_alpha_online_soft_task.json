@@ -1,0 +1,104 @@
+{
+  "experiment_id": "STTW-H75-FIVE-ALPHA-SOFT-TASK-DIAGNOSTIC",
+  "mode": "native_five_alpha_online",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "bank_state_fingerprints": {
+    "6": "30586431583422f1ca405c3d3614eaa0e0f8cd343a666cc796e4a9d26a610bd8"
+  },
+  "user_alpha": 0.5,
+  "horizon_s": 10.0,
+  "expected_cases": 14,
+  "maximum_lower_ticks": 28000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "onset_s": 2.2,
+  "duration_s": 0.15,
+  "forces_N": [
+    -64.0,
+    64.0
+  ],
+  "force_frame": "worldY",
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "arm": 0,
+  "hypothetical_duration_s": 0.15,
+  "task_aware_fallback": false,
+  "guard_fallback": true,
+  "route_contexts": [
+    {
+      "route": "straight_v2p6",
+      "family": 0,
+      "radius_m": 2.0,
+      "angle_deg": 0.0,
+      "speed": 2.6,
+      "direction": 1.0,
+      "goal_distance_m": 20.0
+    },
+    {
+      "route": "left70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right70_R1p9",
+      "family": 1,
+      "radius_m": 1.9,
+      "angle_deg": 70,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "left130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": 1.0
+    },
+    {
+      "route": "right130_R2p7",
+      "family": 1,
+      "radius_m": 2.7,
+      "angle_deg": 130,
+      "speed": 2.6,
+      "direction": -1.0
+    },
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_tolerance_predictor_bank4_full_fit_v1/training",
+  "export_manifest_sha256": "ed543b15f0f42ed98e4e8b085f4402f054c0c970607edfaa4595c69a0b6206da",
+  "data_role": "Known bank6 related DEV online diagnostic; no independent TEST, additional baseline, model adoption or training.",
+  "scoring": "Original goal first arrival/contact, fullH10 contact/fault, executed alpha and q gates/permission/clipping; no benefit claim without matched comparison.",
+  "stop_rule": "Fourteen H10 episodes maximum28000lower,0optimizer; engineering errors stop with partials, no automatic retry or expansion. Existing min4 thresholds .8/.85, task gate and alpha.5 fallback unchanged; no safety guarantee or added slew. Optional dwell: hold all actual alpha changes40 native lower ticks; no initial hold, task-mask infeasibility bypasses, denied publication preserves alpha/latch with physical-time expiry; q drop alone does not release. No benefit/safety claim. Explicit guard fallback only: if degraded and some task-mask candidate exists, prefer feasible requested user, otherwise minimum original proxy over feasible candidates. Keep degraded/latch; no feasible task candidate retains fixed.5. Not risk-qualified restoration or safety. Soft task diagnostic: keep hard qualification finite bounded valid references (reject original NaN/inf before clip); add max(v_target^2*kappa_max/3-1,0)^2 to original selection proxy coefficient1. Historical3 is heuristic scale, not physical bound. User q/guard priority preserved; curvature alone cannot cancel hold. No threshold tuning, model or physics changes.",
+  "alpha_dwell_s": 0.2,
+  "curvature_task_mode": "soft_penalty"
+}

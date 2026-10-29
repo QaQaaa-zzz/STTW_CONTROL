@@ -186,15 +186,27 @@ def preview_curvature(progress,path_s,path_curvature):
     return j.maximum(j.max(knots),j.maximum(j.abs(j.interp(start,path_s,path_curvature)),j.abs(j.interp(end,path_s,path_curvature))))
 
 
-def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.)):
+def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,prev_alpha,*,use_q=True,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.),curvature_task_mode='hard',candidate_valid=None):
     """No time/event/route inputs; thresholds are engineering gates."""
     import jax.numpy as j
+    if curvature_task_mode not in ('hard','soft_penalty'):raise ValueError('unknown curvature task mode')
     permission=j.asarray(permission,dtype=bool);latched=j.asarray(latched,dtype=bool)
     alpha=j.asarray(candidate_alphas,j.float32)
     count=alpha.shape[0]
     task_mask=targets[:,0]**2*max_curvature<=3.
     user_index=j.argmin(j.abs(alpha-user_alpha))
     cost=(.1+.9*user_alpha)*((targets[:,0]-v_user)/1.)**2+(1.-.9*user_alpha)*((targets[:,1]-nominal[1])/.2)**2+.05*(alpha-user_alpha)**2+.02*(alpha-prev_alpha)**2
+    original_cost=cost
+    if curvature_task_mode=='soft_penalty':
+        historical_mask=task_mask
+        valid=j.all(j.isfinite(targets),axis=-1)&j.isfinite(cost)&j.isfinite(max_curvature)&(max_curvature>=0)
+        if candidate_valid is not None:valid=valid&j.asarray(candidate_valid,dtype=bool)
+        acceleration=targets[:,0]**2*max_curvature
+        excess=j.maximum(acceleration/3.-1.,0.)
+        penalty=excess**2
+        cost=original_cost+penalty
+        valid=valid&j.isfinite(cost)
+        task_mask=valid
     quality=j.where(use_q,qmin>=.8,j.ones(count,dtype=bool))
     restore=task_mask[user_index]&j.where(use_q,qmin[user_index]>=j.where(latched,.85,.8),True)
     eligible=task_mask&quality&(j.arange(count)!=user_index)
@@ -207,12 +219,18 @@ def choose_alpha(targets,max_curvature,nominal,v_user,qmin,permission,latched,pr
     task_aware_selected=j.asarray(task_aware_fallback)&degraded&j.any(task_mask)&~guard_selected
     fallback=j.where(guard_selected,guard_best,j.where(task_aware_selected,task_best,fallback))
     proposed=j.where(restore,alpha[user_index],fallback)
+    if curvature_task_mode=='soft_penalty':
+        selected_valid=valid[j.argmin(j.abs(alpha-proposed))]
+        reference_fault=~selected_valid
+        permission=permission&selected_valid
     chosen=j.where(permission,proposed,prev_alpha)
     new_latch=j.where(permission,~restore,latched)
-    return dict(alpha=chosen,latched=new_latch,prev_alpha=chosen,task_mask=task_mask,proxy_cost=cost,degraded=permission&degraded,publication_withheld=~permission,task_aware_fallback=j.asarray(task_aware_fallback),task_aware_selected=permission&task_aware_selected,guard_fallback=j.asarray(guard_fallback),guard_fallback_selected=permission&guard_selected)
+    result=dict(alpha=chosen,latched=new_latch,prev_alpha=chosen,task_mask=task_mask,proxy_cost=cost,degraded=permission&degraded,publication_withheld=~permission,task_aware_fallback=j.asarray(task_aware_fallback),task_aware_selected=permission&task_aware_selected,guard_fallback=j.asarray(guard_fallback),guard_fallback_selected=permission&guard_selected)
+    if curvature_task_mode=='soft_penalty':result.update(historical_hard_task_mask=historical_mask,valid_target_mask=valid,original_proxy_cost=original_cost,proxy_accel=acceleration,curvature_excess=excess,curvature_excess_penalty=penalty,selected_reference_valid=selected_valid,candidate_reference_fault=reference_fault)
+    return result
 
 
-def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.),hypothetical_duration_s=.1):
+def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_s,path_curvature,permission,latched,prev_alpha,interface,*,use_q=True,arm=1,user_alpha=1.,task_aware_fallback=False,guard_fallback=False,candidate_alphas=(0.,.5,1.),hypothetical_duration_s=.1,curvature_task_mode='hard'):
     import jax.numpy as j
     probabilities=candidate_probabilities(params,observation,latents,yaw,interface,candidate_alphas=candidate_alphas,hypothetical_duration_s=hypothetical_duration_s)[arm]
     qmin=j.min(probabilities,axis=-1)
@@ -220,7 +238,8 @@ def coordinate(params,observation,latents,yaw,nominal,v_user,path_progress,path_
     lo,hi=interface['speed_reference_bounds_m_s'];steer=interface['steer_reference_bound_rad']
     targets=j.stack([j.clip(unbounded[:,0],lo,hi),j.clip(unbounded[:,1],-steer,steer)],axis=-1)
     curvature=preview_curvature(path_progress,path_s,path_curvature)
-    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q,user_alpha=user_alpha,task_aware_fallback=task_aware_fallback,guard_fallback=guard_fallback,candidate_alphas=candidate_alphas)
+    valid=(j.all(j.isfinite(latents),axis=-1)&j.all(j.isfinite(unbounded),axis=-1)&j.all(j.isfinite(targets),axis=-1)&(targets[:,0]>=lo)&(targets[:,0]<=hi)&(j.abs(targets[:,1])<=steer)) if curvature_task_mode=='soft_penalty' else None
+    result=choose_alpha(targets,curvature,nominal,v_user,qmin,permission,latched,prev_alpha,use_q=use_q,user_alpha=user_alpha,task_aware_fallback=task_aware_fallback,guard_fallback=guard_fallback,candidate_alphas=candidate_alphas,curvature_task_mode=curvature_task_mode,candidate_valid=valid)
     result.update(probabilities=probabilities,qmin=qmin,targets=targets,unbounded_targets=unbounded,target_clipped=targets!=unbounded,max_abs_curvature=curvature)
     return result
 

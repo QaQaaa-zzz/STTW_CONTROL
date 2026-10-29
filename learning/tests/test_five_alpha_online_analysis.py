@@ -180,3 +180,25 @@ def test_float32_event_phases_have_exact_thirty_actual_lower_ticks(onset):
     assert stats['windows']['during_pulse']['observed_ticks']==30
     assert stats['windows']['before_pulse']['observed_ticks']==round(onset/.005)
     assert stats['windows']['after_pulse']['observed_ticks']==2000-round(onset/.005)-30
+
+
+def soft_fixture():
+    r=raw([.5]*4,np.full((4,5),.9));grid=np.array([0.,.25,.5,.75,1.],np.float32);original=.07*(grid-.5)**2;targets=np.tile([2.,0.],(4,5,1)).astype(np.float32);penalty=np.full((4,5),(4/3-1)**2,np.float32)
+    r.update(coord_latents=np.zeros((4,5,2),np.float32),coord_nominal=np.tile([2.,0.],(4,1)).astype(np.float32),coord_prev_alpha=np.full(4,.5,np.float32),coord_max_abs_curvature=np.ones(4,np.float32),coord_unbounded_targets=targets.copy(),coord_targets=targets,coord_original_proxy_cost=np.tile(original,(4,1)),coord_proxy_accel=np.full((4,5),4.,np.float32),coord_curvature_excess=np.full((4,5),1/3,np.float32),coord_curvature_excess_penalty=penalty,coord_proxy_cost=np.tile(original,(4,1))+penalty,coord_valid_target_mask=np.ones((4,5),bool),coord_historical_hard_task_mask=np.zeros((4,5),bool),coord_selected_reference_valid=np.ones(4,bool),coord_candidate_reference_fault=np.zeros(4,bool),coord_native_permission=np.ones(4,bool))
+    interface=dict(speed_positive_scale_m_s=2.,speed_negative_scale_m_s=1.,steer_scale_rad=.2,speed_reference_bounds_m_s=[0.,4.],steer_reference_bound_rad=.4)
+    return r,interface
+
+
+def test_soft_cost_validity_and_historical_hard_mask_are_independently_audited():
+    r,interface=soft_fixture();c=dict(alpha=.5,speed=2.,onset_s=2.2,duration_s=.15)
+    stats=m.five_alpha_online_statistics(r,c,curvature_task_mode='soft_penalty',interface=interface)
+    assert stats['curvature_task_audit']['independent_numpy_match']
+    assert stats['windows']['full']['historical_hard_none_ticks']==4
+    assert stats['windows']['full']['valid_reference_any_ticks']==4
+    r['coord_curvature_excess_penalty']*=2
+    with pytest.raises(AssertionError):m.audit_soft_curvature_task(r,c,interface)
+
+
+def test_soft_invalid_selected_reference_cannot_claim_permission():
+    r,interface=soft_fixture();r['coord_selected_reference_valid'][:]=False
+    with pytest.raises(AssertionError):m.audit_soft_curvature_task(r,dict(alpha=.5,speed=2.),interface)
