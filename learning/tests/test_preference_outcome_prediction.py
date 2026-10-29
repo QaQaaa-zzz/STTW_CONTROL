@@ -3,6 +3,7 @@ import pytest
 
 from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
 from sttw_control.tolerance_coordination import select_from_alpha_range
+from sttw_control.preference_outcome_prediction import merge_outcome_datasets,SCHEMA
 
 
 def example():
@@ -71,3 +72,24 @@ def test_disconnected_range_selection_never_commands_unqueried_interior():
     plan=dict(candidate_alphas=[0.,.25,.5,.75,1.],feasible_mask=[True,True,False,True,True])
     result=select_from_alpha_range(plan,user_alpha=.5,previous_alpha=.75)
     assert result['selected_alpha']==.75 and result['selected_is_predicted_feasible']
+
+
+def test_refit_merge_releases_known_dev_explicitly_without_changing_parent_roles(tmp_path):
+    import json,hashlib
+    def parent(name,case,role,actor='actor'):
+        p=tmp_path/name;p.mkdir()
+        np.savez_compressed(p/'dataset.npz',features=np.zeros((1,42)),targets=np.zeros((1,4)),regression_mask=np.ones((1,2)),roles=np.array([role]))
+        meta=dict(schema=SCHEMA,feature_dimension=42,state_indices=list(STATE_INDICES),physical_contract_sha256='physics-fixture',query_features=['fixture'],targets=['fixture'],
+            source_model=dict(actor_sha256=actor),records=[dict(case_id=case,role=role)],partition={role:1},inputs_sha256={},
+            dataset_sha256=hashlib.sha256((p/'dataset.npz').read_bytes()).hexdigest())
+        (p/'manifest.json').write_text(json.dumps(meta));return p
+    a=parent('a','a','training');b=parent('b','b','development');before=(b/'manifest.json').read_bytes()
+    out=tmp_path/'merged';meta=merge_outcome_datasets([a,b],out,release_note='Known DEV outcomes released for a new refit; new validation required.')
+    with np.load(out/'dataset.npz') as z:assert z['roles'].tolist()==['training','training']
+    assert meta['records'][1]['parent_role']=='development' and (b/'manifest.json').read_bytes()==before
+    with pytest.raises(ValueError,match='duplicate physical'):merge_outcome_datasets([a,a],tmp_path/'duplicate',release_note='explicit')
+    c=parent('c','c','training',actor='other')
+    with pytest.raises(ValueError,match='different feature'):merge_outcome_datasets([a,c],tmp_path/'different',release_note='explicit')
+    d=parent('d','d','training');changed=json.loads((d/'manifest.json').read_text());changed['physical_contract_sha256']='other-physics';(d/'manifest.json').write_text(json.dumps(changed))
+    with pytest.raises(ValueError,match='different feature'):merge_outcome_datasets([a,d],tmp_path/'physics',release_note='explicit')
+    with pytest.raises(ValueError,match='explicit release'):merge_outcome_datasets([a],tmp_path/'implicit',release_note='')

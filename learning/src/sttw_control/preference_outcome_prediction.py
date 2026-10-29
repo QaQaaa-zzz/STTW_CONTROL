@@ -37,18 +37,25 @@ def outcome_features(observation,latent,source_yaw,case,interface):
     return features
 
 
-def prepare_dataset(run,output):
+def prepare_dataset(run,output,*,partition_override=None,release_note=None):
     """Freeze all declared TRAIN/DEV groups after successful independent analysis."""
     run=Path(run).resolve();output=Path(output).resolve()
     plan=json.loads((run/'plan.json').read_text());rows=json.loads((run/'analysis/results.json').read_text())
     status=json.loads((run/'evaluation/status.json').read_text());receipt=json.loads((run/'analysis/receipt.json').read_text())
-    shape=json.loads((run/'evaluation/shape_receipt.json').read_text());partition=plan['protocol']['dataset_partition']
+    shape=json.loads((run/'evaluation/shape_receipt.json').read_text());parent_partition=plan['protocol'].get('dataset_partition')
+    partition=parent_partition if partition_override is None else partition_override
+    if partition is None or (partition_override is not None and not release_note):raise ValueError('declared partition or explicit release note required')
     if (status['phase']!='completed' or status['completed_cases']!=len(rows) or len(rows)!=plan['cases']
         or not receipt['execution_reward_reconstructed'] or not shape.get('all_nonalpha_source_leaves_exact')
         or not shape.get('paired_reset_all_leaves_exact') or not shape.get('conditional_complete_state_copy')):
         raise ValueError('complete authenticated conditional branch analysis required')
     inputs={};sha=lambda path:hashlib.sha256(Path(path).read_bytes()).hexdigest()
     input_paths=[run/'plan.json',run/'analysis/results.json',run/'analysis/receipt.json',run/'evaluation/shape_receipt.json']
+    declared_groups=None
+    if plan['protocol'].get('excluded_completed_cases') or plan['protocol'].get('range_planner_boundary'):
+        input_paths.append(run/'inventory.json');declared_groups={}
+        for case in json.loads((run/'inventory.json').read_text()):
+            declared_groups.setdefault(case['route']+'/'+case['event'],[]).append(case['alpha'])
     source_alphas={c['route']:c['state_source']['source_alpha'] for c in plan['contexts']}
     has_unchanged=any(r['force_N']==0. and r['alpha']==source_alphas[r['route']] for r in rows)
     if has_unchanged:input_paths.append(run/'source_replay_audit.json')
@@ -59,6 +66,8 @@ def prepare_dataset(run,output):
     for row in rows:
         if row['endpoint']['physical_outcome'] not in ('survived','contact') or row['endpoint']['goal_arrived'] is None:
             raise ValueError('engineering/unknown outcome cannot become a negative target')
+        if sha(row['raw_file'])!=row['raw_sha256']:raise ValueError('physical source trajectory changed after analysis')
+        inputs[row['raw_file']]=row['raw_sha256'];inputs[row['diagnostic_task_file']]=sha(row['diagnostic_task_file'])
         with np.load(row['raw_file']) as z:raw=dict(z)
         n=row['active_lower_ticks'];obs=raw['query_observation'][0]
         neutral=np.delete(obs,336)
@@ -82,13 +91,53 @@ def prepare_dataset(run,output):
         raise ValueError('predeclared TRAIN/DEV counts differ')
     for group in {m['group'] for m in metadata}:
         members=[m for m in metadata if m['group']==group]
-        if len({m['role'] for m in members})!=1 or sorted(m['alpha'] for m in members)!=plan['protocol']['alphas']:
+        expected=sorted(declared_groups[group]) if declared_groups is not None else plan['protocol']['alphas']
+        if len({m['role'] for m in members})!=1 or sorted(m['alpha'] for m in members)!=expected:
             raise ValueError('source/challenge alpha siblings cannot split across data roles')
     output.mkdir(parents=True,exist_ok=False)
     np.savez_compressed(output/'dataset.npz',features=np.asarray(xs),targets=np.asarray(ys,np.float32),regression_mask=np.asarray(masks,np.float32),roles=np.asarray(roles))
-    manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),unchanged_alpha_replay='checked' if has_unchanged else 'not applicable: all queried alphas differ from source alpha; complete source-copy proof retained',limitations='Related four-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
+    manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),unchanged_alpha_replay='checked' if has_unchanged else 'not applicable: no unchanged-alpha zero-force branch; complete source-copy proof retained',limitations='Related-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
+    if partition_override is not None:manifest.update(parent_partition=parent_partition,release_note=release_note)
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     return manifest
+
+
+def merge_outcome_datasets(datasets,output,*,release_note):
+    """New TRAIN-only refit stage; preserve every parent's original data roles."""
+    if not release_note:raise ValueError('explicit release of known development labels required')
+    output=Path(output).resolve();parents=[];records=[];parts=[];inputs={};seen=set();reference=None
+    sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    for directory in datasets:
+        directory=Path(directory).resolve();file=directory/'manifest.json';meta=json.loads(file.read_text());datafile=directory/'dataset.npz'
+        if meta['schema']!=SCHEMA or sha(datafile)!=meta['dataset_sha256']:raise ValueError('parent dataset identity differs')
+        for source,expected in meta['inputs_sha256'].items():
+            if sha(source)!=expected:raise ValueError('parent evidence changed '+source)
+        contract={k:meta[k] for k in ('schema','feature_dimension','state_indices','query_features','targets')}
+        contract['middle_actor_sha256']=meta['source_model']['actor_sha256']
+        physical_contract=meta.get('physical_contract_sha256')
+        if physical_contract is None:
+            source=Path(meta['source_run']);source_plan=json.loads((source/'plan.json').read_text());receipt=json.loads((source/'analysis/receipt.json').read_text())
+            payload=dict(config=source_plan['config'],initial_source=source_plan['initial_source'],physics_identity=receipt['physics_identity'])
+            physical_contract=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        contract['physical_contract_sha256']=physical_contract
+        if reference is None:reference=contract
+        elif reference!=contract:raise ValueError('cannot merge different feature or frozen-middle identities')
+        with np.load(datafile) as z:data=dict(z)
+        if len(meta['records'])!=len(data['features']):raise ValueError('parent labels/records count differs')
+        for i,row in enumerate(meta['records']):
+            if row['case_id'] in seen:raise ValueError('duplicate physical case across datasets')
+            seen.add(row['case_id']);records.append(dict(row,role='training',parent_role=str(data['roles'][i]),parent_dataset=str(directory)))
+        parents.append(dict(dataset=str(directory),partition=meta['partition'],rows=len(data['features'])))
+        parts.append(data);inputs.update({str(file):sha(file),str(datafile):sha(datafile)})
+    if not parts:raise ValueError('nonempty parent datasets required')
+    merged={key:np.concatenate([part[key] for part in parts]) for key in ('features','targets','regression_mask')}
+    merged['roles']=np.full(len(records),'training');output.mkdir(parents=True,exist_ok=False)
+    np.savez_compressed(output/'dataset.npz',**merged)
+    manifest=dict(meta,schema=SCHEMA,source_run=None,physical_contract_sha256=reference['physical_contract_sha256'],source_datasets=parents,records=records,
+        partition=dict(training_rows=len(records),development_rows=0,unit='Explicit release of all known parent rows for this refit only'),
+        release_note=release_note,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),
+        limitations='Related states and already observed outcomes; all rows TRAIN. Parent DEV evidence remains unchanged. No independent validation or online control claim.')
+    (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest
 
 
 def predict_outcomes(export,features):
@@ -197,20 +246,24 @@ def freeze_query_predictions(protocol,training,output):
     protocol=Path(protocol).resolve();training=Path(training).resolve();output=Path(output).resolve()
     cfg=json.loads(protocol.read_text());cases=low_speed_lateral_load_inventory(cfg)
     fitted=json.loads((training/'manifest.json').read_text());dataset=Path(fitted['dataset']);meta=json.loads((dataset/'manifest.json').read_text())
-    root=Path(meta['source_run']);parent=json.loads((root/'plan.json').read_text());rows=json.loads((root/'analysis/results.json').read_text())
+    root=Path(cfg.get('query_source_run') or meta['source_run']);parent=json.loads((root/'plan.json').read_text());rows=json.loads((root/'analysis/results.json').read_text())
     sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-    if sha(training/'parameters.npz')!=fitted['parameters_sha256'] or sha(parent['models']['H75']['actor'])!=parent['models']['H75']['actor_sha256']:
+    if sha(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('prospective query source changed')
+    if sha(training/'parameters.npz')!=fitted['parameters_sha256'] or sha(parent['models']['H75']['actor'])!=parent['models']['H75']['actor_sha256'] or parent['models']['H75']['actor_sha256']!=fitted['source_model']['actor_sha256']:
         raise ValueError('frozen outcome model or middle actor changed')
     with np.load(training/'parameters.npz') as z:export=dict(z)
     with Path(parent['models']['H75']['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
     actor=PathCommandActor(architecture=parent['config']['network']['architecture'])
     source={};checks=[]
     for route in {c['route'] for c in cases}:
-        row=next(r for r in rows if r['route']==route and r['force_N']==0. and r['alpha']==0.)
+        context=next(c for c in cfg['route_contexts'] if c['route']==route)
+        previous_context=next(c for c in parent['contexts'] if c['route']==route)
+        if context.get('state_source')!=previous_context.get('state_source'):raise ValueError('prospective complete source identity differs')
+        row=next(r for r in rows if r['route']==route)
         with np.load(row['raw_file']) as z:raw=dict(z)
         obs=raw['query_observation'][0];latent=np.asarray(actor.apply(params,j.asarray(obs)))
         np.testing.assert_allclose(latent,raw['composed_latent'][0],atol=3e-5,rtol=3e-5)
-        source[route]=(obs,float(raw['pre_upper_yaw'][0]));checks.append(dict(route=route,maximum_actor_latent_error=float(np.max(abs(latent-raw['composed_latent'][0])))))
+        source[route]=(obs,float(raw['pre_upper_yaw'][0]));checks.append(dict(route=route,source_run=str(root),source_plan_sha256=sha(root/'plan.json'),source_raw_sha256=sha(row['raw_file']),maximum_actor_latent_error=float(np.max(abs(latent-raw['composed_latent'][0])))))
     queries=[]
     for case in cases:
         obs=source[case['route']][0].copy();obs[336]=case['alpha'];queries.append(obs)
@@ -221,7 +274,7 @@ def freeze_query_predictions(protocol,training,output):
     if output.exists() or output.with_suffix('.npz').exists():raise FileExistsError('frozen prospective prediction already exists')
     np.savez_compressed(output.with_suffix('.npz'),features=features,prediction=prediction,case_ids=np.asarray([c['case_id'] for c in cases]))
     import datetime
-    result=dict(schema=SCHEMA,recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical alpha interpolation labels. Known four source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
+    result=dict(schema=SCHEMA,recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical alpha interpolation labels. Known source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
     output.write_text(json.dumps(result,indent=2)+'\n');return result
 
 
@@ -243,7 +296,7 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     default=(query['prediction'][:,0]>=.8)&(query['prediction'][:,1]>=.5)&(query['prediction'][:,2]<=4.)
     actual=(data['targets'][:,0]==1)&(data['targets'][:,1]==1)&(np.expm1(data['targets'][:,2])<=4.)
     disturbed=np.asarray([r['force_N']!=0 for r in meta['records']])
-    metric.update(qualified_new_candidates=int(default.sum()),qualified_new_disturbed_candidates=int((default&disturbed).sum()),false_feasible_new_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and not actual[i]],false_no_fall_qualified_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and data['targets'][i,0]==0],scope='New32 interior-alpha probes only; no training rows included in these metrics. Example thresholds q.8/task.5/pathRMSE4m.')
+    metric.update(qualified_new_candidates=int(default.sum()),qualified_new_disturbed_candidates=int((default&disturbed).sum()),false_feasible_new_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and not actual[i]],false_no_fall_qualified_cases=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and data['targets'][i,0]==0],scope=f'New{len(meta["records"])} prospective probes only; no training rows included in these metrics. Example thresholds q.8/task.5/pathRMSE4m.')
     metric['qualified_new_speed_violations']=[r['case_id'] for i,r in enumerate(meta['records']) if default[i] and r['full_upright_max_abs_speed_m_s']>2.1]
     parent=Path(fitted['dataset']);parent_meta=json.loads((parent/'manifest.json').read_text())
     if sha(parent/'manifest.json')!=fitted['dataset_manifest_sha256']:raise ValueError('training reference metadata changed')
@@ -256,7 +309,7 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     examples=frozen['interval_examples']
     for group in sorted(wanted):
         members=sorted([r for r in combined if r['record']['group']==group],key=lambda r:r['record']['alpha']);grid=[r['record']['alpha'] for r in members]
-        if grid!=[0.,.125,.25,.375,.5,.625,.75,.875,1.]:raise ValueError('old five and fresh four must form exactly the checked nine-point grid')
+        if len(grid)!=len(set(grid)) or not {0.,.25,.5,.75,1.}.issubset(set(grid)):raise ValueError('unique checked points including all original five training references required')
         prediction=np.asarray([r['prediction'] for r in members]);truth=np.asarray([r['target'] for r in members]);ranges=[]
         for risk in examples['no_fall_thresholds']:
             for limit in examples['path_rmse_limits_m']:
@@ -265,11 +318,11 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
                 plan.update(observed_qualified_mask=observed.tolist(),false_feasible_alpha=[a for a,p,t in zip(grid,plan['feasible_mask'],observed) if p and not t]);ranges.append(plan)
         groups.append(dict(group=group,candidates=members,plans=ranges))
     output.mkdir(parents=True,exist_ok=False)
-    result=dict(schema=SCHEMA,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Nine-point range plots include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
+    result=dict(schema=SCHEMA,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Range tables include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
     (output/'results.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metric,indent=2)+'\n')
     physical_run=Path(meta['source_run']);first=next(r for r in meta['records'] if r['force_N']!=0)
     event=first['group'].split('/')[-1];xy=physical_run/'analysis'/(first['route']+'_'+event+'_fixed_candidate_xy.png')
-    lines=['# Prospective alpha-interior prediction check','',f'![New physical alpha trajectories]({xy})','',f'All actual XY / reward / component panels: [{physical_run.name}]({physical_run}/analysis/README.md).','','```json',json.dumps(metric,indent=2),'```','','New32 metrics above exclude all training rows. Old5 plus new4 below are an explicitly mixed nine-point candidate reference, not nine independent held-out cases.','', '|Source / challenge|Estimated intervals at q>=.8, task>=.5, pathRMSE<=4m|False feasible sampled alpha|','|---|---|---|']
+    lines=['# Prospective alpha-interior prediction check','',f'![New physical alpha trajectories]({xy})','',f'All actual XY / reward / component panels: [{physical_run.name}]({physical_run}/analysis/README.md).','','```json',json.dumps(metric,indent=2),'```','','Fresh-probe metrics above exclude all training rows. Range references below mix the original five training points with fresh queried points; they are not all held-out cases.','', '|Source / challenge|Estimated intervals at q>=.8, task>=.5, pathRMSE<=4m|False feasible sampled alpha|','|---|---|---|']
     for g in groups:
         p=next(p for p in g['plans'] if p['no_fall_threshold']==.8 and p['max_path_error_m']==4.)
         lines.append(f"|{g['group']}|{p['estimated_intervals']}|{p['false_feasible_alpha']}|")
@@ -347,7 +400,7 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
     np.testing.assert_allclose(prediction,reference,atol=3e-5,rtol=3e-5,err_msg='NumPy export inference differs from training model')
     np.savez_compressed(output/'parameters.npz',**export);np.savez_compressed(output/'predictions.npz',prediction=prediction,targets=y,roles=data['roles'])
     metrics=dict(training=outcome_metrics(y[train],prediction[train],mask[train]),development=outcome_metrics(y[dev],prediction[dev],mask[dev]) if dev.any() else None)
-    result=dict(schema=SCHEMA,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related four-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
+    result=dict(schema=SCHEMA,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
     (output/'manifest.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metrics,indent=2)+'\n')
     import matplotlib
     matplotlib.use('Agg')
