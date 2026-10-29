@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "81fdcb3f7dcc00e9c953d6c9c68ed460047ac044c17741651027987a1424386c",
-  "builder_sha256": "f098ea16fc493d9066f1c590aa5378074419e3ee21c4bbbf69a2305e07ecbbe7",
+  "manuscript_sha256": "649660f427223d589e1d4d1fc093400e22ca037e0cbfad0b2f81cba033a9a6bf",
+  "builder_sha256": "695d90a2e3711cb27a13fd50f79d0fa4ebcbf8a8b4744d05206a447340407244",
   "evidence_cutoff": "2026-10-29",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1637,6 +1637,12 @@
       "sha256": "bf5c4a4534ac8115b6ac4a7bfd0b94f22bfdaa7be5c449e1595dd4057e239f67",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E273": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_tcst_mirrored_sources_v1/analysis/query_feature_coverage.json",
+      "sha256": "687a59025166858e43bf9184529ec53c13111fe691186bf1f813222f429eaa5f",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1662,7 +1668,8 @@
     "E269",
     "E270",
     "E271",
-    "E272"
+    "E272",
+    "E273"
   ],
   "historical_claims_from_readback": [
     {

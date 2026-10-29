@@ -354,6 +354,7 @@ def evidence_manifest():
         'E270':archive/'u170_tcst_mirrored_gust_v1/analysis/results.json',
         'E271':archive/'u170_tcst_mirrored_sources_v1/analysis/prospective_boundary_queries.json',
         'E272':archive/'u170_tcst_mirrored_sources_v1/analysis/geometry_preview_diagnostic.json',
+        'E273':archive/'u170_tcst_mirrored_sources_v1/analysis/query_feature_coverage.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
