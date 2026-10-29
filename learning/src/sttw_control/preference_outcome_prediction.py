@@ -45,7 +45,11 @@ def prepare_dataset(run,output):
         or not shape.get('paired_reset_all_leaves_exact') or not shape.get('conditional_complete_state_copy')):
         raise ValueError('complete authenticated conditional branch analysis required')
     inputs={};sha=lambda path:hashlib.sha256(Path(path).read_bytes()).hexdigest()
-    for path in (run/'plan.json',run/'analysis/results.json',run/'analysis/receipt.json',run/'evaluation/shape_receipt.json',run/'source_replay_audit.json'):
+    input_paths=[run/'plan.json',run/'analysis/results.json',run/'analysis/receipt.json',run/'evaluation/shape_receipt.json']
+    source_alphas={c['route']:c['state_source']['source_alpha'] for c in plan['contexts']}
+    has_unchanged=any(r['force_N']==0. and r['alpha']==source_alphas[r['route']] for r in rows)
+    if has_unchanged:input_paths.append(run/'source_replay_audit.json')
+    for path in input_paths:
         inputs[str(path)]=sha(path)
     if inputs[str(run/'plan.json')]!=json.loads((run/'seal.json').read_text())['plan_sha256']:raise ValueError('conditional plan changed')
     xs=[];ys=[];masks=[];roles=[];metadata=[];source_observations={}
@@ -79,7 +83,7 @@ def prepare_dataset(run,output):
             raise ValueError('source/challenge alpha siblings cannot split across data roles')
     output.mkdir(parents=True,exist_ok=False)
     np.savez_compressed(output/'dataset.npz',features=np.asarray(xs),targets=np.asarray(ys,np.float32),regression_mask=np.asarray(masks,np.float32),roles=np.asarray(roles))
-    manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),limitations='Related four-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
+    manifest=dict(schema=SCHEMA,source_run=str(run),source_plan_sha256=inputs[str(run/'plan.json')],source_model=plan['models']['H75'],feature_dimension=42,state_indices=list(STATE_INDICES),query_features=['candidate_alpha','candidate_speed_correction_m_s','candidate_steer_correction_div_0p2rad','hypothetical_body_force_x_div32N','hypothetical_body_force_y_div32N','preparation_div0p6s','duration_div0p4s','remaining_task_time_div10s'],targets=['no_fall_to_original_task10','survived_and_entered_original_goal','log1p_original_path_rmse_to_goal_or_window','log1p_peak_upright_abs_speed'],partition=partition,records=metadata,inputs_sha256=inputs,dataset_sha256=sha(output/'dataset.npz'),unchanged_alpha_replay='checked' if has_unchanged else 'not applicable: all queried alphas differ from source alpha; complete source-copy proof retained',limitations='Related four-state TRAIN/DEV, deterministic branch labels. Inputs contain hypothetical queries, never actual future sensor values. Only declared original task<=10s is labeled; extra raw suffix is preserved separately. No independent TEST, probability calibration or continuous safety guarantee.')
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     return manifest
 
@@ -122,6 +126,42 @@ def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,s
     result=feasible_alpha_intervals(grid,aggregate[:,0],aggregate[:,1],aggregate[:,2],no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
     result.update(candidate_outcomes=aggregate.tolist(),hypothetical_disturbances=hypotheses,task_time_s=float(task_time_s),aggregation='Worst predicted no-fall/task probability and path/speed bound across declared hypothetical queries.',model_scope='Estimated ranges from a small related-domain predictor; no calibrated risk or continuous-interior guarantee. No actual future event schedule is read.')
     return result
+
+
+class FrozenAlphaRangePlanner:
+    """State-query adapter: frozen middle queries plus the small outcome network.
+
+    Loads only model/config artifacts, never trajectories or future outcome
+    labels. The caller supplies the current native observation and a declared
+    hypothetical disturbance family. This class does not command actuators.
+    """
+    def __init__(self,directory):
+        import pickle
+        import jax
+        import jax.numpy as j
+        from .path_command_policy import PathCommandActor
+        self.directory=Path(directory).resolve();self.manifest=json.loads((self.directory/'manifest.json').read_text())
+        sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();middle=self.manifest['source_model']
+        for file,expected in ((self.directory/'parameters.npz',self.manifest['parameters_sha256']),(Path(middle['actor']),middle['actor_sha256']),(Path(middle['training_manifest']),middle['training_manifest_sha256'])):
+            if sha(file)!=expected:raise ValueError('range planner model identity changed')
+        config=json.loads(Path(middle['training_manifest']).read_text())['config']
+        if config['network']['actor_dim']!=351:raise ValueError('native351 state schema required')
+        self.interface=config['residual_interface']
+        with np.load(self.directory/'parameters.npz') as z:self.parameters=dict(z)
+        with Path(middle['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
+        actor=PathCommandActor(architecture=config['network']['architecture'])
+        self.middle_query=jax.jit(lambda x:actor.apply(params,x))
+
+    def query(self,observation,source_yaw,task_time_s,hypotheses,*,candidate_alphas=(0.,.125,.25,.375,.5,.625,.75,.875,1.),no_fall_threshold=.8,task_threshold=.5,max_path_error_m=4.):
+        import jax.numpy as j
+        started=time.monotonic();obs=np.asarray(observation,np.float32)
+        if obs.shape!=(351,) or not np.isfinite(obs).all() or not 0<=obs[336]<=1:raise ValueError('current native351 observation with valid user alpha required')
+        # Preserve an explicitly requested user preference even off the standard grid.
+        grid=np.unique(np.r_[candidate_alphas,float(obs[336])]);queries=np.repeat(obs[None,:],len(grid),axis=0);queries[:,336]=grid
+        latents=np.asarray(self.middle_query(j.asarray(queries)))
+        result=plan_alpha_intervals(self.parameters,obs,grid,latents,source_yaw,task_time_s,hypotheses,self.interface,no_fall_threshold=no_fall_threshold,task_threshold=task_threshold,max_path_error_m=max_path_error_m)
+        result.update(user_alpha=float(obs[336]),middle_id=self.manifest['source_model']['registry_id'],outcome_parameters_sha256=self.manifest['parameters_sha256'],query_seconds=time.monotonic()-started,scope='Query API only; caller controls execution and restores preference. Related-state alpha interpolation validated, not universal control/safety certification.')
+        return result
 
 
 def release_development_for_refit(dataset,output):
