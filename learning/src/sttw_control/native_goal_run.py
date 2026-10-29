@@ -137,7 +137,8 @@ def low_speed_lateral_load_inventory(p):
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
     if any(p.get(k)!=value for k,value in required.items()):
         raise ValueError('paired low-speed lateral-load contract differs')
-    if p['alphas'] not in ([0.,1.],[0.,.25,.5,.75,1.]):raise ValueError('two endpoints or all five declared preferences required')
+    if (not p['alphas'] or any(not math.isfinite(a) or not 0<=a<=1 for a in p['alphas'])
+        or any(b<=a for a,b in zip(p['alphas'],p['alphas'][1:]))):raise ValueError('finite strictly increasing candidate alpha grid required')
     direction=p.get('force_direction_world',[0.,1.,0.])
     if (len(direction)!=3 or any(not math.isfinite(x) for x in direction)
         or direction[2]!=0. or abs(sum(x*x for x in direction)-1.)>1e-6
@@ -389,6 +390,12 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
     if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
+    if proposal.get('frozen_prediction'):
+        frozen=proposal['frozen_prediction'];file=Path(frozen['manifest'])
+        if digest(file)!=frozen['manifest_sha256']:raise ValueError('prospective prediction changed before prepare')
+        record=json.loads(file.read_text());data=Path(record['query_data'])
+        if digest(data)!=record['query_data_sha256'] or [c['case_id'] for c in record['cases']]!=[c['case_id'] for c in rows]:raise ValueError('prospective query identity differs')
+        files += [file,data]
     for context in proposal['route_contexts']:
         if 'state_source' in context:
             ss=context['state_source'];files += [Path(ss['run'])/'plan.json',Path(ss['run'])/'seal.json',Path(ss['carry_file']),Path(ss['path_file'])]

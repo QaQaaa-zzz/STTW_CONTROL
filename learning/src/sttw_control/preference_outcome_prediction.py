@@ -68,7 +68,7 @@ def prepare_dataset(run,output):
         ys.append([float(survived),float(goal),np.log1p(path_rmse),np.log1p(peak)])
         # Do not reward early failure with an artificially small partial-window error.
         masks.append([float(survived),float(survived)])
-        dev=row['force_N']==partition['development_force_N'] and row['preparation_s']==partition['development_preparation_s']
+        dev=partition.get('all_development',False) or (row['force_N']==partition.get('development_force_N') and row['preparation_s']==partition.get('development_preparation_s'))
         roles.append('development' if dev else 'training')
         metadata.append(dict(case_id=row['case_id'],group=row['route']+'/'+row['event'],route=row['route'],alpha=row['alpha'],force_N=row['force_N'],preparation_s=row['preparation_s'],source_task_start_s=row['source_task_start_s'],path_rmse_to_goal_or_window_m=path_rmse,full_upright_max_abs_speed_m_s=peak,no_fall=survived,task_completed=bool(goal),regression_targets_valid=survived,role=roles[-1]))
     if roles.count('training')!=partition['training_rows'] or roles.count('development')!=partition['development_rows']:
@@ -99,6 +99,60 @@ def predict_outcomes(export,features):
     return np.concatenate([probabilities,continuous],axis=-1).mean(axis=0)
 
 
+def release_development_for_refit(dataset,output):
+    """Explicit new-stage release; original failed TRAIN/DEV experiment stays intact."""
+    dataset=Path(dataset).resolve();output=Path(output).resolve();meta=json.loads((dataset/'manifest.json').read_text())
+    sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    if sha(dataset/'dataset.npz')!=meta['dataset_sha256']:raise ValueError('parent dataset changed')
+    with np.load(dataset/'dataset.npz') as z:data=dict(z)
+    count=len(data['features']);data['roles']=np.full(count,'training')
+    output.mkdir(parents=True,exist_ok=False);np.savez_compressed(output/'dataset.npz',**data)
+    meta.update(parent_dataset=str(dataset),parent_partition=meta['partition'],development_released=True,
+        release_note='Prior related DEV failure is known and these labels are released for a new fit. No DEV claim for refit; freeze predictions before new physical interior-alpha probes.',
+        partition=dict(training_rows=count,development_rows=0,unit='all prior complete source/challenge groups released together'),dataset_sha256=sha(output/'dataset.npz'))
+    for row in meta['records']:row['role']='training'
+    meta['inputs_sha256'].update({str(dataset/'manifest.json'):sha(dataset/'manifest.json'),str(dataset/'dataset.npz'):sha(dataset/'dataset.npz')})
+    (output/'manifest.json').write_text(json.dumps(meta,indent=2)+'\n');return meta
+
+
+def freeze_query_predictions(protocol,training,output):
+    """Predict new candidate alphas before collecting their physical labels."""
+    import pickle
+    import jax
+    import jax.numpy as j
+    from .native_goal_run import low_speed_lateral_load_inventory
+    from .path_command_policy import PathCommandActor
+    protocol=Path(protocol).resolve();training=Path(training).resolve();output=Path(output).resolve()
+    cfg=json.loads(protocol.read_text());cases=low_speed_lateral_load_inventory(cfg)
+    fitted=json.loads((training/'manifest.json').read_text());dataset=Path(fitted['dataset']);meta=json.loads((dataset/'manifest.json').read_text())
+    root=Path(meta['source_run']);parent=json.loads((root/'plan.json').read_text());rows=json.loads((root/'analysis/results.json').read_text())
+    sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    if sha(training/'parameters.npz')!=fitted['parameters_sha256'] or sha(parent['models']['H75']['actor'])!=parent['models']['H75']['actor_sha256']:
+        raise ValueError('frozen outcome model or middle actor changed')
+    with np.load(training/'parameters.npz') as z:export=dict(z)
+    with Path(parent['models']['H75']['actor']).open('rb') as f:params=jax.tree.map(j.asarray,pickle.load(f))
+    actor=PathCommandActor(architecture=parent['config']['network']['architecture'])
+    source={};checks=[]
+    for route in {c['route'] for c in cases}:
+        row=next(r for r in rows if r['route']==route and r['force_N']==0. and r['alpha']==0.)
+        with np.load(row['raw_file']) as z:raw=dict(z)
+        obs=raw['query_observation'][0];latent=np.asarray(actor.apply(params,j.asarray(obs)))
+        np.testing.assert_allclose(latent,raw['composed_latent'][0],atol=3e-5,rtol=3e-5)
+        source[route]=(obs,float(raw['pre_upper_yaw'][0]));checks.append(dict(route=route,maximum_actor_latent_error=float(np.max(abs(latent-raw['composed_latent'][0])))))
+    queries=[]
+    for case in cases:
+        obs=source[case['route']][0].copy();obs[336]=case['alpha'];queries.append(obs)
+    latents=np.asarray(actor.apply(params,j.asarray(np.stack(queries))))
+    features=np.stack([outcome_features(obs,z,source[c['route']][1],c,parent['config']['residual_interface']) for obs,z,c in zip(queries,latents,cases)])
+    prediction=predict_outcomes(export,features)
+    output.parent.mkdir(parents=True,exist_ok=True)
+    if output.exists() or output.with_suffix('.npz').exists():raise FileExistsError('frozen prospective prediction already exists')
+    np.savez_compressed(output.with_suffix('.npz'),features=features,prediction=prediction,case_ids=np.asarray([c['case_id'] for c in cases]))
+    import datetime
+    result=dict(schema=SCHEMA,recorded_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),training=str(training),training_manifest_sha256=sha(training/'manifest.json'),parameters_sha256=fitted['parameters_sha256'],query_data=str(output.with_suffix('.npz')),query_data_sha256=sha(output.with_suffix('.npz')),cases=cases,actor_export_checks=checks,scope='Prospective predictions frozen before new physical alpha interpolation labels. Known four source states/challenges, no new-scenario generalization claim.',interval_examples=dict(no_fall_thresholds=[.7,.8,.9],task_threshold=.5,path_rmse_limits_m=[.3,1.,2.,4.]))
+    output.write_text(json.dumps(result,indent=2)+'\n');return result
+
+
 def outcome_metrics(target,prediction,mask):
     truth=np.asarray(target);p=np.asarray(prediction);valid=np.asarray(mask)[:,0]>0
     return dict(rows=len(truth),no_fall_brier=float(np.mean((p[:,0]-truth[:,0])**2)),
@@ -125,6 +179,7 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
         if sha(p)!=h:raise ValueError('prepared source changed '+p)
     with np.load(dataset/'dataset.npz') as z:data=dict(z)
     train=data['roles']=='training';dev=data['roles']=='development'
+    if not train.any():raise ValueError('nonempty training partition required')
     x=data['features'];y=data['targets'];mask=data['regression_mask']
     mean=x[train].mean(axis=0);scale=np.maximum(x[train].std(axis=0),.05)
     normalized=np.clip((x-mean)/scale,-5.,5.).astype(np.float32)
@@ -146,8 +201,10 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
             if not torch.isfinite(loss):raise ValueError('nonfinite supervised loss; stop without retry')
             loss.backward();optimizer.step();status['completed_updates']+=1
             if step==1 or step%cfg['training']['log_every_updates']==0:
-                with torch.no_grad():d=model(tx[dev]);prob=torch.sigmoid(d[:,:2]).numpy()
-                rec=dict(seed=seed,step=step,loss=float(loss.detach()),no_fall_dev_brier=float(np.mean((prob[:,0]-y[dev,0])**2)),task_dev_brier=float(np.mean((prob[:,1]-y[dev,1])**2)))
+                rec=dict(seed=seed,step=step,loss=float(loss.detach()))
+                if dev.any():
+                    with torch.no_grad():d=model(tx[dev]);prob=torch.sigmoid(d[:,:2]).numpy()
+                    rec.update(no_fall_dev_brier=float(np.mean((prob[:,0]-y[dev,0])**2)),task_dev_brier=float(np.mean((prob[:,1]-y[dev,1])**2)))
                 history.append(rec)
                 for key,value in rec.items():
                     if key not in ('seed','step'):writer.add_scalar(key,value,step)
@@ -165,7 +222,7 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
         logits=torch.stack([m(tx) for m in models]).numpy();reference=np.concatenate([1./(1.+np.exp(-np.clip(logits[...,:2],-60,60))),np.expm1(np.clip(logits[...,2:],0,10))],axis=-1).mean(axis=0)
     np.testing.assert_allclose(prediction,reference,atol=3e-5,rtol=3e-5,err_msg='NumPy export inference differs from training model')
     np.savez_compressed(output/'parameters.npz',**export);np.savez_compressed(output/'predictions.npz',prediction=prediction,targets=y,roles=data['roles'])
-    metrics=dict(training=outcome_metrics(y[train],prediction[train],mask[train]),development=outcome_metrics(y[dev],prediction[dev],mask[dev]))
+    metrics=dict(training=outcome_metrics(y[train],prediction[train],mask[train]),development=outcome_metrics(y[dev],prediction[dev],mask[dev]) if dev.any() else None)
     result=dict(schema=SCHEMA,dataset=str(dataset),dataset_manifest_sha256=sha(dataset/'manifest.json'),config=cfg,source_model=meta['source_model'],metrics=metrics,selection='fixed last per seed; DEV curves diagnostic, not checkpoint selection',history=history,parameters_sha256=sha(output/'parameters.npz'),adoption='pending',limits='Related four-state pilot; uncalibrated probabilities, no independent TEST or continuous alpha guarantee. Path/speed regression trained only on full-primary-window survival.')
     (output/'manifest.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metrics,indent=2)+'\n')
     import matplotlib
@@ -175,6 +232,8 @@ def fit_outcomes(dataset,output,config,*,on_training_complete=None):
     for seed in cfg['training']['seeds']:
         records=[r for r in history if r['seed']==seed]
         for ax,key in zip(axes,['loss','no_fall_dev_brier','task_dev_brier']):
+            if key not in records[0]:
+                ax.text(.5,.5,'No DEV during fit; fresh-alpha evaluation pending',ha='center',va='center',wrap=True,transform=ax.transAxes);continue
             ax.plot([r['step'] for r in records],[r[key] for r in records],marker='.',label=f'seed{seed}')
             ax.set(xlabel='Supervised updates',ylabel=key);ax.grid(alpha=.2);ax.legend()
     fig.suptitle(f'Conditional outcome MLP / TRAIN{int(train.sum())} DEV{int(dev.sum())} / fixed last; DEV is related, not independent TEST')

@@ -2789,7 +2789,7 @@ def validate_fixed_capability_cases(cases,protocol):
         declared=low_speed_lateral_load_inventory(protocol)
         signature=lambda c:(c['route'],c['alpha'],c['force_N'],c['onset_s'])
         expected={signature(c) for c in declared};observed={signature(c) for c in cases}
-        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas'] not in ([0.,1.],[0.,.25,.5,.75,1.]):raise ValueError('complete paired low-speed load inventory required')
+        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0]:raise ValueError('complete paired low-speed load inventory required')
         speeds={c['route']:c['speed'] for c in protocol['route_contexts']}
         if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
@@ -2957,6 +2957,7 @@ def paired_low_speed_load_outcomes(rows):
     pairs=[]
     for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
         group=sorted([r for r in rows if (r['route'],r['event'])==(route,event) and r['alpha'] in (0.,1.)],key=lambda r:r['alpha'])
+        if not group:continue  # Interior-only probes retain every row; endpoint contrasts live in the parent dataset.
         if len(group)!=2 or [r['alpha'] for r in group]!=[0.,1.]:raise ValueError('exact alpha0/1 event pair required')
         a,b=group
         if any(a[k]!=b[k] for k in ('force_N','onset_s','duration_s','bank_index','model_id','speed')) or a.get('force_direction_world',[0.,1.,0.])!=b.get('force_direction_world',[0.,1.,0.]):raise ValueError('same intended event and initial model required')
@@ -2979,7 +2980,7 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];t=raw['time'][:n]+.005;steps=np.arange(1,n+1)
         source_start=row.get('source_task_start_s',0.)
         with np.load(row['diagnostic_task_file']) as z:d=dict(z)
-        color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}[row['alpha']];label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
+        color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}.get(row['alpha'],(plt.get_cmap('tab10')(column%10),['-',':','-.','--'][column%4]));label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
         series=[raw['actual_forward_speed'][:n],raw['actual_forward_speed'][:n]-raw['wheel_speed_proxy'][:n],raw['actual_delta'][:n],raw['phi'][:n]*180/np.pi,raw['phi_dot'][:n]*180/np.pi,d['original_cross_track_m'],d['original_heading_error_rad'],d['reward'],np.cumsum(d['reward'])]
         for k,(ax,y) in enumerate(zip(axes.flat,series)):
             x=steps if k>=7 else t;ax.plot(x,y,color=color,ls=style,lw=1.1,label=label)
