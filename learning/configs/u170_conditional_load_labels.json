@@ -1,0 +1,160 @@
+{
+  "experiment_id": "STTW-U170-CONDITIONAL-LOAD-LABELS",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    0
+  ],
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 100,
+  "maximum_lower_ticks": 200000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    20.0,
+    24.0
+  ],
+  "duration_s": 0.4,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R1p3_v2p0_source_t1p6_a0",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1",
+        "plan_sha256": "e47ce7180dab006fd2ada759c2bf3ceb6eb098a35eb2a0a6666355adb7536d35",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/complete_carry_15.pkl",
+        "carry_sha256": "b73d3490ec6d0dec830443e404bdc1b779fb83538b0cb5e91cfac871776934ec",
+        "source_lane": 0,
+        "source_task_tick": 320,
+        "source_physical_tick": 1020,
+        "source_alpha": 0.0,
+        "parent_route": "left90_R1p3_v2p0",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/bank0_left90_R1p3_v2p0_path.npz",
+        "path_sha256": "90b0fd51c6349da3c354f2e46b8721990e03566bd3dc8b0691d79849cbb5655c"
+      }
+    },
+    {
+      "route": "left90_R1p3_v2p0_source_t1p6_a1",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1",
+        "plan_sha256": "e47ce7180dab006fd2ada759c2bf3ceb6eb098a35eb2a0a6666355adb7536d35",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/complete_carry_15.pkl",
+        "carry_sha256": "b73d3490ec6d0dec830443e404bdc1b779fb83538b0cb5e91cfac871776934ec",
+        "source_lane": 4,
+        "source_task_tick": 320,
+        "source_physical_tick": 1020,
+        "source_alpha": 1.0,
+        "parent_route": "left90_R1p3_v2p0",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/evaluation/bank0_left90_R1p3_v2p0_path.npz",
+        "path_sha256": "90b0fd51c6349da3c354f2e46b8721990e03566bd3dc8b0691d79849cbb5655c"
+      }
+    },
+    {
+      "route": "left90_R0p9_v1p6_source_t1p6_a0",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1",
+        "plan_sha256": "8075a2004bf2e228844a0147ac1a306384389eb343c4239b38ba1d752f6fa9f4",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/evaluation/complete_carry_15.pkl",
+        "carry_sha256": "0304367addc34e1c365374fbd29b1dfd1c31edd777a459645a83d09cd6988dc8",
+        "source_lane": 0,
+        "source_task_tick": 320,
+        "source_physical_tick": 1020,
+        "source_alpha": 0.0,
+        "parent_route": "left90_R0p9_v1p6",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/evaluation/bank0_left90_R0p9_v1p6_path.npz",
+        "path_sha256": "df9089cbc54e33b45df867353c370c55e46ee8186330c0030cbda005b3c0f854"
+      }
+    },
+    {
+      "route": "left90_R0p9_v1p6_source_t1p6_a1",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0,
+      "state_source": {
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1",
+        "plan_sha256": "8075a2004bf2e228844a0147ac1a306384389eb343c4239b38ba1d752f6fa9f4",
+        "carry_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/evaluation/complete_carry_15.pkl",
+        "carry_sha256": "0304367addc34e1c365374fbd29b1dfd1c31edd777a459645a83d09cd6988dc8",
+        "source_lane": 2,
+        "source_task_tick": 320,
+        "source_physical_tick": 1020,
+        "source_alpha": 1.0,
+        "parent_route": "left90_R0p9_v1p6",
+        "path_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/evaluation/bank0_left90_R0p9_v1p6_path.npz",
+        "path_sha256": "df9089cbc54e33b45df867353c370c55e46ee8186330c0030cbda005b3c0f854"
+      }
+    }
+  ],
+  "data_role": "Related conditional TRAIN/DEV from4nominal full states at task1.6s. Copy physical/ESO/filter/history/geometry/sidecar exactly; only candidate alpha changes. Each source F20/preparation.6 entire5alpha group DEV (20rows); other80 TRAIN. No independent TEST or air-wind calibration.",
+  "scoring": "Full original goal/contact, post-source actual XY, original-path cost/trajectory error, complete execution reward reconstruction, actual speeds. Source task clock1.6 retained; prepare delays.2/.6 after switch; no leaked real future event to controller. All five alpha and null/negative outcomes retained.",
+  "stop_rule": "100declared branches to original task10s/contact, max200000allocated lower slots, at most168000active lower ticks from source1.6s,0optimizer. Preserve all physical negatives, engineering fault stops without auto retry. Source prefixes reused, not rerun.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Can a small multi-output network learn candidate tolerance, original task completion and path/speed outcomes from genuine common full-state branch labels?",
+  "onsets_s": [
+    0.2,
+    0.6
+  ],
+  "force_frame": "world_fixed_vector",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.1,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 2.0,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  },
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "force_direction_world": [
+    -0.7173560908995228,
+    0.6967067093471654,
+    0.0
+  ],
+  "dataset_partition": {
+    "development_force_N": 20.0,
+    "development_preparation_s": 0.6,
+    "unit": "entire source-state/challenge group, all five alpha together",
+    "training_rows": 80,
+    "development_rows": 20
+  }
+}

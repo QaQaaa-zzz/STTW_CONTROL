@@ -144,7 +144,8 @@ def low_speed_lateral_load_inventory(p):
         or p['force_frame']!=('world_fixed_vector' if 'force_direction_world' in p else 'worldY')):
         raise ValueError('explicit fixed unit horizontal world force direction required')
     forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
-    count=len(p['alphas'])*(1+len(forces)*len(onsets))
+    contexts=p['route_contexts']
+    count=len(contexts)*len(p['alphas'])*(1+len(forces)*len(onsets))
     if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
@@ -156,22 +157,69 @@ def low_speed_lateral_load_inventory(p):
         raise ValueError('explicit distinct candidate identity required')
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
         raise ValueError('complete candidate artifact identity required')
-    contexts=p['route_contexts']
-    if (len(contexts)!=1 or contexts[0]['family']!=1 or contexts[0]['angle_deg']!=90.
-        or contexts[0]['speed']!=2. or contexts[0]['direction']!=1.
-        or not math.isfinite(contexts[0]['radius_m']) or contexts[0]['radius_m']<=0
-        or contexts[0].get('goal_offset_after_turn_m')!=4.):
-        raise ValueError('single declared low-speed tight-turn geometry required')
+    if (not contexts or len({c['route'] for c in contexts})!=len(contexts)
+        or any(c['family']!=1 or c['angle_deg']!=90. or not 1.5<=c['speed']<=2.2 or c['direction']!=1.
+               or not math.isfinite(c['radius_m']) or c['radius_m']<=0 or c.get('goal_offset_after_turn_m')!=4. for c in contexts)):
+        raise ValueError('unique declared low-speed tight-turn geometries required')
     events=[dict(event='zero',force_N=0.,onset_s=0.)]+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
-    route=contexts[0]['route']
     identity=candidate['registry_id'] if candidate else p['model_id']
-    return [dict(route=route,speed=2.,**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
+    rows=[]
+    for context,event,alpha in itertools.product(contexts,events,p['alphas']):
+        route=context['route'];source=context.get('state_source');start=source['source_task_tick']*.005 if source else 0.
+        if start+p['duration_s']+max(onsets)>10:raise ValueError('conditional force extends beyond task horizon')
+        onset=event['onset_s']+start if event['force_N'] else 0.
+        event_name=f"prep{event['onset_s']:g}_F{event['force_N']:+g}" if source and event['force_N'] else event['event']
+        rows.append(dict(route=route,speed=context['speed'],**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
         **({'force_direction_world':direction} if 'force_direction_world' in p else {}),
-        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/{identity}/a{alpha:g}/{event['event']}",
-        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha)
-        for event,alpha in itertools.product(events,p['alphas'])]
+        **({'source_task_start_s':start,'preparation_s':event['onset_s'] if event['force_N'] else 0.} if source else {}),
+        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/{identity}/a{alpha:g}/{event_name}",
+        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha))
+        rows[-1]['onset_s']=onset
+        rows[-1]['event']=event_name
+    if any('state_source' in c for c in contexts) and not all('state_source' in c for c in contexts):raise ValueError('all conditional contexts require explicit sources')
+    return rows
+
+
+def restore_conditional_capability_states(plan,cases,paths):
+    """Copy complete declared native carries; change candidate alpha only."""
+    import pickle
+    import jax
+    import jax.numpy as j
+    import numpy as np
+    contexts={c['route']:c for c in plan['contexts']};cache={};copies=[];sources=[]
+    for i,case in enumerate(cases):
+        context=contexts[case['route']];source=context['state_source'];root=Path(source['run'])
+        if str(root) not in cache:
+            parent=json.loads((root/'plan.json').read_text())
+            if digest(root/'plan.json')!=source['plan_sha256'] or json.loads((root/'seal.json').read_text())['plan_sha256']!=source['plan_sha256']:raise ValueError('conditional source plan changed')
+            if parent['config']!=plan['config'] or parent['initial_source']!=plan['initial_source'] or parent['models']['H75']['actor_sha256']!=plan['models']['H75']['actor_sha256']:raise ValueError('conditional source model/physics/config differs')
+            cache[str(root)]=(parent,{})
+        parent,loaded=cache[str(root)]
+        original=next(c for c in parent['contexts'] if c['route']==source['parent_route'])
+        if {k:v for k,v in context.items() if k not in ('route','state_source')}!={k:v for k,v in original.items() if k!='route'}:raise ValueError('conditional geometry changed')
+        file=Path(source['carry_file'])
+        if file not in loaded:
+            if digest(file)!=source['carry_sha256'] or file.parent!=root/'evaluation':raise ValueError('conditional complete carry identity differs')
+            with file.open('rb') as f:loaded[file]=pickle.load(f)
+        state_key=('state',file,source['source_lane'])
+        if state_key not in loaded:
+            selected=jax.tree.map(lambda x:j.asarray(np.asarray(x)[source['source_lane']]),loaded[file])
+            loaded[state_key]=(selected,snapshot_fingerprint(selected))
+        carry,fingerprint=loaded[state_key];state=carry.state
+        if int(state.tick)!=source['source_task_tick'] or int(state.physical.physical_tick)!=source['source_physical_tick'] or float(state.alpha)!=source['source_alpha'] or bool(state.physical.failed)|bool(state.fault):raise ValueError('conditional clock/alpha/failure differs')
+        pathfile=Path(source['path_file'])
+        if ('path',pathfile) not in loaded:
+            if digest(pathfile)!=source['path_sha256'] or pathfile.parent!=root/'evaluation':raise ValueError('conditional original path identity differs')
+            with np.load(pathfile) as z:loaded['path',pathfile]=dict(z)
+        for key,value in loaded['path',pathfile].items():np.testing.assert_array_equal(np.asarray(getattr(paths,key))[i],value)
+        copied=carry.replace(state=state.replace(alpha=j.asarray(case['alpha'],state.alpha.dtype)))
+        aa=jax.tree.leaves(carry.replace(state=state.replace(alpha=j.zeros_like(state.alpha))))
+        bb=jax.tree.leaves(copied.replace(state=copied.state.replace(alpha=j.zeros_like(state.alpha))))
+        if any(not np.array_equal(a,b,equal_nan=True) for a,b in zip(aa,bb)):raise ValueError('conditional copy modified a non-alpha leaf')
+        copies.append(copied);sources.append(dict(route=case['route'],source_lane=source['source_lane'],task_tick=int(state.tick),physical_tick=int(state.physical.physical_tick),source_alpha=float(state.alpha),fingerprint=fingerprint))
+    return jax.tree.map(lambda *xs:j.stack(xs),*copies),dict(conditional_complete_state_copy=True,all_nonalpha_source_leaves_exact=True,sources=sources)
 
 
 def targeted_base_review_inventory(p):
@@ -341,6 +389,10 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
     if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
+    for context in proposal['route_contexts']:
+        if 'state_source' in context:
+            ss=context['state_source'];files += [Path(ss['run'])/'plan.json',Path(ss['run'])/'seal.json',Path(ss['carry_file']),Path(ss['path_file'])]
+    files=list(dict.fromkeys(files))
     if proposal.get('capability_variant')=='S_goal_extension':
         files += [Path(proposal['goal_source']['run'])/'plan.json']+[Path(r['file']) for r in proposal['goal_source']['paths'].values()]
     steps=planning_chunk_steps(10.,10.)
@@ -348,7 +400,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
         config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
         maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,
-        initialization=f"Fresh new-physics prepared bank{bank_index}, original native task reset; {model['registry_id']} declared alpha={proposal['alphas']}; no q or additional baseline.",data_role=proposal['data_role'],
+        initialization=("Authenticated full native source carries; only candidate alpha changes, original task clock retained. " if any('state_source' in c for c in proposal['route_contexts']) else f"Fresh new-physics prepared bank{bank_index}, original native task reset; ")+f"{model['registry_id']} declared alpha={proposal['alphas']}; no q or additional baseline.",data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
         stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
@@ -2062,6 +2114,9 @@ def load(root,*,prefix_phase=False):
         initial=jax.jit(jax.vmap(lambda snap,path,v,a:env.initial(env.reset(snap,path,v,a))))(lane_snapshots,paths,speeds,alphas)
     else:initial=jax.jit(jax.vmap(lambda path,v,a:env.initial(env.reset(snapshot,path,v,a))))(paths,speeds,alphas)
     jax.block_until_ready(initial)
+    conditional_receipt=None
+    if capability and any('state_source' in c for c in p['contexts']):
+        initial,conditional_receipt=restore_conditional_capability_states(p,cases,paths)
     if response and not confirmation and not samestate and not bank144:
         cached=Path(p['cached_source'])
         with (cached/'evaluation/initial_carry.pkl').open('rb') as f:archived=pickle.load(f)
@@ -2076,7 +2131,8 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']))
+        if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
     elif five_online:

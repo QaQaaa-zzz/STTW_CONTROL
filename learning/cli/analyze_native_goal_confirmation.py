@@ -21,20 +21,21 @@ STYLES=('-','--',':','-.')
 def audit_selection_replans(run,case,lane,raw,path,goal,decisions):
     """Check every saved path and causal trigger; original goal cannot move."""
     from sttw_control.goal_replanning import replan_requested
-    updates=[];n=int(np.asarray(raw['active_tick'],bool).sum());previous=0
+    updates=[];n=int(np.asarray(raw['active_tick'],bool).sum());start_tick=int(round(float(raw['time'][0])/.005));previous=start_tick
     for d in decisions:
         tick=d['task_tick']
-        if d['case_index']!=lane or tick%20 or not previous<tick<n:raise ValueError('invalid10Hz planning record')
+        local=tick-start_tick
+        if d['case_index']!=lane or tick%20 or not previous<tick<start_tick+n:raise ValueError('invalid10Hz planning record')
         if not replan_requested(xy=d['measured_pose'][:2],goal_xy=goal,cross_track_m=d['cross_track_m'],follower_invalid=d['follower_invalid'],already_replanned=bool(updates),contact=d['contact'],fault=d['fault'],ever_arrived=d['ever_arrived'],continuous_replanning=True):raise ValueError('noncausal planning record')
-        np.testing.assert_allclose(d['measured_pose'][:2],raw['actual_xy'][tick-1],atol=3e-6,rtol=0)
-        np.testing.assert_allclose(d['cross_track_m'],raw['path_cross_track'][tick-1],atol=3e-6,rtol=0)
+        np.testing.assert_allclose(d['measured_pose'][:2],raw['actual_xy'][local-1],atol=3e-6,rtol=0)
+        np.testing.assert_allclose(d['cross_track_m'],raw['path_cross_track'][local-1],atol=3e-6,rtol=0)
         f=run/d['path_file']
         if f.name!=f'replanned_path_{lane:02d}_tick{tick:04d}.npz':raise ValueError('unexpected per-update path filename')
         with np.load(f) as z:changed=dict(z)
         np.testing.assert_allclose(changed['xy'][0],d['measured_pose'][:2],atol=3e-6,rtol=0)
         np.testing.assert_allclose([np.interp(float(changed['goal']),changed['s'],changed['xy'][:,k]) for k in (0,1)],goal,atol=3e-6,rtol=0)
         if np.any(np.diff(changed['s'])<=0):raise ValueError('replanned arclength is not ordered')
-        updates.append((tick,changed));previous=tick
+        updates.append((local,changed));previous=tick
     if bool(updates)!=case['replanned']:raise ValueError('replanning flag mismatch')
     return updates
 
@@ -2784,10 +2785,13 @@ def analyze_five_alpha_online14(root,p):
 
 def validate_fixed_capability_cases(cases,protocol):
     if protocol.get('capability_variant')=='low_speed_lateral_load':
-        expected={(a,float(f),float(t)) for a in protocol['alphas'] for f in protocol['forces_N'] for t in protocol['onsets_s']}|{(a,0.,0.) for a in protocol['alphas']}
-        observed={(c['alpha'],c['force_N'],c['onset_s']) for c in cases}
+        from sttw_control.native_goal_run import low_speed_lateral_load_inventory
+        declared=low_speed_lateral_load_inventory(protocol)
+        signature=lambda c:(c['route'],c['alpha'],c['force_N'],c['onset_s'])
+        expected={signature(c) for c in declared};observed={signature(c) for c in cases}
         if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0] or protocol['alphas'] not in ([0.,1.],[0.,.25,.5,.75,1.]):raise ValueError('complete paired low-speed load inventory required')
-        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=2. or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
+        speeds={c['route']:c['speed'] for c in protocol['route_contexts']}
+        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or any(c[k]!=c['alpha'] for k in ('user_alpha','query_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
         return
     targeted=protocol.get('capability_variant')=='targeted_base_review'
@@ -2842,7 +2846,8 @@ def analyze_fixed_h75_capability(root,p):
         with np.load(c['raw_file']) as z:raw=dict(z)
         n=int(np.asarray(raw['active_tick'],bool).sum());ticks+=n
         if n<=0 or n>2000 or not np.array_equal(np.flatnonzero(raw['active_tick']),np.arange(n)):raise ValueError('invalid capability actual prefix')
-        np.testing.assert_allclose(raw['time'][:n],np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
+        start_s=c.get('source_task_start_s',0.);start_tick=round(start_s/.005)
+        np.testing.assert_allclose(raw['time'][:n],start_s+np.arange(n)*.005,atol=3e-6,rtol=0);np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.full((n,2),c['alpha']));np.testing.assert_allclose(raw['query_observation'][:n,336],c['alpha'],atol=1e-6,rtol=0);
         if load_screen:
             t=raw['time'][:n];overlap=np.maximum(0.,np.minimum(t+.005,c['onset_s']+c['duration_s'])-np.maximum(t,c['onset_s']))
             expected_force=(overlap*c['force_N'])[:,None]*np.asarray(c.get('force_direction_world',[0.,1.,0.]))
@@ -2862,11 +2867,11 @@ def analyze_fixed_h75_capability(root,p):
             np.testing.assert_allclose(old_goal,c['old_goal_xy'],atol=3e-6,rtol=0)
             np.testing.assert_allclose(float(path['goal']),source['new_goal_s'],atol=1e-6,rtol=0)
             np.testing.assert_allclose(goal,c['new_goal_xy'],atol=3e-6,rtol=0)
-        fault=raw['policy_fault']|raw['continuation_geometry_fault']|raw['lower_fault']|raw['nonfinite'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault);endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);endpoint['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
+        fault=raw['policy_fault']|raw['continuation_geometry_fault']|raw['lower_fault']|raw['nonfinite'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault);endpoint=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.,start_tick=start_tick);endpoint['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000-start_tick)
         updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']]);original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=c['alpha'],raw_alpha=c['alpha'],broaden_cost_numerics=True)
-        rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
+        rows.append(dict(c,endpoint=endpoint,active_lower_ticks=n,actual_observed_s=n*.005,contact_pre_tick_s=float(start_s+np.flatnonzero(raw['contact_failure'][:n])[0]*.005) if np.any(raw['contact_failure'][:n]) else None,replan_ticks=[t+start_tick for t,_ in updates],original_user_three_running_costs=original['task_step_costs'].sum(axis=0).tolist(),original_user_cost_audit=check,actual_final_xy=raw['actual_xy'][n-1].tolist()))
         if load_screen:
-            rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],path_updates=updates)
+            rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],start_tick=start_tick,path_updates=updates)
             original.update(rebuilt)
             rows[-1]['execution_reward_reconstructed']=True
             rows[-1]['diagnostic_task_file']=str(out/f'case_{lane:02d}_original_task.npz')
@@ -2955,13 +2960,14 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
             'Original heading error (rad)','Reward per actual lower step','Cumulative reward']
     for column,row in enumerate(group):
         raw=raws[row['case_id']];n=row['active_lower_ticks'];t=raw['time'][:n]+.005;steps=np.arange(1,n+1)
+        source_start=row.get('source_task_start_s',0.)
         with np.load(row['diagnostic_task_file']) as z:d=dict(z)
         color,style={0.:('#0072B2','-'),.25:('#E69F00',':'),.5:('#009E73','-.'),.75:('#CC79A7','--'),1.:('#D55E00','--')}[row['alpha']];label=f"alpha={row['alpha']:g} / {row['endpoint']['physical_outcome']}"
         series=[raw['actual_forward_speed'][:n],raw['actual_forward_speed'][:n]-raw['wheel_speed_proxy'][:n],raw['actual_delta'][:n],raw['phi'][:n]*180/np.pi,raw['phi_dot'][:n]*180/np.pi,d['original_cross_track_m'],d['original_heading_error_rad'],d['reward'],np.cumsum(d['reward'])]
         for k,(ax,y) in enumerate(zip(axes.flat,series)):
             x=steps if k>=7 else t;ax.plot(x,y,color=color,ls=style,lw=1.1,label=label)
             ax.scatter(x[-1],y[-1],color=color,marker='x' if row['endpoint']['physical_outcome']=='contact' else 's',s=20)
-            if row['force_N']:ax.axvspan((row['onset_s']/.005 if k>=7 else row['onset_s']),( (row['onset_s']+row['duration_s'])/.005 if k>=7 else row['onset_s']+row['duration_s']),color='gray',alpha=.09)
+            if row['force_N']:ax.axvspan(((row['onset_s']-source_start)/.005 if k>=7 else row['onset_s']),((row['onset_s']+row['duration_s']-source_start)/.005 if k>=7 else row['onset_s']+row['duration_s']),color='gray',alpha=.09)
         axes[0,0].plot(t,raw['governed'][:n,0],color=color,ls=':',lw=.8,label=f"alpha{row['alpha']:g} governed")
         axes[0,0].plot(t,raw['wheel_speed_proxy'][:n],color=color,ls='-.',lw=.7,label=f"alpha{row['alpha']:g} wheel estimate")
         axes[0,2].plot(t,raw['governed'][:n,1],color=color,ls=':',lw=.8)
@@ -2970,7 +2976,7 @@ def render_paired_load_diagnostics(out,group,raws,component_names,stem):
             for rr,y in enumerate((values,np.cumsum(values))):caxes[rr,column].plot(steps,y,lw=.8,label=key)
         for rr,y in enumerate((d['terminal_adjustment'],np.cumsum(d['terminal_adjustment']))):
             ax=caxes[rr,column];ax.plot(steps,y,color='black',ls='--',label='terminal adjustment');ax.set(xlabel='Actual lower steps',ylabel='Signed reward' if rr==0 else 'Cumulative signed reward',title=f"alpha={row['alpha']:g}");ax.grid(alpha=.2);ax.legend(fontsize=7,ncol=3)
-            if row['force_N']:ax.axvspan(row['onset_s']/.005,(row['onset_s']+row['duration_s'])/.005,color='gray',alpha=.12)
+            if row['force_N']:ax.axvspan((row['onset_s']-source_start)/.005,(row['onset_s']+row['duration_s']-source_start)/.005,color='gray',alpha=.12)
     for k,(ax,label) in enumerate(zip(axes.flat,labels)):
         ax.set(xlabel='Actual lower steps' if k>=7 else 'Task time (s)',ylabel=label);ax.grid(alpha=.2);ax.legend(fontsize=7)
     title=f"{group[0]['model_id']} | {group[0]['route']} | {group[0]['event']} | equivalent fixed world-vector load; shade=applied interval"

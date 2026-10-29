@@ -62,6 +62,18 @@ def test_common_fixed_world_vector_is_not_rotated_per_alpha():
     with pytest.raises(ValueError,match='unit horizontal'):fixed_h75_capability_inventory(cfg)
 
 
+def test_conditional_case_grid_uses_source_clock_plus_preparation_and_full_groups():
+    path=Path(__file__).parents[1]/'configs/u170_conditional_load_labels.json'
+    cfg=json.loads(path.read_text());rows=fixed_h75_capability_inventory(cfg)
+    assert len(rows)==100 and len({r['case_id'] for r in rows})==100
+    assert {r['source_task_start_s'] for r in rows}=={1.6}
+    assert {round(r['onset_s'],6) for r in rows if r['force_N']}=={1.8,2.2}
+    for i in range(0,100,5):
+        pulses=force_pulses(rows[i:i+5],3.5)
+        for p in pulses[1:]:np.testing.assert_array_equal(p,pulses[0])
+    assert sum(r['force_N']==20. and r['preparation_s']==.6 for r in rows)==20
+
+
 @pytest.mark.parametrize('alphas',[[0.,1.],[0.,.25,.5,.75,1.]])
 def test_two_alpha_per_event_reset_audit_preserves_complete_pairing(alphas):
     @struct.dataclass

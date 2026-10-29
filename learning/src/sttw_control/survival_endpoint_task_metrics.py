@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 
-def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s):
+def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s, start_tick=0):
     """First entry into the ORIGINAL goal disk before contact/fault.
 
     No heading/speed/hold or follower-domain condition is imposed. Arrival is
@@ -28,7 +28,9 @@ def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s):
     limit = round(horizon_s / dt)
     if not math.isclose(limit * dt, horizon_s, abs_tol=1e-8):
         raise ValueError('horizon must align to physical ticks')
-    if not np.array_equal(ticks, np.arange(len(ticks))) or len(ticks) > limit:
+    if isinstance(start_tick,bool) or not isinstance(start_tick,(int,np.integer)) or not 0<=start_tick<limit:
+        raise ValueError('declared source task start tick required')
+    if not np.array_equal(ticks, np.arange(start_tick,start_tick+len(ticks))) or len(ticks) > limit-start_tick:
         raise ValueError('complete observed clock prefix required')
     contact = active & np.asarray(physical['contact_failure'], bool)
     fault = active & (np.asarray(physical['nonfinite'], bool) |
@@ -46,7 +48,7 @@ def goal_arrival_metrics(physical, *, goal_xy, radius_m, dt, horizon_s):
     elif fatal.size:
         outcome = 'unknown' if fault[stop] else 'contact_before_arrival'
     else:
-        outcome = 'not_arrived' if len(ticks) == limit else 'unknown'
+        outcome = 'not_arrived' if len(ticks) == limit-start_tick else 'unknown'
     first = float((ticks[hits[0]] + 1) * dt) if arrived else None
     return dict(goal_arrived=None if outcome == 'unknown' else arrived,
         arrival_outcome=outcome, goal_radius_m=float(radius_m),

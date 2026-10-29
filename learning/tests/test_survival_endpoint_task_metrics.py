@@ -3,6 +3,18 @@ import numpy as np
 import pytest
 
 
+def test_declared_continuation_keeps_original_goal_clock_and_remaining_horizon():
+    from sttw_control.survival_endpoint_task_metrics import goal_arrival_metrics
+    p,_=fixture();p['physical_tick']=np.arange(2,10);p['active_tick']=np.arange(8)<6
+    p['actual_xy']=np.full((8,2),4.)
+    kwargs=dict(goal_xy=[1.,0.],radius_m=.3,dt=.005,horizon_s=.04)
+    with pytest.raises(ValueError,match='clock prefix'):goal_arrival_metrics(p,**kwargs)
+    result=goal_arrival_metrics(p,start_tick=2,**kwargs)
+    assert result['goal_arrived'] is False and result['arrival_outcome']=='not_arrived'
+    p['actual_xy'][2]=[1.,0.]
+    assert goal_arrival_metrics(p,start_tick=2,**kwargs)['first_arrival_s']==pytest.approx(.025)
+
+
 def goal_cost_fixture():
     p, _ = fixture()
     p['actual_xy'] = np.full((8, 2), 4.)
