@@ -134,13 +134,35 @@ def fixed_h75_capability_inventory(p):
         alphas=[0.,.25,.5,.75,1.],horizon_s=10.,expected_cases=35,maximum_lower_ticks=70000,
         optimizer_updates=0,planning_frequency_hz=10.,forces_N=[0.],duration_s=.15,
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
+    variant=p.get('capability_variant')
+    if variant=='S_goal_extension':required.update(expected_cases=10,maximum_lower_ticks=20000)
+    elif variant is not None:raise ValueError('unknown capability variant')
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('fixed H75 capability contract differs')
     contexts=p['route_contexts']
-    if len(contexts)!=7 or len({c['route'] for c in contexts})!=7 or {c['family'] for c in contexts}!={0,1,2}:raise ValueError('seven original route identities required')
+    if variant=='S_goal_extension':
+        if p.get('goal_extension_m')!=3. or len(contexts)!=2 or {c['route'] for c in contexts}!={'S_left_90_R1p8','S_right_90_R1p8'} or any(c['family']!=2 or c.get('goal_distance_m')!=p['goal_source']['paths'][c['route']]['new_goal_s'] for c in contexts):raise ValueError('two S-route goal-only extension required')
+    elif len(contexts)!=7 or len({c['route'] for c in contexts})!=7 or {c['family'] for c in contexts}!={0,1,2}:raise ValueError('seven original route identities required')
     return [dict(route=c['route'],speed=c['speed'],event='zero',force_N=0.,onset_s=0.,duration_s=.15,
         bank_index=6,path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/H75/a{a:g}/zero',
-        mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a)
+        mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,
+        **({k:p['goal_source']['paths'][c['route']][k] for k in ('old_goal_xy','new_goal_xy')}|{'goal_extension_m':3.} if variant else {}))
         for c,a in itertools.product(contexts,p['alphas'])]
+
+
+def validate_goal_extension_source(proposal,initial_source):
+    """A moved goal uses the exact saved original curve and physical identity."""
+    import numpy as np
+    source=proposal['goal_source'];run=Path(source['run']);plan=json.loads((run/'plan.json').read_text())
+    if digest(run/'plan.json')!=source['plan_sha256'] or json.loads((run/'seal.json').read_text())['plan_sha256']!=source['plan_sha256'] or plan.get('mode')!=CAPABILITY_MODE or plan['initial_source']!=initial_source:raise ValueError('goal source identity differs')
+    for c in proposal['route_contexts']:
+        r=source['paths'][c['route']];file=Path(r['file'])
+        if file.resolve()!=(run/'evaluation'/f"bank6_{c['route']}_path.npz").resolve() or digest(file)!=r['sha256']:raise ValueError('saved goal path changed')
+        with np.load(file) as path:
+            old=float(path['goal']);new=old+proposal['goal_extension_m']
+            point=lambda q:np.array([np.interp(q,path['s'],path['xy'][:,i]) for i in (0,1)])
+            if r['old_goal_s']!=old or r['new_goal_s']!=new or new>path['s'][-1] or not np.allclose(point(old),r['old_goal_xy'],atol=1e-9) or not np.allclose(point(new),r['new_goal_xy'],atol=1e-9):raise ValueError('goal extension metadata differs')
+            window=(path['s']>=old)&(path['s']<=new)
+            if np.any(path['curvature'][window]!=0):raise ValueError('goal extension must stay on existing exit straight')
 
 
 def prepare_fixed_h75_capability(transition,root,protocol):
@@ -158,7 +180,12 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     if Path(source['prepared_bank']).resolve()!=transition/'prepared_bank.pkl' or digest(source['prepared_bank'])!=source['prepared_bank_sha256']:raise ValueError('fresh bank identity differs')
     xml=native.parents[1]/'mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml'
     if digest(xml)!=source['model']['source_xml_sha256'] or source['model']==previous['old_model_identity']:raise ValueError('new physical model identity differs')
-    if previous['contexts']!=proposal['route_contexts'] or previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('original routes/frozen H75 identity differs')
+    if proposal.get('capability_variant')=='S_goal_extension':
+        originals={c['route']:c for c in previous['contexts']}
+        if any({k:v for k,v in c.items() if k!='goal_distance_m'}!=originals.get(c['route']) for c in proposal['route_contexts']):raise ValueError('original S curve/speed changed')
+        validate_goal_extension_source(proposal,source)
+    elif previous['contexts']!=proposal['route_contexts']:raise ValueError('original routes differ')
+    if previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('frozen H75 identity differs')
     model=previous['models']['H75']
     for key in ('actor','checkpoint'):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint differs')
@@ -177,11 +204,13 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     for file in modules:(root/'source'/file.name).write_bytes(file.read_bytes())
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
+    if proposal.get('capability_variant')=='S_goal_extension':
+        files += [Path(proposal['goal_source']['run'])/'plan.json']+[Path(r['file']) for r in proposal['goal_source']['paths'].values()]
     steps=planning_chunk_steps(10.,10.)
     p=dict(project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=CAPABILITY_MODE,source=str(transition),
         native_runtime_root=str(native),native_expected_sources=expected_sources,initial_source=source,models={'H75':model},
-        config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=35,horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
-        maximum_active_lower_ticks=70000,maximum_allocated_lower_slots=70000,optimizer_updates=0,
+        config=previous['config'],contexts=proposal['route_contexts'],protocol=proposal,cases=len(rows),horizon_s=10.,goal_radius_m=1.,chunks=100,steps_per_chunk=5,chunk_upper_steps=steps,
+        maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,
         initialization='Fresh new-physics prepared bank6, original native task reset; frozen H75 five alpha; no q or additional baseline.',data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
         stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
@@ -291,7 +320,7 @@ def five_alpha_online_inventory(p):
         event=f't2.2_F{force:+g}',force_N=force,onset_s=2.2,duration_s=.15) for c,force in itertools.product(p['route_contexts'],p['forces_N'])]
 
 
-def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=None):
+def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=None,expected_route_count=7):
     """Check original reset leaves; only user alpha is neutralized for pairing."""
     import jax
     import jax.numpy as j
@@ -303,7 +332,7 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     groups={}
     for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route']),[]).append(i)
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10}.get(panel_kind,2)
-    if len(groups)!=7 or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
+    if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
 
@@ -1818,6 +1847,9 @@ def load(root,*,prefix_phase=False):
             for c in p['contexts']:
                 if c['route'] not in {r['route'] for r in cases}:continue
                 path=_integrate_route(ownpose,cfg['path'],c.get('family',2),c['radius_m'],np.deg2rad(c['angle_deg']),c['speed'],c['direction'],0.,0.).path
+                if capability and p['protocol'].get('capability_variant')=='S_goal_extension':
+                    record=p['protocol']['goal_source']['paths'][c['route']]
+                    with np.load(record['file']) as saved:path=path.replace(**{k:j.asarray(saved[k]) for k in ('s','xy','heading','curvature','turn_end','goal')})
                 if selection and 'goal_distance_m' in c:path=path.replace(goal=j.asarray(c['goal_distance_m']))
                 bank[f'bank{b}_'+c['route']]=extend_straight_support(path,p['protocol']['planner_points'],p['protocol']['planner_spacing_m'])
     elif response:
@@ -1894,7 +1926,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='nominal_five_user')
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='nominal_five_user',expected_route_count=len(p['contexts']))
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
     elif five_online:

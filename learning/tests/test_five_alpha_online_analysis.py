@@ -211,3 +211,14 @@ def test_fixed_h75_capability_requires_allfive_alphas_without_zero_baseline():
     rows[0]['mode']='zero'
     with pytest.raises(ValueError,match='identity'):m.validate_fixed_capability_cases(rows,dict(alphas=grid))
     with pytest.raises(ValueError,match='complete'):m.validate_fixed_capability_cases(rows[:-1],dict(alphas=grid))
+
+
+def test_fixed_capability_S_extension_requires_exact_two_routes_and_goal_identity():
+    grid=[0.,.25,.5,.75,1.];routes=['S_left_90_R1p8','S_right_90_R1p8']
+    paths={r:dict(old_goal_s=12.,new_goal_s=15.,old_goal_xy=[12.,0.],new_goal_xy=[15.,0.]) for r in routes}
+    protocol=dict(alphas=grid,capability_variant='S_goal_extension',goal_extension_m=3.,expected_cases=10,maximum_lower_ticks=20000,goal_source=dict(paths=paths))
+    rows=[dict(route=r,alpha=a,user_alpha=a,query_alpha=a,effective_user_alpha=a,force_N=0.,bank_index=6,mode='H75',goal_extension_m=3.,old_goal_xy=[12.,0.],new_goal_xy=[15.,0.]) for r in routes for a in grid]
+    m.validate_fixed_capability_cases(rows,protocol)
+    with pytest.raises(ValueError,match='complete'):m.validate_fixed_capability_cases(rows[:-1],protocol)
+    rows[0]['old_goal_xy']=[11.,0.]
+    with pytest.raises(ValueError,match='goal identity'):m.validate_fixed_capability_cases(rows,protocol)

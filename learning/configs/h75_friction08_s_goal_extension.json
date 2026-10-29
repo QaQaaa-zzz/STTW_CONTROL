@@ -1,0 +1,86 @@
+{
+  "experiment_id": "STTW-H75-FRICTION08-S-GOAL-EXTENSION",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 10,
+  "maximum_lower_ticks": 20000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    0.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "S_left_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": 1.0,
+      "goal_distance_m": 19.65486717224121
+    },
+    {
+      "route": "S_right_90_R1p8",
+      "family": 2,
+      "radius_m": 1.8,
+      "angle_deg": 90.0,
+      "speed": 2.8,
+      "direction": -1.0,
+      "goal_distance_m": 19.65486717224121
+    }
+  ],
+  "data_role": "User-authorized goal-only extension along existing S exit straights; same fresh bank6, frozenH75, physics and speeds. Finite capability scope, no q.",
+  "scoring": "All ten cases original moved-goal/contact and same-user costs; preserve old goal coordinates for context.",
+  "stop_rule": "Ten nominal H10 episodes atmost20000lower,0optimizer. No retry/replacement or physics/model changes.",
+  "capability_variant": "S_goal_extension",
+  "goal_extension_m": 3.0,
+  "goal_source": {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_nominal_five_alpha_v1",
+    "plan_sha256": "08cdd273642c59664c101893a4b926b9da7fd33252c50050e7b48e18ff080187",
+    "paths": {
+      "S_left_90_R1p8": {
+        "file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_nominal_five_alpha_v1/evaluation/bank6_S_left_90_R1p8_path.npz",
+        "sha256": "4d9a33ba16101fe47062e676dcbf91e8b9d7f7c1834f857170ce8ade7f7ccf54",
+        "old_goal_s": 16.65486717224121,
+        "new_goal_s": 19.65486717224121,
+        "old_goal_xy": [
+          20.015932083129883,
+          7.136819341904376
+        ],
+        "new_goal_xy": [
+          23.015926361083984,
+          7.142687177603513
+        ]
+      },
+      "S_right_90_R1p8": {
+        "file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_friction08_nominal_five_alpha_v1/evaluation/bank6_S_right_90_R1p8_path.npz",
+        "sha256": "4f66cf7b575e1c1642af70c2f62a413457d3e0f30396718c5fd922bf7d7de8ac",
+        "old_goal_s": 16.65486717224121,
+        "new_goal_s": 19.65486717224121,
+        "old_goal_xy": [
+          20.043787002563477,
+          -7.076759835952069
+        ],
+        "new_goal_xy": [
+          23.043781280517578,
+          -7.070869112069339
+        ]
+      }
+    }
+  }
+}

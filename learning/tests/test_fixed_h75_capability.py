@@ -24,3 +24,23 @@ def test_frozen_only_h75_thirtyfive_nominal_and_original_routes():
 def test_changed_capability_contract_rejected(key,value):
     p=config();p[key]=value
     with pytest.raises(ValueError):fixed_h75_capability_inventory(p)
+
+
+def test_s_goal_extension_changes_only_goal_on_authenticated_saved_exit():
+    import copy
+    import numpy as np
+    from sttw_control.native_goal_run import validate_goal_extension_source
+    p=json.loads((Path(__file__).parents[1]/'configs/h75_friction08_s_goal_extension.json').read_text())
+    rows=fixed_h75_capability_inventory(p)
+    assert len(rows)==10 and p['maximum_lower_ticks']==2000*len(rows)
+    old={c['route']:c for c in config()['route_contexts']}
+    for c in p['route_contexts']:
+        assert {k:v for k,v in c.items() if k!='goal_distance_m'}==old[c['route']]
+        r=p['goal_source']['paths'][c['route']]
+        assert r['new_goal_s']-r['old_goal_s']==3.
+        with np.load(r['file']) as z:
+            assert np.all(z['curvature'][(z['s']>=r['old_goal_s'])&(z['s']<=r['new_goal_s'])]==0)
+    source=json.loads((Path(p['goal_source']['run'])/'plan.json').read_text())['initial_source']
+    validate_goal_extension_source(p,source)
+    bad=copy.deepcopy(p);bad['goal_source']['paths'][p['route_contexts'][0]['route']]['new_goal_s']+=1.
+    with pytest.raises(ValueError):validate_goal_extension_source(bad,source)
