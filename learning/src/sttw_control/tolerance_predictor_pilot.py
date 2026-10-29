@@ -842,3 +842,188 @@ def validate_matched_full_prior(cfg):
     prior_cfg=json.loads(Path(manifest['config']).read_text())
     if prior_cfg.get('feature_mask_keep_indices') is not None or prior_cfg.get('bce_group_weights')!={'early':.75,'late':.125,'userlate':.125}:raise ValueError('matched full prior must use original full inputs and same objective')
     return manifest
+
+
+def validate_five_alpha_fit_config(cfg):
+    """Separate opt-in budget; historical pilot schemas remain unchanged."""
+    t=cfg['training'];b=cfg['budget'];f=cfg['features'];d=cfg['dataset']
+    if (cfg['mode']!='five_alpha_fit' or cfg['architecture']['hidden']!=[16,16] or
+        t['seeds']!=[0,1,2] or t['updates_per_model_seed']!=1000 or
+        t['maximum_total_optimizer_updates']!=3000 or t['learning_rate']!=.001 or
+        t['weight_decay']!=.001 or t['optimizer']!='AdamW' or t['device']!='CPU' or
+        t['fixed_last'] is not True or t['full_batch'] is not True or t.get('ranking_weight',.5)!=.5 or
+        cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
+        b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3000,automatic_extensions=False) or
+        f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows'])!=(280,160,120)):
+        raise ValueError('frozen five-alpha fitting contract mismatch')
+    return cfg
+
+
+def _five_alpha_read_json(path,inputs):
+    path=Path(path).resolve();inputs[str(path)]=digest(path)
+    return json.loads(path.read_text())
+
+
+def load_five_alpha_dataset(analysis,cfg):
+    """Authenticate every row and independently rebuild source-only41 features."""
+    analysis=Path(analysis).resolve();root=analysis.parent;inputs={}
+    read=lambda p:_five_alpha_read_json(p,inputs)
+    plan=read(root/'plan.json');seal=read(root/'seal.json');receipt=read(analysis/'receipt.json')
+    if plan.get('mode')!='five_alpha_tolerance_labels' or not plan.get('label_parent') or seal['plan_sha256']!=digest(root/'plan.json') or receipt['plan_sha256']!=seal['plan_sha256']:raise ValueError('sealed parent label analysis required')
+    if set(plan['models'])!={'H75'} or plan['models']['H75'].get('registry_id')!='STTW_MIDDLE_FULLTAIL_PPO75_U77':raise ValueError('frozen H75 only required')
+    for key in ('actor','checkpoint'):
+        model=plan['models']['H75']
+        if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint changed')
+        inputs[str(model[key])]=model[key+'_sha256']
+    protocol=plan['protocol'];split=protocol['fitting_split']
+    if not split['declared_before_new_labels'] or set(split['training_routes'])&set(split['development_routes']):raise ValueError('predeclared disjoint route split required')
+    expected_train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};expected_dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
+    if set(split['training_routes'])!=expected_train or set(split['development_routes'])!=expected_dev:raise ValueError('frozen route split changed')
+    def sealed(p):
+        for file,sha in {**p['input_sha256'],**p['source_sha256']}.items():
+            if digest(file)!=sha:raise ValueError('sealed label input/source changed '+file)
+            inputs[str(file)]=sha
+    sealed(plan)
+    records=read(analysis/'results.json');declared=read(root/'inventory.json')
+    if len(records)!=280 or len(declared)!=280 or len({r['case_id'] for r in records})!=280:raise ValueError('complete unique280 cases required')
+    children={};child_records={}
+    for item in plan['children']:
+        child=Path(item);child=child if child.is_absolute() else root/child
+        cp=read(child/'plan.json');cs=read(child/'seal.json');cr=read(child/'analysis/receipt.json')
+        if cs['plan_sha256']!=digest(child/'plan.json') or cr['plan_sha256']!=cs['plan_sha256'] or cp['models']!=plan['models'] or cp['config']!=plan['config']:raise ValueError('child frozen identity differs')
+        sealed(cp)
+        source_records=read(child/'evaluation/source_records.json')
+        if len(source_records)!=7 or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
+        rows=read(child/'analysis/results.json');cases=read(child/'inventory.json')
+        if len(rows)!=140 or len(cases)!=140:raise ValueError('child140 required')
+        path=child/'evaluation/source_features.npz';inputs[str(path)]=digest(path)
+        with np.load(path,allow_pickle=False) as z:sources={k:z[k].copy() for k in z.files}
+        for i,(r,c) in enumerate(zip(rows,cases)):
+            if any(r.get(k)!=v for k,v in c.items()) or r['case_id'] in children:raise ValueError('child row/inventory identity differs')
+            children[r['case_id']]=(child,i,c,sources);child_records[r['case_id']]=r
+    feature_path=analysis/'features_labels.npz';inputs[str(feature_path)]=digest(feature_path)
+    with np.load(feature_path,allow_pickle=False) as z:features=z['features'].copy();labels=z['labels'].copy();case_ids=z['case_ids'].copy();roles=z['fitting_role'].copy();valid=z['valid'].copy()
+    if features.shape!=(280,41) or labels.shape!=(280,) or not np.isfinite(features).all():raise ValueError('finite280x41 features required')
+    states={};queries={};excluded=[];meta=[];all_roles=[];source_roles={};actual=set()
+    for i,(record,case) in enumerate(zip(records,declared)):
+        cid=record['case_id']
+        if record!=child_records.get(cid) or any(record.get(k)!=v for k,v in case.items()) or str(case_ids[i])!=cid:raise ValueError('parent child row identity differs')
+        child,lane,c,sources=children[cid];group=c['source_index'];alpha=c['candidate_alpha']
+        condition=(group,alpha,c['preparation_s'],c['force_N'])
+        if condition in actual:raise ValueError('duplicate sibling')
+        actual.add(condition)
+        if c['source_user_alpha']!=.5 or c['alpha']!=.5 or c['user_alpha']!=.5 or c['query_alpha']!=alpha:raise ValueError('source/candidate alpha identity changed')
+        role='training' if c['route'] in expected_train else 'development' if c['route'] in expected_dev else None
+        if role is None or record['fitting_role']!=role or str(roles[i])!=role:raise ValueError('row split differs')
+        if group in source_roles and source_roles[group]!=role:raise ValueError('source sibling split')
+        source_roles[group]=role;all_roles.append(role)
+        raw_path=Path(record['raw_file'])
+        if digest(raw_path)!=record['raw_sha256']:raise ValueError('label raw changed')
+        inputs[str(raw_path)]=record['raw_sha256']
+        with np.load(raw_path,allow_pickle=False) as z:
+            if not z['active_tick'][0] or not z['reference_target_permitted'][0] or abs(float(z['time'][0])-c['source_task_s'])>3e-6:raise ValueError('first source candidate missing')
+            query=z['query_observation'][0];latent=z['composed_latent'][0];yaw=float(z['pre_upper_yaw'][0])
+            active=np.asarray(z['active_tick'],bool);clock=np.rint(z['time']/.005).astype(int)
+            window=active&(clock>=round(c['primary_window_start_s']/.005))&(clock<round(c['primary_window_end_s']/.005))
+            faults=z['policy_fault']|z['lower_fault']|z['nonfinite']|z['continuation_geometry_fault']
+            fall=bool(np.any(window&(z['contact_failure']|z['physical_failure'])));fault=bool(np.any(window&faults));complete=np.array_equal(clock[window],np.arange(round(c['primary_window_start_s']/.005),round(c['primary_window_end_s']/.005)))
+            status='invalid_fault' if fault else 'fall' if fall else 'no_fall' if complete else 'invalid_incomplete'
+            if record['primary']['label_status']!=status:raise ValueError('primary label fails independent raw reconstruction')
+        g=next(g for g in protocol['source_groups'] if g['source_index']==group)
+        if record['lifecycle_role']!=g['lifecycle_role']:raise ValueError('source lifecycle changed')
+        for field,value in [('source_task_s',g['source_task_s']),('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('primary_window_end_s',g['source_task_s']+c['preparation_s']+.15+3),('duration_s',.15)]:
+            if not math.isclose(c[field],value,abs_tol=1e-9):raise ValueError('label timing changed')
+        source=sources['native_observation'][lane]
+        if abs(np.arctan2(np.sin(yaw-sources['source_world_yaw'][lane]),np.cos(yaw-sources['source_world_yaw'][lane])))>1e-6:raise ValueError('source yaw differs')
+        rebuilt,_=feature_row(source,query,latent,yaw,c,plan['config']['residual_interface'],cfg,expected_source_alpha=.5)
+        np.testing.assert_array_equal(features[i],rebuilt)
+        if group in states:np.testing.assert_array_equal(source,states[group])
+        states[group]=source;key=(group,alpha)
+        if key in queries:np.testing.assert_array_equal(np.r_[query,latent],queries[key])
+        queries[key]=np.r_[query,latent]
+        label=resolved_label(record['primary']);expected_valid=label is not None
+        if bool(valid[i])!=expected_valid or (expected_valid and labels[i]!=label) or (not expected_valid and not np.isnan(labels[i])):raise ValueError('label cache differs')
+        meta.append(dict(case_id=cid,source_group_id=f'source{group}',route=c['route'],alpha=alpha,preparation_s=c['preparation_s'],force_N=c['force_N'],lifecycle_role=record['lifecycle_role']))
+        if not expected_valid:excluded.append(dict(meta[-1],role=role,reason=status))
+    expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in [.2,.6] for f in [-64.,64.]}
+    if actual!=expected or all_roles.count('training')!=160 or all_roles.count('development')!=120:raise ValueError('full predeclared split/product required')
+    data={}
+    for role in ('training','development'):
+        ids=[i for i,r in enumerate(all_roles) if r==role and valid[i]]
+        if not ids:raise ValueError('no valid '+role+' labels')
+        data[role]=dict(full=features[ids],y=labels[ids],meta=[meta[i] for i in ids])
+    coverage={}
+    for role in ('training','development'):
+        coverage[role]={}
+        for key in ('alpha','preparation_s','lifecycle_role'):
+            coverage[role][key]={}
+            for value in sorted({m[key] for m in meta}):
+                ids=[i for i,m in enumerate(meta) if all_roles[i]==role and m[key]==value]
+                coverage[role][key][str(value)]=dict(declared_rows=len(ids),valid_rows=sum(bool(valid[i]) for i in ids),invalid_rows=sum(not bool(valid[i]) for i in ids))
+    data['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,declared_training_rows=160,declared_development_rows=120,source_groups=len(states),source_state_audit='Inherited exact native fullcarry/path sibling proof;41features and primary labels independently rebuilt',frozen_model_identity=plan['models'],data_role='Related bank6 DEV, route grouped, not independent TEST')
+    return data
+
+
+def five_alpha_grouped_metrics(y,p,meta):
+    out=dict(overall=metrics(y,p,meta),groups={})
+    for key in ('alpha','preparation_s','lifecycle_role'):
+        out['groups'][key]={}
+        for value in sorted({m[key] for m in meta}):
+            ids=[i for i,m in enumerate(meta) if m[key]==value]
+            out['groups'][key][str(value)]=metrics(y[ids],p[ids],[meta[i] for i in ids])
+    return out
+
+
+def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
+    """Explicit CPU3x1000 fixed-last BCE+.5ranking; never launches physics."""
+    import time
+    import torch
+    from torch.utils.tensorboard import SummaryWriter
+    torch.set_num_threads(1);started=time.monotonic();config=Path(config).resolve();cfg=validate_five_alpha_fit_config(json.loads(config.read_text()));output=Path(output).resolve()
+    if Path(cfg['dataset']['analysis']).resolve()!=Path(analysis).resolve():raise ValueError('analysis differs from frozen fitting config')
+    if output.exists():raise ValueError('fresh five-alpha fit output required')
+    data=load_five_alpha_dataset(analysis,cfg);train=data['training'];dev=data['development']
+    if len(np.unique(train['y']))!=2:raise ValueError('training needs both resolved classes; no automatic resampling')
+    output.mkdir(parents=True);write_json(output/'data_receipt.json',data['receipt']);writer=SummaryWriter(str(output/'tensorboard'));updates=0;per_seed={};selected=[];inflight=False;timings=dict(initialization_s=time.monotonic()-started,optimization_s=0.,validation_s=0.)
+    x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y']);pairs=discordant_pairs(train['y'],train['meta']);models=[]
+    try:
+        writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
+        for seed in (0,1,2):
+            torch.manual_seed(seed);model=make_model(41);optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
+            for step in range(1,1001):
+                tick=time.monotonic();model.train();optimizer.zero_grad();logit=model(x).squeeze(-1);bce=torch.nn.functional.binary_cross_entropy_with_logits(logit,y);rank=ranking_loss(logit,pairs);loss=bce+.5*rank
+                if not torch.isfinite(loss):raise ValueError('nonfinite five-alpha loss')
+                loss.backward()
+                if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()):raise ValueError('nonfinite five-alpha gradient')
+                inflight=True;optimizer.step();updates+=1;inflight=False;per_seed[str(seed)]=step;timings['optimization_s']+=time.monotonic()-tick
+                if any(not torch.isfinite(p).all() for p in model.parameters()):raise ValueError('nonfinite postupdate parameters')
+                row=dict(seed=seed,step=step,bce=float(bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()))
+                for key in ('bce','rank_loss','total_loss'):writer.add_scalar(f'seed{seed}/train/{key}',row[key],step)
+                writer.add_scalar('train/optimizer_updates',updates,updates)
+                if step%100==0:
+                    tick=time.monotonic();score=metrics(dev['y'],predict(model,dev['full']),dev['meta']);row['development_brier']=score['brier'];writer.add_scalar(f'seed{seed}/development/brier',score['brier'],step);timings['validation_s']+=time.monotonic()-tick;writer.flush()
+                with (output/'history.jsonl').open('a') as f:f.write(json.dumps(row,allow_nan=False)+'\n')
+                write_json(output/'status.json',dict(phase='fitting',actual_optimizer_updates=updates,per_seed=per_seed,timings=timings))
+            file=output/f'full_state_mlp_seed{seed}_last.pt';torch.save(dict(state_dict=model.state_dict(),dim=41,seed=seed,step=1000,arm='bce_rank',selector='last'),file)
+            selected.append(dict(model='full_state_mlp',key='full',dim=41,seed=seed,step=1000,arm='bce_rank',selector='last',file=str(file),sha256=digest(file)));models.append(model)
+        manifest=dict(kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Related single-bank DEV; no calibration, safety or online gain claim')
+        write_json(output/'selection_manifest.json',manifest);write_json(output/'selection_seal.json',dict(selection_manifest_sha256=digest(output/'selection_manifest.json'),selected_sha256={r['file']:r['sha256'] for r in selected}))
+        training_receipt=dict(actual_optimizer_updates=updates,per_seed=per_seed,timings=timings,stage_notified=False)
+        write_json(output/'training_complete.json',training_receipt)
+        if on_training_complete:
+            on_training_complete(training_receipt);training_receipt['stage_notified']=True;write_json(output/'training_complete.json',training_receipt)
+        for role in ('training','development'):
+            d=data[role];probs=[predict(model,d['full']) for model in models];report={f'seed{s}':five_alpha_grouped_metrics(d['y'],p,d['meta']) for s,p in enumerate(probs)};ensemble=np.mean(probs,axis=0);report['ensemble']=five_alpha_grouped_metrics(d['y'],ensemble,d['meta']);write_json(output/(role+'_metrics.json'),report)
+            write_json(output/(role+'_predictions.json'),[dict(m,label=int(label),probabilities=[float(p[i]) for p in probs],ensemble=float(ensemble[i])) for i,(m,label) in enumerate(zip(d['meta'],d['y']))])
+        params={}
+        for i,layer in enumerate((0,2,4)):
+            params[f'w{i}']=np.stack([model[layer].weight.detach().numpy().T for model in models])[None]
+            params[f'b{i}']=np.stack([model[layer].bias.detach().numpy() for model in models])[None]
+        np.savez_compressed(output/'parameters.npz',**params)
+        write_json(output/'export_manifest.json',dict(parameters_sha256=digest(output/'parameters.npz'),selection_manifest_sha256=digest(output/'selection_manifest.json'),arms=['bce_rank_last'],shape='arm1,seed3;w0(41,16),w1(16,16),w2(16,1); ReLU/sigmoid',candidate_alpha_grid=[0.,.25,.5,.75,1.],source_user_alpha=.5,online_coordinator_compatibility='Weight layout compatible; use explicit arm0, five-alpha grid and0.15s hypothetical duration. Online rollout integration remains unvalidated by this export'))
+        write_json(output/'status.json',dict(phase='completed',actual_optimizer_updates=updates,per_seed=per_seed,timings=timings))
+    except BaseException as exc:
+        write_json(output/'status.json',dict(phase='error',actual_optimizer_updates=updates,per_seed=per_seed,optimizer_step_may_be_partial=inflight,error=repr(exc)));raise
+    finally:writer.close()
+    return manifest
