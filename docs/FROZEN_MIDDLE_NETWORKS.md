@@ -170,3 +170,19 @@ python learning/cli/freeze_middle_lineage.py \
 - [历史同接口模型比较：仅无扰动](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lineage_nominal_common_interface_v1/analysis_corrected_roles_v1/REPORT.md)
 
 尚未完成：当前共同接回条件下H75/W400/u325的五档配对选型；新五档协调器闭环；2.8/3s实际转角机制图及接回修复。不能把旧域成绩当作这些工作已经通过。
+
+## 三中层五档与10 Hz持续接回：2026-10-29新增结果
+
+统一336物理回合：三中层各105（7路线×3事件×5档alpha），zero为21物理回合，跨alpha仅重评分。单个prepared bank6、相关开发条件，不是独立训练种子或最终TEST。正常原路，离带后10Hz持续几何接回；首达停止更新路径但继续物理至H10。
+
+|模型|原1m终点首达/105|H10触地/105|无扰动首达/35|
+|---|---:|---:|---:|
+|H75|67|28|33|
+|W400|68|30|33|
+|u325|67|28|33|
+
+zero原终点首达17/21、触地4/21，无扰动7/7。不同分母不能直接比较计数。三中层共同无扰动未达为左右紧S的alpha1；H75最小目标距离1.0816/1.0512m，保留原1m判据，不能事后改成成功，也不夸大微小越界。原终点首达不要求末速度、航向或保持，不能当完整轨迹合格。
+
+目前无明显依据替换H75；W400多1到达却多2触地，须结合原任务成本与逐条件得失再定。三者共享的一些大绕行说明提高规划频率本身不等于解决动态可跟随性；本批没有同条件一次规划对照，不声称10Hz增益。
+
+[全部42张轨迹/奖励图与原始分析索引](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/middle_selection_five_alpha_v1/analysis/README.md)。420份逐步诊断视图、完整原始轨迹保留。固定诊断的分项及速度代理独立图尚待补全，非任务奖励尚未全独立重建；不称最终论文交付。执行382.61s，分析109.07s，0optimizer。
