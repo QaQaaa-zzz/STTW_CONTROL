@@ -126,6 +126,149 @@ def prepare_middle_selection(source,root,protocol):
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',optimizer_updates=0,active_lower_ticks=0,allocated_lower_slots=0))
 
 
+LABEL_MODE='five_alpha_tolerance_labels'
+
+
+def five_alpha_label_inventory(p, source_cases=None, task_s=None):
+    """Fixed related-DEV source branching contract; no outcome-based replacement."""
+    required=dict(mode=LABEL_MODE,model_id='STTW_MIDDLE_FULLTAIL_PPO75_U77',
+        candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-64.,64.],
+        force_frame='worldY',duration_s=.15,horizon_s=10.,primary_after_pulse_end_s=3.,
+        planning_frequency_hz=10.,expected_source_states=14,expected_cases=280,
+        maximum_new_prefix_lower_ticks=0,maximum_suffix_lower_ticks=364000,optimizer_updates=0)
+    if any(p.get(k)!=v for k,v in required.items()):raise ValueError('five-alpha label contract differs')
+    groups=p['source_groups'];routes=['straight_v2p6','left70_R1p9','right70_R1p9','left130_R2p7','right130_R2p7','S_left_90_R1p8','S_right_90_R1p8']
+    lanes=[2,50,98,146,194,242,290]
+    if len(groups)!=14 or [g['source_index'] for g in groups]!=list(range(14)):raise ValueError('fourteen exact source groups required')
+    if task_s is not None and task_s not in (1.,6.):raise ValueError('source group clock must be1 or6')
+    rows=[]
+    for idx,g in enumerate(groups):
+        t=1. if idx<7 else 6.;block=9 if t==1. else 59;route=routes[idx%7]
+        expected=dict(source_task_s=t,source_block=block,source_lane=lanes[idx%7],route=route,
+            path_key='bank6_'+route,bank_index=6,source_user_alpha=.5,
+            complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
+            executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',
+            expected_task_tick=round(t/.005),expected_physical_tick=700+round(t/.005),
+            expected_ever_arrived=t==6. and 1<=idx%7<=4,expected_replanned=t==6. and idx%7==5)
+        if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source metadata differs '+str(idx))
+        speed=2.8 if idx%7>=5 else 2.6
+        if source_cases is not None:
+            c=source_cases[g['source_lane']]
+            if any(c.get(k)!=v for k,v in dict(case_id=g['source_case_id'],mode='H75',alpha=.5,force_N=0.,route=route,speed=speed,bank_index=6).items()):raise ValueError('source lane identity differs')
+        if task_s is not None and t!=task_s:continue
+        for a,prep,force in itertools.product(p['candidate_alphas'],p['preparation_s'],p['forces_N']):
+            rows.append(dict(g,source_origin='saved_nominal_half',speed=speed,mode='H75',mode_index=0,
+                alpha=.5,user_alpha=.5,candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=t+prep,
+                duration_s=.15,force_N=force,primary_window_start_s=t,primary_window_end_s=t+prep+.15+3.,
+                case_id=f'source{idx}/alpha{a:g}/prep{prep:g}/F{force:+g}'))
+    return rows
+
+
+def import_five_alpha_sources(source, cases):
+    """Import complete pre-boundary carry/path/host; never integrate or reset."""
+    import jax
+    import jax.numpy as j
+    import numpy as np
+    source=Path(source);cache={};car=[];paths=[];changed=[];arrived=[];goals=[]
+    for c in cases:
+        key=c['complete_carry']
+        if key not in cache:
+            with (source/key).open('rb') as f:carry=pickle.load(f)
+            with (source/c['executed_paths']).open('rb') as f:path=pickle.load(f)
+            with np.load(source/c['host_state']) as h:host={k:h[k].copy() for k in h.files}
+            cache[key]=(carry,path,host)
+        carry,path,host=cache[key];i=c['source_lane']
+        selected=jax.tree.map(lambda x:j.asarray(x[i]),carry)
+        expected=jax.tree.leaves(jax.tree.map(lambda x:np.asarray(x[i]),carry))
+        actual=jax.tree.leaves(jax.device_get(selected))
+        if any(a.dtype!=b.dtype or not np.array_equal(a,b,equal_nan=True) for a,b in zip(actual,expected)):raise ValueError('complete source copy changed leaf dtype/value')
+        if hasattr(selected,'native'):raise ValueError('native selection source must not have online wrapper')
+        st=selected.state
+        if (int(st.tick)!=c['expected_task_tick'] or int(st.physical.physical_tick)!=c['expected_physical_tick'] or
+            float(st.alpha)!=.5 or bool(st.fault) or bool(st.physical.failed)):
+            raise ValueError('saved source clock/user/failure differs')
+        if any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(selected) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('nonfinite source carry')
+        if bool(host['replanned'][i])!=c['expected_replanned'] or bool(host['ever_arrived'][i])!=c['expected_ever_arrived']:raise ValueError('saved source host flags differ')
+        car.append(selected);paths.append(jax.tree.map(lambda x:j.asarray(x[i]),path))
+        changed.append(host['replanned'][i]);arrived.append(host['ever_arrived'][i]);goals.append(host['original_goals_xy'][i])
+    stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
+    return stack(car),stack(paths),dict(replanned=np.asarray(changed),ever_arrived=np.asarray(arrived),original_goals_xy=np.asarray(goals))
+
+
+def prepare_five_alpha_labels(source,root,protocol):
+    source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
+    proposal=json.loads(protocol.read_text());old=json.loads((source/'plan.json').read_text());cs=json.loads((source/'inventory.json').read_text())
+    rows=five_alpha_label_inventory(proposal,cs)
+    if str(source)!=proposal['source'] or digest(source/'plan.json')!=proposal['source_plan_sha256'] or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('selection source identity differs')
+    status=json.loads((source/'evaluation/status.json').read_text())
+    if old.get('mode')!=SELECTION_MODE or status.get('phase')!='completed' or status.get('completed_cases')!=336:raise ValueError('completed selection source required')
+    if old['models']['H75']['registry_id']!=proposal['model_id'] or not old['replanning'].get('continuous_replanning') or old['replanning']['period_s']!=.1:raise ValueError('frozen native H75/10Hz identity differs')
+    for file,sha in {**old['input_sha256'],**old['native_expected_sources']}.items():
+        if digest(file)!=sha:raise ValueError('source input/native drift '+file)
+    for file,sha in old['source_sha256'].items():
+        if digest(source/'source'/Path(file).name)!=sha:raise ValueError('archived source drift')
+    folder=Path(__file__).resolve().parent
+    modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
+    files=[protocol,source/'plan.json',source/'seal.json',source/'inventory.json',source/'evaluation/status.json']
+    files += [source/name for name in {g[k] for g in proposal['source_groups'] for k in ('complete_carry','executed_paths','host_state')}]
+    files += [source/'evaluation'/(g['path_key']+'_path.npz') for g in proposal['source_groups'][:7]]
+    for k in ('actor','checkpoint'):
+        model=old['models']['H75']
+        if digest(model[k])!=model[k+'_sha256']:raise ValueError('H75 drift')
+        files.append(Path(model[k]))
+    root.mkdir(exist_ok=False);(root/'source').mkdir()
+    for file in modules:(root/'source'/file.name).write_bytes(file.read_bytes())
+    common=dict(initialization=proposal['initialization'],stop=proposal['stop_rule'],project='STTW_CONTROL',experiment_id=proposal['experiment_id'],mode=LABEL_MODE,
+        source=str(source),native_runtime_root=old['native_runtime_root'],native_expected_sources=old['native_expected_sources'],
+        initial_source=old['initial_source'],config=old['config'],models={'H75':old['models']['H75']},
+        contexts=old['contexts'],horizon_s=10.,goal_radius_m=1.,steps_per_chunk=5,optimizer_updates=0,
+        protocol={**proposal,'planner_points':5001,'planner_spacing_m':.02,'planner_support_m':100.,
+                  'bank_indices':[6],'bank_state_fingerprints':old['protocol']['bank_state_fingerprints']},
+        replanning=old['replanning'],data_role=proposal['data_role'],scoring=proposal['label'],
+        input_sha256={str(file):digest(file) for file in files},source_sha256={str(file):digest(file) for file in modules})
+    children=[]
+    for t in (1.,6.):
+        child=root/f'task{t:g}';child.mkdir();(child/'source').mkdir()
+        for file in modules:(child/'source'/file.name).write_bytes(file.read_bytes())
+        rr=five_alpha_label_inventory(proposal,cs,t);save(child/'inventory.json',rr);save(child/'effective_config.json',old['config'])
+        budget=int((10.-t)*200*len(rr));steps=planning_chunk_steps(10.,10.-t)
+        plan=dict(common,source_task_s=t,cases=len(rr),chunks=len(steps),chunk_upper_steps=steps,
+            maximum_active_lower_ticks=budget,maximum_allocated_lower_slots=budget)
+        plan['input_sha256']={**common['input_sha256'],str(child/'inventory.json'):digest(child/'inventory.json'),str(child/'effective_config.json'):digest(child/'effective_config.json')}
+        save(child/'plan.json',plan);save(child/'seal.json',dict(plan_sha256=digest(child/'plan.json')))
+        save(child/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0));children.append(str(child))
+    save(root/'inventory.json',rows)
+    parent=dict(common,label_parent=True,children=children,cases=280,maximum_active_lower_ticks=364000,maximum_allocated_lower_slots=364000)
+    parent['input_sha256']={**common['input_sha256'],str(root/'inventory.json'):digest(root/'inventory.json'),**{str(Path(c)/n):digest(Path(c)/n) for c in children for n in ('plan.json','seal.json')}}
+    save(root/'plan.json',parent);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+
+
+def run_five_alpha_label_groups(root,shape_only=False):
+    """Two fixed clock groups; execution is never retried implicitly."""
+    root=Path(root);p=verify(root)
+    if not p.get('label_parent'):raise ValueError('label parent required')
+    if not shape_only and json.loads((root/'status.json').read_text())['phase']!='prepared':raise ValueError('prepared only')
+    active=allocated=0
+    try:
+        if not shape_only:save(root/'status.json',dict(phase='running',pid=os.getpid(),active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
+        for child in p['children']:
+            run(child,shape_only=shape_only)
+            if not shape_only:
+                st=json.loads((Path(child)/'status.json').read_text());active+=st['active_lower_ticks'];allocated+=st['allocated_lower_slots']
+                if active>364000 or allocated>364000:raise RuntimeError('label campaign budget exceeded')
+                save(root/'status.json',dict(phase='running',pid=os.getpid(),active_lower_ticks=active,allocated_lower_slots=allocated,optimizer_updates=0))
+        if shape_only:
+            save(root/'shape_receipt.json',dict(phase='completed',physics_steps=0,groups=p['children'],lanes_per_group=140))
+        else:save(root/'status.json',dict(phase='completed',active_lower_ticks=active,allocated_lower_slots=allocated,optimizer_updates=0,completed_cases=280))
+    except BaseException as exc:
+        if not shape_only:
+            # Include a failed child's last returned block, without claiming inflight work was zero.
+            statuses=[json.loads((Path(c)/'status.json').read_text()) for c in p['children']]
+            save(root/'status.json',dict(phase='error',error=repr(exc),active_lower_ticks=sum(x.get('active_lower_ticks',0) for x in statuses),allocated_lower_slots=sum(x.get('allocated_lower_slots',0) for x in statuses),optimizer_updates=0,inflight_cost_unknown=True))
+        raise
+
+
 def inventory():
     events=[dict(event='zero',onset_s=1.6,force_N=0.)]
     events += [dict(event=f't{t:g}_F{f:+g}',onset_s=t,force_N=f)
@@ -1347,7 +1490,7 @@ def verify(root):
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('changed plan')
     for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
         if digest(f)!=sha:raise ValueError('changed sealed source/input '+f)
-    if json.loads((root/'inventory.json').read_text())!=(middle_selection_inventory(p['protocol']) if p.get('mode')==SELECTION_MODE else bank144_inventory(p['protocol']) if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else inventory()):raise ValueError('fixed inventory changed')
+    if json.loads((root/'inventory.json').read_text())!=(five_alpha_label_inventory(p['protocol'],task_s=p.get('source_task_s')) if p.get('mode')==LABEL_MODE else middle_selection_inventory(p['protocol']) if p.get('mode')==SELECTION_MODE else bank144_inventory(p['protocol']) if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') else samestate_inventory(p['protocol']) if p.get('mode')=='h75_samestate_tolerance72' else confirmation_inventory(p['protocol']) if p.get('mode')=='h75_online_confirmation100' else online_inventory(p['protocol']) if p.get('mode')=='h75_online_scalar' else continuation_inventory(p['protocol']) if p.get('mode')=='h75_switching_continuation' else switching_inventory(p['protocol']) if p.get('mode')=='h75_channel_switching' else response_inventory(p['protocol']) if p.get('mode')=='h75_channel_response' else tolerance_inventory(p['protocol']) if p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else inventory()):raise ValueError('fixed inventory changed')
     return p
 
 
@@ -1380,10 +1523,11 @@ def load(root,*,prefix_phase=False):
     sys.modules[package.__name__+'.geometric_path']=geometry
     planner=file_module(package.__name__+'.goal_replanning',folder/'goal_replanning.py')
     configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
+    labels=p.get('mode')==LABEL_MODE
     selection=p.get('mode')==SELECTION_MODE
     cfg=p['config'];tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation');confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance or selection
     fresh=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') and new_confirmation_sources(p['protocol'])
-    if confirmation or fresh:
+    if confirmation or fresh or labels:
         env,prepared=load_confirmation_environment(cfg,p['initial_source'])
         snapshot=jax.tree.map(lambda x:j.asarray(x[p['protocol']['bank_indices'][0]]),prepared)
     else:env,snapshot=load_environment(cfg,p['initial_source'],'terminal_contract_v2')
@@ -1391,16 +1535,16 @@ def load(root,*,prefix_phase=False):
                                         project=geometry.project,pursuit=pursuit)
     bank144=p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192')
     cases=bank144_prefix_cases(p['protocol']) if bank144 and prefix_phase else json.loads((root/'inventory.json').read_text());pose=np.asarray(env.physics.helpers.pose(snapshot.data))
-    samestate=p.get('mode')=='h75_samestate_tolerance72' or (bank144 and not prefix_phase)
+    samestate=labels or p.get('mode')=='h75_samestate_tolerance72' or (bank144 and not prefix_phase)
     confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance or selection
     online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100') or tolerance
     branch=p.get('mode')=='h75_switching_continuation'
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation')
-    response=selection or tolerance or p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192')
+    response=labels or selection or tolerance or p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192')
     if (samestate or bank144) and not fresh:
         bank={}
         for route in sorted({case_path_key(c) for c in cases}):
-            with np.load(Path(p['samestate_source']['source'])/'evaluation'/(route+'_path.npz')) as rawpath:
+            with np.load(Path(p['source'] if labels else p['samestate_source']['source'])/'evaluation'/(route+'_path.npz')) as rawpath:
                 bank[route]=geometry.Path(*(j.asarray(rawpath[k]) for k in ('s','xy','heading','curvature','turn_end','goal')))
     elif confirmation or fresh:
         snapshots={b:jax.tree.map(lambda x:j.asarray(x[b]),prepared) for b in p['protocol']['bank_indices']}
@@ -1432,7 +1576,10 @@ def load(root,*,prefix_phase=False):
     if any(len(path.s)!=target_points for path in bank.values()):raise ValueError('initial/replanned geometry support shape mismatch')
     stack=lambda xs:jax.tree.map(lambda *x:j.stack(x),*xs)
     paths=stack([bank[case_path_key(c)] for c in cases]);speeds=j.asarray([c['speed'] for c in cases]);alphas=j.asarray([c['alpha'] for c in cases])
-    if bank144:
+    if labels:
+        initial,paths,label_host=import_five_alpha_sources(p['source'],cases)
+        initial_identity=dict(all_source_copy_leaves_exact=True,native_leaf_count=len(jax.tree.leaves(initial)),source_task_s=p['source_task_s'],source_boundary='before planner',source_host_flags_preserved=True)
+    elif bank144:
         schedule=file_module('_sttw_online_scalar',folder/'geometric_preference_schedule.py')
         if prefix_phase and fresh:
             lane_snapshots=stack([snapshots[c['bank_index']] for c in cases])
@@ -1655,7 +1802,7 @@ def load(root,*,prefix_phase=False):
     terminal20=float(failure_reward(1000,cfg));terminal10=float(failure_reward(500,cfg))
     return dict(plan=p,config=cfg,cases=cases,env=env,initial=initial,paths=paths,bank=bank,speeds=speeds,
                 chunk=chunk,bind=bind,measurements=measurements,planner=planner,keys=keys,
-                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10,initial_identity=initial_identity if response else None)
+                physical_start_s=physical_start,consumed=consumed,terminal20=terminal20,terminal10=terminal10,initial_identity=initial_identity if response else None,source_host=label_host if labels else None)
 
 
 def flatten(logs):
@@ -1665,6 +1812,7 @@ def flatten(logs):
 
 def run(root,*,shape_only=False):
     root=Path(root).resolve();p=verify(root)
+    if p.get('label_parent'):return run_five_alpha_label_groups(root,shape_only=shape_only)
     if not shape_only and json.loads((root/'status.json').read_text())['phase']!=('prefix_completed' if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192') else 'prepared'):raise ValueError('prepared only; no implicit rerun')
     directory=root/('shape' if shape_only else 'evaluation');directory.mkdir(exist_ok=False)
     started=time.monotonic();status=dict(phase='initializing',pid=os.getpid(),active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0)
@@ -1695,7 +1843,7 @@ def run(root,*,shape_only=False):
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU required for numerical evaluation')
         cases=runtime['cases'];path_list=[runtime['bank'][case_path_key(c)] for c in cases]
         original_path_list=path_list
-        if p.get('mode') in ('h75_late_state_tolerance48','h75_user_late_state192'):path_list=[jax.tree.map(lambda x:x[i],paths) for i in range(n)]
+        if p.get('mode') in (LABEL_MODE,'h75_late_state_tolerance48','h75_user_late_state192'):path_list=[jax.tree.map(lambda x:x[i],paths) for i in range(n)]
         goals=np.array([[np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.xy)[:,axis]) for axis in (0,1)] for path in original_path_list])
         for name,path in runtime['bank'].items():np.savez_compressed(directory/(name+'_path.npz'),**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
         save(directory/'manifest.json',dict(config=p['config'],source=p['initial_source'],cases=cases,models=p['models'],
@@ -1731,6 +1879,18 @@ def run(root,*,shape_only=False):
             with (directory/'task1_complete_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
             np.savez_compressed(directory/'task1_host_state.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
 
+        labels=p.get('mode')==LABEL_MODE
+        if labels:
+            host=runtime['source_host']
+            changed=host['replanned'].copy();arrived=host['ever_arrived'].copy()
+            if not np.array_equal(goals,host['original_goals_xy']):raise ValueError('imported original goals differ')
+            np.savez_compressed(directory/'source_host_state.npz',**host)
+            source_records=[]
+            for source_index in sorted({c['source_index'] for c in cases}):
+                ids=[i for i,c in enumerate(cases) if c['source_index']==source_index];i=ids[0]
+                state=jax.tree.map(lambda x:x[i],carry)
+                source_records.append(dict(source_index=source_index,case_indices=ids,source_lane=cases[i]['source_lane'],source_task_s=p['source_task_s'],pre_boundary_fingerprint=snapshot_fingerprint(jax.device_get(state)),ever_arrived=bool(arrived[i]),replanned=bool(changed[i]),original_goal_xy=goals[i].tolist()))
+
         for block in range(p['chunks']):
             if block==1 and p.get('mode')=='h75_channel_switching':
                 with (directory/'task1_complete_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
@@ -1741,7 +1901,7 @@ def run(root,*,shape_only=False):
                 cached=json.loads((root/'cached_stay_records.json').read_text())
                 capture['stay_prefix']=audit_stay_prefix(all_logs[0],cases,cached,p['protocol'])
                 save(directory/'task1_capture_receipt.json',capture)
-            if block or (branch and p.get('mode') not in ('h75_late_state_tolerance48','h75_user_late_state192')):
+            if labels or block or (branch and p.get('mode') not in ('h75_late_state_tolerance48','h75_user_late_state192')):
                 poses= jax.device_get(runtime['measurements'](carry))
                 cross,invalid,failed,fault,ticks=jax.device_get((carry.state.projection.cross_track,carry.state.follower.invalid,carry.state.physical.failed,carry.state.fault,carry.state.tick))
                 mask=np.zeros(n,bool)
@@ -1749,7 +1909,7 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=int(ticks[i])*env.cc.dt,continuous_replanning=p['replanning'].get('continuous_replanning',False)):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         path_file=f'replanned_path_{i:02d}_tick{int(ticks[i]):04d}.npz' if p['replanning'].get('continuous_replanning',False) else f'replanned_path_{i:02d}.npz'
                         np.savez_compressed(directory/path_file,**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
@@ -1758,8 +1918,25 @@ def run(root,*,shape_only=False):
                     paths=jax.tree.map(lambda *x:j.stack(x),*path_list)
                     carry=runtime['bind'](carry,paths,j.asarray(mask))
                 save(directory/'replanning_decisions.json',decisions)
+            if labels and block==0:
+                # Export current information only, after the ordinary source-boundary planner.
+                observations=jax.jit(jax.vmap(lambda st,path,v:env.observation(st,path,v,p['horizon_s'])[0]))(carry.state,paths,runtime['speeds'])
+                np.savez_compressed(directory/'source_features.npz',native_observation=np.asarray(observations),source_user_alpha=np.asarray(carry.state.alpha),source_world_yaw=np.asarray(runtime['measurements'](carry))[:,2])
+                with (directory/'source_post_boundary_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
+                with (directory/'source_post_boundary_paths.pkl').open('wb') as f:pickle.dump(jax.device_get(paths),f)
+                np.savez_compressed(directory/'source_post_boundary_host.npz',replanned=changed,ever_arrived=arrived,original_goals_xy=goals)
+                leaves=jax.tree.leaves(jax.device_get((carry,paths)))
+                for record in source_records:
+                    ids=record['case_indices'];i=ids[0]
+                    if len(ids)!=20 or any(any(not np.array_equal(x[i],x[k],equal_nan=True) for k in ids[1:]) for x in leaves):raise ValueError('post-boundary source siblings differ')
+                    record.update(post_boundary_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],carry))),post_boundary_path_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],paths))),post_boundary_replanned=bool(changed[i]),all_twenty_siblings_exact=True)
+                save(directory/'source_records.json',source_records)
+            if labels:
+                update(phase='inflight',completed_blocks=block,active_lower_ticks=actual,allocated_lower_slots=(block+1)*20*n,inflight_cost_unknown=True)
             carry,logs=runtime['chunk'](carry,paths,upper_steps=p.get('chunk_upper_steps',[50]*p['chunks'])[block]);jax.block_until_ready(carry)
             logs=flatten(jax.device_get(logs));all_logs.append(logs)
+            if labels and block==0:
+                np.savez_compressed(directory/'source_features.npz',native_observation=np.asarray(observations),source_user_alpha=np.asarray(carry.state.alpha),source_world_yaw=logs['pre_upper_yaw'][0],query_observation=logs['query_observation'][0],candidate_latent=logs['composed_latent'][0])
             np.savez_compressed(directory/f'chunk_{block+int(branch):02d}.npz',**logs)
             fatal=logs['contact_failure']|logs['nonfinite']|logs['lower_fault']|logs['policy_fault']|logs['continuation_geometry_fault']
             eligible=logs['active_tick']&(np.cumsum(fatal,axis=0)==0)
@@ -1772,7 +1949,7 @@ def run(root,*,shape_only=False):
             actual+=int(logs['active_tick'].sum())
             if actual>p['maximum_active_lower_ticks'] or sum(p.get('chunk_upper_steps',[50]*p['chunks'])[:block+1])*4*n>p['maximum_allocated_lower_slots']:
                 raise RuntimeError('declared lower-tick budget exceeded')
-            update(phase='running',completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=sum(p.get('chunk_upper_steps',[50]*p['chunks'])[:block+1])*4*n,replanned_cases=int(changed.sum()))
+            update(phase='running',**({'inflight_cost_unknown':False} if labels else {}),completed_blocks=block+1,active_lower_ticks=actual,allocated_lower_slots=sum(p.get('chunk_upper_steps',[50]*p['chunks'])[:block+1])*4*n,replanned_cases=int(changed.sum()))
             if p.get('mode')=='h75_switching_continuation':
                 scheduled=audit_scheduled_pairs(logs,cases)
                 save(directory/'scheduled_pair_receipt.json',dict(scheduled,completed_blocks=block+1))

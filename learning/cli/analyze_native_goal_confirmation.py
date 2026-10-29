@@ -155,6 +155,7 @@ def analyze_middle_selection(root,p):
 def analyze(root,include_heldout_labels=False,include_confirmation_labels=False):
     root=root.resolve();run=root/'evaluation';out=root/'analysis'
     p=json.loads((root/'plan.json').read_text())
+    if p.get('mode')=='five_alpha_tolerance_labels':return analyze_five_alpha_labels(root,p)
     if p.get('mode')=='middle_selection':return analyze_middle_selection(root,p)
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
@@ -2386,6 +2387,136 @@ def write_paired_candidate_costs(out,rows,results,arrays,*,candidate,prefix):
         item['windows']={name:{old_label:old['windows'][name],new_label:new['windows'][name],new_label+'_minus_'+old_label+'_three_task_cost_sum':new['windows'][name]['three_task_cost_sum']-old['windows'][name]['three_task_cost_sum']} for name in names}
         comparisons.append(item)
     atomic_json(out/(prefix+'_paired_costs.json'),comparisons)
+
+
+def validate_five_alpha_cases(cases, protocol):
+    """Require every source's full five-alpha/preparation/direction product."""
+    groups=protocol['source_groups'];expected=set()
+    for g in groups:
+        for a,prep,f in itertools.product(protocol['candidate_alphas'],protocol['preparation_s'],protocol['forces_N']):
+            expected.add((g['source_index'],a,prep,f))
+    actual=set()
+    for c in cases:
+        key=(c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N'])
+        if key in actual:raise ValueError('duplicate five-alpha condition')
+        actual.add(key);g=next(g for g in groups if g['source_index']==c['source_index'])
+        if c['source_user_alpha']!=.5 or c['alpha']!=.5 or c['query_alpha']!=c['candidate_alpha']:raise ValueError('source/query identity mismatch')
+        for field,value in [('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('duration_s',.15),('primary_window_end_s',g['source_task_s']+c['preparation_s']+.15+3)]:
+            if not np.isclose(c[field],value,atol=1e-9,rtol=0):raise ValueError('five-alpha timing mismatch '+field)
+    if actual!=expected:raise ValueError('incomplete five-alpha product')
+
+
+def five_alpha_feature_rows(cases,sources,raws,interface):
+    from sttw_control.tolerance_predictor_pilot import feature_row
+    cfg={'features':{'full_indices':list(range(300,320))+list(range(337,351)),'speed_indices':[304]}}
+    features=[];states={};queries={}
+    for lane,c in enumerate(cases):
+        raw=raws[c['case_id']];obs=sources['native_observation'][lane]
+        if not raw['active_tick'][0] or not raw['reference_target_permitted'][0]:raise ValueError('first prebranch candidate query missing')
+        yaw=float(raw['pre_upper_yaw'][0]);saved=float(sources['source_world_yaw'][lane])
+        if abs(np.arctan2(np.sin(yaw-saved),np.cos(yaw-saved)))>1e-6:raise ValueError('prebranch yaw changed')
+        x,_=feature_row(obs,raw['query_observation'][0],raw['composed_latent'][0],yaw,c,interface,cfg,expected_source_alpha=.5)
+        if 'query_observation' in sources:np.testing.assert_array_equal(raw['query_observation'][0],sources['query_observation'][lane])
+        if 'candidate_latent' in sources:np.testing.assert_array_equal(raw['composed_latent'][0],sources['candidate_latent'][lane])
+        group=c['source_index'];candidate=(group,c['candidate_alpha'])
+        if group in states:np.testing.assert_array_equal(obs,states[group])
+        states[group]=obs
+        q=np.r_[raw['query_observation'][0],raw['composed_latent'][0]]
+        if candidate in queries:np.testing.assert_array_equal(q,queries[candidate])
+        queries[candidate]=q;features.append(x)
+    return np.asarray(features,np.float32)
+
+
+def analyze_five_alpha_labels(root,p):
+    """Native parent/child readback; no physics, fitting or baseline creation."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from sttw_control.tolerance_predictor_pilot import resolved_label
+    protocol=p.get('protocol',p);out=root/'analysis'
+    if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('five-alpha plan drift')
+    for f,sha in {**p.get('source_sha256',{}),**p.get('input_sha256',{})}.items():
+        if digest(f)!=sha:raise ValueError('five-alpha sealed source/input drift '+f)
+    children=p.get('children')
+    if children:
+        rows=[];xs=[];ys=[];links=[];ticks=0
+        for child in children:
+            child=Path(child);child=child if child.is_absolute() else root/child
+            cp=json.loads((child/'plan.json').read_text())
+            if not (child/'analysis/receipt.json').exists():analyze_five_alpha_labels(child,cp)
+            receipt=json.loads((child/'analysis/receipt.json').read_text())
+            if receipt['plan_sha256']!=digest(child/'plan.json'):raise ValueError('child analysis plan mismatch')
+            rows.extend(json.loads((child/'analysis/results.json').read_text()));ticks+=receipt['new_active_lower_ticks']
+            with np.load(child/'analysis/features_labels.npz') as z:xs.append(z['features']);ys.append(z['labels'])
+            links.extend(str(f.relative_to(root)) for f in sorted((child/'analysis').glob('*_xy.png')))
+        validate_five_alpha_cases(rows,protocol)
+        if len(rows)!=280 or ticks>364000:raise ValueError('parent budget/inventory mismatch')
+        out.mkdir(exist_ok=False);features=np.concatenate(xs);labels=np.concatenate(ys)
+    else:
+        run=root/'evaluation';status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
+        child_protocol=dict(protocol,source_groups=[g for g in protocol['source_groups'] if g['source_task_s']==p['source_task_s']])
+        validate_five_alpha_cases(cases,child_protocol)
+        if status['phase']!='completed' or status['completed_cases']!=140 or len(index)!=140:raise ValueError('complete child140 required')
+        manifest=json.loads((run/'manifest.json').read_text())
+        for key,value in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
+            if manifest[key]!=value:raise ValueError('five-alpha manifest drift '+key)
+        for f,sha in {**p['source_sha256'],**p['input_sha256']}.items():
+            if digest(f)!=sha:raise ValueError('five-alpha source/input drift '+f)
+        source_records=json.loads((run/'source_records.json').read_text())
+        if len(source_records)!=7:raise ValueError('seven complete-state source identities required')
+        for record in source_records:
+            lanes=[i for i,c in enumerate(cases) if c['source_index']==record['source_index']]
+            g=next(g for g in child_protocol['source_groups'] if g['source_index']==record['source_index'])
+            if record['case_indices']!=lanes or len(lanes)!=20 or not record['all_twenty_siblings_exact']:raise ValueError('complete-state sibling copy audit failed')
+            if record['ever_arrived']!=g['expected_ever_arrived'] or record['replanned']!=g['expected_replanned']:raise ValueError('source lifecycle identity drift')
+            for key in ('pre_boundary_fingerprint','post_boundary_fingerprint','post_boundary_path_fingerprint'):
+                if len(record[key])!=64:raise ValueError('source fingerprint missing')
+        with np.load(run/'source_features.npz') as z:sources=dict(z)
+        raws={};rows=[];ticks=0;links=[]
+        for lane,c in enumerate(index):
+            if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('five-alpha case/raw drift')
+            with np.load(c['raw_file']) as z:raw=dict(z)
+            active=np.asarray(raw['active_tick'],bool);n=int(active.sum());ticks+=n;start=round(c['primary_window_start_s']/.005)
+            if n<=0 or n>2000-start or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('suffix prefix invalid')
+            np.testing.assert_allclose(raw['time'][:n],(start+np.arange(n))*.005,atol=3e-6,rtol=0)
+            query=audit_samestate_query(raw,c);clock=np.rint(raw['time']/.005).astype(int)
+            pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=.15))
+            faults=raw['policy_fault']|raw['continuation_geometry_fault']|raw['nonfinite']|raw['lower_fault']
+            outcome=goal_arrival_metrics(dict(raw,physical_tick=clock-start,policy_fault=faults),goal_xy=c['original_goal_xy'],radius_m=1.,dt=.005,horizon_s=10-start*.005)
+            g=next(g for g in protocol['source_groups'] if g['source_index']==c['source_index'])
+            outcome.update(physical_outcome=physical_outcome(active,raw['contact_failure'],faults,2000-start),goal_arrived_before_source=g['expected_ever_arrived'],goal_arrived_in_suffix=outcome['goal_arrived'])
+            if outcome['first_arrival_s'] is not None:outcome['first_arrival_s']+=start*.005
+            if g['expected_ever_arrived']:outcome['goal_arrived']=True
+            outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
+            split=protocol['fitting_split'];role='training' if c['route'] in split['training_routes'] else 'development'
+            rows.append(dict(c,primary=samestate_primary_label(raw,c),horizons={'10':outcome},lifecycle_role=g['lifecycle_role'],fitting_role=role,checkpoint_identity=p['models']['H75'],source_group_id=f"source{c['source_index']}",query=query,pulse=pulse,new_suffix_lower_ticks=n))
+            raws[c['case_id']]=raw
+        if ticks!=status['active_lower_ticks']:raise ValueError('physical accounting mismatch')
+        features=five_alpha_feature_rows(cases,sources,raws,p['config']['residual_interface']);labels=np.array([np.nan if resolved_label(r['primary']) is None else resolved_label(r['primary']) for r in rows],np.float32)
+        out.mkdir(exist_ok=False)
+        for source,prep,force in sorted({(c['source_index'],c['preparation_s'],c['force_N']) for c in cases}):
+            group=[r for r in rows if (r['source_index'],r['preparation_s'],r['force_N'])==(source,prep,force)];first=group[0]
+            with np.load(run/(first['path_key']+'_path.npz')) as z:path=dict(z)
+            fig,ax=plt.subplots(figsize=(8,7),layout='constrained');ax.plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+            for r in group:
+                raw=raws[r['case_id']];n=r['new_suffix_lower_ticks'];line=ax.plot(*raw['actual_xy'][:n].T,label=f"alpha={r['candidate_alpha']:g}")[0]
+                ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's')
+                mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
+                ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
+            ax.scatter(*first['original_goal_xy'],marker='*',color='k');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f"H75 frozen | {first['route']} | source{source} | prep{prep:g}s | worldY {force:+g}N / .15s\nSource suffix only; source alpha=.5; bank6 initialization seed from source_case_id; actual endpoints; no reset")
+            model=p['models']['H75'];fig.suptitle('Checkpoint: '+str(model.get('checkpoint',model.get('actor',model.get('path',model.get('sha256','H75; identity in results.json'))))))
+            ax.set_aspect('equal');ax.legend();ax.grid(alpha=.2);name=f'source{source}_prep{prep:g}_F{force:+g}_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+    atomic_json(out/'results.json',rows)
+    summary=[]
+    for source,alpha in sorted({(r['source_index'],r['candidate_alpha']) for r in rows}):
+        group=[r for r in rows if r['source_index']==source and r['candidate_alpha']==alpha]
+        summary.append(dict(source_index=source,candidate_alpha=alpha,route=group[0]['route'],lifecycle_role=group[0]['lifecycle_role'],cases=len(group),fall=sum(r['primary']['label_status']=='fall' for r in group),no_fall=sum(r['primary']['label_status']=='no_fall' for r in group),invalid=sum(r['primary']['label_status'].startswith('invalid') for r in group),goal_H10=sum(r['horizons']['10']['goal_arrived'] is True for r in group)))
+    atomic_json(out/'summary.json',summary)
+    np.savez_compressed(out/'features_labels.npz',features=features,labels=labels,valid=np.isfinite(labels),case_ids=np.array([r['case_id'] for r in rows]),fitting_role=np.array([r['fitting_role'] for r in rows]))
+    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',data_role='Related single-bank DEV; route grouped fitting split; no independent TEST')
+    atomic_json(out/'receipt.json',receipt)
+    (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Full H10 outcome includes recorded pre-source arrival latch, not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
+    return receipt
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path)

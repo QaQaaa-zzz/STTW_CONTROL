@@ -1,7 +1,7 @@
 {
   "experiment_id": "STTW-H75-FIVE-ALPHA-TOLERANCE-LABELS",
   "mode": "five_alpha_tolerance_labels",
-  "status": "protocol_draft_not_executable",
+  "status": "implemented_pending_zero_step_shape",
   "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/middle_selection_five_alpha_v1",
   "source_plan_sha256": "9251e52dd9d63a2762b9c4ea35cccbe1026948039c7e26aa59ae5cdf15188f05",
   "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
@@ -304,7 +304,7 @@
   "source_selection": "All seven routes, nominal H75 alpha.5 lanes by metadata only; no success filtering or extra model/baseline.",
   "data_role": "Related single-bank DEV label extension, not independent TEST. Group source states by route before any fitting; no random sibling split. Do not mix old1Hz labels as validation of10Hz.",
   "stop_rule": "At most280 suffixes/364000lower,0optimizer; stop on engineering error, no automatic retry/force sweep/source replacement. Review labels before separate bounded MLP fit authorization under continuing project scope.",
-  "readiness": "Needs native sampler/import and analyzer integration plus exact state/timing checks; this file does not launch or claim completed physics.",
+  "readiness": "Sampler and analyzer implemented; focused CPU checks passed. Prepare and zero-integration shape next; no physics claimed.",
   "source_lifecycle_limits": "Four task6 single-turn sources already arrived; retain as post-arrival survival labels, not task recovery examples. Ten sources are ongoing-task states. No outcome-based replacement.",
   "fitting_split": {
     "training_routes": [
