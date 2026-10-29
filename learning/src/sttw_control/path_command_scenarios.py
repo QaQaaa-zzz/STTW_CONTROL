@@ -60,6 +60,61 @@ def episode_key(seed,env_id,episode):
     return jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(seed),env_id),episode)
 
 
+def validate_mixed_finetune_distribution(config):
+    """New task coverage is explicit; historical samplers remain unchanged."""
+    import math
+    d=config['finetuning']['distribution']
+    if not 0<d['low_fraction']<1:raise ValueError('mixed training needs new and retention routes')
+    for name in ('low','retention'):
+        c=d[name];prob=c['family_probabilities']
+        if len(prob)!=3 or any(not math.isfinite(x) or x<0 for x in prob) or not math.isclose(sum(prob),1.):raise ValueError('invalid family probabilities')
+        for key in ('speed_m_s','radius_m','single_angle_deg','s_angle_deg'):
+            if key not in c:continue
+            v=c[key]
+            if len(v)!=2 or not all(math.isfinite(x) and x>0 for x in v) or v[0]>v[1]:raise ValueError('invalid mixed route bounds '+key)
+    retained=d['retention']
+    if not 0<=retained['fixed_fraction']<=1 or not retained['fixed_contexts']:raise ValueError('retained named tasks are required')
+    if not config['curriculum']['stages']:raise ValueError('retention curriculum is required')
+
+
+def sample_mixed_finetune_route(seed,eid,episode,pose,cfg):
+    """Reset-time low-speed geometry plus the original joint curriculum.
+
+    One fixed global route is integrated per episode. No future disturbance,
+    policy output, or success label participates in route selection.
+    """
+    d=cfg['finetuning']['distribution'];u=jax.random.uniform(episode_key(seed,eid,episode),(14,))
+    low=u[0]<d['low_fraction'];lc=d['low'];rc=d['retention']
+    prob=j.where(low,j.asarray(lc['family_probabilities']),j.asarray(rc['family_probabilities']))
+    family=j.sum(u[1]>j.cumsum(prob)).astype(j.int32)
+    levels=cfg['curriculum']['stages'];level=j.minimum((u[2]*len(levels)).astype(j.int32),len(levels)-1)
+    speeds=j.asarray([x['speed_m_s'] for x in levels]);radii=j.asarray([x['radius_m'] for x in levels])
+    draw=lambda bounds,q:bounds[0]+q*(bounds[1]-bounds[0])
+    speed=j.where(low,draw(lc['speed_m_s'],u[3]),draw(speeds[level],u[3]))
+    radius=j.where(low,draw(lc['radius_m'],u[4]),draw(radii[level],u[4]))
+    # Gentle ordinary routes retain a feasible, explicitly separate radius.
+    radius=j.where(family==0,j.where(low,lc['gentle_radius_m'],rc['gentle_radius_m']),radius)
+    single=j.where(low,draw(lc['single_angle_deg'],u[5]),draw(rc['single_angle_deg'],u[5]))
+    sang=j.where(low,draw(lc['s_angle_deg'],u[5]),draw(rc['s_angle_deg'],u[5]))
+    angle=j.deg2rad(j.where(family==0,j.where(u[6]<.5,0.,30.),j.where(family==2,sang,single)))
+    direction=j.where(u[7]<.5,-1.,1.)
+    contexts=rc['fixed_contexts'];index=j.minimum((u[11]*len(contexts)).astype(j.int32),len(contexts)-1)
+    named=(~low)&(u[12]<rc['fixed_fraction'])
+    field=lambda key:j.asarray([c[key] for c in contexts])[index]
+    family=j.where(named,field('family'),family)
+    speed=j.where(named,field('speed'),speed)
+    radius=j.where(named,field('radius_m'),radius)
+    angle=j.where(named,j.deg2rad(field('angle_deg')),angle)
+    direction=j.where(named,field('direction'),direction)
+    t=cfg['training_future_phase_C'];offset=u[8]<t['initial_route_pose_offset_fraction']
+    lat=j.where(offset,draw(t['initial_lateral_offset_range_m'],u[9]),0.)
+    heading=j.where(offset,draw(t['initial_heading_offset_range_rad'],u[10]),0.)
+    route=_integrate_route(pose,cfg['path'],family,radius,angle,speed,direction,lat,heading,
+                           sample_group=j.where(low,0,1))
+    extension=j.where(named,field('goal_extension_m'),0.)
+    return route.replace(path=route.path.replace(goal=route.path.goal+extension))
+
+
 def validate_recovery_coverage(coverage):
     """Validate an optional TRAIN-only route-distribution override."""
     import math
