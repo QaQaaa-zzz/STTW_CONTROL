@@ -23,7 +23,7 @@ def analyze(root,include_heldout_labels=False,include_confirmation_labels=False)
     p=json.loads((root/'plan.json').read_text())
     if p.get('mode') in ('h75_samestate_bank144','h75_late_state_tolerance48','h75_user_late_state192'):return analyze_bank144(root,p,include_heldout_labels=include_heldout_labels,include_confirmation_labels=include_confirmation_labels)
     if p.get('mode')=='h75_samestate_tolerance72':return analyze_samestate(root,p)
-    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation'):return analyze_response(root,p)
+    if p.get('mode') in ('h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):return analyze_response(root,p)
     status=json.loads((run/'status.json').read_text())
     if status['phase']!='completed' or status['completed_cases']!=80:raise ValueError('all80 numerical cases required; no partial selection')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
@@ -1060,8 +1060,8 @@ def load_tolerance_analysis_export(root,p):
     expected_order=['temporal_rank_selected','temporal_rank_last'] if p['mode']=='tolerance_online40' else ['bce','bce_rank']
     if p['mode']=='user_preference120':
         expected_map={a:1 for a in USER_PREFERENCE_ARMS};expected_order=['temporal_rank_selected','temporal_rank_last']
-    if p['mode'] in ('user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation'):
-        expected_map={a:0 for a in (GUARD_FALLBACK_ARMS if p['mode']=='guard_fallback_evaluation' else SPEED_QUERY_ARMS if p['mode']=='speed_query_online60' else FROZEN_CONFIRMATION_ARMS if p['mode']=='frozen_confirmation200' else TASK_AWARE_ARMS if p['mode']=='task_aware_fallback72' else PRIOR_ARMS)};expected_order=['speed_query_rank_last'] if p['mode']=='speed_query_online60' else ['prior_rank_last']
+    if p['mode'] in ('user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):
+        expected_map={a:0 for a in (p['protocol']['arms'] if p['mode']=='frozen_transfer_evaluation' else GUARD_FALLBACK_ARMS if p['mode']=='guard_fallback_evaluation' else SPEED_QUERY_ARMS if p['mode']=='speed_query_online60' else FROZEN_CONFIRMATION_ARMS if p['mode']=='frozen_confirmation200' else TASK_AWARE_ARMS if p['mode']=='task_aware_fallback72' else PRIOR_ARMS)};expected_order=['speed_query_rank_last'] if p['mode']=='speed_query_online60' else ['prior_rank_last']
     if p['mode']=='tolerance_broaden120':
         expected_map={a:1 for a in BROADEN_TOLERANCE_ARMS};expected_order=['temporal_rank_selected','temporal_rank_last']
     if Path(declared['directory'])!=directory or declared['receipt_sha256']!=digest(directory/'receipt.json') or declared['arm_to_export_index']!=expected_map:raise ValueError('declared frozen export identity mismatch')
@@ -1333,7 +1333,7 @@ def rescore_original_task(raw,path,config,controller,keys,replan_tick=None,*,bro
 
 def rescore_original_task_analysis(root):
     p=json.loads((root/'plan.json').read_text())
-    if p['mode'] not in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation'):raise ValueError('original task rescoring requires a complete tolerance online analysis')
+    if p['mode'] not in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation'):raise ValueError('original task rescoring requires a complete tolerance online analysis')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
     rows=json.loads((root/'analysis/results.json').read_text());index=json.loads((root/'evaluation/case_index.json').read_text())
     if p['mode']=='tolerance_online40':
@@ -1370,7 +1370,7 @@ def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
     import time
     started=time.monotonic()
     out=root/'analysis'/'original_task_rescoring';out.mkdir(exist_ok=False);results=[];arrays={}
-    descriptive=json.loads((root/'plan.json').read_text()).get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
+    descriptive=json.loads((root/'plan.json').read_text()).get('mode') in ('tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation')
     for lane,row in enumerate(rows):
         values,receipt=rescore_original_task(raws[row['case_id']],paths[analysis_path_key(row)],config,controller,keys,row.get('replan_task_tick'),broaden_cost_numerics=descriptive,task_alpha=row.get('effective_user_alpha',1.),raw_alpha=row.get('raw_user_alpha',row.get('alpha',1.)))
         arrays[row['case_id']]=values;np.savez_compressed(out/f'case_{lane:03d}.npz',**values)
@@ -1382,7 +1382,7 @@ def write_original_task_rescoring(root,rows,raws,paths,config,controller,keys):
             for name,n in (('actual_observed',len(step)),('own_pre_first_arrival',row['prefix']['ticks']),('common_actual',common),('common_pre_first_arrival',prefix)):
                 record['windows'][name]=dict(actual_ticks=n,observed_s=n*.005,three_task_costs=step[:n].sum(axis=0).tolist(),three_task_cost_sum=float(step[:n].sum()))
     for candidate,prefix in (('speed_query','full_mask'),('guard_degraded','old_new_candidate')):
-        if any(r['method']==candidate for r in rows):write_paired_candidate_costs(out,rows,results,arrays,candidate=candidate,prefix=prefix)
+        if any(r['method']==candidate for r in rows) and any(r['method']=='task_aware' for r in rows):write_paired_candidate_costs(out,rows,results,arrays,candidate=candidate,prefix=prefix)
     atomic_json(out/'results.json',results);atomic_json(out/'receipt.json',dict(analysis_source_sha256=digest(__file__),plan_sha256=digest(root/'plan.json'),main_analysis_results_sha256=digest(root/'analysis/results.json'),original_path_sha256={key:digest(root/'evaluation'/(key+'_path.npz')) for key in paths},elapsed_s=time.monotonic()-started,cases=len(rows),new_physics_steps=0,optimizer_updates=0,task_alpha='per_row_effective_user_alpha' if any('effective_user_alpha' in r for r in rows) else 1.,projection='Frozen original world path from task0; no reset at executed-path Dubins replan; native bounded local projection/tie/monotone progress semantics.',scoring='Only frozen V3 speed/path/primary running cost channels. Other reward terms are not substituted or relabeled. Actual global terminal replacement excluded from these three channels; full observed reward retains it.',observation='Stop at actual failure/end. Common actual and common pre-first-arrival windows supplied; goal/contact unchanged. Offline original-task rescoring of actual executed trajectories, not hypothetical original-path-controlled trajectories.'))
     (out/'README.md').write_text('# Original effective-user task rescoring\n\nOnly frozen V3 speed/path/primary running costs on the immutable original path. Goal/contact outcomes and actual observation lengths take precedence over costs: early failure can shorten a common window and cannot be declared better tracking from a smaller truncated cost. Original projection state is replayed from task0 and never reset at Dubins replan. All pre-replan windows are checked against recorded native projection and task costs.\n\nActual trajectories stop at their real endpoints. Common observation/pre-first-arrival windows are provided. These three running channels exclude the global terminal reward replacement and are not a reconstructed total reward. Goal/contact outcomes are unchanged.\n\n[Per-case windows and validation](results.json) · [Scope receipt](receipt.json)\n')
     return results
@@ -1473,16 +1473,16 @@ def analyze_response(root,p):
     speed_comparison=p.get('mode')=='speed_query_online60'
     guard_comparison=p.get('mode')=='guard_fallback_evaluation'
     guard_layout=guard_fallback_layout(p['protocol']) if guard_comparison else None
-    frozen=p.get('mode')=='frozen_confirmation200'
+    frozen=p.get('mode') in ('frozen_confirmation200','frozen_transfer_evaluation')
     frozen_layout=frozen_confirmation_layout(p['protocol']) if frozen else None
     fallback=p.get('mode')=='task_aware_fallback72'
     prior=p.get('mode') in ('user_prior_online72','task_aware_fallback72')
-    preference=p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
+    preference=p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation')
     broaden=p.get('mode')=='tolerance_broaden120'
     temporal=p.get('mode')=='tolerance_online40'
-    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
-    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
-    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation')
+    tolerance=p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation')
+    confirmation=p.get('mode') in ('h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation')
+    online=p.get('mode') in ('h75_online_scalar','h75_online_confirmation100','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation')
     continuation=p.get('mode')=='h75_switching_continuation'
     switching=p.get('mode') in ('h75_channel_switching','h75_switching_continuation');count=guard_layout['new_cases'] if guard_comparison else 60 if speed_comparison else frozen_layout['cases'] if frozen else 72 if prior else 40 if temporal else 120 if tolerance else 100 if confirmation else 18 if online else 36 if switching else 54
     inventory=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
@@ -1903,7 +1903,7 @@ def preference_common_windows(rows,raws,paths,goals):
 
 def preference_methods(rows):
     methods=tuple(x for x in ('last','guard','fixed','prior_last','task_aware','speedcap','speed_query','guard_degraded') if any(r['method']==x for r in rows))
-    if methods not in (('last','guard','fixed'),('last','guard','fixed','prior_last'),('last','guard','fixed','prior_last','task_aware'),('guard','fixed','task_aware'),('guard','fixed','task_aware','speedcap'),('guard','fixed','task_aware','speed_query'),('guard','fixed','task_aware','speedcap','speed_query'),('guard','fixed','task_aware','guard_degraded'),('guard','fixed','task_aware','speedcap','guard_degraded')):raise ValueError('unsupported preference method set')
+    if methods not in (('last','guard','fixed'),('last','guard','fixed','prior_last'),('last','guard','fixed','prior_last','task_aware'),('guard','fixed','task_aware'),('guard','fixed','task_aware','speedcap'),('guard','fixed','task_aware','speed_query'),('guard','fixed','task_aware','speedcap','speed_query'),('guard','fixed','task_aware','guard_degraded'),('guard','fixed','task_aware','speedcap','guard_degraded'),('guard','fixed','speedcap','guard_degraded')):raise ValueError('unsupported preference method set')
     return methods
 
 
@@ -1920,12 +1920,12 @@ def preference_summary(rows,frozen_confirmation=False,speed_comparison=False,fro
         methods=preference_methods(rows)
         if len(rows)!=72*len(methods) or len(response_plot_groups(rows))!=72:raise ValueError('complete user-condition groups required')
     summary={};paired=[]
-    for user in (0.,.5,1.):
+    for user in frozen_layout.get('users',(0.,.5,1.)) if frozen_confirmation else (0.,.5,1.):
         summary[str(user)]={}
         methods=preference_methods([r for r in rows if r['effective_user_alpha']==user])
         if guard_layout and set(methods)!=({'task_aware','guard','fixed','speedcap','guard_degraded'} if user==1. else {'task_aware','guard','fixed','guard_degraded'}):raise ValueError('declared per-user guard-fallback methods required')
         if speed_comparison and set(methods)!=({'task_aware','guard','fixed','speedcap','speed_query'} if user==1. else {'task_aware','guard','fixed','speed_query'}):raise ValueError('declared per-user input ablation methods required')
-        if frozen_confirmation and set(methods)!=({'task_aware','guard','fixed','speedcap'} if user==1. else {'task_aware','guard','fixed'}):raise ValueError('declared per-user methods required')
+        if frozen_confirmation and set(methods)!=(set(frozen_layout['methods']) if 'methods' in frozen_layout else {'task_aware','guard','fixed','speedcap'} if user==1. else {'task_aware','guard','fixed'}):raise ValueError('declared per-user methods required')
         for method in methods:
             group=[r for r in rows if r['effective_user_alpha']==user and r['method']==method]
             if len(group)!=conditions:raise ValueError('complete conditions per user/method required')
@@ -1975,15 +1975,41 @@ def render_preference_crossuser(root,rows,raws,paths,goals,executed):
                 p2=executed[row['case_id']];ax.plot(*p2['xy'][p2['s']<=p2['goal']].T,c=color,ls='-.',lw=.5,alpha=.4)
             dose=np.flatnonzero(np.linalg.norm(raw['applied_force_impulse'][:n],axis=1)>1e-10)
             if len(dose):ax.scatter(*xy[dose].T,c=color,s=7)
-        ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'H75 {checkpoint} / bank{bank}/{route}/{event}: users0/.5/1; actual H10 endpoints; dashdot=execution replan');ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=7);ax.grid(alpha=.15)
+        ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f'H75 {checkpoint} / bank{bank}/{route}/{event}: users{sorted(set(r["effective_user_alpha"] for r in group))}; actual H10 endpoints; dashdot=execution replan');ax.set_aspect('equal',adjustable='datalim');ax.legend(fontsize=7);ax.grid(alpha=.15)
         fig.savefig(out/f'crossuser_xy_{event}__bank{bank}__route{route}.png',dpi=140);plt.close(fig)
 
 
 
 
 
+def frozen_transfer_layout(protocol):
+    declarations=protocol['method_declarations'];arms=protocol['arms']
+    if [d['arm'] for d in declarations]!=arms or len(set(arms))!=len(arms):raise ValueError('unique transfer declarations required')
+    if len(declarations)!=4 or {d['method'] for d in declarations}!={'guard_degraded','guard','fixed','speedcap'} or any(d['user_alpha']!=1. for d in declarations):raise ValueError('declared user1 four-method transfer required')
+    events=[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s']))
+    banks=protocol['bank_indices'];routes=protocol['routes']
+    if len(set(banks))!=len(banks) or len({r['route'] for r in routes})!=len(routes) or len(set(events))!=len(events):raise ValueError('unique transfer cartesian conditions required')
+    conditions=len(banks)*len(routes)*len(events);cases=conditions*len(arms)
+    if protocol['expected_cases']!=cases or protocol['maximum_lower_ticks']!=cases*2000 or protocol['horizon_s']!=10. or protocol['optimizer_updates']!=0:raise ValueError('transfer declared count/budget differs')
+    return dict(variant='frozen_transfer_evaluation',cases=cases,conditions=conditions,routes=len(routes),user_groups=conditions,nominal_cases=len(banks)*len(routes)*len(arms),users=[1.],methods=[d['method'] for d in declarations])
+
+
+def validate_frozen_transfer_inventory(rows,protocol):
+    layout=frozen_transfer_layout(protocol)
+    if len(rows)!=layout['cases']:raise ValueError('complete transfer inventory required')
+    declarations={d['arm']:d for d in protocol['method_declarations']};actual=[]
+    for row in rows:
+        d=declarations.get(row['mode'])
+        if d is None or row['method']!=d['method'] or any(row[k]!=d['user_alpha'] for k in ('alpha','user_alpha','effective_user_alpha','query_alpha')):raise ValueError('transfer user/method mismatch')
+        if row['initial_fingerprint']!=protocol['bank_state_fingerprints'][str(row['bank_index'])] or row['path_key']!=f"bank{row['bank_index']}_"+row['route']:raise ValueError('transfer bank/path mismatch')
+        actual.append((row['bank_index'],row['route'],row['speed'],row['mode'],row['force_N'],row['onset_s'],row['duration_s']))
+    expected=[(b,r['route'],r['speed'],a,f,t,protocol['duration_s']) for b,r,a,(f,t) in itertools.product(protocol['bank_indices'],protocol['routes'],protocol['arms'],[(0.,protocol['zero_onset_s'])]+list(itertools.product(protocol['forces_N'],protocol['onsets_s'])))]
+    if sorted(actual)!=sorted(expected):raise ValueError('complete transfer condition coverage required')
+
+
 def frozen_confirmation_layout(protocol):
     """Only explicitly registered variants may alter the historical200 layout."""
+    if protocol.get('mode')=='frozen_transfer_evaluation':return frozen_transfer_layout(protocol)
     variant=protocol.get('variant')
     if variant not in (None,'geometry_duration_extension_v1'):raise ValueError('unknown frozen confirmation variant')
     if tuple(protocol['arms'])!=FROZEN_CONFIRMATION_ARMS:raise ValueError('frozen ten-arm contract required')
@@ -2002,6 +2028,8 @@ def frozen_confirmation_layout(protocol):
 
 
 def frozen_confirmation_intro(protocol,layout):
+    if protocol.get('mode')=='frozen_transfer_evaluation':
+        return [f"# 冻结控制组合确认{layout['cases']}",'',f"全部{layout['cases']}为新H10物理，{layout['conditions']}条件×四user1方法；banks{protocol['bank_indices']}，原始goal1m与真实contact分别报告；q+guardfallback对无qguard为主比较，fixed1/speedcap为简单对照。0优化，全部条件/失败保留。",'',"仅改变声明初态/几何/实际脉冲组合，不称全研究未见TEST或独立训练seed；0.15s实际脉冲相对冻结0.1s假设外推。控制、q三seed/H75/lower、门槛和one-shot接回全冻结；guard/fixed/cap的qgate只作诊断，非其控制恢复门。用户0/.5未新增确认。"]
     routes=', '.join(f"{r['route']} ({r['speed']:g}m/s)" for r in protocol['routes'])
     text=f"全部{layout['cases']}为新物理：banks{protocol['bank_indices']}；{routes}；实际力{protocol['forces_N']}N、起扰{protocol['onsets_s']}s、持续{protocol['duration_s']:g}s，含无扰。每用户{layout['conditions']}条件、同用户3/4方法共同窗口。user0/.5各taskaware/guard/fixed，user1另有speedcap。冻结候选后声明，不按本结果选checkpoint；guard/fixed/speedcap不使用q决策，其模型gate仅为事后诊断，合格恢复记N/A。0优化更新。"
     if layout['variant']=='geometry_duration_extension_v1':
@@ -2010,6 +2038,7 @@ def frozen_confirmation_intro(protocol,layout):
     return [f"# 冻结候选组合确认{layout['cases']}",'',text,'',scope]
 
 def validate_frozen_confirmation_inventory(rows,protocol):
+    if protocol.get('mode')=='frozen_transfer_evaluation':return validate_frozen_transfer_inventory(rows,protocol)
     layout=frozen_confirmation_layout(protocol)
     if len(rows)!=layout['cases']:raise ValueError('complete declared frozen confirmation cases required')
     expected=set()
