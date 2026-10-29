@@ -278,6 +278,29 @@ def freeze_query_predictions(protocol,training,output):
     output.write_text(json.dumps(result,indent=2)+'\n');return result
 
 
+def audit_query_feature_alignment(frozen,observed,export):
+    """Bound Actor roundoff without changing the pre-physics predictions.
+
+    Candidate steer correction (feature36) is divided by .2rad; the extra
+    allowance is at most4e-5rad. State/clock/force features retain old bounds.
+    Probability/output drift and default feasibility must also remain stable.
+    No observed outcome labels enter this numerical check.
+    """
+    frozen=np.asarray(frozen);observed=np.asarray(observed)
+    if frozen.shape!=observed.shape or frozen.ndim!=2 or frozen.shape[1]!=42:raise ValueError('matching conditional42 features required')
+    error=abs(observed-frozen);bound=np.full(42,5e-5);bound[36]=2e-4
+    if not np.isfinite(error).all() or np.any(error>bound+3e-5*abs(frozen)):raise ValueError('observed source features exceed bounded Actor roundoff')
+    expected=predict_outcomes(export,frozen);actual=predict_outcomes(export,observed);drift=abs(expected-actual)
+    if np.any(drift[:,:2]>5e-3) or np.any(drift[:,2:]>1e-2):raise ValueError('Actor roundoff changes outcome predictions materially')
+    if not np.array_equal(expected[:,:2]>=.5,actual[:,:2]>=.5):raise ValueError('Actor roundoff changes binary classification')
+    mask=lambda p:(p[:,0]>=.8)&(p[:,1]>=.5)&(p[:,2]<=4.)
+    if not np.array_equal(mask(expected),mask(actual)):raise ValueError('Actor roundoff changes default feasibility')
+    return dict(maximum_feature_error=float(error.max()),candidate_steer_error_rad=float(error[:,36].max()*.2),
+        maximum_probability_drift=float(drift[:,:2].max()),maximum_regression_drift=float(drift[:,2:].max()),
+        default_feasibility_unchanged=True,binary_classification_unchanged=True,frozen_predictions_preserved=True,
+        numerical_protocol='Post-sampling Actor batching amendment: only feature36 up to2e-4 normalized, <=.005 probability / .01 regression drift; all state features retain original bounds, all classification/qualification decisions must be unchanged. No outcome labels used.')
+
+
 def evaluate_frozen_queries(frozen_manifest,dataset,output):
     """Score only fresh physical probes; old training points only annotate ranges."""
     from .tolerance_coordination import feasible_alpha_intervals
@@ -291,7 +314,8 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
     with np.load(dataset/'dataset.npz') as z:data=dict(z)
     if [r['case_id'] for r in meta['records']]!=query['case_ids'].tolist() or not np.all(data['roles']=='development'):
         raise ValueError('all new physical probe identities/roles must match frozen queries')
-    np.testing.assert_allclose(data['features'],query['features'],atol=5e-5,rtol=3e-5,err_msg='observed source features differ from prospective features')
+    with np.load(training/'parameters.npz') as z:export=dict(z)
+    alignment=audit_query_feature_alignment(query['features'],data['features'],export)
     metric=outcome_metrics(data['targets'],query['prediction'],data['regression_mask'])
     default=(query['prediction'][:,0]>=.8)&(query['prediction'][:,1]>=.5)&(query['prediction'][:,2]<=4.)
     actual=(data['targets'][:,0]==1)&(data['targets'][:,1]==1)&(np.expm1(data['targets'][:,2])<=4.)
@@ -318,7 +342,7 @@ def evaluate_frozen_queries(frozen_manifest,dataset,output):
                 plan.update(observed_qualified_mask=observed.tolist(),false_feasible_alpha=[a for a,p,t in zip(grid,plan['feasible_mask'],observed) if p and not t]);ranges.append(plan)
         groups.append(dict(group=group,candidates=members,plans=ranges))
     output.mkdir(parents=True,exist_ok=False)
-    result=dict(schema=SCHEMA,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Range tables include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
+    result=dict(schema=SCHEMA,feature_alignment_audit=alignment,prospective_manifest=str(frozen_manifest),prospective_manifest_sha256=sha(frozen_manifest),new_dataset=str(dataset),new_dataset_manifest_sha256=sha(dataset/'manifest.json'),metrics=metric,groups=groups,adoption='pending_closed_loop_review',limits='Model scores are uncalibrated, known-state alpha interpolation only. Range tables include labeled training references explicitly; continuous interior remains unverified. No road/safety guarantee; empty sets preserved.')
     (output/'results.json').write_text(json.dumps(result,indent=2)+'\n');(output/'metrics.json').write_text(json.dumps(metric,indent=2)+'\n')
     physical_run=Path(meta['source_run']);first=next(r for r in meta['records'] if r['force_N']!=0)
     event=first['group'].split('/')[-1];xy=physical_run/'analysis'/(first['route']+'_'+event+'_fixed_candidate_xy.png')

@@ -3,7 +3,7 @@ import pytest
 
 from sttw_control.preference_outcome_prediction import outcome_features,STATE_INDICES,plan_alpha_intervals,FrozenAlphaRangePlanner
 from sttw_control.tolerance_coordination import select_from_alpha_range
-from sttw_control.preference_outcome_prediction import merge_outcome_datasets,SCHEMA
+from sttw_control.preference_outcome_prediction import merge_outcome_datasets,audit_query_feature_alignment,SCHEMA
 
 
 def example():
@@ -93,3 +93,16 @@ def test_refit_merge_releases_known_dev_explicitly_without_changing_parent_roles
     d=parent('d','d','training');changed=json.loads((d/'manifest.json').read_text());changed['physical_contract_sha256']='other-physics';(d/'manifest.json').write_text(json.dumps(changed))
     with pytest.raises(ValueError,match='different feature'):merge_outcome_datasets([a,d],tmp_path/'physics',release_note='explicit')
     with pytest.raises(ValueError,match='explicit release'):merge_outcome_datasets([a],tmp_path/'implicit',release_note='')
+
+
+def test_bounded_actor_roundoff_does_not_relax_state_or_feasibility_checks():
+    export=dict(mean=np.zeros(42),scale=np.ones(42),w0=np.zeros((1,42,16)),b0=np.zeros((1,16)),w1=np.zeros((1,16,16)),b1=np.zeros((1,16)),w2=np.zeros((1,16,4)),b2=np.array([[2.,3.,np.log1p(.2),np.log1p(2.)]]))
+    frozen=np.zeros((1,42));observed=frozen.copy();observed[0,36]=1.2e-4
+    audit=audit_query_feature_alignment(frozen,observed,export)
+    assert audit['candidate_steer_error_rad']==pytest.approx(2.4e-5) and audit['frozen_predictions_preserved']
+    altered=frozen.copy();altered[0,0]=1.2e-4
+    with pytest.raises(ValueError,match='exceed bounded'):audit_query_feature_alignment(frozen,altered,export)
+    altered=frozen.copy();altered[0,36]=1e-3
+    with pytest.raises(ValueError,match='exceed bounded'):audit_query_feature_alignment(frozen,altered,export)
+    export['w0'][0,36,0]=1.;export['w1'][0,0,0]=1.;export['w2'][0,0,0]=20.;export['b2'][0,0]=np.log(.7998/(1-.7998))
+    with pytest.raises(ValueError,match='changes default feasibility'):audit_query_feature_alignment(frozen,observed,export)
