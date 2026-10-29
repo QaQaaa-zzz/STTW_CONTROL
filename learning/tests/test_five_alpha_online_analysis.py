@@ -36,3 +36,28 @@ def test_low_risk_user_not_relabelled_restored_and_logged_gate_audited():
     assert stats['windows']['full']['fallback_user_ticks']==4
     r['coord_degraded'][:]=False
     with pytest.raises(AssertionError):m.five_alpha_online_statistics(r,dict(onset_s=.02,duration_s=.015))
+
+
+def dwell_fixture(n=48):
+    alpha=np.r_[np.full(40,.25),np.full(8,.5)][:n];q=np.full((n,5),.1);q[:4,1]=.9;r=raw(alpha,q)
+    tick=(np.arange(n)//4)*4;r.update(coord_proxy_cost=np.zeros((n,5)),coord_dwell_tick=tick,coord_raw_alpha=np.r_[np.full(4,.25),np.full(n-4,.5)],coord_raw_latched=np.ones(n,bool),coord_hold_until_before=np.where(tick==0,0,np.where(tick<=40,40,80)),coord_hold_until_tick=np.where(tick<40,40,80),coord_hold_remaining_ticks=np.where(tick<40,40,80)-tick,coord_hold_release_reason=np.where(tick==40,1,0),coord_held=(tick>0)&(tick!=40),coord_alpha_changed=(tick==0)|(tick==40),rule_latched=np.ones(n,bool),coord_prev_alpha=np.where(tick==0,.5,np.where(tick<=40,.25,.5)))
+    r['coord_latched_before']=tick!=0
+    return r
+
+
+def test_hold_survives_q_decline_and_expires_on_native_lower_ticks():
+    r=dwell_fixture();a=m.audit_five_alpha_dwell(r,.2)
+    assert a['independent_numpy_match']
+    assert a['decisions'][1]['held'] and a['decisions'][1]['raw_alpha']==.5 and a['decisions'][1]['executed_alpha']==.25
+    assert a['decisions'][10]['task_tick']==40 and a['decisions'][10]['release_reason']==1
+    r['coord_hold_until_tick'][4:8]=44
+    with pytest.raises(AssertionError):m.audit_five_alpha_dwell(r,.2)
+
+
+def test_denied_publication_retains_deadline_and_task_mask_bypasses_hold():
+    r=dwell_fixture(12);r['coord_permission'][4:8]=False;r['coord_raw_alpha'][4:8]=.25;r['coord_held'][4:8]=False;r['coord_hold_release_reason'][4:8]=3
+    m.audit_five_alpha_dwell(r,.2)
+    r['coord_task_mask'][8:12,1]=False;r['alpha_exec'][8:12]=.5;r['coord_held'][8:12]=False;r['coord_hold_release_reason'][8:12]=2;r['coord_alpha_changed'][8:12]=True;r['coord_hold_until_tick'][8:12]=48;r['coord_hold_remaining_ticks'][8:12]=40
+    a=m.audit_five_alpha_dwell(r,.2)
+    assert a['decisions'][1]['hold_until_tick']==40
+    assert a['decisions'][2]['release_reason']==2 and a['decisions'][2]['hold_until_tick']==48

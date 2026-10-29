@@ -18,6 +18,45 @@ class OnlineCarry(NamedTuple):
         return self.native.state
 
 
+class DwellOnlineCarry(NamedTuple):
+    native: Any
+    latched: Any
+    prev_alpha: Any
+    hold_until_tick: Any
+
+    @property
+    def state(self):
+        return self.native.state
+
+
+def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
+                      prev_alpha,latched,hold_until_tick,current_tick,*,
+                      candidate_alphas=(0.,.25,.5,.75,1.),dwell_ticks=40):
+    """Optional causal hold, timed by native lower ticks (200Hz).
+
+    Reason codes:0=no release,1=expiry,2=current task-mask infeasible,
+    3=publication denied. A q decline alone never releases the hold.
+    Expiry follows elapsed native time even during denied publication. Actual
+    alpha changes restart the deadline, including a change to fallback .5.
+    No initial hold is imposed; caller initializes deadline to current tick.
+    """
+    import jax.numpy as j
+    if isinstance(dwell_ticks,bool) or not isinstance(dwell_ticks,int) or dwell_ticks<=0:raise ValueError('positive static dwell tick count required')
+    grid=j.asarray(candidate_alphas,j.float32);idx=j.argmin(j.abs(grid-prev_alpha))
+    active=current_tick<hold_until_tick
+    feasible=task_mask[idx]
+    held=permission&active&feasible
+    alpha=j.where(permission,j.where(held,prev_alpha,proposed_alpha),prev_alpha)
+    latch=j.where(permission,j.where(held,latched,proposed_latched),latched)
+    changed=permission&(alpha!=prev_alpha)
+    deadline=j.where(changed,current_tick+dwell_ticks,
+                     j.where(permission&((active&~feasible)|~active),0,hold_until_tick))
+    reason=j.where(~permission,3,j.where(active&~feasible,2,j.where((hold_until_tick>0)&~active,1,0)))
+    return dict(alpha=alpha,latched=latch,hold_until_tick=deadline,
+        held=held,remaining_ticks=j.maximum(deadline-current_tick,0),
+        release_reason=reason,alpha_changed=changed)
+
+
 def file_module(path,name):
     spec=importlib.util.spec_from_file_location(name,path)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)

@@ -2546,7 +2546,30 @@ def analyze_five_alpha_labels(root,p):
     return receipt
 
 
-def five_alpha_online_statistics(raw,case,first_arrival_s=None):
+def audit_five_alpha_dwell(raw,dwell_s):
+    """Independent NumPy replay of native lower-tick hold timing and raw chooser."""
+    n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);ticks=round(dwell_s/.005)
+    if dwell_s!=.2 or ticks!=40:raise ValueError('only explicitly declared .2s hold accepted')
+    prev=.5;latched=False;deadline=0;decisions=[]
+    fields=('coord_raw_alpha','coord_raw_latched','coord_dwell_tick','coord_hold_until_before','coord_hold_until_tick','coord_hold_remaining_ticks','coord_hold_release_reason','coord_held','coord_alpha_changed')
+    for start in range(0,n,4):
+        for key in fields:
+            x=np.asarray(raw[key])[start:min(n,start+4)];np.testing.assert_array_equal(x,np.broadcast_to(x[0],x.shape))
+        tick=int(raw['coord_dwell_tick'][start]);permission=bool(raw['coord_permission'][start]);task=np.asarray(raw['coord_task_mask'][start],bool);q=np.asarray(raw['coord_qmin'][start]);cost=np.asarray(raw['coord_proxy_cost'][start]);restore=bool(task[2] and q[2]>=(.85 if latched else .8));eligible=task&(q>=.8);eligible[2]=False
+        proposed=.5 if restore or not eligible.any() else float(grid[np.argmin(np.where(eligible,cost,np.inf))]);raw_alpha=proposed if permission else prev;raw_latch=not restore if permission else latched
+        np.testing.assert_equal(tick,start);np.testing.assert_equal(raw['coord_prev_alpha'][start],prev);np.testing.assert_equal(raw['coord_latched_before'][start],latched);np.testing.assert_equal(raw['coord_raw_alpha'][start],raw_alpha);np.testing.assert_equal(raw['coord_raw_latched'][start],raw_latch);np.testing.assert_equal(raw['coord_hold_until_before'][start],deadline)
+        active=tick<deadline;feasible=bool(task[np.argmin(abs(grid-prev))]);held=permission and active and feasible;alpha=prev if held or not permission else raw_alpha;latch=latched if held or not permission else raw_latch;changed=permission and alpha!=prev;nextdeadline=tick+ticks if changed else 0 if permission and ((active and not feasible) or not active) else deadline;reason=3 if not permission else 2 if active and not feasible else 1 if deadline>0 and not active else 0
+        for key,value in [('coord_held',held),('alpha_exec',alpha),('rule_latched',latch),('coord_alpha_changed',changed),('coord_hold_until_tick',nextdeadline),('coord_hold_remaining_ticks',max(nextdeadline-tick,0)),('coord_hold_release_reason',reason)]:np.testing.assert_array_equal(raw[key][start:min(n,start+4)],value)
+        decisions.append(dict(task_tick=tick,held=held,raw_alpha=raw_alpha,executed_alpha=alpha,raw_latched=raw_latch,effective_latched=latch,release_reason=reason,alpha_changed=changed,hold_until_tick=nextdeadline));prev=alpha;latched=latch;deadline=nextdeadline
+    return dict(dwell_s=dwell_s,dwell_lower_ticks=ticks,independent_numpy_match=True,decisions=decisions,contract='No initialhold. Every permitted actualchange starts40native lower ticks; unchanged proposals do not restart. Currenttaskmask failure bypasses hold; q decline alone does not. Denied publication retains alpha/latch/deadline while native time advances.')
+
+
+def online_alpha_dwell_intervals(raw):
+    n=int(np.asarray(raw['active_tick'],bool).sum());alpha=np.asarray(raw['alpha_exec'][:n]);changes=np.flatnonzero(alpha!=np.r_[.5,alpha[:-1]]);intervals=np.diff(changes)
+    return dict(switch_to_switch_intervals_s=(intervals*.005).tolist(),interval_count=len(intervals),below_0p2_s=int(np.sum(intervals<40)),below_0p6_s=int(np.sum(intervals<120)),initial_unswitched_and_final_censored_excluded=True)
+
+
+def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.):
     """Retrospective windows; fallback at user alpha is not qualified restoration."""
     n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);t=np.asarray(raw['time'][:n]);alpha=np.asarray(raw['alpha_exec'][:n]);q=np.asarray(raw['coord_qmin'][:n]);task=np.asarray(raw['coord_task_mask'][:n],bool);permission=np.asarray(raw['coord_permission'][:n],bool);latched=np.asarray(raw['coord_latched_before'][:n],bool)
     if q.shape!=(n,5) or task.shape!=(n,5) or not np.isfinite(q).all() or not np.isin(alpha,grid).all():raise ValueError('five-alpha coordinator evidence malformed')
@@ -2556,15 +2579,24 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None):
     if 'coord_probabilities' in raw:np.testing.assert_allclose(q,np.min(raw['coord_probabilities'][:n],axis=-1),atol=1e-6,rtol=0)
     if 'coord_candidate_alpha' in raw:np.testing.assert_array_equal(raw['coord_candidate_alpha'][:n],np.tile(grid,(n,1)))
     if 'coord_restore_requested' in raw:np.testing.assert_array_equal(raw['coord_restore_requested'][:n],restore)
-    if 'coord_restore_published' in raw:np.testing.assert_array_equal(raw['coord_restore_published'][:n],restore&permission)
+    if 'coord_restore_published' in raw:
+        published=restore&permission
+        if dwell_s:published=published&~np.asarray(raw['coord_held'][:n],bool)&~np.asarray(raw['rule_latched'][:n],bool)&(alpha==.5)
+        np.testing.assert_array_equal(raw['coord_restore_published'][:n],published)
     np.testing.assert_array_equal(raw['alpha_user'][:n],.5)
     np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]));np.testing.assert_allclose(raw['query_observation'][:n,336],alpha,atol=1e-6,rtol=0)
     previous=np.r_[.5,alpha[:-1]];switch=alpha!=previous;returned=(previous!=.5)&(alpha==.5);qualified=(alpha==.5)&restore&permission
+    if dwell_s:qualified=qualified&np.asarray(raw['coord_restore_published'][:n],bool)
+    dwell_audit=audit_five_alpha_dwell(raw,dwell_s) if dwell_s else None
     masks=dict(full=np.ones(n,bool),before_pulse=t<case['onset_s'],during_pulse=(t>=case['onset_s'])&(t<case['onset_s']+case['duration_s']),after_pulse=t>=case['onset_s']+case['duration_s'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
     result={}
     for name,m in masks.items():
         result[name]=dict(observed_ticks=int(m.sum()),observed_s=float(m.sum()*.005),alpha_occupancy_s={str(a):float(np.sum(m&(alpha==a))*.005) for a in grid},switch_count=int(np.sum(m&switch)),nonuser_ticks=int(np.sum(m&(alpha!=.5))),return_to_user_events=int(np.sum(m&returned)),qualified_return_events=int(np.sum(m&returned&qualified)),any_risk_eligible_ticks=int(np.sum(m&risk.any(axis=1))),any_task_and_risk_eligible_ticks=int(np.sum(m&eligible.any(axis=1))),all_degraded_ticks=int(np.sum(m&all_degraded)),operational_degraded_ticks=int(np.sum(m&permission&all_degraded)),permission_withheld_ticks=int(np.sum(m&~permission)),qualified_user_ticks=int(np.sum(m&qualified)),fallback_user_ticks=int(np.sum(m&(alpha==.5)&all_degraded)),qmin_min_by_alpha=q[m].min(axis=0).tolist() if m.any() else None,qmin_max_by_alpha=q[m].max(axis=0).tolist() if m.any() else None)
-    return dict(windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Static fallback.5 never counts as restored.')
+    if dwell_s:
+        rawalpha=np.asarray(raw['coord_raw_alpha'][:n]);rawswitch=rawalpha!=np.r_[.5,rawalpha[:-1]]
+        for name,mask in masks.items():
+            result[name].update(raw_chooser_nonuser_ticks=int(np.sum(mask&(rawalpha!=.5))),raw_chooser_switches=int(np.sum(mask&rawswitch)),held_ticks=int(np.sum(mask&raw['coord_held'][:n])),held_execution_differs_from_raw_ticks=int(np.sum(mask&(rawalpha!=alpha))),task_mask_bypass_ticks=int(np.sum(mask&(raw['coord_hold_release_reason'][:n]==2))),raw_restore_requested_ticks=int(np.sum(mask&restore)),actual_restore_published_ticks=int(np.sum(mask&raw['coord_restore_published'][:n])))
+    return dict(dwell_audit=dwell_audit,actual_alpha_dwell=online_alpha_dwell_intervals(raw),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),contract='Eligibility is current6m-curvature proxy plus risk threshold, not road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Static fallback.5 never counts as restored.')
 
 
 def analyze_five_alpha_online14(root,p):
@@ -2596,7 +2628,7 @@ def analyze_five_alpha_online14(root,p):
         path=paths[key];goal=np.array([np.interp(float(path['goal']),path['s'],path['xy'][:,a]) for a in (0,1)]);np.testing.assert_allclose(c['original_goal_xy'],goal,atol=3e-6,rtol=0)
         fault=raw['policy_fault']|raw['nonfinite']|raw['lower_fault']|raw['continuation_geometry_fault'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault)
         outcome=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);outcome['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
-        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s']);pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=440,pulse_duration_s=.15));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
+        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.));pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=440,pulse_duration_s=.15));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
         original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=.5,raw_alpha=.5,broaden_cost_numerics=True)
         phase={}
         for name,m in [('before',raw['time'][:n]<2.2),('during',(raw['time'][:n]>=2.2)&(raw['time'][:n]<2.35)),('after',raw['time'][:n]>=2.35)]:
