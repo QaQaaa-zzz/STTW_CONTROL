@@ -70,13 +70,15 @@ def native_target(latent,interface):
     return np.array([a[0]*(interface['speed_positive_scale_m_s'] if a[0]>=0 else interface['speed_negative_scale_m_s']),a[1]*interface['steer_scale_rad']],np.float32)
 
 
-def feature_row(source,query,latent,yaw,case,interface,cfg):
+def feature_row(source,query,latent,yaw,case,interface,cfg,*,expected_source_alpha=1.):
     """Source-only state plus explicit hypothetical intervention; no outcome."""
     source=np.asarray(source,np.float32);query=np.asarray(query,np.float32)
     if source.shape!=(351,) or query.shape!=(351,) or not np.isfinite(source).all() or not np.isfinite(query).all():
         raise ValueError('finite native351 source/query required')
     np.testing.assert_allclose(np.delete(source,336),np.delete(query,336),atol=1e-6,rtol=1e-6)
-    if abs(float(source[336])-1)>1e-6 or abs(float(query[336])-case['candidate_alpha'])>1e-6:raise ValueError('source/query alpha mismatch')
+    if not np.isfinite(expected_source_alpha) or not 0<=expected_source_alpha<=1:
+        raise ValueError('invalid expected source alpha')
+    if abs(float(source[336])-expected_source_alpha)>1e-6 or abs(float(query[336])-case['candidate_alpha'])>1e-6:raise ValueError('source/query alpha mismatch')
     target=native_target(latent,interface)
     shared=np.array([case['candidate_alpha'],target[0]/1.,target[1]/.2,
         case['force_N']*math.sin(yaw)/64.,case['force_N']*math.cos(yaw)/64.,case['duration_s']/.1,case['preparation_s']/.6],np.float32)

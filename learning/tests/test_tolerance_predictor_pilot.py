@@ -325,3 +325,21 @@ def test_temporal_fit_checks_frozen_preparation_before_optimizer(tmp_path,monkey
     pilot.write_json(prepared/'seal.json',{'training.npz':'originalsha'})
     monkeypatch.setattr(pilot,'ranking_fit',lambda *a,**k:pytest.fail('optimizer entered'))
     with pytest.raises(ValueError,match='preparation changed'):pilot.temporal_mix_fit(cfg,prepared,tmp_path/'training')
+
+
+@pytest.mark.parametrize('candidate',[0.,.25,.5,.75,1.])
+def test_explicit_source_user_preserved_for_five_alpha_features(candidate):
+    cfg=config();source=np.zeros(351,np.float32);source[336]=.5
+    query=source.copy();query[336]=candidate
+    case=dict(candidate_alpha=candidate,force_N=64.,duration_s=.15,preparation_s=.6)
+    interface=dict(speed_positive_scale_m_s=.25,speed_negative_scale_m_s=1.,steer_scale_rad=.2)
+    with pytest.raises(ValueError,match='source/query'):
+        pilot.feature_row(source,query,[0.,0.],0.,case,interface,cfg)
+    full,_=pilot.feature_row(source,query,[0.,0.],0.,case,interface,cfg,expected_source_alpha=.5)
+    assert full[-7]==candidate
+    assert full[-2]==pytest.approx(1.5)
+    assert full[-1]==pytest.approx(1.)
+    assert source[336]==.5
+    query[304]=1.
+    with pytest.raises(AssertionError):
+        pilot.feature_row(source,query,[0.,0.],0.,case,interface,cfg,expected_source_alpha=.5)
