@@ -146,7 +146,10 @@ def low_speed_lateral_load_inventory(p):
         raise ValueError('explicit fixed unit horizontal world force direction required')
     forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
     contexts=p['route_contexts']
-    count=len(contexts)*len(p['alphas'])*(1+len(forces)*len(onsets))
+    boundary=p.get('range_planner_boundary')
+    context_grids=[c.get('boundary_expected_alphas',p['alphas']) if boundary else p['alphas'] for c in contexts]
+    if any(not g or any(a not in p['alphas'] for a in g) or len(set(g))!=len(g) for g in context_grids):raise ValueError('boundary execution candidates must be declared grid points')
+    count=sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))
     if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
@@ -162,12 +165,13 @@ def low_speed_lateral_load_inventory(p):
         or any(c['family']!=1 or c['angle_deg']!=90. or not 1.5<=c['speed']<=2.2 or c['direction']!=1.
                or not math.isfinite(c['radius_m']) or c['radius_m']<=0 or c.get('goal_offset_after_turn_m')!=4. for c in contexts)):
         raise ValueError('unique declared low-speed tight-turn geometries required')
-    events=[dict(event='zero',force_N=0.,onset_s=0.)]+[
+    events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
     identity=candidate['registry_id'] if candidate else p['model_id']
     rows=[]
-    for context,event,alpha in itertools.product(contexts,events,p['alphas']):
+    combinations=((context,event,alpha) for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
+    for context,event,alpha in combinations:
         route=context['route'];source=context.get('state_source');start=source['source_task_tick']*.005 if source else 0.
         if start+p['duration_s']+max(onsets)>10:raise ValueError('conditional force extends beyond task horizon')
         onset=event['onset_s']+start if event['force_N'] else 0.
@@ -179,6 +183,7 @@ def low_speed_lateral_load_inventory(p):
         mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha))
         rows[-1]['onset_s']=onset
         rows[-1]['event']=event_name
+        if boundary:rows[-1]['original_user_alpha']=context['state_source']['source_alpha']
     if any('state_source' in c for c in contexts) and not all('state_source' in c for c in contexts):raise ValueError('all conditional contexts require explicit sources')
     return rows
 
@@ -199,7 +204,7 @@ def restore_conditional_capability_states(plan,cases,paths):
             cache[str(root)]=(parent,{})
         parent,loaded=cache[str(root)]
         original=next(c for c in parent['contexts'] if c['route']==source['parent_route'])
-        if {k:v for k,v in context.items() if k not in ('route','state_source')}!={k:v for k,v in original.items() if k!='route'}:raise ValueError('conditional geometry changed')
+        if {k:v for k,v in context.items() if k not in ('route','state_source','boundary_expected_alphas')}!={k:v for k,v in original.items() if k!='route'}:raise ValueError('conditional geometry changed')
         file=Path(source['carry_file'])
         if file not in loaded:
             if digest(file)!=source['carry_sha256'] or file.parent!=root/'evaluation':raise ValueError('conditional complete carry identity differs')
@@ -221,6 +226,25 @@ def restore_conditional_capability_states(plan,cases,paths):
         if any(not np.array_equal(a,b,equal_nan=True) for a,b in zip(aa,bb)):raise ValueError('conditional copy modified a non-alpha leaf')
         copies.append(copied);sources.append(dict(route=case['route'],source_lane=source['source_lane'],task_tick=int(state.tick),physical_tick=int(state.physical.physical_tick),source_alpha=float(state.alpha),fingerprint=fingerprint))
     return jax.tree.map(lambda *xs:j.stack(xs),*copies),dict(conditional_complete_state_copy=True,all_nonalpha_source_leaves_exact=True,sources=sources)
+
+
+def query_boundary_alpha(folder,configuration,observation,latents,yaw,task_time_s,interface,user_alpha,permission):
+    """One current-state decision; deliberately accepts no case/event schedule."""
+    import numpy as np
+    folder=Path(folder)
+    prediction=file_module('_sttw_boundary_outcome',folder/'preference_outcome_prediction.py')
+    coordination=file_module('_sttw_boundary_coordination',folder/'tolerance_coordination.py')
+    file=Path(configuration['parameters'])
+    if digest(file)!=configuration['parameters_sha256']:raise ValueError('boundary outcome parameters changed')
+    with np.load(file) as z:export=dict(z)
+    plan=prediction.plan_alpha_intervals(export,observation,configuration['candidate_alphas'],latents,yaw,task_time_s,
+        configuration['hypotheses'],interface,no_fall_threshold=configuration['no_fall_threshold'],
+        task_threshold=configuration['task_threshold'],max_path_error_m=configuration['max_path_error_m'],
+        interval_function=coordination.feasible_alpha_intervals)
+    decision=coordination.select_from_alpha_range(plan,user_alpha=user_alpha,previous_alpha=user_alpha,
+        publication_permitted=permission)
+    return dict(plan=plan,decision=decision,actual_future_event_input=False,
+        execution='Single causal decision at restored task boundary, held afterwards; not continuous online replanning.')
 
 
 def targeted_base_review_inventory(p):
@@ -382,6 +406,8 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     proposal=dict(proposal,bank_state_fingerprints={str(bank_index):snapshot_fingerprint(snapshot)})
     folder=Path(__file__).resolve().parent
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
+    if proposal.get('range_planner_boundary'):
+        modules += [folder/'preference_outcome_prediction.py',folder/'tolerance_coordination.py']
     expected_sources=json.loads((transition/'native_expected_sources.json').read_text())
     for file,expected in expected_sources.items():
         if digest(file)!=expected:raise ValueError('new native source drift')
@@ -390,6 +416,13 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
     files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
     if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
+    if proposal.get('range_planner_boundary'):
+        boundary=proposal['range_planner_boundary'];manifest=Path(boundary['manifest']);parameters=Path(boundary['parameters'])
+        if digest(manifest)!=boundary['manifest_sha256'] or digest(parameters)!=boundary['parameters_sha256']:raise ValueError('boundary predictor identity differs')
+        trained=json.loads(manifest.read_text())
+        if trained['parameters_sha256']!=boundary['parameters_sha256'] or trained['source_model']['actor_sha256']!=model['actor_sha256']:raise ValueError('boundary predictor middle differs')
+        if boundary['candidate_alphas']!=[0.,.25,.5,.75,1.] or not boundary['hypotheses']:raise ValueError('declared five-grid hypothetical boundary queries required')
+        files += [manifest,parameters]
     if proposal.get('frozen_prediction'):
         frozen=proposal['frozen_prediction'];file=Path(frozen['manifest'])
         if digest(file)!=frozen['manifest_sha256']:raise ValueError('prospective prediction changed before prepare')
@@ -535,6 +568,11 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     if panel_kind in ('disturbed_two_user','disturbed_declared_user'):expected_route_count*=len({c['event'] for c in cases})
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
     if panel_kind=='disturbed_declared_user':expected_group_size=len({c['alpha'] for c in cases})
+    if panel_kind=='boundary_selected_user':
+        expected_group_size=1
+        groups={}
+        for i,c in enumerate(cases):groups.setdefault((c['bank_index'],c['route'],c['event']),[]).append(i)
+        expected_route_count*=len({c['event'] for c in cases})
     if len(groups)!=expected_route_count or any(len(ids)!=expected_group_size for ids in groups.values()) or any(any(not np.array_equal(x[ids[0]],x[i],equal_nan=True) for i in ids[1:]) for ids in groups.values() for x in leaves):raise ValueError('online per-route initial states differ after user alpha neutralization')
     return dict(authenticated_native_online=True,paired_reset_all_leaves_exact=True,native_leaf_count=len(leaves),alpha_neutralized_only=True,initial_user_alphas=[c['alpha'] for c in cases],initial_previous_alpha='declared user',initial_hold_until_tick=0)
 
@@ -2141,7 +2179,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
         if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
@@ -2206,6 +2244,26 @@ def load(root,*,prefix_phase=False):
         if jax.eval_shape(actor.apply,params,j.zeros(351)).shape!=(2,):raise ValueError('native Actor shape mismatch')
     params=stack([actors[c['mode'] if c['mode'] in actors else 'H75'] for c in cases])
     n=len(cases);horizon=p['horizon_s'];speed_alpha=j.asarray([c.get('query_alpha',c.get('speed_alpha',c['alpha'])) for c in cases]);steer_alpha=j.asarray([c.get('query_alpha',c.get('steer_alpha',c['alpha'])) for c in cases])
+    if capability and p['protocol'].get('range_planner_boundary'):
+        boundary=p['protocol']['range_planner_boundary'];receipts=[];selected=[];by_route={}
+        for i,case in enumerate(cases):
+            lane=jax.tree.map(lambda x:x[i],initial)
+            user=float(case['original_user_alpha']);state=lane.state.replace(alpha=j.asarray(user,lane.state.alpha.dtype))
+            path=jax.tree.map(lambda x:x[i],paths)
+            obs,_,fault=env.observation(state,path,speeds[i],horizon)
+            queries=jax.vmap(lambda a:obs.at[336].set(a))(j.asarray(boundary['candidate_alphas']))
+            latent=jax.vmap(lambda x:actor.apply(actors['H75'],x))(queries)
+            yaw=float(env.physics.observe(state.physical.data)[1][2])
+            permission=bool(adapter.target_permission(lane)&~fault)
+            receipt=query_boundary_alpha(folder,boundary,np.asarray(obs),np.asarray(latent),yaw,float(state.tick)*env.cc.dt,cfg['residual_interface'],user,permission)
+            chosen=receipt['decision']['selected_alpha']
+            if chosen!=case['alpha']:raise ValueError('actual NN choice differs from sealed expected candidate; no physical execution')
+            signature=dict(plan=receipt['plan'],decision=receipt['decision'])
+            if case['route'] in by_route and by_route[case['route']]!=signature:raise ValueError('same-source boundary decisions depend on actual event')
+            by_route[case['route']]=signature;receipts.append(dict(case_id=case['case_id'],**receipt));selected.append(chosen)
+        speed_alpha=j.asarray(selected);steer_alpha=speed_alpha
+        initial=initial.replace(state=initial.state.replace(alpha=speed_alpha))
+        save(root/'range_planner_decisions.json',dict(actual_future_event_input=False,same_source_actual_event_decisions_identical=True,decisions=receipts))
     modes=j.asarray([c['mode_index'] for c in cases],j.int32)
     physical_start=float(snapshot.physical_tick)*env.cc.dt
     pulses=j.asarray(force_pulses(cases,physical_start))

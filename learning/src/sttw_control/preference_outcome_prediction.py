@@ -106,14 +106,16 @@ def predict_outcomes(export,features):
     return np.concatenate([probabilities,continuous],axis=-1).mean(axis=0)
 
 
-def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,source_yaw,task_time_s,hypotheses,interface,*,no_fall_threshold,task_threshold,max_path_error_m):
+def plan_alpha_intervals(export,observation,candidate_alphas,candidate_latents,source_yaw,task_time_s,hypotheses,interface,*,no_fall_threshold,task_threshold,max_path_error_m,interval_function=None):
     """Return risk/task/path-constrained candidate ranges without a future-event input.
 
     Hypotheses are the caller-declared disturbance family, not a feed of actual
     scheduled gusts. Predictions remain empirical and domain-limited; an empty
     set is preserved instead of inventing a safe fallback alpha.
     """
-    from .tolerance_coordination import feasible_alpha_intervals
+    if interval_function is None:
+        from .tolerance_coordination import feasible_alpha_intervals
+    else:feasible_alpha_intervals=interval_function
     grid=np.asarray(candidate_alphas,float);latents=np.asarray(candidate_latents,np.float32)
     if grid.ndim!=1 or latents.shape!=(len(grid),2) or not hypotheses:raise ValueError('candidate latents and nonempty hypothetical disturbance family required')
     features=[]

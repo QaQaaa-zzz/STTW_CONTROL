@@ -16,6 +16,18 @@ def config():
     return json.loads((Path(__file__).parents[1]/'configs/h75_low_speed_lateral_load_screen.json').read_text())
 
 
+def test_nn_boundary_inventory_only_runs_selected_points_and_new_gust_timings():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_nn_range_boundary.json').read_text())
+    rows=fixed_h75_capability_inventory(p)
+    assert len(rows)==4 and {r['alpha'] for r in rows}=={.25,.5}
+    assert {r['preparation_s'] for r in rows}=={.3,.5}
+    assert all(r['force_N']==24. for r in rows)
+    assert all(r['alpha']==(.5 if r['original_user_alpha']==0. else .25) for r in rows)
+    assert [h['preparation_s'] for h in p['range_planner_boundary']['hypotheses']]==[.2,.6]
+    assert not any('onsets_s' in h for h in p['range_planner_boundary']['hypotheses'])
+    assert p['maximum_lower_ticks']==8000 and p['optimizer_updates']==0
+
+
 def test_full_load_grid_and_identical_world_force_across_alpha():
     cfg=config();rows=fixed_h75_capability_inventory(cfg)
     assert len(rows)==len({row['case_id'] for row in rows})==34
