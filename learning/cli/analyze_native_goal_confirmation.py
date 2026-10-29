@@ -2451,6 +2451,15 @@ def render_five_alpha_xy(root,p,rows,raws):
     return links
 
 
+def five_alpha_role_metadata(plan):
+    """Describe sealed batch role without changing labels or historical artifacts."""
+    from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    protocol=plan.get('protocol',plan);partition=five_alpha_partition(protocol)
+    role=protocol.get('data_role',plan.get('data_role'))
+    if not role:role=f"Related bank{partition['bank']} {partition['kind']} batch; no independent TEST"
+    return dict(data_role=role,data_partition=partition['kind'],source_bank_index=partition['bank'],declared_training_rows=partition['training_rows'],declared_development_rows=partition['development_rows'])
+
+
 def analyze_five_alpha_labels(root,p):
     """Native parent/child readback; no physics, fitting or baseline creation."""
     import matplotlib
@@ -2475,7 +2484,7 @@ def analyze_five_alpha_labels(root,p):
             if receipt['plan_sha256']!=digest(child/'plan.json'):raise ValueError('child analysis plan mismatch')
             rows.extend(json.loads((child/'analysis/results.json').read_text()));ticks+=receipt['new_active_lower_ticks']
             with np.load(child/'analysis/features_labels.npz') as z:xs.append(z['features']);ys.append(z['labels'])
-            links.extend(str(f.relative_to(root)) for f in sorted((child/'analysis').glob('*_xy.png')))
+            links.extend(str(Path('..')/f.relative_to(root)) for f in sorted((child/'analysis').glob('*_xy.png')))
         validate_five_alpha_cases(rows,protocol)
         budget=p.get('maximum_active_lower_ticks',protocol['maximum_suffix_lower_ticks'])
         if len(rows)!=protocol['expected_cases'] or ticks>budget:raise ValueError('parent budget/inventory mismatch')
@@ -2530,9 +2539,9 @@ def analyze_five_alpha_labels(root,p):
         summary.append(dict(source_index=source,candidate_alpha=alpha,route=group[0]['route'],lifecycle_role=group[0]['lifecycle_role'],cases=len(group),fall=sum(r['primary']['label_status']=='fall' for r in group),no_fall=sum(r['primary']['label_status']=='no_fall' for r in group),invalid=sum(r['primary']['label_status'].startswith('invalid') for r in group),goal_H10=sum(r['horizons']['10']['goal_arrived'] is True for r in group)))
     atomic_json(out/'summary.json',summary)
     np.savez_compressed(out/'features_labels.npz',features=features,labels=labels,valid=np.isfinite(labels),case_ids=np.array([r['case_id'] for r in rows]),fitting_role=np.array([r['fitting_role'] for r in rows]))
-    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',data_role='Related single-bank DEV; route grouped fitting split; no independent TEST')
+    receipt=dict(plan_sha256=digest(root/'plan.json'),new_suffix_cases=len(rows),source_states=len({r['source_index'] for r in rows}),new_active_lower_ticks=ticks,optimizer_updates=0,new_analysis_physics_ticks=0,feature_dimension=41,valid_labels=int(np.isfinite(labels).sum()),negative_labels=int(np.sum(labels==0)),post_arrival_rows=sum(r['lifecycle_role']=='post_arrival_survival' for r in rows),full_hidden_state_audit='sampler exact-leaf source/sibling checks and saved pre/post planner carry/path/host fingerprints; inherited, not independently unpickled by analyzer',reward_diagnostics='deferred: no complete independent multi-replanning/source-prefix reward reconstruction',source_feature_timing='after common source-boundary planner, before first suffix physics',**five_alpha_role_metadata(p))
     atomic_json(out/'receipt.json',receipt)
-    (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Full H10 outcome includes recorded pre-source arrival latch, not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
+    (out/'README.md').write_text('# Five-alpha same-state labels\n\n'+five_alpha_role_metadata(p)['data_role']+'\n\nPartition: '+five_alpha_role_metadata(p)['data_partition']+'; declared training/development rows: '+str(partition['training_rows'])+'/'+str(partition['development_rows'])+'.\n\n'+ '\n\n'.join(f'![Paired five-alpha XY]({name})' for name in links)+'\n\nSource suffix XY only; no baseline. Full H10 outcome includes recorded pre-source arrival latch, not a new recovery. Preparation falls are negative; engineering faults are invalid. Features and labels: features_labels.npz; per-case results: results.json. Reward diagnostics remain deferred; this is not complete experimental diagnostics.\n')
     return receipt
 
 if __name__=='__main__':

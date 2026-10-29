@@ -58,3 +58,15 @@ def test_features_use_prephysics_half_state_and_event_invariant_queries():
     np.testing.assert_allclose(x[:,39],1.5)
     raws['3']['composed_latent'][0,0]=.3
     with pytest.raises(AssertionError):m.five_alpha_feature_rows(cases,src,raws,interface)
+
+
+def test_role_metadata_uses_sealed_training_only_bank4_protocol():
+    p=json.loads((ROOT/'learning/configs/h75_five_alpha_bank4_labels.json').read_text())
+    role=m.five_alpha_role_metadata(dict(protocol=p,data_role='stale outer description'))
+    assert role['data_role']==p['data_role']
+    assert role['data_partition']=='training_only'
+    assert role['source_bank_index']==4
+    assert (role['declared_training_rows'],role['declared_development_rows'])==(560,0)
+    old,_=inventory();legacy=m.five_alpha_role_metadata(dict(protocol=old))
+    assert legacy['data_partition']=='mixed'
+    assert (legacy['declared_training_rows'],legacy['declared_development_rows'])==(160,120)
