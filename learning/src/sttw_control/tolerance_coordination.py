@@ -42,6 +42,67 @@ def load_export(path):
     return params
 
 
+def load_five_alpha_export(path, *, expected_export_sha256,
+                           candidate_alphas=(0.,.25,.5,.75,1.), hypothetical_duration_s=.15):
+    """Explicit transport-only loader for fixed-last five-alpha fit artifacts.
+
+    Caller supplies an independently frozen export-manifest hash. Authenticate
+    parameter/selection/checkpoint/config/data-receipt identities and the small
+    source feature artifacts; do not rescan historical physics or adopt a model.
+    Arm0 is a three-seed 41-16-16-1 ensemble. Legacy load_export is unchanged.
+    """
+    root=Path(path);root=root if root.is_dir() else root.parent
+    export_path=root/'export_manifest.json'
+    if not isinstance(expected_export_sha256,str) or len(expected_export_sha256)!=64 or sha(export_path)!=expected_export_sha256:
+        raise ValueError('five-alpha export manifest identity differs')
+    export=json.loads(export_path.read_text());selection_path=root/'selection_manifest.json'
+    manifest=json.loads(selection_path.read_text());seal=json.loads((root/'selection_seal.json').read_text())
+    grid=[0.,.25,.5,.75,1.]
+    if (list(candidate_alphas)!=grid or hypothetical_duration_s!=.15 or
+        export.get('candidate_alpha_grid')!=grid or export.get('source_user_alpha')!=.5 or
+        export.get('arms')!=['bce_rank_last'] or manifest.get('kind')!='five_alpha_fixed_last' or
+        manifest.get('candidate_alpha_grid')!=grid or manifest.get('feature_dimension')!=41):
+        raise ValueError('five-alpha grid/arm/feature/duration contract differs')
+    if export['parameters_sha256']!=sha(root/'parameters.npz') or export['selection_manifest_sha256']!=sha(selection_path) or seal['selection_manifest_sha256']!=sha(selection_path):
+        raise ValueError('five-alpha parameters or selection seal differs')
+    if sha(manifest['config'])!=manifest['config_sha256'] or sha(root/'data_receipt.json')!=manifest['data_receipt_sha256']:
+        raise ValueError('five-alpha config/data receipt differs')
+    cfg=json.loads(Path(manifest['config']).read_text());receipt=json.loads((root/'data_receipt.json').read_text())
+    if (cfg['architecture']['hidden']!=[16,16] or cfg['training']['seeds']!=[0,1,2] or
+        cfg['features']['full_dim']!=41 or cfg['features']['full_indices']!=list(range(300,320))+list(range(337,351)) or
+        cfg['training'].get('fixed_last') is not True):raise ValueError('five-alpha network/config feature semantics differ')
+    selected=manifest['selected']
+    if len(selected)!=3 or [r['seed'] for r in selected]!=[0,1,2] or seal['selected_sha256']!={r['file']:r['sha256'] for r in selected}:
+        raise ValueError('five-alpha three-seed checkpoint inventory differs')
+    with np.load(root/'parameters.npz',allow_pickle=False) as z:params={k:z[k].copy() for k in z.files}
+    shapes=dict(w0=(1,3,41,16),b0=(1,3,16),w1=(1,3,16,16),b1=(1,3,16),w2=(1,3,16,1),b2=(1,3,1))
+    if set(params)!=set(shapes) or any(params[k].shape!=shape or params[k].dtype!=np.float32 or not np.isfinite(params[k]).all() for k,shape in shapes.items()):
+        raise ValueError('five-alpha parameter layout/dtype/finiteness differs')
+    # Verify the NPZ is the actual selected checkpoint export, not merely a
+    # separately rehashed array file. Deserialization follows SHA authentication.
+    import torch
+    for seed,row in enumerate(selected):
+        if sha(row['file'])!=row['sha256']:raise ValueError('five-alpha checkpoint identity differs')
+        if any(row.get(k)!=v for k,v in dict(dim=41,arm='bce_rank',selector='last',step=cfg['training']['updates_per_model_seed']).items()):raise ValueError('five-alpha selection metadata differs')
+        state=torch.load(row['file'],map_location='cpu',weights_only=True)
+        if any(state.get(k)!=row[k] for k in ('dim','seed','step','arm','selector')):raise ValueError('five-alpha checkpoint metadata differs')
+        for i,layer in enumerate((0,2,4)):
+            for key,value in [(f'w{i}',state['state_dict'][f'{layer}.weight'].numpy().T),(f'b{i}',state['state_dict'][f'{layer}.bias'].numpy())]:
+                if not np.array_equal(params[key][0,seed],value):raise ValueError('five-alpha exported weights differ from checkpoint')
+    for analysis in cfg['dataset']['analyses']:
+        analysis=Path(analysis);feature_file=analysis/'features_labels.npz';plan_file=analysis.parent/'plan.json'
+        for file in (feature_file,plan_file):
+            if receipt['inputs'].get(str(file))!=sha(file):raise ValueError('five-alpha feature/source-plan identity differs')
+        protocol=json.loads(plan_file.read_text())['protocol']
+        if protocol['duration_s']!=hypothetical_duration_s or protocol['candidate_alphas']!=grid or any(g['source_user_alpha']!=.5 for g in protocol['source_groups']):
+            raise ValueError('five-alpha source duration/grid/user semantics differ')
+        with np.load(feature_file,allow_pickle=False) as z:features=z['features']
+        if (features.ndim!=2 or features.shape[1]!=41 or not np.isfinite(features).all() or
+            not np.isin(features[:,34],grid).all() or not np.allclose(features[:,39],hypothetical_duration_s/.1,rtol=0,atol=1e-6)):
+            raise ValueError('five-alpha saved feature duration/grid differs')
+    return params
+
+
 def infer_probabilities(params,features):
     """Return [arm, sample] by averaging three sigmoid probabilities."""
     import jax.numpy as j
