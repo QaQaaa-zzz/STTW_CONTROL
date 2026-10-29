@@ -1468,6 +1468,24 @@ def load_online40_comparison_cache(root,p,paths,keys,verified_files=None):
     return dict(rows=rows,raws=raws,executed=executed,rebuilt=rebuilt)
 
 
+def verify_response_sources(root, plan):
+    """Keep execution identities immutable; document the analysis-only count repair."""
+    revisions=[]
+    for file,sha in {**plan['source_sha256'],**plan['input_sha256']}.items():
+        if digest(file)==sha:continue
+        frozen=root/'source'/Path(file).name
+        old="*(1+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms"
+        new="*(int(protocol.get('include_nominal',True))+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms"
+        if (file not in plan['source_sha256'] or Path(file).name!='audit_native_goal_initial.py'
+                or not frozen.is_file() or digest(frozen)!=sha
+                or old not in frozen.read_text()
+                or frozen.read_text().replace(old,new)!=Path(file).read_text()):
+            raise ValueError('executed source/input drift '+file)
+        revisions.append(dict(file=file,executed_snapshot=str(frozen),executed_sha256=sha,
+            analysis_sha256=digest(file),reason='Initial audit count honors declared include_nominal; no control or raw data change'))
+    return revisions
+
+
 def analyze_response(root,p):
     run=root/'evaluation';out=root/'analysis';status=json.loads((run/'status.json').read_text())
     speed_comparison=p.get('mode')=='speed_query_online60'
@@ -1490,8 +1508,7 @@ def analyze_response(root,p):
         raise ValueError(f'complete declared{count} H10 cases required')
     if len({c['case_id'] for c in index})!=count:raise ValueError('duplicate case identity')
     if digest(root/'plan.json')!=json.loads((root/'seal.json').read_text())['plan_sha256']:raise ValueError('plan drift')
-    for file,sha in {**p['source_sha256'],**p['input_sha256']}.items():
-        if digest(file)!=sha:raise ValueError('executed source/input drift '+file)
+    analysis_revisions=verify_response_sources(root,p)
     manifest=json.loads((run/'manifest.json').read_text())
     for key,expected in (('plan_sha256',digest(root/'plan.json')),('config',p['config']),('models',p['models']),('cases',inventory),('source',p['initial_source'])):
         if manifest[key]!=expected:raise ValueError('manifest identity mismatch '+key)
@@ -1512,6 +1529,7 @@ def analyze_response(root,p):
     if len(expected)!=count or len({r['route'] for r in inventory})!=(guard_layout['routes'] if guard_comparison else frozen_layout['routes'] if frozen else 2 if speed_comparison else 4 if broaden or preference else 2) or sum(not r['force_N'] for r in inventory)!=(guard_layout['nominal_new_cases'] if guard_comparison else 12 if speed_comparison else frozen_layout['nominal_cases'] if frozen else 24 if prior else 40 if broaden or preference else 8 if temporal else 24 if tolerance else 20 if confirmation else 2 if online else 12 if switching else 6):
         raise ValueError('declared response inventory invalid')
     out.mkdir(exist_ok=False);helper=Path(__file__).with_name('audit_native_goal_initial.py')
+    atomic_json(out/'analysis_source_revisions.json',analysis_revisions)
     subprocess.run([sys.executable,'-B',str(helper),str(root),str(out/'initial_carry_review.json')],check=True)
     initial=json.loads((out/'initial_carry_review.json').read_text())
     paths={};goals={};trees={};raws={};rows=[];ticks=0;rebuilt={};executed={}
@@ -1525,7 +1543,9 @@ def analyze_response(root,p):
         case=decision['case_id']
         if case in by_case:raise ValueError('more than one replan')
         tick=decision['task_tick']
-        if tick not in range(200,1801,200):raise ValueError('replan outside declared1..9s boundaries')
+        scheduled=p.get('protocol',{}).get('scheduled_replan_s')
+        allowed_ticks=[round(scheduled/.005)] if scheduled is not None else range(200,1801,200)
+        if tick not in allowed_ticks:raise ValueError('replan outside declared boundaries')
         by_case[case]=decision
     for route in {analysis_path_key(r) for r in inventory}:
         with np.load(run/(route+'_path.npz')) as z:paths[route]=dict(z)

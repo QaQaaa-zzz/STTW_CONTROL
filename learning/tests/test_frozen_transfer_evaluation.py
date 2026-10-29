@@ -101,3 +101,18 @@ def test_scheduled_timing_probe_preserves_budget_and_only_declared_event():
     assert not replan_requested(**dict(args,already_replanned=True),task_time_s=2.8)
     assert not replan_requested(**dict(args,contact=True),task_time_s=2.8)
     assert scheduled_chunk_steps(protocol()) is None
+
+
+def test_analysis_count_repair_preserves_execution_identity(tmp_path):
+    import hashlib
+    m=module('analyze_native_goal_confirmation')
+    f=tmp_path/'audit_native_goal_initial.py';(tmp_path/'source').mkdir()
+    old="count=x*(1+len(protocol['forces_N'])*len(protocol['onsets_s']))*arms"
+    new=old.replace("*(1+", "*(int(protocol.get('include_nominal',True))+")
+    (tmp_path/'source'/f.name).write_text(old);f.write_text(new)
+    plan=dict(source_sha256={str(f):hashlib.sha256(old.encode()).hexdigest()},input_sha256={})
+    assert len(m.verify_response_sources(tmp_path,plan))==1
+    f.write_text(new+'\nother_change=True')
+    with pytest.raises(ValueError):m.verify_response_sources(tmp_path,plan)
+    f.write_text(new);(tmp_path/'source'/f.name).write_text('tampered')
+    with pytest.raises(ValueError):m.verify_response_sources(tmp_path,plan)
