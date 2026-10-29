@@ -222,3 +222,13 @@ def test_fixed_capability_S_extension_requires_exact_two_routes_and_goal_identit
     with pytest.raises(ValueError,match='complete'):m.validate_fixed_capability_cases(rows[:-1],protocol)
     rows[0]['old_goal_xy']=[11.,0.]
     with pytest.raises(ValueError,match='goal identity'):m.validate_fixed_capability_cases(rows,protocol)
+
+
+def test_low_speed_tight_turn_requires_declared_four_routes_and_all_alphas():
+    import json
+    from pathlib import Path
+    protocol=json.loads((Path(__file__).parents[1]/'configs/h75_friction08_low_speed_tight_turn.json').read_text())
+    rows=[dict(route=c['route'],alpha=a,mode='H75',force_N=0.,bank_index=6) for c in protocol['route_contexts'] for a in protocol['alphas']]
+    m.validate_fixed_capability_cases(rows,protocol)
+    with pytest.raises(ValueError,match='complete'):
+        m.validate_fixed_capability_cases(rows[:-1],protocol)

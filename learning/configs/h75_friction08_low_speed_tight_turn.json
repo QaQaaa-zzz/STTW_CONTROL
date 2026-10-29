@@ -1,0 +1,70 @@
+{
+  "experiment_id": "STTW-H75-FRICTION08-LOW-SPEED-TIGHT-TURN",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    6
+  ],
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 20,
+  "maximum_lower_ticks": 40000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    0.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "left90_R0p9_v1p6",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R1p3_v1p6",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 1.6,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R0p9_v2p0",
+      "family": 1,
+      "radius_m": 0.9,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "left90_R1p3_v2p0",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 90.0,
+      "speed": 2.0,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "data_role": "Exploratory development only; fresh bank6 starts at actual2.548m/s and transitions to requested1.6/2.0, not a settled low-speed initial state. Four routes times five alpha. No new baseline or disturbance.",
+  "scoring": "All20 original goal/contact, actual XY, true speed/governed speed and inclination; preserve frozen1.5m/s reference floor. Lower true speeds possible but not assumed dangerous without observed evidence.",
+  "stop_rule": "Atmost20 H10 episodes/max40000 lower ticks,0optimizer/0external force; stop and preserve partial on engineering error. No auto expansion, limit or physical change.",
+  "capability_variant": "low_speed_tight_turn",
+  "question": "Exploratory fixed-H75 screen: can tight low-speed tracking make alpha0 reach the frozen 1.5m/s governed floor and lose balance while another alpha remains viable? No forced outcome; all failures retained."
+}

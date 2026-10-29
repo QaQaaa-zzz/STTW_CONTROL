@@ -2785,9 +2785,10 @@ def analyze_five_alpha_online14(root,p):
 def validate_fixed_capability_cases(cases,protocol):
     grid=[0.,.25,.5,.75,1.];routes={c['route'] for c in cases}
     variant=protocol.get('capability_variant');extended=variant=='S_goal_extension'
-    if variant not in (None,'S_goal_extension'):raise ValueError('unknown capability variant')
-    expected_routes={'S_left_90_R1p8','S_right_90_R1p8'} if extended else routes
-    if protocol['alphas']!=grid or len(cases)!=(10 if extended else 35) or len(routes)!=(2 if extended else 7) or routes!=expected_routes or {(c['route'],c['alpha']) for c in cases}!={(r,a) for r in routes for a in grid}:raise ValueError('complete declared route fivefixedalpha capability panel required')
+    if variant not in (None,'S_goal_extension','low_speed_tight_turn'):raise ValueError('unknown capability variant')
+    low_speed=variant=='low_speed_tight_turn'
+    expected_routes={c['route'] for c in protocol['route_contexts']} if low_speed else {'S_left_90_R1p8','S_right_90_R1p8'} if extended else routes
+    if protocol['alphas']!=grid or len(cases)!=(20 if low_speed else 10 if extended else 35) or len(routes)!=(4 if low_speed else 2 if extended else 7) or routes!=expected_routes or {(c['route'],c['alpha']) for c in cases}!={(r,a) for r in routes for a in grid}:raise ValueError('complete declared route fivefixedalpha capability panel required')
     if extended:
         if protocol.get('goal_extension_m')!=3. or protocol.get('expected_cases')!=10 or protocol.get('maximum_lower_ticks')!=20000:raise ValueError('S goal extension contract differs')
         for c in cases:

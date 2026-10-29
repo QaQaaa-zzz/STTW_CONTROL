@@ -136,16 +136,20 @@ def fixed_h75_capability_inventory(p):
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
     variant=p.get('capability_variant')
     if variant=='S_goal_extension':required.update(expected_cases=10,maximum_lower_ticks=20000)
+    elif variant=='low_speed_tight_turn':required.update(expected_cases=20,maximum_lower_ticks=40000)
     elif variant is not None:raise ValueError('unknown capability variant')
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('fixed H75 capability contract differs')
     contexts=p['route_contexts']
     if variant=='S_goal_extension':
         if p.get('goal_extension_m')!=3. or len(contexts)!=2 or {c['route'] for c in contexts}!={'S_left_90_R1p8','S_right_90_R1p8'} or any(c['family']!=2 or c.get('goal_distance_m')!=p['goal_source']['paths'][c['route']]['new_goal_s'] for c in contexts):raise ValueError('two S-route goal-only extension required')
+    elif variant=='low_speed_tight_turn':
+        expected={(v,r) for v,r in itertools.product((1.6,2.),(.9,1.3))}
+        if len(contexts)!=4 or len({c['route'] for c in contexts})!=4 or {(c['speed'],c['radius_m']) for c in contexts}!=expected or any(c['family']!=1 or c['angle_deg']!=90. or c['direction']!=1. or c.get('goal_offset_after_turn_m')!=4. for c in contexts):raise ValueError('four declared low-speed left tight turns required')
     elif len(contexts)!=7 or len({c['route'] for c in contexts})!=7 or {c['family'] for c in contexts}!={0,1,2}:raise ValueError('seven original route identities required')
     return [dict(route=c['route'],speed=c['speed'],event='zero',force_N=0.,onset_s=0.,duration_s=.15,
         bank_index=6,path_key=f'bank6_{c["route"]}',case_id=f'bank6/{c["route"]}/H75/a{a:g}/zero',
         mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,
-        **({k:p['goal_source']['paths'][c['route']][k] for k in ('old_goal_xy','new_goal_xy')}|{'goal_extension_m':3.} if variant else {}))
+        **({k:p['goal_source']['paths'][c['route']][k] for k in ('old_goal_xy','new_goal_xy')}|{'goal_extension_m':3.} if variant=='S_goal_extension' else {}))
         for c,a in itertools.product(contexts,p['alphas'])]
 
 
@@ -184,6 +188,8 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         originals={c['route']:c for c in previous['contexts']}
         if any({k:v for k,v in c.items() if k!='goal_distance_m'}!=originals.get(c['route']) for c in proposal['route_contexts']):raise ValueError('original S curve/speed changed')
         validate_goal_extension_source(proposal,source)
+    elif proposal.get('capability_variant')=='low_speed_tight_turn':
+        if previous['config']['path']['goal_section_offset_after_turn_m']!=4. or previous['config']['residual_interface']['speed_reference_bounds_m_s']!=[1.5,3.5]:raise ValueError('low-speed screen preserves exit goal and frozen speed authority')
     elif previous['contexts']!=proposal['route_contexts']:raise ValueError('original routes differ')
     if previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('frozen H75 identity differs')
     model=previous['models']['H75']
