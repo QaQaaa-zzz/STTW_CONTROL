@@ -32,10 +32,10 @@ if __name__=='__main__':
         notify(args.output.parent,'STTW容扰覆盖训练流水线完成','3000步训练与离线分析完成；未执行控制物理。')
     elif args.stage=='five-alpha-fit':
         from engineer_reference_bias import notify
-        try:five_alpha_fit(args.config,args.analysis,args.output,on_training_complete=lambda receipt:notify(args.output.parent,'STTW五alpha容扰训练阶段完成','三seed各1000步固定last已结束，开始离线分析。'))
+        try:five_alpha_fit(args.config,args.analysis,args.output,on_training_complete=lambda receipt:notify(args.output.parent,'STTW五alpha容扰训练阶段完成',f"三seed固定预算已结束，共{receipt['actual_optimizer_updates']}次更新，开始离线分析。"))
         except BaseException:
             notify(args.output.parent,'STTW五alpha容扰训练报错','保留实际更新与日志，不自动重试。')
             raise
-        notify(args.output.parent,'STTW五alpha容扰流水线完成','3000步训练、分组指标及三checkpoint导出完成；未执行控制物理。')
+        notify(args.output.parent,'STTW五alpha容扰流水线完成','固定预算训练、分组指标及三checkpoint导出完成；未执行控制物理。')
     elif args.stage=='confirmation-eval':confirmation_evaluate(args.manifest,args.analysis,args.output)
     else:evaluate(args.output,args.heldout_analysis)

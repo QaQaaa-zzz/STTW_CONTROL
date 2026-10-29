@@ -145,3 +145,14 @@ def test_multi_analysis_rejects_same_source_semantics(dataset,tmp_path):
     # Different directory is insufficient: copied metadata still describes the same source task states.
     cfg=copy.deepcopy(cfg);cfg['dataset'].pop('analysis');cfg['dataset'].update(analyses=[str(analysis),str(alias/'analysis')],expected_cases=560,expected_training_rows=320,expected_development_rows=240)
     with pytest.raises(ValueError,match='duplicate semantic source'):m.load_five_alpha_dataset(None,cfg)
+
+
+def test_short_fit_budget_matches_three_fixed_seeds():
+    cfg=json.loads((ROOT/'learning/configs/h75_tolerance_predictor_short_fit.json').read_text())
+    m.validate_five_alpha_fit_config(cfg)
+    assert cfg['training']['updates_per_model_seed']==200
+    for steps in (0,True,200.5,1001):
+        bad=copy.deepcopy(cfg);bad['training']['updates_per_model_seed']=steps
+        with pytest.raises(ValueError):m.validate_five_alpha_fit_config(bad)
+    bad=copy.deepcopy(cfg);bad['budget']['maximum_optimizer_updates']=3000
+    with pytest.raises(ValueError):m.validate_five_alpha_fit_config(bad)

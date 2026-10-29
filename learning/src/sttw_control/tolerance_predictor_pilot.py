@@ -847,17 +847,20 @@ def validate_matched_full_prior(cfg):
 def validate_five_alpha_fit_config(cfg):
     """Separate opt-in budget; historical pilot schemas remain unchanged."""
     t=cfg['training'];b=cfg['budget'];f=cfg['features'];d=cfg['dataset']
+    steps=t['updates_per_model_seed']
+    if isinstance(steps,bool) or not isinstance(steps,int) or not 1<=steps<=1000:
+        raise ValueError('fixed per-seed updates must be an integer in1..1000')
     analyses=d.get('analyses')
     batches=len(analyses) if analyses is not None else 1
     if batches not in (1,2) or (analyses is not None and (not isinstance(analyses,list) or len(set(analyses))!=batches or 'analysis' in d)):
         raise ValueError('one or two distinct analysis batches required')
     if (cfg['mode']!='five_alpha_fit' or cfg['architecture']['hidden']!=[16,16] or
-        t['seeds']!=[0,1,2] or t['updates_per_model_seed']!=1000 or
-        t['maximum_total_optimizer_updates']!=3000 or t['learning_rate']!=.001 or
+        t['seeds']!=[0,1,2] or t['updates_per_model_seed']!=steps or
+        t['maximum_total_optimizer_updates']!=3*steps or t['learning_rate']!=.001 or
         t['weight_decay']!=.001 or t['optimizer']!='AdamW' or t['device']!='CPU' or
         t['fixed_last'] is not True or t['full_batch'] is not True or t.get('ranking_weight',.5)!=.5 or
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
-        b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3000,automatic_extensions=False) or
+        b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
         (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows'])!=(280*batches,160*batches,120*batches)):
         raise ValueError('frozen five-alpha fitting contract mismatch')
@@ -1017,7 +1020,7 @@ def five_alpha_grouped_metrics(y,p,meta):
 
 
 def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
-    """Explicit CPU3x1000 fixed-last BCE+.5ranking; never launches physics."""
+    """Explicit budgeted three-seed CPU fixed-last BCE+.5ranking; never launches physics."""
     import time
     import torch
     from torch.utils.tensorboard import SummaryWriter
@@ -1029,12 +1032,13 @@ def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
     data=load_five_alpha_dataset(requested,cfg);train=data['training'];dev=data['development']
     if len(np.unique(train['y']))!=2:raise ValueError('training needs both resolved classes; no automatic resampling')
     output.mkdir(parents=True);write_json(output/'data_receipt.json',data['receipt']);writer=SummaryWriter(str(output/'tensorboard'));updates=0;per_seed={};selected=[];inflight=False;timings=dict(initialization_s=time.monotonic()-started,optimization_s=0.,validation_s=0.)
+    steps=cfg['training']['updates_per_model_seed']
     x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y']);pairs=discordant_pairs(train['y'],train['meta']);models=[]
     try:
         writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
         for seed in (0,1,2):
             torch.manual_seed(seed);model=make_model(41);optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
-            for step in range(1,1001):
+            for step in range(1,steps+1):
                 tick=time.monotonic();model.train();optimizer.zero_grad();logit=model(x).squeeze(-1);bce=torch.nn.functional.binary_cross_entropy_with_logits(logit,y);rank=ranking_loss(logit,pairs);loss=bce+.5*rank
                 if not torch.isfinite(loss):raise ValueError('nonfinite five-alpha loss')
                 loss.backward()
@@ -1044,12 +1048,12 @@ def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
                 row=dict(seed=seed,step=step,bce=float(bce.detach()),rank_loss=float(rank.detach()),total_loss=float(loss.detach()))
                 for key in ('bce','rank_loss','total_loss'):writer.add_scalar(f'seed{seed}/train/{key}',row[key],step)
                 writer.add_scalar('train/optimizer_updates',updates,updates)
-                if step%100==0:
+                if step%100==0 or step==steps:
                     tick=time.monotonic();score=metrics(dev['y'],predict(model,dev['full']),dev['meta']);row['development_brier']=score['brier'];writer.add_scalar(f'seed{seed}/development/brier',score['brier'],step);timings['validation_s']+=time.monotonic()-tick;writer.flush()
                 with (output/'history.jsonl').open('a') as f:f.write(json.dumps(row,allow_nan=False)+'\n')
                 write_json(output/'status.json',dict(phase='fitting',actual_optimizer_updates=updates,per_seed=per_seed,timings=timings))
-            file=output/f'full_state_mlp_seed{seed}_last.pt';torch.save(dict(state_dict=model.state_dict(),dim=41,seed=seed,step=1000,arm='bce_rank',selector='last'),file)
-            selected.append(dict(model='full_state_mlp',key='full',dim=41,seed=seed,step=1000,arm='bce_rank',selector='last',file=str(file),sha256=digest(file)));models.append(model)
+            file=output/f'full_state_mlp_seed{seed}_last.pt';torch.save(dict(state_dict=model.state_dict(),dim=41,seed=seed,step=steps,arm='bce_rank',selector='last'),file)
+            selected.append(dict(model='full_state_mlp',key='full',dim=41,seed=seed,step=steps,arm='bce_rank',selector='last',file=str(file),sha256=digest(file)));models.append(model)
         manifest=dict(kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Related single-bank DEV; no calibration, safety or online gain claim')
         write_json(output/'selection_manifest.json',manifest);write_json(output/'selection_seal.json',dict(selection_manifest_sha256=digest(output/'selection_manifest.json'),selected_sha256={r['file']:r['sha256'] for r in selected}))
         training_receipt=dict(actual_optimizer_updates=updates,per_seed=per_seed,timings=timings,stage_notified=False)
