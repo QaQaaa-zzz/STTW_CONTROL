@@ -4,6 +4,30 @@ import pytest
 from sttw_control import tolerance_coordination as coordinator
 
 
+def test_alpha_interval_output_preserves_unsafe_interior_and_explicit_empty_set():
+    grid=[0.,.25,.5,.75,1.]
+    kwargs=dict(no_fall_threshold=.9,task_threshold=.8,max_path_error_m=.3)
+    result=coordinator.feasible_alpha_intervals(grid,[.95]*5,[.9,.9,.2,.9,.9],[.2]*5,**kwargs)
+    assert result['estimated_intervals']==[[0.,.25],[.75,1.]]
+    assert result['feasible_candidates']==[0.,.25,.75,1.]
+    assert not result['empty']
+    empty=coordinator.feasible_alpha_intervals(grid,[.2]*5,[.9]*5,[.2]*5,**kwargs)
+    assert empty['empty'] and empty['estimated_intervals']==[]
+    assert empty['feasible_candidates']==[]
+
+
+def test_alpha_interval_outputs_respect_risk_threshold_and_missing_predictions():
+    grid=[0.,.25,.5,.75,1.];q=[.6,.8,.95,.99,np.nan]
+    kwargs=dict(task_threshold=.8,max_path_error_m=.3)
+    low=coordinator.feasible_alpha_intervals(grid,q,[.9]*5,[.2]*5,no_fall_threshold=.7,**kwargs)
+    high=coordinator.feasible_alpha_intervals(grid,q,[.9]*5,[.2]*5,no_fall_threshold=.98,**kwargs)
+    assert set(high['feasible_candidates'])<=set(low['feasible_candidates'])
+    assert high['estimated_intervals']==[[.75,.75]]
+    assert not high['valid_prediction_mask'][-1]
+    with pytest.raises(ValueError,match='prediction per'):
+        coordinator.feasible_alpha_intervals(grid,[.9],[.9]*5,[.2]*5,no_fall_threshold=.9,**kwargs)
+
+
 @pytest.fixture
 def interface():
     return dict(speed_positive_scale_m_s=.25,speed_negative_scale_m_s=1.,steer_scale_rad=.2,speed_reference_bounds_m_s=[1.5,3.5],steer_reference_bound_rad=.35)

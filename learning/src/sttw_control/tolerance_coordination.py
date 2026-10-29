@@ -8,6 +8,36 @@ import importlib.util
 import numpy as np
 
 
+def feasible_alpha_intervals(candidate_alphas,no_fall_probability,task_probability,path_error_prediction,*,
+                             no_fall_threshold,task_threshold,max_path_error_m):
+    """Threshold model outputs into possibly disconnected, approximate grid intervals.
+
+    Endpoints describe consecutive qualifying queried samples. Interior alpha
+    values remain unverified; no monotonicity, interpolation or safety guarantee
+    is assumed. Missing/nonfinite model outputs are infeasible, never repaired.
+    Empty output is an explicit result, not an implicit alpha fallback.
+    """
+    grid=np.asarray(candidate_alphas,float);q=np.asarray(no_fall_probability,float)
+    task=np.asarray(task_probability,float);path=np.asarray(path_error_prediction,float)
+    if (grid.ndim!=1 or len(grid)==0 or not np.isfinite(grid).all()
+        or np.any(np.diff(grid)<=0) or np.any((grid<0)|(grid>1))):
+        raise ValueError('finite strictly increasing alpha grid in[0,1] required')
+    if any(x.shape!=grid.shape for x in (q,task,path)):raise ValueError('one prediction per queried alpha required')
+    if (not np.isfinite([no_fall_threshold,task_threshold,max_path_error_m]).all()
+        or not 0<=no_fall_threshold<=1 or not 0<=task_threshold<=1 or max_path_error_m<0):
+        raise ValueError('finite probability thresholds and nonnegative path limit required')
+    if any(np.any(np.isfinite(x)&((x<0)|(x>1))) for x in (q,task)) or np.any(np.isfinite(path)&(path<0)):
+        raise ValueError('probabilities in[0,1] and nonnegative path error required')
+    valid=np.isfinite(q)&np.isfinite(task)&np.isfinite(path)
+    mask=valid&(q>=no_fall_threshold)&(task>=task_threshold)&(path<=max_path_error_m)
+    indices=np.flatnonzero(mask);runs=np.split(indices,np.flatnonzero(np.diff(indices)>1)+1) if len(indices) else []
+    return dict(candidate_alphas=grid.tolist(),feasible_mask=mask.tolist(),valid_prediction_mask=valid.tolist(),
+        estimated_intervals=[[float(grid[r[0]]),float(grid[r[-1]])] for r in runs],
+        feasible_candidates=grid[mask].tolist(),empty=not bool(len(indices)),
+        no_fall_threshold=float(no_fall_threshold),task_threshold=float(task_threshold),max_path_error_m=float(max_path_error_m),
+        interpretation='Consecutive qualifying queried samples; continuous interior unverified. Model estimates, no safety guarantee.')
+
+
 class OnlineCarry(NamedTuple):
     native: Any
     latched: Any
