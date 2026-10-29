@@ -125,3 +125,20 @@ def test_two_alpha_per_event_reset_audit_preserves_complete_pairing(alphas):
     bad=initial.replace(hidden=initial.hidden.at[1].set(999))
     with pytest.raises(ValueError,match='neutralization'):
         audit_five_alpha_online_initial(bad,rows,700,panel_kind='disturbed_declared_user',expected_route_count=1)
+
+
+def test_mirrored_nominal_sources_preserve_direction_and_have_no_force():
+    p=config();p.update(alphas=[0.],forces_N=[],onsets_s=[],include_nominal=True,expected_cases=2,maximum_lower_ticks=4000)
+    left=copy.deepcopy(p['route_contexts'][0]);right=copy.deepcopy(left)
+    left.update(route='left',direction=1.);right.update(route='right',direction=-1.)
+    p['route_contexts']=[left,right]
+    rows=fixed_h75_capability_inventory(p)
+    assert len(rows)==2 and all(r['force_N']==0. for r in rows)
+    assert {r['route'] for r in rows}=={'left','right'}
+    p['route_contexts'][1]['direction']=0.
+    with pytest.raises(ValueError,match='geometries'):fixed_h75_capability_inventory(p)
+
+
+def test_missing_half_of_disturbance_grid_is_rejected():
+    p=config();p['forces_N']=[]
+    with pytest.raises(ValueError,match='grid'):fixed_h75_capability_inventory(p)

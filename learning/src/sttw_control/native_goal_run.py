@@ -152,7 +152,7 @@ def low_speed_lateral_load_inventory(p):
     excluded=p.get('excluded_completed_cases',[])
     if len({r['case_id'] for r in excluded})!=len(excluded):raise ValueError('unique reused complete cases required')
     count=sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))-len(excluded)
-    if (not forces or not onsets or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
+    if (bool(forces)!=bool(onsets) or (not forces and not p.get('include_nominal',True)) or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
         or any(not math.isfinite(t) or t<=0 or t+duration>10 for t in onsets)
@@ -164,7 +164,7 @@ def low_speed_lateral_load_inventory(p):
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
         raise ValueError('complete candidate artifact identity required')
     if (not contexts or len({c['route'] for c in contexts})!=len(contexts)
-        or any(c['family']!=1 or c['angle_deg']!=90. or not 1.5<=c['speed']<=2.2 or c['direction']!=1.
+        or any(c['family']!=1 or c['angle_deg']!=90. or not 1.5<=c['speed']<=2.2 or c['direction'] not in (-1.,1.)
                or not math.isfinite(c['radius_m']) or c['radius_m']<=0 or c.get('goal_offset_after_turn_m')!=4. for c in contexts)):
         raise ValueError('unique declared low-speed tight-turn geometries required')
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
@@ -175,7 +175,7 @@ def low_speed_lateral_load_inventory(p):
     combinations=((context,event,alpha) for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
     for context,event,alpha in combinations:
         route=context['route'];source=context.get('state_source');start=source['source_task_tick']*.005 if source else 0.
-        if start+p['duration_s']+max(onsets)>10:raise ValueError('conditional force extends beyond task horizon')
+        if start+p['duration_s']+max(onsets,default=0.)>10:raise ValueError('conditional force extends beyond task horizon')
         onset=event['onset_s']+start if event['force_N'] else 0.
         event_name=f"prep{event['onset_s']:g}_F{event['force_N']:+g}" if source and event['force_N'] else event['event']
         rows.append(dict(route=route,speed=context['speed'],**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
