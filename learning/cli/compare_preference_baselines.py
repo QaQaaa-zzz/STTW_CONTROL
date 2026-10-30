@@ -15,6 +15,7 @@ from analyze_native_goal_confirmation import rescore_original_task
 def compare(baselines, proposed, user_alpha):
     roots = [baselines.resolve(), proposed.resolve()]
     plans = [json.loads((r / 'plan.json').read_text()) for r in roots]
+    baseline_returns = 'causal_preference_return' in plans[0]['protocol']
     rows = []
     for root, plan in zip(roots, plans):
         assert digest(root / 'plan.json') == json.loads((root / 'seal.json').read_text())['plan_sha256']
@@ -54,7 +55,8 @@ def compare(baselines, proposed, user_alpha):
             task, audit = rescore_original_task(raw, path, plan['config'], plan['initial_source']['controller'], keys,
                 first, broaden_cost_numerics=True, task_alpha=user_alpha,
                 raw_alpha=row.get('raw_user_alpha', row['alpha']))
-            label = f"Fixed alpha={row['alpha']:g}" if root == roots[0] else 'Tolerance-guided + return'
+            baseline_label = f"Preset alpha={row['alpha']:g} + return" if baseline_returns else f"Fixed alpha={row['alpha']:g}"
+            label = baseline_label if root == roots[0] else 'Tolerance-guided + return'
             color, style = [('#0072B2', '--'), ('#D55E00', '-.'), ('#009E73', '-')][index]
             t = raw['time'][:n]
             marker = 'x' if row['endpoint']['physical_outcome'] == 'contact' else 's'
@@ -63,7 +65,7 @@ def compare(baselines, proposed, user_alpha):
             if row['endpoint']['goal_arrived']:
                 arrival = np.argmin(abs(t-row['endpoint']['first_arrival_s']))
                 axes[0].scatter(*raw['actual_xy'][arrival], color=color, marker='*', s=90, label='First goal arrival')
-            executed_alpha = np.full(n, row['alpha']) if root == roots[0] else raw['alpha_exec'][:n]
+            executed_alpha = np.full(n, row['alpha']) if root == roots[0] and not baseline_returns else raw['alpha_exec'][:n]
             values = [raw['actual_forward_speed'][:n], executed_alpha, task['original_cross_track_m'],
                       task['task_step_costs'].sum(axis=1), task['cumulative_task_costs'].sum(axis=1)]
             for ax, data in zip(axes[1:], values):
@@ -95,7 +97,7 @@ def compare(baselines, proposed, user_alpha):
     (out / 'results.json').write_text(json.dumps(dict(user_alpha=user_alpha, rows=records,
         new_physics_ticks=0, statistical_unit='paired deterministic branches; shared source',
         cost_scope='Original-path three running task channels, not total reward. Early failure shortens full-window costs.'), indent=2)+'\n')
-    (out / 'README.md').write_text('# Matched fixed-preference comparison\n\n' + '\n\n'.join(
+    (out / 'README.md').write_text('# Matched preference comparison\n\n' + '\n\n'.join(
         f'![Actual/reference XY and original-user task costs]({name})' for name in links) +
         '\n\nSame original user objective; no smoothing. Full-window costs and common-prefix costs are separate; '
         'short failure costs do not indicate good task performance. See results.json for all endpoints and source identities.\n')
