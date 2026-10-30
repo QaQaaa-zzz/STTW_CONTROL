@@ -23,3 +23,15 @@ def test_physical_domain_reaches_runtime_without_changing_nominal(tmp_path):
     assert m.opt.timestep==base.model.opt.timestep
     assert receipt['model']==env.bundle.identity
     assert DEFAULT_XML.read_bytes()==original
+
+
+def test_domain_bank_shares_equal_fields_and_selects_changed_fields():
+    import jax.numpy as j
+    from sttw_control.lower_domains import DomainModels
+    a=dict(shared=j.arange(4.),mass=j.array([1.,2.]))
+    b=dict(shared=j.arange(4.),mass=j.array([1.,2.2]))
+    bank=DomainModels([a,b])
+    assert len(bank.variables)==1
+    selected=bank.select(j.int32(1))
+    assert selected['shared'] is a['shared']
+    np.testing.assert_array_equal(selected['mass'],b['mass'])

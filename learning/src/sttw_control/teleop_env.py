@@ -55,8 +55,9 @@ class TeleopEnv:
         speed=jp.dot(jp.asarray(data.qvel[:2]),jp.array([jp.cos(p[2]),jp.sin(p[2])]))
         return m,p,speed
 
-    def _step(self,s,goal,bypass,exact_governed=False,control_override=None,force_pulse=None):
+    def _step(self,s,goal,bypass,exact_governed=False,control_override=None,force_pulse=None,physics_model=None):
         h=self.helpers;dt=self.cc.dt
+        active_model=h.mjx_model if physics_model is None and self.backend=='mjx' else physics_model
         m,_,_=self.observe(s.data)
         current=s.governor.current_reference
         governed=jp.where(bypass,s.raw,current+jp.clip(goal-current,-jp.array([1.,.6])*dt,jp.array([1.,.6])*dt))
@@ -96,7 +97,7 @@ class TeleopEnv:
                 if force_pulse is not None:
                     d=d.replace(xfrc_applied=d.xfrc_applied.at[self.bundle.chassis].set(pulse_wrench(d,index)))
                 impulse=impulse+d.xfrc_applied[self.bundle.chassis,:3]*hp
-                d=h._mjx.step(h.mjx_model,d);mm=h.measure(d)
+                d=h._mjx.step(active_model,d);mm=h.measure(d)
                 finite=finite&jp.all(jp.isfinite(d.qpos))&jp.all(jp.isfinite(d.qvel))&jp.all(jp.isfinite(d.act))
                 return d,contact|h._contact_failure(d),jp.maximum(pr,jp.abs(mm[0])),jp.maximum(pd,jp.abs(mm[1])),finite,impulse
             initial=(d,jp.bool_(False),jp.asarray(0.,dtype=d.qpos.dtype),jp.asarray(0.,dtype=d.qpos.dtype),jp.bool_(True),jp.zeros(3,dtype=d.qpos.dtype))
@@ -112,7 +113,7 @@ class TeleopEnv:
                 log.update(actuator_force_min=force_min,actuator_force_max=force_max,actuator_force_limit_substeps=force_hits)
             else:
                 d,contact,peak_roll,peak_rate,finite,impulse=jax.lax.fori_loop(0,self.substeps,substep,initial)
-            d=h._mjx.forward(h.mjx_model,d)
+            d=h._mjx.forward(active_model,d)
         if self.spec.get('lower_internal_diagnostics',False):
             log.update(actuator_force_end=d.actuator_force,actuator_ctrl=ctrl)
         m,p,speed=self.observe(d)

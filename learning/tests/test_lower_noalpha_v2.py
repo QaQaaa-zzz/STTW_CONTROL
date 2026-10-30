@@ -98,3 +98,14 @@ def test_weights_only_parent_keeps_fresh_optimizer_and_rejects_contract_drift(tm
     for a,b in zip(parent.parameters(),child.parameters()):torch.testing.assert_close(a,b)
     bad=copy.deepcopy(CFG);bad['observation_scales'][0]*=2
     with pytest.raises(ValueError,match='contract differs'):restore_parent_weights(algo,identity,bad)
+
+
+def test_new_sequence_ranges_reach_low_and_high_requests_without_changing_defaults():
+    import copy
+    spec=copy.deepcopy(CFG);design=spec['command_design']
+    design.update(command_speed_core=[1.6,3.2],command_speed_edge=[1.5,3.5],sequence_low_speed=[1.5,2.2],sequence_high_speed=[2.6,3.4])
+    def sample(i):return sample_local_v2(i,jp.int32(0),2.3,spec,ControllerConfig())
+    rows,_,labels=map(np.asarray,jax.jit(jax.vmap(sample))(jp.arange(1024)))
+    sequence=labels[:,0]!=0
+    assert rows[sequence,1,1].min()<1.7
+    assert rows[sequence&(labels[:,0]!=3),4,1].max()>3.2

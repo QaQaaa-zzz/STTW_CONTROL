@@ -72,6 +72,7 @@ class LowerState:
     issued_stream:object=None
     task_labels:object=None
     episode_totals:object=None
+    domain_index:object=None
 
 class LowerCommandEnv:
     def __init__(self,spec):
@@ -84,19 +85,21 @@ class LowerCommandEnv:
           previous_final_command=s.physical.actuator.previous,previous_bounded_residual=s.previous_applied,
           raw=s.physical.raw,raw_rates=s.rates,eso_equilibrium_shift=-s.physical.controller.disturbance/a4,cc=self.cc)
         return s.replace(frames=jp.concatenate([s.frames[1:],frame[None]]),mask=jp.concatenate([s.mask[1:],jp.ones(1)]))
-    def reset(self,snapshot,env_id,episode):
+    def reset(self,snapshot,env_id,episode,domain_index=None,initial_yaw_rate=0.):
         pose=self.physics.helpers.pose(snapshot.data);rows,slew=command_rows(env_id,episode,snapshot.raw[0],self.spec,self.cc)
         raw,rates,_=publish_local_command(snapshot.raw,rows,0,slew,self.spec,self.cc)
         p=snapshot.replace(raw=raw,reference_pose=pose,yaw_unwrapped=pose[2],yaw_wrapped=pose[2],failed=jp.bool_(False))
-        s=LowerState(p,jp.zeros((self.spec['history_frames'],20)),jp.zeros(self.spec['history_frames']),rows,slew,rates,jp.zeros(2),jp.zeros(2),jp.asarray(0.),jp.int32(0),env_id,episode)
+        s=LowerState(p,jp.zeros((self.spec['history_frames'],20)),jp.zeros(self.spec['history_frames']),rows,slew,rates,jp.zeros(2),jp.zeros(2),jp.asarray(initial_yaw_rate),jp.int32(0),env_id,episode,domain_index=domain_index)
         if self.spec.get('command_design',{}).get('version')=='four_local_families_v2':
             _,_,labels=sample_local_v2(env_id,episode,snapshot.raw[0],self.spec,self.cc)
             s=s.replace(task_labels=labels,episode_totals=jp.zeros(6))
         return self.record(s)
-    def step(self,s,z):
+    def step(self,s,z,physics_model=None):
         p=s.physical;raw=p.raw;action=map_action(z);m,_,_=self.physics.observe(p.data)
         override=controls(p.controller,p.actuator,m,raw,raw,p.physical_tick*self.cc.dt>3.,True,self.cc,self.ac,lower_action=action)
-        end,log=self.physics._step(p,raw,True,exact_governed=True,control_override=override)
+        model=physics_model
+        end,log=self.physics._step(p,raw,True,exact_governed=True,control_override=override,physics_model=model)
+        if s.domain_index is not None:log['physical_domain_index']=s.domain_index
         terms=reward_terms(log['actual_forward_speed']-raw[0],log['actual_delta']-raw[1],log['phi'],action,s.previous_action,end.failed,self.spec,roll_rate=log['phi_dot'],remaining_ticks=round(self.spec['episode_seconds']/self.spec['dt'])-s.tick,peak_roll=log['peak_roll'])
         tick=s.tick+1;done=end.failed|(tick>=round(self.spec['episode_seconds']/self.spec['dt']))
         from .direct_command_scenarios import publish_issued_reference
@@ -194,7 +197,8 @@ def sample_local_v2(env_id,episode,speed,spec,cc,*,case=None):
     vrange=jp.where(edge,jp.array(d['command_speed_edge']),jp.array(d['command_speed_core']))
     max_delta=jp.where(edge,d['abs_steer_max_edge'],d['abs_steer_max_core'])
     roll=jp.where(uniform(5,0.,1.)<d['rare_fraction'],uniform(6,d['ordinary_roll_reference'],d['rare_roll_reference']),uniform(6,*d['sample_target_roll_reference_abs_range']))
-    low=uniform(7,jp.maximum(1.7,vrange[0]),jp.minimum(2.1,vrange[1]));high=uniform(8,jp.maximum(2.3,vrange[0]),jp.minimum(2.8,vrange[1]))
+    low_bounds=d.get('sequence_low_speed',[1.7,2.1]);high_bounds=d.get('sequence_high_speed',[2.3,2.8])
+    low=uniform(7,jp.maximum(low_bounds[0],vrange[0]),jp.minimum(low_bounds[1],vrange[1]));high=uniform(8,jp.maximum(high_bounds[0],vrange[0]),jp.minimum(high_bounds[1],vrange[1]))
     small=uniform(9,*d['post_return_small_magnitude'])
     times=jp.array(list(d['base_event_times'].values()))+uniform(10,-d['time_jitter_abs_s'],d['time_jitter_abs_s'],(5,))
     times=times.at[4].set(jp.minimum(times[4],d['post_return_small_latest_request_s']))

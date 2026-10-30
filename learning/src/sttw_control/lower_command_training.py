@@ -67,7 +67,7 @@ class Training:
         from dataclasses import asdict
         from .lower_command import LowerCommandEnv
         from .runtime import configure_compilation_cache
-        torch.set_num_threads(2);configure_compilation_cache(self.out/'jax_cache')
+        torch.set_num_threads(2);configure_compilation_cache(self.cfg.get('shared_jax_cache',self.out/'jax_cache'))
         self.env=LowerCommandEnv(self.cfg)
         if self.cfg.get('candidate_local_interface'):
             from .lower_command import SCALES
@@ -79,9 +79,31 @@ class Training:
         source=json.loads(Path(self.cfg['prepared_manifest']).read_text())
         assert self.env.physics.bundle.identity==source['model'],'prepared bank physics identity mismatch'
         assert asdict(self.env.cc)==source['controller'] and asdict(self.env.ac)==source['actuator']
+        self.domain_source=None
+        if 'domains' in source:
+            from .lower_domains import load_domain_models
+            if source['status']!='admitted' or source['config']['roles']!=['REFERENCE','TRAIN']:
+                raise ValueError('only admitted training-domain states may enter optimizer sampling')
+            _,models,records=load_domain_models(source['config']['domain_manifest'],source['config']['roles'])
+            if records!=source['domains']:raise ValueError('prepared-state model/domain mapping changed')
+            if hashlib.sha256(Path(source['state_domains']).read_bytes()).hexdigest()!=source['state_domains_sha256']:
+                raise ValueError('state/domain association changed')
+            with np.load(source['state_domains']) as mapping:
+                ids=mapping['domain_index'];yaw=mapping['initial_yaw_rate']
+            if ids.shape!=(self.bank_size,) or yaw.shape!=(self.bank_size,) or np.any(ids<0) or np.any(ids>=len(records)) or not np.isfinite(yaw).all():
+                raise ValueError('complete finite per-state domain mapping required')
+            if hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest()!=source['prepared_bank_sha256']:
+                raise ValueError('domain prepared bank changed')
+            counts=np.bincount(ids,minlength=len(records))
+            if np.any(counts!=counts[0]) or self.cfg['num_envs']%len(records):
+                raise ValueError('domain groups require equal bank counts and divisible environment count')
+            self.domain_bank_indices=jp.asarray(np.stack([np.flatnonzero(ids==di) for di in range(len(records))]))
+            self.env.domain_models=models;self.bank_domain_index=jp.asarray(ids);self.bank_yaw_rate=jp.asarray(yaw)
+            self.domain_source=source
+
         if self.cfg.get('prepared_bank_expected_sha256') and hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest()!=self.cfg['prepared_bank_expected_sha256']:raise ValueError('prepared bank SHA mismatch')
         manifest_path=self.out/(f'resume_manifests/to_{self.cfg["updates"]:04d}.json' if self.resume_checkpoint else 'manifest.json')
-        write(manifest_path,dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=self.cfg.get('weights_only_parent'),optimizer_source=None,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
+        write(manifest_path,dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=self.cfg.get('weights_only_parent'),optimizer_source=None,physical_domains=self.domain_source,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
         if self.cfg.get('candidate_local_interface'):
             # Existing lower/ECBC interface validation is retained; do not repeat it.
             write(self.out/'interface_checks.json',dict(status='reused_existing_interface_no_new_parity_physics',candidate_checks='learning/tests/test_local_lower_candidate.py'))
@@ -101,12 +123,25 @@ class Training:
         e=self.env
         def reset_one(eid,episode):
             key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.cfg['seed']),eid),episode)
-            idx=jax.random.randint(key,(),0,self.bank_size);snap=jax.tree.map(lambda x:x[idx],self.bank)
+            if self.domain_source is None:idx=jax.random.randint(key,(),0,self.bank_size)
+            else:
+                di=eid//(n//len(self.domain_source['domains']))
+                idx=self.domain_bank_indices[di,jax.random.randint(key,(),0,self.domain_bank_indices.shape[1])]
+            snap=jax.tree.map(lambda x:x[idx],self.bank)
+            if self.domain_source is not None:return e.reset(snap,eid,episode,self.bank_domain_index[idx],self.bank_yaw_rate[idx])
             return e.reset(snap,eid,episode)
         reset=self.compile(f'{n} resets',jax.vmap(reset_one),jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32))
         states=reset(jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32));jax.block_until_ready(states)
         def advance(states,z):
-            end,reward,done,logs=jax.vmap(e.step)(states,z)
+            if self.domain_source is None:end,reward,done,logs=jax.vmap(e.step)(states,z)
+            else:
+                domains=len(self.domain_source['domains']);lanes=n//domains
+                grouped=jax.tree.map(lambda x:x.reshape((domains,lanes)+x.shape[1:]),states)
+                def group(args):
+                    state,action,di=args;model=e.domain_models.select(di)
+                    return jax.vmap(lambda s,a:e.step(s,a,physics_model=model))(state,action)
+                result=jax.lax.map(group,(grouped,z.reshape(domains,lanes,2),jp.arange(domains)))
+                end,reward,done,logs=jax.tree.map(lambda x:x.reshape((n,)+x.shape[2:]),result)
             nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda x:reset_one(x.env_id,x.episode+1),lambda x:x,s))(end,done)
             a,c=jax.vmap(e.observation)(nxt)
             ev=logs['actual_forward_speed']-logs['limited_command'][:,0];ed=logs['actual_delta']-logs['limited_command'][:,1]
@@ -114,6 +149,11 @@ class Training:
             stats=jp.stack([jp.mean(ev**2),jp.mean(ed**2),jp.mean(jp.abs(ev)),jp.mean(jp.abs(ed)),jp.mean(jp.abs(logs['phi'])>.3),jp.mean(end.physical.failed),jp.mean(done),jp.mean(jp.abs(logs['normalized_residual'])>=.99),jp.max(logs['peak_roll']),jp.mean(logs['actual_forward_speed']),jp.mean(logs['limited_command'][:,0]),jp.mean(logs['limited_command'][:,1]),jp.mean(logs['final_command_clipped'])])
             parts={k:jp.mean(v) for k,v in logs['reward_parts'].items()};diag=jax.tree.map(lambda x:x[:2],logs)
             sampling={}
+            if self.domain_source is not None:
+                for di in range(len(self.domain_source['domains'])):
+                    mask=states.domain_index==di
+                    sampling['domain_'+str(di)]=jp.array([jp.sum(mask),jp.sum(jp.where(mask,reward,0.)),jp.sum(jp.where(mask,ev**2,0.)),jp.sum(jp.where(mask,ed**2,0.)),jp.sum(mask&end.physical.failed)])
+
             if self.cfg['command_design'].get('version')=='four_local_families_v2':
                 labels=states.task_labels
                 values=jp.column_stack([logs['target'],logs['limited_command'],logs['raw_rates']])
@@ -146,7 +186,7 @@ class Training:
         import jax,jax.numpy as jp,torch
         from tensordict import TensorDict
         from torch.utils.tensorboard import SummaryWriter
-        n,steps,updates=(8,16,2) if phase=='smoke' else (self.cfg['num_envs'],self.cfg['rollout_steps'],self.cfg['updates'])
+        n,steps,updates=((8 if self.domain_source is None else 2*len(self.domain_source['domains'])),16,2) if phase=='smoke' else (self.cfg['num_envs'],self.cfg['rollout_steps'],self.cfg['updates'])
         states,advance,observe=self.batch(n)
         torch.manual_seed(self.cfg['seed']);torch.cuda.manual_seed_all(self.cfg['seed']);np.random.seed(self.cfg['seed']);random.seed(self.cfg['seed'])
         def td(a,c):return TensorDict({'policy':torch.utils.dlpack.from_dlpack(a),'critic':torch.utils.dlpack.from_dlpack(c)},batch_size=[n])
@@ -213,7 +253,7 @@ class Training:
                     raise KeyboardInterrupt('requested stop saved at complete rollout boundary')
                 if self.cfg.get('candidate_local_interface'):
                     if stop:raise RuntimeError(stop)
-                    if phase=='training' and update in self.cfg['validation_updates']:
+                    if phase=='training' and update in self.cfg['validation_updates'] and not self.cfg.get('training_reward_selection',False):
                         from .lower_command_validation import evaluate_fixed
                         path=self.checkpoint(algo,update,phase,states)
                         self.update_status(stage='fixed_validation',stage_updates=update)
@@ -229,9 +269,10 @@ class Training:
                 # Last is already checkpointed. Final verification reloads immutable best.
                 self.checkpoint(algo,completed,phase,states,'resume_boundary.pt')
                 boundary=False
-                best_record=load_best(self.out/'training',algo.policy)
-                evaluate_fixed(self,algo,best_record['source_update'],best_record['checkpoint'],select=False)
-                self.update_status(best_source_update=best_record['source_update'],best_qualified=best_record['qualified'],adoption_status='not_adopted')
+                if not self.cfg.get('training_reward_selection',False):
+                    best_record=load_best(self.out/'training',algo.policy)
+                    evaluate_fixed(self,algo,best_record['source_update'],best_record['checkpoint'],select=False)
+                    self.update_status(best_source_update=best_record['source_update'],best_qualified=best_record['qualified'],adoption_status='not_adopted')
             if phase=='smoke':
                 assert actor_delta>0 and metrics['actor_grad_norm']>0 and metrics['critic_grad_norm']>0
                 write(self.out/'smoke/passed.json',dict(updates=completed,finite_gradients=True,actor_delta=actor_delta))
@@ -305,6 +346,11 @@ def aggregate_sampling(samples,n,steps):
     for i,name in enumerate(names):
         a=np.sum([s['completed_family_'+str(i)] for s in samples],axis=0).astype(float)
         result[name]['complete_episodes']=dict(count=int(a[0]),mean_cost_per_tick=float(-a[1]/a[2]) if a[2] else None,speed_rmse=float(np.sqrt(a[3]/a[2])) if a[2] else None,steer_rmse=float(np.sqrt(a[4]/a[2])) if a[2] else None)
+    result['physical_domains']={}
+    for key in samples[0]:
+        if key.startswith('domain_'):
+            a=np.sum([s[key] for s in samples],axis=0).astype(float);count=a[0]
+            result['physical_domains'][key]=dict(samples=int(count),mean_reward=float(a[1]/count) if count else None,speed_rmse=float(np.sqrt(a[2]/count)) if count else None,steer_rmse=float(np.sqrt(a[3]/count)) if count else None,physical_failures=int(a[4]))
     result['component_cap_fractions']={k[4:]:float(np.mean([s[k] for s in samples])) for k in samples[0] if k.startswith('cap_')}
     return result
 
