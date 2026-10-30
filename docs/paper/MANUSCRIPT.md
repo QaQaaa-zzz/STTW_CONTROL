@@ -137,6 +137,23 @@ At each subsequent middle update:
 
 Each prediction package binds the feature schema, model identity, and restoration parameters to the evaluated continuation policy. Results are grouped by complete source state and actual force event. Shared-source branches provide paired interventions. They are not independent random repetitions. Fixed and dynamic baselines use the same vehicle model, frozen control stack, goal, and reconnection mechanism. Original-user costs are independently reconstructed from saved trajectories, and trajectories terminate at their actual physical endpoint. [E251,E261,E275,E278,E280]
 
+### 3.5 Experimental contrasts and measurement
+
+The experiments separate four questions. First, fixed-preference branches characterize the behaviors available from the frozen middle policy. Second, holding a preparation preference and restoring the original preference test whether balance recovery also leads to task completion. Third, matched fixed and preset-return baselines test the complete selection-and-restoration controller. Finally, mirrored turns and two-turn segments examine how those behaviors extend across geometry. Each contrast keeps the physical model, actuator configuration, original goal, and geometric reconnection mechanism fixed. [E250,E253,E276–E284]
+
+A continuation begins from a saved complete closed-loop state. This includes the vehicle state, controller history, observer, reference filters, and task clock. Candidate preference is changed at that boundary while the other state variables are retained. A shared source therefore defines a paired physical intervention. Different source histories are reported separately because their speed, attitude, and reference states can differ before the new candidate is applied. The hypothetical disturbance family used by the predictor is fixed before execution; the realized force and onset are used only to generate and score the evaluation trajectory. [E254–E258,E261]
+
+| Evaluation quantity | Definition | Interpretation |
+|---|---|---|
+| Contact outcome | Any physical ground-contact failure before task time 10 s | Balance survival |
+| Original-goal arrival | First entry into the fixed 1 m goal disk before failure | Completion of the positional task |
+| Arrival time | Task-clock time at first entry | Timeliness, reported with contact outcome |
+| Preference intervention | Integral of absolute executed-minus-user preference | Amount and duration of preference change |
+| Original-task running cost | Same original-user task channels reconstructed from each trajectory | Path and speed performance under one objective |
+| Peak upright speed | Maximum absolute actual forward speed before failure | Check of the low-speed operating regime |
+
+All reported comparisons preserve the full declared set of candidate trajectories, including contact failures and surviving trajectories that miss the destination. Arrival and survival are tabulated separately. The running-cost comparison uses both a common paired prefix and each trajectory's full observation window; cost values are not substituted for the physical outcomes. On the matched S-segment panel, all methods survive through task time 10 s, so the complete observation window is shared. Three network initializations form the prediction ensemble, whereas the control comparisons are deterministic branches from saved source states. The figures show those branches directly rather than assigning sampling error bars to them. [E251,E268,E278,E280,E284]
+
 ## 4 Simulation Results
 
 ### 4.1 Preference-dependent disturbance outcomes
@@ -279,11 +296,28 @@ The left-leading S segment is repeated from the identical complete state with th
 
 Compared with maintaining the user's preference, tolerance-guided execution advances arrival by 0.210 s under 20 N and 2.045 s under 24 N. The 24 N trajectory shows a smaller lateral excursion and earlier recovery of forward speed. Compared with preset one, the selected execution reduces preference intervention by 13.7% and 14.2%, with arrival differences of +0.010 s and -0.035 s. Thus, on this two-turn task, a smaller temporary preference change retains the arrival performance of the stronger preset intervention. Preset one has lower accumulated original-task running cost in both cases; the selected execution's advantage is the smaller departure from the user's preference. The common full observation window extends from task time 1 to 10 s, and all costs retain the post-arrival portion of that window. [E283,E284]
 
+### 4.12 Preparation timing under a common disturbance event
+
+![Common-event preparation branches: actual XY, speed, roll and steering. All branches encounter the same task-time-2 s force pulse; the 0.4 s preparation is reused from the earlier coverage experiment. Other preparations are new continuations.](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_common_event_t1p0_v1/analysis/common_event_comparison/comparison.png)
+
+To separate switching time from the imposed disturbance clock, a 24 N pulse of duration 0.4 s is fixed at task time 2 s. The robot follows the same original zero-preference history until task time 1.0, 1.4, 1.6, or 1.8 s, then switches to preference one. The corresponding preparation intervals are 1.0, 0.6, 0.4, and 0.2 s. Preference one is held afterward, eliminating differences caused by a source-relative restoration clock. The 0.4 s branch is reused after matching its model, controller configuration, source history, path, force, and event time. [E285]
+
+| Preparation (s) | Pre-pulse speed (m/s) | Pre-pulse roll (deg) | Pre-pulse steering (deg) | Outcome |
+|---|---:|---:|---:|---|
+| 1.0 | 1.751 | 8.770 | 12.161 | Survived, goal missed |
+| 0.6 | 1.772 | 8.762 | 12.061 | Survived, goal missed |
+| 0.4 | 1.768 | 7.462 | 9.944 | Ground contact |
+| 0.2 | 1.682 | 6.912 | 10.482 | Survived, goal missed |
+
+The state samples are taken at task time 1.995 s. Preparations of 0.6 and 0.4 s produce almost equal forward speeds before the event, yet different contact outcomes; roll, steering, and controller-state histories also differ. The nearly equal speeds direct attention to attitude, steering, and reference histories as additional explanatory variables. The shorter 0.2 s preparation survives with a substantially different subsequent path, demonstrating that longer preparation does not impose a monotonic survival ordering. These observations motivate conditioning the predictor on the evolving closed-loop state and preparation interval together. Earlier intervention changes the state at which the fixed-time disturbance is encountered. [E285]
+
+The three surviving held-preference trajectories miss the original goal. Their closest upright distances to its center are 1.451, 1.891, and 2.649 m for preparations of 1.0, 0.6, and 0.2 s, respectively. The common-event experiment thus isolates a balance-outcome mechanism, while the paired restoration experiments establish how a surviving preparation can be connected to completion of the original task. [E253,E276,E285]
+
 ## 5 Discussion
 
 The experiments support a coherent preparation-and-restoration mechanism. Preference-dependent trajectories reach different states before a common disturbance; maintaining a surviving preference can then miss the original goal. Feedback restoration reconnects the temporary intervention to the original task. The fixed-preference comparisons show a survival and arrival benefit in the two matched events, while the preset-return comparison shows that strong simple preparation is also effective. The network-selected preference trades later arrival for a smaller departure from the user preference relative to preset alpha=1. These comparisons locate the value of coordination in the joint task and intervention tradeoff. [E250,E276–E280]
 
-The predictor is a compact evaluator of an existing control stack. Its useful operating domain is set jointly by the available control behaviors, represented state and geometry, preparation-time coverage, and the continuation policy used for supervision. An empty candidate set can reflect inadequate candidate capability, inadequate predictive coverage, or the aggregation of several disturbance hypotheses. The mirrored-turn and candidate-branch results distinguish these possibilities without changing the declared thresholds. A practical extension is to sample complete states along the nominal route and evaluate preparation at a common subsequent disturbance event. This separates the available preparation interval from the encounter's position in the turn. [E271–E275]
+The predictor is a compact evaluator of an existing control stack. Its useful operating domain is set jointly by the available control behaviors, represented state and geometry, preparation-time coverage, and the continuation policy used for supervision. An empty candidate set can reflect inadequate candidate capability, inadequate predictive coverage, or the aggregation of several disturbance hypotheses. The mirrored-turn and candidate-branch results distinguish these possibilities without changing the declared thresholds. The common-event experiment changes the intervention time while keeping the imposed pulse clock fixed. Its nonmonotonic outcomes motivate evaluating the candidate closed loop rather than assigning a uniformly beneficial effect to a longer preparation interval. [E271–E275]
 
 The present force model represents a specified center-of-mass disturbance rather than a calibrated aerodynamic wind field. Goal arrival uses a fixed 1 m disk, and the current open-plane path-error criterion permits substantial reconnection excursions. A bounded track requires explicit corridor constraints and endpoint requirements. Hardware evaluation will additionally measure the delay and accuracy of forward-speed, steering, and pose estimates and verify the disturbance application and actuator interface. These conditions define the next transfer step from the simulated closed loop.
 
@@ -301,7 +335,7 @@ This paper develops disturbance-tolerance-guided preference coordination for a s
 
 [R4] Persson, N., Zhao, F., Kaheni, M., Dörfler, F., and Papadopoulos, A. V. An Adaptive Data-Enabled Policy Optimization Approach for Autonomous Bicycle Control. arXiv:2502.13676, 2025. https://arxiv.org/abs/2502.13676.
 
-[R5] Coordinated Trajectory Tracking and Self-Balancing Control for Unmanned Bicycle Robot Against Disturbances. Actuators, 15(1), 49, 2026. https://doi.org/10.3390/act15010049.
+[R5] Liu, J., Dong, C., Lu, X., Liu, Q., and Yang, L. Coordinated Trajectory Tracking and Self-Balancing Control for Unmanned Bicycle Robot Against Disturbances. Actuators, 15(1), 49, 2026. https://doi.org/10.3390/act15010049.
 
 [R6] Garone, E., Di Cairano, S., and Kolmanovsky, I. V. Reference and Command Governors for Systems with Constraints: A Survey on Theory and Applications. MERL TR2016-102, 2016; published in Automatica, 2017. https://merl.com/publications/docs/TR2016-102.pdf ; https://doi.org/10.1016/j.automatica.2016.08.013.
 

@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "229fffd3bf128bbd53a1e3144232bf846c218b5d677be2792351c3b356540497",
-  "builder_sha256": "7380f1c08fb476cce14e53453be7116954799d820db0634f7b950c0fcf5eb5fd",
+  "manuscript_sha256": "e32b6b35de5bf9538f3164f2adf1e5dc2382a7e166c533aefeeae776c0d48b2a",
+  "builder_sha256": "17f83cdef93ed9106ff22fecc5ad0c6f56674b0b547a2c6a72858291bb2db351",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1709,6 +1709,12 @@
       "sha256": "4000257cac123e8a339c7568e82c7c1f3cdd33f42eecfa365292fbf826f7d1fb",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E285": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_common_event_t1p0_v1/analysis/common_event_comparison/results.json",
+      "sha256": "4fb125dd21566e0f206dd996d5f3990d440f09f5c5724074f9529acb993b37ef",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1745,7 +1751,8 @@
     "E281",
     "E282",
     "E283",
-    "E284"
+    "E284",
+    "E285"
   ],
   "historical_claims_from_readback": [
     {
@@ -1818,7 +1825,7 @@
   "historical_claim_scope": "Historical source registry only; not current return43 claims",
   "detailed_evidence": {
     "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/EVIDENCE_DETAILS.md",
-    "sha256": "0dde992565c1c34d0518ba702edf517308dc954a8d934bc0c942cae1569090fe",
+    "sha256": "8d3b21f83be9cc5801f114a603303d7605be7057d86234bde66d77aa14aad7b8",
     "role": "Full historical evidence narrative; current research decisions remain in the shared ledger"
   },
   "image_role": "Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments",

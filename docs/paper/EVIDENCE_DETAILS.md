@@ -1204,3 +1204,7 @@ E_min(F) = (z + Kτ F)² / W
 [14] Zhang, M., Feng, Z., Zhang, X., Chen, X., Li, D., and Xiao, X. Composite safety control for non-coaxial two-wheeled robot with geometry-enhanced multi-step control barrier function. Control Engineering Practice, 168, 106732, 2026. [DOI](https://doi.org/10.1016/j.conengprac.2025.106732)。作者/卷年由Crossref核对；本次仅出版页摘要层面核对，未核完整假设。
 
 [15] Schwab, A. L., and Kooijman, J. D. G. Controllability of a bicycle. The Proceedings of the Asian Conference on Multibody Dynamics, 2010, session58786. [DOI](https://doi.org/10.1299/jsmeacmd.2010.5._58786-1_)。本轮仅核出版页摘要及元数据；Whipple-like模型与本文三状态近似不同，不搬用其保证。
+
+## Bibliographic metadata audit: R5, 2026-10-30
+
+Crossref publisher-deposited record `https://api.crossref.org/works/10.3390/act15010049` fetched directly after publisher HTML returned HTTP429. `message.author` lists Jinghao Liu, Chengcheng Dong, Xiaoying Lu, Qiaobin Liu, Lu Yang; title, DOI, volume15, issue1 and publication year2026 match R5. Local raw record: `runs/paper_toolchain/act15010049_crossref.json`. Author metadata added to the main reference. This checks bibliographic metadata only, not full-paper technical claims or accountable-human approval.

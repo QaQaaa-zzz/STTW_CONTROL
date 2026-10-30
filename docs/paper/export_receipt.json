@@ -8,14 +8,15 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_matched_fixed_baselines_v1/analysis/matched_comparison/group_00_comparison.png": "267b2c45c898f51cf04a1d442cf11e82d96acbdd3c3e14f60d5fa60e661de6e9",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/group_01_comparison.png": "09a9759e0981dbe180b23845fa1ced7dd510fb56963c7dfded1d34db80bf837a",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_nominal_v1/analysis/S_left_60_R1p3_v2p0_zero_fixed_candidate_xy.png": "9da61b863a973fd9f591008c0c7f43e5d84c8d39a20ab0682ac60ae70e06d33c",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/group_01_comparison.png": "1a06814d8188c114ff4da66f16c1f48bdc0dfbd73f35b6b614174c0ed804eae9"
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/group_01_comparison.png": "1a06814d8188c114ff4da66f16c1f48bdc0dfbd73f35b6b614174c0ed804eae9",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_common_event_t1p0_v1/analysis/common_event_comparison/comparison.png": "3734f90d1aaee62650201bb0602762a8e3a5a1f7154977e4d8dc7a35683b42b0"
   },
-  "html_sha256": "ed537bccd56f13637e97197e795c4a884db8b91ed9a15a351b3d822014edc6f2",
+  "html_sha256": "2cdef12fd986387ff026c8f797c381c7e3a827205604fbd34cfe665e4905a6fd",
   "pdf_requested": false,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
   "renderer": "Tectonic 0.17.0 / IEEEtran journal",
-  "tex_sha256": "adb75084da8d4d2e34c46e167bd7d10cf4e08e8b5717179401f8dfc855bec087",
-  "pdf_sha256": "7c05c5cc29379e9958dc8d85e3ec79e73efc1f89b395da627e7661e47723fadc",
-  "pdf_bytes": 2361561
+  "tex_sha256": "f51a79ba31e222685abfc8f4aefae96f4b7289f363f9873036aae2a2ffc386b0",
+  "pdf_sha256": "135a634796a730dc790fe5b4e4b210f48ecf87c249484acf9b836d00db51c43e",
+  "pdf_bytes": 2737244
 }
