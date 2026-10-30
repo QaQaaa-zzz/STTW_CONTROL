@@ -439,15 +439,19 @@ def export_ieee():
         pieces=re.split(r'(@@CITER\d+@@)',text)
         return ''.join(r'\cite{'+x[6:-2]+'}' if re.fullmatch(r'@@CITER\d+@@',x) else escape(x) for x in pieces)
     images={}
+    section_title=""
     def render(node):
+        nonlocal section_title
         kind=node['type']
         children=node.get('children',[])
         content=lambda:''.join(render(c) for c in children)
         if kind=='text':return prose(node['raw'])
+        if kind=='inline_math':return '$'+node['raw']+'$'
         if kind in ('blank_line','softbreak','linebreak'):return '\n'
         if kind in ('paragraph','block_text'):return content()+'\n\n'
         if kind=='heading':
             text=re.sub(r'^\d+(?:\.\d+)*\s+','',content())
+            section_title=text
             command='section' if node['attrs']['level']==2 else 'subsection'
             return '\\'+command+'{'+text+'}\n'
         if kind=='strong':return r'\textbf{'+content()+'}'
@@ -470,9 +474,9 @@ def export_ieee():
             head=children[0]['children'];rows=[head]+[r['children'] for r in children[1]['children']]
             columns=''.join('p{'+f'{(.96/len(head)-.018):.4f}'+r'\textwidth}' for _ in head)
             data='\n\\hline\n'.join(' & '.join(''.join(render(c) for c in cell['children']) for cell in row)+r' \\' for row in rows)
-            return '\n\\begin{table*}[tp]\n\\centering\n\\begin{tabular}{'+columns+'}\n\\hline\n'+data+'\n\\hline\n\\end{tabular}\n\\end{table*}\n'
+            return '\n\\begin{table*}[tp]\n\\caption{'+section_title+'}\n\\centering\n\\begin{tabular}{'+columns+'}\n\\hline\n'+data+'\n\\hline\n\\end{tabular}\n\\end{table*}\n'
         raise ValueError('Unsupported manuscript Markdown node: '+kind)
-    markdown=mistune.create_markdown(renderer='ast',plugins=['table'])
+    markdown=mistune.create_markdown(renderer='ast',plugins=['table','math'])
     text=r'''\documentclass[journal]{IEEEtran}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx,amsmath,url}

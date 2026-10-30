@@ -12,7 +12,7 @@ from sttw_control.preference_best import digest
 from analyze_native_goal_confirmation import rescore_original_task
 
 
-def compare(baselines, proposed, user_alpha):
+def compare(baselines, proposed, user_alpha, publication=False):
     roots = [baselines.resolve(), proposed.resolve()]
     plans = [json.loads((r / 'plan.json').read_text()) for r in roots]
     baseline_returns = 'causal_preference_return' in plans[0]['protocol']
@@ -30,7 +30,9 @@ def compare(baselines, proposed, user_alpha):
     for context in plans[0]['contexts']:
         assert context == proposed_contexts[context['route']], context['route']
     out = roots[0] / 'analysis/matched_comparison'
-    out.mkdir(exist_ok=True)
+    if publication:
+        out = out / 'publication'
+    out.mkdir(parents=True, exist_ok=True)
     groups = sorted({(r['route'], r['onset_s'], r['force_N']) for root, _, r in rows if root == roots[0]})
     records = []
     links = []
@@ -38,7 +40,7 @@ def compare(baselines, proposed, user_alpha):
         selected = [(root, plan, row) for root, plan, row in rows if (row['route'], row['onset_s'], row['force_N']) == group]
         assert len(selected) == 3 and sum(root == roots[0] for root, _, _ in selected) == 2, 'two baselines plus one proposed trajectory required'
         common = min(row['active_lower_ticks'] for _, _, row in selected)
-        fig, axes = plt.subplots(2, 3, figsize=(16, 9), layout='constrained')
+        fig, axes = plt.subplots(2, 3, figsize=(7.16, 5.5) if publication else (16, 9), layout='constrained')
         axes = axes.ravel()
         source = selected[0][2]
         with np.load(selected[0][0] / 'evaluation' / (source['path_key'] + '_path.npz')) as z:
@@ -77,8 +79,11 @@ def compare(baselines, proposed, user_alpha):
                 ax.plot(t, data, color=color, ls=style, label=label)
                 ax.scatter(t[-1], data[-1], color=color, marker=marker)
             name = f'group_{group_index:02d}_method_{index:02d}.npz'
-            np.savez_compressed(out / name, time=t, actual_xy=raw['actual_xy'][:n],
-                                actual_forward_speed=values[0], alpha_exec=values[1], **task)
+            if publication:
+                name = '../' + name
+            else:
+                np.savez_compressed(out / name, time=t, actual_xy=raw['actual_xy'][:n],
+                                    actual_forward_speed=values[0], alpha_exec=values[1], **task)
             records.append(dict(label=label, case_id=row['case_id'], source_run=root.name,
                 route=row['route'], force_N=row['force_N'], onset_s=row['onset_s'], endpoint=row['endpoint'], observed_ticks=n, common_ticks=common,
                 full_window_costs=task['task_step_costs'].sum(axis=0).tolist(),
@@ -96,8 +101,21 @@ def compare(baselines, proposed, user_alpha):
         axes[0].legend(loc='upper center', bbox_to_anchor=(.5,-.25), ncol=2, fontsize=8)
         fig.suptitle(f"U170 | {group[0]} | gust {group[1]:g} s, {source['force_N']:g} N | user alpha={user_alpha:g}\n"
                      'Same complete source; x=contact, square=observed end; task costs exclude terminal penalty')
+        if publication:
+            fig.suptitle(f"{source['force_N']:g} N at {source['onset_s']:g} s; original user preference {user_alpha:g}", fontsize=9)
+            for panel, ax in enumerate(axes):
+                ax.tick_params(labelsize=7)
+                ax.xaxis.label.set_size(7); ax.yaxis.label.set_size(7)
+                ax.set_title(f'({chr(97+panel)})', fontsize=8, loc='left')
+                if panel > 0:
+                    ax.get_legend().remove()
+            axes[0].get_legend().remove()
+            handles, labels = axes[2].get_legend_handles_labels()
+            fig.legend(handles, labels, loc='outside lower center', ncol=1, fontsize=7, frameon=False)
         filename = f'group_{group_index:02d}_comparison.png'
-        fig.savefig(out / filename, dpi=150)
+        fig.savefig(out / filename, dpi=300 if publication else 150)
+        if publication:
+            fig.savefig(out / filename.replace('.png','.pdf'))
         plt.close(fig)
         links.append(filename)
     (out / 'results.json').write_text(json.dumps(dict(user_alpha=user_alpha, rows=records,
@@ -115,7 +133,8 @@ if __name__ == '__main__':
     parser.add_argument('--baselines', type=Path, required=True)
     parser.add_argument('--proposed', type=Path, required=True)
     parser.add_argument('--user-alpha', type=float, default=0.)
+    parser.add_argument('--publication', action='store_true')
     args = parser.parse_args()
     if not 0. <= args.user_alpha <= 1.:
         parser.error('user alpha must be in [0,1]')
-    compare(args.baselines, args.proposed, args.user_alpha)
+    compare(args.baselines, args.proposed, args.user_alpha, args.publication)

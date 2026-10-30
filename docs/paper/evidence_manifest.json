@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "e32b6b35de5bf9538f3164f2adf1e5dc2382a7e166c533aefeeae776c0d48b2a",
-  "builder_sha256": "17f83cdef93ed9106ff22fecc5ad0c6f56674b0b547a2c6a72858291bb2db351",
+  "manuscript_sha256": "5298cc1c8cda53ccbf8685e2c691a50602eefb9f2d3548c350e4b7b40dd4f185",
+  "builder_sha256": "9e2df590a9d56cd9dbce06da6c677805d687bd0380d40fab5d557aa4f5f483fb",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
