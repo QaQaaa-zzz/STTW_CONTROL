@@ -41,7 +41,24 @@ def prepare_transition(source,root,config):
     source=Path(source).resolve();root=Path(root).resolve();config=Path(config).resolve();cfg=read(config);old=read(source/'plan.json')
     if root.exists():raise ValueError('fresh isolated output directory required')
     if digest(source/'plan.json')!=read(source/'seal.json')['plan_sha256']:raise ValueError('source seal differs')
-    if cfg['maximum_preparation_lower_ticks']!=5600 or cfg['preparation_ticks']!=700 or cfg['evaluation_bank_index']!=6:raise ValueError('fixed eight-state preparation budget required')
+    randomized=cfg.get('initial_randomization')
+    count=8 if randomized is None else randomized['count']
+    if (not isinstance(count,int) or count<1 or cfg['maximum_preparation_lower_ticks']!=count*700
+        or cfg['preparation_ticks']!=700 or not 0<=cfg['evaluation_bank_index']<count):
+        raise ValueError('explicit state count and 700-tick preparation budget required')
+    if randomized is None and cfg['evaluation_bank_index']!=6:raise ValueError('original bank6 contract required')
+    if randomized is not None:
+        import numpy as np
+        bounds=np.asarray([randomized['speed_m_s'],randomized['roll_rad']],dtype=float)
+        if (bounds.shape!=(2,2) or not np.isfinite(bounds).all() or np.any(bounds[:,0]>=bounds[:,1])
+            or bounds[0,0]<1.5 or bounds[0,1]>3.5 or np.max(np.abs(bounds[1]))>.1
+            or randomized['data_role'] not in ('TRAIN','DEV','TEST')):
+            raise ValueError('bounded explicit random initial distribution and data role required')
+        # Stratify speed so a finite bank covers the full declared interval.
+        rng=np.random.default_rng(randomized['seed'])
+        samples=rng.uniform(size=(count,2))
+        samples[:,0]=(rng.permutation(count)+samples[:,0])/count
+        conditions=(bounds[:,0]+samples*(bounds[:,1]-bounds[:,0])).tolist()
     xml=Path(cfg['source_xml']).resolve()
     if digest(xml)!=cfg['expected_source_xml_sha256']:raise ValueError('new XML identity differs')
     assets,wheel_bodies=wheel_assets(xml);native=Path(old['native_runtime_root']).resolve()
@@ -52,6 +69,11 @@ def prepare_transition(source,root,config):
     for model in [old['models']['H75'],old['initial_source']['candidate']]:
         for key in ('actor','checkpoint'):
             if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen checkpoint identity differs')
+    if randomized is not None:
+        init=copy.deepcopy(init)
+        init['initial_conditions_speed_roll']=conditions
+        init['randomization']=randomized
+        spec=copy.deepcopy(spec);spec['initialization']=init
     root.mkdir();runtime=root/'native_runtime';sources={}
     for name,expected in old['native_expected_sources'].items():
         path=Path(name).resolve()
@@ -67,9 +89,9 @@ def prepare_transition(source,root,config):
     shutil.copyfile(__file__,root/'preparation_utility.py')
     for artifact in ('resolved_config.json','plant_spec.json','preparation_utility.py'):sources[str(root/artifact)]=digest(root/artifact)
     initial=copy.deepcopy(old['initial_source']);initial.pop('prepared_bank');initial.pop('prepared_bank_sha256');initial.pop('model');initial['bank_index']=cfg['evaluation_bank_index']
-    plan=dict(mode='native_physics_transition',source=str(source),source_plan_sha256=digest(source/'plan.json'),old_model_identity=old['initial_source']['model'],old_bank_reuse=False,initial_source_pending=initial,
+    plan=dict(mode='native_random_initial_preparation' if randomized else 'native_physics_transition',source=str(source),source_plan_sha256=digest(source/'plan.json'),old_model_identity=old['initial_source']['model'],old_bank_reuse=False,initial_source_pending=initial,
         models={'H75':old['models']['H75']},config=old['config'],contexts=old['contexts'],native_runtime_root=str(runtime/'learning/src'),copied_files_sha256=sources,wheel_bodies=wheel_bodies,
-        preparation_constructor='TeleopEnv(config=original plant_spec, backend=mjx), exactly the original DirectCommandEnv.physics constructor; original bank preparation calls only physics._step, never task lower. Do not load unused RegisteredLowerController.',initialization=init,preparation_ticks=700,maximum_preparation_lower_ticks=5600,optimizer_updates=0,policy_evaluation_lower_ticks=0,
+        preparation_constructor='TeleopEnv with sealed plant specification; fresh physical initial conditions followed by 700 ECBC-only ticks per state. No learned lower policy during preparation.',initialization=init,preparation_ticks=700,maximum_preparation_lower_ticks=count*700,optimizer_updates=0,policy_evaluation_lower_ticks=0,
         utility_sha256=digest(__file__),shared_jax_cache=cfg['shared_jax_cache'],inputs={str(config):digest(config),str(specpath):digest(specpath),str(xml):digest(xml)},limits='Physics transition: old H75 checkpoint unchanged; old q labels/calibration belong to old physics. Fresh ECBC preparation only, not five-alpha task evaluation.')
     write(root/'plan.json',plan);write(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));write(root/'status.json',dict(phase='prepared',actual_preparation_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
     return plan
@@ -105,18 +127,18 @@ def execute_preparation(root):
             pose=physics.helpers.pose(data);raw=j.array([speed,0.])
             return base.replace(data=data,raw=raw,actuator=initial_actuator(physics.ac,speed/.1),reference_pose=pose,yaw_wrapped=pose[2],yaw_unwrapped=pose[2],governor=base.governor.replace(current_reference=raw,last_goal=raw))
         bank=jax.jit(jax.vmap(initial))(conditions)
+        count=len(conditions)
         actual_log_blocks=[]
-        # Same original ECBC-only _step loop, vmap8; scan50 only changes host
-        # batching and retains every tick/failure: exactly14 blocks.
+        # Same ECBC-only _step loop, batched states; preserve every tick/failure.
         def chunk(bank):return jax.lax.scan(lambda b,_:jax.vmap(lambda state:physics._step(state,state.raw,True))(b),bank,None,length=50)
         chunk=jax.jit(chunk)
         for block in range(14):
-            status.update(phase='inflight',allocated_lower_slots=(block+1)*50*8,inflight_cost_unknown=True);write(root/'status.json',status)
+            status.update(phase='inflight',allocated_lower_slots=(block+1)*50*count,inflight_cost_unknown=True);write(root/'status.json',status)
             bank,logs=chunk(bank);jax.block_until_ready(bank)
             actual_log_blocks.append(jax.device_get(logs))
             with (root/'last_preparation_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(bank),f)
             np.savez_compressed(root/'preparation_trace.npz',**{k:np.concatenate([np.asarray(x[k]) for x in actual_log_blocks]) for k in ('actual_xy','phi','phi_dot','actual_forward_speed','actual_delta') if k in actual_log_blocks[0]})
-            status.update(phase='preparing',actual_preparation_lower_ticks=(block+1)*50*8,inflight_cost_unknown=False,elapsed_s=time.monotonic()-started);write(root/'status.json',status)
+            status.update(phase='preparing',actual_preparation_lower_ticks=(block+1)*50*count,inflight_cost_unknown=False,elapsed_s=time.monotonic()-started);write(root/'status.json',status)
             if bool(j.any(bank.failed)):raise RuntimeError('fresh preparation failed; no replacement or retry')
         last=jax.tree.map(lambda x:np.asarray(x[-1]),logs);limits=p['initialization']
         passed=(~np.asarray(bank.failed))&(abs(last['phi'])<=limits['end_roll_abs_max_rad'])&(abs(last['phi_dot'])<=limits['end_roll_rate_abs_max_rad_s'])&(abs(last['actual_delta'])<=limits['end_steer_abs_max_rad'])&(abs(last['actual_forward_speed']-np.asarray(conditions[:,0]))<=limits['end_speed_error_abs_max_m_s'])

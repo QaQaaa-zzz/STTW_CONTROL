@@ -51,3 +51,23 @@ def test_wheel_friction_and_path_escape_are_explicit(files):
     assert assets==[Path('meshes/wheel.stl')] and bodies==['frontwheel','rearwheel']
     xml.write_text(xml.read_text().replace('friction="0.8"','friction="10"',1))
     with pytest.raises(ValueError,match='two explicit'):wheel_assets(xml)
+
+
+def test_random_initial_bank_is_reproducible_stratified_and_separated(files):
+    source,out,cfg,xml,oldbank=files
+    spec=json.loads(cfg.read_text())
+    spec.update(maximum_preparation_lower_ticks=11200,evaluation_bank_index=0,
+        initial_randomization=dict(count=16,seed=930101,data_role='TRAIN',
+                                   speed_m_s=[1.5,3.4],roll_rad=[-.06,.06]))
+    put(cfg,spec)
+    first=prepare_transition(source,out,cfg)
+    second=prepare_transition(source,out.with_name('repeat'),cfg)
+    values=first['initialization']['initial_conditions_speed_roll']
+    assert values==second['initialization']['initial_conditions_speed_roll']
+    assert first['mode']=='native_random_initial_preparation'
+    assert len(values)==16 and len({int((v-1.5)/1.9*16) for v,r in values})==16
+    assert all(1.5<=v<3.4 and -.06<=r<.06 for v,r in values)
+    spec['initial_randomization'].update(seed=930102,data_role='DEV');put(cfg,spec)
+    third=prepare_transition(source,out.with_name('dev'),cfg)
+    assert values!=third['initialization']['initial_conditions_speed_roll']
+    assert not (out/'prepared_bank.pkl').exists()
