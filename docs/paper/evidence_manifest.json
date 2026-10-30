@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "f22a4d90b74ac665bbdeea7a54affe0390ffaf3cbab25977de2986da9996d595",
-  "builder_sha256": "c100e7d7c607af12f4b955b926e5549634fda0907190b6ab95399799df0c8e78",
+  "manuscript_sha256": "58bd92337e1d38a260a86d28fb8dbafe45e8703acce7a4088f1b10274c5b5d7b",
+  "builder_sha256": "1c8cddad08be752dad6bdac7d4fc0a83562ae3d9749f8fbc3336c2bf4b871264",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1682,7 +1682,7 @@
     },
     "E280": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/results.json",
-      "sha256": "4fb09b6caf59c2e395659fe135e2ce1e247e9330bb6e4f4f266c9452dc4fa729",
+      "sha256": "1f90fa08190348ce2389aa5ac21606d6d3ceeafc0361458deb386743eae1de51",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -1695,6 +1695,18 @@
     "E282": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_gust_v1/analysis/results.json",
       "sha256": "3965f30e4a8315e23fbbcda6a5050d7f512b904442a466c4743c077d84e269b3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E283": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/results.json",
+      "sha256": "2aff7ec2f2d2a5fcbee5ae7af3a2414a30fc209e349d1200795de00aa0070b86",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E284": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/results.json",
+      "sha256": "4000257cac123e8a339c7568e82c7c1f3cdd33f42eecfa365292fbf826f7d1fb",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     }
@@ -1731,7 +1743,9 @@
     "E279",
     "E280",
     "E281",
-    "E282"
+    "E282",
+    "E283",
+    "E284"
   ],
   "historical_claims_from_readback": [
     {

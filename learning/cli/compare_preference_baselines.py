@@ -69,7 +69,7 @@ def compare(baselines, proposed, user_alpha):
             axes[0].scatter(*raw['actual_xy'][n-1], color=color, marker=marker)
             if row['endpoint']['goal_arrived']:
                 arrival = np.argmin(abs(t-row['endpoint']['first_arrival_s']))
-                axes[0].scatter(*raw['actual_xy'][arrival], color=color, marker='*', s=90, label='First goal arrival')
+                axes[0].scatter(*raw['actual_xy'][arrival], color=color, marker='*', s=90, label='First goal arrival' if index == 0 else None)
             executed_alpha = np.full(n, row['alpha']) if root == roots[0] and not baseline_returns else raw['alpha_exec'][:n]
             values = [raw['actual_forward_speed'][:n], executed_alpha, task['original_cross_track_m'],
                       task['task_step_costs'].sum(axis=1), task['cumulative_task_costs'].sum(axis=1)]
@@ -93,6 +93,7 @@ def compare(baselines, proposed, user_alpha):
         for ax in axes:
             ax.grid(alpha=.2)
             ax.legend(fontsize=8)
+        axes[0].legend(loc='upper center', bbox_to_anchor=(.5,-.25), ncol=2, fontsize=8)
         fig.suptitle(f"U170 | {group[0]} | gust {group[1]:g} s, {source['force_N']:g} N | user alpha={user_alpha:g}\n"
                      'Same complete source; x=contact, square=observed end; task costs exclude terminal penalty')
         filename = f'group_{group_index:02d}_comparison.png'

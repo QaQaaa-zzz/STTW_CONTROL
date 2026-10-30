@@ -260,6 +260,23 @@ The frozen predictor is queried from the task-time-1 s state of each zero-prefer
 
 All four executions reach the original goal and survive to task time 10 s; peak upright forward speed is below 2.034 m/s. The left-leading cases extend active preference preparation and restoration to a two-turn task. The right-leading results demonstrate successful unchanged-preference execution under the tested pulses, while preserving the predictor's empty-set outcome. Thus the panel records both active coordination and fallback behavior on the same nominal task family. [E282]
 
+### 4.11 Matched comparison on the S segment
+
+![Matched original-user and preset-return baselines on the left-leading S segment under 24 N](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/group_01_comparison.png)
+
+The left-leading S segment is repeated from the identical complete state with the original preference held at zero and with preset preference one followed by the same feedback restoration. Both baselines use the same original destination, geometric reconnection, disturbance vector, and task horizon as the saved network-selected trajectories. The two force magnitudes are compared separately. All six trajectories survive and arrive. [E282–E284]
+
+| Force (N) | Execution | Arrival (s) | Preference intervention (s) |
+|---|---|---:|---:|
+| 20 | Original user 0 | 7.245 | 0.0000 |
+| 20 | Preset 1 and return | 7.025 | 2.7700 |
+| 20 | Selected 0.875 and return | 7.035 | 2.3897 |
+| 24 | Original user 0 | 9.235 | 0.0000 |
+| 24 | Preset 1 and return | 7.225 | 2.7900 |
+| 24 | Selected 0.875 and return | 7.190 | 2.3933 |
+
+Compared with maintaining the user's preference, tolerance-guided execution advances arrival by 0.210 s under 20 N and 2.045 s under 24 N. The 24 N trajectory shows a smaller lateral excursion and earlier recovery of forward speed. Compared with preset one, the selected execution reduces preference intervention by 13.7% and 14.2%, with arrival differences of +0.010 s and -0.035 s. Thus, on this two-turn task, a smaller temporary preference change retains the arrival performance of the stronger preset intervention. Preset one has lower accumulated original-task running cost in both cases; the selected execution's advantage is the smaller departure from the user's preference. The common full observation window extends from task time 1 to 10 s, and all costs retain the post-arrival portion of that window. [E283,E284]
+
 ## 5 Discussion
 
 The experiments support a coherent preparation-and-restoration mechanism. Preference-dependent trajectories reach different states before a common disturbance; maintaining a surviving preference can then miss the original goal. Feedback restoration reconnects the temporary intervention to the original task. The fixed-preference comparisons show a survival and arrival benefit in the two matched events, while the preset-return comparison shows that strong simple preparation is also effective. The network-selected preference trades later arrival for a smaller departure from the user preference relative to preset alpha=1. These comparisons locate the value of coordination in the joint task and intervention tradeoff. [E250,E276–E280]

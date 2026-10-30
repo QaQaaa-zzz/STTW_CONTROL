@@ -364,6 +364,8 @@ def evidence_manifest():
         'E280':archive/'u170_preset_return_baselines_v1/analysis/matched_comparison/results.json',
         'E281':archive/'u170_track_segments_nominal_v1/analysis/results.json',
         'E282':archive/'u170_track_segments_gust_v1/analysis/results.json',
+        'E283':archive/'u170_track_segments_baselines_v1/analysis/results.json',
+        'E284':archive/'u170_track_segments_baselines_v1/analysis/matched_comparison/results.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
