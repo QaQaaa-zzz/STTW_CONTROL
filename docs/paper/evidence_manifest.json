@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "69fc4723e38721dbb7172a2e82181ec8306a729add92ea6fd9012028968dab19",
-  "builder_sha256": "ee914e1d1cbb014fc4b8b1bd6c475f35d4c54c99746ab025103198dda6cb1cda",
+  "manuscript_sha256": "f22a4d90b74ac665bbdeea7a54affe0390ffaf3cbab25977de2986da9996d595",
+  "builder_sha256": "c100e7d7c607af12f4b955b926e5549634fda0907190b6ab95399799df0c8e78",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1691,6 +1691,12 @@
       "sha256": "5bf6e632cba436f27a307d0e4c10e230b319a081f45eee8787e80e289382fcac",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E282": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_gust_v1/analysis/results.json",
+      "sha256": "3965f30e4a8315e23fbbcda6a5050d7f512b904442a466c4743c077d84e269b3",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1710,7 +1716,6 @@
     "E263",
     "E264",
     "E265",
-    "E266",
     "E267",
     "E268",
     "E269",
@@ -1725,7 +1730,8 @@
     "E278",
     "E279",
     "E280",
-    "E281"
+    "E281",
+    "E282"
   ],
   "historical_claims_from_readback": [
     {

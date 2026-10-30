@@ -363,6 +363,7 @@ def evidence_manifest():
         'E279':archive/'u170_preset_return_baselines_v1/analysis/results.json',
         'E280':archive/'u170_preset_return_baselines_v1/analysis/matched_comparison/results.json',
         'E281':archive/'u170_track_segments_nominal_v1/analysis/results.json',
+        'E282':archive/'u170_track_segments_gust_v1/analysis/results.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
@@ -411,10 +412,86 @@ def export_draft(pdf=False):
     (HERE/'export_receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
 
 
+def export_ieee():
+    """Render the canonical Markdown through IEEEtran using the local engine."""
+    import mistune
+    source=(HERE/'MANUSCRIPT.md').read_text()
+    source=re.sub(r'\[E\d{3}[^\]]*\]', '', source)
+    engine=ROOT/'runs/paper_toolchain/tectonic'
+    title=source.splitlines()[0].removeprefix('# ')
+    abstract=source.split('## Abstract\n',1)[1].split('\n## 1 ',1)[0].strip()
+    body='## 1 '+source.split('\n## 1 ',1)[1].split('\n## References',1)[0]
+    body=re.sub(r'\[(R\d+)\]', r'@@CITE\1@@', body)
+    references=source.split('\n## References',1)[1]
+    mapping={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$','#':r'\#','_':r'\_','{':r'\{','}':r'\}','~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
+    def escape(text):
+        return ''.join(mapping.get(c,c) for c in text.replace('–','--').replace('—','---'))
+    def prose(text):
+        text=re.sub(r'\[E\d{3}[^\]]*\]','',text)
+        pieces=re.split(r'(@@CITER\d+@@)',text)
+        return ''.join(r'\cite{'+x[6:-2]+'}' if re.fullmatch(r'@@CITER\d+@@',x) else escape(x) for x in pieces)
+    images={}
+    def render(node):
+        kind=node['type']
+        children=node.get('children',[])
+        content=lambda:''.join(render(c) for c in children)
+        if kind=='text':return prose(node['raw'])
+        if kind in ('blank_line','softbreak','linebreak'):return '\n'
+        if kind in ('paragraph','block_text'):return content()+'\n\n'
+        if kind=='heading':
+            text=re.sub(r'^\d+(?:\.\d+)*\s+','',content())
+            command='section' if node['attrs']['level']==2 else 'subsection'
+            return '\\'+command+'{'+text+'}\n'
+        if kind=='strong':return r'\textbf{'+content()+'}'
+        if kind=='emphasis':return r'\emph{'+content()+'}'
+        if kind=='codespan':return r'\texttt{'+escape(node['raw'])+'}'
+        if kind=='link':return content()
+        if kind=='image':
+            path=(HERE/node['attrs']['url']).resolve();images[str(path)]=digest(path)
+            return '\n\\begin{figure*}[tp]\n\\centering\n\\includegraphics[width=\\textwidth,height=0.78\\textheight,keepaspectratio]{'+str(path)+'}\n\\caption{'+content()+'}\n\\end{figure*}\n'
+        if kind=='block_code':
+            if node.get('attrs', {}).get('info')=='math':
+                return '\n\\begin{equation}\\begin{aligned}\n'+node['raw'].strip()+'\n\\end{aligned}\\end{equation}\n'
+            lines=node['raw'].splitlines()
+            return '\n\\begin{quote}\\raggedright\\ttfamily\n'+'\\\\\n'.join(escape(line) for line in lines)+'\n\\end{quote}\n'
+        if kind=='list':
+            env='enumerate' if node['attrs']['ordered'] else 'itemize'
+            return '\\begin{'+env+'}\n'+content()+'\\end{'+env+'}\n'
+        if kind=='list_item':return '\\item '+content()
+        if kind=='table':
+            head=children[0]['children'];rows=[head]+[r['children'] for r in children[1]['children']]
+            columns=''.join('p{'+f'{(.96/len(head)-.018):.4f}'+r'\textwidth}' for _ in head)
+            data='\n\\hline\n'.join(' & '.join(''.join(render(c) for c in cell['children']) for cell in row)+r' \\' for row in rows)
+            return '\n\\begin{table*}[tp]\n\\centering\n\\begin{tabular}{'+columns+'}\n\\hline\n'+data+'\n\\hline\n\\end{tabular}\n\\end{table*}\n'
+        raise ValueError('Unsupported manuscript Markdown node: '+kind)
+    markdown=mistune.create_markdown(renderer='ast',plugins=['table'])
+    text=r'''\documentclass[journal]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx,amsmath,url}
+\begin{document}
+\title{'''+escape(title)+r'''}
+\author{}
+\maketitle
+\begin{abstract}
+'''+prose(abstract)+'\n\\end{abstract}\n'+''.join(render(n) for n in markdown(body))
+    text+='\n\\begin{thebibliography}{99}\n'
+    for key,entry in re.findall(r'\[(R\d+)\]\s+(.+?)(?=\n\n|\Z)',references,re.S):
+        text+='\\bibitem{'+key+'} '+escape(entry.strip())+'\n'
+    text+='\\end{thebibliography}\n\\end{document}\n'
+    target=HERE/'MANUSCRIPT.tex';target.write_text(text)
+    subprocess.run([str(engine),'--keep-logs',str(target)],cwd=HERE,check=True)
+    receipt=json.loads((HERE/'export_receipt.json').read_text())
+    receipt.update(renderer='Tectonic 0.17.0 / IEEEtran journal',tex_sha256=digest(target),
+                   pdf_sha256=digest(HERE/'MANUSCRIPT.pdf'),pdf_bytes=(HERE/'MANUSCRIPT.pdf').stat().st_size,images=images)
+    (HERE/'export_receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser();group=parser.add_mutually_exclusive_group()
     group.add_argument('--figures-only',action='store_true');group.add_argument('--export-only',action='store_true')
-    parser.add_argument('--pdf',action='store_true');args=parser.parse_args()
+    parser.add_argument('--pdf',action='store_true');parser.add_argument('--ieee',action='store_true');args=parser.parse_args()
     if not args.export_only and not (FIG/'tolerance_coordination_architecture.svg').exists():control_diagram()
     evidence_manifest()
-    if not args.figures_only:export_draft(pdf=args.pdf)
+    if not args.figures_only:
+        export_draft(pdf=args.pdf and not args.ieee)
+        if args.ieee:export_ieee()
