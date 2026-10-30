@@ -163,8 +163,13 @@ def low_speed_lateral_load_inventory(p):
         raise ValueError('explicit distinct candidate identity required')
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
         raise ValueError('complete candidate artifact identity required')
+    scope=p.get('geometry_scope','single_turn')
+    if scope not in ('single_turn','low_speed_track_segments'):
+        raise ValueError('unknown low-speed geometry scope')
     if (not contexts or len({c['route'] for c in contexts})!=len(contexts)
-        or any(c['family']!=1 or c['angle_deg']!=90. or not 1.5<=c['speed']<=2.2 or c['direction'] not in (-1.,1.)
+        or any((c['family']!=1 or c['angle_deg']!=90.) if scope=='single_turn'
+               else (c['family'] not in (1,2) or not 30.<=c['angle_deg']<=90.) for c in contexts)
+        or any(not 1.5<=c['speed']<=2.2 or c['direction'] not in (-1.,1.)
                or not math.isfinite(c['radius_m']) or c['radius_m']<=0 or c.get('goal_offset_after_turn_m')!=4. for c in contexts)):
         raise ValueError('unique declared low-speed tight-turn geometries required')
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[

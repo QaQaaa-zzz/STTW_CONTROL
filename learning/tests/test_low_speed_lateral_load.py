@@ -142,3 +142,18 @@ def test_mirrored_nominal_sources_preserve_direction_and_have_no_force():
 def test_missing_half_of_disturbance_grid_is_rejected():
     p=config();p['forces_N']=[]
     with pytest.raises(ValueError,match='grid'):fixed_h75_capability_inventory(p)
+
+
+def test_track_segments_are_explicit_and_preserve_event_pairing():
+    cfg=config()
+    cfg['route_contexts'][0].update(family=2,angle_deg=60.)
+    with pytest.raises(ValueError,match='geometries'):
+        fixed_h75_capability_inventory(cfg)
+    cfg['geometry_scope']='low_speed_track_segments'
+    rows=fixed_h75_capability_inventory(cfg)
+    assert len(rows)==cfg['expected_cases']
+    for a,b in zip(rows[::2],rows[1::2]):
+        np.testing.assert_array_equal(force_pulses([a],3.5),force_pulses([b],3.5))
+    cfg['route_contexts'][0]['speed']=2.8
+    with pytest.raises(ValueError,match='geometries'):
+        fixed_h75_capability_inventory(cfg)
