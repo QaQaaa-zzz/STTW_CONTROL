@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "30503dd564ba3261e7275cb5bca4da944b0984d82e7e5f76b35b0eced1845d78",
-  "builder_sha256": "8c916d556deda2200660943de5e25fee71a027c851dde1d21c54d8c4ff557e99",
+  "manuscript_sha256": "85821466c91f451ae06ee5de430ba24e2120a5ac286a6d2f49f1d153d3bedcd5",
+  "builder_sha256": "9eb6210db8406b6b2298efd08581bd905b729b4380266ec328ee43f42f9e9a2b",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1568,7 +1568,7 @@
     },
     "E261": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/native_goal_run.py",
-      "sha256": "d104be146797e27a5bd6505e69e3a3218adec25c7d2de6e028a9140ffd7ba5db",
+      "sha256": "4864a3ab673c3460a655efc6f603b766e279415634089277b53fe317d8cf63aa",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
     },
@@ -1673,6 +1673,18 @@
       "sha256": "e27f46c6d327fb5e64757b22aee270ccb7566a66358d3a71a85c2563b4b45aff",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E279": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/results.json",
+      "sha256": "7afa0891c58397e74aa545587261b0c4773d5c1778c173643962b0bb9de33ed6",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
+    },
+    "E280": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/results.json",
+      "sha256": "4fb09b6caf59c2e395659fe135e2ce1e247e9330bb6e4f4f266c9452dc4fa729",
+      "verification": "AI artifact_checked",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
@@ -1704,7 +1716,9 @@
     "E275",
     "E276",
     "E277",
-    "E278"
+    "E278",
+    "E279",
+    "E280"
   ],
   "historical_claims_from_readback": [
     {

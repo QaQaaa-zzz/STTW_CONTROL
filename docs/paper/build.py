@@ -360,6 +360,8 @@ def evidence_manifest():
         'E276':archive/'u170_causal_preference_return_v1/analysis/cached_hold_comparison.json',
         'E277':archive/'u170_matched_fixed_baselines_v1/analysis/results.json',
         'E278':archive/'u170_matched_fixed_baselines_v1/analysis/matched_comparison/results.json',
+        'E279':archive/'u170_preset_return_baselines_v1/analysis/results.json',
+        'E280':archive/'u170_preset_return_baselines_v1/analysis/matched_comparison/results.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)

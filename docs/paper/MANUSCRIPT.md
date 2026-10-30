@@ -1,34 +1,34 @@
-# 容扰度引导的单轨机器人偏好区间规划与反馈恢复
+# Disturbance-Tolerance-Guided Preference Coordination for a Single-Track Robot
 
-**Disturbance-Tolerance-Guided Preference Range Planning and Feedback Restoration for a Single-Track Robot**
-
-> TCST方向内部研究主稿；证据更新至2026-10-30。当前版本为U170固定中层、43特征后续策略预测器与10Hz几何接回。尚未投稿就绪，人类作者核验、独立重复与实车验证未完成。旧H75三候选原型不作为本版性能证据；[旧主稿快照](history/pre_return43_revision2737/MANUSCRIPT.md)和[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)保留此前方法、负结果与近邻文献研究。研究决策唯一入口为[项目台账](/home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md)。
-
-## 摘要（中文审阅）
-
-单轨机器人在低速转弯时，路径跟踪与速度保持的偏好会改变后续抗扰表现；较小的名义跟踪误差或侧倾角并不直接代表较大的扰动余量。本文研究冻结控制行为下的容扰度引导偏好区间规划。固定中层U170提供路径—速度偏好条件下的参考修正，一个小型监督预测器联合评价候选偏好、准备时间和后续偏好恢复策略的不触地、原目标到达及原路径误差。非学习协调器优先保留用户偏好，在模型筛选的候选集合中选择执行值；准备后依据当前姿态、速度和参考权限平滑恢复用户偏好，10Hz几何接回保持原任务目标。低速左弯的同一24N等效阵风下，固定α=0触地而α=1存活，但后者未到原目标。模型冻结后的五条新仿真覆盖两个低速弯道、三个来源状态，其中四条实际使用网络选择，另一条验证预测区间上端；全部存活并到达原目标。随后冻结模型的左右镜像新几何测试中，四条均触发空集退化，三条完成原任务、一条触地，显示预测覆盖与调度能力仍有限。结果支持有限开发域中的控制机制与实现可行性，不构成连续区间安全认证、预测概率校准或独立泛化证明。[E250–E258,E269–E272]
+Internal TCST manuscript. Evidence updated 2026-10-30. Model and data provenance are recorded in the companion evidence manifest; the current study uses frozen U170 control, a continuation-conditioned predictor, and 10 Hz geometric reconnection.
 
 ## Abstract
 
-Low-speed turning exposes a coupling between tracking preferences and disturbance tolerance in single-track robots. We study preference-range planning while keeping the reference-generating middle policy and the lower controller frozen. A compact supervised predictor evaluates candidate preferences, preparation time, and a specified feedback-restoration policy through no-contact, original-goal, and path-error outcomes. A nonlearned selector retains the user preference when predicted feasible and otherwise selects a queried candidate. Sensor-based restoration subsequently returns execution toward the original preference, while geometric replanning preserves the original goal. In a low-speed turning example, an identical equivalent gust caused contact for the path-prioritized setting, whereas the speed-prioritized setting survived but missed the goal. Five new simulations after model freezing, covering two low-speed geometries and three source states, all survived and reached the original goal; four used neural range selection and one tested an estimated range endpoint. A subsequent prospective mirrored-geometry panel produced empty feasible sets in all four cases: the degraded unchanged-preference execution reached the goal in three cases and contacted the ground in one. The evidence supports a finite-domain control prototype and exposes limitations in predictive coverage. Continuous interval safety, calibrated probabilities, independent generalization, and hardware performance remain unestablished.
+A tracking preference changes more than the nominal balance between path accuracy and speed regulation in a single-track robot: it also changes the closed-loop state from which the robot must withstand a disturbance. This paper develops disturbance-tolerance-guided preference coordination for low-speed turning. A frozen preference-conditioned middle policy supplies reference corrections to an existing balance controller. A compact supervised network evaluates candidate preferences together with preparation time, hypothetical disturbances, and a specified feedback policy for returning to the user's preference. A nonlearned coordinator retains the user setting when its predicted outcomes satisfy the task criteria and otherwise selects a temporary preference. Feedback restoration and geometric reconnection preserve the original task. Matched simulations expose distinct outcomes for balance recovery and goal completion. In two 24 N disturbance cases, both the fixed user preference and a fixed intermediate preference contact the ground before arrival, whereas the proposed execution reaches the original goal at 6.935 and 6.980 s and survives the full observation window. A separate three-case held-versus-return comparison achieves three arrivals with restoration and one with continued holding. These results establish the usefulness of coordinating preparation and preference restoration in the tested low-speed regime. [E250–E258,E276–E278]
 
-## 1 研究问题与贡献定位
+## 1 Introduction
 
-用户给定α_user，α=0偏路径、α=1偏速度。研究问题不是如何让所有任务指标同时最优，而是：当用户偏好对应的未来抗扰能力不足时，何时以及向哪些偏好暂时调整，才能保留完成原任务并恢复偏好的机会？用户偏好、原世界目标和原路径评分始终保留；执行α可以临时不同。[E250,E259–E261]
+Single-track robots must coordinate steering, forward motion, and balance while following a task reference. In a tight turn, a request for smaller path error can induce a different speed and reference history from a request for stronger speed regulation. For a user, these settings represent legitimate tracking preferences. For the physical robot, they create different states, actuator demands, and responses to a subsequent disturbance. A controller that performs well on the nominal task can therefore encounter a disturbance from an unfavorable state. The control problem is to preserve the user's task while deciding when a temporary change of preference is useful. [E250,E259–E261]
 
-拟向TCST呈现三项控制层面的贡献。第一，以低速转弯的同扰动实验刻画偏好、准备时间与闭环抗扰结局的耦合。第二，把“候选α及其后续返回策略”作为预测对象，联合筛选容扰与任务表现，输出可多段的候选区间。第三，将区间选择、传感器反馈返回和原目标几何接回组合，展示原任务完成的闭环实例。MLP、分层控制或加入α本身不作为首次性主张；正式新颖性论证还需与最接近的偏好控制、参考治理及学习恢复预测文献逐项对照。旧稿的文献记录可作入口，但不同旧物理/策略下的基线结论不能直接支持本版优势。
+The preference parameter in this study is denoted by alpha: zero emphasizes path tracking and one emphasizes speed regulation. It enters a learned middle policy that produces bounded reference corrections. The middle policy and the lower balance controller are frozen during disturbance-tolerance learning and evaluation. This architecture provides a small set of executable alternatives without retraining a complete control policy for each disturbance scenario. The coordinator changes the executed preference, while the original path, destination, and user preference continue to define the task. [E259–E261]
 
-TCST强调具体控制工程问题中的技术贡献，涵盖分析、设计、仿真及硬件。当前整理按完整Paper组织，版面尚未套用IEEE双栏模板；官方投稿上限为Paper 16页、Brief Paper 8页，含图。此为2026-10-29核对的编辑要求，并不意味着本文已经达到录用条件。[R1,R2]
+Two aspects make this coordination problem temporal. First, a preference command acts through reference filters, actuator dynamics, and vehicle motion. Its disturbance response depends on the state reached after a preparation interval. Second, maintaining a disturbance-resistant preference indefinitely may prevent completion of the original task. The temporary intervention must therefore be evaluated together with what happens afterward. Our predictor evaluates the candidate preference under a specified feedback-restoration policy, and our experiments distinguish ground contact, original-goal arrival, and original-user task cost. [E251,E253,E276]
 
-### 1.1 近邻工作的边界
+### 1.1 Related work
 
-分层残差学习已用于无人自行车路径跟踪：Huo等将姿态与位置子任务分别与传统控制器结合，并在物理仿真中评价跟踪与复杂地形表现。[R3] Persson等把内环反馈线性化与外环自适应DeePO结合，通过仿真和实车评价侧倾角及角速度跟踪。[R4] 另有扰动下轨迹—平衡协调工作采用饱和型速度规划器、快速滑模控制与RBF网络近似器。[R5] 因此，分层、残差、学习增强或速度—平衡协调都不是本文可单独主张的新颖点。
+Learning-enhanced bicycle control provides a relevant foundation. Hierarchical residual reinforcement learning combines attitude and position subtasks with conventional control for unmanned-bicycle path tracking. [R3] Adaptive data-enabled policy optimization has been combined with inner-loop feedback linearization for bicycle lean tracking. [R4] Disturbance-rejection approaches also coordinate trajectory tracking and balance through velocity planning and nonlinear feedback. [R5] These studies motivate the use of a capable frozen control stack and place the focus here on how its tracking preference is executed over time.
 
-本文拟强调的研究对象是：冻结的偏好条件控制器在不同准备时间和后续返回策略下形成的闭环容扰能力，以及如何据此暂时偏离并恢复用户偏好。该定位是依据已核验方法描述形成的差异化论点，尚不构成“已有文献均未研究此问题”的证明。本轮仅核验R3出版方摘要与方法摘录、R4作者预印本摘要、R5出版方摘要；完整相关工作仍须覆盖参考治理与学习恢复预测，不能将摘要未提及的机制断言为全文不存在。
+Reference and command governors modify requests to address constraints in an existing closed loop. [R6] Predictive safety filters assess a proposed control action and construct an alternative through model-based prediction. [R7] Recovery RL separates task behavior from recovery behavior using learned information about violations. [R8] Our coordinator similarly acts above an existing controller, but its decision variable is the tracking preference of a frozen middle policy. Its supervised target is the joint disturbance and task outcome under a candidate preparation and a prescribed subsequent restoration policy. This defines a concrete application of outcome prediction to preference execution in a steering-balanced single-track robot.
 
-参考治理的核心是对已闭环稳定的系统按需修改请求以处理约束；Garone等的综述还覆盖参数治理与不确定性。[R6] Wabersich与Zeilinger的预测安全过滤器依据当前状态检查学习控制输入，并用带不确定性的模型预测控制构造安全策略。[R7] Recovery RL利用离线违规数据，并区分任务策略与恢复策略。[R8] 这些思想说明“必要时修改请求”和“任务—恢复分工”已有明确前例。
+### 1.2 Contributions
 
-本文沿用附加协调层的设计思路，但实际操纵量是冻结中层的偏好参数，监督对象是带准备时间及指定反馈返回策略的完整闭环结果，执行端不训练第二个恢复策略。本文未构造不变安全集或证明递归可行性，因此不与预测安全过滤器的保证混同；只比较问题定义与实现机制，不据未匹配实验声称性能优于上述方法。R6核验作者机构公开稿的摘要/引言，R7和R8核验作者预印本摘要及元数据；本文推断与文献事实分开。
+The paper develops three connected contributions:
+
+1. **Preference-conditioned closed-loop characterization.** A frozen middle policy exposes the path–speed tradeoff, and matched low-speed experiments characterize how preference-dependent state and reference histories change disturbance outcomes.
+2. **Preparation- and continuation-conditioned tolerance prediction.** A compact model evaluates candidate preferences using the available preparation interval and a specified feedback-return policy, jointly predicting contact avoidance, original-goal completion, path deviation, and speed.
+3. **Task-preserving preference coordination.** A user-priority selection rule combines these predictions with feedback restoration and geometric reconnection. Matched fixed-preference and held-versus-return experiments evaluate its effect on completing the original task.
+
+The first contribution identifies the control behavior available to the coordinator, the second evaluates the consequences of using that behavior, and the third connects a temporary intervention to task completion. The experiments accordingly separate nominal preference behavior, preparation outcomes, and the effect of returning to the user's preference. [E250–E261,E276–E278]
 
 ## 2 问题定义与实际控制系统
 
@@ -226,6 +226,19 @@ Four additional baseline continuations compare fixed preferences 0 and 0.5 with 
 | 2.075 | Contact at 2.495 s | Contact at 2.530 s | Goal at 6.980 s; survives to 10 s |
 
 The proposed controller selects alpha=0.875 and restores the original user preference at 4.26 and 4.38 s. Both fixed baselines contact the ground before reaching the goal in both cases. These matched comparisons demonstrate a task-completion benefit over the original preference and a fixed compromise under the two tested events. They complement the held-versus-return comparison in Section 4.2: preparation preserves balance through the disturbance, and restoration enables subsequent task completion. The full comparison includes both event timings and preserves each physical endpoint. Original-path running costs are reported separately from contact and arrival; shorter failed trajectories are not ranked favorably by their smaller accumulated cost. [E253,E254,E277,E278]
+
+### 4.8 Preset preparation with identical feedback restoration
+
+![Preset preparation and tolerance-guided execution under the same gust](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/group_01_comparison.png)
+
+A second comparison replaces the predictor's choice with a preset preparation preference of 0.75 or 1. Both baselines use the identical source state, feedback-restoration rule, original goal, and geometric reconnection as the proposed method. Their preparation is initiated at the same declared task boundary; neither baseline receives the actual future gust timing. These four additional continuations separate the effect of executing a preparation-and-return sequence from the effect of choosing its preparation preference. [E279,E280]
+
+| Gust onset (s) | Preset 0.75: arrival (s) / intervention (alpha·s) | Preset 1: arrival (s) / intervention (alpha·s) | Network-selected 0.875: arrival (s) / intervention (alpha·s) |
+|---:|---|---|---|
+| 1.925 | 7.275 / 2.093 | 6.410 / 2.789 | 6.935 / 2.432 |
+| 2.075 | Not reached / 2.410 | 5.530 / 2.830 | 6.980 / 2.446 |
+
+All six compared trajectories survive to task time 10 s. Intervention is the integral of the absolute difference between executed and original user preference over the shared source-to-end window. Preset 1 and network-selected 0.875 both complete the two tasks. The network-selected execution uses 12.8% and 13.6% less preference intervention, while preset 1 arrives earlier and has smaller primary running task cost in both cases. Preset 0.75 reduces intervention in the first case but does not reach the second goal. The comparison illustrates the tradeoff among preparation strength, task completion, and departure from the user preference; it motivates state-dependent selection across a broader set of tasks rather than a claim of uniformly superior performance in this pair. [E279,E280]
 
 ## 5 面向TCST的论点与最小后续工作
 
