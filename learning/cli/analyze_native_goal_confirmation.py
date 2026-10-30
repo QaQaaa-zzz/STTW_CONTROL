@@ -2918,6 +2918,9 @@ def analyze_fixed_h75_capability(root,p):
     return_rule=p['protocol'].get('causal_preference_return')
     candidate=p['protocol'].get('candidate_model')
     model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
+    if p.get('lower_transfer'):
+        lower=p['initial_source']['candidate']
+        model_label+=f" | lower u{lower['source_update']} {lower['actor_sha256'][:8]} zero-shot"
     boundary_decisions={}
     if boundary:
         receipt=json.loads((root/'range_planner_decisions.json').read_text())
@@ -2940,6 +2943,7 @@ def analyze_fixed_h75_capability(root,p):
     for file,sha in p['source_sha256'].items():
         if digest(root/'source'/Path(file).name)!=sha:raise ValueError('capability archived source changed '+file)
     manifest=json.loads((run/'manifest.json').read_text())
+    if p.get('lower_transfer') and manifest['source']!=p['initial_source']:raise ValueError('executed lower transfer source differs')
     for key,value in [('cases',cases),('models',p['models']),('config',p['config']),('plan_sha256',digest(root/'plan.json'))]:
         if manifest[key]!=value:raise ValueError('capability manifest differs '+key)
     if set(p['models'])!={'H75'}:raise ValueError('frozenH75 only capability panel')

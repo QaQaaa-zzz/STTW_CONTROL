@@ -497,6 +497,24 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         initialization=("Authenticated full native source carries; only candidate alpha changes, original task clock retained. " if any('state_source' in c for c in proposal['route_contexts']) else f"Fresh new-physics prepared bank{bank_index}, original native task reset; ")+f"{model['registry_id']} declared alpha={proposal['alphas']}; no q or additional baseline.",data_role=proposal['data_role'],
         replanning=dict(period_s=.1,radius_m=1.8,departure_m=1.,maximum_per_case=100,continuous_replanning=True,information='Current causal reconnection, no force/event information'),
         stop=proposal['stop_rule'],scoring=proposal['scoring'],input_sha256={**previous['inputs'],**previous['copied_files_sha256'],**{str(file):digest(file) for file in files}},source_sha256={str(file):digest(file) for file in modules})
+    if proposal.get('lower_transfer'):
+        transfer=proposal['lower_transfer'];file=Path(transfer['manifest'])
+        if digest(file)!=transfer['manifest_sha256']:raise ValueError('lower transfer manifest changed')
+        record=json.loads(file.read_text());candidate=record['candidate']
+        if record['parent_checkpoint_sha256']!=source['candidate']['checkpoint_sha256']:
+            raise ValueError('lower transfer parent differs')
+        if any('state_source' in c for c in proposal['route_contexts']) or proposal.get('excluded_completed_cases') or proposal.get('range_planner_boundary'):
+            raise ValueError('lower transfer requires fresh paired tasks without old outcome predictor or cached cases')
+        if candidate['normalizer']!=source['candidate']['normalizer']:
+            raise ValueError('lower transfer normalizer differs')
+        for key,hash_key in [('actor','actor_sha256'),('checkpoint','checkpoint_sha256'),('config','config_file_sha256')]:
+            if digest(candidate[key])!=candidate[hash_key]:raise ValueError('lower transfer artifact changed')
+            p['input_sha256'][candidate[key]]=candidate[hash_key]
+        p['input_sha256'][str(file)]=transfer['manifest_sha256']
+        p['middle_training_initial_source']=source
+        p['initial_source']=dict(source,candidate=candidate)
+        p['lower_transfer']=record
+        p['initialization']+=' Explicit frozen-middle/lower-candidate zero-shot transfer; original physical preparation retained.'
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')));save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
 
 
