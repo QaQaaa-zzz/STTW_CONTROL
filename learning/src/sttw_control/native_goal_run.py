@@ -144,6 +144,11 @@ def low_speed_lateral_load_inventory(p):
         or direction[2]!=0. or abs(sum(x*x for x in direction)-1.)>1e-6
         or p['force_frame']!=('world_fixed_vector' if 'force_direction_world' in p else 'worldY')):
         raise ValueError('explicit fixed unit horizontal world force direction required')
+    reconnection=p.get('reconnection')
+    if reconnection is not None and (set(reconnection)!={'goal_heading','maximum_added_length_m'}
+        or reconnection['goal_heading']!='original' or not math.isfinite(reconnection['maximum_added_length_m'])
+        or reconnection['maximum_added_length_m']<0):
+        raise ValueError('explicit original-tangent reconnection length contract required')
     forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
     contexts=p['route_contexts']
     boundary=p.get('range_planner_boundary')
@@ -2534,9 +2539,12 @@ def run(root,*,shape_only=False):
         if shape_only:update(phase='completed',physics_steps=0);return
         if not any(d.platform=='gpu' for d in jax.devices()):raise ValueError('GPU required for numerical evaluation')
         cases=runtime['cases'];path_list=[runtime['bank'][case_path_key(c)] for c in cases]
-        original_path_list=path_list
+        original_path_list=list(path_list)
         if p.get('mode') in (LABEL_MODE,'h75_late_state_tolerance48','h75_user_late_state192'):path_list=[jax.tree.map(lambda x:x[i],paths) for i in range(n)]
         goals=np.array([[np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.xy)[:,axis]) for axis in (0,1)] for path in original_path_list])
+        original_goal_headings=np.array([np.interp(float(path.goal),np.asarray(path.s),np.asarray(path.heading)) for path in original_path_list])
+        reconnection=p.get('protocol',{}).get('reconnection')
+        rejected_replans=[]
         for name,path in runtime['bank'].items():np.savez_compressed(directory/(name+'_path.npz'),**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
         save(directory/'manifest.json',dict(config=p['config'],source=p['initial_source'],cases=cases,models=p['models'],
             original_goals_xy=goals.tolist(),reward_components=runtime['keys'],physics_identity=env.physics.bundle.identity,
@@ -2601,7 +2609,12 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=int(ticks[i])*env.cc.dt,continuous_replanning=p['replanning'].get('continuous_replanning',False)):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (CAPABILITY_MODE,FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(goal_heading_rad=float(original_goal_headings[i])) if reconnection else {}),**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (CAPABILITY_MODE,FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
+                        if reconnection:
+                            remaining=max(0.,float(path_list[i].goal)-float(carry.state.projection.progress[i]))
+                            if float(path.goal)>remaining+reconnection['maximum_added_length_m']:
+                                rejected_replans.append(dict(case_id=cases[i]['case_id'],task_tick=int(ticks[i]),remaining_path_m=remaining,candidate_length_m=float(path.goal),reason='candidate exceeds declared added-length allowance',**meta))
+                                continue
                         path_list[i]=path;changed[i]=True;mask[i]=True
                         path_file=f'replanned_path_{i:02d}_tick{int(ticks[i]):04d}.npz' if p['replanning'].get('continuous_replanning',False) else f'replanned_path_{i:02d}.npz'
                         np.savez_compressed(directory/path_file,**{k:np.asarray(getattr(path,k)) for k in ('s','xy','heading','curvature','turn_end','goal')})
@@ -2658,6 +2671,7 @@ def run(root,*,shape_only=False):
             index.append(dict(c,raw_file=str(file),raw_sha256=digest(file),original_goal_xy=goals[i].tolist(),replanned=bool(changed[i])))
         with (directory/'final_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(carry),f)
         save(directory/'case_index.json',index);save(directory/'replanning_decisions.json',decisions)
+        if reconnection:save(directory/'replanning_rejections.json',rejected_replans)
         update(phase='completed',completed_cases=n,**({'collection_s':p['collection_s'],'task_horizon_s':p['horizon_s'],'prefix_only':True} if p.get('mode')==PREFIX_MODE else {}))
     except BaseException as exc:
         (directory/'traceback.txt').write_text(traceback.format_exc());update(phase='error',error=repr(exc));raise

@@ -9,7 +9,7 @@ import jax.numpy as j
 from .geometric_path import Path
 
 
-def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02):
+def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None):
     """Upstream planner with eight world headings plus the current goal bearing.
 
     This finite heading set avoids imposing one final heading as task success;
@@ -24,7 +24,9 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
     distance=float(np.linalg.norm(goal-pose[:2]))
     if distance<1e-6:raise ValueError('already at goal; retain arrival rather than build zero-length route')
     bearing=np.arctan2(goal[1]-pose[1],goal[0]-pose[0])
-    headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing])
+    if goal_heading_rad is not None and not np.isfinite(goal_heading_rad):
+        raise ValueError('finite optional goal heading required')
+    headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing]) if goal_heading_rad is None else np.array([goal_heading_rad])
     candidates=[]
     for heading in headings:
         x,y,yaw,modes,lengths=plan_dubins_path(*pose,*goal,float(heading),1/radius_m,
@@ -63,6 +65,7 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
                   upstream_commit='8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031',
                   radius_m=float(radius_m),modes=modes,segment_lengths_m=list(lengths),
                   goal_heading_rad=goal_heading,goal_heading_candidates=len(headings),
+                  goal_heading_mode='free' if goal_heading_rad is None else 'prescribed',
                   goal_arclength_m=float(total),goal_xy=goal.tolist(),start_pose=pose.tolist(),
                   curvature_continuous=False,position_heading_continuous=True,
                   shortest_path_certificate=False,safety_certificate=False)

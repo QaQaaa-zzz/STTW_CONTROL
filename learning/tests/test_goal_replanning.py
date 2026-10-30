@@ -64,3 +64,12 @@ def test_degenerate_or_out_of_support_goal_is_explicit_instead_of_moved():
     with pytest.raises(ValueError,match='already'):dubins_goal_path([0,0,0],[0,0])
     with pytest.raises(ValueError,match='beyond'):dubins_goal_path([0,0,0],[100,0])
     with pytest.raises(ValueError):dubins_goal_path([0,0,np.nan],[2,3])
+
+
+def test_prescribed_goal_heading_preserves_outgoing_original_direction():
+    angle=-1.95
+    path,meta=dubins_goal_path([13.67,-6.72,-1.98],[11.66,-9.06],goal_heading_rad=angle)
+    end=np.asarray(path.xy)[-1]-np.asarray(path.xy)[-2]
+    np.testing.assert_allclose(end/np.linalg.norm(end),[np.cos(angle),np.sin(angle)],atol=1e-3)
+    assert meta['goal_heading_mode']=='prescribed' and meta['goal_heading_candidates']==1
+    assert meta['goal_heading_rad']==angle
