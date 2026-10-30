@@ -79,3 +79,30 @@ def export_model(output,source=DEFAULT_XML):
     with output.open('x') as stream:
         stream.write(ET.tostring(root,encoding='unicode'))
     return bundle.identity
+
+
+def export_domain_model(output,parameters,source=DEFAULT_XML):
+    """Write an isolated physical-domain asset; leave the nominal model intact."""
+    import math
+    if set(parameters)!={'wheel_sliding_friction','chassis_mass_scale'} or any(not math.isfinite(v) or v<=0 for v in parameters.values()):
+        raise ValueError('explicit positive wheel friction and chassis mass scale required')
+    source=Path(source).resolve();bundle=load_model(source)
+    root=ET.fromstring(bundle.portable_xml)
+    wheels=root.findall(".//worldbody//geom[@class='wheel']")
+    inertia=root.find(".//body[@name='chasis']/inertial")
+    if len(wheels)!=2 or inertia is None or 'diaginertia' not in inertia.attrib:
+        raise ValueError('expected two wheel contacts and explicit chassis inertia')
+    for geom in wheels:
+        # Preserve nominal torsional/rolling friction inherited from defaults.
+        values=geom.get('friction').split();values[0]=str(parameters['wheel_sliding_friction'])
+        geom.set('friction',' '.join(values))
+    scale=parameters['chassis_mass_scale']
+    inertia.set('mass',str(float(inertia.get('mass'))*scale))
+    inertia.set('diaginertia',' '.join(str(float(v)*scale) for v in inertia.get('diaginertia').split()))
+    compiler=root.find('compiler')
+    compiler.set('meshdir',str((source.parent/compiler.get('meshdir','')).resolve()))
+    output=Path(output);output.parent.mkdir(parents=True,exist_ok=True)
+    with output.open('x') as stream:stream.write(ET.tostring(root,encoding='unicode'))
+    varied=load_model(output)
+    return dict(source_model=bundle.identity,parameters=parameters,model=varied.identity,
+                output=str(output.resolve()),semantics='both wheel sliding coefficients; chassis mass and principal inertia scaled together, center of mass and other bodies unchanged')

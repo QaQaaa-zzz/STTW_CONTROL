@@ -14,14 +14,14 @@ from .teleop_reference import integrate,unwrap
 
 class TeleopEnv:
     observation_mode='oracle_full_state'
-    def __init__(self,config=None,backend='mjx'):
+    def __init__(self,config=None,backend='mjx',model_path=None):
         self.spec=load_teleop_config() if config is None else config
         legacy=load_config(CONFIG_PATH.parent/'fixed_endpoint_directional_alpha0.json')
         self.cc=replace(legacy.controller,fixed_roll_reference=None)
         self.ac=legacy.actuator
         self.backend=backend
         self.helpers=RecoveryEnv(TaskConfig(controller=self.cc,actuator=self.ac,
-            speed_reference=2.3,eso_start=3.,roll_failure=.7),backend=backend)
+            speed_reference=2.3,eso_start=3.,roll_failure=.7),backend=backend,model_path=model_path)
         self.model=self.helpers.model;self.bundle=self.helpers.bundle
         self.substeps=self.helpers.substeps
         expected=(.005,1.5,10.,3.,60.,.8,1.,1.,False,'additive',.408,25*np.pi/180)

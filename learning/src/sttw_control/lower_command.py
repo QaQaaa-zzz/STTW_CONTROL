@@ -75,7 +75,7 @@ class LowerState:
 
 class LowerCommandEnv:
     def __init__(self,spec):
-        self.spec=spec;self.physics=TeleopEnv();self.cc=self.physics.cc;self.ac=self.physics.ac
+        self.spec=spec;self.physics=TeleopEnv(model_path=spec.get('physical_model_xml'));self.cc=self.physics.cc;self.ac=self.physics.ac
     def observation(self,s):return observation_from_history(s.frames,s.mask,s.tick,self.spec)
     def record(self,s):
         m,_,v=self.physics.observe(s.physical.data);m=m.at[4].set(s.yaw_rate)

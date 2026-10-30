@@ -280,11 +280,11 @@ class RecoveryEnv:
             return object.__new__(CommandRecoveryEnv)
         return object.__new__(cls)
 
-    def __init__(self,config=TaskConfig(),*,backend='cpu'):
+    def __init__(self,config=TaskConfig(),*,backend='cpu',model_path=None):
         if backend not in ('cpu','mjx'): raise ValueError('backend must be cpu or mjx')
         self.config=config
         self.backend=backend
-        self.bundle=load_model()
+        self.bundle=load_model() if model_path is None else load_model(model_path)
         self.model=self.bundle.model
         self._wheel_body_ids=tuple(mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_BODY,n) for n in ('frontwheel','rearwheel'))
         self._allowed_floor_bodies=(0,*self._wheel_body_ids)

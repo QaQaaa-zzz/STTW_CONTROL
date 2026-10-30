@@ -1,0 +1,13 @@
+{
+  "experiment_id": "STTW-LOWER-PHYSICAL-DOMAINS-V1",
+  "wheel_sliding_friction": [0.6, 1.0],
+  "chassis_mass_scale": [0.9, 1.1],
+  "seeds": {"TRAIN": 930201, "TEST": 930202},
+  "counts": {"TRAIN": 8, "TEST": 4},
+  "sampling": "independent stratified marginals, frozen finite bank; nominal reference retained",
+  "semantics": "same friction for front/rear; scale chassis mass and principal inertia together without moving COM; preserve other bodies, contact priorities, actuator permissions and timing",
+  "initial_state_contract": "prepare each bank under its own model; no transplantation from nominal physical carries",
+  "data_role": "TRAIN for fitting; TEST frozen until training/model selection is complete; REFERENCE nominal",
+  "physical_steps": 0,
+  "optimizer_updates": 0
+}
