@@ -59,6 +59,19 @@ def prepare_transition(source,root,config):
         samples=rng.uniform(size=(count,2))
         samples[:,0]=(rng.permutation(count)+samples[:,0])/count
         conditions=(bounds[:,0]+samples*(bounds[:,1]-bounds[:,0])).tolist()
+        excitation=cfg.get('terminal_excitation')
+        if excitation is not None:
+            force=np.asarray(excitation['world_y_force_N'],float)
+            duration=np.asarray(excitation['duration_s'],float)
+            limits=excitation['acceptance']
+            if (force.shape!=(2,) or duration.shape!=(2,) or not np.isfinite(np.r_[force,duration]).all()
+                or force[0]>=force[1] or np.max(np.abs(force))>30 or not 0<duration[0]<=duration[1]<=.5
+                or set(limits)!={'end_roll_abs_max_rad','end_roll_rate_abs_max_rad_s','end_speed_error_abs_max_m_s','end_steer_abs_max_rad'}
+                or any(not np.isfinite(v) or v<=0 for v in limits.values())):
+                raise ValueError('bounded terminal excitation and explicit acceptance required')
+            pulse_force=rng.uniform(*force,size=count)
+            pulse_duration=rng.uniform(*duration,size=count)
+            pulses=np.column_stack([3.5-pulse_duration,np.full(count,3.5),np.zeros(count),pulse_force,np.zeros(count)]).tolist()
     xml=Path(cfg['source_xml']).resolve()
     if digest(xml)!=cfg['expected_source_xml_sha256']:raise ValueError('new XML identity differs')
     assets,wheel_bodies=wheel_assets(xml);native=Path(old['native_runtime_root']).resolve()
@@ -73,6 +86,10 @@ def prepare_transition(source,root,config):
         init=copy.deepcopy(init)
         init['initial_conditions_speed_roll']=conditions
         init['randomization']=randomized
+        if excitation is not None:
+            init.update(excitation['acceptance'])
+            init['terminal_excitation']=excitation
+            init['terminal_force_pulses']=pulses
         spec=copy.deepcopy(spec);spec['initialization']=init
     root.mkdir();runtime=root/'native_runtime';sources={}
     for name,expected in old['native_expected_sources'].items():
@@ -130,14 +147,18 @@ def execute_preparation(root):
         count=len(conditions)
         actual_log_blocks=[]
         # Same ECBC-only _step loop, batched states; preserve every tick/failure.
-        def chunk(bank):return jax.lax.scan(lambda b,_:jax.vmap(lambda state:physics._step(state,state.raw,True))(b),bank,None,length=50)
+        if 'terminal_force_pulses' in p['initialization']:
+            pulses=j.asarray(p['initialization']['terminal_force_pulses'])
+            def chunk(bank):return jax.lax.scan(lambda b,_:jax.vmap(lambda state,pulse:physics._step(state,state.raw,True,force_pulse=pulse))(b,pulses),bank,None,length=50)
+        else:
+            def chunk(bank):return jax.lax.scan(lambda b,_:jax.vmap(lambda state:physics._step(state,state.raw,True))(b),bank,None,length=50)
         chunk=jax.jit(chunk)
         for block in range(14):
             status.update(phase='inflight',allocated_lower_slots=(block+1)*50*count,inflight_cost_unknown=True);write(root/'status.json',status)
             bank,logs=chunk(bank);jax.block_until_ready(bank)
             actual_log_blocks.append(jax.device_get(logs))
             with (root/'last_preparation_carry.pkl').open('wb') as f:pickle.dump(jax.device_get(bank),f)
-            np.savez_compressed(root/'preparation_trace.npz',**{k:np.concatenate([np.asarray(x[k]) for x in actual_log_blocks]) for k in ('actual_xy','phi','phi_dot','actual_forward_speed','actual_delta') if k in actual_log_blocks[0]})
+            np.savez_compressed(root/'preparation_trace.npz',**{k:np.concatenate([np.asarray(x[k]) for x in actual_log_blocks]) for k in ('actual_xy','phi','phi_dot','actual_forward_speed','actual_delta','applied_force_impulse') if k in actual_log_blocks[0]})
             status.update(phase='preparing',actual_preparation_lower_ticks=(block+1)*50*count,inflight_cost_unknown=False,elapsed_s=time.monotonic()-started);write(root/'status.json',status)
             if bool(j.any(bank.failed)):raise RuntimeError('fresh preparation failed; no replacement or retry')
         last=jax.tree.map(lambda x:np.asarray(x[-1]),logs);limits=p['initialization']

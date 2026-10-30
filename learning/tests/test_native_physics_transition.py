@@ -71,3 +71,20 @@ def test_random_initial_bank_is_reproducible_stratified_and_separated(files):
     third=prepare_transition(source,out.with_name('dev'),cfg)
     assert values!=third['initialization']['initial_conditions_speed_roll']
     assert not (out/'prepared_bank.pkl').exists()
+
+
+def test_terminal_excitation_is_frozen_per_state_and_changes_only_new_gates(files):
+    source,out,cfg,xml,oldbank=files
+    spec=json.loads(cfg.read_text())
+    spec.update(maximum_preparation_lower_ticks=11200,evaluation_bank_index=0,
+        initial_randomization=dict(count=16,seed=930101,data_role='TRAIN',speed_m_s=[1.5,3.4],roll_rad=[-.06,.06]),
+        terminal_excitation=dict(world_y_force_N=[-12.,12.],duration_s=[.15,.3],acceptance=dict(end_roll_abs_max_rad=.25,end_roll_rate_abs_max_rad_s=.8,end_speed_error_abs_max_m_s=.4,end_steer_abs_max_rad=.25)))
+    put(cfg,spec);p=prepare_transition(source,out,cfg)
+    pulses=p['initialization']['terminal_force_pulses']
+    assert len(pulses)==16
+    assert all(3.2<=r[0]<=3.35 and r[1]==3.5 and r[2]==r[4]==0 and -12<=r[3]<=12 for r in pulses)
+    assert min(r[3] for r in pulses)<0<max(r[3] for r in pulses)
+    assert p['initialization']['end_roll_abs_max_rad']==.25
+    original=json.loads((source/'plan.json').read_text())
+    original_spec=Path(original['initial_source']['upper_run'])/'alpha0/frozen_config_stage52.json'
+    assert 'terminal_force_pulses' not in json.loads(original_spec.read_text())['initialization']

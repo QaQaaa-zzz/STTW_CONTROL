@@ -1,0 +1,39 @@
+{
+  "source_xml": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml",
+  "expected_source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+  "preparation_ticks": 700,
+  "maximum_preparation_lower_ticks": 22400,
+  "evaluation_bank_index": 0,
+  "shared_jax_cache": "/home/qy/STTW_CONTROL/runs/.jax_compilation_cache",
+  "note": "Non-equilibrium TRAIN preparation: same randomized speed/roll reset then 700 ECBC steps, signed terminal world-Y forces ending exactly at 3.5s. Explicit wider non-equilibrium admission gates, not stable-bank qualification or safety guarantees. All failures retained, no resampling.",
+  "expected_plant_spec_sha256": "a46ff9f0099d191f755008d4fdf203de30b1bb8adc65fca1c4cc5fc94f93962c",
+  "initial_randomization": {
+    "count": 32,
+    "seed": 930101,
+    "data_role": "TRAIN",
+    "speed_m_s": [
+      1.5,
+      3.4
+    ],
+    "roll_rad": [
+      -0.06,
+      0.06
+    ]
+  },
+  "terminal_excitation": {
+    "world_y_force_N": [
+      -12.0,
+      12.0
+    ],
+    "duration_s": [
+      0.15,
+      0.3
+    ],
+    "acceptance": {
+      "end_roll_abs_max_rad": 0.25,
+      "end_roll_rate_abs_max_rad_s": 0.8,
+      "end_speed_error_abs_max_m_s": 0.4,
+      "end_steer_abs_max_rad": 0.25
+    }
+  }
+}
