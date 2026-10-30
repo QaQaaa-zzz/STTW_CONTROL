@@ -12,6 +12,20 @@ from sttw_control.native_goal_run import (
     fixed_h75_capability_inventory,force_pulses,audit_five_alpha_online_initial)
 
 
+@struct.dataclass
+class Physical:
+    physical_tick: object
+@struct.dataclass
+class State:
+    alpha: object
+    tick: object
+    physical: object
+    history: object
+@struct.dataclass
+class Carry:
+    state: object
+    hidden: object
+
 def config():
     return json.loads((Path(__file__).parents[1]/'configs/h75_low_speed_lateral_load_screen.json').read_text())
 
@@ -99,19 +113,6 @@ def test_conditional_case_grid_uses_source_clock_plus_preparation_and_full_group
 
 @pytest.mark.parametrize('alphas',[[0.,1.],[0.,.25,.5,.75,1.]])
 def test_two_alpha_per_event_reset_audit_preserves_complete_pairing(alphas):
-    @struct.dataclass
-    class Physical:
-        physical_tick: object
-    @struct.dataclass
-    class State:
-        alpha: object
-        tick: object
-        physical: object
-        history: object
-    @struct.dataclass
-    class Carry:
-        state: object
-        hidden: object
     cfg=config();n=17*len(alphas);cfg.update(alphas=alphas,expected_cases=n,maximum_lower_ticks=n*2000)
     rows=fixed_h75_capability_inventory(cfg);alpha=j.array([r['alpha'] for r in rows])
     values=j.repeat(j.arange(17),len(alphas))
@@ -173,3 +174,20 @@ def test_mixed_speed_scope_preserves_old_low_speed_contract():
     cfg['route_contexts'][0]['speed']=3.6
     with pytest.raises(ValueError,match='speed/angle scope'):
         fixed_h75_capability_inventory(cfg)
+
+
+def test_multiple_prepared_states_keep_five_alpha_pairing_and_separate_paths():
+    p=json.loads((Path(__file__).parents[1]/'configs/lower_domain_transfer_dev.json').read_text())
+    p.update(bank_indices=[0,6],expected_cases=40,maximum_lower_ticks=80000)
+    rows=fixed_h75_capability_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==40
+    for bank in [0,6]:
+        selected=[r for r in rows if r['bank_index']==bank]
+        assert len(selected)==20
+        assert {r['alpha'] for r in selected}=={0.,.25,.5,.75,1.}
+        assert all(r['path_key'].startswith(f'bank{bank}_') for r in selected)
+    alpha=j.array([r['alpha'] for r in rows]);values=j.repeat(j.arange(8),5)
+    initial=Carry(State(alpha,j.zeros(40,j.int32),Physical(j.full(40,700,j.int32)),values),values+10)
+    assert audit_five_alpha_online_initial(initial,rows,700,panel_kind='disturbed_declared_user',expected_route_count=8)['paired_reset_all_leaves_exact']
+    p['bank_indices']=[0,0]
+    with pytest.raises(ValueError,match='unique sorted'):fixed_h75_capability_inventory(p)

@@ -2787,12 +2787,12 @@ def validate_fixed_capability_cases(cases,protocol):
     if protocol.get('capability_variant')=='low_speed_lateral_load':
         from sttw_control.native_goal_run import low_speed_lateral_load_inventory
         declared=low_speed_lateral_load_inventory(protocol)
-        signature=lambda c:(c['route'],c['alpha'],c['force_N'],c['onset_s'])
+        signature=lambda c:(c['bank_index'],c['route'],c['alpha'],c['force_N'],c['onset_s'])
         expected={signature(c) for c in declared};observed={signature(c) for c in cases}
-        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases) or protocol['bank_indices']!=[0]:raise ValueError('complete paired low-speed load inventory required')
+        if len(cases)!=protocol['expected_cases'] or observed!=expected or len(observed)!=len(cases):raise ValueError('complete paired low-speed load inventory required')
         speeds={c['route']:c['speed'] for c in protocol['route_contexts']}
         user=lambda c:protocol['causal_preference_return']['user_alpha'] if protocol.get('causal_preference_return') else c['alpha']
-        if any(c['bank_index']!=0 or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or c['query_alpha']!=c['alpha'] or any(c[k]!=user(c) for k in ('user_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
+        if any(c['bank_index'] not in protocol['bank_indices'] or c['mode']!='H75' or c['speed']!=speeds[c['route']] or c['duration_s']!=protocol['duration_s'] or c['query_alpha']!=c['alpha'] or any(c[k]!=user(c) for k in ('user_alpha','effective_user_alpha')) for c in cases):raise ValueError('paired low-speed load identity differs')
         if {c['route'] for c in cases}!={c['route'] for c in protocol['route_contexts']}:raise ValueError('load route mismatch')
         return
     targeted=protocol.get('capability_variant')=='targeted_base_review'
@@ -3029,9 +3029,9 @@ def analyze_fixed_h75_capability(root,p):
                 rows[-1].update(load_kind='nominal_no_applied_force',gate_contract='No load windows in nominal episode; use low_speed_full_upright_gate_passed.')
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected*2000:raise ValueError('capability actual physics accounting differs')
-    plot_groups=[(route,event) for route,event in sorted({(r['route'],r['event']) for r in rows})] if load_screen else [(route,None) for route in sorted({r['route'] for r in rows})]
-    for route,event in plot_groups:
-        group=sorted([r for r in rows if r['route']==route and (event is None or r['event']==event)],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+    plot_groups=sorted({(r['bank_index'],r['route'],r['event'] if load_screen else None) for r in rows})
+    for initial_index,route,event in plot_groups:
+        group=sorted([r for r in rows if r['bank_index']==initial_index and r['route']==route and (event is None or r['event']==event)],key=lambda r:r['alpha']);path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
         # Show the continuing controller reference beyond the arrival target.
         # Limit display to observed progress plus preview, keeping XY readable.
         observed_end=max(float(np.max(raws[r['case_id']]['path_progress'][:r['active_lower_ticks']])) for r in group)
@@ -3056,7 +3056,7 @@ def analyze_fixed_h75_capability(root,p):
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | new wheel friction.8 | actual endpoints');name=(f'bank{initial_index}_' if len(p['protocol']['bank_indices'])>1 else '')+route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
         if load_screen:
             render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}

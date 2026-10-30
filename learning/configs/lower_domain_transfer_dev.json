@@ -3,7 +3,8 @@
   "mode": "fixed_h75_capability",
   "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
   "bank_indices": [
-    0
+    0,
+    6
   ],
   "alphas": [
     0.0,
@@ -13,8 +14,8 @@
     1.0
   ],
   "horizon_s": 10.0,
-  "expected_cases": 20,
-  "maximum_lower_ticks": 40000,
+  "expected_cases": 40,
+  "maximum_lower_ticks": 80000,
   "optimizer_updates": 0,
   "planning_frequency_hz": 10.0,
   "forces_N": [],
@@ -60,9 +61,9 @@
       "goal_offset_after_turn_m": 4.0
     }
   ],
-  "data_role": "DEV selection only: four representative low/high single/S routes, all five alphas, existing nominal bank0. Random-start and unseen physical-domain TEST remain separate.",
+  "data_role": "DEV selection only: four low/high single/S routes, five alphas, two existing prepared states (bank0/6). These are historical near-equilibrium states, not independent randomized-state TEST.",
   "scoring": "Actual/reference XY, true in-turn speed, first original-goal arrival and full-window survival reported separately; original-path error, final speed/steer reference tracking and terminal excursions. Same U170 and 10Hz reconnection for parent and candidate; no universal-dominance requirement.",
-  "stop_rule": "20 episodes to task10/contact, maximum40000 lower ticks, zero optimizer; no performance execution before candidate selection.",
+  "stop_rule": "40 episodes to task10/contact, maximum80000 lower ticks per model, zero optimizer; performance execution waits for checkpoint selection.",
   "capability_variant": "low_speed_lateral_load",
   "question": "Does a lower continuation improve frozen-U170 task tracking across low/high bends without unacceptable loss of nominal behavior?",
   "onsets_s": [],
@@ -96,7 +97,7 @@
   "geometry_scope": "mixed_speed_track_segments",
   "dataset_partition": {
     "training_rows": 0,
-    "development_rows": 20,
+    "development_rows": 40,
     "all_development": true,
     "unit": "route/alpha"
   },
@@ -110,5 +111,6 @@
   "reconnection": {
     "goal_heading": "original",
     "maximum_added_length_m": 0.5
-  }
+  },
+  "initial_state_scope": "Original prepared bank0 true speed1.9603m/s and bank6 true speed2.5483m/s; preserve complete physics/ESO/actuator state. For low-speed route labels report actual turn speed separately from initial deceleration."
 }

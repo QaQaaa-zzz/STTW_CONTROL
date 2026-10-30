@@ -131,12 +131,14 @@ CAPABILITY_MODE='fixed_h75_capability'
 
 def low_speed_lateral_load_inventory(p):
     """Complete paired world-Y equivalent lateral-load screen; never a wind speed."""
-    required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[0],
+    required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],
         horizon_s=10.,
         optimizer_updates=0,planning_frequency_hz=10.,zero_onset_s=0.,
         planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
     if any(p.get(k)!=value for k,value in required.items()):
         raise ValueError('paired low-speed lateral-load contract differs')
+    banks=p['bank_indices']
+    if not banks or banks!=sorted(set(banks)) or any(type(b) is not int or not 0<=b<8 for b in banks):raise ValueError('declare unique sorted indices in the existing eight-state bank')
     if (not p['alphas'] or any(not math.isfinite(a) or not 0<=a<=1 for a in p['alphas'])
         or any(b<=a for a,b in zip(p['alphas'],p['alphas'][1:]))):raise ValueError('finite strictly increasing candidate alpha grid required')
     direction=p.get('force_direction_world',[0.,1.,0.])
@@ -156,7 +158,7 @@ def low_speed_lateral_load_inventory(p):
     if any(not g or any(a not in p['alphas'] for a in g) or len(set(g))!=len(g) for g in context_grids):raise ValueError('boundary execution candidates must be declared grid points')
     excluded=p.get('excluded_completed_cases',[])
     if len({r['case_id'] for r in excluded})!=len(excluded):raise ValueError('unique reused complete cases required')
-    count=sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))-len(excluded)
+    count=len(banks)*sum(map(len,context_grids))*(int(p.get('include_nominal',True))+len(forces)*len(onsets))-len(excluded)
     if (bool(forces)!=bool(onsets) or (not forces and not p.get('include_nominal',True)) or len(set(forces))!=len(forces) or len(set(onsets))!=len(onsets)
         or any(not math.isfinite(f) or f==0 for f in forces)
         or not math.isfinite(duration) or duration<=0
@@ -184,8 +186,8 @@ def low_speed_lateral_load_inventory(p):
         for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
     identity=candidate['registry_id'] if candidate else p['model_id']
     rows=[]
-    combinations=((context,event,alpha) for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
-    for context,event,alpha in combinations:
+    combinations=((b,context,event,alpha) for b in banks for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
+    for b,context,event,alpha in combinations:
         route=context['route'];source=context.get('state_source');start=source['source_task_tick']*.005 if source else 0.
         if start+p['duration_s']+max(onsets,default=0.)>10:raise ValueError('conditional force extends beyond task horizon')
         onset=event['onset_s']+start if event['force_N'] else 0.
@@ -193,7 +195,7 @@ def low_speed_lateral_load_inventory(p):
         rows.append(dict(route=route,speed=context['speed'],**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
         **({'force_direction_world':direction} if 'force_direction_world' in p else {}),
         **({'source_task_start_s':start,'preparation_s':event['onset_s'] if event['force_N'] else 0.} if source else {}),
-        bank_index=0,path_key=f'bank0_{route}',case_id=f"bank0/{route}/{identity}/a{alpha:g}/{event_name}",
+        bank_index=b,path_key=f'bank{b}_{route}',case_id=f"bank{b}/{route}/{identity}/a{alpha:g}/{event_name}",
         mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha))
         rows[-1]['onset_s']=onset
         rows[-1]['event']=event_name
@@ -203,6 +205,7 @@ def low_speed_lateral_load_inventory(p):
             rows[-1].update(original_user_alpha=user,raw_user_alpha=user,user_alpha=user,effective_user_alpha=user,
                 case_id=rows[-1]['case_id']+f'/return_user{user:g}')
     if any('state_source' in c for c in contexts) and not all('state_source' in c for c in contexts):raise ValueError('all conditional contexts require explicit sources')
+    if any('state_source' in c for c in contexts) and banks!=[0]:raise ValueError('conditional saved sources retain their original bank0 contract')
     excluded_ids={r['case_id'] for r in excluded}
     if not excluded_ids.issubset({r['case_id'] for r in rows}):raise ValueError('reused case outside declared complete query matrix')
     return [r for r in rows if r['case_id'] not in excluded_ids]
@@ -429,9 +432,12 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
     bank_index=proposal['bank_indices'][0]
     if proposal.get('capability_variant') in ('low_speed_lateral_load','targeted_base_review'):source=dict(source,bank_index=bank_index)
-    snapshot=jax.tree.map(lambda x:np.asarray(x[bank_index]),bank)
-    if bool(snapshot.failed) or int(snapshot.physical_tick)!=700 or any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(snapshot) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('fresh bank6 clock/failure invalid; no replacement')
-    proposal=dict(proposal,bank_state_fingerprints={str(bank_index):snapshot_fingerprint(snapshot)})
+    fingerprints={}
+    for selected_index in proposal['bank_indices']:
+        snapshot=jax.tree.map(lambda x:np.asarray(x[selected_index]),bank)
+        if bool(snapshot.failed) or int(snapshot.physical_tick)!=700 or any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(snapshot) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('selected prepared-state clock/failure invalid; no replacement')
+        fingerprints[str(selected_index)]=snapshot_fingerprint(snapshot)
+    proposal=dict(proposal,bank_state_fingerprints=fingerprints)
     folder=Path(__file__).resolve().parent
     modules=[folder/n for n in ('native_goal_run.py','native_goal_continuation.py','native_equilibrium_rule.py','contact_only_environment.py','goal_replanning.py','_vendor/pythonrobotics/dubins.py','_vendor/pythonrobotics/angle.py')]+[Path('learning/cli/run_native_goal_confirmation.py').resolve()]
     if proposal.get('range_planner_boundary'):
@@ -2252,7 +2258,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_subset' if p['protocol'].get('excluded_completed_cases') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_subset' if p['protocol'].get('excluded_completed_cases') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts'])*len(p['protocol']['bank_indices']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
         if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
