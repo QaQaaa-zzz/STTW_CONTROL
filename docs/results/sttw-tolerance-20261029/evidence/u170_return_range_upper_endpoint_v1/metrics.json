@@ -1,0 +1,56 @@
+[
+  {
+    "case_id": "bank0/left90_R1p3_v2p0_source_t1p0_a0/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a1/prep1_F+24/return_user0",
+    "route": "left90_R1p3_v2p0_source_t1p0_a0",
+    "speed": 2.0,
+    "event": "prep1_F+24",
+    "force_N": 24.0,
+    "onset_s": 2.0,
+    "duration_s": 0.4,
+    "force_frame": "world_fixed_vector",
+    "force_direction_world": [
+      -0.7173560908995228,
+      0.6967067093471654,
+      0.0
+    ],
+    "source_task_start_s": 1.0,
+    "preparation_s": 1.0,
+    "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "alpha": 1.0,
+    "user_alpha": 0.0,
+    "original_goal_xy": [
+      11.600531896076673,
+      5.201323872227382
+    ],
+    "endpoint": {
+      "goal_arrived": true,
+      "arrival_outcome": "arrived",
+      "goal_radius_m": 1.0,
+      "first_arrival_s": 6.735,
+      "minimum_upright_goal_distance_m": 0.07877288746676825,
+      "contact_after_arrival": false,
+      "fault_after_arrival": false,
+      "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+      "physical_outcome": "survived"
+    },
+    "contact_pre_tick_s": null,
+    "preference_return_audit": {
+      "independent_sensor_permission_clock_audit": true,
+      "actual_event_labels_used": false,
+      "first_return_command_s": 3.2799999713897705,
+      "first_original_alpha_s": 4.400000095367432,
+      "original_user_alpha": 0.0,
+      "final_executing_alpha": 0.0,
+      "changed_upper_steps": 50
+    },
+    "original_user_three_running_costs": [
+      24.489898969585045,
+      153.2569000440736,
+      15.503275443916735
+    ],
+    "full_upright_max_abs_speed_m_s": 2.0307424068450928,
+    "low_speed_full_upright_gate_passed": true,
+    "raw_sha256": "6c4e7b40323449dc20f00e2cdfc65970860203a24f84f21a224ad618c2ac2304",
+    "trace_file": "case_00_trace.npz"
+  }
+]

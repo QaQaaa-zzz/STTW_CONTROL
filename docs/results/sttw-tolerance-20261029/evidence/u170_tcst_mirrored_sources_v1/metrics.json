@@ -1,0 +1,88 @@
+[
+  {
+    "case_id": "bank0/left90_R1p1_v1p8/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a0/zero",
+    "route": "left90_R1p1_v1p8",
+    "speed": 1.8,
+    "event": "zero",
+    "force_N": 0.0,
+    "onset_s": 0.0,
+    "duration_s": 0.4,
+    "force_frame": "world_fixed_vector",
+    "force_direction_world": [
+      -0.7173560908995228,
+      0.6967067093471654,
+      0.0
+    ],
+    "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "alpha": 0.0,
+    "user_alpha": 0.0,
+    "original_goal_xy": [
+      11.39480022535742,
+      5.00891158247783
+    ],
+    "endpoint": {
+      "goal_arrived": true,
+      "arrival_outcome": "arrived",
+      "goal_radius_m": 1.0,
+      "first_arrival_s": 4.815,
+      "minimum_upright_goal_distance_m": 0.06682360258190344,
+      "contact_after_arrival": false,
+      "fault_after_arrival": false,
+      "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+      "physical_outcome": "survived"
+    },
+    "contact_pre_tick_s": null,
+    "original_user_three_running_costs": [
+      7.3898806397919845,
+      13.946029636467037,
+      0.060294306797304485
+    ],
+    "full_upright_max_abs_speed_m_s": 1.9594382047653198,
+    "low_speed_full_upright_gate_passed": true,
+    "raw_sha256": "cc451de09dde6af5aba12d8b41f2334704df8e9b00627e26d2f6a11a3f194a3e",
+    "trace_file": "case_00_trace.npz"
+  },
+  {
+    "case_id": "bank0/right90_R1p1_v1p8/STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170/a0/zero",
+    "route": "right90_R1p1_v1p8",
+    "speed": 1.8,
+    "event": "zero",
+    "force_N": 0.0,
+    "onset_s": 0.0,
+    "duration_s": 0.4,
+    "force_frame": "world_fixed_vector",
+    "force_direction_world": [
+      -0.7173560908995228,
+      0.6967067093471654,
+      0.0
+    ],
+    "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "alpha": 0.0,
+    "user_alpha": 0.0,
+    "original_goal_xy": [
+      11.036695441146486,
+      -5.696094962604783
+    ],
+    "endpoint": {
+      "goal_arrived": true,
+      "arrival_outcome": "arrived",
+      "goal_radius_m": 1.0,
+      "first_arrival_s": 4.88,
+      "minimum_upright_goal_distance_m": 0.04068319706370154,
+      "contact_after_arrival": false,
+      "fault_after_arrival": false,
+      "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+      "physical_outcome": "survived"
+    },
+    "contact_pre_tick_s": null,
+    "original_user_three_running_costs": [
+      19.214741427105782,
+      20.362416279744266,
+      0.25904328173643626
+    ],
+    "full_upright_max_abs_speed_m_s": 1.9594382047653198,
+    "low_speed_full_upright_gate_passed": true,
+    "raw_sha256": "8236332bf2f96f8d4d6dbf7592fb5d47042d2d735029a688d149cd1e75928212",
+    "trace_file": "case_01_trace.npz"
+  }
+]
