@@ -2,7 +2,7 @@
 
 **Disturbance-Tolerance-Guided Preference Range Planning and Feedback Restoration for a Single-Track Robot**
 
-> TCST方向内部研究主稿；证据更新至2026-10-29。当前版本为U170固定中层、43特征后续策略预测器与10Hz几何接回。尚未投稿就绪，人类作者核验、独立重复与实车验证未完成。旧H75三候选原型不作为本版性能证据；[旧主稿快照](history/pre_return43_revision2737/MANUSCRIPT.md)和[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)保留此前方法、负结果与近邻文献研究。研究决策唯一入口为[项目台账](/home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md)。
+> TCST方向内部研究主稿；证据更新至2026-10-30。当前版本为U170固定中层、43特征后续策略预测器与10Hz几何接回。尚未投稿就绪，人类作者核验、独立重复与实车验证未完成。旧H75三候选原型不作为本版性能证据；[旧主稿快照](history/pre_return43_revision2737/MANUSCRIPT.md)和[EVIDENCE_DETAILS.md](EVIDENCE_DETAILS.md)保留此前方法、负结果与近邻文献研究。研究决策唯一入口为[项目台账](/home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md)。
 
 ## 摘要（中文审阅）
 
@@ -214,6 +214,19 @@ A_ok = {a in A_query : min_d q_no-contact(a,d) >= eta_q,
 
 该结果更正了把左24N失败直接归因于预测器选择不当的解释：尚无证据表明此次已测试候选能救回任务，空集与这三个候选的实际失败一致。未测α或准备时刻仍可能有效，因此也不能宣布该工况不可恢复。本阶段停止围绕此强扰动继续扫参，把它保留为能力边界。远端几何特征提取函数已通过接口测试，但尚未训练或接入新预测器，不宣称特征修正带来性能提升；现有冻结模型和已有成功实验保持原身份。[E274,E275]
 
+### 4.7 Matched fixed-preference baselines
+
+![Same-source actual and reference trajectories with fixed-preference baselines](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_matched_fixed_baselines_v1/analysis/matched_comparison/group_00_comparison.png)
+
+Four additional baseline continuations compare fixed preferences 0 and 0.5 with the two previously completed neural-selection cases. Each comparison starts from the identical complete closed-loop state at task time 1 s and retains the same U170 policy, lower controller, original path and goal, 10 Hz geometric reconnection, and 24 N disturbance lasting 0.4 s. The disturbance begins at either 1.925 or 2.075 s. Baselines execute their stated preference from the shared source; the earlier prefix belongs to the original user-zero trajectory. All task costs are rescored for user preference zero. [E254,E277,E278]
+
+| Gust onset (s) | Fixed alpha=0 | Fixed alpha=0.5 | Tolerance-guided selection and return |
+|---:|---|---|---|
+| 1.925 | Contact at 2.390 s | Contact at 2.430 s | Goal at 6.935 s; survives to 10 s |
+| 2.075 | Contact at 2.495 s | Contact at 2.530 s | Goal at 6.980 s; survives to 10 s |
+
+The proposed controller selects alpha=0.875 and restores the original user preference at 4.26 and 4.38 s. Both fixed baselines contact the ground before reaching the goal in both cases. These matched comparisons demonstrate a task-completion benefit over the original preference and a fixed compromise under the two tested events. They complement the held-versus-return comparison in Section 4.2: preparation preserves balance through the disturbance, and restoration enables subsequent task completion. The full comparison includes both event timings and preserves each physical endpoint. Original-path running costs are reported separately from contact and arrival; shorter failed trajectories are not ranked favorably by their smaller accumulated cost. [E253,E254,E277,E278]
+
 ## 5 面向TCST的论点与最小后续工作
 
 现有数据已经形成可写作的应用控制故事：路径优先可能降低未来容扰能力，过晚切换可能失效，提前准备与反馈恢复可以同时服务存活和原目标。论文价值应落在这一闭环问题、可执行的策略条件预测及实际效果上，不要求所有场景全面领先。但目前五条成功轨迹仍不足以支撑宽泛可靠性或神经预测器不可替代性。
@@ -221,7 +234,7 @@ A_ok = {a in A_query : min_d q_no-contact(a,d) >= eta_q,
 后续按以下顺序推进；已完成的镜像面板见4.5，下面的修正与验证尚未执行：
 
 1. **保留能力边界，集中论文论证。** 镜像面板和两个追加候选已完成；左24N三个已测候选均失败，当前不追加训练/扫参去追求全场景成功。几何预览补强暂为接口准备，待出现能区分预测不足与行为能力不足的证据后再安排受控对照。论文同时保留成功、退化和失败，而不以新的简单场景替换负结果。
-2. **任务与方法归因。** 已有同源恒定α缓存的配对归因已在4.2整理，分开到达、连续目标距离、原用户代价和路径偏离；后续不重复运行这些缓存。现有固定.5成功反例必须保留。新的速度支持或外部强基线按用户当前决定暂不启动；是否需要补充由最后主张决定，而不是要求大幅胜过某个指定基线。
+2. **任务与方法归因。** 已有同源恒定α缓存的配对归因已在4.2整理，分开到达、连续目标距离、原用户代价和路径偏离；后续不重复运行这些缓存。现有固定.5成功反例必须保留。按用户最新要求，4.7已补齐同条件固定α0/.5基本基线；下一补充简单因果调度规则与少量跑道条件，保持统一物理、几何接回及原用户评分，不以全面胜过所有基线为目标。
 3. **实车与论文定稿。** 在明确实车授权及传感器/执行接口后验证关键低速转弯—扰动—恢复过程；同步完成最近邻文献对照、作者核验和IEEE格式。实车尚未执行，不把仿真触地或等效力结果写成硬件验证。
 
 当前方法不包含已证明的UCEDT牛顿阈值。UCEDT可作为平衡潜力的物理解释候选；若在正文使用其公式，需要另行核验原文、适用条件与当前闭环差异。本版容扰依据为实际闭环不触地标签，避免将解析势能量直接当真实外力安全界。

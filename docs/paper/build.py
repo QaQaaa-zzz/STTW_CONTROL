@@ -358,12 +358,14 @@ def evidence_manifest():
         'E274':archive/'u170_tcst_left24_candidates_v1/analysis/results.json',
         'E275':archive/'u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.json',
         'E276':archive/'u170_causal_preference_return_v1/analysis/cached_hold_comparison.json',
+        'E277':archive/'u170_matched_fixed_baselines_v1/analysis/results.json',
+        'E278':archive/'u170_matched_fixed_baselines_v1/analysis/matched_comparison/results.json',
     })
     sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
     referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
     manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
         manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
-        evidence_cutoff='2026-10-29',submission_ready=False,human_approval='not_recorded',
+        evidence_cutoff='2026-10-30',submission_ready=False,human_approval='not_recorded',
         sources=sources,manuscript_evidence_references=referenced,historical_claims_from_readback=data['claims'],
         historical_claim_scope='Historical source registry only; not current return43 claims',
         detailed_evidence=dict(path=str(HERE/'EVIDENCE_DETAILS.md'),
