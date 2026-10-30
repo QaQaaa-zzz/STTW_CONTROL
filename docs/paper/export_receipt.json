@@ -1,5 +1,6 @@
 {
   "images": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/control_architecture.png": "1563bd8576113e0d5be75112e347d5ed753ff4b5939ad1852ac423930481dbd4",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/left90_R1p3_v2p0_t2.2_F+24_fixed_candidate_xy.png": "9931fdf3d4db5b08af0464c26070a05acc7f7b6fe1845b9849c5c876117f9ec5",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_causal_preference_return_v1/analysis/cached_hold_comparison_02.png": "5a4856a046a8970d0b3018cc8eb1f2cfadaf3f0e95acdb54a7316ba16c04c9ee",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_return_policy_nn_confirmation_v1/analysis/left90_R1p3_v2p0_source_t1p0_a0_prep0.925_F+24_fixed_candidate_xy.png": "60884553df6640d7839f5bdfab1ca8cb0dea576a3de6285facbef5cebe9ad9c2",
@@ -9,12 +10,12 @@
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_nominal_v1/analysis/S_left_60_R1p3_v2p0_zero_fixed_candidate_xy.png": "9da61b863a973fd9f591008c0c7f43e5d84c8d39a20ab0682ac60ae70e06d33c",
     "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/group_01_comparison.png": "1a06814d8188c114ff4da66f16c1f48bdc0dfbd73f35b6b614174c0ed804eae9"
   },
-  "html_sha256": "5fa5c8691db3d1a054e22bd75f47ac8523b06b86207436962e9106b6b5490e05",
+  "html_sha256": "ed537bccd56f13637e97197e795c4a884db8b91ed9a15a351b3d822014edc6f2",
   "pdf_requested": false,
   "disclosure": "Offline local rendering only, no publication or source-data upload",
   "physics_steps": 0,
   "renderer": "Tectonic 0.17.0 / IEEEtran journal",
-  "tex_sha256": "eecf70fa124e42ba73dc659471ec56b8b1f544f1d42f3624c4bf6a7fcf3b4dc3",
-  "pdf_sha256": "b81a51ff6b27f5a63b7ee523055efa7b87cbb9f4a844bb79110a027fb91120c1",
-  "pdf_bytes": 2197579
+  "tex_sha256": "adb75084da8d4d2e34c46e167bd7d10cf4e08e8b5717179401f8dfc855bec087",
+  "pdf_sha256": "7c05c5cc29379e9958dc8d85e3ec79e73efc1f89b395da627e7661e47723fadc",
+  "pdf_bytes": 2361561
 }

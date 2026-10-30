@@ -47,6 +47,15 @@ The first contribution identifies the control behavior available to the coordina
 
 \subsection{Frozen control hierarchy}
 
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/control_architecture.png}
+\caption{Implemented preference-coordination architecture. The learned predictor is queried once at the source boundary; feedback restoration runs at 50 Hz and geometric reconnection at 10 Hz. Hypothetical disturbances enter prediction, while the actual future event schedule is unavailable to the controller.}
+\end{figure*}
+
+
+
 The middle controller is \texttt{STTW\_MIDDLE\_H75\_LOW\_SPEED\_MIXED\_U170}, selected from a continuation of H75 training that includes low-speed tight turns. It supplies preference-conditioned reference corrections at 50 Hz. The lower controller combines ECBC, ESO, and the frozen local300 residual at 200 Hz. Each lower control interval comprises 25 physics steps of 0.0002 s. Front and rear wheel friction coefficients are both 0.8. The tolerance-learning stage changes neither policy weights nor the lower controller.
 
 

@@ -25,45 +25,50 @@ def digest(path):
 
 
 def control_diagram():
+    """Draw the implemented source-boundary selector and feedback-return stack."""
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    from matplotlib.patches import FancyBboxPatch,FancyArrowPatch
-    fig,ax=plt.subplots(figsize=(18,7));ax.set(xlim=(0,21),ylim=(.4,9));ax.axis('off')
-    colors=dict(base='#35658A',learned='#278C82',rule='#647180',external='#B45659')
-    def box(x,y,w,h,text,kind='base'):
-        color=colors[kind]
-        ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle='round,pad=.05',ec=color,fc='white',lw=1.5))
-        ax.text(x+w/2,y+h/2,text,ha='center',va='center',fontsize=11,color='#243548',linespacing=1.35)
-    def arrow(points,kind='base'):
-        for p,q in zip(points[:-2],points[1:-1]):ax.plot([p[0],q[0]],[p[1],q[1]],c=colors[kind],lw=1.4)
-        ax.add_patch(FancyArrowPatch(points[-2],points[-1],arrowstyle='-|>',mutation_scale=15,lw=1.4,color=colors[kind]))
-    boxes=[(.2,6,2.3,1.1,'Original path\nand speed request'),(3,6,2.6,1.1,'Geometric follower\nNominal references'),
-        (6.2,6,2.7,1.1,'NN + fixed rules\nMode / permission'),(9.5,6,3.1,1.1,'Original reference\nfilter / slew / bounds'),
-        (13.2,6,3.5,1.1,'ECBC + ESO + local300\nActuator constraints\nFrozen lower /200 Hz'),
-        (17.3,6,3.1,1.1,'Single-track plant\n25 physics substeps\nper lower tick')]
-    for args in boxes:box(*args)
-    for a,b in zip(boxes[:-1],boxes[1:]):arrow([(a[0]+a[2],6.55),(b[0],6.55)])
-    box(6.2,3,2.7,1.4,'Frozen middle NN\n351-D input /50 Hz\nSpeed + steer offsets','learned')
-    arrow([(7.55,4.4),(7.55,6)],'learned')
-    box(9.6,3,3.0,1.4,'Fixed geometry feedback\nExisting speed support\nProtocol held constant','rule')
-    arrow([(11.1,4.4),(11.1,5.2),(8.6,5.2),(8.6,6)],'rule')
-    box(3,3,2.5,1.4,'User preference alpha\n0: path priority\n1: speed priority')
-    arrow([(5.5,3.7),(6.2,3.7)])
-    box(13.2,2.9,3.5,1.5,'Observed + controller state\nIMU / wheel / steer / pose\nHistory / observer / filters')
-    arrow([(18.85,6),(18.85,3.65),(16.7,3.65)])
-    arrow([(14.95,4.4),(14.95,6)])
-    arrow([(15.5,2.9),(15.5,1.45),(2.7,1.45),(2.7,5.35),(4.3,5.35),(4.3,6)])
-    arrow([(13.2,3.1),(13.0,2.1),(7.55,2.1),(7.55,3)],'learned')
-    arrow([(11.1,2.1),(11.1,3)],'rule')
-    box(17.3,7.8,3.1,.7,'World-frame COM pulse','external')
-    arrow([(18.85,7.8),(18.85,7.1)],'external')
-    ax.text(.2,8.45,'Recent expanded evaluation stack: middle references are not motor actions',fontsize=16,color='#243548')
-    ax.text(.2,.8,'Zero middle masks only neural channels; fixed rules and the frozen lower remain.\nNo force/onset query enters the controller. Opt-in permission factor is a separate, non-adopted comparison.',fontsize=11,color='#647180')
-    FIG.mkdir(exist_ok=True)
-    for ext in ['svg','png','pdf']:
-        fig.savefig(FIG/f'control_architecture.{ext}',dpi=160,bbox_inches='tight',pad_inches=.12)
-    plt.close(fig)
+    from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+    with plt.rc_context({'font.size': 8, 'svg.fonttype': 'none', 'pdf.fonttype': 42}):
+        fig, ax = plt.subplots(figsize=(7.16, 4.7))
+        ax.set(xlim=(0, 12.4), ylim=(0, 8.6)); ax.axis('off')
+        def box(x, y, w, h, text, color='#0072B2'):
+            ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle='round,pad=.06',
+                                       ec=color,fc='white',lw=1.1))
+            ax.text(x+w/2,y+h/2,text,ha='center',va='center',linespacing=1.3)
+        def arrow(points, dashed=False):
+            for a,b in zip(points[:-2],points[1:-1]):
+                ax.plot([a[0],b[0]],[a[1],b[1]],color='#444444',lw=.9,ls='--' if dashed else '-')
+            ax.add_patch(FancyArrowPatch(points[-2],points[-1],arrowstyle='-|>',
+                mutation_scale=9,lw=.9,color='#444444',linestyle='--' if dashed else '-'))
+        box(.3,6.35,2.5,1.2,'Original task\nPath, speed, goal\nUser preference')
+        box(4,6.35,3.2,1.2,'Outcome predictor\nCandidate / load query\nPreparation / return','#009E73')
+        box(8.5,6.35,3.2,1.2,'Preference coordinator\nSelect once at source\nFeedback return at 50 Hz','#D55E00')
+        box(.3,3.55,2.5,1.2,'Geometric follower\nReconnection: 10 Hz\nOriginal goal')
+        box(4,3.55,3.2,1.2,'Frozen U170 middle\nPreference-conditioned\nReference offsets: 50 Hz')
+        box(8.5,3.55,3.2,1.2,'Filters and bounds\nECBC + ESO + local300\nFrozen lower: 200 Hz')
+        box(8.5,.75,3.2,1.2,'Single-track robot\nActuators and contact\nPhysics step: 0.2 ms')
+        box(4,.75,3.2,1.2,'Closed-loop feedback\nVehicle / reference state\nObserver, filters, history')
+        arrow([(1.55,6.35),(1.55,4.75)])
+        arrow([(1.55,7.55),(1.55,8.1),(10.1,8.1),(10.1,7.55)])
+        ax.text(6,8.23,'Original user preference',ha='center',fontsize=7)
+        arrow([(7.2,6.95),(8.5,6.95)])
+        arrow([(10.1,6.35),(10.1,5.55),(5.6,5.55),(5.6,4.75)])
+        ax.text(7.75,5.69,'Executed preference',ha='center',fontsize=7)
+        arrow([(2.8,4.15),(4,4.15)])
+        arrow([(7.2,4.15),(8.5,4.15)])
+        arrow([(10.1,3.55),(10.1,1.95)])
+        arrow([(8.5,1.35),(7.2,1.35)],True)
+        arrow([(5.6,1.95),(5.6,3.55)],True)
+        arrow([(4,1.35),(3.3,1.35),(3.3,6.95),(4,6.95)],True)
+        arrow([(4,1.1),(1.55,1.1),(1.55,3.55)],True)
+        arrow([(11.7,1.35),(12.1,1.35),(12.1,6.65),(11.7,6.65)],True)
+        ax.text(.3,.2,'Solid: task / control commands     Dashed: measured or controller-state feedback',fontsize=7)
+        FIG.mkdir(exist_ok=True)
+        for ext in ['svg','png','pdf']:
+            fig.savefig(FIG/f'control_architecture.{ext}',dpi=300,bbox_inches='tight',pad_inches=.05)
+        plt.close(fig)
     svg=FIG/'control_architecture.svg'
     svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
 
@@ -492,7 +497,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();group=parser.add_mutually_exclusive_group()
     group.add_argument('--figures-only',action='store_true');group.add_argument('--export-only',action='store_true')
     parser.add_argument('--pdf',action='store_true');parser.add_argument('--ieee',action='store_true');args=parser.parse_args()
-    if not args.export_only and not (FIG/'tolerance_coordination_architecture.svg').exists():control_diagram()
+    if not args.export_only:control_diagram()
     evidence_manifest()
     if not args.figures_only:
         export_draft(pdf=args.pdf and not args.ieee)

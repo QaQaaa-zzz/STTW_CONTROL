@@ -34,6 +34,8 @@ The first contribution identifies the control behavior available to the coordina
 
 ### 2.1 Frozen control hierarchy
 
+![Implemented preference-coordination architecture. The learned predictor is queried once at the source boundary; feedback restoration runs at 50 Hz and geometric reconnection at 10 Hz. Hypothetical disturbances enter prediction, while the actual future event schedule is unavailable to the controller.](figures/control_architecture.png)
+
 The middle controller is `STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170`, selected from a continuation of H75 training that includes low-speed tight turns. It supplies preference-conditioned reference corrections at 50 Hz. The lower controller combines ECBC, ESO, and the frozen local300 residual at 200 Hz. Each lower control interval comprises 25 physics steps of 0.0002 s. Front and rear wheel friction coefficients are both 0.8. The tolerance-learning stage changes neither policy weights nor the lower controller. [E259–E261]
 
 The original path, speed request, destination, and user preference define the task. A geometric follower provides nominal references. When departure requires reconnection, a deterministic geometric module checks and updates the connection at 10 Hz while retaining the original world-frame destination. The executed preference enters the frozen middle network; the resulting corrections pass through the existing reference filters and actuator permissions. Thus preference coordination changes reference-generating behavior rather than directly commanding motor torques. [E259,E261]

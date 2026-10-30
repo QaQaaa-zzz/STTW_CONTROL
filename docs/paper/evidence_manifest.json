@@ -1,7 +1,7 @@
 {
   "scope": "Current local research manuscript; previous20260912 direct-motor draft separately archived",
-  "manuscript_sha256": "58bd92337e1d38a260a86d28fb8dbafe45e8703acce7a4088f1b10274c5b5d7b",
-  "builder_sha256": "1c8cddad08be752dad6bdac7d4fc0a83562ae3d9749f8fbc3336c2bf4b871264",
+  "manuscript_sha256": "229fffd3bf128bbd53a1e3144232bf846c218b5d677be2792351c3b356540497",
+  "builder_sha256": "7380f1c08fb476cce14e53453be7116954799d820db0634f7b950c0fcf5eb5fd",
   "evidence_cutoff": "2026-10-30",
   "submission_ready": false,
   "human_approval": "not_recorded",
@@ -1823,9 +1823,9 @@
   },
   "image_role": "Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments",
   "figures": {
-    "figures/control_architecture.pdf": "30d824409279ca07804f1688ae9e9d190c923b5df5b1532b357b67b0e64ab0c8",
-    "figures/control_architecture.png": "f86e4763fa2d1f24d6e4270df3df85abc17259218e3177b76316e6c0bc2e2f2e",
-    "figures/control_architecture.svg": "ad9efc04debf38e8be23995fe3259b287c48fb3fb9631d2b939ecdda977f556e",
+    "figures/control_architecture.pdf": "1739aa64fe26a6253595bc10f8b69c6ec9a9b535072572d9bcbba8f538b0cb0f",
+    "figures/control_architecture.png": "1563bd8576113e0d5be75112e347d5ed753ff4b5939ad1852ac423930481dbd4",
+    "figures/control_architecture.svg": "55d902c044b2fd01851a7001335a483edd87e13215fef5d2bcecb153af7c6e54",
     "figures/tolerance_coordination_architecture.svg": "b6d81623cacee5ba6e6af6420628d24f80e5768dd41debeb56264afbf13b0cc0"
   },
   "new_physics_steps": 0,
