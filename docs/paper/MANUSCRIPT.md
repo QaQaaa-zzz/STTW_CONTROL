@@ -30,104 +30,110 @@ The paper develops three connected contributions:
 
 The first contribution identifies the control behavior available to the coordinator, the second evaluates the consequences of using that behavior, and the third connects a temporary intervention to task completion. The experiments accordingly separate nominal preference behavior, preparation outcomes, and the effect of returning to the user's preference. [E250–E261,E276–E278]
 
-## 2 问题定义与实际控制系统
+## 2 System and Task Formulation
 
-当前固定中层为STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170，由H75加入低速小弯混合场景续训后选出。后续容扰学习不再更新中层或ECBC、ESO、local300底层。中层50Hz，底层200Hz，每底层步含25个0.0002s物理子步；前后轮摩擦系数均0.8。重规划模块按10Hz检查/更新接回路径，原世界目标不变；这不是小网络以10Hz连续重新决策的证据。[E259,E261]
+### 2.1 Frozen control hierarchy
 
-```text
-原路径、原目标、速度请求、alpha_user
-       ↓ 几何跟随 / 10Hz因果接回
-当前观测、前方曲率、候选中层参考修正、假设扰动和准备时间
-       ↓ 小型联合结果预测器
-通过抗扰/到达/路径阈值的候选集合 → 区间表示
-       ↓ 用户优先选择 + 当前传感器反馈恢复
-alpha_exec → 冻结U170（50Hz）→ 原参考滤波与权限
-       → ECBC + ESO + local300（200Hz）→ 车辆
-```
+The middle controller is `STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170`, selected from a continuation of H75 training that includes low-speed tight turns. It supplies preference-conditioned reference corrections at 50 Hz. The lower controller combines ECBC, ESO, and the frozen local300 residual at 200 Hz. Each lower control interval comprises 25 physics steps of 0.0002 s. Front and rear wheel friction coefficients are both 0.8. The tolerance-learning stage changes neither policy weights nor the lower controller. [E259–E261]
 
-物理完整快照包括车辆、ESO、执行器、参考滤波与历史观测，分支接续不重置这些量。预测器只使用当前可构造观测的子集和候选查询，不读取完整未来轨迹或真实起扰日程。当前观测含真实车体速度；实车应提供相应估计，后轮轴速乘半径不能无验证替代。所有新结果均为仿真。[E259–E261]
+The original path, speed request, destination, and user preference define the task. A geometric follower provides nominal references. When departure requires reconnection, a deterministic geometric module checks and updates the connection at 10 Hz while retaining the original world-frame destination. The executed preference enters the frozen middle network; the resulting corrections pass through the existing reference filters and actuator permissions. Thus preference coordination changes reference-generating behavior rather than directly commanding motor torques. [E259,E261]
 
-本文的风为固定世界水平向量上的质心等效外力：方向(-sin0.8, cos0.8, 0)，持续0.4s。20N或24N是力幅值，不是气动标定风速。低速检验使用完整直立观察窗真实前向速度绝对值不超过2.1m/s。该门槛是本研究工况定义，不是稳定性定理。[E250,E254–E256]
+Let x denote the complete closed-loop state, including the vehicle, actuators, observer, reference filters, and observation history. Let z=H(x,r) denote the observable predictor features for original task r. Experimental branches originate from the same complete x; selecting a different preference does not reset hidden controller state. The simulation uses true vehicle forward speed in this interface. A physical implementation requires an estimator for that quantity in addition to the available attitude, steering, and localization signals. [E259–E261]
 
-## 3 后续策略条件的容扰—任务预测
+### 2.2 Task and disturbance outcomes
 
-令x_k为含车体、执行器、ESO、滤波、历史观测及协调器状态的完整闭环状态，r为固定原任务，z_k=H(x_k,r)为预测输入可观测部分。对某个候选a及给定返回规则π_return，闭环分支记为
+The user preference alpha_u remains fixed within each evaluation. The executed preference alpha_e may temporarily differ from alpha_u. Original-task metrics are always evaluated against the original path and destination, even while a reconnecting path supplies executable references. Arrival occurs when the robot enters the original destination disk of radius 1 m before contact or a controller fault. The arrival condition does not impose a terminal stop. [E250,E253–E258]
+
+The disturbance is a horizontal force applied at the body center of mass in a fixed world direction, (-sin(0.8), cos(0.8), 0). The main matched experiments use a 24 N pulse lasting 0.4 s; additional cases use 20 N. Force magnitude and duration define the intervention, and the actual future pulse schedule is not an input to the coordinator. Low-speed outcomes are checked using actual forward speed over the full upright observation window, with an absolute-speed threshold of 2.1 m/s. [E250,E254–E256,E277,E279]
+
+For a source state at task time t_s, the observation ends at task time 10 s or a physical failure. The binary labels are
 
 ```text
-x_(k+1) = F_cl(x_k, α_exec,k, r, d_k)
-α_exec,k = Π(a, α_user, current sensors, plan age; π_return)
-Y_nf = 1{从源时刻到原任务10s均未触地且无工程故障}
-Y_goal = Y_nf × 1{故障前曾进入原世界目标1m圆}
+Y_nf   = 1 if the remaining observation window contains no ground contact;
+Y_goal = Y_nf times 1 if the original goal is reached before failure.
 ```
 
-这里F_cl表示实际仿真闭环，不是另一个已学习动力学模型。相同源状态的候选分支只改变声明的α和假设扰动；控制隐藏状态保持一致。工程故障不混入物理触地训练标签。网络由有限确定性分支的监督结果拟合，分类输出作为模型筛选分数使用；三个初始化成员平均并不自动给出真实扰动分布下的校准概率。[E251,E259–E261]
+Engineering faults are retained in evaluation records and excluded from physical-contact supervision. In addition to these outcomes, we record original-path error, actual speed, preference restoration time, and intervention I_alpha = integral |alpha_e(t) - alpha_u| dt. Full-window costs and costs over a common paired observation prefix are reported separately. [E251,E278,E280]
 
-### 3.1 预测对象与监督标签
+## 3 Preparation-Conditioned Preference Coordination
 
-定义 f_ψ(z,a,d,τ,α_user; π_return) → (q_no-contact, q_goal, ê_path, v̂_peak)。其中z取源时刻最新状态与路径上下文，a为候选偏好及U170对应参考修正，d为假设扰动方向、幅值、持续时间，τ为准备时间；π_return为冻结的传感器返回规则。q_goal标签要求到达原目标且完整窗口存活。窗口截止原任务10s，触地轨迹在真实失败处截止；到达为接触/故障前进入原目标1m圆，不要求终端停车、航向对齐或驻留。[E251,E259–E261]
+### 3.1 Predicting a complete candidate execution
 
-43个特征包括最新观测34维、候选/假设查询8维及原用户α一维。观测含速度、姿态、参考滤波以及当前/前方曲率等信息。架构为43→16ELU→16ELU→4，三个随机初始化成员分别预测后平均；每成员1044参数。两分类头使用BCE，路径与速度头学习log1p目标，损失权重1/1/0.25/0.25，失败样本不参与连续量回归，避免把早失败短轨迹误当低代价。AdamW学习率及权重衰减均0.001，三个成员各5000次CPU监督更新，固定末轮。训练拟合良好不等于校准或泛化。[E251,E252,E260,E268]
-
-训练数据为232条查询、188条独特物理轨迹：185条“原用户α等于执行α”的恒定行为等价查询；44条在允许返回前已经触地的因果前缀失败查询；3条真实反馈返回轨迹。44条派生查询不计作新增物理实验或独立重复。新验证轨迹未用于该次拟合；来源状态和邻近恒定策略数据属于已知开发域，不称独立holdout。[E251,E252]
-
-### 3.2 区间与实际选择
-
-对预先声明的假设族D，在每个候选取最小不触地/到达分数和最大路径误差预测。候选集合定义为：
+A candidate consists of a preparation preference a and a specified subsequent restoration policy pi_r. The complete branch evolves according to
 
 ```text
-A_ok = {a in A_query : min_d q_no-contact(a,d) >= eta_q,
-                       min_d q_goal(a,d) >= eta_g,
-                       max_d e_path(a,d) <= e_max}
+x_(k+1) = F_cl(x_k, alpha_e,k, r, d_k),
+alpha_e,k = Pi(a, alpha_u, current feedback, plan age; pi_r).
 ```
 
-本文实例采用eta_q=0.8、eta_g=0.5、e_max=4m。4m是开放平面强扰动实例的原路径RMSE门槛，不是道路边界；RMSE从源时刻算至首次到达，未到达存活轨迹用剩余观察窗。速度头仅作诊断，不作为已证明上界。不能将上述分类分数直接解释为具有覆盖率保证的安全概率。[E254–E258,E260]
-
-原五档0/.25/.5/.75/1保留，当前研究另查询.875。区间连接相邻合格查询点，遇到不合格点断开；尚未查询的连续内部未验证。α_user在集合内时优先执行原值，否则从已查询的合格点最小化 (a−α_user)² + 0.1(a−α_previous)²。原方案中完整J_user目标目前落实为任务/路径预测门及偏好距离项，未实现长时域J_user优化，不将其写成现有算法。空集合或参考禁止发布时保持前值并标记退化，不宣称退化安全。[E260,E261]
-
-### 3.3 执行与反馈返回
-
-当前闭环实验在声明的源时刻查询一次区间。候选执行至少2s后，当当前侧倾绝对值≤15°、侧倾角速度≤0.35rad/s、前向速度≥1.5m/s且参考允许发布，连续满足0.3s后以每秒1α的上限返回α_user；条件变坏时暂停。定时从方案起点计算，不读真实外力的开始/结束标签。用户α用于原任务奖励，实际α用于中层查询，切换不清空闭环状态。[E253–E256,E261,E265]
-
-预测器必须与这一后续策略一致：旧42特征恒定α模型不能直接评价反馈返回方案。新的manifest绑定43特征、返回参数和实现身份。这种一致性是方法复现要求，不是稳定性证明。全程连续重选区间、改变返回规则或改变用户偏好均需要对应验证。[E251,E260,E261]
-
-### 3.4 可复现的执行顺序与有限性质
+Here F_cl is the implemented closed loop. The learned model predicts outcomes of this execution rather than identifying a separate dynamics model. For hypothetical disturbance d and preparation interval tau, the prediction is
 
 ```text
-源时刻（本阶段每回合仅一次）:
-  读取当前z、用户偏好和参考发布权限；保留完整闭环状态
-  对每个候选a生成冻结U170参考修正
-  对每个预声明扰动假设查询结果预测器；形成A_ok
-  若权限不允许或A_ok为空：保持此前α，记录退化
-  否则若用户α合格：使用用户α
-  否则：在合格查询点中最小化偏好距离与切换代价
-随后每20ms:
-  最小准备期未满时保持准备α
-  满足当前姿态/速度/权限条件并累积驻留时间后进入返回阶段
-  返回阶段条件满足时按限速向用户α移动，否则暂停
-  已返回时保持用户α；几何接回按独立100ms时钟检查
+f_psi(z, a, d, tau, alpha_u; pi_r)
+    = (q_nf, q_goal, e_path_hat, v_peak_hat).
 ```
 
-该实现直接支持三个有限性质。其一，非退化选择属于实际查询的合格点，区间内部不会未经查询直接执行。其二，选择与返回接口不接收真实未来起扰/结束时刻；离线假设家族必须在执行前固定。其三，固定用户偏好时返回阶段使用
+The classification outputs score contact avoidance and completion of the original goal over the remaining task window. The regression outputs summarize original-path RMSE and peak upright speed. Path RMSE is evaluated from the source until first arrival; a surviving nonarriving execution uses the remaining window. Conditioning on pi_r aligns the training label with the actual policy executed after preparation. Holding a preference indefinitely and later returning it define different prediction targets. [E251,E259–E261]
+
+The input contains 34 current observation features, eight candidate/disturbance-query features, and the original user preference, giving 43 features. Its state information includes speed, attitude, reference-filter state, and local path curvature. Candidate features include the preference and associated middle-policy reference corrections. The disturbance query specifies hypothetical force and timing information, independently of the actual future event. [E260]
+
+Three independently initialized 43–16–16–4 networks with ELU hidden activations are trained and their outputs averaged. Each member contains 1,044 parameters. Binary cross entropy trains the two classification heads. The continuous targets use log(1+y), with loss weights 1, 1, 0.25, and 0.25 for the four heads. Failed trajectories do not contribute continuous-target regression, so a short failure cannot be learned as an inexpensive successful task. AdamW uses learning rate 0.001 and weight decay 0.001, for 5,000 supervised updates per member. The fixed final models are used for the reported experiments. [E251,E252,E260,E268]
+
+The training set contains 232 query labels from 188 distinct physical trajectories: 185 held-equivalent queries whose user and executed preferences coincide, 44 derived failure queries that terminate before restoration can start, and three physical feedback-return trajectories. Derived queries reuse physical evidence rather than creating new independent rollouts. The current scores are used for candidate ranking and thresholding; probability calibration is not part of the training objective. [E251,E252]
+
+### 3.2 Candidate selection
+
+Before execution, specify a finite hypothesis set D of possible disturbances and preparation intervals. For each queried preference, take the minimum classification scores and maximum predicted path error across D. The admissible candidate set is
 
 ```text
-α_(k+1) = α_k + clip(α_user − α_k, −ρΔ, ρΔ),  Δ=0.02s, ρ=1/s
+A_ok = {a in A_query:
+        min_(d,tau in D) q_nf(a,d,tau) >= eta_nf,
+        min_(d,tau in D) q_goal(a,d,tau) >= eta_goal,
+        max_(d,tau in D) e_path_hat(a,d,tau) <= e_max}.
 ```
 
-故返回阶段向用户值单调靠近且不越过用户值，数学限速为ρΔ；实现含1e−6完成吸附容差。条件不满足时保持α，首次进入返回阶段需要驻留；进入后暂停再恢复不重新要求完整驻留。源时刻从用户α选择准备α可能发生跳变，上述限速只适用于返回阶段，不能冒称整个α信号都限速。原参考滤波/执行权限继续在底层生效。这些都是代码级性质，不证明状态稳定、任务必达或退化安全。[E261]
+The reported instance uses eta_nf=0.8, eta_goal=0.5, and e_max=4 m. This path-error threshold is an open-plane task criterion. The five original candidate preferences are 0, 0.25, 0.5, 0.75, and 1; the preparation study additionally queries 0.875. Adjacent qualifying queried points can be displayed as ranges, while execution chooses only an evaluated point. [E254–E258,E260]
 
-### 3.5 数据单位和评价口径
+If alpha_u is in A_ok and reference publication is permitted, the coordinator retains it. Otherwise, it chooses a queried admissible point minimizing
 
-本文分别统计物理轨迹、监督查询和来源状态。共享完整来源的分支是配对干预，不是独立训练重复；由一条物理失败轨迹派生的标签不能增加独立样本数。各阶段固定物理模型和控制频率，保留成功与失败，只有明确同源同事件的缓存才用于机制对照。不同α加权奖励不直接排名，返回对照始终使用原用户偏好重评分。[E251,E253,E275]
+```text
+(a - alpha_u)^2 + 0.1 (a - alpha_previous)^2.
+```
 
-| 证据组 | 单位与数据角色 | 能支持的结论 | 不能支持的结论 |
-|---|---|---|---|
-| 232查询/188物理轨迹 | 当前预测器TRAIN | 训练对象及数据构造可复现 | 232独立实验或概率校准 |
-| 三条返回与同源恒定对照 | 相关开发轨迹，返回三条已用于TRAIN | 此组返回规则改善原目标到达 | 独立泛化、神经预测器不可替代 |
-| 五条冻结后验证 | 四条NN选择、一条固定区间端点；DEV | 有限域的实际闭环实例 | 五次独立重复、全区间安全 |
-| 四条新镜像阵风 | 新几何DEV，全部空集退化 | 三完成一失败、预测与行为范围的限制 | 有效神经调度、整个假设族真假分类 |
-| 两条失败后候选 | 事后诊断DEV；复用原α0缓存 | 已测三个候选均不能完成左24N | 任意α和时机均不可恢复 |
+This rule prioritizes the original preference while penalizing a change from the previous execution. When the set is empty or reference publication is prohibited, the current implementation holds the previous preference and records that outcome. The task-output heads determine eligibility; the preference-distance objective determines which eligible candidate is selected. [E260,E261]
 
-五条冻结后成功、四条镜像验证与两条事后诊断用途不同，不合并为“8/11成功率”评价总体可靠性。报告逐工况实际结果，不给共享来源的小样本制造独立二项置信区间。[E254–E258,E269–E275]
+### 3.3 Feedback restoration
+
+After selection, preparation lasts at least 2 s from the source boundary. Restoration becomes eligible when all of the following hold: absolute roll is at most 15 degrees, absolute roll rate is at most 0.35 rad/s, forward speed is at least 1.5 m/s, and reference publication is permitted. These conditions must hold continuously for 0.3 s before entering the return phase. The return update is
+
+```text
+alpha_e,k+1 = alpha_e,k
+              + clip(alpha_u - alpha_e,k, -rho*Delta, rho*Delta),
+Delta = 0.02 s, rho = 1/s.
+```
+
+If the feedback condition becomes invalid during restoration, the preference is held until the condition becomes valid again. A resumed return does not restart the initial dwell requirement. An implementation tolerance of 1e-6 completes the final approach to the user value. Neither the actual gust onset nor its end enters this rule. [E253–E256,E261,E265]
+
+For fixed alpha_u, each permitted return update moves alpha_e toward alpha_u without overshoot. Its increment is bounded by rho*Delta, apart from the stated completion tolerance. The initial preparation selection may jump from the user preference; the return-rate property applies to the restoration phase. Existing reference filters and actuator permissions remain active throughout.
+
+### 3.4 Execution and verification
+
+The reported coordinator performs one neural selection at the declared source boundary. The return rule subsequently runs at the middle-policy update rate, independently of the 10 Hz geometric reconnection clock:
+
+```text
+At the source boundary:
+  Read current observations, user preference, and reference permission.
+  Evaluate every candidate against the fixed hypothetical disturbance set.
+  Retain the user preference when eligible; otherwise select a qualified point.
+  Start the preparation clock without resetting the vehicle or lower controller.
+At each subsequent middle update:
+  Maintain preparation until the minimum age is reached.
+  Accumulate the initial valid-feedback dwell and enter restoration.
+  Move toward the user preference when feedback permits; otherwise hold.
+  Continue geometric reconnection on its independent clock.
+```
+
+Each prediction package binds the feature schema, model identity, and restoration parameters to the evaluated continuation policy. Results are grouped by complete source state and actual force event. Shared-source branches provide paired interventions. They are not independent random repetitions. Fixed and dynamic baselines use the same vehicle model, frozen control stack, goal, and reconnection mechanism. Original-user costs are independently reconstructed from saved trajectories, and trajectories terminate at their actual physical endpoint. [E251,E261,E275,E278,E280]
 
 ## 4 仿真证据
 
@@ -239,6 +245,19 @@ A second comparison replaces the predictor's choice with a preset preparation pr
 | 2.075 | Not reached / 2.410 | 5.530 / 2.830 | 6.980 / 2.446 |
 
 All six compared trajectories survive to task time 10 s. Intervention is the integral of the absolute difference between executed and original user preference over the shared source-to-end window. Preset 1 and network-selected 0.875 both complete the two tasks. The network-selected execution uses 12.8% and 13.6% less preference intervention, while preset 1 arrives earlier and has smaller primary running task cost in both cases. Preset 0.75 reduces intervention in the first case but does not reach the second goal. The comparison illustrates the tradeoff among preparation strength, task completion, and departure from the user preference; it motivates state-dependent selection across a broader set of tasks rather than a claim of uniformly superior performance in this pair. [E279,E280]
+
+### 4.9 Nominal low-speed two-turn track segments
+
+![Three preferences on a left-leading S track segment](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_nominal_v1/analysis/S_left_60_R1p3_v2p0_zero_fixed_candidate_xy.png)
+
+The nominal task panel is extended to mirrored S segments comprising two opposite 60-degree bends of radius 1.3 m, separated by a 3 m straight. Requested speed is 2 m/s and the original goal lies 4 m beyond the second bend. U170, the lower controller, friction, and geometric reconnection are unchanged. Each direction is evaluated at fixed preferences 0, 0.5, and 1 for 10 s, without an external force. [E281]
+
+| Track segment | Alpha=0 arrival (s) | Alpha=0.5 arrival (s) | Alpha=1 arrival (s) |
+|---|---:|---:|---:|
+| Left-leading S | 6.685 | 6.635 | 6.510 |
+| Right-leading S | 6.720 | 6.645 | 6.530 |
+
+All six trajectories reach the original goal and survive the complete window. Their highest upright actual forward speed is 2.0413 m/s, within the 2.1 m/s low-speed criterion. None requires geometric reconnection. The speed-prioritized preference arrives 0.175 s earlier on the left-leading segment and 0.190 s earlier on its mirror than the path-prioritized preference. These nominal results establish a two-turn task setting for subsequent disturbed evaluation while retaining the same frozen control stack. [E281]
 
 ## 5 面向TCST的论点与最小后续工作
 
