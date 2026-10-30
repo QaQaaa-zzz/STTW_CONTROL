@@ -85,6 +85,23 @@ def test_resume_preflight_rejects_stale_boundary_and_budget(tmp_path):
     with pytest.raises(ValueError,match='target'):resume_preflight(path,tmp_path,{**CFG,'updates':50})
 
 
+def test_resume_preserves_parent_provenance_and_consumed_wall_budget(tmp_path):
+    import torch,pytest
+    from sttw_control.lower_command_training import Training
+    cfg={**CFG,'weights_only_parent':{'checkpoint':'original_parent.pt'},'wall_budget_s':120.}
+    root=tmp_path/'training';(root/'checkpoints').mkdir(parents=True)
+    path=root/'checkpoints/resume_boundary.pt'
+    torch.save(dict(config=cfg,update=50,environment_continuation='full_rollout_boundary'),path)
+    (root/'metrics.jsonl').write_text(json.dumps({'update':50})+'\n')
+    (tmp_path/'status.json').write_text(json.dumps({'elapsed_s':119.}))
+    config=tmp_path/'config.json';config.write_text(json.dumps(cfg))
+    t=Training(config,tmp_path,True,str(path))
+    assert t.cfg['weights_only_parent']==cfg['weights_only_parent']
+    assert t.elapsed_before==119.
+    t.started-=2.
+    with pytest.raises(TimeoutError):t.check_budget()
+
+
 def test_weights_only_parent_keeps_fresh_optimizer_and_rejects_contract_drift(tmp_path):
     import torch,hashlib,copy,pytest
     from types import SimpleNamespace

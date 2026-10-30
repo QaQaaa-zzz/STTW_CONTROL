@@ -42,20 +42,22 @@ class Training:
         if self.cfg.get('candidate_local_interface'):
             self.cfg['formal_training_authorized']=bool(authorize_local_training)
             if not authorize_local_training:raise PermissionError('local candidate training resources not authorized')
-        if resume_checkpoint and self.cfg.get('weights_only_parent'):raise ValueError('choose exact resume or weights-only initialization')
+        # A resumed run retains its original parent provenance; the full boundary
+        # below takes precedence and does not reload those initial parent weights.
         self.resume_checkpoint=resume_checkpoint;self.resume_metadata={}
         if target_updates is not None:
             if target_updates>self.cfg.get('max_total_updates',self.cfg['updates']):raise ValueError('target exceeds declared total cap')
             self.cfg['updates']=target_updates
         self.out=Path(output);self.started=time.monotonic()
         if resume_checkpoint:resume_preflight(resume_checkpoint,self.out,self.cfg)
+        self.elapsed_before=json.loads((self.out/'status.json').read_text())['elapsed_s'] if resume_checkpoint else 0.
         if (self.out/'manifest.json').exists() and not resume_checkpoint:raise FileExistsError('run already exists; no overwrite/resume')
         self.status=dict(state='initializing',run_id=self.out.name,declared_updates=self.cfg['updates'],completed_updates=0,training_transitions=0,initialization='fresh_actor_critic_optimizer',training_seed=self.cfg['seed'])
         self.update_status();write(self.out/('resume_config.json' if resume_checkpoint else 'config.json'),self.cfg)
     def update_status(self,**kw):
-        self.status.update(kw);self.status.update(updated_epoch=time.time(),elapsed_s=time.monotonic()-self.started);write(self.out/'status.json',self.status)
+        self.status.update(kw);self.status.update(updated_epoch=time.time(),elapsed_s=self.elapsed_before+time.monotonic()-self.started);write(self.out/'status.json',self.status)
     def check_budget(self):
-        if self.cfg.get('wall_budget_s') is not None and time.monotonic()-self.started>self.cfg['wall_budget_s']:raise TimeoutError('declared wall budget exhausted')
+        if self.cfg.get('wall_budget_s') is not None and self.elapsed_before+time.monotonic()-self.started>self.cfg['wall_budget_s']:raise TimeoutError('declared wall budget exhausted')
     def compile(self,label,fn,*args):
         import jax
         self.check_budget();self.update_status(stage='compile',detail=label,state='running');start=time.monotonic()
@@ -135,13 +137,11 @@ class Training:
         def advance(states,z):
             if self.domain_source is None:end,reward,done,logs=jax.vmap(e.step)(states,z)
             else:
-                domains=len(self.domain_source['domains']);lanes=n//domains
-                grouped=jax.tree.map(lambda x:x.reshape((domains,lanes)+x.shape[1:]),states)
-                def group(args):
-                    state,action,di=args;model=e.domain_models.select(di)
-                    return jax.vmap(lambda s,a:e.step(s,a,physics_model=model))(state,action)
-                result=jax.lax.map(group,(grouped,z.reshape(domains,lanes,2),jp.arange(domains)))
-                end,reward,done,logs=jax.tree.map(lambda x:x.reshape((n,)+x.shape[2:]),result)
+                # One batch axis keeps all lanes parallel. Nested domain/lane
+                # vmap is not equivalent numerically in the current MJX stack.
+                end,reward,done,logs=jax.vmap(
+                    lambda state,action:e.step(state,action,
+                        physics_model=e.domain_models.select(state.domain_index)))(states,z)
             nxt=jax.vmap(lambda s,d:jax.lax.cond(d,lambda x:reset_one(x.env_id,x.episode+1),lambda x:x,s))(end,done)
             a,c=jax.vmap(e.observation)(nxt)
             ev=logs['actual_forward_speed']-logs['limited_command'][:,0];ed=logs['actual_delta']-logs['limited_command'][:,1]

@@ -1,3 +1,11 @@
+# Lower domain sampling acceleration — 2026-10-30
+
+The 9-domain lower sampler now uses one flat vmap over 504 environments, preserving each state's domain model and reset association. The previous lax.map over 9 groups serialized physics sampling. A paired 32-step replay from the same update-144 boundary and identical actions measured median step time 0.68345s → 0.10881s (6.28×); maximum speed difference 0.000222m/s, steering difference 0.000422rad, no changed failure flags. This is approximate agreement, not bitwise equivalence. Nested domain/lane vmap produced nonfinite states and was rejected; static unrolling had no speed benefit. All four raw traces remain in `lower_domain_finetune_v1/analysis/domain_speed_repair` in the experiment archive.
+
+Full-boundary resume retains original parent provenance while restoring current Actor/Critic/Adam, simulator/controller/history and RNG. Consumed wall time now carries across resume. 22 focused CPU checks passed. The ongoing 200-update budget is unchanged; end-to-end resumed timing will be recorded in the project ledger. No claim of improved control performance is made from this engineering replay.
+
+---
+
 # Path Coverage V2 focused verification — 2026-10-11
 
 30 focused CPU checks passed: sampler and legacy routing, active statistics, original full parent restoration and bounded extension, finite-domain single-environment reset, and identity-checked cached DEV. One 8×16 engineering batch executed 512 lower ticks and one disposable PPO update; no engineering fault, all four optimizer epochs accepted. Setup/compile 43.81s, total49.20s. Frozen physics assertion .0002×25=.005s, upper/PP .02s. This short prefix check establishes wiring only, not bend performance or coverage; actual coverage comes from ten-update training windows. Raw evidence: `runs/path_coverage_v2_preparation_20261011/engineering_result.json`. No old physical panels or broad repository tests.
