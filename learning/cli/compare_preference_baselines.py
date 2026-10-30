@@ -24,16 +24,19 @@ def compare(baselines, proposed, user_alpha):
         for row in json.loads((root / 'analysis/results.json').read_text()):
             assert digest(row['raw_file']) == row['raw_sha256']
             rows.append((root, plan, row))
-    for key in ['config', 'initial_source', 'models', 'contexts']:
+    for key in ['config', 'initial_source', 'models']:
         assert plans[0][key] == plans[1][key], key
+    proposed_contexts = {c['route']: c for c in plans[1]['contexts']}
+    for context in plans[0]['contexts']:
+        assert context == proposed_contexts[context['route']], context['route']
     out = roots[0] / 'analysis/matched_comparison'
     out.mkdir(exist_ok=True)
-    groups = sorted({(r['route'], r['onset_s']) for _, _, r in rows})
+    groups = sorted({(r['route'], r['onset_s'], r['force_N']) for root, _, r in rows if root == roots[0]})
     records = []
     links = []
     for group_index, group in enumerate(groups):
-        selected = [(root, plan, row) for root, plan, row in rows if (row['route'], row['onset_s']) == group]
-        assert len(selected) == 3, 'two fixed baselines plus one proposed trajectory required'
+        selected = [(root, plan, row) for root, plan, row in rows if (row['route'], row['onset_s'], row['force_N']) == group]
+        assert len(selected) == 3 and sum(root == roots[0] for root, _, _ in selected) == 2, 'two baselines plus one proposed trajectory required'
         common = min(row['active_lower_ticks'] for _, _, row in selected)
         fig, axes = plt.subplots(2, 3, figsize=(16, 9), layout='constrained')
         axes = axes.ravel()
@@ -56,6 +59,8 @@ def compare(baselines, proposed, user_alpha):
                 first, broaden_cost_numerics=True, task_alpha=user_alpha,
                 raw_alpha=row.get('raw_user_alpha', row['alpha']))
             baseline_label = f"Preset alpha={row['alpha']:g} + return" if baseline_returns else f"Fixed alpha={row['alpha']:g}"
+            if row['alpha'] == user_alpha:
+                baseline_label = f"Fixed user alpha={user_alpha:g}"
             label = baseline_label if root == roots[0] else 'Tolerance-guided + return'
             color, style = [('#0072B2', '--'), ('#D55E00', '-.'), ('#009E73', '-')][index]
             t = raw['time'][:n]
@@ -75,7 +80,7 @@ def compare(baselines, proposed, user_alpha):
             np.savez_compressed(out / name, time=t, actual_xy=raw['actual_xy'][:n],
                                 actual_forward_speed=values[0], alpha_exec=values[1], **task)
             records.append(dict(label=label, case_id=row['case_id'], source_run=root.name,
-                onset_s=row['onset_s'], endpoint=row['endpoint'], observed_ticks=n, common_ticks=common,
+                route=row['route'], force_N=row['force_N'], onset_s=row['onset_s'], endpoint=row['endpoint'], observed_ticks=n, common_ticks=common,
                 full_window_costs=task['task_step_costs'].sum(axis=0).tolist(),
                 common_window_costs=task['task_step_costs'][:common].sum(axis=0).tolist(),
                 preference_deviation_integral=float(np.abs(values[1]-user_alpha).sum()*.005),
