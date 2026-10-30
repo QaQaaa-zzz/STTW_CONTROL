@@ -157,3 +157,19 @@ def test_track_segments_are_explicit_and_preserve_event_pairing():
     cfg['route_contexts'][0]['speed']=2.8
     with pytest.raises(ValueError,match='geometries'):
         fixed_h75_capability_inventory(cfg)
+
+
+def test_mixed_speed_scope_preserves_old_low_speed_contract():
+    cfg=json.loads((Path(__file__).parents[1]/'configs/u170_mixed_speed_capability.json').read_text())
+    rows=fixed_h75_capability_inventory(cfg)
+    assert len(rows)==40 and len({r['case_id'] for r in rows})==40
+    assert {r['alpha'] for r in rows}=={0.,.25,.5,.75,1.}
+    assert {r['speed'] for r in rows}=={1.6,2.,3.2}
+    assert all(r['bank_index']==0 and r['force_N']==0 for r in rows)
+    cfg['geometry_scope']='low_speed_track_segments'
+    with pytest.raises(ValueError,match='speed/angle scope'):
+        fixed_h75_capability_inventory(cfg)
+    cfg['geometry_scope']='mixed_speed_track_segments'
+    cfg['route_contexts'][0]['speed']=3.6
+    with pytest.raises(ValueError,match='speed/angle scope'):
+        fixed_h75_capability_inventory(cfg)
