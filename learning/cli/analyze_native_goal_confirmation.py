@@ -2998,6 +2998,26 @@ def analyze_fixed_h75_capability(root,p):
             rows[-1].update(onset_roll_mean_rad=float(np.mean(raw['phi'][:n][near])) if near.any() else None,onset_roll_rate_mean_rad_s=float(np.mean(raw['phi_dot'][:n][near])) if near.any() else None)
             whole_speed=float(np.max(np.abs(raw['actual_forward_speed'][:n][upright]))) if upright.any() else None
             rows[-1].update(full_upright_max_abs_speed_m_s=whole_speed,low_speed_full_upright_gate_passed=bool(whole_speed is not None and whole_speed<=limit))
+            # Actual tracking of the reference delivered to the lower loop, not
+            # the original user target. Keep this separate from task errors.
+            turn=upright&(np.abs(np.interp(raw['path_progress'][:n],path['s'],path['curvature']))>1e-3)
+            turn_speed=raw['actual_forward_speed'][:n][turn]
+            rows[-1]['actual_turn_speed']=dict(
+                samples=int(turn.sum()),
+                mean_m_s=float(np.mean(turn_speed)) if turn.any() else None,
+                min_m_s=float(np.min(turn_speed)) if turn.any() else None,
+                max_m_s=float(np.max(turn_speed)) if turn.any() else None,
+                fraction_at_least_2p6_m_s=float(np.mean(turn_speed>=2.6)) if turn.any() else None,
+                scope='upright samples whose projected original-path curvature exceeds 0.001/m')
+            lower_speed_error=raw['actual_forward_speed'][:n]-raw['governed'][:n,0]
+            lower_steer_error=raw['actual_delta'][:n]-raw['governed'][:n,1]
+            rows[-1]['lower_reference_tracking']=dict(
+                upright_samples=int(upright.sum()),
+                speed_rmse_m_s=float(np.sqrt(np.mean(lower_speed_error[upright]**2))) if upright.any() else None,
+                steer_rmse_rad=float(np.sqrt(np.mean(lower_steer_error[upright]**2))) if upright.any() else None,
+                speed_max_abs_error_m_s=float(np.max(np.abs(lower_speed_error[upright]))) if upright.any() else None,
+                steer_max_abs_error_rad=float(np.max(np.abs(lower_steer_error[upright]))) if upright.any() else None,
+                scope='same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality')
             if 'force_direction_world' in c:rows[-1]['load_kind']='equivalent_fixed_world_vector_force_not_wind_field'
             if c['force_N']==0.:
                 for field in ('pre_load_max_speed_m_s','during_load_upright_max_speed_m_s','onset_speed_mean_m_s','pre_load_max_abs_roll_deg','during_load_max_abs_roll_deg','onset_roll_mean_rad','onset_roll_rate_mean_rad_s','low_speed_gate_passed'):
