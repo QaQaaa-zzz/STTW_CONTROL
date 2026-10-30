@@ -83,3 +83,18 @@ def test_resume_preflight_rejects_stale_boundary_and_budget(tmp_path):
     with pytest.raises(ValueError,match='latest'):resume_preflight(path,tmp_path,CFG)
     (root/'metrics.jsonl').write_text(json.dumps({'update':50})+'\n')
     with pytest.raises(ValueError,match='target'):resume_preflight(path,tmp_path,{**CFG,'updates':50})
+
+
+def test_weights_only_parent_keeps_fresh_optimizer_and_rejects_contract_drift(tmp_path):
+    import torch,hashlib,copy,pytest
+    from types import SimpleNamespace
+    from sttw_control.lower_command_training import restore_parent_weights
+    parent=torch.nn.Linear(2,2);child=torch.nn.Linear(2,2)
+    opt=torch.optim.Adam(child.parameters());algo=SimpleNamespace(policy=child,optimizer=opt)
+    path=tmp_path/'parent.pt';torch.save(dict(config=CFG,policy=parent.state_dict(),update=300,optimizer={'not_loaded':True}),path)
+    identity=dict(checkpoint=str(path),checkpoint_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+    receipt=restore_parent_weights(algo,identity,CFG)
+    assert receipt['source_update']==300 and not opt.state
+    for a,b in zip(parent.parameters(),child.parameters()):torch.testing.assert_close(a,b)
+    bad=copy.deepcopy(CFG);bad['observation_scales'][0]*=2
+    with pytest.raises(ValueError,match='contract differs'):restore_parent_weights(algo,identity,bad)

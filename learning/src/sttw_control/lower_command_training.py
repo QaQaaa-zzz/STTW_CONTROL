@@ -21,12 +21,28 @@ def make_algorithm(obs,steps,cfg,device='cuda'):
     storage=RolloutStorage('rl',obs.batch_size[0],steps,obs,[2],device=device)
     return DirectCommandPPO(policy,storage,num_learning_epochs=cfg['epochs'],num_mini_batches=cfg['minibatches'],clip_param=cfg['clip_ratio'],gamma=cfg['gamma'],lam=cfg['gae_lambda'],value_loss_coef=1.,entropy_coef=cfg['entropy'],use_clipped_value_loss=False,schedule='fixed',desired_kl=cfg['soft_kl'],normalize_advantage_per_mini_batch=False,device=device,actor_lr=cfg['actor_lr'],critic_lr=cfg['critic_lr'],adam_betas=(.9,.999),adam_epsilon=1e-5,weight_decay=0.,std_min=cfg['std_min'],std_max=cfg['std_max'],hard_kl=cfg['hard_kl'],actor_grad_limit=1.,critic_grad_limit=1.,kl_group_index=None)
 
+def restore_parent_weights(algo,parent,cfg):
+    """Weights-only transfer: preserve the newly created optimizer and RNGs."""
+    import torch
+    path=Path(parent['checkpoint'])
+    if hashlib.sha256(path.read_bytes()).hexdigest()!=parent['checkpoint_sha256']:
+        raise ValueError('lower parent checkpoint identity differs')
+    saved=torch.load(path,map_location='cpu',weights_only=False)
+    fields=('actor_dim','critic_dim','hidden_sizes','history_frames','frame_fields','observation_scales','observation_clip_abs','activation','dt')
+    if any(saved['config'][key]!=cfg[key] for key in fields):
+        raise ValueError('lower parent observation/network/timing contract differs')
+    algo.policy.load_state_dict(saved['policy'],strict=True)
+    return dict(checkpoint=str(path.resolve()),checkpoint_sha256=parent['checkpoint_sha256'],
+                source_update=saved['update'],initialization='weights_only_fresh_optimizer_and_rng')
+
+
 class Training:
     def __init__(self,config,output,authorize_local_training=False,resume_checkpoint=None,target_updates=None):
         self.cfg=json.loads(Path(config).read_text())
         if self.cfg.get('candidate_local_interface'):
             self.cfg['formal_training_authorized']=bool(authorize_local_training)
             if not authorize_local_training:raise PermissionError('local candidate training resources not authorized')
+        if resume_checkpoint and self.cfg.get('weights_only_parent'):raise ValueError('choose exact resume or weights-only initialization')
         self.resume_checkpoint=resume_checkpoint;self.resume_metadata={}
         if target_updates is not None:
             if target_updates>self.cfg.get('max_total_updates',self.cfg['updates']):raise ValueError('target exceeds declared total cap')
@@ -59,12 +75,13 @@ class Training:
             assert self.cfg['actor_dim']==210 and self.cfg['critic_dim']==211 and self.cfg['history_frames']==10
             assert self.cfg['num_envs']*self.cfg['rollout_steps']%self.cfg['minibatches']==0
         with Path(self.cfg['prepared_bank']).open('rb') as f:self.bank=jax.tree.map(jp.asarray,pickle.load(f))
+        self.bank_size=jax.tree.leaves(self.bank)[0].shape[0]
         source=json.loads(Path(self.cfg['prepared_manifest']).read_text())
         assert self.env.physics.bundle.identity==source['model'],'prepared bank physics identity mismatch'
         assert asdict(self.env.cc)==source['controller'] and asdict(self.env.ac)==source['actuator']
         if self.cfg.get('prepared_bank_expected_sha256') and hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest()!=self.cfg['prepared_bank_expected_sha256']:raise ValueError('prepared bank SHA mismatch')
         manifest_path=self.out/(f'resume_manifests/to_{self.cfg["updates"]:04d}.json' if self.resume_checkpoint else 'manifest.json')
-        write(manifest_path,dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=None,optimizer_source=None,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
+        write(manifest_path,dict(schema=self.cfg['schema'],config=self.cfg,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_patch=subprocess.check_output(['git','diff'],text=True),model=self.env.physics.bundle.identity,controller=asdict(self.env.cc),actuator=asdict(self.env.ac),prepared_bank_sha256=hashlib.sha256(Path(self.cfg['prepared_bank']).read_bytes()).hexdigest(),policy_source=self.cfg.get('weights_only_parent'),optimizer_source=None,action_semantics='tanh Gaussian -> front/rear bounded residual added to ECBC',actor_dim=210,critic_dim=211,frequency_hz=200))
         if self.cfg.get('candidate_local_interface'):
             # Existing lower/ECBC interface validation is retained; do not repeat it.
             write(self.out/'interface_checks.json',dict(status='reused_existing_interface_no_new_parity_physics',candidate_checks='learning/tests/test_local_lower_candidate.py'))
@@ -84,7 +101,7 @@ class Training:
         e=self.env
         def reset_one(eid,episode):
             key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(self.cfg['seed']),eid),episode)
-            idx=jax.random.randint(key,(),0,8);snap=jax.tree.map(lambda x:x[idx],self.bank)
+            idx=jax.random.randint(key,(),0,self.bank_size);snap=jax.tree.map(lambda x:x[idx],self.bank)
             return e.reset(snap,eid,episode)
         reset=self.compile(f'{n} resets',jax.vmap(reset_one),jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32))
         states=reset(jp.arange(n,dtype=jp.int32),jp.zeros(n,jp.int32));jax.block_until_ready(states)
@@ -141,7 +158,12 @@ class Training:
             self.update_status(initialization='exact_resume_full_rollout_boundary',resume_checkpoint=str(self.resume_checkpoint),completed_updates=initial_update,training_transitions=initial_update*n*steps,accepted_policy_updates=algo.accepted_policy_updates)
             if self.resume_metadata.get('accepted_count_correction'):
                 write(self.out/'accepted_count_correction.json',self.resume_metadata['accepted_count_correction'])
-        else:self.checkpoint(algo,0,phase,states)
+        else:
+            if self.cfg.get('weights_only_parent'):
+                receipt=restore_parent_weights(algo,self.cfg['weights_only_parent'],self.cfg)
+                write(self.out/phase/'parent_initialization.json',receipt)
+                self.update_status(initialization=receipt['initialization'],parent_source_update=receipt['source_update'])
+            self.checkpoint(algo,0,phase,states)
         writer=SummaryWriter(str(self.out/'tensorboard'/phase));writer.add_scalar('progress/updates',0,0);writer.flush()
         self.update_status(stage=phase,state='running',stage_updates=initial_update)
         best=self.resume_metadata.get('train_best_reward',-float('inf'));completed=initial_update;hard_rejects=self.resume_metadata.get('hard_rejects',0);boundary=True
