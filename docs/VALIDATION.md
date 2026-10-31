@@ -2351,3 +2351,10 @@ The next frozen comparison declares60 H10 episodes: four previously inspected lo
 
 
 Cross-speed preparation follow-up:40 legacy capability tests passed. The first real24-lane shape stopped before integration because the historical initial-state audit multiplied globally distinct event names by route count. Route-specific onsets require actual(bank,route,event) groups. The corrected audit separately verifies route count and retains group sizes and every neutralized closed-loop leaf.39 focused tests passed, including route-specific event names, missing route and altered history. Independent review confirmed the fix. The rejected shape and earlier preparation-only artifacts remain in separate archive directories; neither performed physics.
+
+
+### Reusable matched-method presentation
+
+`learning/cli/compare_native_methods.py MANIFEST OUTPUT` reuses the established six-method plotting workflow with explicit method labels and a declared condition count. It verifies matched model/config/initial-source/geometry/reconnection identities and completed source analyses, then preserves every declared condition in XY/speed/preference overlays and machine-readable outcomes. It records actual observed speed and duration, pulse-window speed, pre-goal user0 occupancy, and separately labelled source-user running costs. Fixed1 costs are not ranked against user0 costs. Contact/fault endpoints use a cross; surviving endpoints use a square.
+
+Engineering validation reused36 historical raw trajectories, not new physics: all six method summaries exactly matched the previous baseline comparison; nominal rows have no invented pulse-speed values. One representative exported panel was visually inspected. The current60-case manifest is archived at `cross_speed_timing_fixed_v1/comparison_manifest.json`; rendering its report awaits completion of all source analyses. The live physics and sealed runtime were not changed.
