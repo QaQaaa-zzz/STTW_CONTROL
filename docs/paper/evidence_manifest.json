@@ -1928,6 +1928,13 @@
       "verification": "AI artifact_checked; all60 raw endpoints independently rebuilt; independent reviewer checked all12 XY and gains/losses",
       "human_verification": "not_recorded",
       "scope": "Four previously inspected routes, shared bank2, five matched methods. No independent training-seed or initial-state-randomization claim."
+    },
+    "E313": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_directional_branch_v1/independent_raw_outcomes.json",
+      "sha256": "3d50f33bcf2af80038ca6d92a3b2dbe5cb812d393a84b3d690c80341eff47d20",
+      "verification": "AI artifact_checked; independent NumPy10 raw endpoints; non-originator two-direction result/XY review",
+      "human_verification": "not_recorded",
+      "scope": "One inspected complete source; five held alphas times two directions. Disjoint held survival sets do not rule out feedback switching."
     }
   },
   "manuscript_evidence_references": [
