@@ -50,6 +50,10 @@ The bounded primary-source check found existing task/recovery policy separation 
 
 Immediate decision: finish the360matched-protocol branch collection and audit the frozen predictor before fitting or changing online thresholds. Reuse the original fixed trajectories for their own-alpha, zero-additional-gust continuation labels. A later, separately declared small branch test at actual online restoration states can determine whether returning versus retaining alpha changes the outcome; it is not launched by this review. No result is inferred for a second network or new controller.
 
+### Frozen onset transfer and common planning constraint — 2026-10-31
+
+The next8episodes freeze both controllers and sample onset once per route before execution (right2.78s,left2.28s). Both measuredrecovery and shortdwell produce2/4goals and4/4survivors; newright arrivals are0.070/0.235s earlier, no binarygain/loss. Two left failures are goalmisses, not falls. No replan is accepted because prescribedterminalheading candidates exceed the unchanged4maddedlength allowance. Offline finite-heading search makes the first rejected left−/+36 candidates fit the same allowance. The next shared planner experiment should preserve originalheading priority and use this existing finite-heading fallback only after length rejection. Do not attribute any shared task-execution repair to prediction calibration. See `onset_transfer_recovery_v1/RESULTS.md`; no new q fitting or timing grid.
+
 ### Measured recovery release result — 2026-10-31
 
 A same-condition six-method consolidation now binds the basic baselines to this result: fixedalpha0, fixedalpha1, geometry-only, originalshortdwell and fixedcommitment all complete4/6; measuredrecovery completes5/6 with the originalfour retained. Fixedalpha1 andcommitment survive5/6, confirming that the incremental result is taskcompletion after survival. Full36raw-record independent checks and six all-method XY panels are in `u170_lower200_recovery_release_online_v1/baseline_comparison`. This comparison does not substitute for the ongoing frozen-rule onset transfer or broader speed/geometry validation.
