@@ -884,8 +884,8 @@ def five_alpha_partition(protocol):
 
 def validate_five_alpha_fit_config(cfg):
     """Separate opt-in budget; historical pilot schemas remain unchanged."""
-    if 'feature_mask_keep_indices' in cfg and cfg['feature_mask_keep_indices']!=[4]+list(range(34,41)):
-        raise ValueError('five-alpha state ablation keeps speed and all candidate-query features')
+    if 'feature_mask_keep_indices' in cfg and cfg['feature_mask_keep_indices'] not in ([4]+list(range(34,41)),list(range(40))):
+        raise ValueError('five-alpha masks allow speed plus candidate-query or all features except preparation')
     t=cfg['training'];b=cfg['budget'];f=cfg['features'];d=cfg['dataset']
     steps=t['updates_per_model_seed']
     if isinstance(steps,bool) or not isinstance(steps,int) or not 1<=steps<=1000:

@@ -303,3 +303,11 @@ def test_speed_state_ablation_keeps_all_candidate_query_information():
     assert cfg['feature_mask_keep_indices']==[4,34,35,36,37,38,39,40]
     cfg['feature_mask_keep_indices']=[4]
     with pytest.raises(ValueError,match='candidate-query'):m.validate_five_alpha_fit_config(cfg)
+
+
+def test_no_preparation_ablation_preserves_state_and_other_query_features():
+    cfg=json.loads((ROOT/'learning/configs/u170_lower200_no_preparation_fit.json').read_text())
+    m.validate_five_alpha_fit_config(cfg)
+    assert cfg['feature_mask_keep_indices']==list(range(40))
+    cfg['feature_mask_keep_indices']=list(range(39))
+    with pytest.raises(ValueError,match='preparation'):m.validate_five_alpha_fit_config(cfg)

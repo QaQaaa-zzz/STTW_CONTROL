@@ -1843,6 +1843,14 @@
       "human_verification": "not_recorded",
       "scope": "All8 four-method rows rescored at original useralpha0; actual, own and common windows; three running task channels, not full reward.",
       "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E302": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_no_preparation_predictor_v1/training/matched_information_comparison.json",
+      "sha256": "3b62f0c805f07ddb8877da84e1eac0e78ad717598ddd36b935c61c305391b39f",
+      "verification": "AI artifact_checked; fixed-budget fit, receipts and masked-column probes checked",
+      "human_verification": "not_recorded",
+      "scope": "Matched preparation-input ablation: same800TRAIN/160DEV,3000CPUupdates,0physics; ensemble and all seeds plus correlated prep-pair outcomes.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
     }
   },
   "manuscript_evidence_references": [
@@ -1981,6 +1989,7 @@
     "E298",
     "E299",
     "E300",
-    "E301"
+    "E301",
+    "E302"
   ]
 }

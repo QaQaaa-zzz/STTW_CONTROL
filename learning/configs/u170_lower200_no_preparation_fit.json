@@ -1,0 +1,179 @@
+{
+  "experiment_id": "STTW-U170-LOWER200-NO-PREPARATION-FIT",
+  "mode": "five_alpha_fit",
+  "dataset": {
+    "expected_cases": 960,
+    "expected_training_rows": 800,
+    "expected_development_rows": 160,
+    "collection_kind": "declared_source_product",
+    "physics_identity": {
+      "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+      "source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+      "portable_xml_sha256": "9e5c7de46245008e0efd9d3ab3729bfb987a87f79c08a2159459e562a0f4ba56",
+      "assets": {
+        "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+        "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+        "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+        "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+        "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+        "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+      },
+      "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+      "mujoco_version": "3.6.0"
+    },
+    "frozen_model_identity": {
+      "H75": {
+        "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+        "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+        "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+        "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+        "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+        "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+        "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+        "source_update": 170,
+        "checkpoint_kind": "PPO_state",
+        "role": "explicit_training_candidate_not_frozen_H75",
+        "base_model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+        "verification": "checkpoint identity, physical source and exact Torch-to-Actor export; zero physics"
+      }
+    },
+    "lower_actor_sha256": "b362a9afc1738e884569aa54e732719d23fc528e9244800f99eb8256d6ab0b9b",
+    "analyses": [
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_tolerance_force48_completed_v1/analysis",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_train_labels_v1/analysis"
+    ],
+    "analysis_plan_sha256s": {
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_tolerance_force48_completed_v1/analysis": "93a61ad056d25f363f9e025fa68ab020e3fc065c66e8e590fe990a51a2d21206",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_train_labels_v1/analysis": "2d0e339dddf8c9cae5d648bf25b9bcab4ca9d329d3451f23598a0dd109e26bb9"
+    },
+    "development_freeze": {
+      "file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_tolerance_force48_predictor_v1/training/development_freeze_for_augmentation.json",
+      "sha256": "da51d47ef3d28dfb4e808a10ea33e5abfac2aa2db3c095792ee2c0b7a3aef2fe"
+    }
+  },
+  "architecture": {
+    "hidden": [
+      16,
+      16
+    ]
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "updates_per_model_seed": 1000,
+    "maximum_total_optimizer_updates": 3000,
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "optimizer": "AdamW",
+    "ranking_weight": 0.5,
+    "device": "CPU",
+    "fixed_last": true,
+    "full_batch": true
+  },
+  "budget": {
+    "new_physics_steps": 0,
+    "new_ppo_updates": 0,
+    "maximum_optimizer_updates": 3000,
+    "automatic_extensions": false
+  },
+  "selection": "Three fixed last1000, same seed initialization and full41 shape; excluded first-layer weights and gradients fixed zero; speed-state plus identical candidate-query information.",
+  "target": "Source through hypothetical pulseEND+3 no contact, preparation falls negative, faults incomplete unknown",
+  "data_role": "Original320 plus640 additionalTRAIN rows; unchanged frozen160DEV; no independent physical TEST",
+  "activation": "Fit once only after complete960row identity/label audit and frozen160DEV check; fixed3000updates, no automatic extension.",
+  "limits": "Matched offline state-information ablation; not an online replacement or a pure speed-only query. No new validation data used.",
+  "stop_rule": "3000maximum updates or engineering/nonfinite stop, no automatic continuation. Training and pipeline completion notifications separate.",
+  "tensorboard": "Reuse project6006 if compatible; verify HTTP and thisrun scalars. No other project interruption.",
+  "features": {
+    "full_indices": [
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342,
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350
+    ],
+    "speed_indices": [
+      304
+    ],
+    "full_dim": 41
+  },
+  "ranking": {
+    "weight": 0.5,
+    "pairing": "source_group_id/preparation_s/force_N; positive-negative only"
+  },
+  "recovery_provenance": "Old force48 dataset has explicit task3 recovery provenance; new source groups are disjoint.",
+  "feature_mask_keep_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "information_ablation": "Only preparation feature40 excluded; same41width/fullstate/candidate/disturbance information, data, three fixed seeds, objective and1000steps. No online replacement."
+}

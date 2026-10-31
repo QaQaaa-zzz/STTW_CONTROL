@@ -1,4 +1,10 @@
 
+## Matched preparation-time predictor ablation — 2026-10-31
+
+Same800TRAIN/160DEV receipts,architecture41→16→16ReLU→1,seeds0/1/2,fixed1000AdamW updates each,BCE+.5ranking. Only input40(preparation) is excluded by zero first-layer weights/gradients. All three trained columns exactly zero,100input probes with preparation+10 give zero logit change.22predictor tests pass.3000CPU updates,0physics/PPO,1.655s optimization; no online model change.
+
+DEV ensemble full/no-prep Brier.065211/.075847,AUC.911/.907455,logloss.603541/.636785. Seed2 favors no-prep while seeds0/1 favor full. Matched preparation pairs:TRAIN42/400 andDEV10/80 have changed labels; DEV10pairs represent2distinct source-direction groups with five correlated alphas. Full predicts5correct/5ties versus10ties without preparation(tie tolerance1e-7); not10independent validation units. [Complete evidence](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_no_preparation_predictor_v1/training/README.md). TensorBoard6006 HTTP200 and no_preparation_q scalars loaded,PID2645056; older runs retained.
+
 ## Original-user cost comparison for the low-speed recovery example — 2026-10-31
 
 [Actual/reference four-method XY](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/four_method_F36.png) and [common-user cost components](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/user0_cost/components.png). All8 saved nominal/+36N method trajectories rescored with identical useralpha0 and original path, using the existing independent projection/cost reconstruction. Same model/physics/config/reconnection verified, raw hashes checked, pre-reconnection numerical checks pass;0newphysics/updates.
