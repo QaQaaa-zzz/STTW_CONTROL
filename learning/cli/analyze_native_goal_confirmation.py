@@ -2405,7 +2405,7 @@ def validate_five_alpha_cases(cases, protocol):
         if key in actual:raise ValueError('duplicate five-alpha condition')
         actual.add(key);g=next(g for g in groups if g['source_index']==c['source_index'])
         if c['source_user_alpha']!=g['source_user_alpha'] or c['alpha']!=g['source_user_alpha'] or c['query_alpha']!=c['candidate_alpha']:raise ValueError('source/query identity mismatch')
-        for field,value in [('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('duration_s',.15),('primary_window_end_s',g['source_task_s']+c['preparation_s']+.15+3)]:
+        for field,value in [('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('duration_s',protocol['duration_s']),('primary_window_end_s',g['source_task_s']+c['preparation_s']+protocol['duration_s']+3)]:
             if not np.isclose(c[field],value,atol=1e-9,rtol=0):raise ValueError('five-alpha timing mismatch '+field)
     if actual!=expected:raise ValueError('incomplete five-alpha product')
 
@@ -2444,13 +2444,13 @@ def render_five_alpha_xy(root,p,rows,raws):
         for r in group:
             raw=raws[r['case_id']];n=r['new_suffix_lower_ticks'];line=ax.plot(*raw['actual_xy'][:n].T,label=f"alpha={r['candidate_alpha']:g}")[0]
             ax.scatter(*raw['actual_xy'][n-1],color=line.get_color(),marker='x' if label_plot_outcome(r)['physical_outcome']=='contact' else 's')
-            mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
+            mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+r['duration_s'])
             ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
         ax.scatter(*first['original_goal_xy'],marker='*',color='k')
         model=p['models']['H75'];identity=model.get('registry_id','middle')+' checkpoint '+model.get('checkpoint_sha256',model.get('actor_sha256','unknown'))[:12]+' | lower '+p['initial_source']['candidate']['actor_sha256'][:8]
         fig.suptitle(identity,fontsize=11)
         ax.set(xlabel='World X (m)',ylabel='World Y (m)')
-        ax.set_title(f"{first['route']} | source{source} at task {first['source_task_s']:g}s | bank{first['bank_index']}\nprep {prep:g}s | worldY {force:+g}N for .15s | source alpha={first['source_user_alpha']:g}\nActual source suffix and endpoints; dots=force exposure; no reset",fontsize=10)
+        ax.set_title(f"{first['route']} | source{source} at task {first['source_task_s']:g}s | bank{first['bank_index']}\nprep {prep:g}s | worldY {force:+g}N for {first['duration_s']:g}s | source alpha={first['source_user_alpha']:g}\nActual source suffix and endpoints; dots=force exposure; no reset",fontsize=10)
         ax.set_aspect('equal');ax.legend();ax.grid(alpha=.2);name=f'source{source}_prep{prep:g}_F{force:+g}_xy.png';fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     return links
 
@@ -2458,6 +2458,9 @@ def render_five_alpha_xy(root,p,rows,raws):
 def label_analysis_partition(protocol):
     """Opt-in fresh task2 collection; historical fullH10 partitions unchanged."""
     from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    if protocol.get('data_partition')=='recorded_continuation':
+        if len(protocol['source_groups'])!=1 or protocol['expected_cases']!=5 or protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[0.] or len(protocol['forces_N'])!=1:raise ValueError('five-candidate recorded continuation required')
+        return dict(kind='recorded_continuation',training_routes=set(),development_routes={protocol['source_groups'][0]['route']},cases=5,training_rows=0,development_rows=5,bank=protocol['source_groups'][0]['bank_index'])
     if protocol.get('data_partition')=='declared_source_product':return five_alpha_partition(protocol)
     if 'label_collection_duration_s' in protocol:
         groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes=set(protocol['source_routes'])
@@ -2550,7 +2553,7 @@ def analyze_five_alpha_labels(root,p):
             if n<=0 or n>round(collection_end/.005)-start or not np.array_equal(np.flatnonzero(active),np.arange(n)):raise ValueError('suffix prefix invalid')
             np.testing.assert_allclose(raw['time'][:n],(start+np.arange(n))*.005,atol=3e-6,rtol=0)
             query=audit_samestate_query(raw,c);clock=np.rint(raw['time']/.005).astype(int)
-            pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=.15))
+            pulse=audit_pulse(dict(raw,physical_tick=clock),dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']))
             faults=raw['policy_fault']|raw['continuation_geometry_fault']|raw['nonfinite']|raw['lower_fault']
             outcome=goal_arrival_metrics(dict(raw,physical_tick=clock-start,policy_fault=faults),goal_xy=c['original_goal_xy'],radius_m=1.,dt=.005,horizon_s=collection_end-start*.005)
             g=next(g for g in protocol['source_groups'] if g['source_index']==c['source_index'])

@@ -204,3 +204,26 @@ def test_disturbed_sources_keep_parent_alpha_and_immediate_pulse():
     with pytest.raises(ValueError,match='metadata'):five_alpha_label_inventory(bad)
     bad=copy.deepcopy(p);bad['source_groups'].pop()
     with pytest.raises(ValueError,match='product'):five_alpha_partition(bad)
+
+
+def test_recorded_restoration_preserves_remaining_event_and_budget():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_restoration_branch.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==5 and p['maximum_suffix_lower_ticks']==8180
+    assert {r['source_origin'] for r in rows}=={'saved_online_native'}
+    assert {r['candidate_alpha'] for r in rows}=={0.,.25,.5,.75,1.}
+    pulse=np.asarray(force_pulses(rows,3.5))
+    np.testing.assert_allclose(pulse[:,0],5.32)
+    np.testing.assert_allclose(pulse[:,1],5.45)
+    assert all(r['duration_s']==.13 and r['force_N']==36. and r['primary_window_end_s']==4.95 for r in rows)
+    for field,value in [('duration_s',.15),('forces_N',[0.]),('source_selection_mode','all_fixed')]:
+        bad=copy.deepcopy(p);bad[field]=value
+        with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+
+
+def test_restoration_continuation_keeps_global_planning_phase():
+    from sttw_control.native_goal_run import label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_restoration_branch.json').read_text())
+    steps=label_collection_steps(p,1.82)
+    assert steps[0]==4 and sum(steps)==409
+    np.testing.assert_array_equal(364+np.cumsum(steps)*4,np.arange(380,2001,20))
