@@ -13,8 +13,8 @@ def main(root, noq):
     rows=json.loads((root/'analysis/results.json').read_text())
     source=Path(plan['source']);protocol=plan['protocol'];g=protocol['source_groups'][0]
     online=json.loads((source/'evaluation/case_index.json').read_text())
-    no_risk=json.loads((noq/'evaluation/case_index.json').read_text())
-    assert len(rows)==10 and len(protocol['source_groups'])==1
+    no_risk=json.loads((noq/'evaluation/case_index.json').read_text()) if noq else []
+    assert len(rows)==5*len(protocol['forces_N']) and len(protocol['source_groups'])==1
     out=root/'analysis';summary=[];links=[]
     with np.load(source/'evaluation'/(g['path_key']+'_path.npz')) as z:path=dict(z)
     markers=['o','s','^','D','v'];colors=['#0072B2','#E69F00','#009E73','#D55E00','#CC79A7']
@@ -26,6 +26,7 @@ def main(root, noq):
             streams.append((f"Hold alpha={r['candidate_alpha']:g}",raw,colors[k],markers[k],'-'))
             summary.append(dict(alpha=r['candidate_alpha'],force_N=force,primary=r['primary']['label_status'],h10=r['horizons']['10'],active_ticks=int(raw['active_tick'].sum())))
         for name,cases,color,style in [('Full online',online,'black','--'),('No-risk online',no_risk,'#666666',':')]:
+            if not cases:continue
             c=next(c for c in cases if c['route']==g['route'] and c['force_N']==force)
             with np.load(c['raw_file']) as z:raw={k:v[g['expected_task_tick']:] for k,v in dict(z).items()}
             streams.append((name,raw,color,None,style))
@@ -50,10 +51,10 @@ def main(root, noq):
         fig.suptitle(title);fig2.suptitle(title+'\nRecorded user-alpha0 rewards; no smoothing; failure endpoints retained');rewaxes[0].legend(fontsize=8)
         name=f'direction_{force:+g}_xy_dynamics.png';fig.savefig(out/name,dpi=150);fig2.savefig(out/f'direction_{force:+g}_rewards.png',dpi=150);plt.close(fig);plt.close(fig2);links.append(name)
     (out/'directional_comparison.json').write_text(json.dumps(dict(rows=summary,scope='Held candidates from one complete source; online continuations may return alpha later. Recorded rewards, not independent component reconstruction.'),indent=2)+'\n')
-    (out/'DIRECTIONAL.md').write_text('# Same-state directional candidate comparison\n\n'+'\n\n'.join(f'![All five alpha actual/reference trajectories]({name})' for name in links)+'\n\nOriginal 1m goal disk; x marks failure, squares mark observed endpoints. Each force direction contains all five held candidates plus recorded full/no-risk continuations. Reward plots use user-alpha0 logged per-step and cumulative suffix rewards, not cross-alpha rescoring.\n')
+    (out/'DIRECTIONAL.md').write_text('# Same-state directional candidate comparison\n\n'+'\n\n'.join(f'![All five alpha actual/reference trajectories]({name})' for name in links)+'\n\nOriginal 1m goal disk; x marks failure, squares mark observed endpoints. Each force direction contains all five held candidates plus the declared recorded online continuations. Reward plots use user-alpha0 logged per-step and cumulative suffix rewards, not cross-alpha rescoring.\n')
     print(json.dumps(summary,indent=2))
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path);parser.add_argument('--noq',type=Path,required=True)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('root',type=Path);parser.add_argument('--noq',type=Path)
     args=parser.parse_args();main(args.root,args.noq)

@@ -794,7 +794,9 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
         g=groups[0];c=source_cases[g['source_lane']];t=g['source_task_s']
         if 'source_capture' in p:
             capture=Path(p['source_capture']);receipt=json.loads((capture/'receipt.json').read_text())
-            if receipt['source']!=p['source'] or receipt['source_plan_sha256']!=p['source_plan_sha256'] or receipt['task_end_s']!=t or receipt['actual_lower_ticks']!=24:raise ValueError('recorded boundary capture differs')
+            capture_steps=round((t-receipt['task_start_s'])*200)
+            capture_budget=len(source_cases)*capture_steps
+            if capture_steps not in (4,8,12,16) or receipt['source']!=p['source'] or receipt['source_plan_sha256']!=p['source_plan_sha256'] or receipt['task_end_s']!=t or receipt['actual_lower_ticks']!=capture_budget or receipt['lower_slots']!=capture_budget:raise ValueError('recorded boundary capture differs')
             for name,sha in receipt['files'].items():
                 if digest(capture/name)!=sha:raise ValueError('recorded boundary capture changed')
         else:

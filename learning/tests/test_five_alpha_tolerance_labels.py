@@ -277,3 +277,20 @@ def test_saved_online_boundary_branches_both_original_directions_without_prefix(
         with pytest.raises(ValueError):five_alpha_label_inventory(bad)
     bad=copy.deepcopy(p);bad['source_groups'][0]['source_task_s']=1.72
     with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+
+
+def test_feedback_capture_uses_actual_twelve_lane_budget_and_remaining_force():
+    from sttw_control.native_goal_run import label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_feedback_return.json').read_text())
+    receipt=json.loads((Path(p['source_capture'])/'receipt.json').read_text())
+    assert receipt['actual_lower_ticks']==receipt['lower_slots']==48
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==5 and {r['source_block'] for r in rows}=={16}
+    assert {r['expected_task_tick'] for r in rows}=={344}
+    pulse=np.asarray(force_pulses(rows,3.5))
+    np.testing.assert_allclose(pulse[:,0],5.22)
+    np.testing.assert_allclose(pulse[:,1],5.35)
+    assert sum(label_collection_steps(p,1.72))*4*5==8280
+    for field,value in [('duration_s',0.),('preparation_s',[.02]),('forces_N',[36.])]:
+        bad=copy.deepcopy(p);bad[field]=value
+        with pytest.raises(ValueError):five_alpha_label_inventory(bad)
