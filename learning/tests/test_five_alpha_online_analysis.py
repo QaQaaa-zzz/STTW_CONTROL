@@ -309,3 +309,13 @@ def test_geometric_ablation_does_not_require_predicted_risk_for_restoration():
     assert stats['qualification_scope']=='task gate only; no risk qualification'
     with pytest.raises(AssertionError):
         m.five_alpha_online_statistics(r,dict(onset_s=.02,duration_s=.015),use_q=True)
+
+
+def test_independent_support_commitment_audit_rejects_short_or_wrong_deadline():
+    r=dwell_fixture(n=4)
+    r['coord_hold_until_tick'][:]=750
+    r['coord_hold_remaining_ticks'][:]=750
+    m.audit_five_alpha_dwell(r,.2,support_commitment_s=3.75)
+    with pytest.raises(AssertionError):m.audit_five_alpha_dwell(r,.2)
+    r['coord_hold_until_tick'][:]=748
+    with pytest.raises(AssertionError):m.audit_five_alpha_dwell(r,.2,support_commitment_s=3.75)
