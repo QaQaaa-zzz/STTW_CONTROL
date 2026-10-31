@@ -2457,6 +2457,17 @@ def render_five_alpha_xy(root,p,rows,raws):
 def label_analysis_partition(protocol):
     """Opt-in fresh task2 collection; historical fullH10 partitions unchanged."""
     from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    if protocol.get('data_partition')=='declared_source_product':
+        import itertools
+        groups=protocol['source_groups'];split=protocol['fitting_split']
+        routes=set(protocol['source_routes']);banks=protocol['source_banks'];times=protocol['source_times_s']
+        expected=set(itertools.product(routes,banks,times));actual={(g['route'],g['bank_index'],g['source_task_s']) for g in groups}
+        if actual!=expected or len(groups)!=len(expected) or len({g['source_index'] for g in groups})!=len(groups):raise ValueError('source product incomplete or duplicated')
+        if protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True or any(g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('ongoing source collection contract differs')
+        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-64.,64.]:raise ValueError('source-product branch grid differs')
+        train=set(split['training_routes']);dev=set(split['development_routes']);nt=sum(g['route'] in train for g in groups)*20;nd=sum(g['route'] in dev for g in groups)*20
+        if not split['declared_before_new_labels'] or train&dev or train|dev!=routes or protocol['expected_cases']!=nt+nd or protocol['expected_source_states']!=len(groups) or split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('source-product split differs')
+        return dict(kind='declared_source_product',training_routes=train,development_routes=dev,cases=nt+nd,training_rows=nt,development_rows=nd,bank=banks)
     if 'label_collection_duration_s' in protocol:
         groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes=set(protocol['source_routes'])
         if protocol.get('data_partition')!='limited_route_subset' or protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True:raise ValueError('duration collection requires explicit3.76s ongoing scope')

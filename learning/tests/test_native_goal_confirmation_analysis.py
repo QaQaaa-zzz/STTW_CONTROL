@@ -890,3 +890,15 @@ def test_user_late192_keeps_native_source_user_and_64_candidate_triplets():
         assert len({r['source_user_alpha'] for r in group})==1
     rows[0]['alpha']=1.
     with pytest.raises(ValueError,match='user/query'):m.validate_bank144_inventory(rows,protocol)
+
+
+def test_declared_source_product_keeps_related_siblings_together():
+    import json,copy
+    protocol=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_tolerance_labels.json').read_text())
+    partition=m.label_analysis_partition(protocol)
+    assert partition['training_rows']==80 and partition['development_rows']==80
+    assert partition['bank']==[0,6]
+    bad=copy.deepcopy(protocol);bad['source_groups'][0]['bank_index']=6
+    with pytest.raises(ValueError,match='product'):m.label_analysis_partition(bad)
+    bad=copy.deepcopy(protocol);bad['fitting_split']['development_routes'].append('low_single_left')
+    with pytest.raises(ValueError,match='split'):m.label_analysis_partition(bad)
