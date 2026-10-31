@@ -731,6 +731,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if source_cases is None:source_cases=json.loads((Path(p['source'])/'inventory.json').read_text())
     if source_plan is None:source_plan=json.loads((Path(p['source'])/'plan.json').read_text())
     if p.get('model_id')!=source_plan['models']['H75']['registry_id']:raise ValueError('label model differs from authenticated source')
+    if p.get('reconnection')!=source_plan.get('protocol',{}).get('reconnection'):raise ValueError('label reconnection differs from source closed loop')
     groups=p['source_groups'];count=p['expected_source_states']
     if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
     times=sorted({g['source_task_s'] for g in groups})

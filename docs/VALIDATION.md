@@ -1,3 +1,9 @@
+## Tolerance collection reconnection correction — 2026-10-31
+
+The first new-base label run omitted the adopted source protocol's original-goal-heading / 0.5 m maximum-added-length reconnection rule. Its 10 Hz cadence alone did not preserve the closed loop. It was explicitly interrupted (exit143) and excluded from fitting, with raw artifacts, original protocol, and interruption receipt retained: 38,357 confirmed returned active lower steps, up to 3,200 additional in-flight steps unknown, 105,600 allocated slots. Completed 80-case path TEST is unaffected.
+
+The label inventory now requires source/proposal reconnection equality at entry; a missing-rule rejection test passes (25 label/source-prefix checks). Corrected run `u170_lower200_tolerance_labels_reconnection_v1` retains the planned 160 suffixes / 120,320 slots / zero prefix or optimization. Its prelaunch source-receipt amendment is archived before execution. Total allocated-slot cap including the interrupted run is 225,920. `u170_lower200_tolerance_fit.json` binds the corrected plan, physics, middle and lower identities, with conditional fixed 3x1000 updates only after valid positive and negative training labels exist. Corrected collection is running; no fit launched.
+
 ## Four-domain path TEST completed — 2026-10-31
 
 All 80 frozen U170/lower200 episodes reached the original 1 m target disk and survived the complete 10-second window. Coverage: four held-out physical domains x two prepared states x low single-left/high S-left x five alphas; 160,000 actual lower steps, zero optimization. Full XY/diagnostics and per-condition outcomes: archive `u170_domain_path_test_v1/analysis/README.md`. Arrival does not require a stop, final heading or hold. No paired parent path run was included in this TEST.

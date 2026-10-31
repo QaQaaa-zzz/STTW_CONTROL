@@ -190,7 +190,7 @@
   "source_selection": "All four routes and both banks, alpha=.5 at task2; metadata selection before disturbance outcomes",
   "data_role": "Nominal physical DEV sources for new U170/lower200 predictor; independent TEST domains excluded",
   "stop_rule": "160 suffixes, maximum120320 lower ticks, no prefix or optimizer; no replacement or retry",
-  "readiness": "Prepared config only. Await ongoing TEST campaign completion before changing sealed label runner. No suffix run launched.",
+  "readiness": "Corrected reconnection contract; prior v1 interrupted and excluded; prepare before execute.",
   "source_lifecycle_limits": "Every selected source must be ongoing finite nonfailed; no postarrival sources.",
   "fitting_split": {
     "training_routes": [
@@ -237,5 +237,9 @@
   ],
   "source_times_s": [
     2.0
-  ]
+  ],
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 0.5
+  }
 }

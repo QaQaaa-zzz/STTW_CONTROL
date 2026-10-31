@@ -167,3 +167,9 @@ def test_new_base_inventory_uses_source_identity_and_exact_budget():
     assert p['maximum_suffix_lower_ticks']==120320
     bad=copy.deepcopy(p);bad['model_id']='STTW_MIDDLE_FULLTAIL_PPO75_U77'
     with pytest.raises(ValueError,match='model'):five_alpha_label_inventory(bad)
+
+
+def test_new_labels_reject_missing_adopted_reconnection():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_tolerance_labels.json').read_text())
+    p.pop('reconnection')
+    with pytest.raises(ValueError,match='reconnection'):five_alpha_label_inventory(p)
