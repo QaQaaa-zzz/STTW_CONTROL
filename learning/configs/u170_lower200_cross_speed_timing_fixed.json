@@ -1,0 +1,121 @@
+{
+  "experiment_id": "STTW-CROSS-SPEED-TIMING-FIXED",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    2
+  ],
+  "alphas": [
+    0.0,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 24,
+  "maximum_lower_ticks": 48000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    -36.0,
+    36.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "validation_low_single_right",
+      "family": 1,
+      "radius_m": 1.2,
+      "angle_deg": 85.0,
+      "speed": 1.8,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_low_S_left",
+      "family": 2,
+      "radius_m": 1.6,
+      "angle_deg": 55.0,
+      "speed": 2.2,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_high_single_left",
+      "family": 1,
+      "radius_m": 3.8,
+      "angle_deg": 100.0,
+      "speed": 3.2,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_high_S_right",
+      "family": 2,
+      "radius_m": 3.3,
+      "angle_deg": 55.0,
+      "speed": 3.0,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "data_role": "Frozen candidate cross-speed/geometry transfer on previously inspected geometries. Development evidence, not an untouched holdout or randomized initial-state study.",
+  "scoring": "All declared original goal arrivals and full H10 survival, actual low/high speed, original-user0 costs and XY; retain losses. Five matched methods total60.",
+  "stop_rule": "Exactly60 H10 episodes across fixed24 and three online12 groups; max120000lower,0updates. No grid, redraw, horizon extension or outcome-dependent method choice.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Does the frozen predictor-guided coordinator improve new-state and mirrored-route outcomes?",
+  "force_frame": "worldY",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.2,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 1.8,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  },
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "include_nominal": true,
+  "geometry_scope": "mixed_speed_track_segments",
+  "dataset_partition": {
+    "training_rows": 0,
+    "development_rows": 24,
+    "unit": "route/alpha/event"
+  },
+  "speed_scope_note": "Low-speed flags retain their literal <=2.2 m/s meaning; high-speed rows are not low-speed evidence. Initial bank is shared and acceleration is included; actual in-turn speed must be reported before calling a case high-speed.",
+  "enabled_optimizations": [
+    "same-shape vmap",
+    "scan50",
+    "shared JAX cache",
+    "existing compiled function reuse"
+  ],
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 4.0,
+    "terminal_heading_fallback": true
+  },
+  "initial_state_scope": "Existing complete prepared bank2 shared by all methods; not newly randomized.",
+  "lower_transfer": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/transfer.json",
+    "manifest_sha256": "644baf1c3ea386bff7b7aaba3cbd2d326a0c42150924c4756cc73e0cb0cb5fed"
+  },
+  "onset_seed": 20261031,
+  "onset_algorithm": "SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50",
+  "onset_by_route_s": {
+    "validation_low_single_right": 1.7,
+    "validation_low_S_left": 2.66,
+    "validation_high_single_left": 2.1,
+    "validation_high_S_right": 1.82
+  }
+}

@@ -116,3 +116,32 @@ def test_recovery_settling_is_elapsed_time_and_rebind_preserves_state():
     assert c._replace(native='rebound')[1:]==c[1:]
     p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_recovery_release_online.json').read_text())
     assert len(five_alpha_online_inventory(p))==6
+
+
+def test_noq_matched_timing_retains_preparation_and_settling():
+    from sttw_control.tolerance_coordination import choose_alpha
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_cross_speed_timing_noq.json').read_text())
+    assert len(five_alpha_online_inventory(p))==12
+    proposal=choose_alpha(j.tile(j.array([1.8,0.]),(5,1)),.1,j.array([1.8,0.]),1.8,j.zeros(5),True,True,1.,use_q=False,user_alpha=0.,candidate_alphas=(0.,.25,.5,.75,1.))
+    assert proposal['alpha']==0. and not proposal['latched']
+    def release(t,ready):
+        return apply_alpha_dwell(proposal['alpha'],proposal['latched'],proposal['task_mask'],j.bool_(True),j.array(1.),j.bool_(True),j.array(850),j.array(t),support_commitment_ticks=750,user_alpha=0.,recovery_ready=ready,recovery_min_ticks=120)
+    assert release(216,True)['alpha']==1.
+    assert release(220,False)['alpha']==1.
+    assert release(220,True)['recovery_released']
+    with pytest.raises(ValueError):five_alpha_online_inventory({**p,'use_q':0})
+
+
+def test_cross_speed_fixed_and_online_have_matching_events_without_extra_product():
+    from sttw_control.native_goal_run import fixed_h75_capability_inventory
+    folder=Path(__file__).parents[1]/'configs'
+    fixed=json.loads((folder/'u170_lower200_cross_speed_timing_fixed.json').read_text())
+    rows=fixed_h75_capability_inventory(fixed)
+    assert len(rows)==24
+    online=json.loads((folder/'u170_lower200_cross_speed_timing_recovery.json').read_text())
+    expected={(r['route'],r['force_N'],r['onset_s'] if r['force_N'] else 0.) for r in five_alpha_online_inventory(online)}
+    for alpha in (0.,1.):
+        assert {(r['route'],r['force_N'],r['onset_s']) for r in rows if r['alpha']==alpha}==expected
+    assert fixed['reconnection']==online['reconnection']
+    for bad in ({**fixed,'onsets_s':[1.8]}, {**fixed,'onset_by_route_s':dict.fromkeys(fixed['onset_by_route_s'],1.8)}, {**fixed,'reconnection':{**fixed['reconnection'],'terminal_heading_fallback':1}}):
+        with pytest.raises(ValueError):fixed_h75_capability_inventory(bad)

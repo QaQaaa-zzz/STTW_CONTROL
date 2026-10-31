@@ -1,0 +1,117 @@
+{
+  "experiment_id": "STTW-CROSS-SPEED-TIMING-NOQ",
+  "mode": "native_five_alpha_online",
+  "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+  "bank_indices": [
+    2
+  ],
+  "bank_state_fingerprints": {
+    "2": "9218a531bbaa818f2f132ce5d886d9d4325a45487d31703ac8917d8828f3b4bf"
+  },
+  "horizon_s": 10.0,
+  "expected_cases": 12,
+  "maximum_lower_ticks": 24000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "duration_s": 0.15,
+  "forces_N": [
+    -36.0,
+    0.0,
+    36.0
+  ],
+  "force_frame": "worldY",
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "arm": 0,
+  "hypothetical_duration_s": 0.15,
+  "task_aware_fallback": false,
+  "guard_fallback": true,
+  "route_contexts": [
+    {
+      "route": "validation_low_single_right",
+      "family": 1,
+      "radius_m": 1.2,
+      "angle_deg": 85.0,
+      "speed": 1.8,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_low_S_left",
+      "family": 2,
+      "radius_m": 1.6,
+      "angle_deg": 55.0,
+      "speed": 2.2,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_high_single_left",
+      "family": 1,
+      "radius_m": 3.8,
+      "angle_deg": 100.0,
+      "speed": 3.2,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "validation_high_S_right",
+      "family": 2,
+      "radius_m": 3.3,
+      "angle_deg": 55.0,
+      "speed": 3.0,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_coverage_predictor_v1/training",
+  "export_manifest_sha256": "aae27532d0a75451681bb3055fd2dbf6a21057d1aa330cc0e50357a7149b9634",
+  "data_role": "Frozen candidate cross-speed/geometry transfer on previously inspected geometries. Development evidence, not an untouched holdout or randomized initial-state study.",
+  "scoring": "All declared original goal arrivals and full H10 survival, actual low/high speed, original-user0 costs and XY; retain losses. Five matched methods total60.",
+  "stop_rule": "Exactly60 H10 episodes across fixed24 and three online12 groups; max120000lower,0updates. No grid, redraw, horizon extension or outcome-dependent method choice.",
+  "panel_kind": "declared_source_product",
+  "user_alphas": [
+    0.0
+  ],
+  "alpha_dwell_s": 0.2,
+  "curvature_task_mode": "hard",
+  "hypothetical_force_N": 48.0,
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 4.0,
+    "terminal_heading_fallback": true
+  },
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1",
+  "use_q": false,
+  "support_commitment_s": 3.75,
+  "support_commitment_basis": {
+    "maximum_preparation_s": 0.6,
+    "hypothetical_duration_s": 0.15,
+    "label_after_pulse_s": 3.0,
+    "start": "actual switch into non-user alpha",
+    "interrupts": "existing task mask or denied reference publication; expiry from native clock",
+    "future_event_input": false
+  },
+  "recovery_release": {
+    "minimum_preparation_s": 0.6,
+    "max_abs_roll_rad": 0.26,
+    "max_abs_roll_rate_rad_s": 0.1,
+    "stable_hold_s": 0.2
+  },
+  "onset_seed": 20261031,
+  "onset_algorithm": "SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50",
+  "onset_by_route_s": {
+    "validation_low_single_right": 1.7,
+    "validation_low_S_left": 2.66,
+    "validation_high_single_left": 2.1,
+    "validation_high_S_right": 1.82
+  }
+}

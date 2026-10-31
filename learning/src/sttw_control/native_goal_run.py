@@ -147,12 +147,20 @@ def low_speed_lateral_load_inventory(p):
         or p['force_frame']!=('world_fixed_vector' if 'force_direction_world' in p else 'worldY')):
         raise ValueError('explicit fixed unit horizontal world force direction required')
     reconnection=p.get('reconnection')
-    if reconnection is not None and (set(reconnection)!={'goal_heading','maximum_added_length_m'}
+    if reconnection is not None and ((not {'goal_heading','maximum_added_length_m'}.issubset(reconnection) or set(reconnection)-{'goal_heading','maximum_added_length_m','terminal_heading_fallback'})
+        or type(reconnection.get('terminal_heading_fallback',False)) is not bool
         or reconnection['goal_heading']!='original' or not math.isfinite(reconnection['maximum_added_length_m'])
         or reconnection['maximum_added_length_m']<0):
         raise ValueError('explicit original-tangent reconnection length contract required')
-    forces=p['forces_N'];onsets=p['onsets_s'];duration=p['duration_s']
+    forces=p['forces_N'];duration=p['duration_s']
     contexts=p['route_contexts']
+    route_onsets=p.get('onset_by_route_s')
+    if route_onsets is not None:
+        if 'onsets_s' in p or p.get('onset_algorithm')!=ROUTE_ONSET_ALGORITHM or route_onsets!=deterministic_route_onsets([c['route'] for c in contexts],p['onset_seed']):raise ValueError('fixed route onset declaration differs')
+        if any(not 0<t<10-duration for t in route_onsets.values()):raise ValueError('fixed route onset outside horizon')
+        onsets=[next(iter(route_onsets.values()))]  # One event time per route, not a cross-route product.
+    else:
+        onsets=p['onsets_s']
     boundary=p.get('range_planner_boundary')
     context_grids=[c.get('boundary_expected_alphas',p['alphas']) if boundary else p['alphas'] for c in contexts]
     if any(not g or any(a not in p['alphas'] for a in g) or len(set(g))!=len(g) for g in context_grids):raise ValueError('boundary execution candidates must be declared grid points')
@@ -183,13 +191,15 @@ def low_speed_lateral_load_inventory(p):
         raise ValueError('unique declared geometries within speed/angle scope required')
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
-        for onset,force in itertools.product(p['onsets_s'],p['forces_N'])]
+        for onset,force in itertools.product(onsets,forces)]
     identity=candidate['registry_id'] if candidate else p['model_id']
     rows=[]
     combinations=((b,context,event,alpha) for b in banks for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
     for b,context,event,alpha in combinations:
         route=context['route'];source=context.get('state_source');start=source['source_task_tick']*.005 if source else 0.
-        if start+p['duration_s']+max(onsets,default=0.)>10:raise ValueError('conditional force extends beyond task horizon')
+        if route_onsets is not None and event['force_N']:
+            event=dict(event=f"t{route_onsets[route]:g}_F{event['force_N']:+g}",force_N=event['force_N'],onset_s=route_onsets[route])
+        if event['force_N'] and start+p['duration_s']+event['onset_s']>10:raise ValueError('conditional force extends beyond task horizon')
         onset=event['onset_s']+start if event['force_N'] else 0.
         event_name=f"prep{event['onset_s']:g}_F{event['force_N']:+g}" if source and event['force_N'] else event['event']
         rows.append(dict(route=route,speed=context['speed'],**event,duration_s=p['duration_s'],force_frame=p['force_frame'],
@@ -602,7 +612,7 @@ def five_alpha_online_inventory(p):
     release=p.get('recovery_release')
     if release is not None and (release!={'minimum_preparation_s':.6,'max_abs_roll_rad':.26,'max_abs_roll_rate_rad_s':.1,'stable_hold_s':.2} or p.get('support_commitment_s')!=3.75):raise ValueError('declared recovery release contract differs')
     if p.get('support_commitment_s',0.) not in (0.,3.75) or isinstance(p.get('support_commitment_s',0.),bool):raise ValueError('support commitment must match the3.75s held query window')
-    if p.get('support_commitment_s',0.) and (p.get('panel_kind')!='declared_source_product' or p.get('use_q') is not True or p.get('alpha_dwell_s')!=.2):raise ValueError('support commitment requires declared q panel and existing dwell')
+    if p.get('support_commitment_s',0.) and (p.get('panel_kind')!='declared_source_product' or p.get('alpha_dwell_s')!=.2):raise ValueError('support commitment requires declared panel and existing dwell')
     if p.get('panel_kind')=='declared_source_product':
         if type(p.get('use_q',True)) is not bool:raise ValueError('use_q must be boolean')
         required=dict(mode=FIVE_ONLINE_MODE,horizon_s=10.,optimizer_updates=0,planning_frequency_hz=10.,duration_s=.15,force_frame='worldY',candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,hypothetical_force_N=48.,task_aware_fallback=False,alpha_dwell_s=.2,planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
