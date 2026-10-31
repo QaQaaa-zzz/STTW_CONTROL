@@ -173,3 +173,12 @@ def test_new_labels_reject_missing_adopted_reconnection():
     p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_tolerance_labels.json').read_text())
     p.pop('reconnection')
     with pytest.raises(ValueError,match='reconnection'):five_alpha_label_inventory(p)
+
+
+def test_moderate_force_coverage_keeps_full_source_product():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_tolerance_coverage.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==320 and {r['force_N'] for r in rows}=={-32.,32.}
+    assert {r['source_task_s'] for r in rows}=={1.,3.}
+    bad=copy.deepcopy(p);bad['force_magnitude_N']=64.
+    with pytest.raises(ValueError):five_alpha_label_inventory(bad)

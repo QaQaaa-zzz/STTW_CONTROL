@@ -723,8 +723,10 @@ def label_collection_steps(protocol, source_task_s):
 
 def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=None):
     """Declarative related-DEV branching, authenticated against source metadata."""
+    magnitude=p.get('force_magnitude_N',64.)
+    if not isinstance(magnitude,(int,float)) or not math.isfinite(magnitude) or not 0<magnitude<=64:raise ValueError('bounded explicit label force magnitude required')
     required=dict(mode=LABEL_MODE,
-        candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-64.,64.],
+        candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-magnitude,magnitude],
         force_frame='worldY',duration_s=.15,horizon_s=10.,primary_after_pulse_end_s=3.,
         planning_frequency_hz=10.,maximum_new_prefix_lower_ticks=0,optimizer_updates=0)
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('five-alpha label contract differs')

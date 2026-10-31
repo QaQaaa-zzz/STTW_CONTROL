@@ -853,7 +853,7 @@ def five_alpha_partition(protocol):
         expected=set(itertools.product(routes,banks,times));actual={(g['route'],g['bank_index'],g['source_task_s']) for g in groups}
         if actual!=expected or len(groups)!=len(expected) or len({g['source_index'] for g in groups})!=len(groups):raise ValueError('source product incomplete or duplicated')
         if protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True or any(g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('ongoing source collection contract differs')
-        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-64.,64.]:raise ValueError('source-product branch grid differs')
+        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-protocol.get('force_magnitude_N',64.),protocol.get('force_magnitude_N',64.)]:raise ValueError('source-product branch grid differs')
         train=set(split['training_routes']);dev=set(split['development_routes']);nt=sum(g['route'] in train for g in groups)*20;nd=sum(g['route'] in dev for g in groups)*20
         if not split['declared_before_new_labels'] or train&dev or train|dev!=routes or protocol['expected_cases']!=nt+nd or protocol['expected_source_states']!=len(groups) or split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('source-product split differs')
         return dict(kind='declared_source_product',training_routes=train,development_routes=dev,cases=nt+nd,training_rows=nt,development_rows=nd,bank=banks)
@@ -900,7 +900,7 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in (({(160,80,80)} if d.get('collection_kind')=='declared_source_product' and batches==1 else {1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches]))):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in (({(160,80,80),(320,160,160)} if d.get('collection_kind')=='declared_source_product' and batches==1 else {1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches]))):
         raise ValueError('frozen five-alpha fitting contract mismatch')
     if d.get('collection_kind')=='declared_source_product' and (not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256') or not d.get('frozen_model_identity') or not d.get('lower_actor_sha256')):raise ValueError('source product requires frozen model, lower, physics and plan identities')
     if d['expected_cases']==140 and (batches!=1 or d.get('collection_kind')!='limited_collection' or not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256')):raise ValueError('limited140 requires explicit physics and plan identity')
@@ -1018,7 +1018,7 @@ def _load_five_alpha_single(analysis,cfg):
         meta.append(dict(case_id=cid,source_group_id=f'source{group}',route=c['route'],alpha=alpha,preparation_s=c['preparation_s'],force_N=c['force_N'],lifecycle_role=record['lifecycle_role']))
         if role=='development':dev_identity.append(dict(case_id=cid,features=features[i].tolist(),label=label,valid=expected_valid,raw_sha256=record['raw_sha256']))
         if not expected_valid:excluded.append(dict(meta[-1],role=role,reason=status))
-    expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in [.2,.6] for f in [-64.,64.]}
+    expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in [.2,.6] for f in protocol['forces_N']}
     if actual!=expected or all_roles.count('training')!=partition['training_rows'] or all_roles.count('development')!=partition['development_rows']:raise ValueError('full predeclared split/product required')
     data={}
     for role in ('training','development'):
