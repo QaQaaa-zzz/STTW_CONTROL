@@ -2446,7 +2446,7 @@ def render_five_alpha_xy(root,p,rows,raws):
             mask=(raw['time'][:n]>=r['onset_s'])&(raw['time'][:n]<r['onset_s']+.15)
             ax.scatter(*raw['actual_xy'][:n][mask].T,color=line.get_color(),s=5)
         ax.scatter(*first['original_goal_xy'],marker='*',color='k')
-        model=p['models']['H75'];identity='H75 checkpoint SHA '+model.get('checkpoint_sha256',model.get('actor_sha256','unknown'))[:12]
+        model=p['models']['H75'];identity=model.get('registry_id','middle')+' checkpoint '+model.get('checkpoint_sha256',model.get('actor_sha256','unknown'))[:12]+' | lower '+p['initial_source']['candidate']['actor_sha256'][:8]
         fig.suptitle(identity,fontsize=11)
         ax.set(xlabel='World X (m)',ylabel='World Y (m)')
         ax.set_title(f"{first['route']} | source{source} at task {first['source_task_s']:g}s | bank{first['bank_index']}\nprep {prep:g}s | worldY {force:+g}N for .15s | source alpha={first['source_user_alpha']:g}\nActual source suffix and endpoints; dots=force exposure; no reset",fontsize=10)
@@ -2557,7 +2557,8 @@ def analyze_five_alpha_labels(root,p):
             if g['expected_ever_arrived']:outcome['goal_arrived']=True
             if limited:outcome.update(collection_start_s=start*.005,collection_end_s=collection_end,fullH10_observed=False,observation_contract=f'Only source task{start*.005:g} through collection{collection_end:g}; original-goal entry/contact here are collection-only, no fullH10 outcome. Primary labels use each exact pulseEND+3 end, not collectionend.')
             else:outcome['source_to_H10_contract']='Suffix contact/fault and original-goal disk, plus inherited pre-source arrival latch. No unseen source prefix reconstructed.'
-            if c['bank_index']!=partition['bank']:raise ValueError('source bank identity changed')
+            banks=partition['bank'] if isinstance(partition['bank'],list) else [partition['bank']]
+            if c['bank_index'] not in banks:raise ValueError('source bank identity changed')
             role='training' if c['route'] in partition['training_routes'] else 'development' if c['route'] in partition['development_routes'] else None
             if role is None:raise ValueError('undeclared source role')
             rows.append(dict(c,primary=samestate_primary_label(raw,c),**(dict(collection_outcome=outcome,horizons={}) if limited else dict(horizons={'10':outcome})),lifecycle_role=g['lifecycle_role'],fitting_role=role,checkpoint_identity=p['models']['H75'],source_group_id=f"source{c['source_index']}",query=query,pulse=pulse,new_suffix_lower_ticks=n))

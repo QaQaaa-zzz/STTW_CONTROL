@@ -22,7 +22,7 @@
       "transform": "remove_unused_torus_assets_disable_startup_position_servo",
       "mujoco_version": "3.6.0"
     },
-    "analysis_plan_sha256": "1393e9629656cde6da51e803d000643421b187a376e6e2772133a201911569b3",
+    "analysis_plan_sha256": "dcdfffdd4da30ff0122541d5395717ac2ad596d9e18d8f44fea18187dd795d58",
     "frozen_model_identity": {
       "H75": {
         "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
