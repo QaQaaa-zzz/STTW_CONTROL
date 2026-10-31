@@ -65,3 +65,25 @@ def test_dwell_jit_vmap_and_static_tick_validation():
     r=f(j.array([0,36,40,44]))
     assert r['alpha'].tolist()==[.25,.25,.5,.5]
     with pytest.raises(ValueError):apply_alpha_dwell(.5,False,j.ones(5,bool),True,.25,True,40,0,dwell_ticks=0)
+
+
+def test_support_commitment_preserves_user_dwell_and_feasibility_interrupt():
+    def call(t,proposal,prev,deadline,mask=j.ones(5,bool)):
+        return apply_alpha_dwell(j.array(proposal),j.array(True),mask,j.array(True),j.array(prev),j.array(True),j.array(deadline),j.array(t),support_commitment_ticks=750,user_alpha=0.)
+    r=call(284,1.,0.,0)
+    assert r['hold_until_tick']==1034
+    r=call(324,.5,1.,1034)
+    assert r['held'] and r['alpha']==1. and r['hold_until_tick']==1034
+    r=call(364,0.,1.,1034)
+    assert r['held'] and r['alpha']==1.
+    r=call(1036,0.,1.,1034)
+    assert not r['held'] and r['alpha']==0. and r['hold_until_tick']==1076
+    r=call(324,0.,1.,1034,j.ones(5,bool).at[4].set(False))
+    assert r['release_reason']==2 and r['alpha']==0. and r['hold_until_tick']==364
+
+
+def test_commitment_protocol_is_opt_in_and_single_declared_window():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_commitment_online.json').read_text())
+    assert len(five_alpha_online_inventory(p))==6
+    for value in (True,1.,float('nan')):
+        with pytest.raises(ValueError):five_alpha_online_inventory({**p,'support_commitment_s':value})

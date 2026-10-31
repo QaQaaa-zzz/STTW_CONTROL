@@ -140,7 +140,8 @@ class DwellOnlineCarry(NamedTuple):
 
 def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
                       prev_alpha,latched,hold_until_tick,current_tick,*,
-                      candidate_alphas=(0.,.25,.5,.75,1.),dwell_ticks=40):
+                      candidate_alphas=(0.,.25,.5,.75,1.),dwell_ticks=40,
+                      support_commitment_ticks=0,user_alpha=0.):
     """Optional causal hold, timed by native lower ticks (200Hz).
 
     Reason codes:0=no release,1=expiry,2=current task-mask infeasible,
@@ -148,6 +149,8 @@ def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
     Expiry follows elapsed native time even during denied publication. Actual
     alpha changes restart the deadline, including a change to fallback .5.
     No initial hold is imposed; caller initializes deadline to current tick.
+    Optional support commitment lengthens only switches to a non-user alpha;
+    the existing feasibility/publication release semantics remain unchanged.
     """
     import jax.numpy as j
     if isinstance(dwell_ticks,bool) or not isinstance(dwell_ticks,int) or dwell_ticks<=0:raise ValueError('positive static dwell tick count required')
@@ -158,7 +161,9 @@ def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
     alpha=j.where(permission,j.where(held,prev_alpha,proposed_alpha),prev_alpha)
     latch=j.where(permission,j.where(held,latched,proposed_latched),latched)
     changed=permission&(alpha!=prev_alpha)
-    deadline=j.where(changed,current_tick+dwell_ticks,
+    # Opt-in commitment follows a real non-user switch, not an event label.
+    duration=j.where((support_commitment_ticks>0)&(alpha!=user_alpha),support_commitment_ticks,dwell_ticks)
+    deadline=j.where(changed,current_tick+duration,
                      j.where(permission&((active&~feasible)|~active),0,hold_until_tick))
     reason=j.where(~permission,3,j.where(active&~feasible,2,j.where((hold_until_tick>0)&~active,1,0)))
     return dict(alpha=alpha,latched=latch,hold_until_tick=deadline,

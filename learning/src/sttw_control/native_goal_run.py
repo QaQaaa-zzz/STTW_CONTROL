@@ -597,6 +597,8 @@ def deterministic_route_onsets(routes,seed):
 
 
 def five_alpha_online_inventory(p):
+    if p.get('support_commitment_s',0.) not in (0.,3.75) or isinstance(p.get('support_commitment_s',0.),bool):raise ValueError('support commitment must match the3.75s held query window')
+    if p.get('support_commitment_s',0.) and (p.get('panel_kind')!='declared_source_product' or p.get('use_q') is not True or p.get('alpha_dwell_s')!=.2):raise ValueError('support commitment requires declared q panel and existing dwell')
     if p.get('panel_kind')=='declared_source_product':
         if type(p.get('use_q',True)) is not bool:raise ValueError('use_q must be boolean')
         required=dict(mode=FIVE_ONLINE_MODE,horizon_s=10.,optimizer_updates=0,planning_frequency_hz=10.,duration_s=.15,force_frame='worldY',candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,hypothetical_force_N=48.,task_aware_fallback=False,alpha_dwell_s=.2,planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
@@ -2458,7 +2460,7 @@ def load(root,*,prefix_phase=False):
                 alpha_exec,latched=cd['alpha'],cd['latched']
                 dwell=None
                 if p['protocol'].get('alpha_dwell_s',0.):
-                    dwell=coordination.apply_alpha_dwell(cd['alpha'],cd['latched'],cd['task_mask'],permission,sidecar.prev_alpha,sidecar.latched,sidecar.hold_until_tick,carry.state.tick,candidate_alphas=tuple(p['protocol']['candidate_alphas']),dwell_ticks=round(p['protocol']['alpha_dwell_s']/env.cc.dt))
+                    dwell=coordination.apply_alpha_dwell(cd['alpha'],cd['latched'],cd['task_mask'],permission,sidecar.prev_alpha,sidecar.latched,sidecar.hold_until_tick,carry.state.tick,candidate_alphas=tuple(p['protocol']['candidate_alphas']),dwell_ticks=round(p['protocol']['alpha_dwell_s']/env.cc.dt),support_commitment_ticks=round(p['protocol'].get('support_commitment_s',0.)/env.cc.dt),user_alpha=carry.state.alpha)
                     alpha_exec,latched=dwell['alpha'],dwell['latched']
                 queried=obs.at[336].set(alpha_exec)
                 z=latents[j.argmin(j.abs(candidate_alpha-alpha_exec))];half=full=j.zeros_like(z)
