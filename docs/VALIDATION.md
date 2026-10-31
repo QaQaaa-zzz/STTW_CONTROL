@@ -1,3 +1,7 @@
+## Model-bound path transfer — 2026-10-31
+
+Added `bind-domain` to the existing native physics preparation CLI. It reuses eight complete TEST states from one authenticated physical model, verifies the native compiled model/controller/actuator against the preparation receipt, and creates an isolated frozen runtime without new physical integration. The path capability entry distinguishes the middle policy training provenance from the test-domain source. Existing physical preparation behavior is retained. Twenty-nine native preparation/goal tests pass. First domain path execution has started; four-domain campaign budget is 80 episodes / 160,000 lower steps / zero optimization. U170 and lower200 remain frozen, alpha=0/.25/.5/.75/1, 10Hz reconnection, low single-left and high S-left, banks0/6. Path-policy histories are initialized by the existing task reset; physical/ESO/actuator states are inherited. No new path-performance conclusion yet.
+
 ## Independent lower-controller TEST results — 2026-10-31
 
 ![Paired XY and command tracking]( /media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_pair_test_v1/analysis/case_31.png )

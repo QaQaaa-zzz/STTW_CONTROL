@@ -171,3 +171,51 @@ def execute_preparation(root):
         status.update(phase='completed',old_prepared_state_reused=False,physical_tick_end=np.asarray(bank.physical_tick).tolist());write(root/'status.json',status)
     except BaseException as exc:
         status.update(phase='error',error=repr(exc));write(root/'status.json',status);raise
+
+
+def bind_domain_bank(source,root,config):
+    """Bind existing same-model TEST states to the authenticated native runtime."""
+    cfg=read(config);source=Path(source).resolve();root=Path(root).resolve();old=read(source/'plan.json')
+    old['initial_source']=read(source/'initial_source.json');old['native_expected_sources']=read(source/'native_expected_sources.json')
+    prepared=read(cfg['initial_source']);manifest=Path(prepared['config']['domain_manifest']);domains=read(manifest)
+    if digest(source/'plan.json')!=read(source/'seal.json')['plan_sha256'] or prepared['config']['roles']!=['TEST'] or prepared['status']!='admitted':
+        raise ValueError('sealed source and admitted independent TEST states required')
+    if digest(manifest)!=read(manifest.parent/'seal.json')['manifest_sha256']:raise ValueError('domain manifest changed')
+    record=prepared['domains'][cfg['domain_index']]
+    if record not in domains['domains'] or record['data_role']!='TEST' or digest(record['output'])!=record['model']['source_xml_sha256']:
+        raise ValueError('TEST domain model changed')
+    for key in ('prepared_bank','state_domains'):
+        if digest(prepared[key])!=prepared[key+'_sha256']:raise ValueError('prepared TEST identity changed')
+    if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('bind in fresh process')
+    root.mkdir(exist_ok=False);runtime=root/'native_runtime';native=Path(old['native_runtime_root']);copied={}
+    for name,expected in old['native_expected_sources'].items():
+        path=Path(name)
+        if not path.is_relative_to(native):continue
+        if digest(path)!=expected:raise ValueError('native source changed')
+        dest=runtime/'learning/src'/path.relative_to(native);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dest);copied[str(dest)]=digest(dest)
+    for name in ('teleop_pref_governor_v1.json','fixed_endpoint_directional_alpha0.json'):
+        dest=runtime/'learning/configs'/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(native.parent/'configs'/name,dest);copied[str(dest)]=digest(dest)
+    xml=runtime/'mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml';xml.parent.mkdir(parents=True);shutil.copyfile(record['output'],xml);copied[str(xml)]=digest(xml)
+    # Domain export already uses absolute mesh assets; authenticate them through
+    # the compiled model identity below, without rewriting the XML.
+    sys.path.insert(0,str(runtime/'learning/src'))
+    import jax
+    import numpy as np
+    from dataclasses import asdict
+    from sttw_control.teleop_env import TeleopEnv
+    spec=read(Path(old['initial_source']['upper_run'])/'alpha0/frozen_config_stage52.json')
+    env=TeleopEnv(config=spec)
+    if env.bundle.identity!=record['model'] or asdict(env.cc)!=prepared['controller'] or asdict(env.ac)!=prepared['actuator']:
+        raise ValueError('native model/controller/actuator differs from prepared TEST')
+    with Path(prepared['prepared_bank']).open('rb') as f:bank=pickle.load(f)
+    with np.load(prepared['state_domains']) as data:indices=np.flatnonzero(data['domain_index']==cfg['domain_index'])
+    if len(indices)!=8:raise ValueError('eight model-bound states required')
+    bank=jax.tree.map(lambda x:np.asarray(x)[indices],bank)
+    if np.any(bank.failed) or np.any(bank.physical_tick!=700):raise ValueError('prepared state invalid')
+    with (root/'prepared_bank.pkl').open('wb') as f:pickle.dump(bank,f)
+    initial=copy.deepcopy(old['initial_source']);initial.update(model=env.bundle.identity,prepared_bank=str(root/'prepared_bank.pkl'),prepared_bank_sha256=digest(root/'prepared_bank.pkl'),bank_index=0)
+    inputs={str(Path(config).resolve()):digest(config),str(manifest):digest(manifest),prepared['prepared_bank']:prepared['prepared_bank_sha256'],prepared['state_domains']:prepared['state_domains_sha256']}
+    plan=dict(mode='native_domain_bank_binding',source=str(source),old_model_identity=old['initial_source']['model'],old_bank_reuse=False,domains_source=prepared,selected_domain=record,selected_indices=indices.tolist(),models=old['models'],config=old['config'],contexts=old['contexts'],native_runtime_root=str(runtime/'learning/src'),inputs=inputs,copied_files_sha256=copied)
+    write(root/'initial_source.json',initial);write(root/'plan.json',plan);write(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
+    write(root/'native_expected_sources.json',{str(f):digest(f) for f in (runtime/'learning/src').rglob('*.py')})
+    write(root/'status.json',dict(phase='completed',actual_preparation_lower_ticks=0,old_prepared_state_reused=False,same_model_TEST_states_reused=True,optimizer_updates=0))

@@ -406,8 +406,8 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     transition=Path(transition).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
     proposal=json.loads(protocol.read_text());rows=fixed_h75_capability_inventory(proposal)
     previous=json.loads((transition/'plan.json').read_text());status=json.loads((transition/'status.json').read_text())
-    if digest(transition/'plan.json')!=json.loads((transition/'seal.json').read_text())['plan_sha256'] or previous.get('mode')!='native_physics_transition':raise ValueError('sealed physics transition required')
-    if status.get('phase')!='completed' or status.get('actual_preparation_lower_ticks')!=5600 or status.get('old_prepared_state_reused') is not False or previous.get('old_bank_reuse') is not False:raise ValueError('completed fresh eight-state preparation required')
+    if digest(transition/'plan.json')!=json.loads((transition/'seal.json').read_text())['plan_sha256'] or previous.get('mode') not in ('native_physics_transition','native_domain_bank_binding'):raise ValueError('sealed physics transition required')
+    if status.get('phase')!='completed' or status.get('actual_preparation_lower_ticks')!=(0 if previous.get('mode')=='native_domain_bank_binding' else 5600) or status.get('old_prepared_state_reused') is not False or previous.get('old_bank_reuse') is not False:raise ValueError('completed fresh eight-state preparation required')
     for file,expected in {**previous['inputs'],**previous['copied_files_sha256']}.items():
         if digest(file)!=expected:raise ValueError('transition identity drift '+file)
     source=json.loads((transition/'initial_source.json').read_text());native=Path(previous['native_runtime_root']).resolve()
@@ -425,8 +425,11 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     model=previous['models']['H75']
     for key in ('actor','checkpoint'):
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint differs')
+    training_source=source
+    if previous.get('mode')=='native_domain_bank_binding':
+        training_source=json.loads((Path(previous['source'])/'initial_source.json').read_text())
     if proposal.get('candidate_model'):
-        model=authenticate_capability_candidate(proposal['candidate_model'],model,source,previous['config'])
+        model=authenticate_capability_candidate(proposal['candidate_model'],model,training_source,previous['config'])
     if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('prepare in fresh process before modern control package import')
     sys.path.insert(0,str(native))
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
@@ -517,7 +520,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
             if digest(candidate[key])!=candidate[hash_key]:raise ValueError('lower transfer artifact changed')
             p['input_sha256'][candidate[key]]=candidate[hash_key]
         p['input_sha256'][str(file)]=transfer['manifest_sha256']
-        p['middle_training_initial_source']=source
+        p['middle_training_initial_source']=training_source
         p['initial_source']=dict(source,candidate=candidate)
         p['lower_transfer']=record
         p['initialization']+=' Explicit frozen-middle/lower-candidate zero-shot transfer; original physical preparation retained.'
