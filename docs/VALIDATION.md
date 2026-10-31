@@ -2360,3 +2360,10 @@ Cross-speed preparation follow-up:40 legacy capability tests passed. The first r
 Engineering validation reused36 historical raw trajectories, not new physics: all six method summaries exactly matched the previous baseline comparison; nominal rows have no invented pulse-speed values. One representative exported panel was visually inspected. The current60-case manifest is archived at `cross_speed_timing_fixed_v1/comparison_manifest.json`; rendering its report awaits completion of all source analyses. The live physics and sealed runtime were not changed.
 
 Independent presentation review identified pre/post-step boundary ambiguity. Pulse speed now uses actual nonzero applied-force impulse transfers; preference occupancy uses the integer transition count through first arrival and excludes later actions. All36 historical pulse windows were checked directly from NPZ and all outcome summaries remain unchanged. This analysis-only correction did not rerun physics.
+
+
+## Completed60-case cross-speed comparison (2026-10-31)
+
+[All12 actual/reference XY panels](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/all_methods/README.md), [results and scope](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/RESULTS.md).
+
+Measured recovery11/12 joint arrivals/survivals; short dwell10/12; matched no-risk timing andfixed0 each11/12; fixed1 10/12. Full versus short gains1/loses0; versus no-risk orfixed0 gains1/loses1, confined to opposite disturbance directions of the low single bend. Other three routes retain3/3 for all methods. Thelow-S actual pulse speeds cross2.2m/s; report it as a transition-speed case. All60 raw endpoints independently reconstructed; all12 XY conditions viewed and independently reviewed. session7850exit0;112067 active/120000allocatedlower,0updates,1212.278s. No active physics remains. Next: one same-complete-state five-alpha/two-direction diagnostic, with the separation time verified before any new execution; no new training or grid from this result alone.

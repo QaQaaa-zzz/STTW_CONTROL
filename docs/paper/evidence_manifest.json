@@ -1921,6 +1921,13 @@
       "sha256": "c3e53be4b1f9f361c38626c63c455bd774b3eb3745b380270a095239e87fde5e",
       "verification": "AI artifact_checked; raw outcome audit plus independent review of four XY and heading permissions; no new physics",
       "human_verification": "not_recorded"
+    },
+    "E312": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/all_methods/comparison.json",
+      "sha256": "c3f41655c3234e3c1cfffee57d309b73361d90342d921d267352d27d84b8d226",
+      "verification": "AI artifact_checked; all60 raw endpoints independently rebuilt; independent reviewer checked all12 XY and gains/losses",
+      "human_verification": "not_recorded",
+      "scope": "Four previously inspected routes, shared bank2, five matched methods. No independent training-seed or initial-state-randomization claim."
     }
   },
   "manuscript_evidence_references": [
