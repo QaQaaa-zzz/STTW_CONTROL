@@ -1771,6 +1771,70 @@
       "human_verification": "not_recorded",
       "scope": "Three fixed-last1000 predictors,41input dimensions",
       "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E293": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_speed_state_predictor_v1/training/matched_information_comparison.json",
+      "sha256": "7262019ef7f3eeecbc9077822044553ceab5e9c161de0afec29633fe06790607",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Matched speed-state versus full-state predictor information ablation; same800TRAIN/160DEV.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E294": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_forward_validation_online_v1/comparison_geometry/comparison.json",
+      "sha256": "21326a5811bbdc39d1c208f71c33a35411adb0cbeba18dc94f9bdab45fd06d14",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Frozen prospective24 fullq versus geometry;16/24 both, zero paired gains/losses.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E295": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_disturbance_envelope_v1/envelope/results.json",
+      "sha256": "e8aee93448c91656552702ee2c2d8764e54713b4ee427d6d1bfc71be9666f883",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Complete60 low-speed fixed-alpha force-envelope records, including cached48N failures.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E296": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_allowance_v1/comparison/reconnection_results.json",
+      "sha256": "37e0475321eef2c10c3dd74497dde3b46af56c4680b26ec9b91bad047b730152",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Common4m versus0.5m permission engineering; five disturbed pairs plus five nominal checks.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E297": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/comparison.json",
+      "sha256": "608e4ca89262e715ff79702f2531706ede4b5b5285eb9da14e2b2a2ff694d238",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Matched two-condition q versus geometry; one disturbed arrival/survival gain.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E298": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/four_method_metrics.json",
+      "sha256": "5e3da6e1a82af2c290e6f05362c2df45c35a35b9ff31fca98e139b9cef97d2ca",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Four-method nominal/36N endpoints and actual alpha-occupancy; unequal pre-goal windows retained.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E299": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/causal_prefix_audit.json",
+      "sha256": "0adf0ef1b1d95128758f906cf6974a6fb93a7b98e982556c0049fbdfc289ee92",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Observed pre-force320-record equality between nominal and disturbed full-coordinator episodes.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E300": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/prior_feature_range_audit.json",
+      "sha256": "0607af9d292521a29941dfe6920ce265f29846286a95cb68ba8a8e96635a6feb",
+      "verification": "AI artifact_checked; source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Descriptive34-state-feature range audit from800TRAIN and older failed48N case; no calibrated OOD claim.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
     }
   },
   "manuscript_evidence_references": [
@@ -1900,6 +1964,14 @@
     "E289",
     "E290",
     "E291",
-    "E292"
+    "E292",
+    "E293",
+    "E294",
+    "E295",
+    "E296",
+    "E297",
+    "E298",
+    "E299",
+    "E300"
   ]
 }
