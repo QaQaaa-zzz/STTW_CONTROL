@@ -2195,3 +2195,17 @@ Completed24 online and24 fixed-user-alpha0 episodes with frozen U170/lower200, f
 Evidence: `/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_online_pilot_v1/comparison/README.md` contains all24 pairedXY panels and reward/error/component diagnostics (72PNGs), with numerical outcomes in comparison.json. Both original run analyses completed and independently reconstructed execution-path rewards.94 relevant analysis tests passed in the preceding implementation step. The comparison now ignores unused pulse-time metadata only for zero-force cases after checking actual applied impulse is zero; disturbed cases retain exact timing checks. Gray reference continuation distinguishes post-goal motion from loss of reference.
 
 This is a related DEV panel, not independent TEST. Gains cannot yet be attributed specifically to the predictor: geometric gates and fallback participate, and the improved−48N witness has substantial fixed-alpha.5 fallback and no qualified return to user preference before arrival. Next useful comparison isolates predictor contribution under otherwise identical coordination. No new physics or fitting was needed to regenerate these figures.
+
+### 2026-10-31 geometric-only coordination ablation
+
+The declared24-case ablation completed:30,975 active lower steps,48,000 allocated slots,332.089s, zero optimizer updates. All physical/model/task inputs match the previous pilot. Only risk qualification is disabled; five candidate preferences, geometric task checks,0.2s dwell and10Hz reconnection remain. Predictor values are still logged, so this experiment does not measure inference latency savings. Independent reward reconstruction and NumPy chooser/dwell replay passed.
+
+| Method | Original1m goal entry | Full10s survival | Both |
+|---|---:|---:|---:|
+| Tolerance coordinator |14/24|15/24|14/24|
+| Geometric-only coordinator |12/24|14/24|12/24|
+| Fixed user alpha0 |12/24|14/24|12/24|
+
+Geometric-only and fixed-user binary outcomes match in every condition. The full coordinator gains both previously identified bank0 high-single-right outcomes: at−48N it reaches the original goal at4.115s and survives whereas geometric-only falls; at+48N it arrives at6.07s whereas geometric-only remains upright but never enters the original target disk (closest distance3.716m). No paired binary outcome losses occur. This relatedDEV ablation supports an incremental effect of risk qualification within the complete coordinator, including its fallback behavior; it does not establish independent generalization or low-speed improvement.
+
+Evidence: `u170_lower200_geometric_ablation_v1/analysis/README.md` and `u170_lower200_online_pilot_v1/comparison_geometry/README.md` under the data archive. A separate one-step replay records1,553 different raw choices among8,166 online-visited decision states,18/24 conditions, without counterfactual state propagation. Next validation should freeze this method and vary initial states, disturbance onset and mirrored route geometry.
