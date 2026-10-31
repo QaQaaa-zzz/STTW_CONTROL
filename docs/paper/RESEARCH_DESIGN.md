@@ -2,6 +2,42 @@
 
 Updated 2026-10-30. Working research design for the active English, double-column, 12-page TCST manuscript objective. Proposed claims below are hypotheses until their listed evidence is complete. The user prioritizes one coherent contribution combining preference-conditioned single-track control and disturbance tolerance; three unrelated new algorithms are not required. RA-L is an alternative positioning, not a replacement of the current manuscript objective.
 
+## Current-method reconciliation — 2026-10-31
+
+The existing manuscript and its12-page PDF describe the earlier U170/local300 continuation-conditioned return43 experiment. They are a historical manuscript snapshot, not a report of the newly improved lower controller and online pilot. The following evidence map governs the next substantive revision; current decisions remain in the shared project ledger.
+
+| Element | Existing manuscript | Current frozen experiment | Revision evidence |
+|---|---|---|---|
+| Lower controller | ECBC+ESO+local300 | ECBC+ESO+STTW_LOCAL_DOMAIN_U200 | E286 |
+| Predictor |43 inputs, four outcomes, ELU |41 inputs,16–16 ReLU hidden layers, contact-avoidance output | E287–E289,E292 |
+| Supervised experiment |Specified feedback-return continuation through task end |Held candidate; preparation0.2/0.6s, hypothetical pulse0.15s, observe through pulse end+3s | E287–E288 |
+| Fitting |Three members,5000 updates each |Three fixed-last members,1000 updates each; BCE plus paired ranking weight0.5 | E287,E292 |
+| Deployment |One source-boundary query then prescribed return |Repeated50Hz candidate queries,0.2s conditional dwell,10Hz geometric reconnection | E286 |
+| Task treatment |Learned goal/path/speed outputs |Nonlearned curvature/reference checks plus original-task evaluation | E286 |
+| Current effect |Old low-speed return comparisons |RelatedDEV24:14 arrivals/15 survivors with predictor;12/14 for fixed-user and geometric-only | E290–E291 |
+
+The new contact predictor evaluates a held-candidate counterfactual, not the full future sequence of online switches. Repeated querying is part of the controller and must be evaluated in closed loop. Its binary target is neither full-task goal completion nor a certified force threshold. The old return43 target, architecture figure, equations and successful24N examples cannot be relabeled as current41-feature evidence.
+
+### Three connected contribution targets for the revised study
+
+1. **Preference-dependent control and disturbance response across speed regimes.** Use the frozen scalar-conditioned middle policy and the improved lower controller to characterize executable path–speed choices. Bind nominal task and same-complete-state disturbance comparisons to one physical/controller identity. Application evidence supports the single-track setting; conditioning on alpha itself is not claimed as a new learning algorithm.
+2. **Preparation-conditioned counterfactual tolerance prediction.** Predict contact avoidance after candidate commitment, preparation and a specified hypothetical disturbance. The expanded-state fit improves Brier0.562549→0.065211 on the unchanged160-row DEV set (E289). DEV has no discordant-alpha groups, so this result supports outcome discrimination rather than independent candidate-ranking accuracy. A matched simple predictor and preparation-information ablation remain useful discriminating evidence before finalizing a novelty claim.
+3. **Task-constrained repeated preference execution.** Combine prediction with geometric eligibility, user-priority restoration and conditional dwell. The risk-disabled24-case ablation removes both observed outcome gains (E291), supporting the incremental contribution of risk qualification inside this controller. New-route/initial-state/onset validation is running under frozen parameters. Low-speed benefits, successful user-preference restoration and broader reliability require their own measured results.
+
+These are contribution targets, not three established originality claims. The current minimal comparisons include fixed user preference and the same geometric coordinator without risk qualification. The larger completed dataset and new lower-controller evidence must not be pooled with old local300 results as if all controllers shared one identity.
+
+### Revision completion checks
+
+- Freeze one final middle/lower/predictor/coordinator identity and rebuild the main architecture, method equations and experimental table around it.
+- Report all declared conditions by speed regime and actual measured speed, with originalXY/goal, contact, task costs and preference intervention/restoration. Preserve raw endpoints and failures.
+- Complete frozen prospective validation before making new-scene claims; keep train, reusedDEV and new validation roles distinct.
+- Use the existing12-page export as a layout starting point only. Rebuild and inspect all pages after the method/results revision; current page count does not imply current scientific completeness.
+- Keep the old experiments and their verified provenance available as historical studies. Sources E286–E292 were checked by the AI against local artifacts; accountable human verification is not recorded.
+
+## Historical research design through 2026-10-30
+
+The following sections document the previous return43/local300 study. Their references to the then-current method, next experiments and page count retain that historical scope.
+
 ## Central argument and three contribution statements
 
 **Central question:** How should a single-track robot temporarily execute a different tracking preference to prepare for uncertain disturbances, and subsequently restore its user's preference while completing the original task?

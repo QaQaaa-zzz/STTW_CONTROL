@@ -1715,6 +1715,62 @@
       "sha256": "4fb125dd21566e0f206dd996d5f3990d440f09f5c5724074f9529acb993b37ef",
       "verification": "AI artifact_checked",
       "human_verification": "not_recorded"
+    },
+    "E286": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_online_pilot_v1/plan.json",
+      "sha256": "bf0c37b6c04d9d3e002a5550699df30a29bc182b8b63b71dc4bfbae191236635",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Current U170/lower200 online execution identity and fixed protocol",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E287": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/u170_lower200_diverse_coverage_fit.json",
+      "sha256": "64c3b7ac5eeeaa98a07323459bc6fc1301f452e4557d0cae5f4fc2ef5741d512",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Current41-feature contact predictor fitting protocol",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E288": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_coverage_predictor_v1/training/data_receipt.json",
+      "sha256": "0e99e113cf72cb35947f148acc6d0ed2dc87b041af3f53889e921e028ca1ea46",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Authenticated800TRAIN/160DEV data identity",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E289": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_coverage_predictor_v1/training/coverage_comparison.json",
+      "sha256": "426a0ba936850ad05fd4710e12fc4facb893f5bfd0b348776590de28fc1221db",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "UnchangedDEV predictor comparison",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E290": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_online_pilot_v1/comparison/comparison.json",
+      "sha256": "ffb39cc62882821370a280a43ab2fa41375b1eda94ca4c5ee3b48a0905546d6c",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Current relatedDEV online versus fixed paired outcomes",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E291": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_online_pilot_v1/comparison_geometry/comparison.json",
+      "sha256": "066411668ddfd5ea07ac4619ee042db6aaaad0cff38f806d03e4b1b2dd2883ef",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Current relatedDEV online versus geometric-only paired outcomes",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
+    },
+    "E292": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_coverage_predictor_v1/training/selection_manifest.json",
+      "sha256": "9b71139eba575290849f912f5e9d04cff58c6a4ebe4ada902381f59f74ce4bab",
+      "verification": "AI artifact_checked; current source opened, not human verification",
+      "human_verification": "not_recorded",
+      "scope": "Three fixed-last1000 predictors,41input dimensions",
+      "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
     }
   },
   "manuscript_evidence_references": [
@@ -1836,5 +1892,14 @@
     "figures/tolerance_coordination_architecture.svg": "b6d81623cacee5ba6e6af6420628d24f80e5768dd41debeb56264afbf13b0cc0"
   },
   "new_physics_steps": 0,
-  "optimizer_updates": 0
+  "optimizer_updates": 0,
+  "current_method_revision_evidence": [
+    "E286",
+    "E287",
+    "E288",
+    "E289",
+    "E290",
+    "E291",
+    "E292"
+  ]
 }
