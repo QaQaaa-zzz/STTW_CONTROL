@@ -2,7 +2,7 @@
   "experiment_id": "STTW-U170-LOWER200-FORCE48-FIT",
   "mode": "five_alpha_fit",
   "dataset": {
-    "analysis": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_tolerance_force48_v1/analysis",
+    "analysis": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_tolerance_force48_completed_v1/analysis",
     "expected_cases": 320,
     "expected_training_rows": 160,
     "expected_development_rows": 160,
@@ -22,7 +22,7 @@
       "transform": "remove_unused_torus_assets_disable_startup_position_servo",
       "mujoco_version": "3.6.0"
     },
-    "analysis_plan_sha256": "631151304e77b2757d1b82a6a269bb144563e82dccc84e5a17af98f2f2d1165d",
+    "analysis_plan_sha256": "93a61ad056d25f363f9e025fa68ab020e3fc065c66e8e590fe990a51a2d21206",
     "frozen_model_identity": {
       "H75": {
         "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
@@ -121,5 +121,6 @@
   "ranking": {
     "weight": 0.5,
     "pairing": "source_group_id/preparation_s/force_N; positive-negative only"
-  }
+  },
+  "recovery_provenance": "Original task1 reused; task3 explicitly recollected after SIGTERM; 320 original conditions, interrupted first-block costs separately retained."
 }
