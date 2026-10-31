@@ -23,20 +23,25 @@ def compare(online, fixed, output):
     for field in ('models','config','initial_source','contexts','replanning','horizon_s'):
         if plans[0][field]!=plans[1][field]:raise ValueError('paired control identity differs: '+field)
     if tables[0].keys()!=tables[1].keys():raise ValueError('paired conditions differ')
-    output.mkdir(exist_ok=False);pairs=[];links=[]
+    output.mkdir(exist_ok=True);pairs=[];links=[]
     for i,key in enumerate(sorted(tables[0])):
         rows=[table[key] for table in tables]
-        for field in ('speed','onset_s','duration_s','original_goal_xy'):
+        for field in (('speed','onset_s','duration_s','original_goal_xy') if key[3] else ('speed','original_goal_xy')):
             if rows[0][field]!=rows[1][field]:raise ValueError('paired task/event differs: '+field)
         arrays=[];endpoints=[]
         for root,row in zip(roots,rows):
             if digest(row['raw_file'])!=row['raw_sha256']:raise ValueError('raw trace changed')
             with np.load(row['raw_file']) as z:arrays.append(dict(z))
+            if not key[3]:np.testing.assert_array_equal(arrays[-1]['applied_force_impulse'],0.)
             endpoints.append(row.get('endpoint',row.get('horizons',{}).get('10')))
         paths=[np.load(root/'evaluation'/(row['path_key']+'_path.npz')) for root,row in zip(roots,rows)]
         for name in ('s','xy','heading','curvature','goal'):np.testing.assert_array_equal(paths[0][name],paths[1][name])
         fig,axes=plt.subplots(1,3,figsize=(17,5),layout='constrained');path=paths[0]
         axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+        last_positions=[raw['actual_xy'][int(raw['active_tick'].sum())-1] for raw in arrays]
+        reference_end=max(float(path['goal']),*(float(path['s'][np.argmin(np.sum((path['xy']-xy)**2,axis=1))]) for xy in last_positions))
+        after=(path['s']>path['goal'])&(path['s']<=reference_end+1.)
+        axes[0].plot(*path['xy'][after].T,color='gray',ls=':',label='Reference continuation after goal')
         for name,color,style,row,raw,end in zip(('Coordinator','Fixed user'),('#0072B2','#D55E00'),('-','--'),rows,arrays,endpoints):
             n=int(raw['active_tick'].sum());t=raw['time'][:n];xy=raw['actual_xy'][:n]
             axes[0].plot(*xy.T,color=color,ls=style,label=name);axes[0].scatter(*xy[-1],color=color,marker='x' if end['physical_outcome']=='contact' else 's')
