@@ -902,3 +902,13 @@ def test_declared_source_product_keeps_related_siblings_together():
     with pytest.raises(ValueError,match='product'):m.label_analysis_partition(bad)
     bad=copy.deepcopy(protocol);bad['fitting_split']['development_routes'].append('low_single_left')
     with pytest.raises(ValueError,match='split'):m.label_analysis_partition(bad)
+
+
+def test_paired_direction_recorded_partition_keeps_all_ten_development_rows():
+    import json,copy
+    protocol=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_directional_branch.json').read_text())
+    partition=m.label_analysis_partition(protocol)
+    assert partition['cases']==partition['development_rows']==10
+    assert partition['training_rows']==0
+    bad=copy.deepcopy(protocol);bad['paired_future_directions']=False
+    with pytest.raises(ValueError):m.label_analysis_partition(bad)

@@ -2459,8 +2459,10 @@ def label_analysis_partition(protocol):
     """Opt-in fresh task2 collection; historical fullH10 partitions unchanged."""
     from sttw_control.tolerance_predictor_pilot import five_alpha_partition
     if protocol.get('data_partition')=='recorded_continuation':
-        if len(protocol['source_groups'])!=1 or protocol['expected_cases']!=5 or protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or len(protocol['preparation_s'])!=1 or len(protocol['forces_N'])!=1:raise ValueError('five-candidate recorded continuation required')
-        return dict(kind='recorded_continuation',training_routes=set(),development_routes={protocol['source_groups'][0]['route']},cases=5,training_rows=0,development_rows=5,bank=protocol['source_groups'][0]['bank_index'])
+        directions=2 if protocol.get('paired_future_directions',False) else 1
+        count=5*directions
+        if len(protocol['source_groups'])!=1 or protocol['expected_cases']!=count or protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or len(protocol['preparation_s'])!=1 or len(protocol['forces_N'])!=directions:raise ValueError('five-candidate recorded continuation required')
+        return dict(kind='recorded_continuation',training_routes=set(),development_routes={protocol['source_groups'][0]['route']},cases=count,training_rows=0,development_rows=count,bank=protocol['source_groups'][0]['bank_index'])
     if protocol.get('data_partition')=='declared_source_product':return five_alpha_partition(protocol)
     if 'label_collection_duration_s' in protocol:
         groups=protocol['source_groups'];split=protocol['fitting_split'];train=set(split['training_routes']);dev=set(split['development_routes']);routes=set(protocol['source_routes'])

@@ -259,3 +259,21 @@ def test_recovery_return_uses_saved_absolute_clock_and_no_new_force():
     for field,value in [('forces_N',[36.]),('duration_s',.15),('preparation_s',[.2])]:
         bad=copy.deepcopy(p);bad[field]=value
         with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+
+
+def test_saved_online_boundary_branches_both_original_directions_without_prefix():
+    from sttw_control.native_goal_run import label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_directional_branch.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==10 and {r['source_block'] for r in rows}=={13}
+    assert {r['source_origin'] for r in rows}=={'saved_online_native'}
+    assert {(r['candidate_alpha'],r['force_N']) for r in rows}=={(a,f) for a in [0.,.25,.5,.75,1.] for f in [-36.,36.]}
+    pulse=np.asarray(force_pulses(rows,3.5))
+    np.testing.assert_allclose(pulse[:,0],5.2)
+    np.testing.assert_allclose(pulse[:,1],5.35)
+    assert sum(label_collection_steps(p,1.4))*4*10==17200
+    for field,value in [('forces_N',[-48.,48.]),('paired_future_directions',False),('preparation_s',[.2])]:
+        bad=copy.deepcopy(p);bad[field]=value
+        with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+    bad=copy.deepcopy(p);bad['source_groups'][0]['source_task_s']=1.72
+    with pytest.raises(ValueError):five_alpha_label_inventory(bad)

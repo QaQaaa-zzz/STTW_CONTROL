@@ -792,12 +792,18 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if recorded and selection=='online_native':
         if selection!='online_native' or source_plan['mode']!=FIVE_ONLINE_MODE or count!=1 or p['horizon_s']!=10.:raise ValueError('single online continuation source required')
         g=groups[0];c=source_cases[g['source_lane']];t=g['source_task_s']
-        capture=Path(p['source_capture']);receipt=json.loads((capture/'receipt.json').read_text())
-        if receipt['source']!=p['source'] or receipt['source_plan_sha256']!=p['source_plan_sha256'] or receipt['task_end_s']!=t or receipt['actual_lower_ticks']!=24:raise ValueError('recorded boundary capture differs')
-        for name,sha in receipt['files'].items():
-            if digest(capture/name)!=sha:raise ValueError('recorded boundary capture changed')
+        if 'source_capture' in p:
+            capture=Path(p['source_capture']);receipt=json.loads((capture/'receipt.json').read_text())
+            if receipt['source']!=p['source'] or receipt['source_plan_sha256']!=p['source_plan_sha256'] or receipt['task_end_s']!=t or receipt['actual_lower_ticks']!=24:raise ValueError('recorded boundary capture differs')
+            for name,sha in receipt['files'].items():
+                if digest(capture/name)!=sha:raise ValueError('recorded boundary capture changed')
+        else:
+            snapshot_block_for_task(source_plan,t)
+        mirrored=p.get('paired_future_directions',False)
+        if not isinstance(mirrored,bool) or (mirrored and not (t<c['onset_s'] and c['force_N']!=0 and p['forces_N']==[-abs(c['force_N']),abs(c['force_N'])])):raise ValueError('paired future directions require one pre-pulse source and original force magnitude')
+        expected_forces=[-abs(c['force_N']),abs(c['force_N'])] if mirrored else [c['force_N']]
         onset=max(t,c['onset_s']);remaining=round((c['onset_s']+c['duration_s']-onset)*200)/200
-        if not t<c['onset_s']+c['duration_s'] or not math.isclose(preparations[0],onset-t,abs_tol=1e-9) or p['forces_N']!=[c['force_N']] or not math.isclose(p['duration_s'],remaining,abs_tol=1e-9):raise ValueError('recorded event remainder must be preserved')
+        if not t<c['onset_s']+c['duration_s'] or not math.isclose(preparations[0],onset-t,abs_tol=1e-9) or p['forces_N']!=expected_forces or not math.isclose(p['duration_s'],remaining,abs_tol=1e-9):raise ValueError('recorded event remainder must be preserved')
     if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
     times=sorted({g['source_task_s'] for g in groups})
     if task_s is not None and task_s not in times:raise ValueError('undeclared source group clock')
@@ -814,13 +820,13 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if p['expected_cases']!=count*branches or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
     rows=[]
     for g in groups:
-        idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,receipt['task_start_s'] if selection=='online_native' else t)
+        idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,receipt['task_start_s'] if selection=='online_native' and 'source_capture' in p else t)
         if t<=0 or t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p['horizon_s']:raise ValueError('source label window outside horizon')
         lane=g['source_lane'];c=source_cases[lane]
         expected=dict(source_block=block,source_user_alpha=c['alpha'],complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
             executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',expected_task_tick=round(t*200),
             source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
-        if selection=='online_native':expected.update(complete_carry=str(capture/'complete_carry.pkl'),executed_paths=str(capture/'executed_paths.pkl'),host_state=str(capture/'host_state.npz'))
+        if selection=='online_native' and 'source_capture' in p:expected.update(complete_carry=str(capture/'complete_carry.pkl'),executed_paths=str(capture/'executed_paths.pkl'),host_state=str(capture/'host_state.npz'))
         if selection in ('all_fixed','online_native','held_native'):expected['source_force_N']=c['force_N']
         if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
         if p.get('require_ongoing_sources',False) is not False and (p['require_ongoing_sources'] is not True or g['expected_ever_arrived']):raise ValueError('ongoing-only sources required')
@@ -902,7 +908,7 @@ def prepare_five_alpha_labels(source,root,protocol):
     if proposal.get('data_partition')=='recorded_continuation':modules.append(folder/'tolerance_coordination.py')
     files=[protocol,source/'plan.json',source/'seal.json',source/'inventory.json',source/'evaluation/status.json',source/'evaluation/manifest.json']
     files += [source/name for name in {g[k] for g in proposal['source_groups'] for k in ('complete_carry','executed_paths','host_state')}]
-    if proposal.get('source_selection_mode')=='online_native':files += [Path(proposal['source_capture'])/n for n in ('receipt.json','plan.json','seal.json','capture_raw.npz','capture_script.py')]
+    if proposal.get('source_selection_mode')=='online_native' and 'source_capture' in proposal:files += [Path(proposal['source_capture'])/n for n in ('receipt.json','plan.json','seal.json','capture_raw.npz','capture_script.py')]
     files += [source/'evaluation'/(key+'_path.npz') for key in sorted({g['path_key'] for g in proposal['source_groups']})]
     for k in ('actor','checkpoint'):
         model=old['models']['H75']
