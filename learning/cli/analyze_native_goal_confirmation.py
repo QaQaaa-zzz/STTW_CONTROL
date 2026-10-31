@@ -2404,7 +2404,7 @@ def validate_five_alpha_cases(cases, protocol):
         key=(c['source_index'],c['candidate_alpha'],c['preparation_s'],c['force_N'])
         if key in actual:raise ValueError('duplicate five-alpha condition')
         actual.add(key);g=next(g for g in groups if g['source_index']==c['source_index'])
-        if c['source_user_alpha']!=.5 or c['alpha']!=.5 or c['query_alpha']!=c['candidate_alpha']:raise ValueError('source/query identity mismatch')
+        if c['source_user_alpha']!=g['source_user_alpha'] or c['alpha']!=g['source_user_alpha'] or c['query_alpha']!=c['candidate_alpha']:raise ValueError('source/query identity mismatch')
         for field,value in [('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('duration_s',.15),('primary_window_end_s',g['source_task_s']+c['preparation_s']+.15+3)]:
             if not np.isclose(c[field],value,atol=1e-9,rtol=0):raise ValueError('five-alpha timing mismatch '+field)
     if actual!=expected:raise ValueError('incomplete five-alpha product')
@@ -2419,7 +2419,7 @@ def five_alpha_feature_rows(cases,sources,raws,interface):
         if not raw['active_tick'][0] or not raw['reference_target_permitted'][0]:raise ValueError('first prebranch candidate query missing')
         yaw=float(raw['pre_upper_yaw'][0]);saved=float(sources['source_world_yaw'][lane])
         if abs(np.arctan2(np.sin(yaw-saved),np.cos(yaw-saved)))>1e-6:raise ValueError('prebranch yaw changed')
-        x,_=feature_row(obs,raw['query_observation'][0],raw['composed_latent'][0],yaw,c,interface,cfg,expected_source_alpha=.5)
+        x,_=feature_row(obs,raw['query_observation'][0],raw['composed_latent'][0],yaw,c,interface,cfg,expected_source_alpha=c['source_user_alpha'])
         if 'query_observation' in sources:np.testing.assert_array_equal(raw['query_observation'][0],sources['query_observation'][lane])
         if 'candidate_latent' in sources:np.testing.assert_array_equal(raw['composed_latent'][0],sources['candidate_latent'][lane])
         group=c['source_index'];candidate=(group,c['candidate_alpha'])
@@ -2526,7 +2526,8 @@ def analyze_five_alpha_labels(root,p):
         run=root/'evaluation';status=json.loads((run/'status.json').read_text());cases=json.loads((root/'inventory.json').read_text());index=json.loads((run/'case_index.json').read_text())
         child_protocol=dict(protocol,source_groups=[g for g in protocol['source_groups'] if g['source_task_s']==p['source_task_s']])
         validate_five_alpha_cases(cases,child_protocol)
-        expected_child=len(child_protocol['source_groups'])*20
+        branches=len(protocol['candidate_alphas'])*len(protocol['preparation_s'])*len(protocol['forces_N'])
+        expected_child=len(child_protocol['source_groups'])*branches
         if status['phase']!='completed' or status['completed_cases']!=expected_child or len(index)!=expected_child:raise ValueError('complete declared child product required')
         manifest=json.loads((run/'manifest.json').read_text())
         for key,value in [('cases',cases),('config',p['config']),('models',p['models']),('plan_sha256',digest(root/'plan.json'))]:
@@ -2536,7 +2537,7 @@ def analyze_five_alpha_labels(root,p):
         for record in source_records:
             lanes=[i for i,c in enumerate(cases) if c['source_index']==record['source_index']]
             g=next(g for g in child_protocol['source_groups'] if g['source_index']==record['source_index'])
-            if record['case_indices']!=lanes or len(lanes)!=20 or not record['all_twenty_siblings_exact']:raise ValueError('complete-state sibling copy audit failed')
+            if record['case_indices']!=lanes or len(lanes)!=branches or not record.get('all_siblings_exact',record.get('all_twenty_siblings_exact',False)):raise ValueError('complete-state sibling copy audit failed')
             if record['ever_arrived']!=g['expected_ever_arrived'] or record['replanned']!=g['expected_replanned']:raise ValueError('source lifecycle identity drift')
             for key in ('pre_boundary_fingerprint','post_boundary_fingerprint','post_boundary_path_fingerprint'):
                 if len(record[key])!=64:raise ValueError('source fingerprint missing')

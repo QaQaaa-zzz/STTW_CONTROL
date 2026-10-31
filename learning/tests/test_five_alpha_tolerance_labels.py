@@ -72,10 +72,11 @@ class Fields:
     def tree_unflatten(cls,keys,values):return cls(**dict(zip(keys,values)))
 
 
-def test_import_preserves_hidden_carry_paths_host_and_correlated_copies(tmp_path):
-    n=3;g=protocol()['source_groups'][12];g={**g,'source_lane':1}
+@pytest.mark.parametrize("source_alpha", [0., .5, 1.])
+def test_import_preserves_hidden_carry_paths_host_and_correlated_copies(tmp_path, source_alpha):
+    n=3;g=protocol()['source_groups'][12];g={**g,'source_lane':1,'source_user_alpha':source_alpha}
     physical=Fields(physical_tick=np.full(n,1900,np.int32),failed=np.zeros(n,bool),eso=np.arange(12,dtype=np.int32).reshape(n,4))
-    saved=Fixture(Fields(tick=np.full(n,1200,np.int32),alpha=np.full(n,.5,np.float32),fault=np.zeros(n,bool),physical=physical),np.arange(21,dtype=np.float32).reshape(n,7))
+    saved=Fixture(Fields(tick=np.full(n,1200,np.int32),alpha=np.full(n,source_alpha,np.float32),fault=np.zeros(n,bool),physical=physical),np.arange(21,dtype=np.float32).reshape(n,7))
     path=np.arange(15).reshape(n,5)
     (tmp_path/'evaluation').mkdir()
     for key,value in [('complete_carry',saved),('executed_paths',path)]:
@@ -182,3 +183,24 @@ def test_moderate_force_coverage_keeps_full_source_product():
     assert {r['source_task_s'] for r in rows}=={1.,3.}
     bad=copy.deepcopy(p);bad['force_magnitude_N']=64.
     with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+
+
+def test_disturbed_sources_keep_parent_alpha_and_immediate_pulse():
+    from sttw_control.tolerance_predictor_pilot import five_alpha_partition
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_disturbed_source_labels.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==360 and p['maximum_suffix_lower_ticks']==270720
+    assert {r['source_force_N'] for r in rows}=={-36.,0.,36.}
+    assert {r['source_user_alpha'] for r in rows}=={0.,1.}
+    for g in p['source_groups']:
+        siblings=[r for r in rows if r['source_index']==g['source_index']]
+        assert len(siblings)==30
+        assert all(r['alpha']==r['user_alpha']==g['source_user_alpha'] for r in siblings)
+        immediate=[r for r in siblings if r['preparation_s']==0]
+        assert len(immediate)==10 and all(r['onset_s']==2. for r in immediate)
+    split=five_alpha_partition(p)
+    assert split['training_rows']==split['development_rows']==180
+    bad=copy.deepcopy(p);bad['source_groups'][0]['source_force_N']=36.
+    with pytest.raises(ValueError,match='metadata'):five_alpha_label_inventory(bad)
+    bad=copy.deepcopy(p);bad['source_groups'].pop()
+    with pytest.raises(ValueError,match='product'):five_alpha_partition(bad)

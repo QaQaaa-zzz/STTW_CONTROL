@@ -744,8 +744,13 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     """Declarative related-DEV branching, authenticated against source metadata."""
     magnitude=p.get('force_magnitude_N',64.)
     if not isinstance(magnitude,(int,float)) or not math.isfinite(magnitude) or not 0<magnitude<=64:raise ValueError('bounded explicit label force magnitude required')
+    preparations=p['preparation_s']
+    if preparations not in ([.2,.6],[0.,.2,.6]):raise ValueError('declared preparation grid required')
+    selection=p.get('source_selection_mode','nominal_half')
+    if selection not in ('nominal_half','all_fixed'):raise ValueError('unknown source selection')
+    branches=5*len(preparations)*2
     required=dict(mode=LABEL_MODE,
-        candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-magnitude,magnitude],
+        candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=preparations,forces_N=[-magnitude,magnitude],
         force_frame='worldY',duration_s=.15,horizon_s=10.,primary_after_pulse_end_s=3.,
         planning_frequency_hz=10.,maximum_new_prefix_lower_ticks=0,optimizer_updates=0)
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('five-alpha label contract differs')
@@ -757,7 +762,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
     times=sorted({g['source_task_s'] for g in groups})
     if task_s is not None and task_s not in times:raise ValueError('undeclared source group clock')
-    nominal={i for i,c in enumerate(source_cases) if c.get('mode')=='H75' and c.get('alpha')==.5 and c.get('force_N')==0.}
+    nominal={i for i,c in enumerate(source_cases) if c.get('mode')=='H75' and (selection=='all_fixed' or (c.get('alpha')==.5 and c.get('force_N')==0.))}
     if 'source_routes' in p:
         routes=p['source_routes']
         available={source_cases[i]['route'] for i in nominal}
@@ -765,16 +770,17 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
         nominal={i for i in nominal if source_cases[i]['route'] in routes}
     if not nominal or any({g['source_lane'] for g in groups if g['source_task_s']==t}!=nominal for t in times):raise ValueError('all nominal source lanes required at each clock')
     if len({(g['source_task_s'],g['source_lane']) for g in groups})!=len(groups):raise ValueError('duplicate complete source group')
-    budget=sum(sum(label_collection_steps(p,g['source_task_s']))*4*20 for g in groups)
-    if p['expected_cases']!=count*20 or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
+    budget=sum(sum(label_collection_steps(p,g['source_task_s']))*4*branches for g in groups)
+    if p['expected_cases']!=count*branches or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
     rows=[]
     for g in groups:
         idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,t)
         if t<=0 or t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p['horizon_s']:raise ValueError('source label window outside horizon')
         lane=g['source_lane'];c=source_cases[lane]
-        expected=dict(source_block=block,source_user_alpha=.5,complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
+        expected=dict(source_block=block,source_user_alpha=c['alpha'],complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
             executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',expected_task_tick=round(t*200),
             source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
+        if selection=='all_fixed':expected['source_force_N']=c['force_N']
         if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
         if p.get('require_ongoing_sources',False) is not False and (p['require_ongoing_sources'] is not True or g['expected_ever_arrived']):raise ValueError('ongoing-only sources required')
         if t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>t+sum(label_collection_steps(p,t))*.02+1e-9:raise ValueError('primary label window outside collection')
@@ -782,8 +788,8 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
         if task_s is not None and t!=task_s:continue
         identity=f"{Path(p['source']).resolve()}@{p['source_plan_sha256']}/tasktick{g['expected_task_tick']}/{g['source_case_id']}"
         for a,prep,force in itertools.product(p['candidate_alphas'],p['preparation_s'],p['forces_N']):
-            rows.append(dict(g,source_group_identity=identity,source_origin='saved_nominal_half',speed=c['speed'],mode='H75',mode_index=0,
-                alpha=.5,user_alpha=.5,candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=t+prep,
+            rows.append(dict(g,source_group_identity=identity,source_origin='saved_fixed' if selection=='all_fixed' else 'saved_nominal_half',speed=c['speed'],mode='H75',mode_index=0,
+                alpha=c['alpha'],user_alpha=c['alpha'],candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=t+prep,
                 duration_s=.15,force_N=force,primary_window_start_s=t,primary_window_end_s=t+prep+.15+3.,
                 case_id=f'source{idx}/alpha{a:g}/prep{prep:g}/F{force:+g}'))
     return rows
@@ -810,7 +816,7 @@ def import_five_alpha_sources(source, cases):
         if hasattr(selected,'native'):raise ValueError('native selection source must not have online wrapper')
         st=selected.state
         if (int(st.tick)!=c['expected_task_tick'] or int(st.physical.physical_tick)!=c['expected_physical_tick'] or
-            float(st.alpha)!=.5 or bool(st.fault) or bool(st.physical.failed)):
+            float(st.alpha)!=c['source_user_alpha'] or bool(st.fault) or bool(st.physical.failed)):
             raise ValueError('saved source clock/user/failure differs')
         if any(not np.isfinite(np.asarray(x)).all() for x in jax.tree.leaves(selected) if np.issubdtype(np.asarray(x).dtype,np.number)):raise ValueError('nonfinite source carry')
         if bool(host['replanned'][i])!=c['expected_replanned'] or bool(host['ever_arrived'][i])!=c['expected_ever_arrived']:raise ValueError('saved source host flags differ')
@@ -2683,8 +2689,9 @@ def run(root,*,shape_only=False):
                 leaves=jax.tree.leaves(jax.device_get((carry,paths)))
                 for record in source_records:
                     ids=record['case_indices'];i=ids[0]
-                    if len(ids)!=20 or any(any(not np.array_equal(x[i],x[k],equal_nan=True) for k in ids[1:]) for x in leaves):raise ValueError('post-boundary source siblings differ')
-                    record.update(post_boundary_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],carry))),post_boundary_path_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],paths))),post_boundary_replanned=bool(changed[i]),all_twenty_siblings_exact=True)
+                    if len(ids)!=len(p['protocol']['candidate_alphas'])*len(p['protocol']['preparation_s'])*len(p['protocol']['forces_N']) or any(any(not np.array_equal(x[i],x[k],equal_nan=True) for k in ids[1:]) for x in leaves):raise ValueError('post-boundary source siblings differ')
+                    record.update(post_boundary_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],carry))),post_boundary_path_fingerprint=snapshot_fingerprint(jax.device_get(jax.tree.map(lambda x:x[i],paths))),post_boundary_replanned=bool(changed[i]),all_siblings_exact=True,sibling_count=len(ids))
+                    if len(ids)==20:record['all_twenty_siblings_exact']=True
                 save(directory/'source_records.json',source_records)
             if labels:
                 update(phase='inflight',completed_blocks=block,active_lower_ticks=actual,allocated_lower_slots=(block+1)*20*n,inflight_cost_unknown=True)

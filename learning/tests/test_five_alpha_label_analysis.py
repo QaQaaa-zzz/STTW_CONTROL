@@ -47,9 +47,10 @@ def test_preparation_fall_negative_and_engineering_fault_invalid():
     assert m.samestate_primary_label(raw_label(fault_tick=5),c)['label_status']=='invalid_fault'
 
 
-def test_features_use_prephysics_half_state_and_event_invariant_queries():
-    cases=[dict(case_id=str(i),source_index=7,candidate_alpha=.25,preparation_s=prep,force_N=f,duration_s=.15) for i,(prep,f) in enumerate(m.itertools.product([.2,.6],[-64.,64.]))]
-    state=np.zeros(351,np.float32);state[336]=.5;query=state.copy();query[336]=.25
+@pytest.mark.parametrize("source_alpha", [0., .5, 1.])
+def test_features_use_prephysics_half_state_and_event_invariant_queries(source_alpha):
+    cases=[dict(case_id=str(i),source_index=7,source_user_alpha=source_alpha,candidate_alpha=.25,preparation_s=prep,force_N=f,duration_s=.15) for i,(prep,f) in enumerate(m.itertools.product([.2,.6],[-64.,64.]))]
+    state=np.zeros(351,np.float32);state[336]=source_alpha;query=state.copy();query[336]=.25
     raws={c['case_id']:dict(active_tick=np.ones(1,bool),reference_target_permitted=np.ones(1,bool),pre_upper_yaw=np.array([.2]),query_observation=query[None].copy(),composed_latent=np.array([[.1,-.2]],np.float32)) for c in cases}
     src=dict(native_observation=np.tile(state,(4,1)),source_world_yaw=np.full(4,.2))
     interface=dict(speed_positive_scale_m_s=1.,speed_negative_scale_m_s=1.,steer_scale_rad=.2)

@@ -1,3 +1,11 @@
+## Disturbed-source and immediate-pulse label collection — 2026-10-31
+
+The existing five-alpha collector now accepts an explicit all-fixed-source selection and preparation times0/.2/.6s. Source alpha and previous disturbance identity remain attached to the complete saved carry; no reset or prefix replay. Default nominal-half sources and historical20-sibling records remain supported. Collector, label analysis and predictor reader derive sibling counts from the declared grid.54CPU tests pass, covering complete hidden-state copy and source-feature reconstruction at alpha0/.5/1, branch completeness and metadata substitution rejection.
+
+All12task2 sources from the adjacent-mirror fixed run are admitted: tick400, no contact/fault/arrival, all target permissions true. This keeps future failures as well as future successes. [Source audit](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_fixed_v1/disturbed_source_admission_audit.json). The declared360suffixes use5alphas×3preparations×2worldY directions at48N/.15s, with the existing4m/10Hz reconnection. Budget270720lower slots, no new prefix or optimizer. Right-route180TRAIN/left-route180DEV are related diagnostic data, not untouched TEST. No old.5m labels are silently relabeled or mixed.
+
+Real360-lane shape tracing completed with zero physical integration. Physical collection and calibration results are pending; this interface extension does not establish improved prediction or recovery. Configuration: learning/configs/u170_lower200_disturbed_source_labels.json. Existing online predictor remains unchanged.
+
 
 ## Frozen adjacent/mirror low-speed validation — 2026-10-31
 

@@ -851,10 +851,14 @@ def five_alpha_partition(protocol):
         groups=protocol['source_groups'];split=protocol['fitting_split']
         routes=set(protocol['source_routes']);banks=protocol['source_banks'];times=protocol['source_times_s']
         expected=set(itertools.product(routes,banks,times));actual={(g['route'],g['bank_index'],g['source_task_s']) for g in groups}
+        if protocol.get('source_selection_mode')=='all_fixed':
+            expected=set(itertools.product(routes,banks,times,protocol['source_alphas'],protocol['source_forces_N']))
+            actual={(g['route'],g['bank_index'],g['source_task_s'],g['source_user_alpha'],g['source_force_N']) for g in groups}
         if actual!=expected or len(groups)!=len(expected) or len({g['source_index'] for g in groups})!=len(groups):raise ValueError('source product incomplete or duplicated')
-        if protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True or any(g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('ongoing source collection contract differs')
-        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-protocol.get('force_magnitude_N',64.),protocol.get('force_magnitude_N',64.)]:raise ValueError('source-product branch grid differs')
-        train=set(split['training_routes']);dev=set(split['development_routes']);nt=sum(g['route'] in train for g in groups)*20;nd=sum(g['route'] in dev for g in groups)*20
+        if protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True or any((protocol.get('source_selection_mode')!='all_fixed' and g['source_user_alpha']!=.5) or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('ongoing source collection contract differs')
+        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s'] not in ([.2,.6],[0.,.2,.6]) or protocol['forces_N']!=[-protocol.get('force_magnitude_N',64.),protocol.get('force_magnitude_N',64.)]:raise ValueError('source-product branch grid differs')
+        branches=5*len(protocol['preparation_s'])*2
+        train=set(split['training_routes']);dev=set(split['development_routes']);nt=sum(g['route'] in train for g in groups)*branches;nd=sum(g['route'] in dev for g in groups)*branches
         if not split['declared_before_new_labels'] or train&dev or train|dev!=routes or protocol['expected_cases']!=nt+nd or protocol['expected_source_states']!=len(groups) or split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('source-product split differs')
         return dict(kind='declared_source_product',training_routes=train,development_routes=dev,cases=nt+nd,training_rows=nt,development_rows=nd,bank=banks)
     train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
@@ -954,6 +958,7 @@ def _load_five_alpha_single(analysis,cfg):
     sealed(plan,root)
     records=read(analysis/'results.json');declared=read(root/'inventory.json')
     if len(records)!=total or len(declared)!=total or len({r['case_id'] for r in records})!=total:raise ValueError('complete unique declared cases required')
+    branches=len(protocol['candidate_alphas'])*len(protocol['preparation_s'])*len(protocol['forces_N'])
     children={};child_records={};physical_sources=[]
     for item in plan['children']:
         child=Path(item);child=child if child.is_absolute() else root/child
@@ -963,13 +968,13 @@ def _load_five_alpha_single(analysis,cfg):
         sealed(cp,child)
         source_records=read(child/'evaluation/source_records.json')
         expected_groups=sum(g['source_task_s']==cp.get('source_task_s') for g in protocol['source_groups']) if partition['kind'] in ('limited_route_subset','declared_source_product') else 7
-        if len(source_records)!=expected_groups or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
+        if len(source_records)!=expected_groups or any(not s.get('all_siblings_exact',s.get('all_twenty_siblings_exact',False)) or len(s['case_indices'])!=branches for s in source_records):raise ValueError('complete source sibling proof missing')
         for record in source_records:
             fingerprint=record.get('pre_boundary_fingerprint')
             if not isinstance(fingerprint,str) or len(fingerprint)!=64:raise ValueError('exact complete-carry source fingerprint required')
             physical_sources.append(fingerprint)
         rows=read(child/'analysis/results.json');cases=read(child/'inventory.json')
-        if len(rows)!=expected_groups*20 or len(cases)!=expected_groups*20:raise ValueError('complete declared child product required')
+        if len(rows)!=expected_groups*branches or len(cases)!=expected_groups*branches:raise ValueError('complete declared child product required')
         path=child/'evaluation/source_features.npz';inputs[str(path)]=digest(path)
         with np.load(path,allow_pickle=False) as z:sources={k:z[k].copy() for k in z.files}
         for i,(r,c) in enumerate(zip(rows,cases)):
@@ -986,7 +991,7 @@ def _load_five_alpha_single(analysis,cfg):
         condition=(group,alpha,c['preparation_s'],c['force_N'])
         if condition in actual:raise ValueError('duplicate sibling')
         actual.add(condition)
-        if c['source_user_alpha']!=.5 or c['alpha']!=.5 or c['user_alpha']!=.5 or c['query_alpha']!=alpha:raise ValueError('source/candidate alpha identity changed')
+        if c['source_user_alpha']!=c['alpha'] or c['user_alpha']!=c['alpha'] or c['query_alpha']!=alpha:raise ValueError('source/candidate alpha identity changed')
         role='training' if c['route'] in expected_train else 'development' if c['route'] in expected_dev else None
         if role is None or record['fitting_role']!=role or str(roles[i])!=role:raise ValueError('row split differs')
         if group in source_roles and source_roles[group]!=role:raise ValueError('source sibling split')
@@ -1004,12 +1009,13 @@ def _load_five_alpha_single(analysis,cfg):
             status='invalid_fault' if fault else 'fall' if fall else 'no_fall' if complete else 'invalid_incomplete'
             if record['primary']['label_status']!=status:raise ValueError('primary label fails independent raw reconstruction')
         g=next(g for g in protocol['source_groups'] if g['source_index']==group)
+        if c['source_user_alpha']!=g['source_user_alpha']:raise ValueError('source user differs from declared group')
         if record['lifecycle_role']!=g['lifecycle_role']:raise ValueError('source lifecycle changed')
         for field,value in [('source_task_s',g['source_task_s']),('primary_window_start_s',g['source_task_s']),('onset_s',g['source_task_s']+c['preparation_s']),('primary_window_end_s',g['source_task_s']+c['preparation_s']+.15+3),('duration_s',.15)]:
             if not math.isclose(c[field],value,abs_tol=1e-9):raise ValueError('label timing changed')
         source=sources['native_observation'][lane]
         if abs(np.arctan2(np.sin(yaw-sources['source_world_yaw'][lane]),np.cos(yaw-sources['source_world_yaw'][lane])))>1e-6:raise ValueError('source yaw differs')
-        rebuilt,_=feature_row(source,query,latent,yaw,c,plan['config']['residual_interface'],cfg,expected_source_alpha=.5)
+        rebuilt,_=feature_row(source,query,latent,yaw,c,plan['config']['residual_interface'],cfg,expected_source_alpha=c['source_user_alpha'])
         np.testing.assert_array_equal(features[i],rebuilt)
         if group in states:np.testing.assert_array_equal(source,states[group])
         states[group]=source;key=(group,alpha)
@@ -1020,7 +1026,7 @@ def _load_five_alpha_single(analysis,cfg):
         meta.append(dict(case_id=cid,source_group_id=f'source{group}',route=c['route'],alpha=alpha,preparation_s=c['preparation_s'],force_N=c['force_N'],lifecycle_role=record['lifecycle_role']))
         if role=='development':dev_identity.append(dict(case_id=cid,features=features[i].tolist(),label=label,valid=expected_valid,raw_sha256=record['raw_sha256']))
         if not expected_valid:excluded.append(dict(meta[-1],role=role,reason=status))
-    expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in [.2,.6] for f in protocol['forces_N']}
+    expected={(g['source_index'],a,p,f) for g in protocol['source_groups'] for a in [0.,.25,.5,.75,1.] for p in protocol['preparation_s'] for f in protocol['forces_N']}
     if actual!=expected or all_roles.count('training')!=partition['training_rows'] or all_roles.count('development')!=partition['development_rows']:raise ValueError('full predeclared split/product required')
     data={}
     for role in ('training','development'):
