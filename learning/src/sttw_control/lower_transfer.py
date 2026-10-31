@@ -4,6 +4,37 @@ import hashlib,io,json,pickle
 import numpy as np
 
 
+def select_scored_lower_checkpoint(run):
+    """Select one saved continuation by its own next-rollout score and exposure."""
+    import torch
+    run=Path(run)
+    if json.loads((run/'status.json').read_text())['state']!='completed':
+        raise ValueError('selection requires completed training')
+    rows=[json.loads(line) for line in (run/'training/metrics.jsonl').read_text().splitlines()]
+    if len({r['update'] for r in rows})!=len(rows):raise ValueError('duplicate scoring updates')
+    scores={r['update']-1:r for r in rows}
+    candidates=[]
+    for path in sorted((run/'training/checkpoints').glob('*.pt')):
+        saved=torch.load(path,map_location='cpu',weights_only=False)
+        update=saved['update'];row=scores.get(update)
+        reasons=[]
+        if update==0:reasons.append('parent_weights')
+        if row is None:reasons.append('no_next_rollout_score')
+        else:
+            groups=row['command_sampling']['disturbance_groups']
+            exposure={direction:sum(v['exposed_ticks'] for k,v in groups.items() if k.startswith(direction+'_')) for direction in ('negative','positive')}
+            nominal=sum(v['samples'] for k,v in groups.items() if k.startswith('nominal_'))
+            if not all(exposure.values()) or not nominal:reasons.append('missing_actual_direction_or_nominal_coverage')
+            if not np.isfinite(row['mean_step_reward']):reasons.append('nonfinite_reward')
+        candidates.append(dict(checkpoint=str(path.resolve()),source_update=update,eligible=not reasons,reasons=reasons,
+            scored_by_rollout=row['update'] if row else None,mean_step_reward=row['mean_step_reward'] if row else None,
+            disturbance_groups=row['command_sampling']['disturbance_groups'] if row else None))
+    eligible=[c for c in candidates if c['eligible']]
+    selected=max(eligible,key=lambda c:(c['mean_step_reward'],-c['source_update'])) if eligible else None
+    return dict(selected=selected,candidates=candidates,selection='Best eligible saved continuation by its own pre-update rollout reward; not fixed-scene qualification.',
+        unrestricted_best=json.loads((run/'training/train_best_candidate.json').read_text()))
+
+
 def export_lower_transfer(checkpoint,base,output):
     import torch
     data=Path(checkpoint).read_bytes();saved=torch.load(io.BytesIO(data),map_location='cpu',weights_only=False)

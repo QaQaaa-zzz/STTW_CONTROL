@@ -2,7 +2,7 @@ import hashlib,json,pickle
 import numpy as np
 import pytest
 import torch
-from sttw_control.lower_transfer import export_lower_transfer
+from sttw_control.lower_transfer import export_lower_transfer,select_scored_lower_checkpoint
 
 
 def fixture(tmp_path):
@@ -43,3 +43,28 @@ def test_incompatible_export_stops_before_writing(tmp_path,change):
     torch.save(saved,path)
     with pytest.raises(ValueError):export_lower_transfer(path,base,tmp_path/'export')
     assert not (tmp_path/'export').exists()
+
+
+def test_selection_uses_next_rollout_and_actual_exposure(tmp_path):
+    training=tmp_path/'training';checkpoints=training/'checkpoints';checkpoints.mkdir(parents=True)
+    (tmp_path/'status.json').write_text(json.dumps({'state':'completed'}))
+    (training/'train_best_candidate.json').write_text(json.dumps({'update':0,'mean_step_reward':0.}))
+    rows=[]
+    for update,reward,negative in [(1,0.,1),(11,-.5,1),(21,-.1,0),(31,-.2,1)]:
+        groups={'nominal_low':{'samples':10,'exposed_ticks':0},'positive_high':{'samples':10,'exposed_ticks':1},'negative_low':{'samples':10,'exposed_ticks':negative}}
+        rows.append(dict(update=update,mean_step_reward=reward,command_sampling={'disturbance_groups':groups}))
+    (training/'metrics.jsonl').write_text('\n'.join(map(json.dumps,rows)))
+    for update in (0,10,20,30,40):torch.save({'update':update},checkpoints/f'update_{update:04d}.pt')
+    result=select_scored_lower_checkpoint(tmp_path)
+    assert result['selected']['source_update']==30
+    assert result['selected']['scored_by_rollout']==31
+    assert result['unrestricted_best']['update']==0
+    rejected={x['source_update']:x['reasons'] for x in result['candidates'] if not x['eligible']}
+    assert rejected[0]==['parent_weights']
+    assert rejected[20]==['missing_actual_direction_or_nominal_coverage']
+    assert rejected[40]==['no_next_rollout_score']
+
+
+def test_selection_does_not_read_live_checkpoints(tmp_path):
+    (tmp_path/'status.json').write_text(json.dumps({'state':'running'}))
+    with pytest.raises(ValueError,match='completed training'):select_scored_lower_checkpoint(tmp_path)
