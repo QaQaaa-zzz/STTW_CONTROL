@@ -1859,6 +1859,62 @@
       "human_verification": "not_recorded",
       "scope": "Adjacent/mirrored geometry and later onset, reusedbank2: fullq/noq/fixed0 each4/6arrival/survival;fixed1 4/6arrival5/6survival.",
       "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E304": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_restoration_branch_v1/analysis/restoration_comparison.json",
+      "sha256": "ae4413c2294d84ec74bdb036f71dad73254d29f848aa6ed517c094eafe3ba000",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Late1.82s complete-state held-alpha intervention; allfive contact. Actual remaining pulse retained.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E305": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_pregust_branch_v1/analysis/pregust_comparison.json",
+      "sha256": "38f2699fb65c005822bf171aa4278814eee09424af71029bb16f55ac800d00c8",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Earlier1.62s complete-state intervention; heldalpha1 survives but missesgoal, otherfour contact.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E306": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_recovery_return_v1/analysis/return_comparison.json",
+      "sha256": "5c339f1b276b9f6756bed114d296f46c7e6a263046e4038df4bf10fe049b9ba2",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Recoverytask3 complete-state fivealpha return experiment; onlyalpha0 reachesgoal9.905s, allfive survive. Offline source timing, not online policy.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E307": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_commitment_online_v1/comparison_previous/comparison.json",
+      "sha256": "1a0da49add696d3d9b2d785955efccf0937659e98bab59e6d67ed0a3e05776bd",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Online3.75scommitment sixDEV:5survive,4arrive; originalshortdwell4survive4arrive.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E308": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_recovery_release_online_v1/baseline_comparison/comparison.json",
+      "sha256": "65fa7f83582ba10b1f1cbf90d2eec624b3a39145d7d9bb253abe15c56d99e9b0",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Six-method matched six-condition DEV: measuredreturn5arrive5survive; eachothermethod4arrive, survival4or5. All36raw independently checked.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E309": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/onset_transfer_recovery_v1/comparison_short_dwell/comparison.json",
+      "sha256": "c4ea26519811021a89bb73efeced631a867aece7ae340a18e320114e2786605e",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Frozen-rule onsettransfer eightactualepisodes: bothmethods2/4arrivals4/4survivors; sameoldgeometry, laterpresampled onset.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E310": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/onset_transfer_recovery_v1/terminal_heading_diagnostic.json",
+      "sha256": "c95b1f8430957962a0bed75a2d7240f766c479d005035aa71c7ae757b57859c8",
+      "verification": "AI artifact_checked; completed prior run and retained independent raw review, no new simulation for registry update",
+      "human_verification": "not_recorded",
+      "scope": "Offline saved-pose finite-heading query; originalheading forcesrejected reconnection. Geometric eligibility, not executed task benefit.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
     }
   },
   "manuscript_evidence_references": [
@@ -1999,6 +2055,14 @@
     "E300",
     "E301",
     "E302",
-    "E303"
-  ]
+    "E303",
+    "E304",
+    "E305",
+    "E306",
+    "E307",
+    "E308",
+    "E309",
+    "E310"
+  ],
+  "current_method_revision_cutoff": "2026-10-31"
 }
