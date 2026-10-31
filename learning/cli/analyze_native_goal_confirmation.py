@@ -1,5 +1,6 @@
 """Complete fixed80 readback: original goal, contact and task costs separately."""
 import argparse
+import os
 import itertools
 import json
 from pathlib import Path
@@ -2516,7 +2517,7 @@ def analyze_five_alpha_labels(root,p):
             if receipt['plan_sha256']!=digest(child/'plan.json'):raise ValueError('child analysis plan mismatch')
             rows.extend(json.loads((child/'analysis/results.json').read_text()));ticks+=receipt['new_active_lower_ticks']
             with np.load(child/'analysis/features_labels.npz') as z:xs.append(z['features']);ys.append(z['labels'])
-            links.extend(str(Path('..')/f.relative_to(root)) for f in sorted((child/'analysis').glob('*_xy.png')))
+            links.extend(os.path.relpath(f,out) for f in sorted((child/'analysis').glob('*_xy.png')))
         validate_five_alpha_cases(rows,protocol)
         budget=p.get('maximum_active_lower_ticks',protocol['maximum_suffix_lower_ticks'])
         if len(rows)!=protocol['expected_cases'] or ticks>budget:raise ValueError('parent budget/inventory mismatch')

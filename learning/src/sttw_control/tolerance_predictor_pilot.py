@@ -1154,14 +1154,14 @@ def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
                 write_json(output/'status.json',dict(phase='fitting',actual_optimizer_updates=updates,per_seed=per_seed,timings=timings))
             file=output/f'full_state_mlp_seed{seed}_last.pt';torch.save(dict(state_dict=model.state_dict(),dim=41,seed=seed,step=steps,arm='bce_rank',selector='last'),file)
             selected.append(dict(model='full_state_mlp',key='full',dim=41,seed=seed,step=steps,arm='bce_rank',selector='last',file=str(file),sha256=digest(file)));models.append(model)
-        manifest=dict(kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Related single-bank DEV; no calibration, safety or online gain claim')
+        manifest=dict(kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Declared related-source route split; no independent calibration or online gain evaluation')
         write_json(output/'selection_manifest.json',manifest);write_json(output/'selection_seal.json',dict(selection_manifest_sha256=digest(output/'selection_manifest.json'),selected_sha256={r['file']:r['sha256'] for r in selected}))
         training_receipt=dict(actual_optimizer_updates=updates,per_seed=per_seed,timings=timings,stage_notified=False)
         write_json(output/'training_complete.json',training_receipt)
         if on_training_complete:
             on_training_complete(training_receipt);training_receipt['stage_notified']=True;write_json(output/'training_complete.json',training_receipt)
         for role in ('training','development'):
-            d=data[role];probs=[predict(model,d['full']) for model in models];report={f'seed{s}':five_alpha_grouped_metrics(d['y'],p,d['meta']) for s,p in enumerate(probs)};ensemble=np.mean(probs,axis=0);report['ensemble']=five_alpha_grouped_metrics(d['y'],ensemble,d['meta']);write_json(output/(role+'_metrics.json'),report)
+            d=data[role];probs=[predict(model,d['full']) for model in models];report={f'seed{s}':five_alpha_grouped_metrics(d['y'],p,d['meta']) for s,p in enumerate(probs)};ensemble=np.mean(probs,axis=0);report['ensemble']=five_alpha_grouped_metrics(d['y'],ensemble,d['meta']);report['training_prevalence_baseline']=five_alpha_grouped_metrics(d['y'],np.full(len(d['y']),float(np.mean(train['y']))),d['meta']);write_json(output/(role+'_metrics.json'),report)
             write_json(output/(role+'_predictions.json'),[dict(m,label=int(label),probabilities=[float(p[i]) for p in probs],ensemble=float(ensemble[i])) for i,(m,label) in enumerate(zip(d['meta'],d['y']))])
         params={}
         for i,layer in enumerate((0,2,4)):

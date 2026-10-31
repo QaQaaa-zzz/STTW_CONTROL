@@ -2173,3 +2173,10 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 
 ## 2026-10-10 Path Feedback V1 有界验证
 9项新增必要测试通过（符号/弦长/不可重锚/局部投影/filter/antiwindup/schema/新Actor零输出/非有限保护/频谱），附件数学检查通过；非全仓验证。实际加载.0002×25=.005，upper/path.02；两条2000+4000真实步完成，训练0。两条无物理失败，但末1s航向超限92/200、112/200，整体保持0/2；保留原门槛，不以生存/通过目标截面代替保持。[完整证据](evidence/path_feedback_v1_20261010/INDEX.md)。运行后非有限防护修复有单元证据，未重跑物理；执行源码SHA及差异已保存。
+
+### 2026-10-31 force48 coverage and predictor
+Frozen U170/lower200, five candidate alphas, task1/3 full-state sources, 10Hz reconnection. The completed campaign reuses the first160 branches and collects the remaining160 after a SIGTERM; the interrupted first block adds at most3200 allocated slots. Evidence: `u170_lower200_tolerance_force48_completed_v1/analysis/README.md` under the data archive. All320 labels valid:227 no-contact/93 falls; only1/64 source/preparation/direction groups differs across alpha. Relative to matched force32:83 additional falls,227 retained no-contact,10 retained falls.
+
+A fixed3-seed×1000-step predictor fit completed with TRAIN117 positive/43 negative and DEV110/50. Ensemble TRAIN Brier0.000635, DEV Brier0.562549 and AUC0.333; the training-prevalence constant yields DEV Brier0.216758. The predictor is not adopted. Evidence: `u170_lower200_tolerance_force48_predictor_v1/training`. No online scheduling improvement is established by these labels. Next work must address independent state coverage and physical feature representation rather than extending this fit.
+
+Engineering: completed child analyses can now be linked from another run directory using relative paths; frozen raw data remain unchanged. Predictor reports include a zero-update training-prevalence baseline.18 predictor tests passed; full320-row analysis and raw-label/feature reconstruction passed. TensorBoard6006 includes force48_q and retains earlier runs.
