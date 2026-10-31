@@ -1,0 +1,81 @@
+{
+  "experiment_id": "STTW-TERMINAL-HEADING-SHORT_DWELL",
+  "mode": "native_five_alpha_online",
+  "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+  "bank_indices": [
+    2
+  ],
+  "bank_state_fingerprints": {
+    "2": "9218a531bbaa818f2f132ce5d886d9d4325a45487d31703ac8917d8828f3b4bf"
+  },
+  "horizon_s": 10.0,
+  "expected_cases": 4,
+  "maximum_lower_ticks": 8000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "duration_s": 0.15,
+  "forces_N": [
+    -36.0,
+    36.0
+  ],
+  "force_frame": "worldY",
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "arm": 0,
+  "hypothetical_duration_s": 0.15,
+  "task_aware_fallback": false,
+  "guard_fallback": true,
+  "route_contexts": [
+    {
+      "route": "adjacent_low_right",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 80.0,
+      "speed": 1.8,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "adjacent_low_left",
+      "family": 1,
+      "radius_m": 1.3,
+      "angle_deg": 80.0,
+      "speed": 1.8,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "predictor_training": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_diverse_coverage_predictor_v1/training",
+  "export_manifest_sha256": "aae27532d0a75451681bb3055fd2dbf6a21057d1aa330cc0e50357a7149b9634",
+  "data_role": "Diagnostic shared planner repair on fixed onset-transfer DEV: original-heading priority, finite-heading fallback only after length rejection; unchanged goal/radius/4m/H10. Not new unseen geometry or q calibration.",
+  "scoring": "Four disturbed route/event conditions, paired recovery-release versus original short-dwell coordinator: original goal1m entry, fullH10 survival, user0 costs, actual speed, all XY and losses. Two methods total8episodes.",
+  "stop_rule": "Exactly4 H10 episodes,8000lower maximum,0updates; paired two methods total8/16000. No onset reselection or threshold sweep.",
+  "panel_kind": "declared_source_product",
+  "user_alphas": [
+    0.0
+  ],
+  "alpha_dwell_s": 0.2,
+  "curvature_task_mode": "hard",
+  "hypothetical_force_N": 48.0,
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 4.0,
+    "terminal_heading_fallback": true
+  },
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_fixed_v1",
+  "use_q": true,
+  "onset_seed": 20261031,
+  "onset_algorithm": "SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50",
+  "onset_by_route_s": {
+    "adjacent_low_right": 2.78,
+    "adjacent_low_left": 2.28
+  }
+}

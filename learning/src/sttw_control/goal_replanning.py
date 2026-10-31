@@ -9,7 +9,7 @@ import jax.numpy as j
 from .geometric_path import Path
 
 
-def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None):
+def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None, fallback_max_length_m=None):
     """Upstream planner with eight world headings plus the current goal bearing.
 
     This finite heading set avoids imposing one final heading as task success;
@@ -26,9 +26,13 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
     bearing=np.arctan2(goal[1]-pose[1],goal[0]-pose[0])
     if goal_heading_rad is not None and not np.isfinite(goal_heading_rad):
         raise ValueError('finite optional goal heading required')
-    headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing]) if goal_heading_rad is None else np.array([goal_heading_rad])
+    if fallback_max_length_m is not None and (goal_heading_rad is None or not np.isfinite(fallback_max_length_m) or fallback_max_length_m<0):
+        raise ValueError('heading fallback requires a preferred heading and finite nonnegative length allowance')
+    finite_headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing])
+    headings=finite_headings if goal_heading_rad is None else np.r_[goal_heading_rad,finite_headings] if fallback_max_length_m is not None else np.array([goal_heading_rad])
     candidates=[]
-    for heading in headings:
+    for heading_index,heading in enumerate(headings):
+        if heading_index==1 and fallback_max_length_m is not None and candidates[0][0]<=fallback_max_length_m:break
         x,y,yaw,modes,lengths=plan_dubins_path(*pose,*goal,float(heading),1/radius_m,
                                               step_size=spacing_m/radius_m)
         if not np.isfinite(np.r_[x,y,yaw,lengths]).all():raise ValueError('nonfinite upstream plan')
@@ -64,11 +68,14 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
     metadata=dict(planner='PythonRobotics Dubins; six path families and finite goal-heading candidates',
                   upstream_commit='8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031',
                   radius_m=float(radius_m),modes=modes,segment_lengths_m=list(lengths),
-                  goal_heading_rad=goal_heading,goal_heading_candidates=len(headings),
+                  goal_heading_rad=goal_heading,goal_heading_candidates=len(candidates),
                   goal_heading_mode='free' if goal_heading_rad is None else 'prescribed',
                   goal_arclength_m=float(total),goal_xy=goal.tolist(),start_pose=pose.tolist(),
                   curvature_continuous=False,position_heading_continuous=True,
                   shortest_path_certificate=False,safety_certificate=False)
+    if fallback_max_length_m is not None:
+        metadata.update(goal_heading_mode='finite_fallback' if goal_heading!=goal_heading_rad else 'prescribed',heading_fallback_attempted=len(candidates)>1,heading_fallback_selected=goal_heading!=goal_heading_rad,
+                        preferred_goal_heading_rad=float(goal_heading_rad),preferred_candidate_length_m=candidates[0][0],maximum_goal_length_m=float(fallback_max_length_m))
     return result,metadata
 
 

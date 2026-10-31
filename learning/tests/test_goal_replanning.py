@@ -73,3 +73,25 @@ def test_prescribed_goal_heading_preserves_outgoing_original_direction():
     np.testing.assert_allclose(end/np.linalg.norm(end),[np.cos(angle),np.sin(angle)],atol=1e-3)
     assert meta['goal_heading_mode']=='prescribed' and meta['goal_heading_candidates']==1
     assert meta['goal_heading_rad']==angle
+
+
+def test_terminal_heading_fallback_preserves_feasible_preferred_path():
+    preferred,old=dubins_goal_path([0,0,0],[3,4],goal_heading_rad=1.2)
+    selected,new=dubins_goal_path([0,0,0],[3,4],goal_heading_rad=1.2,fallback_max_length_m=100.)
+    np.testing.assert_allclose(selected.xy,preferred.xy)
+    assert not new['heading_fallback_attempted'] and not new['heading_fallback_selected']
+    assert new['goal_heading_candidates']==1 and new['goal_heading_mode']=='prescribed'
+
+
+def test_terminal_heading_fallback_recovers_rejected_geometry_without_moving_goal():
+    pose=[12.457101821899414,.12004201859235764,-.10719804465770721]
+    goal=[13.314137259798894,4.9078766422536395]
+    path,meta=dubins_goal_path(pose,goal,goal_heading_rad=1.3671023845672607,fallback_max_length_m=8.775142669677734)
+    assert meta['preferred_candidate_length_m']>8.775 and float(path.goal)<8.775
+    assert meta['heading_fallback_attempted'] and meta['heading_fallback_selected']
+    assert meta['goal_heading_mode']=='finite_fallback' and meta['goal_heading_candidates']>=9
+    np.testing.assert_allclose([np.interp(float(path.goal),path.s,path.xy[:,k]) for k in (0,1)],goal,atol=3e-6)
+    # An unavailable short route stays too long; do not clip or move the goal.
+    path2,meta2=dubins_goal_path(pose,goal,goal_heading_rad=1.3671023845672607,fallback_max_length_m=1.)
+    assert float(path2.goal)>1. and meta2['maximum_goal_length_m']==1.
+    with pytest.raises(ValueError):dubins_goal_path(pose,goal,fallback_max_length_m=1.)

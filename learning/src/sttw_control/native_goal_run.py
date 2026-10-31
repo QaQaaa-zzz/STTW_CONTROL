@@ -597,6 +597,8 @@ def deterministic_route_onsets(routes,seed):
 
 
 def five_alpha_online_inventory(p):
+    reconnect=p.get('reconnection',{})
+    if set(reconnect)-{'goal_heading','maximum_added_length_m','terminal_heading_fallback'} or reconnect.get('terminal_heading_fallback',False) not in (False,True) or ('terminal_heading_fallback' in reconnect and type(reconnect['terminal_heading_fallback']) is not bool):raise ValueError('invalid terminal heading fallback declaration')
     release=p.get('recovery_release')
     if release is not None and (release!={'minimum_preparation_s':.6,'max_abs_roll_rad':.26,'max_abs_roll_rate_rad_s':.1,'stable_hold_s':.2} or p.get('support_commitment_s')!=3.75):raise ValueError('declared recovery release contract differs')
     if p.get('support_commitment_s',0.) not in (0.,3.75) or isinstance(p.get('support_commitment_s',0.),bool):raise ValueError('support commitment must match the3.75s held query window')
@@ -2708,9 +2710,9 @@ def run(root,*,shape_only=False):
                     if runtime['planner'].replan_requested(xy=poses[i,:2],goal_xy=goals[i],cross_track_m=float(cross[i]),
                         follower_invalid=bool(invalid[i]),already_replanned=bool(changed[i]),contact=bool(failed[i]),fault=bool(fault[i]),ever_arrived=bool(arrived[i]),scheduled_time_s=p.get('protocol',{}).get('scheduled_replan_s'),task_time_s=int(ticks[i])*env.cc.dt,continuous_replanning=p['replanning'].get('continuous_replanning',False)):
                         if int(ticks[i])%4:raise ValueError('replanning boundary was not an upper boundary')
-                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(goal_heading_rad=float(original_goal_headings[i])) if reconnection else {}),**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (CAPABILITY_MODE,FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
+                        remaining=max(0.,float(path_list[i].goal)-float(carry.state.projection.progress[i])) if reconnection else 0.
+                        path,meta=runtime['planner'].dubins_goal_path(poses[i],goals[i],radius_m=p['replanning']['radius_m'],**(dict(fallback_max_length_m=remaining+reconnection['maximum_added_length_m']) if reconnection and reconnection.get('terminal_heading_fallback',False) else {}),**(dict(goal_heading_rad=float(original_goal_headings[i])) if reconnection else {}),**(dict(length_m=p['protocol']['planner_support_m'],spacing_m=p['protocol']['planner_spacing_m']) if p.get('mode') in (CAPABILITY_MODE,FIVE_ONLINE_MODE,PREFIX_MODE,LABEL_MODE,SELECTION_MODE,'h75_channel_response','h75_channel_switching','h75_switching_continuation','h75_online_scalar','h75_online_confirmation100','h75_samestate_tolerance72','h75_samestate_bank144','tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation','h75_late_state_tolerance48','h75_user_late_state192') else {}))
                         if reconnection:
-                            remaining=max(0.,float(path_list[i].goal)-float(carry.state.projection.progress[i]))
                             if float(path.goal)>remaining+reconnection['maximum_added_length_m']:
                                 rejected_replans.append(dict(case_id=cases[i]['case_id'],task_tick=int(ticks[i]),remaining_path_m=remaining,candidate_length_m=float(path.goal),reason='candidate exceeds declared added-length allowance',**meta))
                                 continue
