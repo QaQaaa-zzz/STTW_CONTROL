@@ -92,8 +92,10 @@
   },
   "initial_state_scope": "Existing complete prepared bank2 shared by all methods; not newly randomized.",
   "lower_transfer": {
-    "manifest": "UNBOUND_PENDING_CHECKPOINT_SELECTION",
-    "manifest_sha256": "UNBOUND_PENDING_CHECKPOINT_SELECTION"
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_pulse_finetune_v1/selected_export/transfer.json",
+    "manifest_sha256": "8eae5e78ae4bde18772bf2423ae5c3d89b1551dbe9ce8d972160339c0e0176c6",
+    "parent_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/transfer.json",
+    "parent_manifest_sha256": "644baf1c3ea386bff7b7aaba3cbd2d326a0c42150924c4756cc73e0cb0cb5fed"
   },
   "onset_seed": 20261031,
   "onset_algorithm": "SHA256 UTF8 f'{seed}:{route}', first8bytes bigendian modulo61+80, divided50",

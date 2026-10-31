@@ -8,6 +8,22 @@ from sttw_control.native_goal_run import fixed_h75_capability_inventory,planning
 def config():return json.loads((Path(__file__).parents[1]/'configs/h75_friction08_capability.json').read_text())
 
 
+def test_lower_transfer_parent_chain_requires_real_artifacts(tmp_path):
+    from sttw_control.native_goal_run import authenticate_lower_transfer_parent,digest
+    base={'checkpoint_sha256':'root','normalizer':{'dim':210}}
+    assert authenticate_lower_transfer_parent({'parent_checkpoint_sha256':'root'},base,{})=={}
+    candidate={'normalizer':base['normalizer']}
+    for key,hash_key in [('actor','actor_sha256'),('checkpoint','checkpoint_sha256'),('config','config_file_sha256')]:
+        file=tmp_path/key;file.write_text(key);candidate[key]=str(file);candidate[hash_key]=digest(file)
+    manifest=tmp_path/'transfer.json';manifest.write_text(json.dumps({'parent_checkpoint_sha256':'root','candidate':candidate}))
+    transfer={'parent_manifest':str(manifest),'parent_manifest_sha256':digest(manifest)}
+    record={'parent_checkpoint_sha256':candidate['checkpoint_sha256']}
+    assert len(authenticate_lower_transfer_parent(record,base,transfer))==4
+    with pytest.raises(ValueError,match='lineage'):authenticate_lower_transfer_parent({'parent_checkpoint_sha256':'different'},base,transfer)
+    (tmp_path/'actor').write_text('changed')
+    with pytest.raises(ValueError,match='artifact'):authenticate_lower_transfer_parent(record,base,transfer)
+
+
 def test_frozen_only_h75_thirtyfive_nominal_and_original_routes():
     p=config();rows=fixed_h75_capability_inventory(p)
     assert len(rows)==len({r['case_id'] for r in rows})==35

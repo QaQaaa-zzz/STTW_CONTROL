@@ -409,6 +409,23 @@ def authenticate_capability_candidate(candidate, frozen_model, initial_source, n
                 base_model_id=SELECTION_MODELS['H75'],verification='checkpoint identity, physical source and exact Torch-to-Actor export; zero physics')
 
 
+def authenticate_lower_transfer_parent(record,base,transfer):
+    """Authenticate either direct continuation or one explicitly supplied parent export."""
+    if record['parent_checkpoint_sha256']==base['checkpoint_sha256']:return {}
+    if 'parent_manifest' not in transfer:raise ValueError('lower transfer parent differs; explicit parent export required')
+    file=Path(transfer['parent_manifest'])
+    if digest(file)!=transfer['parent_manifest_sha256']:raise ValueError('lower parent manifest changed')
+    parent=json.loads(file.read_text());candidate=parent['candidate']
+    if parent['parent_checkpoint_sha256']!=base['checkpoint_sha256'] or candidate['checkpoint_sha256']!=record['parent_checkpoint_sha256']:
+        raise ValueError('lower transfer lineage differs')
+    if candidate['normalizer']!=base['normalizer']:raise ValueError('lower parent normalizer differs')
+    inputs={str(file):transfer['parent_manifest_sha256']}
+    for key,hash_key in [('actor','actor_sha256'),('checkpoint','checkpoint_sha256'),('config','config_file_sha256')]:
+        if digest(candidate[key])!=candidate[hash_key]:raise ValueError('lower parent artifact changed')
+        inputs[candidate[key]]=candidate[hash_key]
+    return inputs
+
+
 def prepare_fixed_h75_capability(transition,root,protocol):
     """Authenticate a completed fresh-physics bank; no integration or old bank reuse."""
     import jax
@@ -520,8 +537,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         transfer=proposal['lower_transfer'];file=Path(transfer['manifest'])
         if digest(file)!=transfer['manifest_sha256']:raise ValueError('lower transfer manifest changed')
         record=json.loads(file.read_text());candidate=record['candidate']
-        if record['parent_checkpoint_sha256']!=source['candidate']['checkpoint_sha256']:
-            raise ValueError('lower transfer parent differs')
+        p['input_sha256'].update(authenticate_lower_transfer_parent(record,source['candidate'],transfer))
         if any('state_source' in c for c in proposal['route_contexts']) or proposal.get('excluded_completed_cases') or proposal.get('range_planner_boundary'):
             raise ValueError('lower transfer requires fresh paired tasks without old outcome predictor or cached cases')
         if candidate['normalizer']!=source['candidate']['normalizer']:
