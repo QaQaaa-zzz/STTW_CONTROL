@@ -128,3 +128,14 @@ def test_new_base_declared_product_and_hypothesis_identity():
     assert {r['bank_index'] for r in rows}=={0,6}
     p['hypothetical_force_N']=64.
     with pytest.raises(ValueError):five_alpha_online_inventory(p)
+
+
+def test_declared_force_subset_preserves_budget_and_query():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_low_reconnection_online.json').read_text())
+    rows=five_alpha_online_inventory(p)
+    assert len(rows)==2 and [r['force_N'] for r in rows]==[0.,36.]
+    assert p['hypothetical_force_N']==48. and p['maximum_lower_ticks']==4000
+    for forces in ([36.,0.],[0.,0.],[float('nan')],[65.],[True],[]):
+        bad=dict(p,forces_N=forces)
+        with pytest.raises(ValueError):five_alpha_online_inventory(bad)
+    with pytest.raises(ValueError):five_alpha_online_inventory(dict(p,maximum_lower_ticks=2000))

@@ -607,7 +607,8 @@ def five_alpha_online_inventory(p):
             or set(p['bank_state_fingerprints'])!={str(b) for b in banks}
             or not routes or len({c['route'] for c in routes})!=len(routes)
             or not users or users!=sorted(set(users)) or any(a not in p['candidate_alphas'] for a in users)
-            or forces!=[-48.,0.,48.] or not 0<p['onset_s']<9.85
+            or not forces or any(type(f) not in (int,float) or not math.isfinite(f) or abs(f)>64. for f in forces)
+            or forces!=sorted(set(forces)) or not 0<p['onset_s']<9.85
             or p['expected_cases']!=count or p['maximum_lower_ticks']!=2000*count
             or p.get('curvature_task_mode')!='hard' or p.get('guard_fallback') is not True):raise ValueError('declared online source grid differs')
         return [dict(route=c['route'],speed=c['speed'],bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_{c["route"]}',case_id=f'bank{b}/{c["route"]}/coordinator/a{a:g}/F{f:+g}',mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,event=f'F{f:+g}',force_N=f,onset_s=p['onset_s'],duration_s=.15) for b,c,a,f in itertools.product(banks,routes,users,forces)]
