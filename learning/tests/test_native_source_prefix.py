@@ -33,7 +33,7 @@ def test_seven_lane_prefix_is_a_valid_declarative_label_source():
     for g in p['source_groups']:
         c=source_cases[g['source_index']%7]
         g.update(source_lane=g['source_index']%7,source_case_id=c['case_id'],route=c['route'],path_key=c['path_key'],bank_index=4)
-    rows=five_alpha_label_inventory(p,source_cases,source_plan=dict(chunk_upper_steps=[5]*60))
+    rows=five_alpha_label_inventory(p,source_cases,source_plan=dict(chunk_upper_steps=[5]*60,models={'H75':{'registry_id':p['model_id']}}))
     assert len(rows)==280 and {r['bank_index'] for r in rows}=={4}
     assert {r['source_lane'] for r in rows}==set(range(7))
     assert all('bank4/' in r['source_group_identity'] for r in rows)

@@ -1,3 +1,9 @@
+## Four-domain path TEST completed — 2026-10-31
+
+All 80 frozen U170/lower200 episodes reached the original 1 m target disk and survived the complete 10-second window. Coverage: four held-out physical domains x two prepared states x low single-left/high S-left x five alphas; 160,000 actual lower steps, zero optimization. Full XY/diagnostics and per-condition outcomes: archive `u170_domain_path_test_v1/analysis/README.md`. Arrival does not require a stop, final heading or hold. No paired parent path run was included in this TEST.
+
+After the sealed campaign exited successfully, the five-alpha label inventory was changed to authenticate the model ID against its source plan instead of requiring the historical H75 ID. Twenty-four label/source-prefix checks pass, including the new U170/lower200 160-row inventory and rejection of an incorrect model ID; an old minimal test fixture was updated to provide its required model metadata. `u170_lower200_tolerance_labels_v1` is prepared from the previously declared eight nominal DEV full-state sources, with no prefix replay and no physics executed during preparation. Maximum suffix budget remains 120,320 lower steps; fitting is not launched.
+
 ## New-base predictor reader integration — 2026-10-31
 
 The predictor and label analyzer now share the declared source-product partition validator. The opt-in 160-row (80 TRAIN/80 DEV) fitting schema requires the exact middle-model identity, lower actor SHA, physical identity, and sealed label-plan SHA; legacy datasets retain their original contract. The reader checks per-child source/model identity and source-group counts for the new product, and rejects full-H10 claims from short suffix collection. CPU checks: 100 predictor/analysis checks plus 18 five-alpha reader checks pass. No new label data or fitted predictor exists yet; actual dataset readback remains to be validated after collection. The live sealed path runner has not been edited.

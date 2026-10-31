@@ -723,13 +723,14 @@ def label_collection_steps(protocol, source_task_s):
 
 def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=None):
     """Declarative related-DEV branching, authenticated against source metadata."""
-    required=dict(mode=LABEL_MODE,model_id='STTW_MIDDLE_FULLTAIL_PPO75_U77',
+    required=dict(mode=LABEL_MODE,
         candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=[.2,.6],forces_N=[-64.,64.],
         force_frame='worldY',duration_s=.15,horizon_s=10.,primary_after_pulse_end_s=3.,
         planning_frequency_hz=10.,maximum_new_prefix_lower_ticks=0,optimizer_updates=0)
     if any(p.get(k)!=v for k,v in required.items()):raise ValueError('five-alpha label contract differs')
     if source_cases is None:source_cases=json.loads((Path(p['source'])/'inventory.json').read_text())
     if source_plan is None:source_plan=json.loads((Path(p['source'])/'plan.json').read_text())
+    if p.get('model_id')!=source_plan['models']['H75']['registry_id']:raise ValueError('label model differs from authenticated source')
     groups=p['source_groups'];count=p['expected_source_states']
     if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
     times=sorted({g['source_task_s'] for g in groups})
