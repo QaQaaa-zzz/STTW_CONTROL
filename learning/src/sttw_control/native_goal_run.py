@@ -679,7 +679,9 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
     for i,c in enumerate(cases):
         key=(c['bank_index'],c['route'],c['event']) if panel_kind in ('disturbed_two_user','disturbed_declared_user') else (c['bank_index'],c['route'])
         groups.setdefault(key,[]).append(i)
-    if panel_kind in ('disturbed_two_user','disturbed_declared_user','disturbed_declared_subset'):expected_route_count*=len({c['event'] for c in cases})
+    if panel_kind in ('disturbed_two_user','disturbed_declared_user','disturbed_declared_subset'):
+        if len({(c['bank_index'],c['route']) for c in cases})!=expected_route_count:raise ValueError('initial route count differs')
+        expected_route_count=len({(c['bank_index'],c['route'],c['event']) for c in cases})
     expected_group_size={'nominal_five_user':5,'disturbed_five_user':10,'targeted_three_user':3}.get(panel_kind,2)
     if panel_kind=='disturbed_declared_user':expected_group_size=len({c['alpha'] for c in cases})
     if panel_kind=='boundary_selected_user':

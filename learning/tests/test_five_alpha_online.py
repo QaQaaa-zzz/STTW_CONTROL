@@ -155,3 +155,29 @@ def test_source_product_onset_transfer_is_frozen_and_paired():
     with pytest.raises(ValueError):five_alpha_online_inventory(p)
     p=copy.deepcopy(protocols[0]);p['onset_s']=1.8
     with pytest.raises(ValueError):five_alpha_online_inventory(p)
+
+
+def test_route_specific_event_names_do_not_multiply_initial_groups():
+    from flax import struct
+    from sttw_control.native_goal_run import audit_five_alpha_online_initial
+    @struct.dataclass
+    class Physical:
+        physical_tick: object
+    @struct.dataclass
+    class State:
+        alpha: object
+        tick: object
+        physical: object
+        history: object
+    @struct.dataclass
+    class Carry:
+        state: object
+    cases=[dict(bank_index=2,route=r,event=e,alpha=a) for r,e in [('left','t2_F36'),('right','t3_F36')] for a in [0.,1.]]
+    history=j.array([1.,1.,2.,2.])
+    initial=Carry(State(j.array([0.,1.,0.,1.]),j.zeros(4,j.int32),Physical(j.full(4,700,j.int32)),history))
+    assert audit_five_alpha_online_initial(initial,cases,700,panel_kind='disturbed_declared_user',expected_route_count=2)['alpha_neutralized_only']
+    with pytest.raises(ValueError,match='route count'):
+        audit_five_alpha_online_initial(initial,cases,700,panel_kind='disturbed_declared_user',expected_route_count=3)
+    bad=initial.replace(state=initial.state.replace(history=history.at[1].set(9.)))
+    with pytest.raises(ValueError,match='neutralization'):
+        audit_five_alpha_online_initial(bad,cases,700,panel_kind='disturbed_declared_user',expected_route_count=2)
