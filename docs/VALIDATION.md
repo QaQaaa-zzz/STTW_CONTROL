@@ -1,4 +1,14 @@
 
+## Low-speed online coordination: matched q ablation — 2026-10-31
+
+![Four-method actual/reference XY](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/four_method_F36.png)
+
+Completed frozen-q and geometry-only runs,2 episodes each,6,411 active/8,000 allocated lower steps,zero optimizer updates; pipeline and both matched comparisons exit0. Same U170/lower200/bank2/right85-degree R1.2/request1.8m/s/common4m reconnection/H10; nominal and+36N at1.6s for.15s. Full coordinator2/2 arrival+survival versus geometry1/2 and cached fixeduser0 1/2. At+36N: coordinator arrives8.565s and survives; geometry and fixed0 contact; cached fixed1 arrives9.605s and survives. Nominal arrival4.620/4.655/4.660/4.585s respectively. Four-method nominal/disturbed XY and alpha/speed plots generated and disturbed figure inspected; all paired reward diagnostics retained.
+
+Before disturbed arrival the coordinator executes user0 for77.35% of8.565s, squared alpha discrepancy integral0.60375s; fixed1 integral9.605s over its own arrival window. This is alpha discrepancy, not original task cost or a matched-duration comparison. Initial320 pre-force lower records have exact observed XY/alpha/qmin/query-observation equality between nominal and disturbed coordinator runs. Thus the observed1.4–1.6s intervention precedes actual force without event access. Qualified return and guard fallback remain separately logged.
+
+This is one post-hoc engineering DEV recovery gain, with a large path excursion and q trained under old0.5m permission. It supports the method's potential, not broad probability calibration or universal superiority. Old48N failures remain. [Full results and numerical provenance](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/RESULTS.md). Next: frozen-rule adjacent/mirror validation rather than retuning this successful case.
+
 ## Common reconnection permission: low-speed right turn — 2026-10-31
 
 ![Alpha1 actual/reference XY, matched allowance comparison](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_allowance_v1/comparison/pair_04_xy.png)
