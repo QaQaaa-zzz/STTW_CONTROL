@@ -1,0 +1,110 @@
+{
+  "experiment_id": "STTW-U170-LOWER200-RECORDED-PREGUST-BRANCH",
+  "mode": "five_alpha_tolerance_labels",
+  "status": "declared_pending_prepare",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_online_v1",
+  "source_plan_sha256": "a33cca24b26d06eb9797d55f40601c834bc39f61a6efba1fa4ce37b3137e719a",
+  "model_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+  "source_groups": [
+    {
+      "source_index": 0,
+      "source_task_s": 1.62,
+      "source_block": 15,
+      "source_lane": 2,
+      "source_case_id": "bank2/adjacent_low_right/coordinator/a0/F+36",
+      "route": "adjacent_low_right",
+      "path_key": "bank2_adjacent_low_right",
+      "bank_index": 2,
+      "source_user_alpha": 0.0,
+      "source_force_N": 36.0,
+      "complete_carry": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_pregust_capture_v1/complete_carry.pkl",
+      "executed_paths": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_pregust_capture_v1/executed_paths.pkl",
+      "host_state": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_pregust_capture_v1/host_state.npz",
+      "expected_task_tick": 324,
+      "expected_physical_tick": 1024,
+      "expected_ever_arrived": false,
+      "expected_replanned": false,
+      "lifecycle_role": "ongoing_task"
+    }
+  ],
+  "candidate_alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "preparation_s": [
+    0.18
+  ],
+  "forces_N": [
+    36.0
+  ],
+  "force_frame": "worldY",
+  "duration_s": 0.15,
+  "horizon_s": 10.0,
+  "primary_after_pulse_end_s": 3.0,
+  "planning_frequency_hz": 10.0,
+  "expected_source_states": 1,
+  "expected_cases": 5,
+  "maximum_new_prefix_lower_ticks": 0,
+  "maximum_suffix_lower_ticks": 8380,
+  "optimizer_updates": 0,
+  "initialization": "Clone all native complete state/path/host from saved online boundary. Replace future coordinator with held candidate; preserve reference filters/ESO/history and remaining actual pulse.",
+  "replanning": "Current adopted10Hz continuous reconnection, original goal and actual arrival/contact latches retained; no new geometry redesign.",
+  "label": "Original +36N worldY event task1.8\u20131.95, held candidate from1.62; primary nofall through4.95 and separate originalH10 goal/contact.",
+  "data_role": "Diagnostic DEV: actual pre-gust online alpha1 to.5 decision selected from inspected evidence; no fitting or untouched TEST.",
+  "stop_rule": "Exactly five held-alpha suffixes to original task10/contact/fault, maximum8380lower slots, no new prefix/optimizer; no automatic repeat.",
+  "readiness": "Not executed",
+  "source_lifecycle_limits": "Every selected source must be ongoing finite nonfailed; no postarrival sources.",
+  "fitting_split": {
+    "training_routes": [],
+    "development_routes": [
+      "adjacent_low_right"
+    ],
+    "unit": "One diagnostic source, never train",
+    "expected_training_rows": 0,
+    "expected_development_rows": 5,
+    "declared_before_new_labels": true
+  },
+  "require_ongoing_sources": true,
+  "source_routes": [
+    "adjacent_low_right"
+  ],
+  "data_partition": "recorded_continuation",
+  "physics_identity": {
+    "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+    "source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+    "portable_xml_sha256": "9e5c7de46245008e0efd9d3ab3729bfb987a87f79c08a2159459e562a0f4ba56",
+    "assets": {
+      "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+      "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+      "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+      "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+      "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+      "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+    },
+    "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+    "mujoco_version": "3.6.0"
+  },
+  "state_coverage": "One source, right+36 online task1.62 before published alpha1 to.5 selection.",
+  "source_banks": [
+    2
+  ],
+  "source_times_s": [
+    1.62
+  ],
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 4.0
+  },
+  "force_magnitude_N": 36.0,
+  "source_alphas": [
+    0.0
+  ],
+  "source_forces_N": [
+    36.0
+  ],
+  "source_selection_mode": "online_native",
+  "source_capture": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_pregust_capture_v1"
+}

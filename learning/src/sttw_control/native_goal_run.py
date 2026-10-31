@@ -748,7 +748,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if not isinstance(magnitude,(int,float)) or not math.isfinite(magnitude) or not 0<magnitude<=64:raise ValueError('bounded explicit label force magnitude required')
     recorded=p.get('data_partition')=='recorded_continuation'
     preparations=p['preparation_s']
-    if preparations not in (([0.],) if recorded else ([.2,.6],[0.,.2,.6])):raise ValueError('declared preparation grid required')
+    if (recorded and (len(preparations)!=1 or not math.isfinite(preparations[0]) or preparations[0]<0)) or (not recorded and preparations not in ([.2,.6],[0.,.2,.6])):raise ValueError('declared preparation grid required')
     selection=p.get('source_selection_mode','nominal_half')
     if selection not in ('nominal_half','all_fixed','online_native') or (selection=='online_native')!=recorded:raise ValueError('unknown or incompatible source selection')
     branches=5*len(preparations)*len(p['forces_N'])
@@ -763,14 +763,14 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if p.get('reconnection')!=source_plan.get('protocol',{}).get('reconnection'):raise ValueError('label reconnection differs from source closed loop')
     groups=p['source_groups'];count=p['expected_source_states']
     if recorded:
-        if selection!='online_native' or source_plan['mode']!=FIVE_ONLINE_MODE or count!=1 or preparations!=[0.] or p['horizon_s']!=10.:raise ValueError('single online continuation source required')
+        if selection!='online_native' or source_plan['mode']!=FIVE_ONLINE_MODE or count!=1 or p['horizon_s']!=10.:raise ValueError('single online continuation source required')
         g=groups[0];c=source_cases[g['source_lane']];t=g['source_task_s']
         capture=Path(p['source_capture']);receipt=json.loads((capture/'receipt.json').read_text())
         if receipt['source']!=p['source'] or receipt['source_plan_sha256']!=p['source_plan_sha256'] or receipt['task_end_s']!=t or receipt['actual_lower_ticks']!=24:raise ValueError('recorded boundary capture differs')
         for name,sha in receipt['files'].items():
             if digest(capture/name)!=sha:raise ValueError('recorded boundary capture changed')
-        remaining=round((c['onset_s']+c['duration_s']-t)*200)/200
-        if not c['onset_s']<=t<c['onset_s']+c['duration_s'] or p['forces_N']!=[c['force_N']] or not math.isclose(p['duration_s'],remaining,abs_tol=1e-9):raise ValueError('recorded event remainder must be preserved')
+        onset=max(t,c['onset_s']);remaining=round((c['onset_s']+c['duration_s']-onset)*200)/200
+        if not t<c['onset_s']+c['duration_s'] or not math.isclose(preparations[0],onset-t,abs_tol=1e-9) or p['forces_N']!=[c['force_N']] or not math.isclose(p['duration_s'],remaining,abs_tol=1e-9):raise ValueError('recorded event remainder must be preserved')
     if len(groups)!=count or [g['source_index'] for g in groups]!=list(range(count)):raise ValueError('exact source groups required')
     times=sorted({g['source_task_s'] for g in groups})
     if task_s is not None and task_s not in times:raise ValueError('undeclared source group clock')

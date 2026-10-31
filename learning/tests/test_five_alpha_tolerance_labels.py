@@ -227,3 +227,17 @@ def test_restoration_continuation_keeps_global_planning_phase():
     steps=label_collection_steps(p,1.82)
     assert steps[0]==4 and sum(steps)==409
     np.testing.assert_array_equal(364+np.cumsum(steps)*4,np.arange(380,2001,20))
+
+
+def test_pregust_continuation_preserves_future_event_and_planning_phase():
+    from sttw_control.native_goal_run import label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_pregust_branch.json').read_text())
+    rows=five_alpha_label_inventory(p)
+    pulse=np.asarray(force_pulses(rows,3.5))
+    np.testing.assert_allclose(pulse[:,0],5.3)
+    np.testing.assert_allclose(pulse[:,1],5.45)
+    steps=label_collection_steps(p,1.62)
+    assert len(rows)==5 and sum(steps)*4*5==8380
+    np.testing.assert_array_equal(324+np.cumsum(steps)*4,np.arange(340,2001,20))
+    bad=copy.deepcopy(p);bad['preparation_s']=[0.]
+    with pytest.raises(ValueError):five_alpha_label_inventory(bad)
