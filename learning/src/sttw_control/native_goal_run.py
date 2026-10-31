@@ -718,7 +718,7 @@ def snapshot_block_for_task(source_plan, task_s):
     """Locate a saved AFTER-chunk / BEFORE-next-planner task boundary."""
     target=task_s*200
     if not math.isfinite(target) or target!=round(target):raise ValueError('source must be an exact lower-tick boundary')
-    cumulative=0
+    cumulative=round(source_plan.get('source_task_s',0.)*200)
     for block,steps in enumerate(source_plan['chunk_upper_steps']):
         cumulative+=steps*4
         if cumulative==target:return block
@@ -750,7 +750,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     preparations=p['preparation_s']
     if (recorded and (len(preparations)!=1 or not math.isfinite(preparations[0]) or preparations[0]<0)) or (not recorded and preparations not in ([.2,.6],[0.,.2,.6])):raise ValueError('declared preparation grid required')
     selection=p.get('source_selection_mode','nominal_half')
-    if selection not in ('nominal_half','all_fixed','online_native') or (selection=='online_native')!=recorded:raise ValueError('unknown or incompatible source selection')
+    if selection not in ('nominal_half','all_fixed','online_native','held_native') or (selection in ('online_native','held_native'))!=recorded:raise ValueError('unknown or incompatible source selection')
     branches=5*len(preparations)*len(p['forces_N'])
     required=dict(mode=LABEL_MODE,
         candidate_alphas=[0.,.25,.5,.75,1.],preparation_s=preparations,forces_N=p['forces_N'] if recorded else [-magnitude,magnitude],
@@ -762,7 +762,11 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if p.get('model_id')!=source_plan['models']['H75']['registry_id']:raise ValueError('label model differs from authenticated source')
     if p.get('reconnection')!=source_plan.get('protocol',{}).get('reconnection'):raise ValueError('label reconnection differs from source closed loop')
     groups=p['source_groups'];count=p['expected_source_states']
-    if recorded:
+    if recorded and selection=='held_native':
+        if source_plan['mode']!=LABEL_MODE or count!=1 or preparations!=[0.] or p['forces_N']!=[0.] or p['duration_s']!=0.:raise ValueError('single held-native zero-additional-force continuation required')
+        g=groups[0];c=source_cases[g['source_lane']]
+        if g.get('source_held_alpha')!=c['candidate_alpha'] or g['source_task_s']<c['onset_s']+c['duration_s']:raise ValueError('original held candidate differs or pulse has not ended')
+    if recorded and selection=='online_native':
         if selection!='online_native' or source_plan['mode']!=FIVE_ONLINE_MODE or count!=1 or p['horizon_s']!=10.:raise ValueError('single online continuation source required')
         g=groups[0];c=source_cases[g['source_lane']];t=g['source_task_s']
         capture=Path(p['source_capture']);receipt=json.loads((capture/'receipt.json').read_text())
@@ -787,14 +791,14 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
     if p['expected_cases']!=count*branches or p['maximum_suffix_lower_ticks']!=budget:raise ValueError('declared source-derived suffix budget differs')
     rows=[]
     for g in groups:
-        idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,receipt['task_start_s'] if recorded else t)
+        idx=g['source_index'];t=g['source_task_s'];block=snapshot_block_for_task(source_plan,receipt['task_start_s'] if selection=='online_native' else t)
         if t<=0 or t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>p['horizon_s']:raise ValueError('source label window outside horizon')
         lane=g['source_lane'];c=source_cases[lane]
         expected=dict(source_block=block,source_user_alpha=c['alpha'],complete_carry=f'evaluation/complete_carry_{block:02d}.pkl',
             executed_paths=f'evaluation/executed_paths_{block:02d}.pkl',host_state=f'evaluation/host_state_{block:02d}.npz',expected_task_tick=round(t*200),
             source_case_id=c['case_id'],route=c['route'],path_key=case_path_key(c),bank_index=c['bank_index'])
-        if recorded:expected.update(complete_carry=str(capture/'complete_carry.pkl'),executed_paths=str(capture/'executed_paths.pkl'),host_state=str(capture/'host_state.npz'))
-        if selection in ('all_fixed','online_native'):expected['source_force_N']=c['force_N']
+        if selection=='online_native':expected.update(complete_carry=str(capture/'complete_carry.pkl'),executed_paths=str(capture/'executed_paths.pkl'),host_state=str(capture/'host_state.npz'))
+        if selection in ('all_fixed','online_native','held_native'):expected['source_force_N']=c['force_N']
         if any(g.get(k)!=v for k,v in expected.items()):raise ValueError('source lane metadata differs '+str(idx))
         if p.get('require_ongoing_sources',False) is not False and (p['require_ongoing_sources'] is not True or g['expected_ever_arrived']):raise ValueError('ongoing-only sources required')
         if t+max(p['preparation_s'])+p['duration_s']+p['primary_after_pulse_end_s']>t+sum(label_collection_steps(p,t))*.02+1e-9:raise ValueError('primary label window outside collection')
@@ -802,7 +806,7 @@ def five_alpha_label_inventory(p, source_cases=None, task_s=None, source_plan=No
         if task_s is not None and t!=task_s:continue
         identity=f"{Path(p['source']).resolve()}@{p['source_plan_sha256']}/tasktick{g['expected_task_tick']}/{g['source_case_id']}"
         for a,prep,force in itertools.product(p['candidate_alphas'],p['preparation_s'],p['forces_N']):
-            rows.append(dict(g,source_group_identity=identity,source_origin='saved_online_native' if recorded else 'saved_fixed' if selection=='all_fixed' else 'saved_nominal_half',speed=c['speed'],mode='H75',mode_index=0,
+            rows.append(dict(g,source_group_identity=identity,source_origin='saved_online_native' if selection=='online_native' else 'saved_held_native' if selection=='held_native' else 'saved_fixed' if selection=='all_fixed' else 'saved_nominal_half',speed=c['speed'],mode='H75',mode_index=0,
                 alpha=c['alpha'],user_alpha=c['alpha'],candidate_alpha=a,query_alpha=a,preparation_s=prep,onset_s=t+prep,
                 duration_s=p['duration_s'],force_N=force,primary_window_start_s=t,primary_window_end_s=t+prep+p['duration_s']+3.,
                 case_id=f'source{idx}/alpha{a:g}/prep{prep:g}/F{force:+g}'))
@@ -863,7 +867,7 @@ def prepare_five_alpha_labels(source,root,protocol):
     if 'physics_identity' in proposal and proposal['physics_identity']!=old['initial_source']['model']:raise ValueError('label source physics identity differs')
     if str(source)!=proposal['source'] or digest(source/'plan.json')!=proposal['source_plan_sha256'] or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('selection source identity differs')
     status=json.loads((source/'evaluation/status.json').read_text())
-    if old.get('mode') not in (SELECTION_MODE,PREFIX_MODE,CAPABILITY_MODE,FIVE_ONLINE_MODE) or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
+    if old.get('mode') not in (SELECTION_MODE,PREFIX_MODE,CAPABILITY_MODE,FIVE_ONLINE_MODE,LABEL_MODE) or status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed selection source required')
     if old['models']['H75']['registry_id']!=proposal['model_id'] or not old['replanning'].get('continuous_replanning') or old['replanning']['period_s']!=.1:raise ValueError('frozen native H75/10Hz identity differs')
     for file,sha in {**old['input_sha256'],**old['native_expected_sources']}.items():
         if digest(file)!=sha:raise ValueError('source input/native drift '+file)
@@ -875,7 +879,7 @@ def prepare_five_alpha_labels(source,root,protocol):
     if proposal.get('data_partition')=='recorded_continuation':modules.append(folder/'tolerance_coordination.py')
     files=[protocol,source/'plan.json',source/'seal.json',source/'inventory.json',source/'evaluation/status.json',source/'evaluation/manifest.json']
     files += [source/name for name in {g[k] for g in proposal['source_groups'] for k in ('complete_carry','executed_paths','host_state')}]
-    if proposal.get('data_partition')=='recorded_continuation':files += [Path(proposal['source_capture'])/n for n in ('receipt.json','plan.json','seal.json','capture_raw.npz','capture_script.py')]
+    if proposal.get('source_selection_mode')=='online_native':files += [Path(proposal['source_capture'])/n for n in ('receipt.json','plan.json','seal.json','capture_raw.npz','capture_script.py')]
     files += [source/'evaluation'/(key+'_path.npz') for key in sorted({g['path_key'] for g in proposal['source_groups']})]
     for k in ('actor','checkpoint'):
         model=old['models']['H75']

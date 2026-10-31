@@ -241,3 +241,21 @@ def test_pregust_continuation_preserves_future_event_and_planning_phase():
     np.testing.assert_array_equal(324+np.cumsum(steps)*4,np.arange(340,2001,20))
     bad=copy.deepcopy(p);bad['preparation_s']=[0.]
     with pytest.raises(ValueError):five_alpha_label_inventory(bad)
+
+
+def test_recovery_return_uses_saved_absolute_clock_and_no_new_force():
+    from sttw_control.native_goal_run import snapshot_block_for_task,label_collection_steps
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_recovery_return.json').read_text())
+    source=json.loads((Path(p['source'])/'plan.json').read_text())
+    assert snapshot_block_for_task(source,3.)==13
+    rows=five_alpha_label_inventory(p)
+    assert len(rows)==5 and {r['source_origin'] for r in rows}=={'saved_held_native'}
+    assert {r['source_held_alpha'] for r in rows}=={1.}
+    assert {r['alpha'] for r in rows}=={0.}
+    assert sum(label_collection_steps(p,3.))*4*5==7000
+    pulses=np.asarray(force_pulses(rows,3.5))
+    np.testing.assert_array_equal(pulses[:,2:],0.)
+    np.testing.assert_allclose(pulses[:,:2],6.5)
+    for field,value in [('forces_N',[36.]),('duration_s',.15),('preparation_s',[.2])]:
+        bad=copy.deepcopy(p);bad[field]=value
+        with pytest.raises(ValueError):five_alpha_label_inventory(bad)
