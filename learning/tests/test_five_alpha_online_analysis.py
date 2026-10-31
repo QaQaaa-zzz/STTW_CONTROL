@@ -289,3 +289,13 @@ def test_conditional_primary_window_does_not_relabel_or_discard_extension_failur
     assert window['observed_full_lower_ticks']==8 and window['post_primary_extension_lower_ticks']==2
     assert window['post_primary_extension_contact'] is True
     assert raw['contact_failure'][-1] and len(raw['time'])==8
+
+
+def test_declared_product_analysis_checks_bank_force_and_all_rows():
+    import json
+    from sttw_control.native_goal_run import five_alpha_online_inventory
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_online_pilot.json').read_text())
+    rows=five_alpha_online_inventory(p)
+    assert m.validate_online_panel(rows,p)['cases']==24
+    rows[0]['bank_index']=6
+    with pytest.raises(ValueError,match='identity'):m.validate_online_panel(rows,p)

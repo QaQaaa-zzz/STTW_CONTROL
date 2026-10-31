@@ -2690,6 +2690,11 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
 
 def validate_online_panel(cases,protocol):
     """Authenticate the full panel and route-specific seeded event metadata."""
+    if protocol.get('panel_kind')=='declared_source_product':
+        from sttw_control.native_goal_run import five_alpha_online_inventory
+        declared=five_alpha_online_inventory(protocol)
+        if len(cases)!=len(declared) or any(any(c.get(k)!=v for k,v in expected.items()) for c,expected in zip(cases,declared)):raise ValueError('complete source-product online identity required')
+        return dict(nominal=False,disturbed_users=False,cases=len(declared))
     kind=protocol.get('panel_kind','disturbed_single_user');nominal=kind=='nominal_five_user';multi=kind=='disturbed_five_user';count=70 if multi else 35 if nominal else 14
     if kind not in ('disturbed_single_user','nominal_five_user','disturbed_five_user') or len(cases)!=count:raise ValueError('complete declared online panel required')
     routes={c['route'] for c in cases};grid=[0.,.25,.5,.75,1.]
@@ -2749,7 +2754,7 @@ def analyze_five_alpha_online14(root,p):
     out.mkdir(exist_ok=False);rows=[];raws={};paths={};ticks=0;links=[];decisions=json.loads((run/'replanning_decisions.json').read_text())
     for lane,c in enumerate(index):
         if any(c.get(k)!=v for k,v in cases[lane].items()) or digest(c['raw_file'])!=c['raw_sha256']:raise ValueError('online14 row identity changed')
-        if c['bank_index']!=6:raise ValueError('online bank identity differs')
+        if c['bank_index'] not in protocol['bank_indices']:raise ValueError('online bank identity differs')
         user=float(c.get('user_alpha',c['alpha']))
         if user!=c['alpha']:raise ValueError('original user identity differs')
         with np.load(c['raw_file']) as z:raw=dict(z)
@@ -2773,17 +2778,17 @@ def analyze_five_alpha_online14(root,p):
         raws[c['case_id']]=raw;np.savez_compressed(out/f'case_{lane:02d}_original_task.npz',**original)
     if ticks!=status['active_lower_ticks'] or ticks>expected_cases*2000:raise ValueError('online14 physics budget mismatch')
     if disturbed_users:links=render_disturbed_user_panel(out,rows,raws,paths)
-    for route in ([] if disturbed_users else sorted({c['route'] for c in cases})):
-        group=[r for r in rows if r['route']==route];path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
+    for bank,route in ([] if disturbed_users else sorted({(c['bank_index'],c['route']) for c in cases})):
+        group=[r for r in rows if r['route']==route and r['bank_index']==bank];path=paths[group[0]['path_key']];fig,axes=plt.subplots(1,3,figsize=(18,6),layout='constrained');axes[0].plot(*path['xy'][path['s']<=path['goal']].T,'k:',label='Original reference')
         for r in group:
             raw=raws[r['case_id']];n=r['observed_ticks'];t=raw['time'][:n];label=f"User alpha={r['alpha']:g}" if nominal else f"WorldY {r['force_N']:+g}N";line=axes[0].plot(*raw['actual_xy'][:n].T,label=label)[0];color=line.get_color();axes[0].scatter(*raw['actual_xy'][n-1],color=color,marker='x' if r['horizons']['10']['physical_outcome']=='contact' else 's');axes[1].step(t,raw['alpha_exec'][:n],where='post',label=label,color=color);axes[2].plot(t,np.max(raw['coord_qmin'][:n],axis=1),label=label,color=color)
         axes[0].set(xlabel='World X (m)',ylabel='World Y (m)');axes[0].set_aspect('equal');axes[1].set(xlabel='Task time (s)',ylabel='Executed alpha');axes[2].set(xlabel='Task time (s)',ylabel='Max candidate min4 probability');axes[2].axhline(.8,color='k',ls='--');axes[2].axhline(.85,color='k',ls=':')
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if not nominal:
-            for ax in axes[1:]:ax.axvspan(2.2,2.35,color='grey',alpha=.2)
-        fig.suptitle(f'{route} | online five-alpha | '+('nominal fiveusers' if nominal else 'user.5 forces')+' | bank6 | H10 | full1000 ensemble | actual endpoints');name=route+('_nominal_five_user_xy.png' if nominal else '_online14_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+            for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+protocol['duration_s'],color='grey',alpha=.2)
+        fig.suptitle(f'{route} | {p["models"]["H75"]["registry_id"]} | online five-alpha | users={sorted({r["alpha"] for r in group})} | bank{bank} | H10 | actual endpoints');name=f'bank{bank}_'+route+('_nominal_five_user_xy.png' if nominal else '_online14_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
     atomic_json(out/'results.json',rows);atomic_json(out/'receipt.json',dict(cases=expected_cases,panel_kind=protocol.get('panel_kind','paired_force'),active_lower_ticks=ticks,optimizer_updates=0,analysis_physics_ticks=0,plan_sha256=digest(root/'plan.json'),limits='Related familiar bank6 DEV diagnostic, no paired comparator or causal gain claim. Three original-user running task channels only; terminal/non-task total reward reconstruction deferred. Logged coordinator gates audited; independent MLP probabilities not yet reconstructed.'))
-    (out/'README.md').write_text(('# Disturbed five-user70 diagnostic\n\n' if disturbed_users else '# Nominal five-user35 diagnostic\n\n' if nominal else '# Five-alpha online14 diagnostic\n\n')+'\n\n'.join(f'![XY and coordinator traces]({f})' for f in links)+'\n\nNo fixed-alpha or baseline comparator. Each original-user cost is three running task channels; no cross-user weighted-cost ranking, not coordinator proxy or full reward. Per-case goal/contact, before/during/after phases and before-first-goal coordinator behavior are in results.json. Static fallback.5 is distinct from qualified user restoration. Soft-task mode audits bounded-reference validity and a squared curvature-excess penalty while reporting the historical hard mask separately; validity is not a road/task guarantee. In guard runs legacy fallback_half_ticks describes degraded .5 occupancy; executed_fixed_half_fallback_ticks uses effective dwell provenance. Raw guard requested/selected/published may differ from actual held execution. Related known-route DEV; no closed-loop gain or safety certificate.\n')
+    (out/'README.md').write_text(('# Disturbed five-user70 diagnostic\n\n' if disturbed_users else '# Nominal five-user35 diagnostic\n\n' if nominal else f'# Five-alpha online {expected_cases}-case diagnostic\n\n')+'\n\n'.join(f'![XY and coordinator traces]({f})' for f in links)+'\n\nNo fixed-alpha or baseline comparator. Each original-user cost is three running task channels; no cross-user weighted-cost ranking, not coordinator proxy or full reward. Per-case goal/contact, before/during/after phases and before-first-goal coordinator behavior are in results.json. Static fallback.5 is distinct from qualified user restoration. Soft-task mode audits bounded-reference validity and a squared curvature-excess penalty while reporting the historical hard mask separately; validity is not a road/task guarantee. In guard runs legacy fallback_half_ticks describes degraded .5 occupancy; executed_fixed_half_fallback_ticks uses effective dwell provenance. Raw guard requested/selected/published may differ from actual held execution. Related known-route DEV; no closed-loop gain or safety certificate.\n')
     return rows
 
 def validate_fixed_capability_cases(cases,protocol):
