@@ -260,3 +260,19 @@ def test_stage_subset_cannot_mix_physics_or_historical_batches(monkeypatch):
     cfg['dataset']['source_route_times']=a['receipt']['source_route_times']+b['receipt']['source_route_times']
     batches=iter([a,b])
     with pytest.raises(ValueError,match='mixed physics'):m.load_five_alpha_dataset(None,cfg)
+
+
+def test_new_base_fit_requires_explicit_model_and_lower_identity():
+    cfg=json.loads((ROOT/'learning/configs/h75_tolerance_predictor_five_alpha.json').read_text())
+    cfg['dataset'].update(collection_kind='declared_source_product',expected_cases=160,expected_training_rows=80,expected_development_rows=80,physics_identity={'xml':'sealed'},analysis_plan_sha256='a'*64,frozen_model_identity={'H75':{'registry_id':'U170'}},lower_actor_sha256='b'*64)
+    m.validate_five_alpha_fit_config(cfg)
+    for field in ('lower_actor_sha256','frozen_model_identity','analysis_plan_sha256'):
+        bad=copy.deepcopy(cfg);bad['dataset'].pop(field)
+        with pytest.raises(ValueError,match='identities'):m.validate_five_alpha_fit_config(bad)
+
+
+def test_new_base_partition_is_shared_with_analysis():
+    protocol=json.loads((ROOT/'learning/configs/u170_lower200_tolerance_labels.json').read_text())
+    p=m.five_alpha_partition(protocol)
+    assert p['cases']==160 and p['training_rows']==p['development_rows']==80
+    assert p['bank']==[0,6]

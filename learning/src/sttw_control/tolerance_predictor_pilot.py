@@ -846,6 +846,17 @@ def validate_matched_full_prior(cfg):
 
 def five_alpha_partition(protocol):
     """Role is sealed before sampling; bank4 is an additive training-only batch."""
+    if protocol.get('data_partition')=='declared_source_product':
+        import itertools
+        groups=protocol['source_groups'];split=protocol['fitting_split']
+        routes=set(protocol['source_routes']);banks=protocol['source_banks'];times=protocol['source_times_s']
+        expected=set(itertools.product(routes,banks,times));actual={(g['route'],g['bank_index'],g['source_task_s']) for g in groups}
+        if actual!=expected or len(groups)!=len(expected) or len({g['source_index'] for g in groups})!=len(groups):raise ValueError('source product incomplete or duplicated')
+        if protocol['label_collection_duration_s']!=3.76 or protocol.get('require_ongoing_sources') is not True or any(g['source_user_alpha']!=.5 or g['expected_ever_arrived'] or g['lifecycle_role']!='ongoing_task' for g in groups):raise ValueError('ongoing source collection contract differs')
+        if protocol['candidate_alphas']!=[0.,.25,.5,.75,1.] or protocol['preparation_s']!=[.2,.6] or protocol['forces_N']!=[-64.,64.]:raise ValueError('source-product branch grid differs')
+        train=set(split['training_routes']);dev=set(split['development_routes']);nt=sum(g['route'] in train for g in groups)*20;nd=sum(g['route'] in dev for g in groups)*20
+        if not split['declared_before_new_labels'] or train&dev or train|dev!=routes or protocol['expected_cases']!=nt+nd or protocol['expected_source_states']!=len(groups) or split['expected_training_rows']!=nt or split['expected_development_rows']!=nd:raise ValueError('source-product split differs')
+        return dict(kind='declared_source_product',training_routes=train,development_routes=dev,cases=nt+nd,training_rows=nt,development_rows=nd,bank=banks)
     train={'straight_v2p6','left70_R1p9','right130_R2p7','S_left_90_R1p8'};dev={'right70_R1p9','left130_R2p7','S_right_90_R1p8'}
     split=protocol['fitting_split'];kind=protocol.get('data_partition','limited_collection' if 'collection_end_s' in protocol else 'mixed')
     if not split['declared_before_new_labels'] or set(split['training_routes'])&set(split['development_routes']):raise ValueError('predeclared disjoint role split required')
@@ -889,8 +900,9 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ({1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches])):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in (({(160,80,80)} if d.get('collection_kind')=='declared_source_product' and batches==1 else {1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches]))):
         raise ValueError('frozen five-alpha fitting contract mismatch')
+    if d.get('collection_kind')=='declared_source_product' and (not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256') or not d.get('frozen_model_identity') or not d.get('lower_actor_sha256')):raise ValueError('source product requires frozen model, lower, physics and plan identities')
     if d['expected_cases']==140 and (batches!=1 or d.get('collection_kind')!='limited_collection' or not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256')):raise ValueError('limited140 requires explicit physics and plan identity')
     if d.get('collection_kind')=='limited_route_subset' and (batches!=2 or not isinstance(d.get('physics_identity'),dict) or set(d.get('analysis_plan_sha256s',{}))!=set(analyses) or not d.get('source_route_times')):raise ValueError('route subset requires two explicit physics-bound plans')
     return cfg
@@ -907,7 +919,12 @@ def _load_five_alpha_single(analysis,cfg):
     read=lambda p:_five_alpha_read_json(p,inputs)
     plan=read(root/'plan.json');seal=read(root/'seal.json');receipt=read(analysis/'receipt.json')
     if plan.get('mode')!='five_alpha_tolerance_labels' or not plan.get('label_parent') or seal['plan_sha256']!=digest(root/'plan.json') or receipt['plan_sha256']!=seal['plan_sha256']:raise ValueError('sealed parent label analysis required')
-    if set(plan['models'])!={'H75'} or plan['models']['H75'].get('registry_id')!='STTW_MIDDLE_FULLTAIL_PPO75_U77':raise ValueError('frozen H75 only required')
+    d=cfg['dataset'];product=d.get('collection_kind')=='declared_source_product'
+    if product:
+        if plan['models']!=d['frozen_model_identity'] or plan['initial_source']['candidate']['actor_sha256']!=d['lower_actor_sha256'] or plan['initial_source']['model']!=d['physics_identity'] or seal['plan_sha256']!=d['analysis_plan_sha256']:raise ValueError('source product model/lower/physics/plan differs')
+        if plan['protocol'].get('data_partition')!='declared_source_product':raise ValueError('source-product protocol required')
+        if receipt.get('full_h10_outcomes_claimed',False):raise ValueError('short source-product collection cannot claim H10')
+    elif set(plan['models'])!={'H75'} or plan['models']['H75'].get('registry_id')!='STTW_MIDDLE_FULLTAIL_PPO75_U77':raise ValueError('frozen H75 only required')
     for key in ('actor','checkpoint'):
         model=plan['models']['H75']
         if digest(model[key])!=model[key+'_sha256']:raise ValueError('frozen H75 checkpoint changed')
@@ -940,10 +957,10 @@ def _load_five_alpha_single(analysis,cfg):
         child=Path(item);child=child if child.is_absolute() else root/child
         cp=read(child/'plan.json');cs=read(child/'seal.json');cr=read(child/'analysis/receipt.json')
         if cs['plan_sha256']!=digest(child/'plan.json') or cr['plan_sha256']!=cs['plan_sha256'] or cp['models']!=plan['models'] or cp['config']!=plan['config']:raise ValueError('child frozen identity differs')
-        if ('collection_end_s' in protocol or protocol.get('data_partition')=='limited_route_subset') and cp.get('initial_source',{}).get('model')!=plan['initial_source']['model']:raise ValueError('child physics identity differs')
+        if ('collection_end_s' in protocol or protocol.get('data_partition') in ('limited_route_subset','declared_source_product')) and cp.get('initial_source')!=plan['initial_source']:raise ValueError('child physics identity differs')
         sealed(cp,child)
         source_records=read(child/'evaluation/source_records.json')
-        expected_groups=sum(g['source_task_s']==cp.get('source_task_s') for g in protocol['source_groups']) if partition['kind']=='limited_route_subset' else 7
+        expected_groups=sum(g['source_task_s']==cp.get('source_task_s') for g in protocol['source_groups']) if partition['kind'] in ('limited_route_subset','declared_source_product') else 7
         if len(source_records)!=expected_groups or any(not s['all_twenty_siblings_exact'] or len(s['case_indices'])!=20 for s in source_records):raise ValueError('complete source sibling proof missing')
         for record in source_records:
             fingerprint=record.get('pre_boundary_fingerprint')
