@@ -20,7 +20,7 @@ def test_exact_fourteen_and_unchanged_source_routes():
     assert sum(planning_chunk_steps(10.,10.))*4*len(rows)==28000
     source=json.loads((Path(__file__).parents[1]/'configs/middle_selection.json').read_text())
     assert p['route_contexts']==source['route_contexts']
-    assert not any('event' in k or 'force' in k or 'time' in k for k in inspect.signature(coordinate).parameters)
+    assert not any('event' in k or 'force' in k or 'time' in k for k in inspect.signature(coordinate).parameters if k!='hypothetical_force_N')
 
 
 @pytest.mark.parametrize('key,value',[('arm',1),('hypothetical_duration_s',.1),('candidate_alphas',[0,.5,1]),('maximum_lower_ticks',28001),('user_alpha',1.),('planning_frequency_hz',1.),('onset_s',3.),('task_aware_fallback',True)])
@@ -117,3 +117,14 @@ def test_nominal_initial_audit_neutralizes_only_user_and_keeps_hidden_state():
     with pytest.raises(ValueError,match='neutralization'):audit_five_alpha_online_initial(bad,cases,700,panel_kind='nominal_five_user')
     bad=initial.replace(state=initial.state.replace(alpha=users.at[0].set(.5)))
     with pytest.raises(ValueError,match='clocks/user'):audit_five_alpha_online_initial(bad,cases,700,panel_kind='nominal_five_user')
+
+
+def test_new_base_declared_product_and_hypothesis_identity():
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_online_pilot.json').read_text())
+    rows=five_alpha_online_inventory(p)
+    assert len(rows)==len({r['case_id'] for r in rows})==24
+    assert {r['alpha'] for r in rows}=={0.}
+    assert {r['force_N'] for r in rows}=={-48.,0.,48.}
+    assert {r['bank_index'] for r in rows}=={0,6}
+    p['hypothetical_force_N']=64.
+    with pytest.raises(ValueError):five_alpha_online_inventory(p)

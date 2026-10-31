@@ -597,6 +597,19 @@ def deterministic_route_onsets(routes,seed):
 
 
 def five_alpha_online_inventory(p):
+    if p.get('panel_kind')=='declared_source_product':
+        required=dict(mode=FIVE_ONLINE_MODE,horizon_s=10.,optimizer_updates=0,planning_frequency_hz=10.,duration_s=.15,force_frame='worldY',candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,hypothetical_force_N=48.,task_aware_fallback=False,alpha_dwell_s=.2,planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
+        if any(p.get(k)!=v for k,v in required.items()):raise ValueError('source-product online contract differs')
+        banks=p['bank_indices'];routes=p['route_contexts'];users=p['user_alphas'];forces=p['forces_N']
+        count=len(banks)*len(routes)*len(users)*len(forces)
+        if (not banks or banks!=sorted(set(banks)) or any(type(b)!=int or not 0<=b<8 for b in banks)
+            or set(p['bank_state_fingerprints'])!={str(b) for b in banks}
+            or not routes or len({c['route'] for c in routes})!=len(routes)
+            or not users or users!=sorted(set(users)) or any(a not in p['candidate_alphas'] for a in users)
+            or forces!=[-48.,0.,48.] or not 0<p['onset_s']<9.85
+            or p['expected_cases']!=count or p['maximum_lower_ticks']!=2000*count
+            or p.get('curvature_task_mode')!='hard' or p.get('guard_fallback') is not True):raise ValueError('declared online source grid differs')
+        return [dict(route=c['route'],speed=c['speed'],bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_{c["route"]}',case_id=f'bank{b}/{c["route"]}/coordinator/a{a:g}/F{f:+g}',mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,event=f'F{f:+g}',force_N=f,onset_s=p['onset_s'],duration_s=.15) for b,c,a,f in itertools.product(banks,routes,users,forces)]
     required=dict(mode=FIVE_ONLINE_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],user_alpha=.5,
         horizon_s=10.,expected_cases=14,maximum_lower_ticks=28000,optimizer_updates=0,
         planning_frequency_hz=10.,onset_s=2.2,duration_s=.15,forces_N=[-64.,64.],force_frame='worldY',
@@ -661,7 +674,7 @@ def audit_five_alpha_online_initial(initial,cases,physical_tick,*,panel_kind=Non
 def prepare_five_alpha_online(source,root,protocol):
     source=Path(source).resolve();root=Path(root).resolve();protocol=Path(protocol).resolve();storage_guard(root)
     proposal=json.loads(protocol.read_text());rows=five_alpha_online_inventory(proposal);old=json.loads((source/'plan.json').read_text())
-    if old.get('mode')!=SELECTION_MODE or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed selection interface required')
+    if old.get('mode') not in (SELECTION_MODE,CAPABILITY_MODE) or digest(source/'plan.json')!=json.loads((source/'seal.json').read_text())['plan_sha256']:raise ValueError('sealed selection interface required')
     status=json.loads((source/'evaluation/status.json').read_text())
     if status.get('phase')!='completed' or status.get('completed_cases')!=old['cases']:raise ValueError('completed native selection required')
     if proposal['route_contexts']!=old['contexts'] or proposal['bank_state_fingerprints']!=old['protocol']['bank_state_fingerprints']:raise ValueError('online route/bank differs')
@@ -671,6 +684,10 @@ def prepare_five_alpha_online(source,root,protocol):
     folder=Path(__file__).resolve().parent;coordinator=file_module('_sttw_five_online_auth',folder/'tolerance_coordination.py')
     coordinator.load_five_alpha_export(proposal['predictor_training'],expected_export_sha256=proposal['export_manifest_sha256'],candidate_alphas=tuple(proposal['candidate_alphas']),hypothetical_duration_s=proposal['hypothetical_duration_s'])
     training=Path(proposal['predictor_training']);selection=json.loads((training/'selection_manifest.json').read_text())
+    receipt=json.loads((training/'data_receipt.json').read_text())
+    if proposal.get('panel_kind')=='declared_source_product':
+        fit_cfg=json.loads(Path(selection['config']).read_text())
+        if receipt['frozen_model_identity']!=old['models'] or receipt['physics_identity']!=old['initial_source']['model'] or fit_cfg['dataset']['lower_actor_sha256']!=old['initial_source']['candidate']['actor_sha256']:raise ValueError('predictor/source model, lower or physics mismatch')
     files=[protocol,source/'plan.json',source/'seal.json',Path(old['initial_source']['prepared_bank'])]+[training/n for n in ('export_manifest.json','parameters.npz','selection_manifest.json','selection_seal.json','data_receipt.json')]+[Path(r['file']) for r in selection['selected']]+[Path(selection['config'])]
     for key in ('actor','checkpoint'):
         model=old['models']['H75']
@@ -686,7 +703,7 @@ def prepare_five_alpha_online(source,root,protocol):
         config=old['config'],models={'H75':old['models']['H75']},contexts=proposal['route_contexts'],protocol=proposal,
         cases=len(rows),horizon_s=10.,goal_radius_m=1.,steps_per_chunk=5,chunks=100,chunk_upper_steps=steps,
         maximum_active_lower_ticks=proposal['maximum_lower_ticks'],maximum_allocated_lower_slots=proposal['maximum_lower_ticks'],optimizer_updates=0,replanning=old['replanning'],
-        data_role=proposal['data_role'],initialization='Authenticated native bank6 reset, unchanged complete native carry plus separate latch and previous alpha. Initial previous alpha equals each declared user; optional hold deadline0.',
+        data_role=proposal['data_role'],initialization='Authenticated declared native bank reset, unchanged complete native carry plus separate latch and previous alpha. Initial previous alpha equals each declared user; optional hold deadline0.',
         scoring=proposal['scoring'],stop=proposal['stop_rule'],input_sha256={str(file):digest(file) for file in files},source_sha256={str(file):digest(file) for file in modules})
     save(root/'plan.json',p);save(root/'seal.json',dict(plan_sha256=digest(root/'plan.json')))
     save(root/'status.json',dict(phase='prepared',active_lower_ticks=0,allocated_lower_slots=0,optimizer_updates=0))
@@ -2270,7 +2287,7 @@ def load(root,*,prefix_phase=False):
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
     elif five_online:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind=p['protocol'].get('panel_kind'))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,snapshot.physical_tick,panel_kind='disturbed_declared_user' if p['protocol'].get('panel_kind')=='declared_source_product' else p['protocol'].get('panel_kind'),expected_route_count=len(p['contexts'])*len(p['protocol']['bank_indices']))
     elif native_prefix:
         if not bool(j.all((initial.state.tick==0)&(initial.state.alpha==.5)&(initial.state.physical.physical_tick==snapshot.physical_tick))):raise ValueError('native prefix initialization differs')
         initial_identity=dict(authenticated_native_prefix=True,prefix_lanes=len(cases),native_leaf_count=len(jax.tree.leaves(initial)),new_bank_fingerprints=p['protocol']['bank_state_fingerprints'],collection_s=p['collection_s'],task_horizon_s=p['horizon_s'])
@@ -2400,7 +2417,7 @@ def load(root,*,prefix_phase=False):
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
                     carry.state.projection.progress,path.s,path.curvature,permission,sidecar.latched,sidecar.prev_alpha,
                     cfg['residual_interface'],candidate_alphas=tuple(p['protocol']['candidate_alphas']),
-                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False,curvature_task_mode=p['protocol'].get('curvature_task_mode','hard'))
+                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],hypothetical_force_N=p['protocol'].get('hypothetical_force_N',64.),arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False,curvature_task_mode=p['protocol'].get('curvature_task_mode','hard'))
                 native_permission=permission
                 if p['protocol'].get('curvature_task_mode','hard')=='soft_penalty':
                     # Invalid proposed reference is an engineering fault, not a
