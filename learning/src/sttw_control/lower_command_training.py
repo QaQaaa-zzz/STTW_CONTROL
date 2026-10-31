@@ -154,6 +154,13 @@ class Training:
                     mask=states.domain_index==di
                     sampling['domain_'+str(di)]=jp.array([jp.sum(mask),jp.sum(jp.where(mask,reward,0.)),jp.sum(jp.where(mask,ev**2,0.)),jp.sum(jp.where(mask,ed**2,0.)),jp.sum(mask&end.physical.failed)])
 
+            if self.cfg.get('episode_disturbance') is not None:
+                force=states.force_pulse[:,3];low=logs['limited_command'][:,0]<=2.2
+                for name,assigned in [('nominal',force==0),('negative',force<0),('positive',force>0)]:
+                    for speed,band in [('low',low),('high',~low)]:
+                        mask=assigned&band
+                        sampling['pulse_'+name+'_'+speed]=jp.array([jp.sum(mask),jp.sum(jp.where(mask,reward,0.)),jp.sum(jp.where(mask,ev**2,0.)),jp.sum(jp.where(mask,ed**2,0.)),jp.sum(mask&end.physical.failed),jp.sum(mask&done),jp.sum(mask&(jp.abs(logs['applied_force_impulse'][:,1])>0)),jp.sum(jp.where(mask,logs['applied_force_impulse'][:,1],0.))])
+
             if self.cfg['command_design'].get('version')=='four_local_families_v2':
                 labels=states.task_labels
                 values=jp.column_stack([logs['target'],logs['limited_command'],logs['raw_rates']])
@@ -241,6 +248,9 @@ class Training:
                 for k,v in metrics.items():
                     if isinstance(v,(int,float)) and np.isfinite(v):writer.add_scalar('ppo/'+k,v,update)
                 for k,v in record['reward_parts'].items():writer.add_scalar('reward_parts/'+k,v,update)
+                for group,values in record.get('command_sampling',{}).get('disturbance_groups',{}).items():
+                    for key in ('mean_reward','physical_failures','ended_episodes','exposed_ticks','speed_rmse','steer_rmse'):
+                        if values[key] is not None:writer.add_scalar('disturbance/'+group+'/'+key,values[key],update)
                 writer.flush()
                 if update==1 or update%self.cfg['save_every']==0 or update==updates or metrics['hard_kl_stop'] or metrics['nonfinite_stop']:
                     path=self.checkpoint(algo,update,phase,states);write(self.out/phase/'last_completed.json',dict(update=update,checkpoint=path))
@@ -351,6 +361,11 @@ def aggregate_sampling(samples,n,steps):
         if key.startswith('domain_'):
             a=np.sum([s[key] for s in samples],axis=0).astype(float);count=a[0]
             result['physical_domains'][key]=dict(samples=int(count),mean_reward=float(a[1]/count) if count else None,speed_rmse=float(np.sqrt(a[2]/count)) if count else None,steer_rmse=float(np.sqrt(a[3]/count)) if count else None,physical_failures=int(a[4]))
+    result['disturbance_groups']={}
+    for key in samples[0]:
+        if key.startswith('pulse_'):
+            a=np.sum([s[key] for s in samples],axis=0).astype(float);count=a[0]
+            result['disturbance_groups'][key[6:]]=dict(samples=int(count),mean_reward=float(a[1]/count) if count else None,speed_rmse=float(np.sqrt(a[2]/count)) if count else None,steer_rmse=float(np.sqrt(a[3]/count)) if count else None,physical_failures=int(a[4]),ended_episodes=int(a[5]),exposed_ticks=int(a[6]),signed_impulse_Ns=float(a[7]),scope='Assigned episode disturbance and current requested speed <=2.2m/s; counts are transitions, not independent episodes.')
     result['component_cap_fractions']={k[4:]:float(np.mean([s[k] for s in samples])) for k in samples[0] if k.startswith('cap_')}
     return result
 

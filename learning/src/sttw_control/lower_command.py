@@ -51,6 +51,19 @@ def command_rows(env_id,episode,speed,spec,cc=None):
     slew=jp.stack([jax.random.uniform(ks1,(),minval=spec['speed_slew'][0],maxval=spec['speed_slew'][1]),jax.random.uniform(ks2,(),minval=spec['steer_slew'][0],maxval=spec['steer_slew'][1])])
     return rows,slew
 
+def episode_force_pulse(env_id,episode,physical_start_s,spec):
+    """Reset-only latent disturbance schedule, separate from command sampling."""
+    cfg=spec['episode_disturbance']
+    key=jax.random.fold_in(jax.random.fold_in(jax.random.PRNGKey(cfg['seed']),env_id),episode)
+    choose,onset,magnitude,direction=jax.random.split(key,4)
+    enabled=jax.random.bernoulli(choose,cfg['probability'])
+    start=jax.random.uniform(onset,(),minval=cfg['onset_s'][0],maxval=cfg['onset_s'][1])
+    start=jp.round(start/spec['dt'])*spec['dt']+physical_start_s
+    force=jax.random.uniform(magnitude,(),minval=cfg['magnitude_N'][0],maxval=cfg['magnitude_N'][1])
+    force=jp.where(enabled,jp.where(jax.random.bernoulli(direction),force,-force),0.)
+    return jp.stack([start,start+cfg['duration_s'],jp.asarray(0.),force,jp.asarray(0.)])
+
+
 def observation_from_history(frames,mask,tick,spec):
     obs=jp.concatenate([jp.clip(frames/SCALES,-5.,5.).reshape(-1),mask])
     return obs,jp.concatenate([obs,jp.array([1.-tick/(spec['episode_seconds']/spec['dt'])])])
@@ -73,10 +86,19 @@ class LowerState:
     task_labels:object=None
     episode_totals:object=None
     domain_index:object=None
+    force_pulse:object=None
 
 class LowerCommandEnv:
-    def __init__(self,spec):
-        self.spec=spec;self.physics=TeleopEnv(model_path=spec.get('physical_model_xml'));self.cc=self.physics.cc;self.ac=self.physics.ac
+    def __init__(self,spec,backend='mjx'):
+        cfg=spec.get('episode_disturbance')
+        if cfg is not None:
+            onset=cfg['onset_s'];magnitude=cfg['magnitude_N'];duration=cfg['duration_s']
+            values=[cfg['probability'],*onset,*magnitude,duration]
+            if (cfg['frame']!='worldY' or not isinstance(cfg['seed'],int) or isinstance(cfg['seed'],bool) or len(onset)!=2 or len(magnitude)!=2 or
+                not all(math.isfinite(x) for x in values) or not 0<=cfg['probability']<=1 or
+                not 0<=onset[0]<onset[1] or not 0<magnitude[0]<magnitude[1] or not 0<duration or onset[1]+duration>=spec['episode_seconds']):
+                raise ValueError('invalid finite episode disturbance contract')
+        self.spec=spec;self.physics=TeleopEnv(model_path=spec.get('physical_model_xml'),backend=backend);self.cc=self.physics.cc;self.ac=self.physics.ac
     def observation(self,s):return observation_from_history(s.frames,s.mask,s.tick,self.spec)
     def record(self,s):
         m,_,v=self.physics.observe(s.physical.data);m=m.at[4].set(s.yaw_rate)
@@ -93,13 +115,18 @@ class LowerCommandEnv:
         if self.spec.get('command_design',{}).get('version')=='four_local_families_v2':
             _,_,labels=sample_local_v2(env_id,episode,snapshot.raw[0],self.spec,self.cc)
             s=s.replace(task_labels=labels,episode_totals=jp.zeros(6))
+        if self.spec.get('episode_disturbance') is not None:
+            s=s.replace(force_pulse=episode_force_pulse(env_id,episode,snapshot.physical_tick*self.cc.dt,self.spec))
         return self.record(s)
     def step(self,s,z,physics_model=None):
         p=s.physical;raw=p.raw;action=map_action(z);m,_,_=self.physics.observe(p.data)
         override=controls(p.controller,p.actuator,m,raw,raw,p.physical_tick*self.cc.dt>3.,True,self.cc,self.ac,lower_action=action)
         model=physics_model
-        end,log=self.physics._step(p,raw,True,exact_governed=True,control_override=override,physics_model=model)
+        end,log=self.physics._step(p,raw,True,exact_governed=True,control_override=override,physics_model=model,force_pulse=s.force_pulse)
         if s.domain_index is not None:log['physical_domain_index']=s.domain_index
+        if s.force_pulse is not None:
+            log['episode_force_pulse']=s.force_pulse
+            log['episode_disturbance_assigned']=s.force_pulse[3]!=0.
         terms=reward_terms(log['actual_forward_speed']-raw[0],log['actual_delta']-raw[1],log['phi'],action,s.previous_action,end.failed,self.spec,roll_rate=log['phi_dot'],remaining_ticks=round(self.spec['episode_seconds']/self.spec['dt'])-s.tick,peak_roll=log['peak_roll'])
         tick=s.tick+1;done=end.failed|(tick>=round(self.spec['episode_seconds']/self.spec['dt']))
         from .direct_command_scenarios import publish_issued_reference
