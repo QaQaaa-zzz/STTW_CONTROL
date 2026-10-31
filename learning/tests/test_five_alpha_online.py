@@ -139,3 +139,19 @@ def test_declared_force_subset_preserves_budget_and_query():
         bad=dict(p,forces_N=forces)
         with pytest.raises(ValueError):five_alpha_online_inventory(bad)
     with pytest.raises(ValueError):five_alpha_online_inventory(dict(p,maximum_lower_ticks=2000))
+
+
+def test_source_product_onset_transfer_is_frozen_and_paired():
+    import copy
+    from sttw_control.native_goal_run import deterministic_route_onsets
+    folder=Path(__file__).parents[1]/'configs'
+    protocols=[json.loads((folder/f'u170_lower200_onset_transfer_{name}.json').read_text()) for name in ('recovery','short_dwell')]
+    inventories=[five_alpha_online_inventory(p) for p in protocols]
+    assert inventories[0]==inventories[1] and len(inventories[0])==4
+    expected=deterministic_route_onsets(['adjacent_low_right','adjacent_low_left'],20261031)
+    assert expected=={'adjacent_low_right':2.78,'adjacent_low_left':2.28}
+    assert all(c['onset_s']==expected[c['route']] for c in inventories[0])
+    p=copy.deepcopy(protocols[0]);p['onset_by_route_s']['adjacent_low_right']=1.8
+    with pytest.raises(ValueError):five_alpha_online_inventory(p)
+    p=copy.deepcopy(protocols[0]);p['onset_s']=1.8
+    with pytest.raises(ValueError):five_alpha_online_inventory(p)

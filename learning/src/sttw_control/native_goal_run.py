@@ -607,15 +607,20 @@ def five_alpha_online_inventory(p):
         if any(p.get(k)!=v for k,v in required.items()):raise ValueError('source-product online contract differs')
         banks=p['bank_indices'];routes=p['route_contexts'];users=p['user_alphas'];forces=p['forces_N']
         count=len(banks)*len(routes)*len(users)*len(forces)
+        if 'onset_by_route_s' in p:
+            if 'onset_s' in p or p.get('onset_algorithm')!=ROUTE_ONSET_ALGORITHM or p['onset_by_route_s']!=deterministic_route_onsets([c['route'] for c in routes],p['onset_seed']):raise ValueError('source-product route onset declaration differs')
+            onsets=p['onset_by_route_s']
+        else:
+            onsets={c['route']:p['onset_s'] for c in routes}
         if (not banks or banks!=sorted(set(banks)) or any(type(b)!=int or not 0<=b<8 for b in banks)
             or set(p['bank_state_fingerprints'])!={str(b) for b in banks}
             or not routes or len({c['route'] for c in routes})!=len(routes)
             or not users or users!=sorted(set(users)) or any(a not in p['candidate_alphas'] for a in users)
             or not forces or any(type(f) not in (int,float) or not math.isfinite(f) or abs(f)>64. for f in forces)
-            or forces!=sorted(set(forces)) or not 0<p['onset_s']<9.85
+            or forces!=sorted(set(forces)) or any(type(t) not in (int,float) or not math.isfinite(t) or not 0<t<9.85 for t in onsets.values())
             or p['expected_cases']!=count or p['maximum_lower_ticks']!=2000*count
             or p.get('curvature_task_mode')!='hard' or p.get('guard_fallback') is not True):raise ValueError('declared online source grid differs')
-        return [dict(route=c['route'],speed=c['speed'],bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_{c["route"]}',case_id=f'bank{b}/{c["route"]}/coordinator/a{a:g}/F{f:+g}',mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,event=f'F{f:+g}',force_N=f,onset_s=p['onset_s'],duration_s=.15) for b,c,a,f in itertools.product(banks,routes,users,forces)]
+        return [dict(route=c['route'],speed=c['speed'],bank_index=b,initial_fingerprint=p['bank_state_fingerprints'][str(b)],path_key=f'bank{b}_{c["route"]}',case_id=f'bank{b}/{c["route"]}/coordinator/a{a:g}/F{f:+g}',mode='H75',mode_index=0,model_id=p['model_id'],alpha=a,query_alpha=a,user_alpha=a,effective_user_alpha=a,event=f'F{f:+g}',force_N=f,onset_s=onsets[c['route']],duration_s=.15) for b,c,a,f in itertools.product(banks,routes,users,forces)]
     required=dict(mode=FIVE_ONLINE_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],user_alpha=.5,
         horizon_s=10.,expected_cases=14,maximum_lower_ticks=28000,optimizer_updates=0,
         planning_frequency_hz=10.,onset_s=2.2,duration_s=.15,forces_N=[-64.,64.],force_frame='worldY',
