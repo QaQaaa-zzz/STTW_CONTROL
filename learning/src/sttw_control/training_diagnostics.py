@@ -71,7 +71,10 @@ def draw(entries,destination,title):
 
 
 def plot_training(directory):
-    directory=Path(directory);rows=read_metrics(directory/'metrics.jsonl');s=series(rows)
+    directory=Path(directory)
+    rows=[json.loads(line) for line in (directory/'metrics.jsonl').read_text().splitlines() if line.strip()]
+    if rows and 'transitions' in rows[0] and 'ppo' in rows[0]:return plot_lower_training(rows,directory/'diagnostics')
+    rows=read_metrics(directory/'metrics.jsonl');s=series(rows)
     plot_reward_components(rows,directory/'diagnostics')
     draw([(directory.parent.name if directory.name=='training' else directory.name,s)],directory/'diagnostics','PPO training progress')
     declaration=json.loads((directory/'declaration.json').read_text())
@@ -82,6 +85,41 @@ def plot_training(directory):
         draw([('Previous stage',series(prior)),('Continuation',s)],directory/'diagnostics/lineage','PPO continuation: same objective, reset simulation boundary')
         (directory/'diagnostics/lineage/sources.json').write_text(json.dumps({'previous':str(parent/'metrics.jsonl'),'current':str(directory/'metrics.jsonl'),'boundary_update':continuation['update_offset']},indent=2)+'\n')
     return s
+
+
+def plot_lower_training(rows,destination):
+    """Unsmoothed lower-PPO samples; no inferred development recovery score."""
+    if not rows or any(b['transitions']<=a['transitions'] for a,b in zip(rows,rows[1:])):
+        raise ValueError('nonempty strictly increasing lower training samples required')
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+    x=np.array([r['transitions'] for r in rows])/1e6
+    fig,axes=plt.subplots(3,3,figsize=(15,11),layout='constrained');axes=axes.ravel()
+    fields=[('mean_step_reward','Mean reward / transition'),('failed_episodes','Physical failures / rollout'),('seconds','Wall seconds / rollout')]
+    for ax,(field,title) in zip(axes[:3],fields):
+        ax.plot(x,[r[field] for r in rows],marker='.',label=field);ax.set_title(title)
+    for ax,field,title in zip(axes[3:6],['mean_kl','surrogate','value'],['PPO KL','PPO surrogate loss','PPO value loss']):
+        ax.plot(x,[r['ppo'][field] for r in rows],marker='.');ax.set_title(title)
+    groups=sorted({k for r in rows for k in r['command_sampling']['disturbance_groups']})
+    colors={'nominal':'#000000','negative':'#0072B2','positive':'#D55E00'}
+    for name in groups:
+        direction,speed=name.split('_');style='--' if speed=='low' else '-'
+        values=[r['command_sampling']['disturbance_groups'].get(name) for r in rows]
+        for ax,key in zip(axes[6:8],['mean_reward','speed_rmse']):
+            y=[v[key] if v is not None and v[key] is not None else np.nan for v in values]
+            ax.plot(x,y,label=name,color=colors[direction],linestyle=style)
+        y=[v['exposed_ticks']/v['samples'] if v is not None and v['samples'] else np.nan for v in values]
+        axes[8].plot(x,y,label=name,color=colors[direction],linestyle=style)
+    for ax,title in zip(axes[6:],['Assigned-group mean reward','Assigned-group speed RMSE [m/s]','Actually exposed ticks / group ticks']):
+        ax.set_title(title);ax.legend(fontsize=7)
+    for index in (0,3,4,5,6):axes[index].set_yscale('symlog',linthresh=.001)
+    for ax in axes:ax.set_xlabel('Collected transitions [million]');ax.grid(alpha=.2)
+    fig.suptitle('Lower PPO training samples — one run, no smoothing\nLow/high groups use requested speed ≤2.2/>2.2 m/s; training failures are not development recovery rates')
+    fig.savefig(destination/'lower_training.png',dpi=140);plt.close(fig)
+    (destination/'lower_training_data.json').write_text(json.dumps(rows,indent=2,allow_nan=False)+'\n')
+    return destination/'lower_training.png'
 
 
 def compare_runs(root,output):
