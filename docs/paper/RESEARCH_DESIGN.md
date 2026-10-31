@@ -50,6 +50,10 @@ The bounded primary-source check found existing task/recovery policy separation 
 
 Immediate decision: finish the360matched-protocol branch collection and audit the frozen predictor before fitting or changing online thresholds. Reuse the original fixed trajectories for their own-alpha, zero-additional-gust continuation labels. A later, separately declared small branch test at actual online restoration states can determine whether returning versus retaining alpha changes the outcome; it is not launched by this review. No result is inferred for a second network or new controller.
 
+### Actual restoration intervention result — 2026-10-31
+
+The precise online restoration is1.82s, not1.9s. At that complete native state, allfive heldalpha continuations fall atapproximately2.24s while retaining the original remaining.13s,+36N pulse and absolute10Hz planning phase. Previousalpha.5 andalpha1 also fail. This directly weakens the proposed explanation that merely withholding this late restoration would save the trajectory. The original online policy switches again later, so the counterfactual changes its future held continuation, not just one action. The failed late branches do not establish that preference scheduling is ineffective earlier. The next discriminating source is the actualpre-gust1.62s change1→.5. Fullreport: u170_lower200_restoration_branch_v1/RESULTS.md. No new mechanism or publication-level gain is claimed from this negative diagnostic.
+
 ### Revision completion checks
 
 - Freeze one final middle/lower/predictor/coordinator identity and rebuild the main architecture, method equations and experimental table around it.
