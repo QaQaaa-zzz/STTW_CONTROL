@@ -1,0 +1,22 @@
+{
+  "experiment_id": "STTW-LOWER-DOMAIN-PAIR-TEST",
+  "initial_source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_test_states_v1/initial_source.json",
+  "controller_config": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/lower_domain_finetune.json",
+  "command_seed": 930502,
+  "maximum_lower_ticks": 128000,
+  "actors": [
+    {
+      "name": "local300",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/best_generations/8aa8a90e76dce8c8ad34a8cbca3b4602015926f3d18e24af3000ac2bc26b3577/best_actor.pkl",
+      "actor_sha256": "d408a94e886fa7f6309aa2c7635eb62e273c197405293ac9c2f1859014f25bcc"
+    },
+    {
+      "name": "lower200",
+      "actor": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/actor.pkl",
+      "actor_sha256": "b362a9afc1738e884569aa54e732719d23fc528e9244800f99eb8256d6ab0b9b"
+    }
+  ],
+  "data_role": "TEST; frozen models; no selection or optimizer",
+  "scope": "Local speed/steer tracking under identical command seeds and full physical states; not geometric path success",
+  "stop_rule": "32 cases per actor, 10s each, stop individual cases at physical failure; no retries"
+}

@@ -119,3 +119,69 @@ def prepare_domain_states(config,output):
     (out/'initial_source.json').write_text(json.dumps(receipt,indent=2)+'\n')
     status.update(phase='completed' if passed.all() else 'not_admitted',admitted=int(passed.sum()),states=n,elapsed_s=time.monotonic()-start);save()
     print(json.dumps(status))
+
+
+def evaluate_domain_pair(config, output):
+    """Frozen local-command TEST, paired complete states and command seeds."""
+    from .lower_command import LowerCommandEnv
+    from .network import ResidualActor
+    from .direct_command_training import flatten_logs
+    cfg=json.loads(Path(config).read_text());out=Path(output)
+    source=json.loads(Path(cfg['initial_source']).read_text())
+    spec=json.loads(Path(cfg['controller_config']).read_text())
+    if source['config']['roles']!=['TEST'] or source['status']!='admitted':
+        raise ValueError('admitted TEST bank required; never optimizer sampling')
+    for key in ('prepared_bank','state_domains'):
+        if hashlib.sha256(Path(source[key]).read_bytes()).hexdigest()!=source[key+'_sha256']:
+            raise ValueError('TEST state identity changed: '+key)
+    spec['command_seed']=cfg['command_seed']
+    spec['physical_model_xml']=source['domains'][0]['output']
+    configure_compilation_cache(spec['shared_jax_cache'])
+    _,models,records=load_domain_models(source['config']['domain_manifest'],['TEST'])
+    if records!=source['domains']:raise ValueError('TEST models changed')
+    with Path(source['prepared_bank']).open('rb') as f:bank=jax.tree.map(j.asarray,pickle.load(f))
+    mapping=np.load(source['state_domains']);ids=j.asarray(mapping['domain_index']);yaw=j.asarray(mapping['initial_yaw_rate'])
+    n=len(ids);ticks=round(spec['episode_seconds']/spec['dt'])
+    if cfg['maximum_lower_ticks']!=2*n*ticks or ticks!=2000 or len(cfg['actors'])!=2:
+        raise ValueError('declared two-policy 10-second budget required')
+    params=[]
+    for actor in cfg['actors']:
+        path=Path(actor['actor'])
+        if hashlib.sha256(path.read_bytes()).hexdigest()!=actor['actor_sha256']:raise ValueError('actor changed')
+        with path.open('rb') as f:params.append(jax.tree.map(j.asarray,pickle.load(f)))
+    out.mkdir(parents=True,exist_ok=False)
+    shutil.copyfile(config,out/'config.json');shutil.copyfile(__file__,out/'lower_domains.py')
+    (out/'initial_source.json').write_text(json.dumps(source,indent=2)+'\n')
+    env=LowerCommandEnv(spec);net=ResidualActor(tuple(spec['hidden_sizes']),activation=spec['activation'])
+    initial=jax.jit(jax.vmap(lambda snap,i,di,y:env.reset(snap,i,j.int32(0),di,y)))(bank,j.arange(n),ids,yaw)
+    example=jax.tree.map(lambda x:x[0],initial)
+    shape=jax.eval_shape(lambda s:env.step(s,j.zeros(2),models.select(s.domain_index)),example)[3]
+    zero=jax.tree.map(lambda x:j.zeros(x.shape,x.dtype),shape)
+    def one(state,par):
+        def active(s):
+            obs,_=env.observation(s)
+            ns,_,_,log=env.step(s,net.apply(par,obs,return_logits=True),models.select(s.domain_index))
+            return ns,log
+        return jax.lax.cond(state.physical.failed,lambda s:(s,zero),active,state)
+    @jax.jit
+    def chunk(states,par):
+        return jax.lax.scan(lambda states,_:jax.vmap(one,in_axes=(0,None))(states,par),states,None,length=50)
+    status=dict(phase='running',pid=os.getpid(),maximum_lower_ticks=cfg['maximum_lower_ticks'],allocated_lower_ticks=0,optimizer_updates=0)
+    start=time.monotonic();summaries={}
+    for actor,par in zip(cfg['actors'],params):
+        states=initial;chunks=[];dest=out/actor['name'];dest.mkdir()
+        for _ in range(ticks//50):
+            status.update(actor=actor['name'],allocated_lower_ticks=status['allocated_lower_ticks']+50*n,elapsed_s=time.monotonic()-start)
+            (out/'status.json').write_text(json.dumps(status,indent=2)+'\n')
+            states,logs=chunk(states,par);jax.block_until_ready(states);chunks.append(jax.device_get(logs))
+        logs=jax.tree.map(lambda *xs:np.concatenate(xs),*chunks);rows=[]
+        for i in range(n):
+            d=flatten_logs(jax.tree.map(lambda x:x[:,i],logs));used=int(states.tick[i]);d={k:v[:used] for k,v in d.items()}
+            np.savez_compressed(dest/f'case_{i:02d}.npz',**d)
+            ev=d['actual_forward_speed']-d['limited_command'][:,0];ed=d['actual_delta']-d['limited_command'][:,1]
+            rows.append(dict(case=i,domain=int(ids[i]),steps=used,failed=bool(states.physical.failed[i]),speed_rmse=float(np.sqrt(np.mean(ev**2))),steer_rmse=float(np.sqrt(np.mean(ed**2))),reward=float(d['reward'].sum())))
+        summaries[actor['name']]=rows
+    status.update(phase='completed',elapsed_s=time.monotonic()-start,actual_lower_ticks=sum(r['steps'] for rows in summaries.values() for r in rows))
+    (out/'results.json').write_text(json.dumps(summaries,indent=2)+'\n')
+    (out/'status.json').write_text(json.dumps(status,indent=2)+'\n')
+    print(json.dumps(status))

@@ -1,3 +1,7 @@
+## Frozen lower-controller TEST launch — 2026-10-31
+
+Independent state preparation completed: 32/32 admitted under four TEST domains, 22,400 lower steps, 184.814 seconds, zero optimization. No rejected-state replacement. `lower_domain_pair_test.json` declares local300 versus frozen lower200, identical states and command seed 930502, 64 episodes of at most 10 seconds (128,000 lower steps). `evaluate_lower_domain_pair.py` reuses the local-command environment with flat vmap and scan(50), recording first-failure-truncated traces. `analyze_lower_domain_pair.py` checks paired issued commands and provides all 32 paired XY/reward/speed/steer/roll panels. This run tests local command tracking; geometric path and preference-scheduling performance remain separate. GPU execution is in progress; seven related CPU tests pass, not a claim that the new runtime has finished validation.
+
 ## Independent physical-domain state preparation — 2026-10-31
 
 The state-preparation entry now accepts a separate `TEST` selection as well as the existing `REFERENCE`/`TRAIN` selection. The optimizer entry still rejects TEST banks. Frozen configuration: `learning/configs/lower_domain_test_states.json`; four held-out physical domains, eight states each, new seed 930501, 22,400 lower steps and zero updates. Output: archive `lower_domain_test_states_v1`. Preparation is running; this is not a controller performance result. Seven physical-domain/local-command tests pass (CPU); initial test collection lacked PYTHONPATH and was rerun with the project source path.
