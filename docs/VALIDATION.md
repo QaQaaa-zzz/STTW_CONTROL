@@ -1,4 +1,10 @@
 
+## Original-user cost comparison for the low-speed recovery example — 2026-10-31
+
+[Actual/reference four-method XY](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/four_method_F36.png) and [common-user cost components](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/user0_cost/components.png). All8 saved nominal/+36N method trajectories rescored with identical useralpha0 and original path, using the existing independent projection/cost reconstruction. Same model/physics/config/reconnection verified, raw hashes checked, pre-reconnection numerical checks pass;0newphysics/updates.
+
+Across the common successful-method0–8.565s disturbed window, three running task channels total280.05513(coordinator) versus295.22881(fixed1),5.14% lower. Speed worsens18.84997 versus9.76210; path131.06482 versus132.66699 and primary path-priority130.14034 versus152.79972 improve. This is a preference tradeoff; channels exclude global terminal replacement and other total-reward terms. Failed methods retain their actual shorter windows and cannot be called better from low truncated costs. All full/own/common windows and step arrays are saved in user0_cost; component figure inspected. This adds original-task evidence to E297–E299 rather than substituting alpha occupancy for task quality.
+
 ## Low-speed online coordination: matched q ablation — 2026-10-31
 
 ![Four-method actual/reference XY](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/comparison_geometry/four_method_F36.png)

@@ -1835,6 +1835,14 @@
       "human_verification": "not_recorded",
       "scope": "Descriptive34-state-feature range audit from800TRAIN and older failed48N case; no calibrated OOD claim.",
       "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E301": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_low_reconnection_online_v1/user0_cost/results.json",
+      "sha256": "d9111ceb063641cb100213838699e044ab953eb14378b9592f638739809f25ae",
+      "verification": "AI artifact_checked; reconstructed from original raw traces",
+      "human_verification": "not_recorded",
+      "scope": "All8 four-method rows rescored at original useralpha0; actual, own and common windows; three running task channels, not full reward.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
     }
   },
   "manuscript_evidence_references": [
@@ -1972,6 +1980,7 @@
     "E297",
     "E298",
     "E299",
-    "E300"
+    "E300",
+    "E301"
   ]
 }
