@@ -4,7 +4,7 @@ parser=argparse.ArgumentParser(description='Describe paired candidate outcomes w
 
 rows=json.loads((root/'results.json').read_text());groups=collections.defaultdict(list)
 for r in rows:groups[(r['source_index'],r['preparation_s'],r['force_N'])].append(r)
-fixed={};lines=['# Paired candidate effects on the new base','','All outcomes use the frozen source-through-pulse-end+3s no-contact definition. Each branch is one deterministic simulation; these counts are not calibrated probabilities. All nominal DEV source states and both signs/preparation times are retained.','','| Source / task time / route / bank | Preparation (s) | Force Y (N) | alpha 0 / .25 / .5 / .75 / 1 |','|---|---:|---:|---|']
+fixed={};lines=['# Paired candidate effects on the new base','','All outcomes use the frozen source-through-pulse-end+3s no-contact definition. Each branch is one deterministic simulation; these counts are not calibrated probabilities. All declared source states, fitting roles, disturbance signs and preparation times are retained.','','| Source / task time / route / bank | Preparation (s) | Force Y (N) | alpha 0 / .25 / .5 / .75 / 1 |','|---|---:|---:|---|']
 discordant=0;validgroups=0
 for key,rr in sorted(groups.items()):
  rr.sort(key=lambda r:r['candidate_alpha']);labels=[r['primary']['label_status'] for r in rr]
@@ -15,7 +15,7 @@ for key,rr in sorted(groups.items()):
 for a in [0,.25,.5,.75,1]:
  rr=[r for r in rows if r['candidate_alpha']==a];fixed[str(a)]=dict(total=len(rr),no_fall=sum(r['primary']['label_status']=='no_fall' for r in rr),fall=sum(r['primary']['label_status']=='fall' for r in rr),invalid=sum(r['primary']['label_status'] not in ('fall','no_fall') for r in rr))
 prep={}
-for v in [.2,.6]:
+for v in sorted({r['preparation_s'] for r in rows}):
  rr=[r for r in rows if r['preparation_s']==v];prep[str(v)]=dict(total=len(rr),no_fall=sum(r['primary']['label_status']=='no_fall' for r in rr),invalid=sum(r['primary']['label_status'] not in ('fall','no_fall') for r in rr))
 roles={}
 for role in ['training','development']:

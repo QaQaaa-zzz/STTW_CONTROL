@@ -38,6 +38,18 @@ The current paper-level narrative is a capability–prediction–execution chain
 
 E293–E300 bind both positive and negative current results. The canonical manuscript/PDF remains the historical local300/return43 study until one final method identity and its evidence are chosen. This internal design audit uses the scientific-writing evidence workflow locally; human source verification remains unrecorded.
 
+### Recovery qualification: mechanism review — 2026-10-31
+
+Focal question: does false restoration arise from missing disturbed-state training, a mismatched prediction target, or insufficient executable recovery authority? The present review uses scientific-brainstorming locally, with a separate non-originator AI critique. The candidates were generated before the literature check; the accountable user has authorized research iteration but has not verified these hypotheses. Simulation only; no unpublished data were sent to external services.
+
+Decision criteria, in order: distinguish the observed failure mechanism; reuse complete-state evidence at low simulation cost; produce an actionable preference decision; preserve broad task performance. No numeric novelty scores were assigned. Candidate A is matched-protocol disturbed-state coverage and calibration of the current single predictor. Candidate B separates contact-free continuation without another gust from preparation for another gust, initially through the same conditional predictor with d=0. Candidate C improves the lower controller if no candidate can recover the relevant state. A new second network is not currently justified.
+
+The non-originator critique identifies two confounds: the360new branches still add a gust, and their fixed-source histories differ from the actual online restoration states. High predicted probability before a fall does not prove that retaining the previous alpha would avoid that fall. Disconfirming observations are concrete: if better held-label calibration leaves online false qualifications unchanged, coverage alone is insufficient; if zero-gust and perturbed queries induce the same eligibility, separate recovery qualification adds no control information; if all five held candidates fail without another gust, scheduling at that state lacks demonstrated recovery authority. An equal-data single conditional network is the first alternative to any two-head proposal.
+
+The bounded primary-source check found existing task/recovery policy separation in [Recovery RL](https://arxiv.org/abs/2010.15920), and state-dependent acceptance/modification of proposed actions in [predictive safety filtering](https://arxiv.org/abs/1812.05506). Abstracts and metadata were checked; a complete method comparison was not performed. These findings challenge treating a recovery gate alone as original. The proposed scientific focus remains the measured coupling between preference execution, preparation and restoration in single-track dynamics. The search does not establish a new research gap.
+
+Immediate decision: finish the360matched-protocol branch collection and audit the frozen predictor before fitting or changing online thresholds. Reuse the original fixed trajectories for their own-alpha, zero-additional-gust continuation labels. A later, separately declared small branch test at actual online restoration states can determine whether returning versus retaining alpha changes the outcome; it is not launched by this review. No result is inferred for a second network or new controller.
+
 ### Revision completion checks
 
 - Freeze one final middle/lower/predictor/coordinator identity and rebuild the main architecture, method equations and experimental table around it.
