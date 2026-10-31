@@ -191,3 +191,8 @@ Scientific Agent Skills supported independent ideation, a separate adversarial r
 ## Direction-dependent preparation and feedback correction (E313)
 
 Ten same-state branches from the first risk/no-risk decision separation show disjoint held-alpha survival sets for opposite disturbances: alpha0/.25/.5 for negative force and.75/1 for positive force. The latter held candidates miss the goal, whereas online return reaches. This exposes a concrete preparation-versus-feedback problem rather than an absent middle-alpha compromise. Recorded feedback separates by the first20ms post-onset decision, but whether intervention then remains effective needs a causal continuation experiment. Existing q values are optimistic on the failing direction; adding a q-decrease release alone is unsupported. Treat observable interruption of preparation commitments and subsequent task restoration as a candidate mechanism, not an established additional contribution.
+
+
+### Feedback timing outcome and next capability iteration (E314)
+
+The first measured roll-rate-change trigger occurs at1.72s, but all five held-alpha interventions from that complete state fail by2.065s while retaining the original ongoing force. Earlier1.40s low-alpha preparation succeeds for this direction. This provides a direct example of preparation-state dependence and ineffective late held switching. It does not establish that every reactive sequence is impossible. The next candidate addresses lower-controller training exposure: retain nominal/domain/command coverage and introduce bounded episode pulses before revising the risk predictor. New lower weights would require new tolerance labels; existing q calibration cannot silently transfer.
