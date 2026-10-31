@@ -884,6 +884,8 @@ def five_alpha_partition(protocol):
 
 def validate_five_alpha_fit_config(cfg):
     """Separate opt-in budget; historical pilot schemas remain unchanged."""
+    if 'feature_mask_keep_indices' in cfg and cfg['feature_mask_keep_indices']!=[4]+list(range(34,41)):
+        raise ValueError('five-alpha state ablation keeps speed and all candidate-query features')
     t=cfg['training'];b=cfg['budget'];f=cfg['features'];d=cfg['dataset']
     steps=t['updates_per_model_seed']
     if isinstance(steps,bool) or not isinstance(steps,int) or not 1<=steps<=1000:
@@ -1135,15 +1137,19 @@ def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
     if len(np.unique(train['y']))!=2:raise ValueError('training needs both resolved classes; no automatic resampling')
     output.mkdir(parents=True);write_json(output/'data_receipt.json',data['receipt']);writer=SummaryWriter(str(output/'tensorboard'));updates=0;per_seed={};selected=[];inflight=False;timings=dict(initialization_s=time.monotonic()-started,optimization_s=0.,validation_s=0.)
     steps=cfg['training']['updates_per_model_seed']
+    removed=[i for i in range(41) if i not in cfg.get('feature_mask_keep_indices',list(range(41)))]
     x=torch.as_tensor(train['full']);y=torch.as_tensor(train['y']);pairs=discordant_pairs(train['y'],train['meta']);models=[]
     try:
         writer.add_scalar('train/optimizer_updates',0,0);writer.flush()
         for seed in (0,1,2):
-            torch.manual_seed(seed);model=make_model(41);optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
+            torch.manual_seed(seed);model=make_model(41)
+            with torch.no_grad():model[0].weight[:,removed]=0.
+            optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.001)
             for step in range(1,steps+1):
                 tick=time.monotonic();model.train();optimizer.zero_grad();logit=model(x).squeeze(-1);bce=torch.nn.functional.binary_cross_entropy_with_logits(logit,y);rank=ranking_loss(logit,pairs);loss=bce+.5*rank
                 if not torch.isfinite(loss):raise ValueError('nonfinite five-alpha loss')
                 loss.backward()
+                model[0].weight.grad[:,removed]=0.
                 if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()):raise ValueError('nonfinite five-alpha gradient')
                 inflight=True;optimizer.step();updates+=1;inflight=False;per_seed[str(seed)]=step;timings['optimization_s']+=time.monotonic()-tick
                 if any(not torch.isfinite(p).all() for p in model.parameters()):raise ValueError('nonfinite postupdate parameters')
@@ -1156,7 +1162,7 @@ def five_alpha_fit(config,analysis,output,*,on_training_complete=None):
                 write_json(output/'status.json',dict(phase='fitting',actual_optimizer_updates=updates,per_seed=per_seed,timings=timings))
             file=output/f'full_state_mlp_seed{seed}_last.pt';torch.save(dict(state_dict=model.state_dict(),dim=41,seed=seed,step=steps,arm='bce_rank',selector='last'),file)
             selected.append(dict(model='full_state_mlp',key='full',dim=41,seed=seed,step=steps,arm='bce_rank',selector='last',file=str(file),sha256=digest(file)));models.append(model)
-        manifest=dict(kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Declared related-source route split; no independent calibration or online gain evaluation')
+        manifest=dict(feature_mask_keep_indices=cfg.get('feature_mask_keep_indices',list(range(41))),kind='five_alpha_fixed_last',config=str(config),config_sha256=digest(config),implementation_sha256=digest(__file__),selected=selected,actual_optimizer_updates=updates,data_receipt_sha256=digest(output/'data_receipt.json'),new_physics_steps=0,new_ppo_updates=0,candidate_alpha_grid=[0.,.25,.5,.75,1.],feature_dimension=41,selection='All three fixed last, no development selection',limits='Declared related-source route split; no independent calibration or online gain evaluation')
         write_json(output/'selection_manifest.json',manifest);write_json(output/'selection_seal.json',dict(selection_manifest_sha256=digest(output/'selection_manifest.json'),selected_sha256={r['file']:r['sha256'] for r in selected}))
         training_receipt=dict(actual_optimizer_updates=updates,per_seed=per_seed,timings=timings,stage_notified=False)
         write_json(output/'training_complete.json',training_receipt)

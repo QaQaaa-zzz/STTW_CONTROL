@@ -295,3 +295,11 @@ def test_frozen160_preserves_features_and_raw_identity(tmp_path):
     m.verify_five_alpha_development_freeze(data,cfg)
     changed=copy.deepcopy(data);changed['receipt']['development_identity_rows'][0]['raw_sha256']='different'
     with pytest.raises(ValueError,match='frozen development'):m.verify_five_alpha_development_freeze(changed,cfg)
+
+
+def test_speed_state_ablation_keeps_all_candidate_query_information():
+    cfg=json.loads((ROOT/'learning/configs/u170_lower200_speed_state_fit.json').read_text())
+    m.validate_five_alpha_fit_config(cfg)
+    assert cfg['feature_mask_keep_indices']==[4,34,35,36,37,38,39,40]
+    cfg['feature_mask_keep_indices']=[4]
+    with pytest.raises(ValueError,match='candidate-query'):m.validate_five_alpha_fit_config(cfg)

@@ -1758,8 +1758,8 @@
     },
     "E291": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_online_pilot_v1/comparison_geometry/comparison.json",
-      "sha256": "066411668ddfd5ea07ac4619ee042db6aaaad0cff38f806d03e4b1b2dd2883ef",
-      "verification": "AI artifact_checked; current source opened, not human verification",
+      "sha256": "f70cee519a87ea166f8d91b2a25129494c096f5bff48ff7d4eb123bf579ebd5b",
+      "verification": "AI artifact_checked; comparison gained stratified accounting and role metadata; original outcomes and trajectories unchanged",
       "human_verification": "not_recorded",
       "scope": "Current relatedDEV online versus geometric-only paired outcomes",
       "manuscript_role": "Current-method revision evidence; not yet inserted into historical return43 manuscript claims"
