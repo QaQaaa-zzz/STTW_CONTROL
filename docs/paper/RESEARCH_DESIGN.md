@@ -1,6 +1,6 @@
 # Research design: preference-conditioned disturbance preparation
 
-Updated 2026-10-30. Working research design for the active English, double-column, 12-page TCST manuscript objective. Proposed claims below are hypotheses until their listed evidence is complete. The user prioritizes one coherent contribution combining preference-conditioned single-track control and disturbance tolerance; three unrelated new algorithms are not required. RA-L is an alternative positioning, not a replacement of the current manuscript objective.
+Updated 2026-10-31. Working research design for the active English, double-column, 12-page TCST manuscript objective. Proposed claims below are hypotheses until their listed evidence is complete. The user prioritizes one coherent contribution combining preference-conditioned single-track control and disturbance tolerance; three unrelated new algorithms are not required. RA-L is an alternative positioning, not a replacement of the current manuscript objective.
 
 ## Current-method reconciliation — 2026-10-31
 
@@ -12,7 +12,7 @@ The existing manuscript and its12-page PDF describe the earlier U170/local300 co
 | Predictor |43 inputs, four outcomes, ELU |41 inputs,16–16 ReLU hidden layers, contact-avoidance output | E287–E289,E292 |
 | Supervised experiment |Specified feedback-return continuation through task end |Held candidate; preparation0.2/0.6s, hypothetical pulse0.15s, observe through pulse end+3s | E287–E288 |
 | Fitting |Three members,5000 updates each |Three fixed-last members,1000 updates each; BCE plus paired ranking weight0.5 | E287,E292 |
-| Deployment |One source-boundary query then prescribed return |Repeated50Hz candidate queries,0.2s conditional dwell,10Hz geometric reconnection | E286 |
+| Deployment |One source-boundary query then prescribed return |Repeated50Hz queries;3.75s support commitment with measured release;0.2s user dwell;10Hz reconnection | E286 |
 | Task treatment |Learned goal/path/speed outputs |Nonlearned curvature/reference checks plus original-task evaluation | E286 |
 | Current effect |Old low-speed return comparisons |Original DEV gains, prospective24 null result, and one low-speed recovery gain under common4m reconnection | E290–E291,E294,E297–E299 |
 
@@ -22,7 +22,7 @@ The new contact predictor evaluates a held-candidate counterfactual, not the ful
 
 1. **Preference-dependent control and disturbance response across speed regimes.** Use the frozen scalar-conditioned middle policy and the improved lower controller to characterize executable path–speed choices. Bind nominal task and same-complete-state disturbance comparisons to one physical/controller identity. Application evidence supports the single-track setting; conditioning on alpha itself is not claimed as a new learning algorithm. Complete-state interventions distinguish late1.82s failure, earlier1.62s held-support survival, and task3return-to-user completion(E304–E306).
 2. **Preparation-conditioned counterfactual tolerance prediction.** Predict contact avoidance after candidate commitment, preparation and a specified hypothetical disturbance. The expanded-state fit improves Brier0.562549→0.065211 on the unchanged160-row DEV set (E289). DEV has no discordant-alpha groups, so this result supports outcome discrimination rather than independent candidate-ranking accuracy. The matched speed-state information ablation is complete(E293): full-state DEV Brier0.065211 versus0.071052, while AUC0.911 versus0.912545 does not favor full state. Preparation-information ablation is now complete(E302): removing preparation increases DEV ensemble Brier to0.075847 and reduces AUC to0.907455; one of three seeds improves without it. Ten preparation-discordant DEV pairs come from two source-direction groups; full predicts five correctly and ties five. This is limited positive information evidence, not strong independent ranking evidence.
-3. **Task-constrained repeated preference execution.** Combine prediction with geometric eligibility, user-priority restoration and conditional dwell. The risk-disabled24-case ablation removes both observed outcome gains (E291), supporting the incremental contribution of risk qualification inside this controller. The first frozen prospective24 comparison has no paired outcome advantage(E294). A subsequent common4m low-speed engineering comparison yields one additional arrival and survivor versus geometry-only(E297); its77.35% pre-goal user0 occupancy and pre-force intervention are measured(E298–E299). The adjacent/mirror24-case campaign is complete(E303): fullq/noq/fixed0 each4/6arrivals andsurvivors; fixed1 has4arrivals/5survivors. The isolated low-speed gain does not transfer to this panel. Measured recovery release subsequently completes5/6versus4/6for each of five matched baselines(E308); the frozen later-onset transfer preserves2/4goals and4/4survivors for both new andshortdwell controllers(E309). Broader reliability remains an evidence question; common planning rejection is being tested separately(E310).
+3. **Task-constrained repeated preference execution.** Combine prediction with geometric eligibility, user-priority restoration and conditional dwell. The risk-disabled24-case ablation removes both observed outcome gains (E291), supporting the incremental contribution of risk qualification inside this controller. The first frozen prospective24 comparison has no paired outcome advantage(E294). A subsequent common4m low-speed engineering comparison yields one additional arrival and survivor versus geometry-only(E297); its77.35% pre-goal user0 occupancy and pre-force intervention are measured(E298–E299). The adjacent/mirror24-case campaign is complete(E303): fullq/noq/fixed0 each4/6arrivals andsurvivors; fixed1 has4arrivals/5survivors. The isolated low-speed gain does not transfer to this panel. Measured recovery release subsequently completes5/6versus4/6for each of five matched baselines(E308); the frozen later-onset transfer preserves2/4goals and4/4survivors for both new andshortdwell controllers(E309). The common finite-heading fallback subsequently gives3/4versus2/4arrivals with4/4survivors for both(E311); the left−36N closest-goal distance worsens to4.860m for both. The planner is a frozen candidate for the cross-speed panel, not a uniformly improved replacement.
 
 These are contribution targets, not three established originality claims. The current minimal comparisons include fixed user preference and the same geometric coordinator without risk qualification. The larger completed dataset and new lower-controller evidence must not be pooled with old local300 results as if all controllers shared one identity.
 
@@ -32,7 +32,38 @@ The non-originator review retains one connected argument: preference-dependent d
 
 The prediction contribution is currently the weakest: held-candidate labels do not estimate the future online return sequence, and the current4m/planning protocol needs grouped source-state validation of candidate ranking and false qualification. AUC/Brier alone cannot establish useful selection. The coordinator still needs the same commitment/settling/planning with q disabled; the old geometry-only controller does not isolate q under the new timing rule.
 
-After the ongoing common planning experiment, freeze one version and evaluate a single low/high single/S-bend panel rather than keep tuning the original right bend. The review proposes4routes × nominal/±36N ×5methods (full, originalshortdwell, same-timing no-q, fixeduser0, fixed1),60H10episodes/120000lower upper bound/0updates, with one presampled onset per route. This is a proposed next budget, not an already launched run. Physical endpoints are comparable across allmethods; fixed1 costs require reweighting to the originaluser0 objective. Actual initialspeed must match the stated low/high regime; translated world poses are not relative path-error randomization. Separate initial-state and physical-domain testing follows final method selection.
+After the ongoing common planning experiment, freeze one version and evaluate a single low/high single/S-bend panel rather than keep tuning the original right bend. The review proposes4routes × nominal/±36N ×5methods (full, originalshortdwell, same-timing no-q, fixeduser0, fixed1),60H10episodes/120000lower upper bound/0updates, with one presampled onset per route. This60-episode budget is now running as `cross_speed_timing_*_v1` under the shared ledger revision2958. Its results are pending; the four geometries have prior development exposure. Physical endpoints are comparable across allmethods; fixed1 costs require reweighting to the originaluser0 objective. Actual initialspeed must match the stated low/high regime; translated world poses are not relative path-error randomization. Separate initial-state and physical-domain testing follows final method selection.
+
+### Source-bound method text for the current revision
+
+This text describes the implemented candidate, independently of the pending60-case outcome. The canonical manuscript's older return43 method will be replaced together with its results and figures, rather than mixing controller generations. Source locators: `tolerance_coordination.py::{candidate_features,infer_probabilities,preview_curvature,choose_alpha,apply_alpha_dwell,recovery_settling_start}`; `native_goal_run.py` online `one` step; frozen cross-speed configuration files. These are implementation claims; human source verification is not recorded.
+
+**Counterfactual preparation.** Let x contain the vehicle and actuator states together with the observer, reference filters and observation history. From a common x, a candidate a in A={0,0.25,0.5,0.75,1} selects the frozen middle controller's reference correction. A training branch holds a, advances the complete closed loop for preparation time tau, applies a hypothetical pulse d, and observes contact avoidance through three seconds after pulse termination. The binary target therefore describes the held-candidate branch. The41-feature network combines34 observation entries with a, two candidate reference corrections, two body-frame force components, pulse duration and preparation time. Three16–16 ReLU networks are fitted; their sigmoid outputs are averaged.
+
+At each50Hz query, the coordinator evaluates both signs of a48N world-Y pulse lasting0.15s at preparation times0.2 and0.6s. Its score is
+
+```math
+q_k(a)=\min_{d\in\{-48,+48\},\,\tau\in\{0.2,0.6\}}
+\frac{1}{3}\sum_{m=1}^{3}q_{\psi_m}(z_k,a,d,\tau).
+```
+
+The hypothetical force components are rotated using the current heading. The actual future disturbance schedule is absent from this query. A high score qualifies a candidate for selection; closed-loop task performance is measured separately because the deployed coordinator can later change a.
+
+**Task-conditioned proposal.** The frozen middle controller produces candidate speed and steering references, bounded by the existing reference interface. Let kappa_max be the largest absolute curvature over the next6m of the current execution path. Geometric eligibility is v_a² kappa_max <=3m/s². Among qualified alternatives, the proposal minimizes
+
+```math
+C_k(a)=(0.1+0.9\alpha_u)\left(\frac{v_a-v_u}{1\,\mathrm{m/s}}\right)^2
+ +(1-0.9\alpha_u)\left(\frac{\delta_a-\delta_0}{0.2\,\mathrm{rad}}\right)^2
+ +0.05(a-\alpha_u)^2+0.02(a-\alpha_{k-1})^2.
+```
+
+Here delta_0 is the nominal steering reference. The user preference takes priority when its geometric and risk checks pass. The risk threshold is0.8, increased to0.85 for restoring a latched user preference. If no risk-qualified alternative exists, the configured fallback chooses the user when geometrically eligible, otherwise the minimum-cost geometrically eligible candidate, without risk qualification. An empty geometric set selects the existing midpoint fallback. Native reference permissions govern publication of every proposal.
+
+**Support commitment and measured return.** A real switch to a non-user preference starts a3.75s hold, equal to the maximum queried preparation interval plus pulse duration and post-pulse observation interval. This aligns the commitment duration with the query window; the held-candidate prediction and the subsequent switching policy retain their separate evaluation roles. A switch to the user starts a0.2s dwell. The hold is a controller state, preserved when geometry is reconnected. A decline in the current risk score alone does not cancel it. The task mask may release an infeasible held candidate; denied publication retains the previous preference and does not restart its elapsed clock.
+
+Earlier return is allowed once the raw proposal qualifies the user, at least0.6s has elapsed since the support switch, and sampled roll and roll rate have remained within0.26rad and0.1rad/s for0.2s. A nonqualifying sample resets the settling interval, and an actual preference change clears its history. Thus entering support and returning to the user are distinct causal decisions. The no-risk ablation removes risk qualification while retaining these timing and geometric operations.
+
+The10Hz reconnection module retains the original world-frame goal. It first tests the original terminal heading; only an overlong candidate triggers the finite alternative-heading search. Every accepted connection obeys the existing current-remaining-length plus4m permission. That local allowance is recomputed at each reconnection; it is not a global4m detour budget. Original-goal arrival and fullH10 survival are recorded separately from tracking the execution path.
 
 ### Evidence-to-contribution audit — 2026-10-31
 
@@ -124,19 +155,11 @@ A read-only audit of `u170_preparation_time_coverage_v1/analysis/results.json` f
 
 **Inference:** more preparation is not uniformly better in these records. Since the gust time changes with preparation, turn phase changes too. Do not present this as a monotone minimum preparation-time threshold or as an isolated causal effect of preparation. A stronger next experiment fixes the actual gust time/location and varies the decision start using saved complete states along the same nominal prefix. The online controller still receives no actual future gust timestamp; the timestamp belongs only to the paired experimental protocol.
 
-## Minimal baseline and evidence plan
+## Matched baseline and evidence plan
 
-Use the same frozen U170, lower controller, original task, friction, actuator permissions, initial states, force schedules, and 10 Hz geometric reconnection for all methods.
+The running panel compares fixed alpha0, fixed alpha1, original short dwell, measured recovery without risk qualification, and the complete measured-recovery coordinator. All share U170/local200, the original task, friction, actuator permissions, prepared bank2, route-specific force schedules, H10, and10Hz geometric reconnection. The two online recovery versions share commitment and settling rules; removing risk qualification may change their actual switch times. The fixed endpoints establish available control behavior, not a per-case hindsight oracle.
 
-- B0: execute the user's alpha throughout.
-- B1: fixed alpha=0.5; retain the existing five-alpha sweep as context, not as a hindsight per-test oracle.
-- B2: a simple predeclared curvature/speed rule with the same feedback return and candidate authority. Tune on development sources only; no gust-time input.
-- Proposed: tolerance-guided preference choice plus the same return mechanism.
-- Mechanism ablations: omit preparation-time input; omit the original-task prediction head. Run only if needed to establish contributions 2–3, using matched data and executable policies.
-
-First reuse existing exactly matched baselines. Then freeze a small panel containing a left/right turn pair, an S connector, and a two-turn track segment. Preserve the previous 10 s episode contract for the first panel; constructing a whole-lap evaluation requires an explicitly recorded new horizon, rather than silently extending all old trials. Paths have a fixed global goal and declared corridor width; do not choose widths after inspecting tracking errors. Do not add repeated neural decisions until labels and evaluation cover their continuation policy.
-
-Report actual/reference XY, contact, original-goal completion, path error, arrival time, preference deviation integral, restoration time, and actual speed. Methods need not win every case. No experimental run is launched by this design document; executable configs, source identities, episode budget, data roles, and stopping conditions are recorded before each new stage.
+The four routes cover low/high requested speeds with single/S bends. Report actual speed during the disturbance and the observed task window. Bank2 is a shared complete initial state, not relative-path initial-state randomization. This development panel fixes the controller version before a separate initial-state/physical-domain study. Preserve actual/reference XY, contact and fault endpoints, original-goal arrival, arrival time, original-path error, preference intervention, and restoration. Running costs from fixedalpha1 require reweighting before comparison with user0; first report the common physical outcomes.
 
 ## Literature anchors checked 2026-10-30
 

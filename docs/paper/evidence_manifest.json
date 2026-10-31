@@ -1915,6 +1915,12 @@
       "human_verification": "not_recorded",
       "scope": "Offline saved-pose finite-heading query; originalheading forcesrejected reconnection. Geometric eligibility, not executed task benefit.",
       "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E311": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/terminal_heading_recovery_v1/paired_raw_audit.json",
+      "sha256": "c3e53be4b1f9f361c38626c63c455bd774b3eb3745b380270a095239e87fde5e",
+      "verification": "AI artifact_checked; raw outcome audit plus independent review of four XY and heading permissions; no new physics",
+      "human_verification": "not_recorded"
     }
   },
   "manuscript_evidence_references": [
