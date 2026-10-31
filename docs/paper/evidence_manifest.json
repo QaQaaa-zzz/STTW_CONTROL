@@ -1851,6 +1851,14 @@
       "human_verification": "not_recorded",
       "scope": "Matched preparation-input ablation: same800TRAIN/160DEV,3000CPUupdates,0physics; ensemble and all seeds plus correlated prep-pair outcomes.",
       "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
+    },
+    "E303": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_fixed_v1/four_method/metrics.json",
+      "sha256": "cacbede847ca5d8f89a742bbcab5df53b767d072299ae318fad32be9b248556c",
+      "verification": "AI artifact_checked; completed24-case frozen validation and six XY panels",
+      "human_verification": "not_recorded",
+      "scope": "Adjacent/mirrored geometry and later onset, reusedbank2: fullq/noq/fixed0 each4/6arrival/survival;fixed1 4/6arrival5/6survival.",
+      "manuscript_role": "Current-method revision evidence; historical return43 manuscript unchanged"
     }
   },
   "manuscript_evidence_references": [
@@ -1990,6 +1998,7 @@
     "E299",
     "E300",
     "E301",
-    "E302"
+    "E302",
+    "E303"
   ]
 }

@@ -1,4 +1,12 @@
 
+## Frozen adjacent/mirror low-speed validation — 2026-10-31
+
+![Right-turn positive-force four-method XY](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_fixed_v1/four_method/adjacent_low_right_F36.png)
+
+All24 declared episodes and paired analyses completed/exit0:37,130active/48,000allocatedlower,0optimizer. Two mirrored R1.3/80deg turns,vrequest1.8,bank2,worldY−36/0/+36N@1.8/.15; fixed0/fixed1/fullq/geometry share4m original-heading reconnection,H10 and original1m goal. Fullq,geometry,fixed0 each4/6arrival and4/6survival with identical outcome sets; fixed1=4/6arrival,5/6survival. Right/+36 fixed1 survives without arriving, while fullq/geometry/fixed0 contact; left/−36 all contact. Six four-method XY panels and both6-pair reward diagnostic sets generated; representative failure inspected. All24 rescored at common user0 on original paths with actual/own/common windows and existing pre-replan checks.
+
+The earlier positive R1.2/85deg/t1.6 example remains valid but does not transfer here. Fullq right/+36 qmin(user0)≈.99919 at1.8s and≈1 at1.9s precedes contact; actual alpha1→.5→0 around1.6/1.8/1.9s exposes a restoration-qualification problem. This is not proof that simply delaying restoration solves it. [Complete conditions and evidence](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_adjacent_mirror_fixed_v1/RESULTS.md). Next prioritize matched current-reconnection labels covering disturbed states and immediate hypothetical disturbance, retaining nominal sources and fixed-method controls; no arbitrary threshold sweep or extra geometry grid launched.
+
 ## Matched preparation-time predictor ablation — 2026-10-31
 
 Same800TRAIN/160DEV receipts,architecture41→16→16ReLU→1,seeds0/1/2,fixed1000AdamW updates each,BCE+.5ranking. Only input40(preparation) is excluded by zero first-layer weights/gradients. All three trained columns exactly zero,100input probes with preparation+10 give zero logit change.22predictor tests pass.3000CPU updates,0physics/PPO,1.655s optimization; no online model change.
