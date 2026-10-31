@@ -276,3 +276,22 @@ def test_new_base_partition_is_shared_with_analysis():
     p=m.five_alpha_partition(protocol)
     assert p['cases']==160 and p['training_rows']==p['development_rows']==80
     assert p['bank']==[0,6]
+
+
+def test_declared_source_product_additive_fit_requires_frozen_dev():
+    cfg=json.loads((ROOT/'learning/configs/u170_lower200_tolerance_force48_fit.json').read_text())
+    d=cfg['dataset'];d.pop('analysis');d.pop('analysis_plan_sha256')
+    d.update(analyses=['/old/analysis','/new/analysis'],analysis_plan_sha256s={'/old/analysis':'a'*64,'/new/analysis':'b'*64},expected_cases=960,expected_training_rows=800,expected_development_rows=160,development_freeze={'file':'/freeze.json','sha256':'c'*64})
+    m.validate_five_alpha_fit_config(cfg)
+    d.pop('development_freeze')
+    with pytest.raises(ValueError,match='source product'):m.validate_five_alpha_fit_config(cfg)
+
+
+def test_frozen160_preserves_features_and_raw_identity(tmp_path):
+    rows=[dict(case_id=f'case{i}',features=[i/160],label=i%2,valid=True,raw_sha256=str(i)) for i in range(160)]
+    data={'receipt':dict(development_identity_rows=rows,declared_development_rows=160,inputs={})}
+    freeze=m.write_five_alpha_development_freeze(data,tmp_path/'freeze.json')
+    cfg={'dataset':dict(development_freeze=freeze,expected_development_rows=160)}
+    m.verify_five_alpha_development_freeze(data,cfg)
+    changed=copy.deepcopy(data);changed['receipt']['development_identity_rows'][0]['raw_sha256']='different'
+    with pytest.raises(ValueError,match='frozen development'):m.verify_five_alpha_development_freeze(changed,cfg)

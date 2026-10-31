@@ -900,9 +900,9 @@ def validate_five_alpha_fit_config(cfg):
         cfg['ranking']!=dict(weight=.5,pairing='source_group_id/preparation_s/force_N; positive-negative only') or
         b!=dict(new_physics_steps=0,new_ppo_updates=0,maximum_optimizer_updates=3*steps,automatic_extensions=False) or
         f['full_indices']!=list(range(300,320))+list(range(337,351)) or f['speed_indices']!=[304] or f['full_dim']!=41 or
-        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in (({(160,80,80),(320,160,160)} if d.get('collection_kind')=='declared_source_product' and batches==1 else {1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches]))):
+        (d['expected_cases'],d['expected_training_rows'],d['expected_development_rows']) not in ((({(160,80,80),(320,160,160)} if batches==1 else {(960,800,160)}) if d.get('collection_kind')=='declared_source_product' and batches in (1,2) else {1:{(280,160,120),(140,80,60)},2:{(560,320,240),(280,160,120)},3:{(1120,880,240)}}[batches]))):
         raise ValueError('frozen five-alpha fitting contract mismatch')
-    if d.get('collection_kind')=='declared_source_product' and (not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256') or not d.get('frozen_model_identity') or not d.get('lower_actor_sha256')):raise ValueError('source product requires frozen model, lower, physics and plan identities')
+    if d.get('collection_kind')=='declared_source_product' and (not isinstance(d.get('physics_identity'),dict) or not (d.get('analysis_plan_sha256') if batches==1 else set(d.get('analysis_plan_sha256s',{}))==set(analyses) and d.get('development_freeze')) or not d.get('frozen_model_identity') or not d.get('lower_actor_sha256')):raise ValueError('source product requires frozen model, lower, physics and plan identities')
     if d['expected_cases']==140 and (batches!=1 or d.get('collection_kind')!='limited_collection' or not isinstance(d.get('physics_identity'),dict) or not d.get('analysis_plan_sha256')):raise ValueError('limited140 requires explicit physics and plan identity')
     if d.get('collection_kind')=='limited_route_subset' and (batches!=2 or not isinstance(d.get('physics_identity'),dict) or set(d.get('analysis_plan_sha256s',{}))!=set(analyses) or not d.get('source_route_times')):raise ValueError('route subset requires two explicit physics-bound plans')
     return cfg
@@ -921,7 +921,7 @@ def _load_five_alpha_single(analysis,cfg):
     if plan.get('mode')!='five_alpha_tolerance_labels' or not plan.get('label_parent') or seal['plan_sha256']!=digest(root/'plan.json') or receipt['plan_sha256']!=seal['plan_sha256']:raise ValueError('sealed parent label analysis required')
     d=cfg['dataset'];product=d.get('collection_kind')=='declared_source_product'
     if product:
-        if plan['models']!=d['frozen_model_identity'] or plan['initial_source']['candidate']['actor_sha256']!=d['lower_actor_sha256'] or plan['initial_source']['model']!=d['physics_identity'] or seal['plan_sha256']!=d['analysis_plan_sha256']:raise ValueError('source product model/lower/physics/plan differs')
+        if plan['models']!=d['frozen_model_identity'] or plan['initial_source']['candidate']['actor_sha256']!=d['lower_actor_sha256'] or plan['initial_source']['model']!=d['physics_identity'] or seal['plan_sha256']!=(d.get('analysis_plan_sha256s',{}).get(str(analysis)) if d.get('analyses') else d['analysis_plan_sha256']):raise ValueError('source product model/lower/physics/plan differs')
         if plan['protocol'].get('data_partition')!='declared_source_product':raise ValueError('source-product protocol required')
         if receipt.get('full_h10_outcomes_claimed',False):raise ValueError('short source-product collection cannot claim H10')
     elif set(plan['models'])!={'H75'} or plan['models']['H75'].get('registry_id')!='STTW_MIDDLE_FULLTAIL_PPO75_U77':raise ValueError('frozen H75 only required')
@@ -1023,7 +1023,7 @@ def _load_five_alpha_single(analysis,cfg):
     data={}
     for role in ('training','development'):
         ids=[i for i,r in enumerate(all_roles) if r==role and valid[i]]
-        if not ids and not (role=='development' and partition['kind']=='training_only'):raise ValueError('no valid '+role+' labels')
+        if not ids and not (role=='development' and partition['development_rows']==0):raise ValueError('no valid '+role+' labels')
         data[role]=dict(full=features[ids],y=labels[ids],meta=[meta[i] for i in ids])
     coverage={}
     for role in ('training','development'):
@@ -1076,7 +1076,7 @@ def load_five_alpha_dataset(analysis,cfg):
     if any(identity!=identities[0] for identity in identities[1:]):raise ValueError('combined frozen model identities differ')
     for role in combined:
         combined[role]['full']=np.concatenate(combined[role]['full']);combined[role]['y']=np.concatenate(combined[role]['y'])
-    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=totals[1],declared_development_rows=totals[2],physical_source_fingerprints=sorted(physical_seen),development_identity_rows=dev_identity,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],physics_identity=batches[0]['receipt']['physics_identity'],data_partition=cfg['dataset'].get('collection_kind','historical_combined'),data_role='Related native10Hz batches; existing bank6 route split and additive bank4 training-only sources; no independent TEST')
+    combined['receipt']=dict(inputs=inputs,excluded_invalid=excluded,coverage=coverage,analyses=[str(Path(p).resolve()) for p in paths],declared_training_rows=totals[1],declared_development_rows=totals[2],physical_source_fingerprints=sorted(physical_seen),development_identity_rows=dev_identity,source_groups=len(seen),source_semantic_keys=[list(k) for k in sorted(seen)],frozen_model_identity=identities[0],physics_identity=batches[0]['receipt']['physics_identity'],data_partition=cfg['dataset'].get('collection_kind','historical_combined'),data_role='Related native10Hz batches with sealed source-group roles; no independent TEST')
     verify_five_alpha_development_freeze(combined,cfg)
     return combined
 
@@ -1084,7 +1084,8 @@ def load_five_alpha_dataset(analysis,cfg):
 def write_five_alpha_development_freeze(data,path):
     """Explicit snapshot writer; caller chooses when to freeze existing DEV."""
     rows=data['receipt']['development_identity_rows']
-    if len(rows)!=240 or len({r['case_id'] for r in rows})!=240:raise ValueError('exact240 declared development rows required')
+    expected=data['receipt']['declared_development_rows']
+    if len(rows)!=expected or len({r['case_id'] for r in rows})!=expected:raise ValueError('exact declared development rows required')
     write_json(path,dict(schema='five_alpha_development_freeze_v1',rows=rows))
     return dict(file=str(Path(path).resolve()),sha256=digest(path))
 
@@ -1095,7 +1096,8 @@ def verify_five_alpha_development_freeze(data,cfg):
     file=Path(frozen['file']).resolve()
     if digest(file)!=frozen['sha256']:raise ValueError('development freeze hash changed')
     payload=json.loads(file.read_text());rows=payload['rows'];current=data['receipt']['development_identity_rows']
-    if len(rows)!=240 or len(current)!=240:raise ValueError('exact frozen240 DEV rows required')
+    expected=cfg['dataset']['expected_development_rows']
+    if len(rows)!=expected or len(current)!=expected:raise ValueError('exact frozen DEV rows required')
     if payload['schema']=='sttw_development_freeze_v1':
         for path,sha in payload['inputs'].items():
             if data['receipt']['inputs'].get(path)!=sha:raise ValueError('frozen development authenticated inputs changed')
@@ -1105,7 +1107,7 @@ def verify_five_alpha_development_freeze(data,cfg):
     elif payload['schema']=='five_alpha_development_freeze_v1':
         old={r['case_id']:r for r in rows};new={r['case_id']:r for r in current}
     else:raise ValueError('unknown development freeze schema')
-    if len(old)!=240 or len(new)!=240 or old!=new:raise ValueError('frozen development IDs/features/labels/raw hashes changed')
+    if len(old)!=expected or len(new)!=expected or old!=new:raise ValueError('frozen development IDs/features/labels/raw hashes changed')
     data['receipt']['inputs'][str(file)]=frozen['sha256'];data['receipt']['development_freeze_verified']=True
 
 
