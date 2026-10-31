@@ -1,0 +1,24 @@
+{
+  "experiment_id": "STTW-LOWER-DOMAIN-TEST-STATES-V1",
+  "domain_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_physical_domains_v1/manifest.json",
+  "roles": [
+    "TEST"
+  ],
+  "states_per_domain": 8,
+  "preparation_ticks": 700,
+  "maximum_lower_ticks": 22400,
+  "seed": 930501,
+  "speed_m_s": [
+    1.5,
+    3.4
+  ],
+  "terminal_world_y_force_N": [
+    -8.0,
+    8.0
+  ],
+  "shared_jax_cache": "/home/qy/STTW_CONTROL/runs/.jax_compilation_cache",
+  "initialization": "fresh clean state, 700 real ECBC steps under each corresponding model; first four states per domain unforced, last four terminal excitation",
+  "data_role": "TEST only; excluded from optimizer and model selection",
+  "admission": "all finite noncontact states with roll<=.35, rollrate<=1.5 and steer<=.6; preserve all rejected states, no replacement",
+  "stop_rule": "exactly 22400 lower ticks, zero optimizer; preserve all failures, no replacement"
+}

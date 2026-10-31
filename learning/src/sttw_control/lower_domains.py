@@ -48,8 +48,8 @@ def load_domain_models(manifest,roles):
 def prepare_domain_states(config,output):
     cfg=json.loads(Path(config).read_text());out=Path(output)
     count=cfg['states_per_domain'];ticks=cfg['preparation_ticks']
-    if not isinstance(count,int) or count<2 or ticks!=700 or cfg['roles']!=['REFERENCE','TRAIN']:
-        raise ValueError('explicit TRAIN/reference preparation with 700 ticks required')
+    if not isinstance(count,int) or count<2 or ticks!=700 or cfg['roles'] not in (['REFERENCE','TRAIN'],['TEST']):
+        raise ValueError('separate TRAIN/reference or TEST preparation with 700 ticks required')
     speed=np.asarray(cfg['speed_m_s'],float);force=np.asarray(cfg['terminal_world_y_force_N'],float)
     if (speed.shape!=(2,) or force.shape!=(2,) or not np.isfinite(np.r_[speed,force]).all()
         or not 1.5<=speed[0]<speed[1]<=3.5 or not -12<=force[0]<force[1]<=12):

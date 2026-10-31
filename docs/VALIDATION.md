@@ -1,3 +1,7 @@
+## Independent physical-domain state preparation — 2026-10-31
+
+The state-preparation entry now accepts a separate `TEST` selection as well as the existing `REFERENCE`/`TRAIN` selection. The optimizer entry still rejects TEST banks. Frozen configuration: `learning/configs/lower_domain_test_states.json`; four held-out physical domains, eight states each, new seed 930501, 22,400 lower steps and zero updates. Output: archive `lower_domain_test_states_v1`. Preparation is running; this is not a controller performance result. Seven physical-domain/local-command tests pass (CPU); initial test collection lacked PYTHONPATH and was rerun with the project source path.
+
 # Lower domain sampling acceleration — 2026-10-30
 
 The 9-domain lower sampler now uses one flat vmap over 504 environments, preserving each state's domain model and reset association. The previous lax.map over 9 groups serialized physics sampling. A paired 32-step replay from the same update-144 boundary and identical actions measured median step time 0.68345s → 0.10881s (6.28×); maximum speed difference 0.000222m/s, steering difference 0.000422rad, no changed failure flags. This is approximate agreement, not bitwise equivalence. Nested domain/lane vmap produced nonfinite states and was rejected; static unrolling had no speed benefit. All four raw traces remain in `lower_domain_finetune_v1/analysis/domain_speed_repair` in the experiment archive.
