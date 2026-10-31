@@ -24,7 +24,7 @@ for plan in plans[1:]:
 assert plans[1]['initial_source']==plans[2]['initial_source']
 assert plans[0]['lower_transfer']['parent_checkpoint_sha256']==plans[1]['initial_source']['candidate']['checkpoint_sha256']
 parent={k:(r,roots[i]) for i in (1,2) for k,r in tables[i].items() if k in tables[0]}
-assert len(parent)==len(tables[0])==30
+assert len(parent)==len(tables[0])==plans[0]['cases']
 assert not (set(tables[1])&set(tables[2]))
 for plan in plans[1:]:
  contexts={c['route']:c for c in plan['contexts']}
@@ -67,9 +67,9 @@ for label in ('candidate','parent'):
  summary[label]=dict(n=len(ends),arrived=sum(e['goal_arrived'] for e in ends),survived=sum(e['physical_outcome']=='survived' for e in ends),joint=sum(d[label]['joint'] for d in details))
 changes=dict(gained=sum(d['joint_change']>0 for d in details),lost=sum(d['joint_change']<0 for d in details))
 (a.output/'comparison.json').write_text(json.dumps(dict(summary=summary,paired_changes=changes,conditions=details),indent=2)+'\n')
-lines=['# Lower continuation paired development comparison','',f'Candidate update{candidate_update}; parent update{parent_update}. Same middle network, original target, physics and prepared state; all five alpha values.','']
+lines=['# Lower continuation paired development comparison','',f'Candidate update{candidate_update}; parent update{parent_update}. Same middle network, original target, physics and prepared state; all declared alpha values.','']
 for name in figures:lines+=['![]('+name+')','']
 lines+=['| Model | Arrived | Survived | Both |','|---|---:|---:|---:|']
-for label,s in summary.items():lines.append(f"| {label} | {s['arrived']}/30 | {s['survived']}/30 | {s['joint']}/30 |")
+for label,s in summary.items():lines.append(f"| {label} | {s['arrived']}/{s['n']} | {s['survived']}/{s['n']} | {s['joint']}/{s['n']} |")
 lines+=['',f"Paired joint gains: {changes['gained']}; losses: {changes['lost']}.",'','Arrival is entry into the original 1 m goal disk; survival covers H10. No heading/speed/hold arrival requirement. These previously inspected routes are development evidence. Running costs are retained per alpha and observed window; different-alpha weighted scores are not a physical ranking.','', '[Full numeric comparison](comparison.json)']
 (a.output/'README.md').write_text('\n'.join(lines)+'\n');print(json.dumps(dict(summary=summary,paired_changes=changes)))
