@@ -286,3 +286,12 @@ def test_five_alpha_new_duration_matches_offline_source_user_features(interface,
     for duration in (0.,-1.,np.nan):
         with pytest.raises(ValueError,match='duration'):
             coordinator.candidate_features(j.asarray(obs),j.asarray(latents),0.,interface,candidate_alphas=grid,hypothetical_duration_s=duration)
+
+
+def test_geometric_only_selection_is_independent_of_risk_scores():
+    targets=np.array([[1.,0.],[1.2,.05],[1.4,.1],[1.6,.15],[1.8,.2]])
+    for q in (np.zeros(5),np.ones(5),np.linspace(0,1,5)):
+        result=coordinator.choose_alpha(targets,1.,np.array([1.,0.]),1.,q,True,True,.5,use_q=False,user_alpha=0.,guard_fallback=True,candidate_alphas=(0.,.25,.5,.75,1.))
+        assert float(result['alpha'])==0.
+        assert not bool(result['guard_fallback_selected'])
+        assert not bool(result['degraded'])

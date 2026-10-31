@@ -598,6 +598,7 @@ def deterministic_route_onsets(routes,seed):
 
 def five_alpha_online_inventory(p):
     if p.get('panel_kind')=='declared_source_product':
+        if type(p.get('use_q',True)) is not bool:raise ValueError('use_q must be boolean')
         required=dict(mode=FIVE_ONLINE_MODE,horizon_s=10.,optimizer_updates=0,planning_frequency_hz=10.,duration_s=.15,force_frame='worldY',candidate_alphas=[0.,.25,.5,.75,1.],arm=0,hypothetical_duration_s=.15,hypothetical_force_N=48.,task_aware_fallback=False,alpha_dwell_s=.2,planner_points=5001,planner_spacing_m=.02,planner_support_m=100.)
         if any(p.get(k)!=v for k,v in required.items()):raise ValueError('source-product online contract differs')
         banks=p['bank_indices'];routes=p['route_contexts'];users=p['user_alphas'];forces=p['forces_N']
@@ -2417,7 +2418,7 @@ def load(root,*,prefix_phase=False):
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
                     carry.state.projection.progress,path.s,path.curvature,permission,sidecar.latched,sidecar.prev_alpha,
                     cfg['residual_interface'],candidate_alphas=tuple(p['protocol']['candidate_alphas']),
-                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],hypothetical_force_N=p['protocol'].get('hypothetical_force_N',64.),arm=0,use_q=True,user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False,curvature_task_mode=p['protocol'].get('curvature_task_mode','hard'))
+                    hypothetical_duration_s=p['protocol']['hypothetical_duration_s'],hypothetical_force_N=p['protocol'].get('hypothetical_force_N',64.),arm=0,use_q=p['protocol'].get('use_q',True),user_alpha=carry.state.alpha,guard_fallback=p['protocol'].get('guard_fallback',False),task_aware_fallback=False,curvature_task_mode=p['protocol'].get('curvature_task_mode','hard'))
                 native_permission=permission
                 if p['protocol'].get('curvature_task_mode','hard')=='soft_penalty':
                     # Invalid proposed reference is an engineering fault, not a
@@ -2432,8 +2433,8 @@ def load(root,*,prefix_phase=False):
                 queried=obs.at[336].set(alpha_exec)
                 z=latents[j.argmin(j.abs(candidate_alpha-alpha_exec))];half=full=j.zeros_like(z)
                 user_index=j.argmin(j.abs(candidate_alpha-carry.state.alpha))
-                restore=cd['task_mask'][user_index]&(cd['qmin'][user_index]>=j.where(sidecar.latched,.85,.8))
-                eligible=cd['task_mask']&(cd['qmin']>=.8)&(candidate_alpha!=carry.state.alpha)
+                restore=cd['task_mask'][user_index]&j.where(p['protocol'].get('use_q',True),cd['qmin'][user_index]>=j.where(sidecar.latched,.85,.8),True)
+                eligible=cd['task_mask']&j.where(p['protocol'].get('use_q',True),cd['qmin']>=.8,True)&(candidate_alpha!=carry.state.alpha)
                 decision=dict(rule_preview_max_curvature=cd['max_abs_curvature'],rule_accel_estimate=v*v*cd['max_abs_curvature'],rule_alpha_target=alpha_exec)
                 coord_log={'coord_'+k:cd[k] for k in ('probabilities','qmin','targets','task_mask','proxy_cost','degraded','publication_withheld','max_abs_curvature')}
                 coord_log.update(coord_prev_alpha=sidecar.prev_alpha,coord_latents=latents,coord_candidate_alpha=candidate_alpha,
@@ -2444,7 +2445,7 @@ def load(root,*,prefix_phase=False):
                     coord_log.update({'coord_'+key:cd[key] for key in ('historical_hard_task_mask','valid_target_mask','original_proxy_cost','proxy_accel','curvature_excess','curvature_excess_penalty','selected_reference_valid','candidate_reference_fault')})
                     coord_log['coord_native_permission']=native_permission
                 if p['protocol'].get('guard_fallback',False):
-                    guard_requested=(~restore)&(~j.any(eligible))&j.any(cd['task_mask'])
+                    guard_requested=j.asarray(p['protocol'].get('use_q',True))&(~restore)&(~j.any(eligible))&j.any(cd['task_mask'])
                     guard_published=cd['guard_fallback_selected']&(j.asarray(True) if dwell is None else ~dwell['held'])&(alpha_exec==cd['alpha'])
                     coord_log.update(coord_guard_fallback=cd['guard_fallback'],coord_guard_fallback_requested=guard_requested,coord_guard_fallback_selected=cd['guard_fallback_selected'],coord_guard_fallback_alpha=cd['alpha'],coord_guard_fallback_published=guard_published)
                 if dwell is not None:

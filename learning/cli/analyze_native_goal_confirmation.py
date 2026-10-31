@@ -2581,7 +2581,7 @@ def analyze_five_alpha_labels(root,p):
     return receipt
 
 
-def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False):
+def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False,use_q=True):
     """Independent NumPy replay of native lower-tick hold timing and raw chooser."""
     n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);ticks=round(dwell_s/.005)
     if dwell_s!=.2 or ticks!=40:raise ValueError('only explicitly declared .2s hold accepted')
@@ -2592,8 +2592,8 @@ def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False):
     for start in range(0,n,4):
         for key in fields:
             x=np.asarray(raw[key])[start:min(n,start+4)];np.testing.assert_array_equal(x,np.broadcast_to(x[0],x.shape))
-        tick=int(raw['coord_dwell_tick'][start]);permission=bool(raw['coord_permission'][start]);task=np.asarray(raw['coord_task_mask'][start],bool);q=np.asarray(raw['coord_qmin'][start]);cost=np.asarray(raw['coord_proxy_cost'][start]);restore=bool(task[user_index] and q[user_index]>=(.85 if latched else .8));eligible=task&(q>=.8);eligible[user_index]=False
-        degraded=not restore and not eligible.any();guard_selected=bool(guard_fallback and degraded and task.any())
+        tick=int(raw['coord_dwell_tick'][start]);permission=bool(raw['coord_permission'][start]);task=np.asarray(raw['coord_task_mask'][start],bool);q=np.asarray(raw['coord_qmin'][start]);cost=np.asarray(raw['coord_proxy_cost'][start]);restore=bool(task[user_index] and (not use_q or q[user_index]>=(.85 if latched else .8)));eligible=task&((q>=.8) if use_q else True);eligible[user_index]=False
+        degraded=not restore and not eligible.any();guard_selected=bool(guard_fallback and use_q and degraded and task.any())
         proposed=user_alpha if restore else float(grid[np.argmin(np.where(eligible,cost,np.inf))]) if eligible.any() else .5
         if guard_selected:proposed=user_alpha if task[user_index] else float(grid[np.argmin(np.where(task,cost,np.inf))])
         raw_alpha=proposed if permission else prev;raw_latch=not restore if permission else latched
@@ -2637,7 +2637,7 @@ def audit_soft_curvature_task(raw,case,interface,*,guard_fallback=False):
     return dict(independent_numpy_match=True,curvature_task_mode='soft_penalty',original_proxy_cost_preserved=True,penalty='max(target_speed²*max_abs_curvature/3−1,0)² with coefficient1',validity='Finite latent/unbounded/clipped target and original cost, nonnegative finite curvature, clipped speed/steer within original interface bounds; not road or trajectory feasibility',historical_hard_mask_separately_verified=True)
 
 
-def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guard_fallback=False,curvature_task_mode='hard',interface=None):
+def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guard_fallback=False,curvature_task_mode='hard',interface=None,use_q=True):
     """Retrospective windows; fallback at user alpha is not qualified restoration."""
     n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);t=np.asarray(raw['time'][:n]);alpha=np.asarray(raw['alpha_exec'][:n]);q=np.asarray(raw['coord_qmin'][:n]);task=np.asarray(raw['coord_task_mask'][:n],bool);permission=np.asarray(raw['coord_permission'][:n],bool);latched=np.asarray(raw['coord_latched_before'][:n],bool)
     if q.shape!=(n,5) or task.shape!=(n,5) or not np.isfinite(q).all() or not np.isin(alpha,grid).all():raise ValueError('five-alpha coordinator evidence malformed')
@@ -2645,9 +2645,9 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
     soft_audit=audit_soft_curvature_task(raw,case,interface,guard_fallback=guard_fallback) if curvature_task_mode=='soft_penalty' else None
     user_alpha=float(case.get('user_alpha',case.get('alpha',.5)));user_index=int(np.argmin(abs(grid-user_alpha)))
     if grid[user_index]!=user_alpha:raise ValueError('user alpha outside fivegrid')
-    risk=q>=.8;eligible=risk&task;restore=task[:,user_index]&(q[:,user_index]>=np.where(latched,.85,.8));others=eligible.copy();others[:,user_index]=False;all_degraded=~restore&~others.any(axis=1)
+    risk=(q>=.8) if use_q else np.ones_like(q,dtype=bool);eligible=risk&task;restore=task[:,user_index]&((q[:,user_index]>=np.where(latched,.85,.8)) if use_q else True);others=eligible.copy();others[:,user_index]=False;all_degraded=~restore&~others.any(axis=1)
     np.testing.assert_array_equal(raw['coord_degraded'][:n],permission&all_degraded)
-    guard_selected=all_degraded&task.any(axis=1)&bool(guard_fallback)
+    guard_selected=all_degraded&task.any(axis=1)&bool(guard_fallback and use_q)
     if guard_fallback:
         np.testing.assert_array_equal(raw['coord_guard_fallback'][:n],True)
         np.testing.assert_array_equal(raw['coord_guard_fallback_selected'][:n],permission&guard_selected)
@@ -2663,7 +2663,7 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
     np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]));np.testing.assert_allclose(raw['query_observation'][:n,336],alpha,atol=1e-6,rtol=0)
     previous=np.r_[user_alpha,alpha[:-1]];switch=alpha!=previous;returned=(previous!=user_alpha)&(alpha==user_alpha);qualified=(alpha==user_alpha)&restore&permission
     if dwell_s:qualified=qualified&np.asarray(raw['coord_restore_published'][:n],bool)
-    dwell_audit=audit_five_alpha_dwell(raw,dwell_s,user_alpha=user_alpha,guard_fallback=guard_fallback) if dwell_s else None
+    dwell_audit=audit_five_alpha_dwell(raw,dwell_s,user_alpha=user_alpha,guard_fallback=guard_fallback,use_q=use_q) if dwell_s else None
     phases=dict(online_phase_masks(t,case))
     masks=dict(full=np.ones(n,bool),before_pulse=phases['before'],during_pulse=phases['during'],after_pulse=phases['after'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
     if case.get('force_N',1.)==0.:masks={k:v for k,v in masks.items() if k not in ('before_pulse','during_pulse','after_pulse')};masks['nominal_full']=np.ones(n,bool)
@@ -2685,7 +2685,7 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
         rawalpha=np.asarray(raw['coord_raw_alpha'][:n]);rawswitch=rawalpha!=np.r_[user_alpha,rawalpha[:-1]]
         for name,mask in masks.items():
             result[name].update(raw_chooser_nonuser_ticks=int(np.sum(mask&(rawalpha!=user_alpha))),raw_chooser_switches=int(np.sum(mask&rawswitch)),held_ticks=int(np.sum(mask&raw['coord_held'][:n])),held_execution_differs_from_raw_ticks=int(np.sum(mask&(rawalpha!=alpha))),task_mask_bypass_ticks=int(np.sum(mask&(raw['coord_hold_release_reason'][:n]==2))),raw_restore_requested_ticks=int(np.sum(mask&restore)),actual_restore_published_ticks=int(np.sum(mask&raw['coord_restore_published'][:n])))
-    return dict(curvature_task_audit=soft_audit,curvature_task_mode=curvature_task_mode,dwell_audit=dwell_audit,user_alpha=user_alpha,fallback_alpha=.5,actual_alpha_dwell=online_alpha_dwell_intervals(raw,user_alpha=user_alpha),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),phase_clock_contract='Event phases use integer task lower ticks. First-goal windows retain historical raw-time comparison against first_arrival_s-.005; this patch does not change that separate convention.',contract='Default hard task eligibility is the6m-curvature proxy; opt-in soft eligibility is bounded-reference validity with separate excess penalty. Neither is road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Fixed fallback.5 alone never proves qualified user restoration. For guard runs legacy fallback_half_ticks is degraded .5 occupancy; executed_fixed_half_fallback_ticks from replayed dwell provenance is authoritative.')
+    return dict(use_q=use_q,qualification_scope="task and risk gates" if use_q else "task gate only; no risk qualification",curvature_task_audit=soft_audit,curvature_task_mode=curvature_task_mode,dwell_audit=dwell_audit,user_alpha=user_alpha,fallback_alpha=.5,actual_alpha_dwell=online_alpha_dwell_intervals(raw,user_alpha=user_alpha),windows=result,switch_times_s=t[switch].tolist(),return_times_s=t[returned].tolist(),qualified_return_times_s=t[returned&qualified].tolist(),phase_clock_contract='Event phases use integer task lower ticks. First-goal windows retain historical raw-time comparison against first_arrival_s-.005; this patch does not change that separate convention.',contract='Default hard task eligibility is the6m-curvature proxy; opt-in soft eligibility is bounded-reference validity with separate excess penalty. Neither is road/long-trajectory feasibility. Before-pulse/goal windows are retrospective only. Fixed fallback.5 alone never proves qualified user restoration. For guard runs legacy fallback_half_ticks is degraded .5 occupancy; executed_fixed_half_fallback_ticks from replayed dwell provenance is authoritative.')
 
 
 def validate_online_panel(cases,protocol):
@@ -2768,7 +2768,7 @@ def analyze_five_alpha_online14(root,p):
         fault=raw['policy_fault']|raw['nonfinite']|raw['lower_fault']|raw['continuation_geometry_fault'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault)
         outcome=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);outcome['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
         if nominal:np.testing.assert_array_equal(raw['applied_force_impulse'][:n],0.)
-        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.),guard_fallback=protocol.get('guard_fallback',False),curvature_task_mode=protocol.get('curvature_task_mode','hard'),interface=p['config']['residual_interface']);pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
+        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.),guard_fallback=protocol.get('guard_fallback',False),curvature_task_mode=protocol.get('curvature_task_mode','hard'),interface=p['config']['residual_interface'],use_q=protocol.get('use_q',True));pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
         original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=user,raw_alpha=user,broaden_cost_numerics=True)
         rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],path_updates=updates)
         original.update(rebuilt)

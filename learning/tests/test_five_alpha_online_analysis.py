@@ -299,3 +299,13 @@ def test_declared_product_analysis_checks_bank_force_and_all_rows():
     assert m.validate_online_panel(rows,p)['cases']==24
     rows[0]['bank_index']=6
     with pytest.raises(ValueError,match='identity'):m.validate_online_panel(rows,p)
+
+
+def test_geometric_ablation_does_not_require_predicted_risk_for_restoration():
+    r=raw([.5]*8,np.full((8,5),.1))
+    r['coord_degraded'][:]=False
+    stats=m.five_alpha_online_statistics(r,dict(onset_s=.02,duration_s=.015),use_q=False)
+    assert stats['windows']['full']['qualified_user_ticks']==8
+    assert stats['qualification_scope']=='task gate only; no risk qualification'
+    with pytest.raises(AssertionError):
+        m.five_alpha_online_statistics(r,dict(onset_s=.02,duration_s=.015),use_q=True)
