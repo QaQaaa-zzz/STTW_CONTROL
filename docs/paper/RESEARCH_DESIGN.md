@@ -52,6 +52,8 @@ Immediate decision: finish the360matched-protocol branch collection and audit th
 
 ### Measured recovery release result — 2026-10-31
 
+A same-condition six-method consolidation now binds the basic baselines to this result: fixedalpha0, fixedalpha1, geometry-only, originalshortdwell and fixedcommitment all complete4/6; measuredrecovery completes5/6 with the originalfour retained. Fixedalpha1 andcommitment survive5/6, confirming that the incremental result is taskcompletion after survival. Full36raw-record independent checks and six all-method XY panels are in `u170_lower200_recovery_release_online_v1/baseline_comparison`. This comparison does not substitute for the ongoing frozen-rule onset transfer or broader speed/geometry validation.
+
 The same6-case diagnostic panel now produces5/6original-goal arrivals andsurvivors, versus4/6arrivals/5survivors with fixed3.75s commitment. Actual right+36N support1.42→3.16s followed by user0 reachesgoal9.940s; all prior completed tasks remain. Release uses measured roll/rate settling for0.2s sampled at50Hz, minimum0.6s support age and qualified user eligibility. There is no input of the true future pulse time. This closes one online preparation–recovery–return example, with only0.060s horizon margin and left−36N failure retained. The candidate should be frozen for broader validation rather than tuned further on this panel. q labels remain held-action counterfactuals; this result does not validate their calibration for a sequence of future returns. See `u170_lower200_recovery_release_online_v1/RESULTS.md` and all6paired XY/reward figures. Main manuscript remains historical pending final method/evidence selection.
 
 ### Online commitment result — 2026-10-31
