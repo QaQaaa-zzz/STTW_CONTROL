@@ -138,14 +138,35 @@ class DwellOnlineCarry(NamedTuple):
         return self.native.state
 
 
+class RecoveryOnlineCarry(NamedTuple):
+    native: Any
+    latched: Any
+    prev_alpha: Any
+    hold_until_tick: Any
+    stable_since_tick: Any
+
+    @property
+    def state(self):
+        return self.native.state
+
+
+def recovery_settling_start(previous_start,current_tick,roll,roll_rate,permission,rule):
+    """First qualifying50Hz sample; a bad sample breaks the settling interval."""
+    import jax.numpy as j
+    stable=permission&(j.abs(roll)<=rule['max_abs_roll_rad'])&(j.abs(roll_rate)<=rule['max_abs_roll_rate_rad_s'])
+    return j.where(stable,j.where(previous_start>=0,previous_start,current_tick),-1)
+
+
 def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
                       prev_alpha,latched,hold_until_tick,current_tick,*,
                       candidate_alphas=(0.,.25,.5,.75,1.),dwell_ticks=40,
-                      support_commitment_ticks=0,user_alpha=0.):
+                      support_commitment_ticks=0,user_alpha=0.,
+                      recovery_ready=False,recovery_min_ticks=0):
     """Optional causal hold, timed by native lower ticks (200Hz).
 
     Reason codes:0=no release,1=expiry,2=current task-mask infeasible,
-    3=publication denied. A q decline alone never releases the hold.
+    3=publication denied,4=qualified measured recovery. A q decline alone
+    never releases the hold.
     Expiry follows elapsed native time even during denied publication. Actual
     alpha changes restart the deadline, including a change to fallback .5.
     No initial hold is imposed; caller initializes deadline to current tick.
@@ -157,7 +178,10 @@ def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
     grid=j.asarray(candidate_alphas,j.float32);idx=j.argmin(j.abs(grid-prev_alpha))
     active=current_tick<hold_until_tick
     feasible=task_mask[idx]
-    held=permission&active&feasible
+    recovery_release=(permission&active&feasible&(support_commitment_ticks>0)
+        &(prev_alpha!=user_alpha)&(proposed_alpha==user_alpha)&~proposed_latched
+        &recovery_ready&(current_tick>=hold_until_tick-support_commitment_ticks+recovery_min_ticks))
+    held=permission&active&feasible&~recovery_release
     alpha=j.where(permission,j.where(held,prev_alpha,proposed_alpha),prev_alpha)
     latch=j.where(permission,j.where(held,latched,proposed_latched),latched)
     changed=permission&(alpha!=prev_alpha)
@@ -165,10 +189,10 @@ def apply_alpha_dwell(proposed_alpha,proposed_latched,task_mask,permission,
     duration=j.where((support_commitment_ticks>0)&(alpha!=user_alpha),support_commitment_ticks,dwell_ticks)
     deadline=j.where(changed,current_tick+duration,
                      j.where(permission&((active&~feasible)|~active),0,hold_until_tick))
-    reason=j.where(~permission,3,j.where(active&~feasible,2,j.where((hold_until_tick>0)&~active,1,0)))
+    reason=j.where(~permission,3,j.where(active&~feasible,2,j.where(recovery_release,4,j.where((hold_until_tick>0)&~active,1,0))))
     return dict(alpha=alpha,latched=latch,hold_until_tick=deadline,
         held=held,remaining_ticks=j.maximum(deadline-current_tick,0),
-        release_reason=reason,alpha_changed=changed)
+        release_reason=reason,alpha_changed=changed,recovery_released=recovery_release)
 
 
 def file_module(path,name):

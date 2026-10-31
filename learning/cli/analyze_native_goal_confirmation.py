@@ -2585,13 +2585,13 @@ def analyze_five_alpha_labels(root,p):
     return receipt
 
 
-def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False,use_q=True,support_commitment_s=0.):
+def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False,use_q=True,support_commitment_s=0.,recovery_release=None):
     """Independent NumPy replay of native lower-tick hold timing and raw chooser."""
     n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);ticks=round(dwell_s/.005)
     if dwell_s!=.2 or ticks!=40:raise ValueError('only explicitly declared .2s hold accepted')
     user_index=int(np.argmin(abs(grid-user_alpha)))
     if grid[user_index]!=user_alpha:raise ValueError('user alpha outside fivegrid')
-    prev=user_alpha;latched=False;deadline=0;decisions=[];origin='initial_user';origins=[]
+    prev=user_alpha;latched=False;deadline=0;decisions=[];origin='initial_user';origins=[];stable_since=-1
     fields=('coord_raw_alpha','coord_raw_latched','coord_dwell_tick','coord_hold_until_before','coord_hold_until_tick','coord_hold_remaining_ticks','coord_hold_release_reason','coord_held','coord_alpha_changed')
     for start in range(0,n,4):
         for key in fields:
@@ -2607,13 +2607,22 @@ def audit_five_alpha_dwell(raw,dwell_s,*,user_alpha=.5,guard_fallback=False,use_
             np.testing.assert_array_equal(raw['coord_guard_fallback_requested'][start:min(n,start+4)],guard_selected)
             np.testing.assert_array_equal(raw['coord_guard_fallback_alpha'][start:min(n,start+4)],raw_alpha)
         np.testing.assert_equal(tick,start);np.testing.assert_equal(raw['coord_prev_alpha'][start],prev);np.testing.assert_equal(raw['coord_latched_before'][start],latched);np.testing.assert_equal(raw['coord_raw_alpha'][start],raw_alpha);np.testing.assert_equal(raw['coord_raw_latched'][start],raw_latch);np.testing.assert_equal(raw['coord_hold_until_before'][start],deadline)
-        active=tick<deadline;feasible=bool(task[np.argmin(abs(grid-prev))]);held=permission and active and feasible;alpha=prev if held or not permission else raw_alpha;latch=latched if held or not permission else raw_latch;changed=permission and alpha!=prev;nextdeadline=tick+(round(support_commitment_s/.005) if support_commitment_s and alpha!=user_alpha else ticks) if changed else 0 if permission and ((active and not feasible) or not active) else deadline;reason=3 if not permission else 2 if active and not feasible else 1 if deadline>0 and not active else 0
+        active=tick<deadline;feasible=bool(task[np.argmin(abs(grid-prev))]);early=False
+        if recovery_release:
+            np.testing.assert_equal(raw['coord_stable_since_before'][start],stable_since)
+            stable=permission and abs(float(raw['coord_pre_roll'][start]))<=recovery_release['max_abs_roll_rad'] and abs(float(raw['coord_pre_roll_rate'][start]))<=recovery_release['max_abs_roll_rate_rad_s']
+            stable_since=(stable_since if stable_since>=0 else tick) if stable else -1
+            ready=stable_since>=0 and tick-stable_since>=round(recovery_release['stable_hold_s']/.005)
+            early=permission and active and feasible and support_commitment_s>0 and prev!=user_alpha and raw_alpha==user_alpha and not raw_latch and ready and tick>=deadline-round(support_commitment_s/.005)+round(recovery_release['minimum_preparation_s']/.005)
+            for key,value in [('coord_stable_since_tick',stable_since),('coord_recovery_ready',ready),('coord_recovery_released',early)]:np.testing.assert_array_equal(raw[key][start:min(n,start+4)],value)
+        held=permission and active and feasible and not early;alpha=prev if held or not permission else raw_alpha;latch=latched if held or not permission else raw_latch;changed=permission and alpha!=prev;nextdeadline=tick+(round(support_commitment_s/.005) if support_commitment_s and alpha!=user_alpha else ticks) if changed else 0 if permission and ((active and not feasible) or not active) else deadline;reason=3 if not permission else 2 if active and not feasible else 4 if early else 1 if deadline>0 and not active else 0
         for key,value in [('coord_held',held),('alpha_exec',alpha),('rule_latched',latch),('coord_alpha_changed',changed),('coord_hold_until_tick',nextdeadline),('coord_hold_remaining_ticks',max(nextdeadline-tick,0)),('coord_hold_release_reason',reason)]:np.testing.assert_array_equal(raw[key][start:min(n,start+4)],value)
+        if changed:stable_since=-1
         if guard_fallback:np.testing.assert_array_equal(raw['coord_guard_fallback_published'][start:min(n,start+4)],guard_selected&permission&~np.bool_(held)&(alpha==raw_alpha))
         if permission and not held:origin=('guard_user' if proposed==user_alpha else 'guard_other') if guard_selected else 'qualified_user' if restore else 'risk_candidate' if eligible.any() else 'fixed_half'
         origins.extend([origin]*min(4,n-start))
         decisions.append(dict(execution_origin=origin,raw_guard_selected=guard_selected,task_tick=tick,held=held,raw_alpha=raw_alpha,executed_alpha=alpha,raw_latched=raw_latch,effective_latched=latch,release_reason=reason,alpha_changed=changed,hold_until_tick=nextdeadline));prev=alpha;latched=latch;deadline=nextdeadline
-    return dict(guard_fallback=guard_fallback,execution_origin_by_tick=origins,dwell_s=dwell_s,dwell_lower_ticks=ticks,independent_numpy_match=True,decisions=decisions,contract='No initialhold. Every permitted actualchange starts40native lower ticks; unchanged proposals do not restart. Currenttaskmask failure bypasses hold; q decline alone does not. Denied publication retains alpha/latch/deadline while native time advances.')
+    return dict(guard_fallback=guard_fallback,execution_origin_by_tick=origins,dwell_s=dwell_s,dwell_lower_ticks=ticks,independent_numpy_match=True,decisions=decisions,contract='No initial hold. Actual changes start the declared user dwell or non-user support commitment; unchanged proposals do not restart. Optional measured recovery releases only a qualified user proposal after preparation and sampled settling. Task-mask failure bypasses hold; q decline alone does not. Denied publication retains alpha/latch/deadline while native time advances.')
 
 
 def online_alpha_dwell_intervals(raw,*,user_alpha=.5):
@@ -2641,7 +2650,7 @@ def audit_soft_curvature_task(raw,case,interface,*,guard_fallback=False):
     return dict(independent_numpy_match=True,curvature_task_mode='soft_penalty',original_proxy_cost_preserved=True,penalty='max(target_speed²*max_abs_curvature/3−1,0)² with coefficient1',validity='Finite latent/unbounded/clipped target and original cost, nonnegative finite curvature, clipped speed/steer within original interface bounds; not road or trajectory feasibility',historical_hard_mask_separately_verified=True)
 
 
-def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guard_fallback=False,curvature_task_mode='hard',interface=None,use_q=True,support_commitment_s=0.):
+def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guard_fallback=False,curvature_task_mode='hard',interface=None,use_q=True,support_commitment_s=0.,recovery_release=None):
     """Retrospective windows; fallback at user alpha is not qualified restoration."""
     n=int(np.asarray(raw['active_tick'],bool).sum());grid=np.array([0.,.25,.5,.75,1.]);t=np.asarray(raw['time'][:n]);alpha=np.asarray(raw['alpha_exec'][:n]);q=np.asarray(raw['coord_qmin'][:n]);task=np.asarray(raw['coord_task_mask'][:n],bool);permission=np.asarray(raw['coord_permission'][:n],bool);latched=np.asarray(raw['coord_latched_before'][:n],bool)
     if q.shape!=(n,5) or task.shape!=(n,5) or not np.isfinite(q).all() or not np.isin(alpha,grid).all():raise ValueError('five-alpha coordinator evidence malformed')
@@ -2667,7 +2676,7 @@ def five_alpha_online_statistics(raw,case,first_arrival_s=None,*,dwell_s=0.,guar
     np.testing.assert_array_equal(raw['channel_alpha_pair'][:n],np.column_stack([alpha,alpha]));np.testing.assert_allclose(raw['query_observation'][:n,336],alpha,atol=1e-6,rtol=0)
     previous=np.r_[user_alpha,alpha[:-1]];switch=alpha!=previous;returned=(previous!=user_alpha)&(alpha==user_alpha);qualified=(alpha==user_alpha)&restore&permission
     if dwell_s:qualified=qualified&np.asarray(raw['coord_restore_published'][:n],bool)
-    dwell_audit=audit_five_alpha_dwell(raw,dwell_s,user_alpha=user_alpha,guard_fallback=guard_fallback,use_q=use_q,support_commitment_s=support_commitment_s) if dwell_s else None
+    dwell_audit=audit_five_alpha_dwell(raw,dwell_s,user_alpha=user_alpha,guard_fallback=guard_fallback,use_q=use_q,support_commitment_s=support_commitment_s,recovery_release=recovery_release) if dwell_s else None
     phases=dict(online_phase_masks(t,case))
     masks=dict(full=np.ones(n,bool),before_pulse=phases['before'],during_pulse=phases['during'],after_pulse=phases['after'],before_first_original_goal=np.ones(n,bool) if first_arrival_s is None else t<first_arrival_s-.005,after_first_original_goal=np.zeros(n,bool) if first_arrival_s is None else t>=first_arrival_s-.005)
     if case.get('force_N',1.)==0.:masks={k:v for k,v in masks.items() if k not in ('before_pulse','during_pulse','after_pulse')};masks['nominal_full']=np.ones(n,bool)
@@ -2772,7 +2781,7 @@ def analyze_five_alpha_online14(root,p):
         fault=raw['policy_fault']|raw['nonfinite']|raw['lower_fault']|raw['continuation_geometry_fault'];data=dict(raw,physical_tick=np.rint(raw['time']/.005).astype(int),policy_fault=fault)
         outcome=goal_arrival_metrics(data,goal_xy=goal,radius_m=1.,dt=.005,horizon_s=10.);outcome['physical_outcome']=physical_outcome(raw['active_tick'],raw['contact_failure'],fault,2000)
         if nominal:np.testing.assert_array_equal(raw['applied_force_impulse'][:n],0.)
-        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.),guard_fallback=protocol.get('guard_fallback',False),curvature_task_mode=protocol.get('curvature_task_mode','hard'),interface=p['config']['residual_interface'],use_q=protocol.get('use_q',True),support_commitment_s=protocol.get('support_commitment_s',0.));pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
+        stats=five_alpha_online_statistics(raw,c,outcome['first_arrival_s'],dwell_s=protocol.get('alpha_dwell_s',0.),guard_fallback=protocol.get('guard_fallback',False),curvature_task_mode=protocol.get('curvature_task_mode','hard'),interface=p['config']['residual_interface'],use_q=protocol.get('use_q',True),support_commitment_s=protocol.get('support_commitment_s',0.),recovery_release=protocol.get('recovery_release'));pulse=audit_pulse(data,dict(force_N=c['force_N'],world_direction=[0.,1.,0.],pulse_onset_task_tick=round(c['onset_s']/.005),pulse_duration_s=c['duration_s']));updates=audit_selection_replans(run,c,lane,raw,path,goal,[d for d in decisions if d['case_id']==c['case_id']])
         original,check=rescore_original_task(raw,path,p['config'],p['initial_source']['controller'],manifest['reward_components'],updates[0][0] if updates else None,task_alpha=user,raw_alpha=user,broaden_cost_numerics=True)
         rebuilt=reconstruct_execution_path_reward(raw,c,path,None,None,p['config'],p['initial_source']['controller'],manifest['reward_components'],path_updates=updates)
         original.update(rebuilt)

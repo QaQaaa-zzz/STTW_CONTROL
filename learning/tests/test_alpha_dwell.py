@@ -87,3 +87,32 @@ def test_commitment_protocol_is_opt_in_and_single_declared_window():
     assert len(five_alpha_online_inventory(p))==6
     for value in (True,1.,float('nan')):
         with pytest.raises(ValueError):five_alpha_online_inventory({**p,'support_commitment_s':value})
+
+
+def test_recovery_release_requires_preparation_and_qualified_user():
+    def call(t,ready=True,proposal=0.,raw_latch=False,permission=True):
+        return apply_alpha_dwell(j.array(proposal),j.array(raw_latch),j.ones(5,bool),j.array(permission),j.array(1.),j.array(True),j.array(850),j.array(t),support_commitment_ticks=750,user_alpha=0.,recovery_ready=j.array(ready),recovery_min_ticks=120)
+    assert call(216)['held']
+    assert call(220,ready=False)['held']
+    assert call(220,proposal=.5)['held']
+    assert call(220,raw_latch=True)['held']
+    assert call(220,permission=False)['alpha']==1.
+    r=call(220)
+    assert r['alpha']==0. and r['release_reason']==4 and r['hold_until_tick']==260
+
+
+def test_recovery_settling_is_elapsed_time_and_rebind_preserves_state():
+    from sttw_control.tolerance_coordination import recovery_settling_start,RecoveryOnlineCarry
+    rule=dict(max_abs_roll_rad=.26,max_abs_roll_rate_rad_s=.1)
+    start=-1
+    for tick in range(100,144,4):
+        start=int(recovery_settling_start(start,tick,.08,.05,True,rule))
+        assert start==100
+        assert (tick-start>=40)==(tick==140)
+    assert recovery_settling_start(start,144,.08,.2,True,rule)==-1
+    assert recovery_settling_start(start,144,.08,.05,False,rule)==-1
+    assert recovery_settling_start(-1,148,.08,.05,True,rule)==148
+    c=RecoveryOnlineCarry(None,True,1.,850,100)
+    assert c._replace(native='rebound')[1:]==c[1:]
+    p=json.loads((Path(__file__).parents[1]/'configs/u170_lower200_recovery_release_online.json').read_text())
+    assert len(five_alpha_online_inventory(p))==6

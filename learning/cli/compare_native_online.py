@@ -29,7 +29,7 @@ def compare(online, fixed, output):
         keyed={(r['bank_index'],r['route'],r['alpha'],r['force_N']):r for r in rows}
         if len(keyed)!=len(rows):raise ValueError('duplicate paired condition')
         plans.append(plan);tables.append(keyed)
-    labels=tuple('Query-window commitment' if plan['protocol'].get('support_commitment_s',0.) else 'Geometry only' if plan['protocol'].get('use_q',True) is False else 'Tolerance coordinator' if plan.get('mode')=='native_five_alpha_online' else 'Fixed user' for plan in plans)
+    labels=tuple('Measured recovery release' if plan['protocol'].get('recovery_release') else 'Query-window commitment' if plan['protocol'].get('support_commitment_s',0.) else 'Geometry only' if plan['protocol'].get('use_q',True) is False else 'Tolerance coordinator' if plan.get('mode')=='native_five_alpha_online' else 'Fixed user' for plan in plans)
     for field in ('models','config','initial_source','contexts','replanning','horizon_s'):
         if plans[0][field]!=plans[1][field]:raise ValueError('paired control identity differs: '+field)
     if tables[0].keys()!=tables[1].keys():raise ValueError('paired conditions differ')

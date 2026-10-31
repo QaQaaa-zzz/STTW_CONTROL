@@ -597,6 +597,8 @@ def deterministic_route_onsets(routes,seed):
 
 
 def five_alpha_online_inventory(p):
+    release=p.get('recovery_release')
+    if release is not None and (release!={'minimum_preparation_s':.6,'max_abs_roll_rad':.26,'max_abs_roll_rate_rad_s':.1,'stable_hold_s':.2} or p.get('support_commitment_s')!=3.75):raise ValueError('declared recovery release contract differs')
     if p.get('support_commitment_s',0.) not in (0.,3.75) or isinstance(p.get('support_commitment_s',0.),bool):raise ValueError('support commitment must match the3.75s held query window')
     if p.get('support_commitment_s',0.) and (p.get('panel_kind')!='declared_source_product' or p.get('use_q') is not True or p.get('alpha_dwell_s')!=.2):raise ValueError('support commitment requires declared q panel and existing dwell')
     if p.get('panel_kind')=='declared_source_product':
@@ -2371,6 +2373,7 @@ def load(root,*,prefix_phase=False):
             qparams=jax.tree.map(j.asarray,coordination.load_five_alpha_export(p['protocol']['predictor_training'],expected_export_sha256=p['protocol']['export_manifest_sha256'],candidate_alphas=tuple(p['protocol']['candidate_alphas']),hypothetical_duration_s=p['protocol']['hypothetical_duration_s']) if five_online else coordination.load_export(root/'q'))
             initial=coordination.OnlineCarry(initial,j.zeros(len(cases),bool),alphas if five_online or p.get('mode') in ('user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation') else j.ones(len(cases)))
             if five_online and p['protocol'].get('alpha_dwell_s',0.):initial=coordination.DwellOnlineCarry(initial.native,initial.latched,initial.prev_alpha,j.zeros(len(cases),j.int32))
+            if five_online and p['protocol'].get('recovery_release'):initial=coordination.RecoveryOnlineCarry(*initial,-j.ones(len(cases),j.int32))
         else:initial=schedule.OnlineCarry(initial,j.zeros(len(cases),bool))
     actors={}
     for name,model in p['models'].items():
@@ -2444,7 +2447,8 @@ def load(root,*,prefix_phase=False):
                 candidate_alpha=j.asarray(p['protocol']['candidate_alphas'])
                 queries=jax.vmap(lambda a:obs.at[336].set(a))(candidate_alpha)
                 latents=jax.vmap(lambda x:actor.apply(param,x))(queries)
-                yaw=env.physics.observe(carry.state.physical.data)[1][2]
+                measurement,pose,_=env.physics.observe(carry.state.physical.data)
+                yaw=pose[2]
                 permission=adapter.target_permission(carry)&~obs_fault
                 # No event schedule, direction, force or pulse end enters this call.
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
@@ -2459,8 +2463,13 @@ def load(root,*,prefix_phase=False):
                     permission=permission&~cd['candidate_reference_fault']
                 alpha_exec,latched=cd['alpha'],cd['latched']
                 dwell=None
+                release=p['protocol'].get('recovery_release')
+                recovery_ready=j.bool_(False)
+                if release:
+                    stable_since=coordination.recovery_settling_start(sidecar.stable_since_tick,carry.state.tick,measurement[0],measurement[1],permission,release)
+                    recovery_ready=(stable_since>=0)&(carry.state.tick-stable_since>=round(release['stable_hold_s']/env.cc.dt))
                 if p['protocol'].get('alpha_dwell_s',0.):
-                    dwell=coordination.apply_alpha_dwell(cd['alpha'],cd['latched'],cd['task_mask'],permission,sidecar.prev_alpha,sidecar.latched,sidecar.hold_until_tick,carry.state.tick,candidate_alphas=tuple(p['protocol']['candidate_alphas']),dwell_ticks=round(p['protocol']['alpha_dwell_s']/env.cc.dt),support_commitment_ticks=round(p['protocol'].get('support_commitment_s',0.)/env.cc.dt),user_alpha=carry.state.alpha)
+                    dwell=coordination.apply_alpha_dwell(cd['alpha'],cd['latched'],cd['task_mask'],permission,sidecar.prev_alpha,sidecar.latched,sidecar.hold_until_tick,carry.state.tick,candidate_alphas=tuple(p['protocol']['candidate_alphas']),dwell_ticks=round(p['protocol']['alpha_dwell_s']/env.cc.dt),support_commitment_ticks=round(p['protocol'].get('support_commitment_s',0.)/env.cc.dt),user_alpha=carry.state.alpha,recovery_ready=recovery_ready,recovery_min_ticks=round(release['minimum_preparation_s']/env.cc.dt) if release else 0)
                     alpha_exec,latched=dwell['alpha'],dwell['latched']
                 queried=obs.at[336].set(alpha_exec)
                 z=latents[j.argmin(j.abs(candidate_alpha-alpha_exec))];half=full=j.zeros_like(z)
@@ -2480,6 +2489,8 @@ def load(root,*,prefix_phase=False):
                     guard_requested=j.asarray(p['protocol'].get('use_q',True))&(~restore)&(~j.any(eligible))&j.any(cd['task_mask'])
                     guard_published=cd['guard_fallback_selected']&(j.asarray(True) if dwell is None else ~dwell['held'])&(alpha_exec==cd['alpha'])
                     coord_log.update(coord_guard_fallback=cd['guard_fallback'],coord_guard_fallback_requested=guard_requested,coord_guard_fallback_selected=cd['guard_fallback_selected'],coord_guard_fallback_alpha=cd['alpha'],coord_guard_fallback_published=guard_published)
+                if release:
+                    coord_log.update(coord_pre_roll=measurement[0],coord_pre_roll_rate=measurement[1],coord_recovery_ready=recovery_ready,coord_recovery_released=dwell['recovery_released'],coord_stable_since_before=sidecar.stable_since_tick,coord_stable_since_tick=stable_since)
                 if dwell is not None:
                     coord_log.update(coord_raw_alpha=cd['alpha'],coord_raw_latched=cd['latched'],coord_dwell_tick=carry.state.tick,coord_hold_until_before=sidecar.hold_until_tick,coord_hold_until_tick=dwell['hold_until_tick'],coord_hold_remaining_ticks=dwell['remaining_ticks'],coord_hold_release_reason=dwell['release_reason'],coord_held=dwell['held'],coord_alpha_changed=dwell['alpha_changed'])
                     coord_log['coord_restore_published']=restore&permission&~dwell['held']&~latched&(alpha_exec==carry.state.alpha)
@@ -2489,7 +2500,8 @@ def load(root,*,prefix_phase=False):
                 candidate_alpha=j.asarray(p['protocol']['coordination']['candidate_alphas'])
                 queries=jax.vmap(lambda a:obs.at[336].set(a))(candidate_alpha)
                 latents=jax.vmap(lambda x:actor.apply(param,x))(queries)
-                yaw=env.physics.observe(carry.state.physical.data)[1][2]
+                measurement,pose,_=env.physics.observe(carry.state.physical.data)
+                yaw=pose[2]
                 permission=adapter.target_permission(carry)&~obs_fault
                 cd=coordination.coordinate(qparams,obs,latents,yaw,carry.state.physical.raw,v,
                     carry.state.projection.progress,path.s,path.curvature,permission,sidecar.latched,sidecar.prev_alpha,
@@ -2551,6 +2563,7 @@ def load(root,*,prefix_phase=False):
             if tolerance:
                 log.update(rule_pre_upper_progress=ticks(carry.state.projection.progress),**{k:ticks(x) for k,x in coord_log.items()})
                 end=coordination.DwellOnlineCarry(end,latched,alpha_exec,dwell['hold_until_tick']) if five_online and p['protocol'].get('alpha_dwell_s',0.) else coordination.OnlineCarry(end,latched,alpha_exec)
+                if five_online and p['protocol'].get('recovery_release'):end=coordination.RecoveryOnlineCarry(*end,j.where(dwell['alpha_changed'],-1,stable_since))
             else:end=schedule.OnlineCarry(end,latched)
         if switching:log.update(origin_channel_alpha_pair=ticks(origin_pair),switch_active=ticks(switched),switch_tick=ticks(st))
         return end,dict({k:log[k] for k in keep},**({k:log[k] for k in ('alpha_user','alpha_exec')} if samestate or returning else {}),**({k:log[k] for k in log if k.startswith('return_')} if returning else {}),**({k:log[k] for k in ('neural_query_active','support_nominal_reference','rule_pre_upper_progress','support_floor','support_requested_offset','support_realized_target_offset','support_active')} if confirmation and not tolerance and not selection else {}),**({k:log[k] for k in ('alpha_user','alpha_exec','rule_latched','rule_preview_max_curvature','rule_accel_estimate','rule_alpha_target')} if online else {}),**({k:log[k] for k in ('origin_channel_alpha_pair','switch_active','switch_tick')} if switching else {}),**({k:log[k] for k in (('channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped') if online or samestate else ('queried_latent_alpha_half','queried_latent_alpha_one','channel_alpha_pair','composed_latent','query_observation','pre_upper_yaw','reference_yaw_unwrapped','e_psi_unwrapped'))} if response else {}),**({k:log[k] for k in (*coord_log,'rule_pre_upper_progress')} if tolerance else {}),effective_costs=j.stack([log['effective_components'][k] for k in keys],axis=-1))
@@ -2566,7 +2579,7 @@ def load(root,*,prefix_phase=False):
             new=carry._replace(native=jax.vmap(env.rebind_geometry)(carry.native,paths,speeds))
         elif online:
             native=jax.vmap(env.rebind_geometry)(carry.native,paths,speeds)
-            new=(coordination.DwellOnlineCarry(native,carry.latched,carry.prev_alpha,carry.hold_until_tick) if five_online and p['protocol'].get('alpha_dwell_s',0.) else coordination.OnlineCarry(native,carry.latched,carry.prev_alpha)) if tolerance else schedule.OnlineCarry(native,carry.latched)
+            new=carry._replace(native=native) if tolerance else schedule.OnlineCarry(native,carry.latched)
         else:new=jax.vmap(env.rebind_geometry)(carry,paths,speeds)
         return jax.tree.map(lambda a,b:j.where(mask.reshape((n,)+(1,)*(a.ndim-1)),a,b),new,carry)
     consumed={}
