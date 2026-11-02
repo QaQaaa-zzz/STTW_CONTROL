@@ -1,0 +1,2061 @@
+{
+  "summary": [
+    {
+      "method": "Fixed alpha0",
+      "n": 12,
+      "arrivals": 11,
+      "survivals": 11,
+      "joint": 11
+    },
+    {
+      "method": "Fixed alpha1",
+      "n": 12,
+      "arrivals": 10,
+      "survivals": 11,
+      "joint": 10
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "n": 12,
+      "arrivals": 11,
+      "survivals": 11,
+      "joint": 11
+    },
+    {
+      "method": "Short dwell",
+      "n": 12,
+      "arrivals": 10,
+      "survivals": 11,
+      "joint": 10
+    },
+    {
+      "method": "Measured recovery",
+      "n": 12,
+      "arrivals": 11,
+      "survivals": 11,
+      "joint": 11
+    }
+  ],
+  "conditions": [
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_S_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.05,
+        "minimum_upright_goal_distance_m": 0.36098322365472574,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_20.npz",
+      "raw_sha256": "4445d48841b48b4d18884151b4c5f9e5e9e24be3e01c199ad5fc12c625a4654a",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 2.9987738132476807,
+      "actual_speed_mean_m_s": 2.8479697704315186,
+      "pulse_speed_m_s": {
+        "min": 2.624669075012207,
+        "max": 2.69150972366333
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        16.988693759107882,
+        59.26214802639711,
+        12.810257475824422
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_S_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.91,
+        "minimum_upright_goal_distance_m": 0.5430354065574728,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_21.npz",
+      "raw_sha256": "71f9490c1ccc6145fa2374aecb4cfb73b0d1cf624419a21004837a3a058a0341",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272338390350342,
+      "actual_speed_max_m_s": 3.039979934692383,
+      "actual_speed_mean_m_s": 2.9032552242279053,
+      "pulse_speed_m_s": {
+        "min": 2.688682794570923,
+        "max": 2.762571334838867
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        15.934657497569319,
+        5.788606688682741,
+        7.376245073986257
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_S_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.05,
+        "minimum_upright_goal_distance_m": 0.3609436664119029,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_09.npz",
+      "raw_sha256": "38c76922070614a6e582639963aac28e748316440c6d99e6f5e30c0f8c8ce1e0",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 2.99874210357666,
+      "actual_speed_mean_m_s": 2.8479623794555664,
+      "pulse_speed_m_s": {
+        "min": 2.6247856616973877,
+        "max": 2.691723346710205
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        16.990199437920428,
+        59.2282819326315,
+        12.78837185592827
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_S_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.0600000000000005,
+        "minimum_upright_goal_distance_m": 0.36597858131115635,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_09.npz",
+      "raw_sha256": "b23981c32cf2cc367a4751c4775f8e5808f42fa9bd1e13806cc8c790ecf28f77",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 2.998654365539551,
+      "actual_speed_mean_m_s": 2.850428819656372,
+      "pulse_speed_m_s": {
+        "min": 2.5639421939849854,
+        "max": 2.6947178840637207
+      },
+      "before_goal_user0_fraction": 0.834983498349835,
+      "original_user_three_running_costs": [
+        16.56209875908987,
+        59.17586643021629,
+        12.389528475223853
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_S_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.0200000000000005,
+        "minimum_upright_goal_distance_m": 0.3687331810693034,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_09.npz",
+      "raw_sha256": "62596ec165397c41f5af526912bfe6ff14971d52fea58822c888be9776a364fc",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 2.998000144958496,
+      "actual_speed_mean_m_s": 2.8580873012542725,
+      "pulse_speed_m_s": {
+        "min": 2.6393237113952637,
+        "max": 2.7065935134887695
+      },
+      "before_goal_user0_fraction": 0.3754152823920266,
+      "original_user_three_running_costs": [
+        15.536499605836198,
+        57.47960320913124,
+        11.936774633769156
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_S_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.9,
+        "minimum_upright_goal_distance_m": 0.26477234874230776,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_18.npz",
+      "raw_sha256": "aa3e8d16f8d0458ec89c0e6a5c8969db662c9995c0c4b28d80f147ed109a438d",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 3.0135467052459717,
+      "actual_speed_mean_m_s": 2.8442533016204834,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        16.114610018343733,
+        21.15087904199404,
+        1.3755677253978789
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_S_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.65,
+        "minimum_upright_goal_distance_m": 0.1980386911248224,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_19.npz",
+      "raw_sha256": "7220068be08e98382bae9e210ec9b3fedbb9e2aee3416750d41abb8d0acb69d7",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2723381519317627,
+      "actual_speed_max_m_s": 3.011328935623169,
+      "actual_speed_mean_m_s": 2.9068570137023926,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        15.090332428270404,
+        3.347797394130444,
+        7.7053119939714385
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_S_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.9,
+        "minimum_upright_goal_distance_m": 0.26482199606201895,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_10.npz",
+      "raw_sha256": "8385b88fd7fff43f77870ff1cc00d65d9af6edabdc5f33ee5591b406242de18c",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 3.0135695934295654,
+      "actual_speed_mean_m_s": 2.8442604541778564,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        16.113406001265986,
+        21.154634218819957,
+        1.3757857017306916
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_S_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.9,
+        "minimum_upright_goal_distance_m": 0.2618032073122887,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_10.npz",
+      "raw_sha256": "ecaaa1f37086c7b403a2f18c5840b2706d92dae33b17767258bd526c6bd27d06",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 3.010488748550415,
+      "actual_speed_mean_m_s": 2.8466391563415527,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.6949152542372882,
+      "original_user_three_running_costs": [
+        15.741110391844678,
+        20.388387268853172,
+        0.5138172094084262
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_S_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.86,
+        "minimum_upright_goal_distance_m": 0.28765208827506844,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_10.npz",
+      "raw_sha256": "11044049a59b1d8c0f3c50c9f6ff342b145291cc8e3bcd8accdacccaafe852fc",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2728536128997803,
+      "actual_speed_max_m_s": 3.0038046836853027,
+      "actual_speed_mean_m_s": 2.8587710857391357,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.09897610921501707,
+      "original_user_three_running_costs": [
+        14.537598260838706,
+        22.50868512394412,
+        0.7761374770958673
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_S_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.45,
+        "minimum_upright_goal_distance_m": 0.4821472305991183,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_22.npz",
+      "raw_sha256": "2f4f816ae71423dbd62f39db9b4f2f337f140cb24d04c953ef79c8a5d69bc3b6",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.1373343467712402,
+      "actual_speed_max_m_s": 2.9970908164978027,
+      "actual_speed_mean_m_s": 2.7602975368499756,
+      "pulse_speed_m_s": {
+        "min": 2.4411771297454834,
+        "max": 2.598419189453125
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        29.930213497453025,
+        55.870613777026065,
+        6.142324033391448
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_S_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 5.825,
+        "minimum_upright_goal_distance_m": 0.260877359845928,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_23.npz",
+      "raw_sha256": "02bed92e10d05818f10e960a11325d480d5cffc4ba2628129b06d30d970dfbc7",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2723381519317627,
+      "actual_speed_max_m_s": 3.0211074352264404,
+      "actual_speed_mean_m_s": 2.879077434539795,
+      "pulse_speed_m_s": {
+        "min": 2.6158716678619385,
+        "max": 2.7157716751098633
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        19.20619996266209,
+        11.252921100247775,
+        9.73726637586812
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_S_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.455,
+        "minimum_upright_goal_distance_m": 0.48341763762882944,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_11.npz",
+      "raw_sha256": "65670f4d2e17fb6758294ffa4e727e703a578d57721fa90878e510cff0fa9bad",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.1371850967407227,
+      "actual_speed_max_m_s": 2.99709415435791,
+      "actual_speed_mean_m_s": 2.760369062423706,
+      "pulse_speed_m_s": {
+        "min": 2.4413037300109863,
+        "max": 2.5985517501831055
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        29.925064844338046,
+        56.055489990280904,
+        6.24757046015822
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_S_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.6450000000000005,
+        "minimum_upright_goal_distance_m": 0.25443232285127054,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_11.npz",
+      "raw_sha256": "fbc7ce7a1983236cbd3336277aa02d5e878c1dcd50c53b40bf81f379bc24d0c6",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.1110122203826904,
+      "actual_speed_max_m_s": 3.01338267326355,
+      "actual_speed_mean_m_s": 2.776071310043335,
+      "pulse_speed_m_s": {
+        "min": 2.4957163333892822,
+        "max": 2.595215320587158
+      },
+      "before_goal_user0_fraction": 0.5718585402558315,
+      "original_user_three_running_costs": [
+        28.563092368700303,
+        123.07464599568803,
+        26.083343620128034
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_S_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.22,
+        "minimum_upright_goal_distance_m": 0.38378790503620935,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_11.npz",
+      "raw_sha256": "85f6ec71f97f1eeb268c2bfce0d8239a018c9735181a867139cbd671d236416c",
+      "requested_speed_m_s": 3.0,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.229011058807373,
+      "actual_speed_max_m_s": 3.0099570751190186,
+      "actual_speed_mean_m_s": 2.7862484455108643,
+      "pulse_speed_m_s": {
+        "min": 2.4769041538238525,
+        "max": 2.6130406856536865
+      },
+      "before_goal_user0_fraction": 0.2347266881028939,
+      "original_user_three_running_costs": [
+        26.147303084463303,
+        45.83685811209439,
+        2.410176531388253
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_single_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.93,
+        "minimum_upright_goal_distance_m": 0.12166522246039585,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_14.npz",
+      "raw_sha256": "6ea0a77708bc886cd8da1aa0175075a2df91746423c1cca31f7941f8cfd53f2f",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2140274047851562,
+      "actual_speed_mean_m_s": 3.032174825668335,
+      "pulse_speed_m_s": {
+        "min": 2.7593140602111816,
+        "max": 2.902891159057617
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        19.305764436986205,
+        137.40227753243772,
+        26.86797383704448
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_single_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.995,
+        "minimum_upright_goal_distance_m": 0.5002647699600552,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_15.npz",
+      "raw_sha256": "2812c5be0711d1f426671f75291736a257c102adc5483000f7177e2271508680",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2723281383514404,
+      "actual_speed_max_m_s": 3.320164203643799,
+      "actual_speed_mean_m_s": 3.1056997776031494,
+      "pulse_speed_m_s": {
+        "min": 3.030987024307251,
+        "max": 3.151423454284668
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        16.599663859471896,
+        14.777729481323725,
+        2.935803058682011
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_single_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.92,
+        "minimum_upright_goal_distance_m": 0.19332040919694274,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_06.npz",
+      "raw_sha256": "02e35d1e850d059fe2f88a0c8a368d9bfd9c820ee023fc4b6a8508aa88f8c427",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2134320735931396,
+      "actual_speed_mean_m_s": 3.0372939109802246,
+      "pulse_speed_m_s": {
+        "min": 2.759370803833008,
+        "max": 2.902952194213867
+      },
+      "before_goal_user0_fraction": 0.7520325203252033,
+      "original_user_three_running_costs": [
+        18.494142887267696,
+        138.9121374940952,
+        26.866471592066507
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_single_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.91,
+        "minimum_upright_goal_distance_m": 0.192939216376703,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_06.npz",
+      "raw_sha256": "49491f983763c3645d44ee4da3de4ec4a7be137b201108ca85e94f11ea7db616",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.215400218963623,
+      "actual_speed_mean_m_s": 3.0436034202575684,
+      "pulse_speed_m_s": {
+        "min": 2.7697091102600098,
+        "max": 2.915398120880127
+      },
+      "before_goal_user0_fraction": 0.5417515274949084,
+      "original_user_three_running_costs": [
+        17.78480379802068,
+        139.2527168942864,
+        26.938519073362478
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_single_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.905,
+        "minimum_upright_goal_distance_m": 0.19031827981070615,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_06.npz",
+      "raw_sha256": "b23c5281e79cc405b09dfd8c5f68538cf8c565305a043f3972183a9a616ba7d5",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2148232460021973,
+      "actual_speed_mean_m_s": 3.0456464290618896,
+      "pulse_speed_m_s": {
+        "min": 2.764380693435669,
+        "max": 2.9080452919006348
+      },
+      "before_goal_user0_fraction": 0.48521916411824667,
+      "original_user_three_running_costs": [
+        17.667818574256124,
+        139.09105234861,
+        26.924315966165338
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_single_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.67,
+        "minimum_upright_goal_distance_m": 0.4833523613647753,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_12.npz",
+      "raw_sha256": "c6d3b1454d1128c266c6b124b3f3dc0b0870ddbf18d663fb7f4bf67f802b6a35",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2136168479919434,
+      "actual_speed_mean_m_s": 3.053173780441284,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        17.253662851562005,
+        38.8729275505514,
+        4.136532225130382
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_single_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.65,
+        "minimum_upright_goal_distance_m": 0.68463639588098,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_13.npz",
+      "raw_sha256": "21c728b82781a330007c59402a8abe5d5da0044e258c9dd4c8649fbefd60354f",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2723281383514404,
+      "actual_speed_max_m_s": 3.2392160892486572,
+      "actual_speed_mean_m_s": 3.112959861755371,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        14.92964545332319,
+        6.325353846390792,
+        1.5009931483129137
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_single_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.67,
+        "minimum_upright_goal_distance_m": 0.4834637936284743,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_07.npz",
+      "raw_sha256": "646edd56444e4ad3c2226bb1dea98b2e6b9db225c771b3ea0dcd6b99b81b683c",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2138030529022217,
+      "actual_speed_mean_m_s": 3.053248643875122,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        17.247386898511422,
+        38.89173570167082,
+        4.140525626813521
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_single_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.66,
+        "minimum_upright_goal_distance_m": 0.48211586636391757,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_07.npz",
+      "raw_sha256": "e93294ef457f231e29bfbea626eaa186859e759ad6ca7b7a09159f0d855849c9",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.201300859451294,
+      "actual_speed_mean_m_s": 3.0616297721862793,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.776824034334764,
+      "original_user_three_running_costs": [
+        16.454252987898226,
+        39.57785824929378,
+        4.116473532045432
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_single_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.66,
+        "minimum_upright_goal_distance_m": 0.485581066721538,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_07.npz",
+      "raw_sha256": "a0b5091c9e95560074665ae99b63aa05f494d6c1b5fe05668cf58d38fa85f3aa",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2149441242218018,
+      "actual_speed_mean_m_s": 3.0625345706939697,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.7167381974248928,
+      "original_user_three_running_costs": [
+        16.38153788350222,
+        39.908584699312975,
+        4.46962300991677
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_high_single_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.625,
+        "minimum_upright_goal_distance_m": 0.31420413348739007,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_16.npz",
+      "raw_sha256": "96c68ccf74671228033fd28a1e76a768dcf92af57765ea60383f40f90ef814b9",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2134525775909424,
+      "actual_speed_mean_m_s": 3.0171446800231934,
+      "pulse_speed_m_s": {
+        "min": 2.878206968307495,
+        "max": 3.0569043159484863
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        22.92180669445517,
+        27.50942297932069,
+        3.0819835787036003
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_high_single_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.55,
+        "minimum_upright_goal_distance_m": 0.6669783846062315,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_17.npz",
+      "raw_sha256": "6396bd00393ebd9322e278b08139587d426ce138b87bff33e4a4ddc78fe5970a",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.2723281383514404,
+      "actual_speed_max_m_s": 3.318702220916748,
+      "actual_speed_mean_m_s": 3.1058223247528076,
+      "pulse_speed_m_s": {
+        "min": 3.146028757095337,
+        "max": 3.318702220916748
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        16.060776965053496,
+        5.157216041013651,
+        2.256885700034551
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_high_single_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.625,
+        "minimum_upright_goal_distance_m": 0.31465008422700247,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_08.npz",
+      "raw_sha256": "548546cd93664d2dc459e0944fb1ebbf065016f620c8b8962bffe24b124eea03",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.213421106338501,
+      "actual_speed_mean_m_s": 3.017174243927002,
+      "pulse_speed_m_s": {
+        "min": 2.8782272338867188,
+        "max": 3.0569450855255127
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        22.917171540758396,
+        27.53401786956715,
+        3.079483412384912
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_high_single_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.585,
+        "minimum_upright_goal_distance_m": 0.3683646293165658,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_08.npz",
+      "raw_sha256": "6bfe15c6a2a5ba2f6a0d6d3fa4ec4f8f5e7f731d5c8d6d2cfa543a8f8a418134",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2153635025024414,
+      "actual_speed_mean_m_s": 3.0417144298553467,
+      "pulse_speed_m_s": {
+        "min": 2.8880436420440674,
+        "max": 3.0762486457824707
+      },
+      "before_goal_user0_fraction": 0.6423118865866958,
+      "original_user_three_running_costs": [
+        19.889039599665274,
+        31.143202541634732,
+        2.637581047793683
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_high_single_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.575,
+        "minimum_upright_goal_distance_m": 0.40689896067413134,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_08.npz",
+      "raw_sha256": "789a89526003b9e6196b37c6289b3ac0cc5d0c62f084d5652615fd3fe60771ea",
+      "requested_speed_m_s": 3.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 2.272834300994873,
+      "actual_speed_max_m_s": 3.2222766876220703,
+      "actual_speed_mean_m_s": 3.046151876449585,
+      "pulse_speed_m_s": {
+        "min": 2.882995367050171,
+        "max": 3.0600903034210205
+      },
+      "before_goal_user0_fraction": 0.2360655737704918,
+      "original_user_three_running_costs": [
+        18.959340491327453,
+        32.20474603348578,
+        2.652585365464298
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_S_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.73,
+        "minimum_upright_goal_distance_m": 0.08565085489821236,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_08.npz",
+      "raw_sha256": "dc02151002756e50ce875e0f882425f159c4b0cbf41d487097034f841da2b068",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.589978575706482,
+      "actual_speed_max_m_s": 2.2727270126342773,
+      "actual_speed_mean_m_s": 2.036555051803589,
+      "pulse_speed_m_s": {
+        "min": 2.0345382690429688,
+        "max": 2.175633430480957
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        24.46143613048472,
+        127.47114103647506,
+        15.340230085565539
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_S_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.615,
+        "minimum_upright_goal_distance_m": 0.5697110372146146,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_09.npz",
+      "raw_sha256": "99cf37178b5bf1f95cdce04316e390499685ab23ee08bd7992f9deba7ecb92c1",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.8313604593276978,
+      "actual_speed_max_m_s": 2.3199353218078613,
+      "actual_speed_mean_m_s": 2.131195068359375,
+      "pulse_speed_m_s": {
+        "min": 2.036608934402466,
+        "max": 2.181711196899414
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        11.244217485817114,
+        13.422498142138672,
+        1.515425823234762
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_S_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.705,
+        "minimum_upright_goal_distance_m": 0.08775803094158947,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_03.npz",
+      "raw_sha256": "227b660c3558cd1e558094d7dea692dc99647d65428087c958f09bbed2d9afec",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.5900152921676636,
+      "actual_speed_max_m_s": 2.2810378074645996,
+      "actual_speed_mean_m_s": 2.0360703468322754,
+      "pulse_speed_m_s": {
+        "min": 2.041059970855713,
+        "max": 2.167843818664551
+      },
+      "before_goal_user0_fraction": 0.6132381570408826,
+      "original_user_three_running_costs": [
+        24.666005158347588,
+        128.08301505312227,
+        13.329989691980911
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_S_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.705,
+        "minimum_upright_goal_distance_m": 0.08776714861598799,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_03.npz",
+      "raw_sha256": "ec658004739ce9f8cfbdae8b57acf31ee960ed307504a7e8210352de8a7094d8",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.590010404586792,
+      "actual_speed_max_m_s": 2.2810494899749756,
+      "actual_speed_mean_m_s": 2.0361030101776123,
+      "pulse_speed_m_s": {
+        "min": 2.0410542488098145,
+        "max": 2.167832851409912
+      },
+      "before_goal_user0_fraction": 0.6132381570408826,
+      "original_user_three_running_costs": [
+        24.6703831008154,
+        128.08495923423396,
+        13.336750618904112
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_S_left",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.705,
+        "minimum_upright_goal_distance_m": 0.08776447711295525,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_03.npz",
+      "raw_sha256": "22f4c6522768f79099a2992dbe9dced61fd2e5880d4d714b31a71d3d11c8af77",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.5900155305862427,
+      "actual_speed_max_m_s": 2.2810635566711426,
+      "actual_speed_mean_m_s": 2.0366547107696533,
+      "pulse_speed_m_s": {
+        "min": 2.0410571098327637,
+        "max": 2.1678407192230225
+      },
+      "before_goal_user0_fraction": 0.6132381570408826,
+      "original_user_three_running_costs": [
+        24.678683260378655,
+        128.08578457982978,
+        13.33030007881228
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_S_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.22,
+        "minimum_upright_goal_distance_m": 0.013921961187885839,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_06.npz",
+      "raw_sha256": "510df631a038b8d0ffec2412ec603d04f124227b5d41cd89a7a447bac26c1599",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6255958080291748,
+      "actual_speed_max_m_s": 2.2727270126342773,
+      "actual_speed_mean_m_s": 2.1102490425109863,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        8.327505784979557,
+        12.951920084132805,
+        3.269050758796659
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_S_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.035,
+        "minimum_upright_goal_distance_m": 0.12176059082455822,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_07.npz",
+      "raw_sha256": "ca04c5a71ca657948fb4f7cc2387aa0dbf4a7c8b2d6c3e5fcfc6ec2d60b42bca",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.8110222816467285,
+      "actual_speed_max_m_s": 2.271872043609619,
+      "actual_speed_mean_m_s": 2.158632278442383,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        7.751301552596733,
+        1.6207589971531438,
+        6.471684960925309
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_S_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.24,
+        "minimum_upright_goal_distance_m": 0.012088819420749327,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_04.npz",
+      "raw_sha256": "ab16b62cbd8e5ed0d419578365e9cca9491f07a2a739a12afa0ef6722b6910bd",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6137431859970093,
+      "actual_speed_max_m_s": 2.272986888885498,
+      "actual_speed_mean_m_s": 2.1049563884735107,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.592948717948718,
+      "original_user_three_running_costs": [
+        9.091442121675065,
+        13.298778352974809,
+        3.3954592639177705
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_S_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.22,
+        "minimum_upright_goal_distance_m": 0.01444093271259444,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_04.npz",
+      "raw_sha256": "f228f9759c8c37e1ea20d421ae5d8c8c87429149114a93177f4f0c6d758ac32d",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6311752796173096,
+      "actual_speed_max_m_s": 2.272986888885498,
+      "actual_speed_mean_m_s": 2.11041259765625,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.43086816720257237,
+      "original_user_three_running_costs": [
+        8.408075945490946,
+        12.964997761612596,
+        3.158548890432019
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_S_left",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.135,
+        "minimum_upright_goal_distance_m": 0.047034699277796715,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_04.npz",
+      "raw_sha256": "441f6fb89c40c205233498f8edb4415c76e484da445cc86b6e28fc26e2fb5b36",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.7381439208984375,
+      "actual_speed_max_m_s": 2.272986888885498,
+      "actual_speed_mean_m_s": 2.1324880123138428,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.30969845150774244,
+      "original_user_three_running_costs": [
+        6.129202310656656,
+        12.69640420152332,
+        2.809830726688268
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_S_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.45,
+        "minimum_upright_goal_distance_m": 0.01078360642062412,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_10.npz",
+      "raw_sha256": "21ebd7cce03677097161089f84c93603d22a5b7038ae91cb0ce323af574bbc57",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6178876161575317,
+      "actual_speed_max_m_s": 2.53857684135437,
+      "actual_speed_mean_m_s": 2.0908420085906982,
+      "pulse_speed_m_s": {
+        "min": 2.218801498413086,
+        "max": 2.53857684135437
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        13.899201793632212,
+        12.620774804332711,
+        0.12675253660144517
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_S_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.255,
+        "minimum_upright_goal_distance_m": 0.28790002223706784,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_11.npz",
+      "raw_sha256": "5e6d81c213bf837a95ac9fb10701f14e61f9e31bfef0bdfc0f604beeb3a0a7d2",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.9309544563293457,
+      "actual_speed_max_m_s": 2.5367817878723145,
+      "actual_speed_mean_m_s": 2.17226505279541,
+      "pulse_speed_m_s": {
+        "min": 2.2256336212158203,
+        "max": 2.5367817878723145
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        6.761748947210562,
+        3.0991389418696063,
+        3.789453121407882
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_S_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.455,
+        "minimum_upright_goal_distance_m": 0.011070258312024673,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_05.npz",
+      "raw_sha256": "ee9479e4da9f8370dae348cf115d3681eabd265cc004e39cec189fd3afd5949d",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6184160709381104,
+      "actual_speed_max_m_s": 2.528012990951538,
+      "actual_speed_mean_m_s": 2.08884334564209,
+      "pulse_speed_m_s": {
+        "min": 2.2107481956481934,
+        "max": 2.528012990951538
+      },
+      "before_goal_user0_fraction": 0.6777691711851278,
+      "original_user_three_running_costs": [
+        14.09583987711915,
+        12.793639613722304,
+        0.19614706482966324
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_S_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.445,
+        "minimum_upright_goal_distance_m": 0.017160528605571868,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_05.npz",
+      "raw_sha256": "f5f8dcde1e2aa6b426f0ef04d4f203926b45f3a88247f9c1b57beb1a8e935944",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6179014444351196,
+      "actual_speed_max_m_s": 2.5279948711395264,
+      "actual_speed_mean_m_s": 2.0954644680023193,
+      "pulse_speed_m_s": {
+        "min": 2.210763454437256,
+        "max": 2.5279948711395264
+      },
+      "before_goal_user0_fraction": 0.5903801396431342,
+      "original_user_three_running_costs": [
+        12.53771769892815,
+        12.98458355956809,
+        0.23264426142826578
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_S_left",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.425,
+        "minimum_upright_goal_distance_m": 0.018247315732383536,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_05.npz",
+      "raw_sha256": "4b0abb4bd6f8c5e4d47090d7b504dcdfc0981bbdf624d77001c9561bca8baeb7",
+      "requested_speed_m_s": 2.2,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.6281545162200928,
+      "actual_speed_max_m_s": 2.528012752532959,
+      "actual_speed_mean_m_s": 2.1069109439849854,
+      "pulse_speed_m_s": {
+        "min": 2.2107839584350586,
+        "max": 2.528012752532959
+      },
+      "before_goal_user0_fraction": 0.4264591439688716,
+      "original_user_three_running_costs": [
+        9.328616533049637,
+        12.544343914182832,
+        0.6847530906661676
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_single_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.745,
+        "minimum_upright_goal_distance_m": 0.23965886345264534,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_02.npz",
+      "raw_sha256": "830b276c63f8491e9ad95f7cad844b67ac973c8d32e84e9b98a4a1d2d27c87df",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.2124415636062622,
+      "actual_speed_max_m_s": 2.27292799949646,
+      "actual_speed_mean_m_s": 1.6897515058517456,
+      "pulse_speed_m_s": {
+        "min": 1.472402811050415,
+        "max": 1.6166388988494873
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        17.666343667214953,
+        161.26906012508,
+        106.53087145947222
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_single_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.02849953543482,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_03.npz",
+      "raw_sha256": "04a6a01f866dd2525293705d68303f573a18d8e130fc0e13221c86570a7bf398",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 2.0300000000000002,
+      "actual_speed_min_m_s": 1.1227580308914185,
+      "actual_speed_max_m_s": 2.2719075679779053,
+      "actual_speed_mean_m_s": 1.8277848958969116,
+      "pulse_speed_m_s": {
+        "min": 1.532307744026184,
+        "max": 1.573283314704895
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        6.231711906686676,
+        0.19148663480443268,
+        1.9422258257888467
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_single_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.495,
+        "minimum_upright_goal_distance_m": 0.24412641667367618,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_00.npz",
+      "raw_sha256": "7b780611cc47b8f0e339fedbd9fcafafc183103f172b6e8d62be0d577324f7aa",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.224951148033142,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.6990625858306885,
+      "pulse_speed_m_s": {
+        "min": 1.4735416173934937,
+        "max": 1.6162525415420532
+      },
+      "before_goal_user0_fraction": 0.8706697459584296,
+      "original_user_three_running_costs": [
+        17.444586249956807,
+        161.0663502576213,
+        95.15604980501936
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_single_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.025921944262728,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_00.npz",
+      "raw_sha256": "269bc74471bb5c4a80046be3f17e42c1d965cc44d6e76fa0558e59cbf429e13d",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 2.02,
+      "actual_speed_min_m_s": 1.153395414352417,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.8220807313919067,
+      "pulse_speed_m_s": {
+        "min": 1.5308104753494263,
+        "max": 1.614790916442871
+      },
+      "before_goal_user0_fraction": 0.38613861386138615,
+      "original_user_three_running_costs": [
+        5.335535621532841,
+        2.114588742815104,
+        0.7158439075111236
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_single_right",
+      "force_N": -36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 4.97387655982338,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_00.npz",
+      "raw_sha256": "867a1b9bc0cce9682c8aa1733ebb8c8805b002cc5e167c404fddcf476d921cc9",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 2.065,
+      "actual_speed_min_m_s": 1.1166400909423828,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.806868076324463,
+      "pulse_speed_m_s": {
+        "min": 1.5532426834106445,
+        "max": 1.6036505699157715
+      },
+      "before_goal_user0_fraction": 0.2711864406779661,
+      "original_user_three_running_costs": [
+        5.583481791650346,
+        2.798674103051683,
+        1.0181745268051452
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_single_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.66,
+        "minimum_upright_goal_distance_m": 0.010346856946310873,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_00.npz",
+      "raw_sha256": "047c36586be67e9a9ad9ae8cd910dddd2bf5be50f4ab84f8b9518ecef95ae46e",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.451693058013916,
+      "actual_speed_max_m_s": 2.27292799949646,
+      "actual_speed_mean_m_s": 1.77798330783844,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        9.382135017482888,
+        5.950721457713262,
+        0.5226715807974375
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_single_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.585,
+        "minimum_upright_goal_distance_m": 0.1353771113446315,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_01.npz",
+      "raw_sha256": "32b3267c93ddee11257863ee377ef7b66e70ddb10827d6f9879b7ad8f6e849fb",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.4482578039169312,
+      "actual_speed_max_m_s": 2.2719075679779053,
+      "actual_speed_mean_m_s": 1.8074662685394287,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        8.41521920370349,
+        1.303871448291637,
+        3.2686832631044576
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_single_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.655,
+        "minimum_upright_goal_distance_m": 0.010567976656207598,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_01.npz",
+      "raw_sha256": "e067d3d8e0b3be65e800928c8226fbb36949af856413b378cf5375dd9e2fddc8",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.4524385929107666,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.7795909643173218,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.8195488721804511,
+      "original_user_three_running_costs": [
+        9.60019919899306,
+        5.93497569871979,
+        0.5133213117105272
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_single_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.62,
+        "minimum_upright_goal_distance_m": 0.012239798910340808,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_01.npz",
+      "raw_sha256": "8611b706d7951305265a4bc22a0e79cc121721ccff4c0c2ccb0a75b118c9d9af",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.4432717561721802,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.786210298538208,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.7316017316017316,
+      "original_user_three_running_costs": [
+        8.418182264913117,
+        5.625774814512252,
+        0.3850866361578976
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_single_right",
+      "force_N": 0.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.66,
+        "minimum_upright_goal_distance_m": 0.027645360821644673,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_01.npz",
+      "raw_sha256": "ad5ac34c68cdfc697997344bec86682b749ce4d34567cc098cfb9d9037aa8172",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.4433250427246094,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.7834539413452148,
+      "pulse_speed_m_s": null,
+      "before_goal_user0_fraction": 0.4248927038626609,
+      "original_user_three_running_costs": [
+        9.091163356380694,
+        4.975981130350145,
+        0.20072251310021852
+      ]
+    },
+    {
+      "method": "Fixed alpha0",
+      "route": "validation_low_single_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.439676542182843,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_04.npz",
+      "raw_sha256": "08c047e6dac2ff51d045dc3d6e5c2965290f76e06d332f47c592b526ecb2bdc7",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 2.11,
+      "actual_speed_min_m_s": 1.1938968896865845,
+      "actual_speed_max_m_s": 2.27292799949646,
+      "actual_speed_mean_m_s": 1.785528302192688,
+      "pulse_speed_m_s": {
+        "min": 1.4528859853744507,
+        "max": 1.5125864744186401
+      },
+      "before_goal_user0_fraction": 1.0,
+      "original_user_three_running_costs": [
+        6.125543339506967,
+        1.6695956178616083,
+        0.09598417873486718
+      ]
+    },
+    {
+      "method": "Fixed alpha1",
+      "route": "validation_low_single_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "not_arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 1.5769469602646076,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_05.npz",
+      "raw_sha256": "2334933698528bb24cdcdb5e459dc02424b79dde526578d1cb3604ed32e6f763",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.455916404724121,
+      "actual_speed_max_m_s": 2.2719075679779053,
+      "actual_speed_mean_m_s": 1.7343435287475586,
+      "pulse_speed_m_s": {
+        "min": 1.5419360399246216,
+        "max": 1.6164543628692627
+      },
+      "before_goal_user0_fraction": 0.0,
+      "original_user_three_running_costs": [
+        15.255301527378364,
+        15.950594398503801,
+        4.922938463511452
+      ]
+    },
+    {
+      "method": "Same timing without risk qualification",
+      "route": "validation_low_single_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.437070522045377,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1/evaluation/cases/case_02.npz",
+      "raw_sha256": "5d2b87e38c733b662fbef2caefa70b56e5dbfb5b4f8b26848bbda73d876e0f5b",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 2.11,
+      "actual_speed_min_m_s": 1.1928739547729492,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.790394902229309,
+      "pulse_speed_m_s": {
+        "min": 1.449501395225525,
+        "max": 1.5068079233169556
+      },
+      "before_goal_user0_fraction": 0.6018957345971564,
+      "original_user_three_running_costs": [
+        6.4163768179315905,
+        1.6518316474917996,
+        0.09698973585359726
+      ]
+    },
+    {
+      "method": "Short dwell",
+      "route": "validation_low_single_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": false,
+        "arrival_outcome": "not_arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 1.715950229997896,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1/evaluation/cases/case_02.npz",
+      "raw_sha256": "705a1d10ce4f7d89e8c6bf8ce028e001ef619f8d4fc5f155492271f8a35e13f3",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.3331257104873657,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.6483879089355469,
+      "pulse_speed_m_s": {
+        "min": 1.4480597972869873,
+        "max": 1.5481764078140259
+      },
+      "before_goal_user0_fraction": 0.832,
+      "original_user_three_running_costs": [
+        18.331266662289032,
+        159.3350873851044,
+        208.07757035887494
+      ]
+    },
+    {
+      "method": "Measured recovery",
+      "route": "validation_low_single_right",
+      "force_N": 36.0,
+      "bank": 2,
+      "endpoint": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 9.835,
+        "minimum_upright_goal_distance_m": 0.717012026436191,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1/evaluation/cases/case_02.npz",
+      "raw_sha256": "eedda871027c6cdba6a66b9fcc7afadfaf093c0faf6e42a57e6352705efa44d2",
+      "requested_speed_m_s": 1.8,
+      "observed_s": 10.0,
+      "actual_speed_min_m_s": 1.4435290098190308,
+      "actual_speed_max_m_s": 2.273094654083252,
+      "actual_speed_mean_m_s": 1.6671252250671387,
+      "pulse_speed_m_s": {
+        "min": 1.533866047859192,
+        "max": 1.6186223030090332
+      },
+      "before_goal_user0_fraction": 0.4880528723945094,
+      "original_user_three_running_costs": [
+        17.467909221428258,
+        156.16906236969356,
+        180.34168711947095
+      ]
+    }
+  ],
+  "provenance": [
+    {
+      "label": "Fixed alpha0",
+      "root": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1",
+      "alpha_filter": 0.0,
+      "plan_sha256": "cccea039f37306d02f31d0996df313e0226e7c059d239eea92ff7429b10d933d"
+    },
+    {
+      "label": "Fixed alpha1",
+      "root": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1",
+      "alpha_filter": 1.0,
+      "plan_sha256": "cccea039f37306d02f31d0996df313e0226e7c059d239eea92ff7429b10d933d"
+    },
+    {
+      "label": "Same timing without risk qualification",
+      "root": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_noq_v1",
+      "alpha_filter": null,
+      "plan_sha256": "6c9d6016000d325037553e8eb683c7bcc3ab6ed60aa8d22a3d9d9ec705af5e14"
+    },
+    {
+      "label": "Short dwell",
+      "root": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_short_dwell_v1",
+      "alpha_filter": null,
+      "plan_sha256": "cd03e9f57941e0f2962a61f62c5752a7d3c079bb8146266c9687b4a6f7c79436"
+    },
+    {
+      "label": "Measured recovery",
+      "root": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_recovery_v1",
+      "alpha_filter": null,
+      "plan_sha256": "06b78cdcb637ce1eb95f5e9695ce0d149b15d44002640abe201349392501fcac"
+    }
+  ],
+  "role": "Frozen candidate transfer across four previously inspected low/high single/S routes; bank2 is shared, not randomized. Nominal and +/-36N are paired. Original goal arrival and full H10 survival are separate; all failures retained.",
+  "task_cost_columns": [
+    "speed",
+    "path",
+    "primary"
+  ],
+  "window_semantics": "Pulse: actual nonzero applied impulse transfers; pre-goal occupancy: integer control transitions through first arrival, excluding subsequent actions.",
+  "cost_scope": "Per-source user alpha, actual observed window; no terminal replacement included. Do not compare different-alpha weighted costs."
+}

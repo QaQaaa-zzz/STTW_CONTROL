@@ -1,0 +1,346 @@
+{
+  "summary": {
+    "candidate": {
+      "n": 4,
+      "arrived": 2,
+      "survived": 4,
+      "joint": 2
+    },
+    "parent": {
+      "n": 4,
+      "arrived": 4,
+      "survived": 4,
+      "joint": 4
+    }
+  },
+  "paired_changes": {
+    "gained": 0,
+    "lost": 2
+  },
+  "conditions": [
+    {
+      "bank": 2,
+      "route": "validation_high_single_left",
+      "alpha": 0.0,
+      "force_N": 0.0,
+      "candidate": {
+        "endpoint": {
+          "goal_arrived": false,
+          "arrival_outcome": "not_arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": null,
+          "minimum_upright_goal_distance_m": 3.5322589562978353,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": false,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_pulse_nominal_retention_v1/u200/evaluation/cases/case_02.npz",
+        "raw_sha256": "5ce16d1d9418adeeb5a74f70ab03483d1652163004069f59dc250f80d20af914",
+        "actual_turn_speed": {
+          "samples": 310,
+          "mean_m_s": 3.0941598415374756,
+          "min_m_s": 2.869014263153076,
+          "max_m_s": 3.212852716445923,
+          "fraction_at_least_2p6_m_s": 1.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.02115645818412304,
+          "steer_rmse_rad": 0.07716013491153717,
+          "speed_max_abs_error_m_s": 0.056728363037109375,
+          "steer_max_abs_error_rad": 0.16005922853946686,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          15.162065656710228,
+          159.1688948063796,
+          66.4865190998928
+        ]
+      },
+      "parent": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.67,
+          "minimum_upright_goal_distance_m": 0.4833523613647753,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_12.npz",
+        "raw_sha256": "c6d3b1454d1128c266c6b124b3f3dc0b0870ddbf18d663fb7f4bf67f802b6a35",
+        "actual_turn_speed": {
+          "samples": 501,
+          "mean_m_s": 2.9385719299316406,
+          "min_m_s": 2.7595808506011963,
+          "max_m_s": 3.171973943710327,
+          "fraction_at_least_2p6_m_s": 1.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.030782470479607582,
+          "steer_rmse_rad": 0.016835832968354225,
+          "speed_max_abs_error_m_s": 0.06225323677062988,
+          "steer_max_abs_error_rad": 0.04009344056248665,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          17.253662851562005,
+          38.8729275505514,
+          4.136532225130382
+        ]
+      },
+      "joint_change": -1
+    },
+    {
+      "bank": 2,
+      "route": "validation_high_single_left",
+      "alpha": 1.0,
+      "force_N": 0.0,
+      "candidate": {
+        "endpoint": {
+          "goal_arrived": false,
+          "arrival_outcome": "not_arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": null,
+          "minimum_upright_goal_distance_m": 5.460722981142477,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": false,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_pulse_nominal_retention_v1/u200/evaluation/cases/case_03.npz",
+        "raw_sha256": "25a7ffbae2dacfda0d9f9b97d83b7e76a0cae22b85d23e4644591ebeecf1c45d",
+        "actual_turn_speed": {
+          "samples": 270,
+          "mean_m_s": 3.1616170406341553,
+          "min_m_s": 2.8975508213043213,
+          "max_m_s": 3.26896333694458,
+          "fraction_at_least_2p6_m_s": 1.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.01760955899953842,
+          "steer_rmse_rad": 0.07101407647132874,
+          "speed_max_abs_error_m_s": 0.03793215751647949,
+          "steer_max_abs_error_rad": 0.09543459117412567,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          15.6974888839028,
+          16.07975043878293,
+          0.7315960319799102
+        ]
+      },
+      "parent": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.65,
+          "minimum_upright_goal_distance_m": 0.68463639588098,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_13.npz",
+        "raw_sha256": "21c728b82781a330007c59402a8abe5d5da0044e258c9dd4c8649fbefd60354f",
+        "actual_turn_speed": {
+          "samples": 488,
+          "mean_m_s": 3.1258862018585205,
+          "min_m_s": 2.867300271987915,
+          "max_m_s": 3.2310001850128174,
+          "fraction_at_least_2p6_m_s": 1.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.03169571980834007,
+          "steer_rmse_rad": 0.011553555727005005,
+          "speed_max_abs_error_m_s": 0.06549406051635742,
+          "steer_max_abs_error_rad": 0.046750735491514206,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          14.92964545332319,
+          6.325353846390792,
+          1.5009931483129137
+        ]
+      },
+      "joint_change": -1
+    },
+    {
+      "bank": 2,
+      "route": "validation_low_single_right",
+      "alpha": 0.0,
+      "force_N": 0.0,
+      "candidate": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.67,
+          "minimum_upright_goal_distance_m": 0.1376074784202715,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_pulse_nominal_retention_v1/u200/evaluation/cases/case_00.npz",
+        "raw_sha256": "816fb04dc37a868f80b11dad7d49c211b423b8d59e0607bd84b53d4124d319ea",
+        "actual_turn_speed": {
+          "samples": 278,
+          "mean_m_s": 1.4831656217575073,
+          "min_m_s": 1.4405608177185059,
+          "max_m_s": 1.6184331178665161,
+          "fraction_at_least_2p6_m_s": 0.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.01836448721587658,
+          "steer_rmse_rad": 0.04273419827222824,
+          "speed_max_abs_error_m_s": 0.06485974788665771,
+          "steer_max_abs_error_rad": 0.07599274814128876,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          11.572508276078967,
+          25.80754575662143,
+          0.9708184105018393
+        ]
+      },
+      "parent": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.66,
+          "minimum_upright_goal_distance_m": 0.010346856946310873,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_00.npz",
+        "raw_sha256": "047c36586be67e9a9ad9ae8cd910dddd2bf5be50f4ab84f8b9518ecef95ae46e",
+        "actual_turn_speed": {
+          "samples": 277,
+          "mean_m_s": 1.4857003688812256,
+          "min_m_s": 1.451693058013916,
+          "max_m_s": 1.6034595966339111,
+          "fraction_at_least_2p6_m_s": 0.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.02708970196545124,
+          "steer_rmse_rad": 0.01900649070739746,
+          "speed_max_abs_error_m_s": 0.056169986724853516,
+          "steer_max_abs_error_rad": 0.08292639255523682,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          9.382135017482888,
+          5.950721457713262,
+          0.5226715807974375
+        ]
+      },
+      "joint_change": 0
+    },
+    {
+      "bank": 2,
+      "route": "validation_low_single_right",
+      "alpha": 1.0,
+      "force_N": 0.0,
+      "candidate": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.57,
+          "minimum_upright_goal_distance_m": 0.061036771008178524,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_pulse_nominal_retention_v1/u200/evaluation/cases/case_01.npz",
+        "raw_sha256": "1028b109756993f46aba0e28a49fa3280fc8775bb4b4ee1eeca576b40eda7c8d",
+        "actual_turn_speed": {
+          "samples": 273,
+          "mean_m_s": 1.5776487588882446,
+          "min_m_s": 1.4407644271850586,
+          "max_m_s": 1.7899689674377441,
+          "fraction_at_least_2p6_m_s": 0.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.01654455065727234,
+          "steer_rmse_rad": 0.04341175779700279,
+          "speed_max_abs_error_m_s": 0.05945587158203125,
+          "steer_max_abs_error_rad": 0.06303264200687408,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          9.924242852836013,
+          3.3440394140381704,
+          3.6993320430870025
+        ]
+      },
+      "parent": {
+        "endpoint": {
+          "goal_arrived": true,
+          "arrival_outcome": "arrived",
+          "goal_radius_m": 1.0,
+          "first_arrival_s": 4.585,
+          "minimum_upright_goal_distance_m": 0.1353771113446315,
+          "contact_after_arrival": false,
+          "fault_after_arrival": false,
+          "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+          "physical_outcome": "survived"
+        },
+        "joint": true,
+        "raw_file": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/cross_speed_timing_fixed_v1/evaluation/cases/case_01.npz",
+        "raw_sha256": "32b3267c93ddee11257863ee377ef7b66e70ddb10827d6f9879b7ad8f6e849fb",
+        "actual_turn_speed": {
+          "samples": 273,
+          "mean_m_s": 1.5871778726577759,
+          "min_m_s": 1.4482578039169312,
+          "max_m_s": 1.7869101762771606,
+          "fraction_at_least_2p6_m_s": 0.0,
+          "scope": "upright samples whose projected original-path curvature exceeds 0.001/m"
+        },
+        "lower_reference_tracking": {
+          "upright_samples": 2000,
+          "speed_rmse_m_s": 0.026271402835845947,
+          "steer_rmse_rad": 0.015424189157783985,
+          "speed_max_abs_error_m_s": 0.05562758445739746,
+          "steer_max_abs_error_rad": 0.05846721678972244,
+          "scope": "same-sample delivered reference versus measured response, upright active window; includes dynamic lag, not isolated lower-controller causality"
+        },
+        "original_user_three_running_costs": [
+          8.41521920370349,
+          1.303871448291637,
+          3.2686832631044576
+        ]
+      },
+      "joint_change": 0
+    }
+  ]
+}
