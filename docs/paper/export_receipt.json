@@ -1,20 +1,9 @@
 {
-  "images": {
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/control_architecture.png": "1563bd8576113e0d5be75112e347d5ed753ff4b5939ad1852ac423930481dbd4",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/left90_R1p3_v2p0_t2.2_F+24_fixed_candidate_xy.png": "9931fdf3d4db5b08af0464c26070a05acc7f7b6fe1845b9849c5c876117f9ec5",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_causal_preference_return_v1/analysis/cached_hold_comparison_02.png": "5a4856a046a8970d0b3018cc8eb1f2cfadaf3f0e95acdb54a7316ba16c04c9ee",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_matched_fixed_baselines_v1/analysis/matched_comparison/publication/group_00_comparison.png": "1be75d6905d4881ad29700947448c0442a66b025cedaea9055c6bce5bb113185",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/publication/group_01_comparison.png": "40501d57a91f13ad2cd231a42a9f478669d2e5bff3d29734e9833ca3ccfd4edd",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_nominal_v1/analysis/S_left_60_R1p3_v2p0_zero_fixed_candidate_xy.png": "9da61b863a973fd9f591008c0c7f43e5d84c8d39a20ab0682ac60ae70e06d33c",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/publication/group_01_comparison.png": "3e589b23cf36277da043d5e079652a13c40585aaadc99517d7049bc45b61fa6f",
-    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_common_event_t1p0_v1/analysis/common_event_comparison/comparison.png": "3734f90d1aaee62650201bb0602762a8e3a5a1f7154977e4d8dc7a35683b42b0"
-  },
-  "html_sha256": "14cc9380d455c602b1ab26d28a37ad37cbfb8d2cb7f5cfcc8b3b828e3e984cb4",
-  "pdf_requested": false,
-  "disclosure": "Offline local rendering only, no publication or source-data upload",
-  "physics_steps": 0,
-  "renderer": "Tectonic 0.17.0 / IEEEtran journal",
-  "tex_sha256": "094466c5dd59b0b9a3112ac326923ee5a4b94ee06552064f0bd943f22ffb6b79",
-  "pdf_sha256": "59b7b43f4e8c221fcfe74b1c531343c994e20a8d4caa80a07f0c12b4ae39c733",
-  "pdf_bytes": 2165242
+  "manuscript_sha256": "380b2c1787d27460c2f1e9c597e7baf45494acc161ae1e7b354f2fe1642a424b",
+  "html_sha256": "fd58b21f1feb64db1284f5951aff50720498785c1583dbf3280a423a955780fd",
+  "evidence_manifest_sha256": "4cfb8aa7f47fe14c362feab520a77e69fad544fe7a833489dcd365f69e8b4eb3",
+  "pdf_requested": true,
+  "disclosure": "Local offline rendering; no manuscript or unpublished data sent to external service",
+  "pdf_sha256": "a1f62755fd07f410a3d0df32fde1ab32755751c9613127d9ce0c9c4a176dec5a",
+  "pdf_bytes": 287997
 }

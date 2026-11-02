@@ -1,0 +1,337 @@
+# Disturbance-Tolerance-Guided Preference Coordination for a Single-Track Robot
+
+Internal TCST manuscript. Evidence updated 2026-10-30. Model and data provenance are recorded in the companion evidence manifest; the current study uses frozen U170 control, a continuation-conditioned predictor, and 10 Hz geometric reconnection.
+
+## Abstract
+
+A tracking preference changes more than the nominal balance between path accuracy and speed regulation in a single-track robot: it also changes the closed-loop state from which the robot must withstand a disturbance. This paper develops disturbance-tolerance-guided preference coordination for low-speed turning. A frozen preference-conditioned middle policy supplies reference corrections to an existing balance controller. A compact supervised network evaluates candidate preferences together with preparation time, hypothetical disturbances, and a specified feedback policy for returning to the user's preference. A nonlearned coordinator retains the user setting when its predicted outcomes satisfy the task criteria and otherwise selects a temporary preference. Feedback restoration and geometric reconnection preserve the original task. Matched simulations expose distinct outcomes for balance recovery and goal completion. In two 24 N disturbance cases, both the fixed user preference and a fixed intermediate preference contact the ground before arrival, whereas the proposed execution reaches the original goal at 6.935 and 6.980 s and survives the full observation window. A separate three-case held-versus-return comparison achieves three arrivals with restoration and one with continued holding. These results establish the usefulness of coordinating preparation and preference restoration in the tested low-speed regime. [E250–E258,E276–E278]
+
+## 1 Introduction
+
+Single-track robots must coordinate steering, forward motion, and balance while following a task reference. In a tight turn, a request for smaller path error can induce a different speed and reference history from a request for stronger speed regulation. For a user, these settings represent legitimate tracking preferences. For the physical robot, they create different states, actuator demands, and responses to a subsequent disturbance. A controller that performs well on the nominal task can therefore encounter a disturbance from an unfavorable state. The control problem is to preserve the user's task while deciding when a temporary change of preference is useful. [E250,E259–E261]
+
+The preference parameter in this study is denoted by $\alpha$: zero emphasizes path tracking and one emphasizes speed regulation. It enters a learned middle policy that produces bounded reference corrections. The middle policy and the lower balance controller are frozen during disturbance-tolerance learning and evaluation. This architecture provides a small set of executable alternatives without retraining a complete control policy for each disturbance scenario. The coordinator changes the executed preference, while the original path, destination, and user preference continue to define the task. [E259–E261]
+
+Two aspects make this coordination problem temporal. First, a preference command acts through reference filters, actuator dynamics, and vehicle motion. Its disturbance response depends on the state reached after a preparation interval. Second, maintaining a disturbance-resistant preference indefinitely may prevent completion of the original task. The temporary intervention must therefore be evaluated together with what happens afterward. Our predictor evaluates the candidate preference under a specified feedback-restoration policy, and our experiments distinguish ground contact, original-goal arrival, and original-user task cost. [E251,E253,E276]
+
+### 1.1 Related work
+
+Learning-enhanced bicycle control provides a relevant foundation. Hierarchical residual reinforcement learning combines attitude and position subtasks with conventional control for unmanned-bicycle path tracking. [R3] Adaptive data-enabled policy optimization has been combined with inner-loop feedback linearization for bicycle lean tracking. [R4] Disturbance-rejection approaches also coordinate trajectory tracking and balance through velocity planning and nonlinear feedback. [R5] These studies motivate the use of a capable frozen control stack and place the focus here on how its tracking preference is executed over time.
+
+Reference and command governors modify requests to address constraints in an existing closed loop. [R6] Predictive safety filters assess a proposed control action and construct an alternative through model-based prediction. [R7] Recovery RL separates task behavior from recovery behavior using learned information about violations. [R8] Our coordinator similarly acts above an existing controller, but its decision variable is the tracking preference of a frozen middle policy. Its supervised target is the joint disturbance and task outcome under a candidate preparation and a prescribed subsequent restoration policy. This defines a concrete application of outcome prediction to preference execution in a steering-balanced single-track robot.
+
+### 1.2 Contributions
+
+The paper develops three connected contributions:
+
+1. **Preference-conditioned closed-loop characterization.** A frozen middle policy exposes the path–speed tradeoff, and matched low-speed experiments characterize how preference-dependent state and reference histories change disturbance outcomes.
+2. **Preparation- and continuation-conditioned tolerance prediction.** A compact model evaluates candidate preferences using the available preparation interval and a specified feedback-return policy, jointly predicting contact avoidance, original-goal completion, path deviation, and speed.
+3. **Task-preserving preference coordination.** A user-priority selection rule combines these predictions with feedback restoration and geometric reconnection. Matched fixed-preference and held-versus-return experiments evaluate its effect on completing the original task.
+
+The first contribution identifies the control behavior available to the coordinator, the second evaluates the consequences of using that behavior, and the third connects a temporary intervention to task completion. The experiments accordingly separate nominal preference behavior, preparation outcomes, and the effect of returning to the user's preference. [E250–E261,E276–E278]
+
+## 2 System and Task Formulation
+
+### 2.1 Frozen control hierarchy
+
+![Implemented preference-coordination architecture. The learned predictor is queried once at the source boundary; feedback restoration runs at 50 Hz and geometric reconnection at 10 Hz. Hypothetical disturbances enter prediction, while the actual future event schedule is unavailable to the controller.](figures/control_architecture.png)
+
+The middle controller, denoted U170, is selected from a continuation of H75 training that includes low-speed tight turns. It supplies preference-conditioned reference corrections at 50 Hz. The lower controller combines ECBC, ESO, and the frozen local300 residual at 200 Hz. Each lower control interval comprises 25 physics steps of 0.0002 s. Front and rear wheel friction coefficients are both 0.8. The tolerance-learning stage changes neither policy weights nor the lower controller. [E259–E261]
+
+The original path, speed request, destination, and user preference define the task. A geometric follower provides nominal references. When departure requires reconnection, a deterministic geometric module checks and updates the connection at 10 Hz while retaining the original world-frame destination. The executed preference enters the frozen middle network; the resulting corrections pass through the existing reference filters and actuator permissions. Thus preference coordination changes reference-generating behavior rather than directly commanding motor torques. [E259,E261]
+
+Let x denote the complete closed-loop state, including the vehicle, actuators, observer, reference filters, and observation history. Let $z=H(x,r)$ denote the observable predictor features for original task r. Experimental branches originate from the same complete x; selecting a different preference does not reset hidden controller state. The simulation uses true vehicle forward speed in this interface. A physical implementation requires an estimator for that quantity in addition to the available attitude, steering, and localization signals. [E259–E261]
+
+### 2.2 Task and disturbance outcomes
+
+The user preference $\alpha_u$ remains fixed within each evaluation. The executed preference $\alpha_e$ may temporarily differ from $\alpha_u$. Original-task metrics are always evaluated against the original path and destination, even while a reconnecting path supplies executable references. Arrival occurs when the robot enters the original destination disk of radius 1 m before contact or a controller fault. The arrival condition does not impose a terminal stop. [E250,E253–E258]
+
+The disturbance is a horizontal force applied at the body center of mass in a fixed world direction, (-sin(0.8), cos(0.8), 0). The main matched experiments use a 24 N pulse lasting 0.4 s; additional cases use 20 N. Force magnitude and duration define the intervention, and the actual future pulse schedule is not an input to the coordinator. Low-speed outcomes are checked using actual forward speed over the full upright observation window, with an absolute-speed threshold of 2.1 m/s. [E250,E254–E256,E277,E279]
+
+For a source state at task time t_s, the observation ends at task time 10 s or a physical failure. The binary labels are
+
+```math
+Y_{\mathrm{nf}}&=\mathbf{1}\{\text{no contact in the remaining window}\},\\
+Y_{\mathrm{goal}}&=Y_{\mathrm{nf}}\,\mathbf{1}\{\text{original goal reached}\}.
+```
+
+Engineering faults are retained in evaluation records and excluded from physical-contact supervision. In addition to these outcomes, we record original-path error, actual speed, preference restoration time, and intervention $I_\alpha=\int |\alpha_e(t)-\alpha_u|\,dt$. Full-window costs and costs over a common paired observation prefix are reported separately. [E251,E278,E280]
+
+## 3 Preparation-Conditioned Preference Coordination
+
+### 3.1 Predicting a complete candidate execution
+
+A candidate consists of a preparation preference a and a specified subsequent restoration policy $\pi_r$. The complete branch evolves according to
+
+```math
+x_{k+1} &= F_{\mathrm{cl}}(x_k,\alpha_{e,k},r,d_k),\\
+\alpha_{e,k} &= \Pi(a,\alpha_u,z_k,t_k-t_s;\pi_r).
+```
+
+Here $F_{\mathrm{cl}}$ is the implemented closed loop. The learned model predicts outcomes of this execution rather than identifying a separate dynamics model. For hypothetical disturbance d and preparation interval $\tau$, the prediction is
+
+```math
+&f_\psi(z,a,d,\tau,\alpha_u;\pi_r)\\
+&\qquad=(q_{\mathrm{nf}},q_{\mathrm{goal}},\hat e_{\mathrm{path}},\hat v_{\mathrm{peak}}).
+```
+
+The classification outputs score contact avoidance and completion of the original goal over the remaining task window. The regression outputs summarize original-path RMSE and peak upright speed. Path RMSE is evaluated from the source until first arrival; a surviving nonarriving execution uses the remaining window. Conditioning on $\pi_r$ aligns the training label with the actual policy executed after preparation. Holding a preference indefinitely and later returning it define different prediction targets. [E251,E259–E261]
+
+The input contains 34 current observation features, eight candidate/disturbance-query features, and the original user preference, giving 43 features. Its state information includes speed, attitude, reference-filter state, and local path curvature. Candidate features include the preference and associated middle-policy reference corrections. The disturbance query specifies hypothetical force and timing information, independently of the actual future event. [E260]
+
+Three independently initialized 43–16–16–4 networks with ELU hidden activations are trained and their outputs averaged. Each member contains 1,044 parameters. Binary cross entropy trains the two classification heads. The continuous targets use log(1+y), with loss weights 1, 1, 0.25, and 0.25 for the four heads. Failed trajectories do not contribute continuous-target regression, so a short failure cannot be learned as an inexpensive successful task. AdamW uses learning rate 0.001 and weight decay 0.001, for 5,000 supervised updates per member. The fixed final models are used for the reported experiments. [E251,E252,E260,E268]
+
+The training set contains 232 query labels from 188 distinct physical trajectories: 185 held-equivalent queries whose user and executed preferences coincide, 44 derived failure queries that terminate before restoration can start, and three physical feedback-return trajectories. Derived queries reuse physical evidence rather than creating new independent rollouts. The current scores are used for candidate ranking and thresholding; probability calibration is not part of the training objective. [E251,E252]
+
+### 3.2 Candidate selection
+
+Before execution, specify a finite hypothesis set D of possible disturbances and preparation intervals. For each queried preference, take the minimum classification scores and maximum predicted path error across D. The admissible candidate set is
+
+```math
+\mathcal A_{\mathrm{ok}}=\Big\{a\in\mathcal A_{\mathrm{query}}:\quad&\\
+\min_{(d,\tau)\in\mathcal D}q_{\mathrm{nf}}(a,d,\tau)&\ge\eta_{\mathrm{nf}},\\
+\min_{(d,\tau)\in\mathcal D}q_{\mathrm{goal}}(a,d,\tau)&\ge\eta_{\mathrm{goal}},\\
+\max_{(d,\tau)\in\mathcal D}\hat e_{\mathrm{path}}(a,d,\tau)&\le e_{\max}\Big\}.
+```
+
+The reported instance uses $\eta_{\mathrm{nf}}$=0.8, $\eta_{\mathrm{goal}}$=0.5, and $e_{\max}$=4 m. This path-error threshold is an open-plane task criterion. The five original candidate preferences are 0, 0.25, 0.5, 0.75, and 1; the preparation study additionally queries 0.875. Adjacent qualifying queried points can be displayed as ranges, while execution chooses only an evaluated point. [E254–E258,E260]
+
+If $\alpha_u$ is in $\mathcal A_{\mathrm{ok}}$ and reference publication is permitted, the coordinator retains it. Otherwise, it chooses a queried admissible point minimizing
+
+```math
+J(a)=(a-\alpha_u)^2+0.1(a-\alpha_{\mathrm{previous}})^2.
+```
+
+This rule prioritizes the original preference while penalizing a change from the previous execution. When the set is empty or reference publication is prohibited, the current implementation holds the previous preference and records that outcome. The task-output heads determine eligibility; the preference-distance objective determines which eligible candidate is selected. [E260,E261]
+
+### 3.3 Feedback restoration
+
+After selection, preparation lasts at least 2 s from the source boundary. Restoration becomes eligible when all of the following hold: absolute roll is at most 15 degrees, absolute roll rate is at most 0.35 rad/s, forward speed is at least 1.5 m/s, and reference publication is permitted. These conditions must hold continuously for 0.3 s before entering the return phase. The return update is
+
+```math
+\alpha_{e,k+1}&=\alpha_{e,k}\\
+&\quad+\operatorname{clip}(\alpha_u-\alpha_{e,k},-\rho\Delta,\rho\Delta),\\
+\Delta&=0.02\ \mathrm{s},\qquad \rho=1\ \mathrm{s}^{-1}.
+```
+
+If the feedback condition becomes invalid during restoration, the preference is held until the condition becomes valid again. A resumed return does not restart the initial dwell requirement. An implementation tolerance of 1e-6 completes the final approach to the user value. Neither the actual gust onset nor its end enters this rule. [E253–E256,E261,E265]
+
+For fixed $\alpha_u$, each permitted return update moves $\alpha_e$ toward $\alpha_u$ without overshoot. Its increment is bounded by $\rho\Delta$, apart from the stated completion tolerance. The initial preparation selection may jump from the user preference; the return-rate property applies to the restoration phase. Existing reference filters and actuator permissions remain active throughout.
+
+### 3.4 Execution and verification
+
+The reported coordinator performs one neural selection at the declared source boundary. The return rule subsequently runs at the middle-policy update rate, independently of the 10 Hz geometric reconnection clock:
+
+1. **Select at the source.** Read current state and user preference; query all candidates against the fixed hypothetical disturbance family. Retain the eligible user preference or choose a qualified alternative.
+2. **Prepare.** Start the preparation clock with the complete vehicle and controller state preserved. Hold the selected preference for the minimum preparation age.
+3. **Restore.** After the initial valid-feedback dwell, move toward the user preference at each permitted update; hold when feedback is invalid.
+4. **Reconnect.** Continue geometric reconnection on its independent clock throughout execution.
+
+
+Each prediction package binds the feature schema, model identity, and restoration parameters to the evaluated continuation policy. Results are grouped by complete source state and actual force event. Shared-source branches provide paired interventions. They are not independent random repetitions. Fixed and dynamic baselines use the same vehicle model, frozen control stack, goal, and reconnection mechanism. Original-user costs are independently reconstructed from saved trajectories, and trajectories terminate at their actual physical endpoint. [E251,E261,E275,E278,E280]
+
+### 3.5 Experimental contrasts and measurement
+
+The experiments separate four questions. First, fixed-preference branches characterize the behaviors available from the frozen middle policy. Second, holding a preparation preference and restoring the original preference test whether balance recovery also leads to task completion. Third, matched fixed and preset-return baselines test the complete selection-and-restoration controller. Finally, mirrored turns and two-turn segments examine how those behaviors extend across geometry. Each contrast keeps the physical model, actuator configuration, original goal, and geometric reconnection mechanism fixed. [E250,E253,E276–E284]
+
+A continuation begins from a saved complete closed-loop state. This includes the vehicle state, controller history, observer, reference filters, and task clock. Candidate preference is changed at that boundary while the other state variables are retained. A shared source therefore defines a paired physical intervention. Different source histories are reported separately because their speed, attitude, and reference states can differ before the new candidate is applied. The hypothetical disturbance family used by the predictor is fixed before execution; the realized force and onset are used only to generate and score the evaluation trajectory. [E254–E258,E261]
+
+| Evaluation quantity | Definition | Interpretation |
+|---|---|---|
+| Contact outcome | Any physical ground-contact failure before task time 10 s | Balance survival |
+| Original-goal arrival | First entry into the fixed 1 m goal disk before failure | Completion of the positional task |
+| Arrival time | Task-clock time at first entry | Timeliness, reported with contact outcome |
+| Preference intervention | Integral of absolute executed-minus-user preference | Amount and duration of preference change |
+| Original-task running cost | Same original-user task channels reconstructed from each trajectory | Path and speed performance under one objective |
+| Peak upright speed | Maximum absolute actual forward speed before failure | Check of the low-speed operating regime |
+
+All reported comparisons preserve the full declared set of candidate trajectories, including contact failures and surviving trajectories that miss the destination. Arrival and survival are tabulated separately. The running-cost comparison uses both a common paired prefix and each trajectory's full observation window; cost values are not substituted for the physical outcomes. On the matched S-segment panel, all methods survive through task time 10 s, so the complete observation window is shared. Three network initializations form the prediction ensemble, whereas the control comparisons are deterministic branches from saved source states. The figures show those branches directly rather than assigning sampling error bars to them. [E251,E268,E278,E280,E284]
+
+## 4 Simulation Results
+
+### 4.1 Preference-dependent disturbance outcomes
+
+![Five fixed preferences under the same disturbance](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_low_speed_five_alpha_load_boundary_v1/analysis/left90_R1p3_v2p0_t2.2_F+24_fixed_candidate_xy.png)
+
+The first experiment applies the same 24 N, 0.4 s pulse at task time 2.2 s during a left 90-degree turn of radius 1.3 m and requested speed 2 m/s. Each of the five fixed preferences produces a distinct closed-loop history before and after the pulse. [E250]
+
+| Fixed $\alpha$ | Physical outcome at 10 s | Original-goal arrival |
+|---|---|---|
+| 0 | Contact at 2.675 s | No |
+| 0.25 | Contact | No |
+| 0.5 | Survived | 8.680 s |
+| 0.75 | Survived | No |
+| 1 | Survived | No |
+
+Between task times 1 and 2.2 s, the minimum forward speeds for $\alpha$=0 and $\alpha$=1 are approximately 1.448 and 1.660 m/s. Both remain below the 2.1 m/s upper low-speed criterion over their upright windows. Alpha=0 does not exhibit the larger nominal roll amplitude. The observed contact difference therefore concerns the complete preference-dependent closed loop, including speed and reference history, rather than a ranking by instantaneous roll alone. Fixed $\alpha$=0.5 completes this particular event, while the two larger preferences preserve balance without completing the goal. This separates tolerance of the disturbance from completion of the user's task. [E250]
+
+### 4.2 Restoring the user's preference
+
+Three paired cases begin from the same complete early source state and prepare $\alpha$=0.875. Actual pulse onset is varied among 1.9, 2.0, and 2.1 s. The feedback-return executions all survive and arrive. Cached continuations that hold $\alpha$=0.875 also all survive, but only one arrives. The pairs preserve the original goal, source identity, and force event. [E253,E276]
+
+| Onset (s) | Held arrival (s) | Return arrival (s) | Held minimum goal distance (m) | Return minimum goal distance (m) | User preference restored (s) |
+|---:|---:|---:|---:|---:|---:|
+| 1.9 | No arrival | 6.165 | 1.02545 | 0.05810 | 4.18 |
+| 2.0 | 9.050 | 8.645 | 0.05117 | 0.00723 | 4.46 |
+| 2.1 | No arrival | 6.225 | 2.07887 | 0.07313 | 4.42 |
+
+![Held and restored preferences from the same complete source](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_causal_preference_return_v1/analysis/cached_hold_comparison_02.png)
+
+At onset 1.9 s, the held trajectory misses the 1 m arrival disk by approximately 2.5 cm. The onset-2.1 s pair exhibits a larger difference in closest approach, from 2.079 m to 0.073 m. These continuous distances accompany the binary arrival result. The return policy changes task completion without changing survival in this panel; individual original-user cost components need not all decrease. [E276]
+
+### 4.3 Frozen-model confirmations
+
+
+Five subsequent physical simulations use the frozen predictor and control stack. Four execute a neural preference choice and one tests the upper endpoint of a predicted range. The first two actual pulse times are absent from the selector inputs; it queries the predeclared hypothetical family at task time 1 s. [E254–E258]
+
+| Case | Speed (m/s) / radius (m) | Actual onset (s) / force (N) | Qualified queried range; execution | Arrival (s) | Final $\alpha$ |
+|---|---|---|---|---:|---:|
+| New pulse time | 2 / 1.3 | 1.925 / 24 | [0.875,1]; 0.875 | 6.935 | 0 |
+| New pulse time | 2 / 1.3 | 2.075 / 24 | [0.875,1]; 0.875 | 6.980 | 0 |
+| Endpoint test | 2 / 1.3 | 2.000 / 24 | [0.875,1]; preset 1 | 6.735 | 0 |
+| Different source history | 2 / 1.3 | 2.000 / 20 | [0,0.5]; 0 | 4.930 | 0 |
+| Different low-speed turn | 1.6 / 0.9 | 2.000 / 20 | {0}; 0 | 6.960 | 0 |
+
+All five complete the original goal, survive the observation window, and satisfy the full-upright-window speed criterion. The first three restore the preference after preparation; the last two retain the original zero preference throughout. Their source states span two geometries and three related closed-loop histories. The original trajectories show the reconnection excursion explicitly, so goal completion is assessed separately from path accuracy. [E254–E258,E264]
+
+For the early source, increasing the no-contact score threshold from 0.8 to 0.9999 contracts the qualified set from [0.875,1] to {1}. This is a response to the score threshold. More restrictive 2 m path-error screening produces one erroneous admission in the two pulse-time confirmations, and the speed head underestimates the upper-endpoint peak by approximately 0.276 m/s. These diagnostics identify which predictive quantities require improvement as the task domain expands. [E257,E258,E262]
+
+### 4.4 Preparation and continuation coverage
+
+Earlier held-preference models were sensitive to preparation intervals absent from their development data: three of four subsequent recommendations contacted the ground despite favorable preceding preference-interpolation results. Additional supervised updates improved fitting without resolving that time-coverage gap. The current predictor explicitly includes the original user preference and is trained for its specified feedback-return continuation. This motivates preserving both preparation-time coverage and label-policy consistency when adding new tasks. [E251,E263,E267]
+
+### 4.5 Mirrored tighter turns
+
+A frozen-model extension uses left and right 90-degree turns of radius 1.1 m at 1.8 m/s. The two nominal source trajectories reach their goals at 4.815 and 4.880 s. At task time 1 s, each complete source is queried against 20/24 N pulses and preparation intervals 0.9, 1.0, and 1.1 s. The resulting sets are empty, so all four actual pulse cases retain $\alpha$=0. Actual onset is 2 s and duration is 0.4 s. [E269–E271]
+
+| Direction | Force (N) | Arrival (s) | Physical outcome | Peak upright suffix speed (m/s) |
+|---|---:|---:|---|---:|
+| Left | 20 | 5.590 | Survived | 1.83220 |
+| Left | 24 | No arrival | Contact at 2.465 s | 1.82098 |
+| Right | 20 | 5.310 | Survived | 1.83653 |
+| Right | 24 | 5.430 | Survived | 1.83653 |
+
+The three arrivals are outcomes of unchanged-preference execution rather than active neural adaptation. The opposing turn directions yield different outcomes under the same world-frame 24 N force. Source-feature inspection shows zero curvature at the current, 0.5 m, and 1 m preview locations; signed curvature appears farther ahead, reaching approximately plus or minus 0.9091/m at 2 m. Each source has 12 features outside the training ranges. This identifies concrete geometry-preview and source-coverage gaps for further model development. [E270–E273]
+
+### 4.6 Candidate capability at the failed boundary
+
+
+Two additional branches test preparation preferences 0.5 and 1 from the failed left-turn source, with the same return rule and force schedule. They contact at 2.480 and 2.555 s, compared with 2.465 s for the cached $\alpha$=0 execution. All failures precede the earliest permitted restoration, excluding premature restoration as their cause. Peak upright speeds remain below 1.823 m/s. Thus none of these three tested preferences completes this boundary case; the observation separates candidate-control capability from prediction error. This case is retained as a measured boundary while subsequent experiments broaden the task geometry. [E274,E275]
+
+### 4.7 Matched fixed-preference baselines
+
+![Same-source actual and reference trajectories with fixed-preference baselines. Dotted black: original path and goal disk; stars: first arrival; crosses: contact; squares: observation endpoint. Gray shading marks the force pulse. Task costs use the original user objective.](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_matched_fixed_baselines_v1/analysis/matched_comparison/publication/group_00_comparison.png)
+
+Four additional baseline continuations compare fixed preferences 0 and 0.5 with the two previously completed neural-selection cases. Each comparison starts from the identical complete closed-loop state at task time 1 s and retains the same U170 policy, lower controller, original path and goal, 10 Hz geometric reconnection, and 24 N disturbance lasting 0.4 s. The disturbance begins at either 1.925 or 2.075 s. Baselines execute their stated preference from the shared source; the earlier prefix belongs to the original user-zero trajectory. All task costs are rescored for user preference zero. [E254,E277,E278]
+
+| Gust onset (s) | Fixed $\alpha$=0 | Fixed $\alpha$=0.5 | Tolerance-guided selection and return |
+|---:|---|---|---|
+| 1.925 | Contact at 2.390 s | Contact at 2.430 s | Goal at 6.935 s; survives to 10 s |
+| 2.075 | Contact at 2.495 s | Contact at 2.530 s | Goal at 6.980 s; survives to 10 s |
+
+The proposed controller selects $\alpha$=0.875 and restores the original user preference at 4.26 and 4.38 s. Both fixed baselines contact the ground before reaching the goal in both cases. These matched comparisons demonstrate a task-completion benefit over the original preference and a fixed compromise under the two tested events. They complement the held-versus-return comparison in Section 4.2: preparation preserves balance through the disturbance, and restoration enables subsequent task completion. The full comparison includes both event timings and preserves each physical endpoint. Original-path running costs are reported separately from contact and arrival; shorter failed trajectories are not ranked favorably by their smaller accumulated cost. [E253,E254,E277,E278]
+
+### 4.8 Preset preparation with identical feedback restoration
+
+![Preset preparation and tolerance-guided execution under the same gust. Dotted black: original path and goal disk; stars: first arrival; crosses: contact; squares: observation endpoint. Gray shading marks the force pulse. Task costs use the original user objective.](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_preset_return_baselines_v1/analysis/matched_comparison/publication/group_01_comparison.png)
+
+A second comparison replaces the predictor's choice with a preset preparation preference of 0.75 or 1. Both baselines use the identical source state, feedback-restoration rule, original goal, and geometric reconnection as the proposed method. Their preparation is initiated at the same declared task boundary; neither baseline receives the actual future gust timing. These four additional continuations separate the effect of executing a preparation-and-return sequence from the effect of choosing its preparation preference. [E279,E280]
+
+| Gust onset (s) | Preset 0.75: arrival (s) / intervention ($\alpha$·s) | Preset 1: arrival (s) / intervention ($\alpha$·s) | Network-selected 0.875: arrival (s) / intervention ($\alpha$·s) |
+|---:|---|---|---|
+| 1.925 | 7.275 / 2.093 | 6.410 / 2.789 | 6.935 / 2.432 |
+| 2.075 | Not reached / 2.410 | 5.530 / 2.830 | 6.980 / 2.446 |
+
+All six compared trajectories survive to task time 10 s. Intervention is the integral of the absolute difference between executed and original user preference over the shared source-to-end window. Preset 1 and network-selected 0.875 both complete the two tasks. The network-selected execution uses 12.8% and 13.6% less preference intervention, while preset 1 arrives earlier and has smaller primary running task cost in both cases. Preset 0.75 reduces intervention in the first case but does not reach the second goal. The comparison illustrates the tradeoff among preparation strength, task completion, and departure from the user preference; it motivates state-dependent selection across a broader set of tasks rather than a claim of uniformly superior performance in this pair. [E279,E280]
+
+### 4.9 Nominal low-speed two-turn track segments
+
+![Three preferences on a left-leading S track segment](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_nominal_v1/analysis/S_left_60_R1p3_v2p0_zero_fixed_candidate_xy.png)
+
+The nominal task panel is extended to mirrored S segments comprising two opposite 60-degree bends of radius 1.3 m, separated by a 3 m straight. Requested speed is 2 m/s and the original goal lies 4 m beyond the second bend. U170, the lower controller, friction, and geometric reconnection are unchanged. Each direction is evaluated at fixed preferences 0, 0.5, and 1 for 10 s, without an external force. [E281]
+
+| Track segment | Alpha=0 arrival (s) | Alpha=0.5 arrival (s) | Alpha=1 arrival (s) |
+|---|---:|---:|---:|
+| Left-leading S | 6.685 | 6.635 | 6.510 |
+| Right-leading S | 6.720 | 6.645 | 6.530 |
+
+All six trajectories reach the original goal and survive the complete window. Their highest upright actual forward speed is 2.0413 m/s, within the 2.1 m/s low-speed criterion. None requires geometric reconnection. The speed-prioritized preference arrives 0.175 s earlier on the left-leading segment and 0.190 s earlier on its mirror than the path-prioritized preference. These nominal results establish a two-turn task setting for subsequent disturbed evaluation while retaining the same frozen control stack. [E281]
+
+### 4.10 Disturbed two-turn track segments
+
+The frozen predictor is queried from the task-time-1 s state of each zero-preference nominal S segment. Against the fixed 20/24 N hypothetical family, it selects 0.875 on the left-leading segment and returns an empty set on the right-leading segment. The resulting executions are evaluated under actual 20 and 24 N pulses at task time 2 s for 0.4 s, with all model parameters and thresholds unchanged. [E282]
+
+| Segment | Force (N) | Executed preparation | Arrival (s) | Outcome |
+|---|---:|---|---:|---|
+| Left-leading S | 20 | Selected 0.875, feedback return | 7.035 | Survived |
+| Left-leading S | 24 | Selected 0.875, feedback return | 7.190 | Survived |
+| Right-leading S | 20 | Empty set, hold original 0 | 7.890 | Survived |
+| Right-leading S | 24 | Empty set, hold original 0 | 8.305 | Survived |
+
+All four executions reach the original goal and survive to task time 10 s; peak upright forward speed is below 2.034 m/s. The left-leading cases extend active preference preparation and restoration to a two-turn task. The right-leading results demonstrate successful unchanged-preference execution under the tested pulses, while preserving the predictor's empty-set outcome. Thus the panel records both active coordination and fallback behavior on the same nominal task family. [E282]
+
+### 4.11 Matched comparison on the S segment
+
+![Matched original-user and preset-return baselines on the left-leading S segment under 24 N. Dotted black: original path and goal disk; stars: first arrival; crosses: contact; squares: observation endpoint. Gray shading marks the force pulse. Task costs use the original user objective.](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_track_segments_baselines_v1/analysis/matched_comparison/publication/group_01_comparison.png)
+
+The left-leading S segment is repeated from the identical complete state with the original preference held at zero and with preset preference one followed by the same feedback restoration. Both baselines use the same original destination, geometric reconnection, disturbance vector, and task horizon as the saved network-selected trajectories. The two force magnitudes are compared separately. All six trajectories survive and arrive. [E282–E284]
+
+| Force (N) | Execution | Arrival (s) | Preference intervention (s) |
+|---|---|---:|---:|
+| 20 | Original user 0 | 7.245 | 0.0000 |
+| 20 | Preset 1 and return | 7.025 | 2.7700 |
+| 20 | Selected 0.875 and return | 7.035 | 2.3897 |
+| 24 | Original user 0 | 9.235 | 0.0000 |
+| 24 | Preset 1 and return | 7.225 | 2.7900 |
+| 24 | Selected 0.875 and return | 7.190 | 2.3933 |
+
+Compared with maintaining the user's preference, tolerance-guided execution advances arrival by 0.210 s under 20 N and 2.045 s under 24 N. The 24 N trajectory shows a smaller lateral excursion and earlier recovery of forward speed. Compared with preset one, the selected execution reduces preference intervention by 13.7% and 14.2%, with arrival differences of +0.010 s and -0.035 s. Thus, on this two-turn task, a smaller temporary preference change retains the arrival performance of the stronger preset intervention. Preset one has lower accumulated original-task running cost in both cases; the selected execution's advantage is the smaller departure from the user's preference. The common full observation window extends from task time 1 to 10 s, and all costs retain the post-arrival portion of that window. [E283,E284]
+
+### 4.12 Preparation timing under a common disturbance event
+
+![Common-event preparation branches: actual XY, speed, roll and steering. All branches encounter the same task-time-2 s force pulse; the 0.4 s preparation is reused from the earlier coverage experiment. Other preparations are new continuations.](/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_common_event_t1p0_v1/analysis/common_event_comparison/comparison.png)
+
+To separate switching time from the imposed disturbance clock, a 24 N pulse of duration 0.4 s is fixed at task time 2 s. The robot follows the same original zero-preference history until task time 1.0, 1.4, 1.6, or 1.8 s, then switches to preference one. The corresponding preparation intervals are 1.0, 0.6, 0.4, and 0.2 s. Preference one is held afterward, eliminating differences caused by a source-relative restoration clock. The 0.4 s branch is reused after matching its model, controller configuration, source history, path, force, and event time. [E285]
+
+| Preparation (s) | Pre-pulse speed (m/s) | Pre-pulse roll (deg) | Pre-pulse steering (deg) | Outcome |
+|---|---:|---:|---:|---|
+| 1.0 | 1.751 | 8.770 | 12.161 | Survived, goal missed |
+| 0.6 | 1.772 | 8.762 | 12.061 | Survived, goal missed |
+| 0.4 | 1.768 | 7.462 | 9.944 | Ground contact |
+| 0.2 | 1.682 | 6.912 | 10.482 | Survived, goal missed |
+
+The state samples are taken at task time 1.995 s. Preparations of 0.6 and 0.4 s produce almost equal forward speeds before the event, yet different contact outcomes; roll, steering, and controller-state histories also differ. The nearly equal speeds direct attention to attitude, steering, and reference histories as additional explanatory variables. The shorter 0.2 s preparation survives with a substantially different subsequent path, demonstrating that longer preparation does not impose a monotonic survival ordering. These observations motivate conditioning the predictor on the evolving closed-loop state and preparation interval together. Earlier intervention changes the state at which the fixed-time disturbance is encountered. [E285]
+
+The three surviving held-preference trajectories miss the original goal. Their closest upright distances to its center are 1.451, 1.891, and 2.649 m for preparations of 1.0, 0.6, and 0.2 s, respectively. The common-event experiment thus isolates a balance-outcome mechanism, while the paired restoration experiments establish how a surviving preparation can be connected to completion of the original task. [E253,E276,E285]
+
+## 5 Discussion
+
+The experiments support a coherent preparation-and-restoration mechanism. Preference-dependent trajectories reach different states before a common disturbance; maintaining a surviving preference can then miss the original goal. Feedback restoration reconnects the temporary intervention to the original task. The fixed-preference comparisons show a survival and arrival benefit in the two matched events, while the preset-return comparison shows that strong simple preparation is also effective. The network-selected preference trades later arrival for a smaller departure from the user preference relative to preset $\alpha$=1. These comparisons locate the value of coordination in the joint task and intervention tradeoff. [E250,E276–E280]
+
+The predictor is a compact evaluator of an existing control stack. Its useful operating domain is set jointly by the available control behaviors, represented state and geometry, preparation-time coverage, and the continuation policy used for supervision. An empty candidate set can reflect inadequate candidate capability, inadequate predictive coverage, or the aggregation of several disturbance hypotheses. The mirrored-turn and candidate-branch results distinguish these possibilities without changing the declared thresholds. The common-event experiment changes the intervention time while keeping the imposed pulse clock fixed. Its nonmonotonic outcomes motivate evaluating the candidate closed loop rather than assigning a uniformly beneficial effect to a longer preparation interval. [E271–E275]
+
+The present force model represents a specified center-of-mass disturbance rather than a calibrated aerodynamic wind field. Goal arrival uses a fixed 1 m disk, and the current open-plane path-error criterion permits substantial reconnection excursions. A bounded track requires explicit corridor constraints and endpoint requirements. Hardware evaluation will additionally measure the delay and accuracy of forward-speed, steering, and pose estimates and verify the disturbance application and actuator interface. These conditions define the next transfer step from the simulated closed loop.
+
+## 6 Conclusion
+
+This paper develops disturbance-tolerance-guided preference coordination for a single-track robot with a frozen middle and lower controller. A preparation- and continuation-conditioned predictor evaluates contact avoidance together with the original task, and a user-priority rule selects a temporary preference followed by feedback restoration. Matched experiments demonstrate completion of tasks for which fixed user and intermediate preferences fail, and held-versus-return comparisons demonstrate the contribution of restoring the original preference. Preset dynamic baselines expose the tradeoff between arrival time and preference intervention. Mirrored low-speed S segments establish nominal task coverage beyond a single bend. Together, these results motivate a task-oriented use of closed-loop disturbance tolerance for adaptive preference execution.
+
+## References
+
+[R1] IEEE Control Systems Society. Transactions on Control Systems Technology: Aim & Scope. https://www.ieeecss.org/publication/transactions-control-systems-technology.
+
+[R2] IEEE Control Systems Society. Author Information: Transactions on Control Systems Technology. https://www.ieeecss.org/publication/transactions-control-systems-technology/author-info.
+
+[R3] Huo, B., Yu, L., Liu, Y., and Chen, Z. Hierarchical residual reinforcement learning based path tracking control method for unmanned bicycle. Robotics and Autonomous Systems, 190, 104996, 2025. https://doi.org/10.1016/j.robot.2025.104996.
+
+[R4] Persson, N., Zhao, F., Kaheni, M., Dörfler, F., and Papadopoulos, A. V. An Adaptive Data-Enabled Policy Optimization Approach for Autonomous Bicycle Control. arXiv:2502.13676, 2025. https://arxiv.org/abs/2502.13676.
+
+[R5] Liu, J., Dong, C., Lu, X., Liu, Q., and Yang, L. Coordinated Trajectory Tracking and Self-Balancing Control for Unmanned Bicycle Robot Against Disturbances. Actuators, 15(1), 49, 2026. https://doi.org/10.3390/act15010049.
+
+[R6] Garone, E., Di Cairano, S., and Kolmanovsky, I. V. Reference and Command Governors for Systems with Constraints: A Survey on Theory and Applications. MERL TR2016-102, 2016; published in Automatica, 2017. https://merl.com/publications/docs/TR2016-102.pdf ; https://doi.org/10.1016/j.automatica.2016.08.013.
+
+[R7] Wabersich, K. P., and Zeilinger, M. N. A predictive safety filter for learning-based control of constrained nonlinear dynamical systems. arXiv:1812.05506, revised2021. https://arxiv.org/abs/1812.05506.
+
+[R8] Thananjeyan, B., Balakrishna, A., Nair, S., Luo, M., Srinivasan, K., Hwang, M., Gonzalez, J. E., Ibarz, J., Finn, C., and Goldberg, K. Recovery RL: Safe Reinforcement Learning with Learned Recovery Zones. arXiv:2010.15920, revised2021. https://arxiv.org/abs/2010.15920.
+
+[R9] Kassis, T., Agarwal, V., He, Y., Patel, D., and Brueckner, A. M. Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents. 2026. https://doi.org/10.48550/arXiv.2609.00065. Scientific Agent Skills supported evidence organization and manuscript preparation.

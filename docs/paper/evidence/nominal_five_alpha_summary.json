@@ -1,0 +1,56 @@
+{
+  "source_sha256": "6c3075cafa34b2e195e70997b0cdb2ef050a2dcbfc440008a4a5e2da99a27b19",
+  "data_role": "previously inspected nominal DEV",
+  "contexts": 8,
+  "episodes": 40,
+  "means": [
+    {
+      "alpha": 0.0,
+      "n": 8,
+      "arrived": 8,
+      "survived": 8,
+      "turn_speed_mean_m_s": 2.115485966205597,
+      "common_prefix_original_cross_rmse_mean_m": 0.17317896895110607,
+      "arrival_mean_s": 5.4868749999999995
+    },
+    {
+      "alpha": 0.25,
+      "n": 8,
+      "arrived": 8,
+      "survived": 8,
+      "turn_speed_mean_m_s": 2.1445668041706085,
+      "common_prefix_original_cross_rmse_mean_m": 0.20832947455346584,
+      "arrival_mean_s": 5.464375
+    },
+    {
+      "alpha": 0.5,
+      "n": 8,
+      "arrived": 8,
+      "survived": 8,
+      "turn_speed_mean_m_s": 2.18003548681736,
+      "common_prefix_original_cross_rmse_mean_m": 0.24751255847513676,
+      "arrival_mean_s": 5.4425
+    },
+    {
+      "alpha": 0.75,
+      "n": 8,
+      "arrived": 8,
+      "survived": 8,
+      "turn_speed_mean_m_s": 2.227723777294159,
+      "common_prefix_original_cross_rmse_mean_m": 0.2875801008194685,
+      "arrival_mean_s": 5.41625
+    },
+    {
+      "alpha": 1.0,
+      "n": 8,
+      "arrived": 8,
+      "survived": 8,
+      "turn_speed_mean_m_s": 2.29474438726902,
+      "common_prefix_original_cross_rmse_mean_m": 0.3281358480453491,
+      "arrival_mean_s": 5.389375
+    }
+  ],
+  "strict_speed_monotone_contexts": 8,
+  "strict_cross_monotone_contexts": 8,
+  "later_alpha1_arrival_contexts": 2
+}

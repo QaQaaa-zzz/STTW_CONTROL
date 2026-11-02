@@ -1,0 +1,509 @@
+"""Build the current local STTW research draft, never historical experiments.
+
+The prior20260912 builder and every original artifact are SHA-archived under
+history/. This builder draws only the current architecture and reuses existing
+source-backed XY figures. It does not train, integrate physics, or select a model.
+"""
+import argparse
+import base64
+import copy
+import hashlib
+import json
+import mimetypes
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+HERE=Path(__file__).resolve().parent
+ROOT=HERE.parents[1]
+FIG=HERE/'figures'
+
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def control_diagram():
+    """Draw the implemented source-boundary selector and feedback-return stack."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+    with plt.rc_context({'font.size': 8, 'svg.fonttype': 'none', 'pdf.fonttype': 42}):
+        fig, ax = plt.subplots(figsize=(7.16, 4.7))
+        ax.set(xlim=(0, 12.4), ylim=(0, 8.6)); ax.axis('off')
+        def box(x, y, w, h, text, color='#0072B2'):
+            ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle='round,pad=.06',
+                                       ec=color,fc='white',lw=1.1))
+            ax.text(x+w/2,y+h/2,text,ha='center',va='center',linespacing=1.3)
+        def arrow(points, dashed=False):
+            for a,b in zip(points[:-2],points[1:-1]):
+                ax.plot([a[0],b[0]],[a[1],b[1]],color='#444444',lw=.9,ls='--' if dashed else '-')
+            ax.add_patch(FancyArrowPatch(points[-2],points[-1],arrowstyle='-|>',
+                mutation_scale=9,lw=.9,color='#444444',linestyle='--' if dashed else '-'))
+        box(.3,6.35,2.5,1.2,'Original task\nPath, speed, goal\nUser preference')
+        box(4,6.35,3.2,1.2,'Outcome predictor\nCandidate / load query\nPreparation / return','#009E73')
+        box(8.5,6.35,3.2,1.2,'Preference coordinator\nSelect once at source\nFeedback return at 50 Hz','#D55E00')
+        box(.3,3.55,2.5,1.2,'Geometric follower\nReconnection: 10 Hz\nOriginal goal')
+        box(4,3.55,3.2,1.2,'Frozen U170 middle\nPreference-conditioned\nReference offsets: 50 Hz')
+        box(8.5,3.55,3.2,1.2,'Filters and bounds\nECBC + ESO + local300\nFrozen lower: 200 Hz')
+        box(8.5,.75,3.2,1.2,'Single-track robot\nActuators and contact\nPhysics step: 0.2 ms')
+        box(4,.75,3.2,1.2,'Closed-loop feedback\nVehicle / reference state\nObserver, filters, history')
+        arrow([(1.55,6.35),(1.55,4.75)])
+        arrow([(1.55,7.55),(1.55,8.1),(10.1,8.1),(10.1,7.55)])
+        ax.text(6,8.23,'Original user preference',ha='center',fontsize=7)
+        arrow([(7.2,6.95),(8.5,6.95)])
+        arrow([(10.1,6.35),(10.1,5.55),(5.6,5.55),(5.6,4.75)])
+        ax.text(7.75,5.69,'Executed preference',ha='center',fontsize=7)
+        arrow([(2.8,4.15),(4,4.15)])
+        arrow([(7.2,4.15),(8.5,4.15)])
+        arrow([(10.1,3.55),(10.1,1.95)])
+        arrow([(8.5,1.35),(7.2,1.35)],True)
+        arrow([(5.6,1.95),(5.6,3.55)],True)
+        arrow([(4,1.35),(3.3,1.35),(3.3,6.95),(4,6.95)],True)
+        arrow([(4,1.1),(1.55,1.1),(1.55,3.55)],True)
+        arrow([(11.7,1.35),(12.1,1.35),(12.1,6.65),(11.7,6.65)],True)
+        ax.text(.3,.2,'Solid: task / control commands     Dashed: measured or controller-state feedback',fontsize=7)
+        FIG.mkdir(exist_ok=True)
+        for ext in ['svg','png','pdf']:
+            fig.savefig(FIG/f'control_architecture.{ext}',dpi=300,bbox_inches='tight',pad_inches=.05)
+        plt.close(fig)
+    svg=FIG/'control_architecture.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
+
+
+def validate_evidence_references(manuscript, sources):
+    """Resolve bracketed evidence IDs, including inclusive citation ranges."""
+    referenced=set()
+    for bracket in re.findall(r'\[[^\]\n]*\]',manuscript):
+        for match in re.finditer(r'\bE(\d{3})(?:\s*[-–—]\s*E?(\d{3}))?',bracket):
+            start=int(match[1]);end=int(match[2] or match[1])
+            if end<start:raise ValueError('descending manuscript evidence range '+match[0])
+            referenced.update(f'E{number:03d}' for number in range(start,end+1))
+    missing=sorted(referenced-sources.keys())
+    if missing:raise ValueError('unresolved manuscript evidence references: '+', '.join(missing))
+    return sorted(referenced)
+
+
+def evidence_manifest():
+    source=ROOT/'runs/support_permission_factor_v1/analysis/paper_claim_audit/claim_registry.json'
+    data=json.loads(source.read_text());sources=copy.deepcopy(data['sources'])
+    for record in sources.values():
+        if digest(record['path'])!=record['sha256']:raise ValueError('changed manuscript evidence '+record['path'])
+    archive=Path('/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025')
+    extra={
+        'E008':ROOT/'runs/support_permission_factor_v1/common_environment_config.json',
+        'E009':ROOT/'runs/reference_bias_opportunity_v1/production/analysis/summary.json',
+        'E010':ROOT/'runs/support_permission_factor_v1/analysis/existing_witness_scope_review.md',
+        'E011':ROOT/'learning/src/sttw_control/contact_only_environment.py',
+        'E012':ROOT/'learning/configs/frozen_middle_registry.json',
+        'E013':ROOT/'learning/src/sttw_control/actuator.py',
+        'E014':ROOT/'runs/finite_value_online_v1_recovery55/plan.json',
+        'E015':ROOT/'runs/current_native_preference_v1_attempt2/plan.json',
+        'E016':ROOT/'runs/online_preference_survival_v1_attempt3/plan.json',
+        'E017':ROOT/'learning/src/sttw_control/path_command_policy.py',
+        'E018':ROOT/'learning/src/sttw_control/path_command_env.py',
+        'E019':ROOT/'learning/src/sttw_control/reference_reserve_gate.py',
+        'E020':ROOT/'learning/src/sttw_control/reference_reentry.py',
+        'E021':ROOT/'runs/goal_replanning_github_v1/plan.json',
+        'E022':ROOT/'runs/goal_replanning_github_v1/analysis/summary.json',
+        'E023':ROOT/'runs/goal_replanning_h75_v1/combined_analysis/summary.json',
+        'E024':ROOT/'runs/native_zero_preference_v1/analysis/review.json',
+        'E025':ROOT/'runs/native_zero_preference_v1/task_scope/review.json',
+        'E026':ROOT/'runs/native_equilibrium_rule_v1/analysis/review.json',
+        'E027':ROOT/'runs/native_equilibrium_rule_v1/task_scope/review.json',
+        'E028':ROOT/'runs/native_goal_confirmation_v1/analysis/summary.json',
+        'E029':ROOT/'runs/native_goal_confirmation_v1/analysis/initial_carry_review.json',
+        'E030':ROOT/'runs/capability_goal_joint_1m_v1/joint_review.json',
+        'E031':ROOT/'runs/capability_goal_joint_1m_v1/independent_review.json',
+        'E032':ROOT/'runs/capability_preference_utility_v1/review.json',
+        'E033':ROOT/'runs/capability_preference_utility_v1/independent_review.json',
+        'E034':ROOT/'runs/replanning_headroom_review_v1/review.json',
+        'E035':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/PRIOR_ART_AND_CONTRIBUTION_BOUNDARIES_20261027.md',
+        'E036':ROOT/'runs/preference_capacity_order_v1/analysis/review.json',
+        'E037':ROOT/'runs/preference_capacity_order_v1/independent_review.json',
+        'E038':ROOT/'runs/joint_endpoint_tradeoff_review_v1/analysis/review.json',
+        'E039':ROOT/'runs/joint_endpoint_tradeoff_review_v1/independent_review.json',
+        'E040':ROOT/'runs/joint_endpoint_tradeoff_review_v1/arrival_mode_audit.json',
+        'E041':ROOT/'runs/joint_endpoint_tradeoff_review_v1/model_identity_receipt.json',
+        'E042':ROOT/'runs/legacy_credit_goal_continuation_v1/analysis/review.json',
+        'E043':ROOT/'runs/legacy_credit_goal_continuation_v1/independent_review.json',
+        'E044':ROOT/'runs/legacy_credit_goal_continuation_v1/execution_plan.json',
+        'E045':ROOT/'runs/legacy_credit_goal_continuation_v1/diagnostics/receipt.json',
+        'E046':ROOT/'runs/legacy_credit_goal_continuation_v1/evaluation/status.json',
+        'E047':ROOT/'runs/native_transition_mechanism_v1/analysis/review.json',
+        'E048':ROOT/'runs/native_transition_mechanism_v1/independent_review.json',
+        'E049':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/DYNAMIC_REFERENCE_GOVERNOR_METHOD_REVIEW.md',
+        'E050':ROOT/'docs/evidence/tolerance_progress_20261022/finite_value_online/DUAL_NETWORK_COVERAGE_REVIEW.md',
+        'E051':ROOT/'runs/preference_history_factorial_v1/analysis_verified/review.json',
+        'E052':ROOT/'runs/preference_history_factorial_v1/independent_outcome_review.json',
+        'E053':ROOT/'runs/preference_history_baselines_v1/analysis/review.json',
+        'E054':ROOT/'runs/preference_history_baselines_v1/independent_outcome_review.json',
+        'E055':ROOT/'runs/preference_history_task_review_v1/review.json',
+        'E056':ROOT/'runs/preference_history_task_review_v1/verification_receipt.json',
+        'E057':ROOT/'runs/nominal_program_feedback_v1/analysis/review.json',
+        'E058':ROOT/'runs/nominal_program_feedback_v1/independent_outcome_review.json',
+        'E059':ROOT/'runs/nominal_program_feedback_v1/training_support_review/audit.json',
+        'E060':ROOT/'runs/nominal_program_feedback_v1/training_support_review/independent_review.md',
+        'E061':ROOT/'runs/nominal_program_feedback_v1/route_reframe/public_source_review.json',
+        'E062':ROOT/'runs/native_fixed_midpoint_review_v1/analysis/review.json',
+        'E063':ROOT/'runs/native_fixed_midpoint_review_v1/independent_review.json',
+        'E064':ROOT/'runs/native_fixed_midpoint_review_v1/disturbed/analysis/review.json',
+        'E065':ROOT/'runs/native_fixed_midpoint_review_v1/disturbed/independent_review.json',
+        'E066':ROOT/'runs/native_reference_rollout_v1/analysis/review.json',
+        'E067':ROOT/'runs/native_reference_rollout_v1/independent_final_review.json',
+        'E068':ROOT/'runs/native_fixed_midpoint_review_v1/utility_envelope/review.json',
+        'E069':ROOT/'runs/native_fixed_midpoint_review_v1/utility_envelope/independent_review.json',
+        'E070':ROOT/'runs/capability_zero_common3_review_v1/review.json',
+        'E071':ROOT/'runs/capability_zero_common3_review_v1/independent_review.json',
+        'E072':ROOT/'runs/preference_direction_fullpanel_review_v1/review.json',
+        'E073':ROOT/'runs/preference_direction_fullpanel_review_v1/independent_review.json',
+        'E074':ROOT/'runs/preference_direction_fullpanel_review_v1/exposure_review/review.json',
+        'E075':ROOT/'runs/preference_direction_fullpanel_review_v1/exposure_review/independent_exposure.json',
+        'E076':ROOT/'runs/preference_direction_fullpanel_review_v1/arrival_phase_review/review.json',
+        'E077':ROOT/'runs/preference_direction_fullpanel_review_v1/arrival_phase_review/independent_review.json',
+        'E078':ROOT/'runs/native_frozen_geometry_validation_v1/analysis/review.json',
+        'E079':ROOT/'runs/native_frozen_geometry_validation_v1/independent_final_review.json',
+        'E080':ROOT/'runs/ecbc_modal_authority_math_v1/analysis.json',
+        'E081':ROOT/'runs/ecbc_modal_authority_math_v1/independent_review.md',
+        'E082':ROOT/'runs/ordinary_goal_learning_v1/plan.json',
+        'E083':ROOT/'runs/ordinary_goal_learning_v1/first_actual_training_audit.json',
+        'E084':ROOT/'learning/src/sttw_control/goal_endpoint_run.py',
+        'E085':ROOT/'runs/goal_credit_cpu_v1/pulse_timing_first_real_collection_v2.json',
+        'E086':ROOT/'learning/src/sttw_control/goal_networks.py',
+        'E087':archive/'ordinary_goal_learning_v1/training_review/summary.json',
+        'E088':archive/'ordinary_goal_endpoint_v1/analysis_with_h75/results.json',
+        'E089':archive/'ordinary_goal_endpoint_replan_v1/paired_replanning_review/summary.json',
+        'E090':archive/'ordinary_goal_endpoint_replan_v1/paired_replanning_review/raw_verification.json',
+        'E091':archive/'h75_native_s_capability_v1/analysis/review.json',
+        'E092':archive/'h75_nominal_preference_schedule_v1/analysis/review.json',
+        'E093':archive/'h75_nominal_preference_schedule_v1/analysis/independent_review.json',
+        'E094':archive/'h75_nominal_preference_schedule_v1/plan.json',
+        'E095':archive/'ordinary_goal_endpoint_replan_v1/plan.json',
+        'E096':archive/'h75_native_s_capability_v1/plan.json',
+        'E097':archive/'ordinary_goal_learning_v1/training_review/REVIEW.md',
+        'E098':archive/'h75_channel_factorial_v1/analysis/RESULTS.md',
+        'E099':archive/'h75_channel_response_v1_attempt2/analysis/README.md',
+        'E100':archive/'h75_switching_continuation_v1_attempt2/analysis/results.json',
+        'E101':archive/'h75_switching_continuation_v1_attempt2/analysis/receipt.json',
+        'E102':archive/'h75_switching_continuation_v1_attempt2/plan.json',
+        'E103':archive/'h75_switching_continuation_v1_attempt2/root_outcome_check.json',
+        'E104':archive/'h75_online_scalar_v1/analysis/results.json',
+        'E105':archive/'h75_online_scalar_v1/analysis/receipt.json',
+        'E106':archive/'h75_online_scalar_v1/plan.json',
+        'E107':archive/'h75_online_scalar_v1/root_outcome_check.json',
+        'E108':archive/'h75_online_confirmation_v1/analysis/results.json',
+        'E109':archive/'h75_online_confirmation_v1/analysis/receipt.json',
+        'E110':archive/'h75_online_confirmation_v1/plan.json',
+        'E111':archive/'h75_online_confirmation_v1/root_outcome_check.json',
+        'E112':archive/'h75_samestate_tolerance_v1/analysis/results.json',
+        'E113':archive/'h75_samestate_tolerance_v1/analysis/receipt.json',
+        'E114':archive/'h75_samestate_tolerance_v1/plan.json',
+        'E115':archive/'h75_samestate_tolerance_v1/root_primary_label_check.json',
+        'E116':archive/'h75_samestate_bank144_v1/analysis_final/summary.json',
+        'E117':archive/'h75_samestate_bank144_v1/analysis_final/receipt.json',
+        'E118':ROOT/'learning/configs/h75_tolerance_predictor_pilot.json',
+        'E119':archive/'h75_tolerance_predictor_pilot_v1/selection_manifest.json',
+        'E120':archive/'h75_tolerance_predictor_pilot_v1/heldout_metrics.json',
+        'E121':archive/'h75_tolerance_predictor_pilot_v1/training_metrics.json',
+        'E122':archive/'h75_tolerance_predictor_pilot_v1/root_training_review.json',
+        'E123':archive/'h75_tolerance_predictor_ranking_v1/resolved_config.json',
+        'E124':archive/'h75_tolerance_predictor_ranking_v1/selection_manifest.json',
+        'E125':archive/'h75_tolerance_predictor_ranking_v1/development_metrics.json',
+        'E126':archive/'h75_tolerance_predictor_ranking_v1/training_metrics.json',
+        'E127':archive/'h75_samestate_confirmation144_v1/analysis_confirmation/results.json',
+        'E128':archive/'h75_samestate_confirmation144_v1/analysis_confirmation/receipt.json',
+        'E129':archive/'h75_samestate_confirmation144_v1/root_primary_label_check.json',
+        'E130':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/metrics.json',
+        'E131':archive/'h75_samestate_confirmation144_v1/predictor_evaluation/data_receipt.json',
+        'E132':archive/'h75_tolerance_online120_v1/plan.json',
+        'E133':archive/'h75_tolerance_online120_v1/analysis/results.json',
+        'E134':archive/'h75_tolerance_online120_v1/analysis/receipt.json',
+        'E135':archive/'h75_tolerance_online120_v1/root_endpoint_check.json',
+        'E136':archive/'h75_tolerance_online120_v1/analysis/original_task_rescoring/results.json',
+        'E137':archive/'h75_tolerance_online120_v1/analysis/original_task_rescoring/method_summary.json',
+        'E138':archive/'h75_tolerance_online120_v1/q_diagnostics/diagnostic.json',
+        'E139':archive/'h75_late_state_tolerance48_v1/plan.json',
+        'E140':archive/'h75_late_state_tolerance48_v1/evaluation/status.json',
+        'E141':archive/'h75_late_state_tolerance48_v1/analysis_late/results.json',
+        'E142':archive/'h75_late_state_tolerance48_v1/predictor_evaluation/metrics.json',
+        'E143':archive/'h75_late_state_tolerance48_v1/predictor_evaluation/user_rejection.json',
+        'E144':archive/'h75_tolerance_predictor_temporal_mix_v1/training/resolved_config.json',
+        'E145':archive/'h75_tolerance_predictor_temporal_mix_v1/training/selection_manifest.json',
+        'E146':archive/'h75_tolerance_predictor_temporal_mix_v1/training/development_temporal_metrics.json',
+        'E147':archive/'h75_tolerance_predictor_temporal_mix_v1/training/timings.json',
+        'E148':archive/'h75_tolerance_temporal_online40_v1/plan.json',
+        'E149':archive/'h75_tolerance_temporal_online40_v1/status.json',
+        'E150':archive/'h75_tolerance_temporal_online40_v1/analysis/root_method_summary.json',
+        'E151':archive/'h75_tolerance_temporal_online40_v1/analysis/original_task_rescoring/results.json',
+        'E152':archive/'h75_tolerance_temporal_online40_v1/analysis/root_prearrival_alpha.json',
+        'E153':archive/'h75_tolerance_broaden120_v1/plan.json',
+        'E154':archive/'h75_tolerance_broaden120_v1/status.json',
+        'E155':archive/'h75_tolerance_broaden120_v1/analysis/root_method_summary.json',
+        'E156':archive/'h75_tolerance_broaden120_v1/root_endpoint_strata.json',
+        'E157':archive/'h75_tolerance_broaden120_v1/analysis/original_task_rescoring/results.json',
+        'E158':archive/'h75_tolerance_broaden120_v1/analysis/original_task_rescoring/numerical_review.json',
+        'E159':archive/'h75_user_preference120_v1/plan.json',
+        'E160':archive/'h75_user_preference120_v1/status.json',
+        'E161':archive/'h75_user_preference120_v1/analysis/root_user_summary.json',
+        'E162':archive/'h75_user_preference120_v1/root_user_rejection.json',
+        'E163':archive/'h75_user_preference120_v1/analysis/original_task_rescoring/results.json',
+        'E164':archive/'h75_user_late_state192_v1/plan.json',
+        'E165':archive/'h75_user_late_state192_v1/status.json',
+        'E166':archive/'h75_user_late_state192_v1/predictor_evaluation/metrics.json',
+        'E167':archive/'h75_user_late_state192_v1/predictor_evaluation/user_rejection.json',
+        'E168':archive/'h75_tolerance_predictor_user_mix_v1/training/resolved_config.json',
+        'E169':archive/'h75_tolerance_predictor_user_mix_v1/prepared/receipt.json',
+        'E170':archive/'h75_tolerance_predictor_user_mix_v1/training/selection_manifest.json',
+        'E171':archive/'h75_tolerance_predictor_user_mix_v1/training/development_temporal_metrics.json',
+        'E172':archive/'h75_tolerance_predictor_user_mix_v1/training/bce_rank/seed0/history.json',
+        'E173':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/resolved_config.json',
+        'E174':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/selection_manifest.json',
+        'E175':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/development_temporal_metrics.json',
+        'E176':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed0/history.json',
+        'E177':archive/'h75_tolerance_predictor_user_mix_prior_v1/prepared/receipt.json',
+        'E178':archive/'h75_tolerance_predictor_user_mix_v1/training/status.json',
+        'E179':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/status.json',
+        'E180':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed1/history.json',
+        'E181':archive/'h75_tolerance_predictor_user_mix_prior_v1/training/bce_rank/seed2/history.json',
+        'E182':archive/'h75_user_prior_online72_v1/plan.json',
+        'E183':archive/'h75_user_prior_online72_v1/status.json',
+        'E184':archive/'h75_user_prior_online72_v1/analysis/summary.json',
+        'E185':archive/'h75_user_prior_online72_v1/root_endpoint_check.json',
+        'E186':archive/'h75_user_prior_online72_v1/root_failure_audit.json',
+        'E187':archive/'h75_user_prior_online72_v1/analysis/receipt.json',
+        'E188':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/receipt.json',
+        'E189':archive/'h75_user_prior_online72_v1/root_common_cost_summary.json',
+        'E190':archive/'h75_user_prior_online72_v1/analysis/original_task_rescoring/results.json',
+        'E191':archive/'h75_task_aware_fallback72_v1/plan.json',
+        'E192':archive/'h75_task_aware_fallback72_v1/status.json',
+        'E193':archive/'h75_task_aware_fallback72_v1/analysis/summary.json',
+        'E194':archive/'h75_task_aware_fallback72_v1/root_endpoint_check.json',
+        'E195':archive/'h75_task_aware_fallback72_v1/analysis/receipt.json',
+        'E196':archive/'h75_task_aware_fallback72_v1/analysis/results.json',
+        'E197':archive/'h75_task_aware_fallback72_v1/analysis/original_task_rescoring/receipt.json',
+        'E198':archive/'h75_task_aware_fallback72_v1/analysis/original_task_rescoring/results.json',
+        'E199':archive/'h75_task_aware_fallback72_v1/root_common_cost_summary.json',
+        'E200':archive/'h75_frozen_confirmation200_v1/plan.json',
+        'E201':archive/'h75_frozen_confirmation200_v1/status.json',
+        'E202':archive/'h75_frozen_confirmation200_v1/root_endpoint_check.json',
+        'E203':archive/'h75_frozen_confirmation200_v1/analysis/receipt.json',
+        'E204':archive/'h75_frozen_confirmation200_v1/root_outcome_pairs.json',
+        'E205':archive/'h75_frozen_confirmation200_v1/root_guard_behavior_comparison.json',
+        'E206':archive/'h75_frozen_confirmation200_v1/root_common_cost_summary.json',
+        'E207':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/receipt.json',
+        'E208':archive/'h75_frozen_confirmation200_v1/analysis/original_task_rescoring/results.json',
+        'E209':archive/'h75_tolerance_speed_query_ablation_v1/training/resolved_config.json',
+        'E210':archive/'h75_tolerance_speed_query_ablation_v1/prepared/receipt.json',
+        'E211':archive/'h75_tolerance_speed_query_ablation_v1/training/selection_manifest.json',
+        'E212':archive/'h75_tolerance_speed_query_ablation_v1/training/development_temporal_metrics.json',
+        'E213':archive/'h75_tolerance_speed_query_ablation_v1/training/status.json',
+        'E214':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed0/history.json',
+        'E215':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed1/history.json',
+        'E216':archive/'h75_tolerance_speed_query_ablation_v1/training/bce_rank/seed2/history.json',
+        'E217':archive/'h75_tolerance_speed_query_ablation_v1/summary.json',
+        'E218':archive/'h75_prior_speed_retrospective144_v1/identity_receipt.json',
+        'E219':archive/'h75_prior_speed_retrospective144_v1/metrics.json',
+        'E220':archive/'h75_prior_speed_retrospective144_v1/pair_ranking.json',
+        'E221':archive/'h75_prior_speed_retrospective144_v1/predictions.json',
+        'E222':archive/'h75_speed_query_online60_v1/plan.json',
+        'E223':archive/'h75_speed_query_online60_v1/status.json',
+        'E224':archive/'h75_speed_query_online60_v1/analysis/receipt.json',
+        'E225':archive/'h75_speed_query_online60_v1/root_pair_summary.json',
+        'E226':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/full_mask_paired_costs.json',
+        'E227':archive/'h75_speed_query_online60_v1/analysis/original_task_rescoring/receipt.json',
+        'E228':archive/'h75_speed_query_online60_v1/alpha_time_comparison/INDEX.md',
+        'E229':archive/'h75_geometry_duration_extension240_v1/plan.json',
+        'E230':archive/'h75_geometry_duration_extension240_v1/status.json',
+        'E231':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.json',
+        'E232':archive/'h75_geometry_duration_extension240_v1/root_contact_mechanism_check.json',
+        'E233':archive/'h75_geometry_duration_extension240_v1/analysis/receipt.json',
+        'E234':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/receipt.json',
+        'E235':archive/'h75_geometry_duration_extension240_v1/analysis/original_task_rescoring/results.json',
+        'E236':archive/'h75_geometry_duration_extension240_v1/root_endpoint_check.md',
+        'E237':archive/'h75_guard_fallback_extension72_v1/plan.json',
+        'E238':archive/'h75_guard_fallback_extension72_v1/status.json',
+        'E239':archive/'h75_guard_fallback_extension72_v1/root_endpoint_check.json',
+        'E240':archive/'h75_guard_fallback_extension72_v1/analysis/receipt.json',
+        'E241':archive/'h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/receipt.json',
+        'E242':archive/'h75_guard_fallback_extension72_v1/projection_roundoff_resume.json',
+        'E243':archive/'h75_guard_fallback_regression60_v1/plan.json',
+        'E244':archive/'h75_guard_fallback_regression60_v1/status.json',
+        'E245':archive/'h75_guard_fallback_regression60_v1/root_endpoint_check.json',
+        'E246':archive/'h75_guard_fallback_regression60_v1/analysis/receipt.json',
+        'E247':archive/'h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/receipt.json',
+        'E248':archive/'h75_guard_fallback_extension72_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json',
+        'E249':archive/'h75_guard_fallback_regression60_v1/analysis/original_task_rescoring/old_new_candidate_paired_costs.json'}
+    extra.update({
+        'E250':archive/'u170_low_speed_five_alpha_load_boundary_v1/analysis/results.json',
+        'E251':archive/'u170_return_policy_dataset_v1/manifest.json',
+        'E252':archive/'u170_return_policy_outcome_mlp_v1/manifest.json',
+        'E253':archive/'u170_causal_preference_return_v1/analysis/cached_hold_comparison.json',
+        'E254':archive/'u170_return_policy_nn_confirmation_v1/analysis/results.json',
+        'E255':archive/'u170_return_range_upper_endpoint_v1/analysis/results.json',
+        'E256':archive/'u170_return_cross_source_confirmation_v1/analysis/results.json',
+        'E257':archive/'u170_return_policy_outcome_mlp_v1/nn_confirmation_evaluation/results.json',
+        'E258':archive/'u170_return_policy_outcome_mlp_v1/upper_confirmation_evaluation/results.json',
+        'E259':ROOT/'learning/configs/frozen_middle_registry.json',
+        'E260':ROOT/'learning/src/sttw_control/preference_outcome_prediction.py',
+        'E261':ROOT/'learning/src/sttw_control/native_goal_run.py',
+        'E262':archive/'u170_return_policy_outcome_mlp_v1/threshold_response_v1.json',
+        'E263':archive/'u170_nn_range_boundary_v1/analysis/integration_decision.json',
+        'E264':archive/'u170_return_policy_outcome_mlp_v1/cross_source_confirmation_evaluation/results.json',
+        'E265':ROOT/'learning/src/sttw_control/tolerance_coordination.py',
+        'E266':archive/'u170_return_policy_outcome_mlp_v1/cross_source_queries_v1.json',
+        'E267':archive/'u170_temporal_nn_boundary_v4/analysis/results.json',
+        'E268':archive/'u170_return_policy_outcome_mlp_v1/config.json',
+        'E269':archive/'u170_tcst_mirrored_sources_v1/analysis/results.json',
+        'E270':archive/'u170_tcst_mirrored_gust_v1/analysis/results.json',
+        'E271':archive/'u170_tcst_mirrored_sources_v1/analysis/prospective_boundary_queries.json',
+        'E272':archive/'u170_tcst_mirrored_sources_v1/analysis/geometry_preview_diagnostic.json',
+        'E273':archive/'u170_tcst_mirrored_sources_v1/analysis/query_feature_coverage.json',
+        'E274':archive/'u170_tcst_left24_candidates_v1/analysis/results.json',
+        'E275':archive/'u170_tcst_left24_candidates_v1/analysis/cached_user_candidate_comparison.json',
+        'E276':archive/'u170_causal_preference_return_v1/analysis/cached_hold_comparison.json',
+        'E277':archive/'u170_matched_fixed_baselines_v1/analysis/results.json',
+        'E278':archive/'u170_matched_fixed_baselines_v1/analysis/matched_comparison/results.json',
+        'E279':archive/'u170_preset_return_baselines_v1/analysis/results.json',
+        'E280':archive/'u170_preset_return_baselines_v1/analysis/matched_comparison/results.json',
+        'E281':archive/'u170_track_segments_nominal_v1/analysis/results.json',
+        'E282':archive/'u170_track_segments_gust_v1/analysis/results.json',
+        'E283':archive/'u170_track_segments_baselines_v1/analysis/results.json',
+        'E284':archive/'u170_track_segments_baselines_v1/analysis/matched_comparison/results.json',
+        'E285':archive/'u170_common_event_t1p0_v1/analysis/common_event_comparison/results.json',
+    })
+    sources.update({key:dict(path=str(path.resolve()),sha256=digest(path),verification='AI artifact_checked',human_verification='not_recorded') for key,path in extra.items()})
+    referenced=validate_evidence_references((HERE/'MANUSCRIPT.md').read_text(),sources)
+    manifest=dict(scope='Current local research manuscript; previous20260912 direct-motor draft separately archived',
+        manuscript_sha256=digest(HERE/'MANUSCRIPT.md'),builder_sha256=digest(__file__),
+        evidence_cutoff='2026-10-30',submission_ready=False,human_approval='not_recorded',
+        sources=sources,manuscript_evidence_references=referenced,historical_claims_from_readback=data['claims'],
+        historical_claim_scope='Historical source registry only; not current return43 claims',
+        detailed_evidence=dict(path=str(HERE/'EVIDENCE_DETAILS.md'),
+            sha256=digest(HERE/'EVIDENCE_DETAILS.md'),
+            role='Full historical evidence narrative; current research decisions remain in the shared ledger'),
+        image_role='Architecture is a structural diagram; source-backed XY figures show saved actual trajectories, including nominal S-curve comparisons; rendering adds no experiments',
+        figures={str(p.relative_to(HERE)):digest(p) for p in sorted(FIG.glob('*architecture.*'))},
+        new_physics_steps=0,optimizer_updates=0)
+    (HERE/'evidence_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+
+
+def export_draft(pdf=False):
+    import markdown
+    source=(HERE/'MANUSCRIPT.md').read_text()
+    image_inputs={}
+    def embed(match):
+        alt,relative=match.groups();path=(HERE/relative).resolve()
+        if not path.is_file():raise ValueError('missing actual manuscript image '+str(path))
+        image_inputs[str(path)]=digest(path)
+        mime=mimetypes.guess_type(path)[0] or 'application/octet-stream'
+        return f'![{alt}](data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()})'
+    source=re.sub(r'!\[([^\]]*)\]\(([^)]+)\)',embed,source)
+    body=markdown.markdown(source,extensions=['tables','fenced_code'])
+    css='''@page{size:A4;margin:16mm}body{font-family:"Noto Sans CJK SC",sans-serif;font-size:10pt;line-height:1.65;color:#243548;max-width:1100px;margin:24px auto}h1{font-size:19pt}h2{font-size:14pt;margin-top:1.4em}h3{font-size:11pt}h1,h2,h3{break-after:avoid}img{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:9pt;break-inside:avoid}th,td{border-bottom:1px solid #ccd5de;padding:5px;vertical-align:top}tr{break-inside:avoid}blockquote{border-left:3px solid #647180;padding:5px 12px;background:#f2f5f7}pre{white-space:pre-wrap;background:#f2f5f7;padding:10px}a{color:#245b80}p{orphans:3;widows:3}@media print{body{margin:0;max-width:none}}'''
+    html='<!doctype html><html lang="zh"><meta charset="utf-8"><title>STTW current research draft</title><style>'+css+'</style><body>'+body+'</body></html>'
+    (HERE/'MANUSCRIPT.html').write_text(html)
+    receipt=dict(images=image_inputs,html_sha256=digest(HERE/'MANUSCRIPT.html'),pdf_requested=pdf,
+        disclosure='Offline local rendering only, no publication or source-data upload',physics_steps=0)
+    if pdf:
+        chrome=Path('/usr/bin/google-chrome')
+        if not chrome.exists():raise RuntimeError('local Chrome unavailable; no dependency installation attempted')
+        target=HERE/'MANUSCRIPT.pdf'
+        with tempfile.TemporaryDirectory(prefix='sttw-paper-') as profile:
+            proc=subprocess.run([str(chrome),'--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
+                '--disable-background-networking',f'--user-data-dir={profile}','--no-pdf-header-footer',
+                f'--print-to-pdf={target}',(HERE/'MANUSCRIPT.html').as_uri()],capture_output=True,text=True,timeout=90)
+            if proc.returncode or not target.exists():raise RuntimeError('local PDF renderer failed; HTML retained')
+        if target.read_bytes()[:5]!=b'%PDF-':raise ValueError('invalid PDF output')
+        receipt.update(pdf_sha256=digest(target),pdf_bytes=target.stat().st_size,renderer='existing local headless Chrome')
+    (HERE/'export_receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+
+
+def export_ieee():
+    """Render the canonical Markdown through IEEEtran using the local engine."""
+    import mistune
+    source=(HERE/'MANUSCRIPT.md').read_text()
+    source=re.sub(r'\[E\d{3}[^\]]*\]', '', source)
+    engine=ROOT/'runs/paper_toolchain/tectonic'
+    title=source.splitlines()[0].removeprefix('# ')
+    abstract=source.split('## Abstract\n',1)[1].split('\n## 1 ',1)[0].strip()
+    body='## 1 '+source.split('\n## 1 ',1)[1].split('\n## References',1)[0]
+    body=re.sub(r'\[(R\d+)\]', r'@@CITE\1@@', body)
+    references=source.split('\n## References',1)[1]
+    mapping={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$','#':r'\#','_':r'\_','{':r'\{','}':r'\}','~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
+    def escape(text):
+        return ''.join(mapping.get(c,c) for c in text.replace('–','--').replace('—','---'))
+    def prose(text):
+        text=re.sub(r'\[E\d{3}[^\]]*\]','',text)
+        pieces=re.split(r'(@@CITER\d+@@)',text)
+        return ''.join(r'\cite{'+x[6:-2]+'}' if re.fullmatch(r'@@CITER\d+@@',x) else escape(x) for x in pieces)
+    images={}
+    section_title=""
+    def render(node):
+        nonlocal section_title
+        kind=node['type']
+        children=node.get('children',[])
+        content=lambda:''.join(render(c) for c in children)
+        if kind=='text':return prose(node['raw'])
+        if kind=='inline_math':return '$'+node['raw']+'$'
+        if kind in ('blank_line','softbreak','linebreak'):return '\n'
+        if kind in ('paragraph','block_text'):return content()+'\n\n'
+        if kind=='heading':
+            text=re.sub(r'^\d+(?:\.\d+)*\s+','',content())
+            section_title=text
+            command='section' if node['attrs']['level']==2 else 'subsection'
+            return '\\'+command+'{'+text+'}\n'
+        if kind=='strong':return r'\textbf{'+content()+'}'
+        if kind=='emphasis':return r'\emph{'+content()+'}'
+        if kind=='codespan':return r'\texttt{'+escape(node['raw'])+'}'
+        if kind=='link':return content()
+        if kind=='image':
+            path=(HERE/node['attrs']['url']).resolve();images[str(path)]=digest(path)
+            return '\n\\begin{figure*}[tp]\n\\centering\n\\includegraphics[width=\\textwidth,height=0.78\\textheight,keepaspectratio]{'+str(path)+'}\n\\caption{'+content()+'}\n\\end{figure*}\n'
+        if kind=='block_code':
+            if node.get('attrs', {}).get('info')=='math':
+                return '\n\\begin{equation}\\begin{aligned}\n'+node['raw'].strip()+'\n\\end{aligned}\\end{equation}\n'
+            lines=node['raw'].splitlines()
+            return '\n\\begin{quote}\\raggedright\\ttfamily\n'+'\\\\\n'.join(escape(line) for line in lines)+'\n\\end{quote}\n'
+        if kind=='list':
+            env='enumerate' if node['attrs']['ordered'] else 'itemize'
+            return '\\begin{'+env+'}\n'+content()+'\\end{'+env+'}\n'
+        if kind=='list_item':return '\\item '+content()
+        if kind=='table':
+            head=children[0]['children'];rows=[head]+[r['children'] for r in children[1]['children']]
+            columns=''.join('p{'+f'{(.96/len(head)-.018):.4f}'+r'\textwidth}' for _ in head)
+            data='\n\\hline\n'.join(' & '.join(''.join(render(c) for c in cell['children']) for cell in row)+r' \\' for row in rows)
+            return '\n\\begin{table*}[tp]\n\\caption{'+section_title+'}\n\\centering\n\\begin{tabular}{'+columns+'}\n\\hline\n'+data+'\n\\hline\n\\end{tabular}\n\\end{table*}\n'
+        raise ValueError('Unsupported manuscript Markdown node: '+kind)
+    markdown=mistune.create_markdown(renderer='ast',plugins=['table','math'])
+    text=r'''\documentclass[journal]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx,amsmath,url}
+\begin{document}
+\title{'''+escape(title)+r'''}
+\author{}
+\maketitle
+\begin{abstract}
+'''+prose(abstract)+'\n\\end{abstract}\n'+''.join(render(n) for n in markdown(body))
+    text+='\n\\begin{thebibliography}{99}\n'
+    for key,entry in re.findall(r'\[(R\d+)\]\s+(.+?)(?=\n\n|\Z)',references,re.S):
+        text+='\\bibitem{'+key+'} '+escape(entry.strip())+'\n'
+    text+='\\end{thebibliography}\n\\end{document}\n'
+    target=HERE/'MANUSCRIPT.tex';target.write_text(text)
+    subprocess.run([str(engine),'--keep-logs',str(target)],cwd=HERE,check=True)
+    receipt=json.loads((HERE/'export_receipt.json').read_text())
+    receipt.update(renderer='Tectonic 0.17.0 / IEEEtran journal',tex_sha256=digest(target),
+                   pdf_sha256=digest(HERE/'MANUSCRIPT.pdf'),pdf_bytes=(HERE/'MANUSCRIPT.pdf').stat().st_size,images=images)
+    (HERE/'export_receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser();group=parser.add_mutually_exclusive_group()
+    group.add_argument('--figures-only',action='store_true');group.add_argument('--export-only',action='store_true')
+    parser.add_argument('--pdf',action='store_true');parser.add_argument('--ieee',action='store_true');args=parser.parse_args()
+    if not args.export_only:control_diagram()
+    evidence_manifest()
+    if not args.figures_only:
+        export_draft(pdf=args.pdf and not args.ieee)
+        if args.ieee:export_ieee()
