@@ -184,6 +184,14 @@ def low_speed_lateral_load_inventory(p):
         raise ValueError('explicit distinct candidate identity required')
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
         raise ValueError('complete candidate artifact identity required')
+    traditional=p.get('traditional_rule')
+    if traditional is not None and (
+        candidate is not None or frozen_id is not None or p['alphas']!=[.5]
+        or set(traditional)!={'id','preview_m','lateral_acceleration_limit_m_s2'}
+        or not traditional['id'].replace('_','').isalnum()
+        or not 0<traditional['preview_m']<=10
+        or not 0<traditional['lateral_acceleration_limit_m_s2']<=10
+    ):raise ValueError('declare one bounded pure-pursuit curvature-speed rule')
     scope=p.get('geometry_scope','single_turn')
     if scope not in ('single_turn','low_speed_track_segments','mixed_speed_track_segments'):
         raise ValueError('unknown low-speed geometry scope')
@@ -198,7 +206,7 @@ def low_speed_lateral_load_inventory(p):
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(onsets,forces)]
-    identity=candidate['registry_id'] if candidate else frozen_id or p['model_id']
+    identity='STTW_RULE_'+traditional['id'] if traditional else candidate['registry_id'] if candidate else frozen_id or p['model_id']
     rows=[]
     combinations=((b,context,event,alpha) for b in banks for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
     for b,context,event,alpha in combinations:
@@ -212,7 +220,8 @@ def low_speed_lateral_load_inventory(p):
         **({'force_direction_world':direction} if 'force_direction_world' in p else {}),
         **({'source_task_start_s':start,'preparation_s':event['onset_s'] if event['force_N'] else 0.} if source else {}),
         bank_index=b,path_key=f'bank{b}_{route}',case_id=f"bank{b}/{route}/{identity}/a{alpha:g}/{event_name}",
-        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha))
+        mode='H75',mode_index=0,model_id=identity,alpha=alpha,query_alpha=alpha,user_alpha=alpha,effective_user_alpha=alpha,
+        **({'traditional_rule_id':traditional['id']} if traditional else {})))
         rows[-1]['onset_s']=onset
         rows[-1]['event']=event_name
         if boundary:rows[-1]['original_user_alpha']=context['state_source']['source_alpha']
@@ -2266,6 +2275,7 @@ def load(root,*,prefix_phase=False):
     native_prefix=p.get('mode')==PREFIX_MODE
     five_online=p.get('mode')==FIVE_ONLINE_MODE
     capability=p.get('mode')==CAPABILITY_MODE
+    traditional=p['protocol'].get('traditional_rule') if capability else None
     returning=capability and bool(p['protocol'].get('causal_preference_return'))
     selection=p.get('mode') in (SELECTION_MODE,PREFIX_MODE,FIVE_ONLINE_MODE,CAPABILITY_MODE)
     cfg=p['config'];tolerance=five_online or p.get('mode') in ('tolerance_online120','tolerance_online40','tolerance_broaden120','user_preference120','user_prior_online72','task_aware_fallback72','frozen_confirmation200','speed_query_online60','guard_fallback_evaluation','frozen_transfer_evaluation');confirmation=p.get('mode')=='h75_online_confirmation100' or tolerance or selection
@@ -2560,6 +2570,19 @@ def load(root,*,prefix_phase=False):
                 if dwell is not None:
                     coord_log.update(coord_raw_alpha=cd['alpha'],coord_raw_latched=cd['latched'],coord_dwell_tick=carry.state.tick,coord_hold_until_before=sidecar.hold_until_tick,coord_hold_until_tick=dwell['hold_until_tick'],coord_hold_remaining_ticks=dwell['remaining_ticks'],coord_hold_release_reason=dwell['release_reason'],coord_held=dwell['held'],coord_alpha_changed=dwell['alpha_changed'])
                     coord_log['coord_restore_published']=restore&permission&~dwell['held']&~latched&(alpha_exec==carry.state.alpha)
+            elif traditional:
+                progress=carry.state.projection.progress
+                start=j.clip(progress,path.s[0],path.s[-1])
+                end_progress=j.minimum(start+traditional['preview_m'],path.s[-1])
+                knots=j.where((path.s>=start)&(path.s<=end_progress),j.abs(path.curvature),0.)
+                curvature=j.maximum(j.max(knots),j.maximum(j.abs(j.interp(start,path.s,path.curvature)),j.abs(j.interp(end_progress,path.s,path.curvature))))
+                cap=j.sqrt(traditional['lateral_acceleration_limit_m_s2']/j.maximum(curvature,1e-12))
+                interface=cfg['residual_interface'];nominal=carry.state.physical.raw
+                speed=j.clip(j.minimum(v,cap),*interface['speed_reference_bounds_m_s'])
+                offset=j.clip(speed-nominal[0],-interface['speed_negative_scale_m_s']+1e-6,interface['speed_positive_scale_m_s']-1e-6)
+                scale=j.where(offset>=0,interface['speed_positive_scale_m_s'],interface['speed_negative_scale_m_s'])
+                z=j.stack([j.arctanh(offset/scale),j.asarray(0.,obs.dtype)])
+                queried=obs.at[336].set(sa);half=full=j.zeros_like(z)
             elif selection:
                 queried=obs.at[336].set(sa);z=jax.lax.cond(mode==3,lambda _:j.zeros(2),lambda _:actor.apply(param,queried),None);half=full=j.zeros_like(z)
             elif tolerance:

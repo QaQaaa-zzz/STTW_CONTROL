@@ -1,3 +1,17 @@
+# 2026-11-02 Matched geometric-rule control
+
+The existing pure-pursuit geometry follower was paired with a 6 m preview curvature speed cap, with the learned middle output removed. Four lateral-acceleration caps were screened on the earlier four low/high single/S routes and prepared banks1/3; 3.5 m/s² was selected after 6/8 narrow and 6/8 wide development completions (5.0 tied under the declared rule). The frozen rule then ran the same four new route–speed combinations and banks2/5 as U170 and H75: 8/8 original-goal arrivals, 8/8 H10 survival, 7/8 narrow and 7/8 wide tasks, mean turn speed 2.469 m/s and mean pre-goal maximum original-path error 0.233 m. U170's preassigned task endpoints were 6/8 narrow and 8/8 wide. The rule wins two narrow cases that U170 alpha0 misses; U170 wins one narrow and one wide case that the rule misses. The rule run completed 16,000 lower ticks, zero training updates, with full [actual/reference XY and paired task scores](results/sttw-tolerance-20261101/traditional_rule/COMPARISON.md). It was constructed after the U170/H75 new-combination outcomes were viewed and is a later matched comparison, not a blind independent test.
+
+The [signed ±36 N extension](results/sttw-tolerance-20261101/task_preference_disturbance/COMPARISON.md) retained the same four routes, banks2/5, task score, lower controller and 10 Hz causal reconnection; force onset was 2.8 s for 0.15 s. Rule 16 runs and U170 alpha0/1 32 runs all survived H10, while original-goal entry was 15/16, 11/16 and 7/16, respectively. Narrow task completion was 0/16, 1/16 and 2/16; wide was 2/16, 2/16 and 4/16. Both force signs and all 32 original/actual XY panels are retained. This is an exploratory extension designed after nominal outcomes, with 96,000 allocated lower steps and zero optimizer updates. It reveals poor original-task recovery under these pulses despite full upright survival; neither the nominal rule result nor the conditional policy supports a strong tolerance claim here. A multi-bank analyzer grouping bug initially blocked analysis after physical completion; grouping by route, event and bank fixed it, 43 related tests passed and no physical case was rerun.
+
+---
+
+# 2026-11-02 New task combinations and training-log review
+
+Prospectively declared four exact low/high single/S route–speed combinations and prepared banks 2/5 were evaluated with fixed H75 and U170, each across five alpha values under the same local200 lower, friction 0.8 and 10 Hz reconnection. Both panels completed 40/40 H10 episodes and 80,000 lower steps with zero optimizer updates. All 80 entered the original goal and survived. The previously chosen relaxed buffered-anchor task score gives U170 preassigned alpha0 narrow 6/8 versus alpha0.5 4/8, and alpha1 wide 8/8 versus alpha0.5 6/8; H75 alpha0 narrow 8/8 versus alpha0.5 4/8, but H75 alpha1 wide 5/8 versus alpha0.5 8/8. [All 16 actual/reference XY figures and paired per-case results](results/sttw-tolerance-20261101/task_preference_holdout/README.md). Exact combinations are prospective, while score thresholds and the initial-state generator had earlier development exposure. The [U170 training-log review](results/sttw-tolerance-20261101/training_review/README.md) shows late sampled reward improvement with substantial fluctuation and 119 domain exits; it does not establish fixed-task convergence. No new training or domain-randomized physical test was performed.
+
+---
+
 # 2026-11-01 Frozen middle preference comparison
 
 Using the common local200 lower controller, friction 0.8, 10 Hz reconnection and four low/high single/S-turn routes, the existing U170, original H75 and W400 middle policies each completed 40 paired five-alpha evaluations; u325 completed the selected two-route 20-case screen. All 140 completed episodes reached the original goal and survived 10 s. The first H75 process ended externally after 400 lower steps; the identical 20-case panel was manually rerun in a new directory and completed. No PPO updates were made. Under the separately declared relaxed development task score, alpha0 narrow success was U170 6/8, H75 8/8 and W400 6/8; alpha1 wide success was 8/8, 6/8 and 6/8. Original H75 is the next path-priority working base; U170 remains the speed-priority reference. The initial two-route W400 preference was reversed after its low-speed single-right extension. [All actual/reference XY, five-alpha per-case data and protocol provenance](results/sttw-tolerance-20261101/frozen_middle_comparison/README.md). This is model-selection DEV, with the relaxed thresholds chosen after reviewing U170's prior task data; the earlier frozen task-score counts remain unchanged.
@@ -973,3 +987,15 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 左弯中alpha1速度/路径均更优，右高速弯仅弱取舍方向，不能证明稳定alpha偏好。后期DEV保持与部分分工况误差退化；末期弯道样本约2.2%、强需求约0.6%、出口直线约67%，下一步只定位有效样本覆盖，因果仍待验证；无自动续训或新路径评价，下层阻断未获因果证据。
 
 [结果、固定XY、全部候选、原NPZ、训练分项统计与SHA](evidence/path_feedback_v1_20261010/phase_C_results_20261011/INDEX.md)。结论仅同一prepared bank的固定DEV，非独立泛化，多场景不等于多个独立训练种子。
+
+## 2026-11-02 固定偏好论文补证：正向扰动、物理域、90°转向
+
+论文主稿为 [可编辑 LaTeX](paper/MANUSCRIPT.tex) 及 [PDF](paper/MANUSCRIPT.pdf)，采用与用户提供 RAS 文章相近的问题说明和双栏论文结构；公式明确中层偏好输出、10 Hz 因果接回、训练主奖励和任务成功判据。图为真实原路径/实际 XY、真速与架构图，完整数据和图源在 [论文入口](paper/README.md)。
+
+已执行的 signed ±36 N、2.8–2.95 s 四路×bank2/5×U170端点/几何规则共48例均 H10 存活。看过全矩阵后识别的正向子集：低速右 S、高速右单弯各两初态，U170 α1 宽任务4/4、α0 0/4、规则0/4；这是探索性正面案例，原始48例与32张 XY 完整保留在 [扰动结果](results/sttw-tolerance-20261101/task_preference_disturbance/COMPARISON.md)。不以该子集推断所有扰动方向。
+
+两组先前 TEST 物理模型摩擦极值域（μ0.932/质量0.975；μ0.612/质量1.074）及各自准备态bank0/6，在四条原任务路线配对U170 α0/1和几何规则，共48例/96000 lower、0更新，全部原目标到达/H10。U170 α1宽任务在两域各8/8，规则6/8、7/8；α0窄任务各6/8。极值选择和任务协议晚于既有结果，为探索性参数/初态迁移，不作独立域泛化结论。原始XY、全部逐案分数与配置在 [域对照](results/sttw-tolerance-20261101/task_preference_physical_domain/COMPARISON.md)。
+
+用户要求的四条平滑有限半径90°航向变化：低速v2.0/R1.6、高速v3.05/R3.0，左右方向×bank2/5，U170五档40例加规则8例，合48例/96000 lower、0更新，全部原目标到达/H10。实际原路径航向差逐条核为±90.0°；不是零半径折线。U170 α0→1平均转弯速度2.122→2.346m/s、最大原路径误差0.325→0.601m，窄任务6/8→2/8、宽任务2/8→8/8；规则两任务各8/8。这证明本组偏好行为有序和任务可完成，不证明优于规则。[完整16张XY与逐案结果](results/sttw-tolerance-20261101/task_right_angle/COMPARISON.md)。两物理评测自身status均completed；规则shell exit0，U170外层shell在物理完成后exit143且无单独execute.exit收据；未重跑物理，40原始轨迹和评分均在盘。
+
+补充材料 [SUPPLEMENT.tex](paper/SUPPLEMENT.tex)／[SUPPLEMENT.pdf](paper/SUPPLEMENT.pdf) 为七页可重复编译的逐路线表格与解释，覆盖未进主文的H75/U170五档、±36N全矩阵、正向子集逐初态裕量、两物理域和四条90°转弯；附训练过程窗口、右转/反向扰动附图及每个原始逐案JSON入口。生成器为 `docs/paper/analysis/make_supplement.py`，主论文构建命令同时生成两份PDF并校验图源。主文七页保留方法、公式、框图及五张核心图，补充材料不把探索性结果改写为独立验证。

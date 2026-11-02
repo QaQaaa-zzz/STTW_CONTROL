@@ -2947,7 +2947,8 @@ def analyze_fixed_h75_capability(root,p):
     return_rule=p['protocol'].get('causal_preference_return')
     candidate=p['protocol'].get('candidate_model')
     frozen_id=p['protocol'].get('frozen_registry_middle_id')
-    model_label=f"candidate u{candidate['source_update']}" if candidate else frozen_id or 'frozenH75'
+    traditional=p['protocol'].get('traditional_rule')
+    model_label=f"pure pursuit + curvature speed cap {traditional['id']}" if traditional else f"candidate u{candidate['source_update']}" if candidate else frozen_id or 'frozenH75'
     if p.get('lower_transfer'):
         lower=p['initial_source']['candidate']
         model_label+=f" | lower u{lower['source_update']} {lower['actor_sha256'][:8]} zero-shot"
@@ -3077,7 +3078,7 @@ def analyze_fixed_h75_capability(root,p):
             axes[0].add_patch(Circle(group[0]['old_goal_xy'],1.,fill=False,edgecolor='black',linestyle='--',label='Old goal disk'))
             axes[0].add_patch(Circle(group[0]['new_goal_xy'],1.,fill=False,edgecolor='#009E73',label='New goal disk (+3m)'))
         for r in group:
-            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"Prepare alpha={r['alpha']:g}, return user={r['original_user_alpha']:g}" if return_rule else f"NN alpha={r['alpha']:g} (user={r['original_user_alpha']:g})" if boundary else f"Fixed alpha={r['alpha']:g}"
+            raw=raws[r['case_id']];n=r['active_lower_ticks'];t=raw['time'][:n];label=f"Rule {traditional['id']}" if traditional else f"Prepare alpha={r['alpha']:g}, return user={r['original_user_alpha']:g}" if return_rule else f"NN alpha={r['alpha']:g} (user={r['original_user_alpha']:g})" if boundary else f"Fixed alpha={r['alpha']:g}"
             if extended:
                 arrival=r['endpoint']['first_arrival_s'];cut=min(n,round(arrival/.005)) if arrival is not None else n
                 line=axes[0].plot(*raw['actual_xy'][:cut].T,label=label)[0]
@@ -3088,7 +3089,7 @@ def analyze_fixed_h75_capability(root,p):
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | {physics_label} | actual endpoints');slug={'STTW_MIDDLE_FULLTAIL_PPO75_U77':'h75','STTW_MIDDLE_WITNESS_S918501_SUP400':'w400','STTW_MIDDLE_DISTILLED_V3_U325':'u325'}.get(frozen_id,'h75');name=(f'bank{initial_index}_' if len(p['protocol']['bank_indices'])>1 else '')+route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else f'_fixed_{slug}_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint='no-middle-actor' if traditional else p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='curvature speed-cap rule' if traditional else 'Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | {physics_label} | actual endpoints');slug='rule' if traditional else {'STTW_MIDDLE_FULLTAIL_PPO75_U77':'h75','STTW_MIDDLE_WITNESS_S918501_SUP400':'w400','STTW_MIDDLE_DISTILLED_V3_U325':'u325'}.get(frozen_id,'h75');name=(f'bank{initial_index}_' if len(p['protocol']['bank_indices'])>1 else '')+route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else f'_fixed_{slug}_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
         if load_screen:
             render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}
@@ -3173,8 +3174,8 @@ def paired_low_speed_load_outcomes(rows,*,declared_alphas=None,selected_boundary
         return dict(pairs=[],total_pairs=0,desired_witnesses=0,endpoint_comparison='not applicable: one network-selected alpha per source/event, not a paired endpoint experiment; all physical rows remain reported')
     if declared_alphas is not None and not {0.,1.}.issubset(set(declared_alphas)):
         return dict(pairs=[],total_pairs=0,desired_witnesses=0,endpoint_comparison='not applicable: both endpoints were not declared; physical rows remain reported')
-    for route,event in sorted({(r['route'],r['event']) for r in rows if r['force_N']!=0.}):
-        group=sorted([r for r in rows if (r['route'],r['event'])==(route,event) and r['alpha'] in (0.,1.)],key=lambda r:r['alpha'])
+    for route,event,bank in sorted({(r['route'],r['event'],r['bank_index']) for r in rows if r['force_N']!=0.}):
+        group=sorted([r for r in rows if (r['route'],r['event'],r['bank_index'])==(route,event,bank) and r['alpha'] in (0.,1.)],key=lambda r:r['alpha'])
         if not group:continue  # Interior-only probes retain every row; endpoint contrasts live in the parent dataset.
         if len(group)!=2 or [r['alpha'] for r in group]!=[0.,1.]:raise ValueError('exact alpha0/1 event pair required')
         a,b=group
@@ -3182,7 +3183,7 @@ def paired_low_speed_load_outcomes(rows,*,declared_alphas=None,selected_boundary
         outcomes=[r['endpoint']['physical_outcome'] for r in group];low=all(r['low_speed_gate_passed'] for r in group)
         full_low=all(r.get('low_speed_full_upright_gate_passed',False) for r in group)
         contrast='alpha0_contact_alpha1_survived' if outcomes==['contact','survived'] else 'alpha1_contact_alpha0_survived' if outcomes==['survived','contact'] else 'no_endpoint_contrast'
-        pairs.append(dict(route=route,event=event,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,low_speed_full_upright_both=full_low,contrast=contrast,desired_witness=bool(low and full_low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
+        pairs.append(dict(route=route,event=event,bank_index=bank,force_N=a['force_N'],onset_s=a['onset_s'],duration_s=a['duration_s'],outcomes=outcomes,goal_arrived=[r['endpoint']['goal_arrived'] for r in group],onset_speeds_m_s=[r['onset_speed_mean_m_s'] for r in group],low_speed_both=low,low_speed_full_upright_both=full_low,contrast=contrast,desired_witness=bool(low and full_low and contrast=='alpha0_contact_alpha1_survived' and b['endpoint']['goal_arrived']),case_ids=[r['case_id'] for r in group]))
     return dict(pairs=pairs,total_pairs=len(pairs),desired_witnesses=sum(p['desired_witness'] for p in pairs),scope='Exploratory intended identical fixed world-vector force (default world-Y); actual delivered impulse truncates on physical failure. No wind-speed calibration or unseen-condition claim.')
 
 

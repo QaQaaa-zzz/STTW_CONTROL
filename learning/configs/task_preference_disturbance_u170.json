@@ -1,0 +1,156 @@
+{
+  "experiment_id": "STTW-TASK-PREFERENCE-DISTURBANCE-U170-V1",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    2,
+    5
+  ],
+  "alphas": [
+    0.0,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 32,
+  "maximum_lower_ticks": 64000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    -36.0,
+    36.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "holdout_low_single_left_76_R1p45_v1p90",
+      "family": 1,
+      "radius_m": 1.45,
+      "angle_deg": 76.0,
+      "speed": 1.9,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "holdout_low_S_right_72_R1p55_v2p00",
+      "family": 2,
+      "radius_m": 1.55,
+      "angle_deg": 72.0,
+      "speed": 2.0,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "holdout_high_single_right_96_R3p15_v3p05",
+      "family": 1,
+      "radius_m": 3.15,
+      "angle_deg": 96.0,
+      "speed": 3.05,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 4.0
+    },
+    {
+      "route": "holdout_high_S_left_70_R3p10_v3p10",
+      "family": 2,
+      "radius_m": 3.1,
+      "angle_deg": 70.0,
+      "speed": 3.1,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 4.0
+    }
+  ],
+  "data_role": "Exploratory matched disturbance extension after nominal new-combination results were opened; four original new routes, banks2/5, both lateral-force signs, onset2.8s, same task score. No model or rule tuning on this extension.",
+  "scoring": "Original goal+H10+8-10s original cross RMSE<=0.25m; buffered-anchor narrow halfwidth0.9m, wide halfwidth1.4m and actual turn mean speed>=0.85 request. Same scoring for U170/H75/W400/u325; U170 parent outcomes already inspected, so this is model-selection DEV.",
+  "stop_rule": "Exactly 32 disturbed H10 episodes, maximum 64000 lower ticks, zero optimizer; no extension.",
+  "capability_variant": "low_speed_lateral_load",
+  "question": "Do task-specific fixed alpha endpoints and a DEV-tuned geometric rule retain goal, balance and original-path task completion under paired signed lateral impulses?",
+  "onsets_s": [
+    2.8
+  ],
+  "force_frame": "world_fixed_vector",
+  "zero_onset_s": 0.0,
+  "low_speed_evidence_gate": {
+    "true_forward_speed_max_m_s": 2.2,
+    "windows": [
+      "pre_load",
+      "during_load"
+    ],
+    "nominal_requested_speed_m_s": 1.8,
+    "failure_does_not_imply_low_speed_gate_passed": true
+  },
+  "candidate_model": {
+    "registry_id": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+    "actor": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "actor_sha256": "07f1bd3965d4458979e01f56f73cc1aa947480f4187b4c1ba9f4b8e4c7b50ef9",
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/objects/2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "checkpoint_sha256": "2cd5865a6d4e65acc2fc1a0dbdd42f331d24e5af8bef433b296878dafa07a7cf",
+    "training_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/manifest.json",
+    "training_manifest_sha256": "a52779a6c5532b56b144d6903ca6998a8b8e25956e5a01b663a58144066f516e",
+    "source_update": 170
+  },
+  "force_direction_world": [
+    -0.7173560908995228,
+    0.6967067093471654,
+    0.0
+  ],
+  "include_nominal": false,
+  "geometry_scope": "mixed_speed_track_segments",
+  "dataset_partition": {
+    "training_rows": 0,
+    "development_rows": 32,
+    "all_development": true,
+    "unit": "route/bank/force/alpha"
+  },
+  "speed_scope_note": "Low-speed flags retain their literal <=2.2 m/s meaning; high-speed rows are not low-speed evidence. Initial bank is shared and acceleration is included; actual in-turn speed must be reported before calling a case high-speed.",
+  "enabled_optimizations": [
+    "same-shape vmap",
+    "scan50",
+    "shared JAX cache",
+    "existing compiled function reuse"
+  ],
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 0.5
+  },
+  "initial_state_scope": "Prepared complete banks1/3 from authenticated eight-state friction0.8 bank. These banks may have prior project use; no claim of independent random-state TEST.",
+  "lower_transfer": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/transfer.json",
+    "manifest_sha256": "644baf1c3ea386bff7b7aaba3cbd2d326a0c42150924c4756cc73e0cb0cb5fed"
+  },
+  "task_design_diagnostic": {
+    "path_priority_alpha": 0.0,
+    "speed_priority_alpha": 1.0,
+    "fixed_compromise_alpha": 0.5,
+    "narrow_centerline_half_width_m": 0.4,
+    "wide_centerline_half_width_m": 0.9,
+    "original_exit_goal_radius_m": 1.0,
+    "scoring_scope": "0.5m circular-envelope buffer around recorded vehicle XY anchor; conservative proxy, not complete mesh sweep",
+    "source": "Same previously selected relaxed development task thresholds; held route/bank combinations were fixed before execution."
+  },
+  "task_contract": {
+    "narrow": {
+      "corridor_half_width_m": 0.9,
+      "speed_min_ratio": null
+    },
+    "wide": {
+      "corridor_half_width_m": 1.4,
+      "speed_min_ratio": 0.85
+    },
+    "buffer_radius_m": 0.5,
+    "post_goal_last2s_original_cross_rmse_max_m": 0.25,
+    "original_goal_radius_m": 1.0,
+    "horizon_s": 10.0,
+    "alpha_by_task": {
+      "narrow": 0.0,
+      "wide": 1.0
+    },
+    "fixed_compromise_alpha": 0.5,
+    "source": "Relaxed thresholds chosen after the U170 first task panel and before these held route/bank combinations; threshold selection is DEV, exact-combination outcomes are prospective."
+  },
+  "bank_state_fingerprints": {
+    "2": "9218a531bbaa818f2f132ce5d886d9d4325a45487d31703ac8917d8828f3b4bf",
+    "5": "ae6eb88ff62a77224510431f1f2714088e670c04a165d6044da56c4a70ff40b5"
+  }
+}

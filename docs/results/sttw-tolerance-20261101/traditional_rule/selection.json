@@ -1,0 +1,94 @@
+{
+  "data_role": "Rule hyperparameter selection on four previously inspected DEV routes and prepared banks1/3; exact holdout outcomes not used",
+  "contract": {
+    "narrow": {
+      "corridor_half_width_m": 0.9,
+      "speed_min_ratio": null
+    },
+    "wide": {
+      "corridor_half_width_m": 1.4,
+      "speed_min_ratio": 0.85
+    },
+    "buffer_radius_m": 0.5,
+    "post_goal_last2s_original_cross_rmse_max_m": 0.25,
+    "original_goal_radius_m": 1.0,
+    "horizon_s": 10.0,
+    "alpha_by_task": {
+      "narrow": 0.0,
+      "wide": 1.0
+    },
+    "fixed_compromise_alpha": 0.5,
+    "source": "Relaxed pragmatic thresholds chosen after U170 first task panel, before testing this alternative middle; model-selection DEV only."
+  },
+  "candidates": [
+    {
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_traditional_rule_dev_a1p5_v1",
+      "rule": {
+        "id": "ppcap_a1p5_l6p0",
+        "preview_m": 6.0,
+        "lateral_acceleration_limit_m_s2": 1.5
+      },
+      "narrow": 4,
+      "wide": 0,
+      "goal": 8,
+      "survived": 8,
+      "mean_turn_speed_m_s": 1.7872183322906494,
+      "mean_max_cross_m": 0.3564604828134179
+    },
+    {
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_traditional_rule_dev_a2p5_v1",
+      "rule": {
+        "id": "ppcap_a2p5_l6p0",
+        "preview_m": 6.0,
+        "lateral_acceleration_limit_m_s2": 2.5
+      },
+      "narrow": 4,
+      "wide": 4,
+      "goal": 8,
+      "survived": 8,
+      "mean_turn_speed_m_s": 2.2274796664714813,
+      "mean_max_cross_m": 0.341227563098073
+    },
+    {
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_traditional_rule_dev_a3p5_recheck_v1",
+      "rule": {
+        "id": "ppcap_a3p5_l6p0",
+        "preview_m": 6.0,
+        "lateral_acceleration_limit_m_s2": 3.5
+      },
+      "narrow": 6,
+      "wide": 6,
+      "goal": 8,
+      "survived": 8,
+      "mean_turn_speed_m_s": 2.475737512111664,
+      "mean_max_cross_m": 0.2702704854309559
+    },
+    {
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_traditional_rule_dev_a5p0_v1",
+      "rule": {
+        "id": "ppcap_a5p0_l6p0",
+        "preview_m": 6.0,
+        "lateral_acceleration_limit_m_s2": 5.0
+      },
+      "narrow": 6,
+      "wide": 6,
+      "goal": 8,
+      "survived": 8,
+      "mean_turn_speed_m_s": 2.475737363100052,
+      "mean_max_cross_m": 0.27027149125933647
+    }
+  ],
+  "selected": {
+    "narrow": {
+      "id": "ppcap_a3p5_l6p0",
+      "preview_m": 6.0,
+      "lateral_acceleration_limit_m_s2": 3.5
+    },
+    "wide": {
+      "id": "ppcap_a3p5_l6p0",
+      "preview_m": 6.0,
+      "lateral_acceleration_limit_m_s2": 3.5
+    }
+  },
+  "tie_break": "narrow: lower mean maximum original cross; wide: higher mean actual turn speed"
+}

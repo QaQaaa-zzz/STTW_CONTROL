@@ -268,7 +268,7 @@ def test_load_witness_requires_survival_goal_and_both_actual_low_speed_gates(low
 
 
 def test_declared_nonendpoint_grid_does_not_require_new_endpoint_baseline():
-    row=dict(route='turn',event='force',force_N=24.,alpha=1.)
+    row=dict(route='turn',event='force',force_N=24.,alpha=1.,bank_index=0)
     result=m.paired_low_speed_load_outcomes([row],declared_alphas=[.75,1.])
     assert result['total_pairs']==0 and result['desired_witnesses']==0
     with pytest.raises(ValueError,match='exact alpha0/1'):
@@ -280,6 +280,14 @@ def test_selected_endpoint_is_not_a_paired_fixed_endpoint_experiment():
     result=m.paired_low_speed_load_outcomes([row],declared_alphas=[0.,.25,.5,.75,1.],selected_boundary=True)
     assert result['total_pairs']==0 and result['desired_witnesses']==0
     assert 'network-selected' in result['endpoint_comparison']
+
+
+def test_paired_load_outcomes_keep_prepared_banks_separate():
+    common=dict(route='turn',event='force',force_N=24.,onset_s=2.8,duration_s=.15,model_id='frozen',speed=2.,onset_speed_mean_m_s=1.9,low_speed_full_upright_gate_passed=True,low_speed_gate_passed=True,endpoint=dict(physical_outcome='survived',goal_arrived=True))
+    rows=[dict(common,bank_index=bank,alpha=alpha,case_id=f'bank{bank}_a{alpha:g}') for bank in (2,5) for alpha in (0.,1.)]
+    result=m.paired_low_speed_load_outcomes(rows,declared_alphas=[0.,1.])
+    assert result['total_pairs']==2
+    assert [pair['bank_index'] for pair in result['pairs']]==[2,5]
 
 
 def test_conditional_primary_window_does_not_relabel_or_discard_extension_failure():

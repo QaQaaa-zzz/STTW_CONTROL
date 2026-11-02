@@ -1,0 +1,43 @@
+{
+  "source_results": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_holdout/holdout_comparison.json",
+  "raw_runs": {
+    "H75": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_preference_holdout_h75_v1",
+    "U170": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_preference_holdout_u170_v1"
+  },
+  "rule_run": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_traditional_rule_holdout_v1",
+  "pulse_runs": {
+    "u170": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_preference_disturbance_u170_v1",
+    "rule": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/task_preference_disturbance_rule_v1"
+  },
+  "positive_pulse_panel": {
+    "route": "right_angle_high_left_90_R3p0_v3p05",
+    "banks": [
+      2,
+      5
+    ],
+    "event": "t2.8_F+36"
+  },
+  "right_angle_result": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_right_angle/comparison.json",
+  "right_angle_panels": [
+    {
+      "route": "right_angle_low_left_90_R1p6_v2p0",
+      "bank": 2
+    },
+    {
+      "route": "right_angle_high_left_90_R3p0_v3p05",
+      "bank": 2
+    }
+  ],
+  "xy_panels": [
+    {
+      "route": "holdout_low_S_right_72_R1p55_v2p00",
+      "bank": 5
+    },
+    {
+      "route": "holdout_high_S_left_70_R3p10_v3p10",
+      "bank": 2
+    }
+  ],
+  "transformations": "raw actual XY, forward speed and original path; task figure uses saved per-case summary without smoothing",
+  "replicate_unit": "paired route and prepared-state bank, n=8 per model/alpha"
+}

@@ -38,22 +38,21 @@ def main():
     (root / "analysis/task_scores.json").write_text(json.dumps(result, indent=2) + "\n")
     lines = ["# Frozen task-preference score", "", f"The corridor uses a {contract['buffer_radius_m']:g} m circular buffer around recorded vehicle XY. This is an anchor-disk proxy, not an exact swept-mesh or real-wall test. The original goal, H10 survival and 8–10 s original-path tracking are required for both tasks. Threshold provenance: {contract['source']}", "", "## Actual/reference XY", ""]
     frozen_id = plan["protocol"].get("frozen_registry_middle_id")
-    suffix = "candidate" if plan["protocol"].get("candidate_model") else {"STTW_MIDDLE_FULLTAIL_PPO75_U77": "h75", "STTW_MIDDLE_WITNESS_S918501_SUP400": "w400", "STTW_MIDDLE_DISTILLED_V3_U325": "u325"}.get(frozen_id, "h75")
-    for bank in plan["protocol"]["bank_indices"]:
-        for context in plan["contexts"]:
-            name = f"bank{bank}_{context['route']}_zero_fixed_{suffix}_xy.png"
-            lines.append(f"![bank{bank} {context['route']} actual/reference XY]({name})")
+    suffix = "rule" if plan["protocol"].get("traditional_rule") else "candidate" if plan["protocol"].get("candidate_model") else {"STTW_MIDDLE_FULLTAIL_PPO75_U77": "h75", "STTW_MIDDLE_WITNESS_S918501_SUP400": "w400", "STTW_MIDDLE_DISTILLED_V3_U325": "u325"}.get(frozen_id, "h75")
+    for image in sorted((root / "analysis").glob(f"*_fixed_{suffix}_xy.png")):
+        lines.append(f"![{image.stem} actual/reference XY]({image.name})")
     lines += ["", "## Outcomes by fixed alpha", "", "| alpha | narrow task | wide task | narrow corridor proxy | wide speed threshold |", "|---:|---:|---:|---:|---:|"]
     for item in summary:
         lines.append(f"| {item['alpha']:g} | {item['narrow_success']}/{item['n']} | {item['wide_success']}/{item['n']} | {item['narrow_corridor_proxy']}/{item['n']} | {item['wide_speed_met']}/{item['n']} |")
-    lines += ["", "## Preassigned arms by route", "", "| route | narrow α0 | narrow fixed α0.5 | wide α1 | wide fixed α0.5 |", "|---|---:|---:|---:|---:|"]
-    for context in plan["contexts"]:
-        route = context["route"]
-        group = [row for row in rows if row["route"] == route]
-        pick = lambda alpha, task: sum(row[f"{task}_success"] for row in group if row["alpha"] == alpha)
-        n = len(plan["protocol"]["bank_indices"])
-        lines.append(f"| {route} | {pick(0.0, 'narrow')}/{n} | {pick(0.5, 'narrow')}/{n} | {pick(1.0, 'wide')}/{n} | {pick(0.5, 'wide')}/{n} |")
-    lines += ["", "All 40 paired outcomes and failure reasons are in [task_scores.json](task_scores.json). The preassigned comparison is narrow α0 versus fixed α0.5, and wide α1 versus fixed α0.5; the other levels diagnose the preference response. No tuned conventional rule has been tested in this panel.", ""]
+    if {0.0, 0.5, 1.0}.issubset(set(plan["protocol"]["alphas"])):
+        lines += ["", "## Preassigned arms by route", "", "| route | narrow α0 | narrow fixed α0.5 | wide α1 | wide fixed α0.5 |", "|---|---:|---:|---:|---:|"]
+        for context in plan["contexts"]:
+            route = context["route"]
+            group = [row for row in rows if row["route"] == route]
+            pick = lambda alpha, task: sum(row[f"{task}_success"] for row in group if row["alpha"] == alpha)
+            n = sum(row["alpha"] == 0.0 for row in group)
+            lines.append(f"| {route} | {pick(0.0, 'narrow')}/{n} | {pick(0.5, 'narrow')}/{n} | {pick(1.0, 'wide')}/{n} | {pick(0.5, 'wide')}/{n} |")
+    lines += ["", f"All {len(rows)} outcomes and failure reasons are in [task_scores.json](task_scores.json).", ""]
     (root / "analysis/TASK_SCORES.md").write_text("\n".join(lines))
 
 

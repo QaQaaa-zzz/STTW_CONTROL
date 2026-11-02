@@ -1,0 +1,51 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/metrics.jsonl",
+  "source_sha256": "31c4066ac2f93f57b7cd26879d4fefb6c8cd7b3f9993ae141709dc847177166c",
+  "updates": 150,
+  "update_range": [
+    53,
+    202
+  ],
+  "total_physical_failures": 0,
+  "total_domain_exits": 119,
+  "accepted_minibatches": 2376,
+  "target_kl_shortened_updates": [
+    155,
+    175,
+    188
+  ],
+  "nonfinite_stops": 0,
+  "segments": {
+    "early": {
+      "first_update": 53,
+      "last_update": 92,
+      "mean_sample_reward": -0.10750064360909165,
+      "sample_reward_std": 0.08902464554922987,
+      "physical_failures": 0,
+      "domain_exits": 33,
+      "mean_exact_kl": 0.0021072961040772497,
+      "accepted_minibatches": 640
+    },
+    "middle": {
+      "first_update": 108,
+      "last_update": 147,
+      "mean_sample_reward": -0.14580745678395032,
+      "sample_reward_std": 0.11541855361232561,
+      "physical_failures": 0,
+      "domain_exits": 53,
+      "mean_exact_kl": 0.00246884790394688,
+      "accepted_minibatches": 640
+    },
+    "late": {
+      "first_update": 163,
+      "last_update": 202,
+      "mean_sample_reward": -0.07625141073949634,
+      "sample_reward_std": 0.045698822914788786,
+      "physical_failures": 0,
+      "domain_exits": 12,
+      "mean_exact_kl": 0.0028892348036606563,
+      "accepted_minibatches": 624
+    }
+  },
+  "interpretation": "The sampling distribution and scene mix vary. A better late sample-reward mean does not prove fixed-task convergence or safety."
+}

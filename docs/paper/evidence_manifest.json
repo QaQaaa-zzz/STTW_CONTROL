@@ -1,10 +1,11 @@
 {
-  "scope": "Task-specified preference working manuscript",
-  "manuscript_sha256": "ce4a143152fa0f4d514d75cc09c51930bcfcb49c16b52200ea3a309661b1a630",
-  "builder_sha256": "3b84b1215342c56d6ca60ec66d5733814e4d78237eb4ed9eae48aeaa529e4cbc",
+  "scope": "Task-specified preference LaTeX working article",
+  "manuscript_sha256": "6af08532afde5795c96fe4988c81a5143ab2cd44289d050f0d1940f2df1263b2",
+  "supplement_sha256": "a06b700ce9accfc5b3bdf9f487a6989b5285629b8ef7da9759260e80d64000af",
+  "builder_sha256": "3da3df3f99b31aea23999d482a9bfabf5b61a50f2d17da4d433159d3fdc98bb8",
   "submission_ready": false,
   "human_verification": "not_recorded",
-  "data_role": "nominal DEV, bounded frozen task-score validation and related-source middle selection; tuned-rule and independent-domain evidence pending",
+  "data_role": "development model selection and prospective exact nominal combinations; later signed-force, physical-domain and 90-degree panels are exploratory",
   "sources": {
     "middle_reward": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/path_command_reward.py",
@@ -78,7 +79,7 @@
     },
     "task_screen_code": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_screen.py",
-      "sha256": "493fb693f11eae97484c3318171877179998114d3e6ab61a1b142bac9bf6d309",
+      "sha256": "f7e13dd380c21b6f32fb5f1b8075ce411e0c1561b9ca30f24412a54be49fdd41",
       "verification": "AI artifact_checked; human pending"
     },
     "task_score_config": {
@@ -98,7 +99,7 @@
     },
     "task_score_code": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_task_score.py",
-      "sha256": "a26af50a4dc53586a468a0d25758ca4b78dd102a4904ab9103c90b841e044dad",
+      "sha256": "5473394db57d0c2a574fda1700ca0c57b83e6fd9d8610937c33c4035115acf06",
       "verification": "AI artifact_checked; human pending"
     },
     "middle_comparison_h75": {
@@ -149,6 +150,151 @@
     "middle_comparison_two_route_code": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_frozen_middles.py",
       "sha256": "064e6c5c4549459ab20a1d1e6c8fb32b918a8b54f9a73e32f9c871c3b8e12e9e",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_training_log": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_low_speed_mixed_finetune_200_v1/metrics.jsonl",
+      "sha256": "31c4066ac2f93f57b7cd26879d4fefb6c8cd7b3f9993ae141709dc847177166c",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_training_review": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/training_review/training_review.json",
+      "sha256": "76066e912209adfef1007b8c22fde83cbcd6132bbe5d77abaca72b2385fc8623",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_training_review_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/review_middle_training.py",
+      "sha256": "4c73895ebc38ac47787fcb0290b7b0c2eac7d94f4d552e8486f6736716c3356c",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_combination_h75_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_holdout_h75.json",
+      "sha256": "678b7c1bc8e1b8b3653df77c078367c8110a86f7089d0e58d9d0ac85e1722bad",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_combination_u170_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_holdout_u170.json",
+      "sha256": "67db32e1ec1aac4948895e75628696c5694ca4cf8f9b625431e25594eba8197d",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_combination_results": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_holdout/holdout_comparison.json",
+      "sha256": "70133c5d5758203b1d55752df4ded5f91f4a5310dab880c889f4ecb0d363d6cb",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_combination_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_holdout_middles.py",
+      "sha256": "4e9a2b0b22d1e94da9551bd1e150b8709156c93eb40c8871e88366bdedb1184e",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "geometric_rule_dev_selection": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/traditional_rule/selection.json",
+      "sha256": "acf096b4b016738c25f7cd04a1a791502b396596eed47e6a1d47e4c3ce880402",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "geometric_rule_dev_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/select_traditional_rule.py",
+      "sha256": "fb08d66c0263a68a788f4079bba73593b67f69be87fe2a84e0325af7bc345918",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "geometric_rule_holdout_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_traditional_rule_holdout.json",
+      "sha256": "53afb24e7e023fd5568485741ee99a7d2c06f4ad71c4d8dae0bad219d15a452e",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "geometric_rule_comparison": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/traditional_rule/comparison.json",
+      "sha256": "386ef17867acecba1ee65286d0316126a4b280bcef1118029eb8f805811fcdce",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "geometric_rule_comparison_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_traditional_rule.py",
+      "sha256": "1a70b537129511d40dd36eba68ab74da5443c147142c52072fc561bfb59ae748",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "signed_pulse_u170_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_disturbance_u170.json",
+      "sha256": "aa43699ed61b79a625090cc32511824097d6c6ff35481927c0de9f1cef618430",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "signed_pulse_rule_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_disturbance_rule.json",
+      "sha256": "55c347bc8e635f616590b84bbce6c0d68ed918923e140094f3d2b6a667c730bd",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "signed_pulse_comparison": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_disturbance/comparison.json",
+      "sha256": "aa36befac113f98d577d7345effd7da36e7f43b9ab477c85fd01aba2003ea966",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "signed_pulse_comparison_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_task_disturbance.py",
+      "sha256": "50f9acb09790e96b47a8e03ae26a0962f229f97f1839a86ae4ab71a9f64cb04a",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_rescore": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/physical_domain_rescore/domain_task_rescore.json",
+      "sha256": "3346de887ea88ba8717a1679819fc41852a51a8a3c0fccc5fa091db0a646a105",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_rescore_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/rescore_physical_domain.py",
+      "sha256": "aa782b613b4d41648e919dd5c583e0b586c3db020e37c19e8f1e9990daedfc87",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_task_rule_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_physical_domain_rule.json",
+      "sha256": "f7ba32fd946e5cd028cf76a325e7c256cde64b4a2733b63ad0c29ac60f105c41",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_task_u170_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_physical_domain_u170.json",
+      "sha256": "1cd3f0baf9311090ffc5fe7bd4e0bf41e070bed6536b3c72c2817403363b6cb7",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_task_comparison": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_physical_domain/comparison.json",
+      "sha256": "639eb91806807fc8d8cb805201beeb455bb3e35d0b729f966ebba120fcf8c144",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "physical_domain_task_comparison_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_task_domains.py",
+      "sha256": "98179f2e6a57719ca08e770f2b5b9e8b51ef00bf7cf439113a35bdd475e2bff4",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "right_angle_u170_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_right_angle_u170.json",
+      "sha256": "b15b43b978ea290155a0965f6604b117260d33a27026045a6807f695ef300275",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "right_angle_rule_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_right_angle_rule.json",
+      "sha256": "06223b2dcedec63f1624ad72d93db2e839dcdfe60204cc4f2c38f90e51bb4d48",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "right_angle_comparison": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_right_angle/comparison.json",
+      "sha256": "07ae1f36e25b9fbe23235e65e0450e1d058b314f792ce60a577816fcced39e56",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "right_angle_comparison_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_right_angle.py",
+      "sha256": "4a66f09faa481baa541e0225dd26a2577d559237f040e0b907165260d5544930",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "supplement_generator": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/make_supplement.py",
+      "sha256": "6313695c1c07725e4324e4027e10e7681d9ba750a9105102209cd2c2166d16ee",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "article_figure_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/make_article_figures.py",
+      "sha256": "7cbe7491d625f9d1b67a1f40e72e3f44c4ccf2d6288d726f8a06d612249f9902",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "article_figure_sources": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/figures/article_figure_sources.json",
+      "sha256": "43e1aed0a014d5f401d8f4b97af0849355e6ee881fe988ba39b29b32b01f140e",
       "verification": "AI artifact_checked; human pending"
     },
     "earlier_nominal_screen": {
@@ -204,14 +350,23 @@
   },
   "external_source": {
     "Huo_2025": "https://doi.org/10.1016/j.robot.2025.104996",
-    "access": "publisher abstract and section snippets; numerical tables unverified"
+    "access": "local user-supplied full article"
   },
   "image_inputs": {
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/lower_base/bank0_low_single_left_xy.png": "0696870658af2ce3141a84d2b20b8248128b5cad09a194cd3ecb957aa4c38819",
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_candidate_xy.png": "751ca851a3bb0818bb64fabe32971b9aa09c8cb8be9e08a73f05882cfc258664",
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/H75/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_h75_xy.png": "9a3b8bdf79e0ce50cacd913925750a0a8b9fd90e435d544689aabf7195392ad5"
+    "figures/task_preference_architecture.pdf": "46c1649651d32bad762d57a93a6e048156a2538bed93bc110736cb8367f25e57",
+    "figures/preference_task_tradeoff.pdf": "4c86b0907a3ce0d5615ccd74ebf9c7c2356e3e83953378d9b4a3e8b428041d32",
+    "figures/paired_xy_low_high_turn.pdf": "b71b2bb4e14aa823fba76c47cabc0652091da0c1f51b38b968b29ba15714e8bb",
+    "figures/positive_pulse_xy.pdf": "d26ba28ed0a1c206e6cbf3e824c3289e9fd10b87ff1b835225bcca95c78f8df6",
+    "figures/right_angle_xy.pdf": "b19ab0c03be125db330332ab548b1e95f6b427226fee150207851647f84c13d3"
   },
-  "links_checked": 32,
+  "supplement_image_inputs": {
+    "../results/sttw-tolerance-20261101/training_review/training_progress.png": "5c448ed5d0ce8ab6715ef12771865117bd86105acb40f11dceb640068e78558a",
+    "../results/sttw-tolerance-20261101/task_right_angle/xy/u170/bank2_right_angle_low_right_90_R1p6_v2p0_zero_fixed_candidate_xy.png": "a98aea8228e989e427a6b97133ffc8dfafe1daa8e4a385194c60c2837e418738",
+    "../results/sttw-tolerance-20261101/task_right_angle/xy/u170/bank2_right_angle_high_right_90_R3p0_v3p05_zero_fixed_candidate_xy.png": "4f64dc93f64ae57cd0de8690a27bc3953a591c419cf5a1e78dda0b3ce0258699",
+    "../results/sttw-tolerance-20261101/task_preference_disturbance/xy/u170/bank2_holdout_low_S_right_72_R1p55_v2p00_t2.8_F+36_fixed_candidate_xy.png": "f2229fd69979a8becf96194588f32c20919b256802676f1b783ac757e88f9cf6",
+    "../results/sttw-tolerance-20261101/task_preference_disturbance/xy/u170/bank2_holdout_low_S_right_72_R1p55_v2p00_t2.8_F-36_fixed_candidate_xy.png": "89d368186bd5d605faa2394529916bc123bf33a77f04fa6d0b00d63ff23ff7e7"
+  },
+  "figures_checked": 10,
   "physics_steps": 0,
   "optimizer_updates": 0
 }

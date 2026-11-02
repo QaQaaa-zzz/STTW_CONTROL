@@ -4,7 +4,7 @@ Internal working manuscript, 2026-11-01. The nominal, first frozen task-score an
 
 ## Abstract
 
-Path tracking and speed regulation can conflict during a turn on a balancing single-track robot. We study shared preference-conditioned middle policies that adjust speed and steering references while a frozen lower controller handles local tracking and balance. A task specifies one of five preference values before execution. In a 40-episode U170 nominal development panel, all preferences reached the original destination and survived 10 s; mean turn speed rose from 2.115 to 2.295 m/s as original-path cross-track RMSE rose from 0.173 to 0.328 m between endpoint preferences. A second 40-episode nominal screen preserved 40/40 arrivals and survival. In a frozen task-score panel, all 40 episodes again reached the goal and survived; preassigned path-priority alpha=0 met the original buffered narrow score in 2/8 contexts versus 4/8 for fixed alpha=0.5, while speed-priority alpha=1 met the wide score in 3/8 versus 2/8. We then compared four existing frozen middle checkpoints on matched low/high conflict routes with the same lower controller. Under a separately declared relaxed development score, original H75 achieved 8/8 narrow passages at alpha=0 versus 4/8 at alpha=0.5, while U170 achieved 8/8 wide speed-preserving turns at alpha=1 versus 4/8 at alpha=0.5. The preference response is repeatable, but the useful endpoint and task success depend on the frozen checkpoint. A tuned conventional comparator and independent domain validation remain for an application-level claim.
+Path tracking and speed regulation can conflict during a turn on a balancing single-track robot. We study shared preference-conditioned middle policies that adjust speed and steering references while a frozen lower controller handles local tracking and balance. A task specifies one of five preference values before execution. In a 40-episode U170 nominal development panel, all preferences reached the original destination and survived 10 s; mean turn speed rose from 2.115 to 2.295 m/s as original-path cross-track RMSE rose from 0.173 to 0.328 m between endpoint preferences. A second 40-episode nominal screen preserved 40/40 arrivals and survival. In a frozen task-score panel, all 40 episodes again reached the goal and survived; preassigned path-priority alpha=0 met the original buffered narrow score in 2/8 contexts versus 4/8 for fixed alpha=0.5, while speed-priority alpha=1 met the wide score in 3/8 versus 2/8. We then compared four existing frozen middle checkpoints on matched low/high conflict routes with the same lower controller. Under a separately declared relaxed development score, original H75 achieved 8/8 narrow passages at alpha=0 versus 4/8 at alpha=0.5, while U170 achieved 8/8 wide speed-preserving turns at alpha=1 versus 4/8 at alpha=0.5. In a prospectively declared check of four new route–speed combinations and two paired initial banks, the same U170 network obtained 6/8 narrow-task successes at preassigned alpha=0 versus 4/8 at fixed alpha=0.5, and 8/8 wide-task successes at preassigned alpha=1 versus 6/8 at fixed alpha=0.5. The preference response is repeatable, and its task value depends on checkpoint and geometry. A tuned conventional comparator and independent physical-domain validation remain for an application-level claim.
 
 ## 1 Introduction
 
@@ -38,6 +38,8 @@ Each endpoint channel is capped before mixing. Roll, working-roll, roll-rate, ov
 
 Training reward is not itself the application outcome. The tests below compare actual speed, original-path error and task events. Different alpha values have different reward weights, so their weighted returns are not ranked as one common physical-performance score.
 
+The U170 continuation log contains 150 sampled-training records, updates 53–202 [E11]. Mean reward per lower step was −0.108, −0.146 and −0.076 in the first, middle and last 40-record windows; the changing rollout mix and visible fluctuations do not establish a fixed-task reward plateau. The log records 119 domain exits, zero physical failures, three target-KL-shortened updates and no nonfinite optimizer stop. We select and assess the controller from executed task trajectories rather than infer task completion from this reward trace.
+
 ## 3 Experimental design and evidence roles
 
 ### 3.1 Completed nominal preference panel
@@ -58,7 +60,11 @@ We reused the task-score panel's four low/high single/S-turn routes, prepared ba
 
 For model selection, we declared a relaxed development score after inspecting U170's original task panel: the narrow buffered-anchor half-width is 0.9 m, the wide half-width 1.4 m, the post-goal 8–10 s original-path RMSE limit 0.25 m, and the wide turn-speed threshold 0.85 of the request. The 0.5 m anchor buffer, original-goal entry and H10 survival remain. This score is distinct from the earlier frozen 0.8 m/0.2 m/0.88 score in Table 2. It was applied to every model without rewriting Table 2 [E10].
 
-### 3.4 Comparators, channel diagnosis and holdout
+### 3.4 New task combinations
+
+After the checkpoint-selection panel, we froze four new exact route–speed–direction combinations: a low-speed single left turn (76°, R1.45 m, 1.90 m/s), low-speed S right turn (72°, R1.55 m, 2.00 m/s), high-speed single right turn (96°, R3.15 m, 3.05 m/s), and high-speed S left turn (70°, R3.10 m, 3.10 m/s). Prepared complete initial banks 2 and 5 had not been used in the preceding four-route task-score or checkpoint-selection panels. H75 and U170 each executed all four routes × two banks × five fixed alpha values, 40 physical 10 s episodes per model, under the same local200 lower controller, friction 0.8 and 10 Hz geometric reconnection [E12]. The same relaxed buffered-anchor score from Section 3.3 was fixed before these executions. This is a prospective exact-combination check; it is not a claim that the continuous geometry distribution, initial-state generator or physics domain was unseen during training.
+
+### 3.5 Comparators, channel diagnosis and independent domain check
 
 The planned matched comparison retains U170/local200 and the same initial complete state, geometry, filters and actuator bounds within a condition. It compares the two preassigned task preferences with a fixed middle preference alpha=0.5 and a tuned conventional path follower with speed/steering limiting. The conventional rule must be tuned on development data before the holdout is opened; a rule that merely follows an unsafe aggressive command is not a meaningful baseline. Report paired task-success counts with denominators, speed deficit, original-path error, roll/contact, arrival time and actual failure endpoint. Avoid evaluating the path-priority arm only by path error or the speed-priority arm only by speed.
 
@@ -116,13 +122,34 @@ Table 3 compares the three frozen middle policies with full four-route coverage 
 
 H75 shows the clearest path-priority response: alpha=0 clears all eight narrow conditions, whereas alpha=0.5 clears four, while mean turn speed rises across its five alpha settings. U170 remains the strongest alpha=1 wide-task endpoint in this panel. The first two-route model screen favored W400; its remaining low-speed single-right route exposed post-goal tracking loss, so a two-route selection would have been misleading. Original H75 is the working base for the next path-priority experiment, with U170 retained as the speed-priority reference. The relaxed score is checkpoint-selection development evidence, not a replacement for the earlier frozen task test.
 
+![U170 actual/reference XY on a new high-speed single right turn, prepared bank 2; all five fixed preferences.](../results/sttw-tolerance-20261101/task_preference_holdout/U170/bank2_holdout_high_single_right_96_R3p15_v3p05_zero_fixed_candidate_xy.png)
+
+<div style="break-before: page"></div>
+
+Table 4 reports the new-combination panel [E12], eight paired route/bank conditions per model and alpha. All 80 cases entered the original goal and survived H10. The score is the previously fixed relaxed development score; the route–speed–bank combinations were fixed before this panel.
+
+| Middle | Alpha | Narrow task | Wide task | Mean turn speed (m/s) | Mean pre-goal maximum original cross-track (m) |
+|---|---:|---:|---:|---:|---:|
+| H75 | 0 | 8/8 | 7/8 | 2.200 | 0.223 |
+| H75 | 0.25 | 5/8 | 8/8 | 2.253 | 0.317 |
+| H75 | 0.5 | 4/8 | 8/8 | 2.325 | 0.391 |
+| H75 | 0.75 | 4/8 | 8/8 | 2.401 | 0.482 |
+| H75 | 1 | 3/8 | 5/8 | 2.458 | 0.615 |
+| U170 | 0 | 6/8 | 2/8 | 2.094 | 0.273 |
+| U170 | 0.25 | 6/8 | 2/8 | 2.131 | 0.334 |
+| U170 | 0.5 | 4/8 | 6/8 | 2.178 | 0.409 |
+| U170 | 0.75 | 4/8 | 8/8 | 2.234 | 0.473 |
+| U170 | 1 | 4/8 | 8/8 | 2.300 | 0.532 |
+
+Within U170, the preassigned path-priority endpoint improves narrow-task passage from 4/8 at fixed alpha=0.5 to 6/8, and the speed-priority endpoint improves wide-task completion from 6/8 to 8/8. These are gains of two paired contexts per task under the selected score; the [per-route table](../results/sttw-tolerance-20261101/task_preference_holdout/HOLDOUT.md) retains all route-level outcomes. H75 preserves its 8/8 alpha=0 narrow-task result on the new combinations, but its alpha=1 wide score is 5/8 and some high-speed alpha=0 traces show late speed oscillation. Thus neither checkpoint supports a claim that one endpoint is best for all tasks.
+
 The earlier H75/local300 nominal screen reached 33 of 35 original goals without contact; alpha=1 missed both tested S-turn goals [E5]. A separate low-speed tight-turn screen reached 20 of 20 first goals without contact, yet one alpha=0 trajectory had substantial late path oscillation [E6]. Those screens used an earlier lower-controller identity and cannot be pooled numerically with Table 1. They explain why the final task must score sustained behavior and the original corridor instead of counting only first goal entry.
 
 A disturbance-focused development panel with the later U170/local200 stack gave joint original-goal arrival and full-window survival in 11/12 cases for fixed alpha=0, 10/12 for fixed alpha=1, and 11/12 for both a learned-risk coordinator and its same-timing no-risk variant [E7]. This is a negative boundary for a separate predictor claim. It is not evidence that a tolerance selector improves the two task-specified applications studied here.
 
 ## 5 Discussion
 
-U170 produces an ordered nominal path–speed tradeoff across two 40-episode panels. Its first frozen task score shows route-dependent benefit for speed priority: the wide preference completes two low-speed S-turn speed tasks that the fixed compromise misses, while another route favors the compromise. The path-priority endpoint has no consistent narrow-task completion advantage under that original threshold. The later common-stack checkpoint screen resolves a different question: original H75 is more capable on the relaxed narrow task, while U170 retains the best alpha=1 wide score. In H75, alpha=0.25 passes both relaxed task scores in 8/8 paired conditions; a fixed intermediate preference can therefore be sufficient when the two task requirements do not force a choice. The next task design should include conditions where preference choice changes a meaningful outcome, and the simple-rule comparison must use the same conditions.
+U170 produces an ordered nominal path–speed tradeoff across two 40-episode panels. Its first frozen task score gave mixed task outcomes, but the subsequent new-combination panel gives a paired gain of two contexts for each preassigned endpoint against fixed alpha=0.5: alpha=0 on the narrow task and alpha=1 on the wide task. This establishes a bounded task-level use of one shared network under the fixed scoring rule. The checkpoint screen also matters: original H75 is stronger on the narrow task, yet its alpha=1 wide score falls below its fixed compromise. On the earlier selected routes, H75 alpha=0.25 passed both relaxed task scores in 8/8 contexts; on the new combinations its narrow score drops to 5/8. A fixed intermediate preference can be sufficient in some geometries, and task conditions determine when choosing an endpoint changes the outcome. The tuned simple-rule comparison must use the same task conditions.
 
 The lower-level controller was adopted because it improved delivered-steering-reference tracking in its development screen, while some original-path errors increased [E2]. This reinforces the need to measure the full task rather than infer path quality from lower-level tracking or training reward. Replanning supplies an execution reference after deviation but cannot redefine the original scoring path. First arrival without terminal continuation can hide a later tracking failure, as the earlier low-speed diagnostic shows.
 
@@ -132,7 +159,7 @@ The current evidence has limited geometry, prepared initial banks and developmen
 
 ## 6 Conclusion
 
-Frozen preference-conditioned middle policies produce repeatable path–speed behavior while preserving original-goal arrival and upright survival across the bounded panels reported here. The original U170 task score shows route-dependent speed-priority benefit. On a separately declared relaxed development score, original H75 gives 8/8 narrow-task success at alpha=0 versus 4/8 at alpha=0.5, while U170 gives 8/8 wide-task success at alpha=1 versus 4/8 at alpha=0.5. No one checkpoint dominates both endpoint tasks. H75 is the next path-priority working base; U170 remains the speed-priority reference. A tuned rule comparison and independent operating-condition validation are needed before claiming task-level superiority.
+Frozen preference-conditioned middle policies produce repeatable path–speed behavior while preserving original-goal arrival and upright survival across the bounded panels reported here. Under the previously fixed relaxed score, U170's new route/bank combinations show a paired two-context task gain over fixed alpha=0.5 for each preassigned endpoint: 6/8 versus 4/8 narrow and 8/8 versus 6/8 wide. H75 keeps 8/8 alpha=0 narrow success but has 5/8 alpha=1 wide success in those combinations. The policy checkpoint and geometry therefore affect which preferences are useful. A tuned traditional rule, dual-channel diagnosis and independent physical-domain validation remain before a general task-level superiority claim.
 
 ## Evidence and references
 
@@ -155,5 +182,9 @@ Frozen preference-conditioned middle policies produce repeatable path–speed be
 [E9] [Frozen task-score results, eight actual/reference XY panels and per-route outcomes](../results/sttw-tolerance-20261101/task_preference_task40/TASK_SCORES.md); [predeclared configuration](../../learning/configs/task_preference_task40.json); [scoring implementation](analysis/task_preference_task_score.py). AI artifact checked; human verification pending.
 
 [E10] [Frozen-middle comparison, 28 actual/reference XY panels and all per-case outcomes](../results/sttw-tolerance-20261101/frozen_middle_comparison/README.md); [four-route machine-readable comparison](../results/sttw-tolerance-20261101/frozen_middle_comparison/full_route_comparison.json); [two-route four-model screen](../results/sttw-tolerance-20261101/frozen_middle_comparison/comparison.json); [comparison code](analysis/compare_full_route_models.py). Model-selection DEV with relaxed thresholds, not independent TEST; AI artifact checked, human verification pending.
+
+[E11] [U170 continuation reward, domain exit, KL and critic-loss curves](../results/sttw-tolerance-20261101/training_review/README.md); [machine-readable training review](../results/sttw-tolerance-20261101/training_review/training_review.json); [review code](analysis/review_middle_training.py). Source is the frozen continuation `metrics.jsonl`; AI artifact checked, human verification pending.
+
+[E12] [New task-combination panel, 16 actual/reference XY figures and all 80 outcomes](../results/sttw-tolerance-20261101/task_preference_holdout/README.md); [paired per-route table](../results/sttw-tolerance-20261101/task_preference_holdout/HOLDOUT.md); [analysis code](analysis/compare_holdout_middles.py). Exact route/bank combinations were fixed before execution; task thresholds came from earlier development. AI artifact checked, human verification pending.
 
 [R1] Huo, B., Yu, L., Liu, Y., and Chen, Z. “Hierarchical residual reinforcement learning based path tracking control method for unmanned bicycle.” *Robotics and Autonomous Systems* 190 (2025), 104996. [Publisher article](https://doi.org/10.1016/j.robot.2025.104996). Abstract and accessible section snippets checked; full numerical tables remain to be checked.
