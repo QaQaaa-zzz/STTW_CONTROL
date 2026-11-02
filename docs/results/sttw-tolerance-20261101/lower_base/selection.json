@@ -1,0 +1,16 @@
+{
+  "alias": "STTW_LOCAL_DOMAIN_U200",
+  "status": "adopted_for_next_research_stage",
+  "source_update": 200,
+  "middle": "STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170",
+  "lower_transfer": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/transfer.json",
+    "manifest_sha256": "644baf1c3ea386bff7b7aaba3cbd2d326a0c42150924c4756cc73e0cb0cb5fed"
+  },
+  "actor_sha256": "b362a9afc1738e884569aa54e732719d23fc528e9244800f99eb8256d6ab0b9b",
+  "checkpoint_sha256": "9fa353224890fcec7063f7acfacfd01a80a924dd1308d8f98199902dc1e65008",
+  "interface": "210D local command residual; no lower alpha; preserve original local300 normalizer/permissions",
+  "evidence": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/comparison/README.md",
+  "scope": "40-condition nominal DEV: low/high single/S turns, five alphas, banks0/6, 10Hz reconnection. Separate unseen-domain/random-state TEST and tolerance-predictor recalibration pending.",
+  "prior_lower": "local300 retained as paired reference"
+}

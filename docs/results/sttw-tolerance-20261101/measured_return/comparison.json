@@ -1,0 +1,677 @@
+{
+  "method_labels": {
+    "online": "Measured recovery release",
+    "fixed": "Query-window commitment"
+  },
+  "source_runs": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_recovery_release_online_v1",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/u170_lower200_commitment_online_v1"
+  ],
+  "summary": {
+    "online": {
+      "n": 6,
+      "arrivals": 5,
+      "survivals": 5,
+      "arrival_and_survival": 5
+    },
+    "fixed": {
+      "n": 6,
+      "arrivals": 4,
+      "survivals": 5,
+      "arrival_and_survival": 4
+    }
+  },
+  "paired_changes": {
+    "arrival": {
+      "gained": 1,
+      "lost": 0,
+      "retained": 4,
+      "neither": 1
+    },
+    "survival": {
+      "gained": 0,
+      "lost": 0,
+      "retained": 5,
+      "neither": 1
+    }
+  },
+  "stratified": {
+    "requested_speed_m_s": {
+      "1.8": {
+        "methods": {
+          "online": {
+            "n": 6,
+            "arrivals": 5,
+            "survivals": 5,
+            "arrival_and_survival": 5
+          },
+          "fixed": {
+            "n": 6,
+            "arrivals": 4,
+            "survivals": 5,
+            "arrival_and_survival": 4
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 1,
+            "lost": 0,
+            "retained": 4,
+            "neither": 1
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 5,
+            "neither": 1
+          }
+        }
+      }
+    },
+    "route": {
+      "adjacent_low_left": {
+        "methods": {
+          "online": {
+            "n": 3,
+            "arrivals": 2,
+            "survivals": 2,
+            "arrival_and_survival": 2
+          },
+          "fixed": {
+            "n": 3,
+            "arrivals": 2,
+            "survivals": 2,
+            "arrival_and_survival": 2
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 2,
+            "neither": 1
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 2,
+            "neither": 1
+          }
+        }
+      },
+      "adjacent_low_right": {
+        "methods": {
+          "online": {
+            "n": 3,
+            "arrivals": 3,
+            "survivals": 3,
+            "arrival_and_survival": 3
+          },
+          "fixed": {
+            "n": 3,
+            "arrivals": 2,
+            "survivals": 3,
+            "arrival_and_survival": 2
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 1,
+            "lost": 0,
+            "retained": 2,
+            "neither": 0
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 3,
+            "neither": 0
+          }
+        }
+      }
+    },
+    "force_N": {
+      "-36.0": {
+        "methods": {
+          "online": {
+            "n": 2,
+            "arrivals": 1,
+            "survivals": 1,
+            "arrival_and_survival": 1
+          },
+          "fixed": {
+            "n": 2,
+            "arrivals": 1,
+            "survivals": 1,
+            "arrival_and_survival": 1
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 1,
+            "neither": 1
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 1,
+            "neither": 1
+          }
+        }
+      },
+      "0.0": {
+        "methods": {
+          "online": {
+            "n": 2,
+            "arrivals": 2,
+            "survivals": 2,
+            "arrival_and_survival": 2
+          },
+          "fixed": {
+            "n": 2,
+            "arrivals": 2,
+            "survivals": 2,
+            "arrival_and_survival": 2
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 2,
+            "neither": 0
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 2,
+            "neither": 0
+          }
+        }
+      },
+      "36.0": {
+        "methods": {
+          "online": {
+            "n": 2,
+            "arrivals": 2,
+            "survivals": 2,
+            "arrival_and_survival": 2
+          },
+          "fixed": {
+            "n": 2,
+            "arrivals": 1,
+            "survivals": 2,
+            "arrival_and_survival": 1
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 1,
+            "lost": 0,
+            "retained": 1,
+            "neither": 0
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 2,
+            "neither": 0
+          }
+        }
+      }
+    },
+    "bank": {
+      "2": {
+        "methods": {
+          "online": {
+            "n": 6,
+            "arrivals": 5,
+            "survivals": 5,
+            "arrival_and_survival": 5
+          },
+          "fixed": {
+            "n": 6,
+            "arrivals": 4,
+            "survivals": 5,
+            "arrival_and_survival": 4
+          }
+        },
+        "paired_changes": {
+          "arrival": {
+            "gained": 1,
+            "lost": 0,
+            "retained": 4,
+            "neither": 1
+          },
+          "survival": {
+            "gained": 0,
+            "lost": 0,
+            "retained": 5,
+            "neither": 1
+          }
+        }
+      }
+    }
+  },
+  "data_roles": [
+    "Diagnostic DEV: one measured-recovery release variant after inspecting prior6conditions. Threshold engineering provenance in ledger; not untouchedTEST.",
+    "Diagnostic DEV: same6conditions already inspected; first single horizon-linked commitment variant, no untouched TEST."
+  ],
+  "pairs": [
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 439,
+            "min_m_s": 1.2502098083496094,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.766185998916626
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.3981389999389648,
+            "max_m_s": 1.5503250360488892,
+            "mean_m_s": 1.4478548765182495
+          }
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 439,
+            "min_m_s": 1.250333309173584,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7661869525909424
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.3981372117996216,
+            "max_m_s": 1.550319790840149,
+            "mean_m_s": 1.4478529691696167
+          }
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_left",
+      "alpha": 0.0,
+      "force_N": -36.0,
+      "online": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.48501397559125,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "fixed": {
+        "goal_arrived": false,
+        "arrival_outcome": "contact_before_arrival",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 5.485016558036205,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "contact"
+      },
+      "online_observed_s": 2.195,
+      "fixed_observed_s": 2.195,
+      "online_user_cost": [
+        7.145615057979483,
+        1.5005274984273966,
+        0.10133533692170255
+      ],
+      "fixed_user_cost": [
+        7.145593884061618,
+        1.500589047516309,
+        0.10133522569719407
+      ],
+      "figure": "pair_00_xy.png"
+    },
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.4253431558609009,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7851858139038086
+          },
+          "pulse": null
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.425328016281128,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7842644453048706
+          },
+          "pulse": null
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_left",
+      "alpha": 0.0,
+      "force_N": 0.0,
+      "online": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.7,
+        "minimum_upright_goal_distance_m": 0.12817868667071225,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "fixed": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.7,
+        "minimum_upright_goal_distance_m": 0.13284918986703842,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "online_observed_s": 10.0,
+      "fixed_observed_s": 10.0,
+      "online_user_cost": [
+        9.012135324764962,
+        11.914870518313323,
+        0.08707459092997483
+      ],
+      "fixed_user_cost": [
+        8.995188557939237,
+        12.048436779333255,
+        0.08708787349845858
+      ],
+      "figure": "pair_01_xy.png"
+    },
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.1893596649169922,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.716802954673767
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.446757435798645,
+            "max_m_s": 1.5756077766418457,
+            "mean_m_s": 1.531548023223877
+          }
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.1891975402832031,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7161247730255127
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.4467602968215942,
+            "max_m_s": 1.5756092071533203,
+            "mean_m_s": 1.5315488576889038
+          }
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_left",
+      "alpha": 0.0,
+      "force_N": 36.0,
+      "online": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.665,
+        "minimum_upright_goal_distance_m": 0.5008331305777917,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "fixed": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 6.665,
+        "minimum_upright_goal_distance_m": 0.5065480353429505,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "online_observed_s": 10.0,
+      "fixed_observed_s": 10.0,
+      "online_user_cost": [
+        16.93053847494965,
+        110.13760863540034,
+        91.14644090894565
+      ],
+      "fixed_user_cost": [
+        17.007553679791158,
+        110.15635191886764,
+        90.9679405130161
+      ],
+      "figure": "pair_02_xy.png"
+    },
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.1302330493927002,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7051244974136353
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.5409977436065674,
+            "max_m_s": 1.6206457614898682,
+            "mean_m_s": 1.5710870027542114
+          }
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.1302330493927002,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7113020420074463
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.5409977436065674,
+            "max_m_s": 1.6206457614898682,
+            "mean_m_s": 1.5710870027542114
+          }
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_right",
+      "alpha": 0.0,
+      "force_N": -36.0,
+      "online": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.575,
+        "minimum_upright_goal_distance_m": 0.2691865915691874,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "fixed": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 7.575,
+        "minimum_upright_goal_distance_m": 0.2691865915691874,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "online_observed_s": 10.0,
+      "fixed_observed_s": 10.0,
+      "online_user_cost": [
+        17.250308148625066,
+        147.6743401070375,
+        111.1825141312787
+      ],
+      "fixed_user_cost": [
+        16.38682455003312,
+        148.38734663887618,
+        111.1825141312787
+      ],
+      "figure": "pair_03_xy.png"
+    },
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.4441108703613281,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.7917864322662354
+          },
+          "pulse": null
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.450514554977417,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.8024556636810303
+          },
+          "pulse": null
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_right",
+      "alpha": 0.0,
+      "force_N": 0.0,
+      "online": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.63,
+        "minimum_upright_goal_distance_m": 0.05227525445494568,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "fixed": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 4.595,
+        "minimum_upright_goal_distance_m": 0.12022791389976129,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "online_observed_s": 10.0,
+      "fixed_observed_s": 10.0,
+      "online_user_cost": [
+        8.414633753672609,
+        5.570069781848215,
+        0.18061110813902453
+      ],
+      "fixed_user_cost": [
+        7.1302501799680424,
+        11.261731992155012,
+        0.1613082671072387
+      ],
+      "figure": "pair_04_xy.png"
+    },
+    {
+      "requested_speed_m_s": 1.8,
+      "actual_speed": {
+        "online": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.4192501306533813,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.6547386646270752
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.5177814960479736,
+            "max_m_s": 1.597245216369629,
+            "mean_m_s": 1.5481923818588257
+          }
+        },
+        "fixed": {
+          "observed_window": {
+            "n": 2000,
+            "min_m_s": 1.4192479848861694,
+            "max_m_s": 2.2730939388275146,
+            "mean_m_s": 1.6993207931518555
+          },
+          "pulse": {
+            "n": 31,
+            "min_m_s": 1.5177801847457886,
+            "max_m_s": 1.5972418785095215,
+            "mean_m_s": 1.54818856716156
+          }
+        }
+      },
+      "bank": 2,
+      "route": "adjacent_low_right",
+      "alpha": 0.0,
+      "force_N": 36.0,
+      "online": {
+        "goal_arrived": true,
+        "arrival_outcome": "arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": 9.94,
+        "minimum_upright_goal_distance_m": 0.9114763309155655,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "fixed": {
+        "goal_arrived": false,
+        "arrival_outcome": "not_arrived",
+        "goal_radius_m": 1.0,
+        "first_arrival_s": null,
+        "minimum_upright_goal_distance_m": 1.810943565012555,
+        "contact_after_arrival": false,
+        "fault_after_arrival": false,
+        "contract": "Original XY target disk; enter before contact/fault; no heading, speed or hold requirement.",
+        "physical_outcome": "survived"
+      },
+      "online_observed_s": 10.0,
+      "fixed_observed_s": 10.0,
+      "online_user_cost": [
+        22.176384109143047,
+        155.6468758047765,
+        162.9028454705393
+      ],
+      "fixed_user_cost": [
+        15.88489867314385,
+        157.7178223316466,
+        178.57985712892383
+      ],
+      "figure": "pair_05_xy.png"
+    }
+  ],
+  "scope": "Matched declared data roles; speed strata use requested speed, actual active-window/pulse speeds are separate. Costs use actual observed windows and must be read alongside early failure."
+}

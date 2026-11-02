@@ -1,0 +1,89 @@
+{
+  "parent": {
+    "all": {
+      "cases": 40,
+      "arrived": 40,
+      "survived": 40,
+      "arrival_mean_s": 5.447,
+      "cross_rmse_mean_m": 0.23421179335564374,
+      "lower_speed_rmse_mean_m_s": 0.02904540007002652,
+      "lower_steer_rmse_mean_rad": 0.027476248517632484
+    },
+    "low": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.689250000000001,
+      "cross_rmse_mean_m": 0.18057482726871968,
+      "lower_speed_rmse_mean_m_s": 0.03056287420913577,
+      "lower_steer_rmse_mean_rad": 0.034939981624484064
+    },
+    "high": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.204749999999999,
+      "cross_rmse_mean_m": 0.2878487594425678,
+      "lower_speed_rmse_mean_m_s": 0.02752792593091726,
+      "lower_steer_rmse_mean_rad": 0.020012515410780907
+    }
+  },
+  "best163": {
+    "all": {
+      "cases": 40,
+      "arrived": 40,
+      "survived": 40,
+      "arrival_mean_s": 5.457375000000001,
+      "cross_rmse_mean_m": 0.2754229251295328,
+      "lower_speed_rmse_mean_m_s": 0.029532528761774302,
+      "lower_steer_rmse_mean_rad": 0.022926541790366173
+    },
+    "low": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.6765,
+      "cross_rmse_mean_m": 0.21738406047224998,
+      "lower_speed_rmse_mean_m_s": 0.031081487610936164,
+      "lower_steer_rmse_mean_rad": 0.027555719669908284
+    },
+    "high": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.238250000000001,
+      "cross_rmse_mean_m": 0.3334617897868156,
+      "lower_speed_rmse_mean_m_s": 0.027983569912612437,
+      "lower_steer_rmse_mean_rad": 0.01829736391082406
+    }
+  },
+  "last200": {
+    "all": {
+      "cases": 40,
+      "arrived": 40,
+      "survived": 40,
+      "arrival_mean_s": 5.439875000000001,
+      "cross_rmse_mean_m": 0.24894739016890527,
+      "lower_speed_rmse_mean_m_s": 0.02909081322140992,
+      "lower_steer_rmse_mean_rad": 0.02183151214849204
+    },
+    "low": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.656750000000001,
+      "cross_rmse_mean_m": 0.1859862059354782,
+      "lower_speed_rmse_mean_m_s": 0.030023228283971547,
+      "lower_steer_rmse_mean_rad": 0.027086758241057395
+    },
+    "high": {
+      "cases": 20,
+      "arrived": 20,
+      "survived": 20,
+      "arrival_mean_s": 5.223000000000001,
+      "cross_rmse_mean_m": 0.31190857440233233,
+      "lower_speed_rmse_mean_m_s": 0.028158398158848286,
+      "lower_steer_rmse_mean_rad": 0.01657626605592668
+    }
+  }
+}
