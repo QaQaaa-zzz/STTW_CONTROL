@@ -1,3 +1,9 @@
+# 2026-11-01 Frozen middle preference comparison
+
+Using the common local200 lower controller, friction 0.8, 10 Hz reconnection and four low/high single/S-turn routes, the existing U170, original H75 and W400 middle policies each completed 40 paired five-alpha evaluations; u325 completed the selected two-route 20-case screen. All 140 completed episodes reached the original goal and survived 10 s. The first H75 process ended externally after 400 lower steps; the identical 20-case panel was manually rerun in a new directory and completed. No PPO updates were made. Under the separately declared relaxed development task score, alpha0 narrow success was U170 6/8, H75 8/8 and W400 6/8; alpha1 wide success was 8/8, 6/8 and 6/8. Original H75 is the next path-priority working base; U170 remains the speed-priority reference. The initial two-route W400 preference was reversed after its low-speed single-right extension. [All actual/reference XY, five-alpha per-case data and protocol provenance](results/sttw-tolerance-20261101/frozen_middle_comparison/README.md). This is model-selection DEV, with the relaxed thresholds chosen after reviewing U170's prior task data; the earlier frozen task-score counts remain unchanged.
+
+---
+
 # 2026-10-11 Path Coverage V2
 
 Single intervention: 102 legacy / 204 stronger single-bend / 206 stronger S-bend reset environments; full best100/150 learner forks. Reward, PP, filter/slew, network, local300 and physics unchanged. Old `bend=chi>0` was demand coverage, not all geometry. [Native configuration, budget and checks](path_coverage_v2.md). Effectiveness pending formal training and same-six-DEV comparison; engineering checks do not establish alpha preference.

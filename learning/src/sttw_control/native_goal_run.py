@@ -174,6 +174,12 @@ def low_speed_lateral_load_inventory(p):
         or p['expected_cases']!=count or p['maximum_lower_ticks']!=2000*count):
         raise ValueError('unique finite paired load grid and exact budget required')
     candidate=p.get('candidate_model')
+    frozen_id=p.get('frozen_registry_middle_id')
+    if frozen_id is not None and (candidate is not None or frozen_id not in {
+        'STTW_MIDDLE_FULLTAIL_PPO75_U77',
+        'STTW_MIDDLE_WITNESS_S918501_SUP400',
+        'STTW_MIDDLE_DISTILLED_V3_U325',
+    }):raise ValueError('declare one supported frozen middle identity')
     if candidate is not None and (not candidate.get('registry_id') or candidate['registry_id']==SELECTION_MODELS['H75']):
         raise ValueError('explicit distinct candidate identity required')
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
@@ -192,7 +198,7 @@ def low_speed_lateral_load_inventory(p):
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(onsets,forces)]
-    identity=candidate['registry_id'] if candidate else p['model_id']
+    identity=candidate['registry_id'] if candidate else frozen_id or p['model_id']
     rows=[]
     combinations=((b,context,event,alpha) for b in banks for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
     for b,context,event,alpha in combinations:
@@ -457,6 +463,23 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         training_source=json.loads((Path(previous['source'])/'initial_source.json').read_text())
     if proposal.get('candidate_model'):
         model=authenticate_capability_candidate(proposal['candidate_model'],model,training_source,previous['config'])
+    registry_sources=[]
+    if proposal.get('frozen_registry_middle_id'):
+        registry_file=Path('learning/configs/frozen_middle_registry.json').resolve()
+        registry=json.loads(registry_file.read_text());frozen_id=proposal['frozen_registry_middle_id']
+        manifest_file=Path(registry['root'])/'manifest.json'
+        if digest(manifest_file)!=registry['manifest_sha256']:raise ValueError('frozen middle registry manifest changed')
+        record=registry['records'][frozen_id]
+        for key in ('actor','checkpoint'):
+            if digest(record[key])!=record[key+'_sha256']:raise ValueError('frozen middle artifact changed '+key)
+        node=next(item for item in json.loads(manifest_file.read_text())['nodes'] if item['id']==frozen_id)
+        config_file=manifest_file.parent/node['resolved_config']['path']
+        if digest(config_file)!=node['resolved_config']['sha256']:raise ValueError('frozen middle configuration changed')
+        resolved=json.loads(config_file.read_text())
+        if any(resolved[key]!=previous['config'][key] for key in ('network','timing','residual_interface','follower','path_reward')):
+            raise ValueError('frozen middle control interface differs')
+        model=dict(record,registry_id=frozen_id,verification='frozen registry identity and native control interface matched')
+        registry_sources=[registry_file,manifest_file,config_file]
     if any(name=='sttw_control' or name.startswith('sttw_control.') for name in sys.modules):raise ValueError('prepare in fresh process before modern control package import')
     sys.path.insert(0,str(native))
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
@@ -482,7 +505,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     root.mkdir(exist_ok=False);(root/'source').mkdir()
     for file in modules:(root/'source'/file.name).write_bytes(file.read_bytes())
     save(root/'inventory.json',rows);save(root/'effective_config.json',previous['config'])
-    files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json']+[Path(model[k]) for k in ('actor','checkpoint')]
+    files=[protocol,transition/'plan.json',transition/'seal.json',transition/'status.json',transition/'initial_source.json',transition/'native_expected_sources.json',Path(source['prepared_bank']),root/'inventory.json',root/'effective_config.json',*registry_sources]+[Path(model[k]) for k in ('actor','checkpoint')]
     if proposal.get('candidate_model'):files.append(Path(model['training_manifest']))
     for reused in proposal.get('excluded_completed_cases',[]):
         archive=Path(reused['run']);index=json.loads((archive/'evaluation/case_index.json').read_text());status=json.loads((archive/'evaluation/status.json').read_text())

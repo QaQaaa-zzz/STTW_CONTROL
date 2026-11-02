@@ -2946,7 +2946,8 @@ def analyze_fixed_h75_capability(root,p):
     boundary=p['protocol'].get('range_planner_boundary')
     return_rule=p['protocol'].get('causal_preference_return')
     candidate=p['protocol'].get('candidate_model')
-    model_label=f"candidate u{candidate['source_update']}" if candidate else 'frozenH75'
+    frozen_id=p['protocol'].get('frozen_registry_middle_id')
+    model_label=f"candidate u{candidate['source_update']}" if candidate else frozen_id or 'frozenH75'
     if p.get('lower_transfer'):
         lower=p['initial_source']['candidate']
         model_label+=f" | lower u{lower['source_update']} {lower['actor_sha256'][:8]} zero-shot"
@@ -2961,6 +2962,8 @@ def analyze_fixed_h75_capability(root,p):
         for key in ('actor','checkpoint','registry_id'):
             if p['models']['H75'][key]!=candidate[key]:raise ValueError('candidate model identity differs')
         if any(c.get('model_id')!=candidate['registry_id'] for c in cases):raise ValueError('candidate case identity differs')
+    if frozen_id and (p['models']['H75']['registry_id']!=frozen_id or any(c['model_id']!=frozen_id for c in cases)):
+        raise ValueError('frozen registry middle identity differs')
     if extended:
         for source in p['protocol']['goal_source']['paths'].values():
             if digest(source['file'])!=source['sha256']:raise ValueError('extended source path identity differs')
@@ -3085,7 +3088,7 @@ def analyze_fixed_h75_capability(root,p):
         for ax in axes:ax.legend();ax.grid(alpha=.2)
         if load_screen and group[0]['force_N']!=0.:
             for ax in axes[1:]:ax.axvspan(group[0]['onset_s'],group[0]['onset_s']+group[0]['duration_s'],color='grey',alpha=.2)
-        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | {physics_label} | actual endpoints');name=(f'bank{initial_index}_' if len(p['protocol']['bank_indices'])>1 else '')+route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else '_fixed_h75_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
+        checkpoint=p['models']['H75'].get('checkpoint_sha256','unknown')[:12];panel_kind='Causal preference return' if return_rule else 'NN-selected alpha' if boundary else f"{len(p['protocol']['alphas'])} fixed alpha";fig.suptitle(f'{route} | {model_label} {checkpoint} | {panel_kind} | bank{group[0]['bank_index']}/H10/{event or 'force0'} | {physics_label} | actual endpoints');slug={'STTW_MIDDLE_FULLTAIL_PPO75_U77':'h75','STTW_MIDDLE_WITNESS_S918501_SUP400':'w400','STTW_MIDDLE_DISTILLED_V3_U325':'u325'}.get(frozen_id,'h75');name=(f'bank{initial_index}_' if len(p['protocol']['bank_indices'])>1 else '')+route+('_'+str(event).replace('/','_') if load_screen else '')+('_fixed_candidate_xy.png' if candidate else f'_fixed_{slug}_xy.png');fig.savefig(out/name,dpi=140);plt.close(fig);links.append(name)
         if load_screen:
             render_paired_load_diagnostics(out,group,raws,manifest['reward_components'],name.removesuffix('_xy.png'))
     summary={str(a):dict(cases=sum(r['alpha']==a for r in rows),goal=sum(r['endpoint']['goal_arrived'] is True for r in rows if r['alpha']==a),contact=sum(r['endpoint']['physical_outcome']=='contact' for r in rows if r['alpha']==a),survived=sum(r['endpoint']['physical_outcome']=='survived' for r in rows if r['alpha']==a)) for a in p['protocol']['alphas']}

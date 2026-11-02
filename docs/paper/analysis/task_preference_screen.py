@@ -61,9 +61,11 @@ def main():
     target = root / "analysis/task_preference_diagnostic.json"
     target.write_text(json.dumps(result, indent=2) + "\n")
     lines = ["# Task preference nominal screen", "", "Centerline diagnostic only. Original-path deviations are measured before first original-goal entry; the 8–10 s error is reported separately. The centerline proxy does not certify vehicle-body corridor passage or the speed-preserving task.", "", "## Actual/reference XY panels", ""]
+    frozen_id = plan["protocol"].get("frozen_registry_middle_id")
+    suffix = "candidate" if plan["protocol"].get("candidate_model") else {"STTW_MIDDLE_FULLTAIL_PPO75_U77": "h75", "STTW_MIDDLE_WITNESS_S918501_SUP400": "w400", "STTW_MIDDLE_DISTILLED_V3_U325": "u325"}.get(frozen_id, "h75")
     for bank in plan["protocol"]["bank_indices"]:
         for route in (context["route"] for context in plan["contexts"]):
-            name = f"bank{bank}_{route}_zero_fixed_candidate_xy.png"
+            name = f"bank{bank}_{route}_zero_fixed_{suffix}_xy.png"
             lines.append(f"![bank{bank} {route} actual/reference XY]({name})")
     lines += ["", "## All five fixed preferences", "", "| alpha | n | original goal | survived H10 | narrow centerline proxy | wide centerline proxy | mean turn speed (m/s) |", "|---:|---:|---:|---:|---:|---:|---:|"]
     for row in summary:

@@ -1,10 +1,10 @@
 {
   "scope": "Task-specified preference working manuscript",
-  "manuscript_sha256": "96df1d725c1300e763ad04b06d1aa11165c7717d5380eb69ae914074a0c689cd",
-  "builder_sha256": "cd96fb54134693ed768ea5751266f44bb8a2caec73b4afd934426273efbd5b6c",
+  "manuscript_sha256": "ce4a143152fa0f4d514d75cc09c51930bcfcb49c16b52200ea3a309661b1a630",
+  "builder_sha256": "3b84b1215342c56d6ca60ec66d5733814e4d78237eb4ed9eae48aeaa529e4cbc",
   "submission_ready": false,
   "human_verification": "not_recorded",
-  "data_role": "nominal DEV and prospective bounded task-score validation; tuned-rule and independent-domain evidence pending",
+  "data_role": "nominal DEV, bounded frozen task-score validation and related-source middle selection; tuned-rule and independent-domain evidence pending",
   "sources": {
     "middle_reward": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/path_command_reward.py",
@@ -78,7 +78,7 @@
     },
     "task_screen_code": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_screen.py",
-      "sha256": "9907d7927152b24901521969d0e37a950937fa9add29909e3145085af210b6b0",
+      "sha256": "493fb693f11eae97484c3318171877179998114d3e6ab61a1b142bac9bf6d309",
       "verification": "AI artifact_checked; human pending"
     },
     "task_score_config": {
@@ -98,7 +98,57 @@
     },
     "task_score_code": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_task_score.py",
-      "sha256": "c3440ae18fbb115d3455796686e34f91478ea1ba2030cb4ed4a83430a074c415",
+      "sha256": "a26af50a4dc53586a468a0d25758ca4b78dd102a4904ab9103c90b841e044dad",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_h75": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_middle_h75.json",
+      "sha256": "6d3cbfd64055daa8634831c3e1e9ab253436fe9c50bf11769d5976f83a746af5",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_h75_extension": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_middle_h75_extension.json",
+      "sha256": "1b23fe88fc1acb6618b76bca20a160b8be88ff286b5593adfbc5c3e0873e1d9d",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_w400": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_middle_w400.json",
+      "sha256": "07ed6d3e497428fd44838a3c4d19c74c1ae266ae70770e412425c7365a05f720",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_w400_extension": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_middle_w400_extension.json",
+      "sha256": "a088846961fcb3823d8e09aafbde960cb2fdef28cee966079805d01d2a55adf9",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_u325": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_middle_u325.json",
+      "sha256": "f6a03d1468379e1a8077476add196a26c00175516d16320c5a84dea5f50054e9",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_four_routes": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/full_route_comparison.json",
+      "sha256": "83f3bb0dc6c1f805583bad96bc8ed07d4183327ccb79637276ab44bbf4126e71",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_two_routes": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/comparison.json",
+      "sha256": "de8e290f1f6224487da84d37e37f53779300efd7563cb957940e04737b811a53",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_index": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/README.md",
+      "sha256": "992d849d234314da2ee9551865af95abb630ac67398b6ae204597b42255d5358",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_full_route_models.py",
+      "sha256": "7a6f4df9b601ccfb86438b3dd9081b4faca64929ace4c12eb718d6623484b4e6",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "middle_comparison_two_route_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/compare_frozen_middles.py",
+      "sha256": "064e6c5c4549459ab20a1d1e6c8fb32b918a8b54f9a73e32f9c871c3b8e12e9e",
       "verification": "AI artifact_checked; human pending"
     },
     "earlier_nominal_screen": {
@@ -158,9 +208,10 @@
   },
   "image_inputs": {
     "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/lower_base/bank0_low_single_left_xy.png": "0696870658af2ce3141a84d2b20b8248128b5cad09a194cd3ecb957aa4c38819",
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_candidate_xy.png": "751ca851a3bb0818bb64fabe32971b9aa09c8cb8be9e08a73f05882cfc258664"
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_candidate_xy.png": "751ca851a3bb0818bb64fabe32971b9aa09c8cb8be9e08a73f05882cfc258664",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/H75/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_h75_xy.png": "9a3b8bdf79e0ce50cacd913925750a0a8b9fd90e435d544689aabf7195392ad5"
   },
-  "links_checked": 27,
+  "links_checked": 32,
   "physics_steps": 0,
   "optimizer_updates": 0
 }

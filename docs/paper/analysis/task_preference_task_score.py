@@ -36,10 +36,12 @@ def main():
                         "wide_speed_met": sum(row["wide_speed_met"] for row in group)})
     result = {"contract": contract, "data_role": plan["data_role"], "rows": rows, "summary": summary}
     (root / "analysis/task_scores.json").write_text(json.dumps(result, indent=2) + "\n")
-    lines = ["# Frozen task-preference score", "", "The corridor uses a 0.5 m circular buffer around recorded vehicle XY. This is an anchor-disk proxy, not an exact swept-mesh or real-wall test. The original goal, H10 survival and 8–10 s original-path tracking are required for both tasks. Widths and speed threshold were fixed from the earlier DEV2 panel before this run.", "", "## Actual/reference XY", ""]
+    lines = ["# Frozen task-preference score", "", f"The corridor uses a {contract['buffer_radius_m']:g} m circular buffer around recorded vehicle XY. This is an anchor-disk proxy, not an exact swept-mesh or real-wall test. The original goal, H10 survival and 8–10 s original-path tracking are required for both tasks. Threshold provenance: {contract['source']}", "", "## Actual/reference XY", ""]
+    frozen_id = plan["protocol"].get("frozen_registry_middle_id")
+    suffix = "candidate" if plan["protocol"].get("candidate_model") else {"STTW_MIDDLE_FULLTAIL_PPO75_U77": "h75", "STTW_MIDDLE_WITNESS_S918501_SUP400": "w400", "STTW_MIDDLE_DISTILLED_V3_U325": "u325"}.get(frozen_id, "h75")
     for bank in plan["protocol"]["bank_indices"]:
         for context in plan["contexts"]:
-            name = f"bank{bank}_{context['route']}_zero_fixed_candidate_xy.png"
+            name = f"bank{bank}_{context['route']}_zero_fixed_{suffix}_xy.png"
             lines.append(f"![bank{bank} {context['route']} actual/reference XY]({name})")
     lines += ["", "## Outcomes by fixed alpha", "", "| alpha | narrow task | wide task | narrow corridor proxy | wide speed threshold |", "|---:|---:|---:|---:|---:|"]
     for item in summary:
