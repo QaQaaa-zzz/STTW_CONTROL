@@ -1,10 +1,10 @@
 {
   "scope": "Task-specified preference working manuscript",
-  "manuscript_sha256": "380b2c1787d27460c2f1e9c597e7baf45494acc161ae1e7b354f2fe1642a424b",
-  "builder_sha256": "1e1293820836ae88752d43b1502fda1bdcb4cab1a9464a1ec52d73732df1afd1",
+  "manuscript_sha256": "96df1d725c1300e763ad04b06d1aa11165c7717d5380eb69ae914074a0c689cd",
+  "builder_sha256": "cd96fb54134693ed768ea5751266f44bb8a2caec73b4afd934426273efbd5b6c",
   "submission_ready": false,
   "human_verification": "not_recorded",
-  "data_role": "previously inspected nominal DEV; two task experiments and holdout pending",
+  "data_role": "nominal DEV and prospective bounded task-score validation; tuned-rule and independent-domain evidence pending",
   "sources": {
     "middle_reward": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/src/sttw_control/path_command_reward.py",
@@ -59,6 +59,46 @@
     "original_xy": {
       "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/lower_base/bank0_low_single_left_xy.png",
       "sha256": "0696870658af2ce3141a84d2b20b8248128b5cad09a194cd3ecb957aa4c38819",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_screen_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_nominal40.json",
+      "sha256": "6bd45dd483aa3f0f6d8c965bde42cf89e788e456ac3e441bc235a5058deef145",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_screen_diagnostic": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_nominal40/task_preference_diagnostic.json",
+      "sha256": "8620311f24758f11ed2d02e72ad9548b8593af69a261f33ec068b5f38dba978b",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_screen_rows": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_nominal40/results.json",
+      "sha256": "afe5f31ed60171980be334d6a47f609a2edd389fd5244166edcea5104ae4c39e",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_screen_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_screen.py",
+      "sha256": "9907d7927152b24901521969d0e37a950937fa9add29909e3145085af210b6b0",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_score_config": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/learning/configs/task_preference_task40.json",
+      "sha256": "854c2146ac65e612e1b6767f6aa40beaa43151fc6851e84e040800cb44b99a71",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_score_rows": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/task_scores.json",
+      "sha256": "3847f7d984d377773894b9ea50221a15ab48f0830e88d3937425c41caa3aa31e",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_score_native": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/results.json",
+      "sha256": "175bf60a72c08b00b0189a5ee7baa46e15582abcef5e63d109a4cf4b79756422",
+      "verification": "AI artifact_checked; human pending"
+    },
+    "task_score_code": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/paper/analysis/task_preference_task_score.py",
+      "sha256": "c3440ae18fbb115d3455796686e34f91478ea1ba2030cb4ed4a83430a074c415",
       "verification": "AI artifact_checked; human pending"
     },
     "earlier_nominal_screen": {
@@ -117,9 +157,10 @@
     "access": "publisher abstract and section snippets; numerical tables unverified"
   },
   "image_inputs": {
-    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/lower_base/bank0_low_single_left_xy.png": "0696870658af2ce3141a84d2b20b8248128b5cad09a194cd3ecb957aa4c38819"
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/lower_base/bank0_low_single_left_xy.png": "0696870658af2ce3141a84d2b20b8248128b5cad09a194cd3ecb957aa4c38819",
+    "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/task_preference_task40/bank1_tasktest_low_S_left_68_R1p35_v2p05_zero_fixed_candidate_xy.png": "751ca851a3bb0818bb64fabe32971b9aa09c8cb8be9e08a73f05882cfc258664"
   },
-  "links_checked": 21,
+  "links_checked": 27,
   "physics_steps": 0,
   "optimizer_updates": 0
 }
