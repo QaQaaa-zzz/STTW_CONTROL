@@ -2,7 +2,8 @@
 import argparse,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--backend',choices=['gym','lab'],default='gym');p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--lower-training-run',type=Path);p.add_argument('--lower-checkpoint',type=Path);p.add_argument('--backend',choices=['gym','lab'],default='gym');p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
+if (a.lower_training_run is None)!=(a.lower_checkpoint is None):p.error('--lower-training-run and --lower-checkpoint are required together')
 if a.backend=='gym':
     from isaacgym import gymapi
 else:
@@ -17,9 +18,16 @@ if a.asset:s['asset']=str(a.asset.resolve())
 identity=json.loads((a.bundle/'identity.json').read_text());cfg=json.loads((a.bundle/'config.json').read_text());policy=TorchPathPolicy(a.bundle/'actor.npz',identity['files']['actor.npz'],cfg,6,'cuda');plant=None
 if a.backend=='lab':
     from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
-    plant=IsaacLabVectorPlant(s['asset'],list(s['terrains'].values()),[0]*s['num_envs'],a.output)
-env=IsaacPathRollout(a.bundle,s,policy,plant=plant)
+    plant=IsaacLabVectorPlant(s['asset'],list(s['terrains'].values()),[0]*s['num_envs'],a.output,**s.get('plant_options',{}))
+lower=None
+if a.lower_checkpoint:
+    from sttw_control.torch_go2_lower import TorchGo2Lower
+    lower=TorchGo2Lower(a.lower_training_run,a.lower_checkpoint,6,'cuda:0')
+env=IsaacPathRollout(a.bundle,s,policy,plant=plant,lower=lower)
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role='fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction',physics_dt=.0002,lower_dt=.005,policy_dt=.02)
+if lower is not None:
+    contract['lower_identity']=lower.identity
+    contract['role']='fixed preference DEV; Zero uses the same selected frozen lower plus ECBC/ESO, with no H75 correction'
 if a.backend=='lab':contract['lab_physics']=env.plant.metadata
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2));rows=[];detail=[];started=time.time()
 for step in range(env.horizon):

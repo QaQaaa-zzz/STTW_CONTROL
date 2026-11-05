@@ -2726,3 +2726,10 @@ Original8 states exported using MuJoCo forward kinematics only; bank3 equality c
 ## Original reward replay separates reward from trajectory equivalence
 
 New thin offline CLI `compare_local_rewards.py` reuses original lower_command reward functions; all seven saved MuJoCo cases reconstruct logged per-step reward exactly (max abs0). Repaired Lab original Local300 has higher mean reward in7/7 despite return XY divergence; original reward has no XY/accumulated-yaw term. Preserve the original training objective as requested, and retain full trajectories as a separate comparison. Saved per-step/cumulative total reward and all eight signed component curves/arrays for seven cases include matching Lab ECBC. No physics rerun or modification of running training. `runs/local300_contact_repair/rewards` stores replay outputs.
+
+
+## H75 lower-network adapter preparation
+
+`TorchGo2Lower` inherits the existing Local300 history/frame/reset interface and calls native upstream `ActorCritic.act_inference`; no manually recreated512/256/128network. `evaluate_isaac_gpu.py --backend lab` now optionally accepts paired `--lower-training-run` and `--lower-checkpoint`, injects this lower into the existing path rollout, records its identity, and passes declared plant_options. H75 policy/weights, alpha five levels, reference processing, lower200Hz/upper50Hz, residual bounds and Zero's same-lower pairing remain unchanged. Omitting options retains historical Local300.
+
+A two-row GPU forward check using immutable model_0.pt from the active run matched native inference exactly; shared history and reset cleared as expected. No physics or optimizer, and this checkpoint was not selected/adopted. This is interface preparation, not an H75 closed-loop result; the latter waits for lower candidate evaluation. Active training source and process were not changed.
