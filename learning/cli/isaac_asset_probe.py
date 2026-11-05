@@ -17,6 +17,8 @@ def main():
     parser.add_argument('--steps', type=int, default=0)
     parser.add_argument('--ground', choices=('plane', 'box', 'trimesh'), default='plane')
     parser.add_argument('--controller-config', type=Path)
+    parser.add_argument('--lower-actor', type=Path)
+    parser.add_argument('--lower-sha256')
     parser.add_argument('--drive-speed', type=float, default=2.3)
     parser.add_argument('--source-inertia', action='store_true')
     args = parser.parse_args()
@@ -26,6 +28,8 @@ def main():
         parser.error('output exists; preserve previous evidence')
     if args.source_inertia and args.steps:
         parser.error('runtime inertia setter changes link geometry in this asset; static audit only until import is repaired')
+    if bool(args.lower_actor) != bool(args.lower_sha256) or (args.lower_actor and not args.controller_config):
+        parser.error('lower actor requires hash and controller configuration')
     gym = gymapi.acquire_gym()
     params = gymapi.SimParams()
     params.dt = .0002
@@ -137,6 +141,15 @@ def main():
         controller = TorchController(config, 1)
         servos = TorchVelocityServos(contract, joint_names)
         signals = TorchVehicleSignals(contract, joint_names)
+        lower = None
+        if args.lower_actor:
+            from sttw_control.torch_local_lower import TorchLocalLower
+            lower = TorchLocalLower(args.lower_actor, args.lower_sha256, 1)
+            result['lower_actor'] = dict(path=str(args.lower_actor.resolve()), sha256=args.lower_sha256, frequency_hz=200)
+        previous_reference = torch.tensor([[args.drive_speed, 0.]])
+        previous_command = torch.tensor([[0., args.drive_speed/.1]])
+        previous_yaw = None
+        applied = torch.zeros(1, 2)
         properties = gym.get_actor_dof_properties(env, actor)
         properties['driveMode'][:] = gymapi.DOF_MODE_EFFORT
         properties['stiffness'][:] = 0
@@ -170,6 +183,7 @@ def main():
     trajectory = []
     control_trace = []
     contact_trace = []
+    lower_trace = []
     termination = 'budget_end'
     for tick in range(args.steps):
         if args.controller_config:
@@ -183,13 +197,26 @@ def main():
                 if not torch.isfinite(measurement).all() or measurement[0, 0].abs() > .7:
                     termination = 'nonfinite_or_roll_domain'
                     break
+                if lower is not None:
+                    if previous_yaw is not None:
+                        difference = measured_pose[:, 2]-previous_yaw
+                        lower.finish(applied, torch.atan2(torch.sin(difference), torch.cos(difference))/.005)
+                    action, observation, finite = lower.prepare(measurement, speed, previous_reference,
+                        previous_reference, previous_command, controller)
+                    if not finite.all():
+                        termination = 'lower_policy_fault'
+                        break
+                    previous_yaw = measured_pose[:, 2].clone()
+                    applied = action*torch.tensor([1.5, 10.])
+                    lower_trace.append(np.r_[tick*.0002, observation.numpy().ravel(), action.numpy().ravel(), applied.numpy().ravel()])
                 row = torch.stack((measurement[:, 5]*.1, measurement[:, 2], measurement[:, 3],
                                    measurement[:, 0], measurement[:, 1], torch.zeros(1)), dim=-1)
                 output = controller.step(row, torch.tensor([tick*.0002 > 3.]))
-                steer = output[:, 0].clamp(-3., 3.)
+                steer = (output[:, 0]+applied[:, 0]).clamp(-3., 3.)
                 steer = torch.maximum(torch.maximum(torch.tensor(-3.), (-.8-position[:, signals.steer])/.005),
                                       torch.minimum(torch.minimum(torch.tensor(3.), (.8-position[:, signals.steer])/.005), steer))
-                command = torch.stack((steer, torch.full_like(steer, args.drive_speed/.1)), dim=-1)
+                command = torch.stack((steer, (torch.full_like(steer, args.drive_speed/.1)+applied[:, 1]).clamp(-60.,60.)), dim=-1)
+                previous_command = command.clone()
                 control_trace.append(np.r_[tick*.0002, measurement.numpy().ravel(), measured_pose.numpy().ravel(),
                                            speed.numpy(), command.numpy().ravel(), output.numpy().ravel()])
             torque = servos.torque(command, velocity)+signals.passive_torque(position, velocity)
@@ -227,10 +254,10 @@ def main():
                   initial_body_z_m=initial['pose']['p']['z'].tolist(),
                   final_body_z_m=final['pose']['p']['z'].tolist(),
                   finite=bool(np.isfinite(final.view(np.float32)).all()),
-                  scope='ECBC engineering probe without learned policies' if args.controller_config else 'Passive contact engineering probe; no controller, policy or training')
+                  scope=('Frozen LOCAL300 plus ECBC engineering probe' if args.lower_actor else 'ECBC engineering probe without learned policies') if args.controller_config else 'Passive contact engineering probe; no controller, policy or training')
     if trajectory:
         np.savez_compressed(args.output.with_suffix('.npz'), body_states=np.stack(trajectory), contact_counts=contacts,
-                            control_trace=np.asarray(control_trace), contact_trace=np.asarray(contact_trace), dt=params.dt)
+                            control_trace=np.asarray(control_trace), lower_trace=np.asarray(lower_trace), contact_trace=np.asarray(contact_trace), dt=params.dt)
     args.output.write_text(json.dumps(result, indent=2))
     print(json.dumps(result, indent=2))
     gym.destroy_sim(sim)

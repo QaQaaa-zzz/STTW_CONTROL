@@ -59,7 +59,8 @@ class TorchLocalLower:
         return action,obs,torch.isfinite(obs).all(-1)&torch.isfinite(action).all(-1)
 
     def finish(self, applied_residual, yaw_rate):
-        # Applied residual is after actuator constraints; yaw rate is unwrapped
+        # Applied residual is after residual permission clipping, before final
+        # actuator command clipping (closed_loop_kernel contract). Yaw rate is unwrapped
         # pose difference / lower dt, not the instantaneous IMU z measurement.
         self.previous_applied = applied_residual.clone()
         self.yaw_rate = yaw_rate.clone()
