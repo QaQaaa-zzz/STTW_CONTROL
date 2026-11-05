@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from sttw_control.torch_controller import TorchController, TorchVelocityServos
+from sttw_control.torch_observation import TorchVehicleSignals
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--fixture', type=Path, required=True)
@@ -36,6 +37,15 @@ data = np.load(args.fixture/'servos.npz')
 force = servos.torque(tensor(data['command']), tensor(data['velocity'])).cpu().numpy()
 np.testing.assert_allclose(force, data['force'], atol=1e-10 if dtype == torch.float64 else 5e-5, rtol=1e-6)
 errors['servo_force_max_error_Nm'] = float(np.max(np.abs(force-data['force'])))
+signals = TorchVehicleSignals(contract, [j['name'] for j in contract['joints']], device=args.device, dtype=dtype)
+data = np.load(args.fixture/'signals.npz')
+measurement, pose, speed = signals.observe(tensor(data['root']), tensor(data['position']), tensor(data['velocity']))
+passive = signals.passive_torque(tensor(data['position']), tensor(data['velocity']))
+errors['signals'] = {}
+for key, result in [('measurement', measurement), ('pose', pose), ('speed', speed), ('passive', passive)]:
+    actual = result.cpu().numpy()
+    np.testing.assert_allclose(actual, data[key], atol=1e-10 if dtype == torch.float64 else 2e-5, rtol=1e-6)
+    errors['signals'][key] = float(np.max(np.abs(actual-data[key])))
 (args.fixture/('torch_validation_'+args.device.replace(':', '_')+'_'+args.precision+'.json')).write_text(json.dumps(dict(passed=True, errors=errors,
     torch_version=torch.__version__, physics_steps=0, device=args.device, precision=args.precision,
     scope='controller arithmetic and selective reset against float64 JAX'), indent=2))

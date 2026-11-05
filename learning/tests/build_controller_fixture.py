@@ -56,3 +56,28 @@ for command, velocity in zip(commands, velocities):
     mujoco.mj_forward(model, data)
     forces.append(data.qfrc_actuator[indices].copy())
 np.savez_compressed(args.output/'servos.npz', command=commands, velocity=velocities, force=forces)
+from sttw_control.env import RecoveryEnv
+helper = object.__new__(RecoveryEnv)
+helper.bundle = load_model()
+qindices = [int(model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, n)]) for n in names]
+roots, positions, velocities, measurements, poses, speeds, passive = [], [], [], [], [], [], []
+for _ in range(256):
+    data = mujoco.MjData(model)
+    data.qpos[:3] = rng.normal(size=3)
+    quaternion = rng.normal(size=4)
+    data.qpos[3:7] = quaternion/np.linalg.norm(quaternion)
+    data.qpos[qindices] = rng.uniform(-.1, .1, len(qindices))
+    data.qvel[:] = rng.normal(size=model.nv)
+    mujoco.mj_forward(model, data)
+    spatial = np.zeros(6)
+    mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_BODY, helper.bundle.chassis, spatial, 0)
+    roots.append(np.r_[data.xpos[helper.bundle.chassis], np.roll(data.xquat[helper.bundle.chassis], -1), data.qvel[:3], spatial[:3]])
+    positions.append(data.qpos[qindices].copy())
+    velocities.append(data.qvel[indices].copy())
+    measurements.append(np.asarray(helper.measure(data)))
+    pose = np.asarray(helper.pose(data))
+    poses.append(pose)
+    speeds.append(data.qvel[0]*np.cos(pose[2])+data.qvel[1]*np.sin(pose[2]))
+    passive.append(data.qfrc_passive[indices].copy())
+np.savez_compressed(args.output/'signals.npz', root=roots, position=positions, velocity=velocities,
+                    measurement=measurements, pose=poses, speed=speeds, passive=passive)

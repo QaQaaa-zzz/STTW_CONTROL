@@ -60,6 +60,7 @@ def export_isaac_asset(output, source=DEFAULT_XML):
               for i in range(1, model.nbody)]
     joints = [dict(name=name(mujoco.mjtObj.mjOBJ_JOINT, i), axis=model.jnt_axis[i].tolist(),
                    limited=bool(model.jnt_limited[i]), range=model.jnt_range[i].tolist(),
+                   spring_reference=float(model.qpos_spring[model.jnt_qposadr[i]]),
                    stiffness=float(model.jnt_stiffness[i]), damping=float(model.dof_damping[model.jnt_dofadr[i]]))
               for i in range(model.njnt) if model.jnt_type[i] != mujoco.mjtJoint.mjJNT_FREE]
     actuators = [dict(name=name(mujoco.mjtObj.mjOBJ_ACTUATOR, i),
@@ -72,7 +73,10 @@ def export_isaac_asset(output, source=DEFAULT_XML):
                       ctrlrange=model.actuator_ctrlrange[i].tolist(),
                       forcerange=model.actuator_forcerange[i].tolist()) for i in range(model.nu)]
     xml = ET.tostring(root, encoding='unicode')
+    gyro_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, 'gyro_local')
+    gyro_site = int(model.sensor_objid[gyro_id])
     contract = dict(source=bundle.identity, exported_xml_sha256=hashlib.sha256(xml.encode()).hexdigest(),
+                    imu_site_quat_wxyz=model.site_quat[gyro_site].tolist(),
                     timestep_s=float(model.opt.timestep), bodies=bodies, joints=joints, actuators=actuators,
                     actor_collision_filter=1,
                     root_translation=root.find('worldbody/body').get('pos', '0 0 0'),
