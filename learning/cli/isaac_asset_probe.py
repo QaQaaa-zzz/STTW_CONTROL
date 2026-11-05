@@ -31,6 +31,7 @@ def main():
     parser.add_argument('--seed', type=int, default=20261105)
     parser.add_argument('--source-inertia', action='store_true')
     parser.add_argument('--gpu-physics', action='store_true')
+    parser.add_argument('--gpu-wheel-hull', action='store_true')
     args = parser.parse_args()
     if not 0 <= args.steps <= (25000 if args.controller_config else 1000) or not 0 < args.drive_speed <= 3.5:
         parser.error('passive <=1000 / controlled <=25000 physics steps; speed in (0,3.5]')
@@ -66,6 +67,10 @@ def main():
     options.collapse_fixed_joints = False
     options.override_com = False
     options.override_inertia = False
+    if args.gpu_wheel_hull:
+        options.vhacd_enabled = True
+        options.vhacd_params.max_convex_hulls = 1
+        options.vhacd_params.max_num_vertices_per_ch = 64
     path = args.asset.resolve()
     if path.suffix == '.urdf':
         source_contract = json.loads(path.with_name('contract.json').read_text())
@@ -80,6 +85,7 @@ def main():
                   physics_steps=0, optimizer_updates=0,
                   scope='Import diagnostics only; not collision or closed-loop validation')
     result['physx_config'] = {key:getattr(params.physx,key) for key in ('solver_type','num_position_iterations','num_velocity_iterations','contact_offset','rest_offset','bounce_threshold_velocity','max_depenetration_velocity')}
+    result['gpu_wheel_hull'] = args.gpu_wheel_hull
     result['physics_device'] = 'cuda:0' if params.physx.use_gpu else 'cpu'
     result['tensor_pipeline'] = 'gpu' if params.use_gpu_pipeline else 'cpu'
     if args.ground == 'plane':
@@ -297,6 +303,8 @@ def main():
         gym.fetch_results(sim, True)
         contact = gym.get_env_rigid_contacts(env)
         contacts.append(len(contact))
+        if tick == 0:
+            np.save(args.output.with_suffix('.initial_contacts.npy'), contact)
         failed_contact = False
         for c in contact:
             first, second = int(c['body0']), int(c['body1'])

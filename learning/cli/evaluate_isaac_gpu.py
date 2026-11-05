@@ -6,9 +6,10 @@ import numpy as np
 import torch
 from sttw_control.torch_path_policy import TorchPathPolicy
 from sttw_control.isaac_path_rollout import IsaacPathRollout
-p=argparse.ArgumentParser();p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
 a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);torch.manual_seed(1)
 s=json.loads(a.config.read_text());s.update(num_envs=6,alphas=[0,.25,.5,.75,1,0],terrains={'bend_bump':str(a.terrain)},zero_middle=[False]*5+[True],diagnostics=True,episode_s=a.seconds)
+if a.asset:s['asset']=str(a.asset.resolve())
 identity=json.loads((a.bundle/'identity.json').read_text());cfg=json.loads((a.bundle/'config.json').read_text());policy=TorchPathPolicy(a.bundle/'actor.npz',identity['files']['actor.npz'],cfg,6,'cuda');env=IsaacPathRollout(a.bundle,s,policy)
 contract=dict(settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role='fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction',physics_dt=.0002,lower_dt=.005,policy_dt=.02)
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2));rows=[];detail=[];started=time.time()

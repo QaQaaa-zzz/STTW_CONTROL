@@ -26,7 +26,9 @@ def _values(values):
     return ' '.join(format(float(x), '.17g') for x in values)
 
 
-def export_isaac_urdf(output, source=DEFAULT_XML):
+def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
+    if not 6 <= wheel_vertices <= 226:
+        raise ValueError('wheel_vertices must be between 6 and 226')
     output = Path(output)
     contract = export_isaac_asset(output, source)
     model = load_model(source).model
@@ -70,10 +72,31 @@ def export_isaac_urdf(output, source=DEFAULT_XML):
                     for j in range(32):
                         a, b = 2+ring*32+j, 2+ring*32+(j+1)%32
                         faces.extend([[a, a+32, b], [b, a+32, b+32]])
+                if wheel_vertices < len(vertices):
+                    from scipy.spatial import ConvexHull
+                    original = np.asarray(vertices)
+                    normalized = original / size
+                    selected = list(dict.fromkeys(int(f(normalized[:, axis]))
+                                    for axis in range(3) for f in (np.argmin, np.argmax)))
+                    distance = np.full(len(original), np.inf)
+                    for index in selected:
+                        distance = np.minimum(distance, ((normalized-normalized[index])**2).sum(-1))
+                    while len(selected) < wheel_vertices:
+                        index = int(distance.argmax())
+                        selected.append(index)
+                        distance = np.minimum(distance, ((normalized-normalized[index])**2).sum(-1))
+                    vertices = original[selected]
+                    hull = ConvexHull(vertices)
+                    triangles = hull.simplices.copy()
+                    for index, face in enumerate(triangles):
+                        a, b, c = vertices[face]
+                        if np.dot(np.cross(b-a, c-a), hull.equations[index, :3]) < 0:
+                            triangles[index] = face[[0, 2, 1]]
+                    faces = triangles + 1
                 text = '\n'.join(['v '+_values(v) for v in vertices]+['f '+' '.join(map(str, f)) for f in faces])+'\n'
                 (output/mesh_name).write_text(text)
                 meshes[mesh_name] = dict(sha256=hashlib.sha256(text.encode()).hexdigest(), vertices=len(vertices),
-                    faces=len(faces), source_semiaxes_m=size.tolist(), polar_segments=8, azimuth_segments=32)
+                    faces=len(faces), source_semiaxes_m=size.tolist(), source_polar_segments=8, source_azimuth_segments=32, sampling='original mesh' if wheel_vertices == 226 else 'farthest normalized coverage subset; all six extrema retained')
             for tag in ('collision', 'visual'):
                 geometry_parent = ET.SubElement(link, tag)
                 ET.SubElement(geometry_parent, 'origin', xyz=_values(model.geom_pos[g]), rpy=_values(_rpy(model.geom_quat[g])))
@@ -105,6 +128,7 @@ def export_isaac_urdf(output, source=DEFAULT_XML):
     contract.update(exported_xml_sha256=hashlib.sha256(xml.encode()).hexdigest(), asset_format='urdf',
                     meshes=meshes, urdf_joint_effort_semantics='1000 is importer metadata; runtime source actuator limits and passive torques are authoritative',
                     root_quat_wxyz=contract['bodies'][0]['quat_wxyz'])
-    contract['differences'][0] = 'Ellipsoid wheels explicitly sampled to 226-vertex convex OBJ; analytic contact not preserved.'
+    contract['differences'][0] = f'Ellipsoid wheels explicitly sampled to {wheel_vertices}-vertex convex OBJ; analytic contact not preserved.'
+    contract['wheel_vertices'] = wheel_vertices
     (output/'contract.json').write_text(json.dumps(contract, indent=2))
     return contract
