@@ -16,6 +16,8 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--steps', type=int, default=0)
     parser.add_argument('--ground', choices=('plane', 'box', 'trimesh'), default='plane')
+    parser.add_argument('--terrain-mesh', type=Path)
+    parser.add_argument('--terrain-sha256')
     parser.add_argument('--controller-config', type=Path)
     parser.add_argument('--lower-actor', type=Path)
     parser.add_argument('--lower-sha256')
@@ -35,6 +37,8 @@ def main():
         parser.error('lower actor requires hash and controller configuration')
     if (args.path_bundle and not args.lower_actor) or (args.zero_middle and not args.path_bundle):
         parser.error('path bundle requires frozen lower; zero-middle requires path bundle')
+    if bool(args.terrain_mesh) != bool(args.terrain_sha256) or (args.terrain_mesh and args.ground != 'trimesh'):
+        parser.error('terrain mesh requires SHA256 and ground=trimesh')
     gym = gymapi.acquire_gym()
     params = gymapi.SimParams()
     params.dt = .0002
@@ -72,9 +76,18 @@ def main():
     elif args.ground == 'trimesh':
         vertices = np.array([[-2, -2, 0], [2, -2, 0], [2, 2, 0], [-2, 2, 0]], dtype=np.float32)
         triangles = np.array([[0, 1, 2], [0, 2, 3]], dtype=np.uint32)
+        if args.terrain_mesh:
+            digest = hashlib.sha256(args.terrain_mesh.read_bytes()).hexdigest()
+            if digest != args.terrain_sha256:
+                raise ValueError('terrain mesh identity mismatch')
+            terrain = np.load(args.terrain_mesh, allow_pickle=False)
+            vertices = terrain['vertices']; triangles = terrain['triangles']
+            if vertices.ndim != 2 or vertices.shape[1] != 3 or triangles.ndim != 2 or triangles.shape[1] != 3 or vertices.dtype != np.float32 or triangles.dtype != np.uint32 or not np.isfinite(vertices).all() or triangles.max() >= len(vertices):
+                raise ValueError('invalid terrain mesh arrays')
+            result['terrain_mesh'] = dict(path=str(args.terrain_mesh.resolve()), sha256=digest, vertices=len(vertices), triangles=len(triangles), max_height_m=float(vertices[:,2].max()))
         mesh = gymapi.TriangleMeshParams()
-        mesh.nb_vertices = 4
-        mesh.nb_triangles = 2
+        mesh.nb_vertices = len(vertices)
+        mesh.nb_triangles = len(triangles)
         if path.suffix == '.urdf':
             mesh.static_friction = mesh.dynamic_friction = source_contract['ground_friction'][0]
         gym.add_triangle_mesh(sim, vertices.ravel(), triangles.ravel(), mesh)
@@ -226,6 +239,7 @@ def main():
                         middle.after(measurement, measured_pose, speed, previous_reference, previous_command, applied, controller)
                     governed = middle.before(measured_pose, args.zero_middle)
                     if middle.fault.any() or middle.domain_exit.any():
+                        result['middle_terminal'] = dict(fault=middle.fault.tolist(), domain_exit=middle.domain_exit.tolist(), preview_body=middle.follower['preview_body'].tolist(), projection_progress=middle.projection['progress'].tolist(), cross_track=middle.projection['cross_track'].tolist(), pose=measured_pose.tolist())
                         termination = 'middle_fault_or_path_domain'
                         break
                     middle_trace.append(np.r_[tick*.0002, middle.nominal.numpy().ravel(), governed.numpy().ravel(),

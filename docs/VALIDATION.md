@@ -1,3 +1,20 @@
+## 2026-11-04 First real shallow-terrain five-alpha probe
+
+XY first: `runs/isaac_h75_shallow_probe/comparison.png` shows all five H75 traces, zero-middle+LOCAL300, original fixed route and the raised-terrain footprint. `runs/isaac_shallow_terrain` stores the exact mesh and identity: two sin² ridges over x=[2.8,3.4] and [3.7,4.3] m, transverse sin² taper on y=[-1,3] m, maximum height 0.012 m, 0.05 m grid, 78961 vertices and 156800 upward triangles. One triangle surface replaces the plane; no overlapping floor. Vehicle geometry, inertia, source sliding friction, offsets, torque limits and timing remain unchanged. Plane→trimesh changes the contact representation as well as relief, so the earlier plane comparison is not a single-factor terrain-height experiment; a flat mesh control is still needed for that attribution.
+
+| Method | Actual duration (s) | Stop | Terminal cross-track (m) |
+|---|---:|---|---:|
+| Zero middle + LOCAL300 | 2.34 | roll 0.71812 rad | -0.13168 |
+| H75 alpha0 | 5.00 | budget | -1.27202 |
+| H75 alpha0.25 | 3.18 | pursuit preview outside domain | -1.45840 |
+| H75 alpha0.5 | 3.06 | pursuit preview outside domain | -1.42459 |
+| H75 alpha0.75 | 3.08 | pursuit preview outside domain | -1.42950 |
+| H75 alpha1 | 3.06 | pursuit preview outside domain | -1.40751 |
+
+Actual total is 98600 explicit physics steps, zero optimization, below the 150000 budget. All physical arrays are finite. Saved-data terminal reconstruction confirms four H75 domain failures: preview body-x is 0.01281–0.03752 m, below the original 0.05 m threshold, while roll is only 0.06126–0.08792 rad and no follower numerical fault occurs. Alpha0 survives the observation window but reaches maximum pre-step cross error 1.75160 m and ends 1.27202 m off path: survival is not task completion. The original thresholds were not relaxed. Positive contact forces were observed; raw contact records remain available. No new run was performed to clarify the combined stop label; `terminal_reconstruction.json` uses saved terminal root/DOF data and the original path contract. Future probe receipts now retain explicit middle fault/domain/preview/projection fields on termination.
+
+The raw NPZ/receipts/logs, full five-condition summary and inspected figure are preserved. No reward claim, restoration success or generalized alpha preference is supported. This negative result motivates separating flat-mesh effects from raised terrain and then bounded terrain adaptation with the planning document's task reward/return conditions. Five-alpha coverage continues; continuous-task/RB remains deferred. Disk check before execution found 60 GiB available; this bounded test stays below the declared 0.2 GiB output estimate and preserves the 50 GiB reserve.
+
 ## 2026-11-04 Isaac H75 five-alpha fixed-curve closed loop
 
 XY first: `runs/isaac_h75_curve_probe/comparison.png` shows all five alphas, zero-middle+LOCAL300 baseline, and the original fixed route (first 12 m displayed). Raw body/contact/control/lower/middle arrays, per-run receipts and summary remain in that directory. The bundle fixes H75/config/route identities, origin and original 1.8 m radius; its legacy route name is left90_R2. Pairing verifies source asset, controller, initial body/DOF state, material properties, speed request, lower actor and route bundle. The baseline includes LOCAL300; it is not pure ECBC.

@@ -12,12 +12,16 @@ for name,label,color in [('baseline','Zero middle + LOCAL300','black')]+[(f'alph
  if base is None:base=receipt
  for key in ('asset_sha256','controller_config','drive_speed','ground','dt_s','initial_states','initial_dofs','shape_properties','lower_actor'):
   if receipt[key]!=base[key]:raise ValueError('pair mismatch '+key)
+ if receipt.get('terrain_mesh') != base.get('terrain_mesh'):raise ValueError('terrain identity mismatch')
  if receipt['path_contract']['bundle']!=base['path_contract']['bundle']:raise ValueError('route/policy bundle differs')
  axes[0,0].plot(states[:,0],states[:,1],color=color,label=label);axes[0,0].plot(states[-1,0],states[-1,1],'x',color=color)
  axes[0,1].plot(c[:,0],c[:,11],color=color,label=label)
  axes[1,0].plot(middle[:,0],middle[:,6],color=color,label=label)
  axes[1,1].plot(c[:,0],c[:,1],color=color,label=label)
  summary[name]=dict(termination=receipt['termination'],seconds=receipt['physics_steps']*receipt['dt_s'],physics_steps=receipt['physics_steps'],final_xy=states[-1,:2].tolist(),max_abs_roll=float(np.abs(c[:,1]).max()),max_abs_cross=float(np.abs(middle[:,6]).max()),mean_true_speed=float(c[:,11].mean()),alpha=receipt['path_contract']['alpha'],zero_middle=receipt['path_contract']['zero_middle'])
+if base.get('terrain_mesh'):
+ terrain=np.load(base['terrain_mesh']['path']);v=terrain['vertices'];positive=v[:,2]>1e-5
+ axes[0,0].scatter(v[positive,0],v[positive,1],c=v[positive,2],cmap='Greys',s=2,alpha=.2,zorder=-1,label='Raised terrain footprint')
 segment=route['s']<=12;axes[0,0].plot(route['xy'][segment,0],route['xy'][segment,1],'k--',label='Original fixed route (first 12 m)');axes[0,0].set_aspect('equal',adjustable='datalim');axes[0,0].set(xlabel='World X [m]',ylabel='World Y [m]',title='Actual/reference XY; x = actual endpoint');axes[0,0].legend(fontsize=7)
 axes[0,1].axhline(base['drive_speed'],color='grey',linestyle='--');axes[0,1].set(xlabel='Time [s]',ylabel='True forward speed [m/s]')
 axes[1,0].set(xlabel='Time [s]',ylabel='Signed cross-track error [m]');axes[1,1].set(xlabel='Time [s]',ylabel='Left-positive roll [rad]')
