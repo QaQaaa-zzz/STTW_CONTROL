@@ -19,12 +19,27 @@ class IsaacPathRollout:
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
         self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
-        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0;self.reset()
+        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
+        self.initial_state=None;self.initial_physical_tick=0
+        if settings.get('initial_state'):
+            data=np.load(settings['initial_state']);order=[list(data['joint_names']).index(k) for k in self.plant.joints]
+            self.initial_state={key:torch.as_tensor(data[key],device=self.device,dtype=torch.float32) for key in ('root_pose','root_velocity','eso','disturbance','gains','previous_reference','previous_command','raw')}
+            for key in ('joint_position','joint_velocity'):self.initial_state[key]=torch.as_tensor(data[key][order],device=self.device,dtype=torch.float32)
+            self.initial_physical_tick=int(data['physical_tick'])
+        self.reset()
 
     @torch.no_grad()
     def reset(self):
-        self.plant.reset();self.controller.reset(slice(None));self.lower.reset(slice(None));self.previous_reference=torch.stack((self.speed,torch.zeros_like(self.speed)),dim=-1);self.previous_command=torch.stack((torch.zeros_like(self.speed),self.speed/.1),dim=-1);self.alive=torch.ones(self.n,device=self.device,dtype=torch.bool);self.tick=0
-        m,pose,v=self.plant.observe();self.middle.reset(m,pose,v,self.previous_reference,self.previous_reference,self.previous_command,self.controller)
+        self.controller.reset(slice(None));self.lower.reset(slice(None))
+        if self.initial_state is None:
+            self.plant.reset();self.previous_reference=torch.stack((self.speed,torch.zeros_like(self.speed)),dim=-1);self.previous_command=torch.stack((torch.zeros_like(self.speed),self.speed/.1),dim=-1);raw=self.previous_reference
+        else:
+            state=self.initial_state
+            self.plant.reset_idx(torch.arange(self.n,device=self.device),state=state)
+            for key in ('eso','disturbance','gains'):getattr(self.controller,key)[:]=state[key]
+            self.previous_reference=state['previous_reference'].expand(self.n,-1).clone();self.previous_command=state['previous_command'].expand(self.n,-1).clone();raw=state['raw'].expand(self.n,-1)
+        self.alive=torch.ones(self.n,device=self.device,dtype=torch.bool);self.tick=0
+        m,pose,v=self.plant.observe();self.middle.reset(m,pose,v,raw,self.previous_reference,self.previous_command,self.controller)
 
     @torch.no_grad()
     def observation(self):
@@ -37,7 +52,7 @@ class IsaacPathRollout:
             m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std,zero_mask=self.zero_middle)
             if lower_tick==0:first_action=self.middle.latent.clone()
             action,_,finite=self.lower.prepare(m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
-            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,torch.full_like(valid,(self.tick*4+lower_tick)*.005>3.))
+            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,torch.full_like(valid,(self.initial_physical_tick+self.tick*4+lower_tick)*.005>3.))
             steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),25,device=self.device,dtype=torch.long)
             for physics_tick in range(25):

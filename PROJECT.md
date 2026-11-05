@@ -1,3 +1,12 @@
+
+## Original H75 on the user-selected orange Local300 — matched flat DEV
+
+Completed `runs/h75_selected_local300_flat`: unchanged H75 u77 plus original Local300, alpha=0/.25/.5/.75/1 and Zero, same full warm initial state, fixed left90_R2 route and user speed2.3m/s, 10s, friction0.8 on both engines. Native MuJoCo188.94s and Lab106.95s; total600000 allocated physics lane steps, zero optimizer updates. All five H75 conditions in both engines cross the goal section and meet the original final1s speed/path/heading hold and working-roll checks. This is one route/initial state, not a full standard panel or offroad qualification. Zero survives both, but MuJoCo fails final hold and Lab exceeds working-roll0.302rad (peak0.3178rad).
+
+Paired H75 XY RMSE0.0955–0.1163m; endpoint separation0.1913–0.2152m. Lab path RMSE alpha0→1:0.0592→0.1122m; speed RMSE0.1323→0.0478m/s. This preserves the expected preference direction in this case. Per-lower-step Lab rewards reconstructed against saved policy rewards, max difference5.96e-8. Full/cumulative reward, signed components, targets/filter/executed offsets and matched-alpha Zero rewards retained.
+
+User requested grouping by model: `comparison/xy_mujoco_all_alpha.png` and `xy_isaac_lab_all_alpha.png`, each full XY plus equal-aspect bend detail with fixed five-alpha colors, Zero and original path. Raw NPZ retained; no extra physics for plotting. Report: `runs/h75_selected_local300_flat/comparison/RESULTS.md`. Historical MuJoCo/selected Lab comparison included front friction10→0.8, so old differences cannot all be attributed to engine; original evidence preserved with correction. Next keep original H75/selected lower and start the STTW terrain stage; no lower/H75 retraining presently justified by this case.
+
 # Current adopted lower: orange Isaac Lab original Local300
 
 
