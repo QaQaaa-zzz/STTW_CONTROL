@@ -1,3 +1,29 @@
+## 2026-11-04 Go2 timing and PPO reference audit
+
+User requirement: reference Go2 timing, network and RL hyperparameters when porting STTW to Isaac. This is a source/configuration audit, not a new experiment or training result. Reference task is `go2_spring_jump`, registered in `/home/qy/projects/My_unitree_go2_gym/legged_gym/envs/__init__.py`; task configuration is `envs/Go2_Flip/Go2_Spring_Jump/Go2_Spring_Jump_Config.py` under that repository. The IDE's `isaacgym_go2_spring_jump_10k.py` is an evaluation entry, not the training configuration. Values below describe currently checked source defaults, not verified historical launch overrides.
+
+| Quantity | Go2 SpringJump source | STTW port contract |
+|---|---|---|
+| Physics outer dt / substeps | 0.005 s / 1 | 0.0002 s / 1 |
+| Torque recomputation | every physics step, 200 Hz | original velocity servos/passive forces every physics step, 5000 Hz |
+| Lower control | Go2 PD at physics rate | ECBC/ESO and frozen lower at 0.005 s, 200 Hz |
+| Policy interval | decimation 4, 0.02 s, 50 Hz | middle 0.02 s, 50 Hz; 4 lower ticks / 100 physics steps |
+| Rollout | 24 policy transitions, 0.48 s per environment | 24 middle transitions also 0.48 s; candidate, not launched |
+| Parallel environments | 4096 | choose after actual memory/throughput measurement; not yet adopted |
+| Actor / critic hidden layers | both 512,256,128; ELU | reference for fresh candidate; frozen H75/LOCAL300 retain exact checkpoint architecture |
+| Initial action std | 1.0 | candidate requires original bounded-action units and exploration check |
+| PPO epochs / minibatches | 5 / 4 | reference candidate |
+| Clip / value coefficient / clipped value loss | 0.2 / 1.0 / enabled | reference candidate |
+| Entropy coefficient / max gradient norm | 0.01 / 1.0 | reference candidate |
+| Gamma / GAE lambda | 0.99 / 0.95 | reference at middle 50 Hz only |
+| Learning rate / schedule / desired KL | 1e-5 / adaptive / 0.01 | reference candidate; keep existing frozen-policy weights unchanged |
+
+The actual SpringJump `step()` holds policy actions across four calls but refreshes delayed actions, PD torque and joint states each physics tick. `self.dt=decimation*sim_params.dt`; its reward setup multiplies nonzero reward scales by this policy dt. STTW reward reconstruction must follow STTW's existing definition, avoiding a second dt factor. Decimation counts outer `simulate()` calls; solver substeps do not replace explicit actuator feedback updates. A timing change also changes history span, action/filter delays, slew increments, timeout/ESO clocks, discount horizon and sample budget; convert using physical seconds and validate before adoption. For equal continuous discount timescale, a changed policy interval would require `gamma_new=gamma_old**(dt_new/dt_old)`; keeping the middle at 50 Hz avoids that particular conversion. Lower-policy histories remain at their original 200 Hz.
+
+Go2's adaptive PPO implementation (`rsl_rl/rsl_rl/algorithms/ppo.py`) changes LR by factors of 1.5 using KL thresholds 0.5x and 2x desired KL, bounded by 1e-5 and 1e-2. Thus 1e-5 is the initial value, not a fixed LR promise. Its 4096x24 batch contains 98304 transitions; four minibatches and five epochs imply 20 optimizer steps per rollout. This is not authorization for its 50000 configured iterations. Go2's enabled 12-joint symmetry permutation/loss is robot-specific and is not adopted for STTW. Likewise its position-PD gains, friction randomization, contact thresholds, observation scales and action dimensions are not replacements for the STTW physical/action contract.
+
+No simulation or optimization was executed for this audit. Next: preserve frozen interfaces while completing Isaac lower/middle integration; measure batched throughput; declare the resolved bounded training configuration before launch. Offroad STTW remains first; continuous-task/RB work remains deferred.
+
 ## 2026-11-04 URDF physical-tree import and 5 s ECBC drive
 
 `export_isaac_asset.py --format urdf` now uses the compiled MuJoCo body tree: exact full COM inertia tensors, link/joint origins, axes, joint limits and box dimensions. Ellipsoid wheels are explicitly approximated by a closed 226-vertex OBJ (32 azimuth and 8 polar segments); this discretization and source semiaxes are recorded, not described as analytic-contact equivalence. Source meshes and XML are unchanged. URDF effort metadata is not the drive authority: the runtime applies the original 1/3 Nm servo limits plus source passive forces.
