@@ -66,6 +66,9 @@ def export_isaac_asset(output, source=DEFAULT_XML):
                       joint=name(mujoco.mjtObj.mjOBJ_JOINT, int(model.actuator_trnid[i, 0])),
                       enabled=not bool(model.opt.disableactuator & (1 << int(model.actuator_group[i]))),
                       gain=model.actuator_gainprm[i].tolist(), bias=model.actuator_biasprm[i].tolist(),
+                      gear=model.actuator_gear[i].tolist(),
+                      control_limited=bool(model.actuator_ctrllimited[i]),
+                      force_limited=bool(model.actuator_forcelimited[i]),
                       ctrlrange=model.actuator_ctrlrange[i].tolist(),
                       forcerange=model.actuator_forcerange[i].tolist()) for i in range(model.nu)]
     xml = ET.tostring(root, encoding='unicode')

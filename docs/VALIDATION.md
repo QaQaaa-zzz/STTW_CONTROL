@@ -1,3 +1,11 @@
+## 2026-11-04 Torch ECBC/ESO and physical-step velocity servos
+
+`torch_controller.py` adds batched ECBC/ESO and velocity-servo arithmetic for the Isaac runtime. The controller preserves get-output-before-update semantics, ESO accumulation while correction is disabled, gain fallback, and selective environment reset. Servo input remains `[steer rate, forward-positive rear rate]`; rear sign changes once before computing physical joint torque. Source gain, control limits and torque limits come from the asset contract, not Go2 defaults. Passive suspension forces remain separate and must be connected before driven physics.
+
+Cross-environment verification: generate with `PYTHONPATH=learning/src JAX_PLATFORMS=cpu <mjp-python> learning/tests/build_controller_fixture.py --output <new-directory>`; compare with `PYTHONPATH=learning/src <go2-python> learning/tests/check_torch_controller.py --fixture <directory> --precision float64` and `--precision float32 --device cuda:0`. `runs/controller_servo_parity` contains the source hash, configurations, 1024 steps × 8 lanes for both dynamic/fixed roll references, ESO enable changes and selective reset, plus 512 native MuJoCo `mj_forward` actuator-force rows. No physics integration or training occurred.
+
+Actual CPU float64 maximum controller-output error was 6.80e-14; largest internal-gain error 3.66e-13; servo-force error 2.85e-14 Nm. RTX4090D float32 errors were output 2.58e-5, internal gain 1.30e-4 and servo force 1.11e-5 Nm. All assertions passed against the unchanged JAX controller and native MuJoCo actuator force. This validates arithmetic only: Isaac measurement transforms, passive-joint forces, full reset, driven integration, LOCAL300/H75 inference and closed-loop performance are still pending.
+
 ## 2026-11-04 Isaac offroad asset and contact engineering
 
 User requested testing Isaac Gym as the STTW offroad backend. This is backend preparation, not completed offroad control or training.
