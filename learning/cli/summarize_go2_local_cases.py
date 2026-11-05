@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--runs',type=Path,nargs='+',required=True);p.add_argument('--zero',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--plot-top',type=int,default=0);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--reference-label',default='MuJoCo Local300');p.add_argument('--config',type=Path,required=True);p.add_argument('--runs',type=Path,nargs='+',required=True);p.add_argument('--zero',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--plot-top',type=int,default=0);a=p.parse_args()
 s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=True)
 colors=['#0072B2','#E69F00','#009E73','#CC79A7'];styles=['-','--','-.',':'];results=[];traces=[]
 for folder in a.runs:
@@ -25,13 +25,13 @@ if a.plot_top:
  plot_rows=[(d,r) for d,r in plot_rows if r['label'] in chosen]
 zero=np.load(a.zero/'trajectory.npz');fig,axes=plt.subplots(2,4,figsize=(19,10));axes.flat[-1].axis('off')
 for i,name in enumerate(s['cases']):
- ax=axes.flat[i];old=np.load(Path(s['mujoco_reference'])/(name+'.npz'));ax.plot(*old['reference_xy'].T,':',color='.5',label='Original reference');ax.plot(*old['actual_xy'].T,'--',color='black',lw=1.4,label='MuJoCo Local300')
+ ax=axes.flat[i];old=np.load(Path(s['mujoco_reference'])/(name+'.npz'));ax.plot(*old['reference_xy'].T,':',color='.5',label='Original reference');ax.plot(*old['actual_xy'].T,'--',color='black',lw=1.4,label=a.reference_label)
  nz=int(zero['valid'][:,i].sum());ax.plot(*zero['pose'][:nz,i,:2].T,color='.6',lw=1,label='Lab ECBC+ESO')
  for (d,result),color,style in zip(plot_rows,colors,styles):
   n=int(d['valid'][:,i].sum());xy=d['pose'][:n,i,:2];ax.plot(*xy.T,style,color=color,lw=1.4,label=(result['label'] if 'controller_parameters' in result else 'Update '+str(result['completed_updates'])));ax.scatter(*xy[-1],color=color,marker='x',s=18)
  ax.set(title=name,xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2)
 handles,labels=axes.flat[0].get_legend_handles_labels();axes.flat[-1].legend(handles,labels,loc='center',fontsize=10)
-fig.suptitle(('ECBC parameter screen, plotted top '+str(a.plot_top) if a.plot_top else 'Four candidates after simplified-distribution training')+' | fixed nominal DEV\nSame saved initial state and issued references; crosses mark actual observation endpoints')
+fig.suptitle(('ECBC parameter screen, plotted top '+str(a.plot_top) if a.plot_top else ('ECBC parameter candidates' if all('controller_parameters' in r for r in results) else 'Four candidates after simplified-distribution training'))+' | fixed nominal DEV\nSame saved initial state and issued references; crosses mark actual observation endpoints')
 fig.tight_layout();fig.savefig(a.output/'all_candidates_xy.png',dpi=160);plt.close(fig)
 result=dict(role='fixed-case DEV comparison, not held-out generalization',best=rank[0],ranked=rank,
  selection='survival count, final .5s speed/steer tracking count, observed duration, normalized tracking RMSE',

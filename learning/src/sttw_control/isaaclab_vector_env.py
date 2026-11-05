@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull"):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None):
         self.servo_mode=servo_mode
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
@@ -27,11 +27,11 @@ class IsaacLabVectorPlant:
             mesh.set('filename',mapping[original])
         tree.write(staged/'vehicle.urdf',encoding='unicode')
         converter=UrdfConverter(UrdfConverterCfg(asset_path=str((staged/'vehicle.urdf').resolve()),usd_dir=str((output/'usd').resolve()),usd_file_name='vehicle.usd',fix_base=False,merge_fixed_joints=False,make_instanceable=False,force_usd_conversion=True,self_collision=False,collider_type='convex_hull',joint_drive=UrdfConverterCfg.JointDriveCfg(target_type='none',gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(stiffness=0.,damping=0.))))
-        self.sim=sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=.0002,device=self.device,gravity=(0.,0.,-9.81),physx=sim_utils.PhysxCfg(solver_type=1,enable_external_forces_every_iteration=external_forces_every_iteration,bounce_threshold_velocity=.2,friction_correlation_distance=friction_correlation_distance,gpu_found_lost_pairs_capacity=2**24,gpu_total_aggregate_pairs_capacity=2**24,gpu_found_lost_aggregate_pairs_capacity=2**27)))
+        self.sim=sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=.0002,device=self.device,gravity=(0.,0.,-9.81),physx=sim_utils.PhysxCfg(solver_type=1,friction_offset_threshold=friction_offset_threshold,enable_external_forces_every_iteration=external_forces_every_iteration,bounce_threshold_velocity=.2,friction_correlation_distance=friction_correlation_distance,gpu_found_lost_pairs_capacity=2**24,gpu_total_aggregate_pairs_capacity=2**24,gpu_found_lost_aggregate_pairs_capacity=2**27)))
         material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8,restitution=0.,friction_combine_mode='average');material.func('/World/Material',material)
-        cloner=GridCloner(spacing=100.,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
+        cloner=GridCloner(spacing=100. if env_spacing is None else env_spacing,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
         env_paths=cloner.generate_paths('/World/Envs/Env',self.count)
-        origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
+        origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 and env_spacing is None else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
         self.origin=torch.as_tensor(origins,device=self.device);self.terrain_identity=[];terrain_sources={}
         sim_utils.create_prim(env_paths[0],'Xform')
         plane_paths=[]
@@ -100,7 +100,7 @@ class IsaacLabVectorPlant:
             self.sim.stage.GetPrimAtPath(f'/World/CollisionGroups/group{i}').GetRelationship('collection:colliders:includes').AddTarget(f'/World/Terrain_{i}')
         self.sensor=ContactSensor(ContactSensorCfg(prim_path='/World/Envs/Env_.*/Robot/.*',update_period=0.,history_length=1));self.sim.reset();self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device);self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
-        self.metadata=dict(wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
+        self.metadata=dict(env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
         self.reset()
 
     def refresh(self):
@@ -123,9 +123,9 @@ class IsaacLabVectorPlant:
             velocity=torch.zeros_like(position)
             velocity[:,[self.signals.front,self.signals.rear]]=-speed/.1
         else:
-            root=torch.cat((state['root_pose'],state['root_velocity'])).repeat(count,1)
-            position=state['joint_position'].repeat(count,1)
-            velocity=state['joint_velocity'].repeat(count,1)
+            root=torch.cat((state['root_pose'],state['root_velocity']),dim=-1).expand(count,-1).clone()
+            position=state['joint_position'].expand(count,-1).clone()
+            velocity=state['joint_velocity'].expand(count,-1).clone()
         root[:,:3]+=self.origin[env_ids]
         self.robot.write_root_pose_to_sim(root[:,:7],env_ids=env_ids)
         self.robot.write_root_velocity_to_sim(root[:,7:],env_ids=env_ids)

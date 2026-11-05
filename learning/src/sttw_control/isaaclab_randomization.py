@@ -22,9 +22,16 @@ def randomize_vehicle_properties(plant, config):
                     dynamic_friction_range=tuple(config['friction_range']),
                     restitution_range=(0., 0.), num_buckets=64,
                     make_consistent=True)
+    nominal_materials = plant.robot.root_physx_view.get_material_properties().clone()
     term = events.randomize_rigid_body_material(
         EventTermCfg(func=events.randomize_rigid_body_material, mode='startup', params=material), env)
     term(env, ids, **material)
+    # PhysX encodes compliant stiffness as negative restitution. Preserve it
+    # while letting the upstream event sample both friction coefficients.
+    materials = plant.robot.root_physx_view.get_material_properties()
+    materials[..., 2] = torch.where(nominal_materials[..., 2] < 0,
+                                    nominal_materials[..., 2], materials[..., 2])
+    plant.robot.root_physx_view.set_material_properties(materials, ids.cpu())
     # One proportional density variation per body; nominal source assets remain
     # immutable. Lab scales inertia together with mass from default properties.
     links = SceneEntityCfg('robot', body_ids=[i for i in range(len(plant.bodies)) if i not in base.body_ids]) if 'base_mass_add_kg' in config else bodies

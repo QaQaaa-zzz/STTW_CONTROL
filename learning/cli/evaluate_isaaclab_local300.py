@@ -30,7 +30,7 @@ if models and not a.without_zero and not controller_candidates:
  models.append(None)
  identities.append(dict(checkpoint=None,sha256=None,completed_updates=0,label='zero_ecbc'))
 n=cases*max(1,len(models))
-plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*n,a.output)
+plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*n,a.output,**s.get('plant_options',{}))
 x=np.load(a.initial_state);tensor=lambda v:torch.as_tensor(v,dtype=torch.float32,device=device)
 root=tensor(x['root_pose']).repeat(n,1);root[:,:3]+=plant.origin;plant.robot.write_root_pose_to_sim(root);plant.robot.write_root_velocity_to_sim(tensor(x['root_velocity']).repeat(n,1))
 order=[list(x['joint_names']).index(k) for k in plant.joints];plant.robot.write_joint_state_to_sim(tensor(x['joint_position'][order]).repeat(n,1),tensor(x['joint_velocity'][order]).repeat(n,1));plant.robot.reset();plant.sensor.reset();plant.refresh()

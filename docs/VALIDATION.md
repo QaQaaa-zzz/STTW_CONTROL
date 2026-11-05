@@ -2693,3 +2693,26 @@ Official Isaac Lab `define_mesh_collision_properties` with `SDFMeshPropertiesCfg
 The independent official TGS external-forces-every-position-iteration flag reduced rigid-hull hold rollpeak to.026582rad but speed remained1.70121m/s. Its combination with compliant hull contact worsened hold rollpeak to.482705rad; rejected. Initial TGS diagnostic failed before the sampling loop due to a metadata getter spelling error; its artifacts are retained, and the corrected run completed the original budget.
 
 Total completed diagnostic sampling:320000 physics lane steps,0 optimizer. No ECBC parameter or residual/H75 training was started. Defaults preserve the prior plant; all geometry/contact/solver candidates require explicit options. `plant_history.npz` contact vectors are **net normal forces only**, excluding tangential friction, as defined by Isaac Lab ContactSensor; they cannot establish zero friction. Summary across all cases is `candidate_response_summary.json`. Next isolate the remaining contact/velocity-servo coupling using the faithful collision representation before deciding ECBC tuning. Training remains Go2 native512/256/128 ELU with original Local300 task/reward, then unchanged H75 first.
+
+
+## Friction activation distance explains most remaining straight-line error
+
+With the same SDF256 wheels, original-response compliant materials, explicit velocity servos and timestep, changing only PhysX `friction_offset_threshold` from0.04m to0m gives hold speed2.278206m/s versus MuJoCo2.253830, rollpeak0.001736rad, and full-window speed/roll RMSE0.024403m/s/0.000533rad. Rear-step speed RMSE is0.030877m/s. The previous same candidate at0.04m gave hold1.966995m/s. This is a matched one-factor result; friction coefficients remain0.8. A zero activation threshold is a numerical contact choice informed by original zero margin, not an exact equation-level mapping of the two engines.
+
+Positive/negative steering pre0.5s speed RMSE is0.02175/0.02131m/s and steer-angle RMSE0.000399/0.000424rad. Both original and Lab open-loop pulse tests then tip over: first abs(roll)>0.5 at0.5524s/0.5308s respectively. This threshold is a descriptive timing marker, not a new success gate. Full1s XY and all post-tip data remain in `lab_sdf_contact_friction_comparison`; whole-window speed RMSE is0.40009/0.42321m/s, so the post-tip difference is not hidden.
+
+The separate SDF/compliant implicit-drive trial gives hold1.964329m/s, effectively unchanged vs explicit1.966995, despite better roll. Thus implicit drive alone did not resolve the speed bias. Saved Lab root velocity agrees with finite-position differences; FK of saved poses locates soft-contact analytic wheel bottoms near-1mm, whereas original MuJoCo penetration was approximately4mm. The local spring mapping remains approximate. All evidence: `runs/plant_response_pair`, including `sdf_wheel_pose_contact_audit.json`; cumulative plant sampling360000 steps,0 optimizer.
+
+Next paired ECBC+ESO seven-case evaluation uses the original200Hz/5kHz commands and10s windows in `runs/ecbc_contact_repair`, with no gain tuning or policy. It is pending; open-loop improvement alone does not qualify closed-loop transfer.
+
+
+## Original Local300 with repaired contact: full trajectory review
+
+Seven unchanged-policy cases completed (350000 physics lane steps, zero updates); complete XY/state review and per-case numbers in `runs/local300_contact_repair/RESULTS.md`. Final tracking passes7/7 but four return cases retain0.61–0.69m full XY RMSE and1.50–1.71m endpoint separation from MuJoCo. Matched Lab ECBC shown on the same XY plot; residual improves speed RMSE7/7 and steer6/7. No sim2sim equivalence or H75 readiness claim. Shared comparison CLI now accepts --zero and saves full-window differences plus existing final tracking checks; regenerated from saved trajectories only.
+
+
+## Heading diagnosis and original reset distribution restoration
+
+Saved Local300 trajectories show return-case heading differences mostly established by6s (6.2–7.4degrees), leading to endpoint separation; see runs/local300_contact_repair/heading_analysis.json and heading_difference.png. Offline exact displacement decomposition separates length and direction contributions without claiming causality.
+
+Original8 states exported using MuJoCo forward kinematics only; bank3 equality checked. Original sample_local_v2 reused for32768 schedules,4096/state, matching initial speeds[2,2,2.3,2.3,2.3,2.6,2.6,2.6]. Go2 reset now pairs sampled state and schedule; fixed-state historical mode retained. Plant accepts batched states, training config carries contact options. Original randomization would overwrite negative restitution/compliant stiffness with0; preserve original negative entries after upstream friction event. Static parsing and export checks pass; live GPU training/reset/material readback pending. No extra physics/optimizer. First command export used an incorrect source-config path and failed before sampling; corrected to the existing configured original task path.

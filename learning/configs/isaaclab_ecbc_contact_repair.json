@@ -1,0 +1,50 @@
+{
+  "task": "ECBC+ESO contact-repair candidate, original seven Local300 commands; no policy",
+  "source_run": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010",
+  "mujoco_reference": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/ecbc_contact_repair/mujoco",
+  "reference_streams": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/reference_streams",
+  "initial_bank": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/prepared_bank.pkl",
+  "initial_bank_index": 3,
+  "cases": [
+    "straight_speed_change",
+    "steady_positive",
+    "steady_negative",
+    "return_positive",
+    "return_negative",
+    "post_return_small_positive",
+    "post_return_small_negative"
+  ],
+  "seconds": 10,
+  "actor": "runs/local300_torch_portable_parity/actor.npz",
+  "actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "physics_dt": 0.0002,
+  "control_dt": 0.005,
+  "device": "cuda:0",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "finetune": {
+    "updates": 500,
+    "num_envs": 4096,
+    "rollout_steps": 24,
+    "network_hidden": [
+      256,
+      128
+    ],
+    "selection": "select candidates by existing local tracking metrics; compare selected checkpoint with original Local300"
+  },
+  "status": "contact repair seven-case comparison complete; Go2 spacing3m candidate pending",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0
+  }
+}

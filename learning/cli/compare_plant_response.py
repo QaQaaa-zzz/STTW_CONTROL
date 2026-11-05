@@ -2,7 +2,7 @@
 import argparse,json,pickle
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--wheel-collision',choices=['convexHull','sdf'],default='convexHull');p.add_argument('--external-forces-every-iteration',action='store_true');p.add_argument('--friction-correlation-distance',type=float,default=.025);p.add_argument('--mujoco-model',type=Path);p.add_argument('--compliant-wheels',type=Path);p.add_argument('--height-offset',type=float,default=0.);p.add_argument('--mesh-collision-on-geometry',action='store_true');p.add_argument('--hull-vertices',type=int);p.add_argument('--servo-mode',choices=['explicit','implicit'],default='explicit');p.add_argument('--backend',choices=['mujoco','lab'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('learning/configs/isaaclab_local300_transfer.json'));a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--friction-offset-threshold',type=float,default=.04);p.add_argument('--wheel-collision',choices=['convexHull','sdf'],default='convexHull');p.add_argument('--external-forces-every-iteration',action='store_true');p.add_argument('--friction-correlation-distance',type=float,default=.025);p.add_argument('--mujoco-model',type=Path);p.add_argument('--compliant-wheels',type=Path);p.add_argument('--height-offset',type=float,default=0.);p.add_argument('--mesh-collision-on-geometry',action='store_true');p.add_argument('--hull-vertices',type=int);p.add_argument('--servo-mode',choices=['explicit','implicit'],default='explicit');p.add_argument('--backend',choices=['mujoco','lab'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('learning/configs/isaaclab_local300_transfer.json'));a=p.parse_args()
 s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 dt=.0002;t=np.arange(5000)*dt;commands=np.zeros((5000,4,2),np.float32);commands[:,:,1]=23
 commands[(t>=.1)&(t<.6),1,1]=28
@@ -28,7 +28,7 @@ else:
  app=AppLauncher(headless=True,device='cuda:0').app
  import torch
  from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
- plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*4,a.output,wheel_collision=a.wheel_collision,external_forces_every_iteration=a.external_forces_every_iteration,friction_correlation_distance=a.friction_correlation_distance,servo_mode=a.servo_mode,hull_vertices=a.hull_vertices,mesh_collision_on_geometry=a.mesh_collision_on_geometry,compliant_wheels=json.loads(a.compliant_wheels.read_text()) if a.compliant_wheels else None)
+ plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*4,a.output,friction_offset_threshold=a.friction_offset_threshold,wheel_collision=a.wheel_collision,external_forces_every_iteration=a.external_forces_every_iteration,friction_correlation_distance=a.friction_correlation_distance,servo_mode=a.servo_mode,hull_vertices=a.hull_vertices,mesh_collision_on_geometry=a.mesh_collision_on_geometry,compliant_wheels=json.loads(a.compliant_wheels.read_text()) if a.compliant_wheels else None)
  x=np.load('runs/local300_sim2sim/initial_state.npz');state={k:torch.as_tensor(x[k],dtype=torch.float32,device=plant.device) for k in ['root_pose','root_velocity','joint_position','joint_velocity']};order=[list(x['joint_names']).index(k) for k in plant.joints]
  for k in ['joint_position','joint_velocity']:state[k]=state[k][order]
  state['root_pose'][2]+=a.height_offset

@@ -27,15 +27,23 @@ p.add_argument('--output',type=Path,required=True)
 a=p.parse_args()
 s=json.loads(a.source_config.read_text())
 c=ControllerConfig(**json.loads(a.controller_config.read_text()))
-speed=float(np.load(a.initial_state)['previous_reference'][0])
-rows,slew,labels=jax.jit(jax.vmap(lambda i:sample_local_v2(i,jp.int32(0),jp.float32(speed),s,c)))(jp.arange(a.count))
+initial=np.load(a.initial_state)['previous_reference']
+speeds=np.atleast_2d(initial)[:,0]
+# Every initial state receives an equal number of original-sampler schedules.
+per_state=a.count//len(speeds)
+assert per_state*len(speeds)==a.count, 'count must be divisible by initial-state count'
+sample=jax.jit(jax.vmap(lambda i,v:sample_local_v2(i,jp.int32(0),v,s,c)))
+rows,slew,labels=sample(jp.arange(a.count),jp.repeat(jp.asarray(speeds),per_state))
+rows,slew,labels=map(np.asarray,(rows,slew,labels))
+counts=np.bincount(labels[:,0].astype(int),minlength=4)
+if initial.ndim==2:
+ rows=rows.reshape(len(speeds),per_state,*rows.shape[1:]);slew=slew.reshape(len(speeds),per_state,*slew.shape[1:]);labels=labels.reshape(len(speeds),per_state,*labels.shape[1:])
 a.output.mkdir(parents=True,exist_ok=False)
 np.savez_compressed(a.output/'commands.npz',rows=np.asarray(rows),slew=np.asarray(slew),labels=np.asarray(labels))
-counts=np.bincount(np.asarray(labels)[:,0].astype(int),minlength=4)
 (a.output/'identity.json').write_text(json.dumps(dict(source_config=str(a.source_config.resolve()),
     source_config_sha256=hashlib.sha256(a.source_config.read_bytes()).hexdigest(),
     command_design=s['command_design'],controller=json.loads(a.controller_config.read_text()),
-    count=a.count,initial_speed=speed,family_counts=counts.tolist(),
+    count=a.count,initial_speeds=speeds.tolist(),schedules_per_state=per_state,family_counts=counts.tolist(),
     role='finite training command bank sampled by original sample_local_v2; GPU reset samples bank rows',
     physics_steps=0,optimizer_updates=0),indent=2))
 print('Exported command families:',counts.tolist())

@@ -1,8 +1,8 @@
-# Model response diagnosis status
+# Current model-response and Local300 comparison
 
-Completed320000 diagnostic physics lane steps,0 optimizer. Original masses/COM/inertia match; airborne responses nearly match. The PhysX cooking callback exposes a previously missed wheel simplification:226 input vertices become36, with directional support radius as low as92.388mm instead of100mm. The same input mesh in MuJoCo stays close to the original analytic model, localizing that loss to cooking. Official SDF preserves more detail and improves straight-line attitude, but SDF plus original-response compliant contact still has hold speed1.967 vs2.254m/s and nonmatching turning transients. No candidate is qualified or adopted; ECBC tuning and policy training remain paused. Full XY, geometry audit and all negative results: runs/plant_response_pair/RESULTS.md. Next isolate remaining contact/velocity-servo coupling before tuning ECBC.
+Original Local300 with repaired Lab contacts now completes seven standard cases and meets final speed/steer hold in 7/7, but return-case full XY difference RMSE remains 0.61–0.69 m and endpoint separation 1.50–1.71 m versus original MuJoCo. Full XY plus matching Lab ECBC: runs/local300_contact_repair/RESULTS.md. No new training or H75 run. Four ECBC candidates gave mixed effects; retain original wc5/wo40/filter8. Saved yaw analysis locates most return-heading mismatch by6s (6.2–7.4degrees); remaining migration mismatch is explicit, not hidden by final hold.
 
-Latest user confirms native Go2 Actor/Critic512/256/128 ELU and its runner/PPO, preserving original Local300 command distribution/difficulty/reward. Once lower qualification succeeds, test unchanged H75 first; finetune only if needed, then STTW terrain with five alpha levels.
+Future lower uses native Go2 Actor/Critic512/256/128 ELU and runner/PPO, original Local300 commands/difficulty/reward. Eight-state reset/conditional command export is now implemented and checked; compliant stiffness is preserved in the friction-randomization code. Live GPU reset/material readback remains pending before training. H75 unchanged first after lower qualification, then STTW terrain with five alpha levels.
 
 # Latest priority correction: plant response first
 

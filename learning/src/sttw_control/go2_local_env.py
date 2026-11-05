@@ -24,7 +24,7 @@ class Go2LocalEnv(VecEnv):
         self.num_actions = 2
         self.dt = cfg['control_dt']
         self.max_episode_length = round(cfg['episode_s']/self.dt)
-        self.plant = IsaacLabVectorPlant(cfg['asset'], ['plane'], [0]*self.num_envs, output)
+        self.plant = IsaacLabVectorPlant(cfg['asset'], ['plane'], [0]*self.num_envs, output, **cfg.get('plant_options', {}))
         self.decimation = round(self.dt/self.plant.sim.cfg.dt)
         self.controller = TorchController(json.loads(Path(cfg['controller_config']).read_text()), self.num_envs, self.device)
         self.history = TorchLocalLower(cfg['history_actor'], cfg['history_actor_sha256'], self.num_envs, self.device)
@@ -33,7 +33,8 @@ class Go2LocalEnv(VecEnv):
         self.initial = {key: torch.as_tensor(data[key], device=self.device, dtype=torch.float32)
                         for key in ('root_pose', 'root_velocity', 'eso', 'disturbance', 'gains', 'previous_reference', 'previous_command')}
         for key in ('joint_position', 'joint_velocity'):
-            self.initial[key] = torch.as_tensor(data[key][order], device=self.device, dtype=torch.float32)
+            self.initial[key] = torch.as_tensor(data[key][...,order], device=self.device, dtype=torch.float32)
+        self.initial_count = len(self.initial['root_pose']) if self.initial['root_pose'].ndim == 2 else 1
         self.properties = randomize_vehicle_properties(self.plant, cfg['randomization'])
         self.randomization = VehicleControlRandomization(self.plant, cfg['randomization'])
         self.episode_length_buf = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
@@ -62,25 +63,31 @@ class Go2LocalEnv(VecEnv):
         return self.privileged_obs_buf
 
     def reset_idx(self, ids):
-        self.plant.reset_idx(ids, state=self.initial)
+        state_ids = torch.randint(self.initial_count, (len(ids),), device=self.device)
+        initial = ({key: value[state_ids] for key, value in self.initial.items()}
+                   if self.initial['root_pose'].ndim == 2 else self.initial)
+        self.plant.reset_idx(ids, state=initial)
         self.controller.reset(ids)
         for key in ('eso', 'disturbance', 'gains'):
-            getattr(self.controller, key)[ids] = self.initial[key]
+            getattr(self.controller, key)[ids] = initial[key]
         self.history.reset(ids)
         self.randomization.reset(ids)
-        self.reference[ids] = self.initial['previous_reference']
+        self.reference[ids] = initial['previous_reference']
         self.previous_reference[ids] = self.reference[ids]
         self.target[ids] = self.reference[ids]
-        self.command[ids] = self.initial['previous_command']
+        self.command[ids] = initial['previous_command']
         self.previous_action[ids] = 0
         self.command_countdown[ids] = round(self.cfg['commands']['initial_hold_s']/self.dt)
         self.episode_length_buf[ids] = 0
         self.episode_return[ids] = 0
         if self.command_bank is not None:
-            draw=torch.randint(len(self.command_bank['rows']),(len(ids),),device=self.device)
-            self.schedule[ids]=self.command_bank['rows'][draw]
-            self.slew[ids]=self.command_bank['slew'][draw]
-            self.task_labels[ids]=self.command_bank['labels'][draw]
+            grouped = self.command_bank['rows'].ndim == 4
+            count = self.command_bank['rows'].shape[1 if grouped else 0]
+            draw = torch.randint(count, (len(ids),), device=self.device)
+            index = (state_ids, draw) if grouped else draw
+            self.schedule[ids] = self.command_bank['rows'][index]
+            self.slew[ids] = self.command_bank['slew'][index]
+            self.task_labels[ids] = self.command_bank['labels'][index]
 
     def reset(self):
         self.reset_idx(self.all_ids)
