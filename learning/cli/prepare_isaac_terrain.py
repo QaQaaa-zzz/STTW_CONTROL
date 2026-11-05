@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--height',type=float,default=.012);p.add_argument('--spacing',type=float,default=.05);a=p.parse_args()
-if not 0<a.height<=.03 or not .02<=a.spacing<=.1:raise ValueError('shallow terrain height/spacing out of declared range')
+if not 0<=a.height<=.03 or not .02<=a.spacing<=.1:raise ValueError('shallow terrain height/spacing out of declared range')
 a.output.mkdir(parents=True,exist_ok=False)
 # Two smooth longitudinal ridges around curve entry, tapered across Y. Grid
 # includes the whole declared five-second route; no overlapping ground plane.
