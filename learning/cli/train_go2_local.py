@@ -32,6 +32,7 @@ torch.set_num_threads(2)
 recipe = spring_jump_recipe(s['go2_checkout'])
 train = recipe['train']
 train['algorithm'].update(s.get('ppo_overrides', {}))
+train['policy'].update(s.get('policy_overrides', {}))
 train['runner'].update(max_iterations=s['updates'], save_interval=s['save_interval'], experiment_name='sttw_local')
 (a.output/'config.json').write_text(json.dumps(dict(task=s, upstream=recipe), indent=2))
 started = time.time()
@@ -70,6 +71,9 @@ env = Go2LocalEnv(s, a.output)
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties))
 (a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner = RecordedRunner(env, train, log_dir=str(a.output/'training'), device=s['device'])
+if s.get('zero_actor_output_init', False):
+    torch.nn.init.zeros_(runner.alg.actor_critic.actor[-1].weight)
+    torch.nn.init.zeros_(runner.alg.actor_critic.actor[-1].bias)
 # Observe the native PPO update boundary to score the model that actually
 # collected this rollout. Sampling, losses and optimizer remain upstream.
 upstream_update = runner.alg.update

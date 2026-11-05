@@ -112,7 +112,7 @@
   },
   "task_spec": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
   "command_bank": "runs/local300_command_bank_all",
-  "status": "prepared fixed-learning-rate rerun; previous adaptive run interrupted",
+  "status": "prepared residual-task adaptation with native Go2 PPO, prior adaptive run retained",
   "plant_options": {
     "wheel_collision": "sdf",
     "friction_offset_threshold": 0.0,
@@ -130,6 +130,14 @@
   },
   "ppo_overrides": {
     "learning_rate": 1e-05,
-    "schedule": "fixed"
-  }
+    "schedule": "fixed",
+    "gamma": 0.9974905699336811,
+    "lam": 0.9872585449014338
+  },
+  "policy_overrides": {
+    "init_noise_std": 0.15
+  },
+  "zero_actor_output_init": true,
+  "controller_clean_feedback": true,
+  "adaptation_note": "Original residual std .15 and zero-output initialization; clean ECBC feedback while policy retains Go2 observation noise/delay. Gamma/lambda map native Go2 physical decay from 20ms to 5ms. Original task/reward/commands unchanged; repair bundle, not single-factor ablation."
 }

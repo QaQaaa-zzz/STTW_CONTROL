@@ -1,3 +1,17 @@
+# Active: residual-task adaptation500
+
+
+
+## Residual-task adaptation run launched
+
+`runs/go2_local_adapted500`, PID649378, tool session57316: fresh4096×24×500 GPU budget. Native Go2 network512/256/128ELU retained because no width-causality evidence exists. Task-specific initialization restores std.15 and a zero actor output head; PPO learning rate fixed1e-5. Physical-time discount mapping uses gamma=.99**(.005/.02), lambda=.95**(.005/.02). Original Local300 command families/difficulty/reward, all8initial states,10s and original control/physical timing remain. This is a repair bundle, not a single-factor ablation.
+
+Source audit verified an additional wiring mismatch: native Go2 policy observations are delayed/noised while PD uses current dof state; old STTW augmentation also drove ECBC/ESO. New explicit controller_clean_feedback option supplies current plant measurements to ECBC and its steering-limit feedback while retaining prior policy noise/delay, command delay and physical randomization. This is a training-model assumption, not proof of deployable noiseless state feedback. Historical default remains false.
+
+Startup actual: first4updates complete, ~2.96s/update (~25min estimate). TensorBoard first13 logged updates keep actual LR1e-5 and std.14997–.15054; no claim of convergence.6006 HTTP200 and adaptive/adapted run groups loaded, browser opened when desktop available. Existing stage notifier bound toPID649378 with delayed check. Primary best waits for completed episodes, selected at Episode/reward peaks; short-block best separate. Expected output<.3GiB versus33GiB free at launch, preserving30GiB budget. No H75/terrain run yet.
+
+Earlier launch and stop records below are historical snapshots.
+
 # Current: reward selection corrected; no new lower candidate adopted
 
 Episode/reward mid-run peaks are valid completed-episode reward. Old model_best.pt was the initialization winner of short24-step blocks and is not a learned best. Four episode-reward-screened snapshots (completed276/201/301/latest451) now evaluated: survival7/2/7/5 of7, finaltracking0/7 each; full XY in runs/go2_local_original500_episode_candidates/RESULTS.md. No H75/terrain progression on these candidates. New primary selector now follows the TensorBoard completed-episode reward; short-block best diagnostic separate.

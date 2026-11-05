@@ -149,7 +149,7 @@ class Go2LocalEnv(VecEnv):
                 self.cfg['randomization']['push_velocity_range'])
             self.plant.refresh()
         action = torch.tanh(actions)
-        m = self.measurement
+        m = self.plant.observe()[0] if self.cfg.get('controller_clean_feedback', False) else self.measurement
         row = torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],self.reference[:,1]), -1)
         output = self.controller.step(row, torch.ones(self.num_envs, dtype=torch.bool, device=self.device))
         applied = action*torch.tensor([1.5,10.], device=self.device)
