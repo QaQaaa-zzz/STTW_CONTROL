@@ -61,6 +61,13 @@ for case in cases:
  axes[0,0].legend(fontsize=7);fig.suptitle(title+' | signed components; terminal penalties retained in response totals');fig.savefig(target/'components.png',dpi=150);plt.close(fig)
  (target/'metrics.json').write_text(json.dumps(entry,indent=2));report+=['',f'## {case["phase"]} alpha {case["alpha"]}',f'![XY]({target.relative_to(out)}/xy.png)',f'[Full responses]({target.relative_to(out)}/responses.png), [hold/release window]({target.relative_to(out)}/responses_short.png), [local effects vs restored control]({target.relative_to(out)}/local_effects.png), [reward components]({target.relative_to(out)}/components.png), [paired windows and contact phases]({target.relative_to(out)}/metrics.json).','','| Branch | Failed after fork | End s | Speed RMSE m/s | Path RMSE m | Hold ticks |','|---|---|---:|---:|---:|---:|']
  for row in entry['branches']:report.append(f"|{row['branch']}|{row['failed_after_fork']}|{row['observed_end_s']:.3f}|{row['postfork_speed_rmse_m_s']:.4f}|{row['postfork_path_rmse_m']:.4f}|{row['held_lower_ticks']}|")
+ report+=['','| Matched observation window | Natural vs restored max XY m | Speed hold vs restored m | Steer hold vs restored m | Both hold vs restored m |','|---|---:|---:|---:|---:|']
+ for window in ('hold','after_release_0p5','whole_common'):
+  values=[]
+  for lane in (0,2,3,4):
+   observed=entry['branches'][lane]['windows'].get(window);values.append(f"{observed['xy_difference_max_m']:.6f}" if observed else 'not observed')
+  report.append('|'+window+'|'+'|'.join(values)+'|')
+ report+=['','The natural–restored contrast includes reload and lane-level numerical effects; its sole cause is not identified. Whole-tail reload differences may exceed some intervention contrasts. Short-window physical effects and long-tail tracking metrics are reported separately; neither survival nor a small error difference establishes a better execution method.']
  if (target/'same_state_alpha'/'summary.json').exists():
   report+=['',f'[Five-alpha query at the same frozen input]({target.relative_to(out)}/same_state_alpha/summary.json), [targets and executed references]({target.relative_to(out)}/same_state_alpha/queries.csv). This is a forward query, not five new physics trajectories. Values below are one200Hz reference update from the same50Hz decision state.','','| Alpha | Speed target correction m/s | Steer target correction rad | Next speed reference m/s | Next steer reference rad |','|---|---:|---:|---:|---:|']
   with (target/'same_state_alpha'/'queries.csv').open() as stream:
