@@ -29,8 +29,9 @@ class RecordedRunner(module.OnPolicyRunner):
             with (a.output/'episode_rewards.jsonl').open('a') as f:f.write(json.dumps(row)+'\n')
             if score>self.best:
                 self.best=score;self.save(a.output/'training/model_best.pt',infos=row);(a.output/'best_model.json').write_text(json.dumps(dict(row,checkpoint='training/model_best.pt'),indent=2))
-env=Go2PathEnv(s,a.output);(a.output/'randomized_properties.json').write_text(json.dumps(env.rollout.randomization_properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata));runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=s['device']);(a.output/'training').mkdir(exist_ok=True);runner.save(a.output/'training/model_initial.pt',infos={'source':'original H75 u77 Actor/Critic/log_std weights; fresh optimizer'})
+env=Go2PathEnv(s,a.output);(a.output/'randomized_properties.json').write_text(json.dumps(env.rollout.randomization_properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata));runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=s['device']);(a.output/'training').mkdir(exist_ok=True)
 if a.resume_checkpoint:
     runner.load(str(a.resume_checkpoint),load_optimizer=True);runner.current_learning_iteration=a.completed_updates
+runner.save(a.output/'training/model_initial.pt',infos={'completed_updates':a.completed_updates,'source':str(a.resume_checkpoint) if a.resume_checkpoint else 'original H75 u77 Actor/Critic/log_std weights; fresh optimizer'})
 runner.learn(num_learning_iterations=s['updates']-a.completed_updates,init_at_random_ep_len=False)
 status.update(stage='training_complete',completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();env.plant.close();app.close()
