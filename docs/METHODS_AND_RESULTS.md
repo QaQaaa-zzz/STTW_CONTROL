@@ -1309,3 +1309,17 @@ The fourth common-state case(entry_projection,alpha.75) completed all5×10 s/250
 Restored post-fork speed/path RMSE=.07084 m/s/.10270 m; speed-held.06942/.10895, steering-held.07438/.09964 and both-held.07289/.09069. This case again shows coupled, condition-dependent effects rather than a universally preferred hold. In the0.5 s after release, natural/restored maximum XY difference is.001219 m; speed-held/steering-held/both-held contrasts are.004695/.029145/.030567 m relative to restored control. Over the whole common tail, natural/restored reaches.05679 m, exceeding all three intervention contrasts(.03452/.04679/.03531 m). Long-tail improvements cannot be attributed solely to the intervention.
 
 The fourth same-state five-alpha query changes only alpha and gives target spans.26715 m/s/.02670 rad;2/5 rate-active and steering never more-limited than speed. No candidate coordination is executed by this CPU query. Saved-data analysis now covers4/10 physical cases and4/5 entry alphas, with full/bend fixed-color overlays and all branch reward/error/contact evidence retained at runs/h75_common_state_channels/analysis/RESULTS.md. No extra physics, optimizer update or model adoption was introduced by this analysis.
+
+All five entry-projection alpha conditions are now collected:25 branches×10 s,1250000 allocated physics lane steps,0 failures/0 optimizer. The same collector has advanced to exit_projection/alpha0 within the original ten-case budget. Alpha1 forks at1.56 s, front raised1.5506–1.8594 s/rear1.7448–2.0106 s; three held branches each40 lower ticks. Reward replay error2.608e-8, first natural/restored observation difference0. At alpha1, restored speed/path RMSE=.06584 m/s/.13147 m; speed-held.06396/.12980, steering-held.06485/.10781 and both-held.06425/.10866. After-release0.5 s maximum XY contrasts are reload.001102 m, speed-held.004313 m, steering-held.040389 m and both-held.032204 m; whole-tail values.044231/.031014/.080885/.063591 m. These are descriptive effects in this condition, not evidence that freezing channels is generally superior.
+
+The untouched natural continuations show the following post-fork metrics. Their alpha-specific fork times1.56–1.60 s and physical/history states differ; this table describes closed-loop preference behavior, not a same-state alpha intervention. Each row has one initial-state condition, no independent seeds.
+
+| Alpha | Speed RMSE m/s | Path RMSE m |
+|---|---:|---:|
+|0|.12080|.05520|
+|.25|.10153|.04726|
+|.5|.08040|.08043|
+|.75|.07072|.11293|
+|1|.06599|.13305|
+
+Speed error falls as alpha rises in these entry observations; path error generally rises above alpha.25, but the lowest two alphas are not monotonic. Short speed/steering holds affect both outcomes with directions dependent on alpha; full-tail reload contrasts are material and retained. The distinct CPU alpha1 source-state query spans.26428 m/s/.02608 rad in mapped targets, with3/5 rate-active and no steering-more-limited query. Thus all five saved entry states confirm alpha-dependent targets, while none of these single-step queries demonstrates a steering-priority coordination opportunity. Full/bend five-color branch-grouped XY and all per-step/cumulative reward/contact/error panels are saved under runs/h75_common_state_channels/analysis; actual full and bend plots were inspected. Exit conditions, new-model evaluation and multi-terrain/speed coverage remain pending; no method or new policy adopted.
