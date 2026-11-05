@@ -14,7 +14,7 @@ from .torch_path_reward import costs,failure_reward
 class IsaacPathRollout:
     def __init__(self,bundle,settings,actor):
         bundle=Path(bundle);self.config=json.loads((bundle/'config.json').read_text());identity=json.loads((bundle/'identity.json').read_text());n=settings['num_envs'];self.n=n;self.device='cuda:0';self.horizon=round(settings['episode_s']/.02)
-        terrain_ids=[i%3 for i in range(n)];self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor([settings['alphas'][(i//3)%5] for i in range(n)],device=self.device)
+        terrain_count=len(settings['terrains']);terrain_ids=[i%terrain_count for i in range(n)];self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor([settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)],device=self.device);self.diagnostics=settings.get('diagnostics',False);self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
         self.plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids);self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0;self.reset()
@@ -30,9 +30,9 @@ class IsaacPathRollout:
 
     @torch.no_grad()
     def step(self,std):
-        valid=self.alive.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];first_action=None
+        valid=self.alive.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];first_action=None
         for lower_tick in range(4):
-            m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std)
+            m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std,zero_mask=self.zero_middle)
             if lower_tick==0:first_action=self.middle.latent.clone()
             action,_,finite=self.lower.prepare(m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
             signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,torch.full_like(valid,(self.tick*4+lower_tick)*.005>3.))
@@ -48,8 +48,16 @@ class IsaacPathRollout:
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
             reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
             logs.append(torch.cat((post_pose[:15,:2],post_v[:15,None],projection['cross_track'][:15,None],peak[:15,None],terms['reward'][:15,None],active_lower[:15,None],stop_tick[:15,None],governed[:15],post_m[:15,5:6]*.1),dim=-1));self.previous_reference=governed;self.previous_command=command
+            if self.diagnostics:
+                details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
+                    progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),
+                    target=self.middle.flags['target'].clone(),offsets=self.policy.offsets.clone(),filtered=self.policy.filtered.clone(),
+                    rate_clipped=self.middle.flags['rate_clipped'].clone(),alive=self.alive.clone(),
+                    contact_force=self.plant.contact.clone(),body_state=self.plant.rigid.clone(),
+                    reward_normal=terms['reward'].clone(),**{f'{group}_{key}':value.clone() for group in ('raw','effective') for key,value in terms[group].items()}))
         rate=(self.policy.offsets-initial_offsets)/.02;c=self.config['path_reward'];rate_cost=c['offset_rate_weight']*((rate/torch.tensor(c['offset_rate_scales'],device=self.device))**2).sum(-1);reward-=c['scale']*.02*rate_cost.clamp_max(c['component_caps']['offset_rate'])
         reward=torch.where(new_failure,failure_reward(torch.full_like(reward,self.horizon-self.tick),self.config),reward);reward=torch.where(valid,reward,0);self.tick+=1;horizon_done=self.tick==self.horizon;done=new_failure|torch.full_like(valid,horizon_done)
         result=dict(action=first_action,reward=reward,done=done,valid=valid,failure=new_failure,lower_trace=torch.stack(logs),episode=self.episode,episode_tick=self.tick)
+        if self.diagnostics:result['diagnostics']=details
         if horizon_done:self.episode+=1;self.reset()
         return result
