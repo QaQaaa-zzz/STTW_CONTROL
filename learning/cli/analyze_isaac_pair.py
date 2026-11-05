@@ -7,7 +7,10 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--bundle',type=Path,required=True);a=p.parse_args()
 reward_config=json.loads((a.bundle/'config.json').read_text());route=np.load(a.bundle/'route.npz');alphas=[0,.25,.5,.75,1];colors=plt.get_cmap('tab10').colors;all_rows=[]
-for terrain in ['slope','rough_slope']:
+manifest=json.loads((a.run/'manifest.json').read_text()) if (a.run/'manifest.json').exists() else {}
+terrains=list(dict.fromkeys(case['terrain'] for case in manifest['cases'])) if manifest else ['slope','rough_slope']
+identity_label=('reference '+str(manifest.get('reference_bundle','policy_000'))+' / candidate '+str(manifest.get('candidate_bundle','policy_002')))
+for terrain in terrains:
  folder=a.run/terrain;base=json.loads((folder/'baseline.json').read_text());fig,axes=plt.subplots(2,3,figsize=(17,9),layout='constrained');reference=route['s']<=12
  axes[0,0].plot(*route['xy'][reference].T,'k:',label='Original reference')
  for ai,alpha in enumerate(alphas):
@@ -45,7 +48,7 @@ for terrain in ['slope','rough_slope']:
   labels=['XY [m]','Reward / policy step','Cumulative reward','Speed [m/s]; dotted wheel estimate','Signed cross-track [m]','Heading error [rad]','Peak roll magnitude [rad]','Lower-step reward terms (failure penalty separate)','Cumulative terms (failure penalty separate)']
   for ax,title in zip(axs.flat,labels):ax.set_title(title,fontsize=9);ax.grid(alpha=.2)
   axs[0,0].set_aspect('equal',adjustable='datalim');axs[0,0].legend(fontsize=6);axs[1,0].axhline(base['drive_speed'],color='grey',linestyle='--');axs[2,1].legend(fontsize=5,ncol=2)
-  detail.suptitle(terrain+' | alpha='+str(alpha)+' | parent policy_000 / final policy_002 / frozen lower\nSeed 20261105; 5s DEV; terrain begins at world X=2m; actual endpoints; no imposed force pulse')
+  detail.suptitle(terrain+' | alpha='+str(alpha)+' | reference / candidate / frozen lower\nSeed 20261105; 5s DEV; terrain begins at world X=2m; actual endpoints; no imposed force pulse')
   detail.savefig(folder/('detail_a'+str(alpha)+'.png'),dpi=140);plt.close(detail)
  axes[0,0].set_aspect('equal',adjustable='datalim');axes[0,0].legend(fontsize=6,ncol=2);axes[1,0].axhline(base['drive_speed'],color='grey',linestyle=':')
  for ax,label in zip(axes.flat,['Actual/reference XY [m]','Reward / policy step (50Hz)','Cumulative reward','True forward speed [m/s]','Signed cross-track [m]','Peak roll magnitude [rad]']):ax.set_title(label);ax.grid(alpha=.2)
@@ -54,12 +57,12 @@ for terrain in ['slope','rough_slope']:
  fig.suptitle(terrain+' | parent dashed / final solid | five alphas | seed 20261105\nFrozen lower black; alpha-rescored baseline rewards in detailed panels; terrain starts at world X=2m; endpoints x')
  fig.savefig(folder/'comparison.png',dpi=150);plt.close(fig)
 (a.run/'metrics.json').write_text(json.dumps(all_rows,indent=2))
-lines=['# Isaac H75 terrain paired DEV','', 'Parent policy_000 vs final policy_002; zero middle + LOCAL300 + ECBC/ESO baseline. Single initial state, deterministic means, 5s. Budget end is not task success. No independent TEST claim.','']
-for terrain in ['slope','rough_slope']:
+lines=['# Isaac H75 terrain paired DEV','',identity_label,'', 'Reference vs candidate; actual identities below. Zero middle + LOCAL300 + ECBC/ESO baseline. Single initial state, deterministic means, 5s. Budget end is not task success. No independent TEST claim.','']
+for terrain in terrains:
  lines+=['## '+terrain,'','![XY and rewards]('+terrain+'/comparison.png)', '', '| alpha | parent stop | final stop | parent/final cross RMSE m | parent/final speed RMSE m/s | common seconds |','|---|---|---|---|---|---|']
  for alpha in alphas:
   old=next(r for r in all_rows if r['terrain']==terrain and r['alpha']==alpha and r['method']=='parent');new=next(r for r in all_rows if r['terrain']==terrain and r['alpha']==alpha and r['method']=='final')
   lines.append('|%s|%s|%s|%.4f / %.4f|%.4f / %.4f|%.3f|'%(alpha,old['termination'],new['termination'],old['cross_rmse_common'],new['cross_rmse_common'],old['speed_rmse_common'],new['speed_rmse_common'],old['common_parent_final_seconds']))
  lines+=['']+['[alpha %s detailed paired rewards/errors](%s/detail_a%s.png)'%(alpha,terrain,alpha) for alpha in alphas]+['']
 (a.run/'RESULTS.md').write_text('\n'.join(lines)+'\n')
-print(json.dumps(dict(cells=len(all_rows),physical_episodes=22)))
+print(json.dumps(dict(cells=len(all_rows),physical_episodes=len(terrains)*11,new_episodes=manifest.get('new_episodes',22))))
