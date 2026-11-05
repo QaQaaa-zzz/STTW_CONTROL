@@ -1,4 +1,11 @@
 
+## Go2 randomization requirement and first 4 cm terrain DEV
+
+All subsequent lower/middle/student training must reuse the Go2 randomization contract and applicable training processing, recorded in AGENTS.md. Current lower implementation includes friction/mass/inertia/COM, gains/offset, physical-time action/motor/IMU delays, observation noise and periodic pushes. The older middle terrain training path has not yet connected the shared randomization; it must be updated before any new formal training. No new training launched here.
+
+Saved results: runs/h75_selected_local300_bend/RESULTS.md. Original H75 and selected orange Local300 unchanged; same initial state, topology-matched flat mesh vs 4 cm oblique bump, six lanes each, 600000 total allocated physics steps, zero optimizer. All five H75 alpha levels reach full10s; bump Zero fails at6.72s. H75 bump path RMSE alpha0→1 .052→.119m and speed RMSE .127→.063m/s; no independent generalization claim. Figures overlay five fixed alpha colors per model with Zero, original path, bend detail and true endpoints. Goal/hold terrain qualification remains separate from survival. Contact timing currently only support/net-force proxies; exact contact-stage mechanism remains unverified. Same-state alpha queries retained for flat and bump. Next contact-stage/switching work, then any necessary training with shared Go2 DR enabled.
+
+
 ## Original H75 on the user-selected orange Local300 — matched flat DEV
 
 Completed `runs/h75_selected_local300_flat`: unchanged H75 u77 plus original Local300, alpha=0/.25/.5/.75/1 and Zero, same full warm initial state, fixed left90_R2 route and user speed2.3m/s, 10s, friction0.8 on both engines. Native MuJoCo188.94s and Lab106.95s; total600000 allocated physics lane steps, zero optimizer updates. All five H75 conditions in both engines cross the goal section and meet the original final1s speed/path/heading hold and working-roll checks. This is one route/initial state, not a full standard panel or offroad qualification. Zero survives both, but MuJoCo fails final hold and Lab exceeds working-roll0.302rad (peak0.3178rad).
