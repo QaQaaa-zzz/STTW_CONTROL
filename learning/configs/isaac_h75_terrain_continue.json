@@ -1,0 +1,22 @@
+{
+  "updates": 32,
+  "seed": 20261106,
+  "resume_training": "runs/isaac_h75_terrain_training",
+  "terrains": {
+    "flat": "runs/isaac_flat_mesh_010",
+    "slope": "runs/isaac_training_terrain/slope",
+    "rough_slope": "runs/isaac_training_terrain/rough_slope"
+  },
+  "alphas": [0, 0.25, 0.5, 0.75, 1],
+  "episode_s": 5,
+  "lr": 0.00001,
+  "epochs": 5,
+  "minibatches": 4,
+  "clip": 0.2,
+  "entropy": 0.01,
+  "gamma": 0.997,
+  "lam": 0.95,
+  "max_grad_norm": 1,
+  "hard_kl": 0.02,
+  "std_bounds": [0.05, 0.5]
+}

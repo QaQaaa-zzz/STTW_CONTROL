@@ -1149,3 +1149,5 @@ Source paths: learning/configs/lower_local_tracking_no_alpha_v2.json; lower_comm
 
 ## 2026-11-05 Isaac坡地补训工程阶段
 官方slope/rough_slope已接入平地入口与连续出口；H75完成2次有界PPO更新，权重真实变化，五档alpha共10回合。证据`runs/isaac_h75_terrain_training`，验证见docs/VALIDATION.md；最终模型未评估，下一步同场景新旧策略与冻结底层配对。当前唯一事实仍以research-hub/STTW_PROJECT_STATE.md为准。
+
+32轮扩大续训已启动：承接两轮工程阶段，三地形×五alpha每轮混合，原奖励不变。输出runs/isaac_h75_terrain_continue32，TensorBoard6018；不因两轮阴性结果否定训练方向，阶段末再固定配对评估。

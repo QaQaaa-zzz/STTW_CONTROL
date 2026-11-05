@@ -2599,3 +2599,7 @@ Supplementary evidence: `docs/paper/SUPPLEMENT.tex` and `SUPPLEMENT.pdf` are reg
 `runs/isaac_h75_terrain_training` 完成2次接受的PPO更新、10个随机采样回合、246470 physics steps / 2465 policy transitions，64秒左右墙钟。原H75权重初始化、LOCAL300+ECBC/ESO冻结，5s有限时域，五档alpha齐全；坡地和崎岖坡地各一批，不能把两批奖励差当配对提升。两次完整采样集KL为0.004987/0.004736；验证Actor全部数组finite且确有变化、10回合奖励与逐lower计分总和一致、每回合obs/action/reward长度一致。源奖励按原path_command_env costs/offset-rate/failure数学重建于GAE前，保留PhysX工程停止条件差异。语法检查、diffcheck通过。
 
 `sampling_000.png`、`sampling_001.png`覆盖实际XY/原参考、每步/累计奖励；`training_diagnostics.png`和TB包含loss/KL/训练失败。第一批alpha.75发生nonwheel_ground_contact，第二批全部至5s；不是任务合格证据。末次policy_002尚未配对评估，不能称学会陡坡/改善恢复。TB6017 HTTP和loss/KL/reward标量已实际核验，未干扰Model A6006。顺序CPU PhysX采样+CUDA优化仅工程入口，未复用不兼容的MJX vmap；正式吞吐/多种子泛化/空间回归输入奖励与偏好切换尚未完成。
+
+## 两轮候选配对与扩大续训（2026-11-05）
+配对输出`runs/isaac_h75_terrain_paired`，22物理回合、513764physics，原H75两地形10/10到5s，2轮候选8/10；平坡alpha.5/.75新增非轮触地，崎岖坡五档共同窗口cross RMSE均减小。完整XY/奖励/分项/速度/误差及30评分单元由`analyze_isaac_pair.py`保存，baseline每地形只执行1次，跨alpha重评分。共同窗口仅包括双方都完成的lower步，部分物理步终止绘图使用实际时刻。不能把两轮退化当补训方向无效。
+用户明确要求扩大续训，现启动32轮三域混合阶段，`learning/configs/isaac_h75_terrain_continue.json`，每轮平地/坡地/起伏坡地×五alpha=15回合，最大480回合、12000000physics/120000policy。保留上一阶段Actor/Critic/Adam，Actor逐数组初始化exact核验，旧未存RNG故新seed明确登记。原奖励与物理/时序不变；不因少量负结果提前停止学习。实际运行以`runs/isaac_h75_terrain_continue32/status.json`为准，TB6018已HTTP核验，不声称32轮已经完成。

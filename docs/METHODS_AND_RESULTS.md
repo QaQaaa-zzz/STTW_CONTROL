@@ -1002,3 +1002,5 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 
 ## Isaac官方地形补训：H75工程阶段（2026-11-05）
 目的：让旧平地H75首次使用真实坡面接触轨迹进行PPO更新。实现`train_isaac_path.py`、官方tile适配`place_isaac_terrain.py`、原奖励重建`reconstruct_isaac_reward.py`；保持351维alpha调制Actor、底层及5000/200/50Hz。参考Go2的lr1e-5/5epoch/4minibatch/clip.2/entropy.01与512/256/128 ELU新critic，保留H75 gamma.997。10回合/2更新是工程预算；不是正式收敛训练。完整配置、源代码快照、逐步物理、奖励、模型在`runs/isaac_h75_terrain_training`。2更新被接受，KL<.005；第一次坡地alpha.75发生触地失败，原始证据保留。两批地形和随机动作均变化，不把第二批失败减少称训练收益。下一步必须新旧模型同条件配对比较，之后才按证据扩大补训。尚未进入连续越野后续章节。
+
+32轮扩大续训决定：2轮只是工程阶段，平坡新增失败不能据此否定补训。用户要求扩大训练，采用每批同时混合flat/slope/rough_slope与五alpha，承接权重/critic/Adam、原奖励不改，32轮有界预算。第一阶段配对证据完整保留在isaac_h75_terrain_paired；新阶段isaac_h75_terrain_continue32运行中，不将采样reward或首轮波动当最终能力。空间回归与偏好切换仍待后续STTW实现。
