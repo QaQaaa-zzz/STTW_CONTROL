@@ -1004,3 +1004,7 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 目的：让旧平地H75首次使用真实坡面接触轨迹进行PPO更新。实现`train_isaac_path.py`、官方tile适配`place_isaac_terrain.py`、原奖励重建`reconstruct_isaac_reward.py`；保持351维alpha调制Actor、底层及5000/200/50Hz。参考Go2的lr1e-5/5epoch/4minibatch/clip.2/entropy.01与512/256/128 ELU新critic，保留H75 gamma.997。10回合/2更新是工程预算；不是正式收敛训练。完整配置、源代码快照、逐步物理、奖励、模型在`runs/isaac_h75_terrain_training`。2更新被接受，KL<.005；第一次坡地alpha.75发生触地失败，原始证据保留。两批地形和随机动作均变化，不把第二批失败减少称训练收益。下一步必须新旧模型同条件配对比较，之后才按证据扩大补训。尚未进入连续越野后续章节。
 
 32轮扩大续训决定：2轮只是工程阶段，平坡新增失败不能据此否定补训。用户要求扩大训练，采用每批同时混合flat/slope/rough_slope与五alpha，承接权重/critic/Adam、原奖励不改，32轮有界预算。第一阶段配对证据完整保留在isaac_h75_terrain_paired；新阶段isaac_h75_terrain_continue32运行中，不将采样reward或首轮波动当最终能力。空间回归与偏好切换仍待后续STTW实现。
+
+## 新版共同状态alpha查询（2026-11-05）
+目的：区分完整轨迹分化与同一输入状态下alpha造成的直接目标差异。`query_isaac_alpha.py`读取已保存50Hz决策边界的351维观测（包含相同历史）、原名义参考、执行修正和低通状态，只改alpha，分别运行五档原H75，并计算原独立限速/共同gamma/转向优先候选的单步增量。无新增物理、无训练；候选增量在最终参考限幅之前，不能称已执行或闭环改善。原坡地parent_a0.5的250状态×5alpha共1250查询，132次限速激活，0次eta_delta<eta_v；不同alpha目标有变化，但本批转向优先与原独立执行的增量相同。这是长坡单轨迹DEV机制负证据，不推广至新版弯内短横坡/凸起或全部运行状态。原始query CSV、每个共同观测与filter状态、policy/config身份、summary保存`runs/isaac_same_state_alpha_full`。
+新版三项STTW研究以用户新附件为准；保留原奖励chi仅奖励权重、修正量限速不等于实际速度限制/底层平衡转向缩放。下一新版场景上的共同状态短干预与切换需真实闭环证据，不能因代数设计而预先宣称收益。

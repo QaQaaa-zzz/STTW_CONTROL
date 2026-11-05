@@ -2612,3 +2612,7 @@ Supplementary evidence: `docs/paper/SUPPLEMENT.tex` and `SUPPLEMENT.pdf` are reg
 旧CPU续训每批采样约95s、CUDA优化.035~.123s，瓶颈明确在采样；只引用Go2网络/PPO参数不足以复现GPU吞吐。按用户指令中止旧CPU run，保留5个接受更新、checkpoint/部分第6轮样本，status interrupted_for_gpu_migration。不是32轮完成。
 GPU PhysX单例实际日志显示cuda:0，20275physics/roll停止/finite，仍CPU tensor管线。随后新增`IsaacVectorPlant`常驻GPU PhysX+GPU tensor管线，15环境×100步共1500physics短验证成功，root/DOF/rigid/contact必须is_cuda，finite，三种tile各5个独立collision group车辆；初始化.388s，裸物理100批步.105s，尚无完整闭环/训练吞吐结论。共享tile使用world平移50m后policy pose一次扣回，原mesh/URDF/质量/执行器/5000Hz保持。GPU net contact force不同于CPU individual contact记录，不宣称终止域精确等价；后续闭环须检查。
 `torch_path_reward.py`保留原v3全部raw/effective与失败罚；100输入覆盖五alpha，另250剩余时域，CUDA对原JAX通过rtol2e-5/atol2e-4，失败罚最大绝对误差.000732（相对容差内），未调奖励系数；runs/isaac_gpu_reward_parity保存输入/双方对照验证。接下来将常驻批量闭环与GPU reward接PPO，再启动至少150轮；当前150轮未启动，不能把GPU探针称已训练。
+
+## GPU150实际启动与新版任务（2026-11-05）
+`runs/isaac_h75_gpu150`真实4096 GPU环境、GPU Pipeline enabled，常驻GPU控制/奖励/GAE/PPO，150轮预算；首更新98281有效策略转移、采样7.598s、优化.130s（旧CPU每轮最多3750有效转移、约95s采样，不是相同批量的严格速度消融）。PID2296285/session54782，TB6019 HTTP已加载reward/loss/KL/有效更新与耗时。H75 Actor仍128/128/64，未采用宽网；Go2 PPO参数按config采用，STTW物理控制时序及原奖励保持。同步5s reset，失败lane排除而非记零样本；每次24步rollout跨真实episode状态，非终止末端bootstrap。完整合同比例和差异见run contract.json。训练仍运行，不称150轮完成或任务达标。
+新版机制工作读取冻结坡地轨迹，无物理重复；五alpha×250共同观测查询记录见METHODS_AND_RESULTS。网络输入历史和滤波状态相同，仅alpha改变；不是更换完整物理闭环alpha的实验。当前长坡不等于新版弯内短地形，后者还需接入。

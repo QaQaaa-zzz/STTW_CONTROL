@@ -171,3 +171,10 @@ Research coordination rules: /home/qy/STTW_CONTROL/research-hub/AGENTS.md; autho
 
 ## 冻结中层版本入口（2026-10-24）
 用户已要求保留双网络、蒸馏单网络与后续改进的代码/模型/真实迭代路径。读取 docs/FROZEN_MIDDLE_NETWORKS.md 与 learning/configs/frozen_middle_registry.json；持久冻结包位于 /home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1。既有别名不重指向，不修改/覆盖冻结副本或原权重；新迭代使用新模型ID/运行目录。H75是主要固定对照，恢复教学是u325的另一个分支，不冒称H75后继或普遍抗扰提升。
+
+## 明确参数修改直接执行（2026-11-05，用户要求）
+- 用户已明确指定的环境数、训练轮数和训练超参数，直接修改并继续运行；不得自行增加小规模试跑、重复校验或额外审批作为前置条件。
+- 不为简单参数修改新增防御性编程、重复参数检查、重试或并发管理机制；出现实际运行错误时再定位修复。
+- 区分超参数与网络结构：对齐Go2超参数不授权改变既有网络规模；STTW Actor及alpha调制保持原样，除非用户另行明确要求。
+- 当前训练采用GPU物理和GPU张量采样，目标4096环境、每轮24步、至少150轮，PPO超参数参考Go2；保留STTW物理与控制频率。
+- 保留必要的真实运行记录、checkpoint、失败证据和研究台账；不把参数准备或探针验证称作训练完成。

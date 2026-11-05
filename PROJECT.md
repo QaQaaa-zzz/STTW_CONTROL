@@ -1151,3 +1151,7 @@ Source paths: learning/configs/lower_local_tracking_no_alpha_v2.json; lower_comm
 官方slope/rough_slope已接入平地入口与连续出口；H75完成2次有界PPO更新，权重真实变化，五档alpha共10回合。证据`runs/isaac_h75_terrain_training`，验证见docs/VALIDATION.md；最终模型未评估，下一步同场景新旧策略与冻结底层配对。当前唯一事实仍以research-hub/STTW_PROJECT_STATE.md为准。
 
 32轮扩大续训已启动：承接两轮工程阶段，三地形×五alpha每轮混合，原奖励不变。输出runs/isaac_h75_terrain_continue32，TensorBoard6018；不因两轮阴性结果否定训练方向，阶段末再固定配对评估。
+
+## 新版规划主线（2026-11-05）
+以用户新附件491cddf6-4b37-40f8-99ff-2e375d2c32c8/pasted-text-1.txt为当前规划来源。STTW依次完成：真实非平坦地形上的双通道偏好、接触阶段对齐与共同状态通道干预、弯内给定alpha切换及转向优先执行。五档alpha保持；独立执行为主基线，双向共同gamma为机制对照，转向优先候选保留原转向修正进度，仅必要时放慢速度修正。原低通顺序、非对称修正量限速与最终参考边界不变，不预断候选优于Zero或独立执行。旧剩余回归距离输入/奖励不再作为本阶段必先实现项。
+当前4096环境GPU物理+GPU张量PPO150轮已运行，网络规模不变；下一在新版弯内短横坡/斜向凸起场景保留接触阶段、目标/滤波/实际修正和限速激活，再固定偏好/共同状态查询/短干预/切换配对。后续章节C6/S36/S36-R及RB交叉执行仍等待STTW工作完成。
