@@ -26,6 +26,7 @@ class TorchPathPolicy:
         self.config = config
         self.filtered = torch.zeros(count,2,device=device)
         self.offsets = torch.zeros_like(self.filtered)
+        self.execution_mode = torch.zeros(count,device=device,dtype=torch.long)
         c=config['residual_interface'];dt=config['timing']['lower_dt_s']
         self.decay=torch.exp(-dt*torch.ones(2,device=device)/torch.tensor(c['filter_tau_s'],device=device))
         self.increment_low=dt*torch.tensor([-c['correction_speed_down_m_s2'],-c['correction_steer_rate_rad_s']],device=device)
@@ -46,7 +47,15 @@ class TorchPathPolicy:
         c=self.config['residual_interface'];a=torch.tanh(z)
         target=torch.stack((a[:,0]*torch.where(a[:,0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),a[:,1]*c['steer_scale_rad']),dim=-1)
         f=self.decay*self.filtered+(1-self.decay)*target
-        increment=torch.maximum(self.increment_low,torch.minimum(self.increment_high,f-self.offsets))
+        delta=f-self.offsets
+        increment=torch.maximum(self.increment_low,torch.minimum(self.increment_high,delta))
+        budget=torch.where(delta>=0,self.increment_high,-self.increment_low)
+        eta=torch.where(delta.abs()>0,(budget/delta.abs()).clamp_max(1),torch.ones_like(delta))
+        common=eta.min(-1).values
+        joint=common[:,None]*delta
+        steer_priority=torch.stack((joint[:,0],increment[:,1]),dim=-1)
+        increment=torch.where((self.execution_mode==1)[:,None],joint,increment)
+        increment=torch.where((self.execution_mode==2)[:,None],steer_priority,increment)
         rate_clipped=(increment!=f-self.offsets).any(-1)
         before=nominal+self.offsets+increment
         governed=torch.maximum(self.low,torch.minimum(self.high,before))
@@ -55,7 +64,7 @@ class TorchPathPolicy:
         self.filtered=torch.where(clipped,self.offsets,f)
         return governed,dict(reference_clipped=clipped.any(-1),reference_clip_channels=clipped,
             rate_clipped=rate_clipped,
-            policy_fault=~torch.isfinite(z).all(-1),target=target)
+            policy_fault=~torch.isfinite(z).all(-1),target=target,channel_progress=eta)
 
 
 def path_latent(weights,obs):

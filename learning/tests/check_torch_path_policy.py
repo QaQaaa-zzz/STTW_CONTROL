@@ -17,5 +17,5 @@ for t in range(m['ticks']):
         errors[key]=max(errors[key],float(np.max(np.abs(value-expected))))
     actual=np.stack([flags[k].cpu().numpy() for k in ('reference_clipped','rate_clipped','policy_fault')],axis=-1)
     np.testing.assert_array_equal(actual,d['flags'][t])
-report=dict(device=a.device,max_abs_error=errors,flag_equality=True,ticks=m['ticks'],lanes=m['lanes'],alphas=m['alphas'],physics_steps=0,optimizer_updates=0)
+report=dict(device=a.device,max_abs_error=errors,flag_equality=True,ticks=m['ticks'],lanes=m['lanes'],alphas=sorted(np.unique(d['observation'][...,336]).tolist()),physics_steps=0,optimizer_updates=0)
 (a.fixture/('torch_'+a.device.replace(':','_')+'.json')).write_text(json.dumps(report,indent=2));print(report)

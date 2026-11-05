@@ -1,4 +1,11 @@
 
+## Spatial alpha switch on the 4 cm bend bump
+
+Original H75/selected Local300 frozen. Six10s nominal lanes compare0→1/1→0 with independent/common/steer-priority execution after s≥5.3m;0.0002s official mean wheel contact points/force matrices captured. All switches occur after rear raised-contact clearance and before turn end.0→1 meets original goal/hold/work checks in3/3;1→0 crosses goal but all3 fail final hold with persistent path oscillation. No optimizer updates.
+
+Steer-priority has zero post-switch activation opportunities (speed dominates limiting); no candidate adopted as an improvement. Recorded prefixes differ by up to~8–9mm/rad component values, so small mode differences cannot establish causality. Frozen original H75 declares constant alpha per episode; history/state distribution shift under switching is a supported hypothesis, not a proven sole cause. Next same-state channel intervention and faithful original-task switch curriculum with shared Go2 DR. Full XY/reward/contact evidence: runs/h75_bend_switch_execution/analysis/RESULTS.md.
+
+
 ## H75 shares Go2 domain randomization
 
 IsaacPathRollout now connects the same IsaacLab randomize_vehicle_properties/VehicleControlRandomization and push event as Go2LocalEnv. Training defaults to the shared Go2 DR settings and selected repaired contact options; nominal evaluations remain unchanged by default. One declared6-lane5s engineering run completed150000physics/0optimizer, actual randomized material/mass/COM/25–75physical-tick delays saved, six push events at4s and finite observations. ECBC/reward/termination use clean state; policy history uses augmented measurements. No new PPO training or DR robustness claim. Evidence: runs/h75_go2_dr_integration/RESULTS.md.
