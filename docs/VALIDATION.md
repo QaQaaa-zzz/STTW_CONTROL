@@ -1,3 +1,9 @@
+## 2026-11-04 Five-alpha coverage correction
+
+User reaffirmed the five declared alpha levels: **0, 0.25, 0.5, 0.75, 1**. All subsequent offroad comparisons, per-condition reporting and same-scenario overlays must cover these five levels with the matching baseline. Previous three-level engineering probes remain partial coverage, not the complete requested evaluation. Frozen H75 configuration already lists all five; no model change is needed.
+
+The H75 parity fixture now derives its lanes directly from the frozen configuration's `network.alphas` and records the actual levels in evidence. `runs/h75_torch_five_alpha_parity` covers 80 ticks × five lanes. CPU and CUDA checks pass, including exact clipping/rate/fault flag equality. Maximum latent error is 1.312e-6, governed-reference/offset error 5.961e-8 and filter-state error 2.385e-7. No physics or optimization was run. Original three-lane evidence remains intact. Full five-alpha terrain evaluation is still pending.
+
 ## 2026-11-04 H75 Torch inference and correction parity
 
 The frozen registry node `STTW_MIDDLE_FULLTAIL_PPO75_U77` uses alpha-modulated 351→128→128→64→2 inference, with learned gains/shifts on the second and third hidden layers, and outputs unbounded latents. It is not the LOCAL300 tanh Actor or a plain MLP. Source actor SHA256 is `d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df`; resolved configuration SHA256 is `92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364`. Both identities were checked against the frozen registry before conversion. The portable exporter now retains modulation arrays as well as Dense weights, with exact array readback checks; independent fixture and CLI exports agree exactly.
