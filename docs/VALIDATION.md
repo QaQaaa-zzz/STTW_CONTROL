@@ -1,3 +1,11 @@
+## 2026-11-04 Fixed-route Torch geometry and pursuit parity
+
+`torch_path_reference.py` implements immutable route interpolation, bounded local projection with the original tie tolerance, nondecreasing progress, left-positive cross-track error, actual-chord Pure Pursuit and 200 Hz nominal-reference slew. It uses fixed exported route arrays; no route reanchoring or policy-adjusted task reference is introduced. Per-lane vehicle states/progress are batched while route geometry is shared. Route validation rejects nonfinite, unordered or zero-length geometry once at construction.
+
+The original `geometric_path.build_path/project/at` and `path_reference.pursuit/publish` generate independent fixtures for straight, left90_R2 and right90_R2 (the legacy names retain the frozen configuration's actual 1.8 m radius). Each has 256 states distributed along the full path, including later tail/end regions, nonzero world anchor/yaw, lateral errors, heading errors up to 1.7 rad, and speeds from -0.2 to 4 m/s. CPU and CUDA float32 checks pass against JAX: progress agrees exactly, unclamped projection differs by at most 9.537e-7 m, cross-track by 2.981e-8 m, pursuit steering by 8.941e-8 rad, and published rate by 8.941e-6 in its physical units. Invalid/numerical-fault flags agree exactly. Test tolerance is atol/rtol 2e-5. Evidence: `runs/path_reference_torch_parity`, including actual fixed-route arrays and oracle states/results; no physics or optimization executed.
+
+This covers the reference geometry component only. Full H75 history/context and scheduling integration, five-alpha closed-loop offroad comparison and the planning document's subsequent STTW stages remain incomplete. The next integration must sample middle history at 50 Hz, update its reference correction at 200 Hz and retain the 5000 Hz physical integration contract.
+
 ## 2026-11-04 Five-alpha coverage correction
 
 User reaffirmed the five declared alpha levels: **0, 0.25, 0.5, 0.75, 1**. All subsequent offroad comparisons, per-condition reporting and same-scenario overlays must cover these five levels with the matching baseline. Previous three-level engineering probes remain partial coverage, not the complete requested evaluation. Frozen H75 configuration already lists all five; no model change is needed.
