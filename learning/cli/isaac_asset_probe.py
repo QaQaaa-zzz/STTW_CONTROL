@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--policy-std', nargs=2, type=float)
     parser.add_argument('--seed', type=int, default=20261105)
     parser.add_argument('--source-inertia', action='store_true')
+    parser.add_argument('--gpu-physics', action='store_true')
     args = parser.parse_args()
     if not 0 <= args.steps <= (25000 if args.controller_config else 1000) or not 0 < args.drive_speed <= 3.5:
         parser.error('passive <=1000 / controlled <=25000 physics steps; speed in (0,3.5]')
@@ -53,7 +54,7 @@ def main():
     params.substeps = 1
     params.up_axis = gymapi.UP_AXIS_Z
     params.gravity = gymapi.Vec3(0, 0, -9.81)
-    params.physx.use_gpu = False
+    params.physx.use_gpu = args.gpu_physics
     if args.contact_offset is not None:
         params.physx.contact_offset = args.contact_offset
         params.physx.rest_offset = args.rest_offset
@@ -79,6 +80,8 @@ def main():
                   physics_steps=0, optimizer_updates=0,
                   scope='Import diagnostics only; not collision or closed-loop validation')
     result['physx_config'] = {key:getattr(params.physx,key) for key in ('solver_type','num_position_iterations','num_velocity_iterations','contact_offset','rest_offset','bounce_threshold_velocity','max_depenetration_velocity')}
+    result['physics_device'] = 'cuda:0' if params.physx.use_gpu else 'cpu'
+    result['tensor_pipeline'] = 'gpu' if params.use_gpu_pipeline else 'cpu'
     if args.ground == 'plane':
         plane = gymapi.PlaneParams()
         plane.normal = gymapi.Vec3(0, 0, 1)
