@@ -27,11 +27,18 @@ def randomize_vehicle_properties(plant, config):
     term(env, ids, **material)
     # One proportional density variation per body; nominal source assets remain
     # immutable. Lab scales inertia together with mass from default properties.
-    mass = dict(asset_cfg=bodies, mass_distribution_params=tuple(config['mass_scale']),
+    links = SceneEntityCfg('robot', body_ids=[i for i in range(len(plant.bodies)) if i not in base.body_ids]) if 'base_mass_add_kg' in config else bodies
+    mass = dict(asset_cfg=links, mass_distribution_params=tuple(config['mass_scale']),
                 operation='scale', recompute_inertia=True)
     term = events.randomize_rigid_body_mass(
         EventTermCfg(func=events.randomize_rigid_body_mass, mode='startup', params=mass), env)
     term(env, ids, **mass)
+    if 'base_mass_add_kg' in config:
+        mass = dict(asset_cfg=base, mass_distribution_params=tuple(config['base_mass_add_kg']),
+                    operation='add', recompute_inertia=True)
+        term = events.randomize_rigid_body_mass(
+            EventTermCfg(func=events.randomize_rigid_body_mass, mode='startup', params=mass), env)
+        term(env, ids, **mass)
     events.randomize_rigid_body_com(env, ids,
         com_range={axis: tuple(config['base_com_m']) for axis in ('x', 'y', 'z')},
         asset_cfg=base)

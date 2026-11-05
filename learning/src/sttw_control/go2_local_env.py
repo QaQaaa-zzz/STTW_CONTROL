@@ -1,5 +1,6 @@
 """STTW lower task implementing the native Go2 RSL-RL VecEnv interface."""
 import json
+import math
 from pathlib import Path
 import numpy as np
 import torch
@@ -17,7 +18,9 @@ class Go2LocalEnv(VecEnv):
         self.cfg = cfg
         self.device = cfg['device']
         self.num_envs = cfg['num_envs']
-        self.num_obs = self.num_privileged_obs = 210
+        self.num_obs = 210
+        self.task_spec = json.loads(Path(cfg['task_spec']).read_text()) if cfg.get('task_spec') else None
+        self.num_privileged_obs = 211 if self.task_spec else 210
         self.num_actions = 2
         self.dt = cfg['control_dt']
         self.max_episode_length = round(cfg['episode_s']/self.dt)
@@ -43,6 +46,13 @@ class Go2LocalEnv(VecEnv):
         self.episode_return = torch.zeros(self.num_envs, device=self.device)
         self.all_ids = torch.arange(self.num_envs, device=self.device)
         self.total_steps = 0
+        self.command_bank = None
+        if cfg.get('command_bank'):
+            bank=np.load(Path(cfg['command_bank'])/'commands.npz')
+            self.command_bank={key:torch.as_tensor(bank[key],device=self.device,dtype=torch.float32) for key in ('rows','slew','labels')}
+            self.schedule=torch.zeros(self.num_envs,16,3,device=self.device)
+            self.slew=torch.zeros(self.num_envs,2,device=self.device)
+            self.task_labels=torch.zeros(self.num_envs,7,device=self.device)
         self.reset()
 
     def get_observations(self):
@@ -66,6 +76,11 @@ class Go2LocalEnv(VecEnv):
         self.command_countdown[ids] = round(self.cfg['commands']['initial_hold_s']/self.dt)
         self.episode_length_buf[ids] = 0
         self.episode_return[ids] = 0
+        if self.command_bank is not None:
+            draw=torch.randint(len(self.command_bank['rows']),(len(ids),),device=self.device)
+            self.schedule[ids]=self.command_bank['rows'][draw]
+            self.slew[ids]=self.command_bank['slew'][draw]
+            self.task_labels[ids]=self.command_bank['labels'][draw]
 
     def reset(self):
         self.reset_idx(self.all_ids)
@@ -77,9 +92,25 @@ class Go2LocalEnv(VecEnv):
     def _observation(self, speed):
         self.obs_buf = self.history.observation(self.measurement, speed, self.reference,
             self.previous_reference, self.command, self.controller)
-        self.privileged_obs_buf = self.obs_buf
+        self.privileged_obs_buf = (torch.cat((self.obs_buf,(1-self.episode_length_buf/self.max_episode_length)[:,None]),-1)
+                                   if self.task_spec else self.obs_buf)
 
     def _commands(self):
+        if self.command_bank is not None:
+            active=(self.schedule[:,:,0]<=self.episode_length_buf[:,None]*self.dt)&(self.schedule[:,:,0]<99.)
+            indices=torch.where(active,torch.arange(16,device=self.device),0).max(-1).values
+            self.target=self.schedule[self.all_ids,indices,1:]
+            raw=self.reference
+            proposed=raw+(self.target-raw).clamp(-self.slew*self.dt,self.slew*self.dt)
+            design=self.task_spec['command_design'];roll_bound=design['rare_roll_reference']
+            ratio=self.controller._system(torch.maximum(raw[:,0],self.target[:,0]))[3].abs()
+            limit=torch.minimum(ratio*roll_bound,torch.full_like(ratio,design['abs_steer_max_edge']))
+            desired=self.target[:,1].clamp(-limit,limit)
+            delta=raw[:,1]+(desired-raw[:,1]).clamp(-self.slew[:,1]*self.dt,self.slew[:,1]*self.dt)
+            safe=(delta/self.controller._system(proposed[:,0])[3]).abs()<=roll_bound+1e-7
+            self.previous_reference.copy_(raw)
+            self.reference=torch.stack((torch.where(safe,proposed[:,0],raw[:,0]),delta),-1)
+            return
         ids = (self.command_countdown <= 0).nonzero(as_tuple=False).flatten()
         n = len(ids)
         c = self.cfg['commands']
@@ -138,7 +169,24 @@ class Go2LocalEnv(VecEnv):
                      action_change=-(action-self.previous_action).square().sum(-1))
         reward = self.dt*sum(r['weights'][key]*value for key,value in parts.items())
         reward = torch.where(failure, torch.full_like(reward,-r['failure_penalty']), reward)
-        reward = torch.nan_to_num(reward, nan=-r['failure_penalty'])
+        if self.task_spec:
+            r=self.task_spec['reward'];caps=r['caps']
+            def huber(x):return torch.where(x.abs()<=1,x*x,2*x.abs()-1)
+            costs=dict(speed=r['speed_weight']*huber((speed-self.reference[:,0])/r['speed_huber_scale']),
+                steer=r['steer_weight']*huber((clean[:,2]-self.reference[:,1])/r['steer_huber_scale']),
+                roll=r['roll_weight']*huber(torch.relu(peak-r['roll_start'])/r['roll_scale']),
+                working_roll=r['working_roll_weight']*huber(torch.relu(peak-r['working_roll_start'])/r['working_roll_scale']),
+                roll_rate=r['roll_rate_weight']*huber(torch.relu(clean[:,1].abs()-r['roll_rate_start'])/r['roll_rate_scale']),
+                action=r['action_weight']*action.square().sum(-1),
+                action_change=r['action_change_weight']*(action-self.previous_action).square().sum(-1))
+            terms={key:torch.where(failure,0.,-r['scale']*self.dt*value.clamp(max=caps[key])) for key,value in costs.items()}
+            remaining=(self.max_episode_length-self.episode_length_buf+1).clamp_min(0)
+            gamma=self.task_spec['gamma']
+            tail=remaining if gamma==1 else -torch.expm1(remaining*math.log(gamma))/(1-gamma)
+            terms['failure']=torch.where(failure,-r['failure_extra']-r['scale']*self.dt*r['failure_cost_rate_bound']*tail,0.)
+            reward=sum(terms.values())
+            self.reward_parts=terms
+        reward = torch.nan_to_num(reward, nan=-self.cfg['reward']['failure_penalty'])
         timeout = (self.episode_length_buf >= self.max_episode_length) & ~failure
         done = failure | timeout
         self.episode_return += reward
@@ -146,7 +194,7 @@ class Go2LocalEnv(VecEnv):
         yaw = torch.atan2(torch.sin(pose[:,2]-before[:,2]),torch.cos(pose[:,2]-before[:,2]))/self.dt
         self.history.finish(applied,yaw)
         ids = done.nonzero(as_tuple=False).flatten()
-        extras = {'time_outs': timeout}
+        extras = {'time_outs': torch.zeros_like(timeout) if self.task_spec else timeout}
         if len(ids):
             extras['episode'] = dict(reward=self.episode_return[ids].mean(),
                                      failure=failure[ids].float().mean(),

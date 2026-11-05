@@ -2,7 +2,7 @@
 import argparse,json,time,sys,hashlib
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--initial-state',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--training-run',type=Path);p.add_argument('--checkpoints',nargs='+',type=Path);a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--initial-state',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--training-run',type=Path);p.add_argument('--checkpoints',nargs='+',type=Path);p.add_argument('--without-zero',action='store_true');a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device=s['device']).app
 import torch
@@ -22,7 +22,7 @@ if a.training_run:
   checkpoint=torch.load(path,map_location=device,weights_only=False);model.load_state_dict(checkpoint['model_state_dict']);model.eval();models.append(model)
   label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
   identities.append(dict(checkpoint=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),completed_updates=updates,label=path.stem))
-if models:
+if models and not a.without_zero:
  models.append(None)
  identities.append(dict(checkpoint=None,sha256=None,completed_updates=0,label='zero_ecbc'))
 n=cases*max(1,len(models))
