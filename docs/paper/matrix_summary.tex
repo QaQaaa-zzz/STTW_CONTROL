@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\scriptsize\setlength{\tabcolsep}{4pt}
+\caption{Complete matched route-matrix summary. Each cell gives original-goal entries (out of 12); mean measured bend speed (m/s) / mean original-path bend MAE (m). Each speed--event cell comprises six routes and two complete initial states; no model is trained in this evaluation. All 504 physical trajectories and per-case metrics are retained.}
+\label{tab:matrix}
+\begin{tabular}{@{}llccccccc@{}}
+\toprule
+Speed & Force & PP & H75 $\alpha=0$ & H75 $\alpha=.5$ & H75 $\alpha=1$ & U170 $\alpha=0$ & U170 $\alpha=.5$ & U170 $\alpha=1$\\
+\midrule
+1.90 & 0 & 12;1.874/0.071 & 12;1.786/0.079 & 12;1.849/0.083 & 12;1.894/0.153 & 12;1.712/0.117 & 12;1.753/0.131 & 12;1.811/0.154\\
+1.90 & $+36$ N & 12;1.879/0.233 & 10;1.771/0.271 & 11;1.854/0.259 & 12;1.902/0.343 & 10;1.677/0.378 & 11;1.746/0.342 & 12;1.818/0.320\\
+\addlinespace[2pt]
+2.50 & 0 & 12;2.443/0.327 & 12;2.279/0.388 & 12;2.413/0.459 & 11;2.467/0.549 & 12;2.171/0.402 & 10;2.281/0.476 & 10;2.392/0.545\\
+2.50 & $+36$ N & 12;2.451/0.369 & 12;2.291/0.435 & 12;2.423/0.511 & 12;2.478/0.587 & 12;2.167/0.499 & 12;2.283/0.563 & 12;2.400/0.594\\
+\addlinespace[2pt]
+3.05 & 0 & 12;2.999/0.076 & 12;2.790/0.109 & 12;2.899/0.251 & 12;3.013/0.435 & 12;2.710/0.196 & 12;2.794/0.261 & 12;2.907/0.363\\
+3.05 & $+36$ N & 12;3.003/0.125 & 12;2.787/0.158 & 12;2.906/0.320 & 12;3.025/0.492 & 12;2.694/0.205 & 12;2.786/0.278 & 12;2.918/0.400\\
+\bottomrule
+\end{tabular}
+\end{table*}

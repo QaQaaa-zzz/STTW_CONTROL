@@ -1,0 +1,161 @@
+\section{Preference-conditioned policy learning}
+\label{sec:learning}
+\subsection{Conditional Markov decision process}
+We train the middle policy with PPO~\cite{schulman2017}. At each middle interval $\Delta_{\rm M}$, the augmented state contains the simulator state, lower-controller and observer memory, actuator and reference-filter states, path-projection and follower memory, observation history, original task clock, fixed route, requested speed, preference and disturbance-pulse schedule. The pulse schedule specifies its enable flag, amplitude, world direction and end time. The finite-horizon conditional process is
+\begin{equation}
+\mathcal M_\alpha=(\mathcal S,\mathbb R^2,p,r_\alpha,\gamma,\rho_0,N),
+\qquad N=\lceil T/\Delta_{\rm M}\rceil.
+\label{eq:mdp}
+\end{equation}
+The five fixed preference values lie in $[0,1]$. Here $N$ is the full original-task horizon, not the number of steps since a saved-state reset. One transition executes $\Delta_{\rm M}/\Delta_{\rm L}$ lower ticks, each containing $\Delta_{\rm L}/\Delta_{\rm phy}$ physics steps. The actor observes $o_t=h(s_t)$ rather than the complete state. Reset distribution $\rho_0$ samples uniformly from 320 complete parent-policy states, restoring their route, preference, controller memory and original task clock. The state counts at the five preferences are $(128,21,22,21,128)$; the restored preference remains fixed.
+
+The actor has 351 inputs: sixteen 20-field history frames, sixteen validity masks and fifteen current task/control fields. These include measured roll, steering and velocities; recent commands and residuals; the observer equilibrium shift; path errors and curvature preview; requested speed; reference offsets; filter states; and $\alpha$. The critic adds the remaining-original-horizon fraction and has 352 inputs. Separate actor and critic networks use hidden widths 128--128--64 with ELU activations. Layers two and three apply learned preference-dependent feature modulation,
+\begin{equation}
+\begin{split}
+ b_\ell&=W_\ell h_{\ell-1}+c_\ell,\\
+ h_\ell&=\operatorname{ELU}\!\left([1+(2\alpha-1)g_\ell]\odot b_\ell
+ +(2\alpha-1)d_\ell\right).
+\end{split}
+\label{eq:modulation}
+\end{equation}
+The actor outputs the mean of a diagonal Gaussian latent action $z_t\in\mathbb R^2$ with learned state-independent standard deviations. PPO uses the Gaussian sample and log probability before the physical action mapping; evaluation uses the mean. For $a=\tanh z$, the offset targets are
+\begin{equation}
+ u_v=\begin{cases}d_v^+a_v,&a_v\ge0,\\d_v^-a_v,&a_v<0,\end{cases}
+ \qquad u_\delta=d_\delta^{\max}a_\delta,
+\label{eq:offset}
+\end{equation}
+where $d_v^+$ and $d_v^-$ are positive upward and downward amplitude bounds. Filtering and slew limits precede addition to the nominal reference and clipping to delivered-reference bounds. Table~\ref{tab:interface} gives the physical and interface parameters; the archived resolved configuration specifies input scaling and the filter implementation.
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{5pt}
+\caption{Physical, clock and reference-interface parameters. Reference bounds and filter settings describe middle-policy training; all nominal comparisons use a common frozen evaluation interface.}
+\label{tab:interface}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Group & Parameter & Value & Unit\\
+\midrule
+Geometry & Wheelbase $L$; wheel radius $r_w$; caster $\beta_{\rm c}$ & 0.408; 0.10; 25 & m; m; deg\\
+Clocks & $\Delta_{\rm phy}$; $\Delta_{\rm L}$; $\Delta_{\rm M}$ & 0.2; 5; 20 & ms\\
+ & Reconnection $\Delta_{\rm R}$; horizon $N$; deadline $T$ & 0.10; 500; 10 & s; steps; s\\
+Offset amplitudes & $d_v^-$; $d_v^+$; $d_\delta^{\max}$ & 1.00; 0.25; 0.20 & m/s; m/s; rad\\
+Filters & $\tau_v$; $\tau_\delta$ & 0.10; 0.08 & s\\
+Offset slew & $\dot d_v^-$; $\dot d_v^+$; $\dot d_\delta^{\max}$ & 1.00; 0.50; 0.80 & m/s$^2$; m/s$^2$; rad/s\\
+Delivered references & $v_{\min}$; $v_{\max}$; $\delta_{\max}^{\rm ref}$ & 1.50; 3.50; 0.35 & m/s; m/s; rad\\
+Geometric rule & Preview length $\ell_\kappa$; lateral cap $a_{\max}$ & 6.0; 3.5 & m; m/s$^2$\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Preference-weighted reward}
+Define the dimensionless robust cost $H(x)=x^2$ for $|x|\le1$ and $H(x)=2|x|-1$ otherwise, and component clipping $B_c(x)=\min(x,c)$ for $x\ge0$. Errors refer to the fixed training path and requested speed. A curvature-demand gate reduces the path-priority speed penalty during demanding turns:
+\begin{equation}
+ \chi=\operatorname{clip}_{[0,1]}\!\left(
+ \frac{|\arctan(L\kappa/\cos\beta_{\rm c})/q(v_0)|-\phi_\chi}{\sigma_\chi}\right).
+\label{eq:gate}
+\end{equation}
+Let $w_v(\chi)=(1-\chi)w_v^{\rm s}+\chi w_v^{\rm t}$ interpolate the straight and turning speed-cost weights. The speed, path and endpoint-band costs at a lower tick are
+\begin{align}
+C_v={}&(1-\alpha)B_{\bar C_v}\big(w_v(\chi)H(e_v/\sigma_v)\big)\notag\\
+ &+\alpha B_{\bar C_v}\big(w_v^{\rm s}H(e_v/\sigma_v)\big),\label{eq:cv}\\
+C_p={}&[1-(1-\rho_p)\alpha]B_{\bar C_p}\big(w_p[H(e_y/\sigma_y)\notag\\
+ &\hspace{32mm}+w_hH(e_h/\sigma_h)]\big),\label{eq:cp}\\
+C_b={}&(1-\alpha)B_{\bar C_b}\big(w_b\chi H(\pos{|e_y|-b_y}/\sigma_{by})\big)\notag\\
+ &+\alpha B_{\bar C_b}\big(w_b\chi H(\pos{|e_v|-b_v}/\sigma_{bv})\big).
+\label{eq:cb}
+\end{align}
+Each endpoint channel is capped \emph{before} preference mixing. At low $\alpha$, path and lateral-band penalties remain strong while the speed penalty relaxes with curvature demand. At high $\alpha$, the requested-speed and speed-band penalties dominate the preference-dependent allocation. Table~\ref{tab:rewardparams} lists the weights and principal scales.
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{5pt}
+\caption{Reward hyperparameters used by the main policy. Weights and component costs are dimensionless; each error is divided by a physical scale. Auxiliary deadbands, scales and component caps are fixed in the archived configuration.}
+\label{tab:rewardparams}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Group & Parameters & Values & Units\\
+\midrule
+Tracking weights & $w_v^{\rm s}$; $w_v^{\rm t}$; $w_p$; $w_h$; $w_b$ & 10; 1; 10; 0.5; 20 & --\\
+Path retention & $\rho_p$ & 0.10 & --\\
+Tracking scales & $\sigma_v$; $\sigma_y$; $\sigma_h$ & 0.10; 0.10; 0.10 & m/s; m; rad\\
+Demand gate & $\phi_\chi$; $\sigma_\chi$ & 0.18; 0.12 & rad\\
+Endpoint deadbands & $b_y$; $b_v$ & 0.10; 0.05 & m; m/s\\
+Endpoint scales & $\sigma_{by}$; $\sigma_{bv}$ & 0.10; 0.10 & m; m/s\\
+Roll weights & $w_\phi$; $w_w$; $w_{\dot\phi}$ & 80; 240; 1 & --\\
+Speed / correction weights & $w_o$; $w_l$; $w_d$; $w_{\dot d}$ & 2; 4; 0.02; 0.03 & --\\
+Reward conversion & $\lambda_r$; $C_{\rm fail}$; $C_{\max}$ & 0.10; 5; 8980.2 & s$^{-1}$; --; --\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The remaining terms penalize roll excursions, roll rate, overspeed, low speed and reference corrections. For $j\in\{\phi,w,\dot\phi,o,l\}$ they have the common form
+\begin{equation}
+ C_j=B_{\bar C_j}\!\left(w_j H\!\left(\frac{\pos{x_j-b_j}}{\sigma_j}\right)\right),
+\label{eq:auxcost}
+\end{equation}
+where $(x_\phi,x_w,x_{\dot\phi},x_o,x_l)=(\phi_{\rm pk},\phi_{\rm pk},|\dot\phi|,e_v,-v)$ and $\phi_{\rm pk}$ is peak absolute roll over the lower tick's physics substeps. The low-speed threshold $b_l$ is negative, so $\pos{x_l-b_l}=\pos{v_l-v}$ with $v_l=-b_l$. For applied offsets $d=(d_v,d_\delta)$, the remaining two costs are
+\begin{align}
+ C_d&=B_{\bar C_d}\!\left(w_d\sum_{k\in\{v,\delta\}}(d_k/\sigma_{d,k})^2\right),\\
+ C_{\dot d}&=B_{\bar C_{\dot d}}\!\left(w_{\dot d}\sum_{k\in\{v,\delta\}}(\dot d_k/\sigma_{\dot d,k})^2\right),
+\end{align}
+where $\dot d=(d_{t+1}-d_t)/\Delta_{\rm M}$. The same offset-rate cost is assigned to each active lower tick in that middle interval.
+
+Let $\mathcal C=\{v,p,b,\phi,w,\dot\phi,o,l,d,\dot d\}$ index the ten costs and $\mathcal A_t$ the active lower ticks. The ordinary reward and a uniform bound on total running cost are
+\begin{equation}
+ r_t=-\lambda_r\Delta_{\rm L}\sum_{j\in\mathcal A_t}\sum_{i\in\mathcal C}C_{i,j},
+ \qquad C_{\max}=\sum_{i\in\mathcal C}\bar C_i.
+\label{eq:reward}
+\end{equation}
+There is no additional global clipping. Write $\tau_t$ for original task time (original lower-tick count times $\Delta_{\rm L}$) at the start of a transition, and $n_t=\lfloor\tau_t/\Delta_{\rm M}\rfloor$ for its original middle-step index. Physical failure or tracking-domain exit replaces the entire failing interval's reward with
+\begin{equation}
+ r_t^{\rm fail}=-C_{\rm fail}-\lambda_r\Delta_{\rm M}C_{\max}
+ \frac{1-\gamma^{N-n_t}}{1-\gamma}.
+\label{eq:terminal}
+\end{equation}
+The exponent includes the failing interval and the remaining original-task intervals. Saved-state resets preserve $\tau_t$; they do not restart this horizon. The domain check includes a preview behind the vehicle or $|e_h|\ge\pi/2$. These events and finite-horizon completion terminate without value bootstrap; an unfinished episode at a rollout-buffer boundary bootstraps.
+
+\subsection{PPO objective and training settings}
+For critic input $\widetilde o_t=(o_t,1-\tau_t/T)$ and nonterminal mask $m_t$, generalized advantage estimation uses
+\begin{align}
+ \varepsilon_t^{\rm TD}&=r_t+\gamma m_tV_{\psi_{\rm old}}(\widetilde o_{t+1})
+             -V_{\psi_{\rm old}}(\widetilde o_t),\\
+ A_t&=\varepsilon_t^{\rm TD}+\gamma\lambda m_tA_{t+1},\qquad
+ R_t=A_t+V_{\psi_{\rm old}}(\widetilde o_t).
+\end{align}
+Advantages are standardized over the rollout. With likelihood ratio $\rho_t=\pi_\theta(z_t\mid o_t,\alpha)/\pi_{\theta_{\rm old}}(z_t\mid o_t,\alpha)$, the minimized objective is
+\begin{equation}
+\begin{split}
+\mathcal L={}&-\mathbb E\!\left[\min\!\left(\rho_t\widehat A_t,
+ \operatorname{clip}(\rho_t,1-\epsilon,1+\epsilon)\widehat A_t\right)\right]\\
+ &+c_V\mathbb E\!\left[(R_t-V_\psi(\widetilde o_t))^2\right]
+ -c_H\mathbb E[\mathcal H(\pi_\theta)]\\
+ &+\beta_{\rm anchor}\mathbb E_{o\sim\mathcal B_A}\!\left[D_{\rm KL}(\pi_{\rm parent}(\cdot\mid o)\Vert\pi_\theta(\cdot\mid o))\right].
+\end{split}
+\label{eq:ppo}
+\end{equation}
+The critic loss is not clipped. The final term anchors nominal behavior using 512 records per minibatch from a fixed bank of 25,573 parent observation/distribution records. No temporal auxiliary loss is used. A soft KL limit stops further epochs; a hard limit rejects the latest epoch and reduces the actor learning rate. Table~\ref{tab:ppo} gives the final-stage settings.
+
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Final-stage PPO hyperparameters. All entries are dimensionless unless a unit is shown.}
+\label{tab:ppo}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Setting & Value\\
+\midrule
+Environments; rollout length & 512; 128 middle steps\\
+Transitions per rollout & 65,536\\
+Minibatch size; epochs & 16,384; 4\\
+Discount $\gamma$; GAE $\lambda$ & 0.997; 0.99\\
+Policy clip $\epsilon$ & 0.2\\
+Value $c_V$; entropy $c_H$ & 1; 0.001\\
+Parent anchor $\beta_{\rm anchor}$ & 0.05\\
+Actor; critic learning rate & $3\!\times\!10^{-5}$; $3\!\times\!10^{-4}$\\
+Adam $(\beta_1,\beta_2)$; $\varepsilon_{\rm Adam}$ & $(0.9,0.999)$; $10^{-5}$\\
+Weight decay; gradient norms & 0; 1 per network\\
+Latent standard-deviation bounds & $[0.05,0.5]$\\
+Soft/hard mean KL & 0.01/0.03\\
+Training; pulse-sampling seed & 918301; 918203\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The final stage starts from a shared actor and critic obtained by endpoint-policy distillation and curriculum PPO. It performs two critic-only collections and 75 PPO collections, totaling 5,046,272 collected transitions, including 4,915,200 in PPO collections. These counts describe one final training stage. Complete states captured at original task times of 0.8--3.5~s continue to the original deadline $T$. Independently at each reset, a lateral pulse is enabled with probability 0.8, lasts 0.1~s and has uniformly sampled signed amplitude in $\{\pm8,\pm16,\pm24,\pm32\}$~N. Its direction is perpendicular to the captured heading and fixed in world coordinates. The original lower controller remains frozen and training paths are immutable. The common evaluation lower controller and causal reconnection are introduced only at evaluation. The final actor and critic parameters, resolved training configuration and training logs are archived with the run.

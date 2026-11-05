@@ -1,14 +1,19 @@
-# Task-specified preference control article
+# Preference-conditioned single-track control article
 
-The editable article source is [MANUSCRIPT.tex](MANUSCRIPT.tex), with its [PDF](MANUSCRIPT.pdf) compiled using Elsevier's `elsarticle` class in a provisional two-column RAS-like layout. The omitted simulation tables and explanations are in editable [SUPPLEMENT.tex](SUPPLEMENT.tex) and [SUPPLEMENT.pdf](SUPPLEMENT.pdf). The user-supplied `RAS车.pdf` guided the article structure and presentation; no publisher masthead, acceptance date, or journal endorsement is reproduced.
+[MANUSCRIPT.tex](MANUSCRIPT.tex) is the editable RAS-style main article and [MANUSCRIPT.pdf](MANUSCRIPT.pdf) is its compiled PDF. The paper has one integrated main text and no separately delivered supplement. The user-provided `RAS车.pdf` informed the problem presentation and figure style; its publisher identity was not copied.
 
-Generate the article figures from frozen local simulation artifacts, then compile:
+The manuscript uses the frozen H75 policy as its main learned controller. U170 is a second trained middle-policy comparator. The geometric comparator follows the original path by pure pursuit with exactly zero learned middle correction; all three use the same frozen lower controller. The new route matrix covers left/right turns, left/right-leading S turns, exact unrounded left/right 90-degree polylines, low/medium/high requested speeds, two complete prepared initial states, and nominal/+36 N world-Y pulse conditions. Every destination lies 7 m beyond the last bend or vertex. The 504 declared physical trajectories and all failures are retained on the data volume under `task_matrix_v2_20261104`; the [result index](../results/sttw-task-matrix-20261104/README.md) gives exact paths and identities.
+
+The five-alpha H75 nominal comparison and its development-selected curvature-speed pure-pursuit rule remain distinct from the new three-alpha matched matrix. Neither panel is an independent unseen-policy test. The [training methods](method_training.tex) include the middle-policy reward and PPO objective; H75 and U170 use the same `path_reward` and reference interface, while U170 continues H75 on an additional mixed low-speed training distribution. The nine resolved route-matrix configurations are in `learning/configs/task_matrix_v2_*.json` at the repository root.
+
+Regenerate the matrix analysis and selected article figures from the saved raw run directories, then compile with:
 
 ```bash
-PYTHONPATH=learning/src python docs/paper/analysis/make_article_figures.py
+PYTHONPATH=learning/src python docs/paper/analysis/task_matrix_v2.py --policy H75 --runs LOW_H75 LOW_PP MID_H75 MID_PP HIGH_H75 HIGH_PP --out ANALYSIS_H75
+PYTHONPATH=learning/src python docs/paper/analysis/task_matrix_v2.py --policy U170 --runs LOW_U170 LOW_PP MID_U170 MID_PP HIGH_U170 HIGH_PP --out ANALYSIS_U170
+python docs/paper/analysis/make_matrix_figures.py --analysis ANALYSIS_H75 --out docs/paper/figures
+python docs/paper/analysis/make_matrix_table.py --h75 ANALYSIS_H75 --u170 ANALYSIS_U170 --out docs/paper/matrix_summary.tex
 python docs/paper/build.py --pdf --engine tectonic
 ```
 
-The build regenerates the supplement from frozen JSON, checks figure files, and records source hashes in [evidence_manifest.json](evidence_manifest.json) and [export_receipt.json](export_receipt.json). The five article figures and their source map are in [figures](figures/article_figure_sources.json). The [full task result package](../results/sttw-tolerance-20261101/task_preference_holdout/HOLDOUT.md) retains every route, prepared bank, alpha and frozen middle policy. The [matched geometric-rule comparison](../results/sttw-tolerance-20261101/traditional_rule/COMPARISON.md) contains its development selection and all eight new-combination results. The [signed-pulse extension](../results/sttw-tolerance-20261101/task_preference_disturbance/COMPARISON.md) retains all 48 matched case scores and 32 actual/reference XY panels. The [paired physical-domain task comparison](../results/sttw-tolerance-20261101/task_preference_physical_domain/COMPARISON.md) supplies 48 cases and 32 XY panels. The [90-degree left/right turn panel](../results/sttw-tolerance-20261101/task_right_angle/COMPARISON.md) supplies 48 cases and 16 XY panels. The supplement includes route-level tables for all four panels, individual outcomes for the positive disturbance subset, additional right-turn and force-sign figures, training diagnostics, and links to the full per-case data. The earlier Markdown stage report is in [history](history/20261101_task_preference_report_snapshot/MANUSCRIPT.md).
-
-This is a scientific working draft. Model and score selection used development data; new route–speed–bank combinations were frozen before their evaluation. The geometric rule was constructed after the learned-policy new-combination results had been inspected, then selected on the earlier development routes. The current article reports simulation evidence. Author details, declarations, and human scientific approval remain pending.
+The data role is exploratory matched simulation. The current manuscript contains neither a trained tolerance predictor nor an online preference coordinator, and it makes no hardware claim. Author information and final human scientific approval remain to be supplied.

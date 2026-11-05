@@ -1,0 +1,160 @@
+{
+  "experiment_id": "STTW-TASK-MATRIX-V2-LOW-H75",
+  "mode": "fixed_h75_capability",
+  "model_id": "STTW_MIDDLE_FULLTAIL_PPO75_U77",
+  "bank_indices": [
+    2,
+    5
+  ],
+  "alphas": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "horizon_s": 10.0,
+  "expected_cases": 72,
+  "maximum_lower_ticks": 144000,
+  "optimizer_updates": 0,
+  "planning_frequency_hz": 10.0,
+  "forces_N": [
+    36.0
+  ],
+  "duration_s": 0.15,
+  "planner_points": 5001,
+  "planner_spacing_m": 0.02,
+  "planner_support_m": 100.0,
+  "route_contexts": [
+    {
+      "route": "low_single_left_R1p45",
+      "family": 1,
+      "radius_m": 1.45,
+      "angle_deg": 90.0,
+      "speed": 1.9,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    },
+    {
+      "route": "low_single_right_R1p45",
+      "family": 1,
+      "radius_m": 1.45,
+      "angle_deg": 90.0,
+      "speed": 1.9,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    },
+    {
+      "route": "low_s_left_R1p55",
+      "family": 2,
+      "radius_m": 1.55,
+      "angle_deg": 72.0,
+      "speed": 1.9,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    },
+    {
+      "route": "low_s_right_R1p55",
+      "family": 2,
+      "radius_m": 1.55,
+      "angle_deg": 72.0,
+      "speed": 1.9,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    },
+    {
+      "route": "low_single_left_R2p5",
+      "family": 1,
+      "radius_m": 2.5,
+      "angle_deg": 90.0,
+      "speed": 1.9,
+      "direction": 1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    },
+    {
+      "route": "low_single_right_R2p5",
+      "family": 1,
+      "radius_m": 2.5,
+      "angle_deg": 90.0,
+      "speed": 1.9,
+      "direction": -1.0,
+      "goal_offset_after_turn_m": 7.0,
+      "reference_shape": "smooth"
+    }
+  ],
+  "data_role": "Exploratory matched H75 main-method task matrix; prior four-route H75/U170 screen influenced model choice; not independent TEST",
+  "scoring": "Original path, original goal exactly 7m after last bend/corner, true forward speed, roll, H10, full per-case metrics; retain all outcomes",
+  "stop_rule": "One declared nominal and one +36N/0.15s pulse per context and alpha, 10s horizon, no training or replacements",
+  "capability_variant": "task_matrix_v2",
+  "question": "How does the previously adopted frozen H75 preference policy track matched original routes and exact sharp corners, with and without lateral disturbance, versus pure pursuit?",
+  "onsets_s": [
+    2.8
+  ],
+  "force_frame": "world_fixed_vector",
+  "zero_onset_s": 0.0,
+  "force_direction_world": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "include_nominal": true,
+  "geometry_scope": "mixed_speed_track_segments",
+  "dataset_partition": {
+    "training_rows": 0,
+    "development_rows": 72,
+    "all_development": true,
+    "unit": "route/bank/method/alpha/event"
+  },
+  "enabled_optimizations": [
+    "same-shape vmap",
+    "scan50",
+    "shared JAX cache",
+    "existing compiled function reuse"
+  ],
+  "reconnection": {
+    "goal_heading": "original",
+    "maximum_added_length_m": 0.5
+  },
+  "initial_state_scope": "Prepared complete banks2/5 shared across methods and alpha values; baseline zero middle correction",
+  "lower_transfer": {
+    "manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/lower_domain_transfer_dev_v1/last200/export/transfer.json",
+    "manifest_sha256": "644baf1c3ea386bff7b7aaba3cbd2d326a0c42150924c4756cc73e0cb0cb5fed"
+  },
+  "task_design_diagnostic": {
+    "path_priority_alpha": 0.0,
+    "speed_priority_alpha": 1.0,
+    "fixed_compromise_alpha": 0.5,
+    "narrow_centerline_half_width_m": 0.4,
+    "wide_centerline_half_width_m": 0.9,
+    "original_exit_goal_radius_m": 1.0,
+    "scoring_scope": "0.5m circular-envelope buffer around recorded vehicle XY anchor; conservative proxy, not complete mesh sweep",
+    "source": "Same previously selected relaxed development task thresholds; held route/bank combinations were fixed before execution."
+  },
+  "task_contract": {
+    "narrow": {
+      "corridor_half_width_m": 0.9,
+      "speed_min_ratio": null
+    },
+    "wide": {
+      "corridor_half_width_m": 1.4,
+      "speed_min_ratio": 0.85
+    },
+    "buffer_radius_m": 0.5,
+    "post_goal_last2s_original_cross_rmse_max_m": 0.25,
+    "original_goal_radius_m": 1.0,
+    "horizon_s": 10.0,
+    "alpha_by_task": {
+      "narrow": 0.0,
+      "wide": 1.0
+    },
+    "fixed_compromise_alpha": 0.5,
+    "source": "Previously selected relaxed development score, reused unchanged on newly declared 90-degree turn contexts."
+  },
+  "bank_state_fingerprints": {
+    "2": "9218a531bbaa818f2f132ce5d886d9d4325a45487d31703ac8917d8828f3b4bf",
+    "5": "ae6eb88ff62a77224510431f1f2714088e670c04a165d6044da56c4a70ff40b5"
+  }
+}

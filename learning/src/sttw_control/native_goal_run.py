@@ -185,6 +185,9 @@ def low_speed_lateral_load_inventory(p):
     if candidate is not None and set(candidate)!={'registry_id','actor','actor_sha256','checkpoint','checkpoint_sha256','training_manifest','training_manifest_sha256','source_update'}:
         raise ValueError('complete candidate artifact identity required')
     traditional=p.get('traditional_rule')
+    task_matrix=p.get('capability_variant')=='task_matrix_v2'
+    if p.get('zero_middle',False) and (not task_matrix or traditional is not None or candidate is not None or p['alphas']!=[0.]):
+        raise ValueError('pure-pursuit comparator requires zero middle and one alpha label')
     if traditional is not None and (
         candidate is not None or frozen_id is not None or p['alphas']!=[.5]
         or set(traditional)!={'id','preview_m','lateral_acceleration_limit_m_s2'}
@@ -201,12 +204,15 @@ def low_speed_lateral_load_inventory(p):
         or any((c['family']!=1 or c['angle_deg']!=90.) if scope=='single_turn'
                else (c['family'] not in (1,2) or not 30.<=c['angle_deg']<=angle_max) for c in contexts)
         or any(not 1.5<=c['speed']<=speed_max or c['direction'] not in (-1.,1.)
-               or not math.isfinite(c['radius_m']) or c['radius_m']<=0 or c.get('goal_offset_after_turn_m')!=4. for c in contexts)):
+               or not math.isfinite(c['radius_m']) or c['radius_m']<=0
+               or c.get('goal_offset_after_turn_m')!=(7. if task_matrix else 4.)
+               or (task_matrix and c.get('reference_shape','smooth') not in ('smooth','sharp_90'))
+               or (task_matrix and c.get('reference_shape')=='sharp_90' and (c['family']!=1 or c['angle_deg']!=90.)) for c in contexts)):
         raise ValueError('unique declared geometries within speed/angle scope required')
     events=([dict(event='zero',force_N=0.,onset_s=0.)] if p.get('include_nominal',True) else [])+[
         dict(event=f't{onset:g}_F{force:+g}',force_N=force,onset_s=onset)
         for onset,force in itertools.product(onsets,forces)]
-    identity='STTW_RULE_'+traditional['id'] if traditional else candidate['registry_id'] if candidate else frozen_id or p['model_id']
+    identity='STTW_PP_ZERO_MIDDLE' if p.get('zero_middle',False) else 'STTW_RULE_'+traditional['id'] if traditional else candidate['registry_id'] if candidate else frozen_id or p['model_id']
     rows=[]
     combinations=((b,context,event,alpha) for b in banks for context,grid in zip(contexts,context_grids) for event,alpha in itertools.product(events,grid))
     for b,context,event,alpha in combinations:
@@ -326,7 +332,7 @@ def targeted_base_review_inventory(p):
 
 
 def fixed_h75_capability_inventory(p):
-    if p.get('capability_variant')=='low_speed_lateral_load':return low_speed_lateral_load_inventory(p)
+    if p.get('capability_variant') in ('low_speed_lateral_load','task_matrix_v2'):return low_speed_lateral_load_inventory(p)
     if p.get('capability_variant')=='targeted_base_review':return targeted_base_review_inventory(p)
     required=dict(mode=CAPABILITY_MODE,model_id=SELECTION_MODELS['H75'],bank_indices=[6],
         alphas=[0.,.25,.5,.75,1.],horizon_s=10.,expected_cases=35,maximum_lower_ticks=70000,
@@ -460,7 +466,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
         originals={c['route']:c for c in previous['contexts']}
         if any({k:v for k,v in c.items() if k!='goal_distance_m'}!=originals.get(c['route']) for c in proposal['route_contexts']):raise ValueError('original S curve/speed changed')
         validate_goal_extension_source(proposal,source)
-    elif proposal.get('capability_variant') in ('low_speed_tight_turn','low_speed_lateral_load','targeted_base_review'):
+    elif proposal.get('capability_variant') in ('low_speed_tight_turn','low_speed_lateral_load','targeted_base_review','task_matrix_v2'):
         if previous['config']['path']['goal_section_offset_after_turn_m']!=4. or previous['config']['residual_interface']['speed_reference_bounds_m_s']!=[1.5,3.5]:raise ValueError('low-speed screen preserves exit goal and frozen speed authority')
     elif previous['contexts']!=proposal['route_contexts']:raise ValueError('original routes differ')
     if previous['models']['H75']['registry_id']!=proposal['model_id']:raise ValueError('frozen H75 identity differs')
@@ -493,7 +499,7 @@ def prepare_fixed_h75_capability(transition,root,protocol):
     sys.path.insert(0,str(native))
     with Path(source['prepared_bank']).open('rb') as f:bank=pickle.load(f)
     bank_index=proposal['bank_indices'][0]
-    if proposal.get('capability_variant') in ('low_speed_lateral_load','targeted_base_review'):source=dict(source,bank_index=bank_index)
+    if proposal.get('capability_variant') in ('low_speed_lateral_load','targeted_base_review','task_matrix_v2'):source=dict(source,bank_index=bank_index)
     fingerprints={}
     for selected_index in proposal['bank_indices']:
         snapshot=jax.tree.map(lambda x:np.asarray(x[selected_index]),bank)
@@ -2310,7 +2316,16 @@ def load(root,*,prefix_phase=False):
             ownpose=np.asarray(env.physics.helpers.pose(snap.data))
             for c in p['contexts']:
                 if c['route'] not in {r['route'] for r in cases}:continue
-                path=_integrate_route(ownpose,cfg['path'],c.get('family',2),c['radius_m'],np.deg2rad(c['angle_deg']),c['speed'],c['direction'],0.,0.).path
+                if c.get('reference_shape')=='sharp_90':
+                    ss=np.arange(p['protocol']['planner_points'],dtype=np.float32)*p['protocol']['planner_spacing_m']
+                    corner=5.
+                    local=np.column_stack((np.minimum(ss,corner),c['direction']*np.maximum(ss-corner,0.)))
+                    yaw=float(ownpose[2]);cs,sn=np.cos(yaw),np.sin(yaw)
+                    xy=np.column_stack((ownpose[0]+cs*local[:,0]-sn*local[:,1],ownpose[1]+sn*local[:,0]+cs*local[:,1]))
+                    path=geometry.Path(j.asarray(ss),j.asarray(xy),j.asarray(yaw+np.where(ss<corner,0.,c['direction']*np.pi/2)),j.zeros_like(j.asarray(ss)),j.asarray(corner),j.asarray(corner+7.))
+                else:
+                    path=_integrate_route(ownpose,cfg['path'],c.get('family',2),c['radius_m'],np.deg2rad(c['angle_deg']),c['speed'],c['direction'],0.,0.).path
+                    if p['protocol'].get('capability_variant')=='task_matrix_v2':path=path.replace(goal=path.turn_end+7.)
                 if capability and p['protocol'].get('capability_variant')=='S_goal_extension':
                     record=p['protocol']['goal_source']['paths'][c['route']]
                     with np.load(record['file']) as saved:path=path.replace(**{k:j.asarray(saved[k]) for k in ('s','xy','heading','curvature','turn_end','goal')})
@@ -2393,7 +2408,7 @@ def load(root,*,prefix_phase=False):
         initial_identity=dict(all_native_leaves_exact=True,native_leaf_count=len(aa),dtypes_exact=True,original_paths_exact=True)
 
     if capability:
-        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_subset' if p['protocol'].get('excluded_completed_cases') else 'disturbed_declared_user' if p['protocol'].get('capability_variant')=='low_speed_lateral_load' else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts'])*len(p['protocol']['bank_indices']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
+        initial_identity=audit_five_alpha_online_initial(initial,cases,initial.state.physical.physical_tick[0] if conditional_receipt else snapshot.physical_tick,panel_kind='boundary_selected_user' if p['protocol'].get('range_planner_boundary') else 'disturbed_declared_subset' if p['protocol'].get('excluded_completed_cases') else 'disturbed_declared_user' if p['protocol'].get('capability_variant') in ('low_speed_lateral_load','task_matrix_v2') else 'targeted_three_user' if p['protocol'].get('capability_variant')=='targeted_base_review' else 'nominal_five_user',expected_route_count=len(p['contexts'])*len(p['protocol']['bank_indices']),task_tick=j.asarray([round(c.get('source_task_start_s',0.)/.005) for c in cases]))
         if conditional_receipt:initial_identity.update(conditional_receipt)
         for key in ('authenticated_native_online','initial_previous_alpha','initial_hold_until_tick'):initial_identity.pop(key)
         initial_identity['authenticated_fixed_h75_capability']=True
@@ -2584,7 +2599,9 @@ def load(root,*,prefix_phase=False):
                 z=j.stack([j.arctanh(offset/scale),j.asarray(0.,obs.dtype)])
                 queried=obs.at[336].set(sa);half=full=j.zeros_like(z)
             elif selection:
-                queried=obs.at[336].set(sa);z=jax.lax.cond(mode==3,lambda _:j.zeros(2),lambda _:actor.apply(param,queried),None);half=full=j.zeros_like(z)
+                queried=obs.at[336].set(sa)
+                z=j.zeros(2,obs.dtype) if p['protocol'].get('zero_middle',False) else jax.lax.cond(mode==3,lambda _:j.zeros(2),lambda _:actor.apply(param,queried),None)
+                half=full=j.zeros_like(z)
             elif tolerance:
                 candidate_alpha=j.asarray(p['protocol']['coordination']['candidate_alphas'])
                 queries=jax.vmap(lambda a:obs.at[336].set(a))(candidate_alpha)

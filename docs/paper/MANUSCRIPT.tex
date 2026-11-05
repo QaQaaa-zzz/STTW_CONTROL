@@ -1,234 +1,265 @@
 \documentclass[final,5p,times,twocolumn]{elsarticle}
+\input{local_font_maps.tex}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
-\usepackage{booktabs}
-\usepackage{siunitx}
-\usepackage{url}
+\usepackage{booktabs,array}
+\usepackage{xurl}
+\urlstyle{same}
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 \setcounter{dbltopnumber}{3}
 \renewcommand{\dbltopfraction}{0.92}
 \renewcommand{\textfraction}{0.05}
+\newcommand{\pos}[1]{\left[#1\right]_+}
 \journal{Robotics and Autonomous Systems}
-
+\lefthyphenmin=3
+\righthyphenmin=3
+\emergencystretch=0.6em
 \begin{document}
+\raggedbottom
 \begin{frontmatter}
-\title{Task-Specified Path--Speed Preference Control for an Autonomous Single-Track Robot}
-\author{Author list pending confirmation}
+\title{Preference-Conditioned Speed and Steering Control for a Single-Track Robot}
+% Author and affiliation details are to be supplied by the authors.
 \begin{abstract}
-Balancing a single-track robot through a turn creates a task-dependent conflict between path accuracy and forward speed. We study a shared preference-conditioned middle controller that adjusts speed and steering references for a frozen lower balance controller. The task fixes one of five preference values before motion; the original path and destination remain the scoring reference when a causal geometric planner reconnects the execution trajectory. On four new route--speed combinations and two prepared initial states per route, the selected U170 controller reached the original destination and remained upright in all 40 ten-second episodes. Mean turn speed increased from 2.094 to 2.300~m/s and mean maximum pre-arrival path error from 0.273 to 0.532~m between the path and speed endpoints. The path endpoint completed 6/8 narrow passages versus 4/8 for a fixed middle preference, while the speed endpoint completed 8/8 wide, speed-preserving turns versus 6/8. A development-tuned geometric rule completed 7/8 of each nominal task. In a matched positive-force exploratory subset spanning low- and high-speed turns, U170 at $\alpha=1$ completed 4/4 wide tasks, versus 0/4 for its path endpoint and the geometric rule. The study shows a useful, task-specific preference effect in the simulated closed loop.
+Speed, steering and lean are coupled in a single-track robot, so following a tight path and maintaining requested speed can require different control choices. We study a task-priority interface in which a preference-conditioned middle policy jointly adjusts speed and steering above a frozen balance controller. H75 is evaluated at five preferences on four earlier routes and, with a continued policy U170 and a zero-middle pure-pursuit comparator, in a new matched matrix of 504 simulated rollouts. The matrix spans left and right turns, S turns, exact $90^\circ$ corners, three requested speeds, matched initial states and a lateral force pulse. Increasing H75's speed priority generally raises measured bend speed and original-path error. All high-speed cases enter the original goal disk, while low- and medium-speed arrival has exceptions. Pure pursuit usually tracks the original path more closely; one disturbed low-speed S-turn pair instead shows smaller path error and slightly greater speed for H75 at high speed priority. The results establish a measurable, route-dependent preference response and identify where reference allocation still needs improvement.
 \end{abstract}
 \begin{keyword}
-Autonomous bicycle \sep Single-track robot \sep Preference-conditioned control \sep Path tracking \sep Speed regulation
+Single-track robot \sep Task-priority control \sep Preference-conditioned control \sep Path tracking \sep Speed regulation \sep Reinforcement learning
 \end{keyword}
 \end{frontmatter}
 
 \section{Introduction}
-\subsection{Motivation}
-An autonomous single-track vehicle must remain upright while following a route and regulating forward speed. A tight turn can make these demands compete: reducing speed may improve lateral accuracy, whereas maintaining speed may cause a larger departure from the route. The useful compromise depends on the mission. A narrow passage constrains lateral motion; an open turn can tolerate a wider trajectory if progress remains fast. The control problem is therefore to realize a specified path--speed preference without changing the original mission used to judge completion.
+A single-track robot cannot treat route tracking, forward speed and balance as independent commands. Steering changes travel direction and the lateral force supporting lean; forward speed changes the lean demand associated with a turn. When the requested maneuver approaches the useful control range, preserving speed and preserving the original path may call for different reference adjustments. Destination entry alone does not show how the requested motion was executed.
 
-\subsection{Related work}
-Hierarchical residual control has been applied to unmanned-bicycle path tracking. Huo et al.~\cite{huo2025} connect traditional and learned residual controllers for attitude and position in a fixed-speed tracking task. Preference-conditioned networks have also represented changing objective weights in multi-objective reinforcement learning~\cite{abels2019}. Here, the preference is fixed by the task before each run and conditions a middle controller that modifies references for a common lower balance controller. The key experimental question is whether this interface changes the physical path--speed outcome in a useful way, including when the original goal and a geometric control rule are evaluated on the same tasks.
+Two applications illustrate the distinction. In space-constrained passage, lateral departure may be costly even when slowing is acceptable. In a turn with permitted lateral deviation, maintaining forward speed may matter more than following the centreline closely. These contexts motivate a user-selectable priority while keeping corridor limits explicit. The controller should expose that priority through measured speed and path behavior while retaining the same balance-control foundation.
 
-\subsection{Contribution}
-We formulate two route-following tasks with a common original destination, a shared five-level preference input, and explicit path, speed, and post-turn requirements. We implement the preference at the reference level above a frozen balance controller and retain 10~Hz causal geometric reconnection after deviations. We then test one selected conditional policy on paired low- and high-speed turns, alongside a second learned checkpoint and a development-tuned geometric rule. Original-world-path scoring makes the task outcome independent of the modified execution reference.
+Reference and command governors modify requests to respect system constraints~\cite{garone2017}; residual reinforcement learning combines learned corrections with established controllers~\cite{johannink2019}. For unmanned bicycles, Huo et al.~\cite{huo2025} study hierarchical residual path tracking at a regulated speed. Preference-conditioned multi-objective learning provides a way to share parameters across objective weights~\cite{abels2019}. We study task-level allocation between speed loss and path deviation through two reference channels. Hierarchical organization, residual correction and a frozen lower policy implement this interface; the contribution concerns preference allocation.
 
-\section{Problem formulation and control architecture}
-\subsection{Task-dependent path--speed problem}
-Let a task specify an original world-frame path $P_0$, requested speed $v_0$, destination $g_0$, and a preference $\alpha$. The controller must reach $g_0$ while staying upright through the evaluation horizon. Its trajectory is additionally judged against $P_0$ and $v_0$ according to the passage width and speed requirement. Each tested $\alpha$ is constant during an episode; choosing or adapting $\alpha$ online is outside this experiment.
+We use one middle policy to generate bounded, filtered corrections to both speed and steering, conditioned on a scalar preference. The original route, speed request and lower balance controller remain common when the preference changes. This permits paired experiments from the same complete state, so measured motion reveals the realized compromise.
 
-\subsection{Hierarchical closed loop}
+The study formulates joint speed and steering priority control above one balance layer. Paired simulations measure how preference changes speed loss, path departure and lean on single turns, S turns and exact right-angle references. Pure pursuit with zero middle correction and a second frozen learned policy provide matched comparisons under the same lower controller.
+
+\section{Task and control formulation}
+\label{sec:problem}
+\subsection{Coupled speed steering and lean demand}
+Let $v$, $\delta$ and $\phi$ denote forward speed, steering angle and roll angle, respectively. For wheelbase $L$, caster angle $\beta_{\rm c}$, path curvature $\kappa$ and gravitational acceleration $g$, the low-slip steady-turn relations are
+\begin{equation}
+\kappa\simeq\frac{\cos\beta_{\rm c}\tan\delta}{L},\qquad
+ a_y\simeq v^2\kappa,\qquad
+ \tan\phi_{\rm eq}\simeq\frac{v^2\kappa}{g}.
+\label{eq:coupling}
+\end{equation}
+At a fixed nonzero curvature, greater speed raises the lateral acceleration and equilibrium lean. Reducing speed changes both that demand and the operating point of the balance controller. Conversely, altering the steering reference changes the path and the roll reference. The objectives can therefore compete under limited control authority, but a tracking loss is not inevitable in every turn. These relations motivate joint reference adjustment; the experiments propagate the multibody model and its contact dynamics rather than the steady-turn approximation.
+
+The prescribed route is a world-frame curve $P_0(s)$ parameterized by arc length. A rollout specifies $P_0$, a requested forward speed $v_0$ and a fixed preference $\alpha$. Projection onto the original curve gives signed cross-track error $e_y^0$, heading error $e_h^0$ and progress $s^0$. Speed error is $e_v=v-v_0$. Tracking is evaluated against this original geometry for all preferences. The preference controls how the policy allocates its speed and steering corrections; it does not change the prescribed route or requested speed used for reporting.
+
+Locally, the lateral-acceleration demand changes approximately as
+\begin{equation}
+ \Delta a_y\simeq 2v\kappa\,\Delta v+v^2\Delta\kappa.
+\label{eq:localallocation}
+\end{equation}
+This first-order steady-turn interpretation separates the influence of speed and curvature changes. It motivates two reference channels but is not a causal decomposition of the transient multibody response or proof that both channels are necessary.
+
+The dimensionless preference enters the observation and training objective. The closed-loop response determines its physical speed--error operating point; its numerical value is not a desired tracking error or a speed setpoint.
+
+\subsection{Hierarchical reference interface}
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.99\textwidth]{figures/task_preference_architecture.pdf}
-\caption{Implemented control and scoring paths. U170 changes bounded speed and steering references, the frozen ECBC--ESO--U200 layer executes them, and a deterministic 10~Hz planner reconnects the path after deviation. Task scoring always uses the original path and destination plus measured speed and contact. The diagram depicts data flow, not a stability guarantee.}
+\includegraphics[width=0.98\textwidth]{figures/preference_control_architecture.pdf}
+\caption{Task-priority control through a shared reference interface. A user preference conditions joint speed and steering corrections at 50~Hz, while the common frozen lower layer regulates balance at 200~Hz. The original path remains the tracking reference when the evaluation planner reconnects the execution path. The training and evaluation lower-controller configurations are distinguished.}
 \label{fig:architecture}
 \end{figure*}
-Let $P_0$ denote the task's original world-frame path, $v_0$ its requested speed, and $g_0$ its destination. At 50~Hz the middle policy receives a control observation $o_t$ and a task preference $\alpha\in\{0,0.25,0.5,0.75,1\}$ and emits two bounded reference corrections,
+Figure~\ref{fig:architecture} shows the hierarchy. A geometric follower supplies nominal steering, and the requested speed supplies the longitudinal reference. At 50~Hz the middle policy uses vehicle history, local route information and $\alpha$ to produce two latent outputs. Reference filtering converts these outputs to bounded speed and steering offsets. The lower layer combines conventional balance feedback, an extended-state observer and a frozen local residual policy at 200~Hz. The simulator integrates at 5~kHz.
+
+For middle observation $o_t$, latent action $z_t$ and filter state $\eta_t$, the delivered reference is
 \begin{equation}
-(\Delta v_t,\Delta\delta_t)=\Pi_{\mathcal U}\!\left(\pi_\theta(o_t,\alpha)\right),
-\label{eq:middle}
+\begin{bmatrix}v_t^{\rm ref}\\\delta_t^{\rm ref}\end{bmatrix}
+=\mathcal G\!\left(v_0,\delta_t^{\rm geo},z_t,\eta_t\right),
+\qquad z_t\sim\pi_\theta(\cdot\mid o_t,\alpha).
+\label{eq:interface}
 \end{equation}
-where $\Pi_{\mathcal U}$ includes the implemented reference bounds and filtering. The same weights $\theta$ are used for every $\alpha$. The lower ECBC--ESO controller and a frozen local residual policy execute the delivered speed and steering references at 200~Hz. A deterministic planner recomputes an execution path at 10~Hz after deviation. It reconnects the actual state to the original route; it does not replace $P_0$ or $g_0$ in the task score. Thus correction of the execution reference cannot manufacture apparent success by moving the target.
+The map $\mathcal G$ applies action scaling, low-pass filtering, slew limits and reference bounds. One parameter vector $\theta$ serves all tested preferences. During deterministic evaluation, the latent Gaussian mean is used. The preference is fixed before the rollout, with no online preference selector or policy switching.
 
-Let $P_k^{\rm exec}$ be the path available at planner tick $t_k=k/10$~s. Before the first detected departure it equals $P_0$; subsequently a causal geometric connection $\mathcal D$ is recomputed from the current measured pose $x_{t_k}$ toward the fixed original destination:
+The lower layer converts the delivered steering reference to an equilibrium roll reference. With wheel-speed estimate $v_w=r_w\omega_{\rm rear}$, disturbance estimate $\widehat d$, roll-model coefficient $a_4$ and gain schedule $K$, the conventional balance command is
 \begin{equation}
-P_k^{\rm exec}=\begin{cases}P_0,&\text{before departure},\\
-\mathcal D(x_{t_k},g_0),&\text{after departure.}\end{cases}
-\label{eq:reconnect}
+\begin{split}
+ \phi^{\rm ref}&=\delta^{\rm ref}/q(v_w),\\
+ u_{\rm bal}&=\operatorname{clip}_{[-u_{\max},u_{\max}]}\!\left(
+ K(v_w)^\top
+ \begin{bmatrix}\delta^{\rm ref}-\delta\\
+ \phi^{\rm ref}-\phi-\widehat d/a_4\\-\dot\phi\end{bmatrix}\right).
+\end{split}
+\label{eq:lowerbalance}
 \end{equation}
-The geometric follower reads $P_k^{\rm exec}$, whereas every reported path error is projected onto $P_0$. This separation is shown by the two branches in Fig.~\ref{fig:architecture}.
-
-The common lower controller is the frozen local U200 checkpoint. The selected middle checkpoint U170 is an update-170 continuation of the H75 policy. Original H75, W400, and u325 are frozen alternatives assessed during model selection; their complete artifact identifiers are in the research record. Middle $\alpha$ is never passed as a lower-policy preference. Both simulated wheel sliding-friction coefficients are 0.8. All results below are from MuJoCo closed-loop simulation \cite{todorov2012} with the original actuator and controller limits.
-
-\subsection{Preference training objective}
-The middle actor uses a 351-dimensional observation: sixteen 20-field history frames, sixteen history masks, and fifteen current task/control fields including $\alpha$, path error and curvature preview. A shared 128--128--64 ELU network produces the two reference corrections. PPO~\cite{schulman2017} trained this actor with a curvature-aware, endpoint-mixed objective. Define the Huber-like penalty $H(x)=x^2$ for $|x|\leq1$ and $H(x)=2|x|-1$ otherwise. For original-request speed error $e_v$, signed original-path cross-track error $e_y$, original-path heading error $e_h$, and configured curvature-demand gate $\chi$, the implemented main running terms are
-\begin{align}
-J_v &= \big[(1-\alpha)(10-9\chi)+10\alpha\big]H(e_v/0.1),\\
-J_p &= 10(1-0.9\alpha)\big[H(e_y/0.1)+0.5H(e_h/0.1)\big],\\
-J_b &=20\chi\Big[(1-\alpha)H((|e_y|-0.1)_+/0.1)\notag\\
-&\qquad+\alpha H((|e_v|-0.05)_+/0.1)\Big].
-\label{eq:reward}
-\end{align}
-The actual reward also caps endpoint channels and includes roll, roll-rate, low-speed, overspeed, and reference-offset costs plus an early-failure penalty. The frozen code and configuration in the evidence package define these terms exactly. During training, $\alpha=0$ and $\alpha=1$ were sampled with probability 0.4 each, with the remaining 0.2 drawn uniformly. Evaluation at five levels therefore probes one trained conditional policy, not five separately optimized policies.
-
-\subsection{Two task scores}
-Both tasks require entry into the original 1~m destination disk, upright survival through 10~s, and original-path cross-track root-mean-square error below 0.25~m during 8--10~s. If $t_g$ is the first destination-entry time, a buffered-anchor corridor is satisfied when
+Here $q(v)$ is the lower model's equilibrium steering-to-roll ratio. The actuator requests are
 \begin{equation}
-C=\max_{0\leq t<t_g}\big(|e_y(t)|+0.5~\mathrm{m}\big)\leq w.
-\label{eq:corridor}
+ u^{\rm act}=\mathcal A\!\left(
+ \begin{bmatrix}u_{\rm bal}\\v^{\rm ref}/r_w\end{bmatrix}
+ +\operatorname{clip}_{[-D,D]}(D\odot\pi_{\rm L}(o^{\rm L})),\xi^{\rm act}\right),
+\label{eq:lowerresidual}
 \end{equation}
-The 0.5~m disk is an XY vehicle-envelope proxy. The narrow task uses $w=0.9$~m and permits measured speed loss. The wide task uses $w=1.4$~m and additionally requires actual mean turn speed $\bar v_{\rm turn}\geq0.85v_0$. These thresholds were selected on development conditions before the new-combination panel. We preassign $\alpha=0$ to the narrow task and $\alpha=1$ to the wide task; $\alpha=0.5$ is a shared fixed-compromise comparator. Each preference is evaluated by the same full task score.
-Writing $S_{10}$ for upright survival through the horizon and $E_{8:10}$ for original-path cross-track RMS error during the last two seconds, the complete binary score for task $j\in\{\mathrm{narrow},\mathrm{wide}\}$ is
+where $r_w$ is wheel radius, $D$ gives residual-channel limits and $\mathcal A$ enforces actuator rate, slew and travel constraints with memory $\xi^{\rm act}$. Observer compensation follows the lower controller's physical clock. The local actor receives ten 20-field frames and ten validity masks, giving 210 inputs, and has 256--128 ELU hidden layers. It receives neither path features nor $\alpha$. The middle layer therefore changes the tracking compromise through reference commands while the lower layer retains its local balance role.
+
+\subsection{Execution reference and tracking reference}
+After a departure, a causal geometric planner constructs a connection from the measured pose to the original route. It runs at 10~Hz in the evaluation stack. If $P_k^{\rm exec}$ is the available execution path, its update has the form
 \begin{equation}
-\begin{aligned}
-I_j=\mathbf 1\big[&t_g\leq10,\ S_{10},\ E_{8:10}\leq0.25\,\mathrm m,\\
-&C\leq w_j,\ V_j\big],
-\end{aligned}
-\label{eq:task}
+P_k^{\rm exec}=\begin{cases}
+P_0,&\text{before departure},\\
+\mathcal D(x_{t_k},P_0),&\text{after departure},
+\end{cases}\quad t_k=k\Delta_{\rm R}.
+\label{eq:reconnection}
 \end{equation}
-where $V_{\rm narrow}$ is always true and $V_{\rm wide}$ is $\bar v_{\rm turn}\geq0.85v_0$. This score keeps destination, continuation, passage, and speed requirements distinct.
+The follower reads $P_k^{\rm exec}$; the reported original-path error uses $P_0$. Keeping these references separate prevents a reconnection from redefining a path departure as zero tracking error. The planner, lower controller and physical limits are common to the nominal learned-policy and geometric-rule comparisons.
 
-\section{Experimental design}
-\subsection{Controller and route selection}
-Development evaluation considered U170, original H75, W400, and u325 under the same lower stack. Four routes cover low-speed single and S turns and high-speed single and S turns; prepared initial banks 1 and 3 were paired across tested preferences. H75, W400, and U170 had all four routes; u325 was screened on two conflict routes. Every tested episode reached the original goal and survived ten seconds, yet task scores differed. We chose U170 as the main conditional policy because its speed-priority endpoint met the development wide score in 8/8 paired contexts and its path-priority endpoint met the narrow score in 6/8. H75 was retained as a path-priority reference: it met the narrow score in 8/8 at $\alpha=0$, but its speed endpoint met the wide score in 6/8. This selection used development results and cannot serve as an independent final test.
+During middle-policy training the path is immutable and the original lower policy remains frozen. Evaluation uses a later common lower controller and adds the reconnection mechanism. This is an integration change shared by the compared middle policies, rather than additional optimization of their weights during testing. The middle policy observes lower-control history and filter memory, so its effective dynamics depend on the integrated stack.
 
-\subsection{Prospective exact-combination panel}
-After the development model and task score were fixed, we declared four new exact route--speed--direction combinations: low single left (76$^\circ$, radius 1.45~m, request 1.90~m/s), low S right (72$^\circ$, 1.55~m, 2.00~m/s), high single right (96$^\circ$, 3.15~m, 3.05~m/s), and high S left (70$^\circ$, 3.10~m, 3.10~m/s). Prepared complete initial banks 2 and 5 were not used in the preceding four-route selection. Each of U170 and H75 ran four routes $\times$ two banks $\times$ five fixed preferences, giving 40 physical episodes per checkpoint. No policy was retrained. The exact combinations were prospective, although their continuous geometry distribution, prepared-state generator, and friction domain were not independently held out from the broader project.
 
-The main outcomes are original-goal entry, ten-second survival, turn-interval mean true forward speed, maximum original-path error before first arrival, post-turn original-path error, and binary completion of both task scores. We retain all 80 individual trajectories and scores; the main text shows a representative matched XY panel and the aggregate task response. Prepared banks are paired initial states, not independent training seeds.
+\subsection{Task priorities and observable execution}
+For a prescribed route and requested speed, a path-priority task accepts speed loss to limit departure from the original geometry. A speed-priority task accepts deviation within an externally specified free-space envelope to reduce speed loss. In both cases, balance and physical actuator limits remain common requirements. A fixed preference $\alpha$ selects the relative priority; it does not itself specify corridor width or certify constraint satisfaction.
 
-An exploratory disturbance extension kept the same four routes and banks, applying a signed 36~N world-fixed force at 2.8~s for 0.15~s. U170 used the two preassigned endpoint preferences, giving 32 runs; the frozen geometric rule contributed 16 matched runs. Both pulse signs and every failure were retained. The extension was specified after the nominal results were inspected and uses the same original-goal and task score.
+Requested motion, delivered references and measured motion are distinct. A smaller commanded speed need not produce smaller path error. We therefore assess actual motion and use paired motion traces to interpret the response; channel-specific causal attribution requires matched ablations.
 
-For a second exploratory check, we selected the highest and lowest wheel-friction draws from an existing four-domain test set and reran the four nominal routes with each domain's prepared initial banks 0 and 6. Within each domain, U170 at $\alpha=0/1$ and the geometric rule shared the same model, paths, initial states and task score, giving 24 episodes per domain. No weights or task thresholds were changed.
+\input{method_training.tex}
 
-Finally, we constructed four 90$^\circ$ heading-change routes: left and right turns at 2.0~m/s with radius 1.6~m, and at 3.05~m/s with radius 3.0~m. The original routes use finite-radius curvature transitions, so the task represents a realizable right-angle change in heading rather than a zero-radius corner. U170 ran all five preferences and the frozen rule ran once on each route from prepared banks 2 and 5, for 48 matched nominal episodes. This panel was added after the preceding outcomes were inspected.
+\section{Experimental questions and measurement}
+\label{sec:experiments}
+\subsection{Questions linked to the task priorities}
+The experiments address three questions. Does changing preference under a common request produce a consistent change in actual speed and original-path deviation? How does that response vary with turn geometry and relative to a controller without middle correction? What does the available evidence establish about space-constrained and speed-preserving turning tasks? We distinguish a nominal multi-route comparison from earlier trajectory examples so that qualitative mechanism illustrations do not become additional test repetitions.
 
-\subsection{Matched geometric comparator}
-To test whether a simple geometric controller covers the same tasks, we retained the implemented pure-pursuit path follower \cite{coulter1992}, reference filter, lower controller, actuator limits, and 10~Hz reconnection. The learned middle output was removed. At each middle tick, the rule requests
+For task-level assessment, the intended primary measurements are mean actual speed and mean absolute and root-mean-square original-path error over a common bend segment. Maximum excursion and peak lean complement these averages. Space-constrained passage additionally requires a specified admissible corridor; speed-preserving turning requires a declared permissible deviation envelope. Neither context should be ranked solely by arrival within an arbitrary observation window.
+
+\subsection{Available continuous quantities}
+The available nominal tables report mean actual turn speed and the mean of episode-wise maximum absolute original-path error before destination entry. For episode $n$, the latter is
 \begin{equation}
-v_{\rm rule}=\min\left(v_0,\sqrt{a_{\max}/\max_{s\in[s_t,s_t+6\mathrm{m}]}|\kappa(s)|}\right),
+ M_n=\max_{0\le t<\min(t_{g,n},T_{\rm obs})}|e_{y,n}^0(t)|,
+ \qquad \overline M=\frac1{N_{\rm ep}}\sum_{n=1}^{N_{\rm ep}} M_n.
+\label{eq:maxerror}
+\end{equation}
+Here $t_g$ is first entry into the original destination disk and $T_{\rm obs}=10$~s is the recording horizon, not the task objective. Arrival and upright survival are validity information rather than the performance ranking. The exact sample mask of the older stored turn-speed statistic is unavailable; grouped peak errors cannot recover MAE or RMSE. We report those quantities as stored. The new matched matrix below uses raw trajectories and computes original-path MAE and RMSE directly over a declared bend-vicinity segment.
+
+\subsection{Nominal routes and paired states}
+Table~\ref{tab:routes} gives the four nominal route--speed combinations. Each uses two matched complete initial states, including simulator and controller memory. The same learned policy is evaluated at $\alpha\in\{0,0.25,0.5,0.75,1\}$ in each context, giving 40 episodes. The geometric rule runs once per context, giving eight episodes. Nominal wheel sliding friction is 0.8 in the MuJoCo model~\cite{todorov2012}. Route means pool the two states; aggregate means weight the four routes equally.
+\begin{table}[t]
+\centering\small
+\caption{Nominal route--speed combinations. Each uses the same two complete initial states across preferences and controllers.}
+\label{tab:routes}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Route & Angle & Radius (m) & $v_0$ (m/s)\\
+\midrule
+Low single left & $76^\circ$ & 1.45 & 1.90\\
+Low S right & $72^\circ$ & 1.55 & 2.00\\
+High single right & $96^\circ$ & 3.15 & 3.05\\
+High S left & $70^\circ$ & 3.10 & 3.10\\
+\bottomrule
+\end{tabular}
+\end{table}
+These prepared states are not independent training seeds. The comparison contains one trained realization of the preference-conditioned policy and is not an independently locked task-validation study. A later low-speed continuation supplied the U170 comparison actor; it is assessed separately in the new matched route matrix.
+
+\subsection{Reference-controller comparisons}
+The nominal geometric comparator retains pure-pursuit steering~\cite{coulter1992}, common reference conditioning, the frozen evaluation lower layer, actuator limits and 10~Hz reconnection. It removes the learned middle correction and uses
+\begin{equation}
+ v_{\rm rule}=\min\!\left(v_0,\sqrt{\frac{a_{\max}}{\max_{s\in[s_t,s_t+\ell_\kappa]}|\kappa(s)|}}\right),
 \label{eq:rule}
 \end{equation}
-subject to the same reference bounds; $\kappa$ is current execution-path curvature over the causal 6~m preview. The speed reference is published through the same filter, while the geometric follower supplies steering. Four lateral-acceleration caps, 1.5, 2.5, 3.5 and 5.0~m/s$^2$, were screened on the four development routes and banks 1/3. The 3.5 and 5.0 settings both completed 6/8 narrow and 6/8 wide development tasks; the tie rule selected 3.5. This frozen rule was then evaluated once on the same eight new route--bank combinations and original task scores. Its parameters were selected only from development scores, although the U170/H75 new-combination results had already been seen before this later comparator was run.
+with straight-path limit $v_0$. Curvature is read from the execution path. The lateral-acceleration cap $a_{\max}=3.5$~m/s$^2$ was selected from $\{1.5,2.5,3.5,5.0\}$ on development routes and fixed for this comparison. The rule was introduced after inspecting the learned outcomes, so its nominal result is a descriptive reference rather than a blind confirmation result. Because it shares the learned lower balance controller, this comparison tests the middle reference strategy rather than learning versus no learning anywhere in the system.
+
+\subsection{Matched speed, geometry and disturbance matrix}
+The extended matrix uses six routes at each of three requested speeds: 1.90, 2.50 and 3.05~m/s. Each speed stratum includes left and right single turns and left- and right-leading S turns; the low and high strata also contain a tighter single-turn pair. The medium stratum contains two exact $90^\circ$ polyline corners, one left and one right. These corner references change heading discontinuously at the vertex: no clothoid, circular arc, or curvature-based rounding is inserted. The vehicle may round the corner in its actual motion. Every original destination is 7~m after the last bend or vertex, with a 1~m arrival disk.
+
+For each route we restore two complete prepared initial states, then run the fixed H75 policy at $\alpha\in\{0,0.5,1\}$, a second frozen learned middle policy U170 at the same preferences, and a pure-pursuit reference follower with exactly zero middle correction. U170 continues H75 with two critic-only collections and 168 PPO updates over a mixture that includes low-speed tight turns; it is not an independently initialized training seed. Each controller has a nominal run and a run with a $+36$~N world-Y force applied from 2.80 to 2.95~s. Thus the declared matrix contains $18\times2\times2\times7=504$ physical rollouts, each with a 10~s observation window. All controllers share the same lower layer, vehicle model with 0.8 nominal wheel sliding friction, actuator constraints, reference conditioning and 10~Hz causal reconnection. A force applied in a fixed world direction need not have the same body-lateral sign after left and right turns.
+
+The matrix was designed after inspection of earlier development cases, and H75 was previously selected as the main policy. It is therefore an exploratory matched comparison, not independent confirmation. The evaluation uses 0.8 sliding friction at both wheels, whereas the historical H75 training identity used a different front-wheel contact setting; this is a common evaluation-domain change, not a single-factor friction study. We retain all route--state--event outcomes in the accompanying per-case record. Bend speed and original-path MAE are computed from raw measured trajectories in a common original-progress region spanning the turn and 2~m beyond it. Arrival, contact failure, controller fault and full-horizon completion are reported separately; arrival does not by itself imply accurate sustained tracking.
 
 \section{Results}
+\label{sec:results}
+\subsection{What user preference changes across turns}
+Figure~\ref{fig:tradeoff} addresses the central execution question: under the same route and speed request, how much actual speed is retained and how far does the robot depart from the original path as preference changes? Across the four nominal routes, increasing $\alpha$ from 0 to 1 raises mean turn speed from 2.200 to 2.458~m/s and mean maximum pre-arrival path error from 0.223 to 0.615~m (Table~\ref{tab:nominal}). The same network therefore exposes distinct physical operating points, rather than only distinct reward labels.
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/preference_task_tradeoff.pdf}
-\caption{Five fixed preferences on eight paired new route--bank contexts. (a) Mean actual turn speed versus mean pre-arrival maximum original-path error; H75 is dashed and U170 solid. (b) Complete narrow and wide task counts. Lines connect tested values only.}
+\includegraphics[width=0.98\textwidth]{figures/h75_route_preference_evidence.pdf}
+\caption{How preference changes actual execution on multiple routes. Route-resolved curves show stored mean turn speed and mean episode-wise maximum original-path error before arrival, each averaged over two matched complete initial states. Table~\ref{tab:nominal} retains the geometric curvature-speed comparator at the aggregate level. The error is a peak statistic, not MAE or RMSE; lines connect tested preferences and do not establish continuous interpolation.}
 \label{fig:tradeoff}
 \end{figure*}
+\begin{table}[t]
+\centering\small
+\caption{Nominal continuous outcomes. Every row averages eight matched route--state contexts. Intermediate policy aggregates use route means rounded to three decimals.}
+\label{tab:nominal}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Controller / preference & Speed (m/s) & Maximum error (m)\\
+\midrule
+Preference policy, $\alpha=0$ & 2.200 & 0.223\\
+Preference policy, $\alpha=0.25$ & 2.253 & 0.317\\
+Preference policy, $\alpha=0.50$ & 2.325 & 0.391\\
+Preference policy, $\alpha=0.75$ & 2.401 & 0.482\\
+Preference policy, $\alpha=1$ & 2.458 & 0.615\\
+Geometric rule & 2.469 & 0.233\\
+\bottomrule
+\end{tabular}
+\end{table}
 
+The response depends strongly on the route. On the high-speed single right turn, speed increases from 2.667 to 3.019~m/s while mean maximum error increases from 0.300 to 0.990~m. On the high-speed S left turn, the corresponding changes are 2.781 to 3.050~m/s and 0.247 to 0.906~m. Moving toward the requested speed on these routes is accompanied by substantially larger lateral excursions.
+
+The low-speed S right turn shows a smaller exchange: speed rises from 1.734 to 1.933~m/s and error from 0.180 to 0.404~m. The low-speed single left turn is an important exception. Speed rises from 1.619 to 1.829~m/s, while endpoint errors are almost equal, 0.164 and 0.162~m; the error at $\alpha=0.75$ is lower still, at 0.139~m. Thus, changing priority does not enforce a monotone path-error response, and better speed need not always require worse tracking.
+
+These outcomes support a route-dependent priority interface. They do not show an unavoidable physical tradeoff or an optimal allocation. The high- and low-speed strata also differ in geometry and turn direction, so their contrast does not isolate requested speed as the only causal factor.
+
+\subsection{Response to a lateral pulse on a low-speed S turn}
+Figure~\ref{fig:pulse} shows an illustrative pair of complete-state banks on a low-speed left-leading S turn. The pulse is identical in world coordinates for every controller in each bank. With $\alpha=1$, H75 enters the original destination region in both banks. Its bend speed is 1.909 and 1.912~m/s, compared with 1.892 and 1.889~m/s for pure pursuit; original-path bend MAE is 0.221 and 0.151~m, compared with 0.375 and 0.237~m. Peak excursions are 0.427 and 0.275~m, compared with 1.150 and 1.226~m. Neither controller records contact failure in these cases. This is a positive disturbance example for the learned interface, selected after viewing the exploratory matrix rather than an estimate of a population-wide effect.
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/paired_xy_low_high_turn.pdf}
-\caption{World-frame XY paths on the low-speed right S turn (bank 5) and high-speed left S turn (bank 2). The original route is dotted, the rule dashed, and U170 preferences solid; markers show ten-second endpoints. The reference is displayed through sampled progress plus 2~m. Initial state, lower controller and wheel friction match within each panel.}
-\label{fig:xy}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/positive_pulse_xy.pdf}
-\caption{Matched XY trajectories (top) and true forward speed (bottom) on the low-speed right S turn with a world-fixed $+36$~N pulse from 2.8 to 2.95~s (shaded). Both prepared states are shown. Dots mark pulse onset; terminal markers mark the ten-second endpoints. U170 $\alpha=1$ passed the complete wide task in both states, while $\alpha=0$ and the geometric rule did not.}
+\includegraphics[width=0.98\textwidth]{figures/low_s_pulse_matched.pdf}
+\caption{Matched actual XY trajectories and measured forward speed for the two prepared states on the 1.90~m/s left-leading S turn, with a $+36$~N world-Y pulse over 2.80--2.95~s (gray band). Dotted black/gray denotes the original path and requested speed, not an execution-path reset. The star marks the original goal 7~m beyond the last bend; endpoint markers show actual final positions. All four controllers reach the goal without contact failure in these two cases. The selected example is exploratory; the complete route matrix is reported separately.}
 \label{fig:pulse}
 \end{figure*}
 
+Under zero pulse on this same route, pure pursuit has lower bend MAE than H75 at $\alpha=1$ in both banks (0.071 versus 0.134~m and 0.070 versus 0.133~m). Thus the disturbance example does not imply that H75 dominates the geometric follower in nominal tracking. The matched contrast instead shows one setting in which the learned reference response reduces a perturbation-induced departure while retaining speed.
+
+\subsection{An unsmoothed right-angle reference}
+Figure~\ref{fig:sharp} compares actual motion against the two exact polyline corners. The original reference goes straight for 5~m and changes heading by $90^\circ$ at one vertex; it is not a circular or curvature-smoothed target. Both directions use a goal 7~m after the vertex. The traces expose how each controller negotiates a discontinuous geometric request; a rounded actual trajectory is expected from finite steering and lean dynamics and must not be mistaken for a rounded input path.
 \begin{figure*}[t]
 \centering
-\includegraphics[width=.85\textwidth]{figures/right_angle_xy.pdf}
-\caption{Actual and original world-frame XY paths on the preselected low- and high-speed left 90$^\circ$ turns, both from prepared bank 2. The original goal is marked by a star; other symbols mark ten-second endpoints. The controller follows the same finite-radius original route under each preference. All four turn directions/speeds, two banks and five U170 preferences are retained in the accompanying result package.}
-\label{fig:rightangle}
+\includegraphics[width=0.98\textwidth]{figures/exact_sharp90_matched.pdf}
+\caption{Actual XY trajectories from state bank 2 at 2.50~m/s, compared with exact left and right $90^\circ$ polyline references (dotted). The reference has no inserted curved segment. The star marks the original goal 7~m after the corner, circles indicate final positions after destination entry, and crosses indicate an episode ending without that entry. H75 uses three fixed preferences; pure pursuit has zero learned middle correction. All raw trajectories, including the second state bank and disturbed corners, are retained in the matrix inventory.}
+\label{fig:sharp}
 \end{figure*}
 
-All 80 new-combination episodes entered the original destination and remained upright for the full observation window. The U170 path--speed response was ordered over the five fixed preferences (Table~\ref{tab:u170}): higher $\alpha$ increased mean turn speed and maximum original-path deviation. First arrival and survival alone therefore cannot identify the task-appropriate setting.
+\subsection{Complete matched route matrix}
+Table~\ref{tab:matrix} reports all speed strata and both force conditions; each cell aggregates six route geometries and two complete prepared states. The high-speed stratum reaches the original goal disk in every case for all seven controllers. At 1.90~m/s under the force pulse, H75 reaches in 10, 11 and 12 of 12 cases as $\alpha$ increases from 0 to 1; U170 has the same entry counts, and pure pursuit reaches in 12. At 2.50~m/s without the pulse, H75 at $\alpha=1$ reaches in 11 of 12, whereas U170 at $\alpha=0.5$ and 1 reaches in 10 of 12. All medium-speed pulse cases enter the goal disk. No case in the matrix is marked as a contact failure or controller fault; non-arrival and contact failure are distinct outcomes.
 
-\begin{table}[t]
-\caption{U170 on four new routes and two prepared states per route ($n=8$ per preference). Every row also had 8/8 original-goal entries and ten-second survival.}
-\label{tab:u170}
-\centering\small
-\begin{tabular}{@{}ccccc@{}}
-\toprule
-$\alpha$ & Narrow & Wide & Turn speed & Max. path error\\
- & /8 & /8 & (m/s) & (m)\\
-\midrule
-0    & 6 & 2 & 2.094 & 0.273\\
-0.25 & 6 & 2 & 2.131 & 0.334\\
-0.50 & 4 & 6 & 2.178 & 0.409\\
-0.75 & 4 & 8 & 2.234 & 0.473\\
-1.00 & 4 & 8 & 2.300 & 0.532\\
-\bottomrule
-\end{tabular}
-\end{table}
+Across all three speeds, H75's average measured bend speed rises with $\alpha$. Its mean original-path bend MAE also rises in five of the six speed--force strata; in the disturbed low-speed stratum the three values are 0.271, 0.259 and 0.343~m. The geometric comparator has lower bend MAE than every H75 setting in the medium and high strata, and in both nominal and disturbed low-speed aggregate rows. Thus the learned controller's observable preference response is stronger evidence here than absolute tracking superiority. U170 is not consistently better than H75 despite its additional training; we retain it as a distinct learned outcome rather than replacing the selected main policy.
 
-The preassigned U170 path endpoint completed six narrow tasks, two more than the fixed $\alpha=0.5$ comparator; its speed endpoint completed all eight wide tasks, also two more than the comparator. The narrow gain occurred on the high-speed single right turn, where $\alpha=0$ passed both prepared states and $\alpha=0.5$ passed neither. The wide gain occurred on the low-speed S right turn, where $\alpha=1$ passed both states and $\alpha=0.5$ passed neither. Other route-level counts were tied for these comparisons. The pairing is by route and prepared bank, not independent training replicates. The wide score includes requested-speed preservation, post-turn tracking, destination entry, and survival. Per-case evidence is supplied with the article source.
+\input{matrix_summary.tex}
 
-\begin{table}[t]
-\caption{Matched U170 and geometric-rule outcomes on eight new route--bank contexts. All rows reached the original goal and survived ten seconds in 8/8 cases; the rule uses no learned middle output.}
-\label{tab:rule}
-\centering\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-Method & Narrow & Wide & Turn speed & Max. path error\\
- & /8 & /8 & (m/s) & (m)\\
-\midrule
-Geometric rule & 7 & 7 & 2.469 & 0.233\\
-U170 $\alpha=0$ & 6 & 2 & 2.094 & 0.273\\
-U170 $\alpha=0.5$ & 4 & 6 & 2.178 & 0.409\\
-U170 $\alpha=1$ & 4 & 8 & 2.300 & 0.532\\
-\bottomrule
-\end{tabular}
-\end{table}
+\subsection{Comparison with a geometric speed allocation}
+The geometric rule reaches 2.469~m/s mean turn speed with 0.233~m mean maximum pre-arrival error. It is faster and has lower aggregate error than every learned setting with $\alpha\ge0.25$. At $\alpha=0$, the learned controller has 0.010~m less error but is 0.269~m/s slower. The small error difference is descriptive and does not establish superiority with only two initial states and one trained realization.
 
-The geometric rule passed seven of eight narrow and wide tasks (Table~\ref{tab:rule}). Compared case by case with the preassigned U170 endpoint, the narrow task had one U170-only pass and two rule-only passes; five cases passed both. The wide task had one U170-only pass and seven joint passes. Thus the conditional policy offered a measured wide-task gain on one initial state, whereas the geometric rule retained higher narrow-task coverage. The rule's mean turn speed and mean pre-arrival path deviation were 2.469~m/s and 0.233~m, respectively. Its one failure in both tasks was the low-speed S right turn from bank 5, where its maximum original-path error reached 1.042~m. These comparisons use the same scoring contract; the rule was tuned on development routes after the nominal U170 panel had been inspected.
+The rule separates adjustability from the quality of the operating points. The larger learned deviations cannot be attributed solely to physical coupling: better reference allocation is possible on these routes. This earlier rule also differs from the new matrix comparator, which uses pure pursuit with zero middle correction and no curvature-speed cap. A future locked comparison should test error at matched measured speed.
 
-H75 confirms that checkpoint choice matters. Its path endpoint passed 8/8 narrow tasks, compared with 4/8 at its own fixed $\alpha=0.5$. Its speed endpoint, however, passed only 5/8 wide tasks, below the 8/8 obtained by its middle preference. In the same panel H75 mean turn speed rose from 2.200 to 2.458~m/s, while mean maximum original-path error rose from 0.223 to 0.615~m. The behavior change is clear, but $\alpha=1$ is not the best wide-task action for this checkpoint.
+\section{Task interpretation and remaining validation}
+For space-constrained passage, the path-priority endpoint is a plausible operating choice when slowing is acceptable, because its nominal aggregate excursions are smaller. For a turn with permitted deviation, increasing speed priority generally preserves more of the requested speed. These are interpretations of the observed response, not demonstrations that a particular corridor was traversed within its boundaries or that a specified speed-retention requirement was met. Such requirements must be fixed before the corresponding task test.
 
-The disturbance experiment contains a positive matched example (Fig.~\ref{fig:pulse}). With the $+36$~N pulse, U170 at $\alpha=1$ completed the wide task in both prepared states of the low-speed right S turn and the high-speed right single turn: 4/4 cases, compared with 0/4 for U170 at $\alpha=0$ and 0/4 for the geometric rule. These four contexts were selected after inspecting the full signed-pulse panel, so the result illustrates a reproducible behavior in this panel rather than an independently selected disturbance benchmark. Across both force signs and all four routes, every run survived ten seconds, while wide-task counts were 4/16, 2/16 and 2/16 for U170 $\alpha=1$, U170 $\alpha=0$, and the rule, respectively. The full 48-case outcome matrix and 32 actual/reference XY panels remain in the supplement.
+A complete mechanism experiment should hold the full initial state, route and request constant, compare joint correction with unmodified-reference, speed-only and steering-only control, and record both requested and delivered references. It should include low-demand and high-demand maneuvers so that channel use can be related to the speed--steering--lean demand rather than selected from a single favorable example. Training separate restricted-channel policies is distinct from disabling one channel at evaluation; both interventions answer useful but different questions.
 
-We also repeated the four-route task comparison using two previously sampled physical-domain models at the highest and lowest wheel-friction draws, each with two domain-specific prepared initial states (Table~\ref{tab:domain}). All 48 episodes reached the original destination and survived ten seconds. U170 $\alpha=1$ passed the wide task in 8/8 contexts in each domain; the rule passed 6/8 and 7/8. These two domains and their task protocol were chosen after earlier outcomes had been opened, and their role is exploratory.
-
-\begin{table}[t]
-\caption{Matched task transfer to two previously sampled physical domains; $n=8$ routes/states per method and domain. Mass scales are 0.975 for domain 0 and 1.074 for domain 3.}
-\label{tab:domain}
-\centering\small\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}ccccc@{}}
-\toprule
-Domain & Wheel $\mu$ & Method & Narrow & Wide\\
-\midrule
-0 & 0.932 & Rule & 6/8 & 6/8\\
-0 & 0.932 & U170 $\alpha=0$ & 6/8 & 2/8\\
-0 & 0.932 & U170 $\alpha=1$ & 4/8 & 8/8\\
-3 & 0.612 & Rule & 7/8 & 7/8\\
-3 & 0.612 & U170 $\alpha=0$ & 6/8 & 3/8\\
-3 & 0.612 & U170 $\alpha=1$ & 4/8 & 8/8\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The 90$^\circ$ turn panel reached the original goal and remained upright in all 48 episodes. Across its eight paired route--state contexts, U170's mean turn speed increased from 2.122 to 2.346~m/s and mean maximum original-path deviation from 0.325 to 0.601~m between $\alpha=0$ and $\alpha=1$. Narrow-task completion changed from 6/8 to 2/8, while wide-task completion changed from 2/8 to 8/8. The geometric rule completed both tasks in 8/8 contexts. Figure~\ref{fig:rightangle} shows the preselected low/high left-turn trajectories; the complete left/right panel is available with the source data.
-
-\section{Discussion}
-The selected U170 policy supplies one set of parameters for two distinct preassigned tasks. On the tested route--bank combinations, the task-selected endpoints each gained two completions over a fixed intermediate preference. The matched trajectories and continuous path--speed metrics show how the preference changes physical behavior. The geometric rule achieved both tasks in seven of eight nominal contexts with no preference input. This result locates the learned controller's current value in controllable task tradeoffs rather than general nominal-path superiority. Its one additional wide-task completion must be interpreted alongside the rule's one additional narrow-task completion.
-
-The alternative H75 checkpoint exposes a useful limitation. Stronger narrow-passage performance does not imply a stronger speed-preserving endpoint. A checkpoint that moves farther and faster may still fail the wide task through excessive excursion or post-turn tracking error. This is why the original path, fixed destination, and continuation after first arrival remain part of scoring. The same observation also prevents a claimed success based solely on adjusted execution references.
-
-The U170 training log shows no fixed-task convergence plateau: sampled reward varied across continuation windows while the rollout distribution changed. Checkpoint selection therefore rests on executed development tasks. The geometric comparator was formulated after seeing the nominal middle-policy outcomes and selected on distinct development routes, so its new-combination comparison is matched but not blinded. The positive pulse subset shows that a task-appropriate preference can matter under disturbance; performance across the full signed panel varies with route and force direction. The two physical-domain comparisons show that the wide-task endpoint effect persists across those sampled parameter and initial-state changes. The XY buffered corridor is a vehicle-envelope proxy; full-body clearance remains to be measured.
+The matched matrix extends geometric and speed coverage, but was designed after examining earlier results and uses only two prepared complete states per route. Its force pulse has one magnitude, one world direction and one onset time. Multiple independent training seeds, unseen initial-state banks, varied disturbance directions and a locked domain-randomization protocol are needed to quantify repeatability and transfer. Bend-segment MAE, RMS, peak excursion, speed and lean are saved per case for that work. All evidence remains simulation-only; hardware behavior is not inferred from these rollouts.
 
 \section{Conclusion}
-With the same lower balance controller and one frozen middle network, a fixed task preference produced an ordered path--speed response across low- and high-speed turns. On four new exact route--speed combinations, U170's path endpoint completed 6/8 narrow passages versus 4/8 at a fixed middle setting, and its speed endpoint completed 8/8 wide speed-preserving turns versus 6/8. A development-tuned geometric rule completed 7/8 of each nominal task. A matched positive-force subset also showed 4/4 wide-task completions for the speed endpoint against 0/4 for the path endpoint and rule. Four further 90$^\circ$ turn routes confirmed the preference response and 48/48 original-goal arrivals, while the geometric rule completed both tasks on all eight paired contexts. These results establish a measurable task-conditioned capability in the simulated vehicle and identify where preference choice affects completion.
+A preference-conditioned middle controller lets one single-track balance layer execute a common route and speed request with distinct speed and steering adjustments. The complete matched matrix shows a measurable, route-dependent response: greater speed priority generally preserves more speed while increasing original-path error. An illustrative disturbed S turn shows a favorable learned response, but the geometric follower has lower aggregate path error. The present contribution is a controllable task-priority interface and its measured execution behavior; improved reference allocation and independently locked task tests remain the next steps.
 
 \section*{Data and code availability}
-The local research package contains frozen configurations, reward code, individual case scores, raw simulation trajectories, figure-generation code, and a source manifest. Scientific-writing and figure-audit procedures from Scientific Agent Skills~\cite{kassis2026} assisted preparation of this draft.
+The accompanying package provides this article source, resolved configurations, trajectory figures, figure-generation code, per-case metrics and raw-trajectory locations. Historical experiments without recoverable raw trajectories are identified separately from the new complete matched matrix. Scientific writing and figure-audit procedures used the Scientific Agent Skills workflow~\cite{kassis2026}; its use does not validate the physical conclusions.
 
 \begingroup\footnotesize
 \begin{thebibliography}{9}
+\bibitem{garone2017} E. Garone, S. Di Cairano, I. Kolmanovsky, Reference and command governors for systems with constraints: A survey on theory and applications, \emph{Automatica} 75 (2017) 306--328. \url{https://doi.org/10.1016/j.automatica.2016.08.013}.
+\bibitem{johannink2019} T. Johannink, et al., Residual Reinforcement Learning for Robot Control, in: \emph{2019 International Conference on Robotics and Automation}, 2019. \url{https://arxiv.org/abs/1812.03201}.
 \bibitem{huo2025} B. Huo, L. Yu, Y. Liu, Z. Chen, Hierarchical residual reinforcement learning based path tracking control method for unmanned bicycle, \emph{Robotics and Autonomous Systems} 190 (2025) 104996. \url{https://doi.org/10.1016/j.robot.2025.104996}.
 \bibitem{schulman2017} J. Schulman, F. Wolski, P. Dhariwal, A. Radford, O. Klimov, Proximal Policy Optimization Algorithms, arXiv:1707.06347 (2017). \url{https://arxiv.org/abs/1707.06347}.
 \bibitem{abels2019} A. Abels, D. Roijers, T. Lenaerts, A. Now\'{e}, D. Steckelmacher, Dynamic Weights in Multi-Objective Deep Reinforcement Learning, in: \emph{Proceedings of the 36th International Conference on Machine Learning}, PMLR 97 (2019) 11--20. \url{https://proceedings.mlr.press/v97/abels19a.html}.
 \bibitem{todorov2012} E. Todorov, T. Erez, Y. Tassa, MuJoCo: A physics engine for model-based control, in: \emph{2012 IEEE/RSJ International Conference on Intelligent Robots and Systems}, 2012, pp. 5026--5033. \url{https://doi.org/10.1109/IROS.2012.6386109}.
-\bibitem{kassis2026} T. Kassis, V. Agarwal, Y. He, D. Patel, A. M. Brueckner, Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents, arXiv:2609.00065 (2026). \url{https://doi.org/10.48550/arXiv.2609.00065}.
-\bibitem{coulter1992} R. C. Coulter, Implementation of the Pure Pursuit Path Tracking Algorithm, Tech. Rep. CMU-RI-TR-92-01, Carnegie Mellon University, 1992. \url{https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm}.
+\bibitem{coulter1992} R. C. Coulter, Implementation of the Pure Pursuit Path Tracking Algorithm, Tech. Rep. CMU-RI-TR-92-01, Carnegie Mellon University, 1992. \url{https://www.ri.cmu.edu/publications/implementation-of-the-pure-pursuit-path-tracking-algorithm/}.
+\bibitem{kassis2026} A. Kassis, et al., Scientific Agent Skills, arXiv:2609.00065 (2026). \url{https://arxiv.org/abs/2609.00065}.
 \end{thebibliography}
 \endgroup
 \end{document}
