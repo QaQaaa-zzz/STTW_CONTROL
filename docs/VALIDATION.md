@@ -2603,3 +2603,5 @@ Supplementary evidence: `docs/paper/SUPPLEMENT.tex` and `SUPPLEMENT.pdf` are reg
 ## 两轮候选配对与扩大续训（2026-11-05）
 配对输出`runs/isaac_h75_terrain_paired`，22物理回合、513764physics，原H75两地形10/10到5s，2轮候选8/10；平坡alpha.5/.75新增非轮触地，崎岖坡五档共同窗口cross RMSE均减小。完整XY/奖励/分项/速度/误差及30评分单元由`analyze_isaac_pair.py`保存，baseline每地形只执行1次，跨alpha重评分。共同窗口仅包括双方都完成的lower步，部分物理步终止绘图使用实际时刻。不能把两轮退化当补训方向无效。
 用户明确要求扩大续训，现启动32轮三域混合阶段，`learning/configs/isaac_h75_terrain_continue.json`，每轮平地/坡地/起伏坡地×五alpha=15回合，最大480回合、12000000physics/120000policy。保留上一阶段Actor/Critic/Adam，Actor逐数组初始化exact核验，旧未存RNG故新seed明确登记。原奖励与物理/时序不变；不因少量负结果提前停止学习。实际运行以`runs/isaac_h75_terrain_continue32/status.json`为准，TB6018已HTTP核验，不声称32轮已经完成。
+
+32轮运行期间的只读诊断：`plot_isaac_training.py`已支持同一更新内混合地形，按terrain×五档alpha输出逐回合奖励分项、实际观察时长、失败原因、速度/cross RMSE至training_groups.csv，并生成loss/KL/采样reward/累计接受更新与alpha-terrain曲线。默认只画首轮、当前末轮和本阶段训练reward best的XY/每步/累计reward/速度/姿态面板，其余所有回合仍在CSV和原NPZ。新阶段首个完成更新15回合及旧阶段10回合两种记录格式均实测通过，奖励和逐tick总和复核；只读取保存数据，无额外物理。运行中的trainer/probe/reward/control/config逐字节与启动snapshot一致，未热改。PID1335552保持live；首轮KL.00349已接受，早期波动不改变既定32轮预算。
