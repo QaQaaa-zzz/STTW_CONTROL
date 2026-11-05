@@ -106,3 +106,47 @@ def export_domain_model(output,parameters,source=DEFAULT_XML):
     varied=load_model(output)
     return dict(source_model=bundle.identity,parameters=parameters,model=varied.identity,
                 output=str(output.resolve()),semantics='both wheel sliding coefficients; chassis mass and principal inertia scaled together, center of mass and other bodies unchanged')
+
+
+def export_offroad_model(output, ridges, source=DEFAULT_XML):
+    """Add buried round ridges with real contacts, preserving the vehicle XML.
+
+    Each ridge specifies world XY, long-axis yaw (radians), straight length,
+    capsule radius and exposed height (metres). A zero-height ridge is a flat
+    control with identical geom topology. No external force is introduced.
+    """
+    import math
+    required = {'x_m', 'y_m', 'yaw_rad', 'length_m', 'radius_m', 'height_m'}
+    if not ridges or any(set(r) != required or
+            any(not math.isfinite(v) for v in r.values()) or
+            r['length_m'] <= 0 or r['radius_m'] <= 0 or
+            not 0 <= r['height_m'] < r['radius_m'] for r in ridges):
+        raise ValueError('finite ridge parameters, positive length/radius and 0 <= height < radius required')
+    source = Path(source).resolve()
+    bundle = load_model(source)
+    root = ET.fromstring(bundle.portable_xml)
+    world = root.find('worldbody')
+    floor = world.find("geom[@name='floor']")
+    if floor is None or floor.get('type') != 'plane':
+        raise ValueError('offroad export requires the original named plane floor')
+    for i, ridge in enumerate(ridges):
+        dx = .5 * ridge['length_m'] * math.cos(ridge['yaw_rad'])
+        dy = .5 * ridge['length_m'] * math.sin(ridge['yaw_rad'])
+        z = ridge['height_m'] - ridge['radius_m']
+        attrs = {k: v for k, v in floor.attrib.items()
+                 if k not in {'name', 'type', 'size', 'pos', 'quat', 'euler', 'axisangle', 'xyaxes', 'zaxis'}}
+        attrs.update(name=f'offroad_ridge_{i}', type='capsule',
+                     size=str(ridge['radius_m']),
+                     fromto=' '.join(map(str, (ridge['x_m']-dx, ridge['y_m']-dy, z,
+                                               ridge['x_m']+dx, ridge['y_m']+dy, z))))
+        ET.SubElement(world, 'geom', attrs)
+    compiler = root.find('compiler')
+    compiler.set('meshdir', str((source.parent / compiler.get('meshdir', '')).resolve()))
+    output = Path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open('x') as stream:
+        stream.write(ET.tostring(root, encoding='unicode'))
+    varied = load_model(output)
+    return dict(source_model=bundle.identity, model=varied.identity, ridges=ridges,
+                output=str(output.resolve()),
+                semantics='buried capsule terrain; original floor and vehicle unchanged; world coordinates in metres/radians')
