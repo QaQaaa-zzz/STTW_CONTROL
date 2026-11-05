@@ -6,6 +6,19 @@ from pathlib import Path
 import torch
 
 
+def local_frame(measurement, true_speed, governed, previous_reference,
+                previous_command, previous_applied, yaw_rate, rates, controller):
+    m = measurement
+    a4 = controller._system(m[:, 5]*.1)[2]
+    ratio = controller._system(governed[:, 0])[3]
+    frame = torch.stack((m[:,0],m[:,1],m[:,2],m[:,3],true_speed,yaw_rate,
+    m[:,5]*.1,m[:,6]*.1,governed[:,0],governed[:,1],rates[:,0],rates[:,1],
+    previous_reference[:,0],previous_reference[:,1],previous_command[:,0],previous_command[:,1],
+    previous_applied[:,0],previous_applied[:,1],-controller.disturbance/a4,
+    governed[:,1]/ratio), dim=-1)
+    return frame
+
+
 class TorchLocalLower:
     def __init__(self, actor_path, actor_sha256, count, device='cpu', dtype=torch.float32):
         data = Path(actor_path).read_bytes()
@@ -38,15 +51,9 @@ class TorchLocalLower:
     def prepare(self, measurement, true_speed, governed, previous_reference,
                 previous_command, controller):
         # Evaluate before controller.step: ESO features use the previous state.
-        m = measurement
-        rates = (governed-previous_reference)/controller.config['dt']
-        a4 = controller._system(m[:, 5]*.1)[2]
-        ratio = controller._system(governed[:, 0])[3]
-        frame = torch.stack((m[:,0],m[:,1],m[:,2],m[:,3],true_speed,self.yaw_rate,
-            m[:,5]*.1,m[:,6]*.1,governed[:,0],governed[:,1],rates[:,0],rates[:,1],
-            previous_reference[:,0],previous_reference[:,1],previous_command[:,0],previous_command[:,1],
-            self.previous_applied[:,0],self.previous_applied[:,1],-controller.disturbance/a4,
-            governed[:,1]/ratio), dim=-1)
+        frame = local_frame(measurement, true_speed, governed, previous_reference,
+            previous_command, self.previous_applied, self.yaw_rate,
+            (governed-previous_reference)/controller.config['dt'], controller)
         self.frames = torch.cat((self.frames[:,1:],frame[:,None]),dim=1)
         self.mask = torch.cat((self.mask[:,1:],torch.ones_like(self.mask[:,:1])),dim=1)
         obs = torch.cat(((self.frames/self.scales).clamp(-5,5).flatten(1),self.mask),dim=-1)
