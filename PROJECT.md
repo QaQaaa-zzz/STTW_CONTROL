@@ -1,3 +1,9 @@
+# Current: reward selection corrected; no new lower candidate adopted
+
+Episode/reward mid-run peaks are valid completed-episode reward. Old model_best.pt was the initialization winner of short24-step blocks and is not a learned best. Four episode-reward-screened snapshots (completed276/201/301/latest451) now evaluated: survival7/2/7/5 of7, finaltracking0/7 each; full XY in runs/go2_local_original500_episode_candidates/RESULTS.md. No H75/terrain progression on these candidates. New primary selector now follows the TensorBoard completed-episode reward; short-block best diagnostic separate.
+
+Original Actor/Critic256/128 hidden widths; new512/256/128 is3.13x Actor parameters, with no causal evidence of over-sizing. Native Go2 transfer requires accounting for action/exploration and50Hz versus200Hz timing. Native source/log comparison report: runs/go2_local_original500/TRAINING_DIFFERENCES.md. Fixed-learning-rate rerun remains prepared, not launched. Next restore task-appropriate near-zero residual initialization and fixed LR, preserve original command difficulty/reward, then run the declared bounded stage. Original Local300 remains frozen reference.
+
 # Current: adaptive-LR run stopped; fixed-LR rerun prepared
 
 

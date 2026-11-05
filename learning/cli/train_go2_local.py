@@ -41,12 +41,29 @@ status = dict(stage='initializing', pid=os.getpid(), completed_updates=0, starte
 
 class RecordedRunner(OnPolicyRunner):
     """Add a status receipt; sampling, optimization and checkpointing stay upstream."""
+    best_episode_reward = -float('inf')
+
     def log(self, locs, width=80, pad=35):
         super().log(locs, width, pad)
         status.update(stage='training', completed_updates=locs['it']+1,
                       sample_seconds=locs['collection_time'], optimize_seconds=locs['learn_time'],
                       elapsed_s=time.time()-started)
         (a.output/'status.json').write_text(json.dumps(status, indent=2))
+        if locs['ep_infos']:
+            score = float(torch.stack([x['reward'].reshape(()) for x in locs['ep_infos']]).mean())
+            row = dict(completed_updates=locs['it']+1, episode_reward=score,
+                       completed_episode_batches=len(locs['ep_infos']),
+                       scope='candidate at completed-episode reward peak; episodes span policy updates')
+            with (a.output/'training_episode_rewards.jsonl').open('a') as stream:
+                stream.write(json.dumps(row)+'\n')
+            if score > self.best_episode_reward:
+                self.best_episode_reward = score
+                torch.save(dict(model_state_dict=self.alg.actor_critic.state_dict(),
+                                optimizer_state_dict=self.alg.optimizer.state_dict(),
+                                iter=locs['it']+1, infos=row), a.output/'training/model_best.pt')
+                (a.output/'best_model.json').write_text(json.dumps(dict(**row,
+                    checkpoint='training/model_best.pt'), indent=2))
+
 
 
 env = Go2LocalEnv(s, a.output)
@@ -69,9 +86,9 @@ def recorded_update():
         selection['best_reward'] = mean_reward
         torch.save(dict(model_state_dict=runner.alg.actor_critic.state_dict(),
                         optimizer_state_dict=runner.alg.optimizer.state_dict(),
-                        iter=update, infos=row), a.output/'training/model_best.pt')
-        (a.output/'best_model.json').write_text(json.dumps(dict(**row,
-            checkpoint='training/model_best.pt',
+                        iter=update, infos=row), a.output/'training/model_step_best.pt')
+        (a.output/'best_step_model.json').write_text(json.dumps(dict(**row,
+            checkpoint='training/model_step_best.pt',
             scope='best sampled pre-update model in this run; not fixed-case qualification'), indent=2))
     result = upstream_update()
     selection['completed_updates'] += 1
