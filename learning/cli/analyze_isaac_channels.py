@@ -74,6 +74,9 @@ for phase in spec['fork_phases_m']:
   for case,data,_,t0 in selected:
    color=alpha_colors[spec['alphas'].index(case['alpha'])];ax.plot(*data[lane]['xy'].T,color=color,label='alpha '+str(case['alpha']));ax.plot(*data[lane]['xy'][-1],color=color,marker='x')
   ax.set(title=labels[lane],xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal')
- axes[0,0].legend(fontsize=8);fig.suptitle('Original H75 | '+phase+' | post-fork trajectories grouped by branch; alpha colors fixed');fig.savefig(out/(phase+'_all_alpha.png'),dpi=150);plt.close(fig)
- report+=['',f'![{phase} alpha overlay]({phase}_all_alpha.png)']
+ axes[0,0].legend(fontsize=8);fig.suptitle('Original H75 | '+phase+f' | {len(selected)}/5 alpha conditions collected | full post-fork XY');fig.savefig(out/(phase+'_all_alpha.png'),dpi=150)
+ bend=route['xy'][abs(route['curvature'])>1e-5]
+ for ax in list(axes.flat)[:5]:ax.set(xlim=(bend[:,0].min()-.5,bend[:,0].max()+.8),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1))
+ fig.suptitle('Original H75 | '+phase+f' | {len(selected)}/5 alpha conditions collected | bend detail');fig.savefig(out/(phase+'_all_alpha_bend.png'),dpi=150);plt.close(fig)
+ report+=['',f'![{phase} alpha overlay bend detail]({phase}_all_alpha_bend.png)',f'[Full post-fork XY]({phase}_all_alpha.png)']
 (out/'metrics.json').write_text(json.dumps(dict(completed_cases=len(cases),expected_cases=10,cases=all_metrics,scope='single-initial-state nominal DEV; descriptive paired branch windows; no automatic superiority or generalization claim'),indent=2));(out/'RESULTS.md').write_text('\n'.join(report)+'\n');print(json.dumps(dict(completed_cases=len(cases),forked_cases=sum(row['fork_reached'] for row in all_metrics),output=str(out))))
