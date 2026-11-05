@@ -73,7 +73,12 @@ class Go2PathEnv:
     def get_privileged_observations(self):return self.privileged_obs_buf
 
     def step(self,actions):
-        out=self.rollout.step(latent=actions);self.episode_length_buf+=1;self.episode_reward+=out['reward'];self.error_squares+=out['tracking_error'].square();ids=out['done'].nonzero(as_tuple=False).flatten();infos={}
+        if self.cfg.get('profile_first_step',False) and self.sampling_steps==0:
+            with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA]) as profile:
+                out=self.rollout.step(latent=actions)
+            Path(self.cfg['profile_output']).write_text(profile.key_averages().table(sort_by='self_cuda_time_total',row_limit=40))
+        else:out=self.rollout.step(latent=actions)
+        self.episode_length_buf+=1;self.episode_reward+=out['reward'];self.error_squares+=out['tracking_error'].square();ids=out['done'].nonzero(as_tuple=False).flatten();infos={}
         if len(ids):
             infos['episode']=dict(reward=self.episode_reward[ids].mean(),length=self.episode_length_buf[ids].float().mean()*.02,failure=out['failure'][ids].float().mean(),speed_rmse=torch.sqrt(self.error_squares[ids,0]/self.episode_length_buf[ids]).mean(),path_rmse=torch.sqrt(self.error_squares[ids,1]/self.episode_length_buf[ids]).mean(),switched=self.switched[ids].float().mean())
             self.reset_idx(ids)
