@@ -27,8 +27,7 @@
         "damping": 173.11038721684574
       }
     },
-    "env_spacing": 100.0,
-    "native_env_filter": true
+    "env_spacing": 100.0
   },
   "randomization": {
     "base_body": "chasis",
