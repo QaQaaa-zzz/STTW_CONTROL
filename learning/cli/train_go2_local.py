@@ -74,6 +74,17 @@ runner = RecordedRunner(env, train, log_dir=str(a.output/'training'), device=s['
 if s.get('zero_actor_output_init', False):
     torch.nn.init.zeros_(runner.alg.actor_critic.actor[-1].weight)
     torch.nn.init.zeros_(runner.alg.actor_critic.actor[-1].bias)
+if s.get('initialize_from_local_actor', False):
+    layers = [layer for layer in runner.alg.actor_critic.actor.modules()
+              if isinstance(layer, torch.nn.Linear)]
+    assert len(layers) == len(env.history.weights), 'native actor must match frozen Local300 layers'
+    with torch.no_grad():
+        for layer, (weight, bias) in zip(layers, env.history.weights):
+            layer.weight.copy_(weight.T)
+            layer.bias.copy_(bias)
+    (a.output/'training').mkdir(exist_ok=True)
+    runner.save(str(a.output/'training/model_initial.pt'),
+                infos=dict(completed_updates=0, initialization='original Local300 actor; fresh critic/optimizer/std'))
 # Observe the native PPO update boundary to score the model that actually
 # collected this rollout. Sampling, losses and optimizer remain upstream.
 upstream_update = runner.alg.update

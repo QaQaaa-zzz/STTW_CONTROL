@@ -1,3 +1,9 @@
+# Active: original Local300 weights adapting in native Go2 framework
+
+`runs/go2_local300_warm1000`, PID737669/session4168,4096×24×1000weights-only adaptation. Original256/128 Actor weights copied exactly; fresh critic/optimizer/std. Original command difficulty/reward and Go2 DR retained. Estimated45min. TensorBoard http://127.0.0.1:6006 includes local300_warm. Post-review session92097 will select≤4candidates and evaluate original7cases; no automatic model adoption/H75/terrain.
+
+Prior adapted500 has completed and all4candidates failed tracking0/7 despite survival7/7. Full XY reviewed; no new candidate adopted. Original transferred Local300 remains the frozen working reference.
+
 # Active training and queued fixed-case review
 
 Training649378/session57316 continues its500update budget. One-shot follow-up session64261 will evaluate at most4reward-screened snapshots plus final (4total), using original seven cases and saved baselines; output runs/go2_local_adapted500/final_review. No new training or H75/terrain stage is queued. Review requires actual full trajectories, not just artifact status.

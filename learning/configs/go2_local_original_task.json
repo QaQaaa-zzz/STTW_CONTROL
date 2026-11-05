@@ -3,7 +3,7 @@
   "device": "cuda:0",
   "seed": 1,
   "num_envs": 4096,
-  "updates": 500,
+  "updates": 1000,
   "save_interval": 25,
   "control_dt": 0.005,
   "episode_s": 10,
@@ -12,7 +12,7 @@
   "initial_state": "runs/local300_sim2sim/initial_states_all.npz",
   "history_actor": "runs/local300_torch_portable_parity/actor.npz",
   "history_actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
-  "initialization": "fresh native Go2 actor/critic/optimizer; original Local300 only supplies observation helper and nominal reference",
+  "initialization": "weights_only original frozen Local300 actor, exact layer copy into native Go2 ActorCritic; fresh critic/optimizer/std",
   "commands": {
     "initial_hold_s": 0.5,
     "speed_m_s": [
@@ -112,7 +112,7 @@
   },
   "task_spec": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
   "command_bank": "runs/local300_command_bank_all",
-  "status": "prepared residual-task adaptation with native Go2 PPO, prior adaptive run retained",
+  "status": "prepared Local300 warm adaptation, bounded1000updates",
   "plant_options": {
     "wheel_collision": "sdf",
     "friction_offset_threshold": 0.0,
@@ -135,9 +135,18 @@
     "lam": 0.9872585449014338
   },
   "policy_overrides": {
-    "init_noise_std": 0.15
+    "init_noise_std": 0.15,
+    "actor_hidden_dims": [
+      256,
+      128
+    ],
+    "critic_hidden_dims": [
+      256,
+      128
+    ]
   },
-  "zero_actor_output_init": true,
+  "zero_actor_output_init": false,
   "controller_clean_feedback": true,
-  "adaptation_note": "Original residual std .15 and zero-output initialization; clean ECBC feedback while policy retains Go2 observation noise/delay. Gamma/lambda map native Go2 physical decay from 20ms to 5ms. Original task/reward/commands unchanged; repair bundle, not single-factor ablation."
+  "adaptation_note": "Restore known-sufficient Local300256/128 to reuse original actor exactly. Network width is not established as a cause; warm start avoids discarding verified control behavior. Retain fixed LR, physical-time gamma/lambda mapping, Go2 DR and original task difficulty/reward.",
+  "initialize_from_local_actor": true
 }
