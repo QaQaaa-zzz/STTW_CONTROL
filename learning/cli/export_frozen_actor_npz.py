@@ -20,12 +20,16 @@ if hashlib.sha256(data).hexdigest() != a.sha256:
     raise ValueError('source actor identity mismatch')
 params = pickle.loads(data)['params']
 a.output.mkdir(parents=True, exist_ok=False)
-np.savez(a.output/'actor.npz', **{f'{layer}_{name}':np.asarray(value)
-    for layer, values in params.items() for name, value in values.items()})
+arrays = {}
+for layer, values in params.items():
+    if isinstance(values, dict):
+        arrays.update({f'{layer}_{name}':np.asarray(value) for name,value in values.items()})
+    else:
+        arrays[layer] = np.asarray(values)
+np.savez(a.output/'actor.npz', **arrays)
 with np.load(a.output/'actor.npz', allow_pickle=False) as archive:
-    for layer, values in params.items():
-        for name, value in values.items():
-            np.testing.assert_array_equal(archive[f'{layer}_{name}'], value)
+    for name,value in arrays.items():
+        np.testing.assert_array_equal(archive[name], value)
 (a.output/'identity.json').write_text(json.dumps(dict(source=str(a.actor.resolve()),
     source_sha256=a.sha256, artifact='actor.npz',
     artifact_sha256=hashlib.sha256((a.output/'actor.npz').read_bytes()).hexdigest(),

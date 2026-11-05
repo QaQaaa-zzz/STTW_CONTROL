@@ -1,3 +1,11 @@
+## 2026-11-04 H75 Torch inference and correction parity
+
+The frozen registry node `STTW_MIDDLE_FULLTAIL_PPO75_U77` uses alpha-modulated 351→128→128→64→2 inference, with learned gains/shifts on the second and third hidden layers, and outputs unbounded latents. It is not the LOCAL300 tanh Actor or a plain MLP. Source actor SHA256 is `d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df`; resolved configuration SHA256 is `92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364`. Both identities were checked against the frozen registry before conversion. The portable exporter now retains modulation arrays as well as Dense weights, with exact array readback checks; independent fixture and CLI exports agree exactly.
+
+`torch_path_policy.py` preserves the Actor and the original 200 Hz reference correction: asymmetric speed scaling, tanh mapping, exponential filters, speed/steering rate limits, reference bounds and clipped-channel filter back-calculation. `build_path_policy_fixture.py` invokes the original JAX Actor and correction function for 80 ticks × three alpha lanes (0/.5/1), including per-lane resets and reference saturation. CPU float32 maximum latent error is 1.073e-6, governed reference error 2.981e-8 and filter-state error 2.385e-7; CUDA values are 8.345e-7, 2.981e-8 and 1.193e-7. All clipping/rate/fault flags agree exactly. Numeric tolerances are atol 4e-5 / rtol 2e-5. Evidence: `runs/h75_torch_parity`, portable actual deployment artifact: `runs/h75_portable_actor`.
+
+This is an offline inference/filter test with synthetic bounded observation vectors, zero physics and zero optimizer steps. It does not validate path projection, pursuit, 351D history/context construction or H75 closed-loop terrain behavior; those remain the next integration work. Frozen architecture remains unchanged despite Go2's different training reference. No continuous-task/RB work has started.
+
 ## 2026-11-04 LOCAL300 Isaac closed-loop engineering check
 
 XY first: `runs/isaac_urdf_drive/local300_plane_5s.png` overlays original command integral, LOCAL300+ECBC/ESO and the previously saved matching ECBC/ESO baseline. Pairing checks require identical asset hash, controller config, requested speed, ground, dt, initial body/DOF states and shape properties. No baseline was rerun. Full NPZ trajectories and receipt remain beside the figure.
