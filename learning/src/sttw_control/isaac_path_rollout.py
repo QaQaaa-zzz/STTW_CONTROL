@@ -110,7 +110,7 @@ class IsaacPathRollout:
                 details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
                     progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),
                     target=self.middle.flags['target'].clone(),offsets=self.policy.offsets.clone(),filtered=self.policy.filtered.clone(),
-                    rate_clipped=self.middle.flags['rate_clipped'].clone(),alive=self.alive.clone(),
+                    held_channels=self.middle.flags['held_channels'].clone(),rate_clipped=self.middle.flags['rate_clipped'].clone(),alive=self.alive.clone(),
                     alpha=self.alpha.clone(),switch_tick=self.switch_tick.clone(),execution_mode=self.policy.execution_mode.clone(),channel_progress=self.middle.flags['channel_progress'].clone(),
                     contact_force=self.plant.contact.clone(),body_state=self.plant.rigid.clone(),
                     reward_normal=terms['reward'].clone(),**{f'{group}_{key}':value.clone() for group in ('raw','effective') for key,value in terms[group].items()}))

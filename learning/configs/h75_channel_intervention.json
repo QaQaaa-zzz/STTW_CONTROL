@@ -1,0 +1,49 @@
+{
+  "source_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "fork_phases_m": {
+    "entry_projection": 3.6,
+    "exit_projection": 4.8
+  },
+  "hold_s": 0.2,
+  "case_labels": [
+    "natural_continuation",
+    "restored_control",
+    "hold_speed_correction",
+    "hold_steer_correction",
+    "hold_both_corrections"
+  ],
+  "hold_channels": [
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      true,
+      false
+    ],
+    [
+      false,
+      true
+    ],
+    [
+      true,
+      true
+    ]
+  ],
+  "semantics": "hold selected H75 correction increments before existing absolute reference clamping; original filter/history/ESO continue; lower balance control unchanged",
+  "scope": "prepared nominal mechanism protocol, no execution yet; selected candidate and physical budget declared after stage-end review",
+  "comparison": "same serialized physical/control/history/filter state, plus unreset versus restored no-hold control; PhysX caches not copied, so not an exact solver-state replay",
+  "contact_measurement": "official wheel contact points/forces at0.2ms; fork triggers are geometric projection, measured contacts used for subsequent alignment",
+  "evaluation_role": "nominal common exported physical/controller/history/filter state channel intervention DEV; PhysX caches not copied; no generalization claim"
+}
