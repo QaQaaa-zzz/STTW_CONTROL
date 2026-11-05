@@ -1,4 +1,11 @@
 
+## Faithful H75 training bank and policy import ready
+
+Original320-prefix TRAIN data exported to runs/h75_original_training_portable:65 ordinary/126 single/129 S contexts, original2.409–2.799m/s speeds, full paths, clocks, physical/controller/lower/middle/filter/history state. u77 Actor/Critic/log_std imported with original128/128/64 alpha modulation into the Go2 adapter; tensor-only export handles old NumPy checkpoint metadata without installing/changing environments. Shared Torch route interface now indexes per-lane route banks.320-state native/Torch forward check complete;0physics/0optimizer. Small numerical errors are not a training gate; user explicitly prioritizes project progress.
+
+The current old Isaac training entry's single fixed2.3m/s route is not a faithful H75 task port. Next finish native Go2 runner/full per-environment reset, original80%0.1s signed8–32N IMU-site pulses and original10s deadline, plus switching and shared Go2 DR; then declare and run the training stage. Existing chosen Local300 and H75 remain unchanged; no new training started.
+
+
 ## Spatial alpha switch on the 4 cm bend bump
 
 Original H75/selected Local300 frozen. Six10s nominal lanes compare0→1/1→0 with independent/common/steer-priority execution after s≥5.3m;0.0002s official mean wheel contact points/force matrices captured. All switches occur after rear raised-contact clearance and before turn end.0→1 meets original goal/hold/work checks in3/3;1→0 crosses goal but all3 fail final hold with persistent path oscillation. No optimizer updates.

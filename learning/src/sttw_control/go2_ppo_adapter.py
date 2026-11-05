@@ -11,14 +11,33 @@ from rsl_rl.storage import RolloutStorage
 class H75ActorCritic(torch.nn.Module):
     is_recurrent = False
 
-    def __init__(self, actor, critic):
+    def __init__(self, actor, critic,log_std=None):
         super().__init__()
         self.actor = actor
         self.critic = critic
+        self.log_std=None if log_std is None else torch.nn.Parameter(log_std.clone())
+
+    @classmethod
+    def from_original_policy(cls,config,state_dict,device):
+        """Reuse original alpha-modulated Actor/Critic and learned log std.
+
+        The new Go2 optimizer is separate; this is a weights-only import.
+        """
+        from .torch_path_policy import make_torch_path_network
+        policy=cls(make_torch_path_network(351,2,config),make_torch_path_network(352,1,config),state_dict['log_std'])
+        policy.load_state_dict(state_dict)
+        return policy.to(device)
 
     def act(self, observations, **kwargs):
-        self.distribution = self.actor.distribution(observations)
+        self.distribution = self.actor.distribution(observations) if self.log_std is None else torch.distributions.Normal(self.actor(observations),self.std)
         return self.distribution.sample()
+
+    def act_inference(self,observations):
+        return self.actor(observations)
+
+    @property
+    def std(self):
+        return (self.actor.log_std if self.log_std is None else self.log_std).exp()
 
     def evaluate(self, observations, **kwargs):
         return self.critic(observations)

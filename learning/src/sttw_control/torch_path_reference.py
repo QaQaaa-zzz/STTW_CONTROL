@@ -1,7 +1,7 @@
 """Fixed-route Torch interpolation, bounded projection and pursuit.
 
-Routes are exported from geometric_path before rollout; never reanchor to the
-moving vehicle. Geometry is shared across batch lanes, progression is per lane.
+Routes are exported before rollout; never reanchor to the moving vehicle.
+One shared route or a saved route bank is indexed by lane, with per-lane progress.
 """
 import math
 import torch
@@ -12,21 +12,26 @@ def wrap(angle):
 
 
 class TorchPathReference:
-    def __init__(self, route, config, device='cpu'):
+    def __init__(self, route, config, device='cpu',route_ids=None):
         self.config=config
         self.s=torch.as_tensor(route['s'],device=device,dtype=torch.float32)
         self.xy=torch.as_tensor(route['xy'],device=device,dtype=torch.float32)
         self.heading=torch.as_tensor(route['heading'],device=device,dtype=torch.float32)
         self.curvature=torch.as_tensor(route['curvature'],device=device,dtype=torch.float32)
+        self.batched=self.xy.ndim==3
+        self.route_ids=(torch.arange(len(self.xy),device=device) if route_ids is None else torch.as_tensor(route_ids,device=device,dtype=torch.long)) if self.batched else None
         n=len(self.s)
-        if n<2 or self.xy.shape!=(n,2) or self.heading.shape!=(n,) or self.curvature.shape!=(n,) or not all(
-                torch.isfinite(x).all() for x in (self.s,self.xy,self.heading,self.curvature)) or not (self.s[1:]>self.s[:-1]).all() or not ((self.xy[1:]-self.xy[:-1]).square().sum(-1)>0).all():
+        if n<2 or self.xy.shape[-2:]!=(n,2) or self.heading.shape!=self.xy.shape[:-1] or self.curvature.shape!=self.heading.shape or not all(
+                torch.isfinite(x).all() for x in (self.s,self.xy,self.heading,self.curvature)) or not (self.s[1:]>self.s[:-1]).all() or not ((self.xy[...,1:,:]-self.xy[...,:-1,:]).square().sum(-1)>0).all():
             raise ValueError('invalid fixed route')
 
     def at(self,progress):
         q=progress.clamp(self.s[0],self.s[-1])
         i=(torch.searchsorted(self.s,q.contiguous(),right=True)-1).clamp(0,len(self.s)-2)
         u=(q-self.s[i])/(self.s[i+1]-self.s[i])
+        if self.batched:
+            rows=self.route_ids
+            return (self.xy[rows,i]+u[...,None]*(self.xy[rows,i+1]-self.xy[rows,i]),self.heading[rows,i]+u*(self.heading[rows,i+1]-self.heading[rows,i]),self.curvature[rows,i]+u*(self.curvature[rows,i+1]-self.curvature[rows,i]))
         return (self.xy[i]+u[...,None]*(self.xy[i+1]-self.xy[i]),
                 self.heading[i]+u*(self.heading[i+1]-self.heading[i]),
                 self.curvature[i]+u*(self.curvature[i+1]-self.curvature[i]))
@@ -35,7 +40,8 @@ class TorchPathReference:
         c=self.config['path']
         lo=(previous-c['projection_backward_m']).clamp_min(0)
         hi=torch.minimum(self.s[-1],previous+torch.maximum(torch.full_like(distance,c['projection_forward_floor_m']),c['projection_forward_motion_multiplier']*distance+c['projection_forward_padding_m']))
-        a=self.xy[:-1];v=self.xy[1:]-a;span=self.s[1:]-self.s[:-1]
+        selected=self.xy[self.route_ids] if self.batched else self.xy
+        a=selected[...,:-1,:];v=selected[...,1:,:]-a;span=self.s[1:]-self.s[:-1]
         u=((xy[:,None]-a)*v).sum(-1)/v.square().sum(-1)
         low=((lo[:,None]-self.s[:-1])/span).clamp(0,1)
         high=((hi[:,None]-self.s[:-1])/span).clamp(0,1)

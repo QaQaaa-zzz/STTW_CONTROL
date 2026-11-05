@@ -2,17 +2,11 @@
 import argparse,json,pickle
 from pathlib import Path
 import numpy as np
-import mujoco
 from sttw_control.model import load_model
+from sttw_control.isaac_portable_state import export_physical_states
 p=argparse.ArgumentParser();p.add_argument('--all-states',action='store_true');p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-s=json.loads(a.config.read_text());bank=pickle.load(open(s['initial_bank'],'rb'));bundle=load_model();model=bundle.model;data=mujoco.MjData(model)
-names=['rearsuspension_joint','steering_joint','rearwheel_joint','frontwheel_joint'];ids=[mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_JOINT,n) for n in names]
-states=[]
+s=json.loads(a.config.read_text());bank=pickle.load(open(s['initial_bank'],'rb'));bundle=load_model()
 indices=range(len(bank.physical_tick)) if a.all_states else [s['initial_bank_index']]
-for i in indices:
- data.qpos[:]=bank.data.qpos[i];data.qvel[:]=bank.data.qvel[i];mujoco.mj_forward(model,data)
- bid=bundle.chassis;velocity=np.zeros(6);mujoco.mj_objectVelocity(model,data,mujoco.mjtObj.mjOBJ_BODY,bid,velocity,0)
- states.append(dict(root_pose=np.r_[data.xpos[bid],data.xquat[bid]],root_velocity=np.r_[velocity[3:],velocity[:3]],joint_position=data.qpos[model.jnt_qposadr[ids]].copy(),joint_velocity=data.qvel[model.jnt_dofadr[ids]].copy(),eso=bank.controller.eso[i],disturbance=bank.controller.disturbance[i],gains=bank.controller.gains[i],previous_command=bank.actuator.previous[i],previous_reference=bank.governor.current_reference[i],physical_tick=bank.physical_tick[i],raw=bank.raw[i]))
-state={key:np.stack([item[key] for item in states]) for key in states[0]} if a.all_states else states[0]
-state['joint_names']=np.array(names)
+state=export_physical_states(bank,bundle,indices)
+if not a.all_states:state={key:value if key=='joint_names' else value[0] for key,value in state.items()}
 a.output.parent.mkdir(parents=True,exist_ok=True);np.savez(a.output,**state);print('exported',a.output,'physical_tick',state['physical_tick'])

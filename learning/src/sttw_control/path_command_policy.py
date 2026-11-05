@@ -123,37 +123,8 @@ def make_path_critic(config):
 
 
 def make_torch_path_network(input_dim, output_dim, config):
-    """Trainable Torch MLP preserving historical numeric Dense state keys."""
-    import torch
-    architecture = architecture_identity(config)
-    if (input_dim, output_dim) not in ((351, 2), (352, 1)):
-        raise ValueError('path network requires Actor351/2 or Critic352/1')
-
-    class AlphaModulatedNetwork(torch.nn.Sequential):
-        def __init__(self, *layers):
-            super().__init__(*layers)
-            self.architecture = architecture
-            for key, shape in MODULATION_SHAPES.items():
-                self.register_parameter(key, torch.nn.Parameter(torch.zeros(shape)))
-
-        def forward(self, obs):
-            q = 2 * obs[..., ALPHA_INDEX:ALPHA_INDEX+1] - 1
-            x = self[1](self[0](obs))
-            for dense_index, suffix in ((2, 2), (4, 3)):
-                z = self[dense_index](x)
-                z = (1 + q * getattr(self, f'gain_{suffix}')) * z + q * getattr(self, f'shift_{suffix}')
-                x = self[dense_index+1](z)
-            return self[6](x)
-
-    widths = (input_dim, 128, 128, 64, output_dim)
-    layers = []
-    for index in range(4):
-        layers.append(torch.nn.Linear(widths[index], widths[index+1]))
-        if index < 3:
-            layers.append(torch.nn.ELU())
-    if architecture == MODULATED_ARCHITECTURE:
-        return AlphaModulatedNetwork(*layers)
-    return torch.nn.Sequential(*layers)
+    from .torch_path_policy import make_torch_path_network as make_network
+    return make_network(input_dim,output_dim,config)
 
 
 def export_torch_actor(actor, config=None):
