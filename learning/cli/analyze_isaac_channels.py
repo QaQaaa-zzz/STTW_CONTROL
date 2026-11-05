@@ -1,5 +1,5 @@
 """Analyze completed common-state channel cases from saved physics only."""
-import argparse,json
+import argparse,csv,json
 from pathlib import Path
 import numpy as np
 import matplotlib
@@ -61,6 +61,10 @@ for case in cases:
  axes[0,0].legend(fontsize=7);fig.suptitle(title+' | signed components; terminal penalties retained in response totals');fig.savefig(target/'components.png',dpi=150);plt.close(fig)
  (target/'metrics.json').write_text(json.dumps(entry,indent=2));report+=['',f'## {case["phase"]} alpha {case["alpha"]}',f'![XY]({target.relative_to(out)}/xy.png)',f'[Full responses]({target.relative_to(out)}/responses.png), [hold/release window]({target.relative_to(out)}/responses_short.png), [local effects vs restored control]({target.relative_to(out)}/local_effects.png), [reward components]({target.relative_to(out)}/components.png), [paired windows and contact phases]({target.relative_to(out)}/metrics.json).','','| Branch | Failed after fork | End s | Speed RMSE m/s | Path RMSE m | Hold ticks |','|---|---|---:|---:|---:|---:|']
  for row in entry['branches']:report.append(f"|{row['branch']}|{row['failed_after_fork']}|{row['observed_end_s']:.3f}|{row['postfork_speed_rmse_m_s']:.4f}|{row['postfork_path_rmse_m']:.4f}|{row['held_lower_ticks']}|")
+ if (target/'same_state_alpha'/'summary.json').exists():
+  report+=['',f'[Five-alpha query at the same frozen input]({target.relative_to(out)}/same_state_alpha/summary.json), [targets and executed references]({target.relative_to(out)}/same_state_alpha/queries.csv). This is a forward query, not five new physics trajectories. Values below are one200Hz reference update from the same50Hz decision state.','','| Alpha | Speed target correction m/s | Steer target correction rad | Next speed reference m/s | Next steer reference rad |','|---|---:|---:|---:|---:|']
+  with (target/'same_state_alpha'/'queries.csv').open() as stream:
+   for row in csv.DictReader(stream):report.append(f"|{row['alpha']}|{float(row['target_speed_correction']):.5f}|{float(row['target_steer_correction']):.5f}|{float(row['speed_reference']):.5f}|{float(row['steer_reference']):.5f}|")
 for phase in spec['fork_phases_m']:
  selected=[item for item in all_lanes if item[0]['phase']==phase]
  if not selected:continue

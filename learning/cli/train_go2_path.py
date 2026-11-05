@@ -34,4 +34,5 @@ if a.resume_checkpoint:
     runner.load(str(a.resume_checkpoint),load_optimizer=True);runner.current_learning_iteration=a.completed_updates
 runner.save(a.output/'training/model_initial.pt',infos={'completed_updates':a.completed_updates,'source':str(a.resume_checkpoint) if a.resume_checkpoint else 'original H75 u77 Actor/Critic/log_std weights; fresh optimizer'})
 runner.learn(num_learning_iterations=s['updates']-a.completed_updates,init_at_random_ep_len=False)
-status.update(stage='training_complete',completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();env.plant.close();app.close()
+runner.writer.close()
+status.update(stage='training_complete',completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)
