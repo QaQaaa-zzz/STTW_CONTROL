@@ -1,0 +1,34 @@
+{
+  "task": "Local300 MuJoCo-to-IsaacLab standard-plane transfer; no H75",
+  "source_run": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010",
+  "mujoco_reference": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/final_best_validation_0300",
+  "reference_streams": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/reference_streams",
+  "initial_bank": "/home/qy/STTW_CONTROL/runs/worktrees/direct-command-policy-v3/runs/direct_command_frozen_lower500_20260929/prepared_bank.pkl",
+  "initial_bank_index": 3,
+  "cases": [
+    "straight_speed_change",
+    "steady_positive",
+    "steady_negative",
+    "return_positive",
+    "return_negative",
+    "post_return_small_positive",
+    "post_return_small_negative"
+  ],
+  "seconds": 10,
+  "actor": "runs/local300_torch_portable_parity/actor.npz",
+  "actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "physics_dt": 0.0002,
+  "control_dt": 0.005,
+  "device": "cuda:0",
+  "finetune": {
+    "updates": 500,
+    "num_envs": 4096,
+    "rollout_steps": 24,
+    "network_hidden": [
+      256,
+      128
+    ],
+    "selection": "select candidates by existing local tracking metrics; compare selected checkpoint with original Local300"
+  },
+  "status": "reference located; simulator initial-state mapping and lower-only Lab entry pending"
+}
