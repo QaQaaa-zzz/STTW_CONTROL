@@ -2,7 +2,7 @@
 import argparse,json,time,sys,hashlib
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--initial-state',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--training-run',type=Path);p.add_argument('--checkpoints',nargs='+',type=Path);p.add_argument('--without-zero',action='store_true');a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--initial-state',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--training-run',type=Path);p.add_argument('--checkpoints',nargs='+',type=Path);p.add_argument('--without-zero',action='store_true');p.add_argument('--controller-candidates',type=Path);a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device=s['device']).app
 import torch
@@ -22,7 +22,11 @@ if a.training_run:
   checkpoint=torch.load(path,map_location=device,weights_only=False);model.load_state_dict(checkpoint['model_state_dict']);model.eval();models.append(model)
   label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
   identities.append(dict(checkpoint=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),completed_updates=updates,label=path.stem))
-if models and not a.without_zero:
+controller_candidates=json.loads(a.controller_candidates.read_text()) if a.controller_candidates else []
+if controller_candidates:
+ models=[None]*len(controller_candidates)
+ identities=[dict(checkpoint=None,sha256=None,completed_updates=0,label=c['label'],controller_parameters=c['parameters']) for c in controller_candidates]
+if models and not a.without_zero and not controller_candidates:
  models.append(None)
  identities.append(dict(checkpoint=None,sha256=None,completed_updates=0,label='zero_ecbc'))
 n=cases*max(1,len(models))
@@ -30,10 +34,14 @@ plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*n,a
 x=np.load(a.initial_state);tensor=lambda v:torch.as_tensor(v,dtype=torch.float32,device=device)
 root=tensor(x['root_pose']).repeat(n,1);root[:,:3]+=plant.origin;plant.robot.write_root_pose_to_sim(root);plant.robot.write_root_velocity_to_sim(tensor(x['root_velocity']).repeat(n,1))
 order=[list(x['joint_names']).index(k) for k in plant.joints];plant.robot.write_joint_state_to_sim(tensor(x['joint_position'][order]).repeat(n,1),tensor(x['joint_velocity'][order]).repeat(n,1));plant.robot.reset();plant.sensor.reset();plant.refresh()
-controller=TorchController(json.loads(Path(s['controller_config']).read_text()),n,device)
+controller_config=json.loads(Path(s['controller_config']).read_text())
+if controller_candidates:
+ for key in ('wc','wo','disturbance_filter'):
+  controller_config[key]=tensor([c['parameters'][key] for c in controller_candidates]).repeat_interleave(cases)
+controller=TorchController(controller_config,n,device)
 for key in ('eso','disturbance','gains'):getattr(controller,key)[:]=tensor(x[key])
 lower=TorchLocalLower(s['actor'],s['actor_sha256'],n,device);previous=tensor(x['previous_reference']).repeat(n,1);command=tensor(x['previous_command']).repeat(n,1);scale=tensor([1.5,10.]);streams=tensor(np.stack([np.load(Path(s['reference_streams'])/(case+'.npy')) for case in s['cases']*max(1,len(models))],axis=1));alive=torch.ones(n,device=device,dtype=torch.bool);rows=[];start=time.time()
-(a.output/'contract.json').write_text(json.dumps(dict(settings=s,initial_state=str(a.initial_state.resolve()),plant=plant.metadata,controller=controller.config,candidates=identities,role='standard-plane DEV comparison; deterministic mean; no H75/randomization/optimizer'),indent=2))
+(a.output/'contract.json').write_text(json.dumps(dict(settings=s,initial_state=str(a.initial_state.resolve()),plant=plant.metadata,controller={key:(value.tolist() if torch.is_tensor(value) else value) for key,value in controller.config.items()},candidates=identities,role='standard-plane DEV comparison; deterministic mean; no H75/randomization/optimizer'),indent=2))
 for tick in range(round(s['seconds']/.005)):
  m,pose,v=plant.observe();raw=streams[tick,:,1:3];valid=alive.clone()
  if models:

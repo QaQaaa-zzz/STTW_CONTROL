@@ -15,7 +15,8 @@ from .torch_controller import TorchVelocityServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit"):
+        self.servo_mode=servo_mode
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
         staged=output/'input';staged.mkdir();tree=ET.parse(asset);mapping={}
@@ -49,7 +50,13 @@ class IsaacLabVectorPlant:
             else:
                 prim=self.sim.stage.DefinePrim(ground_path);prim.GetReferences().AddInternalReference(terrain_sources[terrain_id][0]);prim.SetInstanceable(True)
             xform=UsdGeom.Xformable(self.sim.stage.GetPrimAtPath(ground_path));xform.ClearXformOpOrder();xform.AddTranslateOp().Set(tuple(float(v) for v in origins[i]));self.terrain_identity.append(terrain_sources[terrain_id][1])
-        self.robot=Articulation(ArticulationCfg(prim_path='/World/Envs/Env_.*/Robot',spawn=sim_utils.UsdFileCfg(usd_path=converter.usd_path,activate_contact_sensors=True,rigid_props=sim_utils.RigidBodyPropertiesCfg(linear_damping=0.,angular_damping=0.,max_depenetration_velocity=100.,enable_gyroscopic_forces=True),articulation_props=sim_utils.ArticulationRootPropertiesCfg(enabled_self_collisions=False,solver_position_iteration_count=4,solver_velocity_iteration_count=1)),init_state=ArticulationCfg.InitialStateCfg(pos=tuple(map(float,self.contract['root_translation'].split())),rot=tuple(self.contract['root_quat_wxyz']),joint_pos={'.*':0.},joint_vel={'.*':0.}),actuators={'effort':ImplicitActuatorCfg(joint_names_expr=['.*'],stiffness=0.,damping=0.,effort_limit_sim=1000.,velocity_limit_sim=1000.)}))
+        actuators={'effort':ImplicitActuatorCfg(joint_names_expr=['.*'],stiffness=0.,damping=0.,effort_limit_sim=1000.,velocity_limit_sim=1000.)}
+        if servo_mode == 'implicit':
+            actuators={
+                'steering':ImplicitActuatorCfg(joint_names_expr=['steering_joint'],stiffness=0.,damping=20.,effort_limit_sim=1.,velocity_limit_sim=1000.),
+                'rear':ImplicitActuatorCfg(joint_names_expr=['rearwheel_joint'],stiffness=0.,damping=3.,effort_limit_sim=3.,velocity_limit_sim=1000.),
+                'passive':ImplicitActuatorCfg(joint_names_expr=['frontwheel_joint','rearsuspension_joint'],stiffness=0.,damping=0.,effort_limit_sim=1000.,velocity_limit_sim=1000.)}
+        self.robot=Articulation(ArticulationCfg(prim_path='/World/Envs/Env_.*/Robot',spawn=sim_utils.UsdFileCfg(usd_path=converter.usd_path,activate_contact_sensors=True,rigid_props=sim_utils.RigidBodyPropertiesCfg(linear_damping=0.,angular_damping=0.,max_depenetration_velocity=100.,enable_gyroscopic_forces=True),articulation_props=sim_utils.ArticulationRootPropertiesCfg(enabled_self_collisions=False,solver_position_iteration_count=4,solver_velocity_iteration_count=1)),init_state=ArticulationCfg.InitialStateCfg(pos=tuple(map(float,self.contract['root_translation'].split())),rot=tuple(self.contract['root_quat_wxyz']),joint_pos={'.*':0.},joint_vel={'.*':0.}),actuators=actuators))
         for prim in list(self.sim.stage.Traverse()):
             if '/Robot/' in str(prim.GetPath()) and prim.IsInstance():prim.SetInstanceable(False)
         sim_utils.modify_collision_properties(f'{env_paths[0]}/Robot',sim_utils.CollisionPropertiesCfg(contact_offset=.01,rest_offset=0.))
@@ -62,7 +69,7 @@ class IsaacLabVectorPlant:
             self.sim.stage.GetPrimAtPath(f'/World/CollisionGroups/group{i}').GetRelationship('collection:colliders:includes').AddTarget(f'/World/Terrain_{i}')
         self.sensor=ContactSensor(ContactSensorCfg(prim_path='/World/Envs/Env_.*/Robot/.*',update_period=0.,history_length=1));self.sim.reset();self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device);self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
-        self.metadata=dict(device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
+        self.metadata=dict(servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
         self.reset()
 
     def refresh(self):
@@ -98,7 +105,13 @@ class IsaacLabVectorPlant:
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
 
     def step(self,command):
-        torque=self.servos.torque(command,self.dofs[:,:,1])+self.signals.passive_torque(self.dofs[:,:,0],self.dofs[:,:,1]);self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True);self.refresh();return (self.contact[:,self.nonwheel].square().sum(-1)>0).any(-1)
+        torque=self.signals.passive_torque(self.dofs[:,:,0],self.dofs[:,:,1])
+        if self.servo_mode == 'implicit':
+            target=torch.maximum(self.servos.control[:,0],torch.minimum(self.servos.control[:,1],command*self.servos.sign))
+            self.robot.set_joint_velocity_target(target,joint_ids=self.servos.indices)
+        else:
+            torque=torque+self.servos.torque(command,self.dofs[:,:,1])
+        self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True);self.refresh();return (self.contact[:,self.nonwheel].square().sum(-1)>0).any(-1)
 
     def close(self):
         self.sim.stop()

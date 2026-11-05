@@ -11,13 +11,16 @@ p=argparse.ArgumentParser()
 p.add_argument('--evaluation',type=Path,required=True)
 p.add_argument('--training-run',type=Path,required=True)
 p.add_argument('--config',type=Path,required=True)
+p.add_argument('--additional-evaluation',type=Path)
+p.add_argument('--selected-model',type=Path)
 a=p.parse_args()
 task=json.loads((a.training_run/'config.json').read_text())['task']
 s=json.loads(a.config.read_text())
 r=task['reward'];dt=task['control_dt']
 selection=json.loads((a.training_run/'best_training.json').read_text())
-best=a.evaluation/Path(selection['best']['checkpoint']).stem
+best=a.selected_model or a.evaluation/Path(selection['best']['checkpoint']).stem
 folders=sorted(a.evaluation.glob('model_*'))+[a.evaluation/'zero_ecbc']
+if a.additional_evaluation:folders+=sorted(a.additional_evaluation.glob('model_*'))
 for folder in folders:
     d=np.load(folder/'trajectory.npz')
     previous=np.concatenate([np.zeros_like(d['action'][:1]),d['action'][:-1]])

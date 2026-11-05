@@ -1,3 +1,17 @@
+# Model response diagnosis status
+
+Same-input plant comparison completed, followed by original-gain official implicit-actuator diagnosis:60000 total physics lane steps, no optimizer. Original Lab hold speed1.62495 vs MuJoCo2.25383m/s; implicit1.67364, still unresolved. Six-body USD inertia audit passes numerical correspondence, but analytic wheel/convex collision and solver contact behavior remain to isolate. ECBC tuning/residual training remain paused. Latest user explicitly requests reuse of the Go2 lower neural architecture (native512/256/128 ELU already available), with original Local300 task/difficulty/reward. See runs/plant_response_pair/RESULTS.md.
+
+# Latest priority correction: plant response first
+
+Before selecting or tuning ECBC, compare original MuJoCo and Isaac Lab plant responses from the same physical initial state and identical input commands. Examine full XY and actuator/wheel/body/attitude time histories, not just final tracking hold or survival. The27-parameter ECBC screen has completed but is not adopted and further tuning is paused. Current short paired open-loop response diagnostic: runs/plant_response_pair, four1s cases,40000 total physics lane steps,0optimizer. Then fix identified differences, tune ECBC, restore original Local300 training/reward, test unchanged H75 first, and only after those pass proceed to terrain.
+
+# Latest execution order — 2026-11-05
+
+Finish the four saved candidate comparison, tune zero-residual ECBC+ESO until performance approaches the original baseline, then train the lower residual on original Local300 command families/difficulty/reward. Compare original training logs using the same per-step and complete-episode reward definitions, plus fixed-case tracking; no reward-only adoption. Preserve Go2 runner/PPO/domain randomization/friction/physical-time latency. First test the unchanged original H75 on the qualified lower controller; only finetune H75 if needed. After H75 passes, resume STTW terrain tasks with five alpha levels. No residual training while ECBC remains unresolved. This supersedes earlier immediate middle distillation and single-candidate selection statements below.
+
+Four-candidate comparison is complete; update500 survives7/7 but final tracking0/7, hence not adopted. ECBC27-configuration screen is now running, 189 GPU lanes, original seven cases,10s,9,450,000 physics lane steps/0 optimizer. See runs/ecbc_parameter_screen and research ledger. Original Local300 update300 mean_step_reward=-0.001390266875, last20 updates mean=-0.001749556545; rollout phase matters. Historical positive reward ~20 is incomparable.
+
 # Latest selection and monitoring instruction — 2026-11-05
 
 Newest task-fidelity correction: preserve original MuJoCo command distribution and task difficulty (ordinary/turn-return/post-return-small/reversal, edge ranges and fast slews), reward and task details. Go2 remains the framework/PPO/randomization reference; friction and latency follow Go2, with physical-time conversion. Do not simplify the task to get a running migration. `go2_local500` is explicitly a simplified-distribution historical candidate; it cannot establish original-task transfer even if its training reward is high. Restore the original source specification before the next task-aligned training stage.

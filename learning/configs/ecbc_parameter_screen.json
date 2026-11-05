@@ -1,0 +1,218 @@
+[
+  {
+    "label": "wc3_wo20_f4",
+    "parameters": {
+      "wc": 3,
+      "wo": 20,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc3_wo20_f8",
+    "parameters": {
+      "wc": 3,
+      "wo": 20,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc3_wo20_f16",
+    "parameters": {
+      "wc": 3,
+      "wo": 20,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc3_wo40_f4",
+    "parameters": {
+      "wc": 3,
+      "wo": 40,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc3_wo40_f8",
+    "parameters": {
+      "wc": 3,
+      "wo": 40,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc3_wo40_f16",
+    "parameters": {
+      "wc": 3,
+      "wo": 40,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc3_wo60_f4",
+    "parameters": {
+      "wc": 3,
+      "wo": 60,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc3_wo60_f8",
+    "parameters": {
+      "wc": 3,
+      "wo": 60,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc3_wo60_f16",
+    "parameters": {
+      "wc": 3,
+      "wo": 60,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc5_wo20_f4",
+    "parameters": {
+      "wc": 5,
+      "wo": 20,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc5_wo20_f8",
+    "parameters": {
+      "wc": 5,
+      "wo": 20,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc5_wo20_f16",
+    "parameters": {
+      "wc": 5,
+      "wo": 20,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc5_wo40_f4",
+    "parameters": {
+      "wc": 5,
+      "wo": 40,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc5_wo40_f8",
+    "parameters": {
+      "wc": 5,
+      "wo": 40,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc5_wo40_f16",
+    "parameters": {
+      "wc": 5,
+      "wo": 40,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc5_wo60_f4",
+    "parameters": {
+      "wc": 5,
+      "wo": 60,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc5_wo60_f8",
+    "parameters": {
+      "wc": 5,
+      "wo": 60,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc5_wo60_f16",
+    "parameters": {
+      "wc": 5,
+      "wo": 60,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc7_wo20_f4",
+    "parameters": {
+      "wc": 7,
+      "wo": 20,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc7_wo20_f8",
+    "parameters": {
+      "wc": 7,
+      "wo": 20,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc7_wo20_f16",
+    "parameters": {
+      "wc": 7,
+      "wo": 20,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc7_wo40_f4",
+    "parameters": {
+      "wc": 7,
+      "wo": 40,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc7_wo40_f8",
+    "parameters": {
+      "wc": 7,
+      "wo": 40,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc7_wo40_f16",
+    "parameters": {
+      "wc": 7,
+      "wo": 40,
+      "disturbance_filter": 16
+    }
+  },
+  {
+    "label": "wc7_wo60_f4",
+    "parameters": {
+      "wc": 7,
+      "wo": 60,
+      "disturbance_filter": 4
+    }
+  },
+  {
+    "label": "wc7_wo60_f8",
+    "parameters": {
+      "wc": 7,
+      "wo": 60,
+      "disturbance_filter": 8
+    }
+  },
+  {
+    "label": "wc7_wo60_f16",
+    "parameters": {
+      "wc": 7,
+      "wo": 60,
+      "disturbance_filter": 16
+    }
+  }
+]

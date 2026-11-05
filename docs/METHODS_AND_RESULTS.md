@@ -1062,3 +1062,23 @@ Import inspection rejects the unverified inertia-toggle explanation: installed U
 Completed350000 physical lane-steps,0optimizer,92.57s. MuJoCo original Local300 survives all7×10s; Lab original Local300 survives only straight_speed_change. Lab failures: steady_positive5.340s, steady_negative3.760s, return_positive3.615s, return_negative4.885s, post_return_small_positive5.945s, post_return_small_negative3.640s. Straight speed difference RMSE.596m/s over10s; survival is not matching tracking. XY and speed/steer/roll figures plus raw comparison are in `runs/local300_sim2sim/lab_parent`.
 
 The original bank index3 has physical_tick700 (ESO already enabled), controller and previous command/reference transferred. MuJoCo wheel centers are z=.09592/.09599m with nominal radius.1m. This is an engine contact-equilibrium difference, not proof of a controller error: Lab first5ms rear/front wheel rates34.83/11.49rad/s. MuJoCo contact warm starts/compliance are not transferred by joint/root state mapping. The prior inertia-import hypothesis was rejected. H75 is not loaded; original H75 continuation remains terminated. Further lower adaptation uses the authorized500-iteration stage only after the concrete initial-contact issue is addressed; no new training yet.
+
+
+## 2026-11-05 原Local300恢复前的四候选比较与ECBC优先
+
+目的：完成已授权简化任务500轮候选比较，然后先解决ECBC+ESO基础闭环，再进行原任务残差训练。原始结果：`runs/go2_local500_comparison/RESULTS.md`、`comparison.json`、`all_candidates_xy.png`；选中诊断模型为final500，但不采用为合格底层。实际更新500/401/326/251分别存活7/6/6/4（各7工况），末段速度/转角共同保持均0/7；Zero ECBC存活4/7。训练正奖励与原Local300负代价不同，不能跨版本比较。七场景逐步/累计总奖励、分项、速度/轮速/姿态诊断已保存于model500目录，其他候选与zero的分项NPZ保留。此为固定DEV，无独立泛化证据。
+
+原训练日志：lower-first-noalpha/runs/noalpha_v2_formal_20261010/training/metrics.jsonl，update300 mean_step_reward=-0.001390266875；281–300均值=-0.001749556545。完整回合记录282/290/297的mean_cost_per_tick为0.0019059044/0.0018749279/0.0018099965，各512回合，跨变化中策略，并非固定策略评测。后续恢复同任务、同奖励和尺度后比较训练分项/完整回合，另做固定标准；Go2域随机化仍按用户要求保留，其分布差异必须标明。数据提取记录见comparison/original_local300_training_reference.json。
+
+ECBC筛查复用evaluate_isaaclab_local300.py，新增controller-candidates配置；TorchController只将wc常量构造支持逐lane广播，旧标量公式不变。wc3/5/7 × wo20/40/60 × filter4/8/16，27组、原七指令、GPU189lane、10s、9450000物理lane步、0优化。控制/物理周期和车辆物理、力矩限制均保持原值，未加速度补偿或改变参考。结果待完成，不启动残差。最新顺序：ECBC → 原Local300任务残差 → 先原H75/必要时续训 → STTW地形；不先蒸馏H75。
+
+
+### 最新纠正：先查底层同输入响应，再调ECBC
+
+用户要求以全程XY、响应过程为主，不能以末端保持/存活掩盖方向和轨迹错误。27组ECBC扫描完成但未采用，继续搜索暂停。同输入四case×1s，两后端总40000physics/0optimizer完成，原数据和XY-first图见`runs/plant_response_pair/RESULTS.md`。恒定转向0、后轮23rad/s时，后.5s车速MuJoCo2.25383/Lab1.62495；Lab转向力矩79.16%处于±1Nm饱和；轮速与车体响应差异无需网络即可出现。不是ECBC参数/网络能力单独可解释的问题。
+
+重新核对当前Lab实际USD六刚体质量/COM/惯量主轴重建，最大惯量误差9.15e-10kgm²，质量1.06e-7kg，未发现这部分导出错误。轮子解析椭球→凸mesh及接触软硬差异仍未隔离。复用官方ImplicitActuatorCfg的原参数速度驱动诊断额外20000Labphysics：hold后.5s车速1.67364、rear rate std2.71989，roll峰值.08228（原显式.25917），仍未接近MuJoCo；仅说明该离散实现影响响应，不证明唯一根因，默认未切换。隐式torque是预步估计，不能称真实求解器力矩/饱和率。结果`lab_implicit_comparison/xy.png`及逐步数据完整保留。共60000诊断physics，0训练。
+
+Go2真实源码采用position PD20/.5、5ms物理/20ms策略、action scale.25；原MuJoCo回放每子步同公式，模型碰撞主要primitive/球足；它仍存在armature/阻尼/限矩差异，不宣称两引擎完全相同。GitHub参考UWRobotLearning/WheeledLab的hound.py使用implicit steering/DCMotor wheels，clearlab-sustech/Wheel-Legged-Gym配置用轮kv.5/腿PD，各自结构可参考但不能替换STTW物理参数。来源链接/SHA记录在运行报告。
+
+用户确认后续复用Go2底层网络；当前Go2原生ActorCritic512/256/128 ELU及PPO/runner/storage已有实现，继续保留STTW观测动作与原Local300训练指令/难度/奖励。当前不启动残差/H75/地形。下一步先定位轮接触/执行器耦合，修正底层响应再调ECBC。

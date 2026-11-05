@@ -36,8 +36,8 @@ class TorchController:
                               -a2*a4, a1*a4, -a2,
                               a1*a4, -a2, a1), dim=-1).reshape(-1, 3, 3)
         det = _floor_magnitude(a4*a1*a1-a2*a2, 2.)
-        target = torch.stack((torch.full_like(v, 3*c['wc']), 3*c['wc']**2+a4,
-                              torch.full_like(v, c['wc']**3)), dim=-1)
+        target = torch.stack((torch.ones_like(v)*(3*c['wc']), 3*c['wc']**2+a4,
+                              torch.ones_like(v)*c['wc']**3), dim=-1)
         gains = torch.where((det.abs() > 5.)[:, None],
                             (matrix @ target[:, :, None]).squeeze(-1)/det[:, None], self.gains)
         return a1, a2, a4, m4/m2, gains
