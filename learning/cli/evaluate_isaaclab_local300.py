@@ -15,7 +15,7 @@ plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*n,a
 x=np.load(a.initial_state);tensor=lambda v:torch.as_tensor(v,dtype=torch.float32,device=device)
 root=tensor(x['root_pose']).repeat(n,1);root[:,:3]+=plant.origin;plant.robot.write_root_pose_to_sim(root);plant.robot.write_root_velocity_to_sim(tensor(x['root_velocity']).repeat(n,1))
 order=[list(x['joint_names']).index(k) for k in plant.joints];plant.robot.write_joint_state_to_sim(tensor(x['joint_position'][order]).repeat(n,1),tensor(x['joint_velocity'][order]).repeat(n,1));plant.robot.reset();plant.sensor.reset();plant.refresh()
-controller=TorchController(json.loads(Path('runs/isaac_signals_parity/dynamic.json').read_text()),n,device)
+controller=TorchController(json.loads(Path(s['controller_config']).read_text()),n,device)
 for key in ('eso','disturbance','gains'):getattr(controller,key)[:]=tensor(x[key])
 lower=TorchLocalLower(s['actor'],s['actor_sha256'],n,device);previous=tensor(x['previous_reference']).repeat(n,1);command=tensor(x['previous_command']).repeat(n,1);scale=tensor([1.5,10.]);streams=tensor(np.stack([np.load(Path(s['reference_streams'])/(case+'.npy')) for case in s['cases']],axis=1));alive=torch.ones(n,device=device,dtype=torch.bool);rows=[];start=time.time()
 (a.output/'contract.json').write_text(json.dumps(dict(settings=s,initial_state=str(a.initial_state.resolve()),plant=plant.metadata,controller=controller.config,role='original Local300 standard-plane transfer; no H75 or optimizer'),indent=2))

@@ -20,6 +20,7 @@
   "physics_dt": 0.0002,
   "control_dt": 0.005,
   "device": "cuda:0",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
   "finetune": {
     "updates": 500,
     "num_envs": 4096,
@@ -30,5 +31,5 @@
     ],
     "selection": "select candidates by existing local tracking metrics; compare selected checkpoint with original Local300"
   },
-  "status": "reference located; simulator initial-state mapping and lower-only Lab entry pending"
+  "status": "original Local300 comparison complete; transfer mismatch remains; successor training will use native Go2 runner and network"
 }
