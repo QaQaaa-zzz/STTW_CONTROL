@@ -19,11 +19,13 @@ def load_case(run,baseline_run=None):
     return data,contract
 
 
-def replay_rewards(data,config):
+def replay_rewards(data,config,offset_reset=None):
     """Reuse saved effective costs and rebuild the policy-rate correction cost."""
     c=config['path_reward'];count=data['reward'].shape[1]
     offsets=data['offsets'].reshape(-1,4,count,2)[:,-1]
     previous=np.concatenate((np.zeros_like(offsets[:1]),offsets[:-1]))
+    if offset_reset is not None:
+        step,lanes,value=offset_reset;previous[step,lanes]=value
     rate=(offsets-previous)/.02
     rate_cost=np.minimum(c['offset_rate_weight']*((rate/np.asarray(c['offset_rate_scales']))**2).sum(-1),c['component_caps']['offset_rate'])
     keys=[key for key in data.keys() if key.startswith('effective_')]
@@ -41,3 +43,16 @@ def replay_rewards(data,config):
     total=total.reshape(-1,count)
     components['terminal_adjustment']=total-sum(components.values())
     return total,components,closure
+
+
+def raised_contact_phases(data,contract,lane):
+    """Reuse the original switch report's measured mean-point convention."""
+    terrain=Path(next(iter(contract['settings']['terrains'].values())));meta=json.loads((terrain/'identity.json').read_text());vertices=np.load(terrain/'terrain.npz')['vertices'];side=int(np.sqrt(len(vertices)));height=vertices[:,2].reshape(side,side);lo=meta['bounds_m'][0];spacing=meta['horizontal_scale_m']
+    trace=data['lower_trace'][:,:,lane].reshape(-1,11)
+    points=data['wheel_contact_points'][:,:,lane].reshape(-1,2,data['wheel_contact_points'].shape[-2],3)-np.asarray(contract['origin'][lane]);forces=data['wheel_contact_forces'][:,:,lane].reshape(points.shape)
+    active=np.repeat(trace[:,6].astype(bool),25)&(np.tile(np.arange(25),len(trace))<np.repeat(trace[:,7],25));time=(np.arange(len(points))+1)*.0002;result={}
+    for wheel,index in [('front',0),('rear',1)]:
+        xy=points[:,index,:,:2];finite=np.isfinite(xy).all(-1);grid=np.rint((np.where(finite[...,None],xy,lo)-lo)/spacing).astype(int);inside=finite&(grid>=0).all(-1)&(grid<side).all(-1);grid=np.clip(grid,0,side-1)
+        raised=(inside&(height[grid[...,0],grid[...,1]]>0)&(np.linalg.norm(forces[:,index],axis=-1)>1e-3)&(points[:,index,:,2]>.0025)).any(-1)&active;observed=time[raised]
+        result[wheel+'_first_s']=float(observed[0]) if len(observed) else None;result[wheel+'_last_s']=float(observed[-1]) if len(observed) else None
+    return result
