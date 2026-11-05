@@ -1,3 +1,7 @@
+# Active training and queued fixed-case review
+
+Training649378/session57316 continues its500update budget. One-shot follow-up session64261 will evaluate at most4reward-screened snapshots plus final (4total), using original seven cases and saved baselines; output runs/go2_local_adapted500/final_review. No new training or H75/terrain stage is queued. Review requires actual full trajectories, not just artifact status.
+
 # Active: residual-task adaptation500
 
 
