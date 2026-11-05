@@ -58,6 +58,11 @@ def export_isaac_asset(output, source=DEFAULT_XML):
                    mass=float(model.body_mass[i]), inertia=model.body_inertia[i].tolist(),
                    inertial_pos=model.body_ipos[i].tolist(), inertial_quat_wxyz=model.body_iquat[i].tolist())
               for i in range(1, model.nbody)]
+    for body in bodies:
+        rotation = np.empty(9)
+        mujoco.mju_quat2Mat(rotation, np.asarray(body['inertial_quat_wxyz']))
+        rotation = rotation.reshape(3, 3)
+        body['inertia_body'] = (rotation @ np.diag(body['inertia']) @ rotation.T).tolist()
     joints = [dict(name=name(mujoco.mjtObj.mjOBJ_JOINT, i), axis=model.jnt_axis[i].tolist(),
                    limited=bool(model.jnt_limited[i]), range=model.jnt_range[i].tolist(),
                    spring_reference=float(model.qpos_spring[model.jnt_qposadr[i]]),

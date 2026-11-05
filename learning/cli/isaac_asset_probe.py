@@ -4,7 +4,7 @@ import json
 import hashlib
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from isaacgym import gymapi
+from isaacgym import gymapi, gymtorch
 import numpy as np
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src'))
@@ -18,11 +18,14 @@ def main():
     parser.add_argument('--ground', choices=('plane', 'box', 'trimesh'), default='plane')
     parser.add_argument('--controller-config', type=Path)
     parser.add_argument('--drive-speed', type=float, default=2.3)
+    parser.add_argument('--source-inertia', action='store_true')
     args = parser.parse_args()
     if not 0 <= args.steps <= (25000 if args.controller_config else 1000) or not 0 < args.drive_speed <= 3.5:
         parser.error('passive <=1000 / controlled <=25000 physics steps; speed in (0,3.5]')
     if args.output.exists() or args.output.with_suffix('.npz').exists():
         parser.error('output exists; preserve previous evidence')
+    if args.source_inertia and args.steps:
+        parser.error('runtime inertia setter changes link geometry in this asset; static audit only until import is repaired')
     gym = gymapi.acquire_gym()
     params = gymapi.SimParams()
     params.dt = .0002
@@ -72,6 +75,31 @@ def main():
     root_body = ET.parse(path).find('worldbody/body')
     pose.p = gymapi.Vec3(*map(float, root_body.get('pos', '0 0 0').split()))
     actor = gym.create_actor(env, asset, pose, 'sttw', 0, 1)
+    body_ids = {name: gym.get_actor_rigid_body_index(env, actor, i, gymapi.DOMAIN_ENV)
+                for i, name in enumerate(result['bodies'])}
+    vehicle_ids = set(body_ids.values())
+    nonwheel_ids = {i for name, i in body_ids.items() if name not in ('frontwheel', 'rearwheel')}
+    rigid_properties = gym.get_actor_rigid_body_properties(env, actor)
+    if args.source_inertia:
+        source_contract = json.loads(path.with_name('contract.json').read_text())
+        if source_contract['exported_xml_sha256'] != result['asset_sha256']:
+            raise ValueError('inertia source asset differs')
+        for p, body in zip(rigid_properties, source_contract['bodies']):
+            inertia = gymapi.Mat33()
+            for axis, row in zip(('x', 'y', 'z'), body['inertia_body']):
+                setattr(inertia, axis, gymapi.Vec3(*row))
+            p.inertia = inertia
+        gym.set_actor_rigid_body_properties(env, actor, rigid_properties, False)
+        rigid_properties = gym.get_actor_rigid_body_properties(env, actor)
+        result['inertia_contract'] = 'source principal inertias rotated into body frame; explicit setter, no recomputation'
+    result['rigid_properties'] = [dict(mass=p.mass, com_position=[p.com.x, p.com.y, p.com.z],
+        inverse_inertia=[[getattr(getattr(p.invInertia, row), column) for column in ('x', 'y', 'z')] for row in ('x', 'y', 'z')],
+        inertia=[[getattr(getattr(p.inertia, row), column) for column in ('x', 'y', 'z')] for row in ('x', 'y', 'z')])
+        for p in rigid_properties]
+    if args.source_inertia:
+        for source, actual in zip(source_contract['bodies'], result['rigid_properties']):
+            np.testing.assert_allclose(actual['inertia'], source['inertia_body'], rtol=1e-5, atol=1e-9)
+    result['body_environment_indices'] = body_ids
     if args.controller_config:
         import torch
         from sttw_control.torch_controller import TorchController, TorchVelocityServos
@@ -100,13 +128,23 @@ def main():
     if args.controller_config:
         before_prepare['vel']['linear']['x'][:] = args.drive_speed
         before_dofs['vel'][[signals.front, signals.rear]] = -args.drive_speed/.1
-    gym.set_actor_rigid_body_states(env, actor, before_prepare, gymapi.STATE_ALL)
-    gym.set_actor_dof_states(env, actor, before_dofs, gymapi.STATE_ALL)
+    import torch
+    roots = gymtorch.wrap_tensor(gym.acquire_actor_root_state_tensor(sim))
+    dof_tensor = gymtorch.wrap_tensor(gym.acquire_dof_state_tensor(sim))
+    gym.refresh_actor_root_state_tensor(sim)
+    gym.refresh_dof_state_tensor(sim)
+    actor_index = gym.get_actor_index(env, actor, gymapi.DOMAIN_SIM)
+    roots[actor_index] = torch.from_numpy(before_prepare.view(np.float32).reshape(len(before_prepare), -1)[0].copy())
+    dof_tensor[:] = torch.from_numpy(before_dofs.view(np.float32).reshape(-1, 2).copy())
+    gym.set_actor_root_state_tensor(sim, gymtorch.unwrap_tensor(roots))
+    gym.set_dof_state_tensor(sim, gymtorch.unwrap_tensor(dof_tensor))
+    result['reset_contract'] = 'Isaac root and DOF tensor APIs after prepare_sim; rigid-link caches refreshed by subsequent integration'
     initial = gym.get_actor_rigid_body_states(env, actor, gymapi.STATE_ALL).copy()
     initial_dofs = gym.get_actor_dof_states(env, actor, gymapi.STATE_ALL).copy()
     contacts = []
     trajectory = []
     control_trace = []
+    contact_trace = []
     termination = 'budget_end'
     for tick in range(args.steps):
         if args.controller_config:
@@ -133,9 +171,24 @@ def main():
             gym.apply_actor_dof_efforts(env, actor, torque.numpy().ravel())
         gym.simulate(sim)
         gym.fetch_results(sim, True)
-        contacts.append(len(gym.get_env_rigid_contacts(env)))
+        contact = gym.get_env_rigid_contacts(env)
+        contacts.append(len(contact))
+        failed_contact = False
+        for c in contact:
+            first, second = int(c['body0']), int(c['body1'])
+            contact_trace.append([tick, first, second, float(c['lambda'])])
+            if c['lambda'] > 0 and (
+                    (first in nonwheel_ids and second not in vehicle_ids) or
+                    (second in nonwheel_ids and first not in vehicle_ids)):
+                failed_contact = True
         states = gym.get_actor_rigid_body_states(env, actor, gymapi.STATE_ALL).copy()
         trajectory.append(states.view(np.float32).reshape(len(states), -1))
+        if failed_contact:
+            termination = 'nonwheel_ground_contact'
+            break
+        if not np.isfinite(trajectory[-1]).all():
+            termination = 'nonfinite_state'
+            break
     final = gym.get_actor_rigid_body_states(env, actor, gymapi.STATE_ALL).copy()
     masses = [p.mass for p in gym.get_actor_rigid_body_properties(env, actor)]
     result.update(physics_steps=len(trajectory), requested_physics_steps=args.steps, termination=termination, ground=args.ground,
@@ -152,7 +205,7 @@ def main():
                   scope='ECBC engineering probe without learned policies' if args.controller_config else 'Passive contact engineering probe; no controller, policy or training')
     if trajectory:
         np.savez_compressed(args.output.with_suffix('.npz'), body_states=np.stack(trajectory), contact_counts=contacts,
-                            control_trace=np.asarray(control_trace), dt=params.dt)
+                            control_trace=np.asarray(control_trace), contact_trace=np.asarray(contact_trace), dt=params.dt)
     args.output.write_text(json.dumps(result, indent=2))
     print(json.dumps(result, indent=2))
     gym.destroy_sim(sim)
