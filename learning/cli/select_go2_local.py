@@ -7,13 +7,14 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 
 p=argparse.ArgumentParser()
 p.add_argument('--training-run',type=Path,required=True)
+p.add_argument('--metric',choices=('Train/mean_reward','Episode/reward'),default='Train/mean_reward')
 a=p.parse_args()
 config=json.loads((a.training_run/'config.json').read_text())
 training=a.training_run/'training'
 events=EventAccumulator(str(training),size_guidance={'scalars':0}).Reload()
-reward={event.step:event.value for event in events.Scalars('Train/mean_reward')}
+reward={event.step:event.value for event in events.Scalars(a.metric)}
 rows=[];unscored=[]
-for path in sorted(training.glob('model_*.pt'),key=lambda p:int(p.stem.split('_')[-1])):
+for path in sorted((path for path in training.glob('model_*.pt') if path.stem.removeprefix('model_').isdigit()),key=lambda p:int(p.stem.split('_')[-1])):
     label=int(path.stem.split('_')[-1])
     updates=label if label==config['task']['updates'] else label+1
     # Native runner saves after the update. The next rollout is the first one
@@ -27,7 +28,7 @@ rows.sort(key=lambda row:(-row['training_reward'],row['completed_updates']))
 best=rows[0]
 best['sha256']=hashlib.sha256(Path(best['checkpoint']).read_bytes()).hexdigest()
 result=dict(role='training reward selection before fixed-case evaluation',
-    metric='native Go2 Train/mean_reward: mean return of latest 100 completed training episodes',
+    metric=a.metric,metric_meaning='per-iteration completed-episode aggregate' if a.metric=='Episode/reward' else 'rolling last100 completed-episode return',
     attribution='first subsequent rollout log for each saved post-update checkpoint',
     limitation='rolling episode returns span previous policies; heuristic training score, not isolated frozen-policy evaluation or all-update best',
     best=best,candidates=rows,unscored=unscored,

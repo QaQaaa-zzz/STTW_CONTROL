@@ -1,0 +1,15 @@
+{
+  "candidate_limit": 3,
+  "candidate_roles": ["episode_reward_peak", "periodic_reward_candidate", "final"],
+  "earlier_segments": ["runs/go2_h75_offroad150_slow_baseline", "runs/go2_h75_offroad150_compact_groups"],
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "baseline_root": "runs/h75_selected_local300_bend",
+  "switch_reference": "runs/h75_bend_switch_execution",
+  "domains": {"flat_mesh": "runs/h75_selected_local300_bend/flat_mesh_terrain", "bump": "runs/h75_selected_local300_bend/bump_terrain"},
+  "alphas": [0, 0.25, 0.5, 0.75, 1],
+  "seconds": 10,
+  "max_new_physics_lane_steps": 2400000,
+  "lab_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "role": "nominal matched DEV on existing flat/bump/switch cases, frozen original Local300, no additional optimizer; not independent holdout; selection requires trajectory inspection"
+}
