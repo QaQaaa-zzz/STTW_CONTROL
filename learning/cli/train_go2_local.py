@@ -31,6 +31,7 @@ torch.manual_seed(s['seed'])
 torch.set_num_threads(2)
 recipe = spring_jump_recipe(s['go2_checkout'])
 train = recipe['train']
+train['algorithm'].update(s.get('ppo_overrides', {}))
 train['runner'].update(max_iterations=s['updates'], save_interval=s['save_interval'], experiment_name='sttw_local')
 (a.output/'config.json').write_text(json.dumps(dict(task=s, upstream=recipe), indent=2))
 started = time.time()

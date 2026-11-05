@@ -1,3 +1,15 @@
+# Current: adaptive-LR run stopped; fixed-LR rerun prepared
+
+
+
+## Adaptive learning rate failure — interrupted at463 completed updates
+
+Actual TensorBoard LR rose from initial1e-5 to5.77e-4 after update1,6.57e-3 after update2 and1e-2 after update3. The native Go2 implementation applies factor1.5 per minibatch and caps at1e-2. Near update440, exploration std5.89, finished-episode failure approximately100%, duration around1.1s, value loss thousands. This is sustained degradation, not harmless early fluctuation. Copying the initial LR without controlling its actual adaptive range was insufficient. Shared Go2 implementation does not establish suitability for this two-wheel residual task.
+
+Run stopped at463 completed updates; all original logs/checkpoints retained, status_before_stop.json saved. Latest periodic file model_450.pt represents451 updates; no500 completion claim. Next configuration prepared with learning_rate1e-5 and schedule fixed, all other training/task settings unchanged. No new run launched yet. Learning-rate escalation is observed; its sole causal responsibility is not established.
+
+The following launch snapshots are historical.
+
 # Active lower adaptation training
 
 `runs/go2_local_original500` is running: GPU4096 environments,24steps/update,500updates, native Go2512/256/128ELU Actor/Critic and PPO. Original Local300 eight-state reset/command difficulty/reward restored; repaired contacts, Go2 randomization and physical-time delays. Fresh initialization, not Local300 weight continuation. Initial measured iterations2.9–3.1s (~25min estimate, not completion). Actual randomized friction0.308–0.999 and compliant stiffness entries−7833.38/−5324.41 read back across4096 environments. GPU reset startup succeeded. TensorBoard http://127.0.0.1:6006 HTTP200 and current scalar tags loaded.

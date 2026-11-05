@@ -112,7 +112,7 @@
   },
   "task_spec": "/home/qy/STTW_CONTROL/runs/worktrees/lower-first-noalpha/runs/noalpha_v2_formal_20261010/config.json",
   "command_bank": "runs/local300_command_bank_all",
-  "status": "prepared original-task restoration; not launched",
+  "status": "prepared fixed-learning-rate rerun; previous adaptive run interrupted",
   "plant_options": {
     "wheel_collision": "sdf",
     "friction_offset_threshold": 0.0,
@@ -127,5 +127,9 @@
       }
     },
     "env_spacing": 3.0
+  },
+  "ppo_overrides": {
+    "learning_rate": 1e-05,
+    "schedule": "fixed"
   }
 }

@@ -2733,3 +2733,10 @@ New thin offline CLI `compare_local_rewards.py` reuses original lower_command re
 `TorchGo2Lower` inherits the existing Local300 history/frame/reset interface and calls native upstream `ActorCritic.act_inference`; no manually recreated512/256/128network. `evaluate_isaac_gpu.py --backend lab` now optionally accepts paired `--lower-training-run` and `--lower-checkpoint`, injects this lower into the existing path rollout, records its identity, and passes declared plant_options. H75 policy/weights, alpha five levels, reference processing, lower200Hz/upper50Hz, residual bounds and Zero's same-lower pairing remain unchanged. Omitting options retains historical Local300.
 
 A two-row GPU forward check using immutable model_0.pt from the active run matched native inference exactly; shared history and reset cleared as expected. No physics or optimizer, and this checkpoint was not selected/adopted. This is interface preparation, not an H75 closed-loop result; the latter waits for lower candidate evaluation. Active training source and process were not changed.
+
+
+## Adaptive learning rate failure — interrupted at463 completed updates
+
+Actual TensorBoard LR rose from initial1e-5 to5.77e-4 after update1,6.57e-3 after update2 and1e-2 after update3. The native Go2 implementation applies factor1.5 per minibatch and caps at1e-2. Near update440, exploration std5.89, finished-episode failure approximately100%, duration around1.1s, value loss thousands. This is sustained degradation, not harmless early fluctuation. Copying the initial LR without controlling its actual adaptive range was insufficient. Shared Go2 implementation does not establish suitability for this two-wheel residual task.
+
+Run stopped at463 completed updates; all original logs/checkpoints retained, status_before_stop.json saved. Latest periodic file model_450.pt represents451 updates; no500 completion claim. Next configuration prepared with learning_rate1e-5 and schedule fixed, all other training/task settings unchanged. No new run launched yet. Learning-rate escalation is observed; its sole causal responsibility is not established.
