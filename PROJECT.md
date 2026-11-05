@@ -1,3 +1,14 @@
+# Current adopted lower: orange Isaac Lab original Local300
+
+
+## User-selected orange-curve Local300 lower
+
+User explicitly selected the orange “Isaac Lab original Local300” trace in runs/local300_contact_repair/mujoco_lab_xy.png. Adopted actor sha517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125, original256/128, ECBC5/40/filter8 and repaired Lab contact options frozen together in learning/configs/isaaclab_selected_lower.json. Actor hash and controller/plant settings checked against the actual evaluation contract. Known return XY differences remain documented; adoption is for subsequent simulation work, not exact sim2sim equivalence.
+
+Warm1000 training stopped on user direction at787updates; checkpoints/logs retained, queued review and stage notifier canceled before extra evaluation. No new training queued. Next use unchanged original H75 on standard plane for matched MuJoCo comparison, then terrain after evaluation.
+
+Older active-run snapshots below are historical.
+
 # Active: original Local300 weights adapting in native Go2 framework
 
 `runs/go2_local300_warm1000`, PID737669/session4168,4096×24×1000weights-only adaptation. Original256/128 Actor weights copied exactly; fresh critic/optimizer/std. Original command difficulty/reward and Go2 DR retained. Estimated45min. TensorBoard http://127.0.0.1:6006 includes local300_warm. Post-review session92097 will select≤4candidates and evaluate original7cases; no automatic model adoption/H75/terrain.

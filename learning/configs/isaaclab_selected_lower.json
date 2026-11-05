@@ -1,0 +1,53 @@
+{
+  "name": "original Local300 on contact-repaired Isaac Lab",
+  "adoption": "user_selected_for_following_simulation_tasks",
+  "actor": "runs/local300_torch_portable_parity/actor.npz",
+  "actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "hidden_sizes": [
+    256,
+    128
+  ],
+  "activation": "elu",
+  "actor_dim": 210,
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0
+  },
+  "physics_dt": 0.0002,
+  "lower_dt": 0.005,
+  "evidence": "runs/local300_contact_repair/RESULTS.md",
+  "limitation": "Return trajectories differ from original MuJoCo; user accepts as next-stage lower, not exact equivalence",
+  "next": "unchanged H75 standard-plane paired comparison before terrain",
+  "selected_curve": "Isaac Lab original Local300",
+  "selected_curve_color": "orange",
+  "selection_plot": "runs/local300_contact_repair/mujoco_lab_xy.png",
+  "evaluation_contract": "runs/local300_contact_repair/contract.json",
+  "controller_resolved": {
+    "fixed_roll_reference": null,
+    "dt": 0.005,
+    "wo": 40.0,
+    "wc": 5.0,
+    "disturbance_filter": 8.0,
+    "minimum_speed": 0.5,
+    "max_steer_rate": 4.0,
+    "mass": 5.4,
+    "cg_forward": 0.164,
+    "cg_height": 0.2,
+    "wheelbase": 0.408,
+    "trail": 0.024,
+    "caster": 0.4363323129985824,
+    "gravity": 9.8
+  }
+}
