@@ -26,6 +26,8 @@ class IsaacPathRollout:
             self.randomization_properties=randomize_vehicle_properties(self.plant,settings['randomization'])
             self.randomization=VehicleControlRandomization(self.plant,settings['randomization'])
         self.initial_state=None;self.initial_physical_tick=0
+        self.auto_reset_horizon=settings.get('auto_reset_horizon',True)
+        self.training_pulse=None
         self.initial_alpha=self.alpha.clone();self.switch=settings.get('alpha_switch')
         if self.switch is not None:
             self.switch_target=torch.tensor(self.switch['target_alpha'],device=self.device)
@@ -48,6 +50,7 @@ class IsaacPathRollout:
             for key in ('eso','disturbance','gains'):getattr(self.controller,key)[:]=state[key]
             self.previous_reference=state['previous_reference'].expand(self.n,-1).clone();self.previous_command=state['previous_command'].expand(self.n,-1).clone();raw=state['raw'].expand(self.n,-1)
         self.alive=torch.ones(self.n,device=self.device,dtype=torch.bool);self.tick=0
+        self.task_tick=torch.zeros(self.n,device=self.device,dtype=torch.long);self.physical_tick=torch.full_like(self.task_tick,self.initial_physical_tick);self.since_reset_tick=torch.zeros_like(self.task_tick)
         self.alpha.copy_(self.initial_alpha);self.policy.execution_mode.zero_();self.switched=torch.zeros_like(self.alive);self.switch_tick=torch.full((self.n,),-1,device=self.device,dtype=torch.long)
         m,pose,v=self.plant.observe();self.measurement=m
         if self.randomization is not None:self.randomization.reset(torch.arange(self.n,device=self.device))
@@ -64,29 +67,30 @@ class IsaacPathRollout:
     @torch.no_grad()
     def observation(self):
         self.update_preference()
-        _,pose,_=self.plant.observe();obs=self.middle.observation(pose)[0];obs=torch.nan_to_num(obs);clock=torch.full((self.n,1),1-self.tick/self.horizon,device=self.device);return obs,torch.cat((obs,clock),dim=-1)
+        _,pose,_=self.plant.observe();obs=self.middle.observation(pose)[0];obs=torch.nan_to_num(obs);clock=1-self.task_tick[:,None]/(self.horizon*4);return obs,torch.cat((obs,clock),dim=-1)
 
     @torch.no_grad()
-    def step(self,std):
+    def step(self,std=None,latent=None):
         self.update_preference()
-        valid=self.alive.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];first_action=None
+        valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];first_action=None
         for lower_tick in range(4):
             if self.randomization is not None:
-                physical_control_tick=self.tick*4+lower_tick;push_ticks=round(self.randomization.config['push_interval_s']/.005)
-                if physical_control_tick>0 and physical_control_tick%push_ticks==0:
+                push_ticks=round(self.randomization.config['push_interval_s']/.005)
+                ids=(self.alive&(self.since_reset_tick>0)&(self.since_reset_tick%push_ticks==0)).nonzero(as_tuple=False).flatten()
+                if len(ids):
                     from types import SimpleNamespace
                     from isaaclab.envs.mdp.events import push_by_setting_velocity
-                    ids=self.alive.nonzero(as_tuple=False).flatten()
                     push_by_setting_velocity(SimpleNamespace(scene={'robot':self.plant.robot}),ids,self.randomization.config['push_velocity_range']);self.plant.refresh();self.push_events+=len(ids)
-            m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std,zero_mask=self.zero_middle)
+            m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std,zero_mask=self.zero_middle,latent_override=latent)
             if lower_tick==0:first_action=self.middle.latent.clone()
             policy_m=m if self.randomization is None else self.measurement
             action,_,finite=self.lower.prepare(policy_m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
-            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,torch.full_like(valid,(self.initial_physical_tick+self.tick*4+lower_tick)*.005>3.))
+            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
             steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),25,device=self.device,dtype=torch.long)
             wheel_points=[];wheel_forces=[]
             for physics_tick in range(25):
+                if self.training_pulse is not None:self.training_pulse(physics_tick)
                 motor_command=torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command))
                 contact=self.plant.step(motor_command if self.randomization is None else self.randomization.command(motor_command))
                 if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
@@ -96,6 +100,7 @@ class IsaacPathRollout:
                 q=self.plant.roots[:,3:7];x,y,z,w=q.unbind(-1);roll=-(torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y))-torch.pi/2);peak=torch.where(self.alive,torch.maximum(peak,roll.abs()),peak)
                 failure=contact|~torch.isfinite(self.plant.roots).all(-1);hit=self.alive&failure;stop_tick=torch.where(hit,physics_tick+1,stop_tick);endpoint=torch.where(self.alive[:,None],self.plant.roots,endpoint);new_failure|=hit;self.alive&=~failure
             post_m,post_pose,post_v=self.plant.signals.observe(endpoint,self.plant.dofs[:,:,0],self.plant.dofs[:,:,1]);post_pose=post_pose-self.plant.origin
+            self.physical_tick+=1;self.task_tick+=1;self.since_reset_tick+=1
             self.lower.finish(applied,wrap(post_pose[:,2]-pose[:,2])/.005);offsets=self.policy.offsets.clone();self.middle.after(post_m if self.randomization is None else self.measurement,post_pose,post_v,governed,command,applied,self.controller)
             projection=self.middle.projection;curvature=self.route.at(projection['progress'])[2];ratio=self.controller._system(self.speed)[3];chi=((torch.atan(self.cc['wheelbase']*curvature/np.cos(self.cc['caster']))/ratio).abs()-.18).div(.12).clamp(0,1)
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
@@ -112,8 +117,8 @@ class IsaacPathRollout:
                 if wheel_points:
                     details[-1].update(wheel_contact_points=torch.stack(wheel_points),wheel_contact_forces=torch.stack(wheel_forces))
         rate=(self.policy.offsets-initial_offsets)/.02;c=self.config['path_reward'];rate_cost=c['offset_rate_weight']*((rate/torch.tensor(c['offset_rate_scales'],device=self.device))**2).sum(-1);reward-=c['scale']*.02*rate_cost.clamp_max(c['component_caps']['offset_rate'])
-        reward=torch.where(new_failure,failure_reward(torch.full_like(reward,self.horizon-self.tick),self.config),reward);reward=torch.where(valid,reward,0);self.tick+=1;horizon_done=self.tick==self.horizon;done=new_failure|torch.full_like(valid,horizon_done)
-        result=dict(action=first_action,reward=reward,done=done,valid=valid,failure=new_failure,lower_trace=torch.stack(logs),episode=self.episode,episode_tick=self.tick)
+        reward=torch.where(new_failure,failure_reward(self.horizon-start_task_tick//4,self.config),reward);reward=torch.where(valid,reward,0);self.tick+=1;horizon_done=self.task_tick>=self.horizon*4;done=new_failure|horizon_done
+        result=dict(action=first_action,reward=reward,done=done,valid=valid,failure=new_failure,lower_trace=torch.stack(logs),episode=self.episode,episode_tick=self.tick,tracking_error=torch.stack((post_v-self.speed,projection['cross_track'],post_m[:,0]),dim=-1))
         if self.diagnostics:result['diagnostics']=details
-        if horizon_done:self.episode+=1;self.reset()
+        if self.auto_reset_horizon and self.tick==self.horizon:self.episode+=1;self.reset()
         return result
