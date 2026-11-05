@@ -7,8 +7,16 @@ from pathlib import Path
 import numpy as np
 import torch
 from sttw_control.torch_path_policy import TorchPathPolicy
-p=argparse.ArgumentParser();p.add_argument('--receipt',type=Path,required=True);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--times',type=float,nargs='+',default=[.5,1.5,2.5,3.5]);p.add_argument('--all-decisions',action='store_true');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
-r=json.loads(a.receipt.read_text());raw=np.load(a.receipt.with_suffix('.npz'));middle=raw['middle_trace'];identity=json.loads((a.bundle/'identity.json').read_text());cfg=json.loads((a.bundle/'config.json').read_text());scales=np.array([f['scale'] for f in cfg['network']['context_fields']]);alphas=[0,.25,.5,.75,1];rows=[];snapshots=[]
+p=argparse.ArgumentParser();source=p.add_mutually_exclusive_group(required=True);source.add_argument('--receipt',type=Path);source.add_argument('--gpu-run',type=Path);p.add_argument('--lane',type=int,default=2);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--times',type=float,nargs='+',default=[.5,1.5,2.5,3.5]);p.add_argument('--all-decisions',action='store_true');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+if a.gpu_run:
+ a.receipt=a.gpu_run/'contract.json';contract=json.loads(a.receipt.read_text());raw=np.load(a.gpu_run/'trajectory.npz');lane=a.lane
+ trace=raw['lower_trace'][:,:,lane].reshape(-1,11);count=len(trace);middle=np.zeros((count,358));middle[:,0]=np.arange(count)*.005;middle[:,1:3]=trace[:,8:10]-raw['offsets'][:,lane];middle[:,7:358]=raw['observation'][:,lane]
+ # Keep complete four-lower-step decision groups whose pre-step state was alive.
+ valid_decisions=np.flatnonzero(raw['valid'][:,lane]);middle=middle[:4*(int(valid_decisions[-1])+1)]
+ r={'path_contract':{'alpha':contract['settings']['alphas'][lane]}}
+else:
+ r=json.loads(a.receipt.read_text());raw=np.load(a.receipt.with_suffix('.npz'));middle=raw['middle_trace']
+identity=json.loads((a.bundle/'identity.json').read_text());cfg=json.loads((a.bundle/'config.json').read_text());scales=np.array([f['scale'] for f in cfg['network']['context_fields']]);alphas=[0,.25,.5,.75,1];rows=[];snapshots=[]
 policy=TorchPathPolicy(a.bundle/'actor.npz',identity['files']['actor.npz'],cfg,5,'cpu');interface=cfg['residual_interface']
 with torch.no_grad():
  for requested in (middle[::4,0] if a.all_decisions else a.times):
