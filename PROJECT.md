@@ -1,6 +1,12 @@
+# Latest task specification — bend-local terrain (2026-11-05)
+
+The e2ea098b task attachment retains three STTW studies: nonflat preference primitives, contact-phase channel interventions, and externally scheduled alpha switching. STTW remains first; later connection/RB studies wait. Five alpha levels remain authoritative.
+
+`learning/configs/isaac_bend_bump.json` and the existing `place_isaac_terrain.py` now generate a compact oblique 4 cm bump on the original fixed H75 curve. Nominal support ends at route s=4.8 m, switch crossing is s=5.3 m, and turn ends at s=6.3274 m. These are spatial scene definitions, not observed wheel-contact events. Artifact: `runs/isaac_bend_bump`; fixed-preference trajectories, contact phase extraction and same-state switching interventions remain pending. Current GPU150 uses its frozen original flat/slope/rough-slope assets without modification.
+
 # STTW offroad — current implementation direction (2026-11-04)
 
-User priority: finish STTW offroad before continuous-task/RB work. Stop prolonged mesh parameter scans; use standard Isaac terrain generators and supplement slope/rough-terrain training. Full alpha coverage is 0/.25/.5/.75/1. Current candidate uses 0.1 m horizontal terrain sampling, contact/rest offsets .01/0 m, physics 5000 Hz, lower 200 Hz and middle 50 Hz. H75 Torch inference/history/control are integrated; LOCAL300+ECBC/ESO stays frozen for the first middle finetuning stage. Standard terrain tiles and a trainable weights-only Actor are prepared; training rollout/reward/PPO integration remains to be completed. Current evidence and limitations: docs/VALIDATION.md; authoritative live decisions: /home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md.
+User priority: finish STTW offroad before continuous-task/RB work. Stop prolonged mesh parameter scans; use standard Isaac terrain generators and supplement slope/rough-terrain training. Full alpha coverage is 0/.25/.5/.75/1. Current candidate uses 0.1 m horizontal terrain sampling, contact/rest offsets .01/0 m, physics 5000 Hz, lower 200 Hz and middle 50 Hz. H75 Torch inference/history/control are integrated; LOCAL300+ECBC/ESO stays frozen for the first middle finetuning stage. GPU PhysX/tensor rollout and PPO are implemented; 4096 environments ×24 steps ×150 iteration training is active. Actor architecture remains unchanged. Current evidence and limitations: docs/VALIDATION.md; authoritative live decisions: /home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md.
 
 ---
 

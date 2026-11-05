@@ -1008,3 +1008,7 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 ## 新版共同状态alpha查询（2026-11-05）
 目的：区分完整轨迹分化与同一输入状态下alpha造成的直接目标差异。`query_isaac_alpha.py`读取已保存50Hz决策边界的351维观测（包含相同历史）、原名义参考、执行修正和低通状态，只改alpha，分别运行五档原H75，并计算原独立限速/共同gamma/转向优先候选的单步增量。无新增物理、无训练；候选增量在最终参考限幅之前，不能称已执行或闭环改善。原坡地parent_a0.5的250状态×5alpha共1250查询，132次限速激活，0次eta_delta<eta_v；不同alpha目标有变化，但本批转向优先与原独立执行的增量相同。这是长坡单轨迹DEV机制负证据，不推广至新版弯内短横坡/凸起或全部运行状态。原始query CSV、每个共同观测与filter状态、policy/config身份、summary保存`runs/isaac_same_state_alpha_full`。
 新版三项STTW研究以用户新附件为准；保留原奖励chi仅奖励权重、修正量限速不等于实际速度限制/底层平衡转向缩放。下一新版场景上的共同状态短干预与切换需真实闭环证据，不能因代数设计而预先宣称收益。
+
+
+## Bend-local terrain preparation (2026-11-05)
+New task attachment e2ea098b read in full. Existing terrain placement CLI now supports a configuration-defined finite oblique bump projected onto the original fixed curve. Generated `runs/isaac_bend_bump/terrain.npz`: 25921 vertices, 51200 triangles, height amplitude 0.04 m, horizontal/vertical sampling 0.1/0.005 m. Geometry ends by s=4.8 m; proposed switch s=5.3 m is before turn end 6.3274 m. Generation executed successfully; no additional probe training or physics validation was inserted. Contact phases require actual wheel-contact observations, and closed-loop fixed-alpha/switch results are not yet available. GPU150 continues independently on unchanged training assets.

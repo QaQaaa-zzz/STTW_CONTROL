@@ -2616,3 +2616,7 @@ GPU PhysX单例实际日志显示cuda:0，20275physics/roll停止/finite，仍CP
 ## GPU150实际启动与新版任务（2026-11-05）
 `runs/isaac_h75_gpu150`真实4096 GPU环境、GPU Pipeline enabled，常驻GPU控制/奖励/GAE/PPO，150轮预算；首更新98281有效策略转移、采样7.598s、优化.130s（旧CPU每轮最多3750有效转移、约95s采样，不是相同批量的严格速度消融）。PID2296285/session54782，TB6019 HTTP已加载reward/loss/KL/有效更新与耗时。H75 Actor仍128/128/64，未采用宽网；Go2 PPO参数按config采用，STTW物理控制时序及原奖励保持。同步5s reset，失败lane排除而非记零样本；每次24步rollout跨真实episode状态，非终止末端bootstrap。完整合同比例和差异见run contract.json。训练仍运行，不称150轮完成或任务达标。
 新版机制工作读取冻结坡地轨迹，无物理重复；五alpha×250共同观测查询记录见METHODS_AND_RESULTS。网络输入历史和滤波状态相同，仅alpha改变；不是更换完整物理闭环alpha的实验。当前长坡不等于新版弯内短地形，后者还需接入。
+
+
+## Bend-local terrain preparation (2026-11-05)
+New task attachment e2ea098b read in full. Existing terrain placement CLI now supports a configuration-defined finite oblique bump projected onto the original fixed curve. Generated `runs/isaac_bend_bump/terrain.npz`: 25921 vertices, 51200 triangles, height amplitude 0.04 m, horizontal/vertical sampling 0.1/0.005 m. Geometry ends by s=4.8 m; proposed switch s=5.3 m is before turn end 6.3274 m. Generation executed successfully; no additional probe training or physics validation was inserted. Contact phases require actual wheel-contact observations, and closed-loop fixed-alpha/switch results are not yet available. GPU150 continues independently on unchanged training assets.
