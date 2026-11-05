@@ -33,7 +33,12 @@ class IsaacLabVectorPlant:
         origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
         self.origin=torch.as_tensor(origins,device=self.device);self.terrain_identity=[];terrain_sources={}
         sim_utils.create_prim(env_paths[0],'Xform')
+        plane_paths=[]
+        if 'plane' in terrain_paths:
+            plane=sim_utils.GroundPlaneCfg(physics_material=material);plane.func('/World/Ground',plane);plane_paths=['/World/Ground']
         for i,terrain_id in enumerate(terrain_ids):
+            if str(terrain_paths[terrain_id])=='plane':
+                self.terrain_identity.append(dict(kind='plane',height_m=0.));continue
             ground_path=f'/World/Terrain_{i}'
             if terrain_id not in terrain_sources:
                 path=Path(terrain_paths[terrain_id]);identity=json.loads((path/'identity.json').read_text())
@@ -51,8 +56,9 @@ class IsaacLabVectorPlant:
         for prim in self.sim.stage.Traverse():
             if '/Robot/' in str(prim.GetPath()) and prim.HasAPI(UsdPhysics.CollisionAPI):sim_utils.bind_physics_material(str(prim.GetPath()),'/World/Material')
         Cloner.clone(cloner,source_prim_path=env_paths[0],prim_paths=env_paths,positions=origins,replicate_physics=True,copy_from_source=False,enable_env_ids=True)
-        cloner.filter_collisions(self.sim.cfg.physics_prim_path,'/World/CollisionGroups',env_paths)
+        cloner.filter_collisions(self.sim.cfg.physics_prim_path,'/World/CollisionGroups',env_paths,global_paths=plane_paths)
         for i in range(self.count):
+            if str(terrain_paths[terrain_ids[i]])=='plane':continue
             self.sim.stage.GetPrimAtPath(f'/World/CollisionGroups/group{i}').GetRelationship('collection:colliders:includes').AddTarget(f'/World/Terrain_{i}')
         self.sensor=ContactSensor(ContactSensorCfg(prim_path='/World/Envs/Env_.*/Robot/.*',update_period=0.,history_length=1));self.sim.reset();self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device);self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
