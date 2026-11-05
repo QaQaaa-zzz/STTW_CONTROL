@@ -10,7 +10,10 @@ from sttw_control.torch_path_policy import TorchPathPolicy
 p=argparse.ArgumentParser();source=p.add_mutually_exclusive_group(required=True);source.add_argument('--receipt',type=Path);source.add_argument('--gpu-run',type=Path);p.add_argument('--lane',type=int,default=2);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--times',type=float,nargs='+',default=[.5,1.5,2.5,3.5]);p.add_argument('--all-decisions',action='store_true');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 if a.gpu_run:
  a.receipt=a.gpu_run/'contract.json';contract=json.loads(a.receipt.read_text());raw=np.load(a.gpu_run/'trajectory.npz');lane=a.lane
- trace=raw['lower_trace'][:,:,lane].reshape(-1,11);count=len(trace);middle=np.zeros((count,358));middle[:,0]=np.arange(count)*.005;middle[:,1:3]=trace[:,8:10]-raw['offsets'][:,lane];middle[:,7:358]=raw['observation'][:,lane]
+ trace=raw['lower_trace'][:,:,lane].reshape(-1,11);count=len(trace);middle=np.zeros((count,358));middle[:,0]=np.arange(count)*.005;middle[:,7:358]=raw['observation'][:,lane]
+ # Recover the nominal from the latest pre-decision history frame; using
+ # post-step governed-offset would include the next nominal slew update.
+ frame_scales=np.array(json.loads((a.bundle/'identity.json').read_text())['frame_scales']);middle[:,1:3]=raw['observation'][:,lane,308:310]*frame_scales[8:10]
  # Keep complete four-lower-step decision groups whose pre-step state was alive.
  valid_decisions=np.flatnonzero(raw['valid'][:,lane]);middle=middle[:4*(int(valid_decisions[-1])+1)]
  r={'path_contract':{'alpha':contract['settings']['alphas'][lane]}}
