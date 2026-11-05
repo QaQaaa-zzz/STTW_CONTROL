@@ -1,6 +1,8 @@
 # Model response diagnosis status
 
-Same-input plant comparison completed, followed by original-gain official implicit-actuator diagnosis:60000 total physics lane steps, no optimizer. Original Lab hold speed1.62495 vs MuJoCo2.25383m/s; implicit1.67364, still unresolved. Six-body USD inertia audit passes numerical correspondence, but analytic wheel/convex collision and solver contact behavior remain to isolate. ECBC tuning/residual training remain paused. Latest user explicitly requests reuse of the Go2 lower neural architecture (native512/256/128 ELU already available), with original Local300 task/difficulty/reward. See runs/plant_response_pair/RESULTS.md.
+Completed320000 diagnostic physics lane steps,0 optimizer. Original masses/COM/inertia match; airborne responses nearly match. The PhysX cooking callback exposes a previously missed wheel simplification:226 input vertices become36, with directional support radius as low as92.388mm instead of100mm. The same input mesh in MuJoCo stays close to the original analytic model, localizing that loss to cooking. Official SDF preserves more detail and improves straight-line attitude, but SDF plus original-response compliant contact still has hold speed1.967 vs2.254m/s and nonmatching turning transients. No candidate is qualified or adopted; ECBC tuning and policy training remain paused. Full XY, geometry audit and all negative results: runs/plant_response_pair/RESULTS.md. Next isolate remaining contact/velocity-servo coupling before tuning ECBC.
+
+Latest user confirms native Go2 Actor/Critic512/256/128 ELU and its runner/PPO, preserving original Local300 command distribution/difficulty/reward. Once lower qualification succeeds, test unchanged H75 first; finetune only if needed, then STTW terrain with five alpha levels.
 
 # Latest priority correction: plant response first
 

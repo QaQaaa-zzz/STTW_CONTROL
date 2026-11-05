@@ -2,7 +2,7 @@
 import argparse,json,pickle
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--servo-mode',choices=['explicit','implicit'],default='explicit');p.add_argument('--backend',choices=['mujoco','lab'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('learning/configs/isaaclab_local300_transfer.json'));a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--wheel-collision',choices=['convexHull','sdf'],default='convexHull');p.add_argument('--external-forces-every-iteration',action='store_true');p.add_argument('--friction-correlation-distance',type=float,default=.025);p.add_argument('--mujoco-model',type=Path);p.add_argument('--compliant-wheels',type=Path);p.add_argument('--height-offset',type=float,default=0.);p.add_argument('--mesh-collision-on-geometry',action='store_true');p.add_argument('--hull-vertices',type=int);p.add_argument('--servo-mode',choices=['explicit','implicit'],default='explicit');p.add_argument('--backend',choices=['mujoco','lab'],required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path,default=Path('learning/configs/isaaclab_local300_transfer.json'));a=p.parse_args()
 s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 dt=.0002;t=np.arange(5000)*dt;commands=np.zeros((5000,4,2),np.float32);commands[:,:,1]=23
 commands[(t>=.1)&(t<.6),1,1]=28
@@ -11,9 +11,9 @@ names=['hold','rear_step','steer_positive','steer_negative'];rows=[]
 if a.backend=='mujoco':
  import mujoco
  from sttw_control.model import load_model
- b=load_model();m=b.model;bank=pickle.load(open(s['initial_bank'],'rb'));data=[]
+ b=load_model(a.mujoco_model) if a.mujoco_model else load_model();m=b.model;bank=pickle.load(open(s['initial_bank'],'rb'));data=[]
  for _ in names:
-  d=mujoco.MjData(m);d.qpos[:]=bank.data.qpos[s['initial_bank_index']];d.qvel[:]=bank.data.qvel[s['initial_bank_index']];mujoco.mj_forward(m,d);data.append(d)
+  d=mujoco.MjData(m);d.qpos[:]=bank.data.qpos[s['initial_bank_index']];d.qvel[:]=bank.data.qvel[s['initial_bank_index']];d.qpos[2]+=a.height_offset;mujoco.mj_forward(m,d);data.append(d)
  aid=[mujoco.mj_name2id(m,mujoco.mjtObj.mjOBJ_ACTUATOR,k) for k in ['cmd_steering_v','cmd_rearwheel_v']]
  for command in commands:
   lane=[]
@@ -28,13 +28,17 @@ else:
  app=AppLauncher(headless=True,device='cuda:0').app
  import torch
  from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
- plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*4,a.output,servo_mode=a.servo_mode)
+ plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*4,a.output,wheel_collision=a.wheel_collision,external_forces_every_iteration=a.external_forces_every_iteration,friction_correlation_distance=a.friction_correlation_distance,servo_mode=a.servo_mode,hull_vertices=a.hull_vertices,mesh_collision_on_geometry=a.mesh_collision_on_geometry,compliant_wheels=json.loads(a.compliant_wheels.read_text()) if a.compliant_wheels else None)
  x=np.load('runs/local300_sim2sim/initial_state.npz');state={k:torch.as_tensor(x[k],dtype=torch.float32,device=plant.device) for k in ['root_pose','root_velocity','joint_position','joint_velocity']};order=[list(x['joint_names']).index(k) for k in plant.joints]
  for k in ['joint_position','joint_velocity']:state[k]=state[k][order]
+ state['root_pose'][2]+=a.height_offset
  plant.reset_idx(torch.arange(4,device=plant.device),state=state)
+ history=[]
  for command in torch.as_tensor(commands,device=plant.device):
   force=plant.servos.torque(command,plant.dofs[:,:,1])[:,plant.servos.indices].clone();plant.step(command);m,pose,v=plant.observe();rows.append(torch.cat((pose,m[:,0:1],v[:,None],m[:,2:4],m[:,5:7],force),dim=-1))
+  history.append(torch.cat((plant.roots,plant.dofs.flatten(1),plant.contact.flatten(1)),dim=-1))
+ np.savez_compressed(a.output/'plant_history.npz',values=torch.stack(history).cpu().numpy(),joints=plant.joints,bodies=plant.bodies,fields='root13; joint position/velocity interleaved; body net normal contact world force xyz (excludes friction)')
  rows=torch.stack(rows).cpu().numpy();identity=plant.metadata
 np.savez_compressed(a.output/'response.npz',time=t+dt,command=commands,values=np.asarray(rows),cases=names,fields=['x','y','yaw','roll','body_speed','steer','steer_rate','rear_rate','front_rate','steer_torque','rear_torque'])
-(a.output/'status.json').write_text(json.dumps(dict(stage='complete',backend=a.backend,steps=20000,identity=identity,torque_semantics=('solver actuator force' if a.backend=='mujoco' else 'prestep explicit servo applied torque' if a.servo_mode=='explicit' else 'prestep servo estimate, not solver applied torque'),scope='open-loop velocity-command response; no ECBC/ESO/policy; original physical limits; no matched solver warmstart'),indent=2))
+(a.output/'status.json').write_text(json.dumps(dict(stage='complete',backend=a.backend,height_offset=a.height_offset,steps=20000,identity=identity,torque_semantics=('solver actuator force' if a.backend=='mujoco' else 'prestep explicit servo applied torque' if a.servo_mode=='explicit' else 'prestep servo estimate, not solver applied torque'),scope='open-loop velocity-command response; no ECBC/ESO/policy; original physical limits; no matched solver warmstart'),indent=2))
 if a.backend=='lab':plant.close();app.close(wait_for_replicator=False)

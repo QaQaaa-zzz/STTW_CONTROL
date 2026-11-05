@@ -1082,3 +1082,34 @@ ECBC筛查复用evaluate_isaaclab_local300.py，新增controller-candidates配�
 Go2真实源码采用position PD20/.5、5ms物理/20ms策略、action scale.25；原MuJoCo回放每子步同公式，模型碰撞主要primitive/球足；它仍存在armature/阻尼/限矩差异，不宣称两引擎完全相同。GitHub参考UWRobotLearning/WheeledLab的hound.py使用implicit steering/DCMotor wheels，clearlab-sustech/Wheel-Legged-Gym配置用轮kv.5/腿PD，各自结构可参考但不能替换STTW物理参数。来源链接/SHA记录在运行报告。
 
 用户确认后续复用Go2底层网络；当前Go2原生ActorCritic512/256/128 ELU及PPO/runner/storage已有实现，继续保留STTW观测动作与原Local300训练指令/难度/奖励。当前不启动残差/H75/地形。下一步先定位轮接触/执行器耦合，修正底层响应再调ECBC。
+
+
+## Contact isolation follow-up (2026-11-05)
+
+Latest user confirms reuse of native Go2 Actor/Critic 512/256/128 ELU for subsequent lower training. Original Local300 commands, task difficulty and reward remain required; original H75 is tested unchanged first after lower qualification.
+
+Airborne same-input four-case comparison (root raised6m,1s) gives speed RMSE1.28e-5–1.42e-5m/s versus grounded.396–.598m/s. This isolates contact participation as the dominant observed mismatch; it is not grounded equivalence. Mesh hull255 and moving collision APIs to Mesh produced identical responses; the first hull attempt matched no collider and cannot test the hypothesis. These attempts do not establish hull resolution as the cause.
+
+Original MuJoCo locally calibrated soft-contact candidate improved hold speed from1.62495 to2.00817m/s (source2.25383), but did not fix roll. Combined implicit drives plus this contact completed20000 steps: hold speed2.00295, rear-rate std.99842rad/s; whole-window speed RMSE hold/rear_step/positive/negative=.219957/.260006/.286079/.411795m/s, roll RMSE=.110886/.106186/.025023/.042997rad. Full XY still differs; no adoption or training. Implicit torque is a prestep estimate, not actual solver torque.
+
+Evidence: runs/plant_response_pair/lab_implicit_compliant_comparison/xy.png and comparison.json; runs/plant_response_pair_air; mujoco_contact_calibration.json; USD mass/geometry audits. Total diagnostic budget completed200000 physics lane steps,0 optimizer. Contact calibration is a local linear approximation, not exact MuJoCo contact equivalence. Next resolve remaining wheel-contact response before ECBC tuning.
+
+
+### Wheel representation and friction-anchor isolation
+
+The current compiled wheel friction is0.8 for both wheels; the XML values10/.3 occur only in commented SDF examples. Replacing just the two analytic MuJoCo wheel geoms by the same226-vertex OBJ exported to Isaac gives near-overlapping four-case XY trajectories. Whole-window speed RMSE vs analytic source: hold0.003785, rear_step0.021613, steer_positive0.041348, steer_negative0.034751m/s. The geometry approximation alone is insufficient to explain the much larger Lab response mismatch. Model-array comparison confirms unchanged masses/inertia/COM/contact/servo parameters; only the two wheel geom types change. Evidence: `runs/plant_response_pair/mujoco_mesh_comparison/xy.png`, `comparison.json`, `mujoco_mesh_model_diff.json`, and derived XML. This does not prove identical cooked convex geometry in PhysX.
+
+The PhysX friction correlation distance controls merging of contacts into friction anchors ([official documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/classPxSceneDesc.html)). Changing only this distance from25mm to0.5mm on the compliant explicit candidate produced bitwise-identical5000×4 response arrays; USD readback confirms0.00050000002m. Thus this attempted numerical change offers no improvement in these cases. Evidence: `lab_compliant_friction_anchor/status.json` and `response.npz`, compared with `lab_compliant`.
+
+These two experiments add40000 physics lane steps, reaching240000 total,0 optimizer. All are short open-loop diagnoses, not lower-controller qualification. The contact-calibration CLI was also executed without integration and reproduces the saved k/c values exactly. No production default or frozen controller was changed.
+
+
+## Cooked geometry finding and current unresolved response
+
+The official PhysX cooking callback returns36 vertices for each wheel, with unchanged result after hull_vertex_limit255 and an application update. The imported OBJ has226 vertices. Wheel-plane directional support reaches only92.388mm in the cooked hull versus approximately99.526mm in the input mesh (2001 sampled directions), while the analytic wheel radius is100mm. Thus checking the USD input bounding box alone missed a material shape change during cooking. See `runs/plant_response_pair/cooked_wheel_geometry.png`, raw `physx_cooked_wheel_updated_audit.json`, and the saved audit/plot sources. The callback requires CollisionAPI on actual Mesh; parent-Xform queries failed parsing, which does not imply absent simulation contacts. Original instance-proxy error and all callback failures remain in logs. The [NVIDIA GPU convex limit documentation](https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.2/dev_guide/guides/current_limitations.html) identifies64 vertex/face limits and recommends SDF or convex decomposition.
+
+Official Isaac Lab `define_mesh_collision_properties` with `SDFMeshPropertiesCfg(sdf_resolution=256)` was used on the unchanged input mesh. Rigid SDF completed four1s cases: hold mean speed1.84107m/s, rollpeak.053442rad. Adding only the original-response compliant contact gave speed1.96700m/s and rollpeak.043226rad; four full-window speed RMSE=.272533/.332502/.330641/.348412m/s and roll RMSE=.013915/.007352/.057804/.056043rad. Reference hold speed is2.25383m/s. All four XY and response plots are in `lab_sdf_compliant_comparison`; these remaining errors mean the lower plant is not qualified. Neither candidate is adopted as a complete repair.
+
+The independent official TGS external-forces-every-position-iteration flag reduced rigid-hull hold rollpeak to.026582rad but speed remained1.70121m/s. Its combination with compliant hull contact worsened hold rollpeak to.482705rad; rejected. Initial TGS diagnostic failed before the sampling loop due to a metadata getter spelling error; its artifacts are retained, and the corrected run completed the original budget.
+
+Total completed diagnostic sampling:320000 physics lane steps,0 optimizer. No ECBC parameter or residual/H75 training was started. Defaults preserve the prior plant; all geometry/contact/solver candidates require explicit options. `plant_history.npz` contact vectors are **net normal forces only**, excluding tangential friction, as defined by Isaac Lab ContactSensor; they cannot establish zero friction. Summary across all cases is `candidate_response_summary.json`. Next isolate the remaining contact/velocity-servo coupling using the faithful collision representation before deciding ECBC tuning. Training remains Go2 native512/256/128 ELU with original Local300 task/reward, then unchanged H75 first.
