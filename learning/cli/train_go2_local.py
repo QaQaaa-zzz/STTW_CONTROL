@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import sys
 import time
+import importlib.util
 
 p = argparse.ArgumentParser()
 p.add_argument('--config', type=Path, required=True)
@@ -16,7 +17,13 @@ sys.path.insert(0, str(Path(s['go2_checkout'])/'rsl_rl'))
 from isaaclab.app import AppLauncher
 app = AppLauncher(headless=True, device=s['device']).app
 import torch
-from rsl_rl.runners import OnPolicyRunner
+# Import the actual upstream runner without importing unrelated AMP runners
+# from the package initializer (those require quadruped motion/pybullet tools).
+runner_path = Path(s['go2_checkout'])/'rsl_rl/rsl_rl/runners/on_policy_runner.py'
+runner_spec = importlib.util.spec_from_file_location('sttw_upstream_go2_runner', runner_path)
+runner_module = importlib.util.module_from_spec(runner_spec)
+runner_spec.loader.exec_module(runner_module)
+OnPolicyRunner = runner_module.OnPolicyRunner
 from sttw_control.go2_training_config import spring_jump_recipe
 from sttw_control.go2_local_env import Go2LocalEnv
 

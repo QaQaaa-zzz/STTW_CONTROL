@@ -64,7 +64,7 @@ class VehicleControlRandomization:
         for buffer in self.buffers.values():
             buffer.reset(env_ids)
             lags = torch.randint(self.lag_bounds[0], self.lag_bounds[1]+1,
-                                 (n,), device=self.device)
+                                 (n,), device=self.device, dtype=torch.int)
             buffer.set_time_lag(lags, env_ids)
         low, high = self.config['servo_gain_scale']
         self.plant.servos.gain[env_ids] = self.nominal_gain * (

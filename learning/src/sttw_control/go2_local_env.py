@@ -85,7 +85,9 @@ class Go2LocalEnv(VecEnv):
         c = self.cfg['commands']
         low, high = c['speed_m_s']
         speed = low+(high-low)*torch.rand(n, device=self.device)
-        ratio = self.controller._system(speed)[3].abs()
+        candidate_speed = self.target[:, 0].clone()
+        candidate_speed[ids] = speed
+        ratio = self.controller._system(candidate_speed)[3][ids].abs()
         limit = torch.minimum(ratio*c['max_reference_roll_rad'], torch.full_like(speed, c['max_steer_rad']))
         steer = (2*torch.rand(n, device=self.device)-1)*limit
         steer = torch.where(torch.rand(n, device=self.device)<c['straight_probability'], 0., steer)
