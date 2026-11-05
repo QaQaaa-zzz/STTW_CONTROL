@@ -1,3 +1,15 @@
+## 2026-11-04 Two-triangle control implicates mesh discretization
+
+XY first: `runs/isaac_h75_two_triangle_probe/comparison.png` compares the same H75 alpha0.5/LOCAL300 condition on the native plane, dense flat mesh and two-triangle flat mesh. All use the original route and matching vehicle/controller/initial states. This is one targeted diagnostic condition, not a substitute for five-alpha evaluation. One new run completed 25000 physical steps / 5 s, zero optimization, `budget_end`.
+
+The two-triangle surface retains [-2,12] m bounds and z=0 while removing internal dense tessellation. Max pre-step absolute cross-track is 0.31777 m, close to the native-plane case's 0.29579 m and far below the dense-flat case's 2.30083 m. Final XY is (4.87566,6.58863) m versus native-plane (4.94129,6.70076) m. This supports a mesh-discretization effect in the current runtime; it does not establish a converged terrain resolution or an exact plane equivalence. The relief and controller have not been tuned for this diagnostic.
+
+Actual SDK `PlaneParams` and `TriangleMeshParams` defaults both have static/dynamic friction 1 and restitution 0; both runtime branches explicitly set source sliding friction 0.8. The new receipt records actual ground friction 0.8000000119 and restitution 0. No different default for these fields explains the observed gap. Generator option `--flat-two-triangles` explicitly requires zero height, so it cannot silently flatten a raised terrain.
+
+Local SDK documentation `/home/qy/opt/isaacgym/isaacgym/docs/programming/terrain.html`, section “Net Contact Force Issue”, documents unreliable *net contact force tensor reporting* around triangle edges and suggests force sensors. Our current CPU probe uses per-contact records, a different API; this documentation is not proof of the dynamical cause or of per-contact force correctness. Future batched GPU failure detection must not rely exclusively on that net-force tensor. Contact reporting and actual motion are separate evidence questions.
+
+Artifacts include terrain identity/arrays, new raw trajectory/receipt/log, comparison data and saved plotting source. Next: check the Go2-like terrain resolution and explicit contact settings, then select a declared terrain representation and proceed to reward/return evaluation and bounded adaptation. No new training or later-chapter work has started.
+
 ## 2026-11-04 Flat-mesh control separates surface representation from relief
 
 XY first: `runs/isaac_h75_flat_mesh_probe/surface_comparison.png` compares native plane, flat mesh and raised mesh with identical axes, fixed original route and all five alpha traces plus zero-middle+LOCAL300. Its source and `surface_comparison.json` retain per-method common-window speed/cross-track RMSE and actual stopping durations. The per-domain five-alpha panel remains `comparison.png`. No saved physics was rerun to produce these figures.

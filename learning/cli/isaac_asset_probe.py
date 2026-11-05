@@ -72,6 +72,7 @@ def main():
         plane.normal = gymapi.Vec3(0, 0, 1)
         if path.suffix == '.urdf':
             plane.static_friction = plane.dynamic_friction = source_contract['ground_friction'][0]
+        result['ground_material'] = dict(static_friction=plane.static_friction,dynamic_friction=plane.dynamic_friction,restitution=plane.restitution,distance=plane.distance)
         gym.add_ground(sim, plane)
     elif args.ground == 'trimesh':
         vertices = np.array([[-2, -2, 0], [2, -2, 0], [2, 2, 0], [-2, 2, 0]], dtype=np.float32)
@@ -90,6 +91,7 @@ def main():
         mesh.nb_triangles = len(triangles)
         if path.suffix == '.urdf':
             mesh.static_friction = mesh.dynamic_friction = source_contract['ground_friction'][0]
+        result['ground_material'] = dict(static_friction=mesh.static_friction,dynamic_friction=mesh.dynamic_friction,restitution=mesh.restitution)
         gym.add_triangle_mesh(sim, vertices.ravel(), triangles.ravel(), mesh)
     env = gym.create_env(sim, gymapi.Vec3(-3, -3, -1), gymapi.Vec3(3, 3, 3), 1)
     if args.ground == 'box':
