@@ -1,3 +1,9 @@
+# Latest selection and monitoring instruction — 2026-11-05
+
+Select the saved candidate using native Go2 training reward first, then evaluate only that candidate on the fixed seven cases (plus matching zero ECBC baseline). Fixed cases do not rank or select checkpoints. `select_go2_local.py --training-run runs/go2_local500` writes `best_training.json` from TensorBoard `Train/mean_reward`, using the first subsequent rollout log for each saved post-update checkpoint. This native statistic averages the latest100 completed episodes and spans previous policies: report it as a heuristic training-reward selection among saved candidates, not exact frozen-policy/all-update best. The final checkpoint without subsequent score is unscored, not a default winner. Earlier fixed-case-ranking plans below are superseded.
+
+User requests no frequent polling. `runs/go2_local500/next_check.json` records estimated next check around00:31:48 PST; avoid checking training before that time unless new input or an error requires it. The stage notifier was restarted alone with an initial delay until that estimate, then60-second checks if still running; training PID140402 remains untouched.
+
 # Current direction — native Go2 framework for STTW (2026-11-05)
 
 Current implementation: `train_go2_local.py` calls the upstream `OnPolicyRunner.learn` with `Go2LocalEnv`; only the status logger subclasses the runner. `go2_local_training.json` declares fresh 512/256/128 networks, 4096×24×500 = 49,152,000 lower transitions (1,228,800,000 physics lane steps). This is a new lower candidate, not Local300 weight continuation. The original Local300 file supplies the preserved observation/history helper; its inference is not called during this training.

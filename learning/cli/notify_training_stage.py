@@ -8,12 +8,14 @@ import time
 p=argparse.ArgumentParser()
 p.add_argument('--run',type=Path,required=True)
 p.add_argument('--pid',type=int,required=True)
+p.add_argument('--delay-seconds',type=float,default=0)
 a=p.parse_args()
+time.sleep(a.delay_seconds)
 receipt=a.run/'stage_notification.json'
 if not receipt.exists():
     status=json.loads((a.run/'status.json').read_text())
     while status['stage'] not in ('training_complete','failed') and Path(f'/proc/{a.pid}').exists():
-        time.sleep(5)
+        time.sleep(60)
         status=json.loads((a.run/'status.json').read_text())
     complete=status['stage']=='training_complete'
     message=(f"训练完成 {status['completed_updates']} 轮，候选评测尚待完成" if complete

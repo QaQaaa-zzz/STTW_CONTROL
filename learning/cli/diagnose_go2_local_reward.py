@@ -15,8 +15,8 @@ a=p.parse_args()
 task=json.loads((a.training_run/'config.json').read_text())['task']
 s=json.loads(a.config.read_text())
 r=task['reward'];dt=task['control_dt']
-selection=json.loads((a.evaluation/'selection.json').read_text())
-best=Path(selection['best']['run'])
+selection=json.loads((a.training_run/'best_training.json').read_text())
+best=a.evaluation/Path(selection['best']['checkpoint']).stem
 folders=sorted(a.evaluation.glob('model_*'))+[a.evaluation/'zero_ecbc']
 for folder in folders:
     d=np.load(folder/'trajectory.npz')
