@@ -1,3 +1,9 @@
+# Active lower adaptation training
+
+`runs/go2_local_original500` is running: GPU4096 environments,24steps/update,500updates, native Go2512/256/128ELU Actor/Critic and PPO. Original Local300 eight-state reset/command difficulty/reward restored; repaired contacts, Go2 randomization and physical-time delays. Fresh initialization, not Local300 weight continuation. Initial measured iterations2.9–3.1s (~25min estimate, not completion). Actual randomized friction0.308–0.999 and compliant stiffness entries−7833.38/−5324.41 read back across4096 environments. GPU reset startup succeeded. TensorBoard http://127.0.0.1:6006 HTTP200 and current scalar tags loaded.
+
+Training PID543737, tool session30453. Training rewards belong to sampled pre-update models; `training/model_best.pt` saves the best sampled candidate. Fixed-case comparison will include reward-selected candidates and final, with full XY against original MuJoCo and matched ECBC; no reward-only adoption. H75/terrain remain downstream. Next ordinary training check ~20minutes after startup, unless exit/error is delivered.
+
 # Current model-response and Local300 comparison
 
 Original Local300 with repaired Lab contacts now completes seven standard cases and meets final speed/steer hold in 7/7, but return-case full XY difference RMSE remains 0.61–0.69 m and endpoint separation 1.50–1.71 m versus original MuJoCo. Full XY plus matching Lab ECBC: runs/local300_contact_repair/RESULTS.md. No new training or H75 run. Four ECBC candidates gave mixed effects; retain original wc5/wo40/filter8. Saved yaw analysis locates most return-heading mismatch by6s (6.2–7.4degrees); remaining migration mismatch is explicit, not hidden by final hold.

@@ -16,11 +16,13 @@ if a.training_run:
  train=json.loads((a.training_run/'config.json').read_text())
  sys.path.insert(0,str(Path(train['task']['go2_checkout'])/'rsl_rl'))
  from rsl_rl.modules import ActorCritic
- paths=a.checkpoints or sorted((a.training_run/'training').glob('model_*.pt'),key=lambda path:int(path.stem.split('_')[-1]))
+ paths=a.checkpoints or sorted((path for path in (a.training_run/'training').glob('model_*.pt') if path.stem!='model_best'),key=lambda path:int(path.stem.split('_')[-1]))
  for path in paths:
-  model=ActorCritic(210,210,2,**train['upstream']['train']['policy']).to(device)
+  model=ActorCritic(210,211 if train['task'].get('task_spec') else 210,2,**train['upstream']['train']['policy']).to(device)
   checkpoint=torch.load(path,map_location=device,weights_only=False);model.load_state_dict(checkpoint['model_state_dict']);model.eval();models.append(model)
-  label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
+  if path.stem=='model_best':updates=checkpoint['infos']['completed_updates']
+  else:
+   label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
   identities.append(dict(checkpoint=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),completed_updates=updates,label=path.stem))
 controller_candidates=json.loads(a.controller_candidates.read_text()) if a.controller_candidates else []
 if controller_candidates:

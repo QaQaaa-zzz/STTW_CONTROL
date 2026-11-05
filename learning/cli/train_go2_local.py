@@ -50,7 +50,32 @@ class RecordedRunner(OnPolicyRunner):
 
 env = Go2LocalEnv(s, a.output)
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties))
+(a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner = RecordedRunner(env, train, log_dir=str(a.output/'training'), device=s['device'])
+# Observe the native PPO update boundary to score the model that actually
+# collected this rollout. Sampling, losses and optimizer remain upstream.
+upstream_update = runner.alg.update
+selection = dict(completed_updates=0, best_reward=-float('inf'))
+def recorded_update():
+    mean_reward = float(runner.alg.storage.rewards.mean())
+    update = selection['completed_updates']
+    row = dict(completed_updates=update, mean_step_reward=mean_reward,
+               samples=s['num_envs']*train['runner']['num_steps_per_env'])
+    with (a.output/'training_rewards.jsonl').open('a') as stream:
+        stream.write(json.dumps(row)+'\n')
+    runner.writer.add_scalar('Train/mean_step_reward_pre_update', mean_reward, update)
+    if mean_reward > selection['best_reward']:
+        selection['best_reward'] = mean_reward
+        torch.save(dict(model_state_dict=runner.alg.actor_critic.state_dict(),
+                        optimizer_state_dict=runner.alg.optimizer.state_dict(),
+                        iter=update, infos=row), a.output/'training/model_best.pt')
+        (a.output/'best_model.json').write_text(json.dumps(dict(**row,
+            checkpoint='training/model_best.pt',
+            scope='best sampled pre-update model in this run; not fixed-case qualification'), indent=2))
+    result = upstream_update()
+    selection['completed_updates'] += 1
+    return result
+runner.alg.update = recorded_update
 runner.learn(s['updates'], init_at_random_ep_len=False)
 status.update(stage='training_complete', elapsed_s=time.time()-started)
 (a.output/'status.json').write_text(json.dumps(status, indent=2))
