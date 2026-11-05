@@ -29,6 +29,9 @@ if lower is not None:
     contract['lower_identity']=lower.identity
     contract['role']='fixed preference DEV; Zero uses the same selected frozen lower plus ECBC/ESO, with no H75 correction'
 if a.backend=='lab':contract['lab_physics']=env.plant.metadata
+if env.randomization is not None:
+    contract['randomization_readback']=env.randomization_properties
+    contract['delay_steps']={key:value.time_lags.cpu().tolist() for key,value in env.randomization.buffers.items()}
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2));rows=[];detail=[];started=time.time()
 for step in range(env.horizon):
     result=env.step(None)
@@ -36,7 +39,7 @@ for step in range(env.horizon):
     detail.extend({key:value.cpu().numpy() for key,value in item.items()} for item in result['diagnostics'])
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
 np.savez_compressed(a.output/'trajectory.npz',**{key:np.stack([r[key] for r in rows]) for key in rows[0]},**{key:np.stack([r[key] for r in detail]) for key in detail[0]})
-summary=dict(stage='complete',policy_steps=env.horizon,physics_steps=env.horizon*6*100,elapsed_s=time.time()-started,failures=np.stack([r['failure'] for r in rows]).sum(0).tolist(),valid_steps=np.stack([r['valid'] for r in rows]).sum(0).tolist())
+summary=dict(stage='complete',policy_steps=env.horizon,physics_steps=env.horizon*6*100,elapsed_s=time.time()-started,failures=np.stack([r['failure'] for r in rows]).sum(0).tolist(),valid_steps=np.stack([r['valid'] for r in rows]).sum(0).tolist(),push_events=env.push_events)
 (a.output/'status.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary));env.plant.close()
 
 if a.backend=='lab':app.close()

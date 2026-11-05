@@ -20,6 +20,11 @@ class IsaacPathRollout:
         self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
+        self.randomization=None;self.randomization_properties=None;self.push_events=0
+        if settings.get('randomization'):
+            from .isaaclab_randomization import randomize_vehicle_properties,VehicleControlRandomization
+            self.randomization_properties=randomize_vehicle_properties(self.plant,settings['randomization'])
+            self.randomization=VehicleControlRandomization(self.plant,settings['randomization'])
         self.initial_state=None;self.initial_physical_tick=0
         if settings.get('initial_state'):
             data=np.load(settings['initial_state']);order=[list(data['joint_names']).index(k) for k in self.plant.joints]
@@ -39,7 +44,9 @@ class IsaacPathRollout:
             for key in ('eso','disturbance','gains'):getattr(self.controller,key)[:]=state[key]
             self.previous_reference=state['previous_reference'].expand(self.n,-1).clone();self.previous_command=state['previous_command'].expand(self.n,-1).clone();raw=state['raw'].expand(self.n,-1)
         self.alive=torch.ones(self.n,device=self.device,dtype=torch.bool);self.tick=0
-        m,pose,v=self.plant.observe();self.middle.reset(m,pose,v,raw,self.previous_reference,self.previous_command,self.controller)
+        m,pose,v=self.plant.observe();self.measurement=m
+        if self.randomization is not None:self.randomization.reset(torch.arange(self.n,device=self.device))
+        self.middle.reset(m,pose,v,raw,self.previous_reference,self.previous_command,self.controller)
 
     @torch.no_grad()
     def observation(self):
@@ -49,25 +56,35 @@ class IsaacPathRollout:
     def step(self,std):
         valid=self.alive.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];first_action=None
         for lower_tick in range(4):
+            if self.randomization is not None:
+                physical_control_tick=self.tick*4+lower_tick;push_ticks=round(self.randomization.config['push_interval_s']/.005)
+                if physical_control_tick>0 and physical_control_tick%push_ticks==0:
+                    from types import SimpleNamespace
+                    from isaaclab.envs.mdp.events import push_by_setting_velocity
+                    ids=self.alive.nonzero(as_tuple=False).flatten()
+                    push_by_setting_velocity(SimpleNamespace(scene={'robot':self.plant.robot}),ids,self.randomization.config['push_velocity_range']);self.plant.refresh();self.push_events+=len(ids)
             m,pose,v=self.plant.observe();governed=self.middle.before(pose,noise_std=std,zero_mask=self.zero_middle)
             if lower_tick==0:first_action=self.middle.latent.clone()
-            action,_,finite=self.lower.prepare(m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
+            policy_m=m if self.randomization is None else self.measurement
+            action,_,finite=self.lower.prepare(policy_m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
             signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,torch.full_like(valid,(self.initial_physical_tick+self.tick*4+lower_tick)*.005>3.))
             steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),25,device=self.device,dtype=torch.long)
             for physics_tick in range(25):
-                contact=self.plant.step(torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command)))
+                motor_command=torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command))
+                contact=self.plant.step(motor_command if self.randomization is None else self.randomization.command(motor_command))
+                if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
                 q=self.plant.roots[:,3:7];x,y,z,w=q.unbind(-1);roll=-(torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y))-torch.pi/2);peak=torch.where(self.alive,torch.maximum(peak,roll.abs()),peak)
                 failure=contact|~torch.isfinite(self.plant.roots).all(-1);hit=self.alive&failure;stop_tick=torch.where(hit,physics_tick+1,stop_tick);endpoint=torch.where(self.alive[:,None],self.plant.roots,endpoint);new_failure|=hit;self.alive&=~failure
             post_m,post_pose,post_v=self.plant.signals.observe(endpoint,self.plant.dofs[:,:,0],self.plant.dofs[:,:,1]);post_pose=post_pose-self.plant.origin
-            self.lower.finish(applied,wrap(post_pose[:,2]-pose[:,2])/.005);offsets=self.policy.offsets.clone();self.middle.after(post_m,post_pose,post_v,governed,command,applied,self.controller)
+            self.lower.finish(applied,wrap(post_pose[:,2]-pose[:,2])/.005);offsets=self.policy.offsets.clone();self.middle.after(post_m if self.randomization is None else self.measurement,post_pose,post_v,governed,command,applied,self.controller)
             projection=self.middle.projection;curvature=self.route.at(projection['progress'])[2];ratio=self.controller._system(self.speed)[3];chi=((torch.atan(self.cc['wheelbase']*curvature/np.cos(self.cc['caster']))/ratio).abs()-.18).div(.12).clamp(0,1)
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
             reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
             logs.append(torch.cat((post_pose[:15,:2],post_v[:15,None],projection['cross_track'][:15,None],peak[:15,None],terms['reward'][:15,None],active_lower[:15,None],stop_tick[:15,None],governed[:15],post_m[:15,5:6]*.1),dim=-1));self.previous_reference=governed;self.previous_command=command
             if self.diagnostics:
                 details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
-                    progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),
+                    progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),
                     target=self.middle.flags['target'].clone(),offsets=self.policy.offsets.clone(),filtered=self.policy.filtered.clone(),
                     rate_clipped=self.middle.flags['rate_clipped'].clone(),alive=self.alive.clone(),
                     contact_force=self.plant.contact.clone(),body_state=self.plant.rigid.clone(),

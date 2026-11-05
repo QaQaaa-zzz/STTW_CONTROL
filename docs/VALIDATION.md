@@ -1,4 +1,9 @@
 
+## H75 shares Go2 domain randomization
+
+IsaacPathRollout now connects the same IsaacLab randomize_vehicle_properties/VehicleControlRandomization and push event as Go2LocalEnv. Training defaults to the shared Go2 DR settings and selected repaired contact options; nominal evaluations remain unchanged by default. One declared6-lane5s engineering run completed150000physics/0optimizer, actual randomized material/mass/COM/25–75physical-tick delays saved, six push events at4s and finite observations. ECBC/reward/termination use clean state; policy history uses augmented measurements. No new PPO training or DR robustness claim. Evidence: runs/h75_go2_dr_integration/RESULTS.md.
+
+
 ## Go2 randomization requirement and first 4 cm terrain DEV
 
 All subsequent lower/middle/student training must reuse the Go2 randomization contract and applicable training processing, recorded in AGENTS.md. Current lower implementation includes friction/mass/inertia/COM, gains/offset, physical-time action/motor/IMU delays, observation noise and periodic pushes. The older middle terrain training path has not yet connected the shared randomization; it must be updated before any new formal training. No new training launched here.

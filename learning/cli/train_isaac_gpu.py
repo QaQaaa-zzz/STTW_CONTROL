@@ -3,6 +3,8 @@ import argparse,copy,hashlib,json,os,shutil,subprocess,time,sys
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();s=json.loads(a.config.read_text());a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
 if s.get('backend','gym')=='lab':
+    s.setdefault('randomization',json.loads(Path('learning/configs/go2_local_original_task.json').read_text())['randomization'])
+    s.setdefault('plant_options',json.loads(Path('learning/configs/isaaclab_selected_lower.json').read_text())['plant_options'])
     from isaaclab.app import AppLauncher
     app=AppLauncher(headless=True,device='cuda:0').app
 else:
@@ -26,7 +28,7 @@ ppo.storage=ActiveLaneStorage(s['num_envs'],s['rollout_steps'],[351],[352],[2],d
 writer=SummaryWriter(str(a.output/'tb'));writer.add_scalar('stage/started',1,0);writer.flush();status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,accepted_updates=0,valid_transitions=0,physics_steps=0,started=time.time());(a.output/'status.json').write_text(json.dumps(status,indent=2))
 contract=dict(s,parent_bundle=str(source),parent_checkpoint_sha256=hashlib.sha256((previous/'checkpoint.pt').read_bytes()).hexdigest(),initialization='Actor/Critic/Adam continued; explicit Go2 std=1 and fresh seed',actor_hidden=cfg['network']['hidden'],critic_hidden=[512,256,128],physics_dt=.0002,lower_dt=.005,policy_dt=.02,max_physics_steps=s['updates']*s['rollout_steps']*s['num_envs']*100,max_policy_transitions=s['updates']*s['rollout_steps']*s['num_envs'],reward='unchanged frozen v3; failure discount remains .997, PPO discount .99',contact_monitor='GPU net contact force; not identical to old CPU individual contact query',reset='synchronous five-second episodes; failed lanes excluded until reset',go2_exceptions=['STTW network and action semantics retained','STTW physics/control timing retained','quadruped symmetry permutation not applicable','inactive-lane minibatch mask retained; upstream PPO replaces custom rollback/std clamp'])
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2));snapshot=a.output/'source';snapshot.mkdir()
-for file in ['learning/cli/train_isaac_gpu.py','learning/src/sttw_control/isaac_vector_env.py','learning/src/sttw_control/isaac_path_rollout.py','learning/src/sttw_control/torch_path_reward.py','learning/src/sttw_control/isaaclab_vector_env.py','learning/src/sttw_control/go2_ppo_adapter.py',str(Path(s['go2_rsl_rl'])/'rsl_rl/algorithms/ppo.py'),str(Path(s['go2_rsl_rl'])/'rsl_rl/storage/rollout_storage.py'),str(a.config)]:shutil.copy2(file,snapshot/Path(file).name)
+for file in ['learning/cli/train_isaac_gpu.py','learning/src/sttw_control/isaac_vector_env.py','learning/src/sttw_control/isaac_path_rollout.py','learning/src/sttw_control/torch_path_reward.py','learning/src/sttw_control/isaaclab_vector_env.py','learning/src/sttw_control/isaaclab_randomization.py','learning/src/sttw_control/go2_ppo_adapter.py',str(Path(s['go2_rsl_rl'])/'rsl_rl/algorithms/ppo.py'),str(Path(s['go2_rsl_rl'])/'rsl_rl/storage/rollout_storage.py'),str(a.config)]:shutil.copy2(file,snapshot/Path(file).name)
 def save_policy(index):
     dest=a.output/('policy_%03d'%index);dest.mkdir();np.savez(dest/'actor.npz',**actor.export_arrays())
     for name in ['config.json','route.npz']:shutil.copy2(source/name,dest/name)
@@ -34,8 +36,13 @@ def save_policy(index):
 current=save_policy(0);plant=None
 if s.get('backend','gym')=='lab':
     from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
-    plant=IsaacLabVectorPlant(s['asset'],list(s['terrains'].values()),[i%len(s['terrains']) for i in range(s['num_envs'])],a.output)
-env=IsaacPathRollout(source,s,actor,plant=plant);torch.cuda.synchronize();status['initialization_seconds']=time.time()-status['started'];status['stage']='training';history=[];best=-float('inf')
+    plant=IsaacLabVectorPlant(s['asset'],list(s['terrains'].values()),[i%len(s['terrains']) for i in range(s['num_envs'])],a.output,**s['plant_options'])
+env=IsaacPathRollout(source,s,actor,plant=plant)
+if env.randomization is not None:
+    contract['randomization_readback']=env.randomization_properties
+    contract['delay_steps']={key:value.time_lags.cpu().tolist() for key,value in env.randomization.buffers.items()}
+    (a.output/'contract.json').write_text(json.dumps(contract,indent=2))
+torch.cuda.synchronize();status['initialization_seconds']=time.time()-status['started'];status['stage']='training';history=[];best=-float('inf')
 for update in range(s['updates']):
     start=time.time();rollout=[];traces=[];episode_rows=[]
     with torch.no_grad():
