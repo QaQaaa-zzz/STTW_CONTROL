@@ -1141,3 +1141,8 @@ Original8 states exported using MuJoCo forward kinematics only; bank3 equality c
 ## Original-task native Go2 training launch
 
 `runs/go2_local_original500`: fresh4096×24×500 budget (49,152,000control transitions), native512/256/128ELU Actor/Critic, Actor210/Critic211, original Local300 task/reset distribution and repaired contacts. Startup runs directly at requested4096; no extra pilot training. GPU material readback confirms randomized friction0.307857–0.999337 with original negative stiffness entries intact across4096×6shapes. First two updates completed,2.9–3.1s each; this is launch evidence, not learning success. TensorBoard6006 HTTP200 and active scalar tags verified. Native PPO update boundary logs mean step rewards and saves the corresponding pre-update best; no alteration of native sampling/update. Evaluator now supports211Dcritic and best checkpoint metadata. Stage notification uses existing CLI/PID543737. Subsequent candidate evaluation/qualification pending.
+
+
+## Original reward replay separates reward from trajectory equivalence
+
+New thin offline CLI `compare_local_rewards.py` reuses original lower_command reward functions; all seven saved MuJoCo cases reconstruct logged per-step reward exactly (max abs0). Repaired Lab original Local300 has higher mean reward in7/7 despite return XY divergence; original reward has no XY/accumulated-yaw term. Preserve the original training objective as requested, and retain full trajectories as a separate comparison. Saved per-step/cumulative total reward and all eight signed component curves/arrays for seven cases include matching Lab ECBC. No physics rerun or modification of running training. `runs/local300_contact_repair/rewards` stores replay outputs.

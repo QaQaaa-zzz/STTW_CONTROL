@@ -31,7 +31,7 @@ for i,name in enumerate(s['cases']):
   n=int(d['valid'][:,i].sum());xy=d['pose'][:n,i,:2];ax.plot(*xy.T,style,color=color,lw=1.4,label=(result['label'] if 'controller_parameters' in result else 'Update '+str(result['completed_updates'])));ax.scatter(*xy[-1],color=color,marker='x',s=18)
  ax.set(title=name,xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2)
 handles,labels=axes.flat[0].get_legend_handles_labels();axes.flat[-1].legend(handles,labels,loc='center',fontsize=10)
-fig.suptitle(('ECBC parameter screen, plotted top '+str(a.plot_top) if a.plot_top else ('ECBC parameter candidates' if all('controller_parameters' in r for r in results) else 'Four candidates after simplified-distribution training'))+' | fixed nominal DEV\nSame saved initial state and issued references; crosses mark actual observation endpoints')
+fig.suptitle(('ECBC parameter screen, plotted top '+str(a.plot_top) if a.plot_top else ('ECBC parameter candidates' if all('controller_parameters' in r for r in results) else 'Lower-policy candidates'))+' | fixed nominal DEV\nSame saved initial state and issued references; crosses mark actual observation endpoints')
 fig.tight_layout();fig.savefig(a.output/'all_candidates_xy.png',dpi=160);plt.close(fig)
 result=dict(role='fixed-case DEV comparison, not held-out generalization',best=rank[0],ranked=rank,
  selection='survival count, final .5s speed/steer tracking count, observed duration, normalized tracking RMSE',
