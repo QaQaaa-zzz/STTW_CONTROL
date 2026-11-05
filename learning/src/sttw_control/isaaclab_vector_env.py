@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external"):
         self.servo_mode=servo_mode
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
@@ -32,15 +32,21 @@ class IsaacLabVectorPlant:
         cloner=GridCloner(spacing=100. if env_spacing is None else env_spacing,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
         env_paths=cloner.generate_paths('/World/Envs/Env',self.count)
         origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 and env_spacing is None else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
+        clone_origins=origins.copy()
+        replicated_terrain=terrain_layout=='replicated'
+        terrain_offsets=np.zeros((len(terrain_paths),3),dtype=np.float32)
+        if replicated_terrain:
+            terrain_offsets[:,0]=np.arange(len(terrain_paths))*(env_spacing/len(terrain_paths))
+            origins=origins+terrain_offsets[np.asarray(terrain_ids)]
         self.origin=torch.as_tensor(origins,device=self.device);self.terrain_identity=[];terrain_sources={}
         sim_utils.create_prim(env_paths[0],'Xform')
         plane_paths=[]
         if 'plane' in terrain_paths:
             plane=sim_utils.GroundPlaneCfg(physics_material=material);plane.func('/World/Ground',plane);plane_paths=['/World/Ground']
-        for i,terrain_id in enumerate(terrain_ids):
+        for i,terrain_id in enumerate(range(len(terrain_paths)) if replicated_terrain else terrain_ids):
             if str(terrain_paths[terrain_id])=='plane':
                 self.terrain_identity.append(dict(kind='plane',height_m=0.));continue
-            ground_path=f'/World/Terrain_{i}'
+            ground_path=f'{env_paths[0]}/Terrain_{i}' if replicated_terrain else f'/World/Terrain_{i}'
             if terrain_id not in terrain_sources:
                 path=Path(terrain_paths[terrain_id]);identity=json.loads((path/'identity.json').read_text())
                 if hashlib.sha256((path/'terrain.npz').read_bytes()).hexdigest()!=identity['sha256']:raise ValueError('terrain identity mismatch')
@@ -49,7 +55,9 @@ class IsaacLabVectorPlant:
                 terrain_sources[terrain_id]=(ground_path,identity)
             else:
                 prim=self.sim.stage.DefinePrim(ground_path);prim.GetReferences().AddInternalReference(terrain_sources[terrain_id][0]);prim.SetInstanceable(True)
-            xform=UsdGeom.Xformable(self.sim.stage.GetPrimAtPath(ground_path));xform.ClearXformOpOrder();xform.AddTranslateOp().Set(tuple(float(v) for v in origins[i]));self.terrain_identity.append(terrain_sources[terrain_id][1])
+            position=terrain_offsets[terrain_id] if replicated_terrain else origins[i]
+            xform=UsdGeom.Xformable(self.sim.stage.GetPrimAtPath(ground_path));xform.ClearXformOpOrder();xform.AddTranslateOp().Set(tuple(float(v) for v in position));self.terrain_identity.append(terrain_sources[terrain_id][1])
+        if replicated_terrain:self.terrain_identity=[self.terrain_identity[terrain_id] for terrain_id in terrain_ids]
         actuators={'effort':ImplicitActuatorCfg(joint_names_expr=['.*'],stiffness=0.,damping=0.,effort_limit_sim=1000.,velocity_limit_sim=1000.)}
         if servo_mode == 'implicit':
             actuators={
@@ -93,20 +101,23 @@ class IsaacLabVectorPlant:
                     hull=PhysxSchema.PhysxConvexHullCollisionAPI.Apply(prim)
                     hull.CreateHullVertexLimitAttr(hull_vertices)
                 self.collision_cooking.append(dict(path=str(prim.GetPath()),points=sum(len(UsdGeom.Mesh(child).GetPointsAttr().Get()) for child in Usd.PrimRange(prim) if child.IsA(UsdGeom.Mesh)),previous_hull_limit=previous_limit,hull_limit=hull.GetHullVertexLimitAttr().Get(),approximation=UsdPhysics.MeshCollisionAPI(prim).GetApproximationAttr().Get()))
-        Cloner.clone(cloner,source_prim_path=env_paths[0],prim_paths=env_paths,positions=origins,replicate_physics=True,copy_from_source=False,enable_env_ids=True)
-        cloner.filter_collisions(self.sim.cfg.physics_prim_path,'/World/CollisionGroups',env_paths,global_paths=plane_paths)
-        for i in range(self.count):
-            if str(terrain_paths[terrain_ids[i]])=='plane':continue
-            self.sim.stage.GetPrimAtPath(f'/World/CollisionGroups/group{i}').GetRelationship('collection:colliders:includes').AddTarget(f'/World/Terrain_{i}')
+        Cloner.clone(cloner,source_prim_path=env_paths[0],prim_paths=env_paths,positions=clone_origins,replicate_physics=True,copy_from_source=False,enable_env_ids=True)
+        if not replicated_terrain:
+            cloner.filter_collisions(self.sim.cfg.physics_prim_path,'/World/CollisionGroups',env_paths,global_paths=plane_paths)
+            for i in range(self.count):
+                if str(terrain_paths[terrain_ids[i]])=='plane':continue
+                self.sim.stage.GetPrimAtPath(f'/World/CollisionGroups/group{i}').GetRelationship('collection:colliders:includes').AddTarget(f'/World/Terrain_{i}')
         self.sensor=ContactSensor(ContactSensorCfg(prim_path='/World/Envs/Env_.*/Robot/.*',update_period=0.,history_length=1))
         self.wheel_sensors=[]
         if track_wheel_contacts:
-            filters=plane_paths+(['/World/Terrain_.*'] if terrain_sources else [])
+            terrain_filter='/World/Envs/Env_.*/Terrain_.*' if replicated_terrain else '/World/Terrain_.*'
+            filters=plane_paths+([terrain_filter] if terrain_sources else [])
             self.wheel_sensors=[ContactSensor(ContactSensorCfg(prim_path=f'/World/Envs/Env_.*/Robot/{wheel}',filter_prim_paths_expr=filters,track_contact_points=True,max_contact_data_count_per_prim=16,update_period=0.)) for wheel in ('frontwheel','rearwheel')]
         self.sim.reset();self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
         for sensor in self.wheel_sensors:sensor.update(.0002,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device);self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
         self.metadata=dict(env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
+        self.metadata['terrain_layout']=dict(mode=terrain_layout,clone_origins=clone_origins.tolist(),template_offsets=terrain_offsets.tolist(),filtering='native replicated environment IDs' if replicated_terrain else 'explicit collision groups')
         self.metadata['wheel_contact_tracking']=dict(enabled=track_wheel_contacts,body_order=['frontwheel','rearwheel'],aggregation='official ContactSensor mean contact position per body/filter; force_matrix_w per filter',sample_dt_s=.0002)
         self.reset()
 

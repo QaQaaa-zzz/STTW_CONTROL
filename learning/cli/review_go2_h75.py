@@ -13,12 +13,14 @@ for domain in spec['domains']:
 env=dict(os.environ,PYTHONPATH=str(root/'learning/src'),JAX_PLATFORMS='cpu');a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
 def execute(python,script,args,log):
  with log.open('w') as stream:subprocess.run([python,'-u','learning/cli/'+script,*map(str,args)],env=env,stdout=stream,stderr=subprocess.STDOUT,check=True)
-execute(spec['lab_python'],'select_go2_local.py',['--training-run',run,'--metric','Episode/reward'],a.output/'selection.log')
-peaks=[]
-for segment in [*map(Path,spec['earlier_segments']),run]:
+peaks=[];periodics=[]
+for index,segment in enumerate([*map(Path,spec['earlier_segments']),run]):
+ execute(spec['lab_python'],'select_go2_local.py',['--training-run',segment,'--metric','Episode/reward'],a.output/f'selection_{index}.log')
+ periodic=json.loads((segment/'best_training.json').read_text())['best']
+ if periodic is not None:periodics.append(dict(periodic,training_run=str(segment.resolve())))
  row=json.loads((segment/'best_model.json').read_text());peaks.append(dict(row,checkpoint=str((segment/row['checkpoint']).resolve()),training_run=str(segment.resolve())))
-peak=max(peaks,key=lambda row:row['episode_reward']);periodic=json.loads((run/'best_training.json').read_text())['best'];final=dict(checkpoint=str(run/training_status['final_checkpoint']),completed_updates=training_status['completed_updates'],training_run=str(run))
-periodic['training_run']=str(run);candidates=[]
+peak=max(peaks,key=lambda row:row['episode_reward']);periodic=max(periodics,key=lambda row:row['training_reward']);final=dict(checkpoint=str(run/training_status['final_checkpoint']),completed_updates=training_status['completed_updates'],training_run=str(run))
+candidates=[]
 for role,row in zip(spec['candidate_roles'],[peak,periodic,final]):
  if row['completed_updates'] not in [item['completed_updates'] for item in candidates]:candidates.append(dict(row,role=role))
 (a.output/'selection.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),candidates=candidates,episode_peaks=peaks,scope='reward-based nomination before fixed-case results; cross-update episodes; no automatic adoption',budget=spec['max_new_physics_lane_steps']),indent=2))

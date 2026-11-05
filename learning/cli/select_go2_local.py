@@ -25,8 +25,8 @@ for path in sorted((path for path in training.glob('model_*.pt') if path.stem.re
     rows.append(dict(checkpoint=str(path.resolve()),completed_updates=updates,
                      score_step=score_step,training_reward=reward[score_step]))
 rows.sort(key=lambda row:(-row['training_reward'],row['completed_updates']))
-best=rows[0]
-best['sha256']=hashlib.sha256(Path(best['checkpoint']).read_bytes()).hexdigest()
+best=rows[0] if rows else None
+if best is not None:best['sha256']=hashlib.sha256(Path(best['checkpoint']).read_bytes()).hexdigest()
 result=dict(role='training reward selection before fixed-case evaluation',
     metric=a.metric,metric_meaning='per-iteration completed-episode aggregate' if a.metric=='Episode/reward' else 'rolling last100 completed-episode return',
     attribution='first subsequent rollout log for each saved post-update checkpoint',

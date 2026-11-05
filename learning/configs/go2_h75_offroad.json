@@ -27,7 +27,8 @@
         "damping": 173.11038721684574
       }
     },
-    "env_spacing": 100.0
+    "env_spacing": 200.0,
+    "terrain_layout": "replicated"
   },
   "randomization": {
     "base_body": "chasis",
@@ -132,5 +133,5 @@
   },
   "task_note": "Original320 TRAIN prefixes/full routes/speeds/signed pulses/10s remaining deadline; add switches, SDK wave band and shared Go2 DR; no old trajectories used as new samples.",
   "selection_note": "Episode/reward peak plus periodic/final candidates; physical fixed-case comparison before adoption.",
-  "terrain_layout_note": "64m independent patches spaced100m to avoid overlapping broadphase boxes; original local coordinates retained; exact zero-height planar cells compacted, all nonplanar original mesh vertices/cells retained"
+  "terrain_layout_note": "Clone vehicle and both original compact terrain templates together using native PhysX environment IDs. Templates are100m apart within each200m clone; each lane selects the same flat/waves terrain through its local origin. Original mesh assets, heights, task and physics clocks retained."
 }
