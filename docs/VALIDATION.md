@@ -1,3 +1,21 @@
+## 2026-11-04 Isaac H75 five-alpha fixed-curve closed loop
+
+XY first: `runs/isaac_h75_curve_probe/comparison.png` shows all five alphas, zero-middle+LOCAL300 baseline, and the original fixed route (first 12 m displayed). Raw body/contact/control/lower/middle arrays, per-run receipts and summary remain in that directory. The bundle fixes H75/config/route identities, origin and original 1.8 m radius; its legacy route name is left90_R2. Pairing verifies source asset, controller, initial body/DOF state, material properties, speed request, lower actor and route bundle. The baseline includes LOCAL300; it is not pure ECBC.
+
+All five H75 cases completed 25000 steps / 5 s each. Baseline stopped after 10925 steps / 2.185 s: all saved physical states are finite, and independently reconstructed terminal roll is 0.716855 rad, above the 0.7 rad engineering stop. The pre-step control trace ends at 0.693479 rad; do not mistake that for the final physical maximum. Total new explicit physics steps: 135925, below the declared 150000 limit; optimizer updates: zero.
+
+| Alpha | Duration (s) | Max pre-step abs roll (rad) | Max pre-step abs cross-track (m) |
+|---|---:|---:|---:|
+| 0 | 5 | 0.22543 | 0.46775 |
+| 0.25 | 5 | 0.23363 | 0.23374 |
+| 0.5 | 5 | 0.24414 | 0.29579 |
+| 0.75 | 5 | 0.27314 | 0.61475 |
+| 1 | 5 | 0.26883 | 0.62072 |
+
+These are per-run descriptive extrema over actual observation lengths, not matched-duration capability comparisons. All H75 runs remained finite without triggering the engineering stops, but cross-track excursions remain substantial and alpha0 is not monotonically better than alpha0.25 for path error. No task-success, recovery, generalized preference or terrain claim follows from this one initial-state plane test. No task rewards were computed for this engineering entry. Saved `wiring_check.json` checks every available tick: latent held exactly four lower ticks; lower observation's governed/previous reference and rates match the actual reference stream. The plot was inspected; all failures/endpoints and original reference are retained.
+
+Code connects the scheduler to real physical boundaries, using previous applied residual and completed-interval controller state before the next H75/lower inference. Hash-bound path bundle preparation and five-alpha plotting are now available. Next: real shallow terrain with full five-alpha and matched baseline coverage, followed by task reward/return evidence and bounded training. Continuous-task/RB work remains deferred.
+
 ## 2026-11-04 H75 causal history and combined scheduler parity
 
 `torch_middle_control.py` connects the fixed route, pursuit and frozen H75 reference correction with explicit reset/before/after interfaces. H75 history has 16 real frames sampled every 20 ms plus causal masks; lower reference correction and nominal slew update every 5 ms; pursuit updates every four lower intervals. Reset projects the initial pose, publishes the first nominal reference and records one actual initial frame. After each completed lower interval, projection and pose-difference yaw update before the next observation; H75's latent is held for four intervals. It keeps raw nominal route references separate from governed references and does not relocate the path. Frame construction is shared with the already-verified LOCAL300 implementation; middle history uses explicit nominal rates rather than lower governed-reference differences.
