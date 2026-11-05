@@ -57,6 +57,7 @@ for step in range(env.horizon):
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
 np.savez_compressed(a.output/'trajectory.npz',**{key:np.stack([r[key] for r in rows]) for key in rows[0]},**{key:np.stack([r[key] for r in detail]) for key in detail[0]})
 summary=dict(post_fork_failures=np.stack([r['failure'] for r in rows[fork_step:]]).sum(0).tolist() if fork_step is not None else None,fork_policy_step=fork_step,stage='complete',policy_steps=env.horizon,physics_steps=env.horizon*s['num_envs']*100,elapsed_s=time.time()-started,failures=np.stack([r['failure'] for r in rows]).sum(0).tolist(),valid_steps=np.stack([r['valid'] for r in rows]).sum(0).tolist(),push_events=env.push_events)
-(a.output/'status.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary));env.plant.close()
+(a.output/'status.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
 if a.backend=='lab':app.close(wait_for_replicator=False,skip_cleanup=True)
+else:env.plant.close()
