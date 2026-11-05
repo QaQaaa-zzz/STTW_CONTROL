@@ -2763,3 +2763,12 @@ Startup actual: first4updates complete, ~2.96s/update (~25min estimate). TensorB
 The same run stores `runs/go2_local_adapted500/finish_pipeline.py`, launched as a one-shot continuation (tool session64261). It waits until the estimated20minute check, then waits for this training stage at60s intervals. No training restart. After completion it nominates the completed-episode reward candidate, two reward-screened periodic candidates and final (up to4), then executes exactly the original seven10s cases per candidate, at most1400000physics lane steps/0optimizer. Frozen evaluation config derives from this run's saved task/plant settings. Existing matched Lab ECBC/MuJoCo trajectories are reused.
 
 The continuation generates complete XY, states, per-step/cumulative rewards, signed components, raw data and per-case metrics under `runs/go2_local_adapted500/final_review`. It marks artifacts ready for review, without automatically adopting a model or starting H75. Training-stage notification and pipeline-output notification are separate. The run-specific script remains ignored, not a new reusable execution framework. At registration these are pending actions, not completed results.
+
+
+## Native Go2 lower Torch-to-Flax portability
+
+Reused original `lower_command_validation.export_local_actor` and `network.ResidualActor`; new thin `export_go2_local_actor.py` exports native checkpoint weights and native reference outputs. `FrozenLocalLower` accepts explicit hidden sizes with the historical256/128 default unchanged. No new actor inference formula.
+
+Immutable model25 from the active run was used solely for interface checks, not selected/adopted.2048 synthetic clipped210D inputs with binary history masks tested onGPU: default JAX matmul precision differed by up to3.36e-5 in logits; explicit JAX_DEFAULT_MATMUL_PRECISION=highest brought maximum logits difference1.86e-8 and action difference2.98e-8. Metadata records the required precision. No physics/optimizer or training restart. This is forward parity only, not closed-loop sim2sim. Evidence: runs/go2_local_adapted500/portable_inference_check/{identity,parity}.json.
+
+Initial export completed arrays/weights but failed on duplicate role metadata key; repaired metadata without repeating inference. First Flax check used the CPU-only/missing-Torch mjp interpreter and failed during imports; corrected to existing GPU JAX+Torch environment. Original failed outputs preserved, no package installation.

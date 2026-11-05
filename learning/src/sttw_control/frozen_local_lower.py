@@ -15,9 +15,9 @@ class LocalLowerState:
 
 class FrozenLocalLower:
     local_interface=True
-    def __init__(self,params):
-        self.params=params;self.net=ResidualActor((256,128),activation='elu')
-        if params['params']['Dense_0']['kernel'].shape!=(210,256):raise ValueError('local210 frozen Actor required')
+    def __init__(self,params,hidden_sizes=(256,128)):
+        self.params=params;self.net=ResidualActor(tuple(hidden_sizes),activation='elu')
+        if params['params']['Dense_0']['kernel'].shape!=(210,hidden_sizes[0]):raise ValueError('local210 frozen Actor required')
     def initial(self,pose):
         return LocalLowerState(jp.zeros((10,20)),jp.zeros(10),jp.zeros(2),jp.asarray(0.))
     def prepare_local(self,s,measurement,pose,true_speed,governed,physical,cc):
