@@ -101,8 +101,8 @@
     1
   ],
   "terrains": {
-    "flat": "runs/h75_offroad_training_terrain/flat",
-    "waves": "runs/h75_offroad_training_terrain/waves"
+    "flat": "runs/h75_offroad_training_terrain/flat_compact",
+    "waves": "runs/h75_offroad_training_terrain/waves_compact"
   },
   "switch_probability": 0.5,
   "pulse": {
@@ -132,5 +132,5 @@
   },
   "task_note": "Original320 TRAIN prefixes/full routes/speeds/signed pulses/10s remaining deadline; add switches, SDK wave band and shared Go2 DR; no old trajectories used as new samples.",
   "selection_note": "Episode/reward peak plus periodic/final candidates; physical fixed-case comparison before adoption.",
-  "terrain_layout_note": "64m independent patches spaced100m to avoid overlapping broadphase boxes; original local coordinates retained"
+  "terrain_layout_note": "64m independent patches spaced100m to avoid overlapping broadphase boxes; original local coordinates retained; exact zero-height planar cells compacted, all nonplanar original mesh vertices/cells retained"
 }
