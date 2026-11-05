@@ -39,12 +39,7 @@ class TorchPathPolicy:
 
     @torch.no_grad()
     def latent(self,obs):
-        x=obs;q=2*obs[:,336:337]-1;w=self.weights
-        for i in range(3):
-            x=x@w[f'Dense_{i}_kernel']+w[f'Dense_{i}_bias']
-            if i>0:x=(1+q*w[f'gain_{i+1}'])*x+q*w[f'shift_{i+1}']
-            x=torch.nn.functional.elu(x)
-        return x@w['Dense_3_kernel']+w['Dense_3_bias']
+        return path_latent(self.weights,obs)
 
     @torch.no_grad()
     def correct(self,z,nominal):
@@ -61,3 +56,30 @@ class TorchPathPolicy:
         return governed,dict(reference_clipped=clipped.any(-1),reference_clip_channels=clipped,
             rate_clipped=rate_clipped,
             policy_fault=~torch.isfinite(z).all(-1),target=target)
+
+
+def path_latent(weights,obs):
+    """Shared mean network for frozen evaluation and gradient-based finetuning."""
+    x=obs;q=2*obs[:,336:337]-1;w=weights
+    for i in range(3):
+        x=x@w[f'Dense_{i}_kernel']+w[f'Dense_{i}_bias']
+        if i>0:x=(1+q*w[f'gain_{i+1}'])*x+q*w[f'shift_{i+1}']
+        x=torch.nn.functional.elu(x)
+    return x@w['Dense_3_kernel']+w['Dense_3_bias']
+
+
+class TrainablePathActor(torch.nn.Module):
+    """Weights-only H75 finetuning; original artifacts remain immutable."""
+    def __init__(self,frozen,initial_std=.1):
+        super().__init__()
+        self.weights=torch.nn.ParameterDict({k:torch.nn.Parameter(v.clone()) for k,v in frozen.weights.items()})
+        self.log_std=torch.nn.Parameter(torch.full_like(frozen.offsets[0],float(np.log(initial_std))))
+
+    def forward(self,obs):
+        return path_latent(self.weights,obs)
+
+    def distribution(self,obs):
+        return torch.distributions.Normal(self(obs),self.log_std.exp())
+
+    def export_arrays(self):
+        return {k:v.detach().cpu().numpy().copy() for k,v in self.weights.items()}

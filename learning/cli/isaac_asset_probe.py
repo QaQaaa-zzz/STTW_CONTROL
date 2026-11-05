@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--path-bundle', type=Path)
     parser.add_argument('--alpha', type=float, choices=(0.,.25,.5,.75,1.), default=.5)
     parser.add_argument('--zero-middle', action='store_true')
+    parser.add_argument('--contact-offset', type=float)
+    parser.add_argument('--rest-offset', type=float)
     parser.add_argument('--source-inertia', action='store_true')
     args = parser.parse_args()
     if not 0 <= args.steps <= (25000 if args.controller_config else 1000) or not 0 < args.drive_speed <= 3.5:
@@ -39,6 +41,8 @@ def main():
         parser.error('path bundle requires frozen lower; zero-middle requires path bundle')
     if bool(args.terrain_mesh) != bool(args.terrain_sha256) or (args.terrain_mesh and args.ground != 'trimesh'):
         parser.error('terrain mesh requires SHA256 and ground=trimesh')
+    if (args.contact_offset is None) != (args.rest_offset is None) or (args.contact_offset is not None and not 0 <= args.rest_offset < args.contact_offset <= .02):
+        parser.error('declare both contact/rest offsets with 0 <= rest < contact <= .02')
     gym = gymapi.acquire_gym()
     params = gymapi.SimParams()
     params.dt = .0002
@@ -46,6 +50,9 @@ def main():
     params.up_axis = gymapi.UP_AXIS_Z
     params.gravity = gymapi.Vec3(0, 0, -9.81)
     params.physx.use_gpu = False
+    if args.contact_offset is not None:
+        params.physx.contact_offset = args.contact_offset
+        params.physx.rest_offset = args.rest_offset
     sim = gym.create_sim(0, -1, gymapi.SIM_PHYSX, params)
     if sim is None:
         raise RuntimeError('Isaac simulation creation failed')
@@ -67,6 +74,7 @@ def main():
                   shapes=gym.get_asset_rigid_shape_count(asset),
                   physics_steps=0, optimizer_updates=0,
                   scope='Import diagnostics only; not collision or closed-loop validation')
+    result['physx_config'] = {key:getattr(params.physx,key) for key in ('solver_type','num_position_iterations','num_velocity_iterations','contact_offset','rest_offset','bounce_threshold_velocity','max_depenetration_velocity')}
     if args.ground == 'plane':
         plane = gymapi.PlaneParams()
         plane.normal = gymapi.Vec3(0, 0, 1)
@@ -122,6 +130,9 @@ def main():
         for body_name, span in zip(result['bodies'], ranges):
             for index in range(span.start, span.start+span.count):
                 properties[index].friction = materials[body_name][0]
+                if args.contact_offset is not None:
+                    properties[index].contact_offset = args.contact_offset
+                    properties[index].rest_offset = args.rest_offset
         gym.set_actor_rigid_shape_properties(env, actor, properties)
         result['material_contract'] = 'source sliding friction on terrain and vehicle; PhysX rolling/torsion remain zero and differ from source'
     body_ids = {name: gym.get_actor_rigid_body_index(env, actor, i, gymapi.DOMAIN_ENV)

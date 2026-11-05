@@ -1,3 +1,9 @@
+# STTW offroad — current implementation direction (2026-11-04)
+
+User priority: finish STTW offroad before continuous-task/RB work. Stop prolonged mesh parameter scans; use standard Isaac terrain generators and supplement slope/rough-terrain training. Full alpha coverage is 0/.25/.5/.75/1. Current candidate uses 0.1 m horizontal terrain sampling, contact/rest offsets .01/0 m, physics 5000 Hz, lower 200 Hz and middle 50 Hz. H75 Torch inference/history/control are integrated; LOCAL300+ECBC/ESO stays frozen for the first middle finetuning stage. Standard terrain tiles and a trainable weights-only Actor are prepared; training rollout/reward/PPO integration remains to be completed. Current evidence and limitations: docs/VALIDATION.md; authoritative live decisions: /home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md.
+
+---
+
 # Path Coverage V2 — 2026-10-11
 
 Reset-distribution-only fork from alpha0 best100 / alpha1 best150. [Execution contract and verification](docs/path_coverage_v2.md). Default +100 each; conditional +50 blocks capped +200. Old results preserved; no auto push. Live facts remain in the shared research hub.
