@@ -27,7 +27,7 @@
         "damping": 173.11038721684574
       }
     },
-    "env_spacing": 3.0
+    "env_spacing": 100.0
   },
   "randomization": {
     "base_body": "chasis",
@@ -131,5 +131,6 @@
     "lam": 0.95
   },
   "task_note": "Original320 TRAIN prefixes/full routes/speeds/signed pulses/10s remaining deadline; add switches, SDK wave band and shared Go2 DR; no old trajectories used as new samples.",
-  "selection_note": "Episode/reward peak plus periodic/final candidates; physical fixed-case comparison before adoption."
+  "selection_note": "Episode/reward peak plus periodic/final candidates; physical fixed-case comparison before adoption.",
+  "terrain_layout_note": "64m independent patches spaced100m to avoid overlapping broadphase boxes; original local coordinates retained"
 }

@@ -4,6 +4,7 @@ Task physics/control/rewards remain shared with the fixed-case rollout. Go2
 owns sampling, storage, GAE and PPO; each finished lane resets independently.
 """
 import json
+import time
 from pathlib import Path
 import numpy as np
 import torch
@@ -35,6 +36,7 @@ class Go2PathEnv:
         self.switch_enabled=torch.zeros(self.num_envs,device=self.device,dtype=torch.bool);self.switch_progress=torch.zeros(self.num_envs,device=self.device);self.target_alpha=torch.zeros(self.num_envs,device=self.device);self.switched=torch.zeros_like(self.switch_enabled)
         self.force_levels=torch.tensor(cfg['pulse']['forces_N'],device=self.device);self.force_world=torch.zeros(self.num_envs,3,device=self.device);self.pulse_start=torch.zeros(self.num_envs,device=self.device,dtype=torch.long);self.impulse=torch.zeros_like(self.force_world)
         self.chassis=torch.tensor([self.plant.bodies.index(cfg['randomization']['base_body'])],device=self.device);self.site_position=torch.tensor(cfg['pulse']['site_body_position_m'],device=self.device).expand(self.num_envs,1,3).contiguous();self.zero_torque=torch.zeros(self.num_envs,1,3,device=self.device);r.training_pulse=self.apply_pulse
+        self.sampling_steps=0;self.sampling_started=time.time()
         self.reset()
 
     def reset_idx(self,ids):
@@ -75,4 +77,6 @@ class Go2PathEnv:
         if len(ids):
             infos['episode']=dict(reward=self.episode_reward[ids].mean(),length=self.episode_length_buf[ids].float().mean()*.02,failure=out['failure'][ids].float().mean(),speed_rmse=torch.sqrt(self.error_squares[ids,0]/self.episode_length_buf[ids]).mean(),path_rmse=torch.sqrt(self.error_squares[ids,1]/self.episode_length_buf[ids]).mean(),switched=self.switched[ids].float().mean())
             self.reset_idx(ids)
-        obs=self.get_observations();return obs,self.privileged_obs_buf,out['reward'],out['done'],infos
+        obs=self.get_observations();self.sampling_steps+=1
+        if self.sampling_steps==1 or self.sampling_steps%6==0:print(json.dumps(dict(sampling_policy_steps=self.sampling_steps,elapsed_sampling_s=time.time()-self.sampling_started)),flush=True)
+        return obs,self.privileged_obs_buf,out['reward'],out['done'],infos
