@@ -2593,3 +2593,9 @@ Measured recovery11/12 joint arrivals/survivals; short dwell10/12; matched no-ri
 - Related native runner/analysis behavior tests: 136 passed in 6.09s. Python compilation and `git diff --check` passed. No training, hardware run or remote push.
 
 Supplementary evidence: `docs/paper/SUPPLEMENT.tex` and `SUPPLEMENT.pdf` are regenerated from frozen comparison JSON by `docs/paper/analysis/make_supplement.py` during the paper build. Seven pages include the training-window table, all nominal model/route/alpha aggregates, full signed-force route/sign/method aggregates, individual positive-case margins, both physical-domain route/method aggregates, all 90° route/alpha aggregates, and additional actual/reference XY figures. The main and supplement PDFs both compile locally; the build manifest checks all referenced figure files. Full individual rows remain in the linked JSONs and raw NPZ run archives.
+
+## Isaac 官方坡地 H75 有界补训（2026-11-05）
+
+`runs/isaac_h75_terrain_training` 完成2次接受的PPO更新、10个随机采样回合、246470 physics steps / 2465 policy transitions，64秒左右墙钟。原H75权重初始化、LOCAL300+ECBC/ESO冻结，5s有限时域，五档alpha齐全；坡地和崎岖坡地各一批，不能把两批奖励差当配对提升。两次完整采样集KL为0.004987/0.004736；验证Actor全部数组finite且确有变化、10回合奖励与逐lower计分总和一致、每回合obs/action/reward长度一致。源奖励按原path_command_env costs/offset-rate/failure数学重建于GAE前，保留PhysX工程停止条件差异。语法检查、diffcheck通过。
+
+`sampling_000.png`、`sampling_001.png`覆盖实际XY/原参考、每步/累计奖励；`training_diagnostics.png`和TB包含loss/KL/训练失败。第一批alpha.75发生nonwheel_ground_contact，第二批全部至5s；不是任务合格证据。末次policy_002尚未配对评估，不能称学会陡坡/改善恢复。TB6017 HTTP和loss/KL/reward标量已实际核验，未干扰Model A6006。顺序CPU PhysX采样+CUDA优化仅工程入口，未复用不兼容的MJX vmap；正式吞吐/多种子泛化/空间回归输入奖励与偏好切换尚未完成。

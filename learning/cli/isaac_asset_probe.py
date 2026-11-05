@@ -27,6 +27,8 @@ def main():
     parser.add_argument('--zero-middle', action='store_true')
     parser.add_argument('--contact-offset', type=float)
     parser.add_argument('--rest-offset', type=float)
+    parser.add_argument('--policy-std', nargs=2, type=float)
+    parser.add_argument('--seed', type=int, default=20261105)
     parser.add_argument('--source-inertia', action='store_true')
     args = parser.parse_args()
     if not 0 <= args.steps <= (25000 if args.controller_config else 1000) or not 0 < args.drive_speed <= 3.5:
@@ -43,6 +45,8 @@ def main():
         parser.error('terrain mesh requires SHA256 and ground=trimesh')
     if (args.contact_offset is None) != (args.rest_offset is None) or (args.contact_offset is not None and not 0 <= args.rest_offset < args.contact_offset <= .02):
         parser.error('declare both contact/rest offsets with 0 <= rest < contact <= .02')
+    if args.policy_std is not None and (not args.path_bundle or args.zero_middle or any(not 0 < x <= .5 for x in args.policy_std)):
+        parser.error('sampling requires middle policy and std in (0,.5]')
     gym = gymapi.acquire_gym()
     params = gymapi.SimParams()
     params.dt = .0002
@@ -182,6 +186,9 @@ def main():
         previous_yaw = None
         applied = torch.zeros(1, 2)
         middle = None
+        torch.manual_seed(args.seed)
+        noise_std = None if args.policy_std is None else torch.tensor(args.policy_std)
+        result['sampling'] = dict(seed=args.seed, policy_std=args.policy_std)
         if args.path_bundle:
             from sttw_control.torch_path_policy import TorchPathPolicy
             from sttw_control.torch_path_reference import TorchPathReference
@@ -250,7 +257,7 @@ def main():
                         middle.reset(measurement, measured_pose, speed, previous_reference, previous_reference, previous_command, controller)
                     else:
                         middle.after(measurement, measured_pose, speed, previous_reference, previous_command, applied, controller)
-                    governed = middle.before(measured_pose, args.zero_middle)
+                    governed = middle.before(measured_pose, args.zero_middle, noise_std)
                     if middle.fault.any() or middle.domain_exit.any():
                         result['middle_terminal'] = dict(fault=middle.fault.tolist(), domain_exit=middle.domain_exit.tolist(), preview_body=middle.follower['preview_body'].tolist(), projection_progress=middle.projection['progress'].tolist(), cross_track=middle.projection['cross_track'].tolist(), pose=measured_pose.tolist())
                         termination = 'middle_fault_or_path_domain'

@@ -46,10 +46,12 @@ class TorchMiddleControl:
         self.fault=self.follower['numerical_fault'].clone();self.domain_exit=self.follower['invalid'].clone()
         self.record(measurement,speed,previous_reference,previous_command,torch.zeros_like(raw),controller)
 
-    def before(self,pose,zero_middle=False):
+    def before(self,pose,zero_middle=False,noise_std=None):
         if self.tick%4==0:
             self.obs,fault=self.observation(pose)
             self.latent=torch.zeros_like(self.nominal) if zero_middle else self.policy.latent(self.obs)
+            if noise_std is not None:
+                self.latent=self.latent+noise_std*torch.randn_like(self.latent)
             self.fault|=fault|~torch.isfinite(self.latent).all(-1)
         governed,flags=self.policy.correct(self.latent,self.nominal)
         self.fault|=flags['policy_fault']

@@ -999,3 +999,6 @@ best300从原B0 6.315秒完整状态恢复通过：.445秒进入.10m/s/.04rad带
 用户要求的四条平滑有限半径90°航向变化：低速v2.0/R1.6、高速v3.05/R3.0，左右方向×bank2/5，U170五档40例加规则8例，合48例/96000 lower、0更新，全部原目标到达/H10。实际原路径航向差逐条核为±90.0°；不是零半径折线。U170 α0→1平均转弯速度2.122→2.346m/s、最大原路径误差0.325→0.601m，窄任务6/8→2/8、宽任务2/8→8/8；规则两任务各8/8。这证明本组偏好行为有序和任务可完成，不证明优于规则。[完整16张XY与逐案结果](results/sttw-tolerance-20261101/task_right_angle/COMPARISON.md)。两物理评测自身status均completed；规则shell exit0，U170外层shell在物理完成后exit143且无单独execute.exit收据；未重跑物理，40原始轨迹和评分均在盘。
 
 补充材料 [SUPPLEMENT.tex](paper/SUPPLEMENT.tex)／[SUPPLEMENT.pdf](paper/SUPPLEMENT.pdf) 为七页可重复编译的逐路线表格与解释，覆盖未进主文的H75/U170五档、±36N全矩阵、正向子集逐初态裕量、两物理域和四条90°转弯；附训练过程窗口、右转/反向扰动附图及每个原始逐案JSON入口。生成器为 `docs/paper/analysis/make_supplement.py`，主论文构建命令同时生成两份PDF并校验图源。主文七页保留方法、公式、框图及五张核心图，补充材料不把探索性结果改写为独立验证。
+
+## Isaac官方地形补训：H75工程阶段（2026-11-05）
+目的：让旧平地H75首次使用真实坡面接触轨迹进行PPO更新。实现`train_isaac_path.py`、官方tile适配`place_isaac_terrain.py`、原奖励重建`reconstruct_isaac_reward.py`；保持351维alpha调制Actor、底层及5000/200/50Hz。参考Go2的lr1e-5/5epoch/4minibatch/clip.2/entropy.01与512/256/128 ELU新critic，保留H75 gamma.997。10回合/2更新是工程预算；不是正式收敛训练。完整配置、源代码快照、逐步物理、奖励、模型在`runs/isaac_h75_terrain_training`。2更新被接受，KL<.005；第一次坡地alpha.75发生触地失败，原始证据保留。两批地形和随机动作均变化，不把第二批失败减少称训练收益。下一步必须新旧模型同条件配对比较，之后才按证据扩大补训。尚未进入连续越野后续章节。

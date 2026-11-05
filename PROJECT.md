@@ -1146,3 +1146,6 @@ Source paths: learning/configs/lower_local_tracking_no_alpha_v2.json; lower_comm
 
 ## 2026-10-10 Path Feedback V1 工程交付
 隔离自ab195e7，新增几何模式与351/352接口，A复用旧四条，B两条共6000步已完成，C未训练。当前事实及用户“快速验证主线、不追求基线完美”决定见共享台账STTW-PATH-FEEDBACK-V1；工程证据[INDEX](docs/evidence/path_feedback_v1_20261010/INDEX.md)。不替换旧teleop、best或物理，不自动push。
+
+## 2026-11-05 Isaac坡地补训工程阶段
+官方slope/rough_slope已接入平地入口与连续出口；H75完成2次有界PPO更新，权重真实变化，五档alpha共10回合。证据`runs/isaac_h75_terrain_training`，验证见docs/VALIDATION.md；最终模型未评估，下一步同场景新旧策略与冻结底层配对。当前唯一事实仍以research-hub/STTW_PROJECT_STATE.md为准。
