@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 import numpy as np
 import torch
-from .isaac_vector_env import IsaacVectorPlant
 from .torch_controller import TorchController
 from .torch_local_lower import TorchLocalLower
 from .torch_path_policy import TorchPathPolicy
@@ -12,10 +11,13 @@ from .torch_middle_control import TorchMiddleControl
 from .torch_path_reward import costs,failure_reward
 
 class IsaacPathRollout:
-    def __init__(self,bundle,settings,actor):
+    def __init__(self,bundle,settings,actor,plant=None):
         bundle=Path(bundle);self.config=json.loads((bundle/'config.json').read_text());identity=json.loads((bundle/'identity.json').read_text());n=settings['num_envs'];self.n=n;self.device='cuda:0';self.horizon=round(settings['episode_s']/.02)
         terrain_count=len(settings['terrains']);terrain_ids=[i%terrain_count for i in range(n)];self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor([settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)],device=self.device);self.diagnostics=settings.get('diagnostics',False);self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
-        self.plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids);self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
+        if plant is None:
+            from .isaac_vector_env import IsaacVectorPlant
+            plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
+        self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0;self.reset()
 

@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-p=argparse.ArgumentParser();p.add_argument('--assets',type=Path,nargs='+',required=True);p.add_argument('--runs',type=Path,nargs='*',default=[]);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True);meshes=[]
+p=argparse.ArgumentParser();p.add_argument('--labels',nargs='+');p.add_argument('--assets',type=Path,nargs='+',required=True);p.add_argument('--runs',type=Path,nargs='*',default=[]);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True);meshes=[]
 for asset in a.assets:
  lines=(asset/'ellipsoid_0.1_0.1_0.025.obj').read_text().splitlines();v=np.array([[float(x) for x in l.split()[1:]] for l in lines if l.startswith('v ')]);f=np.array([[int(x)-1 for x in l.split()[1:]] for l in lines if l.startswith('f ')]);meshes.append((v,f))
 fig=plt.figure(figsize=(5*len(meshes),8))
@@ -15,7 +15,7 @@ for i,(v,f) in enumerate(meshes):
  ax=fig.add_subplot(2,len(meshes),len(meshes)+i+1);theta=np.linspace(0,2*np.pi,500);ax.plot(100*np.cos(theta),100*np.sin(theta),color='gray',linestyle=':',label='Analytic rim');rim=v[np.abs(v[:,2])<1e-8,:2];rim=rim[np.argsort(np.arctan2(rim[:,1],rim[:,0]))];rim=np.vstack((rim,rim[0]));ax.plot(*(rim*1000).T,'o-',markersize=3,label='Mesh rim');ax.set_aspect('equal',adjustable='box');ax.set(xlim=(-105,105),ylim=(-105,105),xlabel='x (mm)',ylabel='y (mm)');ax.legend(fontsize=8)
 fig.suptitle('Source collision mesh comparison — radius 100 mm, half-thickness 25 mm\nSource OBJ surfaces, not a rendering of internal GPU-cooked shapes');fig.tight_layout(rect=(0,0,1,.93));fig.savefig(a.output/'wheel_geometry.png',dpi=160);plt.close(fig)
 if a.runs:
- data=[np.load(run/'trajectory.npz') for run in a.runs];contracts=[json.loads((run/'contract.json').read_text()) for run in a.runs];route=np.load(Path(contracts[0]['bundle'])/'route.npz');labels=[f"{len(v)} vertices" for v,_ in meshes];colors=['#D55E00','#0072B2','#009E73'];styles=['--','-','-.'];fig,axes=plt.subplots(2,3,figsize=(15,9));metrics=[]
+ data=[np.load(run/'trajectory.npz') for run in a.runs];contracts=[json.loads((run/'contract.json').read_text()) for run in a.runs];route=np.load(Path(contracts[0]['bundle'])/'route.npz');labels=a.labels or [f"{len(v)} vertices" for v,_ in meshes];colors=['#D55E00','#0072B2','#009E73'];styles=['--','-','-.'];fig,axes=plt.subplots(2,3,figsize=(15,9));metrics=[]
  for lane,ax in enumerate(axes.ravel()):
   series=[d['lower_trace'][:,:,lane].reshape(-1,11) for d in data];counts=[int(x[:,6].sum()) for x in series];common=min(counts);maxprogress=max(float(d['progress'][n-1,lane]) for d,n in zip(data,counts));ref=route['s']<=maxprogress+.3;ax.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
   for i,(trace,count) in enumerate(zip(series,counts)):
