@@ -42,6 +42,8 @@ def main():
     options.override_com = False
     options.override_inertia = False
     path = args.asset.resolve()
+    if path.suffix == '.urdf':
+        source_contract = json.loads(path.with_name('contract.json').read_text())
     asset = gym.load_asset(sim, str(path.parent), path.name, options)
     if asset is None:
         gym.destroy_sim(sim)
@@ -55,6 +57,8 @@ def main():
     if args.ground == 'plane':
         plane = gymapi.PlaneParams()
         plane.normal = gymapi.Vec3(0, 0, 1)
+        if path.suffix == '.urdf':
+            plane.static_friction = plane.dynamic_friction = source_contract['ground_friction'][0]
         gym.add_ground(sim, plane)
     elif args.ground == 'trimesh':
         vertices = np.array([[-2, -2, 0], [2, -2, 0], [2, 2, 0], [-2, 2, 0]], dtype=np.float32)
@@ -62,6 +66,8 @@ def main():
         mesh = gymapi.TriangleMeshParams()
         mesh.nb_vertices = 4
         mesh.nb_triangles = 2
+        if path.suffix == '.urdf':
+            mesh.static_friction = mesh.dynamic_friction = source_contract['ground_friction'][0]
         gym.add_triangle_mesh(sim, vertices.ravel(), triangles.ravel(), mesh)
     env = gym.create_env(sim, gymapi.Vec3(-3, -3, -1), gymapi.Vec3(3, 3, 3), 1)
     if args.ground == 'box':
@@ -70,11 +76,30 @@ def main():
         ground = gym.create_box(sim, 4., 4., .1, fixed)
         pose = gymapi.Transform()
         pose.p.z = -.05
-        gym.create_actor(env, ground, pose, 'ground', 0, 0)
+        ground_actor = gym.create_actor(env, ground, pose, 'ground', 0, 0)
+        if path.suffix == '.urdf':
+            properties = gym.get_actor_rigid_shape_properties(env, ground_actor)
+            for prop in properties:
+                prop.friction = source_contract['ground_friction'][0]
+            gym.set_actor_rigid_shape_properties(env, ground_actor, properties)
     pose = gymapi.Transform()
-    root_body = ET.parse(path).find('worldbody/body')
-    pose.p = gymapi.Vec3(*map(float, root_body.get('pos', '0 0 0').split()))
+    if path.suffix == '.urdf':
+        pose.p = gymapi.Vec3(*map(float, source_contract['root_translation'].split()))
+        w, x, y, z = source_contract['root_quat_wxyz']
+        pose.r = gymapi.Quat(x, y, z, w)
+    else:
+        root_body = ET.parse(path).find('worldbody/body')
+        pose.p = gymapi.Vec3(*map(float, root_body.get('pos', '0 0 0').split()))
     actor = gym.create_actor(env, asset, pose, 'sttw', 0, 1)
+    if path.suffix == '.urdf':
+        materials = {g['body']: g['friction'] for g in source_contract['vehicle_geoms']}
+        properties = gym.get_actor_rigid_shape_properties(env, actor)
+        ranges = gym.get_actor_rigid_body_shape_indices(env, actor)
+        for body_name, span in zip(result['bodies'], ranges):
+            for index in range(span.start, span.start+span.count):
+                properties[index].friction = materials[body_name][0]
+        gym.set_actor_rigid_shape_properties(env, actor, properties)
+        result['material_contract'] = 'source sliding friction on terrain and vehicle; PhysX rolling/torsion remain zero and differ from source'
     body_ids = {name: gym.get_actor_rigid_body_index(env, actor, i, gymapi.DOMAIN_ENV)
                 for i, name in enumerate(result['bodies'])}
     vehicle_ids = set(body_ids.values())

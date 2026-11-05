@@ -83,6 +83,7 @@ def export_isaac_asset(output, source=DEFAULT_XML):
     contract = dict(source=bundle.identity, exported_xml_sha256=hashlib.sha256(xml.encode()).hexdigest(),
                     imu_site_quat_wxyz=model.site_quat[gyro_site].tolist(),
                     timestep_s=float(model.opt.timestep), bodies=bodies, joints=joints, actuators=actuators,
+                    ground_friction=model.geom_friction[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'floor')].tolist(),
                     actor_collision_filter=1,
                     root_translation=root.find('worldbody/body').get('pos', '0 0 0'),
                     vehicle_geoms=[dict(body=name(mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[i])),
