@@ -48,7 +48,7 @@ class TorchLocalLower:
         self.yaw_rate[indices] = 0
 
     @torch.no_grad()
-    def prepare(self, measurement, true_speed, governed, previous_reference,
+    def observation(self, measurement, true_speed, governed, previous_reference,
                 previous_command, controller):
         # Evaluate before controller.step: ESO features use the previous state.
         frame = local_frame(measurement, true_speed, governed, previous_reference,
@@ -56,7 +56,13 @@ class TorchLocalLower:
             (governed-previous_reference)/controller.config['dt'], controller)
         self.frames = torch.cat((self.frames[:,1:],frame[:,None]),dim=1)
         self.mask = torch.cat((self.mask[:,1:],torch.ones_like(self.mask[:,:1])),dim=1)
-        obs = torch.cat(((self.frames/self.scales).clamp(-5,5).flatten(1),self.mask),dim=-1)
+        return torch.cat(((self.frames/self.scales).clamp(-5,5).flatten(1),self.mask),dim=-1)
+
+    @torch.no_grad()
+    def prepare(self, measurement, true_speed, governed, previous_reference,
+                previous_command, controller):
+        obs = self.observation(measurement, true_speed, governed,
+                               previous_reference, previous_command, controller)
         x = obs
         for weight, bias in self.weights[:-1]:
             x = x@weight+bias

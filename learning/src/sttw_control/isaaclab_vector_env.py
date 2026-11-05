@@ -69,7 +69,30 @@ class IsaacLabVectorPlant:
         self.roots=self.robot.data.root_link_state_w.clone();self.roots[:,3:7]=self.roots[:,[4,5,6,3]];self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1);self.rigid=self.robot.data.body_link_state_w.clone();self.rigid[:,:,3:7]=self.rigid[:,:,[4,5,6,3]];self.contact=self.sensor.data.net_forces_w[:,self.contact_order]
 
     def reset(self,speed=2.3):
-        root=self.robot.data.default_root_state.clone();root[:,:3]+=self.origin;root[:,7]=speed;position=self.robot.data.default_joint_pos.clone();velocity=torch.zeros_like(position);velocity[:,[self.signals.front,self.signals.rear]]=-speed/.1;self.robot.write_root_pose_to_sim(root[:,:7]);self.robot.write_root_velocity_to_sim(root[:,7:]);self.robot.write_joint_state_to_sim(position,velocity);self.robot.reset();self.sensor.reset();self.refresh()
+        self.reset_idx(torch.arange(self.count,device=self.device),speed=speed)
+
+    def reset_idx(self,env_ids,speed=2.3,state=None):
+        """Reset selected lanes without advancing or resetting their neighbours.
+
+        Optional state is the exported MuJoCo bank state, with tensors already
+        on this plant's device. Controller/history reset belongs to the task.
+        """
+        count=len(env_ids)
+        if state is None:
+            root=self.robot.data.default_root_state[env_ids].clone()
+            root[:,7]=speed
+            position=self.robot.data.default_joint_pos[env_ids].clone()
+            velocity=torch.zeros_like(position)
+            velocity[:,[self.signals.front,self.signals.rear]]=-speed/.1
+        else:
+            root=torch.cat((state['root_pose'],state['root_velocity'])).repeat(count,1)
+            position=state['joint_position'].repeat(count,1)
+            velocity=state['joint_velocity'].repeat(count,1)
+        root[:,:3]+=self.origin[env_ids]
+        self.robot.write_root_pose_to_sim(root[:,:7],env_ids=env_ids)
+        self.robot.write_root_velocity_to_sim(root[:,7:],env_ids=env_ids)
+        self.robot.write_joint_state_to_sim(position,velocity,env_ids=env_ids)
+        self.robot.reset(env_ids);self.sensor.reset(env_ids);self.refresh()
 
     def observe(self):
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
