@@ -22,6 +22,9 @@ if a.training_run:
   checkpoint=torch.load(path,map_location=device,weights_only=False);model.load_state_dict(checkpoint['model_state_dict']);model.eval();models.append(model)
   label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
   identities.append(dict(checkpoint=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),completed_updates=updates,label=path.stem))
+if models:
+ models.append(None)
+ identities.append(dict(checkpoint=None,sha256=None,completed_updates=0,label='zero_ecbc'))
 n=cases*max(1,len(models))
 plant=IsaacLabVectorPlant('runs/isaac_urdf_drive/vehicle.urdf',['plane'],[0]*n,a.output)
 x=np.load(a.initial_state);tensor=lambda v:torch.as_tensor(v,dtype=torch.float32,device=device)
@@ -35,17 +38,17 @@ for tick in range(round(s['seconds']/.005)):
  m,pose,v=plant.observe();raw=streams[tick,:,1:3];valid=alive.clone()
  if models:
   obs=lower.observation(m,v,raw,previous,command,controller)
-  with torch.no_grad():action=torch.cat([torch.tanh(model.act_inference(obs[i*cases:(i+1)*cases])) for i,model in enumerate(models)])
+  with torch.no_grad():action=torch.cat([(torch.zeros(cases,2,device=device) if model is None else torch.tanh(model.act_inference(obs[i*cases:(i+1)*cases]))) for i,model in enumerate(models)])
   finite=torch.isfinite(obs).all(-1)&torch.isfinite(action).all(-1)
  else:action,obs,finite=lower.prepare(m,v,raw,previous,command,controller)
  applied=action*scale
  row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1);output=controller.step(row,torch.full_like(alive,(int(x['physical_tick'])+tick)*.005>3.))
  steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-m[:,2])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-m[:,2])/.005),steer));command=torch.stack((steer,(raw[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
- alive&=finite&(m[:,0].abs()<=.7);endpoint=plant.roots.clone();end_dofs=plant.dofs.clone();stop=torch.full((n,),25,device=device,dtype=torch.long)
+ alive&=finite&(m[:,0].abs()<=.7);endpoint=plant.roots.clone();end_dofs=plant.dofs.clone();stop=torch.full((n,),25,device=device,dtype=torch.long);peak=m[:,0].abs()
  for substep in range(25):
-  contact=plant.step(torch.where(alive[:,None],command,0.));endpoint=torch.where(alive[:,None],plant.roots,endpoint);end_dofs=torch.where(alive[:,None,None],plant.dofs,end_dofs);hit=alive&(contact|~torch.isfinite(plant.roots).all(-1));stop=torch.where(hit,substep+1,stop);alive&=~hit
+  contact=plant.step(torch.where(alive[:,None],command,0.));current_m,_,_=plant.observe();peak=torch.where(alive,torch.maximum(peak,current_m[:,0].abs()),peak);endpoint=torch.where(alive[:,None],plant.roots,endpoint);end_dofs=torch.where(alive[:,None,None],plant.dofs,end_dofs);hit=alive&(contact|~torch.isfinite(plant.roots).all(-1));stop=torch.where(hit,substep+1,stop);alive&=~hit
  post,position,speed=plant.signals.observe(endpoint,end_dofs[:,:,0],end_dofs[:,:,1]);position-=plant.origin;alive&=post[:,0].abs()<=.7;lower.finish(applied,wrap(position[:,2]-pose[:,2])/.005)
- rows.append(dict(time=torch.full((n,),tick*.005,device=device),pose=position,measurement=post,speed=speed,reference=raw,action=action,command=command,valid=valid,failed=valid&~alive,stop_tick=stop));previous=raw
+ rows.append(dict(time=torch.full((n,),tick*.005,device=device),pose=position,measurement=post,peak_roll=peak,speed=speed,reference=raw,action=action,command=command,valid=valid,failed=valid&~alive,stop_tick=stop));previous=raw
  if (tick+1)%200==0:print(json.dumps(dict(step=tick+1,alive=int(alive.sum()),seconds=time.time()-start)),flush=True)
 data={k:torch.stack([r[k] for r in rows]).cpu().numpy() for k in rows[0]}
 if models:
