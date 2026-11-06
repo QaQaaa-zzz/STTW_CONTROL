@@ -1,0 +1,163 @@
+{
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "device": "cuda:0",
+  "seed": 1,
+  "num_envs": 4096,
+  "updates": 1350,
+  "save_interval": 100,
+  "control_dt": 0.005,
+  "episode_s": 10,
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "controller_config": "learning/configs/rb_sttw_rounded_controller.json",
+  "initial_state": "runs/rb_sttw_platform/local_preparation/initial_states.npz",
+  "history_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "history_actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "initialization": "resume scratch-yaw model150 actor critic std Adam and iteration; environment reset, not bitwise continuation",
+  "commands": {
+    "initial_hold_s": 0.5,
+    "speed_m_s": [
+      1.7,
+      2.8
+    ],
+    "max_reference_roll_rad": 0.24,
+    "max_steer_rad": 0.28,
+    "straight_probability": 0.25,
+    "hold_s": [
+      1.0,
+      3.0
+    ],
+    "slew": [
+      0.5,
+      0.3
+    ]
+  },
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.3,
+      1.0
+    ],
+    "mass_scale": [
+      0.9,
+      1.1
+    ],
+    "base_com_m": [
+      -0.03,
+      0.03
+    ],
+    "servo_gain_scale": [
+      0.9,
+      1.1
+    ],
+    "steer_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "latency_s": [
+      0.005,
+      0.015
+    ],
+    "measurement_noise": [
+      0.01,
+      0.2,
+      0.01,
+      0.15,
+      0.2,
+      1.5,
+      1.5
+    ],
+    "push_interval_s": 4,
+    "push_velocity_range": {
+      "x": [
+        -0.4,
+        0.4
+      ],
+      "y": [
+        -0.4,
+        0.4
+      ],
+      "roll": [
+        -0.6,
+        0.6
+      ],
+      "pitch": [
+        -0.6,
+        0.6
+      ],
+      "yaw": [
+        -0.6,
+        0.6
+      ]
+    },
+    "base_mass_add_kg": [
+      -1,
+      1
+    ],
+    "mapping_note": "Go2 source ranges; velocity-servo gain maps damping multiplier. Angle-target stiffness and leg joint offsets do not exist on wheel velocity interfaces. Sensor representation requires task-specific mapping."
+  },
+  "reward": {
+    "version": "go2_style_local_tracking_v1",
+    "speed_scale": 0.3,
+    "steer_scale": 0.08,
+    "roll_start": 0.26,
+    "weights": {
+      "speed": 2.0,
+      "steer": 2.0,
+      "roll": 40.0,
+      "roll_rate": 0.1,
+      "action": 0.01,
+      "action_change": 0.02
+    },
+    "failure_penalty": 5.0
+  },
+  "task_spec": "learning/configs/rb_local_yaw_rate_task.json",
+  "command_bank": "runs/local300_command_bank_all",
+  "status": "ground-only bounded continuation150 to1500; same model network task reward DR",
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": true,
+    "env_spacing": 3.0,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21
+  },
+  "ppo_overrides": {
+    "learning_rate": 0.0001,
+    "schedule": "fixed",
+    "gamma": 0.9974905699336811,
+    "lam": 0.9872585449014338
+  },
+  "policy_overrides": {
+    "init_noise_std": 0.15,
+    "actor_hidden_dims": [
+      256,
+      128
+    ],
+    "critic_hidden_dims": [
+      256,
+      128
+    ]
+  },
+  "zero_actor_output_init": false,
+  "controller_clean_feedback": true,
+  "adaptation_note": "Original task commands/reward/slew unchanged. RB root height and 0.07m wheel conversion; new pendulum locked, ECBC gains recomputed and observer reset; not an exact historical simulation resume.",
+  "initialize_from_local_actor": false,
+  "resume_checkpoint": "runs/rb_scratch_yaw150/training/model_150.pt"
+}

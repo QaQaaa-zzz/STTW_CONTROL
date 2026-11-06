@@ -82,13 +82,16 @@ if s.get('initialize_from_local_actor', False):
         for layer, (weight, bias) in zip(layers, env.history.weights):
             layer.weight.copy_(weight.T)
             layer.bias.copy_(bias)
+if s.get('resume_checkpoint'):
+    runner.load(s['resume_checkpoint'], load_optimizer=True)
+    runner.alg.learning_rate=runner.alg.optimizer.param_groups[0]['lr']
 (a.output/'training').mkdir(exist_ok=True)
 runner.save(str(a.output/'training/model_initial.pt'),
-            infos=dict(completed_updates=0, initialization=s.get('initialization','fresh actor/critic/optimizer')))
+            infos=dict(completed_updates=runner.current_learning_iteration, initialization=s.get('initialization','fresh actor/critic/optimizer')))
 # Observe the native PPO update boundary to score the model that actually
 # collected this rollout. Sampling, losses and optimizer remain upstream.
 upstream_update = runner.alg.update
-selection = dict(completed_updates=0, best_reward=-float('inf'))
+selection = dict(completed_updates=runner.current_learning_iteration, best_reward=-float('inf'))
 def recorded_update():
     mean_reward = float(runner.alg.storage.rewards.mean())
     update = selection['completed_updates']
