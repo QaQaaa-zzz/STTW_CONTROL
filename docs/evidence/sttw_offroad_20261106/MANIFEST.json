@@ -1105,7 +1105,86 @@
       "source": "learning/cli/summarize_h75_switch_repeats.py",
       "bytes": 7458,
       "sha256": "4f9984d3080af6c3925e2894c9b65f3ebc2eff9ef8650d7b5d2e7f1f69fdec18"
+    },
+    {
+      "file": "contact_acquisition/README.md",
+      "source": "latest acquisition delivery",
+      "bytes": 1187,
+      "sha256": "ff17f498f2231ff7ff5e1686d01690ef21e901bb3749ffa322a5c161fe93d810"
+    },
+    {
+      "file": "contact_acquisition/contract.json",
+      "source": "latest acquisition delivery",
+      "bytes": 30472,
+      "sha256": "17276a979f3de694ac9f41d952d38b41a339b1874b4ca618a03f678b5e30bab8"
+    },
+    {
+      "file": "contact_acquisition/raw_contact_index.json",
+      "source": "latest acquisition delivery",
+      "bytes": 8886,
+      "sha256": "6d41c40f2cf0c30414501209c8165a58672e631c456bd55148530b42bd146287"
+    },
+    {
+      "file": "contact_acquisition/source/learning/cli/analyze_physics_contact_acquisition.py",
+      "source": "latest acquisition delivery",
+      "bytes": 2767,
+      "sha256": "ad0f216b32ce803fe404927aa84440cdec649144c1b96224fedf5418c0bd4716"
+    },
+    {
+      "file": "contact_acquisition/source/learning/cli/evaluate_isaac_gpu.py",
+      "source": "latest acquisition delivery",
+      "bytes": 9587,
+      "sha256": "92bef5e575d5e23336f0ef979ad59dedb8fd6403e7b828cb9a73e1354719b35a"
+    },
+    {
+      "file": "contact_acquisition/source/learning/configs/isaac_h75_contact_acquisition.json",
+      "source": "latest acquisition delivery",
+      "bytes": 2192,
+      "sha256": "4560ff3fafe3ee8a5bcd0ae5114a7529b6f7b97467288f4be49c48d0fd4cf12d"
+    },
+    {
+      "file": "contact_acquisition/source/learning/configs/sttw_contact_mechanism_protocol.json",
+      "source": "latest acquisition delivery",
+      "bytes": 3789,
+      "sha256": "36a5481fff26fa3b489408a1122a503a2b9bfd32a367ef07de79e866ff4206cc"
+    },
+    {
+      "file": "contact_acquisition/source/learning/src/sttw_control/isaac_path_rollout.py",
+      "source": "latest acquisition delivery",
+      "bytes": 20675,
+      "sha256": "78dd9d14baf1bf019686e33798ded64f5edc2bd7b5d1147ec92457fc04f152aa"
+    },
+    {
+      "file": "contact_acquisition/source/learning/src/sttw_control/isaaclab_vector_env.py",
+      "source": "latest acquisition delivery",
+      "bytes": 29295,
+      "sha256": "50fe61135e554cd42d61f4f2502f40a4b518f6fdabb9d4cb45ef0e6d3e6e890d"
+    },
+    {
+      "file": "contact_acquisition/source/learning/src/sttw_control/physics_contact_recording.py",
+      "source": "latest acquisition delivery",
+      "bytes": 2502,
+      "sha256": "8214be26911dbcf26efe29817aa5a4d0bd8db35c91dc5859bdedd02ecb625ec7"
+    },
+    {
+      "file": "contact_acquisition/status.json",
+      "source": "latest acquisition delivery",
+      "bytes": 358,
+      "sha256": "526e58fc5ad73d933c7fd89689e2419f86066d204018426d34b57fce3879ec5d"
+    },
+    {
+      "file": "contact_acquisition/trajectory_compact.npz",
+      "source": "latest acquisition delivery",
+      "bytes": 67762,
+      "sha256": "285df1dc0df9714f7abb370aa4df900d2cefc8c0204316f4d4b910e2898acb84"
+    },
+    {
+      "file": "contact_acquisition/xy.png",
+      "source": "latest acquisition delivery",
+      "bytes": 90289,
+      "sha256": "e912aa372dd76f1f953533e86207ff7ff4828ace11066c0f2bd3eba1de1fbec1"
     }
   ],
-  "incremental_source_commit": "582b1927"
+  "incremental_source_commit": "582b1927",
+  "latest_addition_commit": "9e5ddf3d"
 }

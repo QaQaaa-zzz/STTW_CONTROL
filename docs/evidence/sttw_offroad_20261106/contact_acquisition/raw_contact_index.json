@@ -1,0 +1,461 @@
+{
+  "physics_dt_s": 0.0002,
+  "body_order": [
+    "chasis",
+    "rearsuspension",
+    "frontfork",
+    "rearwheel",
+    "frontsuspension",
+    "frontwheel"
+  ],
+  "joint_order": [
+    "rearsuspension_joint",
+    "steering_joint",
+    "rearwheel_joint",
+    "frontwheel_joint"
+  ],
+  "origins": [
+    [
+      3.0,
+      -1.5,
+      0.0
+    ],
+    [
+      3.0,
+      1.5,
+      0.0
+    ],
+    [
+      0.0,
+      -1.5,
+      0.0
+    ],
+    [
+      0.0,
+      1.5,
+      0.0
+    ],
+    [
+      -3.0,
+      -1.5,
+      0.0
+    ]
+  ],
+  "sampling": "post-solve every physics step, world coordinates, body quaternion xyzw",
+  "force_units": "N (API dt=physics_dt); points m; motor torque Nm in generalized joint coordinates",
+  "indexing": "normal_count/start and friction_count/start independently index each wheel flat patch buffer; only counted entries valid",
+  "phase": "alive_before_this_step retained; same-step motor_torque is applied explicit actuator contribution, not passive torque",
+  "motor_limits": [
+    [
+      -1.0,
+      1.0
+    ],
+    [
+      -3.0,
+      3.0
+    ]
+  ],
+  "total_physics_steps": 20000,
+  "chunks": [
+    {
+      "file": "chunk_00000.npz",
+      "first_step": 1,
+      "last_step": 250
+    },
+    {
+      "file": "chunk_00001.npz",
+      "first_step": 251,
+      "last_step": 500
+    },
+    {
+      "file": "chunk_00002.npz",
+      "first_step": 501,
+      "last_step": 750
+    },
+    {
+      "file": "chunk_00003.npz",
+      "first_step": 751,
+      "last_step": 1000
+    },
+    {
+      "file": "chunk_00004.npz",
+      "first_step": 1001,
+      "last_step": 1250
+    },
+    {
+      "file": "chunk_00005.npz",
+      "first_step": 1251,
+      "last_step": 1500
+    },
+    {
+      "file": "chunk_00006.npz",
+      "first_step": 1501,
+      "last_step": 1750
+    },
+    {
+      "file": "chunk_00007.npz",
+      "first_step": 1751,
+      "last_step": 2000
+    },
+    {
+      "file": "chunk_00008.npz",
+      "first_step": 2001,
+      "last_step": 2250
+    },
+    {
+      "file": "chunk_00009.npz",
+      "first_step": 2251,
+      "last_step": 2500
+    },
+    {
+      "file": "chunk_00010.npz",
+      "first_step": 2501,
+      "last_step": 2750
+    },
+    {
+      "file": "chunk_00011.npz",
+      "first_step": 2751,
+      "last_step": 3000
+    },
+    {
+      "file": "chunk_00012.npz",
+      "first_step": 3001,
+      "last_step": 3250
+    },
+    {
+      "file": "chunk_00013.npz",
+      "first_step": 3251,
+      "last_step": 3500
+    },
+    {
+      "file": "chunk_00014.npz",
+      "first_step": 3501,
+      "last_step": 3750
+    },
+    {
+      "file": "chunk_00015.npz",
+      "first_step": 3751,
+      "last_step": 4000
+    },
+    {
+      "file": "chunk_00016.npz",
+      "first_step": 4001,
+      "last_step": 4250
+    },
+    {
+      "file": "chunk_00017.npz",
+      "first_step": 4251,
+      "last_step": 4500
+    },
+    {
+      "file": "chunk_00018.npz",
+      "first_step": 4501,
+      "last_step": 4750
+    },
+    {
+      "file": "chunk_00019.npz",
+      "first_step": 4751,
+      "last_step": 5000
+    },
+    {
+      "file": "chunk_00020.npz",
+      "first_step": 5001,
+      "last_step": 5250
+    },
+    {
+      "file": "chunk_00021.npz",
+      "first_step": 5251,
+      "last_step": 5500
+    },
+    {
+      "file": "chunk_00022.npz",
+      "first_step": 5501,
+      "last_step": 5750
+    },
+    {
+      "file": "chunk_00023.npz",
+      "first_step": 5751,
+      "last_step": 6000
+    },
+    {
+      "file": "chunk_00024.npz",
+      "first_step": 6001,
+      "last_step": 6250
+    },
+    {
+      "file": "chunk_00025.npz",
+      "first_step": 6251,
+      "last_step": 6500
+    },
+    {
+      "file": "chunk_00026.npz",
+      "first_step": 6501,
+      "last_step": 6750
+    },
+    {
+      "file": "chunk_00027.npz",
+      "first_step": 6751,
+      "last_step": 7000
+    },
+    {
+      "file": "chunk_00028.npz",
+      "first_step": 7001,
+      "last_step": 7250
+    },
+    {
+      "file": "chunk_00029.npz",
+      "first_step": 7251,
+      "last_step": 7500
+    },
+    {
+      "file": "chunk_00030.npz",
+      "first_step": 7501,
+      "last_step": 7750
+    },
+    {
+      "file": "chunk_00031.npz",
+      "first_step": 7751,
+      "last_step": 8000
+    },
+    {
+      "file": "chunk_00032.npz",
+      "first_step": 8001,
+      "last_step": 8250
+    },
+    {
+      "file": "chunk_00033.npz",
+      "first_step": 8251,
+      "last_step": 8500
+    },
+    {
+      "file": "chunk_00034.npz",
+      "first_step": 8501,
+      "last_step": 8750
+    },
+    {
+      "file": "chunk_00035.npz",
+      "first_step": 8751,
+      "last_step": 9000
+    },
+    {
+      "file": "chunk_00036.npz",
+      "first_step": 9001,
+      "last_step": 9250
+    },
+    {
+      "file": "chunk_00037.npz",
+      "first_step": 9251,
+      "last_step": 9500
+    },
+    {
+      "file": "chunk_00038.npz",
+      "first_step": 9501,
+      "last_step": 9750
+    },
+    {
+      "file": "chunk_00039.npz",
+      "first_step": 9751,
+      "last_step": 10000
+    },
+    {
+      "file": "chunk_00040.npz",
+      "first_step": 10001,
+      "last_step": 10250
+    },
+    {
+      "file": "chunk_00041.npz",
+      "first_step": 10251,
+      "last_step": 10500
+    },
+    {
+      "file": "chunk_00042.npz",
+      "first_step": 10501,
+      "last_step": 10750
+    },
+    {
+      "file": "chunk_00043.npz",
+      "first_step": 10751,
+      "last_step": 11000
+    },
+    {
+      "file": "chunk_00044.npz",
+      "first_step": 11001,
+      "last_step": 11250
+    },
+    {
+      "file": "chunk_00045.npz",
+      "first_step": 11251,
+      "last_step": 11500
+    },
+    {
+      "file": "chunk_00046.npz",
+      "first_step": 11501,
+      "last_step": 11750
+    },
+    {
+      "file": "chunk_00047.npz",
+      "first_step": 11751,
+      "last_step": 12000
+    },
+    {
+      "file": "chunk_00048.npz",
+      "first_step": 12001,
+      "last_step": 12250
+    },
+    {
+      "file": "chunk_00049.npz",
+      "first_step": 12251,
+      "last_step": 12500
+    },
+    {
+      "file": "chunk_00050.npz",
+      "first_step": 12501,
+      "last_step": 12750
+    },
+    {
+      "file": "chunk_00051.npz",
+      "first_step": 12751,
+      "last_step": 13000
+    },
+    {
+      "file": "chunk_00052.npz",
+      "first_step": 13001,
+      "last_step": 13250
+    },
+    {
+      "file": "chunk_00053.npz",
+      "first_step": 13251,
+      "last_step": 13500
+    },
+    {
+      "file": "chunk_00054.npz",
+      "first_step": 13501,
+      "last_step": 13750
+    },
+    {
+      "file": "chunk_00055.npz",
+      "first_step": 13751,
+      "last_step": 14000
+    },
+    {
+      "file": "chunk_00056.npz",
+      "first_step": 14001,
+      "last_step": 14250
+    },
+    {
+      "file": "chunk_00057.npz",
+      "first_step": 14251,
+      "last_step": 14500
+    },
+    {
+      "file": "chunk_00058.npz",
+      "first_step": 14501,
+      "last_step": 14750
+    },
+    {
+      "file": "chunk_00059.npz",
+      "first_step": 14751,
+      "last_step": 15000
+    },
+    {
+      "file": "chunk_00060.npz",
+      "first_step": 15001,
+      "last_step": 15250
+    },
+    {
+      "file": "chunk_00061.npz",
+      "first_step": 15251,
+      "last_step": 15500
+    },
+    {
+      "file": "chunk_00062.npz",
+      "first_step": 15501,
+      "last_step": 15750
+    },
+    {
+      "file": "chunk_00063.npz",
+      "first_step": 15751,
+      "last_step": 16000
+    },
+    {
+      "file": "chunk_00064.npz",
+      "first_step": 16001,
+      "last_step": 16250
+    },
+    {
+      "file": "chunk_00065.npz",
+      "first_step": 16251,
+      "last_step": 16500
+    },
+    {
+      "file": "chunk_00066.npz",
+      "first_step": 16501,
+      "last_step": 16750
+    },
+    {
+      "file": "chunk_00067.npz",
+      "first_step": 16751,
+      "last_step": 17000
+    },
+    {
+      "file": "chunk_00068.npz",
+      "first_step": 17001,
+      "last_step": 17250
+    },
+    {
+      "file": "chunk_00069.npz",
+      "first_step": 17251,
+      "last_step": 17500
+    },
+    {
+      "file": "chunk_00070.npz",
+      "first_step": 17501,
+      "last_step": 17750
+    },
+    {
+      "file": "chunk_00071.npz",
+      "first_step": 17751,
+      "last_step": 18000
+    },
+    {
+      "file": "chunk_00072.npz",
+      "first_step": 18001,
+      "last_step": 18250
+    },
+    {
+      "file": "chunk_00073.npz",
+      "first_step": 18251,
+      "last_step": 18500
+    },
+    {
+      "file": "chunk_00074.npz",
+      "first_step": 18501,
+      "last_step": 18750
+    },
+    {
+      "file": "chunk_00075.npz",
+      "first_step": 18751,
+      "last_step": 19000
+    },
+    {
+      "file": "chunk_00076.npz",
+      "first_step": 19001,
+      "last_step": 19250
+    },
+    {
+      "file": "chunk_00077.npz",
+      "first_step": 19251,
+      "last_step": 19500
+    },
+    {
+      "file": "chunk_00078.npz",
+      "first_step": 19501,
+      "last_step": 19750
+    },
+    {
+      "file": "chunk_00079.npz",
+      "first_step": 19751,
+      "last_step": 20000
+    }
+  ]
+}
