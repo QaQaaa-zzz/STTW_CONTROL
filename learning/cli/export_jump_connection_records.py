@@ -22,7 +22,7 @@ for case in m['cases']:
  map_identity=json.loads((Path(spec['scene_terrain'])/'identity.json').read_text())
  state,named=decision_features(decision,run,protocol,spec) if decision is not None else (None,None)
  total=result['success_time_s']
- rows.append(dict(protocol_id=spec['protocol_id'],feature_schema=schema['schema_version'],origin_id=spec['origin_id'],case_id=case['case_id'],data_role='pilot_DEV',model_contract_sha256=identities[key],map_sha256=map_identity['sha256'],policy_sha256=dict(ground=ground['upper_sha256'],jump=protocol['policies'][0]['artifact_sha256']),zero_lower=spec['zero_lower'],physics_dt=protocol['physics_dt'],candidate=spec['connection_candidate'],state=state,named_state=named,decision_reached=decision is not None,supervised_input_complete=state is not None and all(v is not None for v in state),Y=int(result['complete']),T_total_s=total,T_after_decision_s=total-decision['time'] if total is not None and decision else None,stages=result['stages'],checks=result['checks'],analysis_only=dict(max_original_path_error_m=result['max_original_path_error_m']),decision_prefix=result.get('decision_prefix'),prefix=dict(path=str(run/'trajectory.npz'),decision_time_s=decision['time'] if decision else None,replay='uninterrupted full-prefix execution, no snapshot restore'),disturbance_protocol='D0',source_config=case['config']))
+ rows.append(dict(protocol_id=spec['protocol_id'],feature_schema=schema['schema_version'],origin_id=spec['origin_id'],case_id=case['case_id'],data_role='pilot_DEV',model_contract_sha256=identities[key],map_sha256=map_identity['sha256'],policy_sha256=dict(ground=ground['upper_sha256'],jump=protocol['policies'][0]['artifact_sha256']),zero_lower=spec['zero_lower'],physics_dt=protocol['physics_dt'],candidate=spec['connection_candidate'],state=state,named_state=named,decision_reached=decision is not None,supervised_input_complete=state is not None and all(v is not None for v in state),Y=int(result['complete']),T_total_s=total,T_after_decision_s=total-decision['time'] if total is not None and decision else None,stages=result['stages'],checks=result['checks'],analysis_only=dict(max_original_path_error_m=result['max_original_path_error_m']),decision_prefix=result.get('decision_prefix'),prefix=dict(path=str(run/'trajectory.npz'),decision_time_s=decision['time'] if decision else None,replay='uninterrupted full-prefix execution, no snapshot restore'),disturbance_protocol=spec.get('external_force_pulse','D0'),source_config=case['config']))
  sequence=[spec['connection_candidate']]+([spec['connection_midpoint_candidate']] if spec.get('connection_midpoint_candidate') else [])
  rows[-1].update(decision_stage='exit',target_semantics='fixed_two_stage_sequence' if len(sequence)>1 else 'Q_hold',candidate_sequence=sequence)
  if decision is not None:rows[-1]['candidate']=decision['candidate']
@@ -50,15 +50,16 @@ case_info={c['case_id']:c for c in m['cases']}
 paired=defaultdict(list)
 for row in rows:
     skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True)
-    paired[(row['origin_id'],case_info[row['case_id']]['distance_m'],row['protocol_id'],skill)].append(row)
+    disturbance=json.dumps(row['disturbance_protocol'],sort_keys=True)
+    paired[(row['origin_id'],case_info[row['case_id']]['distance_m'],row['protocol_id'],skill,disturbance)].append(row)
 kernel=[];groups=[]
-for (origin,distance,protocol,skill),group in paired.items():
+for (origin,distance,protocol,skill,disturbance),group in paired.items():
     ready=len(group)==6 and all(r['decision_reached'] and r['target_semantics']=='Q_hold' and (r['decision_prefix'] or {}).get('corridor_intact_at_decision') is not False for r in group)
-    groups.append(dict(origin_id=origin,distance_m=distance,protocol_id=protocol,skill_id=skill,executed_rows=len(group),kernel_ready=ready,reason='complete_decision_group' if ready else 'upstream_failure_prior_corridor_violation_incomplete_group_or_non_hold_target'))
+    groups.append(dict(origin_id=origin,distance_m=distance,protocol_id=protocol,skill_id=skill,disturbance_protocol=json.loads(disturbance),executed_rows=len(group),kernel_ready=ready,reason='complete_decision_group' if ready else 'upstream_failure_prior_corridor_violation_incomplete_group_or_non_hold_target'))
     if not ready:continue
     for row in group:
         candidate=row['candidate'];cid=f"v{candidate['speed_m_s']}_a{candidate['alpha']}"
-        kernel.append(dict(origin_id=origin,decision_id=f'{origin}:approach_{distance}',
+        kernel.append(dict(origin_id=origin,decision_id=f'{origin}:approach_{distance}:{disturbance}',disturbance_protocol=json.loads(disturbance),
             task_id=f"{row['protocol_id']}:approach_{distance}",
             skill_id=skill,
             candidate_id=cid,state=[row['named_state'][name] for name in names],
