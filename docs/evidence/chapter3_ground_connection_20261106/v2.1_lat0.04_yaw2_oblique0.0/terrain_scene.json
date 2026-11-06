@@ -1,0 +1,16 @@
+{
+  "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.0/source.npz",
+  "bounds_m": [
+    -30,
+    35
+  ],
+  "horizontal_scale_m": 0.1,
+  "vertical_scale_m": 0.005,
+  "slope_threshold": 1.5,
+  "height_m": 0.0,
+  "center_s_m": 2.0,
+  "length_m": 0.8,
+  "oblique_s_per_lateral_m": 0.0,
+  "half_width_m": 1.5,
+  "role": "fixed oblique bump before shared exit; paired DEV"
+}

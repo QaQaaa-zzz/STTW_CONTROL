@@ -1,0 +1,74 @@
+{
+  "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 80.0,
+    "track_wheel_contacts": false,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ]
+  },
+  "initial_state": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/initial_state.npz",
+  "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+  "role": "Frozen original H75 u77 and user-selected orange Local300; offroad simulation",
+  "num_envs": 6,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    0
+  ],
+  "zero_middle": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ],
+  "evaluation_role": "Nominal DEV, five fixed alpha plus matched Zero; all lanes use required simple replanning",
+  "case_labels": [
+    "alpha0",
+    "alpha025",
+    "alpha05",
+    "alpha075",
+    "alpha1",
+    "Zero"
+  ],
+  "auto_reset_horizon": false,
+  "replanning": {
+    "original_route": "runs/h75_selected_local300_flat/bundle/route.npz",
+    "period_s": 0.5,
+    "departure_m": 0.3,
+    "arrival_radius_m": 2.0,
+    "radius_m": 1.8,
+    "enabled": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "goal_after_turn_m": 5.0
+  },
+  "user_speed_m_s": 2.3
+}

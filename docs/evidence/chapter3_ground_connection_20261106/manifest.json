@@ -1,0 +1,321 @@
+{
+  "role": "Parameterized ground DEV roots; not independent randomized TEST",
+  "status": "assets_ready_not_started",
+  "flat_readiness": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique0.0/evaluation",
+      "source_only": true
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.0/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.0/evaluation",
+      "source_only": true
+    }
+  ],
+  "nominal": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation",
+      "source_only": false
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/collection.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation",
+      "source_only": false
+    }
+  ],
+  "nominal_suffixes": 288,
+  "nominal_roots": 24,
+  "flat_roots": 12,
+  "requested_source_speeds_m_s": [
+    1.9,
+    2.1,
+    2.3
+  ],
+  "actual_entry_speed": "Must measure, not assume equals request; original saved moving state retained",
+  "connection_m": 1.0,
+  "common_B_reference": {
+    "speed_m_s": 2.3,
+    "alpha": 0.5
+  },
+  "corridor_half_width_m": 2.0,
+  "terrain_height_m": 0.06,
+  "optimizer_updates": 0,
+  "execution_order": "Build terrain; flat source-only reachability; then nominal roots. Keep source failures. No physical run has started.",
+  "terrain_assets": {
+    "terrain_flat": {
+      "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.0/source.npz",
+      "bounds_m": [
+        -30,
+        35
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "height_m": 0.0,
+      "center_s_m": 2.0,
+      "length_m": 0.8,
+      "oblique_s_per_lateral_m": 0.0,
+      "half_width_m": 1.5,
+      "role": "fixed oblique bump before shared exit; paired DEV",
+      "route_sha256": "74f2b6ab92f91fa2f94314842280ba8905f478655dfd2015a2935ba9ad334e41",
+      "turn_end_s_m": 0.0,
+      "switch_definition": "first forward crossing of switch_s_m; preserve controller/history/filter state",
+      "contact_phase_definition": "wheel contact points inside nonzero height support; geometric progress alone is not contact",
+      "vertices": 423801,
+      "triangles": 845000,
+      "sha256": "cd8bac636b6d6bf37fecf6c317b89a00598c151ea6b5ef56fdca0024f494d720",
+      "terrain_support_end_s_m": 2.4
+    },
+    "terrain_positive": {
+      "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/source.npz",
+      "bounds_m": [
+        -30,
+        35
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "height_m": 0.06,
+      "center_s_m": 2.0,
+      "length_m": 0.8,
+      "oblique_s_per_lateral_m": 0.4,
+      "half_width_m": 1.5,
+      "role": "fixed oblique bump before shared exit; paired DEV",
+      "route_sha256": "74f2b6ab92f91fa2f94314842280ba8905f478655dfd2015a2935ba9ad334e41",
+      "turn_end_s_m": 0.0,
+      "switch_definition": "first forward crossing of switch_s_m; preserve controller/history/filter state",
+      "contact_phase_definition": "wheel contact points inside nonzero height support; geometric progress alone is not contact",
+      "vertices": 423801,
+      "triangles": 845000,
+      "sha256": "4cdbb4f614e936e94e1e4ce1fda9c35ea803ff7ffc0ddfd9c75774409dbf71ab",
+      "terrain_support_end_s_m": 3.0
+    },
+    "terrain_negative": {
+      "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/source.npz",
+      "bounds_m": [
+        -30,
+        35
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "height_m": 0.06,
+      "center_s_m": 2.0,
+      "length_m": 0.8,
+      "oblique_s_per_lateral_m": -0.4,
+      "half_width_m": 1.5,
+      "role": "fixed oblique bump before shared exit; paired DEV",
+      "route_sha256": "74f2b6ab92f91fa2f94314842280ba8905f478655dfd2015a2935ba9ad334e41",
+      "turn_end_s_m": 0.0,
+      "switch_definition": "first forward crossing of switch_s_m; preserve controller/history/filter state",
+      "contact_phase_definition": "wheel contact points inside nonzero height support; geometric progress alone is not contact",
+      "vertices": 423801,
+      "triangles": 845000,
+      "sha256": "f602ac5736604441789fa30808f86a590e26f2fedc0c9f00caa0498c0f28a03a",
+      "terrain_support_end_s_m": 3.0
+    }
+  },
+  "maximum_flat_physics_lane_steps": 2160000,
+  "maximum_nominal_physics_lane_steps": 18720000,
+  "physics_hz": 5000,
+  "lower_hz": 200,
+  "upper_hz": 50
+}
