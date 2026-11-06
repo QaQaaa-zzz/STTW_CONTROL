@@ -48,7 +48,7 @@ if a.resume_from or a.source_snapshot:
 else:
     source_trace=[];source_commands=[];found=False
     for _ in range(round(spec['source_seconds']/.02)):
-        result=env.step();source_trace.append(result['lower_trace'].clone());source_commands.append(result['executed_commands'].clone())
+        result=env.step();source_trace.append(result['lower_trace'].clone());commands=result['executed_commands'].clone();commands[:,:,0]+=(len(source_trace)-1)*.02;source_commands.append(commands)
         if not bool(env.alive[0]):break
         if float(env.middle.projection['progress'][0])>=spec['source_exit_progress_m']:
             found=True;break
@@ -121,7 +121,7 @@ for task in spec['tasks']:
     env.restore_connection_state(snapshot);env.horizon=round(task['seconds']/.02);env.begin_connection(original,speeds,alphas)
     planner=IsaacGoalReplanning(env,{**spec['replanning'],'original_route':task['route']},folder)
     goal=torch.as_tensor(planner.goal,device=env.device);arrival=torch.full((6,),float('nan'),device=env.device)
-    rows=[];original_errors=[];entry_events=[];common=spec.get('common_task_reference')
+    rows=[];command_rows=[];original_errors=[];entry_events=[];common=spec.get('common_task_reference')
     original_progress=torch.zeros(6,device=env.device);entered_b=torch.zeros(6,device=env.device,dtype=torch.bool)
     # Original fixed-path distance is measured independently of replanned references.
     points=original.xy;segments=points[1:]-points[:-1];segment_norm=segments.square().sum(-1)
@@ -131,9 +131,10 @@ for task in spec['tasks']:
             original_progress=original.project(pose[:,:2],original_progress,velocity.abs()*.02)['progress']
             crossing=env.alive&~entered_b&(original_progress>=spec['connection_end_progress_m'])
             for lane in crossing.nonzero(as_tuple=False).flatten().tolist():
-                entry_events.append(dict(lane=lane,candidate_id=candidates[lane]['candidate_id'],time_s=k*.02,original_progress_m=float(original_progress[lane]),speed_m_s=float(velocity[lane]),measurement=measurement[lane].cpu().tolist(),pose=pose[lane].cpu().tolist(),root=plant.roots[lane].cpu().tolist(),previous_reference=env.previous_reference[lane].cpu().tolist(),previous_alpha=float(env.alpha[lane]),common_reference=common,history='retained; no reset'))
+                entry_events.append(dict(lane=lane,candidate_id=candidates[lane]['candidate_id'],time_s=k*.02,original_progress_m=float(original_progress[lane]),speed_m_s=float(velocity[lane]),lateral_velocity_heading_frame_m_s=float(-torch.sin(pose[lane,2])*plant.roots[lane,7]+torch.cos(pose[lane,2])*plant.roots[lane,8]),world_yaw_rate_rad_s=float(plant.roots[lane,12]),measurement=measurement[lane].cpu().tolist(),pose=pose[lane].cpu().tolist(),root=plant.roots[lane].cpu().tolist(),previous_reference=env.previous_reference[lane].cpu().tolist(),previous_alpha=float(env.alpha[lane]),common_reference=common,history='retained; no reset'))
             env.speed.copy_(torch.where(crossing,common['speed_m_s'],env.speed));env.alpha.copy_(torch.where(crossing,common['alpha'],env.alpha));entered_b|=crossing
         planner.update();result=env.step();trace=result['lower_trace'];rows.append(trace.clone())
+        commands=result['executed_commands'].clone();commands[:,:,0]+=k*.02;command_rows.append(commands)
         xy=trace[:,:,:2]
         delta=xy[:,:,None,:]-points[None,None,:-1,:]
         u=(delta*segments).sum(-1)/segment_norm
@@ -143,12 +144,20 @@ for task in spec['tasks']:
         arrival=torch.where(torch.isnan(arrival)&at_goal,(k+1)*.02,arrival)
         if not bool(env.alive.any()):break
     trace=torch.cat(rows).cpu().numpy();errors=torch.cat(original_errors).cpu().numpy();arrivals=arrival.cpu().numpy()
+    commands=torch.cat(command_rows).cpu().numpy()
+    np.savez_compressed(folder/'executed_commands.npz',commands=commands,columns=np.array(['time_since_connection_s','steering_rate_rad_s','rear_axle_speed_rad_s','alive_before_step']))
     np.savez(folder/'trajectory.npz',trace=trace,original_path_error=errors,original_xy=data['xy'],original_s=data['s'],arrival_time=arrivals,goal=planner.goal)
     if common is not None:(folder/'b_entry_events.json').write_text(json.dumps(entry_events,indent=2)+'\n')
     for i,candidate in enumerate(candidates):
         valid=trace[:,i,6]>0;path_errors=errors[valid,i]
+        live_commands=commands[commands[:,i,3]>0,i,1:3]
+        input_limit={}
+        for column,name in enumerate(['cmd_steering_v','cmd_rearwheel_v']):
+            actuator=next(a for a in plant.contract['actuators'] if a['name']==name);lo,hi=actuator['ctrlrange']
+            count=int(((live_commands[:,column]<=lo+1e-6)|(live_commands[:,column]>=hi-1e-6)).sum()) if actuator['control_limited'] else 0
+            input_limit[name]=dict(at_limit_samples=count,active_physics_samples=len(live_commands),fraction=count/len(live_commands) if len(live_commands) else None,ctrlrange=actuator['ctrlrange'],scope='Plant input target limit, not measured torque saturation')
         completed=bool(env.alive[i]) and (common is None or bool(entered_b[i])) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
-        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,state_named=state_named,geometry=dict(connection_length_m=spec.get('connection_end_progress_m'),corridor_half_width_m=spec['corridor_half_width_m'],route=task['route']),complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
+        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,state_named=state_named,geometry=dict(connection_length_m=spec.get('connection_end_progress_m'),corridor_half_width_m=spec['corridor_half_width_m'],route=task['route']),complete=int(completed),success_cost=float(arrivals[i]) if completed else None,input_target_limit=input_limit,max_original_path_error_m=float(path_errors.max()) if len(path_errors) else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     if decision is not None and decision['status']=='reference_selected':
         selected=next(r for r in records if r['task_id']==task['task_id'] and r['candidate_id']==decision['reference']['candidate_id'])
         lane=next(i for i,c in enumerate(candidates) if c['candidate_id']==selected['candidate_id'])
