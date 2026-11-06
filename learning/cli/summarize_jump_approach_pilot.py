@@ -29,7 +29,7 @@ for c in m['cases']:
  if summary.exists():
   if origin not in figures:figures[origin]=plt.subplots(len(panels[origin]),2,figsize=(12,4*len(panels[origin])),squeeze=False,layout='constrained')
   fig,axes=figures[origin]
-  result=json.loads(summary.read_text());row.update(status='evaluated',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
+  result=json.loads(summary.read_text());row.update(status='evaluated',execution='completed',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
   decision=run/'connection_decision.json';handoff=run/'handoff.json'
   row['decision']=json.loads(decision.read_text()) if decision.exists() else None
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None

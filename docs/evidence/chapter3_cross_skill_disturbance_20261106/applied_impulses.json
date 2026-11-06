@@ -1,0 +1,602 @@
+[
+  {
+    "case_id": "L9.6_v2.0_a0.5_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.5_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.5_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.5_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.0_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.0_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.0_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.0_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.5_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.5_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.5_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a0.5_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a1.0_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a1.0_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a1.0_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v1.8_a1.0_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.0_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.0_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.0_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a0.0_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a1.0_pulse0_source",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a1.0_pulse0_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        -2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a1.0_pulse1_source",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  },
+  {
+    "case_id": "L9.6_v2.0_a1.0_pulse1_rb_run1_candidate",
+    "actual_impulse_Ns": [
+      0.0,
+      0.23999999463558197,
+      0.0
+    ],
+    "active_physics_ticks": 48,
+    "force_requested": {
+      "kind": "external_force_N",
+      "body": "chasis",
+      "site_body_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "force_world_N": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "duration_s": 0.12,
+      "trigger_x_m": -2.5
+    }
+  }
+]
